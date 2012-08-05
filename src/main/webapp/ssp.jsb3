@@ -1,6 +1,11 @@
 {
     "projectName": "Student Success Plan",
-    "licenseText": "Copyright(c) 2012 Sinclair Community College",
+    "licenseText": "@license application.html is licensed under the terms of the Open Source
+LGPL 3.0 license. Commercial use is permitted to the extent that the 
+code/component(s) do NOT become part of another Open Source or Commercially
+licensed development library or toolkit without explicit permission.
+ 
+License details: http://www.gnu.org/licenses/lgpl.html",
     "builds": [
         {
             "name": "All Classes",
@@ -385,13 +390,13 @@
                     "path": "/app/controller/"
                 },
                 {
-                    "clsName": "Ssp.controller.StudentRecordViewController",
-                    "name": "StudentRecordViewController.js",
+                    "clsName": "Ssp.controller.SearchViewController",
+                    "name": "SearchViewController.js",
                     "path": "/app/controller/"
                 },
                 {
-                    "clsName": "Ssp.controller.SearchViewController",
-                    "name": "SearchViewController.js",
+                    "clsName": "Ssp.controller.StudentRecordViewController",
+                    "name": "StudentRecordViewController.js",
                     "path": "/app/controller/"
                 },
                 {
@@ -405,13 +410,13 @@
                     "path": "/app/controller/person/"
                 },
                 {
-                    "clsName": "Ssp.controller.person.CoachViewController",
-                    "name": "CoachViewController.js",
+                    "clsName": "Ssp.controller.person.EditPersonViewController",
+                    "name": "EditPersonViewController.js",
                     "path": "/app/controller/person/"
                 },
                 {
-                    "clsName": "Ssp.controller.person.EditPersonViewController",
-                    "name": "EditPersonViewController.js",
+                    "clsName": "Ssp.controller.person.CoachViewController",
+                    "name": "CoachViewController.js",
                     "path": "/app/controller/person/"
                 },
                 {
@@ -580,16 +585,6 @@
                     "path": "/app/controller/tool/sis/"
                 },
                 {
-                    "clsName": "Ssp.controller.admin.crg.ChallengeReferralAdminViewController",
-                    "name": "ChallengeReferralAdminViewController.js",
-                    "path": "/app/controller/admin/crg/"
-                },
-                {
-                    "clsName": "Ssp.controller.admin.crg.ChallengeAdminViewController",
-                    "name": "ChallengeAdminViewController.js",
-                    "path": "/app/controller/admin/crg/"
-                },
-                {
                     "clsName": "Ssp.controller.admin.AbstractReferenceAdminViewController",
                     "name": "AbstractReferenceAdminViewController.js",
                     "path": "/app/controller/admin/"
@@ -600,18 +595,28 @@
                     "path": "/app/controller/admin/"
                 },
                 {
+                    "clsName": "Ssp.controller.admin.crg.ChallengeAdminViewController",
+                    "name": "ChallengeAdminViewController.js",
+                    "path": "/app/controller/admin/crg/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.crg.ChallengeReferralAdminViewController",
+                    "name": "ChallengeReferralAdminViewController.js",
+                    "path": "/app/controller/admin/crg/"
+                },
+                {
                     "clsName": "Ssp.controller.admin.crg.DisplayChallengesAdminViewController",
                     "name": "DisplayChallengesAdminViewController.js",
                     "path": "/app/controller/admin/crg/"
                 },
                 {
-                    "clsName": "Ssp.controller.admin.crg.EditChallengeViewController",
-                    "name": "EditChallengeViewController.js",
+                    "clsName": "Ssp.controller.admin.crg.DisplayReferralsAdminViewController",
+                    "name": "DisplayReferralsAdminViewController.js",
                     "path": "/app/controller/admin/crg/"
                 },
                 {
-                    "clsName": "Ssp.controller.admin.crg.DisplayReferralsAdminViewController",
-                    "name": "DisplayReferralsAdminViewController.js",
+                    "clsName": "Ssp.controller.admin.crg.EditChallengeViewController",
+                    "name": "EditChallengeViewController.js",
                     "path": "/app/controller/admin/crg/"
                 },
                 {
@@ -720,13 +725,13 @@
                     "path": "/app/view/"
                 },
                 {
-                    "clsName": "Ssp.view.StudentRecord",
-                    "name": "StudentRecord.js",
+                    "clsName": "Ssp.view.Search",
+                    "name": "Search.js",
                     "path": "/app/view/"
                 },
                 {
-                    "clsName": "Ssp.view.Search",
-                    "name": "Search.js",
+                    "clsName": "Ssp.view.StudentRecord",
+                    "name": "StudentRecord.js",
                     "path": "/app/view/"
                 },
                 {
@@ -740,13 +745,13 @@
                     "path": "/app/view/person/"
                 },
                 {
-                    "clsName": "Ssp.view.person.Coach",
-                    "name": "Coach.js",
+                    "clsName": "Ssp.view.person.EditPerson",
+                    "name": "EditPerson.js",
                     "path": "/app/view/person/"
                 },
                 {
-                    "clsName": "Ssp.view.person.EditPerson",
-                    "name": "EditPerson.js",
+                    "clsName": "Ssp.view.person.Coach",
+                    "name": "Coach.js",
                     "path": "/app/view/person/"
                 },
                 {
@@ -1140,13 +1145,13 @@
                     "path": "/app/store/"
                 },
                 {
-                    "clsName": "Ssp.store.JournalEntries",
-                    "name": "JournalEntries.js",
+                    "clsName": "Ssp.store.Goals",
+                    "name": "Goals.js",
                     "path": "/app/store/"
                 },
                 {
-                    "clsName": "Ssp.store.Goals",
-                    "name": "Goals.js",
+                    "clsName": "Ssp.store.JournalEntries",
+                    "name": "JournalEntries.js",
                     "path": "/app/store/"
                 },
                 {
@@ -1240,16 +1245,6 @@
                     "path": "/app/store/reference/"
                 },
                 {
-                    "clsName": "Ssp.controller.admin.crg.AssociateChallengeReferralsAdminViewController",
-                    "name": "AssociateChallengeReferralsAdminViewController.js",
-                    "path": "/app/controller/admin/crg/"
-                },
-                {
-                    "clsName": "Ssp.view.admin.forms.crg.AssociateChallengeReferralsAdmin",
-                    "name": "AssociateChallengeReferralsAdmin.js",
-                    "path": "/app/view/admin/forms/crg/"
-                },
-                {
                     "clsName": "Ssp.controller.admin.crg.AssociateChallengeCategoriesAdminViewController",
                     "name": "AssociateChallengeCategoriesAdminViewController.js",
                     "path": "/app/controller/admin/crg/"
@@ -1257,6 +1252,16 @@
                 {
                     "clsName": "Ssp.view.admin.forms.crg.AssociateChallengeCategoriesAdmin",
                     "name": "AssociateChallengeCategoriesAdmin.js",
+                    "path": "/app/view/admin/forms/crg/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.crg.AssociateChallengeReferralsAdminViewController",
+                    "name": "AssociateChallengeReferralsAdminViewController.js",
+                    "path": "/app/controller/admin/crg/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.crg.AssociateChallengeReferralsAdmin",
+                    "name": "AssociateChallengeReferralsAdmin.js",
                     "path": "/app/view/admin/forms/crg/"
                 },
                 {
@@ -1300,13 +1305,13 @@
                     "path": "/app/store/reference/"
                 },
                 {
-                    "clsName": "Ssp.model.reference.CampusEarlyAlertRouting",
-                    "name": "CampusEarlyAlertRouting.js",
+                    "clsName": "Ssp.model.reference.Campus",
+                    "name": "Campus.js",
                     "path": "/app/model/reference/"
                 },
                 {
-                    "clsName": "Ssp.model.reference.Campus",
-                    "name": "Campus.js",
+                    "clsName": "Ssp.model.reference.CampusEarlyAlertRouting",
+                    "name": "CampusEarlyAlertRouting.js",
                     "path": "/app/model/reference/"
                 },
                 {

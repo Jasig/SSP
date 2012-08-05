@@ -1,5 +1,10 @@
 /*
-Copyright(c) 2012 Sinclair Community College
+@license application.html is licensed under the terms of the Open Source
+LGPL 3.0 license. Commercial use is permitted to the extent that the 
+code/component(s) do NOT become part of another Open Source or Commercially
+licensed development library or toolkit without explicit permission.
+ 
+License details: http://www.gnu.org/licenses/lgpl.html
 */
 Ext.define('Ssp.view.admin.AdminMain', {
 	extend: 'Ext.panel.Panel',
@@ -2155,7 +2160,12 @@ Ext.define('Ssp.util.FormRendererUtils',{
     	var me=this;
     	var selectedItems=[];
     	Ext.Array.each( selectedIdsArray, function(id,index){
-			var item = {name: referenceStore.getById( id ).get('name')};
+			var item = {name: ""};
+    		var referenceItem = referenceStore.getById( id );
+    		if (referenceItem != null)
+    		{
+    			item = {name: referenceItem.get('name')};
+    		}
 			selectedItems.push( item );
 		});
 		if (selectedItems.length==0)
@@ -2261,6 +2271,13 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
         strHtml += '</div>';
 	    return strHtml;
 	},
+
+	renderPersonFullName: function(val, metaData, record) {
+		var strHtml = '<div>';
+		strHtml += '<p>' + record.getPersonFullName() + '</p>';
+        strHtml += '</div>';
+	    return strHtml;
+	},	
 	
 	renderStudentDetails: function(val, metaData, record) {
 		var strHtml = '<div>';
@@ -2596,7 +2613,7 @@ Ext.define('Ssp.store.EarlyAlertCoordinators', {
 	constructor: function(){
 		var me=this;
 		Ext.apply(me, {
-						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('person')),
+						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCoach')),
 						autoLoad: false
 					});
 		return me.callParent(arguments);
@@ -3464,7 +3481,7 @@ Ext.define('Ssp.service.CampusEarlyAlertRoutingService', {
 	    	if (response.responseText != "")
 	    	{
 		    	r = Ext.decode(response.responseText);
-		    	me.store.loadData(r);	    		
+		    	me.store.loadData( r.rows );	    		
 	    	}
 	    	callbacks.success( r, callbacks.scope );
 	    };
@@ -4773,32 +4790,6 @@ Ext.define('Ssp.controller.MainViewController', {
 		mainView.add( arrViewItems );
     }
 });
-Ext.define('Ssp.controller.StudentRecordViewController', {
-    extend: 'Deft.mvc.ViewController',
-    mixins: [ 'Deft.mixin.Injectable'],
-	inject: {
-		appEventsController: 'appEventsController'
-	},
-	
-    control: {
-		view: {
-			collapse: 'onCollapsed',
-			expand: 'onExpanded'
-		}
-	},
-	
-    init: function() {
- 		return this.callParent(arguments);
-    },
-    
-    onCollapsed: function(){
-    	this.appEventsController.getApplication().fireEvent('collapseStudentRecord');
-    },
-    
-    onExpanded: function(){
-    	this.appEventsController.getApplication().fireEvent('expandStudentRecord');
-    }
-});
 Ext.define('Ssp.controller.SearchViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable'],
@@ -5235,7 +5226,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   		}
 	   		personProgramStatus = new Ssp.model.PersonProgramStatus();
 	   		personProgramStatus.set('programStatusId', programStatusId );
-	   		personProgramStatus.set('effectiveDate', new Date());
+	   		personProgramStatus.set('effectiveDate', Ext.Date.now() );
 	   		me.personProgramStatusService.save( 
 	   				personId, 
 	   				personProgramStatus.data, 
@@ -5376,6 +5367,32 @@ Ext.define('Ssp.controller.SearchViewController', {
     getCaseloadFailure: function( r, scope){
     	var me=scope;
     	me.getView().setLoading( false );
+    }
+});
+Ext.define('Ssp.controller.StudentRecordViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable'],
+	inject: {
+		appEventsController: 'appEventsController'
+	},
+	
+    control: {
+		view: {
+			collapse: 'onCollapsed',
+			expand: 'onExpanded'
+		}
+	},
+	
+    init: function() {
+ 		return this.callParent(arguments);
+    },
+    
+    onCollapsed: function(){
+    	this.appEventsController.getApplication().fireEvent('collapseStudentRecord');
+    },
+    
+    onExpanded: function(){
+    	this.appEventsController.getApplication().fireEvent('expandStudentRecord');
     }
 });
 Ext.define('Ssp.controller.ProgramStatusChangeReasonWindowViewController', {
@@ -5729,7 +5746,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     		{
     			personProgramStatus = new Ssp.model.PersonProgramStatus();
     			personProgramStatus.set('programStatusId',Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);
-    			personProgramStatus.set('effectiveDate', new Date() );
+    			personProgramStatus.set('effectiveDate', Ext.Date.now() );
     			me.personProgramStatusService.save( 
     					r.id, 
     					personProgramStatus.data, 
@@ -5823,113 +5840,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     loadStudentToolsView: function(){
     	this.appEventsController.getApplication().fireEvent('displayStudentRecordView');
     }
-});
-Ext.define('Ssp.controller.person.CoachViewController', {
-    extend: 'Deft.mvc.ViewController',
-    mixins: [ 'Deft.mixin.Injectable' ],
-    inject: {
-    	appEventsController: 'appEventsController',
-    	coachesStore: 'coachesStore',
-    	person: 'currentPerson', 	
-    	sspConfig: 'sspConfig',
-        studentTypesStore: 'studentTypesStore'
-    },
-    config: {
-    	inited: false
-    },
-    control: {
-    	departmentField: '#departmentField',
-    	phoneField: '#phoneField',
-    	officeField: '#officeField',
-    	emailAddressField: '#emailAddressField',
-
-    	coachCombo: {
-    		selector: '#coachCombo',
-    		listeners: {
-        		change: 'onCoachComboChange',
-        		select: 'onCoachComboSelect'
-    		} 
-    	},
-    	
-    	studentTypeCombo: {
-    		selector: '#studentTypeCombo',
-    		listeners: {
-        		select: 'onStudentTypeComboSelect'
-    		}     		
-    	}
-    },
-    
-	init: function() {
-		var me=this;
-
-		if ( me.person.get('id') != "")
-		{
-			me.getCoachCombo().setDisabled( me.sspConfig.get('coachSetFromExternalData') );
-			me.getStudentTypeCombo().setDisabled( me.sspConfig.get('studentTypeSetFromExternalData') );			
-		}
-		
-		me.studentTypesStore.load();
-		me.coachesStore.load(function(records, operation, success) {
-	          if(!success)
-	          {
-	        	  Ext.Msg.alert('Error','Unable to load Coaches. Please see your system administrator for assistance.');
-	          }
-		 });
-		
-		me.initForm();
-		
-		return this.callParent(arguments);
-    },
-
-	initForm: function(){
-		var me=this;
-		me.getView().getForm().reset();
-		me.getCoachCombo().setValue( me.person.getCoachId() );
-		me.getStudentTypeCombo().setValue( me.person.getStudentTypeId() );
-		me.inited=true;
-	},    
-    
-	onCoachComboSelect: function(comp, records, eOpts){
-		var me=this;
-		var coach;
-		if(records.length>0){
-			coach=records[0];
-			me.displayCoachDepartment( coach );
-		}
-	},
-	
-	onCoachComboChange: function(comp, newValue, oldValue, eOpts){
-		var me=this;
-		var coach = me.coachesStore.getById(newValue);
-		if(coach != null){
-			me.displayCoachDepartment( coach );
-		}
-	},
-	
-	displayCoachDepartment: function( coach ){
-		var me=this;
-		me.getDepartmentField().setValue( coach.get('departmentName') );
-		me.getPhoneField().setValue( coach.get('workPhone') );
-		me.getEmailAddressField().setValue( coach.get('primaryEmailAddress') );
-		me.getOfficeField().setValue( coach.get('officeLocation') );
-	},
-
-	onStudentTypeComboSelect: function(comp, records, eOpts){
-		var me=this;
-		var studentType, requireInitialAppointment;
-		if(records.length>0){
-			me.appEventsController.getApplication().fireEvent('studentTypeChange');
-		}
-	},
-	
-	onStudentTypeComboChange: function(comp, newValue, oldValue, eOpts){
-		var me=this;
-		var studentType, requireInitialAppointment;
-		studentType = me.studentTypesStore.getById(newValue);
-		if(studentType != null){
-			me.appEventsController.getApplication().fireEvent('studentTypeChange');
-		}
-	}
 });
 Ext.define('Ssp.controller.person.EditPersonViewController', {
     extend: 'Deft.mvc.ViewController',
@@ -6081,6 +5991,113 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     	var me=scope;
     	me.getView().setLoading( false );
     }
+});
+Ext.define('Ssp.controller.person.CoachViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	appEventsController: 'appEventsController',
+    	coachesStore: 'coachesStore',
+    	person: 'currentPerson', 	
+    	sspConfig: 'sspConfig',
+        studentTypesStore: 'studentTypesStore'
+    },
+    config: {
+    	inited: false
+    },
+    control: {
+    	departmentField: '#departmentField',
+    	phoneField: '#phoneField',
+    	officeField: '#officeField',
+    	emailAddressField: '#emailAddressField',
+
+    	coachCombo: {
+    		selector: '#coachCombo',
+    		listeners: {
+        		change: 'onCoachComboChange',
+        		select: 'onCoachComboSelect'
+    		} 
+    	},
+    	
+    	studentTypeCombo: {
+    		selector: '#studentTypeCombo',
+    		listeners: {
+        		select: 'onStudentTypeComboSelect'
+    		}     		
+    	}
+    },
+    
+	init: function() {
+		var me=this;
+
+		if ( me.person.get('id') != "")
+		{
+			me.getCoachCombo().setDisabled( me.sspConfig.get('coachSetFromExternalData') );
+			me.getStudentTypeCombo().setDisabled( me.sspConfig.get('studentTypeSetFromExternalData') );			
+		}
+		
+		me.studentTypesStore.load();
+		me.coachesStore.load(function(records, operation, success) {
+	          if(!success)
+	          {
+	        	  Ext.Msg.alert('Error','Unable to load Coaches. Please see your system administrator for assistance.');
+	          }
+		 });
+		
+		me.initForm();
+		
+		return this.callParent(arguments);
+    },
+
+	initForm: function(){
+		var me=this;
+		me.getView().getForm().reset();
+		me.getCoachCombo().setValue( me.person.getCoachId() );
+		me.getStudentTypeCombo().setValue( me.person.getStudentTypeId() );
+		me.inited=true;
+	},    
+    
+	onCoachComboSelect: function(comp, records, eOpts){
+		var me=this;
+		var coach;
+		if(records.length>0){
+			coach=records[0];
+			me.displayCoachDepartment( coach );
+		}
+	},
+	
+	onCoachComboChange: function(comp, newValue, oldValue, eOpts){
+		var me=this;
+		var coach = me.coachesStore.getById(newValue);
+		if(coach != null){
+			me.displayCoachDepartment( coach );
+		}
+	},
+	
+	displayCoachDepartment: function( coach ){
+		var me=this;
+		me.getDepartmentField().setValue( coach.get('departmentName') );
+		me.getPhoneField().setValue( coach.get('workPhone') );
+		me.getEmailAddressField().setValue( coach.get('primaryEmailAddress') );
+		me.getOfficeField().setValue( coach.get('officeLocation') );
+	},
+
+	onStudentTypeComboSelect: function(comp, records, eOpts){
+		var me=this;
+		var studentType, requireInitialAppointment;
+		if(records.length>0){
+			me.appEventsController.getApplication().fireEvent('studentTypeChange');
+		}
+	},
+	
+	onStudentTypeComboChange: function(comp, newValue, oldValue, eOpts){
+		var me=this;
+		var studentType, requireInitialAppointment;
+		studentType = me.studentTypesStore.getById(newValue);
+		if(studentType != null){
+			me.appEventsController.getApplication().fireEvent('studentTypeChange');
+		}
+	}
 });
 Ext.define('Ssp.controller.person.AppointmentViewController', {
     extend: 'Deft.mvc.ViewController',
@@ -6648,13 +6665,10 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
     },    
     
     onEditTask: function(){
- 	   console.log('TaskViewController->editTask');
- 	   //Ext.Msg.alert("NOTIFICATION","This functionality is disabled until I can figure out why the tree component renders it's init method twice on edit from the grid.")
  	   this.loadEditor();
     },
     
     onCloseTask: function() {
-	   console.log('TaskViewController->closeTask');
        var me=this;
 	   var store, id, model, groupName;
        model = me.model;
@@ -7511,7 +7525,6 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
 			form.updateRecord();
 			jsonData = me.model.data;
 			jsonData = me.model.setPropsNullForSave( me.model.data );
-			console.log(jsonData);
 			me.getView().setLoading('true');
 			me.service.save( jsonData , {
 				success: me.savePersonSuccess,
@@ -7666,7 +7679,6 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     
     /*
     onSearchClick: function(){
-    	console.log('TaskTreeViewController->onSearchClick');
     	Ext.Msg.alert('Attention', 'This is a beta item. Awaiting API methods to utilize for search.'); 
     },
     */
@@ -7682,19 +7694,38 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     	{
 	    	successFunc = function(response,view){
 		    	var r = Ext.decode(response.responseText);
-		    	if (r)
+		    	var challengeReferral = null;
+		    	if (r.rows != null)
 		    	{
-		    		me.task.set('name', r.name);
-		    		me.task.set('description', r.description);
-		    		me.task.set('challengeReferralId', r.id);
+		    		Ext.Array.each(r.rows,function(item,index){
+		    			if (item.id==id)
+		    			{
+		    				challengeReferral = item;
+		    			}
+		    		});
+		    		if (challengeReferral != null)
+		    		{
+			    		me.task.set('name', challengeReferral.name);
+			    		me.task.set('description', challengeReferral.description);
+			    		me.task.set('challengeReferralId', challengeReferral.id);
+		    		}
 		    		me.task.set('challengeId', challengeId);
 		    		me.task.set('confidentialityLevel', {id: confidentialityLevelId});
 		    		me.appEventsController.getApplication().fireEvent('loadTask');
 		    	}		
 			};
 	    	
+			
+			// TODO: This fix is a temp solution for the SSP-381
+			// but that returns a 405 method not allowed
+			// for get and put calls that require an id.
+			// This method call should be replaced with a
+			// get call after the 381 bug has been resolved.
+			// Note: the issue appears to work fine under
+			// most local environments and not under a number
+			// of server environments where SSP has been deployed.
 	    	me.apiProperties.makeRequest({
-				url: me.apiProperties.createUrl( me.challengeReferralUrl+'/'+id ),
+				url: me.apiProperties.createUrl( me.challengeReferralUrl ), // +'/'+id
 				method: 'GET',
 				jsonData: '',
 				successFunc: successFunc 
@@ -8788,7 +8819,6 @@ Ext.define('Ssp.controller.tool.journal.DisplayDetailsViewController', {
 	
     init: function() {
     	var me=this;
-    	console.log( 'DisplayDetailsViewController->init' );
 		me.store.loadData( me.model.getGroupedDetails() );		
 		return me.callParent( arguments );
     },
@@ -9258,7 +9288,12 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		{			
 		   record.set('earlyAlertReferralIds', selectedReferrals);
 		}else{
-		   record.data.referrals=null;
+		   // AAL : 08/01/12 : Commented line below as it was adding a "referrals" property to the API call
+				// and this property isn't valid per the api spec.  Added the setting of the earlyAlertReferralIds
+				// property to the empty array when none are selected.  By default this value was being set to an
+				// empty string which isn't valid per the api spec and was throwing an exception on the server.
+		   // record.data.referrals=null;
+		   record.set('earlyAlertReferralIds', []);
 		}		
 		
 		// set the early alert id for the response
@@ -9422,9 +9457,9 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
 		var me=this;
 		var selectedSuggestions=[];
 		var campus = me.campusesStore.getById( me.model.get('campusId') );
-		var reasonId = ((me.model.get('earlyAlertReasonIds') != null)?me.model.get('earlyAlertReasonIds')[0].id : me.model.get('earlyAlertReasonId') );
+		var reasonId = ((me.model.get('earlyAlertReasonIds') != null )?me.model.get('earlyAlertReasonIds')[0].id : me.model.get('earlyAlertReasonId') );
 		var reason = me.reasonsStore.getById( reasonId );
-		
+
 		// Reset and populate general fields comments, etc.
 		me.getView().getForm().reset();
 		me.getView().loadRecord( me.model );
@@ -9447,12 +9482,15 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
 		
 		if ( me.model.get('closedById') != null )
 		{
-			me.getView().setLoading( true );
-			me.personService.get( me.model.get('closedById'),{
-				success: me.getPersonSuccess,
-				failure: me.getPersonFailure,
-				scope: me
-			});
+			if (me.model.get('closedById') != "")
+			{
+				me.getView().setLoading( true );
+				me.personService.get( me.model.get('closedById'),{
+					success: me.getPersonSuccess,
+					failure: me.getPersonFailure,
+					scope: me
+				});				
+			}
 		}
 		
 		return this.callParent(arguments);
@@ -9794,23 +9832,6 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
     	me.getView().setLoading( false );  	
     }
 });
-Ext.define('Ssp.controller.admin.crg.ChallengeReferralAdminViewController', {
-    extend: 'Deft.mvc.ViewController',
-	init: function() {
-		return this.callParent(arguments);
-    }
-});
-Ext.define('Ssp.controller.admin.crg.ChallengeAdminViewController', {
-    extend: 'Deft.mvc.ViewController',
-    mixins: [ 'Deft.mixin.Injectable' ],
-    inject: {
-    	confidentialityLevelsStore: 'confidentialityLevelsStore'
-    },
-	init: function() {
-		this.confidentialityLevelsStore.load();	
-		return this.callParent(arguments);
-    }
-});
 Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
@@ -10009,7 +10030,13 @@ Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewCont
     
     loadConfidentialityDisclosureAgreementResult: function(records, operation, success){
     	var model = new Ssp.model.reference.ConfidentialityDisclosureAgreement();
-    	model.populateFromGenericObject(records[0].data);
+    	if (success)
+    	{
+        	if ( records.length > 0 )
+        	{
+        		model.populateFromGenericObject(records[0].data);
+        	}    		
+    	}
     	this.getView().loadRecord( model );
     },
     
@@ -10040,6 +10067,23 @@ Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewCont
     saveFailure: function( response, scope ){
     	var me=scope;  
 		me.getView().setLoading(false);
+    }
+});
+Ext.define('Ssp.controller.admin.crg.ChallengeAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	confidentialityLevelsStore: 'confidentialityLevelsStore'
+    },
+	init: function() {
+		this.confidentialityLevelsStore.load();	
+		return this.callParent(arguments);
+    }
+});
+Ext.define('Ssp.controller.admin.crg.ChallengeReferralAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+	init: function() {
+		return this.callParent(arguments);
     }
 });
 Ext.define('Ssp.controller.admin.crg.DisplayChallengesAdminViewController', {
@@ -10145,75 +10189,6 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengesAdminViewController', {
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
 	}
 });
-Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
-    extend: 'Deft.mvc.ViewController',
-    mixins: [ 'Deft.mixin.Injectable' ],
-    inject: {
-    	apiProperties: 'apiProperties',
-    	formUtils: 'formRendererUtils',
-    	model: 'currentChallenge',
-    	store: 'challengesStore'
-    },
-    config: {
-    	containerToLoadInto: 'adminforms',
-    	formToDisplay: 'challengeadmin'
-    },
-    control: {
-    	'saveButton': {
-			click: 'onSaveClick'
-		},
-		
-		'cancelButton': {
-			click: 'onCancelClick'
-		}   	
-    },
-    
-	init: function() {
-		this.getView().getForm().loadRecord(this.model);
-		return this.callParent(arguments);
-    },
-    
-	onSaveClick: function(button) {
-		var me = this;
-		var record, id, jsonData, url;
-		url = this.store.getProxy().url;
-		this.getView().getForm().updateRecord();
-		record = this.model;
-		id = record.get('id');
-		jsonData = record.data;
-		successFunc = function(response, view) {
-			me.displayMain();
-		};
-		
-		if (id.length > 0)
-		{
-			// editing
-			this.apiProperties.makeRequest({
-				url: url+"/"+id,
-				method: 'PUT',
-				jsonData: jsonData,
-				successFunc: successFunc 
-			});
-			
-		}else{
-			// adding
-			this.apiProperties.makeRequest({
-				url: url,
-				method: 'POST',
-				jsonData: jsonData,
-				successFunc: successFunc 
-			});		
-		}
-	},
-	
-	onCancelClick: function(button){
-		this.displayMain();
-	},
-	
-	displayMain: function(){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
-	}
-});
 Ext.define('Ssp.controller.admin.crg.DisplayReferralsAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
@@ -10309,6 +10284,75 @@ Ext.define('Ssp.controller.admin.crg.DisplayReferralsAdminViewController', {
  	},
 	
 	displayEditor: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentChallenge',
+    	store: 'challengesStore'
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'challengeadmin'
+    },
+    control: {
+    	'saveButton': {
+			click: 'onSaveClick'
+		},
+		
+		'cancelButton': {
+			click: 'onCancelClick'
+		}   	
+    },
+    
+	init: function() {
+		this.getView().getForm().loadRecord(this.model);
+		return this.callParent(arguments);
+    },
+    
+	onSaveClick: function(button) {
+		var me = this;
+		var record, id, jsonData, url;
+		url = this.store.getProxy().url;
+		this.getView().getForm().updateRecord();
+		record = this.model;
+		id = record.get('id');
+		jsonData = record.data;
+		successFunc = function(response, view) {
+			me.displayMain();
+		};
+		
+		if (id.length > 0)
+		{
+			// editing
+			this.apiProperties.makeRequest({
+				url: url+"/"+id,
+				method: 'PUT',
+				jsonData: jsonData,
+				successFunc: successFunc 
+			});
+			
+		}else{
+			// adding
+			this.apiProperties.makeRequest({
+				url: url,
+				method: 'POST',
+				jsonData: jsonData,
+				successFunc: successFunc 
+			});		
+		}
+	},
+	
+	onCancelClick: function(button){
+		this.displayMain();
+	},
+	
+	displayMain: function(){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
 	}
 });
@@ -10942,7 +10986,6 @@ Ext.define('Ssp.controller.admin.campus.DefineCampusViewController', {
 	
 	onFinishClick: function(button){
 		var me=this;
-		console.log('DefineCampusViewController->onFinishClick');
 		var campusView = Ext.ComponentQuery.query('.editcampus')[0];
 		var campusForm = campusView.getForm();		
 		var formsToValidate = [campusForm];
@@ -10952,7 +10995,6 @@ Ext.define('Ssp.controller.admin.campus.DefineCampusViewController', {
 		if ( validateResult.valid ) 
 		{
 			campusForm.updateRecord();
-			console.log(me.model.data);
 			me.getView().setLoading( true );
 			me.campusService.saveCampus( me.model.data, {success:me.saveCampusSuccess, 
 				  failure:me.saveCampusFailure, 
@@ -11201,6 +11243,8 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
     	formUtils: 'formRendererUtils',
     	model: 'currentCampusEarlyAlertRouting',
     	campus: 'currentCampus',
+    	peopleSearchLiteStore: 'peopleSearchLiteStore',
+    	searchService: 'searchService',
     	service: 'campusEarlyAlertRoutingService'
     },
     config: {
@@ -11214,41 +11258,68 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 		
 		'cancelButton': {
 			click: 'onCancelClick'
-		}   	
+		},
+		
+		personCombo: '#personCombo'
     },
     
 	init: function() {
 		var me=this;
+		var person;
 		me.getView().getForm().reset();
 		me.getView().getForm().loadRecord( me.model );
+		if (me.model.get('person') != null)
+		{
+			person = me.model.get('person');
+			me.getView().setLoading(true);
+			me.searchService.search(person.firstName+' '+person.lastName, true, {
+				success: me.searchSuccess,
+				failure: me.searchFailure,
+				scope: me
+			});	
+		}
 		return me.callParent(arguments);
+    },
+    
+    searchSuccess: function( r, scope ){
+    	var me=scope;
+    	me.getView().setLoading(false);
+    	if (r.rows.length > 0)
+    	{
+    		me.peopleSearchLiteStore.loadData(r.rows);
+    		me.getPersonCombo().setValue(me.model.get('person').id);
+    	}
+    },
+    
+    searchFailure: function( response, scope ){
+    	var me=scope;
+    	me.getView().setLoading(false);
     },
     
 	onSaveClick: function(button) {
 		var me = this;
-		var record, id, jsonData, url;
+		var record, jsonData, url, selectedPersonId;
 		url = me.url;	
 		if ( me.getView().getForm().isValid() )
 		{
 			me.getView().getForm().updateRecord();
-			record = me.model;
-			id = record.get('id');
+			record = me.model;			
 			jsonData = record.data;
 			
-			// ensure null if person is not set
-			if (record.data.person == "")
+			// set the selected person
+			if (me.getPersonCombo().value != "")
 			{
+				jsonData.person={ id:me.getPersonCombo().value };
+			}else{	
 				jsonData.person=null;
 			}
 			
 			me.getView().setLoading( true );
-			
 			me.service.saveCampusEarlyAlertRouting( me.campus.get('id'), jsonData, {
-				success: saveSuccess,
-				failure: failureSuccess,
+				success: me.saveSuccess,
+				failure: me.saveFailure,
 				scope: me
-			});
-			
+			});			
 		}else{
 			Ext.Msg.alert('SSP Error', 'Please correct the errors before saving this item.');
 		}
@@ -11612,30 +11683,6 @@ Ext.define('Ssp.view.Main', {
     	return me.callParent(arguments);
     }
 });
-Ext.define('Ssp.view.StudentRecord', {
-	extend: 'Ext.panel.Panel',
-    alias: 'widget.studentrecord',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.StudentRecordViewController',
-    width: '100%',
-    height: '100%',
-    initComponent: function(){
-    	Ext.apply(this,{
-    		title: 'Student Record',
-    	    collapsible: true,
-    	    collapseDirection: 'left',
-    		layout: {
-    	    	type: 'hbox',
-    	    	align: 'stretch'
-    	    },
-			
-    	    items: [{xtype:'toolsmenu',flex:1},
-			        {xtype: 'tools', flex:4}]		        
-    	});
-    	return this.callParent(arguments);
-    }
-});	
 Ext.define('Ssp.view.Search', {
 	extend: 'Ext.grid.Panel',
 	alias : 'widget.search',
@@ -11829,6 +11876,30 @@ Ext.define('Ssp.view.Search', {
     	return me.callParent(arguments);
     }
 });
+Ext.define('Ssp.view.StudentRecord', {
+	extend: 'Ext.panel.Panel',
+    alias: 'widget.studentrecord',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.StudentRecordViewController',
+    width: '100%',
+    height: '100%',
+    initComponent: function(){
+    	Ext.apply(this,{
+    		title: 'Student Record',
+    	    collapsible: true,
+    	    collapseDirection: 'left',
+    		layout: {
+    	    	type: 'hbox',
+    	    	align: 'stretch'
+    	    },
+			
+    	    items: [{xtype:'toolsmenu',flex:1},
+			        {xtype: 'tools', flex:4}]		        
+    	});
+    	return this.callParent(arguments);
+    }
+});	
 Ext.define('Ssp.view.ProgramStatusChangeReasonWindow', {
 	extend: 'Ext.window.Window',
 	alias : 'widget.programstatuschangereasonwindow',
@@ -11986,91 +12057,6 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
 	}
 
 });
-Ext.define('Ssp.view.person.Coach', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.personcoach',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.person.CoachViewController',
-    inject: {
-    	coachesStore: 'coachesStore',
-    	sspConfig: 'sspConfig',
-    	studentTypesStore: 'studentTypesStore'
-    },
-	initComponent: function() {	
-		var me=this;
-		Ext.apply(me, 
-				{
-			    border: 0,
-			    padding: 0,
-			    fieldDefaults: {
-			        msgTarget: 'side',
-			        labelAlign: 'right',
-			        labelWidth: 200
-			    },	
-				items: [{
-			            xtype: 'fieldset',
-			            border: 0,
-			            padding: 0,
-			            title: '',
-			            defaultType: 'textfield',
-			            defaults: {
-			                anchor: '50%'
-			            },
-			       items: [{
-				        xtype: 'combobox',
-				        name: 'coachId',
-				        itemId: 'coachCombo',
-				        fieldLabel: me.sspConfig.get('coachFieldLabel'),
-				        emptyText: 'Select One',
-				        store: me.coachesStore,
-				        valueField: 'id',
-				        displayField: 'fullName',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: false
-					},{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Office',
-				        itemId: 'officeField',
-				        name: 'coachOffice'
-				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Phone',
-				        itemId: 'phoneField',
-				        name: 'coachPhone'
-				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Email',
-				        itemId: 'emailAddressField',
-				        name: 'coachEmailAddress'
-				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Department',
-				        itemId: 'departmentField',
-				        name: 'coachDepartment'
-				    },{
-				        xtype: 'combobox',
-				        name: 'studentTypeId',
-				        itemId: 'studentTypeCombo',
-				        id: 'studentTypeCombo',
-				        fieldLabel: 'Student Type',
-				        emptyText: 'Select One',
-				        store: me.studentTypesStore,
-				        valueField: 'id',
-				        displayField: 'name',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: false
-					}]
-			    }]
-			});
-		
-		return me.callParent(arguments);
-	}
-});
 Ext.define('Ssp.view.person.EditPerson', {
 	extend: 'Ext.form.Panel',
 	alias: 'widget.editperson',
@@ -12172,6 +12158,91 @@ Ext.define('Ssp.view.person.EditPerson', {
 		});
 		
 		return this.callParent(arguments);
+	}
+});
+Ext.define('Ssp.view.person.Coach', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.personcoach',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.person.CoachViewController',
+    inject: {
+    	coachesStore: 'coachesStore',
+    	sspConfig: 'sspConfig',
+    	studentTypesStore: 'studentTypesStore'
+    },
+	initComponent: function() {	
+		var me=this;
+		Ext.apply(me, 
+				{
+			    border: 0,
+			    padding: 0,
+			    fieldDefaults: {
+			        msgTarget: 'side',
+			        labelAlign: 'right',
+			        labelWidth: 200
+			    },	
+				items: [{
+			            xtype: 'fieldset',
+			            border: 0,
+			            padding: 0,
+			            title: '',
+			            defaultType: 'textfield',
+			            defaults: {
+			                anchor: '50%'
+			            },
+			       items: [{
+				        xtype: 'combobox',
+				        name: 'coachId',
+				        itemId: 'coachCombo',
+				        fieldLabel: me.sspConfig.get('coachFieldLabel'),
+				        emptyText: 'Select One',
+				        store: me.coachesStore,
+				        valueField: 'id',
+				        displayField: 'fullName',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: false
+					},{
+				    	xtype: 'displayfield',
+				        fieldLabel: 'Office',
+				        itemId: 'officeField',
+				        name: 'coachOffice'
+				    },{
+				    	xtype: 'displayfield',
+				        fieldLabel: 'Phone',
+				        itemId: 'phoneField',
+				        name: 'coachPhone'
+				    },{
+				    	xtype: 'displayfield',
+				        fieldLabel: 'Email',
+				        itemId: 'emailAddressField',
+				        name: 'coachEmailAddress'
+				    },{
+				    	xtype: 'displayfield',
+				        fieldLabel: 'Department',
+				        itemId: 'departmentField',
+				        name: 'coachDepartment'
+				    },{
+				        xtype: 'combobox',
+				        name: 'studentTypeId',
+				        itemId: 'studentTypeCombo',
+				        id: 'studentTypeCombo',
+				        fieldLabel: 'Student Type',
+				        emptyText: 'Select One',
+				        store: me.studentTypesStore,
+				        valueField: 'id',
+				        displayField: 'name',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: false
+					}]
+			    }]
+			});
+		
+		return me.callParent(arguments);
 	}
 });
 Ext.define('Ssp.view.person.Appointment', {
@@ -15664,7 +15735,7 @@ Ext.define('Ssp.view.admin.forms.campus.CampusEarlyAlertRoutingsAdmin', {
     		      dockedItems: [{
 		               xtype: 'toolbar',
 		               items: [{
-	       		                   text: 'Finished',
+	       		                   text: 'Finished Editing Campus',
 	       		                   xtype: 'button',
 	       		                   itemId: 'finishButton'
 	       		               }]
@@ -15682,7 +15753,8 @@ Ext.define('Ssp.view.admin.forms.campus.EarlyAlertRoutingsAdmin',{
     controller: 'Ssp.controller.admin.campus.EarlyAlertRoutingsAdminViewController',
     inject: {
         apiProperties: 'apiProperties',
-        store: 'campusEarlyAlertRoutingsStore'
+        store: 'campusEarlyAlertRoutingsStore',
+        columnRendererUtils: 'columnRendererUtils'
     },
     height: '100%',
 	width: '100%',
@@ -15695,11 +15767,15 @@ Ext.define('Ssp.view.admin.forms.campus.EarlyAlertRoutingsAdmin',{
     		      title: 'Early Alert Routing Groups',
      		      columns: [
     		                { header: 'Group Name',  
-    		                  dataIndex: 'name',
-    		                  flex: .5 },
+    		                  dataIndex: 'groupName',
+    		                  flex: .4 },
       		                { header: 'Group Email',  
-        		                  dataIndex: 'name',
-        		                  flex: .5 }
+        		                  dataIndex: 'groupEmail',
+        		                  flex: .3 },
+    		                { header: 'Person',  
+    		                  dataIndex: 'person',
+    		                  renderer: me.columnRendererUtils.renderPersonFullName, 
+    		                  flex: .3 }
     		           ],
     		        
     		           dockedItems: [{
@@ -15765,20 +15841,6 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
 		        labelWidth: 125
 		    },
             items: [{
-                    xtype: 'textfield',
-                    fieldLabel: 'Group Name',
-                    width: 500,
-                    name: 'groupName',
-                    allowBlank: false
-                },{
-                    xtype: 'textfield',
-                    fieldLabel: 'Group Email',
-                    name: 'groupEmail',
-                    width: 500,
-                    vtype:'email',
-			        maxLength: 100,
-			        allowBlank: false
-                },{
 			        xtype: 'combobox',
 			        name: 'earlyAlertReasonId',
 			        itemId: 'earlyAlertReasonCombo',
@@ -15793,8 +15855,23 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
 			        allowBlank: false,
 			        width: 500
 				},{
+                    xtype: 'textfield',
+                    fieldLabel: 'Group Name',
+                    width: 500,
+                    name: 'groupName',
+                    allowBlank: false
+                },{
+                    xtype: 'textfield',
+                    fieldLabel: 'Group Email',
+                    name: 'groupEmail',
+                    width: 500,
+                    vtype:'email',
+			        maxLength: 100,
+			        allowBlank: false
+                },{
 		            xtype: 'combo',
 		            store: me.peopleSearchLiteStore,
+		            itemId: 'personCombo',
 		            displayField: 'displayFullName',
 		            emptyText: 'Name or ' + me.sspConfig.get('studentIdAlias'),
 		            valueField:'id',
@@ -16257,6 +16334,16 @@ Ext.define('Ssp.model.Person', {
     setPropsNullForSave: function( jsonData ){
 		delete jsonData.studentIntakeCompleteDate;
 		delete jsonData.currentProgramStatusName;
+
+		if ( jsonData.studentType == "")
+		{
+			jsonData.studentType = null;
+		}
+		
+		if ( jsonData.coach == "")
+		{
+			jsonData.coach = null;
+		}
 		
 		if( jsonData.serviceReasons == "" )
 		{
@@ -16718,6 +16805,19 @@ Ext.define('Ssp.store.Coaches', {
 		return me.callParent(arguments);
 	}
 });
+Ext.define('Ssp.store.Goals', {
+    extend: 'Ext.data.Store',
+    model: 'Ssp.model.PersonGoal',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },    
+	constructor: function(){
+		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('personGoal') ),
+						  autoLoad: false });
+		return this.callParent(arguments);
+	},
+});
 Ext.define('Ssp.store.JournalEntries', {
     extend: 'Ext.data.Store',
     model: 'Ssp.model.tool.journal.JournalEntry',
@@ -16728,19 +16828,6 @@ Ext.define('Ssp.store.JournalEntries', {
     },    
 	constructor: function(){
 		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('personJournalEntry') ),
-						  autoLoad: false });
-		return this.callParent(arguments);
-	},
-});
-Ext.define('Ssp.store.Goals', {
-    extend: 'Ext.data.Store',
-    model: 'Ssp.model.PersonGoal',
-    mixins: [ 'Deft.mixin.Injectable' ],
-    inject: {
-    	apiProperties: 'apiProperties'
-    },    
-	constructor: function(){
-		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('personGoal') ),
 						  autoLoad: false });
 		return this.callParent(arguments);
 	},
@@ -16982,6 +17069,69 @@ Ext.define('Ssp.store.reference.YesNo', {
 		this.callParent(arguments);
     }
 });
+Ext.define('Ssp.controller.admin.crg.AssociateChallengeCategoriesAdminViewController', {
+	extend: 'Ssp.controller.admin.AdminItemAssociationViewController',
+    config: {
+        associatedItemType: 'challenge',
+        parentItemType: 'category',
+        parentIdAttribute: 'categoryId',
+        associatedItemIdAttribute: 'challengeId'
+    },
+	constructor: function(){
+		this.callParent(arguments);
+
+		this.clear();
+		this.getParentItems();
+		
+		return this;
+	}
+});
+Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeCategoriesAdmin', {
+	extend: 'Ext.tree.Panel',
+	alias : 'widget.displaychallengecategoriesadmin',
+	title: 'Challenge Category Associations',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.crg.AssociateChallengeCategoriesAdminViewController',
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson',
+        store: 'treeStore'
+    },
+	height: '100%',
+	width: '100%',
+    initComponent: function(){
+    	var me=this;
+    	Ext.apply(me,
+    			{
+    		     singleExpand: true,
+    			 store: me.store,
+    			 useArrows: true,
+    			 rootVisible: false,
+    			 singleExpand: true,
+			     viewConfig: {
+			        plugins: {
+			            ptype: 'treeviewdragdrop',
+			            dropGroup: 'gridtotree',
+			            enableDrop: true
+			        }
+			     },
+    			 dockedItems: [{
+     				        dock: 'top',
+     				        xtype: 'toolbar',
+     				        items: [{
+     				            tooltip: 'Delete selected association',
+     				            text: 'Delete Associations',
+     				            hidden: !me.authenticatedPerson.hasAccess('CHALLENGE_CATEGORIES_ASSOCIATION_ADMIN_DELETE_BUTTON'),
+     				            xtype: 'button',
+     				            itemId: 'deleteAssociationButton'
+     				        }]
+     		    	    }] 
+     		       	
+    	});
+    	
+    	return me.callParent(arguments);
+    }
+});
 Ext.define('Ssp.controller.admin.crg.AssociateChallengeReferralsAdminViewController', {
 	extend: 'Ssp.controller.admin.AdminItemAssociationViewController',
     config: {
@@ -17043,69 +17193,6 @@ Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeReferralsAdmin', {
      				            itemId: 'deleteAssociationButton'
      				        }]
      		    	    }]
-     		       	
-    	});
-    	
-    	return me.callParent(arguments);
-    }
-});
-Ext.define('Ssp.controller.admin.crg.AssociateChallengeCategoriesAdminViewController', {
-	extend: 'Ssp.controller.admin.AdminItemAssociationViewController',
-    config: {
-        associatedItemType: 'challenge',
-        parentItemType: 'category',
-        parentIdAttribute: 'categoryId',
-        associatedItemIdAttribute: 'challengeId'
-    },
-	constructor: function(){
-		this.callParent(arguments);
-
-		this.clear();
-		this.getParentItems();
-		
-		return this;
-	}
-});
-Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeCategoriesAdmin', {
-	extend: 'Ext.tree.Panel',
-	alias : 'widget.displaychallengecategoriesadmin',
-	title: 'Challenge Category Associations',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.crg.AssociateChallengeCategoriesAdminViewController',
-    inject: {
-    	authenticatedPerson: 'authenticatedPerson',
-        store: 'treeStore'
-    },
-	height: '100%',
-	width: '100%',
-    initComponent: function(){
-    	var me=this;
-    	Ext.apply(me,
-    			{
-    		     singleExpand: true,
-    			 store: me.store,
-    			 useArrows: true,
-    			 rootVisible: false,
-    			 singleExpand: true,
-			     viewConfig: {
-			        plugins: {
-			            ptype: 'treeviewdragdrop',
-			            dropGroup: 'gridtotree',
-			            enableDrop: true
-			        }
-			     },
-    			 dockedItems: [{
-     				        dock: 'top',
-     				        xtype: 'toolbar',
-     				        items: [{
-     				            tooltip: 'Delete selected association',
-     				            text: 'Delete Associations',
-     				            hidden: !me.authenticatedPerson.hasAccess('CHALLENGE_CATEGORIES_ASSOCIATION_ADMIN_DELETE_BUTTON'),
-     				            xtype: 'button',
-     				            itemId: 'deleteAssociationButton'
-     				        }]
-     		    	    }] 
      		       	
     	});
     	
@@ -17270,16 +17357,28 @@ Ext.define('Ssp.store.reference.EmploymentShifts', {
     model: 'Ssp.model.reference.EmploymentShift',
 	autoLoad: false
 });
+Ext.define('Ssp.model.reference.Campus', {
+    extend: 'Ssp.model.reference.AbstractReference',
+    fields: [{name:'earlyAlertCoordinatorId', type: 'string'}]
+});
 Ext.define('Ssp.model.reference.CampusEarlyAlertRouting', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'earlyAlertReasonId',type:'string'},
              {name:'person',type:'auto'},
              {name:'groupName',type:'string'},
-             {name:'groupEmail',type:'string'}]
-});
-Ext.define('Ssp.model.reference.Campus', {
-    extend: 'Ssp.model.reference.AbstractReference',
-    fields: [{name:'earlyAlertCoordinatorId', type: 'string'}]
+             {name:'groupEmail',type:'string'}],
+             
+    getPersonFullName: function(){
+    	var me=this;
+    	var person;
+    	var fullName = "";
+    	if (me.get('person') != null)
+    	{
+    		person = me.get('person');
+    		fullName = person.firstName + ' ' + person.lastName;
+    	}
+    	return fullName;
+    }
 });
 Ext.define('Ssp.model.reference.ChildCareArrangement', {
 	extend: 'Ssp.model.reference.AbstractReference',
