@@ -24,7 +24,13 @@ Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewCont
     
     loadConfidentialityDisclosureAgreementResult: function(records, operation, success){
     	var model = new Ssp.model.reference.ConfidentialityDisclosureAgreement();
-    	model.populateFromGenericObject(records[0].data);
+    	if (success)
+    	{
+        	if ( records.length > 0 )
+        	{
+        		model.populateFromGenericObject(records[0].data);
+        	}    		
+    	}
     	this.getView().loadRecord( model );
     },
     
