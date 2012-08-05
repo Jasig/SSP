@@ -15,7 +15,6 @@ Ext.define('Ssp.controller.tool.journal.DisplayDetailsViewController', {
 	
     init: function() {
     	var me=this;
-    	console.log( 'DisplayDetailsViewController->init' );
 		me.store.loadData( me.model.getGroupedDetails() );		
 		return me.callParent( arguments );
     },

@@ -668,7 +668,6 @@ Ext.onReady(function(){
 					autoCreateViewport: true,
 				    launch: function( app ) {
 				    	var me=this;
-				    	console.log('launch application');
 				    	Deft.Injector.providers.appEventsController.value.config.app=me;
 				    	Deft.Injector.providers.appEventsController.value.app=me;
 				    	

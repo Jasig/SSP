@@ -242,8 +242,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			// ensure props are null if necessary
 			jsonData = model.setPropsNullForSave( model.data );
 			
-			console.log( jsonData );
-			
 			me.personService.save( jsonData, 
 	    			               {success:me.savePersonSuccess, 
 				                    failure:me.savePersonFailure, 

@@ -67,7 +67,6 @@ Ext.define('Ssp.controller.admin.campus.DefineCampusViewController', {
 	
 	onFinishClick: function(button){
 		var me=this;
-		console.log('DefineCampusViewController->onFinishClick');
 		var campusView = Ext.ComponentQuery.query('.editcampus')[0];
 		var campusForm = campusView.getForm();		
 		var formsToValidate = [campusForm];
@@ -77,7 +76,6 @@ Ext.define('Ssp.controller.admin.campus.DefineCampusViewController', {
 		if ( validateResult.valid ) 
 		{
 			campusForm.updateRecord();
-			console.log(me.model.data);
 			me.getView().setLoading( true );
 			me.campusService.saveCampus( me.model.data, {success:me.saveCampusSuccess, 
 				  failure:me.saveCampusFailure, 

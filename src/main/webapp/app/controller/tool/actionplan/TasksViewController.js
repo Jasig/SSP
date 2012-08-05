@@ -53,13 +53,10 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
     },    
     
     onEditTask: function(){
- 	   console.log('TaskViewController->editTask');
- 	   //Ext.Msg.alert("NOTIFICATION","This functionality is disabled until I can figure out why the tree component renders it's init method twice on edit from the grid.")
  	   this.loadEditor();
     },
     
     onCloseTask: function() {
-	   console.log('TaskViewController->closeTask');
        var me=this;
 	   var store, id, model, groupName;
        model = me.model;
