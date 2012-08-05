@@ -56,12 +56,15 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
 		
 		if ( me.model.get('closedById') != null )
 		{
-			me.getView().setLoading( true );
-			me.personService.get( me.model.get('closedById'),{
-				success: me.getPersonSuccess,
-				failure: me.getPersonFailure,
-				scope: me
-			});
+			if (me.model.get('closedById') != "")
+			{
+				me.getView().setLoading( true );
+				me.personService.get( me.model.get('closedById'),{
+					success: me.getPersonSuccess,
+					failure: me.getPersonFailure,
+					scope: me
+				});				
+			}
 		}
 		
 		return this.callParent(arguments);

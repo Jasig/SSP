@@ -24,7 +24,7 @@ Ext.define('Ssp.view.admin.forms.campus.CampusEarlyAlertRoutingsAdmin', {
     		      dockedItems: [{
 		               xtype: 'toolbar',
 		               items: [{
-	       		                   text: 'Finished',
+	       		                   text: 'Finished Editing Campus',
 	       		                   xtype: 'button',
 	       		                   itemId: 'finishButton'
 	       		               }]

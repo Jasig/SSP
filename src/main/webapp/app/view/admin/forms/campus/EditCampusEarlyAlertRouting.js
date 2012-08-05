@@ -19,20 +19,6 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
 		        labelWidth: 125
 		    },
             items: [{
-                    xtype: 'textfield',
-                    fieldLabel: 'Group Name',
-                    width: 500,
-                    name: 'groupName',
-                    allowBlank: false
-                },{
-                    xtype: 'textfield',
-                    fieldLabel: 'Group Email',
-                    name: 'groupEmail',
-                    width: 500,
-                    vtype:'email',
-			        maxLength: 100,
-			        allowBlank: false
-                },{
 			        xtype: 'combobox',
 			        name: 'earlyAlertReasonId',
 			        itemId: 'earlyAlertReasonCombo',
@@ -47,8 +33,23 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
 			        allowBlank: false,
 			        width: 500
 				},{
+                    xtype: 'textfield',
+                    fieldLabel: 'Group Name',
+                    width: 500,
+                    name: 'groupName',
+                    allowBlank: false
+                },{
+                    xtype: 'textfield',
+                    fieldLabel: 'Group Email',
+                    name: 'groupEmail',
+                    width: 500,
+                    vtype:'email',
+			        maxLength: 100,
+			        allowBlank: false
+                },{
 		            xtype: 'combo',
 		            store: me.peopleSearchLiteStore,
+		            itemId: 'personCombo',
 		            displayField: 'displayFullName',
 		            emptyText: 'Name or ' + me.sspConfig.get('studentIdAlias'),
 		            valueField:'id',

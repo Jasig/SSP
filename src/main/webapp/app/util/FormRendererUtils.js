@@ -734,7 +734,12 @@ Ext.define('Ssp.util.FormRendererUtils',{
     	var me=this;
     	var selectedItems=[];
     	Ext.Array.each( selectedIdsArray, function(id,index){
-			var item = {name: referenceStore.getById( id ).get('name')};
+			var item = {name: ""};
+    		var referenceItem = referenceStore.getById( id );
+    		if (referenceItem != null)
+    		{
+    			item = {name: referenceItem.get('name')};
+    		}
 			selectedItems.push( item );
 		});
 		if (selectedItems.length==0)

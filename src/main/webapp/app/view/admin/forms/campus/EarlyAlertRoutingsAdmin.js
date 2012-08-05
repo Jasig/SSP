@@ -6,7 +6,8 @@ Ext.define('Ssp.view.admin.forms.campus.EarlyAlertRoutingsAdmin',{
     controller: 'Ssp.controller.admin.campus.EarlyAlertRoutingsAdminViewController',
     inject: {
         apiProperties: 'apiProperties',
-        store: 'campusEarlyAlertRoutingsStore'
+        store: 'campusEarlyAlertRoutingsStore',
+        columnRendererUtils: 'columnRendererUtils'
     },
     height: '100%',
 	width: '100%',
@@ -19,11 +20,15 @@ Ext.define('Ssp.view.admin.forms.campus.EarlyAlertRoutingsAdmin',{
     		      title: 'Early Alert Routing Groups',
      		      columns: [
     		                { header: 'Group Name',  
-    		                  dataIndex: 'name',
-    		                  flex: .5 },
+    		                  dataIndex: 'groupName',
+    		                  flex: .4 },
       		                { header: 'Group Email',  
-        		                  dataIndex: 'name',
-        		                  flex: .5 }
+        		                  dataIndex: 'groupEmail',
+        		                  flex: .3 },
+    		                { header: 'Person',  
+    		                  dataIndex: 'person',
+    		                  renderer: me.columnRendererUtils.renderPersonFullName, 
+    		                  flex: .3 }
     		           ],
     		        
     		           dockedItems: [{

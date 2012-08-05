@@ -58,7 +58,7 @@ Ext.define('Ssp.service.CampusEarlyAlertRoutingService', {
 	    	if (response.responseText != "")
 	    	{
 		    	r = Ext.decode(response.responseText);
-		    	me.store.loadData(r);	    		
+		    	me.store.loadData( r.rows );	    		
 	    	}
 	    	callbacks.success( r, callbacks.scope );
 	    };

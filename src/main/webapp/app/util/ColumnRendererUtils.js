@@ -94,6 +94,13 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
         strHtml += '</div>';
 	    return strHtml;
 	},
+
+	renderPersonFullName: function(val, metaData, record) {
+		var strHtml = '<div>';
+		strHtml += '<p>' + record.getPersonFullName() + '</p>';
+        strHtml += '</div>';
+	    return strHtml;
+	},	
 	
 	renderStudentDetails: function(val, metaData, record) {
 		var strHtml = '<div>';
