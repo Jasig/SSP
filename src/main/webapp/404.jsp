@@ -1,1 +1,1 @@
-404 not found
+<%@ page import="javax.servlet.jsp.JspException" %><%@page isErrorPage="true" contentType="application/json" %><%@ page import="org.slf4j.Logger,org.slf4j.LoggerFactory" %><%! static final Logger LOGGER = LoggerFactory.getLogger("404.jsp"); %><% LOGGER.info("404 Thrown for URI: {}", pageContext.getErrorData().getRequestURI()); %>{"success":false, "uri":${pageContext.errorData.requestURI}, "http status code":"${pageContext.errorData.statusCode}"}
