@@ -197,11 +197,9 @@ Ext.define('Ssp.controller.SearchViewController', {
     },
     
     onCollapseStudentRecord: function(){
-    	console.log('SearchViewController->onCollapseStudentRecord');
 	},
 	
 	onExpandStudentRecord: function(){
-		console.log('SearchViewController->onExpandStudentRecord');
 	},  
 
 	setGridView: function( view ){
