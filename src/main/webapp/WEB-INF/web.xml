@@ -17,7 +17,7 @@
 		<param-value>org.jasig.ssp.config.BeanProfileApplicationContextInitializer</param-value>
 	</context-param>
 	<listener>
-		<listener-class>org.jasig.ssp.config.logging.ExternalConfigLoaderContextListener</listener-class>
+		<listener-class>org.jasig.ssp.config.logging.ExternalConfigLoader</listener-class>
 	</listener>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

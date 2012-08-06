@@ -1,7 +1,6 @@
 package org.jasig.ssp.config;
 
-import java.io.IOException;
-
+import org.jasig.ssp.config.logging.ExternalConfigLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContextInitializer;
@@ -10,7 +9,7 @@ import org.springframework.core.io.support.ResourcePropertySource;
 
 /**
  * Allows us to read the Spring Profile property from the Config file by
- * reading the SSP_CONFIGDIR environment variable.
+ * building the location of the config files with the ExternalConfigLoader.
  * 
  */
 public class BeanProfileApplicationContextInitializer
@@ -20,8 +19,6 @@ public class BeanProfileApplicationContextInitializer
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(BeanProfileApplicationContextInitializer.class);
 
-	private static final String CONFIG_DIR_NAME = System
-			.getenv("SSP_CONFIGDIR");
 	private static final String CONFIG_FILE_NAME = "ssp-config.properties";
 	private static final String FILE_SEPARATOR = System
 			.getProperty("file.separator");
@@ -30,8 +27,8 @@ public class BeanProfileApplicationContextInitializer
 	public void initialize(
 			final ConfigurableApplicationContext applicationContext) {
 
-		final String propertiesFileName = CONFIG_DIR_NAME
-				+ FILE_SEPARATOR + CONFIG_FILE_NAME;
+		final String propertiesFileName = ExternalConfigLoader
+				.getConfigDir() + FILE_SEPARATOR + CONFIG_FILE_NAME;
 
 		try {
 			applicationContext
@@ -42,7 +39,7 @@ public class BeanProfileApplicationContextInitializer
 									"file:" + propertiesFileName));
 			LOGGER.info("Loaded properties file from " + propertiesFileName
 					+ " for determining spring profile.");
-		} catch (IOException e) {
+		} catch (Exception e) {
 			LOGGER.info("Unable to load properties file " + propertiesFileName +
 					" in BeanProfileApplicationContextInitializer, defaulting "
 					+
