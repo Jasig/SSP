@@ -48,11 +48,20 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
 		var me=this;
 		me.campusesStore.load();
 		me.confidentialityLevelsStore.load();
-    	me.outcomesStore.load();
-    	me.outreachesStore.load();
-    	me.reasonsStore.load();
-    	me.suggestionsStore.load();
+    	me.outcomesStore.load({
+    		params:{limit:50}
+    	});
+    	me.outreachesStore.load({
+    		params:{limit:50}
+    	});
+    	me.reasonsStore.load({
+    		params:{limit:50}
+    	});
+    	me.suggestionsStore.load({
+    		params:{limit:50}
+    	});
     	me.referralsStore.load({
+    		params:{limit:50},
     		callback: function(r,options,success) {
     	         if(success == true) {
      	                 me.getEarlyAlerts(); 
