@@ -57,19 +57,23 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			final Boolean outsideCaseload, @NotNull final String searchTerm,
 			final Person advisor, final SortingAndPaging sAndP) {
 
-		if (!StringUtils.isNotBlank(searchTerm)) {
+		if (StringUtils.isBlank(searchTerm)) {
 			throw new IllegalArgumentException("search term must be specified");
-		}
-		if (programStatus == null) {
-			throw new IllegalArgumentException(
-					"program status must be specified");
 		}
 
 		final Criteria query = createCriteria();
 
-		query.createAlias("programStatuses", "personProgramStatus")
-				.add(Restrictions.eq("personProgramStatus.programStatus",
-						programStatus));
+		query.createAlias("programStatuses", "personProgramStatus");
+
+		if (programStatus != null) {
+			query.add(Restrictions.eq("personProgramStatus.programStatus",
+					programStatus));
+		}
+
+		if ((sAndP != null) && sAndP.isFilteredByStatus()) {
+			query.add(Restrictions
+					.isNull("personProgramStatus.expirationDate"));
+		}
 
 		if (Boolean.FALSE.equals(outsideCaseload)) {
 			query.add(Restrictions.eq("coach", advisor));

@@ -69,5 +69,40 @@
 			</delete>
 		</rollback>
 	</changeSet>
+	
+	<changeSet id="add test person_program_statuses" author="daniel.bower">
+		<insert tableName="person_program_status">
+			<column name="id" value="f2e68552-dffe-11e1-9417-0026b9e7ff4c" />
+			<column name="created_date" valueDate="2012-01-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-03-20T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="program_status_id" value="b2d125a4-5056-a51a-8042-d50b8eff0df1" />
+			<column name="person_id" value="1010e4a0-1001-0110-1011-4ffc02fe81ff" />
+			<column name="effective_date" valueDate="2012-01-01T00:00:00" />
+			<column name="expiration_date" valueDate="2012-03-20T00:00:00" />
+		</insert>
+		<insert tableName="person_program_status">
+			<column name="id" value="fd075a58-e007-11e1-8ddd-0026b9e7ff4c" />
+			<column name="created_date" valueDate="2011-01-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-01-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="program_status_id" value="b2d12527-5056-a51a-8054-113116baab88" />
+			<column name="person_id" value="1010e4a0-1001-0110-1011-4ffc02fe81ff" />
+			<column name="effective_date" valueDate="2011-01-01T00:00:00" />
+			<column name="expiration_date" valueDate="2012-01-01T00:00:00" />
+		</insert>
+		<rollback>
+			<delete tableName="person_program_status">
+				<where>id = 'f2e68552-dffe-11e1-9417-0026b9e7ff4c'</where>
+			</delete>
+			<delete tableName="person_program_status">
+				<where>id = 'fd075a58-e007-11e1-8ddd-0026b9e7ff4c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
 
 </databaseChangeLog>

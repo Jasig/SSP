@@ -9,7 +9,6 @@ import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonProgramStatusService;
 import org.jasig.ssp.service.PersonSearchService;
-import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +30,6 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	@Autowired
 	private transient PersonProgramStatusService personProgramStatus;
 
-	@Autowired
-	private transient ProgramStatusService programStatusService;
-
 	@Override
 	public PagingWrapper<PersonSearchResult> searchBy(
 			final ProgramStatus programStatus, final Boolean outsideCaseload,
@@ -41,15 +37,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 			final SortingAndPaging sAndP)
 			throws ObjectNotFoundException {
 
-		ProgramStatus searchByStatus;
-		// programStatus : <programStatusId>, default to Active
-		if (programStatus == null) {
-			searchByStatus = programStatusService.get(ProgramStatus.ACTIVE_ID);
-		} else {
-			searchByStatus = programStatus;
-		}
-
-		final PagingWrapper<Person> people = dao.searchBy(searchByStatus,
+		final PagingWrapper<Person> people = dao.searchBy(programStatus,
 				(outsideCaseload == null ? Boolean.FALSE : outsideCaseload),
 				searchTerm, advisor, sAndP);
 
