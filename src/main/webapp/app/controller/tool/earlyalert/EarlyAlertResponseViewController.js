@@ -120,7 +120,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
      	var personId = me.personLite.get('id');
      	if (btnId=="yes")
      	{
-     		if (me.earlyAlert.get('closedById') != "")
+     		if (me.earlyAlert.get('closedById') == "" || me.earlyAlert.get('closedById') == null)
      		{
      			// fix for GMT to UTC
          		me.earlyAlert.set('closedDate', me.formUtils.fixDateOffsetWithTime( new Date() ) );
