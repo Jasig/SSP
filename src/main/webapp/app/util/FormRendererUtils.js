@@ -733,9 +733,15 @@ Ext.define('Ssp.util.FormRendererUtils',{
     getSimpleItemsForDisplay: function(referenceStore, selectedIdsArray, noItemsPropertyLabel){
     	var me=this;
     	var selectedItems=[];
-    	Ext.Array.each( selectedIdsArray, function(id,index){
+    	Ext.Array.each( selectedIdsArray, function(selectedItem,index){
 			var item = {name: ""};
-    		var referenceItem = referenceStore.getById( id );
+			var referenceItem;
+			if ( selectedItem instanceof Object)
+			{
+	    		referenceItem = referenceStore.getById( selectedItem.id );				
+			}else{
+				referenceItem = referenceStore.getById( selectedItem );				
+			}
     		if (referenceItem != null)
     		{
     			item = {name: referenceItem.get('name')};
