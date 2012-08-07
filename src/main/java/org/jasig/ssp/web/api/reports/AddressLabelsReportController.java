@@ -144,7 +144,7 @@ public class AddressLabelsReportController extends AbstractBaseController { // N
 				: programStatusService.get(programStatus).getName());
 
 		final Map<String, Object> parameters = Maps.newHashMap();
-		parameters.put("ReportTitle", "Address Report");
+		parameters.put("ReportTitle", "General Student Report");
 		parameters.put("DataFile", "Person.java - Bean Array");
 		parameters.put("programStatus", programStatusName);
 		parameters.put("anticipatedStartYear", anticipatedStartYear);
@@ -171,7 +171,7 @@ public class AddressLabelsReportController extends AbstractBaseController { // N
 
 		if ("pdf".equals(reportType)) {
 			response.setHeader("Content-disposition",
-					"attachment; filename=AddressLabelReprt.pdf");
+					"attachment; filename=General_Student_Report.pdf");
 			JasperExportManager.exportReportToPdfStream(decodedInput,
 					response.getOutputStream());
 		} else if ("csv".equals(reportType)) {

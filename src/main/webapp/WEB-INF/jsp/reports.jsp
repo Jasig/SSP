@@ -52,8 +52,8 @@
 
 
 
-<div class="hideable-form addresses-form" style="display:none">
-	<h1>Address labels</h1>
+<div class="hideable-form generalStudent-form" style="display:none">
+	<h1>General Student Report</h1>
 	<form action="/ssp/api/1/report/AddressLabels/" method="post"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">
 		<!-- program Status -->
@@ -159,7 +159,7 @@
 			<label><span>pdf</span></label><input type="radio" name="reportType"
 				value="pdf" checked /><br /> <label><span>csv</span></label><input
 				type="radio" name="reportType" value="csv" />
-		</div>
+		</div> 
 
 		<div class="ea-label">
 			<span>Output Type:</span>

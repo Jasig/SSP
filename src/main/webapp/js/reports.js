@@ -40,9 +40,9 @@ var ssp = ssp || {};
 			});
 		}
 
-		// load Addresses
+		// load Forms
 		var loadForm = function() {
-			// var addressesForm = that.locate('addressesForm');
+			
 			loadGroupInput("/ssp/api/1/reference/programStatus/", that
 					.locate('programStatusGroup'));
 			loadGroupInput("/ssp/api/1/reference/studentType/", that
@@ -106,7 +106,7 @@ var ssp = ssp || {};
 		
 		
 		reportsSelect
-				.append('<option value="addressesForm">Address Labels Report</option>');
+				.append('<option value="generalStudentForm">General Student Report</option>');
 		reportsSelect
 				.append('<option value="specialServicesForm">Special Services Report</option>');
 		reportsSelect
@@ -122,7 +122,7 @@ var ssp = ssp || {};
 						selectors : {
 							reportsSelect : '.reports-select',
 							reportFormBody : '.reports-form-body',
-							addressesForm : '.addresses-form',
+							generalStudentForm : '.generalStudent-form',
 							specialServicesForm : '.special-services-form',
 							confidentialityAgreementForm : '.confidentiality-agreement-form',
 							confidentialityAgreementFormContent : '.confidentiality-agreement-form-content',
