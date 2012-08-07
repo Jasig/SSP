@@ -103,8 +103,10 @@ public class PersonServiceImpl implements PersonService {
 			} catch (final ConstraintViolationException sqlException) {
 				// if we received a constraintViolationException of
 				// unique_person_username, then the user might have been
-				// added since we started.
-				if (sqlException.getConstraintName().equals(
+				// added since we started. (If using SQLServer this will only
+				// work if you're running with ExtendedSQLServer*Dialect. Else
+				// getConstraintName() will always be null.)
+				if (sqlException.getConstraintName().equalsIgnoreCase(
 						"unique_person_username")) {
 					LOGGER.info("Tried to add a user that was already present");
 

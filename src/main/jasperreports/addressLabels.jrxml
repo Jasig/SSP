@@ -119,11 +119,11 @@
 				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="1" y="0" width="751" height="35" backcolor="#70C2E7"/>
 			</rectangle>
 			<staticText>
-				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="326" y="7" width="116" height="20"/>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="251" y="7" width="191" height="20"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Address Labels]]></text>
+				<text><![CDATA[General Student Report]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
@@ -211,7 +211,7 @@
 	<detail>
 		<band height="35" splitType="Stretch">
 			<rectangle>
-				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" x="0" y="2" width="750" height="30" backcolor="#E4E4E4">
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="0" y="2" width="750" height="30" backcolor="#E4E4E4">
 					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
 				</reportElement>
 			</rectangle>
