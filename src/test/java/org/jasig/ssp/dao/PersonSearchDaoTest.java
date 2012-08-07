@@ -1,6 +1,7 @@
 package org.jasig.ssp.dao;
 
 import static org.jasig.ssp.util.assertions.SspAssert.assertNotEmpty;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
@@ -55,12 +56,23 @@ public class PersonSearchDaoTest {
 	}
 
 	@Test
+	public void testNumberOfEntries() {
+		final Collection<Person> list = dao.searchBy(
+				null, true,
+				"Gosling", null, new SortingAndPaging(ObjectStatus.ACTIVE))
+				.getRows();
+		assertNotEmpty("List should not have been empty.", list);
+		assertEquals("Should only be one entry", 1, list.size());
+	}
+
+	@Test
 	public void testGetAllTTfirstName() {
 		final Collection<Person> list = dao.searchBy(
 				activeProgramStatus, true,
 				"enneth", null, new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
 		assertNotEmpty("List should not have been empty.", list);
+		assertEquals("Should only be one entry", 1, list.size());
 	}
 
 	@Test
@@ -70,6 +82,7 @@ public class PersonSearchDaoTest {
 				"hompso", null, new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
 		assertNotEmpty("List should not have been empty.", list);
+		assertEquals("Should only be one entry", 1, list.size());
 	}
 
 	@Test
@@ -79,6 +92,7 @@ public class PersonSearchDaoTest {
 				"ken.1", null, new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
 		assertNotEmpty("List should have had at least one entity.", list);
+		assertEquals("Should only be one entry", 1, list.size());
 	}
 
 	@Test
@@ -89,6 +103,7 @@ public class PersonSearchDaoTest {
 				new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
 		assertNotEmpty("List should have one entity.", list);
+		assertEquals("Should only be one entry", 1, list.size());
 	}
 
 	@Test
@@ -109,7 +124,7 @@ public class PersonSearchDaoTest {
 				.fromString("252de4a0-7c06-4254-b7d8-4ffc02fe81ff"));
 
 		final Collection<Person> list = dao.searchBy(
-				new ProgramStatus(ProgramStatus.ACTIVE_ID), true,
+				null, true,
 				"james", turing, new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
 		assertNotEmpty("List should have one entity.", list);
