@@ -20,13 +20,15 @@ Ext.define('Ssp.view.tools.actionplan.EditGoalForm', {
                     xtype: 'textfield',
                     fieldLabel: 'Name',
                     anchor: '100%',
-                    name: 'name'
+                    name: 'name',
+                    allowBlank: false
                 },
                 {
                     xtype: 'textareafield',
                     fieldLabel: 'Description',
                     anchor: '100%',
-                    name: 'description'
+                    name: 'description',
+                    allowBlank: false
                 },{
 			        xtype: 'combobox',
 			        itemId: 'confidentialityLevel',

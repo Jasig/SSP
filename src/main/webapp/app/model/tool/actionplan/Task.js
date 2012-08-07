@@ -6,12 +6,16 @@ Ext.define('Ssp.model.tool.actionplan.Task', {
              {name:'reminderSentDate', type:'date', dateFormat:'time'},
              {name: 'confidentialityLevel',
                  convert: function(value, record) {
-                	 var obj  = {id:'',name: ''}
+                	 var defaultConfidentialityLevelId = Ssp.util.Constants.DEFAULT_SYSTEM_CONFIDENTIALITY_LEVEL_ID;
+                	 var obj  = {id:defaultConfidentialityLevelId,name: ''};
                 	 if (value != null)
                 	 {
-                		 obj.id  = value.id;
-                		 obj.name = value.name;
-                	 }	
+                		 if (value != "")
+                		 {
+                    		 obj.id  = value.id;
+                    		 obj.name = value.name;                			 
+                		 }
+                	 }
    		            return obj;
                  }
    		      },

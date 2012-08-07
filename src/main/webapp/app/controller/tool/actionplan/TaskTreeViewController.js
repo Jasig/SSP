@@ -130,7 +130,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     	var name = me.treeUtils.getNameFromNodeId( record.data.id );
     	var id = me.treeUtils.getIdFromNodeId( record.data.id );
     	var challengeId = me.treeUtils.getIdFromNodeId( record.data.parentId );
-    	var confidentialityLevelId = "afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c";
+    	var confidentialityLevelId = Ssp.util.Constants.DEFAULT_SYSTEM_CONFIDENTIALITY_LEVEL_ID;
     	if (name=='referral')
     	{
 	    	successFunc = function(response,view){

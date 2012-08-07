@@ -23,6 +23,12 @@ Ext.define('Ssp.util.Constants',{
     		return ((Ext.Array.indexOf( restrictedIdsArray, id ) != -1)? true : false);
     	},
     	
+    	// DEFAULT CONFIDENTIALITY LEVEL ID
+    	// If a value is assigned here then it will be used for the default
+    	// confidentiality level for lists in the SSP portlet.
+    	// default to EVERYONE: 'b3d077a7-4055-0510-7967-4a09f93a0357'
+    	DEFAULT_SYSTEM_CONFIDENTIALITY_LEVEL_ID: '',
+    	
     	// EDUCATION GOALS
         EDUCATION_GOAL_OTHER_ID: '78b54da7-fb19-4092-bb44-f60485678d6b',
         EDUCATION_GOAL_MILITARY_ID: '6c466885-d3f8-44d1-a301-62d6fe2d3553',
