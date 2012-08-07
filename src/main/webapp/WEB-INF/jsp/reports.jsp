@@ -150,7 +150,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Anticipated Start Term:</span>
+			<span>Anticipated Start Year:</span>
 		</div>
 		<div class="ea-clear"></div>
 
