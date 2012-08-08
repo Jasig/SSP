@@ -1,9 +1,9 @@
 package org.jasig.ssp.dao.reference;
 
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
@@ -26,20 +26,21 @@ public class ConfigDao extends AbstractReferenceAuditableCrudDao<Config>
 	}
 
 	@Override
-	@SuppressWarnings(UNCHECKED)
 	public PagingWrapper<Config> getAll(final SortingAndPaging sAndP) {
-		final long totalRows = (Long) createCriteria().setProjection(
-				Projections.rowCount()).uniqueResult();
-
-		if (!sAndP.isSorted()) {
-			sAndP.appendSortField("sortOrder", SortDirection.ASC);
-			sAndP.appendSortField("name", SortDirection.ASC);
+		SortingAndPaging sp = sAndP;
+		if (sp == null) {
+			sp = new SortingAndPaging(ObjectStatus.ACTIVE);
 		}
 
-		return new PagingWrapper<Config>(totalRows,
-				createCriteria(sAndP).list());
+		if (!sp.isSorted()) {
+			sp.appendSortField("sortOrder", SortDirection.ASC);
+			sp.appendSortField("name", SortDirection.ASC);
+		}
+
+		return super.getAll(sp);
 	}
 
+	@Override
 	public Config getByName(final String name) {
 		// TODO: (performance) Perfect example of data that should be cached
 		final Criteria query = createCriteria();
