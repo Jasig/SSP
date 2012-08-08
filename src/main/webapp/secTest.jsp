@@ -11,14 +11,6 @@ Your principal object is: <%= request.getUserPrincipal() %>
 </p>
 
 <p>
-<sec:authorize url='/ssp/api/example'>You can currently access "/ssp/api/example".</sec:authorize>
-</p>
-
-<p>
-<sec:authorize url='/api/example'>You can currently access "/api/example".</sec:authorize>
-</p>
-
-<p>
 <sec:authorize url='/api/1/reference/challenge/all'>You can currently access "/api/reference/challenge/all".</sec:authorize>
 </p>
 

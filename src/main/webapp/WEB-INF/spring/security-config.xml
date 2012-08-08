@@ -27,7 +27,6 @@
 		<intercept-url pattern="/accessDenied.htm" access="permitAll"/>
 		<intercept-url pattern="/invalidSession.htm" access="permitAll"/>
 		<intercept-url pattern="/secTest.jsp" access="permitAll"/>
-		<intercept-url pattern="/api/example" access="isAuthenticated()"/>
 		
 		<intercept-url pattern="/index.html" access="isAuthenticated()" />
 		
