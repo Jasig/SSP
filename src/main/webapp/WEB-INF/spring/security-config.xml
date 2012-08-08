@@ -10,7 +10,8 @@
 	<beans:import resource="local/ssp-sec-local.xml"/>
 
 	<!-- Properties file configuration of existing beans -->
-	<util:properties id="configProperties" location="file:/usr/local/etc/ssp/ssp-config.properties"/>
+	<util:properties id="configProperties" 
+		location="file:#{T(org.jasig.ssp.config.logging.ExternalConfigLoader).getConfigDir()}/ssp-config.properties"/>
 
 	<global-method-security pre-post-annotations="enabled" />
 
