@@ -1,19 +1,21 @@
 package org.jasig.ssp.util.hibernate;
 
-import org.hibernate.dialect.SQLServer2008Dialect;
+
+import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.exception.spi.ViolatedConstraintNameExtracter;
 
 /**
- * Extensions to {@link SQLServer2008Dialect} to work around SQLServer-specific
+ * Extensions to {@link SQLServerDialect} to work around SQLServer-specific
  * issues with SSP.
  */
-public class ExtendedSQLServer2008Dialect extends SQLServer2008Dialect {
+public class ExtendedSQLServerDialect extends SQLServerDialect {
 
-	public ExtendedSQLServer2008Dialect() {
+	public ExtendedSQLServerDialect() {
 		super();
 	}
 
-	private static final ViolatedConstraintNameExtracter MS_SQL_EXTRACTER = new SQLServerViolatedConstraintNameExtractor();
+	private static final ViolatedConstraintNameExtracter MS_SQL_EXTRACTER
+			= new SQLServerViolatedConstraintNameExtractor();
 
 	/**
 	 * Provides a {@link ViolatedConstraintNameExtracter} that tries to return
@@ -24,4 +26,5 @@ public class ExtendedSQLServer2008Dialect extends SQLServer2008Dialect {
 	public ViolatedConstraintNameExtracter getViolatedConstraintNameExtracter() {
 		return MS_SQL_EXTRACTER;
 	}
+
 }

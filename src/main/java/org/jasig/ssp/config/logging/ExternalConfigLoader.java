@@ -3,6 +3,7 @@ package org.jasig.ssp.config.logging;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,28 +18,65 @@ import org.slf4j.LoggerFactory;
  *   </listener>
  * </pre>
  */
-public class ExternalConfigLoaderContextListener implements
+public class ExternalConfigLoader implements
 		ServletContextListener {
+
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(ExternalConfigLoaderContextListener.class);
+			.getLogger(ExternalConfigLoader.class);
+
+	private static String configDir;
+
+	private final boolean initLogback = true;
 
 	@Override
 	public void contextInitialized(final ServletContextEvent sce) {
+		initConfigDirectory(sce);
+		initLogConfig();
+	}
+
+	@Override
+	public void contextDestroyed(final ServletContextEvent sce) {
+		/**
+		 * Nothing to do here
+		 */
+	}
+
+	public static String getConfigDir() {
+		return configDir;
+	}
+
+	private void initConfigDirectory(final ServletContextEvent sce) {
 		final StringBuffer configLocation = new StringBuffer();
 
 		final String environmentDefinedConf = System.getenv("SSP_CONFIGDIR");
-		final String contextDefinedConf = sce.getServletContext()
-				.getInitParameter("SSP_CONFIGDIR");
 
-		// Give precedence to the environmentDefined Config directory
-		if ((environmentDefinedConf == null) && (contextDefinedConf == null)) {
-			LOGGER.error("No config directory set");
-		} else if (environmentDefinedConf == null) {
-			configLocation.append(contextDefinedConf);
+		if (StringUtils.isBlank(environmentDefinedConf)) {
+
+			final String contextDefinedConf = sce.getServletContext()
+					.getInitParameter("SSP_CONFIGDIR");
+
+			if (StringUtils.isBlank(contextDefinedConf)) {
+				LOGGER.error("Unable to set config directory.");
+			} else {
+				configLocation.append(contextDefinedConf);
+			}
+
 		} else {
 			configLocation.append(environmentDefinedConf);
 		}
 
+		configDir = configLocation.toString();
+
+		LOGGER.info("Config directory set to {}", configDir);
+	}
+
+	private void initLogConfig() {
+		if (!initLogback) {
+			return;
+		}
+
+		final StringBuffer configLocation = new StringBuffer();
+		configLocation.append(configDir);
 		configLocation.append(System.getProperty("file.separator"));
 		configLocation.append("logback.xml");
 
@@ -49,12 +87,5 @@ public class ExternalConfigLoaderContextListener implements
 					"Unable to read config file from "
 							+ configLocation.toString(), e);
 		}
-	}
-
-	@Override
-	public void contextDestroyed(final ServletContextEvent sce) {
-		/**
-		 * Nothing to do here
-		 */
 	}
 }
