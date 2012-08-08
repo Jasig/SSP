@@ -15,7 +15,7 @@
 
 	<!-- Properties file configuration of existing beans -->
 	<util:properties id="configProperties"
-		location="file:${SSP_CONFIGDIR}/ssp-config.properties" />
+		location="file:#{T(org.jasig.ssp.config.logging.ExternalConfigLoader).getConfigDir()}/ssp-config.properties" />
 
 	<util:properties id="contextProperties">
 		<prop key="applicationMode">RUN</prop>
