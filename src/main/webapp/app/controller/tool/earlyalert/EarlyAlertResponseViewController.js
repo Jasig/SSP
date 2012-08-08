@@ -15,6 +15,13 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     	formToDisplay: 'earlyalert'
     },
     control: {
+    	outreachList: {
+    		selector: '#outreachList',
+            listeners: {
+            	validitychange: 'onOutreachListValidityChange'
+            }
+    	},
+    	
     	outcomeCombo: {
             selector: '#outcomeCombo',
             listeners: {
@@ -40,7 +47,6 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		me.getView().getForm().reset();
 		me.getView().getForm().loadRecord(me.model);
 		me.showHideOtherOutcomeDescription();
-		
 		return me.callParent(arguments);
     },
     
@@ -58,6 +64,10 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     	}
     },
     
+    onOutreachListValidityChange: function( comp, isValid, eOpts ){
+    	//comp[isValid ? 'removeCls' : 'addCls']('multiselect-invalid');
+    },
+    
 	onSaveClick: function(button) {
 		var me = this;
 		var record, id, jsonData, url;
@@ -65,36 +75,63 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		var earlyAlertId = me.earlyAlert.get('id');
 		var referralsItemSelector = Ext.ComponentQuery.query('#earlyAlertReferralsItemSelector')[0];	
 		var selectedReferrals = [];			
+		var form = me.getView().getForm();
+		var outreaches = me.getOutreachList().getValue();
+		var outreachIsValid = false;
+		// validate multi-select list
+		// accomodate error in extjs where
+		// list is not correctly marked invalid
+		if ( outreaches.length > 0 )
+		{
+			if (outreaches[0] != "")
+			{
+				outreachIsValid=true;
+			}
+		}
+		console.log( outreachIsValid );
+		if ( outreachIsValid == false )
+		{
+			me.getOutreachList().setValue(["1"]);
+			me.getOutreachList().setValue([]);
+			me.getOutreachList().addCls('multiselect-invalid');
+			me.getOutreachList().markInvalid("At least one Outreach is required.");			
+		}
 		
-		me.getView().getForm().updateRecord();
-		record = me.model;
-		
-		// populate referrals
-		selectedReferrals = referralsItemSelector.getValue();
-		if (selectedReferrals.length > 0)
-		{			
-		   record.set('earlyAlertReferralIds', selectedReferrals);
+		// test for valid form entry
+		if ( form.isValid() && outreachIsValid)
+		{
+			form.updateRecord();
+			record = me.model;
+			
+			// populate referrals
+			selectedReferrals = referralsItemSelector.getValue();
+			if (selectedReferrals.length > 0)
+			{			
+			   record.set('earlyAlertReferralIds', selectedReferrals);
+			}else{
+			   // AAL : 08/01/12 : Commented line below as it was adding a "referrals" property to the API call
+					// and this property isn't valid per the api spec.  Added the setting of the earlyAlertReferralIds
+					// property to the empty array when none are selected.  By default this value was being set to an
+					// empty string which isn't valid per the api spec and was throwing an exception on the server.
+			   // record.data.referrals=null;
+			   record.set('earlyAlertReferralIds', []);
+			}		
+			
+			// set the early alert id for the response
+			record.set( 'earlyAlertId', earlyAlertId ); 
+			
+			// jsonData for the response
+			jsonData = record.data;
+			
+			me.getView().setLoading(true);
+			me.earlyAlertResponseService.save(personId, earlyAlertId, jsonData, {
+				success: me.saveEarlyAlertResponseSuccess,
+				failure: me.saveEarlyAlertResponseFailure,
+				scope: me
+			});				
 		}else{
-		   // AAL : 08/01/12 : Commented line below as it was adding a "referrals" property to the API call
-				// and this property isn't valid per the api spec.  Added the setting of the earlyAlertReferralIds
-				// property to the empty array when none are selected.  By default this value was being set to an
-				// empty string which isn't valid per the api spec and was throwing an exception on the server.
-		   // record.data.referrals=null;
-		   record.set('earlyAlertReferralIds', []);
-		}		
-		
-		// set the early alert id for the response
-		record.set( 'earlyAlertId', earlyAlertId ); 
-		
-		// jsonData for the response
-		jsonData = record.data;
-		
-		me.getView().setLoading(true);
-		me.earlyAlertResponseService.save(personId, earlyAlertId, jsonData, {
-			success: me.saveEarlyAlertResponseSuccess,
-			failure: me.saveEarlyAlertResponseFailure,
-			scope: me
-		})
+			Ext.Msg.alert('Error','Please correct the indicated errors in this form.');
+		}
 	},
 	
 	saveEarlyAlertResponseSuccess: function( r, scope ) {
@@ -120,7 +157,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
      	var personId = me.personLite.get('id');
      	if (btnId=="yes")
      	{
-     		if (me.earlyAlert.get('closedById') != "")
+     		if (me.earlyAlert.get('closedById') == "" || me.earlyAlert.get('closedById') == null)
      		{
      			// fix for GMT to UTC
          		me.earlyAlert.set('closedDate', me.formUtils.fixDateOffsetWithTime( new Date() ) );

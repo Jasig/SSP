@@ -1,6 +1,8 @@
 package org.jasig.ssp.util.uuid;
 
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.validation.constraints.NotNull;
 
@@ -10,6 +12,7 @@ import org.hibernate.type.PostgresUUIDType;
 import org.hibernate.type.descriptor.java.UUIDTypeDescriptor;
 import org.hibernate.type.descriptor.sql.SqlTypeDescriptor;
 import org.hibernate.type.descriptor.sql.VarcharTypeDescriptor;
+import org.jasig.ssp.util.hibernate.ExtendedSQLServer2008Dialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,15 +71,15 @@ public final class UUIDCustomType extends
 
 		if ("org.hibernate.dialect.PostgreSQLDialect".equalsIgnoreCase(dialect)) {
 			sqlDescription = PostgresUUIDType.PostgresUUIDSqlTypeDescriptor.INSTANCE;
-		} else if ("org.hibernate.dialect.SQLServerDialect"
-				.equalsIgnoreCase(dialect)
-				|| "org.hibernate.dialect.SQLServer2005Dialect"
-						.equalsIgnoreCase(dialect)
-				|| "org.hibernate.dialect.SQLServer2008Dialect"
-						.equalsIgnoreCase(dialect)) {
-			sqlDescription = VarcharTypeDescriptor.INSTANCE;
 		} else {
-			throw new UnsupportedOperationException("Unsupported database!");
+			final Matcher matcher
+					= Pattern.compile(".*SQLServer.*Dialect", Pattern.CASE_INSENSITIVE)
+					.matcher(dialect);
+			if ( matcher.matches() ) {
+				sqlDescription = VarcharTypeDescriptor.INSTANCE;
+			} else {
+				throw new UnsupportedOperationException("Unsupported database dialect! (" + dialect + ")");
+			}
 		}
 	}
 
@@ -90,4 +93,5 @@ public final class UUIDCustomType extends
 	public String getName() {
 		return "uuid-custom";
 	}
+
 }

@@ -20,10 +20,9 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
         	},
             items: [{
                 	xtype: 'displayfield',
-                	fieldLabel: 'Early Alert Response',
-                	value: me.earlyAlert.get('courseTitle'),
-                	anchor: '95%'
-                },{
+                	fieldLabel: 'Early Alert Course',
+                	value: me.earlyAlert.get('courseName') +  ' ' + me.earlyAlert.get('courseTitle')
+                 },{
 			        xtype: 'combobox',
 			        itemId: 'outcomeCombo',
 			        name: 'earlyAlertOutcomeId',
@@ -47,18 +46,22 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
 				},{
 		            xtype: 'multiselect',
 		            name: 'earlyAlertOutreachIds',
-		            fieldLabel: 'Outreach',
+		            itemId: 'outreachList',
+		            fieldLabel: 'Outreach'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
 		            store: me.outreachesStore,
 		            displayField: 'name',
+		            msgTarget: 'side',
 		            valueField: 'id',
+		            invalidCls: 'multiselect-invalid',
+		            minSelections: 1,
 		            allowBlank: false,
-		            minSelections: 0,
 		            anchor: '95%'
 		        },{
                     xtype: 'textareafield',
                     fieldLabel: 'Comment',
                     anchor: '95%',
-                    name: 'comment'
+                    name: 'comment',
+                    allowBlank: false
                 },{
 				   xtype:'earlyalertreferrals',
 				   flex: 1

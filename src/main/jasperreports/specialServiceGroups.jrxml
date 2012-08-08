@@ -109,7 +109,7 @@
 	<detail>
 		<band height="33" splitType="Stretch">
 			<rectangle>
-				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" x="0" y="2" width="750" height="30" backcolor="#E4E4E4">
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="0" y="2" width="750" height="30" backcolor="#E4E4E4">
 					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
 				</reportElement>
 			</rectangle>

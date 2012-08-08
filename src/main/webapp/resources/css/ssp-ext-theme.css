@@ -65,6 +65,10 @@ background-image: url('/ssp/images/email-icon.png') !important;
 background-image: url('/ssp/images/help-icon.png') !important;
 }
 
+.multiselect-invalid .x-boundlist {
+    border-color: Red !important;
+}
+
 .printIcon {
 background-image: url('/ssp/images/print-icon.png') !important;
 }

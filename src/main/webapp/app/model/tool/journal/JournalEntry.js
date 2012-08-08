@@ -2,7 +2,21 @@ Ext.define('Ssp.model.tool.journal.JournalEntry', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'comment',type:'string'},
              {name:'entryDate',type: 'date',dateFormat:'time', defaultValue: new Date()},
-             {name:'confidentialityLevel', type:'auto'},
+             {name:'confidentialityLevel',
+                 convert: function(value, record) {
+                	 var defaultConfidentialityLevelId = Ssp.util.Constants.DEFAULT_SYSTEM_CONFIDENTIALITY_LEVEL_ID;
+                	 var obj  = {id:defaultConfidentialityLevelId,name: ''};
+                	 if (value != null)
+                	 {
+                		 if (value != "")
+                		 {
+                    		 obj.id  = value.id;
+                    		 obj.name = value.name;                			 
+                		 }
+                	 }
+   		            return obj;
+                 }
+   		      },
 			 {name:'journalSource', type:'auto'},
 			 {name:'journalTrack', type:'auto'},
 			 {name:'journalEntryDetails',type:'auto',defaultValue:[]}],

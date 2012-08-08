@@ -33,7 +33,8 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				       items: [{
 					    	xtype: 'displayfield',
 					        fieldLabel: 'Task Name',
-					        name: 'name'
+					        name: 'name',
+					        allowBlank: false
 					    },{
 				    	xtype: 'textarea',
 				        fieldLabel: 'Description',
