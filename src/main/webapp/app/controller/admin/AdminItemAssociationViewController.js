@@ -124,7 +124,6 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
         if (dropPosition=='before' || dropPosition=='after')
         {
         	// provide a message or instruction if you'd like
-        	// console.log("You can't do that. Drop it on a folder instead.");
         }	
         
         dropHandler.cancelDrop;

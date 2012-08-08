@@ -88,7 +88,6 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 				outreachIsValid=true;
 			}
 		}
-		console.log( outreachIsValid );
 		if ( outreachIsValid == false )
 		{
 			me.getOutreachList().setValue(["1"]);
