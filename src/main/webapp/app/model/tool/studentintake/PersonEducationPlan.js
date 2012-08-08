@@ -4,7 +4,7 @@ Ext.define('Ssp.model.tool.studentintake.PersonEducationPlan', {
              {name: 'studentStatusId', type: 'string'},
              {name: 'newOrientationComplete', type: 'boolean'},
              {name: 'registeredForClasses', type: 'boolean'},
-             {name: 'collegeDegreeForParents', type: 'boolean'},
              {name: 'specialNeeds', type: 'boolean'},
-             {name: 'gradeTypicallyEarned', type: 'string'}]
+             {name: 'gradeTypicallyEarned', type: 'string'},
+             {name: 'collegeDegreeForParents', type: 'boolean'}]
 });

@@ -21,6 +21,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
         statesStore: 'statesStore',
         service: 'studentIntakeService',
         studentStatusesStore: 'studentStatusesStore',
+        studentIntake: 'currentStudentIntake',
     	veteranStatusesStore: 'veteranStatusesStore'        
     }, 
     config: {
@@ -145,16 +146,16 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     
     getStudentIntakeSuccess: function( r, scope ){
     	var me=scope;
-    	var studentIntakeModel;
+    	var studentIntakeClass;
 		
     	// hide the loader
     	me.getView().setLoading( false );
     	
     	if ( r != null )
     	{  		
-        	studentIntakeModel = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
-    		me.studentIntakeForm = studentIntakeModel.getProxy().getReader().read( r ).records[0];		
-    		me.buildStudentIntake( me.studentIntakeForm );    		
+        	studentIntakeClass = Ext.ModelManager.getModel('Ssp.model.tool.studentintake.StudentIntakeForm');
+    		me.studentIntake.data = studentIntakeClass.getProxy().getReader().read( r ).records[0].data;
+    		me.buildStudentIntake( me.studentIntake );    		
     	}else{
     		Ext.Msg.alert('Error','There was an error loading the Student Intake form for this student.');
     	}
@@ -166,8 +167,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	},
     
 	buildStudentIntake: function( formData ){
-		var me=this;
-		
+		var me=this; // formData
+
     	// PERSON RECORD
 		var person = formData.data.person;
 		var personDemographics = formData.data.personDemographics;
@@ -177,6 +178,10 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var personFundingSources = formData.data.personFundingSources;
 		var personChallenges = formData.data.personChallenges;
 		var personEducationGoalId = "";
+		
+		var studentIntakeEducationPlansForm = Ext.getCmp('StudentIntakeEducationPlans');
+		var studentIntakeDemographicsForm = Ext.getCmp('StudentIntakeDemographics');
+		var studentIntakeEducationGoalsForm = Ext.getCmp('StudentIntakeEducationGoals');
 		
 		var educationGoalFormProps;
 		var educationGoalsAdditionalFieldsMap;
@@ -215,20 +220,20 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		Ext.getCmp('StudentIntakePersonal').loadRecord( person );
 		
 		if ( personDemographics != null && personDemographics != undefined ){
-			Ext.getCmp('StudentIntakeDemographics').loadRecord( personDemographics );
+			studentIntakeDemographicsForm.loadRecord( personDemographics );
 		}
-		
+
 		if ( personEducationPlan != null && personEducationPlan != undefined )
 		{
-			Ext.getCmp('StudentIntakeEducationPlans').loadRecord( personEducationPlan );
+			studentIntakeEducationPlansForm.loadRecord( personEducationPlan );
 		}
 		
 		if ( personEducationGoal != null && personEducationGoal != undefined )
 		{
-			Ext.getCmp('StudentIntakeEducationGoals').loadRecord( personEducationGoal );
+			studentIntakeEducationGoalsForm.loadRecord( personEducationGoal );
 			if (personEducationGoal.get('educationGoalId') != null)
 			{
-				personEducationGoalId = personEducationGoal.get('educationGoalId')
+				personEducationGoalId = personEducationGoal.get('educationGoalId');
 			}			 
 		}
 
@@ -388,10 +393,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var fundingForm = Ext.getCmp('StudentIntakeFunding').getForm();
 		var challengesForm = Ext.getCmp('StudentIntakeChallenges').getForm();
 		
-		var personalFormModel = null;
-		var demographicsFormModel = null;
-		var educationPlansFormModel = null;
-		var educationGoalFormModel = null;
+		var educationGoalId = "";
 		var educationGoalDescription = "";
 		var educationGoalFormValues = null;
 		var educationLevelFormValues = null;
@@ -409,44 +411,45 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		             educationGoalForm,
 		             fundingForm,
 		             challengesForm];
-		
+
 		// validate and save the model
 		var validateResult = me.formUtils.validateForms( formsToValidate );
 		if ( validateResult.valid )
 		{
-			// retrieve the models
-			personalFormModel = personalForm.getRecord();
-			demographicsFormModel = demographicsForm.getRecord();
-			educationPlansFormModel = educationPlansForm.getRecord();
-			educationGoalFormModel = educationGoalForm.getRecord();
-			
 			// update the model with changes from the forms
-			personalForm.updateRecord( personalFormModel );
-			demographicsForm.updateRecord( demographicsFormModel );
-			educationPlansForm.updateRecord( educationPlansFormModel );
-			educationGoalForm.updateRecord( educationGoalFormModel );
+			personalForm.updateRecord( me.studentIntake.get('person') );
+			demographicsForm.updateRecord( me.studentIntake.get('personDemographics') );
+			educationPlansForm.updateRecord( me.studentIntake.get('personEducationPlan') );
+			educationGoalForm.updateRecord( me.studentIntake.get('personEducationGoal') );
+			
+			educationGoalId = me.studentIntake.get('personEducationGoal').data.educationGoalId;
 			
 			// save the full model
-			personId = personalFormModel.data.id;
+			personId = me.studentIntake.get('person').data.id;
 			intakeData = {
-				person: personalFormModel.data,
-				personDemographics: demographicsFormModel.data,
-				personEducationGoal: educationGoalFormModel.data,
-				personEducationPlan: educationPlansFormModel.data,
+				person: me.studentIntake.get('person').data,
+				personDemographics: me.studentIntake.get('personDemographics').data,
+				personEducationGoal: me.studentIntake.get('personEducationGoal').data,
+				personEducationPlan: me.studentIntake.get('personEducationPlan').data,
 				personEducationLevels: [],
 				personFundingSources: [],
 				personChallenges: []
 			};
-			
+						
 			// account for date offset
 			intakeData.person.birthDate = me.formUtils.fixDateOffset( intakeData.person.birthDate );
 
+			// cleans properties that will be unable to be saved if not null
+			// arrays set to strings should be null rather than string in saved
+			// json
+			intakeData.person = me.person.setPropsNullForSave( intakeData.person );			
+			
 			intakeData.personDemographics.personId = personId;
 			intakeData.personEducationGoal.personId = personId;
 			intakeData.personEducationPlan.personId = personId;
 
 			educationGoalFormValues = educationGoalForm.getValues();
-			educationGoalDescription = formUtils.getMappedFieldValueFromFormValuesByIdKey( educationGoalFormValues, educationGoalFormModel.data.educationGoalId );
+			educationGoalDescription = formUtils.getMappedFieldValueFromFormValuesByIdKey( educationGoalFormValues, educationGoalId );
 			intakeData.personEducationGoal.description = educationGoalDescription;
 			
 			educationLevelFormValues = educationLevelsForm.getValues();
@@ -456,13 +459,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			intakeData.personFundingSources = formUtils.createTransferObjectsFromSelectedValues('fundingSourceId', fundingFormValues, personId);	
 			
 			challengesFormValues = challengesForm.getValues();
-			intakeData.personChallenges = formUtils.createTransferObjectsFromSelectedValues('challengeId', challengesFormValues, personId);		
+			intakeData.personChallenges = formUtils.createTransferObjectsFromSelectedValues('challengeId', challengesFormValues, personId);			
 
-			// cleans properties that will be unable to be saved if not null
-			// arrays set to strings should be null rather than string in saved
-			// json
-			intakeData.person = me.person.setPropsNullForSave( intakeData.person );
-			
 			// display loader
 			me.getView().setLoading( true );
 			
@@ -475,7 +473,6 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		}else{
 			me.formUtils.displayErrors( validateResult.fields );
 		}
-		
 	},
 	
 	saveStudentIntakeSuccess: function(r, scope) {
@@ -497,6 +494,6 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var me=this;
 		me.getView().removeAll();
 		me.initStudentIntakeViews();
-		me.buildStudentIntake( me.studentIntakeForm );	
+		me.buildStudentIntake( me.studentIntake );	
 	}
 });

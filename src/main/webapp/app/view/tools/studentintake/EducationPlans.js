@@ -6,12 +6,14 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.studentintake.EducationPlansViewController',
     inject: {
+    	formUtils: 'formRendererUtils',
         studentStatusesStore: 'studentStatusesStore'
     },
 	width: '100%',
     height: '100%',
 	
     initComponent: function() {	
+    	var me=this;
 		Ext.apply(this, 
 				{
 					autoScroll: true,
@@ -41,9 +43,10 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				       items: [{
 				        xtype: 'combobox',
 				        name: 'studentStatusId',
+				        itemId: 'studentStatusCombo',
 				        fieldLabel: 'Student Status',
 				        emptyText: 'Select One',
-				        store: this.studentStatusesStore,
+				        store: me.studentStatusesStore,
 				        valueField: 'id',
 				        displayField: 'name',
 				        mode: 'local',
@@ -62,37 +65,37 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				        xtype: "radiogroup",
 				        fieldLabel: "Have your parents obtained a college degree?",
 				        columns: 1,
-				        itemId: 'parentsDegree',
+				        itemId: "collegeDegreeForParents",
 				        items: [
-				            {boxLabel: "Yes", name: "collegeDegreeForParents", inputValue:"true"},
-				            {boxLabel: "No", name: "collegeDegreeForParents", inputValue:"false"}]
+				            {boxLabel: "Yes", itemId: "collegeDegreeForParentsCheckOn", name: "collegeDegreeForParents", inputValue:true},
+				            {boxLabel: "No", itemId: "collegeDegreeForParentsCheckOff", name: "collegeDegreeForParents", inputValue:false}]
 				    },{
 				        xtype: "radiogroup",
 				        fieldLabel: "Require special accommodations?",
 				        columns: 1,
-				        itemId: 'specialNeeds',
+				        itemId: "specialNeeds",
 				        items: [
-				            {boxLabel: "Yes", name: "specialNeeds", inputValue:"true"},
-				            {boxLabel: "No", name: "specialNeeds", inputValue:"false"}]
+				            {boxLabel: "Yes", itemId: "specialNeedsCheckOn", name: "specialNeeds", inputValue:"y"},
+				            {boxLabel: "No", itemId: "specialNeedsCheckOff", name: "specialNeeds", inputValue:"n"}]
 				    },{
 				        xtype: 'radiogroup',
 				        fieldLabel: 'What grade did you typically earn at your highest level of education?',
 				        columns: 1,
 				        items: [
 				            {boxLabel: 'A', name: 'gradeTypicallyEarned', inputValue: "A"},
-				            {boxLabel: 'A-B', name: 'gradeTypicallyEarned', inputValue: "A-B"},
+				            {boxLabel: 'A-B', name: 'gradeTypicallyEarned', inputValue: "AB"},
 				            {boxLabel: 'B', name: 'gradeTypicallyEarned', inputValue: "B"},
-				            {boxLabel: 'B-C', name: 'gradeTypicallyEarned', inputValue: "B-C"},
+				            {boxLabel: 'B-C', name: 'gradeTypicallyEarned', inputValue: "BC"},
 				            {boxLabel: 'C', name: 'gradeTypicallyEarned', inputValue: "C"},
-				            {boxLabel: 'C-D', name: 'gradeTypicallyEarned', inputValue: "C-D"},
+				            {boxLabel: 'C-D', name: 'gradeTypicallyEarned', inputValue: "CD"},
 				            {boxLabel: 'D', name: 'gradeTypicallyEarned', inputValue: "D"},
-				            {boxLabel: 'D-F', name: 'gradeTypicallyEarned', inputValue: "D-F"},
+				            {boxLabel: 'D-F', name: 'gradeTypicallyEarned', inputValue: "DF"},
 				            {boxLabel: 'F', name: 'gradeTypicallyEarned', inputValue: "F"}
 				    		]
 				        }]
 				    }]
 				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}	
 });

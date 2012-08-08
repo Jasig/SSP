@@ -116,8 +116,8 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        fieldLabel: "Are you a Primary Caregiver?",
 				        columns: 1,
 				        items: [
-				            {boxLabel: "Yes", name: "primaryCaregiver", inputValue:"true"},
-				            {boxLabel: "No", name: "primaryCaregiver", inputValue:"false"}]
+				            {boxLabel: "Yes", itemId: 'primaryCaregiverCheckOn', name: "primaryCaregiver", inputValue:"true"},
+				            {boxLabel: "No",  itemId: 'primaryCaregiverCheckOff', name: "primaryCaregiver", inputValue:"false"}]
 				    },{
 				        xtype: 'displayfield',
 				        fieldLabel: 'If you have children, please indicate below'
@@ -137,8 +137,8 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        itemId: 'childcareNeeded',
 				        columns: 1,
 				        items: [
-				            {boxLabel: "Yes", name: "childCareNeeded", inputValue:"true"},
-				            {boxLabel: "No", name: "childCareNeeded", inputValue:"false"}]
+				            {boxLabel: "Yes", itemId: 'childCareNeededCheckOn', name: "childCareNeeded", inputValue:"true"},
+				            {boxLabel: "No", itemId: 'childCareNeededCheckOff', name: "childCareNeeded", inputValue:"false"}]
 				    },{
 				        xtype: 'combobox',
 				        itemId: 'childcareArrangement',
@@ -158,8 +158,8 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        fieldLabel: "Are you employed?",
 				        columns: 1,
 				        items: [
-				            {boxLabel: "Yes", name: "employed", inputValue:"true"},
-				            {boxLabel: "No", name: "employed", inputValue:"false"}]
+				            {boxLabel: "Yes", itemId: 'employedCheckOn', name: "employed", inputValue:"true"},
+				            {boxLabel: "No", itemId: 'employedCheckOff', name: "employed", inputValue:"false"}]
 				    },{
 				        fieldLabel: 'Place of employment',
 				        itemId: 'placeOfEmployment',

@@ -2,10 +2,14 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 	extend: "Ext.form.Panel",
 	alias: 'widget.studentintakeeducationgoals',
 	id : "StudentIntakeEducationGoals",   
-    width: "100%",
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.studentintake.EducationGoalsViewController',
+	width: "100%",
     height: "100%", 
-    initComponent: function() {	
-		Ext.apply(this, 
+    initComponent: function() {
+    	var me=this;
+		Ext.apply(me, 
 				{
 					autoScroll: true,
 				    bodyPadding: 5,
@@ -64,8 +68,8 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				        columns: 1,
 				        itemId: 'careerDecided',
 				        items: [
-				            {boxLabel: "Yes", name: "careerDecided", inputValue:"true"},
-				            {boxLabel: "No", name: "careerDecided", inputValue:"false"}]
+				            {boxLabel: "Yes", itemId: "careerDecidedCheckOn", name: "careerDecided", inputValue:"true"},
+				            {boxLabel: "No", itemId: "careerDecidedCheckOff", name: "careerDecided", inputValue:"false"}]
 					},{
 				        fieldLabel: 'What is your planned occupation?',
 				        name: 'plannedOccupation'
@@ -86,21 +90,21 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				        columns: 1,
 				        itemId: 'confidentInAbilities',
 				        items: [
-				            {boxLabel: "Yes", name: "confidentInAbilities", inputValue:"true"},
-				            {boxLabel: "No", name: "confidentInAbilities", inputValue:"false"}]
+				            {boxLabel: "Yes", itemId: "confidentInAbilitiesCheckOn", name: "confidentInAbilities", inputValue:"true"},
+				            {boxLabel: "No", itemId: "confidentInAbilitiesCheckOff", name: "confidentInAbilities", inputValue:"false"}]
 					},{
 				        xtype: "radiogroup",
 				        fieldLabel: 'Do you need additional information about which academic programs may lead to a future career?',
 				        columns: 1,
 				        itemId: 'additionalAcademicProgramInformationNeeded',
 				        items: [
-				            {boxLabel: "Yes", name: "additionalAcademicProgramInformationNeeded", inputValue:"true"},
-				            {boxLabel: "No", name: "additionalAcademicProgramInformationNeeded", inputValue:"false"}]
+				            {boxLabel: "Yes", itemId: "additionalAcademicProgramInformationNeededCheckOn", name: "additionalAcademicProgramInformationNeeded", inputValue:"true"},
+				            {boxLabel: "No", itemId: "additionalAcademicProgramInformationNeededCheckOff", name: "additionalAcademicProgramInformationNeeded", inputValue:"false"}]
 					}]
 				    
 				    }]
 				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}	
 });

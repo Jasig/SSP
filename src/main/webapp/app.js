@@ -452,6 +452,12 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+			        currentStudentIntake: {
+			        	fn: function(){
+			        		return new Ssp.model.tool.studentintake.StudentIntakeForm();
+			        	},
+				        singleton: true
+			        },
 			        currentJournalEntry:{
 				        fn: function(){
 				            return new Ssp.model.tool.journal.JournalEntry({id:""});

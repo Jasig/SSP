@@ -15,7 +15,7 @@ Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
               {name: 'personDemographics', 
    		      convert: function(value, record) {
 		            var personDemographics = Ext.create('Ssp.model.tool.studentintake.PersonDemographics',{});
-		            personDemographics.populateFromGenericObject( value );		
+		            personDemographics.populateFromGenericObject( value );
 		            return personDemographics;
 		      	}
              },

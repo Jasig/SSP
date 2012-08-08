@@ -3,6 +3,7 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	citizenshipsStore: 'citizenshipsStore',
+    	model: 'currentStudentIntake',
     	sspConfig: 'sspConfig'
     },
     config: {
@@ -13,13 +14,22 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
 			change: 'onCitizenshipChange'
 		},
 		
+		primaryCaregiverCheckOn: '#primaryCaregiverCheckOn',
+		primaryCaregiverCheckOff: '#primaryCaregiverCheckOff',		
+		
 		'childcareNeeded': {
 			change: 'onChildcareNeededChange'
 		},
 		
+		childCareNeededCheckOn: '#childCareNeededCheckOn',
+		childCareNeededCheckOff: '#childCareNeededCheckOff',
+		
 		'isEmployed': {
 			change: 'onIsEmployedChange'
 		},
+		
+		employedCheckOn: '#employedCheckOn',
+		employedCheckOff: '#employedCheckOff',		
 		
 		'countryOfCitizenship': {
 			hide: 'onFieldHidden'
@@ -47,17 +57,37 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
 	},
 
 	init: function() {
+		var me=this;
+		var personDemographics = me.model.get('personDemographics');
 		var citizenship = Ext.ComponentQuery.query('#citizenship')[0];
 		var childcareNeeded = Ext.ComponentQuery.query('#childcareNeeded')[0];
 		var isEmployed = Ext.ComponentQuery.query('#isEmployed')[0];
+		var primaryCaregiver = me.model.get('personDemographics').get('primaryCaregiver');
+		var childCareNeeded = me.model.get('personDemographics').get('childCareNeeded');
+		var employed = me.model.get('personDemographics').get('employed');
 		
-		this.displayStudentIntakeDemographicsEmploymentShift = this.sspConfig.get('displayStudentIntakeDemographicsEmploymentShift');
+		// Assign radio button values
+		// Temp solution to assign a value to 
+		// the No radio button 
+		if ( personDemographics != null && personDemographics != undefined )
+		{
+			me.getPrimaryCaregiverCheckOn().setValue(primaryCaregiver);
+			me.getPrimaryCaregiverCheckOff().setValue(!primaryCaregiver);
+
+			me.getChildCareNeededCheckOn().setValue( childCareNeeded );
+			me.getChildCareNeededCheckOff().setValue( !childCareNeeded );				
+
+			me.getEmployedCheckOn().setValue( employed );
+			me.getEmployedCheckOff().setValue( !employed );
+		}
 		
-		this.showHideCountryOfCitizenship( citizenship.getValue() );
-        this.showHideChildcareArrangement( childcareNeeded.getValue() );
-        this.showHideEmploymentFields( isEmployed.getValue() );
+		me.displayStudentIntakeDemographicsEmploymentShift = me.sspConfig.get('displayStudentIntakeDemographicsEmploymentShift');
+		
+		me.showHideCountryOfCitizenship( citizenship.getValue() );
+        me.showHideChildcareArrangement( childcareNeeded.getValue() );
+        me.showHideEmploymentFields( isEmployed.getValue() );
         
-		return this.callParent(arguments);
+		return me.callParent(arguments);
     },
     
     onCitizenshipChange: function(combo, newValue, oldValue, eOpts) {
