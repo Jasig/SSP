@@ -71,7 +71,7 @@ public final class UUIDCustomType extends
 		if ("org.hibernate.dialect.PostgreSQLDialect".equalsIgnoreCase(dialect)) {
 			sqlDescription = PostgresUUIDType.PostgresUUIDSqlTypeDescriptor.INSTANCE;
 		} else {
-			final Matcher matcher = Pattern.compile(".*SQLServer.*Dialect",
+			final Matcher matcher = Pattern.compile(".*SQLServer(?:|2005|2008)Dialect",
 					Pattern.CASE_INSENSITIVE).matcher(dialect);
 			if (matcher.matches()) {
 				sqlDescription = VarcharTypeDescriptor.INSTANCE;
