@@ -52,6 +52,8 @@
 		systems use WARN for most values, or INFO, or even DEBUG, if you are experiencing 
 		any startup or reoccurring issues you wish to troubleshoot further. -->
 	<logger name="org.jasig.ssp" level="warn" />
+	<!-- When tracing/debugging through the org.jasig.ssp package, you might want this class turned down a bit -->
+	<logger name="org.jasig.ssp.util.uuid.UUIDCustomType" level="info" />
 	<logger name="org.springframework.core" level="warn" />
 	<logger name="org.springframework.beans" level="warn" />
 	<logger name="org.springframework.context" level="warn" />
