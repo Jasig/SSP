@@ -12,7 +12,6 @@ import org.hibernate.type.PostgresUUIDType;
 import org.hibernate.type.descriptor.java.UUIDTypeDescriptor;
 import org.hibernate.type.descriptor.sql.SqlTypeDescriptor;
 import org.hibernate.type.descriptor.sql.VarcharTypeDescriptor;
-import org.jasig.ssp.util.hibernate.ExtendedSQLServer2008Dialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,13 +71,13 @@ public final class UUIDCustomType extends
 		if ("org.hibernate.dialect.PostgreSQLDialect".equalsIgnoreCase(dialect)) {
 			sqlDescription = PostgresUUIDType.PostgresUUIDSqlTypeDescriptor.INSTANCE;
 		} else {
-			final Matcher matcher
-					= Pattern.compile(".*SQLServer.*Dialect", Pattern.CASE_INSENSITIVE)
-					.matcher(dialect);
-			if ( matcher.matches() ) {
+			final Matcher matcher = Pattern.compile(".*SQLServer.*Dialect",
+					Pattern.CASE_INSENSITIVE).matcher(dialect);
+			if (matcher.matches()) {
 				sqlDescription = VarcharTypeDescriptor.INSTANCE;
 			} else {
-				throw new UnsupportedOperationException("Unsupported database dialect! (" + dialect + ")");
+				throw new UnsupportedOperationException(
+						"Unsupported database dialect! (" + dialect + ")");
 			}
 		}
 	}
