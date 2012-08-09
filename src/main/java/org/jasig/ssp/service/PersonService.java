@@ -7,11 +7,14 @@ import java.util.UUID;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
+import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.security.core.GrantedAuthority;
+
+import javax.portlet.PortletRequest;
 
 /**
  * Person service
@@ -138,4 +141,27 @@ public interface PersonService extends AuditableCrudService<Person> {
 
 	void setPersonAttributesService(
 			final PersonAttributesService personAttributesService);
+
+	/**
+	 * Attempt to create a new user account using JSR-168/286
+	 * portlet user attributes from the given request.
+	 *
+	 *
+	 * @param  username the login under which to create the account. Potentially
+	 *                  null or empty, in which case the implementation can
+	 *                  attempt to determine the username on its own, probably
+	 *                  from user attributes on <code>portletRequest</code>, but
+	 *                  under current usage the caller typically expects a
+	 *                  certain username for the new account, so it is exposed
+	 *                  as a param here.
+	 * @param portletRequest current portlet request (note that associated
+	 *                       user attributes map is potentially null or empty)
+	 * @return the created Person, never null
+	 * @throws UnableToCreateAccountException typically caused by the presence
+	 *   of an existing account with conflicting keys or missing required
+	 *   user attributes on <code>portletRequest</code>
+	 */
+	Person createUserAccountForCurrentPortletUser(String username,
+			PortletRequest portletRequest)
+			throws UnableToCreateAccountException;
 }

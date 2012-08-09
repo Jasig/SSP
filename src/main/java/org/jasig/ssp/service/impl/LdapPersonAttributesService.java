@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
+import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,6 +42,12 @@ public class LdapPersonAttributesService implements PersonAttributesService {
 	@Override
 	public PersonAttributesResult getAttributes(final String username) {
 		return propertiesForDn(username, buildDn(username));
+	}
+
+	@Override
+	public PersonAttributesResult getAttributes(final String username,
+			final PortletRequest portletRequest) {
+		return getAttributes(username);
 	}
 
 	private String buildDn(final String userId) {
