@@ -37,6 +37,7 @@ Ext.define('Ssp.view.Search', {
 		       		    items: [{
 				        	xtype: 'textfield',
 		   		        	itemId: 'searchText',
+		   		        	enableKeyEvents: true,
 		   		        	emptyText: 'Name or ' + me.sspConfig.get('studentIdAlias'),
 		   		        	width: 200
 		   		        },{

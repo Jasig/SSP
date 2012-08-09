@@ -41,7 +41,13 @@ Ext.define('Ssp.controller.SearchViewController', {
     	},    	
     	
     	searchGridPager: '#searchGridPager',
-    	searchText: '#searchText',
+    	searchText: {
+    		selector: '#searchText',
+		    listeners:{   
+		        keypress: 'onSearchKeyPress'  
+		    } 
+    	},
+    	
     	searchCaseloadCheck: '#searchCaseloadCheck',
     	searchBar: '#searchBar',
     	caseloadBar: '#caseloadBar',
@@ -466,18 +472,36 @@ Ext.define('Ssp.controller.SearchViewController', {
     
 	onSearchClick: function(button){
 		var me=this;
-		var outsideCaseload = !me.getSearchCaseloadCheck().getValue();
-		var searchTerm = me.getSearchText().value;
-		// store search term
-		me.searchCriteria.set('searchTerm', searchTerm);
-		me.searchCriteria.set('outsideCaseload', outsideCaseload);
-		if ( searchTerm != "")
+		me.setSearchCriteria();
+		if ( me.searchCriteria.get('searchTerm') != "")
 		{
 			me.search();
 		}else{
 			me.searchStore.removeAll();
 		}	
 	},
+	
+	setSearchCriteria: function(){
+		var me=this;
+		var outsideCaseload = !me.getSearchCaseloadCheck().getValue();
+		var searchTerm = me.getSearchText().value;
+		// store search term
+		me.searchCriteria.set('searchTerm', searchTerm);
+		me.searchCriteria.set('outsideCaseload', outsideCaseload);
+	},
+	
+	onSearchKeyPress: function(comp,e){
+		var me=this;
+        if(e.getKey()==e.ENTER){  
+    		me.setSearchCriteria();
+        	if ( me.searchCriteria.get('searchTerm') != "")
+    		{
+    			me.search();
+    		}else{
+    			me.searchStore.removeAll();
+    		}   
+        }  
+    },
 	
 	search: function(){
 		var me=this;
