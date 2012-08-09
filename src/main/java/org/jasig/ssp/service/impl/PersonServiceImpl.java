@@ -2,8 +2,10 @@ package org.jasig.ssp.service.impl;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import com.google.common.collect.Sets;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonDao;
@@ -31,6 +33,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
+import org.springframework.util.StringUtils;
+
+import javax.portlet.PortletRequest;
 
 /**
  * Person service implementation
@@ -60,10 +65,58 @@ public class PersonServiceImpl implements PersonService {
 	@Autowired
 	private transient ExternalPersonService externalPersonService;
 
+	private static interface PersonAttributesLookup {
+		public PersonAttributesResult lookupPersonAttributes(String username)
+				throws ObjectNotFoundException;
+	}
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public Person createUserAccount(final String username,
 			final Collection<GrantedAuthority> authorities) {
+
+		return createUserAccount(username, authorities, new PersonAttributesLookup() {
+			@Override
+			public PersonAttributesResult lookupPersonAttributes(String username)
+			throws ObjectNotFoundException {
+				return personAttributesService.getAttributes(username);
+			}
+		});
+
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public Person createUserAccountForCurrentPortletUser(String username,
+			final PortletRequest portletRequest)
+			throws UnableToCreateAccountException {
+
+		if ( !(StringUtils.hasText(username)) ) {
+			@SuppressWarnings("unchecked") Map<String,String> userInfo =
+					(Map<String,String>) portletRequest.getAttribute(PortletRequest.USER_INFO);
+			username = userInfo
+					.get(PortletRequest.P3PUserInfos.USER_LOGIN_ID.toString());
+		}
+
+		if ( !(StringUtils.hasText(username)) ) {
+			throw new UnableToCreateAccountException(
+					"Cannot find a username to assign to new account.");
+		}
+
+		Collection<GrantedAuthority> authorities = Sets.newHashSet();
+		return createUserAccount(username, authorities, new PersonAttributesLookup() {
+			@Override
+			public PersonAttributesResult lookupPersonAttributes(String username)
+			throws ObjectNotFoundException {
+				return personAttributesService.getAttributes(username, portletRequest);
+			}
+		});
+
+	}
+
+	private Person createUserAccount(String username,
+			Collection<GrantedAuthority> authorities,
+			PersonAttributesLookup personAttributesLookup) {
 
 		Person person = null;
 
@@ -74,8 +127,8 @@ public class PersonServiceImpl implements PersonService {
 
 			try {
 				// Get the Person Attributes to create the person
-				final PersonAttributesResult attr = personAttributesService
-						.getAttributes(username);
+				final PersonAttributesResult attr =
+						personAttributesLookup.lookupPersonAttributes(username);
 				person.setSchoolId(attr.getSchoolId());
 				person.setFirstName(attr.getFirstName());
 				person.setLastName(attr.getLastName());

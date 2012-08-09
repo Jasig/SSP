@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -128,6 +129,17 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 
 	}
 
+	@Override
+	public PersonAttributesResult getAttributes(String username,
+			PortletRequest portletRequest) {
+		@SuppressWarnings("unchecked") Map<String,String> userInfo =
+				(Map<String,String>) portletRequest.getAttribute(PortletRequest.USER_INFO);
+		if ( userInfo == null ) {
+			return new PersonAttributesResult();
+		}
+		return convertAttributesSingleValued(userInfo);
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> searchForUsers(
@@ -238,6 +250,27 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 		if (attr.containsKey(ATTRIBUTE_PRIMARYEMAILADDRESS)) {
 			person.setPrimaryEmailAddress(attr.get(
 					ATTRIBUTE_PRIMARYEMAILADDRESS).get(0));
+		}
+
+		return person;
+	}
+
+	private PersonAttributesResult convertAttributesSingleValued(
+			final Map<String, String> attr) {
+		final PersonAttributesResult person = new PersonAttributesResult();
+
+		if (attr.containsKey(ATTRIBUTE_SCHOOLID)) {
+			person.setSchoolId(attr.get(ATTRIBUTE_SCHOOLID));
+		}
+		if (attr.containsKey(ATTRIBUTE_FIRSTNAME)) {
+			person.setFirstName(attr.get(ATTRIBUTE_FIRSTNAME));
+		}
+		if (attr.containsKey(ATTRIBUTE_LASTNAME)) {
+			person.setLastName(attr.get(ATTRIBUTE_LASTNAME));
+		}
+		if (attr.containsKey(ATTRIBUTE_PRIMARYEMAILADDRESS)) {
+			person.setPrimaryEmailAddress(attr.get(
+					ATTRIBUTE_PRIMARYEMAILADDRESS));
 		}
 
 		return person;
