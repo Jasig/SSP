@@ -31,6 +31,7 @@ Ext.define('Ssp.util.Constants',{
     		        	Ssp.util.Constants.OTHER_EARLY_ALERT_OUTCOME_ID,
     		        	Ssp.util.Constants.OTHER_EARLY_ALERT_REASON_ID,
     		        	Ssp.util.Constants.OTHER_EARLY_ALERT_SUGGESTION_ID,
+    		        	Ssp.util.Constants.EARLY_ALERT_JOURNAL_TRACK_ID,
     		        	Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,
     		        	Ssp.util.Constants.NO_SHOW_PROGRAM_STATUS_ID,
     		        	Ssp.util.Constants.NON_PARTICIPATING_PROGRAM_STATUS_ID,
@@ -68,6 +69,9 @@ Ext.define('Ssp.util.Constants',{
         OTHER_EARLY_ALERT_OUTCOME_ID: '0a080114-3799-1bf5-8137-9a778e200004',
         OTHER_EARLY_ALERT_REASON_ID: 'b2d11335-5056-a51a-80ea-074f8fef94ea',
         OTHER_EARLY_ALERT_SUGGESTION_ID: 'b2d1120c-5056-a51a-80ea-c779a3109f8f',
+        
+        // EARLY ALERT - JOURNAL TRACK
+        EARLY_ALERT_JOURNAL_TRACK_ID: 'b2d07b38-5056-a51a-809d-81ea2f3b27bf',
         
         // PROGRAM STATUS - ID VALUES RELATED TO PROGRAM STATUS REFERENCE DATA
         ACTIVE_PROGRAM_STATUS_ID: 'b2d12527-5056-a51a-8054-113116baab88',
