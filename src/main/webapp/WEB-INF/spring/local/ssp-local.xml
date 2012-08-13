@@ -13,8 +13,16 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 
-	<util:properties id="configProperties"
-		location="file:#{T(org.jasig.ssp.config.logging.ExternalConfigLoader).getConfigDir()}/ssp-config.properties" />
+	<!-- Properties file configuration of existing beans -->
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:ssp-config.default.properties</value>
+				<value>file:#{T(org.jasig.ssp.config.logging.ExternalConfigLoader).getConfigDir()}/ssp-config.properties</value>
+			</list>
+		</property>
+	</bean>
 
 	<!-- Mail Server Configuration -->
 	<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">

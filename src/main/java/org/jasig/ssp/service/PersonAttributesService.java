@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,6 +23,9 @@ public interface PersonAttributesService {
 			throws ObjectNotFoundException;
 
 	PersonAttributesResult getAttributes(String username)
+			throws ObjectNotFoundException;
+
+	PersonAttributesResult getAttributes(String username, PortletRequest portletRequest)
 			throws ObjectNotFoundException;
 	
 	List<Map<String, Object>> searchForUsers(HttpServletRequest req, HttpServletResponse res, 

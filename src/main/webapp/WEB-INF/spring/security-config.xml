@@ -10,8 +10,15 @@
 	<beans:import resource="local/ssp-sec-local.xml"/>
 
 	<!-- Properties file configuration of existing beans -->
-	<util:properties id="configProperties" 
-		location="file:#{T(org.jasig.ssp.config.logging.ExternalConfigLoader).getConfigDir()}/ssp-config.properties"/>
+	<beans:bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<beans:property name="ignoreResourceNotFound" value="true" />
+		<beans:property name="locations">
+			<beans:list>
+				<beans:value>classpath:ssp-config.default.properties</beans:value>
+				<beans:value>file:#{T(org.jasig.ssp.config.logging.ExternalConfigLoader).getConfigDir()}/ssp-config.properties</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
 
 	<global-method-security pre-post-annotations="enabled" />
 

@@ -2,6 +2,17 @@
 var ssp = ssp || {};
 
 (function($) {
+	
+    /*
+     *  NB:  This is a temporary workaround for the 1.0 release (until we have a 
+     *  chance to implement a better system).  The following Ids (uuids) *MUST* 
+     *  match the values in src/main/webapp/app/util/Constants.js and the 
+     *  corresponding rows in the database.
+     */
+    var CONSTANT_IDS = {
+        OTHER_EARLY_ALERT_REASON_ID: 'b2d11335-5056-a51a-80ea-074f8fef94ea',
+        OTHER_EARLY_ALERT_SUGGESTION_ID: 'b2d1120c-5056-a51a-80ea-c779a3109f8f'
+    };
 
     var buildSelectors = function(container) {
         var rslt = {};
@@ -171,7 +182,7 @@ var ssp = ssp || {};
         var submitEarlyAlert = function(sendNotice) {
 
             // Start with a clean slate...
-        	clearErrors();
+            clearErrors();
 
             // Marshal the POST data
             var postData = {
@@ -179,16 +190,13 @@ var ssp = ssp || {};
                 courseTitle: options.parameters.courseTitle,
                 emailCC: $(selectors.emailCc).val(),
                 campusId: $(selectors.campus).val(),
-                earlyAlertReasonIds: [],  // Set below...
+                earlyAlertReasonIds: [ { id: $(selectors.reason).val() } ],
                 earlyAlertReasonOtherDescription: $(selectors.otherReasonText).val(),
                 earlyAlertSuggestionIds: [],  // Set below...
                 earlyAlertSuggestionOtherDescription: $(selectors.suggestionsOtherHidden).val(),
                 comment: $(selectors.comments).val(),
                 sendEmailToStudent: sendNotice
             };
-            if ($(selectors.reason).val() && $(selectors.reason).val() != 'other') {
-                postData.earlyAlertReasonIds.push({ id: $(selectors.reason).val() });
-            }
             $(selectors.suggestionsId).each(function() {
             	postData.earlyAlertSuggestionIds.push({ id: $(this).val() });
             });
@@ -270,9 +278,8 @@ var ssp = ssp || {};
         	var html = '<option value="' + value.id + '">' + value.name + '</option>';
             $(selectors.reason).append(html);
         });
-        $(selectors.reason).append('<option value="other">Other...</option>');
         $(selectors.reason).change(function() {
-            if ($(this).val() === 'other') {
+            if ($(this).val() === CONSTANT_IDS.OTHER_EARLY_ALERT_REASON_ID) {
                 $(selectors.otherReasonText).slideDown(500);
             } else {
             	$(selectors.otherReasonText).val('');
@@ -282,12 +289,13 @@ var ssp = ssp || {};
 
         // suggestions
         $.each(suggestions, function(index, value) {
-        	var html = '<li><input type="checkbox" value="' + value.id + '">' + value.name + '</li>';
+        	var html = '<li><input type="checkbox" value="' + value.id + '">' + value.name;
+        	if (value.id === CONSTANT_IDS.OTHER_EARLY_ALERT_SUGGESTION_ID) {
+                html += '<input type="text" name="earlyAlertSuggestionOtherDescription" value="" placeholder="Type a suggestion..." />';
+            }
+        	html += '</li>';
             $(selectors.suggestionsDialog).find('ul').append(html);
         });
-        $(selectors.suggestionsDialog).find('ul').append(
-                '<li><input type="checkbox" value="other">Other: <input type="text" name="earlyAlertSuggestionOtherDescription" value="" placeholder="Type a suggestion..." /></li>'
-        );
         var suggestionsDlgOptions = {
             autoOpen: false,
             buttons: {
@@ -296,9 +304,10 @@ var ssp = ssp || {};
                     $(this).find('li').each(function() {
                         var chk = $(this).find('input');
                         if (chk.attr('checked')) {
-                            var html = chk.val() === 'other' 
+                        	var html = '<input type="hidden" class="field-suggestions-id" value="' + chk.val() + '" />';
+                            html += (chk.val() === CONSTANT_IDS.OTHER_EARLY_ALERT_SUGGESTION_ID) 
                                 ? $(this).find(':text').val() + '<input type="hidden" class="field-suggestions-other-hidden" value="' + $(this).find(':text').val() + '" />'
-                                : $(this).text() + '<input type="hidden" class="field-suggestions-id" value="' + chk.val() + '" />';
+                                : $(this).text();
                             $(selectors.suggestions).append('<li>' + html + '</li>');
                         }
                     });
