@@ -70,7 +70,7 @@
 		</property>
 		<property name="executeEnabled" value="#{configProperties.db_liquibase_enabled}" />
 		<property name="changeLog"
-			value="classpath:org/jasig/ssp/database/masterChangeLog.xml" />
+			value="#{configProperties.db_liquibase_changelog}" />
 	</bean>
 
 	<!-- Hibernate -->
