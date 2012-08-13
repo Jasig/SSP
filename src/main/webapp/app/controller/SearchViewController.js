@@ -477,7 +477,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		{
 			me.search();
 		}else{
-			me.searchStore.removeAll();
+			me.clearSearch();
 		}	
 	},
 	
@@ -490,6 +490,13 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.searchCriteria.set('outsideCaseload', outsideCaseload);
 	},
 	
+	clearSearch: function(){
+		var me=this;
+		me.searchStore.removeAll();
+		me.searchStore.totalCount = 0;
+		me.getSearchGridPager().onLoad();
+	},
+	
 	onSearchKeyPress: function(comp,e){
 		var me=this;
         if(e.getKey()==e.ENTER){  
@@ -498,7 +505,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     		{
     			me.search();
     		}else{
-    			me.searchStore.removeAll();
+    			me.clearSearch();
     		}   
         }  
     },
@@ -525,6 +532,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	var me=scope;
     	me.getView().setLoading( false );
 		me.selectFirstItem();
+		me.getSearchGridPager().onLoad();
     },
 
     searchFailure: function( r, scope){
@@ -592,6 +600,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	var me=scope;
     	me.getView().setLoading( false );
 		me.selectFirstItem();
+		me.getSearchGridPager().onLoad();
     },
 
     getCaseloadFailure: function( r, scope){

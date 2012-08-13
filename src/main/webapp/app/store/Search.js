@@ -19,10 +19,5 @@ Ext.define('Ssp.store.Search', {
 							}
 						});
 		return me.callParent(arguments);
-	},
-	
-	sorters: [{
-        property: 'lastName',
-        direction: 'ASC'
-    }]
+	}
 });

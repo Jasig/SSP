@@ -86,10 +86,14 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 		me.getView().loadRecord( me.person );	
 
 		// use config to determine if the retrieveFromExternalButton should be visible
-		me.getRetrieveFromExternalButton().setVisible( displayRetrieveFromExternalButton );		
-
-		// enable the retrieveFromExternalButton if the studentId field is valid
-		me.setRetrieveFromExternalButtonDisabled( !studentIdField.isValid() );
+		if (me.person.get('id') == "")
+		{
+			me.getRetrieveFromExternalButton().setVisible( displayRetrieveFromExternalButton );			
+			// enable the retrieveFromExternalButton if the studentId field is valid
+			me.setRetrieveFromExternalButtonDisabled( !studentIdField.isValid() );		
+		}else{
+			me.getRetrieveFromExternalButton().setVisible(false);
+		}
 		
 		return me.callParent(arguments);
     },
