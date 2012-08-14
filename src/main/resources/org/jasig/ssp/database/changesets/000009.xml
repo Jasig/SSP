@@ -234,9 +234,30 @@
 	</changeSet>
 	
 	<changeSet id="drop defaults on personDemographics" author="daniel.bower">
-		<preConditions onFail="CONTINUE">
+		<preConditions onFail="MARK_RAN">
 			<not>
 				<dbms type="mssql"/>
+			</not>
+		</preConditions>
+	
+		<dropDefaultValue tableName="person_demographics" columnName="ability_to_benefit"/>
+		<dropDefaultValue tableName="person_demographics" columnName="local"/>
+		<dropDefaultValue tableName="person_demographics" columnName="primary_caregiver"/>
+		<dropDefaultValue tableName="person_demographics" columnName="child_care_needed"/>
+		<dropDefaultValue tableName="person_demographics" columnName="employed"/>
+		
+		<rollback>
+			<addDefaultValue columnName="ability_to_benefit" tableName="person_demographics" defaultValueBoolean="false"/>
+			<addDefaultValue columnName="local" tableName="person_demographics" defaultValueBoolean="true"/>
+			<addDefaultValue columnName="primary_caregiver" tableName="person_demographics" defaultValueBoolean="false"/>
+			<addDefaultValue columnName="child_care_needed" tableName="person_demographics" defaultValueBoolean="false"/>
+			<addDefaultValue columnName="employed" tableName="person_demographics" defaultValueBoolean="false"/>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="drop defaults on personDemographics mssql 2008" author="daniel.bower" dbms="mssql">
+		<preConditions onFail="MARK_RAN">
+			<not>
 				<sqlCheck expectedResult="2005">${detectMssqlVersion}</sqlCheck>
 			</not>
 		</preConditions>
