@@ -18,8 +18,15 @@ It allows ssp to be run outside in absence of uportal.
 		http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 
 	<!-- Properties file configuration of existing beans -->
-	<util:properties id="configProperties"
-		location="file:#{T(org.jasig.ssp.config.logging.ExternalConfigLoader).getConfigDir()}/ssp-config.properties" />
+	<beans:bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<beans:property name="ignoreResourceNotFound" value="true" />
+		<beans:property name="locations">
+			<beans:list>
+				<beans:value>classpath:ssp-config.default.properties</beans:value>
+				<beans:value>file:#{T(org.jasig.ssp.config.logging.ExternalConfigLoader).getConfigDir()}/ssp-config.properties</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
 
 	<ldap-server ldif="file:#{T(org.jasig.ssp.config.logging.ExternalConfigLoader).getConfigDir()}/users.ldif" 
 			root="dc=springframework,dc=org"

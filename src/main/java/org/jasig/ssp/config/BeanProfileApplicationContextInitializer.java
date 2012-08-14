@@ -20,6 +20,8 @@ public class BeanProfileApplicationContextInitializer
 			.getLogger(BeanProfileApplicationContextInitializer.class);
 
 	private static final String CONFIG_FILE_NAME = "ssp-config.properties";
+	private static final String DEFAULT_CONFIG_FILE_NAME =
+			"ssp-config.default.properties";
 	private static final String FILE_SEPARATOR = System
 			.getProperty("file.separator");
 
@@ -30,6 +32,22 @@ public class BeanProfileApplicationContextInitializer
 		final String propertiesFileName = ExternalConfigLoader
 				.getConfigDir() + FILE_SEPARATOR + CONFIG_FILE_NAME;
 
+		boolean anyPropsLoaded = false;
+		final String defaultPropertiesResourcePath =
+				"classpath:"+DEFAULT_CONFIG_FILE_NAME;
+		try {
+			applicationContext
+					.getEnvironment()
+					.getPropertySources()
+					.addLast(new ResourcePropertySource(
+							defaultPropertiesResourcePath));
+			anyPropsLoaded = true;
+			LOGGER.info("Loaded properties file from {} for determining "
+					+ "spring profile.", defaultPropertiesResourcePath);
+		} catch ( Exception e ) {
+			LOGGER.info("Unable to load properties file {} for determining "
+					+ " spring profile.", defaultPropertiesResourcePath, e);
+		}
 		try {
 			applicationContext
 					.getEnvironment()
@@ -37,15 +55,21 @@ public class BeanProfileApplicationContextInitializer
 					.addLast(
 							new ResourcePropertySource(
 									"file:" + propertiesFileName));
-			LOGGER.info("Loaded properties file from " + propertiesFileName
-					+ " for determining spring profile.");
+			anyPropsLoaded = true;
+			LOGGER.info("Loaded properties file from {} for determining "
+					+ "spring profile.", propertiesFileName);
 		} catch (Exception e) {
-			LOGGER.info("Unable to load properties file " + propertiesFileName +
-					" in BeanProfileApplicationContextInitializer, defaulting "
-					+
-					"spring.profile to uportal");
+			LOGGER.info("Unable to load properties file {} for determining "
+					+ " spring profile.", propertiesFileName, e);
+		}
+
+		if ( !(anyPropsLoaded) ) {
+			LOGGER.info("Unable to load any configuration files for "
+					+ "determining Spring profile. Defaulting spring.profile " +
+					 "to uportal");
 			System.setProperty("spring.profiles.active", "uportal");
 		}
+
 	}
 
 }

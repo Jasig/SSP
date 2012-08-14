@@ -9,48 +9,43 @@ Ext.define('Ssp.service.CaseloadService', {
 		return this.callParent( arguments );
     },
     
-    getBaseUrl: function( id ){
+    getBaseUrl: function(){
 		var me=this;
-		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('person') );
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personCaseload') );
     	return baseUrl;
     },
 
     getCaseload: function( programStatusId, callbacks ){
     	var me=this;
-    	var programStatusFilter = "";
-    	var success = function( response, view ){
-    		var r = Ext.decode(response.responseText);
-    		// clear the store
-    		me.store.removeAll();
-    		if (r.rows.length > 0)
-	    	{
-	    		me.store.loadData( r.rows );
-	    	}
-	    	if (callbacks != null)
-	    	{
-	    		callbacks.success( r, callbacks.scope );
-	    	}	
-	    };
+	    
+		// clear the store
+		me.store.removeAll();
 
-	    var failure = function( response ){
-	    	me.apiProperties.handleError( response );	    	
-	    	if (callbacks != null)
-	    	{
-	    		callbacks.failure( response, callbacks.scope );
-	    	}
-	    };
-	    
-	    if (programStatusId != "")
-	    {
-	    	programStatusFilter = '/?programStatusId='+programStatusId;
-	    }
-	    
-		me.apiProperties.makeRequest({
-			url: me.getBaseUrl()+'/caseload'+programStatusFilter,
-			method: 'GET',
-			successFunc: success,
-			failureFunc: failure,
-			scope: me
+		// Set the Url for the Caseload Store
+		// including param definitions because the params need
+		// to be applied prior to load and not in a params 
+		// definition from the load method or the paging
+		// toolbar applied to the SearchView will not
+		// apply the params when using next or previous
+		// page
+    	Ext.apply(me.store.getProxy(),{url: me.getBaseUrl()+'?sort=lastName&programStatusId='+programStatusId});
+
+	    me.store.load({
+		    callback: function(records, operation, success) {
+		        if (success)
+		        {
+			    	if (callbacks != null)
+			    	{
+			    		callbacks.success( records, callbacks.scope );
+			    	}		        	
+		        }else{
+			    	if (callbacks != null)
+			    	{
+			    		callbacks.failure( records, callbacks.scope );
+			    	}
+		        }
+		    },
+		    scope: me
 		});
     },
     

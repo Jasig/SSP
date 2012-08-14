@@ -73,7 +73,8 @@ Ext.define('Ssp.view.person.Coach', {
 				        valueField: 'id',
 				        displayField: 'name',
 				        mode: 'local',
-				        typeAhead: true,
+				        typeAhead: false,
+				        editable: false,
 				        queryMode: 'local',
 				        allowBlank: false
 					}]
