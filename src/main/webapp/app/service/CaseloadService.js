@@ -28,7 +28,7 @@ Ext.define('Ssp.service.CaseloadService', {
 		// toolbar applied to the SearchView will not
 		// apply the params when using next or previous
 		// page
-    	Ext.apply(me.store.getProxy(),{url: me.getBaseUrl()+'?sort=lastName&programStatusId='+programStatusId});
+		Ext.apply(me.store.getProxy(),{url: me.getBaseUrl()+'?programStatusId='+programStatusId});
 
 	    me.store.load({
 		    callback: function(records, operation, success) {
