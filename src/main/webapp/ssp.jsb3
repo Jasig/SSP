@@ -15,6 +15,21 @@ License details: http://www.gnu.org/licenses/lgpl.html",
             },
             "files": [
                 {
+                    "clsName": "Ssp.model.AbstractBase",
+                    "name": "AbstractBase.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.AbstractReference",
+                    "name": "AbstractReference.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.AbstractReferences",
+                    "name": "AbstractReferences.js",
+                    "path": "/app/store/reference/"
+                },
+                {
                     "clsName": "Ssp.view.admin.AdminMain",
                     "name": "AdminMain.js",
                     "path": "/app/view/admin/"
@@ -72,11 +87,6 @@ License details: http://www.gnu.org/licenses/lgpl.html",
                 {
                     "clsName": "Ssp.view.tools.studentintake.Challenges",
                     "name": "Challenges.js",
-                    "path": "/app/view/tools/studentintake/"
-                },
-                {
-                    "clsName": "Ssp.view.tools.studentintake.EducationGoals",
-                    "name": "EducationGoals.js",
                     "path": "/app/view/tools/studentintake/"
                 },
                 {
@@ -685,11 +695,6 @@ License details: http://www.gnu.org/licenses/lgpl.html",
                     "path": "/app/controller/admin/campus/"
                 },
                 {
-                    "clsName": "Ssp.model.AbstractBase",
-                    "name": "AbstractBase.js",
-                    "path": "/app/model/"
-                },
-                {
                     "clsName": "Ssp.model.Coach",
                     "name": "Coach.js",
                     "path": "/app/model/"
@@ -1095,11 +1100,6 @@ License details: http://www.gnu.org/licenses/lgpl.html",
                     "path": "/app/model/tool/journal/"
                 },
                 {
-                    "clsName": "Ssp.model.reference.AbstractReference",
-                    "name": "AbstractReference.js",
-                    "path": "/app/model/reference/"
-                },
-                {
                     "clsName": "Ssp.model.reference.Challenge",
                     "name": "Challenge.js",
                     "path": "/app/model/reference/"
@@ -1163,11 +1163,6 @@ License details: http://www.gnu.org/licenses/lgpl.html",
                     "clsName": "Ssp.store.Documents",
                     "name": "Documents.js",
                     "path": "/app/store/"
-                },
-                {
-                    "clsName": "Ssp.store.reference.AbstractReferences",
-                    "name": "AbstractReferences.js",
-                    "path": "/app/store/reference/"
                 },
                 {
                     "clsName": "Ssp.store.reference.AnticipatedStartTerms",
@@ -1513,6 +1508,16 @@ License details: http://www.gnu.org/licenses/lgpl.html",
                     "clsName": "Ssp.store.reference.VeteranStatuses",
                     "name": "VeteranStatuses.js",
                     "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.studentintake.EducationGoalsViewController",
+                    "name": "EducationGoalsViewController.js",
+                    "path": "/app/controller/tool/studentintake/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.studentintake.EducationGoals",
+                    "name": "EducationGoals.js",
+                    "path": "/app/view/tools/studentintake/"
                 }
             ]
         },
