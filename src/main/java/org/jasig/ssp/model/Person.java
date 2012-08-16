@@ -612,8 +612,23 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.schoolId = schoolId;
 	}
 
+	/**
+	 * Gives the database value of the column, which may be null.
+	 * 
+	 * @return
+	 */
 	public Boolean getEnabled() {
 		return enabled;
+	}
+	
+	/**
+	 * Indicates whether the account is disabled according to the business rules 
+	 * of SSP.
+	 * 
+	 * @return
+	 */
+	public boolean isDisabled() {
+		return enabled != null && enabled.equals(Boolean.FALSE);
 	}
 
 	public void setEnabled(final Boolean enabled) {

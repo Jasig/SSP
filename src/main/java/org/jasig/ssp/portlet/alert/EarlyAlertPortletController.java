@@ -147,8 +147,7 @@ public final class EarlyAlertPortletController {
 	private Person findEnabledPersonByUsernameOrFail(String username)
 	throws ObjectNotFoundException, UserNotEnabledException {
 		Person person = personService.personFromUsername(username);
-		final boolean enabled = person.getEnabled();
-		if (!enabled) {
+		if (person.isDisabled()) {
 			throw new UserNotEnabledException("User '" + username + "' is disabled.");
 		}
 		return person;

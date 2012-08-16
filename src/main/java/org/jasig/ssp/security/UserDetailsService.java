@@ -64,14 +64,13 @@ public class UserDetailsService implements SspUserDetailsService {
 			}
 		}
 
-		final boolean enabled = person.getEnabled();
-		if (!enabled) {
+		if (person.isDisabled()) {
 			LOGGER.error("User is disabled: {}", username);
 			throw new UserNotEnabledException("User is disabled.");
 		}
 
 		final SspUser sspUser = new SspUser(username, "password",
-				enabled, enabled, enabled, enabled, authorities);
+				true, true, true, true, authorities);
 
 		sspUser.setPerson(person);
 
