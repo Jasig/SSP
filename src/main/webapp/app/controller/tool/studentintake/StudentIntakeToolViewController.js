@@ -436,8 +436,14 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 				personChallenges: []
 			};
 						
-			// account for date offset
-			intakeData.person.birthDate = me.formUtils.fixDateOffset( intakeData.person.birthDate );
+			// date saved as null is ok if using External Data Sync Routine
+			// and the date will not validate because the date field is disabled under
+			// this mode. See SSPConfig and studentintake.PersonalViewController for additional detail.  
+			if (intakeData.person.birthDate != null)
+			{
+				// account for date offset
+				intakeData.person.birthDate = me.formUtils.fixDateOffset( intakeData.person.birthDate );			
+			}
 
 			// cleans properties that will be unable to be saved if not null
 			// arrays set to strings should be null rather than string in saved
