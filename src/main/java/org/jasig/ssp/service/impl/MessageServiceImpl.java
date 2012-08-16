@@ -205,8 +205,15 @@ public class MessageServiceImpl implements MessageService {
 
 			mimeMessageHelper.setFrom(personService.get(
 					Person.SYSTEM_ADMINISTRATOR_ID).getEmailAddressWithName());
-			mimeMessageHelper.setReplyTo(message.getSender()
-					.getEmailAddressWithName());
+			// We just happen to know that getEmailAddressWithName() uses the
+			// primary address. This could probably be handled better. W/o
+			// the blank string check, though, javax.mail will blow up
+			// w/ a AddressException
+			String replyTo = message.getSender().getPrimaryEmailAddress();
+			if ( StringUtils.isNotBlank(replyTo) ) {
+				mimeMessageHelper.setReplyTo(message.getSender()
+						.getEmailAddressWithName());
+			}
 
 			if (message.getRecipient() != null) { // NOPMD by jon.adams
 				mimeMessageHelper.setTo(message.getRecipient()
