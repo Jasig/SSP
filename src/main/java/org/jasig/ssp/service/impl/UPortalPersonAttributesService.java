@@ -51,6 +51,10 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 
 	private Map<String, String> coachesQuery = Collections.singletonMap(
 			"SSP_ROLES", "SSP_COACH");
+	
+	public Map<String, String> getCoachesQuery() {
+		return coachesQuery;
+	}
 
 	/**
 	 * Allows the <code>coachesQuery</code> to be configured in Spring XML. The
@@ -63,7 +67,7 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 	 *            A Map of Strings, attribute name to attribute value
 	 */
 	public void setCoachesQuery(final Map<String, String> coachesQuery) {
-		this.coachesQuery = coachesQuery;
+		this.coachesQuery = Collections.unmodifiableMap(coachesQuery);
 	}
 
 	@SuppressWarnings("unchecked")
