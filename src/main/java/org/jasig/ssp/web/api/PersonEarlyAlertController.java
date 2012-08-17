@@ -1,18 +1,25 @@
 package org.jasig.ssp.web.api;
 
+import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.mail.SendFailedException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.EarlyAlertTOFactory;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonProgramStatus;
+import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonProgramStatusService;
+import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
@@ -51,6 +58,12 @@ public class PersonEarlyAlertController extends
 
 	@Autowired
 	private transient EarlyAlertTOFactory factory;
+
+	@Autowired
+	private transient PersonProgramStatusService personProgramStatusService;
+
+	@Autowired
+	private transient ProgramStatusService programStatusService;
 
 	@Override
 	protected EarlyAlertTOFactory getFactory() {
@@ -141,8 +154,41 @@ public class PersonEarlyAlertController extends
 			}
 		}
 
+		try {
+			ensureAlertedPersonHasProgramStatus(personId);
+		} catch ( Exception e ) {
+			LOGGER.error("Unable to set a program status on person '{}'. This is"
+					+ " likely to prevent that person record from appearing"
+					+ " in caseloads and student searches.", personId);
+		}
+
 		// return created EarlyAlert
 		return earlyAlertTO;
+	}
+
+	private void ensureAlertedPersonHasProgramStatus(UUID personId)
+	throws ObjectNotFoundException, ValidationException {
+		final ProgramStatus programStatus =  programStatusService.getActiveStatus();
+		if ( programStatus == null ) {
+			throw new ObjectNotFoundException(
+					"Unable to find a ProgramStatus representing \"activeness\".",
+					"ProgramStatus");
+		}
+
+		final Person person = personService.get(personId);
+		if ( person == null ) {
+			// very odd, but no reason it couldn't happen
+			throw new ObjectNotFoundException(personId, "Person");
+		}
+		Set<PersonProgramStatus> programStatuses =
+				person.getProgramStatuses();
+		if ( programStatuses == null || programStatuses.isEmpty() ) {
+			PersonProgramStatus personProgramStatus = new PersonProgramStatus();
+			personProgramStatus.setPerson(person);
+			personProgramStatus.setEffectiveDate(new Date());
+			personProgramStatus.setProgramStatus(programStatus);
+			personProgramStatusService.save(personProgramStatus);
+		}
 	}
 
 	@Override
