@@ -5,7 +5,7 @@
 	<artifactId>ssp</artifactId>
 	<packaging>war</packaging>
 	<name>SSP</name>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.1.0-SNAPSHOT</version>
 
 	<properties>
 		<apache.httpcomponents.version>4.1.3</apache.httpcomponents.version>
@@ -25,7 +25,7 @@
 		<connection>scm:git:git://github.com/russlittle/SSP-Open-Source-Project.git</connection>
 		<developerConnection>scm:git:git@github.com:russlittle/SSP-Open-Source-Project.git</developerConnection>
 		<url>https://github.com/russlittle/SSP-Open-Source-Project</url>
-	  <tag>rel-1-0-patches</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 	<profiles>
