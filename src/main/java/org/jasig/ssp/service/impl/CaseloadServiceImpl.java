@@ -1,5 +1,6 @@
 package org.jasig.ssp.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -83,4 +84,22 @@ public class CaseloadServiceImpl implements CaseloadService {
 
 		return records;
 	}
+	
+	
+	@Override
+	public Long caseLoadCountFor(
+			final ProgramStatus programStatus, @NotNull final Person coach, List<UUID> studentTypeIds,Date programStatusDateFrom, Date programStatusDateTo 
+			) throws ObjectNotFoundException  {
+
+		ProgramStatus programStatusOrDefault;
+
+		// programStatus : <programStatusId>, default to Active
+		if (programStatus == null) {
+			programStatusOrDefault = programStatusService
+					.get(ProgramStatus.ACTIVE_ID);
+		} else {
+			programStatusOrDefault = programStatus;
+		}
+
+		return dao.caseLoadCountFor(programStatusOrDefault, coach, studentTypeIds, programStatusDateFrom, programStatusDateTo);	}	
 }

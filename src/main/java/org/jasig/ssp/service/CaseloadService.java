@@ -1,5 +1,9 @@
 package org.jasig.ssp.service;
 
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
 import org.jasig.ssp.model.CaseloadRecord;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ProgramStatus;
@@ -9,7 +13,7 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 
 /**
  * Case load service
- */
+ */  
 public interface CaseloadService {
 	/**
 	 * Gets the case load for the specified {@link CoachPersonLiteTO} (advisor)
@@ -31,4 +35,7 @@ public interface CaseloadService {
 	PagingWrapper<CaseloadRecord> caseLoadFor(ProgramStatus programStatus,
 			Person coach, SortingAndPaging sAndP)
 			throws ObjectNotFoundException;
+	
+	Long caseLoadCountFor(ProgramStatus programStatus,
+			Person coach, List<UUID> studentTypeIds, Date programStatusDateFrom, Date programStatusDateTo) throws ObjectNotFoundException;	
 }

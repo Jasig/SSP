@@ -212,6 +212,75 @@
 	</form>
 </div>
 
+
+<div class="hideable-form caseLoad-form" style="display:none">
+	<h1>Caseload Report</h1>
+	<form action="/ssp/api/1/report/Caseload/" method="get"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+		
+
+		<!-- Student Type -->
+		<div class="ea-input">
+			<select class="input-student-type-group" id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
+		</div>
+		<div class="ea-label">
+			<span>Student Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Student Type -->
+		<div class="ea-input">
+			Not Available Yet
+			<!-- select class="input-student-type-group" id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select-->
+		</div>
+		<div class="ea-label">
+			<span>Home Department:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+
+				
+		<!-- Date From -->
+		<div class="ea-input">
+			<input class="input-calendar-type" type="textbox" name="programStatusDateFrom" id="programStatusDateFrom" />
+		</div>
+		<div class="ea-label">
+			<span>Program Status Date From:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Date To -->
+		<div class="ea-input">
+			<input class="input-calendar-type" type="textbox" name="programStatusDateTo" id="programStatusDateTo" />
+		</div>
+		<div class="ea-label">
+			<span>Program Status Date From:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div> 
+
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+</div>
+
+
+
  
 <div class="hideable-form confidentiality-agreement-form" style="width:800; display:none" >
 <h1>Confidentiality Agreement Form</h1>

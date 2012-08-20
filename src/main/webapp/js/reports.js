@@ -110,6 +110,8 @@ var ssp = ssp || {};
 		reportsSelect
 				.append('<option value="specialServicesForm">Special Services Report</option>');
 		reportsSelect
+		        .append('<option value="caseLoadForm">Caseload Report</option>');		
+		reportsSelect
 				.append('<option value="confidentialityAgreementForm">Confidentiality Agreement</option>');
 		reportsSelect.change(reportsSelectChange);
 	}
@@ -124,6 +126,7 @@ var ssp = ssp || {};
 							reportFormBody : '.reports-form-body',
 							generalStudentForm : '.generalStudent-form',
 							specialServicesForm : '.special-services-form',
+							caseLoadForm : '.caseLoad-form',
 							confidentialityAgreementForm : '.confidentiality-agreement-form',
 							confidentialityAgreementFormContent : '.confidentiality-agreement-form-content',
 							programStatusGroup : '.input-program-status-group',

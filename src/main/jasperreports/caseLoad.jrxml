@@ -1,80 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank Letter Landscape" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de052e81-a0fc-4bfe-a86d-fd593cff06df">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank Letter Landscape" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de052e81-a0fc-4bfe-a86d-fd593cff06df">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<queryString language="json">
-		<![CDATA[]]>
-	</queryString>
 	<field name="firstName" class="java.lang.String">
 		<fieldDescription><![CDATA[firstName]]></fieldDescription>
 	</field>
 	<field name="lastName" class="java.lang.String">
 		<fieldDescription><![CDATA[lastName]]></fieldDescription>
 	</field>
-	<field name="department" class="java.lang.String">
-		<fieldDescription><![CDATA[department]]></fieldDescription>
+	<field name="departmentName" class="java.lang.String">
+		<fieldDescription><![CDATA[departmentName]]></fieldDescription>
 	</field>
-	<field name="totalStudentsServed" class="java.lang.Integer">
-		<fieldDescription><![CDATA[totalStudentsServed]]></fieldDescription>
+	<field name="activeCount" class="java.lang.Long">
+		<fieldDescription><![CDATA[activeCount]]></fieldDescription>
 	</field>
-	<field name="totalAnnualCaseload" class="java.lang.Integer">
-		<fieldDescription><![CDATA[totalAnnualCaseload]]></fieldDescription>
+	<field name="inActiveCount" class="java.lang.Long">
+		<fieldDescription><![CDATA[inActiveCount]]></fieldDescription>
 	</field>
-	<field name="currentTotalCaseload" class="java.lang.Integer">
-		<fieldDescription><![CDATA[currentTotalCaseload]]></fieldDescription>
+	<field name="npCount" class="java.lang.Long">
+		<fieldDescription><![CDATA[npCount]]></fieldDescription>
 	</field>
-	<field name="studentsByStatusA" class="java.lang.Integer">
-		<fieldDescription><![CDATA[studentsByStatusA]]></fieldDescription>
+	<field name="transitionedCount" class="java.lang.Long">
+		<fieldDescription><![CDATA[transitionedCount]]></fieldDescription>
 	</field>
-	<field name="studentsByStatusIA" class="java.lang.Integer">
-		<fieldDescription><![CDATA[studentsByStatusIA]]></fieldDescription>
-	</field>
-	<field name="studentsByStatusT" class="java.lang.Integer">
-		<fieldDescription><![CDATA[studentsByStatusT]]></fieldDescription>
-	</field>
-	<field name="studentsByStatusNP" class="java.lang.Integer">
-		<fieldDescription><![CDATA[studentsByStatusNP]]></fieldDescription>
-	</field>
-	<field name="studentsByStatusNS" class="java.lang.Integer">
-		<fieldDescription><![CDATA[studentsByStatusNS]]></fieldDescription>
+	<field name="noShowCount" class="java.lang.Long">
+		<fieldDescription><![CDATA[noShowCount]]></fieldDescription>
 	</field>
 	<variable name="rowIndex" class="java.lang.Integer">
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
 		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
 	</variable>
-	<variable name="totalStudentSum" class="java.lang.Integer">
-		<variableExpression><![CDATA[Integer.valueOf($V{totalStudentSum}.intValue() + $F{totalStudentsServed})]]></variableExpression>
-		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	<variable name="totalActive" class="java.lang.String">
+		<variableExpression><![CDATA[new Long(0)]]></variableExpression>
+		<initialValueExpression><![CDATA[new Long(0)]]></initialValueExpression>
 	</variable>
-	<variable name="totalAnnualCaseloadSum" class="java.lang.Integer">
-		<variableExpression><![CDATA[Integer.valueOf($V{totalAnnualCaseloadSum}.intValue() + $F{totalAnnualCaseload})]]></variableExpression>
-		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	<variable name="activeCount_1" class="java.lang.Long" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{activeCount}]]></variableExpression>
 	</variable>
-	<variable name="currentTotalCaseloadSum" class="java.lang.Integer">
-		<variableExpression><![CDATA[Integer.valueOf($V{currentTotalCaseloadSum}.intValue() + $F{currentTotalCaseload})]]></variableExpression>
-		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	<variable name="inActiveCount_1" class="java.lang.Long" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{inActiveCount}]]></variableExpression>
 	</variable>
-	<variable name="studentsByStatusASum" class="java.lang.Integer">
-		<variableExpression><![CDATA[Integer.valueOf($V{studentsByStatusASum}.intValue() + $F{studentsByStatusA})]]></variableExpression>
-		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	<variable name="transitionedCount_1" class="java.lang.Long" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{transitionedCount}]]></variableExpression>
 	</variable>
-	<variable name="studentsByStatusIASum" class="java.lang.Integer">
-		<variableExpression><![CDATA[Integer.valueOf($V{studentsByStatusIASum}.intValue() + $F{studentsByStatusIA})]]></variableExpression>
-		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	<variable name="npCount_1" class="java.lang.Long" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{npCount}]]></variableExpression>
 	</variable>
-	<variable name="studentsByStatusTSum" class="java.lang.Integer">
-		<variableExpression><![CDATA[Integer.valueOf($V{studentsByStatusTSum}.intValue() + $F{studentsByStatusT})]]></variableExpression>
-		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
-	</variable>
-	<variable name="studentsByStatusNPSum" class="java.lang.Integer">
-		<variableExpression><![CDATA[Integer.valueOf($V{studentsByStatusNPSum}.intValue() + $F{studentsByStatusNP})]]></variableExpression>
-		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
-	</variable>
-	<variable name="studentsByStatusNSSum" class="java.lang.Integer">
-		<variableExpression><![CDATA[Integer.valueOf($V{studentsByStatusNSSum}.intValue() + $F{studentsByStatusNS})]]></variableExpression>
-		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	<variable name="noShowCount_1" class="java.lang.Long" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{noShowCount}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -141,27 +116,6 @@
 				<text><![CDATA[DEPARTMENT]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="07c2f968-e98a-4673-b614-1def0cb9c4dd" x="227" y="2" width="100" height="26"/>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[TOTAL STUDENTS SERVED]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="f9a07bba-d299-4b7d-9d82-ec1e4c8e3329" x="327" y="2" width="100" height="26"/>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[TOTAL ANNUAL CASELOAD CASELAD]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="56b81aec-c74e-4f01-ab16-5a839da3d4bd" x="430" y="2" width="100" height="26"/>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[CURRENT TOTAL CASELOAD]]></text>
-			</staticText>
-			<staticText>
 				<reportElement uuid="e0612c62-ab6f-4335-9ebc-a9493ec69c1d" x="547" y="2" width="25" height="20"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
@@ -196,12 +150,17 @@
 				</textElement>
 				<text><![CDATA[NS]]></text>
 			</staticText>
+			<staticText>
+				<reportElement uuid="a73c237b-1ece-4eab-9366-693aff8b0221" x="438" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[activeCount]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="35" splitType="Stretch">
+		<band height="30" splitType="Stretch">
 			<rectangle>
-				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" x="0" y="2" width="750" height="30" backcolor="#E4E4E4">
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" x="2" y="0" width="750" height="30" backcolor="#E4E4E4">
 					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
 				</reportElement>
 			</rectangle>
@@ -222,103 +181,79 @@
 			<textField>
 				<reportElement uuid="8eac9b78-2708-4c2b-8ef1-3ed9170a3eef" x="120" y="6" width="107" height="20"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{department}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{departmentName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="5f8451f7-0190-4a92-831a-6cb995bd42a3" x="227" y="6" width="100" height="20"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{totalStudentsServed}]]></textFieldExpression>
+				<reportElement uuid="3efa154d-767a-41fb-95fd-6db1ff5dc959" x="548" y="6" width="24" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{activeCount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="afd0ee49-1d44-4a84-b48e-6e8e041fc4e0" x="327" y="6" width="100" height="20"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{totalAnnualCaseload}]]></textFieldExpression>
+				<reportElement uuid="121a0617-cec2-4b49-97f8-c3824f73f909" x="631" y="6" width="25" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{npCount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="be11853a-39ca-49c3-a9a9-6706d0be58b5" x="430" y="6" width="100" height="20"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{currentTotalCaseload}]]></textFieldExpression>
+				<reportElement uuid="ca48cdf1-0a1e-43d2-9396-71faa4551e4f" x="575" y="6" width="17" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{inActiveCount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="87bd9420-0be5-4722-99e6-f2dc020c744f" x="547" y="6" width="25" height="20"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{studentsByStatusA}]]></textFieldExpression>
+				<reportElement uuid="03e17016-1b6d-42ca-aba4-ac473c5f8589" x="603" y="6" width="17" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{transitionedCount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="fa55010b-e089-4924-9e68-b471e8d1790e" x="575" y="6" width="25" height="20"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{studentsByStatusIA}]]></textFieldExpression>
+				<reportElement uuid="a1918016-b8a6-41ad-bbde-0dea834efaf0" x="659" y="6" width="26" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{noShowCount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="fb1874da-12a2-4dd8-bafb-0d7ca0a64a9c" x="603" y="6" width="25" height="20"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{studentsByStatusT}]]></textFieldExpression>
+				<reportElement uuid="3a3d6b62-fdca-4676-85de-4d90f7184226" x="438" y="9" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{activeCount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="d92b47be-558b-4957-8d03-8bc1f5288f12" x="631" y="6" width="25" height="20"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{studentsByStatusNP}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="abbf2b20-2786-4d5f-9a6d-a8110d9a46e1" x="659" y="6" width="25" height="20"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{studentsByStatusNS}]]></textFieldExpression>
+				<reportElement uuid="783120a2-803b-4884-8047-ed7540cbb39b" x="250" y="6" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{activeCount}.longValue() + $F{inActiveCount}.longValue() + $F{npCount}.longValue() +$F{transitionedCount}.longValue() + $F{noShowCount}.longValue()]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="52" splitType="Stretch"/>
+		<band height="32" splitType="Stretch">
+			<textField>
+				<reportElement uuid="ddb28bd4-6f8e-430f-9177-26dff7a46f1f" x="553" y="7" width="18" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{activeCount_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ee589287-9fe5-4441-a82a-2ca345f9a88e" x="574" y="7" width="17" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{inActiveCount_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="da59866d-9e2b-410d-98dd-ea46f6a52357" x="602" y="7" width="17" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{transitionedCount_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="1baa4b32-83c0-49da-98b5-035e5ca4845d" x="630" y="7" width="25" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{npCount_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ba35a3f4-83ae-41be-9d55-0a48ae433ca7" x="658" y="8" width="25" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{noShowCount_1}]]></textFieldExpression>
+			</textField>
+		</band>
 	</columnFooter>
 	<pageFooter>
 		<band height="54" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
 		<band height="42" splitType="Stretch">
-			<textField>
-				<reportElement uuid="207e1b68-2b4b-4a8b-9011-61023bcdaaef" x="227" y="11" width="99" height="20"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$V{totalStudentSum}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="cb8dad2e-0d83-407e-8d03-58f0ffe91b57" x="327" y="11" width="100" height="20"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$V{totalAnnualCaseloadSum}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="86885de3-b342-44ab-ae9b-d62239cdd651" x="430" y="11" width="100" height="20"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$V{currentTotalCaseloadSum}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="018d7a5c-e4ee-4008-87ae-efbc7fabb301" x="20" y="11" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[Totals:]]></text>
-			</staticText>
-			<textField>
-				<reportElement uuid="db27643c-8ae2-44e4-b9e5-fa701887a2f8" x="547" y="11" width="25" height="20"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$V{studentsByStatusASum}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="a5a7c335-cc37-4009-af82-bc240ab54fb1" x="575" y="11" width="25" height="20"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$V{studentsByStatusIASum}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="4e81c63c-c500-4998-9264-bdd84ac57eba" x="603" y="11" width="25" height="20"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$V{studentsByStatusTSum}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="507b4c35-7df2-448b-88a4-bacee973f867" x="631" y="11" width="25" height="20"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$V{studentsByStatusNPSum}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="7676aaf5-718d-401a-b2ea-eb57a9ffca28" x="659" y="11" width="25" height="20"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$V{studentsByStatusNSSum}]]></textFieldExpression>
-			</textField>
 			<line>
 				<reportElement uuid="d81fa98a-b996-49fb-8070-f4e12fda97c3" x="21" y="6" width="700" height="1"/>
 			</line>

@@ -54,7 +54,7 @@ import com.google.common.collect.Maps;
 /**
  * Service methods for manipulating data about people in the system.
  * <p>
- * Mapped to URI path <code>/1/person</code>
+ * Mapped to URI path <code>report/AddressLabels</code>
  */
 
 // TODO: Add PreAuthorize

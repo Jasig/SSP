@@ -1,7 +1,12 @@
 package org.jasig.ssp.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
 
+import javax.management.Query;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.Criteria;
@@ -15,6 +20,9 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.reports.CaseloadReportController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -32,20 +40,19 @@ public class CaseloadDao extends AbstractDao<Person> {
 		// This creation of the query is order sensitive as 2 queries are run
 		// with the same restrictions. The first query simply runs the query to
 		// find a count of the records. The second query returns the row data.
-
-		final Criteria query = createCriteria();
+		// protected Criteria createCriteria() {
+		// return sessionFactory.getCurrentSession().createCriteria(
+		// this.persistentClass);
+		// }
+		final Criteria query = this.createCriteria();
 
 		// Restrict by program status if provided
 		if (programStatus != null) {
 			final Criteria subquery = query.createAlias("programStatuses",
 					"personProgramStatus");
-			subquery.add(
-					Restrictions.or(
-							Restrictions
-									.isNull("personProgramStatus.expirationDate"),
-							Restrictions.ge(
-									"personProgramStatus.expirationDate",
-									new Date())));
+			subquery.add(Restrictions.or(Restrictions
+					.isNull("personProgramStatus.expirationDate"), Restrictions
+					.ge("personProgramStatus.expirationDate", new Date())));
 			subquery.add(Restrictions.eq("personProgramStatus.programStatus",
 					programStatus));
 		}
@@ -71,13 +78,11 @@ public class CaseloadDao extends AbstractDao<Person> {
 		final ProjectionList projections = Projections.projectionList();
 		projections.add(Projections.property("id").as("personId"));
 		projections.add(Projections.property("firstName").as("firstName"));
-		projections.add(Projections.property("middleName").as(
-				"middleName"));
+		projections.add(Projections.property("middleName").as("middleName"));
 		projections.add(Projections.property("lastName").as("lastName"));
 		projections.add(Projections.property("schoolId").as("schoolId"));
-		projections.add(Projections.property("studentIntakeCompleteDate")
-				.as(
-						"studentIntakeCompleteDate"));
+		projections.add(Projections.property("studentIntakeCompleteDate").as(
+				"studentIntakeCompleteDate"));
 
 		// Join to Student Type
 		query.createAlias("studentType", "studentType",
@@ -98,4 +103,49 @@ public class CaseloadDao extends AbstractDao<Person> {
 
 		return new PagingWrapper<CaseloadRecord>(totalRows, query.list());
 	}
+
+	@SuppressWarnings("unchecked")
+	public Long caseLoadCountFor(final ProgramStatus programStatus,
+			@NotNull final Person coach, List<UUID> studentTypeIds,
+			Date dateFrom, Date dateTo) {
+
+		final Criteria query = createCriteria();
+
+		// Restrict by program status if provided
+		if (programStatus != null) {
+			final Criteria subquery = query.createAlias("programStatuses",
+					"personProgramStatus");
+
+			if (dateFrom != null) {
+				subquery.add(Restrictions.ge(
+						"personProgramStatus.effectiveDate", dateFrom));
+			}
+			if (dateTo != null) {
+				subquery.add(Restrictions.le(
+						"personProgramStatus.effectiveDate", dateTo));
+			}
+
+			subquery.add(Restrictions.or(Restrictions
+					.isNull("personProgramStatus.expirationDate"), Restrictions
+					.ge("personProgramStatus.expirationDate", new Date())));
+
+			subquery.add(Restrictions.eq("personProgramStatus.programStatus",
+					programStatus));
+		}
+
+		// restrict to coach
+		query.add(Restrictions.eq("coach", coach));
+
+		// add possible studentTypeId Check
+		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
+			query.add(Restrictions.in("studentType.id", studentTypeIds));
+		}
+
+		// item count
+		Long totalRows = (Long) query.setProjection(Projections.rowCount())
+				.uniqueResult();
+
+		return totalRows;
+	}
+
 }
