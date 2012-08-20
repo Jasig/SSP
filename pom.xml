@@ -22,6 +22,12 @@
 		<gmaven.runtime>1.8</gmaven.runtime>
 	</properties>
 
+	<scm>
+		<connection>scm:git:git://github.com/russlittle/SSP-Open-Source-Project.git</connection>
+		<developerConnection>scm:git:git@github.com:russlittle/SSP-Open-Source-Project.git</developerConnection>
+		<url>https://github.com/russlittle/SSP-Open-Source-Project</url>
+	</scm>
+
 	<profiles>
 		<profile>
 			<id>STANDALONE</id>
@@ -627,6 +633,11 @@
 						<file>${env.SSP_CONFIGDIR}/ssp-config.properties</file>
 					</files>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.3.2</version>
 			</plugin>
 		</plugins>
 
