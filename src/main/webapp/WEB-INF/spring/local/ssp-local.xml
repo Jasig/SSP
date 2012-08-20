@@ -29,8 +29,11 @@
 		<property name="host" value="#{configProperties.smtp_host}" />
 		<property name="port" value="#{configProperties.smtp_port}" />
 		<property name="protocol" value="#{configProperties.smtp_protocol}" />
-		<property name="username" value="#{configProperties.smtp_username}" />
-		<property name="password" value="#{configProperties.smtp_password}" />
+		<!-- If MS Exchange does not expect authentication username and password
+		must both be null else all connection attempts will fail. Empty strings
+		are not sufficient to skip authN -->
+		<property name="username" value="#{configProperties.smtp_username == null or configProperties.smtp_username.trim() == '' ? null : configProperties.smtp_username}" />
+		<property name="password" value="#{configProperties.smtp_password == null or configProperties.smtp_password.trim() == '' ? null : configProperties.smtp_password}" />
 	</bean>
 
 </beans>
