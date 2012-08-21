@@ -33,6 +33,8 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
+import org.jasig.ssp.service.reference.ReferralSourceService;
+import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.reports.CaseLoadReportTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.web.api.AbstractBaseController;
@@ -72,7 +74,6 @@ public class CaseloadReportController extends AbstractBaseController {
 	
 
 	
-	
 	@Autowired
 	private transient PersonService personService;
 	
@@ -84,6 +85,9 @@ public class CaseloadReportController extends AbstractBaseController {
 	
 	@Autowired
 	protected transient CaseloadService caseLoadService;
+	
+	@Autowired
+	protected transient StudentTypeService studentTypeService;	
 
 	
 	@InitBinder
@@ -139,10 +143,26 @@ public class CaseloadReportController extends AbstractBaseController {
 			
 			caseLoadReportList.add(caseLoadReportTO);
 		}			
+		
+		
+		// Get the actual names of the UUIDs for the referralSources
+		final List<String> studentTypeNames = new ArrayList<String>();
+		if ((studentTypeIds != null) && (studentTypeIds.size() > 0)) {
+			final Iterator<UUID> studentTypeIdsIter = studentTypeIds
+					.iterator();
+			while (studentTypeIdsIter.hasNext()) {
+				studentTypeNames.add(studentTypeService.get(
+						studentTypeIdsIter.next()).getName());
+			}
+		}
 
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
-		parameters.put("reportDate", new Date());
+		parameters.put("statusDateFrom", programStatusDateFrom);
+		parameters.put("statusDateTo", programStatusDateTo);
+		parameters.put("homeDepartment", ""); //not available yet
+		parameters.put("studentTypes", ((studentTypeNames == null || studentTypeNames.isEmpty()) ? "" :  studentTypeNames.toString()));
+		
 				
 		final JRDataSource beanDs;
 		if(caseLoadReportList.isEmpty())

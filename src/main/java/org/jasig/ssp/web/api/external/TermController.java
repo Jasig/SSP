@@ -78,7 +78,7 @@ public class TermController extends AbstractExternalController<TermTO, Term> {
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	TermTO currentTerm() throws ObjectNotFoundException,
-			ValidationException {
+			ValidationException {		
 		final Term model = getService().getCurrentTerm();
 		if (model == null) {
 			return null;
