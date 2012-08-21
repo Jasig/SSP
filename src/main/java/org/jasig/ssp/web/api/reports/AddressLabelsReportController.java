@@ -177,7 +177,7 @@ public class AddressLabelsReportController extends AbstractBaseController { // N
 		} else if ("csv".equals(reportType)) {
 			response.setContentType("application/vnd.ms-excel");
 			response.setHeader("Content-disposition",
-					"attachment; filename=AddressLabelReprt.csv");
+					"attachment; filename=General_Student_Report.csv");
 
 			final JRCsvExporter exporter = new JRCsvExporter();
 			exporter.setParameter(JRExporterParameter.INPUT_STREAM,

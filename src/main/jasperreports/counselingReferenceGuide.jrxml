@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="studentActionPlan" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aac79acd-053b-4b36-bb85-9b85200e4ec8">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[name]]></fieldDescription>
+	</field>
+	<field name="challengeChallengeReferrals" class="java.util.List">
+		<fieldDescription><![CDATA[challengeChallengeReferrals]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="36" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="0" width="572" height="35" backcolor="#70C2E7"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="172" y="15" width="220" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Counseling Reference Guide]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="70" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="19f089d6-00fb-46ae-bc54-ef0012f8f77f" x="0" y="4" width="572" height="20" backcolor="#AFAAAA"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="97c5210e-6cd2-4b77-b581-cd9cbb0afd91" x="14" y="8" width="55" height="20"/>
+				<textElement/>
+				<text><![CDATA[Challenge:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="28e389f0-d564-4828-8efa-4d5d91ee40e9" x="69" y="8" width="403" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="6771cd58-e900-4460-868f-a337c87f11fe" x="0" y="24" width="572" height="42"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{challengeChallengeReferrals})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["reports/referral_subreport.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

@@ -281,6 +281,34 @@
 
 
 
+<div class="hideable-form counseling-reference-guide" style="display:none">
+	<h1>Counseling Reference Guide</h1>
+	<form action="/ssp/api/1/report/counselingreference" method="get" class="alert-form">
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div>
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+</div>
+
+
+
+
+
+
  
 <div class="hideable-form confidentiality-agreement-form" style="width:800; display:none" >
 <h1>Confidentiality Agreement Form</h1>
