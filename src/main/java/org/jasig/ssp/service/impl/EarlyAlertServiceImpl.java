@@ -253,15 +253,20 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			throw new IllegalArgumentException("EarlyAlert Person is missing.");
 		}
 
-		final Person person = earlyAlert.getPerson();
+		final Person person = earlyAlert.getPerson().getCoach();
 		final SubjectAndBody subjAndBody = messageTemplateService
 				.createEarlyAlertAdvisorConfirmationMessage(fillTemplateParameters(earlyAlert));
 
-		// Create and queue the message
-		final Message message = messageService.createMessage(person, emailCC,
-				subjAndBody);
-
-		LOGGER.info("Message {} created for EarlyAlert {}", message, earlyAlert);
+		if ( person == null ) {
+			LOGGER.warn("Student {} had no coach when EarlyAlert {} was"
+					+ " created. Unable to send message to coach.",
+					earlyAlert.getPerson(), earlyAlert);
+		} else {
+			// Create and queue the message
+			final Message message = messageService.createMessage(person, emailCC,
+					subjAndBody);
+			LOGGER.info("Message {} created for EarlyAlert {}", message, earlyAlert);
+		}
 
 		// Send same message to all applicable Campus Early Alert routing
 		// entries
@@ -289,7 +294,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				final Person to = route.getPerson();
 				if ((to != null)
 						&& !StringUtils.isEmpty(to.getPrimaryEmailAddress())) {
-					messageService
+					final Message message = messageService
 							.createMessage(to, null, subjAndBody);
 					LOGGER.info(
 							"Message {} for EarlyAlert {} also routed to {}",
@@ -299,7 +304,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				// Send e-mail to a group
 				if (!StringUtils.isEmpty(route.getGroupName())
 						&& !StringUtils.isEmpty(route.getGroupEmail())) {
-					messageService
+					final Message message = messageService
 							.createMessage(route.getGroupEmail(), null,
 									subjAndBody);
 					LOGGER.info(
@@ -355,15 +360,20 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			throw new IllegalArgumentException("EarlyAlert.Person is missing.");
 		}
 
-		final Person person = earlyAlert.getPerson();
-		final SubjectAndBody subjAndBody = messageTemplateService
-				.createEarlyAlertFacultyConfirmationMessage(fillTemplateParameters(earlyAlert));
+		final Person person = earlyAlert.getCreatedBy();
+		if ( person == null ) {
+			LOGGER.warn("EarlyAlert {} has no creator. Unable to send"
+					+ " confirmation message to faculty.", earlyAlert);
+		} else {
+			final SubjectAndBody subjAndBody = messageTemplateService
+					.createEarlyAlertFacultyConfirmationMessage(fillTemplateParameters(earlyAlert));
 
-		// Create and queue the message
-		final Message message = messageService.createMessage(person, null,
-				subjAndBody);
+			// Create and queue the message
+			final Message message = messageService.createMessage(person, null,
+					subjAndBody);
 
-		LOGGER.info("Message {} created for EarlyAlert {}", message, earlyAlert);
+			LOGGER.info("Message {} created for EarlyAlert {}", message, earlyAlert);
+		}
 	}
 
 	@Override
