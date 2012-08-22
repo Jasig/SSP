@@ -210,4 +210,12 @@ public class MessageTemplateServiceImpl extends
 				MessageTemplate.EARLYALERT_CONFIRMATIONTOADVISOR_ID,
 				messageParams);
 	}
+
+	@Override
+	public SubjectAndBody createEarlyAlertResponseToFacultyMessage(
+			final Map<String, Object> messageParams) {
+		return populateFromTemplate(
+				MessageTemplate.EARLYALERT_RESPONSETOFACULTYFROMCOACH_ID,
+				messageParams);
+	}
 }
