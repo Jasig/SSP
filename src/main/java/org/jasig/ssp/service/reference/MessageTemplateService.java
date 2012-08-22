@@ -44,4 +44,7 @@ public interface MessageTemplateService extends
 
 	SubjectAndBody createEarlyAlertAdvisorConfirmationMessage(
 			Map<String, Object> messageParams);
+
+	SubjectAndBody createEarlyAlertResponseToFacultyMessage(
+			Map<String, Object> messageParams);
 }

@@ -228,7 +228,7 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 					earlyAlertResponse.getEarlyAlert());
 		} else {
 			final SubjectAndBody subjAndBody = messageTemplateService
-					.createAdvisorConfirmationForEarlyAlertMessage(fillTemplateParameters(earlyAlertResponse));
+					.createEarlyAlertResponseToFacultyMessage(fillTemplateParameters(earlyAlertResponse));
 
 			// Create and queue the message
 			final Message message = messageService.createMessage(person, null,
@@ -296,9 +296,10 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		templateParameters.put("earlyAlertResponse", earlyAlertResponse);
 		templateParameters.put("workPhone", earlyAlert.getPerson()
 				.getWorkPhone());
-		if (earlyAlert.getPerson().getStaffDetails() != null) {
+		if ( earlyAlert.getPerson().getCoach() != null &&
+				earlyAlert.getPerson().getCoach().getStaffDetails() != null ) {
 			templateParameters.put("officeLocation", earlyAlert.getPerson()
-					.getStaffDetails().getOfficeLocation());
+					.getCoach().getStaffDetails().getOfficeLocation());
 		}
 
 		return templateParameters;
