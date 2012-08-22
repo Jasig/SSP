@@ -195,7 +195,7 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	/**
 	 * Send e-mail ({@link Message}) to the assigned advisor for the student.
 	 * 
-	 * @param earlyAlert
+	 * @param earlyAlertResponse
 	 *            Early Alert
 	 * @throws ObjectNotFoundException
 	 *             If any referenced data could not be loaded.
@@ -221,16 +221,22 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 			throw new IllegalArgumentException("EarlyAlert Person is missing.");
 		}
 
-		final Person person = earlyAlertResponse.getEarlyAlert().getPerson();
-		final SubjectAndBody subjAndBody = messageTemplateService
-				.createAdvisorConfirmationForEarlyAlertMessage(fillTemplateParameters(earlyAlertResponse));
+		final Person person = earlyAlertResponse.getEarlyAlert().getCreatedBy();
+		if ( person == null ) {
+			LOGGER.warn("EarlyAlert {} has no creator. Unable to send"
+					+ " response email to faculty.",
+					earlyAlertResponse.getEarlyAlert());
+		} else {
+			final SubjectAndBody subjAndBody = messageTemplateService
+					.createAdvisorConfirmationForEarlyAlertMessage(fillTemplateParameters(earlyAlertResponse));
 
-		// Create and queue the message
-		final Message message = messageService.createMessage(person, null,
-				subjAndBody);
+			// Create and queue the message
+			final Message message = messageService.createMessage(person, null,
+					subjAndBody);
 
-		LOGGER.info("Message {} created for EarlyAlertResponse {}", message,
-				earlyAlertResponse);
+			LOGGER.info("Message {} created for EarlyAlertResponse {}", message,
+					earlyAlertResponse);
+		}
 	}
 
 	/**
