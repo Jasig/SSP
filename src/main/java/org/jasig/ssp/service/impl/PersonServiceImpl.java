@@ -1,9 +1,9 @@
 package org.jasig.ssp.service.impl;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.google.common.collect.Sets;
 import org.hibernate.exception.ConstraintViolationException;
@@ -23,6 +23,7 @@ import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.util.transaction.WithTransaction;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +54,9 @@ public class PersonServiceImpl implements PersonService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PersonServiceImpl.class);
 
+	private static final Logger TIMING_LOGGER = LoggerFactory
+			.getLogger("timing." + PersonServiceImpl.class.getName());
+
 	@Autowired
 	private transient PersonDao dao;
 
@@ -64,6 +68,9 @@ public class PersonServiceImpl implements PersonService {
 
 	@Autowired
 	private transient ExternalPersonService externalPersonService;
+
+	@Autowired
+	private transient WithTransaction withTransaction;
 
 	private static interface PersonAttributesLookup {
 		public PersonAttributesResult lookupPersonAttributes(String username)
@@ -389,44 +396,112 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public PagingWrapper<Person> getAllCoaches(final SortingAndPaging sAndP) {
+		long methodStart = new Date().getTime();
 		final Collection<Person> coaches = Lists.newArrayList();
 
+		long pasLookupStart = new Date().getTime();
 		final Collection<String> coachUsernames = personAttributesService
 				.getCoaches();
+		long pasLookupEnd = new Date().getTime();
+		TIMING_LOGGER.info("Read {} coaches from PersonAttributesService in {} ms",
+				coachUsernames.size(), pasLookupEnd - pasLookupStart);
+
+		long mergeLoopStart = new Date().getTime();
+		final AtomicLong timeInExternalReads = new AtomicLong();
+		final AtomicLong timeInExternalWrites = new AtomicLong();
 		for (final String coachUsername : coachUsernames) {
 
-			Person coach = null;
+			long singlePersonStart = new Date().getTime();
+
+			final AtomicReference<Person> coach = new AtomicReference<Person>();
 
 			try {
-				coach = personFromUsername(coachUsername);
-			} catch (final ObjectNotFoundException e) {
-				LOGGER.debug("Coach {} not found", coachUsername);
-			}
+				withTransaction.withNewTransactionAndUncheckedExceptions(new Callable<Object>() {
+					@Override
+					public Object call() throws Exception {
+						long localPersonLookupStart = new Date().getTime();
+						try {
+							coach.set(personFromUsername(coachUsername));
+						} catch (final ObjectNotFoundException e) {
+							LOGGER.debug("Coach {} not found", coachUsername);
+						}
+						long localPersonLookupEnd = new Date().getTime();
+						TIMING_LOGGER.info("Read local coach by username {} in {} ms",
+								coachUsername, localPersonLookupEnd - localPersonLookupStart);
 
-			// Does coach exist in local SSP.person table?
-			if (coach == null) {
+						// Does coach exist in local SSP.person table?
 
-				// Attempt to find coach in external data
-				try {
-					final ExternalPerson externalPerson = externalPersonService
-							.getByUsername(coachUsername);
+						if (coach.get() == null) {
 
-					coach = new Person(); // NOPMD
-					externalPersonService.updatePersonFromExternalPerson(
-							coach, externalPerson);
+							// Attempt to find coach in external data
+							try {
+								long externalPersonLookupStart = new Date().getTime();
 
-				} catch (final ObjectNotFoundException e) {
-					LOGGER.debug("Coach {} not found in external data",
-							coachUsername);
+								final ExternalPerson externalPerson = externalPersonService
+										.getByUsername(coachUsername);
+
+								long externalPersonLookupEnd = new Date().getTime();
+								long externalPersonLookupElapsed = externalPersonLookupEnd -
+										externalPersonLookupStart;
+								timeInExternalReads.set(timeInExternalReads.get()
+										+ externalPersonLookupElapsed);
+								TIMING_LOGGER.info("Read external coach by username {} in {} ms",
+										coachUsername, externalPersonLookupElapsed);
+
+								long externalPersonSyncStart = new Date().getTime();
+
+								coach.set(new Person()); // NOPMD
+								externalPersonService.updatePersonFromExternalPerson(
+										coach.get(), externalPerson);
+
+								long externalPersonSyncEnd = new Date().getTime();
+								long externalPersonSyncElapsed = externalPersonSyncEnd -
+										externalPersonSyncStart;
+								timeInExternalWrites.set(timeInExternalWrites.get()
+										+ externalPersonSyncElapsed);
+								TIMING_LOGGER.info("Synced external coach by username {} in {} ms",
+										coachUsername, externalPersonSyncElapsed);
+
+							} catch (final ObjectNotFoundException e) {
+								LOGGER.debug("Coach {} not found in external data",
+										coachUsername);
+							}
+						}
+						return coach.get();
+					}
+				});
+			} catch ( ConstraintViolationException e ) {
+				if ( "uq_person_school_id".equals(e.getConstraintName()) ) {
+					LOGGER.warn("Skipping coach with non-unique schoolId '{}' (username '{}')",
+							new Object[] { coach.get().getSchoolId(), coachUsername, e });
+					coach.set(null);
+				} else if ( "unique_person_username".equals(e.getConstraintName()) ) {
+					LOGGER.warn("Skipping coach with non-unique username '{}' (schoolId '{}')",
+							new Object[] { coachUsername, coach.get().getSchoolId(), e });
+					coach.set(null);
+				} else {
+					throw e;
 				}
 			}
 
-			if (coach != null) {
-				coaches.add(coach);
-			}
-		}
 
-		return new PagingWrapper<Person>(coaches);
+			if (coach.get() != null) {
+				coaches.add(coach.get());
+			}
+			long singlePersonEnd = new Date().getTime();
+			TIMING_LOGGER.info("SSP coach merge for username {} completed in {} ms",
+					coachUsername, singlePersonEnd - singlePersonStart);
+		}
+		Long mergeLoopEnd = new Date().getTime();
+		TIMING_LOGGER.info("All SSP merges for {} coaches completed in {} ms. Reading: {} ms. Writing: {} ms",
+				new Object[] { coachUsernames.size(), mergeLoopEnd - mergeLoopStart,
+						timeInExternalReads.get(), timeInExternalWrites.get() });
+
+		PagingWrapper pw = new PagingWrapper<Person>(coaches);
+		long methodEnd = new Date().getTime();
+		TIMING_LOGGER.info("Read and merged PersonAttributesService {} coaches in {} ms",
+				coaches.size(), methodEnd - methodStart);
+		return pw;
 	}
 
 	private Iterable<Person> additionalAttribsForStudents(
