@@ -434,8 +434,8 @@ public class PersonServiceImpl implements PersonService {
 		return coachUsernames;
 	}
 
-	@Scheduled(fixedDelay = 300000)
-	// run every 5 minutes
+	@Scheduled(fixedDelay = 28800000)
+	// run every 8 hours
 	public void syncCoachesOnSchedule() {
 		if ( !(scheduledCoachSyncEnabled) ) {
 			LOGGER.debug("Scheduled coach sync disabled. Abandoning sync job");
