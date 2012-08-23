@@ -100,6 +100,10 @@ public class CounselingReferenceGuideController extends AbstractBaseController {
 		final PagingWrapper<Challenge> challengeWrapper = challengeService.getAll(null);
 		final List<ChallengeTO> challengeTOs = challengeTOactory.asTOList(challengeWrapper.getRows());	
 		
+		
+		
+		//challengeTOs.get(0).getObjectStatus().ACTIVE
+		
 		final Map<String, Object> parameters = Maps.newHashMap();
 		parameters.put("ReportTitle", "Counseling Reference Guide");
 		

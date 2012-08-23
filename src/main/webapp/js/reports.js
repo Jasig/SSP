@@ -26,6 +26,17 @@ var ssp = ssp || {};
 				alert(jqXHR + " " + textStatus + " " + errorThrown);
 			});
 		}
+		
+		var loadCoachInput = function(url, container) {
+			$.getJSON(url, function(data) {
+				$.each(data.rows, function(i, row) {
+					addSelectItem(row.id, row.lastName + ", " + row.firstName, container);
+				});
+
+			}).error(function(jqXHR, textStatus, errorThrown) {
+				alert(jqXHR + " " + textStatus + " " + errorThrown);
+			});
+		}		
 
 		var loadTextForm = function(url, container) {
 			$.getJSON(url, function(data) {
@@ -51,6 +62,9 @@ var ssp = ssp || {};
 					.locate('specialServiceGroup'));
 			loadGroupInput("/ssp/api/1/reference/referralSource/", that
 					.locate('referralSourceGroup'));
+			loadCoachInput("/ssp/api/1/person/coach/", that
+					.locate('assignedCounselorGroup'));			
+
 
 			loadTextForm(
 					"/ssp/api/1/reference/confidentialityDisclosureAgreement/",
@@ -110,11 +124,13 @@ var ssp = ssp || {};
 		reportsSelect
                 .append('<option value="caseLoadForm">Caseload Report</option>');		
 		reportsSelect
-				.append('<option value="specialServicesForm">Special Services Report</option>');
+		        .append('<option value="confidentialityAgreementForm">Confidentiality Agreement</option>');		
 		reportsSelect
 		        .append('<option value="counselingRefGuideForm">Counseling Reference Guide</option>');		
 		reportsSelect
-				.append('<option value="confidentialityAgreementForm">Confidentiality Agreement</option>');
+				.append('<option value="counselorCaseManagementReport">Counselor Case Management Report</option>');
+		reportsSelect
+				.append('<option value="specialServicesForm">Special Services Report</option>');
 		reportsSelect.change(reportsSelectChange);
 	}
 
@@ -128,7 +144,8 @@ var ssp = ssp || {};
 							reportFormBody : '.reports-form-body',
 							generalStudentForm : '.generalStudent-form',
 							specialServicesForm : '.special-services-form',
-							counselingRefGuideForm : '.counseling-reference-guide',
+							counselingRefGuideForm : '.counseling-reference-guide',							
+							counselorCaseManagementReport : '.counselor-case-management-report',
 							caseLoadForm : '.caseLoad-form',
 							confidentialityAgreementForm : '.confidentiality-agreement-form',
 							confidentialityAgreementFormContent : '.confidentiality-agreement-form-content',
@@ -136,6 +153,7 @@ var ssp = ssp || {};
 							studentTypeGroup : '.input-student-type-group',
 							specialServiceGroup : '.input-special-service-group',
 							referralSourceGroup : '.input-referral-source-group',
+							assignedCounselorGroup : '.input-assigned-counselor-group',
 							calendarType : '.input-calendar-type',
 							hideableform : '.hideable-form',
 							printConfForm : '.print-conf-form',
