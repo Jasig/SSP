@@ -76,16 +76,12 @@ public class CaseloadReportController extends AbstractBaseController {
 	
 	@Autowired
 	private transient PersonService personService;
-	
 	@Autowired
 	protected transient SecurityService securityService;
-	
 	@Autowired
 	protected transient ProgramStatusService programStatusService;
-	
 	@Autowired
 	protected transient CaseloadService caseLoadService;
-	
 	@Autowired
 	protected transient StudentTypeService studentTypeService;	
 
@@ -128,13 +124,13 @@ public class CaseloadReportController extends AbstractBaseController {
 		Iterator<Person> personIter = coaches.iterator();
 		while(personIter.hasNext())
 		{			
-			Person temp = personIter.next();
-			Long activeCount = caseLoadService.caseLoadCountFor(ps_a,temp, studentTypeIds, programStatusDateFrom, programStatusDateTo);
-			Long inActiveCount = caseLoadService.caseLoadCountFor(ps_ia,temp, studentTypeIds, programStatusDateFrom, programStatusDateTo);
-			Long npCount = caseLoadService.caseLoadCountFor(ps_np,temp, studentTypeIds, programStatusDateFrom, programStatusDateTo);
-			Long transitionedCount = caseLoadService.caseLoadCountFor(ps_t,temp, studentTypeIds, programStatusDateFrom, programStatusDateTo);
-			Long noShowCount = caseLoadService.caseLoadCountFor(ps_ns,temp, studentTypeIds, programStatusDateFrom, programStatusDateTo);	
-			CaseLoadReportTO caseLoadReportTO = new CaseLoadReportTO(temp.getFirstName(), temp.getLastName(), temp.getStaffDetails().getDepartmentName(),
+			Person currPerson = personIter.next();
+			Long activeCount = caseLoadService.caseLoadCountFor(ps_a,currPerson, studentTypeIds, programStatusDateFrom, programStatusDateTo);
+			Long inActiveCount = caseLoadService.caseLoadCountFor(ps_ia,currPerson, studentTypeIds, programStatusDateFrom, programStatusDateTo);
+			Long npCount = caseLoadService.caseLoadCountFor(ps_np,currPerson, studentTypeIds, programStatusDateFrom, programStatusDateTo);
+			Long transitionedCount = caseLoadService.caseLoadCountFor(ps_t,currPerson, studentTypeIds, programStatusDateFrom, programStatusDateTo);
+			Long noShowCount = caseLoadService.caseLoadCountFor(ps_ns,currPerson, studentTypeIds, programStatusDateFrom, programStatusDateTo);	
+			CaseLoadReportTO caseLoadReportTO = new CaseLoadReportTO(currPerson.getFirstName(), currPerson.getLastName(), currPerson.getStaffDetails().getDepartmentName(),
 					activeCount,
 					inActiveCount,
 					npCount,

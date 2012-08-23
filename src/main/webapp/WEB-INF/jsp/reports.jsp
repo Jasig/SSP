@@ -56,6 +56,29 @@
 	<h1>General Student Report</h1>
 	<form action="/ssp/api/1/report/AddressLabels/" method="post"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+		
+		
+		<!-- Home Department -->
+		<div class="ea-input">
+			Not Available Yet
+		</div>
+		<div class="ea-label">
+			<span>Home Department:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Assigned Counselor -->
+		<div class="ea-input">
+			<select id="assignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
+				<option value=""></option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Assigned Counselor:</span>
+		</div>
+		<div class="ea-clear"></div>		
+		
+		
 		<!-- program Status -->
 		<div class="ea-input">
 			<select id="programStatusGroup" name="programStatus" class="input-program-status-group">
@@ -195,7 +218,7 @@
 
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
-			<select id="assignedCounselorGroup" name="assignedCounselor" class="input-assigned-counselor-group">
+			<select id="assignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
 				<option value=""></option>
 			</select>
 		</div>

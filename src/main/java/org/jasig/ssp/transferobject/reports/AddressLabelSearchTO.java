@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.jasig.ssp.transferobject.PersonTO;
+
 /**
  * AddressLabelSearch transfer object
  */
@@ -25,9 +27,19 @@ public class AddressLabelSearchTO
 
 	private List<UUID> studentTypeIds;
 
+	public PersonTO getCoach() {
+		return coach;
+	}
+
+	public void setCoach(PersonTO coach) {
+		this.coach = coach;
+	}
+
 	private Date createDateFrom;
 
 	private Date createDateTo;
+	
+	private PersonTO coach;
 	
 
 	public UUID getProgramStatus() {
@@ -99,7 +111,8 @@ public class AddressLabelSearchTO
 		this.anticipatedStartYear = anticipatedStartYear;
 	}
 
-	public AddressLabelSearchTO(final UUID programStatus,
+	public AddressLabelSearchTO(final PersonTO coach, 
+			final UUID programStatus,
 			final List<UUID> specialServiceGroupId,
 			final List<UUID> referralSourcesId,
 			final String anticipatedStartTerm,
