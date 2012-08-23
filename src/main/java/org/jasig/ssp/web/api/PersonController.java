@@ -12,10 +12,7 @@ import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
-import org.jasig.ssp.transferobject.PagedResponse;
-import org.jasig.ssp.transferobject.PersonLiteTO;
-import org.jasig.ssp.transferobject.PersonTO;
-import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.*;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -107,14 +104,14 @@ public class PersonController extends AbstractBaseController {
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection) {
-		final PagingWrapper<Person> coaches = service
-				.getAllCoaches(SortingAndPaging
-						.createForSingleSort(status, start, limit, sort,
-								sortDirection,
-								null));
+
+		final PagingWrapper<CoachPersonLiteTO> coaches = service
+				.getAllCoachesLite(SortingAndPaging.createForSingleSort(status,
+						start, limit, sort, sortDirection, null));
 
 		return new PagedResponse<PersonLiteTO>(true, coaches.getResults(),
-				PersonLiteTO.toTOList(coaches.getRows()));
+				PersonLiteTO.toTOListFromCoachTOs(coaches.getRows()));
+
 	}
 
 	/**

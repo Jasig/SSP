@@ -20,6 +20,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.tool.IntakeService;
+import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -28,6 +29,8 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -71,6 +74,9 @@ public class PersonServiceImpl implements PersonService {
 
 	@Autowired
 	private transient WithTransaction withTransaction;
+
+	@Value("#{configProperties.scheduled_coach_sync_enabled}")
+	private boolean scheduledCoachSyncEnabled;
 
 	private static interface PersonAttributesLookup {
 		public PersonAttributesResult lookupPersonAttributes(String username)
@@ -395,16 +401,57 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public PagingWrapper<Person> getAllCoaches(final SortingAndPaging sAndP) {
+	public PagingWrapper<CoachPersonLiteTO> getAllCoachesLite(final SortingAndPaging sAndP) {
 		long methodStart = new Date().getTime();
-		final Collection<Person> coaches = Lists.newArrayList();
+		final Collection<String> coachUsernames =
+				getAllCoachUsernamesFromDirectory();
+		long localPersonsLookupStart = new Date().getTime();
+		PagingWrapper<CoachPersonLiteTO> coaches =
+				dao.getCoachPersonsLiteByUsernames(coachUsernames, sAndP);
+		long localPersonsLookupEnd = new Date().getTime();
+		TIMING_LOGGER.info("Read {} local coaches in {} ms",
+				coaches.getResults(),
+				localPersonsLookupEnd - localPersonsLookupStart);
+		TIMING_LOGGER.info("Read {} PersonAttributesService coaches and"
+				+ " correlated them with {} local coaches in {} ms",
+				new Object[] { coachUsernames.size(), coaches.getResults(),
+						localPersonsLookupEnd - methodStart } );
+		return coaches;
+	}
 
+	@Override
+	public PagingWrapper<Person> getAllCoaches(final SortingAndPaging sAndP) {
+		return syncCoaches();
+	}
+
+	private Collection<String> getAllCoachUsernamesFromDirectory() {
 		long pasLookupStart = new Date().getTime();
 		final Collection<String> coachUsernames = personAttributesService
 				.getCoaches();
 		long pasLookupEnd = new Date().getTime();
 		TIMING_LOGGER.info("Read {} coaches from PersonAttributesService in {} ms",
 				coachUsernames.size(), pasLookupEnd - pasLookupStart);
+		return coachUsernames;
+	}
+
+	@Scheduled(fixedDelay = 300000)
+	// run every 5 minutes
+	public void syncCoachesOnSchedule() {
+		if ( !(scheduledCoachSyncEnabled) ) {
+			LOGGER.debug("Scheduled coach sync disabled. Abandoning sync job");
+			return;
+		}
+		LOGGER.info("Scheduled coach sync starting.");
+		PagingWrapper<Person> localCoaches = syncCoaches();
+		LOGGER.info("Scheduled coach sync complete. Local coach count {}",
+				localCoaches.getResults());
+	}
+
+	private PagingWrapper<Person> syncCoaches() {
+		long methodStart = new Date().getTime();
+		final Collection<Person> coaches = Lists.newArrayList();
+
+		final Collection<String> coachUsernames = getAllCoachUsernamesFromDirectory();
 
 		long mergeLoopStart = new Date().getTime();
 		final AtomicLong timeInExternalReads = new AtomicLong();
