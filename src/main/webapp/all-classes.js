@@ -2620,8 +2620,14 @@ Ext.define('Ssp.store.EarlyAlertCoordinators', {
 	constructor: function(){
 		var me=this;
 		Ext.apply(me, {
-						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCoach')),
-						autoLoad: false
+						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCoach')+'/?sort=lastName'),
+						autoLoad: false,
+						pageSize: -1,
+						params : {
+							page : 0,
+							start : 0,
+							limit : -1
+						}
 					});
 		return me.callParent(arguments);
 	}
@@ -8205,8 +8211,14 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 				personChallenges: []
 			};
 						
-			// account for date offset
-			intakeData.person.birthDate = me.formUtils.fixDateOffset( intakeData.person.birthDate );
+			// date saved as null is ok if using External Data Sync Routine
+			// and the date will not validate because the date field is disabled under
+			// this mode. See SSPConfig and studentintake.PersonalViewController for additional detail.  
+			if (intakeData.person.birthDate != null)
+			{
+				// account for date offset
+				intakeData.person.birthDate = me.formUtils.fixDateOffset( intakeData.person.birthDate );			
+			}
 
 			// cleans properties that will be unable to be saved if not null
 			// arrays set to strings should be null rather than string in saved
@@ -16939,8 +16951,14 @@ Ext.define('Ssp.store.Coaches', {
 	constructor: function(){
 		var me=this;
 		Ext.apply(me, {
-						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCoach')),
-						autoLoad: false
+						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCoach')+'/?sort=lastName'),
+						autoLoad: false,
+						pageSize: -1,
+						params : {
+							page : 0,
+							start : 0,
+							limit : -1
+						}
 					});
 		return me.callParent(arguments);
 	}
