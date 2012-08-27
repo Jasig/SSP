@@ -115,7 +115,7 @@ public class ExternalPersonServiceImpl
 		Set<String> internalPeopleSchoolIds = peopleBySchoolId.keySet();
 		if ( LOGGER.isDebugEnabled() ) {
 			LOGGER.debug(
-					"Candidate internal person schoolIds for sync with external persons",
+					"Candidate internal person schoolIds for sync with external persons {}",
 					internalPeopleSchoolIds);
 		}
 
