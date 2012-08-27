@@ -137,6 +137,10 @@ public class ExternalPersonServiceImpl
 	public void updatePersonFromExternalPerson(final Person person,
 			final ExternalPerson externalPerson) {
 
+		LOGGER.debug(
+				"BEGIN : Person and ExternalPerson Sync.  Person school id {}, username {}",
+				person.getSchoolId(), person.getUsername());
+
 		if (person.getSchoolId() == null) {
 			person.setSchoolId(externalPerson.getSchoolId());
 		}
