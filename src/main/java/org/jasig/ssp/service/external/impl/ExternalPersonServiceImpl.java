@@ -1,6 +1,7 @@
 package org.jasig.ssp.service.external.impl;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.external.ExternalDataDao;
@@ -107,21 +108,29 @@ public class ExternalPersonServiceImpl
 
 		// allow access to people by schoolId
 		final Map<String, Person> peopleBySchoolId = Maps.newHashMap();
-		final Map<String, Person> peopleBySchoolIdCaseInsensitive = Maps.newHashMap();
 		for (final Person person : people) {
 			peopleBySchoolId.put(person.getSchoolId(), person);
-			peopleBySchoolIdCaseInsensitive.put(person.getSchoolId().toUpperCase(), person);
+		}
+
+		Set<String> internalPeopleSchoolIds = peopleBySchoolId.keySet();
+		if ( LOGGER.isDebugEnabled() ) {
+			LOGGER.debug(
+					"Candidate internal person schoolIds for sync with external persons",
+					internalPeopleSchoolIds);
 		}
 
 		// fetch external people by schoolId
 		final PagingWrapper<ExternalPerson> externalPeople =
-				dao.getBySchoolIds(peopleBySchoolId.keySet(),
+				dao.getBySchoolIds(internalPeopleSchoolIds,
 						new SortingAndPaging(ObjectStatus.ACTIVE));
 
 		for (final ExternalPerson externalPerson : externalPeople) {
+			LOGGER.debug(
+					"Looking for internal person by external person schoolId {}",
+					externalPerson.getSchoolId());
 			// get the previously fetched person
-			final Person person = peopleBySchoolIdCaseInsensitive.get(externalPerson
-					.getSchoolId().toUpperCase());
+			final Person person = peopleBySchoolId.get(externalPerson
+					.getSchoolId());
 			// upate person from external person
 			updatePersonFromExternalPerson(person, externalPerson);
 		}
@@ -140,7 +149,7 @@ public class ExternalPersonServiceImpl
 			final ExternalPerson externalPerson) {
 
 		LOGGER.debug(
-				"BEGIN : Person and ExternalPerson Sync.  Person school id {}, username {}",
+				"Person and ExternalPerson Sync.  Person school id {}, username {}",
 				person.getSchoolId(), person.getUsername());
 
 		if (person.getSchoolId() == null) {
