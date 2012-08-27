@@ -107,8 +107,10 @@ public class ExternalPersonServiceImpl
 
 		// allow access to people by schoolId
 		final Map<String, Person> peopleBySchoolId = Maps.newHashMap();
+		final Map<String, Person> peopleBySchoolIdCaseInsensitive = Maps.newHashMap();
 		for (final Person person : people) {
 			peopleBySchoolId.put(person.getSchoolId(), person);
+			peopleBySchoolIdCaseInsensitive.put(person.getSchoolId().toUpperCase(), person);
 		}
 
 		// fetch external people by schoolId
@@ -118,8 +120,8 @@ public class ExternalPersonServiceImpl
 
 		for (final ExternalPerson externalPerson : externalPeople) {
 			// get the previously fetched person
-			final Person person = peopleBySchoolId.get(externalPerson
-					.getSchoolId());
+			final Person person = peopleBySchoolIdCaseInsensitive.get(externalPerson
+					.getSchoolId().toUpperCase());
 			// upate person from external person
 			updatePersonFromExternalPerson(person, externalPerson);
 		}
