@@ -25,6 +25,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -33,6 +34,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
+import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.transferobject.reports.PersonReportTO;
@@ -76,6 +78,8 @@ public class PreTransitionedReportController extends AbstractBaseController { //
 	private transient ReferralSourceService referralSourcesService;
 	@Autowired
 	private transient ProgramStatusService programStatusService;
+	@Autowired
+	private transient StudentTypeService studentTypeService;
 
 	// @Autowired
 	// private transient PersonTOFactory factory;
@@ -94,6 +98,7 @@ public class PreTransitionedReportController extends AbstractBaseController { //
 	public void getPreTransitioned(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) UUID coachId,
 			final @RequestParam(required = false) UUID programStatus,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) List<UUID> referralSourcesIds,
@@ -105,7 +110,17 @@ public class PreTransitionedReportController extends AbstractBaseController { //
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 
-		final AddressLabelSearchTO searchForm = new AddressLabelSearchTO(
+		
+		Person coach = null;
+		PersonTO coachTO = null;
+		if(coachId != null)
+		{
+			coach = personService.get(coachId);
+			coachTO = personTOFactory.from(coach);
+		}
+		
+		
+		final AddressLabelSearchTO searchForm = new AddressLabelSearchTO(coachTO,
 				programStatus, specialServiceGroupIds, referralSourcesIds,
 				anticipatedStartTerm.length() == 0 ? null
 						: anticipatedStartTerm, anticipatedStartYear,
@@ -118,26 +133,47 @@ public class PreTransitionedReportController extends AbstractBaseController { //
 		//final List<PersonTO> peopleTO = personTOFactory.asTOList(people);
 
 		// Get the actual names of the UUIDs for the special groups
-		final List<String> specialGroupsNames = new ArrayList<String>();
+		final StringBuffer specialGroupsNamesStringBuffer = new StringBuffer();
 		if ((specialServiceGroupIds != null)
 				&& (specialServiceGroupIds.size() > 0)) {
 			final Iterator<UUID> ssgIter = specialServiceGroupIds.iterator();
 			while (ssgIter.hasNext()) {
-				specialGroupsNames
-						.add(ssgService.get(ssgIter.next()).getName());
+				specialGroupsNamesStringBuffer.append(ssgService.get(ssgIter.next()).getName());
+				if (ssgIter.hasNext()){
+					specialGroupsNamesStringBuffer.append(" | ");
+				}
+			}
+		}
+		
+		// Get the actual names of the UUIDs for the special groups
+		final StringBuffer studentTypeStringBuffer = new StringBuffer();
+		if ((studentTypeIds != null)
+				&& (studentTypeIds.size() > 0)) {
+			final Iterator<UUID> stIter = studentTypeIds.iterator();
+			while (stIter.hasNext()) {
+				studentTypeStringBuffer.append(studentTypeService.get(stIter.next()).getName());
+				if (stIter.hasNext()){
+					studentTypeStringBuffer.append(" | ");
+				}
 			}
 		}
 
 		// Get the actual names of the UUIDs for the referralSources
-		final List<String> referralSourcesNames = new ArrayList<String>();
+		final StringBuffer referralSourcesNameStringBuffer = new StringBuffer();
 		if ((referralSourcesIds != null) && (referralSourcesIds.size() > 0)) {
 			final Iterator<UUID> referralSourceIter = referralSourcesIds
 					.iterator();
 			while (referralSourceIter.hasNext()) {
-				referralSourcesNames.add(referralSourcesService.get(
+				referralSourcesNameStringBuffer.append(referralSourcesService.get(
 						referralSourceIter.next()).getName());
+				
+				if (referralSourceIter.hasNext()){
+					referralSourcesNameStringBuffer.append(" | ");
+				}
 			}
 		}
+		
+	
 
 		// final String programStatusName = ((null!=programStatus &&
 		// !programStatus.isEmpty())?programStatus.get(0)():"");
@@ -146,16 +182,20 @@ public class PreTransitionedReportController extends AbstractBaseController { //
 				: programStatusService.get(programStatus).getName());
 
 		final Map<String, Object> parameters = Maps.newHashMap();
-		parameters.put("ReportTitle", "General Student Report");
-		parameters.put("DataFile", "Person.java - Bean Array");
-		parameters.put("programStatus", programStatusName);
-		parameters.put("anticipatedStartYear", anticipatedStartYear);
-		parameters.put("anticipatedStartTerm", anticipatedStartTerm);
-		parameters.put("specialServiceGroupNames", specialGroupsNames);
-		parameters.put("referralSourceNames", referralSourcesNames);
-		parameters.put("studentTypeIds", studentTypeIds);
+
 		parameters.put("reportDate", new Date());
+		parameters.put("homeDepartment", null);
+		if (coachTO != null){
+			parameters.put("coachName", coachTO.getFirstName() + " " + coachTO.getLastName());
+		}
+		parameters.put("studentType", studentTypeStringBuffer.toString());		
+		parameters.put("programStatus", programStatusName);
+		parameters.put("cohortTerm", StringUtils.defaultString(anticipatedStartTerm) + " " + (anticipatedStartYear == null?"" : anticipatedStartYear.toString()));
 		parameters.put("studentCount", peopleReportTOList == null ? 0 : peopleReportTOList.size());
+		parameters.put("specialServiceGroupNames", specialGroupsNamesStringBuffer.toString());
+		parameters.put("referralSourceNames", referralSourcesNameStringBuffer.toString());
+		parameters.put("anticipatedStartTerm", anticipatedStartTerm);
+	
 
 		JRDataSource beanDS;
 		if (peopleReportTOList == null || peopleReportTOList.size() <= 0) {
