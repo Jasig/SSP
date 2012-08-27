@@ -1,5 +1,6 @@
 package org.jasig.ssp.service.external.impl;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,6 +20,7 @@ import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EthnicityService;
 import org.jasig.ssp.service.reference.MaritalStatusService;
+import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -121,8 +123,10 @@ public class ExternalPersonServiceImpl
 
 		// fetch external people by schoolId
 		final PagingWrapper<ExternalPerson> externalPeople =
-				dao.getBySchoolIds(internalPeopleSchoolIds,
-						new SortingAndPaging(ObjectStatus.ACTIVE));
+				dao.getBySchoolIds(internalPeopleSchoolIds,SortingAndPaging.createForSingleSort(
+						ObjectStatus.ACTIVE, 0, BATCH_SIZE_FOR_PERSON_,
+						"username",
+						SortDirection.ASC.toString(), null));
 
 		for (final ExternalPerson externalPerson : externalPeople) {
 			LOGGER.debug(
