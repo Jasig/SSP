@@ -13,17 +13,27 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="36" splitType="Stretch">
+		<band height="60" splitType="Stretch">
 			<rectangle radius="10">
-				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="0" width="572" height="35" backcolor="#70C2E7"/>
+				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="23" width="572" height="35" backcolor="#70C2E7"/>
 			</rectangle>
 			<staticText>
-				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="172" y="15" width="220" height="20"/>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="172" y="38" width="220" height="20"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Counseling Reference Guide]]></text>
 			</staticText>
+			<staticText>
+				<reportElement uuid="cbce6b32-10ce-4da7-a10c-4613835479b3" x="0" y="3" width="30" height="20"/>
+				<textElement/>
+				<text><![CDATA[Date: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1e05099d-6984-4298-be06-09a35202542b" x="30" y="3" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<detail>

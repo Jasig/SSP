@@ -105,32 +105,32 @@
 				</textElement>
 				<text><![CDATA[Referral Source:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" x="127" y="67" width="647" height="22"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{programStatus}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="6d2788b3-18ca-44f6-837f-6df32f3e8b72" x="127" y="144" width="627" height="22"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{specialServiceGroupNames}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="e49d816d-3764-4980-94ba-2b9e63b689da" x="127" y="218" width="352" height="22"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{studentCount}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="f308e252-c794-4c7d-aca2-86ceb422a4f7" x="127" y="0" width="100" height="22"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="acb5d97c-744c-4734-a98d-a800ceceff3d" x="127" y="169" width="625" height="26"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{referralSourceNames}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="9f2796d0-86f4-4520-af01-8ad5a5faefec" x="127" y="22" width="119" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{homeDepartment}]]></textFieldExpression>
@@ -149,12 +149,12 @@
 				</textElement>
 				<text><![CDATA[Counselor/Coach:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" x="127" y="42" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{coachName}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d" x="125" y="115" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{studentType}]]></textFieldExpression>
@@ -164,9 +164,9 @@
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[Student Type]]></text>
+				<text><![CDATA[Student Type:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" x="127" y="93" width="85" height="22"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{cohortTerm}]]></textFieldExpression>
@@ -178,7 +178,7 @@
 				</textElement>
 				<text><![CDATA[Cohort Term/Year]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="57ce5c51-58f9-4b48-8626-132c0f51d499" x="127" y="195" width="306" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{anticipatedStartTerm}]]></textFieldExpression>
@@ -188,7 +188,7 @@
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[Referral Source:]]></text>
+				<text><![CDATA[Cohort Term:]]></text>
 			</staticText>
 		</band>
 	</title>

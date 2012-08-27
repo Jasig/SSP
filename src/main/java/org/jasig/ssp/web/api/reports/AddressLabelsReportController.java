@@ -135,11 +135,10 @@ public class AddressLabelsReportController extends AbstractBaseController { // N
 				&& (specialServiceGroupIds.size() > 0)) {
 			final Iterator<UUID> ssgIter = specialServiceGroupIds.iterator();
 			while (ssgIter.hasNext()) {
-				specialGroupsNamesStringBuffer.append(ssgService.get(ssgIter.next()).getName());
-				if (ssgIter.hasNext()){
-					specialGroupsNamesStringBuffer.append(" | ");
-				}
-			}
+				specialGroupsNamesStringBuffer.append("\u2022 " + ssgService.get(ssgIter.next()).getName());
+				specialGroupsNamesStringBuffer.append("    ");																		
+			}		
+			
 		}
 		
 		// Get the actual names of the UUIDs for the special groups
@@ -148,11 +147,9 @@ public class AddressLabelsReportController extends AbstractBaseController { // N
 				&& (studentTypeIds.size() > 0)) {
 			final Iterator<UUID> stIter = studentTypeIds.iterator();
 			while (stIter.hasNext()) {
-				studentTypeStringBuffer.append(studentTypeService.get(stIter.next()).getName());
-				if (stIter.hasNext()){
-					studentTypeStringBuffer.append(" | ");
-				}
-			}
+				studentTypeStringBuffer.append("\u2022 " + studentTypeService.get(stIter.next()).getName());
+				studentTypeStringBuffer.append("    ");																		
+			}	
 		}
 
 		// Get the actual names of the UUIDs for the referralSources
@@ -161,12 +158,10 @@ public class AddressLabelsReportController extends AbstractBaseController { // N
 			final Iterator<UUID> referralSourceIter = referralSourcesIds
 					.iterator();
 			while (referralSourceIter.hasNext()) {
-				referralSourcesNameStringBuffer.append(referralSourcesService.get(
+				referralSourcesNameStringBuffer.append("\u2022 " + referralSourcesService.get(
 						referralSourceIter.next()).getName());
 				
-				if (referralSourceIter.hasNext()){
-					referralSourcesNameStringBuffer.append(" | ");
-				}
+				referralSourcesNameStringBuffer.append("    ");																		
 			}
 		}
 

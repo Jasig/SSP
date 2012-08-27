@@ -10,14 +10,19 @@
 	</background>
 	<detail>
 		<band height="43" splitType="Stretch">
-			<textField>
-				<reportElement uuid="0555938f-0ca6-44ad-93ea-2818cdcc7270" x="118" y="0" width="400" height="36"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="0555938f-0ca6-44ad-93ea-2818cdcc7270" x="100" y="0" width="418" height="36"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$F{name} + ": " + $F{description}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement uuid="8b92d5ba-6e97-4684-ac32-26fd3eba2a48" x="119" y="36" width="400" height="1"/>
 			</line>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="7771f1fe-b636-4cfe-85a7-820298e2ba94" x="0" y="0" width="100" height="36"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>
