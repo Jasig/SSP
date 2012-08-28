@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -110,4 +112,32 @@ public class TaskDao
 
 		return criteria.list();
 	}
+
+
+	public Long getTaskCountForCoach(Person currPerson) {
+		final Criteria query = createCriteria();
+
+		// restrict to coach
+		query.add(Restrictions.eq("createdBy", currPerson));
+
+		// item count
+		Long totalRows = (Long) query.setProjection(Projections.rowCount())
+				.uniqueResult();
+
+		return totalRows;
+	}
+	
+
+	public Long getStudentTaskCountForCoach(Person currPerson) {
+		final Criteria query = createCriteria();
+
+		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", currPerson))
+		        .setProjection(Projections.countDistinct("person")).list().get(0);
+
+		return totalRows;
+	}	
+	
+	
+
+	
 }

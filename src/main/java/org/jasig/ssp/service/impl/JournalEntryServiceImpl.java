@@ -3,6 +3,7 @@ package org.jasig.ssp.service.impl;
 import org.jasig.ssp.dao.JournalEntryDao;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.JournalEntryDetail;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.AbstractRestrictedPersonAssocAuditableService;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -60,5 +61,15 @@ public class JournalEntryServiceImpl
 				return;
 			}
 		}
+	}
+	
+	public Long getCountForCoach(Person currPerson){
+		return dao.getJournalCountForCoach(currPerson);
+	}
+
+	@Override
+	public Long getStudentCountForCoach(Person currPerson) {
+		// TODO Auto-generated method stub
+		return dao.getStudentJournalCountForCoach(currPerson);
 	}
 }

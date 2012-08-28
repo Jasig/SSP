@@ -304,4 +304,13 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 
 		return templateParameters;
 	}
+
+	@Override
+	public Long getEarlyAlertResponseCountForCoach(Person currPerson) {
+		
+		return dao.getEarlyAlertResponseCountForCoach(currPerson);
+	}
+	
+	
+
 }

@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
@@ -83,4 +84,8 @@ public interface EarlyAlertService
 	 * @return Map of template parameters
 	 */
 	Map<String, Object> fillTemplateParameters(final EarlyAlert earlyAlert);
+
+	Long getEarlyAlertCountForCoach(Person currPerson);
+	
+	Long getStudentEarlyAlertCountForCoach(Person currPerson);
 }

@@ -432,4 +432,16 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			final Collection<UUID> peopleIds) {
 		return dao.getCountOfActiveAlertsForPeopleIds(peopleIds);
 	}
+
+	@Override
+	public Long getEarlyAlertCountForCoach(Person currPerson) {
+		// TODO Auto-generated method stub
+		return dao.getEarlyAlertCountForCoach(currPerson);
+	}
+
+	@Override
+	public Long getStudentEarlyAlertCountForCoach(Person currPerson) {
+		// TODO Auto-generated method stub
+		return dao.getStudentEarlyAlertCountForCoach(currPerson);
+	}
 }

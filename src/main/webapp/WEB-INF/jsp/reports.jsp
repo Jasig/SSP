@@ -353,7 +353,7 @@
 
 <div class="hideable-form caseload-activity-report" style="display:none">
 	<h1>Caseload Activity Report</h1>
-	<form action="/ssp/api/1/report/caseloadactivity" method="post"
+	<form action="/ssp/api/1/report/caseloadactivity" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">
 
 		<!-- Assigned Counselor -->

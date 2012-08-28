@@ -227,4 +227,9 @@ public interface TaskService
 			final List<UUID> selectedIds, final Person person,
 			final SspUser requester, final String sessionId,
 			final SortingAndPaging sAndP);
+
+	
+	public Long getTaskCountForCoach(Person currPerson);
+	
+	public Long getStudentTaskCountForCoach(Person currPerson);
 }

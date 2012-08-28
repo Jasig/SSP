@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank Letter Landscape" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de052e81-a0fc-4bfe-a86d-fd593cff06df">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="dateFrom" class="java.util.Date"/>
+	<parameter name="dateTo" class="java.util.Date"/>
+	<field name="firstName" class="java.lang.String">
+		<fieldDescription><![CDATA[firstName]]></fieldDescription>
+	</field>
+	<field name="lastName" class="java.lang.String">
+		<fieldDescription><![CDATA[lastName]]></fieldDescription>
+	</field>
+	<field name="journalEntriesCreatedCount" class="java.lang.Long"/>
+	<field name="studentsJournalEntriesCount" class="java.lang.Long"/>
+	<field name="actionPlanTasksCreatedCount" class="java.lang.Long"/>
+	<field name="earlyAlertsCreatedCount" class="java.lang.Long"/>
+	<field name="earlyAlertsRespondedCount" class="java.lang.Long"/>
+	<field name="studentsActionPlanTasksCount" class="java.lang.Long"/>
+	<field name="studentsEarlyAlertsCount" class="java.lang.Long"/>
+	<variable name="rowIndex" class="java.lang.Integer">
+		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
+		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="104" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Report Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="21" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Date From:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="100" y="21" width="112" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{dateFrom}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="64aa21a8-5fbc-4465-b2c4-991e4c0e6450" x="100" y="41" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{dateTo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="255b284c-e962-4bd2-a35c-c07141e46079" x="100" y="1" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="1" y="41" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Date To:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="1" y="1" width="751" height="34" backcolor="#70C2E7"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="297" y="7" width="145" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Case Load Activity]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="6963974f-bd33-4663-be62-4efc95e33d07" stretchType="RelativeToBandHeight" x="1" y="1" width="60" height="30"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FIRST]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8482b9b3-84b3-4380-b17d-3ef86d0ebb16" stretchType="RelativeToBandHeight" x="59" y="1" width="60" height="30"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LAST]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="64786995-51bb-4371-825c-8bcda2736520" x="120" y="2" width="85" height="29"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[JOURNAL ENTRIES CREATED]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="64786995-51bb-4371-825c-8bcda2736520" x="211" y="2" width="85" height="29"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[STUDENT JOURNAL ENTRY COUNT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="579c3214-b601-442a-b5dc-9bb511a13f2e" x="301" y="2" width="85" height="29"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ACTION TASKS CREATED]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="45b5cb80-781f-4426-a162-3ab544ce4f2f" x="476" y="2" width="85" height="29"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EARLY ALERTS CREATED]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d60a1215-9041-44e3-abe0-fb367bf93c25" x="654" y="2" width="85" height="29"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EARLY ALERTS RESPONDED]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="579c3214-b601-442a-b5dc-9bb511a13f2e" x="386" y="2" width="85" height="29"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[STUDENT ACTION TASKS COUNT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0efc8fc2-124b-4545-a1fa-dbd2a27c63cd" x="566" y="2" width="85" height="29"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[STUDENTS EARLY ALERT COUNT]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" x="2" y="0" width="750" height="20" backcolor="#E4E4E4">
+					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<textField>
+				<reportElement uuid="26f7be38-ce84-4162-9fe0-4843db2fe8b9" stretchType="RelativeToBandHeight" x="1" y="1" width="60" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{firstName} == "null" ? "" : $F{firstName})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="da4c0010-a6bc-4016-836e-daa0149f7735" stretchType="RelativeToBandHeight" x="59" y="1" width="60" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{lastName} == "null" ? "" : $F{lastName})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d748b928-bc5b-4c45-b035-92d8635b802b" x="120" y="1" width="85" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{journalEntriesCreatedCount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="55cfc81c-0713-4584-bb5f-a8ab3c4a47cc" x="211" y="1" width="85" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{studentsJournalEntriesCount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c6ededdb-7d63-4e93-8f29-be87c67bd1d3" x="301" y="0" width="85" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{actionPlanTasksCreatedCount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2c2e8edb-bf31-4c53-918b-8f0de18f1e10" x="476" y="1" width="85" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{earlyAlertsCreatedCount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="bd1894db-216c-4a8a-9785-18a4c7016c41" x="654" y="1" width="85" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{earlyAlertsRespondedCount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c6ededdb-7d63-4e93-8f29-be87c67bd1d3" x="386" y="1" width="85" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{studentsActionPlanTasksCount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="fa11e7fe-0476-41c1-b9e3-9ca4cc1ebf84" x="566" y="1" width="85" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{studentsEarlyAlertsCount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="32" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="51" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

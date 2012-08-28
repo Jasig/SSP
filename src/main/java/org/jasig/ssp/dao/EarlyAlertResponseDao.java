@@ -2,9 +2,12 @@ package org.jasig.ssp.dao;
 
 import java.util.UUID;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
@@ -44,5 +47,18 @@ public class EarlyAlertResponseDao extends
 				createCriteria().add(
 						Restrictions.eq("earlyAlert.id", earlyAlertId)), sAndP,
 				true);
+	}
+
+	public Long getEarlyAlertResponseCountForCoach(Person currPerson) {
+		final Criteria query = createCriteria();
+
+		// restrict to coach
+		query.add(Restrictions.eq("createdBy", currPerson));
+
+		// item count
+		Long totalRows = (Long) query.setProjection(Projections.rowCount())
+				.uniqueResult();
+
+		return totalRows;
 	}
 }

@@ -361,4 +361,17 @@ public class TaskServiceImpl
 
 		LOGGER.info("END : sendTaskReminderNotifications()");
 	}
+
+	@Override
+	public Long getTaskCountForCoach(Person currPerson) {
+		// TODO Auto-generated method stub
+		return dao.getTaskCountForCoach(currPerson);
+	}
+	
+	
+	@Override
+	public Long getStudentTaskCountForCoach(Person currPerson) {
+		// TODO Auto-generated method stub
+		return dao.getStudentTaskCountForCoach(currPerson);
+	}
 }

@@ -13,6 +13,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
 import org.springframework.stereotype.Repository;
 
 import com.google.common.collect.Maps;
@@ -96,5 +97,27 @@ public class EarlyAlertDao extends
 		}
 
 		return countForPeopleId;
+	}
+
+	public Long getEarlyAlertCountForCoach(Person currPerson) {
+		final Criteria query = createCriteria();
+
+		// restrict to coach
+		query.add(Restrictions.eq("createdBy", currPerson));
+
+		// item count
+		Long totalRows = (Long) query.setProjection(Projections.rowCount())
+				.uniqueResult();
+
+		return totalRows;
+	}
+
+	public Long getStudentEarlyAlertCountForCoach(Person currPerson) {
+		final Criteria query = createCriteria();
+
+		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", currPerson))
+		        .setProjection(Projections.countDistinct("person")).list().get(0);
+
+		return totalRows;
 	}
 }

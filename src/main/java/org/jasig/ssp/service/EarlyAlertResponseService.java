@@ -2,6 +2,7 @@ package org.jasig.ssp.service;
 
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
@@ -25,4 +26,6 @@ public interface EarlyAlertResponseService
 	PagingWrapper<EarlyAlertResponse> getAllForEarlyAlert(
 			EarlyAlert earlyAlert,
 			SortingAndPaging sAndP);
+
+	Long getEarlyAlertResponseCountForCoach(Person currPerson);
 }
