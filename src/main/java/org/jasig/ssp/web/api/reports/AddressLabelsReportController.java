@@ -25,6 +25,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -178,8 +179,7 @@ public class AddressLabelsReportController extends AbstractBaseController { // N
 		}
 		parameters.put("studentType", studentTypeStringBuffer.toString());
 		parameters.put("programStatus", programStatusName);
-		parameters.put("anticipatedStartYear", anticipatedStartYear);
-		parameters.put("anticipatedStartTerm", anticipatedStartTerm);
+		parameters.put("cohortTerm", StringUtils.defaultString(anticipatedStartTerm) + " " + (anticipatedStartYear == null?"" : anticipatedStartYear.toString()));
 		parameters.put("specialServiceGroupNames", specialGroupsNamesStringBuffer.toString());
 		parameters.put("referralSourceNames", referralSourcesNameStringBuffer.toString());		
 		parameters.put("reportDate", new Date());

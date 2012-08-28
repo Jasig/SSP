@@ -19,8 +19,10 @@
 				<reportElement uuid="8b92d5ba-6e97-4684-ac32-26fd3eba2a48" x="119" y="36" width="400" height="1"/>
 			</line>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="7771f1fe-b636-4cfe-85a7-820298e2ba94" x="0" y="0" width="100" height="36"/>
-				<textElement/>
+				<reportElement uuid="7771f1fe-b636-4cfe-85a7-820298e2ba94" x="0" y="0" width="80" height="36"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 		</band>

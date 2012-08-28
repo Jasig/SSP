@@ -103,10 +103,10 @@ public class PreTransitionedReportController extends AbstractBaseController { //
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) List<UUID> referralSourcesIds,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
+			final @RequestParam(required = false) Date createDateFromCounselor,
+			final @RequestParam(required = false) Date createDateToCounselor,
 			final @RequestParam(required = false) Integer anticipatedStartYear,
-			final @RequestParam(required = false) Date createDateFrom,
-			final @RequestParam(required = false) Date createDateTo,
-			final @RequestParam(required = false) String anticipatedStartTerm,
+			final @RequestParam(required = false) String anticipatedStartTerm,			
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 
@@ -124,13 +124,13 @@ public class PreTransitionedReportController extends AbstractBaseController { //
 				programStatus, specialServiceGroupIds, referralSourcesIds,
 				anticipatedStartTerm.length() == 0 ? null
 						: anticipatedStartTerm, anticipatedStartYear,
-				studentTypeIds, createDateFrom, createDateTo);
+				studentTypeIds, createDateFromCounselor, createDateToCounselor);
 
 		final List<Person> people = personService.peopleFromCriteria(
 				searchForm, SortingAndPaging.createForSingleSort(status, null,
 						null, null, null, null));
 		final List<PersonReportTO> peopleReportTOList = PersonReportTO.toPersonTOList(people);
-		//final List<PersonTO> peopleTO = personTOFactory.asTOList(people);
+
 
 		// Get the actual names of the UUIDs for the special groups
 		final StringBuffer specialGroupsNamesStringBuffer = new StringBuffer();
@@ -192,7 +192,7 @@ public class PreTransitionedReportController extends AbstractBaseController { //
 		parameters.put("studentCount", peopleReportTOList == null ? 0 : peopleReportTOList.size());
 		parameters.put("specialServiceGroupNames", specialGroupsNamesStringBuffer.toString());
 		parameters.put("referralSourceNames", referralSourcesNameStringBuffer.toString());
-		parameters.put("anticipatedStartTerm", anticipatedStartTerm);
+
 	
 
 		JRDataSource beanDS;

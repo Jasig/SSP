@@ -24,8 +24,7 @@ public class PersonReportTO extends PersonTO {
 		while(specialServiceGroupsIter.hasNext())
 		{
 			ReferenceLiteTO<SpecialServiceGroup> tempSpecialServiceGroup = specialServiceGroupsIter.next();
-			sb.append("\u2022 " + tempSpecialServiceGroup.getName());
-			
+			sb.append("\u2022 " + tempSpecialServiceGroup.getName());			
 			sb.append("\n");
 			
 		}

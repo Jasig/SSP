@@ -124,6 +124,8 @@ var ssp = ssp || {};
 		reportsSelect
                 .append('<option value="caseLoadForm">Caseload Report</option>');		
 		reportsSelect
+                .append('<option value="caseloadActivityReport">Caseload Activity Report</option>');			
+		reportsSelect
 		        .append('<option value="confidentialityAgreementForm">Confidentiality Agreement</option>');		
 		reportsSelect
 		        .append('<option value="counselingRefGuideForm">Counseling Reference Guide</option>');		
@@ -148,6 +150,7 @@ var ssp = ssp || {};
 							counselorCaseManagementReport : '.counselor-case-management-report',
 							caseLoadForm : '.caseLoad-form',
 							confidentialityAgreementForm : '.confidentiality-agreement-form',
+							caseloadActivityReport : '.caseload-activity-report',
 							confidentialityAgreementFormContent : '.confidentiality-agreement-form-content',
 							programStatusGroup : '.input-program-status-group',
 							studentTypeGroup : '.input-student-type-group',

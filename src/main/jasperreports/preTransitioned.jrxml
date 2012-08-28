@@ -69,7 +69,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="246" splitType="Stretch">
+		<band height="219" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="2" y="0" width="100" height="15"/>
 				<textElement>
@@ -85,7 +85,7 @@
 				<text><![CDATA[Program Status:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="90e4fa8d-5631-47ef-b9b1-de98b568c27b" x="2" y="218" width="100" height="15"/>
+				<reportElement uuid="90e4fa8d-5631-47ef-b9b1-de98b568c27b" x="2" y="197" width="100" height="15"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
@@ -106,7 +106,7 @@
 				<text><![CDATA[Referral Source:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" x="127" y="67" width="647" height="22"/>
+				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" x="127" y="67" width="627" height="22"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{programStatus}]]></textFieldExpression>
 			</textField>
@@ -116,7 +116,7 @@
 				<textFieldExpression><![CDATA[$P{specialServiceGroupNames}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="e49d816d-3764-4980-94ba-2b9e63b689da" x="127" y="218" width="352" height="22"/>
+				<reportElement uuid="e49d816d-3764-4980-94ba-2b9e63b689da" x="127" y="197" width="352" height="22"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{studentCount}]]></textFieldExpression>
 			</textField>
@@ -177,18 +177,6 @@
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Cohort Term/Year]]></text>
-			</staticText>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="57ce5c51-58f9-4b48-8626-132c0f51d499" x="127" y="195" width="306" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$P{anticipatedStartTerm}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="5f1b46f5-a916-4f4a-b0a1-6bdd2cf265a9" x="2" y="197" width="123" height="15"/>
-				<textElement>
-					<font isBold="false"/>
-				</textElement>
-				<text><![CDATA[Cohort Term:]]></text>
 			</staticText>
 		</band>
 	</title>

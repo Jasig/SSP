@@ -349,17 +349,81 @@
 
 
 
+ 
+
+<div class="hideable-form caseload-activity-report" style="display:none">
+	<h1>Caseload Activity Report</h1>
+	<form action="/ssp/api/1/report/caseloadactivity" method="post"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+
+		<!-- Assigned Counselor -->
+		<div class="ea-input">
+			<select id="assignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
+				<option value=""></option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Assigned Counselor:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Home Department -->
+		<div class="ea-input">
+			Not Available Yet
+		</div>
+		<div class="ea-label">
+			<span>Home Department:</span>
+		</div>
+		<div class="ea-clear"></div>
 
 
+		<!-- Student Type -->
+		<div class="ea-input">
+			<select class="input-student-type-group" id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
+		</div>
+		<div class="ea-label">
+			<span>Student Type:</span>
+		</div>
+		<div class="ea-clear"></div>
 
+		<!-- Date From -->
+		<div class="ea-input">
+			<input class="input-calendar-type" type="textbox" name="caDateFrom" id="caDateFrom" />
+		</div>
+		<div class="ea-label">
+			<span>Date Range From:</span>
+		</div>
+		<div class="ea-clear"></div>
 
+		<!-- Date To -->
+		<div class="ea-input">
+			<input class="input-calendar-type" type="textbox" name="caDateTo" id="caDateTo" />
+		</div>
+		<div class="ea-label">
+			<span>Date Range To:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div> 
 
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
 
-
-
-
-
-
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+</div>
 
 
 
