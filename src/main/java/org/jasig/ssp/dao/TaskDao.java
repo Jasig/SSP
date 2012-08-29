@@ -48,7 +48,7 @@ public class TaskDao
 
 		return criteria.list();
 	}
-
+   
 	@SuppressWarnings(UNCHECKED)
 	public List<Task> getAllForSessionId(final String sessionId,
 			final SortingAndPaging sAndP) {
@@ -114,24 +114,44 @@ public class TaskDao
 	}
 
 
-	public Long getTaskCountForCoach(Person currPerson) {
+	public Long getTaskCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {
 		final Criteria query = createCriteria();
 
 		// restrict to coach
-		query.add(Restrictions.eq("createdBy", currPerson));
+		query.add(Restrictions.eq("createdBy", coach));
+		
+		if (createDateFrom != null) {
+			query.add(Restrictions.ge("createdDate",
+					createDateFrom));
+		}
+
+		if (createDateTo != null) {
+			query.add(Restrictions.le("createdDate",
+					createDateTo));
+		}
 
 		// item count
 		Long totalRows = (Long) query.setProjection(Projections.rowCount())
 				.uniqueResult();
 
 		return totalRows;
-	}
+	} 
 	
 
-	public Long getStudentTaskCountForCoach(Person currPerson) {
+	public Long getStudentTaskCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {
 		final Criteria query = createCriteria();
 
-		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", currPerson))
+		if (createDateFrom != null) {
+			query.add(Restrictions.ge("createdDate",
+					createDateFrom));
+		}
+
+		if (createDateTo != null) {
+			query.add(Restrictions.le("createdDate",
+					createDateTo));
+		}
+		
+		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", coach))
 		        .setProjection(Projections.countDistinct("person")).list().get(0);
 
 		return totalRows;

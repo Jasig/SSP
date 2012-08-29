@@ -113,35 +113,34 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
-		final PagingWrapper<Person>  coachesWrapper = personService.getAllCoaches(null);
 		
-		Collection<Person> coaches = coachesWrapper.getRows();
+		//populate coaches to search for
+		Collection<Person> coaches;		
+		if (coachId != null){		
+			Person coach = personService.get(coachId);
+			coaches = new ArrayList<Person>();
+			coaches.add(coach);
+		}
+		else{
+			final PagingWrapper<Person>  coachesWrapper = personService.getAllCoaches(null);			
+			coaches = coachesWrapper.getRows();
+		}
 		
-
+						
 		List<CaseLoadActivityReportTO> caseLoadActivityReportList = new ArrayList<CaseLoadActivityReportTO>();
 				
-	//	final ProgramStatus ps_a = programStatusService.get(UUID.fromString(activeUid));
-	//	final ProgramStatus ps_ia = programStatusService.get(UUID.fromString(inactiveUid));
-	//	final ProgramStatus ps_np = programStatusService.get(UUID.fromString(nonParUid));
-	//	final ProgramStatus ps_t = programStatusService.get(UUID.fromString(transitionedUid));
-	//	final ProgramStatus ps_ns = programStatusService.get(UUID.fromString(noShowUid));
-
 		Iterator<Person> personIter = coaches.iterator();
 		while(personIter.hasNext())
 		{			
 			Person currPerson = personIter.next(); 
-			Long journalEntriesCount = journalEntryService.getCountForCoach(currPerson);
 			
-			//TODO: This is not right
-			Long studentJournalEntriesCount = journalEntryService.getStudentCountForCoach(currPerson);
-			
-			Long actionPlanTasksCount = taskService.getTaskCountForCoach(currPerson);
-			
-			//TODO: do the actionPlanStudent Report
-			Long studentTaskCountForCoach = taskService.getStudentTaskCountForCoach(currPerson);// = taskService.getStudentCountForCoach(currPerson);
-			Long earlyAlertsCount = earlyAlertService.getEarlyAlertCountForCoach(currPerson);
-			Long earlyAlertsResponded = earlyAlertResponseService.getEarlyAlertResponseCountForCoach(currPerson);
-			Long studentsEarlyAlertsCount = earlyAlertService.getStudentEarlyAlertCountForCoach(currPerson);
+			Long journalEntriesCount = journalEntryService.getCountForCoach(currPerson, caDateFrom, caDateTo);			
+			Long studentJournalEntriesCount = journalEntryService.getStudentCountForCoach(currPerson, caDateFrom, caDateTo);			
+			Long actionPlanTasksCount = taskService.getTaskCountForCoach(currPerson, caDateFrom, caDateTo);			
+			Long studentTaskCountForCoach = taskService.getStudentTaskCountForCoach(currPerson, caDateFrom, caDateTo);
+			Long earlyAlertsCount = earlyAlertService.getEarlyAlertCountForCoach(currPerson, caDateFrom, caDateTo);
+			Long earlyAlertsResponded = earlyAlertResponseService.getEarlyAlertResponseCountForCoach(currPerson, caDateFrom, caDateTo);
+			Long studentsEarlyAlertsCount = earlyAlertService.getStudentEarlyAlertCountForCoach(currPerson, caDateFrom, caDateTo);
 			
 
 			CaseLoadActivityReportTO caseLoadActivityReportTO = new CaseLoadActivityReportTO(
@@ -159,7 +158,7 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 		}			
 		
 		
-		// Get the actual names of the UUIDs for the referralSources
+		// Get the actual names of the UUIDs for the studentTypeIds
 		final List<String> studentTypeNames = new ArrayList<String>();
 		if ((studentTypeIds != null) && (studentTypeIds.size() > 0)) {
 			final Iterator<UUID> studentTypeIdsIter = studentTypeIds

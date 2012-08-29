@@ -1,6 +1,7 @@
 package org.jasig.ssp.dao;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -99,12 +100,22 @@ public class EarlyAlertDao extends
 		return countForPeopleId;
 	}
 
-	public Long getEarlyAlertCountForCoach(Person currPerson) {
+	public Long getEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {
 		final Criteria query = createCriteria();
 
 		// restrict to coach
-		query.add(Restrictions.eq("createdBy", currPerson));
+		query.add(Restrictions.eq("createdBy", coach));
 
+		if (createDateFrom != null) {
+			query.add(Restrictions.ge("createdDate",
+					createDateFrom));
+		}
+
+		if (createDateTo != null) {
+			query.add(Restrictions.le("createdDate",
+					createDateTo));
+		}
+		
 		// item count
 		Long totalRows = (Long) query.setProjection(Projections.rowCount())
 				.uniqueResult();
@@ -112,10 +123,20 @@ public class EarlyAlertDao extends
 		return totalRows;
 	}
 
-	public Long getStudentEarlyAlertCountForCoach(Person currPerson) {
+	public Long getStudentEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {
 		final Criteria query = createCriteria();
 
-		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", currPerson))
+		if (createDateFrom != null) {
+			query.add(Restrictions.ge("createdDate",
+					createDateFrom));
+		}
+
+		if (createDateTo != null) {
+			query.add(Restrictions.le("createdDate",
+					createDateTo));
+		}
+		
+		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", coach))
 		        .setProjection(Projections.countDistinct("person")).list().get(0);
 
 		return totalRows;

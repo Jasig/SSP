@@ -1,5 +1,7 @@
 package org.jasig.ssp.service;
 
+import java.util.Date;
+
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.Person;
 
@@ -9,7 +11,7 @@ import org.jasig.ssp.model.Person;
 public interface JournalEntryService
 		extends RestrictedPersonAssocAuditableService<JournalEntry> {
 
-	public Long getCountForCoach(Person currPerson);
+	public Long getCountForCoach(Person coach, Date createDateFrom, Date createDateTo);
 
-	public Long getStudentCountForCoach(Person currPerson);  
+	public Long getStudentCountForCoach(Person coach, Date createDateFrom, Date createDateTo);  
 }

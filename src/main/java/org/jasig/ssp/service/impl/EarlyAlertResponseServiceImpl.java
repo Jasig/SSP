@@ -301,14 +301,13 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 			templateParameters.put("officeLocation", earlyAlert.getPerson()
 					.getCoach().getStaffDetails().getOfficeLocation());
 		}
-
+ 
 		return templateParameters;
 	}
 
 	@Override
-	public Long getEarlyAlertResponseCountForCoach(Person currPerson) {
-		
-		return dao.getEarlyAlertResponseCountForCoach(currPerson);
+	public Long getEarlyAlertResponseCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {		
+		return dao.getEarlyAlertResponseCountForCoach(coach, createDateFrom, createDateTo);
 	}
 	
 	

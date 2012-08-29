@@ -1,5 +1,6 @@
 package org.jasig.ssp.dao;
 
+import java.util.Date;
 import java.util.UUID;
 
 import org.hibernate.Criteria;
@@ -49,12 +50,22 @@ public class EarlyAlertResponseDao extends
 				true);
 	}
 
-	public Long getEarlyAlertResponseCountForCoach(Person currPerson) {
+	public Long getEarlyAlertResponseCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {
 		final Criteria query = createCriteria();
 
 		// restrict to coach
-		query.add(Restrictions.eq("createdBy", currPerson));
+		query.add(Restrictions.eq("createdBy", coach));
 
+		if (createDateFrom != null) {
+			query.add(Restrictions.ge("createdDate",
+					createDateFrom));
+		}
+
+		if (createDateTo != null) {
+			query.add(Restrictions.le("createdDate",
+					createDateTo));
+		}
+		
 		// item count
 		Long totalRows = (Long) query.setProjection(Projections.rowCount())
 				.uniqueResult();

@@ -363,15 +363,13 @@ public class TaskServiceImpl
 	}
 
 	@Override
-	public Long getTaskCountForCoach(Person currPerson) {
-		// TODO Auto-generated method stub
-		return dao.getTaskCountForCoach(currPerson);
+	public Long getTaskCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {
+		return dao.getTaskCountForCoach(coach, createDateFrom, createDateTo);
 	}
-	
+	 
 	
 	@Override
-	public Long getStudentTaskCountForCoach(Person currPerson) {
-		// TODO Auto-generated method stub
-		return dao.getStudentTaskCountForCoach(currPerson);
+	public Long getStudentTaskCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {
+		return dao.getStudentTaskCountForCoach(coach, createDateFrom, createDateTo);
 	}
 }

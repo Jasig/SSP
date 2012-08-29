@@ -1,5 +1,6 @@
 package org.jasig.ssp.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -198,7 +199,7 @@ public interface TaskService
 	 */
 	void sendTasksForPersonToEmail(final List<Task> tasks,
 			final List<Goal> goals,
-			final Person student, final List<String> emailAddresses,
+			final Person student, final List<String> emailAddresses, 
 			final List<Person> recipients) throws ObjectNotFoundException,
 			ValidationException;
 
@@ -229,7 +230,10 @@ public interface TaskService
 			final SortingAndPaging sAndP);
 
 	
-	public Long getTaskCountForCoach(Person currPerson);
+	Long getTaskCountForCoach(Person coach, Date createDateFrom,
+			Date createDateTo);
 	
-	public Long getStudentTaskCountForCoach(Person currPerson);
+	Long getStudentTaskCountForCoach(Person coach, Date createDateFrom,
+			Date createDateTo);
+
 }

@@ -1,6 +1,7 @@
 package org.jasig.ssp.service.impl; // NOPMD by jon.adams
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -434,14 +435,12 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	}
 
 	@Override
-	public Long getEarlyAlertCountForCoach(Person currPerson) {
-		// TODO Auto-generated method stub
-		return dao.getEarlyAlertCountForCoach(currPerson);
+	public Long getEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {
+		return dao.getEarlyAlertCountForCoach(coach, createDateFrom,  createDateTo);
 	}
 
 	@Override
-	public Long getStudentEarlyAlertCountForCoach(Person currPerson) {
-		// TODO Auto-generated method stub
-		return dao.getStudentEarlyAlertCountForCoach(currPerson);
+	public Long getStudentEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {
+		return dao.getStudentEarlyAlertCountForCoach(coach, createDateFrom,  createDateTo);
 	}
 }

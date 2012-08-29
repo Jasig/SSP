@@ -1,5 +1,7 @@
 package org.jasig.ssp.service;
 
+import java.util.Date;
+
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.Person;
@@ -27,5 +29,7 @@ public interface EarlyAlertResponseService
 			EarlyAlert earlyAlert,
 			SortingAndPaging sAndP);
 
-	Long getEarlyAlertResponseCountForCoach(Person currPerson);
+	Long getEarlyAlertResponseCountForCoach(Person coach, Date createDateFrom,
+			Date createDateTo);
+
 }
