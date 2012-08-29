@@ -4,8 +4,8 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="dateFrom" class="java.util.Date"/>
-	<parameter name="dateTo" class="java.util.Date"/>
+	<parameter name="statusDateFrom" class="java.util.Date"/>
+	<parameter name="statusDateTo" class="java.util.Date"/>
 	<field name="firstName" class="java.lang.String">
 		<fieldDescription><![CDATA[firstName]]></fieldDescription>
 	</field>
@@ -41,12 +41,12 @@
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="100" y="21" width="112" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{dateFrom}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{statusDateFrom}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="64aa21a8-5fbc-4465-b2c4-991e4c0e6450" x="100" y="41" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{dateTo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{statusDateTo}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="255b284c-e962-4bd2-a35c-c07141e46079" x="100" y="1" width="100" height="20"/>
@@ -148,63 +148,63 @@
 					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
 				</reportElement>
 			</rectangle>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="26f7be38-ce84-4162-9fe0-4843db2fe8b9" stretchType="RelativeToBandHeight" x="1" y="1" width="60" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($F{firstName} == "null" ? "" : $F{firstName})]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="da4c0010-a6bc-4016-836e-daa0149f7735" stretchType="RelativeToBandHeight" x="59" y="1" width="60" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($F{lastName} == "null" ? "" : $F{lastName})]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="d748b928-bc5b-4c45-b035-92d8635b802b" x="120" y="1" width="85" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{journalEntriesCreatedCount}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="55cfc81c-0713-4584-bb5f-a8ab3c4a47cc" x="211" y="1" width="85" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{studentsJournalEntriesCount}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="c6ededdb-7d63-4e93-8f29-be87c67bd1d3" x="301" y="0" width="85" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{actionPlanTasksCreatedCount}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="2c2e8edb-bf31-4c53-918b-8f0de18f1e10" x="476" y="1" width="85" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{earlyAlertsCreatedCount}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="bd1894db-216c-4a8a-9785-18a4c7016c41" x="654" y="1" width="85" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{earlyAlertsRespondedCount}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="c6ededdb-7d63-4e93-8f29-be87c67bd1d3" x="386" y="1" width="85" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{studentsActionPlanTasksCount}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="fa11e7fe-0476-41c1-b9e3-9ca4cc1ebf84" x="566" y="1" width="85" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
