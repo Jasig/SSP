@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="schema" value="public" dbms="postgresql" />
+	<property name="schema" value="dbo" dbms="mssql" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet id="add config for coachUnsetFromExternalData" author="dan.mccallum">
+		<insert tableName="config">
+			<column name="id" value="D1442778-F3A0-11E1-A285-406C8F22C3CE" />
+			<column name="name" value="coachUnsetFromExternalData" />
+			<column name="description"
+					value="All coach assignments to be deleted based on external data, overwriting any local changes or externally assigned coach." />
+			<column name="value">false</column>
+			<column name="default_value">false</column>
+			<column name="created_date" valueDate="2012-08-31T12:00:00" />
+			<column name="modified_date" valueDate="2012-08-31T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="102" />
+		</insert>
+
+		<rollback>
+			<delete tableName="config">
+				<where>id='D1442778-F3A0-11E1-A285-406C8F22C3CE'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

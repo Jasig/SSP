@@ -371,18 +371,42 @@ public class ExternalPersonServiceImpl
 	private void setCoachForPerson(final Person person, final String coachId) {
 		if (configService.getByNameNullOrDefaultValue(
 				"coachSetFromExternalData").equalsIgnoreCase("false")) {
+			LOGGER.debug("Skipping all coach assignment processing for person "
+					+ "schoolId '{}' because that operation has been disabled "
+					+ "via configuration.", person.getSchoolId());
 			return;
 		}
 
 		if (person.getCoach() == null) {
 			if (coachId != null) {
+				LOGGER.debug("Assigning coach schoolId '{}' to person " +
+						"schoolId '{}'", coachId, person.getSchoolId());
 				person.setCoach(getCoach(coachId));
 			}// else ignore
 		} else {
 			if (coachId == null) {
-				person.setCoach(null);
+				if ( configService.getByNameNullOrDefaultValue(
+						"coachUnsetFromExternalData")
+						.equalsIgnoreCase("true") ) {
+					LOGGER.debug("Deleting coach assignment for person schoolId '{}'",
+							person.getSchoolId());
+					person.setCoach(null);
+				} else {
+					LOGGER.debug("Skipping coach assignment deletion for "
+							+ "person schoolId '{}' because that operation has "
+							+ "been disabled via configuration.",
+							person.getSchoolId());
+				}
 			} else if (!coachId.equals(person.getCoach().getSchoolId())) {
-				person.setCoach(getCoach(coachId));
+				Person coach = getCoach(coachId);
+				if ( coach == null ) {
+					// lookup problem already logged
+					LOGGER.debug("Coach with schoolId '{}' does not exist so "
+							+ "skipping coach assignment for person schoolId '{}'",
+							person.getSchoolId());
+				} else {
+					person.setCoach(coach);
+				}
 			}// else equals, so ignore
 		}
 	}
