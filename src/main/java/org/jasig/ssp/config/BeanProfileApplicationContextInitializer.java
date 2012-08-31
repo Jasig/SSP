@@ -33,6 +33,22 @@ public class BeanProfileApplicationContextInitializer
 				.getConfigDir() + FILE_SEPARATOR + CONFIG_FILE_NAME;
 
 		boolean anyPropsLoaded = false;
+
+		try {
+			applicationContext
+					.getEnvironment()
+					.getPropertySources()
+					.addLast(
+							new ResourcePropertySource(
+									"file:" + propertiesFileName));
+			anyPropsLoaded = true;
+			LOGGER.info("Loaded properties file from {} for determining "
+					+ "spring profile.", propertiesFileName);
+		} catch (Exception e) {
+			LOGGER.info("Unable to load properties file {} for determining "
+					+ " spring profile.", propertiesFileName, e);
+		}
+
 		final String defaultPropertiesResourcePath =
 				"classpath:"+DEFAULT_CONFIG_FILE_NAME;
 		try {
@@ -48,20 +64,7 @@ public class BeanProfileApplicationContextInitializer
 			LOGGER.info("Unable to load properties file {} for determining "
 					+ " spring profile.", defaultPropertiesResourcePath, e);
 		}
-		try {
-			applicationContext
-					.getEnvironment()
-					.getPropertySources()
-					.addLast(
-							new ResourcePropertySource(
-									"file:" + propertiesFileName));
-			anyPropsLoaded = true;
-			LOGGER.info("Loaded properties file from {} for determining "
-					+ "spring profile.", propertiesFileName);
-		} catch (Exception e) {
-			LOGGER.info("Unable to load properties file {} for determining "
-					+ " spring profile.", propertiesFileName, e);
-		}
+
 
 		if ( !(anyPropsLoaded) ) {
 			LOGGER.info("Unable to load any configuration files for "
