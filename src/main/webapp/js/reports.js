@@ -118,7 +118,7 @@ var ssp = ssp || {};
     		});
         	
 		
-		
+		//add here to include in drop down
 		reportsSelect
 				.append('<option value="generalStudentForm">General Student Report</option>');
 		reportsSelect
@@ -133,6 +133,7 @@ var ssp = ssp || {};
 				.append('<option value="counselorCaseManagementReport">Counselor Case Management Report</option>');
 		reportsSelect
 				.append('<option value="specialServicesForm">Special Services Report</option>');
+		
 		reportsSelect.change(reportsSelectChange);
 	}
 

@@ -2,8 +2,10 @@ package org.jasig.ssp.service.impl; // NOPMD
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.mail.SendFailedException;
 import javax.validation.constraints.NotNull;
@@ -306,8 +308,8 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	}
 
 	@Override
-	public Long getEarlyAlertResponseCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {		
-		return dao.getEarlyAlertResponseCountForCoach(coach, createDateFrom, createDateTo);
+	public Long getEarlyAlertResponseCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {		
+		return dao.getEarlyAlertResponseCountForCoach(coach, createDateFrom, createDateTo, studentTypeIds);
 	}
 	
 	

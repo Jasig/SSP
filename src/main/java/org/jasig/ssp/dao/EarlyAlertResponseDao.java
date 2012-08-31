@@ -1,6 +1,7 @@
 package org.jasig.ssp.dao;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.Criteria;
@@ -50,8 +51,30 @@ public class EarlyAlertResponseDao extends
 				true);
 	}
 
-	public Long getEarlyAlertResponseCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {
+	public Long getEarlyAlertResponseCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
+
 		final Criteria query = createCriteria();
+ 
+		
+		/*
+		 * 
+		 * Criteria criteria = session.createCriteria(Student.class)
+    .createAlias("courses", "course")
+    .createAlias("course.group", "student")
+    .add(Restrictions.eq("course.name", "Math"))
+    .add(Restrictions.eq("student.name", "John"));
+		 */
+		
+		
+		
+		// add possible studentTypeId Check
+		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
+			//.createAlias("person",
+			//		"person")
+			query.createAlias("earlyAlert",	"earlyAlert").createAlias("earlyAlert.person", "student").createAlias("student.studentType","studentType").add(
+						Restrictions.in("studentType.id",studentTypeIds));
+					
+		}		
 
 		// restrict to coach
 		query.add(Restrictions.eq("createdBy", coach));

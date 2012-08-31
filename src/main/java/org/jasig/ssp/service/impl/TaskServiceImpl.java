@@ -363,13 +363,13 @@ public class TaskServiceImpl
 	}
 
 	@Override
-	public Long getTaskCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {
-		return dao.getTaskCountForCoach(coach, createDateFrom, createDateTo);
+	public Long getTaskCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
+		return dao.getTaskCountForCoach(coach, createDateFrom, createDateTo, studentTypeIds);
 	}
 	 
 	
 	@Override
-	public Long getStudentTaskCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {
-		return dao.getStudentTaskCountForCoach(coach, createDateFrom, createDateTo);
+	public Long getStudentTaskCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
+		return dao.getStudentTaskCountForCoach(coach, createDateFrom, createDateTo, studentTypeIds);
 	}
 }

@@ -114,9 +114,20 @@ public class TaskDao
 	}
 
 
-	public Long getTaskCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {
-		final Criteria query = createCriteria();
+	public Long getTaskCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
 
+		final Criteria query = createCriteria();
+ 
+		// add possible studentTypeId Check
+		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
+		
+			query.createAlias("person",
+				"person")
+				.add(Restrictions
+						.in("person.studentType.id",studentTypeIds));
+					
+		}		
+		
 		// restrict to coach
 		query.add(Restrictions.eq("createdBy", coach));
 		
@@ -138,9 +149,20 @@ public class TaskDao
 	} 
 	
 
-	public Long getStudentTaskCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {
-		final Criteria query = createCriteria();
+	public Long getStudentTaskCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
 
+		final Criteria query = createCriteria();
+ 
+		// add possible studentTypeId Check
+		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
+		
+			query.createAlias("person",
+				"person")
+				.add(Restrictions
+						.in("person.studentType.id",studentTypeIds));
+					
+		}		
+		
 		if (createDateFrom != null) {
 			query.add(Restrictions.ge("createdDate",
 					createDateFrom));

@@ -7,6 +7,9 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.AbstractRestrictedPersonAssocAuditableService;
 
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonProgramStatusService;
@@ -66,12 +69,12 @@ public class JournalEntryServiceImpl
 	}
 	
 	@Override
-	public Long getCountForCoach(Person coach, Date createDateFrom, Date createDateTo){
-		return dao.getJournalCountForCoach(coach, createDateFrom, createDateTo);
+	public Long getCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds){
+		return dao.getJournalCountForCoach(coach, createDateFrom, createDateTo, studentTypeIds);
 	}
 
 	@Override
-	public Long getStudentCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {
-		return dao.getStudentJournalCountForCoach(coach, createDateFrom, createDateTo);
+	public Long getStudentCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
+		return dao.getStudentJournalCountForCoach(coach, createDateFrom, createDateTo, studentTypeIds);
 	}
 }

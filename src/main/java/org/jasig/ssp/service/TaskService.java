@@ -231,9 +231,9 @@ public interface TaskService
 
 	
 	Long getTaskCountForCoach(Person coach, Date createDateFrom,
-			Date createDateTo);
+			Date createDateTo, List<UUID> studentTypeIds);
 	
 	Long getStudentTaskCountForCoach(Person coach, Date createDateFrom,
-			Date createDateTo);
+			Date createDateTo, List<UUID> studentTypeIds);
 
 }

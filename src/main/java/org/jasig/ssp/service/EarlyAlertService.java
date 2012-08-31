@@ -2,6 +2,7 @@ package org.jasig.ssp.service;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -86,7 +87,7 @@ public interface EarlyAlertService
 	 */
 	Map<String, Object> fillTemplateParameters(final EarlyAlert earlyAlert);
 
-	Long getEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo);
+	Long getEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds);
 	
-	Long getStudentEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo);
+	Long getStudentEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds);
 }

@@ -6,6 +6,7 @@
 	<property name="ireport.y" value="0"/>
 	<parameter name="statusDateFrom" class="java.util.Date"/>
 	<parameter name="statusDateTo" class="java.util.Date"/>
+	<parameter name="studentType" class="java.lang.String"/>
 	<field name="firstName" class="java.lang.String">
 		<fieldDescription><![CDATA[firstName]]></fieldDescription>
 	</field>
@@ -58,6 +59,18 @@
 				<textElement/>
 				<text><![CDATA[Date To:]]></text>
 			</staticText>
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="2" y="62" width="100" height="15"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Student Type:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d" x="101" y="61" width="651" height="43"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{studentType}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>

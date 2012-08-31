@@ -1,6 +1,8 @@
 package org.jasig.ssp.dao;
 
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.ProjectionList;
@@ -19,10 +21,22 @@ public class JournalEntryDao
 		super(JournalEntry.class);
 	}
 
-	public Long getJournalCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {
+	public Long getJournalCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
 
 		final Criteria query = createCriteria();
 
+		
+		
+		// add possible studentTypeId Check
+		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
+		
+			query.createAlias("person",
+				"person")
+				.add(Restrictions
+						.in("person.studentType.id",studentTypeIds));
+					
+		}
+		
 		// restrict to coach
 		query.add(Restrictions.eq("createdBy", coach));
 		if (createDateFrom != null) {
@@ -42,10 +56,20 @@ public class JournalEntryDao
 		return totalRows;
 	}
 
-	public Long getStudentJournalCountForCoach(Person coach, Date createDateFrom, Date createDateTo) {
+	public Long getStudentJournalCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
 
 		final Criteria query = createCriteria();
  
+		// add possible studentTypeId Check
+		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
+		
+			query.createAlias("person",
+				"person")
+				.add(Restrictions
+						.in("person.studentType.id",studentTypeIds));
+					
+		}		
+		
 		if (createDateFrom != null) {
 			query.add(Restrictions.ge("createdDate",
 					createDateFrom));

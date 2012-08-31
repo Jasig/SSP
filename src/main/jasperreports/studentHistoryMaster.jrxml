@@ -103,7 +103,7 @@
 					<printWhenExpression><![CDATA[!$F{earlyAlerts}.isEmpty();]]></printWhenExpression>
 				</reportElement>
 				<textElement/>
-				<text><![CDATA[Early Alert]]></text>
+				<text><![CDATA[EARLY ALERT]]></text>
 			</staticText>
 			<subreport>
 				<reportElement uuid="2f28ed7a-0c04-4584-bfc2-aee090764c3c" positionType="Float" x="13" y="17" width="558" height="20" isRemoveLineWhenBlank="true"/>

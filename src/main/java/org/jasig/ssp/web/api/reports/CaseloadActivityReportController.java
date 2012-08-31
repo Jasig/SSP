@@ -58,9 +58,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.common.collect.Maps;
 
 /**
- * Service methods for Reporting on CaseLoad
+ * Service methods for Reporting on Caseload Activity
  * <p>
- * Mapped to URI path <code>/1/report/Caseload</code>
+ * Mapped to URI path <code>/1/report/caseloadactivity</code>
  */
 
 @Controller
@@ -74,14 +74,7 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 	@Autowired
 	private transient PersonService personService;
 	@Autowired
-	protected transient SecurityService securityService;
-	@Autowired
-	protected transient ProgramStatusService programStatusService;
-	@Autowired
-	protected transient CaseloadService caseLoadService;
-	@Autowired
 	protected transient StudentTypeService studentTypeService;	
-	
 	@Autowired
 	protected transient JournalEntryService journalEntryService;
 	@Autowired
@@ -134,13 +127,13 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 		{			
 			Person currPerson = personIter.next(); 
 			
-			Long journalEntriesCount = journalEntryService.getCountForCoach(currPerson, caDateFrom, caDateTo);			
-			Long studentJournalEntriesCount = journalEntryService.getStudentCountForCoach(currPerson, caDateFrom, caDateTo);			
-			Long actionPlanTasksCount = taskService.getTaskCountForCoach(currPerson, caDateFrom, caDateTo);			
-			Long studentTaskCountForCoach = taskService.getStudentTaskCountForCoach(currPerson, caDateFrom, caDateTo);
-			Long earlyAlertsCount = earlyAlertService.getEarlyAlertCountForCoach(currPerson, caDateFrom, caDateTo);
-			Long earlyAlertsResponded = earlyAlertResponseService.getEarlyAlertResponseCountForCoach(currPerson, caDateFrom, caDateTo);
-			Long studentsEarlyAlertsCount = earlyAlertService.getStudentEarlyAlertCountForCoach(currPerson, caDateFrom, caDateTo);
+			Long journalEntriesCount = journalEntryService.getCountForCoach(currPerson, caDateFrom, caDateTo, studentTypeIds);			
+			Long studentJournalEntriesCount = journalEntryService.getStudentCountForCoach(currPerson, caDateFrom, caDateTo, studentTypeIds);			
+			Long actionPlanTasksCount = taskService.getTaskCountForCoach(currPerson, caDateFrom, caDateTo, studentTypeIds);			
+			Long studentTaskCountForCoach = taskService.getStudentTaskCountForCoach(currPerson, caDateFrom, caDateTo, studentTypeIds);
+			Long earlyAlertsCount = earlyAlertService.getEarlyAlertCountForCoach(currPerson, caDateFrom, caDateTo, studentTypeIds);
+			Long earlyAlertsResponded = earlyAlertResponseService.getEarlyAlertResponseCountForCoach(currPerson, caDateFrom, caDateTo, studentTypeIds);
+			Long studentsEarlyAlertsCount = earlyAlertService.getStudentEarlyAlertCountForCoach(currPerson, caDateFrom, caDateTo, studentTypeIds);
 			
 
 			CaseLoadActivityReportTO caseLoadActivityReportTO = new CaseLoadActivityReportTO(
@@ -158,15 +151,15 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 		}			
 		
 		
-		// Get the actual names of the UUIDs for the studentTypeIds
-		final List<String> studentTypeNames = new ArrayList<String>();
-		if ((studentTypeIds != null) && (studentTypeIds.size() > 0)) {
-			final Iterator<UUID> studentTypeIdsIter = studentTypeIds
-					.iterator();
-			while (studentTypeIdsIter.hasNext()) {
-				studentTypeNames.add(studentTypeService.get(
-						studentTypeIdsIter.next()).getName());
-			}
+		// Get the actual names of the UUIDs for the special groups
+		final StringBuffer studentTypeStringBuffer = new StringBuffer();
+		if ((studentTypeIds != null)
+				&& (studentTypeIds.size() > 0)) {
+			final Iterator<UUID> stIter = studentTypeIds.iterator();
+			while (stIter.hasNext()) {
+				studentTypeStringBuffer.append("\u2022 " + studentTypeService.get(stIter.next()).getName());
+				studentTypeStringBuffer.append("    ");																			
+			}			
 		}
 
 		
@@ -174,7 +167,7 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 		parameters.put("statusDateFrom", caDateFrom);
 		parameters.put("statusDateTo", caDateTo);
 		parameters.put("homeDepartment", ""); //not available yet
-		parameters.put("studentTypes", ((studentTypeNames == null || studentTypeNames.isEmpty()) ? "" :  studentTypeNames.toString()));
+		parameters.put("studentType", studentTypeStringBuffer.toString());
 		
 				
 		final JRDataSource beanDs;
@@ -196,14 +189,14 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 		if ("pdf".equals(reportType)) {
 			response.setHeader(
 					"Content-disposition",
-					"attachment; filename=CaseLoadReport.pdf");
+					"attachment; filename=CaseLoadActivityReport.pdf");
 			JasperExportManager.exportReportToPdfStream(decodedInput,
 					response.getOutputStream());
 		} else if ("csv".equals(reportType)) {
 			response.setContentType("application/vnd.ms-excel");
 			response.setHeader(
 					"Content-disposition",
-					"attachment; filename=CaseLoadReport.csv");
+					"attachment; filename=CaseLoadActivityReport.csv");
 
 			final JRCsvExporter exporter = new JRCsvExporter();
 			exporter.setParameter(JRExporterParameter.INPUT_STREAM,

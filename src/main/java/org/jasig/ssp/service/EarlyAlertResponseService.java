@@ -1,6 +1,8 @@
 package org.jasig.ssp.service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
@@ -30,6 +32,6 @@ public interface EarlyAlertResponseService
 			SortingAndPaging sAndP);
 
 	Long getEarlyAlertResponseCountForCoach(Person coach, Date createDateFrom,
-			Date createDateTo);
+			Date createDateTo, List<UUID> studentTypeIds);
 
 }
