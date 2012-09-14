@@ -1,5 +1,6 @@
 package org.jasig.ssp.web.api;
 
+import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.ServiceResponse;
@@ -70,6 +71,15 @@ public abstract class AbstractBaseController {
 	ServiceResponse handleAccessDenied(final AccessDeniedException e) {
 		getLogger().error(ERROR_PREFIX, e);
 		return new ServiceResponse(false, e.getMessage());
+	}
+
+	@PreAuthorize(Permission.PERMIT_ALL)
+	@ExceptionHandler(ObjectExistsException.class)
+	@ResponseStatus(HttpStatus.CONFLICT)
+	public @ResponseBody
+	ServiceResponse handleObjectExists(final ObjectExistsException e) {
+		getLogger().error(ERROR_PREFIX, e);
+		return new ServiceResponse(false, e);
 	}
 
 	/**

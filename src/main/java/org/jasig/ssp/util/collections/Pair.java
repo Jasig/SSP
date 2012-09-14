@@ -3,6 +3,10 @@
  */
 package org.jasig.ssp.util.collections;
 
+import com.google.common.collect.Maps;
+
+import java.util.Map;
+
 /**
  * A pair of two data items, a.k.a. a binary tuple.
  * 
@@ -88,5 +92,11 @@ public class Pair<T, U>
 		return (first == null ? other.first == null : first.equals(other.first))
 				&& (second == null ? other.second == null : second
 						.equals(other.second));
+	}
+
+	public Map<T,U> toMap() {
+		Map<T,U> map = Maps.newHashMapWithExpectedSize(1);
+		map.put(first, second);
+		return map;
 	}
 }

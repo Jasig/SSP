@@ -1,10 +1,7 @@
 package org.jasig.ssp.web.api;
 
-import java.util.UUID;
-
-import javax.validation.Valid;
-
 import org.apache.commons.lang.NotImplementedException;
+import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -16,6 +13,7 @@ import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PersonLiteTO;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -30,6 +28,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.validation.Valid;
+import java.io.Serializable;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Service methods for manipulating data about people in the system.
@@ -179,13 +182,74 @@ public class PersonController extends AbstractBaseController {
 
 		final Person model = factory.from(obj);
 
+		Person createdModel = null;
+		ObjectExistsException conflict = null;
 		if (null != model) {
-			final Person createdModel = service.create(model);
-			if (null != createdModel) {
-				return new PersonTO(createdModel);
+			int retryLimit = 1;
+			do {
+				try {
+					conflict = null;
+					createdModel = service.create(model);
+					if (null != createdModel) {
+						return new PersonTO(createdModel);
+					}
+				} catch ( ObjectExistsException e ) {
+					LOGGER.info("Person creation conflicted with an existing"
+							+ " record. Will be retried {} times before"
+							+ " raising an error to the caller.", retryLimit, e);
+					conflict = e;
+					// try to tell the caller which record conflicted, by PK
+					final ObjectExistsException ee = objectExistsExceptionWithId(e);
+					if ( ee != null ) {
+						throw ee;
+					} // else something deleted the person from under us?
+				}
+			} while ( retryLimit-- > 0 );
+			if ( null == createdModel ) {
+				if ( conflict != null ) {
+					throw conflict;
+				}
+				return null;
 			}
 		}
 		return null;
+	}
+
+	private ObjectExistsException objectExistsExceptionWithId(final ObjectExistsException orig) {
+		final Map<String,? extends Serializable> lookupFields = orig.getLookupFields();
+		if ( lookupFields == null || lookupFields.isEmpty() ) {
+			return orig;
+		}
+		if ( lookupFields.containsKey("id") ) {
+			return orig;
+		}
+		Person bySchoolIdOrUsername = null;
+		try {
+			if ( lookupFields.containsKey("schoolId") ) {
+				bySchoolIdOrUsername =
+						service.getBySchoolId((String)lookupFields.get("schoolId"));
+			} else if ( lookupFields.containsKey("username") ) {
+				bySchoolIdOrUsername =
+						service.personFromUsername((String)lookupFields.get("username"));
+			}
+		} catch ( ObjectNotFoundException ee ) {
+			LOGGER.info("Failed to look up conflicting Person record."
+					+ " Original conflict message: {}", orig.getMessage(), ee);
+			return null;
+		} catch ( RuntimeException ee ) {
+			LOGGER.info("Failed to look up conflicting Person record."
+					+ " Original conflict message: {}", orig.getMessage(), ee);
+			return null;
+		}
+		if ( bySchoolIdOrUsername == null ) {
+			LOGGER.info("Failed to look up conflicting Person record."
+					+ " Original conflict message: {}", orig.getMessage());
+			return null;
+		}
+
+		return new ObjectExistsException(Person.class.getName(),
+				new Pair<String,UUID>("id", bySchoolIdOrUsername.getId()).toMap(),
+				orig);
 	}
 
 	/**

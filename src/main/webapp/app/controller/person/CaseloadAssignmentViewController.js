@@ -35,13 +35,9 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
 	init: function() {
 		var me=this;
+		me.resetAppointmentModels();
+
 		var id = me.personLite.get('id');
-		// initialize the appointment and personAppointment
-		var personAppointment = new Ssp.model.PersonAppointment();
-		var appointment = new Ssp.model.Appointment();
-		me.appointment.data = appointment.data;
-		me.currentPersonAppointment.data = personAppointment.data;
-		
 		// load the person record and init the view
 		if (id.length > 0)
 		{
@@ -59,6 +55,15 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		
 		return this.callParent(arguments);
     },
+
+	resetAppointmentModels: function() {
+		var me=this;
+		// initialize the appointment and personAppointment
+		var personAppointment = new Ssp.model.PersonAppointment();
+		var appointment = new Ssp.model.Appointment();
+		me.appointment.data = appointment.data;
+		me.currentPersonAppointment.data = personAppointment.data;
+	},
     
     destroy: function(){
 		this.appEventsController.removeEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
@@ -153,6 +158,12 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
     onSaveClick: function(button){
 		var me=this;
+		me.doSave();
+	},
+
+	// record saving heavy-lifting, independent of any particular event
+	doSave: function() {
+		var me=this;
 		var model=me.person;
 		var id = model.get('id');
 		var jsonData = new Object();
@@ -244,7 +255,10 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			
 			me.personService.save( jsonData, 
 	    			               {success:me.savePersonSuccess, 
-				                    failure:me.savePersonFailure, 
+				                    failure:me.savePersonFailure,
+				                    statusCode: {
+				                      409: me.savePersonConflict
+				                    },
 				                    scope: me} );
 
 		}else{
@@ -286,6 +300,101 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	var me=scope;
     	me.getView().setLoading( false );
     },
+
+	savePersonConflict: function( response, scope ) {
+		var me=scope;
+		me.savePersonFailure(response, scope);
+		var dialogOpts = {
+			buttons: Ext.Msg.YESNOCANCEL,
+			icon: Ext.Msg.WARNING,
+			fn: me.resolvePersonConflict,
+			scope: me
+		};
+		var model=me.person;
+		var id = model.get('id');
+		if ( id ) {
+			dialogOpts.title = "Conflicting Student Record Updates";
+			dialogOpts.msg = "Your changes did not save because another user" +
+				" modified the student record while you were filling out" +
+				" this form. Do you want to save your changes anyway?<br/><br/>" +
+				"Press 'Yes' to overwrite the existing record with your changes.<br/>" +
+				"Press 'No' to discard your changes and load the existing record into this form.<br/>" +
+				"Press 'Cancel' to do nothing and resume editing.";
+		} else {
+			var conflictingPersonId = me.parseConflictingPersonId(response);
+			if ( conflictingPersonId ) {
+				dialogOpts.title = "Student Already on File";
+				dialogOpts.msg = "The student record did not save because another" +
+					" student record already exists for the specified external" +
+					" identifier. Do you want to save your changes anyway?<br/><br/>" +
+					"Press 'Yes' to overwrite the existing record with your changes.<br/>" +
+					"Press 'No' to discard your changes and load the existing record into this form.<br/>" +
+					"Press 'Cancel' to do nothing and resume editing.";
+				dialogOpts.personId = conflictingPersonId;
+			} else {
+				dialogOpts.buttons = Ext.Msg.OK;
+				dialogOptsicon = Ext.Msg.ERROR;
+				dialogOpts.fn = function() {
+					// no-op
+				};
+				dialogOpts.title = "Unresolvable Student Record Conflict";
+				dialogOpts.msg = "Your changes could not be saved because" +
+					" they conflict with an existing student record but the" +
+					" exact cause of the conflict could not be determined.<br/><br/>" +
+					" Either contact your system administrator or try" +
+					" searching for an existing student record with the" +
+					" same name and/or identifier.";
+			}
+		}
+		Ext.Msg.show(dialogOpts);
+	},
+
+	parseConflictingPersonId: function(response) {
+		var me=this;
+		if ( !(response.responseText) ) {
+			return null;
+		}
+		var parsedResponseText = Ext.decode(response.responseText);
+		var responseDetail = parsedResponseText.detail;
+		if ( !(responseDetail) ) {
+			return null;
+		}
+		var attemptedLookupTypeInfo = responseDetail.typeInfo;
+		if ( !(attemptedLookupTypeInfo) ) {
+			return null;
+		}
+		var attemptedLookupType = attemptedLookupTypeInfo.name;
+		if ( !(attemptedLookupType) || "org.jasig.ssp.model.Person" !== attemptedLookupType ) {
+			return null;
+		}
+		var lookupFields = responseDetail.lookupFields;
+		if ( !(lookupFields) ) {
+			return null;
+		}
+		return lookupFields.id || null;
+	},
+
+	resolvePersonConflict: function(buttonId, text, opt) {
+		var me=this;
+		var model;
+		if (buttonId === "yes") {
+			model=me.person;
+			var id = model.set('id', opt.personId);
+			me.doSave();
+		} else if ( buttonId === "no" ) {
+			// Basically the same thing that SearchViewController.js does
+			// to launch the edit form. (Would be a huge patch to get each
+			// individual form to reset/reload itself so we just reload the
+			// entire view.)
+			model = new Ssp.model.Person();
+			me.person.data = model.data;
+			me.personLite.set('id', opt.personId);
+			me.resetAppointmentModels();
+			var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});
+		} else {
+			// nothing to do
+		}
+	},
 
     
     saveProgramStatusSuccess: function( r, scope ){

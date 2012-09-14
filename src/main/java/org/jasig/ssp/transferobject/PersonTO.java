@@ -194,7 +194,7 @@ public class PersonTO // NOPMD
 		}
 
 		if ((null != model.getReferralSources())
-				&& !(model.getSpecialServiceGroups().isEmpty())) {
+				&& !(model.getReferralSources().isEmpty())) {
 			final List<ReferralSource> referralSourcesFromModel = Lists
 					.newArrayList();
 			for (final PersonReferralSource prs : model.getReferralSources()) {

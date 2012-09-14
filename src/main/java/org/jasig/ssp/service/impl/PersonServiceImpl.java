@@ -21,6 +21,7 @@ import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
+import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -294,11 +295,26 @@ public class PersonServiceImpl implements PersonService {
 		if (obj.getUsername() != null) {
 			final Person existing = dao.fromUsername(obj.getUsername());
 			if (null != existing) {
-				throw new ObjectExistsException();
+				throw new ObjectExistsException(Person.class.getName(),
+						new Pair<String,String>("username", obj.getUsername()).toMap());
 			}
 		}
 
-		final Person person = dao.create(obj);
+		Person person = null;
+		try {
+			person = dao.create(obj);
+		} catch ( ConstraintViolationException e ) {
+			final String constraintName = e.getConstraintName();
+			if ( "uq_person_school_id".equals(constraintName) ) {
+				throw new ObjectExistsException(Person.class.getName(),
+						new Pair<String,String>("schoolId", obj.getSchoolId()).toMap(),
+						e);
+			}
+			if ( "unique_person_username".equals(constraintName) ) {
+				throw new ObjectExistsException(Person.class.getName(),
+						new Pair<String,String>("username", obj.getUsername()).toMap());
+			}
+		}
 
 		if (LOGGER.isDebugEnabled()) {
 			if (person == null) {

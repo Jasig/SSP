@@ -9,8 +9,10 @@ import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.hibernate.Session;
@@ -208,17 +210,35 @@ public class PersonControllerIntegrationTest {
 				PERSON_SORTEDBY_FIRSTNAME_7, person7.getFirstName());
 	}
 
-	@Test(expected = ObjectExistsException.class)
+	@Test
 	public void testUniqueSchoolId() throws ObjectNotFoundException,
 			ValidationException {
 		final Person person1 = createPerson();
 		person1.setUsername(TEST_SCHOOLID);
-		controller.create(new PersonTO(person1));
+		final PersonTO person1Saved = controller.create(new PersonTO(person1));
 
 		final Person person2 = createPerson();
 		person2.setUsername(TEST_SCHOOLID);
-		controller.create(new PersonTO(person2));
-		fail("Exception should have been thrown.");
+		try {
+			controller.create(new PersonTO(person2));
+			fail("Exception should have been thrown.");
+		} catch ( ObjectExistsException e ) {
+			assertEquals("Conflict on unexpected entity type",
+					Person.class.getName(), e.getName());
+			final Map<String,UUID> expectedTopLevelLookupFields =
+					new HashMap<String,UUID>();
+			expectedTopLevelLookupFields.put("id", person1Saved.getId());
+			assertEquals("Conflict on unexpected person record",
+					expectedTopLevelLookupFields, e.getLookupFields());
+			final Map<String,String> expectedConflictingLookupFields =
+					new HashMap<String,String>();
+			expectedConflictingLookupFields.put("username", TEST_SCHOOLID);
+			assertEquals("Conflict on unexpected person key",
+					expectedConflictingLookupFields,
+					((ObjectExistsException)e.getCause()).getLookupFields());
+			assertEquals("Conflict on unexpected entity type",
+					Person.class.getName(), ((ObjectExistsException)e.getCause()).getName());
+		}
 	}
 
 	@Test

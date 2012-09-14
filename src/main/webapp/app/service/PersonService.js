@@ -78,29 +78,33 @@ Ext.define('Ssp.service.PersonService', {
     	var me=this;
     	var id=jsonData.id;
         var url = me.getBaseUrl();
+
 	    var success = function( response, view ){
-	    	var r = Ext.decode(response.responseText);
-			callbacks.success( r, callbacks.scope );
+			var r = response.responseText ? Ext.decode(response.responseText) : null;
+			if ( callbacks.statusCode[response.status] ) {
+				callbacks.statusCode[response.status](r, callbacks.scope);
+			} else {
+				callbacks.success(r, callbacks.scope);
+			}
 	    };
 
 	    var failure = function( response ){
 	    	var r;
-	    	// handle unique schoolId error display in a more
-	    	// user friendly fashion
-	    	/*
-	    	if ( response.responseText != null)
-	    	{
-	    		r = Ext.decode(response.responseText);
-	    		if (r.message.indexOf('ERROR: duplicate key value violates unique constraint \"uq_person_school_id\"') == 0)
-	    		{
-	    			Ext.Msg.alert("SSP Error","The " + me.sspConfig.get('studentIdAlias') + " you entered already exists in the system. Please double-check and try again.");
-	    		}
-	    	}else{
-		    	    		
-	    	}
-	    	*/
-	    	me.apiProperties.handleError( response );
-	    	callbacks.failure( response, callbacks.scope );	
+			// Before statusCode callbacks were introduced, "legacy" failure
+			// callbacks expected unparsed responses, whereas legacy success
+			// callbacks expected parsed responses. Also, legacy failure
+			// callbacks all assumed the PersonService handled error dialog
+			// rendering. If a statusCode-specific callback exists, though,
+			// we assume the view wants to perform very specific work on that
+			// particular error type so we skip the dialog rendering here.
+			// (Dialog rendering is the default behavior in
+			// me.apiProperties.handleError( response );)
+			if ( callbacks.statusCode[response.status] ) {
+				callbacks.statusCode[response.status](response, callbacks.scope);
+			} else {
+				me.apiProperties.handleError( response );
+				callbacks.failure(response, callbacks.scope);
+			}
 	    };
         
     	// save the person

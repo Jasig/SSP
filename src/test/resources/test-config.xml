@@ -12,8 +12,15 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
 
 	<!-- Properties file configuration of existing beans -->
-	<util:properties id="configProperties"
-		location="file:${SSP_TESTCONFIGDIR}/ssp-config.properties" />
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:ssp-config.default.properties</value>
+				<value>file:${SSP_TESTCONFIGDIR}/ssp-config.properties</value>
+			</list>
+		</property>
+	</bean>
 
 	<util:properties id="contextProperties">
 		<prop key="applicationMode">TEST</prop>

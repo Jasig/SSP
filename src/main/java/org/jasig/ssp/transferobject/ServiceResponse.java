@@ -2,22 +2,43 @@ package org.jasig.ssp.transferobject;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.jasig.ssp.dao.ObjectExistsException;
+import org.jasig.ssp.transferobject.jsonserializer.BooleanPrimitiveToStringSerializer;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.google.common.collect.Lists;
 
+// NON_NULL preserves backward compatibility with any clients which might
+// not be prepared to accept the "detail" field
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ServiceResponse implements Serializable {
 
 	private static final long serialVersionUID = 256473140649271859L;
 
+	// Prior to adding the "detail" field, JSON output (from toString())
+	// was hand-rolled and the success field value was wrapped in quotes, so
+	// use a custom serializer to preserve that behavior.
+	@JsonSerialize(using = BooleanPrimitiveToStringSerializer.class)
 	private boolean success = false;
 
 	private String message = "";
+
+	// would rather a generic map of Serializable->Serializable, but just
+	// too difficult to get that to work properly w/ Jackson deserialization
+	// (current tests require all TO objects to be Jackson de/serializable)
+	Map<String, Map<String,String>> detail;
 
 	public ServiceResponse() {
 		super();
@@ -82,6 +103,40 @@ public class ServiceResponse implements Serializable {
 		message = sb.toString();
 	}
 
+	/**
+	 * Uses the message from the given {@link ObjectExistsException} and adds
+	 * its custom fields to the <code>detail</code> collection.
+	 *
+	 * @param success
+	 *            If the response should indicate success or not
+	 * @param e
+	 *            Unexpected object existence event to describe
+	 */
+	@SuppressWarnings("unchecked")
+	public ServiceResponse(final boolean success,
+						   final ObjectExistsException e) {
+		this(success, e.getMessage());
+		final Map<String,Map<String,String>> detail =
+				new HashMap<String,Map<String, String>>();
+		detail.put("typeInfo", new HashMap<String,String>() {{
+			put("name", e.getName());
+		}});
+		detail.put("lookupFields", toStringMap(e.getLookupFields()));
+		this.detail = detail;
+	}
+
+	private Map<String,String> toStringMap(Map<String, ? extends Serializable> from) {
+		if ( from == null ) {
+			return null;
+		}
+		final Map<String,String> strings =Maps.newHashMapWithExpectedSize(from.size());
+		for ( Map.Entry<String, ? extends Serializable> entry : from.entrySet() ) {
+			final String value =  entry.getValue() == null ? null : entry.getValue().toString();
+			strings.put(entry.getKey(),value);
+		}
+		return strings;
+	}
+
 	public boolean isSuccess() {
 		return success;
 	}
@@ -98,20 +153,23 @@ public class ServiceResponse implements Serializable {
 		this.message = message;
 	}
 
+	public Map<String, Map<String,String>> getDetail() {
+		return detail;
+	}
+
+	protected void setDetail(final Map<String, Map<String,String>> detail) {
+		this.detail = detail;
+	}
+
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder();
-		sb.append("{\"success\":\"");
-		if (success) {
-			sb.append("true");
-		} else {
-			sb.append("false");
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return mapper.writeValueAsString(this);
+		} catch ( RuntimeException e ) {
+			throw e;
+		} catch ( Exception e ) {
+			throw new RuntimeException(e);
 		}
-
-		sb.append("\", \"message\":\"");
-		sb.append(message);
-		sb.append("\"}");
-
-		return sb.toString();
 	}
 }
