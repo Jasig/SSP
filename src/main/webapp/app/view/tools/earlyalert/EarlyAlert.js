@@ -42,7 +42,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
     		            text: 'Created Date',
     		            flex: 1,
     		            dataIndex: 'createdDate',
-    		            renderer : me.columnRendererUtils.renderCreatedByDateWithTime,
+    		            renderer : Ext.util.Format.dateRenderer('Y-m-d g:i A'),
     		            sortable: false
     		        },{
     		            text: 'Status',

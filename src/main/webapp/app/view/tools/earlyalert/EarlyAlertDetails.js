@@ -25,7 +25,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails',{
 	                anchor: '100%',
 	                name: 'createdDate',
 	                itemId: 'createdDateField',
-	                renderer: Ext.util.Format.dateRenderer('m/d/Y h:m A')
+	                renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
 	            },{
                     xtype: 'displayfield',
                     fieldLabel: 'Course Name',
@@ -48,7 +48,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails',{
                     fieldLabel: 'Closed Date',
                     anchor: '100%',
                     name: 'closedDate',
-                    renderer: Ext.util.Format.dateRenderer('m/d/Y h:m A')
+                    renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
                 },{
                     xtype: 'displayfield',
                     fieldLabel: 'Campus',

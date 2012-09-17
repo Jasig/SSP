@@ -25,7 +25,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponseDetails',{
 	                anchor: '100%',
 	                name: 'createdDate',
 	                itemId: 'createdDateField',
-	                renderer: Ext.util.Format.dateRenderer('m/d/Y h:m A')
+	                renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
 	            },{
 	                xtype: 'displayfield',
 	                fieldLabel: 'Outcome',
