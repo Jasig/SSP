@@ -409,7 +409,14 @@ Ext.define('Ssp.controller.SearchViewController', {
     			break;
     			
     		case 'transition':
-    	     	 me.appEventsController.getApplication().fireEvent('transitionStudent');
+    	     	/* 
+    	     	 * Temp fix for SSP-434
+    	     	 * 
+    	     	 * Temporarily removing Transition Action from this button.
+    			 * TODO: Ensure that this button takes the user to the Journal Tool and initiates a
+    			 * Journal Entry.
+    			 * // me.appEventsController.getApplication().fireEvent('transitionStudent');
+    	     	 */
     	     	 break;
     	     	 
     		case 'non-participating':

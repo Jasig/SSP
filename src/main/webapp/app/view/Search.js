@@ -166,11 +166,11 @@ Ext.define('Ssp.view.Search', {
 		    			    action: 'active',
 		    			    itemId: 'setActiveStatusButton'
 			    		},{
-		    			    tooltip: 'Transition Student',
+		    			    tooltip: 'Set Student to Transitioned status',
 		    			    text: '',
 		    			    width: 25,
 		    			    height: 25,
-		    			    hidden: !me.authenticatedPerson.hasAccess('SET_TRANSITION_STATUS_BUTTON'),
+		    			    hidden: true, // Temp fix for SSP-434: !me.authenticatedPerson.hasAccess('SET_TRANSITION_STATUS_BUTTON')
 		    			    cls: 'setTransitionStatusIcon',
 		    			    xtype: 'button',
 		    			    action: 'transition',
