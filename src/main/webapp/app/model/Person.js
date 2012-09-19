@@ -164,6 +164,7 @@ Ext.define('Ssp.model.Person', {
     	me.set('lastName', jsonData.lastName);	
     	me.set('anticipatedStartTerm',jsonData.anticipatedStartTerm);
     	me.set('anticipatedStartYear',jsonData.anticipatedStartYear);
+    	me.set('homePhone', jsonData.homePhone);
     	me.set('cellPhone', jsonData.cellPhone);
     	me.set('workPhone', jsonData.workPhone);
     	me.set('addressLine1', jsonData.addressLine1);
