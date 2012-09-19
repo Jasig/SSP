@@ -21,18 +21,40 @@ public enum ObjectStatus {
 	 * ALL is used when filtering by this field, to allow all the ObjectStatus
 	 * values to be included.
 	 */
-	ALL,
+	ALL {
+		@Override
+		public ObjectStatus and(final ObjectStatus associationStatus) {
+			if ( associationStatus == null || associationStatus == this ) {
+				return this;
+			}
+			return associationStatus;
+		}
+	},
 
 	/**
 	 * Object is appropriate for use in creating/editing records. (integer: 1)
 	 */
-	ACTIVE,
+	ACTIVE {
+		@Override
+		public ObjectStatus and(final ObjectStatus associationStatus) {
+			if ( associationStatus == null || associationStatus == this ||
+					associationStatus == ALL ) {
+				return this;
+			}
+			return associationStatus;
+		}
+	},
 
 	/**
 	 * Object is not appropriate for use in creating/editing records. (integer:
 	 * 2)
 	 */
-	INACTIVE,
+	INACTIVE {
+		@Override
+		public ObjectStatus and(final ObjectStatus associationStatus) {
+			return this;
+		}
+	},
 
 	/**
 	 * Object has been removed, and should not be used in creating/editing
@@ -43,7 +65,12 @@ public enum ObjectStatus {
 	 * {@link #DELETED}.
 	 */
 	@Deprecated
-	DELETED;
+	DELETED {
+		@Override
+		public ObjectStatus and(final ObjectStatus associationStatus) {
+			return this;
+		}
+	};
 
 	/**
 	 * Filter a collection to return only those that have the specified status.
@@ -67,4 +94,16 @@ public enum ObjectStatus {
 
 		return inStatus;
 	}
+
+	/**
+	 * Quasi-bitwise 'and' of two ObjectStatuses. Used to calculate a combined
+	 * status of two associated but independently statused objects. Basically,
+	 * both objects must be in a non-deleted/inactive state to be considered
+	 * active as a pair.
+	 *
+	 * @param associationStatus the status of the paired object. nulls are
+	 *                          result in the current ObjectStatus
+	 * @return
+	 */
+	public abstract ObjectStatus and(ObjectStatus associationStatus);
 }

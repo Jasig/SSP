@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.model.PersonReferralSource;
@@ -24,6 +25,7 @@ import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 
 import com.google.common.collect.Lists;
+import org.jasig.ssp.util.collections.Pair;
 
 /**
  * Person transfer object
@@ -181,39 +183,51 @@ public class PersonTO // NOPMD
 
 		if ((null != model.getSpecialServiceGroups())
 				&& !(model.getSpecialServiceGroups().isEmpty())) {
-			final List<SpecialServiceGroup> specialServiceGroupsFromModel = Lists
-					.newArrayList();
+			final List<Pair<SpecialServiceGroup, ObjectStatus>>
+					specialServiceGroupsFromModel = Lists.newArrayList();
 			for (final PersonSpecialServiceGroup pssg : model
 					.getSpecialServiceGroups()) {
-				specialServiceGroupsFromModel
-						.add(pssg.getSpecialServiceGroup());
+				Pair<SpecialServiceGroup, ObjectStatus> statusedSsg =
+						new Pair<SpecialServiceGroup, ObjectStatus>(
+								pssg.getSpecialServiceGroup(),
+								pssg.getObjectStatus());
+				specialServiceGroupsFromModel.add(statusedSsg);
 			}
 
 			specialServiceGroups = ReferenceLiteTO
-					.toTOList(specialServiceGroupsFromModel);
+					.toTOAssociationList(specialServiceGroupsFromModel);
 		}
 
 		if ((null != model.getReferralSources())
 				&& !(model.getReferralSources().isEmpty())) {
-			final List<ReferralSource> referralSourcesFromModel = Lists
-					.newArrayList();
+			final List<Pair<ReferralSource,ObjectStatus>> referralSourcesFromModel
+					= Lists.newArrayList();
 			for (final PersonReferralSource prs : model.getReferralSources()) {
-				referralSourcesFromModel.add(prs.getReferralSource());
+				Pair<ReferralSource, ObjectStatus> statusedRs =
+						new Pair<ReferralSource, ObjectStatus>(
+								prs.getReferralSource(),
+								prs.getObjectStatus());
+				referralSourcesFromModel.add(statusedRs);
 			}
 
 			referralSources = ReferenceLiteTO
-					.toTOList(referralSourcesFromModel);
+					.toTOAssociationList(referralSourcesFromModel);
 		}
 
 		if ((null != model.getServiceReasons())
 				&& !(model.getServiceReasons().isEmpty())) {
-			final List<ServiceReason> serviceReasonsFromModel = Lists
-					.newArrayList();
+			final List<Pair<ServiceReason,ObjectStatus>> serviceReasonsFromModel
+					= Lists .newArrayList();
 			for (final PersonServiceReason psr : model.getServiceReasons()) {
-				serviceReasonsFromModel.add(psr.getServiceReason());
+				Pair<ServiceReason, ObjectStatus> statusedSr =
+						new Pair<ServiceReason, ObjectStatus>(
+								psr.getServiceReason(),
+								psr.getObjectStatus());
+				serviceReasonsFromModel.add(statusedSr);
 			}
 
-			serviceReasons = ReferenceLiteTO.toTOList(serviceReasonsFromModel);
+			serviceReasons = ReferenceLiteTO
+					.toTOAssociationList(serviceReasonsFromModel);
 		}
 
 		if ((null != model.getProgramStatuses())

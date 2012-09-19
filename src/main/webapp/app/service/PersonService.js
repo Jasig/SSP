@@ -27,6 +27,7 @@ Ext.define('Ssp.service.PersonService', {
 	    	{
 		    	r = Ext.decode(response.responseText);	    		
 	    	}
+			r = me.superclass.filterInactiveChildren( [ r ] )[0];
 	    	callbacks.success( r, callbacks.scope );
 	    };
 
@@ -56,6 +57,7 @@ Ext.define('Ssp.service.PersonService', {
 		    		r = Ext.decode(response.responseText);
 		    	}		    		
 	    	}
+			r = me.superclass.filterInactiveChildren( [ r ] )[0];
 	    	callbacks.success( r, callbacks.scope );
 	    };
 
@@ -106,7 +108,7 @@ Ext.define('Ssp.service.PersonService', {
 				callbacks.failure(response, callbacks.scope);
 			}
 	    };
-        
+
     	// save the person
 		if (id=="")
 		{

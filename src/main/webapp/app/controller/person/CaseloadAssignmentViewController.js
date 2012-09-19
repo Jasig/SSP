@@ -227,26 +227,17 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			// set special service groups
 			specialServiceGroupsFormValues = specialServiceGroupsItemSelector.getValue();
 			selectedSpecialServiceGroups = me.getSelectedItemSelectorIdsForTransfer(specialServiceGroupsFormValues);
-			if (selectedSpecialServiceGroups.length > 0)
-			{
-				model.set('specialServiceGroups', selectedSpecialServiceGroups);
-			}
+			model.set('specialServiceGroups', selectedSpecialServiceGroups);
 
 			// referral sources
 			referralSourcesFormValues = referralSourcesItemSelector.getValue();
 			selectedReferralSources = me.getSelectedItemSelectorIdsForTransfer(referralSourcesFormValues);
-			if (selectedReferralSources.length > 0)
-			{			
-			   model.set('referralSources', selectedReferralSources);
-			}
+			model.set('referralSources', selectedReferralSources);
 			
 			// set the service reasons
 			serviceReasonsFormValues = serviceReasonsForm.getValues();
 			selectedServiceReasons = me.formUtils.getSelectedIdsAsArray( serviceReasonsFormValues );
-			if (selectedServiceReasons.length > 0)
-			{
-				model.set('serviceReasons', selectedServiceReasons);
-			}
+			model.set('serviceReasons', selectedServiceReasons);
 						
 			me.getView().setLoading( true );
 			
