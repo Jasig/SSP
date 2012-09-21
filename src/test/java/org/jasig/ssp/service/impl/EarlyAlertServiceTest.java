@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
@@ -18,12 +19,14 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
+import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.service.EarlyAlertRoutingService;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.CampusService;
+import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
@@ -68,6 +71,8 @@ public class EarlyAlertServiceTest {
 	private static final UUID EARLY_ALERT_REASON_ID = UUID
 			.fromString("b2d11335-5056-a51a-80ea-074f8fef94ea");
 
+	private static final String INSTRUCTOR_ID = "f549ecab-5110-4cc1-b2bb-369cac854dea";
+
 	@Autowired
 	private transient CampusService campusService;
 
@@ -81,6 +86,9 @@ public class EarlyAlertServiceTest {
 	private transient MessageService messageService;
 
 	@Autowired
+	private transient MessageTemplateService messageTemplateService;
+
+	@Autowired
 	private transient MockMailService mockMailService;
 
 	@Autowired
@@ -91,6 +99,7 @@ public class EarlyAlertServiceTest {
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
+
 
 	/**
 	 * Setup the security service with the administrator user.
@@ -281,6 +290,48 @@ public class EarlyAlertServiceTest {
 		assertEquals(
 				"Sent message count should have only been the 2 main ones, and no extra routes.",
 				2, smtpServer.getReceivedEmailSize());
+	}
+
+	@Test
+	public void testTermAndCourseExposedToMessageRenderer()
+			throws ObjectNotFoundException, ValidationException {
+		final SimpleSmtpServer smtpServer = mockMailService.getSmtpServer();
+		assertFalse("Faux mail server should be running but was not.",
+				smtpServer.isStopped());
+
+		// arrange
+		final String testBody =
+				"Term name: $term.name, Course title: $course.title";
+		MessageTemplate template1 =
+				messageTemplateService.getByName("Early Alert Confirmation to Faculty");
+		template1.setBody(testBody);
+		messageTemplateService.save(template1);
+
+		MessageTemplate template2 =
+				messageTemplateService.getByName("Early Alert Confirmation to Advisor");
+		template2.setBody(testBody);
+		messageTemplateService.save(template2);
+
+		final EarlyAlert obj = arrangeEarlyAlert();
+		obj.setCourseName("MTH101"); // will resolve to v_external_course record
+		obj.setCreatedBy(personService.get(UUID.fromString(INSTRUCTOR_ID)));
+
+		// act
+		earlyAlertService.create(obj);
+		sessionFactory.getCurrentSession().flush();
+
+		// Try to send all messages to the fake server.
+		messageService.sendQueuedMessages();
+
+		// assert
+		assertEquals("Sent message count did not match.", 2,
+				smtpServer.getReceivedEmailSize());
+		@SuppressWarnings("unchecked")
+		final Iterator<SmtpMessage> receivedMessages = smtpServer.getReceivedEmail();
+		final SmtpMessage message1 = receivedMessages.next();
+		assertEquals("Term name: Fall 2012, Course title: College Algebra", message1.getBody());
+		final SmtpMessage message2 = receivedMessages.next();
+		assertEquals("Term name: Fall 2012, Course title: College Algebra", message2.getBody());
 	}
 
 	/**

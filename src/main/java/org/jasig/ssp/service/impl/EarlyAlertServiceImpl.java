@@ -19,6 +19,8 @@ import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
+import org.jasig.ssp.model.external.FacultyCourse;
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
@@ -27,6 +29,9 @@ import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.external.ExternalDataService;
+import org.jasig.ssp.service.external.FacultyCourseService;
+import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EarlyAlertReasonService;
 import org.jasig.ssp.service.reference.EarlyAlertSuggestionService;
@@ -77,6 +82,12 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 	@Autowired
 	private transient PersonService personService;
+
+	@Autowired
+	private transient FacultyCourseService facultyCourseService;
+
+	@Autowired
+	private transient TermService termService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EarlyAlertServiceImpl.class);
@@ -416,6 +427,52 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		}
 
 		final Map<String, Object> templateParameters = Maps.newHashMap();
+
+		final String courseName = earlyAlert.getCourseName();
+		if ( StringUtils.isNotBlank(courseName) ) {
+			final String facultySchoolId = earlyAlert.getCreatedBy().getSchoolId();
+			if ( (StringUtils.isNotBlank(facultySchoolId)) ) {
+				FacultyCourse course = null;
+				try {
+					course = facultyCourseService.
+							getCourseByFacultySchoolIdAndFormattedCourse(
+									facultySchoolId, courseName);
+				} catch ( ObjectNotFoundException e ) {
+					// Trace irrelevant. see below for logging. prefer to
+					// do it there, after the null check b/c not all service
+					// methods implement ObjectNotFoundException reliably.
+				}
+				if ( course != null ) {
+					templateParameters.put("course", course);
+					String termCode = course.getTermCode();
+					if ( StringUtils.isNotBlank(termCode) ) {
+						Term term = null;
+						try {
+							term = termService.getByCode(termCode);
+						} catch ( ObjectNotFoundException e ) {
+							// Trace irrelevant. See below for logging.
+						}
+						if ( term != null ) {
+							templateParameters.put("term", term);
+						} else {
+							LOGGER.info("Not adding term to message template"
+									+ " params or early alert {} because"
+									+ " the term code {} did not resolve to"
+									+ " an external term record",
+									earlyAlert.getId(), termCode);
+						}
+					}
+				} else {
+					LOGGER.info("Not adding course nor term to message template"
+							+ " params for early alert {} because the associated"
+							+ " course {} and faculty school id {} did not"
+							+ " resolve to an external course record.",
+							new Object[] { earlyAlert.getId(), courseName,
+									facultySchoolId});
+				}
+			}
+		}
+
 		templateParameters.put("earlyAlert", earlyAlert);
 		templateParameters.put("termToRepresentEarlyAlert",
 				configService.getByNameEmpty("term_to_represent_early_alert"));
