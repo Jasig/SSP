@@ -11,12 +11,14 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
         model: 'currentJournalEntry'
     },	
     initComponent: function() {
-    	Ext.applyIf(this, {
-        	title: ((this.model.get('id') == "") ? "Add Journal" : "Edit Journal"),
+    	var me=this;
+    	Ext.applyIf(me, {
+        	title: ((me.model.get('id') == "") ? "Add Journal" : "Edit Journal"),
         	autoScroll: true,
         	defaults: {
             	labelWidth: 150,
-            	padding: 5
+            	padding: 5,
+            	labelAlign: 'right'
             },
         	items: [{
 			    	xtype: 'datefield',
@@ -31,7 +33,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        name: 'confidentialityLevelId',
 			        fieldLabel: 'Confidentiality Level',
 			        emptyText: 'Select One',
-			        store: this.confidentialityLevelsStore,
+			        store: me.confidentialityLevelsStore,
 			        valueField: 'id',
 			        displayField: 'name',
 			        mode: 'local',
@@ -46,7 +48,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        name: 'journalSourceId',
 			        fieldLabel: 'Source',
 			        emptyText: 'Select One',
-			        store: this.journalSourcesStore,
+			        store: me.journalSourcesStore,
 			        valueField: 'id',
 			        displayField: 'name',
 			        mode: 'local',
@@ -56,40 +58,57 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        forceSelection: true,
 			        anchor: '95%'
 				},{
-			        xtype: 'combobox',
-			        itemId: 'journalTrackCombo',
-			        name: 'journalTrackId',
-			        fieldLabel: 'Journal Track',
-			        emptyText: 'Select One',
-			        store: this.journalTracksStore,
-			        valueField: 'id',
-			        displayField: 'name',
-			        mode: 'local',
-			        typeAhead: true,
-			        queryMode: 'local',
-			        allowBlank: true,
-			        forceSelection: false,
-			        anchor: '95%'
-				},{
-		        	xtype: 'label',
-		        	text: 'Session Details (Critical Components)'
-				},{
-					xtype: 'tbspacer',
-					flex: 1
-				},{
-		            tooltip: 'Add Journal Session Details',
-		            text: 'Add/Edit Session Details',
-		            xtype: 'button',
-		            itemId: 'addSessionDetailsButton'
-	    	    },
-                { xtype: 'displayjournaldetails', autoScroll: true, anchor:'95% 50%' }
-				,{
                     xtype: 'textareafield',
-                    fieldLabel: 'Comment',
+                    fieldLabel: 'Comment (Optional)',
                     itemId: 'commentText',
                     anchor: '95%',
                     name: 'comment'
-                }],
+                },{
+			        xtype: 'fieldcontainer',
+			        fieldLabel: 'Journal Track (Optional)',
+			        labelWidth: 155,
+			        anchor: '95%',
+			        layout: 'hbox',
+			        items: [{
+						        xtype: 'combobox',
+						        itemId: 'journalTrackCombo',
+						        name: 'journalTrackId',
+						        fieldLabel: '',
+						        emptyText: 'Select One',
+						        store: me.journalTracksStore,
+						        valueField: 'id',
+						        displayField: 'name',
+						        mode: 'local',
+						        typeAhead: true,
+						        queryMode: 'local',
+						        allowBlank: true,
+						        forceSelection: false,
+						        flex: 1
+							},{
+								xtype: 'tbspacer',
+								width: 10
+							},{
+					            tooltip: 'Removes the assigned Journal Track and Session Details',
+					            text: 'Remove/Reset',
+					            xtype: 'button',
+					            itemId: 'removeJournalTrackButton',
+					            hidden: ((me.model.get('id') == "")?false : true)
+				    	    }]
+				},{
+			        xtype: 'fieldcontainer',
+			        fieldLabel: 'Session Details',
+			        labelWidth: 155,
+			        anchor: '95%',
+			        layout: 'hbox',
+			        items: [{
+					            tooltip: 'Add Journal Session Details',
+					            text: 'Add/Edit Session Details',
+					            xtype: 'button',
+					            itemId: 'addSessionDetailsButton'
+				    	    }]
+				},
+                { xtype: 'displayjournaldetails', autoScroll: true, anchor:'95% 50%' }
+				],
             
             dockedItems: [{
        		               xtype: 'toolbar',
@@ -107,6 +126,6 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
        		           }]
         });
 
-        return this.callParent(arguments);
+        return me.callParent(arguments);
     }	
 });

@@ -21,6 +21,13 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     control: {
     	entryDateField: '#entryDateField',
     	
+    	removeJournalTrackButton: {
+    		selector: '#removeJournalTrackButton',
+    		listeners: {
+    			click: 'onRemoveJournalTrackButtonClick'
+    		}
+    	},
+    	
     	journalTrackCombo: {
     		selector: '#journalTrackCombo',
     		listeners: {
@@ -156,7 +163,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     			{
     				jsonData.journalEntryDetails = record.clearGroupedDetails( jsonData.journalEntryDetails );
     			}
-    			    			
+    			
     			me.getView().setLoading( true );
     			
     			me.journalEntryService.save( me.personLite.get('id'), jsonData, {
@@ -198,20 +205,23 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 	},	
 	
 	onJournalTrackComboSelect: function(comp, records, eOpts){
-    	if (records.length > 0)
+		var me=this;
+		if (records.length > 0)
     	{
-    		this.model.set('journalTrack',{"id": records[0].get('id')});
+    		me.model.set('journalTrack',{"id": records[0].get('id')});
     		
     		// the inited property prevents the
     		// Journal Entry Details from clearing
     		// when the ViewController loads, so the details only 
     		// clear when a new journal track is selected
     		// because the init for the view sets the combo
-    		if (this.inited==true)
+    		if (me.inited==true)
     		{
-    	   		this.model.removeAllJournalEntryDetails();
-    			this.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');    			
+    	   		me.model.removeAllJournalEntryDetails();
+    			me.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');    			
     		}
+     	}else{
+     		me.removeJournalTrackAndSessionDetails();
      	}
 	},
 	
@@ -219,10 +229,26 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		var me=this;
     	if (comp.getValue() == "")
     	{
-     		me.model.set("journalTrack","");
-     		me.model.removeAllJournalEntryDetails();
-     		me.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');    			
+     		me.removeJournalTrackAndSessionDetails();
      	}		
+	},
+	
+	removeJournalTrackAndSessionDetails: function(){
+ 		var me=this;
+		me.model.set("journalTrack","");
+ 		me.model.removeAllJournalEntryDetails();
+ 		me.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');
+	},
+	
+	onRemoveJournalTrackButtonClick: function( button ){
+		var me=this;
+		var combo = me.getJournalTrackCombo();
+		combo.clearValue();
+		combo.fireEvent('select',{
+			combo: combo,
+			records: [],
+			eOpts: {}
+		});
 	},
 	
 	onCommentChange: function(comp, newValue, oldValue, eOpts){
