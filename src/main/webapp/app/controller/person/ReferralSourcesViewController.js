@@ -41,14 +41,63 @@ Ext.define('Ssp.controller.person.ReferralSourcesViewController', {
 	            valueField: 'id',
 	            value: ((selectedReferralSources.length>0) ? selectedReferralSources : [] ),
 	            allowBlank: true,
-	            buttons: ["add", "remove"]
+	            buttons: ["add", "remove"],
+				listeners: {
+					toField: {
+						boundList: {
+							scope: me,
+							drop: me.maybeRefireFromFieldLoadWithNonEmptyStore
+						}
+					},
+					fromField: {
+						boundList: {
+							scope: me,
+							itemdblclick: me.maybeRefireFromFieldLoadWithNonEmptyStore
+
+						}
+					}
+				}
 	        }];
-    		
     		view.add(items);
+			me.registerAdditionalListeners();
     	}
 	},
 	
     getAllFailure: function( response, scope ){
     	var me=scope;  	
-    }
+    },
+
+	// TODO abstract copy/paste from SpecialServiceGroupsViewController.js
+	registerAdditionalListeners: function() {
+		var me = this;
+		var itemSelector = me.findItemSelector();
+		var addButton = itemSelector.query('button[iconCls=x-form-itemselector-add]')[0];
+		var origAddButtonHandler = addButton.handler;
+		addButton.setHandler(function() {
+			var me = this;
+			origAddButtonHandler.apply(itemSelector);
+			me.maybeRefireFromFieldLoadWithNonEmptyStore();
+		}, me);
+	},
+
+	// TODO abstract copy/paste from SpecialServiceGroupsViewController.js
+	maybeRefireFromFieldLoadWithNonEmptyStore: function() {
+		var me = this;
+		var itemSelector = me.findItemSelector();
+		var fromField = me.itemSelector.fromField;
+		var toField = me.itemSelector.toField;
+		var origGetCount = fromField.store.getCount;
+		if ( origGetCount.apply(fromField.store) === 0 ) {
+			fromField.store.getCount = function() { return 1; };
+			fromField.store.fireEvent('load', fromField.store);
+			fromField.store.getCount = origGetCount;
+		}
+	},
+
+	// TODO abstract copy/paste from SpecialServiceGroupsViewController.js
+	findItemSelector: function() {
+		var me = this;
+		me.itemSelector = me.itemSelect ||  me.getView().form.findField("referralSources");
+		return me.itemSelector;
+	}
 });

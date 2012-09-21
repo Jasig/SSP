@@ -8,6 +8,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,7 +22,10 @@ import org.hibernate.SessionFactory;
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.AbstractReference;
+import org.jasig.ssp.model.reference.ReferralSource;
 import org.jasig.ssp.model.reference.ServiceReason;
+import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
@@ -285,6 +290,608 @@ public class PersonControllerIntegrationTest {
 		// assert
 		assertEquals("Active program status name did not match.",
 				PROGRAM_STATUS_NAME, reloaded.getCurrentProgramStatusName());
+	}
+
+	@Test
+	public void testUpdateReplacesServiceReasons()
+			throws ObjectNotFoundException, ValidationException {
+		final PersonTO person1 = new PersonTO(createPerson());
+		final List<ReferenceLiteTO<ServiceReason>> serviceReasons = Lists
+				.newArrayList();
+		serviceReasons
+				.add(new ReferenceLiteTO<ServiceReason>(UUID
+						.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+						"IGNORED"));
+		person1.setServiceReasons(serviceReasons);
+
+		final PersonTO person = controller.create(person1);
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+
+		final PersonTO person1Edit = new PersonTO(createPerson());
+		person1Edit.setId(person.getId());
+		final List<ReferenceLiteTO<ServiceReason>> serviceReasons2 = Lists
+				.newArrayList();
+		// ServiceReasons collection edits have replace to semantics, so here
+		// we reference a new Reason and don't reference the old Reason, which
+		// should cause the old Reason association to be deactivated
+		serviceReasons2
+				.add(new ReferenceLiteTO<ServiceReason>(UUID
+						.fromString("205df6c0-fea0-11e1-9678-406c8f22c3ce"),
+						"IGNORED"));
+		person1Edit.setServiceReasons(serviceReasons2);
+
+		final PersonTO person1SavedEdit =
+				controller.save(person1Edit.getId(), person1Edit);
+		List<ReferenceLiteTO<ServiceReason>> serviceReasons3 =
+				person1SavedEdit.getServiceReasons();
+		assertEquals("All deletions are soft operations, so the ServiceReason"
+				+ " collection should actually grow when \"replacing\" an"
+				+ " existing ServiceReason.", 2, serviceReasons3.size());
+		sortById(serviceReasons3); // UUIDs don't sort lexicographically!
+		assertEquals("Unexpected ServiceReason",
+				"f6201a04-bb31-4ca5-b606-609f3ad09f87",
+				serviceReasons3.get(0).getId().toString());
+		assertEquals("Replaced ServiceReason should be inactive",
+				ObjectStatus.INACTIVE,
+				serviceReasons3.get(0).getObjectStatus());
+		assertEquals("Unexpected ServiceReason",
+				"205df6c0-fea0-11e1-9678-406c8f22c3ce",
+				serviceReasons3.get(1).getId().toString());
+		assertEquals("Newly added ServiceReason should be active",
+				ObjectStatus.ACTIVE,
+				serviceReasons3.get(1).getObjectStatus());
+
+		session.flush();
+		session.clear();
+
+		// paranoia
+		final PersonTO reloaded = controller.get(person.getId());
+		List<ReferenceLiteTO<ServiceReason>> serviceReasons4 =
+				reloaded.getServiceReasons();
+		sortById(serviceReasons4); // UUIDs don't sort lexicographically!
+		assertEquals("ServiceReason replacement not actually written through"
+				+ " to database", 2, serviceReasons4.size());
+		assertEquals("Unexpected ServiceReason in persistent Person",
+				"f6201a04-bb31-4ca5-b606-609f3ad09f87",
+				serviceReasons4.get(0).getId().toString());
+		assertEquals("Replaced ServiceReason should be inactive in persistent Person",
+				ObjectStatus.INACTIVE,
+				serviceReasons4.get(0).getObjectStatus());
+		assertEquals("Unexpected ServiceReason in persistent Person",
+				"205df6c0-fea0-11e1-9678-406c8f22c3ce",
+				serviceReasons4.get(1).getId().toString());
+		assertEquals("Newly added ServiceReason should be active in persistent Person",
+				ObjectStatus.ACTIVE,
+				serviceReasons4.get(1).getObjectStatus());
+
+	}
+
+	// Similar to testUpdateReplacesServiceReasons() but makes sure empty
+	// and null ServiceReason collections aren't ignored
+	@Test
+	public void testUpdateCanDeleteAllServiceReasons()
+			throws ObjectNotFoundException, ValidationException {
+		final PersonTO person1 = new PersonTO(createPerson());
+		final List<ReferenceLiteTO<ServiceReason>> serviceReasons1 = Lists
+				.newArrayList();
+		serviceReasons1
+				.add(new ReferenceLiteTO<ServiceReason>(UUID
+						.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+						"IGNORED"));
+		person1.setServiceReasons(serviceReasons1);
+
+		final PersonTO person1Created = controller.create(person1);
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+
+		// sanity check
+		final PersonTO person1Reloaded = controller.get(person1Created.getId());
+		final List<ReferenceLiteTO<ServiceReason>> serviceReasons1Reloaded =
+				person1Reloaded.getServiceReasons();
+		assertEquals("Unexpected persistent ServiceReason count", 1,
+				serviceReasons1Reloaded.size());
+		assertEquals("Unexpected persistent ServiceReason ID",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				serviceReasons1Reloaded.get(0).getId());
+
+		// first test handling of null collections
+		final PersonTO person2 = new PersonTO(createPerson());
+		person2.setId(person1Created.getId());
+		person2.setServiceReasons(null);
+		final PersonTO person2Saved =
+				controller.save(person2.getId(), person2);
+		final List<ReferenceLiteTO<ServiceReason>> serviceReasons2Saved =
+				person2Saved.getServiceReasons();
+		assertEquals("Should have soft-deleted the ServiceReason so the"
+				+ " ServiceReason collection size should not have changed",
+				1,
+				serviceReasons2Saved.size());
+		assertEquals("Should have soft-deleted the ServiceReason so the one"
+				+ " ServiceReason in the collection should not have changed",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				serviceReasons2Saved.get(0).getId());
+		assertEquals("Should have soft-deleted the ServiceReason",
+				ObjectStatus.INACTIVE,
+				serviceReasons2Saved.get(0).getObjectStatus());
+
+		session.flush();
+
+		// add an active service reason back so we can test empty collection
+		// handling
+		final PersonTO person3 = new PersonTO(createPerson());
+		person3.setId(person1Created.getId());
+		final List<ReferenceLiteTO<ServiceReason>> serviceReasons3 = Lists
+				.newArrayList();
+		serviceReasons3
+				.add(new ReferenceLiteTO<ServiceReason>(UUID
+						.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+						"IGNORED"));
+		person3.setServiceReasons(serviceReasons3);
+		final PersonTO person3Saved =
+				controller.save(person3.getId(), person3);
+
+		session.flush();
+
+		// sanity check again
+		final PersonTO person3Reloaded = controller.get(person1Created.getId());
+		final List<ReferenceLiteTO<ServiceReason>> serviceReasons3Reloaded =
+				person3Reloaded.getServiceReasons();
+		assertEquals("Unexpected persistent ServiceReason count", 2,
+				serviceReasons3Reloaded.size());
+		// same ID should occupy both slots in the collection now
+		assertEquals("Unexpected persistent ServiceReason ID",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				serviceReasons3Reloaded.get(0).getId());
+		assertEquals("Unexpected persistent ServiceReason ID",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				serviceReasons3Reloaded.get(1).getId());
+		int activeCnt3 = 0;
+		if ( serviceReasons3Reloaded.get(0).getObjectStatus() == ObjectStatus.ACTIVE ) {
+			activeCnt3++;
+		}
+		if ( serviceReasons3Reloaded.get(1).getObjectStatus() == ObjectStatus.ACTIVE ) {
+			activeCnt3++;
+		}
+		assertEquals("Only one ServiceReason should be active", 1, activeCnt3);
+
+		// now test that empty collections act like null collections
+		final PersonTO person4 = new PersonTO(createPerson());
+		person4.setId(person1Created.getId());
+		final List<ReferenceLiteTO<ServiceReason>> serviceReasons4 = Lists
+				.newArrayList();
+		person4.setServiceReasons(serviceReasons4);
+		final PersonTO person4Saved =
+				controller.save(person4.getId(), person4);
+		final List<ReferenceLiteTO<ServiceReason>> serviceReasons4Saved =
+				person4Saved.getServiceReasons();
+		assertEquals("Should have soft-deleted the ServiceReason so the"
+				+ " ServiceReason collection size should not have changed",
+				2,
+				serviceReasons4Saved.size());
+		assertEquals("Should have soft-deleted the ServiceReason so neither"
+				+ " ServiceReason in the collection should have changed",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				serviceReasons4Saved.get(0).getId());
+		assertEquals("Should have soft-deleted the ServiceReason so neither"
+				+ " ServiceReason in the collection should have changed",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				serviceReasons4Saved.get(1).getId());
+		int activeCnt4 = 0;
+		if ( serviceReasons4Saved.get(0).getObjectStatus() == ObjectStatus.ACTIVE ) {
+			activeCnt4++;
+		}
+		if ( serviceReasons4Saved.get(1).getObjectStatus() == ObjectStatus.ACTIVE ) {
+			activeCnt4++;
+		}
+		assertEquals("Should be no active ServiceReasons.", 0, activeCnt4);
+
+	}
+
+	@Test
+	public void testUpdateReplacesSpecialServiceGroups()
+			throws ObjectNotFoundException, ValidationException {
+		final PersonTO person1 = new PersonTO(createPerson());
+		final List<ReferenceLiteTO<SpecialServiceGroup>> serviceGroups = Lists
+				.newArrayList();
+		serviceGroups
+				.add(new ReferenceLiteTO<SpecialServiceGroup>(UUID
+						.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+						"IGNORED"));
+		person1.setSpecialServiceGroups(serviceGroups);
+
+		final PersonTO person = controller.create(person1);
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+
+		final PersonTO person1Edit = new PersonTO(createPerson());
+		person1Edit.setId(person.getId());
+		final List<ReferenceLiteTO<SpecialServiceGroup>> serviceGroups2 = Lists
+				.newArrayList();
+		// SpecialServiceGroups collection edits have replace to semantics, so here
+		// we reference a new Group and don't reference the old Group, which
+		// should cause the old Group association to be deactivated
+		serviceGroups2
+				.add(new ReferenceLiteTO<SpecialServiceGroup>(UUID
+						.fromString("40b6b8aa-bca1-11e1-9344-037cb4088c72"),
+						"IGNORED"));
+		person1Edit.setSpecialServiceGroups(serviceGroups2);
+
+		final PersonTO person1SavedEdit =
+				controller.save(person1Edit.getId(), person1Edit);
+		List<ReferenceLiteTO<SpecialServiceGroup>> serviceGroups3 =
+				person1SavedEdit.getSpecialServiceGroups();
+		assertEquals("All deletions are soft operations, so the SpecialServiceGroup"
+				+ " collection should actually grow when \"replacing\" an"
+				+ " existing SpecialServiceGroup.", 2, serviceGroups3.size());
+		sortById(serviceGroups3); // UUIDs don't sort lexicographically!
+		assertEquals("Unexpected SpecialServiceGroup",
+				"f6201a04-bb31-4ca5-b606-609f3ad09f87",
+				serviceGroups3.get(0).getId().toString());
+		assertEquals("Replaced SpecialServiceGroup should be inactive",
+				ObjectStatus.INACTIVE,
+				serviceGroups3.get(0).getObjectStatus());
+		assertEquals("Unexpected SpecialServiceGroup",
+				"40b6b8aa-bca1-11e1-9344-037cb4088c72",
+				serviceGroups3.get(1).getId().toString());
+		assertEquals("Newly added SpecialServiceGroup should be active",
+				ObjectStatus.ACTIVE,
+				serviceGroups3.get(1).getObjectStatus());
+
+		session.flush();
+		session.clear();
+
+		// paranoia
+		final PersonTO reloaded = controller.get(person.getId());
+		List<ReferenceLiteTO<SpecialServiceGroup>> serviceGroups4 =
+				reloaded.getSpecialServiceGroups();
+		sortById(serviceGroups4); // UUIDs don't sort lexicographically!
+		assertEquals("SpecialServiceGroup replacement not actually written through"
+				+ " to database", 2, serviceGroups4.size());
+		assertEquals("Unexpected SpecialServiceGroup in persistent Person",
+				"f6201a04-bb31-4ca5-b606-609f3ad09f87",
+				serviceGroups4.get(0).getId().toString());
+		assertEquals("Replaced SpecialServiceGroup should be inactive in persistent Person",
+				ObjectStatus.INACTIVE,
+				serviceGroups4.get(0).getObjectStatus());
+		assertEquals("Unexpected SpecialServiceGroup in persistent Person",
+				"40b6b8aa-bca1-11e1-9344-037cb4088c72",
+				serviceGroups4.get(1).getId().toString());
+		assertEquals("Newly added SpecialServiceGroup should be active in persistent Person",
+				ObjectStatus.ACTIVE,
+				serviceGroups4.get(1).getObjectStatus());
+
+	}
+
+	@Test
+	public void testUpdateCanDeleteAllSpecialServiceGroups()
+			throws ObjectNotFoundException, ValidationException {
+		final PersonTO person1 = new PersonTO(createPerson());
+		final List<ReferenceLiteTO<SpecialServiceGroup>> serviceGroups1 = Lists
+				.newArrayList();
+		serviceGroups1
+				.add(new ReferenceLiteTO<SpecialServiceGroup>(UUID
+						.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+						"IGNORED"));
+		person1.setSpecialServiceGroups(serviceGroups1);
+
+		final PersonTO person1Created = controller.create(person1);
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+
+		// sanity check
+		final PersonTO person1Reloaded = controller.get(person1Created.getId());
+		final List<ReferenceLiteTO<SpecialServiceGroup>> serviceGroups1Reloaded =
+				person1Reloaded.getSpecialServiceGroups();
+		assertEquals("Unexpected persistent SpecialServiceGroup count", 1,
+				serviceGroups1Reloaded.size());
+		assertEquals("Unexpected persistent SpecialServiceGroup ID",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				serviceGroups1Reloaded.get(0).getId());
+
+		// first test handling of null collections
+		final PersonTO person2 = new PersonTO(createPerson());
+		person2.setId(person1Created.getId());
+		person2.setSpecialServiceGroups(null);
+		final PersonTO person2Saved =
+				controller.save(person2.getId(), person2);
+		final List<ReferenceLiteTO<SpecialServiceGroup>> serviceGroups2Saved =
+				person2Saved.getSpecialServiceGroups();
+		assertEquals("Should have soft-deleted the SpecialServiceGroup so the"
+				+ " SpecialServiceGroup collection size should not have changed",
+				1,
+				serviceGroups2Saved.size());
+		assertEquals("Should have soft-deleted the SpecialServiceGroup so the one"
+				+ " SpecialServiceGroup in the collection should not have changed",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				serviceGroups2Saved.get(0).getId());
+		assertEquals("Should have soft-deleted the SpecialServiceGroup",
+				ObjectStatus.INACTIVE,
+				serviceGroups2Saved.get(0).getObjectStatus());
+
+		session.flush();
+
+		// add an active service group back so we can test empty collection
+		// handling
+		final PersonTO person3 = new PersonTO(createPerson());
+		person3.setId(person1Created.getId());
+		final List<ReferenceLiteTO<SpecialServiceGroup>> serviceGroups3 = Lists
+				.newArrayList();
+		serviceGroups3
+				.add(new ReferenceLiteTO<SpecialServiceGroup>(UUID
+						.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+						"IGNORED"));
+		person3.setSpecialServiceGroups(serviceGroups3);
+		final PersonTO person3Saved =
+				controller.save(person3.getId(), person3);
+
+		session.flush();
+
+		// sanity check again
+		final PersonTO person3Reloaded = controller.get(person1Created.getId());
+		final List<ReferenceLiteTO<SpecialServiceGroup>> serviceGroups3Reloaded =
+				person3Reloaded.getSpecialServiceGroups();
+		assertEquals("Unexpected persistent SpecialServiceGroup count", 2,
+				serviceGroups3Reloaded.size());
+		// same ID should occupy both slots in the collection now
+		assertEquals("Unexpected persistent SpecialServiceGroup ID",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				serviceGroups3Reloaded.get(0).getId());
+		assertEquals("Unexpected persistent SpecialServiceGroup ID",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				serviceGroups3Reloaded.get(1).getId());
+		int activeCnt3 = 0;
+		if ( serviceGroups3Reloaded.get(0).getObjectStatus() == ObjectStatus.ACTIVE ) {
+			activeCnt3++;
+		}
+		if ( serviceGroups3Reloaded.get(1).getObjectStatus() == ObjectStatus.ACTIVE ) {
+			activeCnt3++;
+		}
+		assertEquals("Only one SpecialServiceGroup should be active", 1, activeCnt3);
+
+		// now test that empty collections act like null collections
+		final PersonTO person4 = new PersonTO(createPerson());
+		person4.setId(person1Created.getId());
+		final List<ReferenceLiteTO<SpecialServiceGroup>> serviceGroups4 = Lists
+				.newArrayList();
+		person4.setSpecialServiceGroups(serviceGroups4);
+		final PersonTO person4Saved =
+				controller.save(person4.getId(), person4);
+		final List<ReferenceLiteTO<SpecialServiceGroup>> serviceGroups4Saved =
+				person4Saved.getSpecialServiceGroups();
+		assertEquals("Should have soft-deleted the SpecialServiceGroup so the"
+				+ " SpecialServiceGroup collection size should not have changed",
+				2,
+				serviceGroups4Saved.size());
+		assertEquals("Should have soft-deleted the SpecialServiceGroup so neither"
+				+ " SpecialServiceGroup in the collection should have changed",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				serviceGroups4Saved.get(0).getId());
+		assertEquals("Should have soft-deleted the SpecialServiceGroup so neither"
+				+ " SpecialServiceGroup in the collection should have changed",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				serviceGroups4Saved.get(1).getId());
+		int activeCnt4 = 0;
+		if ( serviceGroups4Saved.get(0).getObjectStatus() == ObjectStatus.ACTIVE ) {
+			activeCnt4++;
+		}
+		if ( serviceGroups4Saved.get(1).getObjectStatus() == ObjectStatus.ACTIVE ) {
+			activeCnt4++;
+		}
+		assertEquals("Should be no active SpecialServiceGroup.", 0, activeCnt4);
+
+	}
+
+	@Test
+	public void testUpdateReplacesReferralSources()
+			throws ObjectNotFoundException, ValidationException {
+		final PersonTO person1 = new PersonTO(createPerson());
+		final List<ReferenceLiteTO<ReferralSource>> referralSources = Lists
+				.newArrayList();
+		referralSources
+				.add(new ReferenceLiteTO<ReferralSource>(UUID
+						.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+						"IGNORED"));
+		person1.setReferralSources(referralSources);
+
+		final PersonTO person = controller.create(person1);
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+
+		final PersonTO person1Edit = new PersonTO(createPerson());
+		person1Edit.setId(person.getId());
+		final List<ReferenceLiteTO<ReferralSource>> referralSources2 = Lists
+				.newArrayList();
+		// ReferralSources collection edits have replace to semantics, so here
+		// we reference a new Source and don't reference the old Source, which
+		// should cause the old Source association to be deactivated
+		referralSources2
+				.add(new ReferenceLiteTO<ReferralSource>(UUID
+						.fromString("ccadd634-bd7a-11e1-8d28-3368721922dc"),
+						"IGNORED"));
+		person1Edit.setReferralSources(referralSources2);
+
+		final PersonTO person1SavedEdit =
+				controller.save(person1Edit.getId(), person1Edit);
+		List<ReferenceLiteTO<ReferralSource>> referralSources3 =
+				person1SavedEdit.getReferralSources();
+		assertEquals("All deletions are soft operations, so the ReferralSource"
+				+ " collection should actually grow when \"replacing\" an"
+				+ " existing ReferralSource.", 2, referralSources3.size());
+		sortById(referralSources3); // UUIDs don't sort lexicographically!
+		assertEquals("Unexpected ReferralSource",
+				"ccadd634-bd7a-11e1-8d28-3368721922dc",
+				referralSources3.get(0).getId().toString());
+		assertEquals("Newly added ReferralSource should be active",
+				ObjectStatus.ACTIVE,
+				referralSources3.get(0).getObjectStatus());
+		assertEquals("Unexpected ReferralSource",
+				"f6201a04-bb31-4ca5-b606-609f3ad09f87",
+				referralSources3.get(1).getId().toString());
+		assertEquals("Replaced ReferralSource should be inactive",
+				ObjectStatus.INACTIVE,
+				referralSources3.get(1).getObjectStatus());
+
+		session.flush();
+		session.clear();
+
+		// paranoia
+		final PersonTO reloaded = controller.get(person.getId());
+		List<ReferenceLiteTO<ReferralSource>> referralSources4 =
+				reloaded.getReferralSources();
+		sortById(referralSources4); // UUIDs don't sort lexicographically!
+		assertEquals("ReferralSource replacement not actually written through"
+				+ " to database", 2, referralSources4.size());
+		assertEquals("Unexpected ReferralSource in persistent Person",
+				"ccadd634-bd7a-11e1-8d28-3368721922dc",
+				referralSources4.get(0).getId().toString());
+		assertEquals("Newly added ReferralSource should be active in persistent Person",
+				ObjectStatus.ACTIVE,
+				referralSources4.get(0).getObjectStatus());
+		assertEquals("Unexpected ReferralSource in persistent Person",
+				"f6201a04-bb31-4ca5-b606-609f3ad09f87",
+				referralSources4.get(1).getId().toString());
+		assertEquals("Replaced ReferralSource should be inactive in persistent Person",
+				ObjectStatus.INACTIVE,
+				referralSources4.get(1).getObjectStatus());
+
+	}
+
+	@Test
+	public void testUpdateCanDeleteAllReferralSources()
+			throws ObjectNotFoundException, ValidationException {
+		final PersonTO person1 = new PersonTO(createPerson());
+		final List<ReferenceLiteTO<ReferralSource>> referralSources1 = Lists
+				.newArrayList();
+		referralSources1
+				.add(new ReferenceLiteTO<ReferralSource>(UUID
+						.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+						"IGNORED"));
+		person1.setReferralSources(referralSources1);
+
+		final PersonTO person1Created = controller.create(person1);
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+
+		// sanity check
+		final PersonTO person1Reloaded = controller.get(person1Created.getId());
+		final List<ReferenceLiteTO<ReferralSource>> referralSources1Reloaded =
+				person1Reloaded.getReferralSources();
+		assertEquals("Unexpected persistent ReferralSource count", 1,
+				referralSources1Reloaded.size());
+		assertEquals("Unexpected persistent ReferralSource ID",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				referralSources1Reloaded.get(0).getId());
+
+		// first test handling of null collections
+		final PersonTO person2 = new PersonTO(createPerson());
+		person2.setId(person1Created.getId());
+		person2.setReferralSources(null);
+		final PersonTO person2Saved =
+				controller.save(person2.getId(), person2);
+		final List<ReferenceLiteTO<ReferralSource>> referralSources2Saved =
+				person2Saved.getReferralSources();
+		assertEquals("Should have soft-deleted the ReferralSource so the"
+				+ " ReferralSource collection size should not have changed",
+				1,
+				referralSources2Saved.size());
+		assertEquals("Should have soft-deleted the ReferralSource so the one"
+				+ " ReferralSource in the collection should not have changed",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				referralSources2Saved.get(0).getId());
+		assertEquals("Should have soft-deleted the ReferralSource",
+				ObjectStatus.INACTIVE,
+				referralSources2Saved.get(0).getObjectStatus());
+
+		session.flush();
+
+		// add an active service group back so we can test empty collection
+		// handling
+		final PersonTO person3 = new PersonTO(createPerson());
+		person3.setId(person1Created.getId());
+		final List<ReferenceLiteTO<ReferralSource>> referralSources3 = Lists
+				.newArrayList();
+		referralSources3
+				.add(new ReferenceLiteTO<ReferralSource>(UUID
+						.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+						"IGNORED"));
+		person3.setReferralSources(referralSources3);
+		final PersonTO person3Saved =
+				controller.save(person3.getId(), person3);
+
+		session.flush();
+
+		// sanity check again
+		final PersonTO person3Reloaded = controller.get(person1Created.getId());
+		final List<ReferenceLiteTO<ReferralSource>> referralSources3Reloaded =
+				person3Reloaded.getReferralSources();
+		assertEquals("Unexpected persistent ReferralSource count", 2,
+				referralSources3Reloaded.size());
+		// same ID should occupy both slots in the collection now
+		assertEquals("Unexpected persistent ReferralSource ID",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				referralSources3Reloaded.get(0).getId());
+		assertEquals("Unexpected persistent ReferralSource ID",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				referralSources3Reloaded.get(1).getId());
+		int activeCnt3 = 0;
+		if ( referralSources3Reloaded.get(0).getObjectStatus() == ObjectStatus.ACTIVE ) {
+			activeCnt3++;
+		}
+		if ( referralSources3Reloaded.get(1).getObjectStatus() == ObjectStatus.ACTIVE ) {
+			activeCnt3++;
+		}
+		assertEquals("Only one ReferralSource should be active", 1, activeCnt3);
+
+		// now test that empty collections act like null collections
+		final PersonTO person4 = new PersonTO(createPerson());
+		person4.setId(person1Created.getId());
+		final List<ReferenceLiteTO<ReferralSource>> referralSources4 = Lists
+				.newArrayList();
+		person4.setReferralSources(referralSources4);
+		final PersonTO person4Saved =
+				controller.save(person4.getId(), person4);
+		final List<ReferenceLiteTO<ReferralSource>> referralSources4Saved =
+				person4Saved.getReferralSources();
+		assertEquals("Should have soft-deleted the ReferralSource so the"
+				+ " ReferralSource collection size should not have changed",
+				2,
+				referralSources4Saved.size());
+		assertEquals("Should have soft-deleted the ReferralSource so neither"
+				+ " ReferralSource in the collection should have changed",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				referralSources4Saved.get(0).getId());
+		assertEquals("Should have soft-deleted the ReferralSource so neither"
+				+ " ReferralSource in the collection should have changed",
+				UUID.fromString("f6201a04-bb31-4ca5-b606-609f3ad09f87"),
+				referralSources4Saved.get(1).getId());
+		int activeCnt4 = 0;
+		if ( referralSources4Saved.get(0).getObjectStatus() == ObjectStatus.ACTIVE ) {
+			activeCnt4++;
+		}
+		if ( referralSources4Saved.get(1).getObjectStatus() == ObjectStatus.ACTIVE ) {
+			activeCnt4++;
+		}
+		assertEquals("Should be no active ReferralSource.", 0, activeCnt4);
+
+	}
+
+	private <T extends AbstractReference> void sortById(List<ReferenceLiteTO<T>> list) {
+		Collections.sort(list, new Comparator<ReferenceLiteTO<T>>() {
+			@Override
+			public int compare(ReferenceLiteTO<T> o1, ReferenceLiteTO<T> o2) {
+				if ( o1.getId() == o2.getId() ) {
+					return 0;
+				}
+				if ( o1.getId() == null ) {
+					return -1;
+				}
+				if ( o2.getId() == null ) {
+					return 1;
+				}
+				return o1.getId().compareTo(o2.getId());
+			}
+		});
 	}
 
 	private Person createPerson() {

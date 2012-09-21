@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<changeSet id="another test service reason" author="dan.mccallum">
+		<insert tableName="service_reason">
+			<column name="id" value="205df6c0-fea0-11e1-9678-406c8f22c3ce" />
+			<column name="name" value="Test Service Reason 2" />
+			<column name="description"
+					value="This is the description of the Test Service Reason 2." />
+			<column name="created_date" valueDate="2012-09-14T00:00:00" />
+			<column name="modified_date" valueDate="2012-09-14T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="service_reason">
+				<where>id='205df6c0-fea0-11e1-9678-406c8f22c3ce'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

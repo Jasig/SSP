@@ -230,9 +230,21 @@ public class MessageServiceImpl implements MessageService {
 			}
 
 			if (!StringUtils.isEmpty(message.getCarbonCopy())) { // NOPMD
-				mimeMessageHelper.setCc(message.getCarbonCopy());
+				try {
+					mimeMessageHelper.setCc(message.getCarbonCopy());
+				} catch ( MessagingException e ) {
+					LOGGER.warn("Invalid carbon copy address: '{}'. Will"
+							+ " attempt to send message anyway.",
+							message.getCarbonCopy(), e);
+				}
 			} else if (!StringUtils.isEmpty(getBcc())) {
-				mimeMessageHelper.setBcc(getBcc());
+				final String bcc = getBcc();
+				try {
+					mimeMessageHelper.setBcc(bcc);
+				} catch ( MessagingException e ) {
+					LOGGER.warn("Invalid BCC address: '{}'. Will"
+							+ " attempt to send message anyway.", bcc, e);
+				}
 			}
 
 			mimeMessageHelper.setSubject(message.getSubject());

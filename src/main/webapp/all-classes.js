@@ -924,7 +924,7 @@ Ext.define('Ssp.model.Configuration', {
     	      */
     	     {name: 'studentIdMinValidationLength', 
     	      type: 'number', 
-    	      defaultValue: 1
+    	      defaultValue: 3
     	     },
     	     /*
     	      * Error message for a studentId/schoolId that exceeds the specified minimum validation length.
@@ -938,7 +938,7 @@ Ext.define('Ssp.model.Configuration', {
     	      */
     	     {name: 'studentIdMaxValidationLength', 
        	      type: 'number', 
-       	      defaultValue: 64
+       	      defaultValue: 8
        	     },
     	     /*
     	      * Error message for a studentId/schoolId that exceeds the specified maximum validation length.
@@ -2210,7 +2210,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	},
 
 	renderCreatedByDateWithTime: function(val, metaData, record) {
-	    return Ext.util.Format.date( record.get('createdDate'),'m/d/Y h:m A');		
+	    return Ext.util.Format.date( record.get('createdDate'),'m/d/Y g:i A');		
 	},	
 
 	renderCreatedBy: function(val, metaData, record) {
@@ -4058,6 +4058,7 @@ Ext.define('Ssp.service.PersonService', {
 	    	{
 		    	r = Ext.decode(response.responseText);	    		
 	    	}
+			r = me.superclass.filterInactiveChildren( [ r ] )[0];
 	    	callbacks.success( r, callbacks.scope );
 	    };
 
@@ -4087,6 +4088,7 @@ Ext.define('Ssp.service.PersonService', {
 		    		r = Ext.decode(response.responseText);
 		    	}		    		
 	    	}
+			r = me.superclass.filterInactiveChildren( [ r ] )[0];
 	    	callbacks.success( r, callbacks.scope );
 	    };
 
@@ -4137,7 +4139,7 @@ Ext.define('Ssp.service.PersonService', {
 				callbacks.failure(response, callbacks.scope);
 			}
 	    };
-        
+
     	// save the person
 		if (id=="")
 		{
@@ -5209,7 +5211,14 @@ Ext.define('Ssp.controller.SearchViewController', {
     			break;
     			
     		case 'transition':
-    	     	 me.appEventsController.getApplication().fireEvent('transitionStudent');
+    	     	/* 
+    	     	 * Temp fix for SSP-434
+    	     	 * 
+    	     	 * Temporarily removing Transition Action from this button.
+    			 * TODO: Ensure that this button takes the user to the Journal Tool and initiates a
+    			 * Journal Entry.
+    			 * // me.appEventsController.getApplication().fireEvent('transitionStudent');
+    	     	 */
     	     	 break;
     	     	 
     		case 'non-participating':
@@ -5749,26 +5758,17 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			// set special service groups
 			specialServiceGroupsFormValues = specialServiceGroupsItemSelector.getValue();
 			selectedSpecialServiceGroups = me.getSelectedItemSelectorIdsForTransfer(specialServiceGroupsFormValues);
-			if (selectedSpecialServiceGroups.length > 0)
-			{
-				model.set('specialServiceGroups', selectedSpecialServiceGroups);
-			}
+			model.set('specialServiceGroups', selectedSpecialServiceGroups);
 
 			// referral sources
 			referralSourcesFormValues = referralSourcesItemSelector.getValue();
 			selectedReferralSources = me.getSelectedItemSelectorIdsForTransfer(referralSourcesFormValues);
-			if (selectedReferralSources.length > 0)
-			{			
-			   model.set('referralSources', selectedReferralSources);
-			}
+			model.set('referralSources', selectedReferralSources);
 			
 			// set the service reasons
 			serviceReasonsFormValues = serviceReasonsForm.getValues();
 			selectedServiceReasons = me.formUtils.getSelectedIdsAsArray( serviceReasonsFormValues );
-			if (selectedServiceReasons.length > 0)
-			{
-				model.set('serviceReasons', selectedServiceReasons);
-			}
+			model.set('serviceReasons', selectedServiceReasons);
 						
 			me.getView().setLoading( true );
 			
@@ -6374,16 +6374,86 @@ Ext.define('Ssp.controller.person.SpecialServiceGroupsViewController', {
 	            valueField: 'id',
 	            value: ((selectedSpecialServiceGroups.length>0) ? selectedSpecialServiceGroups : [] ),
 	            allowBlank: true,
-	            buttons: ["add", "remove"]
+	            buttons: ["add", "remove"],
+				listeners: {
+					toField: {
+						boundList: {
+							scope: me,
+							drop: me.maybeRefireFromFieldLoadWithNonEmptyStore
+						}
+					},
+					fromField: {
+						boundList: {
+							scope: me,
+							itemdblclick: me.maybeRefireFromFieldLoadWithNonEmptyStore
+
+						}
+					}
+				}
 	        }];
-    		
     		view.add(items);
+			me.registerAdditionalListeners();
     	}
 	},
 	
     getAllFailure: function( response, scope ){
     	var me=scope;  	
-    }
+    },
+
+	// Drops, double clicks and button clicks have to be handled separately -
+	// there's no single event they both fire from ItemSelector to indicate that
+	// a selection has been updated. But they both have the same problem when
+	// selecting the last item in the "fromField" (see below). Drop handlers are
+	// registered with standard view config above. Button registration is a
+	// little bit different and is handled here. Note that you can't just
+	// replace itemSelector.onAddBtnClick b/c that method is registered as the
+	// button handler when the button is created, so the button won't see your
+	// replacement.
+	registerAdditionalListeners: function() {
+		var me = this;
+		var itemSelector = me.findItemSelector();
+		var addButton = itemSelector.query('button[iconCls=x-form-itemselector-add]')[0];
+		var origAddButtonHandler = addButton.handler;
+		addButton.setHandler(function() {
+			var me = this;
+			origAddButtonHandler.apply(itemSelector);
+			me.maybeRefireFromFieldLoadWithNonEmptyStore();
+		}, me);
+	},
+
+	// Hack to work around a bug in ItemSelector.setValue() which prevents
+	// selecting the last item in the "fromField". The fromField's store count
+	// is decremented immediately when an item is selected, but setValue(),
+	// which is called after that decrement, assumes the fromField store is
+	// uninitialized if that decrement results in an empty fromField store. In
+	// that case it just registers a 'load' event listener on the store and
+	// returns. The early return prevents the ItemSelector from seeing an
+	// updated list of selected items.
+	maybeRefireFromFieldLoadWithNonEmptyStore: function() {
+		var me = this;
+		var itemSelector = me.findItemSelector();
+		var fromField = me.itemSelector.fromField;
+		var toField = me.itemSelector.toField;
+		var origGetCount = fromField.store.getCount;
+		// this is safe b/c we don't even start to initialize the view
+		// until after the store has been initialized, which obviates the guard
+		// against uninitialized fromField stores in ItemSelector.setValue()
+		if ( origGetCount.apply(fromField.store) === 0 ) {
+			fromField.store.getCount = function() { return 1; };
+			fromField.store.fireEvent('load', fromField.store);
+			fromField.store.getCount = origGetCount;
+		}
+	},
+
+	// Factored into method rather than inlined in getAllSuccess() b/c we need
+	// to be able to find the iterm selector component when callbacks/listeners
+	// fire, which could theoretically happen before getAllSuccess() could cache
+	// this result
+	findItemSelector: function() {
+		var me = this;
+		me.itemSelector = me.itemSelect ||  me.getView().form.findField("specialServiceGroups");
+		return me.itemSelector;
+	}
 });
 Ext.define('Ssp.controller.person.ReferralSourcesViewController', {
     extend: 'Deft.mvc.ViewController',
@@ -6428,16 +6498,65 @@ Ext.define('Ssp.controller.person.ReferralSourcesViewController', {
 	            valueField: 'id',
 	            value: ((selectedReferralSources.length>0) ? selectedReferralSources : [] ),
 	            allowBlank: true,
-	            buttons: ["add", "remove"]
+	            buttons: ["add", "remove"],
+				listeners: {
+					toField: {
+						boundList: {
+							scope: me,
+							drop: me.maybeRefireFromFieldLoadWithNonEmptyStore
+						}
+					},
+					fromField: {
+						boundList: {
+							scope: me,
+							itemdblclick: me.maybeRefireFromFieldLoadWithNonEmptyStore
+
+						}
+					}
+				}
 	        }];
-    		
     		view.add(items);
+			me.registerAdditionalListeners();
     	}
 	},
 	
     getAllFailure: function( response, scope ){
     	var me=scope;  	
-    }
+    },
+
+	// TODO abstract copy/paste from SpecialServiceGroupsViewController.js
+	registerAdditionalListeners: function() {
+		var me = this;
+		var itemSelector = me.findItemSelector();
+		var addButton = itemSelector.query('button[iconCls=x-form-itemselector-add]')[0];
+		var origAddButtonHandler = addButton.handler;
+		addButton.setHandler(function() {
+			var me = this;
+			origAddButtonHandler.apply(itemSelector);
+			me.maybeRefireFromFieldLoadWithNonEmptyStore();
+		}, me);
+	},
+
+	// TODO abstract copy/paste from SpecialServiceGroupsViewController.js
+	maybeRefireFromFieldLoadWithNonEmptyStore: function() {
+		var me = this;
+		var itemSelector = me.findItemSelector();
+		var fromField = me.itemSelector.fromField;
+		var toField = me.itemSelector.toField;
+		var origGetCount = fromField.store.getCount;
+		if ( origGetCount.apply(fromField.store) === 0 ) {
+			fromField.store.getCount = function() { return 1; };
+			fromField.store.fireEvent('load', fromField.store);
+			fromField.store.getCount = origGetCount;
+		}
+	},
+
+	// TODO abstract copy/paste from SpecialServiceGroupsViewController.js
+	findItemSelector: function() {
+		var me = this;
+		me.itemSelector = me.itemSelect ||  me.getView().form.findField("referralSources");
+		return me.itemSelector;
+	}
 });
 Ext.define('Ssp.controller.person.ServiceReasonsViewController', {
     extend: 'Deft.mvc.ViewController',
@@ -12068,11 +12187,11 @@ Ext.define('Ssp.view.Search', {
 		    			    action: 'active',
 		    			    itemId: 'setActiveStatusButton'
 			    		},{
-		    			    tooltip: 'Transition Student',
+		    			    tooltip: 'Set Student to Transitioned status',
 		    			    text: '',
 		    			    width: 25,
 		    			    height: 25,
-		    			    hidden: !me.authenticatedPerson.hasAccess('SET_TRANSITION_STATUS_BUTTON'),
+		    			    hidden: true, // Temp fix for SSP-434: !me.authenticatedPerson.hasAccess('SET_TRANSITION_STATUS_BUTTON')
 		    			    cls: 'setTransitionStatusIcon',
 		    			    xtype: 'button',
 		    			    action: 'transition',
@@ -14406,7 +14525,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
     		            text: 'Created Date',
     		            flex: 1,
     		            dataIndex: 'createdDate',
-    		            renderer : me.columnRendererUtils.renderCreatedByDateWithTime,
+    		            renderer : Ext.util.Format.dateRenderer('Y-m-d g:i A'),
     		            sortable: false
     		        },{
     		            text: 'Status',
@@ -14581,7 +14700,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails',{
 	                anchor: '100%',
 	                name: 'createdDate',
 	                itemId: 'createdDateField',
-	                renderer: Ext.util.Format.dateRenderer('m/d/Y h:m A')
+	                renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
 	            },{
                     xtype: 'displayfield',
                     fieldLabel: 'Course Name',
@@ -14604,7 +14723,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails',{
                     fieldLabel: 'Closed Date',
                     anchor: '100%',
                     name: 'closedDate',
-                    renderer: Ext.util.Format.dateRenderer('m/d/Y h:m A')
+                    renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
                 },{
                     xtype: 'displayfield',
                     fieldLabel: 'Campus',
@@ -14677,7 +14796,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponseDetails',{
 	                anchor: '100%',
 	                name: 'createdDate',
 	                itemId: 'createdDateField',
-	                renderer: Ext.util.Format.dateRenderer('m/d/Y h:m A')
+	                renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
 	            },{
 	                xtype: 'displayfield',
 	                fieldLabel: 'Outcome',
@@ -16616,6 +16735,7 @@ Ext.define('Ssp.model.Person', {
     	me.set('lastName', jsonData.lastName);	
     	me.set('anticipatedStartTerm',jsonData.anticipatedStartTerm);
     	me.set('anticipatedStartYear',jsonData.anticipatedStartYear);
+    	me.set('homePhone', jsonData.homePhone);
     	me.set('cellPhone', jsonData.cellPhone);
     	me.set('workPhone', jsonData.workPhone);
     	me.set('addressLine1', jsonData.addressLine1);
@@ -16809,7 +16929,7 @@ Ext.define('Ssp.model.tool.earlyalert.PersonEarlyAlertTree', {
              {name:'earlyAlertSuggestionIds',type:'auto'},
              {name:'earlyAlertSuggestionOtherDescription',type:'string'},
              {name:'comment',type:'string'},
-             {name:'closedDate',type:'time'},
+             {name:'closedDate',type: 'date', dateFormat: 'time'},
              {name:'closedById',type:'string'},
              {name:'sendEmailToStudent', type:'boolean'},
              
