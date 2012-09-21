@@ -140,4 +140,48 @@ public class MessageServiceTest {
 				"Unexpected sent message. Subject was wrong.", "Subject",
 				receivedMessage.getHeaderValue("Subject"));
 	}
+
+	@Test
+	public void sendQueuedMessagesDoesNotGetStuckOnErroredMessages()
+			throws ObjectNotFoundException {
+
+		// setup
+		final SimpleSmtpServer smtpServer = mockMailService.getSmtpServer();
+		assertFalse("Faux mail server should be running but was not.",
+				smtpServer.isStopped());
+
+		// we know the batch size on sendQueuedMessages() is 25. So create
+		// 26 messages, the first 25 of which are bad. The 26th should still
+		// be sent, either in the first or second call to sendQueuedMessages()
+		// (we don't really care how the impl "unstucks" itself from completely
+		// errored batches)
+		Message validMsg = null;
+		for ( int i = 0; i < 26; i++ ) {
+			if ( i == 25 ) {
+				// valid message
+				validMsg =
+						service.createMessage("to@email.com", null,
+								new SubjectAndBody("Subject " + i, "Message " + i));
+			} else {
+				// invalid message
+				service.createMessage("to@invalid domain", null,
+								new SubjectAndBody("Subject " + i, "Message " + i));
+			}
+		}
+
+		// intentionally call twice. see comments above.
+		service.sendQueuedMessages();
+		service.sendQueuedMessages();
+
+		assertNotNull("Valid message not flagged as sent",
+				messageDao.get(validMsg.getId()).getSentDate());
+		assertEquals("Unexpected number of sent messages.", 1,
+				smtpServer.getReceivedEmailSize());
+		final SmtpMessage receivedMessage = (SmtpMessage) smtpServer
+				.getReceivedEmail()
+				.next();
+		assertEquals(
+				"Unexpected sent message. Subject was wrong.", "Subject 25", // 0-based naming
+				receivedMessage.getHeaderValue("Subject"));
+	}
 }

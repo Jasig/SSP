@@ -1,29 +1,33 @@
 package org.jasig.ssp.dao; // NOPMD by jon.adams on 5/16/12 9:59 PM
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
-
-import java.util.Collection;
-import java.util.UUID;
-
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.UUID;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
@@ -115,7 +119,69 @@ public class MessageDaoTest {
 	 */
 	@Test
 	public void queued() {
-		assertList(dao.queued());
+		assertList(dao.queued(25));
+	}
+
+	@Test
+	@Rollback
+	public void queuedWithSortingAndPaging() throws InterruptedException {
+		for ( int i = 0; i < 15; i++ ) {
+			final Message msg = new Message("Subject " + i, "Body " + i,
+					personDao.fromUsername("ken"),
+					personDao.fromUsername("dmr"),
+					"a@b.com");
+			if ( i == 5 ) {
+				// should skip this one in the 1st batch
+				msg.setSentDate(new Date());
+			} else if ( i == 12 ) {
+				// should skip this one in the second batch
+				msg.setObjectStatus(ObjectStatus.INACTIVE);
+			}
+			dao.save(msg);
+			Thread.sleep(100); // make sure date sorting works predictably
+		}
+
+		// assert on first batch
+		final SortingAndPaging sAndP1 = new SortingAndPaging(ObjectStatus.ACTIVE, 0,
+				10, null, null, null);
+		final PagingWrapper<Message> batch1 = dao.queued(sAndP1);
+		assertEquals("Unexpected total unpaged result set size", 13,
+				batch1.getResults());
+		assertEquals("Unexpected initial batch size", 10, batch1.getRows().size());
+		int i = 0;
+		for ( final Message msg : batch1 ) {
+			if ( i == 0 ) {
+				assertEquals("Unexpected message sorted to head of first batch",
+						"Subject 0", msg.getSubject());
+			}
+			if ( i == 9 ) {
+				// should have skipped one previously created message
+				assertEquals("Unexpected message sorted to end of first batch",
+						"Subject 10", msg.getSubject());
+			}
+			i++;
+		}
+
+		// assert on second batch
+		final SortingAndPaging sAndP2 = new SortingAndPaging(ObjectStatus.ACTIVE, 10,
+				10, null, null, null);
+		final PagingWrapper<Message> batch2 = dao.queued(sAndP2);
+		assertEquals("Unexpected total unpaged result set size", 13,
+				batch1.getResults());
+		assertEquals("Unexpected second batch size", 3, batch2.getRows().size());
+		int j = 0;
+		for ( final Message msg : batch2 ) {
+			if ( j == 0 ) {
+				assertEquals("Unexpected message sorted to head of second batch",
+						"Subject 11", msg.getSubject());
+			}
+			if ( j == 2 ) {
+				// should have skipped one previously created message
+				assertEquals("Unexpected message sorted to end of second batch",
+						"Subject 14", msg.getSubject());
+			}
+			j++;
+		}
 	}
 
 	/**

@@ -1,17 +1,23 @@
 package org.jasig.ssp.service.impl; // NOPMD
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
 import javax.mail.internet.MimeMessage;
 import javax.validation.constraints.NotNull;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
 import org.jasig.ssp.dao.MessageDao;
 import org.jasig.ssp.model.Message;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.service.MessageService;
@@ -19,6 +25,11 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.util.collections.Pair;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
+import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.util.transaction.WithTransaction;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +50,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class MessageServiceImpl implements MessageService {
 
+	private static final Integer QUEUE_BATCH_SIZE = 25;
+
+	private static final long INTER_QUEUE_BATCH_SLEEP = 200;
+
 	@Autowired
 	private transient JavaMailSender javaMailSender;
 
@@ -54,11 +69,16 @@ public class MessageServiceImpl implements MessageService {
 	@Autowired
 	private transient ConfigService configService;
 
+	@Autowired
+	private transient WithTransaction withTransaction;
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MessageServiceImpl.class);
 
 	@Value("#{contextProperties.applicationMode}")
 	private transient String applicationMode;
+
+
 
 	/**
 	 * Gets the global BCC e-mail address from the application configuration
@@ -159,24 +179,84 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
 	@Scheduled(fixedDelay = 150000)
 	// run 2.5 minutes after the end of the last invocation
 	public void sendQueuedMessages() {
 		LOGGER.info("BEGIN : sendQueuedMessages()");
 
-		final List<Message> messages = messageDao.queued();
-		for (final Message message : messages) {
-			try {
-				sendMessage(message);
-			} catch (final ObjectNotFoundException e) {
-				LOGGER.error("Could not load current user or administrator.", e);
-			} catch (final SendFailedException e) {
-				LOGGER.error("Could not send queued message.", e);
+		int startRow = 0;
+		final AtomicReference<SortingAndPaging> sap =
+				new AtomicReference<SortingAndPaging>();
+		sap.set(new SortingAndPaging(ObjectStatus.ACTIVE, startRow, QUEUE_BATCH_SIZE,
+				null, null, null));
+		// process each batch in its own transaction... don't want to hold
+		// a single transaction open while processing what is effectively
+		// an unbounded number of messages.
+		while (true) {
+			Pair<PagingWrapper<Message>, Collection<Throwable>> rslt =
+					withTransaction.withTransactionAndUncheckedExceptions(
+					new Callable<Pair<PagingWrapper<Message>, Collection<Throwable>>>() {
+				@Override
+				public Pair<PagingWrapper<Message>, Collection<Throwable>> call()
+						throws Exception {
+					return sendQueuedMessageBatch(sap.get());
+				}
+			});
+			PagingWrapper<Message> msgsHandled = rslt.getFirst();
+			if ( msgsHandled.getRows() == null ||
+					msgsHandled.getRows().size() < QUEUE_BATCH_SIZE ) {
+				break;
+			}
+			// Are potentially more msgs to handle and we know at least one
+			// msg in the previous batch errored out. go ahead and grab another
+			// full batch. Grabbing a full batch avoids slowdown when enough
+			// errors accumulate to dramatically reduce the number of
+			// *potentially* valid messages in the previous batch.
+			Collection<Throwable> errors = rslt.getSecond();
+			if ( errors != null && !(errors.isEmpty())) {
+				startRow += msgsHandled.getRows().size();
+				sap.set(new SortingAndPaging(ObjectStatus.ACTIVE, startRow,
+						QUEUE_BATCH_SIZE,
+						null, null, null));
+				// lets not get into an excessively tight email loop
+				maybePauseBetweenQueueBatches();
+			} else {
+				break;
 			}
 		}
 
 		LOGGER.info("END : sendQueuedMessages()");
+	}
+
+	private Pair<PagingWrapper<Message>, Collection<Throwable>>
+	sendQueuedMessageBatch(SortingAndPaging sap) {
+		LinkedList<Throwable> errors = Lists.newLinkedList();
+		final PagingWrapper<Message> messages = messageDao.queued(sap);
+		for (final Message message : messages ) {
+			try {
+				sendMessage(message);
+			} catch (final ObjectNotFoundException e) {
+				LOGGER.error("Could not load current user or administrator.", e);
+				errors.add(e);
+			} catch (final SendFailedException e) {
+				LOGGER.error("Could not send queued message.", e);
+				errors.add(e);
+			}
+		}
+		return new Pair<PagingWrapper<Message>, Collection<Throwable>>(messages, errors);
+	}
+
+	private void maybePauseBetweenQueueBatches() {
+		if ( INTER_QUEUE_BATCH_SLEEP > 0 ) {
+			try {
+				Thread.sleep(INTER_QUEUE_BATCH_SLEEP);
+			} catch ( InterruptedException e ) {
+				// reassert
+				Thread.currentThread().interrupt();
+				throw new RuntimeException("Abandoning message queue"
+						+ " processing because job thread was interrupted.", e);
+			}
+		}
 	}
 
 	/**
