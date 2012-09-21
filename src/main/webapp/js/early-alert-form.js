@@ -173,6 +173,15 @@ var ssp = ssp || {};
             } else {
                 $(selectors.reason).removeClass('invalid');
             }
+            var emailCc = $(selectors.emailCc).val().trim();
+            // True regex email validation is a pipe-dream. Just a sanity
+            // check here.
+            if ('' !== emailCc && !(/.+@.+/.test(emailCc))) {
+                rslt = false;
+                $(selectors.emailCc).addClass('invalid');
+            } else {
+                $(selectors.emailCc).removeClass('invalid');
+            }
             return rslt;
         }
 
@@ -345,7 +354,8 @@ var ssp = ssp || {};
             if (validate()) {
                 noticeDlg.dialog('open');
             } else {
-                showError('Validation Error', 'One or more required fields is not specified.');
+                showError('Validation Error',
+                    'Could not submit the Early Alert because not enough information was provided or some form fields contained invalid data. Please correct the highlighted fields.');
             }
         });
 

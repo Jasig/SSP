@@ -3,10 +3,25 @@
  */
 package org.jasig.ssp.service.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.dumbster.smtp.SimpleSmtpServer;
+import com.dumbster.smtp.SmtpMessage;
+import org.jasig.ssp.config.MockMailService;
+import org.jasig.ssp.dao.MessageDao;
+import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.SubjectAndBody;
+import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.service.MessageService;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +30,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.mail.SendFailedException;
 
 /**
  * @author jon.adams
@@ -28,6 +45,15 @@ public class MessageServiceTest {
 
 	@Autowired
 	private transient MessageService service;
+
+	@Autowired
+	private transient MessageDao messageDao;
+
+	@Autowired
+	private transient MockMailService mockMailService;
+
+	@Autowired
+	private transient ConfigService configService;
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -49,5 +75,69 @@ public class MessageServiceTest {
 		assertTrue(
 				"Send mail functionaility for testing not enabled in your ssp-config.xml configuration settings for \"send_mail\". This should always be enabled in the testing environment.",
 				service.shouldSendMail());
+	}
+
+	@Test
+	public void sendsMessageWithInvalidCc() throws ObjectNotFoundException,
+			SendFailedException {
+
+		final SimpleSmtpServer smtpServer = mockMailService.getSmtpServer();
+		assertFalse("Faux mail server should be running but was not.",
+				smtpServer.isStopped());
+
+		final Message message =
+				service.createMessage("to@email.com", "cc@invalid domain",
+						new SubjectAndBody("Subject", "Message"));
+		service.sendMessage(message);
+		assertNotNull("Message not flagged as sent",
+				messageDao.get(message.getId()).getSentDate());
+		assertEquals("Message wasn't actually sent.", 1,
+				smtpServer.getReceivedEmailSize());
+		final SmtpMessage receivedMessage = (SmtpMessage) smtpServer
+				.getReceivedEmail()
+				.next();
+		assertEquals(
+				"Unexpected sent message. Subject was wrong.", "Subject",
+				receivedMessage.getHeaderValue("Subject"));
+	}
+
+	@Test
+	public void sendsMessageWithInvalidBcc() throws ObjectNotFoundException,
+			SendFailedException, ValidationException {
+
+		// setup
+		final SimpleSmtpServer smtpServer = mockMailService.getSmtpServer();
+		assertFalse("Faux mail server should be running but was not.",
+				smtpServer.isStopped());
+
+		// even more setup
+		SortingAndPaging sap = new SortingAndPaging(null, 0,
+				SortingAndPaging.MAXIMUM_ALLOWABLE_RESULTS, null, null, null);
+		PagingWrapper<Config> allConfigs = configService.getAll(null);
+		for ( Config config : allConfigs ) {
+			if ( config.getName().equalsIgnoreCase("bcc_email_address")) {
+				config.setValue("bcc@invalid domain");
+				configService.save(config);
+				break;
+			}
+		}
+
+		// setup setup setup (no cc b/c bcc not sent unless cc unset)
+		final Message message =
+				service.createMessage("to@email.com", null,
+						new SubjectAndBody("Subject", "Message"));
+
+		// actual test
+		service.sendMessage(message);
+		assertNotNull("Message not flagged as sent",
+				messageDao.get(message.getId()).getSentDate());
+		assertEquals("Message wasn't actually sent.", 1,
+				smtpServer.getReceivedEmailSize());
+		final SmtpMessage receivedMessage = (SmtpMessage) smtpServer
+				.getReceivedEmail()
+				.next();
+		assertEquals(
+				"Unexpected sent message. Subject was wrong.", "Subject",
+				receivedMessage.getHeaderValue("Subject"));
 	}
 }

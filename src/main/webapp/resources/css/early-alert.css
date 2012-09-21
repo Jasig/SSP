@@ -73,6 +73,11 @@
     width: 240px;
 }
 
-.early-alert .invalid {
+/* the .ea-input has to be present in this selector to work around selector
+   precedence conflicts with uP sheets which otherwise prevent application of
+   this style to certain form fields (esp emailCc) */
+.early-alert .ea-input .invalid {
     border: 1px red solid;
 }
+
+
