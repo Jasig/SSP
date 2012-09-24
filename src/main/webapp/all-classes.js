@@ -866,7 +866,8 @@ Ext.define('Ssp.model.util.TreeRequest', {
              {name: 'expanded', type:'boolean',defaultValue: false},
              {name: 'expandable', type:'boolean', defaultValue: true},
              {name: 'callbackFunc',type:'auto'},
-             {name: 'callbackScope', type: 'auto'}]
+             {name: 'callbackScope', type: 'auto'},
+             {name: 'removeParentWhenNoChildrenExist', type: 'boolean', defaultValue: false}]
 });
 Ext.define('Ssp.model.Configuration', {
     extend: 'Ext.data.Model',
@@ -2455,6 +2456,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     	var expandable = treeRequest.get('expandable');
     	var callbackFunc = treeRequest.get('callbackFunc');
     	var callbackScope = treeRequest.get('callbackScope');
+    	var removeParentWhenNoChildrenExist = treeRequest.get('removeParentWhenNoChildrenExist');
     	// retrieve items
 		me.apiProperties.makeRequest({
 			url: me.apiProperties.createUrl( url ),
@@ -2470,6 +2472,10 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 		    		me.appendChildren( nodeToAppendTo, nodes);
 		    	}else{
 		    		me.appendChildren( nodeToAppendTo, []);
+		    		if (removeParentWhenNoChildrenExist==true)
+		    		{
+		    			nodeToAppendTo.remove(true);
+		    		}
 		    	}
 		    	
 	    		if (callbackFunc != null && callbackFunc != "")
@@ -8904,6 +8910,13 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     control: {
     	entryDateField: '#entryDateField',
     	
+    	removeJournalTrackButton: {
+    		selector: '#removeJournalTrackButton',
+    		listeners: {
+    			click: 'onRemoveJournalTrackButtonClick'
+    		}
+    	},
+    	
     	journalTrackCombo: {
     		selector: '#journalTrackCombo',
     		listeners: {
@@ -9039,7 +9052,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     			{
     				jsonData.journalEntryDetails = record.clearGroupedDetails( jsonData.journalEntryDetails );
     			}
-    			    			
+    			
     			me.getView().setLoading( true );
     			
     			me.journalEntryService.save( me.personLite.get('id'), jsonData, {
@@ -9081,20 +9094,23 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 	},	
 	
 	onJournalTrackComboSelect: function(comp, records, eOpts){
-    	if (records.length > 0)
+		var me=this;
+		if (records.length > 0)
     	{
-    		this.model.set('journalTrack',{"id": records[0].get('id')});
+    		me.model.set('journalTrack',{"id": records[0].get('id')});
     		
     		// the inited property prevents the
     		// Journal Entry Details from clearing
     		// when the ViewController loads, so the details only 
     		// clear when a new journal track is selected
     		// because the init for the view sets the combo
-    		if (this.inited==true)
+    		if (me.inited==true)
     		{
-    	   		this.model.removeAllJournalEntryDetails();
-    			this.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');    			
+    	   		me.model.removeAllJournalEntryDetails();
+    			me.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');    			
     		}
+     	}else{
+     		me.removeJournalTrackAndSessionDetails();
      	}
 	},
 	
@@ -9102,10 +9118,26 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		var me=this;
     	if (comp.getValue() == "")
     	{
-     		me.model.set("journalTrack","");
-     		me.model.removeAllJournalEntryDetails();
-     		me.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');    			
+     		me.removeJournalTrackAndSessionDetails();
      	}		
+	},
+	
+	removeJournalTrackAndSessionDetails: function(){
+ 		var me=this;
+		me.model.set("journalTrack","");
+ 		me.model.removeAllJournalEntryDetails();
+ 		me.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');
+	},
+	
+	onRemoveJournalTrackButtonClick: function( button ){
+		var me=this;
+		var combo = me.getJournalTrackCombo();
+		combo.clearValue();
+		combo.fireEvent('select',{
+			combo: combo,
+			records: [],
+			eOpts: {}
+		});
 	},
 	
 	onCommentChange: function(comp, newValue, oldValue, eOpts){
@@ -9222,7 +9254,7 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
 		if (journalTrackId != null && journalTrackId != "")
 		{
 			var treeRequest = new Ssp.model.util.TreeRequest();
-	    	treeRequest.set('url', this.journalTrackUrl + '/'+ journalTrackId + '/journalStep');
+	    	treeRequest.set('url', this.journalTrackUrl + '/'+ journalTrackId + '/journalStep?sort=name');
 	    	treeRequest.set('nodeType','journalStep');
 	    	treeRequest.set('isLeaf', false);
 	    	treeRequest.set('enableCheckedItems', false);
@@ -9247,13 +9279,14 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
     	if (url != "")
     	{
         	var treeRequest = new Ssp.model.util.TreeRequest();
-        	treeRequest.set('url', url + '/' + id + '/journalStepDetail');
+        	treeRequest.set('url', url + '/' + id + '/journalStepDetail?sort=name');
         	treeRequest.set('nodeType', 'journalDetail');
         	treeRequest.set('isLeaf', true);
         	treeRequest.set('nodeToAppendTo', node);
         	treeRequest.set('enableCheckedItems',true);
 	    	treeRequest.set('callbackFunc',me.afterJournalDetailsLoaded);
 	    	treeRequest.set('callbackScope',me);
+	    	treeRequest.set('removeParentWhenNoChildrenExist',true);
     		me.treeUtils.getItems( treeRequest );
     	}
     },
@@ -14250,7 +14283,7 @@ Ext.define('Ssp.view.tools.journal.Journal', {
 	    		                { header: 'Date',  
 		    		                  dataIndex: 'entryDate',
 		    		                  flex: 1,
-		    		                  renderer: Ext.util.Format.dateRenderer('m/d/Y')
+		    		                  renderer: Ext.util.Format.dateRenderer('m/d/Y g:i A')
 	    		                },
 	    		                { header: 'Entered By',  
 	    		                  dataIndex: 'createdBy',
@@ -14297,12 +14330,14 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
         model: 'currentJournalEntry'
     },	
     initComponent: function() {
-    	Ext.applyIf(this, {
-        	title: ((this.model.get('id') == "") ? "Add Journal" : "Edit Journal"),
+    	var me=this;
+    	Ext.applyIf(me, {
+        	title: ((me.model.get('id') == "") ? "Add Journal" : "Edit Journal"),
         	autoScroll: true,
         	defaults: {
             	labelWidth: 150,
-            	padding: 5
+            	padding: 5,
+            	labelAlign: 'right'
             },
         	items: [{
 			    	xtype: 'datefield',
@@ -14317,7 +14352,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        name: 'confidentialityLevelId',
 			        fieldLabel: 'Confidentiality Level',
 			        emptyText: 'Select One',
-			        store: this.confidentialityLevelsStore,
+			        store: me.confidentialityLevelsStore,
 			        valueField: 'id',
 			        displayField: 'name',
 			        mode: 'local',
@@ -14332,7 +14367,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        name: 'journalSourceId',
 			        fieldLabel: 'Source',
 			        emptyText: 'Select One',
-			        store: this.journalSourcesStore,
+			        store: me.journalSourcesStore,
 			        valueField: 'id',
 			        displayField: 'name',
 			        mode: 'local',
@@ -14342,40 +14377,57 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			        forceSelection: true,
 			        anchor: '95%'
 				},{
-			        xtype: 'combobox',
-			        itemId: 'journalTrackCombo',
-			        name: 'journalTrackId',
-			        fieldLabel: 'Journal Track',
-			        emptyText: 'Select One',
-			        store: this.journalTracksStore,
-			        valueField: 'id',
-			        displayField: 'name',
-			        mode: 'local',
-			        typeAhead: true,
-			        queryMode: 'local',
-			        allowBlank: true,
-			        forceSelection: false,
-			        anchor: '95%'
-				},{
-		        	xtype: 'label',
-		        	text: 'Session Details (Critical Components)'
-				},{
-					xtype: 'tbspacer',
-					flex: 1
-				},{
-		            tooltip: 'Add Journal Session Details',
-		            text: 'Add/Edit Session Details',
-		            xtype: 'button',
-		            itemId: 'addSessionDetailsButton'
-	    	    },
-                { xtype: 'displayjournaldetails', autoScroll: true, anchor:'95% 50%' }
-				,{
                     xtype: 'textareafield',
-                    fieldLabel: 'Comment',
+                    fieldLabel: 'Comment (Optional)',
                     itemId: 'commentText',
                     anchor: '95%',
                     name: 'comment'
-                }],
+                },{
+			        xtype: 'fieldcontainer',
+			        fieldLabel: 'Journal Track (Optional)',
+			        labelWidth: 155,
+			        anchor: '95%',
+			        layout: 'hbox',
+			        items: [{
+						        xtype: 'combobox',
+						        itemId: 'journalTrackCombo',
+						        name: 'journalTrackId',
+						        fieldLabel: '',
+						        emptyText: 'Select One',
+						        store: me.journalTracksStore,
+						        valueField: 'id',
+						        displayField: 'name',
+						        mode: 'local',
+						        typeAhead: true,
+						        queryMode: 'local',
+						        allowBlank: true,
+						        forceSelection: false,
+						        flex: 1
+							},{
+								xtype: 'tbspacer',
+								width: 10
+							},{
+					            tooltip: 'Removes the assigned Journal Track and Session Details',
+					            text: 'Remove/Reset',
+					            xtype: 'button',
+					            itemId: 'removeJournalTrackButton',
+					            hidden: ((me.model.get('id') == "")?false : true)
+				    	    }]
+				},{
+			        xtype: 'fieldcontainer',
+			        fieldLabel: 'Session Details',
+			        labelWidth: 155,
+			        anchor: '95%',
+			        layout: 'hbox',
+			        items: [{
+					            tooltip: 'Add Journal Session Details',
+					            text: 'Add/Edit Session Details',
+					            xtype: 'button',
+					            itemId: 'addSessionDetailsButton'
+				    	    }]
+				},
+                { xtype: 'displayjournaldetails', autoScroll: true, anchor:'95% 50%' }
+				],
             
             dockedItems: [{
        		               xtype: 'toolbar',
@@ -14393,7 +14445,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
        		           }]
         });
 
-        return this.callParent(arguments);
+        return me.callParent(arguments);
     }	
 });
 Ext.define('Ssp.view.tools.journal.DisplayDetails', {
