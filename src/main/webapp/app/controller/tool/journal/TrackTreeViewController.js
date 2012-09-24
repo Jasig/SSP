@@ -58,7 +58,7 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
 		if (journalTrackId != null && journalTrackId != "")
 		{
 			var treeRequest = new Ssp.model.util.TreeRequest();
-	    	treeRequest.set('url', this.journalTrackUrl + '/'+ journalTrackId + '/journalStep');
+	    	treeRequest.set('url', this.journalTrackUrl + '/'+ journalTrackId + '/journalStep?sort=name');
 	    	treeRequest.set('nodeType','journalStep');
 	    	treeRequest.set('isLeaf', false);
 	    	treeRequest.set('enableCheckedItems', false);
@@ -83,7 +83,7 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
     	if (url != "")
     	{
         	var treeRequest = new Ssp.model.util.TreeRequest();
-        	treeRequest.set('url', url + '/' + id + '/journalStepDetail');
+        	treeRequest.set('url', url + '/' + id + '/journalStepDetail?sort=name');
         	treeRequest.set('nodeType', 'journalDetail');
         	treeRequest.set('isLeaf', true);
         	treeRequest.set('nodeToAppendTo', node);
