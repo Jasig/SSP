@@ -90,6 +90,7 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
         	treeRequest.set('enableCheckedItems',true);
 	    	treeRequest.set('callbackFunc',me.afterJournalDetailsLoaded);
 	    	treeRequest.set('callbackScope',me);
+	    	treeRequest.set('removeParentWhenNoChildrenExist',true);
     		me.treeUtils.getItems( treeRequest );
     	}
     },

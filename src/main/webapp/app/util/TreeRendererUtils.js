@@ -139,6 +139,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     	var expandable = treeRequest.get('expandable');
     	var callbackFunc = treeRequest.get('callbackFunc');
     	var callbackScope = treeRequest.get('callbackScope');
+    	var removeParentWhenNoChildrenExist = treeRequest.get('removeParentWhenNoChildrenExist');
     	// retrieve items
 		me.apiProperties.makeRequest({
 			url: me.apiProperties.createUrl( url ),
@@ -154,6 +155,10 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 		    		me.appendChildren( nodeToAppendTo, nodes);
 		    	}else{
 		    		me.appendChildren( nodeToAppendTo, []);
+		    		if (removeParentWhenNoChildrenExist==true)
+		    		{
+		    			nodeToAppendTo.remove(true);
+		    		}
 		    	}
 		    	
 	    		if (callbackFunc != null && callbackFunc != "")
