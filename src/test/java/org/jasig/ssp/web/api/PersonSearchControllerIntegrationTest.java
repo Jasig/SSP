@@ -75,7 +75,7 @@ public class PersonSearchControllerIntegrationTest {
 	 *             If object could not be found.
 	 */
 	@Test
-	public void testControllerSearch() throws ObjectNotFoundException {
+	public void testControllerSearch() throws ObjectNotFoundException, ValidationException {
 		final PagedResponse<PersonSearchResultTO> results = controller.search(
 				PERSON_LAST_NAME, null, Boolean.TRUE, ObjectStatus.ACTIVE, 0,
 				10, null, null);
@@ -99,7 +99,7 @@ public class PersonSearchControllerIntegrationTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testControllerSearchWithNullTerm()
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, ValidationException {
 		controller.search(null, null, Boolean.TRUE, ObjectStatus.ACTIVE, 0, 10,
 				null, null);
 		fail("Invalid search should have thrown exception.");
@@ -107,7 +107,7 @@ public class PersonSearchControllerIntegrationTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testControllerSearchWithEmptyTerm()
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, ValidationException {
 		controller.search(" ", null, Boolean.TRUE, ObjectStatus.ACTIVE, 0, 10,
 				null, null);
 		fail("Invalid search should have thrown exception.");

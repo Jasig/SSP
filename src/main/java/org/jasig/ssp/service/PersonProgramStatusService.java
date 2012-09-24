@@ -28,7 +28,7 @@ public interface PersonProgramStatusService
 	 *             If personId was not found.
 	 */
 	PersonProgramStatus getCurrent(@NotNull UUID personId)
-			throws ObjectNotFoundException;
+			throws ObjectNotFoundException, ValidationException;
 
 	/**
 	 * Sets the program status for the specified student to Transitioned.

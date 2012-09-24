@@ -1,5 +1,6 @@
 package org.jasig.ssp.dao;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.ValidationException;
@@ -37,27 +38,23 @@ public class PersonProgramStatusDao
 	}
 
 	/**
-	 * Gets the active PersonProgramStatus
+	 * Gets the active PersonProgramStatus(es). Theoretically there should
+	 * only ever be one such status, but because new statuses might be
+	 * flushed to the database as a side-effect of this call, we can't
+	 * guarantee there will only ever be one result without also placing
+	 * awkward restrictions on when the caller can and can't add the
+	 * status to the person record.
 	 * 
-	 * @param person
-	 *            the Person
-	 * @return the active PersonProgramStatus or null if empty
+	 * @param personId
+	 *            the Person identifier
+	 * @return all active (i.e. non-expired) program statuses
 	 */
-	public PersonProgramStatus getActive(final Person person) {
+	@SuppressWarnings("unchecked")
+	public List<PersonProgramStatus> getActive(final UUID personId) {
 		final Criteria criteria = createCriteria();
-		criteria.add(Restrictions.eq("person", person));
+		criteria.add(Restrictions.eq("person.id", personId));
 		criteria.add(Restrictions.isNull("expirationDate"));
-
-		try {
-			return (PersonProgramStatus) criteria.uniqueResult();
-		} catch (final HibernateException exc) {
-			LOGGER.error(
-					"Multiple PersonProgramStatus instances for a single person were found, which should not be allowed.",
-					exc);
-			throw new ValidationException(
-					"Multiple PersonProgramStatus instances for a single person were found, which is not allowed.",
-					exc);
-		}
+		return criteria.list();
 	}
 
 	public PagingWrapper<PersonProgramStatus> getAllForPersonIdAndProgramStatusId(
@@ -68,5 +65,21 @@ public class PersonProgramStatusDao
 		criteria.add(Restrictions.eq("programStatus.id",
 				serviceReasonId));
 		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP);
+	}
+
+	/**
+	 * Same as {@link #getAllForPersonIdAndProgramStatusId(java.util.UUID, java.util.UUID, org.jasig.ssp.util.sort.SortingAndPaging)}
+	 * but without the filtering and paging. Yes, this is backwards that the
+	 * less restrictive search has no paging, but paging would make life
+	 * unnecessarily complex for current call sites. And the likelyhood
+	 * of a user having hundreds or thousand of alerts seems low.
+	 *
+	 * @param personId
+	 * @return
+	 */
+	public List<PersonProgramStatus> getAllForPersonId(UUID personId) {
+		final Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("person.id", personId));
+		return criteria.list();
 	}
 }

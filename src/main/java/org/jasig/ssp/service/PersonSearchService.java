@@ -5,6 +5,7 @@ import org.jasig.ssp.model.PersonSearchResult;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * PersonSearch service
@@ -33,5 +34,5 @@ public interface PersonSearchService {
 	PagingWrapper<PersonSearchResult> searchBy(ProgramStatus programStatus,
 			Boolean outsideCaseload, String searchTerm, Person advisor,
 			SortingAndPaging sAndP)
-			throws ObjectNotFoundException;
+			throws ObjectNotFoundException, ValidationException;
 }

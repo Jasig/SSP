@@ -9,6 +9,7 @@ import org.jasig.ssp.service.PersonProgramStatusService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
 import org.jasig.ssp.web.api.PersonSearchController;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * PersonSearchResult model for use by {@link PersonSearchResultTO} and then
@@ -49,7 +50,7 @@ public class PersonSearchResult {
 	 */
 	public PersonSearchResult(@NotNull final Person person,
 			@NotNull final PersonProgramStatusService personProgramStatusService)
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, ValidationException {
 		super();
 
 		if (null == person) {

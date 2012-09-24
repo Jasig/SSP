@@ -1,6 +1,7 @@
 package org.jasig.ssp.service.impl;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.ConstraintViolationException;
@@ -54,7 +55,7 @@ public class PersonProgramStatusServiceImpl extends
 	public PersonProgramStatus create(
 			final PersonProgramStatus personProgramStatus)
 			throws ObjectNotFoundException, ValidationException {
-		expireActive(personProgramStatus.getPerson());
+		expireActive(personProgramStatus.getPerson(), personProgramStatus);
 
 		try {
 			return getDao().save(personProgramStatus);
@@ -69,7 +70,7 @@ public class PersonProgramStatusServiceImpl extends
 			throws ObjectNotFoundException, ValidationException {
 		// ensure expirationDate is not removed that would allow too many active
 		if (obj.getExpirationDate() == null) {
-			final PersonProgramStatus pps = dao.getActive(obj.getPerson());
+			final PersonProgramStatus pps = getActiveExcluding(obj.getPerson(), obj);
 			if (pps != null && pps.getId().equals(obj.getId())) {
 				LOGGER.warn("Can not un-expire this instance while another is active. See PersonProgramStatus with ID "
 						+ pps.getId());
@@ -107,19 +108,57 @@ public class PersonProgramStatusServiceImpl extends
 	 * 
 	 * @param person
 	 *            the person
+	 * @param savingStatus
+	 *            the status association currently being saved
+	 * @throws ValidationException if the current list of statuses is in an
+	 *   invalid state
 	 */
-	private void expireActive(final Person person) {
-		final PersonProgramStatus pps = dao.getActive(person);
-		if (pps != null) {
+	private void expireActive(final Person person, PersonProgramStatus savingStatus)
+	throws ValidationException {
+		PersonProgramStatus pps = getActiveExcluding(person, savingStatus);
+		if ( pps != null ) {
 			pps.setExpirationDate(new Date());
 			dao.save(pps);
 		}
 	}
 
+	private PersonProgramStatus getActiveExcluding(final Person forPerson,
+												   final PersonProgramStatus exclude)
+			throws ValidationException {
+		return getActiveExcluding(forPerson.getId(), exclude);
+	}
+
+	private PersonProgramStatus getActiveExcluding(final UUID forPersonId,
+												   final PersonProgramStatus exclude)
+			throws ValidationException {
+		// Cannot just ask dao for a single active record b/c the status
+		// currently being saved might be flushed to the db as a side-effect
+		// of the dao call. Have to pull everything back that's not expired,
+		// then filter out the status we're currently working on.
+		final List<PersonProgramStatus> active = dao.getActive(forPersonId);
+		if ( active == null || active.isEmpty() ) {
+			return null;
+		}
+		if ( exclude != null ) {
+			active.remove(exclude);
+		}
+		if ( active.isEmpty() ) {
+			return null;
+		}
+		if ( active.size() > 1 ) {
+			throw new ValidationException(
+					"More than one unexpired ProgramStatus for person '"
+							+ forPersonId + "'. Unable to determine"
+							+ " which of those to expire.");
+		}
+		return active.iterator().next();
+	}
+
+
 	@Override
 	public PersonProgramStatus getCurrent(final UUID personId)
-			throws ObjectNotFoundException {
-		return dao.getActive(personService.get(personId));
+			throws ObjectNotFoundException, ValidationException {
+		return getActiveExcluding(personId, null);
 	}
 
 	@Override

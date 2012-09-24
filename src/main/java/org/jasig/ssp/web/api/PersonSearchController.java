@@ -14,6 +14,7 @@ import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class PersonSearchController extends AbstractBaseController {
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, ValidationException {
 
 		ProgramStatus programStatus = null;
 		if (null != programStatusId) {

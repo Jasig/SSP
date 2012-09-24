@@ -11,6 +11,7 @@ import org.jasig.ssp.service.PersonProgramStatusService;
 import org.jasig.ssp.service.PersonSearchService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +36,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 			final ProgramStatus programStatus, final Boolean outsideCaseload,
 			final String searchTerm, final Person advisor,
 			final SortingAndPaging sAndP)
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, ValidationException {
 
 		final PagingWrapper<Person> people = dao.searchBy(programStatus,
 				(outsideCaseload == null ? Boolean.FALSE : outsideCaseload),
