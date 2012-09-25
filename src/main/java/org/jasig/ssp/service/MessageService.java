@@ -41,7 +41,6 @@ public interface MessageService {
 	 * @throws ValidationException
 	 *             If any data was missing or invalid.
 	 */
-	@Transactional(readOnly = false)
 	Message createMessage(@NotNull Person to, String emailCC,
 			@NotNull SubjectAndBody subjAndBody)
 			throws ObjectNotFoundException, SendFailedException,
@@ -71,7 +70,6 @@ public interface MessageService {
 	 * Send any queued messages. Should be set to run regularly via some kind of
 	 * scheduling system.
 	 */
-	@Transactional(readOnly = false)
 	void sendQueuedMessages();
 
 	/**

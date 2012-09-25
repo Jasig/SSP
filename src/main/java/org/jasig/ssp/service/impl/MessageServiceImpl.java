@@ -47,7 +47,6 @@ import org.springframework.transaction.annotation.Transactional;
  * parties.
  */
 @Service
-@Transactional(readOnly = true)
 public class MessageServiceImpl implements MessageService {
 
 	private static final Integer QUEUE_BATCH_SIZE = 25;
@@ -87,6 +86,7 @@ public class MessageServiceImpl implements MessageService {
 	 * @return the global BCC e-mail address from the application configuration
 	 *         information
 	 */
+	@Transactional(readOnly = true)
 	public String getBcc() {
 		final String bcc = configService.getByNameEmpty("bcc_email_address");
 		if (!bcc.isEmpty() && !bcc.equalsIgnoreCase("noone@test.com")) {
@@ -99,6 +99,7 @@ public class MessageServiceImpl implements MessageService {
 	/**
 	 * Always returns true in TEST applicationMode
 	 */
+	@Transactional(readOnly = true)
 	public boolean shouldSendMail() {
 		if ("TEST".equals(applicationMode)) {
 			return true;
@@ -165,6 +166,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public Message createMessage(@NotNull final String to,
 			final String emailCC,
 			@NotNull final SubjectAndBody subjAndBody)
@@ -182,6 +184,7 @@ public class MessageServiceImpl implements MessageService {
 	@Scheduled(fixedDelay = 150000)
 	// run 2.5 minutes after the end of the last invocation
 	public void sendQueuedMessages() {
+
 		LOGGER.info("BEGIN : sendQueuedMessages()");
 
 		int startRow = 0;
@@ -272,6 +275,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public boolean sendMessage(@NotNull final Message message)
 			throws ObjectNotFoundException, SendFailedException {
 
