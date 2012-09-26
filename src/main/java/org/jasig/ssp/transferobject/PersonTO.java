@@ -159,7 +159,7 @@ public class PersonTO // NOPMD
 		zipCode = model.getZipCode();
 		photoUrl = model.getPhotoUrl();
 		schoolId = model.getSchoolId();
-		enabled = model.getEnabled();
+		enabled = !(model.isDisabled());
 		studentIntakeCompleteDate = model.getStudentIntakeCompleteDate();
 
 		final Person coachPerson = model.getCoach();

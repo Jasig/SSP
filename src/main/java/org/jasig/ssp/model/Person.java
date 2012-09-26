@@ -227,7 +227,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	 * non-students who no longer use the system anymore.
 	 */
 	@Nullable
-	private Boolean enabled;
+	private Boolean enabled = true;
 
 	@Nullable
 	private Boolean abilityToBenefit;
