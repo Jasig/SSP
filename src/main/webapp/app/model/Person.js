@@ -175,5 +175,6 @@ Ext.define('Ssp.model.Person', {
     	me.set('primaryEmailAddress', jsonData.primaryEmailAddress);
     	me.set('secondaryEmailAddress', jsonData.secondaryEmailAddress);
     	me.set('birthDate', jsonData.birthDate);
+    	me.set('username', jsonData.username);
     }
 });

@@ -292,6 +292,27 @@ public class PersonServiceImpl implements PersonService {
 
 		LOGGER.debug("Creating User {}", obj);
 
+		// Best to check for schoolId collisions 1st b/c proposed usernames
+		// are sometimes just calculated values from the UI. Conflicts with
+		// those calculated values are perfectly legitimate, but the UI will
+		// then attempt to load *that* person record to help the user work
+		// through the conflict. But what the user actually entered was a
+		// schoolId, not a username, and the username conflict might have
+		// been on a person record that doesn't have the schoolId they originally
+		// requested. So if the UI isn't careful, it will end up potentially
+		// reloading the screen with the wrong person record or, worse,
+		// eventually overwriting the wrong person record.
+		if (obj.getSchoolId() != null) {
+			Person existing = null;
+			try {
+				existing = dao.getBySchoolId(obj.getSchoolId());
+			} catch ( ObjectNotFoundException e ) {}
+			if (null != existing) {
+				throw new ObjectExistsException(Person.class.getName(),
+						new Pair<String,String>("schoolId", obj.getSchoolId()).toMap());
+			}
+		}
+
 		if (obj.getUsername() != null) {
 			final Person existing = dao.fromUsername(obj.getUsername());
 			if (null != existing) {

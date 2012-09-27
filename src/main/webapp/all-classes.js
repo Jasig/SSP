@@ -925,7 +925,7 @@ Ext.define('Ssp.model.Configuration', {
     	      */
     	     {name: 'studentIdMinValidationLength', 
     	      type: 'number', 
-    	      defaultValue: 3
+    	      defaultValue: 1
     	     },
     	     /*
     	      * Error message for a studentId/schoolId that exceeds the specified minimum validation length.
@@ -939,7 +939,7 @@ Ext.define('Ssp.model.Configuration', {
     	      */
     	     {name: 'studentIdMaxValidationLength', 
        	      type: 'number', 
-       	      defaultValue: 8
+       	      defaultValue: 64
        	     },
     	     /*
     	      * Error message for a studentId/schoolId that exceeds the specified maximum validation length.
@@ -5904,26 +5904,72 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 
 	resolvePersonConflict: function(buttonId, text, opt) {
 		var me=this;
-		var model;
 		if (buttonId === "yes") {
-			model=me.person;
-			var id = model.set('id', opt.personId);
-			me.doSave();
+			// User elected to blindly overwrite persistent record w/ current
+			// form. Even so, need to pull back the existing record b/c we still
+			// need to get the correct username. Do not want the silently
+			// calculated default username to override the externally-provided
+			// value or a value set by another user.
+			me.personService.get( opt.personId, {success:me.doBlindOverwriteOfPersistentPerson,
+				failure: me.getPersonFailure, // TODO need to lock form somehow - do *not* want to send the wrong username
+				scope: me} );
+
 		} else if ( buttonId === "no" ) {
-			// Basically the same thing that SearchViewController.js does
-			// to launch the edit form. (Would be a huge patch to get each
-			// individual form to reset/reload itself so we just reload the
-			// entire view.)
-			model = new Ssp.model.Person();
-			me.person.data = model.data;
-			me.personLite.set('id', opt.personId);
-			me.resetAppointmentModels();
-			var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});
+			// User elected to discard current edits and reload persistent
+			// record. Same concerns here w/r/t making sure we're saving
+			// over the correct back-end record.
+			me.personService.get( opt.personId, {success:me.doReloadWithExistingPersonRecord,
+				failure: me.getPersonFailure, // TODO need to lock form somehow - do *not* want to send the wrong username
+				scope: me} );
 		} else {
 			// nothing to do
 		}
 	},
 
+	doBlindOverwriteOfPersistentPerson: function(r, scope) {
+		var me = scope;
+		if (!(me.assertMatchingSchoolIds(r))) {
+			return;
+		}
+		me.person.set('id', r.id);
+		me.person.data.username = r.username;
+		me.doSave();
+	},
+
+	doReloadWithExistingPersonRecord: function(r, scope) {
+		var me = scope;
+		if (!(me.assertMatchingSchoolIds(r))) {
+			return;
+		}
+		// Do this with basically the same mechanism that
+		// SearchViewController.js does to launch the edit form in the first
+		// place. (Would be a huge patch to get each individual form to
+		// reset/reload itself so we just reload the entire view.)
+		var model = new Ssp.model.Person();
+		me.person.data = model.data;
+		me.personLite.set('id', r.id);
+		me.resetAppointmentModels();
+		me.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});
+	},
+
+	assertMatchingSchoolIds: function(personLookupResult) {
+		var me = this;
+		if ( me.person.data.schoolId ) {
+			if ( me.person.data.schoolId.toUpperCase() !== personLookupResult.schoolId.toUpperCase() ) {
+				// would usually only happen if there's not a record on
+				// file with the proposed schoolID, but there is a record
+				// on file with the silently calculated username
+				Ext.Msg.alert("Form Save Error",
+					"Could not overwrite the existing record" +
+					" because the system might have found multiple" +
+					" conflicting records or detected it was at risk of" +
+					" updating the wrong record your edits. Please contact"
+					+ " your system administrators.");
+				return false;
+			}
+		}
+		return true;
+	},
     
     saveProgramStatusSuccess: function( r, scope ){
 		var me=scope;	
@@ -16640,7 +16686,7 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'secondaryEmailAddress', type: 'string'},
              {name: 'birthDate', type: 'date', dateFormat: 'time'},
     		 {name: 'username', type: 'string'},
-    		 {name: 'enabled', type: 'boolean'},
+    		 {name: 'enabled', type: 'boolean', defaultValue: true},
              {name: 'coach', type: 'auto'},
     		 {name: 'strengths', type: 'string'},
     		 {name: 'studentType',type:'auto'},
@@ -16798,6 +16844,7 @@ Ext.define('Ssp.model.Person', {
     	me.set('primaryEmailAddress', jsonData.primaryEmailAddress);
     	me.set('secondaryEmailAddress', jsonData.secondaryEmailAddress);
     	me.set('birthDate', jsonData.birthDate);
+    	me.set('username', jsonData.username);
     }
 });
 Ext.define('Ssp.model.PersonAppointment', {
