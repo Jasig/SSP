@@ -1,0 +1,62 @@
+Copyright 2012, JA-SIG, Inc.
+This project includes software developed by Jasig.
+http://www.jasig.org/
+
+Licensed under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the License at:
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on
+an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied. See the License for the
+specific language governing permissions and limitations
+under the License.
+
+===========================================================================
+
+This software originally granted to JA-SIG by Sinclair Community College.
+
+===========================================================================
+
+This project includes:
+
+  Ext JS under GNU General Public License version 3.0 with the Open Source
+  License Exception for Applications
+  (http://www.sencha.com/products/floss-exception.php)
+
+  Fluid Infusion and Skinning System under the New BSD license
+
+  jQuery, jQueryUI, the jQuery Form Plugin, the jQuery Parameter Plugin,
+  the jQuery SimpleModal Plugin, the jQuery Templates Plugin, the jQuery Load
+  Templates Plugin, and jQuery Mobile under the MIT license
+
+  The famfamfam Silk Icons under the
+  Creative Commons Attribution 3.0 License
+  http://www.famfamfam.com/lab/icons/silk/
+
+  grid.less under the MIT license
+
+  less.js under The Apache Software License, Version 2.0
+
+  The jQuery Print Plugin under an unknown license.
+
+  json2.js under the public domain
+
+  DeftJS under the MIT license
+
+  Apprise under the MIT license
+
+  Knockout JavaScript library under the MIT license
+
+  ko.jqm.bindings under the MIT license
+
+  namespace.coffee under the MIT license
+
+  Underscore.js under the MIT license
+
+  Jasmine under the MIT license
+
+#GENERATED_NOTICES#
