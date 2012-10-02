@@ -554,6 +554,8 @@
 							regenerating those files
 							(sencha build -p ssp.jsb3 -d .)-->
 						<exclude>**/*.jsb3</exclude>
+						<exclude>src/main/webapp/app-all.js</exclude>
+						<exclude>src/main/webapp/all-classes.js</exclude>
 					</excludes>
 					<mapping>
 						<!-- Defaults don't have any mapping for the following -->
