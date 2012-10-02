@@ -27,6 +27,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.service.tool.IntakeService;
+import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -145,12 +146,34 @@ public interface PersonService extends AuditableCrudService<Person> {
 
 	/**
 	 * Get a list of all Coaches
-	 * 
+	 *
+	 * @deprecated Consider {@link #getAllCoachesLite(org.jasig.ssp.util.sort.SortingAndPaging)} instead.
+	 *   This method attempts to sync external and internal coach records,
+	 *   which is usually far too much overhead for a getter. That
+	 *   synchronization should be happening elsewhere as part of a scheduled
+	 *   job. This method also has the potential to load large {@link Person}
+	 *   graphs, which you usually don't need.
 	 * @param sAndP
 	 *            Sorting and paging parameters
 	 * @return List of all coaches
 	 */
+	@Deprecated
 	PagingWrapper<Person> getAllCoaches(SortingAndPaging sAndP);
+
+	/**
+	 * Get a list of all Coaches where you don't need the complete Person
+	 * graphs.
+	 *
+	 * <em>Does not have the same external-to-internal person record
+	 * copying side-effects as {@link #getAllCoaches(org.jasig.ssp.util.sort.SortingAndPaging)}.
+	 * This method only returns coaches that have already been sync'd into
+	 * local person records by some other mechanism.</em>
+	 *
+	 * @param sAndP
+	 *            Sorting and paging parameters
+	 * @return List of all coaches
+	 */
+	PagingWrapper<CoachPersonLiteTO> getAllCoachesLite(SortingAndPaging sAndP);
 
 	Person load(UUID id);
 
@@ -182,4 +205,5 @@ public interface PersonService extends AuditableCrudService<Person> {
 	Person createUserAccountForCurrentPortletUser(String username,
 			PortletRequest portletRequest)
 			throws UnableToCreateAccountException;
+
 }

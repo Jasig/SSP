@@ -18,6 +18,11 @@
  */
 package org.jasig.ssp.web.api;
 
+import java.io.Serializable;
+import java.util.Map;
+import java.util.UUID;
+import javax.validation.Valid;
+
 import org.apache.commons.lang.NotImplementedException;
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.factory.PersonTOFactory;
@@ -27,6 +32,7 @@ import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PersonLiteTO;
 import org.jasig.ssp.transferobject.PersonTO;
@@ -46,11 +52,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.validation.Valid;
-import java.io.Serializable;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * Service methods for manipulating data about people in the system.
@@ -128,14 +129,14 @@ public class PersonController extends AbstractBaseController {
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection) {
-		final PagingWrapper<Person> coaches = service
-				.getAllCoaches(SortingAndPaging
-						.createForSingleSort(status, start, limit, sort,
-								sortDirection,
-								null));
+
+		final PagingWrapper<CoachPersonLiteTO> coaches = service
+				.getAllCoachesLite(SortingAndPaging.createForSingleSort(status,
+						start, limit, sort, sortDirection, null));
 
 		return new PagedResponse<PersonLiteTO>(true, coaches.getResults(),
-				PersonLiteTO.toTOList(coaches.getRows()));
+				PersonLiteTO.toTOListFromCoachTOs(coaches.getRows()));
+
 	}
 
 	/**
