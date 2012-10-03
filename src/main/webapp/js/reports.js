@@ -146,9 +146,10 @@ var ssp = ssp || {};
 		reportsSelect
 		        .append('<option value="confidentialityAgreementForm">Confidentiality Agreement</option>');		
 		reportsSelect
-		        .append('<option value="counselingRefGuideForm">Counseling Reference Guide</option>');		
-		reportsSelect
-				.append('<option value="counselorCaseManagementReport">Counselor Case Management Report</option>');
+		        .append('<option value="counselingRefGuideForm">Counseling Reference Guide</option>');
+		// Removed for SPC b/c GPA integration not available yet
+//		reportsSelect
+//				.append('<option value="counselorCaseManagementReport">Counselor Case Management Report</option>');
 		reportsSelect
 				.append('<option value="specialServicesForm">Special Services Report</option>');
 		
