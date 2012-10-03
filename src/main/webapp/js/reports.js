@@ -80,7 +80,7 @@ var ssp = ssp || {};
 					.locate('specialServiceGroup'));
 			loadGroupInput("/ssp/api/1/reference/referralSource/", that
 					.locate('referralSourceGroup'));
-			loadCoachInput("/ssp/api/1/person/coach/", that
+			loadCoachInput("/ssp/api/1/person/coach/?sort=lastName&page=1&start=0&limit=-1", that
 					.locate('assignedCounselorGroup'));			
 
 
