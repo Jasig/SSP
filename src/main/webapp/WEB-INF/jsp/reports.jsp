@@ -147,7 +147,7 @@
 			<input class="input-calendar-type" type="textbox" name="createDateFrom" id="createDateFrom" />
 		</div>
 		<div class="ea-label">
-			<span>Student Added From:</span>
+			<span>Student Added From (inclusive):</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -156,7 +156,7 @@
 			<input class="input-calendar-type" type="textbox" name="createDateTo" id="createDateTo" />
 		</div>
 		<div class="ea-label">
-			<span>Student Added To:</span>
+			<span>Student Added To (exclusive):</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -295,7 +295,7 @@
 			<input class="input-calendar-type" type="textbox" name="createDateFrom" id="createDateFromCounselor" />
 		</div>
 		<div class="ea-label">
-			<span>Student Added From:</span>
+			<span>Student Added From (inclusive):</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -304,7 +304,7 @@
 			<input class="input-calendar-type" type="textbox" name="createDateTo" id="createDateToCounselor" />
 		</div>
 		<div class="ea-label">
-			<span>Student Added To:</span>
+			<span>Student Added To (exclusive):</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -411,7 +411,7 @@
 			<input class="input-calendar-type" type="textbox" name="caDateFrom" id="caDateFrom" />
 		</div>
 		<div class="ea-label">
-			<span>Date Range From:</span>
+			<span>Date Range From (inclusive):</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -420,7 +420,7 @@
 			<input class="input-calendar-type" type="textbox" name="caDateTo" id="caDateTo" />
 		</div>
 		<div class="ea-label">
-			<span>Date Range To:</span>
+			<span>Date Range To (exclusive):</span>
 		</div>
 		<div class="ea-clear"></div>
 		
@@ -519,7 +519,7 @@
 			<input class="input-calendar-type" type="textbox" name="programStatusDateFrom" id="programStatusDateFrom" />
 		</div>
 		<div class="ea-label">
-			<span>Program Status Date From:</span>
+			<span>Program Status Date From (inclusive):</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -528,7 +528,7 @@
 			<input class="input-calendar-type" type="textbox" name="programStatusDateTo" id="programStatusDateTo" />
 		</div>
 		<div class="ea-label">
-			<span>Program Status Date From:</span>
+			<span>Program Status Date To (exclusive):</span>
 		</div>
 		<div class="ea-clear"></div>
 
