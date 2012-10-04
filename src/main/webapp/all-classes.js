@@ -11618,7 +11618,8 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     	earlyAlertService: 'earlyAlertService',
     	formUtils: 'formRendererUtils',
     	model: 'currentEarlyAlertResponse',
-    	personLite: 'personLite'
+    	personLite: 'personLite',
+		authenticatedPerson: 'authenticatedPerson'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -11770,7 +11771,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
      		{
      			// fix for GMT to UTC
          		me.earlyAlert.set('closedDate', me.formUtils.fixDateOffsetWithTime( new Date() ) );
-         		me.earlyAlert.set( 'closedById', personId );    			
+         		me.earlyAlert.set( 'closedById', me.authenticatedPerson.getId() );
      		}
      		jsonData = me.earlyAlert.data;
      		delete jsonData.earlyAlertReasonId;
@@ -11971,7 +11972,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
 		me.getView().setLoading( false );
 		if (r != null )
 		{
-			fullName=r.firstName + " " + r.middleName + " " + r.lastName; 
+			fullName=r.firstName + " " + (r.middleName ? r.middleName + " " : "") + r.lastName;
 			me.getClosedByField().setValue( fullName );
 		}
     },    

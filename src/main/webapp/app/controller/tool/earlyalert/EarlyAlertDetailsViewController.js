@@ -94,7 +94,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
 		me.getView().setLoading( false );
 		if (r != null )
 		{
-			fullName=r.firstName + " " + r.middleName + " " + r.lastName; 
+			fullName=r.firstName + " " + (r.middleName ? r.middleName + " " : "") + r.lastName;
 			me.getClosedByField().setValue( fullName );
 		}
     },    

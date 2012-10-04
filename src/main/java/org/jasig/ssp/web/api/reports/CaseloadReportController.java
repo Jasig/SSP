@@ -44,6 +44,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.CaseloadService;
@@ -148,7 +149,7 @@ public class CaseloadReportController extends AbstractBaseController {
 			Long npCount = caseLoadService.caseLoadCountFor(ps_np,currPerson, studentTypeIds, programStatusDateFrom, programStatusDateTo);
 			Long transitionedCount = caseLoadService.caseLoadCountFor(ps_t,currPerson, studentTypeIds, programStatusDateFrom, programStatusDateTo);
 			Long noShowCount = caseLoadService.caseLoadCountFor(ps_ns,currPerson, studentTypeIds, programStatusDateFrom, programStatusDateTo);	
-			CaseLoadReportTO caseLoadReportTO = new CaseLoadReportTO(currPerson.getFirstName(), currPerson.getLastName(), currPerson.getStaffDetails().getDepartmentName(),
+			CaseLoadReportTO caseLoadReportTO = new CaseLoadReportTO(currPerson.getFirstName(), currPerson.getLastName(), nullSafeDepartmentNameFor(currPerson,"Not Available Yet"),
 					activeCount,
 					inActiveCount,
 					npCount,
@@ -220,6 +221,14 @@ public class CaseloadReportController extends AbstractBaseController {
 		response.flushBuffer();
 		is.close();
 		os.close();		
+	}
+
+	private String nullSafeDepartmentNameFor(Person currPerson, String defaultStr) {
+		if ( currPerson == null || currPerson.getStaffDetails() == null ) {
+			return defaultStr;
+		}
+		String deptName = currPerson.getStaffDetails().getDepartmentName();
+		return StringUtils.isBlank(deptName) ? defaultStr : deptName;
 	}
 
 	@Override

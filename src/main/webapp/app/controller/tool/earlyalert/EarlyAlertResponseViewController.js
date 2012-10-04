@@ -26,7 +26,8 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     	earlyAlertService: 'earlyAlertService',
     	formUtils: 'formRendererUtils',
     	model: 'currentEarlyAlertResponse',
-    	personLite: 'personLite'
+    	personLite: 'personLite',
+		authenticatedPerson: 'authenticatedPerson'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -178,7 +179,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
      		{
      			// fix for GMT to UTC
          		me.earlyAlert.set('closedDate', me.formUtils.fixDateOffsetWithTime( new Date() ) );
-         		me.earlyAlert.set( 'closedById', personId );    			
+         		me.earlyAlert.set( 'closedById', me.authenticatedPerson.getId() );
      		}
      		jsonData = me.earlyAlert.data;
      		delete jsonData.earlyAlertReasonId;
