@@ -80,7 +80,8 @@ var ssp = ssp || {};
 					.locate('specialServiceGroup'));
 			loadGroupInput("/ssp/api/1/reference/referralSource/", that
 					.locate('referralSourceGroup'));
-			loadCoachInput("/ssp/api/1/person/coach/?sort=lastName&page=1&start=0&limit=-1", that
+			// 1000 limit is max allowed by server side
+			loadCoachInput("/ssp/api/1/person/coach/?sort=lastName&page=1&start=0&limit=1000", that
 					.locate('assignedCounselorGroup'));			
 
 
