@@ -28,7 +28,7 @@ Ext.define('Ssp.store.Coaches', {
 		Ext.apply(me, {
 						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCoach')+'/?sort=lastName'),
 						autoLoad: false,
-						pageSize: -1,
+						pageSize: 1000, // max allowed server-side
 						params : {
 							page : 0,
 							start : 0,
