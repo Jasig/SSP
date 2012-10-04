@@ -32,7 +32,7 @@ Ext.define('Ssp.store.Coaches', {
 						params : {
 							page : 0,
 							start : 0,
-							limit : -1
+							limit : 1000 // max allowed server-side
 						}
 					});
 		return me.callParent(arguments);
