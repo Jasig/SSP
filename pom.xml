@@ -30,9 +30,9 @@
 	</properties>
 
 	<scm>
-		<connection>scm:git:git://github.com/russlittle/SSP-Open-Source-Project.git</connection>
-		<developerConnection>scm:git:git@github.com:russlittle/SSP-Open-Source-Project.git</developerConnection>
-		<url>https://github.com/russlittle/SSP-Open-Source-Project</url>
+		<connection>scm:git:git://github.com/Jasig/SSP.git</connection>
+		<developerConnection>scm:git:git@github.com:Jasig/SSP.git</developerConnection>
+		<url>https://github.com/Jasig/SSP</url>
 		<tag>HEAD</tag>
 	</scm>
 
