@@ -214,6 +214,8 @@ public class MessageServiceImpl implements MessageService {
 		// a single transaction open while processing what is effectively
 		// an unbounded number of messages.
 		while (true) {
+			LOGGER.info("Before message queue processing transaction at start row {}",
+					sap.get().getFirstResult());
 			Pair<PagingWrapper<Message>, Collection<Throwable>> rslt =
 					withTransaction.withTransactionAndUncheckedExceptions(
 					new Callable<Pair<PagingWrapper<Message>, Collection<Throwable>>>() {
@@ -223,11 +225,17 @@ public class MessageServiceImpl implements MessageService {
 					return sendQueuedMessageBatch(sap.get());
 				}
 			});
+
 			PagingWrapper<Message> msgsHandled = rslt.getFirst();
-			if ( msgsHandled.getRows() == null ||
-					msgsHandled.getRows().size() < QUEUE_BATCH_SIZE ) {
+			int msgHandledCnt = msgsHandled.getRows() == null ? 0 : msgsHandled.getRows().size();
+			if ( msgHandledCnt == 0 || msgHandledCnt < QUEUE_BATCH_SIZE ) {
+				LOGGER.info("Stop message queue processing. Transaction at"
+						+ " start row {} processed fewer messages ({}) than"
+						+ " allowed batch size {}.",
+						new Object[] { startRow, msgHandledCnt, QUEUE_BATCH_SIZE });
 				break;
 			}
+
 			// Are potentially more msgs to handle and we know at least one
 			// msg in the previous batch errored out. go ahead and grab another
 			// full batch. Grabbing a full batch avoids slowdown when enough
@@ -239,9 +247,20 @@ public class MessageServiceImpl implements MessageService {
 				sap.set(new SortingAndPaging(ObjectStatus.ACTIVE, startRow,
 						QUEUE_BATCH_SIZE,
 						null, null, null));
+				LOGGER.info("Need to advance past message queue processing errors."
+						+ " Transaction at start row {} processed all {}"
+						+ " messages in a max batch size of {}, but were"
+						+ " errors.",
+						new Object[] { startRow, msgHandledCnt, QUEUE_BATCH_SIZE });
 				// lets not get into an excessively tight email loop
 				maybePauseBetweenQueueBatches();
 			} else {
+				LOGGER.info("Stop message queue processing. Transaction at"
+						+ " start row {} processed all {} messages in a max"
+						+ " batch size of {}, but were zero errors. Waiting for"
+						+ " next scheduled execution before processing"
+						+ " additional messages.",
+						new Object[] { startRow, msgHandledCnt, QUEUE_BATCH_SIZE });
 				break;
 			}
 		}
@@ -252,7 +271,13 @@ public class MessageServiceImpl implements MessageService {
 	private Pair<PagingWrapper<Message>, Collection<Throwable>>
 	sendQueuedMessageBatch(SortingAndPaging sap) {
 		LinkedList<Throwable> errors = Lists.newLinkedList();
+		LOGGER.info("Looking for queued message batch at start row {}, batch size {}",
+				sap.getFirstResult(), sap.getMaxResults());
 		final PagingWrapper<Message> messages = messageDao.queued(sap);
+		LOGGER.info("Start processing {} queued messages in batchstart"
+				+ " row {}, max batch size {}",
+				new Object[] { messages.getRows() == null ? 0 : messages.getRows().size(),
+						sap.getFirstResult(), sap.getMaxResults() });
 		for (final Message message : messages ) {
 			try {
 				sendMessage(message);
@@ -270,6 +295,8 @@ public class MessageServiceImpl implements MessageService {
 	private void maybePauseBetweenQueueBatches() {
 		if ( INTER_QUEUE_BATCH_SLEEP > 0 ) {
 			try {
+				LOGGER.info("Pausing for {} ms between message queue batches.",
+						INTER_QUEUE_BATCH_SLEEP);
 				Thread.sleep(INTER_QUEUE_BATCH_SLEEP);
 			} catch ( InterruptedException e ) {
 				// reassert
