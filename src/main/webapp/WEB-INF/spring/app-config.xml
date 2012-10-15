@@ -72,7 +72,7 @@
 	</bean>
 
 	<!-- Task Scheduling -->
-	<task:scheduler id="sspScheduler" pool-size="3" />
+	<task:scheduler id="sspScheduler" pool-size="4" />
 	<task:annotation-driven scheduler="sspScheduler" />
 
 	<!-- Transactions -->
