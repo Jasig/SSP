@@ -255,7 +255,7 @@ public class PersonControllerIntegrationTest {
 					expectedTopLevelLookupFields, e.getLookupFields());
 			final Map<String,String> expectedConflictingLookupFields =
 					new HashMap<String,String>();
-			expectedConflictingLookupFields.put("username", TEST_SCHOOLID);
+			expectedConflictingLookupFields.put("schoolId", "legacy id");
 			assertEquals("Conflict on unexpected person key",
 					expectedConflictingLookupFields,
 					((ObjectExistsException)e.getCause()).getLookupFields());
