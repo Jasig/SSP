@@ -22,6 +22,7 @@ import org.jasig.ssp.dao.reference.StudentTypeDao;
 import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
 import org.jasig.ssp.factory.reference.StudentTypeTOFactory;
 import org.jasig.ssp.model.reference.StudentType;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.reference.StudentTypeTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,5 +52,12 @@ public class StudentTypeTOFactoryImpl
 	@Override
 	protected StudentTypeDao getDao() {
 		return dao;
+	}
+
+	@Override
+	public StudentType from(final StudentTypeTO tObject) throws ObjectNotFoundException {
+		StudentType model = super.from(tObject);
+		model.setRequireInitialAppointment(tObject.isRequireInitialAppointment());
+		return model;
 	}
 }
