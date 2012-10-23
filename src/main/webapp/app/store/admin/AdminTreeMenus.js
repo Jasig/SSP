@@ -13,6 +13,60 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     	    	form: '',
     	        expanded: true,
     	        children: [ {
+			    	            text: 'Student Success',
+			    	            title: 'Student Success',
+			    	            form: '',
+			    	            expanded: false,
+			    	            children: [{
+									text: 'Campus Services',
+									title: 'Campus Services',
+									store: 'campusServices',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+							    },{
+									text: 'LASSI Skill Components',
+									title: 'LASSI Skill Components',
+									store: 'lassis',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+							    },{
+									text: 'Personality Types',
+									title: 'Personality Types',
+									store: 'personalityTypes',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+							    }]
+			                },{
+			    	            text: 'Disability Services',
+			    	            title: 'Disability Services',
+			    	            form: '',
+			    	            expanded: false,
+			    	            children: [{
+									text: 'Disability Accommodations',
+									title: 'Disability Accommodations',
+									store: 'disabilityAccommodations',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+							    },{
+									text: 'Disability Agencies',
+									title: 'Disability Agencies',
+									store: 'disabilityAgencies',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+							    },{
+									text: 'Disability Statuses',
+									title: 'Disability Statuses',
+									store: 'disabilityStatuses',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+							    },{
+									text: 'Disability Types',
+									title: 'Disability Types',
+									store: 'disabilityTypes',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+							    }]
+			                },{
     	        	            text: 'Caseload',
     	        	            title: 'Caseload',
     	        	            form: '',
@@ -141,6 +195,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     								    	text: 'Marital Statuses',
     								    	title: 'Marital Statuses',
     								    	store: 'maritalStatuses',
+    								        form: 'AbstractReferenceAdmin',
+    										leaf: true
+    								    },{
+    								    	text: 'Military Affiliations',
+    								    	title: 'Military Affiliations',
+    								    	store: 'militaryAffiliations',
     								        form: 'AbstractReferenceAdmin',
     										leaf: true
     								    }

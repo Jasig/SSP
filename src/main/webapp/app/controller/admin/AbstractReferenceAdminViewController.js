@@ -158,7 +158,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
        		   method: 'DELETE',
        		   successFunc: function(response,responseText){
        			   var r = Ext.decode(response.responseText);
-       			   if (r.success==true)
+       			   if (Boolean(r.success)==true)
        			   {
        				store.remove( store.getById( id ) );
        				store.totalCount = store.totalCount-1;

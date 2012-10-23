@@ -39,5 +39,6 @@
 	<include file="org/jasig/ssp/database/changesets/000010.xml" />
 	<include file="org/jasig/ssp/database/integrationchangesets/i000002-test.xml" />
 	<include file="org/jasig/ssp/database/changesets/000010-test.xml" />
-
+	<include file="org/jasig/ssp/database/changesets/000011.xml" />
+    <include file="org/jasig/ssp/database/changesets/000011-test.xml" />
 </databaseChangeLog>
