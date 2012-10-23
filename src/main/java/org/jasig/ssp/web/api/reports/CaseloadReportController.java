@@ -1,3 +1,21 @@
+/**
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.jasig.ssp.web.api.reports; // NOPMD
 
 import java.io.ByteArrayInputStream;
@@ -26,6 +44,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.CaseloadService;
@@ -130,7 +149,7 @@ public class CaseloadReportController extends AbstractBaseController {
 			Long npCount = caseLoadService.caseLoadCountFor(ps_np,currPerson, studentTypeIds, programStatusDateFrom, programStatusDateTo);
 			Long transitionedCount = caseLoadService.caseLoadCountFor(ps_t,currPerson, studentTypeIds, programStatusDateFrom, programStatusDateTo);
 			Long noShowCount = caseLoadService.caseLoadCountFor(ps_ns,currPerson, studentTypeIds, programStatusDateFrom, programStatusDateTo);	
-			CaseLoadReportTO caseLoadReportTO = new CaseLoadReportTO(currPerson.getFirstName(), currPerson.getLastName(), currPerson.getStaffDetails().getDepartmentName(),
+			CaseLoadReportTO caseLoadReportTO = new CaseLoadReportTO(currPerson.getFirstName(), currPerson.getLastName(), nullSafeDepartmentNameFor(currPerson,"Not Available Yet"),
 					activeCount,
 					inActiveCount,
 					npCount,
@@ -202,6 +221,14 @@ public class CaseloadReportController extends AbstractBaseController {
 		response.flushBuffer();
 		is.close();
 		os.close();		
+	}
+
+	private String nullSafeDepartmentNameFor(Person currPerson, String defaultStr) {
+		if ( currPerson == null || currPerson.getStaffDetails() == null ) {
+			return defaultStr;
+		}
+		String deptName = currPerson.getStaffDetails().getDepartmentName();
+		return StringUtils.isBlank(deptName) ? defaultStr : deptName;
 	}
 
 	@Override

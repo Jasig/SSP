@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank Letter Landscape" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de052e81-a0fc-4bfe-a86d-fd593cff06df">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -40,19 +60,19 @@
 		<variableExpression><![CDATA[new Long(0)]]></variableExpression>
 		<initialValueExpression><![CDATA[new Long(0)]]></initialValueExpression>
 	</variable>
-	<variable name="activeCount_1" class="java.lang.Long" resetType="Column" calculation="Sum">
+	<variable name="activeCount_1" class="java.lang.Long" calculation="Sum">
 		<variableExpression><![CDATA[$F{activeCount}]]></variableExpression>
 	</variable>
-	<variable name="inActiveCount_1" class="java.lang.Long" resetType="Column" calculation="Sum">
+	<variable name="inActiveCount_1" class="java.lang.Long" calculation="Sum">
 		<variableExpression><![CDATA[$F{inActiveCount}]]></variableExpression>
 	</variable>
-	<variable name="transitionedCount_1" class="java.lang.Long" resetType="Column" calculation="Sum">
+	<variable name="transitionedCount_1" class="java.lang.Long" calculation="Sum">
 		<variableExpression><![CDATA[$F{transitionedCount}]]></variableExpression>
 	</variable>
-	<variable name="npCount_1" class="java.lang.Long" resetType="Column" calculation="Sum">
+	<variable name="npCount_1" class="java.lang.Long" calculation="Sum">
 		<variableExpression><![CDATA[$F{npCount}]]></variableExpression>
 	</variable>
-	<variable name="noShowCount_1" class="java.lang.Long" resetType="Column" calculation="Sum">
+	<variable name="noShowCount_1" class="java.lang.Long" calculation="Sum">
 		<variableExpression><![CDATA[$F{noShowCount}]]></variableExpression>
 	</variable>
 	<variable name="totalCount" class="java.lang.String">
@@ -278,7 +298,7 @@
 				<reportElement uuid="d81fa98a-b996-49fb-8070-f4e12fda97c3" x="21" y="17" width="700" height="1"/>
 			</line>
 			<textField>
-				<reportElement uuid="ba35a3f4-83ae-41be-9d55-0a48ae433ca7" x="692" y="22" width="24" height="20"/>
+				<reportElement uuid="ba35a3f4-83ae-41be-9d55-0a48ae433ca7" x="692" y="21" width="24" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$V{noShowCount_1}]]></textFieldExpression>
 			</textField>
@@ -305,7 +325,7 @@
 			<textField>
 				<reportElement uuid="3a3d6b62-fdca-4676-85de-4d90f7184226" x="480" y="19" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$F{activeCount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{activeCount_1}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="5d21c3be-ad7e-47ff-a4b1-e5d2aec1994c" x="45" y="22" width="100" height="20"/>

@@ -1,3 +1,21 @@
+/**
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.jasig.ssp.service.impl;
 
 import java.util.Collection;
@@ -291,6 +309,27 @@ public class PersonServiceImpl implements PersonService {
 	public Person create(final Person obj) {
 
 		LOGGER.debug("Creating User {}", obj);
+
+		// Best to check for schoolId collisions 1st b/c proposed usernames
+		// are sometimes just calculated values from the UI. Conflicts with
+		// those calculated values are perfectly legitimate, but the UI will
+		// then attempt to load *that* person record to help the user work
+		// through the conflict. But what the user actually entered was a
+		// schoolId, not a username, and the username conflict might have
+		// been on a person record that doesn't have the schoolId they originally
+		// requested. So if the UI isn't careful, it will end up potentially
+		// reloading the screen with the wrong person record or, worse,
+		// eventually overwriting the wrong person record.
+		if (obj.getSchoolId() != null) {
+			Person existing = null;
+			try {
+				existing = dao.getBySchoolId(obj.getSchoolId());
+			} catch ( ObjectNotFoundException e ) {}
+			if (null != existing) {
+				throw new ObjectExistsException(Person.class.getName(),
+						new Pair<String,String>("schoolId", obj.getSchoolId()).toMap());
+			}
+		}
 
 		if (obj.getUsername() != null) {
 			final Person existing = dao.fromUsername(obj.getUsername());

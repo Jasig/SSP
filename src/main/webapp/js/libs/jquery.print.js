@@ -1,3 +1,5 @@
+// Originally sourced from http://www.bennadel.com/blog/1591-Ask-Ben-Print-Part-Of-A-Web-Page-With-jQuery.htm
+
 // Create a jquery plugin that prints the given element.
     jQuery.fn.print = function(){
     // NOTE: We are trimming the jQuery collection down to the

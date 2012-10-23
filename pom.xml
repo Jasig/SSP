@@ -5,7 +5,13 @@
 	<artifactId>ssp</artifactId>
 	<packaging>war</packaging>
 	<name>SSP</name>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>1.2.0-SNAPSHOT</version>
+
+	<parent>
+		<groupId>org.jasig.parent</groupId>
+		<artifactId>jasig-parent</artifactId>
+		<version>33</version>
+	</parent>
 
 	<properties>
 		<apache.httpcomponents.version>4.1.3</apache.httpcomponents.version>
@@ -16,17 +22,19 @@
 		<groovy.version>1.8.6</groovy.version>
 
 		<targetJdk>1.6</targetJdk>
+		<project.build.sourceVersion>1.6</project.build.sourceVersion>
+		<project.build.targetVersion>1.6</project.build.targetVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<gmaven.runtime>1.8</gmaven.runtime>
 	</properties>
 
 	<scm>
-		<connection>scm:git:git://github.com/russlittle/SSP-Open-Source-Project.git</connection>
-		<developerConnection>scm:git:git@github.com:russlittle/SSP-Open-Source-Project.git</developerConnection>
-		<url>https://github.com/russlittle/SSP-Open-Source-Project</url>
-	  <tag>HEAD</tag>
-  </scm>
+		<connection>scm:git:git://github.com/Jasig/SSP.git</connection>
+		<developerConnection>scm:git:git@github.com:Jasig/SSP.git</developerConnection>
+		<url>https://github.com/Jasig/SSP</url>
+		<tag>HEAD</tag>
+	</scm>
 
 	<profiles>
 		<profile>
@@ -214,7 +222,7 @@
 		<dependency>
 			<groupId>org.jasig.ssp.platform</groupId>
 			<artifactId>platform-java-api</artifactId>
-			<version>${project.version}</version>
+			<version>1.1.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -499,31 +507,90 @@
 						</exclusions>
 					</dependency>
 					<dependency>
+						<groupId>org.slf4j</groupId>
+						<artifactId>jcl-over-slf4j</artifactId>
+						<version>1.6.4</version>
+					</dependency>
+					<dependency>
 						<groupId>org.codehaus.groovy</groupId>
 						<artifactId>groovy-all</artifactId>
 						<version>${groovy.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>
-			
-			<!-- Bundle licenses into deployed file -->
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<version>1.1</version>
-				<executions>
-					<execution>
-						<id>download-licenses</id>
-						<goals>
-							<goal>download-licenses</goal>
-						</goals>
-					</execution>
-				</executions>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<configuration>
+					<excludes combine.children="append">
+						<exclude>NOTICE.template</exclude>
+						<exclude>src/main/webapp/js/libs/**</exclude>
+						<exclude>src/main/webapp/resources/sass/**/.sass-cache/**/*.scssc</exclude>
+						<exclude>**/.gitignore</exclude>
+						<exclude>**/.pmd</exclude>
+						<exclude>overlays/**/*</exclude>
+						<exclude>src/main/less/mygps/grid.less/grid.less</exclude>
+						<exclude>src/main/webapp/test/app-test/lib/**/*</exclude>
+						<exclude>src/main/webapp/MyGPS/scripts/lib/**/*</exclude>
+						<exclude>src/main/webapp/MyGPS/styles/lib/**/*</exclude>
+						<exclude>**/*.pdf</exclude>
+
+						<!-- Exclude binaries and metadata files generated
+							by tooling. -->
+						<exclude>doc/apiDiagrams/*.mm</exclude>
+						<exclude>doc/apiDiagrams/*.PNG</exclude>
+						<exclude>doc/apiDiagrams/*.ucls</exclude>
+						<exclude>doc/apiDiagrams/*.uxf</exclude>
+
+						<!-- See below for explanation -->
+						<exclude>**/Cakefile</exclude>
+						<exclude>**/*.json</exclude>
+
+						<!-- jsb3 most closely resembles JSON, for which
+							comments are not allowed. There is an embedded
+							license header configured into that JSON
+							content, though, which should be written into the
+							top of all-classes.js and app-all.js whenever
+							regenerating those files
+							(sencha build -p ssp.jsb3 -d .)-->
+						<exclude>**/*.jsb3</exclude>
+						<exclude>src/main/webapp/app-all.js</exclude>
+						<exclude>src/main/webapp/all-classes.js</exclude>
+					</excludes>
+					<mapping>
+						<!-- Defaults don't have any mapping for the following -->
+						<coffee>SCRIPT_STYLE</coffee>
+						<markdown>XML_STYLE</markdown>
+						<ldif>SCRIPT_STYLE</ldif>
+						<jrxml>XML_STYLE</jrxml>
+						<less>DOUBLESLASH_STYLE</less>
+						<scss>DOUBLESLASH_STYLE</scss>
+
+						!<!-- Cannot detect extension-less files, which affects
+							the following in our case. Have to add licenses to
+							these manually -->
+						<!--
+						<Cakefile>SCRIPT_STYLE</Cakefile>
+						-->
+					</mapping>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jasig.maven</groupId>
+				<artifactId>maven-notice-plugin</artifactId>
+				<configuration>
+					<!-- Need our own NOTICE.template to account for JS/CSS
+						licenses -->
+					<noticeTemplate>NOTICE.template</noticeTemplate>
+					<licenseMapping combine.children="append">
+						<param>${basedir}/license-mappings.xml</param>
+					</licenseMapping>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1.1</version>
 				<configuration>
 					<attachClasses>true</attachClasses>
 					<warName>ssp</warName>
@@ -544,18 +611,6 @@
 							</includes>
 						</overlay>
 					</overlays>
-				</configuration>
-			</plugin>
-			<!-- Set encoding to utf-8 and compile at 1.6 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-					<encoding>UTF-8</encoding>
-					<showWarnings>true</showWarnings>
 				</configuration>
 			</plugin>
 			<!-- GMaven plugin for unit tests -->
@@ -601,11 +656,6 @@
 						<version>2.12</version>
 					</dependency>
 				</dependencies>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<version>3.0</version>
 			</plugin>
 			<!-- Allow running liquibase from the command line through maven -->
 			<plugin>
