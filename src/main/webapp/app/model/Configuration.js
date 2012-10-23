@@ -139,7 +139,7 @@ Ext.define('Ssp.model.Configuration', {
     	     {
               name: 'educationPlanSpecialNeedsLabel', 
               type: 'string', 
-              defaultValue: 'Special needs or require special accomodation?'
+              defaultValue: 'Special needs or require special accommodation?'
              },
     	     /*
     	      * Label to use for the Coach field displays across the application.
