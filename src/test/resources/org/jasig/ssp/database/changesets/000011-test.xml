@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="create test military affiliation" author="shawn.gormley">
+		<insert tableName="military_affiliation">
+			<column name="id" value="350b9f90-b78f-430f-ac08-27b56b424bb1" />
+			<column name="name" value="Test Military Affiliation" />
+			<column name="description" value="This is a test military affiliation." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="military_affiliation">
+				<where>id='350b9f90-b78f-430f-ac08-27b56b424bb1'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="create test disability accommodation" author="shawn.gormley">
+		<insert tableName="disability_accommodation">
+			<column name="id" value="9e15bba9-b955-477f-968c-4336b9401f58" />
+			<column name="name" value="Test Disability Accommodation" />
+			<column name="description" value="This is a test disability accommodation" />
+			<column name="created_date" value="2012-10-01T00:00:00" />
+			<column name="modified_date" value="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="disability_accommodation">
+				<where>id='9e15bba9-b955-477f-968c-4336b9401f58'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="create test disability agency" author="shawn.gormley">
+		<insert tableName="disability_agency">
+			<column name="id" value="c0f0d778-5e07-44ed-aadf-6752c9a994ec" />
+			<column name="name" value="Test Disability Agency" />
+			<column name="description" value="This is a test disability agency." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="disability_agency">
+				<where>id='c0f0d778-5e07-44ed-aadf-6752c9a994ec'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="create test disability status" author="shawn.gormley">
+		<insert tableName="disability_status">
+			<column name="id" value="00df56f6-f673-42ed-b73d-d4bceda0d24b" />
+			<column name="name" value="Test Disability Status" />
+			<column name="description" value="This is a test disability status." />
+			<column name="created_date" value="2012-10-01T00:00:00" />
+			<column name="modified_date" value="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="disability_status">
+				<where>id='00df56f6-f673-42ed-b73d-d4bceda0d24b'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="create test disability type" author="shawn.gormley">
+		<insert tableName="disability_type">
+			<column name="id" value="914d2329-28d0-4c79-b81e-c421af56476f" />
+			<column name="name" value="Test Disability Type" />
+			<column name="description" value="This is a test disability type" />
+			<column name="created_date" value="2012-10-01T00:00:00" />
+			<column name="modified_date" value="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="disability_type">
+				<where>id='914d2329-28d0-4c79-b81e-c421af56476f'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="create test lassi" author="shawn.gormley">
+		<insert tableName="lassi">
+			<column name="id" value="96b64b18-c790-40bc-ba3b-384a49618ce3" />
+			<column name="name" value="Test LASSI Skill Component" />
+			<column name="description" value="This is a test lassi" />
+			<column name="created_date" value="2012-10-01T00:00:00" />
+			<column name="modified_date" value="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="lassi">
+				<where>id='96b64b18-c790-40bc-ba3b-384a49618ce3'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="create test personality type" author="shawn.gormley">
+		<insert tableName="personality_type">
+			<column name="id" value="3fac8ee5-8e41-4a4b-8c8e-916c5ea08246" />
+			<column name="name" value="Test Personality Type" />
+			<column name="description" value="This is a test personality type" />
+			<column name="created_date" value="2012-10-01T00:00:00" />
+			<column name="modified_date" value="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="personality_type">
+				<where>id='3fac8ee5-8e41-4a4b-8c8e-916c5ea08246'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="create test campus service" author="shawn.gormley">
+		<insert tableName="campus_service">
+			<column name="id" value="1d517629-1153-43a8-bf1e-faee31f3a24c" />
+			<column name="name" value="Test Campus Service" />
+			<column name="description" value="This is a test campus service" />
+			<column name="created_date" value="2012-10-01T00:00:00" />
+			<column name="modified_date" value="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="campus_service">
+				<where>id='1d517629-1153-43a8-bf1e-faee31f3a24c'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

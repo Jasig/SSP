@@ -1,0 +1,1462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet author='shawn.gormley' id='Add military_affiliation table'>
+		<createTable tableName="military_affiliation">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="${nvarchar.type}(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="military_affiliation_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="military_affiliation_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on military_affiliation to ssp</sql>
+		<rollback>
+			<dropTable tableName="military_affiliation" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='shawn.gormley' id='Add disability_accommodation table'>
+		<createTable tableName="disability_accommodation">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="${nvarchar.type}(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="disability_accommodation_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="disability_accommodation_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on disability_accommodation to ssp</sql>
+		<rollback>
+			<dropTable tableName="disability_accommodation" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='shawn.gormley' id='Add disability_agency table'>
+		<createTable tableName="disability_agency">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="${nvarchar.type}(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="disability_agency_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="disability_agency_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on disability_agency to ssp</sql>
+		<rollback>
+			<dropTable tableName="disability_agency" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='shawn.gormley' id='Add disability_status table'>
+		<createTable tableName="disability_status">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="${nvarchar.type}(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="disability_status_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="disability_status_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on disability_status to ssp</sql>
+		<rollback>
+			<dropTable tableName="disability_status" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='shawn.gormley' id='Add disability_type table'>
+		<createTable tableName="disability_type">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="${nvarchar.type}(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="disability_type_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="disability_type_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on disability_type to ssp</sql>
+		<rollback>
+			<dropTable tableName="disability_type" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='shawn.gormley' id='Add lassi table'>
+		<createTable tableName="lassi">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="${nvarchar.type}(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="lassi_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="lassi_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on lassi to ssp</sql>
+		<rollback>
+			<dropTable tableName="lassi" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='shawn.gormley' id='Add personality_type table'>
+		<createTable tableName="personality_type">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="${nvarchar.type}(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="personality_type_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="personality_type_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on personality_type to ssp</sql>
+		<rollback>
+			<dropTable tableName="personality_type" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet author='shawn.gormley' id='Add campus_service table'>
+		<createTable tableName="campus_service">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="${nvarchar.type}(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="campus_service_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="campus_service_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on campus_service to ssp</sql>
+		<rollback>
+			<dropTable tableName="campus_service" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet id="create reference data - military affiliation" author="shawn.gormley">
+		<insert tableName="military_affiliation">
+			<column name="id" value="7c7df05a-92c2-4806-93c7-5b8d99d42657" />
+			<column name="name" value="Veteran" />
+			<column name="description" value="Veteran" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="military_affiliation">
+			<column name="id" value="FBD43E12-BD41-437E-85BA-A45BA0E12327" />
+			<column name="name" value="Active Duty" />
+			<column name="description" value="Active Duty" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="military_affiliation">
+			<column name="id" value="ac85ac8e-90e6-4425-b74e-7e8b0c7bee7a" />
+			<column name="name" value="DOD Civilian" />
+			<column name="description" value="DOD Civilian" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="military_affiliation">
+			<column name="id" value="fe48d1d0-c6bd-4c85-9e4d-e9f817e08be3" />
+			<column name="name" value="Reservist" />
+			<column name="description" value="Reservist" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="military_affiliation">
+			<column name="id" value="9dbfee85-2a67-489e-9e23-2ec4ff161543" />
+			<column name="name" value="Dependent" />
+			<column name="description" value="Dependent" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="military_affiliation">
+				<where>id='7c7df05a-92c2-4806-93c7-5b8d99d42657'</where>
+			</delete>
+			<delete tableName="military_affiliation">
+				<where>id='FBD43E12-BD41-437E-85BA-A45BA0E12327'</where>
+			</delete>
+			<delete tableName="military_affiliation">
+				<where>id='ac85ac8e-90e6-4425-b74e-7e8b0c7bee7a'</where>
+			</delete>
+			<delete tableName="military_affiliation">
+				<where>id='fe48d1d0-c6bd-4c85-9e4d-e9f817e08be3'</where>
+			</delete>
+			<delete tableName="military_affiliation">
+				<where>id='9dbfee85-2a67-489e-9e23-2ec4ff161543'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="create reference data - disability accommodation" author="shawn.gormley">
+        <insert tableName="disability_accommodation">
+			<column name="id" value="3761d6a4-6f71-4c88-a1d7-f9bea7079346" />
+			<column name="name" value="To be determined" />
+			<column name="description" value="To be determined" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="f4620bbb-35b5-4fac-9746-60e81abeb5b9" />
+			<column name="name" value="Extended time on exams/quizzes" />
+			<column name="description" value="Extended time on exams/quizzes" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="85138559-4d40-420d-bd78-119276a7b42c" />
+			<column name="name" value="Distraction-free testing environment -Testing Center" />
+			<column name="description" value="Distraction-free testing environment -Testing Center" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="9c49cb24-0949-4472-988b-2f539fbe5843" />
+			<column name="name" value="Proctored Exam with writer in Tutorial Center" />
+			<column name="description" value="Proctored Exam with writer in Tutorial Center" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="90ed8cf5-040c-4f68-83c3-863120da0388" />
+			<column name="name" value="Proctored Exam with reader in Tutorial Center" />
+			<column name="description" value="Proctored Exam with reader in Tutorial Center" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="3C3A0E9D-ED9D-47AD-9A5C-C4AFE4EDBE69" />
+			<column name="name" value="Volunteer Note Taker" />
+			<column name="description" value="Volunteer Note Taker" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="f0ff3e53-bf45-421e-8bbf-c0ef8a2049b4" />
+			<column name="name" value="Tape record lecture" />
+			<column name="description" value="Tape record lecture" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="0412e725-05d7-4161-84cd-fd77f494583d" />
+			<column name="name" value="Use of calculator" />
+			<column name="description" value="Use of calculator" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="13588bfe-c9b9-4134-bb6f-ee875c2e8789" />
+			<column name="name" value="Enlarged print materials" />
+			<column name="description" value="Enlarged print materials" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="6d745998-8a2f-4bf0-a104-0e0499c8f18f" />
+			<column name="name" value="Preferential seating in front of class" />
+			<column name="description" value="Preferential seating in front of class" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="74603eff-ea00-413a-acd5-a55755b79778" />
+			<column name="name" value="Allow students to record answers on regular paper -unable to fill scantron sheet" />
+			<column name="description" value="Allow students to record answers on regular paper -unable to fill scantron sheet" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="51155fbf-f681-4492-a059-37626e08e732" />
+			<column name="name" value="Tutors" />
+			<column name="description" value="Tutors" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="08dd4152-82db-429f-9a7f-7f9a749c46f7" />
+			<column name="name" value="Provide Time Management schedule sheet" />
+			<column name="description" value="Provide Time Management schedule sheet" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="a1d9b1c8-6841-46f5-9dda-5b7e4130fd42" />
+			<column name="name" value="Interpreter" />
+			<column name="description" value="Interpreter" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="3424f88b-614c-4686-af57-760ea0b57d2f" />
+			<column name="name" value="FM Loop System with neck coil" />
+			<column name="description" value="FM Loop System with neck coil" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="1f18e705-187a-447d-8f03-8814fc854fc6" />
+			<column name="name" value="Closed captioning for video tapes" />
+			<column name="description" value="Closed captioning for video tapes" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="2da4bd54-29b8-487e-ae81-82867c20631f" />
+			<column name="name" value="Training on computer software" />
+			<column name="description" value="Training on computer software" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="a3b9e31e-b3af-41b3-b602-151b60253938" />
+			<column name="name" value="Other adjustments-accommodations" />
+			<column name="description" value="Other adjustments-accommodations" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="595f1fb6-81f6-40d4-b82a-e0cce834156c" />
+			<column name="name" value="Use of a computer for tests, writing assignments, etc." />
+			<column name="description" value="Use of a computer for tests, writing assignments, etc." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+        <insert tableName="disability_accommodation">
+			<column name="id" value="c2d81565-0dd5-4f1a-ad54-2640f4fd7749" />
+			<column name="name" value="Tape recorded textbooks -Eligible from RFB and D" />
+			<column name="description" value="Tape recorded textbooks -Eligible from RFB and D" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="disability_accommodation">
+				<where>id='3761d6a4-6f71-4c88-a1d7-f9bea7079346'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='f4620bbb-35b5-4fac-9746-60e81abeb5b9'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='f4620bbb-35b5-4fac-9746-60e81abeb5b9'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='f4620bbb-35b5-4fac-9746-60e81abeb5b9'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='90ed8cf5-040c-4f68-83c3-863120da0388'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='3C3A0E9D-ED9D-47AD-9A5C-C4AFE4EDBE69'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='f0ff3e53-bf45-421e-8bbf-c0ef8a2049b4'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='0412e725-05d7-4161-84cd-fd77f494583d'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='13588bfe-c9b9-4134-bb6f-ee875c2e8789'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='6d745998-8a2f-4bf0-a104-0e0499c8f18f'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='74603eff-ea00-413a-acd5-a55755b79778'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='51155fbf-f681-4492-a059-37626e08e732'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='08dd4152-82db-429f-9a7f-7f9a749c46f7'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='a1d9b1c8-6841-46f5-9dda-5b7e4130fd42'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='3424f88b-614c-4686-af57-760ea0b57d2f'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='1f18e705-187a-447d-8f03-8814fc854fc6'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='2da4bd54-29b8-487e-ae81-82867c20631f'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='a3b9e31e-b3af-41b3-b602-151b60253938'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='595f1fb6-81f6-40d4-b82a-e0cce834156c'</where>
+			</delete>
+			<delete tableName="disability_accommodation">
+				<where>id='c2d81565-0dd5-4f1a-ad54-2640f4fd7749'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="create reference data - disability agency" author="shawn.gormley">
+		<insert tableName="disability_agency">
+			<column name="id" value="6B209A6D-70B9-416C-95A5-17CAB4594F85" />
+			<column name="name" value="BVR" />
+			<column name="description" value="BVR" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_agency">
+			<column name="id" value="7845fdea-9da7-49be-a3cf-c9da03c38d56" />
+			<column name="name" value="BSVI" />
+			<column name="description" value="BSVI" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_agency">
+			<column name="id" value="7f92b5bb-8e9c-44c7-88fd-2ffdce68ef98" />
+			<column name="name" value="VA" />
+			<column name="description" value="VA" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_agency">
+			<column name="id" value="02aa9557-c8f1-4716-bbae-2b3401e386f6" />
+			<column name="name" value="MH" />
+			<column name="description" value="MH" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_agency">
+			<column name="id" value="224b03d9-90da-4f9c-8959-ea2e97661f40" />
+			<column name="name" value="Other" />
+			<column name="description" value="Other" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="disability_agency">
+				<where>id='6B209A6D-70B9-416C-95A5-17CAB4594F85'</where>
+			</delete>
+			<delete tableName="disability_agency">
+				<where>id='7845fdea-9da7-49be-a3cf-c9da03c38d56'</where>
+			</delete>
+			<delete tableName="disability_agency">
+				<where>id='7f92b5bb-8e9c-44c7-88fd-2ffdce68ef98'</where>
+			</delete>
+			<delete tableName="disability_agency">
+				<where>id='02aa9557-c8f1-4716-bbae-2b3401e386f6'</where>
+			</delete>
+			<delete tableName="disability_agency">
+				<where>id='224b03d9-90da-4f9c-8959-ea2e97661f40'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+  
+	<changeSet id="create reference data - disability status" author="shawn.gormley">
+		<insert tableName="disability_status">
+			<column name="id" value="E0208429-AEB2-4854-AB7C-3C9281C96002" />
+			<column name="name" value="Eligible" />
+			<column name="description" value="Eligible" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_status">
+			<column name="id" value="5dab94e2-d5a0-4203-b462-8d0841d63786" />
+			<column name="name" value="Ineligible" />
+			<column name="description" value="Ineligible" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_status">
+			<column name="id" value="c2609cdf-6aa2-4948-b0e3-3779f2541783" />
+			<column name="name" value="Pending" />
+			<column name="description" value="Pending" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_status">
+			<column name="id" value="24d12b6f-1d58-4f13-ac5e-c09cd249ba43" />
+			<column name="name" value="Temporary Eligibility" />
+			<column name="description" value="Temporary Eligibility" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="disability_status">
+				<where>id='E0208429-AEB2-4854-AB7C-3C9281C96002'</where>
+			</delete>
+			<delete tableName="disability_status">
+				<where>id='5dab94e2-d5a0-4203-b462-8d0841d63786'</where>
+			</delete>
+			<delete tableName="disability_status">
+				<where>id='c2609cdf-6aa2-4948-b0e3-3779f2541783'</where>
+			</delete>
+			<delete tableName="disability_status">
+				<where>id='24d12b6f-1d58-4f13-ac5e-c09cd249ba43'</where>
+			</delete>
+		</rollback>
+	</changeSet>    
+    
+	<changeSet id="create reference data - disability type" author="shawn.gormley">
+		<insert tableName="disability_type">
+			<column name="id" value="c049aec0-9c5c-46a6-8586-604688e9ac69" />
+			<column name="name" value="DH" />
+			<column name="description" value="1" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_type">
+			<column name="id" value="faf8ae05-a865-4696-8585-e7a7b65d3600" />
+			<column name="name" value="HDH" />
+			<column name="description" value="2" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_type">
+			<column name="id" value="9e8377a3-ded3-4338-9780-8161748601fc" />
+			<column name="name" value="DF" />
+			<column name="description" value="3" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_type">
+			<column name="id" value="35ed9080-e88b-473a-83a4-565c5c56a756" />
+			<column name="name" value="SP" />
+			<column name="description" value="4" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_type">
+			<column name="id" value="b7c3a3c0-de28-4d46-a42b-3de5f294a07f" />
+			<column name="name" value="VIS" />
+			<column name="description" value="5" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_type">
+			<column name="id" value="997df364-627b-4fae-a58a-646e20d7ab6f" />
+			<column name="name" value="EMO" />
+			<column name="description" value="6" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_type">
+			<column name="id" value="960e507a-2c82-4d6e-bf55-b12e4f0a3a86" />
+			<column name="name" value="OR" />
+			<column name="description" value="7" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_type">
+			<column name="id" value="6babd878-46ba-4106-b5e4-3651fdbf3a71" />
+			<column name="name" value="LD" />
+			<column name="description" value="8" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_type">
+			<column name="id" value="00df56f6-f673-42ed-b73d-d4bceda0d24b" />
+			<column name="name" value="ADD/ADHD" />
+			<column name="description" value="9" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_type">
+			<column name="id" value="2715e5e8-34b2-4992-aea4-7f21b4b10bb9" />
+			<column name="name" value="TBI" />
+			<column name="description" value="10" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_type">
+			<column name="id" value="c9afc03f-b7a2-4d8d-9603-09d313783a04" />
+			<column name="name" value="BLIND" />
+			<column name="description" value="11" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_type">
+			<column name="id" value="92a689f2-1850-4d7a-ae58-0ce349cfde6d" />
+			<column name="name" value="MULTI" />
+			<column name="description" value="12" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="disability_type">
+			<column name="id" value="4afd60bf-a5ea-4215-abb9-8276a6b68827" />
+			<column name="name" value="OTHER" />
+			<column name="description" value="13" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="disability_type">
+				<where>id='c049aec0-9c5c-46a6-8586-604688e9ac69'</where>
+			</delete>
+			<delete tableName="disability_type">
+				<where>id='faf8ae05-a865-4696-8585-e7a7b65d3600'</where>
+			</delete>
+			<delete tableName="disability_type">
+				<where>id='9e8377a3-ded3-4338-9780-8161748601fc'</where>
+			</delete>
+			<delete tableName="disability_type">
+				<where>id='35ed9080-e88b-473a-83a4-565c5c56a756'</where>
+			</delete>
+			<delete tableName="disability_type">
+				<where>id='b7c3a3c0-de28-4d46-a42b-3de5f294a07f'</where>
+			</delete>
+			<delete tableName="disability_type">
+				<where>id='997df364-627b-4fae-a58a-646e20d7ab6f'</where>
+			</delete>
+			<delete tableName="disability_type">
+				<where>id='960e507a-2c82-4d6e-bf55-b12e4f0a3a86'</where>
+			</delete>
+			<delete tableName="disability_type">
+				<where>id='6babd878-46ba-4106-b5e4-3651fdbf3a71'</where>
+			</delete>
+			<delete tableName="disability_type">
+				<where>id='00df56f6-f673-42ed-b73d-d4bceda0d24b'</where>
+			</delete>
+			<delete tableName="disability_type">
+				<where>id='2715e5e8-34b2-4992-aea4-7f21b4b10bb9'</where>
+			</delete>
+			<delete tableName="disability_type">
+				<where>id='c9afc03f-b7a2-4d8d-9603-09d313783a04'</where>
+			</delete>
+			<delete tableName="disability_type">
+				<where>id='92a689f2-1850-4d7a-ae58-0ce349cfde6d'</where>
+			</delete>
+			<delete tableName="disability_type">
+				<where>id='4afd60bf-a5ea-4215-abb9-8276a6b68827'</where>
+			</delete>
+		</rollback>
+	</changeSet>    
+
+	<changeSet id="create reference data - lassi" author="shawn.gormley">
+		<insert tableName="lassi">
+			<column name="id" value="346321d3-b1a3-4ca0-b032-a788cc2114a1" />
+			<column name="name" value="Anxiety" />
+			<column name="description" value="The Anxiety Scale assesses the degree to which students worry about school and their academic performance. Students who score low on this scale are experiencing high levels of anxiety associated with school -note that this scale is reverse scored. High levels of anxiety can help direct attention away from completing academic tasks -sample item: When I am studying, worrying about doing poorly in a course interferes with my concentration. Students who score low on this scale may need to develop techniques for coping with anxiety and reducing worry so that attention can be focused on the task at hand." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="lassi">
+			<column name="id" value="349C6A52-2CD1-489C-B958-B6E5ABDB02FF" />
+			<column name="name" value="Attitude" />
+			<column name="description" value="The Attitude Scale assesses students’ attitudes and interest in college and academic success. It examines how facilitative or debilitative their approach to college and academics is for helping them get their work done and succeeding in college -sample item: I have a positive attitude about attending my classes. Students who score low on this scale may not believe college is relevant or important to them and may need to develop a better understanding of how college and their academic performance relates to their future life goals." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="lassi">
+			<column name="id" value="683c6a7d-18bd-407d-8058-22be356cc079" />
+			<column name="name" value="Concentration" />
+			<column name="description" value="The Concentration Scale assesses students’ ability to direct and maintain attention on academic tasks -sample item: I find that during lectures I think of other things and don’t really listen to what is being said. Low scoring students may need to learn to monitor their level of concentration and develop techniques to redirect attention and eliminate interfering thoughts or feelings so that they can be more effective and efficient learners." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="lassi">
+			<column name="id" value="48e6c049-eae6-477c-b13f-4abb9f8d64b8" />
+			<column name="name" value="Information Processing" />
+			<column name="description" value="The Information Processing Scale assesses how well students’ can use imagery, verbal elaboration, organization strategies, and reasoning skills as learning strategies to help build bridges between what they already know and what they are trying to learn and remember, i.e., knowledge acquisition, retention and future application -sample item: I translate what I am studying into my own words. Students who score low on this scale may have difficulty making information meaningful and storing it in memory in a way that will help them recall it in the future." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="lassi">
+			<column name="id" value="927cf28c-89c1-4e05-b675-ee5e45047797" />
+			<column name="name" value="Motivation" />
+			<column name="description" value="The Motivation Scale assesses students’ diligence, self-discipline, and willingness to exert the effort necessary to successfully complete academic requirements -sample item: When work is difficult I either give up or study only the easy parts. Students who score low on this scale need to accept more responsibility for their academic outcomes and learn how to set and use goals to help accomplish specific tasks." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="lassi">
+			<column name="id" value="f2adf116-8e2d-4831-a315-0c8c8a404efa" />
+			<column name="name" value="Selecting Main Ideas" />
+			<column name="description" value="The Selecting Main Ideas Scale assesses students’ skill at identifying important information for further study from among less important information and supporting details -sample item: When studying, I seem to get lost in the details and miss the important information. Students who score low on this may need to develop their skill at separating out critical information on which to focus their attention. Tasks such as reading a textbook can be overwhelming if students focus on every detail presented." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="lassi">
+			<column name="id" value="1af31ae9-0832-496c-b3ed-d545d6bf9a89" />
+			<column name="name" value="Self-Testing" />
+			<column name="description" value="The Self-Testing Scale assesses students’ use of reviewing comprehension monitoring techniques to determine their level of understanding of the information to be learned -sample item: I stop periodically while reading and mentally go over or review what was said. Low scoring students may need to develop an appreciation for the importance of self-testing, and learn effective techniques for reviewing information and monitoring their level of understanding or ability to apply what they are learning." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="lassi">
+			<column name="id" value="816d8fc1-7e78-45c2-938b-eeb58a57066d" />
+			<column name="name" value="Study Aids" />
+			<column name="description" value="The Study Aids Scale assesses students’ use of supports or resources to help them learn or retain information -sample item: I use special study helps, such as italics and headings, that are in my textbooks. Students with low scores may need to develop a better understanding of the resources available to them and how to use these resources to help them be more effective and efficient learners." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="lassi">
+			<column name="id" value="969c0bc0-0395-402d-b03a-8dd226187349" />
+			<column name="name" value="Test Strategies" />
+			<column name="description" value="The Test Strategies Scale assesses students’ use of test preparation and test taking strategies -sample item: In taking tests, writing papers, etc., I find I have misunderstood what is wanted and lose points because of it. Low scoring students may need to learn more effective techniques for preparing for and taking tests so that they are able to effectively demonstrate their knowledge of the subject matter." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="lassi">
+			<column name="id" value="753ea301-aa13-4588-8c71-b7dc8bb26734" />
+			<column name="name" value="Time Management" />
+			<column name="description" value="The Time Management Scale assesses students’ application of time management principles to academic situations -sample item: I set aside more time to study the subjects that are difficult for me. Students who score low on this scale may need to develop effective scheduling and monitoring techniques in order to assure timely completion of academic tasks and to avoid procrastination while realistically including non-academic activities in their schedule." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="lassi">
+				<where>id='346321d3-b1a3-4ca0-b032-a788cc2114a1'</where>
+			</delete>
+			<delete tableName="lassi">
+				<where>id='349C6A52-2CD1-489C-B958-B6E5ABDB02FF'</where>
+			</delete>
+			<delete tableName="lassi">
+				<where>id='683c6a7d-18bd-407d-8058-22be356cc079'</where>
+			</delete>
+			<delete tableName="lassi">
+				<where>id='48e6c049-eae6-477c-b13f-4abb9f8d64b8'</where>
+			</delete>
+			<delete tableName="lassi">
+				<where>id='927cf28c-89c1-4e05-b675-ee5e45047797'</where>
+			</delete>
+			<delete tableName="lassi">
+				<where>id='f2adf116-8e2d-4831-a315-0c8c8a404efa'</where>
+			</delete>
+			<delete tableName="lassi">
+				<where>id='1af31ae9-0832-496c-b3ed-d545d6bf9a89'</where>
+			</delete>
+			<delete tableName="lassi">
+				<where>id='816d8fc1-7e78-45c2-938b-eeb58a57066d'</where>
+			</delete>
+			<delete tableName="lassi">
+				<where>id='969c0bc0-0395-402d-b03a-8dd226187349'</where>
+			</delete>
+			<delete tableName="lassi">
+				<where>id='753ea301-aa13-4588-8c71-b7dc8bb26734'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="create reference data - personality type" author="shawn.gormley">
+		<insert tableName="personality_type">
+			<column name="id" value="f8bcd9d9-d6b9-4f8c-b9c3-477ec49d7271" />
+			<column name="name" value="ENFJ" />
+			<column name="description" value="Outward action and people oriented, factual and detailed, subjective/empathy, decisive and organized." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="personality_type">
+			<column name="id" value="d24e6e27-1a0d-4cb2-96b4-229bf131ff8e" />
+			<column name="name" value="ENFP" />
+			<column name="description" value="Outward action and people oriented, intuitive/possibilities, subjective/empathy, enjoys being in the moment and open to change." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="personality_type">
+			<column name="id" value="a77bf286-df12-4da0-99b5-c2d480c62afb" />
+			<column name="name" value="ENTJ" />
+			<column name="description" value="Outward action and people oriented, intuitive/possibilities, reasoned and objective, and decisive and organized." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="personality_type">
+			<column name="id" value="46eef8be-abc8-4876-8458-a80f54e9112d" />
+			<column name="name" value="ENTP" />
+			<column name="description" value="Outward action and people oriented, intuitive/possibilities, reasoned and objective, enjoys being in the moment and open to change." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="personality_type">
+			<column name="id" value="4ba0245f-9841-4cfa-b5a7-aaa533017519" />
+			<column name="name" value="ESFJ" />
+			<column name="description" value="Outward action and people oriented, factual and detailed, subjective/empathy, decisive and organized." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="personality_type">
+			<column name="id" value="2e347e7b-b4c1-4ed7-97a9-c40d2bcb67d8" />
+			<column name="name" value="ESFP" />
+			<column name="description" value="Outward action and people oriented, factual and detailed, subjective/empathy, enjoys being in the moment and open to change." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="personality_type">
+			<column name="id" value="83358819-cfc1-40f4-a090-ab057ca748a1" />
+			<column name="name" value="ESTJ" />
+			<column name="description" value="Outward action and people oriented, factual and detailed, reasoned and objective, and decisive and organized." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="personality_type">
+			<column name="id" value="3c908c63-497c-4274-bcc5-c30900d8a816" />
+			<column name="name" value="ESTP" />
+			<column name="description" value="Outward action and people oriented, factual and detailed, reasoned and objective, enjoys being in the moment and open to change." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="personality_type">
+			<column name="id" value="7c2a88e7-a41e-4d95-b43e-940226dc82d7" />
+			<column name="name" value="INFJ" />
+			<column name="description" value="Inwardly directed and reflective, intuitive/possibilities, subjective/empathy, decisive and organized." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="personality_type">
+			<column name="id" value="da31be44-e716-4103-a835-0dab915f55b6" />
+			<column name="name" value="INFP" />
+			<column name="description" value="Inwardly directed and reflective, intuitive/possibilities, subjective/empathy, enjoys being in the moment and open to change." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="personality_type">
+			<column name="id" value="6520DE73-BEB9-4BA0-9DB9-481353038C8C" />
+			<column name="name" value="INTJ" />
+			<column name="description" value="Inwardly directed and reflective, intuitive/possibilities, reasoned and objective, decisive and organized." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="personality_type">
+			<column name="id" value="6fb0068c-b1dc-4f85-96bf-2f65e07e6341" />
+			<column name="name" value="INTP" />
+			<column name="description" value="Inwardly directed and reflective, intuitive/possibilities, reasoned and objective, enjoys being in the moment and open to change." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="personality_type">
+			<column name="id" value="03dabbb6-f5b8-42a5-809b-e644e8b4fc0f" />
+			<column name="name" value="ISFJ" />
+			<column name="description" value="Inwardly directed and reflective, factual and detailed, subjective/empathy, decisive and organized." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="personality_type">
+			<column name="id" value="6755dd3c-02c9-4de7-8b76-c8d69e636d58" />
+			<column name="name" value="ISFP" />
+			<column name="description" value="Inwardly directed and reflective, factual and detailed, subjective/empathy, enjoys being in the moment and open to change." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="personality_type">
+			<column name="id" value="fee8ea81-8e09-4061-8b6a-a9556c4d6eee" />
+			<column name="name" value="ISTJ" />
+			<column name="description" value="Inwardly directed and reflective, factual and detailed, reasoned and objective, decisive and organized." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="personality_type">
+			<column name="id" value="4eb1e689-4346-4749-b5a9-bf3788ba5979" />
+			<column name="name" value="ISTP" />
+			<column name="description" value="Inwardly directed and reflective, factual and detailed, reasoned and objective, enjoys being in the moment and open to change." />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="personality_type">
+				<where>id='f8bcd9d9-d6b9-4f8c-b9c3-477ec49d7271'</where>
+			</delete>
+			<delete tableName="personality_type">
+				<where>id='d24e6e27-1a0d-4cb2-96b4-229bf131ff8e'</where>
+			</delete>
+			<delete tableName="personality_type">
+				<where>id='a77bf286-df12-4da0-99b5-c2d480c62afb'</where>
+			</delete>
+			<delete tableName="personality_type">
+				<where>id='46eef8be-abc8-4876-8458-a80f54e9112d'</where>
+			</delete>
+			<delete tableName="personality_type">
+				<where>id='4ba0245f-9841-4cfa-b5a7-aaa533017519'</where>
+			</delete>
+			<delete tableName="personality_type">
+				<where>id='2e347e7b-b4c1-4ed7-97a9-c40d2bcb67d8'</where>
+			</delete>
+			<delete tableName="personality_type">
+				<where>id='83358819-cfc1-40f4-a090-ab057ca748a1'</where>
+			</delete>
+			<delete tableName="personality_type">
+				<where>id='3c908c63-497c-4274-bcc5-c30900d8a816'</where>
+			</delete>
+			<delete tableName="personality_type">
+				<where>id='7c2a88e7-a41e-4d95-b43e-940226dc82d7'</where>
+			</delete>
+			<delete tableName="personality_type">
+				<where>id='da31be44-e716-4103-a835-0dab915f55b6'</where>
+			</delete>
+			<delete tableName="personality_type">
+				<where>id='6520DE73-BEB9-4BA0-9DB9-481353038C8C'</where>
+			</delete>
+			<delete tableName="personality_type">
+				<where>id='6fb0068c-b1dc-4f85-96bf-2f65e07e6341'</where>
+			</delete>
+			<delete tableName="personality_type">
+				<where>id='03dabbb6-f5b8-42a5-809b-e644e8b4fc0f'</where>
+			</delete>
+			<delete tableName="personality_type">
+				<where>id='6755dd3c-02c9-4de7-8b76-c8d69e636d58'</where>
+			</delete>
+			<delete tableName="personality_type">
+				<where>id='fee8ea81-8e09-4061-8b6a-a9556c4d6eee'</where>
+			</delete>
+			<delete tableName="personality_type">
+				<where>id='4eb1e689-4346-4749-b5a9-bf3788ba5979'</where>
+			</delete>
+        </rollback>
+	</changeSet>
+
+	<changeSet id="create reference data - campus service" author="shawn.gormley">
+		<insert tableName="campus_service">
+			<column name="id" value="4a24986d-c8d8-407a-ab98-8211e5946f89" />
+			<column name="name" value="Campus Ministries" />
+			<column name="description" value="Campus Ministries" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="campus_service">
+			<column name="id" value="8aeab4a2-a8ad-4ab5-b5cd-374692da6bfe" />
+			<column name="name" value="Career Services" />
+			<column name="description" value="Career Services" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="campus_service">
+			<column name="id" value="4fb04701-095f-4676-b693-1c9d1bfd813f" />
+			<column name="name" value="Counseling Services" />
+			<column name="description" value="Counseling Services" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="campus_service">
+			<column name="id" value="68C85CD0-3694-4EA6-9A13-F2B6E704D4B4" />
+			<column name="name" value="Disability Services" />
+			<column name="description" value="Disability Services" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="campus_service">
+			<column name="id" value="90c0ff50-cefc-4461-9253-421f27747c5e" />
+			<column name="name" value="Physical Activities Center" />
+			<column name="description" value="Physical Activities Center" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="campus_service">
+			<column name="id" value="47979b52-5773-4593-bd37-f39db075a9b4" />
+			<column name="name" value="Student Activities/Clubs" />
+			<column name="description" value="Student Activities/Clubs" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="campus_service">
+			<column name="id" value="2d55b449-0764-4a97-a96e-eea6dc6e575c" />
+			<column name="name" value="Student Employment" />
+			<column name="description" value="Student Employment" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="campus_service">
+			<column name="id" value="cd3de8de-33bf-4c5f-a1d5-1ea31fe44554" />
+			<column name="name" value="Student Support Services" />
+			<column name="description" value="Student Support Services" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="campus_service">
+			<column name="id" value="c21f54ae-335f-4866-8673-ee0804a57170" />
+			<column name="name" value="Tutorial Services" />
+			<column name="description" value="Tutorial Services" />
+			<column name="created_date" valueDate="2012-10-01T00:00:00" />
+			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="campus_service">
+				<where>id='4a24986d-c8d8-407a-ab98-8211e5946f89'</where>
+			</delete>
+			<delete tableName="campus_service">
+				<where>id='8aeab4a2-a8ad-4ab5-b5cd-374692da6bfe'</where>
+			</delete>
+			<delete tableName="campus_service">
+				<where>id='4fb04701-095f-4676-b693-1c9d1bfd813f'</where>
+			</delete>
+			<delete tableName="campus_service">
+				<where>id='68C85CD0-3694-4EA6-9A13-F2B6E704D4B4'</where>
+			</delete>
+			<delete tableName="campus_service">
+				<where>id='90c0ff50-cefc-4461-9253-421f27747c5e'</where>
+			</delete>
+			<delete tableName="campus_service">
+				<where>id='47979b52-5773-4593-bd37-f39db075a9b4'</where>
+			</delete>
+			<delete tableName="campus_service">
+				<where>id='2d55b449-0764-4a97-a96e-eea6dc6e575c'</where>
+			</delete>
+			<delete tableName="campus_service">
+				<where>id='cd3de8de-33bf-4c5f-a1d5-1ea31fe44554'</where>
+			</delete>
+			<delete tableName="campus_service">
+				<where>id='c21f54ae-335f-4866-8673-ee0804a57170'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>
