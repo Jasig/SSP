@@ -32,29 +32,7 @@ import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 import com.google.common.collect.Lists;
 
 public class PersonReportTO extends PersonTO {
-	
-	
-	public String getSpecialServiceGroupNames()
-	{
-		List<ReferenceLiteTO<SpecialServiceGroup>> specialServiceGroups = this.getSpecialServiceGroups();
-		if ( specialServiceGroups == null || specialServiceGroups.isEmpty() ) {
-			return "";
-		}
-		StringBuffer sb = new StringBuffer();
-		Iterator<ReferenceLiteTO<SpecialServiceGroup>> specialServiceGroupsIter = specialServiceGroups.iterator();
-		while(specialServiceGroupsIter.hasNext())
-		{
-			ReferenceLiteTO<SpecialServiceGroup> tempSpecialServiceGroup = specialServiceGroupsIter.next();
-			sb.append("\u2022 " + tempSpecialServiceGroup.getName());			
-			sb.append("\n");
-			
-		}
-		sb.append("\n");
-		
-		return sb.toString();
-		
-	}
-	
+
 	/**
 	 * Construct a transfer object from a related model instance
 	 * 
@@ -83,6 +61,27 @@ public class PersonReportTO extends PersonTO {
 		}
 
 		return tos;
-	} 
+	}
+
+	public String getSpecialServiceGroupNames()
+	{
+		List<ReferenceLiteTO<SpecialServiceGroup>> specialServiceGroups = this.getSpecialServiceGroups();
+		if ( specialServiceGroups == null || specialServiceGroups.isEmpty() ) {
+			return "";
+		}
+		StringBuffer sb = new StringBuffer();
+		Iterator<ReferenceLiteTO<SpecialServiceGroup>> specialServiceGroupsIter = specialServiceGroups.iterator();
+		while(specialServiceGroupsIter.hasNext())
+		{
+			ReferenceLiteTO<SpecialServiceGroup> tempSpecialServiceGroup = specialServiceGroupsIter.next();
+			sb.append("\u2022 " + tempSpecialServiceGroup.getName());
+			sb.append("\n");
+
+		}
+		sb.append("\n");
+
+		return sb.toString();
+
+	}
 
 }
