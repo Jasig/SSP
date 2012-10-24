@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.factory.impl;
 
+import java.util.UUID;
+
 import org.jasig.ssp.dao.EarlyAlertRoutingDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.EarlyAlertRoutingTOFactory;
@@ -76,8 +78,8 @@ public class EarlyAlertRoutingTOFactoryImpl
 		model.setGroupName(tObject.getGroupName());
 		model.setGroupEmail(tObject.getGroupEmail());
 		model.setCampus(campusService.get(tObject.getCampusId()));
-		model.setPerson(tObject.getPerson() == null ? null : personService
-				.get(tObject.getPerson().getId()));
+		UUID personId = tObject.getPerson() == null ? null : tObject.getPerson().getId();
+		model.setPerson(personId == null ? null : personService.get(personId));
 		model.setEarlyAlertReason(earlyAlertReasonService.get(tObject
 				.getEarlyAlertReasonId()));
 
