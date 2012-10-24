@@ -17366,7 +17366,7 @@ Ext.define('Ssp.view.tools.journal.Journal', {
 					    	        header: 'Action',
 					    	        items: [{
 					    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
-					    	            tooltip: 'Edit Task',
+					    	            tooltip: 'Edit Journal Note',
 					    	            handler: function(grid, rowIndex, colIndex) {
 					    	            	var rec = grid.getStore().getAt(rowIndex);
 					    	            	var panel = grid.up('panel');
@@ -17387,7 +17387,7 @@ Ext.define('Ssp.view.tools.journal.Journal', {
 					    	            scope: me
 					    	        },{
 					    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
-					    	            tooltip: 'Delete Task',
+					    	            tooltip: 'Delete Journal Note',
 					    	            handler: function(grid, rowIndex, colIndex) {
 					    	            	var rec = grid.getStore().getAt(rowIndex);
 					    	            	var panel = grid.up('panel');
