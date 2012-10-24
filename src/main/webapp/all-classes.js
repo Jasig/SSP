@@ -2063,7 +2063,7 @@ Ext.define('Ssp.mixin.ApiProperties', {
 	},
 	
 	getPagingSize: function(){
-		return 10;
+		return 20;
 	},
 	
 	getProxy: function(url){
