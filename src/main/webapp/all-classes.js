@@ -1632,7 +1632,7 @@ Ext.define('Ssp.model.Configuration', {
     	     {
               name: 'educationPlanSpecialNeedsLabel', 
               type: 'string', 
-              defaultValue: 'Special needs or require special accomodation?'
+              defaultValue: 'Special needs or require special accommodation?'
              },
     	     /*
     	      * Label to use for the Coach field displays across the application.
@@ -3574,11 +3574,11 @@ Ext.define('Ssp.store.EarlyAlertCoordinators', {
 		Ext.apply(me, {
 						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCoach')+'/?sort=lastName'),
 						autoLoad: false,
-						pageSize: -1,
+						pageSize: 1000, // max allowed server-side
 						params : {
 							page : 0,
 							start : 0,
-							limit : -1
+							limit : 1000 // max allowed server-side
 						}
 					});
 		return me.callParent(arguments);
@@ -21346,11 +21346,11 @@ Ext.define('Ssp.store.Coaches', {
 		Ext.apply(me, {
 						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCoach')+'/?sort=lastName'),
 						autoLoad: false,
-						pageSize: -1,
+						pageSize: 1000, // max allowed server-side
 						params : {
 							page : 0,
 							start : 0,
-							limit : -1
+							limit : 1000 // max allowed server-side
 						}
 					});
 		return me.callParent(arguments);
