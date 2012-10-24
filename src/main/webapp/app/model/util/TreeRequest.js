@@ -28,5 +28,7 @@ Ext.define('Ssp.model.util.TreeRequest', {
              {name: 'expandable', type:'boolean', defaultValue: true},
              {name: 'callbackFunc',type:'auto'},
              {name: 'callbackScope', type: 'auto'},
-             {name: 'removeParentWhenNoChildrenExist', type: 'boolean', defaultValue: false}]
+             {name: 'removeParentWhenNoChildrenExist', type: 'boolean', defaultValue: false},
+             {name: 'includeToolTip', type: 'boolean', defaultValue: false},
+             {name: 'toolTipFieldName', type: 'string', defaultValue: ""}]
 });
