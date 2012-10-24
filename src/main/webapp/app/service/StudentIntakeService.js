@@ -38,8 +38,10 @@ Ext.define('Ssp.service.StudentIntakeService', {
 	    var success = function( response, view ){
 	    	var r = Ext.decode(response.responseText);
 	    	// filter inactive items
-    		r.rows = me.superclass.filterInactiveChildren( r.rows );	    	
-			callbacks.success( r, callbacks.scope );
+    		r.personEducationLevels = me.superclass.filterInactiveChildren(r.personEducationLevels);
+    		r.personFundingSources = me.superclass.filterInactiveChildren(r.personFundingSources);
+    		r.personChallenges = me.superclass.filterInactiveChildren(r.personChallenges);
+    		callbacks.success( r, callbacks.scope );
 	    };
 
 	    var failure = function( response ){
