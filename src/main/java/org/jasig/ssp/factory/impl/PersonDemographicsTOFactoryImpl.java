@@ -32,6 +32,7 @@ import org.jasig.ssp.service.reference.ChildCareArrangementService;
 import org.jasig.ssp.service.reference.CitizenshipService;
 import org.jasig.ssp.service.reference.EthnicityService;
 import org.jasig.ssp.service.reference.MaritalStatusService;
+import org.jasig.ssp.service.reference.MilitaryAffiliationService;
 import org.jasig.ssp.service.reference.VeteranStatusService;
 import org.jasig.ssp.transferobject.PersonDemographicsTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,9 @@ public class PersonDemographicsTOFactoryImpl extends
 	@Autowired
 	private transient MaritalStatusService maritalStatusService;
 
+	@Autowired
+	private transient MilitaryAffiliationService militaryAffiliationService;	
+	
 	@Autowired
 	private transient EthnicityService ethnicityService;
 
@@ -91,6 +95,9 @@ public class PersonDemographicsTOFactoryImpl extends
 		model.setMaritalStatus(tObject.getMaritalStatusId() == null ? null :
 				maritalStatusService.get(tObject.getMaritalStatusId()));
 
+		model.setMilitaryAffiliation(tObject.getMilitaryAffiliationId() == null ? null :
+			militaryAffiliationService.get(tObject.getMilitaryAffiliationId()));		
+		
 		model.setEthnicity(tObject.getEthnicityId() == null ? null :
 				ethnicityService.get(tObject.getEthnicityId()));
 

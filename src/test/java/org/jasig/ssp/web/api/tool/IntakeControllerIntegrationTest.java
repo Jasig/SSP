@@ -39,6 +39,7 @@ import org.jasig.ssp.model.reference.EmploymentShifts;
 import org.jasig.ssp.model.reference.Ethnicity;
 import org.jasig.ssp.model.reference.Genders;
 import org.jasig.ssp.model.reference.MaritalStatus;
+import org.jasig.ssp.model.reference.MilitaryAffiliation;
 import org.jasig.ssp.model.reference.VeteranStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
@@ -162,6 +163,7 @@ public class IntakeControllerIntegrationTest {
 		personDemographics.setGender(Genders.F);
 		personDemographics.setLocal(true);
 		personDemographics.setMaritalStatus(new MaritalStatus());
+		personDemographics.setMilitaryAffiliation(new MilitaryAffiliation());
 		personDemographics.setNumberOfChildren(Integer.MAX_VALUE);
 		personDemographics.setPaymentStatus("paymentStatus");
 		personDemographics.setPlaceOfEmployment("Chili's");

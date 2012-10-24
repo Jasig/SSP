@@ -40,6 +40,7 @@ import org.jasig.ssp.service.reference.EducationLevelService;
 import org.jasig.ssp.service.reference.EthnicityService;
 import org.jasig.ssp.service.reference.FundingSourceService;
 import org.jasig.ssp.service.reference.MaritalStatusService;
+import org.jasig.ssp.service.reference.MilitaryAffiliationService;
 import org.jasig.ssp.service.reference.StudentStatusService;
 import org.jasig.ssp.service.reference.VeteranStatusService;
 import org.jasig.ssp.service.tool.IntakeService;
@@ -52,6 +53,7 @@ import org.jasig.ssp.transferobject.reference.EducationLevelTO;
 import org.jasig.ssp.transferobject.reference.EthnicityTO;
 import org.jasig.ssp.transferobject.reference.FundingSourceTO;
 import org.jasig.ssp.transferobject.reference.MaritalStatusTO;
+import org.jasig.ssp.transferobject.reference.MilitaryAffiliationTO;
 import org.jasig.ssp.transferobject.reference.StudentStatusTO;
 import org.jasig.ssp.transferobject.reference.VeteranStatusTO;
 import org.jasig.ssp.transferobject.tool.IntakeFormTO;
@@ -110,6 +112,9 @@ public class IntakeController extends AbstractBaseController {
 
 	@Autowired
 	private transient MaritalStatusService maritalStatusService;
+	
+	@Autowired
+	private transient MilitaryAffiliationService militaryAffiliationService;
 
 	@Autowired
 	private transient StudentStatusService studentStatusService;
@@ -194,6 +199,8 @@ public class IntakeController extends AbstractBaseController {
 				.toTOList(fundingSourceService.getAll(sAndP).getRows()));
 		refData.put("maritalStatuses", MaritalStatusTO
 				.toTOList(maritalStatusService.getAll(sAndP).getRows()));
+		refData.put("militaryAffiliations", MilitaryAffiliationTO
+				.toTOList(militaryAffiliationService.getAll(sAndP).getRows()));
 		refData.put("studentStatuses", StudentStatusTO
 				.toTOList(studentStatusService.getAll(sAndP).getRows()));
 		refData.put("veteranStatuses", VeteranStatusTO

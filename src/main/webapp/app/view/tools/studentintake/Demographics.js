@@ -32,6 +32,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
     	ethnicitiesStore: 'ethnicitiesStore',
     	gendersStore: 'gendersStore',
     	maritalStatusesStore: 'maritalStatusesStore',
+    	militaryAffiliationsStore: 'militaryAffiliationsStore',
     	veteranStatusesStore: 'veteranStatusesStore'
     },    
 	width: '100%',
@@ -118,6 +119,18 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        itemId: 'countryOfCitizenship',
 				        name: 'countryOfCitizenship'
 				    },{
+				        xtype: 'combobox',
+				        name: 'militaryAffiliationId',
+				        fieldLabel: 'Military Affiliation',
+				        emptyText: 'Select One',
+				        store: me.militaryAffiliationsStore,
+				        valueField: 'id',
+				        displayField: 'name',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true
+					},{
 				        xtype: 'combobox',
 				        name: 'veteranStatusId',
 				        fieldLabel: 'Veteran Status',

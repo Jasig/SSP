@@ -34,6 +34,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     	fundingSourcesStore: 'fundingSourcesStore',
     	gendersStore: 'gendersStore',
     	maritalStatusesStore: 'maritalStatusesStore',
+    	militaryAffiliationsStore: 'militaryAffiliationsStore',
         personLite: 'personLite',
         person: 'currentPerson',
         statesStore: 'statesStore',
@@ -217,6 +218,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var educationLevels = me.formUtils.alphaSortByField( formData.data.referenceData.educationLevels, 'name' );
 		var fundingSources = me.formUtils.alphaSortByField( formData.data.referenceData.fundingSources, 'name' );
 		var studentStatuses =  me.formUtils.alphaSortByField( formData.data.referenceData.studentStatuses, 'name' );
+		var militaryAffiliations = me.formUtils.alphaSortByField( formData.data.referenceData.militaryAffiliations, 'name' );
 		
 		me.challengesStore.loadData( challenges );
 		me.childCareArrangementsStore.loadData( formData.data.referenceData.childCareArrangements );
@@ -228,6 +230,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		me.fundingSourcesStore.loadData( fundingSources );
 		me.gendersStore.loadData( formData.data.referenceData.genders );
 		me.maritalStatusesStore.loadData( formData.data.referenceData.maritalStatuses );
+		me.militaryAffiliationsStore.loadData( militaryAffiliations );
 		me.statesStore.loadData( formData.data.referenceData.states );
 		me.studentStatusesStore.loadData( studentStatuses );
 		me.veteranStatusesStore.loadData( formData.data.referenceData.veteranStatuses ); 

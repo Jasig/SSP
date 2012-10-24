@@ -57,5 +57,7 @@
 	<include file="org/jasig/ssp/database/changesets/000010.xml" />
 	
 	<include file="org/jasig/ssp/database/changesets/000011.xml" />
+	
+	<include file="org/jasig/ssp/database/changesets/000012.xml" />
 
 </databaseChangeLog>

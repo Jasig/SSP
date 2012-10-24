@@ -35,6 +35,7 @@ import org.jasig.ssp.model.reference.EmploymentShifts;
 import org.jasig.ssp.model.reference.Ethnicity;
 import org.jasig.ssp.model.reference.Genders;
 import org.jasig.ssp.model.reference.MaritalStatus;
+import org.jasig.ssp.model.reference.MilitaryAffiliation;
 import org.jasig.ssp.model.reference.VeteranStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.PersonDemographicsTO;
@@ -83,6 +84,8 @@ public class PersonDemographicsTOFactoryImplTest {
 				.from(new PersonDemographics());
 		assertNull("Marital Status should have been null.",
 				obj.getMaritalStatusId());
+		assertNull("Military Affiliation should have been null.",
+				obj.getMilitaryAffiliationId());
 		assertNull("Person should have been null.", obj.getPersonId());
 		assertNull("Citizenship should have been null.", obj.getCitizenshipId());
 	}
@@ -98,6 +101,7 @@ public class PersonDemographicsTOFactoryImplTest {
 		obj.setGender(Genders.M);
 		obj.setEthnicity(new Ethnicity());
 		obj.setMaritalStatus(new MaritalStatus());
+		obj.setMilitaryAffiliation(new MilitaryAffiliation());
 		obj.setCitizenship(new Citizenship());
 		obj.setVeteranStatus(new VeteranStatus());
 		obj.setChildCareArrangement(new ChildCareArrangement());

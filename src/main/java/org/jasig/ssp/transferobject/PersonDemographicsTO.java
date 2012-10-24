@@ -32,7 +32,7 @@ public class PersonDemographicsTO
 	@NotNull
 	private UUID personId;
 
-	private UUID coachId, maritalStatusId, ethnicityId,
+	private UUID coachId, maritalStatusId, militaryAffiliationId, ethnicityId,
 			citizenshipId, veteranStatusId, childCareArrangementId;
 	private Boolean local, primaryCaregiver,
 			childCareNeeded, employed;
@@ -60,6 +60,10 @@ public class PersonDemographicsTO
 			maritalStatusId = model.getMaritalStatus().getId();
 		}
 
+		if (model.getMilitaryAffiliation() != null) {
+			militaryAffiliationId = model.getMilitaryAffiliation().getId();
+		}
+		
 		if (model.getEthnicity() != null) {
 			ethnicityId = model.getEthnicity().getId();
 		}
@@ -123,6 +127,14 @@ public class PersonDemographicsTO
 		this.maritalStatusId = maritalStatusId;
 	}
 
+	public UUID getMilitaryAffiliationId() {
+		return militaryAffiliationId;
+	}
+
+	public void setMilitaryAffiliationId(final UUID militaryAffiliationId) {
+		this.militaryAffiliationId = militaryAffiliationId;
+	}	
+	
 	public UUID getEthnicityId() {
 		return ethnicityId;
 	}
