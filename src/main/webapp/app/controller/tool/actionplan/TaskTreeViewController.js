@@ -91,7 +91,9 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     	var isLeaf = false;
     	var nodeName =  me.treeUtils.getNameFromNodeId( node.data.id );
     	var id = me.treeUtils.getIdFromNodeId( node.data.id );
- 
+    	var treeRequest = new Ssp.model.util.TreeRequest();
+    	var includeToolTip = false;
+    	var toolTipFieldName = "";
     	switch ( nodeName )
     	{
     		case 'category':
@@ -113,12 +115,13 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     			url = me.challengeUrl + '/' + id + '/challengeReferral/';
     			nodeType = 'referral';
     			isLeaf = true;
+    			includeToolTip = true;
+    			toolTipFieldName = "description";
     			break;
     	}
     	
     	if (url != "")
     	{
-        	var treeRequest = new Ssp.model.util.TreeRequest();
         	treeRequest.set('url', url);
         	treeRequest.set('nodeType', nodeType);
         	treeRequest.set('isLeaf', isLeaf);
@@ -126,8 +129,9 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
         	treeRequest.set('enableCheckedItems',false);
         	treeRequest.set('callbackFunc', me.onLoadComplete);
         	treeRequest.set('callbackScope', me);
+        	treeRequest.set('includeToolTip', includeToolTip);
+        	treeRequest.set('toolTipFieldName', toolTipFieldName);
         	me.treeUtils.getItems( treeRequest );
-
         	me.getView().setLoading( true );        	
     	}
     },
