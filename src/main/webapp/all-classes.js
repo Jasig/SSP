@@ -18847,15 +18847,18 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayReferralsAdmin', {
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',
-    		      columns: [
-    		                { header: 'Name',  
+    		      columns: [{ 
+    		                  header: 'Name',  
     		                  dataIndex: 'name',
     		                  field: {
     		                      xtype: 'textfield'
     		                  },
-    		                  flex: 1 
-    		                }
-    		           ],
+    		                  flex: 1,
+    		                  renderer : function(value, metadata, record) {
+    		                      metadata.tdAttr = 'data-qtip="' + record.get('description') + '"';
+    		                      return value;
+    		                  }
+    		                }],
     		        
     		           dockedItems: [
      		       		{
