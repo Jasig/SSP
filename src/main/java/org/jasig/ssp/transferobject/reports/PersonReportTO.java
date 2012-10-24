@@ -37,6 +37,9 @@ public class PersonReportTO extends PersonTO {
 	public String getSpecialServiceGroupNames()
 	{
 		List<ReferenceLiteTO<SpecialServiceGroup>> specialServiceGroups = this.getSpecialServiceGroups();
+		if ( specialServiceGroups == null || specialServiceGroups.isEmpty() ) {
+			return "";
+		}
 		StringBuffer sb = new StringBuffer();
 		Iterator<ReferenceLiteTO<SpecialServiceGroup>> specialServiceGroupsIter = specialServiceGroups.iterator();
 		while(specialServiceGroupsIter.hasNext())
