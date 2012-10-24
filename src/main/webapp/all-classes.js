@@ -1489,7 +1489,9 @@ Ext.define('Ssp.model.util.TreeRequest', {
              {name: 'expandable', type:'boolean', defaultValue: true},
              {name: 'callbackFunc',type:'auto'},
              {name: 'callbackScope', type: 'auto'},
-             {name: 'removeParentWhenNoChildrenExist', type: 'boolean', defaultValue: false}]
+             {name: 'removeParentWhenNoChildrenExist', type: 'boolean', defaultValue: false},
+             {name: 'includeToolTip', type: 'boolean', defaultValue: false},
+             {name: 'toolTipFieldName', type: 'string', defaultValue: ""}]
 });
 /*
  * Licensed to Jasig under one or more contributor license
@@ -3282,17 +3284,20 @@ Ext.define('Ssp.util.TreeRendererUtils',{
      *             be created with an id such as 12345_challenge.
      * @expanded - whether or not a branch should load expanded   
      */
-    createNodesFromJson: function(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable){
+    createNodesFromJson: function(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable, includeToolTip, toolTipFieldName){
     	var nodeIdentifier = "";
     	var enableCheckSelection = enableCheckSelection;
     	var nodes = [];
     	var nodeName = nodeType || "";
     	if (nodeName != "")
+    	{
     		nodeIdentifier = '_' + nodeName;
+    	}
     	Ext.each(records, function(name, index) {
     		var nodeData = {
         	        text: records[index].name,
         	        id: records[index].id + nodeIdentifier,
+        	        qtip: ((includeToolTip === true)? records[index][toolTipFieldName] : ""),
         	        leaf: isLeaf || false,
         	        expanded: expanded,
         	        expandable: expandable
@@ -3331,6 +3336,8 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     	var callbackFunc = treeRequest.get('callbackFunc');
     	var callbackScope = treeRequest.get('callbackScope');
     	var removeParentWhenNoChildrenExist = treeRequest.get('removeParentWhenNoChildrenExist');
+    	var includeToolTip = treeRequest.get('includeToolTip');
+    	var toolTipFieldName = treeRequest.get('toolTipFieldName');
     	// retrieve items
 		me.apiProperties.makeRequest({
 			url: me.apiProperties.createUrl( url ),
@@ -3342,7 +3349,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 		    	var nodes = [];
 		    	if (records.length > 0)
 		    	{
-		    		nodes = me.createNodesFromJson(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable);
+		    		nodes = me.createNodesFromJson(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable, includeToolTip, toolTipFieldName);
 		    		me.appendChildren( nodeToAppendTo, nodes);
 		    	}else{
 		    		me.appendChildren( nodeToAppendTo, []);
@@ -9747,7 +9754,9 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     	var isLeaf = false;
     	var nodeName =  me.treeUtils.getNameFromNodeId( node.data.id );
     	var id = me.treeUtils.getIdFromNodeId( node.data.id );
- 
+    	var treeRequest = new Ssp.model.util.TreeRequest();
+    	var includeToolTip = false;
+    	var toolTipFieldName = "";
     	switch ( nodeName )
     	{
     		case 'category':
@@ -9769,12 +9778,13 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     			url = me.challengeUrl + '/' + id + '/challengeReferral/';
     			nodeType = 'referral';
     			isLeaf = true;
+    			includeToolTip = true;
+    			toolTipFieldName = "description";
     			break;
     	}
     	
     	if (url != "")
     	{
-        	var treeRequest = new Ssp.model.util.TreeRequest();
         	treeRequest.set('url', url);
         	treeRequest.set('nodeType', nodeType);
         	treeRequest.set('isLeaf', isLeaf);
@@ -9782,8 +9792,9 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
         	treeRequest.set('enableCheckedItems',false);
         	treeRequest.set('callbackFunc', me.onLoadComplete);
         	treeRequest.set('callbackScope', me);
+        	treeRequest.set('includeToolTip', includeToolTip);
+        	treeRequest.set('toolTipFieldName', toolTipFieldName);
         	me.treeUtils.getItems( treeRequest );
-
         	me.getView().setLoading( true );        	
     	}
     },
