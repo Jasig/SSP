@@ -139,9 +139,9 @@ public class AddressLabelsReportController extends AbstractBaseController { // N
 		final AddressLabelSearchTO searchForm = new AddressLabelSearchTO(
 				coachTO,
 				programStatus, specialServiceGroupIds, referralSourcesIds,
-				anticipatedStartTerm.length() == 0 ? null
-						: anticipatedStartTerm, anticipatedStartYear,
-				studentTypeIds, createDateFrom, createDateTo);
+				StringUtils.trimToNull(anticipatedStartTerm),
+				anticipatedStartYear, studentTypeIds, createDateFrom,
+				createDateTo);
 
 		final List<Person> people = personService.peopleFromCriteria(
 				searchForm, SortingAndPaging.createForSingleSort(status, null,
