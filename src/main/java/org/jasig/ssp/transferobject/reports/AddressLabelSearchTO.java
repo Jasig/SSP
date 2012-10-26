@@ -138,6 +138,7 @@ public class AddressLabelSearchTO
 			final List<UUID> studentTypeIds,
 			final Date createDateFrom, final Date createDateTo) {
 		super();
+		this.coach = coach;
 		this.programStatus = programStatus;
 		specialServiceGroupIds = specialServiceGroupId;
 		referralSourcesIds = referralSourcesId;
