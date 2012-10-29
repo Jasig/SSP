@@ -139,6 +139,37 @@ Ext.define('Ssp.model.Person', {
     getProgramStatusName: function(){
     	return this.get('currentProgramStatusName')? this.get('currentProgramStatusName') : "";   	
     },
+ 
+    buildAddress: function(){
+    	var me=this;
+    	var address = "";
+    	address += ((me.get('addressLine1') != null)? me.get('addressLine1') + '<br/>' : "");
+    	address += ((me.get('city') != null)? me.get('city') + ', ': "");
+    	address += ((me.get('state') != null)? me.get('state') + '<br/>': "");
+    	address += ((me.get('zipCode') != null)? me.get('zipCode') : "");	
+    	// ensure a full address was defined 
+    	if (address.length < 30)
+    	{
+    		address = "";
+    	}    	
+    	return address;   	
+    },
+    
+    buildAlternateAddress: function(){
+    	var me=this;
+    	var alternateAddress = "";
+    	alternateAddress += ((me.get('alternateAddressLine1') != null)? me.get('alternateAddressLine1') + '<br/>' : "");
+    	alternateAddress += ((me.get('alternateAddressCity') != null)? me.get('alternateAddressCity') : "");
+    	alternateAddress += ((me.get('alternateAddressState') != null)? ', ' + me.get('alternateAddressState') + '<br/>': "");
+    	alternateAddress += ((me.get('alternateAddressZipCode') != null)? me.get('alternateAddressZipCode') : "<br />");	
+    	alternateAddress += ((me.get('alternateAddressCountry') != null)? ', ' + me.get('alternateAddressCountry') : "");	
+    	// ensure a full address was defined
+    	if (alternateAddress.length < 30)
+    	{
+    		alternateAddress = "";
+    	}
+    	return alternateAddress;   	
+    },
     
     /*
      * cleans properties that will be unable to be saved if not null

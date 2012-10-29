@@ -42,12 +42,12 @@ Ext.define('Ssp.view.tools.profile.Person', {
 				        xtype: 'fieldcontainer',
 				        fieldLabel: '',
 				        layout: 'hbox',
-				        margin: '0 0 0 0',
+				        margin: '0 5 0 0',
 					    defaultType: 'displayfield',
 					    fieldDefaults: {
 					        msgTarget: 'side',
 					        labelAlign: 'right',
-					        labelWidth: 135
+					        labelWidth: 100
 					    },
 				        items: [{
 				            xtype: 'fieldset',
@@ -57,7 +57,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
 				            defaults: {
 				                anchor: '100%'
 				            },
-				            flex: .6,
+				            flex: .55,
 				            items:[{
 							        fieldLabel: 'Student',
 							        name: 'name',
@@ -87,11 +87,11 @@ Ext.define('Ssp.view.tools.profile.Person', {
 							        name: 'studentType',
 							        itemId: 'studentType'
 							    },{
-							        fieldLabel: 'SSP Program Status',
+							        fieldLabel: 'Caseload Status',
 							        name: 'programStatus',
 							        itemId: 'programStatus'
 							    },{
-							        fieldLabel: 'Registered Current Term',
+							        fieldLabel: 'Registered',
 							        name: 'registeredForCurrentTerm',
 							        renderer: me.columnRendererUtils.renderFriendlyBoolean
 							    },{
@@ -106,65 +106,29 @@ Ext.define('Ssp.view.tools.profile.Person', {
 							        fieldLabel: 'Academic Program',
 							        name: 'academicPrograms',
 							        hidden: true
-							    },{
-							    	fieldLabel: 'CURRENT ADDRESS'
-							    },{
-							        fieldLabel: 'Non-local',
-							        name: 'nonLocalAddress',
-							        renderer: me.columnRendererUtils.renderFriendlyBoolean
-							    },{
-							        fieldLabel: 'Address Line 1',
-							        name: 'addressLine1'
-							    },{
-							        fieldLabel: 'Address Line 2',
-							        name: 'addressLine2'
-							    },{
-							        fieldLabel: 'City',
-							        name: 'city'
-							    },{
-							        fieldLabel: 'State',
-							        name: 'state'
-							    },{
-							        fieldLabel: 'Zip Code',
-							        name: 'zipCode'
-							    },{
-							        fieldLabel: 'ALTERNATE ADDRESS'
-							    },{
-							        fieldLabel: 'In Use',
-							        name: 'alternateAddressInUse',
-							        renderer: me.columnRendererUtils.renderFriendlyBoolean
-							    },{
-							        fieldLabel: 'Address Line 1',
-							        name: 'alternateAddressLine1'
-							    },{
-							        fieldLabel: 'Address Line 2',
-							        name: 'alternateAddressLine2'
-							    },{
-							        fieldLabel: 'City',
-							        name: 'alternateAddressCity'
-							    },{
-							        fieldLabel: 'State',
-							        name: 'alternateAddressState'
-							    },{
-							        fieldLabel: 'Zip Code',
-							        name: 'alternateAddressZipCode'
-							    },{
-							        fieldLabel: 'Country',
-							        name: 'alternateAddressCountry'
 							    }]
 				            
 					    },{
 				            xtype: 'fieldset',
-				            border: 1,
-				            cls:'ssp-form',
-				            title: me.sspConfig.get('coachFieldLabel').toUpperCase(),
+				            border: 0,
+				            title: '',
 				            defaultType: 'displayfield',
 				            defaults: {
 				                anchor: '100%'
 				            },
 				            padding: 0,
-				            flex: .4,
+				            flex: .45,
 					        items:[{
+					            xtype: 'fieldset',
+					            border: 1,
+					            cls:'ssp-form',
+					            title: 'Coach',
+					            defaultType: 'displayfield',
+					            defaults: {
+					                anchor: '100%'
+					            },
+					            flex: 1,
+					            items:[{
 							        fieldLabel: me.sspConfig.get('coachFieldLabel'),
 							        name: 'coachName',
 							        itemId: 'coachName',
@@ -189,7 +153,50 @@ Ext.define('Ssp.view.tools.profile.Person', {
 							        name: 'coachOfficeLocation',
 							        itemId: 'coachOfficeLocation',
 							        labelWidth: 80
-							    }]
+							    }]},{
+						            xtype: 'fieldset',
+						            border: 1,
+						            cls:'ssp-form',
+						            title: 'Student Mailing Address',
+						            defaultType: 'displayfield',
+						            defaults: {
+						                anchor: '100%'
+						            },
+						            flex: 1,
+						            items:[{
+							        fieldLabel: 'Non-local',
+							        name: 'nonLocalAddress',
+							        labelWidth: 80,
+							        renderer: me.columnRendererUtils.renderFriendlyBoolean
+							    },{
+							        fieldLabel: 'Address',
+							        height: '60',
+							        name: 'address',
+							        labelWidth: 80,
+							        itemId: 'address'
+							    }]},{
+						            xtype: 'fieldset',
+						            border: 1,
+						            cls:'ssp-form',
+						            title: 'Student Alternate Address',
+						            defaultType: 'displayfield',
+						            defaults: {
+						                anchor: '100%'
+						            },
+						            flex: 1,
+						            items:[{
+							        fieldLabel: 'In Use',
+							        name: 'alternateAddressInUse',
+							        labelWidth: 80,
+							        itemId: 'alternateAddressInUse'
+							    },{
+							    	fieldLabel: 'Address',
+							        name: 'alternateAddress',
+							        labelWidth: 80,
+							        height: '60',
+							        itemId: 'alternateAddress'
+							    }]}
+							    ]
 				       }]
 				    }]
 				});

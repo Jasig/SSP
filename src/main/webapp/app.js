@@ -775,11 +775,27 @@ Ext.onReady(function(){
 				    	 */
 				    	Ext.Function.interceptAfter(Ext.form.Field.prototype,'initComponent', function(){
 				    		var fl=this.fieldLabel, ab=this.allowBlank;
+				    		if (fl){
+				    			this.labelStyle=Ssp.util.Constants.SSP_LABEL_STYLE;
+				    		}
 				    		if (ab===false && fl){
 				    			this.fieldLabel += Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY;
 				    		}
 				    	});		
 
+				    	/*
+				    	 * Provide global asterisks next to required field containers
+				    	 */
+				    	Ext.Function.interceptAfter(Ext.form.FieldContainer.prototype,'initComponent', function(){
+				    		var fl=this.fieldLabel, ab=this.allowBlank;
+				    		if (fl){
+				    			this.labelStyle=Ssp.util.Constants.SSP_LABEL_STYLE;
+				    		}
+				    		if (ab===false && fl){
+				    			this.fieldLabel += Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY;
+				    		}
+				    	});				    	
+				    	
 				    	/*
 				    	 * Per Animal, http://www.extjs.com/forum/showthread.php?p=450116#post450116
 				    	 * Override to provide a function to determine the invalid
