@@ -41,7 +41,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     	studentIdField: '#studentId',
     	birthDateField: '#birthDate',
     	studentTypeField: '#studentType',
-    	programStatusField: '#programStatus'
+    	programStatusField: '#programStatus',
+    	addressField: '#address',
+    	alternateAddressInUseField: '#alternateAddressInUse',
+    	alternateAddressField: '#alternateAddress'
     },
 	init: function() {
 		var me=this;
@@ -83,9 +86,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		var id= me.personLite.get('id');
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');
 		var fullName;
+		var alternateAddressInUse = "No";
 		
 		// load the person data
-		me.person.populateFromGenericObject(r);
+		me.person.populateFromGenericObject(r);		
 		
     	fullName = me.person.getFullName();
    	
@@ -125,6 +129,20 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		programStatusField.setValue( me.person.getProgramStatusName() );
 		studentRecordComp.setTitle('Student Record - ' + fullName);
 
+		me.getAddressField().setValue(me.person.buildAddress());
+		
+		me.getAlternateAddressField().setValue(me.person.buildAlternateAddress());
+		
+		if (me.person.get('alternateAddressInUse')!=null)
+		{
+			if (me.person.get('alternateAddressInUse')===true)
+			{
+				alternateAddressInUse = "Yes";
+			}
+		}
+		
+		me.getAlternateAddressInUseField().setValue( alternateAddressInUse );
+		
 		// hide the loader
     	me.getView().setLoading( false ); 
     },
