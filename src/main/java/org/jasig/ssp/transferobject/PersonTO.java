@@ -77,6 +77,9 @@ public class PersonTO // NOPMD
 
 	private String cellPhone;
 
+	@Nullable
+	private Boolean nonLocalAddress;
+	
 	private String addressLine1;
 
 	private String addressLine2;
@@ -86,7 +89,22 @@ public class PersonTO // NOPMD
 	private String state;
 
 	private String zipCode;
+	
+	@Nullable
+	private Boolean alternateAddressInUse;
 
+	private String alternateAddressLine1;
+
+	private String alternateAddressLine2;
+
+	private String alternateAddressCity;
+
+	private String alternateAddressState;
+
+	private String alternateAddressZipCode;
+	
+	private String alternateAddressCountry;
+	
 	private String photoUrl;
 
 	private String schoolId;
@@ -170,11 +188,19 @@ public class PersonTO // NOPMD
 		homePhone = model.getHomePhone();
 		workPhone = model.getWorkPhone();
 		cellPhone = model.getCellPhone();
+		nonLocalAddress = model.getNonLocalAddress();
 		addressLine1 = model.getAddressLine1();
 		addressLine2 = model.getAddressLine2();
 		city = model.getCity();
 		state = model.getState();
 		zipCode = model.getZipCode();
+		alternateAddressInUse = model.getAlternateAddressInUse();
+		alternateAddressLine1 = model.getAlternateAddressLine1();
+		alternateAddressLine2 = model.getAlternateAddressLine2();
+		alternateAddressCity = model.getAlternateAddressCity();
+		alternateAddressState = model.getAlternateAddressState();
+		alternateAddressZipCode = model.getAlternateAddressZipCode();
+		alternateAddressCountry = model.getAlternateAddressCountry();
 		photoUrl = model.getPhotoUrl();
 		schoolId = model.getSchoolId();
 		enabled = !(model.isDisabled());
@@ -398,6 +424,14 @@ public class PersonTO // NOPMD
 		this.cellPhone = cellPhone;
 	}
 
+	public Boolean getNonLocalAddress() {
+		return nonLocalAddress;
+	}
+
+	public void setNonLocalAddress(final Boolean nonLocalAddress) {
+		this.nonLocalAddress = nonLocalAddress;
+	}	
+	
 	public String getAddressLine1() {
 		return addressLine1;
 	}
@@ -438,6 +472,62 @@ public class PersonTO // NOPMD
 		this.zipCode = zipCode;
 	}
 
+	public Boolean getAlternateAddressInUse() {
+		return alternateAddressInUse;
+	}
+
+	public void setAlternateAddressInUse(final Boolean alternateAddressInUse) {
+		this.alternateAddressInUse = alternateAddressInUse;
+	}
+	
+	public String getAlternateAddressLine1() {
+		return alternateAddressLine1;
+	}
+
+	public void setAlternateAddressLine1(final String alternateAddressLine1) {
+		this.alternateAddressLine1 = alternateAddressLine1;
+	}
+
+	public String getAlternateAddressLine2() {
+		return alternateAddressLine2;
+	}
+
+	public void setAlternateAddressLine2(final String alternateAddressLine2) {
+		this.alternateAddressLine2 = alternateAddressLine2;
+	}
+
+	public String getAlternateAddressCity() {
+		return alternateAddressCity;
+	}
+
+	public void setAlternateAddressCity(final String alternateAddressCity) {
+		this.alternateAddressCity = alternateAddressCity;
+	}
+
+	public String getAlternateAddressState() {
+		return alternateAddressState;
+	}
+
+	public void setAlternateAddressState(final String alternateAddressState) {
+		this.alternateAddressState = alternateAddressState;
+	}
+
+	public String getAlternateAddressZipCode() {
+		return alternateAddressZipCode;
+	}
+
+	public void setAlternateAddressZipCode(final String alternateAddressZipCode) {
+		this.alternateAddressZipCode = alternateAddressZipCode;
+	}	
+	
+	public String getAlternateAddressCountry() {
+		return alternateAddressCountry;
+	}
+
+	public void setAlternateAddressCountry(final String alternateAddressCountry) {
+		this.alternateAddressCountry = alternateAddressCountry;
+	}
+	
 	public String getPhotoUrl() {
 		return photoUrl;
 	}

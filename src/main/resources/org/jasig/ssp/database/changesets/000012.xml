@@ -41,5 +41,45 @@
             <dropColumn tableName="person_demographics" columnName="military_affiliation_id" />
         </rollback>
     </changeSet>
-        
+
+    <changeSet id="Add Alternate Address Fields to person" author="shawn.gormley">
+        <addColumn tableName="person">
+            <column name="non_local_address" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="alternate_address_in_use" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="alternate_address_line_1" type="${nvarchar.type}(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="alternate_address_line_2" type="${nvarchar.type}(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="alternate_address_city" type="${nvarchar.type}(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="alternate_address_state" type="char(2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="alternate_address_zip_code" type="char(10)">
+                <constraints nullable="true" />
+            </column>
+            <column name="alternate_address_country" type="${nvarchar.type}(50)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="person" columnName="non_local_address" />
+            <dropColumn tableName="person" columnName="alternate_address_in_use" />
+            <dropColumn tableName="person" columnName="alternate_address_line_1" />
+            <dropColumn tableName="person" columnName="alternate_address_line_2" />
+            <dropColumn tableName="person" columnName="alternate_address_city" />
+            <dropColumn tableName="person" columnName="alternate_address_state" />
+            <dropColumn tableName="person" columnName="alternate_address_zip_code" />
+            <dropColumn tableName="person" columnName="alternate_address_country" />
+            
+        </rollback>
+    </changeSet>
+       
 </databaseChangeLog>

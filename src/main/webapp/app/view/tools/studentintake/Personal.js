@@ -24,6 +24,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.studentintake.PersonalViewController',
     inject: {
+    	columnRendererUtils: 'columnRendererUtils',
         statesStore: 'statesStore'
     },
 	width: '100%',
@@ -42,7 +43,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    fieldDefaults: {
 				        msgTarget: 'side',
 				        labelAlign: 'right',
-				        labelWidth: 150
+				        labelWidth: 200
 				    },
 				    items: [{
 				            xtype: 'fieldset',
@@ -52,24 +53,12 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				            defaults: {
 				                anchor: '95%'
 				            },
-				       items: [/*{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Intake Date',
-				        name: 'studentIntakeCreatedDate'
-				    },*/{
+				       items: [{
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Intake Completion Date',
 				        name: 'studentIntakeCompleteDate',
 				        renderer: Ext.util.Format.dateRenderer('m/d/Y')
-				    }/*,{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Agreed to Confidentiality',
-				        name: 'confidentialityAgreement'
 				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Date of Agreement',
-				        name: 'confidentialityAgreementDate'
-				    }*/,{
 				        fieldLabel: 'First Name',
 				        name: 'firstName',
 				        itemId: 'firstName',
@@ -133,11 +122,39 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        allowBlank:true,
 				        itemId: 'cellPhone'
 				    },{
-				        fieldLabel: 'Address',
+				        fieldLabel: 'Primary Email (School)',
+				        name: 'primaryEmailAddress',
+				        vtype:'email',
+				        maxLength: 100,
+				        allowBlank:true,
+				        itemId: 'primaryEmailAddress'
+				    },{
+				        fieldLabel: 'Alternate Email',
+				        name: 'secondaryEmailAddress',
+				        vtype:'email',
+				        maxLength: 100,
+				        allowBlank:true,
+				        itemId: 'secondaryEmailAddress'
+				    },{
+				    	xtype: 'displayfield',
+				    	fieldLabel: 'CURRENT ADDRESS'
+				    },{
+				    	xtype: 'displayfield',
+				    	fieldLabel: 'Non-local',
+				    	name: 'nonLocalAddress',
+				    	renderer: me.columnRendererUtils.renderFriendlyBoolean
+				    },{
+				        fieldLabel: 'Address Line 1',
 				        name: 'addressLine1',
 				        maxLength: 50,
 				        allowBlank:true,
-				        itemId: 'address'
+				        itemId: 'addressLine1'
+				    },{
+				        fieldLabel: 'Address Line 2',
+				        name: 'addressLine1',
+				        maxLength: 50,
+				        allowBlank:true,
+				        itemId: 'addressLine2'
 				    },{
 				        fieldLabel: 'City',
 				        name: 'city',
@@ -165,19 +182,49 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        allowBlank:true,
 				        itemId: 'zipCode'
 				    },{
-				        fieldLabel: 'Primary Email (School)',
-				        name: 'primaryEmailAddress',
-				        vtype:'email',
-				        maxLength: 100,
-				        allowBlank:true,
-				        itemId: 'primaryEmailAddress'
+				    	xtype: 'displayfield',
+				    	fieldLabel: 'ALTERNATE ADDRESS'
 				    },{
-				        fieldLabel: 'Alternate Email',
-				        name: 'secondaryEmailAddress',
-				        vtype:'email',
-				        maxLength: 100,
+				    	xtype:'checkbox',
+				    	fieldLabel: 'In Use',
+				    	name: 'alternateAddressInUse'
+				    },{
+				        fieldLabel: 'Address',
+				        name: 'alternateAddressLine1',
+				        maxLength: 50,
 				        allowBlank:true,
-				        itemId: 'secondaryEmailAddress'
+				        itemId: 'alternateAddress'
+				    },{
+				        fieldLabel: 'City',
+				        name: 'alternateAddressCity',
+				        maxLength: 50,
+				        allowBlank:true,
+				        itemId: 'alternateAddressCity'
+				    },{
+				        xtype: 'combobox',
+				        name: 'alternateAddressState',
+				        fieldLabel: 'State',
+				        emptyText: 'Select a State',
+				        store: me.statesStore,
+				        valueField: 'code',
+				        displayField: 'title',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true,
+				        forceSelection: true,
+				        itemId: 'alternateAddressState'
+					},{
+				        fieldLabel: 'Zip Code',
+				        name: 'alternateAddressZipCode',
+				        maxLength: 10,
+				        allowBlank:true,
+				        itemId: 'alternateAddressZipCode'
+				    },{
+				        fieldLabel: 'Country',
+				        name: 'alternateAddressCountry',
+				        allowBlank:true,
+				        itemId: 'alternateAddressCountry'
 				    }]
 				    }]
 				});
