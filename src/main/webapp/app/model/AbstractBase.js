@@ -46,9 +46,9 @@ Ext.define('Ssp.model.AbstractBase', {
 		{
 			for (fieldName in this.data)
 	    	{
-				if (record[fieldName])
+				if ( record[fieldName] )
 	    		{
-	    			this.set(fieldName, record[fieldName] );
+	    			this.set( fieldName, record[fieldName] );
 	    		}
 	    	}
 		}

@@ -25,11 +25,11 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 
 	renderFriendlyBoolean: function(val, metaData, record) {
 		var result = "";
-        if (val != null )
+		if (val !== null )
         {
-           if (val != "")
+           if (val !== "")
            {
-        	   result = ((val==true)?'Yes':'No');
+        	   result = ((val===true)?'Yes':'No');
            }
         }
         

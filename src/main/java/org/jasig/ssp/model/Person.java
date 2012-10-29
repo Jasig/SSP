@@ -173,6 +173,9 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Size(max = 25)
 	private String cellPhone;
 
+	@Nullable
+	private Boolean nonLocalAddress;	
+	
 	/**
 	 * Address line 1.
 	 * 
@@ -218,6 +221,63 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Size(max = 10)
 	private String zipCode;
 
+	@Nullable
+	private Boolean alternateAddressInUse;	
+	
+	/**
+	 * Alternate Address line 1.
+	 * 
+	 * Maximum length of 50.
+	 */
+	@Column(length = 50, name = "alternate_address_line_1")
+	@Size(max = 50)
+	private String alternateAddressLine1;
+
+	/**
+	 * Alternate Address line 2.
+	 * 
+	 * Maximum length of 50.
+	 */
+	@Column(length = 50, name = "alternate_address_line_2")
+	@Size(max = 50)
+	private String alternateAddressLine2;
+
+	/**
+	 * Alternate Address City.
+	 * 
+	 * Maximum length of 50.
+	 */
+	@Column(length = 50, name = "alternate_address_city")
+	@Size(max = 50)
+	private String alternateAddressCity;
+
+	/**
+	 * Alternate Address State code (abbreviated to 2 characters).
+	 * 
+	 * Maximum length of 2.
+	 */
+	@Column(length = 2, name = "alternate_address_state")
+	@Size(max = 2)
+	private String alternateAddressState;
+
+	/**
+	 * Alternate Address ZIP/postal code.
+	 * 
+	 * Maximum length of 10.
+	 */
+	@Column(length = 10, name = "alternate_address_zip_code")
+	@Size(max = 10)
+	private String alternateAddressZipCode;	
+
+	/**
+	 * Alternate Address Country.
+	 * 
+	 * Maximum length of 50.
+	 */
+	@Column(length = 50, name = "alternate_address_country")
+	@Size(max = 50)
+	private String alternateAddressCountry;	
+	
 	/**
 	 * Photo URL.
 	 * 
@@ -562,6 +622,14 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.cellPhone = cellPhone;
 	}
 
+	public Boolean getNonLocalAddress() {
+		return nonLocalAddress;
+	}
+
+	public void setNonLocalAddress(final Boolean nonLocalAddress) {
+		this.nonLocalAddress = nonLocalAddress;
+	}	
+	
 	public String getAddressLine1() {
 		return addressLine1;
 	}
@@ -602,6 +670,62 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.zipCode = zipCode;
 	}
 
+	public Boolean getAlternateAddressInUse() {
+		return alternateAddressInUse;
+	}
+
+	public void setAlternateAddressInUse(final Boolean alternateAddressInUse) {
+		this.alternateAddressInUse = alternateAddressInUse;
+	}
+	
+	public String getAlternateAddressLine1() {
+		return alternateAddressLine1;
+	}
+
+	public void setAlternateAddressLine1(final String alternateAddressLine1) {
+		this.alternateAddressLine1 = alternateAddressLine1;
+	}
+
+	public String getAlternateAddressLine2() {
+		return alternateAddressLine2;
+	}
+
+	public void setAlternateAddressLine2(final String alternateAddressLine2) {
+		this.alternateAddressLine2 = alternateAddressLine2;
+	}
+
+	public String getAlternateAddressCity() {
+		return alternateAddressCity;
+	}
+
+	public void setAlternateAddressCity(final String alternateAddressCity) {
+		this.alternateAddressCity = alternateAddressCity;
+	}
+
+	public String getAlternateAddressState() {
+		return alternateAddressState;
+	}
+
+	public void setAlternateAddressState(final String alternateAddressState) {
+		this.alternateAddressState = alternateAddressState;
+	}
+
+	public String getAlternateAddressZipCode() {
+		return alternateAddressZipCode;
+	}
+
+	public void setAlternateAddressZipCode(final String alternateAddressZipCode) {
+		this.alternateAddressZipCode = alternateAddressZipCode;
+	}	
+
+	public String getAlternateAddressCountry() {
+		return alternateAddressCountry;
+	}
+
+	public void setAlternateAddressCountry(final String alternateAddressCountry) {
+		this.alternateAddressCountry = alternateAddressCountry;
+	}		
+	
 	public String getPhotoUrl() {
 		return photoUrl;
 	}
@@ -903,11 +1027,21 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		result *= hashField("homePhone", homePhone);
 		result *= hashField("workPhone", workPhone);
 		result *= hashField("cellPhone", cellPhone);
+		result *= nonLocalAddress == null ? 2
+				: (nonLocalAddress ? 5 : 3);
 		result *= hashField("addressLine1", addressLine1);
 		result *= hashField("addressLine2", addressLine2);
 		result *= hashField("city", city);
 		result *= hashField("state", state);
 		result *= hashField("zipCode", zipCode);
+		result *= alternateAddressInUse == null ? 7
+				: (alternateAddressInUse ? 13 : 11);
+		result *= hashField("alternateAddressLine1", alternateAddressLine1);
+		result *= hashField("alternateAddressLine2", alternateAddressLine2);
+		result *= hashField("alternateAddressCity", alternateAddressCity);
+		result *= hashField("alternateAddressState", alternateAddressState);
+		result *= hashField("alternateAddressZipCode", alternateAddressZipCode);
+		result *= hashField("alternateAddressCountry", alternateAddressCountry);
 		result *= hashField("photoUrl", photoUrl);
 		result *= hashField("schoolId", schoolId);
 		result *= hashField("username", username);
@@ -918,9 +1052,9 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		result *= hashField("anticipatedStartYear", anticipatedStartYear);
 		// result *= hashField("actualStartTerm", actualStartTerm);
 		result *= hashField("actualStartYear", actualStartYear);
-		result *= enabled == null ? "enabled".hashCode() : (enabled ? 3 : 2);
+		result *= enabled == null ? "enabled".hashCode() : (enabled ? 19 : 17);
 		result *= abilityToBenefit == null ? "abilityToBenefit".hashCode()
-				: (abilityToBenefit ? 3 : 2);
+				: (abilityToBenefit ? 29 : 23);
 		result *= hashField("studentIntakeRequestDate",
 				studentIntakeRequestDate);
 		result *= hashField("studentIntakeCompleteDate",

@@ -33,19 +33,23 @@ Ext.define('Ssp.view.tools.profile.Person', {
     	Ext.apply(me, 
 				{
     		        border: 0,	
-				    bodyPadding: 5,
+				    bodyPadding: 0,
 				    layout: 'anchor',
 				    defaults: {
-				        anchor: '100%'
-				        
+				        anchor: '100%'  
 				    },
-				    fieldDefaults: {
-				        msgTarget: 'side',
-				        labelAlign: 'right',
-				        labelWidth: 200
-				    },
-				    defaultType: 'displayfield',
 				    items: [{
+				        xtype: 'fieldcontainer',
+				        fieldLabel: '',
+				        layout: 'hbox',
+				        margin: '0 0 0 0',
+					    defaultType: 'displayfield',
+					    fieldDefaults: {
+					        msgTarget: 'side',
+					        labelAlign: 'right',
+					        labelWidth: 135
+					    },
+				        items: [{
 				            xtype: 'fieldset',
 				            border: 0,
 				            title: '',
@@ -53,89 +57,141 @@ Ext.define('Ssp.view.tools.profile.Person', {
 				            defaults: {
 				                anchor: '100%'
 				            },
-				       items: 
-				       [{
-					        fieldLabel: 'Student',
-					        name: 'name',
-					        itemId: 'studentName'
+				            flex: .6,
+				            items:[{
+							        fieldLabel: 'Student',
+							        name: 'name',
+							        itemId: 'studentName'
+							    },{
+							        fieldLabel: 'Student Id',
+							        itemId: 'studentId',
+							        name: 'schoolId'
+							    },{
+							        fieldLabel: 'School Email',
+							        name: 'primaryEmailAddress'
+							    },{
+							        fieldLabel: 'Alternate Email',
+							        name: 'secondaryEmailAddress'
+							    },{
+							        fieldLabel: 'Home Phone',
+							        name: 'homePhone'
+							    },{
+							        fieldLabel: 'Cell Phone',
+							        name: 'cellPhone'
+							    },{
+							        fieldLabel: 'Birth Date',
+							        name: 'birthDate',
+							        itemId: 'birthDate'
+							    },{
+							        fieldLabel: 'Student Type',
+							        name: 'studentType',
+							        itemId: 'studentType'
+							    },{
+							        fieldLabel: 'SSP Program Status',
+							        name: 'programStatus',
+							        itemId: 'programStatus'
+							    },{
+							        fieldLabel: 'Registered Current Term',
+							        name: 'registeredForCurrentTerm',
+							        renderer: me.columnRendererUtils.renderFriendlyBoolean
+							    },{
+							        fieldLabel: 'Payment Status',
+							        name: 'paymentStatus',
+							        hidden: true
+							    }, {
+							        fieldLabel: 'CUM GPA',
+							        name: 'cumGPA',
+							        hidden: true
+							    },{
+							        fieldLabel: 'Academic Program',
+							        name: 'academicPrograms',
+							        hidden: true
+							    },{
+							    	fieldLabel: 'CURRENT ADDRESS'
+							    },{
+							        fieldLabel: 'Non-local',
+							        name: 'nonLocalAddress',
+							        renderer: me.columnRendererUtils.renderFriendlyBoolean
+							    },{
+							        fieldLabel: 'Address Line 1',
+							        name: 'addressLine1'
+							    },{
+							        fieldLabel: 'Address Line 2',
+							        name: 'addressLine2'
+							    },{
+							        fieldLabel: 'City',
+							        name: 'city'
+							    },{
+							        fieldLabel: 'State',
+							        name: 'state'
+							    },{
+							        fieldLabel: 'Zip Code',
+							        name: 'zipCode'
+							    },{
+							        fieldLabel: 'ALTERNATE ADDRESS'
+							    },{
+							        fieldLabel: 'In Use',
+							        name: 'alternateAddressInUse',
+							        renderer: me.columnRendererUtils.renderFriendlyBoolean
+							    },{
+							        fieldLabel: 'Address Line 1',
+							        name: 'alternateAddressLine1'
+							    },{
+							        fieldLabel: 'Address Line 2',
+							        name: 'alternateAddressLine2'
+							    },{
+							        fieldLabel: 'City',
+							        name: 'alternateAddressCity'
+							    },{
+							        fieldLabel: 'State',
+							        name: 'alternateAddressState'
+							    },{
+							        fieldLabel: 'Zip Code',
+							        name: 'alternateAddressZipCode'
+							    },{
+							        fieldLabel: 'Country',
+							        name: 'alternateAddressCountry'
+							    }]
+				            
 					    },{
-					        fieldLabel: 'Student Id',
-					        itemId: 'studentId',
-					        name: 'schoolId'
-					    }, {
-					        fieldLabel: 'Birth Date',
-					        name: 'birthDate',
-					        itemId: 'birthDate'
-					    }, {
-					        fieldLabel: 'Home Phone',
-					        name: 'homePhone'
-					    }, {
-					        fieldLabel: 'Cell Phone',
-					        name: 'cellPhone'
-					    }, {
-					        fieldLabel: 'Address',
-					        name: 'addressLine1'
-					    }, {
-					        fieldLabel: 'City',
-					        name: 'city'
-					    }, {
-					        fieldLabel: 'State',
-					        name: 'state'
-					    }, {
-					        fieldLabel: 'Zip Code',
-					        name: 'zipCode'
-					    }, {
-					        fieldLabel: 'School Email',
-					        name: 'primaryEmailAddress'
-					    }, {
-					        fieldLabel: 'Alternate Email',
-					        name: 'secondaryEmailAddress'
-					    }, {
-					        fieldLabel: 'Student Type',
-					        name: 'studentType',
-					        itemId: 'studentType'
-					    }, {
-					        fieldLabel: 'SSP Program Status',
-					        name: 'programStatus',
-					        itemId: 'programStatus'
-					    }, {
-					        fieldLabel: 'Registered for Current Term',
-					        name: 'registeredForCurrentTerm',
-					        renderer: me.columnRendererUtils.renderFriendlyBoolean
-					    }, {
-					        fieldLabel: 'Payment Status',
-					        name: 'paymentStatus',
-					        hidden: true
-					    }, {
-					        fieldLabel: 'CUM GPA',
-					        name: 'cumGPA',
-					        hidden: true
-					    },{
-					        fieldLabel: 'Academic Program',
-					        name: 'academicPrograms',
-					        hidden: true
-					    },{
-					        fieldLabel: me.sspConfig.get('coachFieldLabel'),
-					        name: 'coachName',
-					        itemId: 'coachName'
-					    },{
-					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Phone',
-					        name: 'coachWorkPhone',
-					        itemId: 'coachWorkPhone'
-					    },{
-					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Department',
-					        name: 'coachDepartmentName',
-					        itemId: 'coachDepartmentName'
-					    },{
-					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Office',
-					        name: 'coachOfficeLocation',
-					        itemId: 'coachOfficeLocation'
-					    },{
-					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Email',
-					        name: 'coachPrimaryEmailAddress',
-					        itemId: 'coachPrimaryEmailAddress'
-					    }]
-					    }],
+				            xtype: 'fieldset',
+				            border: 1,
+				            cls:'ssp-form',
+				            title: me.sspConfig.get('coachFieldLabel').toUpperCase(),
+				            defaultType: 'displayfield',
+				            defaults: {
+				                anchor: '100%'
+				            },
+				            padding: 0,
+				            flex: .4,
+					        items:[{
+							        fieldLabel: me.sspConfig.get('coachFieldLabel'),
+							        name: 'coachName',
+							        itemId: 'coachName',
+							        labelWidth: 80
+							    },{
+							        fieldLabel: 'Phone',
+							        name: 'coachWorkPhone',
+							        itemId: 'coachWorkPhone',
+							        labelWidth: 80
+							    },{
+							        fieldLabel: 'Email',
+							        name: 'coachPrimaryEmailAddress',
+							        itemId: 'coachPrimaryEmailAddress',
+							        labelWidth: 80
+							    },{
+							        fieldLabel: 'Department',
+							        name: 'coachDepartmentName',
+							        itemId: 'coachDepartmentName',
+							        labelWidth: 80
+							    },{
+							        fieldLabel: 'Office',
+							        name: 'coachOfficeLocation',
+							        itemId: 'coachOfficeLocation',
+							        labelWidth: 80
+							    }]
+				       }]
+				    }]
 				});
 		
 	     return me.callParent(arguments);
