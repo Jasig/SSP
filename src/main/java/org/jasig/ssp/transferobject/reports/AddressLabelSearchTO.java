@@ -45,20 +45,33 @@ public class AddressLabelSearchTO
 
 	private List<UUID> studentTypeIds;
 
-	public PersonTO getCoach() {
-		return coach;
-	}
-
-	public void setCoach(PersonTO coach) {
-		this.coach = coach;
-	}
-
 	private Date createDateFrom;
 
 	private Date createDateTo;
 	
 	private PersonTO coach;
-	
+
+	public AddressLabelSearchTO(final PersonTO coach,
+								final UUID programStatus,
+								final List<UUID> specialServiceGroupId,
+								final List<UUID> referralSourcesId,
+								final String anticipatedStartTerm,
+								final Integer anticipatedStartYear,
+								final List<UUID> studentTypeIds,
+								final Date createDateFrom, final Date createDateTo) {
+		super();
+		this.coach = coach;
+		this.programStatus = programStatus;
+		specialServiceGroupIds = specialServiceGroupId;
+		referralSourcesIds = referralSourcesId;
+		this.anticipatedStartTerm = anticipatedStartTerm;
+		this.anticipatedStartYear = anticipatedStartYear;
+		this.studentTypeIds = studentTypeIds;
+		this.createDateFrom = createDateFrom == null ? null : new Date(
+				createDateFrom.getTime());
+		this.createDateTo = createDateTo == null ? null : new Date(
+				createDateTo.getTime());
+	}
 
 	public UUID getProgramStatus() {
 		return programStatus;
@@ -129,24 +142,12 @@ public class AddressLabelSearchTO
 		this.anticipatedStartYear = anticipatedStartYear;
 	}
 
-	public AddressLabelSearchTO(final PersonTO coach, 
-			final UUID programStatus,
-			final List<UUID> specialServiceGroupId,
-			final List<UUID> referralSourcesId,
-			final String anticipatedStartTerm,
-			final Integer anticipatedStartYear,
-			final List<UUID> studentTypeIds,
-			final Date createDateFrom, final Date createDateTo) {
-		super();
-		this.programStatus = programStatus;
-		specialServiceGroupIds = specialServiceGroupId;
-		referralSourcesIds = referralSourcesId;
-		this.anticipatedStartTerm = anticipatedStartTerm;
-		this.anticipatedStartYear = anticipatedStartYear;
-		this.studentTypeIds = studentTypeIds;
-		this.createDateFrom = createDateFrom == null ? null : new Date(
-				createDateFrom.getTime());
-		this.createDateTo = createDateTo == null ? null : new Date(
-				createDateTo.getTime());
+	public PersonTO getCoach() {
+		return coach;
 	}
+
+	public void setCoach(PersonTO coach) {
+		this.coach = coach;
+	}
+
 }

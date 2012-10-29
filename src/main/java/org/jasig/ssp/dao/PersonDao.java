@@ -165,9 +165,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 
 		final Criteria criteria = createCriteria(sAndP);
 
-		if (addressLabelSearchTO.getCoach() != null) {
+		if (addressLabelSearchTO.getCoach() != null
+				&& addressLabelSearchTO.getCoach().getId() != null) {
 			// restrict to coach
-			criteria.add(Restrictions.eq("coach", addressLabelSearchTO.getCoach()));
+			criteria.add(Restrictions.eq("coach.id",
+					addressLabelSearchTO.getCoach().getId()));
 		}
 		
 		if (addressLabelSearchTO.getProgramStatus() != null) {
