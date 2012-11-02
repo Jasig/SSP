@@ -46,9 +46,9 @@ Ext.define('Ssp.model.AbstractBase', {
 		{
 			for (fieldName in this.data)
 	    	{
-				if (record[fieldName])
+				if ( record[fieldName] )
 	    		{
-	    			this.set(fieldName, record[fieldName] );
+	    			this.set( fieldName, record[fieldName] );
 	    		}
 	    	}
 		}
@@ -3021,11 +3021,11 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 
 	renderFriendlyBoolean: function(val, metaData, record) {
 		var result = "";
-        if (val != null )
+		if (val !== null )
         {
-           if (val != "")
+           if (val !== "")
            {
-        	   result = ((val==true)?'Yes':'No');
+        	   result = ((val===true)?'Yes':'No');
            }
         }
         
@@ -8489,7 +8489,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		var programStatusField = me.getProgramStatusField();
 		var id= me.personLite.get('id');
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');
-		var fullName; 		
+		var fullName;
 		
 		// load the person data
 		me.person.populateFromGenericObject(r);
@@ -8531,8 +8531,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		studentTypeField.setValue( me.person.getStudentTypeName() );
 		programStatusField.setValue( me.person.getProgramStatusName() );
 		studentRecordComp.setTitle('Student Record - ' + fullName);
-		
-    	// hide the loader
+
+		// hide the loader
     	me.getView().setLoading( false ); 
     },
     
@@ -10638,33 +10638,50 @@ Ext.define('Ssp.controller.tool.studentintake.PersonalViewController', {
     inject: {
     	citizenshipsStore: 'citizenshipsStore',
     	sspConfig: 'sspConfig'
-    },  
+    }, 
+    control: {
+    	firstNameField: '#firstName',
+    	middleNameField: '#middleName',
+    	lastNameField: '#lastName',
+    	studentIdField: '#studentId',
+    	birthDateField: '#birthDate',
+    	homePhoneField: '#homePhone',
+    	workPhoneField: '#workPhone',
+    	addressLine1Field: '#addressLine1',
+    	addressLine2Field: '#addressLine2',
+    	cityField: '#city',
+    	stateField: '#state',
+    	zipCodeField: '#zipCode',
+    	primaryEmailAddressField: '#primaryEmailAddress'
+    },
 	init: function() {
 		var me=this;
     	var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalData');
-    	firstName = Ext.ComponentQuery.query('#firstName')[0].setDisabled(disabled);
-		middleName = Ext.ComponentQuery.query('#middleName')[0].setDisabled(disabled);
-		lastName = Ext.ComponentQuery.query('#lastName')[0].setDisabled(disabled);
-		studentId = Ext.ComponentQuery.query('#studentId')[0];
-		studentId.setDisabled(disabled);
+		// disable externally loaded fields
+    	me.getFirstNameField().setDisabled(disabled);
+		me.getMiddleNameField().setDisabled(disabled);
+		me.getLastNameField().setDisabled(disabled);
+		me.getBirthDateField().setDisabled(disabled);
+		me.getHomePhoneField().setDisabled(disabled);
+		me.getWorkPhoneField().setDisabled(disabled);
+		me.getAddressLine1Field().setDisabled(disabled);
+		me.getAddressLine2Field().setDisabled(disabled);
+		me.getCityField().setDisabled(disabled);
+		me.getStateField().setDisabled(disabled);
+		me.getZipCodeField().setDisabled(disabled);
+		me.getPrimaryEmailAddressField().setDisabled(disabled);		
+		studentIdField = me.getStudentIdField();
+		studentIdField.setDisabled(disabled);
 		// set the field label and supply an asterisk for required
-		studentId.setFieldLabel(me.sspConfig.get('studentIdAlias') + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
-		Ext.apply(studentId, {
-	                  minLength: me.sspConfig.get('studentIdMinValidationLength'),
-	                  minLengthText: '',
-	                  maxLength: me.sspConfig.get('studentIdMaxValidationLength'),
-	                  maxLengthText: '',
-	                  vtype: 'studentIdValidator',
-	                  vtypeText: me.sspConfig.get('studentIdValidationErrorText')
-                     });
-		birthDate = Ext.ComponentQuery.query('#birthDate')[0].setDisabled(disabled);
-		homePhone = Ext.ComponentQuery.query('#homePhone')[0].setDisabled(disabled);
-		workPhone = Ext.ComponentQuery.query('#workPhone')[0].setDisabled(disabled);
-		address = Ext.ComponentQuery.query('#address')[0].setDisabled(disabled);
-		city = Ext.ComponentQuery.query('#city')[0].setDisabled(disabled);
-		state = Ext.ComponentQuery.query('#state')[0].setDisabled(disabled);
-		zipCode = Ext.ComponentQuery.query('#zipCode')[0].setDisabled(disabled);
-		primaryEmailAddress = Ext.ComponentQuery.query('#primaryEmailAddress')[0].setDisabled(disabled);
+		studentIdField.setFieldLabel(me.sspConfig.get('studentIdAlias') + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
+		Ext.apply(studentIdField, {
+            minLength: me.sspConfig.get('studentIdMinValidationLength'),
+            minLengthText: '',
+            maxLength: me.sspConfig.get('studentIdMaxValidationLength'),
+        	maxLengthText: '',
+        	vtype: 'studentIdValidator',
+        	vtypeText: me.sspConfig.get('studentIdValidationErrorText')
+         });
 
 		return me.callParent(arguments);
     }
@@ -15833,19 +15850,23 @@ Ext.define('Ssp.view.tools.profile.Person', {
     	Ext.apply(me, 
 				{
     		        border: 0,	
-				    bodyPadding: 5,
+				    bodyPadding: 0,
 				    layout: 'anchor',
 				    defaults: {
-				        anchor: '100%'
-				        
+				        anchor: '100%'  
 				    },
-				    fieldDefaults: {
-				        msgTarget: 'side',
-				        labelAlign: 'right',
-				        labelWidth: 200
-				    },
-				    defaultType: 'displayfield',
 				    items: [{
+				        xtype: 'fieldcontainer',
+				        fieldLabel: '',
+				        layout: 'hbox',
+				        margin: '0 0 0 0',
+					    defaultType: 'displayfield',
+					    fieldDefaults: {
+					        msgTarget: 'side',
+					        labelAlign: 'right',
+					        labelWidth: 135
+					    },
+				        items: [{
 				            xtype: 'fieldset',
 				            border: 0,
 				            title: '',
@@ -15853,89 +15874,141 @@ Ext.define('Ssp.view.tools.profile.Person', {
 				            defaults: {
 				                anchor: '100%'
 				            },
-				       items: 
-				       [{
-					        fieldLabel: 'Student',
-					        name: 'name',
-					        itemId: 'studentName'
+				            flex: .6,
+				            items:[{
+							        fieldLabel: 'Student',
+							        name: 'name',
+							        itemId: 'studentName'
+							    },{
+							        fieldLabel: 'Student Id',
+							        itemId: 'studentId',
+							        name: 'schoolId'
+							    },{
+							        fieldLabel: 'School Email',
+							        name: 'primaryEmailAddress'
+							    },{
+							        fieldLabel: 'Alternate Email',
+							        name: 'secondaryEmailAddress'
+							    },{
+							        fieldLabel: 'Home Phone',
+							        name: 'homePhone'
+							    },{
+							        fieldLabel: 'Cell Phone',
+							        name: 'cellPhone'
+							    },{
+							        fieldLabel: 'Birth Date',
+							        name: 'birthDate',
+							        itemId: 'birthDate'
+							    },{
+							        fieldLabel: 'Student Type',
+							        name: 'studentType',
+							        itemId: 'studentType'
+							    },{
+							        fieldLabel: 'SSP Program Status',
+							        name: 'programStatus',
+							        itemId: 'programStatus'
+							    },{
+							        fieldLabel: 'Registered Current Term',
+							        name: 'registeredForCurrentTerm',
+							        renderer: me.columnRendererUtils.renderFriendlyBoolean
+							    },{
+							        fieldLabel: 'Payment Status',
+							        name: 'paymentStatus',
+							        hidden: true
+							    }, {
+							        fieldLabel: 'CUM GPA',
+							        name: 'cumGPA',
+							        hidden: true
+							    },{
+							        fieldLabel: 'Academic Program',
+							        name: 'academicPrograms',
+							        hidden: true
+							    },{
+							    	fieldLabel: 'CURRENT ADDRESS'
+							    },{
+							        fieldLabel: 'Non-local',
+							        name: 'nonLocalAddress',
+							        renderer: me.columnRendererUtils.renderFriendlyBoolean
+							    },{
+							        fieldLabel: 'Address Line 1',
+							        name: 'addressLine1'
+							    },{
+							        fieldLabel: 'Address Line 2',
+							        name: 'addressLine2'
+							    },{
+							        fieldLabel: 'City',
+							        name: 'city'
+							    },{
+							        fieldLabel: 'State',
+							        name: 'state'
+							    },{
+							        fieldLabel: 'Zip Code',
+							        name: 'zipCode'
+							    },{
+							        fieldLabel: 'ALTERNATE ADDRESS'
+							    },{
+							        fieldLabel: 'In Use',
+							        name: 'alternateAddressInUse',
+							        renderer: me.columnRendererUtils.renderFriendlyBoolean
+							    },{
+							        fieldLabel: 'Address Line 1',
+							        name: 'alternateAddressLine1'
+							    },{
+							        fieldLabel: 'Address Line 2',
+							        name: 'alternateAddressLine2'
+							    },{
+							        fieldLabel: 'City',
+							        name: 'alternateAddressCity'
+							    },{
+							        fieldLabel: 'State',
+							        name: 'alternateAddressState'
+							    },{
+							        fieldLabel: 'Zip Code',
+							        name: 'alternateAddressZipCode'
+							    },{
+							        fieldLabel: 'Country',
+							        name: 'alternateAddressCountry'
+							    }]
+				            
 					    },{
-					        fieldLabel: 'Student Id',
-					        itemId: 'studentId',
-					        name: 'schoolId'
-					    }, {
-					        fieldLabel: 'Birth Date',
-					        name: 'birthDate',
-					        itemId: 'birthDate'
-					    }, {
-					        fieldLabel: 'Home Phone',
-					        name: 'homePhone'
-					    }, {
-					        fieldLabel: 'Cell Phone',
-					        name: 'cellPhone'
-					    }, {
-					        fieldLabel: 'Address',
-					        name: 'addressLine1'
-					    }, {
-					        fieldLabel: 'City',
-					        name: 'city'
-					    }, {
-					        fieldLabel: 'State',
-					        name: 'state'
-					    }, {
-					        fieldLabel: 'Zip Code',
-					        name: 'zipCode'
-					    }, {
-					        fieldLabel: 'School Email',
-					        name: 'primaryEmailAddress'
-					    }, {
-					        fieldLabel: 'Alternate Email',
-					        name: 'secondaryEmailAddress'
-					    }, {
-					        fieldLabel: 'Student Type',
-					        name: 'studentType',
-					        itemId: 'studentType'
-					    }, {
-					        fieldLabel: 'SSP Program Status',
-					        name: 'programStatus',
-					        itemId: 'programStatus'
-					    }, {
-					        fieldLabel: 'Registered for Current Term',
-					        name: 'registeredForCurrentTerm',
-					        renderer: me.columnRendererUtils.renderFriendlyBoolean
-					    }, {
-					        fieldLabel: 'Payment Status',
-					        name: 'paymentStatus',
-					        hidden: true
-					    }, {
-					        fieldLabel: 'CUM GPA',
-					        name: 'cumGPA',
-					        hidden: true
-					    },{
-					        fieldLabel: 'Academic Program',
-					        name: 'academicPrograms',
-					        hidden: true
-					    },{
-					        fieldLabel: me.sspConfig.get('coachFieldLabel'),
-					        name: 'coachName',
-					        itemId: 'coachName'
-					    },{
-					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Phone',
-					        name: 'coachWorkPhone',
-					        itemId: 'coachWorkPhone'
-					    },{
-					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Department',
-					        name: 'coachDepartmentName',
-					        itemId: 'coachDepartmentName'
-					    },{
-					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Office',
-					        name: 'coachOfficeLocation',
-					        itemId: 'coachOfficeLocation'
-					    },{
-					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Email',
-					        name: 'coachPrimaryEmailAddress',
-					        itemId: 'coachPrimaryEmailAddress'
-					    }]
-					    }],
+				            xtype: 'fieldset',
+				            border: 1,
+				            cls:'ssp-form',
+				            title: me.sspConfig.get('coachFieldLabel').toUpperCase(),
+				            defaultType: 'displayfield',
+				            defaults: {
+				                anchor: '100%'
+				            },
+				            padding: 0,
+				            flex: .4,
+					        items:[{
+							        fieldLabel: me.sspConfig.get('coachFieldLabel'),
+							        name: 'coachName',
+							        itemId: 'coachName',
+							        labelWidth: 80
+							    },{
+							        fieldLabel: 'Phone',
+							        name: 'coachWorkPhone',
+							        itemId: 'coachWorkPhone',
+							        labelWidth: 80
+							    },{
+							        fieldLabel: 'Email',
+							        name: 'coachPrimaryEmailAddress',
+							        itemId: 'coachPrimaryEmailAddress',
+							        labelWidth: 80
+							    },{
+							        fieldLabel: 'Department',
+							        name: 'coachDepartmentName',
+							        itemId: 'coachDepartmentName',
+							        labelWidth: 80
+							    },{
+							        fieldLabel: 'Office',
+							        name: 'coachOfficeLocation',
+							        itemId: 'coachOfficeLocation',
+							        labelWidth: 80
+							    }]
+				       }]
+				    }]
 				});
 		
 	     return me.callParent(arguments);
@@ -17159,6 +17232,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.studentintake.PersonalViewController',
     inject: {
+    	columnRendererUtils: 'columnRendererUtils',
         statesStore: 'statesStore'
     },
 	width: '100%',
@@ -17177,7 +17251,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    fieldDefaults: {
 				        msgTarget: 'side',
 				        labelAlign: 'right',
-				        labelWidth: 150
+				        labelWidth: 200
 				    },
 				    items: [{
 				            xtype: 'fieldset',
@@ -17187,24 +17261,12 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				            defaults: {
 				                anchor: '95%'
 				            },
-				       items: [/*{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Intake Date',
-				        name: 'studentIntakeCreatedDate'
-				    },*/{
+				       items: [{
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Intake Completion Date',
 				        name: 'studentIntakeCompleteDate',
 				        renderer: Ext.util.Format.dateRenderer('m/d/Y')
-				    }/*,{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Agreed to Confidentiality',
-				        name: 'confidentialityAgreement'
 				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Date of Agreement',
-				        name: 'confidentialityAgreementDate'
-				    }*/,{
 				        fieldLabel: 'First Name',
 				        name: 'firstName',
 				        itemId: 'firstName',
@@ -17268,11 +17330,39 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        allowBlank:true,
 				        itemId: 'cellPhone'
 				    },{
-				        fieldLabel: 'Address',
+				        fieldLabel: 'Primary Email (School)',
+				        name: 'primaryEmailAddress',
+				        vtype:'email',
+				        maxLength: 100,
+				        allowBlank:true,
+				        itemId: 'primaryEmailAddress'
+				    },{
+				        fieldLabel: 'Alternate Email',
+				        name: 'secondaryEmailAddress',
+				        vtype:'email',
+				        maxLength: 100,
+				        allowBlank:true,
+				        itemId: 'secondaryEmailAddress'
+				    },{
+				    	xtype: 'displayfield',
+				    	fieldLabel: 'CURRENT ADDRESS'
+				    },{
+				    	xtype: 'displayfield',
+				    	fieldLabel: 'Non-local',
+				    	name: 'nonLocalAddress',
+				    	renderer: me.columnRendererUtils.renderFriendlyBoolean
+				    },{
+				        fieldLabel: 'Address Line 1',
 				        name: 'addressLine1',
 				        maxLength: 50,
 				        allowBlank:true,
-				        itemId: 'address'
+				        itemId: 'addressLine1'
+				    },{
+				        fieldLabel: 'Address Line 2',
+				        name: 'addressLine1',
+				        maxLength: 50,
+				        allowBlank:true,
+				        itemId: 'addressLine2'
 				    },{
 				        fieldLabel: 'City',
 				        name: 'city',
@@ -17300,19 +17390,49 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        allowBlank:true,
 				        itemId: 'zipCode'
 				    },{
-				        fieldLabel: 'Primary Email (School)',
-				        name: 'primaryEmailAddress',
-				        vtype:'email',
-				        maxLength: 100,
-				        allowBlank:true,
-				        itemId: 'primaryEmailAddress'
+				    	xtype: 'displayfield',
+				    	fieldLabel: 'ALTERNATE ADDRESS'
 				    },{
-				        fieldLabel: 'Alternate Email',
-				        name: 'secondaryEmailAddress',
-				        vtype:'email',
-				        maxLength: 100,
+				    	xtype:'checkbox',
+				    	fieldLabel: 'In Use',
+				    	name: 'alternateAddressInUse'
+				    },{
+				        fieldLabel: 'Address',
+				        name: 'alternateAddressLine1',
+				        maxLength: 50,
 				        allowBlank:true,
-				        itemId: 'secondaryEmailAddress'
+				        itemId: 'alternateAddress'
+				    },{
+				        fieldLabel: 'City',
+				        name: 'alternateAddressCity',
+				        maxLength: 50,
+				        allowBlank:true,
+				        itemId: 'alternateAddressCity'
+				    },{
+				        xtype: 'combobox',
+				        name: 'alternateAddressState',
+				        fieldLabel: 'State',
+				        emptyText: 'Select a State',
+				        store: me.statesStore,
+				        valueField: 'code',
+				        displayField: 'title',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true,
+				        forceSelection: true,
+				        itemId: 'alternateAddressState'
+					},{
+				        fieldLabel: 'Zip Code',
+				        name: 'alternateAddressZipCode',
+				        maxLength: 10,
+				        allowBlank:true,
+				        itemId: 'alternateAddressZipCode'
+				    },{
+				        fieldLabel: 'Country',
+				        name: 'alternateAddressCountry',
+				        allowBlank:true,
+				        itemId: 'alternateAddressCountry'
 				    }]
 				    }]
 				});
@@ -20358,11 +20478,19 @@ Ext.define('Ssp.model.Person', {
              {name: 'homePhone', type: 'string'},
     		 {name: 'cellPhone', type: 'string'},
              {name: 'workPhone', type: 'string'},
+             {name: 'nonLocalAddress', type:'boolean', useNull: true},
     		 {name: 'addressLine1', type: 'string'},
              {name: 'addressLine2', type: 'string'},
     		 {name: 'city', type: 'string'},
              {name: 'state', type: 'string'},
     		 {name: 'zipCode', type: 'string'},
+    		 {name: 'alternateAddressInUse', type:'boolean', useNull: true},
+    		 {name: 'alternateAddressLine1', type: 'string'},
+             {name: 'alternateAddressLine2', type: 'string'},
+    		 {name: 'alternateAddressCity', type: 'string'},
+             {name: 'alternateAddressState', type: 'string'},
+    		 {name: 'alternateAddressZipCode', type: 'string'},
+    		 {name: 'alternateAddressCountry', type: 'string'},
              {name: 'primaryEmailAddress', type: 'string'},
     		 {name: 'secondaryEmailAddress', type: 'string'},
              {name: 'birthDate', type: 'date', dateFormat: 'time'},
