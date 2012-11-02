@@ -3474,6 +3474,9 @@ Ext.define('Ssp.util.Constants',{
         
         // CAN BE APPLIED TO THE LABEL OF A FIELD TO SHOW A RED REQUIRED ASTERISK
         REQUIRED_ASTERISK_DISPLAY: '<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>',
+
+        // CAN BE APPLIED TO THE LABEL OF A FIELD OR CONTAINER TO ALTER THE LABEL STYLE
+        SSP_LABEL_STYLE: "color:#04408c;",        
         
         // CONFIGURES THE MESSAGE DISPLAYED NEXT TO THE SAVE BUTTON FOR TOOLS WHERE A SAVE IS ON A SINGLE SCREEN
         // FOR EXAMPLE: THIS FUNCTIONALITY IS APPLIED TO THE STUDENT INTAKE TOOL, ACTION PLAN STRENGTHS AND CONFIDENTIALITY DISCLOSURE AGREEMENT
@@ -8448,7 +8451,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     	studentIdField: '#studentId',
     	birthDateField: '#birthDate',
     	studentTypeField: '#studentType',
-    	programStatusField: '#programStatus'
+    	programStatusField: '#programStatus',
+    	addressField: '#address',
+    	alternateAddressInUseField: '#alternateAddressInUse',
+    	alternateAddressField: '#alternateAddress'
     },
 	init: function() {
 		var me=this;
@@ -8490,9 +8496,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		var id= me.personLite.get('id');
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');
 		var fullName;
+		var alternateAddressInUse = "No";
 		
 		// load the person data
-		me.person.populateFromGenericObject(r);
+		me.person.populateFromGenericObject(r);		
 		
     	fullName = me.person.getFullName();
    	
@@ -8532,6 +8539,20 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		programStatusField.setValue( me.person.getProgramStatusName() );
 		studentRecordComp.setTitle('Student Record - ' + fullName);
 
+		me.getAddressField().setValue(me.person.buildAddress());
+		
+		me.getAlternateAddressField().setValue(me.person.buildAlternateAddress());
+		
+		if (me.person.get('alternateAddressInUse')!=null)
+		{
+			if (me.person.get('alternateAddressInUse')===true)
+			{
+				alternateAddressInUse = "Yes";
+			}
+		}
+		
+		me.getAlternateAddressInUseField().setValue( alternateAddressInUse );
+		
 		// hide the loader
     	me.getView().setLoading( false ); 
     },
@@ -15859,12 +15880,12 @@ Ext.define('Ssp.view.tools.profile.Person', {
 				        xtype: 'fieldcontainer',
 				        fieldLabel: '',
 				        layout: 'hbox',
-				        margin: '0 0 0 0',
+				        margin: '0 5 0 0',
 					    defaultType: 'displayfield',
 					    fieldDefaults: {
 					        msgTarget: 'side',
 					        labelAlign: 'right',
-					        labelWidth: 135
+					        labelWidth: 100
 					    },
 				        items: [{
 				            xtype: 'fieldset',
@@ -15874,7 +15895,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
 				            defaults: {
 				                anchor: '100%'
 				            },
-				            flex: .6,
+				            flex: .55,
 				            items:[{
 							        fieldLabel: 'Student',
 							        name: 'name',
@@ -15904,11 +15925,11 @@ Ext.define('Ssp.view.tools.profile.Person', {
 							        name: 'studentType',
 							        itemId: 'studentType'
 							    },{
-							        fieldLabel: 'SSP Program Status',
+							        fieldLabel: 'Caseload Status',
 							        name: 'programStatus',
 							        itemId: 'programStatus'
 							    },{
-							        fieldLabel: 'Registered Current Term',
+							        fieldLabel: 'Registered',
 							        name: 'registeredForCurrentTerm',
 							        renderer: me.columnRendererUtils.renderFriendlyBoolean
 							    },{
@@ -15923,65 +15944,29 @@ Ext.define('Ssp.view.tools.profile.Person', {
 							        fieldLabel: 'Academic Program',
 							        name: 'academicPrograms',
 							        hidden: true
-							    },{
-							    	fieldLabel: 'CURRENT ADDRESS'
-							    },{
-							        fieldLabel: 'Non-local',
-							        name: 'nonLocalAddress',
-							        renderer: me.columnRendererUtils.renderFriendlyBoolean
-							    },{
-							        fieldLabel: 'Address Line 1',
-							        name: 'addressLine1'
-							    },{
-							        fieldLabel: 'Address Line 2',
-							        name: 'addressLine2'
-							    },{
-							        fieldLabel: 'City',
-							        name: 'city'
-							    },{
-							        fieldLabel: 'State',
-							        name: 'state'
-							    },{
-							        fieldLabel: 'Zip Code',
-							        name: 'zipCode'
-							    },{
-							        fieldLabel: 'ALTERNATE ADDRESS'
-							    },{
-							        fieldLabel: 'In Use',
-							        name: 'alternateAddressInUse',
-							        renderer: me.columnRendererUtils.renderFriendlyBoolean
-							    },{
-							        fieldLabel: 'Address Line 1',
-							        name: 'alternateAddressLine1'
-							    },{
-							        fieldLabel: 'Address Line 2',
-							        name: 'alternateAddressLine2'
-							    },{
-							        fieldLabel: 'City',
-							        name: 'alternateAddressCity'
-							    },{
-							        fieldLabel: 'State',
-							        name: 'alternateAddressState'
-							    },{
-							        fieldLabel: 'Zip Code',
-							        name: 'alternateAddressZipCode'
-							    },{
-							        fieldLabel: 'Country',
-							        name: 'alternateAddressCountry'
 							    }]
 				            
 					    },{
 				            xtype: 'fieldset',
-				            border: 1,
-				            cls:'ssp-form',
-				            title: me.sspConfig.get('coachFieldLabel').toUpperCase(),
+				            border: 0,
+				            title: '',
 				            defaultType: 'displayfield',
 				            defaults: {
 				                anchor: '100%'
 				            },
 				            padding: 0,
-				            flex: .4,
+				            flex: .45,
 					        items:[{
+					            xtype: 'fieldset',
+					            border: 1,
+					            cls:'ssp-form',
+					            title: 'Coach',
+					            defaultType: 'displayfield',
+					            defaults: {
+					                anchor: '100%'
+					            },
+					            flex: 1,
+					            items:[{
 							        fieldLabel: me.sspConfig.get('coachFieldLabel'),
 							        name: 'coachName',
 							        itemId: 'coachName',
@@ -16006,7 +15991,50 @@ Ext.define('Ssp.view.tools.profile.Person', {
 							        name: 'coachOfficeLocation',
 							        itemId: 'coachOfficeLocation',
 							        labelWidth: 80
-							    }]
+							    }]},{
+						            xtype: 'fieldset',
+						            border: 1,
+						            cls:'ssp-form',
+						            title: 'Student Mailing Address',
+						            defaultType: 'displayfield',
+						            defaults: {
+						                anchor: '100%'
+						            },
+						            flex: 1,
+						            items:[{
+							        fieldLabel: 'Non-local',
+							        name: 'nonLocalAddress',
+							        labelWidth: 80,
+							        renderer: me.columnRendererUtils.renderFriendlyBoolean
+							    },{
+							        fieldLabel: 'Address',
+							        height: '60',
+							        name: 'address',
+							        labelWidth: 80,
+							        itemId: 'address'
+							    }]},{
+						            xtype: 'fieldset',
+						            border: 1,
+						            cls:'ssp-form',
+						            title: 'Student Alternate Address',
+						            defaultType: 'displayfield',
+						            defaults: {
+						                anchor: '100%'
+						            },
+						            flex: 1,
+						            items:[{
+							        fieldLabel: 'In Use',
+							        name: 'alternateAddressInUse',
+							        labelWidth: 80,
+							        itemId: 'alternateAddressInUse'
+							    },{
+							    	fieldLabel: 'Address',
+							        name: 'alternateAddress',
+							        labelWidth: 80,
+							        height: '60',
+							        itemId: 'alternateAddress'
+							    }]}
+							    ]
 				       }]
 				    }]
 				});
@@ -20590,6 +20618,37 @@ Ext.define('Ssp.model.Person', {
     
     getProgramStatusName: function(){
     	return this.get('currentProgramStatusName')? this.get('currentProgramStatusName') : "";   	
+    },
+ 
+    buildAddress: function(){
+    	var me=this;
+    	var address = "";
+    	address += ((me.get('addressLine1') != null)? me.get('addressLine1') + '<br/>' : "");
+    	address += ((me.get('city') != null)? me.get('city') + ', ': "");
+    	address += ((me.get('state') != null)? me.get('state') + '<br/>': "");
+    	address += ((me.get('zipCode') != null)? me.get('zipCode') : "");	
+    	// ensure a full address was defined 
+    	if (address.length < 30)
+    	{
+    		address = "";
+    	}    	
+    	return address;   	
+    },
+    
+    buildAlternateAddress: function(){
+    	var me=this;
+    	var alternateAddress = "";
+    	alternateAddress += ((me.get('alternateAddressLine1') != null)? me.get('alternateAddressLine1') + '<br/>' : "");
+    	alternateAddress += ((me.get('alternateAddressCity') != null)? me.get('alternateAddressCity') : "");
+    	alternateAddress += ((me.get('alternateAddressState') != null)? ', ' + me.get('alternateAddressState') + '<br/>': "");
+    	alternateAddress += ((me.get('alternateAddressZipCode') != null)? me.get('alternateAddressZipCode') : "<br />");	
+    	alternateAddress += ((me.get('alternateAddressCountry') != null)? ', ' + me.get('alternateAddressCountry') : "");	
+    	// ensure a full address was defined
+    	if (alternateAddress.length < 30)
+    	{
+    		alternateAddress = "";
+    	}
+    	return alternateAddress;   	
     },
     
     /*
