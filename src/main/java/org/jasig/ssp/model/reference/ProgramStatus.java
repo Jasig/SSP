@@ -40,8 +40,17 @@ public class ProgramStatus extends AbstractReference implements Auditable {
 	public static final UUID ACTIVE_ID = UUID
 			.fromString("b2d12527-5056-a51a-8054-113116baab88");
 
+	public static final UUID INACTIVE_ID = UUID
+			.fromString("b2d125a4-5056-a51a-8042-d50b8eff0df1");
+
 	public static final UUID TRANSITIONED_ID = UUID
 			.fromString("b2d125e3-5056-a51a-800f-6891bc7d1ddc");
+
+	public static final UUID NON_PARTICIPATING_ID = UUID
+			.fromString("b2d125c3-5056-a51a-8004-f1dbabde80c2");
+
+	public static final UUID NO_SHOW = UUID
+			.fromString("b2d12640-5056-a51a-80cc-91264965731a");
 
 	@Column(nullable = false)
 	@NotNull

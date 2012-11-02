@@ -23,7 +23,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -45,17 +44,15 @@ import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
 import org.apache.commons.lang.StringUtils;
-import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.CaseloadService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
-import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.reports.CaseLoadReportTO;
-import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +66,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -84,15 +82,74 @@ public class CaseloadReportController extends AbstractBaseController {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CaseloadReportController.class);
 
-	final String activeUid = "b2d12527-5056-a51a-8054-113116baab88";
-	final String inactiveUid = "b2d125a4-5056-a51a-8042-d50b8eff0df1";
-	final String nonParUid = "b2d125c3-5056-a51a-8004-f1dbabde80c2";
-	final String transitionedUid = "b2d125e3-5056-a51a-800f-6891bc7d1ddc";
-	final String noShowUid = "b2d12640-5056-a51a-80cc-91264965731a";	
-	
-	
+	private static final String DEPARTMENT_PLACEHOLDER = "Not Available Yet";
 
-	
+	private static enum ProgramStatusHelper {
+
+		ACTIVE(ProgramStatus.ACTIVE_ID) {
+			@Override
+			void addToCount(long add, CaseLoadReportTO target) {
+				target.addToActiveCount(add);
+			}
+		},
+		INACTIVE(ProgramStatus.INACTIVE_ID) {
+			@Override
+			void addToCount(long add, CaseLoadReportTO target) {
+				target.addToInActiveCount(add);
+			}
+		},
+		NON_PARTICIPATING(ProgramStatus.NON_PARTICIPATING_ID) {
+			@Override
+			void addToCount(long add, CaseLoadReportTO target) {
+				target.addToNpCount(add);
+			}
+		},
+		TRANSITIONED(ProgramStatus.TRANSITIONED_ID) {
+			@Override
+			void addToCount(long add, CaseLoadReportTO target) {
+				target.addToTransitionedCount(add);
+			}
+		},
+		NO_SHOW(ProgramStatus.NO_SHOW) {
+			@Override
+			void addToCount(long add, CaseLoadReportTO target) {
+				target.addToNoShowCount(add);
+			}
+		};
+
+		private UUID id;
+
+		ProgramStatusHelper(UUID id) {
+			this.id = id;
+		}
+
+		UUID id() {
+			return id;
+		}
+
+		abstract void addToCount(long add, CaseLoadReportTO target);
+
+		static ProgramStatusHelper byId(UUID id) {
+			if ( id == null ) {
+				return null;
+			}
+			for ( ProgramStatusHelper helper : ProgramStatusHelper.values() ) {
+				if ( id.equals(helper.id()) ) {
+					return helper;
+				}
+			}
+			return null;
+		}
+
+		static void maybeAddToCount(long add, CaseLoadReportTO target, UUID programStatusId) {
+			ProgramStatusHelper helper = ProgramStatusHelper.byId(programStatusId);
+			if ( helper == null ) {
+				return;
+			}
+			helper.addToCount(add, target);
+		}
+	}
+
 	@Autowired
 	private transient PersonService personService;
 	@Autowired
@@ -102,9 +159,8 @@ public class CaseloadReportController extends AbstractBaseController {
 	@Autowired
 	protected transient CaseloadService caseLoadService;
 	@Autowired
-	protected transient StudentTypeService studentTypeService;	
+	protected transient StudentTypeService studentTypeService;
 
-	
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
 		final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy",
@@ -124,61 +180,55 @@ public class CaseloadReportController extends AbstractBaseController {
 			final @RequestParam(required = false) Date programStatusDateTo,			
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
-		
-		final PagingWrapper<Person>  coachesWrapper = personService.getAllCoaches(null);
-		
-		
-		Collection<Person> coaches = coachesWrapper.getRows();
-		
-		LOGGER.debug("There are this many coaches: " + coaches.size());
-		
-		List<CaseLoadReportTO> caseLoadReportList = new ArrayList<CaseLoadReportTO>();
-				
-		final ProgramStatus ps_a = programStatusService.get(UUID.fromString(activeUid));
-		final ProgramStatus ps_ia = programStatusService.get(UUID.fromString(inactiveUid));
-		final ProgramStatus ps_np = programStatusService.get(UUID.fromString(nonParUid));
-		final ProgramStatus ps_t = programStatusService.get(UUID.fromString(transitionedUid));
-		final ProgramStatus ps_ns = programStatusService.get(UUID.fromString(noShowUid));
 
-		Iterator<Person> personIter = coaches.iterator();
-		while(personIter.hasNext())
-		{			
-			Person currPerson = personIter.next();
-			Long activeCount = caseLoadService.caseLoadCountFor(ps_a,currPerson, studentTypeIds, programStatusDateFrom, programStatusDateTo);
-			Long inActiveCount = caseLoadService.caseLoadCountFor(ps_ia,currPerson, studentTypeIds, programStatusDateFrom, programStatusDateTo);
-			Long npCount = caseLoadService.caseLoadCountFor(ps_np,currPerson, studentTypeIds, programStatusDateFrom, programStatusDateTo);
-			Long transitionedCount = caseLoadService.caseLoadCountFor(ps_t,currPerson, studentTypeIds, programStatusDateFrom, programStatusDateTo);
-			Long noShowCount = caseLoadService.caseLoadCountFor(ps_ns,currPerson, studentTypeIds, programStatusDateFrom, programStatusDateTo);	
-			CaseLoadReportTO caseLoadReportTO = new CaseLoadReportTO(currPerson.getFirstName(), currPerson.getLastName(), nullSafeDepartmentNameFor(currPerson,"Not Available Yet"),
-					activeCount,
-					inActiveCount,
-					npCount,
-					transitionedCount,
-					noShowCount);
-			
-			caseLoadReportList.add(caseLoadReportTO);
-		}			
-		
-		
-		// Get the actual names of the UUIDs for the referralSources
-		final List<String> studentTypeNames = new ArrayList<String>();
-		if ((studentTypeIds != null) && (studentTypeIds.size() > 0)) {
-			final Iterator<UUID> studentTypeIdsIter = studentTypeIds
-					.iterator();
-			while (studentTypeIdsIter.hasNext()) {
-				studentTypeNames.add(studentTypeService.get(
-						studentTypeIdsIter.next()).getName());
+		final List<CaseLoadReportTO> caseLoadReportList =
+				collectCaseLoadReportTOs(studentTypeIds,
+						programStatusDateFrom, programStatusDateTo);
+
+		final Map<String, Object> parameters =
+				collectParamsForReport(studentTypeIds,
+						programStatusDateFrom, programStatusDateTo);
+
+		renderReport(caseLoadReportList, parameters, reportType, response);
+	}
+
+	private List<CaseLoadReportTO> collectCaseLoadReportTOs(
+			List<UUID> studentTypeIds,
+			Date programStatusDateFrom,
+			Date programStatusDateTo) {
+		List<CaseLoadReportTO> caseLoadReportList = Lists.newArrayList();
+
+		final Collection<CoachCaseloadRecordCountForProgramStatus> countsByCoachAndStatus =
+				caseLoadService.caseLoadCountsByStatusIncludingAllCurrentCoaches(
+						studentTypeIds, programStatusDateFrom, programStatusDateTo);
+		UUID currentCoachId = null;
+		CaseLoadReportTO caseLoadReportTO = null;
+		for ( CoachCaseloadRecordCountForProgramStatus countByCoachAndStatus : countsByCoachAndStatus ) {
+			if ( currentCoachId == null || !(currentCoachId.equals(countByCoachAndStatus.getCoachId())) ) {
+				if ( caseLoadReportTO != null ) {
+					caseLoadReportList.add(caseLoadReportTO);
+				}
+				currentCoachId = countByCoachAndStatus.getCoachId();
+				caseLoadReportTO = new CaseLoadReportTO(countByCoachAndStatus.getCoachFirstName(),
+						countByCoachAndStatus.getCoachLastName(),
+						departmentNameOrDefault(countByCoachAndStatus, DEPARTMENT_PLACEHOLDER));
 			}
+			ProgramStatusHelper.maybeAddToCount(countByCoachAndStatus.getCount(),
+					caseLoadReportTO, countByCoachAndStatus.getProgramStatusId());
 		}
+		// make sure last one isn't forgotten
+		if ( caseLoadReportTO != null ) {
+			caseLoadReportList.add(caseLoadReportTO);
+		}
+		return caseLoadReportList;
+	}
 
-		
-		final Map<String, Object> parameters = Maps.newHashMap();
-		parameters.put("statusDateFrom", programStatusDateFrom);
-		parameters.put("statusDateTo", programStatusDateTo);
-		parameters.put("homeDepartment", ""); //not available yet
-		parameters.put("studentTypes", ((studentTypeNames == null || studentTypeNames.isEmpty()) ? "" :  studentTypeNames.toString()));
-		
-				
+	private void renderReport(
+			List<CaseLoadReportTO> caseLoadReportList,
+			Map<String,Object> parameters,
+			String reportType,
+			HttpServletResponse response) throws IOException, JRException {
+
 		final JRDataSource beanDs;
 		if(caseLoadReportList.isEmpty())
 		{
@@ -186,8 +236,8 @@ public class CaseloadReportController extends AbstractBaseController {
 		}
 		else{
 			beanDs = new JRBeanCollectionDataSource(caseLoadReportList);
-		}		
-		
+		}
+
 		final InputStream is = getClass().getResourceAsStream(
 				"/reports/caseLoad.jasper");
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -217,17 +267,57 @@ public class CaseloadReportController extends AbstractBaseController {
 
 			exporter.exportReport();
 		}
-		
+
 		response.flushBuffer();
 		is.close();
-		os.close();		
+		os.close();
 	}
 
-	private String nullSafeDepartmentNameFor(Person currPerson, String defaultStr) {
-		if ( currPerson == null || currPerson.getStaffDetails() == null ) {
-			return defaultStr;
+	private Map<String, Object> collectParamsForReport(
+			List<UUID> studentTypeIds,
+			Date programStatusDateFrom,
+			Date programStatusDateTo) throws ObjectNotFoundException {
+		final Map<String, Object> parameters = Maps.newHashMap();
+		parameters.put("statusDateFrom", programStatusDateFrom);
+		parameters.put("statusDateTo", programStatusDateTo);
+		parameters.put("homeDepartment", ""); //not available yet
+		parameters.put("studentTypes", collectStudentTypeNamesAsString(studentTypeIds));
+		return parameters;
+	}
+
+	private String collectStudentTypeNamesAsString(List<UUID> studentTypeIds)
+			throws ObjectNotFoundException {
+		final List<String> studentTypeNames = collectStudentTypeNames(studentTypeIds);
+		return (studentTypeNames == null || studentTypeNames.isEmpty())
+				? "" : studentTypeNames.toString();
+	}
+
+	/**
+	 * Get the actual names of the UUIDs for the requested student types.
+	 *
+	 * @param studentTypeIds
+	 * @return
+	 * @throws ObjectNotFoundException
+	 */
+	private List<String> collectStudentTypeNames(List<UUID> studentTypeIds)
+			throws ObjectNotFoundException {
+		final List<String> studentTypeNames = Lists.newArrayList();
+		if ((studentTypeIds != null) && (studentTypeIds.size() > 0)) {
+			final Iterator<UUID> studentTypeIdsIter = studentTypeIds
+					.iterator();
+			while (studentTypeIdsIter.hasNext()) {
+				// TODO shouldn't we just gracefully skip if you submit
+				// a nonsense student type ID?
+				studentTypeNames.add(studentTypeService.get(
+						studentTypeIdsIter.next()).getName());
+			}
 		}
-		String deptName = currPerson.getStaffDetails().getDepartmentName();
+		return studentTypeNames;
+	}
+
+	private String departmentNameOrDefault(CoachCaseloadRecordCountForProgramStatus countByCoachAndStatus,
+										   String defaultStr) {
+		String deptName = countByCoachAndStatus.getCoachDepartmentName();
 		return StringUtils.isBlank(deptName) ? defaultStr : deptName;
 	}
 
@@ -236,6 +326,4 @@ public class CaseloadReportController extends AbstractBaseController {
 		return LOGGER;
 	}
 
-
-	
 }

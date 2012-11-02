@@ -18,11 +18,13 @@
  */
 package org.jasig.ssp.service;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.model.CaseloadRecord;
+import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
@@ -55,5 +57,11 @@ public interface CaseloadService {
 			throws ObjectNotFoundException;
 	
 	Long caseLoadCountFor(ProgramStatus programStatus,
-			Person coach, List<UUID> studentTypeIds, Date programStatusDateFrom, Date programStatusDateTo) throws ObjectNotFoundException;	
+			Person coach, List<UUID> studentTypeIds, Date programStatusDateFrom, Date programStatusDateTo) throws ObjectNotFoundException;
+
+	Collection<CoachCaseloadRecordCountForProgramStatus>
+		caseLoadCountsByStatusIncludingAllCurrentCoaches(
+			List<UUID> studentTypeIds,
+			Date programStatusDateFrom,
+			Date programStatusDateTo);
 }
