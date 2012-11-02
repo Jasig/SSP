@@ -51,6 +51,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
+import org.jasig.ssp.util.service.stub.Stubs;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
@@ -74,28 +75,6 @@ import com.google.common.collect.Sets;
 @TransactionConfiguration
 @Transactional
 public class EarlyAlertServiceTest {
-
-	private static final UUID PERSON_ID = UUID
-			.fromString("1010e4a0-1001-0110-1011-4ffc02fe81ff");
-
-	private static final String PERSON_FULLNAME = "James Gosling";
-
-	private static final String PERSON_CREATEDBY_FULLNAME = "System Administrator";
-
-	private static final UUID EARLY_ALERT_SUGGESTION_ID = UUID
-			.fromString("b2d11141-5056-a51a-80c1-c1250ba820f8");
-
-	private static final String EARLY_ALERT_SUGGESTION_NAME = "See Instructor";
-
-	private static final String EARLY_ALERT_COURSE_NAME = "Complicated Science 101";
-
-	private static final UUID EARLY_ALERT_SUGGESTION_DELETED_ID = UUID
-			.fromString("881DF3DD-1AA6-4CB8-8817-E95DAF49227A");
-
-	private static final UUID EARLY_ALERT_REASON_ID = UUID
-			.fromString("b2d11335-5056-a51a-80ea-074f8fef94ea");
-
-	private static final String INSTRUCTOR_ID = "f549ecab-5110-4cc1-b2bb-369cac854dea";
 
 	@Autowired
 	private transient CampusService campusService;
@@ -159,7 +138,7 @@ public class EarlyAlertServiceTest {
 				smtpServer.isStopped());
 
 		// arrange
-		final EarlyAlert obj = arrangeEarlyAlert();
+		final EarlyAlert obj = Stubs.arrangeEarlyAlert(personService, campusService);
 
 		// act
 		earlyAlertService.create(obj);
@@ -178,11 +157,11 @@ public class EarlyAlertServiceTest {
 				"Message subject did not match. Was: "
 						+ message.getHeaderValue("Subject"),
 				message.getHeaderValue("Subject").contains(
-						"Notice - " + PERSON_FULLNAME + " : "));
+						"Notice - " + student0FullName() + " : "));
 		assertTrue("Message body did not match. Was: " + message.getBody(),
-				message.getBody().contains(PERSON_CREATEDBY_FULLNAME) &&
-						message.getBody().contains(PERSON_FULLNAME) &&
-						message.getBody().contains(EARLY_ALERT_COURSE_NAME));
+				message.getBody().contains(systemFullName()) &&
+						message.getBody().contains(student0FullName()) &&
+						message.getBody().contains(obj.getCourseName()));
 	}
 
 	@Test(expected = ValidationException.class)
@@ -190,7 +169,7 @@ public class EarlyAlertServiceTest {
 			throws ObjectNotFoundException,
 			ValidationException, SendFailedException {
 		// arrange
-		final EarlyAlert obj = arrangeEarlyAlert();
+		final EarlyAlert obj = Stubs.arrangeEarlyAlert(personService, campusService);
 		obj.setPerson(null);
 
 		// act
@@ -220,7 +199,7 @@ public class EarlyAlertServiceTest {
 			throws ObjectNotFoundException, ValidationException,
 			SendFailedException {
 		// arrange
-		final EarlyAlert obj = arrangeEarlyAlert();
+		final EarlyAlert obj = Stubs.arrangeEarlyAlert(personService, campusService);
 		// coach w/o ID (doesn't make sense most of the time — for testing only)
 		final Person coachWithoutId = new Person();
 		coachWithoutId.setFirstName("1");
@@ -243,7 +222,7 @@ public class EarlyAlertServiceTest {
 			throws ObjectNotFoundException, ValidationException,
 			SendFailedException {
 		// arrange
-		final EarlyAlert obj = arrangeEarlyAlert();
+		final EarlyAlert obj = Stubs.arrangeEarlyAlert(personService, campusService);
 		obj.getPerson().setCoach(new Person());
 		obj.setCampus(null);
 
@@ -274,12 +253,12 @@ public class EarlyAlertServiceTest {
 				smtpServer.isStopped());
 
 		// arrange
-		final EarlyAlertRouting route1 = arrangeEarlyAlertRouting();
-		route1.setPerson(personService.get(PERSON_ID));
-		route1.setGroupName(PERSON_FULLNAME);
+		final EarlyAlertRouting route1 = Stubs.arrangeEarlyAlertRouting(campusService);
+		route1.setPerson(personService.get(student0Id()));
+		route1.setGroupName(systemFullName());
 		route1.setGroupEmail("test@example.com");
 
-		final EarlyAlert obj = arrangeEarlyAlert();
+		final EarlyAlert obj = Stubs.arrangeEarlyAlert(personService, campusService);
 
 		// act
 		earlyAlertRoutingService.create(route1);
@@ -304,8 +283,8 @@ public class EarlyAlertServiceTest {
 				smtpServer.isStopped());
 
 		// arrange
-		final EarlyAlertRouting route1 = arrangeEarlyAlertRouting();
-		final EarlyAlert obj = arrangeEarlyAlert();
+		final EarlyAlertRouting route1 = Stubs.arrangeEarlyAlertRouting(campusService);
+		final EarlyAlert obj = Stubs.arrangeEarlyAlert(personService, campusService);
 
 		// act
 		earlyAlertRoutingService.create(route1);
@@ -341,9 +320,9 @@ public class EarlyAlertServiceTest {
 		template2.setBody(testBody);
 		messageTemplateService.save(template2);
 
-		final EarlyAlert obj = arrangeEarlyAlert();
+		final EarlyAlert obj = Stubs.arrangeEarlyAlert(personService, campusService);
 		obj.setCourseName("MTH101"); // will resolve to v_external_course record
-		obj.setCreatedBy(personService.get(UUID.fromString(INSTRUCTOR_ID)));
+		obj.setCreatedBy(personService.get(kenId()));
 
 		// act
 		earlyAlertService.create(obj);
@@ -368,26 +347,24 @@ public class EarlyAlertServiceTest {
 			throws ObjectNotFoundException, ValidationException {
 
 		// sanity check
-		Person alertedOnPerson = personService.get(
-				UUID.fromString("7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194"));
+		Person alertedOnPerson = personService.get(dmrId());
 		assertEquals("This test requires that the alerted-on person have no"
 				+ " program status", 0,
 				alertedOnPerson.getProgramStatuses().size());
 
-		final EarlyAlert proposedEarlyAlert = arrangeEarlyAlert();
+		final EarlyAlert proposedEarlyAlert = Stubs.arrangeEarlyAlert(personService, campusService);
 		proposedEarlyAlert.setPerson(alertedOnPerson);
 		earlyAlertService.create(proposedEarlyAlert);
 		sessionFactory.getCurrentSession().flush();
 
-		final Person alertedOnPersonAfterAlert = personService.get(
-				UUID.fromString("7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194"));
+		final Person alertedOnPersonAfterAlert = personService.get(dmrId());
 		final Set<PersonProgramStatus> programStatuses =
 				alertedOnPersonAfterAlert.getProgramStatuses();
 		assertNotNull("No program status set on alerted on person", programStatuses);
 		assertEquals("Incorrect number of program statuses set on alerted on person",
 				1, programStatuses.size());
 		assertEquals("Did not set active program status on alerted on person",
-				UUID.fromString("b2d12527-5056-a51a-8054-113116baab88"),
+				Stubs.ProgramStatusFixture.ACTIVE.id(),
 				programStatuses.iterator().next().getProgramStatus().getId());
 		assertNull("Active program status expired",
 				programStatuses.iterator().next().getExpirationDate());
@@ -397,24 +374,21 @@ public class EarlyAlertServiceTest {
 	public void testEarlyAlertUndeletesAlertedOnUser()
 			throws ObjectNotFoundException, ValidationException {
 
-		personService.delete(
-				UUID.fromString("7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194"));
+		personService.delete(dmrId());
 		sessionFactory.getCurrentSession().flush();
 
 		// sanity check
-		final Person alertedOnPerson = personService.get(
-				UUID.fromString("7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194"));
+		final Person alertedOnPerson = personService.get(dmrId());
 		assertEquals("This test requires that the alerted on person be in a"
 				+ " deleted state.", ObjectStatus.INACTIVE,
 				alertedOnPerson.getObjectStatus());
 
-		final EarlyAlert proposedEarlyAlert = arrangeEarlyAlert();
+		final EarlyAlert proposedEarlyAlert = Stubs.arrangeEarlyAlert(personService, campusService);
 		proposedEarlyAlert.setPerson(alertedOnPerson);
 		earlyAlertService.create(proposedEarlyAlert);
 		sessionFactory.getCurrentSession().flush();
 
-		final Person alertedOnPersonAfterAlert = personService.get(
-				UUID.fromString("7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194"));
+		final Person alertedOnPersonAfterAlert = personService.get(dmrId());
 		assertEquals("Alerted on person should be undeleted",
 				ObjectStatus.ACTIVE,
 				alertedOnPersonAfterAlert.getObjectStatus());
@@ -428,26 +402,24 @@ public class EarlyAlertServiceTest {
 	public void testUpdatingEarlyAlertDoesNotSetActiveProgramStatusOnAlertedOnUser()
 			throws ObjectNotFoundException, ValidationException {
 		// sanity check
-		final Person alertedOnPerson = personService.get(
-				UUID.fromString("7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194"));
+		final Person alertedOnPerson = personService.get(dmrId());
 		assertEquals("This test requires that the alerted-on person have no"
 				+ " program status", 0,
 				alertedOnPerson.getProgramStatuses().size());
 
-		final EarlyAlert proposedEarlyAlert = arrangeEarlyAlert();
+		final EarlyAlert proposedEarlyAlert = Stubs.arrangeEarlyAlert(personService, campusService);
 		proposedEarlyAlert.setClosedById(null);
 		proposedEarlyAlert.setPerson(alertedOnPerson);
 		final EarlyAlert createdEarlyAlert =
 				earlyAlertService.create(proposedEarlyAlert);
 		sessionFactory.getCurrentSession().flush();
 
-		final Person alertedOnPersonAfterAlert = personService.get(
-				UUID.fromString("7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194"));
+		final Person alertedOnPersonAfterAlert = personService.get(dmrId());
 		final Set<PersonProgramStatus> programStatuses =
 				alertedOnPersonAfterAlert.getProgramStatuses();
 		// sanity check
 		assertEquals("Did not set active program status on alerted on person",
-				UUID.fromString("b2d12527-5056-a51a-8054-113116baab88"),
+				Stubs.ProgramStatusFixture.ACTIVE.id(),
 				programStatuses.iterator().next().getProgramStatus().getId());
 		assertNull("Active program status expired",
 				programStatuses.iterator().next().getExpirationDate());
@@ -456,8 +428,7 @@ public class EarlyAlertServiceTest {
 		final PersonProgramStatus personProgramStatus = new PersonProgramStatus();
 		personProgramStatus.setEffectiveDate(new Date());
 		personProgramStatus.setProgramStatus(
-				programStatusService.get(UUID.
-						fromString("b2d125a4-5056-a51a-8042-d50b8eff0df1")));
+				programStatusService.get(Stubs.ProgramStatusFixture.INACTIVE.id()));
 		personProgramStatus.setPerson(alertedOnPersonAfterAlert);
 		programStatuses.add(personProgramStatus);
 		// save should cascade, but make sure custom create logic fires
@@ -466,19 +437,18 @@ public class EarlyAlertServiceTest {
 		sessionFactory.getCurrentSession().flush();
 
 		// sanity check
-		final Person alertedOnPersonAfterStatusChange = personService.get(
-				UUID.fromString("7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194"));
+		final Person alertedOnPersonAfterStatusChange = personService.get(dmrId());
 		final Set<PersonProgramStatus> programStatusesAfterChange =
 				alertedOnPersonAfterStatusChange.getProgramStatuses();
 		assertEquals("Should have added a program status", 2,
 				programStatusesAfterChange.size());
 		for ( PersonProgramStatus status : programStatusesAfterChange ) {
 			if ( status.getProgramStatus().getId().equals(
-					UUID.fromString("b2d125a4-5056-a51a-8042-d50b8eff0df1")) ) {
+					Stubs.ProgramStatusFixture.INACTIVE.id()) ) {
 				assertNull("Inactive program status should be non-expired",
 						status.getExpirationDate());
 			} else if ( status.getProgramStatus().getId().equals(
-					UUID.fromString("b2d12527-5056-a51a-8054-113116baab88")) ) {
+					Stubs.ProgramStatusFixture.ACTIVE.id()) ) {
 				assertNotNull("Should have expired active program status",
 						status.getExpirationDate());
 			} else { // only two element
@@ -489,13 +459,12 @@ public class EarlyAlertServiceTest {
 		// now close the alert
 		final EarlyAlert loadedEarlyAlert =
 				earlyAlertService.get(createdEarlyAlert.getId());
-		loadedEarlyAlert.setClosedById(PERSON_ID);
+		loadedEarlyAlert.setClosedById(student0Id());
 		earlyAlertService.save(loadedEarlyAlert);
 		sessionFactory.getCurrentSession().flush();
 
 		// and the actual assert of interest
-		final Person alertedOnPersonAfterAlertClose = personService.get(
-				UUID.fromString("7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194"));
+		final Person alertedOnPersonAfterAlertClose = personService.get(dmrId());
 		final Set<PersonProgramStatus> programStatusesAfterClose =
 				alertedOnPersonAfterAlertClose.getProgramStatuses();
 		assertEquals("Closing an early alert should not change person program status",
@@ -503,11 +472,11 @@ public class EarlyAlertServiceTest {
 				programStatusesAfterChange.size());
 		for ( PersonProgramStatus status : programStatusesAfterClose ) {
 			if ( status.getProgramStatus().getId().equals(
-					UUID.fromString("b2d125a4-5056-a51a-8042-d50b8eff0df1")) ) {
+					Stubs.ProgramStatusFixture.INACTIVE.id()) ) {
 				assertNull("Inactive program status should be non-expired",
 						status.getExpirationDate());
 			} else if ( status.getProgramStatus().getId().equals(
-					UUID.fromString("b2d12527-5056-a51a-8054-113116baab88")) ) {
+					Stubs.ProgramStatusFixture.ACTIVE.id()) ) {
 				assertNotNull("Should have expired active program status",
 						status.getExpirationDate());
 			} else { // only two element
@@ -522,22 +491,20 @@ public class EarlyAlertServiceTest {
 	public void testUpdatingEarlyAlertDoesNotUndeleteAlertedOnUser()
 			throws ObjectNotFoundException, ValidationException {
 		// sanity check
-		final Person alertedOnPerson = personService.get(
-				UUID.fromString("7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194"));
+		final Person alertedOnPerson = personService.get(dmrId());
 
-		final EarlyAlert proposedEarlyAlert = arrangeEarlyAlert();
+		final EarlyAlert proposedEarlyAlert = Stubs.arrangeEarlyAlert(personService, campusService);
 		proposedEarlyAlert.setClosedById(null);
 		proposedEarlyAlert.setPerson(alertedOnPerson);
 		final EarlyAlert createdEarlyAlert =
 				earlyAlertService.create(proposedEarlyAlert);
 		sessionFactory.getCurrentSession().flush();
 
-		personService.delete(UUID.fromString("7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194"));
+		personService.delete(dmrId());
 		sessionFactory.getCurrentSession().flush();
 
 		// sanity check
-		final Person deletedPerson = personService.get(
-				UUID.fromString("7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194"));
+		final Person deletedPerson = personService.get(dmrId());
 		assertEquals("This test requires that the alerted on person be in a"
 				+ " deleted state.", ObjectStatus.INACTIVE,
 				deletedPerson.getObjectStatus());
@@ -545,66 +512,35 @@ public class EarlyAlertServiceTest {
 		// now close the alert
 		final EarlyAlert loadedEarlyAlert =
 				earlyAlertService.get(createdEarlyAlert.getId());
-		loadedEarlyAlert.setClosedById(PERSON_ID);
+		loadedEarlyAlert.setClosedById(student0Id());
 		earlyAlertService.save(loadedEarlyAlert);
 		sessionFactory.getCurrentSession().flush();
 
 		// and the actual assert of interest
-		final Person alertedOnPersonAfterAlertClose = personService.get(
-				UUID.fromString("7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194"));
+		final Person alertedOnPersonAfterAlertClose = personService.get(dmrId());
 		assertEquals("Editing an early alert should not undelete the alerted on person.",
 				ObjectStatus.INACTIVE,
 				alertedOnPersonAfterAlertClose.getObjectStatus());
 	}
 
-	/**
-	 * @return
-	 * @throws ObjectNotFoundException
-	 */
-	private EarlyAlert arrangeEarlyAlert() throws ObjectNotFoundException {
-		final EarlyAlert obj = new EarlyAlert();
-		obj.setPerson(personService.get(PERSON_ID));
-		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setClosedById(PERSON_ID);
-		obj.setCourseName(EARLY_ALERT_COURSE_NAME);
-		obj.setCampus(campusService.get(UUID
-				.fromString("901E104B-4DC7-43F5-A38E-581015E204E1")));
-
-		final Set<EarlyAlertSuggestion> earlyAlertSuggestionIds = Sets
-				.newHashSet();
-		earlyAlertSuggestionIds.add(new EarlyAlertSuggestion(
-				EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME,
-				"description", (short) 0)); // NOPMD by jon.adams on 5/21/12
-		final EarlyAlertSuggestion deletedSuggestion = new EarlyAlertSuggestion(
-				EARLY_ALERT_SUGGESTION_DELETED_ID,
-				"EARLY_ALERT_SUGGESTION_DELETED_NAME", "description",
-				(short) 0); // NOPMD
-		deletedSuggestion.setObjectStatus(ObjectStatus.INACTIVE);
-		earlyAlertSuggestionIds.add(deletedSuggestion);
-		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
-
-		final Set<EarlyAlertReason> earlyAlertReasonIds = Sets
-				.newHashSet();
-		earlyAlertReasonIds.add(new EarlyAlertReason(EARLY_ALERT_REASON_ID,
-				"name", "description", (short) 0)); // NOPMD by jon.adams
-		obj.setEarlyAlertReasonIds(earlyAlertReasonIds);
-
-		return obj;
+	private String student0FullName() {
+		return Stubs.PersonFixture.STUDENT_0.fullName();
 	}
 
-	/**
-	 * @return An EarlyAlertRouting with Campus and EarlyAlertReason, but no
-	 *         Person or group information set (left null).
-	 * @throws ObjectNotFoundException
-	 */
-	private EarlyAlertRouting arrangeEarlyAlertRouting()
-			throws ObjectNotFoundException {
-		final EarlyAlertRouting obj = new EarlyAlertRouting();
-		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setCampus(campusService.get(UUID
-				.fromString("901E104B-4DC7-43F5-A38E-581015E204E1")));
-		obj.setEarlyAlertReason(new EarlyAlertReason(EARLY_ALERT_REASON_ID,
-				"name", "description", (short) 0)); // NOPMD by jon.adams
-		return obj;
+	private UUID student0Id() {
+		return Stubs.PersonFixture.STUDENT_0.id();
 	}
+
+	private UUID dmrId() {
+		return Stubs.PersonFixture.DMR.id();
+	}
+
+	private UUID kenId() {
+		return Stubs.PersonFixture.KEN.id();
+	}
+
+	private String systemFullName() {
+		return Stubs.PersonFixture.SYSTEM.fullName();
+	}
+
 }

@@ -32,6 +32,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.util.service.stub.Stubs;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -114,9 +115,9 @@ public class AddressLabelsReportControllerIntegrationTest {
 			throws IOException, ObjectNotFoundException, JRException {
 
 		final Person dennisRitchie =
-				personService.get(UUID.fromString("7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194"));
+				personService.get(Stubs.PersonFixture.DMR.id());
 		final Person kevinSmith =
-				personService.get(UUID.fromString("f26d8f23-df20-40f1-bc98-83111be4a52a"));
+				personService.get(Stubs.PersonFixture.KEVIN_SMITH.id());
 		dennisRitchie.setCoach(kevinSmith);
 		personService.save(dennisRitchie);
 		sessionFactory.getCurrentSession().flush();
@@ -124,7 +125,7 @@ public class AddressLabelsReportControllerIntegrationTest {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		// Alan Turing, i.e. the coach assigned to our test student users
 		// in our standard fixture
-		final UUID coachId = UUID.fromString("252de4a0-7c06-4254-b7d8-4ffc02fe81ff");
+		final UUID coachId = Stubs.PersonFixture.ADVISOR_0.id();
 		controller.getAddressLabels(response, null, coachId, null, null, null,
 				null, null, null, null, null, "csv");
 
