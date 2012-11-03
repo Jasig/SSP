@@ -29,19 +29,6 @@
     <property name="nvarchar.type" value="character varying" dbms="postgresql" />
     <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 
-    <changeSet id="Add military_affiliation_id to person_demographics" author="shawn.gormley">
-        <addColumn tableName="person_demographics">
-            <column name="military_affiliation_id" type="uuid">
-                <constraints nullable="true"
-                    foreignKeyName="person_demographics_military_affiliation_id_military_affiliation_id"
-                    references="military_affiliation(id)" />
-            </column>
-        </addColumn>
-        <rollback>
-            <dropColumn tableName="person_demographics" columnName="military_affiliation_id" />
-        </rollback>
-    </changeSet>
-
     <changeSet id="Add Alternate Address Fields to person" author="shawn.gormley">
         <addColumn tableName="person">
             <column name="non_local_address" type="boolean">
