@@ -3025,7 +3025,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
         {
            if (val !== "")
            {
-        	   result = ((val===true)?'Yes':'No');
+        	   result = ((val===true || val === 'true')?'Yes':'No');
            }
         }
         
