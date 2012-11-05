@@ -1003,6 +1003,16 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.currentRegistrationStatus = currentRegistrationStatus;
 	}
 
+	public String getNullSafeOfficeLocation() {
+		return getStaffDetails() == null ? null
+				: getStaffDetails().getOfficeLocation();
+	}
+
+	public String getNullSafeDepartmentName() {
+		return getStaffDetails() == null ? null
+				: getStaffDetails().getDepartmentName();
+	}
+
 	@Override
 	protected int hashPrime() {
 		return 3;
@@ -1071,4 +1081,5 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		return "Name: \"" + firstName + " " + lastName + "\" Id: "
 				+ super.toString();
 	}
+
 }

@@ -76,15 +76,19 @@ public class CoachPersonLiteTO implements Serializable {
 	 *            department name
 	 */
 	public CoachPersonLiteTO(@NotNull final UUID id,
-			@NotNull final String firstName, @NotNull final String lastName,
+			@NotNull final String firstName,
+			@NotNull final String lastName,
 			@NotNull final String primaryEmailAddress,
-			final String officeLocation, final String departmentName) {
+			final String officeLocation,
+			final String departmentName,
+			final String workPhone) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.primaryEmailAddress = primaryEmailAddress;
 		this.officeLocation = officeLocation;
 		this.departmentName = departmentName;
+		this.workPhone = workPhone;
 	}
 
 	/**

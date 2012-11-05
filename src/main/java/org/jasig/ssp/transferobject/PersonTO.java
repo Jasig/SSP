@@ -212,7 +212,10 @@ public class PersonTO // NOPMD
 		} else {
 			coach = new CoachPersonLiteTO(coachPerson.getId(),
 					coachPerson.getFirstName(), coachPerson.getLastName(),
-					coachPerson.getPrimaryEmailAddress(), null, null);
+					coachPerson.getPrimaryEmailAddress(),
+					coachPerson.getNullSafeOfficeLocation(),
+					coachPerson.getNullSafeDepartmentName(),
+					coachPerson.getWorkPhone());
 		}
 
 		strengths = model.getStrengths();
