@@ -46,9 +46,9 @@ Ext.define('Ssp.model.AbstractBase', {
 		{
 			for (fieldName in this.data)
 	    	{
-				if (record[fieldName])
+				if ( record[fieldName] )
 	    		{
-	    			this.set(fieldName, record[fieldName] );
+	    			this.set( fieldName, record[fieldName] );
 	    		}
 	    	}
 		}
@@ -1489,7 +1489,9 @@ Ext.define('Ssp.model.util.TreeRequest', {
              {name: 'expandable', type:'boolean', defaultValue: true},
              {name: 'callbackFunc',type:'auto'},
              {name: 'callbackScope', type: 'auto'},
-             {name: 'removeParentWhenNoChildrenExist', type: 'boolean', defaultValue: false}]
+             {name: 'removeParentWhenNoChildrenExist', type: 'boolean', defaultValue: false},
+             {name: 'includeToolTip', type: 'boolean', defaultValue: false},
+             {name: 'toolTipFieldName', type: 'string', defaultValue: ""}]
 });
 /*
  * Licensed to Jasig under one or more contributor license
@@ -1632,7 +1634,7 @@ Ext.define('Ssp.model.Configuration', {
     	     {
               name: 'educationPlanSpecialNeedsLabel', 
               type: 'string', 
-              defaultValue: 'Special needs or require special accomodation?'
+              defaultValue: 'Special needs or require special accommodation?'
              },
     	     /*
     	      * Label to use for the Coach field displays across the application.
@@ -2061,7 +2063,7 @@ Ext.define('Ssp.mixin.ApiProperties', {
 	},
 	
 	getPagingSize: function(){
-		return 10;
+		return 20;
 	},
 	
 	getProxy: function(url){
@@ -3019,11 +3021,11 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 
 	renderFriendlyBoolean: function(val, metaData, record) {
 		var result = "";
-        if (val != null )
+		if (val !== null )
         {
-           if (val != "")
+           if (val !== "")
            {
-        	   result = ((val==true)?'Yes':'No');
+        	   result = ((val===true || val === 'true')?'Yes':'No');
            }
         }
         
@@ -3282,17 +3284,20 @@ Ext.define('Ssp.util.TreeRendererUtils',{
      *             be created with an id such as 12345_challenge.
      * @expanded - whether or not a branch should load expanded   
      */
-    createNodesFromJson: function(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable){
+    createNodesFromJson: function(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable, includeToolTip, toolTipFieldName){
     	var nodeIdentifier = "";
     	var enableCheckSelection = enableCheckSelection;
     	var nodes = [];
     	var nodeName = nodeType || "";
     	if (nodeName != "")
+    	{
     		nodeIdentifier = '_' + nodeName;
+    	}
     	Ext.each(records, function(name, index) {
     		var nodeData = {
         	        text: records[index].name,
         	        id: records[index].id + nodeIdentifier,
+        	        qtip: ((includeToolTip === true)? records[index][toolTipFieldName] : ""),
         	        leaf: isLeaf || false,
         	        expanded: expanded,
         	        expandable: expandable
@@ -3331,6 +3336,8 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     	var callbackFunc = treeRequest.get('callbackFunc');
     	var callbackScope = treeRequest.get('callbackScope');
     	var removeParentWhenNoChildrenExist = treeRequest.get('removeParentWhenNoChildrenExist');
+    	var includeToolTip = treeRequest.get('includeToolTip');
+    	var toolTipFieldName = treeRequest.get('toolTipFieldName');
     	// retrieve items
 		me.apiProperties.makeRequest({
 			url: me.apiProperties.createUrl( url ),
@@ -3342,7 +3349,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 		    	var nodes = [];
 		    	if (records.length > 0)
 		    	{
-		    		nodes = me.createNodesFromJson(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable);
+		    		nodes = me.createNodesFromJson(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable, includeToolTip, toolTipFieldName);
 		    		me.appendChildren( nodeToAppendTo, nodes);
 		    	}else{
 		    		me.appendChildren( nodeToAppendTo, []);
@@ -3467,6 +3474,9 @@ Ext.define('Ssp.util.Constants',{
         
         // CAN BE APPLIED TO THE LABEL OF A FIELD TO SHOW A RED REQUIRED ASTERISK
         REQUIRED_ASTERISK_DISPLAY: '<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>',
+
+        // CAN BE APPLIED TO THE LABEL OF A FIELD OR CONTAINER TO ALTER THE LABEL STYLE
+        SSP_LABEL_STYLE: "color:#04408c;",        
         
         // CONFIGURES THE MESSAGE DISPLAYED NEXT TO THE SAVE BUTTON FOR TOOLS WHERE A SAVE IS ON A SINGLE SCREEN
         // FOR EXAMPLE: THIS FUNCTIONALITY IS APPLIED TO THE STUDENT INTAKE TOOL, ACTION PLAN STRENGTHS AND CONFIDENTIALITY DISCLOSURE AGREEMENT
@@ -3574,11 +3584,11 @@ Ext.define('Ssp.store.EarlyAlertCoordinators', {
 		Ext.apply(me, {
 						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCoach')+'/?sort=lastName'),
 						autoLoad: false,
-						pageSize: -1,
+						pageSize: 1000, // max allowed server-side
 						params : {
 							page : 0,
 							start : 0,
-							limit : -1
+							limit : 1000 // max allowed server-side
 						}
 					});
 		return me.callParent(arguments);
@@ -3617,6 +3627,60 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     	    	form: '',
     	        expanded: true,
     	        children: [ {
+			    	            text: 'Student Success',
+			    	            title: 'Student Success',
+			    	            form: '',
+			    	            expanded: false,
+			    	            children: [{
+									text: 'Campus Services',
+									title: 'Campus Services',
+									store: 'campusServices',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+							    },{
+									text: 'LASSI Skill Components',
+									title: 'LASSI Skill Components',
+									store: 'lassis',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+							    },{
+									text: 'Personality Types',
+									title: 'Personality Types',
+									store: 'personalityTypes',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+							    }]
+			                },{
+			    	            text: 'Disability Services',
+			    	            title: 'Disability Services',
+			    	            form: '',
+			    	            expanded: false,
+			    	            children: [{
+									text: 'Disability Accommodations',
+									title: 'Disability Accommodations',
+									store: 'disabilityAccommodations',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+							    },{
+									text: 'Disability Agencies',
+									title: 'Disability Agencies',
+									store: 'disabilityAgencies',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+							    },{
+									text: 'Disability Statuses',
+									title: 'Disability Statuses',
+									store: 'disabilityStatuses',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+							    },{
+									text: 'Disability Types',
+									title: 'Disability Types',
+									store: 'disabilityTypes',
+							        form: 'AbstractReferenceAdmin',
+									leaf: true
+							    }]
+			                },{
     	        	            text: 'Caseload',
     	        	            title: 'Caseload',
     	        	            form: '',
@@ -3745,6 +3809,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     								    	text: 'Marital Statuses',
     								    	title: 'Marital Statuses',
     								    	store: 'maritalStatuses',
+    								        form: 'AbstractReferenceAdmin',
+    										leaf: true
+    								    },{
+    								    	text: 'Military Affiliations',
+    								    	title: 'Military Affiliations',
+    								    	store: 'militaryAffiliations',
     								        form: 'AbstractReferenceAdmin',
     										leaf: true
     								    }
@@ -5772,8 +5842,10 @@ Ext.define('Ssp.service.StudentIntakeService', {
 	    var success = function( response, view ){
 	    	var r = Ext.decode(response.responseText);
 	    	// filter inactive items
-    		r.rows = me.superclass.filterInactiveChildren( r.rows );	    	
-			callbacks.success( r, callbacks.scope );
+    		r.personEducationLevels = me.superclass.filterInactiveChildren(r.personEducationLevels);
+    		r.personFundingSources = me.superclass.filterInactiveChildren(r.personFundingSources);
+    		r.personChallenges = me.superclass.filterInactiveChildren(r.personChallenges);
+    		callbacks.success( r, callbacks.scope );
 	    };
 
 	    var failure = function( response ){
@@ -5970,12 +6042,17 @@ Ext.define('Ssp.controller.AdminViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	campusesStore: 'campusesStore',
+    	campusServicesStore: 'campusServicesStore',
     	challengeCategoriesStore: 'challengeCategoriesStore',
         challengesStore: 'challengesStore',
     	challengeReferralsStore: 'challengeReferralsStore',
     	childCareArrangementsStore: 'childCareArrangementsStore',
     	citizenshipsStore: 'citizenshipsStore',
     	confidentialityLevelsStore: 'confidentialityLevelsStore',
+    	disabilityAccommodationsStore: 'disabilityAccommodationsStore',
+    	disabilityAgenciesStore: 'disabilityAgenciesStore',
+    	disabilityStatusesStore: 'disabilityStatusesStore',
+    	disabilityTypesStore: 'disabilityTypesStore',
 		earlyAlertOutcomesStore: 'earlyAlertOutcomesStore',
 		earlyAlertOutreachesStore: 'earlyAlertOutreachesStore',
 		earlyAlertReasonsStore: 'earlyAlertReasonsStore',
@@ -5991,7 +6068,10 @@ Ext.define('Ssp.controller.AdminViewController', {
         journalSourcesStore: 'journalSourcesStore',
         journalStepsStore: 'journalStepsStore',
         journalTracksStore: 'journalTracksStore',
+        lassisStore: 'lassisStore',
     	maritalStatusesStore: 'maritalStatusesStore',
+    	militaryAffiliationsStore: 'militaryAffiliationsStore',
+    	personalityTypesStore: 'personalityTypesStore',
     	programStatusChangeReasonsStore: 'programStatusChangeReasonsStore',
     	referralSourcesStore: 'referralSourcesStore',
     	serviceReasonsStore: 'serviceReasonsStore',
@@ -8439,7 +8519,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     	studentIdField: '#studentId',
     	birthDateField: '#birthDate',
     	studentTypeField: '#studentType',
-    	programStatusField: '#programStatus'
+    	programStatusField: '#programStatus',
+    	addressField: '#address',
+    	alternateAddressInUseField: '#alternateAddressInUse',
+    	alternateAddressField: '#alternateAddress'
     },
 	init: function() {
 		var me=this;
@@ -8480,10 +8563,11 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		var programStatusField = me.getProgramStatusField();
 		var id= me.personLite.get('id');
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');
-		var fullName; 		
+		var fullName;
+		var alternateAddressInUse = "No";
 		
 		// load the person data
-		me.person.populateFromGenericObject(r);
+		me.person.populateFromGenericObject(r);		
 		
     	fullName = me.person.getFullName();
    	
@@ -8522,8 +8606,22 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		studentTypeField.setValue( me.person.getStudentTypeName() );
 		programStatusField.setValue( me.person.getProgramStatusName() );
 		studentRecordComp.setTitle('Student Record - ' + fullName);
+
+		me.getAddressField().setValue(me.person.buildAddress());
 		
-    	// hide the loader
+		me.getAlternateAddressField().setValue(me.person.buildAlternateAddress());
+		
+		if (me.person.get('alternateAddressInUse')!=null)
+		{
+			if (me.person.get('alternateAddressInUse')===true)
+			{
+				alternateAddressInUse = "Yes";
+			}
+		}
+		
+		me.getAlternateAddressInUseField().setValue( alternateAddressInUse );
+		
+		// hide the loader
     	me.getView().setLoading( false ); 
     },
     
@@ -9747,7 +9845,9 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     	var isLeaf = false;
     	var nodeName =  me.treeUtils.getNameFromNodeId( node.data.id );
     	var id = me.treeUtils.getIdFromNodeId( node.data.id );
- 
+    	var treeRequest = new Ssp.model.util.TreeRequest();
+    	var includeToolTip = false;
+    	var toolTipFieldName = "";
     	switch ( nodeName )
     	{
     		case 'category':
@@ -9769,12 +9869,13 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     			url = me.challengeUrl + '/' + id + '/challengeReferral/';
     			nodeType = 'referral';
     			isLeaf = true;
+    			includeToolTip = true;
+    			toolTipFieldName = "description";
     			break;
     	}
     	
     	if (url != "")
     	{
-        	var treeRequest = new Ssp.model.util.TreeRequest();
         	treeRequest.set('url', url);
         	treeRequest.set('nodeType', nodeType);
         	treeRequest.set('isLeaf', isLeaf);
@@ -9782,8 +9883,9 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
         	treeRequest.set('enableCheckedItems',false);
         	treeRequest.set('callbackFunc', me.onLoadComplete);
         	treeRequest.set('callbackScope', me);
+        	treeRequest.set('includeToolTip', includeToolTip);
+        	treeRequest.set('toolTipFieldName', toolTipFieldName);
         	me.treeUtils.getItems( treeRequest );
-
         	me.getView().setLoading( true );        	
     	}
     },
@@ -9885,6 +9987,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     	fundingSourcesStore: 'fundingSourcesStore',
     	gendersStore: 'gendersStore',
     	maritalStatusesStore: 'maritalStatusesStore',
+    	militaryAffiliationsStore: 'militaryAffiliationsStore',
         personLite: 'personLite',
         person: 'currentPerson',
         statesStore: 'statesStore',
@@ -10068,6 +10171,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var educationLevels = me.formUtils.alphaSortByField( formData.data.referenceData.educationLevels, 'name' );
 		var fundingSources = me.formUtils.alphaSortByField( formData.data.referenceData.fundingSources, 'name' );
 		var studentStatuses =  me.formUtils.alphaSortByField( formData.data.referenceData.studentStatuses, 'name' );
+		var militaryAffiliations = me.formUtils.alphaSortByField( formData.data.referenceData.militaryAffiliations, 'name' );
 		
 		me.challengesStore.loadData( challenges );
 		me.childCareArrangementsStore.loadData( formData.data.referenceData.childCareArrangements );
@@ -10079,6 +10183,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		me.fundingSourcesStore.loadData( fundingSources );
 		me.gendersStore.loadData( formData.data.referenceData.genders );
 		me.maritalStatusesStore.loadData( formData.data.referenceData.maritalStatuses );
+		me.militaryAffiliationsStore.loadData( militaryAffiliations );
 		me.statesStore.loadData( formData.data.referenceData.states );
 		me.studentStatusesStore.loadData( studentStatuses );
 		me.veteranStatusesStore.loadData( formData.data.referenceData.veteranStatuses ); 
@@ -10625,33 +10730,50 @@ Ext.define('Ssp.controller.tool.studentintake.PersonalViewController', {
     inject: {
     	citizenshipsStore: 'citizenshipsStore',
     	sspConfig: 'sspConfig'
-    },  
+    }, 
+    control: {
+    	firstNameField: '#firstName',
+    	middleNameField: '#middleName',
+    	lastNameField: '#lastName',
+    	studentIdField: '#studentId',
+    	birthDateField: '#birthDate',
+    	homePhoneField: '#homePhone',
+    	workPhoneField: '#workPhone',
+    	addressLine1Field: '#addressLine1',
+    	addressLine2Field: '#addressLine2',
+    	cityField: '#city',
+    	stateField: '#state',
+    	zipCodeField: '#zipCode',
+    	primaryEmailAddressField: '#primaryEmailAddress'
+    },
 	init: function() {
 		var me=this;
     	var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalData');
-    	firstName = Ext.ComponentQuery.query('#firstName')[0].setDisabled(disabled);
-		middleName = Ext.ComponentQuery.query('#middleName')[0].setDisabled(disabled);
-		lastName = Ext.ComponentQuery.query('#lastName')[0].setDisabled(disabled);
-		studentId = Ext.ComponentQuery.query('#studentId')[0];
-		studentId.setDisabled(disabled);
+		// disable externally loaded fields
+    	me.getFirstNameField().setDisabled(disabled);
+		me.getMiddleNameField().setDisabled(disabled);
+		me.getLastNameField().setDisabled(disabled);
+		me.getBirthDateField().setDisabled(disabled);
+		me.getHomePhoneField().setDisabled(disabled);
+		me.getWorkPhoneField().setDisabled(disabled);
+		me.getAddressLine1Field().setDisabled(disabled);
+		me.getAddressLine2Field().setDisabled(disabled);
+		me.getCityField().setDisabled(disabled);
+		me.getStateField().setDisabled(disabled);
+		me.getZipCodeField().setDisabled(disabled);
+		me.getPrimaryEmailAddressField().setDisabled(disabled);		
+		studentIdField = me.getStudentIdField();
+		studentIdField.setDisabled(disabled);
 		// set the field label and supply an asterisk for required
-		studentId.setFieldLabel(me.sspConfig.get('studentIdAlias') + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
-		Ext.apply(studentId, {
-	                  minLength: me.sspConfig.get('studentIdMinValidationLength'),
-	                  minLengthText: '',
-	                  maxLength: me.sspConfig.get('studentIdMaxValidationLength'),
-	                  maxLengthText: '',
-	                  vtype: 'studentIdValidator',
-	                  vtypeText: me.sspConfig.get('studentIdValidationErrorText')
-                     });
-		birthDate = Ext.ComponentQuery.query('#birthDate')[0].setDisabled(disabled);
-		homePhone = Ext.ComponentQuery.query('#homePhone')[0].setDisabled(disabled);
-		workPhone = Ext.ComponentQuery.query('#workPhone')[0].setDisabled(disabled);
-		address = Ext.ComponentQuery.query('#address')[0].setDisabled(disabled);
-		city = Ext.ComponentQuery.query('#city')[0].setDisabled(disabled);
-		state = Ext.ComponentQuery.query('#state')[0].setDisabled(disabled);
-		zipCode = Ext.ComponentQuery.query('#zipCode')[0].setDisabled(disabled);
-		primaryEmailAddress = Ext.ComponentQuery.query('#primaryEmailAddress')[0].setDisabled(disabled);
+		studentIdField.setFieldLabel(me.sspConfig.get('studentIdAlias') + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
+		Ext.apply(studentIdField, {
+            minLength: me.sspConfig.get('studentIdMinValidationLength'),
+            minLengthText: '',
+            maxLength: me.sspConfig.get('studentIdMaxValidationLength'),
+        	maxLengthText: '',
+        	vtype: 'studentIdValidator',
+        	vtypeText: me.sspConfig.get('studentIdValidationErrorText')
+         });
 
 		return me.callParent(arguments);
     }
@@ -12552,7 +12674,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
        		   method: 'DELETE',
        		   successFunc: function(response,responseText){
        			   var r = Ext.decode(response.responseText);
-       			   if (r.success==true)
+       			   if (Boolean(r.success)==true)
        			   {
        				store.remove( store.getById( id ) );
        				store.totalCount = store.totalCount-1;
@@ -15820,19 +15942,23 @@ Ext.define('Ssp.view.tools.profile.Person', {
     	Ext.apply(me, 
 				{
     		        border: 0,	
-				    bodyPadding: 5,
+				    bodyPadding: 0,
 				    layout: 'anchor',
 				    defaults: {
-				        anchor: '100%'
-				        
+				        anchor: '100%'  
 				    },
-				    fieldDefaults: {
-				        msgTarget: 'side',
-				        labelAlign: 'right',
-				        labelWidth: 200
-				    },
-				    defaultType: 'displayfield',
 				    items: [{
+				        xtype: 'fieldcontainer',
+				        fieldLabel: '',
+				        layout: 'hbox',
+				        margin: '0 5 0 0',
+					    defaultType: 'displayfield',
+					    fieldDefaults: {
+					        msgTarget: 'side',
+					        labelAlign: 'right',
+					        labelWidth: 100
+					    },
+				        items: [{
 				            xtype: 'fieldset',
 				            border: 0,
 				            title: '',
@@ -15840,89 +15966,148 @@ Ext.define('Ssp.view.tools.profile.Person', {
 				            defaults: {
 				                anchor: '100%'
 				            },
-				       items: 
-				       [{
-					        fieldLabel: 'Student',
-					        name: 'name',
-					        itemId: 'studentName'
+				            flex: .55,
+				            items:[{
+							        fieldLabel: 'Student',
+							        name: 'name',
+							        itemId: 'studentName'
+							    },{
+							        fieldLabel: 'Student Id',
+							        itemId: 'studentId',
+							        name: 'schoolId'
+							    },{
+							        fieldLabel: 'School Email',
+							        name: 'primaryEmailAddress'
+							    },{
+							        fieldLabel: 'Alternate Email',
+							        name: 'secondaryEmailAddress'
+							    },{
+							        fieldLabel: 'Home Phone',
+							        name: 'homePhone'
+							    },{
+							        fieldLabel: 'Cell Phone',
+							        name: 'cellPhone'
+							    },{
+							        fieldLabel: 'Birth Date',
+							        name: 'birthDate',
+							        itemId: 'birthDate'
+							    },{
+							        fieldLabel: 'Student Type',
+							        name: 'studentType',
+							        itemId: 'studentType'
+							    },{
+							        fieldLabel: 'Caseload Status',
+							        name: 'programStatus',
+							        itemId: 'programStatus'
+							    },{
+							        fieldLabel: 'Registered',
+							        name: 'registeredForCurrentTerm',
+							        renderer: me.columnRendererUtils.renderFriendlyBoolean
+							    },{
+							        fieldLabel: 'Payment Status',
+							        name: 'paymentStatus',
+							        hidden: true
+							    }, {
+							        fieldLabel: 'CUM GPA',
+							        name: 'cumGPA',
+							        hidden: true
+							    },{
+							        fieldLabel: 'Academic Program',
+							        name: 'academicPrograms',
+							        hidden: true
+							    }]
+				            
 					    },{
-					        fieldLabel: 'Student Id',
-					        itemId: 'studentId',
-					        name: 'schoolId'
-					    }, {
-					        fieldLabel: 'Birth Date',
-					        name: 'birthDate',
-					        itemId: 'birthDate'
-					    }, {
-					        fieldLabel: 'Home Phone',
-					        name: 'homePhone'
-					    }, {
-					        fieldLabel: 'Cell Phone',
-					        name: 'cellPhone'
-					    }, {
-					        fieldLabel: 'Address',
-					        name: 'addressLine1'
-					    }, {
-					        fieldLabel: 'City',
-					        name: 'city'
-					    }, {
-					        fieldLabel: 'State',
-					        name: 'state'
-					    }, {
-					        fieldLabel: 'Zip Code',
-					        name: 'zipCode'
-					    }, {
-					        fieldLabel: 'School Email',
-					        name: 'primaryEmailAddress'
-					    }, {
-					        fieldLabel: 'Alternate Email',
-					        name: 'secondaryEmailAddress'
-					    }, {
-					        fieldLabel: 'Student Type',
-					        name: 'studentType',
-					        itemId: 'studentType'
-					    }, {
-					        fieldLabel: 'SSP Program Status',
-					        name: 'programStatus',
-					        itemId: 'programStatus'
-					    }, {
-					        fieldLabel: 'Registered for Current Term',
-					        name: 'registeredForCurrentTerm',
-					        renderer: me.columnRendererUtils.renderFriendlyBoolean
-					    }, {
-					        fieldLabel: 'Payment Status',
-					        name: 'paymentStatus',
-					        hidden: true
-					    }, {
-					        fieldLabel: 'CUM GPA',
-					        name: 'cumGPA',
-					        hidden: true
-					    },{
-					        fieldLabel: 'Academic Program',
-					        name: 'academicPrograms',
-					        hidden: true
-					    },{
-					        fieldLabel: me.sspConfig.get('coachFieldLabel'),
-					        name: 'coachName',
-					        itemId: 'coachName'
-					    },{
-					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Phone',
-					        name: 'coachWorkPhone',
-					        itemId: 'coachWorkPhone'
-					    },{
-					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Department',
-					        name: 'coachDepartmentName',
-					        itemId: 'coachDepartmentName'
-					    },{
-					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Office',
-					        name: 'coachOfficeLocation',
-					        itemId: 'coachOfficeLocation'
-					    },{
-					        fieldLabel: me.sspConfig.get('coachFieldLabel') + ' Email',
-					        name: 'coachPrimaryEmailAddress',
-					        itemId: 'coachPrimaryEmailAddress'
-					    }]
-					    }],
+				            xtype: 'fieldset',
+				            border: 0,
+				            title: '',
+				            defaultType: 'displayfield',
+				            defaults: {
+				                anchor: '100%'
+				            },
+				            padding: 0,
+				            flex: .45,
+					        items:[{
+					            xtype: 'fieldset',
+					            border: 1,
+					            cls:'ssp-form',
+					            title: 'Coach',
+					            defaultType: 'displayfield',
+					            defaults: {
+					                anchor: '100%'
+					            },
+					            flex: 1,
+					            items:[{
+							        fieldLabel: me.sspConfig.get('coachFieldLabel'),
+							        name: 'coachName',
+							        itemId: 'coachName',
+							        labelWidth: 80
+							    },{
+							        fieldLabel: 'Phone',
+							        name: 'coachWorkPhone',
+							        itemId: 'coachWorkPhone',
+							        labelWidth: 80
+							    },{
+							        fieldLabel: 'Email',
+							        name: 'coachPrimaryEmailAddress',
+							        itemId: 'coachPrimaryEmailAddress',
+							        labelWidth: 80
+							    },{
+							        fieldLabel: 'Department',
+							        name: 'coachDepartmentName',
+							        itemId: 'coachDepartmentName',
+							        labelWidth: 80
+							    },{
+							        fieldLabel: 'Office',
+							        name: 'coachOfficeLocation',
+							        itemId: 'coachOfficeLocation',
+							        labelWidth: 80
+							    }]},{
+						            xtype: 'fieldset',
+						            border: 1,
+						            cls:'ssp-form',
+						            title: 'Student Mailing Address',
+						            defaultType: 'displayfield',
+						            defaults: {
+						                anchor: '100%'
+						            },
+						            flex: 1,
+						            items:[{
+							        fieldLabel: 'Non-local',
+							        name: 'nonLocalAddress',
+							        labelWidth: 80,
+							        renderer: me.columnRendererUtils.renderFriendlyBoolean
+							    },{
+							        fieldLabel: 'Address',
+							        height: '60',
+							        name: 'address',
+							        labelWidth: 80,
+							        itemId: 'address'
+							    }]},{
+						            xtype: 'fieldset',
+						            border: 1,
+						            cls:'ssp-form',
+						            title: 'Student Alternate Address',
+						            defaultType: 'displayfield',
+						            defaults: {
+						                anchor: '100%'
+						            },
+						            flex: 1,
+						            items:[{
+							        fieldLabel: 'In Use',
+							        name: 'alternateAddressInUse',
+							        labelWidth: 80,
+							        itemId: 'alternateAddressInUse'
+							    },{
+							    	fieldLabel: 'Address',
+							        name: 'alternateAddress',
+							        labelWidth: 80,
+							        height: '60',
+							        itemId: 'alternateAddress'
+							    }]}
+							    ]
+				       }]
+				    }]
 				});
 		
 	     return me.callParent(arguments);
@@ -16823,6 +17008,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
     	ethnicitiesStore: 'ethnicitiesStore',
     	gendersStore: 'gendersStore',
     	maritalStatusesStore: 'maritalStatusesStore',
+    	militaryAffiliationsStore: 'militaryAffiliationsStore',
     	veteranStatusesStore: 'veteranStatusesStore'
     },    
 	width: '100%',
@@ -16909,6 +17095,18 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        itemId: 'countryOfCitizenship',
 				        name: 'countryOfCitizenship'
 				    },{
+				        xtype: 'combobox',
+				        name: 'militaryAffiliationId',
+				        fieldLabel: 'Military Affiliation',
+				        emptyText: 'Select One',
+				        store: me.militaryAffiliationsStore,
+				        valueField: 'id',
+				        displayField: 'name',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true
+					},{
 				        xtype: 'combobox',
 				        name: 'veteranStatusId',
 				        fieldLabel: 'Veteran Status',
@@ -17146,6 +17344,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.studentintake.PersonalViewController',
     inject: {
+    	columnRendererUtils: 'columnRendererUtils',
         statesStore: 'statesStore'
     },
 	width: '100%',
@@ -17164,7 +17363,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    fieldDefaults: {
 				        msgTarget: 'side',
 				        labelAlign: 'right',
-				        labelWidth: 150
+				        labelWidth: 200
 				    },
 				    items: [{
 				            xtype: 'fieldset',
@@ -17174,24 +17373,12 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				            defaults: {
 				                anchor: '95%'
 				            },
-				       items: [/*{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Intake Date',
-				        name: 'studentIntakeCreatedDate'
-				    },*/{
+				       items: [{
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Intake Completion Date',
 				        name: 'studentIntakeCompleteDate',
 				        renderer: Ext.util.Format.dateRenderer('m/d/Y')
-				    }/*,{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Agreed to Confidentiality',
-				        name: 'confidentialityAgreement'
 				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Date of Agreement',
-				        name: 'confidentialityAgreementDate'
-				    }*/,{
 				        fieldLabel: 'First Name',
 				        name: 'firstName',
 				        itemId: 'firstName',
@@ -17255,11 +17442,39 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        allowBlank:true,
 				        itemId: 'cellPhone'
 				    },{
-				        fieldLabel: 'Address',
+				        fieldLabel: 'Primary Email (School)',
+				        name: 'primaryEmailAddress',
+				        vtype:'email',
+				        maxLength: 100,
+				        allowBlank:true,
+				        itemId: 'primaryEmailAddress'
+				    },{
+				        fieldLabel: 'Alternate Email',
+				        name: 'secondaryEmailAddress',
+				        vtype:'email',
+				        maxLength: 100,
+				        allowBlank:true,
+				        itemId: 'secondaryEmailAddress'
+				    },{
+				    	xtype: 'displayfield',
+				    	fieldLabel: 'CURRENT ADDRESS'
+				    },{
+				    	xtype: 'displayfield',
+				    	fieldLabel: 'Non-local',
+				    	name: 'nonLocalAddress',
+				    	renderer: me.columnRendererUtils.renderFriendlyBoolean
+				    },{
+				        fieldLabel: 'Address Line 1',
 				        name: 'addressLine1',
 				        maxLength: 50,
 				        allowBlank:true,
-				        itemId: 'address'
+				        itemId: 'addressLine1'
+				    },{
+				        fieldLabel: 'Address Line 2',
+				        name: 'addressLine1',
+				        maxLength: 50,
+				        allowBlank:true,
+				        itemId: 'addressLine2'
 				    },{
 				        fieldLabel: 'City',
 				        name: 'city',
@@ -17287,19 +17502,49 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        allowBlank:true,
 				        itemId: 'zipCode'
 				    },{
-				        fieldLabel: 'Primary Email (School)',
-				        name: 'primaryEmailAddress',
-				        vtype:'email',
-				        maxLength: 100,
-				        allowBlank:true,
-				        itemId: 'primaryEmailAddress'
+				    	xtype: 'displayfield',
+				    	fieldLabel: 'ALTERNATE ADDRESS'
 				    },{
-				        fieldLabel: 'Alternate Email',
-				        name: 'secondaryEmailAddress',
-				        vtype:'email',
-				        maxLength: 100,
+				    	xtype:'checkbox',
+				    	fieldLabel: 'In Use',
+				    	name: 'alternateAddressInUse'
+				    },{
+				        fieldLabel: 'Address',
+				        name: 'alternateAddressLine1',
+				        maxLength: 50,
 				        allowBlank:true,
-				        itemId: 'secondaryEmailAddress'
+				        itemId: 'alternateAddress'
+				    },{
+				        fieldLabel: 'City',
+				        name: 'alternateAddressCity',
+				        maxLength: 50,
+				        allowBlank:true,
+				        itemId: 'alternateAddressCity'
+				    },{
+				        xtype: 'combobox',
+				        name: 'alternateAddressState',
+				        fieldLabel: 'State',
+				        emptyText: 'Select a State',
+				        store: me.statesStore,
+				        valueField: 'code',
+				        displayField: 'title',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true,
+				        forceSelection: true,
+				        itemId: 'alternateAddressState'
+					},{
+				        fieldLabel: 'Zip Code',
+				        name: 'alternateAddressZipCode',
+				        maxLength: 10,
+				        allowBlank:true,
+				        itemId: 'alternateAddressZipCode'
+				    },{
+				        fieldLabel: 'Country',
+				        name: 'alternateAddressCountry',
+				        allowBlank:true,
+				        itemId: 'alternateAddressCountry'
 				    }]
 				    }]
 				});
@@ -17355,7 +17600,7 @@ Ext.define('Ssp.view.tools.journal.Journal', {
 					    	        header: 'Action',
 					    	        items: [{
 					    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
-					    	            tooltip: 'Edit Task',
+					    	            tooltip: 'Edit Journal Note',
 					    	            handler: function(grid, rowIndex, colIndex) {
 					    	            	var rec = grid.getStore().getAt(rowIndex);
 					    	            	var panel = grid.up('panel');
@@ -17376,7 +17621,7 @@ Ext.define('Ssp.view.tools.journal.Journal', {
 					    	            scope: me
 					    	        },{
 					    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
-					    	            tooltip: 'Delete Task',
+					    	            tooltip: 'Delete Journal Note',
 					    	            handler: function(grid, rowIndex, colIndex) {
 					    	            	var rec = grid.getStore().getAt(rowIndex);
 					    	            	var panel = grid.up('panel');
@@ -18836,15 +19081,18 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayReferralsAdmin', {
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',
-    		      columns: [
-    		                { header: 'Name',  
+    		      columns: [{ 
+    		                  header: 'Name',  
     		                  dataIndex: 'name',
     		                  field: {
     		                      xtype: 'textfield'
     		                  },
-    		                  flex: 1 
-    		                }
-    		           ],
+    		                  flex: 1,
+    		                  renderer : function(value, metadata, record) {
+    		                      metadata.tdAttr = 'data-qtip="' + record.get('description') + '"';
+    		                      return value;
+    		                  }
+    		                }],
     		        
     		           dockedItems: [
      		       		{
@@ -20342,11 +20590,19 @@ Ext.define('Ssp.model.Person', {
              {name: 'homePhone', type: 'string'},
     		 {name: 'cellPhone', type: 'string'},
              {name: 'workPhone', type: 'string'},
+             {name: 'nonLocalAddress', type:'boolean', useNull: true},
     		 {name: 'addressLine1', type: 'string'},
              {name: 'addressLine2', type: 'string'},
     		 {name: 'city', type: 'string'},
              {name: 'state', type: 'string'},
     		 {name: 'zipCode', type: 'string'},
+    		 {name: 'alternateAddressInUse', type:'boolean', useNull: true},
+    		 {name: 'alternateAddressLine1', type: 'string'},
+             {name: 'alternateAddressLine2', type: 'string'},
+    		 {name: 'alternateAddressCity', type: 'string'},
+             {name: 'alternateAddressState', type: 'string'},
+    		 {name: 'alternateAddressZipCode', type: 'string'},
+    		 {name: 'alternateAddressCountry', type: 'string'},
              {name: 'primaryEmailAddress', type: 'string'},
     		 {name: 'secondaryEmailAddress', type: 'string'},
              {name: 'birthDate', type: 'date', dateFormat: 'time'},
@@ -20446,6 +20702,37 @@ Ext.define('Ssp.model.Person', {
     
     getProgramStatusName: function(){
     	return this.get('currentProgramStatusName')? this.get('currentProgramStatusName') : "";   	
+    },
+ 
+    buildAddress: function(){
+    	var me=this;
+    	var address = "";
+    	address += ((me.get('addressLine1') != null)? me.get('addressLine1') + '<br/>' : "");
+    	address += ((me.get('city') != null)? me.get('city') + ', ': "");
+    	address += ((me.get('state') != null)? me.get('state') + '<br/>': "");
+    	address += ((me.get('zipCode') != null)? me.get('zipCode') : "");	
+    	// ensure a full address was defined 
+    	if (address.length < 30)
+    	{
+    		address = "";
+    	}    	
+    	return address;   	
+    },
+    
+    buildAlternateAddress: function(){
+    	var me=this;
+    	var alternateAddress = "";
+    	alternateAddress += ((me.get('alternateAddressLine1') != null)? me.get('alternateAddressLine1') + '<br/>' : "");
+    	alternateAddress += ((me.get('alternateAddressCity') != null)? me.get('alternateAddressCity') : "");
+    	alternateAddress += ((me.get('alternateAddressState') != null)? ', ' + me.get('alternateAddressState') + '<br/>': "");
+    	alternateAddress += ((me.get('alternateAddressZipCode') != null)? me.get('alternateAddressZipCode') : "<br />");	
+    	alternateAddress += ((me.get('alternateAddressCountry') != null)? ', ' + me.get('alternateAddressCountry') : "");	
+    	// ensure a full address was defined
+    	if (alternateAddress.length < 30)
+    	{
+    		alternateAddress = "";
+    	}
+    	return alternateAddress;   	
     },
     
     /*
@@ -20702,6 +20989,7 @@ Ext.define('Ssp.model.tool.studentintake.PersonDemographics', {
              {name: 'maritalStatusId', type: 'string'},
              {name: 'citizenshipId', type: 'string'},
              {name: 'ethnicityId', type: 'string'},
+             {name: 'militaryAffiliationId', type: 'string'},
              {name: 'veteranStatusId', type: 'string'},
              {name: 'primaryCaregiver', type: 'boolean'},
              {name: 'childCareNeeded', type: 'boolean'},
@@ -21346,11 +21634,11 @@ Ext.define('Ssp.store.Coaches', {
 		Ext.apply(me, {
 						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCoach')+'/?sort=lastName'),
 						autoLoad: false,
-						pageSize: -1,
+						pageSize: 1000, // max allowed server-side
 						params : {
 							page : 0,
 							start : 0,
-							limit : -1
+							limit : 1000 // max allowed server-side
 						}
 					});
 		return me.callParent(arguments);
