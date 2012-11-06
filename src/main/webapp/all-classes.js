@@ -3974,7 +3974,7 @@ Ext.define('Ssp.store.PeopleSearchLite', {
 	constructor: function(){
 		var me=this;
 		Ext.apply(me, {
-							proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personSearch')+'/?outsideCaseload=true'),
+							proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personSearch')+'/?outsideCaseload=true&requireProgramStatus=false'),
 							autoLoad: false,
 							autoSync: false,
 						    pageSize: me.apiProperties.getPagingSize(),
@@ -5614,38 +5614,62 @@ Ext.define('Ssp.service.SearchService', {
     	return baseUrl;
     },
 
-    search: function( searchTerm, outsideCaseload, callbacks ){
-    	var me=this;
+	searchWithParams: function(params, callbacks) {
+		var me=this;
 
-	    me.store.removeAll();
+		me.store.removeAll();
 
 		// Set params in the url for Search Store
-		// because the params need to be applied prior to load and not in a params 
+		// because the params need to be applied prior to load and not in a params
 		// definition from the load method or the paging
 		// toolbar applied to the SearchView will not
 		// apply the params when using next or previous page
-    	Ext.apply(me.store.getProxy(),{url: me.getBaseUrl()+'?sort=lastName&outsideCaseload='+outsideCaseload+'&searchTerm='+searchTerm});
 
-	    me.store.load({
-		    params: {
-		        
-		    },
-		    callback: function(records, operation, success) {
-		        if (success)
-		        {
-			    	if (callbacks != null)
-			    	{
-			    		callbacks.success( records, callbacks.scope );
-			    	}		        	
-		        }else{
-			    	if (callbacks != null)
-			    	{
-			    		callbacks.failure( records, callbacks.scope );
-			    	}
-		        }
-		    },
-		    scope: me
+		queryStr = "";
+		for (var paramName in params) {
+			// TODO url encoding?
+			if ( queryStr ) {
+				queryStr += "&";
+			}
+			queryStr += paramName + "=" + params[paramName];
+		}
+		if ( !("sort" in params) ) {
+			if ( queryStr ) {
+				queryStr += "&";
+			}
+			queryStr += "sort=lastName";
+		}
+
+		Ext.apply(me.store.getProxy(),{url: me.getBaseUrl()+'?'+queryStr});
+
+		me.store.load({
+			params: {
+
+			},
+			callback: function(records, operation, success) {
+				if (success)
+				{
+					if (callbacks != null)
+					{
+						callbacks.success( records, callbacks.scope );
+					}
+				}else{
+					if (callbacks != null)
+					{
+						callbacks.failure( records, callbacks.scope );
+					}
+				}
+			},
+			scope: me
 		});
+	},
+
+    search: function( searchTerm, outsideCaseload, callbacks ){
+    	var me = this;
+		me.searchWithParams({
+			searchTerm: searchTerm,
+			outsideCaseload: outsideCaseload
+		}, callbacks);
     }
 });
 /*
@@ -14225,11 +14249,16 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 		{
 			person = me.model.get('person');
 			me.getView().setLoading(true);
-			me.searchService.search(person.firstName+' '+person.lastName, true, {
-				success: me.searchSuccess,
-				failure: me.searchFailure,
-				scope: me
-			});	
+			me.searchService.searchWithParams({
+					searchTerm: person.firstName+' '+person.lastName,
+					outsideCaseload: true,
+					requireProgramStatus: false
+				},
+				{
+					success: me.searchSuccess,
+					failure: me.searchFailure,
+					scope: me
+				});
 		}
 		return me.callParent(arguments);
     },
