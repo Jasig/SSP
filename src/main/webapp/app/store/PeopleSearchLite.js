@@ -26,7 +26,7 @@ Ext.define('Ssp.store.PeopleSearchLite', {
 	constructor: function(){
 		var me=this;
 		Ext.apply(me, {
-							proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personSearch')+'/?outsideCaseload=true'),
+							proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personSearch')+'/?outsideCaseload=true&requireProgramStatus=false'),
 							autoLoad: false,
 							autoSync: false,
 						    pageSize: me.apiProperties.getPagingSize(),

@@ -51,12 +51,15 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 
 	@Override
 	public PagingWrapper<PersonSearchResult> searchBy(
-			final ProgramStatus programStatus, final Boolean outsideCaseload,
+			final ProgramStatus programStatus,
+			final Boolean requireProgramStatus,
+			final Boolean outsideCaseload,
 			final String searchTerm, final Person advisor,
 			final SortingAndPaging sAndP)
 			throws ObjectNotFoundException, ValidationException {
 
 		final PagingWrapper<Person> people = dao.searchBy(programStatus,
+				(requireProgramStatus == null || programStatus != null ? Boolean.TRUE : requireProgramStatus),
 				(outsideCaseload == null ? Boolean.FALSE : outsideCaseload),
 				searchTerm, advisor, sAndP);
 
