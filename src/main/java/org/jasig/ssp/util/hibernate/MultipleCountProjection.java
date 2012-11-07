@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.util.hibernate;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.AggregateProjection;
@@ -25,6 +26,7 @@ import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 import org.hibernate.type.Type;
+import org.jasig.ssp.util.uuid.UUIDCustomType;
 
 import com.google.common.collect.Lists;
 
@@ -113,9 +115,11 @@ public class MultipleCountProjection extends AggregateProjection {
 	 * @return
 	 */
 	private String asSqlStr(String propertyName, Criteria criteria, CriteriaQuery criteriaQuery) {
-		return super.getFunction("str", criteriaQuery).render(
+		return super.getFunction("cast", criteriaQuery).render(
 				criteriaQuery.getType(criteria,propertyName),
-				buildFunctionParameterList(criteriaQuery.getColumn(criteria, propertyName)),
+				Lists.newArrayList((String)buildFunctionParameterList(
+						criteriaQuery.getColumn(criteria, propertyName)).get(0),
+						"string"),
 				criteriaQuery.getFactory());
 	}
 
