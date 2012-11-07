@@ -43,6 +43,7 @@ import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.util.hibernate.MultipleCountProjection;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.util.hibernate.OrderAsString;
 import org.springframework.stereotype.Repository;
 
 import com.google.common.collect.Lists;
@@ -210,6 +211,9 @@ public class CaseloadDao extends AbstractDao<Person> {
 		query.createAlias("coach.staffDetails", "sd", JoinType.LEFT_OUTER_JOIN);
 		ProjectionList projectionList = Projections.projectionList()
 				.add(Projections.groupProperty("c.id").as("coachId"));
+		// TODO find a way to turn these into more generic and centralized
+		// feature checks on the Dialect so we at least aren't scattering
+		// Dialect-specific code all over the place
 		Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
 		if ( dialect instanceof SQLServerDialect ) {
 			// sql server requires all these to part of the grouping
@@ -236,8 +240,17 @@ public class CaseloadDao extends AbstractDao<Person> {
 			// default ordering... make sure it stays synced up
 			query.addOrder(Order.asc("c.lastName"))
 					.addOrder(Order.asc("c.firstName"))
-					.addOrder(Order.asc("c.middleName"))
-					.addOrder(Order.asc("ps.programStatus.id")); // can't sort on name w/o another join
+					.addOrder(Order.asc("c.middleName"));
+
+			// can't sort on program status name without another join, but
+			// sorting on id is non-deterministic across dbs (sqlserver sorts
+			// UUIDs one way, Postgres another, so you can't write a single
+			// integration test for both), so more dialect specific magic here.
+			if ( dialect instanceof SQLServerDialect ) {
+				query.addOrder(OrderAsString.asc("ps.programStatus.id"));
+			} else {
+				query.addOrder(Order.asc("ps.programStatus.id"));
+			}
 		}
 
 		if ( sAndP != null ) {
