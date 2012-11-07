@@ -246,9 +246,6 @@ public class CaseloadDaoTest {
 	@Test
 	public void testCombinedFromAndToFilters() throws ObjectNotFoundException, ValidationException {
 
-//		System.out.println("foo.bar".replaceAll("\\.","\\\\."));
-//		fail("check output");
-
 		// want to make sure both filters work at the same time and can handle
 		// all modes of overlap, i.e.:
 		//   1) only overlap from,
