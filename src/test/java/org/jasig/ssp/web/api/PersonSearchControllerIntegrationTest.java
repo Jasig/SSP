@@ -86,7 +86,7 @@ public class PersonSearchControllerIntegrationTest {
 
 	/**
 	 * Test the
-	 * {@link PersonSearchController#search(String, UUID, Boolean, ObjectStatus, Integer, Integer, String, String)}
+	 * {@link PersonSearchController#search(String, UUID, Boolean, Boolean, ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
 	 * @throws ObjectNotFoundException
@@ -95,7 +95,7 @@ public class PersonSearchControllerIntegrationTest {
 	@Test
 	public void testControllerSearch() throws ObjectNotFoundException, ValidationException {
 		final PagedResponse<PersonSearchResultTO> results = controller.search(
-				PERSON_LAST_NAME, null, Boolean.TRUE, ObjectStatus.ACTIVE, 0,
+				PERSON_LAST_NAME, null, null, Boolean.TRUE, ObjectStatus.ACTIVE, 0,
 				10, null, null);
 
 		assertNotNull("Results list should not have been null.", results);
@@ -110,7 +110,7 @@ public class PersonSearchControllerIntegrationTest {
 	@Test(expected = ObjectNotFoundException.class)
 	public void testControllerCreateWithInvalidData()
 			throws ValidationException, ObjectNotFoundException {
-		controller.search(PERSON_LAST_NAME, UUID.randomUUID(), Boolean.FALSE,
+		controller.search(PERSON_LAST_NAME, UUID.randomUUID(), null, Boolean.FALSE,
 				ObjectStatus.ACTIVE, 0, 10, null, null);
 		fail("Create with invalid ProgramStatus UUID should have thrown exception.");
 	}
@@ -118,7 +118,7 @@ public class PersonSearchControllerIntegrationTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testControllerSearchWithNullTerm()
 			throws ObjectNotFoundException, ValidationException {
-		controller.search(null, null, Boolean.TRUE, ObjectStatus.ACTIVE, 0, 10,
+		controller.search(null, null, null, Boolean.TRUE, ObjectStatus.ACTIVE, 0, 10,
 				null, null);
 		fail("Invalid search should have thrown exception.");
 	}
@@ -126,7 +126,7 @@ public class PersonSearchControllerIntegrationTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testControllerSearchWithEmptyTerm()
 			throws ObjectNotFoundException, ValidationException {
-		controller.search(" ", null, Boolean.TRUE, ObjectStatus.ACTIVE, 0, 10,
+		controller.search(" ", null, null, Boolean.TRUE, ObjectStatus.ACTIVE, 0, 10,
 				null, null);
 		fail("Invalid search should have thrown exception.");
 	}
