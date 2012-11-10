@@ -52,7 +52,8 @@ public class Stubs {
 		ADVISOR_0 ( "252de4a0-7c06-4254-b7d8-4ffc02fe81ff", "advisor0", "turing.1", "Alan", "M", "Turing", null ),
 		MARK_GALAFRION ( "8005ad07-9111-457d-9896-f15a0dc8bbfb", "mark.galafrion", "uu358123", "Mark", null, "Galafrion", null),
 		BOB_REYNOLDS ( "a5a23d8a-f0d3-4ef6-9a75-21f3775bac0f", "bob.reynolds", "uu462875", "Bob", null, "Reynolds", null),
-		FACULTY_0 ( "5eceefd1-257c-421f-99bf-a3622815bfee", "faculty0", "uf928711", "Douglas", null, "Toya", null);
+		FACULTY_0 ( "5eceefd1-257c-421f-99bf-a3622815bfee", "faculty0", "uf928711", "Douglas", null, "Toya", null),
+		FACULTY_1 ( "0d6163de-90fd-46d1-a9ca-7dbaa850924b", "faculty1", "uf123456", "Mary", null, "Webber", null);
 
 		private final UUID id;
 		private final String username;

@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.Criteria;
@@ -41,9 +40,9 @@ import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.util.hibernate.MultipleCountProjection;
+import org.jasig.ssp.util.hibernate.OrderAsString;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.util.hibernate.OrderAsString;
 import org.springframework.stereotype.Repository;
 
 import com.google.common.collect.Lists;
@@ -172,21 +171,53 @@ public class CaseloadDao extends AbstractDao<Person> {
 		return totalRows;
 	}
 
-	@SuppressWarnings("unchecked")
+
+	public PagingWrapper<CoachCaseloadRecordCountForProgramStatus>
+		currentCaseLoadCountsByStatus(List<UUID> studentTypeIds,
+									  SortingAndPaging sAndP) {
+
+		// Technically run the risk of returning multiple statuses
+		// per user if the user's statuses are "pre-loaded" i.e. the current
+		// status is set to expire at a future date and a subsequent status
+		// has already been created in the db and is set to go into effect on
+		// that future date... but that shouldn't happen under current use
+		// cases
+		Criterion dateRestrictions =
+				overlappingProgramStatusDateRestrictions(new Date(), null);
+
+		return caseloadCountsByStatusWithDateRestrictions(dateRestrictions,
+					studentTypeIds, sAndP);
+
+	}
+
 	public PagingWrapper<CoachCaseloadRecordCountForProgramStatus>
 		caseLoadCountsByStatus(
 			List<UUID> studentTypeIds,
 			Date programStatusDateFrom,
 			Date programStatusDateTo,
 			SortingAndPaging sAndP) {
-		final Criteria query = createCriteria();
 
 		Criterion dateRestrictions =
-				dateRestrictions(programStatusDateFrom, programStatusDateTo);
+				overlappingProgramStatusDateRestrictions(programStatusDateFrom,
+						programStatusDateTo);
 
-		query.createAlias("programStatuses", "ps")
-				.createAlias("coach", "c")
-				.add(dateRestrictions);
+		return caseloadCountsByStatusWithDateRestrictions(dateRestrictions,
+					studentTypeIds, sAndP);
+
+	}
+
+	private PagingWrapper<CoachCaseloadRecordCountForProgramStatus>
+		caseloadCountsByStatusWithDateRestrictions(Criterion dateRestrictions,
+												   List<UUID> studentTypeIds,
+												   SortingAndPaging sAndP) {
+
+		final Criteria query = createCriteria();
+
+		query.createAlias("programStatuses", "ps").createAlias("coach", "c");
+
+		if ( dateRestrictions != null ) {
+			query.add(dateRestrictions);
+		}
 
 		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
 			query.add(Restrictions.in("studentType.id", studentTypeIds));
@@ -265,47 +296,48 @@ public class CaseloadDao extends AbstractDao<Person> {
 				: new PagingWrapper<CoachCaseloadRecordCountForProgramStatus>(totalRows, query.list());
 	}
 
-	private Criterion dateRestrictions(Date programStatusDateFrom,
-									   Date programStatusDateTo) {
+	private Criterion overlappingProgramStatusDateRestrictions(
+			Date programStatusDateFrom,
+			Date programStatusDateTo) {
 
-		// TODO might want to reconsider where the defaulting logic lives b/c
-		// putting it here means the client can't actually know what dates were
-		// used for the calculation. Might be better to move this logic out of
-		// the DAO (a good idea anyway) and just have the DAO require non-null,
-		// sensible values. Let the controller or service deal with date param
-		// sanitation. That's also a good idea b/c this date wildcarding logic
-		// is really more like a business rules or front-end feature, so should
-		// be at a higher layer.
-
-		Date now = new Date();
-		Date epoch = new Date(0);
+		// no date filtering
 		if ( programStatusDateFrom == null && programStatusDateTo == null ) {
-			// if nothing specified, assume you want everything spanning this
-			// current moment in time
-			programStatusDateFrom = now;
-			programStatusDateTo = now;
-		} else {
-			// otherwise you want one bound or the other extended as far as it
-			// will go
-			programStatusDateFrom = programStatusDateFrom == null ? epoch : programStatusDateFrom;
-			programStatusDateTo = programStatusDateTo == null ? now : programStatusDateTo;
+			return null;
 		}
 
-		// this is probably what you wanted if all you set was a 'from' date
-		// in the future and no 'to' date, so we'll just go ahead and fix it
-		// for you.
-		if ( programStatusDateFrom.after(programStatusDateTo) ) {
-			programStatusDateTo = new Date(programStatusDateFrom.getTime());
+		// implicit range is 'beginning of time' through 'to'. anything
+		// that became effective prior to or on 'to' intersects with that range
+		if ( programStatusDateFrom == null ) {
+			return Restrictions.le("ps.effectiveDate", programStatusDateTo);
 		}
-		// should catch all statuses overlapping the given date range even
-		// if they only overlap from or only overlap to or overlap both or
-		// fall completely in between.
+
+		// implicit range is 'from' to 'end of time'. the set of intersecting
+		// statuses includes those that overlap with 'from' so just finding
+		// statues that became effective after 'from' won't work.
+		if ( programStatusDateTo == null ) {
+			return Restrictions.or(
+
+					// started before 'from', expired on or after
+					Restrictions.and(
+							Restrictions.le("ps.effectiveDate", programStatusDateFrom),
+							expiresOnOrLaterThan(programStatusDateFrom)),
+
+					// ... or... started on or after 'from'
+					Restrictions.ge("ps.effectiveDate", programStatusDateFrom)
+
+			);
+		}
+
+		// else both bounds were selected... we want to catch all
+		// statuses overlapping that date range even if they only overlap from
+		// or only overlap to or overlap both or fall completely in between.
 		return Restrictions.and(
 				Restrictions.le("ps.effectiveDate", programStatusDateTo),
-				expiresLaterThan(programStatusDateFrom));
+				expiresOnOrLaterThan(programStatusDateFrom));
+
 	}
 
-	private Criterion expiresLaterThan(Date date) {
+	private Criterion expiresOnOrLaterThan(Date date) {
 		return Restrictions.or(Restrictions.isNull("ps.expirationDate"),
 								Restrictions.ge("ps.expirationDate", date));
 	}

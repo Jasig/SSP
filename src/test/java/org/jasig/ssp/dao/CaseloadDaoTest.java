@@ -18,25 +18,30 @@
  */
 package org.jasig.ssp.dao;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.array;
 import static org.jasig.ssp.util.assertions.SspAssert.assertNotEmpty;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.lang.time.DateUtils;
+import org.easymock.internal.matchers.Matches;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.CustomMatcher;
+import org.hamcrest.CustomTypeSafeMatcher;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.hibernate.SessionFactory;
-import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.jasig.ssp.model.CaseloadRecord;
 import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PersonProgramStatus;
-import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonProgramStatusService;
@@ -51,6 +56,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.spockframework.util.Matchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -110,15 +116,29 @@ public class CaseloadDaoTest {
 	}
 
 	@Test
-	public void testCaseLoadCountsByStatusForDefaultDataSetAndNoFilters() {
+	public void testHistoricalCaseLoadCountsByStatusForDefaultDataSetAndNoFilters() {
+		// this counts *everything*... students counted several times, once for
+		// each status they've ever had (or will have)
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
 				dao.caseLoadCountsByStatus(null, null, null, null);
-		expectUnfilteredResultsAgainstDefaultDataSet(results);
+		expectHistoricalUnfilteredResultsAgainstDefaultDataSet(results);
 	}
 
 	@Test
-	public void testMultipleCoachesAndMultipleStatusesButNoFilters() throws ObjectNotFoundException, ValidationException {
+	public void testCurrentCaseLoadCountsByStatusForDefaultDataSetAndNoFilters() {
+		// this counts *everything*... students counted several times, once for
+		// each status they've ever had (or will have)
+		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
+				dao.currentCaseLoadCountsByStatus(null, null);
+		expectCurrentUnfilteredResultsAgainstDefaultDataSet(results);
+	}
 
+	@Test
+	public void testHistoricalCaseloadCountForMultipleCoachesAndMultipleStatusesAndNoFilters()
+			throws ObjectNotFoundException, ValidationException {
+
+		// same fixture as
+		// testCurrentCaseloadCountForMultipleCoachesAndMultipleStatusesAndNoFilters()
 		final Person jamesDoe = person(Stubs.PersonFixture.JAMES_DOE);
 		final Person markGalafion = person(Stubs.PersonFixture.MARK_GALAFRION);
 		final Person bobReynolds = person(Stubs.PersonFixture.BOB_REYNOLDS);
@@ -140,24 +160,76 @@ public class CaseloadDaoTest {
 
 		// order is important b/c we should be sorting by coach name and all
 		// a coach's records should be grouped together.
+
+		// these expectations are slightly different than for
+		// testCurrentCaseloadCountForMultipleCoachesAndMultipleStatusesAndNoFilters(),
+		// which uses the same fixture. Here we'll count all the newly
+		// activated cases plus a few extra expired cases.
+		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.KEVIN_SMITH,
+				Stubs.ProgramStatusFixture.ACTIVE, 2, expectedRecords); // 2 b/c james doe and mark g both counted
+		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.KEVIN_SMITH,
+				Stubs.ProgramStatusFixture.INACTIVE, 1, expectedRecords); // james doe has both his active and inactive statuses counted
+		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.FACULTY_0, // "Douglas Toya"
+				Stubs.ProgramStatusFixture.ACTIVE, 1, expectedRecords);
+		collectUnfilteredCoachStatusCountsForDefaultDataSet(expectedRecords);
+
+		assertCaseloadCountCollectionsEqual(expectedRecords, counts.getRows());
+		assertEquals("Should have been one record for each unique status associated with each coach",
+				expectedRecords.size(),
+				counts.getResults());
+
+	}
+
+	@Test
+	public void testCurrentCaseloadCountForMultipleCoachesAndMultipleStatusesAndNoFilters()
+			throws ObjectNotFoundException, ValidationException {
+
+		// same fixture as
+		// testHistoricalCaseloadCountForMultipleCoachesAndMultipleStatusesAndNoFilters()
+		final Person jamesDoe = person(Stubs.PersonFixture.JAMES_DOE);
+		final Person markGalafion = person(Stubs.PersonFixture.MARK_GALAFRION);
+		final Person bobReynolds = person(Stubs.PersonFixture.BOB_REYNOLDS);
+		final Person kevinSmith = person(Stubs.PersonFixture.KEVIN_SMITH);
+		final Person faculty0 = person(Stubs.PersonFixture.FACULTY_0);
+
+		jamesDoe.setCoach(kevinSmith);
+		markGalafion.setCoach(kevinSmith);
+		bobReynolds.setCoach(faculty0);
+		activate(jamesDoe, markGalafion, bobReynolds);
+		deactivate(jamesDoe);
+		saveAndFlush(jamesDoe, markGalafion, bobReynolds);
+
+		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> counts =
+				dao.currentCaseLoadCountsByStatus(null, null);
+
+		final List<CoachCaseloadRecordCountForProgramStatus> expectedRecords =
+				Lists.newArrayListWithCapacity(4);
+
+		// order is important b/c we should be sorting by coach name and all
+		// a coach's records should be grouped together.
+
+		// these expectations are slightly different than for
+		// testHistoricalCaseloadCountForMultipleCoachesAndMultipleStatusesAndNoFilters(),
+		// which uses the same fixture. Here we'll *only* count all the newly
+		// activated cases plus those cases that already existed but leaving
+		// out any expired cases.
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.KEVIN_SMITH,
 				Stubs.ProgramStatusFixture.ACTIVE, 1, expectedRecords);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.KEVIN_SMITH,
 				Stubs.ProgramStatusFixture.INACTIVE, 1, expectedRecords);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.FACULTY_0, // "Douglas Toya"
 				Stubs.ProgramStatusFixture.ACTIVE, 1, expectedRecords);
-		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0, // "Alan Turing"
-						Stubs.ProgramStatusFixture.ACTIVE, 2, expectedRecords);
+		collectCurrentCoachStatusCountsForDefaultDataSet(expectedRecords);
 
-		assertEquals("Unexpected record(s)", expectedRecords, counts.getRows());
+		assertCaseloadCountCollectionsEqual(expectedRecords, counts.getRows());
 		assertEquals("Should have been one record for each unique status associated with each coach",
-				4, // 2 for Kevin Smith (1 act, 1 inact), 1 for faculty0 (all act), 1 for advisor0 (all act)
+				expectedRecords.size(),
 				counts.getResults());
 
 	}
 
 	@Test
-	public void testExpiredProgramStatusIncludedByOverlappingFromOrToFilters()
+	public void testHistoricalCaseloadCountIncludesExpiredProgramStatusesOverlappingFromFilter()
 			throws ObjectNotFoundException, ValidationException {
 		final Person jamesDoe = person(Stubs.PersonFixture.JAMES_DOE);
 		final Person kevinSmith = person(Stubs.PersonFixture.KEVIN_SMITH);
@@ -169,15 +241,14 @@ public class CaseloadDaoTest {
 		setStatus(Stubs.ProgramStatusFixture.ACTIVE, threeDaysAgo(), oneDayAgo(), true, jamesDoe);
 		saveAndFlush(jamesDoe);
 
-		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> unfilteredResults =
-				dao.caseLoadCountsByStatus(null, null, null, null);
+		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> resultsOverlappingNow =
+				dao.caseLoadCountsByStatus(null, new Date(), null, null);
 
-		// should be the same as the default report, which should only count
-		// statuses active at this moment (despite the "unfiltered" name
-		// here)
-		expectUnfilteredResultsAgainstDefaultDataSet(unfilteredResults);
+		// should be the same as the default report plus the expired record
+		// we added above
+		expectCurrentUnfilteredResultsAgainstDefaultDataSet(resultsOverlappingNow);
 
-		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> filteredResults =
+		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> resultsOverlappingTwoDaysAgo =
 				dao.caseLoadCountsByStatus(null, twoDaysAgo(), null, null);
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedRecords =
 				Lists.newArrayListWithCapacity(2);
@@ -186,19 +257,51 @@ public class CaseloadDaoTest {
 		// default data fixtures scattered throughout the tests
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.KEVIN_SMITH,
 				Stubs.ProgramStatusFixture.ACTIVE, 1, expectedRecords);
-		collectCoachStatusCountsForDefaultDataSet(expectedRecords);
-		assertEquals("Unexpected or missing status(es)",
-				expectedRecords, filteredResults.getRows());
-		assertEquals("Unexpected total result count", 2, filteredResults.getResults());
+		collectCurrentCoachStatusCountsForDefaultDataSet(expectedRecords);
+		assertCaseloadCountCollectionsEqual(expectedRecords,
+				resultsOverlappingTwoDaysAgo.getRows());
+		assertEquals("Unexpected total result count", expectedRecords.size(),
+				resultsOverlappingTwoDaysAgo.getResults());
 	}
 
 	@Test
-	public void testFutureProgramStatusesAndPreviouslyExpiredStatuseIncludedByToFilter()
+	public void testCurrentCaseloadCountExcludesExpiredProgramStatuses()
 			throws ObjectNotFoundException, ValidationException {
+
+		// doesn't really add much... basically just a pair with
+		// testHistoricalCaseloadCountIncludesExpiredProgramStatusesOverlappingFromOrToFilters(),
+		// with which it shares a fixture, but this test really just re-verifies
+		// what testCurrentCaseLoadCountsByStatusForDefaultDataSetAndNoFilters()
+		// had already verified, but with a slightly different db fixture
+
 		final Person jamesDoe = person(Stubs.PersonFixture.JAMES_DOE);
 		final Person kevinSmith = person(Stubs.PersonFixture.KEVIN_SMITH);
 		jamesDoe.setCoach(kevinSmith);
-		// See expiredProgramStatusIncludedByOverlappingFromOrToFilters() for
+		// We happen to know jamesDoe has no program statuses set in the
+		// default data, otherwise this would potentially corrupt his record...
+		// you can't have overlapping statuses, but nothing in the code really
+		//prevents that.
+		setStatus(Stubs.ProgramStatusFixture.ACTIVE, threeDaysAgo(), oneDayAgo(), true, jamesDoe);
+		saveAndFlush(jamesDoe);
+
+		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
+				dao.currentCaseLoadCountsByStatus(null, null);
+
+		// should be the same as the default report, which should only count
+		// statuses active at this moment (despite the "unfiltered" name
+		// here)
+		expectCurrentUnfilteredResultsAgainstDefaultDataSet(results);
+
+	}
+
+	@Test
+	public void testHistoricalCaseloadCountIncludesFutureProgramStatusesAndPreviouslyExpiredStatuseEffectivePriorToToFilter()
+			throws ObjectNotFoundException, ValidationException {
+
+		final Person jamesDoe = person(Stubs.PersonFixture.JAMES_DOE);
+		final Person kevinSmith = person(Stubs.PersonFixture.KEVIN_SMITH);
+		jamesDoe.setCoach(kevinSmith);
+		// See testHistoricalCaseloadCountIncludesExpiredProgramStatusesOverlappingFromFilter() for
 		// more notes on issues w/ the underlying data model.
 		//
 		// Also, we use a program status effective date range in the future even
@@ -206,45 +309,62 @@ public class CaseloadDaoTest {
 		// actually using the "to" filter. If we put the range in the past we
 		// couldn't be sure whether the "to" filter was really being used as
 		// such or if it was inadvertently implemented identically to the "from"
-		// filter. (That's actually demonstrated by
-		// expiredProgramStatusIncludedByOverlappingFromOrToFilters()).
+		// filter.
 		setStatus(Stubs.ProgramStatusFixture.ACTIVE, oneDayFromNow(), threeDaysFromNow(), true, jamesDoe);
 		saveAndFlush(jamesDoe);
 
-		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> unfilteredResults =
-				dao.caseLoadCountsByStatus(null, null, null, null);
+		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> resultsOverlappingNow =
+				dao.caseLoadCountsByStatus(null, null, new Date(), null);
 
-		// should be the same as the default report, which should only count
-		// statuses active at this moment (despite the "unfiltered" name
-		// here)
-		expectUnfilteredResultsAgainstDefaultDataSet(unfilteredResults);
+		// to filter should exclude the new status we created above
+		expectHistoricalUnfilteredResultsAgainstDefaultDataSet(resultsOverlappingNow);
 
-		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> filteredResults =
+		// change the to filter to include the new status
+		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus>
+				resultsPriorToAndOverlappingTwoDaysFromNow =
 				dao.caseLoadCountsByStatus(null, null, twoDaysFromNow(), null);
-		// when you set a "to" filter, the from filter is wildcarded, i.e.
-		// it's no longer "now", it's "beginning of time". So... we expect the
-		// following b/c:
-		//  1) The statuses in the default record set have no expiration, so we
-		//     keep those (same statuses so only one record),
-		//  2) 1 record for already expired statuss which were excluded by the
-		//     "no filters" query which actually means "only current",
-		//  3) 1 record for the not-yet-effective status
+
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedRecords =
 				Lists.newArrayListWithCapacity(3);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.KEVIN_SMITH,
 				Stubs.ProgramStatusFixture.ACTIVE, 1, expectedRecords);
-		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
-				Stubs.ProgramStatusFixture.ACTIVE, 3, expectedRecords);
-		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
-				Stubs.ProgramStatusFixture.INACTIVE, 1, expectedRecords);
+		collectUnfilteredCoachStatusCountsForDefaultDataSet(expectedRecords);
 
-		assertEquals("Unexpected or missing status(es)",
-				expectedRecords, filteredResults.getRows());
-		assertEquals("Unexpected total result count", 3, filteredResults.getResults());
+		assertCaseloadCountCollectionsEqual(expectedRecords,
+				resultsPriorToAndOverlappingTwoDaysFromNow.getRows());
+		assertEquals("Unexpected total result count", expectedRecords.size(),
+				resultsPriorToAndOverlappingTwoDaysFromNow.getResults());
 	}
 
 	@Test
-	public void testCombinedFromAndToFilters() throws ObjectNotFoundException, ValidationException {
+	public void testCurrentCaseloadCountIncludesFutureProgramStatuses()
+			throws ObjectNotFoundException, ValidationException {
+
+		// same fixture as
+		// testHistoricalCaseloadCountIncludesFutureProgramStatusesAndPreviouslyExpiredStatuseEffectivePriorToToFilter()
+		final Person jamesDoe = person(Stubs.PersonFixture.JAMES_DOE);
+		final Person kevinSmith = person(Stubs.PersonFixture.KEVIN_SMITH);
+		jamesDoe.setCoach(kevinSmith);
+		setStatus(Stubs.ProgramStatusFixture.ACTIVE, oneDayFromNow(), threeDaysFromNow(), true, jamesDoe);
+		saveAndFlush(jamesDoe);
+
+		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
+				dao.currentCaseLoadCountsByStatus(null, null);
+
+		final List<CoachCaseloadRecordCountForProgramStatus> expectedRecords =
+				Lists.newArrayListWithCapacity(2);
+		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.KEVIN_SMITH,
+				Stubs.ProgramStatusFixture.ACTIVE, 1, expectedRecords);
+		collectCurrentCoachStatusCountsForDefaultDataSet(expectedRecords);
+
+		assertCaseloadCountCollectionsEqual(expectedRecords, results.getRows());
+		assertEquals("Unexpected total result count", expectedRecords.size(),
+				results.getResults());
+	}
+
+	@Test
+	public void testHistoricalCaseloadCountsRespectCombinedFromAndToFilters()
+			throws ObjectNotFoundException, ValidationException {
 
 		// want to make sure both filters work at the same time and can handle
 		// all modes of overlap, i.e.:
@@ -258,11 +378,14 @@ public class CaseloadDaoTest {
 		final Person bobReynolds = person(Stubs.PersonFixture.BOB_REYNOLDS);
 		final Person kevinSmith = person(Stubs.PersonFixture.KEVIN_SMITH);
 		final Person faculty0 = person(Stubs.PersonFixture.FACULTY_0); // "Douglas Toya"
+		final Person faculty1 = person(Stubs.PersonFixture.FACULTY_1); // "Mary Webber"
+
 
 		jamesDoe.setCoach(faculty0);
 		markGalafion.setCoach(faculty0);
 		bobReynolds.setCoach(faculty0);
 		kevinSmith.setCoach(faculty0);
+		faculty1.setCoach(faculty0);
 
 		// from will be 2 days ago, to will be 2 days from now
 		// only overlap from
@@ -273,7 +396,9 @@ public class CaseloadDaoTest {
 		setStatus(Stubs.ProgramStatusFixture.NO_SHOW, threeDaysAgo(), threeDaysFromNow(), true, bobReynolds);
 		// sits in between from and to
 		setStatus(Stubs.ProgramStatusFixture.NON_PARTICIPATING, twoDaysAgo(), twoDaysFromNow(), true, kevinSmith);
-		saveAndFlush(jamesDoe, markGalafion, bobReynolds, kevinSmith);
+		// doesn't intersect with the from-to range at all
+		setStatus(Stubs.ProgramStatusFixture.ACTIVE, fiveDaysAgo(), fourDaysAgo(), true, faculty1);
+		saveAndFlush(jamesDoe, markGalafion, bobReynolds, kevinSmith, faculty1);
 
 		// plus remember in the default data advisor0 has two statuses that
 		// expired prior to 'from' and two statuses that were effective before
@@ -286,54 +411,63 @@ public class CaseloadDaoTest {
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> unfilteredResults =
 				dao.caseLoadCountsByStatus(null, null, null, null);
 
+		// should get everything
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedUnfilteredRecords =
-				Lists.newArrayListWithCapacity(3);
+				Lists.newArrayListWithCapacity(6);
+		// james doe and mary webber
+		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.FACULTY_0,
+				Stubs.ProgramStatusFixture.ACTIVE, 2, expectedUnfilteredRecords);
+		// mark g
+		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.FACULTY_0,
+				Stubs.ProgramStatusFixture.INACTIVE, 1, expectedUnfilteredRecords);
 		// kevin smith
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.FACULTY_0,
 				Stubs.ProgramStatusFixture.NON_PARTICIPATING, 1, expectedUnfilteredRecords);
 		// bob reynolds
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.FACULTY_0,
 				Stubs.ProgramStatusFixture.NO_SHOW, 1, expectedUnfilteredRecords);
-		collectCoachStatusCountsForDefaultDataSet(expectedUnfilteredRecords);
-		assertEquals("Unexpected or missing status(es)",
-				expectedUnfilteredRecords, unfilteredResults.getRows());
-		assertEquals("Unexpected total result count", 3, unfilteredResults.getResults());
+		collectUnfilteredCoachStatusCountsForDefaultDataSet(expectedUnfilteredRecords);
+		assertCaseloadCountCollectionsEqual(expectedUnfilteredRecords,
+				unfilteredResults.getRows());
+		assertEquals("Unexpected total result count", expectedUnfilteredRecords.size(),
+				unfilteredResults.getResults());
 
-		// remember when 'from' is set but not 'to', 'to' doesn't wildcard.
-		// not completely consistent (see below) but there's no real use case
-		// for forward looking reports as a default behavior (though you could
-		// get that if you want by explicitly providing a forward looking 'to'
-		// filter).
+		// yes, we do have other tests to verify that the 'from' filter works as
+		// it should by itself.
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> fromFilteredResults =
 				dao.caseLoadCountsByStatus(null, twoDaysAgo(), null, null);
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedFromFilteredRecords =
-				Lists.newArrayListWithCapacity(4);
-		// james doe
+				Lists.newArrayListWithCapacity(5);
+		// james doe only (excludes mary webber)
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.FACULTY_0,
 				Stubs.ProgramStatusFixture.ACTIVE, 1, expectedFromFilteredRecords);
+		// mark g
+		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.FACULTY_0,
+				Stubs.ProgramStatusFixture.INACTIVE, 1, expectedFromFilteredRecords);
 		// kevin smith
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.FACULTY_0,
 				Stubs.ProgramStatusFixture.NON_PARTICIPATING, 1, expectedFromFilteredRecords);
 		// bob reynolds
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.FACULTY_0,
 				Stubs.ProgramStatusFixture.NO_SHOW, 1, expectedFromFilteredRecords);
-		collectCoachStatusCountsForDefaultDataSet(expectedFromFilteredRecords);
-		assertEquals("Unexpected or missing status(es)",
-				expectedFromFilteredRecords, fromFilteredResults.getRows());
-		assertEquals("Unexpected total result count", 4, fromFilteredResults.getResults());
+		collectCurrentCoachStatusCountsForDefaultDataSet(expectedFromFilteredRecords);
+		assertCaseloadCountCollectionsEqual(expectedFromFilteredRecords,
+				fromFilteredResults.getRows());
+		assertEquals("Unexpected total result count", expectedFromFilteredRecords.size(),
+				fromFilteredResults.getResults());
 
-		// little bit different here... when 'to' is set but not 'from', 'from'
-		// wildards
+		// yes, we do have other tests to verify that the 'to' filter works as
+		// it should by itself.
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> toFilteredResults =
 				dao.caseLoadCountsByStatus(null, null, twoDaysFromNow(), null);
+
 		// should get you everything, including the two expired records from
 		// the default data
-
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedToFilteredRecords =
 				Lists.newArrayListWithCapacity(6);
-		// james doe
+		// james doe and mary webber
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.FACULTY_0,
-				Stubs.ProgramStatusFixture.ACTIVE, 1, expectedToFilteredRecords);
+				Stubs.ProgramStatusFixture.ACTIVE, 2, expectedToFilteredRecords);
 		// mark g.
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.FACULTY_0,
 				Stubs.ProgramStatusFixture.INACTIVE, 1, expectedToFilteredRecords);
@@ -343,20 +477,17 @@ public class CaseloadDaoTest {
 		// bob reynolds
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.FACULTY_0,
 				Stubs.ProgramStatusFixture.NO_SHOW, 1, expectedToFilteredRecords);
-		// defaults
-		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
-				Stubs.ProgramStatusFixture.ACTIVE, 3, expectedToFilteredRecords);
-		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
-				Stubs.ProgramStatusFixture.INACTIVE, 1, expectedToFilteredRecords);
-		assertEquals("Unexpected or missing status(es)",
-				expectedToFilteredRecords, toFilteredResults.getRows());
-		assertEquals("Unexpected total result count", 6, toFilteredResults.getResults());
+		collectUnfilteredCoachStatusCountsForDefaultDataSet(expectedToFilteredRecords);
+		assertCaseloadCountCollectionsEqual(expectedToFilteredRecords,
+				toFilteredResults.getRows());
+		assertEquals("Unexpected total result count", expectedToFilteredRecords.size(),
+				toFilteredResults.getResults());
 
 		// now what we're *really* after
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> toAndFromFilteredResults =
 				dao.caseLoadCountsByStatus(null, twoDaysAgo(), twoDaysFromNow(), null);
-		// should get you everything, *except* the two expired records from
-		// the default data
+		// should get you everything, except the two expired records from
+		// the default data and the expired mary webber record created above
 
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedToAndFromFilteredRecords =
 				Lists.newArrayListWithCapacity(5);
@@ -372,23 +503,78 @@ public class CaseloadDaoTest {
 		// bob reynolds
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.FACULTY_0,
 				Stubs.ProgramStatusFixture.NO_SHOW, 1, expectedToAndFromFilteredRecords);
-		collectCoachStatusCountsForDefaultDataSet(expectedToAndFromFilteredRecords);
-		assertEquals("Unexpected or missing status(es)",
-				expectedToAndFromFilteredRecords, toAndFromFilteredResults.getRows());
-		assertEquals("Unexpected total result count", 5, toAndFromFilteredResults.getResults());
+		collectCurrentCoachStatusCountsForDefaultDataSet(expectedToAndFromFilteredRecords);
+		assertCaseloadCountCollectionsEqual(expectedToAndFromFilteredRecords,
+				toAndFromFilteredResults.getRows());
+		assertEquals("Unexpected total result count",
+				expectedToAndFromFilteredRecords.size(),
+				toAndFromFilteredResults.getResults());
+	}
+
+
+	@Test
+	public void testCurentCaseloadCountsWithComplexStatusFixture()
+			throws ObjectNotFoundException, ValidationException {
+
+		// same fixture as
+		// testHistoricalCaseloadCountsRespectCombinedFromAndToFilters()... this
+		// is pretty much just a sanity check that there's not some subtle
+		// problem that would cause the "current" query to blow up with a
+		// more complicated dataset
+
+		final Person jamesDoe = person(Stubs.PersonFixture.JAMES_DOE);
+		final Person markGalafion = person(Stubs.PersonFixture.MARK_GALAFRION);
+		final Person bobReynolds = person(Stubs.PersonFixture.BOB_REYNOLDS);
+		final Person kevinSmith = person(Stubs.PersonFixture.KEVIN_SMITH);
+		final Person faculty0 = person(Stubs.PersonFixture.FACULTY_0); // "Douglas Toya"
+		final Person faculty1 = person(Stubs.PersonFixture.FACULTY_1); // "Mary Webber"
+
+		jamesDoe.setCoach(faculty0);
+		markGalafion.setCoach(faculty0);
+		bobReynolds.setCoach(faculty0);
+		kevinSmith.setCoach(faculty0);
+		faculty1.setCoach(faculty0);
+
+		setStatus(Stubs.ProgramStatusFixture.ACTIVE, threeDaysAgo(), oneDayAgo(), true, jamesDoe);
+		setStatus(Stubs.ProgramStatusFixture.INACTIVE, oneDayFromNow(), threeDaysFromNow(), true, markGalafion);
+		setStatus(Stubs.ProgramStatusFixture.NO_SHOW, threeDaysAgo(), threeDaysFromNow(), true, bobReynolds);
+		setStatus(Stubs.ProgramStatusFixture.NON_PARTICIPATING, twoDaysAgo(), twoDaysFromNow(), true, kevinSmith);
+		setStatus(Stubs.ProgramStatusFixture.ACTIVE, fiveDaysAgo(), fourDaysAgo(), true, faculty1);
+		saveAndFlush(jamesDoe, markGalafion, bobReynolds, kevinSmith, faculty1);
+
+		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
+				dao.currentCaseLoadCountsByStatus(null, null);
+
+		final List<CoachCaseloadRecordCountForProgramStatus> expectedRecords =
+				Lists.newArrayListWithCapacity(2);
+
+		// mark g.
+		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.FACULTY_0,
+				Stubs.ProgramStatusFixture.INACTIVE, 1, expectedRecords);
+		// kevin smith
+		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.FACULTY_0,
+				Stubs.ProgramStatusFixture.NON_PARTICIPATING, 1, expectedRecords);
+		// bob reynolds
+		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.FACULTY_0,
+				Stubs.ProgramStatusFixture.NO_SHOW, 1, expectedRecords);
+		collectCurrentCoachStatusCountsForDefaultDataSet(expectedRecords);
+
+		assertCaseloadCountCollectionsEqual(expectedRecords, results.getRows());
+		assertEquals("Unexpected total result count", expectedRecords.size(),
+				results.getResults());
+
 	}
 
 	@Test
-	public void testFromFilterInTheFuture() {
+	public void testHistoricalCaseloadCountWithFromFilterInTheFuture() {
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
 				dao.caseLoadCountsByStatus(null, daysPlusMinus(100), null, null);
 		// some statuses in default data set have no expiration.
-		expectUnfilteredResultsAgainstDefaultDataSet(results);
-
+		expectCurrentUnfilteredResultsAgainstDefaultDataSet(results);
 	}
 
 	@Test
-	public void testNoResults() {
+	public void testHistoricalCaseloadCountWithNoResults() {
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
 				dao.caseLoadCountsByStatus(null, daysPlusMinus(-1000), daysPlusMinus(-1000), null);
 		assertEquals("Should have been no results",
@@ -397,7 +583,7 @@ public class CaseloadDaoTest {
 	}
 
 	@Test
-	public void testSingleStudentTypeIdFilterWithAtLeastOneMatch() {
+	public void testHistoricalCaseloadCountWithSingleStudentTypeIdFilterWithAtLeastOneMatch() {
 		// are two distinct student types on students with any sort of
 		// status at all in the default data set: ILP and CAP
 
@@ -412,8 +598,8 @@ public class CaseloadDaoTest {
 				Stubs.ProgramStatusFixture.ACTIVE, 3, expectedToFilteredRecords);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
 				Stubs.ProgramStatusFixture.INACTIVE, 1, expectedToFilteredRecords);
-		assertEquals("Unexpected or missing status(es)",
-				expectedToFilteredRecords, toFilteredResults.getRows());
+		assertCaseloadCountCollectionsEqual(expectedToFilteredRecords,
+				toFilteredResults.getRows());
 		assertEquals("Unexpected total result count", 2, toFilteredResults.getResults());
 
 		// now one of the actual tests
@@ -424,8 +610,8 @@ public class CaseloadDaoTest {
 				Lists.newArrayListWithCapacity(1);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
 				Stubs.ProgramStatusFixture.ACTIVE, 1, expectedCapFilteredRecords);
-		assertEquals("Unexpected or missing status(es)",
-				expectedCapFilteredRecords, capAndToFilteredResults.getRows());
+		assertCaseloadCountCollectionsEqual(expectedCapFilteredRecords,
+				capAndToFilteredResults.getRows());
 		assertEquals("Unexpected total result count", 1, capAndToFilteredResults.getResults());
 
 		// another one
@@ -438,13 +624,63 @@ public class CaseloadDaoTest {
 				Stubs.ProgramStatusFixture.ACTIVE, 2, expectedIlpFilteredRecords);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
 				Stubs.ProgramStatusFixture.INACTIVE, 1, expectedIlpFilteredRecords);
-		assertEquals("Unexpected or missing status(es)",
-				expectedIlpFilteredRecords, ilpAndToFilteredResults.getRows());
+		assertCaseloadCountCollectionsEqual(expectedIlpFilteredRecords,
+				ilpAndToFilteredResults.getRows());
 		assertEquals("Unexpected total result count", 2, ilpAndToFilteredResults.getResults());
 	}
 
 	@Test
-	public void studentTypeIdFilterWithNoMatchh() {
+	public void testCurrentCaseloadCountWithSingleStudentTypeIdFilterWithAtLeastOneMatch()
+			throws ObjectNotFoundException, ValidationException {
+		// are two distinct student types on students with any sort of
+		// status at all in the default data set: ILP and CAP, and both are
+		// currently non-expired but have the same status, so we have to
+		// change the status on one of them to make sure our test is meaningful
+		Person student0 = person(Stubs.PersonFixture.STUDENT_0);
+		deactivate(student0);
+		saveAndFlush(student0);
+
+		// first a sanity check...
+		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> unfilteredRecords =
+				dao.currentCaseLoadCountsByStatus(null, null);
+
+		final List<CoachCaseloadRecordCountForProgramStatus> expectedUnfilteredRecords =
+				Lists.newArrayListWithCapacity(2);
+		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
+				Stubs.ProgramStatusFixture.ACTIVE, 1, expectedUnfilteredRecords);
+		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
+				Stubs.ProgramStatusFixture.INACTIVE, 1, expectedUnfilteredRecords);
+		assertCaseloadCountCollectionsEqual(expectedUnfilteredRecords,
+				unfilteredRecords.getRows());
+		assertEquals(expectedUnfilteredRecords.size(), unfilteredRecords.getResults());
+
+		// now one of the actual tests
+		final List<UUID> capFilter = Lists.newArrayList(Stubs.StudentTypeFixture.CAP.id());
+		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> capAndToFilteredResults =
+				dao.currentCaseLoadCountsByStatus(capFilter, null);
+		List<CoachCaseloadRecordCountForProgramStatus> expectedCapFilteredRecords =
+				Lists.newArrayListWithCapacity(1);
+		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
+				Stubs.ProgramStatusFixture.ACTIVE, 1, expectedCapFilteredRecords);
+		assertCaseloadCountCollectionsEqual(expectedCapFilteredRecords,
+				capAndToFilteredResults.getRows());
+		assertEquals("Unexpected total result count", 1, capAndToFilteredResults.getResults());
+
+		// another one
+		final List<UUID> ilpFilter = Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id());
+		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> ilpAndToFilteredResults =
+				dao.currentCaseLoadCountsByStatus(ilpFilter, null);
+		List<CoachCaseloadRecordCountForProgramStatus> expectedIlpFilteredRecords =
+				Lists.newArrayListWithCapacity(1);
+		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
+				Stubs.ProgramStatusFixture.INACTIVE, 1, expectedIlpFilteredRecords);
+		assertCaseloadCountCollectionsEqual(expectedIlpFilteredRecords,
+				ilpAndToFilteredResults.getRows());
+		assertEquals("Unexpected total result count", 1, ilpAndToFilteredResults.getResults());
+	}
+
+	@Test
+	public void testHistoricalCaseloadCountWithStudentTypeIdFilterWithNoMatch() {
 		final List<UUID> ealFilter = Lists.newArrayList(Stubs.StudentTypeFixture.EAL.id());
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> ealAndToFilteredResults =
 				dao.caseLoadCountsByStatus(ealFilter, null, new Date(), null);
@@ -454,7 +690,17 @@ public class CaseloadDaoTest {
 	}
 
 	@Test
-	public void  testMultipleStudentTypeIdFilter() throws ObjectNotFoundException, ValidationException {
+	public void testCurrentCaseloadCountWithStudentTypeIdFilterWithNoMatch() {
+		final List<UUID> ealFilter = Lists.newArrayList(Stubs.StudentTypeFixture.EAL.id());
+		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> ealAndToFilteredResults =
+				dao.currentCaseLoadCountsByStatus(ealFilter, null);
+		assertEquals("Should have been no results",
+				Lists.newArrayListWithExpectedSize(0), ealAndToFilteredResults.getRows());
+		assertEquals("Unexpected zero total results", 0, ealAndToFilteredResults.getResults());
+	}
+
+	@Test
+	public void  testHistoricalCaseloadCountWithMultipleStudentTypeIdFilter() throws ObjectNotFoundException, ValidationException {
 
 		final Person jamesDoe = person(Stubs.PersonFixture.JAMES_DOE);
 		final Person kevinSmith = person(Stubs.PersonFixture.KEVIN_SMITH);
@@ -475,8 +721,8 @@ public class CaseloadDaoTest {
 				Stubs.ProgramStatusFixture.ACTIVE, 3, expectedToFilteredRecords);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
 				Stubs.ProgramStatusFixture.INACTIVE, 1, expectedToFilteredRecords);
-		assertEquals("Unexpected or missing status(es)",
-				expectedToFilteredRecords, toFilteredResults.getRows());
+		assertCaseloadCountCollectionsEqual(expectedToFilteredRecords,
+				toFilteredResults.getRows());
 		assertEquals("Unexpected total result count", 3, toFilteredResults.getResults());
 
 		// now the real test
@@ -492,13 +738,13 @@ public class CaseloadDaoTest {
 				Stubs.ProgramStatusFixture.ACTIVE, 1, expectedTypeAndToFilteredRecords);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
 				Stubs.ProgramStatusFixture.ACTIVE, 1, expectedTypeAndToFilteredRecords);
-		assertEquals("Unexpected or missing status(es)",
-				expectedTypeAndToFilteredRecords, typeAndToFilteredResults.getRows());
+		assertCaseloadCountCollectionsEqual(expectedTypeAndToFilteredRecords,
+				typeAndToFilteredResults.getRows());
 		assertEquals("Unexpected total result count", 2, typeAndToFilteredResults.getResults());
 	}
 
 	@Test
-	public void allFilters() throws ObjectNotFoundException, ValidationException {
+	public void testHistoricalCaseloadCountWithWithAllFilters() throws ObjectNotFoundException, ValidationException {
 		final Person jamesDoe = person(Stubs.PersonFixture.JAMES_DOE);
 		final Person kevinSmith = person(Stubs.PersonFixture.KEVIN_SMITH);
 		jamesDoe.setCoach(kevinSmith);
@@ -516,8 +762,8 @@ public class CaseloadDaoTest {
 				Lists.newArrayListWithCapacity(2);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
 				Stubs.ProgramStatusFixture.ACTIVE, 1, expectedCapAndDateFilteredRecords);
-		assertEquals("Unexpected or missing status(es)",
-				expectedCapAndDateFilteredRecords, capAndDateFilteredResults.getRows());
+		assertCaseloadCountCollectionsEqual(expectedCapAndDateFilteredRecords,
+				capAndDateFilteredResults.getRows());
 		assertEquals("Unexpected total result count", 1, capAndDateFilteredResults.getResults());
 
 		final List<UUID> typeFilters = Lists.newArrayList(
@@ -532,13 +778,13 @@ public class CaseloadDaoTest {
 				Stubs.ProgramStatusFixture.ACTIVE, 1, expectedTypeAndDateFilteredRecords);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
 				Stubs.ProgramStatusFixture.ACTIVE, 1, expectedTypeAndDateFilteredRecords);
-		assertEquals("Unexpected or missing status(es)",
-				expectedTypeAndDateFilteredRecords, typeAndDateFilteredResults.getRows());
+		assertCaseloadCountCollectionsEqual(expectedTypeAndDateFilteredRecords,
+				typeAndDateFilteredResults.getRows());
 		assertEquals("Unexpected total result count", 2, typeAndDateFilteredResults.getResults());
 	}
 
 	@Test
-	public void testPaging() throws ObjectNotFoundException, ValidationException {
+	public void testHistoricalCaseloadCountWithPaging() throws ObjectNotFoundException, ValidationException {
 		// set up the same fixtures as in testMultipleCoachesAndMultipleStatusesButNoFilters()
 		// so we have several coaches to deal with
 		final Person jamesDoe = person(Stubs.PersonFixture.JAMES_DOE);
@@ -561,10 +807,10 @@ public class CaseloadDaoTest {
 		final List<CoachCaseloadRecordCountForProgramStatus> firstExpectedRecord =
 				Lists.newArrayList(personStubToCoachStatusCount(
 						Stubs.PersonFixture.KEVIN_SMITH,
-						Stubs.ProgramStatusFixture.ACTIVE, 1));
+						Stubs.ProgramStatusFixture.ACTIVE, 2)); // james doe expired active status included in this
 
-		assertEquals(firstExpectedRecord, firstResult.getRows());
-		assertEquals(4, firstResult.getResults());
+		assertCaseloadCountCollectionsEqual(firstExpectedRecord, firstResult.getRows());
+		assertEquals(5, firstResult.getResults());
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> secondResult =
 				dao.caseLoadCountsByStatus(null, null, null,
@@ -575,8 +821,8 @@ public class CaseloadDaoTest {
 						Stubs.PersonFixture.KEVIN_SMITH,
 						Stubs.ProgramStatusFixture.INACTIVE, 1));
 
-		assertEquals(secondExpectedRecord, secondResult.getRows());
-		assertEquals(4, secondResult.getResults());
+		assertCaseloadCountCollectionsEqual(secondExpectedRecord, secondResult.getRows());
+		assertEquals(5, secondResult.getResults());
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> thirdResult =
 				dao.caseLoadCountsByStatus(null, null, null,
@@ -587,8 +833,8 @@ public class CaseloadDaoTest {
 						Stubs.PersonFixture.FACULTY_0, // "Douglas Toya"
 						Stubs.ProgramStatusFixture.ACTIVE, 1));
 
-		assertEquals(thirdExpectedRecord, thirdResult.getRows());
-		assertEquals(4, thirdResult.getResults());
+		assertCaseloadCountCollectionsEqual(thirdExpectedRecord, thirdResult.getRows());
+		assertEquals(5, thirdResult.getResults());
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> fourthResult =
 				dao.caseLoadCountsByStatus(null, null, null,
@@ -597,33 +843,64 @@ public class CaseloadDaoTest {
 		final List<CoachCaseloadRecordCountForProgramStatus> fourthExpectedRecord =
 				Lists.newArrayList(personStubToCoachStatusCount(
 						Stubs.PersonFixture.ADVISOR_0, // "Alan Turing"
-						Stubs.ProgramStatusFixture.ACTIVE, 2));
+						Stubs.ProgramStatusFixture.ACTIVE, 3));
 
-		assertEquals(fourthExpectedRecord, fourthResult.getRows());
-		assertEquals(4, fourthResult.getResults());
+		assertCaseloadCountCollectionsEqual(fourthExpectedRecord, fourthResult.getRows());
+		assertEquals(5, fourthResult.getResults());
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> fifthResult =
 				dao.caseLoadCountsByStatus(null, null, null,
 						new SortingAndPaging(ObjectStatus.ALL, 4, 1, null, null, null));
 
 		final List<CoachCaseloadRecordCountForProgramStatus> fifthExpectedRecord =
+				Lists.newArrayList(personStubToCoachStatusCount(
+						Stubs.PersonFixture.ADVISOR_0, // "Alan Turing"
+						Stubs.ProgramStatusFixture.INACTIVE, 1));
+
+		assertCaseloadCountCollectionsEqual(fifthExpectedRecord, fifthResult.getRows());
+		assertEquals(5, fifthResult.getResults());
+
+		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> sixthResult =
+				dao.caseLoadCountsByStatus(null, null, null,
+						new SortingAndPaging(ObjectStatus.ALL, 5, 1, null, null, null));
+
+		final List<CoachCaseloadRecordCountForProgramStatus> sixthExpectedRecord =
 				Lists.newArrayListWithExpectedSize(0);
 
-		assertEquals(fifthExpectedRecord, fifthResult.getRows());
-		assertEquals(4, fifthResult.getResults());
+		assertCaseloadCountCollectionsEqual(sixthExpectedRecord, sixthResult.getRows());
+		assertEquals(5, sixthResult.getResults());
 
 	}
 
-	private void expectUnfilteredResultsAgainstDefaultDataSet(
+	private void expectHistoricalUnfilteredResultsAgainstDefaultDataSet(
 			PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results) {
-		final List<CoachCaseloadRecordCountForProgramStatus> expectedUnfilteredRecords =
-				Lists.newArrayListWithCapacity(1);
-		collectCoachStatusCountsForDefaultDataSet(expectedUnfilteredRecords);
-		assertEquals("Unexpected record(s)", expectedUnfilteredRecords, results.getRows());
-		assertEquals("Unexpected total result count", 1, results.getResults());
+		final List<CoachCaseloadRecordCountForProgramStatus> expectedRecords =
+				Lists.newArrayListWithCapacity(2);
+		collectUnfilteredCoachStatusCountsForDefaultDataSet(expectedRecords);
+		//assertEquals("Unexpected record(s)", expectedRecords, results.getRows());
+		assertCaseloadCountCollectionsEqual(expectedRecords, results.getRows());
+		assertEquals("Unexpected total result count", expectedRecords.size(), results.getResults());
 	}
 
-	private void collectCoachStatusCountsForDefaultDataSet(List<CoachCaseloadRecordCountForProgramStatus> collectInto) {
+	private void collectUnfilteredCoachStatusCountsForDefaultDataSet(
+			List<CoachCaseloadRecordCountForProgramStatus> collectInto) {
+		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
+				Stubs.ProgramStatusFixture.ACTIVE, 3, collectInto);
+		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
+				Stubs.ProgramStatusFixture.INACTIVE, 1, collectInto);
+	}
+
+	private void expectCurrentUnfilteredResultsAgainstDefaultDataSet(
+			PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results) {
+		final List<CoachCaseloadRecordCountForProgramStatus> expectedRecords =
+				Lists.newArrayListWithCapacity(1);
+		collectCurrentCoachStatusCountsForDefaultDataSet(expectedRecords);
+		assertCaseloadCountCollectionsEqual(expectedRecords, results.getRows());
+		assertEquals("Unexpected total result count", expectedRecords.size(), results.getResults());
+	}
+
+	private void collectCurrentCoachStatusCountsForDefaultDataSet(
+			List<CoachCaseloadRecordCountForProgramStatus> collectInto) {
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
 				Stubs.ProgramStatusFixture.ACTIVE, 2, collectInto);
 	}
@@ -736,6 +1013,34 @@ public class CaseloadDaoTest {
 		Stubs.setProgramStatus(personService, personProgramStatusService,
 				programStatusService, statusFixture, effectiveOn, expiredOn,
 				makeCurrent, persons);
+	}
+
+	private void assertCaseloadCountCollectionsEqual(Collection<CoachCaseloadRecordCountForProgramStatus> expected,
+													 Collection<CoachCaseloadRecordCountForProgramStatus> actual) {
+		CoachCaseloadRecordCountForProgramStatus[] actualArray =
+				actual.toArray(new CoachCaseloadRecordCountForProgramStatus[actual.size()]);
+		assertThat(actualArray, array(matchersFor(expected)));
+	}
+
+	private Matcher<CoachCaseloadRecordCountForProgramStatus>[]
+		matchersFor(Collection<CoachCaseloadRecordCountForProgramStatus> caseloadCounts) {
+		Matcher<CoachCaseloadRecordCountForProgramStatus>[] matchers =
+				new Matcher[caseloadCounts.size()];
+		int i = 0;
+		for ( CoachCaseloadRecordCountForProgramStatus caseloadCount : caseloadCounts ) {
+			matchers[i++] = matcherFor(caseloadCount);
+		}
+		return matchers;
+	}
+
+	private Matcher<CoachCaseloadRecordCountForProgramStatus>
+		matcherFor(final CoachCaseloadRecordCountForProgramStatus caseloadCount) {
+		return new CustomTypeSafeMatcher<CoachCaseloadRecordCountForProgramStatus>(caseloadCount.toString()) {
+			@Override
+			protected boolean matchesSafely(CoachCaseloadRecordCountForProgramStatus item) {
+				return item.equalsAllFields(caseloadCount);
+			}
+		};
 	}
 
 }

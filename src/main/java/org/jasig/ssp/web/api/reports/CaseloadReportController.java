@@ -176,31 +176,24 @@ public class CaseloadReportController extends AbstractBaseController {
 	void getCaseLoad(
 			final HttpServletResponse response,		
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
-			final @RequestParam(required = false) Date programStatusDateFrom,
-			final @RequestParam(required = false) Date programStatusDateTo,			
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 
 		final List<CaseLoadReportTO> caseLoadReportList =
-				collectCaseLoadReportTOs(studentTypeIds,
-						programStatusDateFrom, programStatusDateTo);
+				collectCaseLoadReportTOs(studentTypeIds);
 
 		final Map<String, Object> parameters =
-				collectParamsForReport(studentTypeIds,
-						programStatusDateFrom, programStatusDateTo);
+				collectParamsForReport(studentTypeIds);
 
 		renderReport(caseLoadReportList, parameters, reportType, response);
 	}
 
 	private List<CaseLoadReportTO> collectCaseLoadReportTOs(
-			List<UUID> studentTypeIds,
-			Date programStatusDateFrom,
-			Date programStatusDateTo) {
+			List<UUID> studentTypeIds) {
 		List<CaseLoadReportTO> caseLoadReportList = Lists.newArrayList();
 
 		final Collection<CoachCaseloadRecordCountForProgramStatus> countsByCoachAndStatus =
-				caseLoadService.caseLoadCountsByStatusIncludingAllCurrentCoaches(
-						studentTypeIds, programStatusDateFrom, programStatusDateTo);
+				caseLoadService.currentCaseloadCountsByStatus(studentTypeIds);
 		UUID currentCoachId = null;
 		CaseLoadReportTO caseLoadReportTO = null;
 		for ( CoachCaseloadRecordCountForProgramStatus countByCoachAndStatus : countsByCoachAndStatus ) {
@@ -274,12 +267,10 @@ public class CaseloadReportController extends AbstractBaseController {
 	}
 
 	private Map<String, Object> collectParamsForReport(
-			List<UUID> studentTypeIds,
-			Date programStatusDateFrom,
-			Date programStatusDateTo) throws ObjectNotFoundException {
+			List<UUID> studentTypeIds) throws ObjectNotFoundException {
 		final Map<String, Object> parameters = Maps.newHashMap();
-		parameters.put("statusDateFrom", programStatusDateFrom);
-		parameters.put("statusDateTo", programStatusDateTo);
+		parameters.put("statusDateFrom", null);
+		parameters.put("statusDateTo", null);
 		parameters.put("homeDepartment", ""); //not available yet
 		parameters.put("studentTypes", collectStudentTypeNamesAsString(studentTypeIds));
 		return parameters;

@@ -103,7 +103,7 @@ public class CaseloadReportControllerIntegrationTest {
 	@Test
 	public void testDefaultDataSet() throws ObjectNotFoundException, IOException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoad(response, null, null, null, "csv");
+		controller.getCaseLoad(response, null, "csv");
 
 		// by "body" the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
@@ -144,7 +144,7 @@ public class CaseloadReportControllerIntegrationTest {
 				.add(Stubs.PersonFixture.KEVIN_SMITH.username());
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoad(response, null, null, null, "csv");
+		controller.getCaseLoad(response, null, "csv");
 
 		// by "body" the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
@@ -201,7 +201,7 @@ public class CaseloadReportControllerIntegrationTest {
 		earlyAlertService.create(earlyAlert);
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoad(response, null, null, null, "csv");
+		controller.getCaseLoad(response, null, "csv");
 
 		// by "body" the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
@@ -261,7 +261,7 @@ public class CaseloadReportControllerIntegrationTest {
 		earlyAlertService.create(earlyAlert);
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoad(response, null, null, null, "csv");
+		controller.getCaseLoad(response, null, "csv");
 
 		// by "body" the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
