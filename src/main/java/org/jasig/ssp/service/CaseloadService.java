@@ -55,13 +55,72 @@ public interface CaseloadService {
 	PagingWrapper<CaseloadRecord> caseLoadFor(ProgramStatus programStatus,
 			Person coach, SortingAndPaging sAndP)
 			throws ObjectNotFoundException;
-	
-	Long caseLoadCountFor(ProgramStatus programStatus,
-			Person coach, List<UUID> studentTypeIds, Date programStatusDateFrom, Date programStatusDateTo) throws ObjectNotFoundException;
 
+	/**
+	 * Count <em>current</em> caseloads for <em>all</em> current coaches. A
+	 * "current" case is a student with any non-expired program status at this
+	 * moment, i.e. when this method is invoked, where that student is also
+	 * assigned to a coach. "All current coaches" means that coaches declared
+	 * as such by {@link org.jasig.ssp.service.PersonAttributesService#getCoaches()}
+	 * but having no caseload will be included in results. Also includes users
+	 * who do have caseloads but who aren't designated as coaches by
+	 * {@link org.jasig.ssp.service.PersonAttributesService#getCoaches()}.
+	 *
+	 * <p>This is effectivley the same as
+	 * <code>caseLoadCountsByStatus(..., now(), null)</code>. This
+	 * <em>usually</em> means a student will only be counted at most once.
+	 * But this cannot be strictly guaranteed.</p>
+	 *
+	 * <p>Design note: The response is not paged because this method exists
+	 * primarily to support reporting features, which we know currently need to
+	 * read the entire report set into memory, there was no point in returning
+	 * a paged response.</p>
+	 *
+	 * @param studentTypeIds filter the results to only count students having
+	 *                       one of these types. <code>null</code> or empty
+	 *                       collection is a wildcard
+	 * @return
+	 */
 	Collection<CoachCaseloadRecordCountForProgramStatus>
-		caseLoadCountsByStatusIncludingAllCurrentCoaches(
-			List<UUID> studentTypeIds,
+		currentCaseloadCountsByStatus(List<UUID> studentTypeIds);
+
+	/**
+	 * Count caseloads overlapping the given date range for <em>all</em>
+	 * current coaches. This is very similar to
+	 * {@link #currentCaseloadCountsByStatus(java.util.List)} except that
+	 * counted caseloads must have been/will be current during the given
+	 * date range. I.e. they needn't be current when this method is executed.
+	 *
+	 * <p>Note that this method is technically counting <em>statuses</em>, not
+	 * <em>students.</em> So every active status for a given student during
+	 * the specified interval will increment the associated coach's count. I.e.
+	 * students can be double (or triple or quadruple) counted.</p>
+	 *
+	 * <p>Also note that the current implementation cannot guarantee that
+	 * the coach currently assigned to any given student is the same coach
+	 * who was assigned to that student during the given date range. So the
+	 * results are not necessarily reliable for tracking individual coach
+	 * caseloads, especially if students are reassigned frequently.</p>
+	 *
+	 * @param studentTypeIds
+	 * @param programStatusDateFrom status effectiveness lower bound, inclusive.
+	 *                              null is a wildcard, i.e. "beginning of time".
+	 *                              Statuses with effectiveness starting prior
+	 *                              to this date will still be included - the
+	 *                              effective range just needs to
+	 *                              <em>intersect</em> the range from this to
+	 *                              <code>programStatusDateTo</code>.
+	 * @param programStatusDateTo status effectiveness upper bound, inclusive.
+	 *                            null is a wildcard, i.e. "end of time".
+	 *                            Statuses with effectiveness extending beyond
+	 *                            this date will still be included - the
+	 *                            effective range just needs to
+	 *                            <em>intersect</em> the range from this to
+	 *                            <code>programStatusDateFrom</code>
+	 * @return
+	 */
+	Collection<CoachCaseloadRecordCountForProgramStatus>
+		caseLoadCountsByStatus(List<UUID> studentTypeIds,
 			Date programStatusDateFrom,
 			Date programStatusDateTo);
 }
