@@ -141,7 +141,7 @@ var ssp = ssp || {};
 		reportsSelect
 				.append('<option value="generalStudentForm">General Student Report</option>');
 		reportsSelect
-                .append('<option value="caseLoadForm">Caseload Report</option>');		
+                .append('<option value="caseLoadForm">Current Caseload Statuses Report</option>');		
 		reportsSelect
                 .append('<option value="caseloadActivityReport">Caseload Activity Report</option>');			
 		reportsSelect
