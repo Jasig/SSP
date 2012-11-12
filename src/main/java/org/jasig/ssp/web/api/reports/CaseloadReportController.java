@@ -269,8 +269,6 @@ public class CaseloadReportController extends AbstractBaseController {
 	private Map<String, Object> collectParamsForReport(
 			List<UUID> studentTypeIds) throws ObjectNotFoundException {
 		final Map<String, Object> parameters = Maps.newHashMap();
-		parameters.put("statusDateFrom", null);
-		parameters.put("statusDateTo", null);
 		parameters.put("homeDepartment", ""); //not available yet
 		parameters.put("studentTypes", collectStudentTypeNamesAsString(studentTypeIds));
 		return parameters;
