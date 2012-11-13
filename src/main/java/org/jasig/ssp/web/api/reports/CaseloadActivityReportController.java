@@ -133,8 +133,7 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 			coaches.add(coach);
 		}
 		else{
-			final PagingWrapper<Person>  coachesWrapper = personService.getAllCoaches(null);			
-			coaches = coachesWrapper.getRows();
+			coaches = personService.getAllCurrentCoaches(Person.PERSON_NAME_COMPARATOR);
 		}
 		
 						

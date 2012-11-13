@@ -59,36 +59,6 @@ import com.google.common.collect.Sets;
 @Transactional
 public class CaseloadServiceImpl implements CaseloadService {
 
-	private static class PersonNameComparator implements Comparator<Person> {
-		@Override
-		public int compare(Person o1, Person o2) {
-			return nameOf(o1).compareTo(nameOf(o2));
-		}
-
-		public int compare(Person p, CoachCaseloadRecordCountForProgramStatus c) {
-			return nameOf(p).compareTo(nameOf(c));
-		}
-
-		String nameOf(Person p) {
-			return new StringBuilder()
-					.append(StringUtils.trimToEmpty(p.getLastName()))
-					.append(StringUtils.trimToEmpty(p.getFirstName()))
-					.append(StringUtils.trimToEmpty(p.getMiddleName()))
-					.toString();
-		}
-
-		String nameOf(CoachCaseloadRecordCountForProgramStatus coachStatusCount) {
-			return new StringBuilder()
-					.append(StringUtils.trimToEmpty(coachStatusCount.getCoachLastName()))
-					.append(StringUtils.trimToEmpty(coachStatusCount.getCoachFirstName()))
-					.append(StringUtils.trimToEmpty(coachStatusCount.getCoachMiddleName()))
-					.toString();
-		}
-	}
-
-	private static final PersonNameComparator PERSON_NAME_COMPARATOR =
-			new PersonNameComparator();
-
 	@Autowired
 	private transient ProgramStatusService programStatusService;
 
@@ -203,7 +173,8 @@ public class CaseloadServiceImpl implements CaseloadService {
 				merged.add(countForStatus);
 				continue;
 			}
-			while ( mergable != null && PERSON_NAME_COMPARATOR.compare(mergable, countForStatus) < 0 ) {
+			while ( mergable != null &&
+					Person.PERSON_NAME_COMPARATOR.compare(mergable, countForStatus) < 0 ) {
 				merged.add(asPlaceholderCoachCaseloadRecordCountForProgramStatus(mergable));
 				mergable = nextPersonFromNotHavingIdIn(coachIter, coachIdsWithCaseloads);
 			}
@@ -252,17 +223,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 	}
 
 	private SortedSet<Person> getAllCurrentCoachesSortedByName() {
-		return getAllCurrentCoaches(PERSON_NAME_COMPARATOR);
+		return personService.getAllCurrentCoaches(Person.PERSON_NAME_COMPARATOR);
 	}
 
-	private SortedSet<Person> getAllCurrentCoaches(Comparator<Person> sortBy) {
-		final Collection<Person> officialCoaches =
-				personService.getAllCoaches(null).getRows();
-		SortedSet<Person> currentCoachesSet = Sets.newTreeSet(PERSON_NAME_COMPARATOR);
-		currentCoachesSet.addAll(officialCoaches);
-		final Collection<Person> assignedCoaches =
-				personService.getAllAssignedCoaches(null).getRows();
-		currentCoachesSet.addAll(assignedCoaches);
-		return currentCoachesSet;
-	}
 }
