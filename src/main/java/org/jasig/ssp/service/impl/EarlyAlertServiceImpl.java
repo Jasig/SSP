@@ -43,6 +43,7 @@ import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 import org.jasig.ssp.model.reference.ProgramStatus;
+import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
 import org.jasig.ssp.service.EarlyAlertRoutingService;
 import org.jasig.ssp.service.EarlyAlertService;
@@ -57,6 +58,7 @@ import org.jasig.ssp.service.reference.EarlyAlertReasonService;
 import org.jasig.ssp.service.reference.EarlyAlertSuggestionService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
+import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -115,6 +117,9 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 	@Autowired
 	private transient ProgramStatusService programStatusService;
+
+	@Autowired
+	private transient StudentTypeService studentTypeService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EarlyAlertServiceImpl.class);
@@ -277,9 +282,10 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		try {
 			ensureValidAlertedOnPersonStateOrFail(person);
 		} catch ( Exception e ) {
-			LOGGER.error("Unable to set a program status on person '{}'. This is"
-					+ " likely to prevent that person record from appearing"
-					+ " in caseloads and student searches.", person.getId());
+			LOGGER.error("Unable to set a program status or student type on "
+					+ "person '{}'. This is likely to prevent that person "
+					+ "record from appearing in caseloads, student searches, "
+					+ "and some reports.", person.getId(), e);
 		}
 	}
 
@@ -308,6 +314,16 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			person.setProgramStatuses(programStatuses);
 			// save should cascade, but make sure custom create logic fires
 			personProgramStatusService.create(personProgramStatus);
+		}
+
+		if ( person.getStudentType() == null ) {
+			StudentType studentType = studentTypeService.get(StudentType.EAL_ID);
+			if ( studentType == null ) {
+				throw new ObjectNotFoundException(
+						"Unable to find a StudentType representing an early "
+								+ "alert-assigned type.", "StudentType");
+			}
+			person.setStudentType(studentType);
 		}
 	}
 

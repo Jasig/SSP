@@ -37,6 +37,9 @@ public class StudentType
 
 	private static final long serialVersionUID = -7875126705128856132L;
 
+	public static final UUID EAL_ID = UUID
+			.fromString("b2d05939-5056-a51a-8004-d803265d2645");
+
 	private boolean requireInitialAppointment;
 
 	/**

@@ -18,10 +18,13 @@
  */
 package org.jasig.ssp.service.impl; // NOPMD by jon.adams on 5/24/12 2:17 PM
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -42,6 +45,7 @@ import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 import org.jasig.ssp.model.reference.MessageTemplate;
+import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.service.EarlyAlertRoutingService;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.MessageService;
@@ -521,6 +525,115 @@ public class EarlyAlertServiceTest {
 		assertEquals("Editing an early alert should not undelete the alerted on person.",
 				ObjectStatus.INACTIVE,
 				alertedOnPersonAfterAlertClose.getObjectStatus());
+	}
+
+	@Test
+	public void testEarlyAlertSetsEarlyAlertStudentTypeIfAlertedOnUserHasNoType()
+			throws ObjectNotFoundException, ValidationException {
+		// sanity check
+		Person alertedOnPerson = personService.get(dmrId());
+		alertedOnPerson.setStudentType(null);
+		personService.save(alertedOnPerson);
+		sessionFactory.getCurrentSession().flush();
+
+		alertedOnPerson = personService.get(dmrId());
+
+		assertNull("This test requires that the alerted-on person have no"
+				+ " student type", alertedOnPerson.getStudentType());
+
+		final EarlyAlert proposedEarlyAlert = Stubs.arrangeEarlyAlert(personService, campusService);
+		proposedEarlyAlert.setPerson(alertedOnPerson);
+		earlyAlertService.create(proposedEarlyAlert);
+		sessionFactory.getCurrentSession().flush();
+
+		final Person alertedOnPersonAfterAlert = personService.get(dmrId());
+		final StudentType studentType = alertedOnPersonAfterAlert.getStudentType();
+		assertNotNull("No student type set on alerted on person", studentType);
+		assertEquals("Did not set active program status on alerted on person",
+				Stubs.StudentTypeFixture.EAL.id(),
+				studentType.getId());
+
+	}
+
+	@Test
+	public void testCreatingAndUpdatingEarlyAlertDoesNotChangeNonNullStudentType()
+			throws ObjectNotFoundException, ValidationException {
+
+		final Person alertedOnPerson = personService.get(dmrId());
+
+		final StudentType initialStudentType = alertedOnPerson.getStudentType();
+		assertNotNull("This test requires that the alerted-on person have"
+				+ " a student type", initialStudentType);
+		assertThat("This test requires that the alerted-on person have"
+				+ " a non-EAL student type", initialStudentType.getId(),
+				not(equalTo(Stubs.StudentTypeFixture.EAL.id())));
+
+		final EarlyAlert proposedEarlyAlert = Stubs.arrangeEarlyAlert(personService, campusService);
+		proposedEarlyAlert.setClosedById(null);
+		proposedEarlyAlert.setPerson(alertedOnPerson);
+		final EarlyAlert createdEarlyAlert =
+				earlyAlertService.create(proposedEarlyAlert);
+		sessionFactory.getCurrentSession().flush();
+
+		final Person alertedOnPersonAfterAlert = personService.get(dmrId());
+		final StudentType studentTypeAfterAlert = alertedOnPersonAfterAlert.getStudentType();
+		assertNotNull("Alerted-on person should have retained a student type after alert",
+				studentTypeAfterAlert);
+		assertEquals("Alerted-on person should have retained the same student type after alert",
+				initialStudentType.getId(), studentTypeAfterAlert.getId());
+
+
+		// now close the alert
+		final EarlyAlert loadedEarlyAlert =
+				earlyAlertService.get(createdEarlyAlert.getId());
+		loadedEarlyAlert.setClosedById(student0Id());
+		earlyAlertService.save(loadedEarlyAlert);
+		sessionFactory.getCurrentSession().flush();
+
+		// and the actual assert of interest
+		final Person alertedOnPersonAfterAlertClose = personService.get(dmrId());
+		final StudentType studentTypeAfterAlertClose = alertedOnPersonAfterAlert.getStudentType();
+		assertNotNull("Alerted-on person should have retained a student type after alert close",
+				studentTypeAfterAlertClose);
+		assertEquals("Alerted-on person should have retained the same student type after alert close",
+				initialStudentType.getId(), studentTypeAfterAlertClose.getId());
+
+	}
+
+	// similar to testCreatingAndUpdatingEarlyAlertDoesNotChangeNonNullStudentType()
+	// but checks for the null student type case, i.e. if someone goes and
+	// removes a student type for whatever reason, just changing an existing
+	// early alert isn't expected to set the student type back... would take
+	// another early alert
+	@Test
+	public void testUpdatingEarlyAlertDoesNotSetStudentType()
+			throws ObjectNotFoundException, ValidationException {
+
+		final Person alertedOnPerson = personService.get(dmrId());
+
+		final EarlyAlert proposedEarlyAlert = Stubs.arrangeEarlyAlert(personService, campusService);
+		proposedEarlyAlert.setClosedById(null);
+		proposedEarlyAlert.setPerson(alertedOnPerson);
+		final EarlyAlert createdEarlyAlert =
+				earlyAlertService.create(proposedEarlyAlert);
+		sessionFactory.getCurrentSession().flush();
+
+		final Person alertedOnPersonAfterAlert = personService.get(dmrId());
+		alertedOnPersonAfterAlert.setStudentType(null);
+		personService.save(alertedOnPersonAfterAlert);
+		sessionFactory.getCurrentSession().flush();
+
+		// now close the alert
+		final EarlyAlert loadedEarlyAlert =
+				earlyAlertService.get(createdEarlyAlert.getId());
+		loadedEarlyAlert.setClosedById(student0Id());
+		earlyAlertService.save(loadedEarlyAlert);
+		sessionFactory.getCurrentSession().flush();
+
+		// and the actual assert of interest
+		final Person alertedOnPersonAfterAlertClose = personService.get(dmrId());
+		assertNull("Only creating an alert should set a user's student type.",
+				alertedOnPersonAfterAlertClose.getStudentType());
 	}
 
 	private String student0FullName() {
