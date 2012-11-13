@@ -109,13 +109,13 @@ public class CaseloadReportControllerIntegrationTest {
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add(",,FIRST,,LAST,DEPARTMENT,TOTAL COUNT,,,ACTIVE COUNT,,A,,IA,,T,,NP,,NS");
-		expectedReportBodyLines.add(",,Alan,,Turing,Not Available Yet,2,,,2,,2,,0,,0,,0,,0");
+		expectedReportBodyLines.add(",FIRST,,LAST,DEPARTMENT,TOTAL COUNT,,,ACTIVE COUNT,,A,,IA,,T,,NP,,NS");
+		expectedReportBodyLines.add(",Alan,,Turing,Not Available Yet,2,,,2,,2,,0,,0,,0,,0");
 		// not sure why totals render this way, but they do... csv formatting
 		// needs to be fixed up
-		expectedReportBodyLines.add(",,,,,,,,2,,,,,,,,,,,");
-		expectedReportBodyLines.add(",,,,,,,,,,2,,0,,0,,0,,0,");
-		expectedReportBodyLines.add(",,TOTAL:,,,,2,,,,,,,,,,,,,");
+		expectedReportBodyLines.add(",,,,,,,2,,,,,,,,,,,");
+		expectedReportBodyLines.add(",,,,,,,,,2,,0,,0,,0,,0,");
+		expectedReportBodyLines.add(",TOTAL:,,,,2,,,,,,,,,,,,,");
 
 		final List<String> actualReportBodyLines = new ArrayList<String>(5);
 		final String csvReport = response.getContentAsString();
@@ -150,14 +150,14 @@ public class CaseloadReportControllerIntegrationTest {
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add(",,FIRST,,LAST,DEPARTMENT,TOTAL COUNT,,,ACTIVE COUNT,,A,,IA,,T,,NP,,NS");
-		expectedReportBodyLines.add(",,Kevin,,Smith,Not Available Yet,0,,,0,,0,,0,,0,,0,,0");
-		expectedReportBodyLines.add(",,Alan,,Turing,Not Available Yet,2,,,2,,2,,0,,0,,0,,0");
+		expectedReportBodyLines.add(",FIRST,,LAST,DEPARTMENT,TOTAL COUNT,,,ACTIVE COUNT,,A,,IA,,T,,NP,,NS");
+		expectedReportBodyLines.add(",Kevin,,Smith,Not Available Yet,0,,,0,,0,,0,,0,,0,,0");
+		expectedReportBodyLines.add(",Alan,,Turing,Not Available Yet,2,,,2,,2,,0,,0,,0,,0");
 		// not sure why totals render this way, but they do... csv formatting
 		// needs to be fixed up
-		expectedReportBodyLines.add(",,,,,,,,2,,,,,,,,,,,");
-		expectedReportBodyLines.add(",,,,,,,,,,2,,0,,0,,0,,0,");
-		expectedReportBodyLines.add(",,TOTAL:,,,,2,,,,,,,,,,,,,");
+		expectedReportBodyLines.add(",,,,,,,2,,,,,,,,,,,");
+		expectedReportBodyLines.add(",,,,,,,,,2,,0,,0,,0,,0,");
+		expectedReportBodyLines.add(",TOTAL:,,,,2,,,,,,,,,,,,,");
 
 		final List<String> actualReportBodyLines = new ArrayList<String>(5);
 		final String csvReport = response.getContentAsString();
@@ -207,14 +207,14 @@ public class CaseloadReportControllerIntegrationTest {
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add(",,FIRST,,LAST,DEPARTMENT,TOTAL COUNT,,,ACTIVE COUNT,,A,,IA,,T,,NP,,NS");
-		expectedReportBodyLines.add(",,Kevin,,Smith,Not Available Yet,1,,,1,,1,,0,,0,,0,,0");
-		expectedReportBodyLines.add(",,Alan,,Turing,Not Available Yet,2,,,2,,2,,0,,0,,0,,0");
+		expectedReportBodyLines.add(",FIRST,,LAST,DEPARTMENT,TOTAL COUNT,,,ACTIVE COUNT,,A,,IA,,T,,NP,,NS");
+		expectedReportBodyLines.add(",Kevin,,Smith,Not Available Yet,1,,,1,,1,,0,,0,,0,,0");
+		expectedReportBodyLines.add(",Alan,,Turing,Not Available Yet,2,,,2,,2,,0,,0,,0,,0");
 		// not sure why totals render this way, but they do... csv formatting
 		// needs to be fixed up
-		expectedReportBodyLines.add(",,,,,,,,3,,,,,,,,,,,");
-		expectedReportBodyLines.add(",,,,,,,,,,3,,0,,0,,0,,0,");
-		expectedReportBodyLines.add(",,TOTAL:,,,,3,,,,,,,,,,,,,");
+		expectedReportBodyLines.add(",,,,,,,3,,,,,,,,,,,");
+		expectedReportBodyLines.add(",,,,,,,,,3,,0,,0,,0,,0,");
+		expectedReportBodyLines.add(",TOTAL:,,,,3,,,,,,,,,,,,,");
 
 		final List<String> actualReportBodyLines = new ArrayList<String>(5);
 		final String csvReport = response.getContentAsString();
@@ -267,14 +267,14 @@ public class CaseloadReportControllerIntegrationTest {
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add(",,FIRST,,LAST,DEPARTMENT,TOTAL COUNT,,,ACTIVE COUNT,,A,,IA,,T,,NP,,NS");
-		expectedReportBodyLines.add(",,Kevin,,Smith,Not Available Yet,1,,,1,,1,,0,,0,,0,,0");
-		expectedReportBodyLines.add(",,Alan,,Turing,Not Available Yet,2,,,2,,2,,0,,0,,0,,0");
+		expectedReportBodyLines.add(",FIRST,,LAST,DEPARTMENT,TOTAL COUNT,,,ACTIVE COUNT,,A,,IA,,T,,NP,,NS");
+		expectedReportBodyLines.add(",Kevin,,Smith,Not Available Yet,1,,,1,,1,,0,,0,,0,,0");
+		expectedReportBodyLines.add(",Alan,,Turing,Not Available Yet,2,,,2,,2,,0,,0,,0,,0");
 		// not sure why totals render this way, but they do... csv formatting
 		// needs to be fixed up
-		expectedReportBodyLines.add(",,,,,,,,3,,,,,,,,,,,");
-		expectedReportBodyLines.add(",,,,,,,,,,3,,0,,0,,0,,0,");
-		expectedReportBodyLines.add(",,TOTAL:,,,,3,,,,,,,,,,,,,");
+		expectedReportBodyLines.add(",,,,,,,3,,,,,,,,,,,");
+		expectedReportBodyLines.add(",,,,,,,,,3,,0,,0,,0,,0,");
+		expectedReportBodyLines.add(",TOTAL:,,,,3,,,,,,,,,,,,,");
 
 		final List<String> actualReportBodyLines = new ArrayList<String>(5);
 		final String csvReport = response.getContentAsString();

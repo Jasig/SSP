@@ -252,13 +252,17 @@ public class CaseloadServiceImpl implements CaseloadService {
 	}
 
 	private SortedSet<Person> getAllCurrentCoachesSortedByName() {
-		Collection<Person> currentCoaches = getAllCurrentCoaches();
-		SortedSet<Person> currentCoachesSet = Sets.newTreeSet(PERSON_NAME_COMPARATOR);
-		currentCoachesSet.addAll(currentCoaches);
-		return currentCoachesSet;
+		return getAllCurrentCoaches(PERSON_NAME_COMPARATOR);
 	}
 
-	private Collection<Person> getAllCurrentCoaches() {
-		return personService.getAllCoaches(null).getRows();
+	private SortedSet<Person> getAllCurrentCoaches(Comparator<Person> sortBy) {
+		final Collection<Person> officialCoaches =
+				personService.getAllCoaches(null).getRows();
+		SortedSet<Person> currentCoachesSet = Sets.newTreeSet(PERSON_NAME_COMPARATOR);
+		currentCoachesSet.addAll(officialCoaches);
+		final Collection<Person> assignedCoaches =
+				personService.getAllAssignedCoaches(null).getRows();
+		currentCoachesSet.addAll(assignedCoaches);
+		return currentCoachesSet;
 	}
 }
