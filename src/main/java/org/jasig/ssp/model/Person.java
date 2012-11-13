@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.model; // NOPMD
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
@@ -40,6 +41,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -63,6 +65,36 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	private static final long serialVersionUID = 4159658337332259029L;
 
 	private static final String DATABASE_TABLE_NAME = "person";
+
+	public static class PersonNameComparator implements Comparator<Person> {
+		@Override
+		public int compare(Person o1, Person o2) {
+			return nameOf(o1).compareTo(nameOf(o2));
+		}
+
+		public int compare(Person p, CoachCaseloadRecordCountForProgramStatus c) {
+			return nameOf(p).compareTo(nameOf(c));
+		}
+
+		String nameOf(Person p) {
+			return new StringBuilder()
+					.append(StringUtils.trimToEmpty(p.getLastName()))
+					.append(StringUtils.trimToEmpty(p.getFirstName()))
+					.append(StringUtils.trimToEmpty(p.getMiddleName()))
+					.toString();
+		}
+
+		String nameOf(CoachCaseloadRecordCountForProgramStatus coachStatusCount) {
+			return new StringBuilder()
+					.append(StringUtils.trimToEmpty(coachStatusCount.getCoachLastName()))
+					.append(StringUtils.trimToEmpty(coachStatusCount.getCoachFirstName()))
+					.append(StringUtils.trimToEmpty(coachStatusCount.getCoachMiddleName()))
+					.toString();
+		}
+	}
+
+	public static final PersonNameComparator PERSON_NAME_COMPARATOR =
+			new PersonNameComparator();
 
 	/**
 	 * Static, super administrator account identifier. Only used by IT and

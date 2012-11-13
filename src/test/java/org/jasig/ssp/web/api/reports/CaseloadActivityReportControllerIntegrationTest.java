@@ -36,108 +36,68 @@ import com.google.common.base.Predicate;
 import net.sf.jasperreports.engine.JRException;
 
 
-public class CaseloadReportControllerIntegrationTest
+public class CaseloadActivityReportControllerIntegrationTest
 		extends AbstractReportControllerIntegrationTest {
 
 	@Autowired
-	private CaseloadReportController controller;
+	private transient CaseloadActivityReportController controller;
 
 	@Test
-	public void testDefaultDataSet() throws ObjectNotFoundException, IOException, JRException {
+	public void testDefaultDataSet()
+			throws ObjectNotFoundException, IOException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoad(response, null, "csv");
+		controller.getCaseLoadActivity(response, null, null, null, null, "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add(",FIRST,,LAST,DEPARTMENT,TOTAL COUNT,,,ACTIVE COUNT,,A,,IA,,T,,NP,,NS");
-		expectedReportBodyLines.add(",Alan,,Turing,Not Available Yet,2,,,2,,2,,0,,0,,0,,0");
-		// not sure why totals render this way, but they do... csv formatting
+		// not sure why lines render this way, but they do... csv formatting
 		// needs to be fixed up
-		expectedReportBodyLines.add(",,,,,,,2,,,,,,,,,,,");
-		expectedReportBodyLines.add(",,,,,,,,,2,,0,,0,,0,,0,");
-		expectedReportBodyLines.add(",TOTAL:,,,,2,,,,,,,,,,,,,");
+		expectedReportBodyLines.add(",FIRST,,LAST,,,,,,,,,,");
+		expectedReportBodyLines.add(",,,,,,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
+		expectedReportBodyLines.add(",,,,,,,,,0,,,,");
+		expectedReportBodyLines.add(",Alan,,Turing,,,0,0,,,0,0,0,0");
 
 		expectReportBodyLines(expectedReportBodyLines, response, afterHeader());
 	}
 
 	@Test
-	public void testIncludesCoachesWithoutAnyCaseload()
+	public void testIncludesAllOfficialCoaches()
 			throws ObjectNotFoundException, IOException, JRException {
 
 		personAttributesService.getCoachUsernames()
 				.add(Stubs.PersonFixture.KEVIN_SMITH.username());
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoad(response, null, "csv");
+		controller.getCaseLoadActivity(response, null, null, null, null, "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add(",FIRST,,LAST,DEPARTMENT,TOTAL COUNT,,,ACTIVE COUNT,,A,,IA,,T,,NP,,NS");
-		expectedReportBodyLines.add(",Kevin,,Smith,Not Available Yet,0,,,0,,0,,0,,0,,0,,0");
-		expectedReportBodyLines.add(",Alan,,Turing,Not Available Yet,2,,,2,,2,,0,,0,,0,,0");
-		// not sure why totals render this way, but they do... csv formatting
+		// not sure why lines render this way, but they do... csv formatting
 		// needs to be fixed up
-		expectedReportBodyLines.add(",,,,,,,2,,,,,,,,,,,");
-		expectedReportBodyLines.add(",,,,,,,,,2,,0,,0,,0,,0,");
-		expectedReportBodyLines.add(",TOTAL:,,,,2,,,,,,,,,,,,,");
+		expectedReportBodyLines.add(",FIRST,,LAST,,,,,,,,,,");
+		expectedReportBodyLines.add(",,,,,,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
+		expectedReportBodyLines.add(",,,,,,,,,0,,,,");
+		expectedReportBodyLines.add(",Kevin,,Smith,,,0,0,,,0,0,0,0");
+		expectedReportBodyLines.add(",,,,,,,,,0,,,,");
+		expectedReportBodyLines.add(",Alan,,Turing,,,0,0,,,0,0,0,0");
 
 		expectReportBodyLines(expectedReportBodyLines, response, afterHeader());
-	}
 
-	@Test
-	public void testNewEarlyAlertForValidCoachReflectedOnReport()
-			throws ObjectNotFoundException, IOException, JRException, ValidationException {
-
-		personAttributesService.getCoachUsernames()
-				.add(Stubs.PersonFixture.KEVIN_SMITH.username());
-
-		final Person jamesDoe =
-				personService.get(Stubs.PersonFixture.JAMES_DOE.id());
-		final Person kevinSmith =
-				personService.get(Stubs.PersonFixture.KEVIN_SMITH.id());
-		jamesDoe.setCoach(kevinSmith);
-		personService.save(jamesDoe);
-		sessionFactory.getCurrentSession().flush();
-
-		final EarlyAlert earlyAlert =
-				Stubs.arrangeEarlyAlert(personService, campusService);
-		earlyAlert.setPerson(jamesDoe);
-		earlyAlert.setClosedById(null);
-		earlyAlert.setClosedDate(null);
-		earlyAlertService.create(earlyAlert);
-
-		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoad(response, null, "csv");
-
-		// "body" is the actual results and the header that describes its columns.
-		// This is as opposed to rows which precede the header, which describe
-		// the filtering criteria
-		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add(",FIRST,,LAST,DEPARTMENT,TOTAL COUNT,,,ACTIVE COUNT,,A,,IA,,T,,NP,,NS");
-		expectedReportBodyLines.add(",Kevin,,Smith,Not Available Yet,1,,,1,,1,,0,,0,,0,,0");
-		expectedReportBodyLines.add(",Alan,,Turing,Not Available Yet,2,,,2,,2,,0,,0,,0,,0");
-		// not sure why totals render this way, but they do... csv formatting
-		// needs to be fixed up
-		expectedReportBodyLines.add(",,,,,,,3,,,,,,,,,,,");
-		expectedReportBodyLines.add(",,,,,,,,,3,,0,,0,,0,,0,");
-		expectedReportBodyLines.add(",TOTAL:,,,,3,,,,,,,,,,,,,");
-
-		expectReportBodyLines(expectedReportBodyLines, response, afterHeader());
 	}
 
 	/**
-	 * Same as {@link #testNewEarlyAlertForValidCoachReflectedOnReport()}, but
+	 * Same as {@link #testIncludesAllOfficialCoaches()}, but
 	 * we don't register one of the coaches with the PersonAttributesService.
 	 * This failed in early impls b/c the coach list returned from the uPortal-
 	 * backed PersonAttributesService didn't match the list of users with actual
 	 * caseloads in the SSP database.
 	 */
 	@Test
-	public void testNewEarlyAlertForMissingCoachReflectedOnReport()
+	public void testIncludesBothOfficialAndNonOfficialCoaches()
 			throws ObjectNotFoundException, ValidationException, IOException, JRException {
 		final Person jamesDoe =
 				personService.get(Stubs.PersonFixture.JAMES_DOE.id());
@@ -147,35 +107,80 @@ public class CaseloadReportControllerIntegrationTest
 		personService.save(jamesDoe);
 		sessionFactory.getCurrentSession().flush();
 
-		final EarlyAlert earlyAlert =
-				Stubs.arrangeEarlyAlert(personService, campusService);
-		earlyAlert.setPerson(jamesDoe);
-		earlyAlert.setClosedById(null);
-		earlyAlert.setClosedDate(null);
-		earlyAlertService.create(earlyAlert);
-
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoad(response, null, "csv");
+		controller.getCaseLoadActivity(response, null, null, null, null, "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add(",FIRST,,LAST,DEPARTMENT,TOTAL COUNT,,,ACTIVE COUNT,,A,,IA,,T,,NP,,NS");
-		expectedReportBodyLines.add(",Kevin,,Smith,Not Available Yet,1,,,1,,1,,0,,0,,0,,0");
-		expectedReportBodyLines.add(",Alan,,Turing,Not Available Yet,2,,,2,,2,,0,,0,,0,,0");
-		// not sure why totals render this way, but they do... csv formatting
+		// not sure why lines render this way, but they do... csv formatting
 		// needs to be fixed up
-		expectedReportBodyLines.add(",,,,,,,3,,,,,,,,,,,");
-		expectedReportBodyLines.add(",,,,,,,,,3,,0,,0,,0,,0,");
-		expectedReportBodyLines.add(",TOTAL:,,,,3,,,,,,,,,,,,,");
+		expectedReportBodyLines.add(",FIRST,,LAST,,,,,,,,,,");
+		expectedReportBodyLines.add(",,,,,,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
+		expectedReportBodyLines.add(",,,,,,,,,0,,,,");
+		expectedReportBodyLines.add(",Kevin,,Smith,,,0,0,,,0,0,0,0");
+		expectedReportBodyLines.add(",,,,,,,,,0,,,,");
+		expectedReportBodyLines.add(",Alan,,Turing,,,0,0,,,0,0,0,0");
+
+		expectReportBodyLines(expectedReportBodyLines, response, afterHeader());
+	}
+
+	@Test
+	public void testNewCoachInitiatedEarlyAlertReflectedOnReport()
+			throws ObjectNotFoundException, IOException, JRException, ValidationException {
+
+		// adding kevinSmith to the personAttributesService stub effectively
+		// duplicates what testIncludesAllOfficialCoaches() tests, but we have
+		// almost exactly the same thing going on in
+		// CaseloadReportControllerIntegrationTest, and there's at least
+		// some (very small) unit of value in verifying that early alert
+		// counting does work for *any* user found in the attributes service,
+		// not just the default
+
+		personAttributesService.getCoachUsernames()
+				.add(Stubs.PersonFixture.KEVIN_SMITH.username());
+
+		final Person jamesDoe =
+				personService.get(Stubs.PersonFixture.JAMES_DOE.id());
+		final Person kevinSmith =
+				personService.get(Stubs.PersonFixture.KEVIN_SMITH.id());
+		jamesDoe.setCoach(kevinSmith);
+		personService.save(jamesDoe);
+		sessionFactory.getCurrentSession().flush();
+
+		final EarlyAlert earlyAlert =
+				Stubs.arrangeEarlyAlert(personService, campusService);
+		earlyAlert.setPerson(jamesDoe);
+		earlyAlert.setClosedById(null);
+		earlyAlert.setClosedDate(null);
+		earlyAlert.setCreatedBy(kevinSmith); //otherwise will be the system user
+		earlyAlertService.create(earlyAlert);
+
+		sessionFactory.getCurrentSession().flush();
+
+		final MockHttpServletResponse response = new MockHttpServletResponse();
+		controller.getCaseLoadActivity(response, null, null, null, null, "csv");
+
+		// "body" is the actual results and the header that describes its columns.
+		// This is as opposed to rows which precede the header, which describe
+		// the filtering criteria
+		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
+		// not sure why lines render this way, but they do... csv formatting
+		// needs to be fixed up
+		expectedReportBodyLines.add(",FIRST,,LAST,,,,,,,,,,");
+		expectedReportBodyLines.add(",,,,,,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
+		expectedReportBodyLines.add(",,,,,,,,,0,,,,");
+		expectedReportBodyLines.add(",Kevin,,Smith,,,0,0,,,0,1,1,0");
+		expectedReportBodyLines.add(",,,,,,,,,0,,,,");
+		expectedReportBodyLines.add(",Alan,,Turing,,,0,0,,,0,0,0,0");
 
 		expectReportBodyLines(expectedReportBodyLines, response, afterHeader());
 	}
 
 	@Override
 	protected Predicate<String> afterHeader() {
-		return afterLineContaining("Case Load");
+		return afterLineContaining("Case Load Activity");
 	}
 
 }

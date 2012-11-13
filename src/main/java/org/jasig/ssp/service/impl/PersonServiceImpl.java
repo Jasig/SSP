@@ -19,8 +19,10 @@
 package org.jasig.ssp.service.impl;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.UUID;
 
 import com.google.common.collect.Sets;
@@ -487,6 +489,18 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public PagingWrapper<Person> getAllAssignedCoaches(SortingAndPaging sAndP) {
 		return dao.getAllAssignedCoaches(sAndP);
+	}
+
+	@Override
+	public SortedSet<Person> getAllCurrentCoaches(Comparator<Person> sortBy) {
+		final Collection<Person> officialCoaches = getAllCoaches(null).getRows();
+		SortedSet<Person> currentCoachesSet =
+				Sets.newTreeSet(sortBy == null ? Person.PERSON_NAME_COMPARATOR : sortBy);
+		currentCoachesSet.addAll(officialCoaches);
+		final Collection<Person> assignedCoaches =
+				getAllAssignedCoaches(null).getRows();
+		currentCoachesSet.addAll(assignedCoaches);
+		return currentCoachesSet;
 	}
 
 	private Iterable<Person> additionalAttribsForStudents(

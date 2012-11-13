@@ -19,7 +19,9 @@
 package org.jasig.ssp.service;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.SortedSet;
 import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
@@ -165,6 +167,24 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 */
 	PagingWrapper<Person> getAllAssignedCoaches(SortingAndPaging sAndP);
 
+
+	/**
+	 * Gets a collection of <em>all</em> coaches, i.e. the union of
+	 * {@link #getAllCoaches(org.jasig.ssp.util.sort.SortingAndPaging)} and
+	 * {@link #getAllAssignedCoaches(org.jasig.ssp.util.sort.SortingAndPaging)},
+	 * without duplicates.
+	 *
+	 * <p>Since we know the implementation would face difficulties implementing
+	 * a paged version of this method and we know that all current clients
+	 * of this method aren't actually interested in a paged view, we choose to
+	 * return a vanilla <code>SortedSet</code> rather than a
+	 * <code>PagingWrapper</code></p>
+	 *
+	 * @param personNameComparator null OK
+	 * @return
+	 */
+	SortedSet<Person> getAllCurrentCoaches(Comparator<Person> personNameComparator);
+
 	Person load(UUID id);
 
 	Person createUserAccount(String username,
@@ -195,6 +215,5 @@ public interface PersonService extends AuditableCrudService<Person> {
 	Person createUserAccountForCurrentPortletUser(String username,
 			PortletRequest portletRequest)
 			throws UnableToCreateAccountException;
-
 
 }
