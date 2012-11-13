@@ -24,6 +24,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,6 +35,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.util.service.stub.Stubs;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -225,5 +227,22 @@ public class PersonDaoTest { // NOPMD Test suites love lots of methods!
 		assertNotNull("ken should have been found", person);
 		assertEquals("first name should be set", "Kenneth",
 				person.getFirstName());
+	}
+
+	@Test
+	public void testGetAllAssignedCoaches() throws ObjectNotFoundException {
+		Person advisor0 = dao.get(Stubs.PersonFixture.ADVISOR_0.id());
+		PagingWrapper<Person> results = dao.getAllAssignedCoaches(null);
+		assertEquals(advisor0, results.getRows().iterator().next());
+		assertEquals(0, results.getResults()); // 0 b/c no paging
+	}
+
+	@Test
+	public void testGetAllAssignedCoachesWithSimplePaging() throws ObjectNotFoundException {
+		Person advisor0 = dao.get(Stubs.PersonFixture.ADVISOR_0.id());
+		PagingWrapper<Person> results = dao.getAllAssignedCoaches(
+				new SortingAndPaging(ObjectStatus.ALL, 0, 10, null, null, null));
+		assertEquals(advisor0, results.getRows().iterator().next());
+		assertEquals(1, results.getResults());
 	}
 }

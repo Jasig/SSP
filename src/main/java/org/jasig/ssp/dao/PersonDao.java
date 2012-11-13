@@ -26,8 +26,12 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -267,4 +271,41 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		return criteria.list();
 	}
 
+	public PagingWrapper<Person> getAllAssignedCoaches(SortingAndPaging sAndP) {
+
+		DetachedCriteria coach_ids =
+				DetachedCriteria.forClass(Person.class, "coach_ids");
+		final ProjectionList projections = Projections.projectionList();
+		projections.add(Projections.distinct(Projections.property("coach.id")));
+		coach_ids.setProjection(projections);
+		coach_ids.add(Restrictions.isNotNull("coach"));
+
+		Criteria criteria = createCriteria()
+				.add(Subqueries.propertiesIn(new String[] {"id"}, coach_ids));
+
+		if ( sAndP != null && sAndP.isFilteredByStatus() ) {
+			sAndP.addStatusFilterToCriteria(criteria);
+		}
+
+		// item count
+		Long totalRows = 0L;
+		if ((sAndP != null) && sAndP.isPaged()) {
+			totalRows = (Long) criteria.setProjection(Projections.rowCount())
+					.uniqueResult();
+		}
+
+		criteria.setProjection(null);
+
+		if ( sAndP == null || !(sAndP.isSorted())) {
+			criteria.addOrder(Order.asc("lastName")).addOrder(Order.asc("firstName"));
+		} else {
+			if ( sAndP.isSorted() ) {
+				sAndP.addSortingToCriteria(criteria);
+			}
+			sAndP.addPagingToCriteria(criteria);
+		}
+
+		return new PagingWrapper<Person>(totalRows, criteria.list());
+
+	}
 }

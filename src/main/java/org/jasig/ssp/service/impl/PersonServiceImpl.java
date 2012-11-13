@@ -484,6 +484,11 @@ public class PersonServiceImpl implements PersonService {
 		return new PagingWrapper<Person>(coaches);
 	}
 
+	@Override
+	public PagingWrapper<Person> getAllAssignedCoaches(SortingAndPaging sAndP) {
+		return dao.getAllAssignedCoaches(sAndP);
+	}
+
 	private Iterable<Person> additionalAttribsForStudents(
 			final Iterable<Person> people) {
 		if (people == null) {

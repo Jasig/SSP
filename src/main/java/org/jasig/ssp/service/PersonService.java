@@ -152,6 +152,19 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 */
 	PagingWrapper<Person> getAllCoaches(SortingAndPaging sAndP);
 
+	/**
+	 * Gets all coaches assigned to local Person records regardless of current
+	 * permissions. This is as opposed to
+	 * {@link #getAllCoaches(org.jasig.ssp.util.sort.SortingAndPaging)} which
+	 * is intended to just return "official" coaches, i.e. users known to
+	 * act as coaches, regardless of whether they have any assignments at all.
+	 *
+	 * @param sAndP
+	 *            Sorting and paging parameters
+	 * @return List of all <em>assigned</em> coaches
+	 */
+	PagingWrapper<Person> getAllAssignedCoaches(SortingAndPaging sAndP);
+
 	Person load(UUID id);
 
 	Person createUserAccount(String username,
@@ -182,4 +195,6 @@ public interface PersonService extends AuditableCrudService<Person> {
 	Person createUserAccountForCurrentPortletUser(String username,
 			PortletRequest portletRequest)
 			throws UnableToCreateAccountException;
+
+
 }
