@@ -61,4 +61,6 @@
 		for SSP-542 and SSP-570) -->
 	<include file="org/jasig/ssp/database/changesets/000012.xml" />
 
+	<include file="org/jasig/ssp/database/changesets/000013.xml" />
+
 </databaseChangeLog>
