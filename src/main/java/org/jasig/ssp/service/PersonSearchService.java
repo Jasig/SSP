@@ -36,6 +36,10 @@ public interface PersonSearchService {
 	 * 
 	 * @param programStatus
 	 *            the program status
+	 * @param requireProgramStatus
+	 *            implicitly <code>true</code> if <code>programStatus</code> is
+	 *            non-null and defaults to <code>true</code>, else if set to
+	 *            <code>false</code> can include persons with no status
 	 * @param outsideCaseload
 	 *            search outside case load
 	 * @param searchTerm
@@ -50,6 +54,7 @@ public interface PersonSearchService {
 	 *             exist in the database.
 	 */
 	PagingWrapper<PersonSearchResult> searchBy(ProgramStatus programStatus,
+			Boolean requireProgramStatus,
 			Boolean outsideCaseload, String searchTerm, Person advisor,
 			SortingAndPaging sAndP)
 			throws ObjectNotFoundException, ValidationException;

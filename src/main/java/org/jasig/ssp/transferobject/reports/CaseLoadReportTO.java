@@ -20,22 +20,23 @@ package org.jasig.ssp.transferobject.reports;
 
 public class CaseLoadReportTO {
 
-	final String firstName;
-	final String lastName;
-	final String departmentName;
-	final Long activeCount;
-	final Long inActiveCount;
-	final Long npCount;
-	final Long transitionedCount;
-	final Long noShowCount;
-	
-	
-	
-	
-	
+	private String firstName;
+	private String lastName;
+	private String departmentName;
+	private long activeCount;
+	private long inActiveCount;
+	private long npCount;
+	private long transitionedCount;
+	private long noShowCount;
+
 	public CaseLoadReportTO(String firstName, String lastName,
-			String departmentName, Long activeCount, Long inActiveCount,
-			Long npCount, Long transitionedCount, Long noShowCount) {
+							String departmentName) {
+		this(firstName, lastName, departmentName, 0, 0, 0, 0, 0);
+	}
+
+	public CaseLoadReportTO(String firstName, String lastName,
+			String departmentName, long activeCount, long inActiveCount,
+			long npCount, long transitionedCount, long noShowCount) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -47,58 +48,87 @@ public class CaseLoadReportTO {
 		this.noShowCount = noShowCount;
 	}
 
-
-
 	public String getFirstName() {
 		return firstName;
 	}
 
-
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
 	public String getLastName() {
 		return lastName;
 	}
 
-
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
 	public String getDepartmentName() {
 		return departmentName;
 	}
 
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
 
-
-	public Long getActiveCount() {
+	public long getActiveCount() {
 		return activeCount;
 	}
 
+	public void setActiveCount(long activeCount) {
+		this.activeCount = activeCount;
+	}
 
+	public void addToActiveCount(long add) {
+		this.activeCount += add;
+	}
 
-
-	public Long getInActiveCount() {
+	public long getInActiveCount() {
 		return inActiveCount;
 	}
 
+	public void setInActiveCount(long inActiveCount) {
+		this.inActiveCount = inActiveCount;
+	}
 
+	public void addToInActiveCount(long add) {
+		this.inActiveCount += add;
+	}
 
-
-
-
-	public Long getNpCount() {
+	public long getNpCount() {
 		return npCount;
 	}
 
+	public void setNpCount(long npCount) {
+		this.npCount = npCount;
+	}
 
+	public void addToNpCount(long add) {
+		this.npCount += add;
+	}
 
-
-	public Long getTransitionedCount() {
+	public long getTransitionedCount() {
 		return transitionedCount;
 	}
 
+	public void setTransitionedCount(long transitionedCount) {
+		this.transitionedCount = transitionedCount;
+	}
 
+	public void addToTransitionedCount(long add) {
+		this.transitionedCount += add;
+	}
 
-
-
-	public Long getNoShowCount() {
+	public long getNoShowCount() {
 		return noShowCount;
+	}
+
+	public void setNoShowCount(long noShowCount) {
+		this.noShowCount = noShowCount;
+	}
+
+	public void addToNoShowCount(long add) {
+		this.noShowCount += add;
 	}
 }

@@ -18,22 +18,33 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListResourceBundle;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.CaseloadDao;
 import org.jasig.ssp.model.Appointment;
 import org.jasig.ssp.model.CaseloadRecord;
+import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonStaffDetails;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.AppointmentService;
 import org.jasig.ssp.service.CaseloadService;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -42,6 +53,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 @Service
 @Transactional
@@ -58,6 +70,9 @@ public class CaseloadServiceImpl implements CaseloadService {
 
 	@Autowired
 	private transient EarlyAlertService earlyAlertService;
+
+	@Autowired
+	private transient PersonService personService;
 
 	@Override
 	public PagingWrapper<CaseloadRecord> caseLoadFor(
@@ -102,22 +117,113 @@ public class CaseloadServiceImpl implements CaseloadService {
 
 		return records;
 	}
-	
-	
+
 	@Override
-	public Long caseLoadCountFor(
-			final ProgramStatus programStatus, @NotNull final Person coach, List<UUID> studentTypeIds,Date programStatusDateFrom, Date programStatusDateTo 
-			) throws ObjectNotFoundException  {
+	public Collection<CoachCaseloadRecordCountForProgramStatus>
+		currentCaseloadCountsByStatus(List<UUID> studentTypeIds) {
 
-		ProgramStatus programStatusOrDefault;
+		Collection<CoachCaseloadRecordCountForProgramStatus> daoResult =
+				dao.currentCaseLoadCountsByStatus(studentTypeIds, null).getRows();
 
-		// programStatus : <programStatusId>, default to Active
-		if (programStatus == null) {
-			programStatusOrDefault = programStatusService
-					.get(ProgramStatus.ACTIVE_ID);
-		} else {
-			programStatusOrDefault = programStatus;
+		// see notes in merge...() on daoResult sorting expectations
+		return mergeCaseloadCountsWithOfficialCoaches(daoResult);
+	}
+
+	@Override
+	public Collection<CoachCaseloadRecordCountForProgramStatus>
+		caseLoadCountsByStatus(
+			List<UUID> studentTypeIds,
+			Date programStatusDateFrom,
+			Date programStatusDateTo) {
+
+		Collection<CoachCaseloadRecordCountForProgramStatus> daoResult =
+				dao.caseLoadCountsByStatus(studentTypeIds,
+						programStatusDateFrom, programStatusDateTo, null).getRows();
+
+		// see notes in merge...() on daoResult sorting expectations
+		return mergeCaseloadCountsWithOfficialCoaches(daoResult);
+	}
+
+
+	private Collection<CoachCaseloadRecordCountForProgramStatus>
+		mergeCaseloadCountsWithOfficialCoaches(
+			Collection<CoachCaseloadRecordCountForProgramStatus> daoResult) {
+
+		// We assume daoResult ordering matches that in
+		// PERSON_NAME_COMPARATOR and we live with that fragility b/c there is
+		// currently no way to construct a SortingAndPaging instance that
+		// doesn't enforce a page size max. But for this particular use case
+		// there's really not much point in enforcing that limit... the entire
+		// result set is eventually going to be read into memory before being
+		// handed to Jasper Reports. Could just sort again here, but we're
+		// already putting the GC to the test with all these intermediate and
+		// potentially quite large data structures.
+		SortedSet<Person> allCurrentCoaches = getAllCurrentCoachesSortedByName();
+		Set<UUID> coachIdsWithCaseloads = Sets.newHashSet();
+		for ( CoachCaseloadRecordCountForProgramStatus countForStatus : daoResult ) {
+			coachIdsWithCaseloads.add(countForStatus.getCoachId());
 		}
+		List<CoachCaseloadRecordCountForProgramStatus> merged =
+				Lists.newArrayListWithCapacity(daoResult.size() + allCurrentCoaches.size());
 
-		return dao.caseLoadCountFor(programStatusOrDefault, coach, studentTypeIds, programStatusDateFrom, programStatusDateTo);	}	
+		Iterator<Person> coachIter = allCurrentCoaches.iterator();
+		Person mergable = nextPersonFromNotHavingIdIn(coachIter, coachIdsWithCaseloads);
+		for ( CoachCaseloadRecordCountForProgramStatus countForStatus : daoResult ) {
+			if ( mergable == null ) {
+				merged.add(countForStatus);
+				continue;
+			}
+			while ( mergable != null &&
+					Person.PERSON_NAME_COMPARATOR.compare(mergable, countForStatus) < 0 ) {
+				merged.add(asPlaceholderCoachCaseloadRecordCountForProgramStatus(mergable));
+				mergable = nextPersonFromNotHavingIdIn(coachIter, coachIdsWithCaseloads);
+			}
+			merged.add(countForStatus);
+		}
+		while ( mergable != null ) {
+			merged.add(asPlaceholderCoachCaseloadRecordCountForProgramStatus(mergable));
+			mergable = nextPersonFromNotHavingIdIn(coachIter, coachIdsWithCaseloads);
+		}
+		return merged;
+	}
+
+	private Person nextPersonFromNotHavingIdIn(Iterator<Person> personIter,
+											   Set<UUID> coachIdsWithCaseloads) {
+		if ( !(personIter.hasNext() ) ) {
+			return null;
+		}
+		while ( personIter.hasNext() ) {
+			Person next = personIter.next();
+			if ( !(coachIdsWithCaseloads.contains(next.getId())) ) {
+				return next;
+			}
+		}
+		return null;
+	}
+
+	private CoachCaseloadRecordCountForProgramStatus
+	asPlaceholderCoachCaseloadRecordCountForProgramStatus(Person person) {
+		return new CoachCaseloadRecordCountForProgramStatus(
+				person.getId(),
+				ProgramStatus.ACTIVE_ID,
+				0,
+				person.getUsername(),
+				person.getSchoolId(),
+				person.getFirstName(),
+				person.getMiddleName(),
+				person.getLastName(),
+				departmentNameOrNull(person));
+	}
+
+	private String departmentNameOrNull(Person person) {
+		PersonStaffDetails staffDetails = person.getStaffDetails();
+		return staffDetails == null
+				? null
+				: StringUtils.trimToNull(staffDetails.getDepartmentName());
+	}
+
+	private SortedSet<Person> getAllCurrentCoachesSortedByName() {
+		return personService.getAllCurrentCoaches(Person.PERSON_NAME_COMPARATOR);
+	}
+
 }

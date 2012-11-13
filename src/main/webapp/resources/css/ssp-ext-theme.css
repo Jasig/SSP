@@ -127,3 +127,24 @@ background:#f6c8ba !important;
 background:#ffff00 !important; 
 }
 
+.ssp-form {
+    background-color:#dfe8f6;
+}
+
+.x-item-disabled .x-form-item-label,
+.x-item-disabled .x-form-cb-label {
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90);
+    opacity: .9;
+}
+
+.x-item-disabled .x-form-field{
+	opacity: 0.5;
+}
+
+.x-item-disabled .x-form-item-body {    
+    background-color:#dddddd;
+}
+
+.x-ie6 .x-item-disabled {
+    filter: none;
+}

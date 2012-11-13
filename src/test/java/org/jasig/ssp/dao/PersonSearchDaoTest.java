@@ -21,6 +21,7 @@ package org.jasig.ssp.dao;
 import static org.jasig.ssp.util.assertions.SspAssert.assertNotEmpty;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -43,6 +44,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
 @TransactionConfiguration(defaultRollback = false)
@@ -62,21 +65,20 @@ public class PersonSearchDaoTest {
 	private transient ProgramStatusService programStatusService;
 
 	private ProgramStatus activeProgramStatus;
+	private ProgramStatus inactiveProgramStatus;
 
 	@Before
-	public void setUp() {
-		try {
-			activeProgramStatus = programStatusService.get(UUID
+	public void setUp() throws ObjectNotFoundException {
+		activeProgramStatus = programStatusService.get(UUID
 					.fromString("b2d12527-5056-a51a-8054-113116baab88"));
-		} catch (ObjectNotFoundException e) {
-			LOGGER.error("Active Program Status not found in db");
-		}
+		inactiveProgramStatus = programStatusService.get(UUID
+				.fromString("b2d125a4-5056-a51a-8042-d50b8eff0df1"));
 	}
 
 	@Test
 	public void testNumberOfEntries() {
 		final Collection<Person> list = dao.searchBy(
-				null, true,
+				null, null, true,
 				"Gosling", null, new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
 		assertNotEmpty("List should not have been empty.", list);
@@ -86,7 +88,7 @@ public class PersonSearchDaoTest {
 	@Test
 	public void testGetAllTTfirstName() {
 		final Collection<Person> list = dao.searchBy(
-				activeProgramStatus, true,
+				activeProgramStatus, null, true,
 				"enneth", null, new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
 		assertNotEmpty("List should not have been empty.", list);
@@ -96,7 +98,7 @@ public class PersonSearchDaoTest {
 	@Test
 	public void testGetAlTTlastName() {
 		final Collection<Person> list = dao.searchBy(
-				activeProgramStatus, true,
+				activeProgramStatus, null, true,
 				"hompso", null, new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
 		assertNotEmpty("List should not have been empty.", list);
@@ -106,7 +108,7 @@ public class PersonSearchDaoTest {
 	@Test
 	public void testGetAllTTschoolId() {
 		final Collection<Person> list = dao.searchBy(
-				activeProgramStatus, true,
+				activeProgramStatus, null, true,
 				"ken.1", null, new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
 		assertNotEmpty("List should have had at least one entity.", list);
@@ -116,7 +118,7 @@ public class PersonSearchDaoTest {
 	@Test
 	public void testGetAllTTfullName() {
 		final Collection<Person> list = dao.searchBy(
-				activeProgramStatus, true,
+				activeProgramStatus, null, true,
 				"kenneth thompson", null,
 				new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
@@ -127,7 +129,7 @@ public class PersonSearchDaoTest {
 	@Test
 	public void testGetAllTTfullNameWithOutsideCaseLoad() {
 		final Collection<Person> list = dao.searchBy(
-				activeProgramStatus, false,
+				activeProgramStatus, null, false,
 				"kenneth thompson", null,
 				new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
@@ -142,9 +144,72 @@ public class PersonSearchDaoTest {
 				.fromString("252de4a0-7c06-4254-b7d8-4ffc02fe81ff"));
 
 		final Collection<Person> list = dao.searchBy(
-				null, true,
+				null, null, true,
 				"james", turing, new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows();
 		assertNotEmpty("List should have one entity.", list);
 	}
+
+	@Test
+	public void testGetAllTTschoolIdNotRequiringProgramStatus() throws ObjectNotFoundException {
+		// first a sanity check... should not be able to find this user with
+		// the default requireProgramStatus flag
+		final Collection<Person> bySchoolId = dao.searchBy(
+				null, null, true,
+				"turing.1", null, new SortingAndPaging(ObjectStatus.ACTIVE))
+				.getRows();
+		assertEquals("Default behavior should be to require a program status",
+				Lists.newArrayListWithExpectedSize(0), bySchoolId);
+
+		// now expectations for the real test
+		final Person turing = personService.get(UUID
+				.fromString("252de4a0-7c06-4254-b7d8-4ffc02fe81ff"));
+		Collection<Person> expectedList = Lists.newArrayList(turing);
+
+		// the real test
+		final Collection<Person> bySchoolIdAndOptionalProgramStatus = dao.searchBy(
+				null, false, true,
+				"turing.1", null, new SortingAndPaging(ObjectStatus.ACTIVE))
+				.getRows();
+		assertEquals(expectedList, bySchoolIdAndOptionalProgramStatus);
+	}
+
+	@Test
+	public void testGetAllTTschoolIdAndProgramStatus()
+			throws ObjectNotFoundException {
+
+		final Person ken1 = personService.get(UUID
+				.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea"));
+		Collection<Person> ken1List = Lists.newArrayList(ken1);
+
+		// first two sanity checks... verify that this user has a program status,
+		// then that filtering on program status works without specifying
+		// the 'programStatusRequired' flag. Then we can know for sure that
+		// the flag is genuinely ignored when set to false in combination with
+		// a program status.
+		final Collection<Person> bySchoolIdAndActiveProgramStaus= dao.searchBy(
+				activeProgramStatus, null, true,
+				"ken.1", null, new SortingAndPaging(ObjectStatus.ALL))
+				.getRows();
+		assertEquals(ken1List, bySchoolIdAndActiveProgramStaus);
+
+		final Collection<Person> bySchoolIdAndInactiveProgramStaus = dao.searchBy(
+				inactiveProgramStatus, null, true,
+				"ken.1", null, new SortingAndPaging(ObjectStatus.ALL))
+				.getRows();
+		assertEquals("Unexpected results when specifying a program status"
+				+ " but no program status required flag",
+				Lists.newArrayListWithExpectedSize(0),
+				bySchoolIdAndInactiveProgramStaus);
+
+		final Collection<Person> bySchoolIdAndInactiveProgramStatusAndOptionalProgramStatus =
+				dao.searchBy(inactiveProgramStatus, false, true,
+					"ken.1", null, new SortingAndPaging(ObjectStatus.ALL))
+					.getRows();
+		assertEquals("Program status flag should be ignored if a program"
+				+ " status is requested",
+				Lists.newArrayListWithExpectedSize(0),
+				bySchoolIdAndInactiveProgramStatusAndOptionalProgramStatus);
+	}
+
 }

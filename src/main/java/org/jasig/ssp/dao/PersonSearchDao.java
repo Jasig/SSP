@@ -29,6 +29,7 @@ import org.hibernate.FetchMode;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.hibernate.type.StringType;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ProgramStatus;
@@ -58,6 +59,10 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	 * 
 	 * @param programStatus
 	 *            program status filter
+	 * @param requireProgramStatus
+	 *            implicitly <code>true</code> if <code>programStatus</code> is
+	 *            non-null. Else <code>false</code> allows searching without
+	 *            requiring a program status; defaults to <code>true</code>
 	 * @param outsideCaseload
 	 *            false allows searches without checking the Coach (advisor)
 	 *            property; defaults to true
@@ -72,6 +77,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	 */
 	public PagingWrapper<Person> searchBy(
 			@NotNull final ProgramStatus programStatus,
+			final Boolean requireProgramStatus,
 			final Boolean outsideCaseload, @NotNull final String searchTerm,
 			final Person advisor, final SortingAndPaging sAndP) {
 
@@ -81,7 +87,13 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 		final Criteria query = createCriteria();
 
-		query.createAlias("programStatuses", "personProgramStatus");
+
+		boolean isRequiringProgramStatus = programStatus != null ||
+				requireProgramStatus == null ||
+				Boolean.TRUE.equals(requireProgramStatus);
+		JoinType programStatusJoinType =
+				isRequiringProgramStatus ? JoinType.INNER_JOIN : JoinType.LEFT_OUTER_JOIN;
+		query.createAlias("programStatuses", "personProgramStatus", programStatusJoinType);
 
 		if (programStatus != null) {
 			query.add(Restrictions.eq("personProgramStatus.programStatus",

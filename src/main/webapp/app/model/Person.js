@@ -26,11 +26,19 @@ Ext.define('Ssp.model.Person', {
              {name: 'homePhone', type: 'string'},
     		 {name: 'cellPhone', type: 'string'},
              {name: 'workPhone', type: 'string'},
+             {name: 'nonLocalAddress', type:'boolean', useNull: true},
     		 {name: 'addressLine1', type: 'string'},
              {name: 'addressLine2', type: 'string'},
     		 {name: 'city', type: 'string'},
              {name: 'state', type: 'string'},
     		 {name: 'zipCode', type: 'string'},
+    		 {name: 'alternateAddressInUse', type:'boolean', useNull: true},
+    		 {name: 'alternateAddressLine1', type: 'string'},
+             {name: 'alternateAddressLine2', type: 'string'},
+    		 {name: 'alternateAddressCity', type: 'string'},
+             {name: 'alternateAddressState', type: 'string'},
+    		 {name: 'alternateAddressZipCode', type: 'string'},
+    		 {name: 'alternateAddressCountry', type: 'string'},
              {name: 'primaryEmailAddress', type: 'string'},
     		 {name: 'secondaryEmailAddress', type: 'string'},
              {name: 'birthDate', type: 'date', dateFormat: 'time'},
@@ -130,6 +138,37 @@ Ext.define('Ssp.model.Person', {
     
     getProgramStatusName: function(){
     	return this.get('currentProgramStatusName')? this.get('currentProgramStatusName') : "";   	
+    },
+ 
+    buildAddress: function(){
+    	var me=this;
+    	var address = "";
+    	address += ((me.get('addressLine1') != null)? me.get('addressLine1') + '<br/>' : "");
+    	address += ((me.get('city') != null)? me.get('city') + ', ': "");
+    	address += ((me.get('state') != null)? me.get('state') + '<br/>': "");
+    	address += ((me.get('zipCode') != null)? me.get('zipCode') : "");	
+    	// ensure a full address was defined 
+    	if (address.length < 30)
+    	{
+    		address = "";
+    	}    	
+    	return address;   	
+    },
+    
+    buildAlternateAddress: function(){
+    	var me=this;
+    	var alternateAddress = "";
+    	alternateAddress += ((me.get('alternateAddressLine1') != null)? me.get('alternateAddressLine1') + '<br/>' : "");
+    	alternateAddress += ((me.get('alternateAddressCity') != null)? me.get('alternateAddressCity') : "");
+    	alternateAddress += ((me.get('alternateAddressState') != null)? ', ' + me.get('alternateAddressState') + '<br/>': "");
+    	alternateAddress += ((me.get('alternateAddressZipCode') != null)? me.get('alternateAddressZipCode') : "<br />");	
+    	alternateAddress += ((me.get('alternateAddressCountry') != null)? ', ' + me.get('alternateAddressCountry') : "");	
+    	// ensure a full address was defined
+    	if (alternateAddress.length < 30)
+    	{
+    		alternateAddress = "";
+    	}
+    	return alternateAddress;   	
     },
     
     /*

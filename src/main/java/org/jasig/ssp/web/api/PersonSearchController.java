@@ -73,6 +73,8 @@ public class PersonSearchController extends AbstractBaseController {
 	PagedResponse<PersonSearchResultTO> search(
 			final @RequestParam String searchTerm,
 			final @RequestParam(required = false) UUID programStatusId,
+			// ignored if programStatusId is non-null
+			final @RequestParam(required = false) Boolean requireProgramStatus,
 			final @RequestParam(required = false) Boolean outsideCaseload,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
@@ -87,7 +89,7 @@ public class PersonSearchController extends AbstractBaseController {
 		}
 
 		final PagingWrapper<PersonSearchResult> results = service.searchBy(
-				programStatus, outsideCaseload, searchTerm,
+				programStatus, requireProgramStatus, outsideCaseload, searchTerm,
 				securityService.currentUser().getPerson(),
 				SortingAndPaging.createForSingleSort(status, start, limit,
 						sort, sortDirection, null));

@@ -19,7 +19,9 @@
 package org.jasig.ssp.service;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.SortedSet;
 import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
@@ -174,6 +176,37 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @return List of all coaches
 	 */
 	PagingWrapper<CoachPersonLiteTO> getAllCoachesLite(SortingAndPaging sAndP);
+
+	/**
+	 * Gets all coaches assigned to local Person records regardless of current
+	 * permissions. This is as opposed to
+	 * {@link #getAllCoaches(org.jasig.ssp.util.sort.SortingAndPaging)} which
+	 * is intended to just return "official" coaches, i.e. users known to
+	 * act as coaches, regardless of whether they have any assignments at all.
+	 *
+	 * @param sAndP
+	 *            Sorting and paging parameters
+	 * @return List of all <em>assigned</em> coaches
+	 */
+	PagingWrapper<Person> getAllAssignedCoaches(SortingAndPaging sAndP);
+
+
+	/**
+	 * Gets a collection of <em>all</em> coaches, i.e. the union of
+	 * {@link #getAllCoaches(org.jasig.ssp.util.sort.SortingAndPaging)} and
+	 * {@link #getAllAssignedCoaches(org.jasig.ssp.util.sort.SortingAndPaging)},
+	 * without duplicates.
+	 *
+	 * <p>Since we know the implementation would face difficulties implementing
+	 * a paged version of this method and we know that all current clients
+	 * of this method aren't actually interested in a paged view, we choose to
+	 * return a vanilla <code>SortedSet</code> rather than a
+	 * <code>PagingWrapper</code></p>
+	 *
+	 * @param personNameComparator null OK
+	 * @return
+	 */
+	SortedSet<Person> getAllCurrentCoaches(Comparator<Person> personNameComparator);
 
 	Person load(UUID id);
 

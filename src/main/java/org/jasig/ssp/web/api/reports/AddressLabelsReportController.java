@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -139,13 +140,17 @@ public class AddressLabelsReportController extends AbstractBaseController { // N
 		final AddressLabelSearchTO searchForm = new AddressLabelSearchTO(
 				coachTO,
 				programStatus, specialServiceGroupIds, referralSourcesIds,
-				anticipatedStartTerm.length() == 0 ? null
-						: anticipatedStartTerm, anticipatedStartYear,
-				studentTypeIds, createDateFrom, createDateTo);
+				StringUtils.trimToNull(anticipatedStartTerm),
+				anticipatedStartYear, studentTypeIds, createDateFrom,
+				createDateTo);
 
+		// TODO Specifying person name sort fields in the SaP doesn't seem to
+		// work... end up with empty results need to dig into actual query
+		// building
 		final List<Person> people = personService.peopleFromCriteria(
 				searchForm, SortingAndPaging.createForSingleSort(status, null,
 						null, null, null, null));
+		Collections.sort(people, Person.PERSON_NAME_COMPARATOR);
 		final List<PersonTO> peopleTO = personTOFactory.asTOList(people);
 
 		// Get the actual names of the UUIDs for the special groups

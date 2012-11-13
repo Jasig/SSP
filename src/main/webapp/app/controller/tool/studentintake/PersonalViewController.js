@@ -22,33 +22,50 @@ Ext.define('Ssp.controller.tool.studentintake.PersonalViewController', {
     inject: {
     	citizenshipsStore: 'citizenshipsStore',
     	sspConfig: 'sspConfig'
-    },  
+    }, 
+    control: {
+    	firstNameField: '#firstName',
+    	middleNameField: '#middleName',
+    	lastNameField: '#lastName',
+    	studentIdField: '#studentId',
+    	birthDateField: '#birthDate',
+    	homePhoneField: '#homePhone',
+    	workPhoneField: '#workPhone',
+    	addressLine1Field: '#addressLine1',
+    	addressLine2Field: '#addressLine2',
+    	cityField: '#city',
+    	stateField: '#state',
+    	zipCodeField: '#zipCode',
+    	primaryEmailAddressField: '#primaryEmailAddress'
+    },
 	init: function() {
 		var me=this;
     	var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalData');
-    	firstName = Ext.ComponentQuery.query('#firstName')[0].setDisabled(disabled);
-		middleName = Ext.ComponentQuery.query('#middleName')[0].setDisabled(disabled);
-		lastName = Ext.ComponentQuery.query('#lastName')[0].setDisabled(disabled);
-		studentId = Ext.ComponentQuery.query('#studentId')[0];
-		studentId.setDisabled(disabled);
+		// disable externally loaded fields
+    	me.getFirstNameField().setDisabled(disabled);
+		me.getMiddleNameField().setDisabled(disabled);
+		me.getLastNameField().setDisabled(disabled);
+		me.getBirthDateField().setDisabled(disabled);
+		me.getHomePhoneField().setDisabled(disabled);
+		me.getWorkPhoneField().setDisabled(disabled);
+		me.getAddressLine1Field().setDisabled(disabled);
+		me.getAddressLine2Field().setDisabled(disabled);
+		me.getCityField().setDisabled(disabled);
+		me.getStateField().setDisabled(disabled);
+		me.getZipCodeField().setDisabled(disabled);
+		me.getPrimaryEmailAddressField().setDisabled(disabled);		
+		studentIdField = me.getStudentIdField();
+		studentIdField.setDisabled(disabled);
 		// set the field label and supply an asterisk for required
-		studentId.setFieldLabel(me.sspConfig.get('studentIdAlias') + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
-		Ext.apply(studentId, {
-	                  minLength: me.sspConfig.get('studentIdMinValidationLength'),
-	                  minLengthText: '',
-	                  maxLength: me.sspConfig.get('studentIdMaxValidationLength'),
-	                  maxLengthText: '',
-	                  vtype: 'studentIdValidator',
-	                  vtypeText: me.sspConfig.get('studentIdValidationErrorText')
-                     });
-		birthDate = Ext.ComponentQuery.query('#birthDate')[0].setDisabled(disabled);
-		homePhone = Ext.ComponentQuery.query('#homePhone')[0].setDisabled(disabled);
-		workPhone = Ext.ComponentQuery.query('#workPhone')[0].setDisabled(disabled);
-		address = Ext.ComponentQuery.query('#address')[0].setDisabled(disabled);
-		city = Ext.ComponentQuery.query('#city')[0].setDisabled(disabled);
-		state = Ext.ComponentQuery.query('#state')[0].setDisabled(disabled);
-		zipCode = Ext.ComponentQuery.query('#zipCode')[0].setDisabled(disabled);
-		primaryEmailAddress = Ext.ComponentQuery.query('#primaryEmailAddress')[0].setDisabled(disabled);
+		studentIdField.setFieldLabel(me.sspConfig.get('studentIdAlias') + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
+		Ext.apply(studentIdField, {
+            minLength: me.sspConfig.get('studentIdMinValidationLength'),
+            minLengthText: '',
+            maxLength: me.sspConfig.get('studentIdMaxValidationLength'),
+        	maxLengthText: '',
+        	vtype: 'studentIdValidator',
+        	vtypeText: me.sspConfig.get('studentIdValidationErrorText')
+         });
 
 		return me.callParent(arguments);
     }

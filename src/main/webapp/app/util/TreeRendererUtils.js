@@ -109,17 +109,20 @@ Ext.define('Ssp.util.TreeRendererUtils',{
      *             be created with an id such as 12345_challenge.
      * @expanded - whether or not a branch should load expanded   
      */
-    createNodesFromJson: function(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable){
+    createNodesFromJson: function(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable, includeToolTip, toolTipFieldName){
     	var nodeIdentifier = "";
     	var enableCheckSelection = enableCheckSelection;
     	var nodes = [];
     	var nodeName = nodeType || "";
     	if (nodeName != "")
+    	{
     		nodeIdentifier = '_' + nodeName;
+    	}
     	Ext.each(records, function(name, index) {
     		var nodeData = {
         	        text: records[index].name,
         	        id: records[index].id + nodeIdentifier,
+        	        qtip: ((includeToolTip === true)? records[index][toolTipFieldName] : ""),
         	        leaf: isLeaf || false,
         	        expanded: expanded,
         	        expandable: expandable
@@ -158,6 +161,8 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     	var callbackFunc = treeRequest.get('callbackFunc');
     	var callbackScope = treeRequest.get('callbackScope');
     	var removeParentWhenNoChildrenExist = treeRequest.get('removeParentWhenNoChildrenExist');
+    	var includeToolTip = treeRequest.get('includeToolTip');
+    	var toolTipFieldName = treeRequest.get('toolTipFieldName');
     	// retrieve items
 		me.apiProperties.makeRequest({
 			url: me.apiProperties.createUrl( url ),
@@ -169,7 +174,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 		    	var nodes = [];
 		    	if (records.length > 0)
 		    	{
-		    		nodes = me.createNodesFromJson(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable);
+		    		nodes = me.createNodesFromJson(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable, includeToolTip, toolTipFieldName);
 		    		me.appendChildren( nodeToAppendTo, nodes);
 		    	}else{
 		    		me.appendChildren( nodeToAppendTo, []);

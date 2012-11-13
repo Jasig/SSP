@@ -53,11 +53,16 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 		{
 			person = me.model.get('person');
 			me.getView().setLoading(true);
-			me.searchService.search(person.firstName+' '+person.lastName, true, {
-				success: me.searchSuccess,
-				failure: me.searchFailure,
-				scope: me
-			});	
+			me.searchService.searchWithParams({
+					searchTerm: person.firstName+' '+person.lastName,
+					outsideCaseload: true,
+					requireProgramStatus: false
+				},
+				{
+					success: me.searchSuccess,
+					failure: me.searchFailure,
+					scope: me
+				});
 		}
 		return me.callParent(arguments);
     },

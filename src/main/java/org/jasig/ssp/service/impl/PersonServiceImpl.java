@@ -18,12 +18,18 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+import javax.portlet.PortletRequest;
 
-import com.google.common.collect.Sets;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonDao;
@@ -54,11 +60,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Lists;
 import org.springframework.util.StringUtils;
 
-import javax.portlet.PortletRequest;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Person service implementation
@@ -604,6 +609,23 @@ public class PersonServiceImpl implements PersonService {
 		TIMING_LOGGER.info("Read and merged PersonAttributesService {} coaches in {} ms",
 				coaches.size(), methodEnd - methodStart);
 		return pw;
+	}
+
+	@Override
+	public PagingWrapper<Person> getAllAssignedCoaches(SortingAndPaging sAndP) {
+		return dao.getAllAssignedCoaches(sAndP);
+	}
+
+	@Override
+	public SortedSet<Person> getAllCurrentCoaches(Comparator<Person> sortBy) {
+		final Collection<Person> officialCoaches = getAllCoaches(null).getRows();
+		SortedSet<Person> currentCoachesSet =
+				Sets.newTreeSet(sortBy == null ? Person.PERSON_NAME_COMPARATOR : sortBy);
+		currentCoachesSet.addAll(officialCoaches);
+		final Collection<Person> assignedCoaches =
+				getAllAssignedCoaches(null).getRows();
+		currentCoachesSet.addAll(assignedCoaches);
+		return currentCoachesSet;
 	}
 
 	private Iterable<Person> additionalAttribsForStudents(

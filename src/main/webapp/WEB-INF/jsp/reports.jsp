@@ -488,7 +488,7 @@
 
 
 <div class="hideable-form caseLoad-form" style="display:none">
-	<h1>Caseload Report</h1>
+	<h1>Current Caseload Statuses Report</h1>
 	<form action="/ssp/api/1/report/Caseload/" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">
 		
@@ -502,33 +502,12 @@
 		</div>
 		<div class="ea-clear"></div>
 
-		<!-- Student Type -->
+		<!-- Home Department -->
 		<div class="ea-input">
 			Not Available Yet
-			<!-- select class="input-student-type-group" id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select-->
 		</div>
 		<div class="ea-label">
 			<span>Home Department:</span>
-		</div>
-		<div class="ea-clear"></div>
-
-
-				
-		<!-- Date From -->
-		<div class="ea-input">
-			<input class="input-calendar-type" type="textbox" name="programStatusDateFrom" id="programStatusDateFrom" />
-		</div>
-		<div class="ea-label">
-			<span>Program Status Date From (inclusive):</span>
-		</div>
-		<div class="ea-clear"></div>
-
-		<!-- Date To -->
-		<div class="ea-input">
-			<input class="input-calendar-type" type="textbox" name="programStatusDateTo" id="programStatusDateTo" />
-		</div>
-		<div class="ea-label">
-			<span>Program Status Date To (exclusive):</span>
 		</div>
 		<div class="ea-clear"></div>
 
