@@ -60,7 +60,7 @@ public class ExternalPersonServiceImpl
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ExternalPersonServiceImpl.class);
 
-	private static final int BATCH_SIZE_FOR_PERSON_ = 1000;
+	private static final int BATCH_SIZE_FOR_PERSON_ = 50;
 
 	@Autowired
 	private transient ExternalPersonDao dao;
