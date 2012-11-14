@@ -190,12 +190,24 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 */
 	PagingWrapper<Person> getAllAssignedCoaches(SortingAndPaging sAndP);
 
+	/**
+	 * Lighter-weight version of
+	 * {@link #getAllAssignedCoaches(org.jasig.ssp.util.sort.SortingAndPaging)}.
+	 *
+	 * @param sAndP
+	 * @return
+	 */
+	PagingWrapper<CoachPersonLiteTO> getAllAssignedCoachesLite(SortingAndPaging sAndP);
 
 	/**
 	 * Gets a collection of <em>all</em> coaches, i.e. the union of
 	 * {@link #getAllCoaches(org.jasig.ssp.util.sort.SortingAndPaging)} and
 	 * {@link #getAllAssignedCoaches(org.jasig.ssp.util.sort.SortingAndPaging)},
 	 * without duplicates.
+	 *
+	 * <p><em>Be very careful when using this method. Implementation is
+	 * likely to use {@link #getAllCoaches(org.jasig.ssp.util.sort.SortingAndPaging)}
+	 * under the covers, which is deprecated for performance reasons.</em></p>
 	 *
 	 * <p>Since we know the implementation would face difficulties implementing
 	 * a paged version of this method and we know that all current clients
@@ -207,6 +219,16 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @return
 	 */
 	SortedSet<Person> getAllCurrentCoaches(Comparator<Person> personNameComparator);
+
+	/**
+	 * (Much) lighter-weight version of
+	 * {@link #getAllCurrentCoaches(java.util.Comparator)}.
+	 *
+	 * @param sortBy
+	 * @return
+	 */
+	SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(
+			Comparator<CoachPersonLiteTO> sortBy);
 
 	Person load(UUID id);
 
@@ -238,5 +260,6 @@ public interface PersonService extends AuditableCrudService<Person> {
 	Person createUserAccountForCurrentPortletUser(String username,
 			PortletRequest portletRequest)
 			throws UnableToCreateAccountException;
+
 
 }

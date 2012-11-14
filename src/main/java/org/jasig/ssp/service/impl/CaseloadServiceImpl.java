@@ -46,6 +46,7 @@ import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
+import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,7 +159,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 		// handed to Jasper Reports. Could just sort again here, but we're
 		// already putting the GC to the test with all these intermediate and
 		// potentially quite large data structures.
-		SortedSet<Person> allCurrentCoaches = getAllCurrentCoachesSortedByName();
+		SortedSet<CoachPersonLiteTO> allCurrentCoaches = getAllCurrentCoachesSortedByName();
 		Set<UUID> coachIdsWithCaseloads = Sets.newHashSet();
 		for ( CoachCaseloadRecordCountForProgramStatus countForStatus : daoResult ) {
 			coachIdsWithCaseloads.add(countForStatus.getCoachId());
@@ -166,15 +167,15 @@ public class CaseloadServiceImpl implements CaseloadService {
 		List<CoachCaseloadRecordCountForProgramStatus> merged =
 				Lists.newArrayListWithCapacity(daoResult.size() + allCurrentCoaches.size());
 
-		Iterator<Person> coachIter = allCurrentCoaches.iterator();
-		Person mergable = nextPersonFromNotHavingIdIn(coachIter, coachIdsWithCaseloads);
+		Iterator<CoachPersonLiteTO> coachIter = allCurrentCoaches.iterator();
+		CoachPersonLiteTO mergable = nextPersonFromNotHavingIdIn(coachIter, coachIdsWithCaseloads);
 		for ( CoachCaseloadRecordCountForProgramStatus countForStatus : daoResult ) {
 			if ( mergable == null ) {
 				merged.add(countForStatus);
 				continue;
 			}
 			while ( mergable != null &&
-					Person.PERSON_NAME_COMPARATOR.compare(mergable, countForStatus) < 0 ) {
+					CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_COMPARATOR.compare(mergable, countForStatus) < 0 ) {
 				merged.add(asPlaceholderCoachCaseloadRecordCountForProgramStatus(mergable));
 				mergable = nextPersonFromNotHavingIdIn(coachIter, coachIdsWithCaseloads);
 			}
@@ -187,13 +188,13 @@ public class CaseloadServiceImpl implements CaseloadService {
 		return merged;
 	}
 
-	private Person nextPersonFromNotHavingIdIn(Iterator<Person> personIter,
+	private CoachPersonLiteTO nextPersonFromNotHavingIdIn(Iterator<CoachPersonLiteTO> personIter,
 											   Set<UUID> coachIdsWithCaseloads) {
 		if ( !(personIter.hasNext() ) ) {
 			return null;
 		}
 		while ( personIter.hasNext() ) {
-			Person next = personIter.next();
+			CoachPersonLiteTO next = personIter.next();
 			if ( !(coachIdsWithCaseloads.contains(next.getId())) ) {
 				return next;
 			}
@@ -202,17 +203,17 @@ public class CaseloadServiceImpl implements CaseloadService {
 	}
 
 	private CoachCaseloadRecordCountForProgramStatus
-	asPlaceholderCoachCaseloadRecordCountForProgramStatus(Person person) {
+	asPlaceholderCoachCaseloadRecordCountForProgramStatus(CoachPersonLiteTO person) {
 		return new CoachCaseloadRecordCountForProgramStatus(
 				person.getId(),
 				ProgramStatus.ACTIVE_ID,
 				0,
-				person.getUsername(),
-				person.getSchoolId(),
+				null,
+				null,
 				person.getFirstName(),
-				person.getMiddleName(),
+				null,
 				person.getLastName(),
-				departmentNameOrNull(person));
+				null);
 	}
 
 	private String departmentNameOrNull(Person person) {
@@ -222,8 +223,8 @@ public class CaseloadServiceImpl implements CaseloadService {
 				: StringUtils.trimToNull(staffDetails.getDepartmentName());
 	}
 
-	private SortedSet<Person> getAllCurrentCoachesSortedByName() {
-		return personService.getAllCurrentCoaches(Person.PERSON_NAME_COMPARATOR);
+	private SortedSet<CoachPersonLiteTO> getAllCurrentCoachesSortedByName() {
+		return personService.getAllCurrentCoachesLite(CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_COMPARATOR);
 	}
 
 }

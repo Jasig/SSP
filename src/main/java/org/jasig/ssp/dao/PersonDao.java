@@ -337,4 +337,42 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		return new PagingWrapper<Person>(totalRows, criteria.list());
 
 	}
+
+	public PagingWrapper<CoachPersonLiteTO> getAllAssignedCoachesLite(SortingAndPaging sAndP) {
+
+		DetachedCriteria coach_ids =
+				DetachedCriteria.forClass(Person.class, "coach_ids");
+		final ProjectionList projections = Projections.projectionList();
+		projections.add(Projections.distinct(Projections.property("coach.id")));
+		coach_ids.setProjection(projections);
+		coach_ids.add(Restrictions.isNotNull("coach"));
+
+		Criteria criteria = createCriteria()
+				.add(Subqueries.propertiesIn(new String[]{"id"}, coach_ids));
+
+		if ( sAndP != null && sAndP.isFilteredByStatus() ) {
+			sAndP.addStatusFilterToCriteria(criteria);
+		}
+
+		// item count
+		Long totalRows = 0L;
+		if ((sAndP != null) && sAndP.isPaged()) {
+			totalRows = (Long) criteria.setProjection(Projections.rowCount())
+					.uniqueResult();
+		}
+
+		criteria.setProjection(null);
+		criteria.setProjection(Projections.projectionList()
+					.add(Projections.property("id").as("person_id"))
+					.add(Projections.property("firstName").as("person_firstName"))
+					.add(Projections.property("lastName").as("person_lastName"))
+					.add(Projections.property("primaryEmailAddress").as("person_primaryEmailAddress"))
+					.add(Projections.property("workPhone").as("person_workPhone")))
+				.setResultTransformer(
+						new NamespacedAliasToBeanResultTransformer(
+								CoachPersonLiteTO.class, "person_"));
+
+		return new PagingWrapper<CoachPersonLiteTO>(totalRows, criteria.list());
+
+	}
 }

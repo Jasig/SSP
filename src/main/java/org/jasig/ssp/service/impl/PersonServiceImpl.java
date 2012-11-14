@@ -617,6 +617,11 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
+	public PagingWrapper<CoachPersonLiteTO> getAllAssignedCoachesLite(SortingAndPaging sAndP) {
+		return dao.getAllAssignedCoachesLite(sAndP);
+	}
+
+	@Override
 	public SortedSet<Person> getAllCurrentCoaches(Comparator<Person> sortBy) {
 		final Collection<Person> officialCoaches = getAllCoaches(null).getRows();
 		SortedSet<Person> currentCoachesSet =
@@ -624,6 +629,18 @@ public class PersonServiceImpl implements PersonService {
 		currentCoachesSet.addAll(officialCoaches);
 		final Collection<Person> assignedCoaches =
 				getAllAssignedCoaches(null).getRows();
+		currentCoachesSet.addAll(assignedCoaches);
+		return currentCoachesSet;
+	}
+
+	@Override
+	public SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(Comparator<CoachPersonLiteTO> sortBy) {
+		final Collection<CoachPersonLiteTO> officialCoaches = getAllCoachesLite(null).getRows();
+		SortedSet<CoachPersonLiteTO> currentCoachesSet =
+				Sets.newTreeSet(sortBy == null ? CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_COMPARATOR : sortBy);
+		currentCoachesSet.addAll(officialCoaches);
+		final Collection<CoachPersonLiteTO> assignedCoaches =
+				getAllAssignedCoachesLite(null).getRows();
 		currentCoachesSet.addAll(assignedCoaches);
 		return currentCoachesSet;
 	}

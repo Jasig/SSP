@@ -20,11 +20,14 @@ package org.jasig.ssp.transferobject;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.Person;
 
 import com.google.common.collect.Lists;
@@ -37,6 +40,35 @@ import com.google.common.collect.Lists;
 public class CoachPersonLiteTO implements Serializable {
 
 	private static final long serialVersionUID = 2921442272658399L;
+
+	public static class CoachPersonLiteTONameComparator implements Comparator<CoachPersonLiteTO> {
+		@Override
+		public int compare(CoachPersonLiteTO o1, CoachPersonLiteTO o2) {
+			return nameOf(o1).compareTo(nameOf(o2));
+		}
+
+		public int compare(CoachPersonLiteTO p, CoachCaseloadRecordCountForProgramStatus c) {
+			return nameOf(p).compareTo(nameOf(c));
+		}
+
+		String nameOf(CoachPersonLiteTO p) {
+			return new StringBuilder()
+					.append(StringUtils.trimToEmpty(p.getLastName()))
+					.append(StringUtils.trimToEmpty(p.getFirstName()))
+					.toString();
+		}
+
+		String nameOf(CoachCaseloadRecordCountForProgramStatus coachStatusCount) {
+			return new StringBuilder()
+					.append(StringUtils.trimToEmpty(coachStatusCount.getCoachLastName()))
+					.append(StringUtils.trimToEmpty(coachStatusCount.getCoachFirstName()))
+					.toString();
+		}
+
+	}
+
+	public static final CoachPersonLiteTONameComparator COACH_PERSON_LITE_TO_NAME_COMPARATOR =
+			new CoachPersonLiteTONameComparator();
 
 	private UUID id;
 
