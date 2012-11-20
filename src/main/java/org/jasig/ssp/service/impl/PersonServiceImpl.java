@@ -20,6 +20,7 @@ package org.jasig.ssp.service.impl;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
@@ -40,6 +41,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.tool.IntakeService;
+import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -73,6 +75,9 @@ public class PersonServiceImpl implements PersonService {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PersonServiceImpl.class);
+
+	private static final Logger TIMING_LOGGER = LoggerFactory
+			.getLogger("timing." + PersonServiceImpl.class.getName());
 
 	@Autowired
 	private transient PersonDao dao;
@@ -445,6 +450,25 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
+	public PagingWrapper<CoachPersonLiteTO> getAllCoachesLite(final SortingAndPaging sAndP) {
+		long methodStart = new Date().getTime();
+		final Collection<String> coachUsernames =
+				getAllCoachUsernamesFromDirectory();
+		long localPersonsLookupStart = new Date().getTime();
+		PagingWrapper<CoachPersonLiteTO> coaches =
+				dao.getCoachPersonsLiteByUsernames(coachUsernames, sAndP);
+		long localPersonsLookupEnd = new Date().getTime();
+		TIMING_LOGGER.info("Read {} local coaches in {} ms",
+				coaches.getResults(),
+				localPersonsLookupEnd - localPersonsLookupStart);
+		TIMING_LOGGER.info("Read {} PersonAttributesService coaches and"
+				+ " correlated them with {} local coaches in {} ms",
+				new Object[] { coachUsernames.size(), coaches.getResults(),
+						localPersonsLookupEnd - methodStart } );
+		return coaches;
+	}
+
+	@Override
 	public PagingWrapper<Person> getAllCoaches(final SortingAndPaging sAndP) {
 		final Collection<Person> coaches = Lists.newArrayList();
 
@@ -486,19 +510,46 @@ public class PersonServiceImpl implements PersonService {
 		return new PagingWrapper<Person>(coaches);
 	}
 
+	private Collection<String> getAllCoachUsernamesFromDirectory() {
+		long pasLookupStart = new Date().getTime();
+		final Collection<String> coachUsernames = personAttributesService
+				.getCoaches();
+		long pasLookupEnd = new Date().getTime();
+		TIMING_LOGGER.info("Read {} coaches from PersonAttributesService in {} ms",
+				coachUsernames.size(), pasLookupEnd - pasLookupStart);
+		return coachUsernames;
+	}
+
 	@Override
 	public PagingWrapper<Person> getAllAssignedCoaches(SortingAndPaging sAndP) {
 		return dao.getAllAssignedCoaches(sAndP);
 	}
 
 	@Override
+	public PagingWrapper<CoachPersonLiteTO> getAllAssignedCoachesLite(SortingAndPaging sAndP) {
+		return dao.getAllAssignedCoachesLite(sAndP);
+	}
+
+	@Override
 	public SortedSet<Person> getAllCurrentCoaches(Comparator<Person> sortBy) {
 		final Collection<Person> officialCoaches = getAllCoaches(null).getRows();
 		SortedSet<Person> currentCoachesSet =
-				Sets.newTreeSet(sortBy == null ? Person.PERSON_NAME_COMPARATOR : sortBy);
+				Sets.newTreeSet(sortBy == null ? Person.PERSON_NAME_AND_ID_COMPARATOR : sortBy);
 		currentCoachesSet.addAll(officialCoaches);
 		final Collection<Person> assignedCoaches =
 				getAllAssignedCoaches(null).getRows();
+		currentCoachesSet.addAll(assignedCoaches);
+		return currentCoachesSet;
+	}
+
+	@Override
+	public SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(Comparator<CoachPersonLiteTO> sortBy) {
+		final Collection<CoachPersonLiteTO> officialCoaches = getAllCoachesLite(null).getRows();
+		SortedSet<CoachPersonLiteTO> currentCoachesSet =
+				Sets.newTreeSet(sortBy == null ? CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_AND_ID_COMPARATOR : sortBy);
+		currentCoachesSet.addAll(officialCoaches);
+		final Collection<CoachPersonLiteTO> assignedCoaches =
+				getAllAssignedCoachesLite(null).getRows();
 		currentCoachesSet.addAll(assignedCoaches);
 		return currentCoachesSet;
 	}
