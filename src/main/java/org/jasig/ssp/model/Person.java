@@ -66,6 +66,15 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 
 	private static final String DATABASE_TABLE_NAME = "person";
 
+	/**
+	 * Compares names only. I.e. two {@link Person}s with the same first, last,
+	 * and middle names are considered equivalent, even if they represent
+	 * different people. This is often problematic when using this
+	 * as the comparator in a {@link java.util.SortedSet} or
+	 * {@link java.util.SortedMap}. Consider {@link PersonNameAndIdComparator}
+	 * for cases when you really want to sort a list of {@link Person}s and
+	 * not inadvertently drop entries with duplicate names.
+	 */
 	public static class PersonNameComparator implements Comparator<Person> {
 		@Override
 		public int compare(Person o1, Person o2) {
@@ -95,6 +104,42 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 
 	public static final PersonNameComparator PERSON_NAME_COMPARATOR =
 			new PersonNameComparator();
+
+	public static class PersonNameAndIdComparator implements Comparator<Person> {
+
+		@Override
+		public int compare(Person o1, Person o2) {
+			int nameCompare = PERSON_NAME_COMPARATOR.compare(o1, o2);
+			if ( nameCompare != 0 ) {
+				return nameCompare;
+			}
+			return compareUUIDs(o1.getId(), o2.getId());
+		}
+
+		public int compare(Person p, CoachCaseloadRecordCountForProgramStatus c) {
+			int nameCompare = PERSON_NAME_COMPARATOR.compare(p, c);
+			if ( nameCompare != 0 ) {
+				return nameCompare;
+			}
+			return compareUUIDs(p.getId(), c.getCoachId());
+		}
+
+		private int compareUUIDs(UUID uuid1, UUID uuid2) {
+			if ( uuid1 == uuid2 ) {
+				return 0;
+			}
+			if ( uuid1 == null ) {
+				return -1;
+			}
+			if ( uuid2 == null ) {
+				return 1;
+			}
+			return uuid1.compareTo(uuid2);
+		}
+	}
+
+	public static final PersonNameAndIdComparator PERSON_NAME_AND_ID_COMPARATOR =
+			new PersonNameAndIdComparator();
 
 	/**
 	 * Static, super administrator account identifier. Only used by IT and

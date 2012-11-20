@@ -61,17 +61,17 @@ public class Stubs {
 	 * should be made to keep it up to date.
 	 */
 	public static enum PersonFixture {
-		STUDENT_0 ( "1010e4a0-1001-0110-1011-4ffc02fe81ff", "student0", "student0", "James", "A", "Gosling", null ),
-		JAMES_DOE ( "d2320b58-4d54-4532-a0cd-1f4409c9fc38", "james.doe", "uu351764", "James", null, "Doe", null ),
-		SYSTEM ( "58ba5ee3-734e-4ae9-b9c5-943774b4de41", "system", "userid_4", "System", null, "Administrator", null ),
-		DMR ( "7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194", "dmr", "dmr.1", "Dennis", "M", "Ritchie", null ),
-		KEN ( "f549ecab-5110-4cc1-b2bb-369cac854dea", "ken", "ken.1", "Kenneth", "L", "Thompson", null ),
-		KEVIN_SMITH ( "f26d8f23-df20-40f1-bc98-83111be4a52a", "kevin.smith", "uu112233", "Kevin", null, "Smith", null ),
-		ADVISOR_0 ( "252de4a0-7c06-4254-b7d8-4ffc02fe81ff", "advisor0", "turing.1", "Alan", "M", "Turing", null ),
-		MARK_GALAFRION ( "8005ad07-9111-457d-9896-f15a0dc8bbfb", "mark.galafrion", "uu358123", "Mark", null, "Galafrion", null),
-		BOB_REYNOLDS ( "a5a23d8a-f0d3-4ef6-9a75-21f3775bac0f", "bob.reynolds", "uu462875", "Bob", null, "Reynolds", null),
-		FACULTY_0 ( "5eceefd1-257c-421f-99bf-a3622815bfee", "faculty0", "uf928711", "Douglas", null, "Toya", null),
-		FACULTY_1 ( "0d6163de-90fd-46d1-a9ca-7dbaa850924b", "faculty1", "uf123456", "Mary", null, "Webber", null);
+		STUDENT_0 ( "1010e4a0-1001-0110-1011-4ffc02fe81ff", "student0", "student0", "James", "A", "Gosling", null, "test@sinclair.edu", "123-456-7654" ),
+		JAMES_DOE ( "d2320b58-4d54-4532-a0cd-1f4409c9fc38", "james.doe", "uu351764", "James", null, "Doe", null, "james.ryan80@university.edu", null ),
+		SYSTEM ( "58ba5ee3-734e-4ae9-b9c5-943774b4de41", "system", "userid_4", "System", null, "Administrator", null, "test@sinclair.edu", "000-000-0000" ),
+		DMR ( "7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194", "dmr", "dmr.1", "Dennis", "M", "Ritchie", null, "test@sinclair.edu", "123-456-7654" ),
+		KEN ( "f549ecab-5110-4cc1-b2bb-369cac854dea", "ken", "ken.1", "Kenneth", "L", "Thompson", null, "test@sinclair.edu", "123-456-7654" ),
+		KEVIN_SMITH ( "f26d8f23-df20-40f1-bc98-83111be4a52a", "kevin.smith", "uu112233", "Kevin", null, "Smith", null, "ksmith12@university.edu", "123-456-7654" ),
+		ADVISOR_0 ( "252de4a0-7c06-4254-b7d8-4ffc02fe81ff", "advisor0", "turing.1", "Alan", "M", "Turing", null, "test@sinclair.edu", "123-456-7654" ),
+		MARK_GALAFRION ( "8005ad07-9111-457d-9896-f15a0dc8bbfb", "mark.galafrion", "uu358123", "Mark", null, "Galafrion", null, "mark.g@university.edu", null),
+		BOB_REYNOLDS ( "a5a23d8a-f0d3-4ef6-9a75-21f3775bac0f", "bob.reynolds", "uu462875", "Bob", null, "Reynolds", null, "bob1@university.edu", null),
+		FACULTY_0 ( "5eceefd1-257c-421f-99bf-a3622815bfee", "faculty0", "uf928711", "Douglas", null, "Toya", null, "douglas.toya@sinclair.edu", null),
+		FACULTY_1 ( "0d6163de-90fd-46d1-a9ca-7dbaa850924b", "faculty1", "uf123456", "Mary", null, "Webber", null, "mary.webber@sinclair.edu", null);
 
 		private final UUID id;
 		private final String username;
@@ -80,10 +80,13 @@ public class Stubs {
 		private final String middleName;
 		private final String lastName;
 		private final String departmentName;
+		private final String primaryEmailAddress;
+		private final String workPhone;
 
 		PersonFixture(String id, String username, String schoolId,
 					  String firstName, String middleName, String lastName,
-					  String departmentName) {
+					  String departmentName, String primaryEmailAddress,
+					  String workPhone) {
 			this.id = UUID.fromString(id);
 			this.username = username;
 			this.schoolId = schoolId;
@@ -91,6 +94,8 @@ public class Stubs {
 			this.middleName = middleName;
 			this.lastName = lastName;
 			this.departmentName = departmentName;
+			this.primaryEmailAddress = primaryEmailAddress;
+			this.workPhone = workPhone;
 		}
 
 		public UUID id() { return id; }
@@ -117,6 +122,8 @@ public class Stubs {
 					.trim();
 		}
 		public String departmentName() { return departmentName; }
+		public String workPhone() { return workPhone; }
+		public String primaryEmailAddress() { return primaryEmailAddress; }
 	}
 
 	public static enum CampusFixture {

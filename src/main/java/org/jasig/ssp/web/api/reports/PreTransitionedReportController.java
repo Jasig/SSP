@@ -151,7 +151,7 @@ public class PreTransitionedReportController extends AbstractBaseController { //
 		final List<Person> people = personService.peopleFromCriteria(
 				searchForm, SortingAndPaging.createForSingleSort(status, null,
 						null, null, null, null));
-		Collections.sort(people, Person.PERSON_NAME_COMPARATOR);
+		Collections.sort(people, Person.PERSON_NAME_AND_ID_COMPARATOR);
 		final List<PersonReportTO> peopleReportTOList = PersonReportTO.toPersonTOList(people);
 
 
