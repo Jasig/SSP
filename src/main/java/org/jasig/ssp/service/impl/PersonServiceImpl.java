@@ -166,7 +166,10 @@ public class PersonServiceImpl implements PersonService {
 					LOGGER.info("Successfully Created Account for {}",
 							username);
 				} catch (final ObjectExistsException oee) {
-					// Don't have to give up in the same way do in the
+					if ( oee.getCause() instanceof ConstraintViolationException ) {
+						throw (ConstraintViolationException)oee.getCause();
+					}
+					// Else don't have to give up in the same way do in the
 					// ConstraintViolationException catch below b/c we happen to
 					// know an insert hasn't been attempted yet under the
 					// current create() impl.
@@ -358,8 +361,10 @@ public class PersonServiceImpl implements PersonService {
 			}
 			if ( "unique_person_username".equals(constraintName) ) {
 				throw new ObjectExistsException(Person.class.getName(),
-						new Pair<String,String>("username", obj.getUsername()).toMap());
+						new Pair<String,String>("username", obj.getUsername()).toMap(),
+						e);
 			}
+			throw e;
 		}
 
 		if (LOGGER.isDebugEnabled()) {
