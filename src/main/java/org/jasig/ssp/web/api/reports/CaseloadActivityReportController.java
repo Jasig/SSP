@@ -133,7 +133,7 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 			coaches.add(coach);
 		}
 		else{
-			coaches = personService.getAllCurrentCoaches(Person.PERSON_NAME_COMPARATOR);
+			coaches = personService.getAllCurrentCoaches(Person.PERSON_NAME_AND_ID_COMPARATOR);
 		}
 		
 						

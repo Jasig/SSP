@@ -481,7 +481,7 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public PagingWrapper<Person> getAllCoaches(final SortingAndPaging sAndP) {
-		return syncCoaches();
+		return syncCoachesInCurrentTransaction();
 	}
 
 	private Collection<String> getAllCoachUsernamesFromDirectory() {
@@ -502,12 +502,70 @@ public class PersonServiceImpl implements PersonService {
 			return;
 		}
 		LOGGER.info("Scheduled coach sync starting.");
-		PagingWrapper<Person> localCoaches = syncCoaches();
+		PagingWrapper<Person> localCoaches = syncCoachesInSeparateTransactions();
 		LOGGER.info("Scheduled coach sync complete. Local coach count {}",
 				localCoaches.getResults());
 	}
 
-	private PagingWrapper<Person> syncCoaches() {
+	/**
+	 * This is primarily a workaround for tests where you need need new
+	 * external persons set up in the transactional fixture to be visible
+	 * when we go to sync them into the person table. If you don't run this
+	 * sync in the current transaction you'll end up at best (Postgres by
+	 * default or SQLServer with <code>SET ALLOW_SNAPSHOT_ISOLATION ON</code>
+	 * and <code>SET READ_COMMITTED_SNAPSHOT ON</code>) a test
+	 * failure saying it can't find the users you expected or at worst
+	 * (SQLServer in default config) a test completely locking up while
+	 * reads here block waiting for locks held by your main test transaction.
+	 *
+	 * @return
+	 */
+	private PagingWrapper<Person> syncCoachesInCurrentTransaction() {
+
+		// TODO reduce code duplication with syncCoachesInSeparateTransactions()
+		// this really is just a copy paste of the pre-SSP-470 impl.
+		final Collection<Person> coaches = Lists.newArrayList();
+
+		final Collection<String> coachUsernames = personAttributesService
+				.getCoaches();
+		for (final String coachUsername : coachUsernames) {
+
+			Person coach = null;
+
+			try {
+				coach = personFromUsername(coachUsername);
+			} catch (final ObjectNotFoundException e) {
+				LOGGER.debug("Coach {} not found", coachUsername);
+			}
+
+			// Does coach exist in local SSP.person table?
+			if (coach == null) {
+
+				// Attempt to find coach in external data
+				try {
+					final ExternalPerson externalPerson = externalPersonService
+							.getByUsername(coachUsername);
+
+					coach = new Person(); // NOPMD
+					externalPersonService.updatePersonFromExternalPerson(
+							coach, externalPerson);
+
+				} catch (final ObjectNotFoundException e) {
+					LOGGER.debug("Coach {} not found in external data",
+							coachUsername);
+				}
+			}
+
+			if (coach != null) {
+				coaches.add(coach);
+			}
+		}
+
+		return new PagingWrapper<Person>(coaches);
+
+	}
+
+	private PagingWrapper<Person> syncCoachesInSeparateTransactions() {
 		long methodStart = new Date().getTime();
 		final Collection<Person> coaches = Lists.newArrayList();
 
@@ -625,7 +683,7 @@ public class PersonServiceImpl implements PersonService {
 	public SortedSet<Person> getAllCurrentCoaches(Comparator<Person> sortBy) {
 		final Collection<Person> officialCoaches = getAllCoaches(null).getRows();
 		SortedSet<Person> currentCoachesSet =
-				Sets.newTreeSet(sortBy == null ? Person.PERSON_NAME_COMPARATOR : sortBy);
+				Sets.newTreeSet(sortBy == null ? Person.PERSON_NAME_AND_ID_COMPARATOR : sortBy);
 		currentCoachesSet.addAll(officialCoaches);
 		final Collection<Person> assignedCoaches =
 				getAllAssignedCoaches(null).getRows();
@@ -637,7 +695,7 @@ public class PersonServiceImpl implements PersonService {
 	public SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(Comparator<CoachPersonLiteTO> sortBy) {
 		final Collection<CoachPersonLiteTO> officialCoaches = getAllCoachesLite(null).getRows();
 		SortedSet<CoachPersonLiteTO> currentCoachesSet =
-				Sets.newTreeSet(sortBy == null ? CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_COMPARATOR : sortBy);
+				Sets.newTreeSet(sortBy == null ? CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_AND_ID_COMPARATOR : sortBy);
 		currentCoachesSet.addAll(officialCoaches);
 		final Collection<CoachPersonLiteTO> assignedCoaches =
 				getAllAssignedCoachesLite(null).getRows();

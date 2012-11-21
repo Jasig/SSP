@@ -175,7 +175,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 				continue;
 			}
 			while ( mergable != null &&
-					CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_COMPARATOR.compare(mergable, countForStatus) < 0 ) {
+					CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_AND_ID_COMPARATOR.compare(mergable, countForStatus) < 0 ) {
 				merged.add(asPlaceholderCoachCaseloadRecordCountForProgramStatus(mergable));
 				mergable = nextPersonFromNotHavingIdIn(coachIter, coachIdsWithCaseloads);
 			}
@@ -224,7 +224,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 	}
 
 	private SortedSet<CoachPersonLiteTO> getAllCurrentCoachesSortedByName() {
-		return personService.getAllCurrentCoachesLite(CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_COMPARATOR);
+		return personService.getAllCurrentCoachesLite(CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_AND_ID_COMPARATOR);
 	}
 
 }

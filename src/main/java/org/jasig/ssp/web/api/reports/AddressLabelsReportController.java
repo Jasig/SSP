@@ -150,7 +150,7 @@ public class AddressLabelsReportController extends AbstractBaseController { // N
 		final List<Person> people = personService.peopleFromCriteria(
 				searchForm, SortingAndPaging.createForSingleSort(status, null,
 						null, null, null, null));
-		Collections.sort(people, Person.PERSON_NAME_COMPARATOR);
+		Collections.sort(people, Person.PERSON_NAME_AND_ID_COMPARATOR);
 		final List<PersonTO> peopleTO = personTOFactory.asTOList(people);
 
 		// Get the actual names of the UUIDs for the special groups

@@ -207,7 +207,9 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 *
 	 * <p><em>Be very careful when using this method. Implementation is
 	 * likely to use {@link #getAllCoaches(org.jasig.ssp.util.sort.SortingAndPaging)}
-	 * under the covers, which is deprecated for performance reasons.</em></p>
+	 * under the covers, which
+	 * <a href="https://issues.jasig.org/browse/SSP-470">SSP-470</a> deprecates
+	 * for performance reasons.</em></p>
 	 *
 	 * <p>Since we know the implementation would face difficulties implementing
 	 * a paged version of this method and we know that all current clients
@@ -223,6 +225,13 @@ public interface PersonService extends AuditableCrudService<Person> {
 	/**
 	 * (Much) lighter-weight version of
 	 * {@link #getAllCurrentCoaches(java.util.Comparator)}.
+	 *
+	 * <em>Note that unlike {@link #getAllCurrentCoaches(java.util.Comparator)},
+	 * this implementation should not be expected to materialize any local
+	 * coach records. I.e. this method plays
+	 * {@link #getAllCoachesLite(org.jasig.ssp.util.sort.SortingAndPaging)}}
+	 * to {@link #getAllCurrentCoaches(java.util.Comparator)}'s
+	 * {@link #getAllCoaches(org.jasig.ssp.util.sort.SortingAndPaging)}</em>
 	 *
 	 * @param sortBy
 	 * @return
