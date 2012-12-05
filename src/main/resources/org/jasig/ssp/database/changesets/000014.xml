@@ -37,11 +37,12 @@
 			WHERE name = N'ssp-test'
 
 		-->
-		<sql>ALTER DATABASE [ssp-test]
+		<sql>SELECT 1</sql>
+		<!--sql>ALTER DATABASE [ssp-test]
 			SET ALLOW_SNAPSHOT_ISOLATION ON
 
 			ALTER DATABASE [ssp-test]
-			SET READ_COMMITTED_SNAPSHOT ON</sql>
+			SET READ_COMMITTED_SNAPSHOT ON</sql-->
 	</changeSet>
 
 </databaseChangeLog>
