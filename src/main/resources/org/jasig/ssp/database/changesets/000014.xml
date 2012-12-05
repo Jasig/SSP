@@ -28,21 +28,23 @@
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<changeSet id="Switch mssql to snapshot isolation" author="dan.mccallum"
-			dbms="mssql">
+			dbms="mssql" >
 		<!-- To check the resulting value:
 
 			SELECT name, snapshot_isolation_state,
 				snapshot_isolation_state_desc AS description
 			FROM sys.databases
-			WHERE name = N'ssp-test'
+			WHERE name = N'${database.name}'
 
 		-->
-		<sql>SELECT 1</sql>
-		<!--sql>ALTER DATABASE [ssp-test]
+		<preConditions onFail="CONTINUE">
+			<changeLogPropertyDefined property="set.mssql.snapshot.isolation" value="true"/>
+		</preConditions>
+		<sql>ALTER DATABASE [${database.name}]
 			SET ALLOW_SNAPSHOT_ISOLATION ON
 
-			ALTER DATABASE [ssp-test]
-			SET READ_COMMITTED_SNAPSHOT ON</sql-->
+			ALTER DATABASE [${database.name}]
+			SET READ_COMMITTED_SNAPSHOT ON</sql>
 	</changeSet>
 
 </databaseChangeLog>
