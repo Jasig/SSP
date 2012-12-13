@@ -1256,7 +1256,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on challenge_category to ssp</sql>
+		<sql>grant all on challenge_category to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="challenge_category" />
 		</rollback>
@@ -1301,7 +1301,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on challenge_referral to ssp</sql>
+		<sql>grant all on challenge_referral to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="challenge_referral" />
 		</rollback>
@@ -1346,7 +1346,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on confidentiality_level to ssp</sql>
+		<sql>grant all on confidentiality_level to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="confidentiality_level" />
 		</rollback>
@@ -1401,7 +1401,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on self_help_guide_group to ssp</sql>
+		<sql>grant all on self_help_guide_group to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="self_help_guide_group" />
 		</rollback>
@@ -1447,7 +1447,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on confidentiality_disclosure_agreement to ssp</sql>
+		<sql>grant all on confidentiality_disclosure_agreement to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="confidentiality_disclosure_agreement" />
 		</rollback>
@@ -1496,7 +1496,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on message_template to ssp</sql>
+		<sql>grant all on message_template to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="message_template" />
 		</rollback>
@@ -1538,7 +1538,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on person_tool to ssp</sql>
+		<sql>grant all on person_tool to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="person_tool" />
 		</rollback>
@@ -1586,7 +1586,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on person_confidentiality_disclosure_agreement to ssp
+		<sql>grant all on person_confidentiality_disclosure_agreement to ${database.app.username}
 		</sql>
 		<rollback>
 			<dropTable tableName="person_confidentiality_disclosure_agreement" />
@@ -1648,7 +1648,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on self_help_guide to ssp</sql>
+		<sql>grant all on self_help_guide to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="self_help_guide" />
 		</rollback>
@@ -1712,7 +1712,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on self_help_guide_question to ssp</sql>
+		<sql>grant all on self_help_guide_question to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="self_help_guide_question" />
 		</rollback>
@@ -1866,7 +1866,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on challenge_challenge_referral to ssp</sql>
+		<sql>grant all on challenge_challenge_referral to ${database.app.username}</sql>
 
 		<rollback>
 			<dropTable tableName="challenge_challenge_referral" />
@@ -3471,7 +3471,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on category to ssp</sql>
+		<sql>grant all on category to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="category" />
 		</rollback>
@@ -3527,7 +3527,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on self_help_guide_response to ssp</sql>
+		<sql>grant all on self_help_guide_response to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="self_help_guide_response" />
 		</rollback>
@@ -3581,7 +3581,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on self_help_guide_question_response to ssp</sql>
+		<sql>grant all on self_help_guide_question_response to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="self_help_guide_question_response" />
 		</rollback>
@@ -3642,7 +3642,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on task to ssp</sql>
+		<sql>grant all on task to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="task" />
 		</rollback>
@@ -3697,7 +3697,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on custom_task to ssp</sql>
+		<sql>grant all on custom_task to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="custom_task" />
 		</rollback>
@@ -3725,7 +3725,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on self_help_guide_self_help_guide_group to ssp</sql>
+		<sql>grant all on self_help_guide_self_help_guide_group to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="self_help_guide_self_help_guide_group" />
 		</rollback>
@@ -3763,7 +3763,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on referral to ssp</sql>
+		<sql>grant all on referral to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="referral" />
 		</rollback>
@@ -3818,7 +3818,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on message to ssp</sql>
+		<sql>grant all on message to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="message" />
 		</rollback>

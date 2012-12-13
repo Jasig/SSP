@@ -109,7 +109,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on appointment to ssp</sql>
+		<sql>grant all on appointment to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="appointment" />
 		</rollback>

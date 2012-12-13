@@ -106,7 +106,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on special_service_group to ssp</sql>
+		<sql>grant all on special_service_group to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="special_service_group" />
 		</rollback>
@@ -149,7 +149,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on service_reason to ssp</sql>
+		<sql>grant all on service_reason to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="service_reason" />
 		</rollback>
@@ -192,7 +192,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on referral_source to ssp</sql>
+		<sql>grant all on referral_source to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="referral_source" />
 		</rollback>
@@ -336,7 +336,7 @@
 			<column name="group_email" type="${nvarchar.type}(255)" />
 		</createTable>
 
-		<sql>grant all on early_alert_routing to ssp</sql>
+		<sql>grant all on early_alert_routing to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="early_alert_routing" />
 		</rollback>
@@ -385,7 +385,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on person_special_service_group to ssp</sql>
+		<sql>grant all on person_special_service_group to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="person_special_service_group" />
 		</rollback>
@@ -434,7 +434,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on person_service_reason to ssp</sql>
+		<sql>grant all on person_service_reason to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="person_service_reason" />
 		</rollback>
@@ -483,7 +483,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on person_referral_source to ssp</sql>
+		<sql>grant all on person_referral_source to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="person_referral_source" />
 		</rollback>
@@ -559,7 +559,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on program_status_change_reason to ssp</sql>
+		<sql>grant all on program_status_change_reason to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="program_status_change_reason" />
 		</rollback>
@@ -794,7 +794,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on student_type to ssp</sql>
+		<sql>grant all on student_type to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="student_type" />
 		</rollback>
@@ -906,7 +906,7 @@
 				</column>
 			</createTable>
 
-			<sql>grant all on journal_entry_journal_step_detail to ssp</sql>
+			<sql>grant all on journal_entry_journal_step_detail to ${database.app.username}</sql>
 		</rollback>
 
 
@@ -953,7 +953,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on journal_entry_detail to ssp</sql>
+		<sql>grant all on journal_entry_detail to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="journal_entry_detail" />
 		</rollback>
@@ -1412,7 +1412,7 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 			</column>
 		</createTable>
 
-		<sql>grant all on program_status to ssp</sql>
+		<sql>grant all on program_status to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="program_status" />
 		</rollback>
@@ -1561,7 +1561,7 @@ where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0';
 			</column>
 		</createTable>
 
-		<sql>grant all on person_program_status to ssp</sql>
+		<sql>grant all on person_program_status to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="person_program_status" />
 		</rollback>

@@ -119,7 +119,7 @@
 			<column name="coach_id" type="uuid" />
 		</createTable>
 
-		<sql>grant all on person_demographics to ssp</sql>
+		<sql>grant all on person_demographics to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="person_demographics" />
 		</rollback>
@@ -170,7 +170,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on person_education_goal to ssp</sql>
+		<sql>grant all on person_education_goal to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="person_education_goal" />
 		</rollback>
@@ -219,7 +219,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on person_education_plan to ssp</sql>
+		<sql>grant all on person_education_plan to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="person_education_plan" />
 		</rollback>
@@ -267,7 +267,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on person_challenge to ssp</sql>
+		<sql>grant all on person_challenge to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="person_challenge" />
 		</rollback>
@@ -317,7 +317,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on person_education_level to ssp</sql>
+		<sql>grant all on person_education_level to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="person_education_level" />
 		</rollback>
@@ -366,7 +366,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on person_funding_source to ssp</sql>
+		<sql>grant all on person_funding_source to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="person_funding_source" />
 		</rollback>

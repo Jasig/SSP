@@ -182,7 +182,7 @@
 			<column name="office_hours" type="${nvarchar.type}(50)" />
 			<column name="department_name" type="${nvarchar.type}(100)" />
 		</createTable>
-		<sql>grant all on person_staff_details to ssp</sql>
+		<sql>grant all on person_staff_details to ${database.app.username}</sql>
 		<addColumn tableName="person">
 			<column name="person_staff_details_id" type="uuid">
 				<constraints nullable="true" foreignKeyName="person_person_staff_details_id"
