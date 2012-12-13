@@ -34,13 +34,13 @@
 		dbms="mssql">
 		<comment>Ensure that the ssp user is connected with rights on this particular database, for use in the GRANT SQL statements below. Though this check/helper script is not necessary if users follow documentation correctly.</comment>
 		<sql>IF NOT EXISTS (SELECT name FROM sys.database_principals WHERE
-			name = 'ssp')
+			name = '${database.app.username}')
 			BEGIN
-			CREATE USER [ssp] FOR LOGIN [ssp]
+			CREATE USER [${database.app.username}] FOR LOGIN [${database.app.username}]
 			EXEC
-			sp_addrolemember N'db_datawriter', N'ssp'
+			sp_addrolemember N'db_datawriter', N'${database.app.username}'
 			EXEC sp_addrolemember
-			N'db_datareader', N'ssp'
+			N'db_datareader', N'${database.app.username}'
 			END
 		</sql>
 	</changeSet>
@@ -65,7 +65,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on persistent_logins to ssp</sql>
+		<sql>grant all on persistent_logins to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="persistent_logins" />
 		</rollback>
@@ -136,7 +136,7 @@
 			<column name="enabled" type="boolean" defaultValueBoolean="false" />
 		</createTable>
 
-		<sql>grant all on person to ssp</sql>
+		<sql>grant all on person to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="person" />
 		</rollback>
@@ -171,7 +171,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on challenge to ssp</sql>
+		<sql>grant all on challenge to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="challenge" />
 		</rollback>
@@ -238,7 +238,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on child_care_arrangement to ssp</sql>
+		<sql>grant all on child_care_arrangement to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="child_care_arrangement" />
 		</rollback>
@@ -279,7 +279,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on citizenship to ssp</sql>
+		<sql>grant all on citizenship to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="citizenship" />
 		</rollback>
@@ -320,7 +320,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on education_goal to ssp</sql>
+		<sql>grant all on education_goal to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="education_goal" />
 		</rollback>
@@ -361,7 +361,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on education_level to ssp</sql>
+		<sql>grant all on education_level to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="education_level" />
 		</rollback>
@@ -402,7 +402,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on ethnicity to ssp</sql>
+		<sql>grant all on ethnicity to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="ethnicity" />
 		</rollback>
@@ -443,7 +443,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on funding_source to ssp</sql>
+		<sql>grant all on funding_source to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="funding_source" />
 		</rollback>
@@ -484,7 +484,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on marital_status to ssp</sql>
+		<sql>grant all on marital_status to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="marital_status" />
 		</rollback>
@@ -525,7 +525,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on student_status to ssp</sql>
+		<sql>grant all on student_status to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="student_status" />
 		</rollback>
@@ -566,7 +566,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on veteran_status to ssp</sql>
+		<sql>grant all on veteran_status to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="veteran_status" />
 		</rollback>

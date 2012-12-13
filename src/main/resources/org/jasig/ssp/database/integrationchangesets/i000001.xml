@@ -122,8 +122,8 @@
 			select code, name, start_date, end_date, report_year from external_term
 		</createView>
 
-		<sql>grant all on external_term to ssp</sql>
-		<sql>grant all on v_external_term to ssp</sql>
+		<sql>grant all on external_term to ${database.app.username}</sql>
+		<sql>grant all on v_external_term to ${database.app.username}</sql>
 		<rollback>
 			<dropView viewName="v_external_term" />
 			<dropTable tableName="external_term" />
@@ -149,7 +149,7 @@
 			select ROW_NUMBER() OVER (ORDER BY code) as id, code, name, start_date, end_date, report_year from external_term
 		</createView>
 
-		<sql>grant all on v_external_term to ssp</sql>
+		<sql>grant all on v_external_term to ${database.app.username}</sql>
 		<rollback>
 		</rollback>
 	</changeSet>
@@ -185,8 +185,8 @@
 			select ROW_NUMBER() OVER (ORDER BY faculty_school_id) as id, faculty_school_id, term_code, formatted_course, title from external_faculty_course
 		</createView>
 
-		<sql>grant all on external_faculty_course to ssp</sql>
-		<sql>grant all on v_external_faculty_course to ssp</sql>
+		<sql>grant all on external_faculty_course to ${database.app.username}</sql>
+		<sql>grant all on v_external_faculty_course to ${database.app.username}</sql>
 		<rollback>
 			<dropView viewName="v_external_faculty_course" />
 			<dropTable tableName="external_faculty_course" />
@@ -244,8 +244,8 @@
 			select ROW_NUMBER() OVER (ORDER BY faculty_school_id) as id, faculty_school_id, school_id, first_name, middle_name, last_name, primary_email_address, term_code, formatted_course from external_faculty_course_roster
 		</createView>
 
-		<sql>grant all on external_faculty_course_roster to ssp</sql>
-		<sql>grant all on v_external_faculty_course_roster to ssp</sql>
+		<sql>grant all on external_faculty_course_roster to ${database.app.username}</sql>
+		<sql>grant all on v_external_faculty_course_roster to ${database.app.username}</sql>
 		<rollback>
 			<dropView viewName="v_external_faculty_course_roster" />
 			<dropTable tableName="external_faculty_course_roster" />
@@ -284,8 +284,8 @@
 			select ROW_NUMBER() OVER (ORDER BY school_id, term_code) as id, school_id, term_code, registered_course_count from external_registration_status_by_term
 		</createView>
 
-		<sql>grant all on external_registration_status_by_term to ssp</sql>
-		<sql>grant all on v_external_registration_status_by_term to ssp</sql>
+		<sql>grant all on external_registration_status_by_term to ${database.app.username}</sql>
+		<sql>grant all on v_external_registration_status_by_term to ${database.app.username}</sql>
 		<rollback>
 			<dropView viewName="v_external_registration_status_by_term" />
 			<dropTable tableName="external_registration_status_by_term" />
@@ -399,8 +399,8 @@
 			from external_person
 		</createView>
 
-		<sql>grant all on external_person to ssp</sql>
-		<sql>grant all on v_external_person to ssp</sql>
+		<sql>grant all on external_person to ${database.app.username}</sql>
+		<sql>grant all on v_external_person to ${database.app.username}</sql>
 		<rollback>
 			<dropView viewName="v_external_person" />
 			<dropTable tableName="external_person" />
