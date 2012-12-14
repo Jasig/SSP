@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.google.common.collect.Sets;
 import org.hibernate.exception.ConstraintViolationException;
@@ -46,10 +49,13 @@ import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.util.transaction.WithTransaction;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -90,6 +96,23 @@ public class PersonServiceImpl implements PersonService {
 
 	@Autowired
 	private transient ExternalPersonService externalPersonService;
+
+	@Autowired
+	private transient WithTransaction withTransaction;
+
+	@Value("#{configProperties.scheduled_coach_sync_enabled}")
+	private boolean scheduledCoachSyncEnabled;
+
+	/**
+	 * If <code>true</code>, each individual coach synchronized by
+	 * {@link #syncCoaches()} will be written in its own transaction. If false,
+	 * the entire synchronization across all coaches will be a single
+	 * transaction. Defaults to <code>true</code>. Usually only set to
+	 * <code>false</code> for tests.
+	 *
+	 */
+	@Value("#{configProperties.per_coach_sync_transactions}")
+	private boolean perCoachSyncTransactions = true;
 
 	private static interface PersonAttributesLookup {
 		public PersonAttributesResult lookupPersonAttributes(String username)
@@ -525,6 +548,19 @@ public class PersonServiceImpl implements PersonService {
 		return coachUsernames;
 	}
 
+	@Scheduled(fixedDelay = 300000)
+	// run every 5 minutes
+	public void syncCoachesOnSchedule() {
+		if ( !(scheduledCoachSyncEnabled) ) {
+			LOGGER.debug("Scheduled coach sync disabled. Abandoning sync job");
+			return;
+		}
+		LOGGER.info("Scheduled coach sync starting.");
+		PagingWrapper<Person> localCoaches = syncCoaches();
+		LOGGER.info("Scheduled coach sync complete. Local coach count {}",
+				localCoaches.getResults());
+	}
+
 	@Override
 	public PagingWrapper<Person> getAllAssignedCoaches(SortingAndPaging sAndP) {
 		return dao.getAllAssignedCoaches(sAndP);
@@ -557,6 +593,117 @@ public class PersonServiceImpl implements PersonService {
 				getAllAssignedCoachesLite(null).getRows();
 		currentCoachesSet.addAll(assignedCoaches);
 		return currentCoachesSet;
+	}
+
+	private PagingWrapper<Person> syncCoaches() {
+		long methodStart = new Date().getTime();
+		final Collection<Person> coaches = Lists.newArrayList();
+
+		final Collection<String> coachUsernames = getAllCoachUsernamesFromDirectory();
+
+		long mergeLoopStart = new Date().getTime();
+		final AtomicLong timeInExternalReads = new AtomicLong();
+		final AtomicLong timeInExternalWrites = new AtomicLong();
+		for (final String coachUsername : coachUsernames) {
+
+			long singlePersonStart = new Date().getTime();
+
+			final AtomicReference<Person> coach = new AtomicReference<Person>();
+
+			try {
+				withCoachSyncTransaction(new Callable<Object>() {
+					@Override
+					public Object call() throws Exception {
+						long localPersonLookupStart = new Date().getTime();
+						try {
+							coach.set(personFromUsername(coachUsername));
+						} catch (final ObjectNotFoundException e) {
+							LOGGER.debug("Coach {} not found", coachUsername);
+						}
+						long localPersonLookupEnd = new Date().getTime();
+						TIMING_LOGGER.info("Read local coach by username {} in {} ms",
+								coachUsername, localPersonLookupEnd - localPersonLookupStart);
+
+						// Does coach exist in local SSP.person table?
+
+						if (coach.get() == null) {
+
+							// Attempt to find coach in external data
+							try {
+								long externalPersonLookupStart = new Date().getTime();
+
+								final ExternalPerson externalPerson = externalPersonService
+										.getByUsername(coachUsername);
+
+								long externalPersonLookupEnd = new Date().getTime();
+								long externalPersonLookupElapsed = externalPersonLookupEnd -
+										externalPersonLookupStart;
+								timeInExternalReads.set(timeInExternalReads.get()
+										+ externalPersonLookupElapsed);
+								TIMING_LOGGER.info("Read external coach by username {} in {} ms",
+										coachUsername, externalPersonLookupElapsed);
+
+								long externalPersonSyncStart = new Date().getTime();
+
+								coach.set(new Person()); // NOPMD
+								externalPersonService.updatePersonFromExternalPerson(
+										coach.get(), externalPerson);
+
+								long externalPersonSyncEnd = new Date().getTime();
+								long externalPersonSyncElapsed = externalPersonSyncEnd -
+										externalPersonSyncStart;
+								timeInExternalWrites.set(timeInExternalWrites.get()
+										+ externalPersonSyncElapsed);
+								TIMING_LOGGER.info("Synced external coach by username {} in {} ms",
+										coachUsername, externalPersonSyncElapsed);
+
+							} catch (final ObjectNotFoundException e) {
+								LOGGER.debug("Coach {} not found in external data",
+										coachUsername);
+							}
+						}
+						return coach.get();
+					}
+				});
+			} catch ( ConstraintViolationException e ) {
+				if ( "uq_person_school_id".equals(e.getConstraintName()) ) {
+					LOGGER.warn("Skipping coach with non-unique schoolId '{}' (username '{}')",
+							new Object[] { coach.get().getSchoolId(), coachUsername, e });
+					coach.set(null);
+				} else if ( "unique_person_username".equals(e.getConstraintName()) ) {
+					LOGGER.warn("Skipping coach with non-unique username '{}' (schoolId '{}')",
+							new Object[] { coachUsername, coach.get().getSchoolId(), e });
+					coach.set(null);
+				} else {
+					throw e;
+				}
+			}
+
+
+			if (coach.get() != null) {
+				coaches.add(coach.get());
+			}
+			long singlePersonEnd = new Date().getTime();
+			TIMING_LOGGER.info("SSP coach merge for username {} completed in {} ms",
+					coachUsername, singlePersonEnd - singlePersonStart);
+		}
+		Long mergeLoopEnd = new Date().getTime();
+		TIMING_LOGGER.info("All SSP merges for {} coaches completed in {} ms. Reading: {} ms. Writing: {} ms",
+				new Object[] { coachUsernames.size(), mergeLoopEnd - mergeLoopStart,
+						timeInExternalReads.get(), timeInExternalWrites.get() });
+
+		PagingWrapper pw = new PagingWrapper<Person>(coaches);
+		long methodEnd = new Date().getTime();
+		TIMING_LOGGER.info("Read and merged PersonAttributesService {} coaches in {} ms",
+				coaches.size(), methodEnd - methodStart);
+		return pw;
+	}
+
+	private <V> V withCoachSyncTransaction(Callable<V> callable) {
+		if ( perCoachSyncTransactions ) {
+			return withTransaction.withNewTransactionAndUncheckedExceptions(callable);
+		}
+		return withTransaction.withTransactionAndUncheckedExceptions(callable);
 	}
 
 	private Iterable<Person> additionalAttribsForStudents(

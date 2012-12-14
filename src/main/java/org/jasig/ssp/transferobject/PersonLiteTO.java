@@ -85,6 +85,16 @@ public class PersonLiteTO implements Serializable {
 		lastName = person.getLastName();
 	}
 
+	public PersonLiteTO(@NotNull final CoachPersonLiteTO coachTO) {
+		if ( coachTO == null ) {
+			throw new IllegalArgumentException(
+					"Coach required when construcing a new simple PersonLiteTO.");
+		}
+		id = coachTO.getId();
+		firstName = coachTO.getFirstName();
+		lastName = coachTO.getLastName();
+	}
+
 	/**
 	 * Convert a collection of models to a List of equivalent transfer objects.
 	 * 
@@ -97,6 +107,16 @@ public class PersonLiteTO implements Serializable {
 		final List<PersonLiteTO> tos = Lists.newArrayList();
 		for (final Person model : models) {
 			tos.add(new PersonLiteTO(model)); // NOPMD
+		}
+
+		return tos;
+	}
+
+	public static List<PersonLiteTO> toTOListFromCoachTOs(
+			@NotNull final Collection<CoachPersonLiteTO> coachTOs) {
+		final List<PersonLiteTO> tos = Lists.newArrayList();
+		for ( final CoachPersonLiteTO coachTO : coachTOs ) {
+			tos.add(new PersonLiteTO(coachTO));
 		}
 
 		return tos;
