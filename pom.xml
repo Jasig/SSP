@@ -247,7 +247,9 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
-			<scope>test</scope>
+			<!-- intentionally *not* test scope... we use mock HTTP req/resp
+				objs from this library when invoking uPortal REST services
+				from background jobs -->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>

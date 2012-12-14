@@ -39,6 +39,7 @@
 				<property name="locations">
 					<list>
 						<value>classpath:ssp-config.default.properties</value>
+						<value>classpath:ssp-config.test.properties</value>
 						<value>file:${SSP_TESTCONFIGDIR}/ssp-config.properties</value>
 					</list>
 				</property>

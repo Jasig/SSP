@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.portlet.PortletRequest;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,8 +42,11 @@ import org.jasig.ssp.service.PersonAttributesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.web.context.ServletContextAware;
 
-public class UPortalPersonAttributesService implements PersonAttributesService {
+public class UPortalPersonAttributesService implements PersonAttributesService, ServletContextAware {
 
 	private static final String PARAM_USERNAME = "username";
 	private static final String REST_URI_PERSON = "/ssp-platform/api/people/{"
@@ -69,7 +73,9 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 
 	private Map<String, String> coachesQuery = Collections.singletonMap(
 			"SSP_ROLES", "SSP_COACH");
-	
+
+	private ServletContext servletContext;
+
 	public Map<String, String> getCoachesQuery() {
 		return coachesQuery;
 	}
@@ -228,15 +234,16 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 	@Override
 	public Collection<String> getCoaches() {
 
-		final HttpServletRequest req = requestAndResponseAccessFilter
+		HttpServletRequest req = requestAndResponseAccessFilter
 				.getHttpServletRequest();
-		final HttpServletResponse res = requestAndResponseAccessFilter
+		HttpServletResponse res = requestAndResponseAccessFilter
 				.getHttpServletResponse();
 
-		// Get out if we can't fulfill the request
 		if ((req == null) || (res == null)) {
-			throw new UnsupportedOperationException(
-					"Uportal attributes may only be fetched when a HttpServletRequest and HttpServletResponse are available");
+			// underlying dispatch mechanism requires that a servlet request
+			// always exist
+			req = new MockHttpServletRequest(servletContext, "GET", "/ssp");
+			res = new MockHttpServletResponse();
 		}
 
 		final List<String> rslt = new ArrayList<String>();
@@ -296,5 +303,10 @@ public class UPortalPersonAttributesService implements PersonAttributesService {
 		}
 
 		return person;
+	}
+
+	@Override
+	public void setServletContext(ServletContext servletContext) {
+		this.servletContext = servletContext;
 	}
 }
