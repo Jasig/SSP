@@ -25,6 +25,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
@@ -35,6 +36,7 @@ import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
@@ -98,6 +100,51 @@ public class EarlyAlertDaoTest {
 	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
 	}
+	
+	private Date getDateSetByDayOffset(int dayOffset) {
+		Calendar today = Calendar.getInstance();
+		today.add(Calendar.DAY_OF_MONTH, dayOffset);
+		return new Date(today.getTimeInMillis());
+	}
+	
+	private void assertList(final Collection<EarlyAlert> objects) {
+		for (final EarlyAlert object : objects) {
+			assertNotNull("List should not have contained any null objects.",
+					object.getId());
+		}
+	}
+	
+	/**
+	 * Create a new sample message to use for testing.
+	 * 
+	 * @return a new sample message to use for testing
+	 * @throws ObjectNotFoundException
+	 */
+	private EarlyAlert createTestClosedEarlyAlert()
+			throws ObjectNotFoundException {
+		final EarlyAlert obj = new EarlyAlert();
+		obj.setPerson(personService.get(PERSON_ID));
+		obj.setObjectStatus(ObjectStatus.ACTIVE);
+		obj.setClosedDate(new Date());
+		obj.setClosedById(PERSON_ID);
+		obj.setCourseName(EARLY_ALERT_COURSE_NAME);
+		obj.setCampus(campusService.get(UUID
+				.fromString("901E104B-4DC7-43F5-A38E-581015E204E1")));
+
+		final Set<EarlyAlertSuggestion> earlyAlertSuggestionIds = Sets
+				.newHashSet();
+		earlyAlertSuggestionIds.add(new EarlyAlertSuggestion(
+				EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME,
+				"description", (short) 0)); // NOPMD by jon.adams on 5/21/12
+		final EarlyAlertSuggestion deletedSuggestion = new EarlyAlertSuggestion(
+				EARLY_ALERT_SUGGESTION_DELETED_ID,
+				"EARLY_ALERT_SUGGESTION_DELETED_NAME", "description", (short) 0); // NOPMD
+		deletedSuggestion.setObjectStatus(ObjectStatus.INACTIVE);
+		earlyAlertSuggestionIds.add(deletedSuggestion);
+		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+
+		return obj;
+	}
 
 	/**
 	 * Test the {@link EarlyAlertDao#save(EarlyAlert)} and
@@ -146,13 +193,6 @@ public class EarlyAlertDaoTest {
 		assertNull("Random ID should not have loaded any object.", obj);
 	}
 
-	private void assertList(final Collection<EarlyAlert> objects) {
-		for (final EarlyAlert object : objects) {
-			assertNotNull("List should not have contained any null objects.",
-					object.getId());
-		}
-	}
-
 	@Test
 	public void uuidGeneration() throws ObjectNotFoundException {
 		final EarlyAlert obj = dao.save(createTestClosedEarlyAlert());
@@ -170,43 +210,10 @@ public class EarlyAlertDaoTest {
 		final EarlyAlert obj = createTestClosedEarlyAlert();
 		assertNotEquals("HashCodes should not have matched.", obj.hashCode(),
 				new EarlyAlert().hashCode());
-		assertEquals("HashCodes should have matched.",
-				obj.hashCode(), obj.hashCode());
+		assertEquals("HashCodes should have matched.", obj.hashCode(),
+				obj.hashCode());
 		assertEquals("HashCodes should have matched.",
 				new EarlyAlert().hashCode(), new EarlyAlert().hashCode());
-	}
-
-	/**
-	 * Create a new sample message to use for testing.
-	 * 
-	 * @return a new sample message to use for testing
-	 * @throws ObjectNotFoundException
-	 */
-	private EarlyAlert createTestClosedEarlyAlert()
-			throws ObjectNotFoundException {
-		final EarlyAlert obj = new EarlyAlert();
-		obj.setPerson(personService.get(PERSON_ID));
-		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setClosedDate(new Date());
-		obj.setClosedById(PERSON_ID);
-		obj.setCourseName(EARLY_ALERT_COURSE_NAME);
-		obj.setCampus(campusService.get(UUID
-				.fromString("901E104B-4DC7-43F5-A38E-581015E204E1")));
-
-		final Set<EarlyAlertSuggestion> earlyAlertSuggestionIds = Sets
-				.newHashSet();
-		earlyAlertSuggestionIds.add(new EarlyAlertSuggestion(
-				EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME,
-				"description", (short) 0)); // NOPMD by jon.adams on 5/21/12
-		final EarlyAlertSuggestion deletedSuggestion = new EarlyAlertSuggestion(
-				EARLY_ALERT_SUGGESTION_DELETED_ID,
-				"EARLY_ALERT_SUGGESTION_DELETED_NAME", "description",
-				(short) 0); // NOPMD
-		deletedSuggestion.setObjectStatus(ObjectStatus.INACTIVE);
-		earlyAlertSuggestionIds.add(deletedSuggestion);
-		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
-
-		return obj;
 	}
 
 	@Test
@@ -238,8 +245,8 @@ public class EarlyAlertDaoTest {
 					2, result.size());
 			assertEquals("Count of PERSON_ID was not expected.", 2,
 					result.get(PERSON_ID).intValue());
-			assertEquals("Count of randomUuid was not expected.", 0,
-					result.get(randomUuid).intValue());
+			assertEquals("Count of randomUuid was not expected.", 0, result
+					.get(randomUuid).intValue());
 		} finally {
 			dao.delete(saved);
 			dao.delete(saved2);
@@ -276,5 +283,93 @@ public class EarlyAlertDaoTest {
 			throws ObjectNotFoundException {
 		dao.getCountOfActiveAlertsForPeopleIds(null);
 		fail("Exception should have been thrown.");
+	}
+
+	@Test
+	public void getCountOfEarlyAlertStudentsByDate()
+			throws ObjectNotFoundException {
+
+		final Date startDate = getDateSetByDayOffset(-1);
+		final Date endDate = getDateSetByDayOffset(1);
+
+		final EarlyAlert earlyAlert = createTestClosedEarlyAlert();
+		earlyAlert.setClosedDate(null);
+		earlyAlert.setClosedById(null);
+		final EarlyAlert saved = dao.save(earlyAlert);
+
+		final EarlyAlert earlyAlert2 = createTestClosedEarlyAlert();
+		final EarlyAlert saved2 = dao.save(earlyAlert2);
+		sessionFactory.getCurrentSession().flush();
+
+		Campus campus = campusService.get(UUID
+				.fromString("901E104B-4DC7-43F5-A38E-581015E204E1"));
+
+		try {
+			final Long result = dao.getCountOfEarlyAlertStudentsByDate(
+					startDate, endDate, campus);
+			assertEquals("Count of Students was not expected.", 1,
+					result.intValue());
+		} finally {
+			dao.delete(saved);
+			dao.delete(saved2);
+		}
+	}
+
+	@Test
+	public void getCountOfEarlyAlertsClosedByDate()
+			throws ObjectNotFoundException {
+		// arrange
+		final Date startDate = getDateSetByDayOffset(-1);
+		final Date endDate = getDateSetByDayOffset(1);
+		final EarlyAlert earlyAlert = createTestClosedEarlyAlert();
+		earlyAlert.setClosedDate(null);
+		earlyAlert.setClosedById(null);
+		final EarlyAlert saved = dao.save(earlyAlert);
+
+		final EarlyAlert earlyAlert2 = createTestClosedEarlyAlert();
+		final EarlyAlert saved2 = dao.save(earlyAlert2);
+		sessionFactory.getCurrentSession().flush();
+
+		Campus campus = campusService.get(UUID
+				.fromString("901E104B-4DC7-43F5-A38E-581015E204E1"));
+
+		try {
+			final Long result = dao.getCountOfEarlyAlertsClosedByDate(
+					startDate, endDate, campus);
+			assertEquals("Count of Students was not expected.", 1,
+					result.intValue());
+		} finally {
+			dao.delete(saved);
+			dao.delete(saved2);
+		}
+	}
+
+	@Test
+	public void getCountOfEarlyAlertsByCreatedDate()
+			throws ObjectNotFoundException {
+		// arrange
+		final Date startDate = getDateSetByDayOffset(-1);
+		final Date endDate = getDateSetByDayOffset(1);
+		final EarlyAlert earlyAlert = createTestClosedEarlyAlert();
+		earlyAlert.setClosedDate(null);
+		earlyAlert.setClosedById(null);
+		final EarlyAlert saved = dao.save(earlyAlert);
+
+		final EarlyAlert earlyAlert2 = createTestClosedEarlyAlert();
+		final EarlyAlert saved2 = dao.save(earlyAlert2);
+		sessionFactory.getCurrentSession().flush();
+
+		Campus campus = campusService.get(UUID
+				.fromString("901E104B-4DC7-43F5-A38E-581015E204E1"));
+
+		try {
+			final Long result = dao.getCountOfEarlyAlertsByCreatedDate(
+					startDate, endDate, campus);
+			assertEquals("Count of Students was not expected.", 2,
+					result.intValue());
+		} finally {
+			dao.delete(saved);
+			dao.delete(saved2);
+		}
 	}
 }

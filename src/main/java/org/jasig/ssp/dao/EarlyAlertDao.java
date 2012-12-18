@@ -33,6 +33,7 @@ import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.Campus;
 import org.springframework.stereotype.Repository;
 
 import com.google.common.collect.Maps;
@@ -178,6 +179,99 @@ public class EarlyAlertDao extends
 		
 		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", coach))
 		        .setProjection(Projections.countDistinct("person")).list().get(0);
+
+		return totalRows;
+	}
+
+	public Long getCountOfAlertsForSchoolIds(
+			Collection<String> schoolIds, Campus campus) {
+		
+		final Criteria query = createCriteria();
+		
+		query.createAlias("person",
+				"person")
+				.add(Restrictions
+						.in("person.schoolId",schoolIds));
+		
+		if(campus != null){
+			query.add(Restrictions
+					.eq("campus", campus));
+		}
+		
+		return (Long)query.setProjection(Projections.countDistinct("person")).list().get(0);
+	}
+
+	public Long getCountOfEarlyAlertsClosedByDate(Date closedDateFrom, Date closedDateTo, Campus campus) {
+		final Criteria query = createCriteria();
+		
+		if (closedDateFrom != null) {
+			query.add(Restrictions.ge("closedDate",
+					closedDateFrom));
+		}
+
+		if (closedDateTo != null) {
+			query.add(Restrictions.le("closedDate",
+					closedDateTo));
+		}
+		
+		if(campus != null){
+			query.add(Restrictions
+					.eq("campus", campus));
+		}
+
+		return  (Long) query.setProjection(Projections.rowCount())
+				.uniqueResult();
+	}
+	
+	public Long getCountOfEarlyAlertsByCreatedDate(Date createdDateFrom, Date createdDateTo, Campus campus) {
+		final Criteria query = createCriteria();
+		
+		if ( createdDateFrom != null) {
+			query.add(Restrictions.ge("createdDate",
+					createdDateFrom));
+		}
+
+		if (createdDateTo != null) {
+			query.add(Restrictions.le("createdDate",
+					createdDateTo));
+		}
+		
+		if(campus != null){
+			query.add(Restrictions
+					.eq("campus", campus));
+		}
+		
+		// item count
+		Long totalRows = (Long) query.setProjection(Projections.rowCount())
+				.uniqueResult();
+
+		return totalRows;
+	}
+	
+	public Long getCountOfEarlyAlertStudentsByDate(Date createdDateFrom, Date createdDateTo, Campus campus) {
+		final Criteria query = createCriteria();
+		
+		if ( createdDateFrom != null) {
+			query.add(Restrictions.ge("createdDate",
+					createdDateFrom));
+		}
+
+		if (createdDateTo != null) {
+			query.add(Restrictions.le("createdDate",
+					createdDateTo));
+		}
+		
+		if(campus != null){
+			query.add(Restrictions
+					.eq("campus", campus));
+		}
+		
+		query.createAlias("person",
+				"person");
+		
+		// item count
+		Long totalRows = (Long) query.setProjection(Projections.countDistinct("person"))
+				.uniqueResult();
 
 		return totalRows;
 	}

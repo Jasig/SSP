@@ -40,6 +40,7 @@ import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.external.FacultyCourse;
 import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 import org.jasig.ssp.model.reference.ProgramStatus;
@@ -574,6 +575,12 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			final Collection<UUID> peopleIds) {
 		return dao.getCountOfActiveAlertsForPeopleIds(peopleIds);
 	}
+	
+	@Override
+	public Long getCountOfEarlyAlertsForSchoolIds(
+			final Collection<String> shoolIds, Campus campus) {
+		return dao.getCountOfAlertsForSchoolIds(shoolIds, campus);
+	}
 
 	@Override
 	public Long getEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
@@ -583,5 +590,21 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	@Override
 	public Long getStudentEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
 		return dao.getStudentEarlyAlertCountForCoach(coach, createDateFrom,  createDateTo, studentTypeIds);
+	}
+	
+	@Override
+	public Long getCountOfEarlyAlertsByCreatedDate(Date createDatedFrom, Date createdDateTo, Campus campus) {
+		return dao.getCountOfEarlyAlertsByCreatedDate(createDatedFrom,  createdDateTo, campus);
+	}
+
+	@Override
+	public Long getCountOfEarlyAlertsClosedByDate(Date closedDateFrom, Date closedDateTo, Campus campus) {
+		return dao.getCountOfEarlyAlertsClosedByDate(closedDateFrom,  closedDateTo, campus);
+	}
+
+	@Override
+	public Long getCountOfEarlyAlertStudentsByDate(Date createDatedFrom,
+			Date createdDateTo, Campus campus) {
+		return dao.getCountOfEarlyAlertStudentsByDate(createDatedFrom, createdDateTo, campus);
 	}
 }

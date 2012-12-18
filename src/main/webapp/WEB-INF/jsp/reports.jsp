@@ -572,6 +572,54 @@
 
 </div>
 
+<div class="hideable-form early-alert-case-counts-report" style="display:none">
+	<h1>Early Alert Case Counts</h1>
+	<form action="/ssp/api/1/report/earlyalertcasecounts" method="get"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+
+		<!-- Campus -->
+		<div class="ea-input">
+			<select id="campusName" name="campusName" class="input-campus-group">
+				<option value=""></option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Campus:</span>
+		</div>
+		<div class="ea-clear"></div>	
+		
+		<!-- Term -->
+		<div class="ea-input">
+			<select id="termCode" name="termCode" class="input-term-group">
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Term:</span>
+		</div>
+		<div class="ea-clear"></div>	
+
+
+		
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div> 
+
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+</div>
 
 
 

@@ -28,6 +28,7 @@ import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
@@ -72,18 +73,6 @@ public class EarlyAlertResponseDao extends
 	public Long getEarlyAlertResponseCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
 
 		final Criteria query = createCriteria();
- 
-		
-		/*
-		 * 
-		 * Criteria criteria = session.createCriteria(Student.class)
-    .createAlias("courses", "course")
-    .createAlias("course.group", "student")
-    .add(Restrictions.eq("course.name", "Math"))
-    .add(Restrictions.eq("student.name", "John"));
-		 */
-		
-		
 		
 		// add possible studentTypeId Check
 		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
@@ -105,6 +94,32 @@ public class EarlyAlertResponseDao extends
 		if (createDateTo != null) {
 			query.add(Restrictions.le("createdDate",
 					createDateTo));
+		}
+		
+		// item count
+		Long totalRows = (Long) query.setProjection(Projections.rowCount())
+				.uniqueResult();
+
+		return totalRows;
+	}
+
+	public Long getEarlyAlertResponseCountForDate(Date createDateFrom,
+			Date createDateTo, Campus campus) {
+		final Criteria query = createCriteria();
+		
+		if (createDateFrom != null) {
+			query.add(Restrictions.ge("createdDate",
+					createDateFrom));
+		}
+
+		if (createDateTo != null) {
+			query.add(Restrictions.le("createdDate",
+					createDateTo));
+		}
+		
+		if(campus != null){
+			query.createAlias("earlyAlert",	"earlyAlert").add(
+					Restrictions.eq("earlyAlert.campus", campus));
 		}
 		
 		// item count

@@ -31,6 +31,7 @@ import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
@@ -108,4 +109,14 @@ public interface EarlyAlertService
 	Long getEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds);
 	
 	Long getStudentEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds);
+
+	Long getCountOfEarlyAlertsForSchoolIds(Collection<String> schoolIds, Campus campus);
+	
+	Long getCountOfEarlyAlertsByCreatedDate(Date createdDateFrom, Date createdDateTo, Campus campus);
+
+	Long getCountOfEarlyAlertsClosedByDate(Date closedDateFrom, Date closedDateTo, Campus campus);
+	
+	Long getCountOfEarlyAlertStudentsByDate(Date createdDateFrom, Date createdDateTo, Campus campus);
+	
+
 }

@@ -54,6 +54,17 @@ var ssp = ssp || {};
 			}).error(function(jqXHR, textStatus, errorThrown) {
 				alert(jqXHR + " " + textStatus + " " + errorThrown);
 			});
+		}
+		
+		var loadTermInput = function(url, container) {
+			$.getJSON(url, function(data) {
+				$.each(data.rows, function(i, row) {
+					addSelectItem(row.code, row.name, container);
+				});
+
+			}).error(function(jqXHR, textStatus, errorThrown) {
+				alert(jqXHR + " " + textStatus + " " + errorThrown);
+			});
 		}		
 
 		var loadTextForm = function(url, container) {
@@ -80,6 +91,10 @@ var ssp = ssp || {};
 					.locate('specialServiceGroup'));
 			loadGroupInput("/ssp/api/1/reference/referralSource/", that
 					.locate('referralSourceGroup'));
+			loadGroupInput("/ssp/api/1/reference/campus/", that
+					.locate('campusGroup'));
+			loadTermInput("/ssp/api/1/reference/term/", that
+					.locate('termGroup'));
 			// 1000 limit is max allowed by server side
 			loadCoachInput("/ssp/api/1/person/coach/?sort=lastName&page=1&start=0&limit=1000", that
 					.locate('assignedCounselorGroup'));			
@@ -152,6 +167,10 @@ var ssp = ssp || {};
 				.append('<option value="counselorCaseManagementReport">Counselor Case Management Report</option>');
 		reportsSelect
 				.append('<option value="specialServicesForm">Special Services Report</option>');
+		reportsSelect
+				.append('<option value="" disabled >- Early Alert Reports -</option>');
+		reportsSelect
+				.append('<option value="earlyAlertCaseCounts">Early Alert Case Counts Report</option>');
 		
 		reportsSelect.change(reportsSelectChange);
 	}
@@ -171,12 +190,15 @@ var ssp = ssp || {};
 							caseLoadForm : '.caseLoad-form',
 							confidentialityAgreementForm : '.confidentiality-agreement-form',
 							caseloadActivityReport : '.caseload-activity-report',
+							earlyAlertCaseCounts : '.early-alert-case-counts-report',
 							confidentialityAgreementFormContent : '.confidentiality-agreement-form-content',
 							programStatusGroup : '.input-program-status-group',
 							studentTypeGroup : '.input-student-type-group',
 							specialServiceGroup : '.input-special-service-group',
 							referralSourceGroup : '.input-referral-source-group',
 							assignedCounselorGroup : '.input-assigned-counselor-group',
+							campusGroup: '.input-campus-group',
+							termGroup: '.input-term-group',
 							calendarType : '.input-calendar-type',
 							hideableform : '.hideable-form',
 							printConfForm : '.print-conf-form',

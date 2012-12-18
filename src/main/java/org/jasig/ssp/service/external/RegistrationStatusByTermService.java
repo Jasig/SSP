@@ -23,6 +23,7 @@ import javax.validation.constraints.NotNull;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -50,6 +51,9 @@ public interface RegistrationStatusByTermService extends
 
 	PagingWrapper<RegistrationStatusByTerm> getAllForPerson(
 			@NotNull final Person person, final SortingAndPaging sAndP);
+	
+	PagingWrapper<RegistrationStatusByTerm> getAllForTerm(
+			@NotNull final Term term, final SortingAndPaging sAndP);
 
 	Person applyRegistrationStatusForCurrentTerm(@NotNull Person person);
 }

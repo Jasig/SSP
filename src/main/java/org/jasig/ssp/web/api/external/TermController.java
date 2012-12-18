@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.web.api.external;
 
+import java.util.Collection;
+
 import org.jasig.ssp.factory.external.ExternalTOFactory;
 import org.jasig.ssp.factory.external.TermTOFactory;
 import org.jasig.ssp.model.external.Term;
@@ -104,4 +106,5 @@ public class TermController extends AbstractExternalController<TermTO, Term> {
 
 		return super.instantiateTO(model);
 	}
+	
 }

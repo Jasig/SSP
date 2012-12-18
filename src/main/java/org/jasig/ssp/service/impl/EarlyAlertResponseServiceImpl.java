@@ -35,6 +35,7 @@ import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
+import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.model.reference.EarlyAlertOutreach;
 import org.jasig.ssp.model.reference.EarlyAlertReferral;
@@ -330,6 +331,9 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		return dao.getEarlyAlertResponseCountForCoach(coach, createDateFrom, createDateTo, studentTypeIds);
 	}
 	
-	
+	@Override
+	public Long getEarlyAlertResponseCountForDate(Date createDateFrom, Date createDateTo, Campus campus) {		
+		return dao.getEarlyAlertResponseCountForDate(createDateFrom, createDateTo, campus);
+	}
 
 }
