@@ -69,8 +69,6 @@ public class PersonTO // NOPMD
 	@NotNull
 	private String username;
 
-	private String userId;
-
 	private String homePhone;
 
 	private String workPhone;
@@ -393,14 +391,6 @@ public class PersonTO // NOPMD
 		}
 
 		this.username = username;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(final String userId) {
-		this.userId = userId;
 	}
 
 	public String getHomePhone() {

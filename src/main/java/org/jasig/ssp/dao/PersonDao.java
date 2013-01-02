@@ -171,7 +171,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 
 		final Criteria criteria = createCriteria(sAndP);
-
+		
 		if (addressLabelSearchTO.getCoach() != null
 				&& addressLabelSearchTO.getCoach().getId() != null) {
 			// restrict to coach
@@ -236,7 +236,6 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		// to do this later
 		criteria.add(Restrictions.isNotNull("studentType"));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-
 		return criteria.list();
 	}
 
