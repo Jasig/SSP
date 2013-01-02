@@ -91,7 +91,7 @@ import com.google.common.collect.Maps;
 
 @Controller
 @RequestMapping("/1/report/earlyalertcasecounts")
-public class EarlyAlertCaseCountsReportController extends AbstractBaseController {
+public class EarlyAlertCaseCountsReportController extends EarlyAlertReportBaseController {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CaseloadActivityReportController.class);
@@ -135,12 +135,7 @@ public class EarlyAlertCaseCountsReportController extends AbstractBaseController
 			final @RequestParam(required = true) String termCode,			
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
-		
-		final Term term = termService.getByCode(termCode);
-		final SortingAndPaging sAndP = null;
-		
-		//PagingWrapper<RegistrationStatusByTerm> registrations = registrationStatusByTermService.getAllForTerm(term, sAndP);		
-		
+				
 		final Map<String, Object> parameters = Maps.newHashMap();
 		Campus campus = null;
 		UUID campusId = null;
@@ -151,6 +146,7 @@ public class EarlyAlertCaseCountsReportController extends AbstractBaseController
 			parameters.put("campus", campus.getName()); 
 		}
 		
+		final Term term = termService.getByCode(termCode);
 		
 		parameters.put("termCode", term.getCode());
 		parameters.put("termName", term.getName());
@@ -163,43 +159,9 @@ public class EarlyAlertCaseCountsReportController extends AbstractBaseController
 				term.getEndDate(), campus));
 		parameters.put("totalClosed", earlyAlertService.getCountOfEarlyAlertsClosedByDate(term.getStartDate(), 
 				term.getEndDate(), campus));
-		
-		final JRDataSource beanDs  = new JREmptyDataSource();
-		
-		final InputStream is = getClass().getResourceAsStream(
-				"/reports/earlyAlertCaseCounts.jasper");
-		
-		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		JasperFillManager.fillReportToStream(is, os, parameters, beanDs);
-		final InputStream decodedInput = new ByteArrayInputStream(
-				os.toByteArray());
-
-		if ("pdf".equals(reportType)) {
-			response.setHeader(
-					"Content-disposition",
-					"attachment; filename=EarlyAlertCaseCountsReport.pdf");
-			JasperExportManager.exportReportToPdfStream(decodedInput,
-					response.getOutputStream());
-		} else if ("csv".equals(reportType)) {
-			response.setContentType("application/vnd.ms-excel");
-			response.setHeader(
-					"Content-disposition",
-					"attachment; filename=EarlyAlertCaseCountsReport.csv");
-
-			final JRCsvExporter exporter = new JRCsvExporter();
-			exporter.setParameter(JRExporterParameter.INPUT_STREAM,
-					decodedInput);
-			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM,
-					response.getOutputStream());
-			exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
-					Boolean.FALSE);
-
-			exporter.exportReport();
-		}
-		
-		response.flushBuffer();
-		is.close();
-		os.close();		
+				
+		generateReport( response,  parameters, null,  "/reports/earlyAlertCaseCounts.jasper", 
+				 reportType, "Early_Alert_Case_Counts_Report");
 	}
 
 	@Override

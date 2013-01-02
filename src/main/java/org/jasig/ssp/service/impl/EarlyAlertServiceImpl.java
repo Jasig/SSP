@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.impl; // NOPMD by jon.adams
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -60,6 +61,8 @@ import org.jasig.ssp.service.reference.EarlyAlertSuggestionService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.StudentTypeService;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -606,5 +609,13 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	public Long getCountOfEarlyAlertStudentsByDate(Date createDatedFrom,
 			Date createdDateTo, Campus campus) {
 		return dao.getCountOfEarlyAlertStudentsByDate(createDatedFrom, createdDateTo, campus);
+	}
+
+	@Override
+	public PagingWrapper<EarlyAlertStudentReportTO> getStudentsEarlyAlertCountSetForCritera(
+			EarlyAlertStudentSearchTO earlyAlertStudentSearchTO,
+			SortingAndPaging createForSingleSort) {
+		// TODO Auto-generated method stub
+		return dao.getStudentsEarlyAlertCountSetForCritera(earlyAlertStudentSearchTO, createForSingleSort);
 	}
 }

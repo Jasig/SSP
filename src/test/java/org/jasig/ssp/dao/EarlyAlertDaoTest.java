@@ -28,6 +28,7 @@ import static org.junit.Assert.fail;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -42,6 +43,11 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.CampusService;
+import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -367,6 +373,41 @@ public class EarlyAlertDaoTest {
 					startDate, endDate, campus);
 			assertEquals("Count of Students was not expected.", 2,
 					result.intValue());
+		} finally {
+			dao.delete(saved);
+			dao.delete(saved2);
+		}
+	}
+	
+	@Test
+	public void getStudentsEarlyAlertCountSetForCritera()
+			throws ObjectNotFoundException {
+		
+		final Date startDate = getDateSetByDayOffset(-1);
+		final Date endDate = getDateSetByDayOffset(1);
+		final EarlyAlert earlyAlert = createTestClosedEarlyAlert();
+		earlyAlert.setClosedDate(null);
+		earlyAlert.setClosedById(null);
+		final EarlyAlert saved = dao.save(earlyAlert);
+
+		final EarlyAlert earlyAlert2 = createTestClosedEarlyAlert();
+		final EarlyAlert saved2 = dao.save(earlyAlert2);
+		sessionFactory.getCurrentSession().flush();
+
+
+		final AddressLabelSearchTO addressLabelSearchTO = new AddressLabelSearchTO(
+				null,
+				null, null, null, null, null,
+				null, null,
+				null);
+		
+		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(addressLabelSearchTO,startDate, endDate);
+
+
+		try {
+			final PagingWrapper<EarlyAlertStudentReportTO> result = dao.getStudentsEarlyAlertCountSetForCritera(searchForm, null);
+			assertEquals("Count of Students was not expected.", 2,
+					result.getRows().size());
 		} finally {
 			dao.delete(saved);
 			dao.delete(saved2);

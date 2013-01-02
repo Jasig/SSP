@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.impl; // NOPMD
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -56,6 +57,7 @@ import org.jasig.ssp.service.reference.EarlyAlertReferralService;
 import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.reference.JournalTrackService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -334,6 +336,11 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	@Override
 	public Long getEarlyAlertResponseCountForDate(Date createDateFrom, Date createDateTo, Campus campus) {		
 		return dao.getEarlyAlertResponseCountForDate(createDateFrom, createDateTo, campus);
+	}
+	
+	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(Date createDateFrom,
+			Date createDateTo, List<UUID> outcomes, Person coach){
+		return dao.getEarlyAlertOutreachCountByOutcome(createDateFrom, createDateTo, outcomes, coach);
 	}
 
 }

@@ -93,6 +93,8 @@ var ssp = ssp || {};
 					.locate('referralSourceGroup'));
 			loadGroupInput("/ssp/api/1/reference/campus/", that
 					.locate('campusGroup'));
+			loadGroupInput("/ssp/api/1/reference/earlyAlertOutcome/", that
+							.locate('earlyAlertOutcomeGroup'));		
 			loadTermInput("/ssp/api/1/reference/term/", that
 					.locate('termGroup'));
 			// 1000 limit is max allowed by server side
@@ -103,6 +105,27 @@ var ssp = ssp || {};
 			loadTextForm(
 					"/ssp/api/1/reference/confidentialityDisclosureAgreement/",
 					that.locate('confidentialityAgreementFormContent'));
+		}
+		
+		var initializeDateRange = function(){
+			var button = $('.switch-date-range-type').filter(':visible');
+			
+			if(button.length == 0)
+				return;
+			var section = button.parent().parent().parent();
+			var term = section.find('.ea-term');
+			var dateRange = section.find('.ea-date-range');
+			var value = button.val();
+			if(value == 'setbyrange'){
+				term.show();
+				dateRange.hide();
+				
+				button.text('use date range');
+			} else {
+				term.hide();
+				dateRange.show();
+				button.text('use term');
+			}
 		}
 
 		function addSelectItem(uid, name, container) {
@@ -120,6 +143,31 @@ var ssp = ssp || {};
 				buttonImageOnly : true,
 				buttonImage : '/ssp/images/calendar.gif'
 			});
+			
+			var switchDateRangeType = that.locate('switchDateRangeType');
+			$(switchDateRangeType).click(function(event) {
+				var value = $(event.target).val();
+				var button = $(event.target);
+				var section = button.parent().parent().parent();
+				var term = section.find('.ea-term');
+				var dateRange = section.find('.ea-date-range');
+				if(value == 'setbyrange'){
+					term.find('[name="termCode"]').val("");
+					term.hide();
+					dateRange.show();
+					button.val('setbyterm');
+					button.text('use term');
+				} else {
+					term.show();
+					dateRange.find('[name="createDateFrom"]').val("");
+					dateRange.find('[name="createDateTo"]').val("");
+					dateRange.hide();
+					button.val('setbyrange');
+					button.text('use date range');
+				}
+				return false;
+			});
+			
 		});
 
 		// construct the new component
@@ -128,6 +176,7 @@ var ssp = ssp || {};
 		var reportsSelectChange = function() {
 			var reportsSelect = that.locate('reportsSelect');
 			loadReportForm(reportsSelect.val());
+			initializeDateRange();
 		};
 
 		var printConfForm = that.locate('printConfForm');
@@ -172,6 +221,26 @@ var ssp = ssp || {};
 		reportsSelect
 				.append('<option value="earlyAlertCaseCounts">Early Alert Case Counts Report</option>');
 		
+		reportsSelect
+		.append('<option value="earlyAlertStudent">Early Alert Student Report</option>');
+		
+		reportsSelect
+		.append('<option value="earlyAlertStudentReferral">Early Alert Student Referral Report</option>');
+		
+		reportsSelect
+		.append('<option value="earlyAlertStudentProgress">Early Alert Student Progress Report</option>');
+		
+		reportsSelect
+		.append('<option value="earlyAlertStudentOutreach">Early Alert Student Outreach Report</option>');
+		
+		reportsSelect
+		.append('<option value="earlyAlertStudentOutcome">Early Alert Student Outcome Report</option>');
+		
+		//TODO Controller Generated but DAO's incomplete at this time.
+		//reportsSelect
+		//.append('<option value="earlyAlertClass">Early Alert Class Report</option>');
+
+
 		reportsSelect.change(reportsSelectChange);
 	}
 
@@ -191,7 +260,13 @@ var ssp = ssp || {};
 							confidentialityAgreementForm : '.confidentiality-agreement-form',
 							caseloadActivityReport : '.caseload-activity-report',
 							earlyAlertCaseCounts : '.early-alert-case-counts-report',
+							earlyAlertStudent : '.early-alert-student-report',
+							earlyAlertStudentReferral : '.early-alert-student-referral-report',
 							confidentialityAgreementFormContent : '.confidentiality-agreement-form-content',
+							earlyAlertStudentProgress : '.early-alert-student-progress-report',
+							earlyAlertStudentOutreach : '.early-alert-student-outreach-report',
+							earlyAlertStudentOutcome : '.early-alert-student-outcome-report',
+							earlyAlertClass : '.early-alert-class-report',
 							programStatusGroup : '.input-program-status-group',
 							studentTypeGroup : '.input-student-type-group',
 							specialServiceGroup : '.input-special-service-group',
@@ -199,7 +274,11 @@ var ssp = ssp || {};
 							assignedCounselorGroup : '.input-assigned-counselor-group',
 							campusGroup: '.input-campus-group',
 							termGroup: '.input-term-group',
+							earlyAlertOutcomeGroup: '.input-early-alert-outcome-group',
 							calendarType : '.input-calendar-type',
+							switchDateRangeType : '.switch-date-range-type',
+							termRange : '.ea-term',
+							dateRange : '.ea-date-range',
 							hideableform : '.hideable-form',
 							printConfForm : '.print-conf-form',
 							loadingMessage: '.loading-message',
