@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -29,6 +30,7 @@ import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
+import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 
@@ -164,6 +166,26 @@ public class EarlyAlertReportBaseController extends AbstractBaseController {
 					
 				}
 		return outcomeNamesStringBuffer.toString();
+	}
+	
+	List<UUID> cleanUUIDListOfNulls(List<UUID> uuids){
+		ArrayList<UUID> cleanUUIDs = null;
+		if(uuids != null){
+			cleanUUIDs = new ArrayList<UUID>();
+			Iterator<UUID> iterator = uuids.iterator();
+			while(iterator.hasNext()){
+				UUID uuid = iterator.next();
+				if(uuid == null)
+					continue;
+				cleanUUIDs.add(uuid);
+			}
+		}
+		return cleanUUIDs;
+	}
+	
+	String getFullName(PersonTO person){
+		return person == null ? "" : 
+			person.getFirstName() + " " + person.getLastName();
 	}
 
 }
