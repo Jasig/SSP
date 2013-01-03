@@ -45,21 +45,14 @@ import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.ProgramStatus;
-import org.jasig.ssp.service.CaseloadService;
 import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TaskService;
-import org.jasig.ssp.service.reference.ProgramStatusService;
-import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.reports.CaseLoadActivityReportTO;
-import org.jasig.ssp.transferobject.reports.CaseLoadReportTO;
-import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,11 +81,10 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CaseloadActivityReportController.class);
 
-
 	@Autowired
 	private transient PersonService personService;
 	@Autowired
-	protected transient StudentTypeService studentTypeService;	
+	protected transient StudentTypeService studentTypeService;
 	@Autowired
 	protected transient JournalEntryService journalEntryService;
 	@Autowired
@@ -102,7 +94,6 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 	@Autowired
 	protected transient EarlyAlertResponseService earlyAlertResponseService;
 
-	
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
 		final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy",
@@ -111,91 +102,89 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(
 				dateFormat, true));
 	}
-	
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	void getCaseLoadActivity(
-			final HttpServletResponse response,		
+			final HttpServletResponse response,
 			final @RequestParam(required = false) UUID coachId,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) Date caDateFrom,
-			final @RequestParam(required = false) Date caDateTo,			
+			final @RequestParam(required = false) Date caDateTo,
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
-		
-		
-		//populate coaches to search for
-		Collection<Person> coaches;		
-		if (coachId != null){		
+
+		// populate coaches to search for
+		Collection<Person> coaches;
+		if (coachId != null) {
 			Person coach = personService.get(coachId);
 			coaches = new ArrayList<Person>();
 			coaches.add(coach);
+		} else {
+			coaches = personService
+					.getAllCurrentCoaches(Person.PERSON_NAME_AND_ID_COMPARATOR);
 		}
-		else{
-			coaches = personService.getAllCurrentCoaches(Person.PERSON_NAME_AND_ID_COMPARATOR);
-		}
-		
-						
+
 		List<CaseLoadActivityReportTO> caseLoadActivityReportList = new ArrayList<CaseLoadActivityReportTO>();
-				
+
 		Iterator<Person> personIter = coaches.iterator();
-		while(personIter.hasNext())
-		{			
-			Person currPerson = personIter.next(); 
-			
-			Long journalEntriesCount = journalEntryService.getCountForCoach(currPerson, caDateFrom, caDateTo, studentTypeIds);			
-			Long studentJournalEntriesCount = journalEntryService.getStudentCountForCoach(currPerson, caDateFrom, caDateTo, studentTypeIds);			
-			Long actionPlanTasksCount = taskService.getTaskCountForCoach(currPerson, caDateFrom, caDateTo, studentTypeIds);			
-			Long studentTaskCountForCoach = taskService.getStudentTaskCountForCoach(currPerson, caDateFrom, caDateTo, studentTypeIds);
-			Long earlyAlertsCount = earlyAlertService.getEarlyAlertCountForCoach(currPerson, caDateFrom, caDateTo, studentTypeIds);
-			Long earlyAlertsResponded = earlyAlertResponseService.getEarlyAlertResponseCountForCoach(currPerson, caDateFrom, caDateTo, studentTypeIds);
-			Long studentsEarlyAlertsCount = earlyAlertService.getStudentEarlyAlertCountForCoach(currPerson, caDateFrom, caDateTo, studentTypeIds);
-			
+		while (personIter.hasNext()) {
+			Person currPerson = personIter.next();
+
+			Long journalEntriesCount = journalEntryService.getCountForCoach(
+					currPerson, caDateFrom, caDateTo, studentTypeIds);
+			Long studentJournalEntriesCount = journalEntryService
+					.getStudentCountForCoach(currPerson, caDateFrom, caDateTo,
+							studentTypeIds);
+			Long actionPlanTasksCount = taskService.getTaskCountForCoach(
+					currPerson, caDateFrom, caDateTo, studentTypeIds);
+			Long studentTaskCountForCoach = taskService
+					.getStudentTaskCountForCoach(currPerson, caDateFrom,
+							caDateTo, studentTypeIds);
+			Long earlyAlertsCount = earlyAlertService
+					.getEarlyAlertCountForCoach(currPerson, caDateFrom,
+							caDateTo, studentTypeIds);
+			Long earlyAlertsResponded = earlyAlertResponseService
+					.getEarlyAlertResponseCountForCoach(currPerson, caDateFrom,
+							caDateTo, studentTypeIds);
+			Long studentsEarlyAlertsCount = earlyAlertService
+					.getStudentEarlyAlertCountForCoach(currPerson, caDateFrom,
+							caDateTo, studentTypeIds);
 
 			CaseLoadActivityReportTO caseLoadActivityReportTO = new CaseLoadActivityReportTO(
-					currPerson.getFirstName(), 
-					currPerson.getLastName(), 
-					journalEntriesCount, 
-					studentJournalEntriesCount,
-					actionPlanTasksCount, 
-					studentTaskCountForCoach, 
-					earlyAlertsCount, 
-					studentsEarlyAlertsCount, 
+					currPerson.getFirstName(), currPerson.getLastName(),
+					journalEntriesCount, studentJournalEntriesCount,
+					actionPlanTasksCount, studentTaskCountForCoach,
+					earlyAlertsCount, studentsEarlyAlertsCount,
 					earlyAlertsResponded);
-			
+
 			caseLoadActivityReportList.add(caseLoadActivityReportTO);
-		}			
-		
-		
-		// Get the actual names of the UUIDs for the special groups
-		final StringBuffer studentTypeStringBuffer = new StringBuffer();
-		if ((studentTypeIds != null)
-				&& (studentTypeIds.size() > 0)) {
-			final Iterator<UUID> stIter = studentTypeIds.iterator();
-			while (stIter.hasNext()) {
-				studentTypeStringBuffer.append("\u2022 " + studentTypeService.get(stIter.next()).getName());
-				studentTypeStringBuffer.append("    ");																			
-			}			
 		}
 
-		
+		// Get the actual names of the UUIDs for the special groups
+		final StringBuffer studentTypeStringBuffer = new StringBuffer();
+		if ((studentTypeIds != null) && (studentTypeIds.size() > 0)) {
+			final Iterator<UUID> stIter = studentTypeIds.iterator();
+			while (stIter.hasNext()) {
+				studentTypeStringBuffer.append("\u2022 "
+						+ studentTypeService.get(stIter.next()).getName());
+				studentTypeStringBuffer.append("    ");
+			}
+		}
+
 		final Map<String, Object> parameters = Maps.newHashMap();
 		parameters.put("statusDateFrom", caDateFrom);
 		parameters.put("statusDateTo", caDateTo);
-		parameters.put("homeDepartment", ""); //not available yet
+		parameters.put("homeDepartment", ""); // not available yet
 		parameters.put("studentType", studentTypeStringBuffer.toString());
-		
-				
+
 		final JRDataSource beanDs;
-		if(caseLoadActivityReportList.isEmpty())
-		{
+		if (caseLoadActivityReportList.isEmpty()) {
 			beanDs = new JREmptyDataSource();
-		}
-		else{
+		} else {
 			beanDs = new JRBeanCollectionDataSource(caseLoadActivityReportList);
-		}		
-		
+		}
+
 		final InputStream is = getClass().getResourceAsStream(
 				"/reports/caseLoadActivity.jasper");
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -204,15 +193,13 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 				os.toByteArray());
 
 		if ("pdf".equals(reportType)) {
-			response.setHeader(
-					"Content-disposition",
+			response.setHeader("Content-disposition",
 					"attachment; filename=CaseLoadActivityReport.pdf");
 			JasperExportManager.exportReportToPdfStream(decodedInput,
 					response.getOutputStream());
 		} else if ("csv".equals(reportType)) {
 			response.setContentType("application/vnd.ms-excel");
-			response.setHeader(
-					"Content-disposition",
+			response.setHeader("Content-disposition",
 					"attachment; filename=CaseLoadActivityReport.csv");
 
 			final JRCsvExporter exporter = new JRCsvExporter();
@@ -225,10 +212,10 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 
 			exporter.exportReport();
 		}
-		
+
 		response.flushBuffer();
 		is.close();
-		os.close();		
+		os.close();
 	}
 
 	@Override
@@ -236,6 +223,4 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 		return LOGGER;
 	}
 
-
-	
 }

@@ -197,9 +197,9 @@ public class AddressLabelsReportController extends AbstractBaseController { // N
 
 		final Map<String, Object> parameters = Maps.newHashMap();
 		
-		if (coachTO != null){
-			parameters.put("coachName", coachTO.getFirstName() + " " + coachTO.getLastName());
-		}
+		parameters.put("coachName", coachTO == null ? "" : 
+			coachTO.getFirstName() + " " + coachTO.getLastName());
+		
 		parameters.put("studentType", studentTypeStringBuffer.toString());
 		parameters.put("programStatus", programStatusName);
 		parameters.put("cohortTerm", StringUtils.defaultString(anticipatedStartTerm) + " " + (anticipatedStartYear == null?"" : anticipatedStartYear.toString()));
