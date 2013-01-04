@@ -123,7 +123,8 @@ var ssp = ssp || {};
         var courses = getCourseListData();
         if (courses && courses.length != 0) {
             $(courses).each(function(index, course) {
-                courseSelect.append('<option value="' + course.formattedCourse  + '">' + course.formattedCourse + ' - ' + course.title + '</option>');
+                var option = '<option value="' + course.formattedCourse  + '">' + course.formattedCourse + (course.title ? ' - ' + course.title : '') + (course.termCode ? ' - ' + course.termCode : '') + '</option>';
+                courseSelect.append(option);
             });
             courseSelect.change(refreshRoster);
 
