@@ -47,16 +47,32 @@ var ssp = ssp || {};
             });
             return rslt;
         };
-		
+
+        var getSelectedRosterIds = function() {
+            var selectedCourse = that.locate('courseSelect').val();
+            var selectedRosterIds = {
+                formattedCourse: '',
+                termCode: ''
+            };
+            if ( selectedCourse ) {
+                var courseIdParts = selectedCourse.split(options.course_id_delim, 2);
+                selectedRosterIds.formattedCourse = courseIdParts[0];
+                if ( courseIdParts.length > 1 ) {
+                    selectedRosterIds.termCode = courseIdParts[1];
+                }
+            }
+            return selectedRosterIds;
+        };
+
         /*
          * Roster Data Function
          */
         var getRosterData = function() {
         	var rslt = [];
-        	var formattedCourse = that.locate('courseSelect').val();
-        	if (formattedCourse) {
+            var selectedRosterIds = getSelectedRosterIds();
+            if ( selectedRosterIds && selectedRosterIds.formattedCourse ) {
                 $.ajax({
-                    url: options.urls.roster.replace('FORMATTEDCOURSE', formattedCourse),
+                    url: options.urls.roster.replace('FORMATTEDCOURSE', selectedRosterIds.formattedCourse).replace('TERMCODE', selectedRosterIds.termCode),
                     async: false,
                     dataType: 'json',
                     error: function(jqXHR, textStatus, errorThrown) {
@@ -123,7 +139,8 @@ var ssp = ssp || {};
         var courses = getCourseListData();
         if (courses && courses.length != 0) {
             $(courses).each(function(index, course) {
-                var option = '<option value="' + course.formattedCourse  + '">' + course.formattedCourse + (course.title ? ' - ' + course.title : '') + (course.termCode ? ' - ' + course.termCode : '') + '</option>';
+                var optionVal = course.formattedCourse + (course.termCode ? options.course_id_delim + course.termCode : '');
+                var option = '<option value="' + optionVal  + '">' + course.formattedCourse + (course.title ? ' - ' + course.title : '') + (course.termCode ? ' - ' + course.termCode : '') + '</option>';
                 courseSelect.append(option);
             });
             courseSelect.change(refreshRoster);
@@ -160,8 +177,8 @@ var ssp = ssp || {};
             // Click event for selecting a student
             $(container + ' ' + that.options.selectors.rosterTable + ' tr').live('click', function() {
                 var schoolId = $(this).find('.schoolId').text();
-                var formattedCourse = that.locate('courseSelect').val();
-                var alertFormUrl = options.urls.enterAlert.replace('SCHOOLID', schoolId).replace('FORMATTEDCOURSE', formattedCourse);
+                var selectedRosterIds = getSelectedRosterIds();
+                var alertFormUrl = options.urls.enterAlert.replace('SCHOOLID', schoolId).replace('FORMATTEDCOURSE', selectedRosterIds.formattedCourse).replace('TERMCODE', selectedRosterIds.termCode);
                 window.location = alertFormUrl;
             });
         } else {

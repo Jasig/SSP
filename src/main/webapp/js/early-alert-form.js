@@ -215,6 +215,7 @@ var ssp = ssp || {};
             var postData = {
                 courseName: options.parameters.courseName,
                 courseTitle: options.parameters.courseTitle,
+                courseTermCode: options.parameters.term,
                 emailCC: $(selectors.emailCc).val(),
                 campusId: $(selectors.campus).val(),
                 earlyAlertReasonIds: [ { id: $(selectors.reason).val() } ],

@@ -65,10 +65,32 @@ public class FacultyCourseDao extends AbstractExternalDataDao<FacultyCourse> {
 			throw new ObjectNotFoundException(formattedCourse,
 					FacultyCourse.class.getName());
 		}
-		
+
 		return (FacultyCourse) createCriteria().add(
 				Restrictions.eq("facultySchoolId", facultySchoolId)).add(
 				Restrictions.eq("formattedCourse", formattedCourse))
+				.uniqueResult();
+	}
+
+	public FacultyCourse getCourseByFacultySchoolIdAndFormattedCourseAndTermCode(
+			final String facultySchoolId, final String formattedCourse,
+			final String termCode) throws ObjectNotFoundException {
+		if ( StringUtils.isBlank(facultySchoolId) ) {
+			throw new ObjectNotFoundException("Must specify a faculty school ID",
+					FacultyCourse.class.getName());
+		}
+		if ( StringUtils.isBlank(formattedCourse) ) {
+			throw new ObjectNotFoundException("Must specify a formatted course ID",
+					FacultyCourse.class.getName());
+		}
+		if ( StringUtils.isBlank(termCode) ) {
+			throw new ObjectNotFoundException("Must specify a term code",
+					FacultyCourse.class.getName());
+		}
+		return (FacultyCourse) createCriteria()
+				.add(Restrictions.eq("facultySchoolId", facultySchoolId))
+				.add(Restrictions.eq("formattedCourse", formattedCourse))
+				.add(Restrictions.eq("termCode", termCode))
 				.uniqueResult();
 	}
 }

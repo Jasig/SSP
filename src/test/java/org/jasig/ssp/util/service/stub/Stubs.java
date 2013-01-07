@@ -221,6 +221,22 @@ public class Stubs {
 
 	}
 
+	public static enum TermFixture {
+		FALL_2012 ("FA12", "Fall 2012"),
+		SPRING_2013 ("SP13", "Spring 2013");
+
+		private final String code;
+		private final String title;
+
+		TermFixture(String code, String title) {
+			this.code = code;
+			this.title = title;
+		}
+
+		public String code() { return code; }
+		public String title() { return title; }
+	}
+
 	/**
 	 * @return
 	 * @throws ObjectNotFoundException

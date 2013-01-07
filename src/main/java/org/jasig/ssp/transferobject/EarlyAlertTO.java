@@ -44,6 +44,8 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 
 	private String courseTitle;
 
+	private String courseTermCode;
+
 	private String emailCC;
 
 	private UUID campusId;
@@ -90,6 +92,7 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 
 		courseName = earlyAlert.getCourseName();
 		courseTitle = earlyAlert.getCourseTitle();
+		courseTermCode = earlyAlert.getCourseTermCode();
 		emailCC = earlyAlert.getEmailCC();
 		campusId = earlyAlert.getCampus() == null ? null : earlyAlert
 				.getCampus().getId();
@@ -157,6 +160,21 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 	 */
 	public void setCourseTitle(final String courseTitle) {
 		this.courseTitle = courseTitle;
+	}
+
+	/**
+	 * @return the Course Term Code
+	 */
+	public String getCourseTermCode() {
+		return courseTermCode;
+	}
+
+	/**
+	 * @param courseTermCode
+	 *            the Course Term Code to set
+	 */
+	public void setCourseTermCode(final String courseTermCode) {
+		this.courseTermCode = courseTermCode;
 	}
 
 	/**

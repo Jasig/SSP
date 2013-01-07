@@ -64,4 +64,6 @@
 
 	<include file="org/jasig/ssp/database/changesets/000014.xml" />
 
+	<include file="org/jasig/ssp/database/changesets/000015.xml" />
+
 </databaseChangeLog>
