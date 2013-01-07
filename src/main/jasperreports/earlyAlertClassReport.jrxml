@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="earlyAlertClassReport" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c435a7b9-fa45-466b-83ed-6043d3153109">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="termName" class="java.lang.String"/>
+	<parameter name="campus" class="java.lang.String"/>
+	<field name="course" class="java.lang.String"/>
+	<field name="section" class="java.lang.String"/>
+	<field name="campus" class="java.lang.String"/>
+	<field name="countEarlyAlerts" class="java.lang.Long"/>
+	<field name="countEnrolled" class="java.lang.Long"/>
+	<field name="countPassing" class="java.lang.Long"/>
+	<field name="countNonPassing" class="java.lang.Long"/>
+	<field name="countWithdrawn" class="java.lang.Long"/>
+	<field name="countZGrades" class="java.lang.Long"/>
+	<variable name="rowIndex" class="java.lang.Integer">
+		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
+		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="10" y="10" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Report Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="10" y="31" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Early Alert Term]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="110" y="31" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{termName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="64aa21a8-5fbc-4465-b2c4-991e4c0e6450" x="110" y="51" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{campus}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="255b284c-e962-4bd2-a35c-c07141e46079" x="110" y="11" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="11" y="51" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Campus]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="0" width="572" height="34" backcolor="#70C2E7"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="211" y="7" width="151" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Early Alert Class Report]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="dfc3b60d-f4ea-4b4b-81ab-8ded09b07330" x="0" y="2" width="45" height="20"/>
+				<textElement/>
+				<text><![CDATA[Course]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8f0dd94d-de0f-404f-95a1-8299c9eceafc" x="45" y="2" width="59" height="20"/>
+				<textElement/>
+				<text><![CDATA[Section]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="133a7739-60b7-4b6c-9a2b-1e703c727e4b" x="104" y="2" width="58" height="18"/>
+				<textElement/>
+				<text><![CDATA[Campus]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bb725aa4-223d-410d-9843-a0d22aa7b601" x="175" y="2" width="100" height="18"/>
+				<textElement/>
+				<text><![CDATA[Early Alerts]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d2f8f480-495c-4860-9f5d-010c700b752a" x="275" y="2" width="48" height="18"/>
+				<textElement/>
+				<text><![CDATA[Enrolled]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="702aa090-f74b-43ea-8d1c-3242f35381f3" x="323" y="2" width="39" height="18"/>
+				<textElement/>
+				<text><![CDATA[Passing]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c9748924-d437-4fa7-a9fa-f62d89365379" x="366" y="0" width="63" height="20"/>
+				<textElement/>
+				<text><![CDATA[Non Passing]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5cc868c9-f855-4bfe-ba87-5c375c40e068" x="429" y="2" width="56" height="18"/>
+				<textElement/>
+				<text><![CDATA[Withdrawn]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dd5ecfe2-c00d-4369-a2ce-c3089b151177" x="485" y="2" width="53" height="20"/>
+				<textElement/>
+				<text><![CDATA[Z Grade]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="31" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="0" y="1" width="572" height="22" backcolor="#E4E4E4">
+					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<textField>
+				<reportElement uuid="7d7205ff-b537-4ed7-95db-ffb6513c2ebd" x="0" y="3" width="60" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{course}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="1dadd85b-8df4-409a-8802-42f2d846d1f2" x="60" y="3" width="62" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{section}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d2028eb4-108d-4cc6-b06b-bc56a73e391d" x="117" y="3" width="58" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{campus}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="616afda9-aaf3-48e2-a5d5-18dfe2c828ac" x="175" y="3" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{countEarlyAlerts}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6bde3c33-a618-475b-ae9f-0ccb995f8f65" x="275" y="3" width="48" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{countEnrolled}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="00cc6750-10be-434a-97e8-928d88bca410" x="323" y="3" width="52" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{countPassing}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ac139c22-4144-4daa-b936-8b6afc9d191e" x="366" y="3" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{countNonPassing}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ccd36ac1-8680-42fc-a392-4ec51145ffb0" x="429" y="3" width="33" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{countWithdrawn}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="159fa46c-9237-45dd-b44d-57dfcbc93d62" x="485" y="0" width="53" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{countZGrades}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

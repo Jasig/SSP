@@ -18,30 +18,34 @@
  */
 package org.jasig.ssp.dao;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-
-import javax.management.Query;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.dialect.SQLServerDialect;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.sql.JoinType;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.jasig.ssp.model.CaseloadRecord;
+import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ProgramStatus;
+import org.jasig.ssp.util.hibernate.MultipleCountProjection;
+import org.jasig.ssp.util.hibernate.OrderAsString;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.reports.CaseloadReportController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+
+import com.google.common.collect.Lists;
 
 @Repository
 public class CaseloadDao extends AbstractDao<Person> {
@@ -131,6 +135,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 
 		// Restrict by program status if provided
 		if (programStatus != null) {
+
 			final Criteria subquery = query.createAlias("programStatuses",
 					"personProgramStatus");
 
@@ -164,6 +169,177 @@ public class CaseloadDao extends AbstractDao<Person> {
 				.uniqueResult();
 
 		return totalRows;
+	}
+
+
+	public PagingWrapper<CoachCaseloadRecordCountForProgramStatus>
+		currentCaseLoadCountsByStatus(List<UUID> studentTypeIds,
+									  SortingAndPaging sAndP) {
+
+		// Technically run the risk of returning multiple statuses
+		// per user if the user's statuses are "pre-loaded" i.e. the current
+		// status is set to expire at a future date and a subsequent status
+		// has already been created in the db and is set to go into effect on
+		// that future date... but that shouldn't happen under current use
+		// cases
+		Criterion dateRestrictions =
+				overlappingProgramStatusDateRestrictions(new Date(), null);
+
+		return caseloadCountsByStatusWithDateRestrictions(dateRestrictions,
+					studentTypeIds, sAndP);
+
+	}
+
+	public PagingWrapper<CoachCaseloadRecordCountForProgramStatus>
+		caseLoadCountsByStatus(
+			List<UUID> studentTypeIds,
+			Date programStatusDateFrom,
+			Date programStatusDateTo,
+			SortingAndPaging sAndP) {
+
+		Criterion dateRestrictions =
+				overlappingProgramStatusDateRestrictions(programStatusDateFrom,
+						programStatusDateTo);
+
+		return caseloadCountsByStatusWithDateRestrictions(dateRestrictions,
+					studentTypeIds, sAndP);
+
+	}
+
+	private PagingWrapper<CoachCaseloadRecordCountForProgramStatus>
+		caseloadCountsByStatusWithDateRestrictions(Criterion dateRestrictions,
+												   List<UUID> studentTypeIds,
+												   SortingAndPaging sAndP) {
+
+		final Criteria query = createCriteria();
+
+		query.createAlias("programStatuses", "ps").createAlias("coach", "c");
+
+		if ( dateRestrictions != null ) {
+			query.add(dateRestrictions);
+		}
+
+		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
+			query.add(Restrictions.in("studentType.id", studentTypeIds));
+		}
+
+		// item count
+		Long totalRows = 0L;
+		if ((sAndP != null) && sAndP.isPaged()) {
+			query.setProjection(new MultipleCountProjection("c.id;ps.programStatus.id").setDistinct());
+			totalRows = (Long) query.uniqueResult();
+
+			if ( totalRows == 0 ) {
+				Collection<CoachCaseloadRecordCountForProgramStatus> empty =
+						Lists.newArrayListWithCapacity(0);
+				return new PagingWrapper<CoachCaseloadRecordCountForProgramStatus>(0, empty);
+			}
+
+			// clear the row count projection
+			query.setProjection(null);
+		}
+
+		query.createAlias("coach.staffDetails", "sd", JoinType.LEFT_OUTER_JOIN);
+		ProjectionList projectionList = Projections.projectionList()
+				.add(Projections.groupProperty("c.id").as("coachId"));
+		// TODO find a way to turn these into more generic and centralized
+		// feature checks on the Dialect so we at least aren't scattering
+		// Dialect-specific code all over the place
+		Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
+		if ( dialect instanceof SQLServerDialect ) {
+			// sql server requires all these to part of the grouping
+			projectionList.add(Projections.groupProperty("c.lastName").as("coachLastName"))
+					.add(Projections.groupProperty("c.firstName").as("coachFirstName"))
+					.add(Projections.groupProperty("c.middleName").as("coachMiddleName"))
+					.add(Projections.groupProperty("c.schoolId").as("coachSchoolId"))
+					.add(Projections.groupProperty("c.username").as("coachUsername"));
+		} else {
+			// other dbs (postgres) don't need these in the grouping
+			projectionList.add(Projections.property("c.lastName").as("coachLastName"))
+					.add(Projections.property("c.firstName").as("coachFirstName"))
+					.add(Projections.property("c.middleName").as("coachMiddleName"))
+					.add(Projections.property("c.schoolId").as("coachSchoolId"))
+					.add(Projections.property("c.username").as("coachUsername"));
+		}
+		projectionList.add(Projections.groupProperty("sd.departmentName").as("coachDepartmentName"))
+				.add(Projections.groupProperty("ps.programStatus.id").as("programStatusId"))
+				.add(Projections.count("ps.programStatus.id").as("count"));
+		query.setProjection(projectionList);
+
+		if ( sAndP == null || !(sAndP.isSorted()) ) {
+			// there are assumptions in CaseloadServiceImpl about this
+			// default ordering... make sure it stays synced up
+			query.addOrder(Order.asc("c.lastName"))
+					.addOrder(Order.asc("c.firstName"))
+					.addOrder(Order.asc("c.middleName"));
+
+			// can't sort on program status name without another join, but
+			// sorting on id is non-deterministic across dbs (sqlserver sorts
+			// UUIDs one way, Postgres another, so you can't write a single
+			// integration test for both), so more dialect specific magic here.
+			if ( dialect instanceof SQLServerDialect ) {
+				query.addOrder(OrderAsString.asc("ps.programStatus.id"));
+			} else {
+				query.addOrder(Order.asc("ps.programStatus.id"));
+			}
+		}
+
+		if ( sAndP != null ) {
+			sAndP.addAll(query);
+		}
+
+		query.setResultTransformer(new AliasToBeanResultTransformer(
+				CoachCaseloadRecordCountForProgramStatus.class));
+
+		return sAndP == null
+				? new PagingWrapper<CoachCaseloadRecordCountForProgramStatus>(query.list())
+				: new PagingWrapper<CoachCaseloadRecordCountForProgramStatus>(totalRows, query.list());
+	}
+
+	private Criterion overlappingProgramStatusDateRestrictions(
+			Date programStatusDateFrom,
+			Date programStatusDateTo) {
+
+		// no date filtering
+		if ( programStatusDateFrom == null && programStatusDateTo == null ) {
+			return null;
+		}
+
+		// implicit range is 'beginning of time' through 'to'. anything
+		// that became effective prior to or on 'to' intersects with that range
+		if ( programStatusDateFrom == null ) {
+			return Restrictions.le("ps.effectiveDate", programStatusDateTo);
+		}
+
+		// implicit range is 'from' to 'end of time'. the set of intersecting
+		// statuses includes those that overlap with 'from' so just finding
+		// statues that became effective after 'from' won't work.
+		if ( programStatusDateTo == null ) {
+			return Restrictions.or(
+
+					// started before 'from', expired on or after
+					Restrictions.and(
+							Restrictions.le("ps.effectiveDate", programStatusDateFrom),
+							expiresOnOrLaterThan(programStatusDateFrom)),
+
+					// ... or... started on or after 'from'
+					Restrictions.ge("ps.effectiveDate", programStatusDateFrom)
+
+			);
+		}
+
+		// else both bounds were selected... we want to catch all
+		// statuses overlapping that date range even if they only overlap from
+		// or only overlap to or overlap both or fall completely in between.
+		return Restrictions.and(
+				Restrictions.le("ps.effectiveDate", programStatusDateTo),
+				expiresOnOrLaterThan(programStatusDateFrom));
+
+	}
+
+	private Criterion expiresOnOrLaterThan(Date date) {
+		return Restrictions.or(Restrictions.isNull("ps.expirationDate"),
+								Restrictions.ge("ps.expirationDate", date));
 	}
 
 }

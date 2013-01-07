@@ -448,9 +448,6 @@
 
 
 
-
-
-
 <div class="hideable-form special-services-form" style="display:none">
 	<h1>Special Services</h1>
 	<form action="/ssp/api/1/report/SpecialServices/" method="post" class="alert-form">
@@ -488,7 +485,7 @@
 
 
 <div class="hideable-form caseLoad-form" style="display:none">
-	<h1>Caseload Report</h1>
+	<h1>Current Caseload Statuses Report</h1>
 	<form action="/ssp/api/1/report/Caseload/" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">
 		
@@ -502,33 +499,12 @@
 		</div>
 		<div class="ea-clear"></div>
 
-		<!-- Student Type -->
+		<!-- Home Department -->
 		<div class="ea-input">
 			Not Available Yet
-			<!-- select class="input-student-type-group" id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select-->
 		</div>
 		<div class="ea-label">
 			<span>Home Department:</span>
-		</div>
-		<div class="ea-clear"></div>
-
-
-				
-		<!-- Date From -->
-		<div class="ea-input">
-			<input class="input-calendar-type" type="textbox" name="programStatusDateFrom" id="programStatusDateFrom" />
-		</div>
-		<div class="ea-label">
-			<span>Program Status Date From (inclusive):</span>
-		</div>
-		<div class="ea-clear"></div>
-
-		<!-- Date To -->
-		<div class="ea-input">
-			<input class="input-calendar-type" type="textbox" name="programStatusDateTo" id="programStatusDateTo" />
-		</div>
-		<div class="ea-label">
-			<span>Program Status Date To (exclusive):</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -552,7 +528,6 @@
 		</div>
 	</form>
 </div>
-
 
 
 <div class="hideable-form counseling-reference-guide" style="display:none">
@@ -593,8 +568,597 @@
 
 </div>
 
+<div class="hideable-form early-alert-case-counts-report" style="display:none">
+	<h1>Early Alert Case Counts</h1>
+	<form action="/ssp/api/1/report/earlyalertcasecounts" method="get"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+
+		<!-- Campus -->
+		<div class="ea-input">
+			<select id="campusName" name="campusName" class="input-campus-group">
+				<option value=""></option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Campus:</span>
+		</div>
+		<div class="ea-clear"></div>	
+		
+		<!-- Term -->
+		<div class="ea-input">
+			<select id="termCode" name="termCode" class="input-term-group">
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Term:</span>
+		</div>
+		<div class="ea-clear"></div>	
 
 
+		
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div> 
+
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+</div>
+
+
+<div class="hideable-form early-alert-student-report" style="display:none">
+	<h1>Early Alert Student Report</h1>
+	<form action="/ssp/api/1/report/earlyalertstudent" method="post"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		
+		<!-- Home Department -->
+		<div class="ea-input">
+			Not Available Yet
+		</div>
+		<div class="ea-label">
+			<span>Home Department:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Assigned Counselor -->
+		<div class="ea-input">
+			<select id="earlyAlertStudentCounselorGroup" name="coachId" class="input-assigned-counselor-group">
+				<option value=""></option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Assigned Counselor:</span>
+		</div>
+		<div class="ea-clear"></div>		
+		
+		
+		<!-- program Status -->
+		<div class="ea-input">
+			<select id="earlyAlertStudentProgramStatusGroup" name="programStatus" class="input-program-status-group">
+				<option value=""></option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Program Status:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Student Type -->
+
+		<div class="ea-input">
+			<select class="input-student-type-group" id="earlyAlertStudentStudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
+		</div>
+		<div class="ea-label">
+			<span>Student Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Special Service Groups -->
+		<div class="ea-input">
+			<select  class="input-special-service-group" id="earlyAlertStudentSpecialServiceGroupIds" name="specialServiceGroupIds"
+				multiple="multiple"></select>
+		</div>
+		<div class="ea-label">
+			<span>Special Service Groups:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Date From -->
+		<div class="ea-input">
+			<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentCreateDateFrom" />
+		</div>
+		<div class="ea-label">
+			<span>Start Date:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Date To -->
+		<div class="ea-input">
+			<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentCreateDateTo" />
+		</div>
+		<div class="ea-label">
+			<span>End Date:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div> 
+
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class="hideable-form early-alert-student-referral-report" style="display:none">
+	<h1>Early Alert Student Referral Report</h1>
+	<form action="/ssp/api/1/report/earlyalertstudentreferral" method="post"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		
+		<!-- Home Department -->
+		<div class="ea-input">
+			Not Available Yet
+		</div>
+		<div class="ea-label">
+			<span>Home Department:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Assigned Counselor -->
+		<div class="ea-input">
+			<select id="earlyAlertStudentReferralCounselorGroup" name="coachId" class="input-assigned-counselor-group">
+				<option value=""></option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Assigned Counselor:</span>
+		</div>
+		<div class="ea-clear"></div>		
+		
+		
+		<!-- program Status -->
+		<div class="ea-input">
+			<select id="earlyAlertStudentReferralProgramStatusGroup" name="programStatus" class="input-program-status-group">
+				<option value=""></option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Program Status:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Referral Source -->
+		<div class="ea-input">
+			<select class='input-referral-source-group' id="earlyAlertStudentReferralReferralSourceId" name="referralSourceId">
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Referral Source:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Semester -->
+		<div class="ea-time-span">
+			<div class="ea-term">
+				<div class="ea-input">
+					<select id="earlyAlertStudentReferralTermCode" name="termCode" class="input-term-group">
+						<option value=""></option>
+						</select>
+				</div>
+				<div class="ea-label">
+					<span>Term:</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-date-range">
+				<!-- Date From -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentReferralCreateDateFrom">
+				</div>
+				<div class="ea-label">
+					<span>Start Date:</span>
+				</div>
+				<div class="ea-clear"></div><!-- Date To -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentReferralCreateDateTo">
+				</div>
+				<div class="ea-label">
+					<span>End Date:</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-buttons">
+				<div>
+					<button class="switch-date-range-type button" value="setbyrange"></button>
+				</div>
+			</div>
+		</div>
+
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div> 
+
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class="hideable-form early-alert-student-progress-report" style="display:none">
+	<h1>Early Alert Student Progress Report</h1>
+	<form action="/ssp/api/1/report/earlyalertstudentprogress" method="post"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		
+		<!-- Home Department -->
+		<div class="ea-input">
+			Not Available Yet
+		</div>
+		<div class="ea-label">
+			<span>Home Department:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Assigned Counselor -->
+		<div class="ea-input">
+			<select id="earlyAlertStudentProgressCounselorGroup" name="coachId" class="input-assigned-counselor-group">
+				<option value=""></option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Assigned Counselor:</span>
+		</div>
+		<div class="ea-clear"></div>		
+		
+		
+		<!-- program Status -->
+		<div class="ea-input">
+			<select id="earlyAlertStudentProgressProgramStatusGroup" name="programStatus" class="input-program-status-group">
+				<option value=""></option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Program Status:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-input">
+			<select class="input-student-type-group" id="earlyAlertStudentProgressStudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
+		</div>
+		<div class="ea-label">
+			<span>Student Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Special Service Groups -->
+		<div class="ea-input">
+			<select  class="input-special-service-group" id="earlyAlertStudentProgressSpecialServiceGroupIds" name="specialServiceGroupIds"
+				multiple="multiple"></select>
+		</div>
+		<div class="ea-label">
+			<span>Special Service Groups:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Initial Semester -->
+		<div class="ea-input">
+			<select id="earlyAlertStudentProgressTermCodeInitial" name="termCodeInitial" class="input-term-group">
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Initial Term:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Initial Semester -->
+		<div class="ea-input">
+			<select id="earlyAlertStudentProgressTermCodeComparitor" name="termCodeComparitor" class="input-term-group">
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Comparative Term:</span>
+		</div>
+		<div class="ea-clear"></div>	
+
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div> 
+
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class="hideable-form early-alert-student-outreach-report" style="display:none">
+	<h1>Early Alert Student Outreach Report</h1>
+	<form action="/ssp/api/1/report/earlyalertstudentoutreach" method="post"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		
+		<!-- Home Department -->
+		<div class="ea-input">
+			Not Available Yet
+		</div>
+		<div class="ea-label">
+			<span>Home Department:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Outcome -->
+		<div class="ea-input">
+			<select id="earlyAlertStudentOutreachOutcomeGroup" name="earlyAlertOutcomes" class="input-early-alert-outcome-group" multiple="multiple" >
+				<option value=""></option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Outcome:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Semester -->
+		<div class="ea-time-span">
+			<div class="ea-term">
+				<div class="ea-input">
+					<select id="earlyAlertStudentOutreachTermCode" name="termCode" class="input-term-group">
+						<option value=""></option>
+						</select>
+				</div>
+				<div class="ea-label">
+					<span>Term:</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-date-range">
+				<!-- Date From -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentOutreachCreateDateFrom">
+				</div>
+				<div class="ea-label">
+					<span>Start Date:</span>
+				</div>
+				<div class="ea-clear"></div><!-- Date To -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentOutreachCreateDateTo">
+				</div>
+				<div class="ea-label">
+					<span>End Date:</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-buttons">
+				<div>
+					<button class="switch-date-range-type button" value="setbyrange"></button>
+				</div>
+			</div>
+		</div>
+		
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div> 
+
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class="hideable-form early-alert-student-outcome-report" style="display:none">
+	<h1>Early Alert Student Outcome Report</h1>
+	<form action="/ssp/api/1/report/earlyalertstudentoutcome" method="post"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		
+		<!-- Home Department -->
+		<div class="ea-input">
+			Not Available Yet
+		</div>
+		<div class="ea-label">
+			<span>Home Department:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Assigned Counselor -->
+		<div class="ea-input">
+			<select id="earlyAlertStudentOutcomeCounselorGroup" name="coachId" class="input-assigned-counselor-group">
+				<option value=""></option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Assigned Counselor:</span>
+		</div>
+		<div class="ea-clear"></div>		
+		
+		<!-- program Status -->
+		<div class="ea-input">
+			<select id="earlyAlertStudentOutcomeProgramStatusGroup" name="programStatus" class="input-program-status-group">
+				<option value=""></option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Program Status:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-input">
+			<select class="input-student-type-group" id="earlyAlertStudentOutcomeStudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
+		</div>
+		<div class="ea-label">
+			<span>Student Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Special Service Groups -->
+		<div class="ea-input">
+			<select  class="input-special-service-group" id="earlyAlertStudentOutcomeSpecialServiceGroupIds" name="specialServiceGroupIds"
+				multiple="multiple"></select>
+		</div>
+		<div class="ea-label">
+			<span>Special Service Groups:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+
+		<!-- Semester -->
+		<div class="ea-time-span">
+			<div class="ea-term">
+				<div class="ea-input">
+					<select id="earlyAlertStudentOutcomeTermCode" name="termCode" class="input-term-group">
+						<option value=""></option>
+						</select>
+				</div>
+				<div class="ea-label">
+					<span>Term:</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-date-range">
+				<!-- Date From -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentOutcomeCreateDateFrom">
+				</div>
+				<div class="ea-label">
+					<span>Start Date:</span>
+				</div>
+				<div class="ea-clear"></div><!-- Date To -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentOutcomeCreateDateTo">
+				</div>
+				<div class="ea-label">
+					<span>End Date:</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-buttons">
+				<div>
+					<button class="switch-date-range-type button" value="setbyrange"></button>
+				</div>
+			</div>
+		</div>
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div> 
+
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+</div>
+
+
+<div class="hideable-form early-alert-class-report" style="display:none">
+	<h1>Early Alert Class Report</h1>
+	<form action="/ssp/api/1/report/earlyalertclass" method="get"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+
+		<!-- Campus -->
+		<div class="ea-input">
+			<select id="earlyAlertClassCampusName" name="campusName" class="input-campus-group">
+				<option value=""></option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Campus:</span>
+		</div>
+		<div class="ea-clear"></div>	
+		
+		<!-- Term -->
+		<div class="ea-input">
+			<select id="earlyAlertClassTermCode" name="termCode" class="input-term-group">
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Term:</span>
+		</div>
+		<div class="ea-clear"></div>	
+
+
+		
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div> 
+
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+</div>
 
 	</div>
     

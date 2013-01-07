@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.dao.external;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;

@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="earlyAlertStudentProgressReport" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e3ea9cb2-eb95-4ad5-a580-45da78bac1f1">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="programStatus" class="java.lang.String"/>
+	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
+	<parameter name="homeDepartment" class="java.lang.String"/>
+	<parameter name="reportDate" class="java.util.Date"/>
+	<parameter name="coachName" class="java.lang.String"/>
+	<parameter name="studentType" class="java.lang.String"/>
+	<parameter name="initialTerm" class="java.lang.String"/>
+	<parameter name="comparisonTerm" class="java.lang.String"/>
+	<field name="firstName" class="java.lang.String">
+		<fieldDescription><![CDATA[firstName]]></fieldDescription>
+	</field>
+	<field name="lastName" class="java.lang.String">
+		<fieldDescription><![CDATA[lastName]]></fieldDescription>
+	</field>
+	<field name="middleName" class="java.lang.String">
+		<fieldDescription><![CDATA[middleName]]></fieldDescription>
+	</field>
+	<field name="schoolId" class="java.lang.String">
+		<fieldDescription><![CDATA[schoolId]]></fieldDescription>
+	</field>
+	<field name="primaryEmailAddress" class="java.lang.String">
+		<fieldDescription><![CDATA[primaryEmailAddress]]></fieldDescription>
+	</field>
+	<field name="registrationStatus" class="java.lang.String"/>
+	<field name="earlyAlertsInitialTerm" class="java.lang.Long"/>
+	<field name="earlyAlertsComparisonTerm" class="java.lang.Long"/>
+	<field name="coach" class="org.jasig.ssp.transferobject.CoachPersonLiteTO"/>
+	<variable name="rowIndex" class="java.lang.Integer">
+		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
+		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="130" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="0" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Report Date:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="f308e252-c794-4c7d-aca2-86ceb422a4f7" positionType="Float" x="115" y="0" width="100" height="22" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="16" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Home Department:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="9f2796d0-86f4-4520-af01-8ad5a5faefec" positionType="Float" x="113" y="16" width="119" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{homeDepartment}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" positionType="Float" x="113" y="32" width="100" height="14" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{coachName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="32" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Counselor/Coach:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d" positionType="Float" x="115" y="47" width="100" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{studentType}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="47" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Student Type:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" positionType="Float" x="115" y="63" width="462" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{programStatus}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="0" y="63" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Program Status:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="6d2788b3-18ca-44f6-837f-6df32f3e8b72" positionType="Float" x="115" y="79" width="429" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{specialServiceGroupNames}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="0" y="79" width="113" height="15"/>
+				<textElement/>
+				<text><![CDATA[Special Service Groups:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
+				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="113" y="109" width="117" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{comparisonTerm}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="0" y="109" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Comparison Term:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="0" y="94" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Initial Term:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="612141fa-92d2-42fe-b83d-aefa001ac035" x="113" y="94" width="117" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{initialTerm}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="0" width="750" height="34" backcolor="#70C2E7"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="287" y="7" width="178" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Early Alert Student Progress Report]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="213fad29-3a69-4ecd-b8d6-442fb0fb753f" x="0" y="0" width="83" height="16"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FIRST]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9472a402-9195-48cb-9d53-6abf62af012c" x="249" y="0" width="83" height="16"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[STUDENT ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8f6acb77-22ba-4495-88c9-1cbfddff4108" x="332" y="0" width="83" height="16"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[EMAIL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e6db6b18-5744-48e1-b4dd-6c86d8520efd" x="415" y="0" width="83" height="16"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[STATUS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f2020f48-9631-4a2b-ba34-adf73e6afb25" x="498" y="0" width="83" height="16"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[EA INITIAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="451e9051-f588-4898-9813-72bdae6523e7" x="581" y="0" width="94" height="16"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[EA COMPARISON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="51a01dc6-c568-4336-bb91-48121ae6a3e9" x="664" y="0" width="83" height="16"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ADVISOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="44eb1e87-6e4d-45c2-b4d6-a0d7e0be6a5a" x="166" y="0" width="83" height="16"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[LAST]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7633fe42-310e-4b87-8171-563fca1ef70d" x="83" y="0" width="83" height="16"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MIDDLE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="35" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="0" y="-10" width="752" height="22" backcolor="#E4E4E4">
+					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<textField>
+				<reportElement uuid="5df35f29-eee6-4ea4-8f4a-6dee911febbf" x="0" y="-4" width="83" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="fccdb7c6-2994-4d2c-a4ec-f34b5a2e788c" x="166" y="-4" width="83" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{lastName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="baddf80d-189e-48c0-b941-832a2810feb3" x="249" y="-4" width="83" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[($F{schoolId} == null ? "" : $F{schoolId})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8dd07508-1865-4043-85b9-6ab036d844ff" x="332" y="-4" width="83" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{primaryEmailAddress}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5eb7a872-6b6c-4869-a5cd-cd1729905d90" x="415" y="-4" width="83" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{registrationStatus}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="235be1e8-005b-47b5-ad98-542b8e123ba7" x="498" y="-4" width="83" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{earlyAlertsInitialTerm}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7586ecb3-d9bd-4ebd-a6e0-82e8bfa2afa7" x="581" y="-4" width="83" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{earlyAlertsComparisonTerm}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="1219a106-79d6-42a5-83e7-998b2c7291d4" x="83" y="-4" width="83" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{middleName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="06263141-db6f-4d00-968b-888a644603e0" x="664" y="-4" width="74" height="16"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{coach}.getFirstName() + " " + $F{coach}.getLastName()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

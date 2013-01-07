@@ -64,7 +64,7 @@
 				</column>
 			</createTable>
 
-			<sql>grant all on referral to ssp</sql>
+			<sql>grant all on referral to ${database.app.username}</sql>
 		</rollback>
 
 		<!-- Theres a different assumption in the liquibase handling of timezones 
@@ -141,7 +141,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on goal to ssp</sql>
+		<sql>grant all on goal to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="goal" />
 		</rollback>
@@ -183,7 +183,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on task_group to ssp</sql>
+		<sql>grant all on task_group to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="task_group" />
 		</rollback>
@@ -209,7 +209,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on task_group_task to ssp</sql>
+		<sql>grant all on task_group_task to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="task_group_task" />
 		</rollback>
@@ -272,8 +272,8 @@
 						references="task(id)" />
 				</column>
 			</createTable>
-			<sql>grant all on task_group to ssp</sql>
-			<sql>grant all on task_group_task to ssp</sql>
+			<sql>grant all on task_group to ${database.app.username}</sql>
+			<sql>grant all on task_group_task to ${database.app.username}</sql>
 		</rollback>
 
 		<!-- Theres a different assumption in the liquibase handling of timezones 
@@ -1284,7 +1284,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on journal_source to ssp</sql>
+		<sql>grant all on journal_source to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="journal_source" />
 		</rollback>
@@ -1330,7 +1330,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on journal_step to ssp</sql>
+		<sql>grant all on journal_step to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="journal_step" />
 		</rollback>
@@ -1376,7 +1376,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on journal_track to ssp</sql>
+		<sql>grant all on journal_track to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="journal_track" />
 		</rollback>
@@ -1424,7 +1424,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on journal_step_detail to ssp</sql>
+		<sql>grant all on journal_step_detail to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="journal_step_detail" />
 		</rollback>
@@ -1473,7 +1473,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on journal_step_journal_step_detail to ssp</sql>
+		<sql>grant all on journal_step_journal_step_detail to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="journal_step_journal_step_detail" />
 		</rollback>
@@ -1522,7 +1522,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on journal_track_journal_step to ssp</sql>
+		<sql>grant all on journal_track_journal_step to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="journal_track_journal_step" />
 		</rollback>

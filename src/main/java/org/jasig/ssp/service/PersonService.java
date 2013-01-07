@@ -19,7 +19,9 @@
 package org.jasig.ssp.service;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.SortedSet;
 import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
@@ -27,6 +29,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.service.tool.IntakeService;
+import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -152,6 +155,83 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 */
 	PagingWrapper<Person> getAllCoaches(SortingAndPaging sAndP);
 
+	/**
+	 * Get a list of all Coaches where you don't need the complete Person
+	 * graphs.
+	 *
+	 * <em>Does not have the same external-to-internal person record
+	 * copying side-effects as {@link #getAllCoaches(org.jasig.ssp.util.sort.SortingAndPaging)}.
+	 * This method only returns coaches that have already been sync'd into
+	 * local person records by some other mechanism.</em>
+	 *
+	 * @param sAndP
+	 *            Sorting and paging parameters
+	 * @return List of all coaches
+	 */
+	PagingWrapper<CoachPersonLiteTO> getAllCoachesLite(SortingAndPaging sAndP);
+
+	/**
+	 * Gets all coaches assigned to local Person records regardless of current
+	 * permissions. This is as opposed to
+	 * {@link #getAllCoaches(org.jasig.ssp.util.sort.SortingAndPaging)} which
+	 * is intended to just return "official" coaches, i.e. users known to
+	 * act as coaches, regardless of whether they have any assignments at all.
+	 *
+	 * @param sAndP
+	 *            Sorting and paging parameters
+	 * @return List of all <em>assigned</em> coaches
+	 */
+	PagingWrapper<Person> getAllAssignedCoaches(SortingAndPaging sAndP);
+
+	/**
+	 * Lighter-weight version of
+	 * {@link #getAllAssignedCoaches(org.jasig.ssp.util.sort.SortingAndPaging)}.
+	 *
+	 * @param sAndP
+	 * @return
+	 */
+	PagingWrapper<CoachPersonLiteTO> getAllAssignedCoachesLite(SortingAndPaging sAndP);
+
+	/**
+	 * Gets a collection of <em>all</em> coaches, i.e. the union of
+	 * {@link #getAllCoaches(org.jasig.ssp.util.sort.SortingAndPaging)} and
+	 * {@link #getAllAssignedCoaches(org.jasig.ssp.util.sort.SortingAndPaging)},
+	 * without duplicates.
+	 *
+	 * <p><em>Be very careful when using this method. Implementation is
+	 * likely to use {@link #getAllCoaches(org.jasig.ssp.util.sort.SortingAndPaging)}
+	 * under the covers, which
+     * <a href="https://issues.jasig.org/browse/SSP-470">SSP-470</a> deprecates
+     * for performance reasons.</em></p>
+	 *
+	 * <p>Since we know the implementation would face difficulties implementing
+	 * a paged version of this method and we know that all current clients
+	 * of this method aren't actually interested in a paged view, we choose to
+	 * return a vanilla <code>SortedSet</code> rather than a
+	 * <code>PagingWrapper</code></p>
+	 *
+	 * @param personNameComparator null OK
+	 * @return
+	 */
+	SortedSet<Person> getAllCurrentCoaches(Comparator<Person> personNameComparator);
+
+	/**
+	 * (Much) lighter-weight version of
+	 * {@link #getAllCurrentCoaches(java.util.Comparator)}.
+	 *
+	 * <em>Note that unlike {@link #getAllCurrentCoaches(java.util.Comparator)},
+	 * this implementation should not be expected to materialize any local
+	 * coach records. I.e. this method plays
+	 * {@link #getAllCoachesLite(org.jasig.ssp.util.sort.SortingAndPaging)}}
+	 * to {@link #getAllCurrentCoaches(java.util.Comparator)}'s
+	 * {@link #getAllCoaches(org.jasig.ssp.util.sort.SortingAndPaging)}</em>
+	 *
+	 * @param sortBy
+	 * @return
+	 */
+	SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(
+			Comparator<CoachPersonLiteTO> sortBy);
+
 	Person load(UUID id);
 
 	Person createUserAccount(String username,
@@ -182,4 +262,6 @@ public interface PersonService extends AuditableCrudService<Person> {
 	Person createUserAccountForCurrentPortletUser(String username,
 			PortletRequest portletRequest)
 			throws UnableToCreateAccountException;
+
+
 }

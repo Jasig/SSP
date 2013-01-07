@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -143,9 +144,13 @@ public class AddressLabelsReportController extends AbstractBaseController { // N
 				anticipatedStartYear, studentTypeIds, createDateFrom,
 				createDateTo);
 
+		// TODO Specifying person name sort fields in the SaP doesn't seem to
+		// work... end up with empty results need to dig into actual query
+		// building
 		final List<Person> people = personService.peopleFromCriteria(
 				searchForm, SortingAndPaging.createForSingleSort(status, null,
 						null, null, null, null));
+		Collections.sort(people, Person.PERSON_NAME_AND_ID_COMPARATOR);
 		final List<PersonTO> peopleTO = personTOFactory.asTOList(people);
 
 		// Get the actual names of the UUIDs for the special groups
@@ -192,9 +197,9 @@ public class AddressLabelsReportController extends AbstractBaseController { // N
 
 		final Map<String, Object> parameters = Maps.newHashMap();
 		
-		if (coachTO != null){
-			parameters.put("coachName", coachTO.getFirstName() + " " + coachTO.getLastName());
-		}
+		parameters.put("coachName", coachTO == null ? "" : 
+			coachTO.getFirstName() + " " + coachTO.getLastName());
+		
 		parameters.put("studentType", studentTypeStringBuffer.toString());
 		parameters.put("programStatus", programStatusName);
 		parameters.put("cohortTerm", StringUtils.defaultString(anticipatedStartTerm) + " " + (anticipatedStartYear == null?"" : anticipatedStartYear.toString()));

@@ -20,6 +20,7 @@ package org.jasig.ssp.web.api.external;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.external.ExternalFacultyCourseRosterTOFactory;
 import org.jasig.ssp.factory.external.ExternalTOFactory;
 import org.jasig.ssp.factory.external.FacultyCourseTOFactory;
@@ -40,6 +41,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -109,6 +111,8 @@ public class FacultyCourseController extends
 	 *            The faculty school id to use to lookup the associated data.
 	 * @param formattedCourse
 	 *            the course
+	 * @param termCode
+	 *            term code filter (optional)
 	 * @return The specified courses if any were found.
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.
@@ -120,11 +124,20 @@ public class FacultyCourseController extends
 	public @ResponseBody
 	PagedResponse<ExternalPersonLiteTO> getRoster(
 			final @PathVariable String facultySchoolId,
-			final @PathVariable String formattedCourse)
+			final @PathVariable String formattedCourse,
+			final @RequestParam(required = false) String termCode)
 			throws ObjectNotFoundException, ValidationException {
-		final List<ExternalFacultyCourseRoster> list = getService()
-				.getRosterByFacultySchoolIdAndCourse(facultySchoolId,
-						formattedCourse);
+		String scrubbedTermCode = StringUtils.trimToNull(termCode);
+		List<ExternalFacultyCourseRoster> list = null;
+		if ( scrubbedTermCode == null ) {
+			list = getService()
+					.getRosterByFacultySchoolIdAndCourse(facultySchoolId,
+							formattedCourse);
+		} else {
+			list = getService()
+					.getRosterByFacultySchoolIdAndCourseAndTermCode(
+							facultySchoolId, formattedCourse, scrubbedTermCode);
+		}
 		return new PagedResponse<ExternalPersonLiteTO>(true, Long.valueOf(list
 				.size()), externalFacultyCourseRosterTOFactory.asTOList(list));
 	}

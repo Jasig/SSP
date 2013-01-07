@@ -73,10 +73,27 @@ public class FacultyCourseServiceImpl extends
 	}
 
 	@Override
+	public List<ExternalFacultyCourseRoster> getRosterByFacultySchoolIdAndCourseAndTermCode(
+			String facultySchoolId, String formattedCourse, String termCode)
+			throws ObjectNotFoundException {
+		return externalFacultyCourseRosterDao.getRosterByFacultySchoolIdAndCourseAndTermCode(
+				facultySchoolId, formattedCourse, termCode);
+	}
+
+	@Override
 	public FacultyCourse getCourseByFacultySchoolIdAndFormattedCourse(
 			String facultySchoolId, String formattedCourse) 
 			throws ObjectNotFoundException {
 		return dao.getCourseByFacultySchoolIdAndFormattedCourse(facultySchoolId, 
 				formattedCourse);
 	}
+
+	@Override
+	public FacultyCourse getCourseByFacultySchoolIdAndFormattedCourseAndTermCode(
+			String facultySchoolId, String formattedCourse, String termCode)
+			throws ObjectNotFoundException {
+		return dao.getCourseByFacultySchoolIdAndFormattedCourseAndTermCode(
+				facultySchoolId, formattedCourse, termCode);
+	}
+
 }

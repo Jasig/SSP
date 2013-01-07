@@ -69,8 +69,6 @@ public class PersonTO // NOPMD
 	@NotNull
 	private String username;
 
-	private String userId;
-
 	private String homePhone;
 
 	private String workPhone;
@@ -212,7 +210,10 @@ public class PersonTO // NOPMD
 		} else {
 			coach = new CoachPersonLiteTO(coachPerson.getId(),
 					coachPerson.getFirstName(), coachPerson.getLastName(),
-					coachPerson.getPrimaryEmailAddress(), null, null);
+					coachPerson.getPrimaryEmailAddress(),
+					coachPerson.getNullSafeOfficeLocation(),
+					coachPerson.getNullSafeDepartmentName(),
+					coachPerson.getWorkPhone());
 		}
 
 		strengths = model.getStrengths();
@@ -390,14 +391,6 @@ public class PersonTO // NOPMD
 		}
 
 		this.username = username;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(final String userId) {
-		this.userId = userId;
 	}
 
 	public String getHomePhone() {

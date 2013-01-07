@@ -59,7 +59,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on military_affiliation to ssp</sql>
+		<sql>grant all on military_affiliation to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="military_affiliation" />
 		</rollback>
@@ -111,7 +111,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on disability_accommodation to ssp</sql>
+		<sql>grant all on disability_accommodation to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="disability_accommodation" />
 		</rollback>
@@ -154,7 +154,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on disability_agency to ssp</sql>
+		<sql>grant all on disability_agency to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="disability_agency" />
 		</rollback>
@@ -197,7 +197,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on disability_status to ssp</sql>
+		<sql>grant all on disability_status to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="disability_status" />
 		</rollback>
@@ -240,7 +240,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on disability_type to ssp</sql>
+		<sql>grant all on disability_type to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="disability_type" />
 		</rollback>
@@ -283,7 +283,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on lassi to ssp</sql>
+		<sql>grant all on lassi to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="lassi" />
 		</rollback>
@@ -326,7 +326,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on personality_type to ssp</sql>
+		<sql>grant all on personality_type to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="personality_type" />
 		</rollback>
@@ -369,7 +369,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on campus_service to ssp</sql>
+		<sql>grant all on campus_service to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="campus_service" />
 		</rollback>

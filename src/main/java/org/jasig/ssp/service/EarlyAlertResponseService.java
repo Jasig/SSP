@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +26,8 @@ import java.util.UUID;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.Campus;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
@@ -51,5 +54,11 @@ public interface EarlyAlertResponseService
 
 	Long getEarlyAlertResponseCountForCoach(Person coach, Date createDateFrom,
 			Date createDateTo, List<UUID> studentTypeIds);
+
+	Long getEarlyAlertResponseCountForDate(Date createDateFrom,
+			Date createDateTo, Campus campus);
+
+	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(Date createDateFrom,
+			Date createDateTo, List<UUID> outcomes, Person coach);
 
 }

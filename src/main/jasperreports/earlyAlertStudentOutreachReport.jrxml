@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="earlyAlertStudentOutreachReport" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ac185325-229c-42eb-9c52-54601dbffce2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="reportDate" class="java.util.Date"/>
+	<parameter name="startDate" class="java.lang.String"/>
+	<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="term" class="java.lang.String"/>
+	<parameter name="earlyAlertOutcome" class="java.lang.String"/>
+	<field name="coach" class="org.jasig.ssp.transferobject.CoachPersonLiteTO"/>
+	<field name="totalEarlyAlerts" class="java.lang.Long"/>
+	<field name="countPhoneCalls" class="java.lang.Long"/>
+	<field name="countEmail" class="java.lang.Long"/>
+	<field name="countLetter" class="java.lang.Long"/>
+	<field name="countText" class="java.lang.Long"/>
+	<field name="countInPerson" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="64" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="0" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Report Date:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="f308e252-c794-4c7d-aca2-86ceb422a4f7" positionType="Float" x="115" y="0" width="100" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="0" y="45" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Start Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="215" y="45" width="65" height="15"/>
+				<textElement/>
+				<text><![CDATA[End Date:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
+				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="115" y="45" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e" x="280" y="45" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="0" y="30" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Term:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
+				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="115" y="30" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{term}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="0" y="15" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Outcome:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
+				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="115" y="15" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{earlyAlertOutcome}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="28" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="1" width="572" height="26" backcolor="#70C2E7"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="174" y="7" width="224" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Early Alert Student Outreach Report]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="710911f9-ea96-4e52-ae1c-1da4c7fd9eee" x="0" y="0" width="81" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Coach]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8bb83c8d-1bf1-457a-b7b8-05ee04d03377" x="81" y="0" width="81" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total EarlyAlerts]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="680b4fd7-f9eb-4e5e-9dc7-98c8ba410413" x="162" y="0" width="81" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Phone Calls]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="20f54207-539e-46d1-9797-4b3346b1aa20" x="243" y="0" width="81" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Emails]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f1c24751-5838-40a5-be78-3dc693d755dd" x="324" y="0" width="81" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Letters]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="21a5972d-14ef-4445-93b4-4b6eb63732f0" x="405" y="0" width="81" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Texts]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a9addbb1-ac1c-4493-9273-0c02741a8b4d" x="486" y="0" width="81" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[In Person]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a2137ee3-4dfe-4903-bc0c-e8e47fc1dd16" x="0" y="0" width="81" height="20"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{coach}.getFirstName() + " " + $F{coach}.getLastName()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="aff46448-29ea-4173-beab-4b7c5867d61f" x="81" y="0" width="81" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalEarlyAlerts} == null ? "" : $F{totalEarlyAlerts}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2236bce7-bdf7-4b0d-968b-9d266c8db6dd" x="162" y="0" width="81" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countPhoneCalls} == null ? "" : $F{countPhoneCalls}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="632061a9-eb78-4b74-be75-1e667dbc7712" x="243" y="0" width="81" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countEmail} == null ? "" : $F{countEmail}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6a986c67-f5b5-4b5e-a4d9-a2a99393e557" x="324" y="0" width="81" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countLetter} == null ? "" : $F{countLetter}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a8b40720-8059-4b84-a1af-212c56f26c7a" x="405" y="0" width="81" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countText} == null ? "" : $F{countText}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2b9d1f3f-8c6e-488d-841d-77100d356b5a" x="486" y="0" width="81" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countInPerson} == null ? "" : $F{countInPerson}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+</jasperReport>

@@ -18,16 +18,24 @@
  */
 package org.jasig.ssp.dao;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.Campus;
+import org.jasig.ssp.model.reference.EarlyAlertOutreach;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
@@ -72,24 +80,13 @@ public class EarlyAlertResponseDao extends
 	public Long getEarlyAlertResponseCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
 
 		final Criteria query = createCriteria();
- 
-		
-		/*
-		 * 
-		 * Criteria criteria = session.createCriteria(Student.class)
-    .createAlias("courses", "course")
-    .createAlias("course.group", "student")
-    .add(Restrictions.eq("course.name", "Math"))
-    .add(Restrictions.eq("student.name", "John"));
-		 */
-		
-		
 		
 		// add possible studentTypeId Check
 		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
 			//.createAlias("person",
 			//		"person")
-			query.createAlias("earlyAlert",	"earlyAlert").createAlias("earlyAlert.person", "student").createAlias("student.studentType","studentType").add(
+			query.createAlias("earlyAlert",	"earlyAlert").
+			createAlias("earlyAlert.person", "student").createAlias("student.studentType","studentType").add(
 						Restrictions.in("studentType.id",studentTypeIds));
 					
 		}		
@@ -112,5 +109,102 @@ public class EarlyAlertResponseDao extends
 				.uniqueResult();
 
 		return totalRows;
+	}
+
+	public Long getEarlyAlertResponseCountForDate(Date createDateFrom,
+			Date createDateTo, Campus campus) {
+		final Criteria query = createCriteria();
+		
+		if (createDateFrom != null) {
+			query.add(Restrictions.ge("createdDate",
+					createDateFrom));
+		}
+
+		if (createDateTo != null) {
+			query.add(Restrictions.le("createdDate",
+					createDateTo));
+		}
+		
+		if(campus != null){
+			query.createAlias("earlyAlert",	"earlyAlert").add(
+					Restrictions.eq("earlyAlert.campus", campus));
+		}
+		
+		// item count
+		Long totalRows = (Long) query.setProjection(Projections.rowCount())
+				.uniqueResult();
+
+		return totalRows;
+	}
+	
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(Date createDateFrom,
+			Date createDateTo, List<UUID> outcomes, Person coach) {
+		final Criteria query = createCriteria();
+		
+		if (createDateFrom != null) {
+			query.add(Restrictions.ge("createdDate",
+					createDateFrom));
+		}
+
+		if (createDateTo != null) {
+			query.add(Restrictions.le("createdDate",
+					createDateTo));
+		}
+		
+		if (outcomes != null && outcomes.size() > 0) {
+			query.add(Restrictions.in("earlyAlertOutcome.id", outcomes));
+		}
+		
+		query.createAlias("earlyAlert", "earlyAlert");
+		query.createAlias("earlyAlert.person", "student");
+		Criteria coachCriteria = query.createAlias("student.coach","coach");
+		
+		if(coach != null){
+			coachCriteria.add(
+					Restrictions.eq("coach.id", coach.getId()));
+		}
+				
+		// item count
+		List<EarlyAlertResponse> values = query.list();
+		if(values.size() == 0)
+			return null;
+		
+		Iterator<EarlyAlertResponse> valueIterator = values.iterator();
+		Map<UUID, EarlyAlertStudentOutreachReportTO> responses = new HashMap<UUID, EarlyAlertStudentOutreachReportTO>();
+		while(valueIterator.hasNext()){
+			EarlyAlertResponse value = valueIterator.next();
+			EarlyAlertStudentOutreachReportTO update = null;
+			UUID coachId = value.getEarlyAlert().getPerson().getCoach().getId();
+			if(responses.containsKey(coachId)){
+				update = responses.get(coachId);
+			}else{
+				update = new EarlyAlertStudentOutreachReportTO(value.getEarlyAlert().getPerson().getCoach(),0L,0L,0L,0L,0L,0L);
+				responses.put(coachId, update);
+			}
+			Iterator<EarlyAlertOutreach> outreachIterator = value.getEarlyAlertOutreachIds().iterator();
+			if(outreachIterator.hasNext()){
+				EarlyAlertOutreach outreach = outreachIterator.next();
+				if(outreach.getName() == "Phone Call"){
+					update.setCountPhoneCalls(update.getCountPhoneCalls() + 1L);
+				}
+				if(outreach.getName() == "Email"){
+					update.setCountEmail(update.getCountEmail() + 1L);
+				}
+				
+				if(outreach.getName() == "In Person"){
+					update.setCountInPerson(update.getCountInPerson() + 1L);
+				}
+				
+				if(outreach.getName() == "Letter"){
+					update.setCountLetter(update.getCountLetter() + 1L);
+				}
+				
+				if(outreach.getName() == "Text"){
+					update.setCountText(update.getCountText() + 1L);
+				}
+			}
+		}
+		return (Collection<EarlyAlertStudentOutreachReportTO>)responses.values();
 	}
 }

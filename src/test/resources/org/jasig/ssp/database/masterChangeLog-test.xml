@@ -33,7 +33,7 @@
 
 	<!-- Script can only run as user sspDbAdmin -->
 	<preConditions onFail="HALT">
-		<runningAs username="sspadmin" />
+		<runningAs username="${database.admin.username}" />
 	</preConditions>
 
 	<include file="org/jasig/ssp/database/changesets/000001.xml" />
@@ -60,6 +60,9 @@
 	<include file="org/jasig/ssp/database/integrationchangesets/i000002-test.xml" />
 	<include file="org/jasig/ssp/database/changesets/000010-test.xml" />
 	<include file="org/jasig/ssp/database/changesets/000011.xml" />
-    <include file="org/jasig/ssp/database/changesets/000011-test.xml" />
-    <include file="org/jasig/ssp/database/changesets/000012.xml" />
+	<include file="org/jasig/ssp/database/changesets/000011-test.xml" />
+	<include file="org/jasig/ssp/database/changesets/000012.xml" />
+	<include file="org/jasig/ssp/database/changesets/000014.xml" />
+	<include file="org/jasig/ssp/database/changesets/000015.xml" />
+
 </databaseChangeLog>

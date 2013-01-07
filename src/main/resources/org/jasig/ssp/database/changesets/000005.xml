@@ -63,7 +63,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on early_alert_suggestion to ssp</sql>
+		<sql>grant all on early_alert_suggestion to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="early_alert_suggestion" />
 		</rollback>
@@ -257,7 +257,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on early_alert_referral to ssp</sql>
+		<sql>grant all on early_alert_referral to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="early_alert_referral" />
 		</rollback>
@@ -459,7 +459,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on early_alert_reason to ssp</sql>
+		<sql>grant all on early_alert_reason to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="early_alert_reason" />
 		</rollback>
@@ -652,7 +652,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on early_alert_outreach to ssp</sql>
+		<sql>grant all on early_alert_outreach to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="early_alert_outreach" />
 		</rollback>
@@ -773,7 +773,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on early_alert_outcome to ssp</sql>
+		<sql>grant all on early_alert_outcome to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="early_alert_outcome" />
 		</rollback>
@@ -993,7 +993,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on early_alert to ssp</sql>
+		<sql>grant all on early_alert to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="early_alert" />
 		</rollback>
@@ -1038,7 +1038,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on early_alert_early_alert_reason to ssp</sql>
+		<sql>grant all on early_alert_early_alert_reason to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="early_alert_early_alert_reason" />
 		</rollback>
@@ -1085,7 +1085,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on early_alert_early_alert_suggestion to ssp</sql>
+		<sql>grant all on early_alert_early_alert_suggestion to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="early_alert_early_alert_suggestion" />
 		</rollback>
@@ -1153,7 +1153,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on early_alert_early_alert_reason to ssp</sql>
+		<sql>grant all on early_alert_early_alert_reason to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="early_alert_early_alert_reason" />
 		</rollback>
@@ -1181,7 +1181,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on early_alert_early_alert_suggestion to ssp</sql>
+		<sql>grant all on early_alert_early_alert_suggestion to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="early_alert_early_alert_suggestion" />
 		</rollback>
@@ -1242,7 +1242,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on journal_entry to ssp</sql>
+		<sql>grant all on journal_entry to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="journal_entry" />
 		</rollback>
@@ -1291,7 +1291,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on journal_entry_journal_step_detail to ssp</sql>
+		<sql>grant all on journal_entry_journal_step_detail to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="journal_entry_journal_step_detail" />
 		</rollback>
@@ -1334,7 +1334,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on campus to ssp</sql>
+		<sql>grant all on campus to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="campus" />
 		</rollback>
@@ -1399,7 +1399,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on early_alert_response to ssp</sql>
+		<sql>grant all on early_alert_response to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="early_alert_response" />
 		</rollback>
@@ -1426,7 +1426,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on early_alert_response_early_alert_outreach to ssp
+		<sql>grant all on early_alert_response_early_alert_outreach to ${database.app.username}
 		</sql>
 		<rollback>
 			<dropTable tableName="early_alert_response_early_alert_outreach" />
@@ -1454,7 +1454,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on early_alert_response_early_alert_referral to ssp
+		<sql>grant all on early_alert_response_early_alert_referral to ${database.app.username}
 		</sql>
 		<rollback>
 			<dropTable tableName="early_alert_response_early_alert_referral" />
@@ -1506,7 +1506,7 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on config to ssp</sql>
+		<sql>grant all on config to ${database.app.username}</sql>
 		<rollback>
 			<dropTable tableName="config" />
 		</rollback>

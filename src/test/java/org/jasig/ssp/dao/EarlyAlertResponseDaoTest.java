@@ -25,15 +25,19 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.EarlyAlertOutreach;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -41,6 +45,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -102,10 +107,19 @@ public class EarlyAlertResponseDaoTest {
 
 	@Autowired
 	private transient PersonService personService;
+	
+	@Autowired
+	private transient SessionFactory sessionFactory;
 
 	@Before
 	public void setUp() {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID));
+	}
+	
+	private Date getDateSetByDayOffset(int dayOffset) {
+		Calendar today = Calendar.getInstance();
+		today.add(Calendar.DAY_OF_MONTH, dayOffset);
+		return new Date(today.getTimeInMillis());
 	}
 
 	/**
@@ -227,4 +241,29 @@ public class EarlyAlertResponseDaoTest {
 
 		return obj;
 	}
+	
+	
+	@Test
+	public void getEarlyAlertOutreachCountByOutcome()
+			throws ObjectNotFoundException {
+		// arrange
+		
+		final Date startDate = getDateSetByDayOffset(-1);
+		final Date endDate = getDateSetByDayOffset(1);
+		EarlyAlertResponse response = createTestEarlyAlertResponse();
+		earlyAlertDao.save(response.getEarlyAlert());
+		final EarlyAlertResponse saved = dao.save(response);
+
+		sessionFactory.getCurrentSession().flush();
+
+		try {
+			final Collection<EarlyAlertStudentOutreachReportTO> result = dao.getEarlyAlertOutreachCountByOutcome(
+					startDate, endDate, null, null);
+			assertEquals("Count of Responses was not expected.", 1,
+					result.size());
+		} finally {
+			dao.delete(saved);
+		}
+	}
+	
 }

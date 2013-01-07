@@ -65,6 +65,7 @@ public final class EarlyAlertPortletController {
 	public ModelAndView showForm(final PortletRequest req, 
 			@RequestParam final String schoolId, 
 			@RequestParam final String formattedCourse,
+			@RequestParam(required = false) final String termCode,
 			ModelMap model) {
 		// Do not use a @ModelAttribute-annotated argument to get the user
 		// out of the model b/c Spring will attempt to set properties on it
@@ -79,8 +80,19 @@ public final class EarlyAlertPortletController {
 		FacultyCourse course = null;
 		Person student = null;
 		try {
-			course = facultyCourseService.getCourseByFacultySchoolIdAndFormattedCourse(
-					user.getSchoolId(), formattedCourse);
+			// Should really always have a term code (see deprecation notes for
+			// getCourseByFacultySchoolIdAndFormattedCourse) but we know at
+			// least one real-world deployment (SPC) cannot/does not send term
+			// codes when deep linking to the EA form *and* this just happens to
+			// work b/c their formattedCourse values are globally unique. So
+			// we preserve the option of not filtering by term code.
+			if ( !(StringUtils.hasText(termCode)) ) {
+				course = facultyCourseService.getCourseByFacultySchoolIdAndFormattedCourse(
+						user.getSchoolId(), formattedCourse);
+			} else {
+				course = facultyCourseService.getCourseByFacultySchoolIdAndFormattedCourseAndTermCode(
+						user.getSchoolId(), formattedCourse, termCode);
+			}
 			/*
 			 * NB:  It's on us to translate from schoolId <-> studentId (SSP 
 			 * UUID) at this point in the Early Alert process.  Previous APIs 

@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.impl; // NOPMD by jon.adams
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -40,9 +41,11 @@ import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.external.FacultyCourse;
 import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 import org.jasig.ssp.model.reference.ProgramStatus;
+import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
 import org.jasig.ssp.service.EarlyAlertRoutingService;
 import org.jasig.ssp.service.EarlyAlertService;
@@ -57,6 +60,9 @@ import org.jasig.ssp.service.reference.EarlyAlertReasonService;
 import org.jasig.ssp.service.reference.EarlyAlertSuggestionService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
+import org.jasig.ssp.service.reference.StudentTypeService;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -115,6 +121,9 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 	@Autowired
 	private transient ProgramStatusService programStatusService;
+
+	@Autowired
+	private transient StudentTypeService studentTypeService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EarlyAlertServiceImpl.class);
@@ -277,9 +286,10 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		try {
 			ensureValidAlertedOnPersonStateOrFail(person);
 		} catch ( Exception e ) {
-			LOGGER.error("Unable to set a program status on person '{}'. This is"
-					+ " likely to prevent that person record from appearing"
-					+ " in caseloads and student searches.", person.getId());
+			LOGGER.error("Unable to set a program status or student type on "
+					+ "person '{}'. This is likely to prevent that person "
+					+ "record from appearing in caseloads, student searches, "
+					+ "and some reports.", person.getId(), e);
 		}
 	}
 
@@ -308,6 +318,16 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			person.setProgramStatuses(programStatuses);
 			// save should cascade, but make sure custom create logic fires
 			personProgramStatusService.create(personProgramStatus);
+		}
+
+		if ( person.getStudentType() == null ) {
+			StudentType studentType = studentTypeService.get(StudentType.EAL_ID);
+			if ( studentType == null ) {
+				throw new ObjectNotFoundException(
+						"Unable to find a StudentType representing an early "
+								+ "alert-assigned type.", "StudentType");
+			}
+			person.setStudentType(studentType);
 		}
 	}
 
@@ -499,11 +519,18 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		if ( StringUtils.isNotBlank(courseName) ) {
 			final String facultySchoolId = earlyAlert.getCreatedBy().getSchoolId();
 			if ( (StringUtils.isNotBlank(facultySchoolId)) ) {
+				String termCode = earlyAlert.getCourseTermCode();
 				FacultyCourse course = null;
 				try {
-					course = facultyCourseService.
-							getCourseByFacultySchoolIdAndFormattedCourse(
-									facultySchoolId, courseName);
+					if ( StringUtils.isBlank(termCode) ) {
+						course = facultyCourseService.
+								getCourseByFacultySchoolIdAndFormattedCourse(
+										facultySchoolId, courseName);
+					} else {
+						course = facultyCourseService.
+								getCourseByFacultySchoolIdAndFormattedCourseAndTermCode(
+										facultySchoolId, courseName, termCode);
+					}
 				} catch ( ObjectNotFoundException e ) {
 					// Trace irrelevant. see below for logging. prefer to
 					// do it there, after the null check b/c not all service
@@ -511,7 +538,9 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				}
 				if ( course != null ) {
 					templateParameters.put("course", course);
-					String termCode = course.getTermCode();
+					if ( StringUtils.isBlank(termCode) ) {
+						termCode = course.getTermCode();
+					}
 					if ( StringUtils.isNotBlank(termCode) ) {
 						Term term = null;
 						try {
@@ -558,6 +587,12 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			final Collection<UUID> peopleIds) {
 		return dao.getCountOfActiveAlertsForPeopleIds(peopleIds);
 	}
+	
+	@Override
+	public Long getCountOfEarlyAlertsForSchoolIds(
+			final Collection<String> shoolIds, Campus campus) {
+		return dao.getCountOfAlertsForSchoolIds(shoolIds, campus);
+	}
 
 	@Override
 	public Long getEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
@@ -567,5 +602,29 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	@Override
 	public Long getStudentEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
 		return dao.getStudentEarlyAlertCountForCoach(coach, createDateFrom,  createDateTo, studentTypeIds);
+	}
+	
+	@Override
+	public Long getCountOfEarlyAlertsByCreatedDate(Date createDatedFrom, Date createdDateTo, Campus campus) {
+		return dao.getCountOfEarlyAlertsByCreatedDate(createDatedFrom,  createdDateTo, campus);
+	}
+
+	@Override
+	public Long getCountOfEarlyAlertsClosedByDate(Date closedDateFrom, Date closedDateTo, Campus campus) {
+		return dao.getCountOfEarlyAlertsClosedByDate(closedDateFrom,  closedDateTo, campus);
+	}
+
+	@Override
+	public Long getCountOfEarlyAlertStudentsByDate(Date createDatedFrom,
+			Date createdDateTo, Campus campus) {
+		return dao.getCountOfEarlyAlertStudentsByDate(createDatedFrom, createdDateTo, campus);
+	}
+
+	@Override
+	public PagingWrapper<EarlyAlertStudentReportTO> getStudentsEarlyAlertCountSetForCritera(
+			EarlyAlertStudentSearchTO earlyAlertStudentSearchTO,
+			SortingAndPaging createForSingleSort) {
+		// TODO Auto-generated method stub
+		return dao.getStudentsEarlyAlertCountSetForCritera(earlyAlertStudentSearchTO, createForSingleSort);
 	}
 }

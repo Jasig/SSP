@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.service.external.impl;
 
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.dao.external.RegistrationStatusByTermDao;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
@@ -93,5 +95,11 @@ public class RegistrationStatusByTermServiceImpl extends
 			LOGGER.debug("term not found?", e);
 		}
 		return person;
+	}
+
+	@Override
+	public PagingWrapper<RegistrationStatusByTerm> getAllForTerm(
+			@NotNull Term term, SortingAndPaging sAndP) {
+		return  dao.getAllForTerm(term, sAndP);
 	}
 }

@@ -24,6 +24,7 @@
     <portlet:param name="action" value="enterAlert"/>
     <portlet:param name="schoolId" value="SCHOOLID"/>
     <portlet:param name="formattedCourse" value="FORMATTEDCOURSE"/>
+    <portlet:param name="termCode" value="TERMCODE"/>
 </portlet:renderURL>
 
 <c:set var="n"><portlet:namespace/></c:set>
@@ -176,8 +177,9 @@
         	urls: {
         		courseList: '<c:url value="/api/1/person/${user.schoolId}/instruction/course"/>',
         		enterAlert: '${enterAlertUrl}',
-        		roster: '<c:url value="/api/1/person/${user.schoolId}/instruction/course/FORMATTEDCOURSE/roster"/>'
-        	}
+        		roster: '<c:url value="/api/1/person/${user.schoolId}/instruction/course/FORMATTEDCOURSE/roster?termCode=TERMCODE"/>'
+        	},
+            course_id_delim: ':'
         };
         ssp.EarlyAlertRoster('#${n}earlyAlert', options);
     </c:when>

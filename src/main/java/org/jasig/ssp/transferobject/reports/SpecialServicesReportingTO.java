@@ -62,7 +62,7 @@ public class SpecialServicesReportingTO implements Serializable {
 		return person.getMiddleName();
 	}
 
-	public String getUserId() {
+	public String getUserName() {
 		return person.getUsername();
 	}
 

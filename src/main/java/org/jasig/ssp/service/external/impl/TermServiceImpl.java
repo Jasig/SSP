@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.service.external.impl;
 
+import java.util.Collection;
+
 import org.jasig.ssp.dao.external.TermDao;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;

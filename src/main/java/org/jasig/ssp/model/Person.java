@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.model; // NOPMD
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
@@ -40,6 +41,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -63,6 +65,81 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	private static final long serialVersionUID = 4159658337332259029L;
 
 	private static final String DATABASE_TABLE_NAME = "person";
+
+	/**
+	 * Compares names only. I.e. two {@link Person}s with the same first, last,
+	 * and middle names are considered equivalent, even if they represent
+	 * different people. This is often problematic when using this
+	 * as the comparator in a {@link java.util.SortedSet} or
+	 * {@link java.util.SortedMap}. Consider {@link PersonNameAndIdComparator}
+	 * for cases when you really want to sort a list of {@link Person}s and
+	 * not inadvertently drop entries with duplicate names.
+	 */
+	public static class PersonNameComparator implements Comparator<Person> {
+		@Override
+		public int compare(Person o1, Person o2) {
+			return nameOf(o1).compareTo(nameOf(o2));
+		}
+
+		public int compare(Person p, CoachCaseloadRecordCountForProgramStatus c) {
+			return nameOf(p).compareTo(nameOf(c));
+		}
+
+		String nameOf(Person p) {
+			return new StringBuilder()
+					.append(StringUtils.trimToEmpty(p.getLastName()))
+					.append(StringUtils.trimToEmpty(p.getFirstName()))
+					.append(StringUtils.trimToEmpty(p.getMiddleName()))
+					.toString();
+		}
+
+		String nameOf(CoachCaseloadRecordCountForProgramStatus coachStatusCount) {
+			return new StringBuilder()
+					.append(StringUtils.trimToEmpty(coachStatusCount.getCoachLastName()))
+					.append(StringUtils.trimToEmpty(coachStatusCount.getCoachFirstName()))
+					.append(StringUtils.trimToEmpty(coachStatusCount.getCoachMiddleName()))
+					.toString();
+		}
+	}
+
+	public static final PersonNameComparator PERSON_NAME_COMPARATOR =
+			new PersonNameComparator();
+
+	public static class PersonNameAndIdComparator implements Comparator<Person> {
+
+		@Override
+		public int compare(Person o1, Person o2) {
+			int nameCompare = PERSON_NAME_COMPARATOR.compare(o1, o2);
+			if ( nameCompare != 0 ) {
+				return nameCompare;
+			}
+			return compareUUIDs(o1.getId(), o2.getId());
+		}
+
+		public int compare(Person p, CoachCaseloadRecordCountForProgramStatus c) {
+			int nameCompare = PERSON_NAME_COMPARATOR.compare(p, c);
+			if ( nameCompare != 0 ) {
+				return nameCompare;
+			}
+			return compareUUIDs(p.getId(), c.getCoachId());
+		}
+
+		private int compareUUIDs(UUID uuid1, UUID uuid2) {
+			if ( uuid1 == uuid2 ) {
+				return 0;
+			}
+			if ( uuid1 == null ) {
+				return -1;
+			}
+			if ( uuid2 == null ) {
+				return 1;
+			}
+			return uuid1.compareTo(uuid2);
+		}
+	}
+
+	public static final PersonNameAndIdComparator PERSON_NAME_AND_ID_COMPARATOR =
+			new PersonNameAndIdComparator();
 
 	/**
 	 * Static, super administrator account identifier. Only used by IT and
@@ -1080,6 +1157,16 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.currentRegistrationStatus = currentRegistrationStatus;
 	}
 
+	public String getNullSafeOfficeLocation() {
+		return getStaffDetails() == null ? null
+				: getStaffDetails().getOfficeLocation();
+	}
+
+	public String getNullSafeDepartmentName() {
+		return getStaffDetails() == null ? null
+				: getStaffDetails().getDepartmentName();
+	}
+
 	@Override
 	protected int hashPrime() {
 		return 3;
@@ -1148,4 +1235,5 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		return "Name: \"" + firstName + " " + lastName + "\" Id: "
 				+ super.toString();
 	}
+
 }
