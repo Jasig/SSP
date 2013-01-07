@@ -515,11 +515,18 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		if ( StringUtils.isNotBlank(courseName) ) {
 			final String facultySchoolId = earlyAlert.getCreatedBy().getSchoolId();
 			if ( (StringUtils.isNotBlank(facultySchoolId)) ) {
+				String termCode = earlyAlert.getCourseTermCode();
 				FacultyCourse course = null;
 				try {
-					course = facultyCourseService.
-							getCourseByFacultySchoolIdAndFormattedCourse(
-									facultySchoolId, courseName);
+					if ( StringUtils.isBlank(termCode) ) {
+						course = facultyCourseService.
+								getCourseByFacultySchoolIdAndFormattedCourse(
+										facultySchoolId, courseName);
+					} else {
+						course = facultyCourseService.
+								getCourseByFacultySchoolIdAndFormattedCourseAndTermCode(
+										facultySchoolId, courseName, termCode);
+					}
 				} catch ( ObjectNotFoundException e ) {
 					// Trace irrelevant. see below for logging. prefer to
 					// do it there, after the null check b/c not all service
@@ -527,7 +534,9 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				}
 				if ( course != null ) {
 					templateParameters.put("course", course);
-					String termCode = course.getTermCode();
+					if ( StringUtils.isBlank(termCode) ) {
+						termCode = course.getTermCode();
+					}
 					if ( StringUtils.isNotBlank(termCode) ) {
 						Term term = null;
 						try {

@@ -23,14 +23,21 @@ import static org.jasig.ssp.util.assertions.SspAssert.assertNotEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.hibernate.SessionFactory;
+import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
+import org.jasig.ssp.model.external.FacultyCourse;
+import org.jasig.ssp.model.external.WriteableExternalFacultyCourse;
+import org.jasig.ssp.model.external.WriteableExternalFacultyCourseRoster;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.external.ExternalPersonLiteTO;
 import org.jasig.ssp.transferobject.external.FacultyCourseTO;
+import org.jasig.ssp.util.service.stub.Stubs;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,6 +61,9 @@ public class FacultyCourseControllerIntegrationTest {
 
 	@Autowired
 	private transient FacultyCourseController controller;
+
+	@Autowired
+	private transient SessionFactory sessionFactory;
 
 	private static final String FACULTY_SCHOOL_ID = "uf928711";
 
@@ -98,7 +108,7 @@ public class FacultyCourseControllerIntegrationTest {
 	}
 
 	/**
-	 * Test that the {@link FacultyCourseController#getRoster(String, String)}
+	 * Test that the {@link FacultyCourseController#getRoster(String, String, String)}
 	 * action returns the correct validation errors when an invalid ID is sent.
 	 * 
 	 * @throws ValidationException
@@ -114,7 +124,7 @@ public class FacultyCourseControllerIntegrationTest {
 				controller);
 
 		final PagedResponse<ExternalPersonLiteTO> obj = controller.getRoster(
-				"invalid id", "invalid id");
+				"invalid id", "invalid id", null);
 
 		assertEquals(
 				"Returned FacultyCourseTO from the controller should have been null.",
@@ -212,13 +222,120 @@ public class FacultyCourseControllerIntegrationTest {
 			ValidationException {
 		// arrange, act
 		final PagedResponse<ExternalPersonLiteTO> list = controller
-				.getRoster(FACULTY_SCHOOL_ID, FORMATTED_COURSE);
+				.getRoster(FACULTY_SCHOOL_ID, FORMATTED_COURSE, null);
 
 		// assert
 		assertEquals("List should have returned 2 students.", 2,
 				list.getResults());
 		assertEquals("Last name did not match.", LAST_NAME, list
 				.getRows().iterator().next().getLastName());
+	}
+
+	@Test
+	public void testGetRostersForFormattedCourseTaughtBySameInstructorInMultipleTerms()
+			throws ObjectNotFoundException, ValidationException {
+
+		// assert on roster preconditions b/c the TOs that come back from the
+		// controller method don't have fields describing the course/section
+		// for each enrollment. so we couldn't otherwise know that our new
+		// enrollment wasn't somehow already in the getRoster() result set.
+		final PagedResponse<ExternalPersonLiteTO> initialEnrollments =
+				controller.getRoster(Stubs.PersonFixture.KEN.schoolId(),
+						"MTH101", null);
+
+		assertEquals(1, initialEnrollments.getRows().size());
+		assertEquals(Stubs.PersonFixture.STUDENT_0.schoolId(),
+				initialEnrollments.getRows().iterator().next().getSchoolId());
+
+		final WriteableExternalFacultyCourse course = new WriteableExternalFacultyCourse();
+		course.setFacultySchoolId(Stubs.PersonFixture.KEN.schoolId());
+		course.setTermCode(Stubs.TermFixture.FALL_2012.code());
+		// prob. not worth the trouble to model a "stub" type for courses since
+		// we don't actually *have* a 1st class course entity in our ext. model
+		// we just happen to know that KEN already instructs MTH101 in term FA12
+		// and PYF101 in term SP13
+		course.setFormattedCourse("MTH101");
+		course.setTermCode(Stubs.TermFixture.SPRING_2013.code());
+		course.setTitle("College Algebra");
+
+		final WriteableExternalFacultyCourseRoster roster = new WriteableExternalFacultyCourseRoster();
+		roster.setFacultySchoolId(Stubs.PersonFixture.KEN.schoolId());
+		roster.setFirstName(Stubs.PersonFixture.KEVIN_SMITH.firstName());
+		roster.setFormattedCourse("MTH101");
+		roster.setLastName(Stubs.PersonFixture.KEVIN_SMITH.lastName());
+		roster.setMiddleName(Stubs.PersonFixture.KEVIN_SMITH.middleName());
+		roster.setPrimaryEmailAddress(Stubs.PersonFixture.KEVIN_SMITH.primaryEmailAddress());
+		roster.setSchoolId(Stubs.PersonFixture.KEVIN_SMITH.schoolId());
+		roster.setTermCode(Stubs.TermFixture.SPRING_2013.code());
+
+		sessionFactory.getCurrentSession().save(course);
+		sessionFactory.getCurrentSession().save(roster);
+		sessionFactory.getCurrentSession().flush();
+
+		final PagedResponse<ExternalPersonLiteTO> modifiedEnrollments =
+				controller.getRoster(Stubs.PersonFixture.KEN.schoolId(),
+						"MTH101", null);
+
+		assertEquals(2, modifiedEnrollments.getRows().size());
+		final Iterator<ExternalPersonLiteTO> modifiedEnrollmentsIterator =
+				modifiedEnrollments.getRows().iterator();
+		assertEquals(Stubs.PersonFixture.STUDENT_0.schoolId(),
+				modifiedEnrollmentsIterator.next().getSchoolId());
+		assertEquals(Stubs.PersonFixture.KEVIN_SMITH.schoolId(),
+				modifiedEnrollmentsIterator.next().getSchoolId());
+
+	}
+
+	@Test
+	public void testGetTermCodeFilteredRostersForFormattedCourseTaughtBySameInstructorInMultipleTerms()
+			throws ObjectNotFoundException, ValidationException {
+		// same fixture as testGetRostersForFormattedCourseTaughtBySameInstructorInMultipleTerms(),
+		// this time we add a filter to the results
+
+		// assert on roster preconditions b/c the TOs that come back from the
+		// controller method don't have fields describing the course/section
+		// for each enrollment. so we couldn't otherwise know that our new
+		// enrollment wasn't somehow already in the getRoster() result set.
+		final PagedResponse<ExternalPersonLiteTO> initialEnrollments =
+				controller.getRoster(Stubs.PersonFixture.KEN.schoolId(),
+						"MTH101", null);
+
+		assertEquals(1, initialEnrollments.getRows().size());
+		assertEquals(Stubs.PersonFixture.STUDENT_0.schoolId(),
+				initialEnrollments.getRows().iterator().next().getSchoolId());
+
+		WriteableExternalFacultyCourse course = new WriteableExternalFacultyCourse();
+		course.setFacultySchoolId(Stubs.PersonFixture.KEN.schoolId());
+		course.setTermCode(Stubs.TermFixture.FALL_2012.code());
+		// prob. not worth the trouble to model a "stub" type for courses since
+		// we don't actually *have* a 1st class course entity in our ext. model
+		// we just happen to know that KEN already instructs MTH101 in term FA12
+		// and PYF101 in term SP13
+		course.setFormattedCourse("MTH101");
+		course.setTermCode("SP13");
+		course.setTitle("College Algebra");
+
+		WriteableExternalFacultyCourseRoster roster = new WriteableExternalFacultyCourseRoster();
+		roster.setFacultySchoolId(Stubs.PersonFixture.KEN.schoolId());
+		roster.setFirstName(Stubs.PersonFixture.KEVIN_SMITH.firstName());
+		roster.setFormattedCourse("MTH101");
+		roster.setLastName(Stubs.PersonFixture.KEVIN_SMITH.lastName());
+		roster.setMiddleName(Stubs.PersonFixture.KEVIN_SMITH.middleName());
+		roster.setPrimaryEmailAddress(Stubs.PersonFixture.KEVIN_SMITH.primaryEmailAddress());
+		roster.setSchoolId(Stubs.PersonFixture.KEVIN_SMITH.schoolId());
+		roster.setTermCode("SP13");
+
+		sessionFactory.getCurrentSession().save(course);
+		sessionFactory.getCurrentSession().save(roster);
+		sessionFactory.getCurrentSession().flush();
+
+		final PagedResponse<ExternalPersonLiteTO> modifiedEnrollments =
+				controller.getRoster(Stubs.PersonFixture.KEN.schoolId(),
+						"MTH101", Stubs.TermFixture.SPRING_2013.code());
+
+		assertEquals(1, modifiedEnrollments.getRows().size());
+		assertEquals(Stubs.PersonFixture.KEVIN_SMITH.schoolId(),
+				modifiedEnrollments.getRows().iterator().next().getSchoolId());
 	}
 
 	/**

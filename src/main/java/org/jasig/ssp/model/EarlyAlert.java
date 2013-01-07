@@ -64,6 +64,9 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	@Column(nullable = true, length = 255)
 	private String courseTitle;
 
+	@Column(nullable = true, length = 25)
+	private String courseTermCode;
+
 	@Column(name = "email_cc", nullable = true, length = 255)
 	private String emailCC;
 
@@ -143,6 +146,21 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	 */
 	public void setCourseTitle(final String courseTitle) {
 		this.courseTitle = courseTitle;
+	}
+
+	/**
+	 * @return the courseTermCode
+	 */
+	public String getCourseTermCode() {
+		return courseTermCode;
+	}
+
+	/**
+	 * @param courseTermCode
+	 *            the courseTermCode to set; optional; max length 25 characters
+	 */
+	public void setCourseTermCode(final String courseTermCode) {
+		this.courseTermCode = courseTermCode;
 	}
 
 	/**
@@ -314,6 +332,7 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 		// EarlyAlert
 		result *= hashField("courseName", courseName);
 		result *= hashField("courseTitle", courseTitle);
+		result *= hashField("courseTermCode", courseTermCode);
 		result *= hashField("emailCC", emailCC);
 		result *= hashField("campus", campus);
 		result *= hashField("earlyAlertSuggestionOtherDescription",

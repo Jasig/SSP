@@ -45,7 +45,19 @@ public interface FacultyCourseService extends
 			throws ObjectNotFoundException;
 
 	/**
-	 * Gets the course roster for the specified faculty's course.
+	 * Gets the course roster for the specified faculty's course. Note that
+	 * this might return enrollments spanning multiple courses/sections if the
+	 * given faculty teaches the same courses/sections across multiple terms.
+	 *
+	 * <p>Not necessarily the same as
+	 * {@link #getRosterByFacultySchoolIdAndCourseAndTermCode(String, String, String)}
+	 * and passing a null term code.</p>
+	 *
+	 * @deprecated Potentially ambiguous result if the given faculty teaches
+	 *   the same course/section in multiple terms. There really isn't a
+	 *   reasonable use case for invoking this method. Use
+	 *   {@link #getRosterByFacultySchoolIdAndCourseAndTermCode(String, String, String)}
+	 *   instead.
 	 * 
 	 * @param facultySchoolId
 	 *            The faculty school id to use to lookup the associated data.
@@ -58,9 +70,41 @@ public interface FacultyCourseService extends
 	List<ExternalFacultyCourseRoster> getRosterByFacultySchoolIdAndCourse(
 			final String facultySchoolId, final String formattedCourse)
 			throws ObjectNotFoundException;
-	
+
+	/**
+	 * Gets the course with the specified id for the specified faculty in the
+	 * given term.
+	 *
+	 * <p>Note that under the current implementation the
+	 * {@link ObjectNotFoundException} in the signature is used to represent
+	 * an invalid argument rather than an empty result set. Do not rely on
+	 * it as a guard against null results.</p>
+	 *
+	 * @param facultySchoolId
+	 *             The faculty school id to use to lookup the associated data.
+	 * @param formattedCourse
+	 *             the course
+	 * @param termCode
+	 *             the term code
+	 * @return
+	 * @throws ObjectNotFoundException see method description
+	 */
+	List<ExternalFacultyCourseRoster>
+	getRosterByFacultySchoolIdAndCourseAndTermCode(String facultySchoolId,
+			String formattedCourse,
+			String termCode)
+	throws ObjectNotFoundException;
+
 	/**
 	 * Gets the course with the specified id for the specified faculty.
+	 *
+	 * @deprecated Potentially ambiguous result if the given faculty teaches
+	 *   the same course/section in multiple terms. The current implementation
+	 *   will throw a <code>org.hibernate.NonUniqueResultException</code> in
+	 *   this case. But as currently designed there really isn't a reasonable
+	 *   use case for invoking this method. Use
+	 *   {@link #getCourseByFacultySchoolIdAndFormattedCourseAndTermCode(String, String, String)}
+	 *   instead
 	 * 
 	 * @param facultySchoolId
 	 *            The faculty school id to use to lookup the associated data.
@@ -73,4 +117,19 @@ public interface FacultyCourseService extends
 	FacultyCourse getCourseByFacultySchoolIdAndFormattedCourse(
 			String facultySchoolId, final String formattedCourse) 
 			throws ObjectNotFoundException;
+
+	/**
+	 * Same as {@link #getCourseByFacultySchoolIdAndFormattedCourse(String, String)}
+	 * but with a term code parameter that eliminates the former's ambiguity.
+	 *
+	 * @param facultySchoolId
+	 * @param formattedCourse
+	 * @param termCode
+	 * @return
+	 * @throws ObjectNotFoundException
+	 */
+	FacultyCourse getCourseByFacultySchoolIdAndFormattedCourseAndTermCode(
+			String facultySchoolId, final String formattedCourse,
+			final String termCode) throws ObjectNotFoundException;
+
 }

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="Add term code field to person" author="dan.mccallum">
+		<addColumn tableName="early_alert">
+			<column name="course_term_code" type="${nvarchar.type}(25)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="person" columnName="course_term_code" />
+		</rollback>
+	</changeSet>
+
+	<!-- These backfill changeSets take the easy way out and just use (what is
+		probably) the most recently added term if an instructor has taught the
+		same course in multiple terms. This approximation is OK b/c if this is
+		run against an existing install we know v_external_faculty_course.
+		formatted_course and v_external_faculty_course.faculty_school_id were a
+		unique pair... else the application never would have worked (or at least
+		not the alerting subsystem).
+
+		These also assume the alert creator is also the course faculty, which
+		needn't always be true, but is what the Java codebase assumes. And
+		we have no reasonable way of guessing at a more correct faculty
+		member. -->
+	<changeSet id="Backfill early alert term codes (mssql)" author="dan.mccallum"
+			dbms="mssql">
+		<sql>
+			update early_alert set course_term_code =
+			(select top 1 c.term_code
+			 from v_external_faculty_course c join person p
+			  on c.faculty_school_id = p.school_id
+			 where p.id = early_alert.created_by
+			  and c.formatted_course = early_alert.course_name
+			 order by c.id desc)
+		</sql>
+		<rollback>
+			<update tableName="early_alert">
+				<column name="course_term_code" value="NULL" />
+			</update>
+		</rollback>
+	</changeSet>
+
+	<!-- Postgres has different result set limiting syntax than SqlServer -->
+	<changeSet id="Backfill early alert term codes (pg)" author="dan.mccallum"
+			   dbms="postgresql">
+		<sql>
+			update early_alert set course_term_code =
+			(select c.term_code
+			 from v_external_faculty_course c join person p
+			  on c.faculty_school_id = p.school_id
+			 where p.id = early_alert.created_by
+			  and c.formatted_course = early_alert.course_name
+			 order by c.id desc
+			 limit 1)
+		</sql>
+		<rollback>
+			<update tableName="early_alert">
+				<column name="course_term_code" value="NULL" />
+			</update>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>
