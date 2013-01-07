@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.transferobject.reference;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -28,20 +29,36 @@ import org.jasig.ssp.transferobject.TransferObject;
 import com.google.common.collect.Lists;
 
 public class DisabilityAccommodationTO extends AbstractReferenceTO<DisabilityAccommodation>
-		implements TransferObject<DisabilityAccommodation> {
+		implements TransferObject<DisabilityAccommodation>, Serializable {
+
+	private static final long serialVersionUID = 1193408160654677796L;
+
+	private String descriptionFieldLabel;
+
+	private Boolean useDescription;
+	
+	private String descriptionFieldType;
 
 	public DisabilityAccommodationTO() {
 		super();
 	}
 
-	public DisabilityAccommodationTO(final UUID id, final String name,
-			final String description) {
-		super(id, name, description);
-	}
-
 	public DisabilityAccommodationTO(final DisabilityAccommodation model) {
 		super();
 		from(model);
+	}
+	
+	public DisabilityAccommodationTO(final UUID id, final String name,
+			final String description) {
+		super(id, name, description);
+	}	
+	
+	@Override
+	public final void from(final DisabilityAccommodation model) {
+		super.from(model);
+		descriptionFieldLabel = model.getDescriptionFieldLabel();
+		useDescription = model.getUseDescription();
+		descriptionFieldType = model.getDescriptionFieldType();
 	}
 
 	public static List<DisabilityAccommodationTO> toTOList(
@@ -51,5 +68,36 @@ public class DisabilityAccommodationTO extends AbstractReferenceTO<DisabilityAcc
 			tObjects.add(new DisabilityAccommodationTO(model));
 		}
 		return tObjects;
+	}	
+	
+	public String getDescriptionFieldLabel() {
+		return descriptionFieldLabel;
+	}
+
+	public void setDescriptionFieldLabel(final String descriptionFieldLabel) {
+		this.descriptionFieldLabel = descriptionFieldLabel;
+	}
+
+	/**
+	 * @return the useDescription
+	 */
+	public Boolean getUseDescription() {
+		return useDescription;
+	}
+
+	/**
+	 * @param useDescription
+	 *            the useDescription to set
+	 */
+	public void setUseDescription(final Boolean useDescription) {
+		this.useDescription = useDescription;
+	}
+	
+	public String getDescriptionFieldType() {
+		return descriptionFieldType;
+	}
+
+	public void setDescriptionFieldType(final String descriptionFieldType) {
+		this.descriptionFieldType = descriptionFieldType;
 	}
 }

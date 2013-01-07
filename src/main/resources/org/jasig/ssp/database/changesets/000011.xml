@@ -83,6 +83,15 @@
 			<column name="description" type="text">
 				<constraints nullable="true" />
 			</column>
+            <column name="use_description" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="description_field_label" type="${nvarchar.type}(80)">
+                <constraints nullable="true" />
+            </column>
+            <column name="description_field_type" type="${nvarchar.type}(80)">
+                <constraints nullable="true" />
+            </column>			
 			<column name="created_date" type="datetime">
 				<constraints nullable="false" />
 			</column>
@@ -447,7 +456,7 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="3761d6a4-6f71-4c88-a1d7-f9bea7079346" />
 			<column name="name" value="To be determined" />
-			<column name="description" value="To be determined" />
+			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -457,7 +466,10 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="f4620bbb-35b5-4fac-9746-60e81abeb5b9" />
 			<column name="name" value="Extended time on exams/quizzes" />
-			<column name="description" value="Extended time on exams/quizzes" />
+			<column name="description" value="" />
+			<column name="use_description" value="true" />
+            <column name="description_field_label" value="Specify Time" />
+            <column name="description_field_type" value="short" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -467,7 +479,7 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="85138559-4d40-420d-bd78-119276a7b42c" />
 			<column name="name" value="Distraction-free testing environment -Testing Center" />
-			<column name="description" value="Distraction-free testing environment -Testing Center" />
+			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -477,7 +489,7 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="9c49cb24-0949-4472-988b-2f539fbe5843" />
 			<column name="name" value="Proctored Exam with writer in Tutorial Center" />
-			<column name="description" value="Proctored Exam with writer in Tutorial Center" />
+			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -487,7 +499,7 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="90ed8cf5-040c-4f68-83c3-863120da0388" />
 			<column name="name" value="Proctored Exam with reader in Tutorial Center" />
-			<column name="description" value="Proctored Exam with reader in Tutorial Center" />
+			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -497,7 +509,7 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="3C3A0E9D-ED9D-47AD-9A5C-C4AFE4EDBE69" />
 			<column name="name" value="Volunteer Note Taker" />
-			<column name="description" value="Volunteer Note Taker" />
+			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -507,7 +519,7 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="f0ff3e53-bf45-421e-8bbf-c0ef8a2049b4" />
 			<column name="name" value="Tape record lecture" />
-			<column name="description" value="Tape record lecture" />
+			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -517,7 +529,7 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="0412e725-05d7-4161-84cd-fd77f494583d" />
 			<column name="name" value="Use of calculator" />
-			<column name="description" value="Use of calculator" />
+			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -527,7 +539,10 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="13588bfe-c9b9-4134-bb6f-ee875c2e8789" />
 			<column name="name" value="Enlarged print materials" />
-			<column name="description" value="Enlarged print materials" />
+			<column name="description" value="" />
+			<column name="use_description" value="true" />
+            <column name="description_field_label" value="Specify Font Size" />
+            <column name="description_field_type" value="short" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -537,7 +552,7 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="6d745998-8a2f-4bf0-a104-0e0499c8f18f" />
 			<column name="name" value="Preferential seating in front of class" />
-			<column name="description" value="Preferential seating in front of class" />
+			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -547,7 +562,7 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="74603eff-ea00-413a-acd5-a55755b79778" />
 			<column name="name" value="Allow students to record answers on regular paper -unable to fill scantron sheet" />
-			<column name="description" value="Allow students to record answers on regular paper -unable to fill scantron sheet" />
+			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -557,7 +572,7 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="51155fbf-f681-4492-a059-37626e08e732" />
 			<column name="name" value="Tutors" />
-			<column name="description" value="Tutors" />
+			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -567,7 +582,7 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="08dd4152-82db-429f-9a7f-7f9a749c46f7" />
 			<column name="name" value="Provide Time Management schedule sheet" />
-			<column name="description" value="Provide Time Management schedule sheet" />
+			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -577,7 +592,7 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="a1d9b1c8-6841-46f5-9dda-5b7e4130fd42" />
 			<column name="name" value="Interpreter" />
-			<column name="description" value="Interpreter" />
+			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -587,7 +602,7 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="3424f88b-614c-4686-af57-760ea0b57d2f" />
 			<column name="name" value="FM Loop System with neck coil" />
-			<column name="description" value="FM Loop System with neck coil" />
+			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -597,7 +612,7 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="1f18e705-187a-447d-8f03-8814fc854fc6" />
 			<column name="name" value="Closed captioning for video tapes" />
-			<column name="description" value="Closed captioning for video tapes" />
+			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -607,7 +622,10 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="2da4bd54-29b8-487e-ae81-82867c20631f" />
 			<column name="name" value="Training on computer software" />
-			<column name="description" value="Training on computer software" />
+			<column name="description" value="" />
+			<column name="use_description" value="true" />
+            <column name="description_field_label" value="Specify" />
+            <column name="description_field_type" value="long" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -617,7 +635,10 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="a3b9e31e-b3af-41b3-b602-151b60253938" />
 			<column name="name" value="Other adjustments-accommodations" />
-			<column name="description" value="Other adjustments-accommodations" />
+			<column name="description" value="" />
+			<column name="use_description" value="true" />
+			<column name="description_field_label" value="Specify" />
+			<column name="description_field_type" value="long" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -627,7 +648,7 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="595f1fb6-81f6-40d4-b82a-e0cce834156c" />
 			<column name="name" value="Use of a computer for tests, writing assignments, etc." />
-			<column name="description" value="Use of a computer for tests, writing assignments, etc." />
+			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -637,7 +658,7 @@
         <insert tableName="disability_accommodation">
 			<column name="id" value="c2d81565-0dd5-4f1a-ad54-2640f4fd7749" />
 			<column name="name" value="Tape recorded textbooks -Eligible from RFB and D" />
-			<column name="description" value="Tape recorded textbooks -Eligible from RFB and D" />
+			<column name="description" value="" />
 			<column name="created_date" valueDate="2012-10-01T00:00:00" />
 			<column name="modified_date" valueDate="2012-10-01T00:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />

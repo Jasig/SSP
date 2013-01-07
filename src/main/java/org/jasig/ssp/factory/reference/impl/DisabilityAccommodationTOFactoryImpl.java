@@ -24,7 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.reference.DisabilityAccommodationDao;
 import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
 import org.jasig.ssp.factory.reference.DisabilityAccommodationTOFactory;
+import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.model.reference.DisabilityAccommodation;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
 import org.jasig.ssp.transferobject.reference.DisabilityAccommodationTO;
 
 @Service
@@ -43,6 +46,18 @@ public class DisabilityAccommodationTOFactoryImpl extends
 	@Override
 	protected DisabilityAccommodationDao getDao() {
 		return dao;
+	}
+	
+	@Override
+	public DisabilityAccommodation from(final DisabilityAccommodationTO tObject)
+			throws ObjectNotFoundException {
+		final DisabilityAccommodation model = super.from(tObject);
+
+		model.setDescriptionFieldLabel(tObject.getDescriptionFieldLabel());
+		model.setUseDescription(tObject.getUseDescription());
+		model.setDescriptionFieldType(tObject.getDescriptionFieldType());
+
+		return model;
 	}
 
 }

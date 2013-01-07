@@ -36,6 +36,7 @@ Ext.define('Ssp.util.Constants',{
     	 */
     	isRestrictedAdminItemId: function( id ){
     		var restrictedIds = [
+    		            Ssp.util.Constants.DISABILITY_AGENCY_OTHER_ID,
     		        	Ssp.util.Constants.EDUCATION_GOAL_OTHER_ID,
     		        	Ssp.util.Constants.EDUCATION_GOAL_MILITARY_ID,
     		        	Ssp.util.Constants.EDUCATION_GOAL_BACHELORS_DEGREE_ID,
@@ -64,7 +65,10 @@ Ext.define('Ssp.util.Constants',{
     	// confidentiality level for lists in the SSP portlet.
     	// default to EVERYONE: 'b3d077a7-4055-0510-7967-4a09f93a0357'
     	DEFAULT_SYSTEM_CONFIDENTIALITY_LEVEL_ID: '',
-    	
+
+    	// DISABILITY AGENCY - ID VALUES RELATED TO DISABILITY INTAKE DISABILITY AGENCIES
+        DISABILITY_AGENCY_OTHER_ID: '224b03d9-90da-4f9c-8959-ea2e97661f40',
+    	   	
     	// EDUCATION GOALS - ID VALUES RELATED TO STUDENT INTAKE EDUCATION GOALS
         EDUCATION_GOAL_OTHER_ID: '78b54da7-fb19-4092-bb44-f60485678d6b',
         EDUCATION_GOAL_MILITARY_ID: '6c466885-d3f8-44d1-a301-62d6fe2d3553',

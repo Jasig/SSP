@@ -55,8 +55,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 									leaf: true
 							    }]
 			                },{
-			    	            text: 'Disability Services',
-			    	            title: 'Disability Services',
+			    	            text: 'Disability Intake',
+			    	            title: 'Disability Intake',
 			    	            form: '',
 			    	            expanded: false,
 			    	            children: [{
@@ -64,7 +64,41 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 									title: 'Disability Accommodations',
 									store: 'disabilityAccommodations',
 							        form: 'AbstractReferenceAdmin',
-									leaf: true
+									leaf: true,
+									columns: [
+					    		                { header: 'Name',  
+					    		                  dataIndex: 'name',
+					    		                  required: true,
+					    		                  field: {
+					    		                      xtype: 'textfield'
+					    		                  },
+					    		                  flex: 1 },
+					      		                { header: 'Additional Desc',
+					    		                  required: true,
+					      		                  dataIndex: 'useDescription', 
+					      		                  flex: .2,
+					      		                  renderer: me.columnRendererUtils.renderFriendlyBoolean,
+					      		                  field: {
+					      		                      xtype: 'checkbox'
+					      		                  }
+					      		                },
+					    		                { header: 'Desc Label',
+					    		                  required: false,
+					    		                  dataIndex: 'descriptionFieldLabel',
+					    		                  field: {
+					    		                      xtype: 'textfield'
+					    		                  },
+					    		                  flex: .2
+					    		                },
+					    		                { header: 'Long/Short Desc',
+					    		                  required: false,
+					    		                  dataIndex: 'descriptionFieldType',
+					    		                  field: {
+					    		                      xtype: 'textfield'
+					    		                  },
+					    		                  flex: .2
+					    		                }
+					    		           ]
 							    },{
 									text: 'Disability Agencies',
 									title: 'Disability Agencies',

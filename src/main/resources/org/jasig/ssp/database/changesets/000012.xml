@@ -77,9 +77,257 @@
             <dropColumn tableName="person" columnName="alternate_address_city" />
             <dropColumn tableName="person" columnName="alternate_address_state" />
             <dropColumn tableName="person" columnName="alternate_address_zip_code" />
-            <dropColumn tableName="person" columnName="alternate_address_country" />
-            
+            <dropColumn tableName="person" columnName="alternate_address_country" />      
         </rollback>
     </changeSet>
-       
+
+    <changeSet author='shawn.gormley' id='Add person_disability table'>
+        <createTable tableName="person_disability">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="created_date" type="datetime">
+                <constraints nullable="false" />
+            </column>
+            <column name="modified_date" type="datetime" />
+            <column name="created_by" type="uuid">
+                <constraints nullable="false"
+                    foreignKeyName="person_disability_created_by_person_id"
+                    references="person(id)" />
+            </column>
+            <column name="modified_by" type="uuid">
+                <constraints nullable="true"
+                    foreignKeyName="person_disability_modified_by_person_id"
+                    references="person(id)" />
+            </column>
+            <column name="object_status" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="disability_status_id" type="uuid">
+                <constraints nullable="true"
+                    foreignKeyName="person_disability_disability_status_id_disability_status_id"
+                    references="disability_status(id)" />
+            </column>            
+            <column name="intake_counselor" type="${nvarchar.type}(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="referred_by" type="${nvarchar.type}(50)">
+                <constraints nullable="true" />
+            </column>            
+            <column name="contact_name" type="${nvarchar.type}(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="release_signed" type="boolean" 
+                defaultValueBoolean="false" />
+            <column name="records_requested" type="boolean"
+                defaultValueBoolean="false" />
+            <column name="records_requested_from" type="${nvarchar.type}(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="refer_for_screening" type="boolean"
+                defaultValueBoolean="false" />
+            <column name="documents_requested_from" type="${nvarchar.type}(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="rights_and_duties" type="${nvarchar.type}(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="eligible_letter_sent" type="boolean"
+                defaultValueBoolean="false" />
+            <column name="eligible_letter_date" type="datetime" />        
+            <column name="ineligible_letter_sent" type="boolean"
+                defaultValueBoolean="false" />
+            <column name="ineligible_letter_date" type="datetime" />
+            <column name="no_documentation" type="boolean"
+                defaultValueBoolean="false" />
+            <column name="inadequate_documentation" type="boolean"
+                defaultValueBoolean="false" />
+            <column name="no_disability" type="boolean"
+                defaultValueBoolean="false" />              
+            <column name="no_special_ed" type="boolean"
+                defaultValueBoolean="false" />                        
+            <column name="temp_eligibility_description" type="${nvarchar.type}(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="on_medication" type="boolean"
+                defaultValueBoolean="false" />
+            <column name="medication_list" type="text">
+                <constraints nullable="true" />
+            </column>
+            <column name="functional_limitations" type="text">
+                <constraints nullable="true" />
+            </column>        
+        </createTable>
+
+        <sql>grant all on person_disability to ssp</sql>
+        <rollback>
+            <dropTable tableName="person_disability" />
+        </rollback>
+
+        <!-- Theres a different assumption in the liquibase handling of timezones 
+            on postgres. Specifying "Without" timezone -->
+        <modifySql dbms="postgresql">
+            <replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+        </modifySql>
+
+    </changeSet>
+
+    <changeSet author='shawn.gormley'
+        id='Add one-to-one association disability foreign key to Person'>
+        <addColumn tableName="person">
+            <column name="person_disability_id" type="uuid">
+                <constraints nullable="true" foreignKeyName="person_person_disability_id"
+                    references="person_disability(id)" />
+            </column>
+        </addColumn>
+
+        <rollback>
+            <dropColumn tableName="person" columnName="person_disability_id" />
+        </rollback>
+    </changeSet>
+
+    <changeSet author='shawn.gormley' id='Add person_disability_agency table'>
+        <createTable tableName="person_disability_agency">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="created_date" type="datetime">
+                <constraints nullable="false" />
+            </column>
+            <column name="modified_date" type="datetime" />
+            <column name="created_by" type="uuid">
+                <constraints nullable="false"
+                    foreignKeyName="person_disability_agency_created_by_person_id"
+                    references="person(id)" />
+            </column>
+            <column name="modified_by" type="uuid">
+                <constraints nullable="true"
+                    foreignKeyName="person_disability_agency_modified_by_person_id"
+                    references="person(id)" />
+            </column>
+            <column name="object_status" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="person_id" type="uuid">
+                <constraints nullable="false"
+                    foreignKeyName="person_disability_agency_person_person_id" references="person(id)" />
+            </column>
+            <column name="description" type="${nvarchar.type}(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="disability_agency_id" type="uuid">
+                <constraints nullable="true"
+                    foreignKeyName="person_disability_agency_disability_agency_id_disability_agency_id"
+                    references="disability_agency(id)" />
+            </column>
+        </createTable>
+
+        <sql>grant all on person_disability_agency to ssp</sql>
+        <rollback>
+            <dropTable tableName="person_disability_agency" />
+        </rollback>
+
+        <!-- Theres a different assumption in the liquibase handling of timezones 
+            on postgres. Specifying "Without" timezone -->
+        <modifySql dbms="postgresql">
+            <replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+        </modifySql>
+    </changeSet>
+
+    <changeSet author='shawn.gormley' id='Add person_disability_accommodation table'>
+        <createTable tableName="person_disability_accommodation">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="created_date" type="datetime">
+                <constraints nullable="false" />
+            </column>
+            <column name="modified_date" type="datetime" />
+            <column name="created_by" type="uuid">
+                <constraints nullable="false"
+                    foreignKeyName="person_disability_accommodation_created_by_person_id"
+                    references="person(id)" />
+            </column>
+            <column name="modified_by" type="uuid">
+                <constraints nullable="true"
+                    foreignKeyName="person_disability_accommodation_modified_by_person_id"
+                    references="person(id)" />
+            </column>
+            <column name="object_status" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="person_id" type="uuid">
+                <constraints nullable="false"
+                    foreignKeyName="person_disability_accommodation_person_person_id" references="person(id)" />
+            </column>
+            <column name="description" type="${nvarchar.type}(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="disability_accommodation_id" type="uuid">
+                <constraints nullable="true"
+                    foreignKeyName="person_disability_accommodation_disability_accommodation_id_disability_accommodation_id"
+                    references="disability_accommodation(id)" />
+            </column>
+        </createTable>
+
+        <sql>grant all on person_disability_accommodation to ssp</sql>
+        <rollback>
+            <dropTable tableName="person_disability_accommodation" />
+        </rollback>
+
+        <!-- Theres a different assumption in the liquibase handling of timezones 
+            on postgres. Specifying "Without" timezone -->
+        <modifySql dbms="postgresql">
+            <replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+        </modifySql>
+    </changeSet>
+
+    <changeSet author='shawn.gormley' id='Add person_disability_type table'>
+        <createTable tableName="person_disability_type">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="created_date" type="datetime">
+                <constraints nullable="false" />
+            </column>
+            <column name="modified_date" type="datetime" />
+            <column name="created_by" type="uuid">
+                <constraints nullable="false"
+                    foreignKeyName="person_disability_type_created_by_person_id"
+                    references="person(id)" />
+            </column>
+            <column name="modified_by" type="uuid">
+                <constraints nullable="true"
+                    foreignKeyName="person_disability_type_modified_by_person_id"
+                    references="person(id)" />
+            </column>
+            <column name="object_status" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="person_id" type="uuid">
+                <constraints nullable="false"
+                    foreignKeyName="person_disability_type_person_person_id" references="person(id)" />
+            </column>
+            <column name="description" type="${nvarchar.type}(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="disability_type_id" type="uuid">
+                <constraints nullable="true"
+                    foreignKeyName="person_disability_type_disability_type_id_disability_type_id"
+                    references="disability_type(id)" />
+            </column>
+        </createTable>
+
+        <sql>grant all on person_disability_type to ssp</sql>
+        <rollback>
+            <dropTable tableName="person_disability_type" />
+        </rollback>
+
+        <!-- Theres a different assumption in the liquibase handling of timezones 
+            on postgres. Specifying "Without" timezone -->
+        <modifySql dbms="postgresql">
+            <replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+        </modifySql>
+    </changeSet>
+    
 </databaseChangeLog>

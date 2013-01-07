@@ -84,12 +84,12 @@ Ext.require([
     'Ssp.view.tools.sis.Registration',
     'Ssp.view.tools.sis.Assessment',
     'Ssp.view.tools.sis.Transcript',
-    'Ssp.view.tools.disability.DisabilityServices',
-    'Ssp.view.tools.disability.General',
-    'Ssp.view.tools.disability.AgencyContacts',
-    'Ssp.view.tools.disability.DisabilityCodes',
-    'Ssp.view.tools.disability.Disposition',
-    'Ssp.view.tools.disability.Accommodations',
+    'Ssp.view.tools.disabilityintake.DisabilityIntake',
+    'Ssp.view.tools.disabilityintake.General',
+    'Ssp.view.tools.disabilityintake.AgencyContacts',
+    'Ssp.view.tools.disabilityintake.DisabilityTypes',
+    'Ssp.view.tools.disabilityintake.Disposition',
+    'Ssp.view.tools.disabilityintake.Accommodations',
     'Ssp.view.tools.displacedworker.DisplacedWorker',
     'Ssp.view.tools.studentsuccess.StudentSuccess',
     'Ssp.view.admin.AdminForms',
@@ -153,6 +153,11 @@ Ext.require([
 	'Ssp.model.tool.studentintake.PersonDemographics',
 	'Ssp.model.tool.studentintake.PersonEducationGoal',
 	'Ssp.model.tool.studentintake.PersonEducationPlan',
+	'Ssp.model.tool.disabilityintake.DisabilityIntakeForm',
+	'Ssp.model.tool.disabilityintake.PersonDisability',
+	'Ssp.model.tool.disabilityintake.PersonDisabilityAgency',
+	'Ssp.model.tool.disabilityintake.PersonDisabilityType',
+	'Ssp.model.tool.disabilityintake.PersonDisabilityAccommodation',
 	'Ssp.model.tool.actionplan.Task',
 	'Ssp.model.tool.earlyalert.PersonEarlyAlert',
 	'Ssp.model.tool.earlyalert.PersonEarlyAlertTree',
@@ -239,6 +244,7 @@ Ext.require([
     'Ssp.service.CampusService',
     'Ssp.service.CampusEarlyAlertRoutingService',
     'Ssp.service.ConfidentialityDisclosureAgreementService',
+    'Ssp.service.DisabilityIntakeService',
     'Ssp.service.EarlyAlertService',
     'Ssp.service.EarlyAlertResponseService',
     'Ssp.service.EarlyAlertReferralService',
@@ -286,6 +292,7 @@ var apiUrls = [
   {name: 'confidentialityLevel', url: 'reference/confidentialityLevel'},
   {name: 'configuration', url: 'reference/configuration'},
   {name: 'disabilityAccommodation', url: 'reference/disabilityAccommodation'},
+  {name: 'disabilityIntakeTool', url: 'tool/disabilityIntake'},
   {name: 'disabilityAgency', url: 'reference/disabilityAgency'},
   {name: 'disabilityStatus', url: 'reference/disabilityStatus'},
   {name: 'disabilityType', url: 'reference/disabilityType'},
@@ -344,7 +351,7 @@ Ext.onReady(function(){
 	Ext.Ajax.request({
 		url: Ssp.mixin.ApiProperties.getBaseApiUrl() + 'session/getAuthenticatedPerson',
 		method: 'GET',
-		headers: { 'Content-Type': 'application/json' },
+		headers: { 'Accept' : 'application/json','Content-Type': 'application/json' },
 		success: function(response){
 			var r = Ext.decode(response.responseText);
 			var user={};
@@ -489,6 +496,12 @@ Ext.onReady(function(){
 			        currentStudentIntake: {
 			        	fn: function(){
 			        		return new Ssp.model.tool.studentintake.StudentIntakeForm();
+			        	},
+				        singleton: true
+			        },
+			        currentDisabilityIntake: {
+			        	fn: function(){
+			        		return new Ssp.model.tool.disabilityintake.DisabilityIntakeForm();
 			        	},
 				        singleton: true
 			        },
@@ -696,6 +709,7 @@ Ext.onReady(function(){
 			        campusEarlyAlertRoutingService: 'Ssp.service.CampusEarlyAlertRoutingService',
 			        caseloadService: 'Ssp.service.CaseloadService',
 			        confidentialityDisclosureAgreementService: 'Ssp.service.ConfidentialityDisclosureAgreementService',
+			        disabilityIntakeService: 'Ssp.service.DisabilityIntakeService',
 			        earlyAlertService: 'Ssp.service.EarlyAlertService',
 			        earlyAlertReferralService: 'Ssp.service.EarlyAlertReferralService',
 			        earlyAlertResponseService: 'Ssp.service.EarlyAlertResponseService',

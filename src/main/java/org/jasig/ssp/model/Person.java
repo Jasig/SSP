@@ -389,8 +389,8 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@ManyToOne
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "person_education_plan_id", unique = true, nullable = true)
-	private PersonEducationPlan educationPlan;
-
+	private PersonEducationPlan educationPlan;	
+	
 	/**
 	 * Education Levels for a student.
 	 * 
@@ -421,6 +421,47 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	private Set<PersonChallenge> challenges;
+
+	/**
+	 * Disability intake for a student.
+	 * 
+	 * Should be null for non-student users.
+	 */
+	@Nullable
+	@ManyToOne
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	@JoinColumn(name = "person_disability_id", unique = true, nullable = true)
+	private PersonDisability disability;	
+	
+	/**
+	 * Any Disability Agencies for a student.
+	 * 
+	 * Should be null for non-student users.
+	 */
+	@Nullable
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	private Set<PersonDisabilityAgency> disabilityAgencies;	
+
+	/**
+	 * Any Disability Types for a student.
+	 * 
+	 * Should be null for non-student users.
+	 */
+	@Nullable
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	private Set<PersonDisabilityType> disabilityTypes;	
+
+	/**
+	 * Any Disability Accommodations for a student.
+	 * 
+	 * Should be null for non-student users.
+	 */
+	@Nullable
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	private Set<PersonDisabilityAccommodation> disabilityAccommodations;
 
 	@Nullable
 	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
@@ -509,6 +550,9 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 
 	private void initializeSets() {
 		challenges = Sets.newHashSet();
+		disabilityAgencies = Sets.newHashSet();
+		disabilityAccommodations = Sets.newHashSet();
+		disabilityTypes = Sets.newHashSet();
 		fundingSources = Sets.newHashSet();
 		educationLevels = Sets.newHashSet();
 		tools = Sets.newHashSet();
@@ -793,6 +837,14 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.demographics = demographics;
 	}
 
+	public PersonDisability getDisability() {
+		return disability;
+	}
+
+	public void setDisability(final PersonDisability disability) {
+		this.disability = disability;
+	}	
+	
 	public PersonEducationGoal getEducationGoal() {
 		return educationGoal;
 	}
@@ -834,6 +886,31 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		this.challenges = challenges;
 	}
 
+	public Set<PersonDisabilityAgency> getDisabilityAgencies() {
+		return disabilityAgencies;
+	}
+
+	public void setDisabilityAgencies(final Set<PersonDisabilityAgency> disabilityAgencies) {
+		this.disabilityAgencies = disabilityAgencies;
+	}
+
+	public Set<PersonDisabilityType> getDisabilityTypes() {
+		return disabilityTypes;
+	}
+
+	public void setDisabilityTypes(final Set<PersonDisabilityType> disabilityTypes) {
+		this.disabilityTypes = disabilityTypes;
+	}
+
+	public Set<PersonDisabilityAccommodation> getDisabilityAccommodations() {
+		return disabilityAccommodations;
+	}
+
+	public void setDisabilityAccommodations(
+			final Set<PersonDisabilityAccommodation> disabilityAccommodations) {
+		this.disabilityAccommodations = disabilityAccommodations;
+	}	
+	
 	public Set<PersonTool> getTools() {
 		return tools;
 	}

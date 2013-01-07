@@ -20,15 +20,16 @@ package org.jasig.ssp.model.reference;
 
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.jasig.ssp.model.Auditable;
 
 /**
- * DisabilityAccommodation reference object.
+ * ChallengeReferral reference object.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -36,8 +37,32 @@ public class DisabilityAccommodation
 		extends AbstractReference
 		implements Auditable {
 
-	private static final long serialVersionUID = 20121004153721171L;
+	private static final long serialVersionUID = 5543482960025703474L;
 
+	/**
+	 * Label to use in the UI for the personDisabilityAccommodation description field
+	 * when useDescription is set to true.
+	 * 
+	 * Optional, null allowed, max length 80 characters.
+	 */
+	@Column(nullable = true, length = 80)
+	@Size(max = 80)
+	private String descriptionFieldLabel;
+
+	@Column(nullable = false)
+	private Boolean useDescription;
+
+	/**
+	 * Field Type for use in the UI when useDescription is set to true.
+	 * Can be apply a TextArea or TextField. Use "long" or "short" value
+	 * for each respectively.  
+	 * 
+	 * Optional, null allowed, max length 80 characters.
+	 */
+	@Column(nullable = true, length = 80)
+	@Size(max = 80)
+	private String descriptionFieldType;	
+	
 	/**
 	 * Constructor
 	 */
@@ -52,7 +77,7 @@ public class DisabilityAccommodation
 	 *            Identifier; required
 	 */
 
-	public DisabilityAccommodation(@NotNull final UUID id) {
+	public DisabilityAccommodation(final UUID id) {
 		super(id);
 	}
 
@@ -62,32 +87,59 @@ public class DisabilityAccommodation
 	 * @param id
 	 *            Identifier; required
 	 * @param name
-	 *            Name; required; max 80 characters
+	 *            Name; required; max 100 characters
 	 */
 
-	public DisabilityAccommodation(@NotNull final UUID id, @NotNull final String name) {
+	public DisabilityAccommodation(final UUID id, final String name) {
 		super(id, name);
 	}
 
-	/**
-	 * Constructor
-	 * 
-	 * @param id
-	 *            Identifier; required
-	 * @param name
-	 *            Name; required; max 80 characters
-	 * @param description
-	 *            Description; max 64000 characters
-	 */
-	public DisabilityAccommodation(@NotNull final UUID id, @NotNull final String name,
-			final String description) {
-		super(id, name, description);
+	public String getDescriptionFieldLabel() {
+		return descriptionFieldLabel;
 	}
 
+	public void setDescriptionFieldLabel(final String descriptionFieldLabel) {
+		this.descriptionFieldLabel = descriptionFieldLabel;
+	}
+
+	/**
+	 * @return the useDescription
+	 */
+	public Boolean getUseDescription() {
+		return useDescription;
+	}
+
+	/**
+	 * @param useDescription
+	 *            the useDescription to set, can be null
+	 */
+	public void setUseDescription(final Boolean useDescription) {
+		this.useDescription = useDescription;
+	}
+
+	public String getDescriptionFieldType() {
+		return descriptionFieldType;
+	}
+
+	public void setDescriptionFieldType(final String descriptionFieldType) {
+		this.descriptionFieldType = descriptionFieldType;
+	}	
+	
 	@Override
 	protected int hashPrime() {
 		return 367;
 	}
 
-	// default hashCode okay if no extra fields are added
+	@Override
+	public int hashCode() { // NOPMD
+		int result = hashPrime() * super.hashCode();
+
+		result *= hashField("descriptionFieldLabel", descriptionFieldLabel);
+		result *= useDescription != null && useDescription ? 5 : 11;
+		result *= hashField("descriptionFieldType", descriptionFieldType);
+
+		// collections are not included here
+
+		return result;
+	}
 }

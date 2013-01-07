@@ -18,5 +18,7 @@
  */
 Ext.define('Ssp.model.reference.DisabilityAccommodation', {
 	extend: 'Ssp.model.reference.AbstractReference',
-    fields: []
+    fields: [{name: 'useDescription', type: 'boolean'},
+             {name: 'descriptionFieldLabel', type: 'string'},
+             {name: 'descriptionFieldType', type: 'string'}]
 });
