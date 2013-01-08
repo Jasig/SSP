@@ -27,14 +27,14 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<changeSet id="Add term code field to person" author="dan.mccallum">
+	<changeSet id="Add term code field to early alert" author="dan.mccallum">
 		<addColumn tableName="early_alert">
 			<column name="course_term_code" type="${nvarchar.type}(25)">
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
 		<rollback>
-			<dropColumn tableName="person" columnName="course_term_code" />
+			<dropColumn tableName="early_alert" columnName="course_term_code" />
 		</rollback>
 	</changeSet>
 
