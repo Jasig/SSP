@@ -381,6 +381,19 @@ objectClass: top
 cn: STUDENT_INTAKE_WRITE
 uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
 
+dn: cn=DISABILITY_INTAKE_READ,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: DISABILITY_INTAKE_READ
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+uniqueMember: uid=advisor1,ou=users,dc=springframework,dc=org
+
+dn: cn=DISABILITY_INTAKE_WRITE,ou=groups,dc=springframework,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: DISABILITY_INTAKE_WRITE
+uniqueMember: uid=advisor0,ou=users,dc=springframework,dc=org
+
 dn: cn=DATA_STAFF,ou=groups,dc=springframework,dc=org
 objectClass: groupOfUniqueNames
 objectClass: top
