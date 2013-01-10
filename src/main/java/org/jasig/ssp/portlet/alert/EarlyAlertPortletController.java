@@ -18,8 +18,12 @@
  */
 package org.jasig.ssp.portlet.alert;
 
+import java.util.Map;
+import javax.portlet.PortletRequest;
+
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
 import org.jasig.ssp.model.external.FacultyCourse;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.security.exception.UserNotEnabledException;
@@ -38,15 +42,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import javax.portlet.PortletRequest;
-import java.util.Map;
-
 @Controller
 @RequestMapping("VIEW")
 public final class EarlyAlertPortletController {
 	
 	private static final String KEY_STUDENT_ID = "studentId";
 	private static final String KEY_COURSE = "course";
+	private static final String KEY_ENROLLMENT = "enrollment";
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -79,6 +81,7 @@ public final class EarlyAlertPortletController {
 		}
 		FacultyCourse course = null;
 		Person student = null;
+		ExternalFacultyCourseRoster enrollment = null;
 		try {
 			// Should really always have a term code (see deprecation notes for
 			// getCourseByFacultySchoolIdAndFormattedCourse) but we know at
@@ -93,12 +96,29 @@ public final class EarlyAlertPortletController {
 				course = facultyCourseService.getCourseByFacultySchoolIdAndFormattedCourseAndTermCode(
 						user.getSchoolId(), formattedCourse, termCode);
 			}
+
+			if ( course == null ) {
+				throw new IllegalStateException("Course not found for current instructor");
+			}
+
 			/*
 			 * NB:  It's on us to translate from schoolId <-> studentId (SSP 
 			 * UUID) at this point in the Early Alert process.  Previous APIs 
 			 * user the former where following APIs use the later.
 			 */
 			student = personService.getBySchoolId(schoolId);  // TODO:  Handle error better??
+
+			if ( student == null ) {
+				throw new IllegalStateException("Student not found");
+			}
+
+			enrollment = facultyCourseService.getEnrollment(user.getSchoolId(),
+					formattedCourse, termCode, student.getSchoolId());
+
+			if ( enrollment == null ) {
+				throw new IllegalStateException("Enrollment not found.");
+			}
+
 		} catch (ObjectNotFoundException e) {
 			throw new RuntimeException("Unrecognized entity", e);
 		}
@@ -114,6 +134,7 @@ public final class EarlyAlertPortletController {
 		}
 		model.put(KEY_STUDENT_ID, student.getId());  // Student UUID
 		model.put(KEY_COURSE, course);
+		model.put(KEY_ENROLLMENT, enrollment);
 		return new ModelAndView("ea-form", model);
 	}
 

@@ -42,6 +42,7 @@ var ssp = ssp || {};
             course:                  '.field-course',
             term:                    '.field-term',
             student:                 '.field-student',
+            enrollmentStatus:        '.field-enrollment-status',
             netId:                   '.field-net-id',
             studentEmail:            '.field-student-email',
             studentType:             '.field-student-type',
@@ -278,6 +279,9 @@ var ssp = ssp || {};
 
         // student
         $(selectors.student).text(studentName);
+
+        // enrollment status
+        $(selectors.enrollmentStatus).text(ssp.getStatusCodeName(options.parameters.enrollmentStatusCode, options));
 
         // netId
         $(selectors.netId).text(student.schoolId);

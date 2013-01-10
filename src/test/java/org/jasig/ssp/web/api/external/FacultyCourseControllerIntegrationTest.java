@@ -18,24 +18,15 @@
  */
 package org.jasig.ssp.web.api.external; // NOPMD
 
-import static org.jasig.ssp.util.assertions.SspAssert.assertNotEmpty;
-import static org.jasig.ssp.util.assertions.SspAssert.assertNotEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.util.Collection;
 import java.util.Iterator;
 
 import org.hibernate.SessionFactory;
-import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
-import org.jasig.ssp.model.external.FacultyCourse;
 import org.jasig.ssp.model.external.WriteableExternalFacultyCourse;
 import org.jasig.ssp.model.external.WriteableExternalFacultyCourseRoster;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.PagedResponse;
-import org.jasig.ssp.transferobject.external.ExternalPersonLiteTO;
+import org.jasig.ssp.transferobject.external.ExternalFacultyCourseRosterTO;
 import org.jasig.ssp.transferobject.external.FacultyCourseTO;
 import org.jasig.ssp.util.service.stub.Stubs;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -47,6 +38,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.jasig.ssp.util.assertions.SspAssert.assertNotEmpty;
+import static org.jasig.ssp.util.assertions.SspAssert.assertNotEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * {@link FacultyCourseController} tests
@@ -123,7 +120,7 @@ public class FacultyCourseControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final PagedResponse<ExternalPersonLiteTO> obj = controller.getRoster(
+		final PagedResponse<ExternalFacultyCourseRosterTO> obj = controller.getRoster(
 				"invalid id", "invalid id", null);
 
 		assertEquals(
@@ -221,7 +218,7 @@ public class FacultyCourseControllerIntegrationTest {
 	public void testGetRoster() throws ObjectNotFoundException,
 			ValidationException {
 		// arrange, act
-		final PagedResponse<ExternalPersonLiteTO> list = controller
+		final PagedResponse<ExternalFacultyCourseRosterTO> list = controller
 				.getRoster(FACULTY_SCHOOL_ID, FORMATTED_COURSE, null);
 
 		// assert
@@ -239,7 +236,7 @@ public class FacultyCourseControllerIntegrationTest {
 		// controller method don't have fields describing the course/section
 		// for each enrollment. so we couldn't otherwise know that our new
 		// enrollment wasn't somehow already in the getRoster() result set.
-		final PagedResponse<ExternalPersonLiteTO> initialEnrollments =
+		final PagedResponse<ExternalFacultyCourseRosterTO> initialEnrollments =
 				controller.getRoster(Stubs.PersonFixture.KEN.schoolId(),
 						"MTH101", null);
 
@@ -272,12 +269,12 @@ public class FacultyCourseControllerIntegrationTest {
 		sessionFactory.getCurrentSession().save(roster);
 		sessionFactory.getCurrentSession().flush();
 
-		final PagedResponse<ExternalPersonLiteTO> modifiedEnrollments =
+		final PagedResponse<ExternalFacultyCourseRosterTO> modifiedEnrollments =
 				controller.getRoster(Stubs.PersonFixture.KEN.schoolId(),
 						"MTH101", null);
 
 		assertEquals(2, modifiedEnrollments.getRows().size());
-		final Iterator<ExternalPersonLiteTO> modifiedEnrollmentsIterator =
+		final Iterator<ExternalFacultyCourseRosterTO> modifiedEnrollmentsIterator =
 				modifiedEnrollments.getRows().iterator();
 		assertEquals(Stubs.PersonFixture.STUDENT_0.schoolId(),
 				modifiedEnrollmentsIterator.next().getSchoolId());
@@ -296,7 +293,7 @@ public class FacultyCourseControllerIntegrationTest {
 		// controller method don't have fields describing the course/section
 		// for each enrollment. so we couldn't otherwise know that our new
 		// enrollment wasn't somehow already in the getRoster() result set.
-		final PagedResponse<ExternalPersonLiteTO> initialEnrollments =
+		final PagedResponse<ExternalFacultyCourseRosterTO> initialEnrollments =
 				controller.getRoster(Stubs.PersonFixture.KEN.schoolId(),
 						"MTH101", null);
 
@@ -329,7 +326,7 @@ public class FacultyCourseControllerIntegrationTest {
 		sessionFactory.getCurrentSession().save(roster);
 		sessionFactory.getCurrentSession().flush();
 
-		final PagedResponse<ExternalPersonLiteTO> modifiedEnrollments =
+		final PagedResponse<ExternalFacultyCourseRosterTO> modifiedEnrollments =
 				controller.getRoster(Stubs.PersonFixture.KEN.schoolId(),
 						"MTH101", Stubs.TermFixture.SPRING_2013.code());
 

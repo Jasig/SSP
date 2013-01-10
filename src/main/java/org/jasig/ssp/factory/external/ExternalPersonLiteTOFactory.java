@@ -18,14 +18,11 @@
  */
 package org.jasig.ssp.factory.external;
 
-import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
-import org.jasig.ssp.transferobject.external.ExternalFacultyCourseRosterTO;
 
-/**
- * FacultyCourse transfer object factory
- * 
- * @author jon.adams
- */
-public interface ExternalFacultyCourseRosterTOFactory extends
-		ExternalTOFactory<ExternalFacultyCourseRosterTO, ExternalFacultyCourseRoster> {
+import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
+import org.jasig.ssp.model.external.ExternalPerson;
+import org.jasig.ssp.transferobject.external.ExternalPersonLiteTO;
+
+public interface ExternalPersonLiteTOFactory extends
+		ExternalTOFactory<ExternalPersonLiteTO, ExternalPerson>{
 }

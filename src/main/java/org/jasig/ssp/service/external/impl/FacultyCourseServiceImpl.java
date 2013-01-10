@@ -81,6 +81,14 @@ public class FacultyCourseServiceImpl extends
 	}
 
 	@Override
+	public ExternalFacultyCourseRoster getEnrollment(String facultySchoolId,
+			String formattedCourse, String termCode, String studentSchoolId)
+			throws ObjectNotFoundException {
+		return externalFacultyCourseRosterDao.getEnrollment(facultySchoolId,
+				formattedCourse, termCode, studentSchoolId);
+	}
+
+	@Override
 	public FacultyCourse getCourseByFacultySchoolIdAndFormattedCourse(
 			String facultySchoolId, String formattedCourse) 
 			throws ObjectNotFoundException {

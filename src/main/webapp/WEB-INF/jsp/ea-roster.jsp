@@ -32,6 +32,7 @@
 <script src="<rs:resourceURL value="/rs/jquery/1.6.1/jquery-1.6.1.min.js"/>" type="text/javascript"></script>
 <script src="<rs:resourceURL value="/rs/jqueryui/1.8.13/jquery-ui-1.8.13.min.js"/>" type="text/javascript"></script>
 <script src="<rs:resourceURL value="/rs/fluid/1.4.0/js/fluid-all-1.4.0.min.js"/>" type="text/javascript"></script>
+<script src="<c:url value="/js/early-alert-shared.js" />" type="text/javascript"></script>
 <script src="<c:url value="/js/early-alert-roster.js" />" type="text/javascript"></script>
 
 <link href="<c:url value="/resources/css/early-alert.css" />" rel="stylesheet" type="text/css">
@@ -129,7 +130,7 @@
               <th id="${n}firstName" class="flc-pager-sort-header"><a rsf:id="firstName" title="Click to sort" href="javascript:;"><spring:message code="first.name"/></a></th>
               <th id="${n}middleName" class="flc-pager-sort-header"><a rsf:id="middleName" title="Click to sort" href="javascript:;"><spring:message code="middle.name"/></a></th>
               <th id="${n}lastName" class="flc-pager-sort-header"><a rsf:id="lastName" title="Click to sort" href="javascript:;"><spring:message code="last.name"/></a></th>
-              <th id="${n}studentType" class="flc-pager-sort-header"><a rsf:id="studentType" title="Click to sort" href="javascript:;"><spring:message code="student.type"/></a></th>
+              <th id="${n}status" class="flc-pager-sort-header"><a rsf:id="status" title="Click to sort" href="javascript:;"><spring:message code="status"/></a></th>
               <th id="${n}schoolId" style="display: none;">schoolId</th>
             </tr>
           </thead>
@@ -138,7 +139,7 @@
               <td headers="${n}firstName" rsf:id="firstName"></td>
               <td headers="${n}middleName" rsf:id="middleName"></td>
               <td headers="${n}lastName" rsf:id="lastName"></td>
-              <td headers="${n}studentType" rsf:id="studentType"></td>
+              <td headers="${n}status" rsf:id="status"></td>
               <td headers="${n}schoolId" rsf:id="schoolId" class="schoolId" style="display: none;"></td>
             </tr>
           </tbody>
@@ -177,9 +178,11 @@
         	urls: {
         		courseList: '<c:url value="/api/1/person/${user.schoolId}/instruction/course"/>',
         		enterAlert: '${enterAlertUrl}',
-        		roster: '<c:url value="/api/1/person/${user.schoolId}/instruction/course/FORMATTEDCOURSE/roster?termCode=TERMCODE"/>'
+        		roster: '<c:url value="/api/1/person/${user.schoolId}/instruction/course/FORMATTEDCOURSE/roster?termCode=TERMCODE"/>',
+                configByName: '<c:url value="/api/1/reference/config?name=CONFIGNAME" />'
         	},
-            course_id_delim: ':'
+            course_id_delim: ':',
+            statusMappingConfigName: 'status_code_mappings'
         };
         ssp.EarlyAlertRoster('#${n}earlyAlert', options);
     </c:when>
