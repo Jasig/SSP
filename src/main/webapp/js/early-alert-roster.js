@@ -64,6 +64,22 @@ var ssp = ssp || {};
             return selectedRosterIds;
         };
 
+        var postProcessRosterData = function(rows) {
+            if ( !(rows) ) {
+                return rows;
+            }
+            $(rows).each(function(index, row) {
+                if ( 'statusName' in row ) {
+                    return;
+                }
+                if ( !('statusCode' in row) ) {
+                    row.statusCode = null;
+                }
+                row.statusName = ssp.getStatusCodeName(row.statusCode, options);
+            });
+            return rows;
+        };
+
         /*
          * Roster Data Function
          */
@@ -81,7 +97,7 @@ var ssp = ssp || {};
                         showError(jqXHR.status + ': ' + errorThrown, response.message);
                     },
                     success: function(data, textStatus, jqXHR) {
-                        rslt = data.rows;
+                        rslt = postProcessRosterData(data.rows);
                     },
                     type: 'GET'
                 });
@@ -152,7 +168,7 @@ var ssp = ssp || {};
                     { key: 'firstName', valuebinding: '*.firstName', sortable: true },
                     { key: 'middleName', valuebinding: '*.middleName', sortable: true },
                     { key: 'lastName', valuebinding: '*.lastName', sortable: true },
-                    { key: 'studentType', valuebinding: '*.studentType', sortable: true },
+                    { key: 'status', valuebinding: '*.statusName', sortable: true },
                     { key: 'schoolId', valuebinding: '*.schoolId', sortable: true }
                 ],
                 bodyRenderer: {
@@ -185,7 +201,7 @@ var ssp = ssp || {};
         	showError('No Available Courses', 'There are no courses available for this user in SSP.');
         }
 
-    }
+    };
 
     // defaults
     fluid.defaults('ssp.EarlyAlertRoster', {

@@ -30,7 +30,7 @@ import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.external.FacultyCourseService;
 import org.jasig.ssp.transferobject.PagedResponse;
-import org.jasig.ssp.transferobject.external.ExternalPersonLiteTO;
+import org.jasig.ssp.transferobject.external.ExternalFacultyCourseRosterTO;
 import org.jasig.ssp.transferobject.external.FacultyCourseTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
@@ -122,7 +122,7 @@ public class FacultyCourseController extends
 	@RequestMapping(value = "/course/{formattedCourse}/roster", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_INSTRUCTION_READ)
 	public @ResponseBody
-	PagedResponse<ExternalPersonLiteTO> getRoster(
+	PagedResponse<ExternalFacultyCourseRosterTO> getRoster(
 			final @PathVariable String facultySchoolId,
 			final @PathVariable String formattedCourse,
 			final @RequestParam(required = false) String termCode)
@@ -138,7 +138,7 @@ public class FacultyCourseController extends
 					.getRosterByFacultySchoolIdAndCourseAndTermCode(
 							facultySchoolId, formattedCourse, scrubbedTermCode);
 		}
-		return new PagedResponse<ExternalPersonLiteTO>(true, Long.valueOf(list
+		return new PagedResponse<ExternalFacultyCourseRosterTO>(true, Long.valueOf(list
 				.size()), externalFacultyCourseRosterTOFactory.asTOList(list));
 	}
 }

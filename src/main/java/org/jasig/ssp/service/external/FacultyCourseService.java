@@ -96,6 +96,28 @@ public interface FacultyCourseService extends
 	throws ObjectNotFoundException;
 
 	/**
+	 * Gets a single enrollment in a course identified by instructor, course
+	 * code, and term.
+	 *
+	 * <p>Note that under the current implementation the
+	 * {@link ObjectNotFoundException} in the signature is used to represent
+	 * an invalid argument rather than an empty result set. Do not rely on
+	 * it as a guard against null results.</p>
+	 *
+	 * @param facultySchoolId
+	 * @param formattedCourse
+	 * @param termCode
+	 * @param studentSchoolId
+	 * @return
+	 * @throws ObjectNotFoundException
+	 */
+	ExternalFacultyCourseRoster getEnrollment(String facultySchoolId,
+			String formattedCourse,
+			String termCode,
+			String studentSchoolId)
+	throws ObjectNotFoundException;
+
+	/**
 	 * Gets the course with the specified id for the specified faculty.
 	 *
 	 * @deprecated Potentially ambiguous result if the given faculty teaches

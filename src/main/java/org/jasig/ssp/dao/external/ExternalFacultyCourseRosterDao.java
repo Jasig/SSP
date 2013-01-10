@@ -110,4 +110,31 @@ public class ExternalFacultyCourseRosterDao extends
 				.list();
 
 	}
+
+	public ExternalFacultyCourseRoster getEnrollment(String facultySchoolId,
+			String formattedCourse, String termCode, String studentSchoolId)
+			throws ObjectNotFoundException {
+		if ( StringUtils.isBlank(facultySchoolId) ) {
+			throw new ObjectNotFoundException("Must specify a faculty school ID",
+					ExternalFacultyCourseRoster.class.getName());
+		}
+		if ( StringUtils.isBlank(formattedCourse) ) {
+			throw new ObjectNotFoundException("Must specify a formatted course ID",
+					ExternalFacultyCourseRoster.class.getName());
+		}
+		if ( StringUtils.isBlank(termCode) ) {
+			throw new ObjectNotFoundException("Must specify a term code",
+					ExternalFacultyCourseRoster.class.getName());
+		}
+		if ( StringUtils.isBlank(termCode) ) {
+			throw new ObjectNotFoundException("Must specify a student school ID",
+					ExternalFacultyCourseRoster.class.getName());
+		}
+		return (ExternalFacultyCourseRoster) createCriteria()
+				.add(Restrictions.eq("facultySchoolId", facultySchoolId))
+				.add(Restrictions.eq("formattedCourse", formattedCourse))
+				.add(Restrictions.eq("termCode", termCode))
+				.add(Restrictions.eq("schoolId", studentSchoolId))
+				.uniqueResult();
+	}
 }

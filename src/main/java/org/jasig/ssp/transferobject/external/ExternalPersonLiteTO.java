@@ -21,10 +21,10 @@ package org.jasig.ssp.transferobject.external;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
-
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
+import org.jasig.ssp.model.external.ExternalPerson;
 
 import com.google.common.collect.Lists;
 
@@ -34,7 +34,7 @@ import com.google.common.collect.Lists;
  * @author jon.adams
  */
 public class ExternalPersonLiteTO implements Serializable,
-		ExternalDataTO<ExternalFacultyCourseRoster> {
+		ExternalDataTO<ExternalPerson> {
 
 	private static final long serialVersionUID = -4413298604867700246L;
 
@@ -54,7 +54,7 @@ public class ExternalPersonLiteTO implements Serializable,
 	}
 
 	/**
-	 * Construct a simple ExternalPerson instance with the specified properties
+	 * Construct a simple ExternalPersonLiteTO instance with the specified properties
 	 * 
 	 * @param schoolId
 	 *            Identifier; required
@@ -77,24 +77,31 @@ public class ExternalPersonLiteTO implements Serializable,
 	/**
 	 * Construct a simple Person from the specified model
 	 * 
+	 * @param externalPerson
+	 *            The ExternalPerson model to copy
+	 */
+	public ExternalPersonLiteTO(
+			@NotNull final ExternalPerson externalPerson) {
+		super();
+		from(externalPerson);
+	}
+
+	/**
+	 * Construct a simple Person from the specified model
+	 *
 	 * @param externalFacultyCourseRoster
 	 *            The ExternalFacultyCourseRoster model to copy
 	 */
 	public ExternalPersonLiteTO(
 			@NotNull final ExternalFacultyCourseRoster externalFacultyCourseRoster) {
-		if (externalFacultyCourseRoster == null) {
-			throw new IllegalArgumentException(
-					"Person required when construcing a new simple ExternalPersonLiteTO.");
-		}
-
-		schoolId = externalFacultyCourseRoster.getSchoolId();
-		firstName = externalFacultyCourseRoster.getFirstName();
-		middleName = externalFacultyCourseRoster.getMiddleName();
-		lastName = externalFacultyCourseRoster.getLastName();
+		this(externalFacultyCourseRoster.getSchoolId(),
+				externalFacultyCourseRoster.getFirstName(),
+				externalFacultyCourseRoster.getMiddleName(),
+				externalFacultyCourseRoster.getLastName());
 	}
 
 	@Override
-	public final void from(final ExternalFacultyCourseRoster model) {
+	public final void from(final ExternalPerson model) {
 		schoolId = model.getSchoolId();
 		firstName = model.getFirstName();
 		middleName = model.getMiddleName();
@@ -103,12 +110,30 @@ public class ExternalPersonLiteTO implements Serializable,
 
 	/**
 	 * Convert a collection of models to a List of equivalent transfer objects.
-	 * 
+	 *
 	 * @param models
 	 *            A collection of models to convert to transfer objects
 	 * @return List of equivalent transfer objects
 	 */
 	public static List<ExternalPersonLiteTO> toTOList(
+			@NotNull final Collection<ExternalPerson> models) {
+		final List<ExternalPersonLiteTO> tos = Lists.newArrayList();
+		for (final ExternalPerson model : models) {
+			tos.add(new ExternalPersonLiteTO(model)); // NOPMD
+		}
+
+		return tos;
+	}
+
+	/**
+	 * Same as {@link #toTOList(java.util.Collection)} but sourcing properties
+	 * from members of a class roster.
+	 * 
+	 * @param models
+	 *            A collection of models to convert to transfer objects
+	 * @return List of equivalent transfer objects
+	 */
+	public static List<ExternalPersonLiteTO> toTOListFromRoster(
 			@NotNull final Collection<ExternalFacultyCourseRoster> models) {
 		final List<ExternalPersonLiteTO> tos = Lists.newArrayList();
 		for (final ExternalFacultyCourseRoster model : models) {

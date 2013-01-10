@@ -19,7 +19,6 @@
 package org.jasig.ssp.model.external;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -63,6 +62,10 @@ public class ExternalFacultyCourseRoster extends AbstractExternalData implements
 	@NotEmpty
 	@Size(max = 35)
 	private String formattedCourse;
+
+	@Column(nullable = true, length = 2)
+	@Size(max = 2)
+	private String statusCode;
 
 	/**
 	 * First name; required.
@@ -147,6 +150,14 @@ public class ExternalFacultyCourseRoster extends AbstractExternalData implements
 	 */
 	public void setFormattedCourse(final String formattedCourse) {
 		this.formattedCourse = formattedCourse;
+	}
+
+	public String getStatusCode() {
+		return statusCode;
+	}
+
+	public void setStatusCode(String statusCode) {
+		this.statusCode = statusCode;
 	}
 
 	public String getFirstName() {

@@ -68,6 +68,10 @@ public class WriteableExternalFacultyCourseRoster  {
 	@Size(max = 35)
 	private String formattedCourse;
 
+	@Column(nullable = true, length = 2)
+	@Size(max = 2)
+	private String statusCode;
+
 	/**
 	 * First name; required.
 	 *
@@ -143,6 +147,14 @@ public class WriteableExternalFacultyCourseRoster  {
 
 	public String getFormattedCourse() {
 		return formattedCourse;
+	}
+
+	public String getStatusCode() {
+		return statusCode;
+	}
+
+	public void setStatusCode(String statusCode) {
+		this.statusCode = statusCode;
 	}
 
 	/**

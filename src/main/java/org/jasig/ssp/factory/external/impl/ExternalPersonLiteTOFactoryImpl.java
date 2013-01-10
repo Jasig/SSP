@@ -19,53 +19,44 @@
 package org.jasig.ssp.factory.external.impl;
 
 import org.jasig.ssp.dao.external.ExternalFacultyCourseRosterDao;
+import org.jasig.ssp.dao.external.ExternalPersonDao;
 import org.jasig.ssp.factory.external.ExternalFacultyCourseRosterTOFactory;
+import org.jasig.ssp.factory.external.ExternalPersonLiteTOFactory;
 import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
+import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.external.ExternalFacultyCourseRosterTO;
+import org.jasig.ssp.transferobject.external.ExternalPersonLiteTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-/**
- * FacultyCourse transfer object factory implementation
- * 
- * @author jon.adams
- */
-@Service
-@Transactional(readOnly = true)
-public class ExternalFacultyCourseRosterTOFactoryImpl
+public class ExternalPersonLiteTOFactoryImpl
 		extends
-		AbstractExternalDataTOFactory<ExternalFacultyCourseRosterTO, ExternalFacultyCourseRoster>
-		implements ExternalFacultyCourseRosterTOFactory {
+		AbstractExternalDataTOFactory<ExternalPersonLiteTO, ExternalPerson>
+		implements ExternalPersonLiteTOFactory {
 
-	public ExternalFacultyCourseRosterTOFactoryImpl() {
-		super(ExternalFacultyCourseRosterTO.class, ExternalFacultyCourseRoster.class);
+	public ExternalPersonLiteTOFactoryImpl() {
+		super(ExternalPersonLiteTO.class, ExternalPerson.class);
 	}
 
 	@Autowired
-	private transient ExternalFacultyCourseRosterDao dao;
+	private transient ExternalPersonDao dao;
 
 	@Override
-	protected ExternalFacultyCourseRosterDao getDao() {
+	protected ExternalPersonDao getDao() {
 		return dao;
 	}
 
 	@Override
-	public ExternalFacultyCourseRoster from(final ExternalFacultyCourseRosterTO tObject)
+	public ExternalPerson from(final ExternalPersonLiteTO tObject)
 			throws ObjectNotFoundException {
-		final ExternalFacultyCourseRoster model = super.from(tObject);
+		final ExternalPerson model = super.from(tObject);
 
 		model.setSchoolId(tObject.getSchoolId());
 		model.setFirstName(tObject.getFirstName());
 		model.setMiddleName(tObject.getMiddleName());
 		model.setLastName(tObject.getLastName());
-		model.setTermCode(tObject.getTermCode());
-		model.setFacultySchoolId(tObject.getFacultySchoolId());
-		model.setFormattedCourse(tObject.getFormattedCourse());
-		model.setPrimaryEmailAddress(tObject.getPrimaryEmailAddress());
-		model.setStatusCode(tObject.getStatusCode());
 
 		return model;
 	}
+
 }

@@ -31,6 +31,7 @@
 <script src="<c:url value="/js/libs/json2.js" />" type="text/javascript"></script>
 <script src="<rs:resourceURL value="/rs/jquery/1.6.1/jquery-1.6.1.min.js"/>" type="text/javascript"></script>
 <script src="<rs:resourceURL value="/rs/jqueryui/1.8.13/jquery-ui-1.8.13.min.js"/>" type="text/javascript"></script>
+<script src="<c:url value="/js/early-alert-shared.js" />" type="text/javascript"></script>
 <script src="<c:url value="/js/early-alert-form.js" />" type="text/javascript"></script>
 
 <link href="<c:url value="/resources/css/early-alert.css" />" rel="stylesheet" type="text/css">
@@ -89,6 +90,16 @@
       <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
         <span><spring:message code="student"/>:</span>
+      </div>
+      <div class="ea-clear"></div>
+
+      <!-- Enrollment Status -->
+      <div class="ea-input">
+        <span class="field-enrollment-status"></span>
+      </div>
+      <div class="ea-required">&nbsp;</div>
+      <div class="ea-label">
+        <span><spring:message code="enrollment.status"/>:</span>
       </div>
       <div class="ea-clear"></div>
 
@@ -268,14 +279,17 @@
                 reason:       '<c:url value="/api/1/reference/earlyAlertReason" />',
                 suggestions:  '<c:url value="/api/1/reference/earlyAlertSuggestion" />',
                 submit:       '<c:url value="/api/1/person/STUDENTID/earlyAlert" />',
+                configByName: '<c:url value="/api/1/reference/config?name=CONFIGNAME" />',
                 done:         '${doneUrl}'
             },
             parameters: {
                 courseName:   '${course.formattedCourse}',
                 courseTitle:  '${course.title}',
                 term:         '${course.termCode}',
-                studentId:    '${studentId}'
-            }
+                studentId:    '${studentId}',
+                enrollmentStatusCode: '${enrollment.statusCode}'
+            },
+            statusMappingConfigName: 'status_code_mappings'
         };
         ssp.EarlyAlertForm('#${n}earlyAlert', options);
 
