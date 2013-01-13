@@ -27,7 +27,9 @@ import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Campus;
+import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
@@ -55,10 +57,32 @@ public interface EarlyAlertResponseService
 	Long getEarlyAlertResponseCountForCoach(Person coach, Date createDateFrom,
 			Date createDateTo, List<UUID> studentTypeIds);
 
-	Long getEarlyAlertResponseCountForDate(Date createDateFrom,
+	Long getEarlyAlertRespondedToCount(Date createDateFrom,
 			Date createDateTo, Campus campus);
 
 	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(Date createDateFrom,
 			Date createDateTo, List<UUID> outcomes, Person coach);
+	
+	/**
+	 * Gets a list of {@link Person} objects based on the specified criteria and
+	 * {@link Early Alert Referral} identifiers.
+	 * 
+	 * @param earlyAlertReferralIds
+	 *            list of {@link EarlyAlertReferral} early alert referral identifiers
+	 *          
+	 * @param addressLabelSearchTO
+	 *            set of standard search criteria see peopleFromCriteria
+	 * @param createForSingleSort
+	 * @return A list of {@link Person} objects based on the specified criteria
+	 *         and special service groups.
+	 * @throws ObjectNotFoundException
+	 *             If any of the special service groups could not be found.
+	 */
+	List<EarlyAlertStudentReportTO> getPeopleByEarlyAlertReferralIds(
+			final List<UUID> earlyAlertReferralIds,
+			final Date createDateFrom,
+			final Date createDateTo, 
+			final AddressLabelSearchTO addressLabelSearchTO,
+			final SortingAndPaging sAndP)throws ObjectNotFoundException;
 
 }

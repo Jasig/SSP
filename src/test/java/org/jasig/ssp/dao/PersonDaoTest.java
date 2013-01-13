@@ -27,6 +27,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -35,6 +36,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.service.stub.Stubs;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
@@ -64,7 +66,7 @@ public class PersonDaoTest { // NOPMD Test suites love lots of methods!
 
 	private static final UUID PERSON_ID = UUID
 			.fromString("F549ECAB-5110-4CC1-B2BB-369CAC854DEA");
-
+	
 	private static final String PERSON_USER_ID = "ken";
 
 	@Autowired
@@ -228,6 +230,7 @@ public class PersonDaoTest { // NOPMD Test suites love lots of methods!
 		assertEquals("first name should be set", "Kenneth",
 				person.getFirstName());
 	}
+	
 
 	@Test
 	public void testGetAllAssignedCoaches() throws ObjectNotFoundException {

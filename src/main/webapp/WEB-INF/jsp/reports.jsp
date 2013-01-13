@@ -668,7 +668,9 @@
 		<!-- Special Service Groups -->
 		<div class="ea-input">
 			<select  class="input-special-service-group" id="earlyAlertStudentSpecialServiceGroupIds" name="specialServiceGroupIds"
-				multiple="multiple"></select>
+				multiple="multiple">
+				<option value="">N/A</option>
+				</select>
 		</div>
 		<div class="ea-label">
 			<span>Special Service Groups:</span>
@@ -753,11 +755,11 @@
 
 		<!-- Referral Source -->
 		<div class="ea-input">
-			<select class='input-referral-source-group' id="earlyAlertStudentReferralReferralSourceId" name="referralSourceId">
+			<select class='input-early-alert-referral-group' id="earlyAlertStudentReferralEarlyAlertReferralId" name="earlyAlertReferralId">
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Referral Source:</span>
+			<span>Early Alert Referral Source:</span>
 		</div>
 		<div class="ea-clear"></div>
 		

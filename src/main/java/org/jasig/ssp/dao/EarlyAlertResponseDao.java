@@ -28,6 +28,7 @@ import java.util.UUID;
 
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.EarlyAlert;
@@ -35,7 +36,11 @@ import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.EarlyAlertOutreach;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
@@ -111,7 +116,7 @@ public class EarlyAlertResponseDao extends
 		return totalRows;
 	}
 
-	public Long getEarlyAlertResponseCountForDate(Date createDateFrom,
+	public Long getEarlyAlertRespondedToCount(Date createDateFrom,
 			Date createDateTo, Campus campus) {
 		final Criteria query = createCriteria();
 		
@@ -131,7 +136,7 @@ public class EarlyAlertResponseDao extends
 		}
 		
 		// item count
-		Long totalRows = (Long) query.setProjection(Projections.rowCount())
+		Long totalRows = (Long) query.setProjection(Projections.countDistinct("earlyAlert.id"))
 				.uniqueResult();
 
 		return totalRows;
@@ -185,26 +190,138 @@ public class EarlyAlertResponseDao extends
 			Iterator<EarlyAlertOutreach> outreachIterator = value.getEarlyAlertOutreachIds().iterator();
 			if(outreachIterator.hasNext()){
 				EarlyAlertOutreach outreach = outreachIterator.next();
-				if(outreach.getName() == "Phone Call"){
+				if(outreach.getName().equals("Phone Call")){
 					update.setCountPhoneCalls(update.getCountPhoneCalls() + 1L);
 				}
-				if(outreach.getName() == "Email"){
+				if(outreach.getName().equals("Email")){
 					update.setCountEmail(update.getCountEmail() + 1L);
 				}
 				
-				if(outreach.getName() == "In Person"){
+				if(outreach.getName().equals("In Person")){
 					update.setCountInPerson(update.getCountInPerson() + 1L);
 				}
 				
-				if(outreach.getName() == "Letter"){
+				if(outreach.getName().equals("Letter")){
 					update.setCountLetter(update.getCountLetter() + 1L);
 				}
 				
-				if(outreach.getName() == "Text"){
+				if(outreach.getName().equals("Text")){
 					update.setCountText(update.getCountText() + 1L);
 				}
+				update.setTotalEarlyAlerts(update.getTotalEarlyAlerts());
 			}
+			
 		}
 		return (Collection<EarlyAlertStudentOutreachReportTO>)responses.values();
 	}
+	
+	@SuppressWarnings(UNCHECKED)
+	public List<EarlyAlertStudentReportTO> getPeopleByEarlyAlertReferralIds(
+			final List<UUID> earlyAlertReferralIds, 
+			final Date createDateFrom, 
+			final Date createDateTo,
+			final AddressLabelSearchTO addressLabelSearchTO,
+			final SortingAndPaging sAndP)
+			throws ObjectNotFoundException {
+
+		final Criteria criteria = createCriteria();
+		
+		if(createDateFrom != null)
+			criteria.add(Restrictions.ge("createdDate", createDateFrom));
+		if(createDateTo != null)
+			criteria.add(Restrictions.le("createdDate", createDateTo));
+		
+		criteria.createAlias("earlyAlertReferralIds", "earlyAlertReferral");
+		if (earlyAlertReferralIds != null) {
+			criteria 
+				.add(Restrictions
+				.in("earlyAlertReferral.id",
+								earlyAlertReferralIds));
+		}
+		
+		criteria.createAlias("earlyAlert", "earlyAlert");
+		Criteria personCriteria = criteria.createAlias("earlyAlert.person", "person");
+
+		setPersonCriteria(personCriteria, addressLabelSearchTO);
+
+		criteria.setProjection(Projections.
+				distinct(Projections.property("earlyAlert.person").as("early_alert_response_person")))
+				.setResultTransformer(
+						new NamespacedAliasToBeanResultTransformer(
+								EarlyAlertStudentReportTO.class, "early_alert_response_"));
+		
+		return criteria.list();
+	}
+	
+	
+
+	private Criteria setPersonCriteria(Criteria criteria, AddressLabelSearchTO addressLabelSearchTO){
+		if (addressLabelSearchTO.getCoach() != null
+				&& addressLabelSearchTO.getCoach().getId() != null) {
+			// restrict to coach
+			criteria.add(Restrictions.eq("person.coach.id",
+					addressLabelSearchTO.getCoach().getId()));
+		}
+		
+		if (addressLabelSearchTO.getProgramStatus() != null) {
+
+			criteria.createAlias("person.programStatuses",
+					"personProgramStatuses")
+					.add(Restrictions
+							.eq("personProgramStatuses.programStatus.id",
+									addressLabelSearchTO
+											.getProgramStatus()));
+
+		}
+
+		if (addressLabelSearchTO.getSpecialServiceGroupIds() != null) {
+			criteria.createAlias("person.specialServiceGroups",
+					"personSpecialServiceGroups")
+					.add(Restrictions
+							.in("personSpecialServiceGroups.specialServiceGroup.id",
+									addressLabelSearchTO
+											.getSpecialServiceGroupIds()));
+		}
+
+		if (addressLabelSearchTO.getReferralSourcesIds() != null) {
+			criteria.createAlias("person.referralSources", "personReferralSources")
+					.add(Restrictions.in(
+							"personReferralSources.referralSource.id",
+							addressLabelSearchTO.getReferralSourcesIds()));
+		}
+
+		if (addressLabelSearchTO.getAnticipatedStartTerm() != null) {
+			criteria.add(Restrictions.eq("person.anticipatedStartTerm",
+					addressLabelSearchTO.getAnticipatedStartTerm())
+					.ignoreCase());
+		}
+
+		if (addressLabelSearchTO.getAnticipatedStartYear() != null) {
+			criteria.add(Restrictions.eq("person.anticipatedStartYear",
+					addressLabelSearchTO.getAnticipatedStartYear()));
+		}
+
+		if (addressLabelSearchTO.getStudentTypeIds() != null) {
+			criteria.add(Restrictions.in("person.studentType.id",
+					addressLabelSearchTO.getStudentTypeIds()));
+		}
+
+		if (addressLabelSearchTO.getCreateDateFrom() != null) {
+			criteria.add(Restrictions.ge("person.createdDate",
+					addressLabelSearchTO.getCreateDateFrom()));
+		}
+
+		if (addressLabelSearchTO.getCreateDateTo() != null) {
+			criteria.add(Restrictions.le("person.createdDate",
+					addressLabelSearchTO.getCreateDateTo()));
+		}
+
+		// don't bring back any non-students, there will likely be a better way
+		// to do this later
+		criteria.add(Restrictions.isNotNull("person.studentType"));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		return criteria;
+	}
+	
+	
 }

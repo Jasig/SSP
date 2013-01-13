@@ -155,7 +155,7 @@ public class EarlyAlertCaseCountsReportController extends EarlyAlertReportBaseCo
 				term.getEndDate(), campus));
 		parameters.put("totalCases",  earlyAlertService.getCountOfEarlyAlertsByCreatedDate(term.getStartDate(), 
 				term.getEndDate(), campus));
-		parameters.put("totalRespondedTo", earlyAlertResponseService.getEarlyAlertResponseCountForDate(term.getStartDate(), 
+		parameters.put("totalRespondedTo", earlyAlertResponseService.getEarlyAlertRespondedToCount(term.getStartDate(), 
 				term.getEndDate(), campus));
 		parameters.put("totalClosed", earlyAlertService.getCountOfEarlyAlertsClosedByDate(term.getStartDate(), 
 				term.getEndDate(), campus));

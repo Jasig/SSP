@@ -25,6 +25,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -45,7 +46,10 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
+import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
+import org.jasig.ssp.util.sort.SortDirection;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -90,6 +94,9 @@ public class EarlyAlertResponseDaoTest {
 
 	public final static UUID EARLY_ALERT_OUTCOME_STUDENTRESPONDED_ID = UUID
 			.fromString("12a58804-45dc-40f2-b2f5-d7e4403acee1");
+	
+	private static final List<UUID> EARLY_ALERT_REFERRAL_IDS = Arrays.asList(UUID.fromString("1f5729af-0337-4e58-a001-8a9f80dbf8aa"));
+
 
 	@Autowired
 	private transient EarlyAlertResponseDao dao;
@@ -244,9 +251,9 @@ public class EarlyAlertResponseDaoTest {
 	
 	
 	@Test
-	public void getEarlyAlertOutreachCountByOutcome()
+	public void getEarlyAlertOutreachCountByOutcomeTest()
 			throws ObjectNotFoundException {
-		// arrange
+		//TODO
 		
 		final Date startDate = getDateSetByDayOffset(-1);
 		final Date endDate = getDateSetByDayOffset(1);
@@ -264,6 +271,22 @@ public class EarlyAlertResponseDaoTest {
 		} finally {
 			dao.delete(saved);
 		}
+	}
+	
+	@Test
+	public void getByEarlyAlertReferralIdTest() throws ObjectNotFoundException {
+		// TODO
+		AddressLabelSearchTO addressLabelSearchTO = new AddressLabelSearchTO(null, null, null, null, null, null, null, null, null);
+		dao.getPeopleByEarlyAlertReferralIds(EARLY_ALERT_REFERRAL_IDS, null, null, addressLabelSearchTO, new SortingAndPaging(ObjectStatus.ALL, 1, 2, null, "lastName",
+				SortDirection.ASC));
+		assertEquals("Should be equal to 1.", 1,1);
+	}
+	
+	@Test
+	public void getEarlyAlertRespondedToCount() throws ObjectNotFoundException {
+		// TODO
+		dao.getEarlyAlertRespondedToCount(null, null, null);
+		assertEquals("Should be equal to 1.", 1,1);
 	}
 	
 }

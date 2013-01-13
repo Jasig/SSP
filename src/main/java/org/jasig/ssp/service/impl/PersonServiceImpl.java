@@ -476,6 +476,7 @@ public class PersonServiceImpl implements PersonService {
 		additionalAttribsForStudents(people);
 		return people;
 	}
+	
 
 	@Override
 	public PagingWrapper<CoachPersonLiteTO> getAllCoachesLite(final SortingAndPaging sAndP) {

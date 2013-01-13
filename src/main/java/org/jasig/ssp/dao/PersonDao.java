@@ -169,68 +169,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	public List<Person> getPeopleByCriteria( // NOPMD
 			final AddressLabelSearchTO addressLabelSearchTO,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
-
-		final Criteria criteria = createCriteria(sAndP);
 		
-		if (addressLabelSearchTO.getCoach() != null
-				&& addressLabelSearchTO.getCoach().getId() != null) {
-			// restrict to coach
-			criteria.add(Restrictions.eq("coach.id",
-					addressLabelSearchTO.getCoach().getId()));
-		}
-		
-		if (addressLabelSearchTO.getProgramStatus() != null) {
-
-			criteria.createAlias("programStatuses",
-					"personProgramStatuses")
-					.add(Restrictions
-							.eq("personProgramStatuses.programStatus.id",
-									addressLabelSearchTO
-											.getProgramStatus()));
-
-		}
-
-		if (addressLabelSearchTO.getSpecialServiceGroupIds() != null) {
-			criteria.createAlias("specialServiceGroups",
-					"personSpecialServiceGroups")
-					.add(Restrictions
-							.in("personSpecialServiceGroups.specialServiceGroup.id",
-									addressLabelSearchTO
-											.getSpecialServiceGroupIds()));
-		}
-
-		if (addressLabelSearchTO.getReferralSourcesIds() != null) {
-			criteria.createAlias("referralSources", "personReferralSources")
-					.add(Restrictions.in(
-							"personReferralSources.referralSource.id",
-							addressLabelSearchTO.getReferralSourcesIds()));
-		}
-
-		if (addressLabelSearchTO.getAnticipatedStartTerm() != null) {
-			criteria.add(Restrictions.eq("anticipatedStartTerm",
-					addressLabelSearchTO.getAnticipatedStartTerm())
-					.ignoreCase());
-		}
-
-		if (addressLabelSearchTO.getAnticipatedStartYear() != null) {
-			criteria.add(Restrictions.eq("anticipatedStartYear",
-					addressLabelSearchTO.getAnticipatedStartYear()));
-		}
-
-		if (addressLabelSearchTO.getStudentTypeIds() != null) {
-			criteria.add(Restrictions.in("studentType.id",
-					addressLabelSearchTO.getStudentTypeIds()));
-		}
-
-		if (addressLabelSearchTO.getCreateDateFrom() != null) {
-			criteria.add(Restrictions.ge("createdDate",
-					addressLabelSearchTO.getCreateDateFrom()));
-		}
-
-		if (addressLabelSearchTO.getCreateDateTo() != null) {
-			criteria.add(Restrictions.le("createdDate",
-					addressLabelSearchTO.getCreateDateTo()));
-		}
+		Criteria criteria = setBasicSearchCriteria(createCriteria(sAndP),  addressLabelSearchTO);
 
 		// don't bring back any non-students, there will likely be a better way
 		// to do this later
@@ -272,6 +212,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 
 		return criteria.list();
 	}
+	
+	
 
 	@SuppressWarnings(UNCHECKED)
 	public PagingWrapper<CoachPersonLiteTO> getCoachPersonsLiteByUsernames(
@@ -374,5 +316,69 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 
 		return new PagingWrapper<CoachPersonLiteTO>(totalRows, criteria.list());
 
+	}
+	
+	private Criteria setBasicSearchCriteria(Criteria criteria, final AddressLabelSearchTO addressLabelSearchTO){
+		if (addressLabelSearchTO.getCoach() != null
+				&& addressLabelSearchTO.getCoach().getId() != null) {
+			// restrict to coach
+			criteria.add(Restrictions.eq("coach.id",
+					addressLabelSearchTO.getCoach().getId()));
+		}
+		
+		
+		if (addressLabelSearchTO.getProgramStatus() != null) {
+
+			criteria.createAlias("programStatuses",
+					"personProgramStatuses")
+					.add(Restrictions
+							.eq("personProgramStatuses.programStatus.id",
+									addressLabelSearchTO
+											.getProgramStatus()));
+
+		}
+
+		if (addressLabelSearchTO.getSpecialServiceGroupIds() != null) {
+			criteria.createAlias("specialServiceGroups",
+					"personSpecialServiceGroups")
+					.add(Restrictions
+							.in("personSpecialServiceGroups.specialServiceGroup.id",
+									addressLabelSearchTO
+											.getSpecialServiceGroupIds()));
+		}
+
+		if (addressLabelSearchTO.getReferralSourcesIds() != null) {
+			criteria.createAlias("referralSources", "personReferralSources")
+					.add(Restrictions.in(
+							"personReferralSources.referralSource.id",
+							addressLabelSearchTO.getReferralSourcesIds()));
+		}
+
+		if (addressLabelSearchTO.getAnticipatedStartTerm() != null) {
+			criteria.add(Restrictions.eq("anticipatedStartTerm",
+					addressLabelSearchTO.getAnticipatedStartTerm())
+					.ignoreCase());
+		}
+
+		if (addressLabelSearchTO.getAnticipatedStartYear() != null) {
+			criteria.add(Restrictions.eq("anticipatedStartYear",
+					addressLabelSearchTO.getAnticipatedStartYear()));
+		}
+
+		if (addressLabelSearchTO.getStudentTypeIds() != null) {
+			criteria.add(Restrictions.in("studentType.id",
+					addressLabelSearchTO.getStudentTypeIds()));
+		}
+
+		if (addressLabelSearchTO.getCreateDateFrom() != null) {
+			criteria.add(Restrictions.ge("createdDate",
+					addressLabelSearchTO.getCreateDateFrom()));
+		}
+
+		if (addressLabelSearchTO.getCreateDateTo() != null) {
+			criteria.add(Restrictions.le("createdDate",
+					addressLabelSearchTO.getCreateDateTo()));
+		}
+		return criteria;
 	}
 }

@@ -57,7 +57,9 @@ import org.jasig.ssp.service.reference.EarlyAlertReferralService;
 import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.reference.JournalTrackService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
+import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -334,13 +336,22 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	}
 	
 	@Override
-	public Long getEarlyAlertResponseCountForDate(Date createDateFrom, Date createDateTo, Campus campus) {		
-		return dao.getEarlyAlertResponseCountForDate(createDateFrom, createDateTo, campus);
+	public Long getEarlyAlertRespondedToCount(Date createDateFrom, Date createDateTo, Campus campus) {		
+		return dao.getEarlyAlertRespondedToCount(createDateFrom, createDateTo, campus);
 	}
 	
 	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(Date createDateFrom,
 			Date createDateTo, List<UUID> outcomes, Person coach){
 		return dao.getEarlyAlertOutreachCountByOutcome(createDateFrom, createDateTo, outcomes, coach);
+	}
+	
+	@Override
+	public List<EarlyAlertStudentReportTO> getPeopleByEarlyAlertReferralIds(
+			List<UUID> earlyAlertReferralIds,final Date createDateFrom,final Date createDateTo,
+			AddressLabelSearchTO addressLabelSearchTO, SortingAndPaging sAndP)
+			throws ObjectNotFoundException {
+		
+		return dao.getPeopleByEarlyAlertReferralIds(earlyAlertReferralIds, createDateFrom,  createDateTo, addressLabelSearchTO, sAndP);
 	}
 
 }

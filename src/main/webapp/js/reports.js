@@ -91,6 +91,8 @@ var ssp = ssp || {};
 					.locate('specialServiceGroup'));
 			loadGroupInput("/ssp/api/1/reference/referralSource/", that
 					.locate('referralSourceGroup'));
+			loadGroupInput("/ssp/api/1/reference/earlyAlertReferral/", that
+					.locate('earlyAlertReferralGroup'));
 			loadGroupInput("/ssp/api/1/reference/campus/", that
 					.locate('campusGroup'));
 			loadGroupInput("/ssp/api/1/reference/earlyAlertOutcome/", that
@@ -271,6 +273,7 @@ var ssp = ssp || {};
 							studentTypeGroup : '.input-student-type-group',
 							specialServiceGroup : '.input-special-service-group',
 							referralSourceGroup : '.input-referral-source-group',
+							earlyAlertReferralGroup: '.input-early-alert-referral-group',
 							assignedCounselorGroup : '.input-assigned-counselor-group',
 							campusGroup: '.input-campus-group',
 							termGroup: '.input-term-group',

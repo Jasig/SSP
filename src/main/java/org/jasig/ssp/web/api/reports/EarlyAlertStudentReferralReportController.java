@@ -18,17 +18,10 @@
  */
 package org.jasig.ssp.web.api.reports; // NOPMD
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -36,40 +29,24 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRCsvExporter;
-import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
-import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.service.EarlyAlertService;
-import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.EarlyAlertReferralService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
-import org.jasig.ssp.service.reference.ReferralSourceService;
-import org.jasig.ssp.service.reference.SpecialServiceGroupService;
-import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
-import org.jasig.ssp.transferobject.reports.CaseLoadActivityReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
-import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,7 +81,7 @@ public class EarlyAlertStudentReferralReportController extends EarlyAlertReportB
 	@Autowired
 	private transient TermService termService;
 	@Autowired
-	private transient ReferralSourceService referralSourcesService;
+	private transient EarlyAlertReferralService earlyAlertReferralsService;
 	@Autowired
 	private transient ProgramStatusService programStatusService;	
 	@Autowired
@@ -126,12 +103,12 @@ public class EarlyAlertStudentReferralReportController extends EarlyAlertReportB
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public void getAddressLabels(
+	public void getEarlyAlertReferralReport(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) UUID coachId,			
 			final @RequestParam(required = false) UUID programStatus,
-			final @RequestParam(required = false) UUID referralSourceId,
+			final @RequestParam(required = false) UUID earlyAlertReferralId,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false) String termCode,
@@ -157,19 +134,18 @@ public class EarlyAlertStudentReferralReportController extends EarlyAlertReportB
 			coachTO = personTOFactory.from(coach);
 		}		
 
-		final AddressLabelSearchTO addressLabelSearchTO = new AddressLabelSearchTO(
+		final AddressLabelSearchTO searchForm = new AddressLabelSearchTO(
 				coachTO,
-				programStatus, null, (List<UUID>)Arrays.asList(referralSourceId), null, null,
-				null, createDateFrom,
-				createDateTo);
+				programStatus, null, null, null, null,
+				null, null,
+				null);
 		
-		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(addressLabelSearchTO, createDateFrom, createDateTo);
-
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
-		final PagingWrapper<EarlyAlertStudentReportTO> peopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
-				searchForm, SortingAndPaging.createForSingleSort(status, null,
+		@SuppressWarnings("unchecked")
+		final List<EarlyAlertStudentReportTO> peopleInfo = earlyAlertResponseService.getPeopleByEarlyAlertReferralIds(
+				(List<UUID>)Arrays.asList(earlyAlertReferralId), startDate, endDate, searchForm, SortingAndPaging.createForSingleSort(status, null,
 						null, null, null, null));
 		
 		// final String programStatusName = ((null!=programStatus &&
@@ -184,12 +160,12 @@ public class EarlyAlertStudentReferralReportController extends EarlyAlertReportB
 		
 		setStartDateEndDateToMap(parameters, startDate, endDate);
 		parameters.put("programStatus", programStatusName);
-		parameters.put("referralSourceName", referralSourcesService.get(referralSourceId).getName());
+		parameters.put("referralSourceName", earlyAlertReferralsService.get(earlyAlertReferralId).getName());
 		parameters.put("reportDate", new Date());
 		parameters.put("termName", termName);
 		
 
-		generateReport( response,  parameters, peopleInfo == null ? null : peopleInfo.getRows(),  "/reports/earlyAlertStudentReferralReport.jasper", 
+		generateReport( response,  parameters, peopleInfo.size() > 0 ? peopleInfo : null,  "/reports/earlyAlertStudentReferralReport.jasper", 
 				 reportType, "Early_Alert_Student_Referral_Report");
 	}
 
