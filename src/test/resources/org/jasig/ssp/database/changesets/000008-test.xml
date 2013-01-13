@@ -127,6 +127,7 @@
 			<column name="object_status" value="1" />
 			<column name="course_name" value="Course Name" />
 			<column name="course_title" value="Course Title" />
+			<column name="campus_id" value="901e104b-4dc7-43f5-a38e-581015e204e1" />
 			<column name="person_id" value="1010e4a0-1001-0110-1011-4ffc02fe81ff" />
 		</insert>
 		<rollback>

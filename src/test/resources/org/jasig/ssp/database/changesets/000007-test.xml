@@ -90,21 +90,6 @@
 			</delete>
 		</rollback>
 	</changeSet>
-
-	<changeSet id="Add sample userIds" author="jon.adams">
-		<update tableName="person">
-			<column name="user_id">userId ken.1</column>
-			<where>id = 'F549ECAB-5110-4CC1-B2BB-369CAC854DEA'</where>
-		</update>
-		<rollback>
-			<update tableName="person">
-				<column name="user_id" value="null" />
-				<where>id = 'F549ECAB-5110-4CC1-B2BB-369CAC854DEA'</where>
-			</update>
-		</rollback>
-	</changeSet>
-	
-	
 	
 	<changeSet id="add goals and Tasks" author="steve.cody">
 		<insert tableName="goal">
