@@ -1,24 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Licensed to Jasig under one or more contributor license
-    agreements. See the NOTICE file distributed with this work
-    for additional information regarding copyright ownership.
-    Jasig licenses this file to you under the Apache License,
-    Version 2.0 (the "License"); you may not use this file
-    except in compliance with the License. You may obtain a
-    copy of the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on
-    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations
-    under the License.
-
--->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="tasks_subreport" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="51dbb813-035f-483a-9532-ecd7ac9cfc86">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -32,11 +12,13 @@
 		<band height="34" splitType="Stretch">
 			<textField>
 				<reportElement uuid="0555938f-0ca6-44ad-93ea-2818cdcc7270" mode="Opaque" x="0" y="1" width="555" height="16" backcolor="#DCC7C7"/>
-				<textElement/>
+				<textElement verticalAlignment="Middle">
+					<font isUnderline="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA["Challenge: " + $F{groupName}]]></textFieldExpression>
 			</textField>
 			<subreport>
-				<reportElement uuid="463f5dd1-6b8b-4aef-96a3-28f44388b49d" stretchType="RelativeToTallestObject" x="28" y="17" width="527" height="16"/>
+				<reportElement uuid="463f5dd1-6b8b-4aef-96a3-28f44388b49d" stretchType="RelativeToTallestObject" x="19" y="17" width="536" height="17"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{taskList})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/tasksHistory_subreport.jasper"]]></subreportExpression>
 			</subreport>

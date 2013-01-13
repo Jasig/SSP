@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="earlyAlertStudentProgressReport" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e3ea9cb2-eb95-4ad5-a580-45da78bac1f1">
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.5" value="columnHeader"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.4" value="columnFooter"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -136,7 +141,7 @@
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="20" splitType="Stretch">
+		<band height="18" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="213fad29-3a69-4ecd-b8d6-442fb0fb753f" x="0" y="0" width="83" height="16"/>
 				<textElement textAlignment="Center">
@@ -203,66 +208,74 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="35" splitType="Stretch">
+		<band height="23" splitType="Stretch">
 			<rectangle>
-				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="0" y="-10" width="752" height="22" backcolor="#E4E4E4">
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="0" y="-1" width="752" height="22" backcolor="#E4E4E4">
 					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
 				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0" lineColor="#FFFFFF"/>
+				</graphicElement>
 			</rectangle>
 			<textField>
-				<reportElement uuid="5df35f29-eee6-4ea4-8f4a-6dee911febbf" x="0" y="-4" width="83" height="20"/>
-				<textElement textAlignment="Center"/>
+				<reportElement uuid="5df35f29-eee6-4ea4-8f4a-6dee911febbf" mode="Transparent" x="0" y="2" width="83" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="fccdb7c6-2994-4d2c-a4ec-f34b5a2e788c" x="166" y="-4" width="83" height="20"/>
-				<textElement textAlignment="Center"/>
+				<reportElement uuid="fccdb7c6-2994-4d2c-a4ec-f34b5a2e788c" mode="Transparent" x="166" y="2" width="83" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{lastName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="baddf80d-189e-48c0-b941-832a2810feb3" x="249" y="-4" width="83" height="20"/>
-				<textElement textAlignment="Center"/>
+				<reportElement uuid="baddf80d-189e-48c0-b941-832a2810feb3" mode="Transparent" x="249" y="2" width="83" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[($F{schoolId} == null ? "" : $F{schoolId})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="8dd07508-1865-4043-85b9-6ab036d844ff" x="332" y="-4" width="83" height="20"/>
-				<textElement textAlignment="Center"/>
+				<reportElement uuid="8dd07508-1865-4043-85b9-6ab036d844ff" mode="Transparent" x="332" y="2" width="83" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{primaryEmailAddress}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="5eb7a872-6b6c-4869-a5cd-cd1729905d90" x="415" y="-4" width="83" height="20"/>
-				<textElement textAlignment="Center"/>
+				<reportElement uuid="5eb7a872-6b6c-4869-a5cd-cd1729905d90" mode="Transparent" x="415" y="2" width="83" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{registrationStatus}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="235be1e8-005b-47b5-ad98-542b8e123ba7" x="498" y="-4" width="83" height="20"/>
-				<textElement textAlignment="Center"/>
+				<reportElement uuid="235be1e8-005b-47b5-ad98-542b8e123ba7" mode="Transparent" x="498" y="2" width="83" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{earlyAlertsInitialTerm}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="7586ecb3-d9bd-4ebd-a6e0-82e8bfa2afa7" x="581" y="-4" width="83" height="20"/>
-				<textElement textAlignment="Center"/>
+				<reportElement uuid="7586ecb3-d9bd-4ebd-a6e0-82e8bfa2afa7" mode="Transparent" x="581" y="2" width="83" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{earlyAlertsComparisonTerm}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="1219a106-79d6-42a5-83e7-998b2c7291d4" x="83" y="-4" width="83" height="20"/>
-				<textElement textAlignment="Center"/>
+				<reportElement uuid="1219a106-79d6-42a5-83e7-998b2c7291d4" mode="Transparent" x="83" y="2" width="83" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{middleName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="06263141-db6f-4d00-968b-888a644603e0" x="664" y="-4" width="74" height="16"/>
-				<textElement textAlignment="Center"/>
+				<reportElement uuid="06263141-db6f-4d00-968b-888a644603e0" mode="Transparent" x="664" y="2" width="74" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{coach}.getFirstName() + " " + $F{coach}.getLastName()]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="45" splitType="Stretch"/>
-	</columnFooter>
 	<pageFooter>
-		<band height="54" splitType="Stretch"/>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement uuid="c67f21c4-b6a2-4480-a2df-a8d1b4be49c0" x="332" y="2" width="53" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="635966d3-8cd0-4de1-8445-fb52a91254e7" x="385" y="2" width="38" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
 	</pageFooter>
-	<summary>
-		<band height="42" splitType="Stretch"/>
-	</summary>
 </jasperReport>
