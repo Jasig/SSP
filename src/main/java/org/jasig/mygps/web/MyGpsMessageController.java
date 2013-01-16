@@ -23,6 +23,7 @@ import javax.mail.SendFailedException;
 import org.jasig.mygps.model.transferobject.MessageTO;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.SecurityService;
@@ -32,6 +33,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +57,7 @@ public class MyGpsMessageController extends AbstractBaseController {
 			.getLogger(MyGpsMessageController.class);
 
 	@RequestMapping(method = RequestMethod.POST)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	Boolean contactCoach(@RequestBody final MessageTO messageTO)
 			throws ObjectNotFoundException,

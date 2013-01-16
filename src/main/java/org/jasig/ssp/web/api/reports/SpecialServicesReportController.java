@@ -44,6 +44,7 @@ import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
@@ -54,6 +55,7 @@ import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -82,6 +84,7 @@ public class SpecialServicesReportController extends AbstractBaseController {
 	private transient SpecialServiceGroupService ssgService;
 
 	@RequestMapping(method = RequestMethod.POST)
+	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	public @ResponseBody
 	void getSpecialServices(
 			final HttpServletResponse response,

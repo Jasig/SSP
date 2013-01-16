@@ -55,6 +55,7 @@ import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
 import org.jasig.ssp.transferobject.reports.StudentActionPlanTO;
+import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
@@ -127,6 +128,7 @@ public class PersonTaskController extends
 	 *             If the person identifier is not valid.
 	 */
 	@RequestMapping(value = "/group", method = RequestMethod.GET)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	Map<String, List<TaskTO>> getAllTasksWithTaskGroup(
 			final @PathVariable UUID personId,
@@ -187,6 +189,7 @@ public class PersonTaskController extends
 	 *             IO exception
 	 */
 	@RequestMapping(value = "/print", method = RequestMethod.POST)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	void print(final HttpServletResponse response,
 			final @PathVariable UUID personId,
@@ -310,6 +313,7 @@ public class PersonTaskController extends
 	 *             If any reference data could not be found.
 	 */
 	@RequestMapping(value = "/email", method = RequestMethod.POST)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	boolean email(final @PathVariable UUID personId,
 			final @RequestBody @Valid EmailPersonTasksForm emailForm)

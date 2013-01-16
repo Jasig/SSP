@@ -52,6 +52,9 @@ public class Permission { // NOPMD enum won't work for these values in
 	public static final String PERSON_PROGRAM_STATUS_WRITE = ROLE_PREFIX
 			+ "PERSON_PROGRAM_STATUS_WRITE";
 
+	// Report Permissions/Roles
+	public static final String REPORT_READ = ROLE_PREFIX + "REPORT_READ";
+
 	// Wrap the permission role in a hasRole
 	public static final String SECURITY_REFERENCE_WRITE = HAS_ROLE
 			+ REFERENCE_WRITE + END;
@@ -67,4 +70,7 @@ public class Permission { // NOPMD enum won't work for these values in
 			+ PERSON_DELETE + END;
 	public static final String SECURITY_PERSON_INSTRUCTION_READ = HAS_ROLE
 			+ PERSON_INSTRUCTION_READ + END;
+
+	public static final String SECURITY_REPORT_READ = HAS_ROLE + REPORT_READ
+			+ END;
 }

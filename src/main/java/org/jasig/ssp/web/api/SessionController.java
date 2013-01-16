@@ -28,6 +28,7 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
+import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,7 @@ public class SessionController extends AbstractBaseController {
 	private transient PersonTOFactory factory;
 
 	@RequestMapping(value = "/permissions", method = RequestMethod.GET)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	Map<String, Object> getMyServicePermissions() {
 
@@ -90,6 +92,7 @@ public class SessionController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/confidentialityLevels", method = RequestMethod.GET)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	Map<String, Object> getMyConfidentialityLevels() {
 
@@ -114,6 +117,7 @@ public class SessionController extends AbstractBaseController {
 	 *         if not authenticated.
 	 */
 	@RequestMapping(value = "/getAuthenticatedPerson", method = RequestMethod.GET)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	PersonTO getAuthenticatedPerson() {
 		if (service == null) {

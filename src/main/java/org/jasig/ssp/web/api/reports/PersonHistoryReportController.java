@@ -53,6 +53,7 @@ import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -69,6 +70,7 @@ import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -83,8 +85,6 @@ import com.google.common.collect.Maps;
  * <p>
  * Mapped to URI path <code>/1/person</code>
  */
-
-// TODO: Add PreAuthorize
 @Controller
 @RequestMapping("/1/report/{personId}/History")
 public class PersonHistoryReportController extends AbstractBaseController {
@@ -112,6 +112,7 @@ public class PersonHistoryReportController extends AbstractBaseController {
 	protected transient SecurityService securityService;
 
 	@RequestMapping(method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	public @ResponseBody
 	void getAddressLabels(
 			final HttpServletResponse response,

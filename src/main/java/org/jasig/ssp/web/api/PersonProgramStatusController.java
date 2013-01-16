@@ -25,6 +25,7 @@ import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonProgramStatusService;
 import org.jasig.ssp.transferobject.PersonProgramStatusTO;
+import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,6 +81,7 @@ public class PersonProgramStatusController
 	}
 
 	@RequestMapping(value = "/current", method = RequestMethod.GET)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	PersonProgramStatusTO getCurrent(@PathVariable final UUID personId)
 			throws ObjectNotFoundException, ValidationException {

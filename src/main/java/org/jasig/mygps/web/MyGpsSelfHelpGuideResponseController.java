@@ -25,6 +25,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SelfHelpGuideResponse;
 import org.jasig.ssp.model.reference.SelfHelpGuide;
 import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.PersonSelfHelpGuideResponseService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.SelfHelpGuideQuestionService;
@@ -35,6 +36,7 @@ import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -78,6 +80,7 @@ public class MyGpsSelfHelpGuideResponseController extends
 	}
 
 	@RequestMapping(value = "cancel", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	boolean cancel(
 			final @RequestParam("selfHelpGuideResponseId") UUID selfHelpGuideResponseId)
@@ -88,6 +91,7 @@ public class MyGpsSelfHelpGuideResponseController extends
 	}
 
 	@RequestMapping(value = "complete", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	boolean complete(
 			final @RequestParam("selfHelpGuideResponseId") UUID selfHelpGuideResponseId)
@@ -99,6 +103,7 @@ public class MyGpsSelfHelpGuideResponseController extends
 	}
 
 	@RequestMapping(value = "getById", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	SelfHelpGuideResponseTO getById(
 			final @RequestParam("selfHelpGuideResponseId") UUID selfHelpGuideResponseId)
@@ -111,6 +116,7 @@ public class MyGpsSelfHelpGuideResponseController extends
 	}
 
 	@RequestMapping(value = "initiate", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	String initiate(final @RequestParam("selfHelpGuideId") UUID selfHelpGuideId)
 			throws Exception {
@@ -120,6 +126,7 @@ public class MyGpsSelfHelpGuideResponseController extends
 	}
 
 	@RequestMapping(value = "answer", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	boolean answer(
 			final @RequestParam("selfHelpGuideResponseId") UUID selfHelpGuideResponseId,

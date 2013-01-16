@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import org.jasig.ssp.factory.reference.ChallengeReferralTOFactory;
 import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
 import org.jasig.ssp.service.reference.ChallengeService;
 import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
@@ -30,6 +31,7 @@ import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -69,6 +71,7 @@ public class MyGpsChallengeReferralController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/getByChallengeId", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	List<ChallengeReferralTO> getByChallengeId(
 			@RequestParam("challengeId") final UUID challengeId)
@@ -86,6 +89,7 @@ public class MyGpsChallengeReferralController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	List<ChallengeReferralTO> search(@RequestParam("query") final String query,
 			@RequestParam("challengeId") final UUID challengeId)

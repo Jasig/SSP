@@ -32,6 +32,7 @@ import org.jasig.ssp.service.reference.ChallengeService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PersonChallengeTO;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
+import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -137,6 +138,7 @@ public class PersonChallengeController extends
 	 *             if object could not be found
 	 */
 	@RequestMapping(method = RequestMethod.GET)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	PagedResponse<ChallengeTO> getChallengesForPerson(
 			@PathVariable final UUID personId,
