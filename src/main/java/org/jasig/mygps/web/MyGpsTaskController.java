@@ -33,6 +33,7 @@ import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
@@ -46,6 +47,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -105,6 +107,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 	 * @param studentId - a student id of the student receiving the task
 	 */
 	@RequestMapping(value = "/createTaskForStudent", method = RequestMethod.POST)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	boolean createTaskForStudent(@RequestParam("name") final String name,
 			@RequestParam("description") final String description,
@@ -130,6 +133,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/createCustom", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	TaskTO createCustom(@RequestParam("name") final String name,
 			@RequestParam("description") final String description)
@@ -145,6 +149,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/createForChallengeReferral", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	TaskTO createForChallengeReferral(
 			@RequestParam("challengeId") final UUID challengeId,
@@ -167,6 +172,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	boolean delete(@RequestParam("taskId") final UUID taskId)
 			throws ObjectNotFoundException {
@@ -175,6 +181,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/email", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	boolean email(@RequestParam("emailAddress") final String emailAddress)
 			throws ObjectNotFoundException, ValidationException {
@@ -207,6 +214,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	List<TaskTO> getAll() {
 
@@ -229,6 +237,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/mark", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	TaskTO mark(@RequestParam("taskId") final UUID taskId,
 			@RequestParam("complete") final Boolean complete)
@@ -240,6 +249,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public ModelAndView print() {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		final SortingAndPaging sAndP = new SortingAndPaging(

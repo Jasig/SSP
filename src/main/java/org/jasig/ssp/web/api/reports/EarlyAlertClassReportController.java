@@ -31,6 +31,7 @@ import net.sf.jasperreports.engine.JRException;
 
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.Campus;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -43,6 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -58,7 +60,6 @@ import com.google.common.collect.Maps;
  * <p>
  * Mapped to URI path <code>/1/report/earlyalertcasecounts</code>
  */
-
 @Controller
 @RequestMapping("/1/report/earlyalertclass")
 public class EarlyAlertClassReportController extends EarlyAlertReportBaseController {
@@ -98,6 +99,7 @@ public class EarlyAlertClassReportController extends EarlyAlertReportBaseControl
 	
 	
 	@RequestMapping(method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	public @ResponseBody
 	void getCaseLoadActivity(
 			final HttpServletResponse response,		

@@ -35,6 +35,7 @@ import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -51,6 +52,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -66,7 +68,6 @@ import com.google.common.collect.Maps;
  * <p>
  * Mapped to URI path <code>/1/report/earlyalertstudentreferral</code>
  */
-
 @Controller
 @RequestMapping("/1/report/earlyalertstudentreferral")
 public class EarlyAlertStudentReferralReportController extends EarlyAlertReportBaseController {
@@ -102,6 +103,7 @@ public class EarlyAlertStudentReferralReportController extends EarlyAlertReportB
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
+	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	@ResponseBody
 	public void getEarlyAlertReferralReport(
 			final HttpServletResponse response,

@@ -26,6 +26,7 @@ import org.jasig.ssp.model.Appointment;
 import org.jasig.ssp.service.AppointmentService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.AppointmentTO;
+import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,7 @@ public class AppointmentController
 	}
 
 	@RequestMapping(value = "/current", method = RequestMethod.GET)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	AppointmentTO getCurrentAppointmentForPerson(
 			final @PathVariable UUID personId) throws ObjectNotFoundException {

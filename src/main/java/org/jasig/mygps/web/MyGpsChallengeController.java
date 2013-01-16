@@ -24,6 +24,7 @@ import org.jasig.ssp.factory.reference.ChallengeReferralTOFactory;
 import org.jasig.ssp.factory.reference.ChallengeTOFactory;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
 import org.jasig.ssp.service.reference.ChallengeService;
@@ -32,6 +33,7 @@ import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -90,6 +92,7 @@ public class MyGpsChallengeController extends AbstractBaseController {
 	 *             If there were any unexpected exceptions thrown.
 	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	List<ChallengeTO> search(@RequestParam("query") final String query)
 			throws Exception {

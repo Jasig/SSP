@@ -48,6 +48,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
@@ -62,6 +63,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -77,8 +79,6 @@ import com.google.common.collect.Maps;
  * <p>
  * Mapped to URI path <code>report/AddressLabels</code>
  */
-
-// TODO: Add PreAuthorize
 @Controller
 @RequestMapping("/1/report/AddressLabels")
 public class AddressLabelsReportController extends AbstractBaseController { // NOPMD
@@ -112,6 +112,7 @@ public class AddressLabelsReportController extends AbstractBaseController { // N
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
+	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	@ResponseBody
 	public void getAddressLabels(
 			final HttpServletResponse response,

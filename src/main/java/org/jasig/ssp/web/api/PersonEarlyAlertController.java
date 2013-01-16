@@ -28,6 +28,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -87,6 +88,7 @@ public class PersonEarlyAlertController extends
 	// Overriding to specify full request path since we needed a custom create
 	// method
 	@Override
+	@DynamicPermissionChecking
 	@RequestMapping(value = "/1/person/{personId}/earlyAlert/{id}", method = RequestMethod.GET)
 	public @ResponseBody
 	EarlyAlertTO get(final @PathVariable @NotNull UUID id,
@@ -101,6 +103,7 @@ public class PersonEarlyAlertController extends
 	}
 
 	@Override
+	@DynamicPermissionChecking
 	@RequestMapping(value = "/1/person/{personId}/earlyAlert", method = RequestMethod.POST)
 	public @ResponseBody
 	EarlyAlertTO create(@PathVariable @NotNull final UUID personId,
@@ -164,6 +167,7 @@ public class PersonEarlyAlertController extends
 
 	@Override
 	@RequestMapping(value = "/1/person/{personId}/earlyAlert/{id}", method = RequestMethod.PUT)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	EarlyAlertTO save(@PathVariable final UUID id,
 			@PathVariable final UUID personId,
@@ -220,6 +224,7 @@ public class PersonEarlyAlertController extends
 	 *             If any of the data was not valid.
 	 */
 	@RequestMapping(value = "/1/person/earlyAlert", method = RequestMethod.POST)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	EarlyAlertTO create(@RequestParam final String studentId,
 			@Valid @RequestBody final EarlyAlertTO obj)

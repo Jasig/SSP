@@ -25,6 +25,7 @@ import org.jasig.ssp.factory.reference.SelfHelpGuideTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.SelfHelpGuide;
 import org.jasig.ssp.model.reference.SelfHelpGuideGroup;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.reference.SelfHelpGuideGroupService;
 import org.jasig.ssp.service.reference.SelfHelpGuideService;
 import org.jasig.ssp.transferobject.reference.SelfHelpGuideDetailTO;
@@ -34,6 +35,7 @@ import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -71,6 +73,7 @@ public class MyGpsSelfHelpGuideController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	List<SelfHelpGuideTO> getAll() throws Exception {
 		// TODO: MyGPSSelfGuideController.getAll() needs filtered based on
@@ -82,6 +85,7 @@ public class MyGpsSelfHelpGuideController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/getContentById", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	SelfHelpGuideDetailTO getContentById(
 			final @RequestParam("selfHelpGuideId") UUID selfHelpGuideId)
@@ -92,6 +96,7 @@ public class MyGpsSelfHelpGuideController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/getBySelfHelpGuideGroup", method = RequestMethod.GET)
+	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	List<SelfHelpGuideTO> getBySelfHelpGuideGroup(
 			final @RequestParam("selfHelpGuideGroupId") UUID selfHelpGuideGroupId)

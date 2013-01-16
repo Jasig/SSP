@@ -36,6 +36,7 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.transferobject.EarlyAlertResponseTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -110,6 +111,7 @@ public class PersonEarlyAlertResponseController extends
 	 *             If any of the data is not valid.
 	 */
 	@RequestMapping(method = RequestMethod.GET)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	PagedResponse<EarlyAlertResponseTO> getAll(
 			@PathVariable final UUID personId,
@@ -141,6 +143,7 @@ public class PersonEarlyAlertResponseController extends
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	EarlyAlertResponseTO get(final @PathVariable UUID id,
 			@PathVariable final UUID personId) throws ObjectNotFoundException,
@@ -157,6 +160,7 @@ public class PersonEarlyAlertResponseController extends
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	EarlyAlertResponseTO create(@PathVariable @NotNull final UUID personId,
 			@PathVariable @NotNull final UUID earlyAlertId,
@@ -200,6 +204,7 @@ public class PersonEarlyAlertResponseController extends
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	EarlyAlertResponseTO save(@PathVariable final UUID id,
 			@PathVariable final UUID personId,
@@ -232,6 +237,7 @@ public class PersonEarlyAlertResponseController extends
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	ServiceResponse delete(@PathVariable final UUID id,
 			@PathVariable final UUID personId) throws ObjectNotFoundException {

@@ -34,6 +34,7 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.transferobject.AbstractAuditableTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -151,6 +152,7 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 	 *             If specified person could not be found.
 	 */
 	@RequestMapping(method = RequestMethod.GET)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	PagedResponse<TO> getAll(@PathVariable final UUID personId,
 			final @RequestParam(required = false) ObjectStatus status,
@@ -173,6 +175,7 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	TO get(final @PathVariable UUID id,
 			@PathVariable final UUID personId) throws ObjectNotFoundException,
@@ -189,6 +192,7 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	TO create(@PathVariable @NotNull final UUID personId,
 			@Valid @RequestBody @NotNull final TO obj)
@@ -243,6 +247,7 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 	 *             If the updated data was not valid.
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	TO save(@PathVariable final UUID id,
 			@PathVariable final UUID personId,
@@ -272,6 +277,7 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	ServiceResponse delete(@PathVariable final UUID id,
 			@PathVariable final UUID personId) throws ObjectNotFoundException {
