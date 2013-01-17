@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="schema" value="public" dbms="postgresql" />
+	<property name="schema" value="dbo" dbms="mssql" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	<property name="externalUser" value="a new UUID" />
+	<property name="check_for_manage_integration_database_config_sql"
+			  value="select count(id) from config where name='manage_integration_database'" />
+	<property name="should_manage_integration_database_sql"
+			  value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
+
+	<changeSet id="Index external_faculty_course by full business key"
+			   author="dan.mccallum">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip creating an index on external_faculty_course for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<createIndex tableName="external_faculty_course"
+					 indexName="idx_external_faculty_course_business_key">
+			<column name="faculty_school_id" />
+			<column name="formatted_course" />
+			<column name="term_code" />
+		</createIndex>
+
+		<rollback>
+			<dropIndex tableName="external_faculty_course"
+					   indexName="idx_external_faculty_course_business_key" />
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Index external_faculty_course_roster by full business key"
+			   author="dan.mccallum">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip creating an index on external_faculty_course for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<createIndex tableName="external_faculty_course_roster"
+					 indexName="idx_external_faculty_course_roster_business_key">
+			<column name="faculty_school_id" />
+			<column name="formatted_course" />
+			<column name="term_code" />
+			<column name="school_id" />
+		</createIndex>
+
+		<rollback>
+			<dropIndex tableName="external_faculty_course_roster"
+					   indexName="idx_external_faculty_course_roster_business_key" />
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Index external_registration_status_by_term by full business key"
+			   author="dan.mccallum">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip creating an index on external_registration_status_by_term for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<createIndex tableName="external_registration_status_by_term"
+					 indexName="idx_external_registration_status_by_term_business_key">
+			<column name="school_id" />
+			<column name="term_code" />
+			<column name="registered_course_count" />
+		</createIndex>
+
+		<rollback>
+			<dropIndex tableName="external_registration_status_by_term"
+					   indexName="idx_external_registration_status_by_term_business_key" />
+		</rollback>
+	</changeSet>
+
+
+</databaseChangeLog>
