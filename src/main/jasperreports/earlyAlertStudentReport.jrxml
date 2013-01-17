@@ -5,8 +5,8 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
-	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="246"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="programStatus" class="java.lang.String"/>
 	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
@@ -223,22 +223,22 @@
 				</textElement>
 				<textFieldExpression><![CDATA[($F{primaryEmailAddress} == null ? "" : $F{primaryEmailAddress})]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="55e047a6-49ba-46f0-8c50-eadb94d3ebe4" mode="Transparent" x="594" y="4" width="53" height="16"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{total} == null ? new Long(0L) : $F{total}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="45e03c53-aae8-4b4f-956c-e6c267c8fccc" mode="Transparent" x="489" y="4" width="53" height="16"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{closed} == null ?  new Long(0L) : $F{closed}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="3b3a64ca-c6f1-4bb1-b9b7-7216480dd492" mode="Transparent" x="541" y="4" width="53" height="16"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{pending} == null ?  new Long(0L) : $F{pending}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="06263141-db6f-4d00-968b-888a644603e0" mode="Transparent" x="435" y="4" width="54" height="16"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{open} == null ?  new Long(0L) : $F{open}]]></textFieldExpression>

@@ -8,7 +8,7 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="14"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="name" class="java.lang.String"/>
 	<parameter name="programStatus" class="java.lang.String"/>
 	<parameter name="specialServiceGroupNames" class="java.lang.String"/>

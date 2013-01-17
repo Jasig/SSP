@@ -217,50 +217,50 @@
 					<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 				</graphicElement>
 			</rectangle>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="5df35f29-eee6-4ea4-8f4a-6dee911febbf" mode="Transparent" x="0" y="2" width="83" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{firstName} == null ? "": $F{firstName}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="fccdb7c6-2994-4d2c-a4ec-f34b5a2e788c" mode="Transparent" x="166" y="2" width="83" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{lastName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{lastName} == null ? "": $F{lastName} ]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="baddf80d-189e-48c0-b941-832a2810feb3" mode="Transparent" x="249" y="2" width="83" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[($F{schoolId} == null ? "" : $F{schoolId})]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="8dd07508-1865-4043-85b9-6ab036d844ff" mode="Transparent" x="332" y="2" width="83" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{primaryEmailAddress}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{primaryEmailAddress} == null ? "":$F{primaryEmailAddress}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="5eb7a872-6b6c-4869-a5cd-cd1729905d90" mode="Transparent" x="415" y="2" width="83" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{registrationStatus}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{registrationStatus} == null ? "":$F{registrationStatus}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="235be1e8-005b-47b5-ad98-542b8e123ba7" mode="Transparent" x="498" y="2" width="83" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{earlyAlertsInitialTerm}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{earlyAlertsInitialTerm} == null ? "":$F{earlyAlertsInitialTerm}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="7586ecb3-d9bd-4ebd-a6e0-82e8bfa2afa7" mode="Transparent" x="581" y="2" width="83" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{earlyAlertsComparisonTerm}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="1219a106-79d6-42a5-83e7-998b2c7291d4" mode="Transparent" x="83" y="2" width="83" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{middleName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{middleName} == null ? "": $F{middleName}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="06263141-db6f-4d00-968b-888a644603e0" mode="Transparent" x="664" y="2" width="74" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{coach}.getFirstName() + " " + $F{coach}.getLastName()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{coach} == null ? "" : $F{coach}.getFirstName() + " " + $F{coach}.getLastName()]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

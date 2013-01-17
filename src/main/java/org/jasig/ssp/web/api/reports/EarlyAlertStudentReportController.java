@@ -105,7 +105,7 @@ public class EarlyAlertStudentReportController extends EarlyAlertReportBaseContr
 	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	@ResponseBody
-	public void getAddressLabels(
+	public void getEarlyAlertStudentReport(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) UUID coachId,			
@@ -124,11 +124,14 @@ public class EarlyAlertStudentReportController extends EarlyAlertReportBaseContr
 		{
 			coach = personService.get(coachId);
 			coachTO = personTOFactory.from(coach);
-		}		
+		}	
+		
+		List<UUID> cleanSpecialServiceGroupIds = cleanUUIDListOfNulls(specialServiceGroupIds);
+		
 
 		final AddressLabelSearchTO addressLabelSearchTO = new AddressLabelSearchTO(
 				coachTO,
-				programStatus, specialServiceGroupIds, null, null, null,
+				programStatus, cleanSpecialServiceGroupIds, null, null, null,
 				studentTypeIds, null,
 				null);
 		

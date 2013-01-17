@@ -7,8 +7,8 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="252"/>
-	<property name="ireport.y" value="13"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="homeDepartment" class="java.lang.String"/>
 	<parameter name="studentTypes" class="java.lang.String"/>
 	<field name="firstName" class="java.lang.String">
@@ -196,56 +196,56 @@
 					<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 				</graphicElement>
 			</rectangle>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="26f7be38-ce84-4162-9fe0-4843db2fe8b9" stretchType="RelativeToBandHeight" x="45" y="1" width="60" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($F{firstName} == "null" ? "" : $F{firstName})]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="da4c0010-a6bc-4016-836e-daa0149f7735" stretchType="RelativeToBandHeight" x="103" y="1" width="60" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($F{lastName} == "null" ? "" : $F{lastName})]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="8eac9b78-2708-4c2b-8ef1-3ed9170a3eef" x="163" y="1" width="107" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{departmentName}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="3efa154d-767a-41fb-95fd-6db1ff5dc959" x="595" y="1" width="25" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{activeCount}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="121a0617-cec2-4b49-97f8-c3824f73f909" x="668" y="1" width="26" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{npCount}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="ca48cdf1-0a1e-43d2-9396-71faa4551e4f" x="618" y="1" width="25" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{inActiveCount}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="03e17016-1b6d-42ca-aba4-ac473c5f8589" x="643" y="1" width="25" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{transitionedCount}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="a1918016-b8a6-41ad-bbde-0dea834efaf0" x="694" y="1" width="24" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{noShowCount}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="3a3d6b62-fdca-4676-85de-4d90f7184226" x="442" y="1" width="153" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{activeCount}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="3013949b-9b42-45be-93ac-4ba6b3831b2e" x="270" y="1" width="172" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{activeCount}+$F{npCount}+$F{inActiveCount}+$F{transitionedCount}+$F{noShowCount}]]></textFieldExpression>

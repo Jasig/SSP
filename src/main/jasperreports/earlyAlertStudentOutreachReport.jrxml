@@ -5,7 +5,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
-	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="reportDate" class="java.util.Date"/>
@@ -165,42 +165,42 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{coach}.getFirstName() + " " + $F{coach}.getLastName()]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="aff46448-29ea-4173-beab-4b7c5867d61f" x="81" y="0" width="81" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalEarlyAlerts} == null ? "" : $F{totalEarlyAlerts}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="2236bce7-bdf7-4b0d-968b-9d266c8db6dd" x="162" y="0" width="81" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{countPhoneCalls} == null ? "" : $F{countPhoneCalls}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="632061a9-eb78-4b74-be75-1e667dbc7712" x="243" y="0" width="81" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{countEmail} == null ? "" : $F{countEmail}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="6a986c67-f5b5-4b5e-a4d9-a2a99393e557" x="324" y="0" width="81" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{countLetter} == null ? "" : $F{countLetter}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="a8b40720-8059-4b84-a1af-212c56f26c7a" x="405" y="0" width="81" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{countText} == null ? "" : $F{countText}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="2b9d1f3f-8c6e-488d-841d-77100d356b5a" x="486" y="0" width="81" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="false"/>
