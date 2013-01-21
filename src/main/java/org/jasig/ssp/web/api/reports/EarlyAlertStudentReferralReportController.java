@@ -46,6 +46,7 @@ import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -117,24 +118,10 @@ public class EarlyAlertStudentReferralReportController extends EarlyAlertReportB
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
-		Person coach = null;
-		PersonTO coachTO = null;
-		Date startDate = createDateFrom;
-		Date endDate = createDateTo;
-		String termName = "";
 		
-		if(termCode != null && termCode.length()> 0) {
-			Term term = termService.getByCode(termCode);
-			termName = term.getName();
-			startDate = term.getStartDate();
-			endDate = term.getEndDate();
-		}
+		PersonTO coachTO = getPerson(coachId, personService, personTOFactory);
 		
-		if(coachId != null)
-		{
-			coach = personService.get(coachId);
-			coachTO = personTOFactory.from(coach);
-		}		
+		DateTerm termDate =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);	
 
 		final AddressLabelSearchTO searchForm = new AddressLabelSearchTO(
 				coachTO,
@@ -147,7 +134,7 @@ public class EarlyAlertStudentReferralReportController extends EarlyAlertReportB
 		// building
 		@SuppressWarnings("unchecked")
 		final List<EarlyAlertStudentReportTO> peopleInfo = earlyAlertResponseService.getPeopleByEarlyAlertReferralIds(
-				(List<UUID>)Arrays.asList(earlyAlertReferralId), startDate, endDate, searchForm, SortingAndPaging.createForSingleSort(status, null,
+				(List<UUID>)Arrays.asList(earlyAlertReferralId), termDate.getStartDate(), termDate.getEndDate(), searchForm, SortingAndPaging.createForSingleSort(status, null,
 						null, null, null, null));
 		
 		// final String programStatusName = ((null!=programStatus &&
@@ -160,12 +147,10 @@ public class EarlyAlertStudentReferralReportController extends EarlyAlertReportB
 		
 		parameters.put("coachName",  getFullName(coachTO));
 		
-		setStartDateEndDateToMap(parameters, startDate, endDate);
+		this.setDateTermToMap(parameters, termDate);
 		parameters.put("programStatus", programStatusName);
 		parameters.put("referralSourceName", earlyAlertReferralsService.get(earlyAlertReferralId).getName());
-		parameters.put("reportDate", new Date());
-		parameters.put("termName", termName);
-		
+		parameters.put("reportDate", new Date());		
 
 		generateReport( response,  parameters, peopleInfo.size() > 0 ? peopleInfo : null,  "/reports/earlyAlertStudentReferralReport.jasper", 
 				 reportType, "Early_Alert_Student_Referral_Report");

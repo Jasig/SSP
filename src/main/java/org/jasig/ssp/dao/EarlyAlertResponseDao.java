@@ -208,7 +208,7 @@ public class EarlyAlertResponseDao extends
 				if(outreach.getName().equals("Text")){
 					update.setCountText(update.getCountText() + 1L);
 				}
-				update.setTotalEarlyAlerts(update.getTotalEarlyAlerts());
+				update.setTotalEarlyAlerts(update.getTotalEarlyAlerts() + 1L);
 			}
 			
 		}

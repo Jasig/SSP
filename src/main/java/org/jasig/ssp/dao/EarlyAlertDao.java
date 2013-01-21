@@ -258,6 +258,8 @@ public class EarlyAlertDao extends
 					closedDateTo));
 		}
 		
+		query.add(Restrictions.isNotNull("closedDate"));
+		
 		if(campus != null){
 			query.add(Restrictions
 					.eq("campus", campus));

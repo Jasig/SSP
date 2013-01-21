@@ -43,7 +43,9 @@ import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
+import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
+import org.jasig.ssp.util.DateTerm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,20 +113,13 @@ public class EarlyAlertStudentOutreachReportController extends EarlyAlertReportB
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
-		
-		Term term = null;
-		Date startDate = createDateFrom;
-		Date endDate = createDateTo;
-		if(termCode != null && termCode.length() > 0){
-			term = termService.getByCode(termCode);
-			startDate = term.getStartDate();
-			endDate = term.getEndDate();
-		}
+				
+		final DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
 
-		List<UUID> earlyAlertOutcomesClean = cleanUUIDListOfNulls(earlyAlertOutcomes);
+		final List<UUID> earlyAlertOutcomesClean = cleanUUIDListOfNulls(earlyAlertOutcomes);
 		
-		Collection<EarlyAlertStudentOutreachReportTO> outreachOutcomes = earlyAlertResponseService.getEarlyAlertOutreachCountByOutcome(startDate, 
-				endDate,
+		final Collection<EarlyAlertStudentOutreachReportTO> outreachOutcomes = earlyAlertResponseService.getEarlyAlertOutreachCountByOutcome(dateTerm.getStartDate(), 
+				dateTerm.getEndDate(),
 				earlyAlertOutcomesClean,
 				null);
 		
@@ -132,10 +127,10 @@ public class EarlyAlertStudentOutreachReportController extends EarlyAlertReportB
 		
 		parameters.put("earlyAlertOutcome", concatEarlyAlertOutcomesFromUUIDs(earlyAlertOutcomesClean, earlyAlertOutcomeService));
 		
-		parameters.put("term", term != null ? term.getName() : "");
+		parameters.put("term", dateTerm.getTermName());
 		parameters.put("reportDate", new Date());
 
-		setStartDateEndDateToMap(parameters, startDate, endDate);
+		setDateTermToMap(parameters, dateTerm);
 
 
 		generateReport(response,  parameters, outreachOutcomes,  "/reports/earlyAlertStudentOutreachReport.jasper", 

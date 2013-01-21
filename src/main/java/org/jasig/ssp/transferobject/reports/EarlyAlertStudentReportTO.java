@@ -18,19 +18,9 @@
  */
 package org.jasig.ssp.transferobject.reports;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
-import org.jasig.ssp.transferobject.PersonTO;
-import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
-
-import com.google.common.collect.Lists;
 
 public class EarlyAlertStudentReportTO {
 

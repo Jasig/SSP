@@ -103,22 +103,22 @@ public class EarlyAlertClassReportController extends EarlyAlertReportBaseControl
 	public @ResponseBody
 	void getEarlyAlertClassReport(
 			final HttpServletResponse response,		
-			final @RequestParam(required = false) String campusName,
-			final @RequestParam(required = true) String termCode,			
+			final @RequestParam(required = false) UUID campusId,
+			final @RequestParam(required = false) String termCode,
+			final @RequestParam(required = false) Date createDateFrom,
+			final @RequestParam(required = false) Date createDateTo,			
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
 		final Term term = termService.getByCode(termCode);		
 		final Map<String, Object> parameters = Maps.newHashMap();
 		Campus campus = null;
-		UUID campusId = null;
 		
-		if(campusName != null && campusName.length() > 0){
-			campusId = UUID.fromString(campusName);
+		if(campusId != null){
 			campus = campusService.get(campusId);
-			parameters.put("campus", campus.getName()); 
+			parameters.put("campus", campus.getName());
 		}	
-		
+
 		parameters.put("termCode", term.getCode());
 		parameters.put("termName", term.getName());
 	

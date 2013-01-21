@@ -56,6 +56,7 @@ import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.ReferenceService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.external.ExternalPersonService;
@@ -67,6 +68,8 @@ import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.reports.CaseLoadActivityReportTO;
 import org.jasig.ssp.transferobject.reports.CaseLoadReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertTermCaseCountsTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.AbstractBaseController;
@@ -133,36 +136,66 @@ public class EarlyAlertCaseCountsReportController extends EarlyAlertReportBaseCo
 	public @ResponseBody
 	void getEarlyAlertCaseCountsReport(
 			final HttpServletResponse response,		
-			final @RequestParam(required = false) String campusName,
-			final @RequestParam(required = true) String termCode,			
+			final @RequestParam(required = false) UUID campusId,
+			final @RequestParam(required = false) List<String> termCodes,			
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 				
 		final Map<String, Object> parameters = Maps.newHashMap();
-		Campus campus = null;
-		UUID campusId = null;
 		
-		if(campusName != null && campusName.length() > 0){
-			campusId = UUID.fromString(campusName);
+		Campus campus = null;		
+		if(campusId != null){
 			campus = campusService.get(campusId);
-			parameters.put("campus", campus.getName()); 
+			parameters.put("campus", campus.getName());
+		}	
+
+		final ArrayList<EarlyAlertTermCaseCountsTO> caseLoads = new ArrayList<EarlyAlertTermCaseCountsTO>();
+		ArrayList<String> termCodesList = new ArrayList<String>();
+		ArrayList<String> termNamesList = new ArrayList<String>();
+		
+		if(termCodes != null){
+			for(String termCode:termCodes)
+			{
+				final Term term = termService.getByCode(termCode);
+				termCodesList.add(term.getCode());
+				termNamesList.add(term.getName());
+				
+				EarlyAlertTermCaseCountsTO caseCounts = new EarlyAlertTermCaseCountsTO(term.getCode(),
+						term.getName(),
+						earlyAlertService.getCountOfEarlyAlertStudentsByDate(term.getStartDate(), 
+								term.getEndDate(), campus),
+						earlyAlertService.getCountOfEarlyAlertsByCreatedDate(term.getStartDate(), 
+								term.getEndDate(), campus),
+						earlyAlertResponseService.getEarlyAlertRespondedToCount(term.getStartDate(), 
+										term.getEndDate(), campus),
+						earlyAlertService.getCountOfEarlyAlertsClosedByDate(term.getStartDate(), 
+												term.getEndDate(), campus)
+										);
+			
+				caseLoads.add(caseCounts);
+	
+			}
+			parameters.put("termCodes", concatNamesFromStrings(termCodesList) );
+			parameters.put("termNames", concatNamesFromStrings(termNamesList));
+		}else{
+			
+			EarlyAlertTermCaseCountsTO caseCounts = new EarlyAlertTermCaseCountsTO("All",
+					"All",
+					earlyAlertService.getCountOfEarlyAlertStudentsByDate(null, null, campus),
+					earlyAlertService.getCountOfEarlyAlertsByCreatedDate(null, null, campus),
+					earlyAlertResponseService.getEarlyAlertRespondedToCount(null, null, campus),
+					earlyAlertService.getCountOfEarlyAlertsClosedByDate(null, null, campus)
+									);
+		
+			caseLoads.add(caseCounts);
+			
+			parameters.put("termCodes", "All" );
+			parameters.put("termNames", "All");
 		}
 		
-		final Term term = termService.getByCode(termCode);
 		
-		parameters.put("termCode", term.getCode());
-		parameters.put("termName", term.getName());
-	
-		parameters.put("totalStudents", earlyAlertService.getCountOfEarlyAlertStudentsByDate(term.getStartDate(), 
-				term.getEndDate(), campus));
-		parameters.put("totalCases",  earlyAlertService.getCountOfEarlyAlertsByCreatedDate(term.getStartDate(), 
-				term.getEndDate(), campus));
-		parameters.put("totalRespondedTo", earlyAlertResponseService.getEarlyAlertRespondedToCount(term.getStartDate(), 
-				term.getEndDate(), campus));
-		parameters.put("totalClosed", earlyAlertService.getCountOfEarlyAlertsClosedByDate(term.getStartDate(), 
-				term.getEndDate(), campus));
 				
-		generateReport( response,  parameters, null,  "/reports/earlyAlertCaseCounts.jasper", 
+		generateReport( response,  parameters, caseLoads,  "/reports/earlyAlertCaseCounts.jasper", 
 				 reportType, "Early_Alert_Case_Counts_Report");
 	}
 

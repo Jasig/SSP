@@ -38,6 +38,7 @@ import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
@@ -45,6 +46,7 @@ import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
+import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -86,6 +88,8 @@ public class EarlyAlertStudentReportController extends EarlyAlertReportBaseContr
 	@Autowired
 	protected transient StudentTypeService studentTypeService;	
 	@Autowired
+	protected transient TermService termService;
+	@Autowired
 	protected transient EarlyAlertService earlyAlertService;
 	@Autowired
 	protected transient EarlyAlertResponseService earlyAlertResponseService;
@@ -114,17 +118,14 @@ public class EarlyAlertStudentReportController extends EarlyAlertReportBaseContr
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
+			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
 		
-		Person coach = null;
-		PersonTO coachTO = null;
-		if(coachId != null)
-		{
-			coach = personService.get(coachId);
-			coachTO = personTOFactory.from(coach);
-		}	
+		PersonTO coachTO = getPerson(coachId, personService, personTOFactory);
+		
+		DateTerm termDate =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
 		
 		List<UUID> cleanSpecialServiceGroupIds = cleanUUIDListOfNulls(specialServiceGroupIds);
 		
@@ -153,24 +154,14 @@ public class EarlyAlertStudentReportController extends EarlyAlertReportBaseContr
 
 		final Map<String, Object> parameters = Maps.newHashMap();
 		
-		parameters.put("coachName", coachTO == null ? "" : 
-			coachTO.getFirstName() + " " + coachTO.getLastName());
-		
+		parameters.put("reportDate", new Date());
+		parameters.put("coachName", this.getFullName(coachTO));
 		parameters.put("studentTypes", concatStudentTypesFromUUIDs(studentTypeIds, studentTypeService));
 		parameters.put("programStatus", programStatusName);
 		parameters.put("specialServiceGroupNames", concatSpecialGroupsNameFromUUIDs(specialServiceGroupIds, ssgService));
-		parameters.put("reportDate", new Date());
+		parameters.put("startDate", termDate.startDateString());
+		parameters.put("endDate", termDate.endDateString());
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		if(createDateFrom != null)
-			parameters.put("startDate", sdf.format(createDateFrom));
-		else
-			parameters.put("startDate","Not Given");
-			
-		if(createDateTo != null)
-			parameters.put("endDate", sdf.format(createDateTo));
-		else
-			parameters.put("endDate","Not Given");	
 
 		generateReport(response,  parameters, people.getRows(),  "/reports/earlyAlertStudentReport.jasper", 
 				 reportType, "Early_Alert_Student_Report");

@@ -49,6 +49,7 @@ import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentProgressTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
+import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -125,14 +126,8 @@ public class EarlyAlertStudentProgressReportController extends EarlyAlertReportB
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
-		Person coach = null;
-		PersonTO coachTO = null;
-		if(coachId != null)
-		{
-			coach = personService.get(coachId);
-			coachTO = personTOFactory.from(coach);
-		}	
-		
+		PersonTO coachTO = getPerson(coachId, personService, personTOFactory);
+				
 		Term initialTerm = termService.getByCode(termCodeInitial);
 		Term comparisonTerm = termService.getByCode(termCodeComparitor);
 

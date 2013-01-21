@@ -171,14 +171,14 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Cohort Term:</span>
+			<span>Anticipated Start Term:</span>
 		</div>
 		<div class="ea-clear"></div>
 
 		<!-- Anticipated Start Year -->
 		<div class="ea-input">
 			<select id="anticipatedStartYear" name="anticipatedStartYear">
-				<option value=""></option>
+				<option value="">All</option>
 				<option value="2010" class="test-class-1">2010</option>
 				<option value="2011" class="test-class-1">2011</option>
 				<option value="2012" class="test-class-1">2012</option>
@@ -193,7 +193,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Cohort Year:</span>
+			<span>Anticipated Start Year:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -586,7 +586,7 @@
 		
 		<!-- Term -->
 		<div class="ea-input">
-			<select id="termCode" name="termCode" class="input-term-group">
+			<select id="termCodes" multiple="multiple" name="termCodes" class="input-term-group">
 			</select>
 		</div>
 		<div class="ea-label">
@@ -682,7 +682,7 @@
 			<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentCreateDateFrom" />
 		</div>
 		<div class="ea-label">
-			<span>Start Date:</span>
+			<span>Start Date (inclusive)::</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -691,7 +691,7 @@
 			<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentCreateDateTo" />
 		</div>
 		<div class="ea-label">
-			<span>End Date:</span>
+			<span>End Date (exclusive)::</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -782,14 +782,14 @@
 					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentReferralCreateDateFrom">
 				</div>
 				<div class="ea-label">
-					<span>Start Date:</span>
+					<span>Start Date (inclusive)::</span>
 				</div>
 				<div class="ea-clear"></div><!-- Date To -->
 				<div class="ea-input">
 					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentReferralCreateDateTo">
 				</div>
 				<div class="ea-label">
-					<span>End Date:</span>
+					<span>End Date (exclusive)::</span>
 				</div>
 				<div class="ea-clear"></div>
 			</div>
@@ -961,14 +961,14 @@
 					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentOutreachCreateDateFrom">
 				</div>
 				<div class="ea-label">
-					<span>Start Date:</span>
+					<span>Start Date (inclusive)::</span>
 				</div>
 				<div class="ea-clear"></div><!-- Date To -->
 				<div class="ea-input">
 					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentOutreachCreateDateTo">
 				</div>
 				<div class="ea-label">
-					<span>End Date:</span>
+					<span>End Date (exclusive)::</span>
 				</div>
 				<div class="ea-clear"></div>
 			</div>
@@ -1074,14 +1074,14 @@
 					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentOutcomeCreateDateFrom">
 				</div>
 				<div class="ea-label">
-					<span>Start Date:</span>
+					<span>Start Date (inclusive)::</span>
 				</div>
 				<div class="ea-clear"></div><!-- Date To -->
 				<div class="ea-input">
 					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentOutcomeCreateDateTo">
 				</div>
 				<div class="ea-label">
-					<span>End Date:</span>
+					<span>End Date (exclusive)::</span>
 				</div>
 				<div class="ea-clear"></div>
 			</div>

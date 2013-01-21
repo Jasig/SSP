@@ -52,6 +52,7 @@ import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutcomeReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
+import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -129,21 +130,9 @@ public class EarlyAlertStudentOutcomeReportController extends EarlyAlertReportBa
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
-		Person coach = null;
-		PersonTO coachTO = null;
-		if(coachId != null)
-		{
-			coach = personService.get(coachId);
-			coachTO = personTOFactory.from(coach);
-		}	
-		Term term = null;
-		Date startDate = createDateFrom;
-		Date endDate = createDateTo;
-		if(termCode != null && termCode.length() > 0){
-			term = termService.getByCode(termCode);
-			startDate = term.getStartDate();
-			endDate = term.getEndDate();
-		}
+		final PersonTO coachTO = getPerson(coachId, personService, personTOFactory);
+		
+		final DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
 
 		final AddressLabelSearchTO addressLabelSearchTO = new AddressLabelSearchTO(
 				coachTO,
@@ -152,7 +141,7 @@ public class EarlyAlertStudentOutcomeReportController extends EarlyAlertReportBa
 				null);
 		
 		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(addressLabelSearchTO, 
-				startDate, endDate);
+				dateTerm.getStartDate(), dateTerm.getEndDate());
 
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
@@ -181,11 +170,10 @@ public class EarlyAlertStudentOutcomeReportController extends EarlyAlertReportBa
 				studentTypeService));
 		parameters.put("specialServiceGroupNames", concatSpecialGroupsNameFromUUIDs(specialServiceGroupIds, ssgService));
 		
-		parameters.put("term", term != null ? term.getName() : "");
 		
 		parameters.put("reportDate", new Date());	
 		
-		setStartDateEndDateToMap(parameters, startDate, endDate);
+	this.setDateTermToMap(parameters, dateTerm);
 		
 		generateReport( response,  parameters, people,  "/reports/earlyAlertStudentOutcomeReport.jasper", 
 				 reportType, "Early_Alert_Student_Outcome_Report");
