@@ -105,7 +105,7 @@ public class EarlyAlertStudentReferralReportController extends EarlyAlertReportB
 	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	@ResponseBody
-	public void getEarlyAlertReferralReport(
+	public void getEarlyAlertStudentReferralReport(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) UUID coachId,			

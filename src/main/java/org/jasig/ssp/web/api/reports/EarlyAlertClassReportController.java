@@ -101,7 +101,7 @@ public class EarlyAlertClassReportController extends EarlyAlertReportBaseControl
 	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	public @ResponseBody
-	void getCaseLoadActivity(
+	void getEarlyAlertClassReport(
 			final HttpServletResponse response,		
 			final @RequestParam(required = false) String campusName,
 			final @RequestParam(required = true) String termCode,			

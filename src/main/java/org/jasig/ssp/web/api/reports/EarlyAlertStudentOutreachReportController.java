@@ -101,7 +101,7 @@ public class EarlyAlertStudentOutreachReportController extends EarlyAlertReportB
 	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public void getAddressLabels(
+	public void getEarlyAlertStudentOutreachReport(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) List<UUID> earlyAlertOutcomes,

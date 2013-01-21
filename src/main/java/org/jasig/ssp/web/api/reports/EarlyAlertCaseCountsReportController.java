@@ -131,7 +131,7 @@ public class EarlyAlertCaseCountsReportController extends EarlyAlertReportBaseCo
 	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	public @ResponseBody
-	void getCaseLoadActivity(
+	void getEarlyAlertCaseCountsReport(
 			final HttpServletResponse response,		
 			final @RequestParam(required = false) String campusName,
 			final @RequestParam(required = true) String termCode,			
