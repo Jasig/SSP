@@ -78,15 +78,16 @@
 								<p>Please log in.</p>
 							</c:otherwise>
 						</c:choose>
-						<form action="../j_spring_security_check" method="post" data-ajax="false">
+						<form id="loginForm" action="/ssp-platform/Login" method="post" data-ajax="false">
 						<div data-role="fieldcontain">
 						    <label for="j_username">Username:</label>
-						    <input type="text" id="j_username" name="j_username" />
+						    <input type="text" id="j_username" name="userName" />
 						</div>
 						<div data-role="fieldcontain">
 							<label for="j_password">Password:</label>
-						    <input type="password" id="j_password" name="j_password" />
+						    <input type="password" id="j_password" name="password" />
 						</div>
+						    <input type="hidden" id="uP_fname" name="uP_fname" value="my-gps"/>
 						<div class="login-form-button-container">
 							<input type="submit" data-theme="b" data-inline="true" name="submit" value="Login" />
 						</div>
