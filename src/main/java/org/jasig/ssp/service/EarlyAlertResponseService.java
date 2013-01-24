@@ -30,6 +30,7 @@ import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
@@ -62,6 +63,24 @@ public interface EarlyAlertResponseService
 
 	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(Date createDateFrom,
 			Date createDateTo, List<UUID> outcomes, Person coach);
+	
+	
+	/**
+	 * Retrieves counts of Distinct Students and EarlyAlertResponses Grouped by Coaches
+	 * Returned As EntityStudentCountByCoachTO
+	 * @param coaches
+	 * @param createDateFrom
+	 * @param createDateTo
+	 * @param studentTypeIds
+	 * @param sAndP
+	 * @return
+	 */
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertResponseCountByCoaches(List<Person> coaches, 
+			Date createDateFrom, 
+			Date createDateTo,
+			List<UUID> studentTypeIds, 
+			SortingAndPaging sAndP);
+
 	
 	/**
 	 * Gets a list of {@link Person} objects based on the specified criteria and

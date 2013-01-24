@@ -28,6 +28,11 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -43,29 +48,10 @@ public class JournalEntryDao
 
 		final Criteria query = createCriteria();
 
-		
-		
-		// add possible studentTypeId Check
-		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
-		
-			query.createAlias("person",
-				"person")
-				.add(Restrictions
-						.in("person.studentType.id",studentTypeIds));
-					
-		}
+		setCriteria( query,  createDateFrom,  createDateTo, studentTypeIds);
 		
 		// restrict to coach
 		query.add(Restrictions.eq("createdBy", coach));
-		if (createDateFrom != null) {
-			query.add(Restrictions.ge("createdDate",
-					createDateFrom));
-		}
-
-		if (createDateTo != null) {
-			query.add(Restrictions.le("createdDate",
-					createDateTo));
-		}
 
 		// item count
 		Long totalRows = (Long) query.setProjection(Projections.rowCount())
@@ -78,6 +64,40 @@ public class JournalEntryDao
 
 		final Criteria query = createCriteria();
  
+		setCriteria( query,  createDateFrom,  createDateTo, studentTypeIds);
+		
+		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", coach))
+        .setProjection(Projections.countDistinct("person")).list().get(0);
+
+		return totalRows;
+	}
+	
+
+	@SuppressWarnings("unchecked")
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentJournalCountForCoaches(List<Person> coaches, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, SortingAndPaging sAndP) {
+
+		final Criteria query = createCriteria();
+ 
+		setCriteria( query,  createDateFrom,  createDateTo, studentTypeIds);
+		query.add(Restrictions.in("createdBy", coaches));
+		// item count
+		Long totalRows = 0L;
+		if ((sAndP != null) && sAndP.isPaged()) {
+				totalRows = (Long) query.setProjection(Projections.rowCount())
+							.uniqueResult();
+		}		
+		
+		query.setProjection(Projections.projectionList().
+				add(Projections.countDistinct("person").as("journal_studentCount")).
+				add(Projections.countDistinct("id").as("journal_entityCount")).
+				add(Projections.groupProperty("createdBy").as("journal_coach"))).setResultTransformer(
+						new NamespacedAliasToBeanResultTransformer(
+								EntityStudentCountByCoachTO.class, "journal_"));
+		
+		return new PagingWrapper<EntityStudentCountByCoachTO>(totalRows, (List<EntityStudentCountByCoachTO>)query.list());
+	}
+	
+	private Criteria setCriteria(Criteria query, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds){
 		// add possible studentTypeId Check
 		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
 		
@@ -97,13 +117,7 @@ public class JournalEntryDao
 			query.add(Restrictions.le("createdDate",
 					createDateTo));
 		}
-	
-		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", coach))
-        .setProjection(Projections.countDistinct("person")).list().get(0);
-		
-
-
-		return totalRows;
+		return query;	
 	}
 
 }

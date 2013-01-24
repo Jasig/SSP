@@ -8,7 +8,7 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="385"/>
-	<property name="ireport.y" value="112"/>
+	<property name="ireport.y" value="80"/>
 	<parameter name="termNames" class="java.lang.String"/>
 	<parameter name="termCodes" class="java.lang.String"/>
 	<parameter name="campus" class="java.lang.String"/>
@@ -213,19 +213,19 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalRespondedTo_1}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="8416a64b-f939-48ce-981c-5b8a464fd36c" mode="Opaque" x="497" y="2" width="43" height="16"/>
-				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{totalClosed_1}]]></textFieldExpression>
-			</textField>
 			<textField isStretchWithOverflow="true" pattern="(###.0)%" isBlankWhenNull="true">
 				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" mode="Opaque" x="455" y="2" width="42" height="16" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalCases_1} != null && $V{totalCases_1} > 0 ? $V{totalRespondedTo_1}/$V{totalCases_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8416a64b-f939-48ce-981c-5b8a464fd36c" mode="Opaque" x="497" y="2" width="43" height="16"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalClosed_1}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="(###.0)%" isBlankWhenNull="true">
 				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" mode="Opaque" x="540" y="2" width="42" height="16" isRemoveLineWhenBlank="true"/>

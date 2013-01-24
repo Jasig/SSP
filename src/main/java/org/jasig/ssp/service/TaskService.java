@@ -31,6 +31,8 @@ import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 
@@ -253,5 +255,11 @@ public interface TaskService
 	
 	Long getStudentTaskCountForCoach(Person coach, Date createDateFrom,
 			Date createDateTo, List<UUID> studentTypeIds);
+	
+	PagingWrapper<EntityStudentCountByCoachTO> getStudentTaskCountForCoaches(List<Person> coaches, 
+			Date createDateFrom, 
+			Date createDateTo, 
+			List<UUID> studentTypeIds, 
+			SortingAndPaging sAndP); 
 
 }

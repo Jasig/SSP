@@ -40,6 +40,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -251,6 +252,50 @@ public class EarlyAlertResponseDao extends
 								EarlyAlertStudentReportTO.class, "early_alert_response_"));
 		
 		return criteria.list();
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertResponseCountByCoaches(List<Person> coaches, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, SortingAndPaging sAndP) {
+
+		final Criteria query = createCriteria();
+ 
+		if (createDateFrom != null) {
+			query.add(Restrictions.ge("createdDate",
+					createDateFrom));
+		}
+
+		if (createDateTo != null) {
+			query.add(Restrictions.le("createdDate",
+					createDateTo));
+		}
+		
+		
+		
+		query.createAlias("earlyAlert", "earlyAlert");
+		Criteria personCriteria = query.createAlias("earlyAlert.person", "person");
+		personCriteria.add(Restrictions.in("earlyAlert.createdBy", coaches));
+		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
+			personCriteria.add(Restrictions
+					.in("person.studentType.id",studentTypeIds));
+		}
+		// item count
+		Long totalRows = 0L;
+		if ((sAndP != null) && sAndP.isPaged()) {
+			totalRows = (Long) query.setProjection(Projections.countDistinct("earlyAlert.createdBy"))
+					.uniqueResult();
+		}
+		
+		query.setProjection(Projections.projectionList().
+        		add(Projections.countDistinct("earlyAlert.person").as("earlyalertresponse_studentCount")).
+        		add(Projections.countDistinct("id").as("earlyalertresponse_entityCount")).
+        		add(Projections.groupProperty("earlyAlert.createdBy").as("earlyalertresponse_coach")));
+		
+		query.setResultTransformer(
+						new NamespacedAliasToBeanResultTransformer(
+								EntityStudentCountByCoachTO.class, "earlyalertresponse_"));
+		
+		return new PagingWrapper<EntityStudentCountByCoachTO>(totalRows,  (List<EntityStudentCountByCoachTO>)query.list());
 	}
 	
 	

@@ -133,7 +133,7 @@ public class EarlyAlertStudentOutcomeReportController extends EarlyAlertReportBa
 		final PersonTO coachTO = getPerson(coachId, personService, personTOFactory);
 		
 		final DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
-
+		
 		final AddressLabelSearchTO addressLabelSearchTO = new AddressLabelSearchTO(
 				coachTO,
 				programStatus, specialServiceGroupIds, null, null, null,
@@ -173,7 +173,7 @@ public class EarlyAlertStudentOutcomeReportController extends EarlyAlertReportBa
 		
 		parameters.put("reportDate", new Date());	
 		
-	this.setDateTermToMap(parameters, dateTerm);
+		setDateTermToMap(parameters, dateTerm);
 		
 		generateReport( response,  parameters, people,  "/reports/earlyAlertStudentOutcomeReport.jasper", 
 				 reportType, "Early_Alert_Student_Outcome_Report");
