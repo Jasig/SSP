@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.service.reference;
 
+import java.util.Map;
+
 import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.ReferenceService;
@@ -82,10 +84,24 @@ public interface ConfigService extends
 	int getByNameExceptionOrDefaultAsInt(String name);
 
 	/**
+	 *
+	 * @param name
+	 * @param clazz
+	 * @param defaultTo
+	 * @param <T>
+	 * @param <E>
+	 * @return
+	 * @throws ConfigException
+	 */
+	<T,E extends T> T getObjectByNameOrDefault(String name,
+			Class<T> clazz, E defaultTo) throws ConfigException;
+
+	/**
 	 * The database-specific CONCAT operator, because some databases don't
 	 * accept ANSI SQL.
 	 * 
 	 * @return database-specific CONCAT operator
 	 */
 	String getDatabaseConcatOperator();
+
 }
