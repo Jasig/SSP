@@ -73,4 +73,5 @@
 
 	<include file="org/jasig/ssp/database/integrationchangesets/i000003.xml" />
 
+	<include file="org/jasig/ssp/database/changesets/000017.xml" />
 </databaseChangeLog>

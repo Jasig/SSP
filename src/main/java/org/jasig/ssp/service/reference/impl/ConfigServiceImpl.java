@@ -18,8 +18,10 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
+import java.io.IOException;
 import java.util.Locale;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.plexus.util.StringUtils;
 import org.jasig.ssp.dao.reference.ConfigDao;
 import org.jasig.ssp.model.reference.Config;
@@ -50,6 +52,8 @@ public class ConfigServiceImpl extends
 	@Value("#{configProperties.db_dialect}")
 	private transient String dialect;
 
+	private ObjectMapper objectMapper = new ObjectMapper();
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ConfigServiceImpl.class);
 
@@ -74,6 +78,30 @@ public class ConfigServiceImpl extends
 			return "+";
 		} else {
 			return "||";
+		}
+	}
+
+	@Override
+	public <T,E extends T> T getObjectByNameOrDefault(String name,
+			Class<T> clazz, E defaultTo) {
+		final Config config = getByName(name);
+		String serialized = null;
+		if ( config == null ) {
+			return defaultTo;
+		}
+		serialized = config.getValue();
+		if ( serialized == null ) {
+			serialized = config.getDefaultValue();
+		}
+		if ( serialized == null ) {
+			return defaultTo;
+		}
+		try {
+			return (T)objectMapper.readValue(serialized, clazz);
+		} catch (IOException e) {
+			throw new ConfigException(
+					"Failed to deserialize value for config entry named ["
+							+ name + "]", e);
 		}
 	}
 
