@@ -65,7 +65,22 @@ var ssp = ssp || {};
 			}).error(function(jqXHR, textStatus, errorThrown) {
 				alert(jqXHR + " " + textStatus + " " + errorThrown);
 			});
-		}		
+		}	
+		
+		var loadReportYearInput = function(url, container) {
+			$.getJSON(url, function(data) {
+				var values = new Array();
+				$.each(data.rows, function(i, row) {
+					if($.inArray(row.reportYear, values) < 0){
+						values.push(row.reportYear);
+						addSelectItem(row.reportYear, row.reportYear, container);
+					}
+				});
+
+			}).error(function(jqXHR, textStatus, errorThrown) {
+				alert(jqXHR + " " + textStatus + " " + errorThrown);
+			});
+		}
 
 		var loadTextForm = function(url, container) {
 			$.getJSON(url, function(data) {
@@ -99,6 +114,9 @@ var ssp = ssp || {};
 							.locate('earlyAlertOutcomeGroup'));		
 			loadTermInput("/ssp/api/1/reference/term/", that
 					.locate('termGroup'));
+			
+			loadReportYearInput("/ssp/api/1/reference/term/", that
+					.locate('reportYearGroup'));
 			// 1000 limit is max allowed by server side
 			loadCoachInput("/ssp/api/1/person/coach/?sort=lastName&page=1&start=0&limit=1000", that
 					.locate('assignedCounselorGroup'));			
@@ -277,6 +295,7 @@ var ssp = ssp || {};
 							assignedCounselorGroup : '.input-assigned-counselor-group',
 							campusGroup: '.input-campus-group',
 							termGroup: '.input-term-group',
+							reportYearGroup: '.input-report-year-group',
 							earlyAlertOutcomeGroup: '.input-early-alert-outcome-group',
 							calendarType : '.input-calendar-type',
 							switchDateRangeType : '.switch-date-range-type',

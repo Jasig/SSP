@@ -121,14 +121,14 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 			final @RequestParam(required = false) UUID coachId,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) String termCode,
-			final @RequestParam(required = false) Date caDateFrom,
-			final @RequestParam(required = false) Date caDateTo,
+			final @RequestParam(required = false) Date createDateFrom,
+			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 
 		// populate coaches to search for
 		
-		final DateTerm dateTerm =  new DateTerm(caDateFrom,  caDateTo, termCode, termService);
+		final DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
 
 		List<Person> coaches;
 		if (coachId != null) {

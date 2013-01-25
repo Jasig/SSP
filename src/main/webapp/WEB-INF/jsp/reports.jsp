@@ -29,7 +29,8 @@
 <c:set var="n"><portlet:namespace/></c:set>
 
 <script src="<rs:resourceURL value="/rs/jquery/1.6.1/jquery-1.6.1.min.js"/>" type="text/javascript"></script>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"></script>
+<!-- <script src="http://code.jquery.com/jquery-latest.js"></script> -->
 <script src="<rs:resourceURL value="/rs/jqueryui/1.8.13/jquery-ui-1.8.13.min.js"/>" type="text/javascript"></script>
 <script src="<rs:resourceURL value="/rs/fluid/1.4.0/js/fluid-all-1.4.0.min.js"/>" type="text/javascript"></script>
 <script src="<c:url value="/js/reports.js" />" type="text/javascript"></script>
@@ -162,38 +163,23 @@
 
 		<!-- Anticipated Start Term -->
 		<div class="ea-input">
-			<select id="anticipatedStartTerm" name="anticipatedStartTerm">
-				<option value=""></option>
-				<option value="Fall" class="test-class-1">Fall</option>
-				<option value="Winter" class="test-class-1">Winter</option>
-				<option value="Spring" class="test-class-1">Spring</option>
-				<option value="Summer" class="test-class-1">Summer</option>
+			<select id="anticipatedStartTermGeneralStudent" multiple="multiple" name="anticipatedStartTerm" class="input-term-group">
+			<option value="">N/A</option>
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Anticipated Start Term:</span>
+			<span>Cohort Term:</span>
 		</div>
 		<div class="ea-clear"></div>
 
 		<!-- Anticipated Start Year -->
 		<div class="ea-input">
-			<select id="anticipatedStartYear" name="anticipatedStartYear">
-				<option value="">All</option>
-				<option value="2010" class="test-class-1">2010</option>
-				<option value="2011" class="test-class-1">2011</option>
-				<option value="2012" class="test-class-1">2012</option>
-				<option value="2013" class="test-class-1">2013</option>
-				<option value="2014" class="test-class-1">2014</option>
-				<option value="2015" class="test-class-1">2015</option>
-				<option value="2016" class="test-class-1">2016</option>
-				<option value="2017" class="test-class-1">2017</option>
-				<option value="2018" class="test-class-1">2018</option>
-				<option value="2019" class="test-class-1">2019</option>
-				<option value="2020" class="test-class-1">2020</option>
+			<select id="anticipatedStartYearGeneralStudent" multiple="multiple" name="anticipatedStartYear" class="input-report-year-group">
+			<option value="">N/A</option>
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Anticipated Start Year:</span>
+			<span>Cohort Year:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -307,15 +293,11 @@
 			<span>Student Added To (exclusive):</span>
 		</div>
 		<div class="ea-clear"></div>
-
+		
 		<!-- Anticipated Start Term -->
 		<div class="ea-input">
-			<select id="anticipatedStartTerm" name="anticipatedStartTerm">
-				<option value=""></option>
-				<option value="Fall" class="test-class-1">Fall</option>
-				<option value="Winter" class="test-class-1">Winter</option>
-				<option value="Spring" class="test-class-1">Spring</option>
-				<option value="Summer" class="test-class-1">Summer</option>
+			<select id="anticipatedStartTerm" multiple="multiple" name="anticipatedStartTerm" class="input-term-group">
+			<option value="">N/A</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -325,19 +307,8 @@
 
 		<!-- Anticipated Start Year -->
 		<div class="ea-input">
-			<select id="anticipatedStartYear" name="anticipatedStartYear">
-				<option value=""></option>
-				<option value="2010" class="test-class-1">2010</option>
-				<option value="2011" class="test-class-1">2011</option>
-				<option value="2012" class="test-class-1">2012</option>
-				<option value="2013" class="test-class-1">2013</option>
-				<option value="2014" class="test-class-1">2014</option>
-				<option value="2015" class="test-class-1">2015</option>
-				<option value="2016" class="test-class-1">2016</option>
-				<option value="2017" class="test-class-1">2017</option>
-				<option value="2018" class="test-class-1">2018</option>
-				<option value="2019" class="test-class-1">2019</option>
-				<option value="2020" class="test-class-1">2020</option>
+			<select id="anticipatedStartYear" multiple="multiple" name="anticipatedStartYear" class="input-report-year-group">
+			<option value="">N/A</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -405,6 +376,43 @@
 			<span>Student Type:</span>
 		</div>
 		<div class="ea-clear"></div>
+		
+		<!-- Semester Date Range Selection -->
+		<div class="ea-time-span">
+			<div class="ea-term">
+				<div class="ea-input">
+					<select id="caseloadActivityTermCode" name="termCode" class="input-term-group">
+						<option value=""></option>
+						</select>
+				</div>
+				<div class="ea-label">
+					<span>Term:</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-date-range">
+				<!-- Date From -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="caseloadActivityCreateDateFrom">
+				</div>
+				<div class="ea-label">
+					<span>Start Date (inclusive)::</span>
+				</div>
+				<div class="ea-clear"></div><!-- Date To -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateTo" id="caseloadActivityCreateDateTo">
+				</div>
+				<div class="ea-label">
+					<span>End Date (exclusive)::</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-buttons">
+				<div>
+					<button class="switch-date-range-type button" value="setbyrange"></button>
+				</div>
+			</div>
+		</div>
 
 		<!-- Date From -->
 		<div class="ea-input">
@@ -553,11 +561,6 @@
 	</form>
 </div>
 
-
-
-
-
-
  
 <div class="hideable-form confidentiality-agreement-form" style="width:800; display:none" >
 <h1>Confidentiality Agreement Form</h1>
@@ -587,6 +590,7 @@
 		<!-- Term -->
 		<div class="ea-input">
 			<select id="termCodes" multiple="multiple" name="termCodes" class="input-term-group">
+			<option value="">All</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -676,24 +680,45 @@
 			<span>Special Service Groups:</span>
 		</div>
 		<div class="ea-clear"></div>
+		
+		<!-- Semester Date Range Selection -->
+		<div class="ea-time-span">
+			<div class="ea-term">
+				<div class="ea-input">
+					<select id="earlyAlertStudentTermCode" name="termCode" class="input-term-group">
+						<option value=""></option>
+						</select>
+				</div>
+				<div class="ea-label">
+					<span>Term:</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-date-range">
+				<!-- Date From -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentCreateDateFrom">
+				</div>
+				<div class="ea-label">
+					<span>Start Date (inclusive)::</span>
+				</div>
+				<div class="ea-clear"></div><!-- Date To -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentCreateDateTo">
+				</div>
+				<div class="ea-label">
+					<span>End Date (exclusive)::</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-buttons">
+				<div>
+					<button class="switch-date-range-type button" value="setbyrange"></button>
+				</div>
+			</div>
+		</div>
 
-		<!-- Date From -->
-		<div class="ea-input">
-			<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentCreateDateFrom" />
-		</div>
-		<div class="ea-label">
-			<span>Start Date (inclusive)::</span>
-		</div>
-		<div class="ea-clear"></div>
-
-		<!-- Date To -->
-		<div class="ea-input">
-			<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentCreateDateTo" />
-		</div>
-		<div class="ea-label">
-			<span>End Date (exclusive)::</span>
-		</div>
-		<div class="ea-clear"></div>
+	
 
 		<!-- output type -->
 		<div class="ea-input">
