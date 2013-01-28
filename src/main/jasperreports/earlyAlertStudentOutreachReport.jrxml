@@ -32,7 +32,7 @@
 	<parameter name="startDate" class="java.lang.String"/>
 	<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="term" class="java.lang.String"/>
-	<parameter name="earlyAlertOutcome" class="java.lang.String"/>
+	<parameter name="earlyAlertOutcomeNames" class="java.lang.String"/>
 	<field name="coach" class="org.jasig.ssp.transferobject.CoachPersonLiteTO"/>
 	<field name="totalEarlyAlerts" class="java.lang.Long"/>
 	<field name="countPhoneCalls" class="java.lang.Long"/>
@@ -97,7 +97,7 @@
 			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
 				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="115" y="15" width="209" height="15"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{earlyAlertOutcome}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{earlyAlertOutcomeNames}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

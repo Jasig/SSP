@@ -32,7 +32,6 @@ import net.sf.jasperreports.engine.JRException;
 
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.service.EarlyAlertService;
@@ -71,8 +70,11 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/earlyalertstudent")
-public class EarlyAlertStudentReportController extends EarlyAlertReportBaseController {
+public class EarlyAlertStudentReportController extends ReportBaseController {
 
+	private static final String REPORT_URL = "/reports/earlyAlertStudentReport.jasper";
+	private static final String REPORT_FILE_TITLE = "Early_Alert_Student_Report";
+	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AddressLabelsReportController.class);
 
@@ -99,7 +101,7 @@ public class EarlyAlertStudentReportController extends EarlyAlertReportBaseContr
 
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
-		final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy",
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT,
 				Locale.US);
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(
@@ -119,21 +121,22 @@ public class EarlyAlertStudentReportController extends EarlyAlertReportBaseContr
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false) String termCode,
-			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
+			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
 		
-		PersonTO coachTO = getPerson(coachId, personService, personTOFactory);
+		PersonTO coachTO = SearchParameters.getPerson(coachId, personService, personTOFactory);
 		
 		DateTerm termDate =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
 		
-		List<UUID> cleanSpecialServiceGroupIds = cleanUUIDListOfNulls(specialServiceGroupIds);
-		
+		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
+		final List<UUID> cleanSpecialServiceGroupIds = SearchParameters.cleanUUIDListOfNulls(specialServiceGroupIds);
+
 
 		final AddressLabelSearchTO addressLabelSearchTO = new AddressLabelSearchTO(
 				coachTO,
 				programStatus, cleanSpecialServiceGroupIds, null, null, null,
-				studentTypeIds, null,
+				cleanStudentTypeIds, null,
 				null);
 		
 		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(addressLabelSearchTO, createDateFrom, createDateTo);
@@ -145,26 +148,17 @@ public class EarlyAlertStudentReportController extends EarlyAlertReportBaseContr
 				searchForm, SortingAndPaging.createForSingleSort(status, null,
 						null, null, null, null));
 		
-	
-		// final String programStatusName = ((null!=programStatus &&
-		// !programStatus.isEmpty())?programStatus.get(0)():"");
-		// Get the actual name of the UUID for the programStatus
-		final String programStatusName = (programStatus == null ? ""
-				: programStatusService.get(programStatus).getName());
 
-		final Map<String, Object> parameters = Maps.newHashMap();
+		final Map<String, Object> map = Maps.newHashMap();
 		
-		parameters.put("reportDate", new Date());
-		parameters.put("coachName", this.getFullName(coachTO));
-		parameters.put("studentTypes", concatStudentTypesFromUUIDs(studentTypeIds, studentTypeService));
-		parameters.put("programStatus", programStatusName);
-		parameters.put("specialServiceGroupNames", concatSpecialGroupsNameFromUUIDs(specialServiceGroupIds, ssgService));
-		parameters.put("startDate", termDate.startDateString());
-		parameters.put("endDate", termDate.endDateString());
-		
+		SearchParameters.addReportDateToMap(map);
+		SearchParameters.addCoachNameToMap(coachTO, map);
+		SearchParameters.addStudentTypesToMap(cleanStudentTypeIds, map, studentTypeService);
+		SearchParameters.addProgramStatusToMap(programStatus, map, programStatusService);
+		SearchParameters.addSpecialGroupsNamesToMap(cleanSpecialServiceGroupIds, map, ssgService);
+		SearchParameters.addDateTermToMap(termDate, map);
 
-		generateReport(response,  parameters, people.getRows(),  "/reports/earlyAlertStudentReport.jasper", 
-				 reportType, "Early_Alert_Student_Report");
+		generateReport(response,  map, people.getRows(),  REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 	
 

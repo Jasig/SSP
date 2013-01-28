@@ -33,7 +33,6 @@ import net.sf.jasperreports.engine.JRException;
 
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertResponseService;
@@ -49,7 +48,6 @@ import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentProgressTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
-import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -74,7 +72,13 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/earlyalertstudentprogress")
-public class EarlyAlertStudentProgressReportController extends EarlyAlertReportBaseController {
+public class EarlyAlertStudentProgressReportController extends ReportBaseController {
+
+	private static final String REPORT_URL = "/reports/earlyAlertStudentProgressReport.jasper";
+	private static final String REPORT_FILE_TITLE = "Early_Alert_Student_Progress_Report";
+	private static final String INITIAL_TERM = "initialTerm";
+	private static final String COMPARISON_TERM = "comparisonTerm";
+	
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AddressLabelsReportController.class);
@@ -104,7 +108,7 @@ public class EarlyAlertStudentProgressReportController extends EarlyAlertReportB
 
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
-		final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy",
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT,
 				Locale.US);
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(
@@ -123,18 +127,20 @@ public class EarlyAlertStudentProgressReportController extends EarlyAlertReportB
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = true) String termCodeInitial,
 			final @RequestParam(required = true) String termCodeComparitor,
-			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
+			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
-		PersonTO coachTO = getPerson(coachId, personService, personTOFactory);
+		PersonTO coachTO = SearchParameters.getPerson(coachId, personService, personTOFactory);
 				
 		Term initialTerm = termService.getByCode(termCodeInitial);
 		Term comparisonTerm = termService.getByCode(termCodeComparitor);
+		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
+		final List<UUID> cleanSpecialServiceGroupIds = SearchParameters.cleanUUIDListOfNulls(specialServiceGroupIds);
 
 		final AddressLabelSearchTO addressLabelSearchTO = new AddressLabelSearchTO(
 				coachTO,
-				programStatus, specialServiceGroupIds, null, null, null,
-				studentTypeIds, 
+				programStatus, cleanSpecialServiceGroupIds, null, null, null,
+				cleanStudentTypeIds, 
 				null, null);
 		
 		final EarlyAlertStudentSearchTO initialSearchForm = new EarlyAlertStudentSearchTO(addressLabelSearchTO, 
@@ -169,28 +175,20 @@ public class EarlyAlertStudentProgressReportController extends EarlyAlertReportB
 				
 		}
 
-		// final String programStatusName = ((null!=programStatus &&
-		// !programStatus.isEmpty())?programStatus.get(0)():"");
-		// Get the actual name of the UUID for the programStatus
-		final String programStatusName = (programStatus == null ? ""
-				: programStatusService.get(programStatus).getName());
 
 		final Map<String, Object> parameters = Maps.newHashMap();
 		
-		parameters.put("coachName", getFullName(coachTO));
+		SearchParameters.addCoachNameToMap(coachTO, parameters);
 		
-		parameters.put("programStatus", programStatusName);
-		parameters.put("initialTerm", initialTerm.getName());
-		parameters.put("comparisonTerm", comparisonTerm.getName());
-		parameters.put("studentType", concatStudentTypesFromUUIDs(studentTypeIds, 
-				studentTypeService));
-		parameters.put("specialServiceGroupNames", concatSpecialGroupsNameFromUUIDs(specialServiceGroupIds, ssgService));
-
-		parameters.put("reportDate", new Date());		
-
+		SearchParameters.addProgramStatusToMap(programStatus, parameters, programStatusService);
+		SearchParameters.addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);
+		SearchParameters.addSpecialGroupsNamesToMap(cleanSpecialServiceGroupIds, parameters, ssgService);
+		SearchParameters.addReportDateToMap(parameters);
 		
-		generateReport(response,  parameters, people,  "/reports/earlyAlertStudentProgressReport.jasper", 
-				 reportType, "Early_Alert_Student_Progress_Report");
+		parameters.put(INITIAL_TERM, initialTerm.getName());
+		parameters.put(COMPARISON_TERM, comparisonTerm.getName());
+		
+		generateReport(response,  parameters, people,  REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 
 	@Override

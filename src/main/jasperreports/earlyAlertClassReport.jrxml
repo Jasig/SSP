@@ -29,10 +29,10 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="termName" class="java.lang.String"/>
-	<parameter name="campus" class="java.lang.String"/>
+	<parameter name="campusName" class="java.lang.String"/>
 	<field name="course" class="java.lang.String"/>
 	<field name="section" class="java.lang.String"/>
-	<field name="campus" class="java.lang.String"/>
+	<field name="campusName" class="java.lang.String"/>
 	<field name="countEarlyAlerts" class="java.lang.Long"/>
 	<field name="countEnrolled" class="java.lang.Long"/>
 	<field name="countPassing" class="java.lang.Long"/>
@@ -66,7 +66,7 @@
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="64aa21a8-5fbc-4465-b2c4-991e4c0e6450" x="110" y="51" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{campus}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{campusName}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="255b284c-e962-4bd2-a35c-c07141e46079" x="110" y="11" width="100" height="20"/>
@@ -163,7 +163,7 @@
 			<textField>
 				<reportElement uuid="d2028eb4-108d-4cc6-b06b-bc56a73e391d" x="117" y="3" width="58" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$F{campus}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{campusName}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="616afda9-aaf3-48e2-a5d5-18dfe2c828ac" x="175" y="3" width="100" height="20"/>

@@ -33,7 +33,6 @@ import net.sf.jasperreports.engine.JRException;
 
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.service.EarlyAlertService;
@@ -43,7 +42,6 @@ import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
-import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.util.DateTerm;
 import org.slf4j.Logger;
@@ -68,8 +66,11 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/earlyalertstudentoutreach")
-public class EarlyAlertStudentOutreachReportController extends EarlyAlertReportBaseController {
+public class EarlyAlertStudentOutreachReportController extends ReportBaseController {
 
+	private static final String REPORT_URL = "/reports/earlyAlertStudentOutreachReport.jasper";
+	private static final String REPORT_FILE_TITLE = "Early_Alert_Student_Outreach_Report";
+	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AddressLabelsReportController.class);
 
@@ -116,7 +117,7 @@ public class EarlyAlertStudentOutreachReportController extends EarlyAlertReportB
 				
 		final DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
 
-		final List<UUID> earlyAlertOutcomesClean = cleanUUIDListOfNulls(earlyAlertOutcomes);
+		final List<UUID> earlyAlertOutcomesClean = SearchParameters.cleanUUIDListOfNulls(earlyAlertOutcomes);
 		
 		final Collection<EarlyAlertStudentOutreachReportTO> outreachOutcomes = earlyAlertResponseService.getEarlyAlertOutreachCountByOutcome(dateTerm.getStartDate(), 
 				dateTerm.getEndDate(),
@@ -125,16 +126,13 @@ public class EarlyAlertStudentOutreachReportController extends EarlyAlertReportB
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
 		
-		parameters.put("earlyAlertOutcome", concatEarlyAlertOutcomesFromUUIDs(earlyAlertOutcomesClean, earlyAlertOutcomeService));
-		
-		parameters.put("term", dateTerm.getTermName());
-		parameters.put("reportDate", new Date());
-
-		setDateTermToMap(parameters, dateTerm);
+		SearchParameters.addEarlyAlertOutcomesToMap(earlyAlertOutcomesClean, parameters, earlyAlertOutcomeService);
+		SearchParameters.addReportDateToMap(parameters);
+		SearchParameters.addReportDateToMap(parameters);
+		SearchParameters.addDateTermToMap(dateTerm, parameters);
 
 
-		generateReport(response,  parameters, outreachOutcomes,  "/reports/earlyAlertStudentOutreachReport.jasper", 
-				 reportType, "Early_Alert_Student_Outreach_Report");
+		generateReport(response,  parameters, outreachOutcomes,  REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 
 	@Override

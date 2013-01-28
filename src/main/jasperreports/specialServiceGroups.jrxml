@@ -1,24 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Licensed to Jasig under one or more contributor license
-    agreements. See the NOTICE file distributed with this work
-    for additional information regarding copyright ownership.
-    Jasig licenses this file to you under the Apache License,
-    Version 2.0 (the "License"); you may not use this file
-    except in compliance with the License. You may obtain a
-    copy of the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on
-    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations
-    under the License.
-
--->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank Letter Landscape" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de052e81-a0fc-4bfe-a86d-fd593cff06df">
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
@@ -29,7 +9,7 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="specialServiceGroupNames" class="java.util.List"/>
+	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
 	<parameter name="reportDate" class="java.util.Date"/>
 	<queryString language="json">
 		<![CDATA[rows]]>
@@ -49,8 +29,8 @@
 	<field name="schoolId" class="java.lang.String">
 		<fieldDescription><![CDATA[schoolId]]></fieldDescription>
 	</field>
-	<field name="studentType" class="java.lang.String">
-		<fieldDescription><![CDATA[studentType]]></fieldDescription>
+	<field name="studentTypeNames" class="java.lang.String">
+		<fieldDescription><![CDATA[studentTypeNames]]></fieldDescription>
 	</field>
 	<variable name="rowIndex" class="java.lang.Integer">
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
@@ -151,7 +131,7 @@
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="d819ba88-7a04-430f-9fa0-0c90e5293930" x="407" y="1" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[($F{studentType} == null? "" : $F{studentType})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{studentTypeNames} == null? "" : $F{studentTypeNames})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="2477acef-4a84-48bc-877d-244b77fde610" x="5" y="1" width="97" height="20"/>

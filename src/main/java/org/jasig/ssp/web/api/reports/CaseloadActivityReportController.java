@@ -18,16 +18,11 @@
  */
 package org.jasig.ssp.web.api.reports; // NOPMD
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -35,16 +30,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRCsvExporter;
-import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
-
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertResponseService;
@@ -59,7 +45,6 @@ import org.jasig.ssp.transferobject.reports.CaseLoadActivityReportTO;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,8 +67,11 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/caseloadactivity")
-public class CaseloadActivityReportController extends AbstractBaseController {
+public class CaseloadActivityReportController extends ReportBaseController {
 
+	private static String REPORT_URL = "/reports/caseLoadActivity.jasper";
+	private static String REPORT_FILE_TITLE = "CaseLoad_Activity_Report";
+	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CaseloadActivityReportController.class);
 
@@ -106,7 +94,7 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
-		final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy",
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT,
 				Locale.US);
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(
@@ -123,51 +111,45 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
-			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
+			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 
 		// populate coaches to search for
 		
 		final DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
 
-		List<Person> coaches;
-		if (coachId != null) {
-			Person coach = personService.get(coachId);
-			coaches = new ArrayList<Person>();
-			coaches.add(coach);
-		} else {
-			coaches = new ArrayList<Person>(personService
-					.getAllCurrentCoaches(Person.PERSON_NAME_AND_ID_COMPARATOR));
-		}
+		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
+		List<Person> coaches = SearchParameters.getCoaches(coachId, personService);
 
 		List<CaseLoadActivityReportTO> caseLoadActivityReportList = new ArrayList<CaseLoadActivityReportTO>();
+		
 		
 		final PagingWrapper<EntityStudentCountByCoachTO> journalCounts = journalEntryService.getStudentJournalCountForCoaches(
 				coaches, 
 				dateTerm.getStartDate(), 
 				dateTerm.getEndDate(), 
-				studentTypeIds, 
+				cleanStudentTypeIds, 
 				null);
 		
 		final PagingWrapper<EntityStudentCountByCoachTO> taskCounts = taskService.getStudentTaskCountForCoaches(
 				coaches, 
 				dateTerm.getStartDate(), 
 				dateTerm.getEndDate(), 
-				studentTypeIds, 
+				cleanStudentTypeIds, 
 				null);
 		
 		final PagingWrapper<EntityStudentCountByCoachTO> earlyAlertCounts = earlyAlertService.getStudentEarlyAlertCountByCoaches(
 				coaches, 
 				dateTerm.getStartDate(), 
 				dateTerm.getEndDate(), 
-				studentTypeIds, 
+				cleanStudentTypeIds, 
 				null);
 		
 		final PagingWrapper<EntityStudentCountByCoachTO> earlyAlertResponseCounts = earlyAlertResponseService.getStudentEarlyAlertResponseCountByCoaches(
 				coaches, 
 				dateTerm.getStartDate(), 
 				dateTerm.getEndDate(), 
-				studentTypeIds, 
+				cleanStudentTypeIds, 
 				null);
 		
 		
@@ -194,63 +176,14 @@ public class CaseloadActivityReportController extends AbstractBaseController {
 			caseLoadActivityReportList.add(caseLoadActivityReportTO);
 		}
 
-		// Get the actual names of the UUIDs for the special groups
-		final StringBuffer studentTypeStringBuffer = new StringBuffer();
-		if ((studentTypeIds != null) && (studentTypeIds.size() > 0)) {
-			final Iterator<UUID> stIter = studentTypeIds.iterator();
-			while (stIter.hasNext()) {
-				studentTypeStringBuffer.append("\u2022 "
-						+ studentTypeService.get(stIter.next()).getName());
-				studentTypeStringBuffer.append("    ");
-			}
-		}
-
+		
 		final Map<String, Object> parameters = Maps.newHashMap();
-		parameters.put("statusDateFrom", dateTerm.getStartDate());
-		parameters.put("statusDateTo", dateTerm.getEndDate());
-		parameters.put("termCode", dateTerm.getTermCode());
-		parameters.put("termName", dateTerm.getTermName());
-		parameters.put("homeDepartment", ""); // not available yet
-		parameters.put("studentType", studentTypeStringBuffer.toString());
-
-		final JRDataSource beanDs;
-		if (caseLoadActivityReportList.isEmpty()) {
-			beanDs = new JREmptyDataSource();
-		} else {
-			beanDs = new JRBeanCollectionDataSource(caseLoadActivityReportList);
-		}
-
-		final InputStream is = getClass().getResourceAsStream(
-				"/reports/caseLoadActivity.jasper");
-		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		JasperFillManager.fillReportToStream(is, os, parameters, beanDs);
-		final InputStream decodedInput = new ByteArrayInputStream(
-				os.toByteArray());
-
-		if ("pdf".equals(reportType)) {
-			response.setHeader("Content-disposition",
-					"attachment; filename=CaseLoadActivityReport.pdf");
-			JasperExportManager.exportReportToPdfStream(decodedInput,
-					response.getOutputStream());
-		} else if ("csv".equals(reportType)) {
-			response.setContentType("application/vnd.ms-excel");
-			response.setHeader("Content-disposition",
-					"attachment; filename=CaseLoadActivityReport.csv");
-
-			final JRCsvExporter exporter = new JRCsvExporter();
-			exporter.setParameter(JRExporterParameter.INPUT_STREAM,
-					decodedInput);
-			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM,
-					response.getOutputStream());
-			exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
-					Boolean.FALSE);
-
-			exporter.exportReport();
-		}
-
-		response.flushBuffer();
-		is.close();
-		os.close();
+		SearchParameters.addDateTermToMap(dateTerm, parameters);
+		SearchParameters.addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);
+		
+		SearchParameters.addHomeDepartment(null, parameters);
+		
+		generateReport(response, parameters, caseLoadActivityReportList, REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 
 	@Override

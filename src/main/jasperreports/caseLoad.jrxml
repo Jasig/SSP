@@ -30,7 +30,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="homeDepartment" class="java.lang.String"/>
-	<parameter name="studentTypes" class="java.lang.String"/>
+	<parameter name="studentTypeNames" class="java.lang.String"/>
 	<field name="firstName" class="java.lang.String">
 		<fieldDescription><![CDATA[firstName]]></fieldDescription>
 	</field>
@@ -109,7 +109,7 @@
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="c1b42e9b-e20f-4dd3-849f-1e71fc9dbbad" x="100" y="42" width="652" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{studentTypes}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{studentTypeNames}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="255b284c-e962-4bd2-a35c-c07141e46079" x="100" y="0" width="100" height="20"/>

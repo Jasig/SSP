@@ -187,6 +187,14 @@ var ssp = ssp || {};
 				}
 				return false;
 			});
+			$('select[multiple="multiple"]').val("");
+			$('select[multiple="multiple"]').change(function(event){
+				var values = $(event.target).val();
+				var index = $.inArray("", values);
+				if(index >= 0){
+					$(event.target).find('option').not(":first-child").prop('selected', false);
+				}
+			});
 			
 		});
 

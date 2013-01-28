@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
 
-import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertResponseService;
@@ -40,6 +39,7 @@ import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.CampusService;
+import org.jasig.ssp.util.DateTerm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,11 +58,14 @@ import com.google.common.collect.Maps;
 /**
  * Service methods for Reporting on Early Alert Case Counts
  * <p>
- * Mapped to URI path <code>/1/report/earlyalertcasecounts</code>
+ * Mapped to URI path <code>/1/report/earlyalertclass</code>
  */
 @Controller
 @RequestMapping("/1/report/earlyalertclass")
-public class EarlyAlertClassReportController extends EarlyAlertReportBaseController {
+public class EarlyAlertClassReportController extends ReportBaseController {
+	
+	private static final String REPORT_URL = "/reports/earlyAlertClassReport.jasper";
+	private static final String REPORT_FILE_TITLE = "Early_Alert_Class_Report";
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CaseloadActivityReportController.class);
@@ -90,7 +93,7 @@ public class EarlyAlertClassReportController extends EarlyAlertReportBaseControl
 	
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
-		final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy",
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT,
 				Locale.US);
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(
@@ -107,24 +110,17 @@ public class EarlyAlertClassReportController extends EarlyAlertReportBaseControl
 			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,			
-			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
+			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
-		final Term term = termService.getByCode(termCode);		
+		final DateTerm dateTerm = new DateTerm(createDateFrom, createDateTo, termCode, termService);		
 		final Map<String, Object> parameters = Maps.newHashMap();
-		Campus campus = null;
+		final Campus campus = SearchParameters.getCampus(campusId, campusService);
 		
-		if(campusId != null){
-			campus = campusService.get(campusId);
-			parameters.put("campus", campus.getName());
-		}	
-
-		parameters.put("termCode", term.getCode());
-		parameters.put("termName", term.getName());
-	
+		SearchParameters.addCampusToParameters(campus, parameters);
+		SearchParameters.addDateTermToMap(dateTerm, parameters);
 		
-		generateReport( response,  parameters, null,  "/reports/earlyAlertClassReport.jasper", 
-				 reportType, "Early_Alert_Class_Report");
+		generateReport( response,  parameters, null,  REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 
 	@Override

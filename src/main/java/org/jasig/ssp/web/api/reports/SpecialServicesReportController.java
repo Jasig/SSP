@@ -18,12 +18,8 @@
  */
 package org.jasig.ssp.web.api.reports;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -31,16 +27,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRCsvExporter;
-import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
-
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -51,7 +38,6 @@ import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.SpecialServicesReportingTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +57,13 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/SpecialServices")
-public class SpecialServicesReportController extends AbstractBaseController {
+public class SpecialServicesReportController extends ReportBaseController {
 
+	private static final String REPORT_URL = "/reports/specialServiceGroups.jasper";
+	private static final String REPORT_FILE_TITLE = "SpecialServicesReport";
+	private static final String REPORT_TITLE = "Special Service Groups Report";
+	private static final String DATA_FILE = "SpecialServicesReportingTO.java - Bean Array";
+	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(SpecialServicesReportController.class);
 
@@ -90,11 +81,12 @@ public class SpecialServicesReportController extends AbstractBaseController {
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
-			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
+			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 
+		final List<UUID> cleanSpecialServiceGroupIds = SearchParameters.cleanUUIDListOfNulls(specialServiceGroupIds);
 		final List<Person> people = personService
-				.peopleFromSpecialServiceGroups(specialServiceGroupIds,
+				.peopleFromSpecialServiceGroups(cleanSpecialServiceGroupIds,
 						SortingAndPaging.createForSingleSort(status, null,
 								null, null, null, null));
 
@@ -102,66 +94,20 @@ public class SpecialServicesReportController extends AbstractBaseController {
 
 		LOGGER.debug("Number of personTOs: " + personTOs.size());
 
-		// Get the actual names of the UUIDs for the special groups
-		final List<String> specialGroupsNames = new ArrayList<String>();
-		if (specialServiceGroupIds != null && specialServiceGroupIds.size() > 0) {
-			final Iterator<UUID> ssgIter = specialServiceGroupIds.iterator();
-			while (ssgIter.hasNext()) {
-				specialGroupsNames
-						.add(ssgService.get(ssgIter.next()).getName());
-			}
-		}
 
 		final Map<String, Object> parameters = Maps.newHashMap();
-		parameters.put("ReportTitle", "Special Service Groups Report");
-		parameters.put("DataFile",
-				"SpecialServicesReportingTO.java - Bean Array");
-		parameters.put("specialServiceGroupNames", specialGroupsNames);
-		parameters.put("reportDate", new Date());
+		
+		SearchParameters.addReportTitleToMap(REPORT_TITLE, parameters);
+		SearchParameters.addDataFIleToMap(DATA_FILE, parameters);
+		
+		SearchParameters.addSpecialGroupsNamesToMap(cleanSpecialServiceGroupIds, parameters, ssgService);
+		SearchParameters.addReportDateToMap(parameters);
 
 		final List<SpecialServicesReportingTO> specialServicesReportingPeopleTO = getReportablePersons(people);
 
-		JRDataSource beanDS;
-		if (specialServicesReportingPeopleTO == null
-				|| specialServicesReportingPeopleTO.size() <= 0) {
-			beanDS = new JREmptyDataSource();
-		}
-		else {
-			beanDS = new JRBeanCollectionDataSource(
-					specialServicesReportingPeopleTO);
-		}
 
-		final InputStream is = getClass().getResourceAsStream(
-				"/reports/specialServiceGroups.jasper");
-		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		JasperFillManager.fillReportToStream(is, os, parameters, beanDS);
-		final InputStream decodedInput = new ByteArrayInputStream(
-				os.toByteArray());
-
-		if ("pdf".equals(reportType)) {
-			response.setHeader("Content-disposition",
-					"attachment; filename=SpecialServicesReport.pdf");
-			JasperExportManager.exportReportToPdfStream(decodedInput,
-					response.getOutputStream());
-		} else if ("csv".equals(reportType)) {
-			response.setContentType("application/vnd.ms-excel");
-			response.setHeader("Content-disposition",
-					"attachment; filename=SpecialServicesReport.csv");
-
-			final JRCsvExporter exporter = new JRCsvExporter();
-			exporter.setParameter(JRExporterParameter.INPUT_STREAM,
-					decodedInput);
-			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM,
-					response.getOutputStream());
-			exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
-					Boolean.FALSE);
-
-			exporter.exportReport();
-		}
-
-		response.flushBuffer();
-		is.close();
-		os.close();
+		generateReport(response, parameters, specialServicesReportingPeopleTO, 
+				REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 
 	@Override

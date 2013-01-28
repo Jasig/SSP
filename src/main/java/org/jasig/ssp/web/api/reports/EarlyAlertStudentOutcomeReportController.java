@@ -36,8 +36,6 @@ import net.sf.jasperreports.engine.JRException;
 
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.service.EarlyAlertService;
@@ -77,7 +75,10 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/earlyalertstudentoutcome")
-public class EarlyAlertStudentOutcomeReportController extends EarlyAlertReportBaseController {
+public class EarlyAlertStudentOutcomeReportController extends ReportBaseController {
+
+	private static final String REPORT_URL = "/reports/earlyAlertStudentOutcomeReport.jasper";
+	private static final String REPORT_FILE_TITLE = "Early_Alert_Student_Outcome_Report";
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AddressLabelsReportController.class);
@@ -93,12 +94,16 @@ public class EarlyAlertStudentOutcomeReportController extends EarlyAlertReportBa
 	
 	@Autowired
 	private transient StudentTypeService studentTypeService;
+	
 	@Autowired
 	private transient ProgramStatusService programStatusService;	
+	
 	@Autowired
 	protected transient EarlyAlertService earlyAlertService;
+	
 	@Autowired
 	protected transient EarlyAlertResponseService earlyAlertResponseService;
+	
 	@Autowired
 	private transient SpecialServiceGroupService ssgService;
 
@@ -130,14 +135,15 @@ public class EarlyAlertStudentOutcomeReportController extends EarlyAlertReportBa
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
-		final PersonTO coachTO = getPerson(coachId, personService, personTOFactory);
-		
+		final PersonTO coachTO = SearchParameters.getPerson(coachId, personService, personTOFactory);
 		final DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
+		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
+		final List<UUID> cleanSpecialServiceGroupIds = SearchParameters.cleanUUIDListOfNulls(specialServiceGroupIds);
 		
 		final AddressLabelSearchTO addressLabelSearchTO = new AddressLabelSearchTO(
 				coachTO,
-				programStatus, specialServiceGroupIds, null, null, null,
-				studentTypeIds, null,
+				programStatus, cleanSpecialServiceGroupIds, null, null, null,
+				cleanStudentTypeIds, null,
 				null);
 		
 		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(addressLabelSearchTO, 
@@ -154,29 +160,18 @@ public class EarlyAlertStudentOutcomeReportController extends EarlyAlertReportBa
 		for(EarlyAlertStudentReportTO personInfo : peopleInfo.getRows()){
 			people.add(new EarlyAlertStudentOutcomeReportTO(personInfo.getPerson(), personInfo.getTotal(), 0L, personInfo.getOpen(), 0L, 0L));
 		}
-		
-		// final String programStatusName = ((null!=programStatus &&
-		// !programStatus.isEmpty())?programStatus.get(0)():"");
-		// Get the actual name of the UUID for the programStatus
-		final String programStatusName = (programStatus == null ? ""
-				: programStatusService.get(programStatus).getName());
+
 
 		final Map<String, Object> parameters = Maps.newHashMap();
 		
-		parameters.put("coachName", getFullName(coachTO));
+		SearchParameters.addCoachNameToMap(coachTO, parameters);
+		SearchParameters.addProgramStatusToMap(programStatus, parameters, programStatusService);
+		SearchParameters.addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);
+		SearchParameters.addSpecialGroupsNamesToMap(cleanSpecialServiceGroupIds, parameters, ssgService);
+		SearchParameters.addReportDateToMap(parameters);
+		SearchParameters.addDateTermToMap(dateTerm, parameters);
 			
-		parameters.put("programStatus", programStatusName);
-		parameters.put("studentType", concatStudentTypesFromUUIDs(studentTypeIds, 
-				studentTypeService));
-		parameters.put("specialServiceGroupNames", concatSpecialGroupsNameFromUUIDs(specialServiceGroupIds, ssgService));
-		
-		
-		parameters.put("reportDate", new Date());	
-		
-		setDateTermToMap(parameters, dateTerm);
-		
-		generateReport( response,  parameters, people,  "/reports/earlyAlertStudentOutcomeReport.jasper", 
-				 reportType, "Early_Alert_Student_Outcome_Report");
+		generateReport(response,  parameters, people,  REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 
 	@Override

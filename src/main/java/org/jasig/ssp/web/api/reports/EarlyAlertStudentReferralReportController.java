@@ -71,7 +71,10 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/earlyalertstudentreferral")
-public class EarlyAlertStudentReferralReportController extends EarlyAlertReportBaseController {
+public class EarlyAlertStudentReferralReportController extends ReportBaseController {
+
+	private static final String REPORT_URL = "/reports/earlyAlertStudentReferralReport.jasper";
+	private static final String REPORT_FILE_TITLE = "Early_Alert_Student_Referral_Report";
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AddressLabelsReportController.class);
@@ -96,7 +99,7 @@ public class EarlyAlertStudentReferralReportController extends EarlyAlertReportB
 
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
-		final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy",
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT,
 				Locale.US);
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(
@@ -115,11 +118,11 @@ public class EarlyAlertStudentReferralReportController extends EarlyAlertReportB
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false) String termCode,
-			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
+			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
 		
-		PersonTO coachTO = getPerson(coachId, personService, personTOFactory);
+		PersonTO coachTO = SearchParameters.getPerson(coachId, personService, personTOFactory);
 		
 		DateTerm termDate =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);	
 
@@ -132,28 +135,21 @@ public class EarlyAlertStudentReferralReportController extends EarlyAlertReportB
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
-		@SuppressWarnings("unchecked")
 		final List<EarlyAlertStudentReportTO> peopleInfo = earlyAlertResponseService.getPeopleByEarlyAlertReferralIds(
-				(List<UUID>)Arrays.asList(earlyAlertReferralId), termDate.getStartDate(), termDate.getEndDate(), searchForm, SortingAndPaging.createForSingleSort(status, null,
+				Arrays.asList(earlyAlertReferralId), termDate.getStartDate(), termDate.getEndDate(), searchForm, SortingAndPaging.createForSingleSort(status, null,
 						null, null, null, null));
-		
-		// final String programStatusName = ((null!=programStatus &&
-		// !programStatus.isEmpty())?programStatus.get(0)():"");
-		// Get the actual name of the UUID for the programStatus
-		final String programStatusName = (programStatus == null ? ""
-				: programStatusService.get(programStatus).getName());
 
 		final Map<String, Object> parameters = Maps.newHashMap();
 		
-		parameters.put("coachName",  getFullName(coachTO));
+		SearchParameters.addReportDateToMap(parameters);
+		SearchParameters.addCoachNameToMap(coachTO, parameters);
 		
-		this.setDateTermToMap(parameters, termDate);
-		parameters.put("programStatus", programStatusName);
-		parameters.put("referralSourceName", earlyAlertReferralsService.get(earlyAlertReferralId).getName());
-		parameters.put("reportDate", new Date());		
-
-		generateReport( response,  parameters, peopleInfo.size() > 0 ? peopleInfo : null,  "/reports/earlyAlertStudentReferralReport.jasper", 
-				 reportType, "Early_Alert_Student_Referral_Report");
+		SearchParameters.addDateTermToMap(termDate, parameters);
+		SearchParameters.addProgramStatusToMap(programStatus, parameters, programStatusService);
+		SearchParameters.addEarlyAlertReferralToMap(earlyAlertReferralId, parameters, earlyAlertReferralsService);
+		
+		generateReport( response,  parameters, peopleInfo.size() > 0 ? peopleInfo : null,  REPORT_URL, 
+				 reportType, REPORT_FILE_TITLE);
 	}
 
 	@Override
