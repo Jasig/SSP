@@ -37,9 +37,9 @@ public class EarlyAlertStudentSearchTO
 
 	private Date endDate;
 	
-	private AddressLabelSearchTO addressLabelSearchTO;
+	private PersonSearchFormTO addressLabelSearchTO;
 
-	public EarlyAlertStudentSearchTO(final AddressLabelSearchTO addressLabelSearchTO,
+	public EarlyAlertStudentSearchTO(final PersonSearchFormTO addressLabelSearchTO,
 								final Date startDate, final Date endDate) {
 		super();
 		
@@ -63,11 +63,11 @@ public class EarlyAlertStudentSearchTO
 		return endDate == null ? null : new Date(endDate.getTime());
 	}
 	
-	public AddressLabelSearchTO getAddressLabelSearchTO() {
+	public PersonSearchFormTO getAddressLabelSearchTO() {
 		return addressLabelSearchTO;
 	}
 
-	public void setAddressLabelSearchTO(AddressLabelSearchTO addressLabelSearchTO) {
+	public void setAddressLabelSearchTO(PersonSearchFormTO addressLabelSearchTO) {
 		this.addressLabelSearchTO = addressLabelSearchTO;
 	}
 

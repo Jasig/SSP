@@ -55,6 +55,7 @@ abstract class ReportBaseController extends AbstractBaseController {
 	protected void generateReport(HttpServletResponse response, Map<String, Object> parameters, 
 			Collection<?> beanCollection, String url, String reportType, String reportName) throws JRException, IOException{
 		
+		SearchParameters.addReportDateToMap(parameters);
 		final InputStream is = getClass().getResourceAsStream(url);
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
 		

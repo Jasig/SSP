@@ -46,7 +46,7 @@ import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutcomeReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
@@ -135,18 +135,37 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
-		final PersonTO coachTO = SearchParameters.getPerson(coachId, personService, personTOFactory);
 		final DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
-		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
-		final List<UUID> cleanSpecialServiceGroupIds = SearchParameters.cleanUUIDListOfNulls(specialServiceGroupIds);
+		final Map<String, Object> parameters = Maps.newHashMap();
+		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
 		
-		final AddressLabelSearchTO addressLabelSearchTO = new AddressLabelSearchTO(
-				coachTO,
-				programStatus, cleanSpecialServiceGroupIds, null, null, null,
-				cleanStudentTypeIds, null,
+		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
+		SearchParameters.addReferenceLists(studentTypeIds, 
+				specialServiceGroupIds, 
+				null, 
+				parameters, 
+				personSearchForm, 
+				studentTypeService, 
+				ssgService, 
 				null);
 		
-		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(addressLabelSearchTO, 
+		SearchParameters.addDateRange(createDateFrom, 
+				createDateTo, 
+				termCode, 
+				parameters, 
+				personSearchForm, 
+				termService);
+		
+		SearchParameters.addReferenceTypes(programStatus, 
+				null, 
+				false,
+				parameters, 
+				personSearchForm, 
+				programStatusService, 
+				null);
+		
+		
+		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(personSearchForm, 
 				dateTerm.getStartDate(), dateTerm.getEndDate());
 
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
@@ -161,14 +180,6 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 			people.add(new EarlyAlertStudentOutcomeReportTO(personInfo.getPerson(), personInfo.getTotal(), 0L, personInfo.getOpen(), 0L, 0L));
 		}
 
-
-		final Map<String, Object> parameters = Maps.newHashMap();
-		
-		SearchParameters.addCoachNameToMap(coachTO, parameters);
-		SearchParameters.addProgramStatusToMap(programStatus, parameters, programStatusService);
-		SearchParameters.addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);
-		SearchParameters.addSpecialGroupsNamesToMap(cleanSpecialServiceGroupIds, parameters, ssgService);
-		SearchParameters.addReportDateToMap(parameters);
 		SearchParameters.addDateTermToMap(dateTerm, parameters);
 			
 		generateReport(response,  parameters, people,  REPORT_URL, reportType, REPORT_FILE_TITLE);

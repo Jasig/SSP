@@ -42,7 +42,7 @@ import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.util.DateTerm;
@@ -129,33 +129,52 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 		
 		DateTerm termDate =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
 		
-		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
-		final List<UUID> cleanSpecialServiceGroupIds = SearchParameters.cleanUUIDListOfNulls(specialServiceGroupIds);
-
-
-		final AddressLabelSearchTO addressLabelSearchTO = new AddressLabelSearchTO(
-				coachTO,
-				programStatus, cleanSpecialServiceGroupIds, null, null, null,
-				cleanStudentTypeIds, null,
+		final Map<String, Object> parameters = Maps.newHashMap();
+		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
+		
+		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
+		
+		SearchParameters.addReferenceLists(studentTypeIds, 
+				specialServiceGroupIds, 
+				null, 
+				parameters, 
+				personSearchForm, 
+				studentTypeService, 
+				ssgService, 
 				null);
 		
-		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(addressLabelSearchTO, createDateFrom, createDateTo);
+		SearchParameters.addDateRange(null, 
+				null, 
+				null, 
+				parameters, 
+				personSearchForm, 
+				termService);
+		
+		SearchParameters.addReferenceTypes(programStatus, 
+				null, 
+				false,
+				parameters, 
+				personSearchForm, 
+				programStatusService, 
+				null);
+		
+		
+		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(personSearchForm, 
+				termDate.getStartDate(), 
+				termDate.getEndDate());
 
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
 		final PagingWrapper<EarlyAlertStudentReportTO> people = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
-				searchForm, SortingAndPaging.createForSingleSort(status, null,
+				searchForm, 
+				SortingAndPaging.createForSingleSort(status, null,
 						null, null, null, null));
 		
 
 		final Map<String, Object> map = Maps.newHashMap();
 		
 		SearchParameters.addReportDateToMap(map);
-		SearchParameters.addCoachNameToMap(coachTO, map);
-		SearchParameters.addStudentTypesToMap(cleanStudentTypeIds, map, studentTypeService);
-		SearchParameters.addProgramStatusToMap(programStatus, map, programStatusService);
-		SearchParameters.addSpecialGroupsNamesToMap(cleanSpecialServiceGroupIds, map, ssgService);
 		SearchParameters.addDateTermToMap(termDate, map);
 
 		generateReport(response,  map, people.getRows(),  REPORT_URL, reportType, REPORT_FILE_TITLE);

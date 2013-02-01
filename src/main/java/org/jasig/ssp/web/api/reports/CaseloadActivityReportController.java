@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -120,7 +121,8 @@ public class CaseloadActivityReportController extends ReportBaseController {
 
 		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
 		List<Person> coaches = SearchParameters.getCoaches(coachId, personService);
-
+		Collections.sort(coaches, Person.PERSON_NAME_AND_ID_COMPARATOR);
+		
 		List<CaseLoadActivityReportTO> caseLoadActivityReportList = new ArrayList<CaseLoadActivityReportTO>();
 		
 		
@@ -178,6 +180,7 @@ public class CaseloadActivityReportController extends ReportBaseController {
 
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
+
 		SearchParameters.addDateTermToMap(dateTerm, parameters);
 		SearchParameters.addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);
 		

@@ -37,7 +37,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.EarlyAlertOutreach;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
@@ -221,7 +221,7 @@ public class EarlyAlertResponseDao extends
 			final List<UUID> earlyAlertReferralIds, 
 			final Date createDateFrom, 
 			final Date createDateTo,
-			final AddressLabelSearchTO addressLabelSearchTO,
+			final PersonSearchFormTO addressLabelSearchTO,
 			final SortingAndPaging sAndP)
 			throws ObjectNotFoundException {
 
@@ -300,7 +300,7 @@ public class EarlyAlertResponseDao extends
 	
 	
 
-	private Criteria setPersonCriteria(Criteria criteria, AddressLabelSearchTO addressLabelSearchTO){
+	private Criteria setPersonCriteria(Criteria criteria, PersonSearchFormTO addressLabelSearchTO){
 		if (addressLabelSearchTO.getCoach() != null
 				&& addressLabelSearchTO.getCoach().getId() != null) {
 			// restrict to coach

@@ -43,7 +43,7 @@ import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -72,7 +72,6 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 
 	private static String REPORT_URL = "/reports/addressLabels.jasper";
 	private static String REPORT_FILE_TITLE = "General_Student_Report";
-	private static String STUDENT_COUNT = "studentCount";
 	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AddressLabelsReportController.class);
@@ -124,42 +123,52 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 			throws ObjectNotFoundException, JRException, IOException {
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
+		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
 		
-		DateTerm dateTerm = new DateTerm(createDateFrom, createDateTo, termCode, termService);
-		PersonTO coach = SearchParameters.getPerson(coachId, personService, personTOFactory);
-		SearchParameters.addCoachNameToMap(coach, parameters);
+		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
 		
-		List<UUID> cleanSpecialServiceGroupIds = SearchParameters.cleanUUIDListOfNulls(specialServiceGroupIds);
-		List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
-		List<UUID> cleanReferralSourcesIds = SearchParameters.cleanUUIDListOfNulls(referralSourcesIds);
-
-		final AddressLabelSearchTO searchForm = new AddressLabelSearchTO(
-				coach,
-				programStatus, cleanSpecialServiceGroupIds, cleanReferralSourcesIds,
-				StringUtils.trimToNull(anticipatedStartTerm),
-				anticipatedStartYear, cleanStudentTypeIds, dateTerm.getStartDate(),
-				dateTerm.getEndDate());
+		SearchParameters.addReferenceLists(studentTypeIds, 
+				specialServiceGroupIds, 
+				referralSourcesIds, 
+				parameters, 
+				personSearchForm, 
+				studentTypeService, 
+				ssgService, 
+				referralSourcesService);
+		
+		SearchParameters.addDateRange(createDateFrom, 
+				createDateTo, 
+				termCode, 
+				parameters, 
+				personSearchForm, 
+				termService);
+		
+		SearchParameters.addReferenceTypes(programStatus,
+				null, 
+				false,
+				parameters, 
+				personSearchForm, 
+				programStatusService, 
+				null);
+		
+		SearchParameters.addAnticipatedAndRegistrationTerms(anticipatedStartTerm, 
+				anticipatedStartYear, 
+				null, 
+				null, 
+				parameters, 
+				personSearchForm);
 
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
 		final List<Person> people = personService.peopleFromCriteria(
-				searchForm, SortingAndPaging.createForSingleSort(status, null,
+				personSearchForm, SortingAndPaging.createForSingleSort(status, null,
 						null, null, null, null));
 		Collections.sort(people, Person.PERSON_NAME_AND_ID_COMPARATOR);
 		final List<PersonTO> peopleTO = personTOFactory.asTOList(people);
-
-		SearchParameters.addSpecialGroupsNamesToMap(cleanSpecialServiceGroupIds, parameters, ssgService);
-		SearchParameters.addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);
-		SearchParameters.addReferralSourcesToMap(cleanReferralSourcesIds, parameters, referralSourcesService);
-		SearchParameters.addProgramStatusToMap(programStatus, parameters, programStatusService);
-		SearchParameters.addDateTermToMap(dateTerm, parameters);
-		SearchParameters.addReportDateToMap(parameters);
-		SearchParameters.addCohortTerm(anticipatedStartTerm, anticipatedStartYear, parameters);
 		
-		parameters.put(STUDENT_COUNT, peopleTO == null ? 0 : peopleTO.size());
+		SearchParameters.addStudentCount(peopleTO, parameters);
 
-		
 		generateReport(response, parameters, peopleTO, REPORT_URL, reportType, REPORT_FILE_TITLE);
 
 	}

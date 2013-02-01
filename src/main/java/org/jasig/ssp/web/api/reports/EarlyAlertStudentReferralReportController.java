@@ -44,7 +44,7 @@ import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.EarlyAlertReferralService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.PersonTO;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -126,7 +126,7 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 		
 		DateTerm termDate =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);	
 
-		final AddressLabelSearchTO searchForm = new AddressLabelSearchTO(
+		final PersonSearchFormTO searchForm = new PersonSearchFormTO(
 				coachTO,
 				programStatus, null, null, null, null,
 				null, null,

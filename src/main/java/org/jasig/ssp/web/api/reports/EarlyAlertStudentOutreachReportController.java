@@ -127,8 +127,7 @@ public class EarlyAlertStudentOutreachReportController extends ReportBaseControl
 		final Map<String, Object> parameters = Maps.newHashMap();
 		
 		SearchParameters.addEarlyAlertOutcomesToMap(earlyAlertOutcomesClean, parameters, earlyAlertOutcomeService);
-		SearchParameters.addReportDateToMap(parameters);
-		SearchParameters.addReportDateToMap(parameters);
+
 		SearchParameters.addDateTermToMap(dateTerm, parameters);
 
 

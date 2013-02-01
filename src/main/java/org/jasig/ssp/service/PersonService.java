@@ -30,7 +30,7 @@ import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.security.core.GrantedAuthority;
@@ -126,7 +126,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @return List of person objects based on specified criteria
 	 * @throws ObjectNotFoundException
 	 */
-	List<Person> peopleFromCriteria(AddressLabelSearchTO addressLabelSearchTO,
+	List<Person> peopleFromCriteria(PersonSearchFormTO addressLabelSearchTO,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException;
 
 	/**

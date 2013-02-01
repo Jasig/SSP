@@ -41,7 +41,7 @@ import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.PersonReportTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -118,40 +118,53 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 			throws ObjectNotFoundException, JRException, IOException {
 
 		
-		final PersonTO coachTO = SearchParameters.getPerson(coachId, personService, personTOFactory);
+		final Map<String, Object> parameters = Maps.newHashMap();
+		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
 		
-		final List<UUID> cleanSpecialServiceGroupIds = SearchParameters.cleanUUIDListOfNulls(specialServiceGroupIds);
+		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
+		SearchParameters.addReferenceLists(studentTypeIds, 
+				specialServiceGroupIds, 
+				referralSourcesIds, 
+				parameters, 
+				personSearchForm, 
+				studentTypeService, 
+				ssgService, 
+				referralSourcesService);
 		
-		final List<UUID> cleanReferralSourcesIds = SearchParameters.cleanUUIDListOfNulls(referralSourcesIds);
+		SearchParameters.addDateRange(createDateFromCounselor, 
+				createDateToCounselor, 
+				null, 
+				parameters, 
+				personSearchForm, 
+				null);
 		
-		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
+		SearchParameters.addReferenceTypes(programStatus, 
+				null, 
+				false,
+				parameters, 
+				personSearchForm, 
+				programStatusService, 
+				null);
 		
-		final AddressLabelSearchTO searchForm = new AddressLabelSearchTO(coachTO,
-				programStatus, cleanSpecialServiceGroupIds, cleanReferralSourcesIds,
-				anticipatedStartTerm.length() == 0 ? null
-						: anticipatedStartTerm, anticipatedStartYear,
-						cleanStudentTypeIds, createDateFromCounselor, createDateToCounselor);
+		SearchParameters.addAnticipatedAndRegistrationTerms(anticipatedStartTerm, 
+				anticipatedStartYear, 
+				null, 
+				null, 
+				parameters, 
+				personSearchForm);
 
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
 		final List<Person> people = personService.peopleFromCriteria(
-				searchForm, SortingAndPaging.createForSingleSort(status, null,
+				personSearchForm, SortingAndPaging.createForSingleSort(status, null,
 						null, null, null, null));
+		
 		Collections.sort(people, Person.PERSON_NAME_AND_ID_COMPARATOR);
+		
 		final List<PersonReportTO> peopleReportTOList = PersonReportTO.toPersonTOList(people);
 
-
-		final Map<String, Object> parameters = Maps.newHashMap();
-
 		SearchParameters.addReportDateToMap(parameters);
-		SearchParameters.addCoachNameToMap(coachTO, parameters);
-		SearchParameters.addProgramStatusToMap(programStatus, parameters, programStatusService);
-		SearchParameters.addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);
-		SearchParameters.addSpecialGroupsNamesToMap(cleanSpecialServiceGroupIds, parameters, ssgService);
-		SearchParameters.addReferralSourcesToMap(cleanReferralSourcesIds, parameters, referralSourcesService);
-		SearchParameters.addCohortTerm(anticipatedStartTerm, anticipatedStartYear, parameters);
-		
 		generateReport(response, parameters, peopleReportTOList, REPORT_URL, reportType, REPORT_FILE_TITLE);
 
 	}

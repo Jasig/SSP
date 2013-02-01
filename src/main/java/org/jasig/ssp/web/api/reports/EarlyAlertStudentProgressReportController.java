@@ -44,7 +44,7 @@ import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentProgressTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
@@ -130,27 +130,41 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
-		PersonTO coachTO = SearchParameters.getPerson(coachId, personService, personTOFactory);
-				
+		final Map<String, Object> parameters = Maps.newHashMap();
+		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
+		
+		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
+		SearchParameters.addReferenceLists(studentTypeIds, 
+				specialServiceGroupIds, 
+				null, 
+				parameters, 
+				personSearchForm, 
+				studentTypeService, 
+				ssgService, 
+				null);
+		
+		
+		SearchParameters.addReferenceTypes(programStatus, 
+				null, 
+				false,
+				parameters, 
+				personSearchForm, 
+				programStatusService, 
+				null);
+
+		
 		Term initialTerm = termService.getByCode(termCodeInitial);
 		Term comparisonTerm = termService.getByCode(termCodeComparitor);
-		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
-		final List<UUID> cleanSpecialServiceGroupIds = SearchParameters.cleanUUIDListOfNulls(specialServiceGroupIds);
 
-		final AddressLabelSearchTO addressLabelSearchTO = new AddressLabelSearchTO(
-				coachTO,
-				programStatus, cleanSpecialServiceGroupIds, null, null, null,
-				cleanStudentTypeIds, 
-				null, null);
 		
-		final EarlyAlertStudentSearchTO initialSearchForm = new EarlyAlertStudentSearchTO(addressLabelSearchTO, 
+		final EarlyAlertStudentSearchTO initialSearchForm = new EarlyAlertStudentSearchTO(personSearchForm, 
 				initialTerm.getStartDate(), initialTerm.getEndDate());
 
 		final PagingWrapper<EarlyAlertStudentReportTO> initialPeopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
 				initialSearchForm, SortingAndPaging.createForSingleSort(status, null,
 						null, "lastName", null, null));
 		
-		final EarlyAlertStudentSearchTO comparisonSearchForm = new EarlyAlertStudentSearchTO(addressLabelSearchTO, 
+		final EarlyAlertStudentSearchTO comparisonSearchForm = new EarlyAlertStudentSearchTO(personSearchForm, 
 				comparisonTerm.getStartDate(), comparisonTerm.getEndDate());
 
 		final PagingWrapper<EarlyAlertStudentReportTO> comparisonPeopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
@@ -174,16 +188,6 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 					initialPersonInfo.getTotal(), finalCount));
 				
 		}
-
-
-		final Map<String, Object> parameters = Maps.newHashMap();
-		
-		SearchParameters.addCoachNameToMap(coachTO, parameters);
-		
-		SearchParameters.addProgramStatusToMap(programStatus, parameters, programStatusService);
-		SearchParameters.addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);
-		SearchParameters.addSpecialGroupsNamesToMap(cleanSpecialServiceGroupIds, parameters, ssgService);
-		SearchParameters.addReportDateToMap(parameters);
 		
 		parameters.put(INITIAL_TERM, initialTerm.getName());
 		parameters.put(COMPARISON_TERM, comparisonTerm.getName());

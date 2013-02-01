@@ -1,6 +1,7 @@
 package org.jasig.ssp.web.api.reports;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -24,19 +25,24 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.ReferenceService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.CampusService;
+import org.jasig.ssp.service.reference.DisabilityStatusService;
+import org.jasig.ssp.service.reference.DisabilityTypeService;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
 import org.jasig.ssp.service.reference.EarlyAlertReferralService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
-import org.jasig.ssp.service.reference.impl.AbstractReferenceService;
 import org.jasig.ssp.transferobject.PersonTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.DateTerm;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 public class SearchParameters {
 	
+	static final String ALL = "All";
 	private static final String COACH_NAME = "coachName";
+	private static final String ODS_COACH_NAME = "odsCoachName";
 	private static final String TERM_CODE = "termCode";
 	private static final String TERM_NAME = "termName";
 	private static final String TERM = "term";
@@ -49,15 +55,19 @@ public class SearchParameters {
 	private static final String PROGRAM_STATUS_NAME = "programStatusName";
 	private static final String REPORT_DATE = "reportDate";
 	private static final String HOME_DEPARTMENT_NAME = "homeDepartmentName";
-	private static final String ALL = "All";
+    
 	private static final String REPORT_TITLE = "ReportTitle";
 	private static final String DATA_FILE = "DataFile";
 	private static final String TERM_CODES = "termCodes";
 	private static final String TERM_NAMES = "termNames";
-	private static final String COHORT_TERM = "cohortTerm";
+	private static final String ANTICIPATED_START_TERM = "anticipatedStartTerm";
+	private static final String REGISTRATION_TERM = "registrationTerm";
 	private static final String REFERRAL_SOURCE_NAMES = "referralSourceNames";
 	private static final String EARLY_ALERT_REFERRAL_NAME = "earlyAlertReferralName";
 	private static final String EARLY_ALERT_REFERRAL_NAMES = "earlyAlertReferralNames";
+	private static final String DISABILITY_STATUS = "disabilityStatus";
+	private static final String DISABILITY_TYPE = "disabilityType";
+	private static final String STUDENT_COUNT = "studentCount";
 	
 	private static final String DEPARTMENT_PLACEHOLDER = "Not Available Yet";
 
@@ -307,16 +317,34 @@ public class SearchParameters {
 		parameters.put(DATA_FILE, dataFile);
 	}
 	
-	final static void addCohortTerm(String anticipatedStartTerm, Integer anticipatedStartYear, Map<String, Object> parameters){
-		if(anticipatedStartTerm != null && anticipatedStartTerm.length() > 0)
-			parameters.put(COHORT_TERM, StringUtils.defaultString(anticipatedStartTerm) + " " + (anticipatedStartYear == null? "" : "and " + anticipatedStartYear.toString()));
+	final static void addTerm(String label, String valueIsNull, String term, Integer year, Map<String, Object> parameters){
+		if(term != null && term.length() > 0)
+			parameters.put(label, StringUtils.defaultString(term) + " " + (year == null? "" : "and " + year.toString()));
 		else
-			parameters.put(COHORT_TERM, (anticipatedStartYear == null? ALL : anticipatedStartYear.toString()));
+			parameters.put(label, (year == null? valueIsNull : year.toString()));
+	}
+	
+	final static void addAnticipatedStartTerm(String anticipatedStartTerm, Integer anticipatedStartYear, Map<String, Object> parameters){
+		addTerm(ANTICIPATED_START_TERM, ALL, anticipatedStartTerm, anticipatedStartYear, parameters);
+	}
+	
+	final static void addRegistrationTerm(String registrationTerm, Integer registrationYear, Map<String, Object> parameters){
+		addTerm(REGISTRATION_TERM, ALL, registrationTerm, registrationYear, parameters);	
 	}
 	
 	@SuppressWarnings("rawtypes")
 	final static void addEarlyAlertReferralToMap(UUID earlyAlertReferralId, Map<String, Object> parameters, EarlyAlertReferralService earlyAlertReferralsService) throws ObjectNotFoundException{
-		SearchParameters.addUUIDToMap(EARLY_ALERT_REFERRAL_NAME, ALL, earlyAlertReferralId, parameters, (AbstractReferenceService)earlyAlertReferralsService);
+		addUUIDToMap(EARLY_ALERT_REFERRAL_NAME, ALL, earlyAlertReferralId, parameters, (ReferenceService)earlyAlertReferralsService);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	final static void addDisablityStatusToMap(UUID disabilityStatusId, Map<String, Object> parameters, DisabilityStatusService disabilityStatusService) throws ObjectNotFoundException{
+		addUUIDToMap(DISABILITY_STATUS, ALL, disabilityStatusId, parameters, (ReferenceService)disabilityStatusService);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	final static void addDisabilityTypeToMap(UUID disabilityTypeId, Map<String, Object> parameters, DisabilityTypeService disabilityTypeService) throws ObjectNotFoundException{
+		addUUIDToMap(DISABILITY_TYPE, ALL, disabilityTypeId, parameters, (ReferenceService)disabilityTypeService);
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -327,5 +355,122 @@ public class SearchParameters {
 		addUUIDSToMap(EARLY_ALERT_REFERRAL_NAMES, ALL, earlyAlertReferralIds, parameters,
 				(ReferenceService) referenceService);
 	}
+	
+	static final void addCoach(UUID coachId, final Map<String, Object> parameters,
+			final PersonSearchFormTO personSearchForm,
+			PersonService personService, 
+			PersonTOFactory personTOFactory) throws ObjectNotFoundException{
+		
+		PersonTO coach = getPerson(coachId, personService,
+				personTOFactory);
+		SearchParameters.addPersonToMap(COACH_NAME, ALL, coach, parameters);
+		personSearchForm.setCoach(coach);
+	}
+	
+	static final void addOdsCoach(UUID odsCoachId, final Map<String, Object> parameters,
+			final PersonSearchFormTO personSearchForm, 
+			PersonService personService, 
+			PersonTOFactory personTOFactory) throws ObjectNotFoundException{
+		PersonTO odsCoach = getPerson(odsCoachId, personService,
+				personTOFactory);
+		SearchParameters.addPersonToMap(ODS_COACH_NAME, ALL, odsCoach, parameters);
+		personSearchForm.setOdsCoach(odsCoach);
+	}
+	
+	static final void addDateRange(final Date createDateFrom,
+			final Date createDateTo,
+			final String termCode,
+			final Map<String, Object> parameters,
+			final PersonSearchFormTO personSearchForm,
+			final TermService termService
+			
+			) throws ObjectNotFoundException{
+		DateTerm dateTerm = new DateTerm(createDateFrom, createDateTo, termCode, termService);
+		addDateTermToMap(dateTerm, parameters);
+		
+		personSearchForm.setCreateDateFrom(dateTerm.getStartDate());
+		personSearchForm.setCreateDateTo(dateTerm.getEndDate());
+	}
+	
+	static final void addReferenceLists(final List<UUID> studentTypeIds,
+			final List<UUID> specialServiceGroupIds,
+			final List<UUID> referralSourcesIds,
+			final Map<String, Object> parameters,
+			final PersonSearchFormTO personSearchForm,
+			final StudentTypeService studentTypeService,
+			final SpecialServiceGroupService ssgService,
+			final ReferralSourceService referralSourcesService
+			) throws ObjectNotFoundException{
+		
+		List<UUID> cleanSpecialServiceGroupIds = cleanUUIDListOfNulls(specialServiceGroupIds);
+		List<UUID> cleanStudentTypeIds = cleanUUIDListOfNulls(studentTypeIds);
+		List<UUID> cleanReferralSourcesIds = cleanUUIDListOfNulls(referralSourcesIds);
+		
+		addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);
+		addSpecialGroupsNamesToMap(cleanSpecialServiceGroupIds, parameters, ssgService);
+		addReferralSourcesToMap(cleanReferralSourcesIds, parameters, referralSourcesService);	
+		
+		personSearchForm.setSpecialServiceGroupIds(cleanSpecialServiceGroupIds);
+		personSearchForm.setStudentTypeIds(cleanStudentTypeIds);
+		personSearchForm.setReferralSourcesIds(cleanReferralSourcesIds);
+	}
+	
+	static final void addReferenceTypes(final UUID programStatus, 
+			final UUID disabilityStatusId,
+			final Boolean disabilityIsNotNull,
+			final Map<String, Object> parameters,
+			final PersonSearchFormTO personSearchForm, 
+			ProgramStatusService programStatusService, 
+			DisabilityStatusService disabilityStatusService) throws ObjectNotFoundException {
+		
+		addProgramStatusToMap(programStatus, parameters, programStatusService);
+		addDisablityStatusToMap(disabilityStatusId, parameters, disabilityStatusService);
 
+		personSearchForm.setProgramStatus(programStatus);
+		personSearchForm.setDisabilityStatusId(disabilityStatusId);
+		personSearchForm.setDisabilityIsNotNull(disabilityIsNotNull);
+	}
+	
+	static final void addReferenceTypes(final UUID programStatus, 
+			final UUID disabilityStatusId,
+			final UUID disabilityTypeId,
+			final Boolean disabilityIsNotNull,
+			final Map<String, Object> parameters,
+			final PersonSearchFormTO personSearchForm, 
+			ProgramStatusService programStatusService, 
+			DisabilityStatusService disabilityStatusService,
+			DisabilityTypeService disabilityTypeService) throws ObjectNotFoundException {
+		
+		SearchParameters.addReferenceTypes(programStatus, 
+				disabilityStatusId, 
+				disabilityIsNotNull, 
+				parameters, 
+				personSearchForm, 
+				programStatusService, 
+				disabilityStatusService);
+		
+		addDisabilityTypeToMap(disabilityTypeId, parameters, disabilityTypeService);
+		personSearchForm.setDisabilityTypeId(disabilityTypeId);
+	}
+	
+	static final void addAnticipatedAndRegistrationTerms(String anticipatedStartTerm, 
+			Integer anticipatedStartYear, 
+			String registrationTerm, 
+			Integer registrationYear,
+			final Map<String, Object> parameters,
+			final PersonSearchFormTO personSearchForm){
+		
+		
+		addAnticipatedStartTerm(anticipatedStartTerm, anticipatedStartYear, parameters);
+		addRegistrationTerm(registrationTerm, registrationYear, parameters);
+		
+		personSearchForm.setAnticipatedStartTerm(anticipatedStartTerm);
+		personSearchForm.setAnticipatedStartYear(anticipatedStartYear);
+		personSearchForm.setRegistrationTerm(registrationTerm);
+		personSearchForm.setRegistrationYear(registrationYear);
+	}
+	
+	static final void addStudentCount(List peopleTO, Map<String, Object> parameters){
+		parameters.put(STUDENT_COUNT, peopleTO == null ? 0 : peopleTO.size());
+	}
 }

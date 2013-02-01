@@ -111,7 +111,14 @@ var ssp = ssp || {};
 			loadGroupInput("/ssp/api/1/reference/campus/", that
 					.locate('campusGroup'));
 			loadGroupInput("/ssp/api/1/reference/earlyAlertOutcome/", that
-							.locate('earlyAlertOutcomeGroup'));		
+							.locate('earlyAlertOutcomeGroup'));	
+			
+			loadGroupInput("/ssp/api/1/reference/disabilityStatus/", that
+					.locate('disabilityStatusGroup'));	
+			
+			loadGroupInput("/ssp/api/1/reference/disabilityType/", that
+					.locate('disabilityTypeGroup'));	
+			
 			loadTermInput("/ssp/api/1/reference/term/", that
 					.locate('termGroup'));
 			
@@ -244,6 +251,10 @@ var ssp = ssp || {};
 				.append('<option value="counselorCaseManagementReport">Counselor Case Management Report</option>');
 		reportsSelect
 				.append('<option value="specialServicesForm">Special Services Report</option>');
+		
+		reportsSelect
+		.append('<option value="disabilityServices">Disability Services Report</option>');
+		
 		reportsSelect
 				.append('<option value="" disabled >- Early Alert Reports -</option>');
 		reportsSelect
@@ -295,6 +306,7 @@ var ssp = ssp || {};
 							earlyAlertStudentOutreach : '.early-alert-student-outreach-report',
 							earlyAlertStudentOutcome : '.early-alert-student-outcome-report',
 							earlyAlertClass : '.early-alert-class-report',
+							disabilityServices : '.disability-services-report',
 							programStatusGroup : '.input-program-status-group',
 							studentTypeGroup : '.input-student-type-group',
 							specialServiceGroup : '.input-special-service-group',
@@ -305,6 +317,8 @@ var ssp = ssp || {};
 							termGroup: '.input-term-group',
 							reportYearGroup: '.input-report-year-group',
 							earlyAlertOutcomeGroup: '.input-early-alert-outcome-group',
+							disabilityStatusGroup: '.input-disability-status-group',
+							disabilityTypeGroup: '.input-disability-type-group',
 							calendarType : '.input-calendar-type',
 							switchDateRangeType : '.switch-date-range-type',
 							termRange : '.ea-term',

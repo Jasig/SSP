@@ -154,7 +154,6 @@ public class EarlyAlertCaseCountsReportController extends ReportBaseController {
 		SearchParameters.addCampusToParameters(campus, parameters);
 		
 		SearchParameters.addTermsToMap(terms, parameters);
-		
 		generateReport( response,  parameters, caseLoads,  REPORT_URL, 
 				 reportType, REPORT_FILE_TITLE);
 	}

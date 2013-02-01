@@ -37,7 +37,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
@@ -377,7 +377,7 @@ public class EarlyAlertDao extends
 	}
 
 	
-	private Criteria setPersonCriteria(Criteria criteria, AddressLabelSearchTO addressLabelSearchTO){
+	private Criteria setPersonCriteria(Criteria criteria, PersonSearchFormTO addressLabelSearchTO){
 		if (addressLabelSearchTO.getCoach() != null
 				&& addressLabelSearchTO.getCoach().getId() != null) {
 			// restrict to coach

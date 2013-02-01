@@ -85,6 +85,7 @@ public class SpecialServicesReportController extends ReportBaseController {
 			throws ObjectNotFoundException, JRException, IOException {
 
 		final List<UUID> cleanSpecialServiceGroupIds = SearchParameters.cleanUUIDListOfNulls(specialServiceGroupIds);
+		
 		final List<Person> people = personService
 				.peopleFromSpecialServiceGroups(cleanSpecialServiceGroupIds,
 						SortingAndPaging.createForSingleSort(status, null,

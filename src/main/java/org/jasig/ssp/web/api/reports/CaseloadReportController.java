@@ -171,10 +171,10 @@ public class CaseloadReportController extends ReportBaseController {
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
-
-		final List<CaseLoadReportTO> caseLoadReportList = collectCaseLoadReportTOs(studentTypeIds);
-
+		
 		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
+
+		final List<CaseLoadReportTO> caseLoadReportList = collectCaseLoadReportTOs(cleanStudentTypeIds);		
 		final Map<String, Object> parameters = collectParamsForReport(cleanStudentTypeIds);
 
 		generateReport(response, parameters, caseLoadReportList, REPORT_URL,
