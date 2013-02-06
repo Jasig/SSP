@@ -45,6 +45,7 @@ public class SelfHelpGuideQuestion
 
 	private static final long serialVersionUID = -3535904390712079266L;
 
+	
 	@Column(nullable = false)
 	private int questionNumber;
 

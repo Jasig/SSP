@@ -26,7 +26,7 @@ import org.jasig.ssp.model.reference.SelfHelpGuide;
 import org.jasig.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
-
+ 
 public class SelfHelpGuideTO extends AbstractReferenceTO<SelfHelpGuide>
 		implements TransferObject<SelfHelpGuide> {
 

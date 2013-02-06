@@ -108,8 +108,8 @@ Ext.define('Ssp.controller.MainViewController', {
 		}
 		
 		arrViewItems = [{xtype:'adminmain',
-					     items:[{xtype: 'admintreemenu', flex:1 }, 
-					            {xtype: 'adminforms', flex: 3 }],
+					     items:[{xtype: 'admintreemenu', region:'west' ,  width: 275}, 
+					            {xtype: 'adminforms', region:'center' }],
 					     flex:5}];
 		
 		mainView.add( arrViewItems );

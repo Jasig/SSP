@@ -18,8 +18,14 @@
  */
 package org.jasig.ssp.dao.reference;
 
+import java.util.UUID;
+
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -33,4 +39,13 @@ public class SelfHelpGuideQuestionDao extends
 	public SelfHelpGuideQuestionDao() {
 		super(SelfHelpGuideQuestion.class);
 	}
+
+	public PagingWrapper<SelfHelpGuideQuestion> getAllForParent(
+			SortingAndPaging createForSingleSort, String selfReferenceGuideId) {
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("selfHelpGuide.id", UUID.fromString(selfReferenceGuideId)));
+
+		return processCriteriaWithStatusSortingAndPaging(criteria,
+				createForSingleSort);	
+		}
 }

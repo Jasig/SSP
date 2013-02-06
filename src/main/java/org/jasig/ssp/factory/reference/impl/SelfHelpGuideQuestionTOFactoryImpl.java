@@ -18,13 +18,18 @@
  */
 package org.jasig.ssp.factory.reference.impl;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.reference.SelfHelpGuideQuestionDao;
 import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
 import org.jasig.ssp.factory.reference.SelfHelpGuideQuestionTOFactory;
+import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.model.reference.SelfHelpGuide;
 import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.reference.SelfHelpGuideQuestionTO;
 
 @Service
@@ -46,4 +51,18 @@ public class SelfHelpGuideQuestionTOFactoryImpl
 		return dao;
 	}
 
+	@Override
+	public SelfHelpGuideQuestion from(SelfHelpGuideQuestionTO tObject)
+			throws ObjectNotFoundException {
+		SelfHelpGuideQuestion question = super.from(tObject);
+		question.setName("N/A");
+		question.setQuestionNumber(tObject.getQuestionNumber());
+		question.setMandatory(tObject.isMandatory());
+		question.setCritical(tObject.isMandatory());
+		question.setSelfHelpGuide(new SelfHelpGuide(UUID.fromString(tObject.getSelfHelpGuideId())));
+		question.setChallenge(new Challenge((tObject.getChallengeId())));
+		
+		
+		return question;
+	}
 }

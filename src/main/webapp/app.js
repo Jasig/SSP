@@ -106,6 +106,16 @@ Ext.require([
     'Ssp.view.admin.forms.crg.EditChallenge',
     'Ssp.view.admin.forms.crg.EditReferral',
 
+    //MyGPS ADMIN TOOLS
+    'Ssp.view.admin.forms.shg.SelfHelpGuideAdmin',
+    'Ssp.view.admin.forms.shg.SelfHelpGuidesDisplayAdmin',
+    'Ssp.view.admin.forms.shg.EditSelfHelpGuide',
+    'Ssp.view.admin.forms.shg.EditSelfHelpGuideChallenges',
+    'Ssp.view.admin.forms.shg.EditSelfHelpGuideDetails',
+    'Ssp.view.admin.forms.shg.EditSelfHelpGuideAvailableChallengesAdmin',
+    'Ssp.view.admin.forms.shg.EditSelfHelpGuideEditChallenges',    
+    
+  
     // JOURNAL ADMIN VIEWS
     'Ssp.view.admin.forms.journal.JournalStepAdmin',
     'Ssp.view.admin.forms.journal.JournalStepDetailAdmin',
@@ -164,6 +174,8 @@ Ext.require([
 	'Ssp.model.tool.earlyalert.EarlyAlertResponse',
 	'Ssp.model.tool.journal.JournalEntry',
 	'Ssp.model.tool.journal.JournalEntryDetail',
+	'Ssp.model.tool.shg.SelfHelpGuides',
+	'Ssp.model.tool.shg.SelfHelpGuideQuestions',
 	'Ssp.model.reference.AbstractReference',
     'Ssp.model.reference.Challenge',
     'Ssp.model.reference.ChallengeCategory',
@@ -183,6 +195,8 @@ Ext.require([
 	'Ssp.store.Caseload',
     'Ssp.store.Tasks',
     'Ssp.store.Goals',
+    'Ssp.store.SelfHelpGuides',
+    'Ssp.store.SelfHelpGuideQuestions',
     'Ssp.store.JournalEntries',
     'Ssp.store.JournalEntryDetails',
     'Ssp.store.EarlyAlerts',
@@ -334,6 +348,8 @@ var apiUrls = [
   {name: 'personViewHistory', url: 'report/{id}/History'},
   {name: 'personPrintTask', url: 'person/{id}/task/print'},
   {name: 'personSearch', url: 'person/search'},
+  {name: 'selfHelpGuides', url: 'selfHelpGuides/search'},
+  {name: 'selfHelpGuideQuestions', url: 'selfHelpGuides/selfHelpGuideQuestions'},
   {name: 'personProgramStatus', url: 'person/{id}/programStatus'},
   {name: 'programStatus', url: 'reference/programStatus'},
   {name: 'programStatusChangeReason', url: 'reference/programStatusChangeReason'},
@@ -541,6 +557,18 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+			        currentSelfHelpGuide:{
+				        fn: function(){
+				            return new Ssp.model.tool.shg.SelfHelpGuides({id:""});
+				    	},
+				        singleton: true
+			        },		
+			        currentSelfHelpGuideQuestions:{
+				        fn: function(){
+				            return new Ssp.model.tool.shg.SelfHelpGuideQuestions({id:""});
+				    	},
+				        singleton: true
+			        },			        
 			        treeStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.TreeStore',{
@@ -690,6 +718,8 @@ Ext.onReady(function(){
 				    referralSourcesStore: 'Ssp.store.reference.ReferralSources',
 				    referralSourcesBindStore: 'Ssp.store.reference.ReferralSourcesBind',
 				    searchStore: 'Ssp.store.Search',
+				    selfHelpGuidesStore: 'Ssp.store.SelfHelpGuides',
+				    selfHelpGuideQuestionsStore: 'Ssp.store.SelfHelpGuideQuestions',
 				    serviceReasonsStore: 'Ssp.store.reference.ServiceReasons',
 				    specialServiceGroupsStore: 'Ssp.store.reference.SpecialServiceGroups',
 				    specialServiceGroupsBindStore: 'Ssp.store.reference.SpecialServiceGroupsBind',

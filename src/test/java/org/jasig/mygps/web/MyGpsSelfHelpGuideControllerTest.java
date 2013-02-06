@@ -36,7 +36,7 @@ import org.jasig.ssp.model.reference.SelfHelpGuideGroup;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.SelfHelpGuideGroupService;
 import org.jasig.ssp.service.reference.SelfHelpGuideService;
-import org.jasig.ssp.transferobject.reference.SelfHelpGuideDetailTO;
+import org.jasig.ssp.transferobject.reference.SelfHelpGuideDetailsTO;
 import org.jasig.ssp.transferobject.reference.SelfHelpGuideTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -109,7 +109,7 @@ public class MyGpsSelfHelpGuideControllerTest {
 		replay(selfHelpGuideGroupService);
 
 		try {
-			SelfHelpGuideDetailTO content = controller
+			SelfHelpGuideDetailsTO content = controller
 					.getContentById(selfHelpGuideId);
 			assertNotNull(content);
 

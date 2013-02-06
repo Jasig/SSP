@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,17 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.reference;
-
-import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
-import org.jasig.ssp.service.ReferenceService;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
-
-public interface SelfHelpGuideQuestionService extends
-		ReferenceService<SelfHelpGuideQuestion> {
-
-	PagingWrapper<SelfHelpGuideQuestion> getAllForParent(
-			SortingAndPaging createForSingleSort, String selfReferenceGuideId);
-
-}
+Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideAvailableChallengesAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	store: 'challengesStore',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentChallenge'
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'editchallenge'
+    },      
+	init: function() {
+		var me=this;
+		
+		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
+		me.store.load();
+		
+		return me.callParent(arguments);
+    }  ,
+	
+	displayEditor: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});

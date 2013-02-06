@@ -42,7 +42,7 @@ public class SelfHelpGuideQuestionTO extends
 
 	private UUID challengeId;
 
-	private UUID selfHelpGuideId;
+	private String selfHelpGuideId;
 
 	public SelfHelpGuideQuestionTO() {
 		super();
@@ -73,9 +73,10 @@ public class SelfHelpGuideQuestionTO extends
 		questionNumber = model.getQuestionNumber();
 		critical = model.isCritical();
 		mandatory = model.isMandatory();
-
+		//For display purposes we put the challenge name as the question name.
+		setName(model.getChallenge().getName());
 		if (model.getSelfHelpGuide() != null) {
-			selfHelpGuideId = model.getSelfHelpGuide().getId();
+			selfHelpGuideId = model.getSelfHelpGuide().getId().toString();
 		}
 
 		if (model.getChallenge() != null) {
@@ -115,11 +116,11 @@ public class SelfHelpGuideQuestionTO extends
 		this.challengeId = challengeId;
 	}
 
-	public UUID getSelfHelpGuideId() {
+	public String getSelfHelpGuideId() {
 		return selfHelpGuideId;
 	}
 
-	public void setSelfHelpGuideId(final UUID selfHelpGuideId) {
+	public void setSelfHelpGuideId(final String selfHelpGuideId) {
 		this.selfHelpGuideId = selfHelpGuideId;
 	}
 

@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,17 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.reference;
-
-import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
-import org.jasig.ssp.service.ReferenceService;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
-
-public interface SelfHelpGuideQuestionService extends
-		ReferenceService<SelfHelpGuideQuestion> {
-
-	PagingWrapper<SelfHelpGuideQuestion> getAllForParent(
-			SortingAndPaging createForSingleSort, String selfReferenceGuideId);
-
-}
+Ext.define('Ssp.view.admin.forms.shg.SelfHelpGuideAdmin', {
+	extend: 'Ext.container.Container',
+	alias : 'widget.selfhelpguideadmin',
+	title: 'Self Help Guide Admin',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.shg.SelfHelpGuideAdminViewController',
+	height: '100%',
+	width: '100%',
+	layout: {
+        type: 'vbox',
+        align: 'stretch'
+    },
+    initComponent: function(){
+		Ext.apply(this,{
+	          items: [
+	                  {
+	                  	xtype: 'selfhelpguidesdisplayadmin', 
+	                    anchor: '100%',
+	                  	flex: 1
+	                  }
+	                 ]});
+    	return this.callParent(arguments);
+    }
+});

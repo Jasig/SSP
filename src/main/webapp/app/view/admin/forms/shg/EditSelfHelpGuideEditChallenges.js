@@ -16,25 +16,33 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.admin.AdminTreeMenu', {
-	extend: 'Ext.tree.Panel',
-	alias : 'widget.admintreemenu',
-	id: 'AdminTreeMenu',
+Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideEditChallenges',{
+	extend: 'Ext.form.Panel',
+	alias : 'widget.editselfhelpguideeditchallenges',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.AdminViewController',
-    inject: {
-    	store: 'adminTreeMenusStore'
-    },    
+    controller: 'Ssp.controller.admin.shg.SelfHelpGuideEditChallengesAdminController',
+	title: 'Manage Challenges',
+	height: '100%',
+	width: '100%',
+	layout: {
+        type: 'hbox',
+        align: 'stretch'
+    },
     collapsible: true,
-	initComponent: function() {	
-		Ext.apply(this, 
-				{
-					store: this.store,
-					singleExpand: true,
-					fields: ['title','form','text'],	
-				});
-		
-	     this.callParent(arguments);
-	}	
-}); 
+    initComponent: function(){
+		Ext.apply(this,{
+	          items: [
+	                  {
+	                  	xtype: 'editselfhelpguidechallenges', 
+	                  	flex: 1
+	                  },{
+	                  	xtype: 'editselfhelpguideavailablechallengesadmin', 
+	                  	flex: 1
+	                  }
+	                 ]});
+    	return this.callParent(arguments);
+    }
+});
+
+ 

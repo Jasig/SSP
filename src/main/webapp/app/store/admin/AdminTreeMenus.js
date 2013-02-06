@@ -296,6 +296,19 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     										leaf: true
     									}]
     						},{
+    							text: 'MyGPS',
+    							title: 'MyGPS',
+    							form: '',
+    							expanded: false,
+    							children: [{
+											text: 'Self Help Guides',
+											title: 'Self Help Guides',
+											store: 'selfHelpGuides',
+											form: 'selfhelpguideadmin',
+											leaf: true
+										}]
+    						},
+    						{
     							text: 'Security',
     							title: 'Security',
     							form: '',

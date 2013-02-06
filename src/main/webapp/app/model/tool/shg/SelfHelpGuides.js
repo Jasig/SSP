@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,17 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.reference;
-
-import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
-import org.jasig.ssp.service.ReferenceService;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
-
-public interface SelfHelpGuideQuestionService extends
-		ReferenceService<SelfHelpGuideQuestion> {
-
-	PagingWrapper<SelfHelpGuideQuestion> getAllForParent(
-			SortingAndPaging createForSingleSort, String selfReferenceGuideId);
-
-}
+Ext.define('Ssp.model.tool.shg.SelfHelpGuides', {
+    extend: 'Ssp.model.AbstractBase',
+    fields: [{name:'id',type:'string'},
+             {name:'name',type:'string'},
+             {name:'description',type:'string'},
+             {name:'active',type:'boolean'},
+             {name:'authenticationRequired',type:'boolean'},             
+             {name:'threshold',type:'integer'},
+             {name:'introductoryText',type:'string'},
+             {name:'summaryText',type:'string'},
+             {name:'summaryTextEarlyAlert',type:'string'},    
+             {name:'summaryTextThreshold',type:'string'},
+             {name:'summaryTextEarlyAlert',type:'string'}
+             ]
+});

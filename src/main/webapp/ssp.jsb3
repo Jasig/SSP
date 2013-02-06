@@ -1512,7 +1512,93 @@
                     "clsName": "Ssp.view.tools.studentintake.EducationGoals",
                     "name": "EducationGoals.js",
                     "path": "/app/view/tools/studentintake/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.shg.EditSelfHelpGuideAvailableChallengesAdminViewController",
+                    "name": "EditSelfHelpGuideAvailableChallengesAdminViewController.js",
+                    "path": "/app/controller/admin/shg/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.shg.EditSelfHelpGuideChallengesViewController",
+                    "name": "EditSelfHelpGuideChallengesViewController.js",
+                    "path": "/app/controller/admin/shg/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.shg.EditSelfHelpGuideViewController",
+                    "name": "EditSelfHelpGuideViewController.js",
+                    "path": "/app/controller/admin/shg/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.shg.SelfHelpGuideAdminViewController",
+                    "name": "SelfHelpGuideAdminViewController.js",
+                    "path": "/app/controller/admin/shg/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.shg.SelfHelpGuideEditAdminController",
+                    "name": "SelfHelpGuideEditAdminController.js",
+                    "path": "/app/controller/admin/shg/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.shg.SelfHelpGuideEditChallengesAdminController",
+                    "name": "SelfHelpGuideEditChallengesAdminController.js",
+                    "path": "/app/controller/admin/shg/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.shg.SelfHelpGuidesDisplayViewController",
+                    "name": "SelfHelpGuidesDisplayViewController.js",
+                    "path": "/app/controller/admin/shg/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.studentintake.EducationGoals",
+                    "name": "EducationGoals.js",
+                    "path": "/app/controller/admin/shg/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.shg.SelfHelpGuideQuestions",
+                    "name": "SelfHelpGuideQuestions.js",
+                    "path": "/app/model/tool/shg/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.shg.SelfHelpGuides",
+                    "name": "SelfHelpGuides.js",
+                    "path": "/app/model/tool/shg/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.shg.EditSelfHelpGuide",
+                    "name": "EditSelfHelpGuide.js",
+                    "path": "/app/view/admin/forms/shg/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.shg.EditSelfHelpGuideAvailableChallengesAdmin",
+                    "name": "EditSelfHelpGuideAvailableChallengesAdmin.js",
+                    "path": "/app/view/admin/forms/shg/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.shg.EditSelfHelpGuideChallenges",
+                    "name": "EditSelfHelpGuideChallenges.js",
+                    "path": "/app/view/admin/forms/shg/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.shg.EditSelfHelpGuideDetails",
+                    "name": "EditSelfHelpGuideDetails.js",
+                    "path": "/app/view/admin/forms/shg/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.shg.EditSelfHelpGuideEditChallenges",
+                    "name": "EditSelfHelpGuideEditChallenges.js",
+                    "path": "/app/view/admin/forms/shg/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.shg.SelfHelpGuideAdmin",
+                    "name": "SelfHelpGuideAdmin.js",
+                    "path": "/app/view/admin/forms/shg/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.shg.SelfHelpGuidesDisplayAdmin",
+                    "name": "SelfHelpGuidesDisplayAdmin.js",
+                    "path": "/app/view/admin/forms/shg/"
                 }
+                
             ]
         },
         {

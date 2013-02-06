@@ -159,9 +159,10 @@ Ext.define('Ssp.view.admin.AdminMain', {
 		Ext.apply(this, 
 				{
 				    layout: {
-				    	type: 'hbox',
+				    	type: 'border',
 				    	align: 'stretch'
-				    }
+				    },
+				    split: true
 				});
 		
 	     this.callParent(arguments);
@@ -799,376 +800,12 @@ Ext.define('Ssp.view.tools.sis.Assessment', {
         me.callParent(arguments);
     }
 });
-/*
- * Licensed to Jasig under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Jasig licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a
- * copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-Ext.define('Ssp.view.tools.disability.DisabilityServices', {
-	extend: 'Ext.panel.Panel',
-	alias : 'widget.disabilityservices',
-	title: 'Disability Services',	
-	width: '100%',
-	height: '100%',   
-	autoScroll: true,
-	initComponent: function() {	
-		var me=this;
-		Ext.apply(me, 
-				{		
-					border: 0,
-					dockedItems: [{
-				        dock: 'top',
-				        xtype: 'toolbar',
-				        items: [{
-				        			xtype: 'button', 
-				        			itemId: 'saveButton', 
-				        			text:'Save', 
-				        			action: 'save'
-				        	   }]
-					}],
-				    
-				    items: [ Ext.createWidget('tabpanel', {
-				        width: '100%',
-				        height: '100%',
-				        activeTab: 0,
-						border: 0,
-				        items: [ { title: 'General',
-				        	       autoScroll: true,
-				        		   items: [{xtype: 'disabilitygeneral'}]
-				        		},{
-				            		title: 'Agency Contacts',
-				            		autoScroll: true,
-				            		border: 0,
-				            		items: [{xtype: 'disabilityagencycontacts'}]
-				        		},{
-				            		title: 'Disability',
-				            		autoScroll: true,
-				            		border: 0,
-				            		items: [{xtype: 'disabilitycodes'}]
-				        		},{
-				            		title: 'Disposition',
-				            		autoScroll: true,
-				            		border: 0,
-				            		items: [{xtype: 'disabilitydisposition'}]
-				        		},{
-				            		title: 'Accommodations',
-				            		autoScroll: true,
-				            		border: 0,
-				            		items: [{xtype: 'disabilityaccommodations'}]
-				        		}]
-				    })]
-			    
-		});
-		
-		return me.callParent(arguments);
-	}
-});
-/*
- * Licensed to Jasig under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Jasig licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a
- * copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-Ext.define('Ssp.view.tools.disability.General', {
-    extend: 'Ext.form.Panel',
-    alias: 'widget.disabilitygeneral',
-    height: '100%',
-    width: '100%',
-    bodyPadding: 0,
-    autoScroll: true,
-    initComponent: function() {
-        var me = this;
 
-        Ext.applyIf(me, {
-            items: [
-                {
-                    xtype: 'combobox',
-                    fieldLabel: 'ODS Status',
-                    anchor: '100%'
-                },
-                {
-                    xtype: 'textareafield',
-                    fieldLabel: 'If temporary eligibility, please explain',
-                    anchor: '100%'
-                },
-                {
-                    xtype: 'displayfield',
-                    value: 'Display Field',
-                    fieldLabel: 'ODS Registration Date',
-                    anchor: '100%'
-                },
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'ODS Counselor',
-                    anchor: '100%'
-                },
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Referred to ODS By',
-                    anchor: '100%'
-                }
-            ]
-        });
 
-        me.callParent(arguments);
-    }
-});
-/*
- * Licensed to Jasig under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Jasig licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a
- * copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-Ext.define('Ssp.view.tools.disability.AgencyContacts', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.disabilityagencycontacts',
-    width: '100%',
-    height: '100%',
-    autoScroll: true,
-	initComponent: function() {	
-        var me = this;
 
-		Ext.apply(me, 
-				{
-				    bodyPadding: 5,
-				    layout: 'anchor',
-				    defaults: {
-				        anchor: '100%'
-				    },
-				    defaultType: 'checkbox'
-				});
-		
-		return me.callParent(arguments);
-	}
-});
-/*
- * Licensed to Jasig under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Jasig licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a
- * copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-Ext.define('Ssp.view.tools.disability.DisabilityCodes', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.disabilitycodes',
-    width: '100%',
-    height: '100%',
-    autoScroll: true,
-	initComponent: function() {	
-        var me = this;
 
-		Ext.apply(me, 
-				{
-				    bodyPadding: 5,
-				    layout: 'anchor',
-				    defaults: {
-				        anchor: '100%'
-				    },
-				    defaultType: 'checkbox'
-				});
-		
-		return me.callParent(arguments);
-	}
-});
-/*
- * Licensed to Jasig under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Jasig licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a
- * copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-Ext.define('Ssp.view.tools.disability.Disposition', {
-    extend: 'Ext.form.Panel',
-    alias: 'widget.disabilitydisposition',
-    height: '100%',
-    width: '100%',
-    bodyPadding: 0,
-    autoScroll: true,
-    initComponent: function() {
-        var me = this;
 
-        Ext.applyIf(me, {
-            items: [
-                {
-                    xtype: 'checkboxfield',
-                    fieldLabel: 'Release Signed',
-                    anchor: '100%'
-                },
-                {
-                    xtype: 'checkboxfield',
-                    fieldLabel: 'Records Requested',
-                    boxLabel: '',
-                    anchor: '100%'
-                },
-                {
-                    xtype: 'checkboxfield',
-                    fieldLabel: 'Referred for Screening LD/ADD',
-                    boxLabel: '',
-                    anchor: '100%'
-                },
-                {
-                    xtype: 'checkboxfield',
-                    fieldLabel: 'Rights and Duties',
-                    boxLabel: '',
-                    anchor: '100%'
-                },
-                {
-                    xtype: 'checkboxfield',
-                    fieldLabel: 'Eligibility Letter Sent',
-                    boxLabel: '',
-                    anchor: '100%'
-                },
-                {
-                    xtype: 'checkboxfield',
-                    fieldLabel: 'Ineligibility Letter Sent',
-                    boxLabel: '',
-                    anchor: '100%'
-                },
-                {
-                    xtype: 'checkboxfield',
-                    fieldLabel: 'No Disability Documentation Received',
-                    boxLabel: '',
-                    anchor: '100%'
-                },
-                {
-                    xtype: 'checkboxfield',
-                    fieldLabel: 'Inadequate Documentation',
-                    boxLabel: '',
-                    anchor: '100%'
-                },
-                {
-                    xtype: 'checkboxfield',
-                    fieldLabel: 'Document states individual has no disability',
-                    boxLabel: '',
-                    anchor: '100%'
-                },
-                {
-                    xtype: 'checkboxfield',
-                    fieldLabel: 'HS reports no special ed placement/no report',
-                    boxLabel: '',
-                    anchor: '100%'
-                },
-                {
-                    xtype: 'combobox',
-                    fieldLabel: 'On Medication',
-                    anchor: '100%'
-                },
-                {
-                    xtype: 'textareafield',
-                    fieldLabel: 'If yes, list medications',
-                    anchor: '100%'
-                },
-                {
-                    xtype: 'textareafield',
-                    fieldLabel: 'Functional limitations, please explain',
-                    anchor: '100%'
-                }
-            ]
-        });
 
-        me.callParent(arguments);
-    }
-
-});
-/*
- * Licensed to Jasig under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Jasig licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a
- * copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-Ext.define('Ssp.view.tools.disability.Accommodations', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.disabilityaccommodations',
-    width: '100%',
-    height: '100%',
-    autoScroll: true,
-	initComponent: function() {	
-        var me = this;
-
-		Ext.apply(me, 
-				{
-				    bodyPadding: 5,
-				    layout: 'anchor',
-				    defaults: {
-				        anchor: '100%'
-				    },
-				    defaultType: 'checkbox'
-				});
-		
-		return me.callParent(arguments);
-	}
-});
 /*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
@@ -2727,7 +2364,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
     		  return 1
     		 return 0 //default return value (no sorting)
     		});
-    },
+    },    
     
     /**
      * @params
@@ -3404,6 +3041,7 @@ Ext.define('Ssp.util.Constants',{
     	 */
     	isRestrictedAdminItemId: function( id ){
     		var restrictedIds = [
+    		            Ssp.util.Constants.DISABILITY_AGENCY_OTHER_ID,
     		        	Ssp.util.Constants.EDUCATION_GOAL_OTHER_ID,
     		        	Ssp.util.Constants.EDUCATION_GOAL_MILITARY_ID,
     		        	Ssp.util.Constants.EDUCATION_GOAL_BACHELORS_DEGREE_ID,
@@ -3432,7 +3070,10 @@ Ext.define('Ssp.util.Constants',{
     	// confidentiality level for lists in the SSP portlet.
     	// default to EVERYONE: 'b3d077a7-4055-0510-7967-4a09f93a0357'
     	DEFAULT_SYSTEM_CONFIDENTIALITY_LEVEL_ID: '',
-    	
+
+    	// DISABILITY AGENCY - ID VALUES RELATED TO DISABILITY INTAKE DISABILITY AGENCIES
+        DISABILITY_AGENCY_OTHER_ID: '224b03d9-90da-4f9c-8959-ea2e97661f40',
+    	   	
     	// EDUCATION GOALS - ID VALUES RELATED TO STUDENT INTAKE EDUCATION GOALS
         EDUCATION_GOAL_OTHER_ID: '78b54da7-fb19-4092-bb44-f60485678d6b',
         EDUCATION_GOAL_MILITARY_ID: '6c466885-d3f8-44d1-a301-62d6fe2d3553',
@@ -3651,8 +3292,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 									leaf: true
 							    }]
 			                },{
-			    	            text: 'Disability Services',
-			    	            title: 'Disability Services',
+			    	            text: 'Disability Intake',
+			    	            title: 'Disability Intake',
 			    	            form: '',
 			    	            expanded: false,
 			    	            children: [{
@@ -3660,7 +3301,41 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 									title: 'Disability Accommodations',
 									store: 'disabilityAccommodations',
 							        form: 'AbstractReferenceAdmin',
-									leaf: true
+									leaf: true,
+									columns: [
+					    		                { header: 'Name',  
+					    		                  dataIndex: 'name',
+					    		                  required: true,
+					    		                  field: {
+					    		                      xtype: 'textfield'
+					    		                  },
+					    		                  flex: 1 },
+					      		                { header: 'Additional Desc',
+					    		                  required: true,
+					      		                  dataIndex: 'useDescription', 
+					      		                  flex: .2,
+					      		                  renderer: me.columnRendererUtils.renderFriendlyBoolean,
+					      		                  field: {
+					      		                      xtype: 'checkbox'
+					      		                  }
+					      		                },
+					    		                { header: 'Desc Label',
+					    		                  required: false,
+					    		                  dataIndex: 'descriptionFieldLabel',
+					    		                  field: {
+					    		                      xtype: 'textfield'
+					    		                  },
+					    		                  flex: .2
+					    		                },
+					    		                { header: 'Long/Short Desc',
+					    		                  required: false,
+					    		                  dataIndex: 'descriptionFieldType',
+					    		                  field: {
+					    		                      xtype: 'textfield'
+					    		                  },
+					    		                  flex: .2
+					    		                }
+					    		           ]
 							    },{
 									text: 'Disability Agencies',
 									title: 'Disability Agencies',
@@ -3858,6 +3533,19 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     										leaf: true
     									}]
     						},{
+    							text: 'MyGPS',
+    							title: 'MyGPS',
+    							form: '',
+    							expanded: false,
+    							children: [{
+											text: 'Self Help Guides',
+											title: 'Self Help Guides',
+											store: 'selfHelpGuides',
+											form: 'selfhelpguideadmin',
+											leaf: true
+										}]
+    						},
+    						{
     							text: 'Security',
     							title: 'Security',
     							form: '',
@@ -6281,8 +5969,8 @@ Ext.define('Ssp.controller.MainViewController', {
 		}
 		
 		arrViewItems = [{xtype:'adminmain',
-					     items:[{xtype: 'admintreemenu', flex:1 }, 
-					            {xtype: 'adminforms', flex: 3 }],
+					     items:[{xtype: 'admintreemenu', region:'west' ,  width: 275}, 
+					            {xtype: 'adminforms', region:'center' }],
 					     flex:5}];
 		
 		mainView.add( arrViewItems );
@@ -14742,6 +14430,7 @@ Ext.define('Ssp.view.admin.AdminTreeMenu', {
     inject: {
     	store: 'adminTreeMenusStore'
     },    
+    collapsible: true,
 	initComponent: function() {	
 		Ext.apply(this, 
 				{
@@ -20439,7 +20128,18 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
     	REQUIRED_PERMISSIONS_EARLY_ALERT_DETAILS_BUTTON:['ROLE_PERSON_EARLY_ALERT_READ','ROLE_PERSON_EARLY_ALERT_RESPONSE_READ'],
     	
     	/* STUDENT INFORMATION SYSTEM TOOL */
-     	REQUIRED_PERMISSIONS_STUDENTINFORMATIONSYSTEM_TOOL:['ROLE_PERSON_READ']
+     	REQUIRED_PERMISSIONS_STUDENTINFORMATIONSYSTEM_TOOL:['ROLE_PERSON_READ'],
+    
+		/* DISABILITY INTAKE TOOL */
+	 	REQUIRED_PERMISSIONS_DISABILITYINTAKE_TOOL:['ROLE_DISABILITY_INTAKE_READ'],
+    	REQUIRED_PERMISSIONS_DISABILITY_INTAKE_SAVE_BUTTON: ['ROLE_DISABILITY_INTAKE_WRITE'],
+    	REQUIRED_PERMISSIONS_DISABILITY_INTAKE_CANCEL_BUTTON: ['ROLE_DISABILITY_INTAKE_WRITE'],
+    	
+    	/* SELF HELP GUIDE ADMIN TOOL */
+	 	REQUIRED_PERMISSIONS_SELF_HELP_GUIDE_EDIT_BUTTON:['ROLE_SELF_HELP_GUIDE_ADMIN_READ'],
+	 	REQUIRED_PERMISSIONS_SELF_HELP_GUIDE_DELETE_BUTTON:['ROLE_SELF_HELP_GUIDE_ADMIN_WRITE'],
+	 	REQUIRED_PERMISSIONS_SELF_HELP_GUIDE_ADD_BUTTON:['ROLE_SELF_HELP_GUIDE_ADMIN_WRITE'],
+	 	REQUIRED_PERMISSIONS_SELF_HELP_GUIDE_SAVE_BUTTON:['ROLE_SELF_HELP_GUIDE_ADMIN_WRITE']
     },
     
     /**
@@ -22189,12 +21889,11 @@ Ext.define('Ssp.store.Tools', {
     	                { group:'beta', name: "Student Intake", toolType: "studentintake", active: true },
     	                { group:'beta', name: "Action Plan", toolType: "actionplan", active: true },
     	                { group:'beta', name: "Journal", toolType: "journal", active: true },
-    	                { group:'rc1', name: "Early Alert", toolType: "earlyalert", active: true }]         
-    	                
+    	                { group:'rc1', name: "Early Alert", toolType: "earlyalert", active: true },        
+    					{ group:'rc1', name: "Disability Intake", toolType: "disabilityintake", active: true }]
     	                /*
     	                { group:'rc1', name: "SIS", toolType: "StudentInformationSystem", active: true },
     	                { group:'rc1', name: "Documents", toolType: "StudentDocuments", active: false },
-    	                { group:'rc1', name: "Disability Services", toolType: "DisabilityServices", active: false },
     	                { group:'rc1', name: "Displaced Workers", toolType: "DisplacedWorker", active: false },
     	                { group:'rc1', name: "Student Success", toolType: "StudentSuccess", active: false },
     	                */
@@ -23965,5 +23664,1075 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 		
 		return me.callParent(arguments);
 	}	
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideAvailableChallengesAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	store: 'challengesStore',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentChallenge'
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'editchallenge'
+    },      
+	init: function() {
+		var me=this;
+		
+		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
+		me.store.load();
+		
+		return me.callParent(arguments);
+    }  ,
+	
+	displayEditor: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideChallengesViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	formUtils: 'formRendererUtils',
+    	parent: 'currentSelfHelpGuide',
+    	store: 'selfHelpGuideQuestionsStore',
+    	model: 'currentSelfHelpGuideQuestions'
+    },
+    config: {
+    	formToDisplay: 'selfhelpguideadmin',
+    	containerToLoadInto: 'adminforms'
+    },
+    control: {
+    	'deleteChallengeButton': {
+			click: 'deleteConfirmation'
+		},
+       'gridView': {
+    	   refresh: 'onRefresh',
+    	   drop: 'onDrop'
+        },
+    },
+    
+	init: function() {
+		this.formUtils.reconfigureGridPanel( this.getView(), this.store);
+		this.store.load({
+			params: {selfReferenceGuideId:this.parent.data.id}
+		});
+		return this.callParent(arguments);
+    },
+    onRefresh: function(node, data, dropRec, dropPosition)
+    {
+    	console.log('foo');
+    },
+    onDrop:function(node, data, overModel, dropPosition, options)
+	{   
+		//Since the panels use two different models we need to remove the record from 
+		//the store and recreate it so it conforms to the appropriate model
+		var badRecord = this.store.findRecord('id', data.records[0].data.id);
+        var newQuestionNumber = this.store.indexOf(badRecord) + 1;
+        var newRecord = new Ssp.model.tool.shg.SelfHelpGuideQuestions();
+        newRecord.data.critical = false;
+        newRecord.data.mandatory = false;
+        newRecord.data.name = badRecord.data.name;
+        newRecord.data.challengeId = badRecord.data.id;
+        newRecord.data.questionNumber = newQuestionNumber;
+        newRecord.data.selfHelpGuideId = this.parent.data.id;
+        if(badRecord)
+        {
+        	this.store.data.replace(this.store.data.getKey(badRecord),newRecord);
+        	
+        	for(var i = 0; i<this.store.data.items.length; i++)
+        	{
+        		this.store.data.items[i].data.questionNumber = i+1;
+        	}
+        }
+        else
+        {
+        	this.store.data.add(newRecord);
+        }
+        this.formUtils.reconfigureGridPanel( this.getView(), this.store);        
+     },
+     deleteConfirmation: function( button ) {
+    	 var me=this;
+    	 var grid = button.up('grid');
+		 var store = grid.getStore();
+		 var selection = grid.getView().getSelectionModel().getSelection()[0];
+		 var message;
+		 if ( selection.get('id') ) 
+		 {
+			   if ( !Ssp.util.Constants.isRestrictedAdminItemId( selection.get('id')  ) )
+			   {
+				    message = 'You are about to delete ' + selection.get('name') + '. Would you like to continue?';
+			     	      	   
+		         Ext.Msg.confirm({
+		 		     title:'Delete?',
+		 		     msg: message,
+		 		     buttons: Ext.Msg.YESNO,
+		 		     fn: me.deleteRecord,
+		 		     scope: me
+		 		   });
+			   }else{
+				   Ext.Msg.alert('WARNING', 'This item is related to core SSP functionality. Please see a developer to delete this item.'); 
+			   }
+		  }else{
+			   Ext.Msg.alert('SSP Error', 'Unable to delete item.'); 
+		  }
+     },	
+
+	deleteRecord: function( btnId ){
+		var me=this;
+		var grid=me.getView();
+		var store = grid.getStore();
+		var selection = grid.getView().getSelectionModel().getSelection()[0];
+		var id = selection.get('id');
+		if (btnId=="yes")
+		{
+			me.apiProperties.makeRequest({
+	 		url: store.getProxy().url+"/"+id,
+	 		method: 'DELETE',
+			successFunc: function(response,responseText){
+	 		store.remove( store.getById( id ) );
+	 		   }
+	 	    });
+		}
+	},
+	
+	onCancelClick: function(button){
+		this.displayMain();
+	},
+	
+	displayMain: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentSelfHelpGuide',
+    	store: 'selfHelpGuidesStore',
+    	questionStore: 'selfHelpGuideQuestionsStore'
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'selfhelpguideadmin'
+    },
+    control: {
+    	'saveButton': {
+			click: 'onSaveClick'
+		},
+		
+		'cancelButton': {
+			click: 'onCancelClick'
+		}   	
+    },
+    
+	init: function() {
+		this.getView().getForm().loadRecord(this.model);
+		return this.callParent(arguments);
+    },
+	onSaveClick: function(button) {
+		var me = this;
+		var record, id, jsonData, url,parentId;
+		url = this.store.getProxy().url;
+		this.getView().getForm().updateRecord();
+		record = this.model;
+		id = record.get('id');
+		jsonData = record.data;
+		successFuncGetId = function(response, view) {
+			var r = Ext.decode(response.responseText);
+			parentId = r.id;
+	 		url = me.questionStore.getProxy().url;
+	 		for(var i=0; i<me.questionStore.data.items.length;i++)
+	 		{
+	 			jsonData = me.questionStore.data.items[i].data;
+	 			jsonData.selfHelpGuideId = parentId;
+	 			id = jsonData.id;
+	 			if (id.length > 0)
+	 			{
+	 				// editing
+	 				me.apiProperties.makeRequest({
+	 					url: url+"/"+id,
+	 					method: 'PUT',
+	 					jsonData: jsonData,
+	 					successFunc: successFunc 
+	 				});
+	 				
+	 			}else{
+	 				// adding
+	 				me.apiProperties.makeRequest({
+	 					url: url,
+	 					method: 'POST',
+	 					jsonData: jsonData,
+	 					successFunc: successFunc 
+	 				});		
+	 			}
+	 		}
+			
+		};
+		successFunc = function(response, view) {
+			me.displayMain();
+		};		
+		if (id.length > 0)
+		{
+			// editing
+			this.apiProperties.makeRequest({
+				url: url+"/"+id,
+				method: 'PUT',
+				jsonData: jsonData,
+				successFunc: successFuncGetId 
+			});
+		}else{
+			// adding
+			this.apiProperties.makeRequest({
+				url: url,
+				method: 'POST',
+				jsonData: jsonData,
+				successFunc: successFuncGetId 
+			});		
+		}
+	 	},		
+		
+	
+	onCancelClick: function(button){
+		this.displayMain();
+	},
+	
+	displayMain: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.admin.shg.SelfHelpGuideAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	selfHelpGuidesStore: 'selfHelpGuidesStore'
+    },
+	init: function() {
+		this.selfHelpGuidesStore.load();	
+		return this.callParent(arguments);
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.admin.shg.SelfHelpGuideEditAdminController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+	init: function() {
+		return this.callParent(arguments);
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.admin.shg.SelfHelpGuideEditChallengesAdminController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+	init: function() {
+		return this.callParent(arguments);
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.admin.shg.SelfHelpGuidesDisplayViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	store: 'selfHelpGuidesStore',
+    	selfHelpGuideQuestionsStore: 'selfHelpGuideQuestionsStore',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentSelfHelpGuide',
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'editselfhelpguide'
+    },
+    control: {
+    	'editButton': {
+			click: 'onEditClick'
+		},
+		
+		'addButton': {
+			click: 'onAddClick'
+		},
+
+		'deleteButton': {
+			click: 'deleteConfirmation'
+		}    	
+    },       
+	init: function() {
+		var me=this;
+		
+		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
+		me.store.load();
+		
+		return me.callParent(arguments);
+    }, 
+    
+	onEditClick: function(button) {
+		var grid, record;
+		grid = button.up('grid');
+		record = grid.getView().getSelectionModel().getSelection()[0];
+        if (record) 
+        {		
+        	this.model.data=record.data;
+        	this.displayEditor();
+        }else{
+     	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
+        }
+	},
+	
+	onAddClick: function(button){
+		var model = new Ssp.model.tool.shg.SelfHelpGuides();
+		this.model.data = model.data;
+		this.displayEditor();
+	},
+	
+    deleteConfirmation: function( button ) {
+  	   var me=this;
+        var grid = button.up('grid');
+        var store = grid.getStore();
+        var selection = grid.getView().getSelectionModel().getSelection()[0];
+        var message;
+        if ( selection.get('id') ) 
+        {
+      	   if ( !Ssp.util.Constants.isRestrictedAdminItemId( selection.get('id')  ) )
+    	   {
+      		    message = 'You are about to delete ' + selection.get('name') + '. Would you like to continue?';
+		     	      	   
+	            Ext.Msg.confirm({
+	    		     title:'Delete?',
+	    		     msg: message,
+	    		     buttons: Ext.Msg.YESNO,
+	    		     fn: me.deleteRecord,
+	    		     scope: me
+	    		   });
+	 	   }else{
+			   Ext.Msg.alert('WARNING', 'This item is related to core SSP functionality. Please see a developer to delete this item.'); 
+		   }
+         }else{
+      	   Ext.Msg.alert('SSP Error', 'Unable to delete item.'); 
+         }
+      },	
+ 	
+ 	deleteRecord: function( btnId ){
+ 		var me=this;
+ 		var grid=me.getView();
+ 		var store = grid.getStore();
+ 	    var selection = grid.getView().getSelectionModel().getSelection()[0];
+      	var id = selection.get('id');
+      	if (btnId=="yes")
+      	{
+      		me.apiProperties.makeRequest({
+        		   url: store.getProxy().url+"/"+id,
+        		   method: 'DELETE',
+        		   successFunc: function(response,responseText){
+        			   store.remove( store.getById( id ) );
+        		   }
+        	    });
+        }
+ 	},
+	
+	displayEditor: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.tool.shg.SelfHelpGuideQuestions', {
+    extend: 'Ssp.model.AbstractBase',
+    fields: [{name:'id',type:'string'},
+             {name:'name',type:'string'},
+             {name:'questionNumber',type:'integer'},
+             {name:'critical',type:'boolean'},
+             {name:'mandatory',type:'boolean'},             
+             {name:'selfHelpGuideId',type:'string'},
+             {name:'challengeId',type:'string'},
+             ]           
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.tool.shg.SelfHelpGuides', {
+    extend: 'Ssp.model.AbstractBase',
+    fields: [{name:'id',type:'string'},
+             {name:'name',type:'string'},
+             {name:'description',type:'string'},
+             {name:'active',type:'boolean'},
+             {name:'authenticationRequired',type:'boolean'},             
+             {name:'threshold',type:'integer'},
+             {name:'introductoryText',type:'string'},
+             {name:'summaryText',type:'string'},
+             {name:'summaryTextEarlyAlert',type:'string'},    
+             {name:'summaryTextThreshold',type:'string'},
+             {name:'summaryTextEarlyAlert',type:'string'}
+             ]
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuide',{
+	extend: 'Ext.form.Panel',
+	alias : 'widget.editselfhelpguide',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.shg.SelfHelpGuideEditAdminController',
+	height: '100%',
+	width: '100%',
+	layout: {
+        type: 'vbox',
+        align: 'stretch'
+    },
+    autoScroll:true,
+    initComponent: function(){
+		Ext.apply(this,{
+	          items: [
+	                  {
+	                  	xtype: 'editselfhelpguidedetails', 
+	                  	flex: 1
+	                  },{
+	                  	xtype: 'editselfhelpguideeditchallenges', 
+	                  	flex: 1
+	                  }
+	                 ]});
+    	return this.callParent(arguments);
+    }
+});
+
+ 
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideAvailableChallengesAdmin', {
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.editselfhelpguideavailablechallengesadmin',
+	title: 'Available Challenges',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.shg.EditSelfHelpGuideAvailableChallengesAdminViewController',
+    inject: {
+        apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson',
+        columnRendererUtils: 'columnRendererUtils'
+    },
+    height: '100%',
+	width: '100%',
+
+    initComponent: function(){
+    	var me=this;
+    	Ext.apply(me,
+    			{
+		          viewConfig: {
+		        	  plugins: {
+		                  ptype: 'gridviewdragdrop',
+		                  dragGroup: 'gridtogrid',
+		                  enableDrag: true
+		        	  },
+		          },
+    		      autoScroll: true,
+    		      selType: 'rowmodel',
+    		      enableDragDrop: false,
+    		      columns: [
+    		                { header: 'Name',  
+    		                  dataIndex: 'name',
+    		                  flex: 1 
+    		                }
+    		           ],
+    		        
+    		           dockedItems: [
+     		       		{
+     		       			xtype: 'pagingtoolbar',
+     		       		    dock: 'bottom',
+     		       		    displayInfo: true,
+     		       		    pageSize: me.apiProperties.getPagingSize()
+     		       		}]
+     		               	
+    	});
+    	
+    	return me.callParent(arguments);
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideChallenges',{
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.editselfhelpguidechallenges',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.shg.EditSelfHelpGuideChallengesViewController',
+	title: 'Assigned Challenges',
+    inject: {
+    	selfHelpGuideQuestionsStore: 'selfHelpGuideQuestionsStore',
+        apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson',
+        columnRendererUtils: 'columnRendererUtils',
+    	parent: 'currentSelfHelpGuide'
+    },	
+	initComponent: function() {
+    	var me=this;
+        Ext.apply(me, {
+	          viewConfig: {
+	        	  itemId: 'gridView',
+	        	  plugins: {
+	                  ptype: 'gridviewdragdrop',
+	                  dropGroup: 'gridtogrid',
+	                  dragGroup: 'gridtogrid',
+			          enableDrop: true,
+			          enableDrag: true,
+	        	  }        
+	                },	        	  
+		      enableDragDrop: true,
+		      selType: 'rowmodel',
+		      columns: [
+		                { 
+		                  header: 'Question Number',  
+			              dataIndex: 'questionNumber',
+			              flex: 1 
+			            },		                
+		                { 
+			              header: 'Challenge Name',  
+		                  dataIndex: 'name',
+		                  flex: 3 
+		                },
+		                { 
+		                  header: 'Critical',  
+    		              dataIndex: 'critical',
+		                  xtype: 'checkcolumn',
+    		              flex: 1 
+    		             },
+		                { 
+    		              header: 'Mandatory',  
+  		                  dataIndex: 'mandatory',
+		                  xtype: 'checkcolumn',
+		                  flex: 1 
+  		                } 		                
+		           ],
+            dockedItems: [{
+	               xtype: 'toolbar',
+	               items: [{
+    		                   text: 'Delete Challenge',
+    		                   xtype: 'button',
+    		                   action: 'delete',
+     		                   hidden: !me.authenticatedPerson.hasAccess('SELF_HELP_GUIDE_DELETE_BUTTON'),
+    		                   itemId: 'deleteChallengeButton'
+    		               }]
+	           },
+	       		{
+	       			xtype: 'pagingtoolbar',
+	       		    dock: 'bottom',
+	       		    displayInfo: true,
+	       		    pageSize: this.apiProperties.getPagingSize()
+	       		}]            
+        });
+
+        return this.callParent(arguments);
+    }	
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideDetails',{
+	extend: 'Ext.form.Panel',
+	alias : 'widget.editselfhelpguidedetails',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.shg.EditSelfHelpGuideViewController',
+	title: 'Edit Self Help Guide',
+    inject: {
+    	selfHelpGuidesStore: 'selfHelpGuidesStore',
+        authenticatedPerson: 'authenticatedPerson'
+    },
+    autoScroll: true,
+    collapsible: true,
+    scroll: 'vertical',
+	initComponent: function() {
+    	var me=this;
+        Ext.applyIf(me, {
+            items: [
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Self Help Guide Name',
+                    anchor: '100%',
+                    name: 'name'
+                },
+                {
+                    xtype: 'textareafield',
+                    fieldLabel: 'Description',
+                    anchor: '100%',
+                    name: 'description'
+                },               
+                {
+                    xtype: 'numberfield',
+                    fieldLabel: 'Threshold',
+                    anchor: '30%',
+                    name: 'threshold'
+                },{
+                    xtype: 'textareafield',
+                    fieldLabel: 'Introduction',
+                    anchor: '100%',
+                    name: 'introductoryText'
+                },
+                {
+                    xtype: 'textareafield',
+                    fieldLabel: 'Summary',
+                    anchor: '100%',
+                    name: 'summaryText'
+                },
+                {
+                    xtype: 'textareafield',
+                    fieldLabel: 'Threshold Summary',
+                    anchor: '100%',
+                    name: 'summaryTextThreshold'
+                },
+                {
+                    xtype: 'textareafield',
+                    fieldLabel: 'Early Alert Summary',
+                    anchor: '100%',
+                    name: 'summaryTextEarlyAlert'
+                },
+                {
+                    xtype: 'checkboxfield',
+                    fieldLabel: 'Active',
+                    anchor: '100%',
+                    name: 'active'
+                },
+                {
+                    xtype: 'checkboxfield',
+                    fieldLabel: 'Authentication Required',
+                    anchor: '100%',
+                    name: 'authenticationRequired'
+                }                
+            ],
+            dockedItems: [{
+	               xtype: 'toolbar',
+	               items: [{
+ 		                   text: 'Save',
+ 		                   xtype: 'button',
+ 		                   action: 'save',
+ 		                   hidden: !me.authenticatedPerson.hasAccess('SELF_HELP_GUIDE_SAVE_BUTTON'),
+ 		                   itemId: 'saveButton'
+ 		               }, '-', {
+ 		                   text: 'Cancel',
+ 		                   xtype: 'button',
+ 		                   action: 'cancel',
+ 		                   itemId: 'cancelButton'
+ 		               }]
+	           }]    
+        });
+
+        return this.callParent(arguments);
+    }	
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideEditChallenges',{
+	extend: 'Ext.form.Panel',
+	alias : 'widget.editselfhelpguideeditchallenges',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.shg.SelfHelpGuideEditChallengesAdminController',
+	title: 'Manage Challenges',
+	height: '100%',
+	width: '100%',
+	layout: {
+        type: 'hbox',
+        align: 'stretch'
+    },
+    collapsible: true,
+    initComponent: function(){
+		Ext.apply(this,{
+	          items: [
+	                  {
+	                  	xtype: 'editselfhelpguidechallenges', 
+	                  	flex: 1
+	                  },{
+	                  	xtype: 'editselfhelpguideavailablechallengesadmin', 
+	                  	flex: 1
+	                  }
+	                 ]});
+    	return this.callParent(arguments);
+    }
+});
+
+ 
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.admin.forms.shg.SelfHelpGuideAdmin', {
+	extend: 'Ext.container.Container',
+	alias : 'widget.selfhelpguideadmin',
+	title: 'Self Help Guide Admin',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.shg.SelfHelpGuideAdminViewController',
+	height: '100%',
+	width: '100%',
+	layout: {
+        type: 'vbox',
+        align: 'stretch'
+    },
+    initComponent: function(){
+		Ext.apply(this,{
+	          items: [
+	                  {
+	                  	xtype: 'selfhelpguidesdisplayadmin', 
+	                    anchor: '100%',
+	                  	flex: 1
+	                  }
+	                 ]});
+    	return this.callParent(arguments);
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.admin.forms.shg.SelfHelpGuidesDisplayAdmin', {
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.selfhelpguidesdisplayadmin',
+	title: 'Self Help Guides Admin',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.shg.SelfHelpGuidesDisplayViewController',
+    inject: {
+        apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson',
+        columnRendererUtils: 'columnRendererUtils'
+    },
+    height: '100%',
+	width: '100%',
+
+    initComponent: function(){
+    	var me=this;
+    	Ext.apply(me,
+    			{
+		          viewConfig: {
+		        	
+		          },
+    		      autoScroll: true,
+    		      selType: 'rowmodel',
+    		      enableDragDrop: false,
+    		      columns: [
+    		                { header: 'Self Help Guide',  
+    		                  dataIndex: 'name',
+    		                  flex: 1 
+    		                },
+    		                { header: 'Description',  
+        		                  dataIndex: 'description',
+        		                  flex: 1 
+        		             },
+    		                { header: 'Active',  
+      		                  dataIndex: 'active',
+      		                  renderer: me.columnRendererUtils.renderFriendlyBoolean,
+      		                  flex: 1 
+      		                }
+    		           ],
+    		        
+    		           dockedItems: [
+     		       		{
+     		       			xtype: 'pagingtoolbar',
+     		       		    dock: 'bottom',
+     		       		    displayInfo: true,
+     		       		    pageSize: me.apiProperties.getPagingSize()
+     		       		},
+     		              {
+     		               xtype: 'toolbar',
+     		               items: [{
+     		                   text: 'Add',
+     		                   iconCls: 'icon-add',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('SELF_HELP_GUIDE_DELETE_BUTTON'),
+     		                   action: 'add',
+     		                   itemId: 'addButton'
+     		               }, '-', {
+     		                   text: 'Edit',
+     		                   iconCls: 'icon-edit',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('SELF_HELP_GUIDE_EDIT_BUTTON'),
+     		                   action: 'edit',
+     		                   itemId: 'editButton'
+     		               }, '-' ,{
+     		                   text: 'Delete',
+     		                   iconCls: 'icon-delete',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('SELF_HELP_GUIDE_ADD_BUTTON'),
+     		                   action: 'delete',
+     		                   itemId: 'deleteButton'
+     		               }]
+     		           },{
+     		               xtype: 'toolbar',
+     		               dock: 'top',
+     		               items: [{
+     	                      xtype: 'label',
+     	                       text: 'Click on an existing Guide to Edit or Delete.  Click on "add" to create a new Guide.'
+     	                     }]
+     		           }]    	
+    	});
+    	
+    	return me.callParent(arguments);
+    }
 });
 

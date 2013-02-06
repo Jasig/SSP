@@ -16,17 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.reference;
+package org.jasig.ssp.factory.reference;
 
-import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
-import org.jasig.ssp.service.ReferenceService;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.reference.SelfHelpGuide;
+import org.jasig.ssp.transferobject.reference.SelfHelpGuideDetailsTO;
+import org.jasig.ssp.transferobject.reference.SelfHelpGuideTO;
 
-public interface SelfHelpGuideQuestionService extends
-		ReferenceService<SelfHelpGuideQuestion> {
-
-	PagingWrapper<SelfHelpGuideQuestion> getAllForParent(
-			SortingAndPaging createForSingleSort, String selfReferenceGuideId);
-
+public interface SelfHelpGuideDetailsTOFactory extends
+		TOFactory<SelfHelpGuideDetailsTO, SelfHelpGuide> {
 }

@@ -18,29 +18,43 @@
  */
 package org.jasig.ssp.transferobject.reference;
 
-import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.jasig.mygps.model.transferobject.SelfHelpGuideQuestionTO;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.SelfHelpGuide;
 import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
+import org.jasig.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class SelfHelpGuideDetailTO extends SelfHelpGuideTO implements
-		Serializable {
+public class SelfHelpGuideDetailsTO extends SelfHelpGuideTO implements TransferObject<SelfHelpGuide> {
 
 	private static final long serialVersionUID = 4097508291481320856L;
 
 	private String introductoryText;
+	
+	private int threshold;	
 
+	private String summaryText;
+
+	private String summaryTextEarlyAlert;
+
+	private String summaryTextThreshold;
+
+	private boolean authenticationRequired;
+	
+	private boolean active;
+	
 	private List<SelfHelpGuideQuestionTO> questions;
 
-	public SelfHelpGuideDetailTO() {
+	public SelfHelpGuideDetailsTO() {
 		super();
 	}
 
-	public SelfHelpGuideDetailTO(final SelfHelpGuide model) {
+	public SelfHelpGuideDetailsTO(final SelfHelpGuide model) {
 		super();
 		from(model);
 	}
@@ -50,6 +64,18 @@ public class SelfHelpGuideDetailTO extends SelfHelpGuideTO implements
 		super.from(model);
 
 		introductoryText = model.getIntroductoryText();
+		
+		threshold = model.getThreshold();
+		
+		summaryText = model.getSummaryText();
+		
+		summaryTextEarlyAlert = model.getSummaryTextEarlyAlert();
+		
+		summaryTextThreshold = model.getSummaryTextThreshold();
+		
+		authenticationRequired = model.isAuthenticationRequired();
+		
+		active = ObjectStatus.ACTIVE.equals(model.getObjectStatus());
 
 		questions = Lists.newArrayList();
 		for (SelfHelpGuideQuestion question : model.getSelfHelpGuideQuestions()) {
@@ -64,12 +90,59 @@ public class SelfHelpGuideDetailTO extends SelfHelpGuideTO implements
 	public void setIntroductoryText(final String introductoryText) {
 		this.introductoryText = introductoryText;
 	}
-
 	public List<SelfHelpGuideQuestionTO> getQuestions() {
 		return questions;
 	}
 
 	public void setQuestions(final List<SelfHelpGuideQuestionTO> questions) {
 		this.questions = questions;
+	}
+
+	public String getSummaryTextEarlyAlert() {
+		return summaryTextEarlyAlert;
+	}
+
+	public void setSummaryTextEarlyAlert(String summaryTextEarlyAlert) {
+		this.summaryTextEarlyAlert = summaryTextEarlyAlert;
+	}
+
+	public String getSummaryTextThreshold() {
+		return summaryTextThreshold;
+	}
+
+	public void setSummaryTextThreshold(String summaryTextThreshold) {
+		this.summaryTextThreshold = summaryTextThreshold;
+	}
+
+	public boolean isAuthenticationRequired() {
+		return authenticationRequired;
+	}
+
+	public void setAuthenticationRequired(boolean authenticationRequired) {
+		this.authenticationRequired = authenticationRequired;
+	}
+
+	public int getThreshold() {
+		return threshold;
+	}
+
+	public void setThreshold(int threshold) {
+		this.threshold = threshold;
+	}
+
+	public String getSummaryText() {
+		return summaryText;
+	}
+
+	public void setSummaryText(String summaryText) {
+		this.summaryText = summaryText;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 }

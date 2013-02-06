@@ -18,9 +18,13 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
+import java.util.ArrayList;
+
 import org.jasig.ssp.dao.reference.SelfHelpGuideQuestionDao;
 import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
 import org.jasig.ssp.service.reference.SelfHelpGuideQuestionService;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,4 +46,16 @@ public class SelfHelpGuideQuestionServiceImpl extends
 	protected SelfHelpGuideQuestionDao getDao() {
 		return dao;
 	}
+
+	@Override
+	public PagingWrapper<SelfHelpGuideQuestion> getAllForParent(
+			SortingAndPaging createForSingleSort, String selfReferenceGuideId) {
+		if(selfReferenceGuideId == null)
+		{
+			return new PagingWrapper<SelfHelpGuideQuestion>(new ArrayList<SelfHelpGuideQuestion>());
+		}
+		return dao.getAllForParent(createForSingleSort,selfReferenceGuideId);
+	}
+	
+	
 }

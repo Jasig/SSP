@@ -29,7 +29,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
-import org.jasig.ssp.transferobject.reference.SelfHelpGuideDetailTO;
+import org.jasig.ssp.transferobject.reference.SelfHelpGuideDetailsTO;
 import org.jasig.ssp.web.api.AbstractControllerHttpTestSupport;
 import org.jasig.ssp.web.api.reference.ChallengeController;
 import org.junit.Before;
@@ -88,7 +88,7 @@ public class MyGpsSelfHelpGuideControllerIntegrationTest
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final SelfHelpGuideDetailTO obj = controller
+		final SelfHelpGuideDetailsTO obj = controller
 				.getContentById(SELFHELPGUIDE_ID);
 
 		assertEquals("Expected success from answer().", SELFHELPGUIDE_NAME,

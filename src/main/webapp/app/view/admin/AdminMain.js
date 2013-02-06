@@ -27,9 +27,10 @@ Ext.define('Ssp.view.admin.AdminMain', {
 		Ext.apply(this, 
 				{
 				    layout: {
-				    	type: 'hbox',
+				    	type: 'border',
 				    	align: 'stretch'
-				    }
+				    },
+				    split: true
 				});
 		
 	     this.callParent(arguments);
