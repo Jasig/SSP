@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank Letter Landscape" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de052e81-a0fc-4bfe-a86d-fd593cff06df">
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
@@ -10,7 +30,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="homeDepartment" class="java.lang.String"/>
-	<parameter name="studentTypes" class="java.lang.String"/>
+	<parameter name="studentTypeNames" class="java.lang.String"/>
 	<field name="firstName" class="java.lang.String">
 		<fieldDescription><![CDATA[firstName]]></fieldDescription>
 	</field>
@@ -89,7 +109,7 @@
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="c1b42e9b-e20f-4dd3-849f-1e71fc9dbbad" x="100" y="42" width="652" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{studentTypes}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{studentTypeNames}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="255b284c-e962-4bd2-a35c-c07141e46079" x="100" y="0" width="100" height="20"/>

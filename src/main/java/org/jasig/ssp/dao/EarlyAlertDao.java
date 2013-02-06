@@ -37,9 +37,10 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
+import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -193,6 +194,7 @@ public class EarlyAlertDao extends
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	public PagingWrapper<EarlyAlertStudentReportTO> getStudentsEarlyAlertCountSetForCritera(EarlyAlertStudentSearchTO criteriaTO, SortingAndPaging sAndP) {
 
 		final Criteria query = createCriteria();
@@ -220,11 +222,13 @@ public class EarlyAlertDao extends
 				.add(Projections.countDistinct("id").as("earlyalert_total"))
                 .add(Projections.countDistinct("closedById").as("earlyalert_closed"))
                 .add( Projections.groupProperty("person").as("earlyalert_person"))
-                ).setResultTransformer(
-						new NamespacedAliasToBeanResultTransformer(
-								EarlyAlertStudentReportTO.class, "earlyalert_"));
+                );
+		  
+		query.setResultTransformer(
+				new NamespacedAliasToBeanResultTransformer(
+						EarlyAlertStudentReportTO.class, "earlyalert_"));
 		
-		return new PagingWrapper<EarlyAlertStudentReportTO>(totalRows, query.list());
+		return new PagingWrapper<EarlyAlertStudentReportTO>(totalRows, (List<EarlyAlertStudentReportTO>)query.list());
 	}
 
 	public Long getCountOfAlertsForSchoolIds(
@@ -257,6 +261,8 @@ public class EarlyAlertDao extends
 			query.add(Restrictions.le("closedDate",
 					closedDateTo));
 		}
+		
+		query.add(Restrictions.isNotNull("closedDate"));
 		
 		if(campus != null){
 			query.add(Restrictions
@@ -320,7 +326,58 @@ public class EarlyAlertDao extends
 		return totalRows;
 	}
 	
-	private Criteria setPersonCriteria(Criteria criteria, AddressLabelSearchTO addressLabelSearchTO){
+	@SuppressWarnings("unchecked")
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(List<Person> coaches, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, SortingAndPaging sAndP) {
+
+		final Criteria query = createCriteria();
+ 
+		setBasicCriteria( query,  createDateFrom,  createDateTo, studentTypeIds);
+		query.add(Restrictions.in("createdBy", coaches));
+		// item count
+		Long totalRows = 0L;
+		if ((sAndP != null) && sAndP.isPaged()) {
+			totalRows = (Long) query.setProjection(Projections.countDistinct("createdBy"))
+					.uniqueResult();
+		}
+		
+		query.setProjection(Projections.projectionList().
+        		add(Projections.countDistinct("person").as("earlyalert_studentCount")).
+        		add(Projections.countDistinct("id").as("earlyalert_entityCount")).
+        		add(Projections.groupProperty("createdBy").as("earlyalert_coach")));
+		
+		query.setResultTransformer(
+						new NamespacedAliasToBeanResultTransformer(
+								EntityStudentCountByCoachTO.class, "earlyalert_"));
+		
+		return new PagingWrapper<EntityStudentCountByCoachTO>(totalRows,  (List<EntityStudentCountByCoachTO>)query.list());
+	}
+	
+	private Criteria setBasicCriteria(Criteria query, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds){
+		// add possible studentTypeId Check
+		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
+		
+			query.createAlias("person",
+				"person")
+				.add(Restrictions
+						.in("person.studentType.id",studentTypeIds));
+					
+		}		
+		
+		if (createDateFrom != null) {
+			query.add(Restrictions.ge("createdDate",
+					createDateFrom));
+		}
+
+		if (createDateTo != null) {
+			query.add(Restrictions.le("createdDate",
+					createDateTo));
+		}
+				
+		return query;
+	}
+
+	
+	private Criteria setPersonCriteria(Criteria criteria, PersonSearchFormTO addressLabelSearchTO){
 		if (addressLabelSearchTO.getCoach() != null
 				&& addressLabelSearchTO.getCoach().getId() != null) {
 			// restrict to coach

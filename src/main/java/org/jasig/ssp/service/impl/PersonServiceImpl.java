@@ -45,7 +45,7 @@ import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -454,7 +454,7 @@ public class PersonServiceImpl implements PersonService {
 	 */
 	@Override
 	public List<Person> peopleFromCriteria(
-			final AddressLabelSearchTO addressLabelSearchTO,
+			final PersonSearchFormTO addressLabelSearchTO,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 
 		final List<Person> people = dao.getPeopleByCriteria(

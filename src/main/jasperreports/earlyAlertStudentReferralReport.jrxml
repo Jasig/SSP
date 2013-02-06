@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="EarlyAlertStudenReport" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="e3a7b420-ce31-4bb0-ae30-18f0aad225cd">
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
@@ -8,15 +28,15 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="programStatus" class="java.lang.String"/>
+	<parameter name="programStatusName" class="java.lang.String"/>
 	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
 	<parameter name="homeDepartment" class="java.lang.String"/>
 	<parameter name="reportDate" class="java.util.Date"/>
 	<parameter name="coachName" class="java.lang.String"/>
-	<parameter name="studentType" class="java.lang.String"/>
+	<parameter name="studentTypeNames" class="java.lang.String"/>
 	<parameter name="startDate" class="java.lang.String"/>
 	<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="referralSourceName" class="java.lang.String"/>
+	<parameter name="earlyAlertReferralName" class="java.lang.String"/>
 	<parameter name="termName" class="java.lang.String"/>
 	<field name="firstName" class="java.lang.String">
 		<fieldDescription><![CDATA[firstName]]></fieldDescription>
@@ -79,7 +99,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d" positionType="Float" x="125" y="53" width="117" height="16" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{referralSourceName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{earlyAlertReferralName}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="10" y="53" width="100" height="16"/>
@@ -89,7 +109,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" positionType="Float" x="125" y="69" width="462" height="16" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{programStatus}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{programStatusName}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="10" y="69" width="100" height="16"/>

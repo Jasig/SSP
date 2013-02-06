@@ -39,6 +39,7 @@ import org.jasig.ssp.security.exception.UPortalSecurityException;
 import org.jasig.ssp.security.uportal.RequestAndResponseAccessFilter;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
+import org.jasig.ssp.service.reference.ConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,10 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.context.ServletContextAware;
 
-public class UPortalPersonAttributesService implements PersonAttributesService, ServletContextAware {
+import com.google.common.collect.Maps;
+
+public class UPortalPersonAttributesService
+		implements PersonAttributesService, ServletContextAware {
 
 	private static final String PARAM_USERNAME = "username";
 	private static final String REST_URI_PERSON = "/ssp-platform/api/people/{"
@@ -68,30 +72,35 @@ public class UPortalPersonAttributesService implements PersonAttributesService, 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UPortalPersonAttributesService.class);
 
+	/**
+	 * The default ("SSP_ROLES":"COACH") matches the default permissions setup
+	 * for coaches, and should be good for many or most adopters. Those who wish
+	 * to define coaches in SSP in a non-default way -- such as through an AD
+	 * group -- will need to adjust this setting to query for coaches
+	 * appropriately via {@link ConfigService}.
+	 */
+	public static final Map<String,String> DEFAULTS_COACHES_QUERY =
+			Collections.singletonMap("SSP_ROLES", "SSP_COACH");
+
+	/**
+	 * {@link ConfigService} entry key for config overriding
+	 * {@link #DEFAULTS_COACHES_QUERY}
+	 */
+	public static final String COACHES_QUERY_CONFIG = "up_coach_query";
+
 	@Autowired
 	private transient RequestAndResponseAccessFilter requestAndResponseAccessFilter;
 
-	private Map<String, String> coachesQuery = Collections.singletonMap(
-			"SSP_ROLES", "SSP_COACH");
+	@Autowired
+	private ConfigService configService;
 
 	private ServletContext servletContext;
 
-	public Map<String, String> getCoachesQuery() {
-		return coachesQuery;
-	}
-
-	/**
-	 * Allows the <code>coachesQuery</code> to be configured in Spring XML. The
-	 * default ("SSP_ROLES":"COACH") matches the default permissions setup for
-	 * coaches, and should be good for many or most adopters. Those who wish to
-	 * define coaches in SSP in a non-default way -- such as through an AD group
-	 * -- will need to adjust this setting to query for coaches appropriately.
-	 * 
-	 * @param coachesQuery
-	 *            A Map of Strings, attribute name to attribute value
-	 */
-	public void setCoachesQuery(final Map<String, String> coachesQuery) {
-		this.coachesQuery = Collections.unmodifiableMap(coachesQuery);
+	@SuppressWarnings("unchecked")
+	protected Map<String, String> getCoachesQuery() {
+		return configService
+				.getObjectByNameOrDefault(COACHES_QUERY_CONFIG, Map.class,
+						DEFAULTS_COACHES_QUERY);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -249,7 +258,7 @@ public class UPortalPersonAttributesService implements PersonAttributesService, 
 		final List<String> rslt = new ArrayList<String>();
 
 		final List<Map<String, Object>> people = searchForUsers(req, res,
-				coachesQuery);
+				getCoachesQuery());
 		for (final Map<String, Object> person : people) {
 			rslt.add((String) person.get(USERNAME_KEY));
 		}

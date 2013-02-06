@@ -33,7 +33,6 @@ import net.sf.jasperreports.engine.JRException;
 
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.service.EarlyAlertService;
@@ -44,6 +43,7 @@ import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
+import org.jasig.ssp.util.DateTerm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,8 +66,11 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/earlyalertstudentoutreach")
-public class EarlyAlertStudentOutreachReportController extends EarlyAlertReportBaseController {
+public class EarlyAlertStudentOutreachReportController extends ReportBaseController {
 
+	private static final String REPORT_URL = "/reports/earlyAlertStudentOutreachReport.jasper";
+	private static final String REPORT_FILE_TITLE = "Early_Alert_Student_Outreach_Report";
+	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AddressLabelsReportController.class);
 
@@ -101,7 +104,7 @@ public class EarlyAlertStudentOutreachReportController extends EarlyAlertReportB
 	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public void getAddressLabels(
+	public void getEarlyAlertStudentOutreachReport(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) List<UUID> earlyAlertOutcomes,
@@ -111,35 +114,24 @@ public class EarlyAlertStudentOutreachReportController extends EarlyAlertReportB
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
-		
-		Term term = null;
-		Date startDate = createDateFrom;
-		Date endDate = createDateTo;
-		if(termCode != null && termCode.length() > 0){
-			term = termService.getByCode(termCode);
-			startDate = term.getStartDate();
-			endDate = term.getEndDate();
-		}
+				
+		final DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
 
-		List<UUID> earlyAlertOutcomesClean = cleanUUIDListOfNulls(earlyAlertOutcomes);
+		final List<UUID> earlyAlertOutcomesClean = SearchParameters.cleanUUIDListOfNulls(earlyAlertOutcomes);
 		
-		Collection<EarlyAlertStudentOutreachReportTO> outreachOutcomes = earlyAlertResponseService.getEarlyAlertOutreachCountByOutcome(startDate, 
-				endDate,
+		final Collection<EarlyAlertStudentOutreachReportTO> outreachOutcomes = earlyAlertResponseService.getEarlyAlertOutreachCountByOutcome(dateTerm.getStartDate(), 
+				dateTerm.getEndDate(),
 				earlyAlertOutcomesClean,
 				null);
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
 		
-		parameters.put("earlyAlertOutcome", concatEarlyAlertOutcomesFromUUIDs(earlyAlertOutcomesClean, earlyAlertOutcomeService));
-		
-		parameters.put("term", term != null ? term.getName() : "");
-		parameters.put("reportDate", new Date());
+		SearchParameters.addEarlyAlertOutcomesToMap(earlyAlertOutcomesClean, parameters, earlyAlertOutcomeService);
 
-		setStartDateEndDateToMap(parameters, startDate, endDate);
+		SearchParameters.addDateTermToMap(dateTerm, parameters);
 
 
-		generateReport(response,  parameters, outreachOutcomes,  "/reports/earlyAlertStudentOutreachReport.jasper", 
-				 reportType, "Early_Alert_Student_Outreach_Report");
+		generateReport(response,  parameters, outreachOutcomes,  REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 
 	@Override

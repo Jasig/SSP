@@ -63,6 +63,7 @@ import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
+import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -627,4 +628,11 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		// TODO Auto-generated method stub
 		return dao.getStudentsEarlyAlertCountSetForCritera(earlyAlertStudentSearchTO, createForSingleSort);
 	}
+	
+	@Override
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(List<Person> coaches, Date createDateFrom, 
+			Date createDateTo, List<UUID> studentTypeIds, SortingAndPaging sAndP) {
+		return dao.getStudentEarlyAlertCountByCoaches(coaches, createDateFrom, createDateTo, studentTypeIds, sAndP);
+	}
+	
 }

@@ -65,7 +65,22 @@ var ssp = ssp || {};
 			}).error(function(jqXHR, textStatus, errorThrown) {
 				alert(jqXHR + " " + textStatus + " " + errorThrown);
 			});
-		}		
+		}	
+		
+		var loadReportYearInput = function(url, container) {
+			$.getJSON(url, function(data) {
+				var values = new Array();
+				$.each(data.rows, function(i, row) {
+					if($.inArray(row.reportYear, values) < 0){
+						values.push(row.reportYear);
+						addSelectItem(row.reportYear, row.reportYear, container);
+					}
+				});
+
+			}).error(function(jqXHR, textStatus, errorThrown) {
+				alert(jqXHR + " " + textStatus + " " + errorThrown);
+			});
+		}
 
 		var loadTextForm = function(url, container) {
 			$.getJSON(url, function(data) {
@@ -96,9 +111,19 @@ var ssp = ssp || {};
 			loadGroupInput("/ssp/api/1/reference/campus/", that
 					.locate('campusGroup'));
 			loadGroupInput("/ssp/api/1/reference/earlyAlertOutcome/", that
-							.locate('earlyAlertOutcomeGroup'));		
+							.locate('earlyAlertOutcomeGroup'));	
+			
+			loadGroupInput("/ssp/api/1/reference/disabilityStatus/", that
+					.locate('disabilityStatusGroup'));	
+			
+			loadGroupInput("/ssp/api/1/reference/disabilityType/", that
+					.locate('disabilityTypeGroup'));	
+			
 			loadTermInput("/ssp/api/1/reference/term/", that
 					.locate('termGroup'));
+			
+			loadReportYearInput("/ssp/api/1/reference/term/", that
+					.locate('reportYearGroup'));
 			// 1000 limit is max allowed by server side
 			loadCoachInput("/ssp/api/1/person/coach/?sort=lastName&page=1&start=0&limit=1000", that
 					.locate('assignedCounselorGroup'));			
@@ -169,6 +194,14 @@ var ssp = ssp || {};
 				}
 				return false;
 			});
+			$('select[multiple="multiple"]').val("");
+			$('select[multiple="multiple"]').change(function(event){
+				var values = $(event.target).val();
+				var index = $.inArray("", values);
+				if(index >= 0){
+					$(event.target).find('option').not(":first-child").prop('selected', false);
+				}
+			});
 			
 		});
 
@@ -218,6 +251,10 @@ var ssp = ssp || {};
 				.append('<option value="counselorCaseManagementReport">Counselor Case Management Report</option>');
 		reportsSelect
 				.append('<option value="specialServicesForm">Special Services Report</option>');
+		
+		reportsSelect
+		.append('<option value="disabilityServices">Disability Services Report</option>');
+		
 		reportsSelect
 				.append('<option value="" disabled >- Early Alert Reports -</option>');
 		reportsSelect
@@ -269,6 +306,7 @@ var ssp = ssp || {};
 							earlyAlertStudentOutreach : '.early-alert-student-outreach-report',
 							earlyAlertStudentOutcome : '.early-alert-student-outcome-report',
 							earlyAlertClass : '.early-alert-class-report',
+							disabilityServices : '.disability-services-report',
 							programStatusGroup : '.input-program-status-group',
 							studentTypeGroup : '.input-student-type-group',
 							specialServiceGroup : '.input-special-service-group',
@@ -277,7 +315,10 @@ var ssp = ssp || {};
 							assignedCounselorGroup : '.input-assigned-counselor-group',
 							campusGroup: '.input-campus-group',
 							termGroup: '.input-term-group',
+							reportYearGroup: '.input-report-year-group',
 							earlyAlertOutcomeGroup: '.input-early-alert-outcome-group',
+							disabilityStatusGroup: '.input-disability-status-group',
+							disabilityTypeGroup: '.input-disability-type-group',
 							calendarType : '.input-calendar-type',
 							switchDateRangeType : '.switch-date-range-type',
 							termRange : '.ea-term',

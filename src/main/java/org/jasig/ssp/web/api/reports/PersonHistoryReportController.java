@@ -18,14 +18,10 @@
  */
 package org.jasig.ssp.web.api.reports; // NOPMD
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -37,13 +33,6 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
-import net.sf.jasperreports.engine.export.JRCsvExporter;
-import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
-
 import org.jasig.ssp.factory.EarlyAlertTOFactory;
 import org.jasig.ssp.factory.JournalEntryTOFactory;
 import org.jasig.ssp.factory.PersonTOFactory;
@@ -66,7 +55,6 @@ import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.reports.StudentHistoryTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,8 +75,12 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/{personId}/History")
-public class PersonHistoryReportController extends AbstractBaseController {
+public class PersonHistoryReportController extends ReportBaseController {
 
+	private static final String REPORT_URL = "/reports/studentHistoryMaster.jasper";
+	private static final String REPORT_FILE_TITLE = "StudentHistoryReprt-";
+	private static final String STUDENT_TO = "studentTO";
+	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PersonHistoryReportController.class);
 
@@ -117,7 +109,7 @@ public class PersonHistoryReportController extends AbstractBaseController {
 	void getAddressLabels(
 			final HttpServletResponse response,
 			final @PathVariable UUID personId,
-			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
+			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 
 		final Person person = personService.get(personId);
@@ -157,47 +149,13 @@ public class PersonHistoryReportController extends AbstractBaseController {
 				taskTOMap, journalEntryTOs);
 
 		final Map<String, Object> parameters = Maps.newHashMap();
-		parameters.put("reportDate", new Date());
-		parameters.put("studentTO", personTO);
+		
+		SearchParameters.addReportDateToMap(parameters);
+		parameters.put(STUDENT_TO, personTO);
+		
+		this.generateReport(response, parameters, studentHistoryTOs, REPORT_URL, reportType, 
+				REPORT_FILE_TITLE + personTO.getLastName());
 
-		final JRBeanArrayDataSource beanDs = new JRBeanArrayDataSource(
-				studentHistoryTOs.toArray());
-
-		final InputStream is = getClass().getResourceAsStream(
-				"/reports/studentHistoryMaster.jasper");
-		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		JasperFillManager.fillReportToStream(is, os, parameters, beanDs);
-		final InputStream decodedInput = new ByteArrayInputStream(
-				os.toByteArray());
-
-		if ("pdf".equals(reportType)) {
-			response.setHeader(
-					"Content-disposition",
-					"attachment; filename=StudentHistoryReprt-"
-							+ personTO.getLastName() + ".pdf");
-			JasperExportManager.exportReportToPdfStream(decodedInput,
-					response.getOutputStream());
-		} else if ("csv".equals(reportType)) {
-			response.setContentType("application/vnd.ms-excel");
-			response.setHeader(
-					"Content-disposition",
-					"attachment; filename=StudentHistoryReprt-"
-							+ personTO.getLastName() + ".csv");
-
-			final JRCsvExporter exporter = new JRCsvExporter();
-			exporter.setParameter(JRExporterParameter.INPUT_STREAM,
-					decodedInput);
-			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM,
-					response.getOutputStream());
-			exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
-					Boolean.FALSE);
-
-			exporter.exportReport();
-		}
-
-		response.flushBuffer();
-		is.close();
-		os.close();
 	}
 
 	@Override
@@ -206,7 +164,7 @@ public class PersonHistoryReportController extends AbstractBaseController {
 	}
 
 	private static final SimpleDateFormat getDateFormatter() {
-		return new SimpleDateFormat("yyyy/MM/dd", Locale.US);
+		return new SimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.US);
 	}
 
 	public static List<StudentHistoryTO> sort(

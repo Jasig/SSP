@@ -28,6 +28,9 @@ import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
+import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
@@ -135,29 +138,11 @@ public class TaskDao
 	public Long getTaskCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
 
 		final Criteria query = createCriteria();
- 
-		// add possible studentTypeId Check
-		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
 		
-			query.createAlias("person",
-				"person")
-				.add(Restrictions
-						.in("person.studentType.id",studentTypeIds));
-					
-		}		
+		setCriteria(query, createDateFrom, createDateTo, studentTypeIds);
 		
 		// restrict to coach
 		query.add(Restrictions.eq("createdBy", coach));
-		
-		if (createDateFrom != null) {
-			query.add(Restrictions.ge("createdDate",
-					createDateFrom));
-		}
-
-		if (createDateTo != null) {
-			query.add(Restrictions.le("createdDate",
-					createDateTo));
-		}
 
 		// item count
 		Long totalRows = (Long) query.setProjection(Projections.rowCount())
@@ -171,6 +156,43 @@ public class TaskDao
 
 		final Criteria query = createCriteria();
  
+		setCriteria(query, createDateFrom, createDateTo, studentTypeIds);
+		
+		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", coach))
+		        .setProjection(Projections.countDistinct("person")).list().get(0);
+
+		return totalRows;
+	}	
+	
+	@SuppressWarnings("unchecked")
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentTaskCountForCoaches(List<Person> coaches, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, SortingAndPaging sAndP) {
+
+		final Criteria query = createCriteria();
+ 
+		setCriteria( query,  createDateFrom,  createDateTo, studentTypeIds);
+		
+		query.add(Restrictions.in("createdBy", coaches));
+		// item count
+		Long totalRows = 0L;
+		if ((sAndP != null) && sAndP.isPaged()) {
+				totalRows = (Long) query.setProjection(Projections.rowCount())
+							.uniqueResult();
+		}
+		
+		
+		query.setProjection(Projections.projectionList().
+        		add(Projections.countDistinct("person").as("task_studentCount")).
+        		add(Projections.countDistinct("id").as("task_entityCount")).
+        		add(Projections.groupProperty("createdBy").as("task_coach"))).setResultTransformer(
+						new NamespacedAliasToBeanResultTransformer(
+								EntityStudentCountByCoachTO.class, "task_"));
+		
+		return new PagingWrapper<EntityStudentCountByCoachTO>(totalRows, (List<EntityStudentCountByCoachTO>)query.list());
+	}
+	
+	
+	
+	private Criteria setCriteria(Criteria query, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds){
 		// add possible studentTypeId Check
 		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
 		
@@ -190,14 +212,9 @@ public class TaskDao
 			query.add(Restrictions.le("createdDate",
 					createDateTo));
 		}
-		
-		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", coach))
-		        .setProjection(Projections.countDistinct("person")).list().get(0);
-
-		return totalRows;
-	}	
-	
-	
+				
+		return query;
+	}
 
 	
 }

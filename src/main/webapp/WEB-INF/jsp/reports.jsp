@@ -28,8 +28,11 @@
 
 <c:set var="n"><portlet:namespace/></c:set>
 
+<c:set var="not_applicable" value="Not Used" />
+
 <script src="<rs:resourceURL value="/rs/jquery/1.6.1/jquery-1.6.1.min.js"/>" type="text/javascript"></script>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"></script>
+<!-- <script src="http://code.jquery.com/jquery-latest.js"></script> -->
 <script src="<rs:resourceURL value="/rs/jqueryui/1.8.13/jquery-ui-1.8.13.min.js"/>" type="text/javascript"></script>
 <script src="<rs:resourceURL value="/rs/fluid/1.4.0/js/fluid-all-1.4.0.min.js"/>" type="text/javascript"></script>
 <script src="<c:url value="/js/reports.js" />" type="text/javascript"></script>
@@ -90,7 +93,7 @@
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="assignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
-				<option value=""></option>
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -102,7 +105,7 @@
 		<!-- program Status -->
 		<div class="ea-input">
 			<select id="programStatusGroup" name="programStatus" class="input-program-status-group">
-				<option value=""></option>
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -113,7 +116,9 @@
 		<!-- Student Type -->
 
 		<div class="ea-input">
-			<select class="input-student-type-group" id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
+			<select class="input-student-type-group" id="StudentTypeIds" name="studentTypeIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Student Type:</span>
@@ -123,7 +128,9 @@
 		<!-- Special Service Groups -->
 		<div class="ea-input">
 			<select  class="input-special-service-group" id="SpecialServiceGroupIds" name="specialServiceGroupIds"
-				multiple="multiple"></select>
+				multiple="multiple">
+				<option value="">${not_applicable}</option>
+				</select>
 		</div>
 		<div class="ea-label">
 			<span>Special Service Groups:</span>
@@ -134,6 +141,7 @@
 		<div class="ea-input">
 			<select class='input-referral-source-group' id="ReferralSourceGroup" name="referralSourcesIds"
 				multiple="multiple">
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -142,58 +150,80 @@
 		<div class="ea-clear"></div>
 
 
-		<!-- Date From -->
+		<!-- Date Range Selection -->
+		<div class="ea-time-span">
+			<div class="ea-term">
+				<div class="ea-input">
+					<select id="generalStudentTermCode" name="termCode" class="input-term-group">
+						<option value="">${not_applicable}</option>
+						</select>
+				</div>
+				<div class="ea-label">
+					<span>Term:</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-date-range">
+				<!-- Date From -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="generalStudentCreateDateFrom">
+				</div>
+				<div class="ea-label">
+					<span>Student Added From (inclusive)::</span>
+				</div>
+				<div class="ea-clear"></div><!-- Date To -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateTo" id="generalStudentCreateDateTo">
+				</div>
+				<div class="ea-label">
+					<span>Student Added To (exclusive)::</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-buttons">
+				<div>
+					<button class="switch-date-range-type button" value="setbyrange"></button>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Actual Start Term -->
 		<div class="ea-input">
-			<input class="input-calendar-type" type="textbox" name="createDateFrom" id="createDateFrom" />
-		</div>
-		<div class="ea-label">
-			<span>Student Added From (inclusive):</span>
-		</div>
-		<div class="ea-clear"></div>
-
-		<!-- Date To -->
-		<div class="ea-input">
-			<input class="input-calendar-type" type="textbox" name="createDateTo" id="createDateTo" />
-		</div>
-		<div class="ea-label">
-			<span>Student Added To (exclusive):</span>
-		</div>
-		<div class="ea-clear"></div>
-
-		<!-- Anticipated Start Term -->
-		<div class="ea-input">
-			<select id="anticipatedStartTerm" name="anticipatedStartTerm">
-				<option value=""></option>
-				<option value="Fall" class="test-class-1">Fall</option>
-				<option value="Winter" class="test-class-1">Winter</option>
-				<option value="Spring" class="test-class-1">Spring</option>
-				<option value="Summer" class="test-class-1">Summer</option>
+			<select id="generalStudentActualStartTerm" name="actualStartTerm" class="input-term-group">
+			<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Cohort Term:</span>
+			<span>Registration Start Term:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Actual Start Year -->
+		<div class="ea-input">
+			<select id="generalStudentActualStartYear" name="actualStartYear" class="input-report-year-group">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+
+		<!-- Anticipated Start Term -->
+		<div class="ea-input">
+			<select id="generalStudentAnticipatedStartTerm" name="anticipatedStartTerm" class="input-term-group">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Anticipated Start Term:</span>
 		</div>
 		<div class="ea-clear"></div>
 
 		<!-- Anticipated Start Year -->
 		<div class="ea-input">
-			<select id="anticipatedStartYear" name="anticipatedStartYear">
-				<option value=""></option>
-				<option value="2010" class="test-class-1">2010</option>
-				<option value="2011" class="test-class-1">2011</option>
-				<option value="2012" class="test-class-1">2012</option>
-				<option value="2013" class="test-class-1">2013</option>
-				<option value="2014" class="test-class-1">2014</option>
-				<option value="2015" class="test-class-1">2015</option>
-				<option value="2016" class="test-class-1">2016</option>
-				<option value="2017" class="test-class-1">2017</option>
-				<option value="2018" class="test-class-1">2018</option>
-				<option value="2019" class="test-class-1">2019</option>
-				<option value="2020" class="test-class-1">2020</option>
+			<select id="generalStudentAnticipatedStartYear" name="anticipatedStartYear" class="input-report-year-group">
+			<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Cohort Year:</span>
+			<span>Anticipated Start Year:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -239,7 +269,7 @@
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="assignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
-				<option value=""></option>
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -251,7 +281,7 @@
 		<!-- program Status -->
 		<div class="ea-input">
 			<select id="programStatusGroup" name="programStatus" class="input-program-status-group">
-				<option value=""></option>
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -261,7 +291,9 @@
 
 		<!-- Student Type -->
 		<div class="ea-input">
-			<select class="input-student-type-group" id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
+			<select class="input-student-type-group" id="StudentTypeIds" name="studentTypeIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Student Type:</span>
@@ -271,7 +303,9 @@
 		<!-- Special Service Groups -->
 		<div class="ea-input">
 			<select  class="input-special-service-group" id="SpecialServiceGroupIds" name="specialServiceGroupIds"
-				multiple="multiple"></select>
+				multiple="multiple">
+				<option value="">${not_applicable}</option>
+				</select>
 		</div>
 		<div class="ea-label">
 			<span>Special Service Groups:</span>
@@ -282,6 +316,7 @@
 		<div class="ea-input">
 			<select class='input-referral-source-group' id="ReferralSourceGroup" name="referralSourcesIds"
 				multiple="multiple">
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -290,58 +325,62 @@
 		<div class="ea-clear"></div>
 
 
-		<!-- Date From -->
-		<div class="ea-input">
-			<input class="input-calendar-type" type="textbox" name="createDateFrom" id="createDateFromCounselor" />
+		<!-- Date Range Selection -->
+		<div class="ea-time-span">
+			<div class="ea-term">
+				<div class="ea-input">
+					<select id="caseloadActivityTermCode" name="termCode" class="input-term-group">
+						<option value="">${not_applicable}</option>
+						</select>
+				</div>
+				<div class="ea-label">
+					<span>Term:</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-date-range">
+				<!-- Date From -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="caseloadActivityCreateDateFrom">
+				</div>
+				<div class="ea-label">
+					<span>Student Added From (inclusive)::</span>
+				</div>
+				<div class="ea-clear"></div><!-- Date To -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateTo" id="caseloadActivityCreateDateTo">
+				</div>
+				<div class="ea-label">
+					<span>Student Added To (exclusive)::</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-buttons">
+				<div>
+					<button class="switch-date-range-type button" value="setbyrange"></button>
+				</div>
+			</div>
 		</div>
-		<div class="ea-label">
-			<span>Student Added From (inclusive):</span>
-		</div>
-		<div class="ea-clear"></div>
-
-		<!-- Date To -->
-		<div class="ea-input">
-			<input class="input-calendar-type" type="textbox" name="createDateTo" id="createDateToCounselor" />
-		</div>
-		<div class="ea-label">
-			<span>Student Added To (exclusive):</span>
-		</div>
-		<div class="ea-clear"></div>
-
+		
 		<!-- Anticipated Start Term -->
 		<div class="ea-input">
-			<select id="anticipatedStartTerm" name="anticipatedStartTerm">
-				<option value=""></option>
-				<option value="Fall" class="test-class-1">Fall</option>
-				<option value="Winter" class="test-class-1">Winter</option>
-				<option value="Spring" class="test-class-1">Spring</option>
-				<option value="Summer" class="test-class-1">Summer</option>
+			<select id="anticipatedStartTerm" name="anticipatedStartTerm" class="input-term-group">
+			<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Cohort Term:</span>
+			<span>Anticipated Start Term:</span>
 		</div>
 		<div class="ea-clear"></div>
 
 		<!-- Anticipated Start Year -->
 		<div class="ea-input">
-			<select id="anticipatedStartYear" name="anticipatedStartYear">
-				<option value=""></option>
-				<option value="2010" class="test-class-1">2010</option>
-				<option value="2011" class="test-class-1">2011</option>
-				<option value="2012" class="test-class-1">2012</option>
-				<option value="2013" class="test-class-1">2013</option>
-				<option value="2014" class="test-class-1">2014</option>
-				<option value="2015" class="test-class-1">2015</option>
-				<option value="2016" class="test-class-1">2016</option>
-				<option value="2017" class="test-class-1">2017</option>
-				<option value="2018" class="test-class-1">2018</option>
-				<option value="2019" class="test-class-1">2019</option>
-				<option value="2020" class="test-class-1">2020</option>
+			<select id="anticipatedStartYear" name="anticipatedStartYear" class="input-report-year-group">
+			<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Cohort Year:</span>
+			<span>Anticipated Start Year:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -379,7 +418,7 @@
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="assignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
-				<option value=""></option>
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -399,30 +438,53 @@
 
 		<!-- Student Type -->
 		<div class="ea-input">
-			<select class="input-student-type-group" id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
+			<select class="input-student-type-group" id="StudentTypeIds" name="studentTypeIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Student Type:</span>
 		</div>
 		<div class="ea-clear"></div>
+		
+		<!-- Date Range Selection -->
+		<div class="ea-time-span">
+			<div class="ea-term">
+				<div class="ea-input">
+					<select id="caseloadActivityTermCode" name="termCode" class="input-term-group">
+						<option value="">${not_applicable}</option>
+						</select>
+				</div>
+				<div class="ea-label">
+					<span>Term:</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-date-range">
+				<!-- Date From -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="caseloadActivityCreateDateFrom">
+				</div>
+				<div class="ea-label">
+					<span>Start Date (inclusive)::</span>
+				</div>
+				<div class="ea-clear"></div><!-- Date To -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateTo" id="caseloadActivityCreateDateTo">
+				</div>
+				<div class="ea-label">
+					<span>End Date (exclusive)::</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-buttons">
+				<div>
+					<button class="switch-date-range-type button" value="setbyrange"></button>
+				</div>
+			</div>
+		</div>
 
-		<!-- Date From -->
-		<div class="ea-input">
-			<input class="input-calendar-type" type="textbox" name="caDateFrom" id="caDateFrom" />
-		</div>
-		<div class="ea-label">
-			<span>Date Range From (inclusive):</span>
-		</div>
-		<div class="ea-clear"></div>
-
-		<!-- Date To -->
-		<div class="ea-input">
-			<input class="input-calendar-type" type="textbox" name="caDateTo" id="caDateTo" />
-		</div>
-		<div class="ea-label">
-			<span>Date Range To (exclusive):</span>
-		</div>
-		<div class="ea-clear"></div>
+		
 		
 		<!-- output type -->
 		<div class="ea-input">
@@ -456,7 +518,9 @@
 		<!-- Special Service Groups -->
 		<div class="ea-input">
 			<select class="input-special-service-group" id="SpecialServiceGroupIds" name="specialServiceGroupIds"
-				multiple="multiple"></select>
+				multiple="multiple">
+				<option value="">${not_applicable}</option>
+				</select>
 		</div>
 		<div class="ea-label">
 			<span>Special Service Groups:</span>
@@ -492,7 +556,9 @@
 
 		<!-- Student Type -->
 		<div class="ea-input">
-			<select class="input-student-type-group" id="StudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
+			<select class="input-student-type-group" id="StudentTypeIds" name="studentTypeIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Student Type:</span>
@@ -553,11 +619,6 @@
 	</form>
 </div>
 
-
-
-
-
-
  
 <div class="hideable-form confidentiality-agreement-form" style="width:800; display:none" >
 <h1>Confidentiality Agreement Form</h1>
@@ -576,7 +637,7 @@
 		<!-- Campus -->
 		<div class="ea-input">
 			<select id="campusName" name="campusName" class="input-campus-group">
-				<option value=""></option>
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -586,7 +647,8 @@
 		
 		<!-- Term -->
 		<div class="ea-input">
-			<select id="termCode" name="termCode" class="input-term-group">
+			<select id="termCodes" multiple="multiple" name="termCodes" class="input-term-group">
+			<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -635,7 +697,7 @@
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentCounselorGroup" name="coachId" class="input-assigned-counselor-group">
-				<option value=""></option>
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -647,7 +709,7 @@
 		<!-- program Status -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentProgramStatusGroup" name="programStatus" class="input-program-status-group">
-				<option value=""></option>
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -658,7 +720,9 @@
 		<!-- Student Type -->
 
 		<div class="ea-input">
-			<select class="input-student-type-group" id="earlyAlertStudentStudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
+			<select class="input-student-type-group" id="earlyAlertStudentStudentTypeIds" name="studentTypeIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Student Type:</span>
@@ -669,31 +733,52 @@
 		<div class="ea-input">
 			<select  class="input-special-service-group" id="earlyAlertStudentSpecialServiceGroupIds" name="specialServiceGroupIds"
 				multiple="multiple">
-				<option value="">N/A</option>
+				<option value="">${not_applicable}</option>
 				</select>
 		</div>
 		<div class="ea-label">
 			<span>Special Service Groups:</span>
 		</div>
 		<div class="ea-clear"></div>
+		
+		<!-- Semester Date Range Selection -->
+		<div class="ea-time-span">
+			<div class="ea-term">
+				<div class="ea-input">
+					<select id="earlyAlertStudentTermCode" name="termCode" class="input-term-group">
+						<option value="">${not_applicable}</option>
+						</select>
+				</div>
+				<div class="ea-label">
+					<span>Term:</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-date-range">
+				<!-- Date From -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentCreateDateFrom">
+				</div>
+				<div class="ea-label">
+					<span>Start Date (inclusive)::</span>
+				</div>
+				<div class="ea-clear"></div><!-- Date To -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentCreateDateTo">
+				</div>
+				<div class="ea-label">
+					<span>End Date (exclusive)::</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-buttons">
+				<div>
+					<button class="switch-date-range-type button" value="setbyrange"></button>
+				</div>
+			</div>
+		</div>
 
-		<!-- Date From -->
-		<div class="ea-input">
-			<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentCreateDateFrom" />
-		</div>
-		<div class="ea-label">
-			<span>Start Date:</span>
-		</div>
-		<div class="ea-clear"></div>
-
-		<!-- Date To -->
-		<div class="ea-input">
-			<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentCreateDateTo" />
-		</div>
-		<div class="ea-label">
-			<span>End Date:</span>
-		</div>
-		<div class="ea-clear"></div>
+	
 
 		<!-- output type -->
 		<div class="ea-input">
@@ -733,7 +818,7 @@
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentReferralCounselorGroup" name="coachId" class="input-assigned-counselor-group">
-				<option value=""></option>
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -745,7 +830,7 @@
 		<!-- program Status -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentReferralProgramStatusGroup" name="programStatus" class="input-program-status-group">
-				<option value=""></option>
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -768,7 +853,7 @@
 			<div class="ea-term">
 				<div class="ea-input">
 					<select id="earlyAlertStudentReferralTermCode" name="termCode" class="input-term-group">
-						<option value=""></option>
+						<option value="">${not_applicable}</option>
 						</select>
 				</div>
 				<div class="ea-label">
@@ -782,14 +867,14 @@
 					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentReferralCreateDateFrom">
 				</div>
 				<div class="ea-label">
-					<span>Start Date:</span>
+					<span>Start Date (inclusive)::</span>
 				</div>
 				<div class="ea-clear"></div><!-- Date To -->
 				<div class="ea-input">
 					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentReferralCreateDateTo">
 				</div>
 				<div class="ea-label">
-					<span>End Date:</span>
+					<span>End Date (exclusive)::</span>
 				</div>
 				<div class="ea-clear"></div>
 			</div>
@@ -838,7 +923,7 @@
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentProgressCounselorGroup" name="coachId" class="input-assigned-counselor-group">
-				<option value=""></option>
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -850,7 +935,7 @@
 		<!-- program Status -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentProgressProgramStatusGroup" name="programStatus" class="input-program-status-group">
-				<option value=""></option>
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -859,7 +944,9 @@
 		<div class="ea-clear"></div>
 
 		<div class="ea-input">
-			<select class="input-student-type-group" id="earlyAlertStudentProgressStudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
+			<select class="input-student-type-group" id="earlyAlertStudentProgressStudentTypeIds" name="studentTypeIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Student Type:</span>
@@ -869,7 +956,9 @@
 		<!-- Special Service Groups -->
 		<div class="ea-input">
 			<select  class="input-special-service-group" id="earlyAlertStudentProgressSpecialServiceGroupIds" name="specialServiceGroupIds"
-				multiple="multiple"></select>
+				multiple="multiple">
+				<option value="">${not_applicable}</option>
+				</select>
 		</div>
 		<div class="ea-label">
 			<span>Special Service Groups:</span>
@@ -934,7 +1023,7 @@
 		<!-- Outcome -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentOutreachOutcomeGroup" name="earlyAlertOutcomes" class="input-early-alert-outcome-group" multiple="multiple" >
-				<option value=""></option>
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -947,7 +1036,7 @@
 			<div class="ea-term">
 				<div class="ea-input">
 					<select id="earlyAlertStudentOutreachTermCode" name="termCode" class="input-term-group">
-						<option value=""></option>
+						<option value="">${not_applicable}</option>
 						</select>
 				</div>
 				<div class="ea-label">
@@ -961,14 +1050,14 @@
 					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentOutreachCreateDateFrom">
 				</div>
 				<div class="ea-label">
-					<span>Start Date:</span>
+					<span>Start Date (inclusive)::</span>
 				</div>
 				<div class="ea-clear"></div><!-- Date To -->
 				<div class="ea-input">
 					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentOutreachCreateDateTo">
 				</div>
 				<div class="ea-label">
-					<span>End Date:</span>
+					<span>End Date (exclusive)::</span>
 				</div>
 				<div class="ea-clear"></div>
 			</div>
@@ -1017,7 +1106,7 @@
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentOutcomeCounselorGroup" name="coachId" class="input-assigned-counselor-group">
-				<option value=""></option>
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -1028,7 +1117,7 @@
 		<!-- program Status -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentOutcomeProgramStatusGroup" name="programStatus" class="input-program-status-group">
-				<option value=""></option>
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -1037,7 +1126,9 @@
 		<div class="ea-clear"></div>
 
 		<div class="ea-input">
-			<select class="input-student-type-group" id="earlyAlertStudentOutcomeStudentTypeIds" name="studentTypeIds" multiple="multiple"></select>
+			<select class="input-student-type-group" id="earlyAlertStudentOutcomeStudentTypeIds" name="studentTypeIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Student Type:</span>
@@ -1047,7 +1138,9 @@
 		<!-- Special Service Groups -->
 		<div class="ea-input">
 			<select  class="input-special-service-group" id="earlyAlertStudentOutcomeSpecialServiceGroupIds" name="specialServiceGroupIds"
-				multiple="multiple"></select>
+				multiple="multiple">
+				<option value="">${not_applicable}</option>
+				</select>
 		</div>
 		<div class="ea-label">
 			<span>Special Service Groups:</span>
@@ -1060,7 +1153,7 @@
 			<div class="ea-term">
 				<div class="ea-input">
 					<select id="earlyAlertStudentOutcomeTermCode" name="termCode" class="input-term-group">
-						<option value=""></option>
+						<option value="">${not_applicable}</option>
 						</select>
 				</div>
 				<div class="ea-label">
@@ -1074,14 +1167,14 @@
 					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentOutcomeCreateDateFrom">
 				</div>
 				<div class="ea-label">
-					<span>Start Date:</span>
+					<span>Start Date (inclusive)::</span>
 				</div>
 				<div class="ea-clear"></div><!-- Date To -->
 				<div class="ea-input">
 					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentOutcomeCreateDateTo">
 				</div>
 				<div class="ea-label">
-					<span>End Date:</span>
+					<span>End Date (exclusive)::</span>
 				</div>
 				<div class="ea-clear"></div>
 			</div>
@@ -1121,7 +1214,7 @@
 		<!-- Campus -->
 		<div class="ea-input">
 			<select id="earlyAlertClassCampusName" name="campusName" class="input-campus-group">
-				<option value=""></option>
+				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -1162,6 +1255,413 @@
 	</form>
 </div>
 
+<div class="hideable-form disability-services-report" style="display:none">
+	<h1>Disability Services Report</h1>
+	<form action="/ssp/api/1/report/disabilityservices/" method="post"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+
+		<!-- Home Department -->
+		<div class="ea-input">
+			Not Available Yet
+		</div>
+		<div class="ea-label">
+			<span>Home Department:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Assigned Counselor -->
+		<div class="ea-input">
+			<select id="disabilityServicesAssignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Assigned Counselor:</span>
+		</div>
+		<div class="ea-clear"></div>	
+		
+		<!-- ODS Counselor -->
+		<div class="ea-input">
+			<select id="disabilityServicesODSCounselorGroup" name="odsCoachId" class="input-assigned-counselor-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>ODS Counselor:</span>
+		</div>
+		<div class="ea-clear"></div>	
+		
+		<!-- Disability Status -->
+		<div class="ea-input">
+			<select class='input-disability-status-group' id="disabilityServicesDisabilityStatusId" name="disabilityStatusId">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Disability Status:</span>
+		</div>
+		<div class="ea-clear"></div>	
+		
+		<!-- Disability Type -->
+		<div class="ea-input">
+			<select class='input-disability-type-group' id="disabilityServicesDisabilityTypeId" name="disabilityTypeId">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Disability Type:</span>
+		</div>
+		<div class="ea-clear"></div>	
+			
+		<!-- program Status -->
+		<div class="ea-input">
+			<select id="disabilityServicesProgramStatusGroup" name="programStatus" class="input-program-status-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Program Status:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Student Type -->
+		<div class="ea-input">
+			<select class="input-student-type-group" id="disabilityServicesStudentTypeIds" name="studentTypeIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Student Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Special Service Groups -->
+		<div class="ea-input">
+			<select  class="input-special-service-group" id="disabilityServicesSpecialServiceGroupIds" name="specialServiceGroupIds"
+				multiple="multiple">
+				<option value="">${not_applicable}</option>
+				</select>
+		</div>
+		<div class="ea-label">
+			<span>Special Service Groups:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Referral Source -->
+		<div class="ea-input">
+			<select class='input-referral-source-group' id="disabilityServicesReferralSourceGroup" name="referralSourcesIds"
+				multiple="multiple">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Referral Source:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+
+		<!-- Date Range Selection -->
+		<div class="ea-time-span">
+			<div class="ea-term">
+				<div class="ea-input">
+					<select id="disabilityServicesTermCode" name="termCode" class="input-term-group">
+						<option value="">${not_applicable}</option>
+						</select>
+				</div>
+				<div class="ea-label">
+					<span>Term:</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-date-range">
+				<!-- Date From -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="disabilityServicesCreateDateFrom">
+				</div>
+				<div class="ea-label">
+					<span>Student Added From (inclusive)::</span>
+				</div>
+				<div class="ea-clear"></div><!-- Date To -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateTo" id="disabilityServicesCreateDateTo">
+				</div>
+				<div class="ea-label">
+					<span>Student Added To (exclusive)::</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-buttons">
+				<div>
+					<button class="switch-date-range-type button" value="setbyrange"></button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Actual Start Term -->
+		<div class="ea-input">
+			<select id="disabilityServicesActualStartTerm" name="actualStartTerm" class="input-term-group">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Registration Start Term:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Actual Start Year -->
+		<div class="ea-input">
+			<select id="disabilityServicesActualStartYear" name="actualStartYear" class="input-report-year-group">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		
+		<div class="ea-label">
+			<span>Registration Year:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Anticipated Start Term -->
+		<div class="ea-input">
+			<select id="disabilityServicesAnticipatedStartTerm" name="anticipatedStartTerm" class="input-term-group">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Anticipated Start Term:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Anticipated Start Year -->
+		<div class="ea-input">
+			<select id="disabilityServicesAnticipatedStartYear" name="anticipatedStartYear" class="input-report-year-group">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Anticipated Start Year:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div> 
+
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class="hideable-form disability-accomodation-report" style="display:none">
+	<h1>Disability Services Report</h1>
+	<form action="/ssp/api/1/report/disabilityservices/" method="post"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+
+		<!-- Home Department -->
+		<div class="ea-input">
+			Not Available Yet
+		</div>
+		<div class="ea-label">
+			<span>Home Department:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Assigned Counselor -->
+		<div class="ea-input">
+			<select id="disabilityAccomodationAssignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Assigned Counselor:</span>
+		</div>
+		<div class="ea-clear"></div>	
+		
+	
+		<!-- Disability Status -->
+		<div class="ea-input">
+			<select class='input-disability-status-group' id="ddisabilityAccomodationDisabilityStatusId" name="disabilityStatusId">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Disability Status:</span>
+		</div>
+		<div class="ea-clear"></div>	
+		
+		<!-- Disability Type -->
+		<div class="ea-input">
+			<select class='input-disability-type-group' id="disabilityAccomodationDisabilityTypeId" name="disabilityTypeId">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Disability Type:</span>
+		</div>
+		<div class="ea-clear"></div>	
+		
+		
+		<!-- program Status -->
+		<div class="ea-input">
+			<select id="disabilityAccomodationProgramStatusGroup" name="programStatus" class="input-program-status-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Program Status:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Student Type -->
+
+		<div class="ea-input">
+			<select class="input-student-type-group" id="disabilityAccomodationStudentTypeIds" name="studentTypeIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Student Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Special Service Groups -->
+		<div class="ea-input">
+			<select  class="input-special-service-group" id="disabilityAccomodationSpecialServiceGroupIds" name="specialServiceGroupIds"
+				multiple="multiple">
+				<option value="">${not_applicable}</option>
+				</select>
+		</div>
+		<div class="ea-label">
+			<span>Special Service Groups:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Referral Source -->
+		<div class="ea-input">
+			<select class='input-referral-source-group' id="disabilityAccomodationReferralSourceGroup" name="referralSourcesIds"
+				multiple="multiple">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Referral Source:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+
+		<!-- Date Range Selection -->
+		<div class="ea-time-span">
+			<div class="ea-term">
+				<div class="ea-input">
+					<select id="disabilityAccomodationTermCode" name="termCode" class="input-term-group">
+						<option value="">${not_applicable}</option>
+						</select>
+				</div>
+				<div class="ea-label">
+					<span>Term:</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-date-range">
+				<!-- Date From -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="disabilityAccomodationCreateDateFrom">
+				</div>
+				<div class="ea-label">
+					<span>Student Added From (inclusive)::</span>
+				</div>
+				<div class="ea-clear"></div><!-- Date To -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateTo" id="disabilityAccomodationCreateDateTo">
+				</div>
+				<div class="ea-label">
+					<span>Student Added To (exclusive)::</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-buttons">
+				<div>
+					<button class="switch-date-range-type button" value="setbyrange"></button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Actual Start Term -->
+		<div class="ea-input">
+			<select id="disabilityAccomodationActualStartTerm" name="actualStartTerm" class="input-term-group">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Registration Start Term:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Actual Start Year -->
+		<div class="ea-input">
+			<select id="disabilityAccomodationActualStartYear" name="actualStartYear" class="input-report-year-group">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		
+		<div class="ea-label">
+			<span>Registration Year:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Anticipated Start Term -->
+		<div class="ea-input">
+			<select id="disabilityAccomodationAnticipatedStartTerm" name="anticipatedStartTerm" class="input-term-group">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Anticipated Start Term:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Anticipated Start Year -->
+		<div class="ea-input">
+			<select id="disabilityAccomodationAnticipatedStartYear" name="anticipatedStartYear" class="input-report-year-group">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Anticipated Start Year:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div> 
+
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+</div>
 	</div>
     
   </div> <!-- end: portlet-body -->
@@ -1171,6 +1671,10 @@
 
 <script type="text/javascript">
     var ${n} = {};
+    function validateForm(form)
+    {
+    	return form;
+    }
     ${n}.jQuery = jQuery.noConflict(true);
 
     ${n}.jQuery(function() {

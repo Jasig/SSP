@@ -18,21 +18,11 @@
  */
 package org.jasig.ssp.transferobject.reports;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
-import org.jasig.ssp.transferobject.PersonTO;
-import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 
-import com.google.common.collect.Lists;
-
-public class EarlyAlertStudentReportTO {
+public class EarlyAlertStudentReportTO extends BaseStudentReportTO {
 
 	/**
 	 * Construct a transfer object from a related model instance
@@ -41,7 +31,7 @@ public class EarlyAlertStudentReportTO {
 	 *            Initialize instance from the data in this model
 	 */
 	public EarlyAlertStudentReportTO(final Person model, Long total, Long pending, Long closed) {	
-		this.setPerson(model);
+		super(model);
 		this.total = total;
 		this.closed = closed;
 		this.pending = pending;
@@ -52,74 +42,9 @@ public class EarlyAlertStudentReportTO {
 		
 	}
 	
-	private String firstName;
-	private String lastName;
-	private String middleName;
-	private String schoolId;
-	private String primaryEmailAddress;
-	private String secondaryEmailAddress;
 	private Long total;
 	private Long pending;
 	private Long closed;
-	private CoachPersonLiteTO coach;
-	private Person person;
-
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getMiddleName() {
-		return middleName;
-	}
-
-	public void setMiddleName(String middleName) {
-		this.middleName = middleName;
-	}
-
-	public String getSchoolId() {
-		return schoolId;
-	}
-
-	public void setSchoolId(String schoolId) {
-		this.schoolId = schoolId;
-	}
-
-	public String getPrimaryEmailAddress() {
-		return primaryEmailAddress;
-	}
-
-	public void setPrimaryEmailAddress(String primaryEmailAddress) {
-		this.primaryEmailAddress = primaryEmailAddress;
-	}
-
-	public String getSecondaryEmailAddress() {
-		return secondaryEmailAddress;
-	}
-
-	public void setSecondaryEmailAddress(String secondaryEmailAddress) {
-		this.secondaryEmailAddress = secondaryEmailAddress;
-	}
-
-	public CoachPersonLiteTO getCoach() {
-		return coach;
-	}
-
-	public void setCoach(CoachPersonLiteTO coach) {
-		this.coach = coach;
-	}
 
 	public Long getTotal() {
 		return total;
@@ -149,18 +74,4 @@ public class EarlyAlertStudentReportTO {
 		return total - closed;
 	}
 
-	public Person getPerson() {
-		return person;
-	}
-
-	public void setPerson(Person person) {
-		this.person = person;
-		setFirstName(person.getFirstName());
-		setLastName(person.getLastName());
-		setMiddleName(person.getMiddleName());
-		setPrimaryEmailAddress(person.getPrimaryEmailAddress());
-		setSecondaryEmailAddress(person.getSecondaryEmailAddress());
-		setSchoolId(person.getSchoolId());
-		setCoach(new CoachPersonLiteTO(person.getCoach()));
-	}
 }

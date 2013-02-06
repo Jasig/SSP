@@ -44,8 +44,9 @@ import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.EarlyAlertReferralService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.PersonTO;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -70,7 +71,10 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/earlyalertstudentreferral")
-public class EarlyAlertStudentReferralReportController extends EarlyAlertReportBaseController {
+public class EarlyAlertStudentReferralReportController extends ReportBaseController {
+
+	private static final String REPORT_URL = "/reports/earlyAlertStudentReferralReport.jasper";
+	private static final String REPORT_FILE_TITLE = "Early_Alert_Student_Referral_Report";
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AddressLabelsReportController.class);
@@ -95,7 +99,7 @@ public class EarlyAlertStudentReferralReportController extends EarlyAlertReportB
 
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
-		final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy",
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT,
 				Locale.US);
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(
@@ -105,7 +109,7 @@ public class EarlyAlertStudentReferralReportController extends EarlyAlertReportB
 	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	@ResponseBody
-	public void getEarlyAlertReferralReport(
+	public void getEarlyAlertStudentReferralReport(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) UUID coachId,			
@@ -114,29 +118,15 @@ public class EarlyAlertStudentReferralReportController extends EarlyAlertReportB
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false) String termCode,
-			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
+			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
-		Person coach = null;
-		PersonTO coachTO = null;
-		Date startDate = createDateFrom;
-		Date endDate = createDateTo;
-		String termName = "";
 		
-		if(termCode != null && termCode.length()> 0) {
-			Term term = termService.getByCode(termCode);
-			termName = term.getName();
-			startDate = term.getStartDate();
-			endDate = term.getEndDate();
-		}
+		PersonTO coachTO = SearchParameters.getPerson(coachId, personService, personTOFactory);
 		
-		if(coachId != null)
-		{
-			coach = personService.get(coachId);
-			coachTO = personTOFactory.from(coach);
-		}		
+		DateTerm termDate =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);	
 
-		final AddressLabelSearchTO searchForm = new AddressLabelSearchTO(
+		final PersonSearchFormTO searchForm = new PersonSearchFormTO(
 				coachTO,
 				programStatus, null, null, null, null,
 				null, null,
@@ -145,30 +135,21 @@ public class EarlyAlertStudentReferralReportController extends EarlyAlertReportB
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
-		@SuppressWarnings("unchecked")
 		final List<EarlyAlertStudentReportTO> peopleInfo = earlyAlertResponseService.getPeopleByEarlyAlertReferralIds(
-				(List<UUID>)Arrays.asList(earlyAlertReferralId), startDate, endDate, searchForm, SortingAndPaging.createForSingleSort(status, null,
+				Arrays.asList(earlyAlertReferralId), termDate.getStartDate(), termDate.getEndDate(), searchForm, SortingAndPaging.createForSingleSort(status, null,
 						null, null, null, null));
-		
-		// final String programStatusName = ((null!=programStatus &&
-		// !programStatus.isEmpty())?programStatus.get(0)():"");
-		// Get the actual name of the UUID for the programStatus
-		final String programStatusName = (programStatus == null ? ""
-				: programStatusService.get(programStatus).getName());
 
 		final Map<String, Object> parameters = Maps.newHashMap();
 		
-		parameters.put("coachName",  getFullName(coachTO));
+		SearchParameters.addReportDateToMap(parameters);
+		SearchParameters.addCoachNameToMap(coachTO, parameters);
 		
-		setStartDateEndDateToMap(parameters, startDate, endDate);
-		parameters.put("programStatus", programStatusName);
-		parameters.put("referralSourceName", earlyAlertReferralsService.get(earlyAlertReferralId).getName());
-		parameters.put("reportDate", new Date());
-		parameters.put("termName", termName);
+		SearchParameters.addDateTermToMap(termDate, parameters);
+		SearchParameters.addProgramStatusToMap(programStatus, parameters, programStatusService);
+		SearchParameters.addEarlyAlertReferralToMap(earlyAlertReferralId, parameters, earlyAlertReferralsService);
 		
-
-		generateReport( response,  parameters, peopleInfo.size() > 0 ? peopleInfo : null,  "/reports/earlyAlertStudentReferralReport.jasper", 
-				 reportType, "Early_Alert_Student_Referral_Report");
+		generateReport( response,  parameters, peopleInfo.size() > 0 ? peopleInfo : null,  REPORT_URL, 
+				 reportType, REPORT_FILE_TITLE);
 	}
 
 	@Override

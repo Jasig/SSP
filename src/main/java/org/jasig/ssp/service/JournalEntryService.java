@@ -24,6 +24,9 @@ import java.util.UUID;
 
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 /**
  * JournalEntry service
@@ -34,4 +37,8 @@ public interface JournalEntryService
 	public Long getCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds);
 
 	public Long getStudentCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds);  
+	
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentJournalCountForCoaches(List<Person> coaches, 
+			Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, SortingAndPaging sAndP);
+
 }

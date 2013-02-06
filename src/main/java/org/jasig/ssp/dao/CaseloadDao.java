@@ -246,7 +246,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 		// feature checks on the Dialect so we at least aren't scattering
 		// Dialect-specific code all over the place
 		Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
-		if ( dialect instanceof SQLServerDialect ) {
+		if ( dialect instanceof SQLServerDialect) {
 			// sql server requires all these to part of the grouping
 			projectionList.add(Projections.groupProperty("c.lastName").as("coachLastName"))
 					.add(Projections.groupProperty("c.firstName").as("coachFirstName"))

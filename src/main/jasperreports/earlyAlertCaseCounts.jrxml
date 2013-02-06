@@ -1,24 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Licensed to Jasig under one or more contributor license
-    agreements. See the NOTICE file distributed with this work
-    for additional information regarding copyright ownership.
-    Jasig licenses this file to you under the Apache License,
-    Version 2.0 (the "License"); you may not use this file
-    except in compliance with the License. You may obtain a
-    copy of the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on
-    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations
-    under the License.
-
--->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank Letter Landscape" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de052e81-a0fc-4bfe-a86d-fd593cff06df">
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
@@ -26,27 +6,32 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="32"/>
-	<parameter name="termName" class="java.lang.String"/>
-	<parameter name="termCode" class="java.lang.String"/>
-	<parameter name="campus" class="java.lang.String"/>
-	<parameter name="totalStudents" class="java.lang.Long"/>
-	<parameter name="totalCases" class="java.lang.Long"/>
-	<parameter name="totalRespondedTo" class="java.lang.Long"/>
-	<parameter name="totalClosed" class="java.lang.Long"/>
-	<field name="totalStudents" class="java.lang.Integer"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="385"/>
+	<property name="ireport.y" value="80"/>
+	<parameter name="termNames" class="java.lang.String"/>
+	<parameter name="termCodes" class="java.lang.String"/>
+	<parameter name="campusName" class="java.lang.String"/>
+	<field name="totalStudents" class="java.lang.Long"/>
+	<field name="termCode" class="java.lang.String"/>
+	<field name="totalCases" class="java.lang.Long"/>
+	<field name="totalRespondedTo" class="java.lang.Long"/>
+	<field name="totalClosed" class="java.lang.Long"/>
 	<variable name="rowIndex" class="java.lang.Integer">
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
 		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
 	</variable>
-	<variable name="percentRespondedTo" class="java.lang.Double">
-		<variableExpression><![CDATA[$P{totalRespondedTo}.intValue() == 0 ? 0.0 : new Double($P{totalRespondedTo}.doubleValue() / $P{totalCases}.doubleValue() )]]></variableExpression>
-		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	<variable name="totalStudents_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalStudents}]]></variableExpression>
 	</variable>
-	<variable name="percentClosed" class="java.lang.Double">
-		<variableExpression><![CDATA[$P{totalClosed}.intValue() == 0 ? 0 : new Double( $P{totalClosed}.doubleValue() / $P{totalCases}.doubleValue() )]]></variableExpression>
+	<variable name="totalCases_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalCases}]]></variableExpression>
+	</variable>
+	<variable name="totalRespondedTo_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalRespondedTo}]]></variableExpression>
+	</variable>
+	<variable name="totalClosed_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalClosed}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -63,15 +48,15 @@
 				<textElement/>
 				<text><![CDATA[Early Alert Term]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="100" y="21" width="100" height="20"/>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="100" y="21" width="311" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{termName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{termNames}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="64aa21a8-5fbc-4465-b2c4-991e4c0e6450" x="100" y="41" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{campus}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{campusName}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="255b284c-e962-4bd2-a35c-c07141e46079" x="100" y="1" width="100" height="20"/>
@@ -138,63 +123,117 @@
 			</staticText>
 		</band>
 	</columnHeader>
-	<columnFooter>
-		<band height="382" splitType="Stretch">
-			<textField pattern="###0;-###0" isBlankWhenNull="false">
-				<reportElement uuid="da4c0010-a6bc-4016-836e-daa0149f7735" stretchType="RelativeToBandHeight" x="181" y="0" width="60" height="20"/>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="181" y="0" width="401" height="20" backcolor="#E4E4E4">
+					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0" lineColor="#FFFFFF"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement uuid="45da8800-1846-41a1-9882-ff007a48762b" x="181" y="1" width="60" height="16"/>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{termCode}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{termCode}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0;-###0" isBlankWhenNull="false">
-				<reportElement uuid="d748b928-bc5b-4c45-b035-92d8635b802b" x="241" y="0" width="85" height="20"/>
+			<textField>
+				<reportElement uuid="294ddbce-601e-4d1f-b57a-c56521042369" x="241" y="1" width="85" height="16"/>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{totalStudents}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalStudents}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0;-###0" isBlankWhenNull="false">
-				<reportElement uuid="55cfc81c-0713-4584-bb5f-a8ab3c4a47cc" x="326" y="0" width="85" height="20"/>
+			<textField>
+				<reportElement uuid="862d9bad-4a09-4795-8539-b7789f997222" x="326" y="1" width="85" height="16"/>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{totalCases}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalCases}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0;-###0" isBlankWhenNull="false">
-				<reportElement uuid="c6ededdb-7d63-4e93-8f29-be87c67bd1d3" isPrintRepeatedValues="false" x="411" y="0" width="43" height="20"/>
+			<textField>
+				<reportElement uuid="ffe22d7b-5cb0-4797-bbd1-69b19b1e6d95" x="411" y="1" width="43" height="16"/>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{totalRespondedTo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalRespondedTo}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0;-###0" isBlankWhenNull="false">
-				<reportElement uuid="c6ededdb-7d63-4e93-8f29-be87c67bd1d3" x="506" y="0" width="34" height="20"/>
+			<textField isStretchWithOverflow="true" pattern="(###.0)%" isBlankWhenNull="true">
+				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" x="455" y="1" width="42" height="16" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{totalClosed}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalCases} != null && $F{totalCases} > 0 ? $F{totalRespondedTo}/$F{totalCases} : 0]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="(###.0)%">
-				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" x="454" y="0" width="42" height="20" isRemoveLineWhenBlank="true"/>
-				<textElement>
-					<font size="8"/>
+			<textField>
+				<reportElement uuid="34055fa2-b00a-4225-a76a-930f0b5e3bb3" x="497" y="1" width="43" height="16"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{percentRespondedTo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalClosed}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="(##0.0)%">
-				<reportElement uuid="e2f4fd38-a3da-44b4-9adb-4007fd9a95d1" x="540" y="0" width="42" height="20"/>
-				<textElement>
-					<font size="8"/>
+				<reportElement uuid="e2f4fd38-a3da-44b4-9adb-4007fd9a95d1" x="540" y="1" width="42" height="16"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{percentClosed}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalCases} != null && $F{totalCases} > 0?$F{totalClosed}/$F{totalCases}:0]]></textFieldExpression>
 			</textField>
 		</band>
+	</detail>
+	<columnFooter>
+		<band height="20" splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="51" splitType="Stretch"/>
+		<band height="20" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement uuid="61d3d9d4-6881-40e3-9dbd-060abbe0e0ac" mode="Opaque" x="241" y="2" width="85" height="16"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalStudents_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="32413929-9d98-45f7-93b8-3600165db12c" mode="Opaque" x="326" y="2" width="85" height="16"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalCases_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="10438f7c-6846-4015-b559-cc5d8658c59a" mode="Opaque" x="411" y="2" width="43" height="16"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalRespondedTo_1}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="(###.0)%" isBlankWhenNull="true">
+				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" mode="Opaque" x="455" y="2" width="42" height="16" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalCases_1} != null && $V{totalCases_1} > 0 ? $V{totalRespondedTo_1}/$V{totalCases_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8416a64b-f939-48ce-981c-5b8a464fd36c" mode="Opaque" x="497" y="2" width="43" height="16"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalClosed_1}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="(###.0)%" isBlankWhenNull="true">
+				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" mode="Opaque" x="540" y="2" width="42" height="16" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalCases_1} != null && $V{totalCases_1} > 0 ? $V{totalClosed_1}/$V{totalCases_1} : 0]]></textFieldExpression>
+			</textField>
+		</band>
 	</summary>
 </jasperReport>

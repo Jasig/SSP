@@ -37,9 +37,10 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.EarlyAlertOutreach;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -208,7 +209,7 @@ public class EarlyAlertResponseDao extends
 				if(outreach.getName().equals("Text")){
 					update.setCountText(update.getCountText() + 1L);
 				}
-				update.setTotalEarlyAlerts(update.getTotalEarlyAlerts());
+				update.setTotalEarlyAlerts(update.getTotalEarlyAlerts() + 1L);
 			}
 			
 		}
@@ -220,7 +221,7 @@ public class EarlyAlertResponseDao extends
 			final List<UUID> earlyAlertReferralIds, 
 			final Date createDateFrom, 
 			final Date createDateTo,
-			final AddressLabelSearchTO addressLabelSearchTO,
+			final PersonSearchFormTO addressLabelSearchTO,
 			final SortingAndPaging sAndP)
 			throws ObjectNotFoundException {
 
@@ -254,8 +255,52 @@ public class EarlyAlertResponseDao extends
 	}
 	
 	
+	@SuppressWarnings("unchecked")
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertResponseCountByCoaches(List<Person> coaches, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, SortingAndPaging sAndP) {
 
-	private Criteria setPersonCriteria(Criteria criteria, AddressLabelSearchTO addressLabelSearchTO){
+		final Criteria query = createCriteria();
+ 
+		if (createDateFrom != null) {
+			query.add(Restrictions.ge("createdDate",
+					createDateFrom));
+		}
+
+		if (createDateTo != null) {
+			query.add(Restrictions.le("createdDate",
+					createDateTo));
+		}
+		
+		
+		
+		query.createAlias("earlyAlert", "earlyAlert");
+		Criteria personCriteria = query.createAlias("earlyAlert.person", "person");
+		personCriteria.add(Restrictions.in("earlyAlert.createdBy", coaches));
+		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
+			personCriteria.add(Restrictions
+					.in("person.studentType.id",studentTypeIds));
+		}
+		// item count
+		Long totalRows = 0L;
+		if ((sAndP != null) && sAndP.isPaged()) {
+			totalRows = (Long) query.setProjection(Projections.countDistinct("earlyAlert.createdBy"))
+					.uniqueResult();
+		}
+		
+		query.setProjection(Projections.projectionList().
+        		add(Projections.countDistinct("earlyAlert.person").as("earlyalertresponse_studentCount")).
+        		add(Projections.countDistinct("id").as("earlyalertresponse_entityCount")).
+        		add(Projections.groupProperty("earlyAlert.createdBy").as("earlyalertresponse_coach")));
+		
+		query.setResultTransformer(
+						new NamespacedAliasToBeanResultTransformer(
+								EntityStudentCountByCoachTO.class, "earlyalertresponse_"));
+		
+		return new PagingWrapper<EntityStudentCountByCoachTO>(totalRows,  (List<EntityStudentCountByCoachTO>)query.list());
+	}
+	
+	
+
+	private Criteria setPersonCriteria(Criteria criteria, PersonSearchFormTO addressLabelSearchTO){
 		if (addressLabelSearchTO.getCoach() != null
 				&& addressLabelSearchTO.getCoach().getId() != null) {
 			// restrict to coach

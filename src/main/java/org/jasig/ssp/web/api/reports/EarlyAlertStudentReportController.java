@@ -32,19 +32,20 @@ import net.sf.jasperreports.engine.JRException;
 
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
+import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -69,8 +70,11 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/earlyalertstudent")
-public class EarlyAlertStudentReportController extends EarlyAlertReportBaseController {
+public class EarlyAlertStudentReportController extends ReportBaseController {
 
+	private static final String REPORT_URL = "/reports/earlyAlertStudentReport.jasper";
+	private static final String REPORT_FILE_TITLE = "Early_Alert_Student_Report";
+	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AddressLabelsReportController.class);
 
@@ -86,6 +90,8 @@ public class EarlyAlertStudentReportController extends EarlyAlertReportBaseContr
 	@Autowired
 	protected transient StudentTypeService studentTypeService;	
 	@Autowired
+	protected transient TermService termService;
+	@Autowired
 	protected transient EarlyAlertService earlyAlertService;
 	@Autowired
 	protected transient EarlyAlertResponseService earlyAlertResponseService;
@@ -95,7 +101,7 @@ public class EarlyAlertStudentReportController extends EarlyAlertReportBaseContr
 
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
-		final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy",
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT,
 				Locale.US);
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(
@@ -114,66 +120,64 @@ public class EarlyAlertStudentReportController extends EarlyAlertReportBaseContr
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
-			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
+			final @RequestParam(required = false) String termCode,
+			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
 		
-		Person coach = null;
-		PersonTO coachTO = null;
-		if(coachId != null)
-		{
-			coach = personService.get(coachId);
-			coachTO = personTOFactory.from(coach);
-		}	
+		PersonTO coachTO = SearchParameters.getPerson(coachId, personService, personTOFactory);
 		
-		List<UUID> cleanSpecialServiceGroupIds = cleanUUIDListOfNulls(specialServiceGroupIds);
+		DateTerm termDate =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
 		
-
-		final AddressLabelSearchTO addressLabelSearchTO = new AddressLabelSearchTO(
-				coachTO,
-				programStatus, cleanSpecialServiceGroupIds, null, null, null,
-				studentTypeIds, null,
+		final Map<String, Object> parameters = Maps.newHashMap();
+		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
+		
+		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
+		
+		SearchParameters.addReferenceLists(studentTypeIds, 
+				specialServiceGroupIds, 
+				null, 
+				parameters, 
+				personSearchForm, 
+				studentTypeService, 
+				ssgService, 
 				null);
 		
-		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(addressLabelSearchTO, createDateFrom, createDateTo);
+		SearchParameters.addDateRange(null, 
+				null, 
+				null, 
+				parameters, 
+				personSearchForm, 
+				termService);
+		
+		SearchParameters.addReferenceTypes(programStatus, 
+				null, 
+				false,
+				parameters, 
+				personSearchForm, 
+				programStatusService, 
+				null);
+		
+		
+		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(personSearchForm, 
+				termDate.getStartDate(), 
+				termDate.getEndDate());
 
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
 		final PagingWrapper<EarlyAlertStudentReportTO> people = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
-				searchForm, SortingAndPaging.createForSingleSort(status, null,
+				searchForm, 
+				SortingAndPaging.createForSingleSort(status, null,
 						null, null, null, null));
 		
-	
-		// final String programStatusName = ((null!=programStatus &&
-		// !programStatus.isEmpty())?programStatus.get(0)():"");
-		// Get the actual name of the UUID for the programStatus
-		final String programStatusName = (programStatus == null ? ""
-				: programStatusService.get(programStatus).getName());
 
-		final Map<String, Object> parameters = Maps.newHashMap();
+		final Map<String, Object> map = Maps.newHashMap();
 		
-		parameters.put("coachName", coachTO == null ? "" : 
-			coachTO.getFirstName() + " " + coachTO.getLastName());
-		
-		parameters.put("studentTypes", concatStudentTypesFromUUIDs(studentTypeIds, studentTypeService));
-		parameters.put("programStatus", programStatusName);
-		parameters.put("specialServiceGroupNames", concatSpecialGroupsNameFromUUIDs(specialServiceGroupIds, ssgService));
-		parameters.put("reportDate", new Date());
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		if(createDateFrom != null)
-			parameters.put("startDate", sdf.format(createDateFrom));
-		else
-			parameters.put("startDate","Not Given");
-			
-		if(createDateTo != null)
-			parameters.put("endDate", sdf.format(createDateTo));
-		else
-			parameters.put("endDate","Not Given");	
+		SearchParameters.addReportDateToMap(map);
+		SearchParameters.addDateTermToMap(termDate, map);
 
-		generateReport(response,  parameters, people.getRows(),  "/reports/earlyAlertStudentReport.jasper", 
-				 reportType, "Early_Alert_Student_Report");
+		generateReport(response,  map, people.getRows(),  REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 	
 

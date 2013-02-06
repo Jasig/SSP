@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="earlyAlertStudentOutreachReport" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ac185325-229c-42eb-9c52-54601dbffce2">
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
@@ -12,7 +32,7 @@
 	<parameter name="startDate" class="java.lang.String"/>
 	<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="term" class="java.lang.String"/>
-	<parameter name="earlyAlertOutcome" class="java.lang.String"/>
+	<parameter name="earlyAlertOutcomeNames" class="java.lang.String"/>
 	<field name="coach" class="org.jasig.ssp.transferobject.CoachPersonLiteTO"/>
 	<field name="totalEarlyAlerts" class="java.lang.Long"/>
 	<field name="countPhoneCalls" class="java.lang.Long"/>
@@ -77,7 +97,7 @@
 			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
 				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="115" y="15" width="209" height="15"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{earlyAlertOutcome}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{earlyAlertOutcomeNames}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

@@ -47,26 +47,6 @@
 				</dependency>
 			</dependencies>
 		</profile>
-		<profile>
-			<id>MSSQL</id>
-			<dependencies>
-				<dependency>
-					<groupId>com.microsoft.sqlserver</groupId>
-					<artifactId>sqlserver-jdbc4</artifactId>
-					<version>3.0</version>
-				</dependency>
-			</dependencies>
-		</profile>
-		<profile>
-			<id>JTDS</id>
-			<dependencies>
-				<dependency>
-					<groupId>net.sourceforge.jtds</groupId>
-					<artifactId>jtds</artifactId>
-					<version>1.2.4</version>
-				</dependency>
-			</dependencies>
-		</profile>
 	</profiles>
 
 	<dependencies>
@@ -318,6 +298,12 @@
 			<groupId>postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>9.1-901.jdbc4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.jtds</groupId>
+			<artifactId>jtds</artifactId>
+			<version>1.2.4</version>
 		</dependency>
 
 		<!-- liquibase versions 2.0.4 through the latest version, 2.0.5, seem to 

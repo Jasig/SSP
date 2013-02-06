@@ -28,7 +28,7 @@ import org.jasig.ssp.transferobject.PersonTO;
 /**
  * AddressLabelSearch transfer object
  */
-public class AddressLabelSearchTO
+public class PersonSearchFormTO
 		implements Serializable {
 
 	private static final long serialVersionUID = 3118831549819428989L;
@@ -50,8 +50,57 @@ public class AddressLabelSearchTO
 	private Date createDateTo;
 	
 	private PersonTO coach;
+	
+	private PersonTO odsCoach;
+	
+	private UUID disabilityStatusId;
+	
+	private UUID disabilityTypeId;
+	
+	private Integer registrationYear;
+	
+	private String registrationTerm;
+	
+	private Boolean disabilityIsNotNull = false;
+	
+	
 
-	public AddressLabelSearchTO(final PersonTO coach,
+	public PersonTO getOdsCoach() {
+		return odsCoach;
+	}
+
+	public void setOdsCoach(PersonTO odsCoach) {
+		this.odsCoach = odsCoach;
+	}
+
+	public UUID getDisabilityStatusId() {
+		return disabilityStatusId;
+	}
+
+	public void setDisabilityStatusId(UUID disabilityStatus) {
+		this.disabilityStatusId = disabilityStatus;
+	}
+
+	public Integer getRegistrationYear() {
+		return registrationYear;
+	}
+
+	public void setRegistrationYear(Integer registrationYear) {
+		this.registrationYear = registrationYear;
+	}
+
+	public String getRegistrationTerm() {
+		return registrationTerm;
+	}
+
+	public void setRegistrationTerm(String registrationTerm) {
+		this.registrationTerm = registrationTerm;
+	}
+
+	public PersonSearchFormTO(){
+		
+	}
+	public PersonSearchFormTO(final PersonTO coach,
 								final UUID programStatus,
 								final List<UUID> specialServiceGroupId,
 								final List<UUID> referralSourcesId,
@@ -148,6 +197,22 @@ public class AddressLabelSearchTO
 
 	public void setCoach(PersonTO coach) {
 		this.coach = coach;
+	}
+
+	public Boolean getDisabilityIsNotNull() {
+		return disabilityIsNotNull;
+	}
+
+	public void setDisabilityIsNotNull(Boolean disabilityIsNotNull) {
+		this.disabilityIsNotNull = disabilityIsNotNull;
+	}
+
+	public UUID getDisabilityTypeId() {
+		return disabilityTypeId;
+	}
+
+	public void setDisabilityTypeId(UUID disabilityTypeId) {
+		this.disabilityTypeId = disabilityTypeId;
 	}
 
 }

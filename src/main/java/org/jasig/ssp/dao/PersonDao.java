@@ -37,7 +37,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
@@ -167,7 +167,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 */
 	@SuppressWarnings(UNCHECKED)
 	public List<Person> getPeopleByCriteria( // NOPMD
-			final AddressLabelSearchTO addressLabelSearchTO,
+			final PersonSearchFormTO addressLabelSearchTO,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 		
 		Criteria criteria = setBasicSearchCriteria(createCriteria(sAndP),  addressLabelSearchTO);
@@ -318,67 +318,97 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 
 	}
 	
-	private Criteria setBasicSearchCriteria(Criteria criteria, final AddressLabelSearchTO addressLabelSearchTO){
-		if (addressLabelSearchTO.getCoach() != null
-				&& addressLabelSearchTO.getCoach().getId() != null) {
+	private Criteria setBasicSearchCriteria(Criteria criteria, final PersonSearchFormTO personSearchTO){
+		if (personSearchTO.getCoach() != null
+				&& personSearchTO.getCoach().getId() != null) {
 			// restrict to coach
 			criteria.add(Restrictions.eq("coach.id",
-					addressLabelSearchTO.getCoach().getId()));
+					personSearchTO.getCoach().getId()));
 		}
 		
 		
-		if (addressLabelSearchTO.getProgramStatus() != null) {
+		if (personSearchTO.getProgramStatus() != null) {
 
 			criteria.createAlias("programStatuses",
 					"personProgramStatuses")
 					.add(Restrictions
 							.eq("personProgramStatuses.programStatus.id",
-									addressLabelSearchTO
+									personSearchTO
 											.getProgramStatus()));
 
 		}
 
-		if (addressLabelSearchTO.getSpecialServiceGroupIds() != null) {
+		if (personSearchTO.getSpecialServiceGroupIds() != null) {
 			criteria.createAlias("specialServiceGroups",
 					"personSpecialServiceGroups")
 					.add(Restrictions
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
-									addressLabelSearchTO
+									personSearchTO
 											.getSpecialServiceGroupIds()));
 		}
 
-		if (addressLabelSearchTO.getReferralSourcesIds() != null) {
+		if (personSearchTO.getReferralSourcesIds() != null) {
 			criteria.createAlias("referralSources", "personReferralSources")
 					.add(Restrictions.in(
 							"personReferralSources.referralSource.id",
-							addressLabelSearchTO.getReferralSourcesIds()));
+							personSearchTO.getReferralSourcesIds()));
 		}
 
-		if (addressLabelSearchTO.getAnticipatedStartTerm() != null) {
+		if (personSearchTO.getAnticipatedStartTerm() != null && personSearchTO.getAnticipatedStartTerm().length() > 0) {
 			criteria.add(Restrictions.eq("anticipatedStartTerm",
-					addressLabelSearchTO.getAnticipatedStartTerm())
+					personSearchTO.getAnticipatedStartTerm())
 					.ignoreCase());
 		}
 
-		if (addressLabelSearchTO.getAnticipatedStartYear() != null) {
+		if (personSearchTO.getAnticipatedStartYear() != null) {
 			criteria.add(Restrictions.eq("anticipatedStartYear",
-					addressLabelSearchTO.getAnticipatedStartYear()));
+					personSearchTO.getAnticipatedStartYear()));
+		}
+		
+		if (personSearchTO.getRegistrationTerm() != null  && personSearchTO.getRegistrationTerm().length() > 0) {
+			criteria.add(Restrictions.eq("actualStartTerm",
+					personSearchTO.getRegistrationTerm())
+					.ignoreCase());
 		}
 
-		if (addressLabelSearchTO.getStudentTypeIds() != null) {
+		if (personSearchTO.getRegistrationYear() != null) {
+			criteria.add(Restrictions.eq("actualStartYear",
+					personSearchTO.getRegistrationYear()));
+		}
+
+		if (personSearchTO.getStudentTypeIds() != null) {
 			criteria.add(Restrictions.in("studentType.id",
-					addressLabelSearchTO.getStudentTypeIds()));
+					personSearchTO.getStudentTypeIds()));
 		}
 
-		if (addressLabelSearchTO.getCreateDateFrom() != null) {
+		if (personSearchTO.getCreateDateFrom() != null) {
 			criteria.add(Restrictions.ge("createdDate",
-					addressLabelSearchTO.getCreateDateFrom()));
+					personSearchTO.getCreateDateFrom()));
 		}
 
-		if (addressLabelSearchTO.getCreateDateTo() != null) {
+		if (personSearchTO.getCreateDateTo() != null) {
 			criteria.add(Restrictions.le("createdDate",
-					addressLabelSearchTO.getCreateDateTo()));
+					personSearchTO.getCreateDateTo()));
 		}
+		
+		if (personSearchTO.getDisabilityIsNotNull() != null && personSearchTO.getDisabilityIsNotNull() == true) {
+			criteria.add(Restrictions.isNotNull("disability"));
+		}
+		
+		if (personSearchTO.getDisabilityStatusId() != null) {
+			criteria.createAlias("disability", "personDisability")
+			.add(Restrictions.eq(
+					"personDisability.disabilityStatus.id",
+					personSearchTO.getDisabilityStatusId()));
+		}
+		
+		if (personSearchTO.getDisabilityTypeId() != null) {
+			criteria.createAlias("disabilityTypes", "personDisabilityTypes")
+			.add(Restrictions.eq(
+					"personDisabilityTypes.disabilityType.id",
+					personSearchTO.getDisabilityTypeId()));
+		}
+
 		return criteria;
 	}
 }

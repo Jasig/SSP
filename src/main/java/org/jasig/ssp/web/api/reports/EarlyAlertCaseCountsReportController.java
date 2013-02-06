@@ -18,15 +18,10 @@
  */
 package org.jasig.ssp.web.api.reports; // NOPMD
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -34,42 +29,19 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRCsvExporter;
-import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
-
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.Campus;
-import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.security.permissions.Permission;
-import org.jasig.ssp.service.CaseloadService;
 import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.service.EarlyAlertService;
-import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.SecurityService;
-import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.CampusService;
-import org.jasig.ssp.service.reference.ProgramStatusService;
-import org.jasig.ssp.service.reference.ReferralSourceService;
-import org.jasig.ssp.service.reference.StudentTypeService;
-import org.jasig.ssp.transferobject.reports.CaseLoadActivityReportTO;
-import org.jasig.ssp.transferobject.reports.CaseLoadReportTO;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.AbstractBaseController;
+import org.jasig.ssp.transferobject.reports.EarlyAlertTermCaseCountsTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +64,10 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/earlyalertcasecounts")
-public class EarlyAlertCaseCountsReportController extends EarlyAlertReportBaseController {
+public class EarlyAlertCaseCountsReportController extends ReportBaseController {
+	
+	private static String REPORT_URL = "/reports/earlyAlertCaseCounts.jasper";
+	private static String REPORT_FILE_TITLE = "Early_Alert_Case_Counts_Report";
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CaseloadActivityReportController.class);
@@ -120,7 +95,7 @@ public class EarlyAlertCaseCountsReportController extends EarlyAlertReportBaseCo
 	
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
-		final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy",
+		final SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT,
 				Locale.US);
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(
@@ -131,39 +106,56 @@ public class EarlyAlertCaseCountsReportController extends EarlyAlertReportBaseCo
 	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	public @ResponseBody
-	void getCaseLoadActivity(
+	void getEarlyAlertCaseCountsReport(
 			final HttpServletResponse response,		
-			final @RequestParam(required = false) String campusName,
-			final @RequestParam(required = true) String termCode,			
-			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
+			final @RequestParam(required = false) UUID campusId,
+			final @RequestParam(required = false) List<String> termCodes,			
+			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
-				
-		final Map<String, Object> parameters = Maps.newHashMap();
-		Campus campus = null;
-		UUID campusId = null;
 		
-		if(campusName != null && campusName.length() > 0){
-			campusId = UUID.fromString(campusName);
-			campus = campusService.get(campusId);
-			parameters.put("campus", campus.getName()); 
-		}
+		Campus campus = SearchParameters.getCampus(campusId, campusService);	
 		
-		final Term term = termService.getByCode(termCode);
-		
-		parameters.put("termCode", term.getCode());
-		parameters.put("termName", term.getName());
+
+		final List<EarlyAlertTermCaseCountsTO> caseLoads = new ArrayList<EarlyAlertTermCaseCountsTO>();
+		final List<String> cleanTermCodes = SearchParameters.cleanStringListOfNulls(termCodes);
+		final List<Term> terms = SearchParameters.getTerms(cleanTermCodes, termService);
+		if(cleanTermCodes.size() > 0){
+			for(Term term:terms)
+			{			
+				EarlyAlertTermCaseCountsTO caseCounts = new EarlyAlertTermCaseCountsTO(term.getCode(),
+						term.getName(),
+						earlyAlertService.getCountOfEarlyAlertStudentsByDate(term.getStartDate(), 
+								term.getEndDate(), campus),
+						earlyAlertService.getCountOfEarlyAlertsByCreatedDate(term.getStartDate(), 
+								term.getEndDate(), campus),
+						earlyAlertResponseService.getEarlyAlertRespondedToCount(term.getStartDate(), 
+										term.getEndDate(), campus),
+						earlyAlertService.getCountOfEarlyAlertsClosedByDate(term.getStartDate(), 
+												term.getEndDate(), campus)
+										);
+			
+				caseLoads.add(caseCounts);
 	
-		parameters.put("totalStudents", earlyAlertService.getCountOfEarlyAlertStudentsByDate(term.getStartDate(), 
-				term.getEndDate(), campus));
-		parameters.put("totalCases",  earlyAlertService.getCountOfEarlyAlertsByCreatedDate(term.getStartDate(), 
-				term.getEndDate(), campus));
-		parameters.put("totalRespondedTo", earlyAlertResponseService.getEarlyAlertRespondedToCount(term.getStartDate(), 
-				term.getEndDate(), campus));
-		parameters.put("totalClosed", earlyAlertService.getCountOfEarlyAlertsClosedByDate(term.getStartDate(), 
-				term.getEndDate(), campus));
-				
-		generateReport( response,  parameters, null,  "/reports/earlyAlertCaseCounts.jasper", 
-				 reportType, "Early_Alert_Case_Counts_Report");
+			}
+
+		}else{
+			
+			EarlyAlertTermCaseCountsTO caseCounts = new EarlyAlertTermCaseCountsTO("All",
+					"All",
+					earlyAlertService.getCountOfEarlyAlertStudentsByDate(null, null, campus),
+					earlyAlertService.getCountOfEarlyAlertsByCreatedDate(null, null, campus),
+					earlyAlertResponseService.getEarlyAlertRespondedToCount(null, null, campus),
+					earlyAlertService.getCountOfEarlyAlertsClosedByDate(null, null, campus)
+									);
+			caseLoads.add(caseCounts);
+		}
+
+		final Map<String, Object> parameters = Maps.newHashMap();
+		SearchParameters.addCampusToParameters(campus, parameters);
+		
+		SearchParameters.addTermsToMap(terms, parameters);
+		generateReport( response,  parameters, caseLoads,  REPORT_URL, 
+				 reportType, REPORT_FILE_TITLE);
 	}
 
 	@Override
