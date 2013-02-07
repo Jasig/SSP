@@ -77,7 +77,7 @@ Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideDetails',{
                 },
                 {
                     xtype: 'checkboxfield',
-                    fieldLabel: 'Active',
+                    fieldLabel: 'Published',
                     anchor: '100%',
                     name: 'active'
                 },

@@ -50,7 +50,7 @@ Ext.define('Ssp.view.admin.forms.shg.SelfHelpGuidesDisplayAdmin', {
         		                  dataIndex: 'description',
         		                  flex: 1 
         		             },
-    		                { header: 'Active',  
+    		                { header: 'Published',  
       		                  dataIndex: 'active',
       		                  renderer: me.columnRendererUtils.renderFriendlyBoolean,
       		                  flex: 1 
@@ -80,13 +80,6 @@ Ext.define('Ssp.view.admin.forms.shg.SelfHelpGuidesDisplayAdmin', {
      		                   hidden: !me.authenticatedPerson.hasAccess('SELF_HELP_GUIDE_EDIT_BUTTON'),
      		                   action: 'edit',
      		                   itemId: 'editButton'
-     		               }, '-' ,{
-     		                   text: 'Delete',
-     		                   iconCls: 'icon-delete',
-     		                   xtype: 'button',
-     		                   hidden: !me.authenticatedPerson.hasAccess('SELF_HELP_GUIDE_ADD_BUTTON'),
-     		                   action: 'delete',
-     		                   itemId: 'deleteButton'
      		               }]
      		           },{
      		               xtype: 'toolbar',
