@@ -69,9 +69,8 @@ public class MyGpsChallengeReferralController extends AbstractBaseController {
 		this.challengeService = challengeService;
 		challengeReferralTOFactory = challangeReferralTOFactory;
 	}
-
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "/getByChallengeId", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	List<ChallengeReferralTO> getByChallengeId(
 			@RequestParam("challengeId") final UUID challengeId)
@@ -87,9 +86,8 @@ public class MyGpsChallengeReferralController extends AbstractBaseController {
 			throw e;
 		}
 	}
-
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	List<ChallengeReferralTO> search(@RequestParam("query") final String query,
 			@RequestParam("challengeId") final UUID challengeId)

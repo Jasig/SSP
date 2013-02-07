@@ -55,9 +55,9 @@ public class MyGpsMessageController extends AbstractBaseController {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsMessageController.class);
-
+	
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(method = RequestMethod.POST)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	Boolean contactCoach(@RequestBody final MessageTO messageTO)
 			throws ObjectNotFoundException,

@@ -106,8 +106,8 @@ public class MyGpsTaskController extends AbstractBaseController {
 	 * 
 	 * @param studentId - a student id of the student receiving the task
 	 */
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "/createTaskForStudent", method = RequestMethod.POST)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	boolean createTaskForStudent(@RequestParam("name") final String name,
 			@RequestParam("description") final String description,
@@ -131,9 +131,8 @@ public class MyGpsTaskController extends AbstractBaseController {
 
 		return true;
 	}
-
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "/createCustom", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	TaskTO createCustom(@RequestParam("name") final String name,
 			@RequestParam("description") final String description)
@@ -147,9 +146,8 @@ public class MyGpsTaskController extends AbstractBaseController {
 
 		return new TaskTO(task);
 	}
-
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "/createForChallengeReferral", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	TaskTO createForChallengeReferral(
 			@RequestParam("challengeId") final UUID challengeId,
@@ -170,18 +168,16 @@ public class MyGpsTaskController extends AbstractBaseController {
 
 		return new TaskTO(task);
 	}
-
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	boolean delete(@RequestParam("taskId") final UUID taskId)
 			throws ObjectNotFoundException {
 		taskService.delete(taskId);
 		return true;
 	}
-
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "/email", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	boolean email(@RequestParam("emailAddress") final String emailAddress)
 			throws ObjectNotFoundException, ValidationException {
@@ -214,7 +210,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	public @ResponseBody
 	List<TaskTO> getAll() {
 
@@ -237,7 +233,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/mark", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	public @ResponseBody
 	TaskTO mark(@RequestParam("taskId") final UUID taskId,
 			@RequestParam("complete") final Boolean complete)
@@ -249,7 +245,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	public ModelAndView print() {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		final SortingAndPaging sAndP = new SortingAndPaging(

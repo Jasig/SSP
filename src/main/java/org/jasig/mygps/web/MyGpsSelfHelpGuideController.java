@@ -28,7 +28,7 @@ import org.jasig.ssp.model.reference.SelfHelpGuideGroup;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.reference.SelfHelpGuideGroupService;
 import org.jasig.ssp.service.reference.SelfHelpGuideService;
-import org.jasig.ssp.transferobject.reference.SelfHelpGuideDetailTO;
+import org.jasig.ssp.transferobject.reference.SelfHelpGuideDetailsTO;
 import org.jasig.ssp.transferobject.reference.SelfHelpGuideTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.AbstractBaseController;
@@ -72,8 +72,8 @@ public class MyGpsSelfHelpGuideController extends AbstractBaseController {
 		this.selfHelpGuideTOFactory = selfHelpGuideTOFactory;
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	List<SelfHelpGuideTO> getAll() throws Exception {
 		// TODO: MyGPSSelfGuideController.getAll() needs filtered based on
@@ -83,20 +83,18 @@ public class MyGpsSelfHelpGuideController extends AbstractBaseController {
 				.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))
 				.getRows());
 	}
-
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "/getContentById", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
-	SelfHelpGuideDetailTO getContentById(
+	SelfHelpGuideDetailsTO getContentById(
 			final @RequestParam("selfHelpGuideId") UUID selfHelpGuideId)
 			throws Exception {
 		final SelfHelpGuide guide = selfHelpGuideService
 				.get(selfHelpGuideId);
-		return new SelfHelpGuideDetailTO(guide);
+		return new SelfHelpGuideDetailsTO(guide);
 	}
-
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "/getBySelfHelpGuideGroup", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	List<SelfHelpGuideTO> getBySelfHelpGuideGroup(
 			final @RequestParam("selfHelpGuideGroupId") UUID selfHelpGuideGroupId)

@@ -91,8 +91,8 @@ public class MyGpsChallengeController extends AbstractBaseController {
 	 * @throws Exception
 	 *             If there were any unexpected exceptions thrown.
 	 */
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	List<ChallengeTO> search(@RequestParam("query") final String query)
 			throws Exception {

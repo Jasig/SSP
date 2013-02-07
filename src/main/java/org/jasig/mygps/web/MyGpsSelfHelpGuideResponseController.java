@@ -78,9 +78,8 @@ public class MyGpsSelfHelpGuideResponseController extends
 		this.selfHelpGuideQuestionService = selfHelpGuideQuestionService;
 		this.securityService = securityService;
 	}
-
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "cancel", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	boolean cancel(
 			final @RequestParam("selfHelpGuideResponseId") UUID selfHelpGuideResponseId)
@@ -89,9 +88,8 @@ public class MyGpsSelfHelpGuideResponseController extends
 				.get(selfHelpGuideResponseId);
 		return service.cancelSelfHelpGuideResponse(response);
 	}
-
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "complete", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	boolean complete(
 			final @RequestParam("selfHelpGuideResponseId") UUID selfHelpGuideResponseId)
@@ -101,9 +99,8 @@ public class MyGpsSelfHelpGuideResponseController extends
 				.get(selfHelpGuideResponseId);
 		return service.completeSelfHelpGuideResponse(response);
 	}
-
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "getById", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	SelfHelpGuideResponseTO getById(
 			final @RequestParam("selfHelpGuideResponseId") UUID selfHelpGuideResponseId)
@@ -114,9 +111,8 @@ public class MyGpsSelfHelpGuideResponseController extends
 		return service.getSelfHelpGuideResponseFor(response,
 				new SortingAndPaging(ObjectStatus.ACTIVE));
 	}
-
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "initiate", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	String initiate(final @RequestParam("selfHelpGuideId") UUID selfHelpGuideId)
 			throws Exception {
@@ -124,9 +120,8 @@ public class MyGpsSelfHelpGuideResponseController extends
 		final Person person = securityService.currentUser().getPerson();
 		return service.initiateSelfHelpGuideResponse(guide, person).toString();
 	}
-
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "answer", method = RequestMethod.GET)
-	@PreAuthorize(Permission.DENY_ALL) // TODO set a more relevant permission. just locking down by default for now
 	public @ResponseBody
 	boolean answer(
 			final @RequestParam("selfHelpGuideResponseId") UUID selfHelpGuideResponseId,

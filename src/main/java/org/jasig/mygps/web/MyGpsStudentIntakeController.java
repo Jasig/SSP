@@ -46,14 +46,14 @@ public class MyGpsStudentIntakeController extends AbstractBaseController {
 		studentIntakeFormManager = manager;
 	}
 
-	@PreAuthorize("hasRole('ROLE_STUDENT_INTAKE_READ')")
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "/getForm", method = RequestMethod.GET)
 	public @ResponseBody
 	FormTO getForm() throws ObjectNotFoundException {
 		return studentIntakeFormManager.populate();
 	}
 
-	@PreAuthorize("hasRole('ROLE_STUDENT_INTAKE_WRITE')")
+	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody
 	Boolean saveForm(final @RequestBody FormTO formTO)

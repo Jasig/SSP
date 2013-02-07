@@ -33,39 +33,40 @@ public class MyGpsSelfHelpGuidePortletController extends
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsSelfHelpGuidePortletController.class);
 
-	@RenderMapping()
+	@RenderMapping
 	public String show() {
 		return "self-help-guide";
 	}
 
-	@RenderMapping(params = "action=showGuides")
+/**	
+	@RequestMapping(params = "action=showGuides")
 	public String showGuides() {
 		return "guides";
 	}
 
-	@RenderMapping(params = "action=showAGuide")
+	@RequestMapping(params = "action=showAGuide")
 	public String showAGuide() {
 		return "guide";
 	}
 
-	@RenderMapping(params = "action=search")
+	@RequestMapping(params = "action=search")
 	public String showSearch() {
 		return "search";
 	}
 
-	@RenderMapping(params = "action=intake")
+	@RequestMapping(params = "action=intake")
 	public String showIntake() {
 		return "intake";
 	}
 
-	@RenderMapping(params = "action=showContacts")
+	@RequestMapping(params = "action=showContacts")
 	public String accessDenied() {
 		return "accessDenied";
 	}
+ **/
 
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
 	}
-
 }
