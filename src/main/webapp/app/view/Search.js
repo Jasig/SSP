@@ -34,7 +34,7 @@ Ext.define('Ssp.view.Search', {
     	Ext.applyIf(me,
     			   {
     		        submitEmptyText: false,
-    				title: 'Students',
+    				title: 'Students Foo',
     	            collapsible: true,
     	            collapseDirection: 'left',
     	        	width: '100%',
@@ -173,7 +173,13 @@ Ext.define('Ssp.view.Search', {
 		    			},{
 	    		        	xtype: 'tbspacer',
 	    		        	flex: 1
-		    		    },{
+		    		    },
+						{
+							xtype: 'label',
+                            text: 'Change Status:',
+							style: 'font-weight:bold;'
+						},
+						{
 		    			    tooltip: 'Set Student to Active status',
 		    			    text: '',
 		    			    width: 25,
