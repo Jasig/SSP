@@ -23,9 +23,9 @@
 	<span class="header-count ui-btn-up-c ui-btn-corner-all" data-bind="text: viewModel.filteredTasks().length"></span>
 	<div class="tasks-navbar" data-role="navbar">
 		<ul>
-			<li><a href="#" rel="external" data-bind="click: function () { viewModel.selectTaskFilter( mygps.enumeration.TaskFilter.ALL ); }, css: { 'ui-btn-active': viewModel.selectedTaskFilter() === mygps.enumeration.TaskFilter.ALL }">All</a></li>
 			<li><a href="#" rel="external" data-bind="click: function () { viewModel.selectTaskFilter( mygps.enumeration.TaskFilter.ACTIVE ); }, css: { 'ui-btn-active': viewModel.selectedTaskFilter() === mygps.enumeration.TaskFilter.ACTIVE }">Active</a></li>
 			<li><a href="#" rel="external" data-bind="click: function () { viewModel.selectTaskFilter( mygps.enumeration.TaskFilter.COMPLETED ); }, css: { 'ui-btn-active': viewModel.selectedTaskFilter() === mygps.enumeration.TaskFilter.COMPLETED }">Completed</a></li>
+			<li><a href="#" rel="external" data-bind="click: function () { viewModel.selectTaskFilter( mygps.enumeration.TaskFilter.ALL ); }, css: { 'ui-btn-active': viewModel.selectedTaskFilter() === mygps.enumeration.TaskFilter.ALL }">All</a></li>
 		</ul>
 	</div>
 </div>

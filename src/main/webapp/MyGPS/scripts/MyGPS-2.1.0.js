@@ -18,8 +18,8 @@
  */
 (function() {
   var $, AbstractService, AbstractSessionViewModel, AbstractTasksViewModel, Challenge, ChallengeReferral, ChallengeReferralSearchViewModel, ChallengeReferralService, ChallengeService, ContactViewModel, Form, FormOption, FormQuestion, FormSection, HomeViewModel, LoginViewModel, MessageService, Person, SelfHelpGuide, SelfHelpGuideContent, SelfHelpGuideQuestion, SelfHelpGuideResponse, SelfHelpGuideResponseService, SelfHelpGuideService, SelfHelpGuideViewModel, SelfHelpGuidesViewModel, Session, SessionService, StudentIntakeService, StudentIntakeViewModel, Task, TaskFilter, TaskService,
-    __hasProp = Object.prototype.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   $ = jQuery;
 
@@ -218,7 +218,9 @@
       }
 
       FormQuestion.prototype.evaluateEnabled = function() {
-        if (this.readOnly()) return false;
+        if (this.readOnly()) {
+          return false;
+        }
         if (this.availabilityExpression() != null) {
           return this.executeExpression(this.availabilityExpression());
         }
@@ -1090,6 +1092,7 @@
         						callbacks?.fault?( fault )
         				)
         */
+
       };
 
       return TaskService;
@@ -1137,7 +1140,7 @@
         this.taskService = taskService;
         this.tasks = ko.observableArray([]);
         this.taskFilters = ko.observableArray(mygps.enumeration.TaskFilter.enumerators);
-        this.selectedTaskFilter = ko.observable(mygps.enumeration.TaskFilter.ALL);
+        this.selectedTaskFilter = ko.observable(mygps.enumeration.TaskFilter.ACTIVE);
         this.filteredTasks = ko.dependentObservable(this.filterTasks, this);
         this.printingTasks = ko.observable(false);
         this.emailingTasks = ko.observable(false);
@@ -1299,7 +1302,9 @@
             }
           }
         }, function(result) {
-          if (result) return _this.emailTasks(result);
+          if (result) {
+            return _this.emailTasks(result);
+          }
         });
       };
 
@@ -1346,7 +1351,9 @@
       };
 
       ChallengeReferralSearchViewModel.prototype.load = function(query) {
-        if (query == null) query = "";
+        if (query == null) {
+          query = "";
+        }
         ChallengeReferralSearchViewModel.__super__.load.call(this);
         this.search(query);
       };
@@ -1383,7 +1390,9 @@
       ChallengeReferralSearchViewModel.prototype.search = function(query) {
         this.query(query);
         this.reset();
-        if ((query != null)) this.searchChallenges(query);
+        if ((query != null)) {
+          this.searchChallenges(query);
+        }
       };
 
       ChallengeReferralSearchViewModel.prototype.refresh = function() {
@@ -1491,8 +1500,8 @@
       };
 
       HomeViewModel.prototype.evaluateCanContactCoach = function() {
-        var _ref, _ref2;
-        return ((_ref = this.session) != null ? (_ref2 = _ref.authenticatedPerson()) != null ? _ref2.coach() : void 0 : void 0) != null;
+        var _ref, _ref1;
+        return ((_ref = this.session) != null ? (_ref1 = _ref.authenticatedPerson()) != null ? _ref1.coach() : void 0 : void 0) != null;
       };
 
       return HomeViewModel;
@@ -1524,14 +1533,18 @@
       }
 
       SelfHelpGuidesViewModel.prototype.load = function(selfHelpGuideGroupId) {
-        if (selfHelpGuideGroupId == null) selfHelpGuideGroupId = null;
+        if (selfHelpGuideGroupId == null) {
+          selfHelpGuideGroupId = null;
+        }
         SelfHelpGuidesViewModel.__super__.load.call(this);
         this.loadSelfHelpGuides(selfHelpGuideGroupId);
       };
 
       SelfHelpGuidesViewModel.prototype.loadSelfHelpGuides = function(selfHelpGuideGroupId) {
         var _this = this;
-        if (selfHelpGuideGroupId == null) selfHelpGuideGroupId = null;
+        if (selfHelpGuideGroupId == null) {
+          selfHelpGuideGroupId = null;
+        }
         if (selfHelpGuideGroupId != null) {
           this.selfHelpGuideService.getBySelfHelpGuideGroup(selfHelpGuideGroupId, {
             result: function(result) {
@@ -1625,8 +1638,8 @@
       };
 
       SelfHelpGuideViewModel.prototype.evaluateCurrentQuestion = function() {
-        var _ref, _ref2;
-        return (_ref = this.selfHelpGuideContent()) != null ? (_ref2 = _ref.questions()) != null ? _ref2[this.currentQuestionIndex()] : void 0 : void 0;
+        var _ref, _ref1;
+        return (_ref = this.selfHelpGuideContent()) != null ? (_ref1 = _ref.questions()) != null ? _ref1[this.currentQuestionIndex()] : void 0 : void 0;
       };
 
       SelfHelpGuideViewModel.prototype.evaluateHasPreviousQuestion = function() {
@@ -1726,7 +1739,9 @@
       };
 
       SelfHelpGuideViewModel.prototype.skipToNextQuestion = function() {
-        if (!this.currentQuestion().mandatory()) return this.moveToNextQuestion();
+        if (!this.currentQuestion().mandatory()) {
+          return this.moveToNextQuestion();
+        }
       };
 
       SelfHelpGuideViewModel.prototype.moveToPreviousQuestion = function() {
@@ -1827,12 +1842,14 @@
       };
 
       StudentIntakeViewModel.prototype.evaluateCurrentSection = function() {
-        var _ref, _ref2;
-        return (_ref = this.form()) != null ? (_ref2 = _ref.sections()) != null ? _ref2[this.currentSectionIndex()] : void 0 : void 0;
+        var _ref, _ref1;
+        return (_ref = this.form()) != null ? (_ref1 = _ref.sections()) != null ? _ref1[this.currentSectionIndex()] : void 0 : void 0;
       };
 
       StudentIntakeViewModel.prototype.evaluateHasPreviousSection = function() {
-        if (this.form() != null) return this.currentSectionIndex() > 0;
+        if (this.form() != null) {
+          return this.currentSectionIndex() > 0;
+        }
         return false;
       };
 
@@ -1850,8 +1867,8 @@
             return _this.form(result);
           },
           fault: function(fault) {
-            var _ref, _ref2;
-            return alert((_ref = (_ref2 = $.parseJSON(fault.responseText)) != null ? _ref2.message : void 0) != null ? _ref : fault.responseText);
+            var _ref, _ref1;
+            return alert((_ref = (_ref1 = $.parseJSON(fault.responseText)) != null ? _ref1.message : void 0) != null ? _ref : fault.responseText);
           }
         });
       };
