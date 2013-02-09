@@ -86,7 +86,7 @@ public class SelfHelpGuideQuestionController
 		}
 
 		final PagingWrapper<SelfHelpGuideQuestion> data =service.getAllForParent(
-				SortingAndPaging.createForSingleSort(
+				SortingAndPaging.createForSingleSortWithPaging(
 						ObjectStatus.ACTIVE , null,
 						null, null, null, "questionNumber"),selfReferenceGuideId);
 
