@@ -34,9 +34,11 @@ import net.sf.jasperreports.engine.JRException;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.DisabilityStatusService;
 import org.jasig.ssp.service.reference.DisabilityTypeService;
@@ -47,6 +49,7 @@ import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,6 +90,8 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 	@Autowired
 	private transient ReferralSourceService referralSourcesService;
 	@Autowired
+	private transient RegistrationStatusByTermService registrationStatusByTermService;
+	@Autowired
 	private transient TermService termService;
 	@Autowired
 	private transient ProgramStatusService programStatusService;
@@ -126,8 +131,8 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) Integer anticipatedStartYear,
 			final @RequestParam(required = false) String anticipatedStartTerm,
-			final @RequestParam(required = false) Integer registrationYear,
-			final @RequestParam(required = false) String registrationTerm,
+			final @RequestParam(required = false) Integer actualStartYear,
+			final @RequestParam(required = false) String actualStartTerm,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false) String termCode,
@@ -165,32 +170,42 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 				disabilityStatusService,
 				disabilityTypeService);
 		
-		SearchParameters.addAnticipatedAndRegistrationTerms(anticipatedStartTerm, 
+		SearchParameters.addAnticipatedAndActualStartTerms(anticipatedStartTerm, 
 				anticipatedStartYear, 
-				registrationTerm, 
-				registrationYear, 
+				actualStartTerm, 
+				actualStartYear, 
 				parameters, 
 				personSearchForm);
 
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
-		final List<Person> people = personService.peopleFromCriteria(
-				personSearchForm, SortingAndPaging.createForSingleSort(status, null,
-						null, null, null, null));
+		final PagingWrapper<DisabilityServicesReportTO> people = personService.getDisabilityReport(
+				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
 		
-		Collections.sort(people, Person.PERSON_NAME_AND_ID_COMPARATOR);
-		List<DisabilityServicesReportTO> reportTOs = new ArrayList<DisabilityServicesReportTO>();
-		
-		for(Person person:people){
-			DisabilityServicesReportTO reportTO = new DisabilityServicesReportTO();
-			reportTO.setPerson(person);
-			reportTOs.add(reportTO);
+		ArrayList<DisabilityServicesReportTO> report = new ArrayList<DisabilityServicesReportTO>(people.getRows());
+		SearchParameters.addStudentCount(report, parameters);
+		ArrayList<DisabilityServicesReportTO> compressedReport = new ArrayList<DisabilityServicesReportTO>();
+		for(DisabilityServicesReportTO reportTO: report){
+			Integer index = compressedReport.indexOf(reportTO);
+			if(index >= 0)
+			{
+				DisabilityServicesReportTO compressedReportTo = compressedReport.get(index);
+				compressedReportTo.processDuplicate(reportTO);
+			}else{
+				RegistrationStatusByTerm regStat = registrationStatusByTermService.getForCurrentTerm(reportTO.getSchoolId());
+				if(regStat != null)
+					reportTO.setRegistrationStatus(regStat.getRegisteredCourseCount());
+				compressedReport.add(reportTO);
+			}
 		}
 		
-		SearchParameters.addStudentCount(people, parameters);
-		
-		generateReport(response, parameters, reportTOs, REPORT_URL, reportType, REPORT_FILE_TITLE);
+		generateReport(response, 
+				parameters, 
+				compressedReport, 
+				REPORT_URL, 
+				reportType, 
+				REPORT_FILE_TITLE);
 
 	}
 

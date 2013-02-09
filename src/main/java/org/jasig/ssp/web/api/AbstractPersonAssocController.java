@@ -167,7 +167,7 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 		// Run getAll for the specified person
 		final Person person = personService.get(personId);
 		final PagingWrapper<T> data = getService().getAllForPerson(person,
-				SortingAndPaging.createForSingleSort(status, start,
+				SortingAndPaging.createForSingleSortWithPaging(status, start,
 						limit, sort, sortDirection, null));
 
 		return new PagedResponse<TO>(true, data.getResults(), getFactory()

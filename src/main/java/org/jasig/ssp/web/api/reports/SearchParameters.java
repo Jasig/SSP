@@ -1,5 +1,6 @@
 package org.jasig.ssp.web.api.reports;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.AbstractReference;
@@ -40,7 +42,8 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 
 public class SearchParameters {
 	
-	static final String ALL = "All";
+	static final String NOT_USED = "Not Used";
+	static final String ALL = "ALL";
 	private static final String COACH_NAME = "coachName";
 	private static final String ODS_COACH_NAME = "odsCoachName";
 	private static final String TERM_CODE = "termCode";
@@ -61,13 +64,15 @@ public class SearchParameters {
 	private static final String TERM_CODES = "termCodes";
 	private static final String TERM_NAMES = "termNames";
 	private static final String ANTICIPATED_START_TERM = "anticipatedStartTerm";
-	private static final String REGISTRATION_TERM = "registrationTerm";
+	private static final String ACTUAL_START_TERM = "actualStartTerm";
 	private static final String REFERRAL_SOURCE_NAMES = "referralSourceNames";
 	private static final String EARLY_ALERT_REFERRAL_NAME = "earlyAlertReferralName";
 	private static final String EARLY_ALERT_REFERRAL_NAMES = "earlyAlertReferralNames";
 	private static final String DISABILITY_STATUS = "disabilityStatus";
 	private static final String DISABILITY_TYPE = "disabilityType";
 	private static final String STUDENT_COUNT = "studentCount";
+	private static final String REPORT_DATE_FORMAT="MMM-dd-yyyy hh:mmaaa";
+	private static final SimpleDateFormat REPORT_DATE_FORMATTER = new SimpleDateFormat(REPORT_DATE_FORMAT);
 	
 	private static final String DEPARTMENT_PLACEHOLDER = "Not Available Yet";
 
@@ -115,8 +120,8 @@ public class SearchParameters {
 			termCodes.add(term.getCode());
 			termNames.add(term.getName());
 		}
-		parameters.put(TERM_CODES, concatNamesFromStrings(termCodes, ALL) );
-		parameters.put(TERM_NAMES, concatNamesFromStrings(termNames, ALL));
+		parameters.put(TERM_CODES, concatNamesFromStrings(termCodes, NOT_USED) );
+		parameters.put(TERM_NAMES, concatNamesFromStrings(termNames, NOT_USED));
 	}
 
 	static void addCampusToParameters(String label, Campus campus,
@@ -124,7 +129,7 @@ public class SearchParameters {
 		if (campus != null)
 			parameters.put(label, campus.getName());
 		else
-			parameters.put(label, "All");
+			parameters.put(label, NOT_USED);
 	}
 
 	static void addCampusToParameters(Campus campus,
@@ -142,7 +147,7 @@ public class SearchParameters {
 			final List<UUID> specialServiceGroupIds, final Map<String, Object> parameters,
 			SpecialServiceGroupService ssgService)
 			throws ObjectNotFoundException {
-		addUUIDSToMap(SEPCIAL_SERVICE_GROUP_NAMES, ALL, specialServiceGroupIds, parameters,
+		addUUIDSToMap(SEPCIAL_SERVICE_GROUP_NAMES, NOT_USED, specialServiceGroupIds, parameters,
 				(ReferenceService)ssgService);
 	}
 
@@ -151,7 +156,7 @@ public class SearchParameters {
 			final Map<String, Object> parameters,
 			StudentTypeService studentTypeService)
 			throws ObjectNotFoundException {
-		addUUIDSToMap(STUDENT_TYPE_NAMES, ALL, studentTypeIds, parameters,
+		addUUIDSToMap(STUDENT_TYPE_NAMES, NOT_USED, studentTypeIds, parameters,
 				(ReferenceService)studentTypeService);
 	}
 	
@@ -167,7 +172,7 @@ public class SearchParameters {
 			final Map<String, Object> parameters,
 			ReferralSourceService referralSourcesService)
 			throws ObjectNotFoundException {
-		addUUIDSToMap(REFERRAL_SOURCE_NAMES, ALL, referralSourcesIds, parameters,
+		addUUIDSToMap(REFERRAL_SOURCE_NAMES, NOT_USED, referralSourcesIds, parameters,
 				(ReferenceService) referralSourcesService);
 	}
 
@@ -176,7 +181,7 @@ public class SearchParameters {
 			final Map<String, Object> parameters,
 			final ProgramStatusService programStatusService)
 			throws ObjectNotFoundException {
-		addUUIDToMap(PROGRAM_STATUS_NAME, ALL, programStatus, parameters,
+		addUUIDToMap(PROGRAM_STATUS_NAME, NOT_USED, programStatus, parameters,
 				(ReferenceService) programStatusService);
 	}
 
@@ -195,7 +200,7 @@ public class SearchParameters {
 			final Map<String, Object> parameters,
 			final EarlyAlertOutcomeService referenceService)
 			throws ObjectNotFoundException {
-		addUUIDSToMap(EARLY_ALERT_OUTCOME_NAMES, ALL, outcomeIds, parameters,
+		addUUIDSToMap(EARLY_ALERT_OUTCOME_NAMES, NOT_USED, outcomeIds, parameters,
 				(ReferenceService) referenceService);
 	}
 
@@ -303,8 +308,8 @@ public class SearchParameters {
 		}
 	}
 
-	final static void addReportDateToMap(final Map<String, Object> parameters) {
-		parameters.put(REPORT_DATE, new Date());
+	final static void addReportDateToMap(final Map<String, Object> parameters) {	
+		parameters.put(REPORT_DATE, REPORT_DATE_FORMATTER.format(new Date()));
 	}
 
 	final static void addReportTitleToMap(final String reportTitle,
@@ -325,26 +330,26 @@ public class SearchParameters {
 	}
 	
 	final static void addAnticipatedStartTerm(String anticipatedStartTerm, Integer anticipatedStartYear, Map<String, Object> parameters){
-		addTerm(ANTICIPATED_START_TERM, ALL, anticipatedStartTerm, anticipatedStartYear, parameters);
+		addTerm(ANTICIPATED_START_TERM, NOT_USED, anticipatedStartTerm, anticipatedStartYear, parameters);
 	}
 	
-	final static void addRegistrationTerm(String registrationTerm, Integer registrationYear, Map<String, Object> parameters){
-		addTerm(REGISTRATION_TERM, ALL, registrationTerm, registrationYear, parameters);	
+	final static void addactualStartTerm(String actualStartTerm, Integer actualStartYear, Map<String, Object> parameters){
+		addTerm(ACTUAL_START_TERM, NOT_USED, actualStartTerm, actualStartYear, parameters);	
 	}
 	
 	@SuppressWarnings("rawtypes")
 	final static void addEarlyAlertReferralToMap(UUID earlyAlertReferralId, Map<String, Object> parameters, EarlyAlertReferralService earlyAlertReferralsService) throws ObjectNotFoundException{
-		addUUIDToMap(EARLY_ALERT_REFERRAL_NAME, ALL, earlyAlertReferralId, parameters, (ReferenceService)earlyAlertReferralsService);
+		addUUIDToMap(EARLY_ALERT_REFERRAL_NAME, NOT_USED, earlyAlertReferralId, parameters, (ReferenceService)earlyAlertReferralsService);
 	}
 	
 	@SuppressWarnings("rawtypes")
 	final static void addDisablityStatusToMap(UUID disabilityStatusId, Map<String, Object> parameters, DisabilityStatusService disabilityStatusService) throws ObjectNotFoundException{
-		addUUIDToMap(DISABILITY_STATUS, ALL, disabilityStatusId, parameters, (ReferenceService)disabilityStatusService);
+		addUUIDToMap(DISABILITY_STATUS, NOT_USED, disabilityStatusId, parameters, (ReferenceService)disabilityStatusService);
 	}
 	
 	@SuppressWarnings("rawtypes")
 	final static void addDisabilityTypeToMap(UUID disabilityTypeId, Map<String, Object> parameters, DisabilityTypeService disabilityTypeService) throws ObjectNotFoundException{
-		addUUIDToMap(DISABILITY_TYPE, ALL, disabilityTypeId, parameters, (ReferenceService)disabilityTypeService);
+		addUUIDToMap(DISABILITY_TYPE, NOT_USED, disabilityTypeId, parameters, (ReferenceService)disabilityTypeService);
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -352,7 +357,7 @@ public class SearchParameters {
 			final Map<String, Object> parameters,
 			final EarlyAlertReferralService referenceService)
 			throws ObjectNotFoundException {
-		addUUIDSToMap(EARLY_ALERT_REFERRAL_NAMES, ALL, earlyAlertReferralIds, parameters,
+		addUUIDSToMap(EARLY_ALERT_REFERRAL_NAMES, NOT_USED, earlyAlertReferralIds, parameters,
 				(ReferenceService) referenceService);
 	}
 	
@@ -363,7 +368,7 @@ public class SearchParameters {
 		
 		PersonTO coach = getPerson(coachId, personService,
 				personTOFactory);
-		SearchParameters.addPersonToMap(COACH_NAME, ALL, coach, parameters);
+		SearchParameters.addPersonToMap(COACH_NAME, NOT_USED, coach, parameters);
 		personSearchForm.setCoach(coach);
 	}
 	
@@ -373,7 +378,7 @@ public class SearchParameters {
 			PersonTOFactory personTOFactory) throws ObjectNotFoundException{
 		PersonTO odsCoach = getPerson(odsCoachId, personService,
 				personTOFactory);
-		SearchParameters.addPersonToMap(ODS_COACH_NAME, ALL, odsCoach, parameters);
+		SearchParameters.addPersonToMap(ODS_COACH_NAME, NOT_USED, odsCoach, parameters);
 		personSearchForm.setOdsCoach(odsCoach);
 	}
 	
@@ -453,24 +458,28 @@ public class SearchParameters {
 		personSearchForm.setDisabilityTypeId(disabilityTypeId);
 	}
 	
-	static final void addAnticipatedAndRegistrationTerms(String anticipatedStartTerm, 
+	static final void addAnticipatedAndActualStartTerms(String anticipatedStartTerm, 
 			Integer anticipatedStartYear, 
-			String registrationTerm, 
-			Integer registrationYear,
+			String actualStartTerm, 
+			Integer actualStartYear,
 			final Map<String, Object> parameters,
 			final PersonSearchFormTO personSearchForm){
 		
 		
 		addAnticipatedStartTerm(anticipatedStartTerm, anticipatedStartYear, parameters);
-		addRegistrationTerm(registrationTerm, registrationYear, parameters);
+		addactualStartTerm(actualStartTerm, actualStartYear, parameters);
 		
 		personSearchForm.setAnticipatedStartTerm(anticipatedStartTerm);
 		personSearchForm.setAnticipatedStartYear(anticipatedStartYear);
-		personSearchForm.setRegistrationTerm(registrationTerm);
-		personSearchForm.setRegistrationYear(registrationYear);
+		personSearchForm.setActualStartTerm(actualStartTerm);
+		personSearchForm.setActualStartYear(actualStartYear);
 	}
 	
 	static final void addStudentCount(List peopleTO, Map<String, Object> parameters){
 		parameters.put(STUDENT_COUNT, peopleTO == null ? 0 : peopleTO.size());
+	}
+	
+	static final SortingAndPaging getReportPersonSortingAndPagingAll(ObjectStatus status){
+		return SortingAndPaging.createForSingleSortAll(status, "lastName", "ASC");
 	}
 }

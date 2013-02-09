@@ -29,6 +29,7 @@
 <c:set var="n"><portlet:namespace/></c:set>
 
 <c:set var="not_applicable" value="Not Used" />
+<c:set var="all_found" value="ALL" />
 
 <script src="<rs:resourceURL value="/rs/jquery/1.6.1/jquery-1.6.1.min.js"/>" type="text/javascript"></script>
 <script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"></script>
@@ -93,7 +94,7 @@
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="assignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
-				<option value="">${not_applicable}</option>
+				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -269,7 +270,7 @@
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="assignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
-				<option value="">${not_applicable}</option>
+				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -418,7 +419,7 @@
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="assignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
-				<option value="">${not_applicable}</option>
+				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -697,7 +698,7 @@
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentCounselorGroup" name="coachId" class="input-assigned-counselor-group">
-				<option value="">${not_applicable}</option>
+				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -818,7 +819,7 @@
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentReferralCounselorGroup" name="coachId" class="input-assigned-counselor-group">
-				<option value="">${not_applicable}</option>
+				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -923,7 +924,7 @@
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentProgressCounselorGroup" name="coachId" class="input-assigned-counselor-group">
-				<option value="">${not_applicable}</option>
+				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -1106,7 +1107,7 @@
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentOutcomeCounselorGroup" name="coachId" class="input-assigned-counselor-group">
-				<option value="">${not_applicable}</option>
+				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -1272,7 +1273,7 @@
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="disabilityServicesAssignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
-				<option value="">${not_applicable}</option>
+				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -1283,7 +1284,7 @@
 		<!-- ODS Counselor -->
 		<div class="ea-input">
 			<select id="disabilityServicesODSCounselorGroup" name="odsCoachId" class="input-assigned-counselor-group">
-				<option value="">${not_applicable}</option>
+				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -1480,7 +1481,7 @@
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="disabilityAccomodationAssignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
-				<option value="">${not_applicable}</option>
+				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">

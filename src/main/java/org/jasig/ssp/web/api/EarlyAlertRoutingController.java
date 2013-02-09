@@ -123,7 +123,7 @@ public class EarlyAlertRoutingController
 		// Run getAll for the specified Campus
 		final PagingWrapper<EarlyAlertRouting> list = service
 				.getAllForCampus(campusService.get(campusId), SortingAndPaging
-						.createForSingleSort(status, start, limit, sort,
+						.createForSingleSortWithPaging(status, start, limit, sort,
 								sortDirection,
 								null));
 

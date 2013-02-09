@@ -111,7 +111,7 @@ public class JournalStepController
 
 		final PagingWrapper<JournalStepDetail> data = journalStepDetailService
 				.getAllForJournalStep(journalStep,
-						SortingAndPaging.createForSingleSort(status, start,
+						SortingAndPaging.createForSingleSortWithPaging(status, start,
 								limit, sort, sortDirection, "sortOrder"));
 
 		return new PagedResponse<JournalStepDetailTO>(true,

@@ -106,10 +106,19 @@ public class JournalTrackController
 		final JournalTrack journalTrack = getService()
 				.get(journalTrackId);
 
+		SortingAndPaging sAndP = null;
+		if(limit != null){
+			sAndP = SortingAndPaging.createForSingleSortWithPaging(status, start, limit, sort, sortDirection, "sortOrder");
+		}else{
+			if(sort == null || sort.length() == 0)
+				sAndP = SortingAndPaging.createForSingleSortAll(status, "sortOrder", sortDirection);
+			else
+				sAndP = SortingAndPaging.createForSingleSortAll(status, sort, sortDirection);
+		}
+		
+		
 		final PagingWrapper<JournalStep> data = journalStepService
-				.getAllForJournalTrack(journalTrack,
-						SortingAndPaging.createForSingleSort(status, start,
-								limit, sort, sortDirection, "sortOrder"));
+				.getAllForJournalTrack(journalTrack,sAndP);
 
 		return new PagedResponse<JournalStepTO>(true,
 				data.getResults(), journalStepFactory

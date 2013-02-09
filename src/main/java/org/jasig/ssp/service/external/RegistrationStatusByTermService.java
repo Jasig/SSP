@@ -36,6 +36,9 @@ public interface RegistrationStatusByTermService extends
 
 	RegistrationStatusByTerm getForTerm(@NotNull Person person,
 			@NotNull Term term);
+	
+	RegistrationStatusByTerm getForTerm(@NotNull String schoolId,
+			@NotNull String termCode);
 
 	/**
 	 * Gets all registration statuses for the current term.
@@ -47,6 +50,9 @@ public interface RegistrationStatusByTermService extends
 	 *             if current term does not exist.
 	 */
 	RegistrationStatusByTerm getForCurrentTerm(@NotNull Person person)
+			throws ObjectNotFoundException;
+	
+	RegistrationStatusByTerm getForCurrentTerm(@NotNull String schoolId)
 			throws ObjectNotFoundException;
 
 	PagingWrapper<RegistrationStatusByTerm> getAllForPerson(

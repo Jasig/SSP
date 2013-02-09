@@ -90,7 +90,7 @@ public class CaseloadController extends AbstractBaseController {
 
 		final PagingWrapper<CaseloadRecord> caseload = service.caseLoadFor(
 				programStatus, securityService.currentUser().getPerson(),
-				SortingAndPaging.createForSingleSort(status, start, limit,
+				SortingAndPaging.createForSingleSortWithPaging(status, start, limit,
 						sort, sortDirection, null));
 
 		return new PagedResponse<CaseloadRecordTO>(true, caseload.getResults(),
@@ -116,7 +116,7 @@ public class CaseloadController extends AbstractBaseController {
 
 		final PagingWrapper<CaseloadRecord> caseload = service.caseLoadFor(
 				programStatus, personService.get(personId),
-				SortingAndPaging.createForSingleSort(status, start, limit,
+				SortingAndPaging.createForSingleSortWithPaging(status, start, limit,
 						sort, sortDirection, null));
 
 		return new PagedResponse<CaseloadRecordTO>(true, caseload.getResults(),

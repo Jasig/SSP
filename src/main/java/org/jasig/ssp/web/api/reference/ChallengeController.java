@@ -128,7 +128,7 @@ public class ChallengeController
 
 		final PagingWrapper<ChallengeReferral> data = challengeReferralService
 				.getAllForChallenge(challenge, SortingAndPaging
-						.createForSingleSort(status, start, limit, sort,
+						.createForSingleSortWithPaging(status, start, limit, sort,
 								sortDirection, null));
 
 		return new PagedResponse<ChallengeReferralTO>(true,

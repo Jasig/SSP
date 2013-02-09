@@ -136,8 +136,11 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 		// work... end up with empty results need to dig into actual query
 		// building
 		final List<EarlyAlertStudentReportTO> peopleInfo = earlyAlertResponseService.getPeopleByEarlyAlertReferralIds(
-				Arrays.asList(earlyAlertReferralId), termDate.getStartDate(), termDate.getEndDate(), searchForm, SortingAndPaging.createForSingleSort(status, null,
-						null, null, null, null));
+				Arrays.asList(earlyAlertReferralId), 
+				termDate.getStartDate(), 
+				termDate.getEndDate(), 
+				searchForm, 
+				SearchParameters.getReportPersonSortingAndPagingAll(status));
 
 		final Map<String, Object> parameters = Maps.newHashMap();
 		

@@ -20,6 +20,7 @@ package org.jasig.ssp.web.api.reports; // NOPMD
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
@@ -43,8 +45,11 @@ import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
+import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
+import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.DateTerm;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -151,7 +156,7 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 				programStatusService, 
 				null);
 		
-		SearchParameters.addAnticipatedAndRegistrationTerms(anticipatedStartTerm, 
+		SearchParameters.addAnticipatedAndActualStartTerms(anticipatedStartTerm, 
 				anticipatedStartYear, 
 				null, 
 				null, 
@@ -161,15 +166,27 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
-		final List<Person> people = personService.peopleFromCriteria(
-				personSearchForm, SortingAndPaging.createForSingleSort(status, null,
-						null, null, null, null));
-		Collections.sort(people, Person.PERSON_NAME_AND_ID_COMPARATOR);
-		final List<PersonTO> peopleTO = personTOFactory.asTOList(people);
+		final PagingWrapper<BaseStudentReportTO> people = personService.getStudentReportTOsFromCriteria(
+				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
 		
-		SearchParameters.addStudentCount(peopleTO, parameters);
+		ArrayList<BaseStudentReportTO> report = new ArrayList<BaseStudentReportTO>(people.getRows());
+		//Collections.sort(report, Person.PERSON_NAME_AND_ID_COMPARATOR);
+		
+		ArrayList<BaseStudentReportTO> compressedReport = new ArrayList<BaseStudentReportTO>();
+		for(BaseStudentReportTO reportTO: report){
+			Integer index = compressedReport.indexOf(reportTO);
+			if(index >= 0)
+			{
+				BaseStudentReportTO compressedReportTo = compressedReport.get(index);
+				compressedReportTo.processDuplicate(reportTO);
+			}else{
+				compressedReport.add(reportTO);
+			}
+		}
+		
+		SearchParameters.addStudentCount(compressedReport, parameters);
 
-		generateReport(response, parameters, peopleTO, REPORT_URL, reportType, REPORT_FILE_TITLE);
+		generateReport(response, parameters, compressedReport, REPORT_URL, reportType, REPORT_FILE_TITLE);
 
 	}
 

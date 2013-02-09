@@ -147,7 +147,7 @@ public class PersonTaskController extends
 		final Map<String, List<Task>> tasksWithTaskGroups = service
 				.getAllGroupedByTaskGroup(personService.get(personId),
 						securityService.currentUser(), SortingAndPaging
-								.createForSingleSort(status, start, limit,
+								.createForSingleSortWithPaging(status, start, limit,
 										sort, sortDirection, null));
 
 		for (final Entry<String, List<Task>> tasksWithTaskGroup : tasksWithTaskGroups

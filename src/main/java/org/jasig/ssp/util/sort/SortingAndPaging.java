@@ -123,6 +123,18 @@ public final class SortingAndPaging { // NOPMD
 		this.defaultSortProperty = defaultSortProperty;
 		this.defaultSortDirection = defaultSortDirection;
 	}
+	
+	public SortingAndPaging(final ObjectStatus status,
+			final List<Pair<String, SortDirection>> sortFields,
+			final String defaultSortProperty,
+			final SortDirection defaultSortDirection) {
+		this.status = status;
+		this.firstResult = null;
+		this.maxResults = null;
+		this.sortFields = sortFields;
+		this.defaultSortProperty = defaultSortProperty;
+		this.defaultSortDirection = defaultSortDirection;
+	}
 
 	/**
 	 * Gets the object status
@@ -382,7 +394,7 @@ public final class SortingAndPaging { // NOPMD
 	 *            A default sort property if the sort parameter is null.
 	 * @return An instance with the specified filters.
 	 */
-	public static SortingAndPaging createForSingleSort(
+	public static SortingAndPaging createForSingleSortWithPaging(
 			final ObjectStatus status,
 			final Integer firstResult, final Integer maxResults,
 			final String sort, final String sortDirection,
@@ -408,6 +420,54 @@ public final class SortingAndPaging { // NOPMD
 				firstResult, maxResults, sortFields, defaultSortProperty,
 				defaultSortDirection);
 
+		return sAndP;
+	}
+	
+	/**
+	 * Construct a full instance of these settings with a single field sort.
+	 * 
+	 * @param status
+	 *            Object status
+	 * @param firstResult
+	 *            First result to return (0-based)
+	 * @param maxResults
+	 *            Maximum total results to return.
+	 * 
+	 *            <p>
+	 *            Will use {@link #DEFAULT_MAXIMUM_RESULTS} if not specified
+	 *            here. Can not exceed {@link #MAXIMUM_ALLOWABLE_RESULTS}.
+	 * @param sort
+	 *            Sort field (property)
+	 * @param sortDirection
+	 *            Sort direction
+	 * @param defaultSortProperty
+	 *            A default sort property if the sort parameter is null.
+	 * @return An instance with the specified filters.
+	 */
+	public static SortingAndPaging createForSingleSortAll(
+			final ObjectStatus status,
+			final String sortField, final String sortDirection) {
+
+		List<Pair<String, SortDirection>> sortFields;
+		SortDirection defaultSortDirection;
+
+		// use sort parameter if available, otherwise use the default
+		if (sortField == null) {
+			sortFields = null; // NOPMD
+			defaultSortDirection = SortDirection
+					.getSortDirection(sortDirection);
+		} else {
+			sortFields = Lists.newArrayList();
+			sortFields.add(new Pair<String, SortDirection>(sortField, SortDirection
+					.getSortDirection(sortDirection)));
+			defaultSortDirection = null; // NOPMD
+		}
+
+		final SortingAndPaging sAndP = new SortingAndPaging(
+				status == null ? ObjectStatus.ACTIVE : status,
+				sortFields, null,
+				defaultSortDirection);
+		
 		return sAndP;
 	}
 }

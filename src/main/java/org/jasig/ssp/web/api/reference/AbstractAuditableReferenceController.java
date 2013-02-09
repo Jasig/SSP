@@ -142,7 +142,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 
 		// Run getAll
 		final PagingWrapper<T> data = getService().getAll(
-				SortingAndPaging.createForSingleSort(
+				SortingAndPaging.createForSingleSortWithPaging(
 						status == null ? ObjectStatus.ACTIVE : status, start,
 						limit, sort, sortDirection, "name"));
 

@@ -110,7 +110,7 @@ public class CategoryController
 
 		final PagingWrapper<Challenge> data = challengeService
 				.getAllForCategory(category,
-						SortingAndPaging.createForSingleSort(status, start,
+						SortingAndPaging.createForSingleSortWithPaging(status, start,
 								limit, sort, sortDirection, null));
 
 		return new PagedResponse<ChallengeTO>(true, data.getResults(),

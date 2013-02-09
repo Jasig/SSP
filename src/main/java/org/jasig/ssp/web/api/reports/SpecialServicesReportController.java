@@ -88,8 +88,7 @@ public class SpecialServicesReportController extends ReportBaseController {
 		
 		final List<Person> people = personService
 				.peopleFromSpecialServiceGroups(cleanSpecialServiceGroupIds,
-						SortingAndPaging.createForSingleSort(status, null,
-								null, null, null, null));
+						SearchParameters.getReportPersonSortingAndPagingAll(status));
 
 		final List<PersonTO> personTOs = personTOFactory.asTOList(people);
 

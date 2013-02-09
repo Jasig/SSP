@@ -1,24 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Licensed to Jasig under one or more contributor license
-    agreements. See the NOTICE file distributed with this work
-    for additional information regarding copyright ownership.
-    Jasig licenses this file to you under the Apache License,
-    Version 2.0 (the "License"); you may not use this file
-    except in compliance with the License. You may obtain a
-    copy of the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on
-    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations
-    under the License.
-
--->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="earlyAlertClassReport" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c435a7b9-fa45-466b-83ed-6043d3153109">
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
@@ -30,6 +10,7 @@
 	<property name="ireport.y" value="0"/>
 	<parameter name="termName" class="java.lang.String"/>
 	<parameter name="campusName" class="java.lang.String"/>
+	<parameter name="reportDate" class="java.lang.String" isForPrompting="false"/>
 	<field name="course" class="java.lang.String"/>
 	<field name="section" class="java.lang.String"/>
 	<field name="campusName" class="java.lang.String"/>
@@ -69,9 +50,9 @@
 				<textFieldExpression><![CDATA[$P{campusName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="255b284c-e962-4bd2-a35c-c07141e46079" x="110" y="11" width="100" height="20"/>
+				<reportElement uuid="255b284c-e962-4bd2-a35c-c07141e46079" x="110" y="11" width="213" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="11" y="51" width="100" height="20"/>
@@ -99,47 +80,47 @@
 			<staticText>
 				<reportElement uuid="dfc3b60d-f4ea-4b4b-81ab-8ded09b07330" x="0" y="2" width="45" height="20"/>
 				<textElement/>
-				<text><![CDATA[Course]]></text>
+				<text><![CDATA[COURSE]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="8f0dd94d-de0f-404f-95a1-8299c9eceafc" x="45" y="2" width="59" height="20"/>
 				<textElement/>
-				<text><![CDATA[Section]]></text>
+				<text><![CDATA[SECTION]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="133a7739-60b7-4b6c-9a2b-1e703c727e4b" x="104" y="2" width="58" height="18"/>
 				<textElement/>
-				<text><![CDATA[Campus]]></text>
+				<text><![CDATA[CAMPUS]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="bb725aa4-223d-410d-9843-a0d22aa7b601" x="175" y="2" width="100" height="18"/>
 				<textElement/>
-				<text><![CDATA[Early Alerts]]></text>
+				<text><![CDATA[EARLY ALERTS]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="d2f8f480-495c-4860-9f5d-010c700b752a" x="275" y="2" width="48" height="18"/>
 				<textElement/>
-				<text><![CDATA[Enrolled]]></text>
+				<text><![CDATA[ENROLLED]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="702aa090-f74b-43ea-8d1c-3242f35381f3" x="323" y="2" width="39" height="18"/>
 				<textElement/>
-				<text><![CDATA[Passing]]></text>
+				<text><![CDATA[PASSING]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="c9748924-d437-4fa7-a9fa-f62d89365379" x="366" y="0" width="63" height="20"/>
 				<textElement/>
-				<text><![CDATA[Non Passing]]></text>
+				<text><![CDATA[NON PASSING]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="5cc868c9-f855-4bfe-ba87-5c375c40e068" x="429" y="2" width="56" height="18"/>
 				<textElement/>
-				<text><![CDATA[Withdrawn]]></text>
+				<text><![CDATA[WITHDRAWN]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="dd5ecfe2-c00d-4369-a2ce-c3089b151177" x="485" y="2" width="53" height="20"/>
 				<textElement/>
-				<text><![CDATA[Z Grade]]></text>
+				<text><![CDATA[Z GRADE]]></text>
 			</staticText>
 		</band>
 	</columnHeader>

@@ -10,7 +10,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
-	<parameter name="reportDate" class="java.util.Date"/>
+	<parameter name="reportDate" class="java.lang.String"/>
 	<queryString language="json">
 		<![CDATA[rows]]>
 	</queryString>
@@ -52,7 +52,7 @@
 				<text><![CDATA[Special Service Groups:]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="2bd0b0c4-c354-40a4-8131-9c0f91358ffa" x="202" y="0" width="100" height="13"/>
+				<reportElement uuid="2bd0b0c4-c354-40a4-8131-9c0f91358ffa" x="202" y="0" width="205" height="13"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
@@ -82,32 +82,32 @@
 			<staticText>
 				<reportElement uuid="4d03dc84-97ee-4f56-b388-b80ca1bdaf28" mode="Opaque" x="102" y="3" width="100" height="18"/>
 				<textElement/>
-				<text><![CDATA[First Name]]></text>
+				<text><![CDATA[FIRST NAME]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="41e49ee4-6c5a-405c-96ef-f27913ec2d3c" mode="Opaque" x="304" y="3" width="103" height="18"/>
 				<textElement/>
-				<text><![CDATA[Last Name]]></text>
+				<text><![CDATA[LAST NAME]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="30c39301-6947-4293-83d0-75ccc86772aa" mode="Opaque" x="407" y="3" width="100" height="18"/>
 				<textElement/>
-				<text><![CDATA[Student Type]]></text>
+				<text><![CDATA[STUDENT TYPE]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="bd80bde0-56f7-44dc-ad07-43ce4d3eb6af" mode="Opaque" x="5" y="3" width="97" height="18"/>
 				<textElement/>
-				<text><![CDATA[Student ID]]></text>
+				<text><![CDATA[STUDENT ID]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="64fe9859-8248-41b1-9f33-b6777c98b182" mode="Opaque" x="202" y="3" width="102" height="18"/>
 				<textElement/>
-				<text><![CDATA[Middle Name]]></text>
+				<text><![CDATA[MIDDLE NAME]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="89c526dd-df29-4208-8b49-5761bb61cc80" mode="Opaque" x="507" y="3" width="243" height="18"/>
 				<textElement/>
-				<text><![CDATA[Special Services]]></text>
+				<text><![CDATA[SPECIAL SERVICES]]></text>
 			</staticText>
 		</band>
 	</columnHeader>

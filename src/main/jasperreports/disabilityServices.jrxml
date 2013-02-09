@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="disabilityServices.jasper" pageWidth="1548" pageHeight="612" orientation="Landscape" columnWidth="1508" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f9f700f2-fa61-4172-90b1-b8f9677f8bee">
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="130"/>
+	<property name="ireport.y" value="212"/>
+	<parameter name="programStatusName" class="java.lang.String"/>
+	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
+	<parameter name="referralSourceNames" class="java.lang.String"/>
+	<parameter name="studentCount" class="java.lang.Integer"/>
+	<parameter name="reportDate" class="java.lang.String"/>
+	<parameter name="homeDepartment" class="java.lang.String"/>
+	<parameter name="coachName" class="java.lang.String"/>
+	<parameter name="studentTypeNames" class="java.lang.String"/>
+	<parameter name="actualStartTerm" class="java.lang.String">
+		<parameterDescription><![CDATA[Registration Term]]></parameterDescription>
+	</parameter>
+	<parameter name="anticipatedStartTerm" class="java.lang.String"/>
+	<parameter name="disabilityStatus" class="java.lang.String"/>
+	<parameter name="odsCoachName" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="disabilityType" class="java.lang.String">
+		<parameterDescription><![CDATA[disabilityType]]></parameterDescription>
+	</parameter>
+	<field name="firstName" class="java.lang.String">
+		<fieldDescription><![CDATA[firstName]]></fieldDescription>
+	</field>
+	<field name="lastName" class="java.lang.String">
+		<fieldDescription><![CDATA[lastName]]></fieldDescription>
+	</field>
+	<field name="middleName" class="java.lang.String">
+		<fieldDescription><![CDATA[middleName]]></fieldDescription>
+	</field>
+	<field name="schoolId" class="java.lang.String">
+		<fieldDescription><![CDATA[schoolId]]></fieldDescription>
+	</field>
+	<field name="studentType" class="java.lang.String">
+		<fieldDescription><![CDATA[studentType]]></fieldDescription>
+	</field>
+	<field name="disabilityTypesName" class="java.lang.String">
+		<fieldDescription><![CDATA[disabilityTypesName]]></fieldDescription>
+	</field>
+	<field name="agencyContacts" class="java.lang.String">
+		<fieldDescription><![CDATA[agencyContacts]]></fieldDescription>
+	</field>
+	<field name="currentProgramStatusName" class="java.lang.String">
+		<fieldDescription><![CDATA[currentProgramStatusName]]></fieldDescription>
+	</field>
+	<field name="odsReason" class="java.lang.String">
+		<fieldDescription><![CDATA[odsReason]]></fieldDescription>
+	</field>
+	<field name="odsRegistrationDate" class="java.util.Date">
+		<fieldDescription><![CDATA[odsRegistrationDate]]></fieldDescription>
+	</field>
+	<field name="interpreter" class="java.lang.String">
+		<fieldDescription><![CDATA[interpreter]]></fieldDescription>
+	</field>
+	<field name="registrationStatus" class="java.lang.String">
+		<fieldDescription><![CDATA[registrationStatus]]></fieldDescription>
+	</field>
+	<field name="coachName" class="java.lang.String">
+		<fieldDescription><![CDATA[coachName]]></fieldDescription>
+	</field>
+	<field name="assignmentDates" class="java.lang.String">
+		<fieldDescription><![CDATA[assignmentDates]]></fieldDescription>
+	</field>
+	<field name="major" class="java.lang.String">
+		<fieldDescription><![CDATA[major]]></fieldDescription>
+	</field>
+	<field name="veteranStatus" class="java.lang.String">
+		<fieldDescription><![CDATA[veteranStatus]]></fieldDescription>
+	</field>
+	<field name="ethnicity" class="java.lang.String">
+		<fieldDescription><![CDATA[ethnicity]]></fieldDescription>
+	</field>
+	<field name="isIlp" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[isIlp]]></fieldDescription>
+	</field>
+	<field name="odsStatus" class="java.lang.String">
+		<fieldDescription><![CDATA[odsStatus]]></fieldDescription>
+	</field>
+	<variable name="rowIndex" class="java.lang.Integer">
+		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
+		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="233" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" mode="Opaque" x="10" y="6" width="100" height="16"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Report Date:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="f308e252-c794-4c7d-aca2-86ceb422a4f7" mode="Opaque" x="135" y="6" width="174" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" mode="Opaque" x="10" y="24" width="100" height="16"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Home Department:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="9f2796d0-86f4-4520-af01-8ad5a5faefec" mode="Opaque" x="135" y="24" width="119" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{homeDepartment}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" mode="Opaque" x="10" y="43" width="100" height="16"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Counselor/Coach:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" mode="Opaque" x="135" y="43" width="100" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{coachName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" mode="Opaque" x="12" y="62" width="100" height="16"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[ODS Coach:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" mode="Opaque" x="135" y="61" width="100" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{odsCoachName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" mode="Opaque" x="10" y="78" width="100" height="16"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Program Status:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" mode="Opaque" x="135" y="78" width="306" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{programStatusName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" mode="Opaque" x="10" y="97" width="100" height="16"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Registration Term]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" mode="Opaque" x="135" y="97" width="100" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{actualStartTerm}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" mode="Opaque" x="10" y="116" width="100" height="16"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Student Type:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d" mode="Opaque" x="135" y="116" width="141" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{studentTypeNames}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" mode="Opaque" x="10" y="137" width="123" height="16"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Special Service Groups:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="6d2788b3-18ca-44f6-837f-6df32f3e8b72" mode="Opaque" x="135" y="137" width="507" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{specialServiceGroupNames}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5f1b46f5-a916-4f4a-b0a1-6bdd2cf265a9" mode="Opaque" x="10" y="158" width="123" height="16"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Referral Source:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="acb5d97c-744c-4734-a98d-a800ceceff3d" mode="Opaque" x="135" y="158" width="425" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{referralSourceNames}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="e49d816d-3764-4980-94ba-2b9e63b689da" mode="Opaque" x="642" y="211" width="352" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{studentCount}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="90e4fa8d-5631-47ef-b9b1-de98b568c27b" mode="Opaque" x="517" y="211" width="100" height="16"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Student Count:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="e49d816d-3764-4980-94ba-2b9e63b689da" mode="Opaque" x="135" y="195" width="352" height="16" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{disabilityStatus}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="90e4fa8d-5631-47ef-b9b1-de98b568c27b" mode="Opaque" x="10" y="198" width="123" height="16"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Disability Service Status:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="90e4fa8d-5631-47ef-b9b1-de98b568c27b" mode="Opaque" x="10" y="214" width="123" height="16"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Disability Type:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="e49d816d-3764-4980-94ba-2b9e63b689da" mode="Opaque" x="135" y="214" width="352" height="16" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{disabilityType}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="f2e5c86b-db8e-4bbb-8e74-c3cdc8affdc3" x="503" y="13" width="197" height="117"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="3bd7384d-fcbe-4e65-a732-bd412b284cd7" x="514" y="21" width="167" height="22"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ODS Reasons for Ineligibility:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3307b6a4-2445-4a39-8706-db3df3400d69" x="542" y="43" width="132" height="16"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[ None (No Documentation)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0b589f7b-7c2a-4aa5-837e-8ee28659e574" x="542" y="63" width="147" height="17"/>
+				<textElement/>
+				<text><![CDATA[ I (Incomplete Documentation)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bcd31bce-5d2a-4989-8ce7-e943d227c1e8" x="542" y="81" width="100" height="14"/>
+				<textElement/>
+				<text><![CDATA[NA (No Disability)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3aa5d93e-25b5-4ecf-b6af-9c747d1a3481" x="542" y="100" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[NSE (No Special Ed)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" mode="Opaque" x="272" y="97" width="115" height="16"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Anticipated Start Term]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" mode="Opaque" x="391" y="97" width="100" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{anticipatedStartTerm}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="30" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="3" y="1" width="1477" height="27" backcolor="#70C2E7"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="444" y="8" width="310" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DISABILITY SERVICES REPORT]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="14" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="6963974f-bd33-4663-be62-4efc95e33d07" stretchType="RelativeToBandHeight" mode="Opaque" x="8" y="0" width="196" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[STUDENT NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="915b815c-190b-44b9-a1f1-4bc0468b538c" stretchType="RelativeToBandHeight" mode="Opaque" x="204" y="0" width="75" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d701b627-d6cf-4105-892f-502f098e2d72" mode="Opaque" x="278" y="0" width="21" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[ILP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="078f6abb-8c0e-4aae-b096-6a30611623d0" mode="Opaque" x="309" y="0" width="59" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[DISABILITY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="396bc89d-e7b1-4821-a8b5-067f9dfa430e" mode="Opaque" x="368" y="0" width="60" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[SSP STATUS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f2af5a5e-8883-4e32-921b-cfae205228b4" mode="Opaque" x="497" y="0" width="157" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[ODS REASON FOR INELIGIBILTY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7fb79f93-1a84-4545-ae5f-f0411ff12a92" mode="Opaque" x="654" y="0" width="78" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[ODS REG DATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1d27d029-b53e-4849-adfb-f99c7257336b" mode="Opaque" x="732" y="0" width="84" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[INTERPRETER]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9cc3b052-984c-4edc-9086-5a303c3d3d39" mode="Opaque" x="1370" y="0" width="110" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[SSP COACH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1986e05a-ec4a-46de-8d79-e5534fd7f511" mode="Opaque" x="886" y="0" width="75" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[MAJOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f48db932-8a08-4079-bc2a-1ba74dd632e3" mode="Opaque" x="820" y="0" width="62" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="9" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[REG STATUS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="368dd47d-1cae-44a4-ba38-e10c284179fd" mode="Opaque" x="1127" y="0" width="128" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[ASSIGNMENT DATES	]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a58f22f4-06f5-4226-beeb-1892fa1afa33" mode="Opaque" x="961" y="0" width="96" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[VET STATUS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1f71ddf2-63f3-4276-a0e6-07806690d928" mode="Opaque" x="1057" y="0" width="70" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[ETHNICITY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d50ddcda-987f-4d94-80b8-56e725410243" mode="Opaque" x="1255" y="0" width="115" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[AGENCY CONTACTS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="023580ac-06ce-4e83-bffb-8c3090c0d897" mode="Opaque" x="428" y="0" width="69" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[ODS STATUS]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="3" y="3" width="1477" height="16" backcolor="#E4E4E4">
+					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</graphicElement>
+			</rectangle>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="da4c0010-a6bc-4016-836e-daa0149f7735" stretchType="RelativeToBandHeight" x="8" y="3" width="196" height="16"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{firstName} == null ? "" : $F{firstName}) + ( $F{middleName} == null ? "" : " " + $F{middleName} )  + ($F{lastName} == null ? "" : " " + $F{lastName})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="dc91cd22-3c43-404a-b445-c02cd090c250" stretchType="RelativeToBandHeight" x="204" y="3" width="75" height="16"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{schoolId} == null ? "" : $F{schoolId})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d22d3cb7-2cc0-431e-889a-5ab8d11ae874" x="278" y="3" width="31" height="16"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{isIlp}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="38f4248d-b512-4939-a59b-10dc3c8d3513" isPrintRepeatedValues="false" x="309" y="3" width="59" height="16"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{disabilityTypesName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="cbc0e657-1ff1-4bce-bf2c-fbd582fa810b" x="368" y="3" width="60" height="16"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{currentProgramStatusName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="da478bb6-9280-40c2-9eb5-cea8c868e614" x="428" y="3" width="69" height="16"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{odsStatus}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ea368692-bb36-4c3b-9278-378eb25d72bc" x="497" y="3" width="157" height="16"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{odsReason}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="4bb79470-0d13-43f6-ad29-2d6c0e3a9ff1" x="654" y="3" width="78" height="16"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{odsRegistrationDate}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="4c7203f3-de3f-4d03-a78b-6f60240211a1" x="732" y="3" width="88" height="16"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{interpreter}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="681d70b3-65c6-4ad9-bf7f-bd29293da4ff" x="886" y="3" width="75" height="16"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{major}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="bfe75fbc-2d49-404e-a8ed-db43d5476a83" x="820" y="3" width="62" height="16"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{registrationStatus}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="15a01dba-6891-4af6-bf33-4e2125afd3de" x="1127" y="3" width="128" height="16"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{assignmentDates}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="45ba8225-260f-41af-b424-cf2b982579d5" x="961" y="3" width="96" height="16"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{veteranStatus}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="dae9b576-3960-4e4a-b69e-7c168879c43d" x="1057" y="3" width="70" height="16"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{ethnicity}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="29702cce-db6c-4135-b497-f1a5b8970c1b" x="1255" y="3" width="115" height="16"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{agencyContacts}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="9970d598-99bb-4344-8ae7-6602c3327da0" x="1370" y="3" width="110" height="16"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{coachName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

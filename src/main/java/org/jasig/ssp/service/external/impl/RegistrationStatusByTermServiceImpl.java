@@ -102,4 +102,16 @@ public class RegistrationStatusByTermServiceImpl extends
 			@NotNull Term term, SortingAndPaging sAndP) {
 		return  dao.getAllForTerm(term, sAndP);
 	}
+
+	@Override
+	public RegistrationStatusByTerm getForTerm(@NotNull String schoolId,
+			@NotNull String termCode) {
+		return dao.getForTerm(schoolId, termCode);
+	}
+
+	@Override
+	public RegistrationStatusByTerm getForCurrentTerm(@NotNull String schoolId)
+			throws ObjectNotFoundException {
+		return getForTerm(schoolId, termService.getCurrentTerm().getCode());
+	}
 }

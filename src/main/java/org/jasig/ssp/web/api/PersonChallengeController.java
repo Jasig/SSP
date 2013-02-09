@@ -110,7 +110,7 @@ public class PersonChallengeController extends
 		final Person person = personService.get(personId);
 		final PagingWrapper<PersonChallenge> data = getService()
 				.getAllForPerson(person,
-						SortingAndPaging.createForSingleSort(status, start,
+						SortingAndPaging.createForSingleSortWithPaging(status, start,
 								limit, sort, sortDirection, null));
 
 		return new PagedResponse<PersonChallengeTO>(true,
@@ -154,7 +154,7 @@ public class PersonChallengeController extends
 		final Person person = personService.get(personId);
 		final PagingWrapper<Challenge> data = challengeService.getAllForPerson(
 				person,
-				SortingAndPaging.createForSingleSort(status, start,
+				SortingAndPaging.createForSingleSortWithPaging(status, start,
 						limit, sort, sortDirection, null));
 
 		return new PagedResponse<ChallengeTO>(true, data.getResults(),

@@ -40,9 +40,14 @@ public class RegistrationStatusByTermDao extends
 
 	public RegistrationStatusByTerm getForTerm(final Person person,
 			final Term term) {
+		return getForTerm(person.getSchoolId(), term.getCode());
+	}
+	
+	public RegistrationStatusByTerm getForTerm(final String schoolId,
+			final String termCode) {
 		final Criteria query = createCriteria();
-		query.add(Restrictions.eq("schoolId", person.getSchoolId()));
-		query.add(Restrictions.eq("termCode", term.getCode()));
+		query.add(Restrictions.eq("schoolId", schoolId));
+		query.add(Restrictions.eq("termCode", termCode));
 		query.add(Restrictions.gt("registeredCourseCount", 0));
 		return (RegistrationStatusByTerm) query.uniqueResult();
 	}

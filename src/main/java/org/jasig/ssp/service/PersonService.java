@@ -30,6 +30,8 @@ import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
+import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
+import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -262,6 +264,12 @@ public interface PersonService extends AuditableCrudService<Person> {
 	Person createUserAccountForCurrentPortletUser(String username,
 			PortletRequest portletRequest)
 			throws UnableToCreateAccountException;
+	
+	PagingWrapper<DisabilityServicesReportTO> getDisabilityReport(PersonSearchFormTO form,
+			final SortingAndPaging sAndP) throws ObjectNotFoundException;
 
 
+	public PagingWrapper<BaseStudentReportTO> getStudentReportTOsFromCriteria(
+			final PersonSearchFormTO personSearchFormTO,
+			final SortingAndPaging sAndP) throws ObjectNotFoundException;
 }

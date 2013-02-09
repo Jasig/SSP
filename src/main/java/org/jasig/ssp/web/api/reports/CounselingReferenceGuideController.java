@@ -81,7 +81,7 @@ public class CounselingReferenceGuideController extends ReportBaseController {
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
 		SearchParameters.addReportTitleToMap(REPORT_TITLE, parameters);
-		this.generateReport(response, parameters, challengeTOs, REPORT_URL, reportType, REPORT_FILE_TITLE);
+		generateReport(response, parameters, challengeTOs, REPORT_URL, reportType, REPORT_FILE_TITLE);
 		
 		
 	}

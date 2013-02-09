@@ -57,13 +57,21 @@ public class PersonSearchFormTO
 	
 	private UUID disabilityTypeId;
 	
-	private Integer registrationYear;
+	private Integer actualStartYear;
 	
-	private String registrationTerm;
+	private String actualStartTerm;
 	
 	private Boolean disabilityIsNotNull = false;
 	
-	
+	private String homeDepartment;
+
+	public String getHomeDepartment() {
+		return homeDepartment;
+	}
+
+	public void setHomeDepartment(String homeDepartment) {
+		this.homeDepartment = homeDepartment;
+	}
 
 	public PersonTO getOdsCoach() {
 		return odsCoach;
@@ -81,20 +89,20 @@ public class PersonSearchFormTO
 		this.disabilityStatusId = disabilityStatus;
 	}
 
-	public Integer getRegistrationYear() {
-		return registrationYear;
+	public Integer getActualStartYear() {
+		return actualStartYear;
 	}
 
-	public void setRegistrationYear(Integer registrationYear) {
-		this.registrationYear = registrationYear;
+	public void setActualStartYear(Integer actualStartYear) {
+		this.actualStartYear = actualStartYear;
 	}
 
-	public String getRegistrationTerm() {
-		return registrationTerm;
+	public String getActualStartTerm() {
+		return actualStartTerm;
 	}
 
-	public void setRegistrationTerm(String registrationTerm) {
-		this.registrationTerm = registrationTerm;
+	public void setActualStartTerm(String actualStartTerm) {
+		this.actualStartTerm = actualStartTerm;
 	}
 
 	public PersonSearchFormTO(){

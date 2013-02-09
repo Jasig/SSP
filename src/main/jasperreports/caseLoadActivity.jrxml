@@ -1,24 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Licensed to Jasig under one or more contributor license
-    agreements. See the NOTICE file distributed with this work
-    for additional information regarding copyright ownership.
-    Jasig licenses this file to you under the Apache License,
-    Version 2.0 (the "License"); you may not use this file
-    except in compliance with the License. You may obtain a
-    copy of the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on
-    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations
-    under the License.
-
--->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank Letter Landscape" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de052e81-a0fc-4bfe-a86d-fd593cff06df">
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
@@ -29,9 +9,10 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="statusDateFrom" class="java.util.Date"/>
-	<parameter name="statusDateTo" class="java.util.Date"/>
+	<parameter name="startDate" class="java.lang.String"/>
+	<parameter name="endDate" class="java.lang.String"/>
 	<parameter name="studentTypeNames" class="java.lang.String"/>
+	<parameter name="reportDate" class="java.lang.String" isForPrompting="false"/>
 	<field name="firstName" class="java.lang.String">
 		<fieldDescription><![CDATA[firstName]]></fieldDescription>
 	</field>
@@ -48,6 +29,27 @@
 	<variable name="rowIndex" class="java.lang.Integer">
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
 		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<variable name="journalEntriesCreatedCount_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{journalEntriesCreatedCount}]]></variableExpression>
+	</variable>
+	<variable name="studentsJournalEntriesCount_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{studentsJournalEntriesCount}]]></variableExpression>
+	</variable>
+	<variable name="actionPlanTasksCreatedCount_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{actionPlanTasksCreatedCount}]]></variableExpression>
+	</variable>
+	<variable name="studentsActionPlanTasksCount_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{studentsActionPlanTasksCount}]]></variableExpression>
+	</variable>
+	<variable name="earlyAlertsCreatedCount_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{earlyAlertsCreatedCount}]]></variableExpression>
+	</variable>
+	<variable name="studentsEarlyAlertsCount_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{studentsEarlyAlertsCount}]]></variableExpression>
+	</variable>
+	<variable name="earlyAlertsRespondedCount_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{earlyAlertsRespondedCount}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -67,17 +69,17 @@
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="100" y="21" width="112" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{statusDateFrom}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="64aa21a8-5fbc-4465-b2c4-991e4c0e6450" x="100" y="41" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{statusDateTo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="255b284c-e962-4bd2-a35c-c07141e46079" x="100" y="1" width="100" height="20"/>
+				<reportElement uuid="255b284c-e962-4bd2-a35c-c07141e46079" x="100" y="1" width="201" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="1" y="41" width="100" height="20"/>
@@ -255,7 +257,7 @@
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="30" splitType="Stretch">
+		<band height="35" splitType="Stretch">
 			<textField>
 				<reportElement uuid="c67f21c4-b6a2-4480-a2df-a8d1b4be49c0" x="333" y="7" width="53" height="20"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
@@ -268,4 +270,57 @@
 			</textField>
 		</band>
 	</pageFooter>
+	<summary>
+		<band height="17">
+			<textField>
+				<reportElement uuid="6492ec46-73c6-44d0-8ac1-9536d84a5217" x="119" y="0" width="92" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{journalEntriesCreatedCount_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="00b84556-2c0a-4d51-9b21-087804688fa3" x="212" y="0" width="89" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{studentsJournalEntriesCount_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e3e0c513-d867-403a-a87f-b68a607eb4bc" x="301" y="0" width="85" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{actionPlanTasksCreatedCount_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e25fede4-e079-49bf-b120-11b88d3ad75f" x="386" y="0" width="90" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{studentsActionPlanTasksCount_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d1e6df3a-a37f-4baa-8d65-e609c3d3dad5" x="476" y="0" width="90" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{earlyAlertsCreatedCount_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e4ed99ae-7935-457c-a3d9-c52d502fff42" x="566" y="0" width="88" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{studentsEarlyAlertsCount_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7c41c8a6-5115-4ce1-af23-71b2cb50ce5a" x="654" y="0" width="85" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{earlyAlertsRespondedCount_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
 </jasperReport>

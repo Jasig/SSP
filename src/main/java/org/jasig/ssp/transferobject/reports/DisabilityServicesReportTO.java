@@ -1,8 +1,11 @@
 package org.jasig.ssp.transferobject.reports;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonDisabilityAgency;
@@ -13,7 +16,6 @@ import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PersonTO;
 
 public class DisabilityServicesReportTO extends BaseStudentReportTO {
-	private static String ILP = "ILP";
 	
 	final private static String DEFAULT_DATE_FORMAT = "MM/dd/yyyy";
 	
@@ -22,17 +24,14 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 	public DisabilityServicesReportTO(Person model, Boolean ilp,
 			String disabilityCode, String agencyContact, String sspStatus,
 			String odsReason, Date odsRegistrationDate, String interpreter,
-			Integer registrationStatus, String assignmentDate, String major,
+			String assignmentDate, String major,
 			String verteranSatus, String ethnicity) {
 		super(model);
-		this.ilp = ilp;
-		this.disabilityCode = disabilityCode;
+		this.disabilityTypesName = disabilityCode;
 		this.agencyContacts = agencyContact;
-		this.sspStatus = sspStatus;
 		this.odsReason = odsReason;
 		this.odsRegistrationDate = odsRegistrationDate;
 		this.interpreter = interpreter;
-		this.registrationStatus = registrationStatus;
 		this.assignmentDates = assignmentDate;
 		this.major = major;
 		this.veteranStatus = verteranSatus;
@@ -46,64 +45,108 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 		
 	}
 	
-	private Boolean ilp;
-	private String disabilityCode;
+	private String disabilityType;
+	private List<String> disabilityTypes = new ArrayList<String>();
+	private String disabilityTypesName;
 	private String agencyContacts;
-	private String sspStatus;
 	private String odsStatus;
 	private String odsReason;
 	private Date odsRegistrationDate;
 	private String interpreter;
-	private Integer registrationStatus;
+
 	private String assignmentDates;
 	private String major;
 	private String veteranStatus;
 	private String ethnicity;
+	private List<String> disabilityAgenciesName = new ArrayList<String>();
+	private List<Date> disabilityAgenciesCreatedDate = new ArrayList<Date>();
+	private String disabilityAgencyName = null;
+	private Date disabilityAgencyCreatedDate = null;
 	
 	
-	public Boolean getIlp() {
-		return ilp;
+	public String getDisabilityAgencyName() {
+		return disabilityAgencyName;
 	}
 
-	public void setIlp(Boolean ilp) {
-		this.ilp = ilp;
+	public void setDisabilityAgencyName(String disabilityAgencyName) {
+		this.disabilityAgencyName = disabilityAgencyName;
+		addDisabilityAgenciesName(disabilityAgencyName);
 	}
 
-	public String getDisabilityCode() {
-		return disabilityCode;
+	public List<String> getDisabilityAgenciesName() {
+		return disabilityAgenciesName;
 	}
 
-	public void setDisabilityCode(String disabilityCode) {
-		this.disabilityCode = disabilityCode;
+	public void addDisabilityAgenciesName(List<String> disabilityAgenciesName) {
+		for(String disabilityAgencyName:disabilityAgenciesName)
+			if(!this.disabilityAgenciesName.contains(disabilityAgencyName))
+				this.disabilityAgenciesName.add(disabilityAgencyName);
+	}
+
+	public void addDisabilityAgenciesName(String disabilityAgenciesName) {
+		if(!this.disabilityAgenciesName.contains(disabilityAgenciesName))
+			this.disabilityAgenciesName.add(disabilityAgenciesName);
 	}
 
 	public String getAgencyContacts() {
+		if(agencyContacts == null || agencyContacts.length() == 0){
+			agencyContacts = "";
+			for(String disabilityAgencyName:disabilityAgenciesName){
+				agencyContacts = addValueToStringList(agencyContacts, disabilityAgencyName);
+			}
+		}
 		return agencyContacts;
 	}
 
 	public void setAgencyContacts(String agencyContacts) {
 		this.agencyContacts = agencyContacts;
 	}
-
-	public String getSspStatus() {
-		return sspStatus;
+	
+	public Date getDisabilityAgencyCreatedDate() {
+		return disabilityAgencyCreatedDate;
 	}
 
-	public void setSspStatus(String sspStatus) {
-		this.sspStatus = sspStatus;
+	public void setDisabilityAgencyCreatedDate(Date disabilityAgencyCreatedDate) {
+		addDisabilityAgenciesCreatedDate(disabilityAgencyCreatedDate);
+		this.disabilityAgencyCreatedDate = disabilityAgencyCreatedDate;
 	}
+	
+	public List<Date> getDisabilityAgenciesCreatedDate() {
+		return disabilityAgenciesCreatedDate;
+	}
+	
+	public void addDisabilityAgenciesCreatedDate(List<Date> disabilityAgenciesCreatedDate) {
+		for(Date disabilityAgencyCreatedDate:disabilityAgenciesCreatedDate)
+			if(!this.disabilityAgenciesCreatedDate.contains(disabilityAgencyCreatedDate))
+				this.disabilityAgenciesCreatedDate.add(disabilityAgencyCreatedDate);
+	}
+
+	public void addDisabilityAgenciesCreatedDate(Date disabilityAgenciesCreatedDate) {		
+		if(!this.disabilityAgenciesCreatedDate.contains(disabilityAgenciesCreatedDate))
+			this.disabilityAgenciesCreatedDate.add(disabilityAgenciesCreatedDate);
+	}
+	
+	public void setAssignmentDates(String assignmentDate) {
+		this.assignmentDates = assignmentDate;
+	}
+
+	public String getAssignmentDates() {
+		if(assignmentDates == null || assignmentDates.length() == 0){
+				assignmentDates = "";
+			for(Date disabilityAgencyCreatedDate:disabilityAgenciesCreatedDate)
+				assignmentDates = addValueToStringList(assignmentDates, DATE_FORMATTER.format(disabilityAgencyCreatedDate));
+		}
+		return assignmentDates;
+	}
+
 
 	public String getOdsStatus() {
 		return odsStatus;
 	}
 
-
-
 	public void setOdsStatus(String odsStatus) {
 		this.odsStatus = odsStatus;
 	}
-
-
 
 	public String getOdsReason() {
 		return odsReason;
@@ -128,23 +171,7 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 	public void setInterpreter(String interpreter) {
 		this.interpreter = interpreter;
 	}
-
-	public Integer getRegistrationStatus() {
-		return registrationStatus;
-	}
-
-	public void setRegistrationStatus(Integer registrationStatus) {
-		this.registrationStatus = registrationStatus;
-	}
-
-	public String getAssignmentDates() {
-		return assignmentDates;
-	}
-
-	public void setAssignmentDates(String assignmentDate) {
-		this.assignmentDates = assignmentDate;
-	}
-
+	
 	public String getMajor() {
 		return major;
 	}
@@ -169,6 +196,51 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 		this.ethnicity = ethnicity;
 	}
 	
+	public List<String> getDisabilityTypes() {
+		return disabilityTypes;
+	}
+
+	public void setDisabilityTypes(List<String> disabilityTypes) {
+		this.disabilityTypes = disabilityTypes;
+	}
+
+
+
+	
+	public String getDisabilityType() {
+		return disabilityType;
+	}
+
+	public void setDisabilityType(String disabilityType) {
+		this.disabilityType = disabilityType;
+		addDisabilityTypes(disabilityType);
+	}
+
+	public void addDisabilityTypes(List<String> disabilityTypes) {
+		for(String disabilityType:disabilityTypes)
+			if(!this.disabilityTypes.contains(disabilityType))
+				this.disabilityTypes.add(disabilityType);
+	}
+
+	public void addDisabilityTypes(String programStatus) {
+		if(!this.disabilityTypes.contains(programStatus))
+			this.disabilityTypes.add(programStatus);
+	}
+	
+	public void setdisabilityTypesName(String disabilityTypesName) {
+		this.disabilityTypesName = disabilityTypesName;
+	}
+
+	public String getdisabilityTypesName() {
+		if(disabilityTypesName == null || disabilityTypesName.length() == 0){
+			disabilityTypesName = "";
+			for(String disabilityType:disabilityTypes){
+				disabilityTypesName = addValueToStringList(disabilityTypesName, disabilityType);
+			}
+		}
+		return disabilityTypesName;
+	}
+	
 	public void setPerson(Person person) {
 		super.setPerson(person);
 		if(person.getDemographics() != null){
@@ -186,36 +258,29 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 			disabilityAgents.append(disabilityAgency.getDisabilityAgency().getName() + " ");
 			disabilityAssignmentDates.append(DATE_FORMATTER.format(disabilityAgency.getCreatedDate()) + " ");
 		}
-		
-		StringBuffer programStatuses = new StringBuffer("");
-		for(PersonProgramStatus programStatus:person.getProgramStatuses())
-		{
-			programStatuses.append(programStatus.getProgramStatus().getName() + " ");
-		}
-		setSspStatus(programStatuses.toString());
-		
 		setAgencyContacts(disabilityAgents.toString());
 		setAssignmentDates(disabilityAssignmentDates.toString());
-		
-		setCoach(new CoachPersonLiteTO(person.getCoach()));
 		
 		StringBuffer disabilityTypes = new StringBuffer("");
 		for(PersonDisabilityType disabilityType:person.getDisabilityTypes())
 		{
 			disabilityTypes.append(disabilityType.getDisabilityType().getName() + " ");
 		}
-		setDisabilityCode(disabilityTypes.toString());
-		if(getStudentType().equals(ILP))
-			setIlp(true);
-		else
-			setIlp(false);
+		setdisabilityTypesName(disabilityTypes.toString());
 
 		if(person.getCurrentRegistrationStatus() != null)
 			setRegistrationStatus(person.getCurrentRegistrationStatus().getRegisteredCourseCount());
+		
 		if(person.getEducationGoal() != null && person.getEducationGoal().getPlannedMajor() != null)
 			setMajor(person.getEducationGoal().getPlannedMajor());
 		
 		if(person.getDisability() != null && person.getDisability().getDisabilityStatus() != null)
 			setOdsStatus(person.getDisability().getDisabilityStatus().getName());
+	}
+	
+	public void processDuplicate(BaseStudentReportTO reportTO){
+		super.processDuplicate(reportTO);
+		this.addDisabilityAgenciesCreatedDate(((DisabilityServicesReportTO)reportTO).getDisabilityAgenciesCreatedDate());
+		this.addDisabilityAgenciesName(((DisabilityServicesReportTO)reportTO).getDisabilityAgenciesName());
 	}
 }

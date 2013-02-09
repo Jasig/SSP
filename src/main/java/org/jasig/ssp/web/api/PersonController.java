@@ -113,7 +113,7 @@ public class PersonController extends AbstractBaseController {
 			final @RequestParam(required = false) String sortDirection) {
 		// Run getAll
 		final PagingWrapper<Person> people = service.getAll(SortingAndPaging
-				.createForSingleSort(status, start, limit, sort, sortDirection,
+				.createForSingleSortWithPaging(status, start, limit, sort, sortDirection,
 						null));
 
 		return new PagedResponse<PersonTO>(true, people.getResults(),
@@ -130,7 +130,7 @@ public class PersonController extends AbstractBaseController {
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection) {
 		final PagingWrapper<CoachPersonLiteTO> coaches = service
-				.getAllCoachesLite(SortingAndPaging.createForSingleSort(status,
+				.getAllCoachesLite(SortingAndPaging.createForSingleSortWithPaging(status,
 						start, limit, sort, sortDirection, null));
 
 		return new PagedResponse<PersonLiteTO>(true, coaches.getResults(),

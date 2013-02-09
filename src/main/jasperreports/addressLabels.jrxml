@@ -1,24 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Licensed to Jasig under one or more contributor license
-    agreements. See the NOTICE file distributed with this work
-    for additional information regarding copyright ownership.
-    Jasig licenses this file to you under the Apache License,
-    Version 2.0 (the "License"); you may not use this file
-    except in compliance with the License. You may obtain a
-    copy of the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on
-    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations
-    under the License.
-
--->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank Letter Landscape" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de052e81-a0fc-4bfe-a86d-fd593cff06df">
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
@@ -34,7 +14,7 @@
 	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
 	<parameter name="referralSourceNames" class="java.lang.String"/>
 	<parameter name="studentCount" class="java.lang.Integer"/>
-	<parameter name="reportDate" class="java.util.Date"/>
+	<parameter name="reportDate" class="java.lang.String"/>
 	<parameter name="homeDepartment" class="java.lang.String"/>
 	<parameter name="coachName" class="java.lang.String"/>
 	<parameter name="studentTypeNames" class="java.lang.String"/>
@@ -55,7 +35,7 @@
 	<field name="schoolId" class="java.lang.String">
 		<fieldDescription><![CDATA[schoolId]]></fieldDescription>
 	</field>
-	<field name="studentType" class="org.jasig.ssp.transferobject.reference.ReferenceLiteTO">
+	<field name="studentType" class="java.lang.String">
 		<fieldDescription><![CDATA[studentType]]></fieldDescription>
 	</field>
 	<field name="addressLine1" class="java.lang.String">
@@ -97,7 +77,7 @@
 				<text><![CDATA[Report Date:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="f308e252-c794-4c7d-aca2-86ceb422a4f7" positionType="Float" x="134" y="2" width="100" height="16" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="f308e252-c794-4c7d-aca2-86ceb422a4f7" positionType="Float" x="134" y="2" width="249" height="16" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
@@ -239,7 +219,7 @@
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Address]]></text>
+				<text><![CDATA[ADDRESS]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="2d7a42c3-760c-4322-8134-b4b8b130e0fe" stretchType="RelativeToBandHeight" x="383" y="0" width="40" height="12"/>
@@ -321,7 +301,7 @@
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{studentType} == null || $F{studentType}.getName() == null ? "" : $F{studentType}.getName())]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{studentType}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="3e72c5ae-a131-4ab6-bc2f-a904c7fed129" stretchType="RelativeToBandHeight" x="254" y="2" width="131" height="32"/>

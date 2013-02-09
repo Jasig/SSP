@@ -203,7 +203,7 @@ public class PersonEarlyAlertController extends
 		final Person person = personService.get(personId);
 		final PagingWrapper<EarlyAlert> data = getService().getAllForPerson(
 				person,
-				SortingAndPaging.createForSingleSort(status, start,
+				SortingAndPaging.createForSingleSortWithPaging(status, start,
 						limit, sort, sortDirection, "createdDate"));
 
 		return new PagedResponse<EarlyAlertTO>(true, data.getResults(),

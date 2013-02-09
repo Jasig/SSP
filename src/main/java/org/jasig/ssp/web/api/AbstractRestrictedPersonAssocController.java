@@ -95,7 +95,7 @@ public abstract class AbstractRestrictedPersonAssocController<T extends Restrict
 		final Person person = personService.get(personId);
 		final PagingWrapper<T> data = getService().getAllForPerson(
 				person, requestor,
-				SortingAndPaging.createForSingleSort(status, start,
+				SortingAndPaging.createForSingleSortWithPaging(status, start,
 						limit, sort, sortDirection, null));
 
 		return new PagedResponse<TO>(true, data.getResults(), getFactory()

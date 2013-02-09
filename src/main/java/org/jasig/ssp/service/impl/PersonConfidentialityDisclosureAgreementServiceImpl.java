@@ -88,7 +88,7 @@ public class PersonConfidentialityDisclosureAgreementServiceImpl
 			throws ObjectNotFoundException {
 		final Collection<ConfidentialityDisclosureAgreement> agreements = cdaDao
 				.getAll(SortingAndPaging
-						.createForSingleSort(ObjectStatus.ACTIVE, 0, 1,
+						.createForSingleSortWithPaging(ObjectStatus.ACTIVE, 0, 1,
 								"modifiedDate", "DESC", null)).getRows();
 
 		if ((agreements != null) && !agreements.isEmpty()) {

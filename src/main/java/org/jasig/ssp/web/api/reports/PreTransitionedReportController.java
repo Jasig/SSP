@@ -20,6 +20,7 @@ package org.jasig.ssp.web.api.reports; // NOPMD
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -41,8 +42,10 @@ import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
+import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.PersonReportTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,7 +149,7 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 				programStatusService, 
 				null);
 		
-		SearchParameters.addAnticipatedAndRegistrationTerms(anticipatedStartTerm, 
+		SearchParameters.addAnticipatedAndActualStartTerms(anticipatedStartTerm, 
 				anticipatedStartYear, 
 				null, 
 				null, 
@@ -156,16 +159,22 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
-		final List<Person> people = personService.peopleFromCriteria(
-				personSearchForm, SortingAndPaging.createForSingleSort(status, null,
-						null, null, null, null));
+		/*final List<Person> people = personService.peopleFromCriteria(
+				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
 		
 		Collections.sort(people, Person.PERSON_NAME_AND_ID_COMPARATOR);
 		
-		final List<PersonReportTO> peopleReportTOList = PersonReportTO.toPersonTOList(people);
+		final List<PersonReportTO> peopleReportTOList = PersonReportTO.toPersonTOList(people);*/
+		
+		final PagingWrapper<BaseStudentReportTO> people = personService.getStudentReportTOsFromCriteria(
+				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
+		
+		ArrayList<BaseStudentReportTO> report = new ArrayList<BaseStudentReportTO>(people.getRows());
+		//Collections.sort(people, Person.PERSON_NAME_AND_ID_COMPARATOR);
+		
+		SearchParameters.addStudentCount(report, parameters);
 
-		SearchParameters.addReportDateToMap(parameters);
-		generateReport(response, parameters, peopleReportTOList, REPORT_URL, reportType, REPORT_FILE_TITLE);
+		generateReport(response, parameters, report, REPORT_URL, reportType, REPORT_FILE_TITLE);
 
 	}
 

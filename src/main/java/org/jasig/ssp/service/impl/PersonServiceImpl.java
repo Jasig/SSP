@@ -36,6 +36,7 @@ import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.ExternalPerson;
+import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.security.PersonAttributesResult;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -45,6 +46,8 @@ import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
+import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
+import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -454,11 +457,11 @@ public class PersonServiceImpl implements PersonService {
 	 */
 	@Override
 	public List<Person> peopleFromCriteria(
-			final PersonSearchFormTO addressLabelSearchTO,
+			final PersonSearchFormTO personSearchFormTO,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 
 		final List<Person> people = dao.getPeopleByCriteria(
-				addressLabelSearchTO,
+				personSearchFormTO,
 				sAndP);
 		additionalAttribsForStudents(people);
 		return people;
@@ -682,10 +685,32 @@ public class PersonServiceImpl implements PersonService {
 
 		return people;
 	}
+	
+	private Iterable<BaseStudentReportTO> additionalAttribsForStudentReportTOs(
+			final Iterable<BaseStudentReportTO> people) throws ObjectNotFoundException {
+		if (people == null) {
+			return null;
+		}
+
+		for (final BaseStudentReportTO person : people) {
+			additionalAttribsForStudentReportTO(person);
+		}
+
+		return people;
+	}
 
 	private Person additionalAttribsForStudent(final Person person) {
 		registrationStatusByTermService
 				.applyRegistrationStatusForCurrentTerm(person);
+		return person;
+	}
+	
+	private BaseStudentReportTO additionalAttribsForStudentReportTO(final BaseStudentReportTO person)
+			throws ObjectNotFoundException {
+		RegistrationStatusByTerm termStatus = registrationStatusByTermService
+				.getForCurrentTerm(person.getSchoolId());
+		if(termStatus != null)
+			person.setRegistrationStatus(termStatus.getRegisteredCourseCount());
 		return person;
 	}
 
@@ -693,5 +718,26 @@ public class PersonServiceImpl implements PersonService {
 	public void setPersonAttributesService(
 			final PersonAttributesService personAttributesService) {
 		this.personAttributesService = personAttributesService;
+	}
+	
+	@Override
+	public PagingWrapper<DisabilityServicesReportTO> getDisabilityReport(PersonSearchFormTO form,
+			final SortingAndPaging sAndP) throws ObjectNotFoundException{
+		return dao.getDisabilityReport(form, sAndP);
+	}
+	
+	/**
+	 * Used for Specific Report "Address Labels"
+	 */
+	@Override
+	public PagingWrapper<BaseStudentReportTO> getStudentReportTOsFromCriteria(
+			final PersonSearchFormTO personSearchFormTO,
+			final SortingAndPaging sAndP) throws ObjectNotFoundException {
+
+		final PagingWrapper<BaseStudentReportTO> people = dao.getStudentReportTOs(
+				personSearchFormTO,
+				sAndP);
+		additionalAttribsForStudentReportTOs(people);
+		return people;
 	}
 }

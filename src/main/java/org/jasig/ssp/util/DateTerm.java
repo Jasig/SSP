@@ -11,7 +11,7 @@ import org.jasig.ssp.service.external.TermService;
  * Use this class to determine Date Range Given dates or termcode
  */
 public class DateTerm {
-	final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	final SimpleDateFormat sdf = new SimpleDateFormat("MMM-dd-yyyy");
 	Term term;
 	Date startDate;
 	Date endDate;

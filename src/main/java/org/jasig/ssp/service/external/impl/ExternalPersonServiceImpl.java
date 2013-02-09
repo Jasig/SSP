@@ -102,7 +102,7 @@ public class ExternalPersonServiceImpl
 				"BEGIN : Person and ExternalPerson Sync.  Selecting {} records starting at {}",
 				BATCH_SIZE_FOR_PERSON_, lastRecord);
 
-		final SortingAndPaging sAndP = SortingAndPaging.createForSingleSort(
+		final SortingAndPaging sAndP = SortingAndPaging.createForSingleSortWithPaging(
 				ObjectStatus.ACTIVE, lastRecord, BATCH_SIZE_FOR_PERSON_,
 				"username",
 				SortDirection.ASC.toString(), null);
@@ -141,7 +141,7 @@ public class ExternalPersonServiceImpl
 
 		// fetch external people by schoolId
 		final PagingWrapper<ExternalPerson> externalPeople =
-				dao.getBySchoolIds(internalPeopleSchoolIds,SortingAndPaging.createForSingleSort(
+				dao.getBySchoolIds(internalPeopleSchoolIds,SortingAndPaging.createForSingleSortWithPaging(
 						ObjectStatus.ACTIVE, 0, BATCH_SIZE_FOR_PERSON_,
 						"username",
 						SortDirection.ASC.toString(), null));

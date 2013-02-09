@@ -91,7 +91,7 @@ public class PersonSearchController extends AbstractBaseController {
 		final PagingWrapper<PersonSearchResult> results = service.searchBy(
 				programStatus, requireProgramStatus, outsideCaseload, searchTerm,
 				securityService.currentUser().getPerson(),
-				SortingAndPaging.createForSingleSort(status, start, limit,
+				SortingAndPaging.createForSingleSortWithPaging(status, start, limit,
 						sort, sortDirection, null));
 
 		return new PagedResponse<PersonSearchResultTO>(true,
