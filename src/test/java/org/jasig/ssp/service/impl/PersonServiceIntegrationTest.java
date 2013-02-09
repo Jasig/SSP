@@ -86,7 +86,7 @@ public class PersonServiceIntegrationTest {
 		final Collection<Person> listAll = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		final Collection<Person> listFiltered = service.getAll(
-				SortingAndPaging.createForSingleSort(ObjectStatus.ACTIVE, 1, 2,
+				SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ACTIVE, 1, 2,
 						null, null, null)).getRows();
 
 		assertNotNull("List should not have been null.", listAll);

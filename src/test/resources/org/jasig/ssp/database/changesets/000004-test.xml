@@ -32,7 +32,6 @@
 		<insert tableName="confidentiality_level">
 			<column name="id" value="afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c" />
 			<column name="name" value="Test Confidentiality Level" />
-			<column name="permission" value="DATA_TEST" />
 			<column name="description" value="This is the description of the Test Confidentiality Level." />
 			<column name="created_date" valueDate="2012-03-20T00:00:00" />
 			<column name="modified_date" valueDate="2012-03-20T00:00:00" />

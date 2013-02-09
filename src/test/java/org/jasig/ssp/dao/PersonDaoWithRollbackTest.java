@@ -79,7 +79,7 @@ public class PersonDaoWithRollbackTest {
 		Iterator<Person> resultIterator = results.getRows().iterator();
 		assertEquals(kevinSmith, resultIterator.next());
 		assertEquals(advisor0, resultIterator.next());
-		assertEquals(2, results.getResults());
+		assertEquals(3, results.getResults());
 	}
 
 	private void saveAndFlush(Person... persons) throws ObjectNotFoundException {

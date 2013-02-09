@@ -30,7 +30,7 @@
 		<insert tableName="person">
 			<column name="id" value="252de4a0-7c06-4254-b7d8-4ffc02fe81ff" />
 			<column name="first_name" value="Alan" />
-			<column name="middle_name" value="M" />
+			<column name="middle_initial" value="M" />
 			<column name="last_name" value="Turing" />
 			<column name="primary_email_address" value="test@sinclair.edu" />
 			<column name="secondary_email_address" value="test@sinclair.edu" />
@@ -52,7 +52,7 @@
 		<insert tableName="person">
 			<column name="id" value="7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194" />
 			<column name="first_name" value="Dennis" />
-			<column name="middle_name" value="M" />
+			<column name="middle_initial" value="M" />
 			<column name="last_name" value="Ritchie" />
 			<column name="primary_email_address" value="test@sinclair.edu" />
 			<column name="secondary_email_address" value="test@sinclair.edu" />
@@ -74,7 +74,7 @@
 		<insert tableName="person">
 			<column name="id" value="f549ecab-5110-4cc1-b2bb-369cac854dea" />
 			<column name="first_name" value="Kenneth" />
-			<column name="middle_name" value="L" />
+			<column name="middle_initial" value="L" />
 			<column name="last_name" value="Thompson" />
 			<column name="primary_email_address" value="test@sinclair.edu" />
 			<column name="secondary_email_address" value="test@sinclair.edu" />
@@ -96,7 +96,7 @@
 		<insert tableName="person">
 			<column name="id" value="1010e4a0-1001-0110-1011-4ffc02fe81ff" />
 			<column name="first_name" value="James" />
-			<column name="middle_name" value="A" />
+			<column name="middle_initial" value="A" />
 			<column name="last_name" value="Gosling" />
 			<column name="primary_email_address" value="test@sinclair.edu" />
 			<column name="secondary_email_address" value="test@sinclair.edu" />

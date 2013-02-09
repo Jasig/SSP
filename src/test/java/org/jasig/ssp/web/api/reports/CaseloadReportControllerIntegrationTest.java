@@ -47,19 +47,14 @@ public class CaseloadReportControllerIntegrationTest
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		controller.getCaseLoad(response, null, "csv");
 
-		// "body" is the actual results and the header that describes its columns.
-		// This is as opposed to rows which precede the header, which describe
-		// the filtering criteria
+		/// TODO Eliminate Spaces in Report TO Remove Extra commas
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add(",FIRST,,LAST,DEPARTMENT,TOTAL COUNT,,,ACTIVE COUNT,,A,,IA,,T,,NP,,NS");
-		expectedReportBodyLines.add(",Alan,,Turing,Not Available Yet,2,,,2,,2,,0,,0,,0,,0");
-		// not sure why totals render this way, but they do... csv formatting
-		// needs to be fixed up
-		expectedReportBodyLines.add(",,,,,,,2,,,,,,,,,,,");
-		expectedReportBodyLines.add(",,,,,,,,,2,,0,,0,,0,,0,");
-		expectedReportBodyLines.add(",TOTAL:,,,,2,,,,,,,,,,,,,");
+		expectedReportBodyLines.add("FIRST,LAST,,DEPARTMENT,,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
+		expectedReportBodyLines.add("Alan,Turing,,Not Available Yet,,2,2,2,0,0,0,0");
+		expectedReportBodyLines.add("test,coach1,,Not Available Yet,,5,1,1,1,1,1,1");
+		expectedReportBodyLines.add("TOTAL:,,,,,7,3,3,1,1,1,1");
 
-		expectReportBodyLines(expectedReportBodyLines, response, afterHeader());
+		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 
 	@Test
@@ -76,16 +71,15 @@ public class CaseloadReportControllerIntegrationTest
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add(",FIRST,,LAST,DEPARTMENT,TOTAL COUNT,,,ACTIVE COUNT,,A,,IA,,T,,NP,,NS");
-		expectedReportBodyLines.add(",Kevin,,Smith,Not Available Yet,0,,,0,,0,,0,,0,,0,,0");
-		expectedReportBodyLines.add(",Alan,,Turing,Not Available Yet,2,,,2,,2,,0,,0,,0,,0");
-		// not sure why totals render this way, but they do... csv formatting
-		// needs to be fixed up
-		expectedReportBodyLines.add(",,,,,,,2,,,,,,,,,,,");
-		expectedReportBodyLines.add(",,,,,,,,,2,,0,,0,,0,,0,");
-		expectedReportBodyLines.add(",TOTAL:,,,,2,,,,,,,,,,,,,");
+		/// TODO Eliminate Spaces in Report TO Remove Extra commas
+		expectedReportBodyLines.add("FIRST,LAST,,DEPARTMENT,,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
+		expectedReportBodyLines.add("Kevin,Smith,,Not Available Yet,,0,0,0,0,0,0,0");
+		expectedReportBodyLines.add("Alan,Turing,,Not Available Yet,,2,2,2,0,0,0,0");
+		expectedReportBodyLines.add("test,coach1,,Not Available Yet,,5,1,1,1,1,1,1");
+		expectedReportBodyLines.add("TOTAL:,,,,,7,3,3,1,1,1,1");
 
-		expectReportBodyLines(expectedReportBodyLines, response, afterHeader());
+
+		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 
 	@Test
@@ -117,16 +111,14 @@ public class CaseloadReportControllerIntegrationTest
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add(",FIRST,,LAST,DEPARTMENT,TOTAL COUNT,,,ACTIVE COUNT,,A,,IA,,T,,NP,,NS");
-		expectedReportBodyLines.add(",Kevin,,Smith,Not Available Yet,1,,,1,,1,,0,,0,,0,,0");
-		expectedReportBodyLines.add(",Alan,,Turing,Not Available Yet,2,,,2,,2,,0,,0,,0,,0");
-		// not sure why totals render this way, but they do... csv formatting
-		// needs to be fixed up
-		expectedReportBodyLines.add(",,,,,,,3,,,,,,,,,,,");
-		expectedReportBodyLines.add(",,,,,,,,,3,,0,,0,,0,,0,");
-		expectedReportBodyLines.add(",TOTAL:,,,,3,,,,,,,,,,,,,");
+		/// TODO Eliminate Spaces in Report TO Remove Extra commas
+		expectedReportBodyLines.add("FIRST,LAST,,DEPARTMENT,,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
+		expectedReportBodyLines.add("Kevin,Smith,,Not Available Yet,,1,1,1,0,0,0,0");
+		expectedReportBodyLines.add("Alan,Turing,,Not Available Yet,,2,2,2,0,0,0,0");
+		expectedReportBodyLines.add("test,coach1,,Not Available Yet,,5,1,1,1,1,1,1");
+		expectedReportBodyLines.add("TOTAL:,,,,,8,4,4,1,1,1,1");
 
-		expectReportBodyLines(expectedReportBodyLines, response, afterHeader());
+		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 
 	/**
@@ -161,16 +153,14 @@ public class CaseloadReportControllerIntegrationTest
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add(",FIRST,,LAST,DEPARTMENT,TOTAL COUNT,,,ACTIVE COUNT,,A,,IA,,T,,NP,,NS");
-		expectedReportBodyLines.add(",Kevin,,Smith,Not Available Yet,1,,,1,,1,,0,,0,,0,,0");
-		expectedReportBodyLines.add(",Alan,,Turing,Not Available Yet,2,,,2,,2,,0,,0,,0,,0");
-		// not sure why totals render this way, but they do... csv formatting
-		// needs to be fixed up
-		expectedReportBodyLines.add(",,,,,,,3,,,,,,,,,,,");
-		expectedReportBodyLines.add(",,,,,,,,,3,,0,,0,,0,,0,");
-		expectedReportBodyLines.add(",TOTAL:,,,,3,,,,,,,,,,,,,");
+		/// TODO Eliminate Spaces in Report TO Remove Extra commas
+		expectedReportBodyLines.add("FIRST,LAST,,DEPARTMENT,,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
+		expectedReportBodyLines.add("Kevin,Smith,,Not Available Yet,,1,1,1,0,0,0,0");
+		expectedReportBodyLines.add("Alan,Turing,,Not Available Yet,,2,2,2,0,0,0,0");
+		expectedReportBodyLines.add("test,coach1,,Not Available Yet,,5,1,1,1,1,1,1");
+		expectedReportBodyLines.add("TOTAL:,,,,,8,4,4,1,1,1,1");
 
-		expectReportBodyLines(expectedReportBodyLines, response, afterHeader());
+		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 
 	@Override

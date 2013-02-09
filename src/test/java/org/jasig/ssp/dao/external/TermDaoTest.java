@@ -69,6 +69,6 @@ public class TermDaoTest {
 	@Test
 	public void getCurrentTerm() throws ObjectNotFoundException {
 		final Term term = dao.getCurrentTerm();
-		assertEquals("expected Fall2012", "FA12", term.getCode());
+		assertEquals("expected Fall2012", "SP13", term.getCode());//May want to rethink this
 	}
 }

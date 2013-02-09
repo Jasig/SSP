@@ -68,6 +68,7 @@ public class Stubs {
 		KEN ( "f549ecab-5110-4cc1-b2bb-369cac854dea", "ken", "ken.1", "Kenneth", "L", "Thompson", null, "test@sinclair.edu", "123-456-7654" ),
 		KEVIN_SMITH ( "f26d8f23-df20-40f1-bc98-83111be4a52a", "kevin.smith", "uu112233", "Kevin", null, "Smith", null, "ksmith12@university.edu", "123-456-7654" ),
 		ADVISOR_0 ( "252de4a0-7c06-4254-b7d8-4ffc02fe81ff", "advisor0", "turing.1", "Alan", "M", "Turing", null, "test@sinclair.edu", "123-456-7654" ),
+		COACH_1 ("47ccb6cd-9d7c-49ce-852d-9422aea5f9f3", "coach1", "coach1", "test", "Mumford", "coach1", null, "coach1@unicon.net", "480-775-7894"),
 		MARK_GALAFRION ( "8005ad07-9111-457d-9896-f15a0dc8bbfb", "mark.galafrion", "uu358123", "Mark", null, "Galafrion", null, "mark.g@university.edu", null),
 		BOB_REYNOLDS ( "a5a23d8a-f0d3-4ef6-9a75-21f3775bac0f", "bob.reynolds", "uu462875", "Bob", null, "Reynolds", null, "bob1@university.edu", null),
 		FACULTY_0 ( "5eceefd1-257c-421f-99bf-a3622815bfee", "faculty0", "uf928711", "Douglas", null, "Toya", null, "douglas.toya@sinclair.edu", null),

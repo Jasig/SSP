@@ -38,6 +38,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.util.service.stub.StubPersonAttributesService;
 import org.jasig.ssp.util.service.stub.Stubs;
+import org.jasig.ssp.util.service.stub.Stubs.PersonFixture;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.junit.After;
 import org.junit.Before;
@@ -56,6 +57,7 @@ import com.google.common.collect.Sets;
 import static org.hamcrest.Matchers.array;
 import static org.jasig.ssp.util.service.stub.Stubs.PersonFixture.ADVISOR_0;
 import static org.jasig.ssp.util.service.stub.Stubs.PersonFixture.JAMES_DOE;
+import static org.jasig.ssp.util.service.stub.Stubs.PersonFixture.COACH_1;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -103,7 +105,7 @@ public class PersonServiceBulkCoachLookupIntegrationTest {
 	public void testGetAllAssignedCoachesLite() {
 
 		final Collection<CoachPersonLiteTO> expected =
-				Lists.newArrayList(coachPersonLiteTOFor(ADVISOR_0));
+				Lists.newArrayList(coachPersonLiteTOFor(ADVISOR_0), coachPersonLiteTOFor(COACH_1));
 
 		final PagingWrapper<CoachPersonLiteTO> result1 =
 				personService.getAllAssignedCoachesLite(null);
@@ -143,7 +145,7 @@ public class PersonServiceBulkCoachLookupIntegrationTest {
 		// basically the same as testGetAllAssignedCoachesLite() except
 		// we expect Persons instead
 		final Collection<UUID> expected =
-				Lists.newArrayList(ADVISOR_0.id());
+				Lists.newArrayList(ADVISOR_0.id(), COACH_1.id());
 
 		final PagingWrapper<Person> result1 =
 				personService.getAllAssignedCoaches(null);
@@ -175,7 +177,7 @@ public class PersonServiceBulkCoachLookupIntegrationTest {
 	public void testGetAllCurrentCoachesLite() throws ObjectNotFoundException {
 
 		final Collection<CoachPersonLiteTO> expected =
-				Lists.newArrayList(coachPersonLiteTOFor(ADVISOR_0));
+				Lists.newArrayList(coachPersonLiteTOFor(ADVISOR_0), coachPersonLiteTOFor(COACH_1));
 
 		final SortedSet<CoachPersonLiteTO> result1 =
 				personService.getAllCurrentCoachesLite(null);
@@ -204,7 +206,7 @@ public class PersonServiceBulkCoachLookupIntegrationTest {
 				personService.getAllCurrentCoaches(null);
 
 		assertPersonCollectionsHaveSameIds(
-				Lists.newArrayList(ADVISOR_0.id()),
+				Lists.newArrayList(ADVISOR_0.id(),COACH_1.id()),
 				result1);
 
 		final Set<String> newExternalCoachUsernames =
@@ -217,7 +219,8 @@ public class PersonServiceBulkCoachLookupIntegrationTest {
 				Lists.newArrayList(
 						personService.personFromUsername("bulk_coach_001").getId(),
 						personService.personFromUsername("bulk_coach_002").getId(),
-						ADVISOR_0.id()),
+						ADVISOR_0.id(),
+						COACH_1.id()),
 				result2);
 	}
 
@@ -232,7 +235,7 @@ public class PersonServiceBulkCoachLookupIntegrationTest {
 
 		final SortedSet<CoachPersonLiteTO> result =
 				personService.getAllCurrentCoachesLite(null);
-		assertEquals(1, result.size());
+		assertEquals(2, result.size());
 	}
 
 	@Test
@@ -246,7 +249,7 @@ public class PersonServiceBulkCoachLookupIntegrationTest {
 
 		final SortedSet<Person> result =
 				personService.getAllCurrentCoaches(null);
-		assertEquals(1, result.size());
+		assertEquals(2, result.size());
 	}
 
 	@Test
@@ -271,7 +274,7 @@ public class PersonServiceBulkCoachLookupIntegrationTest {
 
 		final SortedSet<CoachPersonLiteTO> result =
 				personService.getAllCurrentCoachesLite(null);
-		assertEquals(2, result.size());
+		assertEquals(3, result.size());
 	}
 
 	@Test
@@ -296,7 +299,7 @@ public class PersonServiceBulkCoachLookupIntegrationTest {
 
 		final SortedSet<Person> result =
 				personService.getAllCurrentCoaches(null);
-		assertEquals(2, result.size());
+		assertEquals(3, result.size());
 	}
 
 	/**

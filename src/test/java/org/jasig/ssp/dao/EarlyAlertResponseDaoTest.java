@@ -38,7 +38,6 @@ import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.EarlyAlertOutreach;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -46,8 +45,8 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
@@ -276,7 +275,7 @@ public class EarlyAlertResponseDaoTest {
 	@Test
 	public void getByEarlyAlertReferralIdTest() throws ObjectNotFoundException {
 		// TODO
-		AddressLabelSearchTO addressLabelSearchTO = new AddressLabelSearchTO(null, null, null, null, null, null, null, null, null);
+		PersonSearchFormTO addressLabelSearchTO = new PersonSearchFormTO(null, null, null, null, null, null, null, null, null);
 		dao.getPeopleByEarlyAlertReferralIds(EARLY_ALERT_REFERRAL_IDS, null, null, addressLabelSearchTO, new SortingAndPaging(ObjectStatus.ALL, 1, 2, null, "lastName",
 				SortDirection.ASC));
 		assertEquals("Should be equal to 1.", 1,1);

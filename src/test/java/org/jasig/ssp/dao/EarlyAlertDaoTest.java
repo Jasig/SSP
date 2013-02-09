@@ -28,7 +28,6 @@ import static org.junit.Assert.fail;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -43,11 +42,10 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.CampusService;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -395,7 +393,7 @@ public class EarlyAlertDaoTest {
 		sessionFactory.getCurrentSession().flush();
 
 
-		final AddressLabelSearchTO addressLabelSearchTO = new AddressLabelSearchTO(
+		final PersonSearchFormTO addressLabelSearchTO = new PersonSearchFormTO(
 				null,
 				null, null, null, null, null,
 				null, null,
@@ -406,7 +404,7 @@ public class EarlyAlertDaoTest {
 
 		try {
 			final PagingWrapper<EarlyAlertStudentReportTO> result = dao.getStudentsEarlyAlertCountSetForCritera(searchForm, null);
-			assertEquals("Count of Students was not expected.", 2,
+			assertEquals("Count of Students was not expected.", 1,
 					result.getRows().size());
 		} finally {
 			dao.delete(saved);

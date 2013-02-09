@@ -46,7 +46,7 @@ public class CaseloadActivityReportControllerIntegrationTest
 	public void testDefaultDataSet()
 			throws ObjectNotFoundException, IOException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoadActivity(response, null, null, null, null, "csv");
+		controller.getCaseLoadActivity(response, null, null, null, null, null,  "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
@@ -54,12 +54,12 @@ public class CaseloadActivityReportControllerIntegrationTest
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		// not sure why lines render this way, but they do... csv formatting
 		// needs to be fixed up
-		expectedReportBodyLines.add(",FIRST,,LAST,,,,,,,,,,");
-		expectedReportBodyLines.add(",,,,,,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
-		expectedReportBodyLines.add(",,,,,,,,,0,,,,");
-		expectedReportBodyLines.add(",Alan,,Turing,,,0,0,,,0,0,0,0");
+		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
+		expectedReportBodyLines.add("Alan,Turing,0,0,,0,0,0,0,0");
+		expectedReportBodyLines.add("test,coach1,10,4,,10,4,15,5,17");
+		expectedReportBodyLines.add(",,10,,4,10,4,15,5,17");
 
-		expectReportBodyLines(expectedReportBodyLines, response, afterHeader());
+		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 
 	@Test
@@ -70,22 +70,21 @@ public class CaseloadActivityReportControllerIntegrationTest
 				.add(Stubs.PersonFixture.KEVIN_SMITH.username());
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoadActivity(response, null, null, null, null, "csv");
+		controller.getCaseLoadActivity(response, null, null, null, null, null,  "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		// not sure why lines render this way, but they do... csv formatting
-		// needs to be fixed up
-		expectedReportBodyLines.add(",FIRST,,LAST,,,,,,,,,,");
-		expectedReportBodyLines.add(",,,,,,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
-		expectedReportBodyLines.add(",,,,,,,,,0,,,,");
-		expectedReportBodyLines.add(",Kevin,,Smith,,,0,0,,,0,0,0,0");
-		expectedReportBodyLines.add(",,,,,,,,,0,,,,");
-		expectedReportBodyLines.add(",Alan,,Turing,,,0,0,,,0,0,0,0");
+		
+		/// TODO Eliminate Spaces in Report TO Remove Extra commas
+		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
+		expectedReportBodyLines.add("Kevin,Smith,0,0,,0,0,0,0,0");
+		expectedReportBodyLines.add("Alan,Turing,0,0,,0,0,0,0,0");
+		expectedReportBodyLines.add("test,coach1,10,4,,10,4,15,5,17");
+		expectedReportBodyLines.add(",,10,,4,10,4,15,5,17");
 
-		expectReportBodyLines(expectedReportBodyLines, response, afterHeader());
+		expectReportBodyLines(expectedReportBodyLines, response, null);
 
 	}
 
@@ -108,22 +107,20 @@ public class CaseloadActivityReportControllerIntegrationTest
 		sessionFactory.getCurrentSession().flush();
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoadActivity(response, null, null, null, null, "csv");
+		controller.getCaseLoadActivity(response, null, null, null, null, null,  "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		// not sure why lines render this way, but they do... csv formatting
-		// needs to be fixed up
-		expectedReportBodyLines.add(",FIRST,,LAST,,,,,,,,,,");
-		expectedReportBodyLines.add(",,,,,,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
-		expectedReportBodyLines.add(",,,,,,,,,0,,,,");
-		expectedReportBodyLines.add(",Kevin,,Smith,,,0,0,,,0,0,0,0");
-		expectedReportBodyLines.add(",,,,,,,,,0,,,,");
-		expectedReportBodyLines.add(",Alan,,Turing,,,0,0,,,0,0,0,0");
+		/// TODO Eliminate Spaces in Report TO Remove Extra commas
+		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
+		expectedReportBodyLines.add("Kevin,Smith,0,0,,0,0,0,0,0");
+		expectedReportBodyLines.add("Alan,Turing,0,0,,0,0,0,0,0");
+		expectedReportBodyLines.add("test,coach1,10,4,,10,4,15,5,17");
+		expectedReportBodyLines.add(",,10,,4,10,4,15,5,17");
 
-		expectReportBodyLines(expectedReportBodyLines, response, afterHeader());
+		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 
 	@Test
@@ -160,22 +157,20 @@ public class CaseloadActivityReportControllerIntegrationTest
 		sessionFactory.getCurrentSession().flush();
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoadActivity(response, null, null, null, null, "csv");
+		controller.getCaseLoadActivity(response, null, null, null, null, null, "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		// not sure why lines render this way, but they do... csv formatting
-		// needs to be fixed up
-		expectedReportBodyLines.add(",FIRST,,LAST,,,,,,,,,,");
-		expectedReportBodyLines.add(",,,,,,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
-		expectedReportBodyLines.add(",,,,,,,,,0,,,,");
-		expectedReportBodyLines.add(",Kevin,,Smith,,,0,0,,,0,1,1,0");
-		expectedReportBodyLines.add(",,,,,,,,,0,,,,");
-		expectedReportBodyLines.add(",Alan,,Turing,,,0,0,,,0,0,0,0");
+		/// TODO Eliminate Spaces in Report TO Remove Extra commas
+		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
+		expectedReportBodyLines.add("Kevin,Smith,0,0,,0,0,1,1,0");
+		expectedReportBodyLines.add("Alan,Turing,0,0,,0,0,0,0,0");
+		expectedReportBodyLines.add("test,coach1,10,4,,10,4,15,5,17");
+		expectedReportBodyLines.add(",,10,,4,10,4,16,6,17");
 
-		expectReportBodyLines(expectedReportBodyLines, response, afterHeader());
+		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 
 	@Override

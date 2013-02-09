@@ -105,6 +105,8 @@ public abstract class AbstractReportControllerIntegrationTest {
 		final LineIterator lineIterator =
 				IOUtils.lineIterator(new CharSequenceReader(csvReport));
 		boolean accumulatingActualBodyLines = false;
+		if(firstBodyRowRule == null)
+			accumulatingActualBodyLines = true;
 		while ( lineIterator.hasNext() ) {
 			String line = lineIterator.next();
 			if ( accumulatingActualBodyLines || firstBodyRowRule.apply(line) ) {

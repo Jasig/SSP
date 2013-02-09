@@ -45,18 +45,20 @@ public class AddressLabelsReportControllerIntegrationTest
 			throws IOException, ObjectNotFoundException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		controller.getAddressLabels(response, null, null, null, null, null,
-				null, null, null, null, null, "csv");
+				null, null, null, null, null, null, "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add("FIRST,,,MIDDLE,LAST,,,Student ,TYP,Address,,CITY,ST,PHONE(H),EMAIL(SCHOOL),EMAIL(HOME)");
-		expectedReportBodyLines.add("James,,,A,Gosling,,,,ILP,444 West Third Street ,,San Francisco,CA,908-123-4567,test@sinclair.edu,test@sinclair.edu");
-		expectedReportBodyLines.add("Dennis,,,M,Ritchie,,,,CAP,444 West Third Street ,,Berkeley Heights,NJ,908-123-4567,test@sinclair.edu,test@sinclair.edu");
-		expectedReportBodyLines.add("Kenneth,,,L,Thompson,,,,CAP,444 West Third Street ,,Murray Hill,NJ,908-123-4567,test@sinclair.edu,test@sinclair.edu");
+		expectedReportBodyLines.add("FIRST,MIDDLE,LAST, ID,TYPE,ADDRESS,CITY,ST,PHONE(H),EMAIL(SCHOOL),EMAIL(HOME)");
+		expectedReportBodyLines.add("James,A,Gosling,student0,ILP,444 West Third Street ,San Francisco,CA,908-123-4567,test@sinclair.edu,test@sinclair.edu");
+		expectedReportBodyLines.add("Kenneth,L,Thompson,ken.1,CAP,444 West Third Street ,Murray Hill,NJ,908-123-4567,test@sinclair.edu,test@sinclair.edu");
+		expectedReportBodyLines.add("test,Mumford,coach1student0,coach1student0,ILP,0 house on the corner ,Mesa,AZ,480-775-2345,coach1student0@unicon.net,coach1student0@unicon.net");
+		expectedReportBodyLines.add("test,Mumford,coach1student1,coach1student1,CAP,1 house on the corner ,Mesa,AZ,480-775-2345,coach1student1@unicon.net,coach1student1@unicon.net");
+		expectedReportBodyLines.add("test,Mumford,coach1student4,coach1student4,CAP,4 house on the corner ,Mesa,AZ,480-775-2345,coach1student4@unicon.net,coach1student4@unicon.net");
 
-		expectReportBodyLines(expectedReportBodyLines, response, afterHeader());
+		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 
 	@Test
@@ -76,7 +78,7 @@ public class AddressLabelsReportControllerIntegrationTest
 		// in our standard fixture
 		final UUID coachId = Stubs.PersonFixture.ADVISOR_0.id();
 		controller.getAddressLabels(response, null, coachId, null, null, null,
-				null, null, null, null, null, "csv");
+				null, null, null, null, null, null, "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
@@ -84,11 +86,11 @@ public class AddressLabelsReportControllerIntegrationTest
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		// same as in testGetAddressLabelsReturnsAllStudentsIfNoFiltersSet(), but
 		// Dennis Ritchie is missing
-		expectedReportBodyLines.add("FIRST,,,MIDDLE,LAST,,,Student ,TYP,Address,,CITY,ST,PHONE(H),EMAIL(SCHOOL),EMAIL(HOME)");
-		expectedReportBodyLines.add("James,,,A,Gosling,,,,ILP,444 West Third Street ,,San Francisco,CA,908-123-4567,test@sinclair.edu,test@sinclair.edu");
-		expectedReportBodyLines.add("Kenneth,,,L,Thompson,,,,CAP,444 West Third Street ,,Murray Hill,NJ,908-123-4567,test@sinclair.edu,test@sinclair.edu");
+		expectedReportBodyLines.add("FIRST,MIDDLE,LAST, ID,TYPE,ADDRESS,CITY,ST,PHONE(H),EMAIL(SCHOOL),EMAIL(HOME)");
+		expectedReportBodyLines.add("James,A,Gosling,student0,ILP,444 West Third Street ,San Francisco,CA,908-123-4567,test@sinclair.edu,test@sinclair.edu");
+		expectedReportBodyLines.add("Kenneth,L,Thompson,ken.1,CAP,444 West Third Street ,Murray Hill,NJ,908-123-4567,test@sinclair.edu,test@sinclair.edu");
 
-		expectReportBodyLines(expectedReportBodyLines, response, afterHeader());
+		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 
 	@Override

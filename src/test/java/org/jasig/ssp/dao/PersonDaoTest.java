@@ -36,7 +36,6 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
-import org.jasig.ssp.transferobject.reports.AddressLabelSearchTO;
 import org.jasig.ssp.util.service.stub.Stubs;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
@@ -246,6 +245,6 @@ public class PersonDaoTest { // NOPMD Test suites love lots of methods!
 		PagingWrapper<Person> results = dao.getAllAssignedCoaches(
 				new SortingAndPaging(ObjectStatus.ALL, 0, 10, null, null, null));
 		assertEquals(advisor0, results.getRows().iterator().next());
-		assertEquals(1, results.getResults());
+		assertEquals(2, results.getResults()); //Changed because data has been added 2/8/2013 J. Stanley
 	}
 }

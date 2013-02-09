@@ -74,14 +74,14 @@ public class PersonJournalEntryServiceIntegrationTest {
 		final Collection<JournalEntry> listAll = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
 		final Collection<JournalEntry> listFiltered = service.getAll(
-				SortingAndPaging.createForSingleSort(ObjectStatus.ACTIVE, 1, 2,
+				SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ACTIVE, 1, 2,
 						null, null, null)).getRows();
 
 		assertNotNull("List should not have been null.", listAll);
 		assertFalse("List should not have been empty.", listAll.isEmpty());
 
 		assertNotNull("Filtered list should not have been null.", listFiltered);
-		assertEquals("List should have included exactly 0 entities.", 0,
+		assertEquals("List should have included exactly 2 entities.", 2,
 				listFiltered.size());
 
 		assertNotSame(
