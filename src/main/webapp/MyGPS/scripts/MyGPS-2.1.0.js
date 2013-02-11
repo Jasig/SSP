@@ -1295,7 +1295,7 @@
         apprise('E-mail address:', {
           'input': true,
           'validation': function(value) {
-            if (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+            if (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) || value === '') {
               return 'true';
             } else {
               return 'invalid email address';
