@@ -82,13 +82,15 @@ public class PersonDisability // NOPMD
 
 	private Boolean recordsRequested;
 
-	@Column(length = 50)
+	// cannot use "from" in column names. See https://issues.jasig.org/browse/SSP-727
+	@Column(name = "records_requested_contact", length = 50)
 	@Size(max = 50)
 	private String recordsRequestedFrom;
 	
 	private Boolean referForScreening;
 
-	@Column(length = 50)
+	// cannot use "from" in column names. See https://issues.jasig.org/browse/SSP-727
+	@Column(name = "documents_requested_contact", length = 50)
 	@Size(max = 50)
 	private String documentsRequestedFrom;	
 	
