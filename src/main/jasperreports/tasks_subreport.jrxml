@@ -32,8 +32,8 @@
 	</background>
 	<detail>
 		<band height="43" splitType="Stretch">
-			<textField>
-				<reportElement uuid="0555938f-0ca6-44ad-93ea-2818cdcc7270" x="104" y="0" width="321" height="36"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="0555938f-0ca6-44ad-93ea-2818cdcc7270" x="104" y="0" width="321" height="36" />
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{name} + ": " + $F{description}]]></textFieldExpression>
 			</textField>
@@ -43,7 +43,7 @@
 				<textFieldExpression><![CDATA[$F{dueDate}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement uuid="8b92d5ba-6e97-4684-ac32-26fd3eba2a48" x="77" y="36" width="400" height="1"/>
+				<reportElement uuid="8b92d5ba-6e97-4684-ac32-26fd3eba2a48" positionType="Float" x="77" y="36" width="400" height="1"/>
 			</line>
 			<textField>
 				<reportElement uuid="bfe27127-c224-4b6a-b997-d01644e394d6" x="0" y="0" width="77" height="20"/>
