@@ -59,7 +59,7 @@ public class SelfHelpGuideServiceImpl extends
 
 	@Override
 	public PagingWrapper<SelfHelpGuide> getAll(final SortingAndPaging sAndP) {
-		if (securityService.isAuthenticated()) {
+		if (!securityService.anonymousUser().getUsername().equals(securityService.currentUser().getUsername())) {
 			return dao.getAll(sAndP);
 		} else {
 			return new PagingWrapper<SelfHelpGuide>(

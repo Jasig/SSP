@@ -18,6 +18,7 @@
  */
 package org.jasig.mygps.web;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -76,12 +77,10 @@ public class MyGpsSelfHelpGuideController extends AbstractBaseController {
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
 	public @ResponseBody
 	List<SelfHelpGuideTO> getAll() throws Exception {
-		// TODO: MyGPSSelfGuideController.getAll() needs filtered based on
-		// security. Guides with authenticationRequired == true should not show
-		// for the anonymous user.
-		return selfHelpGuideTOFactory.asTOList(selfHelpGuideService
+		Collection<SelfHelpGuide> rows = selfHelpGuideService
 				.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))
-				.getRows());
+				.getRows();
+		return selfHelpGuideTOFactory.asTOList(rows);
 	}
 	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "/getContentById", method = RequestMethod.GET)
