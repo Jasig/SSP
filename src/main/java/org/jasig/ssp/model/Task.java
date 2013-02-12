@@ -79,7 +79,7 @@ public class Task // NOPMD by jon.adams
 
 	@Column(length = 32, updatable = false)
 	private String sessionId;
-
+	@Column
 	private boolean deletable;
 
 	/**
