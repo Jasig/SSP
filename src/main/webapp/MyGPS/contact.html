@@ -74,6 +74,10 @@
 					<p>We are here to help you achieve your goals, address your action plan items, and meet the challenges you have identified.</p>
 					<form>
 						<div data-role="fieldcontain">
+							<label for="coach">Coach:</label>
+							<input readonly name="coach" id="coach" data-bind="value: viewModel.coachName()"></input>
+						</div>
+						<div data-role="fieldcontain">
 						    <label for="subject">Subject:</label>
 						    <input type="text" name="subject" id="subject" data-bind="value: subject" />
 						</div>

@@ -30,10 +30,18 @@ namespace 'mygps.viewmodel'
 				@subject = ko.observable( null )
 				@message = ko.observable( null )
 				@contactingCoach = ko.observable( false )
+				@coachName = ko.dependentObservable( @coachName , this )
+				
 				
 			load: () ->
 				super()
 				return
+			
+			coachName: () ->
+				person = @session.authenticatedPerson().coach()
+				if person?
+					return "#{ person.firstName() } #{ person.lastName() }"
+				return null
 				
 			contactCoach: ( subject, message, callbacks ) ->
 				@contactingCoach( true )

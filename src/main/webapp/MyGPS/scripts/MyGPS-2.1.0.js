@@ -1454,10 +1454,20 @@
         this.subject = ko.observable(null);
         this.message = ko.observable(null);
         this.contactingCoach = ko.observable(false);
+        this.coachName = ko.dependentObservable(this.coachName, this);
       }
 
       ContactViewModel.prototype.load = function() {
         ContactViewModel.__super__.load.call(this);
+      };
+
+      ContactViewModel.prototype.coachName = function() {
+        var person;
+        person = this.session.authenticatedPerson().coach();
+        if (person != null) {
+          return "" + (person.firstName()) + " " + (person.lastName());
+        }
+        return null;
       };
 
       ContactViewModel.prototype.contactCoach = function(subject, message, callbacks) {
