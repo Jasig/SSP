@@ -18,7 +18,7 @@
     under the License.
 
 -->
-<li data-bind="css: { ActionPlanTask: type() == 'ActionPlanTask', CustomActionPlanTask: type() == 'CustomActionPlanTask', SSPActionPlanTask: type() == 'SSPActionPlanTask', deletable: deletable() }">
+<li data-bind="css: { ActionPlanTask: type() == 'ACT', CustomActionPlanTask: type() == 'CUS', SSPActionPlanTask: type() == 'SSP', deletable: deletable() }">
 	<a class="task" href="#" ref="external" data-bind="click: function () { viewModel.markTask( $data, !$data.completed() ) }, css: { 'completed': completed() }">
 		<span class="task-status"></span>
 		<h3 class="task-name" data-bind="text: name"></h3>
