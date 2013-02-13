@@ -27,7 +27,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="84"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="name" class="java.lang.String"/>
 	<parameter name="programStatusName" class="java.lang.String"/>
@@ -55,8 +55,8 @@
 	<field name="schoolId" class="java.lang.String">
 		<fieldDescription><![CDATA[schoolId]]></fieldDescription>
 	</field>
-	<field name="studentType" class="org.jasig.ssp.transferobject.reference.ReferenceLiteTO">
-		<fieldDescription><![CDATA[studentType]]></fieldDescription>
+	<field name="studentTypeNames" class="java.lang.String">
+		<fieldDescription><![CDATA[studentTypeNames]]></fieldDescription>
 	</field>
 	<field name="addressLine1" class="java.lang.String">
 		<fieldDescription><![CDATA[addressLine1]]></fieldDescription>
@@ -87,7 +87,7 @@
 	<field name="coachName" class="java.lang.String">
 		<fieldDescription><![CDATA[coachName]]></fieldDescription>
 	</field>
-	<field name="specialServiceGroupNames" class="java.lang.String"/>
+	<field name="specialServiceGroupsName" class="java.lang.String"/>
 	<variable name="rowIndex" class="java.lang.Integer">
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
 		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
@@ -370,7 +370,7 @@
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{studentType} == null || $F{studentType}.getName() == null ? "" : $F{studentType}.getName())]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{studentTypeNames}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="804cadab-5574-4274-b756-e4ae6a1fb403" stretchType="RelativeToBandHeight" x="150" y="2" width="51" height="20"/>
@@ -405,7 +405,7 @@
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{specialServiceGroupNames}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{specialServiceGroupsName}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

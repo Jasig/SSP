@@ -31,12 +31,16 @@ import net.sf.jasperreports.engine.JRException;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.transferobject.PersonTO;
+import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.SpecialServicesReportingTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,51 +88,33 @@ public class SpecialServicesReportController extends ReportBaseController {
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 
-		final List<UUID> cleanSpecialServiceGroupIds = SearchParameters.cleanUUIDListOfNulls(specialServiceGroupIds);
-		
-		final List<Person> people = personService
-				.peopleFromSpecialServiceGroups(cleanSpecialServiceGroupIds,
-						SearchParameters.getReportPersonSortingAndPagingAll(status));
-
-		final List<PersonTO> personTOs = personTOFactory.asTOList(people);
-
-		LOGGER.debug("Number of personTOs: " + personTOs.size());
-
-
 		final Map<String, Object> parameters = Maps.newHashMap();
+		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
+		
+		SearchParameters.addReferenceLists(null, 
+				specialServiceGroupIds, 
+				null, 
+				parameters, 
+				personSearchForm, 
+				null, 
+				ssgService, 
+				null);
+
+		final PagingWrapper<BaseStudentReportTO> people = personService
+				.getStudentReportTOsFromCriteria(personSearchForm, SortingAndPaging.createForSingleSortAll(status, "lastName", "DESC"));
+
+		List<BaseStudentReportTO> compressedReports = processStudentReportTOs(people);
+		LOGGER.debug("Number of personTOs: " + compressedReports.size());
+
 		
 		SearchParameters.addReportTitleToMap(REPORT_TITLE, parameters);
 		SearchParameters.addDataFIleToMap(DATA_FILE, parameters);
-		
-		SearchParameters.addSpecialGroupsNamesToMap(cleanSpecialServiceGroupIds, parameters, ssgService);
-		SearchParameters.addReportDateToMap(parameters);
 
-		final List<SpecialServicesReportingTO> specialServicesReportingPeopleTO = getReportablePersons(people);
-
-
-		generateReport(response, parameters, specialServicesReportingPeopleTO, 
-				REPORT_URL, reportType, REPORT_FILE_TITLE);
+		generateReport(response, parameters, compressedReports, REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
-	}
-
-	public List<SpecialServicesReportingTO> getReportablePersons(
-			final List<Person> persons) {
-		final List<SpecialServicesReportingTO> retVal = new ArrayList<SpecialServicesReportingTO>();
-
-		// handle a null or empty person list
-		if (persons == null || persons.size() <= 0) {
-			return retVal;
-		}
-
-		final Iterator<Person> personIter = persons.iterator();
-		while (personIter.hasNext()) {
-			retVal.add(new SpecialServicesReportingTO(personIter.next())); // NOPMD
-		}
-
-		return retVal;
 	}
 }

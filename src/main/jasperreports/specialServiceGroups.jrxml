@@ -43,8 +43,8 @@
 	<field name="lastName" class="java.lang.String">
 		<fieldDescription><![CDATA[lastName]]></fieldDescription>
 	</field>
-	<field name="specialServices" class="java.util.List">
-		<fieldDescription><![CDATA[specialServices]]></fieldDescription>
+	<field name="specialServiceGroupsName" class="java.lang.String">
+		<fieldDescription><![CDATA[specialServiceGroupsName]]></fieldDescription>
 	</field>
 	<field name="schoolId" class="java.lang.String">
 		<fieldDescription><![CDATA[schoolId]]></fieldDescription>
@@ -166,7 +166,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="ce9d2cd4-2571-4b65-b981-a04d2f862fee" stretchType="RelativeToBandHeight" x="507" y="1" width="243" height="31" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$F{specialServices}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{specialServiceGroupsName}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

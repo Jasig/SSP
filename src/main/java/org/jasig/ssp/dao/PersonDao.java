@@ -334,22 +334,20 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 					personSearchTO.getCoach().getId()));
 		}
 		
-		
+		criteria.createAlias("programStatuses",
+				"personProgramStatuses");
 		if (personSearchTO.getProgramStatus() != null) {
-
-			criteria.createAlias("programStatuses",
-					"personProgramStatuses")
-					.add(Restrictions
+			criteria.add(Restrictions
 							.eq("personProgramStatuses.programStatus.id",
 									personSearchTO
 											.getProgramStatus()));
 
 		}
-
+		criteria.createAlias("specialServiceGroups",
+				"personSpecialServiceGroups");
+		
 		if (personSearchTO.getSpecialServiceGroupIds() != null) {
-			criteria.createAlias("specialServiceGroups",
-					"personSpecialServiceGroups")
-					.add(Restrictions
+			criteria.add(Restrictions
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
 									personSearchTO
 											.getSpecialServiceGroupIds()));
@@ -404,8 +402,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		}
 		
 		if (personSearchTO.getDisabilityStatusId() != null) {
-			criteria.createAlias("disability", "personDisability")
-			.add(Restrictions.eq(
+			criteria.createAlias("disability", "personDisability");
+			criteria.add(Restrictions.eq(
 					"personDisability.disabilityStatus.id",
 					personSearchTO.getDisabilityStatusId()));
 		}
@@ -426,8 +424,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<BaseStudentReportTO> getStudentReportTOs(PersonSearchFormTO form,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
-		Criteria criteria = this.setBasicSearchCriteria(createCriteria(sAndP),  form);
-		
+		Criteria criteria = setBasicSearchCriteria(createCriteria(sAndP),  form);
 		
 		// item count
 		Long totalRows = 0L;
@@ -463,7 +460,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<DisabilityServicesReportTO> getDisabilityReport(PersonSearchFormTO form,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
-		Criteria criteria = this.setBasicSearchCriteria(createCriteria(sAndP),  form);
+		Criteria criteria = setBasicSearchCriteria(createCriteria(sAndP),  form);
 		
 		// item count
 		Long totalRows = 0L;
@@ -492,8 +489,10 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		criteria.createAlias("disabilityAgencies.disabilityAgency", "disabilityAgency");
 		criteria.createAlias("disabilityTypes", "disabilityTypes");
 		criteria.createAlias("disabilityTypes.disabilityType", "disabilityType");
-		criteria.createAlias("disability", "disability");
-		criteria.createAlias("disability.disabilityStatus", "disabilityStatus");
+		if (form.getDisabilityStatusId() == null) {
+			criteria.createAlias("disability", "personDisability");
+		}
+		criteria.createAlias("personDisability.disabilityStatus", "disabilityStatus");
 		
 		criteria.createAlias("educationGoal", "educationGoal");
 		
@@ -545,14 +544,13 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		projections.add(Projections.property("state").as("state"));
 		projections.add(Projections.property("zipCode").as("zipCode"));
 		projections.add(Projections.property("id").as("id"));
-		criteria.createAlias("specialServiceGroups", "specialServiceGroups");
-		criteria.createAlias("specialServiceGroups.specialServiceGroup", "specialServiceGroup");
+		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup");
 		projections.add(Projections.property("specialServiceGroup.name").as("specialServiceGroup"));
 		
-		criteria.createAlias("programStatuses", "programStatuses").add(Restrictions
-				.isNull("programStatuses.expirationDate"));
+		criteria.add(Restrictions
+				.isNull("personProgramStatuses.expirationDate"));
 		
-		criteria.createAlias("programStatuses.programStatus", "programStatus");
+		criteria.createAlias("personProgramStatuses.programStatus", "programStatus");
 		
 		projections.add(Projections.property("programStatus.name").as("currentProgramStatusName"));
 

@@ -119,7 +119,7 @@ public class EarlyAlertCaseCountsReportController extends ReportBaseController {
 		final List<EarlyAlertTermCaseCountsTO> caseLoads = new ArrayList<EarlyAlertTermCaseCountsTO>();
 		final List<String> cleanTermCodes = SearchParameters.cleanStringListOfNulls(termCodes);
 		final List<Term> terms = SearchParameters.getTerms(cleanTermCodes, termService);
-		if(cleanTermCodes.size() > 0){
+		if(terms.size() > 0){
 			for(Term term:terms)
 			{			
 				EarlyAlertTermCaseCountsTO caseCounts = new EarlyAlertTermCaseCountsTO(term.getCode(),

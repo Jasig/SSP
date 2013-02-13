@@ -45,7 +45,7 @@ import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
-import org.jasig.ssp.transferobject.reports.EarlyAlertStudentProgressTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentProgressReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -161,29 +161,28 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 				initialTerm.getStartDate(), initialTerm.getEndDate());
 
 		final PagingWrapper<EarlyAlertStudentReportTO> initialPeopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
-				initialSearchForm, SortingAndPaging.createForSingleSortAll(status, "lasName", "DESC"));
+				initialSearchForm, SortingAndPaging.createForSingleSortAll(status, "lastName", "DESC"));
 		
 		final EarlyAlertStudentSearchTO comparisonSearchForm = new EarlyAlertStudentSearchTO(personSearchForm, 
 				comparisonTerm.getStartDate(), comparisonTerm.getEndDate());
 
 		final PagingWrapper<EarlyAlertStudentReportTO> comparisonPeopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
-				comparisonSearchForm, SortingAndPaging.createForSingleSortAll(status, "lasName", "DESC"));
+				comparisonSearchForm, SortingAndPaging.createForSingleSortAll(status, "lastName", "DESC"));
 		
 		
-		List<EarlyAlertStudentProgressTO> people = new ArrayList<EarlyAlertStudentProgressTO>();
+		List<EarlyAlertStudentProgressReportTO> people = new ArrayList<EarlyAlertStudentProgressReportTO>();
 		for(EarlyAlertStudentReportTO initialPersonInfo : initialPeopleInfo){
 			EarlyAlertStudentReportTO foundPerson = null;
 			for(EarlyAlertStudentReportTO comparisonPersonInfo : comparisonPeopleInfo){
-				if(initialPersonInfo.getPerson().getId().equals(comparisonPersonInfo.getPerson().getId())){
+				if(initialPersonInfo.getId().equals(comparisonPersonInfo.getId())){
 					foundPerson = comparisonPersonInfo;
 					break;
 				}
 			}
 			
 			Long finalCount = foundPerson != null ? (Long)foundPerson.getTotal() : 0;
-			
-			people.add(new EarlyAlertStudentProgressTO(initialPersonInfo.getPerson(), "",
-					initialPersonInfo.getTotal(), finalCount));
+			if(!people.contains(initialPersonInfo))
+				people.add(new EarlyAlertStudentProgressReportTO(initialPersonInfo,initialPersonInfo.getTotal(), finalCount));
 				
 		}
 		

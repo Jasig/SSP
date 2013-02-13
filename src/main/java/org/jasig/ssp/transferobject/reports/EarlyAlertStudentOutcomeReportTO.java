@@ -23,13 +23,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.transferobject.PersonTO;
 
 /**
  * AddressLabelSearch transfer object
  */
-public class EarlyAlertStudentOutcomeReportTO extends PersonReportTO  {
+public class EarlyAlertStudentOutcomeReportTO extends EarlyAlertStudentReportTO  {
 
 	private static final long serialVersionUID = 3118831549819428989L;
 
@@ -43,7 +44,7 @@ public class EarlyAlertStudentOutcomeReportTO extends PersonReportTO  {
 	
 	private Long duplicate;
 
-	public EarlyAlertStudentOutcomeReportTO(Person model,
+	public EarlyAlertStudentOutcomeReportTO(EarlyAlertStudentReportTO model,
 			Long response, Long noResponse, Long waitingForResponse,
 			Long notEALClass, Long duplicate) {
 		super(model);
@@ -96,6 +97,31 @@ public class EarlyAlertStudentOutcomeReportTO extends PersonReportTO  {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if (!(BaseStudentReportTO.class.isInstance(obj))
+				|| !(getClass().equals(obj.getClass()))) {
+			return false;
+		}
+		return ((BaseStudentReportTO)obj).getId().equals(getId());
+	}
+	
+	
+	protected int hashPrime() {
+		return 19;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		int result = hashPrime();
+
+		result = super.hashCode() * result;
+		
+
+		return result;
 	}
 	
 }

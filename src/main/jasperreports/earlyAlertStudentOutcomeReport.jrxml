@@ -55,7 +55,9 @@
 	<field name="response" class="java.lang.Long"/>
 	<field name="noResponse" class="java.lang.Long"/>
 	<field name="waitingForResponse" class="java.lang.Long"/>
-	<field name="coach" class="org.jasig.ssp.transferobject.CoachPersonLiteTO"/>
+	<field name="coachName" class="java.lang.String">
+		<fieldDescription><![CDATA[coachName]]></fieldDescription>
+	</field>
 	<field name="notEALClass" class="java.lang.Long"/>
 	<field name="duplicate" class="java.lang.Long"/>
 	<variable name="rowIndex" class="java.lang.Integer">
@@ -303,7 +305,7 @@
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="06263141-db6f-4d00-968b-888a644603e0" x="608" y="5" width="122" height="16"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{coach}.getFirstName() + " " + $F{coach}.getLastName()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{coachName}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

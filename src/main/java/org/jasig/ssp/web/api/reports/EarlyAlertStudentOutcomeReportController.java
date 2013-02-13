@@ -172,13 +172,16 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 		// work... end up with empty results need to dig into actual query
 		// building
 		final PagingWrapper<EarlyAlertStudentReportTO> peopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
-				searchForm, SortingAndPaging.createForSingleSortAll(status, "lasName", "DESC"));
+				searchForm, SortingAndPaging.createForSingleSortAll(status, "lastName", "DESC"));
 
 		List<EarlyAlertStudentOutcomeReportTO> people = new ArrayList<EarlyAlertStudentOutcomeReportTO>();
 		for(EarlyAlertStudentReportTO personInfo : peopleInfo.getRows()){
-			people.add(new EarlyAlertStudentOutcomeReportTO(personInfo.getPerson(), personInfo.getTotal(), 0L, personInfo.getOpen(), 0L, 0L));
+			Integer index = people.indexOf(personInfo);
+			if(index == null || index < 0)
+				people.add(new EarlyAlertStudentOutcomeReportTO(personInfo, personInfo.getTotal(), 0L, personInfo.getOpen(), 0L, 0L));
+			else
+				people.get(index).processDuplicate(personInfo);
 		}
-
 		SearchParameters.addDateTermToMap(dateTerm, parameters);
 			
 		generateReport(response,  parameters, people,  REPORT_URL, reportType, REPORT_FILE_TITLE);

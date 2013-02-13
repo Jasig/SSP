@@ -122,6 +122,8 @@ public class SearchParameters {
 	static List<Term> getTerms(final List<String> termCodes, final TermService termService) 
 			throws ObjectNotFoundException{
 		List<Term> terms = new ArrayList<Term>();
+		if(termCodes == null)
+			return terms;
 		for(String termCode:termCodes){
 			Term term = termService.getByCode(termCode);
 			terms.add(term);

@@ -19,11 +19,14 @@
 package org.jasig.ssp.transferobject.reports;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.EarlyAlertOutreach;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PersonTO;
 
@@ -36,39 +39,48 @@ public class EarlyAlertStudentOutreachReportTO
 	private static final long serialVersionUID = 3118831549819428989L;
 
 	private CoachPersonLiteTO coach;
+	
+	private String coachFirstName;
+	private String coachLastName;
+	private String coachMiddleName;
+	private String coachSchoolId;
+	private UUID  coachId;
+		
+	private UUID earlyAlertId;
+	
+	private List<UUID> earlyAlertIds = new ArrayList<UUID>();
 
-	private Long totalEarlyAlerts;
+	private String earlyAlertOutreachName;
 	
-	private Long countPhoneCalls;
+	private Long countPhoneCalls = 0L;
 	
-	private Long countLetter;
+	private Long countLetter = 0L;
 	
-	private Long countText;
+	private Long countText = 0L;
 	
-	private Long countEmail;
+	private Long countEmail = 0L;
 	
-	private Long countInPerson;
+	private Long countInPerson = 0L;
 	
-	public EarlyAlertStudentOutreachReportTO(Person coach,
-			Long totalEarlyAlerts, Long countPhoneCalls, Long countLetter,
+	public EarlyAlertStudentOutreachReportTO(Person coach, Long countPhoneCalls, Long countLetter,
 			Long countText, Long countEmail, Long countInPerson) {
 		super();
 		this.coach = new CoachPersonLiteTO(coach);
-		this.totalEarlyAlerts = totalEarlyAlerts;
 		this.countPhoneCalls = countPhoneCalls;
 		this.countLetter = countLetter;
 		this.countText = countText;
 		this.countEmail = countEmail;
 		this.countInPerson = countInPerson;
 	}
+	
+	public EarlyAlertStudentOutreachReportTO() {
+		super();
+	}
 
 	public Long getTotalEarlyAlerts() {
-		return totalEarlyAlerts;
+		return earlyAlertIds.size() + 0L;
 	}
 
-	public void setTotalEarlyAlerts(Long totalEarlyAlerts) {
-		this.totalEarlyAlerts = totalEarlyAlerts;
-	}
 
 	public Long getCountPhoneCalls() {
 		return countPhoneCalls;
@@ -120,6 +132,137 @@ public class EarlyAlertStudentOutreachReportTO
 
 	public void setCountEmail(Long countEmail) {
 		this.countEmail = countEmail;
+	}
+
+	public String getCoachFirstName() {
+		return coachFirstName;
+	}
+
+	public void setCoachFirstName(String coachFirstName) {
+		this.coachFirstName = coachFirstName;
+	}
+
+	public String getCoachLastName() {
+		return coachLastName;
+	}
+
+	public void setCoachLastName(String coachLastName) {
+		this.coachLastName = coachLastName;
+	}
+
+	public String getCoachMiddleName() {
+		return coachMiddleName;
+	}
+
+	public void setCoachMiddleName(String coachMiddleName) {
+		this.coachMiddleName = coachMiddleName;
+	}
+
+	public UUID getCoachId() {
+		return coachId;
+	}
+	
+	public String getCoachName() {
+		StringBuffer coachName = new StringBuffer(coachFirstName);
+		coachName.append(coachMiddleName == null || coachMiddleName.length() == 0 ? "":" " + coachMiddleName);
+		coachName.append(coachLastName == null || coachLastName.length() == 0 ? "":" " + coachLastName);
+		return coachName.toString();
+	}
+
+	public void setCoachId(UUID coachId) {
+		this.coachId = coachId;
+	}
+	
+	public UUID getEarlyAlertId() {
+		return earlyAlertId;
+	}
+
+	public void setEarlyAlertId(UUID earlyAlertId) {
+		this.earlyAlertId = earlyAlertId;
+		addEarlyAlertIds(earlyAlertId);
+	}
+	
+	public void addEarlyAlertIds(UUID earlyAlertId){
+		if(!earlyAlertIds.contains(earlyAlertId))
+			earlyAlertIds.add(earlyAlertId);
+	}
+	
+	public void addEarlyAlertIds(List<UUID> earlyAlertIdsToAdd){
+		for(UUID earlyAlertIdToAdd:earlyAlertIdsToAdd)
+			addEarlyAlertIds(earlyAlertIdToAdd);
+	}
+	
+	public List<UUID> getEarlyAlertIds(){
+		return earlyAlertIds;
+	}
+
+	public String getEarlyAlertOutreachName() {
+		return earlyAlertOutreachName;
+	}
+
+	public void setEarlyAlertOutreachName(String earlyAlertOutreachName) {
+
+		if(earlyAlertOutreachName.equals("Phone Call")){
+			setCountPhoneCalls(getCountPhoneCalls() + 1L);
+		}
+		if(earlyAlertOutreachName.equals("Email")){
+			setCountEmail(getCountEmail() + 1L);
+		}
+		
+		if(earlyAlertOutreachName.equals("In Person")){
+			setCountInPerson(getCountInPerson() + 1L);
+		}
+		
+		if(earlyAlertOutreachName.equals("Letter")){
+			setCountLetter(getCountLetter() + 1L);
+		}
+		
+		if(earlyAlertOutreachName.equals("Text")){
+			setCountText(getCountText() + 1L);
+		}
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if (!(EarlyAlertStudentOutreachReportTO.class.isInstance(obj))
+				|| !(getClass().equals(obj.getClass()))) {
+			return false;
+		}
+		return ((EarlyAlertStudentOutreachReportTO)obj).getCoachId().equals(getCoachId());
+	}
+	
+	
+	protected int hashPrime() {
+		return 57;
+	}
+	
+	public int hashCode()
+	{
+		int result = hashPrime();
+
+		result *= coachId == null ? "coachId".hashCode() : coachId
+				.hashCode();
+		result *= StringUtils.isEmpty(coachLastName) ? "coachLastName"
+				.hashCode() : coachLastName.hashCode();
+		result *= StringUtils.isEmpty(coachFirstName) ? "coachFirstName"
+				.hashCode()
+				: coachFirstName.hashCode();
+		result *= StringUtils.isEmpty(coachMiddleName) ? "coachMiddleName".hashCode()
+				: coachMiddleName.hashCode();
+		result *= coachSchoolId == null ? "coachSchoolId".hashCode() : coachSchoolId
+				.hashCode();
+
+		return result;
+	}
+
+	
+	public void processDuplicate(EarlyAlertStudentOutreachReportTO reportTO){
+			setCountPhoneCalls(getCountPhoneCalls() + reportTO.getCountPhoneCalls());
+			setCountEmail(getCountEmail()  + reportTO.getCountEmail());
+			setCountInPerson(getCountInPerson()  + reportTO.getCountInPerson());
+			setCountLetter(getCountLetter()  + reportTO.getCountLetter());		
+			setCountText(getCountText()  + reportTO.getCountText());
+			addEarlyAlertIds(reportTO.getEarlyAlertIds());
 	}
 
 }

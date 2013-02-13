@@ -166,15 +166,14 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 		
 		final List<PersonReportTO> peopleReportTOList = PersonReportTO.toPersonTOList(people);*/
 		
-		final PagingWrapper<BaseStudentReportTO> people = personService.getStudentReportTOsFromCriteria(
+		final PagingWrapper<BaseStudentReportTO> reports = personService.getStudentReportTOsFromCriteria(
 				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
 		
-		ArrayList<BaseStudentReportTO> report = new ArrayList<BaseStudentReportTO>(people.getRows());
-		//Collections.sort(people, Person.PERSON_NAME_AND_ID_COMPARATOR);
+		List<BaseStudentReportTO> compressedReports = this.processStudentReportTOs(reports);
 		
-		SearchParameters.addStudentCount(report, parameters);
+		SearchParameters.addStudentCount(compressedReports, parameters);
 
-		generateReport(response, parameters, report, REPORT_URL, reportType, REPORT_FILE_TITLE);
+		generateReport(response, parameters, compressedReports, REPORT_URL, reportType, REPORT_FILE_TITLE);
 
 	}
 

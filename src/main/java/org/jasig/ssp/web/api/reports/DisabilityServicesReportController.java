@@ -188,7 +188,7 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 		ArrayList<DisabilityServicesReportTO> compressedReport = new ArrayList<DisabilityServicesReportTO>();
 		for(DisabilityServicesReportTO reportTO: report){
 			Integer index = compressedReport.indexOf(reportTO);
-			if(index >= 0)
+			if(index != null && index >= 0)
 			{
 				DisabilityServicesReportTO compressedReportTo = compressedReport.get(index);
 				compressedReportTo.processDuplicate(reportTO);

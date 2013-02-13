@@ -19,6 +19,7 @@
 package org.jasig.ssp.transferobject.reports;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -29,8 +30,13 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 
-public class BaseStudentReportTO {
+public class BaseStudentReportTO implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4549055165582379400L;
+	
 	private static String ILP = "ILP";
 	/**
 	 * Construct a transfer object from a related model instance
@@ -48,6 +54,11 @@ public class BaseStudentReportTO {
 		
 	}
 	
+	public BaseStudentReportTO(BaseStudentReportTO person)
+	{
+		setPerson(person);
+	}
+	
 	private String firstName;
 	private String lastName;
 	private String middleName;
@@ -62,6 +73,8 @@ public class BaseStudentReportTO {
     private String cellPhone;
     private String homePhone;
 	private String studentType;
+	private List<String> studentTypes = new ArrayList<String>();
+	private String studentTypeNames;
 	private Integer registrationStatus;
 	private CoachPersonLiteTO coach;
 	private String coachFirstName;
@@ -87,14 +100,7 @@ public class BaseStudentReportTO {
 
 	private UUID id;
 
-	
-	public String getStudentType() {
-		return studentType;
-	}
 
-	public void setStudentType(String studentType) {
-		this.studentType = studentType;
-	}
 
 	public String getFirstName() {
 		return firstName;
@@ -208,10 +214,6 @@ public class BaseStudentReportTO {
 		this.programCurrentStatusName = programCurrentStatusName;
 	}
 
-	public void setSpecialServiceGroups(List<String> specialServiceGroups) {
-		this.specialServiceGroups = specialServiceGroups;
-	}
-
 	public Integer getRegistrationStatus() {
 		return registrationStatus;
 	}
@@ -304,6 +306,38 @@ public class BaseStudentReportTO {
 		else
 			setIsIlp(false);
 	}
+	
+	public void setPerson(BaseStudentReportTO person) {
+		setId(person.getId());
+		setFirstName(person.getFirstName());
+		setLastName(person.getLastName());
+		setMiddleName(person.getMiddleName());
+		setPrimaryEmailAddress(person.getPrimaryEmailAddress());
+		setSecondaryEmailAddress(person.getSecondaryEmailAddress());
+		setAddressLine1(person.getAddressLine1());
+		setAddressLine2(person.getAddressLine2());
+		setCity(person.getCity());
+		setState(person.getState());
+		setZipCode(person.getZipCode());
+		setHomePhone(person.getHomePhone());
+		setCellPhone(person.getCellPhone());
+		setSchoolId(person.getSchoolId());
+		setCoachFirstName(person.getCoachFirstName());
+		setCoachMiddleName(person.getCoachMiddleName());
+		setCoachLastName(person.getCoachLastName());
+		setCoachSchoolId(person.getCoachSchoolId());
+		setCoachUsername(person.getCoachUsername());
+		setCoach(person.getCoach());
+		setStudentType(person.getStudentType());
+		setProgramCurrentStatusName(person.getCurrentProgramStatusName());
+		setRegistrationStatus(person.getRegistrationStatus());
+		setSpecialServiceGroupsName(person.getSpecialServiceGroupsName());
+		
+		if(getStudentType().equals(ILP))
+			setIsIlp(true);
+		else
+			setIsIlp(false);
+	}
 
 	
 	public String getCurrentProgramStatusName() {
@@ -312,8 +346,8 @@ public class BaseStudentReportTO {
 
 	public void setCurrentProgramStatusName(String programStatus) {
 		this.programCurrentStatusName = programStatus;
-	}	
-	
+	}
+		
 	public void setSpecialServiceGroup(String specialServiceGroup) {
 		this.specialServiceGroup = specialServiceGroup;
 		addSpecialServiceGroups(specialServiceGroup);
@@ -338,6 +372,10 @@ public class BaseStudentReportTO {
 			return this.specialServiceGroups;
 	}
 	
+	public void setSpecialServiceGroups(List<String> specialServiceGroups) {
+		this.specialServiceGroups = specialServiceGroups;
+}
+	
 
 	public void setSpecialServiceGroupsName(String specialServiceGroupsName) {
 		this.specialServiceGroupsName = specialServiceGroupsName;
@@ -352,6 +390,47 @@ public class BaseStudentReportTO {
 		}
 		return specialServiceGroupsName;
 	}
+	
+	public void setStudentType(String studentType) {
+		this.studentType = studentType;
+		addStudentTypes(studentType);
+	}
+	
+	public String getStudentType(){
+		return studentType;
+	}
+
+	public void addStudentTypes(List<String> studentTypes) {
+		for(String studentType:studentTypes)
+			addStudentTypes(studentType);
+	}
+
+	public void addStudentTypes(String studentType) {
+		if(!this.studentTypes.contains(studentType))
+			this.studentTypes.add(studentType);
+	}
+	
+	public List<String> getStudentTypes() {
+			return this.studentTypes;
+	}
+	
+	public void setStudentTypes(List<String> studentTypes) {
+		this.studentTypes = studentTypes;
+	}
+
+	public void setStudentTypeNames(String studentTypeNames) {
+		this.studentTypeNames = studentTypeNames;
+	}
+
+	public String getStudentTypeNames() {
+		if(studentTypeNames == null || studentTypeNames.length() == 0){
+			studentTypeNames = "";
+			for(String studentType:studentTypes){
+				studentTypeNames = addValueToStringList(studentTypeNames, studentType);
+			}
+		}
+		return studentTypeNames;
+	}
 
 	public Boolean getIsIlp() {
 		return isIlp;
@@ -359,6 +438,36 @@ public class BaseStudentReportTO {
 
 	public void setIsIlp(Boolean isIlp) {
 		this.isIlp = isIlp;
+	}
+
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((addressLine1 == null) ? 0 : addressLine1.hashCode());
+		result = prime * result
+				+ ((addressLine2 == null) ? 0 : addressLine2.hashCode());
+		result = prime * result
+				+ ((cellPhone == null) ? 0 : cellPhone.hashCode());
+		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result
+				+ ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result
+				+ ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result
+				+ ((middleName == null) ? 0 : middleName.hashCode());
+		result = prime
+				* result
+				+ ((primaryEmailAddress == null) ? 0 : primaryEmailAddress
+						.hashCode());
+		result = prime * result
+				+ ((schoolId == null) ? 0 : schoolId.hashCode());
+		result = prime * result
+				+ ((studentType == null) ? 0 : studentType.hashCode());
+		return result;
 	}
 
 	@Override
@@ -371,35 +480,13 @@ public class BaseStudentReportTO {
 	}
 	
 	
-	protected int hashPrime() {
-		return 57;
-	}
-	
-	public int hashCode()
-	{
-		int result = hashPrime();
 
-		result *= id == null ? "id".hashCode() : id
-				.hashCode();
-		result *= StringUtils.isEmpty(lastName) ? "lastname"
-				.hashCode() : lastName.hashCode();
-		result *= StringUtils.isEmpty(firstName) ? "firstName"
-				.hashCode()
-				: firstName.hashCode();
-		result *= StringUtils.isEmpty(middleName) ? "middleName".hashCode()
-				: middleName.hashCode();
-		result *= schoolId == null ? "createdBy".hashCode() : schoolId
-				.hashCode();
-		result *= primaryEmailAddress == null ? "primaryEmailAddress".hashCode() : primaryEmailAddress.hashCode();
-
-		return result;
-	}
-	
 	protected String addValueToStringList(String str, String value){
 		return str + ((str.length() != 0) ? " -":"") + value;
 	}
 	
 	public void processDuplicate(BaseStudentReportTO reportTO){
 		addSpecialServiceGroups(reportTO.getSpecialServiceGroups());
+		addStudentTypes(reportTO.getStudentTypes());
 	}
 }

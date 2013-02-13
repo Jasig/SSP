@@ -18,11 +18,14 @@
  */
 package org.jasig.ssp.util.service.stub;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertRouting;
 import org.jasig.ssp.model.ObjectStatus;
@@ -154,6 +157,37 @@ public class Stubs {
 		public UUID id() { return id; }
 		public String title() { return title; }
 	}
+	
+	public static enum EarlyAlertOutcomeFixture {
+		WAITING_FOR_RESPONSE ( "7148606f-9034-4538-8fc2-c852a5c912ee", "Waiting for Response" );
+
+		private final UUID id;
+		private final String title;
+
+		EarlyAlertOutcomeFixture(String id, String title) {
+			this.id = UUID.fromString(id);
+			this.title = title;
+		}
+
+		public UUID id() { return id; }
+		public String title() { return title; }
+	}
+	
+	public static enum EarlyAlertReferralFixture {
+		ACADEMIC_COUNSELORS ( "b2d112a9-5056-a51a-8010-b510525ea3a8", "Academic Counselors" );
+
+		private final UUID id;
+		// "name" is reserved for enums
+		private final String title;
+
+		EarlyAlertReferralFixture(String id, String title) {
+			this.id = UUID.fromString(id);
+			this.title = title;
+		}
+
+		public UUID id() { return id; }
+		public String title() { return title; }
+	}
 
 	public static enum EarlyAlertSuggestionFixture {
 		SEE_INSTRUCTOR ( "b2d11141-5056-a51a-80c1-c1250ba820f8", "See Instructor" ),
@@ -171,6 +205,25 @@ public class Stubs {
 		public UUID id() { return id; }
 		public String title() { return title; }
 	}
+	
+	public static enum ReferralSourceFixture {
+		TEST_REFERRAL_SOURCE ( "f6201a04-bb31-4ca5-b606-609f3ad09f87", "Test Referral Source" ),
+		TEST_REFERRAL_SOURCE_2 ( "ccadd634-bd7a-11e1-8d28-3368721922dc", "Test Referral Source 2" ),
+		TEST_REFERRAL_SOURCE_3 ( "c54aa656-bd7a-11e1-9ced-5b723f71da43", "Test Referral Source 3" );
+
+		private final UUID id;
+		// "name" is reserved for enums
+		private final String title;
+
+		ReferralSourceFixture(String id, String title) {
+			this.id = UUID.fromString(id);
+			this.title = title;
+		}
+
+		public UUID id() { return id; }
+		public String title() { return title; }
+	}
+
 
 	public static enum ProgramStatusFixture {
 		ACTIVE (ProgramStatus.ACTIVE_ID, "Active"),
@@ -221,21 +274,98 @@ public class Stubs {
 		public String title() { return title; }
 
 	}
+	
+	public static enum SpecialServiceGroupFixture {
+
+		ANOTHER_TEST_SSG ("40b6b8aa-bca1-11e1-9344-037cb4088c72", "Another Test Special Service Group"),
+		TEST_SSG ("f6201a04-bb31-4ca5-b606-609f3ad09f87", "Test Special Service Group");
+
+		private final UUID id;
+		// "name" is reserved for enums
+		private final String title;
+
+		SpecialServiceGroupFixture(String id, String title) {
+			this.id = UUID.fromString(id);
+			this.title = title;
+		}
+
+		SpecialServiceGroupFixture(UUID id, String title) {
+			this.id = id;
+			this.title = title;
+		}
+
+		public UUID id() { return id; }
+		public String title() { return title; }
+
+	}
 
 	public static enum TermFixture {
-		FALL_2012 ("FA12", "Fall 2012"),
-		SPRING_2013 ("SP13", "Spring 2013");
+		FALL_2012 ("FA12", "Fall 2012", 2013),
+		SPRING_2013 ("SP13", "Spring 2013", 2013);
 
 		private final String code;
 		private final String title;
+		private final Integer year;
 
-		TermFixture(String code, String title) {
+		TermFixture(String code, String title, Integer year) {
 			this.code = code;
 			this.title = title;
+			this.year = year;
 		}
 
 		public String code() { return code; }
 		public String title() { return title; }
+		public Integer year() { return year; }
+	}
+	
+	public static enum DateFixture{
+		START_FALL_2012 (startFall2012()),
+		END_FALL_2012 (endFall2012()),
+		NOW (new Date()),
+		NOW_MINUS_1 (daysPlusMinus(1)),
+		NOW_MINUS_2 (daysPlusMinus(2)),
+		NOW_MINUS_3 (daysPlusMinus(3)),
+		NOW_MINUS_4 (daysPlusMinus(4)),
+		NOW_MINUS_5 (daysPlusMinus(5));
+		
+		private final Date date;
+		
+		DateFixture(Date date) {
+			this.date = date;
+		}
+		
+		static private final Date startFall2012(){
+			return timeStampFormat("2012-06-20 00:00:00");
+		}
+		
+		static private final Date endFall2012(){
+			return timeStampFormat("2012-12-31 23:59:59");
+		}
+		
+		static private final Date timeStampFormat(String value){
+			SimpleDateFormat tsf = null;
+			Date dt = null;
+			try{
+				tsf =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				dt = tsf.parse(value);
+			}catch(Exception exception){
+				
+			}
+			return dt;
+		}
+	
+		public String dateSearchForm() { return dateSearchFormat.format(date); }
+		public Date date() { return date; }
+	
+		private static Date daysPlusMinus(int days) {
+			return DateUtils.addDays(new Date(), days);
+		}
+		
+		private static final SimpleDateFormat dateSearchFormat = new SimpleDateFormat("MM/dd/yyyy",
+				Locale.US);
+		
+
+
 	}
 
 	/**

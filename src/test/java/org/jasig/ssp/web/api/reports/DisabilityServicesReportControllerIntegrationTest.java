@@ -65,7 +65,7 @@ public class DisabilityServicesReportControllerIntegrationTest
 	@Autowired
 	protected transient ReferralSourceService referralSourceService;
 
-	//@Test
+	@Test
 	public void testGetDisabilityeServicesReportFilters()
 			throws IOException, ObjectNotFoundException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
@@ -94,9 +94,9 @@ public class DisabilityServicesReportControllerIntegrationTest
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add("FIRST,,,MIDDLE,LAST,,,Student ,TYP,Address,,CITY,ST,PHONE(H),EMAIL(SCHOOL),EMAIL(HOME)");
-		expectedReportBodyLines.add("James,,,A,Gosling,,,,ILP,444 West Third Street ,,San Francisco,CA,908-123-4567,test@sinclair.edu,test@sinclair.edu");
-		expectedReportBodyLines.add("Kenneth,,,L,Thompson,,,,CAP,444 West Third Street ,,Murray Hill,NJ,908-123-4567,test@sinclair.edu,test@sinclair.edu");
+		expectedReportBodyLines.add("STUDENT NAME,ID,ILP,DISABILITY,SSP STATUS,ODS STATUS,ODS REASON FOR INELIGIBILTY,ODS REG DATE,INTERPRETER,REG STATUS,MAJOR,VET STATUS,ETHNICITY,ASSIGNMENT DATES\t,AGENCY CONTACTS,SSP COACH");
+		expectedReportBodyLines.add( ",,,,,,,,,,,,,,,");
+
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 
