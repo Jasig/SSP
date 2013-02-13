@@ -9979,7 +9979,9 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			                                   name: "highestGradeCompleted", 
 			                                   label: "Highest Grade Completed", 
 			                                   fieldType: "mappedtextfield", 
-			                                   labelWidth: defaultLabelWidth},
+			                                   labelWidth: defaultLabelWidth,
+                                               validationExpression: '^([0-9]|1[0-6])$',
+                                               validationErrorMessage: 'This field requires a numeric value between 0 and 16'},
 		                                      {parentId: Ssp.util.Constants.EDUCATION_LEVEL_GED_ID, 
 			                                   parentName: "ged", 
 			                                   name: "graduatedYear", 
@@ -14541,7 +14543,7 @@ Ext.define('Ssp.view.Search', {
     	Ext.applyIf(me,
     			   {
     		        submitEmptyText: false,
-    				title: 'Students',
+    				title: 'Students Foo',
     	            collapsible: true,
     	            collapseDirection: 'left',
     	        	width: '100%',
@@ -14680,7 +14682,13 @@ Ext.define('Ssp.view.Search', {
 		    			},{
 	    		        	xtype: 'tbspacer',
 	    		        	flex: 1
-		    		    },{
+		    		    },
+						{
+							xtype: 'label',
+                            text: 'Change Status:',
+							style: 'font-weight:bold;'
+						},
+						{
 		    			    tooltip: 'Set Student to Active status',
 		    			    text: '',
 		    			    width: 25,
@@ -14763,8 +14771,8 @@ Ext.define('Ssp.view.StudentRecord', {
     	    	align: 'stretch'
     	    },
 			
-    	    items: [{xtype:'toolsmenu',flex:1},
-			        {xtype: 'tools', flex:4}]		        
+    	    items: [{xtype:'toolsmenu',flex:.60},
+			        {xtype: 'tools', flex:4.40}]		        
     	});
     	return this.callParent(arguments);
     }
@@ -15566,6 +15574,7 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 		            title: 'Profile',
 		            padding: 0,
 		            border: 0,
+					preventHeader: true,
 					items: [
 						Ext.createWidget('tabpanel', {
 						    width: '100%',
@@ -15600,23 +15609,38 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 				    dockedItems: [{
 				        dock: 'top',
 				        xtype: 'toolbar',
-				        items: [{
+				        items: [
+						{
+                            xtype: 'tbspacer',
+                            width: 5
+                        },
+						{
+							xtype: 'label',
+                            text: 'Profile',
+							style: 'font-weight:bold;color: #00008B'
+						},
+						{
+							xtype: 'tbspacer',
+                            flex: 1
+						},
+						{
 					            tooltip: 'Print Student History',
-					            text: '',
-					            width: 32,
-					            height: 32,
+					            text: '<u>Print Student History</u>',
+					            width: 150,
+					            height: 20,
 					            hidden: !me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'),
-					            cls: 'studentHistoryIcon',
+					            //cls: 'studentHistoryIcon',
 					            xtype: 'button',
 					            itemId: 'viewHistoryButton'
-				        },{
+				        },
+						{
 			            	   xtype: 'button',
 			            	   itemId: 'printConfidentialityAgreementButton',
-			                   text: '',
+			                   text: '<u>Print Confidentiality Agreement</u>',
 			                   tooltip: 'Print Confidentiality Agreement',
-			            	   cls: 'confidentialityAgreementIcon',
-			            	   height: 32,
-			            	   width: 32,
+			            	   //cls: 'confidentialityAgreementIcon',
+			            	   height: 20,
+			            	   width: 175,
 			            	   hidden: !me.authenticatedPerson.hasAccess('PROFILE_PRINT_CONFIDENTIALITY_AGREEMENT_BUTTON'),
 			            }]
 				    }]
@@ -17363,7 +17387,8 @@ Ext.define('Ssp.view.tools.journal.Journal', {
 	    		                { header: 'Date',  
 		    		                  dataIndex: 'entryDate',
 		    		                  flex: 1,
-		    		                  renderer: Ext.util.Format.dateRenderer('m/d/Y g:i A')
+		    		                  //renderer: Ext.util.Format.dateRenderer('m/d/Y g:i A')
+									  renderer: Ext.util.Format.dateRenderer('m/d/Y')
 	    		                },
 	    		                { header: 'Entered By',  
 	    		                  dataIndex: 'createdBy',
