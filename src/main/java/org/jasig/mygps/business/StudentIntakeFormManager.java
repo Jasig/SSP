@@ -527,7 +527,6 @@ public class StudentIntakeFormManager { // NOPMD
 								.toString());
 			}
 
-			// Country of Citizenship -> Shown if Citizenship is "International"
 			formSectionTO
 					.getFormQuestionById(
 							SECTION_DEMOGRAPHICS_QUESTION_COUNTRYOFCITIZENSHIP_ID)
@@ -1984,7 +1983,6 @@ public class StudentIntakeFormManager { // NOPMD
 
 		demographicSectionQuestions.add(citizenshipQuestion);
 
-		// Country of Citizenship -> Shown if Citizenship is "International"
 		final FormQuestionTO countryOfCitizenshipQuestion = new FormQuestionTO();
 
 		countryOfCitizenshipQuestion
@@ -1992,11 +1990,7 @@ public class StudentIntakeFormManager { // NOPMD
 		countryOfCitizenshipQuestion.setLabel("Country of Citizenship");
 		countryOfCitizenshipQuestion.setMaximumLength("50");
 		countryOfCitizenshipQuestion.setType(FORM_TYPE_TEXTINPUT);
-		// DEPENDENCY -> countryOfCitizenshipQuestion should be shown only when
-		// citizenshipQuestion selection matches 'International'
-		countryOfCitizenshipQuestion
-				.setVisibilityExpression("hasValueForQuestionId('8BFA49CE-4D8E-43C1-AA2B-0F5E66319168', '"
-						+ SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID + "')");
+
 
 		demographicSectionQuestions.add(countryOfCitizenshipQuestion);
 
