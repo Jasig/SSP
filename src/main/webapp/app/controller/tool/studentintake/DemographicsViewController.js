@@ -28,10 +28,6 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
     	displayEmploymentShift: 1
     },
     control: {
-		'citizenship': {
-			change: 'onCitizenshipChange'
-		},
-		
 		primaryCaregiverCheckOn: '#primaryCaregiverCheckOn',
 		primaryCaregiverCheckOff: '#primaryCaregiverCheckOff',		
 		
@@ -48,11 +44,7 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
 		
 		employedCheckOn: '#employedCheckOn',
 		employedCheckOff: '#employedCheckOff',		
-		
-		'countryOfCitizenship': {
-			hide: 'onFieldHidden'
-		},
-		
+
 		'childcareArrangement': {
 			hide: 'onFieldHidden'
 		},
@@ -101,27 +93,12 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
 		
 		me.displayStudentIntakeDemographicsEmploymentShift = me.sspConfig.get('displayStudentIntakeDemographicsEmploymentShift');
 		
-		me.showHideCountryOfCitizenship( citizenship.getValue() );
         me.showHideChildcareArrangement( childcareNeeded.getValue() );
         me.showHideEmploymentFields( isEmployed.getValue() );
         
 		return me.callParent(arguments);
     },
     
-    onCitizenshipChange: function(combo, newValue, oldValue, eOpts) {
-    	this.showHideCountryOfCitizenship( newValue );
-    },
-    
-    showHideCountryOfCitizenship: function( value ){
-    	var field = Ext.ComponentQuery.query('#countryOfCitizenship')[0];
-		var record = this['citizenshipsStore'].findRecord('name', 'International');
-		if ( value==record.get( 'id' ) )
-		{
-			field.show();
-		}else{
-			field.hide();
-		}    
-    },
 
     onChildcareNeededChange: function(radiogroup, newValue, oldValue, eOpts) {
     	this.showHideChildcareArrangement( newValue );
