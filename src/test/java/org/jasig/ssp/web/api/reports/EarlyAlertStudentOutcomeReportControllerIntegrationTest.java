@@ -48,8 +48,8 @@ public class EarlyAlertStudentOutcomeReportControllerIntegrationTest extends
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add("FIRST,MIDDLE,LAST,STUDENT ID,EMAIL(SCHOOL),RESPONSES,NO RESPONSE,WAITING ,COUNSELOR");
-		expectedReportBodyLines.add(",,,,,,,,");
+		expectedReportBodyLines.add("FIRST,MIDDLE,LAST,STUDENT ID,EMAIL(SCHOOL),EA TOT,RESPONSES,NO RESPONSE,,WAITING,NOT EA CLASS,DUPLICATE,COUNSELOR");
+		expectedReportBodyLines.add(",,,,,,,,,,,,");
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 
@@ -73,11 +73,11 @@ public class EarlyAlertStudentOutcomeReportControllerIntegrationTest extends
 				"csv");
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		//TODO Understand why no filters does not bring back a result!
-		expectedReportBodyLines.add("FIRST,MIDDLE,LAST,STUDENT ID,EMAIL(SCHOOL),RESPONSES,NO RESPONSE,WAITING ,COUNSELOR");
-		expectedReportBodyLines.add("James,A,Gosling,student0,test@sinclair.edu,1,0,1,Alan Turing");
-		expectedReportBodyLines.add("test,Mumford,coach1student0,coach1student0,coach1student0@unicon.net,1,0,1,test coach1");
-		expectedReportBodyLines.add("test,Mumford,coach1student1,coach1student1,coach1student1@unicon.net,2,0,2,test coach1");
-		expectedReportBodyLines.add("test,Mumford,coach1student4,coach1student4,coach1student4@unicon.net,5,0,4,test coach1");
+		expectedReportBodyLines.add("FIRST,MIDDLE,LAST,STUDENT ID,EMAIL(SCHOOL),EA TOT,RESPONSES,NO RESPONSE,,WAITING,NOT EA CLASS,DUPLICATE,COUNSELOR");
+		expectedReportBodyLines.add("James,A,Gosling,student0,test@sinclair.edu,1,1,,1,0,0,0,Alan Turing");
+		expectedReportBodyLines.add("test,Mumford,coach1student0,coach1student0,coach1student0@unicon.net,1,0,,0,0,0,0,test coach1");
+		expectedReportBodyLines.add("test,Mumford,coach1student1,coach1student1,coach1student1@unicon.net,2,2,,0,0,1,1,test coach1");
+		expectedReportBodyLines.add("test,Mumford,coach1student4,coach1student4,coach1student4@unicon.net,5,3,,3,0,0,0,test coach1");
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}

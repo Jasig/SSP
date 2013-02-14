@@ -404,7 +404,7 @@ public class EarlyAlertDaoTest {
 
 		try {
 			final PagingWrapper<EarlyAlertStudentReportTO> result = dao.getStudentsEarlyAlertCountSetForCritera(searchForm, null);
-			assertEquals("Count of Students was not expected.", 2,
+			assertEquals("Count of Students was not expected.", 4,
 					result.getRows().size());
 		} finally {
 			dao.delete(saved);

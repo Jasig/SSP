@@ -57,6 +57,7 @@ import org.jasig.ssp.service.reference.EarlyAlertReferralService;
 import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.reference.JournalTrackService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
+import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
@@ -363,5 +364,15 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 			SortingAndPaging sAndP){
 		return dao.getStudentEarlyAlertResponseCountByCoaches(coaches, createDateFrom, createDateTo, studentTypeIds, sAndP);
 	}
-
+	
+	@Override
+	public EarlyAlertResponseCounts getCountEarlyAlertRespondedToForEarlyAlerts(List<UUID> earlyAlertIds){
+		return dao.getCountEarlyAlertRespondedToForEarlyAlerts(earlyAlertIds);
+	}
+	
+	@Override
+	public EarlyAlertResponseCounts getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(List<UUID> earlyAlertIds, UUID outcomeId)
+	{
+		return dao.getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(earlyAlertIds, outcomeId);
+	}
 }

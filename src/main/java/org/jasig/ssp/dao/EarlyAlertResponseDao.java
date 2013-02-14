@@ -43,6 +43,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.EarlyAlertOutreach;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
@@ -122,6 +123,51 @@ public class EarlyAlertResponseDao extends
 
 		return totalRows;
 	}
+	
+	public EarlyAlertResponseCounts getCountEarlyAlertRespondedToForEarlyAlerts(List<UUID> earlyAlertIds) {
+
+		final Criteria query = createCriteria();
+		final EarlyAlertResponseCounts counts = new EarlyAlertResponseCounts();
+		
+		query.createAlias("earlyAlert", "earlyAlert");
+		query.add(Restrictions.in("earlyAlert.id", earlyAlertIds));
+		query.setProjection(Projections.rowCount());
+		if(!query.list().isEmpty())
+			counts.setTotalResponses((Long)(query.list().get(0)));
+		
+		query.setProjection(Projections.countDistinct("earlyAlert.id"));
+		if(!query.list().isEmpty())
+			counts.setTotalEARespondedTo((Long)(query.list().get(0)));
+		
+		 query.add(Restrictions.isNull("earlyAlert.closedById"));
+		 if(!query.list().isEmpty())
+				counts.setTotalEARespondedToNotClosed((Long)(query.list().get(0)));
+		 
+		 return counts;
+	}
+	
+	public EarlyAlertResponseCounts getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(List<UUID> earlyAlertIds, UUID outcomeId) {
+
+		final Criteria query = createCriteria();
+		final EarlyAlertResponseCounts counts = new EarlyAlertResponseCounts();
+		query.createAlias("earlyAlert", "earlyAlert");
+		query.add(Restrictions.in("earlyAlert.id", earlyAlertIds));
+		query.add(Restrictions.eq("earlyAlertOutcome.id", outcomeId));
+		query.setProjection(Projections.rowCount());
+		if(!query.list().isEmpty())
+			counts.setTotalResponses((Long)(query.list().get(0)));
+		
+		query.setProjection(Projections.countDistinct("earlyAlert.id"));
+		if(!query.list().isEmpty())
+			counts.setTotalEARespondedTo((Long)(query.list().get(0)));
+		
+		 query.add(Restrictions.isNull("earlyAlert.closedById"));
+		 if(!query.list().isEmpty())
+				counts.setTotalEARespondedToNotClosed((Long)(query.list().get(0)));
+		 return counts;
+	}
+	
+	
 
 	public Long getEarlyAlertRespondedToCount(Date createDateFrom,
 			Date createDateTo, Campus campus) {

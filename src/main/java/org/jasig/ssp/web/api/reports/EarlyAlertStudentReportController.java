@@ -172,25 +172,12 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 				SortingAndPaging.createForSingleSortWithPaging(status, null,
 						null, null, null, null));
 		
-			 
-		ArrayList<EarlyAlertStudentReportTO> compressedReports = new ArrayList<EarlyAlertStudentReportTO>();
-		for(EarlyAlertStudentReportTO reportTO: reports){
-			Integer index = compressedReports.indexOf(reportTO);
-			if(index != null && index >= 0)
-			{
-				BaseStudentReportTO compressedReportTo = compressedReports.get(index);
-				compressedReportTo.processDuplicate(reportTO);
-			}else{
-				compressedReports.add(reportTO);
-			}
-		}
+		List<EarlyAlertStudentReportTO> compressedReports = processReports(reports, earlyAlertResponseService);
 			
 
 		final Map<String, Object> map = Maps.newHashMap();
 		
-		SearchParameters.addReportDateToMap(map);
 		SearchParameters.addDateTermToMap(termDate, map);
-
 		generateReport(response,  map, compressedReports,  REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 	
@@ -199,4 +186,5 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 	protected Logger getLogger() {
 		return LOGGER;
 	}
+	
 }

@@ -27,6 +27,7 @@ import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Campus;
+import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
@@ -103,5 +104,14 @@ public interface EarlyAlertResponseService
 			final Date createDateTo, 
 			final PersonSearchFormTO addressLabelSearchTO,
 			final SortingAndPaging sAndP)throws ObjectNotFoundException;
+
+	/**
+	 * Get count of all early alerts which have one or more responses.  No selection criteria other than earlyAlertId
+	 * @param earlyAlertIds
+	 * @return
+	 */
+	EarlyAlertResponseCounts getCountEarlyAlertRespondedToForEarlyAlerts(List<UUID> earlyAlertIds);
+	
+	EarlyAlertResponseCounts getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(List<UUID> earlyAlertIds, UUID outcomeId);
 
 }

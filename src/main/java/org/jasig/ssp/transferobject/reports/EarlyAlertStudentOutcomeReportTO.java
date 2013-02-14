@@ -18,87 +18,111 @@
  */
 package org.jasig.ssp.transferobject.reports;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.lang.StringUtils;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.transferobject.PersonTO;
 
 /**
  * AddressLabelSearch transfer object
  */
 public class EarlyAlertStudentOutcomeReportTO extends EarlyAlertStudentReportTO  {
 
+	public static final UUID STUDENT_RESPONDED = UUID.fromString("12a58804-45dc-40f2-b2f5-d7e4403acee1");
+	public static final UUID WAITING_FOR_RESPONSE = UUID.fromString("7148606f-9034-4538-8fc2-c852a5c912ee");
+	public static final UUID STUDENT_DID_NOT_RESPOND = UUID.fromString("9a98ff78-92af-4681-8111-adb3300cbe1c");
+	public static final UUID NOT_AN_EA_CLASS = UUID.fromString("14e390d5-2371-48b4-a9de-2d35bc18e868");
+	public static final UUID DUPLICATE_EA_NOTICE = UUID.fromString("14e390d5-2371-48b4-a9de-2d35bc18e868");
 	private static final long serialVersionUID = 3118831549819428989L;
 
-	private Long response;
+	private Long totalAllReponses;
 	
-	private Long noResponse;
+	private Long studentResponded;
 	
 	private Long waitingForResponse;
 	
-	private Long notEALClass;
+	private Long notEAClass;
 	
-	private Long duplicate;
+	private Long duplicateEANotice;
+	
+	private Long studentDidNotRespond;
 
-	public EarlyAlertStudentOutcomeReportTO(EarlyAlertStudentReportTO model,
-			Long response, Long noResponse, Long waitingForResponse,
-			Long notEALClass, Long duplicate) {
-		super(model);
-		this.response = response;
-		this.noResponse = noResponse;
-		this.waitingForResponse = waitingForResponse;
-		this.notEALClass = notEALClass;
-		this.duplicate = duplicate;
+	public EarlyAlertStudentOutcomeReportTO()
+	{
+		
+	}
+	
+	
+	public Long getTotalAllReponses() {
+		return totalAllReponses;
 	}
 
-	public Long getResponse() {
-		return response;
+
+
+	public void setTotalAllReponses(Long totalAllReponses) {
+		this.totalAllReponses = totalAllReponses;
 	}
 
-	public void setResponse(Long response) {
-		this.response = response;
+
+
+	public Long getStudentResponded() {
+		return studentResponded;
 	}
 
-	public Long getNoResponse() {
-		return noResponse;
+
+
+	public void setStudentResponded(Long studentResponded) {
+		this.studentResponded = studentResponded;
 	}
 
-	public void setNoResponse(Long noResponse) {
-		this.noResponse = noResponse;
-	}
+
 
 	public Long getWaitingForResponse() {
 		return waitingForResponse;
 	}
 
+
+
 	public void setWaitingForResponse(Long waitingForResponse) {
 		this.waitingForResponse = waitingForResponse;
 	}
 
-	public Long getNotEALClass() {
-		return notEALClass;
+
+
+	public Long getNotEAClass() {
+		return notEAClass;
 	}
 
-	public void setNotEALClass(Long notEALClass) {
-		this.notEALClass = notEALClass;
+
+
+	public void setNotEAClass(Long notEAClass) {
+		this.notEAClass = notEAClass;
 	}
 
-	public Long getDuplicate() {
-		return duplicate;
+
+
+	public Long getDuplicateEANotice() {
+		return duplicateEANotice;
 	}
 
-	public void setDuplicate(Long duplicate) {
-		this.duplicate = duplicate;
+
+
+	public void setDuplicateEANotice(Long duplicateEANotice) {
+		this.duplicateEANotice = duplicateEANotice;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+
+
+	public Long getStudentDidNotRespond() {
+		return studentDidNotRespond;
 	}
-	
+
+
+
+	public void setStudentDidNotRespond(Long studentDidNotRespond) {
+		this.studentDidNotRespond = studentDidNotRespond;
+	}
+
+
+
 	@Override
 	public boolean equals(Object obj){
 		if (!(BaseStudentReportTO.class.isInstance(obj))

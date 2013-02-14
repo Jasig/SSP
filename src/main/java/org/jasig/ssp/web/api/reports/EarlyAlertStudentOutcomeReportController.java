@@ -46,6 +46,8 @@ import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
+import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutcomeReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
@@ -171,24 +173,61 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
-		final PagingWrapper<EarlyAlertStudentReportTO> peopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
+		final PagingWrapper<EarlyAlertStudentReportTO> reportTOs = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
 				searchForm, SortingAndPaging.createForSingleSortAll(status, "lastName", "DESC"));
 
-		List<EarlyAlertStudentOutcomeReportTO> people = new ArrayList<EarlyAlertStudentOutcomeReportTO>();
-		for(EarlyAlertStudentReportTO personInfo : peopleInfo.getRows()){
-			Integer index = people.indexOf(personInfo);
-			if(index == null || index < 0)
-				people.add(new EarlyAlertStudentOutcomeReportTO(personInfo, personInfo.getTotal(), 0L, personInfo.getOpen(), 0L, 0L));
-			else
-				people.get(index).processDuplicate(personInfo);
-		}
+		List<EarlyAlertStudentOutcomeReportTO> compressedReportTOS = processReportsTO(reportTOs, earlyAlertResponseService);
 		SearchParameters.addDateTermToMap(dateTerm, parameters);
 			
-		generateReport(response,  parameters, people,  REPORT_URL, reportType, REPORT_FILE_TITLE);
+		generateReport(response,  parameters, compressedReportTOS,  REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
+	}
+	
+	protected List<EarlyAlertStudentOutcomeReportTO> processReportsTO(PagingWrapper<EarlyAlertStudentReportTO> reports, EarlyAlertResponseService earlyAlertResponseService){
+		 
+		List<EarlyAlertStudentOutcomeReportTO> compressedReports = new ArrayList<EarlyAlertStudentOutcomeReportTO>();
+		for(EarlyAlertStudentReportTO personInfo : reports){
+			Integer index = compressedReports.indexOf(personInfo);
+			if(index == null || index < 0){
+				EarlyAlertStudentOutcomeReportTO reportTO = new EarlyAlertStudentOutcomeReportTO();
+				reportTO.setPerson(personInfo);
+				reportTO.processDuplicate(personInfo);
+				compressedReports.add(reportTO);
+			}else
+				compressedReports.get(index).processDuplicate(personInfo);
+		}
+		
+		for(EarlyAlertStudentOutcomeReportTO reportTO: compressedReports){
+			List<UUID> earlyAlertIds = reportTO.getEarlyAlertIds();
+			EarlyAlertResponseCounts countOfResponses = earlyAlertResponseService.getCountEarlyAlertRespondedToForEarlyAlerts(earlyAlertIds);
+			//TODO Possible inaccuracy if early alert was closed but there was no response at all.
+			reportTO.setPending(countOfResponses.getTotalEARespondedToNotClosed());
+			reportTO.setTotalAllReponses(countOfResponses.getTotalResponses());
+			
+			countOfResponses = earlyAlertResponseService.getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(
+					earlyAlertIds, EarlyAlertStudentOutcomeReportTO.DUPLICATE_EA_NOTICE);
+			reportTO.setDuplicateEANotice(countOfResponses.getTotalResponses());
+			
+			countOfResponses = earlyAlertResponseService.getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(
+					earlyAlertIds, EarlyAlertStudentOutcomeReportTO.NOT_AN_EA_CLASS);
+			reportTO.setNotEAClass(countOfResponses.getTotalResponses());
+			
+			countOfResponses = earlyAlertResponseService.getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(
+					earlyAlertIds, EarlyAlertStudentOutcomeReportTO.STUDENT_DID_NOT_RESPOND);
+			reportTO.setStudentDidNotRespond(countOfResponses.getTotalResponses());
+			
+			countOfResponses = earlyAlertResponseService.getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(
+					earlyAlertIds, EarlyAlertStudentOutcomeReportTO.STUDENT_RESPONDED);
+			reportTO.setStudentResponded(countOfResponses.getTotalResponses());
+			
+			countOfResponses = earlyAlertResponseService.getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(
+					earlyAlertIds, EarlyAlertStudentOutcomeReportTO.WAITING_FOR_RESPONSE);
+			reportTO.setWaitingForResponse(countOfResponses.getTotalResponses());
+		}
+		return compressedReports;
 	}
 }

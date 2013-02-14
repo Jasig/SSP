@@ -169,11 +169,13 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 		final PagingWrapper<EarlyAlertStudentReportTO> comparisonPeopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
 				comparisonSearchForm, SortingAndPaging.createForSingleSortAll(status, "lastName", "DESC"));
 		
+		List<EarlyAlertStudentReportTO> initialPeopleInfoCompressed = processReports(initialPeopleInfo, earlyAlertResponseService);
+		List<EarlyAlertStudentReportTO> comparisonPeopleInfoCompressed = processReports(comparisonPeopleInfo, earlyAlertResponseService);
 		
 		List<EarlyAlertStudentProgressReportTO> people = new ArrayList<EarlyAlertStudentProgressReportTO>();
-		for(EarlyAlertStudentReportTO initialPersonInfo : initialPeopleInfo){
+		for(EarlyAlertStudentReportTO initialPersonInfo : initialPeopleInfoCompressed){
 			EarlyAlertStudentReportTO foundPerson = null;
-			for(EarlyAlertStudentReportTO comparisonPersonInfo : comparisonPeopleInfo){
+			for(EarlyAlertStudentReportTO comparisonPersonInfo : comparisonPeopleInfoCompressed){
 				if(initialPersonInfo.getId().equals(comparisonPersonInfo.getId())){
 					foundPerson = comparisonPersonInfo;
 					break;

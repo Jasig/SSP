@@ -222,11 +222,12 @@ public class EarlyAlertDao extends
 							.uniqueResult();
 		}
 
+		
 		ProjectionList projections = Projections.projectionList()
 			.add(Projections.countDistinct("id").as("earlyalert_total"))
 			.add(Projections.countDistinct("closedById").as("earlyalert_closed"));
-		
-		addBasicStudentProperties(projections, query);  
+				addBasicStudentProperties(projections, query);  
+		projections.add(Projections.groupProperty("id").as("earlyalert_earlyAlertId"));
 		query.setProjection(projections);
 		query.setResultTransformer(
 				new NamespacedAliasToBeanResultTransformer(

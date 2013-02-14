@@ -38,7 +38,10 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
 
+import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
@@ -120,6 +123,28 @@ abstract class ReportBaseController extends AbstractBaseController {
 			}else{
 				compressedReports.add(reportTO);
 			}
+		}
+		return compressedReports;
+	}
+	
+	protected List<EarlyAlertStudentReportTO> processReports(PagingWrapper<EarlyAlertStudentReportTO> reports, EarlyAlertResponseService earlyAlertResponseService){
+		 
+		ArrayList<EarlyAlertStudentReportTO> compressedReports = new ArrayList<EarlyAlertStudentReportTO>();
+		for(EarlyAlertStudentReportTO reportTO: reports){
+			Integer index = compressedReports.indexOf(reportTO);
+			if(index != null && index >= 0)
+			{
+				BaseStudentReportTO compressedReportTo = compressedReports.get(index);
+				compressedReportTo.processDuplicate(reportTO);
+			}else{
+				compressedReports.add(reportTO);
+			}
+		}
+		
+		for(EarlyAlertStudentReportTO reportTO: compressedReports){
+			EarlyAlertResponseCounts countOfResponses = earlyAlertResponseService.getCountEarlyAlertRespondedToForEarlyAlerts(reportTO.getEarlyAlertIds());
+			//TODO Possible inaccuracy if early alert was closed but there was no response at all.
+			reportTO.setPending(countOfResponses.getTotalEARespondedToNotClosed());
 		}
 		return compressedReports;
 	}
