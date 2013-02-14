@@ -10453,6 +10453,7 @@ Ext.define('Ssp.controller.tool.studentintake.PersonalViewController', {
     	birthDateField: '#birthDate',
     	homePhoneField: '#homePhone',
     	workPhoneField: '#workPhone',
+        cellPhoneField: '#cellPhone',
     	addressLine1Field: '#addressLine1',
     	addressLine2Field: '#addressLine2',
     	cityField: '#city',
@@ -10470,6 +10471,7 @@ Ext.define('Ssp.controller.tool.studentintake.PersonalViewController', {
 		me.getBirthDateField().setDisabled(disabled);
 		me.getHomePhoneField().setDisabled(disabled);
 		me.getWorkPhoneField().setDisabled(disabled);
+        me.getCellPhoneField().setDisabled(disabled);
 		me.getAddressLine1Field().setDisabled(disabled);
 		me.getAddressLine2Field().setDisabled(disabled);
 		me.getCityField().setDisabled(disabled);
