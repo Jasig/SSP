@@ -249,6 +249,11 @@ public class ExternalPersonServiceImpl
 			person.setWorkPhone(externalPerson.getWorkPhone());
 		}
 
+		if ((person.getCellPhone() == null) ||
+				(!person.getCellPhone().equals(externalPerson.getCellPhone()))) {
+			person.setCellPhone(externalPerson.getCellPhone());
+		}
+
 		if ((person.getActualStartTerm() == null) ||
 				(!person.getActualStartTerm().equals(
 						externalPerson.getActualStartTerm()))) {

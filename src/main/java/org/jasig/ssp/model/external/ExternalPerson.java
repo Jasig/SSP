@@ -86,7 +86,7 @@ public class ExternalPerson extends AbstractExternalData implements
 
 	@Column(length = 25)
 	@Size(max = 25)
-	private String homePhone, workPhone;
+	private String homePhone, workPhone, cellPhone;
 
 	@Column(length = 50)
 	@Size(max = 50)
@@ -227,6 +227,14 @@ public class ExternalPerson extends AbstractExternalData implements
 
 	public void setWorkPhone(final String workPhone) {
 		this.workPhone = workPhone;
+	}
+
+	public String getCellPhone() {
+		return cellPhone;
+	}
+
+	public void setCellPhone(final String cellPhone) {
+		this.cellPhone = cellPhone;
 	}
 
 	public String getOfficeLocation() {
