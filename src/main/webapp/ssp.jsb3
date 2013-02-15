@@ -1164,11 +1164,6 @@
                     "path": "/app/store/reference/"
                 },
                 {
-                    "clsName": "Ssp.store.reference.AnticipatedStartYears",
-                    "name": "AnticipatedStartYears.js",
-                    "path": "/app/store/reference/"
-                },
-                {
                     "clsName": "Ssp.store.reference.Challenges",
                     "name": "Challenges.js",
                     "path": "/app/store/reference/"
