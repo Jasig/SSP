@@ -109,6 +109,16 @@
                     "path": "/app/view/tools/sis/"
                 },
                 {
+                    "clsName": "Ssp.controller.tool.disabilityintake.GeneralViewController",
+                    "name": "GeneralViewController.js",
+                    "path": "/app/controller/tool/disabilityintake/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewController",
+                    "name": "DisabilityIntakeToolViewController.js",
+                    "path": "/app/controller/tool/disabilityintake/"
+                },
+                {
                     "clsName": "Ssp.view.tools.disabilityintake.General",
                     "name": "General.js",
                     "path": "/app/view/tools/disabilityintake/"
