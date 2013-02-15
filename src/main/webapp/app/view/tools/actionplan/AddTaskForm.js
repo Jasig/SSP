@@ -83,16 +83,17 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				    }],
 				    
 				    dockedItems: [{
-				        dock: 'bottom',
+				        dock: 'top',
 				        xtype: 'toolbar',
 				        items: [{xtype: 'button', 
 				        	     itemId: 'addButton', 
 				        	     text:'Save', 
 				        	     action: 'add' },
+								 , '-',
 				        	     {
 				            	   xtype: 'button',
 				            	   itemId: 'closeButton',
-				            	   text: 'Finished',
+				            	   text: 'Cancel',
 				            	   action: 'close'}]
 				    }]
 				});
