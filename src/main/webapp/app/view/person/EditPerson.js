@@ -78,10 +78,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        fieldLabel: 'Home Phone',
 			        name: 'homePhone',
 			        emptyText: 'xxx-xxx-xxxx',
-			        maskRe: /[\d\-]/,
-			        regex: /^\d{3}-\d{3}-\d{4}$/,
-			        regexText: 'Must be in the format xxx-xxx-xxxx',
-			        maxLength: 12,
+			        maxLength: 25,
 			        allowBlank:true,
 			        itemId: 'homePhone',
 			        width: 350
@@ -89,10 +86,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        fieldLabel: 'Work Phone',
 			        name: 'workPhone',
 			        emptyText: 'xxx-xxx-xxxx',
-			        maskRe: /[\d\-]/,
-			        regex: /^\d{3}-\d{3}-\d{4}$/,
-			        regexText: 'Must be in the format xxx-xxx-xxxx',
-			        maxLength: 12,
+			        maxLength: 25,
 			        allowBlank:true,
 			        itemId: 'workPhone',
 			        width: 350
