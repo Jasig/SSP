@@ -95,30 +95,21 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        fieldLabel: 'Home Phone',
 				        name: 'homePhone',
 				        emptyText: 'xxx-xxx-xxxx',
-				        maskRe: /[\d\-]/,
-				        regex: /^\d{3}-\d{3}-\d{4}$/,
-				        regexText: 'Must be in the format xxx-xxx-xxxx',
-				        maxLength: 12,
+				        maxLength: 25,
 				        allowBlank:true,
 				        itemId: 'homePhone' 
 				    },{
 				        fieldLabel: 'Work Phone',
 				        name: 'workPhone',
 				        emptyText: 'xxx-xxx-xxxx',
-				        maskRe: /[\d\-]/,
-				        regex: /^\d{3}-\d{3}-\d{4}$/,
-				        regexText: 'Must be in the format xxx-xxx-xxxx',
-				        maxLength: 12,
+				        maxLength: 25,
 				        allowBlank:true,
 				        itemId: 'workPhone'
 				    },{
 				        fieldLabel: 'Cell Phone',
 				        name: 'cellPhone',
 				        emptyText: 'xxx-xxx-xxxx',
-				        maskRe: /[\d\-]/,
-				        regex: /^\d{3}-\d{3}-\d{4}$/,
-				        regexText: 'Must be in the format xxx-xxx-xxxx',
-				        maxLength: 12,
+				        maxLength: 25,
 				        allowBlank:true,
 				        itemId: 'cellPhone'
 				    },{
