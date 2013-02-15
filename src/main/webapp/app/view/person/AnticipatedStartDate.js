@@ -24,7 +24,6 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
     controller: 'Ssp.controller.person.AnticipatedStartDateViewController',
     inject: {
     	anticipatedStartTermsStore: 'anticipatedStartTermsStore',
-    	anticipatedStartYearsStore: 'anticipatedStartYearsStore'
     },
 	initComponent: function() {	
 		Ext.apply(this, 
@@ -55,16 +54,16 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
 		        queryMode: 'local',
 		        allowBlank: true
 			},{
-		        xtype: 'combobox',
+		        xtype: 'textfield',
 		        name: 'anticipatedStartYear',
 		        fieldLabel: 'Anticipated Start Year',
-		        emptyText: 'Select One',
-		        store: this.anticipatedStartYearsStore,
-		        valueField: 'name',
-		        displayField: 'name',
-		        mode: 'local',
-		        typeAhead: true,
-		        queryMode: 'local',
+                minLength: 4,
+                maxLength: 4,
+                width: 200,
+                emptyText: 'xxxx',
+                maskRe: /\d/,
+                regex: /^\d{4}$/,
+                regexText: 'Must be a four-digit number',
 		        allowBlank: true
 			}]
 		});
