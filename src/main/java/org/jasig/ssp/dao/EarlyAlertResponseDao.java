@@ -261,7 +261,7 @@ public class EarlyAlertResponseDao extends
 			final List<UUID> earlyAlertReferralIds, 
 			final Date createDateFrom, 
 			final Date createDateTo,
-			final PersonSearchFormTO addressLabelSearchTO,
+			final PersonSearchFormTO personSearchForm,
 			final SortingAndPaging sAndP)
 			throws ObjectNotFoundException {
 
@@ -283,9 +283,17 @@ public class EarlyAlertResponseDao extends
 		criteria.createAlias("earlyAlert", "earlyAlert");
 		Criteria personCriteria = criteria.createAlias("earlyAlert.person", "person");
 
-		setPersonCriteria(personCriteria, addressLabelSearchTO);
+		setPersonCriteria(personCriteria, personSearchForm);
 		ProjectionList projections = Projections.projectionList().
 				add(Projections.distinct(Projections.groupProperty("earlyAlert.id").as("early_alert_response_earlyAlertId")));
+		
+		if(personSearchForm.getSpecialServiceGroupIds() == null)
+			criteria.createAlias("person.specialServiceGroups",
+				"personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
+		
+		if(personSearchForm.getProgramStatus() == null)
+			criteria.createAlias("person.programStatuses",
+				"personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
 		
 		addBasicStudentProperties(projections, criteria);
 		criteria.setProjection(projections)
@@ -404,11 +412,11 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 			criteria.add(Restrictions.eq("person.coach.id",
 					addressLabelSearchTO.getCoach().getId()));
 		}
-		criteria.createAlias("person.programStatuses",
-				"personProgramStatuses");
-		criteria.createAlias("person.specialServiceGroups",
-				"personSpecialServiceGroups");
-		if (addressLabelSearchTO.getProgramStatus() != null) {			
+		
+		
+		if (addressLabelSearchTO.getProgramStatus() != null) {	
+			criteria.createAlias("person.programStatuses",
+					"personProgramStatuses");
 			criteria.add(Restrictions
 							.eq("personProgramStatuses.programStatus.id",
 									addressLabelSearchTO
@@ -417,7 +425,8 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		}
 
 		if (addressLabelSearchTO.getSpecialServiceGroupIds() != null) {
-			
+			criteria.createAlias("person.specialServiceGroups",
+					"personSpecialServiceGroups");
 			criteria.add(Restrictions
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
 									addressLabelSearchTO

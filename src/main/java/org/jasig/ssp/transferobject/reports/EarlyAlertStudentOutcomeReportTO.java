@@ -25,7 +25,7 @@ import java.util.UUID;
  * AddressLabelSearch transfer object
  */
 public class EarlyAlertStudentOutcomeReportTO extends EarlyAlertStudentReportTO  {
-
+	
 	public static final UUID STUDENT_RESPONDED = UUID.fromString("12a58804-45dc-40f2-b2f5-d7e4403acee1");
 	public static final UUID WAITING_FOR_RESPONSE = UUID.fromString("7148606f-9034-4538-8fc2-c852a5c912ee");
 	public static final UUID STUDENT_DID_NOT_RESPOND = UUID.fromString("9a98ff78-92af-4681-8111-adb3300cbe1c");

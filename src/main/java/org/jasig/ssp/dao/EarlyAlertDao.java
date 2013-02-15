@@ -222,6 +222,13 @@ public class EarlyAlertDao extends
 							.uniqueResult();
 		}
 
+		if(criteriaTO.getAddressLabelSearchTO().getProgramStatus() == null){
+			query.createAlias("person.programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
+		}
+		
+		if(criteriaTO.getAddressLabelSearchTO().getSpecialServiceGroupIds() == null){
+			query.createAlias("person.specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
+		}
 		
 		ProjectionList projections = Projections.projectionList()
 			.add(Projections.countDistinct("id").as("earlyalert_total"))
@@ -252,11 +259,10 @@ public class EarlyAlertDao extends
 		projections.add(Projections.groupProperty("person.state").as("earlyalert_state"));
 		projections.add(Projections.groupProperty("person.zipCode").as("earlyalert_zipCode"));
 		projections.add(Projections.groupProperty("person.id").as("earlyalert_id"));
-		
-		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup");
+		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup" );
 		projections.add(Projections.groupProperty("specialServiceGroup.name").as("earlyalert_specialServiceGroup"));
 		
-		criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate"));
+		criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate")); 
 		
 		criteria.createAlias("personProgramStatuses.programStatus", "programStatus");
 		
@@ -444,22 +450,19 @@ public class EarlyAlertDao extends
 			criteria.add(Restrictions.eq("person.coach.id",
 					addressLabelSearchTO.getCoach().getId()));
 		}
-		criteria.createAlias("person.programStatuses",
-				"personProgramStatuses");
+		
 		if (addressLabelSearchTO.getProgramStatus() != null) {
-
-			
+			criteria.createAlias("person.programStatuses",
+					"personProgramStatuses");
 			criteria.add(Restrictions
 							.eq("personProgramStatuses.programStatus.id",
 									addressLabelSearchTO
 											.getProgramStatus()));
 
 		}
-
-		criteria.createAlias("person.specialServiceGroups",
-				"personSpecialServiceGroups");
 		if (addressLabelSearchTO.getSpecialServiceGroupIds() != null) {
-			
+			criteria.createAlias("person.specialServiceGroups",
+					"personSpecialServiceGroups");
 				criteria.add(Restrictions
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
 									addressLabelSearchTO

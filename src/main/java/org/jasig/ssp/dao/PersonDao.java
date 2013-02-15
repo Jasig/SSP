@@ -334,19 +334,19 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 					personSearchTO.getCoach().getId()));
 		}
 		
-		criteria.createAlias("programStatuses",
-				"personProgramStatuses");
 		if (personSearchTO.getProgramStatus() != null) {
+			criteria.createAlias("programStatuses",
+					"personProgramStatuses");
 			criteria.add(Restrictions
 							.eq("personProgramStatuses.programStatus.id",
 									personSearchTO
 											.getProgramStatus()));
 
 		}
-		criteria.createAlias("specialServiceGroups",
-				"personSpecialServiceGroups");
 		
 		if (personSearchTO.getSpecialServiceGroupIds() != null) {
+			criteria.createAlias("specialServiceGroups",
+					"personSpecialServiceGroups");
 			criteria.add(Restrictions
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
 									personSearchTO
@@ -443,6 +443,14 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		final ProjectionList projections = Projections.projectionList();
 		
 		criteria.setProjection(projections);
+		if(form.getProgramStatus() == null){
+			criteria.createAlias("programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
+		}
+		
+		if(form.getSpecialServiceGroupIds() == null){
+			criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
+		}
+	
 		addBasicStudentProperties(projections, criteria);
 		
 		criteria.setResultTransformer(new AliasToBeanResultTransformer(
@@ -479,6 +487,15 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		final ProjectionList projections = Projections.projectionList();
 		
 		criteria.setProjection(projections);
+		
+		if(form.getProgramStatus() == null){
+			criteria.createAlias("programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
+		}
+		
+		if(form.getSpecialServiceGroupIds() == null){
+			criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
+		}
+		
 		addBasicStudentProperties(projections, criteria);
 		Criteria demographics = criteria.createAlias("demographics", "demographics");
 		demographics.createAlias("demographics.ethnicity", "ethnicity");
