@@ -109,34 +109,24 @@
                     "path": "/app/view/tools/sis/"
                 },
                 {
-                    "clsName": "Ssp.view.tools.disability.DisabilityServices",
-                    "name": "DisabilityServices.js",
-                    "path": "/app/view/tools/disability/"
-                },
-                {
-                    "clsName": "Ssp.view.tools.disability.General",
+                    "clsName": "Ssp.view.tools.disabilityintake.General",
                     "name": "General.js",
-                    "path": "/app/view/tools/disability/"
+                    "path": "/app/view/tools/disabilityintake/"
                 },
                 {
-                    "clsName": "Ssp.view.tools.disability.AgencyContacts",
+                    "clsName": "Ssp.view.tools.disabilityintake.AgencyContacts",
                     "name": "AgencyContacts.js",
-                    "path": "/app/view/tools/disability/"
+                    "path": "/app/view/tools/disabilityintake/"
                 },
                 {
-                    "clsName": "Ssp.view.tools.disability.DisabilityCodes",
-                    "name": "DisabilityCodes.js",
-                    "path": "/app/view/tools/disability/"
-                },
-                {
-                    "clsName": "Ssp.view.tools.disability.Disposition",
+                    "clsName": "Ssp.view.tools.disabilityintake.Disposition",
                     "name": "Disposition.js",
-                    "path": "/app/view/tools/disability/"
+                    "path": "/app/view/tools/disabilityintake/"
                 },
                 {
-                    "clsName": "Ssp.view.tools.disability.Accommodations",
+                    "clsName": "Ssp.view.tools.disabilityintake.Accommodations",
                     "name": "Accommodations.js",
-                    "path": "/app/view/tools/disability/"
+                    "path": "/app/view/tools/disabilityintake/"
                 },
                 {
                     "clsName": "Ssp.view.tools.displacedworker.DisplacedWorker",
@@ -1541,11 +1531,6 @@
                 {
                     "clsName": "Ssp.controller.admin.shg.SelfHelpGuidesDisplayViewController",
                     "name": "SelfHelpGuidesDisplayViewController.js",
-                    "path": "/app/controller/admin/shg/"
-                },
-                {
-                    "clsName": "Ssp.view.tools.studentintake.EducationGoals",
-                    "name": "EducationGoals.js",
                     "path": "/app/controller/admin/shg/"
                 },
                 {
