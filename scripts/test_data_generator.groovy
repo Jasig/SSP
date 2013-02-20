@@ -55,22 +55,22 @@ class Constants{
 	
 	/* parameter values for generation */
 	
-	static final TOTAL_NUMBER_OF_COACHES = 2 as Integer
+	static final TOTAL_NUMBER_OF_COACHES = 100 as Integer
 	static final STUDENT_MULTIPLIER = 4 as Integer //use this to set the multiplier that determines the number of students a coach has. (coachIndex * STUDENT_MULTIPLIER)
-	static final BASE_NUMBER_OF_STUDENTS = 5 as Integer
-	static final MAX_EARLY_ALERTS = 5 as Integer
+	static final BASE_NUMBER_OF_STUDENTS = 15 as Integer
+	static final MAX_EARLY_ALERTS = 8 as Integer
 	static final MAX_EARLY_ALERT_RESPONSES = 4 as Integer
-	static final MAX_MANY_TO_MANY = 2 as Integer
-	static final MAXIMUM_TASKS = 5 as Integer
-	static final MAXIMUM_JOURNAL_ENTRIES = 5 as Integer
+	static final MAX_MANY_TO_MANY = 8 as Integer
+	static final MAXIMUM_TASKS = 10 as Integer
+	static final MAXIMUM_JOURNAL_ENTRIES = 8 as Integer
 	static final FREQUENCY_OF_EARLY_ALERT_RESPONSE = 3 as Integer
 	static final FREQUENCY_OF_EARLY_ALERT_SUGGESTION = 2 as Integer
 	static final FREQUENCY_OF_EARLY_ALERT_REASON = 1 as Integer
 	static final FREQUENCY_CLOSED_EARLY_ALERTS = 4 as Integer
-	static final FREQUENCY_DISABILITY = 2 as Integer
+	static final FREQUENCY_DISABILITY = 3 as Integer
 	
-	static final BASE_COACH_NAME = "coach"
-	static final BASE_STUDENT_NAME = "student"
+	static final BASE_COACH_NAME = "Coach"
+	static final BASE_STUDENT_NAME = "Student"
 	static final STUDENT_TYPE_ID_PARAMS = [max:3,mod:3]  // array size 3, where max is less than size of id array mod greater than array size causes mod-size null selections
 	static final PROGRAM_STATUS_ID_PARAMS = [max:5,mod:5] // array size 5
 	static final EARLY_ALERT_OUTREACH_ID_PARAMS = [max:5,mod:8] // array size 5
