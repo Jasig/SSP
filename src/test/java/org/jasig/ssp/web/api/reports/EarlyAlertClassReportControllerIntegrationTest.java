@@ -33,6 +33,7 @@ public class EarlyAlertClassReportControllerIntegrationTest extends
 						TermFixture.FALL_2012.name(),
 						null,
 						null,
+						null,
 						"csv");
 
 		// "body" is the actual results and the header that describes its columns.
@@ -55,6 +56,7 @@ public class EarlyAlertClassReportControllerIntegrationTest extends
 
 		controller.getEarlyAlertClassReport(response, 
 				null, 
+				null,
 				null,
 				null,
 				null,

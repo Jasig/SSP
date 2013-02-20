@@ -121,6 +121,8 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) Integer anticipatedStartYear,
 			final @RequestParam(required = false) String anticipatedStartTerm,
+			final @RequestParam(required = false) Integer actualStartYear,
+			final @RequestParam(required = false) String actualStartTerm,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false) String termCode,
@@ -151,6 +153,8 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 		SearchParameters.addReferenceTypes(programStatus,
 				null, 
 				false,
+				null,
+				null,
 				parameters, 
 				personSearchForm, 
 				programStatusService, 
@@ -158,8 +162,8 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 		
 		SearchParameters.addAnticipatedAndActualStartTerms(anticipatedStartTerm, 
 				anticipatedStartYear, 
-				null, 
-				null, 
+				actualStartTerm, 
+				actualStartYear, 
 				parameters, 
 				personSearchForm);
 

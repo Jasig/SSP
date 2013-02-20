@@ -118,6 +118,8 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 	public void getEarlyAlertStudentReport(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) String rosterStatus,
+			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) UUID coachId,			
 			final @RequestParam(required = false) UUID programStatus,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
@@ -154,6 +156,8 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 		SearchParameters.addReferenceTypes(programStatus, 
 				null, 
 				false,
+				rosterStatus,
+				homeDepartment,
 				parameters, 
 				personSearchForm, 
 				programStatusService, 
@@ -169,16 +173,11 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 		// building
 		final PagingWrapper<EarlyAlertStudentReportTO> reports = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
 				searchForm, 
-				SortingAndPaging.createForSingleSortWithPaging(status, null,
-						null, null, null, null));
+				SearchParameters.getReportPersonSortingAndPagingAll(status));
 		
 		List<EarlyAlertStudentReportTO> compressedReports = processReports(reports, earlyAlertResponseService);
 			
-
-		final Map<String, Object> map = Maps.newHashMap();
-		
-		SearchParameters.addDateTermToMap(termDate, map);
-		generateReport(response,  map, compressedReports,  REPORT_URL, reportType, REPORT_FILE_TITLE);
+		generateReport(response,  parameters, compressedReports,  REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 	
 

@@ -29,6 +29,7 @@ import java.util.UUID;
 
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
@@ -170,7 +171,7 @@ public class EarlyAlertResponseDao extends
 	
 
 	public Long getEarlyAlertRespondedToCount(Date createDateFrom,
-			Date createDateTo, Campus campus) {
+			Date createDateTo, Campus campus, String rosterStatus) {
 		final Criteria query = createCriteria();
 		
 		if (createDateFrom != null) {
@@ -195,9 +196,9 @@ public class EarlyAlertResponseDao extends
 		return totalRows;
 	}
 	
-	@SuppressWarnings({ "unchecked", "deprecation" })
+	@SuppressWarnings({ "unchecked" })
 	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(Date createDateFrom,
-			Date createDateTo, List<UUID> outcomes, Person coach) {
+			Date createDateTo, List<UUID> outcomes, String rosterStatus, Person coach) {
 		final Criteria query = createCriteria();
 		
 		if (createDateFrom != null) {
@@ -296,6 +297,9 @@ public class EarlyAlertResponseDao extends
 				"personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
 		
 		addBasicStudentProperties(projections, criteria);
+		criteria.addOrder(Order.asc("person.lastName"));
+		criteria.addOrder(Order.asc("person.firstName"));
+		criteria.addOrder(Order.asc("person.middleName"));
 		criteria.setProjection(projections)
 				.setResultTransformer(
 						new NamespacedAliasToBeanResultTransformer(

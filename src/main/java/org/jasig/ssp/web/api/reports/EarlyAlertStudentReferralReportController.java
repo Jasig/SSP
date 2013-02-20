@@ -112,6 +112,8 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 	public void getEarlyAlertStudentReferralReport(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) String rosterStatus,
+			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) UUID coachId,			
 			final @RequestParam(required = false) UUID programStatus,
 			final @RequestParam(required = false) UUID earlyAlertReferralId,
@@ -132,6 +134,8 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 				null, null,
 				null);
 		
+		searchForm.setRosterStatus(rosterStatus);
+		searchForm.setHomeDepartment(homeDepartment);
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
@@ -146,10 +150,12 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 		
 		SearchParameters.addReportDateToMap(parameters);
 		SearchParameters.addCoachNameToMap(coachTO, parameters);
-		
+		SearchParameters.addRosterStatusToMap(rosterStatus, parameters);
+		SearchParameters.addHomeDepartmentToMap(homeDepartment, parameters);
 		SearchParameters.addDateTermToMap(termDate, parameters);
 		SearchParameters.addProgramStatusToMap(programStatus, parameters, programStatusService);
 		SearchParameters.addEarlyAlertReferralToMap(earlyAlertReferralId, parameters, earlyAlertReferralsService);
+		SearchParameters.addStudentCount(peopleInfo, parameters);
 		
 		generateReport( response,  parameters, peopleInfo.size() > 0 ? peopleInfo : null,  REPORT_URL, 
 				 reportType, REPORT_FILE_TITLE);

@@ -34,6 +34,8 @@ public class EarlyAlertStudentOutcomeReportControllerIntegrationTest extends
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		
 		controller.getEarlyAlertStudentOutcomeReport(response, 
+				null,
+				null,
 				null, 
 				PersonFixture.COACH_1.id(), 
 				Lists.newArrayList(StudentTypeFixture.ILP.id()),
@@ -62,6 +64,8 @@ public class EarlyAlertStudentOutcomeReportControllerIntegrationTest extends
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 
 		controller.getEarlyAlertStudentOutcomeReport(response, 
+				null,
+				null,
 				null, 
 				null, 
 				null, 

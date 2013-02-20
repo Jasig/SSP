@@ -101,7 +101,7 @@ public class SpecialServicesReportController extends ReportBaseController {
 				null);
 
 		final PagingWrapper<BaseStudentReportTO> people = personService
-				.getStudentReportTOsFromCriteria(personSearchForm, SortingAndPaging.createForSingleSortAll(status, "lastName", "DESC"));
+				.getStudentReportTOsFromCriteria(personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
 
 		List<BaseStudentReportTO> compressedReports = processStudentReportTOs(people);
 		LOGGER.debug("Number of personTOs: " + compressedReports.size());

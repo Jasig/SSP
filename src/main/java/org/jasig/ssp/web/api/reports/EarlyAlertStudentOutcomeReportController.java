@@ -127,6 +127,8 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 	public void getEarlyAlertStudentOutcomeReport(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) String rosterStatus,
+			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) UUID coachId,	
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) UUID programStatus,
@@ -161,6 +163,8 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 		SearchParameters.addReferenceTypes(programStatus, 
 				null, 
 				false,
+				rosterStatus,
+				homeDepartment,
 				parameters, 
 				personSearchForm, 
 				programStatusService, 
@@ -174,7 +178,7 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 		// work... end up with empty results need to dig into actual query
 		// building
 		final PagingWrapper<EarlyAlertStudentReportTO> reportTOs = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
-				searchForm, SortingAndPaging.createForSingleSortAll(status, "lastName", "DESC"));
+				searchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
 
 		List<EarlyAlertStudentOutcomeReportTO> compressedReportTOS = processReportsTO(reportTOs, earlyAlertResponseService);
 		SearchParameters.addDateTermToMap(dateTerm, parameters);

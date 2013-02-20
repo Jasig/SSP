@@ -121,6 +121,8 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 	public void getEarlyAlertStudentProgressReport(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) String rosterStatus,
+			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) UUID coachId,	
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) UUID programStatus,
@@ -147,6 +149,8 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 		SearchParameters.addReferenceTypes(programStatus, 
 				null, 
 				false,
+				rosterStatus,
+				homeDepartment,
 				parameters, 
 				personSearchForm, 
 				programStatusService, 
@@ -161,13 +165,13 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 				initialTerm.getStartDate(), initialTerm.getEndDate());
 
 		final PagingWrapper<EarlyAlertStudentReportTO> initialPeopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
-				initialSearchForm, SortingAndPaging.createForSingleSortAll(status, "lastName", "DESC"));
+				initialSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
 		
 		final EarlyAlertStudentSearchTO comparisonSearchForm = new EarlyAlertStudentSearchTO(personSearchForm, 
 				comparisonTerm.getStartDate(), comparisonTerm.getEndDate());
 
 		final PagingWrapper<EarlyAlertStudentReportTO> comparisonPeopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
-				comparisonSearchForm, SortingAndPaging.createForSingleSortAll(status, "lastName", "DESC"));
+				comparisonSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
 		
 		List<EarlyAlertStudentReportTO> initialPeopleInfoCompressed = processReports(initialPeopleInfo, earlyAlertResponseService);
 		List<EarlyAlertStudentReportTO> comparisonPeopleInfoCompressed = processReports(comparisonPeopleInfo, earlyAlertResponseService);

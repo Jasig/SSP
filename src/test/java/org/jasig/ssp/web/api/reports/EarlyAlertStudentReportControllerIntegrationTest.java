@@ -35,6 +35,8 @@ public class EarlyAlertStudentReportControllerIntegrationTest extends
 		
 		controller.getEarlyAlertStudentReport(response, 
 				null, 
+				null,
+				null,
 				PersonFixture.COACH_1.id(), 
 				ProgramStatusFixture.ACTIVE.id(), 
 				Lists.newArrayList(SpecialServiceGroupFixture.TEST_SSG.id()), 
@@ -63,6 +65,8 @@ public class EarlyAlertStudentReportControllerIntegrationTest extends
 
 		controller.getEarlyAlertStudentReport(response, 
 				null, 
+				null,
+				null,
 				null, 
 				null, 
 				null, 

@@ -315,7 +315,7 @@ public class EarlyAlertDao extends
 		return (Long)query.setProjection(Projections.countDistinct("person")).list().get(0);
 	}
 
-	public Long getCountOfEarlyAlertsClosedByDate(Date closedDateFrom, Date closedDateTo, Campus campus) {
+	public Long getCountOfEarlyAlertsClosedByDate(Date closedDateFrom, Date closedDateTo, Campus campus, String rosterStatus) {
 		final Criteria query = createCriteria();
 		
 		if (closedDateFrom != null) {
@@ -339,7 +339,7 @@ public class EarlyAlertDao extends
 				.uniqueResult();
 	}
 	
-	public Long getCountOfEarlyAlertsByCreatedDate(Date createdDateFrom, Date createdDateTo, Campus campus) {
+	public Long getCountOfEarlyAlertsByCreatedDate(Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus) {
 		final Criteria query = createCriteria();
 		
 		if ( createdDateFrom != null) {
@@ -364,7 +364,7 @@ public class EarlyAlertDao extends
 		return totalRows;
 	}
 	
-	public Long getCountOfEarlyAlertStudentsByDate(Date createdDateFrom, Date createdDateTo, Campus campus) {
+	public Long getCountOfEarlyAlertStudentsByDate(Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus) {
 		final Criteria query = createCriteria();
 		
 		if ( createdDateFrom != null) {

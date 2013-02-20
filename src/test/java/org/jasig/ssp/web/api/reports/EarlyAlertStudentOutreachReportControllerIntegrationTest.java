@@ -31,6 +31,7 @@ public class EarlyAlertStudentOutreachReportControllerIntegrationTest extends
 		
 		controller.getEarlyAlertStudentOutreachReport(response, 
 				null, 
+				null,
 				Lists.newArrayList(EarlyAlertOutcomeFixture.WAITING_FOR_RESPONSE.id()), 
 				TermFixture.FALL_2012.code(), 
 				null, 
@@ -55,6 +56,7 @@ public class EarlyAlertStudentOutreachReportControllerIntegrationTest extends
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 
 		controller.getEarlyAlertStudentOutreachReport(response, 
+				null,
 				null,
 				null,
 				null, 

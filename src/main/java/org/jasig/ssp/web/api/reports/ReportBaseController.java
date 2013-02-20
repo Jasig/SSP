@@ -45,6 +45,7 @@ import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 abstract class ReportBaseController extends AbstractBaseController {
 
@@ -54,10 +55,12 @@ abstract class ReportBaseController extends AbstractBaseController {
 	
 	public static final String DEFAULT_DATE_FORMAT = "MM/dd/yyyy";
 	
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(ReportBaseController.class);
+	
 	@Override
 	protected Logger getLogger() {
-		// TODO Auto-generated method stub
-		return null;
+		return LOGGER;
 	}
 	
 	protected void generateReport(HttpServletResponse response, Map<String, Object> parameters, 
@@ -143,7 +146,6 @@ abstract class ReportBaseController extends AbstractBaseController {
 		
 		for(EarlyAlertStudentReportTO reportTO: compressedReports){
 			EarlyAlertResponseCounts countOfResponses = earlyAlertResponseService.getCountEarlyAlertRespondedToForEarlyAlerts(reportTO.getEarlyAlertIds());
-			//TODO Possible inaccuracy if early alert was closed but there was no response at all.
 			reportTO.setPending(countOfResponses.getTotalEARespondedToNotClosed());
 		}
 		return compressedReports;

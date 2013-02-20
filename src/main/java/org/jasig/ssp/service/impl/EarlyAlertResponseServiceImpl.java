@@ -338,13 +338,13 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	}
 	
 	@Override
-	public Long getEarlyAlertRespondedToCount(Date createDateFrom, Date createDateTo, Campus campus) {		
-		return dao.getEarlyAlertRespondedToCount(createDateFrom, createDateTo, campus);
+	public Long getEarlyAlertRespondedToCount(Date createDateFrom, Date createDateTo, Campus campus, String rosterStatus) {		
+		return dao.getEarlyAlertRespondedToCount(createDateFrom, createDateTo, campus, rosterStatus);
 	}
 	
 	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(Date createDateFrom,
-			Date createDateTo, List<UUID> outcomes, Person coach){
-		return dao.getEarlyAlertOutreachCountByOutcome(createDateFrom, createDateTo, outcomes, coach);
+			Date createDateTo, List<UUID> outcomes, String rosterStatus, Person coach){
+		return dao.getEarlyAlertOutreachCountByOutcome(createDateFrom, createDateTo, outcomes, rosterStatus, coach);
 	}
 	
 	@Override

@@ -60,10 +60,10 @@ public interface EarlyAlertResponseService
 			Date createDateTo, List<UUID> studentTypeIds);
 
 	Long getEarlyAlertRespondedToCount(Date createDateFrom,
-			Date createDateTo, Campus campus);
+			Date createDateTo, Campus campus, String rosterStatus);
 
 	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(Date createDateFrom,
-			Date createDateTo, List<UUID> outcomes, Person coach);
+			Date createDateTo, List<UUID> outcomes, String rosterStatus, Person coach);
 	
 	
 	/**

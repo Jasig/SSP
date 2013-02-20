@@ -32,6 +32,8 @@ public class EarlyAlertStudentReferralReportControllerIntegrationTest extends
 		
 		controller.getEarlyAlertStudentReferralReport(response, 
 				null, 
+				null,
+				null,
 				PersonFixture.COACH_1.id(), 
 				ProgramStatusFixture.ACTIVE.id(), 
 				EarlyAlertReferralFixture.ACADEMIC_COUNSELORS.id(), 
@@ -59,6 +61,8 @@ public class EarlyAlertStudentReferralReportControllerIntegrationTest extends
 
 		controller.getEarlyAlertStudentReferralReport(response, 
 				null, 
+				null,
+				null,
 				null, 
 				null, 
 				null, 

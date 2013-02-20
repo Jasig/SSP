@@ -36,12 +36,14 @@ public class EarlyAlertStudentProgressReportControllerIntegrationTest extends
 		
 		controller.getEarlyAlertStudentProgressReport(response,
 				null, 
+				null,
+				null,
 				PersonFixture.COACH_1.id(), 
 				Lists.newArrayList(StudentTypeFixture.ILP.id()), 
 				ProgramStatusFixture.ACTIVE.id(), 
 				Lists.newArrayList(SpecialServiceGroupFixture.ANOTHER_TEST_SSG.id()), 
 				TermFixture.FALL_2012.code(), 
-				TermFixture.SPRING_2013.code(), 
+				TermFixture.SPRING_2013.code(),
 				"csv");
 
 		// "body" is the actual results and the header that describes its columns.
@@ -63,6 +65,8 @@ public class EarlyAlertStudentProgressReportControllerIntegrationTest extends
 
 		controller.getEarlyAlertStudentProgressReport(response, 
 				null, 
+				null,
+				null,
 				null, 
 				null, 
 				null, 

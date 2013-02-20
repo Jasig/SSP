@@ -21,6 +21,7 @@ package org.jasig.ssp.transferobject.reports;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +29,9 @@ import org.apache.commons.lang.StringUtils;
 import org.jasig.mygps.model.transferobject.TaskReportTO;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonProgramStatus;
+import org.jasig.ssp.model.external.RegistrationStatusByTerm;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 
 public class BaseStudentReportTO implements Serializable {
@@ -82,7 +86,9 @@ public class BaseStudentReportTO implements Serializable {
 	private String coachMiddleName;
 	private String coachSchoolId;
 	private String coachUsername;
+	
 	private String programCurrentStatusName;
+	
 	private List<String> specialServiceGroups = new ArrayList<String>();
 	private String specialServiceGroup;
 	private String specialServiceGroupsName;
@@ -347,6 +353,7 @@ public class BaseStudentReportTO implements Serializable {
 	public void setCurrentProgramStatusName(String programStatus) {
 		this.programCurrentStatusName = programStatus;
 	}
+	
 		
 	public void setSpecialServiceGroup(String specialServiceGroup) {
 		this.specialServiceGroup = specialServiceGroup;
@@ -385,6 +392,8 @@ public class BaseStudentReportTO implements Serializable {
 		if(specialServiceGroupsName == null || specialServiceGroupsName.length() == 0){
 			specialServiceGroupsName = "";
 			for(String specialServiceGroup:specialServiceGroups){
+				if(specialServiceGroup == null)
+					continue;
 				specialServiceGroupsName = addValueToStringList(specialServiceGroupsName, specialServiceGroup);
 			}
 		}
@@ -488,5 +497,14 @@ public class BaseStudentReportTO implements Serializable {
 	public void processDuplicate(BaseStudentReportTO reportTO){
 		addSpecialServiceGroups(reportTO.getSpecialServiceGroups());
 		addStudentTypes(reportTO.getStudentTypes());
+	}
+	
+	
+	public void setCurrentRegistrationStatus(RegistrationStatusByTermService registrationStatusByTermService )
+			throws ObjectNotFoundException {
+		RegistrationStatusByTerm termStatus = registrationStatusByTermService
+				.getForCurrentTerm(getSchoolId());
+		if(termStatus != null)
+			setRegistrationStatus(termStatus.getRegisteredCourseCount());
 	}
 }

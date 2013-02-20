@@ -341,7 +341,6 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 							.eq("personProgramStatuses.programStatus.id",
 									personSearchTO
 											.getProgramStatus()));
-
 		}
 		
 		if (personSearchTO.getSpecialServiceGroupIds() != null) {
@@ -447,6 +446,9 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			criteria.createAlias("programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
 		}
 		
+		criteria.add(Restrictions
+				.isNull("personProgramStatuses.expirationDate"));
+		
 		if(form.getSpecialServiceGroupIds() == null){
 			criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
 		}
@@ -455,11 +457,6 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		
 		criteria.setResultTransformer(new AliasToBeanResultTransformer(
 				BaseStudentReportTO.class));
-
-		// Add Paging
-		if (sAndP != null) {
-			sAndP.addAll(criteria);
-		}
 
 		return new PagingWrapper<BaseStudentReportTO>(totalRows, criteria.list());
 
@@ -504,8 +501,10 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		criteria.createAlias("disabilityAgencies", "disabilityAgencies");
 		
 		criteria.createAlias("disabilityAgencies.disabilityAgency", "disabilityAgency");
-		criteria.createAlias("disabilityTypes", "disabilityTypes");
-		criteria.createAlias("disabilityTypes.disabilityType", "disabilityType");
+		if (form.getDisabilityTypeId() == null)
+			criteria.createAlias("disabilityTypes", "personDisabilityTypes");
+		
+		criteria.createAlias("personDisabilityTypes.disabilityType", "disabilityType");
 		if (form.getDisabilityStatusId() == null) {
 			criteria.createAlias("disability", "personDisability");
 		}
@@ -561,15 +560,12 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		projections.add(Projections.property("state").as("state"));
 		projections.add(Projections.property("zipCode").as("zipCode"));
 		projections.add(Projections.property("id").as("id"));
-		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup");
+		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup", JoinType.LEFT_OUTER_JOIN);
 		projections.add(Projections.property("specialServiceGroup.name").as("specialServiceGroup"));
 		
-		criteria.add(Restrictions
-				.isNull("personProgramStatuses.expirationDate"));
+		criteria.createAlias("personProgramStatuses.programStatus", "programStatus", JoinType.LEFT_OUTER_JOIN);
 		
-		criteria.createAlias("personProgramStatuses.programStatus", "programStatus");
-		
-		projections.add(Projections.property("programStatus.name").as("currentProgramStatusName"));
+		projections.add(Projections.property("programStatus.name").as("programCurrentStatusName"));
 
 		// Join to Student Type
 		criteria.createAlias("studentType", "studentType",

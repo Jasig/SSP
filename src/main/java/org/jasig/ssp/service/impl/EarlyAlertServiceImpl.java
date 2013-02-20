@@ -606,26 +606,25 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	}
 	
 	@Override
-	public Long getCountOfEarlyAlertsByCreatedDate(Date createDatedFrom, Date createdDateTo, Campus campus) {
-		return dao.getCountOfEarlyAlertsByCreatedDate(createDatedFrom,  createdDateTo, campus);
+	public Long getCountOfEarlyAlertsByCreatedDate(Date createDatedFrom, Date createdDateTo, Campus campus, String rosterStatus) {
+		return dao.getCountOfEarlyAlertsByCreatedDate(createDatedFrom,  createdDateTo, campus, rosterStatus);
 	}
 
 	@Override
-	public Long getCountOfEarlyAlertsClosedByDate(Date closedDateFrom, Date closedDateTo, Campus campus) {
-		return dao.getCountOfEarlyAlertsClosedByDate(closedDateFrom,  closedDateTo, campus);
+	public Long getCountOfEarlyAlertsClosedByDate(Date closedDateFrom, Date closedDateTo, Campus campus, String rosterStatus) {
+		return dao.getCountOfEarlyAlertsClosedByDate(closedDateFrom,  closedDateTo, campus, rosterStatus);
 	}
 
 	@Override
 	public Long getCountOfEarlyAlertStudentsByDate(Date createDatedFrom,
-			Date createdDateTo, Campus campus) {
-		return dao.getCountOfEarlyAlertStudentsByDate(createDatedFrom, createdDateTo, campus);
+			Date createdDateTo, Campus campus, String rosterStatus) {
+		return dao.getCountOfEarlyAlertStudentsByDate(createDatedFrom, createdDateTo, campus, rosterStatus);
 	}
 
 	@Override
 	public PagingWrapper<EarlyAlertStudentReportTO> getStudentsEarlyAlertCountSetForCritera(
 			EarlyAlertStudentSearchTO earlyAlertStudentSearchTO,
 			SortingAndPaging createForSingleSort) {
-		// TODO Auto-generated method stub
 		return dao.getStudentsEarlyAlertCountSetForCritera(earlyAlertStudentSearchTO, createForSingleSort);
 	}
 	

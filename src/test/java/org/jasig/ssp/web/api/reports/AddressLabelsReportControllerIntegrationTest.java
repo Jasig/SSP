@@ -44,7 +44,7 @@ public class AddressLabelsReportControllerIntegrationTest
 	public void testGetAddressLabelsReturnsAllStudentsIfNoFiltersSet()
 			throws IOException, ObjectNotFoundException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getAddressLabels(response, null, null, null, null, null,
+		controller.getAddressLabels(response, null, null, null, null, null,null,null,
 				null, null, null, null, null, null, "csv");
 
 		// "body" is the actual results and the header that describes its columns.
@@ -53,9 +53,12 @@ public class AddressLabelsReportControllerIntegrationTest
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		expectedReportBodyLines.add("FIRST,MIDDLE,LAST, ID,TYPE,ADDRESS,CITY,ST,PHONE(H),EMAIL(SCHOOL),EMAIL(HOME)");
 		expectedReportBodyLines.add("James,A,Gosling,student0,ILP,444 West Third Street ,San Francisco,CA,908-123-4567,test@sinclair.edu,test@sinclair.edu");
+		expectedReportBodyLines.add("Dennis,M,Ritchie,dmr.1,CAP,444 West Third Street ,Berkeley Heights,NJ,908-123-4567,test@sinclair.edu,test@sinclair.edu");
 		expectedReportBodyLines.add("Kenneth,L,Thompson,ken.1,CAP,444 West Third Street ,Murray Hill,NJ,908-123-4567,test@sinclair.edu,test@sinclair.edu");
 		expectedReportBodyLines.add("test,Mumford,coach1student0,coach1student0,ILP,0 house on the corner ,Mesa,AZ,480-775-2345,coach1student0@unicon.net,coach1student0@unicon.net");
 		expectedReportBodyLines.add("test,Mumford,coach1student1,coach1student1,CAP,1 house on the corner ,Mesa,AZ,480-775-2345,coach1student1@unicon.net,coach1student1@unicon.net");
+		expectedReportBodyLines.add("test,Mumford,coach1student2,coach1student2,EAL,2 house on the corner ,Mesa,AZ,480-775-2345,coach1student2@unicon.net,coach1student2@unicon.net");
+		expectedReportBodyLines.add("test,Mumford,coach1student3,coach1student3,ILP,3 house on the corner ,Mesa,AZ,480-775-2345,coach1student3@unicon.net,coach1student3@unicon.net");
 		expectedReportBodyLines.add("test,Mumford,coach1student4,coach1student4,CAP,4 house on the corner ,Mesa,AZ,480-775-2345,coach1student4@unicon.net,coach1student4@unicon.net");
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
@@ -77,7 +80,7 @@ public class AddressLabelsReportControllerIntegrationTest
 		// Alan Turing, i.e. the coach assigned to our test student users
 		// in our standard fixture
 		final UUID coachId = Stubs.PersonFixture.ADVISOR_0.id();
-		controller.getAddressLabels(response, null, coachId, null, null, null,
+		controller.getAddressLabels(response, null, coachId, null, null, null,null,null,
 				null, null, null, null, null, null, "csv");
 
 		// "body" is the actual results and the header that describes its columns.

@@ -57,7 +57,7 @@ public class EarlyAlertCaseCountsReportControllerIntegrationTest
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		
 		controller.getEarlyAlertCaseCountsReport(response, 
-				CampusFixture.TEST.id(), 
+				CampusFixture.TEST.id(),null, 
 				Lists.newArrayList(TermFixture.FALL_2012.code()), 
 				"csv");
 
@@ -66,8 +66,8 @@ public class EarlyAlertCaseCountsReportControllerIntegrationTest
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(3);
 		expectedReportBodyLines.add("TERM,TOTAL STUDENTS,TOTAL CASES,TOTAL RESPONDED ,,TOTAL CLOSED,,");
-		expectedReportBodyLines.add("FA12,6,16,9,(.0)%,,2,(0.0)%");
-		expectedReportBodyLines.add(",6,16,9,(.0)%,,2,(.0)%");
+		expectedReportBodyLines.add("FA12,6,16,9,(56.2)%,,2,(12.5)%");
+		expectedReportBodyLines.add(",6,16,9,(56.2)%,,2,(12.5)%");
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 
@@ -87,6 +87,7 @@ public class EarlyAlertCaseCountsReportControllerIntegrationTest
 	
 		controller.getEarlyAlertCaseCountsReport(response, 
 				null, 
+				null,
 				null, 
 				"csv");;
 		// "body" is the actual results and the header that describes its columns.
@@ -96,8 +97,8 @@ public class EarlyAlertCaseCountsReportControllerIntegrationTest
 		// same as in testGetAddressLabelsReturnsAllStudentsIfNoFiltersSet(), but
 		// Dennis Ritchie is missing
 		expectedReportBodyLines.add("TERM,TOTAL STUDENTS,TOTAL CASES,TOTAL RESPONDED ,,TOTAL CLOSED,,");
-		expectedReportBodyLines.add("All,6,16,9,(.0)%,,2,(0.0)%");
-		expectedReportBodyLines.add(",6,16,9,(.0)%,,2,(.0)%");
+		expectedReportBodyLines.add( "All,6,16,9,(56.2)%,,2,(12.5)%");
+		expectedReportBodyLines.add(",6,16,9,(56.2)%,,2,(12.5)%");
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}

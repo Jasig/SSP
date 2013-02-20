@@ -109,6 +109,7 @@ public class EarlyAlertCaseCountsReportController extends ReportBaseController {
 	void getEarlyAlertCaseCountsReport(
 			final HttpServletResponse response,		
 			final @RequestParam(required = false) UUID campusId,
+			final @RequestParam(required = false) String rosterStatus,
 			final @RequestParam(required = false) List<String> termCodes,			
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
@@ -125,13 +126,13 @@ public class EarlyAlertCaseCountsReportController extends ReportBaseController {
 				EarlyAlertTermCaseCountsTO caseCounts = new EarlyAlertTermCaseCountsTO(term.getCode(),
 						term.getName(),
 						earlyAlertService.getCountOfEarlyAlertStudentsByDate(term.getStartDate(), 
-								term.getEndDate(), campus),
+								term.getEndDate(), campus, rosterStatus),
 						earlyAlertService.getCountOfEarlyAlertsByCreatedDate(term.getStartDate(), 
-								term.getEndDate(), campus),
+								term.getEndDate(), campus, rosterStatus),
 						earlyAlertResponseService.getEarlyAlertRespondedToCount(term.getStartDate(), 
-										term.getEndDate(), campus),
+										term.getEndDate(), campus, rosterStatus),
 						earlyAlertService.getCountOfEarlyAlertsClosedByDate(term.getStartDate(), 
-												term.getEndDate(), campus)
+												term.getEndDate(), campus, rosterStatus)
 										);
 			
 				caseLoads.add(caseCounts);
@@ -142,10 +143,10 @@ public class EarlyAlertCaseCountsReportController extends ReportBaseController {
 			
 			EarlyAlertTermCaseCountsTO caseCounts = new EarlyAlertTermCaseCountsTO("All",
 					"All",
-					earlyAlertService.getCountOfEarlyAlertStudentsByDate(null, null, campus),
-					earlyAlertService.getCountOfEarlyAlertsByCreatedDate(null, null, campus),
-					earlyAlertResponseService.getEarlyAlertRespondedToCount(null, null, campus),
-					earlyAlertService.getCountOfEarlyAlertsClosedByDate(null, null, campus)
+					earlyAlertService.getCountOfEarlyAlertStudentsByDate(null, null, campus, rosterStatus),
+					earlyAlertService.getCountOfEarlyAlertsByCreatedDate(null, null, campus, rosterStatus),
+					earlyAlertResponseService.getEarlyAlertRespondedToCount(null, null, campus, rosterStatus),
+					earlyAlertService.getCountOfEarlyAlertsClosedByDate(null, null, campus, rosterStatus)
 									);
 			caseLoads.add(caseCounts);
 		}

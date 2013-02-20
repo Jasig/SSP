@@ -67,6 +67,18 @@ var ssp = ssp || {};
 			});
 		}	
 		
+		var loadConfigInput = function(url, container) {
+			$.getJSON(url, function(data) {
+				var values = $.parseJSON(data.value);
+				for(var index in values){
+					addSelectItem(index, values[index], container);
+				}
+
+			}).error(function(jqXHR, textStatus, errorThrown) {
+				alert(jqXHR + " " + textStatus + " " + errorThrown);
+			});
+		}
+		
 		var loadReportYearInput = function(url, container) {
 			$.getJSON(url, function(data) {
 				var values = new Array();
@@ -122,10 +134,14 @@ var ssp = ssp || {};
 			loadTermInput("/ssp/api/1/reference/term/", that
 					.locate('termGroup'));
 			
-			loadReportYearInput("/ssp/api/1/reference/term/", that
+			loadReportYearInput("/ssp/api/1/reference/term/?sort=start_date&start=1&limit=10000&sortDirection=ASC", that
 					.locate('reportYearGroup'));
+			
+			loadConfigInput("/ssp/api/1/reference/config/?name=status_code_mappings", that
+					.locate('rosterStatusCodeGroup'));
+			
 			// 1000 limit is max allowed by server side
-			loadCoachInput("/ssp/api/1/person/coach/?sort=lastName&page=1&start=0&limit=1000", that
+			loadCoachInput("/ssp/api/1/person/coach/?sort=lastName&page=1&start=0&limit=1000&sortDirection=ASC", that
 					.locate('assignedCounselorGroup'));			
 
 
@@ -319,6 +335,7 @@ var ssp = ssp || {};
 							earlyAlertOutcomeGroup: '.input-early-alert-outcome-group',
 							disabilityStatusGroup: '.input-disability-status-group',
 							disabilityTypeGroup: '.input-disability-type-group',
+							rosterStatusCodeGroup: '.input-roster-status-code-group',
 							calendarType : '.input-calendar-type',
 							switchDateRangeType : '.switch-date-range-type',
 							termRange : '.ea-term',

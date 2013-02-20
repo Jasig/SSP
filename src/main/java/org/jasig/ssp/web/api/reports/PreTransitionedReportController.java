@@ -144,6 +144,8 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 		SearchParameters.addReferenceTypes(programStatus, 
 				null, 
 				false,
+				null,
+				null,
 				parameters, 
 				personSearchForm, 
 				programStatusService, 

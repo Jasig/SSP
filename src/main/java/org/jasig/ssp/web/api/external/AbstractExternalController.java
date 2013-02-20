@@ -123,8 +123,7 @@ public abstract class AbstractExternalController<TO extends ExternalDataTO<T>, T
 
 		// Run getAll
 		final PagingWrapper<T> data = getService().getAll(
-				SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ALL, start,
-						limit, sort, sortDirection, null));
+				SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ACTIVE, start, limit, sort, sortDirection, sort));
 
 		return new PagedResponse<TO>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));

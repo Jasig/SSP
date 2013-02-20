@@ -310,7 +310,7 @@ public class EarlyAlertDaoTest {
 
 		try {
 			final Long result = dao.getCountOfEarlyAlertStudentsByDate(
-					startDate, endDate, campus);
+					startDate, endDate, campus, null);
 			assertEquals("Count of Students was not expected.", 1,
 					result.intValue());
 		} finally {
@@ -339,7 +339,7 @@ public class EarlyAlertDaoTest {
 
 		try {
 			final Long result = dao.getCountOfEarlyAlertsClosedByDate(
-					startDate, endDate, campus);
+					startDate, endDate, campus, null);
 			assertEquals("Count of Students was not expected.", 1,
 					result.intValue());
 		} finally {
@@ -368,7 +368,7 @@ public class EarlyAlertDaoTest {
 
 		try {
 			final Long result = dao.getCountOfEarlyAlertsByCreatedDate(
-					startDate, endDate, campus);
+					startDate, endDate, campus, null);
 			assertEquals("Count of Students was not expected.", 2,
 					result.intValue());
 		} finally {

@@ -1,32 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Licensed to Jasig under one or more contributor license
-    agreements. See the NOTICE file distributed with this work
-    for additional information regarding copyright ownership.
-    Jasig licenses this file to you under the Apache License,
-    Version 2.0 (the "License"); you may not use this file
-    except in compliance with the License. You may obtain a
-    copy of the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on
-    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations
-    under the License.
-
--->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="disabilityServices.jasper" pageWidth="1548" pageHeight="612" orientation="Landscape" columnWidth="1508" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f9f700f2-fa61-4172-90b1-b8f9677f8bee">
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
-	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="130"/>
-	<property name="ireport.y" value="212"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="47"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="programStatusName" class="java.lang.String"/>
 	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
 	<parameter name="referralSourceNames" class="java.lang.String"/>
@@ -44,6 +24,8 @@
 	<parameter name="disabilityType" class="java.lang.String">
 		<parameterDescription><![CDATA[disabilityType]]></parameterDescription>
 	</parameter>
+	<parameter name="startDate" class="java.lang.String"/>
+	<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
 	<field name="firstName" class="java.lang.String">
 		<fieldDescription><![CDATA[firstName]]></fieldDescription>
 	</field>
@@ -297,6 +279,26 @@
 				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" mode="Opaque" x="391" y="97" width="100" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{anticipatedStartTerm}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="41" y="174" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Start Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="256" y="174" width="65" height="15"/>
+				<textElement/>
+				<text><![CDATA[End Date:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
+				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="135" y="174" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e" x="322" y="173" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

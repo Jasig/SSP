@@ -449,5 +449,10 @@ public class ExternalPersonServiceImpl
 	protected ExternalDataDao<ExternalPerson> getDao() {
 		return dao;
 	}
+	
+	@Override
+	public List<String> getAllDepartmentNames(){
+		return dao.getAllDepartmentNames();
+	}
 
 }
