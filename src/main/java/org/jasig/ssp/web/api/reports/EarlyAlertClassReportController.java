@@ -107,6 +107,7 @@ public class EarlyAlertClassReportController extends ReportBaseController {
 	void getEarlyAlertClassReport(
 			final HttpServletResponse response,		
 			final @RequestParam(required = false) UUID campusId,
+			final @RequestParam(required = false) String rosterStatus,
 			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,			
@@ -119,6 +120,7 @@ public class EarlyAlertClassReportController extends ReportBaseController {
 		
 		SearchParameters.addCampusToParameters(campus, parameters);
 		SearchParameters.addDateTermToMap(dateTerm, parameters);
+		SearchParameters.addRosterStatusToMap(rosterStatus, parameters);
 		
 		generateReport( response,  parameters, null,  REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}

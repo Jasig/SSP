@@ -40,7 +40,7 @@ public class DateTerm {
 		startDate = createDateFrom;
 		endDate = createDateTo;		
 		if(termCode != null && termCode.length()> 0) {
-			Term term = termService.getByCode(termCode);
+			term = termService.getByCode(termCode);
 			startDate = term.getStartDate();
 			endDate = term.getEndDate();
 		}

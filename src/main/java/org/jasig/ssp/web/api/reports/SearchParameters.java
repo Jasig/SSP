@@ -56,7 +56,11 @@ import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.DateTerm;
+import org.jasig.ssp.util.collections.Pair;
+import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+
+import com.google.common.collect.Lists;
 
 public class SearchParameters {
 	
@@ -66,6 +70,7 @@ public class SearchParameters {
 	private static final String ODS_COACH_NAME = "odsCoachName";
 	private static final String TERM_CODE = "termCode";
 	private static final String TERM_NAME = "termName";
+	private static final String ROSTER_STATUS = "rosterStatus";
 	private static final String TERM = "term";
 	private static final String START_DATE = "startDate";
 	private static final String END_DATE = "endDate";
@@ -122,6 +127,8 @@ public class SearchParameters {
 	static List<Term> getTerms(final List<String> termCodes, final TermService termService) 
 			throws ObjectNotFoundException{
 		List<Term> terms = new ArrayList<Term>();
+		if(termCodes == null)
+			return terms;
 		for(String termCode:termCodes){
 			Term term = termService.getByCode(termCode);
 			terms.add(term);
@@ -178,11 +185,18 @@ public class SearchParameters {
 				(ReferenceService)studentTypeService);
 	}
 	
-	static final void addHomeDepartment(final String homeDepartment, final Map<String, Object> parameters){
+	static final void addHomeDepartmentToMap(final String homeDepartment, final Map<String, Object> parameters){
 		if(homeDepartment == null || homeDepartment.length() == 0)
 			parameters.put(HOME_DEPARTMENT_NAME, DEPARTMENT_PLACEHOLDER);
 		else
 			parameters.put(HOME_DEPARTMENT_NAME, homeDepartment);
+	}
+	
+	static final void addRosterStatusToMap(final String rosterStatus, final Map<String, Object> parameters){
+		if(rosterStatus == null || rosterStatus.length() == 0)
+			parameters.put(ROSTER_STATUS, NOT_USED);
+		else
+			parameters.put(ROSTER_STATUS, rosterStatus);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -441,6 +455,8 @@ public class SearchParameters {
 	static final void addReferenceTypes(final UUID programStatus, 
 			final UUID disabilityStatusId,
 			final Boolean disabilityIsNotNull,
+			final String rosterStatus,
+			final String homeDepartment,
 			final Map<String, Object> parameters,
 			final PersonSearchFormTO personSearchForm, 
 			ProgramStatusService programStatusService, 
@@ -448,16 +464,20 @@ public class SearchParameters {
 		
 		addProgramStatusToMap(programStatus, parameters, programStatusService);
 		addDisablityStatusToMap(disabilityStatusId, parameters, disabilityStatusService);
-
+		addRosterStatusToMap(rosterStatus, parameters);
 		personSearchForm.setProgramStatus(programStatus);
 		personSearchForm.setDisabilityStatusId(disabilityStatusId);
 		personSearchForm.setDisabilityIsNotNull(disabilityIsNotNull);
+		personSearchForm.setRosterStatus(rosterStatus);
+		personSearchForm.setHomeDepartment(homeDepartment);
 	}
 	
 	static final void addReferenceTypes(final UUID programStatus, 
 			final UUID disabilityStatusId,
 			final UUID disabilityTypeId,
 			final Boolean disabilityIsNotNull,
+			final String rosterStatus,
+			final String homeDepartment,
 			final Map<String, Object> parameters,
 			final PersonSearchFormTO personSearchForm, 
 			ProgramStatusService programStatusService, 
@@ -466,7 +486,9 @@ public class SearchParameters {
 		
 		SearchParameters.addReferenceTypes(programStatus, 
 				disabilityStatusId, 
-				disabilityIsNotNull, 
+				disabilityIsNotNull,
+				rosterStatus,
+				homeDepartment,
 				parameters, 
 				personSearchForm, 
 				programStatusService, 
@@ -498,6 +520,10 @@ public class SearchParameters {
 	}
 	
 	static final SortingAndPaging getReportPersonSortingAndPagingAll(ObjectStatus status){
-		return SortingAndPaging.createForSingleSortAll(status, "lastName", "ASC");
+		List<Pair<String, SortDirection>> sortFields = Lists.newArrayList();
+		sortFields.add(new Pair<String, SortDirection>("lastName", SortDirection.ASC));
+		sortFields.add(new Pair<String, SortDirection>("firstName", SortDirection.ASC));
+		sortFields.add(new Pair<String, SortDirection>("middleName", SortDirection.ASC));
+		return new SortingAndPaging(status, sortFields, null, SortDirection.ASC);
 	}
 }

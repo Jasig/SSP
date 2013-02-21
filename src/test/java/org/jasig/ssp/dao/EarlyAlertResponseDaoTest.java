@@ -252,7 +252,7 @@ public class EarlyAlertResponseDaoTest {
 	@Test
 	public void getEarlyAlertOutreachCountByOutcomeTest()
 			throws ObjectNotFoundException {
-		//TODO
+		//TODO  Add additional tests to more fully test query.
 		
 		final Date startDate = getDateSetByDayOffset(-1);
 		final Date endDate = getDateSetByDayOffset(1);
@@ -264,7 +264,7 @@ public class EarlyAlertResponseDaoTest {
 
 		try {
 			final Collection<EarlyAlertStudentOutreachReportTO> result = dao.getEarlyAlertOutreachCountByOutcome(
-					startDate, endDate, null, null);
+					startDate, endDate, null, null, null);
 			assertEquals("Count of Responses was not expected.", 1,
 					result.size());
 		} finally {
@@ -284,7 +284,7 @@ public class EarlyAlertResponseDaoTest {
 	@Test
 	public void getEarlyAlertRespondedToCount() throws ObjectNotFoundException {
 		// TODO
-		dao.getEarlyAlertRespondedToCount(null, null, null);
+		dao.getEarlyAlertRespondedToCount(null, null, null, null);
 		assertEquals("Should be equal to 1.", 1,1);
 	}
 	

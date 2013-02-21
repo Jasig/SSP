@@ -184,7 +184,7 @@ public class CaseloadActivityReportController extends ReportBaseController {
 		SearchParameters.addDateTermToMap(dateTerm, parameters);
 		SearchParameters.addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);
 		
-		SearchParameters.addHomeDepartment(null, parameters);
+		SearchParameters.addHomeDepartmentToMap(null, parameters);
 		
 		generateReport(response, parameters, caseLoadActivityReportList, REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}

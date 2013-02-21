@@ -118,11 +118,11 @@ public interface EarlyAlertService
 
 	Long getCountOfEarlyAlertsForSchoolIds(Collection<String> schoolIds, Campus campus);
 	
-	Long getCountOfEarlyAlertsByCreatedDate(Date createdDateFrom, Date createdDateTo, Campus campus);
+	Long getCountOfEarlyAlertsByCreatedDate(Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus);
 
-	Long getCountOfEarlyAlertsClosedByDate(Date closedDateFrom, Date closedDateTo, Campus campus);
+	Long getCountOfEarlyAlertsClosedByDate(Date closedDateFrom, Date closedDateTo, Campus campus, String rosterStatus);
 	
-	Long getCountOfEarlyAlertStudentsByDate(Date createdDateFrom, Date createdDateTo, Campus campus);
+	Long getCountOfEarlyAlertStudentsByDate(Date createdDateFrom, Date createdDateTo, Campus campu, String rosterStatuss);
 
 	PagingWrapper<EarlyAlertStudentReportTO> getStudentsEarlyAlertCountSetForCritera(EarlyAlertStudentSearchTO searchForm, SortingAndPaging createForSingleSort);
 	

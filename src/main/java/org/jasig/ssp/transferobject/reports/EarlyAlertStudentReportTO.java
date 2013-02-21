@@ -19,10 +19,19 @@
 package org.jasig.ssp.transferobject.reports;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 
 public class EarlyAlertStudentReportTO extends BaseStudentReportTO {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1118821454338145835L;
 
 	/**
 	 * Construct a transfer object from a related model instance
@@ -37,14 +46,24 @@ public class EarlyAlertStudentReportTO extends BaseStudentReportTO {
 		this.pending = pending;
 	}
 	
+	public EarlyAlertStudentReportTO(EarlyAlertStudentReportTO model)
+	{
+		super(model);
+		this.total = model.getTotal();
+		this.closed = model.getClosed();
+		this.pending = model.getPending();
+	}
+	
 	public EarlyAlertStudentReportTO()
 	{
 		
 	}
 	
-	private Long total;
-	private Long pending;
-	private Long closed;
+	private Long total = 0L;
+	private Long pending = 0L;
+	private Long closed = 0L;
+	private UUID earlyAlertId;
+	private List<UUID> earlyAlertIds = new ArrayList<UUID>();
 
 	public Long getTotal() {
 		return total;
@@ -72,6 +91,64 @@ public class EarlyAlertStudentReportTO extends BaseStudentReportTO {
 	
 	public Long getOpen() {
 		return total - closed;
+	}
+	
+	public UUID getEarlyAlertId() {
+		return earlyAlertId;
+	}
+
+	public void setEarlyAlertId(UUID earlyAlertId) {
+		this.earlyAlertId = earlyAlertId;
+		addEarlyAlertIds(earlyAlertId);
+	}
+	
+	public void addEarlyAlertIds(UUID earlyAlertId){
+		if(!earlyAlertIds.contains(earlyAlertId))
+			earlyAlertIds.add(earlyAlertId);
+	}
+	
+	public void addEarlyAlertIds(List<UUID> earlyAlertIds){
+		for(UUID earlyAlertId:earlyAlertIds)
+			addEarlyAlertIds(earlyAlertId);
+	}
+	
+	public List<UUID> getEarlyAlertIds(){
+		return earlyAlertIds;
+	}
+
+	@Override
+	public boolean equals(Object obj){
+		if (!(BaseStudentReportTO.class.isInstance(obj))) {
+			return false;
+		}
+		return ((BaseStudentReportTO)obj).getId().equals(getId());
+	}
+	
+	
+	protected int hashPrime() {
+		return 853;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		int result = hashPrime();
+
+		result = super.hashCode() * result;
+		
+
+		return result;
+	}
+	
+	@Override
+	public void processDuplicate(BaseStudentReportTO reportTO){
+		super.processDuplicate(reportTO);
+		EarlyAlertStudentReportTO earlyReportTO = (EarlyAlertStudentReportTO)reportTO;
+		if(!getEarlyAlertIds().contains(earlyReportTO.getEarlyAlertId())){
+			this.addEarlyAlertIds(earlyReportTO.getEarlyAlertIds());
+			this.setTotal(this.getTotal() + earlyReportTO.getTotal());
+			this.setClosed(this.getClosed() + earlyReportTO.getClosed());
+		}
 	}
 
 }

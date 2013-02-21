@@ -34,8 +34,8 @@ Ext.define('Ssp.view.StudentRecord', {
     	    	align: 'stretch'
     	    },
 			
-    	    items: [{xtype:'toolsmenu',flex:1},
-			        {xtype: 'tools', flex:4}]		        
+    	    items: [{xtype:'toolsmenu',flex:.60},
+			        {xtype: 'tools', flex:4.40}]		        
     	});
     	return this.callParent(arguments);
     }

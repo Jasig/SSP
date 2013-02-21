@@ -27,7 +27,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="84"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="name" class="java.lang.String"/>
 	<parameter name="programStatusName" class="java.lang.String"/>
@@ -38,8 +38,9 @@
 	<parameter name="homeDepartment" class="java.lang.String"/>
 	<parameter name="coachName" class="java.lang.String"/>
 	<parameter name="studentTypeNames" class="java.lang.String"/>
-	<parameter name="cohortTerm" class="java.lang.String"/>
 	<parameter name="anticipatedStartTerm" class="java.lang.String"/>
+	<parameter name="startDate" class="java.lang.String"/>
+	<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
 	<queryString language="json">
 		<![CDATA[rows(name==$P{name}]]>
 	</queryString>
@@ -55,8 +56,8 @@
 	<field name="schoolId" class="java.lang.String">
 		<fieldDescription><![CDATA[schoolId]]></fieldDescription>
 	</field>
-	<field name="studentType" class="org.jasig.ssp.transferobject.reference.ReferenceLiteTO">
-		<fieldDescription><![CDATA[studentType]]></fieldDescription>
+	<field name="studentTypeNames" class="java.lang.String">
+		<fieldDescription><![CDATA[studentTypeNames]]></fieldDescription>
 	</field>
 	<field name="addressLine1" class="java.lang.String">
 		<fieldDescription><![CDATA[addressLine1]]></fieldDescription>
@@ -87,7 +88,7 @@
 	<field name="coachName" class="java.lang.String">
 		<fieldDescription><![CDATA[coachName]]></fieldDescription>
 	</field>
-	<field name="specialServiceGroupNames" class="java.lang.String"/>
+	<field name="specialServiceGroupsName" class="java.lang.String"/>
 	<variable name="rowIndex" class="java.lang.Integer">
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
 		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
@@ -141,7 +142,7 @@
 				<text><![CDATA[Program Status:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" mode="Opaque" x="127" y="50" width="627" height="16"/>
+				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" mode="Opaque" x="127" y="50" width="530" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{programStatusName}]]></textFieldExpression>
 			</textField>
@@ -155,7 +156,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" mode="Opaque" x="127" y="66" width="85" height="16"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{cohortTerm}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{anticipatedStartTerm}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" mode="Opaque" x="2" y="82" width="100" height="16"/>
@@ -177,7 +178,7 @@
 				<text><![CDATA[Special Service Groups:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="6d2788b3-18ca-44f6-837f-6df32f3e8b72" mode="Opaque" x="127" y="98" width="627" height="16"/>
+				<reportElement uuid="6d2788b3-18ca-44f6-837f-6df32f3e8b72" mode="Opaque" x="127" y="98" width="507" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{specialServiceGroupNames}]]></textFieldExpression>
 			</textField>
@@ -205,6 +206,26 @@
 				</textElement>
 				<text><![CDATA[Student Count:]]></text>
 			</staticText>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="317" y="67" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Start Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="532" y="67" width="65" height="15"/>
+				<textElement/>
+				<text><![CDATA[End Date:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
+				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="411" y="67" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e" x="598" y="66" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -370,7 +391,7 @@
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{studentType} == null || $F{studentType}.getName() == null ? "" : $F{studentType}.getName())]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{studentTypeNames}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="804cadab-5574-4274-b756-e4ae6a1fb403" stretchType="RelativeToBandHeight" x="150" y="2" width="51" height="20"/>
@@ -405,7 +426,7 @@
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{specialServiceGroupNames}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{specialServiceGroupsName}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

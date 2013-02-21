@@ -125,6 +125,26 @@
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="313" y="4" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Start Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="528" y="4" width="65" height="15"/>
+				<textElement/>
+				<text><![CDATA[End Date:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
+				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="407" y="4" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e" x="594" y="3" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>

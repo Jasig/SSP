@@ -125,8 +125,6 @@ public class PersonTO // NOPMD
 	private String anticipatedStartTerm;
 
 	@Nullable
-	@Max(2100)
-	@Min(2000)
 	private Integer anticipatedStartYear;
 
 	@Nullable
@@ -134,8 +132,6 @@ public class PersonTO // NOPMD
 	private String actualStartTerm;
 
 	@Nullable
-	@Max(2100)
-	@Min(2000)
 	private Integer actualStartYear;
 
 	private Date studentIntakeRequestDate;

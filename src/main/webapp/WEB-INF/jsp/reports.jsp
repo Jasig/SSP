@@ -637,15 +637,26 @@
 
 		<!-- Campus -->
 		<div class="ea-input">
-			<select id="campusName" name="campusName" class="input-campus-group">
+			<select id="earlyAlertCaseCountsCampusName" name="campusId" class="input-campus-group">
 				<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
 			<span>Campus:</span>
 		</div>
-		<div class="ea-clear"></div>	
+		<div class="ea-clear"></div>
 		
+		<!-- Roster Status 
+		<div class="ea-input">
+			<select id="earlyAlertCaseCountRosterStatus" name="rosterStatus" class="input-roster-status-code-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Roster Status:</span>
+		</div>
+		<div class="ea-clear"></div>	
+		-->
 		<!-- Term -->
 		<div class="ea-input">
 			<select id="termCodes" multiple="multiple" name="termCodes" class="input-term-group">
@@ -694,7 +705,19 @@
 			<span>Home Department:</span>
 		</div>
 		<div class="ea-clear"></div>
-
+		
+		<!-- Roster Status 
+		<div class="ea-input">
+			<select id="earlyAlertStudentRosterStatus" name="rosterStatus" class="input-roster-status-code-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Roster Status:</span>
+		</div>
+		<div class="ea-clear"></div>
+		-->
+		
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentCounselorGroup" name="coachId" class="input-assigned-counselor-group">
@@ -815,7 +838,18 @@
 			<span>Home Department:</span>
 		</div>
 		<div class="ea-clear"></div>
-
+		
+				<!-- Roster Status 
+		<div class="ea-input">
+			<select id="EarlyAlerStudentReferralRosterStatus" name="rosterStatus" class="input-roster-status-code-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Roster Status:</span>
+		</div>
+		<div class="ea-clear"></div>
+-->
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentReferralCounselorGroup" name="coachId" class="input-assigned-counselor-group">
@@ -845,7 +879,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Early Alert Referral Source:</span>
+			<span>Referred To:</span>
 		</div>
 		<div class="ea-clear"></div>
 		
@@ -921,6 +955,17 @@
 		</div>
 		<div class="ea-clear"></div>
 
+		<!-- Roster Status
+		<div class="ea-input">
+			<select id="EarlyAlertStudentProgressRosterStatus" name="rosterStatus" class="input-roster-status-code-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Roster Status:</span>
+		</div>
+		<div class="ea-clear"></div>
+		 -->
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentProgressCounselorGroup" name="coachId" class="input-assigned-counselor-group">
@@ -1021,6 +1066,17 @@
 		</div>
 		<div class="ea-clear"></div>
 		
+				<!-- Roster Status 
+		<div class="ea-input">
+			<select id="earlyAlertOutreachRosterStatus" name="rosterStatus" class="input-roster-status-code-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Roster Status:</span>
+		</div>
+		<div class="ea-clear"></div>
+		-->
 		<!-- Outcome -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentOutreachOutcomeGroup" name="earlyAlertOutcomes" class="input-early-alert-outcome-group" multiple="multiple" >
@@ -1104,6 +1160,17 @@
 		</div>
 		<div class="ea-clear"></div>
 		
+				<!-- Roster Status 
+		<div class="ea-input">
+			<select id="earlyAlertStudentOutcomeRosterStatus" name="rosterStatus" class="input-roster-status-code-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Roster Status:</span>
+		</div>
+		<div class="ea-clear"></div>
+		-->
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentOutcomeCounselorGroup" name="coachId" class="input-assigned-counselor-group">
@@ -1214,7 +1281,7 @@
 
 		<!-- Campus -->
 		<div class="ea-input">
-			<select id="earlyAlertClassCampusName" name="campusName" class="input-campus-group">
+			<select id="earlyAlertClassCampusName" name="campusId" class="input-campus-group">
 				<option value="">${not_applicable}</option>
 			</select>
 		</div>
@@ -1223,6 +1290,17 @@
 		</div>
 		<div class="ea-clear"></div>	
 		
+				<!-- Roster Status 
+		<div class="ea-input">
+			<select id="earlyAlertClassRosterStatus" name="rosterStatus" class="input-roster-status-code-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Roster Status:</span>
+		</div>
+		<div class="ea-clear"></div>
+		-->
 		<!-- Term -->
 		<div class="ea-input">
 			<select id="earlyAlertClassTermCode" name="termCode" class="input-term-group">

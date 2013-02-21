@@ -334,22 +334,19 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 					personSearchTO.getCoach().getId()));
 		}
 		
-		
 		if (personSearchTO.getProgramStatus() != null) {
-
 			criteria.createAlias("programStatuses",
-					"personProgramStatuses")
-					.add(Restrictions
+					"personProgramStatuses");
+			criteria.add(Restrictions
 							.eq("personProgramStatuses.programStatus.id",
 									personSearchTO
 											.getProgramStatus()));
-
 		}
-
+		
 		if (personSearchTO.getSpecialServiceGroupIds() != null) {
 			criteria.createAlias("specialServiceGroups",
-					"personSpecialServiceGroups")
-					.add(Restrictions
+					"personSpecialServiceGroups");
+			criteria.add(Restrictions
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
 									personSearchTO
 											.getSpecialServiceGroupIds()));
@@ -404,8 +401,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		}
 		
 		if (personSearchTO.getDisabilityStatusId() != null) {
-			criteria.createAlias("disability", "personDisability")
-			.add(Restrictions.eq(
+			criteria.createAlias("disability", "personDisability");
+			criteria.add(Restrictions.eq(
 					"personDisability.disabilityStatus.id",
 					personSearchTO.getDisabilityStatusId()));
 		}
@@ -426,8 +423,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<BaseStudentReportTO> getStudentReportTOs(PersonSearchFormTO form,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
-		Criteria criteria = this.setBasicSearchCriteria(createCriteria(sAndP),  form);
-		
+		Criteria criteria = setBasicSearchCriteria(createCriteria(sAndP),  form);
 		
 		// item count
 		Long totalRows = 0L;
@@ -446,15 +442,21 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		final ProjectionList projections = Projections.projectionList();
 		
 		criteria.setProjection(projections);
+		if(form.getProgramStatus() == null){
+			criteria.createAlias("programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
+		}
+		
+		criteria.add(Restrictions
+				.isNull("personProgramStatuses.expirationDate"));
+		
+		if(form.getSpecialServiceGroupIds() == null){
+			criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
+		}
+	
 		addBasicStudentProperties(projections, criteria);
 		
 		criteria.setResultTransformer(new AliasToBeanResultTransformer(
 				BaseStudentReportTO.class));
-
-		// Add Paging
-		if (sAndP != null) {
-			sAndP.addAll(criteria);
-		}
 
 		return new PagingWrapper<BaseStudentReportTO>(totalRows, criteria.list());
 
@@ -463,7 +465,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<DisabilityServicesReportTO> getDisabilityReport(PersonSearchFormTO form,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
-		Criteria criteria = this.setBasicSearchCriteria(createCriteria(sAndP),  form);
+		Criteria criteria = setBasicSearchCriteria(createCriteria(sAndP),  form);
 		
 		// item count
 		Long totalRows = 0L;
@@ -482,6 +484,15 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		final ProjectionList projections = Projections.projectionList();
 		
 		criteria.setProjection(projections);
+		
+		if(form.getProgramStatus() == null){
+			criteria.createAlias("programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
+		}
+		
+		if(form.getSpecialServiceGroupIds() == null){
+			criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
+		}
+		
 		addBasicStudentProperties(projections, criteria);
 		Criteria demographics = criteria.createAlias("demographics", "demographics");
 		demographics.createAlias("demographics.ethnicity", "ethnicity");
@@ -490,10 +501,14 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		criteria.createAlias("disabilityAgencies", "disabilityAgencies");
 		
 		criteria.createAlias("disabilityAgencies.disabilityAgency", "disabilityAgency");
-		criteria.createAlias("disabilityTypes", "disabilityTypes");
-		criteria.createAlias("disabilityTypes.disabilityType", "disabilityType");
-		criteria.createAlias("disability", "disability");
-		criteria.createAlias("disability.disabilityStatus", "disabilityStatus");
+		if (form.getDisabilityTypeId() == null)
+			criteria.createAlias("disabilityTypes", "personDisabilityTypes");
+		
+		criteria.createAlias("personDisabilityTypes.disabilityType", "disabilityType");
+		if (form.getDisabilityStatusId() == null) {
+			criteria.createAlias("disability", "personDisability");
+		}
+		criteria.createAlias("personDisability.disabilityStatus", "disabilityStatus");
 		
 		criteria.createAlias("educationGoal", "educationGoal");
 		
@@ -545,16 +560,12 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		projections.add(Projections.property("state").as("state"));
 		projections.add(Projections.property("zipCode").as("zipCode"));
 		projections.add(Projections.property("id").as("id"));
-		criteria.createAlias("specialServiceGroups", "specialServiceGroups");
-		criteria.createAlias("specialServiceGroups.specialServiceGroup", "specialServiceGroup");
+		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup", JoinType.LEFT_OUTER_JOIN);
 		projections.add(Projections.property("specialServiceGroup.name").as("specialServiceGroup"));
 		
-		criteria.createAlias("programStatuses", "programStatuses").add(Restrictions
-				.isNull("programStatuses.expirationDate"));
+		criteria.createAlias("personProgramStatuses.programStatus", "programStatus", JoinType.LEFT_OUTER_JOIN);
 		
-		criteria.createAlias("programStatuses.programStatus", "programStatus");
-		
-		projections.add(Projections.property("programStatus.name").as("currentProgramStatusName"));
+		projections.add(Projections.property("programStatus.name").as("programCurrentStatusName"));
 
 		// Join to Student Type
 		criteria.createAlias("studentType", "studentType",

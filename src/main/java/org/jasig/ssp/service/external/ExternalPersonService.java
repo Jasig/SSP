@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.service.external;
 
+import java.util.List;
+
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -46,4 +48,6 @@ public interface ExternalPersonService extends
 
 	void updatePersonFromExternalPerson(final Person person,
 			final ExternalPerson externalPerson);
+	
+	List<String> getAllDepartmentNames();
 }

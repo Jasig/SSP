@@ -45,7 +45,7 @@ import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
-import org.jasig.ssp.transferobject.reports.EarlyAlertStudentProgressTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentProgressReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -121,6 +121,8 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 	public void getEarlyAlertStudentProgressReport(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) String rosterStatus,
+			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) UUID coachId,	
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) UUID programStatus,
@@ -147,6 +149,8 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 		SearchParameters.addReferenceTypes(programStatus, 
 				null, 
 				false,
+				rosterStatus,
+				homeDepartment,
 				parameters, 
 				personSearchForm, 
 				programStatusService, 
@@ -161,29 +165,30 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 				initialTerm.getStartDate(), initialTerm.getEndDate());
 
 		final PagingWrapper<EarlyAlertStudentReportTO> initialPeopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
-				initialSearchForm, SortingAndPaging.createForSingleSortAll(status, "lasName", "DESC"));
+				initialSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
 		
 		final EarlyAlertStudentSearchTO comparisonSearchForm = new EarlyAlertStudentSearchTO(personSearchForm, 
 				comparisonTerm.getStartDate(), comparisonTerm.getEndDate());
 
 		final PagingWrapper<EarlyAlertStudentReportTO> comparisonPeopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
-				comparisonSearchForm, SortingAndPaging.createForSingleSortAll(status, "lasName", "DESC"));
+				comparisonSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
 		
+		List<EarlyAlertStudentReportTO> initialPeopleInfoCompressed = processReports(initialPeopleInfo, earlyAlertResponseService);
+		List<EarlyAlertStudentReportTO> comparisonPeopleInfoCompressed = processReports(comparisonPeopleInfo, earlyAlertResponseService);
 		
-		List<EarlyAlertStudentProgressTO> people = new ArrayList<EarlyAlertStudentProgressTO>();
-		for(EarlyAlertStudentReportTO initialPersonInfo : initialPeopleInfo){
+		List<EarlyAlertStudentProgressReportTO> people = new ArrayList<EarlyAlertStudentProgressReportTO>();
+		for(EarlyAlertStudentReportTO initialPersonInfo : initialPeopleInfoCompressed){
 			EarlyAlertStudentReportTO foundPerson = null;
-			for(EarlyAlertStudentReportTO comparisonPersonInfo : comparisonPeopleInfo){
-				if(initialPersonInfo.getPerson().getId().equals(comparisonPersonInfo.getPerson().getId())){
+			for(EarlyAlertStudentReportTO comparisonPersonInfo : comparisonPeopleInfoCompressed){
+				if(initialPersonInfo.getId().equals(comparisonPersonInfo.getId())){
 					foundPerson = comparisonPersonInfo;
 					break;
 				}
 			}
 			
 			Long finalCount = foundPerson != null ? (Long)foundPerson.getTotal() : 0;
-			
-			people.add(new EarlyAlertStudentProgressTO(initialPersonInfo.getPerson(), "",
-					initialPersonInfo.getTotal(), finalCount));
+			if(!people.contains(initialPersonInfo))
+				people.add(new EarlyAlertStudentProgressReportTO(initialPersonInfo,initialPersonInfo.getTotal(), finalCount));
 				
 		}
 		

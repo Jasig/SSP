@@ -800,12 +800,793 @@ Ext.define('Ssp.view.tools.sis.Assessment', {
         me.callParent(arguments);
     }
 });
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.tool.disabilityintake.GeneralViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+	init: function() {
+		var me=this;
+		return me.callParent(arguments);
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson',
+        appEventsController: 'appEventsController',
+    	formUtils: 'formRendererUtils',
+    	disabilityAccommodationsStore: 'disabilityAccommodationsStore',
+    	disabilityAgenciesStore: 'disabilityAgenciesStore',
+    	disabilityIntake: 'currentDisabilityIntake',
+    	disabilityStatusesStore: 'disabilityStatusesStore',
+    	disabilityTypesStore: 'disabilityTypesStore',
+        personLite: 'personLite',
+        person: 'currentPerson',
+        service: 'disabilityIntakeService', 	       
+    }, 
+    config: {
+    	disabilityIntakeForm: null
+    },
+    control: {
+		'saveButton': {
+			click: 'onSaveClick'
+		},
+		
+    	'cancelButton': {
+    		click: 'onCancelClick'
+    	},
+    	
+    	saveSuccessMessage: '#saveSuccessMessage'
+	},
+    
+	init: function() {
+		var me=this;	
+		
+		// Load the views dynamically
+		// otherwise duplicate id's will be registered
+		// on cancel
+		me.initDisabilityIntakeViews();
+	
+		// This enables mapped text fields and mapped text areas
+		// to be shown or hidden upon selection from a parent object
+		// such as a dynamic check box.
+		me.appEventsController.getApplication().addListener('dynamicCompChange', function( comp ){
+			var tfArr = Ext.ComponentQuery.query('.mappedtextfield');
+			var taArr = Ext.ComponentQuery.query('.mappedtextarea');
+			
+			// show or hide mapped text fields
+			Ext.each(tfArr,function(item, index){
+				if (comp.id==item.parentId)
+				{
+					if(comp.checked)
+					{
+						item.show();
+						Ext.apply(item,{allowBlank:false});
+					}else{
+						item.hide();
+						Ext.apply(item,{allowBlank:true});
+					}
+				}	
+			},this);
+			
+			// show or hide mapped text area components
+			Ext.each(taArr,function(item, index){
+				if (comp.id==item.parentId)
+				{
+					if(comp.checked)
+					{
+						item.show();
+						Ext.apply(item,{allowBlank:false});
+					}else{
+						item.hide();
+						Ext.apply(item,{allowBlank:true});
+					}
+				}	
+			},this);
+		},me);
+		
+		// display loader
+		me.getView().setLoading( true );
+		
+		me.service.get(me.personLite.get('id'),{
+			success: me.getDisabilityIntakeSuccess,
+			failure: me.getDisabilityIntakeFailure,
+			scope: me
+		});
+		
+		return me.callParent(arguments);
+    },
 
+    destroy: function() {
+    	//this.appEventsController.removeEvent({eventName: 'dynamicCompChange', callBackFunc: this.onDynamicCompChange, scope: this});
 
+        return this.callParent( arguments );
+    },     
+    
+    initDisabilityIntakeViews: function(){
+    	var me=this;
+    	var items = [ Ext.createWidget('tabpanel', {
+	        width: '100%',
+	        height: '100%',
+	        activeTab: 0,
+			border: 0,
+	        items: [ { title: 'General',
+	        	       autoScroll: true,
+	        		   items: [{xtype: 'disabilitygeneral'}]
+	        		},{
+	            		title: 'Agency Contacts',
+	            		autoScroll: true,
+	            		items: [{xtype: 'disabilityagencycontacts'}]
+	        		},{
+	            		title: 'Disability',
+	            		autoScroll: true,
+	            		items: [{xtype: 'disabilitytypes'}]
+	        		},{
+	            		title: 'Disposition',
+	            		autoScroll: true,
+	            		items: [{xtype: 'disabilitydisposition'}]
+	        		},{
+	            		title: 'Accommodations',
+	            		autoScroll: true,
+	            		items: [{xtype: 'disabilityaccommodations'}]
+	        		}]
+	    	})
+	    
+		];
+    	
+    	me.getView().add( items );
+    },
+    
+    getDisabilityIntakeSuccess: function( r, scope ){
+    	var me=scope;
+    	var disabilityIntakeClass;
+		
+    	// hide the loader
+    	me.getView().setLoading( false );
+    	
+    	if ( r != null )
+    	{  		
+        	disabilityIntakeClass = Ext.ModelManager.getModel('Ssp.model.tool.disabilityintake.DisabilityIntakeForm');
+    		me.disabilityIntake.data = disabilityIntakeClass.getProxy().getReader().read( r ).records[0].data;
+    		me.buildDisabilityIntake( me.disabilityIntake );    		
+    	}else{
+    		Ext.Msg.alert('Error','There was an error loading the Disability Intake form for this student.');
+    	}
+	},
+	
+	getDisabilityIntakeFailure: function( response, scope){
+		var me=scope;
+		me.getView().setLoading( false );
+	},
+    
+	buildDisabilityIntake: function( formData ){
+		var me=this; // formData
+		
+    	// PERSON RECORD
+		var person = formData.data.person;
+		var personDisability = formData.data.personDisability;
+		var personDisabilityAgencies = formData.data.personDisabilityAgencies;
+		var personDisabilityTypes = formData.data.personDisabilityTypes;
+		var personDisabilityAccommodations = formData.data.personDisabilityAccommodations;
+		
+		var disabilityIntakeGeneralForm = Ext.getCmp('DisabilityIntakeGeneral');
+		var disabilityIntakeAgencyContactNameForm = Ext.getCmp('DisabilityIntakeAgencyContactName');
+		var disabilityIntakeDispositionForm = Ext.getCmp('DisabilityIntakeDisposition');
+		
+		/*
+		 * For drawing reference check boxes dynamically
+		 */
+		var disabilityAgencyFormProps;
+		var disabilityAgenciesAdditionalFieldsMap;	
+		var disabilityTypesFormProps;
+		var disabilityTypesAdditionalFieldsMap;
+		var disabilityAccommodationsFormProps;
+		var disabilityAccommodationsAdditionalFieldsMap;
+		var defaultLabelWidth;
 
+		// REFERENCE OBJECTS
+		var disabilityAccommodations = me.formUtils.alphaSortByField( formData.data.referenceData.disabilityAccommodations, 'name' );
+		var disabilityAgencies = me.formUtils.alphaSortByField( formData.data.referenceData.disabilityAgencies, 'name' );
+		var disabilityStatuses =  me.formUtils.alphaSortByField( formData.data.referenceData.disabilityStatuses, 'name' );
+		var disabilityTypes = me.formUtils.alphaSortByField( formData.data.referenceData.disabilityTypes, 'name');
+		
+		me.disabilityAgenciesStore.loadData( disabilityAgencies );
+		me.disabilityAccommodationsStore.loadData( disabilityAccommodations );
+		me.disabilityStatusesStore.loadData( disabilityStatuses );
+		me.disabilityTypesStore.loadData( disabilityTypes );
+		
+		// LOAD RECORDS FOR EACH OF THE FORMS
+		
+		if ( personDisability != null && personDisability != undefined ){
+			disabilityIntakeGeneralForm.loadRecord( personDisability );
+		}
+		
+		if ( personDisability != null && personDisability != undefined ){
+			disabilityIntakeAgencyContactNameForm.loadRecord( personDisability );
+		}
+		
+		if ( personDisability != null && personDisability != undefined ){
+			disabilityIntakeDispositionForm.loadRecord( personDisability );
+		}	
 
+		defaultLabelWidth = 150;
 
+		// DEFINE DISABILITY AGENCY DYNAMIC FIELDS
+		
+		disabilityAgenciesAdditionalFieldsMap = [{parentId: Ssp.util.Constants.DISABILITY_AGENCY_OTHER_ID, 
+											  parentName: "other",
+											  name: "description", 
+											  label: "Please Explain", 
+											  fieldType: "mappedtextarea",
+											  labelWidth: defaultLabelWidth}];
+		
+		disabilityAgencyFormProps = {
+				mainComponentType: 'checkbox',
+				formId: 'DisabilityIntakeDisabilityAgencies',
+                fieldSetTitle: 'Select all agencies that apply',
+                itemsArr: disabilityAgencies, 
+                selectedItemsArr: personDisabilityAgencies, 
+                idFieldName: 'id', 
+                selectedIdFieldName: 'disabilityAgencyId',
+                additionalFieldsMap: disabilityAgenciesAdditionalFieldsMap };
+		
+		me.formUtils.createForm( disabilityAgencyFormProps );
+		
+		// DEFINE DISABILITY TYPE DYNAMIC FIELDS
+		
+		disabilityTypesAdditionalFieldsMap = [];
+		
+		// For each disability type provide a mapped description field
+		// this will allow the user to provide a description for the disability
+		Ext.Array.each(disabilityTypes, function(name,index,self){
+			var item = disabilityTypes[index];
+			var map = {parentId: item.id, 
+				  parentName: item.name,
+				  name: "description", 
+				  label: "Please Explain", 
+				  fieldType: "mappedtextarea",
+				  labelWidth: 80,
+				  width: '350'};
+			disabilityTypesAdditionalFieldsMap.push(map);
+		});	
+		
+		disabilityTypesFormProps = {
+		mainComponentType: 'checkbox',
+		formId: 'DisabilityIntakeDisabilityTypes', 
+		fieldSetTitle: 'Select all that apply',
+		itemsArr: disabilityTypes, 
+		selectedItemsArr: personDisabilityTypes, 
+		idFieldName: 'id', 
+		selectedIdFieldName: 'disabilityTypeId',
+		additionalFieldsMap: disabilityTypesAdditionalFieldsMap };
+		
+		me.formUtils.createForm( disabilityTypesFormProps );
 
+		// DEFINE DISABILITY ACCOMMODATION DYNAMIC FIELDS			
+
+		disabilityAccommodationsAdditionalFieldsMap = [];
+		
+		// For each disability type provide a mapped description field
+		// this will allow the user to provide a description for the disability
+		Ext.Array.each(disabilityAccommodations, function(name,index,self){
+			var map;
+			var item = disabilityAccommodations[index];
+			var fieldType = "mappedtextfield";
+			if (item.useDescription === true)
+			{
+				// determine field type
+				// long = mappedtextarea
+				// short = mappedtextfield
+				if (item.descriptionFieldType.toLowerCase() === "long")
+				{
+					fieldType = "mappedtextarea";
+				}				
+				
+				map = {parentId: item.id, 
+						  parentName: item.name,
+						  name: "description", 
+						  label: item.descriptionFieldLabel, 
+						  fieldType: fieldType,
+						  labelWidth: 100,
+						  width: '350'};
+				disabilityAccommodationsAdditionalFieldsMap.push(map);				
+			}
+		});		
+		
+		disabilityAccommodationsFormProps = {
+			mainComponentType: 'checkbox',
+			formId: 'DisabilityIntakeDisabilityAccommodations', 
+			fieldSetTitle: 'Select all that apply',
+			itemsArr: disabilityAccommodations, 
+			selectedItemsArr: personDisabilityAccommodations, 
+			idFieldName: 'id', 
+			selectedIdFieldName: 'disabilityAccommodationId',
+			additionalFieldsMap: disabilityAccommodationsAdditionalFieldsMap };
+		
+		me.formUtils.createForm( disabilityAccommodationsFormProps );
+	},
+	
+	onSaveClick: function( button ) {
+		var me=this;
+		var formUtils = me.formUtils;
+
+		var disabilityForm = Ext.getCmp('DisabilityIntakeGeneral').getForm();
+		var disabilityIntakeAgencyContactNameForm = Ext.getCmp('DisabilityIntakeAgencyContactName').getForm();
+		var disabilityDispositionForm = Ext.getCmp('DisabilityIntakeDisposition').getForm();
+		var disabilityAgenciesForm = Ext.getCmp('DisabilityIntakeDisabilityAgencies').getForm();		
+		var disabilityTypesForm = Ext.getCmp('DisabilityIntakeDisabilityTypes').getForm();		
+		var disabilityAccommodationsForm = Ext.getCmp('DisabilityIntakeDisabilityAccommodations').getForm();		
+
+		var disabilityAgenciesFormValues = null;
+		var disabilityAccommodationsFormValues = null;
+		var disabilityTypesFormValues = null;
+		var disabilityIntakeFormModel = null;
+		var personId = "";
+		var disabilityIntakeData = {};
+		
+		var formsToValidate = [disabilityForm,
+		             disabilityIntakeAgencyContactNameForm,
+		             disabilityDispositionForm,
+		             disabilityAgenciesForm,
+		             disabilityAccommodationsForm,
+		             disabilityTypesForm];
+
+		// validate and save the model
+		var validateResult = me.formUtils.validateForms( formsToValidate );
+		if ( validateResult.valid )
+		{
+			// update the model with changes from the forms
+			disabilityForm.updateRecord( me.disabilityIntake.get('personDisability') );
+	
+			// update the model with changes from the forms
+			disabilityIntakeAgencyContactNameForm.updateRecord( me.disabilityIntake.get('personDisability') );			
+
+			// update the model with changes from the forms
+			disabilityDispositionForm.updateRecord( me.disabilityIntake.get('personDisability') );			
+			
+			// save the full model
+			personId = me.disabilityIntake.get('person').data.id;
+			disabilityIntakeData = {
+				person: me.disabilityIntake.get('person').data,
+				personDisability: me.disabilityIntake.get('personDisability').data,
+				personDisabilityAgencies: [],
+				personDisabilityAccommodations: [],
+				personDisabilityTypes: []
+			};
+						
+			// date saved as null is ok 
+			if (disabilityIntakeData.personDisability.eligibleLetterDate != null)
+			{
+				// account for date offset
+				disabilityIntakeData.personDisability.eligibleLetterDate = me.formUtils.fixDateOffset( disabilityIntakeData.personDisability.eligibleLetterDate );			
+			}
+
+			// date saved as null is ok 
+			if (disabilityIntakeData.personDisability.ineligibleLetterDate != null)
+			{
+				// account for date offset
+				disabilityIntakeData.personDisability.ineligibleLetterDate = me.formUtils.fixDateOffset( disabilityIntakeData.personDisability.ineligibleLetterDate );			
+			}			
+			
+			// cleans properties that will be unable to be saved if not null
+			// arrays set to strings should be null rather than string in saved
+			// json
+			disabilityIntakeData.person = me.person.setPropsNullForSave( disabilityIntakeData.person );			
+			
+			disabilityIntakeData.personDisability.personId = personId;
+			// Clean personDisability props that won't save as empty string
+			disabilityIntakeData.personDisability = me.disabilityIntake.get('personDisability').setPropsNullForSave( disabilityIntakeData.personDisability );			
+			
+			disabilityAgenciesFormValues = disabilityAgenciesForm.getValues();
+			disabilityIntakeData.personDisabilityAgencies = formUtils.createTransferObjectsFromSelectedValues('disabilityAgencyId', disabilityAgenciesFormValues, personId);
+
+			disabilityTypesFormValues = disabilityTypesForm.getValues();
+			disabilityIntakeData.personDisabilityTypes = formUtils.createTransferObjectsFromSelectedValues('disabilityTypeId', disabilityTypesFormValues, personId);
+			
+			disabilityAccommodationsFormValues = disabilityAccommodationsForm.getValues();
+			disabilityIntakeData.personDisabilityAccommodations = formUtils.createTransferObjectsFromSelectedValues('disabilityAccommodationId', disabilityAccommodationsFormValues, personId);
+			
+			// display loader
+			me.getView().setLoading( true );
+			
+			me.service.save(me.personLite.get('id'), disabilityIntakeData, {
+				success: me.saveDisabilityIntakeSuccess,
+				failure: me.saveDisabilityIntakeFailure,
+				scope: me
+			});
+
+		}else{
+			me.formUtils.displayErrors( validateResult.fields );
+		}
+	},
+	
+	saveDisabilityIntakeSuccess: function(r, scope) {
+		var me=scope;
+
+		me.getView().setLoading( false );
+		
+		if( r.success == true ) {
+			me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );							
+		}								
+	},
+	
+	saveDisabilityIntakeFailure: function(response, scope) {
+		var me=scope;
+		me.getView().setLoading( false );							
+	},	
+	
+	onCancelClick: function( button ){
+		var me=this;
+		me.getView().removeAll();
+		me.initDisabilityIntakeViews();
+		me.buildDisabilityIntake( me.disabilityIntake );	
+	}
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.disabilityintake.General', {
+    extend: 'Ext.form.Panel',
+    alias: 'widget.disabilitygeneral',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.disabilityintake.GeneralViewController',
+    inject: {
+    	disabilityStatusesStore: 'disabilityStatusesStore'
+    }, 
+    height: '100%',
+    width: '100%',
+    id : 'DisabilityIntakeGeneral',
+    initComponent: function() {
+        var me = this;
+        Ext.apply(me, {
+			autoScroll: true,
+		    layout: {
+		    	type: 'vbox',
+		    	align: 'stretch'
+		    },
+		    border: 0,
+		    padding: 10,
+		    defaults: {
+		        anchor: '95%'
+		    },
+		    fieldDefaults: {
+		        msgTarget: 'side',
+		        labelAlign: 'right',
+		        labelWidth: 200
+		    },
+		    defaultType: 'textfield',
+            items: [{
+		                xtype: 'displayfield',
+		                name: 'odsRegistrationDate',
+		                fieldLabel: 'ODS Registration Date',
+		                renderer: Ext.util.Format.dateRenderer('m/d/Y')
+		            },{
+                        xtype: 'combobox',
+                        name: 'disabilityStatusId',
+                        fieldLabel: 'ODS Status',
+				        emptyText: 'Select One',
+				        store: me.disabilityStatusesStore,
+				        valueField: 'id',
+				        displayField: 'name',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true
+                    },
+                    {
+                        xtype: 'textareafield',
+                        fieldLabel: 'Please Explain Temporary Eligibility',
+                        name: 'tempEligibilityDescription'
+                    },
+                    {
+                        xtype: 'textfield',
+                        name: 'intakeCounselor',
+                        fieldLabel: 'ODS Counselor'
+                    },
+                    {
+                        xtype: 'textfield',
+                        name: 'referredBy',
+                        fieldLabel: 'Referred to ODS by'
+                    }]
+        });
+
+        me.callParent(arguments);
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.disabilityintake.AgencyContacts', {
+	extend: 'Ext.panel.Panel',
+	alias: 'widget.disabilityagencycontacts',
+    width: '100%',
+    height: '100%',
+    autoScroll: true,
+	initComponent: function() {	
+        var me = this;
+		Ext.apply(me,
+				{
+		    		bodyPadding: 10,
+		    		border: 0,
+					items: [{
+						xtype: 'form',
+						id : 'DisabilityIntakeDisabilityAgencies',
+					    layout: 'anchor',
+					    border: 0,
+					    defaults: {
+					        anchor: '100%'
+					    },
+					    defaultType: 'checkbox'
+					},{
+						xtype: 'form',
+						id : 'DisabilityIntakeAgencyContactName',
+					    layout: 'anchor',
+					    border: 0,
+					    defaults: {
+					        anchor: '95%'
+					    },
+					    items: [{
+	                        xtype: 'textfield',
+	                        fieldLabel: 'Name of Contact',
+	                        name: 'contactName'
+	                    }]
+					}]			
+				});
+		
+		return me.callParent(arguments);
+	}
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.disabilityintake.Disposition', {
+    extend: 'Ext.form.Panel',
+    alias: 'widget.disabilitydisposition',
+    height: '100%',
+    width: '100%',
+    id : 'DisabilityIntakeDisposition',
+    initComponent: function() {
+        var me = this;
+        Ext.apply(me, {
+        	border: 0,
+            padding: 10,
+		    defaults: {
+		        anchor: '95%'
+		    },
+            autoScroll: true,
+            items: [{
+		                xtype: 'fieldcontainer',
+		                fieldLabel: 'Disposition',
+		                layout: 'vbox',
+		                items: [
+                            {
+                                xtype: 'checkboxfield',
+                                boxLabel: 'Release Signed',
+                                name: 'releaseSigned'
+                            },
+                            {
+                                xtype: 'checkboxfield',
+                                boxLabel: 'Records Requested',
+                                name: 'recordsRequested'
+                            },
+                            {
+                                xtype: 'textfield',
+                                fieldLabel: 'Records Requested From',
+        		                labelWidth: 150,
+                                name: 'recordsRequestedFrom'
+                            },
+                            {
+                                xtype: 'checkboxfield',
+                                boxLabel: 'Referred for Screening of LD/ADD',
+                                name: 'referForScreening'
+                            },
+                            {
+                                xtype: 'textfield',
+                                fieldLabel: 'Documents Requested From',
+                                labelWidth: 180,
+                                name: 'documentsRequestedFrom'
+                            },
+                            {
+                                xtype: 'checkboxfield',
+                                boxLabel: 'Rights and Duties',
+                                name: 'rightsAndDuties'
+                            },
+                            {
+                                xtype: 'checkboxfield',
+                                boxLabel: 'Eligibility Letter Sent',
+                                name: 'eligibleLetterSent'
+                            },{
+        				    	xtype: 'datefield',
+        				    	fieldLabel: 'Eligibility Letter Date',
+        				    	itemId: 'eligibleLetterDate',
+        				    	labelWidth: 180,
+        				    	altFormats: 'm/d/Y|m-d-Y',
+        				    	invalidText: '{0} is not a valid date - it must be in the format: 06/02/2012 or 06-02-2012',
+        				        name: 'eligibleLetterDate',
+        				        allowBlank:true
+        				    },
+                            {
+                                xtype: 'checkboxfield',
+                                boxLabel: 'Ineligibility Letter Sent',
+                                name: 'ineligibleLetterSent'
+                            },{
+        				    	xtype: 'datefield',
+        				    	fieldLabel: 'Ineligibility Letter Date',
+        				    	itemId: 'ineligibleLetterDate',
+        				    	labelWidth: 180,
+        				    	altFormats: 'm/d/Y|m-d-Y',
+        				    	invalidText: '{0} is not a valid date - it must be in the format: 06/02/2012 or 06-02-2012',
+        				        name: 'ineligibleLetterDate',
+        				        allowBlank:true
+        				    },
+                            {
+                                xtype: 'checkboxfield',
+                                boxLabel: 'No disability documentation received',
+                                name: 'noDocumentation'
+                            },
+                            {
+                                xtype: 'checkboxfield',
+                                boxLabel: 'Inadequate documentation',
+                                name: 'inadequateDocumentation'
+                            },
+                            {
+                                xtype: 'checkboxfield',
+                                boxLabel: 'Document states individual has no disability',
+                                name: 'noDisability'
+                            },
+                            {
+                                xtype: 'checkboxfield',
+                                boxLabel: 'HS reports no special ed placement/no report',
+                                name: 'noSpecialEd'
+                            }
+                        ]
+                    },
+                    {
+                        xtype: 'checkboxfield',
+                        boxLabel: '',
+                        fieldLabel: 'On Medication',
+                        name: 'onMedication'
+                    },
+                    {
+                        xtype: 'textareafield',
+                        fieldLabel: 'Please list medications',
+                        name: 'medicationList'
+                    },
+                    {
+                        xtype: 'textareafield',
+                        fieldLabel: 'Functional limitations?, please explain',
+                        name: 'functionalLimitations'
+                    }]
+        });
+
+        me.callParent(arguments);
+    }
+
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.disabilityintake.Accommodations', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.disabilityaccommodations',
+	id:'DisabilityIntakeDisabilityAccommodations',
+    width: '100%',
+    height: '100%',
+    autoScroll: true,
+	initComponent: function() {	
+        var me = this;
+		Ext.apply(me, 
+				{
+				    bodyPadding: 10,
+				    border: 0,
+				    layout: 'anchor',
+				    defaults: {
+				        anchor: '95%'
+				    },
+				    defaultType: 'checkbox'
+				});
+		
+		return me.callParent(arguments);
+	}
+});
 /*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
@@ -6110,6 +6891,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.getSearchText().setValue( me.searchCriteria.get('searchTerm') );
 	   	me.getSearchCaseloadCheck().setValue( !me.searchCriteria.get('outsideCaseload') );
 		
+		
 		return me.callParent(arguments);
     },
     
@@ -6136,6 +6918,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 
 	onViewReady: function(comp, eobj){
 		var me=this;
+        me.appEventsController.assignEvent({eventName: 'collapseSearch', callBackFunc: me.onCollapseSearch, scope: me});
 		me.appEventsController.assignEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
 	   	me.appEventsController.assignEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
 	   	me.appEventsController.assignEvent({eventName: 'setNonParticipatingProgramStatusComplete', callBackFunc: me.onSetNonParticipatingProgramStatusComplete, scope: me});
@@ -6148,6 +6931,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     destroy: function() {
     	var me=this;
+        me.appEventsController.removeEvent({eventName: 'collapseSearch', callBackFunc: me.onCollapseSearch, scope: me});
     	me.appEventsController.removeEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'retrieveCaseload', callBackFunc: me.onRetrieveCaseload, scope: me});
@@ -6207,6 +6991,12 @@ Ext.define('Ssp.controller.SearchViewController', {
 	setGridView: function( view ){
 		var me=this;
 		me.applyColumns();
+	},
+	
+	onCollapseSearch: function() {
+		console.log('search collapse');
+		var searchView = Ext.ComponentQuery.query('search')[0];
+		searchView.collapse();
 	},
 	
 	onDisplaySearchBarClick: function( button ){
@@ -8048,86 +8838,102 @@ Ext.define('Ssp.controller.person.AnticipatedStartDateViewController', {
  * under the License.
  */
 Ext.define('Ssp.controller.ToolsViewController', {
-	extend: 'Deft.mvc.ViewController',
-    mixins: [ 'Deft.mixin.Injectable'],
+    extend: 'Deft.mvc.ViewController',
+    mixins: ['Deft.mixin.Injectable'],
     inject: {
         appEventsController: 'appEventsController',
-    	apiProperties: 'apiProperties',
-    	authenticatedPerson: 'authenticatedPerson',
+        apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson',
         formUtils: 'formRendererUtils',
-    	personLite: 'personLite',
-    	toolsStore: 'toolsStore'
+        personLite: 'personLite',
+        toolsStore: 'toolsStore'
     },
     control: {
-		view: {
-			itemclick: 'onItemClick',
-			viewready: 'onViewReady'
-		}
-		
-	},
-	
-	init: function() {	
-		return this.callParent(arguments);
-    }, 
+        view: {
+            itemclick: 'onItemClick',
+            viewready: 'onViewReady'
+        }
+    
+    },
+    
+    init: function(){
+        return this.callParent(arguments);
+    },
     
     onViewReady: function(comp, obj){
-    	var me=this;
-    	me.appEventsController.assignEvent({eventName: 'loadPerson', callBackFunc: me.onLoadPerson, scope: me});
-    	me.appEventsController.assignEvent({eventName: 'transitionStudent', callBackFunc: me.onTransitionStudent, scope: me});
- 
-    	if (me.personLite.get('id') != "")
-    	{
-    		me.loadPerson();
-    	}
+        var me = this;
+        me.appEventsController.assignEvent({
+            eventName: 'loadPerson',
+            callBackFunc: me.onLoadPerson,
+            scope: me
+        });
+        me.appEventsController.assignEvent({
+            eventName: 'transitionStudent',
+            callBackFunc: me.onTransitionStudent,
+            scope: me
+        });
+        
+        if (me.personLite.get('id') != "") {
+            me.loadPerson();
+        }
     },
-
-    destroy: function() {
-    	var me=this;
-     	
-    	me.appEventsController.removeEvent({eventName: 'loadPerson', callBackFunc: me.onLoadPerson, scope: me});
-    	me.appEventsController.assignEvent({eventName: 'transitionStudent', callBackFunc: me.onTransitionStudent, scope: me});
-
-        return me.callParent( arguments );
+    
+    destroy: function(){
+        var me = this;
+        
+        me.appEventsController.removeEvent({
+            eventName: 'loadPerson',
+            callBackFunc: me.onLoadPerson,
+            scope: me
+        });
+        me.appEventsController.removeEvent({
+            eventName: 'transitionStudent',
+            callBackFunc: me.onTransitionStudent,
+            scope: me
+        });
+        
+        return me.callParent(arguments);
     },
     
     onLoadPerson: function(){
-    	this.loadPerson();
+        this.loadPerson();
     },
     
     onTransitionStudent: function(){
-    	this.selectTool( 'journal' );
-    	this.loadTool('journal');
+        this.selectTool('journal');
+        this.loadTool('journal');
     },
     
     loadPerson: function(){
-    	this.selectTool( 'profile' );
-    	this.loadTool('profile');  
+        this.selectTool('profile');
+        this.loadTool('profile');
     },
     
-    selectTool: function( toolType ){
-    	var tool = this.toolsStore.find( 'toolType', toolType )
-		this.getView().getSelectionModel().select( tool );
+    selectTool: function(toolType){
+        var tool = this.toolsStore.find('toolType', toolType)
+        this.getView().getSelectionModel().select(tool);
     },
     
-	onItemClick: function(grid,record,item,index){ 
-		var me=this;
-		if (record.get('active') && me.personLite.get('id') != "")
-		{
-			this.loadTool( record.get('toolType') );
-		}
-	},
-	
-	loadTool: function( toolType ) {
-		var me=this;
-		var comp;
-		if ( me.authenticatedPerson.hasAccess(toolType.toUpperCase()+'_TOOL') )
-		{
-			comp = me.formUtils.loadDisplay('tools',toolType, true, {});
-		}else{
-			me.authenticatedPerson.showUnauthorizedAccessAlert();
-		}
-	}
+    onItemClick: function(grid, record, item, index){
+        var me = this;
+        if (record.get('active') && me.personLite.get('id') != "") {
+            this.loadTool(record.get('toolType'));
+            this.appEventsController.getApplication().fireEvent('collapseSearch');
+        }
+    },
+    
+    loadTool: function(toolType){
+        var me = this;
+        var comp;
+        if (me.authenticatedPerson.hasAccess(toolType.toUpperCase() + '_TOOL')) {
+            comp = me.formUtils.loadDisplay('tools', toolType, true, {});
+        }
+        else {
+            me.authenticatedPerson.showUnauthorizedAccessAlert();
+        }
+    }
 });
+
 /*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
@@ -9979,7 +10785,9 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			                                   name: "highestGradeCompleted", 
 			                                   label: "Highest Grade Completed", 
 			                                   fieldType: "mappedtextfield", 
-			                                   labelWidth: defaultLabelWidth},
+			                                   labelWidth: defaultLabelWidth,
+                                               validationExpression: '^([0-9]|1[0-6])$',
+                                               validationErrorMessage: 'This field requires a numeric value between 0 and 16'},
 		                                      {parentId: Ssp.util.Constants.EDUCATION_LEVEL_GED_ID, 
 			                                   parentName: "ged", 
 			                                   name: "graduatedYear", 
@@ -10219,10 +11027,6 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
     	displayEmploymentShift: 1
     },
     control: {
-		'citizenship': {
-			change: 'onCitizenshipChange'
-		},
-		
 		primaryCaregiverCheckOn: '#primaryCaregiverCheckOn',
 		primaryCaregiverCheckOff: '#primaryCaregiverCheckOff',		
 		
@@ -10239,11 +11043,7 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
 		
 		employedCheckOn: '#employedCheckOn',
 		employedCheckOff: '#employedCheckOff',		
-		
-		'countryOfCitizenship': {
-			hide: 'onFieldHidden'
-		},
-		
+
 		'childcareArrangement': {
 			hide: 'onFieldHidden'
 		},
@@ -10267,6 +11067,13 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
 
 	init: function() {
 		var me=this;
+		//added below 5 lines to take care of disabling entry if syncStudentPersonalDataWithExternalData is true
+		var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalData');
+		var studentIntakeDemographicsForm = Ext.getCmp('StudentIntakeDemographics');
+		studentIntakeDemographicsForm.getForm().findField("gender").setDisabled(disabled);
+		studentIntakeDemographicsForm.getForm().findField("maritalStatusId").setDisabled(disabled);
+		studentIntakeDemographicsForm.getForm().findField("ethnicityId").setDisabled(disabled);
+		
 		var personDemographics = me.model.get('personDemographics');
 		var citizenship = Ext.ComponentQuery.query('#citizenship')[0];
 		var childcareNeeded = Ext.ComponentQuery.query('#childcareNeeded')[0];
@@ -10292,27 +11099,12 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
 		
 		me.displayStudentIntakeDemographicsEmploymentShift = me.sspConfig.get('displayStudentIntakeDemographicsEmploymentShift');
 		
-		me.showHideCountryOfCitizenship( citizenship.getValue() );
         me.showHideChildcareArrangement( childcareNeeded.getValue() );
         me.showHideEmploymentFields( isEmployed.getValue() );
         
 		return me.callParent(arguments);
     },
     
-    onCitizenshipChange: function(combo, newValue, oldValue, eOpts) {
-    	this.showHideCountryOfCitizenship( newValue );
-    },
-    
-    showHideCountryOfCitizenship: function( value ){
-    	var field = Ext.ComponentQuery.query('#countryOfCitizenship')[0];
-		var record = this['citizenshipsStore'].findRecord('name', 'International');
-		if ( value==record.get( 'id' ) )
-		{
-			field.show();
-		}else{
-			field.hide();
-		}    
-    },
 
     onChildcareNeededChange: function(radiogroup, newValue, oldValue, eOpts) {
     	this.showHideChildcareArrangement( newValue );
@@ -10451,6 +11243,7 @@ Ext.define('Ssp.controller.tool.studentintake.PersonalViewController', {
     	birthDateField: '#birthDate',
     	homePhoneField: '#homePhone',
     	workPhoneField: '#workPhone',
+        cellPhoneField: '#cellPhone',
     	addressLine1Field: '#addressLine1',
     	addressLine2Field: '#addressLine2',
     	cityField: '#city',
@@ -10468,6 +11261,7 @@ Ext.define('Ssp.controller.tool.studentintake.PersonalViewController', {
 		me.getBirthDateField().setDisabled(disabled);
 		me.getHomePhoneField().setDisabled(disabled);
 		me.getWorkPhoneField().setDisabled(disabled);
+        me.getCellPhoneField().setDisabled(disabled);
 		me.getAddressLine1Field().setDisabled(disabled);
 		me.getAddressLine2Field().setDisabled(disabled);
 		me.getCityField().setDisabled(disabled);
@@ -14524,209 +15318,216 @@ Ext.define('Ssp.view.Main', {
  * under the License.
  */
 Ext.define('Ssp.view.Search', {
-	extend: 'Ext.grid.Panel',
-	alias : 'widget.search',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.search',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.SearchViewController',
     inject: {
-    	authenticatedPerson: 'authenticatedPerson',
-    	apiProperties: 'apiProperties',
-    	columnRendererUtils: 'columnRendererUtils',
-    	programStatusesStore: 'programStatusesStore',
-    	sspConfig: 'sspConfig'
+        authenticatedPerson: 'authenticatedPerson',
+        apiProperties: 'apiProperties',
+        columnRendererUtils: 'columnRendererUtils',
+        programStatusesStore: 'programStatusesStore',
+        sspConfig: 'sspConfig'
     },
     initComponent: function(){
-    	var me=this;
-    	Ext.applyIf(me,
-    			   {
-    		        submitEmptyText: false,
-    				title: 'Students',
-    	            collapsible: true,
-    	            collapseDirection: 'left',
-    	        	width: '100%',
-    	        	height: '100%',
-		    	    columns: [{ text: 'Name', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderSearchStudentName, flex: 50}],
+        var me = this;
+        Ext.applyIf(me, {
+            submitEmptyText: false,
+            title: 'Students Foo',
+            collapsible: true,
+            collapseDirection: 'left',
+            width: '100%',
+            height: '100%',
+            columns: [{
+                text: 'Name',
+                dataIndex: 'lastName',
+                renderer: me.columnRendererUtils.renderSearchStudentName,
+                flex: 50
+            }],
+            
+            dockedItems: [{
+                xtype: 'pagingtoolbar',
+                itemId: 'searchGridPager',
+                dock: 'bottom',
+                displayInfo: true,
+                pageSize: me.apiProperties.getPagingSize(),
+                listeners: {
+                    afterrender: function(){
+                        var a = Ext.query("button[data-qtip=Refresh]");
+                        for (var x = 0; x < a.length; x++) {
+                            a[x].style.display = "none";
+                        }
+                    }
+                }
+            }, {
+                xtype: 'toolbar',
+                dock: 'top',
+                itemId: 'searchBar',
+                hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH'),
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'searchText',
+                    enableKeyEvents: true,
+                    emptyText: 'Name or ' + me.sspConfig.get('studentIdAlias'),
+                    width: 200
+                }, {
+                    xtype: 'button',
+                    tooltip: 'Find a Student',
+                    itemId: 'searchButton',
+                    width: 32,
+                    height: 32,
+                    cls: 'searchIcon'
+                }, {
+                    xtype: 'tbspacer',
+                    width: 5
+                }, {
+                    xtype: 'checkboxfield',
+                    boxLabel: 'My Caseload',
+                    itemId: 'searchCaseloadCheck',
+                    name: 'searchInCaseload',
+                    hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH'),
+                    inputValue: false
+                }, {
+                    xtype: 'tbspacer',
+                    flex: 1
+                }, {
+                    tooltip: 'Display Caseload Filters',
+                    text: '',
+                    width: 25,
+                    height: 25,
+                    hidden: false,
+                    cls: 'displayCaseloadIcon',
+                    xtype: 'button',
+                    itemId: 'displayCaseloadBarButton'
+                }]
+            }, {
+                xtype: 'toolbar',
+                dock: 'top',
+                itemId: 'caseloadBar',
+                hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS'),
+                items: [{
+                    xtype: 'combobox',
+                    itemId: 'caseloadStatusCombo',
+                    name: 'programStatusId',
+                    fieldLabel: '',
+                    emptyText: 'Select One',
+                    store: me.programStatusesStore,
+                    valueField: 'id',
+                    displayField: 'name',
+                    mode: 'local',
+                    typeAhead: false,
+                    editable: false,
+                    queryMode: 'local',
+                    allowBlank: true,
+                    forceSelection: false,
+                    width: 200,
+                    labelWidth: 125
+                }, {
+                    xtype: 'button',
+                    tooltip: 'Retrieve My Caseload',
+                    itemId: 'retrieveCaseloadButton',
+                    width: 32,
+                    height: 32,
+                    cls: 'retrieveCaseloadIcon'
+                }, {
+                    xtype: 'tbspacer',
+                    flex: 1
+                }, {
+                    tooltip: 'Display Search Filters',
+                    text: '',
+                    width: 25,
+                    height: 25,
+                    hidden: false,
+                    cls: 'displaySearchIcon',
+                    xtype: 'button',
+                    itemId: 'displaySearchBarButton'
+                }]
+            
+            }, {
+                xtype: 'toolbar',
+                dock: 'top',
+                items: [{
+                    tooltip: 'Add Student',
+                    text: '',
+                    width: 25,
+                    height: 25,
+                    hidden: !me.authenticatedPerson.hasAccess('ADD_STUDENT_BUTTON'),
+                    cls: 'addPersonIcon',
+                    xtype: 'button',
+                    itemId: 'addPersonButton'
+                }, {
+                    tooltip: 'Edit Student',
+                    text: '',
+                    width: 25,
+                    height: 25,
+                    hidden: !me.authenticatedPerson.hasAccess('EDIT_STUDENT_BUTTON'),
+                    cls: 'editPersonIcon',
+                    xtype: 'button',
+                    itemId: 'editPersonButton'
+                }, {
+                    tooltip: 'Delete Student',
+                    text: '',
+                    width: 25,
+                    height: 25,
+                    hidden: !me.authenticatedPerson.hasAccess('DELETE_STUDENT_BUTTON'),
+                    cls: 'deletePersonIcon',
+                    xtype: 'button',
+                    itemId: 'deletePersonButton'
+                }, {
+                    xtype: 'tbspacer',
+                    flex: 1
+                }, {
+                    xtype: 'label',
+                    text: 'Change Status:',
+                    style: 'font-weight:bold;'
+                }, {
+                    tooltip: 'Set Student to Active status',
+                    text: '',
+                    width: 25,
+                    height: 25,
+                    hidden: !me.authenticatedPerson.hasAccess('SET_ACTIVE_STATUS_BUTTON'),
+                    cls: 'setActiveStatusIcon',
+                    xtype: 'button',
+                    action: 'active',
+                    itemId: 'setActiveStatusButton'
+                }, {
+                    tooltip: 'Set Student to Transitioned status',
+                    text: '',
+                    width: 25,
+                    height: 25,
+                    hidden: true, // Temp fix for SSP-434: !me.authenticatedPerson.hasAccess('SET_TRANSITION_STATUS_BUTTON')
+                    cls: 'setTransitionStatusIcon',
+                    xtype: 'button',
+                    action: 'transition',
+                    itemId: 'setTransitionStatusButton'
+                }, {
+                    tooltip: 'Set Student to Non-Participating status',
+                    text: '',
+                    width: 25,
+                    height: 25,
+                    hidden: !me.authenticatedPerson.hasAccess('SET_NON_PARTICIPATING_STATUS_BUTTON'),
+                    cls: 'setNonParticipatingStatusIcon',
+                    xtype: 'button',
+                    action: 'non-participating',
+                    itemId: 'setNonParticipatingStatusButton'
+                }, {
+                    tooltip: 'Set Student to No-Show status',
+                    text: '',
+                    width: 25,
+                    height: 25,
+                    hidden: !me.authenticatedPerson.hasAccess('SET_NO_SHOW_STATUS_BUTTON'),
+                    cls: 'setNoShowStatusIcon',
+                    xtype: 'button',
+                    action: 'no-show',
+                    itemId: 'setNoShowStatusButton'
+                }]
+            }]
+        });
         
-		    	    dockedItems: [{
-		       			xtype: 'pagingtoolbar',
-		       		    itemId: 'searchGridPager',
-		       			dock: 'bottom',
-		       		    displayInfo: true,
-		       		    pageSize: me.apiProperties.getPagingSize(),
-			       		listeners:{
-			       		    afterrender:function(){
-			       		        var a = Ext.query("button[data-qtip=Refresh]"); 
-			       		        for(var x=0;x < a.length;x++)
-			       		        {
-			       		            a[x].style.display="none";
-			       		        }
-			       		    }
-			       		}
-		       		},{
-		       			xtype: 'toolbar',
-		       			dock: 'top',
-		       			itemId: 'searchBar',
-	    	            hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH'),
-		       		    items: [{
-				        	xtype: 'textfield',
-		   		        	itemId: 'searchText',
-		   		        	enableKeyEvents: true,
-		   		        	emptyText: 'Name or ' + me.sspConfig.get('studentIdAlias'),
-		   		        	width: 200
-		   		        },{
-		   		        	xtype: 'button',
-		   		        	tooltip: 'Find a Student',
-		   		        	itemId: 'searchButton',
-				            width: 32,
-				            height: 32,
-				            cls: 'searchIcon'
-		   		        },{
-		   		        	xtype: 'tbspacer',
-		   		        	width: 5
-		   		        },{
-		   		        	xtype: 'checkboxfield',
-		                    boxLabel  : 'My Caseload',
-		                    itemId: 'searchCaseloadCheck',
-		                    name      : 'searchInCaseload',
-		                    hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH'),
-		                    inputValue: false
-		                },{
-	    		        	xtype: 'tbspacer',
-	    		        	flex: 1
-		    		    },{
-		    	            tooltip: 'Display Caseload Filters',
-		    	            text: '',
-		    	            width: 25,
-		    	            height: 25,
-		    	            hidden: false,
-		    	            cls: 'displayCaseloadIcon',
-		    	            xtype: 'button',
-		    	            itemId: 'displayCaseloadBarButton'				        	
-		    	        }]
-		       		},{
-		       			xtype: 'toolbar',
-		       			dock: 'top',
-		       			itemId: 'caseloadBar',
-		       			hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS'),
-		       		    items: [{
-					        xtype: 'combobox',
-					        itemId: 'caseloadStatusCombo',
-					        name: 'programStatusId',
-					        fieldLabel: '',
-					        emptyText: 'Select One',
-					        store: me.programStatusesStore,
-					        valueField: 'id',
-					        displayField: 'name',
-					        mode: 'local',
-					        typeAhead: false,
-					        editable: false,
-					        queryMode: 'local',
-					        allowBlank: true,
-					        forceSelection: false,
-					        width: 200,
-					        labelWidth: 125
-						},{
-				        	xtype: 'button',
-				        	tooltip: 'Retrieve My Caseload',
-				        	itemId: 'retrieveCaseloadButton',
-				            width: 32,
-				            height: 32,
-				            cls: 'retrieveCaseloadIcon'
-				        },{
-	    		        	xtype: 'tbspacer',
-	    		        	flex: 1
-		    		    },{
-		    	            tooltip: 'Display Search Filters',
-		    	            text: '',
-		    	            width: 25,
-		    	            height: 25,
-		    	            hidden: false,
-		    	            cls: 'displaySearchIcon',
-		    	            xtype: 'button',
-		    	            itemId: 'displaySearchBarButton'				        	
-		    	        }]
-		       		    
-		       		},{
-		       			xtype: 'toolbar',
-		       			dock: 'top',
-		       			items: [{
-		    			    tooltip: 'Add Student',
-		    			    text: '',
-		    			    width: 25,
-		    			    height: 25,
-		    			    hidden: !me.authenticatedPerson.hasAccess('ADD_STUDENT_BUTTON'),
-		    			    cls: 'addPersonIcon',
-		    			    xtype: 'button',
-		    			    itemId: 'addPersonButton'
-		    			},{
-		    			    tooltip: 'Edit Student',
-		    			    text: '',
-		    			    width: 25,
-		    			    height: 25,
-		    			    hidden: !me.authenticatedPerson.hasAccess('EDIT_STUDENT_BUTTON'),
-		    			    cls: 'editPersonIcon',
-		    			    xtype: 'button',
-		    			    itemId: 'editPersonButton'
-		    			},{
-		    			    tooltip: 'Delete Student',
-		    			    text: '',
-		    			    width: 25,
-		    			    height: 25,
-		    			    hidden: !me.authenticatedPerson.hasAccess('DELETE_STUDENT_BUTTON'),
-		    			    cls: 'deletePersonIcon',
-		    			    xtype: 'button',
-		    			    itemId: 'deletePersonButton'
-		    			},{
-	    		        	xtype: 'tbspacer',
-	    		        	flex: 1
-		    		    },{
-		    			    tooltip: 'Set Student to Active status',
-		    			    text: '',
-		    			    width: 25,
-		    			    height: 25,
-		    			    hidden: !me.authenticatedPerson.hasAccess('SET_ACTIVE_STATUS_BUTTON'),
-		    			    cls: 'setActiveStatusIcon',
-		    			    xtype: 'button',
-		    			    action: 'active',
-		    			    itemId: 'setActiveStatusButton'
-			    		},{
-		    			    tooltip: 'Set Student to Transitioned status',
-		    			    text: '',
-		    			    width: 25,
-		    			    height: 25,
-		    			    hidden: true, // Temp fix for SSP-434: !me.authenticatedPerson.hasAccess('SET_TRANSITION_STATUS_BUTTON')
-		    			    cls: 'setTransitionStatusIcon',
-		    			    xtype: 'button',
-		    			    action: 'transition',
-		    			    itemId: 'setTransitionStatusButton'
-		    			},{
-		    			    tooltip: 'Set Student to Non-Participating status',
-		    			    text: '',
-		    			    width: 25,
-		    			    height: 25,
-		    			    hidden: !me.authenticatedPerson.hasAccess('SET_NON_PARTICIPATING_STATUS_BUTTON'),
-		    			    cls: 'setNonParticipatingStatusIcon',
-		    			    xtype: 'button',
-		    			    action: 'non-participating',
-		    			    itemId: 'setNonParticipatingStatusButton'
-		    			},{
-		    			    tooltip: 'Set Student to No-Show status',
-		    			    text: '',
-		    			    width: 25,
-		    			    height: 25,
-		    			    hidden: !me.authenticatedPerson.hasAccess('SET_NO_SHOW_STATUS_BUTTON'),
-		    			    cls: 'setNoShowStatusIcon',
-		    			    xtype: 'button',
-		    			    action: 'no-show',
-		    			    itemId: 'setNoShowStatusButton'
-		    			}]
-		       		}]
-		    	    });
-    	
-    	return me.callParent(arguments);
+        return me.callParent(arguments);
     }
 });
+
 /*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
@@ -14763,8 +15564,8 @@ Ext.define('Ssp.view.StudentRecord', {
     	    	align: 'stretch'
     	    },
 			
-    	    items: [{xtype:'toolsmenu',flex:1},
-			        {xtype: 'tools', flex:4}]		        
+    	    items: [{xtype:'toolsmenu',flex:.60},
+			        {xtype: 'tools', flex:4.40}]		        
     	});
     	return this.callParent(arguments);
     }
@@ -15042,10 +15843,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        fieldLabel: 'Home Phone',
 			        name: 'homePhone',
 			        emptyText: 'xxx-xxx-xxxx',
-			        maskRe: /[\d\-]/,
-			        regex: /^\d{3}-\d{3}-\d{4}$/,
-			        regexText: 'Must be in the format xxx-xxx-xxxx',
-			        maxLength: 12,
+			        maxLength: 25,
 			        allowBlank:true,
 			        itemId: 'homePhone',
 			        width: 350
@@ -15053,10 +15851,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        fieldLabel: 'Work Phone',
 			        name: 'workPhone',
 			        emptyText: 'xxx-xxx-xxxx',
-			        maskRe: /[\d\-]/,
-			        regex: /^\d{3}-\d{3}-\d{4}$/,
-			        regexText: 'Must be in the format xxx-xxx-xxxx',
-			        maxLength: 12,
+			        maxLength: 25,
 			        allowBlank:true,
 			        itemId: 'workPhone',
 			        width: 350
@@ -15407,7 +16202,6 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
     controller: 'Ssp.controller.person.AnticipatedStartDateViewController',
     inject: {
     	anticipatedStartTermsStore: 'anticipatedStartTermsStore',
-    	anticipatedStartYearsStore: 'anticipatedStartYearsStore'
     },
 	initComponent: function() {	
 		Ext.apply(this, 
@@ -15438,16 +16232,16 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
 		        queryMode: 'local',
 		        allowBlank: true
 			},{
-		        xtype: 'combobox',
+		        xtype: 'textfield',
 		        name: 'anticipatedStartYear',
 		        fieldLabel: 'Anticipated Start Year',
-		        emptyText: 'Select One',
-		        store: this.anticipatedStartYearsStore,
-		        valueField: 'name',
-		        displayField: 'name',
-		        mode: 'local',
-		        typeAhead: true,
-		        queryMode: 'local',
+                minLength: 4,
+                maxLength: 4,
+                width: 200,
+                emptyText: 'xxxx',
+                maskRe: /\d/,
+                regex: /^\d{4}$/,
+                regexText: 'Must be a four-digit number',
 		        allowBlank: true
 			}]
 		});
@@ -15566,6 +16360,7 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 		            title: 'Profile',
 		            padding: 0,
 		            border: 0,
+					preventHeader: true,
 					items: [
 						Ext.createWidget('tabpanel', {
 						    width: '100%',
@@ -15600,23 +16395,38 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 				    dockedItems: [{
 				        dock: 'top',
 				        xtype: 'toolbar',
-				        items: [{
+				        items: [
+						{
+                            xtype: 'tbspacer',
+                            width: 5
+                        },
+						{
+							xtype: 'label',
+                            text: 'Profile',
+							style: 'font-weight:bold;color: #00008B'
+						},
+						{
+							xtype: 'tbspacer',
+                            flex: 1
+						},
+						{
 					            tooltip: 'Print Student History',
-					            text: '',
-					            width: 32,
-					            height: 32,
+					            text: '<u>Print Student History</u>',
+					            width: 150,
+					            height: 20,
 					            hidden: !me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'),
-					            cls: 'studentHistoryIcon',
+					            //cls: 'studentHistoryIcon',
 					            xtype: 'button',
 					            itemId: 'viewHistoryButton'
-				        },{
+				        },
+						{
 			            	   xtype: 'button',
 			            	   itemId: 'printConfidentialityAgreementButton',
-			                   text: '',
+			                   text: '<u>Print Confidentiality Agreement</u>',
 			                   tooltip: 'Print Confidentiality Agreement',
-			            	   cls: 'confidentialityAgreementIcon',
-			            	   height: 32,
-			            	   width: 32,
+			            	   //cls: 'confidentialityAgreementIcon',
+			            	   height: 20,
+			            	   width: 175,
 			            	   hidden: !me.authenticatedPerson.hasAccess('PROFILE_PRINT_CONFIDENTIALITY_AGREEMENT_BUTTON'),
 			            }]
 				    }]
@@ -16138,16 +16948,17 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				    }],
 				    
 				    dockedItems: [{
-				        dock: 'bottom',
+				        dock: 'top',
 				        xtype: 'toolbar',
 				        items: [{xtype: 'button', 
 				        	     itemId: 'addButton', 
 				        	     text:'Save', 
 				        	     action: 'add' },
+								 , '-',
 				        	     {
 				            	   xtype: 'button',
 				            	   itemId: 'closeButton',
-				            	   text: 'Finished',
+				            	   text: 'Cancel',
 				            	   action: 'close'}]
 				    }]
 				});
@@ -17133,30 +17944,21 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        fieldLabel: 'Home Phone',
 				        name: 'homePhone',
 				        emptyText: 'xxx-xxx-xxxx',
-				        maskRe: /[\d\-]/,
-				        regex: /^\d{3}-\d{3}-\d{4}$/,
-				        regexText: 'Must be in the format xxx-xxx-xxxx',
-				        maxLength: 12,
+				        maxLength: 25,
 				        allowBlank:true,
 				        itemId: 'homePhone' 
 				    },{
 				        fieldLabel: 'Work Phone',
 				        name: 'workPhone',
 				        emptyText: 'xxx-xxx-xxxx',
-				        maskRe: /[\d\-]/,
-				        regex: /^\d{3}-\d{3}-\d{4}$/,
-				        regexText: 'Must be in the format xxx-xxx-xxxx',
-				        maxLength: 12,
+				        maxLength: 25,
 				        allowBlank:true,
 				        itemId: 'workPhone'
 				    },{
 				        fieldLabel: 'Cell Phone',
 				        name: 'cellPhone',
 				        emptyText: 'xxx-xxx-xxxx',
-				        maskRe: /[\d\-]/,
-				        regex: /^\d{3}-\d{3}-\d{4}$/,
-				        regexText: 'Must be in the format xxx-xxx-xxxx',
-				        maxLength: 12,
+				        maxLength: 25,
 				        allowBlank:true,
 				        itemId: 'cellPhone'
 				    },{
@@ -17363,7 +18165,8 @@ Ext.define('Ssp.view.tools.journal.Journal', {
 	    		                { header: 'Date',  
 		    		                  dataIndex: 'entryDate',
 		    		                  flex: 1,
-		    		                  renderer: Ext.util.Format.dateRenderer('m/d/Y g:i A')
+		    		                  //renderer: Ext.util.Format.dateRenderer('m/d/Y g:i A')
+									  renderer: Ext.util.Format.dateRenderer('m/d/Y')
 	    		                },
 	    		                { header: 'Entered By',  
 	    		                  dataIndex: 'createdBy',
@@ -21546,38 +22349,6 @@ Ext.define('Ssp.store.reference.AnticipatedStartTerms', {
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.store.reference.AnticipatedStartYears', {
-    extend: 'Ext.data.Store',
-    model: 'Ssp.model.reference.AbstractReference',
-    autoLoad: false,
-    constructor: function(){
-		return this.callParent(arguments);
-    },
-    data: [{ name: "2010", description: "2010" },
-           { name: "2011", description: "2011" },
-           { name: "2012", description: "2012" },
-           { name: "2013", description: "2013" },
-           { name: "2014", description: "2014" },
-           { name: "2015", description: "2015" }]
-});
-/*
- * Licensed to Jasig under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Jasig licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a
- * copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
 Ext.define('Ssp.store.reference.Challenges', {
     extend: 'Ssp.store.reference.AbstractReferences',
     model: 'Ssp.model.reference.Challenge',
@@ -24111,7 +24882,6 @@ Ext.define('Ssp.controller.admin.shg.SelfHelpGuidesDisplayViewController', {
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
 	}
 });
-
 /*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work

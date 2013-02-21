@@ -685,19 +685,6 @@ public class PersonServiceImpl implements PersonService {
 
 		return people;
 	}
-	
-	private Iterable<BaseStudentReportTO> additionalAttribsForStudentReportTOs(
-			final Iterable<BaseStudentReportTO> people) throws ObjectNotFoundException {
-		if (people == null) {
-			return null;
-		}
-
-		for (final BaseStudentReportTO person : people) {
-			additionalAttribsForStudentReportTO(person);
-		}
-
-		return people;
-	}
 
 	private Person additionalAttribsForStudent(final Person person) {
 		registrationStatusByTermService
@@ -705,14 +692,6 @@ public class PersonServiceImpl implements PersonService {
 		return person;
 	}
 	
-	private BaseStudentReportTO additionalAttribsForStudentReportTO(final BaseStudentReportTO person)
-			throws ObjectNotFoundException {
-		RegistrationStatusByTerm termStatus = registrationStatusByTermService
-				.getForCurrentTerm(person.getSchoolId());
-		if(termStatus != null)
-			person.setRegistrationStatus(termStatus.getRegisteredCourseCount());
-		return person;
-	}
 
 	@Override
 	public void setPersonAttributesService(
@@ -737,7 +716,6 @@ public class PersonServiceImpl implements PersonService {
 		final PagingWrapper<BaseStudentReportTO> people = dao.getStudentReportTOs(
 				personSearchFormTO,
 				sAndP);
-		additionalAttribsForStudentReportTOs(people);
 		return people;
 	}
 }

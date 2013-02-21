@@ -136,6 +136,8 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false) String termCode,
+			final @RequestParam(required = false) String homeDepartment,
+			final @RequestParam(required = false) String rosterStatus,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
@@ -164,6 +166,8 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 				disabilityStatusId, 
 				disabilityTypeId,
 				true,
+				rosterStatus,
+				homeDepartment,
 				parameters, 
 				personSearchForm, 
 				programStatusService, 
@@ -188,14 +192,12 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 		ArrayList<DisabilityServicesReportTO> compressedReport = new ArrayList<DisabilityServicesReportTO>();
 		for(DisabilityServicesReportTO reportTO: report){
 			Integer index = compressedReport.indexOf(reportTO);
-			if(index >= 0)
+			if(index != null && index >= 0)
 			{
 				DisabilityServicesReportTO compressedReportTo = compressedReport.get(index);
 				compressedReportTo.processDuplicate(reportTO);
 			}else{
-				RegistrationStatusByTerm regStat = registrationStatusByTermService.getForCurrentTerm(reportTO.getSchoolId());
-				if(regStat != null)
-					reportTO.setRegistrationStatus(regStat.getRegisteredCourseCount());
+				//reportTO.setCurrentRegistrationStatus(registrationStatusByTermService);
 				compressedReport.add(reportTO);
 			}
 		}

@@ -90,7 +90,8 @@ Ext.define('Ssp.view.tools.journal.Journal', {
 	    		                { header: 'Date',  
 		    		                  dataIndex: 'entryDate',
 		    		                  flex: 1,
-		    		                  renderer: Ext.util.Format.dateRenderer('m/d/Y g:i A')
+		    		                  //renderer: Ext.util.Format.dateRenderer('m/d/Y g:i A')
+									  renderer: Ext.util.Format.dateRenderer('m/d/Y')
 	    		                },
 	    		                { header: 'Entered By',  
 	    		                  dataIndex: 'createdBy',

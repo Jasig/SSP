@@ -107,6 +107,7 @@ public class EarlyAlertStudentOutreachReportController extends ReportBaseControl
 	public void getEarlyAlertStudentOutreachReport(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) String rosterStatus,
 			final @RequestParam(required = false) List<UUID> earlyAlertOutcomes,
 			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false) Date createDateFrom,
@@ -122,6 +123,7 @@ public class EarlyAlertStudentOutreachReportController extends ReportBaseControl
 		final Collection<EarlyAlertStudentOutreachReportTO> outreachOutcomes = earlyAlertResponseService.getEarlyAlertOutreachCountByOutcome(dateTerm.getStartDate(), 
 				dateTerm.getEndDate(),
 				earlyAlertOutcomesClean,
+				rosterStatus,
 				null);
 		
 		final Map<String, Object> parameters = Maps.newHashMap();

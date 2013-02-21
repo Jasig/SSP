@@ -32,6 +32,10 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.dialect.SQLServerDialect;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.sql.JoinType;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -217,18 +221,80 @@ public class EarlyAlertDao extends
 				totalRows = (Long) query.setProjection(Projections.rowCount())
 							.uniqueResult();
 		}
+
+		if(criteriaTO.getAddressLabelSearchTO().getProgramStatus() == null){
+			query.createAlias("person.programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
+		}
 		
-		query.setProjection( Projections.projectionList()
-				.add(Projections.countDistinct("id").as("earlyalert_total"))
-                .add(Projections.countDistinct("closedById").as("earlyalert_closed"))
-                .add( Projections.groupProperty("person").as("earlyalert_person"))
-                );
-		  
+		if(criteriaTO.getAddressLabelSearchTO().getSpecialServiceGroupIds() == null){
+			query.createAlias("person.specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
+		}
+		
+		ProjectionList projections = Projections.projectionList()
+			.add(Projections.countDistinct("id").as("earlyalert_total"))
+			.add(Projections.countDistinct("closedById").as("earlyalert_closed"));
+				addBasicStudentProperties(projections, query);  
+		projections.add(Projections.groupProperty("id").as("earlyalert_earlyAlertId"));
+		query.setProjection(projections);
 		query.setResultTransformer(
 				new NamespacedAliasToBeanResultTransformer(
 						EarlyAlertStudentReportTO.class, "earlyalert_"));
 		
 		return new PagingWrapper<EarlyAlertStudentReportTO>(totalRows, (List<EarlyAlertStudentReportTO>)query.list());
+	}
+	
+	private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria){
+		
+		projections.add(Projections.groupProperty("person.firstName").as("earlyalert_firstName"));
+		projections.add(Projections.groupProperty("person.middleName").as("earlyalert_middleName"));
+		projections.add(Projections.groupProperty("person.lastName").as("earlyalert_lastName"));
+		projections.add(Projections.groupProperty("person.schoolId").as("earlyalert_schoolId"));
+		projections.add(Projections.groupProperty("person.primaryEmailAddress").as("earlyalert_primaryEmailAddress"));
+		projections.add(Projections.groupProperty("person.secondaryEmailAddress").as("earlyalert_secondaryEmailAddress"));
+		projections.add(Projections.groupProperty("person.cellPhone").as("earlyalert_cellPhone"));
+		projections.add(Projections.groupProperty("person.homePhone").as("earlyalert_homePhone"));
+		projections.add(Projections.groupProperty("person.addressLine1").as("earlyalert_addressLine1"));
+		projections.add(Projections.groupProperty("person.addressLine2").as("earlyalert_addressLine2"));
+		projections.add(Projections.groupProperty("person.city").as("earlyalert_city"));
+		projections.add(Projections.groupProperty("person.state").as("earlyalert_state"));
+		projections.add(Projections.groupProperty("person.zipCode").as("earlyalert_zipCode"));
+		projections.add(Projections.groupProperty("person.id").as("earlyalert_id"));
+		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup" );
+		projections.add(Projections.groupProperty("specialServiceGroup.name").as("earlyalert_specialServiceGroup"));
+		
+		criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate")); 
+		
+		criteria.createAlias("personProgramStatuses.programStatus", "programStatus");
+		
+		projections.add(Projections.groupProperty("programStatus.name").as("earlyalert_currentProgramStatusName"));
+
+		// Join to Student Type
+		criteria.createAlias("person.studentType", "studentType",
+				JoinType.LEFT_OUTER_JOIN);
+		// add StudentTypeName Column
+		projections.add(Projections.groupProperty("studentType.name").as("earlyalert_studentType"));
+		
+		criteria.createAlias("person.coach","c");
+
+		Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
+		if ( dialect instanceof SQLServerDialect) {
+			// sql server requires all these to part of the grouping
+			//projections.add(Projections.groupProperty("c.id").as("coachId"));
+			projections.add(Projections.groupProperty("c.lastName").as("earlyalert_coachLastName"))
+					.add(Projections.groupProperty("c.firstName").as("earlyalert_coachFirstName"))
+					.add(Projections.groupProperty("c.middleName").as("earlyalert_coachMiddleName"))
+					.add(Projections.groupProperty("c.schoolId").as("earlyalert_coachSchoolId"))
+					.add(Projections.groupProperty("c.username").as("earlyalert_coachUsername"));
+		} else {
+			// other dbs (postgres) don't need these in the grouping
+			//projections.add(Projections.property("c.id").as("coachId"));
+			projections.add(Projections.groupProperty("c.lastName").as("earlyalert_coachLastName"))
+					.add(Projections.groupProperty("c.firstName").as("earlyalert_coachFirstName"))
+					.add(Projections.groupProperty("c.middleName").as("earlyalert_coachMiddleName"))
+					.add(Projections.groupProperty("c.schoolId").as("earlyalert_coachSchoolId"))
+					.add(Projections.groupProperty("c.username").as("earlyalert_coachUsername"));
+		}
+		return projections;
 	}
 
 	public Long getCountOfAlertsForSchoolIds(
@@ -249,7 +315,7 @@ public class EarlyAlertDao extends
 		return (Long)query.setProjection(Projections.countDistinct("person")).list().get(0);
 	}
 
-	public Long getCountOfEarlyAlertsClosedByDate(Date closedDateFrom, Date closedDateTo, Campus campus) {
+	public Long getCountOfEarlyAlertsClosedByDate(Date closedDateFrom, Date closedDateTo, Campus campus, String rosterStatus) {
 		final Criteria query = createCriteria();
 		
 		if (closedDateFrom != null) {
@@ -273,7 +339,7 @@ public class EarlyAlertDao extends
 				.uniqueResult();
 	}
 	
-	public Long getCountOfEarlyAlertsByCreatedDate(Date createdDateFrom, Date createdDateTo, Campus campus) {
+	public Long getCountOfEarlyAlertsByCreatedDate(Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus) {
 		final Criteria query = createCriteria();
 		
 		if ( createdDateFrom != null) {
@@ -298,7 +364,7 @@ public class EarlyAlertDao extends
 		return totalRows;
 	}
 	
-	public Long getCountOfEarlyAlertStudentsByDate(Date createdDateFrom, Date createdDateTo, Campus campus) {
+	public Long getCountOfEarlyAlertStudentsByDate(Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus) {
 		final Criteria query = createCriteria();
 		
 		if ( createdDateFrom != null) {
@@ -386,20 +452,18 @@ public class EarlyAlertDao extends
 		}
 		
 		if (addressLabelSearchTO.getProgramStatus() != null) {
-
 			criteria.createAlias("person.programStatuses",
-					"personProgramStatuses")
-					.add(Restrictions
+					"personProgramStatuses");
+			criteria.add(Restrictions
 							.eq("personProgramStatuses.programStatus.id",
 									addressLabelSearchTO
 											.getProgramStatus()));
 
 		}
-
 		if (addressLabelSearchTO.getSpecialServiceGroupIds() != null) {
 			criteria.createAlias("person.specialServiceGroups",
-					"personSpecialServiceGroups")
-					.add(Restrictions
+					"personSpecialServiceGroups");
+				criteria.add(Restrictions
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
 									addressLabelSearchTO
 											.getSpecialServiceGroupIds()));

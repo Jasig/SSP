@@ -187,7 +187,7 @@
 				<textElement textAlignment="Center">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{totalCases} != null && $F{totalCases} > 0 ? $F{totalRespondedTo}/$F{totalCases} : 0]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalCases} != null && $F{totalCases} > 0 ? (double)$F{totalRespondedTo}/(double)$F{totalCases} : 0]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="34055fa2-b00a-4225-a76a-930f0b5e3bb3" x="497" y="1" width="43" height="16"/>
@@ -201,7 +201,7 @@
 				<textElement textAlignment="Center">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{totalCases} != null && $F{totalCases} > 0?$F{totalClosed}/$F{totalCases}:0]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalCases} != null && $F{totalCases} > 0?(double)$F{totalClosed}/(double)$F{totalCases}:0]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -239,7 +239,7 @@
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{totalCases_1} != null && $V{totalCases_1} > 0 ? $V{totalRespondedTo_1}/$V{totalCases_1} : 0]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{totalCases_1} != null && $V{totalCases_1} > 0 ? (double)$V{totalRespondedTo_1}/(double)$V{totalCases_1} : 0]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="8416a64b-f939-48ce-981c-5b8a464fd36c" mode="Opaque" x="497" y="2" width="43" height="16"/>
@@ -253,7 +253,7 @@
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{totalCases_1} != null && $V{totalCases_1} > 0 ? $V{totalClosed_1}/$V{totalCases_1} : 0]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{totalCases_1} != null && $V{totalCases_1} > 0 ? (double)$V{totalClosed_1}/(double)$V{totalCases_1} : 0]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

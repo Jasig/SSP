@@ -33,7 +33,9 @@
 	<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="term" class="java.lang.String"/>
 	<parameter name="earlyAlertOutcomeNames" class="java.lang.String"/>
-	<field name="coach" class="org.jasig.ssp.transferobject.CoachPersonLiteTO"/>
+	<field name="coachName" class="java.lang.String">
+		<fieldDescription><![CDATA[coachName]]></fieldDescription>
+	</field>
 	<field name="totalEarlyAlerts" class="java.lang.Long"/>
 	<field name="countPhoneCalls" class="java.lang.Long"/>
 	<field name="countEmail" class="java.lang.Long"/>
@@ -178,12 +180,12 @@
 					<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 				</graphicElement>
 			</rectangle>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="a2137ee3-4dfe-4903-bc0c-e8e47fc1dd16" x="0" y="0" width="81" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{coach}.getFirstName() + " " + $F{coach}.getLastName()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{coachName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="aff46448-29ea-4173-beab-4b7c5867d61f" x="81" y="0" width="81" height="20"/>

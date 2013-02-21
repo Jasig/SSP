@@ -132,6 +132,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.getSearchText().setValue( me.searchCriteria.get('searchTerm') );
 	   	me.getSearchCaseloadCheck().setValue( !me.searchCriteria.get('outsideCaseload') );
 		
+		
 		return me.callParent(arguments);
     },
     
@@ -158,6 +159,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 
 	onViewReady: function(comp, eobj){
 		var me=this;
+        me.appEventsController.assignEvent({eventName: 'collapseSearch', callBackFunc: me.onCollapseSearch, scope: me});
 		me.appEventsController.assignEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
 	   	me.appEventsController.assignEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
 	   	me.appEventsController.assignEvent({eventName: 'setNonParticipatingProgramStatusComplete', callBackFunc: me.onSetNonParticipatingProgramStatusComplete, scope: me});
@@ -170,6 +172,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     destroy: function() {
     	var me=this;
+        me.appEventsController.removeEvent({eventName: 'collapseSearch', callBackFunc: me.onCollapseSearch, scope: me});
     	me.appEventsController.removeEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'retrieveCaseload', callBackFunc: me.onRetrieveCaseload, scope: me});
@@ -229,6 +232,12 @@ Ext.define('Ssp.controller.SearchViewController', {
 	setGridView: function( view ){
 		var me=this;
 		me.applyColumns();
+	},
+	
+	onCollapseSearch: function() {
+		console.log('search collapse');
+		var searchView = Ext.ComponentQuery.query('search')[0];
+		searchView.collapse();
 	},
 	
 	onDisplaySearchBarClick: function( button ){

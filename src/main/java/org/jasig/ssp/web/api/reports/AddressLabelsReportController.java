@@ -121,6 +121,8 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) Integer anticipatedStartYear,
 			final @RequestParam(required = false) String anticipatedStartTerm,
+			final @RequestParam(required = false) Integer actualStartYear,
+			final @RequestParam(required = false) String actualStartTerm,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false) String termCode,
@@ -151,6 +153,8 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 		SearchParameters.addReferenceTypes(programStatus,
 				null, 
 				false,
+				null,
+				null,
 				parameters, 
 				personSearchForm, 
 				programStatusService, 
@@ -158,35 +162,17 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 		
 		SearchParameters.addAnticipatedAndActualStartTerms(anticipatedStartTerm, 
 				anticipatedStartYear, 
-				null, 
-				null, 
+				actualStartTerm, 
+				actualStartYear, 
 				parameters, 
 				personSearchForm);
 
-		// TODO Specifying person name sort fields in the SaP doesn't seem to
-		// work... end up with empty results need to dig into actual query
-		// building
 		final PagingWrapper<BaseStudentReportTO> people = personService.getStudentReportTOsFromCriteria(
 				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
 		
-		ArrayList<BaseStudentReportTO> report = new ArrayList<BaseStudentReportTO>(people.getRows());
-		//Collections.sort(report, Person.PERSON_NAME_AND_ID_COMPARATOR);
-		
-		ArrayList<BaseStudentReportTO> compressedReport = new ArrayList<BaseStudentReportTO>();
-		for(BaseStudentReportTO reportTO: report){
-			Integer index = compressedReport.indexOf(reportTO);
-			if(index >= 0)
-			{
-				BaseStudentReportTO compressedReportTo = compressedReport.get(index);
-				compressedReportTo.processDuplicate(reportTO);
-			}else{
-				compressedReport.add(reportTO);
-			}
-		}
-		
-		SearchParameters.addStudentCount(compressedReport, parameters);
-
-		generateReport(response, parameters, compressedReport, REPORT_URL, reportType, REPORT_FILE_TITLE);
+		List<BaseStudentReportTO> compressedReports = processStudentReportTOs(people);
+		SearchParameters.addStudentCount(compressedReports, parameters);
+		generateReport(response, parameters, compressedReports, REPORT_URL, reportType, REPORT_FILE_TITLE);
 
 	}
 

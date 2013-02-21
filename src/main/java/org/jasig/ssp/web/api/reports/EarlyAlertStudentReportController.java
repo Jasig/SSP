@@ -20,6 +20,8 @@ package org.jasig.ssp.web.api.reports; // NOPMD
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -42,6 +44,8 @@ import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
+import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentProgressReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
@@ -114,6 +118,8 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 	public void getEarlyAlertStudentReport(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) String rosterStatus,
+			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) UUID coachId,			
 			final @RequestParam(required = false) UUID programStatus,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
@@ -123,10 +129,7 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
-		
-		
-		PersonTO coachTO = SearchParameters.getPerson(coachId, personService, personTOFactory);
-		
+				
 		DateTerm termDate =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
@@ -153,6 +156,8 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 		SearchParameters.addReferenceTypes(programStatus, 
 				null, 
 				false,
+				rosterStatus,
+				homeDepartment,
 				parameters, 
 				personSearchForm, 
 				programStatusService, 
@@ -166,18 +171,13 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
-		final PagingWrapper<EarlyAlertStudentReportTO> people = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
+		final PagingWrapper<EarlyAlertStudentReportTO> reports = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
 				searchForm, 
-				SortingAndPaging.createForSingleSortWithPaging(status, null,
-						null, null, null, null));
+				SearchParameters.getReportPersonSortingAndPagingAll(status));
 		
-
-		final Map<String, Object> map = Maps.newHashMap();
-		
-		SearchParameters.addReportDateToMap(map);
-		SearchParameters.addDateTermToMap(termDate, map);
-
-		generateReport(response,  map, people.getRows(),  REPORT_URL, reportType, REPORT_FILE_TITLE);
+		List<EarlyAlertStudentReportTO> compressedReports = processReports(reports, earlyAlertResponseService);
+			
+		generateReport(response,  parameters, compressedReports,  REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 	
 
@@ -185,4 +185,5 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 	protected Logger getLogger() {
 		return LOGGER;
 	}
+	
 }

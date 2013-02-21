@@ -26,7 +26,7 @@ import java.util.UUID;
 import org.jasig.ssp.transferobject.PersonTO;
 
 /**
- * AddressLabelSearch transfer object
+ * Use this for storing criteria used to search for persons (primariy students) transfer object
  */
 public class PersonSearchFormTO
 		implements Serializable {
@@ -64,6 +64,8 @@ public class PersonSearchFormTO
 	private Boolean disabilityIsNotNull = false;
 	
 	private String homeDepartment;
+	
+	private String rosterStatus;
 
 	public String getHomeDepartment() {
 		return homeDepartment;
@@ -221,6 +223,14 @@ public class PersonSearchFormTO
 
 	public void setDisabilityTypeId(UUID disabilityTypeId) {
 		this.disabilityTypeId = disabilityTypeId;
+	}
+
+	public String getRosterStatus() {
+		return rosterStatus;
+	}
+
+	public void setRosterStatus(String rosterStatus) {
+		this.rosterStatus = rosterStatus;
 	}
 
 }

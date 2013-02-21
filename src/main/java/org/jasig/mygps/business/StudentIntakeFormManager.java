@@ -39,8 +39,10 @@ import org.jasig.ssp.dao.PersonEducationGoalDao;
 import org.jasig.ssp.dao.PersonEducationLevelDao;
 import org.jasig.ssp.dao.PersonFundingSourceDao;
 import org.jasig.ssp.dao.reference.ChallengeDao;
+import org.jasig.ssp.dao.reference.EducationGoalDao;
 import org.jasig.ssp.dao.reference.EducationLevelDao;
 import org.jasig.ssp.dao.reference.FundingSourceDao;
+import org.jasig.ssp.dao.reference.MilitaryAffiliationDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonChallenge;
@@ -59,6 +61,7 @@ import org.jasig.ssp.model.reference.Ethnicity;
 import org.jasig.ssp.model.reference.FundingSource;
 import org.jasig.ssp.model.reference.Genders;
 import org.jasig.ssp.model.reference.MaritalStatus;
+import org.jasig.ssp.model.reference.MilitaryAffiliation;
 import org.jasig.ssp.model.reference.StudentStatus;
 import org.jasig.ssp.model.reference.VeteranStatus;
 import org.jasig.ssp.model.tool.Tools;
@@ -75,6 +78,7 @@ import org.jasig.ssp.service.reference.StudentStatusService;
 import org.jasig.ssp.service.reference.VeteranStatusService;
 import org.jasig.ssp.service.tool.PersonToolService;
 import org.jasig.ssp.util.SspStringUtils;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,9 +108,12 @@ public class StudentIntakeFormManager { // NOPMD
 
 	@Autowired
 	private transient EducationLevelDao educationLevelDao;
-
+	
 	@Autowired
 	private transient EducationGoalService educationGoalService;
+	
+	@Autowired
+	private transient EducationGoalDao educationGoalDao;
 
 	@Autowired
 	private transient EthnicityService ethnicityService;
@@ -131,6 +138,9 @@ public class StudentIntakeFormManager { // NOPMD
 
 	@Autowired
 	private transient PersonFundingSourceDao studentFundingSourceDao;
+	
+	@Autowired
+	private transient MilitaryAffiliationDao militaryAffiliationDao;
 
 	@Autowired
 	private transient PersonConfidentialityDisclosureAgreementService studentConfidentialityDisclosureAgreementService;
@@ -227,6 +237,8 @@ public class StudentIntakeFormManager { // NOPMD
 			.fromString("8fb34e96-1db7-4078-adc8-0e73b6ca73c9");
 	public static final UUID SECTION_DEMOGRAPHICS_QUESTION_SHIFT_ID = UUID
 			.fromString("5d9a5b30-13c8-4498-80b8-2bba32ff8178");
+	public static final UUID SECTION_DEMOGRAPHICS_MILITARY_AFFILIATION_ID = UUID
+			.fromString("a4bf9024-3f11-4bdd-be01-60ec8154fd6e");	
 	public static final UUID SECTION_DEMOGRAPHICS_QUESTION_WAGE_ID = UUID
 			.fromString("9d818a23-7d99-4189-9131-cfef3253a7b1");
 	public static final UUID SECTION_DEMOGRAPHICS_QUESTION_HOURSWORKEDPERWEEK_ID = UUID
@@ -279,8 +291,16 @@ public class StudentIntakeFormManager { // NOPMD
 			.fromString("98abe279-9cb0-4df1-859b-a7b96ec82b3c");
 	public static final UUID SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID = UUID
 			.fromString("4e3eceb7-a832-43b9-bccd-151e77fd3a84");
+	public static final UUID SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_DECIDED_ID = UUID
+			.fromString("3af3632e-d26c-11e1-b2df-0026b9e7ff4c");	
 	public static final UUID SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_ID = UUID
 			.fromString("6dda82d4-5f6a-4187-bf56-4d26730be054");
+	public static final UUID SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_SUREOF_ID = UUID
+			.fromString("74891747-36aa-409c-8b1f-76d3eaf9028e");	
+	public static final UUID SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_COMPATIBLE_ID = UUID
+			.fromString("c0a8017b-3c6d-1d59-813c-6dfd67960001");	
+	public static final UUID SECTION_EDUCATIONGOAL_QUESTION_ADDITIONAL_INFO_ID = UUID
+			.fromString("0e46733e-193d-4950-ba29-4cd0f9620561");	
 	public static final UUID SECTION_EDUCATIONGOAL_QUESTION_MILITARYBRANCHDESCRIPTION_ID = UUID
 			.fromString("ca44bce9-3e12-46e4-b83d-51a60878bb8c");
 
@@ -507,7 +527,6 @@ public class StudentIntakeFormManager { // NOPMD
 								.toString());
 			}
 
-			// Country of Citizenship -> Shown if Citizenship is "International"
 			formSectionTO
 					.getFormQuestionById(
 							SECTION_DEMOGRAPHICS_QUESTION_COUNTRYOFCITIZENSHIP_ID)
@@ -534,6 +553,25 @@ public class StudentIntakeFormManager { // NOPMD
 								student.getDemographics().getVeteranStatus()
 										.getId());
 			}
+			
+			if (student.getDemographics().getMilitaryAffiliation()== null) {
+				formSectionTO
+						.getFormQuestionById(
+								SECTION_DEMOGRAPHICS_MILITARY_AFFILIATION_ID)
+						.getOptions()
+						.add(0,
+								new FormOptionTO(UUID.randomUUID(),
+										DEFAULT_DROPDOWN_LIST_LABEL,
+										DEFAULT_DROPDOWN_LIST_VALUE));
+				formSectionTO.getFormQuestionById(
+						SECTION_DEMOGRAPHICS_MILITARY_AFFILIATION_ID)
+						.setValue(DEFAULT_DROPDOWN_LIST_VALUE);
+			} else {
+				formSectionTO.getFormQuestionById(
+						SECTION_DEMOGRAPHICS_MILITARY_AFFILIATION_ID)
+						.setValueUUID(
+								student.getDemographics().getMilitaryAffiliation().getId());
+			}			
 
 			// Primary Caregiver
 			formSectionTO.getFormQuestionById(
@@ -789,13 +827,27 @@ public class StudentIntakeFormManager { // NOPMD
 					SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_ID).setValue(
 					student.getEducationGoal().getPlannedOccupation());
 
-			// Military Branch Description
 			formSectionTO
 					.getFormQuestionById(
 							SECTION_EDUCATIONGOAL_QUESTION_MILITARYBRANCHDESCRIPTION_ID)
 					.setValue(
 							student.getEducationGoal()
 									.getMilitaryBranchDescription());
+			
+			// Career Decided
+			formSectionTO.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_DECIDED_ID)
+					.setValue(student.getEducationGoal().getCareerDecided().toString());
+			// Career Sure of
+			formSectionTO.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_SUREOF_ID)
+					.setValue(student.getEducationGoal().getHowSureAboutOccupation().toString());
+			
+			// Career Compatibility 
+			formSectionTO.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_COMPATIBLE_ID)
+					.setValue(student.getEducationGoal().getConfidentInAbilities().toString());
+			
+			// Career Additional Info
+			formSectionTO.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_ADDITIONAL_INFO_ID)
+					.setValue(student.getEducationGoal().getAdditionalAcademicProgramInformationNeeded().toString());
 		}
 
 		/* Funding Sources */
@@ -962,10 +1014,12 @@ public class StudentIntakeFormManager { // NOPMD
 		demographics.setChildAges(demographicsSection.getFormQuestionById(
 				SECTION_DEMOGRAPHICS_QUESTION_CHILDRENAGES_ID).getValue());
 
-		// Childcare Arrangements
+		
+		
 		final FormQuestionTO childCareArrangementQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_CHILDCAREARRANGEMENT_ID);
 
+		// Childcare Arrangements
 		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(childCareArrangementQuestion
 				.getValue())) {
 			demographics.setChildCareArrangement(null);
@@ -996,6 +1050,18 @@ public class StudentIntakeFormManager { // NOPMD
 					.booleanFromString(childCareNeededQuestion.getValue()));
 		}
 
+		//Military Affiliation
+		final FormQuestionTO militaryAffiliationTO = demographicsSection.getFormQuestionById(SECTION_DEMOGRAPHICS_MILITARY_AFFILIATION_ID);
+		if(DEFAULT_DROPDOWN_LIST_VALUE.equals(militaryAffiliationTO.getValue()) || "None".equals(militaryAffiliationTO.getValue()))
+		{
+			demographics.setMilitaryAffiliation(null);
+		}
+		else 
+		{
+			FormOptionTO militaryAffiliationChoice = militaryAffiliationTO.getFormOptionByValue(militaryAffiliationTO.getValue());
+			demographics.setMilitaryAffiliation(new MilitaryAffiliation(militaryAffiliationChoice.getId(),militaryAffiliationChoice.getValue()));
+		}
+		
 		// Citizenship
 		final FormQuestionTO citizenshipQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID);
@@ -1421,6 +1487,18 @@ public class StudentIntakeFormManager { // NOPMD
 							SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID)
 							.getValue()));
 
+			studentEducationGoal.setHowSureAboutOccupation(
+					Integer.valueOf(educationGoalSection.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_SUREOF_ID).getValue()));
+			
+			studentEducationGoal.setAdditionalAcademicProgramInformationNeeded(
+					SspStringUtils.booleanFromString(educationGoalSection.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_ADDITIONAL_INFO_ID).getValue()));
+			
+			studentEducationGoal.setCareerDecided(SspStringUtils.booleanFromString(
+					educationGoalSection.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_DECIDED_ID).getValue()));
+			
+			studentEducationGoal.setConfidentInAbilities(SspStringUtils.booleanFromString(
+					educationGoalSection.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_COMPATIBLE_ID).getValue()));
+			
 			studentEducationGoalDao.save(studentEducationGoal);
 		}
 
@@ -1843,16 +1921,11 @@ public class StudentIntakeFormManager { // NOPMD
 				.setId(SECTION_DEMOGRAPHICS_QUESTION_MARITALSTATUS_ID);
 		maritalStatusQuestion.setLabel("Marital Status");
 
-		maritalStatusQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"Single", "Single"));
-		maritalStatusQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"Married", "Married"));
-		maritalStatusQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"Divorced", "Divorced"));
-		maritalStatusQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"Separated", "Separated"));
-		maritalStatusQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"Widowed", "Widowed"));
+		PagingWrapper<MaritalStatus> allMartialStatuses = maritalStatusService.getAll(new SortingAndPaging(ObjectStatus.ACTIVE));
+		for (MaritalStatus maritalStatus : allMartialStatuses) 
+		{
+			maritalStatusQuestionOptions.add(new FormOptionTO(maritalStatus.getId(), maritalStatus.getName(), maritalStatus.getName()));
+		}
 
 		maritalStatusQuestion.setOptions(maritalStatusQuestionOptions);
 		maritalStatusQuestion.setType(FORM_TYPE_SELECT);
@@ -1897,14 +1970,11 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO citizenshipQuestion = new FormQuestionTO();
 		final List<FormOptionTO> citizenshipQuestionOptions = new ArrayList<FormOptionTO>();
 
-		citizenshipQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"US Citizen", "DD1A644C-58A9-4A77-A263-76C2ECB6B152"));
-		citizenshipQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"Permanent Resident", "1B870957-9165-46AB-9BA8-47085DD4B561"));
-		citizenshipQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"Naturalized Citizen", "8DDB5013-1D9F-441D-8C6B-71C52F839570"));
-		citizenshipQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
-				"International", "8BFA49CE-4D8E-43C1-AA2B-0F5E66319168"));
+		PagingWrapper<Citizenship> allCitizenship = citizenshipService.getAll(new SortingAndPaging(ObjectStatus.ACTIVE));
+		for (Citizenship citizenship : allCitizenship) 
+		{
+			citizenshipQuestionOptions.add(new FormOptionTO(citizenship.getId(), citizenship.getName(), citizenship.getName()));
+		}
 
 		citizenshipQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID);
 		citizenshipQuestion.setLabel("Citizenship");
@@ -1913,7 +1983,6 @@ public class StudentIntakeFormManager { // NOPMD
 
 		demographicSectionQuestions.add(citizenshipQuestion);
 
-		// Country of Citizenship -> Shown if Citizenship is "International"
 		final FormQuestionTO countryOfCitizenshipQuestion = new FormQuestionTO();
 
 		countryOfCitizenshipQuestion
@@ -1921,11 +1990,7 @@ public class StudentIntakeFormManager { // NOPMD
 		countryOfCitizenshipQuestion.setLabel("Country of Citizenship");
 		countryOfCitizenshipQuestion.setMaximumLength("50");
 		countryOfCitizenshipQuestion.setType(FORM_TYPE_TEXTINPUT);
-		// DEPENDENCY -> countryOfCitizenshipQuestion should be shown only when
-		// citizenshipQuestion selection matches 'International'
-		countryOfCitizenshipQuestion
-				.setVisibilityExpression("hasValueForQuestionId('8BFA49CE-4D8E-43C1-AA2B-0F5E66319168', '"
-						+ SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID + "')");
+
 
 		demographicSectionQuestions.add(countryOfCitizenshipQuestion);
 
@@ -1948,6 +2013,25 @@ public class StudentIntakeFormManager { // NOPMD
 
 		demographicSectionQuestions.add(veteranStatusQuestion);
 
+		// Military Affiliation
+		final FormQuestionTO militaryAffiliationQuestion = new FormQuestionTO();
+		final List<FormOptionTO> militaryAffiliationOptions = new ArrayList<FormOptionTO>();
+		PagingWrapper<MilitaryAffiliation> militaryAffiliations = militaryAffiliationDao.getAll(ObjectStatus.ACTIVE);
+		
+		militaryAffiliationOptions.add(new FormOptionTO(UUID.randomUUID(),"None","None"));
+		for (MilitaryAffiliation militaryAffiliation : militaryAffiliations) 
+		{
+			militaryAffiliationOptions.add(new FormOptionTO(militaryAffiliation.getId(),militaryAffiliation.getName(),militaryAffiliation.getName()));
+		}
+
+		militaryAffiliationQuestion.setId(SECTION_DEMOGRAPHICS_MILITARY_AFFILIATION_ID);
+		militaryAffiliationQuestion.setLabel("Military Affiliation");
+		militaryAffiliationQuestion.setOptions(militaryAffiliationOptions);
+		militaryAffiliationQuestion.setType(FORM_TYPE_SELECT);
+
+		demographicSectionQuestions.add(militaryAffiliationQuestion);
+
+		
 		// Primary Caregiver
 		final FormQuestionTO primaryCaregiverQuestion = new FormQuestionTO();
 		final List<FormOptionTO> primaryCaregiverQuestionOptions = new ArrayList<FormOptionTO>();
@@ -2464,25 +2548,12 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO educationCareerGoalQuestion = new FormQuestionTO();
 		final List<FormOptionTO> educationCareerGoalQuestionOptions = new ArrayList<FormOptionTO>();
 
-		educationCareerGoalQuestionOptions.add(new FormOptionTO(UUID
-				.randomUUID(), "Uncertain", "uncertain"));
-		educationCareerGoalQuestionOptions.add(new FormOptionTO(UUID
-				.randomUUID(), "Associates Degree", "associate"));
-		educationCareerGoalQuestionOptions.add(new FormOptionTO(UUID
-				.randomUUID(), "Certificate", "certificate"));
-		educationCareerGoalQuestionOptions.add(new FormOptionTO(UUID
-				.randomUUID(), "Short Term Certificate", "short-term"));
-		educationCareerGoalQuestionOptions.add(new FormOptionTO(UUID
-				.randomUUID(), "Bachelor's Degree", "bachelor"));
-		educationCareerGoalQuestionOptions.add(new FormOptionTO(UUID
-				.randomUUID(), "Workforce", "workforce"));
-		educationCareerGoalQuestionOptions.add(new FormOptionTO(UUID
-				.randomUUID(), "Tech School", "tech-school"));
-		educationCareerGoalQuestionOptions.add(new FormOptionTO(UUID
-				.randomUUID(), "Military", "military"));
-		educationCareerGoalQuestionOptions.add(new FormOptionTO(UUID
-				.randomUUID(), "Other", "other"));
-
+		PagingWrapper<EducationGoal> allGoals = educationGoalDao.getAll(ObjectStatus.ACTIVE);
+		for (EducationGoal educationGoal : allGoals) 
+		{
+			educationCareerGoalQuestionOptions.add(new FormOptionTO(educationGoal.getId(), educationGoal.getName(), educationGoal.getId().toString()));
+		}
+		
 		educationCareerGoalQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID);
 		educationCareerGoalQuestion.setLabel("Education/Career Goal");
@@ -2504,7 +2575,7 @@ public class StudentIntakeFormManager { // NOPMD
 		// DEPENDENCY -> bachelorsDegreeQuestion shown when
 		// educationCareerGoalQuestion.option.value value is 'bachelor'
 		bachelorsDegreeQuestion
-				.setVisibilityExpression("hasValueForQuestionId('bachelor', '"
+				.setVisibilityExpression("hasValueForQuestionId('efeb5536-d634-4b79-80bc-1e1041dcd3ff', '"
 						+ SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID + "')");
 
 		eduGoalSectionQuestions.add(bachelorsDegreeQuestion);
@@ -2521,7 +2592,7 @@ public class StudentIntakeFormManager { // NOPMD
 		// DEPENDENCY -> militaryBranchQuestion shown when
 		// educationCareerGoalQuestion.option.value value is 'military'
 		militaryBranchQuestion
-				.setVisibilityExpression("hasValueForQuestionId('military', '"
+				.setVisibilityExpression("hasValueForQuestionId('6c466885-d3f8-44d1-a301-62d6fe2d3553', '"
 						+ SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID + "')");
 
 		eduGoalSectionQuestions.add(militaryBranchQuestion);
@@ -2537,7 +2608,7 @@ public class StudentIntakeFormManager { // NOPMD
 		// DEPENDENCY -> otherQuestion shown when
 		// educationCareerGoalQuestion.option.value value is 'other'
 		otherQuestion
-				.setVisibilityExpression("hasValueForQuestionId('other', '"
+				.setVisibilityExpression("hasValueForQuestionId('78b54da7-fb19-4092-bb44-f60485678d6b', '"
 						+ SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID + "')");
 
 		eduGoalSectionQuestions.add(otherQuestion);
@@ -2565,6 +2636,23 @@ public class StudentIntakeFormManager { // NOPMD
 
 		eduGoalSectionQuestions.add(majorCertaintyQuestion);
 
+		// Occupation Decided
+		final FormQuestionTO occupationDecidedQuestion = new FormQuestionTO();
+		final List<FormOptionTO> occupationDecidedQuestionOptions = new ArrayList<FormOptionTO>();
+
+		occupationDecidedQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
+				"Yes", "Y"));
+		occupationDecidedQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
+				"No", "N"));
+
+		occupationDecidedQuestion
+				.setId(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_DECIDED_ID);
+		occupationDecidedQuestion.setLabel("Have you decided on a career / occupation?");
+		occupationDecidedQuestion.setOptions(occupationDecidedQuestionOptions);
+		occupationDecidedQuestion.setType(FORM_TYPE_RADIOLIST);
+
+		eduGoalSectionQuestions.add(occupationDecidedQuestion);	
+		
 		// Planned Occupation
 		final FormQuestionTO plannedOccupationQuestion = new FormQuestionTO();
 
@@ -2575,7 +2663,62 @@ public class StudentIntakeFormManager { // NOPMD
 		plannedOccupationQuestion.setType(FORM_TYPE_TEXTINPUT);
 
 		eduGoalSectionQuestions.add(plannedOccupationQuestion);
+		
+		// Occupation Certainty
+		final FormQuestionTO occupationCertaintyQuestion = new FormQuestionTO();
+		final List<FormOptionTO> occupationCertaintyQuestionOptions = new ArrayList<FormOptionTO>();
 
+		occupationCertaintyQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
+				"Very Unsure", "1"));
+		occupationCertaintyQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
+				"Unsure", "2"));
+		occupationCertaintyQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
+				"None", "3"));
+		occupationCertaintyQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
+				"Sure", "4"));
+		occupationCertaintyQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
+				"Very Sure", "5"));
+
+		occupationCertaintyQuestion
+				.setId(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_SUREOF_ID);
+		occupationCertaintyQuestion.setLabel("How sure are you about your occupation?");
+		occupationCertaintyQuestion.setOptions(occupationCertaintyQuestionOptions);
+		occupationCertaintyQuestion.setType(FORM_TYPE_RADIOLIST);
+
+		eduGoalSectionQuestions.add(occupationCertaintyQuestion);		
+		
+		final FormQuestionTO occupationCompatibleQuestion = new FormQuestionTO();
+		final List<FormOptionTO> occupationCompatibleQuestionOptions = new ArrayList<FormOptionTO>();
+
+		occupationCompatibleQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
+				"Yes", "Y"));
+		occupationCompatibleQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
+				"No", "N"));
+
+		occupationCompatibleQuestion
+				.setId(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_COMPATIBLE_ID);
+		occupationCompatibleQuestion.setLabel("Are you confident your abilities are compatible with the career field?");
+		occupationCompatibleQuestion.setOptions(occupationCompatibleQuestionOptions);
+		occupationCompatibleQuestion.setType(FORM_TYPE_RADIOLIST);
+
+		eduGoalSectionQuestions.add(occupationCompatibleQuestion);	
+		
+		final FormQuestionTO additionalInfoQuestion = new FormQuestionTO();
+		final List<FormOptionTO> additionalInfoQuestionOptions = new ArrayList<FormOptionTO>();
+
+		additionalInfoQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
+				"Yes", "Y"));
+		additionalInfoQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
+				"No", "N"));
+
+		additionalInfoQuestion
+				.setId(SECTION_EDUCATIONGOAL_QUESTION_ADDITIONAL_INFO_ID);
+		additionalInfoQuestion.setLabel("Do you need additional information about which academic programs may lead to a future career?");
+		additionalInfoQuestion.setOptions(additionalInfoQuestionOptions);
+		additionalInfoQuestion.setType(FORM_TYPE_RADIOLIST);
+
+		eduGoalSectionQuestions.add(additionalInfoQuestion);			
+		
 		// Add questions to section
 		eduGoalSection.setQuestions(eduGoalSectionQuestions);
 

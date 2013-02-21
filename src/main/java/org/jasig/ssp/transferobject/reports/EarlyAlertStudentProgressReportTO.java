@@ -18,13 +18,14 @@
  */
 package org.jasig.ssp.transferobject.reports;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.transferobject.PersonTO;
 
 /**
  * AddressLabelSearch transfer object
  */
-public class EarlyAlertStudentProgressTO extends PersonReportTO {
+public class EarlyAlertStudentProgressReportTO extends BaseStudentReportTO {
 
 	/**
 	 * Construct a transfer object from a related model instance
@@ -32,23 +33,22 @@ public class EarlyAlertStudentProgressTO extends PersonReportTO {
 	 * @param model
 	 *            Initialize instance from the data in this model
 	 */
-	public EarlyAlertStudentProgressTO(final Person model, String registrationStatus, Long earlyAlertsInitialTerm, Long earlyAlertsComparisonTerm) {		
+	public EarlyAlertStudentProgressReportTO(final Person model, Long earlyAlertsInitialTerm, Long earlyAlertsComparisonTerm) {		
 		super(model);
-		this.registrationStatus = registrationStatus;
 		this.earlyAlertsComparisonTerm = earlyAlertsComparisonTerm;
 		this.earlyAlertsInitialTerm = earlyAlertsInitialTerm;
 	}
 	
-	private String registrationStatus;
+	public EarlyAlertStudentProgressReportTO(BaseStudentReportTO studentReportTO, Long earlyAlertsInitialTerm, Long earlyAlertsComparisonTerm) {		
+		super(studentReportTO);
+		this.earlyAlertsComparisonTerm = earlyAlertsComparisonTerm;
+		this.earlyAlertsInitialTerm = earlyAlertsInitialTerm;
+	}
+	
 	private Long earlyAlertsInitialTerm;
 	private Long earlyAlertsComparisonTerm;
 	
-	public String getRegistrationStatus() {
-		return registrationStatus;
-	}
-	public void setRegistrationStatus(String registrationStatus) {
-		this.registrationStatus = registrationStatus;
-	}
+
 	public Long getEarlyAlertsInitialTerm() {
 		return earlyAlertsInitialTerm;
 	}
@@ -60,6 +60,27 @@ public class EarlyAlertStudentProgressTO extends PersonReportTO {
 	}
 	public void setEarlyAlertsComparisonTerm(Long earlyAlertsComparisonTerm) {
 		this.earlyAlertsComparisonTerm = earlyAlertsComparisonTerm;
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if (!(BaseStudentReportTO.class.isInstance(obj))) {
+			return false;
+		}
+		return ((BaseStudentReportTO)obj).getId().equals(getId());
+	}
+	
+	
+	protected int hashPrime() {
+		return 1051;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		int result = hashPrime();
+		result *= super.hashCode();
+		return result;
 	}
 
 }

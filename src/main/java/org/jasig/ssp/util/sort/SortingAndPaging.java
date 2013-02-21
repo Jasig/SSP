@@ -77,7 +77,7 @@ public final class SortingAndPaging { // NOPMD
 	 *            Object status filter
 	 */
 	public SortingAndPaging(final ObjectStatus status) {
-		this.status = status;
+		this.status = status == null ? ObjectStatus.ACTIVE : status;
 		firstResult = 0;
 		maxResults = DEFAULT_MAXIMUM_RESULTS;
 		defaultSortProperty = null;
@@ -110,7 +110,7 @@ public final class SortingAndPaging { // NOPMD
 			final List<Pair<String, SortDirection>> sortFields,
 			final String defaultSortProperty,
 			final SortDirection defaultSortDirection) {
-		this.status = status;
+		this.status = status == null ? ObjectStatus.ACTIVE : status;
 		this.firstResult = (firstResult == null)
 				|| (firstResult < Integer.valueOf(0)) ? Integer.valueOf(0)
 				: firstResult;
@@ -124,11 +124,21 @@ public final class SortingAndPaging { // NOPMD
 		this.defaultSortDirection = defaultSortDirection;
 	}
 	
+	/**
+	 * 
+	 * @param status
+	 * @param sortFields
+	 * @param defaultSortProperty
+	 * @param defaultSortDirection
+	 * 
+	 * Use this constructor if there is to be no paging.  firstResult and maxResults are set to null
+	 */
+	
 	public SortingAndPaging(final ObjectStatus status,
 			final List<Pair<String, SortDirection>> sortFields,
 			final String defaultSortProperty,
 			final SortDirection defaultSortDirection) {
-		this.status = status;
+		this.status = status == null ? ObjectStatus.ACTIVE : status;
 		this.firstResult = null;
 		this.maxResults = null;
 		this.sortFields = sortFields;
@@ -198,7 +208,7 @@ public final class SortingAndPaging { // NOPMD
 	 * @return true if filtering by object status
 	 */
 	public boolean isFilteredByStatus() {
-		return (status != ObjectStatus.ALL);
+		return (status != null && status != ObjectStatus.ALL);
 	}
 
 	/**

@@ -168,6 +168,7 @@ public class CaseloadReportController extends ReportBaseController {
 	public @ResponseBody
 	void getCaseLoad(
 			final HttpServletResponse response,
+			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
@@ -175,7 +176,7 @@ public class CaseloadReportController extends ReportBaseController {
 		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
 
 		final List<CaseLoadReportTO> caseLoadReportList = collectCaseLoadReportTOs(cleanStudentTypeIds);		
-		final Map<String, Object> parameters = collectParamsForReport(cleanStudentTypeIds);
+		final Map<String, Object> parameters = collectParamsForReport(cleanStudentTypeIds, homeDepartment);
 
 		generateReport(response, parameters, caseLoadReportList, REPORT_URL,
 				reportType, REPORT_FILE_TITLE);
@@ -215,10 +216,10 @@ public class CaseloadReportController extends ReportBaseController {
 		return caseLoadReportList;
 	}
 
-	private Map<String, Object> collectParamsForReport(List<UUID> studentTypeIds)
+	private Map<String, Object> collectParamsForReport(List<UUID> studentTypeIds, String homeDepartment)
 			throws ObjectNotFoundException {
 		final Map<String, Object> parameters = Maps.newHashMap();
-		SearchParameters.addHomeDepartment(null, parameters);
+		SearchParameters.addHomeDepartmentToMap(homeDepartment, parameters);
 		SearchParameters.addStudentTypesToMap(studentTypeIds, parameters,
 				studentTypeService);
 		return parameters;

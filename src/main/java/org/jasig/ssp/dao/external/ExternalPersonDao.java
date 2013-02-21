@@ -19,11 +19,13 @@
 package org.jasig.ssp.dao.external;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -103,5 +105,14 @@ public class ExternalPersonDao extends AbstractExternalDataDao<ExternalPerson> {
 				.add(Restrictions.in("schoolId", schoolIds));
 
 		return processCriteriaWithSortingAndPaging(query, sAndP, false);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<String> getAllDepartmentNames(){
+		final Criteria query = createCriteria();
+		query.setProjection(Projections.projectionList()
+						.add(Projections.distinct(Projections.property("departmentName"))));
+		
+		return (List<String>)query.list();
 	}
 }

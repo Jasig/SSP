@@ -35,6 +35,7 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 		            title: 'Profile',
 		            padding: 0,
 		            border: 0,
+					preventHeader: true,
 					items: [
 						Ext.createWidget('tabpanel', {
 						    width: '100%',
@@ -69,23 +70,38 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 				    dockedItems: [{
 				        dock: 'top',
 				        xtype: 'toolbar',
-				        items: [{
+				        items: [
+						{
+                            xtype: 'tbspacer',
+                            width: 5
+                        },
+						{
+							xtype: 'label',
+                            text: 'Profile',
+							style: 'font-weight:bold;color: #00008B'
+						},
+						{
+							xtype: 'tbspacer',
+                            flex: 1
+						},
+						{
 					            tooltip: 'Print Student History',
-					            text: '',
-					            width: 32,
-					            height: 32,
+					            text: '<u>Print Student History</u>',
+					            width: 150,
+					            height: 20,
 					            hidden: !me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'),
-					            cls: 'studentHistoryIcon',
+					            //cls: 'studentHistoryIcon',
 					            xtype: 'button',
 					            itemId: 'viewHistoryButton'
-				        },{
+				        },
+						{
 			            	   xtype: 'button',
 			            	   itemId: 'printConfidentialityAgreementButton',
-			                   text: '',
+			                   text: '<u>Print Confidentiality Agreement</u>',
 			                   tooltip: 'Print Confidentiality Agreement',
-			            	   cls: 'confidentialityAgreementIcon',
-			            	   height: 32,
-			            	   width: 32,
+			            	   //cls: 'confidentialityAgreementIcon',
+			            	   height: 20,
+			            	   width: 175,
 			            	   hidden: !me.authenticatedPerson.hasAccess('PROFILE_PRINT_CONFIDENTIALITY_AGREEMENT_BUTTON'),
 			            }]
 				    }]

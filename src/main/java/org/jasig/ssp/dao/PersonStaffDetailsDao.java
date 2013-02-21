@@ -18,6 +18,11 @@
  */
 package org.jasig.ssp.dao;
 
+import java.util.List;
+
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.PersonStaffDetails;
 import org.springframework.stereotype.Repository;
 
@@ -35,4 +40,14 @@ public class PersonStaffDetailsDao extends
 	public PersonStaffDetailsDao() {
 		super(PersonStaffDetails.class);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<String> getAllHomeDepartments(){
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.isNotEmpty("home_department"));
+		criteria.setProjection(Projections.projectionList().add(Projections.distinct(Projections.property("home_department"))));
+		return ((List<String>)criteria.list());
+	}
+	
+	
 }

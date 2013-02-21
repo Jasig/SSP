@@ -19,6 +19,7 @@
 package org.jasig.ssp.web.api.reports;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -38,18 +39,21 @@ import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.util.service.stub.Stubs;
+import org.jasig.ssp.util.service.stub.Stubs.CampusFixture;
+import org.jasig.ssp.util.service.stub.Stubs.TermFixture;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 
-public class DisabilityServicesReportControllerIntegrationTest
-		extends AbstractReportControllerIntegrationTest  {
+public class EarlyAlertCaseCountsReportControllerIntegrationTest 
+	extends AbstractReportControllerIntegrationTest{
 
 	@Autowired
-	private transient DisabilityServicesReportController controller;
+	private transient EarlyAlertCaseCountsReportController controller;
 	@Autowired
 	private transient PersonService personService;
 	@Autowired
@@ -66,44 +70,27 @@ public class DisabilityServicesReportControllerIntegrationTest
 	protected transient ReferralSourceService referralSourceService;
 
 	@Test
-	public void testGetDisabilityeServicesReportFilters()
+	public void testGetEarlyAlertCaseCountsReportWtihFilters()
 			throws IOException, ObjectNotFoundException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		final UUID coachId = Stubs.PersonFixture.ADVISOR_0.id();
-		final UUID odsCoachId = Stubs.PersonFixture.ADVISOR_0.id();
 		
-		controller.getDisabilityServicesReport(response, 
-				ObjectStatus.ACTIVE, 
-				coachId, 
-				odsCoachId, 
-				getReferences(disabilityStatusService, 1).get(0), 
-				null, 
-				getReferences(programStatusService, 1).get(0), 
-				getReferences(ssgService, 2), 
-				getReferences(referralSourceService, 2), 
-				getReferences(studentTypeService, 2), 
-				null, 
-				null, 2013, 
-				"FA12", 
-				null, 
-				null, 
-				null,
-				null,
-				"FA12",
+		controller.getEarlyAlertCaseCountsReport(response, 
+				CampusFixture.TEST.id(),null, 
+				Lists.newArrayList(TermFixture.FALL_2012.code()), 
 				"csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
-		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add("STUDENT NAME,ID,ILP,DISABILITY,SSP STATUS,ODS STATUS,ODS REASON FOR INELIGIBILTY,ODS REG DATE,INTERPRETER,REG STATUS,MAJOR,VET STATUS,ETHNICITY,ASSIGNMENT DATES\t,AGENCY CONTACTS,SSP COACH");
-		expectedReportBodyLines.add( ",,,,,,,,,,,,,,,");
-
+		final List<String> expectedReportBodyLines = new ArrayList<String>(3);
+		expectedReportBodyLines.add("TERM,TOTAL STUDENTS,TOTAL CASES,TOTAL RESPONDED ,,TOTAL CLOSED,,");
+		expectedReportBodyLines.add("FA12,6,16,9,(56.2)%,,2,(12.5)%");
+		expectedReportBodyLines.add(",6,16,9,(56.2)%,,2,(12.5)%");
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 
 	@Test
-	public void testGetDisablityServicesReportNoFilter()
+	public void testGetEarlyAlertCaseCountsReportNoFilters()
 			throws IOException, ObjectNotFoundException, JRException {
 
 		final Person dennisRitchie =
@@ -115,60 +102,28 @@ public class DisabilityServicesReportControllerIntegrationTest
 		sessionFactory.getCurrentSession().flush();
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		// Alan Turing, i.e. the coach assigned to our test student users
-		// in our standard fixture
-		final UUID coachId = Stubs.PersonFixture.ADVISOR_0.id();
-		final UUID odsCoachId = Stubs.PersonFixture.ADVISOR_0.id();
-		controller.getDisabilityServicesReport(response, 
-				ObjectStatus.ACTIVE, 
-				null, 
-				null, 
-				null, 
-				null, 
-				null, 
-				null, 
-				null, 
-				null, 
-				null, 
-				null, 
-				2013, 
-				null, 
-				null, 
+	
+		controller.getEarlyAlertCaseCountsReport(response, 
 				null, 
 				null,
-				null,
-				null,
-				"csv");
+				null, 
+				"csv");;
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		// same as in testGetAddressLabelsReturnsAllStudentsIfNoFiltersSet(), but
 		// Dennis Ritchie is missing
-		expectedReportBodyLines.add("STUDENT NAME,ID,ILP,DISABILITY,SSP STATUS,ODS STATUS,ODS REASON FOR INELIGIBILTY,ODS REG DATE,INTERPRETER,REG STATUS,MAJOR,VET STATUS,ETHNICITY,ASSIGNMENT DATES\t,AGENCY CONTACTS,SSP COACH");
-		expectedReportBodyLines.add("test Mumford coach1student0,coach1student0,,ADD/ADHD,Active,Test Disability ,,,,,Physics,Dependent of ,American ,10/01/2012,Other -MH,test coach1");
-		expectedReportBodyLines.add("test Mumford coach1student2,coach1student2,,SP,Non-,Ineligible,,,,,ENGISH,Montgomery ,Asian Pacific ,10/01/2012,BSVI -BVR,test coach1");
-		expectedReportBodyLines.add("test Mumford coach1student4,coach1student4,,LD,No-Show,Eligible,,,,,Biology,VEAP,Prefer Not To ,10/01/2012,Test Disability Agency ,test coach1");
-		
+		expectedReportBodyLines.add("TERM,TOTAL STUDENTS,TOTAL CASES,TOTAL RESPONDED ,,TOTAL CLOSED,,");
+		expectedReportBodyLines.add( "All,6,16,9,(56.2)%,,2,(12.5)%");
+		expectedReportBodyLines.add(",6,16,9,(56.2)%,,2,(12.5)%");
+
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
-	
-	private List<UUID> getReferences(ReferenceService referenceService, int count){
-		PagingWrapper<AbstractReference> references = referenceService.getAll(null);
-		List<UUID> referenceIds = new ArrayList<UUID>();
-		Integer index = new Integer(0);
-		for(AbstractReference reference:references.getRows()){
-			if(count == index++)
-				break;
-			
-			referenceIds.add(reference.getId());
-		}
-		return referenceIds;
-	}
+
 
 	@Override
 	protected Predicate<String> afterHeader() {
-		return afterLineContaining("Disability Services Report");
+		return afterLineContaining("Early Alert Case Counts Report");
 	}
-
 }

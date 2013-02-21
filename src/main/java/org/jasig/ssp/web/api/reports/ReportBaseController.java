@@ -22,7 +22,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,8 +37,15 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
+
+import org.jasig.ssp.service.EarlyAlertResponseService;
+import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 abstract class ReportBaseController extends AbstractBaseController {
 
@@ -44,12 +53,14 @@ abstract class ReportBaseController extends AbstractBaseController {
 	protected static final String REPORT_TYPE_PDF = "pdf";
 	protected static final String REPORT_TYPE_CSV = "csv";
 	
-	protected static final String DEFAULT_DATE_FORMAT = "MM/dd/yyyy";
+	public static final String DEFAULT_DATE_FORMAT = "MM/dd/yyyy";
+	
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(ReportBaseController.class);
 	
 	@Override
 	protected Logger getLogger() {
-		// TODO Auto-generated method stub
-		return null;
+		return LOGGER;
 	}
 	
 	protected void generateReport(HttpServletResponse response, Map<String, Object> parameters, 
@@ -97,6 +108,47 @@ abstract class ReportBaseController extends AbstractBaseController {
 		response.flushBuffer();
 		is.close();
 		os.close();		
+	}
+	
+	List<BaseStudentReportTO> processStudentReportTOs(PagingWrapper<BaseStudentReportTO> people){
+			
+		 return processStudentReportTOs(new ArrayList<BaseStudentReportTO>(people.getRows()));
+	}
+	
+	List<BaseStudentReportTO> processStudentReportTOs(List<BaseStudentReportTO> reports){
+		ArrayList<BaseStudentReportTO> compressedReports = new ArrayList<BaseStudentReportTO>();
+		for(BaseStudentReportTO reportTO: reports){
+			Integer index = compressedReports.indexOf(reportTO);
+			if(index != null && index >= 0)
+			{
+				BaseStudentReportTO compressedReportTo = compressedReports.get(index);
+				compressedReportTo.processDuplicate(reportTO);
+			}else{
+				compressedReports.add(reportTO);
+			}
+		}
+		return compressedReports;
+	}
+	
+	protected List<EarlyAlertStudentReportTO> processReports(PagingWrapper<EarlyAlertStudentReportTO> reports, EarlyAlertResponseService earlyAlertResponseService){
+		 
+		ArrayList<EarlyAlertStudentReportTO> compressedReports = new ArrayList<EarlyAlertStudentReportTO>();
+		for(EarlyAlertStudentReportTO reportTO: reports){
+			Integer index = compressedReports.indexOf(reportTO);
+			if(index != null && index >= 0)
+			{
+				BaseStudentReportTO compressedReportTo = compressedReports.get(index);
+				compressedReportTo.processDuplicate(reportTO);
+			}else{
+				compressedReports.add(reportTO);
+			}
+		}
+		
+		for(EarlyAlertStudentReportTO reportTO: compressedReports){
+			EarlyAlertResponseCounts countOfResponses = earlyAlertResponseService.getCountEarlyAlertRespondedToForEarlyAlerts(reportTO.getEarlyAlertIds());
+			reportTO.setPending(countOfResponses.getTotalEARespondedToNotClosed());
+		}
+		return compressedReports;
 	}
 
 }

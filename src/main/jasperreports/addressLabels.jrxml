@@ -38,7 +38,7 @@
 	<parameter name="homeDepartment" class="java.lang.String"/>
 	<parameter name="coachName" class="java.lang.String"/>
 	<parameter name="studentTypeNames" class="java.lang.String"/>
-	<parameter name="cohortTerm" class="java.lang.String"/>
+	<parameter name="actualStartTerm" class="java.lang.String"/>
 	<parameter name="anticipatedStartTerm" class="java.lang.String"/>
 	<queryString language="json">
 		<![CDATA[rows(name==$P{name}]]>
@@ -147,9 +147,9 @@
 				<text><![CDATA[Cohort Term/Year]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" positionType="Float" x="134" y="90" width="85" height="16" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" positionType="Float" x="134" y="90" width="117" height="16" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{cohortTerm}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{actualStartTerm}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="12" y="108" width="118" height="16"/>
@@ -180,6 +180,16 @@
 				<reportElement uuid="e49d816d-3764-4980-94ba-2b9e63b689da" positionType="Float" x="134" y="145" width="352" height="16" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{studentCount}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="255" y="90" width="142" height="16"/>
+				<textElement/>
+				<text><![CDATA[Anticipated Start Term/Year:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" positionType="Float" x="401" y="90" width="117" height="16" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{anticipatedStartTerm}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
