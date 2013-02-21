@@ -109,34 +109,34 @@
                     "path": "/app/view/tools/sis/"
                 },
                 {
-                    "clsName": "Ssp.controller.tool.disabilityintake.GeneralViewController",
+                    "clsName": "Ssp.controller.tool.accommodation.GeneralViewController",
                     "name": "GeneralViewController.js",
-                    "path": "/app/controller/tool/disabilityintake/"
+                    "path": "/app/controller/tool/accommodation/"
                 },
                 {
-                    "clsName": "Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewController",
-                    "name": "DisabilityIntakeToolViewController.js",
-                    "path": "/app/controller/tool/disabilityintake/"
+                    "clsName": "Ssp.controller.tool.accommodation.AccommodationToolViewController",
+                    "name": "AccommodationToolViewController.js",
+                    "path": "/app/controller/tool/accommodation/"
                 },
                 {
-                    "clsName": "Ssp.view.tools.disabilityintake.General",
+                    "clsName": "Ssp.view.tools.accommodation.General",
                     "name": "General.js",
-                    "path": "/app/view/tools/disabilityintake/"
+                    "path": "/app/view/tools/accommodation/"
                 },
                 {
-                    "clsName": "Ssp.view.tools.disabilityintake.AgencyContacts",
+                    "clsName": "Ssp.view.tools.accommodation.AgencyContacts",
                     "name": "AgencyContacts.js",
-                    "path": "/app/view/tools/disabilityintake/"
+                    "path": "/app/view/tools/accommodation/"
                 },
                 {
-                    "clsName": "Ssp.view.tools.disabilityintake.Disposition",
+                    "clsName": "Ssp.view.tools.accommodation.Disposition",
                     "name": "Disposition.js",
-                    "path": "/app/view/tools/disabilityintake/"
+                    "path": "/app/view/tools/accommodation/"
                 },
                 {
-                    "clsName": "Ssp.view.tools.disabilityintake.Accommodations",
+                    "clsName": "Ssp.view.tools.accommodation.Accommodations",
                     "name": "Accommodations.js",
-                    "path": "/app/view/tools/disabilityintake/"
+                    "path": "/app/view/tools/accommodation/"
                 },
                 {
                     "clsName": "Ssp.view.tools.displacedworker.DisplacedWorker",

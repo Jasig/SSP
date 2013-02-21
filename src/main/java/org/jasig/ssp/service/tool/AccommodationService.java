@@ -20,12 +20,12 @@ package org.jasig.ssp.service.tool;
 
 import java.util.UUID;
 
-import org.jasig.ssp.model.tool.DisabilityIntakeForm;
+import org.jasig.ssp.model.tool.AccommodationForm;
 import org.jasig.ssp.service.ObjectNotFoundException;
 
-public interface DisabilityIntakeService {
+public interface AccommodationService {
 
-	boolean save(DisabilityIntakeForm form) throws ObjectNotFoundException;
+	boolean save(AccommodationForm form) throws ObjectNotFoundException;
 
-	DisabilityIntakeForm loadForPerson(UUID studentId) throws ObjectNotFoundException;
+	AccommodationForm loadForPerson(UUID studentId) throws ObjectNotFoundException;
 }

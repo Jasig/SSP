@@ -22,11 +22,11 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonAssoc;
 
 /**
- * The model for the Disability Intake Form tool.
+ * The model for the Accommodation tool.
  * 
  * Currently only a simple wrapper around a fully-normalized {@link Person}.
  */
-public class DisabilityIntakeForm implements PersonAssoc {
+public class AccommodationForm implements PersonAssoc {
 
 	/**
 	 * Person with the full tree of data, down to only using identifiers

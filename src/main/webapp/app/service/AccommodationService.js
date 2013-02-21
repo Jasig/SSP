@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.service.DisabilityIntakeService', {  
+Ext.define('Ssp.service.AccommodationService', {
     extend: 'Ssp.service.AbstractService',   		
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
@@ -28,7 +28,7 @@ Ext.define('Ssp.service.DisabilityIntakeService', {
 
     getBaseUrl: function(){
 		var me=this;
-		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('disabilityIntakeTool') );
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('accommodationTool') );
     	return baseUrl;
     },
     

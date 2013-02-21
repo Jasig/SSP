@@ -27,17 +27,17 @@ import org.jasig.ssp.model.PersonDisability;
 import org.junit.Test;
 
 /**
- * Simple tests on the {@link DisabilityIntakeForm} model.
+ * Simple tests on the {@link AccommodationForm} model.
  * 
  * @author shawn.gormley
  */
-public class DisabilityIntakeFormTest {
+public class AccommodationFormTest {
 
 	private static final String TEST_STRING1 = "ts1";
 	private static final String TEST_STRING2 = "ts2";
 
 	/**
-	 * Test that {@link DisabilityIntakeForm#setPerson(Person)} correctly sets nested
+	 * Test that {@link AccommodationForm#setPerson(Person)} correctly sets nested
 	 * properties.
 	 */
 	@Test
@@ -48,7 +48,7 @@ public class DisabilityIntakeFormTest {
 		final PersonDisability pd1 = new PersonDisability();
 		pd1.setContactName(TEST_STRING2);
 
-		final DisabilityIntakeForm pPersistent = new DisabilityIntakeForm();
+		final AccommodationForm pPersistent = new AccommodationForm();
 		pPersistent.setPerson(person1);
 		pPersistent.getPerson().setDisability(pd1);
 

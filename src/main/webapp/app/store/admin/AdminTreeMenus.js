@@ -55,8 +55,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 									leaf: true
 							    }]
 			                },{
-			    	            text: 'Disability Intake',
-			    	            title: 'Disability Intake',
+			    	            text: 'Accommodation',
+			    	            title: 'Accommodation',
 			    	            form: '',
 			    	            expanded: false,
 			    	            children: [{

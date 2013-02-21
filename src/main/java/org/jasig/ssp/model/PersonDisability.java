@@ -38,7 +38,8 @@ import org.jasig.ssp.model.reference.DisabilityStatus;
 
 
 /**
- * Students should have some disability intake information stored for use in Disability Services reports.
+ * Students should have some disability information stored for use in
+ * Disability Services reports.
  * 
  * Students may have one associated disability instance (one-to-one mapping).
  * Non-student users should never have any disability information associated to

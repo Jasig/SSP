@@ -16,9 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.tool.disabilityintake.PersonDisabilityAccommodation', {
-	extend: 'Ssp.model.AbstractBase',
-    fields: ['personId',
-             'disabilityAccommodationId',
-             'description']
+Ext.define('Ssp.controller.tool.accommodation.GeneralViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+	init: function() {
+		var me=this;
+		return me.callParent(arguments);
+    }
 });

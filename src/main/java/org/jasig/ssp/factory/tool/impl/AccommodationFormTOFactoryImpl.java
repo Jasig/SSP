@@ -25,13 +25,13 @@ import org.jasig.ssp.factory.PersonDisabilityAgencyTOFactory;
 import org.jasig.ssp.factory.PersonDisabilityTypeTOFactory;
 import org.jasig.ssp.factory.PersonDisabilityAccommodationTOFactory;
 import org.jasig.ssp.factory.PersonTOFactory;
-import org.jasig.ssp.factory.tool.DisabilityIntakeFormTOFactory;
+import org.jasig.ssp.factory.tool.AccommodationFormTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonAssoc;
-import org.jasig.ssp.model.tool.DisabilityIntakeForm;
+import org.jasig.ssp.model.tool.AccommodationForm;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.tool.DisabilityIntakeFormTO;
+import org.jasig.ssp.transferobject.tool.AccommodationFormTO;
 import org.jasig.ssp.util.SetOps;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-public class DisabilityIntakeFormTOFactoryImpl implements DisabilityIntakeFormTOFactory {
+public class AccommodationFormTOFactoryImpl implements AccommodationFormTOFactory {
 
 	@Autowired
 	private transient PersonTOFactory personTOFactory;
@@ -58,14 +58,14 @@ public class DisabilityIntakeFormTOFactoryImpl implements DisabilityIntakeFormTO
 	private transient PersonDisabilityAccommodationTOFactory personDisabilityAccommodationTOFactory;
 
 	@Override
-	public DisabilityIntakeFormTO from(final DisabilityIntakeForm model) {
-		return new DisabilityIntakeFormTO(model);
+	public AccommodationFormTO from(final AccommodationForm model) {
+		return new AccommodationFormTO(model);
 	}
 
 	@Override
-	public DisabilityIntakeForm from(final DisabilityIntakeFormTO tObject)
+	public AccommodationForm from(final AccommodationFormTO tObject)
 			throws ObjectNotFoundException, ValidationException {
-		final DisabilityIntakeForm model = new DisabilityIntakeForm();
+		final AccommodationForm model = new AccommodationForm();
 
 		if (tObject.getPerson() != null) {
 			model.setPerson(personTOFactory.from(tObject.getPerson()));

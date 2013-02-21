@@ -18,24 +18,23 @@
  */
 package org.jasig.ssp.service.tool.impl;
 
-import java.util.Date;
 import java.util.UUID;
 
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.tool.DisabilityIntakeForm;
+import org.jasig.ssp.model.tool.AccommodationForm;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.tool.DisabilityIntakeService;
+import org.jasig.ssp.service.tool.AccommodationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Disability Intake service implementation
+ * Accommodation tool service implementation
  */
 @Service
 @Transactional
-public class DisabilityIntakeServiceImpl implements DisabilityIntakeService {
+public class AccommodationServiceImpl implements AccommodationService {
 
 	@Autowired
 	private transient PersonService personService;
@@ -48,9 +47,9 @@ public class DisabilityIntakeServiceImpl implements DisabilityIntakeService {
 	 * appropriately.
 	 */
 	@Override
-	public DisabilityIntakeForm loadForPerson(final UUID studentId)
+	public AccommodationForm loadForPerson(final UUID studentId)
 			throws ObjectNotFoundException {
-		final DisabilityIntakeForm form = new DisabilityIntakeForm();
+		final AccommodationForm form = new AccommodationForm();
 
 		final Person person = personService.get(studentId);
 		form.setPerson(person);
@@ -62,7 +61,7 @@ public class DisabilityIntakeServiceImpl implements DisabilityIntakeService {
 	 * Persist the form contents
 	 */
 	@Override
-	public boolean save(final DisabilityIntakeForm form) throws ObjectNotFoundException {
+	public boolean save(final AccommodationForm form) throws ObjectNotFoundException {
 		if (form.getPerson() == null) {
 			throw new ObjectNotFoundException(
 					"Missing (null) Person.",

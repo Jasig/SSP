@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.tools.disabilityintake.AgencyContacts', {
+Ext.define('Ssp.view.tools.accommodation.AgencyContacts', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.disabilityagencycontacts',
     width: '100%',
@@ -30,7 +30,7 @@ Ext.define('Ssp.view.tools.disabilityintake.AgencyContacts', {
 		    		border: 0,
 					items: [{
 						xtype: 'form',
-						id : 'DisabilityIntakeDisabilityAgencies',
+						id : 'AccommodationDisabilityAgencies',
 					    layout: 'anchor',
 					    border: 0,
 					    defaults: {
@@ -39,7 +39,7 @@ Ext.define('Ssp.view.tools.disabilityintake.AgencyContacts', {
 					    defaultType: 'checkbox'
 					},{
 						xtype: 'form',
-						id : 'DisabilityIntakeAgencyContactName',
+						id : 'AccommodationAgencyContactName',
 					    layout: 'anchor',
 					    border: 0,
 					    defaults: {

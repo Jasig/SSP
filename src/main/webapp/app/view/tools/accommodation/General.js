@@ -16,18 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.tools.disabilityintake.General', {
+Ext.define('Ssp.view.tools.accommodation.General', {
     extend: 'Ext.form.Panel',
     alias: 'widget.disabilitygeneral',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.disabilityintake.GeneralViewController',
+    controller: 'Ssp.controller.tool.accommodation.GeneralViewController',
     inject: {
     	disabilityStatusesStore: 'disabilityStatusesStore'
     }, 
     height: '100%',
     width: '100%',
-    id : 'DisabilityIntakeGeneral',
+    id : 'AccommodationGeneral',
     initComponent: function() {
         var me = this;
         Ext.apply(me, {

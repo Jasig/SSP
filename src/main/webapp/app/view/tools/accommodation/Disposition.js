@@ -16,12 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.tools.disabilityintake.Disposition', {
+Ext.define('Ssp.view.tools.accommodation.Disposition', {
     extend: 'Ext.form.Panel',
     alias: 'widget.disabilitydisposition',
     height: '100%',
     width: '100%',
-    id : 'DisabilityIntakeDisposition',
+    id : 'AccommodationDisposition',
     initComponent: function() {
         var me = this;
         Ext.apply(me, {

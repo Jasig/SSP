@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.tool.disabilityintake.PersonDisabilityAgency', {
+Ext.define('Ssp.model.tool.accommodation.PersonDisabilityAgency', {
 	extend: 'Ssp.model.AbstractBase',
     fields: ['personId',
              'disabilityAgencyId',

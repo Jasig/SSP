@@ -31,11 +31,9 @@ import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonDisability;
 import org.jasig.ssp.model.PersonDisabilityAgency;
-import org.jasig.ssp.model.reference.DisabilityAccommodation;
 import org.jasig.ssp.model.reference.DisabilityAgency;
 import org.jasig.ssp.model.reference.DisabilityStatus;
-import org.jasig.ssp.model.reference.DisabilityType;
-import org.jasig.ssp.model.tool.DisabilityIntakeForm;
+import org.jasig.ssp.model.tool.AccommodationForm;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
@@ -50,16 +48,16 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * DisabilityIntakeService integration tests
+ * AccommodationService integration tests
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("../service-testConfig.xml")
 @TransactionConfiguration
 @Transactional
-public class DisabilityIntakeServiceIntegrationTest {
+public class AccommodationServiceIntegrationTest {
 
 	@Autowired
-	private transient DisabilityIntakeService service;
+	private transient AccommodationService service;
 
 	@Autowired
 	private transient PersonService personService;
@@ -90,22 +88,23 @@ public class DisabilityIntakeServiceIntegrationTest {
 	}
 
 	@Test(expected = ObjectNotFoundException.class)
-	public void testDisabilityIntakeServiceFormObjectNotFoundException()
+	public void testAccommodationServiceFormObjectNotFoundException()
 			throws ObjectNotFoundException {
 		service.loadForPerson(UUID.randomUUID());
 	}
 
 	/**
-	 * Integration test that loads and asserts an {@link DisabilityIntakeForm} for the
+	 * Integration test that loads and asserts an
+	 * {@link org.jasig.ssp.model.tool.AccommodationForm} for the
 	 * administrator user.
 	 * 
 	 * @throws ObjectNotFoundException
 	 *             Thrown if the special administrator user is not found.
 	 */
 	@Test
-	public void testDisabilityIntakeServiceFromLoadForPersonFromDatabaseForAdminUser()
+	public void testAccommodationServiceFromLoadForPersonFromDatabaseForAdminUser()
 			throws ObjectNotFoundException {
-		final DisabilityIntakeForm form = service
+		final AccommodationForm form = service
 				.loadForPerson(Person.SYSTEM_ADMINISTRATOR_ID);
 		assertNotNull("Admin user could not be loaded.", form.getPerson());
 		assertNotNull("Admin user loaded but was missing the Person instance.",
@@ -120,7 +119,7 @@ public class DisabilityIntakeServiceIntegrationTest {
 
 	/**
 	 * Massive integration test that creates, fills, and asserts the correct
-	 * insertion of a {@link DisabilityIntakeService#save(DisabilityIntakeForm)} all the way
+	 * insertion of a {@link AccommodationService#save(org.jasig.ssp.model.tool.AccommodationForm)} all the way
 	 * through the service, DAO, and model layers.
 	 * 
 	 * @throws ObjectNotFoundException
@@ -128,7 +127,7 @@ public class DisabilityIntakeServiceIntegrationTest {
 	 *             found in the database.
 	 */
 	@Test
-	public void testDisabilityIntakeServiceForNewUser() throws ObjectNotFoundException { // NOPMD
+	public void testAccommodationServiceForNewUser() throws ObjectNotFoundException { // NOPMD
 		// From test database, see the test liquibase XML
 		final UUID testDisabilityAgencyId = UUID
 				.fromString("7f92b5bb-8e9c-44c7-88fd-2ffdce68ef98");
@@ -154,17 +153,17 @@ public class DisabilityIntakeServiceIntegrationTest {
 
 		assertNotNull("New person did not save and reload correctly", person);
 
-		// initialize the DisabilityIntakeForm with the recently created Person
+		// initialize the AccommodationForm with the recently created Person
 		// instance
-		DisabilityIntakeForm form = service.loadForPerson(id);
+		AccommodationForm form = service.loadForPerson(id);
 
-		assertNotNull("DisabilityIntakeForm could not be initialized correctly.", form);
+		assertNotNull("AccommodationForm could not be initialized correctly.", form);
 		assertNotNull("Recently created user could not be loaded.",
 				form.getPerson());
 
 		person = form.getPerson(); // refresh
 
-		// Setup - fill the DisabilityIntakeForm with test data
+		// Setup - fill the AccommodationForm with test data
 
 		final PersonDisability pd1 = new PersonDisability();
 		final DisabilityStatus ds1 = disabilityStatusService.get(DISABILITY_STATUS_ID);
@@ -178,13 +177,13 @@ public class DisabilityIntakeServiceIntegrationTest {
 		person.getDisabilityAgencies().add(pda1);
 
 		// Run
-		assertTrue("DisabilityIntakeFormService did not return success (true).",
+		assertTrue("AccommodationService did not return success (true).",
 				service.save(form));
 
 		// Re-load form
 		form = service.loadForPerson(id);
 
-		assertNotNull("DisabilityIntakeForm could not be initialized correctly.", form);
+		assertNotNull("AccommodationForm could not be initialized correctly.", form);
 		assertNotNull("Recently created user could not be loaded.",
 				form.getPerson());
 
@@ -210,7 +209,7 @@ public class DisabilityIntakeServiceIntegrationTest {
 				TEST_STRING3, pda3.getDescription());
 
 		// Remove Person completely (not just mark deleted) which should
-		// delete all child objects created by the DisabilityIntakeFormService
+		// delete all child objects created by the AccommodationService
 		personDao.delete(person);
 
 		try {

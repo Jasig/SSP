@@ -16,11 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.controller.tool.disabilityintake.GeneralViewController', {
-    extend: 'Deft.mvc.ViewController',
-    mixins: [ 'Deft.mixin.Injectable' ],
-	init: function() {
-		var me=this;
+Ext.define('Ssp.view.tools.accommodation.Accommodations', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.disabilityaccommodations',
+	id:'AccommodationDisabilityAccommodations',
+    width: '100%',
+    height: '100%',
+    autoScroll: true,
+	initComponent: function() {	
+        var me = this;
+		Ext.apply(me, 
+				{
+				    bodyPadding: 10,
+				    border: 0,
+				    layout: 'anchor',
+				    defaults: {
+				        anchor: '95%'
+				    },
+				    defaultType: 'checkbox'
+				});
+		
 		return me.callParent(arguments);
-    }
+	}
 });

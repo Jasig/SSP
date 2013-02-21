@@ -1,4 +1,4 @@
-/*
+/**
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,26 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.tools.disabilityintake.Accommodations', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.disabilityaccommodations',
-	id:'DisabilityIntakeDisabilityAccommodations',
-    width: '100%',
-    height: '100%',
-    autoScroll: true,
-	initComponent: function() {	
-        var me = this;
-		Ext.apply(me, 
-				{
-				    bodyPadding: 10,
-				    border: 0,
-				    layout: 'anchor',
-				    defaults: {
-				        anchor: '95%'
-				    },
-				    defaultType: 'checkbox'
-				});
-		
-		return me.callParent(arguments);
-	}
-});
+package org.jasig.ssp.factory.tool;
+
+import org.jasig.ssp.model.tool.AccommodationForm;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.tool.AccommodationFormTO;
+import org.jasig.ssp.web.api.validation.ValidationException;
+
+public interface AccommodationFormTOFactory {
+	AccommodationFormTO from(AccommodationForm model);
+
+	AccommodationForm from(AccommodationFormTO tObject) throws ObjectNotFoundException, ValidationException;
+}

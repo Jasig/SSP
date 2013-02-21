@@ -24,21 +24,21 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.jasig.ssp.factory.tool.DisabilityIntakeFormTOFactory;
+import org.jasig.ssp.factory.tool.AccommodationFormTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.tool.DisabilityIntakeForm;
+import org.jasig.ssp.model.tool.AccommodationForm;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.DisabilityAgencyService;
 import org.jasig.ssp.service.reference.DisabilityAccommodationService;
 import org.jasig.ssp.service.reference.DisabilityStatusService;
 import org.jasig.ssp.service.reference.DisabilityTypeService;
-import org.jasig.ssp.service.tool.DisabilityIntakeService;
+import org.jasig.ssp.service.tool.AccommodationService;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.DisabilityAgencyTO;
 import org.jasig.ssp.transferobject.reference.DisabilityAccommodationTO;
 import org.jasig.ssp.transferobject.reference.DisabilityStatusTO;
 import org.jasig.ssp.transferobject.reference.DisabilityTypeTO;
-import org.jasig.ssp.transferobject.tool.DisabilityIntakeFormTO;
+import org.jasig.ssp.transferobject.tool.AccommodationFormTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.AbstractBaseController;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -54,22 +54,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Disability Intake tool services
+ * Accommodation tool services
  * <p>
- * Mapped to URI path <code>/1/tool/disabilityIntake</code>
+ * Mapped to URI path <code>/1/tool/accommodation</code>
  */
 @Controller
-@RequestMapping("/1/tool/disabilityIntake")
-public class DisabilityIntakeController extends AbstractBaseController {
+@RequestMapping("/1/tool/accommodation")
+public class AccommodationController extends AbstractBaseController {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(DisabilityIntakeController.class);
+			.getLogger(AccommodationController.class);
 
 	@Autowired
-	private transient DisabilityIntakeService service;
+	private transient AccommodationService service;
 
 	@Autowired
-	private transient DisabilityIntakeFormTOFactory factory;
+	private transient AccommodationFormTOFactory factory;
 
 	@Autowired
 	private transient DisabilityAgencyService disabilityAgencyService;
@@ -84,32 +84,32 @@ public class DisabilityIntakeController extends AbstractBaseController {
 	private transient DisabilityTypeService disabilityTypeService;
 
 	/**
-	 * Save changes to a DisabilityIntakeForm
+	 * Save changes to a AccommodationForm
 	 * 
 	 * @param studentId
 	 *            Student identifier
-	 * @param intakeForm
+	 * @param accommodationForm
 	 *            Incoming data
 	 * @return Service response with success value, in the JSON format.
 	 * @throws ValidationException
-	 *             If IntakeForm data was not valid.
+	 *             If form data was not valid.
 	 * @throws ObjectNotFoundException
 	 *             If any reference look up data couldn't be loaded.
 	 */
-	@PreAuthorize("hasRole('ROLE_DISABILITY_INTAKE_WRITE')")
+	@PreAuthorize("hasRole('ROLE_ACCOMMODATION_WRITE')")
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.PUT)
 	public @ResponseBody
 	ServiceResponse save(final @PathVariable UUID studentId,
-			final @Valid @RequestBody DisabilityIntakeFormTO disabilityIntakeForm)
+			final @Valid @RequestBody AccommodationFormTO accommodationForm)
 			throws ObjectNotFoundException, ValidationException {
-		final DisabilityIntakeForm model = factory.from(disabilityIntakeForm);
+		final AccommodationForm model = factory.from(accommodationForm);
 		model.getPerson().setId(studentId);
 		return new ServiceResponse(service.save(model));
 	}
 
 	/**
-	 * Using the studentId passed, return the DisabilityIntakeForm in its current state,
-	 * creating it if necessary.
+	 * Using the studentId passed, return the {@link AccommodationFormTO} in its
+	 * current state, creating it if necessary.
 	 * 
 	 * @param studentId
 	 *            Student identifier Any errors will throw this generic
@@ -119,18 +119,18 @@ public class DisabilityIntakeController extends AbstractBaseController {
 	 *             If any reference data could not be loaded.
 	 */
 	@RequestMapping(value = "/{studentId}", method = RequestMethod.GET)
-	@PreAuthorize("hasRole('ROLE_DISABILITY_INTAKE_READ')")
+	@PreAuthorize("hasRole('ROLE_ACCOMMODATION_READ')")
 	public @ResponseBody
-	DisabilityIntakeFormTO load(final @PathVariable UUID studentId)
+	AccommodationFormTO load(final @PathVariable UUID studentId)
 			throws ObjectNotFoundException {
-		final DisabilityIntakeFormTO formTO = new DisabilityIntakeFormTO(
+		final AccommodationFormTO formTO = new AccommodationFormTO(
 				service.loadForPerson(studentId));
 		formTO.setReferenceData(referenceData());
 		return formTO;
 	}
 
 	/**
-	 * Return all the data that is necessary to complete a disability intake form.
+	 * Return all the data that is necessary to complete an accommodation form.
 	 * 
 	 * @return Service response with success value, in the JSON format.
 	 */

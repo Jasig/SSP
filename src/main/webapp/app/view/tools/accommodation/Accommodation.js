@@ -16,16 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.tools.disabilityintake.DisabilityIntake', {
+Ext.define('Ssp.view.tools.accommodation.Accommodation', {
 	extend: 'Ext.panel.Panel',
-	alias : 'widget.disabilityintake',
+	alias : 'widget.accommodation',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewController',
+    controller: 'Ssp.controller.tool.accommodation.AccommodationToolViewController',
     inject: {
     	authenticatedPerson: 'authenticatedPerson'
     },
-	title: 'Disability Intake',	
+	title: 'Accommodation',
 	width: '100%',
 	height: '100%',
 	initComponent: function() {	
@@ -42,12 +42,12 @@ Ext.define('Ssp.view.tools.disabilityintake.DisabilityIntake', {
 				        			xtype: 'button', 
 				        			itemId: 'saveButton', 
 				        			text:'Save',
-				        			hidden: !me.authenticatedPerson.hasAccess('DISABILITY_INTAKE_SAVE_BUTTON'),
+				        			hidden: !me.authenticatedPerson.hasAccess('ACCOMMODATION_SAVE_BUTTON')
 				        	   },{
 					        	     xtype: 'button', 
 					        	     itemId: 'cancelButton', 
 					        	     text:'Cancel',
-					        	     hidden: !me.authenticatedPerson.hasAccess('DISABILITY_INTAKE_CANCEL_BUTTON'),
+					        	     hidden: !me.authenticatedPerson.hasAccess('ACCOMMODATION_CANCEL_BUTTON')
 				        	   },{
 				        	    	xtype: 'label',
 				        	    	html: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE,

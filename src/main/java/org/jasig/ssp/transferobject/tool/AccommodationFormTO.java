@@ -23,7 +23,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.jasig.ssp.model.tool.DisabilityIntakeForm;
+import org.jasig.ssp.model.tool.AccommodationForm;
 import org.jasig.ssp.transferobject.PersonDisabilityTO;
 import org.jasig.ssp.transferobject.PersonDisabilityAgencyTO;
 import org.jasig.ssp.transferobject.PersonDisabilityAccommodationTO;
@@ -32,9 +32,9 @@ import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.TransferObject;
 
 /**
- * IntakeForm transfer object
+ * Accommodation tool form transfer object
  */
-public class DisabilityIntakeFormTO implements TransferObject<DisabilityIntakeForm> { // NOPMD
+public class AccommodationFormTO implements TransferObject<AccommodationForm> { // NOPMD
 
 	@Valid
 	private PersonTO person;
@@ -53,17 +53,17 @@ public class DisabilityIntakeFormTO implements TransferObject<DisabilityIntakeFo
 	
 	private Map<String, Object> referenceData;
 
-	public DisabilityIntakeFormTO() {
+	public AccommodationFormTO() {
 		super();
 	}
 
-	public DisabilityIntakeFormTO(final DisabilityIntakeForm model) {
+	public AccommodationFormTO(final AccommodationForm model) {
 		super();
 		from(model);
 	}
 
 	@Override
-	public final void from(final DisabilityIntakeForm model) { // NOPMD
+	public final void from(final AccommodationForm model) { // NOPMD
 		if (model.getPerson() != null) {
 			person = new PersonTO(model.getPerson());
 		}

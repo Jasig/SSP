@@ -16,26 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.tools.disabilityintake.DisabilityTypes', {
-	extend: 'Ext.form.Panel',
-	alias: 'widget.disabilitytypes',
-	id: 'DisabilityIntakeDisabilityTypes',
-    width: '100%',
-    height: '100%',
-    autoScroll: true,
-	initComponent: function() {	
-        var me = this;
-		Ext.apply(me, 
-				{
-				    bodyPadding: 10,
-				    border: 0,
-				    layout: 'anchor',
-				    defaults: {
-				        anchor: '95%'
-				    },
-				    defaultType: 'checkbox'
-				});
-		
-		return me.callParent(arguments);
-	}
+Ext.define('Ssp.model.tool.accommodation.PersonDisabilityType', {
+	extend: 'Ssp.model.AbstractBase',
+    fields: ['personId',
+             'disabilityTypeId']
 });

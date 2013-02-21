@@ -40,7 +40,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.transferobject.PersonDisabilityTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
-import org.jasig.ssp.transferobject.tool.DisabilityIntakeFormTO;
+import org.jasig.ssp.transferobject.tool.AccommodationFormTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,7 +55,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.collect.Lists;
 
 /**
- * {@link DisabilityIntakeController} tests
+ * {@link AccommodationController} tests
  * 
  * @author shawn.gormley
  */
@@ -63,10 +63,10 @@ import com.google.common.collect.Lists;
 @ContextConfiguration("../../ControllerIntegrationTests-context.xml")
 @TransactionConfiguration
 @Transactional
-public class DisabilityIntakeControllerIntegrationTest {
+public class AccommodationControllerIntegrationTest {
 
 	@Autowired
-	private transient DisabilityIntakeController controller;
+	private transient AccommodationController controller;
 
 	@Autowired
 	private transient PersonService personService;
@@ -94,7 +94,7 @@ public class DisabilityIntakeControllerIntegrationTest {
 	}
 
 	/**
-	 * Test the {@link DisabilityIntakeController#load(UUID)} action.
+	 * Test the {@link AccommodationController#load(UUID)} action.
 	 * 
 	 * @throws ObjectNotFoundException
 	 *             Thrown if any of the expected test data identifiers are not
@@ -106,10 +106,10 @@ public class DisabilityIntakeControllerIntegrationTest {
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
-		final DisabilityIntakeFormTO obj = controller.load(STUDENT_ID);
+		final AccommodationFormTO obj = controller.load(STUDENT_ID);
 
 		assertNotNull(
-				"Returned DisabilityIntakeFormTO from the controller should not have been null.",
+				"Returned AccommodationFormTO from the controller should not have been null.",
 				obj);
 
 		assertEquals("Returned Person.FirstName did not match.",
@@ -117,7 +117,7 @@ public class DisabilityIntakeControllerIntegrationTest {
 	}
 
 	/**
-	 * Test the {@link DisabilityIntakeController#save(UUID, DisabilityIntakeFormTO)} action.
+	 * Test the {@link AccommodationController#save(UUID, org.jasig.ssp.transferobject.tool.AccommodationFormTO)} action.
 	 * 
 	 * @throws ObjectNotFoundException
 	 *             Thrown if lookup data could not be found.
@@ -128,7 +128,7 @@ public class DisabilityIntakeControllerIntegrationTest {
 	public void testControllerSave() throws ObjectNotFoundException,
 			ValidationException {
 		// arrange
-		final DisabilityIntakeFormTO obj = new DisabilityIntakeFormTO();
+		final AccommodationFormTO obj = new AccommodationFormTO();
 		final Person person = personService.get(STUDENT_ID);
 		obj.setPerson(personTOFactory.from(person));
 
@@ -179,7 +179,7 @@ public class DisabilityIntakeControllerIntegrationTest {
 
 		// assert
 		assertNotNull(
-				"Returned DisabilityIntakeFormTO from the controller should not have been null.",
+				"Returned AccommodationFormTO from the controller should not have been null.",
 				response);
 
 		assertTrue("Result should have returned success.",
@@ -187,7 +187,7 @@ public class DisabilityIntakeControllerIntegrationTest {
 	}
 
 	/**
-	 * Test the {@link DisabilityIntakeController#referenceData()} action.
+	 * Test the {@link AccommodationController#referenceData()} action.
 	 * 
 	 * This test assumes that there is at least 1 valid, active
 	 * DisabilityAgency in the test database.

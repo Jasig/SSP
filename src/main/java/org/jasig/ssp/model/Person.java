@@ -496,7 +496,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	private Set<PersonChallenge> challenges;
 
 	/**
-	 * Disability intake for a student.
+	 * Disability record for a student.
 	 * 
 	 * Should be null for non-student users.
 	 */

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.tool.disabilityintake.DisabilityIntakeForm', {
+Ext.define('Ssp.model.tool.accommodation.AccommodationForm', {
 	extend: 'Ext.data.Model',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
@@ -32,7 +32,7 @@ Ext.define('Ssp.model.tool.disabilityintake.DisabilityIntakeForm', {
              },
               {name: 'personDisability', 
    		      convert: function(value, record) {
-		            var personDisability = Ext.create('Ssp.model.tool.disabilityintake.PersonDisability',{});
+		            var personDisability = Ext.create('Ssp.model.tool.accommodation.PersonDisability',{});
 		            personDisability.populateFromGenericObject( value );
 		            if (value !== null)
 		            {
@@ -49,7 +49,7 @@ Ext.define('Ssp.model.tool.disabilityintake.DisabilityIntakeForm', {
 	autoLoad: false,
  	proxy: {
 		type: 'rest',
-		url: '/ssp/api/1/tool/disabilityIntake/',
+		url: '/ssp/api/1/tool/accommodation/',
 		actionMethods: {
 			create: "POST", 
 			read: "GET", 

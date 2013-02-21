@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,15 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.factory.tool;
-
-import org.jasig.ssp.model.tool.DisabilityIntakeForm;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.tool.DisabilityIntakeFormTO;
-import org.jasig.ssp.web.api.validation.ValidationException;
-
-public interface DisabilityIntakeFormTOFactory {
-	DisabilityIntakeFormTO from(DisabilityIntakeForm model);
-
-	DisabilityIntakeForm from(DisabilityIntakeFormTO tObject) throws ObjectNotFoundException, ValidationException;
-}
+Ext.define('Ssp.view.tools.accommodation.DisabilityTypes', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.disabilitytypes',
+	id: 'AccommodationDisabilityTypes',
+    width: '100%',
+    height: '100%',
+    autoScroll: true,
+	initComponent: function() {	
+        var me = this;
+		Ext.apply(me, 
+				{
+				    bodyPadding: 10,
+				    border: 0,
+				    layout: 'anchor',
+				    defaults: {
+				        anchor: '95%'
+				    },
+				    defaultType: 'checkbox'
+				});
+		
+		return me.callParent(arguments);
+	}
+});

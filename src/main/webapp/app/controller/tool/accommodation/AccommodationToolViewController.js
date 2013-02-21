@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewController', {
+Ext.define('Ssp.controller.tool.accommodation.AccommodationToolViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
@@ -26,15 +26,15 @@ Ext.define('Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewControl
     	formUtils: 'formRendererUtils',
     	disabilityAccommodationsStore: 'disabilityAccommodationsStore',
     	disabilityAgenciesStore: 'disabilityAgenciesStore',
-    	disabilityIntake: 'currentDisabilityIntake',
+    	accommodation: 'currentAccommodation',
     	disabilityStatusesStore: 'disabilityStatusesStore',
     	disabilityTypesStore: 'disabilityTypesStore',
         personLite: 'personLite',
         person: 'currentPerson',
-        service: 'disabilityIntakeService', 	       
+        service: 'accommodationService'
     }, 
     config: {
-    	disabilityIntakeForm: null
+    	accommodationForm: null
     },
     control: {
 		'saveButton': {
@@ -54,7 +54,7 @@ Ext.define('Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewControl
 		// Load the views dynamically
 		// otherwise duplicate id's will be registered
 		// on cancel
-		me.initDisabilityIntakeViews();
+		me.initAccommodationViews();
 	
 		// This enables mapped text fields and mapped text areas
 		// to be shown or hidden upon selection from a parent object
@@ -98,8 +98,8 @@ Ext.define('Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewControl
 		me.getView().setLoading( true );
 		
 		me.service.get(me.personLite.get('id'),{
-			success: me.getDisabilityIntakeSuccess,
-			failure: me.getDisabilityIntakeFailure,
+			success: me.getAccommodationSuccess,
+			failure: me.getAccommodationFailure,
 			scope: me
 		});
 		
@@ -112,7 +112,7 @@ Ext.define('Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewControl
         return this.callParent( arguments );
     },     
     
-    initDisabilityIntakeViews: function(){
+    initAccommodationViews: function(){
     	var me=this;
     	var items = [ Ext.createWidget('tabpanel', {
 	        width: '100%',
@@ -146,29 +146,29 @@ Ext.define('Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewControl
     	me.getView().add( items );
     },
     
-    getDisabilityIntakeSuccess: function( r, scope ){
+    getAccommodationSuccess: function( r, scope ){
     	var me=scope;
-    	var disabilityIntakeClass;
+    	var accommodationClass;
 		
     	// hide the loader
     	me.getView().setLoading( false );
     	
     	if ( r != null )
-    	{  		
-        	disabilityIntakeClass = Ext.ModelManager.getModel('Ssp.model.tool.disabilityintake.DisabilityIntakeForm');
-    		me.disabilityIntake.data = disabilityIntakeClass.getProxy().getReader().read( r ).records[0].data;
-    		me.buildDisabilityIntake( me.disabilityIntake );    		
+    	{
+            accommodationClass = Ext.ModelManager.getModel('Ssp.model.tool.accommodation.AccommodationForm');
+    		me.accommodation.data = accommodationClass.getProxy().getReader().read( r ).records[0].data;
+    		me.buildAccommodation( me.accommodation );
     	}else{
-    		Ext.Msg.alert('Error','There was an error loading the Disability Intake form for this student.');
+    		Ext.Msg.alert('Error','There was an error loading the Accommodation form for this student.');
     	}
 	},
 	
-	getDisabilityIntakeFailure: function( response, scope){
+	getAccommodationFailure: function( response, scope){
 		var me=scope;
 		me.getView().setLoading( false );
 	},
     
-	buildDisabilityIntake: function( formData ){
+	buildAccommodation: function( formData ){
 		var me=this; // formData
 		
     	// PERSON RECORD
@@ -178,9 +178,9 @@ Ext.define('Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewControl
 		var personDisabilityTypes = formData.data.personDisabilityTypes;
 		var personDisabilityAccommodations = formData.data.personDisabilityAccommodations;
 		
-		var disabilityIntakeGeneralForm = Ext.getCmp('DisabilityIntakeGeneral');
-		var disabilityIntakeAgencyContactNameForm = Ext.getCmp('DisabilityIntakeAgencyContactName');
-		var disabilityIntakeDispositionForm = Ext.getCmp('DisabilityIntakeDisposition');
+		var accommodationGeneralForm = Ext.getCmp('AccommodationGeneral');
+		var accommodationAgencyContactNameForm = Ext.getCmp('AccommodationAgencyContactName');
+		var accommodationDispositionForm = Ext.getCmp('AccommodationDisposition');
 		
 		/*
 		 * For drawing reference check boxes dynamically
@@ -207,15 +207,15 @@ Ext.define('Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewControl
 		// LOAD RECORDS FOR EACH OF THE FORMS
 		
 		if ( personDisability != null && personDisability != undefined ){
-			disabilityIntakeGeneralForm.loadRecord( personDisability );
+			accommodationGeneralForm.loadRecord( personDisability );
 		}
 		
 		if ( personDisability != null && personDisability != undefined ){
-			disabilityIntakeAgencyContactNameForm.loadRecord( personDisability );
+			accommodationAgencyContactNameForm.loadRecord( personDisability );
 		}
 		
 		if ( personDisability != null && personDisability != undefined ){
-			disabilityIntakeDispositionForm.loadRecord( personDisability );
+			accommodationDispositionForm.loadRecord( personDisability );
 		}	
 
 		defaultLabelWidth = 150;
@@ -231,7 +231,7 @@ Ext.define('Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewControl
 		
 		disabilityAgencyFormProps = {
 				mainComponentType: 'checkbox',
-				formId: 'DisabilityIntakeDisabilityAgencies',
+				formId: 'AccommodationDisabilityAgencies',
                 fieldSetTitle: 'Select all agencies that apply',
                 itemsArr: disabilityAgencies, 
                 selectedItemsArr: personDisabilityAgencies, 
@@ -261,7 +261,7 @@ Ext.define('Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewControl
 		
 		disabilityTypesFormProps = {
 		mainComponentType: 'checkbox',
-		formId: 'DisabilityIntakeDisabilityTypes', 
+		formId: 'AccommodationDisabilityTypes',
 		fieldSetTitle: 'Select all that apply',
 		itemsArr: disabilityTypes, 
 		selectedItemsArr: personDisabilityTypes, 
@@ -304,7 +304,7 @@ Ext.define('Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewControl
 		
 		disabilityAccommodationsFormProps = {
 			mainComponentType: 'checkbox',
-			formId: 'DisabilityIntakeDisabilityAccommodations', 
+			formId: 'AccommodationDisabilityAccommodations',
 			fieldSetTitle: 'Select all that apply',
 			itemsArr: disabilityAccommodations, 
 			selectedItemsArr: personDisabilityAccommodations, 
@@ -319,22 +319,22 @@ Ext.define('Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewControl
 		var me=this;
 		var formUtils = me.formUtils;
 
-		var disabilityForm = Ext.getCmp('DisabilityIntakeGeneral').getForm();
-		var disabilityIntakeAgencyContactNameForm = Ext.getCmp('DisabilityIntakeAgencyContactName').getForm();
-		var disabilityDispositionForm = Ext.getCmp('DisabilityIntakeDisposition').getForm();
-		var disabilityAgenciesForm = Ext.getCmp('DisabilityIntakeDisabilityAgencies').getForm();		
-		var disabilityTypesForm = Ext.getCmp('DisabilityIntakeDisabilityTypes').getForm();		
-		var disabilityAccommodationsForm = Ext.getCmp('DisabilityIntakeDisabilityAccommodations').getForm();		
+		var accommodationForm = Ext.getCmp('AccommodationGeneral').getForm();
+		var disabilityAgencyContactNameForm = Ext.getCmp('AccommodationAgencyContactName').getForm();
+		var disabilityDispositionForm = Ext.getCmp('AccommodationDisposition').getForm();
+		var disabilityAgenciesForm = Ext.getCmp('AccommodationDisabilityAgencies').getForm();
+		var disabilityTypesForm = Ext.getCmp('AccommodationDisabilityTypes').getForm();
+		var disabilityAccommodationsForm = Ext.getCmp('AccommodationDisabilityAccommodations').getForm();
 
 		var disabilityAgenciesFormValues = null;
 		var disabilityAccommodationsFormValues = null;
 		var disabilityTypesFormValues = null;
-		var disabilityIntakeFormModel = null;
+		var accommodationFormModel = null;
 		var personId = "";
-		var disabilityIntakeData = {};
+		var accommodationData = {};
 		
-		var formsToValidate = [disabilityForm,
-		             disabilityIntakeAgencyContactNameForm,
+		var formsToValidate = [accommodationForm,
+		             disabilityAgencyContactNameForm,
 		             disabilityDispositionForm,
 		             disabilityAgenciesForm,
 		             disabilityAccommodationsForm,
@@ -345,62 +345,62 @@ Ext.define('Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewControl
 		if ( validateResult.valid )
 		{
 			// update the model with changes from the forms
-			disabilityForm.updateRecord( me.disabilityIntake.get('personDisability') );
+            accommodationForm.updateRecord( me.accommodation.get('personDisability') );
 	
 			// update the model with changes from the forms
-			disabilityIntakeAgencyContactNameForm.updateRecord( me.disabilityIntake.get('personDisability') );			
+            disabilityAgencyContactNameForm.updateRecord( me.accommodation.get('personDisability') );
 
 			// update the model with changes from the forms
-			disabilityDispositionForm.updateRecord( me.disabilityIntake.get('personDisability') );			
+			disabilityDispositionForm.updateRecord( me.accommodation.get('personDisability') );
 			
 			// save the full model
-			personId = me.disabilityIntake.get('person').data.id;
-			disabilityIntakeData = {
-				person: me.disabilityIntake.get('person').data,
-				personDisability: me.disabilityIntake.get('personDisability').data,
+			personId = me.accommodation.get('person').data.id;
+			accommodationData = {
+				person: me.accommodation.get('person').data,
+				personDisability: me.accommodation.get('personDisability').data,
 				personDisabilityAgencies: [],
 				personDisabilityAccommodations: [],
 				personDisabilityTypes: []
 			};
 						
 			// date saved as null is ok 
-			if (disabilityIntakeData.personDisability.eligibleLetterDate != null)
+			if (accommodationData.personDisability.eligibleLetterDate != null)
 			{
 				// account for date offset
-				disabilityIntakeData.personDisability.eligibleLetterDate = me.formUtils.fixDateOffset( disabilityIntakeData.personDisability.eligibleLetterDate );			
+				accommodationData.personDisability.eligibleLetterDate = me.formUtils.fixDateOffset( accommodationData.personDisability.eligibleLetterDate );
 			}
 
 			// date saved as null is ok 
-			if (disabilityIntakeData.personDisability.ineligibleLetterDate != null)
+			if (accommodationData.personDisability.ineligibleLetterDate != null)
 			{
 				// account for date offset
-				disabilityIntakeData.personDisability.ineligibleLetterDate = me.formUtils.fixDateOffset( disabilityIntakeData.personDisability.ineligibleLetterDate );			
+                accommodationData.personDisability.ineligibleLetterDate = me.formUtils.fixDateOffset( accommodationData.personDisability.ineligibleLetterDate );
 			}			
 			
 			// cleans properties that will be unable to be saved if not null
 			// arrays set to strings should be null rather than string in saved
 			// json
-			disabilityIntakeData.person = me.person.setPropsNullForSave( disabilityIntakeData.person );			
-			
-			disabilityIntakeData.personDisability.personId = personId;
+            accommodationData.person = me.person.setPropsNullForSave( accommodationData.person );
+
+            accommodationData.personDisability.personId = personId;
 			// Clean personDisability props that won't save as empty string
-			disabilityIntakeData.personDisability = me.disabilityIntake.get('personDisability').setPropsNullForSave( disabilityIntakeData.personDisability );			
+            accommodationData.personDisability = me.accommodation.get('personDisability').setPropsNullForSave( accommodationData.personDisability );
 			
 			disabilityAgenciesFormValues = disabilityAgenciesForm.getValues();
-			disabilityIntakeData.personDisabilityAgencies = formUtils.createTransferObjectsFromSelectedValues('disabilityAgencyId', disabilityAgenciesFormValues, personId);
+            accommodationData.personDisabilityAgencies = formUtils.createTransferObjectsFromSelectedValues('disabilityAgencyId', disabilityAgenciesFormValues, personId);
 
 			disabilityTypesFormValues = disabilityTypesForm.getValues();
-			disabilityIntakeData.personDisabilityTypes = formUtils.createTransferObjectsFromSelectedValues('disabilityTypeId', disabilityTypesFormValues, personId);
+            accommodationData.personDisabilityTypes = formUtils.createTransferObjectsFromSelectedValues('disabilityTypeId', disabilityTypesFormValues, personId);
 			
 			disabilityAccommodationsFormValues = disabilityAccommodationsForm.getValues();
-			disabilityIntakeData.personDisabilityAccommodations = formUtils.createTransferObjectsFromSelectedValues('disabilityAccommodationId', disabilityAccommodationsFormValues, personId);
+            accommodationData.personDisabilityAccommodations = formUtils.createTransferObjectsFromSelectedValues('disabilityAccommodationId', disabilityAccommodationsFormValues, personId);
 			
 			// display loader
 			me.getView().setLoading( true );
 			
-			me.service.save(me.personLite.get('id'), disabilityIntakeData, {
-				success: me.saveDisabilityIntakeSuccess,
-				failure: me.saveDisabilityIntakeFailure,
+			me.service.save(me.personLite.get('id'), accommodationData, {
+				success: me.saveAccommodationSuccess,
+				failure: me.saveAccommodationFailure,
 				scope: me
 			});
 
@@ -409,7 +409,7 @@ Ext.define('Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewControl
 		}
 	},
 	
-	saveDisabilityIntakeSuccess: function(r, scope) {
+	saveAccommodationSuccess: function(r, scope) {
 		var me=scope;
 
 		me.getView().setLoading( false );
@@ -419,7 +419,7 @@ Ext.define('Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewControl
 		}								
 	},
 	
-	saveDisabilityIntakeFailure: function(response, scope) {
+	saveAccommodationFailure: function(response, scope) {
 		var me=scope;
 		me.getView().setLoading( false );							
 	},	
@@ -427,7 +427,7 @@ Ext.define('Ssp.controller.tool.disabilityintake.DisabilityIntakeToolViewControl
 	onCancelClick: function( button ){
 		var me=this;
 		me.getView().removeAll();
-		me.initDisabilityIntakeViews();
-		me.buildDisabilityIntake( me.disabilityIntake );	
+		me.initAccommodationViews();
+		me.buildAccommodation( me.accommodation );
 	}
 });
