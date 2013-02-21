@@ -198,7 +198,7 @@ public class EarlyAlertResponseDao extends
 	
 	@SuppressWarnings({ "unchecked" })
 	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(Date createDateFrom,
-			Date createDateTo, List<UUID> outcomes, String rosterStatus, Person coach) {
+			Date createDateTo, List<UUID> outcomes, String homeDepartment, Person coach) {
 		final Criteria query = createCriteria();
 		
 		if (createDateFrom != null) {
@@ -223,12 +223,23 @@ public class EarlyAlertResponseDao extends
 					Restrictions.eq("coach.id", coach.getId()));
 		}
 		
+		if(homeDepartment != null && homeDepartment.length() > 0)
+		{
+			 query.createAlias("coach.staffDetails","personStaffDetails");
+			 query.add(Restrictions.eq("personStaffDetails.departmentName", homeDepartment));
+		}else{
+			query.createAlias("coach.staffDetails","personStaffDetails", JoinType.LEFT_OUTER_JOIN);
+		}
+
+		
 		ProjectionList projections = Projections.projectionList().
 				add(Projections.groupProperty("earlyAlert.id").as("early_response_earlyAlertId"));
 		projections.add(Projections.groupProperty("coach.firstName").as("early_response_coachFirstName"));
 		projections.add(Projections.groupProperty("coach.middleName").as("early_response_coachMiddleName"));
 		projections.add(Projections.groupProperty("coach.lastName").as("early_response_coachLastName"));
 		projections.add(Projections.groupProperty("coach.id").as("early_response_coachId"));
+		projections.add(Projections.groupProperty("coach.schoolId").as("early_response_coachSchoolId"));
+		projections.add(Projections.groupProperty("personStaffDetails.departmentName").as("early_response_coachDepartmentName"));
 		query.createAlias("earlyAlertOutreachIds", "earlyAlertOutreachIds");
 		projections.add(Projections.groupProperty("earlyAlertOutreachIds.name").as("early_response_earlyAlertOutreachName"));
 		
@@ -295,6 +306,10 @@ public class EarlyAlertResponseDao extends
 		if(personSearchForm.getProgramStatus() == null)
 			criteria.createAlias("person.programStatuses",
 				"personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
+		if(personSearchForm.getHomeDepartment() == null
+				|| personSearchForm.getHomeDepartment().length() <= 0) {
+			criteria.createAlias("person.coach","c", JoinType.LEFT_OUTER_JOIN);
+		}
 		
 		addBasicStudentProperties(projections, criteria);
 		criteria.addOrder(Order.asc("person.lastName"));
@@ -340,8 +355,7 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		// add StudentTypeName Column
 		projections.add(Projections.groupProperty("studentType.name").as("early_alert_response_studentType"));
 		
-		criteria.createAlias("person.coach","c");
-
+		
 		Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
 		if ( dialect instanceof SQLServerDialect) {
 			// sql server requires all these to part of the grouping
@@ -409,65 +423,73 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 	
 	
 
-	private Criteria setPersonCriteria(Criteria criteria, PersonSearchFormTO addressLabelSearchTO){
-		if (addressLabelSearchTO.getCoach() != null
-				&& addressLabelSearchTO.getCoach().getId() != null) {
+	private Criteria setPersonCriteria(Criteria criteria, PersonSearchFormTO personSearchFormTO){
+		if (personSearchFormTO.getCoach() != null
+				&& personSearchFormTO.getCoach().getId() != null) {
 			// restrict to coach
 			criteria.add(Restrictions.eq("person.coach.id",
-					addressLabelSearchTO.getCoach().getId()));
+					personSearchFormTO.getCoach().getId()));
 		}
 		
 		
-		if (addressLabelSearchTO.getProgramStatus() != null) {	
+		if (personSearchFormTO.getHomeDepartment() != null
+				&& personSearchFormTO.getHomeDepartment().length() > 0) {
+			criteria.createAlias("person.coach", "c");
+			criteria.createAlias("c.staffDetails", "staffDetails");
+			criteria.add(Restrictions.eq("staffDetails.departmentName",
+					personSearchFormTO.getHomeDepartment()));
+		}
+		
+		if (personSearchFormTO.getProgramStatus() != null) {	
 			criteria.createAlias("person.programStatuses",
 					"personProgramStatuses");
 			criteria.add(Restrictions
 							.eq("personProgramStatuses.programStatus.id",
-									addressLabelSearchTO
+									personSearchFormTO
 											.getProgramStatus()));
 
 		}
 
-		if (addressLabelSearchTO.getSpecialServiceGroupIds() != null) {
+		if (personSearchFormTO.getSpecialServiceGroupIds() != null) {
 			criteria.createAlias("person.specialServiceGroups",
 					"personSpecialServiceGroups");
 			criteria.add(Restrictions
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
-									addressLabelSearchTO
+									personSearchFormTO
 											.getSpecialServiceGroupIds()));
 		}
 
-		if (addressLabelSearchTO.getReferralSourcesIds() != null) {
+		if (personSearchFormTO.getReferralSourcesIds() != null) {
 			criteria.createAlias("person.referralSources", "personReferralSources")
 					.add(Restrictions.in(
 							"personReferralSources.referralSource.id",
-							addressLabelSearchTO.getReferralSourcesIds()));
+							personSearchFormTO.getReferralSourcesIds()));
 		}
 
-		if (addressLabelSearchTO.getAnticipatedStartTerm() != null) {
+		if (personSearchFormTO.getAnticipatedStartTerm() != null) {
 			criteria.add(Restrictions.eq("person.anticipatedStartTerm",
-					addressLabelSearchTO.getAnticipatedStartTerm())
+					personSearchFormTO.getAnticipatedStartTerm())
 					.ignoreCase());
 		}
 
-		if (addressLabelSearchTO.getAnticipatedStartYear() != null) {
+		if (personSearchFormTO.getAnticipatedStartYear() != null) {
 			criteria.add(Restrictions.eq("person.anticipatedStartYear",
-					addressLabelSearchTO.getAnticipatedStartYear()));
+					personSearchFormTO.getAnticipatedStartYear()));
 		}
 
-		if (addressLabelSearchTO.getStudentTypeIds() != null) {
+		if (personSearchFormTO.getStudentTypeIds() != null) {
 			criteria.add(Restrictions.in("person.studentType.id",
-					addressLabelSearchTO.getStudentTypeIds()));
+					personSearchFormTO.getStudentTypeIds()));
 		}
 
-		if (addressLabelSearchTO.getCreateDateFrom() != null) {
+		if (personSearchFormTO.getCreateDateFrom() != null) {
 			criteria.add(Restrictions.ge("person.createdDate",
-					addressLabelSearchTO.getCreateDateFrom()));
+					personSearchFormTO.getCreateDateFrom()));
 		}
 
-		if (addressLabelSearchTO.getCreateDateTo() != null) {
+		if (personSearchFormTO.getCreateDateTo() != null) {
 			criteria.add(Restrictions.le("person.createdDate",
-					addressLabelSearchTO.getCreateDateTo()));
+					personSearchFormTO.getCreateDateTo()));
 		}
 
 		// don't bring back any non-students, there will likely be a better way

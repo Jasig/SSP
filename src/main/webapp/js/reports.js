@@ -90,6 +90,18 @@ var ssp = ssp || {};
 				});
 
 			}).error(function(jqXHR, textStatus, errorThrown) {
+				var headers = jqXHR.getAllResponseHeaders();
+				alert(headers + " " + textStatus + " " + errorThrown);
+			});
+		}
+		
+		var loadHomeDepartmentInput = function(url, container) {
+			$.getJSON(url, function(data) {
+				$.each(data, function(i, datum) {
+					addSelectItem(datum, datum, container);
+				});
+
+			}).error(function(jqXHR, textStatus, errorThrown) {
 				alert(jqXHR + " " + textStatus + " " + errorThrown);
 			});
 		}
@@ -134,7 +146,7 @@ var ssp = ssp || {};
 			loadTermInput("/ssp/api/1/reference/term/", that
 					.locate('termGroup'));
 			
-			loadReportYearInput("/ssp/api/1/reference/term/?sort=start_date&start=1&limit=10000&sortDirection=ASC", that
+			loadReportYearInput("/ssp/api/1/reference/term/?sort=startDate&start=1&limit=10000&sortDirection=ASC", that
 					.locate('reportYearGroup'));
 			
 			loadConfigInput("/ssp/api/1/reference/config/?name=status_code_mappings", that
@@ -144,7 +156,8 @@ var ssp = ssp || {};
 			loadCoachInput("/ssp/api/1/person/coach/?sort=lastName&page=1&start=0&limit=1000&sortDirection=ASC", that
 					.locate('assignedCounselorGroup'));			
 
-
+			loadHomeDepartmentInput("/ssp/api/1/personStaffDetails/homeDepartments", that
+					.locate('homeDepartmentGroup'))
 			loadTextForm(
 					"/ssp/api/1/reference/confidentialityDisclosureAgreement/",
 					that.locate('confidentialityAgreementFormContent'));
@@ -336,6 +349,7 @@ var ssp = ssp || {};
 							disabilityStatusGroup: '.input-disability-status-group',
 							disabilityTypeGroup: '.input-disability-type-group',
 							rosterStatusCodeGroup: '.input-roster-status-code-group',
+							homeDepartmentGroup: '.input-home-department-group',
 							calendarType : '.input-calendar-type',
 							switchDateRangeType : '.switch-date-range-type',
 							termRange : '.ea-term',

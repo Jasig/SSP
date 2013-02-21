@@ -499,6 +499,26 @@ public class PersonServiceImpl implements PersonService {
 						localPersonsLookupEnd - methodStart } );
 		return coaches;
 	}
+	
+	@Override
+	public PagingWrapper<CoachPersonLiteTO> getAllCoachesLite(final SortingAndPaging sAndP, String HomeDepartment) {
+		long methodStart = new Date().getTime();
+		final Collection<String> coachUsernames =
+				getAllCoachUsernamesFromDirectory();
+		long localPersonsLookupStart = new Date().getTime();
+		PagingWrapper<CoachPersonLiteTO> coaches =
+				dao.getCoachPersonsLiteByUsernames(coachUsernames, sAndP, HomeDepartment);
+		long localPersonsLookupEnd = new Date().getTime();
+		TIMING_LOGGER.info("Read {} local coaches in {} ms",
+				coaches.getResults(),
+				localPersonsLookupEnd - localPersonsLookupStart);
+		TIMING_LOGGER.info("Read {} PersonAttributesService coaches and"
+				+ " correlated them with {} local coaches in {} ms",
+				new Object[] { coachUsernames.size(), coaches.getResults(),
+						localPersonsLookupEnd - methodStart } );
+		
+		return coaches;
+	}
 
 	@Override
 	public PagingWrapper<Person> getAllCoaches(final SortingAndPaging sAndP) {
@@ -537,6 +557,11 @@ public class PersonServiceImpl implements PersonService {
 	public PagingWrapper<CoachPersonLiteTO> getAllAssignedCoachesLite(SortingAndPaging sAndP) {
 		return dao.getAllAssignedCoachesLite(sAndP);
 	}
+	
+	@Override
+	public PagingWrapper<CoachPersonLiteTO> getAllAssignedCoachesLite(SortingAndPaging sAndP, String homeDepartment) {
+		return dao.getAllAssignedCoachesLite(sAndP, homeDepartment);
+	}
 
 	@Override
 	public SortedSet<Person> getAllCurrentCoaches(Comparator<Person> sortBy) {
@@ -549,6 +574,8 @@ public class PersonServiceImpl implements PersonService {
 		currentCoachesSet.addAll(assignedCoaches);
 		return currentCoachesSet;
 	}
+	
+	
 
 	@Override
 	public SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(Comparator<CoachPersonLiteTO> sortBy) {
@@ -558,6 +585,18 @@ public class PersonServiceImpl implements PersonService {
 		currentCoachesSet.addAll(officialCoaches);
 		final Collection<CoachPersonLiteTO> assignedCoaches =
 				getAllAssignedCoachesLite(null).getRows();
+		currentCoachesSet.addAll(assignedCoaches);
+		return currentCoachesSet;
+	}
+	
+	@Override
+	public SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(Comparator<CoachPersonLiteTO> sortBy, String homeDepartment) {
+		final Collection<CoachPersonLiteTO> officialCoaches = getAllCoachesLite(null, homeDepartment).getRows();
+		SortedSet<CoachPersonLiteTO> currentCoachesSet =
+				Sets.newTreeSet(sortBy == null ? CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_AND_ID_COMPARATOR : sortBy);
+		currentCoachesSet.addAll(officialCoaches);
+		final Collection<CoachPersonLiteTO> assignedCoaches =
+				getAllAssignedCoachesLite(null, homeDepartment).getRows();
 		currentCoachesSet.addAll(assignedCoaches);
 		return currentCoachesSet;
 	}

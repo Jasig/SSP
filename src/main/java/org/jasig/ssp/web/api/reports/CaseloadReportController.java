@@ -175,7 +175,7 @@ public class CaseloadReportController extends ReportBaseController {
 		
 		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
 
-		final List<CaseLoadReportTO> caseLoadReportList = collectCaseLoadReportTOs(cleanStudentTypeIds);		
+		final List<CaseLoadReportTO> caseLoadReportList = collectCaseLoadReportTOs(cleanStudentTypeIds, homeDepartment);		
 		final Map<String, Object> parameters = collectParamsForReport(cleanStudentTypeIds, homeDepartment);
 
 		generateReport(response, parameters, caseLoadReportList, REPORT_URL,
@@ -184,11 +184,11 @@ public class CaseloadReportController extends ReportBaseController {
 	}
 
 	private List<CaseLoadReportTO> collectCaseLoadReportTOs(
-			List<UUID> studentTypeIds) {
+			List<UUID> studentTypeIds, String homeDepartment) {
 		List<CaseLoadReportTO> caseLoadReportList = Lists.newArrayList();
 
 		final Collection<CoachCaseloadRecordCountForProgramStatus> countsByCoachAndStatus = caseLoadService
-				.currentCaseloadCountsByStatus(studentTypeIds);
+				.currentCaseloadCountsByStatus(studentTypeIds, homeDepartment);
 		UUID currentCoachId = null;
 		CaseLoadReportTO caseLoadReportTO = null;
 		for (CoachCaseloadRecordCountForProgramStatus countByCoachAndStatus : countsByCoachAndStatus) {

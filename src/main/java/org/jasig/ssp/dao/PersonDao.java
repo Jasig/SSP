@@ -224,28 +224,49 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	@SuppressWarnings(UNCHECKED)
 	public PagingWrapper<CoachPersonLiteTO> getCoachPersonsLiteByUsernames(
 			final Collection<String> coachUsernames, final SortingAndPaging sAndP) {
+
+		return getCoachPersonsLiteByUsernames(coachUsernames, sAndP, null);
+
+	}
+	
+	@SuppressWarnings(UNCHECKED)
+	public PagingWrapper<CoachPersonLiteTO> getCoachPersonsLiteByUsernames(
+			final Collection<String> coachUsernames, final SortingAndPaging sAndP, final String homeDepartment) {
+		
 		Criteria criteria = createCriteria()
 				.add(Restrictions.in("username", coachUsernames));
+		
+		if(homeDepartment != null && homeDepartment.length() > 0){
+			criteria.createAlias("staffDetails", "personStaffDetails")
+				.add(Restrictions.eq("personStaffDetails.departmentName", homeDepartment));
+		}
 
 		final long totalRows = (Long) criteria.setProjection(
 				Projections.rowCount()).uniqueResult();
 
 		// ignore department name and office location for now... would
 		// require join we know we don't actually need for existing call sites
-		criteria = createCriteria(sAndP)
-				.add(Restrictions.in("username", coachUsernames))
+		criteria = createCriteria(sAndP);
+		if(homeDepartment != null && homeDepartment.length() > 0){
+			criteria.createAlias("staffDetails", "personStaffDetails")
+				.add(Restrictions.eq("personStaffDetails.departmentName", homeDepartment));
+		}else{
+			criteria.createAlias("staffDetails", "personStaffDetails", JoinType.LEFT_OUTER_JOIN);
+		}
+		
+		criteria.add(Restrictions.in("username", coachUsernames))
 				.setProjection(Projections.projectionList()
 						.add(Projections.property("id").as("person_id"))
 						.add(Projections.property("firstName").as("person_firstName"))
 						.add(Projections.property("lastName").as("person_lastName"))
 						.add(Projections.property("primaryEmailAddress").as("person_primaryEmailAddress"))
-						.add(Projections.property("workPhone").as("person_workPhone")))
+						.add(Projections.property("workPhone").as("person_workPhone"))
+						.add(Projections.property("personStaffDetails.departmentName").as("person_departmentName")))
 				.setResultTransformer(
 						new NamespacedAliasToBeanResultTransformer(
 								CoachPersonLiteTO.class, "person_"));
 
 		return new PagingWrapper<CoachPersonLiteTO>(totalRows, criteria.list());
-
 	}
 
 	public PagingWrapper<Person> getAllAssignedCoaches(SortingAndPaging sAndP) {
@@ -285,8 +306,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		return new PagingWrapper<Person>(totalRows, criteria.list());
 
 	}
-
 	public PagingWrapper<CoachPersonLiteTO> getAllAssignedCoachesLite(SortingAndPaging sAndP) {
+		return  getAllAssignedCoachesLite(sAndP, null);
+	}
+
+	public PagingWrapper<CoachPersonLiteTO> getAllAssignedCoachesLite(SortingAndPaging sAndP, String homeDepartment) {
 
 		DetachedCriteria coach_ids =
 				DetachedCriteria.forClass(Person.class, "coach_ids");
@@ -300,6 +324,13 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 
 		if ( sAndP != null && sAndP.isFilteredByStatus() ) {
 			sAndP.addStatusFilterToCriteria(criteria);
+		}
+		
+		if(homeDepartment != null && homeDepartment.length() >= 0){
+			criteria.createAlias("staffDetails", "personStaffDetails");
+			criteria.add(Restrictions.eq("personStaffDetails.departmentName", homeDepartment));
+		}else{
+			criteria.createAlias("staffDetails", "personStaffDetails", JoinType.LEFT_OUTER_JOIN);
 		}
 
 		// item count
@@ -315,7 +346,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 					.add(Projections.property("firstName").as("person_firstName"))
 					.add(Projections.property("lastName").as("person_lastName"))
 					.add(Projections.property("primaryEmailAddress").as("person_primaryEmailAddress"))
-					.add(Projections.property("workPhone").as("person_workPhone")))
+					.add(Projections.property("workPhone").as("person_workPhone"))
+					.add(Projections.property("personStaffDetails.departmentName").as("person_departmentName")))
 				.setResultTransformer(
 						new NamespacedAliasToBeanResultTransformer(
 								CoachPersonLiteTO.class, "person_"));
@@ -328,10 +360,16 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		criteria.createAlias("coach", "c");
 		if (personSearchTO.getCoach() != null
 				&& personSearchTO.getCoach().getId() != null) {
-			// restrict to coach
 			
 			criteria.add(Restrictions.eq("c.id",
 					personSearchTO.getCoach().getId()));
+		}
+		
+		if (personSearchTO.getHomeDepartment() != null
+				&& personSearchTO.getHomeDepartment().length() > 0) {
+			criteria.createAlias("c.staffDetails", "coachStaffDetails");
+			criteria.add(Restrictions.eq("coachStaffDetails.departmentName",
+					personSearchTO.getHomeDepartment()));
 		}
 		
 		if (personSearchTO.getProgramStatus() != null) {

@@ -45,7 +45,7 @@ public class AddressLabelsReportControllerIntegrationTest
 			throws IOException, ObjectNotFoundException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		controller.getAddressLabels(response, null, null, null, null, null,null,null,
-				null, null, null, null, null, null, "csv");
+				null, null, null, null, null, null, null, "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
@@ -81,7 +81,7 @@ public class AddressLabelsReportControllerIntegrationTest
 		// in our standard fixture
 		final UUID coachId = Stubs.PersonFixture.ADVISOR_0.id();
 		controller.getAddressLabels(response, null, coachId, null, null, null,null,null,
-				null, null, null, null, null, null, "csv");
+				null, null, null, null, null, null,  null, "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe

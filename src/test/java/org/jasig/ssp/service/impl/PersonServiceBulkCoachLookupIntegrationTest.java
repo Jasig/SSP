@@ -105,7 +105,7 @@ public class PersonServiceBulkCoachLookupIntegrationTest {
 	public void testGetAllAssignedCoachesLite() {
 
 		final Collection<CoachPersonLiteTO> expected =
-				Lists.newArrayList(coachPersonLiteTOFor(ADVISOR_0), coachPersonLiteTOFor(COACH_1));
+				Lists.newArrayList( coachPersonLiteTOFor(ADVISOR_0), coachPersonLiteTOFor(COACH_1));
 
 		final PagingWrapper<CoachPersonLiteTO> result1 =
 				personService.getAllAssignedCoachesLite(null);

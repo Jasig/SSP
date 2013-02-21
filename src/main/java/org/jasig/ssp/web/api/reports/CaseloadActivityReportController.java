@@ -109,6 +109,7 @@ public class CaseloadActivityReportController extends ReportBaseController {
 			final HttpServletResponse response,
 			final @RequestParam(required = false) UUID coachId,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
+			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
@@ -120,8 +121,20 @@ public class CaseloadActivityReportController extends ReportBaseController {
 		final DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
 
 		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
-		List<Person> coaches = SearchParameters.getCoaches(coachId, personService);
+		List<Person> coaches = SearchParameters.getCoaches(coachId, homeDepartment, personService);
 		Collections.sort(coaches, Person.PERSON_NAME_AND_ID_COMPARATOR);
+			
+		final Map<String, Object> parameters = Maps.newHashMap();
+
+		SearchParameters.addDateTermToMap(dateTerm, parameters);
+		SearchParameters.addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);
+		
+		SearchParameters.addHomeDepartmentToMap(homeDepartment, parameters);
+		
+		if(coaches.size() == 0){
+			generateReport(response, parameters, null, REPORT_URL, reportType, REPORT_FILE_TITLE);
+			return;
+		}
 		
 		List<CaseLoadActivityReportTO> caseLoadActivityReportList = new ArrayList<CaseLoadActivityReportTO>();
 		
@@ -178,13 +191,6 @@ public class CaseloadActivityReportController extends ReportBaseController {
 			caseLoadActivityReportList.add(caseLoadActivityReportTO);
 		}
 
-		
-		final Map<String, Object> parameters = Maps.newHashMap();
-
-		SearchParameters.addDateTermToMap(dateTerm, parameters);
-		SearchParameters.addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);
-		
-		SearchParameters.addHomeDepartmentToMap(null, parameters);
 		
 		generateReport(response, parameters, caseLoadActivityReportList, REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}

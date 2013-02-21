@@ -174,6 +174,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 
 	public PagingWrapper<CoachCaseloadRecordCountForProgramStatus>
 		currentCaseLoadCountsByStatus(List<UUID> studentTypeIds,
+									  String homeDepartment,
 									  SortingAndPaging sAndP) {
 
 		// Technically run the risk of returning multiple statuses
@@ -186,7 +187,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 				overlappingProgramStatusDateRestrictions(new Date(), null);
 
 		return caseloadCountsByStatusWithDateRestrictions(dateRestrictions,
-					studentTypeIds, sAndP);
+					studentTypeIds, homeDepartment, sAndP);
 
 	}
 
@@ -195,6 +196,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 			List<UUID> studentTypeIds,
 			Date programStatusDateFrom,
 			Date programStatusDateTo,
+			String homeDepartment,
 			SortingAndPaging sAndP) {
 
 		Criterion dateRestrictions =
@@ -202,13 +204,14 @@ public class CaseloadDao extends AbstractDao<Person> {
 						programStatusDateTo);
 
 		return caseloadCountsByStatusWithDateRestrictions(dateRestrictions,
-					studentTypeIds, sAndP);
+					studentTypeIds, homeDepartment, sAndP);
 
 	}
 
 	private PagingWrapper<CoachCaseloadRecordCountForProgramStatus>
 		caseloadCountsByStatusWithDateRestrictions(Criterion dateRestrictions,
 												   List<UUID> studentTypeIds,
+												   String homeDepartment,
 												   SortingAndPaging sAndP) {
 
 		final Criteria query = createCriteria();
@@ -239,7 +242,12 @@ public class CaseloadDao extends AbstractDao<Person> {
 			query.setProjection(null);
 		}
 
-		query.createAlias("coach.staffDetails", "sd", JoinType.LEFT_OUTER_JOIN);
+		if(homeDepartment == null || homeDepartment.length() <= 0)
+			query.createAlias("coach.staffDetails", "sd", JoinType.LEFT_OUTER_JOIN);
+		else{
+			query.createAlias("coach.staffDetails", "sd");
+			query.add(Restrictions.eq("sd.departmentName", homeDepartment));
+		}
 		ProjectionList projectionList = Projections.projectionList()
 				.add(Projections.groupProperty("c.id").as("coachId"));
 		// TODO find a way to turn these into more generic and centralized

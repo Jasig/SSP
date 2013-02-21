@@ -84,7 +84,9 @@
 		
 		<!-- Home Department -->
 		<div class="ea-input">
-			Not Available Yet
+			<select id="generalStudentHomeDepartment" name="homeDepartment" class="input-home-department-group">
+				<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Home Department:</span>
@@ -260,12 +262,15 @@
 
 		<!-- Home Department -->
 		<div class="ea-input">
-			Not Available Yet
+			<select id="counselorCaseManagementHomeDepartment" name="homeDepartment" class="input-home-department-group">
+				<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Home Department:</span>
 		</div>
 		<div class="ea-clear"></div>
+
 
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
@@ -429,12 +434,15 @@
 
 		<!-- Home Department -->
 		<div class="ea-input">
-			Not Available Yet
+			<select id="caseloadActivityHomeDepartment" name="homeDepartment" class="input-home-department-group">
+				<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Home Department:</span>
 		</div>
 		<div class="ea-clear"></div>
+
 
 
 		<!-- Student Type -->
@@ -568,12 +576,15 @@
 
 		<!-- Home Department -->
 		<div class="ea-input">
-			Not Available Yet
+			<select id="currentCaseloadStatusHomeDepartment" name="homeDepartment" class="input-home-department-group">
+				<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Home Department:</span>
 		</div>
 		<div class="ea-clear"></div>
+
 
 		<!-- output type -->
 		<div class="ea-input">
@@ -699,12 +710,15 @@
 		
 		<!-- Home Department -->
 		<div class="ea-input">
-			Not Available Yet
+			<select id="earlyAlertStudentHomeDepartment" name="homeDepartment" class="input-home-department-group">
+				<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Home Department:</span>
 		</div>
 		<div class="ea-clear"></div>
+
 		
 		<!-- Roster Status 
 		<div class="ea-input">
@@ -832,12 +846,15 @@
 		
 		<!-- Home Department -->
 		<div class="ea-input">
-			Not Available Yet
+			<select id="earlyAlertStudentReferralHomeDepartment" name="homeDepartment" class="input-home-department-group">
+				<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Home Department:</span>
 		</div>
 		<div class="ea-clear"></div>
+
 		
 				<!-- Roster Status 
 		<div class="ea-input">
@@ -948,12 +965,15 @@
 		
 		<!-- Home Department -->
 		<div class="ea-input">
-			Not Available Yet
+			<select id="earlyAlertStudentProgressHomeDepartment" name="homeDepartment" class="input-home-department-group">
+				<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Home Department:</span>
 		</div>
 		<div class="ea-clear"></div>
+
 
 		<!-- Roster Status
 		<div class="ea-input">
@@ -1059,12 +1079,15 @@
 		
 		<!-- Home Department -->
 		<div class="ea-input">
-			Not Available Yet
+			<select id="earlyAlertStudentOutreachHomeDepartment" name="homeDepartment" class="input-home-department-group">
+				<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Home Department:</span>
 		</div>
 		<div class="ea-clear"></div>
+
 		
 				<!-- Roster Status 
 		<div class="ea-input">
@@ -1153,12 +1176,15 @@
 		
 		<!-- Home Department -->
 		<div class="ea-input">
-			Not Available Yet
+			<select id="earlyAlertStudentOutcomeHomeDepartment" name="homeDepartment" class="input-home-department-group">
+				<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Home Department:</span>
 		</div>
 		<div class="ea-clear"></div>
+
 		
 				<!-- Roster Status 
 		<div class="ea-input">
@@ -1341,12 +1367,15 @@
 
 		<!-- Home Department -->
 		<div class="ea-input">
-			Not Available Yet
+			<select id="disabilityServicesHomeDepartment" name="homeDepartment" class="input-home-department-group">
+				<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Home Department:</span>
 		</div>
 		<div class="ea-clear"></div>
+
 
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
@@ -1549,12 +1578,15 @@
 
 		<!-- Home Department -->
 		<div class="ea-input">
-			Not Available Yet
+			<select id="disabilityAccomodationHomeDepartment" name="homeDepartment" class="input-home-department-group">
+				<option value="">${not_applicable}</option>
+			</select>
 		</div>
 		<div class="ea-label">
 			<span>Home Department:</span>
 		</div>
 		<div class="ea-clear"></div>
+
 
 		<!-- Assigned Counselor -->
 		<div class="ea-input">

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	<property name="check_for_manage_integration_database_config_sql"
+			  value="select count(id) from config where name='manage_integration_database'" />
+	<property name="should_manage_integration_database_sql"
+			  value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
+
+	<changeSet id="Update staff_details to test home department queries" author="jim.stanley">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip updating the staff_details table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+		
+		<insert tableName="person_staff_details">
+			<column name="id" value="0a0f1083-3cb1-1e4a-813c-b16039520001" />
+			<column name="created_date" value="2013-02-06 14:18:59.046-07"/>
+			<column name="modified_date" value="2013-02-06 14:18:59.046-07"/>
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+			<column name="object_status" value="1"/>
+			<column name="office_location" value="Kings College"/>
+			<column name="office_hours" value=""/>
+			<column name="department_name" value="Mathematics"/>
+		</insert>
+		
+		<update tableName="person">
+			<column name="person_staff_details_id" value="0a0f1083-3cb1-1e4a-813c-b16039520001" />
+			<where>id='252de4a0-7c06-4254-b7d8-4ffc02fe81ff'</where>
+		</update>
+		
+		<update tableName="person">
+			<column name="person_staff_details_id" value="0a0f1083-3cb1-1e4a-813c-b16039520001" />
+			<where>id='f26d8f23-df20-40f1-bc98-83111be4a52a'</where>
+		</update>
+		<rollback>
+			<delete tableName="person_staff_details">
+				<where>id='0a0f1083-3cb1-1e4a-813c-b16039520001'</where>
+			</delete>
+			
+		<update tableName="person">
+			<column name="person_staff_details_id" value="" />
+			<where>id='252de4a0-7c06-4254-b7d8-4ffc02fe81ff'</where>
+		</update>
+		
+		<update tableName="person">
+			<column name="person_staff_details_id" value="" />
+			<where>id='f26d8f23-df20-40f1-bc98-83111be4a52a'</where>
+		</update>
+		
+		</rollback>
+			
+		
+	</changeSet>
+
+
+</databaseChangeLog>

@@ -80,7 +80,7 @@ public class SearchParameters {
 	private static final String EARLY_ALERT_OUTCOME_NAMES = "earlyAlertOutcomeNames";
 	private static final String PROGRAM_STATUS_NAME = "programStatusName";
 	private static final String REPORT_DATE = "reportDate";
-	private static final String HOME_DEPARTMENT_NAME = "homeDepartmentName";
+	private static final String HOME_DEPARTMENT_NAME = "homeDepartment";
     
 	private static final String REPORT_TITLE = "ReportTitle";
 	private static final String DATA_FILE = "DataFile";
@@ -108,7 +108,7 @@ public class SearchParameters {
 		return campus;
 	}
 
-	static List<Person> getCoaches(final UUID coachId, PersonService personService)
+	static List<Person> getCoaches(final UUID coachId, String homeDepartment, PersonService personService)
 			throws ObjectNotFoundException {
 		List<Person> coaches;
 		if (coachId != null) {
@@ -119,6 +119,17 @@ public class SearchParameters {
 			coaches = new ArrayList<Person>(
 					personService
 							.getAllCurrentCoaches(Person.PERSON_NAME_AND_ID_COMPARATOR));
+			
+			if(homeDepartment != null && homeDepartment.length() > 0){
+				List<Person> homeCoaches = new ArrayList<Person>();
+				for(Person coach:coaches){
+					if(coach.getStaffDetails() != null && 
+							coach.getStaffDetails().getDepartmentName() != null &&
+							coach.getStaffDetails().getDepartmentName().equals(homeDepartment))
+						homeCoaches.add(coach);
+				}
+				coaches = homeCoaches;
+			}
 		}
 
 		return coaches;
@@ -186,8 +197,8 @@ public class SearchParameters {
 	}
 	
 	static final void addHomeDepartmentToMap(final String homeDepartment, final Map<String, Object> parameters){
-		if(homeDepartment == null || homeDepartment.length() == 0)
-			parameters.put(HOME_DEPARTMENT_NAME, DEPARTMENT_PLACEHOLDER);
+		if(homeDepartment == null || homeDepartment.length() <= 0)
+			parameters.put(HOME_DEPARTMENT_NAME, NOT_USED);
 		else
 			parameters.put(HOME_DEPARTMENT_NAME, homeDepartment);
 	}
@@ -465,6 +476,7 @@ public class SearchParameters {
 		addProgramStatusToMap(programStatus, parameters, programStatusService);
 		addDisablityStatusToMap(disabilityStatusId, parameters, disabilityStatusService);
 		addRosterStatusToMap(rosterStatus, parameters);
+		addHomeDepartmentToMap(homeDepartment, parameters);
 		personSearchForm.setProgramStatus(programStatus);
 		personSearchForm.setDisabilityStatusId(disabilityStatusId);
 		personSearchForm.setDisabilityIsNotNull(disabilityIsNotNull);

@@ -69,6 +69,10 @@ public class EarlyAlertCaseCountsReportControllerIntegrationTest
 	@Autowired
 	protected transient ReferralSourceService referralSourceService;
 
+	/**
+	 * {@link #testGetCaseloadWithFilters()}, 
+	 * Test to make sure all the filters are implemented properly.
+	 */
 	@Test
 	public void testGetEarlyAlertCaseCountsReportWtihFilters()
 			throws IOException, ObjectNotFoundException, JRException {

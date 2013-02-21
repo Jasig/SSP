@@ -110,6 +110,7 @@ public class EarlyAlertStudentOutreachReportController extends ReportBaseControl
 			final @RequestParam(required = false) String rosterStatus,
 			final @RequestParam(required = false) List<UUID> earlyAlertOutcomes,
 			final @RequestParam(required = false) String termCode,
+			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
@@ -131,6 +132,7 @@ public class EarlyAlertStudentOutreachReportController extends ReportBaseControl
 		SearchParameters.addEarlyAlertOutcomesToMap(earlyAlertOutcomesClean, parameters, earlyAlertOutcomeService);
 
 		SearchParameters.addDateTermToMap(dateTerm, parameters);
+		SearchParameters.addHomeDepartmentToMap(homeDepartment, parameters);
 
 
 		generateReport(response,  parameters, outreachOutcomes,  REPORT_URL, reportType, REPORT_FILE_TITLE);

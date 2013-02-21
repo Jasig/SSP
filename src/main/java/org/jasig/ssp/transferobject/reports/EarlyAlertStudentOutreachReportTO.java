@@ -44,6 +44,7 @@ public class EarlyAlertStudentOutreachReportTO
 	private String coachLastName;
 	private String coachMiddleName;
 	private String coachSchoolId;
+	private String coachDepartmentName;
 	private UUID  coachId;
 		
 	private UUID earlyAlertId;
@@ -156,6 +157,22 @@ public class EarlyAlertStudentOutreachReportTO
 
 	public void setCoachMiddleName(String coachMiddleName) {
 		this.coachMiddleName = coachMiddleName;
+	}
+
+	public String getCoachSchoolId() {
+		return coachSchoolId;
+	}
+
+	public void setCoachSchoolId(String coachSchoolId) {
+		this.coachSchoolId = coachSchoolId;
+	}
+
+	public String getCoachDepartmentName() {
+		return coachDepartmentName;
+	}
+
+	public void setCoachDepartmentName(String coachDepartmentName) {
+		this.coachDepartmentName = coachDepartmentName;
 	}
 
 	public UUID getCoachId() {

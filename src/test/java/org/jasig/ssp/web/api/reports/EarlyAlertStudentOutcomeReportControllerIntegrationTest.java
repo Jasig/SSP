@@ -24,6 +24,7 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRException;
 
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.service.stub.Stubs;
 import org.jasig.ssp.util.service.stub.Stubs.PersonFixture;
@@ -45,16 +46,19 @@ public class EarlyAlertStudentOutcomeReportControllerIntegrationTest extends
 	@Autowired
 	private transient EarlyAlertStudentOutcomeReportController controller;
 
-
+	/**
+	 * {@link #testGetEarlyAlertStudentOutcomeReportWithFilters()}, 
+	 * Test to make sure all the filters are implemented properly.
+	 */
 	@Test
 	public void testGetEarlyAlertStudentOutcomeReportWithFilters()
 			throws IOException, ObjectNotFoundException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		
 		controller.getEarlyAlertStudentOutcomeReport(response, 
-				null,
-				null,
-				null, 
+				ObjectStatus.ACTIVE,//Object Status
+				null,//roster status
+				Stubs.HomeDepartmentFixture.MATHEMATICS.title(), //home department
 				PersonFixture.COACH_1.id(), 
 				Lists.newArrayList(StudentTypeFixture.ILP.id()),
 				ProgramStatusFixture.ACTIVE.id(), 

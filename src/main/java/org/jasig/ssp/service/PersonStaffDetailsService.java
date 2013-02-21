@@ -18,12 +18,14 @@
  */
 package org.jasig.ssp.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonStaffDetails;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.model.ObjectStatus;
 
 /**
  * PersonStaffDetails service
@@ -48,4 +50,6 @@ public interface PersonStaffDetailsService extends
 
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;
+	
+	List<String> getAllHomeDepartments(ObjectStatus status);
 }

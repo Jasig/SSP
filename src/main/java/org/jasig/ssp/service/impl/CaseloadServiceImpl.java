@@ -121,13 +121,13 @@ public class CaseloadServiceImpl implements CaseloadService {
 
 	@Override
 	public Collection<CoachCaseloadRecordCountForProgramStatus>
-		currentCaseloadCountsByStatus(List<UUID> studentTypeIds) {
+		currentCaseloadCountsByStatus(List<UUID> studentTypeIds, String homeDepartment) {
 
 		Collection<CoachCaseloadRecordCountForProgramStatus> daoResult =
-				dao.currentCaseLoadCountsByStatus(studentTypeIds, null).getRows();
+				dao.currentCaseLoadCountsByStatus(studentTypeIds, homeDepartment, null).getRows();
 
 		// see notes in merge...() on daoResult sorting expectations
-		return mergeCaseloadCountsWithOfficialCoaches(daoResult);
+		return mergeCaseloadCountsWithOfficialCoaches(daoResult, homeDepartment);
 	}
 
 	@Override
@@ -135,20 +135,21 @@ public class CaseloadServiceImpl implements CaseloadService {
 		caseLoadCountsByStatus(
 			List<UUID> studentTypeIds,
 			Date programStatusDateFrom,
-			Date programStatusDateTo) {
+			Date programStatusDateTo,
+			String homeDepartment) {
 
 		Collection<CoachCaseloadRecordCountForProgramStatus> daoResult =
 				dao.caseLoadCountsByStatus(studentTypeIds,
-						programStatusDateFrom, programStatusDateTo, null).getRows();
+						programStatusDateFrom, programStatusDateTo, homeDepartment, null).getRows();
 
 		// see notes in merge...() on daoResult sorting expectations
-		return mergeCaseloadCountsWithOfficialCoaches(daoResult);
+		return mergeCaseloadCountsWithOfficialCoaches(daoResult, null);
 	}
 
 
 	private Collection<CoachCaseloadRecordCountForProgramStatus>
 		mergeCaseloadCountsWithOfficialCoaches(
-			Collection<CoachCaseloadRecordCountForProgramStatus> daoResult) {
+			Collection<CoachCaseloadRecordCountForProgramStatus> daoResult, String homeDepartment) {
 
 		// We assume daoResult ordering matches that in
 		// PERSON_NAME_COMPARATOR and we live with that fragility b/c there is
@@ -159,7 +160,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 		// handed to Jasper Reports. Could just sort again here, but we're
 		// already putting the GC to the test with all these intermediate and
 		// potentially quite large data structures.
-		SortedSet<CoachPersonLiteTO> allCurrentCoaches = getAllCurrentCoachesSortedByName();
+		SortedSet<CoachPersonLiteTO> allCurrentCoaches = getAllCurrentCoachesSortedByName(homeDepartment);
 		Set<UUID> coachIdsWithCaseloads = Sets.newHashSet();
 		for ( CoachCaseloadRecordCountForProgramStatus countForStatus : daoResult ) {
 			coachIdsWithCaseloads.add(countForStatus.getCoachId());
@@ -213,18 +214,12 @@ public class CaseloadServiceImpl implements CaseloadService {
 				person.getFirstName(),
 				null,
 				person.getLastName(),
-				null);
+				person.getDepartmentName());
 	}
 
-	private String departmentNameOrNull(Person person) {
-		PersonStaffDetails staffDetails = person.getStaffDetails();
-		return staffDetails == null
-				? null
-				: StringUtils.trimToNull(staffDetails.getDepartmentName());
-	}
 
-	private SortedSet<CoachPersonLiteTO> getAllCurrentCoachesSortedByName() {
-		return personService.getAllCurrentCoachesLite(CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_AND_ID_COMPARATOR);
+	private SortedSet<CoachPersonLiteTO> getAllCurrentCoachesSortedByName(String homeDepartment) {
+		return personService.getAllCurrentCoachesLite(CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_AND_ID_COMPARATOR, homeDepartment);
 	}
 
 }

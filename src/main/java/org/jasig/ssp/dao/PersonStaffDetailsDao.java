@@ -24,6 +24,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.PersonStaffDetails;
+import org.jasig.ssp.model.ObjectStatus;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -42,10 +43,12 @@ public class PersonStaffDetailsDao extends
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<String> getAllHomeDepartments(){
+	public List<String> getAllHomeDepartments(ObjectStatus status){
 		Criteria criteria = createCriteria();
-		criteria.add(Restrictions.isNotEmpty("home_department"));
-		criteria.setProjection(Projections.projectionList().add(Projections.distinct(Projections.property("home_department"))));
+		if(status != null)
+			criteria.add(Restrictions.eq("objectStatus", status));
+		criteria.add(Restrictions.isNotNull("departmentName"));
+		criteria.setProjection(Projections.projectionList().add(Projections.distinct(Projections.property("departmentName"))));
 		return ((List<String>)criteria.list());
 	}
 	

@@ -69,8 +69,8 @@ public class Stubs {
 		SYSTEM ( "58ba5ee3-734e-4ae9-b9c5-943774b4de41", "system", "userid_4", "System", null, "Administrator", null, "test@sinclair.edu", "000-000-0000" ),
 		DMR ( "7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194", "dmr", "dmr.1", "Dennis", "M", "Ritchie", null, "test@sinclair.edu", "123-456-7654" ),
 		KEN ( "f549ecab-5110-4cc1-b2bb-369cac854dea", "ken", "ken.1", "Kenneth", "L", "Thompson", null, "test@sinclair.edu", "123-456-7654" ),
-		KEVIN_SMITH ( "f26d8f23-df20-40f1-bc98-83111be4a52a", "kevin.smith", "uu112233", "Kevin", null, "Smith", null, "ksmith12@university.edu", "123-456-7654" ),
-		ADVISOR_0 ( "252de4a0-7c06-4254-b7d8-4ffc02fe81ff", "advisor0", "turing.1", "Alan", "M", "Turing", null, "test@sinclair.edu", "123-456-7654" ),
+		KEVIN_SMITH ( "f26d8f23-df20-40f1-bc98-83111be4a52a", "kevin.smith", "uu112233", "Kevin", null, "Smith", "Mathematics", "ksmith12@university.edu", "123-456-7654" ),
+		ADVISOR_0 ( "252de4a0-7c06-4254-b7d8-4ffc02fe81ff", "advisor0", "turing.1", "Alan", "M", "Turing", "Mathematics", "test@sinclair.edu", "123-456-7654" ),
 		COACH_1 ("47ccb6cd-9d7c-49ce-852d-9422aea5f9f3", "coach1", "coach1", "test", "Mumford", "coach1", null, "coach1@unicon.net", "480-775-7894"),
 		MARK_GALAFRION ( "8005ad07-9111-457d-9896-f15a0dc8bbfb", "mark.galafrion", "uu358123", "Mark", null, "Galafrion", null, "mark.g@university.edu", null),
 		BOB_REYNOLDS ( "a5a23d8a-f0d3-4ef6-9a75-21f3775bac0f", "bob.reynolds", "uu462875", "Bob", null, "Reynolds", null, "bob1@university.edu", null),
@@ -366,6 +366,18 @@ public class Stubs {
 		
 
 
+	}
+	
+	public static enum HomeDepartmentFixture {
+		MATHEMATICS ( "Mathematics");
+
+		private final String title;
+
+		HomeDepartmentFixture(String name) {
+			this.title = name;
+		}
+
+		public String title() { return title; }
 	}
 
 	/**

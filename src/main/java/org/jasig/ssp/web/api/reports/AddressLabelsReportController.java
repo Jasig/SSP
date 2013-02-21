@@ -126,6 +126,7 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false) String termCode,
+			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
@@ -154,7 +155,7 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 				null, 
 				false,
 				null,
-				null,
+				homeDepartment,
 				parameters, 
 				personSearchForm, 
 				programStatusService, 

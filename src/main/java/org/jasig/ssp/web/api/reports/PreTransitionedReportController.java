@@ -116,7 +116,8 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 			final @RequestParam(required = false) Date createDateFromCounselor,
 			final @RequestParam(required = false) Date createDateToCounselor,
 			final @RequestParam(required = false) Integer anticipatedStartYear,
-			final @RequestParam(required = false) String anticipatedStartTerm,			
+			final @RequestParam(required = false) String anticipatedStartTerm,
+			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 
@@ -145,7 +146,7 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 				null, 
 				false,
 				null,
-				null,
+				homeDepartment,
 				parameters, 
 				personSearchForm, 
 				programStatusService, 

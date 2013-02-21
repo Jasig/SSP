@@ -25,6 +25,7 @@ import java.util.List;
 import net.sf.jasperreports.engine.JRException;
 
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.util.service.stub.Stubs;
 import org.jasig.ssp.util.service.stub.Stubs.EarlyAlertOutcomeFixture;
 import org.jasig.ssp.util.service.stub.Stubs.TermFixture;
 import org.junit.Test;
@@ -42,6 +43,10 @@ public class EarlyAlertStudentOutreachReportControllerIntegrationTest extends
 	private transient EarlyAlertStudentOutreachReportController controller;
 
 
+	/**
+	 * {@link #testGetEarlyAlertStudentOutreachReportWithFilters()}, 
+	 * Test to make sure all the filters are implemented properly.
+	 */
 	@Test
 	public void testGetEarlyAlertStudentOutreachReportWithFilters()
 			throws IOException, ObjectNotFoundException, JRException {
@@ -52,6 +57,7 @@ public class EarlyAlertStudentOutreachReportControllerIntegrationTest extends
 				null,
 				Lists.newArrayList(EarlyAlertOutcomeFixture.WAITING_FOR_RESPONSE.id()), 
 				TermFixture.FALL_2012.code(), 
+				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
 				null, 
 				null, 
 				"csv");
@@ -77,7 +83,8 @@ public class EarlyAlertStudentOutreachReportControllerIntegrationTest extends
 				null,
 				null,
 				null,
-				null, 
+				null,
+				null,
 				null,
 				null, 
 				"csv");;

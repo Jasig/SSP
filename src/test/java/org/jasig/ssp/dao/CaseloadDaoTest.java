@@ -122,7 +122,7 @@ public class CaseloadDaoTest {
 		// this counts *everything*... students counted several times, once for
 		// each status they've ever had (or will have)
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
-				dao.caseLoadCountsByStatus(null, null, null, null);
+				dao.caseLoadCountsByStatus(null, null, null, null, null);
 		expectHistoricalUnfilteredResultsAgainstDefaultDataSet(results);
 	}
 
@@ -131,7 +131,7 @@ public class CaseloadDaoTest {
 		// this counts *everything*... students counted several times, once for
 		// each status they've ever had (or will have)
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
-				dao.currentCaseLoadCountsByStatus(null, null);
+				dao.currentCaseLoadCountsByStatus(null, null, null);
 		expectCurrentUnfilteredResultsAgainstDefaultDataSet(results);
 	}
 
@@ -155,7 +155,7 @@ public class CaseloadDaoTest {
 		saveAndFlush(jamesDoe, markGalafion, bobReynolds);
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> counts =
-				dao.caseLoadCountsByStatus(null, null, null, null);
+				dao.caseLoadCountsByStatus(null, null, null, null, null);
 
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedRecords =
 				Lists.newArrayListWithCapacity(4);
@@ -202,7 +202,7 @@ public class CaseloadDaoTest {
 		saveAndFlush(jamesDoe, markGalafion, bobReynolds);
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> counts =
-				dao.currentCaseLoadCountsByStatus(null, null);
+				dao.currentCaseLoadCountsByStatus(null, null, null);
 
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedRecords =
 				Lists.newArrayListWithCapacity(4);
@@ -244,14 +244,14 @@ public class CaseloadDaoTest {
 		saveAndFlush(jamesDoe);
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> resultsOverlappingNow =
-				dao.caseLoadCountsByStatus(null, new Date(), null, null);
+				dao.caseLoadCountsByStatus(null, new Date(), null, null, null);
 
 		// should be the same as the default report plus the expired record
 		// we added above
 		expectCurrentUnfilteredResultsAgainstDefaultDataSet(resultsOverlappingNow);
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> resultsOverlappingTwoDaysAgo =
-				dao.caseLoadCountsByStatus(null, twoDaysAgo(), null, null);
+				dao.caseLoadCountsByStatus(null, twoDaysAgo(), null, null, null);
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedRecords =
 				Lists.newArrayListWithCapacity(2);
 		// We just happen to know the correct ordering of expected results here
@@ -287,7 +287,7 @@ public class CaseloadDaoTest {
 		saveAndFlush(jamesDoe);
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
-				dao.currentCaseLoadCountsByStatus(null, null);
+				dao.currentCaseLoadCountsByStatus(null, null, null);
 
 		// should be the same as the default report, which should only count
 		// statuses active at this moment (despite the "unfiltered" name
@@ -316,7 +316,7 @@ public class CaseloadDaoTest {
 		saveAndFlush(jamesDoe);
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> resultsOverlappingNow =
-				dao.caseLoadCountsByStatus(null, null, new Date(), null);
+				dao.caseLoadCountsByStatus(null, null, new Date(), null, null);
 
 		// to filter should exclude the new status we created above
 		expectHistoricalUnfilteredResultsAgainstDefaultDataSet(resultsOverlappingNow);
@@ -324,7 +324,7 @@ public class CaseloadDaoTest {
 		// change the to filter to include the new status
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus>
 				resultsPriorToAndOverlappingTwoDaysFromNow =
-				dao.caseLoadCountsByStatus(null, null, twoDaysFromNow(), null);
+				dao.caseLoadCountsByStatus(null, null, twoDaysFromNow(), null, null);
 
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedRecords =
 				Lists.newArrayListWithCapacity(3);
@@ -351,7 +351,7 @@ public class CaseloadDaoTest {
 		saveAndFlush(jamesDoe);
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
-				dao.currentCaseLoadCountsByStatus(null, null);
+				dao.currentCaseLoadCountsByStatus(null, null, null);
 
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedRecords =
 				Lists.newArrayListWithCapacity(2);
@@ -411,7 +411,7 @@ public class CaseloadDaoTest {
 		// other tests of these same date bound filters.
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> unfilteredResults =
-				dao.caseLoadCountsByStatus(null, null, null, null);
+				dao.caseLoadCountsByStatus(null, null, null, null, null);
 
 		// should get everything
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedUnfilteredRecords =
@@ -437,7 +437,7 @@ public class CaseloadDaoTest {
 		// yes, we do have other tests to verify that the 'from' filter works as
 		// it should by itself.
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> fromFilteredResults =
-				dao.caseLoadCountsByStatus(null, twoDaysAgo(), null, null);
+				dao.caseLoadCountsByStatus(null, twoDaysAgo(), null, null, null);
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedFromFilteredRecords =
 				Lists.newArrayListWithCapacity(5);
 		// james doe only (excludes mary webber)
@@ -461,7 +461,7 @@ public class CaseloadDaoTest {
 		// yes, we do have other tests to verify that the 'to' filter works as
 		// it should by itself.
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> toFilteredResults =
-				dao.caseLoadCountsByStatus(null, null, twoDaysFromNow(), null);
+				dao.caseLoadCountsByStatus(null, null, twoDaysFromNow(), null, null);
 
 		// should get you everything, including the two expired records from
 		// the default data
@@ -487,7 +487,7 @@ public class CaseloadDaoTest {
 
 		// now what we're *really* after
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> toAndFromFilteredResults =
-				dao.caseLoadCountsByStatus(null, twoDaysAgo(), twoDaysFromNow(), null);
+				dao.caseLoadCountsByStatus(null, twoDaysAgo(), twoDaysFromNow(), null, null);
 		// should get you everything, except the two expired records from
 		// the default data and the expired mary webber record created above
 
@@ -545,7 +545,7 @@ public class CaseloadDaoTest {
 		saveAndFlush(jamesDoe, markGalafion, bobReynolds, kevinSmith, faculty1);
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
-				dao.currentCaseLoadCountsByStatus(null, null);
+				dao.currentCaseLoadCountsByStatus(null, null, null);
 
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedRecords =
 				Lists.newArrayListWithCapacity(2);
@@ -570,7 +570,7 @@ public class CaseloadDaoTest {
 	@Test
 	public void testHistoricalCaseloadCountWithFromFilterInTheFuture() {
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
-				dao.caseLoadCountsByStatus(null, daysPlusMinus(100), null, null);
+				dao.caseLoadCountsByStatus(null, daysPlusMinus(100), null, null, null);
 		// some statuses in default data set have no expiration.
 		expectCurrentUnfilteredResultsAgainstDefaultDataSet(results);
 	}
@@ -578,7 +578,7 @@ public class CaseloadDaoTest {
 	@Test
 	public void testHistoricalCaseloadCountWithNoResults() {
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
-				dao.caseLoadCountsByStatus(null, daysPlusMinus(-1000), daysPlusMinus(-1000), null);
+				dao.caseLoadCountsByStatus(null, daysPlusMinus(-1000), daysPlusMinus(-1000), null, null);
 		assertEquals("Should have been no results",
 				Lists.newArrayListWithExpectedSize(0), results.getRows());
 		assertEquals("Unexpected zero total results", 0, results.getResults());
@@ -592,7 +592,7 @@ public class CaseloadDaoTest {
 		// first a sanity check... only use a 'to' filter so we get the complete
 		// set of statuses, included expired
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> toFilteredResults =
-				dao.caseLoadCountsByStatus(null, null, new Date(), null);
+				dao.caseLoadCountsByStatus(null, null, new Date(), null, null);
 
 		List<CoachCaseloadRecordCountForProgramStatus> expectedToFilteredRecords =
 				Lists.newArrayListWithCapacity(2);
@@ -617,7 +617,7 @@ public class CaseloadDaoTest {
 		// now one of the actual tests
 		final List<UUID> capFilter = Lists.newArrayList(Stubs.StudentTypeFixture.CAP.id());
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> capAndToFilteredResults =
-				dao.caseLoadCountsByStatus(capFilter, null, new Date(), null);
+				dao.caseLoadCountsByStatus(capFilter, null, new Date(), null, null);
 		List<CoachCaseloadRecordCountForProgramStatus> expectedCapFilteredRecords =
 				Lists.newArrayListWithCapacity(1);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
@@ -629,7 +629,7 @@ public class CaseloadDaoTest {
 		// another one
 		final List<UUID> ilpFilter = Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id());
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> ilpAndToFilteredResults =
-				dao.caseLoadCountsByStatus(ilpFilter, null, new Date(), null);
+				dao.caseLoadCountsByStatus(ilpFilter, null, new Date(), null, null);
 		List<CoachCaseloadRecordCountForProgramStatus> expectedIlpFilteredRecords =
 				Lists.newArrayListWithCapacity(5);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
@@ -655,7 +655,7 @@ public class CaseloadDaoTest {
 
 		// first a sanity check...
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> unfilteredRecords =
-				dao.currentCaseLoadCountsByStatus(null, null);
+				dao.currentCaseLoadCountsByStatus(null, null, null);
 
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedUnfilteredRecords =
 				Lists.newArrayListWithCapacity(2);
@@ -682,7 +682,7 @@ public class CaseloadDaoTest {
 		// now one of the actual tests
 		final List<UUID> capFilter = Lists.newArrayList(Stubs.StudentTypeFixture.CAP.id());
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> capAndToFilteredResults =
-				dao.currentCaseLoadCountsByStatus(capFilter, null);
+				dao.currentCaseLoadCountsByStatus(capFilter, null, null);
 		List<CoachCaseloadRecordCountForProgramStatus> expectedCapFilteredRecords =
 				Lists.newArrayListWithCapacity(1);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
@@ -699,7 +699,7 @@ public class CaseloadDaoTest {
 		// another one
 		final List<UUID> ilpFilter = Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id());
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> ilpAndToFilteredResults =
-				dao.currentCaseLoadCountsByStatus(ilpFilter, null);
+				dao.currentCaseLoadCountsByStatus(ilpFilter, null, null);
 		List<CoachCaseloadRecordCountForProgramStatus> expectedIlpFilteredRecords =
 				Lists.newArrayListWithCapacity(1);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
@@ -713,7 +713,7 @@ public class CaseloadDaoTest {
 	public void testHistoricalCaseloadCountWithStudentTypeIdFilterWithNoMatch() {
 		final List<UUID> ealFilter = Lists.newArrayList(Stubs.StudentTypeFixture.EAL.id());
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> ealAndToFilteredResults =
-				dao.caseLoadCountsByStatus(ealFilter, null, new Date(), null);
+				dao.caseLoadCountsByStatus(ealFilter, null, new Date(), null, null);
 		
 		List<CoachCaseloadRecordCountForProgramStatus> expectedFilterWithNoMatch =
 				Lists.newArrayListWithCapacity(1);
@@ -730,7 +730,7 @@ public class CaseloadDaoTest {
 	public void testCurrentCaseloadCountWithStudentTypeIdFilterWithNoMatch() {
 		final List<UUID> ealFilter = Lists.newArrayList(Stubs.StudentTypeFixture.EAL.id());
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> ealAndToFilteredResults =
-				dao.currentCaseLoadCountsByStatus(ealFilter, null);
+				dao.currentCaseLoadCountsByStatus(ealFilter, null, null);
 		
 		List<CoachCaseloadRecordCountForProgramStatus> expectedFilterWithNoMatch =
 				Lists.newArrayListWithCapacity(1);
@@ -755,7 +755,7 @@ public class CaseloadDaoTest {
 
 		// first the sanity check - get a baseline before applying filters
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> toFilteredResults =
-				dao.caseLoadCountsByStatus(null, null, new Date(), null);
+				dao.caseLoadCountsByStatus(null, null, new Date(), null, null);
 
 		List<CoachCaseloadRecordCountForProgramStatus> expectedToFilteredRecords =
 				Lists.newArrayListWithCapacity(3);
@@ -787,7 +787,7 @@ public class CaseloadDaoTest {
 				Stubs.StudentTypeFixture.CAP.id(),
 				Stubs.StudentTypeFixture.EAL.id());
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> typeAndToFilteredResults =
-				dao.caseLoadCountsByStatus(typeFilters, null, new Date(), null);
+				dao.caseLoadCountsByStatus(typeFilters, null, new Date(), null, null);
 
 		List<CoachCaseloadRecordCountForProgramStatus> expectedTypeAndToFilteredRecords =
 				Lists.newArrayListWithCapacity(2);
@@ -814,7 +814,7 @@ public class CaseloadDaoTest {
 		// let's just focus on adding type filters to that mix
 		final List<UUID> capFilter = Lists.newArrayList(Stubs.StudentTypeFixture.CAP.id());
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> capAndDateFilteredResults =
-				dao.caseLoadCountsByStatus(capFilter, twoDaysAgo(), new Date(), null);
+				dao.caseLoadCountsByStatus(capFilter, twoDaysAgo(), new Date(), null, null);
 
 		List<CoachCaseloadRecordCountForProgramStatus> expectedCapAndDateFilteredRecords =
 				Lists.newArrayListWithCapacity(2);
@@ -833,7 +833,7 @@ public class CaseloadDaoTest {
 				Stubs.StudentTypeFixture.CAP.id(),
 				Stubs.StudentTypeFixture.EAL.id());
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> typeAndDateFilteredResults =
-				dao.caseLoadCountsByStatus(typeFilters, twoDaysAgo(), new Date(), null);
+				dao.caseLoadCountsByStatus(typeFilters, twoDaysAgo(), new Date(), null, null);
 
 		List<CoachCaseloadRecordCountForProgramStatus> expectedTypeAndDateFilteredRecords =
 				Lists.newArrayListWithCapacity(2);
@@ -865,7 +865,7 @@ public class CaseloadDaoTest {
 		saveAndFlush(jamesDoe, markGalafion, bobReynolds);
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> firstResult =
-				dao.caseLoadCountsByStatus(null, null, null,
+				dao.caseLoadCountsByStatus(null, null, null, null,
 						new SortingAndPaging(ObjectStatus.ALL, 0, 1, null, null, null));
 
 		final List<CoachCaseloadRecordCountForProgramStatus> firstExpectedRecord =
@@ -877,7 +877,7 @@ public class CaseloadDaoTest {
 		assertEquals(10, firstResult.getResults());
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> secondResult =
-				dao.caseLoadCountsByStatus(null, null, null,
+				dao.caseLoadCountsByStatus(null, null, null, null,
 						new SortingAndPaging(ObjectStatus.ALL, 1, 1, null, null, null));
 
 		final List<CoachCaseloadRecordCountForProgramStatus> secondExpectedRecord =
@@ -889,7 +889,7 @@ public class CaseloadDaoTest {
 		assertEquals(10, secondResult.getResults());
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> thirdResult =
-				dao.caseLoadCountsByStatus(null, null, null,
+				dao.caseLoadCountsByStatus(null, null, null, null,
 						new SortingAndPaging(ObjectStatus.ALL, 2, 1, null, null, null));
 
 		final List<CoachCaseloadRecordCountForProgramStatus> thirdExpectedRecord =
@@ -901,7 +901,7 @@ public class CaseloadDaoTest {
 		assertEquals(10, thirdResult.getResults());
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> fourthResult =
-				dao.caseLoadCountsByStatus(null, null, null,
+				dao.caseLoadCountsByStatus(null, null, null, null,
 						new SortingAndPaging(ObjectStatus.ALL, 3, 1, null, null, null));
 
 		final List<CoachCaseloadRecordCountForProgramStatus> fourthExpectedRecord =
@@ -913,7 +913,7 @@ public class CaseloadDaoTest {
 		assertEquals(10, fourthResult.getResults());
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> fifthResult =
-				dao.caseLoadCountsByStatus(null, null, null,
+				dao.caseLoadCountsByStatus(null, null, null, null,
 						new SortingAndPaging(ObjectStatus.ALL, 4, 1, null, null, null));
 
 		final List<CoachCaseloadRecordCountForProgramStatus> fifthExpectedRecord =
@@ -925,7 +925,7 @@ public class CaseloadDaoTest {
 		assertEquals(10, fifthResult.getResults());
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> sixthResult =
-				dao.caseLoadCountsByStatus(null, null, null,
+				dao.caseLoadCountsByStatus(null, null, null, null,
 						new SortingAndPaging(ObjectStatus.ALL, 5, 1, null, null, null));
 
 		final List<CoachCaseloadRecordCountForProgramStatus> sixthExpectedRecord =

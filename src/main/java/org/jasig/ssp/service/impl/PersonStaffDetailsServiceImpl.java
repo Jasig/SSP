@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.dao.PersonStaffDetailsDao;
@@ -87,5 +88,10 @@ public class PersonStaffDetailsServiceImpl implements PersonStaffDetailsService 
 			current.setObjectStatus(ObjectStatus.INACTIVE);
 			save(current);
 		}
+	}
+	
+	@Override
+	public List<String> getAllHomeDepartments(ObjectStatus status){
+		return dao.getAllHomeDepartments(status);
 	}
 }

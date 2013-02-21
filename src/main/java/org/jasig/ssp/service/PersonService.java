@@ -171,6 +171,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @return List of all coaches
 	 */
 	PagingWrapper<CoachPersonLiteTO> getAllCoachesLite(SortingAndPaging sAndP);
+	PagingWrapper<CoachPersonLiteTO> getAllCoachesLite(final SortingAndPaging sAndP, String HomeDepartment);
 
 	/**
 	 * Gets all coaches assigned to local Person records regardless of current
@@ -193,6 +194,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @return
 	 */
 	PagingWrapper<CoachPersonLiteTO> getAllAssignedCoachesLite(SortingAndPaging sAndP);
+	PagingWrapper<CoachPersonLiteTO> getAllAssignedCoachesLite(SortingAndPaging sAndP, String homeDepartment);
 
 	/**
 	 * Gets a collection of <em>all</em> coaches, i.e. the union of
@@ -231,6 +233,9 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @param sortBy
 	 * @return
 	 */
+	SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(
+			Comparator<CoachPersonLiteTO> sortBy, String homeDepartment);
+	
 	SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(
 			Comparator<CoachPersonLiteTO> sortBy);
 

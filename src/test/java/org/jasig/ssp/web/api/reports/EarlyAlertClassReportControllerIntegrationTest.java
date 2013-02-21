@@ -40,7 +40,11 @@ public class EarlyAlertClassReportControllerIntegrationTest extends
 	@Autowired
 	private transient EarlyAlertClassReportController controller;
 
-
+	
+	/**
+	 * {@link #testGetEarlyAlertClassReportWithFilters()}, 
+	 * Test to make sure all the filters are implemented properly.
+	 */
 	//@Test
 	public void testGetEarlyAlertClassReportWithFilters()
 			throws IOException, ObjectNotFoundException, JRException {
@@ -48,8 +52,8 @@ public class EarlyAlertClassReportControllerIntegrationTest extends
 		
 		controller.getEarlyAlertClassReport(response, 
 						CampusFixture.TEST.id(), 
+						null, //roster status
 						TermFixture.FALL_2012.name(),
-						null,
 						null,
 						null,
 						"csv");

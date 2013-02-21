@@ -65,6 +65,10 @@ public class DisabilityServicesReportControllerIntegrationTest
 	@Autowired
 	protected transient ReferralSourceService referralSourceService;
 
+	/**
+	 * {@link #testGetCaseloadWithFilters()}, 
+	 * Test to make sure all the filters are implemented properly.
+	 */
 	@Test
 	public void testGetDisabilityeServicesReportFilters()
 			throws IOException, ObjectNotFoundException, JRException {
@@ -82,14 +86,15 @@ public class DisabilityServicesReportControllerIntegrationTest
 				getReferences(ssgService, 2), 
 				getReferences(referralSourceService, 2), 
 				getReferences(studentTypeService, 2), 
-				null, 
-				null, 2013, 
-				"FA12", 
-				null, 
-				null, 
-				null,
-				null,
-				"FA12",
+				null, //anticipatedStartYear
+				null, //anticipatedStartTerm
+				2013, //actualStartYear
+				"FA12", //actualStartTerm
+				null, //startDate
+				null, //endDate
+				"FA12", //termRange
+				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
+				null,//roster status
 				"csv");
 
 		// "body" is the actual results and the header that describes its columns.

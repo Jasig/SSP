@@ -82,7 +82,7 @@ public interface CaseloadService {
 	 * @return
 	 */
 	Collection<CoachCaseloadRecordCountForProgramStatus>
-		currentCaseloadCountsByStatus(List<UUID> studentTypeIds);
+		currentCaseloadCountsByStatus(List<UUID> studentTypeIds, String homeDepartment);
 
 	/**
 	 * Count caseloads overlapping the given date range for <em>all</em>
@@ -122,5 +122,6 @@ public interface CaseloadService {
 	Collection<CoachCaseloadRecordCountForProgramStatus>
 		caseLoadCountsByStatus(List<UUID> studentTypeIds,
 			Date programStatusDateFrom,
-			Date programStatusDateTo);
+			Date programStatusDateTo,
+			String homeDepartment);
 }

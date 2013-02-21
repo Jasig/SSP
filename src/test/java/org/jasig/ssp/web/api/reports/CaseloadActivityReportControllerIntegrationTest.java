@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 
 import net.sf.jasperreports.engine.JRException;
 
@@ -46,7 +47,7 @@ public class CaseloadActivityReportControllerIntegrationTest
 	public void testDefaultDataSet()
 			throws ObjectNotFoundException, IOException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoadActivity(response, null, null, null, null, null,  "csv");
+		controller.getCaseLoadActivity(response, null, null, null, null, null, null,  "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
@@ -61,6 +62,62 @@ public class CaseloadActivityReportControllerIntegrationTest
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
+	
+	/**
+	 * {@link #testDataSetAllFiltersButHomeDepartment()}, 
+	 * Test to make sure all the filters are implemented properly.
+	 * Coach Id overrides home department
+	 */
+	@Test
+	public void testDataSetAllFiltersButHomeDepartment()
+			throws ObjectNotFoundException, IOException, JRException {
+		final MockHttpServletResponse response = new MockHttpServletResponse();
+		controller.getCaseLoadActivity(response, 
+				Stubs.PersonFixture.COACH_1.id(), 
+				Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()), 
+				null,
+				Stubs.TermFixture.FALL_2012.code(), null, null,  "csv");
+
+		// "body" is the actual results and the header that describes its columns.
+		// This is as opposed to rows which precede the header, which describe
+		// the filtering criteria
+		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
+		// not sure why lines render this way, but they do... csv formatting
+		// needs to be fixed up
+		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
+		expectedReportBodyLines.add("test,coach1,3,1,,3,1,5,2,6");
+		expectedReportBodyLines.add(",,3,,1,3,1,5,2,6");
+
+		expectReportBodyLines(expectedReportBodyLines, response, null);
+	}
+	
+	/**
+	 * {@link #testDataSetAllFiltersButCoach()}, 
+	 * Test to make sure all the filters are implemented properly.
+	 * By not setting coach, homeDepartment is tested
+	 */
+	@Test
+	public void testDataSetAllFiltersButCoach()
+			throws ObjectNotFoundException, IOException, JRException {
+		final MockHttpServletResponse response = new MockHttpServletResponse();
+		controller.getCaseLoadActivity(response, 
+				null, 
+				Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()), 
+				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
+				Stubs.TermFixture.FALL_2012.code(), null, null,  "csv");
+
+		// "body" is the actual results and the header that describes its columns.
+		// This is as opposed to rows which precede the header, which describe
+		// the filtering criteria
+		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
+		// not sure why lines render this way, but they do... csv formatting
+		// needs to be fixed up
+		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
+		expectedReportBodyLines.add("Alan,Turing,0,0,,0,0,0,0,0");
+		expectedReportBodyLines.add(",,0,,0,0,0,0,0,0");
+
+		expectReportBodyLines(expectedReportBodyLines, response, null);
+	}
 
 	@Test
 	public void testIncludesAllOfficialCoaches()
@@ -70,7 +127,7 @@ public class CaseloadActivityReportControllerIntegrationTest
 				.add(Stubs.PersonFixture.KEVIN_SMITH.username());
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoadActivity(response, null, null, null, null, null,  "csv");
+		controller.getCaseLoadActivity(response, null, null, null, null, null, null,  "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
@@ -107,7 +164,7 @@ public class CaseloadActivityReportControllerIntegrationTest
 		sessionFactory.getCurrentSession().flush();
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoadActivity(response, null, null, null, null, null,  "csv");
+		controller.getCaseLoadActivity(response, null, null, null, null, null, null,  "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
@@ -157,7 +214,7 @@ public class CaseloadActivityReportControllerIntegrationTest
 		sessionFactory.getCurrentSession().flush();
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoadActivity(response, null, null, null, null, null, "csv");
+		controller.getCaseLoadActivity(response, null, null, null, null, null, null, "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe

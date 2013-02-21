@@ -23,7 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import net.sf.jasperreports.engine.JRException;
 
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.util.service.stub.Stubs;
 import org.jasig.ssp.util.service.stub.Stubs.EarlyAlertReferralFixture;
 import org.jasig.ssp.util.service.stub.Stubs.PersonFixture;
 import org.jasig.ssp.util.service.stub.Stubs.ProgramStatusFixture;
@@ -43,15 +45,19 @@ public class EarlyAlertStudentReferralReportControllerIntegrationTest extends
 	private transient EarlyAlertStudentReferralReportController controller;
 
 
+	/**
+	 * {@link #testEarlyAlertStudentReferralReportWithFilters()}, 
+	 * Test to make sure all the filters are implemented properly.
+	 */
 	@Test
-	public void testGetEarlyAlertClassReportWithFilters()
+	public void testEarlyAlertStudentReferralReportWithFilters()
 			throws IOException, ObjectNotFoundException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		
 		controller.getEarlyAlertStudentReferralReport(response, 
-				null, 
-				null,
-				null,
+				ObjectStatus.ACTIVE, 
+				null,// roster status
+				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
 				PersonFixture.COACH_1.id(), 
 				ProgramStatusFixture.ACTIVE.id(), 
 				EarlyAlertReferralFixture.ACADEMIC_COUNSELORS.id(), 

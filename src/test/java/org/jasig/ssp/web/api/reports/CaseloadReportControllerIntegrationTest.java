@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 
 import net.sf.jasperreports.engine.JRException;
 
@@ -50,7 +51,7 @@ public class CaseloadReportControllerIntegrationTest
 		/// TODO Eliminate Spaces in Report TO Remove Extra commas
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		expectedReportBodyLines.add("FIRST,LAST,,DEPARTMENT,,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
-		expectedReportBodyLines.add("Alan,Turing,,Not Available Yet,,2,2,2,0,0,0,0");
+		expectedReportBodyLines.add("Alan,Turing,,Mathematics,,2,2,2,0,0,0,0");
 		expectedReportBodyLines.add("test,coach1,,Not Available Yet,,5,1,1,1,1,1,1");
 		expectedReportBodyLines.add("TOTAL:,,,,,7,3,3,1,1,1,1");
 
@@ -73,8 +74,8 @@ public class CaseloadReportControllerIntegrationTest
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		/// TODO Eliminate Spaces in Report TO Remove Extra commas
 		expectedReportBodyLines.add("FIRST,LAST,,DEPARTMENT,,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
-		expectedReportBodyLines.add("Kevin,Smith,,Not Available Yet,,0,0,0,0,0,0,0");
-		expectedReportBodyLines.add("Alan,Turing,,Not Available Yet,,2,2,2,0,0,0,0");
+		expectedReportBodyLines.add("Kevin,Smith,,Mathematics,,0,0,0,0,0,0,0");
+		expectedReportBodyLines.add("Alan,Turing,,Mathematics,,2,2,2,0,0,0,0");
 		expectedReportBodyLines.add("test,coach1,,Not Available Yet,,5,1,1,1,1,1,1");
 		expectedReportBodyLines.add("TOTAL:,,,,,7,3,3,1,1,1,1");
 
@@ -113,8 +114,8 @@ public class CaseloadReportControllerIntegrationTest
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		/// TODO Eliminate Spaces in Report TO Remove Extra commas
 		expectedReportBodyLines.add("FIRST,LAST,,DEPARTMENT,,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
-		expectedReportBodyLines.add("Kevin,Smith,,Not Available Yet,,1,1,1,0,0,0,0");
-		expectedReportBodyLines.add("Alan,Turing,,Not Available Yet,,2,2,2,0,0,0,0");
+		expectedReportBodyLines.add("Kevin,Smith,,Mathematics,,1,1,1,0,0,0,0");
+		expectedReportBodyLines.add("Alan,Turing,,Mathematics,,2,2,2,0,0,0,0");
 		expectedReportBodyLines.add("test,coach1,,Not Available Yet,,5,1,1,1,1,1,1");
 		expectedReportBodyLines.add("TOTAL:,,,,,8,4,4,1,1,1,1");
 
@@ -155,11 +156,40 @@ public class CaseloadReportControllerIntegrationTest
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		/// TODO Eliminate Spaces in Report TO Remove Extra commas
 		expectedReportBodyLines.add("FIRST,LAST,,DEPARTMENT,,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
-		expectedReportBodyLines.add("Kevin,Smith,,Not Available Yet,,1,1,1,0,0,0,0");
-		expectedReportBodyLines.add("Alan,Turing,,Not Available Yet,,2,2,2,0,0,0,0");
+		expectedReportBodyLines.add("Kevin,Smith,,Mathematics,,1,1,1,0,0,0,0");
+		expectedReportBodyLines.add("Alan,Turing,,Mathematics,,2,2,2,0,0,0,0");
 		expectedReportBodyLines.add("test,coach1,,Not Available Yet,,5,1,1,1,1,1,1");
 		expectedReportBodyLines.add("TOTAL:,,,,,8,4,4,1,1,1,1");
 
+		expectReportBodyLines(expectedReportBodyLines, response, null);
+	}
+	
+	/**
+	 * {@link #testGetCaseloadWithFilters()}, 
+	 * Test to make sure all the filters are implemented properly.
+	 */
+	@Test
+	public void testGetCaseloadWithFilters()
+			throws ObjectNotFoundException, ValidationException, IOException, JRException {
+
+
+		sessionFactory.getCurrentSession().flush();
+
+		final MockHttpServletResponse response = new MockHttpServletResponse();
+		controller.getCaseLoad(response, 
+				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
+				Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()), 
+				"csv");
+
+		// "body" is the actual results and the header that describes its columns.
+		// This is as opposed to rows which precede the header, which describe
+		// the filtering criteria
+		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
+		/// TODO Eliminate Spaces in Report TO Remove Extra commas
+		expectedReportBodyLines.add("FIRST,LAST,,DEPARTMENT,,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
+		expectedReportBodyLines.add("Alan,Turing,,Mathematics,,1,1,1,0,0,0,0");
+		expectedReportBodyLines.add("TOTAL:,,,,,1,1,1,0,0,0,0");
+		
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 

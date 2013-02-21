@@ -25,7 +25,9 @@ import java.util.UUID;
 
 import net.sf.jasperreports.engine.JRException;
 
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.util.service.stub.Stubs;
 import org.jasig.ssp.util.service.stub.Stubs.EarlyAlertReferralFixture;
 import org.jasig.ssp.util.service.stub.Stubs.PersonFixture;
 import org.jasig.ssp.util.service.stub.Stubs.ProgramStatusFixture;
@@ -46,16 +48,20 @@ public class EarlyAlertStudentProgressReportControllerIntegrationTest extends
 	@Autowired
 	private transient EarlyAlertStudentProgressReportController controller;
 
-
+	
+	/**
+	 * {@link #testGetEarlyAlertStudentProgressReportWithFilters()}, 
+	 * Test to make sure all the filters are implemented properly.
+	 */
 	@Test
 	public void testGetEarlyAlertStudentProgressReportWithFilters()
 			throws IOException, ObjectNotFoundException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		
 		controller.getEarlyAlertStudentProgressReport(response,
-				null, 
-				null,
-				null,
+				ObjectStatus.ACTIVE, 
+				null,//roster status
+				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
 				PersonFixture.COACH_1.id(), 
 				Lists.newArrayList(StudentTypeFixture.ILP.id()), 
 				ProgramStatusFixture.ACTIVE.id(), 
@@ -69,7 +75,7 @@ public class EarlyAlertStudentProgressReportControllerIntegrationTest extends
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		expectedReportBodyLines.add("FIRST,MIDDLE,LAST,STUDENT ID,EMAIL,STATUS,EA INITIAL,EA COMPARISON,ADVISOR");
-		expectedReportBodyLines.add("test,Mumford,coach1student0,coach1student0,coach1student0,,1,0,");
+		expectedReportBodyLines.add( ",,,,,,,,");
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 
