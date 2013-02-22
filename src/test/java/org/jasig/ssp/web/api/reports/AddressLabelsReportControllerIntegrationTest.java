@@ -51,7 +51,7 @@ public class AddressLabelsReportControllerIntegrationTest
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add("FIRST,MIDDLE,LAST, ID,TYPE,ADDRESS,CITY,ST,PHONE(H),EMAIL(SCHOOL),EMAIL(HOME)");
+		expectedReportBodyLines.add("FIRST,MIDDLE,LAST, ID,TYPE,ADDRESS,CITY,ST,PHONE(H),EMAIL(SCHOOL),EMAIL(ALTERNATE)");
 		expectedReportBodyLines.add("James,A,Gosling,student0,ILP,444 West Third Street ,San Francisco,CA,908-123-4567,test@sinclair.edu,test@sinclair.edu");
 		expectedReportBodyLines.add("Dennis,M,Ritchie,dmr.1,CAP,444 West Third Street ,Berkeley Heights,NJ,908-123-4567,test@sinclair.edu,test@sinclair.edu");
 		expectedReportBodyLines.add("Kenneth,L,Thompson,ken.1,CAP,444 West Third Street ,Murray Hill,NJ,908-123-4567,test@sinclair.edu,test@sinclair.edu");
@@ -89,7 +89,7 @@ public class AddressLabelsReportControllerIntegrationTest
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		// same as in testGetAddressLabelsReturnsAllStudentsIfNoFiltersSet(), but
 		// Dennis Ritchie is missing
-		expectedReportBodyLines.add("FIRST,MIDDLE,LAST, ID,TYPE,ADDRESS,CITY,ST,PHONE(H),EMAIL(SCHOOL),EMAIL(HOME)");
+		expectedReportBodyLines.add("FIRST,MIDDLE,LAST, ID,TYPE,ADDRESS,CITY,ST,PHONE(H),EMAIL(SCHOOL),EMAIL(ALTERNATE)");
 		expectedReportBodyLines.add("James,A,Gosling,student0,ILP,444 West Third Street ,San Francisco,CA,908-123-4567,test@sinclair.edu,test@sinclair.edu");
 		expectedReportBodyLines.add("Kenneth,L,Thompson,ken.1,CAP,444 West Third Street ,Murray Hill,NJ,908-123-4567,test@sinclair.edu,test@sinclair.edu");
 

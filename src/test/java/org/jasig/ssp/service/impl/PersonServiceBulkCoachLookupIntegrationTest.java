@@ -32,6 +32,7 @@ import org.hamcrest.Matcher;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
@@ -40,6 +41,7 @@ import org.jasig.ssp.util.service.stub.StubPersonAttributesService;
 import org.jasig.ssp.util.service.stub.Stubs;
 import org.jasig.ssp.util.service.stub.Stubs.PersonFixture;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -105,15 +107,20 @@ public class PersonServiceBulkCoachLookupIntegrationTest {
 	public void testGetAllAssignedCoachesLite() {
 
 		final Collection<CoachPersonLiteTO> expected =
-				Lists.newArrayList( coachPersonLiteTOFor(ADVISOR_0), coachPersonLiteTOFor(COACH_1));
-
+				Lists.newArrayList( coachPersonLiteTOFor(COACH_1), coachPersonLiteTOFor(ADVISOR_0));
+		
 		final PagingWrapper<CoachPersonLiteTO> result1 =
-				personService.getAllAssignedCoachesLite(null);
+				personService.getAllAssignedCoachesLite(SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ACTIVE, 
+						0, 
+						1000, 
+						"lastName", 
+						"ASC", 
+						"lastName"));
 
 		assertCoachPersonLiteTOCollectionsEqual(expected, result1.getRows());
 		// zero b/c the request specified no pagination, so impl skips total
 		// result size calculation
-		assertEquals(0, result1.getResults());
+		assertEquals(2, result1.getResults());
 
 		// now prove that getAllAssignedCoachesLite() doesn't lazily
 		// create/return new coaches by creating a fixture where it could do so,
@@ -123,12 +130,17 @@ public class PersonServiceBulkCoachLookupIntegrationTest {
 				addCoachesToExternalDataAndAttributeService(5);
 
 		final PagingWrapper<CoachPersonLiteTO> result2 =
-				personService.getAllAssignedCoachesLite(null);
+				personService.getAllAssignedCoachesLite(SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ACTIVE, 
+						0, 
+						1000, 
+						"lastName", 
+						"ASC", 
+						"lastName"));
 
 		assertCoachPersonLiteTOCollectionsEqual(expected, result2.getRows());
 		// zero b/c the request specified no pagination, so impl skips total
 		// result size calculation
-		assertEquals(0, result2.getResults());
+		assertEquals(2, result2.getResults());
 	}
 
 	private CoachPersonLiteTO coachPersonLiteTOFor(Stubs.PersonFixture personFixture) {

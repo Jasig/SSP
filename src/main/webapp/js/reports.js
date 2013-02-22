@@ -143,10 +143,10 @@ var ssp = ssp || {};
 			loadGroupInput("/ssp/api/1/reference/disabilityType/", that
 					.locate('disabilityTypeGroup'));	
 			
-			loadTermInput("/ssp/api/1/reference/term/", that
+			loadTermInput("/ssp/api/1/reference/term/?sort=startDate&start=0&limit=10000&sortDirection=ASC", that
 					.locate('termGroup'));
 			
-			loadReportYearInput("/ssp/api/1/reference/term/?sort=startDate&start=1&limit=10000&sortDirection=ASC", that
+			loadReportYearInput("/ssp/api/1/reference/term/?sort=startDate&start=0&limit=10000&sortDirection=ASC", that
 					.locate('reportYearGroup'));
 			
 			loadConfigInput("/ssp/api/1/reference/config/?name=status_code_mappings", that

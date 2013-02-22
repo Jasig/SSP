@@ -101,10 +101,10 @@ public class EarlyAlertStudentReportControllerIntegrationTest extends
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		//TODO Understand why no filters does not bring back a result!
 		expectedReportBodyLines.add("FIRST,MIDDLE,LAST,STUDENT ID,EMAIL(SCHOOL),OPEN,CLOSED,PENDING,TOTAL");
-		expectedReportBodyLines.add("James,A,Gosling,student0,test@sinclair.edu,1,0,1,1");
+		expectedReportBodyLines.add("James,A,Gosling,student0,test@sinclair.edu,0,0,1,1");
 		expectedReportBodyLines.add("test,Mumford,coach1student0,coach1student0,coach1student0@unicon.net,1,0,0,1");
-		expectedReportBodyLines.add("test,Mumford,coach1student1,coach1student1,coach1student1@unicon.net,2,0,1,2");
-		expectedReportBodyLines.add("test,Mumford,coach1student4,coach1student4,coach1student4@unicon.net,4,1,3,5");
+		expectedReportBodyLines.add("test,Mumford,coach1student1,coach1student1,coach1student1@unicon.net,1,0,1,2");
+		expectedReportBodyLines.add("test,Mumford,coach1student4,coach1student4,coach1student4@unicon.net,1,1,3,5");
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}

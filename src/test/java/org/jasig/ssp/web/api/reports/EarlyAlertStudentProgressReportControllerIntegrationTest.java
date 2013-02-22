@@ -74,7 +74,7 @@ public class EarlyAlertStudentProgressReportControllerIntegrationTest extends
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add("FIRST,MIDDLE,LAST,STUDENT ID,EMAIL,STATUS,EA INITIAL,EA COMPARISON,ADVISOR");
+		expectedReportBodyLines.add("FIRST,MIDDLE,LAST,STUDENT ID,EMAIL,STATUS,EA INITIAL,EA COMPARISON,COUNSELOR");
 		expectedReportBodyLines.add( ",,,,,,,,");
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
@@ -100,11 +100,11 @@ public class EarlyAlertStudentProgressReportControllerIntegrationTest extends
 				"csv");;
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 
-		expectedReportBodyLines.add("FIRST,MIDDLE,LAST,STUDENT ID,EMAIL,STATUS,EA INITIAL,EA COMPARISON,ADVISOR");
-		expectedReportBodyLines.add("James,A,Gosling,student0,test@sinclair.edu,,1,0,");
-		expectedReportBodyLines.add("test,Mumford,coach1student0,coach1student0,coach1student0,,1,0,");
-		expectedReportBodyLines.add("test,Mumford,coach1student1,coach1student1,coach1student1,,2,0,");
-		expectedReportBodyLines.add("test,Mumford,coach1student4,coach1student4,coach1student4,,5,0,");
+		expectedReportBodyLines.add("FIRST,MIDDLE,LAST,STUDENT ID,EMAIL,STATUS,EA INITIAL,EA COMPARISON,COUNSELOR");
+		expectedReportBodyLines.add("James,A,Gosling,student0,test@sinclair.edu,,1,0,Alan Turing");
+		expectedReportBodyLines.add("test,Mumford,coach1student0,coach1student0,coach1student0@unicon.net,,1,0,test coach1");
+		expectedReportBodyLines.add("test,Mumford,coach1student1,coach1student1,coach1student1@unicon.net,,2,0,test coach1");
+		expectedReportBodyLines.add("test,Mumford,coach1student4,coach1student4,coach1student4@unicon.net,,5,0,test coach1");
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 	

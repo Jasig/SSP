@@ -1,24 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Licensed to Jasig under one or more contributor license
-    agreements. See the NOTICE file distributed with this work
-    for additional information regarding copyright ownership.
-    Jasig licenses this file to you under the Apache License,
-    Version 2.0 (the "License"); you may not use this file
-    except in compliance with the License. You may obtain a
-    copy of the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on
-    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations
-    under the License.
-
--->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank Letter Landscape" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de052e81-a0fc-4bfe-a86d-fd593cff06df">
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
@@ -108,35 +88,35 @@
 	<columnHeader>
 		<band height="21" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="8482b9b3-84b3-4380-b17d-3ef86d0ebb16" stretchType="RelativeToBandHeight" x="181" y="4" width="60" height="15"/>
+				<reportElement uuid="8482b9b3-84b3-4380-b17d-3ef86d0ebb16" stretchType="RelativeToBandHeight" x="140" y="4" width="60" height="15"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TERM]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="64786995-51bb-4371-825c-8bcda2736520" x="241" y="4" width="85" height="15"/>
+				<reportElement uuid="64786995-51bb-4371-825c-8bcda2736520" x="200" y="4" width="85" height="15"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL STUDENTS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="64786995-51bb-4371-825c-8bcda2736520" x="326" y="4" width="85" height="15"/>
+				<reportElement uuid="64786995-51bb-4371-825c-8bcda2736520" x="285" y="4" width="85" height="15"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL CASES]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="579c3214-b601-442a-b5dc-9bb511a13f2e" x="411" y="4" width="85" height="15"/>
+				<reportElement uuid="579c3214-b601-442a-b5dc-9bb511a13f2e" x="370" y="4" width="126" height="15"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL RESPONDED TO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="579c3214-b601-442a-b5dc-9bb511a13f2e" x="496" y="4" width="86" height="15"/>
+				<reportElement uuid="579c3214-b601-442a-b5dc-9bb511a13f2e" x="496" y="4" width="130" height="15"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -147,7 +127,7 @@
 	<detail>
 		<band height="24" splitType="Stretch">
 			<rectangle>
-				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="181" y="0" width="401" height="20" backcolor="#E4E4E4">
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="130" y="2" width="506" height="20" backcolor="#E4E4E4">
 					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
@@ -155,106 +135,107 @@
 				</graphicElement>
 			</rectangle>
 			<textField>
-				<reportElement uuid="45da8800-1846-41a1-9882-ff007a48762b" x="181" y="1" width="60" height="16"/>
+				<reportElement uuid="45da8800-1846-41a1-9882-ff007a48762b" x="140" y="3" width="60" height="16"/>
 				<textElement textAlignment="Center">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{termCode}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="294ddbce-601e-4d1f-b57a-c56521042369" x="241" y="1" width="85" height="16"/>
-				<textElement textAlignment="Center">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{totalStudents}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="862d9bad-4a09-4795-8539-b7789f997222" x="326" y="1" width="85" height="16"/>
+				<reportElement uuid="862d9bad-4a09-4795-8539-b7789f997222" x="285" y="3" width="85" height="16"/>
 				<textElement textAlignment="Center">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalCases}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="ffe22d7b-5cb0-4797-bbd1-69b19b1e6d95" x="411" y="1" width="43" height="16"/>
+				<reportElement uuid="ffe22d7b-5cb0-4797-bbd1-69b19b1e6d95" x="370" y="3" width="57" height="16"/>
 				<textElement textAlignment="Center">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalRespondedTo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="(###.0)%" isBlankWhenNull="true">
-				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" x="455" y="1" width="42" height="16" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" x="427" y="3" width="70" height="16" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Center">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalCases} != null && $F{totalCases} > 0 ? (double)$F{totalRespondedTo}/(double)$F{totalCases} : 0]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="34055fa2-b00a-4225-a76a-930f0b5e3bb3" x="497" y="1" width="43" height="16"/>
+				<reportElement uuid="34055fa2-b00a-4225-a76a-930f0b5e3bb3" x="497" y="3" width="54" height="16"/>
 				<textElement textAlignment="Center">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalClosed}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="(##0.0)%">
-				<reportElement uuid="e2f4fd38-a3da-44b4-9adb-4007fd9a95d1" x="540" y="1" width="42" height="16"/>
+				<reportElement uuid="e2f4fd38-a3da-44b4-9adb-4007fd9a95d1" x="551" y="3" width="75" height="16"/>
 				<textElement textAlignment="Center">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalCases} != null && $F{totalCases} > 0?(double)$F{totalClosed}/(double)$F{totalCases}:0]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement uuid="294ddbce-601e-4d1f-b57a-c56521042369" x="200" y="3" width="85" height="16"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalStudents}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="20" splitType="Stretch"/>
-	</columnFooter>
-	<pageFooter>
-		<band height="20" splitType="Stretch"/>
-	</pageFooter>
 	<summary>
 		<band height="42" splitType="Stretch">
 			<textField>
-				<reportElement uuid="61d3d9d4-6881-40e3-9dbd-060abbe0e0ac" mode="Opaque" x="241" y="2" width="85" height="16"/>
-				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+				<reportElement uuid="61d3d9d4-6881-40e3-9dbd-060abbe0e0ac" mode="Opaque" x="200" y="2" width="85" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalStudents_1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="32413929-9d98-45f7-93b8-3600165db12c" mode="Opaque" x="326" y="2" width="85" height="16"/>
-				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+				<reportElement uuid="32413929-9d98-45f7-93b8-3600165db12c" mode="Opaque" x="285" y="2" width="85" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalCases_1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="10438f7c-6846-4015-b559-cc5d8658c59a" mode="Opaque" x="411" y="2" width="43" height="16"/>
-				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+				<reportElement uuid="10438f7c-6846-4015-b559-cc5d8658c59a" mode="Opaque" x="370" y="2" width="57" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalRespondedTo_1}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="(###.0)%" isBlankWhenNull="true">
-				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" mode="Opaque" x="455" y="2" width="42" height="16" isRemoveLineWhenBlank="true"/>
-				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" mode="Opaque" x="427" y="2" width="69" height="16" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalCases_1} != null && $V{totalCases_1} > 0 ? (double)$V{totalRespondedTo_1}/(double)$V{totalCases_1} : 0]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="8416a64b-f939-48ce-981c-5b8a464fd36c" mode="Opaque" x="497" y="2" width="43" height="16"/>
-				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+				<reportElement uuid="8416a64b-f939-48ce-981c-5b8a464fd36c" mode="Opaque" x="497" y="2" width="54" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalClosed_1}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="(###.0)%" isBlankWhenNull="true">
-				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" mode="Opaque" x="540" y="2" width="42" height="16" isRemoveLineWhenBlank="true"/>
-				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" mode="Opaque" x="551" y="2" width="75" height="16" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalCases_1} != null && $V{totalCases_1} > 0 ? (double)$V{totalClosed_1}/(double)$V{totalCases_1} : 0]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="140" y="2" width="60" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTALS:]]></text>
+			</staticText>
 		</band>
 	</summary>
 </jasperReport>

@@ -90,7 +90,7 @@ public class EarlyAlertStudentReportTO extends BaseStudentReportTO {
 	}
 	
 	public Long getOpen() {
-		return total - closed;
+		return total - closed - pending;
 	}
 	
 	public UUID getEarlyAlertId() {
