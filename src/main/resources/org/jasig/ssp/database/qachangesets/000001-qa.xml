@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="schema" value="public" dbms="postgresql" />
+	<property name="schema" value="dbo" dbms="mssql" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet id="create singletest student" author="dan.mccallum">
+		<insert tableName="person">
+			<column name="id" value="fa8d6aeb-7de8-11e2-b865-406c8f22c3ce" />
+			<column name="first_name" value="QA" />
+			<column name="middle_name" value="Q" />
+			<column name="last_name" value="TestStudent1" />
+			<column name="primary_email_address" value="teststudent1@institution.edu" />
+			<column name="secondary_email_address" value="teststudent1@institution.edu" />
+			<column name="username" value="teststudent1" />
+			<column name="home_phone" value="123-456-1234" />
+			<column name="work_phone" value="123-456-7654" />
+			<column name="address_line_1" value="444 West Third Street" />
+			<column name="city" value="San Francisco" />
+			<column name="state" value="CA" />
+			<column name="zip_code" value="94102" />
+			<column name="photo_url" value="" />
+			<column name="school_id" value="teststudent1" />
+			<column name="student_type_id">b2d058eb-5056-a51a-80a7-8a20c30d1e91</column>
+			<column name="created_date" valueDate="2013-02-23T00:00:00" />
+			<column name="modified_date" valueDate="2013-02-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<rollback>
+			<delete tableName="person">
+				<where>id='fa8d6aeb-7de8-11e2-b865-406c8f22c3ce'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="create program status for teststudent1" author="dan.mccallum">
+		<insert tableName="person_program_status">
+			<column name="id" value="de5bb487-7dea-11e2-8921-406c8f22c3ce" />
+			<column name="person_id" value="fa8d6aeb-7de8-11e2-b865-406c8f22c3ce" />
+			<column name="created_date" valueDate="2013-02-23T00:00:00" />
+			<column name="modified_date" valueDate="2013-02-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="program_status_id" value="b2d12527-5056-a51a-8054-113116baab88" />
+			<column name="effective_date" valueDate="2012-03-20T00:00:00" />
+			<column name="expiration_date" valueDate="2015-03-20T00:00:00" />
+		</insert>
+		
+		<rollback>
+			<delete tableName="person_program_status">
+				<where>id='e5bb487-7dea-11e2-8921-406c8f22c3ce'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="unbounded program status for teststudent1" author="dan.mccallum">
+		<update tableName="person_program_status">
+			<column name="expiration_date">NULL</column>
+			<where>id = 'de5bb487-7dea-11e2-8921-406c8f22c3ce'</where>
+		</update>
+		
+		<rollback>
+			<update tableName="person_program_status">
+			<column name="expiration_date">2015-03-20T00:00:00</column>
+			<where>id = 'de5bb487-7dea-11e2-8921-406c8f22c3ce'</where>
+		</update>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="set coach for teststudent1" author="dan.mccallum">
+		<update tableName="person">
+				<column name="coach_id">58ba5ee3-734e-4ae9-b9c5-943774b4de41</column>
+				<where>id = 'fa8d6aeb-7de8-11e2-b865-406c8f22c3ce'</where>
+		</update>
+		<rollback>
+			<update tableName="person">
+				<column name="coach_id">NULL</column>
+				<where>id = 'fa8d6aeb-7de8-11e2-b865-406c8f22c3ce'</where>
+			</update>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="activate teststudent1" author="dan.mccallum">
+		<update tableName="person">
+				<column name="enabled">true</column>
+				<where>id = 'fa8d6aeb-7de8-11e2-b865-406c8f22c3ce'</where>
+		</update>
+		<rollback>
+			<update tableName="person">
+				<column name="enabled">false</column>
+				<where>id = 'fa8d6aeb-7de8-11e2-b865-406c8f22c3ce'</where>
+			</update>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="create single qa early_alert" author="dan.mccallum">
+		<insert tableName="early_alert">
+			<column name="id" value="475e9a38-7de9-11e2-8842-406c8f22c3ce" />
+			<column name="created_date" valueDate="2013-02-23T00:00:00" />
+			<column name="modified_date" valueDate="2013-02-23T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="course_name" value="Course Name" />
+			<column name="course_title" value="Course Title" />
+			<column name="campus_id" value="901e104b-4dc7-43f5-a38e-581015e204e1" />
+			<column name="person_id" value="fa8d6aeb-7de8-11e2-b865-406c8f22c3ce" />
+		</insert>
+		<rollback>
+			<delete tableName="early_alert">
+				<where>id='475e9a38-7de9-11e2-8842-406c8f22c3ce'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="set early alert reason on qa alert" author="dan.mccallum">
+		<insert tableName="early_alert_early_alert_reason">
+			<column name="early_alert_id" value="475e9a38-7de9-11e2-8842-406c8f22c3ce" />
+			<column name="early_alert_reason_id" value="b2d112a9-5056-a51a-8010-b510525ea3a8" />
+		</insert>
+		<rollback>
+			<delete tableName="early_alert_early_alert_reason">
+				<where>early_alert_id='475e9a38-7de9-11e2-8842-406c8f22c3ce' and early_alert_reason_id = 'b2d112a9-5056-a51a-8010-b510525ea3a8'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>
