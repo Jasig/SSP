@@ -34,6 +34,8 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 
+import com.google.common.collect.Lists;
+
 public class BaseStudentReportTO implements Serializable {
 
 	/**
@@ -87,7 +89,11 @@ public class BaseStudentReportTO implements Serializable {
 	private String coachSchoolId;
 	private String coachUsername;
 	
-	private String programCurrentStatusName;
+	private String currentProgramStatusName;
+	private Date programStatusExpirationDate;
+	private UUID programStatusId;
+	private String programStatusName;
+	private List<ProgramStatusReportTO> programStatuses = null;
 	
 	private List<String> specialServiceGroups = new ArrayList<String>();
 	private String specialServiceGroup;
@@ -212,12 +218,63 @@ public class BaseStudentReportTO implements Serializable {
 		this.homePhone = homePhone;
 	}
 
-	public String getProgramCurrentStatusName() {
-		return programCurrentStatusName;
+	public String getCurrentProgramStatusName() {
+		currentProgramStatusName = "";
+		for(ProgramStatusReportTO programStatus:this.getProgramStatuses()){
+			if(programStatus.getExpirationDate() == null && programStatus.getName() != null)
+				currentProgramStatusName = addValueToStringList(currentProgramStatusName, 
+						programStatus.getName());		
+		}
+		return currentProgramStatusName;
 	}
 
-	public void setProgramCurrentStatusName(String programCurrentStatusName) {
-		this.programCurrentStatusName = programCurrentStatusName;
+	public void setCurrentProgramStatusName(String currentProgramStatusName) {
+		this.currentProgramStatusName = currentProgramStatusName;
+	}
+	
+	public void setProgramStatusExpirationDate(Date programStatusExpirationDate) {
+		this.programStatusExpirationDate = programStatusExpirationDate;
+	}
+		
+	public Date getProgramStatusExpirationDate(){
+		return programStatusExpirationDate;
+	}
+	
+	public void setProgramStatusId(UUID programStatusId) {
+			this.programStatusId = programStatusId;
+	}
+		
+	public UUID getProgramStatusId(){
+		return programStatusId;
+	}
+	
+	public void setProgramStatusName(String programStatusName) {
+			this.programStatusName = programStatusName;
+	}
+		
+	public String getProgramStatusName(){
+			return programStatusName;
+	}
+	
+	
+	public void addProgramStatuses(ProgramStatusReportTO programStatus) {
+			if(!this.getProgramStatuses().contains(programStatus))
+				this.programStatuses.add(programStatus);
+	}
+	
+	public void addProgramStatuses(List<ProgramStatusReportTO> programStatuses) {
+		for(ProgramStatusReportTO programStatus:programStatuses)
+			addProgramStatuses(programStatus);
+	}
+	
+	
+	public List<ProgramStatusReportTO> getProgramStatuses(){
+		if(programStatuses == null)
+			programStatuses = Lists.newArrayList(new ProgramStatusReportTO( 
+					programStatusName, 
+					programStatusId,
+					programStatusExpirationDate));
+		return programStatuses;
 	}
 
 	public Integer getRegistrationStatus() {
@@ -335,7 +392,7 @@ public class BaseStudentReportTO implements Serializable {
 		setCoachUsername(person.getCoachUsername());
 		setCoach(person.getCoach());
 		setStudentType(person.getStudentType());
-		setProgramCurrentStatusName(person.getCurrentProgramStatusName());
+		setCurrentProgramStatusName(person.getCurrentProgramStatusName());
 		setRegistrationStatus(person.getRegistrationStatus());
 		setSpecialServiceGroupsName(person.getSpecialServiceGroupsName());
 		
@@ -345,15 +402,6 @@ public class BaseStudentReportTO implements Serializable {
 			setIsIlp(false);
 	}
 
-	
-	public String getCurrentProgramStatusName() {
-		return programCurrentStatusName;
-	}
-
-	public void setCurrentProgramStatusName(String programStatus) {
-		this.programCurrentStatusName = programStatus;
-	}
-	
 		
 	public void setSpecialServiceGroup(String specialServiceGroup) {
 		this.specialServiceGroup = specialServiceGroup;
@@ -491,20 +539,22 @@ public class BaseStudentReportTO implements Serializable {
 	
 
 	protected String addValueToStringList(String str, String value){
-		return str + ((str.length() != 0) ? " -":"") + value;
+		return str + ((str.length() != 0) ? " - ":"") + value;
 	}
 	
 	public void processDuplicate(BaseStudentReportTO reportTO){
 		addSpecialServiceGroups(reportTO.getSpecialServiceGroups());
 		addStudentTypes(reportTO.getStudentTypes());
+		addProgramStatuses(reportTO.getProgramStatuses());
 	}
 	
 	
-	public void setCurrentRegistrationStatus(RegistrationStatusByTermService registrationStatusByTermService )
+public void setCurrentRegistrationStatus(RegistrationStatusByTermService registrationStatusByTermService )
 			throws ObjectNotFoundException {
 		RegistrationStatusByTerm termStatus = registrationStatusByTermService
 				.getForCurrentTerm(getSchoolId());
 		if(termStatus != null)
 			setRegistrationStatus(termStatus.getRegisteredCourseCount());
-	}
+}
+
 }

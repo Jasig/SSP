@@ -25,6 +25,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>

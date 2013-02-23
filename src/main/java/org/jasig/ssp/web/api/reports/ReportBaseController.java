@@ -111,12 +111,16 @@ abstract class ReportBaseController extends AbstractBaseController {
 	}
 	
 	List<BaseStudentReportTO> processStudentReportTOs(PagingWrapper<BaseStudentReportTO> people){
-			
+		if(people == null || people.getRows().size() <= 0)
+			return new ArrayList<BaseStudentReportTO>();
 		 return processStudentReportTOs(new ArrayList<BaseStudentReportTO>(people.getRows()));
 	}
 	
 	List<BaseStudentReportTO> processStudentReportTOs(List<BaseStudentReportTO> reports){
 		ArrayList<BaseStudentReportTO> compressedReports = new ArrayList<BaseStudentReportTO>();
+		if(reports == null || reports.size() <= 0)
+			return compressedReports;
+		
 		for(BaseStudentReportTO reportTO: reports){
 			Integer index = compressedReports.indexOf(reportTO);
 			if(index != null && index >= 0)
@@ -133,6 +137,9 @@ abstract class ReportBaseController extends AbstractBaseController {
 	protected List<EarlyAlertStudentReportTO> processReports(PagingWrapper<EarlyAlertStudentReportTO> reports, EarlyAlertResponseService earlyAlertResponseService){
 		 
 		ArrayList<EarlyAlertStudentReportTO> compressedReports = new ArrayList<EarlyAlertStudentReportTO>();
+		if(reports == null || reports.getRows().size() <= 0)
+			return compressedReports;
+		
 		for(EarlyAlertStudentReportTO reportTO: reports){
 			Integer index = compressedReports.indexOf(reportTO);
 			if(index != null && index >= 0)

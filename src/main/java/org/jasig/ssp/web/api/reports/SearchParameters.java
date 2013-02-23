@@ -538,4 +538,12 @@ public class SearchParameters {
 		sortFields.add(new Pair<String, SortDirection>("middleName", SortDirection.ASC));
 		return new SortingAndPaging(status, sortFields, null, SortDirection.ASC);
 	}
+	
+	static final SortingAndPaging getReportPersonSortingAndPagingAll(ObjectStatus status, String prefix){
+		List<Pair<String, SortDirection>> sortFields = Lists.newArrayList();
+		sortFields.add(new Pair<String, SortDirection>(prefix + ".lastName", SortDirection.ASC));
+		sortFields.add(new Pair<String, SortDirection>(prefix + ".firstName", SortDirection.ASC));
+		sortFields.add(new Pair<String, SortDirection>(prefix + ".middleName", SortDirection.ASC));
+		return new SortingAndPaging(status, sortFields, null, SortDirection.ASC);
+	}
 }

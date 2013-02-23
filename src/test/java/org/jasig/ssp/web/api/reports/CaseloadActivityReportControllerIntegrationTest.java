@@ -55,10 +55,9 @@ public class CaseloadActivityReportControllerIntegrationTest
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		// not sure why lines render this way, but they do... csv formatting
 		// needs to be fixed up
-		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
-		expectedReportBodyLines.add("Alan,Turing,0,0,,0,0,0,0,0");
-		expectedReportBodyLines.add("test,coach1,10,4,,10,4,15,5,17");
-		expectedReportBodyLines.add(",,10,,4,10,4,15,5,17");
+		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
+		expectedReportBodyLines.add("Alan,Turing,0,0,0,0,0,0,0");
+		expectedReportBodyLines.add("test,coach1,10,4,10,4,15,5,17");
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
@@ -84,9 +83,8 @@ public class CaseloadActivityReportControllerIntegrationTest
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		// not sure why lines render this way, but they do... csv formatting
 		// needs to be fixed up
-		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
-		expectedReportBodyLines.add("test,coach1,3,1,,3,1,5,2,6");
-		expectedReportBodyLines.add(",,3,,1,3,1,5,2,6");
+		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
+		expectedReportBodyLines.add("test,coach1,3,1,3,1,5,2,6");
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
@@ -112,9 +110,8 @@ public class CaseloadActivityReportControllerIntegrationTest
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		// not sure why lines render this way, but they do... csv formatting
 		// needs to be fixed up
-		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
-		expectedReportBodyLines.add("Alan,Turing,0,0,,0,0,0,0,0");
-		expectedReportBodyLines.add(",,0,,0,0,0,0,0,0");
+		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
+		expectedReportBodyLines.add("Alan,Turing,0,0,0,0,0,0,0");
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
@@ -135,11 +132,10 @@ public class CaseloadActivityReportControllerIntegrationTest
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		
 		/// TODO Eliminate Spaces in Report TO Remove Extra commas
-		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
-		expectedReportBodyLines.add("Kevin,Smith,0,0,,0,0,0,0,0");
-		expectedReportBodyLines.add("Alan,Turing,0,0,,0,0,0,0,0");
-		expectedReportBodyLines.add("test,coach1,10,4,,10,4,15,5,17");
-		expectedReportBodyLines.add(",,10,,4,10,4,15,5,17");
+		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
+		expectedReportBodyLines.add("Kevin,Smith,0,0,0,0,0,0,0");
+		expectedReportBodyLines.add("Alan,Turing,0,0,0,0,0,0,0");
+		expectedReportBodyLines.add("test,coach1,10,4,10,4,15,5,17");		
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 
@@ -171,11 +167,10 @@ public class CaseloadActivityReportControllerIntegrationTest
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		/// TODO Eliminate Spaces in Report TO Remove Extra commas
-		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
-		expectedReportBodyLines.add("Kevin,Smith,0,0,,0,0,0,0,0");
-		expectedReportBodyLines.add("Alan,Turing,0,0,,0,0,0,0,0");
-		expectedReportBodyLines.add("test,coach1,10,4,,10,4,15,5,17");
-		expectedReportBodyLines.add(",,10,,4,10,4,15,5,17");
+		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
+		expectedReportBodyLines.add("Kevin,Smith,0,0,0,0,0,0,0");
+		expectedReportBodyLines.add("Alan,Turing,0,0,0,0,0,0,0");
+		expectedReportBodyLines.add("test,coach1,10,4,10,4,15,5,17");
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
@@ -221,11 +216,10 @@ public class CaseloadActivityReportControllerIntegrationTest
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		/// TODO Eliminate Spaces in Report TO Remove Extra commas
-		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
-		expectedReportBodyLines.add("Kevin,Smith,0,0,,0,0,1,1,0");
-		expectedReportBodyLines.add("Alan,Turing,0,0,,0,0,0,0,0");
-		expectedReportBodyLines.add("test,coach1,10,4,,10,4,15,5,17");
-		expectedReportBodyLines.add(",,10,,4,10,4,16,6,17");
+		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
+		expectedReportBodyLines.add("Kevin,Smith,0,0,0,0,1,1,0");
+		expectedReportBodyLines.add("Alan,Turing,0,0,0,0,0,0,0");
+		expectedReportBodyLines.add("test,coach1,10,4,10,4,15,5,17");
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}

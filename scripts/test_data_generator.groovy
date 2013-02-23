@@ -41,21 +41,24 @@ class Constants{
 	
 	static final campusId = "901e104b-4dc7-43f5-a38e-581015e204e1"
 	static final base_created_date = "2012-08-20T00:00:00"
+	static final base_terms_start_date = "1983-08-20T00:00:00"
+	static final term_codes = ["FA","WN","SP","SU"]
+	static final term_names = ["Fall","Winter","Spring","Summer"]
 
 	/* Change Sets, change as needed */
-	static final fileName = "000012-test.xml";
+	static final fileName = "000013-test.xml";
 	static final TEST_LOCATION_CHANGESET = './src/test/resources/org/jasig/ssp/database/changesets/'
 	static final FULL_DATA_BASE_LOCATION_CHANGESET = './src/main/resources/org/jasig/ssp/database/testingchangesets/'
-	static final BASE_LOCATION_CHANGESET = TEST_LOCATION_CHANGESET
+	static final BASE_LOCATION_CHANGESET = FULL_DATA_BASE_LOCATION_CHANGESET
 	static final WRITE_UPORTAL_USERS = false;
 	static final BASE_LOCATION_UPORTAL_USERS = "/Users/jamesstanley/Documents/opensource/uPortal/uportal-war/src/main/data/ssp_entities/user/"
 	static final author = "james.stanley"
-	static final fileDescription = "Adding Randomized Data Set"
+	static final fileDescription = "Adding 2nd Randomized Data Set"
 	
 	
 	/* parameter values for generation */
 	
-	static final TOTAL_NUMBER_OF_COACHES = 100 as Integer
+	static final TOTAL_NUMBER_OF_COACHES = 50 as Integer
 	static final STUDENT_MULTIPLIER = 4 as Integer //use this to set the multiplier that determines the number of students a coach has. (coachIndex * STUDENT_MULTIPLIER)
 	static final BASE_NUMBER_OF_STUDENTS = 15 as Integer
 	static final MAX_EARLY_ALERTS = 8 as Integer
@@ -69,8 +72,8 @@ class Constants{
 	static final FREQUENCY_CLOSED_EARLY_ALERTS = 4 as Integer
 	static final FREQUENCY_DISABILITY = 3 as Integer
 	
-	static final BASE_COACH_NAME = "Coach"
-	static final BASE_STUDENT_NAME = "Student"
+	static final BASE_COACH_NAME = "Advisor"
+	static final BASE_STUDENT_NAME = "Advisee"
 	static final STUDENT_TYPE_ID_PARAMS = [max:3,mod:3]  // array size 3, where max is less than size of id array mod greater than array size causes mod-size null selections
 	static final PROGRAM_STATUS_ID_PARAMS = [max:5,mod:5] // array size 5
 	static final EARLY_ALERT_OUTREACH_ID_PARAMS = [max:5,mod:8] // array size 5
@@ -340,7 +343,7 @@ static final journalTrackIds = ["b2d07a7d-5056-a51a-80a8-96ae5188a188",
 static final specialServiceGroupIds = ['40b6b8aa-bca1-11e1-9344-037cb4088c72',
 	"f6201a04-bb31-4ca5-b606-609f3ad09f87"] as String[]
 	
-	static final def eol = System.properties.'line.separator'
+static final def eol = System.properties.'line.separator'
 	
 static final referralSourceIds = ["c54aa656-bd7a-11e1-9ced-5b723f71da43",
 "ccadd634-bd7a-11e1-8d28-3368721922dc",
@@ -403,6 +406,7 @@ xml.databaseChangeLog( xmlns : "http://www.liquibase.org/xml/ns/dbchangelog"
 						 	
 							ArrayList<UUID> rollbackList = new ArrayList<UUID>()
 							ArrayList<GroovyPerson> groovyPersons = new ArrayList<GroovyPerson>()
+							generateTerms(xml)
 							generatePeople(xml, null, "", 0, TOTAL_NUMBER_OF_COACHES, rollbackList, groovyPersons)
 							generateRollbacks(xml, 'person', rollbackList)
 							
@@ -552,6 +556,43 @@ ArrayList<UUID> generatePeople(xml, coachId, coachSuffix, startIndex, endIndex, 
 	 return rollbackList;
 }
 
+void generateTerms(xml){
+	String dateString = offSetDate(base_terms_start_date, 0)
+	ArrayList<String> fullCodes = new ArrayList<String>()
+	for(Integer k = 0; k <= 26; k++)
+		for(Integer i = 0; i <= 3; i++){
+			String code = term_codes[i]
+			String name = term_names[i]
+			String yearString = getYear(dateString).toString()
+			String fullCode = code + yearString.substring(2)
+		xml.insert(tableName:'external_term'){
+			xml.column(name:"name", value:name + " " + getYear(dateString))
+			xml.column(name:"code", value:fullCode)
+			xml.column(name:"start_date", value:dateString)
+			dateString = offSetDate(dateString, 92)
+			xml.column(name:"end_date", value:dateString)
+			xml.column(name:"report_year", getYear(dateString))
+		}
+		
+	}
+	
+	xml.rollback{
+		for(String code:fullCodes){
+			xml.delete(tableName:'external_term'){
+				xml.where("code='" + code+"'")
+			}
+		}
+	}
+}
+
+Integer getYear(dateString){
+	java.text.DateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+	Date date = dateFormat.parse(dateString)
+	Calendar c = Calendar.getInstance();
+	c.setTime(date);
+	return c.get(Calendar.YEAR);
+}
+
 ArrayList<UUID> generateJournalEntries(xml, personId, coachId, i, startDate, journalIds){
 	for(Integer k = 0; k < i%MAXIMUM_JOURNAL_ENTRIES; k++){
 		confidentialityLevelId = retrieveListValue(confidentialityLevelIds,k, CONFIDENTIALITY_LEVEL_ID_PARAMS)
@@ -674,11 +715,21 @@ String generateTaskDescription(i){
 
 String getDateWithOffSet(dateString, dayOffsetParams, index){
 	java.text.DateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-	date = dateFormat.parse(dateString)
+	Date date = dateFormat.parse(dateString)
 	Calendar cal = Calendar.getInstance()
 	cal.setTime(date)
-	cal.add(Calendar.DAY_OF_MONTH, dayOffsetParams.baseOffsetDays + index%dayOffsetParams.mod);
+	if(dayOffsetParams != null)
+		cal.add(Calendar.DAY_OF_MONTH, dayOffsetParams.baseOffsetDays + index%dayOffsetParams.mod);
 	return new Date(cal.getTimeInMillis()).toString();
+}
+
+String offSetDate(dateString, dayOffsetParams){
+	java.text.DateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+	Date date = dateFormat.parse(dateString)
+	Calendar cal = Calendar.getInstance()
+	cal.setTime(date)
+	cal.add(Calendar.DAY_OF_MONTH, dayOffsetParams);
+	return dateFormat.format(new Date(cal.getTimeInMillis())).toString()
 }
 
 String retrieveListValue(list, i, params){
@@ -690,13 +741,18 @@ String retrieveListValue(list, i, params){
 }
 
 void generateManyToMany(xml, id, manyIds, i, k, manyIdsSize, params, tableName, idName, manyIdName){
+	ArrayList<String> usedIds = new ArrayList<String>()
 	for(Integer l = 0; l < (i+k)%MAX_MANY_TO_MANY; l++){
 		manyId = retrieveListValue(manyIds, i + k + l, params)
+		
 		if(manyId == null)
-			continue;
-			xml.insert(tableName:tableName){
-				xml.column(name:idName,  value:id.toString())
-				xml.column(name:manyIdName,  value:manyId.toString())
+			continue
+		if(usedIds.contains(manyId))
+			continue
+			usedIds.add(manyId)
+		xml.insert(tableName:tableName){
+			xml.column(name:idName,  value:id.toString())
+			xml.column(name:manyIdName,  value:manyId.toString())
 		}
 	}
 }

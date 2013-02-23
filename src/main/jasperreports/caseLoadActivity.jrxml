@@ -25,6 +25,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -293,54 +294,64 @@
 	<summary>
 		<band height="17">
 			<textField>
-				<reportElement uuid="6492ec46-73c6-44d0-8ac1-9536d84a5217" x="119" y="0" width="92" height="12"/>
+				<reportElement uuid="6492ec46-73c6-44d0-8ac1-9536d84a5217" x="119" y="3" width="92" height="12"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{journalEntriesCreatedCount_1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="00b84556-2c0a-4d51-9b21-087804688fa3" x="212" y="0" width="89" height="12"/>
+				<reportElement uuid="00b84556-2c0a-4d51-9b21-087804688fa3" x="211" y="3" width="90" height="12"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{studentsJournalEntriesCount_1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="e3e0c513-d867-403a-a87f-b68a607eb4bc" x="301" y="0" width="85" height="12"/>
+				<reportElement uuid="e3e0c513-d867-403a-a87f-b68a607eb4bc" x="301" y="3" width="85" height="12"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{actionPlanTasksCreatedCount_1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="e25fede4-e079-49bf-b120-11b88d3ad75f" x="386" y="0" width="90" height="12"/>
+				<reportElement uuid="e25fede4-e079-49bf-b120-11b88d3ad75f" x="386" y="3" width="90" height="12"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{studentsActionPlanTasksCount_1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="d1e6df3a-a37f-4baa-8d65-e609c3d3dad5" x="476" y="0" width="90" height="12"/>
+				<reportElement uuid="d1e6df3a-a37f-4baa-8d65-e609c3d3dad5" x="476" y="3" width="90" height="12"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{earlyAlertsCreatedCount_1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="e4ed99ae-7935-457c-a3d9-c52d502fff42" x="566" y="0" width="88" height="12"/>
+				<reportElement uuid="e4ed99ae-7935-457c-a3d9-c52d502fff42" x="566" y="3" width="88" height="12"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{studentsEarlyAlertsCount_1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="7c41c8a6-5115-4ce1-af23-71b2cb50ce5a" x="654" y="0" width="85" height="12"/>
+				<reportElement uuid="7c41c8a6-5115-4ce1-af23-71b2cb50ce5a" x="654" y="3" width="85" height="12"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{earlyAlertsRespondedCount_1}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="61" y="3" width="58" height="12"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTALS:]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="5ca3bd16-3799-44f1-9ba0-5139ee537dd5" x="59" y="1" width="680" height="1"/>
+			</line>
 		</band>
 	</summary>
 </jasperReport>

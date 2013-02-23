@@ -25,9 +25,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -404,8 +406,26 @@ public class EarlyAlertDaoTest {
 
 		try {
 			final PagingWrapper<EarlyAlertStudentReportTO> result = dao.getStudentsEarlyAlertCountSetForCritera(searchForm, null);
-			assertEquals("Count of Students was not expected.", 4,
-					result.getRows().size());
+			List<EarlyAlertStudentReportTO> compressedReports = new ArrayList<EarlyAlertStudentReportTO>();
+			for(EarlyAlertStudentReportTO reportTO: result.getRows())
+			{
+				Integer index = compressedReports.indexOf(reportTO);
+				if(index >= 0){
+					compressedReports.get(index).processDuplicate(reportTO);
+				}else{
+					compressedReports.add(reportTO);
+				}
+			}
+			assertEquals("Count of Students was not expected.", 1,
+					compressedReports.size());
+			assertEquals("Count of Alerts Total was not expected.", (Long)2L,
+					compressedReports.get(0).getTotal());
+			assertEquals("Count of Alerts Closed was not expected.", (Long)1L,
+					compressedReports.get(0).getClosed());
+			assertEquals("Count of Alerts Pending was not expected.", (Long)0L,
+					compressedReports.get(0).getPending());
+			assertEquals("Count of Alerts Open was not expected.", (Long)1L,
+					compressedReports.get(0).getOpen());
 		} finally {
 			dao.delete(saved);
 			dao.delete(saved2);

@@ -165,7 +165,7 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 				initialTerm.getStartDate(), initialTerm.getEndDate());
 
 		final PagingWrapper<EarlyAlertStudentReportTO> initialPeopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
-				initialSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
+				initialSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status, "person"));
 		
 		final EarlyAlertStudentSearchTO comparisonSearchForm = new EarlyAlertStudentSearchTO(personSearchForm, 
 				comparisonTerm.getStartDate(), comparisonTerm.getEndDate());

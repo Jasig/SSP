@@ -57,7 +57,7 @@ public class PretransistionedReportControllerIntegrationTest extends
 
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		expectedReportBodyLines.add("STUDENT NAME,,,ID,PHONE (HOME),PHONE (CELL)),TYPE,STATUS,ACADEMIC STANDING,FA STANDING,CUM GPA,QUARTER GPA,REG STATUS,COHORT TERM,COHORT YEAR,SPECIAL SERVICE GROUPS,COACH");
-		expectedReportBodyLines.add("James,A,Gosling,student0,908-123-4567,,ILP,Active,,,,,,,,Another Test Special Service Group -Test Special Service Group,Alan Turing");
+		expectedReportBodyLines.add("James,A,Gosling,student0,908-123-4567,,ILP,Active,,,,,,,,Another Test Special Service Group - Test Special Service Group,Alan Turing");
 		expectedReportBodyLines.add("Dennis,M,Ritchie,dmr.1,908-123-4567,,CAP,,,,,,,,,Another Test Special Service Group,Alan Turing");
 		expectedReportBodyLines.add("Kenneth,L,Thompson,ken.1,908-123-4567,,CAP,Active,,,,,,,,Test Special Service Group,Alan Turing");
 		expectedReportBodyLines.add("test,Mumford,coach1student0,coach1student0,480-775-2345,,ILP,Active,,,,,,,,Another Test Special Service Group,test coach1");

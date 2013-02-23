@@ -25,6 +25,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -59,6 +60,18 @@
 	<variable name="rowIndex" class="java.lang.Integer">
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
 		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<variable name="open_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{open}]]></variableExpression>
+	</variable>
+	<variable name="closed_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{closed}]]></variableExpression>
+	</variable>
+	<variable name="pending_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{pending}]]></variableExpression>
+	</variable>
+	<variable name="total_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{total}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -229,7 +242,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="24" splitType="Stretch">
+		<band height="33" splitType="Stretch">
 			<rectangle>
 				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="13" y="3" width="728" height="20" backcolor="#E4E4E4">
 					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
@@ -309,4 +322,46 @@
 			</textField>
 		</band>
 	</pageFooter>
+	<summary>
+		<band height="21">
+			<staticText>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="313" y="6" width="122" height="12"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[TOTALS:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="eb4090f0-11b1-47c5-94d2-fdf7edf070ed" x="435" y="6" width="54" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{open_1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="c38c94c6-08f4-454b-a14e-6b8555908cd8" x="489" y="6" width="52" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{closed_1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="80aaca1c-e524-41c4-a56a-dfa3688069d1" x="541" y="6" width="53" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{pending_1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="240e0348-ca2e-4aaf-8d3b-d803f4e3ce59" x="594" y="6" width="53" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total_1}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="436ea051-ccd8-48ef-ab22-e726f38334be" x="375" y="3" width="272" height="1"/>
+			</line>
+		</band>
+	</summary>
 </jasperReport>

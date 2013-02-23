@@ -25,6 +25,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -190,7 +191,7 @@
 				<text><![CDATA[Referral Source:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="acb5d97c-744c-4734-a98d-a800ceceff3d" mode="Opaque" x="129" y="114" width="625" height="16"/>
+				<reportElement uuid="acb5d97c-744c-4734-a98d-a800ceceff3d" mode="Opaque" x="129" y="114" width="569" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{referralSourceNames}]]></textFieldExpression>
 			</textField>

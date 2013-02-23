@@ -186,19 +186,21 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 		// building
 		final PagingWrapper<DisabilityServicesReportTO> people = personService.getDisabilityReport(
 				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
-		
-		ArrayList<DisabilityServicesReportTO> report = new ArrayList<DisabilityServicesReportTO>(people.getRows());
-		SearchParameters.addStudentCount(report, parameters);
-		ArrayList<DisabilityServicesReportTO> compressedReport = new ArrayList<DisabilityServicesReportTO>();
-		for(DisabilityServicesReportTO reportTO: report){
-			Integer index = compressedReport.indexOf(reportTO);
-			if(index != null && index >= 0)
-			{
-				DisabilityServicesReportTO compressedReportTo = compressedReport.get(index);
-				compressedReportTo.processDuplicate(reportTO);
-			}else{
-				//reportTO.setCurrentRegistrationStatus(registrationStatusByTermService);
-				compressedReport.add(reportTO);
+		ArrayList<DisabilityServicesReportTO> compressedReport = null;
+		if(people != null){
+			ArrayList<DisabilityServicesReportTO> report = new ArrayList<DisabilityServicesReportTO>(people.getRows());
+			SearchParameters.addStudentCount(report, parameters);
+			compressedReport = new ArrayList<DisabilityServicesReportTO>();
+			for(DisabilityServicesReportTO reportTO: report){
+				Integer index = compressedReport.indexOf(reportTO);
+				if(index != null && index >= 0)
+				{
+					DisabilityServicesReportTO compressedReportTo = compressedReport.get(index);
+					compressedReportTo.processDuplicate(reportTO);
+				}else{
+					//reportTO.setCurrentRegistrationStatus(registrationStatusByTermService);
+					compressedReport.add(reportTO);
+				}
 			}
 		}
 		

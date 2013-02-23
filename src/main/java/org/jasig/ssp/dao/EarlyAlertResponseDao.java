@@ -296,35 +296,42 @@ public class EarlyAlertResponseDao extends
 		Criteria personCriteria = criteria.createAlias("earlyAlert.person", "person");
 
 		setPersonCriteria(personCriteria, personSearchForm);
+		
+		List<UUID> ids = criteria.setProjection(Projections.distinct(Projections.property("id"))).list();
+		
+		final Criteria collectionCriteria = createCriteria();
+		
+		if(ids.size() == 0)
+			return new ArrayList<EarlyAlertStudentReportTO>();
+		
+		collectionCriteria.add(Restrictions.in("id", ids));
+		
+		collectionCriteria.createAlias("earlyAlert", "earlyAlert");
+		collectionCriteria.createAlias("earlyAlert.person", "person");
+		
 		ProjectionList projections = Projections.projectionList().
 				add(Projections.distinct(Projections.groupProperty("earlyAlert.id").as("early_alert_response_earlyAlertId")));
 		
-		if(personSearchForm.getSpecialServiceGroupIds() == null)
-			criteria.createAlias("person.specialServiceGroups",
-				"personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
-		
-		if(personSearchForm.getProgramStatus() == null)
-			criteria.createAlias("person.programStatuses",
-				"personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
-		if(personSearchForm.getHomeDepartment() == null
-				|| personSearchForm.getHomeDepartment().length() <= 0) {
-			criteria.createAlias("person.coach","c", JoinType.LEFT_OUTER_JOIN);
-		}
-		
-		addBasicStudentProperties(projections, criteria);
-		criteria.addOrder(Order.asc("person.lastName"));
-		criteria.addOrder(Order.asc("person.firstName"));
-		criteria.addOrder(Order.asc("person.middleName"));
-		criteria.setProjection(projections)
+		addBasicStudentProperties(projections, collectionCriteria);
+		collectionCriteria.addOrder(Order.asc("person.lastName"));
+		collectionCriteria.addOrder(Order.asc("person.firstName"));
+		collectionCriteria.addOrder(Order.asc("person.middleName"));
+		collectionCriteria.setProjection(projections)
 				.setResultTransformer(
 						new NamespacedAliasToBeanResultTransformer(
 								EarlyAlertStudentReportTO.class, "early_alert_response_"));
 		
-		return criteria.list();
+		return collectionCriteria.list();
 	}
 	
 private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria){
 		
+		criteria.createAlias("person.specialServiceGroups",
+			"personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);	
+		criteria.createAlias("person.programStatuses",
+			"personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
+		criteria.createAlias("person.coach","c", JoinType.LEFT_OUTER_JOIN);
+	
 		projections.add(Projections.groupProperty("person.firstName").as("early_alert_response_firstName"));
 		projections.add(Projections.groupProperty("person.middleName").as("early_alert_response_middleName"));
 		projections.add(Projections.groupProperty("person.lastName").as("early_alert_response_lastName"));
@@ -339,16 +346,15 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		projections.add(Projections.groupProperty("person.state").as("early_alert_response_state"));
 		projections.add(Projections.groupProperty("person.zipCode").as("early_alert_response_zipCode"));
 		projections.add(Projections.groupProperty("person.id").as("early_alert_response_id"));
-		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup");
+		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup",JoinType.LEFT_OUTER_JOIN);
 		projections.add(Projections.groupProperty("specialServiceGroup.name").as("early_alert_response_specialServiceGroup"));
 		
-		criteria.add(Restrictions
-				.isNull("personProgramStatuses.expirationDate"));
+		criteria.createAlias("personProgramStatuses.programStatus", "programStatus", JoinType.LEFT_OUTER_JOIN);
 		
-		criteria.createAlias("personProgramStatuses.programStatus", "programStatus");
+		projections.add(Projections.groupProperty("programStatus.name").as("early_alert_response_programStatusName"));
+		projections.add(Projections.groupProperty("personProgramStatuses.id").as("early_alert_response_programStatusId"));
+		projections.add(Projections.groupProperty("personProgramStatuses.expirationDate").as("early_alert_response_programStatusExpirationDate"));
 		
-		projections.add(Projections.groupProperty("programStatus.name").as("early_alert_response_currentProgramStatusName"));
-
 		// Join to Student Type
 		criteria.createAlias("person.studentType", "studentType",
 				JoinType.LEFT_OUTER_JOIN);
@@ -447,7 +453,7 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 							.eq("personProgramStatuses.programStatus.id",
 									personSearchFormTO
 											.getProgramStatus()));
-
+			criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate"));
 		}
 
 		if (personSearchFormTO.getSpecialServiceGroupIds() != null) {

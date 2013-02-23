@@ -25,6 +25,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -45,6 +46,24 @@
 	<variable name="rowIndex" class="java.lang.Integer">
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
 		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalEarlyAlerts_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalEarlyAlerts}]]></variableExpression>
+	</variable>
+	<variable name="countPhoneCalls_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{countPhoneCalls}]]></variableExpression>
+	</variable>
+	<variable name="countEmail_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{countEmail}]]></variableExpression>
+	</variable>
+	<variable name="countLetter_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{countLetter}]]></variableExpression>
+	</variable>
+	<variable name="countText_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{countText}]]></variableExpression>
+	</variable>
+	<variable name="countInPerson_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{countInPerson}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -109,7 +128,7 @@
 				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="1" width="572" height="26" backcolor="#70C2E7"/>
 			</rectangle>
 			<staticText>
-				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="174" y="7" width="224" height="20"/>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="180" y="7" width="224" height="20"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -245,4 +264,60 @@
 			</textField>
 		</band>
 	</pageFooter>
+	<summary>
+		<band height="21">
+			<staticText>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="6" width="81" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[TOTALS:]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="436ea051-ccd8-48ef-ab22-e726f38334be" x="21" y="3" width="546" height="1"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="0f7fe3a3-1761-4450-8c13-ac090cde86e7" x="81" y="6" width="81" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalEarlyAlerts_1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="e05a3e04-21b8-427b-83dc-d43aee701fc5" x="162" y="6" width="81" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{countPhoneCalls_1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="3b897678-b06e-42a3-a9cb-e38c5ce66539" x="243" y="6" width="81" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{countEmail_1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="11a6a90e-414c-4ebc-a694-4a0024a347a2" x="324" y="6" width="80" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{countLetter_1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="faacf309-b773-4c24-8d97-c14f8fb6f694" x="404" y="6" width="82" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{countText_1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="7b4cda8c-9344-4bc6-a72d-93a887e95b5f" x="486" y="6" width="81" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{countInPerson_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
 </jasperReport>

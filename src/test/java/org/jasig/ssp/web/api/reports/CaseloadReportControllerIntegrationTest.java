@@ -50,10 +50,9 @@ public class CaseloadReportControllerIntegrationTest
 
 		/// TODO Eliminate Spaces in Report TO Remove Extra commas
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add("FIRST,LAST,,DEPARTMENT,,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
-		expectedReportBodyLines.add("Alan,Turing,,Mathematics,,2,2,2,0,0,0,0");
-		expectedReportBodyLines.add("test,coach1,,Not Available Yet,,5,1,1,1,1,1,1");
-		expectedReportBodyLines.add("TOTAL:,,,,,7,3,3,1,1,1,1");
+		expectedReportBodyLines.add("FIRST,LAST,DEPARTMENT,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
+		expectedReportBodyLines.add("Alan,Turing,Mathematics,2,2,2,0,0,0,0");
+		expectedReportBodyLines.add("test,coach1,Not Available Yet,5,1,1,1,1,1,1");
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
@@ -73,12 +72,10 @@ public class CaseloadReportControllerIntegrationTest
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		/// TODO Eliminate Spaces in Report TO Remove Extra commas
-		expectedReportBodyLines.add("FIRST,LAST,,DEPARTMENT,,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
-		expectedReportBodyLines.add("Kevin,Smith,,Mathematics,,0,0,0,0,0,0,0");
-		expectedReportBodyLines.add("Alan,Turing,,Mathematics,,2,2,2,0,0,0,0");
-		expectedReportBodyLines.add("test,coach1,,Not Available Yet,,5,1,1,1,1,1,1");
-		expectedReportBodyLines.add("TOTAL:,,,,,7,3,3,1,1,1,1");
-
+		expectedReportBodyLines.add("FIRST,LAST,DEPARTMENT,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
+		expectedReportBodyLines.add("Kevin,Smith,Mathematics,0,0,0,0,0,0,0");
+		expectedReportBodyLines.add("Alan,Turing,Mathematics,2,2,2,0,0,0,0");
+		expectedReportBodyLines.add("test,coach1,Not Available Yet,5,1,1,1,1,1,1");
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
@@ -113,11 +110,10 @@ public class CaseloadReportControllerIntegrationTest
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		/// TODO Eliminate Spaces in Report TO Remove Extra commas
-		expectedReportBodyLines.add("FIRST,LAST,,DEPARTMENT,,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
-		expectedReportBodyLines.add("Kevin,Smith,,Mathematics,,1,1,1,0,0,0,0");
-		expectedReportBodyLines.add("Alan,Turing,,Mathematics,,2,2,2,0,0,0,0");
-		expectedReportBodyLines.add("test,coach1,,Not Available Yet,,5,1,1,1,1,1,1");
-		expectedReportBodyLines.add("TOTAL:,,,,,8,4,4,1,1,1,1");
+		expectedReportBodyLines.add("FIRST,LAST,DEPARTMENT,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
+		expectedReportBodyLines.add("Kevin,Smith,Mathematics,1,1,1,0,0,0,0");
+		expectedReportBodyLines.add("Alan,Turing,Mathematics,2,2,2,0,0,0,0");
+		expectedReportBodyLines.add("test,coach1,Not Available Yet,5,1,1,1,1,1,1");
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
@@ -155,11 +151,10 @@ public class CaseloadReportControllerIntegrationTest
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		/// TODO Eliminate Spaces in Report TO Remove Extra commas
-		expectedReportBodyLines.add("FIRST,LAST,,DEPARTMENT,,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
-		expectedReportBodyLines.add("Kevin,Smith,,Mathematics,,1,1,1,0,0,0,0");
-		expectedReportBodyLines.add("Alan,Turing,,Mathematics,,2,2,2,0,0,0,0");
-		expectedReportBodyLines.add("test,coach1,,Not Available Yet,,5,1,1,1,1,1,1");
-		expectedReportBodyLines.add("TOTAL:,,,,,8,4,4,1,1,1,1");
+		expectedReportBodyLines.add("FIRST,LAST,DEPARTMENT,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
+		expectedReportBodyLines.add("Kevin,Smith,Mathematics,1,1,1,0,0,0,0");
+		expectedReportBodyLines.add("Alan,Turing,Mathematics,2,2,2,0,0,0,0");
+		expectedReportBodyLines.add("test,coach1,Not Available Yet,5,1,1,1,1,1,1");
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
@@ -186,9 +181,8 @@ public class CaseloadReportControllerIntegrationTest
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		/// TODO Eliminate Spaces in Report TO Remove Extra commas
-		expectedReportBodyLines.add("FIRST,LAST,,DEPARTMENT,,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
-		expectedReportBodyLines.add("Alan,Turing,,Mathematics,,1,1,1,0,0,0,0");
-		expectedReportBodyLines.add("TOTAL:,,,,,1,1,1,0,0,0,0");
+		expectedReportBodyLines.add("FIRST,LAST,DEPARTMENT,TOTAL COUNT,ACTIVE COUNT,A,IA,T,NP,NS");
+		expectedReportBodyLines.add("Alan,Turing,Mathematics,1,1,1,0,0,0,0");
 		
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}

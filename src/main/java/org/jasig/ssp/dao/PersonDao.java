@@ -379,6 +379,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 							.eq("personProgramStatuses.programStatus.id",
 									personSearchTO
 											.getProgramStatus()));
+			criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate"));
 		}
 		
 		if (personSearchTO.getSpecialServiceGroupIds() != null) {
@@ -461,7 +462,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<BaseStudentReportTO> getStudentReportTOs(PersonSearchFormTO form,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
-		Criteria criteria = setBasicSearchCriteria(createCriteria(sAndP),  form);
+		
+		Criteria criteria = setBasicSearchCriteria(createCriteria(),  form);
 		
 		// item count
 		Long totalRows = 0L;
@@ -473,23 +475,19 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		// clear the row count projection
 		criteria.setProjection(null);
 
-				
-		// don't bring back any non-students, there will likely be a better way
-		// to do this later
+		criteria.setProjection(Projections.distinct(Projections.property("id")));
+		List<UUID> ids = criteria.list();
 		
+		criteria = createCriteria(sAndP);
+		
+		if(ids.size() == 0)
+			return null;
+		
+		criteria.add(Restrictions.in("id", ids));
+			
 		final ProjectionList projections = Projections.projectionList();
 		
 		criteria.setProjection(projections);
-		if(form.getProgramStatus() == null){
-			criteria.createAlias("programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
-		}
-		
-		criteria.add(Restrictions
-				.isNull("personProgramStatuses.expirationDate"));
-		
-		if(form.getSpecialServiceGroupIds() == null){
-			criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
-		}
 	
 		addBasicStudentProperties(projections, criteria);
 		
@@ -503,7 +501,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<DisabilityServicesReportTO> getDisabilityReport(PersonSearchFormTO form,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
-		Criteria criteria = setBasicSearchCriteria(createCriteria(sAndP),  form);
+		Criteria criteria = setBasicSearchCriteria(createCriteria(),  form);
 		
 		// item count
 		Long totalRows = 0L;
@@ -515,22 +513,20 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		// clear the row count projection
 		criteria.setProjection(null);
 
-				
+		List<UUID> ids = criteria.setProjection(Projections.distinct(Projections.property("id"))).list();
+		criteria = createCriteria(sAndP);
+		
+		if(ids.size() == 0)
+			return null;
+		
+		criteria.add(Restrictions.in("id", ids));
 		// don't bring back any non-students, there will likely be a better way
 		// to do this later
 		
 		final ProjectionList projections = Projections.projectionList();
 		
 		criteria.setProjection(projections);
-		
-		if(form.getProgramStatus() == null){
-			criteria.createAlias("programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
-		}
-		
-		if(form.getSpecialServiceGroupIds() == null){
-			criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
-		}
-		
+				
 		addBasicStudentProperties(projections, criteria);
 		Criteria demographics = criteria.createAlias("demographics", "demographics");
 		demographics.createAlias("demographics.ethnicity", "ethnicity");
@@ -556,18 +552,18 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			projections.add(Projections.groupProperty("ethnicity.name").as("ethnicity"));
 			projections.add(Projections.groupProperty("veteranStatus.name").as("veteranStatus"));
 			projections.add(Projections.groupProperty("disabilityAgency.name").as("disabilityAgencyName"));
-			projections.add(Projections.property("disabilityType.name").as("disabilityType"));
+			projections.add(Projections.groupProperty("disabilityType.name").as("disabilityType"));
 			projections.add(Projections.groupProperty("disabilityAgency.createdDate").as("disabilityAgencyCreatedDate"));
-			projections.add(Projections.property("educationGoal.plannedMajor").as("major"));
-			projections.add(Projections.property("disabilityStatus.name").as("odsStatus"));
+			projections.add(Projections.groupProperty("educationGoal.plannedMajor").as("major"));
+			projections.add(Projections.groupProperty("disabilityStatus.name").as("odsStatus"));
 		} else {
-			projections.add(Projections.property("ethnicity.name").as("ethnicity"));
-			projections.add(Projections.property("veteranStatus.name").as("veteranStatus"));
-			projections.add(Projections.property("disabilityType.name").as("disabilityType"));
-			projections.add(Projections.property("disabilityAgency.name").as("disabilityAgencyName"));
-			projections.add(Projections.property("disabilityAgency.createdDate").as("disabilityAgencyCreatedDate"));
-			projections.add(Projections.property("educationGoal.plannedMajor").as("major"));
-			projections.add(Projections.property("disabilityStatus.name").as("odsStatus"));
+			projections.add(Projections.groupProperty("ethnicity.name").as("ethnicity"));
+			projections.add(Projections.groupProperty("veteranStatus.name").as("veteranStatus"));
+			projections.add(Projections.groupProperty("disabilityType.name").as("disabilityType"));
+			projections.add(Projections.groupProperty("disabilityAgency.name").as("disabilityAgencyName"));
+			projections.add(Projections.groupProperty("disabilityAgency.createdDate").as("disabilityAgencyCreatedDate"));
+			projections.add(Projections.groupProperty("educationGoal.plannedMajor").as("major"));
+			projections.add(Projections.groupProperty("disabilityStatus.name").as("odsStatus"));
 		}
 		
 		criteria.setResultTransformer(new AliasToBeanResultTransformer(
@@ -584,33 +580,38 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	
 	private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria){
 		
-		projections.add(Projections.property("firstName").as("firstName"));
-		projections.add(Projections.property("middleName").as("middleName"));
-		projections.add(Projections.property("lastName").as("lastName"));
-		projections.add(Projections.property("schoolId").as("schoolId"));
-		projections.add(Projections.property("primaryEmailAddress").as("primaryEmailAddress"));
-		projections.add(Projections.property("secondaryEmailAddress").as("secondaryEmailAddress"));
-		projections.add(Projections.property("cellPhone").as("cellPhone"));
-		projections.add(Projections.property("homePhone").as("homePhone"));
-		projections.add(Projections.property("addressLine1").as("addressLine1"));
-		projections.add(Projections.property("addressLine2").as("addressLine2"));
-		projections.add(Projections.property("city").as("city"));
-		projections.add(Projections.property("state").as("state"));
-		projections.add(Projections.property("zipCode").as("zipCode"));
-		projections.add(Projections.property("id").as("id"));
-		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup", JoinType.LEFT_OUTER_JOIN);
-		projections.add(Projections.property("specialServiceGroup.name").as("specialServiceGroup"));
+		projections.add(Projections.groupProperty("firstName").as("firstName"));
+		projections.add(Projections.groupProperty("middleName").as("middleName"));
+		projections.add(Projections.groupProperty("lastName").as("lastName"));
+		projections.add(Projections.groupProperty("schoolId").as("schoolId"));
+		projections.add(Projections.groupProperty("primaryEmailAddress").as("primaryEmailAddress"));
+		projections.add(Projections.groupProperty("secondaryEmailAddress").as("secondaryEmailAddress"));
+		projections.add(Projections.groupProperty("cellPhone").as("cellPhone"));
+		projections.add(Projections.groupProperty("homePhone").as("homePhone"));
+		projections.add(Projections.groupProperty("addressLine1").as("addressLine1"));
+		projections.add(Projections.groupProperty("addressLine2").as("addressLine2"));
+		projections.add(Projections.groupProperty("city").as("city"));
+		projections.add(Projections.groupProperty("state").as("state"));
+		projections.add(Projections.groupProperty("zipCode").as("zipCode"));
+		projections.add(Projections.groupProperty("id").as("id"));
 		
+		criteria.createAlias("programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
+		criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
+		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup", JoinType.LEFT_OUTER_JOIN);
+		
+		projections.add(Projections.groupProperty("specialServiceGroup.name").as("specialServiceGroup"));
 		criteria.createAlias("personProgramStatuses.programStatus", "programStatus", JoinType.LEFT_OUTER_JOIN);
 		
-		projections.add(Projections.property("programStatus.name").as("programCurrentStatusName"));
-
+		projections.add(Projections.groupProperty("programStatus.name").as("programStatusName"));
+		projections.add(Projections.groupProperty("personProgramStatuses.id").as("programStatusId"));
+		projections.add(Projections.groupProperty("personProgramStatuses.expirationDate").as("programStatusExpirationDate"));
+	
 		// Join to Student Type
-		criteria.createAlias("studentType", "studentType",
-				JoinType.LEFT_OUTER_JOIN);
+		criteria.createAlias("studentType", "studentType", JoinType.LEFT_OUTER_JOIN);
 		// add StudentTypeName Column
-		projections.add(Projections.property("studentType.name").as("studentType"));
+		projections.add(Projections.groupProperty("studentType.name").as("studentType"));
 
+		criteria.createAlias("coach", "c");
 		Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
 		if ( dialect instanceof SQLServerDialect) {
 			// sql server requires all these to part of the grouping
@@ -623,11 +624,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		} else {
 			// other dbs (postgres) don't need these in the grouping
 			//projections.add(Projections.property("c.id").as("coachId"));
-			projections.add(Projections.property("c.lastName").as("coachLastName"))
-					.add(Projections.property("c.firstName").as("coachFirstName"))
-					.add(Projections.property("c.middleName").as("coachMiddleName"))
-					.add(Projections.property("c.schoolId").as("coachSchoolId"))
-					.add(Projections.property("c.username").as("coachUsername"));
+			projections.add(Projections.groupProperty("c.lastName").as("coachLastName"))
+					.add(Projections.groupProperty("c.firstName").as("coachFirstName"))
+					.add(Projections.groupProperty("c.middleName").as("coachMiddleName"))
+					.add(Projections.groupProperty("c.schoolId").as("coachSchoolId"))
+					.add(Projections.groupProperty("c.username").as("coachUsername"));
 		}
 		return projections;
 	}

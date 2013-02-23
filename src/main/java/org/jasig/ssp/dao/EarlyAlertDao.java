@@ -221,35 +221,39 @@ public class EarlyAlertDao extends
 				totalRows = (Long) query.setProjection(Projections.rowCount())
 							.uniqueResult();
 		}
+		
+		List<UUID> ids = query.setProjection(Projections.distinct(Projections.property("id"))).list();
 
-		if(criteriaTO.getAddressLabelSearchTO().getProgramStatus() == null){
-			query.createAlias("person.programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
-		}
+		if(ids.size() <= 0)
+			return null;
 		
-		if(criteriaTO.getAddressLabelSearchTO().getHomeDepartment() == null || criteriaTO.getAddressLabelSearchTO().getHomeDepartment().length() <= 0 ){
-			query.createAlias("person.coach","c");
-			query.createAlias("person.staffDetails", "personStaffDetails", JoinType.LEFT_OUTER_JOIN);
-		}
+		final Criteria collectionQuery = createCriteria(sAndP);
 		
-		if(criteriaTO.getAddressLabelSearchTO().getSpecialServiceGroupIds() == null){
-			query.createAlias("person.specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
-		}
+		collectionQuery.add(Restrictions.in("id", ids));		
 		
 		ProjectionList projections = Projections.projectionList()
 			.add(Projections.countDistinct("id").as("earlyalert_total"))
 			.add(Projections.countDistinct("closedById").as("earlyalert_closed"));
-				addBasicStudentProperties(projections, query);  
+		
+		addBasicStudentProperties(projections, collectionQuery); 
+		
 		projections.add(Projections.groupProperty("id").as("earlyalert_earlyAlertId"));
-		query.setProjection(projections);
-		query.setResultTransformer(
+		collectionQuery.setProjection(projections);
+		collectionQuery.setResultTransformer(
 				new NamespacedAliasToBeanResultTransformer(
 						EarlyAlertStudentReportTO.class, "earlyalert_"));
 		
-		return new PagingWrapper<EarlyAlertStudentReportTO>(totalRows, (List<EarlyAlertStudentReportTO>)query.list());
+		return new PagingWrapper<EarlyAlertStudentReportTO>(totalRows, (List<EarlyAlertStudentReportTO>)collectionQuery.list());
 	}
 	
 	private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria){
 		
+		criteria.createAlias("person","person");
+		criteria.createAlias("person.programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);		
+		criteria.createAlias("person.coach","c");
+		criteria.createAlias("person.staffDetails", "personStaffDetails", JoinType.LEFT_OUTER_JOIN);		
+		criteria.createAlias("person.specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
+
 		projections.add(Projections.groupProperty("person.firstName").as("earlyalert_firstName"));
 		projections.add(Projections.groupProperty("person.middleName").as("earlyalert_middleName"));
 		projections.add(Projections.groupProperty("person.lastName").as("earlyalert_lastName"));
@@ -265,14 +269,14 @@ public class EarlyAlertDao extends
 		projections.add(Projections.groupProperty("person.zipCode").as("earlyalert_zipCode"));
 		projections.add(Projections.groupProperty("person.id").as("earlyalert_id"));
 		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup" );
-		projections.add(Projections.groupProperty("specialServiceGroup.name").as("earlyalert_specialServiceGroup"));
-		
-		criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate")); 
-		
 		criteria.createAlias("personProgramStatuses.programStatus", "programStatus");
 		
-		projections.add(Projections.groupProperty("programStatus.name").as("earlyalert_currentProgramStatusName"));
-
+		projections.add(Projections.groupProperty("specialServiceGroup.name").as("earlyalert_specialServiceGroup"));
+				
+		projections.add(Projections.groupProperty("programStatus.name").as("earlyalert_programStatusName"));
+		projections.add(Projections.groupProperty("personProgramStatuses.id").as("earlyalert_programStatusId"));
+		projections.add(Projections.groupProperty("personProgramStatuses.expirationDate").as("earlyalert_programStatusExpirationDate"));
+		
 		// Join to Student Type
 		criteria.createAlias("person.studentType", "studentType",
 				JoinType.LEFT_OUTER_JOIN);
@@ -471,6 +475,7 @@ public class EarlyAlertDao extends
 							.eq("personProgramStatuses.programStatus.id",
 									personSearchForm
 											.getProgramStatus()));
+			criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate"));
 
 		}
 		if (personSearchForm.getSpecialServiceGroupIds() != null) {

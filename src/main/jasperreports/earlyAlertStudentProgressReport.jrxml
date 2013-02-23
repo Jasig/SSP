@@ -25,6 +25,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.5" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.4" value="columnFooter"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -58,6 +59,12 @@
 	<variable name="rowIndex" class="java.lang.Integer">
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
 		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<variable name="earlyAlertsInitialTerm_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{earlyAlertsInitialTerm}]]></variableExpression>
+	</variable>
+	<variable name="earlyAlertsComparisonTerm_1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{earlyAlertsComparisonTerm}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -285,7 +292,7 @@
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="22" splitType="Stretch">
+		<band height="24" splitType="Stretch">
 			<textField>
 				<reportElement uuid="c67f21c4-b6a2-4480-a2df-a8d1b4be49c0" x="332" y="2" width="53" height="20"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
@@ -298,4 +305,32 @@
 			</textField>
 		</band>
 	</pageFooter>
+	<summary>
+		<band height="22">
+			<line>
+				<reportElement uuid="436ea051-ccd8-48ef-ab22-e726f38334be" x="458" y="4" width="218" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="457" y="7" width="60" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[TOTALS:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ea24fe31-8dc3-4738-8f26-51affbfe00d2" x="517" y="7" width="64" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{earlyAlertsInitialTerm_1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d7b6596a-b9df-45ca-8404-a17ae352fb9b" x="581" y="7" width="94" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{earlyAlertsComparisonTerm_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
 </jasperReport>

@@ -54,7 +54,7 @@ public class SpecialServicesReportControllerIntegrationTest extends
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		expectedReportBodyLines.add("STUDENT ID,FIRST NAME,MIDDLE NAME,LAST NAME,STUDENT TYPE,SPECIAL SERVICES");
-		expectedReportBodyLines.add("student0,James,A,Gosling,ILP,Another Test Special Service Group");
+		expectedReportBodyLines.add("student0,James,A,Gosling,ILP,Another Test Special Service Group - Test Special Service Group");
 		expectedReportBodyLines.add("dmr.1,Dennis,M,Ritchie,CAP,Another Test Special Service Group");
 		expectedReportBodyLines.add("coach1student0,test,Mumford,coach1student0,ILP,Another Test Special Service Group");
 		expectedReportBodyLines.add("coach1student4,test,Mumford,coach1student4,CAP,Another Test Special Service Group");
@@ -76,7 +76,7 @@ public class SpecialServicesReportControllerIntegrationTest extends
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		//TODO Understand why no filters does not bring back a result!
 		expectedReportBodyLines.add("STUDENT ID,FIRST NAME,MIDDLE NAME,LAST NAME,STUDENT TYPE,SPECIAL SERVICES");
-		expectedReportBodyLines.add("student0,James,A,Gosling,ILP,Another Test Special Service Group -Test Special Service Group");
+		expectedReportBodyLines.add("student0,James,A,Gosling,ILP,Another Test Special Service Group - Test Special Service Group");
 		expectedReportBodyLines.add("dmr.1,Dennis,M,Ritchie,CAP,Another Test Special Service Group");
 		expectedReportBodyLines.add("ken.1,Kenneth,L,Thompson,CAP,Test Special Service Group");
 		expectedReportBodyLines.add( "coach1student0,test,Mumford,coach1student0,ILP,Another Test Special Service Group");
