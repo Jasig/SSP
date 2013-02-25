@@ -460,29 +460,23 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<UUID> getStudentUUIDs(PersonSearchFormTO form){
+		Criteria criteria = setBasicSearchCriteria(createCriteria(),  form);
+		criteria.setProjection(Projections.distinct(Projections.property("id")));
+		
+		return (List<UUID>)criteria.list();
+	}
+	
+	@SuppressWarnings("unchecked")
 	public PagingWrapper<BaseStudentReportTO> getStudentReportTOs(PersonSearchFormTO form,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 		
-		Criteria criteria = setBasicSearchCriteria(createCriteria(),  form);
-		
-		// item count
-		Long totalRows = 0L;
-		if ((sAndP != null) && sAndP.isPaged()) {
-			totalRows = (Long) criteria.setProjection(Projections.rowCount())
-					.uniqueResult();
-		}
-
-		// clear the row count projection
-		criteria.setProjection(null);
-
-		criteria.setProjection(Projections.distinct(Projections.property("id")));
-		List<UUID> ids = criteria.list();
-		
-		criteria = createCriteria(sAndP);
-		
+		List<UUID> ids = getStudentUUIDs(form);
 		if(ids.size() == 0)
 			return null;
 		
+		final Criteria criteria = createCriteria(sAndP);
+
 		criteria.add(Restrictions.in("id", ids));
 			
 		final ProjectionList projections = Projections.projectionList();
@@ -494,31 +488,19 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		criteria.setResultTransformer(new AliasToBeanResultTransformer(
 				BaseStudentReportTO.class));
 
-		return new PagingWrapper<BaseStudentReportTO>(totalRows, criteria.list());
+		return new PagingWrapper<BaseStudentReportTO>(ids.size(), criteria.list());
 
 	}
 	
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<DisabilityServicesReportTO> getDisabilityReport(PersonSearchFormTO form,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
-		Criteria criteria = setBasicSearchCriteria(createCriteria(),  form);
 		
-		// item count
-		Long totalRows = 0L;
-		if ((sAndP != null) && sAndP.isPaged()) {
-			totalRows = (Long) criteria.setProjection(Projections.rowCount())
-					.uniqueResult();
-		}
-
-		// clear the row count projection
-		criteria.setProjection(null);
-
-		List<UUID> ids = criteria.setProjection(Projections.distinct(Projections.property("id"))).list();
-		criteria = createCriteria(sAndP);
-		
+		List<UUID> ids = getStudentUUIDs(form);
 		if(ids.size() == 0)
 			return null;
 		
+		final Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.in("id", ids));
 		// don't bring back any non-students, there will likely be a better way
 		// to do this later
@@ -528,6 +510,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		criteria.setProjection(projections);
 				
 		addBasicStudentProperties(projections, criteria);
+		
 		Criteria demographics = criteria.createAlias("demographics", "demographics");
 		demographics.createAlias("demographics.ethnicity", "ethnicity");
 		demographics.createAlias("demographics.veteranStatus", "veteranStatus");
@@ -542,6 +525,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		if (form.getDisabilityStatusId() == null) {
 			criteria.createAlias("disability", "personDisability");
 		}
+		
 		criteria.createAlias("personDisability.disabilityStatus", "disabilityStatus");
 		
 		criteria.createAlias("educationGoal", "educationGoal");
@@ -574,7 +558,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			sAndP.addAll(criteria);
 		}
 
-		return new PagingWrapper<DisabilityServicesReportTO>(totalRows, criteria.list());
+		return new PagingWrapper<DisabilityServicesReportTO>(ids.size(), criteria.list());
 
 	}
 	
