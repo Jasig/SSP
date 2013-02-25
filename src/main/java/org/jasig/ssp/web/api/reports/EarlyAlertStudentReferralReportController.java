@@ -20,6 +20,7 @@ package org.jasig.ssp.web.api.reports; // NOPMD
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +45,7 @@ import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.EarlyAlertReferralService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.PersonTO;
+import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.util.DateTerm;
@@ -156,9 +158,29 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 		SearchParameters.addProgramStatusToMap(programStatus, parameters, programStatusService);
 		SearchParameters.addEarlyAlertReferralToMap(earlyAlertReferralId, parameters, earlyAlertReferralsService);
 		SearchParameters.addStudentCount(peopleInfo, parameters);
-		
-		generateReport( response,  parameters, peopleInfo,  REPORT_URL, 
+		generateReport( response,  parameters, processReports(peopleInfo),  REPORT_URL, 
 				 reportType, REPORT_FILE_TITLE);
+	}
+	
+	
+	protected List<EarlyAlertStudentReportTO> processReports(List<EarlyAlertStudentReportTO> reports){
+		 
+		ArrayList<EarlyAlertStudentReportTO> compressedReports = new ArrayList<EarlyAlertStudentReportTO>();
+		if(reports == null || reports.size() <= 0)
+			return compressedReports;
+		
+		for(EarlyAlertStudentReportTO reportTO: reports){
+			Integer index = compressedReports.indexOf(reportTO);
+			if(index != null && index >= 0)
+			{
+				BaseStudentReportTO compressedReportTo = compressedReports.get(index);
+				compressedReportTo.processDuplicate(reportTO);
+			}else{
+				compressedReports.add(reportTO);
+			}
+		}
+		
+		return compressedReports;
 	}
 
 	@Override

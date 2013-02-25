@@ -306,26 +306,26 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="22">
+		<band height="26">
 			<line>
 				<reportElement uuid="436ea051-ccd8-48ef-ab22-e726f38334be" x="458" y="4" width="218" height="1"/>
 			</line>
 			<staticText>
-				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="457" y="7" width="60" height="12"/>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="457" y="7" width="60" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true" isItalic="false" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[TOTALS:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="ea24fe31-8dc3-4738-8f26-51affbfe00d2" x="517" y="7" width="64" height="12"/>
+				<reportElement uuid="ea24fe31-8dc3-4738-8f26-51affbfe00d2" x="517" y="7" width="64" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{earlyAlertsInitialTerm_1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="d7b6596a-b9df-45ca-8404-a17ae352fb9b" x="581" y="7" width="94" height="12"/>
+				<reportElement uuid="d7b6596a-b9df-45ca-8404-a17ae352fb9b" x="581" y="7" width="94" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>

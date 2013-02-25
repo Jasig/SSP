@@ -323,37 +323,37 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="21">
+		<band height="25">
 			<staticText>
-				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="313" y="6" width="122" height="12"/>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="313" y="6" width="122" height="16"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="true" isItalic="false" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[TOTALS:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="eb4090f0-11b1-47c5-94d2-fdf7edf070ed" x="435" y="6" width="54" height="12"/>
+				<reportElement uuid="eb4090f0-11b1-47c5-94d2-fdf7edf070ed" x="435" y="6" width="54" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true" isItalic="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{open_1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="c38c94c6-08f4-454b-a14e-6b8555908cd8" x="489" y="6" width="52" height="12"/>
+				<reportElement uuid="c38c94c6-08f4-454b-a14e-6b8555908cd8" x="489" y="6" width="52" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true" isItalic="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{closed_1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="80aaca1c-e524-41c4-a56a-dfa3688069d1" x="541" y="6" width="53" height="12"/>
+				<reportElement uuid="80aaca1c-e524-41c4-a56a-dfa3688069d1" x="541" y="6" width="53" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true" isItalic="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{pending_1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="240e0348-ca2e-4aaf-8d3b-d803f4e3ce59" x="594" y="6" width="53" height="12"/>
+				<reportElement uuid="240e0348-ca2e-4aaf-8d3b-d803f4e3ce59" x="594" y="6" width="53" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true" isItalic="false" isUnderline="false"/>
 				</textElement>

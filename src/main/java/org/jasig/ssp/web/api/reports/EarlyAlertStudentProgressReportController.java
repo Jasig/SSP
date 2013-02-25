@@ -171,7 +171,7 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 				comparisonTerm.getStartDate(), comparisonTerm.getEndDate());
 
 		final PagingWrapper<EarlyAlertStudentReportTO> comparisonPeopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
-				comparisonSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
+				comparisonSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status, "person"));
 		
 		List<EarlyAlertStudentReportTO> initialPeopleInfoCompressed = processReports(initialPeopleInfo, earlyAlertResponseService);
 		List<EarlyAlertStudentReportTO> comparisonPeopleInfoCompressed = processReports(comparisonPeopleInfo, earlyAlertResponseService);

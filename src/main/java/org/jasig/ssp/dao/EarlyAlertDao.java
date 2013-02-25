@@ -222,6 +222,8 @@ public class EarlyAlertDao extends
 							.uniqueResult();
 		}
 		
+		query.setProjection(null);
+		
 		List<UUID> ids = query.setProjection(Projections.distinct(Projections.property("id"))).list();
 
 		if(ids.size() <= 0)
@@ -268,8 +270,9 @@ public class EarlyAlertDao extends
 		projections.add(Projections.groupProperty("person.state").as("earlyalert_state"));
 		projections.add(Projections.groupProperty("person.zipCode").as("earlyalert_zipCode"));
 		projections.add(Projections.groupProperty("person.id").as("earlyalert_id"));
-		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup" );
-		criteria.createAlias("personProgramStatuses.programStatus", "programStatus");
+		
+		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup", JoinType.LEFT_OUTER_JOIN );
+		criteria.createAlias("personProgramStatuses.programStatus", "programStatus", JoinType.LEFT_OUTER_JOIN);
 		
 		projections.add(Projections.groupProperty("specialServiceGroup.name").as("earlyalert_specialServiceGroup"));
 				

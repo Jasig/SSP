@@ -209,54 +209,57 @@
 	<summary>
 		<band height="24" splitType="Stretch">
 			<textField>
-				<reportElement uuid="61d3d9d4-6881-40e3-9dbd-060abbe0e0ac" mode="Opaque" x="200" y="2" width="85" height="12"/>
+				<reportElement uuid="61d3d9d4-6881-40e3-9dbd-060abbe0e0ac" mode="Opaque" x="200" y="6" width="85" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalStudents_1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="32413929-9d98-45f7-93b8-3600165db12c" mode="Opaque" x="285" y="2" width="85" height="12"/>
+				<reportElement uuid="32413929-9d98-45f7-93b8-3600165db12c" mode="Opaque" x="285" y="6" width="85" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalCases_1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="10438f7c-6846-4015-b559-cc5d8658c59a" mode="Opaque" x="370" y="2" width="57" height="12"/>
+				<reportElement uuid="10438f7c-6846-4015-b559-cc5d8658c59a" mode="Opaque" x="370" y="6" width="57" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalRespondedTo_1}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="(###.0)%" isBlankWhenNull="true">
-				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" mode="Opaque" x="427" y="2" width="69" height="12" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" mode="Opaque" x="427" y="6" width="69" height="16" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalCases_1} != null && $V{totalCases_1} > 0 ? (double)$V{totalRespondedTo_1}/(double)$V{totalCases_1} : 0]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="8416a64b-f939-48ce-981c-5b8a464fd36c" mode="Opaque" x="497" y="2" width="54" height="12"/>
+				<reportElement uuid="8416a64b-f939-48ce-981c-5b8a464fd36c" mode="Opaque" x="497" y="6" width="54" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalClosed_1}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="(###.0)%" isBlankWhenNull="true">
-				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" mode="Opaque" x="551" y="2" width="75" height="12" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" mode="Opaque" x="551" y="6" width="75" height="16" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalCases_1} != null && $V{totalCases_1} > 0 ? (double)$V{totalClosed_1}/(double)$V{totalCases_1} : 0]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="140" y="2" width="60" height="16"/>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="140" y="6" width="60" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[TOTALS:]]></text>
 			</staticText>
+			<line>
+				<reportElement uuid="436ea051-ccd8-48ef-ab22-e726f38334be" x="140" y="4" width="496" height="1"/>
+			</line>
 		</band>
 	</summary>
 </jasperReport>
