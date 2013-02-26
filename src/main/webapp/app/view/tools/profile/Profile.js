@@ -22,9 +22,7 @@ Ext.define('Ssp.view.tools.profile.Profile', {
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
-    inject: {
-    	authenticatedPerson: 'authenticatedPerson'
-    },
+    
     width: '100%',
 	height: '100%',
     initComponent: function() {	
@@ -43,68 +41,34 @@ Ext.define('Ssp.view.tools.profile.Profile', {
 						    activeTab: 0,
 						    itemId: 'profileTabs',
 						    items: [{ 
-						    	      title: 'Personal',
+						    	      title: 'Dashboard',
 						    	      autoScroll: true,
 						    		  items: [{xtype: 'profileperson'}]
 						    		},{ 
-						    		  title: 'Special Service Groups',
+						    		  title: 'Placement',
 						    		  autoScroll: true,
-						    		  items: [{xtype: 'profilespecialservicegroups'}]
+									  items: [{xtype: 'placement'}]
+						    		  //items: [{xtype: 'profilespecialservicegroups'}]
+									  
 						    		},{ 
-						    		  title: 'Referral Sources',
+						    		  title: 'Transcript',
 						    		  autoScroll: true,
-						    		  items: [{xtype: 'profilereferralsources'}]
+									  items: [{xtype: 'transcript'}]
+						    		  //items: [{xtype: 'profilereferralsources'}]
+									  
 						    		},{ 
-						    		  title: 'Service Reasons',
+						    		  title: 'Contact',
 						    		  autoScroll: true,
-						    		  items: [{xtype: 'profileservicereasons'}]
+						    		  items: [{xtype: 'profilecontact'}]
+                                      //items: [{xtype: 'profileservicereasons'}]
+									  
 						    		},{ 
-						    		  title: 'Services Provided History',
-						    		  hidden: true,
+						    		  title: 'Coach',
 						    		  autoScroll: true,
-						    		  items: [{xtype: 'profileservicesprovided'}]
+						    		  items: [{xtype: 'profilecoach'}]
 							    	}]
 						})
-				    ],
-				    
-				    dockedItems: [{
-				        dock: 'top',
-				        xtype: 'toolbar',
-				        items: [
-						{
-                            xtype: 'tbspacer',
-                            width: 5
-                        },
-						{
-							xtype: 'label',
-                            text: 'Profile',
-							style: 'font-weight:bold;color: #00008B'
-						},
-						{
-							xtype: 'tbspacer',
-                            flex: 1
-						},
-						{
-					            tooltip: 'Print Student History',
-					            text: '<u>Print Student History</u>',
-					            width: 150,
-					            height: 20,
-					            hidden: !me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'),
-					            //cls: 'studentHistoryIcon',
-					            xtype: 'button',
-					            itemId: 'viewHistoryButton'
-				        },
-						{
-			            	   xtype: 'button',
-			            	   itemId: 'printConfidentialityAgreementButton',
-			                   text: '<u>Print Confidentiality Agreement</u>',
-			                   tooltip: 'Print Confidentiality Agreement',
-			            	   //cls: 'confidentialityAgreementIcon',
-			            	   height: 20,
-			            	   width: 175,
-			            	   hidden: !me.authenticatedPerson.hasAccess('PROFILE_PRINT_CONFIDENTIALITY_AGREEMENT_BUTTON'),
-			            }]
-				    }]
+				    ]
 				});	     
     	
     	return me.callParent(arguments);

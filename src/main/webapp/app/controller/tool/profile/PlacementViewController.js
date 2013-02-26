@@ -16,12 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
+Ext.define('Ssp.controller.tool.profile.PlacementViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	service: 'transcriptService',
+    	//service: 'placementService',
         personLite: 'personLite'
     },
 	init: function() {
@@ -29,25 +29,24 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
 		var personId = me.personLite.get('id');
 
     	// hide the loader
-		
-    	/*me.getView().setLoading( true );
+    	me.getView().setLoading( true );
     	
-		me.service.getFull( personId, {
-			success: me.getTranscriptSuccess,
-			failure: me.getTranscriptFailure,
+		me.service.getAll( personId, {
+			success: me.getPlacementSuccess,
+			failure: me.getPlacementFailure,
 			scope: me			
-		});*/
+		});
 		
 		return this.callParent(arguments);
     },
     
-    getTranscriptSuccess: function( r, scope ){
+    getPlacementSuccess: function( r, scope ){
     	var me=scope;
     	me.getView().setLoading( false );
     	
     },
     
-    getTranscriptFailure: function( response, scope ){
+    getPlacementFailure: function( response, scope ){
     	var me=scope;
     	me.getView().setLoading( false );  	
     }

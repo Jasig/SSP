@@ -16,12 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.tools.sis.Transcript', {
+Ext.define('Ssp.view.tools.profile.Placement', {
 	extend: 'Ext.grid.Panel',
-	alias: 'widget.sistranscript',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.sis.TranscriptViewController',
+	alias: 'widget.placement',
     width: '100%',
     height: '100%',
     autoScroll: true,
@@ -33,32 +30,22 @@ Ext.define('Ssp.view.tools.sis.Transcript', {
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'string',
-                    text: 'Course'
+                    text: 'Type'
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'string',
-                    text: 'Section'
+                    text: 'Score'
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'string',
-                    text: 'Credit'
+                    text: 'Status'
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'string',
-                    text: 'Title'
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Grade'
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Term'
+                    text: 'Date'
                 }
             ],
             viewConfig: {

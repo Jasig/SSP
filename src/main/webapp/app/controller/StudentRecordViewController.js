@@ -20,17 +20,40 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable'],
 	inject: {
-		appEventsController: 'appEventsController'
+		appEventsController: 'appEventsController',
+		formUtils: 'formRendererUtils',
+		apiProperties: 'apiProperties',
+        personLite: 'personLite'
 	},
+	
+    config: {
+        personViewHistoryUrl: ''
+       
+    },
 	
     control: {
 		view: {
 			collapse: 'onCollapsed',
 			expand: 'onExpanded'
-		}
+		},
+		'studentRecordEditButton': {
+            click: 'onStudentRecordEditButtonClick'
+        },
+		'viewCoachingHistoryButton': {
+            click: 'onViewCoachingHistoryButtonClick'
+        },
+        'emailCoachButton': {
+            click: 'onEmailCoachButtonClick'
+        },
 	},
 	
     init: function() {
+		var me=this;
+		var personId = me.personLite.get('id');
+		
+		me.personViewHistoryUrl = me.apiProperties.getAPIContext() + me.apiProperties.getItemUrl('personViewHistory');
+		
+        me.personViewHistoryUrl = me.personViewHistoryUrl.replace('{id}',personId);
  		return this.callParent(arguments);
     },
     
@@ -40,5 +63,22 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     
     onExpanded: function(){
     	this.appEventsController.getApplication().fireEvent('expandStudentRecord');
+    },
+	
+	onStudentRecordEditButtonClick: function(button){
+        var me=this;
+        
+        var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
+    },
+	
+	onEmailCoachButtonClick: function(button){
+        var me=this;
+        this.appEventsController.getApplication().fireEvent('emailCoach');
+        
+    },
+	
+	onViewCoachingHistoryButtonClick: function(button){
+        var me=this;
+       this.appEventsController.getApplication().fireEvent('viewCoachHistory');
     }
 });

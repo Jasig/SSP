@@ -26,7 +26,7 @@ Ext.define('Ssp.view.tools.studentintake.StudentIntake', {
     	authenticatedPerson: 'authenticatedPerson',
         store: 'studentsStore'
     },
-	title: 'Student Intake',	
+	title: 'Intake',	
 	width: '100%',
 	height: '100%',   
 	initComponent: function() {

@@ -21,31 +21,54 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	personLite: 'personLite'
+    	personLite: 'personLite',
+		formUtils: 'formRendererUtils',
+		appEventsController: 'appEventsController'
     },
     config: {
     	personViewHistoryUrl: '',
     	printConfidentialityAgreementUrl: ''
     },
     control: {
-    	'viewHistoryButton': {
+    	/*'viewHistoryButton': {
 			click: 'onViewHistoryClick'
 		},
 		
 		'printConfidentialityAgreementButton': {
 			click: 'printConfidentialityAgreement'
-		}
+		},
+		
+		'profileEditButton': {
+            click: 'onProfileEditButtonClick'
+        }*/
     },
 	init: function() {
 		var me=this;
 		var personId = me.personLite.get('id');
+		
+		me.appEventsController.assignEvent({
+            eventName: 'viewCoachHistory',
+            callBackFunc: me.onViewCoachHistory,
+            scope: me
+        });
+		
+		
 		me.personViewHistoryUrl = me.apiProperties.getAPIContext() + me.apiProperties.getItemUrl('personViewHistory');
+		
 		me.personViewHistoryUrl = me.personViewHistoryUrl.replace('{id}',personId);
+		
 		me.printConfidentialityAgreementUrl = me.apiProperties.getContext() + me.apiProperties.getItemUrl('printConfidentialityDisclosureAgreement');
 		return this.callParent(arguments);
     },
+	
+	destroy: function() {
+        var me=this;
+        me.appEventsController.removeEvent({eventName: 'viewCoachHistory', callBackFunc: me.onViewCoachHistory, scope: me});
+        
+        return me.callParent( arguments );
+    },
     
-	printConfidentialityAgreement: function(button){
+	/*printConfidentialityAgreement: function(button){
 		var me=this;
 		me.apiProperties.getReporter().loadBlankReport( me.printConfidentialityAgreementUrl );
 	},   
@@ -56,5 +79,19 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
 			url:me.personViewHistoryUrl,
 			params: ""
 		});
+    },
+	
+	onProfileEditButtonClick: function(button){
+        var me=this;
+        console.log('onEditClick');
+		var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
+    },*/
+	
+	onViewCoachHistory: function(){
+      var me=this;
+        me.apiProperties.getReporter().load({
+            url:me.personViewHistoryUrl,
+            params: ""
+        });
     }
 });

@@ -46,6 +46,13 @@ background-image: url('/ssp/images/display-caseload-icon.png') !important;
 background-image: url('/ssp/images/mail-reply-icon.png') !important;
 }
 
+.editPencilIcon {
+background-image: url('/ssp/images/pencil.png') !important;
+background: transparent;
+ border-style:none;
+ background-repeat: no-repeat;
+}
+
 /*
 .early-alert-tree-panel .x-tree-icon-parent
 {
@@ -131,6 +138,11 @@ background:#ffff00 !important;
     background-color:#dfe8f6;
 }
 
+.makeTransparent{
+	background: transparent;
+ border-style:none;
+}
+
 .x-item-disabled .x-form-item-label,
 .x-item-disabled .x-form-cb-label {
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90);
@@ -147,4 +159,13 @@ background:#ffff00 !important;
 
 .x-ie6 .x-item-disabled {
     filter: none;
+}
+
+.studentpanel .x-tool {
+    left: 0 !important;
+	
+}
+
+.studentpanel .x-panel-header-text {
+	padding-left: 15px;
 }

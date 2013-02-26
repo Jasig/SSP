@@ -74,6 +74,26 @@
                     "path": "/app/view/tools/profile/"
                 },
                 {
+                    "clsName": "Ssp.view.tools.profile.Coach",
+                    "name": "Coach.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.Contact",
+                    "name": "Contact.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.Placement",
+                    "name": "Placement.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.Transcript",
+                    "name": "Transcript.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
                     "clsName": "Ssp.view.tools.actionplan.AddTask",
                     "name": "AddTask.js",
                     "path": "/app/view/tools/actionplan/"
@@ -466,6 +486,21 @@
                 {
                     "clsName": "Ssp.controller.tool.profile.ServicesProvidedViewController",
                     "name": "ServicesProvidedViewController.js",
+                    "path": "/app/controller/tool/profile/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.profile.PlacementViewController",
+                    "name": "PlacementViewController.js",
+                    "path": "/app/controller/tool/profile/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.profile.ProfileCoachViewController",
+                    "name": "ProfileCoachViewController.js",
+                    "path": "/app/controller/tool/profile/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.profile.ProfileContactViewController",
+                    "name": "ProfileContactViewController.js",
                     "path": "/app/controller/tool/profile/"
                 },
                 {
@@ -914,9 +949,9 @@
                     "path": "/app/view/tools/document/"
                 },
                 {
-                    "clsName": "Ssp.view.tools.sis.Transcript",
+                    "clsName": "Ssp.view.tools.profile.Transcript",
                     "name": "Transcript.js",
-                    "path": "/app/view/tools/sis/"
+                    "path": "/app/view/tools/profile/"
                 },
                 {
                     "clsName": "Ssp.view.admin.forms.AbstractReferenceAdmin",

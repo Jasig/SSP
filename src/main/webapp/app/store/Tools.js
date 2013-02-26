@@ -26,11 +26,12 @@ Ext.define('Ssp.store.Tools', {
     autoLoad: false,
     
     constructor: function(){
+
         var me=this;
         me.callParent( arguments );
 
-        var sspTools = [{ group:'beta', name: "Profile", toolType: "profile", active: true },
-            { group:'beta', name: "Student Intake", toolType: "studentintake", active: true },
+        var sspTools = [{ group:'beta', name: "Main", toolType: "profile", active: true },
+            { group:'beta', name: "Intake", toolType: "studentintake", active: true },
             { group:'beta', name: "Action Plan", toolType: "actionplan", active: true },
             { group:'beta', name: "Journal", toolType: "journal", active: true },
             { group:'rc1', name: "Early Alert", toolType: "earlyalert", active: true },
@@ -48,6 +49,7 @@ Ext.define('Ssp.store.Tools', {
         me.loadData( me.applySecurity( sspTools ) );
 
         return me;
+
     },
     
     applySecurity: function( tools ){

@@ -52,6 +52,10 @@ Ext.require([
     'Ssp.view.tools.profile.ReferralSources',
     'Ssp.view.tools.profile.ServicesProvided',
     'Ssp.view.tools.profile.ServiceReasons',
+	'Ssp.view.tools.profile.Coach',
+	'Ssp.view.tools.profile.Contact',
+	'Ssp.view.tools.profile.Placement',
+    'Ssp.view.tools.profile.Transcript',
     'Ssp.view.tools.actionplan.ActionPlan',
     'Ssp.view.tools.actionplan.Tasks',
     'Ssp.view.tools.actionplan.AddTask',
@@ -83,6 +87,7 @@ Ext.require([
     'Ssp.view.tools.sis.StudentInformationSystem',
     'Ssp.view.tools.sis.Registration',
     'Ssp.view.tools.sis.Assessment',
+
     'Ssp.view.tools.sis.Transcript',
     'Ssp.view.tools.accommodation.Accommodation',
     'Ssp.view.tools.accommodation.General',
@@ -90,6 +95,7 @@ Ext.require([
     'Ssp.view.tools.accommodation.DisabilityTypes',
     'Ssp.view.tools.accommodation.Disposition',
     'Ssp.view.tools.accommodation.Accommodations',
+
     'Ssp.view.tools.displacedworker.DisplacedWorker',
     'Ssp.view.tools.studentsuccess.StudentSuccess',
     'Ssp.view.admin.AdminForms',

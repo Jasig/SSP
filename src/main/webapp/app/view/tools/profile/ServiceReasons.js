@@ -17,28 +17,39 @@
  * under the License.
  */
 Ext.define('Ssp.view.tools.profile.ServiceReasons', {
-	extend: 'Ext.grid.Panel',
-	alias : 'widget.profileservicereasons',
-    mixins: [ 'Deft.mixin.Injectable'],
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.profileservicereasons',
+    mixins: ['Deft.mixin.Injectable'],
     inject: {
-    	store: 'profileServiceReasonsStore'
+        store: 'profileServiceReasonsStore'
     },
-	width: '100%',
-	height: '100%',
-	initComponent: function() {
-		var me=this;
-		Ext.apply(me, 
-				{
-			        hideHeaders: true,
-			        autoScroll: true,
-		            store: me.store,
-    		        columns: [
-    		                { header: 'Reason',  
-    		                  dataIndex: 'name',
-    		                  flex: 1,
-    		                }],
-				});
-		
-		return me.callParent(arguments);
-	}
+    width: '100%',
+    height: '100%',
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            title: 'Service Reasons',
+            hideHeaders: true,
+            autoScroll: true,
+            
+            store: me.store,
+            tools: [{
+                xtype: 'button',
+                itemId: 'serviceReasonEdit',
+                width: 20,
+                height: 20,
+				cls: 'editPencilIcon',
+				text:'',
+				tooltip: 'Edit'
+            }],
+            columns: [{
+                header: 'Reason',
+                dataIndex: 'name',
+                flex: 1
+            
+            }],
+        });
+        
+        return me.callParent(arguments);
+    }
 });
