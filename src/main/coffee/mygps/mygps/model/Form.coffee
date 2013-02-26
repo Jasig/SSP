@@ -23,10 +23,11 @@ namespace 'mygps.model'
 	
 		class Form
 		
-			constructor: ( id, label, sections ) ->
+			constructor: ( id, label, sections, completed ) ->
 				@id = ko.observable( id )
 				@label = ko.observable( label )
 				@sections = ko.observableArray( sections )
+				@completed = ko.observable( completed )
 				
 				@valid = ko.dependentObservable( @evaluateValid, this )
 				
@@ -43,7 +44,7 @@ namespace 'mygps.model'
 				if formTO.sections?
 					sections = for section in formTO.sections 
 						mygps.model.FormSection.createFromTransferObject( section )
-				return new Form( formTO.id, formTO.label, sections )
+				return new Form( formTO.id, formTO.label, sections, formTO.completed )
 				
 			@toTransferObject: ( form ) ->
 				if form.sections()

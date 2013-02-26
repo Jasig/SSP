@@ -18,15 +18,16 @@
     under the License.
 
 -->
-<li data-bind="css: { ActionPlanTask: type() == 'ACT', CustomActionPlanTask: type() == 'CUS', SSPActionPlanTask: type() == 'SSP', deletable: deletable() }">
-	<a class="task" href="#" ref="external" data-bind="click: function () { viewModel.markTask( $data, !$data.completed() ) }, css: { 'completed': completed() }">
-		<span class="task-status"></span>
+<li data-bind="css: { ActionPlanTask: type() == 'ACT', CustomActionPlanTask: type() == 'CUS', SSPActionPlanTask: type() == 'SSP', deletable: deletable() }" data-icon="false">
+	<a class="task"  data-bind="css: { 'completed': completed() }">
+		<span class="task-status" data-bind="click: function () { viewModel.markTask( $data, !$data.completed() ) }"></span>
 		<h3 class="task-name" data-bind="text: name"></h3>
 		<p class="task-description" data-bind="text: description"></p>
-		<p class="task-date ui-li-aside" data-bind="text: viewModel.formatDate( dueDate() )"></p>
 		<span data-bind="click: function ( e ) { var event = e || window.event; var container = $('<div></div>'); ko.renderTemplate( 'taskDetailTemplate', $data, { templateOptions: { modal: container.modal() } }, container.get(0) ); container.trigger('create'); if ( event.cancelBubble ) event.cancelBubble = true; if ( event.stopPropagation ) event.stopPropagation(); }">
 			<button data-icon="search" data-inline="true">More Details...</button>
 		</span>
+		<p class="task-description" data-bind="html: link"></p>
+		<p class="task-date ui-li-aside" data-bind="text: viewModel.formatDate( dueDate() )"></p>
 	</a>
-	<a class="action" href="#" rel="external" data-role="button" data-icon="delete" data-iconpos="notext" data-theme="a" href="#" ref="external" data-bind="click: function () { apprise( 'Are you sure you want to remove<br>\'' + $data.name() + '\'', { 'verify': true }, function ( result ) { if ( result ) viewModel.deleteTask( $data ); } ) }">Delete</a>
+	<a class="action" href="#" rel="external" data-role="button" data-icon="delete"  data-iconpos="notext" data-theme="a" href="#" ref="external" data-bind="click: function () { apprise( 'Are you sure you want to remove<br>\'' + $data.name() + '\'', { 'verify': true }, function ( result ) { if ( result ) viewModel.deleteTask( $data ); } ) }">Delete</a>
 </li>

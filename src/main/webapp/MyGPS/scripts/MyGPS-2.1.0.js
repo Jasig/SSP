@@ -94,11 +94,12 @@
   namespace('mygps.model', {
     Form: Form = (function() {
 
-      function Form(id, label, sections) {
+      function Form(id, label, sections, completed) {
         var section, _i, _len, _ref;
         this.id = ko.observable(id);
         this.label = ko.observable(label);
         this.sections = ko.observableArray(sections);
+        this.completed = ko.observable(completed);
         this.valid = ko.dependentObservable(this.evaluateValid, this);
         _ref = this.sections();
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -136,7 +137,7 @@
             return _results;
           })();
         }
-        return new Form(formTO.id, formTO.label, sections);
+        return new Form(formTO.id, formTO.label, sections, formTO.completed);
       };
 
       Form.toTransferObject = function(form) {
@@ -542,7 +543,7 @@
   namespace('mygps.model', {
     Task: Task = (function() {
 
-      function Task(id, type, name, description, details, dueDate, completed, deletable, challengeId, challengeReferralId) {
+      function Task(id, type, name, description, link, details, dueDate, completed, deletable, challengeId, challengeReferralId) {
         this.id = ko.observable(id);
         this.type = ko.observable(type);
         this.name = ko.observable(name);
@@ -550,6 +551,7 @@
         this.details = ko.observable(details);
         this.dueDate = ko.observable(dueDate);
         this.completed = ko.observable(completed);
+        this.link = ko.observable(link);
         this.deletable = ko.observable(deletable);
         this.challengeId = ko.observable(challengeId);
         this.challengeReferralId = ko.observable(challengeReferralId);
@@ -564,7 +566,7 @@
             return null;
           }
         };
-        return new Task(taskTO.id, taskTO.type, taskTO.name, taskTO.description, taskTO.details, parseDate(taskTO.dueDate), taskTO.completed, taskTO.deletable, taskTO.challengeId, taskTO.challengeReferralId);
+        return new Task(taskTO.id, taskTO.type, taskTO.name, taskTO.description, taskTO.link, taskTO.details, parseDate(taskTO.dueDate), taskTO.completed, taskTO.deletable, taskTO.challengeId, taskTO.challengeReferralId);
       };
 
       return Task;
@@ -1844,6 +1846,7 @@
         this.currentSection = ko.dependentObservable(this.evaluateCurrentSection, this);
         this.hasPreviousSection = ko.dependentObservable(this.evaluateHasPreviousSection, this);
         this.hasNextSection = ko.dependentObservable(this.evaluateHasNextSection, this);
+        this.completed = ko.dependentObservable(this.evaluateCompleted, this);
       }
 
       StudentIntakeViewModel.prototype.load = function() {
@@ -1854,6 +1857,11 @@
       StudentIntakeViewModel.prototype.evaluateCurrentSection = function() {
         var _ref, _ref1;
         return (_ref = this.form()) != null ? (_ref1 = _ref.sections()) != null ? _ref1[this.currentSectionIndex()] : void 0 : void 0;
+      };
+
+      StudentIntakeViewModel.prototype.evaluateCompleted = function() {
+        var _ref;
+        return (_ref = this.form()) != null ? _ref.completed() : void 0;
       };
 
       StudentIntakeViewModel.prototype.evaluateHasPreviousSection = function() {

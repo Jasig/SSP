@@ -20,6 +20,7 @@ package org.jasig.ssp.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -27,6 +28,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -42,6 +44,12 @@ public class Appointment extends AbstractAuditable
 	private Date endTime;
 
 	private boolean attended;
+	
+	@Transient
+	private boolean studentIntakeRequested;
+	
+	@Transient
+	private String intakeEmail;
 
 	@ManyToOne
 	@JoinColumn(name = "person_id", updatable = false, nullable = false)
@@ -65,6 +73,8 @@ public class Appointment extends AbstractAuditable
 		result *= hashField("endTime", endTime);
 		result *= hashField("person", person);
 		result *= attended ? 3 : 5;
+		result *= studentIntakeRequested ? 3 : 5;
+		
 		return result;
 	}
 
@@ -101,5 +111,21 @@ public class Appointment extends AbstractAuditable
 
 	public void setAttended(final boolean attended) {
 		this.attended = attended;
+	}
+
+	public Boolean isStudentIntakeRequested() {
+		return studentIntakeRequested;
+	}
+
+	public void setStudentIntakeRequested(Boolean studentIntakeRequested) {
+		this.studentIntakeRequested = studentIntakeRequested;
+	}
+
+	public String getIntakeEmail() {
+		return intakeEmail;
+	}
+
+	public void setIntakeEmail(String intakeEmail) {
+		this.intakeEmail = intakeEmail;
 	}
 }

@@ -72,6 +72,7 @@ public class TaskTOFactoryImpl extends
 
 		model.setName(tObject.getName());
 		model.setDescription(tObject.getDescription());
+		model.setLink(tObject.getLink());
 		model.setDeletable(tObject.isDeletable());
 		model.setDueDate(tObject.getDueDate());
 		model.setCompletedDate(tObject.getCompletedDate());

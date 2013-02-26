@@ -20,6 +20,7 @@
 -->
 <div class='task-detail-modal ui-overlay-shadow ui-body-b ui-corner-all'>
 	<h3 class="task-name" data-bind="text: name"></h3>
-	<p class="task-details" data-bind="html: details"></p>
+	<p class="task-details" data-bind="html: description"></p>
+	<p class="task-details" data-bind="html: link"></p>
 	<a href="#" rel="external" data-icon="delete" data-role="button" data-theme="c" data-inline="true" data-bind="click: function () { $item.modal.close() }">Close</a>
 </div>

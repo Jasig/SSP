@@ -34,6 +34,7 @@ namespace 'mygps.viewmodel'
 				@currentSection = ko.dependentObservable( @evaluateCurrentSection, this )
 				@hasPreviousSection = ko.dependentObservable( @evaluateHasPreviousSection, this )
 				@hasNextSection = ko.dependentObservable( @evaluateHasNextSection, this )
+				@completed = ko.dependentObservable( @evaluateCompleted, this )
 			
 			load: () ->
 				super()
@@ -42,6 +43,9 @@ namespace 'mygps.viewmodel'
 			
 			evaluateCurrentSection: () ->
 				return @form()?.sections()?[ @currentSectionIndex() ]
+
+			evaluateCompleted: () ->
+				return @form()?.completed()
 			
 			evaluateHasPreviousSection: () ->
 				if @form()?

@@ -42,7 +42,13 @@ Ext.define('Ssp.view.admin.forms.crg.EditReferral',{
                     fieldLabel: 'Public Description',
                     anchor: '100%',
                     name: 'publicDescription'
-                },
+                }
+                ,{
+                    xtype: 'textareafield',
+                    fieldLabel: 'Link (HTML supported) example &lt;a href="www.google.com"&gt;Google&lt;/a&gt;',
+                    anchor: '100%',
+                    name: 'link'
+                },                
                 {
                     xtype: 'checkboxfield',
                     fieldLabel: 'Show in Self Help Guide',

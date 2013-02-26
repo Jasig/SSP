@@ -31,6 +31,7 @@ public class ReferralSourceTO
 		extends AbstractReferenceTO<ReferralSource>
 		implements TransferObject<ReferralSource> { // NOPMD
 
+	private String link;
 	public ReferralSourceTO() {
 		super();
 	}
@@ -53,5 +54,13 @@ public class ReferralSourceTO
 		}
 
 		return tObjects;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
 	}
 }

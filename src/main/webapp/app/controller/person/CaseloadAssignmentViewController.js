@@ -468,7 +468,9 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     		// Fix dates for GMT offset to UTC
     		me.currentPersonAppointment.set( 'startTime', me.formUtils.fixDateOffsetWithTime(me.appointment.getStartDate() ) );
     		me.currentPersonAppointment.set( 'endTime', me.formUtils.fixDateOffsetWithTime( me.appointment.getEndDate() ) );
-
+    		me.currentPersonAppointment.set(  'studentIntakeRequested', me.appointment.get('studentIntakeRequested'));
+    		me.currentPersonAppointment.set(  'intakeEmail', me.appointment.get('intakeEmail'));
+    		
     		jsonData = me.currentPersonAppointment.data;
     		personId = me.person.get('id');
 			

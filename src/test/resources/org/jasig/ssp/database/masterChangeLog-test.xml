@@ -70,8 +70,11 @@
 	<include file="org/jasig/ssp/database/changesets/000017.xml" />
 	<include file="org/jasig/ssp/database/changesets/000012-test.xml" ></include>
 	<include file="org/jasig/ssp/database/changesets/000018.xml" />
-	<include file="org/jasig/ssp/database/integrationchangesets/i000004.xml" />
+	
 	<include file="org/jasig/ssp/database/changesets/000019.xml" />
+		
+	<include file="org/jasig/ssp/database/integrationchangesets/i000004.xml" />
+	<include file="org/jasig/ssp/database/changesets/000020.xml" />
 	<include file="org/jasig/ssp/database/integrationchangesets/i000005-test.xml" />
 
 </databaseChangeLog>

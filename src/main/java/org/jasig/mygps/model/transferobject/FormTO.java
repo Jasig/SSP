@@ -34,6 +34,9 @@ public class FormTO implements Serializable {
 	private String label;
 
 	private List<FormSectionTO> sections;
+	
+	private boolean completed;
+	
 
 	public FormSectionTO getFormSectionById(final UUID formSectionId) {
 		for (final FormSectionTO formSectionTO : getSections()) {
@@ -66,5 +69,13 @@ public class FormTO implements Serializable {
 
 	public void setSections(final List<FormSectionTO> sections) {
 		this.sections = sections;
+	}
+
+	public boolean isCompleted() {
+		return completed;
+	}
+
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
 	}
 }

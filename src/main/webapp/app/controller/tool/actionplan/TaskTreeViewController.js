@@ -170,6 +170,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
 		    		{
 			    		me.task.set('name', challengeReferral.name);
 			    		me.task.set('description', challengeReferral.description);
+			    		me.task.set('link', challengeReferral.link);
 			    		me.task.set('challengeReferralId', challengeReferral.id);
 		    		}
 		    		me.task.set('challengeId', challengeId);

@@ -60,7 +60,10 @@ public class ChallengeReferral
 	@OneToMany(mappedBy = "challengeReferral")
 	private Set<ChallengeChallengeReferral> challengeChallengeReferrals =
 			new HashSet<ChallengeChallengeReferral>(0);
-
+	
+	@Column(nullable = true, length = 64000)
+	@Size(max = 64000)
+	private String link;
 	/**
 	 * Constructor
 	 */
@@ -148,5 +151,13 @@ public class ChallengeReferral
 		// collections are not included here
 
 		return result;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
 	}
 }

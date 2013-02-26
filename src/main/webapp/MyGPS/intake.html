@@ -68,11 +68,14 @@
 				</div>
 			</div>
 			
-			<div class="content" data-role="content">
+			<div class="content" data-role="content" data-bind="visible: !viewModel.completed()">
 				<div class="intake-form" data-bind="template: { name: 'sectionTemplate', data: currentSection }">
 				</div>
 			</div>
-
+			<div class="content" data-role="content" data-bind="visible: viewModel.completed()">
+				<p>Student Intake Form Completed</p>
+			</div>
+			
 			<div class="footer" data-bind="template: { name: 'footerTemplate' }"></div>
 			
 		</div>

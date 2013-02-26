@@ -20,9 +20,11 @@ package org.jasig.ssp.model.reference;
 
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.validation.constraints.Size;
 
 import org.jasig.ssp.model.Auditable;
 
@@ -36,6 +38,8 @@ public class ReferralSource
 		implements Auditable {
 
 	private static final long serialVersionUID = 7328556853410789637L;
+	
+
 
 	/**
 	 * Constructor

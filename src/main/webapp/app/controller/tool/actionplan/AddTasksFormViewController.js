@@ -106,7 +106,6 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
         		model.set('type','SSP');
         		model.set('personId', this.person.get('id') );    		
         		model.set('confidentialityLevel',{id: form.getValues().confidentialityLevelId});
-     		
     			// add the task
     			this.apiProperties.makeRequest({
 	    			url: me.url,

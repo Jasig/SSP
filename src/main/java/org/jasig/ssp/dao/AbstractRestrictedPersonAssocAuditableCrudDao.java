@@ -29,6 +29,7 @@ import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.RestrictedPersonAssocAuditable;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -60,10 +61,11 @@ public abstract class AbstractRestrictedPersonAssocAuditableCrudDao<T extends Re
 						.getAuthorities());
 
 		if (levels.isEmpty()) {
-			criteria.add(
-					Restrictions.eq("createdBy.id", requestor.getPerson()
-							.getId()));
-		} else {
+			try {
+				levels.add(confidentialityLevelService.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE));
+			} catch (ObjectNotFoundException e) {
+				LOGGER.error(e.getLocalizedMessage());
+			}
 			criteria.add(Restrictions.or(
 					Restrictions.in("confidentialityLevel", levels),
 					Restrictions.eq("createdBy.id", requestor.getPerson()

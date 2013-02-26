@@ -39,7 +39,7 @@ public class TaskTO
 
 	private String type;
 
-	private String name, description;
+	private String name, description, link;
 
 	private boolean deletable;
 
@@ -75,11 +75,10 @@ public class TaskTO
 		dueDate = task.getDueDate();
 		completedDate = task.getCompletedDate();
 		reminderSentDate = task.getReminderSentDate();
-
+		link = task.getLink();
 		name = task.getName();
 		description = task.getDescription() == null ? null : task
 				.getDescription().replaceAll("\\<.*?>", "");
-
 		if (task.getChallenge() != null) {
 			challengeId = task.getChallenge().getId();
 		}
@@ -250,5 +249,13 @@ public class TaskTO
 	public void setConfidentialityLevel(
 			final ConfidentialityLevelLiteTO confidentialityLevel) {
 		this.confidentialityLevel = confidentialityLevel;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
 	}
 }

@@ -16,8 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-/* grid.less 2.0 */
-.appriseInner {
+ 
+ .appriseInner {
   font-family: Helvetica, Arial, sans-serif;
 }
 .appriseInner button:hover {
@@ -262,10 +262,10 @@
   content: url("../images/accent/task-list-torn-paper.png");
   top: 0px;
 }
-.task-list .tasks-listview-container ul li a.action .ui-btn {
+.task-list .tasks-listview-container ul li a.action {
   visibility: hidden;
 }
-.task-list .tasks-listview-container ul li.deletable a.action .ui-btn {
+.task-list .tasks-listview-container ul li.deletable a.action {
   visibility: visible;
 }
 .task-list .ui-listview {
@@ -328,13 +328,17 @@
 .task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text .task.completed .task-status {
   background: url('../images/icons/checkbox-on.png');
 }
-.task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text .task.completed .task-name, .task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text .task.completed .task-description, .task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text .task.completed .task-date {
+.task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text .task.completed .task-name,
+.task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text .task.completed .task-description,
+.task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text .task.completed .task-date {
   text-decoration: line-through;
 }
-.task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text:hover, .task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text:active {
+.task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text:hover,
+.task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text:active {
   height: 121px;
 }
-.task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text:hover .ui-btn, .task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text:active .ui-btn {
+.task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text:hover .ui-btn,
+.task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text:active .ui-btn {
   display: inline-block;
 }
 .task-list .ui-listview .ui-btn.ui-li.ActionPlanTask {
@@ -733,10 +737,14 @@
   background-color: #ddd;
   opacity: 0.4;
 }
-#intake-page .intake-form .ui-field-contain.required label.ui-input-text, #intake-page .intake-form .ui-field-contain.required label.ui-select, #intake-page .intake-form .ui-field-contain.required .ui-controlgroup-label {
+#intake-page .intake-form .ui-field-contain.required label.ui-input-text,
+#intake-page .intake-form .ui-field-contain.required label.ui-select,
+#intake-page .intake-form .ui-field-contain.required .ui-controlgroup-label {
   font-weight: bold;
 }
-#intake-page .intake-form .ui-field-contain.invalid label.ui-input-text, #intake-page .intake-form .ui-field-contain.invalid label.ui-select, #intake-page .intake-form .ui-field-contain.invalid .ui-controlgroup-label {
+#intake-page .intake-form .ui-field-contain.invalid label.ui-input-text,
+#intake-page .intake-form .ui-field-contain.invalid label.ui-select,
+#intake-page .intake-form .ui-field-contain.invalid .ui-controlgroup-label {
   color: #900;
   font-weight: bold;
 }

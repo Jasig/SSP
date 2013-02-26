@@ -272,7 +272,8 @@ public abstract class AbstractPersonAssocController<T extends PersonAssocAuditab
 		if (null != savedT) {
 			return instantiateTO(savedT);
 		}
-
+		//If a student intake request has been made, initiate that workflow
+		
 		return null;
 	}
 

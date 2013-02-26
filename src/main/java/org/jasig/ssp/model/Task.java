@@ -29,6 +29,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -81,6 +82,10 @@ public class Task // NOPMD by jon.adams
 	private String sessionId;
 	@Column
 	private boolean deletable;
+	
+	@Column(nullable = true, length = 64000)
+	@Size(max = 64000)
+	private String link;
 
 	/**
 	 * Associated person. Changes to this Person are not persisted.
@@ -279,5 +284,13 @@ public class Task // NOPMD by jon.adams
 		result *= hashField("confidentialityLevel", confidentialityLevel);
 
 		return result;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
 	}
 }

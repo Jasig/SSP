@@ -58,6 +58,8 @@ public class AppointmentTOFactoryImpl
 		model.setStartTime(tObject.getStartTime());
 		model.setEndTime(tObject.getEndTime());
 		model.setAttended(tObject.isAttended());
+		model.setStudentIntakeRequested(tObject.isStudentIntakeRequested());
+		model.setIntakeEmail(tObject.getIntakeEmail());
 
 		if (tObject.getPersonId() != null) {
 			model.setPerson(personService.get(tObject.getPersonId()));

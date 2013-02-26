@@ -8019,7 +8019,9 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     		// Fix dates for GMT offset to UTC
     		me.currentPersonAppointment.set( 'startTime', me.formUtils.fixDateOffsetWithTime(me.appointment.getStartDate() ) );
     		me.currentPersonAppointment.set( 'endTime', me.formUtils.fixDateOffsetWithTime( me.appointment.getEndDate() ) );
-
+    		me.currentPersonAppointment.set(  'studentIntakeRequested', me.appointment.get('studentIntakeRequested'));
+    		me.currentPersonAppointment.set(  'intakeEmail', me.appointment.get('intakeEmail'));
+    		
     		jsonData = me.currentPersonAppointment.data;
     		personId = me.person.get('id');
 			
@@ -8401,7 +8403,10 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
     control: {
     	appointmentDateField: '#appointmentDateField',
     	startTimeField: '#startTimeField',
-    	endTimeField: '#endTimeField'
+    	endTimeField: '#endTimeField',
+    	'studentIntakeRequestedField':{
+    		change: 'onHideRequestEmail'
+    	} 
     },
     
 	init: function() {
@@ -8423,7 +8428,18 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 		
 		return me.callParent(arguments);
     },
-    
+    onHideRequestEmail: function(field, newValue,oldValue, eOpts)
+    {
+    	var emailBox = Ext.ComponentQuery.query('#intakeEmailField')[0];
+    	if(newValue)
+    	{
+    		emailBox.show();
+    	}
+    	else
+    	{
+    		emailBox.hide();
+    	}
+    },
     destroy: function(){
     	this.appEventsController.removeEvent({eventName: 'studentTypeChange', callBackFunc: this.onStudentTypeChange, scope: this});    	
     	
@@ -9484,7 +9500,6 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
         		model.set('type','SSP');
         		model.set('personId', this.person.get('id') );    		
         		model.set('confidentialityLevel',{id: form.getValues().confidentialityLevelId});
-     		
     			// add the task
     			this.apiProperties.makeRequest({
 	    			url: me.url,
@@ -10442,6 +10457,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
 		    		{
 			    		me.task.set('name', challengeReferral.name);
 			    		me.task.set('description', challengeReferral.description);
+			    		me.task.set('link', challengeReferral.link);
 			    		me.task.set('challengeReferralId', challengeReferral.id);
 		    		}
 		    		me.task.set('challengeId', challengeId);
@@ -16050,7 +16066,21 @@ Ext.define('Ssp.view.person.Appointment', {
 				        typeAhead: false,
 				        allowBlank: false,
 				        increment: 30
-				    }]
+				    },{
+			            xtype: 'checkboxfield',
+			            fieldLabel: 'Send Student Intake Request',
+				        name: 'studentIntakeRequested',
+			            itemId: 'studentIntakeRequestedField',
+			            inputValue: true
+				    },{
+			            xtype: 'textfield',
+			            fieldLabel: 'Also Send Student Intake Request To Email',
+				        name: 'intakeEmail',
+			            itemId: 'intakeEmailField',
+			            hidden: true
+				    }
+				    
+				    ]
 			    }]
 			});
 		
@@ -16924,6 +16954,12 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				        name: 'description',
 				        maxLength: 1000,
 				        allowBlank:false
+				    },{
+				    	xtype: 'textarea',
+				        fieldLabel: 'Link (HTML Supported)',
+				        name: 'link',
+				        maxLength: 1000,
+				        allowBlank:true
 				    },{
 				        xtype: 'combobox',
 				        itemId: 'confidentialityLevel',
@@ -19809,7 +19845,13 @@ Ext.define('Ssp.view.admin.forms.crg.EditReferral',{
                     fieldLabel: 'Public Description',
                     anchor: '100%',
                     name: 'publicDescription'
-                },
+                }
+                ,{
+                    xtype: 'textareafield',
+                    fieldLabel: 'Link (HTML supported) example &lt;a href="www.google.com"&gt;Google&lt;/a&gt;',
+                    anchor: '100%',
+                    name: 'link'
+                },                
                 {
                     xtype: 'checkboxfield',
                     fieldLabel: 'Show in Self Help Guide',
@@ -21391,7 +21433,9 @@ Ext.define('Ssp.model.Appointment', {
     },    
     fields: [{name:'appointmentDate', type: 'date', dateFormat: 'time'},
              {name: 'startTime', type: 'date', dateFormat: 'time'},
-             {name: 'endTime', type: 'date', dateFormat: 'time'}],        
+             {name: 'endTime', type: 'date', dateFormat: 'time'},        
+             {name: 'studentIntakeRequested', type: 'boolean'},
+             {name: 'intakeEmail', type: 'string'}],        
              
     getStartDate: function(){
 		var me=this;
@@ -21620,6 +21664,7 @@ Ext.define('Ssp.model.tool.actionplan.Task', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'name',type:'string'},
              {name:'description',type:'string'},
+             {name:'link',type:'string'},
              {name:'dueDate', type:'date', dateFormat: 'time'},
              {name:'reminderSentDate', type:'date', dateFormat:'time'},
              {name: 'confidentialityLevel',
@@ -21959,6 +22004,7 @@ Ext.define('Ssp.model.reference.ChallengeCategory', {
 Ext.define('Ssp.model.reference.ChallengeReferral', {
     extend: 'Ssp.model.reference.AbstractReference',
     fields: [{name: 'publicDescription', type: 'string'},
+             {name:'link',type:'string'},
              {name: 'showInSelfHelpGuide', type: 'boolean'}]
 });
 /*

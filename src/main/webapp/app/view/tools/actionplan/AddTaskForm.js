@@ -60,6 +60,12 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				        maxLength: 1000,
 				        allowBlank:false
 				    },{
+				    	xtype: 'textarea',
+				        fieldLabel: 'Link (HTML Supported)',
+				        name: 'link',
+				        maxLength: 1000,
+				        allowBlank:true
+				    },{
 				        xtype: 'combobox',
 				        itemId: 'confidentialityLevel',
 				        name: 'confidentialityLevelId',

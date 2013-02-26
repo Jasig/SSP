@@ -24,7 +24,9 @@ Ext.define('Ssp.model.Appointment', {
     },    
     fields: [{name:'appointmentDate', type: 'date', dateFormat: 'time'},
              {name: 'startTime', type: 'date', dateFormat: 'time'},
-             {name: 'endTime', type: 'date', dateFormat: 'time'}],        
+             {name: 'endTime', type: 'date', dateFormat: 'time'},        
+             {name: 'studentIntakeRequested', type: 'boolean'},
+             {name: 'intakeEmail', type: 'string'}],        
              
     getStartDate: function(){
 		var me=this;

@@ -39,6 +39,10 @@ public class AppointmentTO
 	private Date startTime, endTime;
 
 	private boolean attended;
+	
+	private Boolean studentIntakeRequested;
+	
+	private String intakeEmail;
 
 	public AppointmentTO() {
 		super();
@@ -58,6 +62,8 @@ public class AppointmentTO
 		startTime = model.getStartTime();
 		endTime = model.getEndTime();
 		attended = model.isAttended();
+		studentIntakeRequested = model.isStudentIntakeRequested();
+		intakeEmail = model.getIntakeEmail();
 	}
 
 	/**
@@ -111,6 +117,22 @@ public class AppointmentTO
 
 	public void setAttended(final boolean attended) {
 		this.attended = attended;
+	}
+
+	public boolean isStudentIntakeRequested() {
+		return studentIntakeRequested;
+	}
+
+	public void setStudentIntakeRequested(boolean studentIntakeRequested) {
+		this.studentIntakeRequested = studentIntakeRequested;
+	}
+
+	public String getIntakeEmail() {
+		return intakeEmail;
+	}
+
+	public void setIntakeEmail(String intakeEmail) {
+		this.intakeEmail = intakeEmail;
 	}
 
 }

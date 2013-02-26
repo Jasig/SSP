@@ -37,6 +37,8 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 	private Boolean showInSelfHelpGuide;
 
 	private Boolean showInStudentIntake;
+	
+	private String link;
 
 	public ChallengeReferralTO() {
 		super();
@@ -45,6 +47,7 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 	public ChallengeReferralTO(final ChallengeReferral model) {
 		super();
 		from(model);
+		this.link = model.getLink();
 	}
 
 	public static List<ChallengeReferralTO> toTOList(
@@ -63,6 +66,7 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 		publicDescription = model.getPublicDescription();
 		showInSelfHelpGuide = model.getShowInSelfHelpGuide();
 		showInStudentIntake = model.getShowInStudentIntake();
+		link = model.getLink();
 	}
 
 	public String getPublicDescription() {
@@ -101,5 +105,13 @@ public class ChallengeReferralTO extends AbstractReferenceTO<ChallengeReferral>
 	 */
 	public void setShowInStudentIntake(final Boolean showInStudentIntake) {
 		this.showInStudentIntake = showInStudentIntake;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
 	}
 }

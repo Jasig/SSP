@@ -93,7 +93,7 @@ import com.google.common.collect.Sets;
 public class StudentIntakeFormManager { // NOPMD
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(MyGpsStudentIntakeController.class);
+			.getLogger(StudentIntakeFormManager.class);
 
 	private static final String DEFAULT_MAXIMUM_STRING_LENGTH = "255";
 
@@ -361,6 +361,8 @@ public class StudentIntakeFormManager { // NOPMD
 		// now refresh Person from Hibernate so lazy-loading works in case the
 		// person instance was loaded in a previous request
 		student = personService.get(student.getId());
+		
+		formTO.setCompleted(student.getStudentIntakeCompleteDate()== null ? false : true);
 
 		/* Confidentiality disclosure */
 
@@ -503,9 +505,12 @@ public class StudentIntakeFormManager { // NOPMD
 			}
 
 			// Gender
-			formSectionTO.getFormQuestionById(
-					SECTION_DEMOGRAPHICS_QUESTION_GENDER_ID).setValue(
-					student.getDemographics().getGender().getCode());
+			if( student.getDemographics().getGender() != null)
+			{
+				formSectionTO.getFormQuestionById(
+						SECTION_DEMOGRAPHICS_QUESTION_GENDER_ID).setValue(
+								student.getDemographics().getGender().getCode());
+			}
 
 			// Citizenship
 			if (student.getDemographics().getCitizenship() == null) {
@@ -1358,7 +1363,7 @@ public class StudentIntakeFormManager { // NOPMD
 								SECTION_EDUCATIONLEVEL_QUESTION_NODIPLOMALASTYEARATTENDED_ID)
 						.getValue();
 
-				if (educationLevelQuestionValue != null) {
+				if (educationLevelQuestionValue != null && !"".equals(educationLevelQuestionValue)) {
 					studentEducationLevel.setLastYearAttended(Integer
 							.parseInt(educationLevelQuestionValue));
 				}
@@ -1368,7 +1373,7 @@ public class StudentIntakeFormManager { // NOPMD
 								SECTION_EDUCATIONLEVEL_QUESTION_NODIPLOMAHIGHESTGRADECOMPLETED_ID)
 						.getValue();
 
-				if (educationLevelQuestionValue != null) {
+				if (educationLevelQuestionValue != null && !"".equals(educationLevelQuestionValue) && !"null".equals(educationLevelQuestionValue)) {
 					studentEducationLevel.setHighestGradeCompleted(Integer
 							.parseInt(educationLevelQuestionValue));
 				}
@@ -1380,7 +1385,7 @@ public class StudentIntakeFormManager { // NOPMD
 								SECTION_EDUCATIONLEVEL_QUESTION_GEDYEAROFGED_ID)
 						.getValue();
 
-				if (educationLevelQuestionValue != null) {
+				if (educationLevelQuestionValue != null && !"".equals(educationLevelQuestionValue)) {
 					studentEducationLevel.setGraduatedYear(Integer
 							.parseInt(educationLevelQuestionValue));
 				}
@@ -1393,7 +1398,7 @@ public class StudentIntakeFormManager { // NOPMD
 								SECTION_EDUCATIONLEVEL_QUESTION_HIGHSCHOOLYEARGRADUATED_ID)
 						.getValue();
 
-				if (educationLevelQuestionValue != null) {
+				if (educationLevelQuestionValue != null && !"".equals(educationLevelQuestionValue)) {
 					studentEducationLevel.setGraduatedYear(Integer
 							.parseInt(educationLevelQuestionValue));
 				}
@@ -1412,7 +1417,7 @@ public class StudentIntakeFormManager { // NOPMD
 								SECTION_EDUCATIONLEVEL_QUESTION_SOMECOLLEGECREDITSLASTYEARATTENDED_ID)
 						.getValue();
 
-				if (educationLevelQuestionValue != null) {
+				if (educationLevelQuestionValue != null && !"".equals(educationLevelQuestionValue)) {
 					studentEducationLevel.setLastYearAttended(Integer
 							.parseInt(educationLevelQuestionValue));
 				}

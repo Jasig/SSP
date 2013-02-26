@@ -39,8 +39,8 @@ public final class SspStringUtils {
 	 * @return String representation of the year, or empty string if the value
 	 *         was 0 or negative.
 	 */
-	public static String stringFromYear(final int year) {
-		return 0 >= year ? "" : String.valueOf(year);
+	public static String stringFromYear(final Integer year) {
+		return year == null || 0 >= year ? "" : String.valueOf(year);
 	}
 
 	/**
@@ -78,5 +78,9 @@ public final class SspStringUtils {
 		}
 
 		return false;
+	}
+	
+	public static String YesNoFromBoolean(final Boolean value) {
+			return value == null ? null : value ?"YES" : "NO";
 	}
 }

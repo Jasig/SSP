@@ -20,6 +20,7 @@ Ext.define('Ssp.model.tool.actionplan.Task', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'name',type:'string'},
              {name:'description',type:'string'},
+             {name:'link',type:'string'},
              {name:'dueDate', type:'date', dateFormat: 'time'},
              {name:'reminderSentDate', type:'date', dateFormat:'time'},
              {name: 'confidentialityLevel',

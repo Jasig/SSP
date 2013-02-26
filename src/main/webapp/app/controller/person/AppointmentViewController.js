@@ -28,7 +28,10 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
     control: {
     	appointmentDateField: '#appointmentDateField',
     	startTimeField: '#startTimeField',
-    	endTimeField: '#endTimeField'
+    	endTimeField: '#endTimeField',
+    	'studentIntakeRequestedField':{
+    		change: 'onHideRequestEmail'
+    	} 
     },
     
 	init: function() {
@@ -50,7 +53,18 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 		
 		return me.callParent(arguments);
     },
-    
+    onHideRequestEmail: function(field, newValue,oldValue, eOpts)
+    {
+    	var emailBox = Ext.ComponentQuery.query('#intakeEmailField')[0];
+    	if(newValue)
+    	{
+    		emailBox.show();
+    	}
+    	else
+    	{
+    		emailBox.hide();
+    	}
+    },
     destroy: function(){
     	this.appEventsController.removeEvent({eventName: 'studentTypeChange', callBackFunc: this.onStudentTypeChange, scope: this});    	
     	

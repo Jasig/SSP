@@ -20,6 +20,9 @@ package org.jasig.ssp.web.api;
 
 import java.util.UUID;
 
+import javax.validation.Valid;
+
+import org.jasig.mygps.business.StudentIntakeRequestManager;
 import org.jasig.ssp.factory.AppointmentTOFactory;
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.model.Appointment;
@@ -27,11 +30,13 @@ import org.jasig.ssp.service.AppointmentService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.AppointmentTO;
 import org.jasig.ssp.util.security.DynamicPermissionChecking;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -57,6 +62,9 @@ public class AppointmentController
 	@Autowired
 	protected transient AppointmentTOFactory factory;
 
+	@Autowired
+	protected transient StudentIntakeRequestManager intakeRequestManager;
+	
 	@Override
 	protected AppointmentService getService() {
 		return service;
@@ -93,5 +101,21 @@ public class AppointmentController
 
 		return factory.from(appt);
 	}
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@DynamicPermissionChecking
+	@Override
+	public @ResponseBody
+	AppointmentTO save(@PathVariable final UUID id,
+			@PathVariable final UUID personId,
+			@Valid @RequestBody final AppointmentTO obj)
+			throws ObjectNotFoundException, ValidationException {
 
+		AppointmentTO appointment = super.save(id, personId, obj);
+		if(obj.isStudentIntakeRequested() && appointment != null)
+		{
+			intakeRequestManager.processStudentIntakeRequest(appointment);
+		}
+		return appointment;
+		
+	}
 }

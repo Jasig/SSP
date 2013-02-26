@@ -66,7 +66,21 @@ Ext.define('Ssp.view.person.Appointment', {
 				        typeAhead: false,
 				        allowBlank: false,
 				        increment: 30
-				    }]
+				    },{
+			            xtype: 'checkboxfield',
+			            fieldLabel: 'Send Student Intake Request',
+				        name: 'studentIntakeRequested',
+			            itemId: 'studentIntakeRequestedField',
+			            inputValue: true
+				    },{
+			            xtype: 'textfield',
+			            fieldLabel: 'Also Send Student Intake Request To Email',
+				        name: 'intakeEmail',
+			            itemId: 'intakeEmailField',
+			            hidden: true
+				    }
+				    
+				    ]
 			    }]
 			});
 		
