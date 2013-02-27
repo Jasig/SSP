@@ -101,7 +101,7 @@ Ext.define('Ssp.service.PersonService', {
 
 	    var success = function( response, view ){
 			var r = response.responseText ? Ext.decode(response.responseText) : null;
-			if ( callbacks.statusCode[response.status] ) {
+			if ( callbacks.statusCode && callbacks.statusCode[response.status] ) {
 				callbacks.statusCode[response.status](r, callbacks.scope);
 			} else {
 				callbacks.success(r, callbacks.scope);
