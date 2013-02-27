@@ -88,7 +88,7 @@ Ext.require([
     'Ssp.view.tools.sis.Registration',
     'Ssp.view.tools.sis.Assessment',
 
-    'Ssp.view.tools.sis.Transcript',
+    //'Ssp.view.tools.sis.Transcript',
     'Ssp.view.tools.accommodation.Accommodation',
     'Ssp.view.tools.accommodation.General',
     'Ssp.view.tools.accommodation.AgencyContacts',
