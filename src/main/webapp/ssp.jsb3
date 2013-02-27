@@ -74,23 +74,8 @@
                     "path": "/app/view/tools/profile/"
                 },
                 {
-                    "clsName": "Ssp.view.tools.profile.Coach",
-                    "name": "Coach.js",
-                    "path": "/app/view/tools/profile/"
-                },
-                {
-                    "clsName": "Ssp.view.tools.profile.Contact",
-                    "name": "Contact.js",
-                    "path": "/app/view/tools/profile/"
-                },
-                {
                     "clsName": "Ssp.view.tools.profile.Placement",
                     "name": "Placement.js",
-                    "path": "/app/view/tools/profile/"
-                },
-                {
-                    "clsName": "Ssp.view.tools.profile.Transcript",
-                    "name": "Transcript.js",
                     "path": "/app/view/tools/profile/"
                 },
                 {
@@ -499,9 +484,19 @@
                     "path": "/app/controller/tool/profile/"
                 },
                 {
+                    "clsName": "Ssp.view.tools.profile.Coach",
+                    "name": "Coach.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
                     "clsName": "Ssp.controller.tool.profile.ProfileContactViewController",
                     "name": "ProfileContactViewController.js",
                     "path": "/app/controller/tool/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.Contact",
+                    "name": "Contact.js",
+                    "path": "/app/view/tools/profile/"
                 },
                 {
                     "clsName": "Ssp.controller.tool.actionplan.ActionPlanToolViewController",
@@ -622,6 +617,11 @@
                     "clsName": "Ssp.controller.tool.sis.TranscriptViewController",
                     "name": "TranscriptViewController.js",
                     "path": "/app/controller/tool/sis/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.Transcript",
+                    "name": "Transcript.js",
+                    "path": "/app/view/tools/profile/"
                 },
                 {
                     "clsName": "Ssp.controller.admin.AbstractReferenceAdminViewController",
@@ -947,11 +947,6 @@
                     "clsName": "Ssp.view.tools.document.EditDocument",
                     "name": "EditDocument.js",
                     "path": "/app/view/tools/document/"
-                },
-                {
-                    "clsName": "Ssp.view.tools.profile.Transcript",
-                    "name": "Transcript.js",
-                    "path": "/app/view/tools/profile/"
                 },
                 {
                     "clsName": "Ssp.view.admin.forms.AbstractReferenceAdmin",
