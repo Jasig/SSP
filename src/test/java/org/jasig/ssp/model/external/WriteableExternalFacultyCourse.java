@@ -65,6 +65,18 @@ public class WriteableExternalFacultyCourse {
 	@NotEmpty
 	@Size(max = 100)
 	private String title;
+	
+	@Column(nullable = false, length = 128)
+	@NotNull
+	@NotEmpty
+	@Size(max = 128)
+	private String sectionCode;
+	
+	@Column(nullable = false, length = 10)
+	@NotNull
+	@NotEmpty
+	@Size(max = 10)
+	private String sectionNumber;
 
 	public String getFacultySchoolId() {
 		return facultySchoolId;
@@ -112,5 +124,21 @@ public class WriteableExternalFacultyCourse {
 	 */
 	public void setTitle(final String title) {
 		this.title = title;
+	}
+
+	public String getSectionCode() {
+		return sectionCode;
+	}
+
+	public void setSectionCode(String sectionCode) {
+		this.sectionCode = sectionCode;
+	}
+
+	public String getSectionNumber() {
+		return sectionNumber;
+	}
+
+	public void setSectionNumber(String sectionNumber) {
+		this.sectionNumber = sectionNumber;
 	}
 }

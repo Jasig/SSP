@@ -30,6 +30,9 @@ public class ExternalFacultyCoursePk implements Serializable {
 	private String facultySchoolId;
 	private String termCode;
 	private String formattedCourse;
+	private String sectionCode;
+	private String sectionNumber;
+
 
 	public String getFacultySchoolId() {
 		return facultySchoolId;
@@ -54,6 +57,34 @@ public class ExternalFacultyCoursePk implements Serializable {
 	public void setFormattedCourse(String formattedCourse) {
 		this.formattedCourse = formattedCourse;
 	}
+	
+	/**
+	 * @return the sectionCode
+	 */
+	public String getSectionCode() {
+		return sectionCode;
+	}
+
+	/**
+	 * @param sectionCode the sectionCode to set
+	 */
+	public void setSectionCode(String sectionCode) {
+		this.sectionCode = sectionCode;
+	}
+
+	/**
+	 * @return the sectionNumber
+	 */
+	public String getSectionNumber() {
+		return sectionNumber;
+	}
+
+	/**
+	 * @param sectionNumber the sectionNumber to set
+	 */
+	public void setSectionNumber(String sectionNumber) {
+		this.sectionNumber = sectionNumber;
+	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -65,6 +96,8 @@ public class ExternalFacultyCoursePk implements Serializable {
 		if (!facultySchoolId.equals(that.facultySchoolId)) return false;
 		if (!formattedCourse.equals(that.formattedCourse)) return false;
 		if (!termCode.equals(that.termCode)) return false;
+		if (!sectionCode.equals(that.sectionCode)) return false;
+		if (!sectionNumber.equals(that.sectionNumber)) return false;
 
 		return true;
 	}
@@ -74,6 +107,9 @@ public class ExternalFacultyCoursePk implements Serializable {
 		int result = facultySchoolId.hashCode();
 		result = 31 * result + termCode.hashCode();
 		result = 31 * result + formattedCourse.hashCode();
+		result = 31 * result + sectionCode.hashCode();
+		result = 31 * result + sectionNumber.hashCode();
+
 		return result;
 	}
 }

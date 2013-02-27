@@ -19,7 +19,6 @@
 package org.jasig.ssp.factory.external;
 
 
-import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
 import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.transferobject.external.ExternalPersonLiteTO;
 

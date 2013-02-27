@@ -99,6 +99,8 @@ public class FacultyCourseDaoTest {
 		course.setFormattedCourse("MTH101");
 		course.setTermCode(Stubs.TermFixture.SPRING_2013.code());
 		course.setTitle("College Algebra");
+		course.setSectionCode("CA100FA");
+		course.setSectionNumber("CA100FA");
 
 		sessionFactory.getCurrentSession().save(course);
 		sessionFactory.getCurrentSession().flush();
@@ -120,7 +122,8 @@ public class FacultyCourseDaoTest {
 		course.setFormattedCourse("MTH101");
 		course.setTermCode(Stubs.TermFixture.SPRING_2013.code());
 		course.setTitle("College Algebra");
-
+		course.setSectionCode("CA100SP");
+		course.setSectionNumber("CA100SP2");
 		sessionFactory.getCurrentSession().save(course);
 		sessionFactory.getCurrentSession().flush();
 

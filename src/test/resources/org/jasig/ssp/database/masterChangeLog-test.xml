@@ -75,6 +75,8 @@
 		
 	<include file="org/jasig/ssp/database/integrationchangesets/i000004.xml" />
 	<include file="org/jasig/ssp/database/changesets/000020.xml" />
-	<include file="org/jasig/ssp/database/integrationchangesets/i000005-test.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000005-test.xml" /><!-- Adds Staff Details  -->
+	<include file="org/jasig/ssp/database/integrationchangesets/i000005.xml" /> <!-- Adds SIS DATA Tables -->
+	<include file="org/jasig/ssp/database/integrationchangesets/i000007-test.xml" /> <!-- Adds SIS DATA for testing -->
 
 </databaseChangeLog>

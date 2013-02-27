@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.hibernate.SessionFactory;
+import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
 import org.jasig.ssp.model.external.WriteableExternalFacultyCourse;
 import org.jasig.ssp.model.external.WriteableExternalFacultyCourseRoster;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -90,7 +91,9 @@ public class FacultyCourseControllerIntegrationTest {
 
 		final PagedResponse<FacultyCourseTO> list = controller
 				.getAllCoursesForFaculty(FACULTY_SCHOOL_ID);
-		final FacultyCourseTO obj = list.getRows().iterator().next();
+		Iterator<FacultyCourseTO> iterator = list.getRows().iterator();
+		iterator.next();
+		final FacultyCourseTO obj = iterator.next();
 
 		assertNotNull(
 				"Returned FacultyCourseTO from the controller should not have been null.",
@@ -210,8 +213,11 @@ public class FacultyCourseControllerIntegrationTest {
 		// assert
 		assertEquals("Course list should have returned 2 courses.", 2,
 				list.getResults());
-		assertEquals("Course name did not match.", FORMATTED_COURSE, list
-				.getRows().iterator().next().getFormattedCourse());
+		
+		Iterator<FacultyCourseTO> iterator = list.getRows().iterator();
+		iterator.next();
+		assertEquals("Course name did not match.", FORMATTED_COURSE, 
+				iterator.next().getFormattedCourse());
 	}
 
 	@Test
@@ -224,8 +230,9 @@ public class FacultyCourseControllerIntegrationTest {
 		// assert
 		assertEquals("List should have returned 2 students.", 2,
 				list.getResults());
-		assertEquals("Last name did not match.", LAST_NAME, list
-				.getRows().iterator().next().getLastName());
+		Iterator<ExternalFacultyCourseRosterTO> iterator = list.getRows().iterator();
+		assertEquals("Last name did not match.", LAST_NAME, 
+				iterator.next().getLastName());
 	}
 
 	@Test
@@ -254,6 +261,8 @@ public class FacultyCourseControllerIntegrationTest {
 		course.setFormattedCourse("MTH101");
 		course.setTermCode(Stubs.TermFixture.SPRING_2013.code());
 		course.setTitle("College Algebra");
+		course.setSectionCode("Aa");
+		course.setSectionNumber("1");
 
 		final WriteableExternalFacultyCourseRoster roster = new WriteableExternalFacultyCourseRoster();
 		roster.setFacultySchoolId(Stubs.PersonFixture.KEN.schoolId());
@@ -264,6 +273,9 @@ public class FacultyCourseControllerIntegrationTest {
 		roster.setPrimaryEmailAddress(Stubs.PersonFixture.KEVIN_SMITH.primaryEmailAddress());
 		roster.setSchoolId(Stubs.PersonFixture.KEVIN_SMITH.schoolId());
 		roster.setTermCode(Stubs.TermFixture.SPRING_2013.code());
+		roster.setSectionCode("Aa");
+		roster.setSectionNumber("1");
+		roster.setStatusCode("WK");
 
 		sessionFactory.getCurrentSession().save(course);
 		sessionFactory.getCurrentSession().save(roster);
@@ -276,10 +288,11 @@ public class FacultyCourseControllerIntegrationTest {
 		assertEquals(2, modifiedEnrollments.getRows().size());
 		final Iterator<ExternalFacultyCourseRosterTO> modifiedEnrollmentsIterator =
 				modifiedEnrollments.getRows().iterator();
-		assertEquals(Stubs.PersonFixture.STUDENT_0.schoolId(),
-				modifiedEnrollmentsIterator.next().getSchoolId());
 		assertEquals(Stubs.PersonFixture.KEVIN_SMITH.schoolId(),
 				modifiedEnrollmentsIterator.next().getSchoolId());
+		assertEquals(Stubs.PersonFixture.STUDENT_0.schoolId(),
+				modifiedEnrollmentsIterator.next().getSchoolId());
+		
 
 	}
 
@@ -311,6 +324,8 @@ public class FacultyCourseControllerIntegrationTest {
 		course.setFormattedCourse("MTH101");
 		course.setTermCode("SP13");
 		course.setTitle("College Algebra");
+		course.setSectionCode("Aa");
+		course.setSectionNumber("1");
 
 		WriteableExternalFacultyCourseRoster roster = new WriteableExternalFacultyCourseRoster();
 		roster.setFacultySchoolId(Stubs.PersonFixture.KEN.schoolId());
@@ -321,6 +336,10 @@ public class FacultyCourseControllerIntegrationTest {
 		roster.setPrimaryEmailAddress(Stubs.PersonFixture.KEVIN_SMITH.primaryEmailAddress());
 		roster.setSchoolId(Stubs.PersonFixture.KEVIN_SMITH.schoolId());
 		roster.setTermCode("SP13");
+		roster.setSectionCode("Aa");
+		roster.setSectionNumber("1");
+		roster.setStatusCode("WK");
+
 
 		sessionFactory.getCurrentSession().save(course);
 		sessionFactory.getCurrentSession().save(roster);
@@ -331,6 +350,8 @@ public class FacultyCourseControllerIntegrationTest {
 						"MTH101", Stubs.TermFixture.SPRING_2013.code());
 
 		assertEquals(1, modifiedEnrollments.getRows().size());
+		
+		
 		assertEquals(Stubs.PersonFixture.KEVIN_SMITH.schoolId(),
 				modifiedEnrollments.getRows().iterator().next().getSchoolId());
 	}

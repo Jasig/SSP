@@ -36,6 +36,8 @@ public class ExternalFacultyCourseRosterTO implements Serializable,
 	private String primaryEmailAddress;
 	private String statusCode;
 	private String termCode;
+	private String sectionCode;
+	private String sectionNumber;
 
 	/**
 	 * Empty constructor. Should only ever be used for unit tests or ORMs.
@@ -72,6 +74,8 @@ public class ExternalFacultyCourseRosterTO implements Serializable,
 		primaryEmailAddress = model.getPrimaryEmailAddress();
 		statusCode = model.getStatusCode();
 		termCode = model.getTermCode();
+		sectionCode = model.getSectionCode();
+		sectionNumber = model.getSectionNumber();
 	}
 
 	public String getSchoolId() {
@@ -144,5 +148,33 @@ public class ExternalFacultyCourseRosterTO implements Serializable,
 
 	public void setTermCode(final String termCode) {
 		this.termCode = termCode;
+	}
+
+	/**
+	 * @return the sectionCode
+	 */
+	public String getSectionCode() {
+		return sectionCode;
+	}
+
+	/**
+	 * @param sectionCode the sectionCode to set
+	 */
+	public void setSectionCode(final String sectionCode) {
+		this.sectionCode = sectionCode;
+	}
+
+	/**
+	 * @return the sectionNumber
+	 */
+	public String getSectionNumber() {
+		return sectionNumber;
+	}
+
+	/**
+	 * @param sectionNumber the sectionNumber to set
+	 */
+	public void setSectionNumber(final String sectionNumber) {
+		this.sectionNumber = sectionNumber;
 	}
 }

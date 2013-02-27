@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	<property name="nchar.type" value="character" dbms="postgresql" />
+	<property name="nchar.type" value="nchar" dbms="mssql" />
+
+
+	<changeSet author='jim.stanley'
+		id='Add tuition paid colum to External Registration Status By Term'>
+		<addColumn tableName="external_registration_status_by_term">
+			<column name="tuition_paid" type="${nchar.type}(1)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+
+		<rollback>
+			<dropColumn tableName="external_registration_status_by_term" columnName="tuition_paid" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="Add tuition paid field to external reg. status by term view" author="jim.stanley">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip adding the tuition paid field to the v_external_registration_status_by_term table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+		<dropView viewName="v_external_registration_status_by_term" />
+		<createView viewName="v_external_registration_status_by_term">
+			select ROW_NUMBER() OVER (ORDER BY school_id, term_code) as id, school_id, term_code, registered_course_count, tuition_paid from external_registration_status_by_term
+		</createView>
+		<sql>grant all on external_registration_status_by_term to ${database.app.username}</sql>
+		<sql>grant all on v_external_registration_status_by_term to ${database.app.username}</sql>
+		<rollback>
+			<dropView viewName="v_external_registration_status_by_term" />
+			<createView viewName="v_external_registration_status_by_term">
+				select ROW_NUMBER() OVER (ORDER BY school_id, term_code) as id, school_id, term_code, registered_course_count from external_registration_status_by_term
+			</createView>
+		</rollback>
+	</changeSet>
+	
+	<changeSet author='jim.stanley'
+		id='Add Section Info for External Faculty Course Roster'>
+		<addColumn tableName="external_faculty_course_roster">
+			<column name="section_code" type="${nvarchar.type}(128)">
+				<constraints nullable="true" />
+			</column>
+			<column name="section_number" type="${nvarchar.type}(10)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+
+		<rollback>
+			<dropColumn tableName="external_faculty_course_roster" columnName="section_code" />
+			<dropColumn tableName="external_faculty_course_roster" columnName="section_number" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="Add section (code, number) fields to external roster view" author="jim.stanley">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip adding the status field to the v_external_faculty_course_roster table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+		<dropView viewName="v_external_faculty_course_roster" />
+		<createView viewName="v_external_faculty_course_roster">
+			select ROW_NUMBER() OVER (ORDER BY faculty_school_id) as id, faculty_school_id, school_id, first_name, middle_name, last_name, primary_email_address, term_code, formatted_course, status_code, section_code, section_number from external_faculty_course_roster
+		</createView>
+		<sql>grant all on v_external_faculty_course_roster to ${database.app.username}</sql>
+		<sql>grant all on external_faculty_course_roster to ${database.app.username}</sql>
+		<rollback>
+			<dropView viewName="v_external_faculty_course_roster" />
+			<createView viewName="v_external_faculty_course_roster">
+				select ROW_NUMBER() OVER (ORDER BY faculty_school_id) as id, faculty_school_id, school_id, first_name, middle_name, last_name, primary_email_address, term_code, formatted_course, status_code from external_faculty_course_roster
+			</createView>
+		</rollback>
+	</changeSet>
+	
+	<changeSet author='jim.stanley'
+		id='Add Section Info for External Faculty Course'>
+		<addColumn tableName="external_faculty_course">
+			<column name="section_code" type="${nvarchar.type}(128)">
+				<constraints nullable="true" />
+			</column>
+			<column name="section_number" type="${nvarchar.type}(10)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+
+		<rollback>
+			<dropColumn tableName="external_faculty_course" columnName="section_code" />
+			<dropColumn tableName="external_faculty_course" columnName="section_number" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="Add section (code, number) fields to ext faculty course view" author="jim.stanley">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip adding the section code and section number fields to the v_external_faculty_course table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+		<dropView viewName="v_external_faculty_course" />
+		<createView viewName="v_external_faculty_course">
+			select ROW_NUMBER() OVER (ORDER BY faculty_school_id) as id, faculty_school_id,term_code, formatted_course, section_code, section_number, title from external_faculty_course
+		</createView>
+		<sql>grant all on v_external_faculty_course to ${database.app.username}</sql>
+		<sql>grant all on external_faculty_course to ${database.app.username}</sql>
+		<rollback>
+			<dropView viewName="v_external_faculty_course" />
+			<createView viewName="v_external_faculty_course">
+				select ROW_NUMBER() OVER (ORDER BY faculty_school_id)  as id, faculty_school_id,term_code, formatted_course, status_code, title from external_faculty_course_roster
+			</createView>
+		</rollback>
+	</changeSet>
+	
+	
+	
+	<changeSet author='jim.stanley'
+		id='Add Table External Students By Course'>
+		<createTable tableName="external_students_by_course">
+			<column name="school_id" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="formatted_course" type="${nvarchar.type}(35)">
+				<constraints nullable="false" />
+			</column>
+			<column name="term_code" type="${nvarchar.type}(25)">
+				<constraints nullable="false" />
+			</column>
+			<column name="first_name" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="middle_name" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="last_name" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="audited" type="${nchar.type}(1)">
+				<constraints nullable="true" />
+			</column>
+			<column name="academic_grade" type="${nvarchar.type}(10)">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+
+		<createView viewName="v_external_students_by_course">
+			select ROW_NUMBER() OVER (ORDER BY school_id, term_code) as id, school_id, formatted_course, term_code, first_name, middle_name, last_name, audited, academic_grade from external_students_by_course
+		</createView>
+
+		<sql>grant all on external_students_by_course to ${database.app.username}</sql>
+		<sql>grant all on v_external_students_by_course to ${database.app.username}</sql>
+		<rollback>
+			<dropView viewName="v_external_students_by_course" />
+			<dropTable tableName="external_students_by_course" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet author='jim.stanley'
+		id='Add Table External Student Academic Program'>
+		<createTable tableName="external_student_academic_program">
+			<column name="school_id" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="degree_code" type="${nvarchar.type}(10)">
+				<constraints nullable="false" />
+			</column>
+			<column name="degree_name" type="${nvarchar.type}(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="program_code" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="program_name" type="${nvarchar.type}(100)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createView viewName="v_external_student_academic_program">
+			select ROW_NUMBER() OVER (ORDER BY school_id) as id, school_id, degree_code, degree_name, program_code, program_name from external_student_academic_program
+		</createView>
+
+		<sql>grant all on external_student_academic_program to ${database.app.username}</sql>
+		<sql>grant all on v_external_student_academic_program to ${database.app.username}</sql>
+		<rollback>
+			<dropView viewName="v_external_student_academic_program" />
+			<dropTable tableName="external_student_academic_program" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet author='jim.stanley'
+		id='Add Table External Student Test'>
+		<createTable tableName="external_student_test">
+			<column name="school_id" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="test_name" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="test_code" type="${nvarchar.type}(25)">
+				<constraints nullable="false" />
+			</column>
+			<column name="sub_test_code" type="${nvarchar.type}(25)">
+				<constraints nullable="true" />
+			</column>
+			<column name="sub_test_name" type="datetime">
+				<constraints nullable="true" />
+			</column>
+			
+			<column name="test_date" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="score" type="decimal(9,2)">
+				<constraints nullable="false" />
+			</column>
+			<column name="status" type="${nvarchar.type}(25)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createView viewName="v_external_student_test">
+			select ROW_NUMBER() OVER (ORDER BY school_id) as id, school_id, test_name, test_code, sub_test_code, sub_test_name, test_date, score, status from external_student_test
+		</createView>
+
+		<sql>grant all on external_student_test to ${database.app.username}</sql>
+		<sql>grant all on v_external_student_test to ${database.app.username}</sql>
+		<rollback>
+			<dropView viewName="v_external_student_test" />
+			<dropTable tableName="external_student_test" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+	
+	<changeSet author='jim.stanley'
+		id='Add Table External Course Section'>
+		<createTable tableName="external_course_section">
+			<column name="formatted_course" type="${nvarchar.type}(35)">
+				<constraints nullable="false" />
+			</column>
+			<column name="subject_abbreviation" type="${nvarchar.type}(10)">
+				<constraints nullable="false" />
+			</column>
+			<column name="number" type="${nvarchar.type}(15)">
+				<constraints nullable="false" />
+			</column>
+			<column name="section_number" type="${nvarchar.type}(10)">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="credit_value" type="decimal(9,2)">
+				<constraints nullable="false" />
+			</column>
+			<column name="term_code" type="${nvarchar.type}(25)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="${nvarchar.type}(2500)">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+
+		<createView viewName="v_external_course_section">
+			select ROW_NUMBER() OVER (ORDER BY formatted_course, subject_abbreviation, number, section_number) as id, formatted_course, subject_abbreviation, number, section_number, credit_value, term_code, description   from external_course_section
+		</createView>
+
+		<sql>grant all on external_course_section to ${database.app.username}</sql>
+		<sql>grant all on v_external_course_section to ${database.app.username}</sql>
+		<rollback>
+			<dropView viewName="v_external_course_section" />
+			<dropTable tableName="external_course_section" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet author='jim.stanley'
+		id='Add Table External Student Transcript.'>
+		<createTable tableName="external_student_transcript">
+			<column name="school_id" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="credit_hours_for_gpa" type="decimal(9,2)">
+				<constraints nullable="false" />
+			</column>
+			<column name="credit_hours_earned" type="decimal(9,2)">
+				<constraints nullable="false" />
+			</column>
+			<column name="credit_hours_attempted" type="decimal(9,2)">
+				<constraints nullable="false" />
+			</column>
+			<column name="total_quality_points" type="decimal(9,2)">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="grade_point_average" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+
+		<createView viewName="v_external_student_transcript">
+			select ROW_NUMBER() OVER (ORDER BY school_id) as id, school_id, credit_hours_for_gpa, credit_hours_earned, credit_hours_attempted, total_quality_points, grade_point_average   from external_student_transcript
+		</createView>
+
+		<sql>grant all on external_student_transcript to ${database.app.username}</sql>
+		<sql>grant all on v_external_student_transcript to ${database.app.username}</sql>
+		<rollback>
+			<dropView viewName="v_external_student_transcript" />
+			<dropTable tableName="external_student_transcript" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet author='jim.stanley'
+		id='Add Table External Student Transcript Course'>
+		<createTable tableName="external_student_transcript_course">
+			<column name="school_id" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="subject_abbreviation" type="${nvarchar.type}(10)">
+				<constraints nullable="false" />
+			</column>
+			<column name="number" type="${nvarchar.type}(15)">
+				<constraints nullable="false" />
+			</column>
+			<column name="formatted_course" type="${nvarchar.type}(35)">
+				<constraints nullable="false" />
+			</column>
+			<column name="section_number" type="${nvarchar.type}(10)">
+				<constraints nullable="true" />
+			</column>
+			<column name="title" type="${nvarchar.type}(2500)">
+				<constraints nullable="true" />
+			</column>
+
+			<column name="description" type="${nvarchar.type}(100)">
+				<constraints nullable="true" />
+			</column>
+			<column name="grade" type="${nvarchar.type}(10)">
+				<constraints nullable="true" />
+			</column>
+			<column name="credit_earned" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+			<column name="term_code" type="${nvarchar.type}(25)">
+				<constraints nullable="false" />
+			</column>
+			<column name="credit_type" type="${nvarchar.type}(25)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createView viewName="v_external_student_transcript_course">
+			select ROW_NUMBER() OVER (ORDER BY school_id, subject_abbreviation, number) as id, school_id, subject_abbreviation, number, formatted_course, section_number, title, description, grade, credit_earned, term_code, credit_type from external_student_transcript_course
+		</createView>
+
+		<sql>grant all on external_student_transcript_course to ${database.app.username}</sql>
+		<sql>grant all on v_external_student_transcript_course to ${database.app.username}</sql>
+		<rollback>
+			<dropView viewName="v_external_student_transcript_course" />
+			<dropTable tableName="external_student_transcript_course" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="Insert tuition paid default values ext_reg_stat_by_term" author="jim.stanley">
+		<update tableName="external_registration_status_by_term">
+			<column name="tuition_paid" value="Y"/>
+			<where >school_id IS NOT NULL</where>
+		</update>
+		<rollback>
+			<update tableName="external_registration_status_by_term">
+				<column name="tuition_paid" value="" />
+				<where>school_id IS NOT NULL</where>
+			</update>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="Set sec code numbers to default values ext_fac_cou_roster" author="jim.stanley">
+		<update tableName="external_faculty_course_roster">
+			<column name="section_code" value="default" />
+			<column name="section_number" value="default" />
+			<where>faculty_school_id IS NOT NULL</where>
+		</update>
+		<rollback>
+			<update tableName="external_faculty_course_roster">
+				<column name="section_code" value="" />
+			    <column name="section_number" value="" />
+			     <where>faculty_school_id IS NOT NULL</where>
+			</update>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="Insert course code into external_faculty_course" author="jim.stanley">
+		<update tableName="external_faculty_course">
+			<column name="section_code" value="code" />
+			<column name="section_number" value="code" />
+			<where>faculty_school_id IS NOT NULL</where>
+		</update>
+		<rollback>
+			<update tableName="external_faculty_course">
+				<column name="section_code" value="" />
+				<column name="section_number" value="" />
+				<where>faculty_school_id IS NOT NULL</where>
+			</update>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="Add not null constraing tuition paid external_reg_stat_by_term" author="jim.stanley">
+		<addNotNullConstraint tableName="external_registration_status_by_term"
+				columnName="tuition_paid" />
+		<rollback>
+			<dropNotNullConstraint tableName="external_registration_status_by_term"
+				columnName="tuition_paid" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="Add not null constraint to sec code,number of ext_fac_roster" author="jim.stanley">
+		<addNotNullConstraint tableName="external_faculty_course_roster"
+				columnName="section_code"  />
+		<rollback>
+			<dropNotNullConstraint tableName="external_faculty_course_roster"
+				columnName="section_code"  />
+		</rollback>
+		
+		<addNotNullConstraint tableName="external_faculty_course_roster"
+				columnName="section_number"  />
+		<rollback>
+			<dropNotNullConstraint tableName="external_faculty_course_roster"
+				columnName="section_number"  />
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="Add not null constraint to number, code of ext_fac_course" author="jim.stanley">	
+		<addNotNullConstraint tableName="external_faculty_course"
+				columnName="section_code" />
+		<rollback>
+			<dropNotNullConstraint tableName="external_faculty_course"
+				columnName="section_code" />
+		</rollback>
+		
+		<addNotNullConstraint tableName="external_faculty_course"
+				columnName="section_number" />
+		<rollback>
+			<dropNotNullConstraint tableName="external_faculty_course"
+				columnName="section_number" />
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

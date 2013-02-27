@@ -104,6 +104,7 @@ public class EarlyAlertStudentReportControllerIntegrationTest extends
 		expectedReportBodyLines.add("James,A,Gosling,student0,test@sinclair.edu,0,0,1,1");
 		expectedReportBodyLines.add("test,Mumford,coach1student0,coach1student0,coach1student0@unicon.net,1,0,0,1");
 		expectedReportBodyLines.add("test,Mumford,coach1student1,coach1student1,coach1student1@unicon.net,1,0,1,2");
+		expectedReportBodyLines.add("test,Mumford,coach1student2,coach1student2,coach1student2@unicon.net,1,0,2,3");
 		expectedReportBodyLines.add("test,Mumford,coach1student3,coach1student3,coach1student3@unicon.net,1,1,2,4");
 		expectedReportBodyLines.add("test,Mumford,coach1student4,coach1student4,coach1student4@unicon.net,1,1,3,5");
 		expectReportBodyLines(expectedReportBodyLines, response, null);

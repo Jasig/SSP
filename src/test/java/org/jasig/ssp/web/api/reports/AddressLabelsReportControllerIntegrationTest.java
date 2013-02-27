@@ -68,8 +68,7 @@ public class AddressLabelsReportControllerIntegrationTest
 	public void testGetAddressLabelsFiltersByCoachId()
 			throws IOException, ObjectNotFoundException, JRException {
 
-		final Person dennisRitchie =
-				personService.get(Stubs.PersonFixture.DMR.id());
+		final Person dennisRitchie = personService.get(Stubs.PersonFixture.DMR.id());
 		final Person kevinSmith =
 				personService.get(Stubs.PersonFixture.KEVIN_SMITH.id());
 		dennisRitchie.setCoach(kevinSmith);

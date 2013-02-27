@@ -32,6 +32,7 @@ public class RegistrationStatusByTermTO implements
 	private static final long serialVersionUID = -2247016612567563155L;
 
 	private String schoolId, termCode;
+	private String tuitionPaid;
 
 	private int registeredCourseCount;
 
@@ -48,6 +49,7 @@ public class RegistrationStatusByTermTO implements
 	public final void from(final RegistrationStatusByTerm model) {
 		termCode = model.getTermCode();
 		schoolId = model.getSchoolId();
+		tuitionPaid = model.getTuitionPaid();
 		registeredCourseCount = model.getRegisteredCourseCount();
 	}
 
@@ -84,5 +86,19 @@ public class RegistrationStatusByTermTO implements
 
 	public void setRegisteredCourseCount(final int registeredCourseCount) {
 		this.registeredCourseCount = registeredCourseCount;
+	}
+
+	/**
+	 * @return the tuitionPaid
+	 */
+	public String getTuitionPaid() {
+		return tuitionPaid;
+	}
+
+	/**
+	 * @param tuitionPaid the tuitionPaid to set
+	 */
+	public void setTuitionPaid(final String tuitionPaid) {
+		this.tuitionPaid = tuitionPaid;
 	}
 }

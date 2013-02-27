@@ -104,7 +104,8 @@ public class EarlyAlertStudentProgressReportControllerIntegrationTest extends
 		expectedReportBodyLines.add("James,A,Gosling,student0,test@sinclair.edu,,1,0,Alan Turing");
 		expectedReportBodyLines.add("test,Mumford,coach1student0,coach1student0,coach1student0@unicon.net,,1,0,test coach1");
 		expectedReportBodyLines.add("test,Mumford,coach1student1,coach1student1,coach1student1@unicon.net,,2,0,test coach1");
-		expectedReportBodyLines.add(""test,Mumford,coach1student3,coach1student3,coach1student3@unicon.net,,4,0,test coach1");
+		expectedReportBodyLines.add("test,Mumford,coach1student2,coach1student2,coach1student2@unicon.net,,3,0,test coach1");
+		expectedReportBodyLines.add("test,Mumford,coach1student3,coach1student3,coach1student3@unicon.net,,4,0,test coach1");
 		expectedReportBodyLines.add("test,Mumford,coach1student4,coach1student4,coach1student4@unicon.net,,5,0,test coach1");
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}

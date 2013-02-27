@@ -63,6 +63,18 @@ public class FacultyCourse extends AbstractExternalData implements
 	@NotEmpty
 	@Size(max = 100)
 	private String title;
+	
+	@Column(nullable = false, length = 128)
+	@NotNull
+	@NotEmpty
+	@Size(max = 128)
+	private String sectionCode;
+	
+	@Column(nullable = false, length = 10)
+	@NotNull
+	@NotEmpty
+	@Size(max = 10)
+	private String sectionNumber;
 
 	public String getFacultySchoolId() {
 		return facultySchoolId;
@@ -110,5 +122,33 @@ public class FacultyCourse extends AbstractExternalData implements
 	 */
 	public void setTitle(final String title) {
 		this.title = title;
+	}
+
+	/**
+	 * @return the sectionCode
+	 */
+	public String getSectionCode() {
+		return sectionCode;
+	}
+
+	/**
+	 * @param sectionCode the sectionCode to set
+	 */
+	public void setSectionCode(final String sectionCode) {
+		this.sectionCode = sectionCode;
+	}
+
+	/**
+	 * @return the sectionNumber
+	 */
+	public String getSectionNumber() {
+		return sectionNumber;
+	}
+
+	/**
+	 * @param sectionNumber the sectionNumber to set
+	 */
+	public void setSectionNumber(final String sectionNumber) {
+		this.sectionNumber = sectionNumber;
 	}
 }

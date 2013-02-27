@@ -55,6 +55,11 @@ public class RegistrationStatusByTerm extends AbstractExternalData
 	@NotNull
 	@Column(nullable = false, length = 25)
 	private int registeredCourseCount;
+	
+	@NotNull
+	@NotEmpty
+	@Column(nullable = false, length = 1)
+	private String tuitionPaid;
 
 	public String getSchoolId() {
 		return schoolId;
@@ -78,6 +83,20 @@ public class RegistrationStatusByTerm extends AbstractExternalData
 
 	public void setRegisteredCourseCount(final int registeredCourseCount) {
 		this.registeredCourseCount = registeredCourseCount;
+	}
+
+	/**
+	 * @return the tuitionPaid
+	 */
+	public String getTuitionPaid() {
+		return tuitionPaid;
+	}
+
+	/**
+	 * @param tuitionPaid the tuitionPaid to set
+	 */
+	public void setTuitionPaid(final String tuitionPaid) {
+		this.tuitionPaid = tuitionPaid;
 	}
 
 }

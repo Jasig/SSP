@@ -71,6 +71,18 @@ public class WriteableExternalFacultyCourseRoster  {
 	@Column(nullable = true, length = 2)
 	@Size(max = 2)
 	private String statusCode;
+	
+	@Column(nullable = false, length = 128)
+	@NotNull
+	@NotEmpty
+	@Size(max = 128)
+	private String sectionCode;
+	
+	@Column(nullable = false, length = 10)
+	@NotNull
+	@NotEmpty
+	@Size(max = 10)
+	private String sectionNumber;
 
 	/**
 	 * First name; required.
@@ -195,5 +207,22 @@ public class WriteableExternalFacultyCourseRoster  {
 
 	public void setPrimaryEmailAddress(@NotNull final String primaryEmailAddress) {
 		this.primaryEmailAddress = primaryEmailAddress;
+	}
+	
+
+	public String getSectionCode() {
+		return sectionCode;
+	}
+
+	public void setSectionCode(String sectionCode) {
+		this.sectionCode = sectionCode;
+	}
+
+	public String getSectionNumber() {
+		return sectionNumber;
+	}
+
+	public void setSectionNumber(String sectionNumber) {
+		this.sectionNumber = sectionNumber;
 	}
 }

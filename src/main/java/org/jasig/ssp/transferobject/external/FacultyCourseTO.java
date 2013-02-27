@@ -36,6 +36,10 @@ public class FacultyCourseTO implements ExternalDataTO<FacultyCourse> {
 	private String formattedCourse;
 
 	private String title;
+	
+	private String sectionCode;
+	
+	private String sectionNumber;
 
 	public FacultyCourseTO() {
 		super();
@@ -52,6 +56,8 @@ public class FacultyCourseTO implements ExternalDataTO<FacultyCourse> {
 		termCode = model.getTermCode();
 		formattedCourse = model.getFormattedCourse();
 		title = model.getTitle();
+		sectionCode = model.getSectionCode();
+		sectionNumber = model.getSectionNumber();
 	}
 
 	public static List<FacultyCourseTO> toTOList(
@@ -94,5 +100,33 @@ public class FacultyCourseTO implements ExternalDataTO<FacultyCourse> {
 
 	public final void setTitle(@NotNull final String title) {
 		this.title = title;
+	}
+
+	/**
+	 * @return the sectionCode
+	 */
+	public String getSectionCode() {
+		return sectionCode;
+	}
+
+	/**
+	 * @param sectionCode the sectionCode to set
+	 */
+	public void setSectionCode(@NotNull final String sectionCode) {
+		this.sectionCode = sectionCode;
+	}
+
+	/**
+	 * @return the sectionNumber
+	 */
+	public final String getSectionNumber() {
+		return sectionNumber;
+	}
+
+	/**
+	 * @param sectionNumber the sectionNumber to set
+	 */
+	public void setSectionNumber(@NotNull final String sectionNumber) {
+		this.sectionNumber = sectionNumber;
 	}
 }
