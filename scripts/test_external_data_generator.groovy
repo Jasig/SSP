@@ -134,6 +134,13 @@ xml.databaseChangeLog( xmlns : "http://www.liquibase.org/xml/ns/dbchangelog"
 									degreeName,
 									programCode,
 									programName)
+								addExternalStudentTranscript(xml,
+									schoolId,
+									CREDIT_HOURS_FOR_GPA,
+									CREDIT_HOURS_EARNED,
+									CREDIT_HOURS_ATTEMPTED,
+									TOTAL_QUALITY_POINTS,
+									GRADE_POINT_AVERAGE)
 								for(Integer l = 0; l < NUMBER_OF_SUBJECTS; l++) {
 								subjectAbbreviation = SUBJECT_ABBREVIATIONS[l]
 								number = COURSE_NUMBER[l]
@@ -177,13 +184,7 @@ xml.databaseChangeLog( xmlns : "http://www.liquibase.org/xml/ns/dbchangelog"
 									"FA12",
 									"Best")
 								
-								addExternalStudentTranscript(xml,
-									schoolId,
-									CREDIT_HOURS_FOR_GPA,
-									CREDIT_HOURS_EARNED,
-									CREDIT_HOURS_ATTEMPTED,
-									TOTAL_QUALITY_POINTS,
-									GRADE_POINT_AVERAGE)
+								
 								
 								addExternalStudentTest(xml,
 									schoolId,
@@ -304,7 +305,7 @@ void addExternalStudentTest(xml,
 	}
 
 	xml.rollback{
-		xml.delete(tableName:'external_student_transcript'){
+		xml.delete(tableName:'external_student_test'){
 				xml.where("school_id='" + schoolId + "'")
 		}
 	}

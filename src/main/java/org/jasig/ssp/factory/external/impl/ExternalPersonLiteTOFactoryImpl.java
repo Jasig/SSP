@@ -18,17 +18,17 @@
  */
 package org.jasig.ssp.factory.external.impl;
 
-import org.jasig.ssp.dao.external.ExternalFacultyCourseRosterDao;
 import org.jasig.ssp.dao.external.ExternalPersonDao;
-import org.jasig.ssp.factory.external.ExternalFacultyCourseRosterTOFactory;
 import org.jasig.ssp.factory.external.ExternalPersonLiteTOFactory;
-import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
 import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.external.ExternalFacultyCourseRosterTO;
 import org.jasig.ssp.transferobject.external.ExternalPersonLiteTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Service
+@Transactional(readOnly = true)
 public class ExternalPersonLiteTOFactoryImpl
 		extends
 		AbstractExternalDataTOFactory<ExternalPersonLiteTO, ExternalPerson>

@@ -11,8 +11,23 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 
 	@Override
 	public void from(ExternalStudentTranscriptCourse model) {
-		// TODO Auto-generated method stub
+		schoolId = model.getSchoolId();
+		subjectAbbreviation = model.getSubjectAbbreviation();
+		number = model.getNumber();
+		formattedCourse = model.getFormattedCourse();
+		sectionNumber = model.getSectionNumber();
+		title = model.getTitle();
+		description = model.getDescription();
+		grade = model.getGrade();
+		creditEarned = model.getCreditEarned();
+		termCode = model.getTermCode();
+		creditType = model.getCreditType();
 		
+	}
+	
+	public ExternalStudentTranscriptCourseTO()
+	{
+		super();
 	}
 	private String schoolId;
 	private String subjectAbbreviation;

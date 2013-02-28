@@ -13,7 +13,7 @@ public class ExternalStudentTranscriptTO implements ExternalDataTO<ExternalStude
 	private BigDecimal creditHoursForGpa;
 	private BigDecimal creditHoursAttempted;
 	private BigDecimal totalQualityPoints;
-	private BigDecimal gradePointAverrage;
+	private BigDecimal gradePointAverage;
 
 	@Override
 	public void from(ExternalStudentTranscript model) {
@@ -22,7 +22,7 @@ public class ExternalStudentTranscriptTO implements ExternalDataTO<ExternalStude
 		creditHoursForGpa = model.getCreditHoursForGpa();
 		creditHoursAttempted = model.getCreditHoursAttempted();
 		totalQualityPoints = model.getTotalQualityPoints();
-		gradePointAverrage = model.getGradePointAverrage();
+		gradePointAverage = model.getGradePointAverage();
 	}
 
 	/**
@@ -40,7 +40,13 @@ public class ExternalStudentTranscriptTO implements ExternalDataTO<ExternalStude
 		this.creditHoursForGpa = creditHoursForGpa;
 		this.creditHoursAttempted = creditHoursAttempted;
 		this.totalQualityPoints = totalQualityPoints;
-		this.gradePointAverrage = gradePointAverrage;
+		this.gradePointAverage = gradePointAverrage;
+	}
+	
+	public ExternalStudentTranscriptTO(ExternalStudentTranscript model)
+	{
+		super();
+		from(model);
 	}
 
 	/**
@@ -102,15 +108,15 @@ public class ExternalStudentTranscriptTO implements ExternalDataTO<ExternalStude
 	/**
 	 * @return the gradePointAverrage
 	 */
-	public BigDecimal getGradePointAverrage() {
-		return gradePointAverrage;
+	public BigDecimal getGradePointAverage() {
+		return gradePointAverage;
 	}
 
 	/**
 	 * @param gradePointAverrage the gradePointAverrage to set
 	 */
-	public void setGradePointAverrage(final BigDecimal gradePointAverrage) {
-		this.gradePointAverrage = gradePointAverrage;
+	public void setGradePointAverage(final BigDecimal gradePointAverage) {
+		this.gradePointAverage = gradePointAverage;
 	}
 
 }

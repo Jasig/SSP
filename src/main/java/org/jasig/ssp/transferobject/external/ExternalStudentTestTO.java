@@ -13,13 +13,17 @@ public class ExternalStudentTestTO implements Serializable, ExternalDataTO<Exter
 	private static final long serialVersionUID = 6430469007527451476L;
 	
 	private String schoolId;
-	private String testName;
+	private String name;
 	private String testCode;
 	private String subTestCode;
 	private String subTestName;
-	private Date testDate;
+	private Date takenDate;
 	private BigDecimal score;
 	private String status;
+	
+	public ExternalStudentTestTO(){
+		super();
+	}
 
 	/**
 	 * @param schoolId
@@ -37,10 +41,10 @@ public class ExternalStudentTestTO implements Serializable, ExternalDataTO<Exter
 		super();
 		this.schoolId = schoolId;
 		this.testCode = testCode;
-		this.testName = testName;
+		this.name = testName;
 		this.subTestCode = subTestCode;
 		this.subTestName = subTestName;
-		this.testDate = testDate;
+		this.takenDate = testDate;
 		this.score = score;
 		this.status = status;
 	}
@@ -50,11 +54,11 @@ public class ExternalStudentTestTO implements Serializable, ExternalDataTO<Exter
 	public void from(ExternalStudentTest model) {
 		
 		schoolId = model.getSchoolId();
-		testName = model.getTestName();
+		name = model.getTestName();
 		testCode = model.getTestCode();
 		subTestCode = model.getSubTestCode();
 		subTestName = model.getSubTestName();
-		testDate = model.getTestDate();
+		takenDate = model.getTestDate();
 		score = model.getScore();
 		status = model.getStatus();
 		
@@ -80,16 +84,16 @@ public class ExternalStudentTestTO implements Serializable, ExternalDataTO<Exter
 	/**
 	 * @return the testName
 	 */
-	public String getTestName() {
-		return testName;
+	public String getName() {
+		return name;
 	}
 
 
 	/**
 	 * @param testName the testName to set
 	 */
-	public void setTestName(final String testName) {
-		this.testName = testName;
+	public void setName(final String testName) {
+		this.name = testName;
 	}
 
 
@@ -128,16 +132,16 @@ public class ExternalStudentTestTO implements Serializable, ExternalDataTO<Exter
 	/**
 	 * @return the testDate
 	 */
-	public Date getTestDate() {
-		return testDate;
+	public Date getTakenDate() {
+		return takenDate;
 	}
 
 
 	/**
 	 * @param testDate the testDate to set
 	 */
-	public void setTestDate(final Date testDate) {
-		this.testDate = testDate;
+	public void setTakenDate(final Date testDate) {
+		this.takenDate = testDate;
 	}
 
 

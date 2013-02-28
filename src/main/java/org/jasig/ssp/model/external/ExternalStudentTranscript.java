@@ -39,7 +39,7 @@ public class ExternalStudentTranscript extends AbstractExternalData implements
 	private BigDecimal totalQualityPoints;
 	
 	@Column(nullable = true)
-	private BigDecimal gradePointAverrage;
+	private BigDecimal gradePointAverage;
 
 	/**
 	 * @return the schoolId
@@ -100,14 +100,14 @@ public class ExternalStudentTranscript extends AbstractExternalData implements
 	/**
 	 * @return the gradePointAverrage
 	 */
-	public BigDecimal getGradePointAverrage() {
-		return gradePointAverrage;
+	public BigDecimal getGradePointAverage() {
+		return gradePointAverage;
 	}
 
 	/**
 	 * @param gradePointAverrage the gradePointAverrage to set
 	 */
-	public void setGradePointAverrage(final BigDecimal gradePointAverrage) {
-		this.gradePointAverrage = gradePointAverrage;
+	public void setGradePointAverage(final BigDecimal gradePointAverage) {
+		this.gradePointAverage = gradePointAverage;
 	}
 }

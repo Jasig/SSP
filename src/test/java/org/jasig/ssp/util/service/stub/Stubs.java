@@ -75,8 +75,9 @@ public class Stubs {
 		MARK_GALAFRION ( "8005ad07-9111-457d-9896-f15a0dc8bbfb", "mark.galafrion", "uu358123", "Mark", null, "Galafrion", null, "mark.g@university.edu", null),
 		BOB_REYNOLDS ( "a5a23d8a-f0d3-4ef6-9a75-21f3775bac0f", "bob.reynolds", "uu462875", "Bob", null, "Reynolds", null, "bob1@university.edu", null),
 		FACULTY_0 ( "5eceefd1-257c-421f-99bf-a3622815bfee", "faculty0", "uf928711", "Douglas", null, "Toya", null, "douglas.toya@sinclair.edu", null),
-		FACULTY_1 ( "0d6163de-90fd-46d1-a9ca-7dbaa850924b", "faculty1", "uf123456", "Mary", null, "Webber", null, "mary.webber@sinclair.edu", null);
-
+		FACULTY_1 ( "0d6163de-90fd-46d1-a9ca-7dbaa850924b", "faculty1", "uf123456", "Mary", null, "Webber", null, "mary.webber@sinclair.edu", null),
+		COACH1_STUDENT0 ( "a7a4b8cc-167d-4b04-816f-c7a508b5fcc0", "coach1student0", "coach1student0", "test", "Mumford", "coach1student0", null, "coach1student0@unicon.net", "480-775-2345" );
+		
 		private final UUID id;
 		private final String username;
 		private final String schoolId;

@@ -1,0 +1,65 @@
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	<property name="nchar.type" value="character" dbms="postgresql" />
+	<property name="nchar.type" value="nchar" dbms="mssql" />
+
+	<changeSet author='jim.stanley'
+		id='Fix Table External Student Test'>
+		<dropView viewName="v_external_student_test" />
+		<dropTable tableName="external_student_test" />
+		<createTable tableName="external_student_test">
+			<column name="school_id" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="test_name" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="test_code" type="${nvarchar.type}(25)">
+				<constraints nullable="false" />
+			</column>
+			<column name="sub_test_code" type="${nvarchar.type}(25)">
+				<constraints nullable="true" />
+			</column>
+			<column name="sub_test_name" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+			
+			<column name="test_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="score" type="decimal(9,2)">
+				<constraints nullable="false" />
+			</column>
+			<column name="status" type="${nvarchar.type}(25)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createView viewName="v_external_student_test">
+			select ROW_NUMBER() OVER (ORDER BY school_id) as id, school_id, test_name, test_code, sub_test_code, sub_test_name, test_date, score, status from external_student_test
+		</createView>
+
+		<sql>grant all on external_student_test to ${database.app.username}</sql>
+		<sql>grant all on v_external_student_test to ${database.app.username}</sql>
+		<rollback>
+			<dropView viewName="v_external_student_test" />
+			<dropTable tableName="external_student_test" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+		
+	</changeSet>
+</databaseChangeLog>

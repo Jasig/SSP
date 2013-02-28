@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+ <!-- 													
+			Licensed to Jasig under one or more contributor license		
+			agreements. See the NOTICE file distributed with this work	
+			for additional information regarding copyright ownership.	
+			Jasig licenses this file to you under the Apache License,	
+			Version 2.0 (the "License"); you may not use this file 	
+			except in compliance with the License. You may obtain a 	
+			copy of the License at: 									
+																		
+			http://www.apache.org/licenses/LICENSE-2.0					 
+																		
+			Unless required by applicable law or agreed to in writing,	
+			software distributed under the License is distributed on	
+			an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY	
+			KIND, either express or implied. See the License for the	
+			specific language governing permissions and limitations		
+			under the License.											-->
+ 
+<databaseChangeLog xmlns='http://www.liquibase.org/xml/ns/dbchangelog' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd'>
+  <changeSet author='james.stanley' id='Adding Set of External Data'>
+    
+	<delete tableName='external_student_transcript'>
+        <where>school_id IS NOT NULL</where>
+      </delete>
+
+    <insert tableName='external_student_transcript'>
+      <column name='school_id'>coach1student0</column>
+      <column name='credit_hours_for_gpa'>30.2</column>
+      <column name='credit_hours_earned'>22.0</column>
+      <column name='credit_hours_attempted'>18.8</column>
+      <column name='total_quality_points'>221.0</column>
+      <column name='grade_point_average'>3.9</column>
+    </insert>
+    <rollback>
+      <delete tableName='external_student_transcript'>
+        <where>school_id='coach1student0'</where>
+      </delete>
+    </rollback>
+	<insert tableName='external_student_transcript'>
+      <column name='school_id'>coach1student1</column>
+      <column name='credit_hours_for_gpa'>30.2</column>
+      <column name='credit_hours_earned'>22.0</column>
+      <column name='credit_hours_attempted'>18.8</column>
+      <column name='total_quality_points'>221.0</column>
+      <column name='grade_point_average'>3.9</column>
+    </insert>
+    <rollback>
+      <delete tableName='external_student_transcript'>
+        <where>school_id='coach1student1'</where>
+      </delete>
+    </rollback>
+
+	<insert tableName='external_student_transcript'>
+      <column name='school_id'>coach1student2</column>
+      <column name='credit_hours_for_gpa'>30.2</column>
+      <column name='credit_hours_earned'>22.0</column>
+      <column name='credit_hours_attempted'>18.8</column>
+      <column name='total_quality_points'>221.0</column>
+      <column name='grade_point_average'>3.9</column>
+    </insert>
+    <rollback>
+      <delete tableName='external_student_transcript'>
+        <where>school_id='coach1student2'</where>
+      </delete>
+    </rollback>
+
+	<insert tableName='external_student_transcript'>
+      <column name='school_id'>coach1student3</column>
+      <column name='credit_hours_for_gpa'>30.2</column>
+      <column name='credit_hours_earned'>22.0</column>
+      <column name='credit_hours_attempted'>18.8</column>
+      <column name='total_quality_points'>221.0</column>
+      <column name='grade_point_average'>3.9</column>
+    </insert>
+    <rollback>
+      <delete tableName='external_student_transcript'>
+        <where>school_id='coach1student3'</where>
+      </delete>
+    </rollback>
+
+	<insert tableName='external_student_transcript'>
+      <column name='school_id'>coach1student4</column>
+      <column name='credit_hours_for_gpa'>30.2</column>
+      <column name='credit_hours_earned'>22.0</column>
+      <column name='credit_hours_attempted'>18.8</column>
+      <column name='total_quality_points'>221.0</column>
+      <column name='grade_point_average'>3.9</column>
+    </insert>
+    <rollback>
+      <delete tableName='external_student_transcript'>
+        <where>school_id='coach1student4'</where>
+      </delete>
+    </rollback>
+   
+  </changeSet>
+</databaseChangeLog>
