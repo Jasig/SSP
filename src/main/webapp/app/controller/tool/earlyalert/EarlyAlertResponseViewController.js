@@ -64,6 +64,10 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 	init: function() {
 		var me=this;
 		me.getView().getForm().reset();
+		if(me.model.dirty)
+		{
+			me.model = new Ssp.model.tool.earlyalert.EarlyAlertResponse();
+		}
 		me.getView().getForm().loadRecord(me.model);
 		me.showHideOtherOutcomeDescription();
 		return me.callParent(arguments);
