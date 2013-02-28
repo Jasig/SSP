@@ -13000,6 +13000,10 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 	init: function() {
 		var me=this;
 		me.getView().getForm().reset();
+		if(me.model.dirty)
+		{
+			me.model = new Ssp.model.tool.earlyalert.EarlyAlertResponse();
+		}
 		me.getView().getForm().loadRecord(me.model);
 		me.showHideOtherOutcomeDescription();
 		return me.callParent(arguments);
@@ -13178,7 +13182,6 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertReferralsViewController', {
     },
 	init: function() {
 		var me=this;
-		
 		me.service.getAll({
 			success: me.getAllSuccess,
 			failure: me.getAllFailure,
@@ -13192,7 +13195,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertReferralsViewController', {
     	var me=scope;
     	var items;
     	var view = me.getView();
-    	var selectedReferrals = me.earlyAlertResponse.get('earlyAlertReferralIds');
+    	//var selectedReferrals = me.earlyAlertResponse.get('earlyAlertReferralIds');
     	if (r.rows.length > 0)
     	{
     		me.store.loadData(r.rows);
@@ -13207,7 +13210,8 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertReferralsViewController', {
 	            store: me.store,
 	            displayField: 'name',
 	            valueField: 'id',
-	            value: ((selectedReferrals.length>0) ? selectedReferrals : [] ),
+	       //     value: ((selectedReferrals.length>0) ? selectedReferrals : [] ),
+	            value: [],
 	            allowBlank: true,
 	            buttons: ["add", "remove"]
 	        }];
