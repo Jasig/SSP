@@ -170,6 +170,7 @@ Ext.require([
 	'Ssp.model.reference.ConfidentialityDisclosureAgreement',
 	'Ssp.model.ApiUrl',
 	'Ssp.mixin.ApiProperties',
+	'Ssp.mixin.controller.ItemSelectorInitializer',
 	'Ssp.util.FormRendererUtils',
 	'Ssp.util.ColumnRendererUtils',
 	'Ssp.util.TreeRendererUtils',
@@ -390,6 +391,16 @@ Ext.onReady(function(){
 				            return new Ssp.model.Preferences();
 				        },
 				        singleton: true
+				    },
+				    itemSelectorInitializer: {
+				        fn: function(){
+				            return new Ssp.mixin.controller.ItemSelectorInitializer({});
+				        },
+                        // Not a singleton b/c this is really intended to work
+                        // more like a mixin on a view component, so needs to
+                        // allowed to maintain state and smaller scopes than
+                        // 'application'.
+				        singleton: false
 				    },
 				    apiProperties: {
 				        fn: function(){
