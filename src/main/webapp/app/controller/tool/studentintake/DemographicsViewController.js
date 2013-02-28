@@ -76,6 +76,13 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
 
 	init: function() {
 		var me=this;
+		//added below 5 lines to take care of disabling entry if syncStudentPersonalDataWithExternalData is true
+		var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalData');
+		var studentIntakeDemographicsForm = Ext.getCmp('StudentIntakeDemographics');
+		studentIntakeDemographicsForm.getForm().findField("gender").setDisabled(disabled);
+		studentIntakeDemographicsForm.getForm().findField("maritalStatusId").setDisabled(disabled);
+		studentIntakeDemographicsForm.getForm().findField("ethnicityId").setDisabled(disabled);
+		
 		var personDemographics = me.model.get('personDemographics');
 		var citizenship = Ext.ComponentQuery.query('#citizenship')[0];
 		var childcareNeeded = Ext.ComponentQuery.query('#childcareNeeded')[0];
