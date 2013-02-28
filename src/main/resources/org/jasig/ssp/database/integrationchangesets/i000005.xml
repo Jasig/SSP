@@ -441,42 +441,42 @@
 	
 	<changeSet id="Add not null constraing tuition paid external_reg_stat_by_term" author="jim.stanley">
 		<addNotNullConstraint tableName="external_registration_status_by_term"
-				columnName="tuition_paid" />
+				columnName="tuition_paid" columnDataType="${nchar.type}(1)" />
 		<rollback>
 			<dropNotNullConstraint tableName="external_registration_status_by_term"
-				columnName="tuition_paid" />
+				columnName="tuition_paid" columnDataType="${nchar.type}(1)" />
 		</rollback>
 	</changeSet>
 	
 	<changeSet id="Add not null constraint to sec code,number of ext_fac_roster" author="jim.stanley">
 		<addNotNullConstraint tableName="external_faculty_course_roster"
-				columnName="section_code"  />
+				columnName="section_code" columnDataType="${nvarchar.type}(128)"  />
 		<rollback>
 			<dropNotNullConstraint tableName="external_faculty_course_roster"
-				columnName="section_code"  />
+				columnName="section_code" columnDataType="${nvarchar.type}(128)" />
 		</rollback>
 		
 		<addNotNullConstraint tableName="external_faculty_course_roster"
-				columnName="section_number"  />
+				columnName="section_number" columnDataType="${nvarchar.type}(10)" />
 		<rollback>
 			<dropNotNullConstraint tableName="external_faculty_course_roster"
-				columnName="section_number"  />
+				columnName="section_number" columnDataType="${nvarchar.type}(10)" />
 		</rollback>
 	</changeSet>
 	
 	<changeSet id="Add not null constraint to number, code of ext_fac_course" author="jim.stanley">	
 		<addNotNullConstraint tableName="external_faculty_course"
-				columnName="section_code" />
+				columnName="section_code" columnDataType="${nvarchar.type}(128)" />
 		<rollback>
 			<dropNotNullConstraint tableName="external_faculty_course"
-				columnName="section_code" />
+				columnName="section_code" columnDataType="${nvarchar.type}(128)" />
 		</rollback>
 		
 		<addNotNullConstraint tableName="external_faculty_course"
-				columnName="section_number" />
+				columnName="section_number" columnDataType="${nvarchar.type}(10)" />
 		<rollback>
 			<dropNotNullConstraint tableName="external_faculty_course"
-				columnName="section_number" />
+				columnName="section_number" columnDataType="${nvarchar.type}(10)" />
 		</rollback>
 	</changeSet>
 
