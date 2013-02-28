@@ -46,6 +46,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.mail.SendFailedException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -173,6 +175,11 @@ public class PersonEarlyAlertController extends
 			@PathVariable final UUID personId,
 			@Valid @RequestBody final EarlyAlertTO obj)
 			throws ObjectNotFoundException, ValidationException {
+		
+		if(obj.getClosedById() != null)
+		{
+			obj.setClosedDate(new Date());
+		}
 		return super.save(id, personId, obj);
 	}
 
