@@ -23,5 +23,6 @@ Ext.define('Ssp.model.tool.earlyalert.EarlyAlertResponse', {
              {name:'earlyAlertOutcomeOtherDescription',type:'string'},
              {name:'earlyAlertReferralIds',type:'auto'},
              {name:'earlyAlertOutreachIds',type:'auto'},
-             {name:'comment',type:'string'}]
+             {name:'comment',type:'string'},
+             {name:'closed',type:'boolean'}]
 });

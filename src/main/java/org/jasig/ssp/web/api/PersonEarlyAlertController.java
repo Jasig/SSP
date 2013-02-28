@@ -139,7 +139,12 @@ public class PersonEarlyAlertController extends
 		if (obj.getPersonId() == null) {
 			obj.setPersonId(personId);
 		}
-
+		
+		if(obj.getClosedById() != null)
+		{
+			obj.setClosedDate(new Date());
+		}
+		
 		// create
 		final EarlyAlertTO earlyAlertTO = super.create(personId, obj);
 

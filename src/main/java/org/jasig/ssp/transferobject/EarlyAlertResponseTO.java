@@ -54,6 +54,8 @@ public class EarlyAlertResponseTO
 	private Set<UUID> earlyAlertOutreachIds;
 
 	private Set<UUID> earlyAlertReferralIds;
+	
+	private boolean closed;
 
 	/**
 	 * Empty constructor
@@ -216,5 +218,13 @@ public class EarlyAlertResponseTO
 	public void setEarlyAlertReferralIds(
 			final Set<UUID> earlyAlertReferralIds) {
 		this.earlyAlertReferralIds = earlyAlertReferralIds;
+	}
+
+	public boolean isClosed() {
+		return closed;
+	}
+
+	public void setClosed(boolean closed) {
+		this.closed = closed;
 	}
 }

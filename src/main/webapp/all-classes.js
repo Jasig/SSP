@@ -13063,13 +13063,21 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 			// set the early alert id for the response
 			record.set( 'earlyAlertId', earlyAlertId ); 
 			
+			if(record.data.closed)
+			{
+				if (me.earlyAlert.get('closedById') == "" || me.earlyAlert.get('closedById') == null)
+				{
+					me.earlyAlert.set( 'closedById', me.authenticatedPerson.getId() );
+				}
+			}
+			
 			// jsonData for the response
 			jsonData = record.data;
 			
 			me.getView().setLoading(true);
 			me.earlyAlertResponseService.save(personId, earlyAlertId, jsonData, {
-				success: me.saveEarlyAlertResponseSuccess,
-				failure: me.saveEarlyAlertResponseFailure,
+				success: me.closeEarlyAlertSuccess,
+				failure: me.closeEarlyAlertFailure,
 				scope: me
 			});				
 		}else{
@@ -13077,45 +13085,6 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		}
 	},
 	
-	saveEarlyAlertResponseSuccess: function( r, scope ) {
-		var me=scope;
-		me.getView().setLoading(false);
-        Ext.Msg.confirm({
-		     title: 'Your response was saved.',
-		     msg: 'Would you like to close the Early Alert Notice',
-		     buttons: Ext.Msg.YESNO,
-		     fn: me.closeEarlyAlertConfirm,
-		     scope: me
-	    });
-	},
-
-	saveEarlyAlertResponseFailure: function( response, scope ) {
-		var me=scope;
-		me.getView().setLoading(false);
-	},
-	
-	closeEarlyAlertConfirm: function( btnId ){
-     	var me=this;
-     	var jsonData;
-     	var personId = me.personLite.get('id');
-     	if (btnId=="yes")
-     	{
-     		if (me.earlyAlert.get('closedById') == "" || me.earlyAlert.get('closedById') == null)
-     		{
-         		me.earlyAlert.set( 'closedById', me.authenticatedPerson.getId() );
-     		}
-     		jsonData = me.earlyAlert.data;
-     		delete jsonData.earlyAlertReasonId;
-         	me.earlyAlertService.save( personId, jsonData,{
-         		success: me.closeEarlyAlertSuccess,
-         		failure: me.closeEarlyAlertFailure,
-         		scope: me
-         	});    		
-     	}else{
-     		me.displayMain();
-     	}
-     }, 
-
  	closeEarlyAlertSuccess: function( r, scope ) {
 		var me=scope;
 		me.getView().setLoading(false);
@@ -19503,6 +19472,12 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
                     name: 'comment',
                     allowBlank: false
                 },{
+		            xtype: 'checkboxfield',
+		            fieldLabel: 'Close',
+			        name: 'closed',
+		            itemId: 'closedField',
+		            inputValue: true
+			    },{
 				   xtype:'earlyalertreferrals',
 				   flex: 1
 				}],
@@ -22542,7 +22517,8 @@ Ext.define('Ssp.model.tool.earlyalert.EarlyAlertResponse', {
              {name:'earlyAlertOutcomeOtherDescription',type:'string'},
              {name:'earlyAlertReferralIds',type:'auto'},
              {name:'earlyAlertOutreachIds',type:'auto'},
-             {name:'comment',type:'string'}]
+             {name:'comment',type:'string'},
+             {name:'closed',type:'boolean'}]
 });
 /*
  * Licensed to Jasig under one or more contributor license
