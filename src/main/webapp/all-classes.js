@@ -5346,7 +5346,7 @@ Ext.define('Ssp.service.PersonService', {
 
 	    var success = function( response, view ){
 			var r = response.responseText ? Ext.decode(response.responseText) : null;
-			if ( callbacks.statusCode[response.status] ) {
+			if ( callbacks.statusCode && callbacks.statusCode[response.status] ) {
 				callbacks.statusCode[response.status](r, callbacks.scope);
 			} else {
 				callbacks.success(r, callbacks.scope);
@@ -9676,7 +9676,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
 			form.updateRecord();
 			jsonData = me.model.data;
 			jsonData = me.model.setPropsNullForSave( me.model.data );
-			me.getView().setLoading('true');
+			me.getView().setLoading(true);
 			me.service.save( jsonData , {
 				success: me.savePersonSuccess,
 				failure: me.savePersonFailure,

@@ -61,7 +61,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
 			form.updateRecord();
 			jsonData = me.model.data;
 			jsonData = me.model.setPropsNullForSave( me.model.data );
-			me.getView().setLoading('true');
+			me.getView().setLoading(true);
 			me.service.save( jsonData , {
 				success: me.savePersonSuccess,
 				failure: me.savePersonFailure,
