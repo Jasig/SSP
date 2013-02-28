@@ -244,6 +244,11 @@
                     "path": "/app/mixin/"
                 },
                 {
+                    "clsName": "Ssp.mixin.controller.ItemSelectorInitializer",
+                    "name": "ItemSelectorInitializer.js",
+                    "path": "/app/mixin/controller/"
+                },
+                {
                     "clsName": "Ssp.util.FormRendererUtils",
                     "name": "FormRendererUtils.js",
                     "path": "/app/util/"
