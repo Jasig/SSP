@@ -71,7 +71,7 @@ public class StudentIntakeRequestManager {
 			taskService.create(studentIntakeTask);
 			
 			SubjectAndBody studentIntakeMessage = messageTemplateService.createStudentIntakeTaskMessage(studentIntakeTask);
-				messageService.createMessage(student, appointment.getIntakeEmail(), studentIntakeMessage);
+				messageService.createMessage(student, appointment.getIntakeEmail()+","+student.getSecondaryEmailAddress(), studentIntakeMessage);
 				
 			clearIntakeData(student);
 			
