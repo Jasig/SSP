@@ -81,26 +81,9 @@
 	<include file="org/jasig/ssp/database/changesets/000019.xml" />
 	
 	<include file="org/jasig/ssp/database/changesets/000020.xml" />
-		
-	<!-- <include file="org/jasig/ssp/database/testingchangesets/000001-test.xml" />
-	<include file="org/jasig/ssp/database/testingchangesets/000002-test.xml" />
-	<include file="org/jasig/ssp/database/testingchangesets/000003-test.xml" />
-	<include file="org/jasig/ssp/database/testingchangesets/000004-test.xml" />
 
-	<include file="org/jasig/ssp/database/testingchangesets/000006-test.xml" />
-	<include file="org/jasig/ssp/database/testingchangesets/000007-test.xml" />
-	<include file="org/jasig/ssp/database/testingchangesets/000008-test.xml" />
-	<include file="org/jasig/ssp/database/testingintegrationchangesets/i000001-test.xml" />
-	<include file="org/jasig/ssp/database/testingchangesets/000009-test.xml" />
-	<include file="org/jasig/ssp/database/testingintegrationchangesets/i000002-test.xml" />
-	<include file="org/jasig/ssp/database/testingchangesets/000010-test.xml" />
-	<include file="org/jasig/ssp/database/testingchangesets/000011-test.xml" />
-	 <include file="org/jasig/ssp/database/testingchangesets/000012-test.xml" ></include>  --><!-- Massive data set for testing performans -->
-	<include file="org/jasig/ssp/database/testingintegrationchangesets/i000005-test.xml" /><!--  Adds Staff details to some coaches  -->
 	<include file="org/jasig/ssp/database/integrationchangesets/i000005.xml" /><!-- Adds SIS external data tables -->
-	<include file="org/jasig/ssp/database/integrationchangesets/i000006.xml" />
-	<include file="org/jasig/ssp/database/testingintegrationchangesets/i000006-test.xml" ></include><!-- Adds 100+ term codes  not used in test config-->
-	<include file="org/jasig/ssp/database/testingintegrationchangesets/i000007-test.xml" /><!-- Adds some external SIS data -->
 
-	
+	<include file="org/jasig/ssp/database/integrationchangesets/i000006.xml" />
+
 </databaseChangeLog>
