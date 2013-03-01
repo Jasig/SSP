@@ -24,7 +24,7 @@
     <title id="page-title">Student Success Plan</title>
 </head>
 <body>
-<jsp:directive.include file="/WEB-INF/jsp/ssp-main_dev.jsp"/>
+<jsp:directive.include file="/WEB-INF/jsp/ssp-main.jsp"/>
 </body>
 </html>
 <!-- eof -->
