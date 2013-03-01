@@ -16,8 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
- 
- .appriseInner {
+
+/* grid.less 2.0 */
+.ui-btn-inner {
+  overflow: visible;
+}
+.appriseInner {
   font-family: Helvetica, Arial, sans-serif;
 }
 .appriseInner button:hover {
@@ -284,6 +288,8 @@
 }
 .task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li {
   padding: 9px 33px 9px 25px;
+  overflow: visible;
+  text-overflw: string;
 }
 .task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text {
   height: 85px;

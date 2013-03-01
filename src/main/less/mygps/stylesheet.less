@@ -18,6 +18,7 @@
 //
 
 @import "grid.less/grid.less";
+ 
 
 .mainview() {
 	#grid > .container .columns(12);
@@ -30,7 +31,7 @@
 		line-height: 150%;
 	}
 }
-
+ 
 .splitview-main() {
 	#grid > .container .columns(7);
 	padding-bottom: 30px;
@@ -42,7 +43,9 @@
 		line-height: 150%;
 	}
 }
-
+.ui-btn-inner {
+	overflow: visible;
+}
 .splitview-sidebar() {
 	#grid > .container .columns(5);
 	
@@ -368,6 +371,8 @@
 			
 			.ui-btn-inner.ui-li {
 				padding: 9px 33px 9px 25px;
+				overflow: visible;
+				text-overflw: string;
 				.ui-btn-text {
 					height: 85px;
 					padding: 0px 13px 6px 21px;
