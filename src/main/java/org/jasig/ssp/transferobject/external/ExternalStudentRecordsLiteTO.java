@@ -26,8 +26,9 @@ public class ExternalStudentRecordsLiteTO implements ExternalDataTO<ExternalStud
 
 	@Override
 	public void from(ExternalStudentRecordsLite model) {
-		
-		gpa = new ExternalStudentTranscriptTO(model.getGPA());
+		// nothing to do... need access to TO factories to actually the
+		// programs association, so for consistency we require the client
+		// to fully hydrate any TO associations.
 	}
 
 	/**

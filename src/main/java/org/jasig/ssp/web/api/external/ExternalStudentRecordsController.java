@@ -26,6 +26,7 @@ import org.jasig.ssp.transferobject.external.ExternalStudentRecordsLiteTO;
 import org.jasig.ssp.transferobject.external.ExternalStudentRecordsTO;
 import org.jasig.ssp.transferobject.external.ExternalStudentTermCoursesTO;
 import org.jasig.ssp.transferobject.external.ExternalStudentTestTO;
+import org.jasig.ssp.transferobject.external.ExternalStudentTranscriptTO;
 import org.jasig.ssp.web.api.AbstractBaseController;
 import org.jasig.ssp.web.api.tool.IntakeController;
 import org.slf4j.Logger;
@@ -43,7 +44,7 @@ import com.google.common.collect.Lists;
 import java.util.List;
 
 @Controller
-@RequestMapping("i/1/person/{id}")
+@RequestMapping("/1/person/{id}")
 public class ExternalStudentRecordsController extends AbstractBaseController {
 
 	
@@ -94,7 +95,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	 * @throws ObjectNotFoundException
 	 *             If any reference data could not be loaded.
 	 */
-	@RequestMapping(value = "/transcript/summary}", method = RequestMethod.GET)
+	@RequestMapping(value = "/transcript/summary", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
 	ExternalStudentRecordsLiteTO loadSummaryStudentRecords(final @PathVariable UUID id)
@@ -104,12 +105,25 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		ExternalStudentTranscript transcript = externalStudentTranscriptService.getRecordsBySchoolId(schoolId);
 		record.setPrograms(externalStudentAcademicProgramService.getAcademicProgramsBySchoolId(schoolId));
 		record.setGPA(transcript);
+
 		ExternalStudentRecordsLiteTO recordTO = new ExternalStudentRecordsLiteTO(record);
+
+		// Have to hydrate the TO ourselves b/c building a collection of TOs
+		// in the "correct" way requires access to the corresponding Factory.
+
+		// in general TO constructors can't handle null arguments. multi-valued
+		// associations are a special case, though. See below.
+		if ( record.getGPA() != null ) {
+			recordTO.setGpa(new ExternalStudentTranscriptTO(record.getGPA()));
+		}
+
+		// This is standard handling for multi-valued TO associations, which
+		// converts null associations to empty lists.
 		recordTO.setPrograms(programFactory.asTOList(record.getPrograms()));
 		return recordTO;
 	}
 	
-	@RequestMapping(value = "/transcript/full}", method = RequestMethod.GET)
+	@RequestMapping(value = "/transcript/full", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
 	ExternalStudentRecordsTO loadFullStudentRecords(final @PathVariable UUID id)
@@ -155,7 +169,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	 * @throws ObjectNotFoundException
 	 *             If any reference data could not be loaded.
 	 */
-	@RequestMapping(value = "/test}", method = RequestMethod.GET)
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
 	List<ExternalStudentTestTO> loadStudentTestRecords(final @PathVariable UUID id)
