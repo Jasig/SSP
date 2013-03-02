@@ -9229,7 +9229,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
         gpaField: '#cumGPA',
         hoursEarnedField: '#hrsEarned',
-        hoursAttemptedField: '#hrsAttempted'
+        hoursAttemptedField: '#hrsAttempted',
+
+        academicProgramsField: '#academicPrograms'
     
     },
     init: function(){
@@ -9385,6 +9387,14 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
                 me.getGpaField().setValue(gpa.gradePointAverage);
                 me.getHoursEarnedField().setValue(gpa.creditHoursForGpa);
                 me.getHoursAttemptedField().setValue(gpa.creditHoursAttempted);
+            }
+            var programs = transcript.get('programs');
+            if ( programs ) {
+                var programNames = [];
+                Ext.Array.each(programs, function(program) {
+                   programNames.push(program.programName);
+                });
+                me.getAcademicProgramsField().setValue(programNames.join(', '));
             }
 
         }
@@ -17419,8 +17429,8 @@ Ext.define('Ssp.view.tools.profile.Person', {
                     }, {
                         fieldLabel: 'Academic Program',
                         name: 'academicPrograms',
-                        //hidden: true,
-                        labelWidth: 100
+                        itemId: 'academicPrograms',
+                        labelWidth: 120
                     }                   
                     ]
                 

@@ -90,8 +90,8 @@ Ext.define('Ssp.view.tools.profile.Person', {
                     }, {
                         fieldLabel: 'Academic Program',
                         name: 'academicPrograms',
-                        //hidden: true,
-                        labelWidth: 100
+                        itemId: 'academicPrograms',
+                        labelWidth: 120
                     }                   
                     ]
                 
