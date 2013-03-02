@@ -9428,7 +9428,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
     onEmailCoach: function(){
         var me = this;
-        if (coachPrimaryEmailAddress != '') {
+        if (me.person.getCoachPrimaryEmailAddress()) {
             window.location = 'mailto:' + me.person.getCoachPrimaryEmailAddress();
         }
     }
