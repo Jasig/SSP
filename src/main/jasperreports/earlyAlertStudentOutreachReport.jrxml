@@ -1,25 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Licensed to Jasig under one or more contributor license
-    agreements. See the NOTICE file distributed with this work
-    for additional information regarding copyright ownership.
-    Jasig licenses this file to you under the Apache License,
-    Version 2.0 (the "License"); you may not use this file
-    except in compliance with the License. You may obtain a
-    copy of the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on
-    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations
-    under the License.
-
--->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="earlyAlertStudentOutreachReport" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ac185325-229c-42eb-9c52-54601dbffce2">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="earlyAlertStudentOutreachReport" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ac185325-229c-42eb-9c52-54601dbffce2">
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
@@ -27,105 +7,187 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="71"/>
 	<property name="ireport.y" value="0"/>
+	<subDataset name="Table Dataset" uuid="be43ce74-c7e5-48bb-9e55-2f61365d6e2f">
+		<field name="first" class="java.lang.String"/>
+		<field name="second" class="java.lang.Long"/>
+	</subDataset>
+	<parameter name="homeDepartment" class="java.lang.String"/>
+	<parameter name="coachName" class="java.lang.String"/>
+	<parameter name="studentTypeNames" class="java.lang.String"/>
 	<parameter name="reportDate" class="java.lang.String"/>
+	<parameter name="programStatusName" class="java.lang.String"/>
+	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
 	<parameter name="startDate" class="java.lang.String"/>
 	<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="outcomeTotals" class="java.util.List"/>
 	<parameter name="term" class="java.lang.String"/>
-	<parameter name="earlyAlertOutcomeNames" class="java.lang.String"/>
+	<field name="firstName" class="java.lang.String">
+		<fieldDescription><![CDATA[firstName]]></fieldDescription>
+	</field>
+	<field name="lastName" class="java.lang.String">
+		<fieldDescription><![CDATA[lastName]]></fieldDescription>
+	</field>
+	<field name="middleName" class="java.lang.String">
+		<fieldDescription><![CDATA[middleName]]></fieldDescription>
+	</field>
+	<field name="schoolId" class="java.lang.String">
+		<fieldDescription><![CDATA[schoolId]]></fieldDescription>
+	</field>
+	<field name="primaryEmailAddress" class="java.lang.String">
+		<fieldDescription><![CDATA[primaryEmailAddress]]></fieldDescription>
+	</field>
 	<field name="coachName" class="java.lang.String">
 		<fieldDescription><![CDATA[coachName]]></fieldDescription>
 	</field>
-	<field name="totalEarlyAlerts" class="java.lang.Long"/>
-	<field name="countPhoneCalls" class="java.lang.Long"/>
-	<field name="countEmail" class="java.lang.Long"/>
-	<field name="countLetter" class="java.lang.Long"/>
-	<field name="countText" class="java.lang.Long"/>
-	<field name="countInPerson" class="java.lang.Long"/>
+	<field name="outreachName" class="java.lang.String"/>
 	<variable name="rowIndex" class="java.lang.Integer">
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
 		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
-	</variable>
-	<variable name="totalEarlyAlerts_1" class="java.lang.Long" calculation="Sum">
-		<variableExpression><![CDATA[$F{totalEarlyAlerts}]]></variableExpression>
-	</variable>
-	<variable name="countPhoneCalls_1" class="java.lang.Long" calculation="Sum">
-		<variableExpression><![CDATA[$F{countPhoneCalls}]]></variableExpression>
-	</variable>
-	<variable name="countEmail_1" class="java.lang.Long" calculation="Sum">
-		<variableExpression><![CDATA[$F{countEmail}]]></variableExpression>
-	</variable>
-	<variable name="countLetter_1" class="java.lang.Long" calculation="Sum">
-		<variableExpression><![CDATA[$F{countLetter}]]></variableExpression>
-	</variable>
-	<variable name="countText_1" class="java.lang.Long" calculation="Sum">
-		<variableExpression><![CDATA[$F{countText}]]></variableExpression>
-	</variable>
-	<variable name="countInPerson_1" class="java.lang.Long" calculation="Sum">
-		<variableExpression><![CDATA[$F{countInPerson}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="64" splitType="Stretch">
-			<staticText>
-				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="0" width="100" height="15"/>
-				<textElement/>
-				<text><![CDATA[Report Date:]]></text>
-			</staticText>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="f308e252-c794-4c7d-aca2-86ceb422a4f7" positionType="Float" x="115" y="0" width="209" height="15" isPrintWhenDetailOverflows="true"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="0" y="45" width="100" height="15"/>
-				<textElement/>
-				<text><![CDATA[Start Date:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="215" y="45" width="65" height="15"/>
-				<textElement/>
-				<text><![CDATA[End Date:]]></text>
-			</staticText>
+		<band height="142" splitType="Stretch">
 			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
-				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="115" y="45" width="100" height="15"/>
+				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="130" y="102" width="100" height="15"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="230" y="102" width="65" height="15"/>
+				<textElement/>
+				<text><![CDATA[End Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="11" y="10" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Report Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="11" y="57" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Program Status:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="f308e252-c794-4c7d-aca2-86ceb422a4f7" positionType="Float" x="130" y="10" width="213" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
+			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e" x="280" y="45" width="100" height="15"/>
+				<reportElement uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e" x="295" y="102" width="100" height="15"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="0" y="30" width="100" height="15"/>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="11" y="40" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Counselor/Coach:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="9f2796d0-86f4-4520-af01-8ad5a5faefec" positionType="Float" x="130" y="25" width="119" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{homeDepartment}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="10" y="102" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Start Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="11" y="25" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Home Department:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" positionType="Float" x="130" y="57" width="265" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{programStatusName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" positionType="Float" x="130" y="42" width="100" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{coachName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="11" y="72" width="116" height="15"/>
+				<textElement/>
+				<text><![CDATA[Special Service Groups:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="6d2788b3-18ca-44f6-837f-6df32f3e8b72" positionType="Float" x="130" y="72" width="407" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{specialServiceGroupNames}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="10" y="117" width="100" height="15"/>
 				<textElement/>
 				<text><![CDATA[Term:]]></text>
 			</staticText>
 			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
-				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="115" y="30" width="100" height="15"/>
+				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="130" y="117" width="100" height="15"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{term}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="0" y="15" width="100" height="15"/>
+			<textField>
+				<reportElement uuid="cd7eafd4-390c-4ded-8a23-c33648371bb4" x="149" y="87" width="388" height="20"/>
 				<textElement/>
-				<text><![CDATA[Outcome:]]></text>
-			</staticText>
-			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
-				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="115" y="15" width="209" height="15"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$P{earlyAlertOutcomeNames}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{studentTypeNames}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="15" y="87" width="116" height="15"/>
+				<textElement/>
+				<text><![CDATA[Student Type:]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="f68164f7-fe5e-4f34-9db6-757cd9d5ca38" key="table" style="table" x="548" y="10" width="199" height="92"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+					<datasetRun subDataset="Table Dataset" uuid="233770c2-d00a-4810-aac6-4b3b68ad8ffd">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.
+data.JRBeanCollectionDataSource($P{outcomeTotals})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="120" uuid="c881a348-bbc9-4cf7-aa05-1bb3f072514b">
+						<jr:columnHeader style="table_CH" height="16" rowSpan="1">
+							<staticText>
+								<reportElement uuid="e577fda2-b641-4562-9c54-b3ec31bddc6c" x="0" y="0" width="120" height="16"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Outreach(s)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="16" rowSpan="1">
+							<textField>
+								<reportElement uuid="fa14ca6f-a096-4a31-991e-f09cb91e443f" x="0" y="0" width="120" height="16"/>
+								<textElement/>
+								<textFieldExpression><![CDATA[$F{first}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="43829015-8a1e-4cb0-9dc8-8e212626b0d1">
+						<jr:columnHeader style="table_CH" height="16" rowSpan="1">
+							<staticText>
+								<reportElement uuid="a7677c51-210c-4a14-ab85-0799b3b1fbcd" x="0" y="0" width="90" height="16"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="16" rowSpan="1">
+							<textField>
+								<reportElement uuid="6f86c836-c815-4fed-9063-b43a8955deae" x="0" y="0" width="90" height="16"/>
+								<textElement textAlignment="Right"/>
+								<textFieldExpression><![CDATA[$F{second}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
 		</band>
 	</title>
 	<pageHeader>
 		<band height="28" splitType="Stretch">
 			<rectangle radius="10">
-				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="1" width="572" height="26" backcolor="#70C2E7"/>
+				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="1" width="752" height="26" backcolor="#70C2E7"/>
 			</rectangle>
 			<staticText>
 				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="180" y="7" width="224" height="20"/>
@@ -139,60 +201,60 @@
 	<columnHeader>
 		<band height="24" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="710911f9-ea96-4e52-ae1c-1da4c7fd9eee" x="0" y="0" width="81" height="20"/>
-				<textElement textAlignment="Center">
+				<reportElement uuid="6963974f-bd33-4663-be62-4efc95e33d07" stretchType="RelativeToBandHeight" x="1" y="5" width="67" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[COACH]]></text>
+				<text><![CDATA[FIRST]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="8bb83c8d-1bf1-457a-b7b8-05ee04d03377" x="81" y="0" width="81" height="20"/>
-				<textElement textAlignment="Center">
+				<reportElement uuid="fc947e50-9466-4392-8d82-9aee1d9eae67" stretchType="RelativeToBandHeight" x="68" y="5" width="49" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[TOTAL EARLY ALERTS]]></text>
+				<text><![CDATA[MIDDLE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="680b4fd7-f9eb-4e5e-9dc7-98c8ba410413" x="162" y="0" width="81" height="20"/>
-				<textElement textAlignment="Center">
+				<reportElement uuid="8482b9b3-84b3-4380-b17d-3ef86d0ebb16" stretchType="RelativeToBandHeight" x="117" y="5" width="99" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[PHONE CALLS]]></text>
+				<text><![CDATA[LAST]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="20f54207-539e-46d1-9797-4b3346b1aa20" x="243" y="0" width="81" height="20"/>
-				<textElement textAlignment="Center">
+				<reportElement uuid="915b815c-190b-44b9-a1f1-4bc0468b538c" stretchType="RelativeToBandHeight" x="216" y="5" width="101" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[EMAILS]]></text>
+				<text><![CDATA[STUDENT ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="f1c24751-5838-40a5-be78-3dc693d755dd" x="324" y="0" width="81" height="20"/>
-				<textElement textAlignment="Center">
+				<reportElement uuid="b8d1916e-ffdc-4a75-bc88-ed1c37f1b2c9" stretchType="RelativeToBandHeight" x="317" y="5" width="132" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[LETTERS]]></text>
+				<text><![CDATA[EMAIL(SCHOOL)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="21a5972d-14ef-4445-93b4-4b6eb63732f0" x="405" y="0" width="81" height="20"/>
-				<textElement textAlignment="Center">
+				<reportElement uuid="b8d1916e-ffdc-4a75-bc88-ed1c37f1b2c9" stretchType="RelativeToBandHeight" x="594" y="5" width="155" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[TEXTS]]></text>
+				<text><![CDATA[COUNSELOR]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="a9addbb1-ac1c-4493-9273-0c02741a8b4d" x="486" y="0" width="81" height="20"/>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
+				<reportElement uuid="6980c490-8e65-458f-b9aa-aa21f7a55b0d" x="449" y="5" width="145" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[IN PERSON]]></text>
+				<text><![CDATA[OUTREACH]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="24" splitType="Stretch">
+		<band height="25" splitType="Stretch">
 			<rectangle>
-				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="0" y="0" width="572" height="20" backcolor="#E4E4E4">
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="0" y="2" width="750" height="23" backcolor="#E4E4E4">
 					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
@@ -200,53 +262,49 @@
 				</graphicElement>
 			</rectangle>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="a2137ee3-4dfe-4903-bc0c-e8e47fc1dd16" x="0" y="0" width="81" height="20"/>
-				<textElement verticalAlignment="Middle">
-					<font isBold="false"/>
+				<reportElement uuid="26f7be38-ce84-4162-9fe0-4843db2fe8b9" x="2" y="6" width="67" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
 				</textElement>
+				<textFieldExpression><![CDATA[($F{firstName} == null ? "" : $F{firstName})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="01e5233b-49f5-4070-abaa-42365740c499" x="69" y="6" width="48" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( $F{middleName} == null ? "" : $F{middleName} )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="da4c0010-a6bc-4016-836e-daa0149f7735" x="118" y="6" width="99" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{lastName} == null ? "" : $F{lastName})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="dc91cd22-3c43-404a-b445-c02cd090c250" x="217" y="6" width="101" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{schoolId} == null ? "" : $F{schoolId})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="8bef58a2-cca0-4694-9796-487168a3b195" x="318" y="6" width="132" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{primaryEmailAddress} == null ? "" : $F{primaryEmailAddress})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="06263141-db6f-4d00-968b-888a644603e0" x="595" y="6" width="155" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{coachName}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="aff46448-29ea-4173-beab-4b7c5867d61f" x="81" y="0" width="81" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{totalEarlyAlerts} == null ? "" : $F{totalEarlyAlerts}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="2236bce7-bdf7-4b0d-968b-9d266c8db6dd" x="162" y="0" width="81" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{countPhoneCalls} == null ? "" : $F{countPhoneCalls}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="632061a9-eb78-4b74-be75-1e667dbc7712" x="243" y="0" width="81" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{countEmail} == null ? "" : $F{countEmail}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="6a986c67-f5b5-4b5e-a4d9-a2a99393e557" x="324" y="0" width="81" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{countLetter} == null ? "" : $F{countLetter}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="a8b40720-8059-4b84-a1af-212c56f26c7a" x="405" y="0" width="81" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{countText} == null ? "" : $F{countText}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="2b9d1f3f-8c6e-488d-841d-77100d356b5a" x="486" y="0" width="81" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{countInPerson} == null ? "" : $F{countInPerson}]]></textFieldExpression>
+			<textField>
+				<reportElement uuid="fe9b2ba8-95d3-49a5-81ab-d7c587d49a30" x="450" y="6" width="145" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{outreachName}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -264,60 +322,4 @@
 			</textField>
 		</band>
 	</pageFooter>
-	<summary>
-		<band height="25">
-			<line>
-				<reportElement uuid="436ea051-ccd8-48ef-ab22-e726f38334be" x="21" y="3" width="546" height="1"/>
-			</line>
-			<staticText>
-				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="6" width="81" height="16"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10" isBold="true" isItalic="false" isUnderline="false"/>
-				</textElement>
-				<text><![CDATA[TOTALS:]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="0f7fe3a3-1761-4450-8c13-ac090cde86e7" x="81" y="6" width="81" height="16"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{totalEarlyAlerts_1}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="e05a3e04-21b8-427b-83dc-d43aee701fc5" x="162" y="6" width="81" height="16"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{countPhoneCalls_1}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="3b897678-b06e-42a3-a9cb-e38c5ce66539" x="243" y="6" width="81" height="16"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{countEmail_1}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="11a6a90e-414c-4ebc-a694-4a0024a347a2" x="324" y="6" width="80" height="16"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{countLetter_1}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="faacf309-b773-4c24-8d97-c14f8fb6f694" x="404" y="6" width="82" height="16"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{countText_1}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="7b4cda8c-9344-4bc6-a72d-93a887e95b5f" x="486" y="6" width="81" height="16"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{countInPerson_1}]]></textFieldExpression>
-			</textField>
-		</band>
-	</summary>
 </jasperReport>

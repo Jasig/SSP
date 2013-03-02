@@ -28,6 +28,8 @@ import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentResponseOutcomeReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
@@ -113,5 +115,8 @@ public interface EarlyAlertResponseService
 	EarlyAlertResponseCounts getCountEarlyAlertRespondedToForEarlyAlerts(List<UUID> earlyAlertIds);
 	
 	EarlyAlertResponseCounts getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(List<UUID> earlyAlertIds, UUID outcomeId);
+	
+	List<EarlyAlertStudentResponseOutcomeReportTO> getEarlyAlertResponseOutcomeTypeForStudentsByCriteria(String outcomeType, EarlyAlertStudentSearchTO searchForm, SortingAndPaging sAndP);
 
+	Long getEarlyAlertOutcomeTypeCountByCriteria(String outcomeType, UUID outcomeId, EarlyAlertStudentSearchTO searchForm) throws ObjectNotFoundException;
 }

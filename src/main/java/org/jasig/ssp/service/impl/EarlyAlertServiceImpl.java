@@ -634,4 +634,9 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		return dao.getStudentEarlyAlertCountByCoaches(coaches, createDateFrom, createDateTo, studentTypeIds, sAndP);
 	}
 	
+	@Override
+	public Long getEarlyAlertCountSetForCritera(EarlyAlertStudentSearchTO searchForm){
+		return dao.getEarlyAlertCountSetForCritera(searchForm);
+	}
+	
 }

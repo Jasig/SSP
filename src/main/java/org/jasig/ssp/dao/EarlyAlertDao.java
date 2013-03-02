@@ -454,6 +454,23 @@ public class EarlyAlertDao extends
 		return query;
 	}
 
+	public Long getEarlyAlertCountSetForCritera(EarlyAlertStudentSearchTO searchForm){
+		final Criteria criteria = setPersonCriteria(createCriteria().createAlias("person", "person"), searchForm.getAddressLabelSearchTO());
+		if (searchForm.getStartDate() != null) {
+			criteria.add(Restrictions.ge("createdDate",
+					searchForm.getStartDate() ));
+		}
+
+		if (searchForm.getEndDate()  != null) {
+			criteria.add(Restrictions.le("createdDate",
+					searchForm.getEndDate()));
+		}
+		
+		Long total = (Long)criteria.setProjection(Projections.countDistinct("id")).uniqueResult();
+		
+		return total;
+
+	}
 	
 	private Criteria setPersonCriteria(Criteria criteria, PersonSearchFormTO personSearchForm){
 		if (personSearchForm.getCoach() != null

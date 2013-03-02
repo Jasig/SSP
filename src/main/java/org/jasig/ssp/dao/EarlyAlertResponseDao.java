@@ -21,16 +21,12 @@ package org.jasig.ssp.dao;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -42,13 +38,14 @@ import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Campus;
-import org.jasig.ssp.model.reference.EarlyAlertOutreach;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
-import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentResponseOutcomeReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -233,21 +230,21 @@ public class EarlyAlertResponseDao extends
 
 		
 		ProjectionList projections = Projections.projectionList().
-				add(Projections.groupProperty("earlyAlert.id").as("early_response_earlyAlertId"));
-		projections.add(Projections.groupProperty("coach.firstName").as("early_response_coachFirstName"));
-		projections.add(Projections.groupProperty("coach.middleName").as("early_response_coachMiddleName"));
-		projections.add(Projections.groupProperty("coach.lastName").as("early_response_coachLastName"));
-		projections.add(Projections.groupProperty("coach.id").as("early_response_coachId"));
-		projections.add(Projections.groupProperty("coach.schoolId").as("early_response_coachSchoolId"));
-		projections.add(Projections.groupProperty("personStaffDetails.departmentName").as("early_response_coachDepartmentName"));
+				add(Projections.groupProperty("earlyAlert.id").as("ea_outcome_earlyAlertId"));
+		projections.add(Projections.groupProperty("coach.firstName").as("ea_outcome_coachFirstName"));
+		projections.add(Projections.groupProperty("coach.middleName").as("ea_outcome_coachMiddleName"));
+		projections.add(Projections.groupProperty("coach.lastName").as("ea_outcome_coachLastName"));
+		projections.add(Projections.groupProperty("coach.id").as("ea_outcome_coachId"));
+		projections.add(Projections.groupProperty("coach.schoolId").as("ea_outcome_coachSchoolId"));
+		projections.add(Projections.groupProperty("personStaffDetails.departmentName").as("ea_outcome_coachDepartmentName"));
 		query.createAlias("earlyAlertOutreachIds", "earlyAlertOutreachIds");
-		projections.add(Projections.groupProperty("earlyAlertOutreachIds.name").as("early_response_earlyAlertOutreachName"));
+		projections.add(Projections.groupProperty("earlyAlertOutreachIds.name").as("ea_outcome_earlyAlertOutreachName"));
 		
 
 		query.setProjection(projections)
 				.setResultTransformer(
 						new NamespacedAliasToBeanResultTransformer(
-								EarlyAlertStudentOutreachReportTO.class,"early_response_"));
+								EarlyAlertStudentOutreachReportTO.class,"ea_outcome_"));
 
 		
 		// item count
@@ -266,6 +263,83 @@ public class EarlyAlertResponseDao extends
 				responses.add(value);
 		}
 		return responses;
+	}
+	
+	@SuppressWarnings(UNCHECKED)
+	public Long getEarlyAlertOutcomeTypeCountByCriteria(String outcomeType, UUID outcomeId,
+			EarlyAlertStudentSearchTO searchForm)
+			throws ObjectNotFoundException {
+
+		final Criteria criteria = getCriteriaForOutcomeType(outcomeType, searchForm, null);
+		criteria.createAlias(outcomeType, outcomeType);
+		criteria.add(Restrictions.eq(outcomeType + ".id", outcomeId));
+		criteria.setProjection(Projections.countDistinct("id"));
+		return (Long)criteria.uniqueResult();
+	}
+	
+	
+	
+	
+	@SuppressWarnings({ "unchecked", "unused" })
+	public 	List<EarlyAlertStudentResponseOutcomeReportTO> getEarlyAlertResponseOutcomeTypeForStudentsByCriteria(String outcomeType,
+			EarlyAlertStudentSearchTO searchForm,
+			SortingAndPaging sAndP){
+		
+		if(outcomeType.equals("earlyAlertOutcome") && searchForm.getOutcomeIds() != null && searchForm.getOutcomeIds().size() > 0){
+			searchForm.setOutcomeIds(null);
+		}
+		final Criteria criteria = getCriteriaForOutcomeType(outcomeType, searchForm, sAndP);
+		
+		ProjectionList projections = getPersonProjection();
+		criteria.createAlias(outcomeType, outcomeType);
+		projections.add(Projections.groupProperty(outcomeType + ".name").as("ea_outcome_outcomeName"));
+		
+		criteria.setProjection(projections)
+		.setResultTransformer(
+				new NamespacedAliasToBeanResultTransformer(
+						EarlyAlertStudentResponseOutcomeReportTO.class,"ea_outcome_"));
+		
+		return (List)criteria.list();
+		
+	}
+	
+	
+	private ProjectionList getPersonProjection(){
+		ProjectionList projections = Projections.projectionList();
+		projections.add(Projections.groupProperty("person.firstName").as("ea_outcome_firstName"));
+		projections.add(Projections.groupProperty("person.middleName").as("ea_outcome_middleName"));
+		projections.add(Projections.groupProperty("person.lastName").as("ea_outcome_lastName"));
+		projections.add(Projections.groupProperty("person.primaryEmailAddress").as("ea_outcome_primaryEmailAddress"));
+		projections.add(Projections.groupProperty("person.schoolId").as("ea_outcome_schoolId"));
+		
+		projections.add(Projections.groupProperty("coach.firstName").as("ea_outcome_coachFirstName"));
+		projections.add(Projections.groupProperty("coach.middleName").as("ea_outcome_coachMiddleName"));
+		projections.add(Projections.groupProperty("coach.lastName").as("ea_outcome_coachLastName"));
+
+		return projections;
+	}
+	
+	
+	private Criteria getCriteriaForOutcomeType(String fieldName, EarlyAlertStudentSearchTO searchForm,
+			SortingAndPaging sAndP){
+		final Criteria criteria = createCriteria();
+		
+		if(searchForm.getStartDate() != null)
+			criteria.add(Restrictions.ge("createdDate", searchForm.getStartDate()));
+		if(searchForm.getEndDate() != null)
+			criteria.add(Restrictions.le("createdDate", searchForm.getEndDate() ));
+		
+		criteria.createAlias("earlyAlert", "earlyAlert");
+		Criteria personCriteria = criteria.createAlias("earlyAlert.person", "person");
+
+		setPersonCriteria(personCriteria, searchForm.getAddressLabelSearchTO());
+		
+		if(searchForm.getOutcomeIds() != null && searchForm.getOutcomeIds().size() > 0)
+			criteria.add(Restrictions.in("earlyAlertOutcome.id", searchForm.getOutcomeIds()));
+		if(sAndP != null)
+			sAndP.addAll(criteria);
+		
+		return criteria;
 	}
 	
 	@SuppressWarnings(UNCHECKED)
@@ -308,6 +382,7 @@ public class EarlyAlertResponseDao extends
 		
 		collectionCriteria.createAlias("earlyAlert", "earlyAlert");
 		collectionCriteria.createAlias("earlyAlert.person", "person");
+		collectionCriteria.createAlias("person.coach","coach");
 		
 		ProjectionList projections = Projections.projectionList().
 				add(Projections.distinct(Projections.groupProperty("earlyAlert.id").as("early_alert_response_earlyAlertId")));
@@ -330,7 +405,8 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 			"personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);	
 		criteria.createAlias("person.programStatuses",
 			"personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
-		criteria.createAlias("person.coach","c", JoinType.LEFT_OUTER_JOIN);
+		
+		
 	
 		projections.add(Projections.groupProperty("person.firstName").as("early_alert_response_firstName"));
 		projections.add(Projections.groupProperty("person.middleName").as("early_alert_response_middleName"));
@@ -365,20 +441,20 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
 		if ( dialect instanceof SQLServerDialect) {
 			// sql server requires all these to part of the grouping
-			//projections.add(Projections.groupProperty("c.id").as("coachId"));
-			projections.add(Projections.groupProperty("c.lastName").as("early_alert_response_coachLastName"))
-					.add(Projections.groupProperty("c.firstName").as("early_alert_response_coachFirstName"))
-					.add(Projections.groupProperty("c.middleName").as("early_alert_response_coachMiddleName"))
-					.add(Projections.groupProperty("c.schoolId").as("early_alert_response_coachSchoolId"))
-					.add(Projections.groupProperty("c.username").as("early_alert_response_coachUsername"));
+			//projections.add(Projections.groupProperty("coach.id").as("coachId"));
+			projections.add(Projections.groupProperty("coach.lastName").as("early_alert_response_coachLastName"))
+					.add(Projections.groupProperty("coach.firstName").as("early_alert_response_coachFirstName"))
+					.add(Projections.groupProperty("coach.middleName").as("early_alert_response_coachMiddleName"))
+					.add(Projections.groupProperty("coach.schoolId").as("early_alert_response_coachSchoolId"))
+					.add(Projections.groupProperty("coach.username").as("early_alert_response_coachUsername"));
 		} else {
 			// other dbs (postgres) don't need these in the grouping
-			//projections.add(Projections.property("c.id").as("coachId"));
-			projections.add(Projections.groupProperty("c.lastName").as("early_alert_response_coachLastName"))
-					.add(Projections.groupProperty("c.firstName").as("early_alert_response_coachFirstName"))
-					.add(Projections.groupProperty("c.middleName").as("early_alert_response_coachMiddleName"))
-					.add(Projections.groupProperty("c.schoolId").as("early_alert_response_coachSchoolId"))
-					.add(Projections.groupProperty("c.username").as("early_alert_response_coachUsername"));
+			//projections.add(Projections.property("coach.id").as("coachId"));
+			projections.add(Projections.groupProperty("coach.lastName").as("early_alert_response_coachLastName"))
+					.add(Projections.groupProperty("coach.firstName").as("early_alert_response_coachFirstName"))
+					.add(Projections.groupProperty("coach.middleName").as("early_alert_response_coachMiddleName"))
+					.add(Projections.groupProperty("coach.schoolId").as("early_alert_response_coachSchoolId"))
+					.add(Projections.groupProperty("coach.username").as("early_alert_response_coachUsername"));
 		}
 		return projections;
 	}
@@ -437,11 +513,12 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 					personSearchFormTO.getCoach().getId()));
 		}
 		
+		criteria.createAlias("person.coach", "coach");
 		
 		if (personSearchFormTO.getHomeDepartment() != null
 				&& personSearchFormTO.getHomeDepartment().length() > 0) {
-			criteria.createAlias("person.coach", "c");
-			criteria.createAlias("c.staffDetails", "staffDetails");
+			
+			criteria.createAlias("coach.staffDetails", "staffDetails");
 			criteria.add(Restrictions.eq("staffDetails.departmentName",
 					personSearchFormTO.getHomeDepartment()));
 		}

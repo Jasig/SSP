@@ -1074,9 +1074,9 @@
 
 <div class="hideable-form early-alert-student-outreach-report" style="display:none">
 	<h1>Early Alert Student Outreach Report</h1>
-	<form action="/ssp/api/1/report/earlyalertstudentoutreach" method="post"
+	<form action="/ssp/api/1/report/earlyalertstudentoutcome" method="post"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
-		
+		<input type="hidden" id="earlyAlertStudentOutreachOutcomeType" name="outcomeType" value="earlyAlertOutreachIds"/>
 		<!-- Home Department -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentOutreachHomeDepartment" name="homeDepartment" class="input-home-department-group">
@@ -1091,7 +1091,7 @@
 		
 				<!-- Roster Status 
 		<div class="ea-input">
-			<select id="earlyAlertOutreachRosterStatus" name="rosterStatus" class="input-roster-status-code-group">
+			<select id="earlyAlertStudentOutreachRosterStatus" name="rosterStatus" class="input-roster-status-code-group">
 				<option value="">${not_applicable}</option>
 			</select>
 		</div>
@@ -1100,10 +1100,54 @@
 		</div>
 		<div class="ea-clear"></div>
 		-->
+		<!-- Assigned Counselor -->
+		<div class="ea-input">
+			<select id="earlyAlertStudentOutreachCounselorGroup" name="coachId" class="input-assigned-counselor-group">
+				<option value="">${all_found}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Assigned Counselor:</span>
+		</div>
+		<div class="ea-clear"></div>		
+		
+		<!-- program Status -->
+		<div class="ea-input">
+			<select id="earlyAlertStudentOutreachProgramStatusGroup" name="programStatus" class="input-program-status-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Program Status:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-input">
+			<select class="input-student-type-group" id="earlyAlertStudentOutcomeStudentTypeIds" name="studentTypeIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Student Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Special Service Groups -->
+		<div class="ea-input">
+			<select  class="input-special-service-group" id="earlyAlertStudentOutcomeSpecialServiceGroupIds" name="specialServiceGroupIds"
+				multiple="multiple">
+				<option value="">${not_applicable}</option>
+				</select>
+		</div>
+		<div class="ea-label">
+			<span>Special Service Groups:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
 		<!-- Outcome -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentOutreachOutcomeGroup" name="earlyAlertOutcomes" class="input-early-alert-outcome-group" multiple="multiple" >
-				<option value="">${not_applicable}</option>
+				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
@@ -1127,14 +1171,14 @@
 			<div class="ea-date-range">
 				<!-- Date From -->
 				<div class="ea-input">
-					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentOutreachCreateDateFrom">
+					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentOutcomeCreateDateFrom">
 				</div>
 				<div class="ea-label">
 					<span>Start Date (inclusive)::</span>
 				</div>
 				<div class="ea-clear"></div><!-- Date To -->
 				<div class="ea-input">
-					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentOutreachCreateDateTo">
+					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentOutcomeCreateDateTo">
 				</div>
 				<div class="ea-label">
 					<span>End Date (exclusive)::</span>
@@ -1147,7 +1191,6 @@
 				</div>
 			</div>
 		</div>
-		
 		<!-- output type -->
 		<div class="ea-input">
 			<label><span>pdf</span></label><input type="radio" name="reportType"
@@ -1173,7 +1216,7 @@
 	<h1>Early Alert Student Outcome Report</h1>
 	<form action="/ssp/api/1/report/earlyalertstudentoutcome" method="post"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
-		
+		<input type="hidden" id="earlyAlertStudentOutcomeOutcomeType"  name="outcomeType" value="earlyAlertOutcome"/>
 		<!-- Home Department -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentOutcomeHomeDepartment" name="homeDepartment" class="input-home-department-group">
@@ -1240,7 +1283,17 @@
 			<span>Special Service Groups:</span>
 		</div>
 		<div class="ea-clear"></div>
-
+		
+		<!-- Outcome -->
+		<div class="ea-input">
+			<select id="earlyAlertStudentOutcomeOutcomeGroup" name="earlyAlertOutcomes" class="input-early-alert-outcome-group" multiple="multiple" >
+				<option value="">${all_found}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Outcome:</span>
+		</div>
+		<div class="ea-clear"></div>
 
 		<!-- Semester -->
 		<div class="ea-time-span">

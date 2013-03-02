@@ -55,7 +55,7 @@ public class EarlyAlertStudentOutcomeReportControllerIntegrationTest extends
 			throws IOException, ObjectNotFoundException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		
-		controller.getEarlyAlertStudentOutcomeReport(response, 
+		controller.getEarlyAlertStudentOutcomeReport(response,"earlyAlertOutcome",
 				ObjectStatus.ACTIVE,//Object Status
 				null,//roster status
 				Stubs.HomeDepartmentFixture.MATHEMATICS.title(), //home department
@@ -63,6 +63,7 @@ public class EarlyAlertStudentOutcomeReportControllerIntegrationTest extends
 				Lists.newArrayList(StudentTypeFixture.ILP.id()),
 				ProgramStatusFixture.ACTIVE.id(), 
 				Lists.newArrayList(Stubs.SpecialServiceGroupFixture.TEST_SSG.id()), 
+				Lists.newArrayList(Stubs.EarlyAlertOutcomeFixture.WAITING_FOR_RESPONSE.id()),
 				TermFixture.FALL_2012.code(), 
 				null, 
 				null,
@@ -85,7 +86,7 @@ public class EarlyAlertStudentOutcomeReportControllerIntegrationTest extends
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 
-		controller.getEarlyAlertStudentOutcomeReport(response, 
+		controller.getEarlyAlertStudentOutcomeReport(response,"earlyAlertOutcome",
 				null,
 				null,
 				null, 
@@ -94,6 +95,72 @@ public class EarlyAlertStudentOutcomeReportControllerIntegrationTest extends
 				null, 
 				null, 
 				null, 
+				null,
+				null,
+				null,
+				"csv");
+		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
+		//TODO Understand why no filters does not bring back a result!
+		expectedReportBodyLines.add("FIRST,MIDDLE,LAST,STUDENT ID,EMAIL(SCHOOL),EA TOT,RESPONSES,NO RESPONSE,WAITING,NOT EA CLASS,DUPLICATE,COUNSELOR");
+		expectedReportBodyLines.add("James,A,Gosling,student0,test@sinclair.edu,1,1,1,0,0,0,Alan Turing");
+		expectedReportBodyLines.add("test,Mumford,coach1student0,coach1student0,coach1student0@unicon.net,1,0,0,0,0,0,test coach1");
+		expectedReportBodyLines.add("test,Mumford,coach1student1,coach1student1,coach1student1@unicon.net,2,2,0,0,1,1,test coach1");
+		expectedReportBodyLines.add("test,Mumford,coach1student2,coach1student2,coach1student2@unicon.net,3,6,2,2,2,2,test coach1");
+		expectedReportBodyLines.add("test,Mumford,coach1student3,coach1student3,coach1student3@unicon.net,4,6,2,2,0,0,test coach1");
+		expectedReportBodyLines.add("test,Mumford,coach1student4,coach1student4,coach1student4@unicon.net,5,3,3,0,0,0,test coach1");
+		expectReportBodyLines(expectedReportBodyLines, response, null);
+	}
+	
+	/**
+	 * {@link #testGetEarlyAlertStudentOutcomeReportWithFilters()}, 
+	 * Test to make sure all the filters are implemented properly.
+	 */
+	@Test
+	public void testGetEarlyAlertStudentOutreachReportWithFilters()
+			throws IOException, ObjectNotFoundException, JRException {
+		final MockHttpServletResponse response = new MockHttpServletResponse();
+		
+		controller.getEarlyAlertStudentOutcomeReport(response,"earlyAlertOutreachIds",
+				ObjectStatus.ACTIVE,//Object Status
+				null,//roster status
+				Stubs.HomeDepartmentFixture.MATHEMATICS.title(), //home department
+				PersonFixture.COACH_1.id(), 
+				Lists.newArrayList(StudentTypeFixture.ILP.id()),
+				ProgramStatusFixture.ACTIVE.id(), 
+				Lists.newArrayList(Stubs.SpecialServiceGroupFixture.TEST_SSG.id()), 
+				Lists.newArrayList(Stubs.EarlyAlertOutcomeFixture.WAITING_FOR_RESPONSE.id()),
+				TermFixture.FALL_2012.code(), 
+				null, 
+				null,
+				"csv");
+
+		// "body" is the actual results and the header that describes its columns.
+		// This is as opposed to rows which precede the header, which describe
+		// the filtering criteria
+		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
+		expectedReportBodyLines.add("FIRST,MIDDLE,LAST,STUDENT ID,EMAIL(SCHOOL),EA TOT,RESPONSES,NO RESPONSE,WAITING,NOT EA CLASS,DUPLICATE,COUNSELOR");
+		expectedReportBodyLines.add(",,,,,,,,,,,");
+		expectReportBodyLines(expectedReportBodyLines, response, null);
+	}
+
+	@Test
+	public void testGetEarlyAlertStudentReachReportWithNoFilter()
+			throws IOException, ObjectNotFoundException, JRException {
+
+		sessionFactory.getCurrentSession().flush();
+
+		final MockHttpServletResponse response = new MockHttpServletResponse();
+
+		controller.getEarlyAlertStudentOutcomeReport(response,"earlyAlertOutreachIds",
+				null,
+				null,
+				null, 
+				null, 
+				null, 
+				null, 
+				null, 
+				null, 
+				null,
 				null,
 				null,
 				"csv");

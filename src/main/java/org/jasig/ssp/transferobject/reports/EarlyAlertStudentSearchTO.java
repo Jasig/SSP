@@ -38,6 +38,8 @@ public class EarlyAlertStudentSearchTO
 	private Date endDate;
 	
 	private PersonSearchFormTO addressLabelSearchTO;
+	
+	private List<UUID> outcomeIds;
 
 	public EarlyAlertStudentSearchTO(final PersonSearchFormTO addressLabelSearchTO,
 								final Date startDate, final Date endDate) {
@@ -69,6 +71,22 @@ public class EarlyAlertStudentSearchTO
 
 	public void setAddressLabelSearchTO(PersonSearchFormTO addressLabelSearchTO) {
 		this.addressLabelSearchTO = addressLabelSearchTO;
+	}
+
+
+	/**
+	 * @return the outcomeIds
+	 */
+	public List<UUID> getOutcomeIds() {
+		return outcomeIds;
+	}
+
+
+	/**
+	 * @param outcomeIds the outcomeIds to set
+	 */
+	public void setOutcomeIds(List<UUID> outcomeIds) {
+		this.outcomeIds = outcomeIds;
 	}
 
 }

@@ -22,6 +22,7 @@ package org.jasig.ssp.web.api.reports; // NOPMD
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -30,30 +31,30 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
-
 import net.sf.jasperreports.engine.JRException;
-
 
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.reference.EarlyAlertOutcome;
+import org.jasig.ssp.model.reference.EarlyAlertOutreach;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
+import org.jasig.ssp.service.reference.EarlyAlertOutreachService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
-import org.jasig.ssp.transferobject.PersonTO;
-import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
-import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
-import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
-import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutcomeReportTO;
-import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentResponseOutcomeReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.DateTerm;
+import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +69,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -80,7 +82,13 @@ import com.google.common.collect.Maps;
 public class EarlyAlertStudentOutcomeReportController extends ReportBaseController {
 
 	private static final String REPORT_URL = "/reports/earlyAlertStudentOutcomeReport.jasper";
-	private static final String REPORT_FILE_TITLE = "Early_Alert_Student_Outcome_Report";
+	private static final String[] REPORT_FILE_TITLE = {"Early_Alert_Student_Outcome_Report", "Early_Alert_Student_Outreach_Report"};
+	private static final String[] REPORT_TITLE = {"Early Alert Student Outcome Report", "Early Alert Student Outreach Report"};
+	private static final String[] COLUMN_TITLE = {"Outcome(s)", "Outreach(s)"};
+	private static final String REPORT_TITLE_LABEL = "reportTitle";
+	private static final String COLUMN_TITLE_LABEL = "columnTitle";
+	
+	private static final String OUTCOME_TOTALS = "outcomeTotals";
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AddressLabelsReportController.class);
@@ -98,13 +106,20 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 	private transient StudentTypeService studentTypeService;
 	
 	@Autowired
-	private transient ProgramStatusService programStatusService;	
+	private transient ProgramStatusService programStatusService;
+	
 	
 	@Autowired
 	protected transient EarlyAlertService earlyAlertService;
 	
 	@Autowired
 	protected transient EarlyAlertResponseService earlyAlertResponseService;
+	
+	@Autowired
+	protected transient EarlyAlertOutcomeService earlyAlertOutcomeService;
+	
+	@Autowired
+	protected transient EarlyAlertOutreachService earlyAlertOutreachService;
 	
 	@Autowired
 	private transient SpecialServiceGroupService ssgService;
@@ -126,6 +141,7 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 	@ResponseBody
 	public void getEarlyAlertStudentOutcomeReport(
 			final HttpServletResponse response,
+			final @RequestParam(required = true) String outcomeType,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) String rosterStatus,
 			final @RequestParam(required = false) String homeDepartment,
@@ -133,6 +149,7 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) UUID programStatus,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
+			final @RequestParam(required = false) List<UUID> outcomeIds,
 			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
@@ -170,20 +187,67 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 				programStatusService, 
 				null);
 		
+		SearchParameters.addUUIDSToMap("outcomes", "Not Used", outcomeIds, parameters, earlyAlertOutcomeService);
 		
 		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(personSearchForm, 
 				dateTerm.getStartDate(), dateTerm.getEndDate());
-
+		
+		searchForm.setOutcomeIds(outcomeIds);
+		
+		List<Pair<String, SortDirection>> sortFields = Lists.newArrayList();
+		sortFields.add(new Pair<String, SortDirection>("name", SortDirection.ASC));
+		Collection<EarlyAlertOutcome> earlyAlertOutcomes;	
+		if(outcomeIds != null && outcomeIds.size() > 0){
+			earlyAlertOutcomes = new ArrayList<EarlyAlertOutcome>();
+			for(UUID outcomeId:outcomeIds){
+				earlyAlertOutcomes.add(earlyAlertOutcomeService.get(outcomeId));
+			}
+		}else{
+			earlyAlertOutcomes = earlyAlertOutcomeService.getAll(new SortingAndPaging(status, sortFields, null, SortDirection.ASC)).getRows();
+		}
+		
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
-		final PagingWrapper<EarlyAlertStudentReportTO> reportTOs = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
-				searchForm, SearchParameters.getReportPersonSortingAndPagingAll(status, "person"));
-
-		List<EarlyAlertStudentOutcomeReportTO> compressedReportTOS = processReportsTO(reportTOs, earlyAlertResponseService);
+		final List<EarlyAlertStudentResponseOutcomeReportTO> reportTOs = earlyAlertResponseService.getEarlyAlertResponseOutcomeTypeForStudentsByCriteria(
+				outcomeType, searchForm, SortingAndPaging.createForSingleSortAll(status, outcomeType + ".name", "ASC"));
+		
+		
+		List<Pair<String,Long>> outcomeTotals = new ArrayList<Pair<String,Long>>();
+		if(outcomeType.equals("earlyAlertOutcome")){
+		for(EarlyAlertOutcome earlyAlertOutcome:earlyAlertOutcomes){
+			outcomeTotals.add(
+					new Pair<String,Long>(earlyAlertOutcome.getName(),earlyAlertResponseService.
+							getEarlyAlertOutcomeTypeCountByCriteria(outcomeType, earlyAlertOutcome.getId(), searchForm)));
+		}
+		}else if(outcomeType.equals("earlyAlertOutreachIds")){
+			Collection<EarlyAlertOutreach> earlyAlertOutreaches = earlyAlertOutreachService.getAll(new SortingAndPaging(status, sortFields, null, SortDirection.ASC)).getRows();
+			searchForm.setOutcomeIds(outcomeIds);
+			for(EarlyAlertOutreach earlyAlertOutreach:earlyAlertOutreaches){
+				outcomeTotals.add(
+						new Pair<String,Long>(earlyAlertOutreach.getName(),earlyAlertResponseService.
+								getEarlyAlertOutcomeTypeCountByCriteria(outcomeType, earlyAlertOutreach.getId(), searchForm)));
+			}
+		}
+		
+		outcomeTotals.add(
+				new Pair<String,Long>(" ", null));
+		
+		outcomeTotals.add(
+				new Pair<String,Long>("Total Early Alerts",earlyAlertService.
+						getEarlyAlertCountSetForCritera(searchForm)));
+		
 		SearchParameters.addDateTermToMap(dateTerm, parameters);
-			
-		generateReport(response,  parameters, compressedReportTOS,  REPORT_URL, reportType, REPORT_FILE_TITLE);
+		
+		parameters.put(OUTCOME_TOTALS, outcomeTotals);
+		
+		
+		
+		Integer index = outcomeType.equals("earlyAlertOutcome") ? 0:1;
+		parameters.put(REPORT_TITLE_LABEL, REPORT_TITLE[index]);
+		parameters.put(COLUMN_TITLE_LABEL, COLUMN_TITLE[index]);
+		
+		generateReport(response,  parameters, reportTOs,  REPORT_URL, reportType, REPORT_FILE_TITLE[index]);
 	}
 
 	@Override
@@ -191,50 +255,5 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 		return LOGGER;
 	}
 	
-	protected List<EarlyAlertStudentOutcomeReportTO> processReportsTO(PagingWrapper<EarlyAlertStudentReportTO> reports, EarlyAlertResponseService earlyAlertResponseService){
-		 
-		List<EarlyAlertStudentOutcomeReportTO> compressedReports = new ArrayList<EarlyAlertStudentOutcomeReportTO>();
-		if(reports == null || reports.getRows().size() <= 0)
-			return compressedReports;
-		
-		for(EarlyAlertStudentReportTO personInfo : reports){
-			Integer index = compressedReports.indexOf(personInfo);
-			if(index == null || index < 0){
-				EarlyAlertStudentOutcomeReportTO reportTO = new EarlyAlertStudentOutcomeReportTO();
-				reportTO.setPerson(personInfo);
-				reportTO.processDuplicate(personInfo);
-				compressedReports.add(reportTO);
-			}else
-				compressedReports.get(index).processDuplicate(personInfo);
-		}
-		
-		for(EarlyAlertStudentOutcomeReportTO reportTO: compressedReports){
-			List<UUID> earlyAlertIds = reportTO.getEarlyAlertIds();
-			EarlyAlertResponseCounts countOfResponses = earlyAlertResponseService.getCountEarlyAlertRespondedToForEarlyAlerts(earlyAlertIds);
-			//TODO Possible inaccuracy if early alert was closed but there was no response at all.
-			reportTO.setPending(countOfResponses.getTotalEARespondedToNotClosed());
-			reportTO.setTotalAllReponses(countOfResponses.getTotalResponses());
-			
-			countOfResponses = earlyAlertResponseService.getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(
-					earlyAlertIds, EarlyAlertStudentOutcomeReportTO.DUPLICATE_EA_NOTICE);
-			reportTO.setDuplicateEANotice(countOfResponses.getTotalResponses());
-			
-			countOfResponses = earlyAlertResponseService.getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(
-					earlyAlertIds, EarlyAlertStudentOutcomeReportTO.NOT_AN_EA_CLASS);
-			reportTO.setNotEAClass(countOfResponses.getTotalResponses());
-			
-			countOfResponses = earlyAlertResponseService.getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(
-					earlyAlertIds, EarlyAlertStudentOutcomeReportTO.STUDENT_DID_NOT_RESPOND);
-			reportTO.setStudentDidNotRespond(countOfResponses.getTotalResponses());
-			
-			countOfResponses = earlyAlertResponseService.getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(
-					earlyAlertIds, EarlyAlertStudentOutcomeReportTO.STUDENT_RESPONDED);
-			reportTO.setStudentResponded(countOfResponses.getTotalResponses());
-			
-			countOfResponses = earlyAlertResponseService.getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(
-					earlyAlertIds, EarlyAlertStudentOutcomeReportTO.WAITING_FOR_RESPONSE);
-			reportTO.setWaitingForResponse(countOfResponses.getTotalResponses());
-		}
-		return compressedReports;
-	}
+	
 }

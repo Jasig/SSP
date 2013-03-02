@@ -124,6 +124,8 @@ public interface EarlyAlertService
 	
 	Long getCountOfEarlyAlertStudentsByDate(Date createdDateFrom, Date createdDateTo, Campus campu, String rosterStatuss);
 
+	Long getEarlyAlertCountSetForCritera(EarlyAlertStudentSearchTO searchForm);
+
 	PagingWrapper<EarlyAlertStudentReportTO> getStudentsEarlyAlertCountSetForCritera(EarlyAlertStudentSearchTO searchForm, SortingAndPaging createForSingleSort);
 	
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(List<Person> coaches, Date createDateFrom, 

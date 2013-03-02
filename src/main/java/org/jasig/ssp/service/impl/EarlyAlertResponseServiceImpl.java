@@ -58,10 +58,12 @@ import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.reference.JournalTrackService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
-import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentResponseOutcomeReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -375,4 +377,16 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	{
 		return dao.getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(earlyAlertIds, outcomeId);
 	}
+	
+	public Long getEarlyAlertOutcomeTypeCountByCriteria(String outcomeType,UUID outcomeId,
+			EarlyAlertStudentSearchTO searchForm) throws ObjectNotFoundException{
+		return dao.getEarlyAlertOutcomeTypeCountByCriteria(outcomeType, outcomeId, searchForm);
+	}
+	
+	public 	List<EarlyAlertStudentResponseOutcomeReportTO> getEarlyAlertResponseOutcomeTypeForStudentsByCriteria(
+			String outcomeType, EarlyAlertStudentSearchTO searchForm, SortingAndPaging sAndP){
+		
+		return dao.getEarlyAlertResponseOutcomeTypeForStudentsByCriteria(outcomeType, searchForm, sAndP);
+	}
+
 }
