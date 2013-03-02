@@ -43,7 +43,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
                 margin: '5 0 0 0',
                 defaultType: 'displayfield',
                 fieldDefaults: {
-                    msgTarget: 'side',
+                    msgTarget: 'side'
                     //labelAlign: 'right',
                     //labelWidth: 80
                 },
@@ -64,7 +64,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
                         fieldLabel: 'ID',
                         itemId: 'studentId',
                         name: 'schoolId',
-                        labelWidth: 20
+                        labelWidth: 70
                     }, {
                         fieldLabel: 'DOB',
                         name: 'birthDate',
@@ -76,7 +76,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
                         labelWidth: 40
                     }, {
                         fieldLabel: '',
-                        name: 'primaryEmailAddress',
+                        name: 'primaryEmailAddress'
                     }, {
                         fieldLabel: 'Student Type',
                         name: 'studentType',
@@ -107,27 +107,25 @@ Ext.define('Ssp.view.tools.profile.Person', {
                     items: [{
                         fieldLabel: 'GPA',
                         name: 'cumGPA',
-                        //hidden: true
+                        itemId: 'cumGPA'
                     }, {
                         fieldLabel: 'Hrs Earned',
                         name: 'hrsEarned',
-                        //hidden: true
+                        itemId: 'hrsEarned'
                     }, {
                         fieldLabel: 'Hrs Attempted',
                         name: 'hrsAttempted',
-                        //hidden: true
+                        itemId: 'hrsAttempted'
                     }, {
                         fieldLabel: 'Reg',
                         name: 'registeredForCurrentTerm',
                         renderer: me.columnRendererUtils.renderFriendlyBoolean
                     }, {
                         fieldLabel: 'Payment',
-                        name: 'paymentStatus',
-                        //hidden: true
+                        name: 'paymentStatus'
                     }, {
                         fieldLabel: 'Early Alerts',
-                        name: 'earlyAlert',
-                        //hidden: true
+                        name: 'earlyAlert'
                     }]
                 
                 }, {

@@ -21,8 +21,9 @@ public class ExternalStudentRecordsTO implements ExternalDataTO<ExternalStudentR
 
 	@Override
 	public void from(ExternalStudentRecords model) {
-		// TODO Auto-generated method stub
-		this.gpa = new ExternalStudentTranscriptTO(model.getGPA());
+		if ( model.getGPA() != null ) {
+			this.gpa = new ExternalStudentTranscriptTO(model.getGPA());
+		}
 	}
 	
 	private ExternalStudentTranscriptTO gpa;

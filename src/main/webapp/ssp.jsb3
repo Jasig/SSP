@@ -469,6 +469,11 @@
                     "path": "/app/controller/tool/profile/"
                 },
                 {
+                    "clsName": "Ssp.model.Transcript",
+                    "name": "Transcript.js",
+                    "path": "/app/model/"
+                },
+                {
                     "clsName": "Ssp.controller.tool.profile.ProfilePersonViewController",
                     "name": "ProfilePersonViewController.js",
                     "path": "/app/controller/tool/profile/"

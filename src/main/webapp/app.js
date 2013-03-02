@@ -165,6 +165,8 @@ Ext.require([
 	'Ssp.model.PersonLite',
 	'Ssp.model.PersonSearchLite',
 	'Ssp.model.PersonProgramStatus',
+	'Ssp.model.CourseTranscript',
+	'Ssp.model.Transcript',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
 	'Ssp.model.tool.studentintake.PersonEducationGoal',
@@ -584,7 +586,15 @@ Ext.onReady(function(){
 				            return new Ssp.model.tool.shg.SelfHelpGuideQuestions({id:""});
 				    	},
 				        singleton: true
-			        },			        
+			        },
+					courseTranscriptsStore: {
+						fn: function(){
+							return Ext.create('Ext.data.Store',{
+								model: 'Ssp.model.CourseTranscript'
+							});
+						},
+						singleton: true
+					},
 			        treeStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.TreeStore',{

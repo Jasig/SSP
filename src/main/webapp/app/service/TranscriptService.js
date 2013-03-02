@@ -32,26 +32,35 @@ Ext.define('Ssp.service.TranscriptService', {
     	baseUrl = baseUrl.replace('{id}', id);
     	return baseUrl;
     },
+
+    getSummary: function ( personId, callbacks ) {
+        var me = this;
+        me.doGet(personId, callbacks,  me.getBaseUrl( personId ) + "/summary" );
+    },
     
     getFull: function( personId, callbacks ){
-		var me=this;
-		var url = me.getBaseUrl( personId );
-	    var success = function( response, view ){
-	    	var r = Ext.decode(response.responseText);
-			callbacks.success( r, callbacks.scope );
-	    };
+        var me = this;
+		me.doGet(personId, callbacks,  me.getBaseUrl( personId ) + "/full" );
+    },
 
-	    var failure = function( response ){
-	    	me.apiProperties.handleError( response );	    	
-	    	callbacks.failure( response, callbacks.scope );
-	    };
-	    
-		me.apiProperties.makeRequest({
-			url: url+'/full',
-			method: 'GET',
-			successFunc: success,
-			failureFunc: failure,
-			scope: me
-		});    	
+    doGet: function( personId, callbacks, url ) {
+        var me=this;
+        var success = function( response ){
+            var r = Ext.decode(response.responseText);
+            callbacks.success( r, callbacks.scope );
+        };
+
+        var failure = function( response ){
+            me.apiProperties.handleError( response );
+            callbacks.failure( response, callbacks.scope );
+        };
+
+        me.apiProperties.makeRequest({
+            url: url,
+            method: 'GET',
+            successFunc: success,
+            failureFunc: failure,
+            scope: me
+        });
     }
 });

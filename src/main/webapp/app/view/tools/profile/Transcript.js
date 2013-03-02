@@ -22,6 +22,9 @@ Ext.define('Ssp.view.tools.profile.Transcript', {
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.sis.TranscriptViewController',
+    inject: {
+        store: 'courseTranscriptsStore'
+    },
     width: '100%',
     height: '100%',
     autoScroll: true,
@@ -29,41 +32,42 @@ Ext.define('Ssp.view.tools.profile.Transcript', {
         var me = this;
 
         Ext.applyIf(me, {
+            store: me.store,
             columns: [
                 {
                     xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Course'
-                },
-				 {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Title'
-                },
-                /*{
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Section'
-                },*/
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Credit Type'
-                },
-               
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Grade'
+                    dataIndex: 'formattedCourse',
+                    text: 'Course',
+                    flex: 1
                 },
                 {
                     xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Term'
+                    dataIndex: 'title',
+                    text: 'Title',
+                    flex: 1
+                },
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'creditType',
+                    text: 'Credit Type',
+                    flex: 1
+                },
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'grade',
+                    text: 'Grade',
+                    sortable: 'false',
+                    flex: 1
+                },
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'termCode',
+                    text: 'Term',
+                    flex: 1
                 }
             ],
             viewConfig: {
-
+                markDirty:false
             }
         });
 

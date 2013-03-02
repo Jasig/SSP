@@ -22,29 +22,44 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
     inject: {
     	apiProperties: 'apiProperties',
     	service: 'transcriptService',
-        personLite: 'personLite'
+        personLite: 'personLite',
+        store: 'courseTranscriptsStore'
     },
 	init: function() {
 		var me=this;
 		var personId = me.personLite.get('id');
 
-    	// hide the loader
-		
-    	/*me.getView().setLoading( true );
+        me.store.removeAll();
+
+    	me.getView().setLoading( true );
     	
 		me.service.getFull( personId, {
 			success: me.getTranscriptSuccess,
 			failure: me.getTranscriptFailure,
 			scope: me			
-		});*/
+		});
 		
 		return this.callParent(arguments);
     },
     
     getTranscriptSuccess: function( r, scope ){
     	var me=scope;
-    	me.getView().setLoading( false );
-    	
+
+        var courseTranscripts = [];
+        var transcript = new Ssp.model.Transcript(r);
+        var terms = transcript.get('terms');
+        if ( terms ) {
+            Ext.Array.each(terms, function(term) {
+                Ext.Array.each(term.courses, function(course) {
+                    var courseTranscript = new Ssp.model.CourseTranscript(course);
+                    courseTranscript.set('termCode', term.code);
+                    courseTranscripts.push(courseTranscript);
+                });
+            });
+        }
+
+        me.store.loadData(courseTranscripts);
+        me.getView().setLoading( false );
     },
     
     getTranscriptFailure: function( response, scope ){

@@ -60,6 +60,6 @@ Ext.define('Ssp.model.AbstractBase', {
 
     getCreatedById: function(){
     	return this.get('createdBy').id + ' ' + this.get('createdBy').id;
-    },
+    }
 
 });
