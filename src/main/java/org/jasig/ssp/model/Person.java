@@ -598,6 +598,13 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Transient
 	private RegistrationStatusByTerm currentRegistrationStatus;
 
+	@Transient
+	private Number activeAlertsCount;
+
+	@Transient
+	private Number closedAlertsCount;
+
+
 	/**
 	 * Initialize a Person.
 	 * 
@@ -1151,6 +1158,22 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	public void setCurrentRegistrationStatus(
 			final RegistrationStatusByTerm currentRegistrationStatus) {
 		this.currentRegistrationStatus = currentRegistrationStatus;
+	}
+
+	public Number getActiveAlertsCount() {
+		return activeAlertsCount;
+	}
+
+	public void setActiveAlertsCount(Number activeAlertsCount) {
+		this.activeAlertsCount = activeAlertsCount;
+	}
+
+	public Number getClosedAlertsCount() {
+		return closedAlertsCount;
+	}
+
+	public void setClosedAlertsCount(Number closedAlertsCount) {
+		this.closedAlertsCount = closedAlertsCount;
 	}
 
 	public String getNullSafeOfficeLocation() {

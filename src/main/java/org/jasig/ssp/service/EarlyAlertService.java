@@ -81,6 +81,22 @@ public interface EarlyAlertService
 			final Collection<UUID> peopleIds);
 
 	/**
+	 * Same as {@link #getCountOfActiveAlertsForPeopleIds(java.util.Collection)}
+	 * but for closed alerts.
+	 *
+	 * @param peopleIds
+	 * @return
+	 */
+	Map<UUID, Number> getCountOfClosedAlertsForPeopleIds(
+			final Collection<UUID> peopleIds);
+
+	/**
+	 * Similar to {@link org.jasig.ssp.service.external.RegistrationStatusByTermService#applyRegistrationStatusForCurrentTerm(org.jasig.ssp.model.Person)},
+	 * but for early alerts.
+	 */
+	void applyEarlyAlertCounts(Person person);
+
+	/**
 	 * Send e-mail ({@link Message}) to the student.
 	 * 
 	 * <p>

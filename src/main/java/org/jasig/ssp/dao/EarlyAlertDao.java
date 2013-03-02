@@ -90,6 +90,33 @@ public class EarlyAlertDao extends
 	 */
 	public Map<UUID, Number> getCountOfActiveAlertsForPeopleIds(
 			@NotNull final Collection<UUID> personIds) {
+		return getCountOfAlertsForPeopleId(personIds, new CriteriaCallback() {
+			@Override
+			public Criteria criteria(Criteria criteria) {
+				criteria.add(Restrictions.isNull("closedDate"));
+				return criteria;
+			}
+		});
+	}
+
+	public Map<UUID, Number> getCountOfClosedAlertsForPeopleId(
+			@NotNull final Collection<UUID> personIds) {
+		return getCountOfAlertsForPeopleId(personIds, new CriteriaCallback() {
+			@Override
+			public Criteria criteria(Criteria criteria) {
+				criteria.add(Restrictions.isNotNull("closedDate"));
+				return criteria;
+			}
+		});
+	}
+
+	private interface CriteriaCallback {
+		Criteria criteria(Criteria criteria);
+	}
+
+	private Map<UUID, Number> getCountOfAlertsForPeopleId(
+			@NotNull final Collection<UUID> personIds,
+			CriteriaCallback criteriaCallback) {
 		// validate
 		if (personIds == null) {
 			throw new IllegalArgumentException(
@@ -107,11 +134,14 @@ public class EarlyAlertDao extends
 					"personId"));
 			projections.add(Projections.count("id"));
 
-			final Criteria query = createCriteria();
+			Criteria query = createCriteria();
 			query.setProjection(projections);
 			query.add(Restrictions.in("person.id", personIds));
-			query.add(Restrictions.isNull("closedDate"));
 			query.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
+
+			if ( criteriaCallback != null ) {
+				query = criteriaCallback.criteria(query);
+			}
 
 			// run query
 			@SuppressWarnings("unchecked")

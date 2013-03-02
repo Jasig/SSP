@@ -39,6 +39,7 @@ import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.security.PersonAttributesResult;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
+import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.PersonService;
@@ -102,6 +103,9 @@ public class PersonServiceImpl implements PersonService {
 
 	@Autowired
 	private transient WithTransaction withTransaction;
+
+	@Autowired
+	private transient EarlyAlertService earlyAlertService;
 
 	@Value("#{configProperties.scheduled_coach_sync_enabled}")
 	private boolean scheduledCoachSyncEnabled;
@@ -728,6 +732,7 @@ public class PersonServiceImpl implements PersonService {
 	private Person additionalAttribsForStudent(final Person person) {
 		registrationStatusByTermService
 				.applyRegistrationStatusForCurrentTerm(person);
+		earlyAlertService.applyEarlyAlertCounts(person);
 		return person;
 	}
 	

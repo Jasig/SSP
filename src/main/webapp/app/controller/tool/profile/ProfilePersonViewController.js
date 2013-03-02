@@ -44,7 +44,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         hoursEarnedField: '#hrsEarned',
         hoursAttemptedField: '#hrsAttempted',
 
-        academicProgramsField: '#academicPrograms'
+        academicProgramsField: '#academicPrograms',
+
+        earlyAlertField: '#earlyAlert'
     
     },
     init: function(){
@@ -148,11 +150,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
         var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
         var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
-        var nameField = me.getNameField();
 
-        var birthDateField = me.getBirthDateField();
-        var studentTypeField = me.getStudentTypeField();
-        var programStatusField = me.getProgramStatusField();
         var id = me.personLite.get('id');
 
         // load and render person data
@@ -160,6 +158,14 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         me.profileReferralSourcesStore.removeAll();
         me.profileServiceReasonsStore.removeAll();
         if ( serviceResponses.personResponse ) {
+
+            var nameField = me.getNameField();
+
+            var birthDateField = me.getBirthDateField();
+            var studentTypeField = me.getStudentTypeField();
+            var programStatusField = me.getProgramStatusField();
+            var earlyAlertField = me.getEarlyAlertField();
+
             me.person.populateFromGenericObject(serviceResponses.personResponse);
 
             var fullName = me.person.getFullName();
@@ -188,6 +194,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             birthDateField.setValue(me.person.getFormattedBirthDate());
             studentTypeField.setValue(me.person.getStudentTypeName());
             programStatusField.setValue(me.person.getProgramStatusName());
+            earlyAlertField.setValue(me.person.getEarlyAlertRatio());
             studentRecordComp.setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + me.person.get('schoolId'));
             studentCoachButton.setText('<u>Coach: ' + coachName + '</u>');
         }

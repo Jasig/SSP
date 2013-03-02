@@ -150,6 +150,10 @@ public class PersonTO // NOPMD
 
 	private boolean registeredForCurrentTerm;
 
+	private Integer activeAlertsCount;
+
+	private Integer closedAlertsCount;
+
 	/**
 	 * Empty constructor
 	 */
@@ -299,6 +303,10 @@ public class PersonTO // NOPMD
 		} else {
 			registeredForCurrentTerm = true;
 		}
+
+
+		this.activeAlertsCount = model.getActiveAlertsCount() == null ? 0 : model.getActiveAlertsCount().intValue();
+		this.closedAlertsCount = model.getClosedAlertsCount() == null ? 0 : model.getClosedAlertsCount().intValue();
 	}
 
 	/**
@@ -709,6 +717,22 @@ public class PersonTO // NOPMD
 	public void setRegisteredForCurrentTerm(
 			final boolean registeredForCurrentTerm) {
 		this.registeredForCurrentTerm = registeredForCurrentTerm;
+	}
+
+	public Integer getClosedAlertsCount() {
+		return closedAlertsCount;
+	}
+
+	public void setClosedAlertsCount(Integer closedAlertsCount) {
+		this.closedAlertsCount = closedAlertsCount;
+	}
+
+	public Integer getActiveAlertsCount() {
+		return activeAlertsCount;
+	}
+
+	public void setActiveAlertsCount(Integer activeAlertsCount) {
+		this.activeAlertsCount = activeAlertsCount;
 	}
 
 }
