@@ -32,7 +32,7 @@ Ext.define('Ssp.view.Search', {
         var me = this;
         Ext.applyIf(me, {
             submitEmptyText: false,
-            title: 'Students Foo',
+            title: 'Students',
             collapsible: true,
             collapseDirection: 'left',
             width: '100%',
