@@ -80,5 +80,6 @@
 	<include file="org/jasig/ssp/database/integrationchangesets/i000006.xml" /> <!--  Fixes SIS Data Tables -->
 	<include file="org/jasig/ssp/database/integrationchangesets/i000007-test.xml" /> <!-- Adds SIS DATA for testing -->
 	<include file="org/jasig/ssp/database/integrationchangesets/i000008-test.xml" /> <!--  Fixes SIS DATA Table -->
+	<include file="org/jasig/ssp/database/changesets/000021.xml" />
 
 </databaseChangeLog>
