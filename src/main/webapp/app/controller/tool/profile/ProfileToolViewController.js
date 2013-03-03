@@ -83,7 +83,6 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
 	
 	onProfileEditButtonClick: function(button){
         var me=this;
-        console.log('onEditClick');
 		var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
     },*/
 	

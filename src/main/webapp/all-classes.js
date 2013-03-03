@@ -10388,7 +10388,6 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
 	
 	onProfileEditButtonClick: function(button){
         var me=this;
-        console.log('onEditClick');
 		var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
     },*/
 	
@@ -26866,7 +26865,7 @@ Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideChallengesViewController',
     },
     onRefresh: function(node, data, dropRec, dropPosition)
     {
-    	console.log('foo');
+
     },
     onDrop:function(node, data, overModel, dropPosition, options)
 	{   

@@ -49,7 +49,7 @@ Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideChallengesViewController',
     },
     onRefresh: function(node, data, dropRec, dropPosition)
     {
-    	console.log('foo');
+
     },
     onDrop:function(node, data, overModel, dropPosition, options)
 	{   
