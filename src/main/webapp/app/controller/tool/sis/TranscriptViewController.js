@@ -51,7 +51,7 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
         if ( terms ) {
             Ext.Array.each(terms, function(term) {
                 Ext.Array.each(term.courses, function(course) {
-                    var courseTranscript = new Ssp.model.CourseTranscript(course);
+                    var courseTranscript = Ext.create('Ssp.model.CourseTranscript', course);
                     courseTranscript.set('termCode', term.code);
                     courseTranscripts.push(courseTranscript);
                 });

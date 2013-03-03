@@ -474,6 +474,11 @@
                     "path": "/app/model/"
                 },
                 {
+                    "clsName": "Ssp.model.CourseTranscript",
+                    "name": "CourseTranscript.js",
+                    "path": "/app/model/"
+                },
+                {
                     "clsName": "Ssp.controller.tool.profile.ProfilePersonViewController",
                     "name": "ProfilePersonViewController.js",
                     "path": "/app/controller/tool/profile/"
