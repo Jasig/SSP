@@ -25,8 +25,8 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
     	model: 'currentCampusEarlyAlertRouting',
     	campus: 'currentCampus',
     	peopleSearchLiteStore: 'peopleSearchLiteStore',
-    	searchService: 'searchService',
-    	service: 'campusEarlyAlertRoutingService'
+    	service: 'campusEarlyAlertRoutingService',
+        personService: 'personService'
     },
     config: {
     	containerToLoadInto: 'campusearlyalertroutingsadmin',
@@ -49,35 +49,42 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 		var person;
 		me.getView().getForm().reset();
 		me.getView().getForm().loadRecord( me.model );
-		if (me.model.get('person') != null)
+		if (me.model.get('id'))
 		{
+            // EA routing model has a person ID, first name, and last name but
+            // our form represents this association in an incremental search
+            // box. The latter needs to be backed by something resembling a
+            // Ssp.model.PersonSearchLite model. Can't the latter directly
+            // from our JSON. Previous impls used the search API to find the
+            // person by fname+lname. SSP-564 changed this to an ID lookup
+            // for reliability. In the future consider just passing a minimal
+            // PersonSearchLite mapped from EA routing JSON model. Should
+            // be much more efficient. But not sure about unexpected
+            // compatibility problems with peopleSearchLiteStore.
 			person = me.model.get('person');
-			me.getView().setLoading(true);
-			me.searchService.searchWithParams({
-					searchTerm: person.firstName+' '+person.lastName,
-					outsideCaseload: true,
-					requireProgramStatus: false
-				},
-				{
-					success: me.searchSuccess,
-					failure: me.searchFailure,
-					scope: me
-				});
+            if ( person && person.id ) {
+                me.getView().setLoading(true);
+                me.personService.getSearchLite(person.id, {
+                    success: me.routingPersonLookupSuccess,
+                    failure: me.routingPersonLookupFailure,
+                    scope: me
+                });
+            }
 		}
 		return me.callParent(arguments);
     },
-    
-    searchSuccess: function( r, scope ){
+
+    routingPersonLookupSuccess: function( r, scope ){
     	var me=scope;
     	me.getView().setLoading(false);
-    	if (r.rows.length > 0)
+    	if (r && r.id )
     	{
-    		me.peopleSearchLiteStore.loadData(r.rows);
+    		me.peopleSearchLiteStore.loadData([r]);
     		me.getPersonCombo().setValue(me.model.get('person').id);
     	}
     },
-    
-    searchFailure: function( response, scope ){
+
+    routingPersonLookupFailure: function( response, scope ){
     	var me=scope;
     	me.getView().setLoading(false);
     },

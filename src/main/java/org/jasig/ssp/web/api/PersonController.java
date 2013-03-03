@@ -30,6 +30,7 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PersonLiteTO;
+import org.jasig.ssp.transferobject.PersonSearchResultTO;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.util.collections.Pair;
@@ -158,6 +159,28 @@ public class PersonController extends AbstractBaseController {
 		}
 
 		return new PersonTO(model);
+	}
+
+	@RequestMapping(value= "/lite/{id}", method=RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	@ResponseBody
+	PersonLiteTO getLite(final @PathVariable UUID id) throws ObjectNotFoundException {
+		final Person model = service.get(id);
+		if (model == null) {
+			return null;
+		}
+		return new PersonLiteTO(model);
+	}
+
+	@RequestMapping(value = "/searchlite/{id}", method=RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	@ResponseBody
+	PersonSearchResultTO getSearchLite(final @PathVariable UUID id) throws ObjectNotFoundException {
+		final Person model = service.get(id);
+		if (model == null) {
+			return null;
+		}
+		return new PersonSearchResultTO(model);
 	}
 
 	@RequestMapping(value = "/bySchoolId/{id}", method = RequestMethod.GET)

@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.transferobject;
 
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchResult;
 
 /**
@@ -27,6 +28,11 @@ public class PersonSearchResultTO extends PersonSearchResult implements
 		TransferObject<PersonSearchResult> {
 
 	public PersonSearchResultTO(final PersonSearchResult model) {
+		super();
+		from(model);
+	}
+
+	public PersonSearchResultTO(final Person model) {
 		super();
 		from(model);
 	}
@@ -42,4 +48,18 @@ public class PersonSearchResultTO extends PersonSearchResult implements
 		setCurrentProgramStatusName(model.getCurrentProgramStatusName());
 		setCoach(model.getCoach());
 	}
+
+	public final void from(final Person model) {
+		setFirstName(model.getFirstName());
+		setLastName(model.getLastName());
+		setMiddleName(model.getMiddleName());
+		setPhotoUrl(model.getPhotoUrl());
+		setSchoolId(model.getSchoolId());
+		setId(model.getId());
+		setCurrentProgramStatusName(model.getCurrentProgramStatusName());
+		if ( model.getCoach() != null ) {
+			setCoach(new CoachPersonLiteTO(model.getCoach()));
+		}
+	}
+
 }

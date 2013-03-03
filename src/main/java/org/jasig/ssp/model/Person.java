@@ -1127,6 +1127,19 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		return programStatuses;
 	}
 
+	public String getCurrentProgramStatusName() {
+		Set<PersonProgramStatus> programStatuses = getProgramStatuses();
+		if ( programStatuses == null || programStatuses.isEmpty() ) {
+			return null;
+		}
+		for ( PersonProgramStatus programStatus : programStatuses ) {
+			if ( !(programStatus.isExpired()) ) {
+				return programStatus.getProgramStatus().getName();
+			}
+		}
+		return null;
+	}
+
 	public void setProgramStatuses(
 			final Set<PersonProgramStatus> programStatuses) {
 		this.programStatuses = programStatuses;

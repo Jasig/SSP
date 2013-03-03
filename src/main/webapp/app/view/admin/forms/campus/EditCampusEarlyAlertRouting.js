@@ -75,7 +75,7 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
 		            fieldLabel: 'Person',
 		            hideTrigger:true,
 		            queryParam: 'searchTerm',
-		            allowBlank: true,
+		            allowBlank: false,
 		            width: 500,
 
 		            listConfig: {

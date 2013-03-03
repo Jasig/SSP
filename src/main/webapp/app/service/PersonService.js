@@ -37,62 +37,80 @@ Ext.define('Ssp.service.PersonService', {
     	return baseUrl;
     },
 
+    beforeGetRequestSuccess: function( response, callbacks ) {
+        var me=this;
+        var r;
+        if ( response && response.responseText ) {
+            r = me.superclass.filterInactiveChildren( [ Ext.decode(response.responseText) ] )[0];
+        }
+        callbacks.success( r, callbacks.scope );
+    },
+
+    beforeGetRequestFailure: function ( response, callbacks ) {
+        var me=this;
+        me.apiProperties.handleError( response );
+        callbacks.failure( response, callbacks.scope );
+    },
+
+    newBeforeGetRequestSuccess: function(callbacks) {
+        var me = this;
+        return function(response) {
+            me.beforeGetRequestSuccess(response, callbacks);
+        }
+    },
+
+    newBeforeGetRequestFailure: function(callbacks) {
+        var me = this;
+        return function(response) {
+            me.beforeGetRequestFailure(response, callbacks);
+        }
+    },
+
     get: function( id, callbacks ){
     	var me=this;
-	    var success = function( response, view ){
-	    	var r = Ext.decode(response.responseText);
-	    	if (response.responseText != "")
-	    	{
-		    	r = Ext.decode(response.responseText);	    		
-	    	}
-			r = me.superclass.filterInactiveChildren( [ r ] )[0];
-	    	callbacks.success( r, callbacks.scope );
-	    };
-
-	    var failure = function( response ){
-	    	me.apiProperties.handleError( response );	    	
-	    	callbacks.failure( response, callbacks.scope );
-	    };
-	    
 		// load the person to edit
 		me.apiProperties.makeRequest({
 			url: me.getBaseUrl()+'/'+id,
 			method: 'GET',
-			successFunc: success,
-			failureFunc: failure,
+			successFunc: me.newBeforeGetRequestSuccess(callbacks),
+			failureFunc: me.newBeforeGetRequestFailure(callbacks),
 			scope: me
 		});
-    },   
+    },
 
     getBySchoolId: function( schoolId, callbacks ){
     	var me=this;
-	    var success = function( response, view ){
-	    	var r;
-	    	if (response != null)
-	    	{
-		    	if (response.responseText != "")
-		    	{
-		    		r = Ext.decode(response.responseText);
-		    	}		    		
-	    	}
-			r = me.superclass.filterInactiveChildren( [ r ] )[0];
-	    	callbacks.success( r, callbacks.scope );
-	    };
-
-	    var failure = function( response ){
-	    	me.apiProperties.handleError( response );	    	
-	    	callbacks.failure( response, callbacks.scope );
-	    };
-	    
 		// load the person to edit
 		me.apiProperties.makeRequest({
 			url: me.getBaseUrl()+'/bySchoolId/'+schoolId,
 			method: 'GET',
-			successFunc: success,
-			failureFunc: failure,
-			scope: me
+            successFunc: me.newBeforeGetRequestSuccess(callbacks),
+            failureFunc: me.newBeforeGetRequestFailure(callbacks),
+            scope: me
 		});
-    },    
+    },
+
+    getLite: function ( id, callbacks ) {
+        var me=this;
+        me.apiProperties.makeRequest({
+            url: me.getBaseUrl()+'/lite/'+id,
+            method: 'GET',
+            successFunc: me.newBeforeGetRequestSuccess(callbacks),
+            failureFunc: me.newBeforeGetRequestFailure(callbacks),
+            scope: me
+        });
+    },
+
+    getSearchLite: function ( id, callbacks ) {
+        var me=this;
+        me.apiProperties.makeRequest({
+            url: me.getBaseUrl()+'/searchlite/'+id,
+            method: 'GET',
+            successFunc: me.newBeforeGetRequestSuccess(callbacks),
+            failureFunc: me.newBeforeGetRequestFailure(callbacks),
+            scope: me
+        });
+    },
     
     save: function( jsonData, callbacks ){
     	var me=this;
