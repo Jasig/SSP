@@ -7221,7 +7221,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 	
 	onCollapseSearch: function() {
-		console.log('search collapse');
 		var searchView = Ext.ComponentQuery.query('search')[0];
 		searchView.collapse();
 	},
