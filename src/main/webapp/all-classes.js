@@ -898,6 +898,736 @@ Ext.define('Ssp.view.tools.sis.Assessment', {
  * specific language governing permissions and limitations
  * under the License.
  */
+Ext.define('Ssp.model.reference.PersonalityType', {
+	extend: 'Ssp.model.reference.AbstractReference',
+    fields: []
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.store.reference.PersonalityTypes', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.PersonalityType',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('personalityType')});
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.reference.MilitaryAffiliation', {
+	extend: 'Ssp.model.reference.AbstractReference',
+    fields: []
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.store.reference.MilitaryAffiliations', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.MilitaryAffiliation',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('militaryAffiliation')});
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.reference.DisabilityStatus', {
+	extend: 'Ssp.model.reference.AbstractReference',
+    fields: []
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.store.reference.DisabilityStatuses', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.DisabilityStatus',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('disabilityStatus')});
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.reference.DisabilityType', {
+	extend: 'Ssp.model.reference.AbstractReference',
+    fields: []
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.store.reference.DisabilityTypes', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.DisabilityType',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('disabilityType')});
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.reference.Lassi', {
+	extend: 'Ssp.model.reference.AbstractReference',
+    fields: []
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.store.reference.Lassis', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.Lassi',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('lassi')});
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.reference.DisabilityAccommodation', {
+	extend: 'Ssp.model.reference.AbstractReference',
+    fields: [{name: 'useDescription', type: 'boolean'},
+             {name: 'descriptionFieldLabel', type: 'string'},
+             {name: 'descriptionFieldType', type: 'string'}]
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.store.reference.DisabilityAccommodations', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.DisabilityAccommodation',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('disabilityAccommodation')});
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.reference.DisabilityAgency', {
+	extend: 'Ssp.model.reference.AbstractReference',
+    fields: []
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.store.reference.DisabilityAgencies', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.DisabilityAgency',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('disabilityAgency')});
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.reference.CampusService', {
+	extend: 'Ssp.model.reference.AbstractReference',
+    fields: []
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.store.reference.CampusServices', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.CampusService',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('campusService')});
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.reference.ConfidentialityDisclosureAgreement', {
+    extend: 'Ssp.model.reference.AbstractReference',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },    
+    fields: [{name:'text',type:'string'}],
+
+	constructor: function(){
+		Ext.apply(this.getProxy(), 
+				{ 
+			url: this.apiProperties.createUrl( this.apiProperties.getItemUrl('confidentialityDisclosureAgreement') )
+			    }
+		);
+		return this.callParent(arguments);
+	}, 	
+	
+	proxy: {
+		type: 'rest',
+		url: '',
+		actionMethods: {
+			create: "POST", 
+			read: "GET", 
+			update: "PUT",
+			destroy: "DELETE"
+		},
+		reader: {
+			type: 'json'
+		},
+	    writer: {
+	        type: 'json',
+	        successProperty: 'success'
+	    }
+	}
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.store.reference.ConfidentialityDisclosureAgreements', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.ConfidentialityDisclosureAgreement',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('confidentialityDisclosureAgreement')});
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.reference.EarlyAlertReferral', {
+	extend: 'Ssp.model.reference.AbstractReference',
+    fields: [{name:'acronym',type:'string'},
+             {name:'sortOrder',type:'int'}]
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+/**
+ * This is a special case where the item selector on the add/edit early alert
+ * response referrals is bound to the store and adds new fields. Since,
+ * I don't yet know all of the fields to clean-up and the new
+ * fields cause issues in the reference admin tools after loading the
+ * bound store, I am creating a separate store to use for this case.
+ * TODO: Clean-up this condition and resolve in a better way.
+ */
+Ext.define('Ssp.store.reference.EarlyAlertReferralsBind', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.EarlyAlertReferral',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('earlyAlertReferral')});
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.reference.EducationGoal', {
+	extend: 'Ssp.model.reference.AbstractReference',
+    fields: []
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.store.reference.EducationGoals', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.EducationGoal',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('educationGoal')});
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.reference.EducationLevel', {
+	extend: 'Ssp.model.reference.AbstractReference',
+    fields: []
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.store.reference.EducationLevels', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.EducationLevel',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('educationLevel')});
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.reference.ReferralSource', {
+	extend: 'Ssp.model.reference.AbstractReference',
+    fields: []
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+/**
+ * This is a special case where the item selector on the add/edit person
+ * appointment view is bound to the store and adds new fields. Since,
+ * I don't yet know all of the fields to clean-up and the new
+ * fields cause issues in the reference admin tools after loading the
+ * bound store, I am creating a separate store to use for this case.
+ * TODO: Clean-up this condition and resolve in a better way.
+ */
+Ext.define('Ssp.store.reference.ReferralSourcesBind', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.ReferralSource',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('referralSource')});
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.reference.SpecialServiceGroup', {
+	extend: 'Ssp.model.reference.AbstractReference',
+    fields: []
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+/**
+ * This is a special case where the item selector on the add/edit person
+ * appointment view is bound to the store and adds new fields. Since,
+ * I don't yet know all of the fields to clean-up and the new
+ * fields cause issues in the reference admin tools after loading the
+ * bound store, I am creating a separate store to use for this case.
+ * TODO: Clean-up this condition and resolve in a better way.
+ */
+Ext.define('Ssp.store.reference.SpecialServiceGroupsBind', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.SpecialServiceGroup',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('specialServiceGroup')});
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 Ext.define('Ssp.controller.tool.accommodation.GeneralViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
@@ -1644,10 +2374,117 @@ Ext.define('Ssp.view.tools.accommodation.Disposition', {
  * specific language governing permissions and limitations
  * under the License.
  */
+Ext.define('Ssp.view.tools.accommodation.Accommodation', {
+	extend: 'Ext.panel.Panel',
+	alias : 'widget.accommodation',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.accommodation.AccommodationToolViewController',
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson'
+    },
+	title: 'Accommodation',
+	width: '100%',
+	height: '100%',
+	initComponent: function() {	
+		var me=this;
+		Ext.apply(me, 
+				{		
+		    		layout: 'fit',
+		    		padding: 0,
+		    		border: 0,
+					dockedItems: [{
+				        dock: 'top',
+				        xtype: 'toolbar',
+				        items: [{
+				        			xtype: 'button', 
+				        			itemId: 'saveButton', 
+				        			text:'Save',
+				        			hidden: !me.authenticatedPerson.hasAccess('ACCOMMODATION_SAVE_BUTTON')
+				        	   },{
+					        	     xtype: 'button', 
+					        	     itemId: 'cancelButton', 
+					        	     text:'Cancel',
+					        	     hidden: !me.authenticatedPerson.hasAccess('ACCOMMODATION_CANCEL_BUTTON')
+				        	   },{
+				        	    	xtype: 'label',
+				        	    	html: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE,
+				        	    	itemId: 'saveSuccessMessage',
+				        	    	style: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE_STYLE,
+				        	    	hidden: true
+				        	    }]
+					}],
+				    
+				    items: []
+			    
+		});
+		
+		return me.callParent(arguments);
+	}
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 Ext.define('Ssp.view.tools.accommodation.Accommodations', {
 	extend: 'Ext.form.Panel',
 	alias: 'widget.disabilityaccommodations',
 	id:'AccommodationDisabilityAccommodations',
+    width: '100%',
+    height: '100%',
+    autoScroll: true,
+	initComponent: function() {	
+        var me = this;
+		Ext.apply(me, 
+				{
+				    bodyPadding: 10,
+				    border: 0,
+				    layout: 'anchor',
+				    defaults: {
+				        anchor: '95%'
+				    },
+				    defaultType: 'checkbox'
+				});
+		
+		return me.callParent(arguments);
+	}
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.accommodation.DisabilityTypes', {
+	extend: 'Ext.form.Panel',
+	alias: 'widget.disabilitytypes',
+	id: 'AccommodationDisabilityTypes',
     width: '100%',
     height: '100%',
     autoScroll: true,
@@ -2362,6 +3199,210 @@ Ext.define('Ssp.model.PersonSearchLite', {
    	        	  return record.get('firstName') + " " + record.get('lastName');
    		      }
              }]        
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.tool.accommodation.PersonDisabilityType', {
+	extend: 'Ssp.model.AbstractBase',
+    fields: ['personId',
+             'disabilityTypeId']
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.tool.accommodation.PersonDisabilityAgency', {
+	extend: 'Ssp.model.AbstractBase',
+    fields: ['personId',
+             'disabilityAgencyId',
+             'description']
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.tool.accommodation.PersonDisabilityAccommodation', {
+	extend: 'Ssp.model.AbstractBase',
+    fields: ['personId',
+             'disabilityAccommodationId',
+             'description']
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.tool.accommodation.PersonDisability', {
+    extend: 'Ssp.model.AbstractBase',
+    fields: [{name: 'personId', type: 'string'},
+             {name: 'odsRegistrationDate', type: 'date', dateFormat: 'time', useNull: true},
+             {name: 'disabilityStatusId', type: 'string'},
+             {name: 'intakeCounselor', type: 'string'},
+             {name: 'referredBy', type: 'string'},
+             {name: 'contactName', type: 'string'},
+             {name: 'releaseSigned', type: 'boolean', useNull:true},
+             {name: 'recordsRequested', type: 'boolean', useNull:true},
+             {name: 'recordsRequestedFrom', type: 'string'},
+             {name: 'referForScreening', type: 'boolean', useNull:true},
+             {name: 'documentsRequestedFrom', type: 'string'},
+             {name: 'rightsAndDuties', type: 'string'},	 
+             {name: 'eligibleLetterSent', type: 'boolean', useNull:true},
+             {name: 'eligibleLetterDate', type: 'date', dateFormat: 'time'},
+             {name: 'ineligibleLetterSent', type: 'boolean', useNull:true},
+             {name: 'ineligibleLetterDate', type: 'date', dateFormat: 'time'},
+             {name: 'noDocumentation', type: 'boolean', useNull:true},
+             {name: 'inadequateDocumentation', type: 'boolean', useNull:true},
+             {name: 'noDisability', type: 'boolean', useNull:true},
+             {name: 'noSpecialEd', type: 'boolean', useNull:true},
+             {name: 'tempEligibilityDescription', type: 'string'},
+             {name: 'onMedication', type: 'boolean', useNull:true},
+             {name: 'medicationList', type: 'string'},
+             {name: 'functionalLimitations', type: 'string'}],
+
+     /*
+      * cleans properties that will be unable to be saved if not null
+      */ 
+     setPropsNullForSave: function( jsonData ){	
+ 		// remove registration date field.
+    	// it was only a substitute for the createdDate,
+    	// so the createdDate field would not be modified by
+    	// extjs when the record is updated by it's form prior to save.
+    	delete jsonData.odsRegistrationDate;
+    	 
+    	if ( jsonData.intakeCounselor == "")
+ 		{
+ 			jsonData.intakeCounselor = null;
+ 		}
+ 		if ( jsonData.referredBy == "")
+ 		{
+ 			jsonData.referredBy = null;
+ 		}
+ 		return jsonData;
+     }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.tool.accommodation.AccommodationForm', {
+	extend: 'Ext.data.Model',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties'
+    }, 
+
+	fields: [{name: 'person', 
+		      convert: function(value, record) {
+		            var person  = Ext.create('Ssp.model.Person',{});
+		            person.populateFromGenericObject( value );		
+		            return person;
+		      	}
+             },
+              {name: 'personDisability', 
+   		      convert: function(value, record) {
+		            var personDisability = Ext.create('Ssp.model.tool.accommodation.PersonDisability',{});
+		            personDisability.populateFromGenericObject( value );
+		            if (value !== null)
+		            {
+		            	personDisability.set('odsRegistrationDate',value.createdDate);
+		            }
+		            return personDisability;
+		      	}
+             },
+             'personDisabilityAgencies',
+             'personDisabilityAccommodations',
+             'personDisabilityTypes',
+             'referenceData'],
+
+	autoLoad: false,
+ 	proxy: {
+		type: 'rest',
+		url: '/ssp/api/1/tool/accommodation/',
+		actionMethods: {
+			create: "POST", 
+			read: "GET", 
+			update: "PUT",
+			destroy: "DELETE"
+		},
+		reader: {
+			type: 'json'
+		},
+	    writer: {
+	        type: 'json',
+	        successProperty: 'success'
+	    }
+	}
 });
 /*
  * Licensed to Jasig under one or more contributor license
@@ -6675,6 +7716,187 @@ Ext.define('Ssp.service.TranscriptService', {
             scope: me
         });
     }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.service.AccommodationService', {
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+
+    getBaseUrl: function(){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('accommodationTool') );
+    	return baseUrl;
+    },
+    
+    get: function( personId, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl();
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+	    	// filter inactive items
+    		r.personDisabilityAgencies = me.superclass.filterInactiveChildren(r.personDisabilityAgencies);
+    		r.personDisabilityTypes = me.superclass.filterInactiveChildren(r.personDisabilityTypes);
+    		r.personDisabilityAccommodations = me.superclass.filterInactiveChildren(r.personDisabilityAccommodations);
+    		callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		me.apiProperties.makeRequest({
+			url: url+'/'+personId,
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});    	
+    },
+    
+    save: function( personId, jsonData, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl();
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+		
+		// save
+		if (personId=="")
+		{				
+			me.apiProperties.makeRequest({
+    			url: url,
+    			method: 'POST',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});				
+		}else{
+			// update
+    		me.apiProperties.makeRequest({
+    			url: url+"/"+personId,
+    			method: 'PUT',
+    			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});	
+		}	
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.service.PersonProgramStatusService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	formUtils: 'formRendererUtils'
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+    
+    getBaseUrl: function( personId ){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personProgramStatus') );
+    	baseUrl = baseUrl.replace("{id}",personId);
+		return baseUrl;
+    },
+
+    save: function( personId, jsonData, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl( personId );
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+	    	callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+		
+    	if (personId != "")
+    	{
+    		id = jsonData.id;
+
+    		// save the program status
+    		if (id=="")
+    		{
+    			// Fix dates for GMT offset to UTC
+    			jsonData.effectiveDate = me.formUtils.fixDateOffset( jsonData.effectiveDate );
+	
+    			me.apiProperties.makeRequest({
+        			url: url,
+        			method: 'POST',
+        			jsonData: jsonData,
+        			successFunc: success,
+        			failureFunc: failure,
+        			scope: me
+        		});		
+    		}else{
+    			
+    			// update
+        		me.apiProperties.makeRequest({
+        			url: url+"/"+id,
+        			method: 'PUT',
+        			jsonData: jsonData,
+        			successFunc: success,
+        			failureFunc: failure,
+        			scope: me
+        		});	
+    		}     		
+    	}else{
+    		Ext.Msg.alert('SSP Error', 'Error determining student to which to save a Program Status. Unable to save Program Status. See your system administrator for assistance.');
+    	}  	
+    }   
 });
 /*
  * Licensed to Jasig under one or more contributor license
@@ -16169,6 +17391,150 @@ Ext.define('Ssp.view.admin.AdminTreeMenu', {
 	     this.callParent(arguments);
 	}	
 }); 
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.ViewportViewController', {
+    extend: 'Deft.mvc.ViewController',
+	init: function() {
+		return this.callParent(arguments);
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.Viewport',{
+	extend: 'Ext.container.Container',
+	requires: ['Ext.EventManager'],
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.ViewportViewController',
+    inject: {
+    	parentDivId: 'sspParentDivId',
+    	renderFullScreen: 'renderSSPFullScreen'
+    },
+    layout: 'fit',
+    id: 'sspView',
+    alias: 'widget.sspview',
+
+    preserveElOnDestroy: true,
+
+    initComponent : function() {
+        var me = this,
+            html = document.body.parentNode,
+            el;
+
+        // Init the Main Shell for the application
+        Ext.apply(this, {items: [{xtype:'mainview'}]}); 
+        
+        // Get the DOM disruption over with before the Viewport renders and begins a layout
+        Ext.getScrollbarSize();
+        
+        // Clear any dimensions, we will size later on
+        me.width = me.height = undefined;
+
+        me.callParent(arguments);
+        if (me.renderFullScreen==true)
+        {
+           Ext.fly(html).addCls(Ext.baseCSSPrefix + 'viewport');
+        }
+        if (me.autoScroll) {
+            //delete me.autoScroll;
+            //Ext.fly(html).setStyle('overflow', 'auto');
+        }
+        if (me.renderFullScreen==true)
+        {
+        	me.el = el = Ext.getBody();
+        }else{
+        	me.el = el = Ext.getElementById( this.parentDivId );
+        }
+        el.setHeight = Ext.emptyFn;
+        el.setWidth = Ext.emptyFn;
+        el.setSize = Ext.emptyFn;
+        //el.dom.scroll = 'no';
+        me.allowDomMove = false;
+        me.renderTo = me.el;
+     },
+    
+    onRender: function() {
+        var me = this;
+        me.callParent(arguments);
+
+        // Important to start life as the proper size (to avoid extra layouts)
+        // But after render so that the size is not stamped into the body
+
+        if (this.renderFullScreen==true)
+        {
+            me.width = Ext.Element.getViewportWidth();
+            me.height = Ext.Element.getViewportHeight();
+        }else{
+        	me.width = Ext.Element.getViewportWidth()-35; // me.el.getViewSize().width;
+            me.height = me.el.getViewSize().height; //Ext.Element.getViewportHeight()-160;  
+        }
+    },
+
+    afterFirstLayout: function() {
+        var me = this;
+
+        me.callParent(arguments);
+        setTimeout(function() {
+            Ext.EventManager.onWindowResize(me.fireResize, me);
+        }, 1);
+    },
+
+    fireResize : function(width, height){
+        // In IE we can get resize events that have our current size, so we ignore them
+        // to avoid the useless layout...
+    	var me = this;
+    	// if renderFullScreen is configured then size to the viewport
+    	// otherwise
+    	// resize the container width and leave the height alone
+    	// this will maintain the container size to the height as
+    	// originally drawn on the page, but the width will be flexible
+    	if (this.renderFullScreen==true)
+    	{
+    		newWidth = Ext.Element.getViewportWidth();
+    		newHeight = Ext.Element.getViewportHeight();
+    	}else{
+    		newWidth = Ext.Element.getViewportWidth()-35; // me.width+(width-me.el.getWidth());
+    		newHeight = me.el.getViewSize().height; //Ext.Element.getViewportHeight()-160; // me.height;
+    	}
+    		
+    	if (width != me.width || height != me.height) {
+	        me.setSize( newWidth, newHeight);
+    	}
+    }
+});
 /*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
@@ -25899,6 +27265,39 @@ Ext.define('Ssp.model.tool.shg.SelfHelpGuideQuestions', {
  * specific language governing permissions and limitations
  * under the License.
  */
+Ext.define('Ssp.store.SelfHelpGuideQuestions', {
+    extend: 'Ext.data.Store',
+    model: 'Ssp.model.tool.shg.SelfHelpGuideQuestions',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },    
+	constructor: function(){
+		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('selfHelpGuideQuestions') ),
+						  autoLoad: false });
+		return this.callParent(arguments);
+	},
+	
+	groupField: 'group'
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 Ext.define('Ssp.model.tool.shg.SelfHelpGuides', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'id',type:'string'},
@@ -25913,6 +27312,39 @@ Ext.define('Ssp.model.tool.shg.SelfHelpGuides', {
              {name:'summaryTextThreshold',type:'string'},
              {name:'summaryTextEarlyAlert',type:'string'}
              ]
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.store.SelfHelpGuides', {
+    extend: 'Ext.data.Store',
+    model: 'Ssp.model.tool.shg.SelfHelpGuides',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },    
+	constructor: function(){
+		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('selfHelpGuides') ),
+						  autoLoad: false });
+		return this.callParent(arguments);
+	},
+	
+	groupField: 'group'
 });
 /*
  * Licensed to Jasig under one or more contributor license

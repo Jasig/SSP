@@ -114,6 +114,146 @@
                     "path": "/app/view/tools/sis/"
                 },
                 {
+                    "clsName": "Ssp.model.reference.PersonalityType",
+                    "name": "PersonalityType.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.PersonalityTypes",
+                    "name": "PersonalityTypes.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.MilitaryAffiliation",
+                    "name": "MilitaryAffiliation.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.MilitaryAffiliations",
+                    "name": "MilitaryAffiliations.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.DisabilityStatus",
+                    "name": "DisabilityStatus.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.DisabilityStatuses",
+                    "name": "DisabilityStatuses.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.DisabilityType",
+                    "name": "DisabilityType.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.DisabilityTypes",
+                    "name": "DisabilityTypes.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.Lassi",
+                    "name": "Lassi.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.Lassis",
+                    "name": "Lassis.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.DisabilityAccommodation",
+                    "name": "DisabilityAccommodation.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.DisabilityAccommodations",
+                    "name": "DisabilityAccommodations.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.DisabilityAgency",
+                    "name": "DisabilityAgency.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.DisabilityAgencies",
+                    "name": "DisabilityAgencies.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.CampusService",
+                    "name": "CampusService.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.CampusServices",
+                    "name": "CampusServices.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.ConfidentialityDisclosureAgreement",
+                    "name": "ConfidentialityDisclosureAgreement.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.ConfidentialityDisclosureAgreements",
+                    "name": "ConfidentialityDisclosureAgreements.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.EarlyAlertReferral",
+                    "name": "EarlyAlertReferral.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.EarlyAlertReferralsBind",
+                    "name": "EarlyAlertReferralsBind.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.EducationGoal",
+                    "name": "EducationGoal.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.EducationGoals",
+                    "name": "EducationGoals.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.EducationLevel",
+                    "name": "EducationLevel.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.EducationLevels",
+                    "name": "EducationLevels.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.ReferralSource",
+                    "name": "ReferralSource.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.ReferralSourcesBind",
+                    "name": "ReferralSourcesBind.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.SpecialServiceGroup",
+                    "name": "SpecialServiceGroup.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.SpecialServiceGroupsBind",
+                    "name": "SpecialServiceGroupsBind.js",
+                    "path": "/app/store/reference/"
+                },
+                {
                     "clsName": "Ssp.controller.tool.accommodation.GeneralViewController",
                     "name": "GeneralViewController.js",
                     "path": "/app/controller/tool/accommodation/"
@@ -139,8 +279,18 @@
                     "path": "/app/view/tools/accommodation/"
                 },
                 {
+                    "clsName": "Ssp.view.tools.accommodation.Accommodation",
+                    "name": "Accommodation.js",
+                    "path": "/app/view/tools/accommodation/"
+                },
+                {
                     "clsName": "Ssp.view.tools.accommodation.Accommodations",
                     "name": "Accommodations.js",
+                    "path": "/app/view/tools/accommodation/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.accommodation.DisabilityTypes",
+                    "name": "DisabilityTypes.js",
                     "path": "/app/view/tools/accommodation/"
                 },
                 {
@@ -222,6 +372,31 @@
                     "clsName": "Ssp.model.PersonSearchLite",
                     "name": "PersonSearchLite.js",
                     "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.accommodation.PersonDisabilityType",
+                    "name": "PersonDisabilityType.js",
+                    "path": "/app/model/tool/accommodation/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.accommodation.PersonDisabilityAgency",
+                    "name": "PersonDisabilityAgency.js",
+                    "path": "/app/model/tool/accommodation/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.accommodation.PersonDisabilityAccommodation",
+                    "name": "PersonDisabilityAccommodation.js",
+                    "path": "/app/model/tool/accommodation/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.accommodation.PersonDisability",
+                    "name": "PersonDisability.js",
+                    "path": "/app/model/tool/accommodation/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.accommodation.AccommodationForm",
+                    "name": "AccommodationForm.js",
+                    "path": "/app/model/tool/accommodation/"
                 },
                 {
                     "clsName": "Ssp.model.tool.studentintake.StudentIntakeForm",
@@ -386,6 +561,16 @@
                 {
                     "clsName": "Ssp.service.TranscriptService",
                     "name": "TranscriptService.js",
+                    "path": "/app/service/"
+                },
+                {
+                    "clsName": "Ssp.service.AccommodationService",
+                    "name": "AccommodationService.js",
+                    "path": "/app/service/"
+                },
+                {
+                    "clsName": "Ssp.service.PersonProgramStatusService",
+                    "name": "PersonProgramStatusService.js",
                     "path": "/app/service/"
                 },
                 {
@@ -767,6 +952,16 @@
                     "clsName": "Ssp.view.admin.AdminTreeMenu",
                     "name": "AdminTreeMenu.js",
                     "path": "/app/view/admin/"
+                },
+                {
+                    "clsName": "Ssp.controller.ViewportViewController",
+                    "name": "ViewportViewController.js",
+                    "path": "/app/controller/"
+                },
+                {
+                    "clsName": "Ssp.view.Viewport",
+                    "name": "Viewport.js",
+                    "path": "/app/view/"
                 },
                 {
                     "clsName": "Ssp.view.Main",
@@ -1594,9 +1789,19 @@
                     "path": "/app/model/tool/shg/"
                 },
                 {
+                    "clsName": "Ssp.store.SelfHelpGuideQuestions",
+                    "name": "SelfHelpGuideQuestions.js",
+                    "path": "/app/store/"
+                },
+                {
                     "clsName": "Ssp.model.tool.shg.SelfHelpGuides",
                     "name": "SelfHelpGuides.js",
                     "path": "/app/model/tool/shg/"
+                },
+                {
+                    "clsName": "Ssp.store.SelfHelpGuides",
+                    "name": "SelfHelpGuides.js",
+                    "path": "/app/store/"
                 },
                 {
                     "clsName": "Ssp.view.admin.forms.shg.EditSelfHelpGuide",
