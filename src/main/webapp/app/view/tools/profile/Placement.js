@@ -19,32 +19,38 @@
 Ext.define('Ssp.view.tools.profile.Placement', {
 	extend: 'Ext.grid.Panel',
 	alias: 'widget.placement',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],	
     width: '100%',
     height: '100%',
+    controller: 'Ssp.controller.tool.profile.PlacementViewController',
     autoScroll: true,
+    inject: {
+        store: 'placementStore'
+    },
     initComponent: function() {
         var me = this;
-
         Ext.applyIf(me, {
+            store: me.store,
             columns: [
                 {
                     xtype: 'gridcolumn',
-                    dataIndex: 'string',
+                    dataIndex: 'type',
                     text: 'Type'
                 },
                 {
                     xtype: 'gridcolumn',
-                    dataIndex: 'string',
+                    dataIndex: 'score',
                     text: 'Score'
                 },
                 {
                     xtype: 'gridcolumn',
-                    dataIndex: 'string',
+                    dataIndex: 'status',
                     text: 'Status'
                 },
                 {
                     xtype: 'gridcolumn',
-                    dataIndex: 'string',
+                    dataIndex: 'takenDate',
                     text: 'Date'
                 }
             ],

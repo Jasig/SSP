@@ -74,11 +74,6 @@
                     "path": "/app/view/tools/profile/"
                 },
                 {
-                    "clsName": "Ssp.view.tools.profile.Placement",
-                    "name": "Placement.js",
-                    "path": "/app/view/tools/profile/"
-                },
-                {
                     "clsName": "Ssp.view.tools.actionplan.AddTask",
                     "name": "AddTask.js",
                     "path": "/app/view/tools/actionplan/"
@@ -132,6 +127,16 @@
                     "clsName": "Ssp.store.reference.MilitaryAffiliations",
                     "name": "MilitaryAffiliations.js",
                     "path": "/app/store/reference/"
+                },
+ 				{
+                    "clsName": "Ssp.model.Placement",
+                    "name": "Placement.js",
+                    "path": "/app/model/"
+                },                    
+                {
+                    "clsName": "Ssp.store.Placement",
+                    "name": "Placement.js",
+                    "path": "/app/store/"
                 },
                 {
                     "clsName": "Ssp.model.reference.DisabilityStatus",
@@ -534,6 +539,11 @@
                     "path": "/app/service/"
                 },
                 {
+                    "clsName": "Ssp.service.PlacementService",
+                    "name": "PlacementService.js",
+                    "path": "/app/service/"
+                },                
+                {
                     "clsName": "Ssp.service.ProgramStatusService",
                     "name": "ProgramStatusService.js",
                     "path": "/app/service/"
@@ -649,10 +659,20 @@
                     "path": "/app/controller/"
                 },
                 {
+                    "clsName": "Ssp.controller.tool.profile.PlacementViewController",
+                    "name": "PlacementViewController.js",
+                    "path": "/app/controller/tool/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.Placement",
+                    "name": "Placement.js",
+                    "path": "/app/view/tools/profile/"
+                },                
+                {
                     "clsName": "Ssp.controller.tool.profile.ProfileToolViewController",
                     "name": "ProfileToolViewController.js",
                     "path": "/app/controller/tool/profile/"
-                },
+                },                
                 {
                     "clsName": "Ssp.model.Transcript",
                     "name": "Transcript.js",
@@ -671,11 +691,6 @@
                 {
                     "clsName": "Ssp.controller.tool.profile.ServicesProvidedViewController",
                     "name": "ServicesProvidedViewController.js",
-                    "path": "/app/controller/tool/profile/"
-                },
-                {
-                    "clsName": "Ssp.controller.tool.profile.PlacementViewController",
-                    "name": "PlacementViewController.js",
                     "path": "/app/controller/tool/profile/"
                 },
                 {

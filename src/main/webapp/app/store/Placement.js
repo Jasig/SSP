@@ -16,41 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.controller.tool.profile.PlacementViewController', {
-    extend: 'Deft.mvc.ViewController',
+Ext.define('Ssp.store.Placement', {
+    extend: 'Ext.data.Store',
+    model: 'Ssp.model.Placement',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-    	apiProperties: 'apiProperties',
-        personLite: 'personLite',
-        store: 'placementStore',
-        service: 'placementService'
+        apiProperties: 'apiProperties'
     },
-	init: function() {
-		var me=this;
-		var personId = me.personLite.get('id');
-
-    	// hide the loader
-    	me.getView().setLoading( true );
-    	
-		me.service.getAll( personId, {
-			success: me.getPlacementSuccess,
-			failure: me.getPlacementFailure,
-			scope: me			
-		});
-		
+	constructor: function(){
+		Ext.apply(this, {
+							proxy: this.apiProperties.getProxy(this.apiProperties.getItemUrl('placement')),
+							autoLoad: false
+						});
 		return this.callParent(arguments);
-    },
-    
-    getPlacementSuccess: function( r, scope ){
-    	var me=scope;
-
-        me.store.loadData(r);
-    	me.getView().setLoading( false );
-    	
-    },
-    
-    getPlacementFailure: function( response, scope ){
-    	var me=scope;
-    	me.getView().setLoading( false );  	
-    }
+	}
 });

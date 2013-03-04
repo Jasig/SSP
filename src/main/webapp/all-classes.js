@@ -507,64 +507,6 @@ Ext.define('Ssp.view.tools.profile.ServiceReasons', {
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.tools.profile.Placement', {
-	extend: 'Ext.grid.Panel',
-	alias: 'widget.placement',
-    width: '100%',
-    height: '100%',
-    autoScroll: true,
-    initComponent: function() {
-        var me = this;
-
-        Ext.applyIf(me, {
-            columns: [
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Type'
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Score'
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Status'
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'string',
-                    text: 'Date'
-                }
-            ],
-            viewConfig: {
-
-            }
-        });
-
-        me.callParent(arguments);
-    }
-});
-/*
- * Licensed to Jasig under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Jasig licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a
- * copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
 Ext.define('Ssp.view.tools.actionplan.AddTask', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.addtask',
@@ -975,6 +917,71 @@ Ext.define('Ssp.store.reference.MilitaryAffiliations', {
     	this.callParent(arguments);
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('militaryAffiliation')});
     }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.Placement', {
+    extend: 'Ssp.model.AbstractBase',
+    fields: [{name:'score',type:'string'},
+             {name:'status',type:'string'},
+             {name:'name',type:'string'},
+             {name:'subTestName',type:'string'},
+             {
+            	 name: 'type',
+            	 convert: function(value, record) {
+            		 return record.get('name') + ' '+ record.get('subTestName');
+            	 }
+             },             
+             {name: 'takenDate',type: 'date', dateFormat: 'time'}]
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.store.Placement', {
+    extend: 'Ext.data.Store',
+    model: 'Ssp.model.Placement',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties'
+    },
+	constructor: function(){
+		Ext.apply(this, {
+							proxy: this.apiProperties.getProxy(this.apiProperties.getItemUrl('placement')),
+							autoLoad: false
+						});
+		return this.callParent(arguments);
+	}
 });
 /*
  * Licensed to Jasig under one or more contributor license
@@ -7224,6 +7231,64 @@ Ext.define('Ssp.service.PersonService', {
  * specific language governing permissions and limitations
  * under the License.
  */
+Ext.define('Ssp.service.PlacementService', {  
+    extend: 'Ssp.service.AbstractService',   		
+    mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	apiProperties: 'apiProperties',
+        store: 'placementStore'
+    },
+    initComponent: function() {
+		return this.callParent( arguments );
+    },
+
+    getBaseUrl: function( id ){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('placement') );
+    	baseUrl = baseUrl.replace('{id}', id);
+    	return baseUrl;
+    },
+    
+    getAll: function( personId, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl( personId );
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		me.apiProperties.makeRequest({
+			url: url,
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});    	
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 Ext.define('Ssp.service.ProgramStatusService', {  
     extend: 'Ssp.service.AbstractService',   		
     mixins: [ 'Deft.mixin.Injectable'],
@@ -10321,6 +10386,126 @@ Ext.define('Ssp.controller.ToolsViewController', {
  * specific language governing permissions and limitations
  * under the License.
  */
+Ext.define('Ssp.controller.tool.profile.PlacementViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+        personLite: 'personLite',
+        store: 'placementStore',
+        service: 'placementService'
+    },
+	init: function() {
+		var me=this;
+		var personId = me.personLite.get('id');
+
+    	// hide the loader
+    	me.getView().setLoading( true );
+    	
+		me.service.getAll( personId, {
+			success: me.getPlacementSuccess,
+			failure: me.getPlacementFailure,
+			scope: me			
+		});
+		
+		return this.callParent(arguments);
+    },
+    
+    getPlacementSuccess: function( r, scope ){
+    	var me=scope;
+
+        me.store.loadData(r);
+    	me.getView().setLoading( false );
+    	
+    },
+    
+    getPlacementFailure: function( response, scope ){
+    	var me=scope;
+    	me.getView().setLoading( false );  	
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.profile.Placement', {
+	extend: 'Ext.grid.Panel',
+	alias: 'widget.placement',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],	
+    width: '100%',
+    height: '100%',
+    controller: 'Ssp.controller.tool.profile.PlacementViewController',
+    autoScroll: true,
+    inject: {
+        store: 'placementStore'
+    },
+    initComponent: function() {
+        var me = this;
+        Ext.applyIf(me, {
+            store: me.store,
+            columns: [
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'type',
+                    text: 'Type'
+                },
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'score',
+                    text: 'Score'
+                },
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'status',
+                    text: 'Status'
+                },
+                {
+                    xtype: 'gridcolumn',
+                    dataIndex: 'takenDate',
+                    text: 'Date'
+                }
+            ],
+            viewConfig: {
+
+            }
+        });
+
+        me.callParent(arguments);
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
@@ -10727,59 +10912,6 @@ Ext.define('Ssp.controller.tool.profile.ServicesProvidedViewController', {
 		var me=this;
 
 		return this.callParent(arguments);
-    }
-});
-/*
- * Licensed to Jasig under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Jasig licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a
- * copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-Ext.define('Ssp.controller.tool.profile.PlacementViewController', {
-    extend: 'Deft.mvc.ViewController',
-    mixins: [ 'Deft.mixin.Injectable' ],
-    inject: {
-    	apiProperties: 'apiProperties',
-    	//service: 'placementService',
-        personLite: 'personLite'
-    },
-	init: function() {
-		var me=this;
-		var personId = me.personLite.get('id');
-
-    	// hide the loader
-    	me.getView().setLoading( true );
-    	
-		me.service.getAll( personId, {
-			success: me.getPlacementSuccess,
-			failure: me.getPlacementFailure,
-			scope: me			
-		});
-		
-		return this.callParent(arguments);
-    },
-    
-    getPlacementSuccess: function( r, scope ){
-    	var me=scope;
-    	me.getView().setLoading( false );
-    	
-    },
-    
-    getPlacementFailure: function( response, scope ){
-    	var me=scope;
-    	me.getView().setLoading( false );  	
     }
 });
 /*
