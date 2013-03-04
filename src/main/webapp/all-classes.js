@@ -10335,19 +10335,10 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
     	printConfidentialityAgreementUrl: ''
     },
     control: {
-    	/*'viewHistoryButton': {
-			click: 'onViewHistoryClick'
-		},
-		
-		'printConfidentialityAgreementButton': {
-			click: 'printConfidentialityAgreement'
-		},
-		
-		'profileEditButton': {
-            click: 'onProfileEditButtonClick'
-        }*/
+    	
     },
 	init: function() {
+		
 		var me=this;
 		var personId = me.personLite.get('id');
 		
@@ -10368,28 +10359,12 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
 	
 	destroy: function() {
         var me=this;
-        me.appEventsController.removeEvent({eventName: 'viewCoachHistory', callBackFunc: me.onViewCoachHistory, scope: me});
+       // me.appEventsController.removeEvent({eventName: 'viewCoachHistory', callBackFunc: me.onViewCoachHistory, scope: me});
         
         return me.callParent( arguments );
     },
     
-	/*printConfidentialityAgreement: function(button){
-		var me=this;
-		me.apiProperties.getReporter().loadBlankReport( me.printConfidentialityAgreementUrl );
-	},   
-    
-    onViewHistoryClick: function(button){
-		var me=this;
-		me.apiProperties.getReporter().load({
-			url:me.personViewHistoryUrl,
-			params: ""
-		});
-    },
 	
-	onProfileEditButtonClick: function(button){
-        var me=this;
-		var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
-    },*/
 	
 	onViewCoachHistory: function(){
       var me=this;
@@ -10480,7 +10455,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         profileReferralSourcesStore: 'profileReferralSourcesStore',
         profileServiceReasonsStore: 'profileServiceReasonsStore',
         profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
-        sspConfig: 'sspConfig'
+        sspConfig: 'sspConfig',
+		formUtils: 'formRendererUtils',
     },
     
     control: {
@@ -10497,7 +10473,15 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
         academicProgramsField: '#academicPrograms',
 
-        earlyAlertField: '#earlyAlert'
+        earlyAlertField: '#earlyAlert',
+		
+		'serviceReasonEdit': {
+            click: 'onServiceReasonEditButtonClick'
+        },
+        
+        'serviceGroupEdit': {
+            click: 'onServiceGroupEditButtonClick'
+        },
     
     },
     init: function(){
@@ -10685,7 +10669,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 	
 	destroy: function() {
         var me=this;
-        me.appEventsController.removeEvent({eventName: 'emailCoach', callBackFunc: me.onEmailCoach, scope: me});
+        //me.appEventsController.removeEvent({eventName: 'emailCoach', callBackFunc: me.onEmailCoach, scope: me});
         
         return me.callParent( arguments );
     },
@@ -10695,7 +10679,22 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         if (me.person.getCoachPrimaryEmailAddress()) {
             window.location = 'mailto:' + me.person.getCoachPrimaryEmailAddress();
         }
-    }
+    },
+	
+	onServiceReasonEditButtonClick: function(button){
+        var me=this;
+        
+        var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
+        
+    },
+    
+    onServiceGroupEditButtonClick: function(button){
+        var me=this;
+        
+        var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
+        
+    },
+	
 });
 
 /*
@@ -11022,7 +11021,14 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
     	birthDateField: '#birthDate',
     	addressField: '#address',
     	alternateAddressInUseField: '#alternateAddressInUse',
-    	alternateAddressField: '#alternateAddress'
+    	alternateAddressField: '#alternateAddress',
+		primaryEmailAddressField: '#primaryEmailAddress',
+		primaryEmailAddress: {
+            click :    'onPrimaryEmailAddressClick',
+        
+           
+        }
+		
     },
 	init: function() {
 		var me=this;
@@ -11055,10 +11061,13 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
 		
 		var birthDateField = me.getBirthDateField();
 		
+		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
+		
 		var id= me.personLite.get('id');
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');
 		var fullName;
 		var alternateAddressInUse = "No";
+		var primaryEmailWithLink = "";
 		
 		// load the person data
 		me.person.populateFromGenericObject(r);		
@@ -11075,6 +11084,10 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
 		
 		birthDateField.setValue( me.person.getFormattedBirthDate() );
 		
+		primaryEmailWithLink = '<u>' + me.person.get('primaryEmailAddress') + '</u>';
+		
+		
+		primaryEmailAddressField.setValue(primaryEmailWithLink);
 		
 
 		me.getAddressField().setValue(me.person.buildAddress());
@@ -11098,7 +11111,14 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
     getPersonFailure: function( response, scope){
     	var me=scope;
     	me.getView().setLoading( false );
-    }
+    },
+	
+	onPrimaryEmailAddressClick: function(){
+        var me = this;
+        if (me.person.get('primaryEmailAddress')) {
+            window.location = 'mailto:' + me.person.get('primaryEmailAddress');
+        }
+    },
 });
 /*
  * Licensed to Jasig under one or more contributor license
@@ -11142,7 +11162,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
             items: [{
                 xtype: 'fieldcontainer',
                 fieldLabel: '',
-                margin: '0 5 0 0',
+                margin: '0 5 5 0',
                 layout: 'hbox',
                 defaultType: 'displayfield',
                 fieldDefaults: {
@@ -11164,9 +11184,9 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         fieldLabel: '',
                         name: 'name',
                         itemId: 'studentName',
-						padding: '0 0 0 10',
-						height: '20',
-						style: 'font-weight:bold;color: #00008B'
+                        padding: '0 0 0 10',
+                        height: '20',
+                        style: 'font-weight:bold;color: #00008B'
                     
                     }, {
                         xtype: 'fieldset',
@@ -11177,7 +11197,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         defaults: {
                             anchor: '100%'
                         },
-                        flex: 1,
+                        flex: .40,
                         items: [{
                             fieldLabel: 'Non-local',
                             name: 'nonLocalAddress',
@@ -11194,7 +11214,9 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         xtype: 'fieldset',
                         border: 0,
                         title: '',
+                        flex: .60,
                         defaultType: 'displayfield',
+                        padding: '0 0 10 0',
                         defaults: {
                             anchor: '100%'
                         },
@@ -11206,7 +11228,15 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                             name: 'cellPhone'
                         }, {
                             fieldLabel: 'School Official',
-                            name: 'primaryEmailAddress'
+                            name: 'primaryEmailAddress',
+                            itemId: 'primaryEmailAddress',
+                            listeners: {
+                                render: function(c){
+                                    c.getEl().on('click', function(){
+                                        this.fireEvent('click', c);
+                                    }, c);
+                                }
+                            }
                         }, {
                             fieldLabel: 'Secondary',
                             name: 'secondaryEmailAddress'
@@ -11222,9 +11252,8 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                     
                     flex: .05,
                 
-                }, 
-				{
-					xtype: 'fieldset',
+                }, {
+                    xtype: 'fieldset',
                     border: 0,
                     title: '',
                     defaultType: 'displayfield',
@@ -11233,38 +11262,36 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                     },
                     padding: 0,
                     flex: .40,
-                    items:[
-					{
+                    items: [{
                         fieldLabel: '',
                         padding: '0 0 0 10',
                         height: '20'
                     
-                    },
-					{
-                    xtype: 'fieldset',
-                    border: 1,
-                    cls: 'ssp-form',
-                    title: 'Alternate Address',
-					
-                    defaultType: 'displayfield',
-                    defaults: {
-                        anchor: '100%'
-                    },
-                 
-                    items: [{
-                        fieldLabel: 'In Use',
-                        name: 'alternateAddressInUse',
-                        labelWidth: 80,
-                        itemId: 'alternateAddressInUse'
                     }, {
-                        fieldLabel: 'Address',
-                        name: 'alternateAddress',
-                        labelWidth: 80,
-                        height: '60',
-                        itemId: 'alternateAddress'
+                        xtype: 'fieldset',
+                        border: 1,
+                        cls: 'ssp-form',
+                        title: 'Alternate Address',
+                        
+                        defaultType: 'displayfield',
+                        defaults: {
+                            anchor: '100%'
+                        },
+                        
+                        items: [{
+                            fieldLabel: 'In Use',
+                            name: 'alternateAddressInUse',
+                            labelWidth: 80,
+                            itemId: 'alternateAddressInUse'
+                        }, {
+                            fieldLabel: 'Address',
+                            name: 'alternateAddress',
+                            labelWidth: 80,
+                            height: '60',
+                            itemId: 'alternateAddress'
+                        }]
                     }]
                 }]
-            }]
             }]
         });
         
@@ -17856,7 +17883,7 @@ Ext.define('Ssp.view.StudentRecord', {
         Ext.apply(this, {
             title: '',
             collapsible: true,
-            collapseDirection: 'left',
+            collapseDirection: 'right',
             cls: 'studentpanel',
             layout: {
                 type: 'hbox',
@@ -17870,7 +17897,7 @@ Ext.define('Ssp.view.StudentRecord', {
 			{
                 
                 text: '',
-                width: 120,
+                width: 200,
                 height: 20,
                 xtype: 'button',
                 itemId: 'emailCoachButton',
@@ -18210,7 +18237,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        itemId: 'primaryEmailAddress',
 			        width: 350
 			    },{
-			        fieldLabel: 'Home Email',
+			        fieldLabel: 'Alternate Email',
 			        name: 'secondaryEmailAddress',
 			        vtype:'email',
 			        maxLength: 100,
@@ -20340,7 +20367,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        allowBlank:true,
 				        itemId: 'cellPhone'
 				    },{
-				        fieldLabel: 'Primary Email (School)',
+				        fieldLabel: 'School Email',
 				        name: 'primaryEmailAddress',
 				        vtype:'email',
 				        maxLength: 100,
