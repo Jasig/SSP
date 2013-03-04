@@ -145,7 +145,7 @@
 			<staticText>
 				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="12" y="90" width="100" height="16"/>
 				<textElement/>
-				<text><![CDATA[Cohort Term/Year]]></text>
+				<text><![CDATA[Start Term/Year]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" positionType="Float" x="134" y="90" width="117" height="16" isPrintWhenDetailOverflows="true"/>

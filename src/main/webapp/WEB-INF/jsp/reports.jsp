@@ -197,7 +197,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Registration Start Term:</span>
+			<span>Actual Start Term:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -208,7 +208,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Registration Start Year:</span>
+			<span>Actual Start Year:</span>
 		</div>
 
 		<!-- Anticipated Start Term -->
@@ -1568,7 +1568,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Registration Start Term:</span>
+			<span>Actual Start Term:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -1580,7 +1580,7 @@
 		</div>
 		
 		<div class="ea-label">
-			<span>Registration Start Year:</span>
+			<span>Actual Start Year:</span>
 		</div>
 		<div class="ea-clear"></div>
 		
@@ -1771,7 +1771,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Registration Start Term:</span>
+			<span>Actual Start Term:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -1783,7 +1783,7 @@
 		</div>
 		
 		<div class="ea-label">
-			<span>Registration Start Year:</span>
+			<span>Actual Start Year:</span>
 		</div>
 		<div class="ea-clear"></div>
 		

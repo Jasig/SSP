@@ -152,7 +152,7 @@
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[Cohort Term/Year]]></text>
+				<text><![CDATA[Start Term/Year]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" mode="Opaque" x="127" y="66" width="85" height="16"/>
@@ -327,14 +327,14 @@
 				<textElement textAlignment="Center">
 					<font size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[COHORT TERM]]></text>
+				<text><![CDATA[START TERM]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="5a5f5430-af2e-4a79-ba88-9322a65fb0af" stretchType="RelativeToBandHeight" x="565" y="0" width="42" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[COHORT YEAR]]></text>
+				<text><![CDATA[START YEAR]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="5a5f5430-af2e-4a79-ba88-9322a65fb0af" stretchType="RelativeToBandHeight" x="607" y="0" width="91" height="20"/>
