@@ -99,7 +99,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        itemId: 'primaryEmailAddress',
 			        width: 350
 			    },{
-			        fieldLabel: 'Home Email',
+			        fieldLabel: 'Alternate Email',
 			        name: 'secondaryEmailAddress',
 			        vtype:'email',
 			        maxLength: 100,

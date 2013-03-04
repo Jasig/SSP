@@ -33,7 +33,14 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
     	birthDateField: '#birthDate',
     	addressField: '#address',
     	alternateAddressInUseField: '#alternateAddressInUse',
-    	alternateAddressField: '#alternateAddress'
+    	alternateAddressField: '#alternateAddress',
+		primaryEmailAddressField: '#primaryEmailAddress',
+		primaryEmailAddress: {
+            click :    'onPrimaryEmailAddressClick',
+        
+           
+        }
+		
     },
 	init: function() {
 		var me=this;
@@ -66,10 +73,13 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
 		
 		var birthDateField = me.getBirthDateField();
 		
+		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
+		
 		var id= me.personLite.get('id');
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');
 		var fullName;
 		var alternateAddressInUse = "No";
+		var primaryEmailWithLink = "";
 		
 		// load the person data
 		me.person.populateFromGenericObject(r);		
@@ -86,6 +96,10 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
 		
 		birthDateField.setValue( me.person.getFormattedBirthDate() );
 		
+		primaryEmailWithLink = '<u>' + me.person.get('primaryEmailAddress') + '</u>';
+		
+		
+		primaryEmailAddressField.setValue(primaryEmailWithLink);
 		
 
 		me.getAddressField().setValue(me.person.buildAddress());
@@ -109,5 +123,12 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
     getPersonFailure: function( response, scope){
     	var me=scope;
     	me.getView().setLoading( false );
-    }
+    },
+	
+	onPrimaryEmailAddressClick: function(){
+        var me = this;
+        if (me.person.get('primaryEmailAddress')) {
+            window.location = 'mailto:' + me.person.get('primaryEmailAddress');
+        }
+    },
 });

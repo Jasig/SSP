@@ -113,7 +113,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        allowBlank:true,
 				        itemId: 'cellPhone'
 				    },{
-				        fieldLabel: 'Primary Email (School)',
+				        fieldLabel: 'School Email',
 				        name: 'primaryEmailAddress',
 				        vtype:'email',
 				        maxLength: 100,

@@ -40,7 +40,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
             items: [{
                 xtype: 'fieldcontainer',
                 fieldLabel: '',
-                margin: '0 5 0 0',
+                margin: '0 5 5 0',
                 layout: 'hbox',
                 defaultType: 'displayfield',
                 fieldDefaults: {
@@ -62,9 +62,9 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         fieldLabel: '',
                         name: 'name',
                         itemId: 'studentName',
-						padding: '0 0 0 10',
-						height: '20',
-						style: 'font-weight:bold;color: #00008B'
+                        padding: '0 0 0 10',
+                        height: '20',
+                        style: 'font-weight:bold;color: #00008B'
                     
                     }, {
                         xtype: 'fieldset',
@@ -75,7 +75,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         defaults: {
                             anchor: '100%'
                         },
-                        flex: 1,
+                        flex: .40,
                         items: [{
                             fieldLabel: 'Non-local',
                             name: 'nonLocalAddress',
@@ -92,7 +92,9 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         xtype: 'fieldset',
                         border: 0,
                         title: '',
+                        flex: .60,
                         defaultType: 'displayfield',
+                        padding: '0 0 10 0',
                         defaults: {
                             anchor: '100%'
                         },
@@ -104,7 +106,15 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                             name: 'cellPhone'
                         }, {
                             fieldLabel: 'School Official',
-                            name: 'primaryEmailAddress'
+                            name: 'primaryEmailAddress',
+                            itemId: 'primaryEmailAddress',
+                            listeners: {
+                                render: function(c){
+                                    c.getEl().on('click', function(){
+                                        this.fireEvent('click', c);
+                                    }, c);
+                                }
+                            }
                         }, {
                             fieldLabel: 'Secondary',
                             name: 'secondaryEmailAddress'
@@ -120,9 +130,8 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                     
                     flex: .05,
                 
-                }, 
-				{
-					xtype: 'fieldset',
+                }, {
+                    xtype: 'fieldset',
                     border: 0,
                     title: '',
                     defaultType: 'displayfield',
@@ -131,38 +140,36 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                     },
                     padding: 0,
                     flex: .40,
-                    items:[
-					{
+                    items: [{
                         fieldLabel: '',
                         padding: '0 0 0 10',
                         height: '20'
                     
-                    },
-					{
-                    xtype: 'fieldset',
-                    border: 1,
-                    cls: 'ssp-form',
-                    title: 'Alternate Address',
-					
-                    defaultType: 'displayfield',
-                    defaults: {
-                        anchor: '100%'
-                    },
-                 
-                    items: [{
-                        fieldLabel: 'In Use',
-                        name: 'alternateAddressInUse',
-                        labelWidth: 80,
-                        itemId: 'alternateAddressInUse'
                     }, {
-                        fieldLabel: 'Address',
-                        name: 'alternateAddress',
-                        labelWidth: 80,
-                        height: '60',
-                        itemId: 'alternateAddress'
+                        xtype: 'fieldset',
+                        border: 1,
+                        cls: 'ssp-form',
+                        title: 'Alternate Address',
+                        
+                        defaultType: 'displayfield',
+                        defaults: {
+                            anchor: '100%'
+                        },
+                        
+                        items: [{
+                            fieldLabel: 'In Use',
+                            name: 'alternateAddressInUse',
+                            labelWidth: 80,
+                            itemId: 'alternateAddressInUse'
+                        }, {
+                            fieldLabel: 'Address',
+                            name: 'alternateAddress',
+                            labelWidth: 80,
+                            height: '60',
+                            itemId: 'alternateAddress'
+                        }]
                     }]
                 }]
-            }]
             }]
         });
         

@@ -29,7 +29,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         profileReferralSourcesStore: 'profileReferralSourcesStore',
         profileServiceReasonsStore: 'profileServiceReasonsStore',
         profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
-        sspConfig: 'sspConfig'
+        sspConfig: 'sspConfig',
+		formUtils: 'formRendererUtils',
     },
     
     control: {
@@ -46,7 +47,15 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
         academicProgramsField: '#academicPrograms',
 
-        earlyAlertField: '#earlyAlert'
+        earlyAlertField: '#earlyAlert',
+		
+		'serviceReasonEdit': {
+            click: 'onServiceReasonEditButtonClick'
+        },
+        
+        'serviceGroupEdit': {
+            click: 'onServiceGroupEditButtonClick'
+        },
     
     },
     init: function(){
@@ -234,7 +243,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 	
 	destroy: function() {
         var me=this;
-        me.appEventsController.removeEvent({eventName: 'emailCoach', callBackFunc: me.onEmailCoach, scope: me});
+        //me.appEventsController.removeEvent({eventName: 'emailCoach', callBackFunc: me.onEmailCoach, scope: me});
         
         return me.callParent( arguments );
     },
@@ -244,5 +253,20 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         if (me.person.getCoachPrimaryEmailAddress()) {
             window.location = 'mailto:' + me.person.getCoachPrimaryEmailAddress();
         }
-    }
+    },
+	
+	onServiceReasonEditButtonClick: function(button){
+        var me=this;
+        
+        var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
+        
+    },
+    
+    onServiceGroupEditButtonClick: function(button){
+        var me=this;
+        
+        var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
+        
+    },
+	
 });

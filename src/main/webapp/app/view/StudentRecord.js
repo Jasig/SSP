@@ -28,7 +28,7 @@ Ext.define('Ssp.view.StudentRecord', {
         Ext.apply(this, {
             title: '',
             collapsible: true,
-            collapseDirection: 'left',
+            collapseDirection: 'right',
             cls: 'studentpanel',
             layout: {
                 type: 'hbox',
@@ -42,7 +42,7 @@ Ext.define('Ssp.view.StudentRecord', {
 			{
                 
                 text: '',
-                width: 120,
+                width: 200,
                 height: 20,
                 xtype: 'button',
                 itemId: 'emailCoachButton',
