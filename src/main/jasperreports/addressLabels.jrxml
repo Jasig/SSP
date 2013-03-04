@@ -209,79 +209,79 @@
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="15" splitType="Stretch">
+		<band height="17" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="6963974f-bd33-4663-be62-4efc95e33d07" stretchType="RelativeToBandHeight" x="2" y="0" width="49" height="12"/>
+				<reportElement uuid="6963974f-bd33-4663-be62-4efc95e33d07" stretchType="RelativeToBandHeight" x="2" y="0" width="49" height="14"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[FIRST]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="8482b9b3-84b3-4380-b17d-3ef86d0ebb16" stretchType="RelativeToBandHeight" x="100" y="0" width="56" height="12"/>
+				<reportElement uuid="8482b9b3-84b3-4380-b17d-3ef86d0ebb16" stretchType="RelativeToBandHeight" x="100" y="0" width="56" height="14"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[LAST]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="fc947e50-9466-4392-8d82-9aee1d9eae67" stretchType="RelativeToBandHeight" x="51" y="0" width="49" height="12"/>
+				<reportElement uuid="fc947e50-9466-4392-8d82-9aee1d9eae67" stretchType="RelativeToBandHeight" x="51" y="0" width="49" height="14"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[MIDDLE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="915b815c-190b-44b9-a1f1-4bc0468b538c" stretchType="RelativeToBandHeight" x="156" y="0" width="63" height="12"/>
+				<reportElement uuid="915b815c-190b-44b9-a1f1-4bc0468b538c" stretchType="RelativeToBandHeight" x="156" y="0" width="63" height="14"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[ ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="5a5f5430-af2e-4a79-ba88-9322a65fb0af" stretchType="RelativeToBandHeight" x="217" y="0" width="38" height="12"/>
+				<reportElement uuid="5a5f5430-af2e-4a79-ba88-9322a65fb0af" stretchType="RelativeToBandHeight" x="217" y="0" width="38" height="14"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[TYPE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="18c53758-fe7a-46c8-973d-df6f2813c714" stretchType="RelativeToBandHeight" x="254" y="0" width="131" height="12"/>
+				<reportElement uuid="18c53758-fe7a-46c8-973d-df6f2813c714" stretchType="RelativeToBandHeight" x="254" y="0" width="131" height="14"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[ADDRESS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="2d7a42c3-760c-4322-8134-b4b8b130e0fe" stretchType="RelativeToBandHeight" x="383" y="0" width="40" height="12"/>
+				<reportElement uuid="2d7a42c3-760c-4322-8134-b4b8b130e0fe" stretchType="RelativeToBandHeight" x="383" y="0" width="40" height="14"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[CITY]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="ccac72a8-4dbb-4b49-ad92-93c6bc19b5d4" stretchType="RelativeToBandHeight" x="423" y="0" width="31" height="12"/>
+				<reportElement uuid="ccac72a8-4dbb-4b49-ad92-93c6bc19b5d4" stretchType="RelativeToBandHeight" x="423" y="0" width="31" height="14"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[ST]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="7e8a2c84-5e76-4c4b-bcf5-48d1873e2d79" stretchType="RelativeToBandHeight" x="454" y="0" width="64" height="12"/>
+				<reportElement uuid="7e8a2c84-5e76-4c4b-bcf5-48d1873e2d79" stretchType="RelativeToBandHeight" x="454" y="0" width="64" height="14"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[PHONE(H)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="b8d1916e-ffdc-4a75-bc88-ed1c37f1b2c9" stretchType="RelativeToBandHeight" x="517" y="0" width="116" height="12"/>
+				<reportElement uuid="b8d1916e-ffdc-4a75-bc88-ed1c37f1b2c9" stretchType="RelativeToBandHeight" x="517" y="0" width="116" height="14"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[EMAIL(SCHOOL)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="a8a2f0da-b777-463b-a4e0-02ba811e1200" stretchType="RelativeToBandHeight" x="632" y="0" width="117" height="12"/>
+				<reportElement uuid="a8a2f0da-b777-463b-a4e0-02ba811e1200" stretchType="RelativeToBandHeight" x="632" y="0" width="117" height="14"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>

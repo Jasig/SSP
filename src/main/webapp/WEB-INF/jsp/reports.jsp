@@ -207,6 +207,9 @@
 			<option value="">${not_applicable}</option>
 			</select>
 		</div>
+		<div class="ea-label">
+			<span>Registration Start Year:</span>
+		</div>
 
 		<!-- Anticipated Start Term -->
 		<div class="ea-input">
@@ -1577,7 +1580,7 @@
 		</div>
 		
 		<div class="ea-label">
-			<span>Registration Year:</span>
+			<span>Registration Start Year:</span>
 		</div>
 		<div class="ea-clear"></div>
 		
@@ -1780,7 +1783,7 @@
 		</div>
 		
 		<div class="ea-label">
-			<span>Registration Year:</span>
+			<span>Registration Start Year:</span>
 		</div>
 		<div class="ea-clear"></div>
 		
