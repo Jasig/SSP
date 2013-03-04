@@ -20,6 +20,7 @@ package org.jasig.ssp.dao.external;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -69,8 +70,8 @@ public class TermDao extends AbstractExternalDataDao<Term> {
 		final Date now = new Date();
 
 		final Criteria query = createCriteria();
-		query.add(Restrictions.gt("endDate", now));
 		query.add(Restrictions.lt("startDate", now));
+		query.add(Restrictions.gt("endDate", now));
 
 		final Term term = (Term) query.uniqueResult();
 
@@ -79,6 +80,23 @@ public class TermDao extends AbstractExternalDataDao<Term> {
 					"Term");
 		} else {
 			return term;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Term> getCurrentAndFutureTerms() throws ObjectNotFoundException {
+		final Date now = new Date();
+
+		final Criteria query = createCriteria();
+		query.add(Restrictions.gt("endDate", now));
+
+		final List<Term> terms = (List<Term>) query.list();
+
+		if (terms == null || terms.isEmpty()) {
+			throw new ObjectNotFoundException("Could not find any terms",
+					"Term");
+		} else {
+			return terms;
 		}
 	}
 }

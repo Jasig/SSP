@@ -118,8 +118,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
                         itemId: 'hrsAttempted'
                     }, {
                         fieldLabel: 'Reg',
-                        name: 'registeredForCurrentTerm',
-                        renderer: me.columnRendererUtils.renderFriendlyBoolean
+                        name: 'registeredTerms',
                     }, {
                         fieldLabel: 'Payment',
                         name: 'paymentStatus'

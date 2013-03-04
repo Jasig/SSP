@@ -732,6 +732,7 @@ public class PersonServiceImpl implements PersonService {
 	private Person additionalAttribsForStudent(final Person person) {
 		registrationStatusByTermService
 				.applyRegistrationStatusForCurrentTerm(person);
+		registrationStatusByTermService.applyCurrentAndFutureRegistrationStatuses(person);
 		earlyAlertService.applyEarlyAlertCounts(person);
 		return person;
 	}

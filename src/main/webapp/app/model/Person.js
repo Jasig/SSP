@@ -58,7 +58,8 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'serviceReasons', type: 'auto'},
     		 {name: 'studentIntakeCompleteDate', type: 'date', dateFormat: 'time'},
     		 {name: 'currentProgramStatusName', type: 'auto'},
-    		 {name: 'registeredForCurrentTerm', type: 'string'},
+    		 {name: 'registeredTerms', type: 'string'},
+    		 {name: 'paymentStatus', type: 'string'},
              {name: 'activeAlertsCount', type: 'int'},
              {name: 'closedAlertsCount', type: 'int'}],
     		 		 

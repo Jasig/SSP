@@ -20,6 +20,7 @@ package org.jasig.ssp.model; // NOPMD
 
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -597,6 +598,9 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 
 	@Transient
 	private RegistrationStatusByTerm currentRegistrationStatus;
+	
+	@Transient
+	private List<RegistrationStatusByTerm> currentAndFutureRegistrationStatuses;	
 
 	@Transient
 	private Number activeAlertsCount;
@@ -1266,6 +1270,15 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	public String toString() {
 		return "Name: \"" + firstName + " " + lastName + "\" Id: "
 				+ super.toString();
+	}
+
+	public List<RegistrationStatusByTerm> getCurrentAndFutureRegistrationStatuses() {
+		return currentAndFutureRegistrationStatuses;
+	}
+
+	public void setCurrentAndFutureRegistrationStatuses(
+			List<RegistrationStatusByTerm> currentAndFutureRegistrationStatuses) {
+		this.currentAndFutureRegistrationStatuses = currentAndFutureRegistrationStatuses;
 	}
 
 }

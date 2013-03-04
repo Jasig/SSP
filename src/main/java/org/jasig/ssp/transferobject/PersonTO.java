@@ -35,6 +35,7 @@ import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.model.PersonReferralSource;
 import org.jasig.ssp.model.PersonServiceReason;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
+import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.model.reference.ReferralSource;
 import org.jasig.ssp.model.reference.ServiceReason;
@@ -153,6 +154,10 @@ public class PersonTO // NOPMD
 	private Integer activeAlertsCount;
 
 	private Integer closedAlertsCount;
+	
+	private String paymentStatus;
+	
+	private String registeredTerms;
 
 	/**
 	 * Empty constructor
@@ -304,9 +309,25 @@ public class PersonTO // NOPMD
 			registeredForCurrentTerm = true;
 		}
 
-
 		this.activeAlertsCount = model.getActiveAlertsCount() == null ? 0 : model.getActiveAlertsCount().intValue();
 		this.closedAlertsCount = model.getClosedAlertsCount() == null ? 0 : model.getClosedAlertsCount().intValue();
+		
+		this.paymentStatus = model.getCurrentRegistrationStatus() == null ? "N" :  model.getCurrentRegistrationStatus().getTuitionPaid();
+		this.registeredTerms = getCurrentAndFutureTerms(model);
+	}
+
+	private String getCurrentAndFutureTerms(Person model) {
+		List<RegistrationStatusByTerm> currentAndFutureRegistrationStatuses = model.getCurrentAndFutureRegistrationStatuses();
+		if(currentAndFutureRegistrationStatuses == null)
+		{
+			return "";
+		}
+		StringBuilder builder = new StringBuilder();
+		for (RegistrationStatusByTerm registrationStatusByTerm : currentAndFutureRegistrationStatuses) 
+		{
+			builder.append(registrationStatusByTerm.getTermCode()+" ");
+		}
+		return builder.toString().trim();
 	}
 
 	/**
@@ -733,6 +754,22 @@ public class PersonTO // NOPMD
 
 	public void setActiveAlertsCount(Integer activeAlertsCount) {
 		this.activeAlertsCount = activeAlertsCount;
+	}
+
+	public String getRegisteredTerms() {
+		return registeredTerms;
+	}
+
+	public void setRegisteredTerms(String registeredTerms) {
+		this.registeredTerms = registeredTerms;
+	}
+
+	public String getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
 	}
 
 }

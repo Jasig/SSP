@@ -19038,8 +19038,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
                         itemId: 'hrsAttempted'
                     }, {
                         fieldLabel: 'Reg',
-                        name: 'registeredForCurrentTerm',
-                        renderer: me.columnRendererUtils.renderFriendlyBoolean
+                        name: 'registeredTerms',
                     }, {
                         fieldLabel: 'Payment',
                         name: 'paymentStatus'
@@ -23632,7 +23631,8 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'serviceReasons', type: 'auto'},
     		 {name: 'studentIntakeCompleteDate', type: 'date', dateFormat: 'time'},
     		 {name: 'currentProgramStatusName', type: 'auto'},
-    		 {name: 'registeredForCurrentTerm', type: 'string'},
+    		 {name: 'registeredTerms', type: 'string'},
+    		 {name: 'paymentStatus', type: 'string'},
              {name: 'activeAlertsCount', type: 'int'},
              {name: 'closedAlertsCount', type: 'int'}],
     		 		 

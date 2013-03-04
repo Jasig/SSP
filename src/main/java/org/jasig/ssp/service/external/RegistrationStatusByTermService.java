@@ -62,4 +62,6 @@ public interface RegistrationStatusByTermService extends
 			@NotNull final Term term, final SortingAndPaging sAndP);
 
 	Person applyRegistrationStatusForCurrentTerm(@NotNull Person person);
+
+	Person applyCurrentAndFutureRegistrationStatuses(Person person);
 }

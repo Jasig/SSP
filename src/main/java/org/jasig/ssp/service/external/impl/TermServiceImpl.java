@@ -19,6 +19,7 @@
 package org.jasig.ssp.service.external.impl;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.jasig.ssp.dao.external.TermDao;
 import org.jasig.ssp.model.external.Term;
@@ -58,5 +59,10 @@ public class TermServiceImpl extends AbstractExternalDataService<Term>
 	@Override
 	public Term getCurrentTerm() throws ObjectNotFoundException {
 		return getDao().getCurrentTerm();
+	}
+
+	@Override
+	public List<Term> getCurrentAndFutureTerms() throws ObjectNotFoundException {
+		return getDao().getCurrentAndFutureTerms();
 	}
 }

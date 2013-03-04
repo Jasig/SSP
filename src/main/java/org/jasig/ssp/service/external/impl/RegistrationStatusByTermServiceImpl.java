@@ -18,6 +18,9 @@
  */
 package org.jasig.ssp.service.external.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.dao.external.RegistrationStatusByTermDao;
@@ -95,6 +98,35 @@ public class RegistrationStatusByTermServiceImpl extends
 			LOGGER.debug("term not found?", e);
 		}
 		return person;
+	}
+	
+	@Override
+	public Person applyCurrentAndFutureRegistrationStatuses(final Person person) {
+
+		if (person == null) {
+			return null;
+		}
+
+		try {
+			person.setCurrentAndFutureRegistrationStatuses(getCurrentAndFutureTerms(person));
+		} catch (ObjectNotFoundException e) {
+			LOGGER.debug("term not found?", e);
+		}
+		return person;
+	}	
+
+	private List<RegistrationStatusByTerm> getCurrentAndFutureTerms(
+			Person person) throws ObjectNotFoundException {
+		List<Term> currentAndFutureTerms = termService.getCurrentAndFutureTerms();
+		List<RegistrationStatusByTerm> registrationStatuses = new ArrayList<RegistrationStatusByTerm>();
+		for (Term term : currentAndFutureTerms) {
+			RegistrationStatusByTerm regStatus = dao.getForTerm(person.getSchoolId(), term.getCode());
+			if(regStatus != null)
+			{
+				registrationStatuses.add(regStatus);
+			}
+		}
+		return registrationStatuses;
 	}
 
 	@Override
