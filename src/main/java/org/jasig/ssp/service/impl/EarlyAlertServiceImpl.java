@@ -614,7 +614,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	@Override
 	public Map<UUID, Number> getCountOfClosedAlertsForPeopleIds(
 			final Collection<UUID> peopleIds) {
-		return dao.getCountOfClosedAlertsForPeopleId(peopleIds);
+		return dao.getCountOfClosedAlertsForPeopleIds(peopleIds);
 	}
 	
 	@Override

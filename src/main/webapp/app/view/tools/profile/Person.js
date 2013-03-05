@@ -118,12 +118,12 @@ Ext.define('Ssp.view.tools.profile.Person', {
                         itemId: 'hrsAttempted'
                     }, {
                         fieldLabel: 'Reg',
-                        name: 'registeredTerms',
+                        name: 'registeredTerms'
                     }, {
                         fieldLabel: 'Payment',
                         name: 'paymentStatus'
                     }, {
-                        fieldLabel: 'Early Alerts (Open/Closed)',
+                        fieldLabel: 'Early Alerts (Open/Total)',
                         itemId: 'earlyAlert',
                         name: 'earlyAlert'
                     }]

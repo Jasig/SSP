@@ -99,7 +99,7 @@ public class EarlyAlertDao extends
 		});
 	}
 
-	public Map<UUID, Number> getCountOfClosedAlertsForPeopleId(
+	public Map<UUID, Number> getCountOfClosedAlertsForPeopleIds(
 			@NotNull final Collection<UUID> personIds) {
 		return getCountOfAlertsForPeopleId(personIds, new CriteriaCallback() {
 			@Override

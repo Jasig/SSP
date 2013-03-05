@@ -144,7 +144,7 @@ Ext.define('Ssp.model.Person', {
     },
 
     getEarlyAlertRatio: function() {
-        return this.get('activeAlertsCount') + '/' + this.get('closedAlertsCount');
+        return this.get('activeAlertsCount') + '/' + (this.get('activeAlertsCount') + this.get('closedAlertsCount'));
     },
  
     buildAddress: function(){
