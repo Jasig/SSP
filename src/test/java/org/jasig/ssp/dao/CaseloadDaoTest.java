@@ -51,6 +51,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.StudentTypeService;
+import org.jasig.ssp.transferobject.reports.CaseLoadSearchTO;
 import org.jasig.ssp.util.service.stub.Stubs;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -131,7 +132,7 @@ public class CaseloadDaoTest {
 		// this counts *everything*... students counted several times, once for
 		// each status they've ever had (or will have)
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
-				dao.currentCaseLoadCountsByStatus(null, null, null);
+				dao.currentCaseLoadCountsByStatus(null, null);
 		expectCurrentUnfilteredResultsAgainstDefaultDataSet(results);
 	}
 
@@ -202,7 +203,7 @@ public class CaseloadDaoTest {
 		saveAndFlush(jamesDoe, markGalafion, bobReynolds);
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> counts =
-				dao.currentCaseLoadCountsByStatus(null, null, null);
+				dao.currentCaseLoadCountsByStatus(null, null);
 
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedRecords =
 				Lists.newArrayListWithCapacity(4);
@@ -287,7 +288,7 @@ public class CaseloadDaoTest {
 		saveAndFlush(jamesDoe);
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
-				dao.currentCaseLoadCountsByStatus(null, null, null);
+				dao.currentCaseLoadCountsByStatus(null, null);
 
 		// should be the same as the default report, which should only count
 		// statuses active at this moment (despite the "unfiltered" name
@@ -351,7 +352,7 @@ public class CaseloadDaoTest {
 		saveAndFlush(jamesDoe);
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
-				dao.currentCaseLoadCountsByStatus(null, null, null);
+				dao.currentCaseLoadCountsByStatus(null, null);
 
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedRecords =
 				Lists.newArrayListWithCapacity(2);
@@ -545,7 +546,7 @@ public class CaseloadDaoTest {
 		saveAndFlush(jamesDoe, markGalafion, bobReynolds, kevinSmith, faculty1);
 
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> results =
-				dao.currentCaseLoadCountsByStatus(null, null, null);
+				dao.currentCaseLoadCountsByStatus(null, null);
 
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedRecords =
 				Lists.newArrayListWithCapacity(2);
@@ -655,7 +656,7 @@ public class CaseloadDaoTest {
 
 		// first a sanity check...
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> unfilteredRecords =
-				dao.currentCaseLoadCountsByStatus(null, null, null);
+				dao.currentCaseLoadCountsByStatus(null, null);
 
 		final List<CoachCaseloadRecordCountForProgramStatus> expectedUnfilteredRecords =
 				Lists.newArrayListWithCapacity(2);
@@ -682,7 +683,7 @@ public class CaseloadDaoTest {
 		// now one of the actual tests
 		final List<UUID> capFilter = Lists.newArrayList(Stubs.StudentTypeFixture.CAP.id());
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> capAndToFilteredResults =
-				dao.currentCaseLoadCountsByStatus(capFilter, null, null);
+				dao.currentCaseLoadCountsByStatus(new CaseLoadSearchTO(capFilter,null,null), null);
 		List<CoachCaseloadRecordCountForProgramStatus> expectedCapFilteredRecords =
 				Lists.newArrayListWithCapacity(1);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
@@ -699,7 +700,7 @@ public class CaseloadDaoTest {
 		// another one
 		final List<UUID> ilpFilter = Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id());
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> ilpAndToFilteredResults =
-				dao.currentCaseLoadCountsByStatus(ilpFilter, null, null);
+				dao.currentCaseLoadCountsByStatus(new CaseLoadSearchTO(ilpFilter,null,null), null);
 		List<CoachCaseloadRecordCountForProgramStatus> expectedIlpFilteredRecords =
 				Lists.newArrayListWithCapacity(1);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
@@ -730,7 +731,7 @@ public class CaseloadDaoTest {
 	public void testCurrentCaseloadCountWithStudentTypeIdFilterWithNoMatch() {
 		final List<UUID> ealFilter = Lists.newArrayList(Stubs.StudentTypeFixture.EAL.id());
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> ealAndToFilteredResults =
-				dao.currentCaseLoadCountsByStatus(ealFilter, null, null);
+				dao.currentCaseLoadCountsByStatus(new CaseLoadSearchTO(ealFilter,null,null), null);
 		
 		List<CoachCaseloadRecordCountForProgramStatus> expectedFilterWithNoMatch =
 				Lists.newArrayListWithCapacity(1);

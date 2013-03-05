@@ -183,6 +183,9 @@ public class CaseloadDao extends AbstractDao<Person> {
 		// has already been created in the db and is set to go into effect on
 		// that future date... but that shouldn't happen under current use
 		// cases
+		
+		if(searchForm == null)
+			searchForm = new CaseLoadSearchTO();
 		Criterion dateRestrictions =
 				overlappingProgramStatusDateRestrictions(new Date(), null);
 
