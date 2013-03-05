@@ -75,6 +75,7 @@ public interface EarlyAlertResponseService
 	 * @param createDateFrom
 	 * @param createDateTo
 	 * @param studentTypeIds
+	 * @param serviceReasonIds
 	 * @param sAndP
 	 * @return
 	 */
@@ -82,6 +83,7 @@ public interface EarlyAlertResponseService
 			Date createDateFrom, 
 			Date createDateTo,
 			List<UUID> studentTypeIds, 
+			List<UUID> serviceReasonIds,
 			SortingAndPaging sAndP);
 
 	
@@ -113,6 +115,8 @@ public interface EarlyAlertResponseService
 	 * @return
 	 */
 	EarlyAlertResponseCounts getCountEarlyAlertRespondedToForEarlyAlerts(List<UUID> earlyAlertIds);
+	
+	Long getEarlyAlertCountByOutcomeCriteria(EarlyAlertStudentSearchTO searchForm)  throws ObjectNotFoundException;
 	
 	EarlyAlertResponseCounts getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(List<UUID> earlyAlertIds, UUID outcomeId);
 	

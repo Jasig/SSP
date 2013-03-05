@@ -435,11 +435,16 @@ public class EarlyAlertDao extends
 	}
 	
 	@SuppressWarnings("unchecked")
-	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(List<Person> coaches, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, SortingAndPaging sAndP) {
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(List<Person> coaches, 
+			Date createDateFrom,
+			Date createDateTo, 
+			List<UUID> studentTypeIds,
+			List<UUID> serviceReasonIds,
+			SortingAndPaging sAndP) {
 
 		final Criteria query = createCriteria();
  
-		setBasicCriteria( query,  createDateFrom,  createDateTo, studentTypeIds);
+		setBasicCriteria( query,  createDateFrom,  createDateTo, studentTypeIds, serviceReasonIds);
 		query.add(Restrictions.in("createdBy", coaches));
 		// item count
 		Long totalRows = 0L;
@@ -460,13 +465,20 @@ public class EarlyAlertDao extends
 		return new PagingWrapper<EntityStudentCountByCoachTO>(totalRows,  (List<EntityStudentCountByCoachTO>)query.list());
 	}
 	
-	private Criteria setBasicCriteria(Criteria query, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds){
-		// add possible studentTypeId Check
+	private Criteria setBasicCriteria(Criteria query, 
+			Date createDateFrom, 
+			Date createDateTo, 
+			List<UUID> studentTypeIds, 
+			List<UUID> serviceReasonIds){
+		if (studentTypeIds != null && !studentTypeIds.isEmpty() || serviceReasonIds != null && !serviceReasonIds.isEmpty())
+		{
+			query.createAlias("person",
+					"person");
+		}
 		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
 		
-			query.createAlias("person",
-				"person")
-				.add(Restrictions
+			
+			query.add(Restrictions
 						.in("person.studentType.id",studentTypeIds));
 					
 		}		
@@ -479,6 +491,14 @@ public class EarlyAlertDao extends
 		if (createDateTo != null) {
 			query.add(Restrictions.le("createdDate",
 					createDateTo));
+		}
+		
+		if(serviceReasonIds != null && !serviceReasonIds.isEmpty()){
+			query.createAlias("person.serviceReasons", "serviceReasons");
+			query.createAlias("serviceReasons.serviceReason", "serviceReason");
+			query.add(Restrictions
+					.in("serviceReason.id",serviceReasonIds));
+			
 		}
 				
 		return query;
@@ -568,6 +588,13 @@ public class EarlyAlertDao extends
 		if (personSearchForm.getCreateDateTo() != null) {
 			criteria.add(Restrictions.le("person.createdDate",
 					personSearchForm.getCreateDateTo()));
+		}
+		
+		if (personSearchForm.getServiceReasonsIds() != null && personSearchForm.getServiceReasonsIds().size() > 0) {
+			criteria.createAlias("person.serviceReasons", "serviceReasons");
+			criteria.createAlias("serviceReasons.serviceReason", "serviceReason");
+			criteria.add(Restrictions.in("serviceReason.id",
+					personSearchForm.getServiceReasonsIds()));
 		}
 
 		// don't bring back any non-students, there will likely be a better way

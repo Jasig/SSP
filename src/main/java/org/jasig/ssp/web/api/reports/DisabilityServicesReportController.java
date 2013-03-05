@@ -44,6 +44,7 @@ import org.jasig.ssp.service.reference.DisabilityStatusService;
 import org.jasig.ssp.service.reference.DisabilityTypeService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
+import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
@@ -97,6 +98,10 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 	private transient ProgramStatusService programStatusService;
 	@Autowired
 	protected transient StudentTypeService studentTypeService;	
+	
+	@Autowired
+	protected transient ServiceReasonService serviceReasonService;	
+	
 	@Autowired
 	protected transient DisabilityStatusService disabilityStatusService;	
 	
@@ -129,6 +134,7 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) List<UUID> referralSourcesIds,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
+			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false) Integer anticipatedStartYear,
 			final @RequestParam(required = false) String anticipatedStartTerm,
 			final @RequestParam(required = false) Integer actualStartYear,
@@ -148,12 +154,15 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 		
 		SearchParameters.addReferenceLists(studentTypeIds, 
 				specialServiceGroupIds, 
-				referralSourcesIds, 
+				referralSourcesIds,
+				serviceReasonIds,
 				parameters, 
 				personSearchForm, 
 				studentTypeService, 
 				ssgService, 
-				referralSourcesService);
+				referralSourcesService,
+				serviceReasonService);
+		
 		
 		SearchParameters.addDateRange(createDateFrom, 
 				createDateTo, 

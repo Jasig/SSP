@@ -260,6 +260,7 @@ public interface TaskService
 			Date createDateFrom, 
 			Date createDateTo, 
 			List<UUID> studentTypeIds, 
+			List<UUID> serviceReasonIds,
 			SortingAndPaging sAndP); 
 
 }

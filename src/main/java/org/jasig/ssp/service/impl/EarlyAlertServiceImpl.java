@@ -658,8 +658,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	
 	@Override
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(List<Person> coaches, Date createDateFrom, 
-			Date createDateTo, List<UUID> studentTypeIds, SortingAndPaging sAndP) {
-		return dao.getStudentEarlyAlertCountByCoaches(coaches, createDateFrom, createDateTo, studentTypeIds, sAndP);
+			Date createDateTo, List<UUID> studentTypeIds, List<UUID> serviceReasonIds, SortingAndPaging sAndP) {
+		return dao.getStudentEarlyAlertCountByCoaches(coaches, createDateFrom, createDateTo, studentTypeIds, serviceReasonIds, sAndP);
 	}
 	
 	@Override

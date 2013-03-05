@@ -64,6 +64,7 @@ public class EarlyAlertStudentProgressReportControllerIntegrationTest extends
 				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
 				PersonFixture.COACH_1.id(), 
 				Lists.newArrayList(StudentTypeFixture.ILP.id()), 
+				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
 				ProgramStatusFixture.ACTIVE.id(), 
 				Lists.newArrayList(SpecialServiceGroupFixture.ANOTHER_TEST_SSG.id()), 
 				TermFixture.FALL_2012.code(), 
@@ -95,6 +96,7 @@ public class EarlyAlertStudentProgressReportControllerIntegrationTest extends
 				null, 
 				null, 
 				null, 
+				null,
 				TermFixture.FALL_2012.code(), 
 				TermFixture.SPRING_2013.code(), 
 				"csv");;

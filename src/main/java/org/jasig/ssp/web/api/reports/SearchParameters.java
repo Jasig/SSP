@@ -51,6 +51,7 @@ import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
 import org.jasig.ssp.service.reference.EarlyAlertReferralService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
+import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
@@ -76,6 +77,7 @@ public class SearchParameters {
 	private static final String END_DATE = "endDate";
 	private static final String CAMPUS_NAME = "campusName";
 	private static final String SEPCIAL_SERVICE_GROUP_NAMES = "specialServiceGroupNames";
+	private static final String SERVICE_REASON_NAMES = "serviceReasonGroupNames";
 	private static final String STUDENT_TYPE_NAMES = "studentTypeNames";
 	private static final String EARLY_ALERT_OUTCOME_NAMES = "earlyAlertOutcomeNames";
 	private static final String PROGRAM_STATUS_NAME = "programStatusName";
@@ -185,6 +187,16 @@ public class SearchParameters {
 			throws ObjectNotFoundException {
 		addUUIDSToMap(SEPCIAL_SERVICE_GROUP_NAMES, NOT_USED, specialServiceGroupIds, parameters,
 				(ReferenceService)ssgService);
+	}
+	
+	
+	@SuppressWarnings({"rawtypes" })
+	final static public void addServiceReasonToMap(
+			final List<UUID> serviceReasonsIds, final Map<String, Object> parameters,
+			ServiceReasonService serviceReasonService)
+			throws ObjectNotFoundException {
+		addUUIDSToMap(SERVICE_REASON_NAMES, NOT_USED, serviceReasonsIds, parameters,
+				(ReferenceService)serviceReasonService);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -443,24 +455,29 @@ public class SearchParameters {
 	static final void addReferenceLists(final List<UUID> studentTypeIds,
 			final List<UUID> specialServiceGroupIds,
 			final List<UUID> referralSourcesIds,
+			final List<UUID> serviceReasonIds,
 			final Map<String, Object> parameters,
 			final PersonSearchFormTO personSearchForm,
 			final StudentTypeService studentTypeService,
 			final SpecialServiceGroupService ssgService,
-			final ReferralSourceService referralSourcesService
+			final ReferralSourceService referralSourcesService,
+			final ServiceReasonService serviceReasonService
 			) throws ObjectNotFoundException{
 		
 		List<UUID> cleanSpecialServiceGroupIds = cleanUUIDListOfNulls(specialServiceGroupIds);
 		List<UUID> cleanStudentTypeIds = cleanUUIDListOfNulls(studentTypeIds);
 		List<UUID> cleanReferralSourcesIds = cleanUUIDListOfNulls(referralSourcesIds);
+		List<UUID> cleanserviceReasonIds = cleanUUIDListOfNulls(serviceReasonIds);
 		
 		addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);
 		addSpecialGroupsNamesToMap(cleanSpecialServiceGroupIds, parameters, ssgService);
 		addReferralSourcesToMap(cleanReferralSourcesIds, parameters, referralSourcesService);	
+		addServiceReasonToMap(cleanserviceReasonIds, parameters, serviceReasonService);
 		
 		personSearchForm.setSpecialServiceGroupIds(cleanSpecialServiceGroupIds);
 		personSearchForm.setStudentTypeIds(cleanStudentTypeIds);
 		personSearchForm.setReferralSourcesIds(cleanReferralSourcesIds);
+		personSearchForm.setServiceReasonsIds(cleanserviceReasonIds);
 	}
 	
 	static final void addReferenceTypes(final UUID programStatus, 

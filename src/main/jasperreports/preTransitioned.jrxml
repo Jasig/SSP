@@ -38,10 +38,11 @@
 	<parameter name="reportDate" class="java.lang.String"/>
 	<parameter name="homeDepartment" class="java.lang.String"/>
 	<parameter name="coachName" class="java.lang.String"/>
-	<parameter name="studentTypeNames" class="java.lang.String"/>
 	<parameter name="anticipatedStartTerm" class="java.lang.String"/>
 	<parameter name="startDate" class="java.lang.String"/>
 	<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="studentTypeNames" class="java.lang.String"/>
+	<parameter name="serviceReasonGroupNames" class="java.lang.String"/>
 	<queryString language="json">
 		<![CDATA[rows(name==$P{name}]]>
 	</queryString>
@@ -98,7 +99,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="151" splitType="Stretch">
+		<band height="165" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" mode="Opaque" x="2" y="2" width="100" height="16"/>
 				<textElement>
@@ -196,12 +197,12 @@
 				<textFieldExpression><![CDATA[$P{referralSourceNames}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="e49d816d-3764-4980-94ba-2b9e63b689da" mode="Opaque" x="127" y="130" width="352" height="16"/>
+				<reportElement uuid="e49d816d-3764-4980-94ba-2b9e63b689da" mode="Opaque" x="127" y="148" width="352" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{studentCount}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="90e4fa8d-5631-47ef-b9b1-de98b568c27b" mode="Opaque" x="2" y="130" width="100" height="16"/>
+				<reportElement uuid="90e4fa8d-5631-47ef-b9b1-de98b568c27b" mode="Opaque" x="2" y="148" width="100" height="16"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
@@ -226,6 +227,16 @@
 				<reportElement uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e" x="598" y="66" width="100" height="15"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="5" y="130" width="109" height="16"/>
+				<textElement/>
+				<text><![CDATA[Service Reasons:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1ca8c5e0-8d6e-4de9-aa97-373049b1348a" x="127" y="130" width="530" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{serviceReasonGroupNames}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

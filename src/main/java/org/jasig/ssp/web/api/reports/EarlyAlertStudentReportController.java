@@ -41,6 +41,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
+import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
@@ -94,6 +95,8 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 	@Autowired
 	protected transient StudentTypeService studentTypeService;	
 	@Autowired
+	protected transient ServiceReasonService serviceReasonService;	
+	@Autowired
 	protected transient TermService termService;
 	@Autowired
 	protected transient EarlyAlertService earlyAlertService;
@@ -124,6 +127,7 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 			final @RequestParam(required = false) UUID programStatus,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
+			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false) String termCode,
@@ -139,12 +143,14 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 		
 		SearchParameters.addReferenceLists(studentTypeIds, 
 				specialServiceGroupIds, 
-				null, 
+				null,
+				serviceReasonIds,
 				parameters, 
 				personSearchForm, 
 				studentTypeService, 
 				ssgService, 
-				null);
+				null,
+				serviceReasonService);
 		
 		SearchParameters.addDateRange(null, 
 				null, 

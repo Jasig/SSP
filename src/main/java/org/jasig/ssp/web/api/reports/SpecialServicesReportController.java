@@ -35,7 +35,9 @@ import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
+import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
@@ -77,6 +79,10 @@ public class SpecialServicesReportController extends ReportBaseController {
 	private transient PersonTOFactory personTOFactory;
 	@Autowired
 	private transient SpecialServiceGroupService ssgService;
+	@Autowired
+	protected transient ServiceReasonService serviceReasonService;	
+	@Autowired
+	private transient StudentTypeService studentTypeService;
 
 	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize(Permission.SECURITY_REPORT_READ)
@@ -85,20 +91,24 @@ public class SpecialServicesReportController extends ReportBaseController {
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
+			final @RequestParam(required = false) List<UUID> studentTypeIds,
+			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 
 		final Map<String, Object> parameters = Maps.newHashMap();
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
 		
-		SearchParameters.addReferenceLists(null, 
+		SearchParameters.addReferenceLists(studentTypeIds, 
 				specialServiceGroupIds, 
-				null, 
+				null,
+				serviceReasonIds,
 				parameters, 
 				personSearchForm, 
-				null, 
+				studentTypeService, 
 				ssgService, 
-				null);
+				null,
+				serviceReasonService);
 
 		final PagingWrapper<BaseStudentReportTO> people = personService
 				.getStudentReportTOsFromCriteria(personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));

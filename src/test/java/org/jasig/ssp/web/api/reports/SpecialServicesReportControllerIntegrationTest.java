@@ -25,6 +25,7 @@ import java.util.List;
 import net.sf.jasperreports.engine.JRException;
 
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.util.service.stub.Stubs;
 import org.jasig.ssp.util.service.stub.Stubs.SpecialServiceGroupFixture;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,11 @@ public class SpecialServicesReportControllerIntegrationTest extends
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		
 		controller.getSpecialServices(response, 
-				null, Lists.newArrayList(SpecialServiceGroupFixture.ANOTHER_TEST_SSG.id(), SpecialServiceGroupFixture.ANOTHER_TEST_SSG.id()), "csv");
+				null, 
+				Lists.newArrayList(SpecialServiceGroupFixture.ANOTHER_TEST_SSG.id()), 
+				Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()),
+				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
+				"csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
@@ -71,7 +76,9 @@ public class SpecialServicesReportControllerIntegrationTest extends
 
 		controller.getSpecialServices(response, 
 				null, 
-				null, 
+				null,
+				null,
+				null,
 				"csv");;
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		//TODO Understand why no filters does not bring back a result!

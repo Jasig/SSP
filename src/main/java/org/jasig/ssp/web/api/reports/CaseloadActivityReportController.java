@@ -41,6 +41,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.reports.CaseLoadActivityReportTO;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
@@ -82,6 +83,9 @@ public class CaseloadActivityReportController extends ReportBaseController {
 	protected transient StudentTypeService studentTypeService;
 	
 	@Autowired
+	protected transient ServiceReasonService serviceReasonService;	
+	
+	@Autowired
 	protected transient TermService termService;
 	
 	@Autowired
@@ -109,6 +113,7 @@ public class CaseloadActivityReportController extends ReportBaseController {
 			final HttpServletResponse response,
 			final @RequestParam(required = false) UUID coachId,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
+			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false) Date createDateFrom,
@@ -121,6 +126,7 @@ public class CaseloadActivityReportController extends ReportBaseController {
 		final DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
 
 		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
+		final List<UUID> cleanServiceReasonIds = SearchParameters.cleanUUIDListOfNulls(serviceReasonIds);
 		List<Person> coaches = SearchParameters.getCoaches(coachId, homeDepartment, personService);
 		Collections.sort(coaches, Person.PERSON_NAME_AND_ID_COMPARATOR);
 			
@@ -128,6 +134,7 @@ public class CaseloadActivityReportController extends ReportBaseController {
 
 		SearchParameters.addDateTermToMap(dateTerm, parameters);
 		SearchParameters.addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);
+		SearchParameters.addServiceReasonToMap(cleanServiceReasonIds, parameters, serviceReasonService);
 		
 		SearchParameters.addHomeDepartmentToMap(homeDepartment, parameters);
 		
@@ -143,7 +150,8 @@ public class CaseloadActivityReportController extends ReportBaseController {
 				coaches, 
 				dateTerm.getStartDate(), 
 				dateTerm.getEndDate(), 
-				cleanStudentTypeIds, 
+				cleanStudentTypeIds,
+				cleanServiceReasonIds,
 				null);
 		
 		final PagingWrapper<EntityStudentCountByCoachTO> taskCounts = taskService.getStudentTaskCountForCoaches(
@@ -151,6 +159,7 @@ public class CaseloadActivityReportController extends ReportBaseController {
 				dateTerm.getStartDate(), 
 				dateTerm.getEndDate(), 
 				cleanStudentTypeIds, 
+				cleanServiceReasonIds,
 				null);
 		
 		final PagingWrapper<EntityStudentCountByCoachTO> earlyAlertCounts = earlyAlertService.getStudentEarlyAlertCountByCoaches(
@@ -158,6 +167,7 @@ public class CaseloadActivityReportController extends ReportBaseController {
 				dateTerm.getStartDate(), 
 				dateTerm.getEndDate(), 
 				cleanStudentTypeIds, 
+				cleanServiceReasonIds,
 				null);
 		
 		final PagingWrapper<EntityStudentCountByCoachTO> earlyAlertResponseCounts = earlyAlertResponseService.getStudentEarlyAlertResponseCountByCoaches(
@@ -165,6 +175,7 @@ public class CaseloadActivityReportController extends ReportBaseController {
 				dateTerm.getStartDate(), 
 				dateTerm.getEndDate(), 
 				cleanStudentTypeIds, 
+				cleanServiceReasonIds,
 				null);
 		
 		

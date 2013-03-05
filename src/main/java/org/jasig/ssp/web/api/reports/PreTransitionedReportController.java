@@ -39,6 +39,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
+import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
@@ -89,6 +90,9 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 	private transient ProgramStatusService programStatusService;
 	@Autowired
 	private transient StudentTypeService studentTypeService;
+	
+	@Autowired
+	protected transient ServiceReasonService serviceReasonService;	
 
 	// @Autowired
 	// private transient PersonTOFactory factory;
@@ -113,6 +117,7 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) List<UUID> referralSourcesIds,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
+			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false) Date createDateFromCounselor,
 			final @RequestParam(required = false) Date createDateToCounselor,
 			final @RequestParam(required = false) Integer anticipatedStartYear,
@@ -126,14 +131,17 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
 		
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
+		
 		SearchParameters.addReferenceLists(studentTypeIds, 
 				specialServiceGroupIds, 
-				referralSourcesIds, 
+				referralSourcesIds,
+				serviceReasonIds,
 				parameters, 
 				personSearchForm, 
 				studentTypeService, 
 				ssgService, 
-				referralSourcesService);
+				referralSourcesService,
+				serviceReasonService);
 		
 		SearchParameters.addDateRange(createDateFromCounselor, 
 				createDateToCounselor, 

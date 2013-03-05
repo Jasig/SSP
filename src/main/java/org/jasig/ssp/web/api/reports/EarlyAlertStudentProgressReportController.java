@@ -41,6 +41,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
+import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
@@ -94,6 +95,10 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 	
 	@Autowired
 	private transient StudentTypeService studentTypeService;
+	
+	@Autowired
+	protected transient ServiceReasonService serviceReasonService;	
+	
 	@Autowired
 	private transient SpecialServiceGroupService ssgService;
 	@Autowired
@@ -125,6 +130,7 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) UUID coachId,	
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
+			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false) UUID programStatus,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = true) String termCodeInitial,
@@ -136,14 +142,17 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
 		
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
+		
 		SearchParameters.addReferenceLists(studentTypeIds, 
 				specialServiceGroupIds, 
-				null, 
+				null,
+				serviceReasonIds,
 				parameters, 
 				personSearchForm, 
 				studentTypeService, 
 				ssgService, 
-				null);
+				null,
+				serviceReasonService);
 		
 		
 		SearchParameters.addReferenceTypes(programStatus, 

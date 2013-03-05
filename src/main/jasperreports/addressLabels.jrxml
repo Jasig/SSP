@@ -41,6 +41,7 @@
 	<parameter name="studentTypeNames" class="java.lang.String"/>
 	<parameter name="actualStartTerm" class="java.lang.String"/>
 	<parameter name="anticipatedStartTerm" class="java.lang.String"/>
+	<parameter name="serviceReasonGroupNames" class="java.lang.String"/>
 	<queryString language="json">
 		<![CDATA[rows(name==$P{name}]]>
 	</queryString>
@@ -91,7 +92,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="165" splitType="Stretch">
+		<band height="180" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="12" y="2" width="100" height="16"/>
 				<textElement/>
@@ -173,12 +174,12 @@
 				<textFieldExpression><![CDATA[$P{referralSourceNames}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="90e4fa8d-5631-47ef-b9b1-de98b568c27b" x="12" y="145" width="100" height="16"/>
+				<reportElement uuid="90e4fa8d-5631-47ef-b9b1-de98b568c27b" x="12" y="162" width="100" height="16"/>
 				<textElement/>
 				<text><![CDATA[Student Count:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="e49d816d-3764-4980-94ba-2b9e63b689da" positionType="Float" x="134" y="145" width="352" height="16" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="e49d816d-3764-4980-94ba-2b9e63b689da" positionType="Float" x="134" y="162" width="352" height="16" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{studentCount}]]></textFieldExpression>
 			</textField>
@@ -191,6 +192,16 @@
 				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" positionType="Float" x="401" y="90" width="117" height="16" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{anticipatedStartTerm}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="12" y="143" width="110" height="16"/>
+				<textElement/>
+				<text><![CDATA[Service Reasons:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="1ca8c5e0-8d6e-4de9-aa97-373049b1348a" x="134" y="143" width="339" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{serviceReasonGroupNames}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

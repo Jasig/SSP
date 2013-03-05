@@ -145,7 +145,7 @@ public interface EarlyAlertService
 	PagingWrapper<EarlyAlertStudentReportTO> getStudentsEarlyAlertCountSetForCritera(EarlyAlertStudentSearchTO searchForm, SortingAndPaging createForSingleSort);
 	
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(List<Person> coaches, Date createDateFrom, 
-			Date createDateTo, List<UUID> studentTypeIds, SortingAndPaging sAndP);
+			Date createDateTo, List<UUID> studentTypeIds, List<UUID> serviceReasonIds, SortingAndPaging sAndP);
 
 
 }

@@ -394,7 +394,7 @@ public class TaskServiceImpl
 	
 	@Override
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentTaskCountForCoaches(List<Person> coaches, 
-			Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, SortingAndPaging sAndP) {
-		return dao.getStudentTaskCountForCoaches(coaches, createDateFrom, createDateTo, studentTypeIds, sAndP);
+			Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, List<UUID> serviceReasonIds, SortingAndPaging sAndP) {
+		return dao.getStudentTaskCountForCoaches(coaches, createDateFrom, createDateTo, studentTypeIds, serviceReasonIds, sAndP);
 	}
 }

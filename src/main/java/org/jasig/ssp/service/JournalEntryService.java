@@ -39,6 +39,6 @@ public interface JournalEntryService
 	public Long getStudentCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds);  
 	
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentJournalCountForCoaches(List<Person> coaches, 
-			Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, SortingAndPaging sAndP);
+			Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, List<UUID> serviceReasonIds, SortingAndPaging sAndP);
 
 }

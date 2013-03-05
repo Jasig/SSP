@@ -39,6 +39,7 @@ import org.jasig.ssp.model.CaseloadRecord;
 import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ProgramStatus;
+import org.jasig.ssp.transferobject.reports.CaseLoadSearchTO;
 import org.jasig.ssp.util.hibernate.MultipleCountProjection;
 import org.jasig.ssp.util.hibernate.OrderAsString;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -173,8 +174,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 
 
 	public PagingWrapper<CoachCaseloadRecordCountForProgramStatus>
-		currentCaseLoadCountsByStatus(List<UUID> studentTypeIds,
-									  String homeDepartment,
+		currentCaseLoadCountsByStatus(CaseLoadSearchTO searchForm,
 									  SortingAndPaging sAndP) {
 
 		// Technically run the risk of returning multiple statuses
@@ -187,7 +187,10 @@ public class CaseloadDao extends AbstractDao<Person> {
 				overlappingProgramStatusDateRestrictions(new Date(), null);
 
 		return caseloadCountsByStatusWithDateRestrictions(dateRestrictions,
-					studentTypeIds, homeDepartment, sAndP);
+				 searchForm.getStudentTypeIds(),
+				 searchForm.getServiceReasonIds(), 
+				 searchForm.getHomeDepartment(), 
+				 sAndP);
 
 	}
 
@@ -204,14 +207,15 @@ public class CaseloadDao extends AbstractDao<Person> {
 						programStatusDateTo);
 
 		return caseloadCountsByStatusWithDateRestrictions(dateRestrictions,
-					studentTypeIds, homeDepartment, sAndP);
+					studentTypeIds, null, homeDepartment, sAndP);
 
 	}
 
 	private PagingWrapper<CoachCaseloadRecordCountForProgramStatus>
 		caseloadCountsByStatusWithDateRestrictions(Criterion dateRestrictions,
-												   List<UUID> studentTypeIds,
-												   String homeDepartment,
+													List<UUID> studentTypeIds,
+													List<UUID> serviceReasonIds,
+													String homeDepartment,
 												   SortingAndPaging sAndP) {
 
 		final Criteria query = createCriteria();
@@ -224,6 +228,12 @@ public class CaseloadDao extends AbstractDao<Person> {
 
 		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
 			query.add(Restrictions.in("studentType.id", studentTypeIds));
+		}
+		
+		if (serviceReasonIds != null && !serviceReasonIds.isEmpty()) {
+			query.createAlias("serviceReasons", "serviceReasons");
+			query.createAlias("serviceReasons.serviceReason", "serviceReason");
+			query.add(Restrictions.in("serviceReason.id", serviceReasonIds));
 		}
 
 		// item count

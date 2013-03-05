@@ -363,8 +363,9 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 			Date createDateFrom, 
 			Date createDateTo,
 			List<UUID> studentTypeIds, 
+			List<UUID> serviceReasonIds,
 			SortingAndPaging sAndP){
-		return dao.getStudentEarlyAlertResponseCountByCoaches(coaches, createDateFrom, createDateTo, studentTypeIds, sAndP);
+		return dao.getStudentEarlyAlertResponseCountByCoaches(coaches, createDateFrom, createDateTo, studentTypeIds, serviceReasonIds, sAndP);
 	}
 	
 	@Override
@@ -378,15 +379,21 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		return dao.getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(earlyAlertIds, outcomeId);
 	}
 	
+	@Override
 	public Long getEarlyAlertOutcomeTypeCountByCriteria(String outcomeType,UUID outcomeId,
 			EarlyAlertStudentSearchTO searchForm) throws ObjectNotFoundException{
 		return dao.getEarlyAlertOutcomeTypeCountByCriteria(outcomeType, outcomeId, searchForm);
 	}
 	
+	@Override
 	public 	List<EarlyAlertStudentResponseOutcomeReportTO> getEarlyAlertResponseOutcomeTypeForStudentsByCriteria(
 			String outcomeType, EarlyAlertStudentSearchTO searchForm, SortingAndPaging sAndP){
 		
 		return dao.getEarlyAlertResponseOutcomeTypeForStudentsByCriteria(outcomeType, searchForm, sAndP);
+	}
+	
+	public Long getEarlyAlertCountByOutcomeCriteria(EarlyAlertStudentSearchTO searchForm)  throws ObjectNotFoundException{
+		return dao.getEarlyAlertCountByOutcomeCriteria(searchForm);
 	}
 
 }

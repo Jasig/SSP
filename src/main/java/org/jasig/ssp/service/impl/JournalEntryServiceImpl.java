@@ -101,7 +101,7 @@ public class JournalEntryServiceImpl
 	
 	@Override
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentJournalCountForCoaches(List<Person> coaches, 
-			Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, SortingAndPaging sAndP){
-		return dao.getStudentJournalCountForCoaches(coaches, createDateFrom, createDateTo, studentTypeIds, sAndP);
+			Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, List<UUID> serviceReasonIds, SortingAndPaging sAndP){
+		return dao.getStudentJournalCountForCoaches(coaches, createDateFrom, createDateTo, studentTypeIds, serviceReasonIds, sAndP);
 	}
 }

@@ -452,6 +452,13 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 					"personDisabilityTypes.disabilityType.id",
 					personSearchTO.getDisabilityTypeId()));
 		}
+		
+		if (personSearchTO.getServiceReasonsIds() != null && personSearchTO.getServiceReasonsIds().size() > 0) {
+			criteria.createAlias("serviceReasons", "serviceReasons");
+			criteria.createAlias("serviceReasons.serviceReason", "serviceReason");
+			criteria.add(Restrictions.in("serviceReason.id",
+					personSearchTO.getServiceReasonsIds()));
+		}
 
 		// don't bring back any non-students, there will likely be a better way
 		// to do this later

@@ -28,6 +28,7 @@ import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
+import org.jasig.ssp.transferobject.reports.CaseLoadSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
@@ -82,7 +83,7 @@ public interface CaseloadService {
 	 * @return
 	 */
 	Collection<CoachCaseloadRecordCountForProgramStatus>
-		currentCaseloadCountsByStatus(List<UUID> studentTypeIds, String homeDepartment);
+		currentCaseloadCountsByStatus(CaseLoadSearchTO searchForm);
 
 	/**
 	 * Count caseloads overlapping the given date range for <em>all</em>

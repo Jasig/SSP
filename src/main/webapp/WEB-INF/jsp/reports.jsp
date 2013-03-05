@@ -117,7 +117,6 @@
 		<div class="ea-clear"></div>
 
 		<!-- Student Type -->
-
 		<div class="ea-input">
 			<select class="input-student-type-group" id="StudentTypeIds" name="studentTypeIds" multiple="multiple">
 			<option value="">${not_applicable}</option>
@@ -125,6 +124,17 @@
 		</div>
 		<div class="ea-label">
 			<span>Student Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Service Reason -->
+		<div class="ea-input">
+			<select class="input-service-reason-group" id="ServiceReasonIds" name="serviceReasonIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Service Reason:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -300,12 +310,23 @@
 
 		<!-- Student Type -->
 		<div class="ea-input">
-			<select class="input-student-type-group" id="StudentTypeIds" name="studentTypeIds" multiple="multiple">
+			<select class="input-student-type-group" id="counselorCaseStudentTypeIds" name="studentTypeIds" multiple="multiple">
 			<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
 			<span>Student Type:</span>
+		</div>
+		
+		<div class="ea-clear"></div>
+		<!-- Service Reason -->
+		<div class="ea-input">
+			<select class="input-service-reason-group" id="counselorCaseServiceReasonIds" name="serviceReasonIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Service Reason:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -458,6 +479,16 @@
 			<span>Student Type:</span>
 		</div>
 		<div class="ea-clear"></div>
+		<!-- Service Reason -->
+		<div class="ea-input">
+			<select class="input-service-reason-group" id="caseloadActivityServiceReasonIds" name="serviceReasonIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Service Reason:</span>
+		</div>
+		<div class="ea-clear"></div>
 		
 		<!-- Date Range Selection -->
 		<div class="ea-time-span">
@@ -526,6 +557,27 @@
 	<h1>Special Services</h1>
 	<form action="/ssp/api/1/report/SpecialServices/" method="post" class="alert-form">
 
+		<!-- Student Type -->
+		<div class="ea-input">
+			<select class="input-student-type-group" id="specialServicesStudentTypeIds" name="studentTypeIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Student Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Service Reason -->
+		<div class="ea-input">
+			<select class="input-service-reason-group" id="specialServicesServiceReasonIds" name="serviceReasonIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Service Reason:</span>
+		</div>
+		<div class="ea-clear"></div>
 
 		<!-- Special Service Groups -->
 		<div class="ea-input">
@@ -574,6 +626,17 @@
 		</div>
 		<div class="ea-label">
 			<span>Student Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Service Reason -->
+		<div class="ea-input">
+			<select class="input-service-reason-group" id="currentCaseloadStatusServiceReasonIds" name="serviceReasonIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Service Reason:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -759,7 +822,6 @@
 		<div class="ea-clear"></div>
 
 		<!-- Student Type -->
-
 		<div class="ea-input">
 			<select class="input-student-type-group" id="earlyAlertStudentStudentTypeIds" name="studentTypeIds" multiple="multiple">
 			<option value="">${not_applicable}</option>
@@ -767,6 +829,17 @@
 		</div>
 		<div class="ea-label">
 			<span>Student Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Service Reason -->
+		<div class="ea-input">
+			<select class="input-service-reason-group" id="earlyAlertStudentServiceReasonIds" name="serviceReasonIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Service Reason:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -1012,6 +1085,7 @@
 		</div>
 		<div class="ea-clear"></div>
 
+		<!-- Student Type -->
 		<div class="ea-input">
 			<select class="input-student-type-group" id="earlyAlertStudentProgressStudentTypeIds" name="studentTypeIds" multiple="multiple">
 			<option value="">${not_applicable}</option>
@@ -1019,6 +1093,17 @@
 		</div>
 		<div class="ea-label">
 			<span>Student Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Service Reason -->
+		<div class="ea-input">
+			<select class="input-service-reason-group" id="earlyAlertStudentProgressServiceReasonIds" name="serviceReasonIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Service Reason:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -1134,6 +1219,17 @@
 			<span>Student Type:</span>
 		</div>
 		<div class="ea-clear"></div>
+		
+		<!-- Service Reason -->
+		<div class="ea-input">
+			<select class="input-service-reason-group" id="earlyAlertStudentOutcomesServiceReasonIds" name="serviceReasonIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Service Reason:</span>
+		</div>
+		<div class="ea-clear"></div>
 
 		<!-- Special Service Groups -->
 		<div class="ea-input">
@@ -1149,7 +1245,7 @@
 		
 		<!-- Outcome -->
 		<div class="ea-input">
-			<select id="earlyAlertStudentOutreachOutcomeGroup" name="earlyAlertOutcomes" class="input-early-alert-outcome-group" multiple="multiple" >
+			<select id="earlyAlertStudentOutreachOutcomeGroup" name="outcomeIds" class="input-early-alert-outcome-group" multiple="multiple" >
 				<option value="">${all_found}</option>
 			</select>
 		</div>
@@ -1264,7 +1360,8 @@
 			<span>Program Status:</span>
 		</div>
 		<div class="ea-clear"></div>
-
+		
+		<!-- Student Type -->
 		<div class="ea-input">
 			<select class="input-student-type-group" id="earlyAlertStudentOutcomeStudentTypeIds" name="studentTypeIds" multiple="multiple">
 			<option value="">${not_applicable}</option>
@@ -1272,6 +1369,17 @@
 		</div>
 		<div class="ea-label">
 			<span>Student Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Service Reason -->
+		<div class="ea-input">
+			<select class="input-service-reason-group" id="earlyAlertStudentOutcomeServiceReasonIds" name="serviceReasonIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Service Reason:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -1289,7 +1397,7 @@
 		
 		<!-- Outcome -->
 		<div class="ea-input">
-			<select id="earlyAlertStudentOutcomeOutcomeGroup" name="earlyAlertOutcomes" class="input-early-alert-outcome-group" multiple="multiple" >
+			<select id="earlyAlertStudentOutcomeOutcomeGroup" name="outcomeIds" class="input-early-alert-outcome-group" multiple="multiple" >
 				<option value="">${all_found}</option>
 			</select>
 		</div>
@@ -1498,6 +1606,17 @@
 			<span>Student Type:</span>
 		</div>
 		<div class="ea-clear"></div>
+		
+		<!-- Service Reason -->
+		<div class="ea-input">
+			<select class="input-service-reason-group" id="disabilityServicesServiceReasonIds" name="serviceReasonIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Service Reason:</span>
+		</div>
+		<div class="ea-clear"></div>
 
 		<!-- Special Service Groups -->
 		<div class="ea-input">
@@ -1691,7 +1810,6 @@
 		<div class="ea-clear"></div>
 
 		<!-- Student Type -->
-
 		<div class="ea-input">
 			<select class="input-student-type-group" id="disabilityAccomodationStudentTypeIds" name="studentTypeIds" multiple="multiple">
 			<option value="">${not_applicable}</option>
@@ -1699,6 +1817,17 @@
 		</div>
 		<div class="ea-label">
 			<span>Student Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Service Reason -->
+		<div class="ea-input">
+			<select class="input-service-reason-group" id="disabilityAccomodationServiceReasonIds" name="serviceReasonIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Service Reason:</span>
 		</div>
 		<div class="ea-clear"></div>
 

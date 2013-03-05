@@ -46,7 +46,7 @@ public class CaseloadReportControllerIntegrationTest
 	@Test
 	public void testDefaultDataSet() throws ObjectNotFoundException, IOException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoad(response,null, null, "csv");
+		controller.getCaseLoad(response, null, null, null, "csv");
 
 		/// TODO Eliminate Spaces in Report TO Remove Extra commas
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
@@ -65,7 +65,7 @@ public class CaseloadReportControllerIntegrationTest
 				.add(Stubs.PersonFixture.KEVIN_SMITH.username());
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoad(response, null, null, "csv");
+		controller.getCaseLoad(response, null, null, null, "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
@@ -103,7 +103,7 @@ public class CaseloadReportControllerIntegrationTest
 		earlyAlertService.create(earlyAlert);
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoad(response, null, null, "csv");
+		controller.getCaseLoad(response, null, null, null, "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
@@ -144,7 +144,7 @@ public class CaseloadReportControllerIntegrationTest
 		earlyAlertService.create(earlyAlert);
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoad(response, null, null, "csv");
+		controller.getCaseLoad(response, null, null, null, "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
@@ -173,7 +173,8 @@ public class CaseloadReportControllerIntegrationTest
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		controller.getCaseLoad(response, 
 				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
-				Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()), 
+				Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()),
+				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
 				"csv");
 
 		// "body" is the actual results and the header that describes its columns.

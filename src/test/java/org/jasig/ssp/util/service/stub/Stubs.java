@@ -299,6 +299,30 @@ public class Stubs {
 		public String title() { return title; }
 
 	}
+	
+	public static enum ServiceReasonFixture {
+
+		TEST_SERVICE_REASON ("f6201a04-bb31-4ca5-b606-609f3ad09f87", "Test Service Reason"),
+		TEST_SERVICE_REASON_2 ("205df6c0-fea0-11e1-9678-406c8f22c3ce", "Test Service Reason 2");
+
+		private final UUID id;
+		// "name" is reserved for enums
+		private final String title;
+
+		ServiceReasonFixture(String id, String title) {
+			this.id = UUID.fromString(id);
+			this.title = title;
+		}
+
+		ServiceReasonFixture(UUID id, String title) {
+			this.id = id;
+			this.title = title;
+		}
+
+		public UUID id() { return id; }
+		public String title() { return title; }
+
+	}
 
 	public static enum TermFixture {
 		FALL_2012 ("FA12", "Fall 2012", 2013),

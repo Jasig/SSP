@@ -16,12 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.web.api.reports; // NOPMD
+package org.jasig.ssp.web.api.reports;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -31,33 +29,27 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
-import org.apache.commons.lang.StringUtils;
+
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.JournalStepDetailService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
-import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
-import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
-import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,20 +59,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Maps;
 
-/**
- * Service methods for manipulating data about people in the system.
- * <p>
- * Mapped to URI path <code>report/AddressLabels</code>
- */
-@Controller
-@RequestMapping("/1/report/AddressLabels")
-public class AddressLabelsReportController extends ReportBaseController { // NOPMD
-
-	private static String REPORT_URL = "/reports/addressLabels.jasper";
-	private static String REPORT_FILE_TITLE = "General_Student_Report";
+public class DistanceLearningReportController extends ReportBaseController {
+	private static String REPORT_URL = "/reports/journalSessionDetails.jasper";
+	private static String REPORT_FILE_TITLE = "Journal_Session_Details_Report";
+	private static String JOURNAL_SESSION_DETAILS = "journalSessionDetails";
 	
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AddressLabelsReportController.class);
+			.getLogger(JournalSessionDetailsReportController.class);
 
 	@Autowired
 	private transient PersonService personService;
@@ -88,8 +73,7 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 	private transient PersonTOFactory personTOFactory;
 	@Autowired
 	private transient SpecialServiceGroupService ssgService;
-	@Autowired
-	private transient ReferralSourceService referralSourcesService;
+
 	@Autowired
 	private transient TermService termService;
 	@Autowired
@@ -98,6 +82,7 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 	protected transient StudentTypeService studentTypeService;	
 	@Autowired
 	protected transient ServiceReasonService serviceReasonService;	
+	
 
 	// @Autowired
 	// private transient PersonTOFactory factory;
@@ -114,19 +99,13 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	@ResponseBody
-	public void getAddressLabels(
+	public void getDistanceLearningReport(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) UUID coachId,			
-			final @RequestParam(required = false) UUID programStatus,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
-			final @RequestParam(required = false) List<UUID> referralSourcesIds,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) List<UUID> serviceReasonIds,
-			final @RequestParam(required = false) Integer anticipatedStartYear,
-			final @RequestParam(required = false) String anticipatedStartTerm,
-			final @RequestParam(required = false) Integer actualStartYear,
-			final @RequestParam(required = false) String actualStartTerm,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false) String termCode,
@@ -141,14 +120,15 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 		
 		SearchParameters.addReferenceLists(studentTypeIds, 
 				specialServiceGroupIds, 
-				referralSourcesIds,
+				null,
 				serviceReasonIds,
 				parameters, 
 				personSearchForm, 
 				studentTypeService, 
 				ssgService, 
-				referralSourcesService,
+				null,
 				serviceReasonService);
+		
 		
 		SearchParameters.addDateRange(createDateFrom, 
 				createDateTo, 
@@ -157,7 +137,7 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 				personSearchForm, 
 				termService);
 		
-		SearchParameters.addReferenceTypes(programStatus,
+		SearchParameters.addReferenceTypes(null,
 				null, 
 				false,
 				null,
@@ -166,14 +146,8 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 				personSearchForm, 
 				programStatusService, 
 				null);
-		
-		SearchParameters.addAnticipatedAndActualStartTerms(anticipatedStartTerm, 
-				anticipatedStartYear, 
-				actualStartTerm, 
-				actualStartYear, 
-				parameters, 
-				personSearchForm);
 
+		
 		final PagingWrapper<BaseStudentReportTO> people = personService.getStudentReportTOsFromCriteria(
 				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
 		

@@ -52,7 +52,7 @@ public class PretransistionedReportControllerIntegrationTest extends
 			throws IOException, ObjectNotFoundException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		
-		controller.getPreTransitioned(response, null, null, null, null, null, null,
+		controller.getPreTransitioned(response, null, null, null, null, null, null, null,
 				null, null, null, null, null, "csv");
 
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
@@ -90,6 +90,7 @@ public class PretransistionedReportControllerIntegrationTest extends
 				Lists.newArrayList(SpecialServiceGroupFixture.ANOTHER_TEST_SSG.id()), 
 				Lists.newArrayList(ReferralSourceFixture.TEST_REFERRAL_SOURCE.id()), 
 				Lists.newArrayList(StudentTypeFixture.ILP.id()), 
+				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
 				null, 
 				null, 
 				TermFixture.FALL_2012.year(),
@@ -124,7 +125,8 @@ public class PretransistionedReportControllerIntegrationTest extends
 				ProgramStatusFixture.ACTIVE.id(), 
 				Lists.newArrayList(SpecialServiceGroupFixture.ANOTHER_TEST_SSG.id()), 
 				Lists.newArrayList(ReferralSourceFixture.TEST_REFERRAL_SOURCE.id()), 
-				Lists.newArrayList(StudentTypeFixture.ILP.id()), 
+				Lists.newArrayList(StudentTypeFixture.ILP.id()),
+				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
 				null, 
 				null, 
 				TermFixture.FALL_2012.year(),

@@ -47,6 +47,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
+import org.jasig.ssp.transferobject.reports.CaseLoadSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,13 +122,13 @@ public class CaseloadServiceImpl implements CaseloadService {
 
 	@Override
 	public Collection<CoachCaseloadRecordCountForProgramStatus>
-		currentCaseloadCountsByStatus(List<UUID> studentTypeIds, String homeDepartment) {
+		currentCaseloadCountsByStatus(CaseLoadSearchTO searchForm) {
 
 		Collection<CoachCaseloadRecordCountForProgramStatus> daoResult =
-				dao.currentCaseLoadCountsByStatus(studentTypeIds, homeDepartment, null).getRows();
+				dao.currentCaseLoadCountsByStatus(searchForm, null).getRows();
 
 		// see notes in merge...() on daoResult sorting expectations
-		return mergeCaseloadCountsWithOfficialCoaches(daoResult, homeDepartment);
+		return mergeCaseloadCountsWithOfficialCoaches(daoResult, searchForm.getHomeDepartment());
 	}
 
 	@Override

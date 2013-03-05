@@ -44,6 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 
 public class DisabilityServicesReportControllerIntegrationTest
 		extends AbstractReportControllerIntegrationTest  {
@@ -86,6 +87,7 @@ public class DisabilityServicesReportControllerIntegrationTest
 				getReferences(ssgService, 2), 
 				getReferences(referralSourceService, 2), 
 				getReferences(studentTypeService, 2), 
+				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
 				null, //anticipatedStartYear
 				null, //anticipatedStartTerm
 				2013, //actualStartYear
@@ -134,6 +136,7 @@ public class DisabilityServicesReportControllerIntegrationTest
 				null, 
 				null, 
 				null, 
+				null,
 				null, 
 				null, 
 				2013, 

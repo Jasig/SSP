@@ -137,6 +137,9 @@ var ssp = ssp || {};
 			loadGroupInput("/ssp/api/1/reference/earlyAlertOutcome/", that
 							.locate('earlyAlertOutcomeGroup'));	
 			
+			loadGroupInput("/ssp/api/1/reference/serviceReason/", that
+					.locate('serviceReasonGroup'));	
+			
 			loadGroupInput("/ssp/api/1/reference/disabilityStatus/", that
 					.locate('disabilityStatusGroup'));	
 			
@@ -339,6 +342,7 @@ var ssp = ssp || {};
 							programStatusGroup : '.input-program-status-group',
 							studentTypeGroup : '.input-student-type-group',
 							specialServiceGroup : '.input-special-service-group',
+							serviceReasonGroup: '.input-service-reason-group',
 							referralSourceGroup : '.input-referral-source-group',
 							earlyAlertReferralGroup: '.input-early-alert-referral-group',
 							assignedCounselorGroup : '.input-assigned-counselor-group',

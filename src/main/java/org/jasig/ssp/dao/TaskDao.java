@@ -139,7 +139,7 @@ public class TaskDao
 
 		final Criteria query = createCriteria();
 		
-		setCriteria(query, createDateFrom, createDateTo, studentTypeIds);
+		setCriteria(query, createDateFrom, createDateTo, studentTypeIds, null);
 		
 		// restrict to coach
 		query.add(Restrictions.eq("createdBy", coach));
@@ -156,7 +156,7 @@ public class TaskDao
 
 		final Criteria query = createCriteria();
  
-		setCriteria(query, createDateFrom, createDateTo, studentTypeIds);
+		setCriteria(query, createDateFrom, createDateTo, studentTypeIds, null);
 		
 		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", coach))
 		        .setProjection(Projections.countDistinct("person")).list().get(0);
@@ -165,11 +165,16 @@ public class TaskDao
 	}	
 	
 	@SuppressWarnings("unchecked")
-	public PagingWrapper<EntityStudentCountByCoachTO> getStudentTaskCountForCoaches(List<Person> coaches, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, SortingAndPaging sAndP) {
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentTaskCountForCoaches(List<Person> coaches, 
+			Date createDateFrom, 
+			Date createDateTo, 
+			List<UUID> studentTypeIds, 
+			List<UUID> serviceReasonIds,
+			SortingAndPaging sAndP) {
 
 		final Criteria query = createCriteria();
  
-		setCriteria( query,  createDateFrom,  createDateTo, studentTypeIds);
+		setCriteria( query,  createDateFrom,  createDateTo, studentTypeIds, serviceReasonIds);
 		
 		query.add(Restrictions.in("createdBy", coaches));
 		// item count
@@ -192,13 +197,16 @@ public class TaskDao
 	
 	
 	
-	private Criteria setCriteria(Criteria query, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds){
-		// add possible studentTypeId Check
+	private Criteria setCriteria(Criteria query, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds,  List<UUID> serviceReasonIds){
+		if (studentTypeIds != null && !studentTypeIds.isEmpty() || serviceReasonIds != null && !serviceReasonIds.isEmpty())
+		{
+			query.createAlias("person",
+					"person");
+		}
 		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
 		
-			query.createAlias("person",
-				"person")
-				.add(Restrictions
+			
+			query.add(Restrictions
 						.in("person.studentType.id",studentTypeIds));
 					
 		}		
@@ -211,6 +219,14 @@ public class TaskDao
 		if (createDateTo != null) {
 			query.add(Restrictions.le("createdDate",
 					createDateTo));
+		}
+		
+		if(serviceReasonIds != null && !serviceReasonIds.isEmpty()){
+			query.createAlias("person.serviceReasons", "serviceReasons");
+			query.createAlias("serviceReasons.serviceReason", "serviceReason");
+			query.add(Restrictions
+					.in("serviceReason.id",serviceReasonIds));
+			
 		}
 				
 		return query;

@@ -44,7 +44,7 @@ public class AddressLabelsReportControllerIntegrationTest
 	public void testGetAddressLabelsReturnsAllStudentsIfNoFiltersSet()
 			throws IOException, ObjectNotFoundException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getAddressLabels(response, null, null, null, null, null,null,null,
+		controller.getAddressLabels(response, null, null, null, null, null, null,null,null,
 				null, null, null, null, null, null, null, "csv");
 
 		// "body" is the actual results and the header that describes its columns.
@@ -79,7 +79,7 @@ public class AddressLabelsReportControllerIntegrationTest
 		// Alan Turing, i.e. the coach assigned to our test student users
 		// in our standard fixture
 		final UUID coachId = Stubs.PersonFixture.ADVISOR_0.id();
-		controller.getAddressLabels(response, null, coachId, null, null, null,null,null,
+		controller.getAddressLabels(response, null, coachId, null, null, null, null,null,null,
 				null, null, null, null, null, null,  null, "csv");
 
 		// "body" is the actual results and the header that describes its columns.

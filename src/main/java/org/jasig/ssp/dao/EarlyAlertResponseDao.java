@@ -270,10 +270,25 @@ public class EarlyAlertResponseDao extends
 			EarlyAlertStudentSearchTO searchForm)
 			throws ObjectNotFoundException {
 
-		final Criteria criteria = getCriteriaForOutcomeType(outcomeType, searchForm, null);
+		final Criteria criteria = getCriteriaForOutcomeType(searchForm, null);
 		criteria.createAlias(outcomeType, outcomeType);
 		criteria.add(Restrictions.eq(outcomeType + ".id", outcomeId));
 		criteria.setProjection(Projections.countDistinct("id"));
+		return (Long)criteria.uniqueResult();
+	}
+	
+	@SuppressWarnings(UNCHECKED)
+	public Long getEarlyAlertCountByOutcomeCriteria(
+			EarlyAlertStudentSearchTO searchForm)
+			throws ObjectNotFoundException {
+
+		final Criteria criteria = getCriteriaForOutcomeType(searchForm, null);
+		
+		if(searchForm.getOutcomeIds() != null && searchForm.getOutcomeIds().size() > 0){
+			criteria.createAlias("earlyAlertOutcome", "earlyAlertOutcome");
+			criteria.add(Restrictions.in("earlyAlertOutcome.id", searchForm.getOutcomeIds()));
+		}
+		criteria.setProjection(Projections.countDistinct("earlyAlert.id"));
 		return (Long)criteria.uniqueResult();
 	}
 	
@@ -285,10 +300,7 @@ public class EarlyAlertResponseDao extends
 			EarlyAlertStudentSearchTO searchForm,
 			SortingAndPaging sAndP){
 		
-		if(outcomeType.equals("earlyAlertOutcome") && searchForm.getOutcomeIds() != null && searchForm.getOutcomeIds().size() > 0){
-			searchForm.setOutcomeIds(null);
-		}
-		final Criteria criteria = getCriteriaForOutcomeType(outcomeType, searchForm, sAndP);
+		final Criteria criteria = getCriteriaForOutcomeType(searchForm, sAndP);
 		
 		ProjectionList projections = getPersonProjection();
 		criteria.createAlias(outcomeType, outcomeType);
@@ -320,7 +332,7 @@ public class EarlyAlertResponseDao extends
 	}
 	
 	
-	private Criteria getCriteriaForOutcomeType(String fieldName, EarlyAlertStudentSearchTO searchForm,
+	private Criteria getCriteriaForOutcomeType(EarlyAlertStudentSearchTO searchForm,
 			SortingAndPaging sAndP){
 		final Criteria criteria = createCriteria();
 		
@@ -461,7 +473,12 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 	
 	
 	@SuppressWarnings("unchecked")
-	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertResponseCountByCoaches(List<Person> coaches, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, SortingAndPaging sAndP) {
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertResponseCountByCoaches(List<Person> coaches, 
+			Date createDateFrom, 
+			Date createDateTo, 
+			List<UUID> studentTypeIds, 
+			List<UUID> serviceReasonIds,
+			SortingAndPaging sAndP) {
 
 		final Criteria query = createCriteria();
  
@@ -480,10 +497,19 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		query.createAlias("earlyAlert", "earlyAlert");
 		Criteria personCriteria = query.createAlias("earlyAlert.person", "person");
 		personCriteria.add(Restrictions.in("earlyAlert.createdBy", coaches));
+		
 		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
 			personCriteria.add(Restrictions
 					.in("person.studentType.id",studentTypeIds));
 		}
+		
+		if (serviceReasonIds != null && !serviceReasonIds.isEmpty()) {
+			query.createAlias("person.serviceReasons", "serviceReasons");
+			query.createAlias("serviceReasons.serviceReason", "serviceReason");
+			query.add(Restrictions
+					.in("serviceReason.id",serviceReasonIds));
+		}
+		
 		// item count
 		Long totalRows = 0L;
 		if ((sAndP != null) && sAndP.isPaged()) {
@@ -574,6 +600,14 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 			criteria.add(Restrictions.le("person.createdDate",
 					personSearchFormTO.getCreateDateTo()));
 		}
+		
+		if (personSearchFormTO.getServiceReasonsIds() != null && personSearchFormTO.getServiceReasonsIds().size() > 0) {
+			criteria.createAlias("person.serviceReasons", "serviceReasons");
+			criteria.createAlias("serviceReasons.serviceReason", "serviceReason");
+			criteria.add(Restrictions.in("serviceReason.id",
+					personSearchFormTO.getServiceReasonsIds()));
+		}
+
 
 		// don't bring back any non-students, there will likely be a better way
 		// to do this later

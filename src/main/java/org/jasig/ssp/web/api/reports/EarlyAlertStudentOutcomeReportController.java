@@ -46,6 +46,7 @@ import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
 import org.jasig.ssp.service.reference.EarlyAlertOutreachService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
+import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentResponseOutcomeReportTO;
@@ -85,8 +86,13 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 	private static final String[] REPORT_FILE_TITLE = {"Early_Alert_Student_Outcome_Report", "Early_Alert_Student_Outreach_Report"};
 	private static final String[] REPORT_TITLE = {"Early Alert Student Outcome Report", "Early Alert Student Outreach Report"};
 	private static final String[] COLUMN_TITLE = {"Outcome(s)", "Outreach(s)"};
+	private static final String[] DETAIL_COLUMN_TITLE = {"OUTCOME", "OUTREACH"};
 	private static final String REPORT_TITLE_LABEL = "reportTitle";
 	private static final String COLUMN_TITLE_LABEL = "columnTitle";
+	private static final String DETAIL_COLUMN_TITLE_LABEL = "detailColumnTitle";
+	private static final String EARLY_ALERT_OUTCOME = "earlyAlertOutcome";
+	private static final String EARLY_ALERT_OUTREACH = "earlyAlertOutreachIds";
+	private static final String SELECTED_OUTCOME_NAMES = "selectedOutcomeNames";
 	
 	private static final String OUTCOME_TOTALS = "outcomeTotals";
 
@@ -104,6 +110,9 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 	
 	@Autowired
 	private transient StudentTypeService studentTypeService;
+	
+	@Autowired
+	protected transient ServiceReasonService serviceReasonService;	
 	
 	@Autowired
 	private transient ProgramStatusService programStatusService;
@@ -147,6 +156,7 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) UUID coachId,	
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
+			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false) UUID programStatus,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) List<UUID> outcomeIds,
@@ -161,14 +171,17 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
 		
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
+		
 		SearchParameters.addReferenceLists(studentTypeIds, 
 				specialServiceGroupIds, 
-				null, 
+				null,
+				serviceReasonIds,
 				parameters, 
 				personSearchForm, 
 				studentTypeService, 
 				ssgService, 
-				null);
+				null,
+				serviceReasonService);
 		
 		SearchParameters.addDateRange(createDateFrom, 
 				createDateTo, 
@@ -187,55 +200,41 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 				programStatusService, 
 				null);
 		
-		SearchParameters.addUUIDSToMap("outcomes", "Not Used", outcomeIds, parameters, earlyAlertOutcomeService);
+		final List<UUID> cleanOutcomeIds = SearchParameters.cleanUUIDListOfNulls(outcomeIds);
+		SearchParameters.addUUIDSToMap(SELECTED_OUTCOME_NAMES, "Not Used", cleanOutcomeIds, parameters, earlyAlertOutcomeService);
+		
 		
 		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(personSearchForm, 
 				dateTerm.getStartDate(), dateTerm.getEndDate());
 		
-		searchForm.setOutcomeIds(outcomeIds);
+		searchForm.setOutcomeIds(cleanOutcomeIds);
 		
 		List<Pair<String, SortDirection>> sortFields = Lists.newArrayList();
 		sortFields.add(new Pair<String, SortDirection>("name", SortDirection.ASC));
-		Collection<EarlyAlertOutcome> earlyAlertOutcomes;	
-		if(outcomeIds != null && outcomeIds.size() > 0){
-			earlyAlertOutcomes = new ArrayList<EarlyAlertOutcome>();
-			for(UUID outcomeId:outcomeIds){
-				earlyAlertOutcomes.add(earlyAlertOutcomeService.get(outcomeId));
-			}
-		}else{
-			earlyAlertOutcomes = earlyAlertOutcomeService.getAll(new SortingAndPaging(status, sortFields, null, SortDirection.ASC)).getRows();
+		
+		List<Pair<String,Long>> outcomeTotals = null;
+		SortingAndPaging sAndP = new SortingAndPaging(status, sortFields, null, SortDirection.ASC);
+		if(outcomeType.equals(EARLY_ALERT_OUTCOME)){
+			outcomeTotals = getOutcomes(cleanOutcomeIds,  searchForm, sAndP);
+		}else if(outcomeType.equals(EARLY_ALERT_OUTREACH)){
+			outcomeTotals = getOutreaches(cleanOutcomeIds,  searchForm, sAndP);
 		}
 		
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
+		searchForm.setOutcomeIds(cleanOutcomeIds);
 		final List<EarlyAlertStudentResponseOutcomeReportTO> reportTOs = earlyAlertResponseService.getEarlyAlertResponseOutcomeTypeForStudentsByCriteria(
 				outcomeType, searchForm, SortingAndPaging.createForSingleSortAll(status, outcomeType + ".name", "ASC"));
 		
+	
+		// Add a blank line to the table
+		outcomeTotals.add(new Pair<String,Long>(" ", null));
 		
-		List<Pair<String,Long>> outcomeTotals = new ArrayList<Pair<String,Long>>();
-		if(outcomeType.equals("earlyAlertOutcome")){
-		for(EarlyAlertOutcome earlyAlertOutcome:earlyAlertOutcomes){
-			outcomeTotals.add(
-					new Pair<String,Long>(earlyAlertOutcome.getName(),earlyAlertResponseService.
-							getEarlyAlertOutcomeTypeCountByCriteria(outcomeType, earlyAlertOutcome.getId(), searchForm)));
-		}
-		}else if(outcomeType.equals("earlyAlertOutreachIds")){
-			Collection<EarlyAlertOutreach> earlyAlertOutreaches = earlyAlertOutreachService.getAll(new SortingAndPaging(status, sortFields, null, SortDirection.ASC)).getRows();
-			searchForm.setOutcomeIds(outcomeIds);
-			for(EarlyAlertOutreach earlyAlertOutreach:earlyAlertOutreaches){
-				outcomeTotals.add(
-						new Pair<String,Long>(earlyAlertOutreach.getName(),earlyAlertResponseService.
-								getEarlyAlertOutcomeTypeCountByCriteria(outcomeType, earlyAlertOutreach.getId(), searchForm)));
-			}
-		}
-		
+		searchForm.setOutcomeIds(cleanOutcomeIds);
 		outcomeTotals.add(
-				new Pair<String,Long>(" ", null));
-		
-		outcomeTotals.add(
-				new Pair<String,Long>("Total Early Alerts",earlyAlertService.
-						getEarlyAlertCountSetForCritera(searchForm)));
+				new Pair<String,Long>("Total Early Alerts",earlyAlertResponseService.
+						getEarlyAlertCountByOutcomeCriteria(searchForm)));
 		
 		SearchParameters.addDateTermToMap(dateTerm, parameters);
 		
@@ -246,8 +245,46 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 		Integer index = outcomeType.equals("earlyAlertOutcome") ? 0:1;
 		parameters.put(REPORT_TITLE_LABEL, REPORT_TITLE[index]);
 		parameters.put(COLUMN_TITLE_LABEL, COLUMN_TITLE[index]);
+		parameters.put(DETAIL_COLUMN_TITLE_LABEL,DETAIL_COLUMN_TITLE[index]);
 		
 		generateReport(response,  parameters, reportTOs,  REPORT_URL, reportType, REPORT_FILE_TITLE[index]);
+	}
+	
+	private List<Pair<String,Long>> getOutcomes(final List<UUID> cleanOutcomeIds, EarlyAlertStudentSearchTO searchForm, SortingAndPaging sAndP) throws ObjectNotFoundException{
+		List<Pair<String,Long>> outcomeTotals = new ArrayList<Pair<String,Long>>();
+		Collection<EarlyAlertOutcome> earlyAlertOutcomes;	
+		if(cleanOutcomeIds != null && cleanOutcomeIds.size() > 0){
+			earlyAlertOutcomes = new ArrayList<EarlyAlertOutcome>();
+			for(UUID outcomeId:cleanOutcomeIds){
+				earlyAlertOutcomes.add(earlyAlertOutcomeService.get(outcomeId));
+			}
+		}else{
+			earlyAlertOutcomes = earlyAlertOutcomeService.getAll(sAndP).getRows();
+		}
+		
+	
+			for(EarlyAlertOutcome earlyAlertOutcome:earlyAlertOutcomes){
+				searchForm.setOutcomeIds(null);
+				outcomeTotals.add(
+					new Pair<String,Long>(earlyAlertOutcome.getName(),earlyAlertResponseService.
+							getEarlyAlertOutcomeTypeCountByCriteria(EARLY_ALERT_OUTCOME, earlyAlertOutcome.getId(), searchForm)));
+			}
+		return outcomeTotals;
+	}
+	
+	private List<Pair<String,Long>> getOutreaches(final List<UUID> cleanOutcomeIds, EarlyAlertStudentSearchTO searchForm, SortingAndPaging sAndP) 
+			throws ObjectNotFoundException{
+		List<Pair<String,Long>> outcomeTotals = new ArrayList<Pair<String,Long>>();
+		Collection<EarlyAlertOutreach> earlyAlertOutreaches = earlyAlertOutreachService.getAll(sAndP).getRows();
+		
+		searchForm.setOutcomeIds(cleanOutcomeIds);
+		
+		for(EarlyAlertOutreach earlyAlertOutreach:earlyAlertOutreaches){
+			outcomeTotals.add(
+					new Pair<String,Long>(earlyAlertOutreach.getName(),earlyAlertResponseService.
+							getEarlyAlertOutcomeTypeCountByCriteria(EARLY_ALERT_OUTREACH, earlyAlertOutreach.getId(), searchForm)));
+		}
+		return outcomeTotals;
 	}
 
 	@Override

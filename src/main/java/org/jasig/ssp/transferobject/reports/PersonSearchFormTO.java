@@ -44,6 +44,8 @@ public class PersonSearchFormTO
 	private Integer anticipatedStartYear;
 
 	private List<UUID> studentTypeIds;
+	
+	private List<UUID> serviceReasonsIds;
 
 	private Date createDateFrom;
 
@@ -183,6 +185,20 @@ public class PersonSearchFormTO
 
 	public void setReferralSourcesIds(final List<UUID> referralSourcesIds) {
 		this.referralSourcesIds = referralSourcesIds;
+	}
+
+	/**
+	 * @return the serviceReasonsIds
+	 */
+	public List<UUID> getServiceReasonsIds() {
+		return serviceReasonsIds;
+	}
+
+	/**
+	 * @param serviceReasonsIds the serviceReasonsIds to set
+	 */
+	public void setServiceReasonsIds(List<UUID> serviceReasonsIds) {
+		this.serviceReasonsIds = serviceReasonsIds;
 	}
 
 	public String getAnticipatedStartTerm() {

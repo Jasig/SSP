@@ -32,6 +32,8 @@
 	<property name="ireport.y" value="0"/>
 	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
 	<parameter name="reportDate" class="java.lang.String"/>
+	<parameter name="studentTypeNames" class="java.lang.String"/>
+	<parameter name="serviceReasonGroupNames" class="java.lang.String"/>
 	<queryString language="json">
 		<![CDATA[rows]]>
 	</queryString>
@@ -61,26 +63,48 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="38" splitType="Stretch">
+		<band height="72" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="0" width="100" height="13"/>
 				<textElement/>
 				<text><![CDATA[Report Date:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="3a5dca54-1006-4f21-a054-1f544849639d" x="0" y="13" width="125" height="13"/>
+				<reportElement uuid="3a5dca54-1006-4f21-a054-1f544849639d" x="0" y="13" width="125" height="16"/>
 				<textElement/>
 				<text><![CDATA[Special Service Groups:]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="2bd0b0c4-c354-40a4-8131-9c0f91358ffa" x="202" y="0" width="205" height="13"/>
+				<reportElement uuid="2bd0b0c4-c354-40a4-8131-9c0f91358ffa" x="127" y="0" width="205" height="13"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="b6d2a5e6-e868-4229-834f-391bc3a81f59" stretchType="RelativeToBandHeight" x="202" y="13" width="548" height="20" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="b6d2a5e6-e868-4229-834f-391bc3a81f59" stretchType="RelativeToBandHeight" x="125" y="13" width="548" height="16" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{specialServiceGroupNames}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="0" y="31" width="98" height="16"/>
+				<textElement/>
+				<text><![CDATA[Service Reasons:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="1ca8c5e0-8d6e-4de9-aa97-373049b1348a" x="125" y="31" width="554" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{serviceReasonGroupNames}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" mode="Opaque" x="2" y="49" width="100" height="16"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Student Type:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d" mode="Opaque" x="127" y="49" width="141" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{studentTypeNames}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

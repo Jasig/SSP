@@ -61,6 +61,7 @@ public class EarlyAlertStudentOutcomeReportControllerIntegrationTest extends
 				Stubs.HomeDepartmentFixture.MATHEMATICS.title(), //home department
 				PersonFixture.COACH_1.id(), 
 				Lists.newArrayList(StudentTypeFixture.ILP.id()),
+				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
 				ProgramStatusFixture.ACTIVE.id(), 
 				Lists.newArrayList(Stubs.SpecialServiceGroupFixture.TEST_SSG.id()), 
 				Lists.newArrayList(Stubs.EarlyAlertOutcomeFixture.WAITING_FOR_RESPONSE.id()),
@@ -94,6 +95,7 @@ public class EarlyAlertStudentOutcomeReportControllerIntegrationTest extends
 				null, 
 				null, 
 				null, 
+				null,
 				null, 
 				null,
 				null,
@@ -126,6 +128,7 @@ public class EarlyAlertStudentOutcomeReportControllerIntegrationTest extends
 				Stubs.HomeDepartmentFixture.MATHEMATICS.title(), //home department
 				PersonFixture.COACH_1.id(), 
 				Lists.newArrayList(StudentTypeFixture.ILP.id()),
+				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
 				ProgramStatusFixture.ACTIVE.id(), 
 				Lists.newArrayList(Stubs.SpecialServiceGroupFixture.TEST_SSG.id()), 
 				Lists.newArrayList(Stubs.EarlyAlertOutcomeFixture.WAITING_FOR_RESPONSE.id()),
@@ -160,6 +163,7 @@ public class EarlyAlertStudentOutcomeReportControllerIntegrationTest extends
 				null, 
 				null, 
 				null, 
+				null,
 				null,
 				null,
 				null,

@@ -33,6 +33,7 @@
 	<parameter name="homeDepartment" class="java.lang.String"/>
 	<parameter name="studentTypeNames" class="java.lang.String"/>
 	<parameter name="reportDate" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="serviceReasonGroupNames" class="java.lang.String"/>
 	<field name="firstName" class="java.lang.String">
 		<fieldDescription><![CDATA[firstName]]></fieldDescription>
 	</field>
@@ -87,7 +88,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="64" splitType="Stretch">
+		<band height="85" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="0" width="100" height="20"/>
 				<textElement/>
@@ -117,6 +118,16 @@
 				<reportElement uuid="255b284c-e962-4bd2-a35c-c07141e46079" x="100" y="0" width="226" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="0" y="62" width="96" height="20"/>
+				<textElement/>
+				<text><![CDATA[Service Reasons:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="1ca8c5e0-8d6e-4de9-aa97-373049b1348a" x="100" y="62" width="568" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{serviceReasonGroupNames}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

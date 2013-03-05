@@ -40,8 +40,10 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
+import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.reports.CaseLoadReportTO;
+import org.jasig.ssp.transferobject.reports.CaseLoadSearchTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,6 +155,9 @@ public class CaseloadReportController extends ReportBaseController {
 	protected transient CaseloadService caseLoadService;
 	@Autowired
 	protected transient StudentTypeService studentTypeService;
+	
+	@Autowired
+	protected transient ServiceReasonService serviceReasonService;	
 
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
@@ -170,13 +175,15 @@ public class CaseloadReportController extends ReportBaseController {
 			final HttpServletResponse response,
 			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
+			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
 		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
-
-		final List<CaseLoadReportTO> caseLoadReportList = collectCaseLoadReportTOs(cleanStudentTypeIds, homeDepartment);		
-		final Map<String, Object> parameters = collectParamsForReport(cleanStudentTypeIds, homeDepartment);
+		final List<UUID> cleanServiceReasonsIds = SearchParameters.cleanUUIDListOfNulls(serviceReasonIds);
+        CaseLoadSearchTO searchForm = new CaseLoadSearchTO(cleanStudentTypeIds, cleanServiceReasonsIds, homeDepartment);
+		final List<CaseLoadReportTO> caseLoadReportList = collectCaseLoadReportTOs(searchForm);		
+		final Map<String, Object> parameters = collectParamsForReport(searchForm);
 
 		generateReport(response, parameters, caseLoadReportList, REPORT_URL,
 				reportType, REPORT_FILE_TITLE);
@@ -184,11 +191,11 @@ public class CaseloadReportController extends ReportBaseController {
 	}
 
 	private List<CaseLoadReportTO> collectCaseLoadReportTOs(
-			List<UUID> studentTypeIds, String homeDepartment) {
+			CaseLoadSearchTO searchForm) {
 		List<CaseLoadReportTO> caseLoadReportList = Lists.newArrayList();
 
 		final Collection<CoachCaseloadRecordCountForProgramStatus> countsByCoachAndStatus = caseLoadService
-				.currentCaseloadCountsByStatus(studentTypeIds, homeDepartment);
+				.currentCaseloadCountsByStatus(searchForm);
 		UUID currentCoachId = null;
 		CaseLoadReportTO caseLoadReportTO = null;
 		for (CoachCaseloadRecordCountForProgramStatus countByCoachAndStatus : countsByCoachAndStatus) {
@@ -216,12 +223,13 @@ public class CaseloadReportController extends ReportBaseController {
 		return caseLoadReportList;
 	}
 
-	private Map<String, Object> collectParamsForReport(List<UUID> studentTypeIds, String homeDepartment)
+	private Map<String, Object> collectParamsForReport(CaseLoadSearchTO searchForm)
 			throws ObjectNotFoundException {
 		final Map<String, Object> parameters = Maps.newHashMap();
-		SearchParameters.addHomeDepartmentToMap(homeDepartment, parameters);
-		SearchParameters.addStudentTypesToMap(studentTypeIds, parameters,
+		SearchParameters.addHomeDepartmentToMap(searchForm.getHomeDepartment(), parameters);
+		SearchParameters.addStudentTypesToMap(searchForm.getStudentTypeIds(), parameters,
 				studentTypeService);
+		SearchParameters.addServiceReasonToMap(searchForm.getServiceReasonIds(), parameters, serviceReasonService);
 		return parameters;
 	}
 
