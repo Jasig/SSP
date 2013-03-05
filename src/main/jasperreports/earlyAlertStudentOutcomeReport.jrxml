@@ -28,7 +28,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="6"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -50,9 +50,6 @@
 		</box>
 	</style>
 	<subDataset name="Table Dataset" uuid="be43ce74-c7e5-48bb-9e55-2f61365d6e2f">
-		<parameter name="columnTitle" class="java.lang.String">
-			<defaultValueExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get( "columnTitle" )]]></defaultValueExpression>
-		</parameter>
 		<field name="first" class="java.lang.String"/>
 		<field name="second" class="java.lang.Long"/>
 	</subDataset>
@@ -66,7 +63,13 @@
 	<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="outcomeTotals" class="java.util.List"/>
 	<parameter name="term" class="java.lang.String"/>
+	<parameter name="columnTitle" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get( "columnTitle" )]]></defaultValueExpression>
+	</parameter>
 	<parameter name="reportTitle" class="java.lang.String"/>
+	<parameter name="detailColumnTitle" class="java.lang.String"/>
+	<parameter name="selectedOutcomeNames" class="java.lang.String"/>
+	<parameter name="serviceReasonGroupNames" class="java.lang.String"/>
 	<field name="firstName" class="java.lang.String">
 		<fieldDescription><![CDATA[firstName]]></fieldDescription>
 	</field>
@@ -94,7 +97,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="136" splitType="Stretch">
+		<band height="172" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="6" width="100" height="15"/>
 				<textElement/>
@@ -121,26 +124,6 @@
 				<textFieldExpression><![CDATA[$P{homeDepartment}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="2" y="102" width="100" height="15"/>
-				<textElement/>
-				<text><![CDATA[Start Date:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="222" y="102" width="65" height="15"/>
-				<textElement/>
-				<text><![CDATA[End Date:]]></text>
-			</staticText>
-			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
-				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="120" y="102" width="100" height="15"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e" x="287" y="102" width="100" height="15"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
-			</textField>
-			<staticText>
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="21" width="100" height="15"/>
 				<textElement/>
 				<text><![CDATA[Home Department:]]></text>
@@ -151,7 +134,7 @@
 				<textFieldExpression><![CDATA[$P{programStatusName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" positionType="Float" x="119" y="38" width="100" height="15" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" positionType="Float" x="119" y="37" width="100" height="15" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{coachName}]]></textFieldExpression>
 			</textField>
@@ -165,16 +148,6 @@
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{specialServiceGroupNames}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="0" y="120" width="100" height="15"/>
-				<textElement/>
-				<text><![CDATA[Term:]]></text>
-			</staticText>
-			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
-				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="119" y="120" width="100" height="15"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$P{term}]]></textFieldExpression>
-			</textField>
 			<textField>
 				<reportElement uuid="cd7eafd4-390c-4ded-8a23-c33648371bb4" x="119" y="84" width="340" height="16"/>
 				<textElement/>
@@ -185,6 +158,36 @@
 				<textElement/>
 				<text><![CDATA[Student Type:]]></text>
 			</staticText>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="4" y="135" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Start Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="223" y="135" width="65" height="15"/>
+				<textElement/>
+				<text><![CDATA[End Date:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
+				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="121" y="135" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e" x="289" y="135" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="2" y="153" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Term:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
+				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="121" y="153" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{term}]]></textFieldExpression>
+			</textField>
 			<componentElement>
 				<reportElement uuid="f68164f7-fe5e-4f34-9db6-757cd9d5ca38" key="table" style="table" x="515" y="11" width="199" height="117"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
@@ -195,9 +198,9 @@ data.JRBeanCollectionDataSource($P{outcomeTotals})]]></dataSourceExpression>
 					<jr:column width="120" uuid="c881a348-bbc9-4cf7-aa05-1bb3f072514b">
 						<jr:columnHeader style="table_CH" height="16" rowSpan="1">
 							<textField isBlankWhenNull="true">
-								<reportElement uuid="f82ae205-11b4-47c9-a903-863d74cacd9c" x="0" y="0" width="120" height="16"/>
+								<reportElement uuid="7f13a7d6-1858-47cb-bfd9-674f04a4458c" x="0" y="0" width="120" height="16"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get( "columnTitle" )]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("columnTitle")]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="16" rowSpan="1">
@@ -230,6 +233,26 @@ data.JRBeanCollectionDataSource($P{outcomeTotals})]]></dataSourceExpression>
 					</jr:column>
 				</jr:table>
 			</componentElement>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="2" y="100" width="110" height="16"/>
+				<textElement/>
+				<text><![CDATA[Outcomes:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="dc994712-2d38-4dd0-ad72-534e496cacb3" x="120" y="101" width="339" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{selectedOutcomeNames}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="2" y="117" width="110" height="16"/>
+				<textElement/>
+				<text><![CDATA[Service Reasons:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="1ca8c5e0-8d6e-4de9-aa97-373049b1348a" x="121" y="117" width="339" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{serviceReasonGroupNames}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -290,13 +313,13 @@ data.JRBeanCollectionDataSource($P{outcomeTotals})]]></dataSourceExpression>
 				</textElement>
 				<text><![CDATA[COUNSELOR]]></text>
 			</staticText>
-			<staticText>
-				<reportElement uuid="6980c490-8e65-458f-b9aa-aa21f7a55b0d" x="452" y="7" width="145" height="16"/>
+			<textField>
+				<reportElement uuid="ef31687e-cef9-45e5-bea2-176636b5e16f" x="452" y="7" width="145" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[OUTCOME]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$P{detailColumnTitle}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnHeader>
 	<detail>
@@ -349,7 +372,7 @@ data.JRBeanCollectionDataSource($P{outcomeTotals})]]></dataSourceExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{coachName}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="fe9b2ba8-95d3-49a5-81ab-d7c587d49a30" x="452" y="5" width="145" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{outcomeName}]]></textFieldExpression>

@@ -37,6 +37,7 @@
 	<parameter name="studentTypeNames" class="java.lang.String"/>
 	<parameter name="initialTerm" class="java.lang.String"/>
 	<parameter name="comparisonTerm" class="java.lang.String"/>
+	<parameter name="serviceReasonGroupNames" class="java.lang.String"/>
 	<field name="firstName" class="java.lang.String">
 		<fieldDescription><![CDATA[firstName]]></fieldDescription>
 	</field>
@@ -70,7 +71,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="130" splitType="Stretch">
+		<band height="143" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="0" width="100" height="15"/>
 				<textElement/>
@@ -132,24 +133,34 @@
 				<text><![CDATA[Special Service Groups:]]></text>
 			</staticText>
 			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
-				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="113" y="109" width="117" height="15"/>
+				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="113" y="124" width="117" height="15"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{comparisonTerm}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="0" y="109" width="100" height="15"/>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="0" y="124" width="100" height="15"/>
 				<textElement/>
 				<text><![CDATA[Comparison Term:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="0" y="94" width="100" height="15"/>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="0" y="109" width="100" height="15"/>
 				<textElement/>
 				<text><![CDATA[Initial Term:]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="612141fa-92d2-42fe-b83d-aefa001ac035" x="113" y="94" width="117" height="15"/>
+				<reportElement uuid="612141fa-92d2-42fe-b83d-aefa001ac035" x="113" y="109" width="117" height="15"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{initialTerm}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="2" y="93" width="98" height="16"/>
+				<textElement/>
+				<text><![CDATA[Service Reasons:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="1ca8c5e0-8d6e-4de9-aa97-373049b1348a" x="117" y="93" width="507" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{serviceReasonGroupNames}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
