@@ -174,6 +174,21 @@ public class Stubs {
 		public String title() { return title; }
 	}
 	
+	public static enum JournalStepDetail {
+		TEST_JOURNAL_STEP_DETAIL ( "471afc02-ab5c-11e1-a997-0026b9e7ff4c", "Test Journal Step Detail" );
+
+		private final UUID id;
+		private final String title;
+
+		JournalStepDetail(String id, String title) {
+			this.id = UUID.fromString(id);
+			this.title = title;
+		}
+
+		public UUID id() { return id; }
+		public String title() { return title; }
+	}
+	
 	public static enum EarlyAlertReferralFixture {
 		ACADEMIC_COUNSELORS ( "b2d112a9-5056-a51a-8010-b510525ea3a8", "Academic Counselors" );
 
