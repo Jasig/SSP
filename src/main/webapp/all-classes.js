@@ -6557,172 +6557,218 @@ Ext.define('Ssp.service.ConfidentialityDisclosureAgreementService', {
  * specific language governing permissions and limitations
  * under the License.
  */
+var cc = 0;
+
 Ext.define('Ssp.service.EarlyAlertService', {  
-    extend: 'Ssp.service.AbstractService',   		
+    extend: 'Ssp.service.AbstractService',          
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
-    	apiProperties: 'apiProperties',
-    	earlyAlertOutcomesStore: 'earlyAlertOutcomesStore',
-    	treeStore: 'earlyAlertsTreeStore',
-    	treeUtils: 'treeRendererUtils'
+        apiProperties: 'apiProperties',
+        earlyAlertOutcomesStore: 'earlyAlertOutcomesStore',
+        treeStore: 'earlyAlertsTreeStore',
+        treeUtils: 'treeRendererUtils',
+		currentEarlyAlertResponsesGridStore: 'currentEarlyAlertResponsesGridStore'
     },
     initComponent: function() {
-		return this.callParent( arguments );
+        return this.callParent( arguments );
     },
     
     getBaseUrl: function( personId ){
-		var me=this;
-		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personEarlyAlert') );
-		baseUrl = baseUrl.replace( '{personId}', personId );
-		return baseUrl;
+        var me=this;
+        var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personEarlyAlert') );
+        baseUrl = baseUrl.replace( '{personId}', personId );
+        return baseUrl;
     },
 
     getAll: function( personId, callbacks ){
-    	var me=this;
-    	var success = function( response, view ){
-    		var r = Ext.decode(response.responseText);
-    		if (r.rows.length > 0)
-	    	{
-    			me.populateEarlyAlerts( r.rows );
-	    	}
-	    	if (callbacks != null)
-	    	{
-	    		callbacks.success( r, callbacks.scope );
-	    	}	
-	    };
+        var me=this;
+        var success = function( response, view ){
+            var r = Ext.decode(response.responseText);
+            if (r.rows.length > 0)
+            {
+                
+                me.populateEarlyAlerts( r.rows,personId );
+                
+            }
+            if (callbacks != null)
+            {
+                callbacks.success( r, callbacks.scope );
+            }   
+        };
 
-	    var failure = function( response ){
-	    	me.apiProperties.handleError( response );	    	
-	    	if (callbacks != null)
-	    	{
-	    		callbacks.failure( response, callbacks.scope );
-	    	}
-	    };
-	    
-	    // clear the early alerts
-    	me.treeStore.setRootNode({
-    	    text: 'EarlyAlerts',
-    	    leaf: false,
-    	    expanded: false
-    	});
-	    
-		me.apiProperties.makeRequest({
-			url: me.getBaseUrl(personId),
-			method: 'GET',
-			successFunc: success,
-			failureFunc: failure,
-			scope: me
-		});
+        var failure = function( response ){
+            me.apiProperties.handleError( response );           
+            if (callbacks != null)
+            {
+                callbacks.failure( response, callbacks.scope );
+            }
+        };
+        
+        // clear the early alerts
+        me.treeStore.setRootNode({
+            text: 'EarlyAlerts',
+            leaf: false,
+            expanded: false
+        });
+        
+        me.apiProperties.makeRequest({
+            url: me.getBaseUrl(personId),
+            method: 'GET',
+            successFunc: success,
+            failureFunc: failure,
+            scope: me
+        });
     },
 
     getAllEarlyAlertResponses: function( personId, earlyAlertId, callbacks ){
-    	var me=this;
-    	var url = "";
-    	var node = me.cleanResponses( earlyAlertId );
-    	var success = function( response, view ){
-    		var r = Ext.decode(response.responseText);
-    		if (r.rows.length > 0)
-	    	{
-    			me.populateEarlyAlertResponses( node, r.rows );
-	    	}
-	    	if (callbacks != null)
-	    	{
-	    		callbacks.success( r, callbacks.scope );
-	    	}	
-	    };
+        var me=this;
+        var url = "";
+        var node = me.cleanResponses( earlyAlertId );
+        var success = function( response, view ){
+            var r = Ext.decode(response.responseText);
+            if (r.rows.length > 0)
+            {
+               
+                me.populateEarlyAlertResponses( node, r.rows );
+                
+            }
+            if (callbacks != null)
+            {
+                callbacks.success( r, callbacks.scope );
+            }   
+        };
 
-	    var failure = function( response ){
-	    	me.apiProperties.handleError( response );	    	
-	    	if (callbacks != null)
-	    	{
-	    		callbacks.failure( response, callbacks.scope );
-	    	}
-	    };
-	    
-	    url = me.getBaseUrl(personId);
-	    if (earlyAlertId != null && earlyAlertId != "")
-	    {
-			me.apiProperties.makeRequest({
-				url: url + '/' + earlyAlertId + '/response',
-				method: 'GET',
-				successFunc: success,
-				failureFunc: failure,
-				scope: me
-			});	    	
-	    }
+        var failure = function( response ){
+            me.apiProperties.handleError( response );           
+            if (callbacks != null)
+            {
+                callbacks.failure( response, callbacks.scope );
+            }
+        };
+        
+        url = me.getBaseUrl(personId);
+        if (earlyAlertId != null && earlyAlertId != "")
+        {
+            me.apiProperties.makeRequest({
+                url: url + '/' + earlyAlertId + '/response',
+                method: 'GET',
+                successFunc: success,
+                failureFunc: failure,
+                scope: me
+            });         
+        }
+    },  
+
+    getAllEarlyAlertCount: function( personId, earlyAlertId, callbacks ){
+        var me=this;
+        var url = "";
+        //var node = me.cleanResponses( earlyAlertId );
+        var success = function( response, view ){
+            var r = Ext.decode(response.responseText);
+            if (callbacks != null)
+            {
+                callbacks.success( personId, earlyAlertId, r.rows.length, callbacks.scope );
+            } 
+        };
+
+        var failure = function( response ){
+            
+            me.apiProperties.handleError( response );           
+            if (callbacks != null)
+            {
+                callbacks.failure( response, callbacks.scope );
+            }
+        };
+        url = me.getBaseUrl(personId);
+		
+        if (earlyAlertId != null && earlyAlertId != "")
+        {
+            me.apiProperties.makeRequest({
+                url: url + '/' + earlyAlertId + '/response',
+                method: 'GET',
+                successFunc: success,
+                failureFunc: failure,
+                scope: me
+            });       
+        }
     },    
     
-    populateEarlyAlerts: function( records ){
-    	var me=this;
+    populateEarlyAlerts: function( records, personId ){
+        var me=this;
+        
+        Ext.Array.each( records, function(record, index){
+             // count = me.getAllEarlyAlertCount(personId, record.id);
+            //record.iconCls='earlyAlertTreeIcon';
+            record.leaf=false;
+            record.nodeType='early alert';
+            record.gridDisplayDetails=record.courseName + " - " + record.courseTitle ; 
+            record.noOfResponses = 0;
+            record.expanded=false;
+        });
 
-    	Ext.Array.each( records, function(record, index){
-    		//record.iconCls='earlyAlertTreeIcon';
-    		record.leaf=false;
-    		record.nodeType='early alert';
-    		record.gridDisplayDetails=record.courseName + " - " + record.courseTitle;
-    		record.expanded=false;
-    	});
-
-    	me.treeStore.getRootNode().appendChild(records);
+        me.treeStore.getRootNode().appendChild(records);
     },
     
     populateEarlyAlertResponses: function( node, records ){
-    	var me=this;
+        var me=this;
+        
+		var dataArray = [];
+        Ext.Array.each( records, function(record, index){
+            record.leaf=true;
+            record.nodeType='early alert response';
+            record.gridDisplayDetails=me.earlyAlertOutcomesStore.getById(record.earlyAlertOutcomeId).get('name');
+			dataArray.push(record);
+        });
+		
+		me.currentEarlyAlertResponsesGridStore.loadData(dataArray);
 
-    	Ext.Array.each( records, function(record, index){
-    		//record.iconCls='earlyAlertTreeIcon';
-    		record.leaf=true;
-    		record.nodeType='early alert response';
-    		record.gridDisplayDetails=me.earlyAlertOutcomesStore.getById(record.earlyAlertOutcomeId).get('name');
-    	});
-
-    	node.appendChild(records);
+        node.appendChild(records);
     },
     
     cleanResponses: function( earlyAlertId ){
-    	var me=this;
-    	node = me.treeStore.getNodeById( earlyAlertId );
-    	node.removeAll();
-    	return node;
+        var me=this;
+        node = me.treeStore.getNodeById( earlyAlertId );
+        node.removeAll();
+        return node;
     },
     
     save: function( personId, jsonData, callbacks ){
-    	var me=this;
-    	var id=jsonData.id;
+        var me=this;
+        var id=jsonData.id;
         var url = me.getBaseUrl(personId);
-	    var success = function( response, view ){
-	    	var r = Ext.decode(response.responseText);
-			callbacks.success( r, callbacks.scope );
-	    };
+        var success = function( response, view ){
+            var r = Ext.decode(response.responseText);
+            callbacks.success( r, callbacks.scope );
+        };
 
-	    var failure = function( response ){
-	    	me.apiProperties.handleError( response );	    	
-	    	callbacks.failure( response, callbacks.scope );
-	    };
+        var failure = function( response ){
+            me.apiProperties.handleError( response );           
+            callbacks.failure( response, callbacks.scope );
+        };
         
-    	// save
-		if (id=="")
-		{
-			// create
-			me.apiProperties.makeRequest({
-    			url: url,
-    			method: 'POST',
-    			jsonData: jsonData,
-    			successFunc: success,
-    			failureFunc: failure,
-    			scope: me
-    		});				
-		}else{
-			// update
-    		me.apiProperties.makeRequest({
-    			url: url+"/"+id,
-    			method: 'PUT',
-    			jsonData: jsonData,
-    			successFunc: success,
-    			failureFunc: failure,
-    			scope: me
-    		});	
-		}   	
+        // save
+        if (id=="")
+        {
+            // create
+            me.apiProperties.makeRequest({
+                url: url,
+                method: 'POST',
+                jsonData: jsonData,
+                successFunc: success,
+                failureFunc: failure,
+                scope: me
+            });             
+        }else{
+            // update
+            me.apiProperties.makeRequest({
+                url: url+"/"+id,
+                method: 'PUT',
+                jsonData: jsonData,
+                successFunc: success,
+                failureFunc: failure,
+                scope: me
+            }); 
+        }       
     }
 });
 /*
@@ -14288,216 +14334,260 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
  * under the License.
  */
 Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
-    extend: 'Deft.mvc.ViewController',	
+    extend: 'Deft.mvc.ViewController',  
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
-    	appEventsController: 'appEventsController',
-    	confidentialityLevelsStore: 'confidentialityLevelsStore',
-    	campusesStore: 'campusesStore',
-    	earlyAlertsStore: 'earlyAlertsStore',
-    	earlyAlertService: 'earlyAlertService',
-    	earlyAlertResponseService: 'earlyAlertResponseService',
-    	earlyAlert: 'currentEarlyAlert',
-    	earlyAlertResponse: 'currentEarlyAlertResponse',
-    	formUtils: 'formRendererUtils',
+        appEventsController: 'appEventsController',
+        confidentialityLevelsStore: 'confidentialityLevelsStore',
+        campusesStore: 'campusesStore',
+        earlyAlertsStore: 'earlyAlertsStore',
+        earlyAlertService: 'earlyAlertService',
+        earlyAlertResponseService: 'earlyAlertResponseService',
+        earlyAlert: 'currentEarlyAlert',
+        earlyAlertResponse: 'currentEarlyAlertResponse',
+        formUtils: 'formRendererUtils',
         outcomesStore: 'earlyAlertOutcomesStore',
         outreachesStore: 'earlyAlertOutreachesStore',
         reasonsStore: 'earlyAlertReasonsStore',
-    	personLite: 'personLite',
+        personLite: 'personLite',
         referralsStore: 'earlyAlertReferralsStore',
         suggestionsStore: 'earlyAlertSuggestionsStore',
-    	treeStore: 'earlyAlertsTreeStore'
+        treeStore: 'earlyAlertsTreeStore'
     },
     config: {
-    	containerToLoadInto: 'tools',
-    	formToDisplay: 'earlyalertresponse',
-    	earlyAlertDetailsDisplay: 'earlyalertdetails',
-    	earlyAlertResponseDetailsDisplay: 'earlyalertresponsedetails'
+        containerToLoadInto: 'tools',
+        formToDisplay: 'earlyalertresponse',
+        earlyAlertDetailsDisplay: 'earlyalertdetails',
+        earlyAlertResponseDetailsDisplay: 'earlyalertresponsedetails'
     },
     control: {
-    	view: {
-    		viewready: 'onViewReady',
-    		itemexpand: 'onItemExpand'
-    	},
-    	
-    	'respondButton': {
-			click: 'onRespondClick'
-		},
-		
-    	'displayDetailsButton': {
-			click: 'onDisplayDetailsClick'
-		}
-	},
-	
-	init: function(){
-		return this.callParent(arguments);		
-	},
+        view: {
+            viewready: 'onViewReady',
+            itemexpand: 'onItemExpand',
+            itemClick: 'onAlertClick'
+        }
+    },
+    
+    init: function(){
+        return this.callParent(arguments);      
+    },
 
     onViewReady: function(comp, obj){
-		var me=this;
-		me.campusesStore.load({
-    		params:{limit:50}
-    	});
-		
-		me.confidentialityLevelsStore.load({
-    		params:{limit:50}
-    	});
-		
-    	me.outcomesStore.load({
-    		params:{limit:50}
-    	});
-    	
-    	me.outreachesStore.load({
-    		params:{limit:50}
-    	});
-    	
-    	me.reasonsStore.load({
-    		params:{limit:50}
-    	});
-    	
-    	me.suggestionsStore.load({
-    		params:{limit:50}
-    	});
-    	
-    	me.referralsStore.load({
-    		params:{limit:50},
-    		callback: function(r,options,success) {
-    	         if(success == true) {
-     	                 me.getEarlyAlerts(); 
-    	          }
-    	          else {
-    	              Ext.Msg.alert("Ssp Error","Failed to load referrals. See your system administrator for assitance.");
-    	          }
-    	     }
-    	});
-    },	
+        var me=this;
+        me.campusesStore.load({
+            params:{limit:50}
+        });
+        
+        me.confidentialityLevelsStore.load({
+            params:{limit:50}
+        });
+        
+        me.outcomesStore.load({
+            params:{limit:50}
+        });
+        
+        me.outreachesStore.load({
+            params:{limit:50}
+        });
+        
+        me.reasonsStore.load({
+            params:{limit:50}
+        });
+        
+        me.suggestionsStore.load({
+            params:{limit:50}
+        });
+        
+        me.referralsStore.load({
+            params:{limit:50},
+            callback: function(r,options,success) {
+                 if(success == true) {
+                         me.getEarlyAlerts(); 
+                  }
+                  else {
+                      Ext.Msg.alert("Ssp Error","Failed to load referrals. See your system administrator for assitance.");
+                  }
+             }
+        });
+        
+        me.appEventsController.assignEvent({eventName: 'goToResponse', callBackFunc: me.onRespondClick, scope: me});
+    },  
 
     destroy: function() {
+        var me=this;
+        //me.appEventsController.removeEvent({eventName: 'goToResponse', callBackFunc: me.onRespondClick, scope: me});
          return this.callParent( arguments );
     },    
     
-	getEarlyAlerts: function(){
-    	var me=this;
-		var pId = me.personLite.get('id');
-		me.getView().setLoading(true);
-		me.earlyAlertService.getAll( pId, 
-    		{success:me.getEarlyAlertsSuccess, 
-			 failure:me.getEarlyAlertsFailure, 
-			 scope: me});
-	},
+    getEarlyAlerts: function(){
+        var me=this;
+        var pId = me.personLite.get('id');
+        me.getView().setLoading(true);
+        me.earlyAlertService.getAll( pId, 
+            {success:me.getEarlyAlertsSuccess, 
+             failure:me.getEarlyAlertsFailure, 
+             scope: me});
+    },
     
     getEarlyAlertsSuccess: function( r, scope){
-    	var me=scope;
-    	var personEarlyAlert;
-		me.getView().setLoading(false);
-    	if ( me.earlyAlertsStore.getCount() > 0)
-    	{
-    		me.getView().getSelectionModel().select(0);
-    	}else{
-    		// if no record is available then set the selected early alert to null
-    		personEarlyAlert = new Ssp.model.tool.earlyalert.PersonEarlyAlert();
-    		me.earlyAlert.data = personEarlyAlert.data;
-    	}
+        var me=scope;
+        var personEarlyAlert;
+        me.getView().setLoading(false);
+        if ( me.earlyAlertsStore.getCount() > 0)
+        {
+            me.getView().getSelectionModel().select(0);
+        }else{
+            // if no record is available then set the selected early alert to null
+            personEarlyAlert = new Ssp.model.tool.earlyalert.PersonEarlyAlert();
+            me.earlyAlert.data = personEarlyAlert.data;
+        }
+		var pId = me.personLite.get('id');
+		
+		me.treeStore.getRootNode().eachChild(function(record){
+			var eaId = record.get('id');
+            me.earlyAlertService.getAllEarlyAlertCount( pId, eaId, 
+                {success:me.getEarlyAlertCountSuccess, 
+                 failure:me.getEarlyAlertCountFailure, 
+                 scope: me});
+			}
+	    );
     },
 
     getEarlyAlertsFailure: function( r, scope){
-    	var me=scope;
-		me.getView().setLoading(false);
+        var me=scope;
+        me.getView().setLoading(false);
+    },
+	
+	getEarlyAlertCountSuccess: function(personId, earlyAlertId, count, scope) {
+		var me = scope;
+		// update the tree node w/ the count
+		var originalChild = me.treeStore.getRootNode().findChildBy(function(n) {
+                return earlyAlertId === n.data.id;
+            }, me, true);
+		me.treeStore.suspendEvents();
+		originalChild.set('noOfResponses',count);
+        me.treeStore.resumeEvents();
+		
+	},
+
+    getEarlyAlertCountFailure: function( r, scope){
+        var me=scope;
+        me.getView().setLoading(false);
+		
     },
 
     onItemExpand: function(nodeInt, obj){
-    	var me=this;
-    	var node = nodeInt;
-    	var nodeType = node.get('nodeType');
-    	var id = node.get('id' );
-    	var personId = me.personLite.get('id');
-    	if (node != null)
-    	{
-    		// use root here to prevent the expand from firing
-    		// when items are added to the root element in the tree
-        	if (nodeType == 'early alert' && id != "root" && id != "")
-        	{
-        		me.getView().setLoading(true);
-        		me.earlyAlertService.getAllEarlyAlertResponses(personId, id,
-        				{success:me.getEarlyAlertResponsesSuccess, 
-       			 failure:me.getEarlyAlertResponsesFailure, 
-       			 scope: me}	
-        		);
-        	}    		
-    	}
+        var me=this;
+        var node = nodeInt;
+        var nodeType = node.get('nodeType');
+        var id = node.get('id' );
+        var personId = me.personLite.get('id');
+        if (node != null)
+        {
+            // use root here to prevent the expand from firing
+            // when items are added to the root element in the tree
+            if (nodeType == 'early alert' && id != "root" && id != "")
+            {
+                me.getView().setLoading(true);
+                me.earlyAlertService.getAllEarlyAlertResponses(personId, id,
+                        {success:me.getEarlyAlertResponsesSuccess, 
+                 failure:me.getEarlyAlertResponsesFailure, 
+                 scope: me} 
+                );
+            }           
+        }
     },
   
     getEarlyAlertResponsesSuccess: function( r, scope){
-    	var me=scope;
-    	// clear the current Early Alert Response
-    	var earlyAlertResponse = new Ssp.model.tool.earlyalert.EarlyAlertResponse();
-		me.earlyAlertResponse.data = earlyAlertResponse.data;
-		me.getView().setLoading(false);
+        var me=scope;
+        // clear the current Early Alert Response
+        var earlyAlertResponse = new Ssp.model.tool.earlyalert.EarlyAlertResponse();
+        me.earlyAlertResponse.data = earlyAlertResponse.data;
+        me.getView().setLoading(false);
     },
 
     getEarlyAlertResponsesFailure: function( r, scope){
-    	var me=scope;
-		me.getView().setLoading(false);
+        var me=scope;
+        me.getView().setLoading(false);
     },    
     
-	onRespondClick: function( button ){
-		var me=this;
-		var record = me.getView().getSelectionModel().getSelection()[0];
-		if (record != null)
-		{
-			if (record.get('nodeType')=='early alert')
-	    	{
-	        	for (prop in me.earlyAlert.data)
-	        	{
-	        		me.earlyAlert.data[prop] = record.data[prop];
-	        	}
-	        	
-	        	me.loadEditor();
-	    	}else{
-	    		Ext.Msg.alert('Notification','Please select an Early Alert to send a response.');
-	    	}	
-    	}else{
-    		Ext.Msg.alert('Notification','Please select an Early Alert to send a response.');
-    	}
-	},
-
-	onDisplayDetailsClick: function( button ){
-		var me=this;
-		var record = me.getView().getSelectionModel().getSelection()[0];
-		if (record != null)
-		{
-			if (record.get('nodeType')=='early alert')
-	    	{
-				for (prop in me.earlyAlert.data)
-	        	{
-	        		me.earlyAlert.data[prop] = record.data[prop];
-	        	}
-
-	        	me.displayEarlyAlertDetails();
-	    	}else{
-	    		
-	        	for (prop in me.earlyAlertResponse.data)
-	        	{
-	        		me.earlyAlertResponse.data[prop] = record.data[prop];
-	        	}
-	        	
-	        	me.displayEarlyAlertResponseDetails();	    		
-	    	}	
-    	}else{
-    		Ext.Msg.alert('Notification','Please select an item to view.');
-    	}
-	},	
-	
-	loadEditor: function(button){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+    onRespondClick: function( button ){
+        
+        var me=this;
+        
+        var record = me.getView().getSelectionModel().getSelection()[0];
+        if (record != null)
+        {
+            if (record.get('nodeType')=='early alert')
+            {
+                for (prop in me.earlyAlert.data)
+                {
+                    me.earlyAlert.data[prop] = record.data[prop];
+                }
+                
+                me.loadEditor();
+            }else{
+                Ext.Msg.alert('Notification','Please select an Early Alert to send a response.');
+            }   
+        }else{
+            Ext.Msg.alert('Notification','Please select an Early Alert to send a response.');
+        }
     },
     
-	displayEarlyAlertDetails: function(button){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertDetailsDisplay(), true, {});
+    onGoToResponse: function(){
+    },
+
+    
+    
+    onAlertClick: function(nodeInt, obj){
+        var me=this;
+        var record = me.getView().getSelectionModel().getSelection()[0];
+		var node = nodeInt;
+       
+		var id = record.get('id');
+		
+		var personId = me.personLite.get('id');
+		
+        if (record != null)
+        {
+            if (record.get('nodeType')=='early alert')
+            {
+                for (prop in me.earlyAlert.data)
+                {
+                    me.earlyAlert.data[prop] = record.data[prop];
+                }
+                
+				/*me.earlyAlertService.getAllEarlyAlertResponses(personId, id,
+                        {success:me.getEarlyAlertResponsesSuccess, 
+                 failure:me.getEarlyAlertResponsesFailure, 
+                 scope: me} );*/
+
+                me.displayEarlyAlertDetails();
+            }
+			/*else{
+                
+                for (prop in me.earlyAlertResponse.data)
+                {
+                    me.earlyAlertResponse.data[prop] = record.data[prop];
+                }
+                
+                me.displayEarlyAlertResponseDetails();              
+            }  */ 
+        }else{
+            Ext.Msg.alert('Notification','Please select an item to view.');
+        }
     },
     
-	displayEarlyAlertResponseDetails: function(button){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertResponseDetailsDisplay(), true, {});
+    loadEditor: function(button){
+        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+    },
+    
+    displayEarlyAlertDetails: function(button){
+        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertDetailsDisplay(), true, {});
+    },
+    
+    displayEarlyAlertResponseDetails: function(button){
+        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertResponseDetailsDisplay(), true, {});
     }
 });
 /*
@@ -14533,7 +14623,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     },
     config: {
     	containerToLoadInto: 'tools',
-    	formToDisplay: 'earlyalert'
+    	formToDisplay: 'earlyalertdetails'
     },
     control: {
     	outreachList: {
@@ -14560,7 +14650,15 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		
 		'cancelButton': {
 			click: 'onCancelClick'
-		}   	
+		}   ,
+		
+		'responseGotoEAListButton': {
+            click: 'onResponseGotoEAListClick'
+        },
+		
+        'responseGotoEADetailsButton': {
+            click: 'onCancelClick'
+        }	
     },
     
 	init: function() {
@@ -14683,7 +14781,13 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 	
 	displayMain: function(){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
-	}
+	},
+	
+	onResponseGotoEAListClick: function(button){
+        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), 'earlyalert', true, {});
+    }
+	
+	
 });
 /*
  * Licensed to Jasig under one or more contributor license
@@ -14770,92 +14874,144 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-    	apiProperties: 'apiProperties',
-    	campusesStore: 'campusesStore',
-    	formUtils: 'formRendererUtils',
+        apiProperties: 'apiProperties',
+        campusesStore: 'campusesStore',
+        formUtils: 'formRendererUtils',
         model: 'currentEarlyAlert',
         personService: 'personService',
-       	reasonsStore: 'earlyAlertReasonsStore',
+        reasonsStore: 'earlyAlertReasonsStore',
         suggestionsStore: 'earlyAlertSuggestionsStore',
-        selectedSuggestionsStore: 'earlyAlertDetailsSuggestionsStore'
+        selectedSuggestionsStore: 'earlyAlertDetailsSuggestionsStore',
+        appEventsController: 'appEventsController',
+		earlyAlertResponse: 'currentEarlyAlertResponse',
+		personLite: 'personLite',
+		earlyAlertService: 'earlyAlertService'
+		
     },
     config: {
-    	containerToLoadInto: 'tools',
-    	formToDisplay: 'earlyalert'
+        containerToLoadInto: 'tools',
+        formToDisplay: 'earlyalert',
+		earlyAlertResponseDetailsDisplay: 'earlyalertresponsedetails'
     },
     control: {
-    	'finishButton': {
-    		click: 'onFinishButtonClick'
-    	},
-    	
-    	earlyAlertSuggestionsList: '#earlyAlertSuggestionsList',
-    	campusField: '#campusField',
-    	earlyAlertReasonField: '#earlyAlertReasonField',
-    	statusField: '#statusField',
-    	createdByField: '#createdByField',
-    	closedByField: '#closedByField'
+        'finishButton': {
+            click: 'onFinishButtonClick'
+        },
+        'detailRespondButton': {
+            click: 'onDetailRespondClick'
+        },
+		
+		'detailResponseGridPanel': {
+			cellClick : 'onGridClick'
+		},
+        
+        earlyAlertSuggestionsList: '#earlyAlertSuggestionsList',
+        campusField: '#campusField',
+        earlyAlertReasonField: '#earlyAlertReasonField',
+        statusField: '#statusField',
+        createdByField: '#createdByField',
+        closedByField: '#closedByField'
     },
-	init: function() {
-		var me=this;
-		var selectedSuggestions=[];
-		var campus = me.campusesStore.getById( me.model.get('campusId') );
-		var reasonId = ((me.model.get('earlyAlertReasonIds') != null )?me.model.get('earlyAlertReasonIds')[0].id : me.model.get('earlyAlertReasonId') );
-		var reason = me.reasonsStore.getById( reasonId );
+    init: function() {
+		
+        var me=this;
+        var selectedSuggestions=[];
+        var campus = me.campusesStore.getById( me.model.get('campusId') );
+        var reasonId = ((me.model.get('earlyAlertReasonIds') != null )?me.model.get('earlyAlertReasonIds')[0].id : me.model.get('earlyAlertReasonId') );
+        var reason = me.reasonsStore.getById( reasonId );
 
-		// Reset and populate general fields comments, etc.
-		me.getView().getForm().reset();
-		me.getView().loadRecord( me.model );
+        // Reset and populate general fields comments, etc.
+        me.getView().getForm().reset();
+        me.getView().loadRecord( me.model );
+        
+        me.getCreatedByField().setValue( me.model.getCreatedByPersonName() );
+        
+        // Early Alert Status: 'Open', 'Closed'
+        me.getStatusField().setValue( ((me.model.get('closedDate'))? 'Closed' : 'Open') );
+        
+        // Campus
+        me.getCampusField().setValue( ((campus)? campus.get('name') : "No Campus Defined") );
+        
+        // Reason
+        me.getEarlyAlertReasonField().setValue( ((reason)? reason.get('name') : "No Reason Defined") );
+        
+        // Suggestions
+        selectedSuggestions = me.formUtils.getSimpleItemsForDisplay( me.suggestionsStore, me.model.get('earlyAlertSuggestionIds'), 'Suggestions' );
+        me.selectedSuggestionsStore.removeAll();
+        me.selectedSuggestionsStore.loadData( selectedSuggestions );
+        
+        if ( me.model.get('closedById') != null )
+        {
+            if (me.model.get('closedById') != "")
+            {
+                me.getView().setLoading( true );
+                me.personService.get( me.model.get('closedById'),{
+                    success: me.getPersonSuccess,
+                    failure: me.getPersonFailure,
+                    scope: me
+                });             
+            }
+        }
 		
-		me.getCreatedByField().setValue( me.model.getCreatedByPersonName() );
+		var personId = me.personLite.get('id');
 		
-		// Early Alert Status: 'Open', 'Closed'
-		me.getStatusField().setValue( ((me.model.get('closedDate'))? 'Closed' : 'Open') );
-		
-		// Campus
-		me.getCampusField().setValue( ((campus)? campus.get('name') : "No Campus Defined") );
-		
-		// Reason
-		me.getEarlyAlertReasonField().setValue( ((reason)? reason.get('name') : "No Reason Defined") );
-		
-		// Suggestions
-		selectedSuggestions = me.formUtils.getSimpleItemsForDisplay( me.suggestionsStore, me.model.get('earlyAlertSuggestionIds'), 'Suggestions' );
-		me.selectedSuggestionsStore.removeAll();
-		me.selectedSuggestionsStore.loadData( selectedSuggestions );
-		
-		if ( me.model.get('closedById') != null )
-		{
-			if (me.model.get('closedById') != "")
-			{
-				me.getView().setLoading( true );
-				me.personService.get( me.model.get('closedById'),{
-					success: me.getPersonSuccess,
-					failure: me.getPersonFailure,
-					scope: me
-				});				
-			}
-		}
-		
-		return this.callParent(arguments);
+		me.earlyAlertService.getAllEarlyAlertResponses(personId, me.model.get('id'),
+                        {success:me.getEarlyAlertResponsesSuccess, 
+                 failure:me.getEarlyAlertResponsesFailure, 
+                 scope: me} );
+        
+        return this.callParent(arguments);
     },
+	
+	 getEarlyAlertResponsesSuccess: function( r, scope){
+        var me=scope;
+        // clear the current Early Alert Response
+        var earlyAlertResponse = new Ssp.model.tool.earlyalert.EarlyAlertResponse();
+        me.earlyAlertResponse.data = earlyAlertResponse.data;
+        me.getView().setLoading(false);
+    },
+
+    getEarlyAlertResponsesFailure: function( r, scope){
+        var me=scope;
+        me.getView().setLoading(false);
+    }, 
+	
     
     getPersonSuccess: function( r, scope ){
-		var me=scope;
-		var fullName="";
-		me.getView().setLoading( false );
-		if (r != null )
-		{
-			fullName=r.firstName + " " + (r.middleName ? r.middleName + " " : "") + r.lastName;
-			me.getClosedByField().setValue( fullName );
-		}
+        var me=scope;
+        var fullName="";
+        me.getView().setLoading( false );
+        if (r != null )
+        {
+            fullName=r.firstName + " " + (r.middleName ? r.middleName + " " : "") + r.lastName;
+            me.getClosedByField().setValue( fullName );
+        }
     },    
     
     getPersonFailure: function( response, scope ){
-    	var me=scope;  
-    	me.getView().setLoading( false );
+        var me=scope;  
+        me.getView().setLoading( false );
     },   
     
     onFinishButtonClick: function( button ){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
+        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});        
+    },
+    
+    onDetailRespondClick: function( button ){
+        this.appEventsController.getApplication().fireEvent('goToResponse');
+       
+    },
+	
+	onGridClick: function(){
+		var me=this;
+		var record = Ext.getCmp('detailResponseGridPanel').getSelectionModel().getSelection()[0];
+		
+		for (prop in me.earlyAlertResponse.data)
+                {
+                    me.earlyAlertResponse.data[prop] = record.data[prop];
+                }
+        this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertResponseDetailsDisplay(), true, {});
+       
     }
 });
 /*
@@ -14891,7 +15047,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseDetailsViewControll
     },
     config: {
     	containerToLoadInto: 'tools',
-    	formToDisplay: 'earlyalert'
+    	formToDisplay: 'earlyalertdetails'
     },
     control: {
     	'finishButton': {
@@ -21055,89 +21211,71 @@ Ext.define('Ssp.view.tools.journal.TrackTree', {
  * under the License.
  */
 Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
-	extend: 'Ext.tree.Panel',
-	alias : 'widget.earlyalert',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
+    extend: 'Ext.tree.Panel',
+    alias: 'widget.earlyalert',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.earlyalert.EarlyAlertToolViewController',
     inject: {
-    	appEventsController: 'appEventsController',
-    	authenticatedPerson: 'authenticatedPerson',
-    	columnRendererUtils: 'columnRendererUtils',
-    	model: 'currentEarlyAlert',
+        appEventsController: 'appEventsController',
+        authenticatedPerson: 'authenticatedPerson',
+        columnRendererUtils: 'columnRendererUtils',
+        model: 'currentEarlyAlert',
         treeStore: 'earlyAlertsTreeStore'
     },
-	width: '100%',
-	height: '100%',	
-	initComponent: function() {	
-    	var me=this;
-		Ext.apply(me, 
-				{
-		            autoScroll: true,
-		            title: 'Early Alerts',
-		            cls: 'early-alert-tree-panel',
-		            collapsible: false,
-		            useArrows: true,
-		            rootVisible: false,
-		            store: me.treeStore,
-		            multiSelect: false,
-		            singleExpand: true,
-    		        columns: [{
-    		            xtype: 'treecolumn',
-    		            text: 'Responses',
-    		            flex: .5,
-    		            sortable: false,
-    		            dataIndex: 'text'
-    		        },{
-    		            text: 'Created By',
-    		            flex: 1,
-    		            dataIndex: 'createdBy',
-    		            renderer : me.columnRendererUtils.renderCreatedBy,
-    		            sortable: false
-    		        },{
-    		            text: 'Created Date',
-    		            flex: 1,
-    		            dataIndex: 'createdDate',
-    		            renderer : Ext.util.Format.dateRenderer('Y-m-d g:i A'),
-    		            sortable: false
-    		        },{
-    		            text: 'Status',
-    		            flex: .5,
-    		            sortable: false,
-    		            dataIndex: 'closedDate',
-    		            renderer: me.columnRendererUtils.renderEarlyAlertStatus
-    		        },{
-    		            text: 'Details',
-    		            flex: 2,
-    		            sortable: false,
-    		            dataIndex: 'gridDisplayDetails'
-    		        }],
-    		        
-    		        dockedItems: [{
-				        dock: 'top',
-				        xtype: 'toolbar',
-				        items: [{
-				            tooltip: 'Respond to the selected Early Alert',
-				            text: '',
-				            xtype: 'button',
-				            hidden: !me.authenticatedPerson.hasAccess('RESPOND_EARLY_ALERT_BUTTON'),
-			            	width: 28,
-					        height: 28,
-				            cls: 'earlyAlertResponseIcon',
-				            itemId: 'respondButton'
-				        },{
-				            tooltip: 'Display detail for the selected item',
-				            text: 'Details',
-				            xtype: 'button',
-				            hidden: !me.authenticatedPerson.hasAccess('EARLY_ALERT_DETAILS_BUTTON'),
-				            itemId: 'displayDetailsButton'
-				        }]
-				    }]
-				});
-		
-		return me.callParent(arguments);
-	}
+    width: '100%',
+    height: '100%',
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            autoScroll: true,
+            title: 'Early Alerts',
+            cls: 'early-alert-tree-panel',
+            collapsible: false,
+            useArrows: true,
+            rootVisible: false,
+            store: me.treeStore,
+            multiSelect: false,
+            singleExpand: true,
+            
+            columns: [{
+                text: 'Responses',
+                flex: .5,
+                dataIndex: 'noOfResponses',
+                sortable: false
+            }, {
+                text: 'Created By',
+                flex: 1,
+                dataIndex: 'createdBy',
+                renderer: me.columnRendererUtils.renderCreatedBy,
+                sortable: false
+            }, {
+                text: 'Created Date',
+                flex: 1,
+                dataIndex: 'createdDate',
+                renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A'),
+                sortable: false
+            }, {
+                text: 'Status',
+                flex: .5,
+                sortable: false,
+                dataIndex: 'closedDate',
+                renderer: me.columnRendererUtils.renderEarlyAlertStatus
+            }, {
+                text: 'Details',
+                flex: 2,
+                sortable: false,
+                dataIndex: 'gridDisplayDetails'
+            }],
+            
+            viewConfig: {
+                markDirty: false
+            }
+        });
+        
+        return me.callParent(arguments);
+    }
 });
+
 /*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
@@ -21157,98 +21295,117 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
  * under the License.
  */
 Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
-	extend: 'Ext.form.Panel',
-	alias : 'widget.earlyalertresponse',
+    extend: 'Ext.form.Panel',
+    alias : 'widget.earlyalertresponse',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController',
     inject: {
-    	earlyAlert: 'currentEarlyAlert',
+        earlyAlert: 'currentEarlyAlert',
         outcomesStore: 'earlyAlertOutcomesStore',
         outreachesStore: 'earlyAlertOutreachesStore',
         referralsStore: 'earlyAlertReferralsStore'
     },
     initComponent: function() {
-    	var me=this;
-		Ext.applyIf(me, {
-			autoScroll: true,
-        	title: 'Early Alert Response',
-        	defaults:{
-        		labelWidth: 200
-        	},
-            items: [{
-                	xtype: 'displayfield',
-                	fieldLabel: 'Early Alert Course',
-                	value: me.earlyAlert.get('courseName') +  ' ' + me.earlyAlert.get('courseTitle')
+        var me=this;
+        Ext.applyIf(me, {
+            autoScroll: true,
+            title: 'Early Alert Response',
+            defaults:{
+                labelWidth: 200
+            },
+            items: [
+			
+                {
+                           xtype: 'toolbar',
+                           dock: 'top',
+                           items: [{
+                                       text: 'Save',
+                                       xtype: 'button',
+                                       action: 'save',
+                                       itemId: 'saveButton'
+                                   }, '-', {
+                                       text: 'Cancel',
+                                       xtype: 'button',
+                                       action: 'cancel',
+                                       itemId: 'cancelButton'
+                                   }]
+                       },{
+                    xtype: 'displayfield',
+                    fieldLabel: 'Early Alert Course',
+                    value: me.earlyAlert.get('courseName') +  ' ' + me.earlyAlert.get('courseTitle')
                  },{
-			        xtype: 'combobox',
-			        itemId: 'outcomeCombo',
-			        name: 'earlyAlertOutcomeId',
-			        fieldLabel: 'Outcome',
-			        emptyText: 'Select One',
-			        store: me.outcomesStore,
-			        valueField: 'id',
-			        displayField: 'name',
-			        mode: 'local',
-			        typeAhead: true,
-			        queryMode: 'local',
-			        allowBlank: false,
-			        forceSelection: true,
-			        anchor: '95%'
-				},{
-					xtype: 'textfield',
-					itemId: 'otherOutcomeDescriptionText',
-					name: 'earlyAlertOutcomeOtherDescription',
-					fieldLabel: 'Other Outcome Description',
-					anchor: '95%'
-				},{
-		            xtype: 'multiselect',
-		            name: 'earlyAlertOutreachIds',
-		            itemId: 'outreachList',
-		            fieldLabel: 'Outreach'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
-		            store: me.outreachesStore,
-		            displayField: 'name',
-		            msgTarget: 'side',
-		            valueField: 'id',
-		            invalidCls: 'multiselect-invalid',
-		            minSelections: 1,
-		            allowBlank: false,
-		            anchor: '95%'
-		        },{
+                    xtype: 'combobox',
+                    itemId: 'outcomeCombo',
+                    name: 'earlyAlertOutcomeId',
+                    fieldLabel: 'Outcome',
+                    emptyText: 'Select One',
+                    store: me.outcomesStore,
+                    valueField: 'id',
+                    displayField: 'name',
+                    mode: 'local',
+                    typeAhead: true,
+                    queryMode: 'local',
+                    allowBlank: false,
+                    forceSelection: true,
+                    anchor: '95%'
+                },{
+                    xtype: 'textfield',
+                    itemId: 'otherOutcomeDescriptionText',
+                    name: 'earlyAlertOutcomeOtherDescription',
+                    fieldLabel: 'Other Outcome Description',
+                    anchor: '95%'
+                },{
+                    xtype: 'multiselect',
+                    name: 'earlyAlertOutreachIds',
+                    itemId: 'outreachList',
+                    fieldLabel: 'Outreach'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
+                    store: me.outreachesStore,
+                    displayField: 'name',
+                    msgTarget: 'side',
+                    valueField: 'id',
+                    invalidCls: 'multiselect-invalid',
+                    minSelections: 1,
+                    allowBlank: false,
+                    anchor: '95%'
+                },{
                     xtype: 'textareafield',
                     fieldLabel: 'Comment',
                     anchor: '95%',
                     name: 'comment',
                     allowBlank: false
                 },{
-		            xtype: 'checkboxfield',
-		            fieldLabel: 'Close',
-			        name: 'closed',
-		            itemId: 'closedField',
-		            inputValue: true
-			    },{
-				   xtype:'earlyalertreferrals',
-				   flex: 1
-				}],
+                    xtype: 'checkboxfield',
+                    fieldLabel: 'Close',
+                    name: 'closed',
+                    itemId: 'closedField',
+                    inputValue: true
+                },{
+                   xtype:'earlyalertreferrals',
+                   flex: 1
+                }
+				],
             
-            dockedItems: [{
-       		               xtype: 'toolbar',
-       		               items: [{
-		       		                   text: 'Save',
-		       		                   xtype: 'button',
-		       		                   action: 'save',
-		       		                   itemId: 'saveButton'
-		       		               }, '-', {
-		       		                   text: 'Cancel',
-		       		                   xtype: 'button',
-		       		                   action: 'cancel',
-		       		                   itemId: 'cancelButton'
-		       		               }]
-       		           }]
+            
+			dockedItems: [{
+                           xtype: 'toolbar',
+                           items: [{
+                                       text: 'Return to Early Alert List',
+                                       xtype: 'button',
+                                     
+                                       itemId: 'responseGotoEAListButton'
+                                   }, '-', {
+                                       text: 'Return to Early Alert Details',
+                                       xtype: 'button',
+                                      
+                                       itemId: 'responseGotoEADetailsButton'
+                                   }]
+                       }]		   
+			
         });
 
         return me.callParent(arguments);
-    }	
+    }   
 });
 /*
  * Licensed to Jasig under one or more contributor license
@@ -21306,102 +21463,177 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertReferrals', {
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails',{
-	extend: 'Ext.form.Panel',
-	alias : 'widget.earlyalertdetails',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
+Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
+    extend: 'Ext.form.Panel',
+    alias: 'widget.earlyalertdetails',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController',
     inject: {
-    	model: 'currentEarlyAlert',
-    	selectedSuggestionsStore: 'earlyAlertDetailsSuggestionsStore'
+        model: 'currentEarlyAlert',
+        selectedSuggestionsStore: 'earlyAlertDetailsSuggestionsStore',
+        authenticatedPerson: 'authenticatedPerson',
+        columnRendererUtils: 'columnRendererUtils',
+        treeStore: 'earlyAlertsTreeStore',
+		currentEarlyAlertResponsesGridStore: 'currentEarlyAlertResponsesGridStore'
     },
+    width: '100%',
+    height: '100%',
     title: 'Early Alert Details',
-	initComponent: function() {
-		var me=this;
+    initComponent: function(){
+        var me = this;
         Ext.applyIf(me, {
-        	autoScroll: true,
+            autoScroll: true,
             items: [{
-	                xtype: 'displayfield',
-	                fieldLabel: 'Created By',
-	                anchor: '100%',
-	                name: 'createdByPersonName',
-	                itemId: 'createdByField'
-	            },{
-	                xtype: 'displayfield',
-	                fieldLabel: 'Created Date',
-	                anchor: '100%',
-	                name: 'createdDate',
-	                itemId: 'createdDateField',
-	                renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
-	            },{
-                    xtype: 'displayfield',
-                    fieldLabel: 'Course Name',
-                    anchor: '100%',
-                    name: 'courseName'
-                },{
-                    xtype: 'displayfield',
-                    fieldLabel: 'Status',
-                    anchor: '100%',
-                    name: 'status',
-                    itemId: 'statusField'
-                },{
-                    xtype: 'displayfield',
-                    fieldLabel: 'Closed By',
-                    anchor: '100%',
-                    name: 'closedByPersonName',
-                    itemId: 'closedByField'
-                },{
-                    xtype: 'displayfield',
-                    fieldLabel: 'Closed Date',
-                    anchor: '100%',
-                    name: 'closedDate',
-                    renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
-                },{
-                    xtype: 'displayfield',
-                    fieldLabel: 'Campus',
-                    itemId: 'campusField',
-                    anchor: '100%',
-                    name: 'campus'
-                },{
-                    xtype: 'displayfield',
-                    fieldLabel: 'Reason',
-                    itemId: 'earlyAlertReasonField',
-                    anchor: '100%',
-                    name: 'earlyAlertReason'
-                },{
-		            xtype: 'multiselect',
-		            name: 'earlyAlertSuggestionIds',
-		            itemId: 'earlyAlertSuggestionsList',
-		            fieldLabel: 'Suggestions',
-		            store: me.selectedSuggestionsStore,
-		            displayField: 'name',
-		            anchor: '95%'
-		        },{
-                    xtype: 'displayfield',
-                    fieldLabel: 'Email CC',
-                    anchor: '100%',
-                    name: 'emailCC'
-                },{
-                    xtype: 'displayfield',
-                    fieldLabel: 'Comment',
-                    anchor: '100%',
-                    name: 'comment'
-                }],
+                xtype: 'fieldcontainer',
+                fieldLabel: '',
+                layout: 'hbox',
+                margin: '5 0 0 0',
+                defaultType: 'displayfield',
+                fieldDefaults: {
+                    msgTarget: 'side',
+                    //labelAlign: 'right',
+                    //labelWidth: 80
+                },
+                items: [{
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    flex: .40,
+                    items: [{
+                    
+                        fieldLabel: 'Created By',
+                        
+                        name: 'createdByPersonName',
+                        itemId: 'createdByField'
+                    }, {
+                    
+                        fieldLabel: 'Created Date',
+                        
+                        name: 'createdDate',
+                        itemId: 'createdDateField',
+                        renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
+                    }, {
+                    
+                        fieldLabel: 'Course Name',
+                        
+                        name: 'courseName'
+                    }, {
+                    
+                        fieldLabel: 'Campus',
+                        itemId: 'campusField',
+                        
+                        name: 'campus'
+                    }, {
+                    
+                        fieldLabel: 'Reason',
+                        itemId: 'earlyAlertReasonField',
+                        
+                        name: 'earlyAlertReason'
+                    }, {
+                        xtype: 'multiselect',
+                        name: 'earlyAlertSuggestionIds',
+                        itemId: 'earlyAlertSuggestionsList',
+                        fieldLabel: 'Suggestions',
+                        store: me.selectedSuggestionsStore,
+                        displayField: 'name',
+                        anchor: '95%'
+                    }, {
+                    
+                        fieldLabel: 'Comment',
+                        name: 'comment',
+                    
+                    }, {
+                        xtype: 'tbspacer',
+                        height: '10'
+                    }, {
+                        xtype: 'toolbar',
+                        dock: 'top',
+                        items: [{
+                            text: 'Respond  to selected Early Alert',
+                            xtype: 'button',
+                            itemId: 'detailRespondButton',
+                            hidden: !me.authenticatedPerson.hasAccess('RESPOND_EARLY_ALERT_BUTTON')
+                        }]
+                    }, {
+                        xtype: 'gridpanel',
+                        title: 'Responses',
+                        id: 'detailResponseGridPanel',
+						store: me.currentEarlyAlertResponsesGridStore,
+                        columns: [{
+                            text: 'Created By',
+                            flex: 1,
+                            dataIndex: 'createdBy',
+                            renderer: me.columnRendererUtils.renderCreatedBy,
+                            sortable: false
+                        }, {
+                            text: 'Created Date',
+                            flex: 1,
+                            dataIndex: 'createdDate',
+                            renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A'),
+                            sortable: false
+                        }, {
+                            text: 'Status',
+                            flex: .5,
+                            sortable: false,
+                            dataIndex: 'closedDate',
+                            renderer: me.columnRendererUtils.renderEarlyAlertStatus
+                        }, {
+                            text: 'Details',
+                            flex: 2,
+                            sortable: false,
+                            dataIndex: 'gridDisplayDetails'
+                        }]
+                    }]
+                
+                }, {
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    flex: .30,
+                    items: [{
+                        fieldLabel: 'Status',
+                        name: 'status',
+                        itemId: 'statusField'
+                    }, {
+                        fieldLabel: 'Closed By',
+                        name: 'closedByPersonName',
+                        itemId: 'closedByField'
+                    }, {
+                        fieldLabel: 'Closed Date',
+                        name: 'closedDate',
+                        renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
+                    }, {
+                    
+                        fieldLabel: 'Email CC',
+                        
+                        name: 'emailCC'
+                    }]
+                
+                }]
+            }],
             
             dockedItems: [{
-       		               xtype: 'toolbar',
-       		               items: [{
-		       		                   text: 'Return to Early Alert List',
-		       		                   xtype: 'button',
-		       		                   itemId: 'finishButton'
-		       		               }]
-       		           }]
+                xtype: 'toolbar',
+                items: [{
+                    text: 'Return to Early Alert List',
+                    xtype: 'button',
+                    itemId: 'finishButton'
+                }]
+            }]
         });
-
+        
         return me.callParent(arguments);
-    }	
+    }
 });
+
 /*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
@@ -21480,7 +21712,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponseDetails',{
             dockedItems: [{
        		               xtype: 'toolbar',
        		               items: [{
-		       		                   text: 'Return to Early Alert List',
+		       		                   text: 'Return to Early Alert Details',
 		       		                   xtype: 'button',
 		       		                   itemId: 'finishButton'
 		       		               }]
@@ -24239,9 +24471,55 @@ Ext.define('Ssp.model.tool.earlyalert.PersonEarlyAlertTree', {
              {name:'text',type: 'string'},
              {name:'nodeType',type:'string',defaultValue:'early alert'},
              {name:'gridDisplayDetails', type:'string'},
+             {name: 'noOfResponses', type:'string'},
              /* end props for tree manipulation */
              
              {name:'earlyAlertId',type:'string'},
+             {name:'earlyAlertOutcomeId',type:'string'},
+             {name:'earlyAlertOutcomeOtherDescription',type:'string'},
+             {name:'earlyAlertReferralIds',type:'auto'},
+             {name:'earlyAlertOutreachIds',type:'auto'},
+             {name:'comment',type:'string'}]
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.tool.earlyalert.EarlyAlertResponseGrid', {
+    extend: 'Ssp.model.AbstractBase',
+    fields: [{name:'personId', type: 'string'},
+             {name:'courseName', type:'string'},
+             {name:'courseTitle', type:'string'},
+             {name:'emailCC', type:'string'},
+             {name:'campusId', type:'string'},
+             {name:'earlyAlertReasonId', type:'string'},
+             {name:'earlyAlertReasonIds', type:'string'},
+             {name:'earlyAlertReasonOtherDescription', type:'string'},
+             {name:'earlyAlertSuggestionIds', type:'auto'},
+             {name:'earlyAlertSuggestionOtherDescription', type:'string'},
+             {name:'comment', type:'string'},
+             {name:'closedDate', type: 'date', dateFormat: 'time'},
+             {name:'closedById', type:'string'}, 
+             {name:'sendEmailToStudent', type:'boolean'},
+			 
+			 {name:'nodeType',type:'string',defaultValue:'early alert'},
+             {name:'gridDisplayDetails', type:'string'},
+			 
+			 {name:'earlyAlertId',type:'string'},
              {name:'earlyAlertOutcomeId',type:'string'},
              {name:'earlyAlertOutcomeOtherDescription',type:'string'},
              {name:'earlyAlertReferralIds',type:'auto'},

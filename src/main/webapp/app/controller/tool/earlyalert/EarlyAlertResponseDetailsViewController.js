@@ -31,7 +31,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseDetailsViewControll
     },
     config: {
     	containerToLoadInto: 'tools',
-    	formToDisplay: 'earlyalert'
+    	formToDisplay: 'earlyalertdetails'
     },
     control: {
     	'finishButton': {

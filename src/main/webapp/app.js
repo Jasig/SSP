@@ -181,6 +181,7 @@ Ext.require([
 	'Ssp.model.tool.earlyalert.PersonEarlyAlert',
 	'Ssp.model.tool.earlyalert.PersonEarlyAlertTree',
 	'Ssp.model.tool.earlyalert.EarlyAlertResponse',
+	'Ssp.model.tool.earlyalert.EarlyAlertResponseGrid',
 	'Ssp.model.tool.journal.JournalEntry',
 	'Ssp.model.tool.journal.JournalEntryDetail',
 	'Ssp.model.tool.shg.SelfHelpGuides',
@@ -561,6 +562,15 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+					currentEarlyAlertResponsesGridStore: {
+                        fn: function() {
+                            return Ext.create('Ext.data.Store',{
+                                model: 'Ssp.model.tool.earlyalert.EarlyAlertResponseGrid',
+                                storeId: 'currentEarlyAlertResponsesGridStore'
+                            }); 
+                        },
+                        singleton: true
+                    },
 			        currentDocument:{
 				        fn: function(){
 				            return new Ssp.model.PersonDocument({id:""});

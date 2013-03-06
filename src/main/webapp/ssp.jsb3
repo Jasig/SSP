@@ -1339,6 +1339,11 @@
                     "path": "/app/model/tool/earlyalert/"
                 },
                 {
+                    "clsName": "Ssp.model.tool.earlyalert.EarlyAlertResponseGrid",
+                    "name": "EarlyAlertResponseGrid.js",
+                    "path": "/app/model/tool/earlyalert/"
+                },
+                {
                     "clsName": "Ssp.model.tool.earlyalert.EarlyAlertResponse",
                     "name": "EarlyAlertResponse.js",
                     "path": "/app/model/tool/earlyalert/"
