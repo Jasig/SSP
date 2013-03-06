@@ -116,7 +116,7 @@ abstract class ReportBaseController extends AbstractBaseController {
 		 return processStudentReportTOs(new ArrayList<BaseStudentReportTO>(people.getRows()));
 	}
 	
-	List<BaseStudentReportTO> processStudentReportTOs(List<BaseStudentReportTO> reports){
+	List<BaseStudentReportTO> processStudentReportTOs(Collection<BaseStudentReportTO> reports){
 		ArrayList<BaseStudentReportTO> compressedReports = new ArrayList<BaseStudentReportTO>();
 		if(reports == null || reports.size() <= 0)
 			return compressedReports;

@@ -144,7 +144,10 @@ var ssp = ssp || {};
 					.locate('disabilityStatusGroup'));	
 			
 			loadGroupInput("/ssp/api/1/reference/disabilityType/", that
-					.locate('disabilityTypeGroup'));	
+					.locate('disabilityTypeGroup'));
+			
+			loadGroupInput("/ssp/api/1/reference/journalStepDetail/", that
+					.locate('journalStepDetailGroup'));
 			
 			loadTermInput("/ssp/api/1/reference/term/?sort=startDate&start=0&limit=10000&sortDirection=DESC", that
 					.locate('termGroup'));
@@ -307,6 +310,12 @@ var ssp = ssp || {};
 		reportsSelect
 		.append('<option value="earlyAlertStudentOutcome">Early Alert Student Outcome Report</option>');
 		
+		reportsSelect
+		.append('<option value="" disabled >- Journal/Task Reports -</option>');
+		
+		reportsSelect
+		.append('<option value="journalSessionDetail">Journal Step Detail Report</option>');
+		
 		//TODO Controller Generated but DAO's incomplete at this time.
 		//reportsSelect
 		//.append('<option value="earlyAlertClass">Early Alert Class Report</option>');
@@ -337,6 +346,7 @@ var ssp = ssp || {};
 							earlyAlertStudentProgress : '.early-alert-student-progress-report',
 							earlyAlertStudentOutreach : '.early-alert-student-outreach-report',
 							earlyAlertStudentOutcome : '.early-alert-student-outcome-report',
+							journalSessionDetail : '.journal-session-detail-report',
 							earlyAlertClass : '.early-alert-class-report',
 							disabilityServices : '.disability-services-report',
 							programStatusGroup : '.input-program-status-group',
@@ -346,6 +356,7 @@ var ssp = ssp || {};
 							referralSourceGroup : '.input-referral-source-group',
 							earlyAlertReferralGroup: '.input-early-alert-referral-group',
 							assignedCounselorGroup : '.input-assigned-counselor-group',
+							journalStepDetailGroup : '.input-journal-step-detail-group',
 							campusGroup: '.input-campus-group',
 							termGroup: '.input-term-group',
 							reportYearGroup: '.input-report-year-group',
