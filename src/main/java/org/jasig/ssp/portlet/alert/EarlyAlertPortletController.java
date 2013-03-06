@@ -111,9 +111,9 @@ public final class EarlyAlertPortletController {
 			if ( student == null ) {
 				throw new IllegalStateException("Student not found");
 			}
-
+			
 			enrollment = facultyCourseService.getEnrollment(user.getSchoolId(),
-					formattedCourse, termCode, student.getSchoolId());
+					formattedCourse, course.getTermCode(), student.getSchoolId());
 
 			if ( enrollment == null ) {
 				throw new IllegalStateException("Enrollment not found.");
