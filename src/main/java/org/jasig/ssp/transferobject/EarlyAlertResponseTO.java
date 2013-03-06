@@ -101,6 +101,7 @@ public class EarlyAlertResponseTO
 				.getEarlyAlertReferralIds()) {
 			earlyAlertReferralIds.add(obj.getId());
 		}
+		closed = earlyAlertResponse.getEarlyAlert().getClosedById() != null;
 	}
 
 	/**
