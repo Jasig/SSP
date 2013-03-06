@@ -11436,7 +11436,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
             						name: 'editButton',
             						text:'Edit', 
                                     anchor: '33%',
-                                    buttonAlign: 'right'                        
+                                    buttonAlign: 'right',                        
              						action: 'edit'
             		 },
                        
