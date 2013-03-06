@@ -584,6 +584,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		projections.add(Projections.groupProperty("city").as("city"));
 		projections.add(Projections.groupProperty("state").as("state"));
 		projections.add(Projections.groupProperty("zipCode").as("zipCode"));
+		projections.add(Projections.groupProperty("actualStartTerm").as("actualStartTerm"));
+		projections.add(Projections.groupProperty("actualStartYear").as("actualStartYear"));
 		projections.add(Projections.groupProperty("id").as("id"));
 		
 		criteria.createAlias("programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);

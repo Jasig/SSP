@@ -20,6 +20,7 @@ package org.jasig.ssp.transferobject.reports;
 
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,8 +30,10 @@ import org.apache.commons.lang.StringUtils;
 import org.jasig.mygps.model.transferobject.TaskReportTO;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonProgramStatus;
+import org.jasig.ssp.model.external.ExternalStudentTranscript;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 
@@ -99,6 +102,10 @@ public class BaseStudentReportTO implements Serializable {
 	private String specialServiceGroup;
 	private String specialServiceGroupsName;
 	private Boolean isIlp;
+	
+	private String actualStartTerm;
+	private Integer actualStartYear;
+	private BigDecimal gradePointAverage;
 	
 	private Person person;
 	
@@ -498,6 +505,48 @@ public class BaseStudentReportTO implements Serializable {
 	}
 
 	
+	/**
+	 * @return the actualStartTerm
+	 */
+	public String getActualStartTerm() {
+		return actualStartTerm;
+	}
+
+	/**
+	 * @param actualStartTerm the actualStartTerm to set
+	 */
+	public void setActualStartTerm(String actualStartTerm) {
+		this.actualStartTerm = actualStartTerm;
+	}
+
+	/**
+	 * @return the actualStartYear
+	 */
+	public Integer getActualStartYear() {
+		return actualStartYear;
+	}
+
+	/**
+	 * @param actualStartYear the actualStartYear to set
+	 */
+	public void setActualStartYear(Integer actualStartYear) {
+		this.actualStartYear = actualStartYear;
+	}
+
+	/**
+	 * @return the gradePointAverage
+	 */
+	public BigDecimal getGradePointAverage() {
+		return gradePointAverage;
+	}
+
+	/**
+	 * @param gradePointAverage the gradePointAverage to set
+	 */
+	public void setGradePointAverage(BigDecimal gradePointAverage) {
+		this.gradePointAverage = gradePointAverage;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -551,10 +600,23 @@ public class BaseStudentReportTO implements Serializable {
 	
 public void setCurrentRegistrationStatus(RegistrationStatusByTermService registrationStatusByTermService )
 			throws ObjectNotFoundException {
-		RegistrationStatusByTerm termStatus = registrationStatusByTermService
+	
+	   if(getSchoolId() != null && !getSchoolId().isEmpty()){
+		   RegistrationStatusByTerm termStatus = registrationStatusByTermService
 				.getForCurrentTerm(getSchoolId());
-		if(termStatus != null)
-			setRegistrationStatus(termStatus.getRegisteredCourseCount());
+		   if(termStatus != null)
+			   setRegistrationStatus(termStatus.getRegisteredCourseCount());
+	   }
+}
+
+public void setStudentTranscript(ExternalStudentTranscriptService externalStudentTranscriptService )
+		throws ObjectNotFoundException {
+	if(getSchoolId() != null && !getSchoolId().isEmpty()){
+		ExternalStudentTranscript transcript = externalStudentTranscriptService
+			.getRecordsBySchoolId(getSchoolId());
+		if(transcript != null)
+			this.setGradePointAverage(transcript.getGradePointAverage());
+	}
 }
 
 }

@@ -37,6 +37,8 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
+import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
@@ -93,6 +95,12 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 	
 	@Autowired
 	protected transient ServiceReasonService serviceReasonService;	
+	
+	@Autowired
+	protected transient ExternalStudentTranscriptService externalStudentTranscriptService;
+	
+	@Autowired
+	protected transient RegistrationStatusByTermService registrationStatusByTermService;
 
 	// @Autowired
 	// private transient PersonTOFactory factory;
@@ -181,6 +189,10 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
 		
 		List<BaseStudentReportTO> compressedReports = this.processStudentReportTOs(reports);
+		for(BaseStudentReportTO report:compressedReports){
+			report.setStudentTranscript(externalStudentTranscriptService);
+			report.setCurrentRegistrationStatus(registrationStatusByTermService);
+		}
 		
 		SearchParameters.addStudentCount(compressedReports, parameters);
 
