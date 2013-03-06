@@ -11145,7 +11145,9 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
         person: 'currentPerson',
         personLite: 'personLite',
         personService: 'personService',
-        sspConfig: 'sspConfig'
+        sspConfig: 'sspConfig',
+		authenticatedPerson: 'authenticatedPerson',
+		formUtils: 'formRendererUtils',
     },
     
     control: {
@@ -11157,9 +11159,12 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
 		primaryEmailAddressField: '#primaryEmailAddress',
 		primaryEmailAddress: {
             click :    'onPrimaryEmailAddressClick',
-        
+		},    
+        editButton: {
+    		click: 'onEditClick'
+    	}        
            
-        }
+        
 		
     },
 	init: function() {
@@ -11251,6 +11256,20 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
             window.location = 'mailto:' + me.person.get('primaryEmailAddress');
         }
     },
+	
+	onEditClick: function(button){
+		this.displayIntake();
+	},	
+	displayIntake: function(){
+        var me = this;
+        var comp;
+        if (me.authenticatedPerson.hasAccess('STUDENTINTAKE_TOOL')) {
+            comp = me.formUtils.loadDisplay('tools', 'studentintake', true, {});
+        }
+        else {
+            me.authenticatedPerson.showUnauthorizedAccessAlert();
+        }	
+     }	
 });
 /*
  * Licensed to Jasig under one or more contributor license
@@ -11410,7 +11429,18 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                             anchor: '100%'
                         },
                         
-                        items: [{
+                        items: [
+                      {
+            						xtype: 'button', 
+            						itemId: 'editButton', 
+            						name: 'editButton',
+            						text:'Edit', 
+                                    anchor: '33%',
+                                    buttonAlign: 'right'                        
+             						action: 'edit'
+            		 },
+                       
+                       {
                             fieldLabel: 'In Use',
                             name: 'alternateAddressInUse',
                             labelWidth: 80,

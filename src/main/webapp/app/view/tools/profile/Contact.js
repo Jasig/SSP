@@ -156,7 +156,18 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                             anchor: '100%'
                         },
                         
-                        items: [{
+                        items: [
+                      {
+            						xtype: 'button', 
+            						itemId: 'editButton', 
+            						name: 'editButton',
+            						text:'Edit', 
+                                    anchor: '33%',
+                                    buttonAlign: 'right'                        
+             						action: 'edit'
+            		 },
+                       
+                       {
                             fieldLabel: 'In Use',
                             name: 'alternateAddressInUse',
                             labelWidth: 80,
