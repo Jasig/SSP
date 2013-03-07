@@ -265,6 +265,12 @@ public class ExternalPersonServiceImpl
 						externalPerson.getActualStartYear()))) {
 			person.setActualStartYear(externalPerson.getActualStartYear());
 		}
+		
+		if ((person.getNonLocalAddress() == null) ||
+				(!person.getNonLocalAddress().equals(
+						externalPerson.getNonLocalAddress()))) {
+			person.setNonLocalAddress(externalPerson.getNonLocalAddress());
+		}
 
 		setCoachForPerson(person, externalPerson.getCoachSchoolId());
 
