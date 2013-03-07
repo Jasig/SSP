@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -115,6 +116,9 @@ public class ExternalPerson extends AbstractExternalData implements
 	@Column(length = 50)
 	@Size(max = 50)
 	private String coachSchoolId;
+	
+	@Nullable
+	private Boolean nonLocalAddress;
 
 	public String getSchoolId() {
 		return schoolId;
@@ -324,4 +328,13 @@ public class ExternalPerson extends AbstractExternalData implements
 	public void setCoachSchoolId(final String coachSchoolId) {
 		this.coachSchoolId = coachSchoolId;
 	}
+
+	public Boolean getNonLocalAddress() {
+		return nonLocalAddress;
+	}
+
+	public void setNonLocalAddress(Boolean nonLocalAddress) {
+		this.nonLocalAddress = nonLocalAddress;
+	}
+
 }
