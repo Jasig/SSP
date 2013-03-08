@@ -212,7 +212,7 @@ public class EarlyAlertResponseDaoTest {
 		earlyAlert.setClosedDate(new Date());
 		earlyAlert.setPerson(personService.get(PERSON_ID));
 		earlyAlert.setObjectStatus(ObjectStatus.ACTIVE);
-		earlyAlert.setClosedById(PERSON_ID);
+		earlyAlert.setClosedBy(personService.get(PERSON_ID));
 		earlyAlert.setCourseName(EARLY_ALERT_COURSE_NAME);
 		earlyAlert.setCampus(campusService.get(UUID
 				.fromString("901E104B-4DC7-43F5-A38E-581015E204E1")));

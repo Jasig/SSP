@@ -132,7 +132,7 @@ public class EarlyAlertDaoTest {
 		obj.setPerson(personService.get(PERSON_ID));
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		obj.setClosedDate(new Date());
-		obj.setClosedById(PERSON_ID);
+		obj.setClosedBy(personService.get(PERSON_ID));
 		obj.setCourseName(EARLY_ALERT_COURSE_NAME);
 		obj.setCampus(campusService.get(UUID
 				.fromString("901E104B-4DC7-43F5-A38E-581015E204E1")));
@@ -230,12 +230,12 @@ public class EarlyAlertDaoTest {
 
 		final EarlyAlert earlyAlert = createTestClosedEarlyAlert();
 		earlyAlert.setClosedDate(null);
-		earlyAlert.setClosedById(null);
+		earlyAlert.setClosedBy(null);
 		final EarlyAlert saved = dao.save(earlyAlert);
 
 		final EarlyAlert earlyAlert2 = createTestClosedEarlyAlert();
 		earlyAlert2.setClosedDate(null);
-		earlyAlert2.setClosedById(null);
+		earlyAlert2.setClosedBy(null);
 		earlyAlert2.setObjectStatus(ObjectStatus.INACTIVE);
 		final EarlyAlert saved2 = dao.save(earlyAlert2);
 		sessionFactory.getCurrentSession().flush();
@@ -300,7 +300,7 @@ public class EarlyAlertDaoTest {
 
 		final EarlyAlert earlyAlert = createTestClosedEarlyAlert();
 		earlyAlert.setClosedDate(null);
-		earlyAlert.setClosedById(null);
+		earlyAlert.setClosedBy(null);
 		final EarlyAlert saved = dao.save(earlyAlert);
 
 		final EarlyAlert earlyAlert2 = createTestClosedEarlyAlert();
@@ -329,7 +329,7 @@ public class EarlyAlertDaoTest {
 		final Date endDate = getDateSetByDayOffset(1);
 		final EarlyAlert earlyAlert = createTestClosedEarlyAlert();
 		earlyAlert.setClosedDate(null);
-		earlyAlert.setClosedById(null);
+		earlyAlert.setClosedBy(null);
 		final EarlyAlert saved = dao.save(earlyAlert);
 
 		final EarlyAlert earlyAlert2 = createTestClosedEarlyAlert();
@@ -358,7 +358,7 @@ public class EarlyAlertDaoTest {
 		final Date endDate = getDateSetByDayOffset(1);
 		final EarlyAlert earlyAlert = createTestClosedEarlyAlert();
 		earlyAlert.setClosedDate(null);
-		earlyAlert.setClosedById(null);
+		earlyAlert.setClosedBy(null);
 		final EarlyAlert saved = dao.save(earlyAlert);
 
 		final EarlyAlert earlyAlert2 = createTestClosedEarlyAlert();
@@ -387,7 +387,7 @@ public class EarlyAlertDaoTest {
 		final Date endDate = getDateSetByDayOffset(1);
 		final EarlyAlert earlyAlert = createTestClosedEarlyAlert();
 		earlyAlert.setClosedDate(null);
-		earlyAlert.setClosedById(null);
+		earlyAlert.setClosedBy(null);
 		final EarlyAlert saved = dao.save(earlyAlert);
 
 		final EarlyAlert earlyAlert2 = createTestClosedEarlyAlert();

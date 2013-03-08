@@ -430,7 +430,7 @@ public class Stubs {
 		final EarlyAlert obj = new EarlyAlert();
 		obj.setPerson(personService.get(PersonFixture.STUDENT_0.id()));
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setClosedById(PersonFixture.STUDENT_0.id());
+		obj.setClosedBy(personService.get(PersonFixture.STUDENT_0.id()));
 		obj.setCourseName("Complicated Science 101");
 		obj.setCampus(campusService.get(CampusFixture.TEST.id()));
 

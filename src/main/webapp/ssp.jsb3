@@ -809,6 +809,11 @@
                     "path": "/app/controller/tool/earlyalert/"
                 },
                 {
+                    "clsName": "Ssp.util.ResponseDispatcher",
+                    "name": "ResponseDispatcher.js",
+                    "path": "/app/util/"
+                },
+                {
                     "clsName": "Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController",
                     "name": "EarlyAlertDetailsViewController.js",
                     "path": "/app/controller/tool/earlyalert/"

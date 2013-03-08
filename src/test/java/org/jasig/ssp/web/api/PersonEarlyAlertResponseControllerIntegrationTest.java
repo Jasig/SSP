@@ -163,27 +163,6 @@ public class PersonEarlyAlertResponseControllerIntegrationTest {
 		fail("Create with invalid Person UUID should have thrown exception.");
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testControllerCreateWithNullPerson()
-			throws ValidationException, ObjectNotFoundException {
-		controller.create(null, null, new EarlyAlertResponseTO());
-		fail("Null values should have thrown an exception.");
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testControllerCreateWithNull()
-			throws ValidationException, ObjectNotFoundException {
-		controller.create(null, null, null);
-		fail("Null values should have thrown an exception.");
-	}
-
-	@Test(expected = ValidationException.class)
-	public void testControllerSaveWithNull()
-			throws ValidationException, ObjectNotFoundException {
-		controller.save(null, null, null, null);
-		fail("Null values should have thrown an exception.");
-	}
-
 	/**
 	 * Test the
 	 * {@link PersonEarlyAlertResponseController#create(UUID, UUID, EarlyAlertResponseTO)}

@@ -169,34 +169,14 @@ public class PersonEarlyAlertResponseController extends
 
 		checkPermissionForOp("WRITE");
 
-		if (obj == null) {
-			throw new IllegalArgumentException(
-					"EarlyAlertResponse is required.");
-		}
-
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"It is invalid to send with an ID to the create method. Did you mean to use the save method instead?");
 		}
 
-		if (personId == null) {
-			throw new IllegalArgumentException(
-					"Person identifier is required.");
-		}
-
 		// ensure earlyAlertId is set to path variable
-		final EarlyAlertResponseTO earlyAlertResponseTO = obj;
-		earlyAlertResponseTO.setEarlyAlertId(earlyAlertId);
-		final EarlyAlertResponse model = factory.from(earlyAlertResponseTO);
-
-		if (null != model) {
-			final EarlyAlertResponse createdModel = service.create(model);
-			if (null != createdModel) {
-				return instantiateTO(createdModel);
-			}
-		}
-
-		return null;
+		obj.setEarlyAlertId(earlyAlertId);
+		return instantiateTO(service.create(obj));
 	}
 
 	private EarlyAlertResponseTO instantiateTO(final EarlyAlertResponse model) {

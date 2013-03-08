@@ -32,6 +32,12 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
     width: '100%',
     height: '100%',
     title: 'Early Alert Details',
+
+    // By default we assume the component causing this view to load has already
+    // loaded the EA of interest into a shared resource (the injected
+    // 'currentEarlyAlert')
+    reloadEarlyAlert: false,
+
     initComponent: function(){
         var me = this;
         Ext.applyIf(me, {

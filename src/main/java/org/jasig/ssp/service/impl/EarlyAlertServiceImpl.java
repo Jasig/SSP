@@ -46,6 +46,7 @@ import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.StudentType;
+import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
 import org.jasig.ssp.service.EarlyAlertRoutingService;
 import org.jasig.ssp.service.EarlyAlertService;
@@ -53,6 +54,7 @@ import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonProgramStatusService;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.FacultyCourseService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
@@ -127,6 +129,9 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	@Autowired
 	private transient StudentTypeService studentTypeService;
 
+	@Autowired
+	private transient SecurityService securityService;
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EarlyAlertServiceImpl.class);
 
@@ -196,6 +201,39 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	}
 
 	@Override
+	public void closeEarlyAlert(UUID earlyAlertId)
+			throws ObjectNotFoundException, ValidationException {
+		final EarlyAlert earlyAlert = getDao().get(earlyAlertId);
+
+		// DAOs don't implement ObjectNotFoundException consistently and we'd
+		// rather they not implement it at all, so a small attempt at 'future
+		// proofing' here
+		if ( earlyAlert == null ) {
+			throw new ObjectNotFoundException(earlyAlertId, EarlyAlert.class.getName());
+		}
+
+		if ( earlyAlert.getClosedDate() != null ) {
+			// already closed
+			return;
+		}
+
+		final SspUser sspUser = securityService.currentUser();
+		if ( sspUser == null ) {
+			throw new ValidationException("Early Alert cannot be closed by a null User.");
+		}
+
+		earlyAlert.setClosedDate(new Date());
+		earlyAlert.setClosedBy(sspUser.getPerson());
+
+		// This save will result in a Hib session flush, which works fine with
+		// our current usage. Future use cases might prefer to delay the
+		// flush and we can address that when the time comes. Might not even
+		// need to change anything here if it turns out nothing actually
+		// *depends* on the flush.
+		getDao().save(earlyAlert);
+	}
+
+	@Override
 	public EarlyAlert save(@NotNull final EarlyAlert obj)
 			throws ObjectNotFoundException {
 		final EarlyAlert current = getDao().get(obj.getId());
@@ -208,7 +246,11 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				.getEarlyAlertReasonOtherDescription());
 		current.setComment(obj.getComment());
 		current.setClosedDate(obj.getClosedDate());
-		current.setClosedById(obj.getClosedById());
+		if ( obj.getClosedById() == null ) {
+			current.setClosedBy(null);
+		} else {
+			current.setClosedBy(personService.get(obj.getClosedById()));
+		}
 
 		if (obj.getPerson() == null) {
 			current.setPerson(null);

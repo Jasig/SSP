@@ -198,6 +198,7 @@ Ext.require([
 	'Ssp.model.ApiUrl',
 	'Ssp.mixin.ApiProperties',
 	'Ssp.mixin.controller.ItemSelectorInitializer',
+    'Ssp.util.ResponseDispatcher',
 	'Ssp.util.FormRendererUtils',
 	'Ssp.util.ColumnRendererUtils',
 	'Ssp.util.TreeRendererUtils',

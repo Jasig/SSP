@@ -39,6 +39,38 @@ Ext.define('Ssp.service.EarlyAlertService', {
         return baseUrl;
     },
 
+    standardFailure: function(callbacks) {
+        var me = this;
+        return function(response) {
+            me.apiProperties.handleError( response );
+            if (callbacks)
+            {
+                callbacks.failure( response, callbacks.scope );
+            }
+        }
+    },
+
+    get: function( earlyAlertId, personId, callbacks ) {
+        var me = this;
+        var success = function( response ) {
+            var r;
+            if ( response.responseText ) {
+                r = Ext.decode(response.responseText);
+            }
+            if ( callbacks ) {
+                callbacks.success( r, callbacks.scope );
+            }
+        };
+        var failure = me.standardFailure(callbacks);
+        me.apiProperties.makeRequest({
+            url: me.getBaseUrl(personId) + "/" + earlyAlertId,
+            method: 'GET',
+            successFunc: success,
+            failureFunc: failure,
+            scope: me
+        });
+    },
+
     getAll: function( personId, callbacks ){
         var me=this;
         var success = function( response, view ){

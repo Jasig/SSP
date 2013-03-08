@@ -90,9 +90,9 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date closedDate;
 
-	@Column(nullable = true)
-	@Type(type = "uuid-custom")
-	private UUID closedById;
+	@ManyToOne
+	@JoinColumn(name = "closed_by_id", nullable = true)
+	private Person closedBy;
 
 	/**
 	 * Associated person. Changes to this Person <i>are</i> persisted.
@@ -262,15 +262,15 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	 * @return the closedById
 	 */
 	public UUID getClosedById() {
-		return closedById;
+		return closedBy == null ? null : closedBy.getId();
 	}
 
-	/**
-	 * @param closedById
-	 *            the closedById to set
-	 */
-	public void setClosedById(final UUID closedById) {
-		this.closedById = closedById;
+	public Person getClosedBy() {
+		return closedBy;
+	}
+
+	public void setClosedBy(Person closedBy) {
+		this.closedBy = closedBy;
 	}
 
 	@Override
@@ -340,7 +340,7 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 		result *= hashField("comment", comment);
 		result *= hashField("person", person);
 		result *= hashField("closedDate", closedDate);
-		result *= hashField("closedById", closedById);
+		result *= hashField("closedById", closedBy == null ? null : closedBy.getId());
 
 		return result;
 	}

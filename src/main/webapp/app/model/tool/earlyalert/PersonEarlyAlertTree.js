@@ -31,6 +31,7 @@ Ext.define('Ssp.model.tool.earlyalert.PersonEarlyAlertTree', {
              {name:'comment',type:'string'},
              {name:'closedDate',type: 'date', dateFormat: 'time'},
              {name:'closedById',type:'string'},
+             {name:'closedByName',type:'string'},
              {name:'sendEmailToStudent', type:'boolean'},
              
              /* props for tree manipulation */

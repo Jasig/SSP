@@ -66,7 +66,8 @@ public interface AuditableCrudService<T extends Auditable> {
 	 * 
 	 * <p>
 	 * Side effect: Assigns a new ID to the specified object.
-	 * 
+	 *
+	 * @deprecated use TO-based creation method(s) instead, if present.
 	 * @param obj
 	 *            Data to use to create a new instance in persistent storage
 	 * @return The updated data object instance

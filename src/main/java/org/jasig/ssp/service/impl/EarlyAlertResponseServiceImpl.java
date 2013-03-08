@@ -25,11 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
 import javax.mail.SendFailedException;
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.dao.EarlyAlertResponseDao;
+import org.jasig.ssp.factory.EarlyAlertResponseTOFactory;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.JournalEntry;
@@ -57,6 +57,7 @@ import org.jasig.ssp.service.reference.EarlyAlertReferralService;
 import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.reference.JournalTrackService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
+import org.jasig.ssp.transferobject.EarlyAlertResponseTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
@@ -124,47 +125,118 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	@Autowired
 	private transient VelocityTemplateService velocityTemplateService;
 
+	@Autowired
+	private transient EarlyAlertResponseTOFactory earlyAlertResponseTOFactory;
+
 	@Override
 	protected EarlyAlertResponseDao getDao() {
 		return dao;
 	}
 
+	/**
+	 *
+	 * @deprecated Use {@link EarlyAlertResponseServiceImpl#create(org.jasig.ssp.transferobject.EarlyAlertResponseTO)}
+	 * instead. <em>This has already been reimplemented to throw an
+	 * <code>UnsupportedOperationException</code></em>
+	 * @param earlyAlertResponse
+	 * @return
+	 * @throws ObjectNotFoundException
+	 * @throws ValidationException
+	 */
+	@Deprecated
 	@Override
 	public EarlyAlertResponse create(
 			@NotNull final EarlyAlertResponse earlyAlertResponse)
 			throws ObjectNotFoundException, ValidationException {
-		// Validate objects
-		if (earlyAlertResponse == null) {
-			throw new IllegalArgumentException(
-					"EarlyAlertResponse must be provided.");
+
+		throw new UnsupportedOperationException("Use the TO-based create() instead");
+
+	}
+
+	@Override
+	public EarlyAlertResponse create(@NotNull final EarlyAlertResponseTO obj)
+			throws ValidationException {
+
+		if (obj == null) {
+			throw new IllegalArgumentException("Must specify an EarlyAlertResponseTO");
 		}
 
-		if (earlyAlertResponse.getEarlyAlert() == null) {
-			throw new ValidationException(
-					"EarlyAlert data must be provided.");
-		}
-
-		if (earlyAlertResponse.getEarlyAlert().getPerson() == null) {
-			throw new ValidationException(
-					"EarlyAlert Student data must be provided.");
-		}
-
-		// Create alert response
-		final EarlyAlertResponse saved = getDao().save(earlyAlertResponse);
-
-		// Send message response to Faculty from Coach
+		EarlyAlertResponse entity = null;
 		try {
-			sendMessageToFaculty(saved);
-		} catch (final SendFailedException e) {
+
+			entity = earlyAlertResponseTOFactory.from(obj);
+			if ( entity.getEarlyAlert() == null ) {
+				// might expect ObjectNotFoundException here, but impls
+				// are not consistent in throwing that, plus we know this
+				// is going to end up in the client, where an explicit
+				// ValidationException results in a much better experience
+				// (ObjectNotFoundException would likely be a nonsensical 404,
+				// and NPEs are obviously obnoxious)
+				throw new ValidationException(
+						"Proposed EarlyAlertResponse did not reference a valid EarlyAlert record");
+			}
+
+		} catch ( ObjectNotFoundException e ) {
 			throw new ValidationException(
-					"Could not send response message to faculty. Response not saved.",
+					"Proposed EarlyAlertResponse referred to a non-existent record.", e);
+		}
+
+		// Might expect just a EaService.addResponse() call here, but
+		// Hib assoc are EaResponse->Ea, not other way around. So really
+		// EaService should know nothing about EaResponses, just that an Ea
+		// needs to be closed (for whatever reason).
+		final EarlyAlertResponse saved = getDao().save(entity);
+		if ( obj.isClosed() ) {
+			// Passing the ID instead of EA means the EaService will try to
+			// look up the EA again, but that's cheap b/c we're in the same
+			// Hib Session. So we stick w/ passing and ID b/c it's
+			// consistent w/ our general rule of not accepting Domain
+			// Entities in Service method args.
+			try {
+				earlyAlertService.closeEarlyAlert(saved.getEarlyAlert().getId());
+			} catch ( ObjectNotFoundException e ) {
+				throw new ValidationException(
+						"Records related to the proposed EarlyAlertResponse " +
+						"have gone missing. Probably deleted by another user.",
+						e);
+			}
+		}
+
+		afterEarlyAlertResponseCreate(saved);
+		return saved;
+	}
+
+	private void afterEarlyAlertResponseCreate(EarlyAlertResponse saved)
+	throws ValidationException {
+		// Save a journal note for the Early Alert. Do this first so all
+		// related state is available when we go to issue notifications
+		try {
+			createJournalNoteForEarlyAlertResponse(saved);
+		} catch (ObjectNotFoundException e) {
+			throw new ValidationException(
+					"Records necessary for generating a JournalNote for the " +
+					"proposed EarlyAlertResponse have gone missing. " +
+					"Probably deleted by another user.",
 					e);
 		}
 
-		// Save a journal note for the Early Alert
-		createJournalNoteForEarlyAlertResponse(saved);
-
-		return saved;
+		// Notifications stay here rather than in EaService again since
+		// Ea's don't know about EaResponses and the use case is not that
+		// Ea *closure* triggers mail, it's that any Ea *response* triggers
+		// mail.
+		try {
+			sendEarlyAlertResponseNotifications(saved);
+		} catch (final SendFailedException e) {
+			throw new ValidationException(
+					"Could not send EarlyAlertResponse notifications.",
+					e);
+		} catch ( final ObjectNotFoundException e ) {
+			throw new ValidationException(
+					"Records necessary for generating notifications for the " +
+							"proposed EarlyAlertResponse have gone missing. " +
+							"Probably deleted by another user.",
+					e);
+		}
 	}
 
 	@Override
@@ -233,7 +305,7 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	 * @throws ValidationException
 	 *             If any data or references were invalid.
 	 */
-	private void sendMessageToFaculty(
+	private void sendEarlyAlertResponseNotifications(
 			@NotNull final EarlyAlertResponse earlyAlertResponse)
 			throws ObjectNotFoundException, SendFailedException,
 			ValidationException {
