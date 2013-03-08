@@ -98,7 +98,7 @@ public class CaseloadReportControllerIntegrationTest
 		final EarlyAlert earlyAlert =
 				Stubs.arrangeEarlyAlert(personService, campusService);
 		earlyAlert.setPerson(jamesDoe);
-		earlyAlert.setClosedById(null);
+		earlyAlert.setClosedBy(null);
 		earlyAlert.setClosedDate(null);
 		earlyAlertService.create(earlyAlert);
 
@@ -139,7 +139,7 @@ public class CaseloadReportControllerIntegrationTest
 		final EarlyAlert earlyAlert =
 				Stubs.arrangeEarlyAlert(personService, campusService);
 		earlyAlert.setPerson(jamesDoe);
-		earlyAlert.setClosedById(null);
+		earlyAlert.setClosedBy(null);
 		earlyAlert.setClosedDate(null);
 		earlyAlertService.create(earlyAlert);
 

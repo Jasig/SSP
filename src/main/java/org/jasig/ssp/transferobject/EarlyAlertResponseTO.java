@@ -92,14 +92,18 @@ public class EarlyAlertResponseTO
 		earlyAlertOutreachIds = Sets.newHashSet();
 		earlyAlertReferralIds = Sets.newHashSet();
 
-		for (EarlyAlertOutreach obj : earlyAlertResponse
-				.getEarlyAlertOutreachIds()) {
-			earlyAlertOutreachIds.add(obj.getId());
+		if ( earlyAlertResponse.getEarlyAlertOutreachIds() != null ) {
+			for (EarlyAlertOutreach obj : earlyAlertResponse
+					.getEarlyAlertOutreachIds()) {
+				earlyAlertOutreachIds.add(obj.getId());
+			}
 		}
 
-		for (EarlyAlertReferral obj : earlyAlertResponse
-				.getEarlyAlertReferralIds()) {
-			earlyAlertReferralIds.add(obj.getId());
+		if ( earlyAlertResponse.getEarlyAlertReferralIds() != null ) {
+			for (EarlyAlertReferral obj : earlyAlertResponse
+					.getEarlyAlertReferralIds()) {
+				earlyAlertReferralIds.add(obj.getId());
+			}
 		}
 		closed = earlyAlertResponse.getEarlyAlert().getClosedById() != null;
 	}

@@ -37,7 +37,7 @@
 	<import resource="classpath:test-config.xml"/>
 	
 	<!-- Scans within the base package of the application for @Components, @Service & @Repository to configure as beans -->
-	<context:component-scan base-package="org.jasig.ssp" />
+	<context:component-scan base-package="org.jasig.ssp,org.jasig.mygps" />
 
 	<!-- sec:ldap-server 
 			ldif="classpath:org/jasig/ssp/security/users.ldif" 

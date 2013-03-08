@@ -412,7 +412,7 @@ public class EarlyAlertServiceTest {
 				alertedOnPerson.getProgramStatuses().size());
 
 		final EarlyAlert proposedEarlyAlert = Stubs.arrangeEarlyAlert(personService, campusService);
-		proposedEarlyAlert.setClosedById(null);
+		proposedEarlyAlert.setClosedBy(null);
 		proposedEarlyAlert.setPerson(alertedOnPerson);
 		final EarlyAlert createdEarlyAlert =
 				earlyAlertService.create(proposedEarlyAlert);
@@ -463,7 +463,7 @@ public class EarlyAlertServiceTest {
 		// now close the alert
 		final EarlyAlert loadedEarlyAlert =
 				earlyAlertService.get(createdEarlyAlert.getId());
-		loadedEarlyAlert.setClosedById(student0Id());
+		loadedEarlyAlert.setClosedBy(personService.get(student0Id()));
 		earlyAlertService.save(loadedEarlyAlert);
 		sessionFactory.getCurrentSession().flush();
 
@@ -498,7 +498,7 @@ public class EarlyAlertServiceTest {
 		final Person alertedOnPerson = personService.get(dmrId());
 
 		final EarlyAlert proposedEarlyAlert = Stubs.arrangeEarlyAlert(personService, campusService);
-		proposedEarlyAlert.setClosedById(null);
+		proposedEarlyAlert.setClosedBy(null);
 		proposedEarlyAlert.setPerson(alertedOnPerson);
 		final EarlyAlert createdEarlyAlert =
 				earlyAlertService.create(proposedEarlyAlert);
@@ -516,7 +516,7 @@ public class EarlyAlertServiceTest {
 		// now close the alert
 		final EarlyAlert loadedEarlyAlert =
 				earlyAlertService.get(createdEarlyAlert.getId());
-		loadedEarlyAlert.setClosedById(student0Id());
+		loadedEarlyAlert.setClosedBy(personService.get(student0Id()));
 		earlyAlertService.save(loadedEarlyAlert);
 		sessionFactory.getCurrentSession().flush();
 
@@ -569,7 +569,7 @@ public class EarlyAlertServiceTest {
 				not(equalTo(Stubs.StudentTypeFixture.EAL.id())));
 
 		final EarlyAlert proposedEarlyAlert = Stubs.arrangeEarlyAlert(personService, campusService);
-		proposedEarlyAlert.setClosedById(null);
+		proposedEarlyAlert.setClosedBy(null);
 		proposedEarlyAlert.setPerson(alertedOnPerson);
 		final EarlyAlert createdEarlyAlert =
 				earlyAlertService.create(proposedEarlyAlert);
@@ -586,7 +586,7 @@ public class EarlyAlertServiceTest {
 		// now close the alert
 		final EarlyAlert loadedEarlyAlert =
 				earlyAlertService.get(createdEarlyAlert.getId());
-		loadedEarlyAlert.setClosedById(student0Id());
+		loadedEarlyAlert.setClosedBy(personService.get(student0Id()));
 		earlyAlertService.save(loadedEarlyAlert);
 		sessionFactory.getCurrentSession().flush();
 
@@ -612,7 +612,7 @@ public class EarlyAlertServiceTest {
 		final Person alertedOnPerson = personService.get(dmrId());
 
 		final EarlyAlert proposedEarlyAlert = Stubs.arrangeEarlyAlert(personService, campusService);
-		proposedEarlyAlert.setClosedById(null);
+		proposedEarlyAlert.setClosedBy(null);
 		proposedEarlyAlert.setPerson(alertedOnPerson);
 		final EarlyAlert createdEarlyAlert =
 				earlyAlertService.create(proposedEarlyAlert);
@@ -626,7 +626,7 @@ public class EarlyAlertServiceTest {
 		// now close the alert
 		final EarlyAlert loadedEarlyAlert =
 				earlyAlertService.get(createdEarlyAlert.getId());
-		loadedEarlyAlert.setClosedById(student0Id());
+		loadedEarlyAlert.setClosedBy(personService.get(student0Id()));
 		earlyAlertService.save(loadedEarlyAlert);
 		sessionFactory.getCurrentSession().flush();
 

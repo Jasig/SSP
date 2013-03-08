@@ -51,6 +51,7 @@ import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
+import org.jasig.ssp.transferobject.EarlyAlertResponseTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -176,7 +177,11 @@ public class EarlyAlertResponseServiceTest {
 
 		// act
 		earlyAlertService.create(obj.getEarlyAlert());
-		service.create(obj);
+
+		// can't use the Domain Entity-based EA Response create() anymore
+		EarlyAlertResponseTO objTo = new EarlyAlertResponseTO();
+		objTo.from(obj);
+		service.create(objTo);
 		sessionFactory.getCurrentSession().flush();
 
 		// Try to send all messages to the fake server.
@@ -220,7 +225,11 @@ public class EarlyAlertResponseServiceTest {
 
 		// act
 		earlyAlertService.create(obj.getEarlyAlert());
-		service.create(obj);
+
+		// can't use the Domain Entity-based EA Response create() anymore
+		EarlyAlertResponseTO objTo = new EarlyAlertResponseTO();
+		objTo.from(obj);
+		service.create(objTo);
 		sessionFactory.getCurrentSession().flush();
 
 		// assert
@@ -281,7 +290,7 @@ public class EarlyAlertResponseServiceTest {
 		final EarlyAlert obj = new EarlyAlert();
 		obj.setPerson(personService.get(PERSON_ID));
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
-		obj.setClosedById(PERSON_ID);
+		obj.setClosedBy(personService.get(PERSON_ID));
 		obj.setCourseName(EARLY_ALERT_COURSE_NAME);
 		obj.setCampus(campusService.get(UUID
 				.fromString("901E104B-4DC7-43F5-A38E-581015E204E1")));
@@ -318,29 +327,14 @@ public class EarlyAlertResponseServiceTest {
 		return response;
 	}
 
-	@Test(expected = ValidationException.class)
-	public void testCreateEarlyAlertResponseInvalidPerson()
-			throws ObjectNotFoundException,
-			ValidationException, SendFailedException {
-		// arrange
-		final EarlyAlertResponse obj = arrangeEarlyAlertResponse();
-		obj.getEarlyAlert().setPerson(null);
-
-		// act
-		service.create(obj);
-
-		// assert
-		fail("Should have thrown a ValidationException.");
-	}
-
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateEarlyAlertResponseInvalidEarlyAlertResponse()
 			throws ObjectNotFoundException,
 			ValidationException, SendFailedException {
 		// act
-		service.create(null);
+		service.create((EarlyAlertResponseTO)null);
 
 		// assert
-		fail("Should have thrown a ValidationException.");
+		fail("Should have thrown a IllegalArgumentException.");
 	}
 }

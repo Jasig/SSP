@@ -18,13 +18,11 @@
  */
 package org.jasig.ssp.service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import javax.mail.SendFailedException;
 import javax.validation.constraints.NotNull;
 
@@ -60,6 +58,17 @@ public interface EarlyAlertService
 	@Override
 	EarlyAlert create(EarlyAlert obj) throws ObjectNotFoundException,
 			ValidationException;
+
+	/**
+	 * Mark an EarlyAlert closed by the current user. No-op if the alert
+	 * is already closed.
+	 *
+	 * @param earlyAlertId
+	 * @throws ObjectNotFoundException if the referenced EarlyAlert does
+	 *   not exist
+	 * @throws ValidationException if a business rule is violated
+	 */
+	void closeEarlyAlert(UUID earlyAlertId) throws ObjectNotFoundException, ValidationException;
 
 	/**
 	 * Count how many open early alerts exist for the specified people
@@ -146,6 +155,5 @@ public interface EarlyAlertService
 	
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(List<Person> coaches, Date createDateFrom, 
 			Date createDateTo, List<UUID> studentTypeIds, List<UUID> serviceReasonIds, SortingAndPaging sAndP);
-
 
 }

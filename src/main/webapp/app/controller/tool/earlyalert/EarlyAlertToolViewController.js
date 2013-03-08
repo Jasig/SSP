@@ -199,7 +199,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
 		var id = record.get('id');
 		
 		var personId = me.personLite.get('id');
-		
+
         if (record != null)
         {
             if (record.get('nodeType')=='early alert')
@@ -208,6 +208,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
                 {
                     me.earlyAlert.data[prop] = record.data[prop];
                 }
+
 
 				/*me.earlyAlertService.getAllEarlyAlertResponses(personId, id,
                         {success:me.getEarlyAlertResponsesSuccess, 
@@ -231,7 +232,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     },
 
     displayEarlyAlertDetails: function(button){
-        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertDetailsDisplay(), true, {});
+        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertDetailsDisplay(), true, {reloadEarlyAlert: false});
     },
     
     displayEarlyAlertResponseDetails: function(button){

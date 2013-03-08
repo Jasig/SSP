@@ -30,6 +30,7 @@ Ext.define('Ssp.model.tool.earlyalert.PersonEarlyAlert', {
              {name:'earlyAlertSuggestionOtherDescription', type:'string'},
              {name:'comment', type:'string'},
              {name:'closedDate', type: 'date', dateFormat: 'time'},
-             {name:'closedById', type:'string'}, 
+             {name:'closedById', type:'string'},
+             {name:'closedByName', type:'string'},
              {name:'sendEmailToStudent', type:'boolean'}]
 });

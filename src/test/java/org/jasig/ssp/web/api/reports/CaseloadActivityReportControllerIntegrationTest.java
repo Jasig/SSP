@@ -203,7 +203,7 @@ public class CaseloadActivityReportControllerIntegrationTest
 		final EarlyAlert earlyAlert =
 				Stubs.arrangeEarlyAlert(personService, campusService);
 		earlyAlert.setPerson(jamesDoe);
-		earlyAlert.setClosedById(null);
+		earlyAlert.setClosedBy(null);
 		earlyAlert.setClosedDate(null);
 		earlyAlert.setCreatedBy(kevinSmith); //otherwise will be the system user
 		earlyAlertService.create(earlyAlert);

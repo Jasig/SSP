@@ -31,7 +31,8 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     },
     config: {
     	containerToLoadInto: 'tools',
-    	formToDisplay: 'earlyalertdetails'
+    	formToDisplay: 'earlyalertdetails',
+        earlyAlertList: 'earlyalert'
     },
     control: {
     	outreachList: {
@@ -188,11 +189,11 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 	},
 	
 	displayMain: function(){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {reloadEarlyAlert: true});
 	},
 	
 	onResponseGotoEAListClick: function(button){
-        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), 'earlyalert', true, {});
+        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertList(), true, {});
     }
 	
 	

@@ -137,7 +137,7 @@ public class EarlyAlertResponseDao extends
 		if(!query.list().isEmpty())
 			counts.setTotalEARespondedTo((Long)(query.list().get(0)));
 		
-		 query.add(Restrictions.isNull("earlyAlert.closedById"));
+		 query.add(Restrictions.isNull("earlyAlert.closedBy"));
 		 if(!query.list().isEmpty())
 				counts.setTotalEARespondedToNotClosed((Long)(query.list().get(0)));
 		 
@@ -159,7 +159,7 @@ public class EarlyAlertResponseDao extends
 		if(!query.list().isEmpty())
 			counts.setTotalEARespondedTo((Long)(query.list().get(0)));
 		
-		 query.add(Restrictions.isNull("earlyAlert.closedById"));
+		 query.add(Restrictions.isNull("earlyAlert.closedBy"));
 		 if(!query.list().isEmpty())
 				counts.setTotalEARespondedToNotClosed((Long)(query.list().get(0)));
 		 return counts;

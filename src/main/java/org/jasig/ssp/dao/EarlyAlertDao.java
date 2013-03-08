@@ -265,7 +265,7 @@ public class EarlyAlertDao extends
 		
 		ProjectionList projections = Projections.projectionList()
 			.add(Projections.countDistinct("id").as("earlyalert_total"))
-			.add(Projections.countDistinct("closedById").as("earlyalert_closed"));
+			.add(Projections.countDistinct("closedBy").as("earlyalert_closed"));
 		
 		addBasicStudentProperties(projections, collectionQuery); 
 		

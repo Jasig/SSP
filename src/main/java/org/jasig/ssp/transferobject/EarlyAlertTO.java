@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.jasig.ssp.model.EarlyAlert;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.transferobject.reference.EarlyAlertReasonTO;
 import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
 
@@ -61,6 +62,8 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 	private Date closedDate;
 
 	private UUID closedById;
+
+	private String closedByName;
 
 	private Set<EarlyAlertReasonTO> earlyAlertReasonIds;
 
@@ -103,6 +106,13 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 		comment = earlyAlert.getComment();
 		closedDate = earlyAlert.getClosedDate();
 		closedById = earlyAlert.getClosedById();
+
+		if ( closedById != null ) {
+			Person closedBy = earlyAlert.getClosedBy();
+			closedByName = closedBy.getFirstName()
+					+ (closedBy.getMiddleName() == null || closedBy.getMiddleName().length() == 0 ? "" : " " + closedBy.getMiddleName())
+					+ " " + closedBy.getLastName();
+		}
 
 		personId = earlyAlert.getPerson() == null ? null : earlyAlert
 				.getPerson().getId();
@@ -302,6 +312,14 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 	 */
 	public void setClosedById(final UUID closedById) {
 		this.closedById = closedById;
+	}
+
+	public String getClosedByName() {
+		return closedByName;
+	}
+
+	public void setClosedByName(String closedByName) {
+		this.closedByName = closedByName;
 	}
 
 	/**

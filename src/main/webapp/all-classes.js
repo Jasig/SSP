@@ -6580,6 +6580,38 @@ Ext.define('Ssp.service.EarlyAlertService', {
         return baseUrl;
     },
 
+    standardFailure: function(callbacks) {
+        var me = this;
+        return function(response) {
+            me.apiProperties.handleError( response );
+            if (callbacks)
+            {
+                callbacks.failure( response, callbacks.scope );
+            }
+        }
+    },
+
+    get: function( earlyAlertId, personId, callbacks ) {
+        var me = this;
+        var success = function( response ) {
+            var r;
+            if ( response.responseText ) {
+                r = Ext.decode(response.responseText);
+            }
+            if ( callbacks ) {
+                callbacks.success( r, callbacks.scope );
+            }
+        };
+        var failure = me.standardFailure(callbacks);
+        me.apiProperties.makeRequest({
+            url: me.getBaseUrl(personId) + "/" + earlyAlertId,
+            method: 'GET',
+            successFunc: success,
+            failureFunc: failure,
+            scope: me
+        });
+    },
+
     getAll: function( personId, callbacks ){
         var me=this;
         var success = function( response, view ){
@@ -14586,7 +14618,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
 		var id = record.get('id');
 		
 		var personId = me.personLite.get('id');
-		
+
         if (record != null)
         {
             if (record.get('nodeType')=='early alert')
@@ -14595,6 +14627,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
                 {
                     me.earlyAlert.data[prop] = record.data[prop];
                 }
+
 
 				/*me.earlyAlertService.getAllEarlyAlertResponses(personId, id,
                         {success:me.getEarlyAlertResponsesSuccess, 
@@ -14618,7 +14651,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     },
 
     displayEarlyAlertDetails: function(button){
-        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertDetailsDisplay(), true, {});
+        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertDetailsDisplay(), true, {reloadEarlyAlert: false});
     },
     
     displayEarlyAlertResponseDetails: function(button){
@@ -14658,7 +14691,8 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     },
     config: {
     	containerToLoadInto: 'tools',
-    	formToDisplay: 'earlyalertdetails'
+    	formToDisplay: 'earlyalertdetails',
+        earlyAlertList: 'earlyalert'
     },
     control: {
     	outreachList: {
@@ -14815,11 +14849,11 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 	},
 	
 	displayMain: function(){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {reloadEarlyAlert: true});
 	},
 	
 	onResponseGotoEAListClick: function(button){
-        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), 'earlyalert', true, {});
+        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertList(), true, {});
     }
 	
 	
@@ -14905,6 +14939,114 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertReferralsViewController', {
  * specific language governing permissions and limitations
  * under the License.
  */
+
+// Use this to trigger additional callbacks as side-effects of completion of
+// an arbitrary collection of named success/failure callbacks. The latter are
+// usually async AJAX callbacks. E.g. a controller might need to issue several
+// AJAX calls, then do something when all that data has been loaded (maybe just
+// clear a spinner). Currently can register side-effect callbacks that either
+// fire after every named callback or after at least one of each named callbacks
+// has fired. Does not cache the results of the named callbacks. That could
+// be added in future revisions, but the assumption is that the client is
+// capable of caching those results since they are passed to client-registered
+// callbacks.
+//
+// There is no sophistication in the callback mechanism, e.g. all "failures"
+// go to the same callback... there is no statuscode-based routing.
+Ext.define('Ssp.util.ResponseDispatcher',{
+    extend: 'Ext.Component',
+    config: {
+        successCallbacks: {},
+        failureCallbacks: {},
+        remainingOpNames: [],
+        afterAnyOp: null,
+        afterLastOp: null
+    },
+    initComponent: function() {
+        return this.callParent( arguments );
+    },
+
+    // Returns a function that is typically useful for registering with
+    // of our "service" classes as a success callback.
+    setSuccessCallback: function(opName, callback, callbackScope) {
+        var me = this;
+        me.getSuccessCallbacks()[opName] = me.newScopedCallback(callback, callbackScope);
+        return function(response) {
+            me.onSuccess(opName, response);
+        }
+    },
+
+    // Returns a function that is typically useful for registering with
+    // of our "service" classes as a failure callback.
+    setFailureCallback: function(opName, callback, callbackScope) {
+        var me = this;
+        me.getFailureCallbacks()[opName] = me.newScopedCallback(callback, callbackScope);
+    },
+
+    setAfterAnyCallback: function(callback, callbackScope) {
+        var me = this;
+        me.setAfterAnyOp(me.newScopedCallback(callback, callbackScope));
+    },
+    setAfterLastCallback: function(callback, callbackScope) {
+        var me = this;
+        me.setAfterLastOp(me.newScopedCallback(callback, callbackScope));
+    },
+    newScopedCallback: function(callback, callbackScope) {
+        if (!(callback)) {
+            return null;
+        }
+        return { callback: callback, callbackScope: callbackScope };
+    },
+    invokeScopedCallback: function(callback, response, opName) {
+        if ( callback ) {
+            callback.callback.apply(callback.callbackScope, [response, callback.callbackScope, opName]);
+        }
+    },
+    onSuccess: function(opName, response) {
+        var me = this;
+        var callback = me.getSuccessCallbacks()[opName];
+        me.onResponse(opName, response, callback);
+    },
+    onFailure: function(opName, response) {
+        var me = this;
+        var callback = me.getFailureCallbacks()[opName];
+        me.onResponse(opName, response, callback);
+    },
+    onResponse: function(opName, response, callback) {
+        var me = this;
+        var remainingOps = me.getRemainingOpNames();
+        if ( remainingOps ) {
+            me.setRemainingOpNames(remainingOps.filter(function(element){
+                return element !== opName;
+            }));
+            remainingOps = me.getRemainingOpNames();
+        }
+
+        me.invokeScopedCallback(callback, response, opName);
+        me.invokeScopedCallback(me.getAfterAnyOp(), response, opName);
+        if (!(remainingOps) || remainingOps.length === 0 ) {
+            me.invokeScopedCallback(me.getAfterLastOp(), response, opName);
+        }
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
@@ -14918,16 +15060,15 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
         suggestionsStore: 'earlyAlertSuggestionsStore',
         selectedSuggestionsStore: 'earlyAlertDetailsSuggestionsStore',
         appEventsController: 'appEventsController',
-		earlyAlertResponse: 'currentEarlyAlertResponse',
-		personLite: 'personLite',
-		earlyAlertService: 'earlyAlertService'
-		
+        earlyAlertResponse: 'currentEarlyAlertResponse',
+        personLite: 'personLite',
+        earlyAlertService: 'earlyAlertService'
     },
     config: {
         containerToLoadInto: 'tools',
         earlyAlertResponseFormDisplay: 'earlyalertresponse',
         earlyAlertListDisplay: 'earlyalert',
-		earlyAlertResponseDetailsDisplay: 'earlyalertresponsedetails'
+        earlyAlertResponseDetailsDisplay: 'earlyalertresponsedetails'
     },
     control: {
         'finishButton': {
@@ -14936,10 +15077,9 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
         'detailRespondButton': {
             click: 'onDetailRespondClick'
         },
-		
-		'detailResponseGridPanel': {
-			cellClick : 'onGridClick'
-		},
+        'detailResponseGridPanel': {
+            cellClick : 'onGridClick'
+        },
         
         earlyAlertSuggestionsList: '#earlyAlertSuggestionsList',
         campusField: '#campusField',
@@ -14950,9 +15090,60 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
     },
 
     init: function() {
-		
+
         var me=this;
-        var selectedSuggestions=[];
+
+        me.getView().setLoading( true );
+
+        var personId = me.personLite.get('id');
+        var earlyAlertId = me.model.get('id');
+
+        var responseDispatcher = Ext.create('Ssp.util.ResponseDispatcher', {
+            remainingOpNames: ['earlyalert','earlyalertresponses']
+        });
+        responseDispatcher.setAfterLastCallback(me.afterLastServiceResponse, me);
+
+        if ( me.getView().reloadEarlyAlert ) {
+            me.earlyAlertService.get(earlyAlertId, personId, {
+               success: responseDispatcher.setSuccessCallback('earlyalert', me.getEarlyAlertSuccess, me),
+               failure: responseDispatcher.setFailureCallback('earlyalert', me.getEarlyAlertFailure, me),
+               scope: responseDispatcher
+            });
+        } else {
+            // still need to go through the request dispatcher so we can fire the
+            // 'all clear' once all sync and async data loads have completed
+            responseDispatcher.setSuccessCallback('earlyalert', me.bindEarlyAlertToView, me).apply(responseDispatcher, null);
+        }
+
+        me.earlyAlertService.getAllEarlyAlertResponses(personId,
+            earlyAlertId, {
+                success: responseDispatcher.setSuccessCallback('earlyalertresponses', me.getEarlyAlertResponsesSuccess, me),
+                failure: responseDispatcher.setFailureCallback('earlyalertresponses', me.getEarlyAlertResponsesFailure, me),
+                scope: responseDispatcher
+            });
+        
+        return this.callParent(arguments);
+    },
+
+    getEarlyAlertSuccess: function(response) {
+        var me = this;
+        // TODO I have no idea how correct this model state management is. The
+        // property copying loop that EarlyAlertToolViewController.js and
+        // onGridClick() uses doesn't work here for reasons that currently
+        // elude me (e.g. date types are all wrong). IMHO, it seems all wrong
+        // anyway... shouldn't this all be hidden behind a Ext Store? Playing
+        // low-level reinitialization games with singleton Models can't possibly
+        // be right... can it?
+        var earlyAlert= new Ssp.model.tool.earlyalert.PersonEarlyAlert();
+        me.model.data = earlyAlert.data;
+        if ( response ) {
+            me.model.populateFromGenericObject(response);
+        } // TODO else what? a horror show is likely to ensue...
+        me.bindEarlyAlertToView();
+    },
+
+    bindEarlyAlertToView: function() {
+        var me = this;
         var campus = me.campusesStore.getById( me.model.get('campusId') );
         var reasonId = ((me.model.get('earlyAlertReasonIds') != null )?me.model.get('earlyAlertReasonIds')[0].id : me.model.get('earlyAlertReasonId') );
         var reason = me.reasonsStore.getById( reasonId );
@@ -14960,76 +15151,55 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
         // Reset and populate general fields comments, etc.
         me.getView().getForm().reset();
         me.getView().loadRecord( me.model );
-        
+
         me.getCreatedByField().setValue( me.model.getCreatedByPersonName() );
-        
+
         // Early Alert Status: 'Open', 'Closed'
         me.getStatusField().setValue( ((me.model.get('closedDate'))? 'Closed' : 'Open') );
-        
+
         // Campus
         me.getCampusField().setValue( ((campus)? campus.get('name') : "No Campus Defined") );
-        
+
         // Reason
         me.getEarlyAlertReasonField().setValue( ((reason)? reason.get('name') : "No Reason Defined") );
-        
+
         // Suggestions
-        selectedSuggestions = me.formUtils.getSimpleItemsForDisplay( me.suggestionsStore, me.model.get('earlyAlertSuggestionIds'), 'Suggestions' );
+        var selectedSuggestions = me.formUtils.getSimpleItemsForDisplay( me.suggestionsStore, me.model.get('earlyAlertSuggestionIds'), 'Suggestions' );
         me.selectedSuggestionsStore.removeAll();
         me.selectedSuggestionsStore.loadData( selectedSuggestions );
-        
-        if ( me.model.get('closedById') != null )
-        {
-            if (me.model.get('closedById') != "")
-            {
-                me.getView().setLoading( true );
-                me.personService.get( me.model.get('closedById'),{
-                    success: me.getPersonSuccess,
-                    failure: me.getPersonFailure,
-                    scope: me
-                });             
+
+        if ( me.model.get('closedById') ) {
+            if ( me.model.get('closedByName') ) {
+                me.getClosedByField().setValue( me.model.get('closedByName') );
+            } else {
+                me.getClosedByField().setValue('UNKNOWN');
             }
         }
-		
-		var personId = me.personLite.get('id');
-		
-		me.earlyAlertService.getAllEarlyAlertResponses(personId, me.model.get('id'),
-                        {success:me.getEarlyAlertResponsesSuccess, 
-                 failure:me.getEarlyAlertResponsesFailure, 
-                 scope: me} );
-        
-        return this.callParent(arguments);
+
     },
-	
-	 getEarlyAlertResponsesSuccess: function( r, scope){
+
+    getEarlyAlertFailure: function() {
+        // no-op for now... error probably already  presented to end user as
+        // part of the service call.
+    },
+
+    getEarlyAlertResponsesSuccess: function( r, scope){
         var me=scope;
         // clear the current Early Alert Response
         var earlyAlertResponse = new Ssp.model.tool.earlyalert.EarlyAlertResponse();
         me.earlyAlertResponse.data = earlyAlertResponse.data;
-        me.getView().setLoading(false);
     },
 
     getEarlyAlertResponsesFailure: function( r, scope){
-        var me=scope;
-        me.getView().setLoading(false);
-    }, 
-	
-    
-    getPersonSuccess: function( r, scope ){
-        var me=scope;
-        var fullName="";
+        // no-op for now... error probably already presented to end user as
+        // part of the service call.
+    },
+
+    afterLastServiceResponse: function() {
+        var me = this;
         me.getView().setLoading( false );
-        if (r != null )
-        {
-            fullName=r.firstName + " " + (r.middleName ? r.middleName + " " : "") + r.lastName;
-            me.getClosedByField().setValue( fullName );
-        }
-    },    
-    
-    getPersonFailure: function( response, scope ){
-        var me=scope;  
-        me.getView().setLoading( false );
-    },   
-    
+    },
+
     onFinishButtonClick: function( button ){
         var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertListDisplay(), true, {});
     },
@@ -15042,12 +15212,12 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
     loadEarlyAlertResponseForm: function(button){
         this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertResponseFormDisplay(), true, {});
     },
-	
-	onGridClick: function(){
-		var me=this;
-		var record = Ext.getCmp('detailResponseGridPanel').getSelectionModel().getSelection()[0];
-		
-		for (prop in me.earlyAlertResponse.data)
+
+    onGridClick: function(){
+        var me=this;
+        var record = Ext.getCmp('detailResponseGridPanel').getSelectionModel().getSelection()[0];
+
+        for (prop in me.earlyAlertResponse.data)
                 {
                     me.earlyAlertResponse.data[prop] = record.data[prop];
                 }
@@ -15128,7 +15298,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseDetailsViewControll
     },
     
     onFinishButtonClick: function( button ){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {reloadEarlyAlert: false});
     }
 });
 /*
@@ -22328,6 +22498,12 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
     width: '100%',
     height: '100%',
     title: 'Early Alert Details',
+
+    // By default we assume the component causing this view to load has already
+    // loaded the EA of interest into a shared resource (the injected
+    // 'currentEarlyAlert')
+    reloadEarlyAlert: false,
+
     initComponent: function(){
         var me = this;
         Ext.applyIf(me, {
@@ -25269,7 +25445,8 @@ Ext.define('Ssp.model.tool.earlyalert.PersonEarlyAlert', {
              {name:'earlyAlertSuggestionOtherDescription', type:'string'},
              {name:'comment', type:'string'},
              {name:'closedDate', type: 'date', dateFormat: 'time'},
-             {name:'closedById', type:'string'}, 
+             {name:'closedById', type:'string'},
+             {name:'closedByName', type:'string'},
              {name:'sendEmailToStudent', type:'boolean'}]
 });
 /*
@@ -25305,6 +25482,7 @@ Ext.define('Ssp.model.tool.earlyalert.PersonEarlyAlertTree', {
              {name:'comment',type:'string'},
              {name:'closedDate',type: 'date', dateFormat: 'time'},
              {name:'closedById',type:'string'},
+             {name:'closedByName',type:'string'},
              {name:'sendEmailToStudent', type:'boolean'},
              
              /* props for tree manipulation */

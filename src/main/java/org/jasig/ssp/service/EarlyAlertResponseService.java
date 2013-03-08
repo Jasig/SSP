@@ -27,6 +27,7 @@ import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Campus;
+import org.jasig.ssp.transferobject.EarlyAlertResponseTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentResponseOutcomeReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
@@ -36,6 +37,7 @@ import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * EarlyAlertResponse service
@@ -45,6 +47,17 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
  */
 public interface EarlyAlertResponseService
 		extends AuditableCrudService<EarlyAlertResponse> {
+
+	/**
+	 * Same as {@link EarlyAlertResponseService#create(org.jasig.ssp.model.Auditable)}
+	 * but accepts a TO representation of the entity to be created. This is
+	 * the preferred way to create an {@EarlyAlertResponse}.
+	 *
+	 * @param obj
+	 * @return
+	 */
+	EarlyAlertResponse create(EarlyAlertResponseTO obj) throws ValidationException;
+
 	/**
 	 * Retrieve every response in the database filtered by the supplied status
 	 * and early alert.
@@ -123,4 +136,5 @@ public interface EarlyAlertResponseService
 	List<EarlyAlertStudentResponseOutcomeReportTO> getEarlyAlertResponseOutcomeTypeForStudentsByCriteria(String outcomeType, EarlyAlertStudentSearchTO searchForm, SortingAndPaging sAndP);
 
 	Long getEarlyAlertOutcomeTypeCountByCriteria(String outcomeType, UUID outcomeId, EarlyAlertStudentSearchTO searchForm) throws ObjectNotFoundException;
+
 }
