@@ -36,7 +36,8 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
     },
     config: {
         containerToLoadInto: 'tools',
-        formToDisplay: 'earlyalert',
+        earlyAlertResponseFormDisplay: 'earlyalertresponse',
+        earlyAlertListDisplay: 'earlyalert',
 		earlyAlertResponseDetailsDisplay: 'earlyalertresponsedetails'
     },
     control: {
@@ -58,6 +59,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
         createdByField: '#createdByField',
         closedByField: '#closedByField'
     },
+
     init: function() {
 		
         var me=this;
@@ -140,12 +142,16 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
     },   
     
     onFinishButtonClick: function( button ){
-        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});        
+        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertListDisplay(), true, {});
     },
-    
+
     onDetailRespondClick: function( button ){
-        this.appEventsController.getApplication().fireEvent('goToResponse');
-       
+        var me=this;
+        me.loadEarlyAlertResponseForm(button);
+    },
+
+    loadEarlyAlertResponseForm: function(button){
+        this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertResponseFormDisplay(), true, {});
     },
 	
 	onGridClick: function(){

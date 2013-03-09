@@ -39,7 +39,6 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     },
     config: {
         containerToLoadInto: 'tools',
-        formToDisplay: 'earlyalertresponse',
         earlyAlertDetailsDisplay: 'earlyalertdetails',
         earlyAlertResponseDetailsDisplay: 'earlyalertresponsedetails'
     },
@@ -52,7 +51,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     },
     
     init: function(){
-        return this.callParent(arguments);      
+        return this.callParent(arguments);
     },
 
     onViewReady: function(comp, obj){
@@ -92,14 +91,11 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
                   }
              }
         });
-        
-        me.appEventsController.assignEvent({eventName: 'goToResponse', callBackFunc: me.onRespondClick, scope: me});
-    },  
+
+    },
 
     destroy: function() {
-        var me=this;
-        //me.appEventsController.removeEvent({eventName: 'goToResponse', callBackFunc: me.onRespondClick, scope: me});
-         return this.callParent( arguments );
+        return this.callParent( arguments );
     },    
     
     getEarlyAlerts: function(){
@@ -124,6 +120,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
             personEarlyAlert = new Ssp.model.tool.earlyalert.PersonEarlyAlert();
             me.earlyAlert.data = personEarlyAlert.data;
         }
+
 		var pId = me.personLite.get('id');
 		
 		me.treeStore.getRootNode().eachChild(function(record){
@@ -193,35 +190,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
         var me=scope;
         me.getView().setLoading(false);
     },    
-    
-    onRespondClick: function( button ){
-        
-        var me=this;
-        
-        var record = me.getView().getSelectionModel().getSelection()[0];
-        if (record != null)
-        {
-            if (record.get('nodeType')=='early alert')
-            {
-                for (prop in me.earlyAlert.data)
-                {
-                    me.earlyAlert.data[prop] = record.data[prop];
-                }
-                
-                me.loadEditor();
-            }else{
-                Ext.Msg.alert('Notification','Please select an Early Alert to send a response.');
-            }   
-        }else{
-            Ext.Msg.alert('Notification','Please select an Early Alert to send a response.');
-        }
-    },
-    
-    onGoToResponse: function(){
-    },
 
-    
-    
     onAlertClick: function(nodeInt, obj){
         var me=this;
         var record = me.getView().getSelectionModel().getSelection()[0];
@@ -239,7 +208,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
                 {
                     me.earlyAlert.data[prop] = record.data[prop];
                 }
-                
+
 				/*me.earlyAlertService.getAllEarlyAlertResponses(personId, id,
                         {success:me.getEarlyAlertResponsesSuccess, 
                  failure:me.getEarlyAlertResponsesFailure, 
@@ -260,11 +229,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
             Ext.Msg.alert('Notification','Please select an item to view.');
         }
     },
-    
-    loadEditor: function(button){
-        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
-    },
-    
+
     displayEarlyAlertDetails: function(button){
         var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertDetailsDisplay(), true, {});
     },
