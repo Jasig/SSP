@@ -312,7 +312,7 @@ public class PersonTO // NOPMD
 		this.activeAlertsCount = model.getActiveAlertsCount() == null ? 0 : model.getActiveAlertsCount().intValue();
 		this.closedAlertsCount = model.getClosedAlertsCount() == null ? 0 : model.getClosedAlertsCount().intValue();
 		
-		this.paymentStatus = model.getCurrentRegistrationStatus() == null ? "N" :  model.getCurrentRegistrationStatus().getTuitionPaid();
+		this.paymentStatus = getCurrentAndFuturePaymentStatuses(model);
 		this.registeredTerms = getCurrentAndFutureTerms(model);
 	}
 
@@ -329,6 +329,20 @@ public class PersonTO // NOPMD
 		}
 		return builder.toString().trim();
 	}
+	
+	private String getCurrentAndFuturePaymentStatuses(Person model) {
+		List<RegistrationStatusByTerm> currentAndFutureRegistrationStatuses = model.getCurrentAndFutureRegistrationStatuses();
+		if(currentAndFutureRegistrationStatuses == null)
+		{
+			return "N";
+		}
+		StringBuilder builder = new StringBuilder();
+		for (RegistrationStatusByTerm registrationStatusByTerm : currentAndFutureRegistrationStatuses) 
+		{
+			builder.append(registrationStatusByTerm.getTuitionPaid() + " ");
+		}
+		return builder.toString().trim();
+	}	
 
 	/**
 	 * Convert a collection of models to a List of equivalent transfer objects.
