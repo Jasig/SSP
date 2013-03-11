@@ -51,6 +51,9 @@ public enum DataPermissions {
 	DATA_MANAGER,
 
 	DATA_STAFF,
+	
+	DATA_TEST,
+
 
 	/**
 	 * Suitable for testing
