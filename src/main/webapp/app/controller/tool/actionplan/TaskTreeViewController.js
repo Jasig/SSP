@@ -22,7 +22,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     inject: {
     	apiProperties: 'apiProperties',
         appEventsController: 'appEventsController',
-        person: 'currentPerson',
+        personLite: 'personLite',
         task: 'currentTask',
     	treeUtils: 'treeRendererUtils'
     },
@@ -53,7 +53,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
 		this.challengeUrl = this.apiProperties.getItemUrl('challenge');
 		this.challengeReferralUrl = this.apiProperties.getItemUrl('challengeReferral');
 		this.personChallengeUrl = this.apiProperties.getItemUrl('personChallenge');
-		this.personChallengeUrl = this.personChallengeUrl.replace('{id}',this.person.get('id'));
+		this.personChallengeUrl = this.personChallengeUrl.replace('{id}',this.personLite.get('id'));
 
 		// clear the categories
 		this.treeUtils.clearRootCategories();

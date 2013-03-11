@@ -25,7 +25,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     	authenticatedPerson: 'authenticatedPerson',
     	formUtils: 'formRendererUtils',
     	goalsStore: 'goalsStore',
-    	person: 'currentPerson',
+        personLite: 'personLite',
     	store: 'tasksStore'
     },
     
@@ -105,7 +105,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 		// display loader
 		me.getView().setLoading( true );
 		
-		personId = me.person.get('id');
+		personId = me.personLite.get('id');
 		me.personTaskUrl = me.apiProperties.getItemUrl('personTask');
 		me.personTaskUrl = me.personTaskUrl.replace('{id}',personId);
 		me.personTaskGroupUrl = me.apiProperties.getItemUrl('personTaskGroup');

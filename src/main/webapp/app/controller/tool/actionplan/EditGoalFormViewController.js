@@ -25,7 +25,7 @@ Ext.define('Ssp.controller.tool.actionplan.EditGoalFormViewController', {
     	confidentialityLevelsStore: 'confidentialityLevelsStore',
     	formUtils: 'formRendererUtils',
     	model: 'currentGoal',
-    	person: 'currentPerson',
+    	personLite: 'personLite',
     	preferences: 'preferences'
     },
     config: {
@@ -59,7 +59,7 @@ Ext.define('Ssp.controller.tool.actionplan.EditGoalFormViewController', {
 	
 	constructor: function(){
 		this.url = this.apiProperties.getItemUrl('personGoal');
-		this.url = this.url.replace('{id}',this.person.get('id'));
+		this.url = this.url.replace('{id}',this.personLite.get('id'));
     	this.url = this.apiProperties.createUrl( this.url );
 	
 		return this.callParent(arguments);

@@ -30,7 +30,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         profileServiceReasonsStore: 'profileServiceReasonsStore',
         profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
         sspConfig: 'sspConfig',
-		formUtils: 'formRendererUtils',
+		formUtils: 'formRendererUtils'
     },
     
     control: {
@@ -55,7 +55,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         
         'serviceGroupEdit': {
             click: 'onServiceGroupEditButtonClick'
-        },
+        }
     
     },
     init: function(){
@@ -68,22 +68,20 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             me.getView().setLoading(true);
 
             var serviceResponses = {
-                personResponse: null,
-                personFailure: false,
-                transcriptResponse: null,
-                transcriptFailure: false,
+                failures: {},
+                successes: {},
                 responseCnt: 0,
                 expectedResponseCnt: 2
             }
 
-            me.transcriptService.getSummary(id, {
-                success: me.newTranscriptSuccessHandler(serviceResponses),
-                failure: me.newTranscriptFailureHandler(serviceResponses),
+            me.personService.get(id, {
+                success: me.newServiceSuccessHandler('person', me.getPersonSuccess, serviceResponses),
+                failure: me.newServiceFailureHandler('person', me.getPersonFailure, serviceResponses),
                 scope: me
             });
-            me.personService.get(id, {
-                success: me.newPersonSuccessHandler(serviceResponses),
-                failure: me.newPersonFailureHandler(serviceResponses),
+            me.transcriptService.getSummary(id, {
+                success: me.newServiceSuccessHandler('transcript', me.getTranscriptSuccess, serviceResponses),
+                failure: me.newServiceFailureHandler('transcript', me.getTranscriptFailure, serviceResponses),
                 scope: me
             });
         }
@@ -101,146 +99,126 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
     },
 
-    newTranscriptSuccessHandler: function(serviceResponses) {
-        return function(r, scope) {
-            var me = scope;
-            serviceResponses.transcriptResponse = r;
-            serviceResponses.transcriptFailure = false;
-            serviceResponses.responseCnt++;
-            me.serviceResponseArrived(serviceResponses);
-        };
-    },
-
-    newTranscriptFailureHandler: function(serviceResponses) {
-        return function(r, scope) {
-            var me = scope;
-            serviceResponses.transcriptResponse = r;
-            serviceResponses.transcriptFailure = true;
-            serviceResponses.responseCnt++;
-            me.serviceResponseArrived(serviceResponses);
-        };
-    },
-
-    newPersonSuccessHandler: function(serviceResponses) {
-        return function(r, scope) {
-            var me = scope;
-            serviceResponses.personResponse = r;
-            serviceResponses.personFailure = false;
-            serviceResponses.responseCnt++;
-            me.serviceResponseArrived(serviceResponses);
-        };
-    },
-
-    newPersonFailureHandler: function(serviceResponses) {
-        return function(r, scope) {
-            var me = scope;
-            serviceResponses.personResponse = r;
-            serviceResponses.personFailure = true;
-            serviceResponses.responseCnt++;
-            me.serviceResponseArrived(serviceResponses);
-        };
-    },
-
-    serviceResponseArrived: function(serviceResponses) {
+    newServiceSuccessHandler: function(name, callback, serviceResponses) {
         var me = this;
-        if ( serviceResponses.responseCnt >= serviceResponses.expectedResponseCnt ) {
-            me.allServiceResponsesArrived(serviceResponses);
-        }
+        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response) {
+            serviceResponses.successes[name] = response;
+        });
     },
 
-    allServiceResponsesArrived: function(serviceResponses) {
+    newServiceFailureHandler: function(name, callback, serviceResponses) {
         var me = this;
+        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response) {
+            serviceResponses.failures[name] = response;
+        });
+    },
 
-        me.getView().setLoading(false);
+    newServiceHandler: function(name, callback, serviceResponses, serviceResponsesCallback) {
+        return function(r, scope) {
+            var me = scope;
+            serviceResponses.responseCnt++;
+            if ( serviceResponsesCallback ) {
+                serviceResponsesCallback.apply(me, [name, serviceResponses, r]);
+            }
+            if ( callback ) {
+                callback.apply(me, [ serviceResponses ]);
+            }
+            me.afterServiceHandler(serviceResponses);
+        };
+    },
 
-        if ( serviceResponses.personFailure || serviceResponses.transcriptFailure ) {
-            return;
-        }
-
-        var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
-        var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
-
-        var id = me.personLite.get('id');
+    getPersonSuccess: function(serviceResponses) {
+        var me = this;
+        var personResponse = serviceResponses.successes.person;
+        me.person.populateFromGenericObject(personResponse);
 
         // load and render person data
         me.profileSpecialServiceGroupsStore.removeAll();
         me.profileReferralSourcesStore.removeAll();
         me.profileServiceReasonsStore.removeAll();
-        if ( serviceResponses.personResponse ) {
 
-            var nameField = me.getNameField();
+        var nameField = me.getNameField();
+        var birthDateField = me.getBirthDateField();
+        var studentTypeField = me.getStudentTypeField();
+        var programStatusField = me.getProgramStatusField();
+        var earlyAlertField = me.getEarlyAlertField();
 
-            var birthDateField = me.getBirthDateField();
-            var studentTypeField = me.getStudentTypeField();
-            var programStatusField = me.getProgramStatusField();
-            var earlyAlertField = me.getEarlyAlertField();
+        var fullName = me.person.getFullName();
+        var coachName = me.person.getCoachFullName();
 
-            me.person.populateFromGenericObject(serviceResponses.personResponse);
-
-            var fullName = me.person.getFullName();
-            var coachName = me.person.getCoachFullName();
-
-            // load special service groups
-            if (serviceResponses.personResponse.specialServiceGroups != null) {
-                me.profileSpecialServiceGroupsStore.loadData(me.person.get('specialServiceGroups'));
-            }
-
-            // load referral sources
-            if (serviceResponses.personResponse.referralSources != null) {
-                me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
-            }
-
-            // load service reasons
-            if (serviceResponses.personResponse.serviceReasons != null) {
-                me.profileServiceReasonsStore.loadData(me.person.get('serviceReasons'));
-            }
-
-            // load general student record
-            me.getView().loadRecord(me.person);
-
-            // load additional values
-            nameField.setValue(fullName);
-            birthDateField.setValue(me.person.getFormattedBirthDate());
-            studentTypeField.setValue(me.person.getStudentTypeName());
-            programStatusField.setValue(me.person.getProgramStatusName());
-            earlyAlertField.setValue(me.person.getEarlyAlertRatio());
-            studentRecordComp.setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + me.person.get('schoolId'));
-            studentCoachButton.setText('<u>Coach: ' + coachName + '</u>');
+        // load special service groups
+        if (personResponse.specialServiceGroups != null) {
+            me.profileSpecialServiceGroupsStore.loadData(me.person.get('specialServiceGroups'));
         }
 
-        // transcript output
-        if ( serviceResponses.transcriptResponse ) {
-            var transcript = new Ssp.model.Transcript(serviceResponses.transcriptResponse);
-            var gpa = transcript.get('gpa');
-            if ( gpa ) {
-                me.getGpaField().setValue(gpa.gradePointAverage);
-                me.getHoursEarnedField().setValue(gpa.creditHoursForGpa);
-                me.getHoursAttemptedField().setValue(gpa.creditHoursAttempted);
-            }
-            var programs = transcript.get('programs');
-            if ( programs ) {
-                var programNames = [];
-                Ext.Array.each(programs, function(program) {
-                   programNames.push(program.programName);
-                });
-                me.getAcademicProgramsField().setValue(programNames.join(', '));
-            }
-
+        // load referral sources
+        if (personResponse.referralSources != null) {
+            me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
         }
+
+        // load service reasons
+        if (personResponse.serviceReasons != null) {
+            me.profileServiceReasonsStore.loadData(me.person.get('serviceReasons'));
+        }
+
+        // load general student record
+        me.getView().loadRecord(me.person);
+
+        // load additional values
+        nameField.setValue(fullName);
+        birthDateField.setValue(me.person.getFormattedBirthDate());
+        studentTypeField.setValue(me.person.getStudentTypeName());
+        programStatusField.setValue(me.person.getProgramStatusName());
+        earlyAlertField.setValue(me.person.getEarlyAlertRatio());
+
+        var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
+        var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
+        studentRecordComp.setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + me.person.get('schoolId'));
+        studentCoachButton.setText('<u>Coach: ' + coachName + '</u>');
 
         me.appEventsController.assignEvent({
             eventName: 'emailCoach',
             callBackFunc: me.onEmailCoach,
             scope: me
         });
-
-
-
-        // hide the loader
-        me.getView().setLoading(false);
     },
 
-	
+    getPersonFailure: function() {
+        // nothing to do
+    },
+
+    getTranscriptSuccess: function(serviceResponses) {
+        var me = this;
+        var transcriptResponse = serviceResponses.successes.transcript;
+
+        var transcript = new Ssp.model.Transcript(transcriptResponse);
+        var gpa = transcript.get('gpa');
+        if ( gpa ) {
+            me.getGpaField().setValue(gpa.gradePointAverage);
+            me.getHoursEarnedField().setValue(gpa.creditHoursForGpa);
+            me.getHoursAttemptedField().setValue(gpa.creditHoursAttempted);
+        }
+        var programs = transcript.get('programs');
+        if ( programs ) {
+            var programNames = [];
+            Ext.Array.each(programs, function(program) {
+                programNames.push(program.programName);
+            });
+            me.getAcademicProgramsField().setValue(programNames.join(', '));
+        }
+    },
+
+    getTranscriptFailure: function() {
+        // nothing to do
+    },
+
+    afterServiceHandler: function(serviceResponses) {
+        var me = this;
+        if ( serviceResponses.responseCnt >= serviceResponses.expectedResponseCnt ) {
+            me.getView().setLoading(false);
+        }
+    },
+
 	destroy: function() {
         var me=this;
         //me.appEventsController.removeEvent({eventName: 'emailCoach', callBackFunc: me.onEmailCoach, scope: me});
@@ -267,6 +245,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         
         var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
         
-    },
+    }
 	
 });

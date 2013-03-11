@@ -23,6 +23,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
     	authenticatedPerson: 'authenticatedPerson',
     	formUtils: 'formRendererUtils',
     	model: 'currentPerson',
+        personLite: 'personLite',
     	service: 'personService'
     },
     
@@ -46,10 +47,41 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
 	
 	init: function() {
 		var me=this;
-		me.getView().getForm().loadRecord( me.model );
-		me.getSaveButton().disabled=true;  	
-		me.getStrengthsField().setDisabled( !me.authenticatedPerson.hasAccess('ACTION_PLAN_STRENGTHS_FIELD') );
+        me.getSaveButton().disabled=true;
+        me.getStrengthsField().setDisabled( !me.authenticatedPerson.hasAccess('ACTION_PLAN_STRENGTHS_FIELD') );
+
+        // display loader
+        me.getView().setLoading(true);
+        if ( !(me.model) || !(me.model.get('id')) || !(me.personLite.get('id') === me.model.get('id')) ) {
+
+            me.service.get(me.personLite.get('id'), {
+                success: me.loadPersonSuccess,
+                failure: me.loadPersonFailure,
+                scope: me
+            });
+        } else {
+            me.bindModelToView();
+        }
+
+
 		return me.callParent(arguments);
+    },
+
+    loadPersonSuccess: function(response, scope) {
+        var me = scope;
+        me.model.populateFromGenericObject(response);
+        me.bindModelToView();
+    },
+
+    bindModelToView: function() {
+        var me = this;
+        me.getView().getForm().loadRecord( me.model );
+        me.getView().setLoading(false);
+    },
+
+    loadPersonFailure: function(response, scope) {
+        var me = scope;
+        me.getView().setLoading(false);
     },
     
     onSaveClick: function(button) {
