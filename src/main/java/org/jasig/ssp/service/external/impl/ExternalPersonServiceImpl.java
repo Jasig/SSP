@@ -272,6 +272,12 @@ public class ExternalPersonServiceImpl
 			person.setNonLocalAddress(externalPerson.getNonLocalAddress());
 		}
 
+		if ((person.getPhotoUrl() == null) ||
+				(!person.getPhotoUrl().equals(
+						externalPerson.getPhotoUrl()))) {
+			person.setPhotoUrl(externalPerson.getPhotoUrl());
+		}
+		
 		setCoachForPerson(person, externalPerson.getCoachSchoolId());
 
 		if ((StringUtils.isBlank(externalPerson.getDepartmentName())

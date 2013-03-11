@@ -22,6 +22,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.Column;
+import javax.validation.constraints.Size;
+
 import org.jasig.ssp.model.PersonEducationGoal;
 
 import com.google.common.collect.Lists;
@@ -38,6 +41,12 @@ public class PersonEducationGoalTO
 	private Integer howSureAboutMajor, howSureAboutOccupation;
 	private Boolean additionalAcademicProgramInformationNeeded, careerDecided,
 			confidentInAbilities;
+	
+	private String courseWorkWeeklyHoursName;
+
+	private String registrationLoadName;
+
+	private String anticipatedGraduationDateTermCode;
 
 	public PersonEducationGoalTO() {
 		super();
@@ -64,6 +73,9 @@ public class PersonEducationGoalTO
 		careerDecided = model.getCareerDecided();
 		howSureAboutOccupation = model.getHowSureAboutOccupation();
 		confidentInAbilities = model.getConfidentInAbilities();
+		courseWorkWeeklyHoursName = model.getCourseWorkWeeklyHoursName();
+		registrationLoadName = model.getRegistrationLoadName();
+		anticipatedGraduationDateTermCode = model.getAnticipatedGraduationDateTermCode();
 		additionalAcademicProgramInformationNeeded = model
 				.getAdditionalAcademicProgramInformationNeeded();
 	}
@@ -157,5 +169,48 @@ public class PersonEducationGoalTO
 
 	public void setConfidentInAbilities(final Boolean confidentInAbilities) {
 		this.confidentInAbilities = confidentInAbilities;
+	}
+
+	/**
+	 * @return the courseWorkWeeklyHoursName
+	 */
+	public String getCourseWorkWeeklyHoursName() {
+		return courseWorkWeeklyHoursName;
+	}
+
+	/**
+	 * @param courseWorkWeeklyHoursName the courseWorkWeeklyHoursName to set
+	 */
+	public void setCourseWorkWeeklyHoursName(String courseWorkWeeklyHoursName) {
+		this.courseWorkWeeklyHoursName = courseWorkWeeklyHoursName;
+	}
+
+	/**
+	 * @return the registrationLoadName
+	 */
+	public String getRegistrationLoadName() {
+		return registrationLoadName;
+	}
+
+	/**
+	 * @param registrationLoadName the registrationLoadName to set
+	 */
+	public void setRegistrationLoadName(String registrationLoadName) {
+		this.registrationLoadName = registrationLoadName;
+	}
+
+	/**
+	 * @return the anticipatedGraduationDateTermCode
+	 */
+	public String getAnticipatedGraduationDateTermCode() {
+		return anticipatedGraduationDateTermCode;
+	}
+
+	/**
+	 * @param anticipatedGraduationDateTermCode the anticipatedGraduationDateTermCode to set
+	 */
+	public void setAnticipatedGraduationDateTermCode(
+			String anticipatedGraduationDateTermCode) {
+		this.anticipatedGraduationDateTermCode = anticipatedGraduationDateTermCode;
 	}
 }
