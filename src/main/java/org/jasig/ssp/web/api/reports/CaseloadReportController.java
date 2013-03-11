@@ -41,6 +41,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
+import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.reports.CaseLoadReportTO;
 import org.jasig.ssp.transferobject.reports.CaseLoadSearchTO;
@@ -158,6 +159,9 @@ public class CaseloadReportController extends ReportBaseController {
 	
 	@Autowired
 	protected transient ServiceReasonService serviceReasonService;	
+	
+	@Autowired
+	protected transient SpecialServiceGroupService ssgService;	
 
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
@@ -176,12 +180,14 @@ public class CaseloadReportController extends ReportBaseController {
 			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) List<UUID> serviceReasonIds,
+			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
 		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
+		final List<UUID> cleanSpecialServiceGroupIds = SearchParameters.cleanUUIDListOfNulls(specialServiceGroupIds);
 		final List<UUID> cleanServiceReasonsIds = SearchParameters.cleanUUIDListOfNulls(serviceReasonIds);
-        CaseLoadSearchTO searchForm = new CaseLoadSearchTO(cleanStudentTypeIds, cleanServiceReasonsIds, homeDepartment);
+        CaseLoadSearchTO searchForm = new CaseLoadSearchTO(cleanStudentTypeIds, cleanServiceReasonsIds, cleanSpecialServiceGroupIds, homeDepartment);
 		final List<CaseLoadReportTO> caseLoadReportList = collectCaseLoadReportTOs(searchForm);		
 		final Map<String, Object> parameters = collectParamsForReport(searchForm);
 
@@ -230,6 +236,7 @@ public class CaseloadReportController extends ReportBaseController {
 		SearchParameters.addStudentTypesToMap(searchForm.getStudentTypeIds(), parameters,
 				studentTypeService);
 		SearchParameters.addServiceReasonToMap(searchForm.getServiceReasonIds(), parameters, serviceReasonService);
+		SearchParameters.addSpecialGroupsNamesToMap(searchForm.getSpecialServiceGroupIds(), parameters, ssgService);
 		return parameters;
 	}
 

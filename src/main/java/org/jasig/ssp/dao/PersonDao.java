@@ -203,7 +203,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 
 		final Criteria criteria = createCriteria(sAndP);
 
-		if (specialServiceGroups != null) {
+		if (specialServiceGroups != null && !specialServiceGroups.isEmpty()) {
 			criteria.createAlias("specialServiceGroups",
 					"personSpecialServiceGroups")
 					.add(Restrictions
