@@ -82,12 +82,12 @@
 	
 	<include file="org/jasig/ssp/database/changesets/000020.xml" />
 
-	<include file="org/jasig/ssp/database/integrationchangesets/i000005.xml" /><!-- Adds SIS external data tables -->
-
-	<include file="org/jasig/ssp/database/integrationchangesets/i000006.xml" />
-
+	<include file="org/jasig/ssp/database/integrationchangesets/i000005.xml" />
+    <include file="org/jasig/ssp/database/integrationchangesets/i000006.xml" />
     <include file="org/jasig/ssp/database/changesets/000021.xml" />
+    <include file="org/jasig/ssp/database/changesets/000022.xml" />
     
     <include file="org/jasig/ssp/database/integrationchangesets/i000007.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000008.xml" />
 
 </databaseChangeLog>

@@ -856,6 +856,7 @@ void addPerson(xml,
 		xml.column(name:"enabled", value:true)
 		xml.column(name:"city", value:"Mesa")
 		xml.column(name:"state", value:"AZ")
+		xml.column(name:"photo_url", value:"http://img.youtube.com/vi/gcC1nPNYFzk/0.jpg")
 		xml.column(name:"zip_code", value:"85201")
 		xml.column(name:"photo_url", value:"")
 		xml.column(name:"school_id",  value:userNameSuffix + i)

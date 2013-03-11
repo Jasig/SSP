@@ -35,6 +35,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     
     control: {
         nameField: '#studentName',
+        photoUrlField: '#studentPhoto',
+
         
         studentIdField: '#studentId',
         birthDateField: '#birthDate',
@@ -169,6 +171,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         if ( serviceResponses.personResponse ) {
 
             var nameField = me.getNameField();
+            var photoUrlField = me.getPhotoUrlField();
 
             var birthDateField = me.getBirthDateField();
             var studentTypeField = me.getStudentTypeField();
@@ -202,6 +205,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             nameField.setValue(fullName);
             birthDateField.setValue(me.person.getFormattedBirthDate());
             studentTypeField.setValue(me.person.getStudentTypeName());
+            photoUrlField.setSrc(me.person.getPhotoUrl());
             programStatusField.setValue(me.person.getProgramStatusName());
             earlyAlertField.setValue(me.person.getEarlyAlertRatio());
             studentRecordComp.setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + me.person.get('schoolId'));

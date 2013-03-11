@@ -139,6 +139,21 @@ Ext.define('Ssp.model.Person', {
     	}
     },
     
+    getPhotoUrl: function(){
+    	return  this.get('photoUrl')   	
+    },    
+    
+    setPhotoUrl: function( value ){
+    	var me=this;
+    	if (value != "")
+    	{
+        	if ( me.get('photoUrl') != null)
+        	{
+        		me.set('photoUrl',value);
+        	}    		
+    	}
+    },
+    
     getProgramStatusName: function(){
     	return this.get('currentProgramStatusName')? this.get('currentProgramStatusName') : "";   	
     },
@@ -234,5 +249,6 @@ Ext.define('Ssp.model.Person', {
     	me.set('secondaryEmailAddress', jsonData.secondaryEmailAddress);
     	me.set('birthDate', jsonData.birthDate);
     	me.set('username', jsonData.username);
+    	me.set('photoUrl', jsonData.photoUrl);
     }
 });

@@ -55,6 +55,24 @@ Ext.define('Ssp.view.tools.profile.Person', {
                     defaults: {
                         anchor: '100%'
                     },
+                    width: 150,
+                    items: [
+                     {
+                    	xtype: 'image',
+                        fieldLabel: '',
+                        src: 'photoUrl',
+                        itemId: 'studentPhoto',
+                        width:150,
+                        height:150
+                        
+                    }]},{
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    defaults: {
+                        anchor: '100%'
+                    },
                     flex: .40,
                     items: [{
                         fieldLabel: '',
