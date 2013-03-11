@@ -20,7 +20,9 @@ package org.jasig.ssp.transferobject.reference;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +32,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeChallengeReferral;
 import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
+import org.jasig.ssp.transferobject.NamedTOComparator;
 import org.jasig.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
@@ -151,6 +154,8 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 				referralTOs.add(new ChallengeReferralTO(challengeReferral // NOPMD
 						.getChallengeReferral()));
 			}
+			
+			Collections.sort(referralTOs, new ChallengeReferralTOComparator());
 			challengeChallengeReferrals = referralTOs;
 		}
 	}
