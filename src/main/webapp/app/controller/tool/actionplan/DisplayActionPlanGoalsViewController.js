@@ -25,7 +25,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     	authenticatedPerson: 'authenticatedPerson',
     	formUtils: 'formRendererUtils',
     	model: 'currentGoal',
-    	person: 'currentPerson',
+    	personLite: 'personLite',
     	preferences: 'preferences',
     	store: 'goalsStore'
     },
@@ -50,7 +50,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     constructor: function() {
     	// reconfigure the url for the current person
     	this.url = this.apiProperties.createUrl(this.apiProperties.getItemUrl('personGoal'));
-    	this.url = this.url.replace('{id}',this.person.get('id'));
+    	this.url = this.url.replace('{id}',this.personLite.get('id'));
     	
     	// apply the person url to the store proxy
     	Ext.apply(this.store.getProxy(), { url: this.url });

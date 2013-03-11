@@ -4384,6 +4384,24 @@ Ext.define('Ssp.util.FormRendererUtils',{
 	 * 
 	 * @returns - returns the sorted array
 	 */
+    valueSortByField: function( arrayToSort, fieldName ){
+    	return Ext.Array.sort(arrayToSort, function(a, b){
+    		 var nameA=a[fieldName], nameB=b[fieldName]
+    		 if (nameA < nameB) //sort string ascending
+    		  return -1
+    		 if (nameA > nameB)
+    		  return 1
+    		 return 0 //default return value (no sorting)
+    		});
+    },  
+    
+    /**
+	 * @params
+	 * @arrayToSort - the array to sort props on
+	 * @fieldName - the field name to sort on
+	 * 
+	 * @returns - returns the sorted array
+	 */
     alphaSortByField: function( arrayToSort, fieldName ){
     	return Ext.Array.sort(arrayToSort, function(a, b){
     		 var nameA=a[fieldName].toLowerCase(), nameB=b[fieldName].toLowerCase()
@@ -4393,7 +4411,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
     		  return 1
     		 return 0 //default return value (no sorting)
     		});
-    },    
+    },
     
     /**
      * @params
@@ -10687,12 +10705,13 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         profileServiceReasonsStore: 'profileServiceReasonsStore',
         profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
         sspConfig: 'sspConfig',
-		formUtils: 'formRendererUtils',
+        formUtils: 'formRendererUtils'
     },
-    
+
     control: {
         nameField: '#studentName',
-        
+        photoUrlField: '#studentPhoto',
+
         studentIdField: '#studentId',
         birthDateField: '#birthDate',
         studentTypeField: '#studentType',
@@ -10705,15 +10724,15 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         academicProgramsField: '#academicPrograms',
 
         earlyAlertField: '#earlyAlert',
-		
-		'serviceReasonEdit': {
+
+        'serviceReasonEdit': {
             click: 'onServiceReasonEditButtonClick'
         },
-        
+
         'serviceGroupEdit': {
             click: 'onServiceGroupEditButtonClick'
-        },
-    
+        }
+
     },
     init: function(){
         var me = this;
@@ -10725,26 +10744,24 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             me.getView().setLoading(true);
 
             var serviceResponses = {
-                personResponse: null,
-                personFailure: false,
-                transcriptResponse: null,
-                transcriptFailure: false,
+                failures: {},
+                successes: {},
                 responseCnt: 0,
                 expectedResponseCnt: 2
             }
 
-            me.transcriptService.getSummary(id, {
-                success: me.newTranscriptSuccessHandler(serviceResponses),
-                failure: me.newTranscriptFailureHandler(serviceResponses),
+            me.personService.get(id, {
+                success: me.newServiceSuccessHandler('person', me.getPersonSuccess, serviceResponses),
+                failure: me.newServiceFailureHandler('person', me.getPersonFailure, serviceResponses),
                 scope: me
             });
-            me.personService.get(id, {
-                success: me.newPersonSuccessHandler(serviceResponses),
-                failure: me.newPersonFailureHandler(serviceResponses),
+            me.transcriptService.getSummary(id, {
+                success: me.newServiceSuccessHandler('transcript', me.getTranscriptSuccess, serviceResponses),
+                failure: me.newServiceFailureHandler('transcript', me.getTranscriptFailure, serviceResponses),
                 scope: me
             });
         }
-        
+
         return me.callParent(arguments);
     },
 
@@ -10758,150 +10775,132 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
     },
 
-    newTranscriptSuccessHandler: function(serviceResponses) {
-        return function(r, scope) {
-            var me = scope;
-            serviceResponses.transcriptResponse = r;
-            serviceResponses.transcriptFailure = false;
-            serviceResponses.responseCnt++;
-            me.serviceResponseArrived(serviceResponses);
-        };
-    },
-
-    newTranscriptFailureHandler: function(serviceResponses) {
-        return function(r, scope) {
-            var me = scope;
-            serviceResponses.transcriptResponse = r;
-            serviceResponses.transcriptFailure = true;
-            serviceResponses.responseCnt++;
-            me.serviceResponseArrived(serviceResponses);
-        };
-    },
-
-    newPersonSuccessHandler: function(serviceResponses) {
-        return function(r, scope) {
-            var me = scope;
-            serviceResponses.personResponse = r;
-            serviceResponses.personFailure = false;
-            serviceResponses.responseCnt++;
-            me.serviceResponseArrived(serviceResponses);
-        };
-    },
-
-    newPersonFailureHandler: function(serviceResponses) {
-        return function(r, scope) {
-            var me = scope;
-            serviceResponses.personResponse = r;
-            serviceResponses.personFailure = true;
-            serviceResponses.responseCnt++;
-            me.serviceResponseArrived(serviceResponses);
-        };
-    },
-
-    serviceResponseArrived: function(serviceResponses) {
+    newServiceSuccessHandler: function(name, callback, serviceResponses) {
         var me = this;
-        if ( serviceResponses.responseCnt >= serviceResponses.expectedResponseCnt ) {
-            me.allServiceResponsesArrived(serviceResponses);
-        }
+        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response) {
+            serviceResponses.successes[name] = response;
+        });
     },
 
-    allServiceResponsesArrived: function(serviceResponses) {
+    newServiceFailureHandler: function(name, callback, serviceResponses) {
         var me = this;
+        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response) {
+            serviceResponses.failures[name] = response;
+        });
+    },
 
-        me.getView().setLoading(false);
+    newServiceHandler: function(name, callback, serviceResponses, serviceResponsesCallback) {
+        return function(r, scope) {
+            var me = scope;
+            serviceResponses.responseCnt++;
+            if ( serviceResponsesCallback ) {
+                serviceResponsesCallback.apply(me, [name, serviceResponses, r]);
+            }
+            if ( callback ) {
+                callback.apply(me, [ serviceResponses ]);
+            }
+            me.afterServiceHandler(serviceResponses);
+        };
+    },
 
-        if ( serviceResponses.personFailure || serviceResponses.transcriptFailure ) {
-            return;
-        }
-
-        var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
-        var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
-
-        var id = me.personLite.get('id');
+    getPersonSuccess: function(serviceResponses) {
+        var me = this;
+        var personResponse = serviceResponses.successes.person;
+        me.person.populateFromGenericObject(personResponse);
 
         // load and render person data
         me.profileSpecialServiceGroupsStore.removeAll();
         me.profileReferralSourcesStore.removeAll();
         me.profileServiceReasonsStore.removeAll();
-        if ( serviceResponses.personResponse ) {
 
-            var nameField = me.getNameField();
+        var nameField = me.getNameField();
+        var photoUrlField = me.getPhotoUrlField();
+        var birthDateField = me.getBirthDateField();
+        var studentTypeField = me.getStudentTypeField();
+        var programStatusField = me.getProgramStatusField();
+        var earlyAlertField = me.getEarlyAlertField();
 
-            var birthDateField = me.getBirthDateField();
-            var studentTypeField = me.getStudentTypeField();
-            var programStatusField = me.getProgramStatusField();
-            var earlyAlertField = me.getEarlyAlertField();
+        var fullName = me.person.getFullName();
+        var coachName = me.person.getCoachFullName();
 
-            me.person.populateFromGenericObject(serviceResponses.personResponse);
-
-            var fullName = me.person.getFullName();
-            var coachName = me.person.getCoachFullName();
-
-            // load special service groups
-            if (serviceResponses.personResponse.specialServiceGroups != null) {
-                me.profileSpecialServiceGroupsStore.loadData(me.person.get('specialServiceGroups'));
-            }
-
-            // load referral sources
-            if (serviceResponses.personResponse.referralSources != null) {
-                me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
-            }
-
-            // load service reasons
-            if (serviceResponses.personResponse.serviceReasons != null) {
-                me.profileServiceReasonsStore.loadData(me.person.get('serviceReasons'));
-            }
-
-            // load general student record
-            me.getView().loadRecord(me.person);
-
-            // load additional values
-            nameField.setValue(fullName);
-            birthDateField.setValue(me.person.getFormattedBirthDate());
-            studentTypeField.setValue(me.person.getStudentTypeName());
-            programStatusField.setValue(me.person.getProgramStatusName());
-            earlyAlertField.setValue(me.person.getEarlyAlertRatio());
-            studentRecordComp.setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + me.person.get('schoolId'));
-            studentCoachButton.setText('<u>Coach: ' + coachName + '</u>');
+        // load special service groups
+        if (personResponse.specialServiceGroups != null) {
+            me.profileSpecialServiceGroupsStore.loadData(me.person.get('specialServiceGroups'));
         }
 
-        // transcript output
-        if ( serviceResponses.transcriptResponse ) {
-            var transcript = new Ssp.model.Transcript(serviceResponses.transcriptResponse);
-            var gpa = transcript.get('gpa');
-            if ( gpa ) {
-                me.getGpaField().setValue(gpa.gradePointAverage);
-                me.getHoursEarnedField().setValue(gpa.creditHoursForGpa);
-                me.getHoursAttemptedField().setValue(gpa.creditHoursAttempted);
-            }
-            var programs = transcript.get('programs');
-            if ( programs ) {
-                var programNames = [];
-                Ext.Array.each(programs, function(program) {
-                   programNames.push(program.programName);
-                });
-                me.getAcademicProgramsField().setValue(programNames.join(', '));
-            }
-
+        // load referral sources
+        if (personResponse.referralSources != null) {
+            me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
         }
+
+        // load service reasons
+        if (personResponse.serviceReasons != null) {
+            me.profileServiceReasonsStore.loadData(me.person.get('serviceReasons'));
+        }
+
+        // load general student record
+        me.getView().loadRecord(me.person);
+
+        // load additional values
+        nameField.setValue(fullName);
+        birthDateField.setValue(me.person.getFormattedBirthDate());
+        studentTypeField.setValue(me.person.getStudentTypeName());
+        photoUrlField.setSrc(me.person.getPhotoUrl());
+        programStatusField.setValue(me.person.getProgramStatusName());
+        earlyAlertField.setValue(me.person.getEarlyAlertRatio());
+
+        var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
+        var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
+        studentRecordComp.setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + me.person.get('schoolId'));
+        studentCoachButton.setText('<u>Coach: ' + coachName + '</u>');
 
         me.appEventsController.assignEvent({
             eventName: 'emailCoach',
             callBackFunc: me.onEmailCoach,
             scope: me
         });
-
-
-
-        // hide the loader
-        me.getView().setLoading(false);
     },
 
-	
-	destroy: function() {
+    getPersonFailure: function() {
+        // nothing to do
+    },
+
+    getTranscriptSuccess: function(serviceResponses) {
+        var me = this;
+        var transcriptResponse = serviceResponses.successes.transcript;
+
+        var transcript = new Ssp.model.Transcript(transcriptResponse);
+        var gpa = transcript.get('gpa');
+        if ( gpa ) {
+            me.getGpaField().setValue(gpa.gradePointAverage);
+            me.getHoursEarnedField().setValue(gpa.creditHoursForGpa);
+            me.getHoursAttemptedField().setValue(gpa.creditHoursAttempted);
+        }
+        var programs = transcript.get('programs');
+        if ( programs ) {
+            var programNames = [];
+            Ext.Array.each(programs, function(program) {
+                programNames.push(program.programName);
+            });
+            me.getAcademicProgramsField().setValue(programNames.join(', '));
+        }
+    },
+
+    getTranscriptFailure: function() {
+        // nothing to do
+    },
+
+    afterServiceHandler: function(serviceResponses) {
+        var me = this;
+        if ( serviceResponses.responseCnt >= serviceResponses.expectedResponseCnt ) {
+            me.getView().setLoading(false);
+        }
+    },
+
+    destroy: function() {
         var me=this;
         //me.appEventsController.removeEvent({eventName: 'emailCoach', callBackFunc: me.onEmailCoach, scope: me});
-        
+
         return me.callParent( arguments );
     },
 
@@ -10911,23 +10910,22 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             window.location = 'mailto:' + me.person.getCoachPrimaryEmailAddress();
         }
     },
-	
-	onServiceReasonEditButtonClick: function(button){
+
+    onServiceReasonEditButtonClick: function(button){
         var me=this;
-        
-        var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
-        
+
+        var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});
+
     },
-    
+
     onServiceGroupEditButtonClick: function(button){
         var me=this;
-        
-        var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
-        
-    },
-	
-});
 
+        var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});
+
+    }
+
+});
 /*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
@@ -11569,7 +11567,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
     	appEventsController: 'appEventsController',
     	formUtils: 'formRendererUtils',
     	model: 'currentTask',
-    	person: 'currentPerson',
+    	personLite: 'personLite',
     	store: 'tasksStore' 
     },
     
@@ -11588,7 +11586,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
 	
 	init: function() {
 		this.url = this.apiProperties.createUrl( this.apiProperties.getItemUrl('personTask') );
-		this.url = this.url.replace('{id}',this.person.get('id'));
+		this.url = this.url.replace('{id}',this.personLite.get('id'));
 
 		return this.callParent(arguments);
     },
@@ -11668,7 +11666,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
         if (model.get('id') != "") 
         {
     		// test if this is a student task
-     	   if ( model.get('createdBy').id == this.person.get('id') )
+     	   if ( model.get('createdBy').id == this.personLite.get('id') )
      	   {
      		   message = "WARNING: You are about to delete a task created by this student. Would you like to continue?"; 
      	   }
@@ -11732,7 +11730,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     	confidentialityLevelsStore: 'confidentialityLevelsStore',
     	formUtils: 'formRendererUtils',
     	model: 'currentTask',
-    	person: 'currentPerson'
+    	personLite: 'personLite'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -11757,7 +11755,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 		me.authenticatedPerson.applyConfidentialityLevelsFilter( me.confidentialityLevelsStore );
 		
 		me.url = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personTask') );
-		me.url = me.url.replace('{id}',me.person.get('id'));
+		me.url = me.url.replace('{id}',me.personLite.get('id'));
 		
 		me.initForm();
 		
@@ -11810,7 +11808,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     		if (id == "")
     		{
         		model.set('type','SSP');
-        		model.set('personId', this.person.get('id') );    		
+        		model.set('personId', this.personLite.get('id') );
         		model.set('confidentialityLevel',{id: form.getValues().confidentialityLevelId});
     			// add the task
     			this.apiProperties.makeRequest({
@@ -11886,7 +11884,7 @@ Ext.define('Ssp.controller.tool.actionplan.EditGoalFormViewController', {
     	confidentialityLevelsStore: 'confidentialityLevelsStore',
     	formUtils: 'formRendererUtils',
     	model: 'currentGoal',
-    	person: 'currentPerson',
+    	personLite: 'personLite',
     	preferences: 'preferences'
     },
     config: {
@@ -11920,7 +11918,7 @@ Ext.define('Ssp.controller.tool.actionplan.EditGoalFormViewController', {
 	
 	constructor: function(){
 		this.url = this.apiProperties.getItemUrl('personGoal');
-		this.url = this.url.replace('{id}',this.person.get('id'));
+		this.url = this.url.replace('{id}',this.personLite.get('id'));
     	this.url = this.apiProperties.createUrl( this.url );
 	
 		return this.callParent(arguments);
@@ -12002,7 +12000,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     	authenticatedPerson: 'authenticatedPerson',
     	formUtils: 'formRendererUtils',
     	goalsStore: 'goalsStore',
-    	person: 'currentPerson',
+        personLite: 'personLite',
     	store: 'tasksStore'
     },
     
@@ -12082,7 +12080,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
 		// display loader
 		me.getView().setLoading( true );
 		
-		personId = me.person.get('id');
+		personId = me.personLite.get('id');
 		me.personTaskUrl = me.apiProperties.getItemUrl('personTask');
 		me.personTaskUrl = me.personTaskUrl.replace('{id}',personId);
 		me.personTaskGroupUrl = me.apiProperties.getItemUrl('personTaskGroup');
@@ -12399,7 +12397,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     	authenticatedPerson: 'authenticatedPerson',
     	formUtils: 'formRendererUtils',
     	model: 'currentGoal',
-    	person: 'currentPerson',
+    	personLite: 'personLite',
     	preferences: 'preferences',
     	store: 'goalsStore'
     },
@@ -12424,7 +12422,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     constructor: function() {
     	// reconfigure the url for the current person
     	this.url = this.apiProperties.createUrl(this.apiProperties.getItemUrl('personGoal'));
-    	this.url = this.url.replace('{id}',this.person.get('id'));
+    	this.url = this.url.replace('{id}',this.personLite.get('id'));
     	
     	// apply the person url to the store proxy
     	Ext.apply(this.store.getProxy(), { url: this.url });
@@ -12527,6 +12525,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
     	authenticatedPerson: 'authenticatedPerson',
     	formUtils: 'formRendererUtils',
     	model: 'currentPerson',
+        personLite: 'personLite',
     	service: 'personService'
     },
     
@@ -12550,10 +12549,41 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
 	
 	init: function() {
 		var me=this;
-		me.getView().getForm().loadRecord( me.model );
-		me.getSaveButton().disabled=true;  	
-		me.getStrengthsField().setDisabled( !me.authenticatedPerson.hasAccess('ACTION_PLAN_STRENGTHS_FIELD') );
+        me.getSaveButton().disabled=true;
+        me.getStrengthsField().setDisabled( !me.authenticatedPerson.hasAccess('ACTION_PLAN_STRENGTHS_FIELD') );
+
+        // display loader
+        me.getView().setLoading(true);
+        if ( !(me.model) || !(me.model.get('id')) || !(me.personLite.get('id') === me.model.get('id')) ) {
+
+            me.service.get(me.personLite.get('id'), {
+                success: me.loadPersonSuccess,
+                failure: me.loadPersonFailure,
+                scope: me
+            });
+        } else {
+            me.bindModelToView();
+        }
+
+
 		return me.callParent(arguments);
+    },
+
+    loadPersonSuccess: function(response, scope) {
+        var me = scope;
+        me.model.populateFromGenericObject(response);
+        me.bindModelToView();
+    },
+
+    bindModelToView: function() {
+        var me = this;
+        me.getView().getForm().loadRecord( me.model );
+        me.getView().setLoading(false);
+    },
+
+    loadPersonFailure: function(response, scope) {
+        var me = scope;
+        me.getView().setLoading(false);
     },
     
     onSaveClick: function(button) {
@@ -12621,7 +12651,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     inject: {
     	apiProperties: 'apiProperties',
         appEventsController: 'appEventsController',
-        person: 'currentPerson',
+        personLite: 'personLite',
         task: 'currentTask',
     	treeUtils: 'treeRendererUtils'
     },
@@ -12652,7 +12682,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
 		this.challengeUrl = this.apiProperties.getItemUrl('challenge');
 		this.challengeReferralUrl = this.apiProperties.getItemUrl('challengeReferral');
 		this.personChallengeUrl = this.apiProperties.getItemUrl('personChallenge');
-		this.personChallengeUrl = this.personChallengeUrl.replace('{id}',this.person.get('id'));
+		this.personChallengeUrl = this.personChallengeUrl.replace('{id}',this.personLite.get('id'));
 
 		// clear the categories
 		this.treeUtils.clearRootCategories();
@@ -12836,11 +12866,16 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     	militaryAffiliationsStore: 'militaryAffiliationsStore',
         personLite: 'personLite',
         person: 'currentPerson',
+        
         statesStore: 'statesStore',
         service: 'studentIntakeService',
         studentStatusesStore: 'studentStatusesStore',
         studentIntake: 'currentStudentIntake',
-    	veteranStatusesStore: 'veteranStatusesStore'        
+    	veteranStatusesStore: 'veteranStatusesStore',
+    	registrationLoadRangesStore: 'registrationLoadRangesStore',
+    	futureTermsStore:'futureTermsStore',
+    	weeklyCourseWorkHourRangesStore:'weeklyCourseWorkHourRangesStore'
+    	
     }, 
     config: {
     	studentIntakeForm: null
@@ -13017,6 +13052,11 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var educationLevels = me.formUtils.alphaSortByField( formData.data.referenceData.educationLevels, 'name' );
 		var fundingSources = me.formUtils.alphaSortByField( formData.data.referenceData.fundingSources, 'name' );
 		var studentStatuses =  me.formUtils.alphaSortByField( formData.data.referenceData.studentStatuses, 'name' );
+		var futureTerms =  me.formUtils.valueSortByField( formData.data.referenceData.futureTerms, 'startDate' );
+		var weeklyCourseWorkHourRanges =  JSON.parse(formData.data.referenceData.weeklyCourseWorkHourRanges);
+		weeklyCourseWorkHourRanges = me.formUtils.valueSortByField( weeklyCourseWorkHourRanges, 'rangeStart' );
+		var registrationLoadRanges = JSON.parse(formData.data.referenceData.registrationLoadRanges);
+		registrationLoadRanges =  me.formUtils.valueSortByField(registrationLoadRanges , 'rangeStart' );
 		var militaryAffiliations = me.formUtils.alphaSortByField( formData.data.referenceData.militaryAffiliations, 'name' );
 		
 		me.challengesStore.loadData( challenges );
@@ -13027,12 +13067,17 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		me.employmentShiftsStore.loadData( formData.data.referenceData.employmentShifts );
 		me.ethnicitiesStore.loadData( formData.data.referenceData.ethnicities );
 		me.fundingSourcesStore.loadData( fundingSources );
+		
 		me.gendersStore.loadData( formData.data.referenceData.genders );
 		me.maritalStatusesStore.loadData( formData.data.referenceData.maritalStatuses );
 		me.militaryAffiliationsStore.loadData( militaryAffiliations );
+		
 		me.statesStore.loadData( formData.data.referenceData.states );
 		me.studentStatusesStore.loadData( studentStatuses );
-		me.veteranStatusesStore.loadData( formData.data.referenceData.veteranStatuses ); 
+		me.veteranStatusesStore.loadData( formData.data.referenceData.veteranStatuses );
+		me.futureTermsStore.loadData( futureTerms );
+		me.registrationLoadRangesStore.loadData(registrationLoadRanges);
+		me.weeklyCourseWorkHourRangesStore.loadData(weeklyCourseWorkHourRanges);
 		
 		// LOAD RECORDS FOR EACH OF THE FORMS
 		
@@ -19140,6 +19185,24 @@ Ext.define('Ssp.view.tools.profile.Person', {
                     defaults: {
                         anchor: '100%'
                     },
+                    width: 150,
+                    items: [
+                     {
+                    	xtype: 'image',
+                        fieldLabel: '',
+                        src: 'photoUrl',
+                        itemId: 'studentPhoto',
+                        width:150,
+                        height:150
+                        
+                    }]},{
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    defaults: {
+                        anchor: '100%'
+                    },
                     flex: .40,
                     items: [{
                         fieldLabel: '',
@@ -20541,7 +20604,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				            {boxLabel: 'D-F', name: 'gradeTypicallyEarned', inputValue: "DF"},
 				            {boxLabel: 'F', name: 'gradeTypicallyEarned', inputValue: "F"}
 				    		]
-				        }]
+				    }]
 				    }]
 				});
 		
@@ -23953,6 +24016,21 @@ Ext.define('Ssp.model.Person', {
     	}
     },
     
+    getPhotoUrl: function(){
+    	return  this.get('photoUrl')   	
+    },    
+    
+    setPhotoUrl: function( value ){
+    	var me=this;
+    	if (value != "")
+    	{
+        	if ( me.get('photoUrl') != null)
+        	{
+        		me.set('photoUrl',value);
+        	}    		
+    	}
+    },
+    
     getProgramStatusName: function(){
     	return this.get('currentProgramStatusName')? this.get('currentProgramStatusName') : "";   	
     },
@@ -24048,6 +24126,7 @@ Ext.define('Ssp.model.Person', {
     	me.set('secondaryEmailAddress', jsonData.secondaryEmailAddress);
     	me.set('birthDate', jsonData.birthDate);
     	me.set('username', jsonData.username);
+    	me.set('photoUrl', jsonData.photoUrl);
     }
 });
 /*
@@ -24289,6 +24368,9 @@ Ext.define('Ssp.model.tool.studentintake.PersonEducationGoal', {
     		 {name: 'plannedOccupation', type: 'string'},
     		 {name: 'howSureAboutOccupation', type:'int'},
     		 {name: 'confidentInAbilities', type: 'boolean'},
+    		 {name: 'courseWorkWeeklyHoursName', type: 'string'},
+             {name: 'registrationLoadName', type: 'string'},
+             {name: 'anticipatedGraduationDateTermCode', type: 'string'},
     		 {name: 'additionalAcademicProgramInformationNeeded', type: 'boolean'}]
 });
 /*
@@ -27107,6 +27189,12 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.studentintake.EducationGoalsViewController',
+    inject:{
+    	formUtils: 'formRendererUtils',
+        weeklyCourseWorkHourRangesStore: 'weeklyCourseWorkHourRangesStore',
+        registrationLoadRangesStore: 'registrationLoadRangesStore',
+        futureTermsStore: 'futureTermsStore'
+    },
 	width: "100%",
     height: "100%", 
     initComponent: function() {
@@ -27202,6 +27290,45 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				        items: [
 				            {boxLabel: "Yes", itemId: "additionalAcademicProgramInformationNeededCheckOn", name: "additionalAcademicProgramInformationNeeded", inputValue:"true"},
 				            {boxLabel: "No", itemId: "additionalAcademicProgramInformationNeededCheckOff", name: "additionalAcademicProgramInformationNeeded", inputValue:"false"}]
+					},{
+				        xtype: 'combobox',
+				        name: 'registrationLoadName',
+				        itemId: 'fieldRegistrationLoadCombo',
+				        fieldLabel: 'Field Registration Load',
+				        emptyText: 'Select One',
+				        store: me.registrationLoadRangesStore,
+				        valueField: 'name',
+				        displayField: 'rangeLabel',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true
+					},{
+				        xtype: 'combobox',
+				        name: 'courseWorkWeeklyHoursName',
+				        itemId: 'courseWorkWeeklyHoursCombo',
+				        fieldLabel: 'Hours per Week for Coursework',
+				        emptyText: 'Select One',
+				        store: me.weeklyCourseWorkHourRangesStore,
+				        valueField: 'name',
+				        displayField: 'rangeLabel',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true
+					},{
+				        xtype: 'combobox',
+				        name: 'anticipatedGraduationDateTermCode',
+				        itemId: 'anticipatedGraduationDateTermCodeCombo',
+				        fieldLabel: 'Anticipated Graduation Date',
+				        emptyText: 'Select One',
+				        store: me.futureTermsStore,
+				        valueField: 'code',
+				        displayField: 'name',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true
 					}]
 				    
 				    }]

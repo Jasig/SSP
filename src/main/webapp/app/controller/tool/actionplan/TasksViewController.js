@@ -24,7 +24,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
     	appEventsController: 'appEventsController',
     	formUtils: 'formRendererUtils',
     	model: 'currentTask',
-    	person: 'currentPerson',
+    	personLite: 'personLite',
     	store: 'tasksStore' 
     },
     
@@ -43,7 +43,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
 	
 	init: function() {
 		this.url = this.apiProperties.createUrl( this.apiProperties.getItemUrl('personTask') );
-		this.url = this.url.replace('{id}',this.person.get('id'));
+		this.url = this.url.replace('{id}',this.personLite.get('id'));
 
 		return this.callParent(arguments);
     },
@@ -123,7 +123,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
         if (model.get('id') != "") 
         {
     		// test if this is a student task
-     	   if ( model.get('createdBy').id == this.person.get('id') )
+     	   if ( model.get('createdBy').id == this.personLite.get('id') )
      	   {
      		   message = "WARNING: You are about to delete a task created by this student. Would you like to continue?"; 
      	   }

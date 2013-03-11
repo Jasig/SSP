@@ -26,7 +26,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     	confidentialityLevelsStore: 'confidentialityLevelsStore',
     	formUtils: 'formRendererUtils',
     	model: 'currentTask',
-    	person: 'currentPerson'
+    	personLite: 'personLite'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -51,7 +51,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 		me.authenticatedPerson.applyConfidentialityLevelsFilter( me.confidentialityLevelsStore );
 		
 		me.url = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personTask') );
-		me.url = me.url.replace('{id}',me.person.get('id'));
+		me.url = me.url.replace('{id}',me.personLite.get('id'));
 		
 		me.initForm();
 		
@@ -104,7 +104,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     		if (id == "")
     		{
         		model.set('type','SSP');
-        		model.set('personId', this.person.get('id') );    		
+        		model.set('personId', this.personLite.get('id') );
         		model.set('confidentialityLevel',{id: form.getValues().confidentialityLevelId});
     			// add the task
     			this.apiProperties.makeRequest({
