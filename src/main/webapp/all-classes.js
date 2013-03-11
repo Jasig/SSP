@@ -18512,6 +18512,14 @@ Ext.define('Ssp.view.person.EditPerson', {
 			    	text: 'Retrieve from External',
 			    	itemId: 'retrieveFromExternalButton'
 			    },{
+			        fieldLabel: 'Username',
+			        name: 'username',
+			        minLength: 4,
+			        maxLength: 100,
+			        itemId: 'username',
+			        allowBlank:false,
+			        width: 350
+			    },{
 			        fieldLabel: 'Home Phone',
 			        name: 'homePhone',
 			        emptyText: 'xxx-xxx-xxxx',
@@ -24024,12 +24032,6 @@ Ext.define('Ssp.model.Person', {
 		if( jsonData.referralSources == "" )
 		{
 			jsonData.referralSources=null;
-		}
-		
-		// TODO: Handle username field
-		if (jsonData.username == "")
-		{
-			jsonData.username = jsonData.firstName +'.'+jsonData.lastName;			
 		}
 
 		return jsonData;
