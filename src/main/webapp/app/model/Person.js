@@ -209,12 +209,6 @@ Ext.define('Ssp.model.Person', {
 		{
 			jsonData.referralSources=null;
 		}
-		
-		// TODO: Handle username field
-		if (jsonData.username == "")
-		{
-			jsonData.username = jsonData.firstName +'.'+jsonData.lastName;			
-		}
 
 		return jsonData;
     },
