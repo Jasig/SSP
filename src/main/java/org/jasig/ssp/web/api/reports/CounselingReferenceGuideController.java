@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
 import org.jasig.ssp.factory.reference.ChallengeTOFactory;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -32,6 +33,7 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ChallengeService;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,13 +78,14 @@ public class CounselingReferenceGuideController extends ReportBaseController {
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 
-		final PagingWrapper<Challenge> challengeWrapper = challengeService.getAll(null);
+		final PagingWrapper<Challenge> challengeWrapper = challengeService.getAll(SortingAndPaging.
+				createForSingleSortAll(ObjectStatus.ACTIVE, "name", "ASC"));
+		
 		final List<ChallengeTO> challengeTOs = challengeTOactory.asTOList(challengeWrapper.getRows());	
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
 		SearchParameters.addReportTitleToMap(REPORT_TITLE, parameters);
 		generateReport(response, parameters, challengeTOs, REPORT_URL, reportType, REPORT_FILE_TITLE);
-		
 		
 	}
 
