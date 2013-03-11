@@ -10733,6 +10733,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     
     control: {
         nameField: '#studentName',
+        photoUrlField: '#studentPhoto',
+
         
         studentIdField: '#studentId',
         birthDateField: '#birthDate',
@@ -10740,8 +10742,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         programStatusField: '#programStatus',
 
         gpaField: '#cumGPA',
-        //hoursEarnedField: '#hrsEarned',
-        //hoursAttemptedField: '#hrsAttempted',
 
         academicProgramsField: '#academicPrograms',
 
@@ -10836,6 +10836,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         me.profileServiceReasonsStore.removeAll();
 
         var nameField = me.getNameField();
+        var photoUrlField = me.getPhotoUrlField();
         var birthDateField = me.getBirthDateField();
         var studentTypeField = me.getStudentTypeField();
         var programStatusField = me.getProgramStatusField();
@@ -10854,12 +10855,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
         }
 
-
         // load service reasons
         if (personResponse.serviceReasons != null) {
             me.profileServiceReasonsStore.loadData(me.person.get('serviceReasons'));
         }
-
 
         // load general student record
         me.getView().loadRecord(me.person);
@@ -10868,6 +10867,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         nameField.setValue(fullName);
         birthDateField.setValue(me.person.getFormattedBirthDate());
         studentTypeField.setValue(me.person.getStudentTypeName());
+        photoUrlField.setSrc(me.person.getPhotoUrl());
         programStatusField.setValue(me.person.getProgramStatusName());
         earlyAlertField.setValue(me.person.getEarlyAlertRatio());
 
@@ -10896,8 +10896,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         if ( gpa ) {
 			var gpaFormatted = Ext.util.Format.number(gpa.gradePointAverage, '0.00');
             me.getGpaField().setValue(gpaFormatted);
-            me.getHoursEarnedField().setValue(gpa.creditHoursForGpa);
-            me.getHoursAttemptedField().setValue(gpa.creditHoursAttempted);
         }
         var programs = transcript.get('programs');
         if ( programs ) {
@@ -20058,10 +20056,12 @@ Ext.define('Ssp.view.tools.profile.Person', {
             },
             
             items: [{
-                xtype: 'label',
-                html: '<img src=""  height="120" width="100" />',
-                text: '',
-                itemId: 'studentImage'
+                xtype: 'image',
+                fieldLabel: '',
+                src: 'photoUrl',
+                itemId: 'studentPhoto',
+                width:150,
+                height:150
             }, {
                 xtype: 'fieldset',
                 border: 0,
@@ -25204,6 +25204,21 @@ Ext.define('Ssp.model.Person', {
     	}
     },
     
+    getPhotoUrl: function(){
+    	return  this.get('photoUrl')   	
+    },    
+    
+    setPhotoUrl: function( value ){
+    	var me=this;
+    	if (value != "")
+    	{
+        	if ( me.get('photoUrl') != null)
+        	{
+        		me.set('photoUrl',value);
+        	}    		
+    	}
+    },
+    
     getProgramStatusName: function(){
     	return this.get('currentProgramStatusName')? this.get('currentProgramStatusName') : "";   	
     },
@@ -25299,6 +25314,7 @@ Ext.define('Ssp.model.Person', {
     	me.set('secondaryEmailAddress', jsonData.secondaryEmailAddress);
     	me.set('birthDate', jsonData.birthDate);
     	me.set('username', jsonData.username);
+    	me.set('photoUrl', jsonData.photoUrl);
     }
 });
 /*

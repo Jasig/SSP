@@ -40,10 +40,12 @@ Ext.define('Ssp.view.tools.profile.Person', {
             },
             
             items: [{
-                xtype: 'label',
-                html: '<img src=""  height="120" width="100" />',
-                text: '',
-                itemId: 'studentImage'
+                xtype: 'image',
+                fieldLabel: '',
+                src: 'photoUrl',
+                itemId: 'studentPhoto',
+                width:150,
+                height:150
             }, {
                 xtype: 'fieldset',
                 border: 0,

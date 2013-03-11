@@ -35,6 +35,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     
     control: {
         nameField: '#studentName',
+        photoUrlField: '#studentPhoto',
+
         
         studentIdField: '#studentId',
         birthDateField: '#birthDate',
@@ -42,8 +44,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         programStatusField: '#programStatus',
 
         gpaField: '#cumGPA',
-        //hoursEarnedField: '#hrsEarned',
-        //hoursAttemptedField: '#hrsAttempted',
 
         academicProgramsField: '#academicPrograms',
 
@@ -138,6 +138,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         me.profileServiceReasonsStore.removeAll();
 
         var nameField = me.getNameField();
+        var photoUrlField = me.getPhotoUrlField();
         var birthDateField = me.getBirthDateField();
         var studentTypeField = me.getStudentTypeField();
         var programStatusField = me.getProgramStatusField();
@@ -156,12 +157,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
         }
 
-
         // load service reasons
         if (personResponse.serviceReasons != null) {
             me.profileServiceReasonsStore.loadData(me.person.get('serviceReasons'));
         }
-
 
         // load general student record
         me.getView().loadRecord(me.person);
@@ -170,6 +169,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         nameField.setValue(fullName);
         birthDateField.setValue(me.person.getFormattedBirthDate());
         studentTypeField.setValue(me.person.getStudentTypeName());
+        photoUrlField.setSrc(me.person.getPhotoUrl());
         programStatusField.setValue(me.person.getProgramStatusName());
         earlyAlertField.setValue(me.person.getEarlyAlertRatio());
 
@@ -198,8 +198,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         if ( gpa ) {
 			var gpaFormatted = Ext.util.Format.number(gpa.gradePointAverage, '0.00');
             me.getGpaField().setValue(gpaFormatted);
-            me.getHoursEarnedField().setValue(gpa.creditHoursForGpa);
-            me.getHoursAttemptedField().setValue(gpa.creditHoursAttempted);
         }
         var programs = transcript.get('programs');
         if ( programs ) {
