@@ -110,7 +110,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				            {boxLabel: 'D-F', name: 'gradeTypicallyEarned', inputValue: "DF"},
 				            {boxLabel: 'F', name: 'gradeTypicallyEarned', inputValue: "F"}
 				    		]
-				        }]
+				    }]
 				    }]
 				});
 		

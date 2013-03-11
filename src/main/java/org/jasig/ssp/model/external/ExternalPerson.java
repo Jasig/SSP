@@ -324,5 +324,4 @@ public class ExternalPerson extends AbstractExternalData implements
 	public void setCoachSchoolId(final String coachSchoolId) {
 		this.coachSchoolId = coachSchoolId;
 	}
-
 }

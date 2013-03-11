@@ -43,6 +43,8 @@ import org.jasig.ssp.service.reference.MaritalStatusService;
 import org.jasig.ssp.service.reference.MilitaryAffiliationService;
 import org.jasig.ssp.service.reference.StudentStatusService;
 import org.jasig.ssp.service.reference.VeteranStatusService;
+import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
@@ -121,6 +123,12 @@ public class IntakeController extends AbstractBaseController {
 
 	@Autowired
 	private transient VeteranStatusService veteranStatusService;
+	
+	@Autowired
+	private transient ConfigService configService;
+	
+	@Autowired
+	private transient TermService termService;
 
 	/**
 	 * Save changes to an IntakeForm
@@ -172,8 +180,9 @@ public class IntakeController extends AbstractBaseController {
 	 * Return all the data that is necessary to complete an intake form.
 	 * 
 	 * @return Service response with success value, in the JSON format.
+	 * @throws ObjectNotFoundException 
 	 */
-	public Map<String, Object> referenceData() {
+	public Map<String, Object> referenceData() throws ObjectNotFoundException {
 		final Map<String, Object> refData = new HashMap<String, Object>();
 
 		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
@@ -209,7 +218,9 @@ public class IntakeController extends AbstractBaseController {
 		refData.put("employmentShifts", EmploymentShifts.values());
 		refData.put("genders", Genders.values());
 		refData.put("states", States.values());
-
+		refData.put("futureTerms",termService.getCurrentAndFutureTerms());
+		refData.put("weeklyCourseWorkHourRanges", configService.getByName("registration_load_ranges").getValue());
+		refData.put("registrationLoadRanges", configService.getByName("weekly_course_work_hour_ranges").getValue());
 		return refData;
 	}
 

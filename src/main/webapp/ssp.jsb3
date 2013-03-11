@@ -754,6 +754,36 @@
                     "path": "/app/controller/tool/actionplan/"
                 },
                 {
+                    "clsName": "Ssp.model.LoadRange",
+                    "name": "LoadRange.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.RegistrationLoadRanges",
+                    "name": "RegistrationLoadRanges.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.WeeklyCourseWorkHourRanges",
+                    "name": "WeeklyCourseWorkHourRanges.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.external.AbstractExternal",
+                    "name": "AbstractExternal.js",
+                    "path": "/app/model/external/"
+                },
+                {
+                    "clsName": "Ssp.model.external.Term",
+                    "name": "Term.js",
+                    "path": "/app/model/external/"
+                },
+                {
+                    "clsName": "Ssp.store.external.FutureTerms",
+                    "name": "FutureTerms.js",
+                    "path": "/app/store/external/"
+                },
+                {
                     "clsName": "Ssp.controller.tool.studentintake.StudentIntakeToolViewController",
                     "name": "StudentIntakeToolViewController.js",
                     "path": "/app/controller/tool/studentintake/"

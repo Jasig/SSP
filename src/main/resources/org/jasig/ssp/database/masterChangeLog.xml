@@ -86,5 +86,8 @@
     <include file="org/jasig/ssp/database/integrationchangesets/i000006.xml" />
     <include file="org/jasig/ssp/database/changesets/000021.xml" />
 	<include file="org/jasig/ssp/database/changesets/000023.xml" />
+    <!-- Intentionally out of order. 22 was orginally on the 1.2 branch
+    but had to be *moved* to master, at which time 23 was already present. -->
+	<include file="org/jasig/ssp/database/changesets/000022.xml" />
 
 </databaseChangeLog>

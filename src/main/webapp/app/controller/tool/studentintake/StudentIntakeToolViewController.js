@@ -37,11 +37,16 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     	militaryAffiliationsStore: 'militaryAffiliationsStore',
         personLite: 'personLite',
         person: 'currentPerson',
+        
         statesStore: 'statesStore',
         service: 'studentIntakeService',
         studentStatusesStore: 'studentStatusesStore',
         studentIntake: 'currentStudentIntake',
-    	veteranStatusesStore: 'veteranStatusesStore'        
+    	veteranStatusesStore: 'veteranStatusesStore',
+    	registrationLoadRangesStore: 'registrationLoadRangesStore',
+    	futureTermsStore:'futureTermsStore',
+    	weeklyCourseWorkHourRangesStore:'weeklyCourseWorkHourRangesStore'
+    	
     }, 
     config: {
     	studentIntakeForm: null
@@ -218,6 +223,11 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var educationLevels = me.formUtils.alphaSortByField( formData.data.referenceData.educationLevels, 'name' );
 		var fundingSources = me.formUtils.alphaSortByField( formData.data.referenceData.fundingSources, 'name' );
 		var studentStatuses =  me.formUtils.alphaSortByField( formData.data.referenceData.studentStatuses, 'name' );
+		var futureTerms =  me.formUtils.valueSortByField( formData.data.referenceData.futureTerms, 'startDate' );
+		var weeklyCourseWorkHourRanges =  JSON.parse(formData.data.referenceData.weeklyCourseWorkHourRanges);
+		weeklyCourseWorkHourRanges = me.formUtils.valueSortByField( weeklyCourseWorkHourRanges, 'rangeStart' );
+		var registrationLoadRanges = JSON.parse(formData.data.referenceData.registrationLoadRanges);
+		registrationLoadRanges =  me.formUtils.valueSortByField(registrationLoadRanges , 'rangeStart' );
 		var militaryAffiliations = me.formUtils.alphaSortByField( formData.data.referenceData.militaryAffiliations, 'name' );
 		
 		me.challengesStore.loadData( challenges );
@@ -228,12 +238,17 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		me.employmentShiftsStore.loadData( formData.data.referenceData.employmentShifts );
 		me.ethnicitiesStore.loadData( formData.data.referenceData.ethnicities );
 		me.fundingSourcesStore.loadData( fundingSources );
+		
 		me.gendersStore.loadData( formData.data.referenceData.genders );
 		me.maritalStatusesStore.loadData( formData.data.referenceData.maritalStatuses );
 		me.militaryAffiliationsStore.loadData( militaryAffiliations );
+		
 		me.statesStore.loadData( formData.data.referenceData.states );
 		me.studentStatusesStore.loadData( studentStatuses );
-		me.veteranStatusesStore.loadData( formData.data.referenceData.veteranStatuses ); 
+		me.veteranStatusesStore.loadData( formData.data.referenceData.veteranStatuses );
+		me.futureTermsStore.loadData( futureTerms );
+		me.registrationLoadRangesStore.loadData(registrationLoadRanges);
+		me.weeklyCourseWorkHourRangesStore.loadData(weeklyCourseWorkHourRanges);
 		
 		// LOAD RECORDS FOR EACH OF THE FORMS
 		

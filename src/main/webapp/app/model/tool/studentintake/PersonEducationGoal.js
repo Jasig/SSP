@@ -27,5 +27,8 @@ Ext.define('Ssp.model.tool.studentintake.PersonEducationGoal', {
     		 {name: 'plannedOccupation', type: 'string'},
     		 {name: 'howSureAboutOccupation', type:'int'},
     		 {name: 'confidentInAbilities', type: 'boolean'},
+    		 {name: 'courseWorkWeeklyHoursName', type: 'string'},
+             {name: 'registrationLoadName', type: 'string'},
+             {name: 'anticipatedGraduationDateTermCode', type: 'string'},
     		 {name: 'additionalAcademicProgramInformationNeeded', type: 'boolean'}]
 });

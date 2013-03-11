@@ -4384,6 +4384,24 @@ Ext.define('Ssp.util.FormRendererUtils',{
 	 * 
 	 * @returns - returns the sorted array
 	 */
+    valueSortByField: function( arrayToSort, fieldName ){
+    	return Ext.Array.sort(arrayToSort, function(a, b){
+    		 var nameA=a[fieldName], nameB=b[fieldName]
+    		 if (nameA < nameB) //sort string ascending
+    		  return -1
+    		 if (nameA > nameB)
+    		  return 1
+    		 return 0 //default return value (no sorting)
+    		});
+    },  
+    
+    /**
+	 * @params
+	 * @arrayToSort - the array to sort props on
+	 * @fieldName - the field name to sort on
+	 * 
+	 * @returns - returns the sorted array
+	 */
     alphaSortByField: function( arrayToSort, fieldName ){
     	return Ext.Array.sort(arrayToSort, function(a, b){
     		 var nameA=a[fieldName].toLowerCase(), nameB=b[fieldName].toLowerCase()
@@ -4393,7 +4411,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
     		  return 1
     		 return 0 //default return value (no sorting)
     		});
-    },    
+    },
     
     /**
      * @params
@@ -12918,6 +12936,180 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
  * specific language governing permissions and limitations
  * under the License.
  */
+Ext.define('Ssp.model.LoadRange', {
+    extend: 'Ext.data.Model',
+    fields: [{name: 'name', type: 'string'},
+             {name: 'description', type: 'string'},
+             {name: 'rangeLabel', type: 'string'},
+             {name: 'rangeStart', type: 'string'},
+             {name: 'rangeEnd', type: 'string'}]
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.store.reference.RegistrationLoadRanges', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.LoadRange',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('registrationLoadRanges')});   
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.store.reference.WeeklyCourseWorkHourRanges', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.LoadRange',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('weeklyCourseWorkHourRanges')});   
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.external.AbstractExternal', {
+    extend: 'Ext.data.Model',
+    fields: [],
+    
+	populateFromGenericObject: function( record ){
+		if (record != null)
+		{
+			for (fieldName in this.data)
+	    	{
+				if ( record[fieldName] )
+	    		{
+	    			this.set( fieldName, record[fieldName] );
+	    		}
+	    	}
+		}
+    }
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.external.Term', {
+    extend: 'Ssp.model.external.AbstractExternal',
+    fields: [{name: 'name', type: 'string'},
+             {name: 'code', type: 'string'},
+             {name: 'startDate', type: 'date', dateFormat: 'time'},
+             {name: 'endDate', type: 'date', dateFormat: 'time'},
+             {name: 'reportYear', type: 'int'}
+             ]
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.store.external.FutureTerms', {
+	extend: 'Ext.data.Store',
+	model: 'Ssp.model.external.Term',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },
+   
+    constructor: function(){
+    	Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('futureTerms') ),
+			  autoLoad: false });
+    	return this.callParent(arguments);	    
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
@@ -12939,11 +13131,16 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     	militaryAffiliationsStore: 'militaryAffiliationsStore',
         personLite: 'personLite',
         person: 'currentPerson',
+        
         statesStore: 'statesStore',
         service: 'studentIntakeService',
         studentStatusesStore: 'studentStatusesStore',
         studentIntake: 'currentStudentIntake',
-    	veteranStatusesStore: 'veteranStatusesStore'        
+    	veteranStatusesStore: 'veteranStatusesStore',
+    	registrationLoadRangesStore: 'registrationLoadRangesStore',
+    	futureTermsStore:'futureTermsStore',
+    	weeklyCourseWorkHourRangesStore:'weeklyCourseWorkHourRangesStore'
+    	
     }, 
     config: {
     	studentIntakeForm: null
@@ -13120,6 +13317,11 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var educationLevels = me.formUtils.alphaSortByField( formData.data.referenceData.educationLevels, 'name' );
 		var fundingSources = me.formUtils.alphaSortByField( formData.data.referenceData.fundingSources, 'name' );
 		var studentStatuses =  me.formUtils.alphaSortByField( formData.data.referenceData.studentStatuses, 'name' );
+		var futureTerms =  me.formUtils.valueSortByField( formData.data.referenceData.futureTerms, 'startDate' );
+		var weeklyCourseWorkHourRanges =  JSON.parse(formData.data.referenceData.weeklyCourseWorkHourRanges);
+		weeklyCourseWorkHourRanges = me.formUtils.valueSortByField( weeklyCourseWorkHourRanges, 'rangeStart' );
+		var registrationLoadRanges = JSON.parse(formData.data.referenceData.registrationLoadRanges);
+		registrationLoadRanges =  me.formUtils.valueSortByField(registrationLoadRanges , 'rangeStart' );
 		var militaryAffiliations = me.formUtils.alphaSortByField( formData.data.referenceData.militaryAffiliations, 'name' );
 		
 		me.challengesStore.loadData( challenges );
@@ -13130,12 +13332,17 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		me.employmentShiftsStore.loadData( formData.data.referenceData.employmentShifts );
 		me.ethnicitiesStore.loadData( formData.data.referenceData.ethnicities );
 		me.fundingSourcesStore.loadData( fundingSources );
+		
 		me.gendersStore.loadData( formData.data.referenceData.genders );
 		me.maritalStatusesStore.loadData( formData.data.referenceData.maritalStatuses );
 		me.militaryAffiliationsStore.loadData( militaryAffiliations );
+		
 		me.statesStore.loadData( formData.data.referenceData.states );
 		me.studentStatusesStore.loadData( studentStatuses );
-		me.veteranStatusesStore.loadData( formData.data.referenceData.veteranStatuses ); 
+		me.veteranStatusesStore.loadData( formData.data.referenceData.veteranStatuses );
+		me.futureTermsStore.loadData( futureTerms );
+		me.registrationLoadRangesStore.loadData(registrationLoadRanges);
+		me.weeklyCourseWorkHourRangesStore.loadData(weeklyCourseWorkHourRanges);
 		
 		// LOAD RECORDS FOR EACH OF THE FORMS
 		
@@ -21593,7 +21800,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				            {boxLabel: 'D-F', name: 'gradeTypicallyEarned', inputValue: "DF"},
 				            {boxLabel: 'F', name: 'gradeTypicallyEarned', inputValue: "F"}
 				    		]
-				        }]
+				    }]
 				    }]
 				});
 		
@@ -25347,6 +25554,9 @@ Ext.define('Ssp.model.tool.studentintake.PersonEducationGoal', {
     		 {name: 'plannedOccupation', type: 'string'},
     		 {name: 'howSureAboutOccupation', type:'int'},
     		 {name: 'confidentInAbilities', type: 'boolean'},
+    		 {name: 'courseWorkWeeklyHoursName', type: 'string'},
+             {name: 'registrationLoadName', type: 'string'},
+             {name: 'anticipatedGraduationDateTermCode', type: 'string'},
     		 {name: 'additionalAcademicProgramInformationNeeded', type: 'boolean'}]
 });
 /*
@@ -28175,6 +28385,12 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.studentintake.EducationGoalsViewController',
+    inject:{
+    	formUtils: 'formRendererUtils',
+        weeklyCourseWorkHourRangesStore: 'weeklyCourseWorkHourRangesStore',
+        registrationLoadRangesStore: 'registrationLoadRangesStore',
+        futureTermsStore: 'futureTermsStore'
+    },
 	width: "100%",
     height: "100%", 
     initComponent: function() {
@@ -28270,6 +28486,45 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				        items: [
 				            {boxLabel: "Yes", itemId: "additionalAcademicProgramInformationNeededCheckOn", name: "additionalAcademicProgramInformationNeeded", inputValue:"true"},
 				            {boxLabel: "No", itemId: "additionalAcademicProgramInformationNeededCheckOff", name: "additionalAcademicProgramInformationNeeded", inputValue:"false"}]
+					},{
+				        xtype: 'combobox',
+				        name: 'registrationLoadName',
+				        itemId: 'fieldRegistrationLoadCombo',
+				        fieldLabel: 'Field Registration Load',
+				        emptyText: 'Select One',
+				        store: me.registrationLoadRangesStore,
+				        valueField: 'name',
+				        displayField: 'rangeLabel',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true
+					},{
+				        xtype: 'combobox',
+				        name: 'courseWorkWeeklyHoursName',
+				        itemId: 'courseWorkWeeklyHoursCombo',
+				        fieldLabel: 'Hours per Week for Coursework',
+				        emptyText: 'Select One',
+				        store: me.weeklyCourseWorkHourRangesStore,
+				        valueField: 'name',
+				        displayField: 'rangeLabel',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true
+					},{
+				        xtype: 'combobox',
+				        name: 'anticipatedGraduationDateTermCode',
+				        itemId: 'anticipatedGraduationDateTermCodeCombo',
+				        fieldLabel: 'Anticipated Graduation Date',
+				        emptyText: 'Select One',
+				        store: me.futureTermsStore,
+				        valueField: 'code',
+				        displayField: 'name',
+				        mode: 'local',
+				        typeAhead: true,
+				        queryMode: 'local',
+				        allowBlank: true
 					}]
 				    
 				    }]

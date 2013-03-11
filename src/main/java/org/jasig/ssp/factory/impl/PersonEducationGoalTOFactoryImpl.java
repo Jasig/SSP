@@ -80,7 +80,9 @@ public class PersonEducationGoalTOFactoryImpl extends
 		model.setHowSureAboutOccupation(tObject.getHowSureAboutOccupation());
 		model.setConfidentInAbilities(tObject.getConfidentInAbilities());
 		model.setAdditionalAcademicProgramInformationNeeded(tObject.getAdditionalAcademicProgramInformationNeeded());
-		
+		model.setCourseWorkWeeklyHoursName(tObject.getCourseWorkWeeklyHoursName());
+		model.setRegistrationLoadName(tObject.getRegistrationLoadName());
+		model.setAnticipatedGraduationDateTermCode(tObject.getAnticipatedGraduationDateTermCode());
 		model.setEducationGoal(tObject.getEducationGoalId() == null ? null
 				: educationGoalService.get(tObject.getEducationGoalId()));
 		

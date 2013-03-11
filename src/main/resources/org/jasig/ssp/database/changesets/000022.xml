@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="schema" value="public" dbms="postgresql" />
+	<property name="schema" value="dbo" dbms="mssql" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet id="add config for registration_load_ranges" author="jim.stanley">
+		<insert tableName="config">
+			<column name="id" value="5e42ccb0-876c-11e2-9e96-0800200c9a66" />
+			<column name="name" value="registration_load_ranges" />
+			<column name="description"
+					value="To properly indicate the term load activity ranges need to be sepcified, is proper json with range name and [start,end] range." />
+			<column name="value"><![CDATA[[{"name":"LT","description":"Light part time schedule.","rangeStart":1,"rangeEnd":6,"rangeLabel":"1-6"},
+											{"name":"PT","description":"Part time student","rangeStart":7,"rangeEnd":12,"rangeLabel":"7-12"}, 
+											{"name":"FT","description":"Full time student","rangeStart":13,"rangeEnd":1000,"rangeLabel":"13 or more"}]]]></column>
+			<column name="default_value"><![CDATA[[{"name":"LT","description":"Light part time schedule","rangeStart":1,"rangeEnd":6,"rangeLabel":"1-6"},
+											{"name":"PT","description":"Part time student","rangeStart":7,"rangeEnd":12,"rangeLabel":"7-12"}, 
+											{"name":"FT","description":"Full time student","rangeStart":13,"rangeEnd":1000,"rangeLabel":"13 or more"}]]]></column>
+			<column name="created_date" valueDate="2013-03-07T12:00:00" />
+			<column name="modified_date" valueDate="2013-03-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="105" />
+		</insert>
+		<rollback>
+			<delete tableName="config">
+				<where>id='5e42ccb0-876c-11e2-9e96-0800200c9a66'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="add config for weekly_course_work_hour_ranges" author="jim.stanley">
+		<insert tableName="config">
+			<column name="id" value="bc5f37e0-880f-11e2-9e96-0800200c9a66" />
+			<column name="name" value="weekly_course_work_hour_ranges" />
+			<column name="description"
+					value="To properly indate the weekly course work hour ranges need to be sepcified, is proper json with range name and [start,end] range." />
+			<column name="value"><![CDATA[[{"name":"LTPT","description":"Light Load","rangeStart":0,"rangeEnd":5,"rangeLabel":"0-5"},
+			{"name":"Moderate","description":"Moderate Load","rangeStart":6,"rangeEnd":10,"rangeLabel":"6-10"}, 
+			{"name":"LTFT","description":"Light load Full Time Student","rangeStart":11,"rangeEnd":15,"rangeLabel":"11-15"},
+			{"name":"STFT","description":"Standard load Full Time Student","rangeStart":16,"rangeEnd":20,"rangeLabel":"16-20"},
+			{"name":"HVFT","description":"Heavy load Full Time Student","rangeStart":21,"rangeEnd":1000,"rangeLabel":"More Than 20"}]]]></column>
+			<column name="default_value"><![CDATA[[{"name":"LTPT","description":"Light Load","rangeStart":0,"rangeEnd":5,"rangeLabel":"0-5"},
+			{"name":"Moderate","description":"Moderate Load","rangeStart":6,"rangeEnd":10,"rangeLabel":"6-10"}, 
+			{"name":"LTFT","description":"Light load Full Time Student","rangeStart":11,"rangeEnd":15,"rangeLabel":"11-15"},
+			{"name":"STFT","description":"Standard load Full Time Student","rangeStart":16,"rangeEnd":20,"rangeLabel":"16-20"},
+			{"name":"HVFT","description":"Heavy load Full Time Student","rangeStart":21,"rangeEnd":1000,"rangeLabel":"More Than 20"}]]]></column>
+			<column name="created_date" valueDate="2013-03-07T12:00:00" />
+			<column name="modified_date" valueDate="2013-03-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="106" />
+		</insert>
+		<rollback>
+			<delete tableName="config">
+				<where>id='bc5f37e0-880f-11e2-9e96-0800200c9a66'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="Add wrk load, exp. grad dates to person_education_goal"
+		author="jim.stanley">
+		<addColumn tableName="person_education_goal">
+			<column name="course_work_weekly_hours_name" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<addColumn tableName="person_education_goal">
+			<column name="registration_load_name" type="${nvarchar.type}(50)" >
+			<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<addColumn tableName="person_education_goal">
+			<column name="anticipated_graduation_date_term_code" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="person_education_goal" columnName="course_work_weekly_hours_name" />
+			<dropColumn tableName="person_education_goal" columnName="registration_load_name" />
+			<dropColumn tableName="person_education_goal" columnName="anticipated_graduation_date_term_code" />
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

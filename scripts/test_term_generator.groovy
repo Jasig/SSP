@@ -38,17 +38,17 @@ import java.util.UUID
 import org.jasig.ssp.model.Person
 import static Constants.*
 class Constants{
-	static final base_terms_start_date = "1983-08-20T00:00:00"
+	static final base_terms_start_date = "2014-08-20T00:00:00"
 	static final term_codes = ["FA","WN","SP","SU"]
 	static final term_names = ["Fall","Winter","Spring","Summer"]
 
 	/* Change Sets, change as needed */
-	static final fileName = "000013-test.xml";
+	static final fileName = "000014-test.xml";
 	static final TEST_LOCATION_CHANGESET = './src/test/resources/org/jasig/ssp/database/changesets/'
 	static final FULL_DATA_BASE_LOCATION_CHANGESET = './src/main/resources/org/jasig/ssp/database/testingchangesets/'
 	static final BASE_LOCATION_CHANGESET = FULL_DATA_BASE_LOCATION_CHANGESET
 	static final author = "james.stanley"
-	static final fileDescription = "Adding Set of Terms Data Set"
+	static final fileDescription = "Adding Set of Future Terms Data Set"
 	
 	static final def eol = System.properties.'line.separator'
 	
@@ -70,7 +70,7 @@ xml.databaseChangeLog( xmlns : "http://www.liquibase.org/xml/ns/dbchangelog"
 void generateTerms(xml){
 	String dateString = offSetDate(base_terms_start_date, 0)
 	ArrayList<String> fullCodes = new ArrayList<String>()
-	for(Integer k = 0; k <= 26; k++)
+	for(Integer k = 0; k <= 4; k++)
 		for(Integer i = 0; i <= 3; i++){
 			String code = term_codes[i]
 			String name = term_names[i]
