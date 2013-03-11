@@ -478,6 +478,20 @@
 		<div class="ea-label">
 			<span>Student Type:</span>
 		</div>
+		
+		<!-- Special Service Groups 
+		<div class="ea-input">
+			<select  class="input-special-service-group" id="caseloadActivitySpecialServiceGroupIds" name="specialServiceGroupIds"
+				multiple="multiple">
+				<option value="">${not_applicable}</option>
+				</select>
+		</div>
+		<div class="ea-label">
+			<span>Special Service Groups:</span>
+		</div>
+		<div class="ea-clear"></div>-->
+		
+		
 		<div class="ea-clear"></div>
 		<!-- Service Reason -->
 		<div class="ea-input">
@@ -616,6 +630,16 @@
 	<h1>Current Caseload Statuses Report</h1>
 	<form action="/ssp/api/1/report/Caseload/" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+		<!-- Home Department -->
+		<div class="ea-input">
+			<select id="currentCaseloadStatusHomeDepartment" name="homeDepartment" class="input-home-department-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Home Department:</span>
+		</div>
+		<div class="ea-clear"></div>
 		
 
 		<!-- Student Type -->
@@ -639,18 +663,20 @@
 			<span>Service Reason:</span>
 		</div>
 		<div class="ea-clear"></div>
-
-		<!-- Home Department -->
+		
+		<!-- Special Service Groups -->
 		<div class="ea-input">
-			<select id="currentCaseloadStatusHomeDepartment" name="homeDepartment" class="input-home-department-group">
+			<select class="input-special-service-group" id="currentCaseloadStatusSpecialServiceGroupIds" name="specialServiceGroupIds"
+				multiple="multiple">
 				<option value="">${not_applicable}</option>
-			</select>
+				</select>
 		</div>
 		<div class="ea-label">
-			<span>Home Department:</span>
+			<span>Special Service Groups:</span>
 		</div>
 		<div class="ea-clear"></div>
 
+		
 
 		<!-- output type -->
 		<div class="ea-input">

@@ -683,7 +683,7 @@ public class CaseloadDaoTest {
 		// now one of the actual tests
 		final List<UUID> capFilter = Lists.newArrayList(Stubs.StudentTypeFixture.CAP.id());
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> capAndToFilteredResults =
-				dao.currentCaseLoadCountsByStatus(new CaseLoadSearchTO(capFilter,null,null), null);
+				dao.currentCaseLoadCountsByStatus(new CaseLoadSearchTO(capFilter,null,null, null), null);
 		List<CoachCaseloadRecordCountForProgramStatus> expectedCapFilteredRecords =
 				Lists.newArrayListWithCapacity(1);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
@@ -700,7 +700,7 @@ public class CaseloadDaoTest {
 		// another one
 		final List<UUID> ilpFilter = Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id());
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> ilpAndToFilteredResults =
-				dao.currentCaseLoadCountsByStatus(new CaseLoadSearchTO(ilpFilter,null,null), null);
+				dao.currentCaseLoadCountsByStatus(new CaseLoadSearchTO(ilpFilter,null,null, null), null);
 		List<CoachCaseloadRecordCountForProgramStatus> expectedIlpFilteredRecords =
 				Lists.newArrayListWithCapacity(1);
 		collectPersonStubToCoachStatusCount(Stubs.PersonFixture.ADVISOR_0,
@@ -731,7 +731,7 @@ public class CaseloadDaoTest {
 	public void testCurrentCaseloadCountWithStudentTypeIdFilterWithNoMatch() {
 		final List<UUID> ealFilter = Lists.newArrayList(Stubs.StudentTypeFixture.EAL.id());
 		final PagingWrapper<CoachCaseloadRecordCountForProgramStatus> ealAndToFilteredResults =
-				dao.currentCaseLoadCountsByStatus(new CaseLoadSearchTO(ealFilter,null,null), null);
+				dao.currentCaseLoadCountsByStatus(new CaseLoadSearchTO(ealFilter, null,null, null), null);
 		
 		List<CoachCaseloadRecordCountForProgramStatus> expectedFilterWithNoMatch =
 				Lists.newArrayListWithCapacity(1);

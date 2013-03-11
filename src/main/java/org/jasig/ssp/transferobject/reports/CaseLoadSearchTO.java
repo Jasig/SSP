@@ -25,6 +25,7 @@ public class CaseLoadSearchTO {
 	
 	List<UUID> studentTypeIds;
 	List<UUID> serviceReasonIds;
+	List<UUID> specialServiceGroupIds;
 	String homeDepartment;
 	
 	
@@ -39,11 +40,12 @@ public class CaseLoadSearchTO {
 	 * @param homeDepartment
 	 */
 	public CaseLoadSearchTO(List<UUID> studentTypeIds,
-			List<UUID> serviceReasonIds, String homeDepartment) {
+			List<UUID> serviceReasonIds, List<UUID> specialServiceGroupIds, String homeDepartment) {
 		super();
 		this.studentTypeIds = studentTypeIds;
 		this.serviceReasonIds = serviceReasonIds;
 		this.homeDepartment = homeDepartment;
+		this.specialServiceGroupIds = specialServiceGroupIds;
 	}
 	
 	/**
@@ -70,6 +72,20 @@ public class CaseLoadSearchTO {
 	public void setServiceReasonIds(List<UUID> serviceReasonIds) {
 		this.serviceReasonIds = serviceReasonIds;
 	}
+	/**
+	 * @return the specialServiceGroupIds
+	 */
+	public List<UUID> getSpecialServiceGroupIds() {
+		return specialServiceGroupIds;
+	}
+
+	/**
+	 * @param specialServiceGroupIds the specialServiceGroupIds to set
+	 */
+	public void setSpecialServiceGroupIds(List<UUID> specialServiceGroupIds) {
+		this.specialServiceGroupIds = specialServiceGroupIds;
+	}
+
 	/**
 	 * @return the homeDepartment
 	 */

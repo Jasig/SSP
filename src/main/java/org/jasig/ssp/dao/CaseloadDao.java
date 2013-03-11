@@ -191,7 +191,8 @@ public class CaseloadDao extends AbstractDao<Person> {
 
 		return caseloadCountsByStatusWithDateRestrictions(dateRestrictions,
 				 searchForm.getStudentTypeIds(),
-				 searchForm.getServiceReasonIds(), 
+				 searchForm.getServiceReasonIds(),
+				 searchForm.getSpecialServiceGroupIds(), 
 				 searchForm.getHomeDepartment(), 
 				 sAndP);
 
@@ -210,7 +211,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 						programStatusDateTo);
 
 		return caseloadCountsByStatusWithDateRestrictions(dateRestrictions,
-					studentTypeIds, null, homeDepartment, sAndP);
+					studentTypeIds, null, null, homeDepartment, sAndP);
 
 	}
 
@@ -218,6 +219,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 		caseloadCountsByStatusWithDateRestrictions(Criterion dateRestrictions,
 													List<UUID> studentTypeIds,
 													List<UUID> serviceReasonIds,
+													List<UUID> specialServiceGroupIds,
 													String homeDepartment,
 												   SortingAndPaging sAndP) {
 
@@ -237,6 +239,14 @@ public class CaseloadDao extends AbstractDao<Person> {
 			query.createAlias("serviceReasons", "serviceReasons");
 			query.createAlias("serviceReasons.serviceReason", "serviceReason");
 			query.add(Restrictions.in("serviceReason.id", serviceReasonIds));
+		}
+		
+		if (specialServiceGroupIds != null && !specialServiceGroupIds.isEmpty()) {
+			query.createAlias("specialServiceGroups",
+				"personSpecialServiceGroups")
+				.add(Restrictions
+						.in("personSpecialServiceGroups.specialServiceGroup.id",
+								specialServiceGroupIds));
 		}
 
 		// item count
