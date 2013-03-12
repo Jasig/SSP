@@ -40,18 +40,18 @@ import static Constants.*
 class Constants{
 
 	/* Change Sets, change as needed */
-	static final fileName = "i000007-test.xml";
+	static final fileName = "i000009-test.xml";
 	static final TEST_LOCATION_CHANGESET = './src/test/resources/org/jasig/ssp/database/integrationchangesets/'
 	static final FULL_DATA_BASE_LOCATION_CHANGESET = './src/main/resources/org/jasig/ssp/database/testingintegrationchangesets/'
-	static final BASE_LOCATION_CHANGESET = TEST_LOCATION_CHANGESET
+	static final BASE_LOCATION_CHANGESET = FULL_DATA_BASE_LOCATION_CHANGESET
 	static final author = "james.stanley"
-	static final fileDescription = "Adding Set of External Data"
+	static final fileDescription = "Adding Large Set of External Data"
 	
 	static final def eol = System.properties.'line.separator'
 	
-	static final ADVISOR_NAME = "coach"
-	static final STUDENT_NAME = "student"
-	static final TOTAL_NUMBER_OF_COACHES = 2 as Integer
+	static final ADVISOR_NAME = "Adv"
+	static final STUDENT_NAME = "Stu"
+	static final TOTAL_NUMBER_OF_COACHES = 3 as Integer
 	static final STUDENT_MULTIPLIER = 4 as Integer //use this to set the multiplier that determines the number of students a coach has. (coachIndex * STUDENT_MULTIPLIER)
 	static final BASE_NUMBER_OF_STUDENTS = 5 as Integer
 	
@@ -59,7 +59,7 @@ class Constants{
 	static final String[] COURSE_NUMBER = ["1001M", "1001B","1001C"]
 	static final String[] FORMATTED_COURSE = ["Freshman Math", "Freshman Biology", "Freshman Chemistry"]
 	static final String[] SECTION_NUMBER =["A1", "B2", "C3"]
-	static final String TERM_CODE = "FA12"
+	static final String TERM_CODE = "SP13"
 	static final Integer NUMBER_OF_SUBJECTS = 3
 	static final Integer CREDIT_VALUE = "4"
 	static final String FIRST_NAME = "test"
@@ -127,7 +127,14 @@ xml.databaseChangeLog( xmlns : "http://www.liquibase.org/xml/ns/dbchangelog"
 								degreeName = DEGREE_NAME
 								programCode = degreeCode + k
 								programName = DEGREE_NAME + k
-								
+								for(Integer k = 0; k < BASE_NUMBER_OF_STUDENTS; k++){
+									schoolId = coachName + STUDENT_NAME + k
+								addExternalRegistrationStatusbyTerm(xml,
+										schoolId,
+										TERM_CODE,
+										NUMBER_OF_SUBJECTS,
+										k%3 == 0 ? 'Y':'N')
+								}
 								addExternalStudentAcademicProgress(xml,
 									schoolId,
 									degreeCode,
@@ -200,7 +207,26 @@ xml.databaseChangeLog( xmlns : "http://www.liquibase.org/xml/ns/dbchangelog"
 						}
 					 }
 }
+
 					 
+ void addExternalRegistrationStatusbyTerm(xml,
+	 schoolId,
+	 termCode,
+	 registeredCourseCount,
+	 tuitionPaid){
+	 xml.insert(tableName:'external_registration_status_by_term'){
+		 xml.column(name:"school_id", schoolId)
+		 xml.column(name:"term_code", termCode)
+		 xml.column(name:"registered_course_count", registeredCourseCount)
+		 xml.column(name:"tuition_paid",tuitionPaid)
+	 }
+ 
+	 xml.rollback{
+		 xml.delete(tableName:'external_registration_status_by_term'){
+				 xml.where("school_id='" + schoolId + "'")
+			 }
+		 }
+ }
 					 
 void addExternalStudentTranscriptCourse(xml, 
 	schoolId, 

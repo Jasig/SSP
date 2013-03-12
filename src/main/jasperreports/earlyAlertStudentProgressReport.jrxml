@@ -1,24 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Licensed to Jasig under one or more contributor license
-    agreements. See the NOTICE file distributed with this work
-    for additional information regarding copyright ownership.
-    Jasig licenses this file to you under the Apache License,
-    Version 2.0 (the "License"); you may not use this file
-    except in compliance with the License. You may obtain a
-    copy of the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on
-    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations
-    under the License.
-
--->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="earlyAlertStudentProgressReport" pageWidth="828" pageHeight="612" orientation="Landscape" columnWidth="788" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e3ea9cb2-eb95-4ad5-a580-45da78bac1f1">
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
@@ -53,7 +33,7 @@
 	<field name="primaryEmailAddress" class="java.lang.String">
 		<fieldDescription><![CDATA[primaryEmailAddress]]></fieldDescription>
 	</field>
-	<field name="registrationStatus" class="java.lang.String"/>
+	<field name="registrationStatus" class="java.lang.Integer"/>
 	<field name="earlyAlertsInitialTerm" class="java.lang.Long"/>
 	<field name="earlyAlertsComparisonTerm" class="java.lang.Long"/>
 	<field name="coachName" class="java.lang.String"/>
@@ -278,7 +258,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="5eb7a872-6b6c-4869-a5cd-cd1729905d90" mode="Transparent" x="456" y="2" width="61" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{registrationStatus} == null ? "":$F{registrationStatus}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{registrationStatus} != null && $F{registrationStatus} > 0 ? "Y":"N"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="235be1e8-005b-47b5-ad98-542b8e123ba7" mode="Transparent" x="517" y="2" width="64" height="20"/>

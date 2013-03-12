@@ -33,12 +33,14 @@ import net.sf.jasperreports.engine.JRException;
 
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
@@ -107,6 +109,10 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 	protected transient EarlyAlertService earlyAlertService;
 	@Autowired
 	protected transient EarlyAlertResponseService earlyAlertResponseService;
+	
+	@Autowired
+	protected transient RegistrationStatusByTermService registrationStatusByTermService;
+	
 
 	// @Autowired
 	// private transient PersonTOFactory factory;
@@ -182,6 +188,7 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 		final PagingWrapper<EarlyAlertStudentReportTO> comparisonPeopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
 				comparisonSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status, "person"));
 		
+		
 		List<EarlyAlertStudentReportTO> initialPeopleInfoCompressed = processReports(initialPeopleInfo, earlyAlertResponseService);
 		List<EarlyAlertStudentReportTO> comparisonPeopleInfoCompressed = processReports(comparisonPeopleInfo, earlyAlertResponseService);
 		
@@ -196,8 +203,14 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 			}
 			
 			Long finalCount = foundPerson != null ? (Long)foundPerson.getTotal() : 0;
-			if(!people.contains(initialPersonInfo))
+			if(!people.contains(initialPersonInfo)){
+				RegistrationStatusByTerm comparativeTermRegistrationStatus = registrationStatusByTermService.getForTerm(initialPersonInfo.getSchoolId(), comparisonTerm.getCode());
+				if(comparativeTermRegistrationStatus != null)
+					initialPersonInfo.setRegistrationStatus(comparativeTermRegistrationStatus.getRegisteredCourseCount());
+				else
+					initialPersonInfo.setRegistrationStatus(0);
 				people.add(new EarlyAlertStudentProgressReportTO(initialPersonInfo,initialPersonInfo.getTotal(), finalCount));
+			}
 				
 		}
 		
