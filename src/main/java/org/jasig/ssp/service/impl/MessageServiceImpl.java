@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -343,7 +344,7 @@ public class MessageServiceImpl implements MessageService {
 				mimeMessageHelper.setReplyTo(message.getSender()
 						.getEmailAddressWithName());
 			}
-
+ 
 			if (message.getRecipient() != null) { // NOPMD by jon.adams
 				mimeMessageHelper.setTo(message.getRecipient()
 						.getEmailAddressWithName());
@@ -360,7 +361,21 @@ public class MessageServiceImpl implements MessageService {
 
 			if (!StringUtils.isEmpty(message.getCarbonCopy())) { // NOPMD
 				try {
-					mimeMessageHelper.setCc(message.getCarbonCopy());
+					
+					//check for multiple addresses seperated by a comma
+					if(message.getCarbonCopy().indexOf(",") != -1)
+					{
+						StringTokenizer tokenizer = new StringTokenizer(message.getCarbonCopy(),",");
+						while(tokenizer.hasMoreTokens())
+						{
+							mimeMessageHelper.addCc(tokenizer.nextToken());
+						}
+					}
+					else
+					{
+						mimeMessageHelper.setCc(message.getCarbonCopy());
+					}
+					
 				} catch ( MessagingException e ) {
 					LOGGER.warn("Invalid carbon copy address: '{}'. Will"
 							+ " attempt to send message anyway.",
