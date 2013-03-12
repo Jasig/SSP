@@ -28187,10 +28187,11 @@ Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideChallengesViewController',
     },
     onDrop:function(node, data, overModel, dropPosition, options)
 	{   
+    	var me=this;
 		//Since the panels use two different models we need to remove the record from 
 		//the store and recreate it so it conforms to the appropriate model
-		var badRecord = this.store.findRecord('id', data.records[0].data.id);
-        var newQuestionNumber = this.store.indexOf(badRecord) + 1;
+		var badRecord = me.store.findRecord('id', data.records[0].data.id);
+        var newQuestionNumber = me.store.indexOf(badRecord) + 1;
         var newRecord = new Ssp.model.tool.shg.SelfHelpGuideQuestions();
         newRecord.data.critical = false;
         newRecord.data.mandatory = false;
@@ -28200,18 +28201,19 @@ Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideChallengesViewController',
         newRecord.data.selfHelpGuideId = this.parent.data.id;
         if(badRecord)
         {
-        	this.store.data.replace(this.store.data.getKey(badRecord),newRecord);
+        	me.store.data.replace(this.store.data.getKey(badRecord),newRecord);
         	
         	for(var i = 0; i<this.store.data.items.length; i++)
         	{
-        		this.store.data.items[i].data.questionNumber = i+1;
+        		me.store.data.items[i].data.questionNumber = i+1;
         	}
         }
         else
         {
-        	this.store.data.add(newRecord);
+        	me.store.add(newRecord);
         }
-        this.formUtils.reconfigureGridPanel( this.getView(), this.store);        
+        me.getView().getStore().loadRecords(me.store.getRange());
+        this.formUtils.reconfigureGridPanel( this.getView(), me.store);
      },
      deleteConfirmation: function( button ) {
     	 var me=this;
@@ -28219,6 +28221,11 @@ Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideChallengesViewController',
 		 var store = grid.getStore();
 		 var selection = grid.getView().getSelectionModel().getSelection()[0];
 		 var message;
+		 if(!selection)
+		 {
+		 	Ext.Msg.alert('SSP Error', 'Please select an item.'); 
+		 }
+		 else
 		 if ( selection.get('id') ) 
 		 {
 			   if ( !Ssp.util.Constants.isRestrictedAdminItemId( selection.get('id')  ) )
@@ -28236,7 +28243,9 @@ Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideChallengesViewController',
 				   Ext.Msg.alert('WARNING', 'This item is related to core SSP functionality. Please see a developer to delete this item.'); 
 			   }
 		  }else{
-			   Ext.Msg.alert('SSP Error', 'Unable to delete item.'); 
+		       store.remove(selection);
+		       me.getView().getStore().loadRecords(me.store.getRange());
+		       me.formUtils.reconfigureGridPanel( me.getView(), me.store);
 		  }
      },	
 
