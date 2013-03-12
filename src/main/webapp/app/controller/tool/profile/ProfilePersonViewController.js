@@ -42,8 +42,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         programStatusField: '#programStatus',
 
         gpaField: '#cumGPA',
-        hoursEarnedField: '#hrsEarned',
-        hoursAttemptedField: '#hrsAttempted',
+        //hoursEarnedField: '#hrsEarned',
+        //hoursAttemptedField: '#hrsAttempted',
 
         academicProgramsField: '#academicPrograms',
 
@@ -156,10 +156,12 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
         }
 
+
         // load service reasons
         if (personResponse.serviceReasons != null) {
             me.profileServiceReasonsStore.loadData(me.person.get('serviceReasons'));
         }
+
 
         // load general student record
         me.getView().loadRecord(me.person);
@@ -221,8 +223,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
 	destroy: function() {
         var me=this;
-        //me.appEventsController.removeEvent({eventName: 'emailCoach', callBackFunc: me.onEmailCoach, scope: me});
-        
         return me.callParent( arguments );
     },
 

@@ -18,9 +18,8 @@
  */
 Ext.define('Ssp.view.tools.profile.Coach', {
     extend: 'Ext.form.Panel',
-    alias : 'widget.profilecoach',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
+    alias: 'widget.profilecoach',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.profile.ProfileCoachViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
@@ -28,71 +27,125 @@ Ext.define('Ssp.view.tools.profile.Coach', {
     },
     width: '100%',
     height: '100%',
-    initComponent: function() { 
-        var me=this;
-        Ext.apply(me, 
-                {
-                    border: 0,  
-                    bodyPadding: 0,
-                    layout: 'anchor',
-                    defaults: {
-                        anchor: '100%'  
-                    },
-					items: [{
-                        xtype: 'fieldcontainer',
-                        fieldLabel: '',
-                        layout: 'hbox',
-                        margin: '0 5 0 0',
-                        defaultType: 'displayfield',
-                        fieldDefaults: {
-                            msgTarget: 'side',
-                            labelAlign: 'right',
-                            labelWidth: 100
-                        },
-                        items: [{
-                            xtype: 'fieldset',
-                            border: 0,
-                            title: '',
-                            defaultType: 'displayfield',
-                            defaults: {
-                                anchor: '100%'
-                            },
-                            flex: .55,
-                            items:[{
-                        
-                                    fieldLabel: me.sspConfig.get('coachFieldLabel'),
-                                    name: 'coachName',
-                                    itemId: 'coachName',
-                                    labelWidth: 80
-                                },{
-                                    fieldLabel: 'Phone',
-                                    name: 'coachWorkPhone',
-                                    itemId: 'coachWorkPhone',
-                                    labelWidth: 80
-                                },{
-                                    fieldLabel: 'Email',
-                                    name: 'coachPrimaryEmailAddress',
-                                    itemId: 'coachPrimaryEmailAddress',
-                                    labelWidth: 80
-                                },{
-                                    fieldLabel: 'Department',
-                                    name: 'coachDepartmentName',
-                                    itemId: 'coachDepartmentName',
-                                    labelWidth: 80
-                                },{
-                                    fieldLabel: 'Office',
-                                    name: 'coachOfficeLocation',
-                                    itemId: 'coachOfficeLocation',
-                                    labelWidth: 80
-                                }]
-                            
-                        }]
-                               
-                      }]
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            border: 1,
+            bodyPadding: 0,
+            layout: 'anchor',
+            
+            items: [{
+                xtype: 'fieldcontainer',
+                fieldLabel: '',
+                layout: 'hbox',
+                margin: '5 5 5 5',
+                defaultType: 'displayfield',
+				anchor: '100% , 60%',
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                items: [{
+                    xtype: 'label',
+                    html: '<img src=""  height="150" width="150" />',
+                    text: '',
+                    itemId: 'coachImage'
+                }, {
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
                     
-                });
+                    padding: '0 5 15 5',
+                    
+                    flex: .30,
+                    items: [{
+                    
+                        fieldLabel: 'Assigned Coach',
+                        name: 'coachName',
+                        itemId: 'coachName',
+                        labelAlign: 'top',
+                        labelPad: 0,
+						flex: 1
+                    }, {
+                        xtype: 'tbspacer',
+                        height: '10'
+                    }, {
+                        fieldLabel: 'Phone',
+                        name: 'coachWorkPhone',
+                        itemId: 'coachWorkPhone',
+                        labelWidth: 80,
+						flex: 1
+                    
+                    }, {
+                        fieldLabel: '',
+                        name: 'coachPrimaryEmailAddress',
+                        itemId: 'coachPrimaryEmailAddress',
+						flex: 1
+                    }, {
+                        xtype: 'tbspacer',
+                        height: '10'
+                    }, {
+                        fieldLabel: '',
+                        name: 'coachDepartmentName',
+                        itemId: 'coachDepartmentName'
+                    
+                    }, {
+                        fieldLabel: '',
+                        name: 'coachOfficeLocation',
+                        itemId: 'coachOfficeLocation',
+						flex: 1
+                    
+                    }, {
+                        fieldLabel: 'Coach Type',
+                        name: 'coachType',
+                        itemId: 'coachType',
+                    flex: 1
+                    
+                    }]
+                
+                }, {
+                    xtype: 'fieldset',
+                    border: 1,
+                    title: 'Most recent activity of this coach with the record',
+                    cls: 'makeTitleBold',
+                    
+                    defaultType: 'displayfield',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    flex: .50,
+                    padding: '0 5 5 5',
+                    items: [{
+                        fieldLabel: 'Date',
+                        name: 'coachLastServiceDate',
+                        itemId: 'coachLastServiceDate',
+                        labelWidth: 80,
+                        labelSeperator: false
+                    
+                    }, {
+                        xtype: 'tbspacer',
+                        height: '10'
+                    }, {
+                        fieldLabel: 'Last Service Provided',
+                        name: 'coachLastServiceProvided',
+                        itemId: 'coachLastServiceProvided',
+                        labelAlign: 'top',
+                        labelPad: 0,
+                        labelWidth: 150
+                    
+                    }]
+                
+                }]
+            
+            }, {
+                xtype: 'recentsspactivity',
+				anchor: '100% , 40%'
+            
+            }]
         
-         return me.callParent(arguments);
+        });
+        
+        return me.callParent(arguments);
     }
     
 });

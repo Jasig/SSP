@@ -17,60 +17,73 @@
  * under the License.
  */
 Ext.define('Ssp.view.tools.profile.Profile', {
-	extend: 'Ext.form.Panel',
-	alias : 'widget.profile',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
+    extend: 'Ext.form.Panel',
+    alias: 'widget.profile',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
     
     width: '100%',
-	height: '100%',
-    initComponent: function() {	
-		var me=this;
-    	Ext.apply(me, 
-				{
-		    	    layout: 'fit',
-		            title: 'Profile',
-		            padding: 0,
-		            border: 0,
-					preventHeader: true,
-					items: [
-						Ext.createWidget('tabpanel', {
-						    width: '100%',
-						    height: '100%',
-						    activeTab: 0,
-						    itemId: 'profileTabs',
-						    items: [{ 
-						    	      title: 'Dashboard',
-						    	      autoScroll: true,
-						    		  items: [{xtype: 'profileperson'}]
-						    		},{ 
-						    		  title: 'Placement',
-						    		  autoScroll: true,
-									  items: [{xtype: 'placement'}]
-						    		  //items: [{xtype: 'profilespecialservicegroups'}]
-									  
-						    		},{ 
-						    		  title: 'Transcript',
-						    		  autoScroll: true,
-									  items: [{xtype: 'transcript'}]
-						    		  //items: [{xtype: 'profilereferralsources'}]
-									  
-						    		},{ 
-						    		  title: 'Contact',
-						    		  autoScroll: true,
-						    		  items: [{xtype: 'profilecontact'}]
-                                      //items: [{xtype: 'profileservicereasons'}]
-									  
-						    		},{ 
-						    		  title: 'Coach',
-						    		  autoScroll: true,
-						    		  items: [{xtype: 'profilecoach'}]
-							    	}]
-						})
-				    ]
-				});	     
-    	
-    	return me.callParent(arguments);
-	}
+    height: '100%',
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            layout: 'fit',
+            title: 'Profile',
+            padding: 0,
+            border: 0,
+            preventHeader: true,
+            items: [Ext.createWidget('tabpanel', {
+                width: '100%',
+                height: '100%',
+                activeTab: 0,
+                itemId: 'profileTabs',
+                items: [{
+                    title: 'Dashboard',
+                    autoScroll: true,
+                    items: [{
+                        xtype: 'profiledashboard'
+                    }]
+                }, {
+                    title: 'Details',
+                    autoScroll: true,
+                    items: [{
+                        xtype: 'profiledetails'
+                    }]
+                }, {
+                    title: 'Transcript',
+                    autoScroll: true,
+                    items: [{
+                        xtype: 'transcript'
+                    }]
+                }, {
+                    title: 'Placement',
+                    autoScroll: true,
+                    items: [{
+                        xtype: 'placement'
+                    }]
+                }, {
+                    title: 'Contact',
+                    autoScroll: true,
+                    items: [{
+                        xtype: 'profilecontact'
+                    }]
+                }, {
+                    title: 'Coach',
+                    autoScroll: true,
+                    items: [{
+                        xtype: 'profilecoach'
+                    }]
+                }, {
+                    title: 'Schedule',
+                    autoScroll: true,
+                    items: [{
+                        xtype: 'profileschedule'
+                    }]
+                }
+				]
+            })]
+        });
+        
+        return me.callParent(arguments);
+    }
 });

@@ -1049,8 +1049,48 @@
                     "path": "/app/view/tools/profile/"
                 },
                 {
+                    "clsName": "Ssp.view.tools.profile.Details",
+                    "name": "Details.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.Dashboard",
+                    "name": "Dashboard.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
                     "clsName": "Ssp.view.tools.profile.Person",
                     "name": "Person.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.AcademicProgram",
+                    "name": "AcademicProgram.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.RecentTermActivity",
+                    "name": "RecentTermActivity.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.RecentSSPActivity",
+                    "name": "RecentSSPActivity.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.Schedule",
+                    "name": "Schedule.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.CurrentSchedule",
+                    "name": "CurrentSchedule.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.DroppedCourses",
+                    "name": "DroppedCourses.js",
                     "path": "/app/view/tools/profile/"
                 },
                 {

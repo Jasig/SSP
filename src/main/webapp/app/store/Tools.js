@@ -35,7 +35,15 @@ Ext.define('Ssp.store.Tools', {
             { group:'beta', name: "Action Plan", toolType: "actionplan", active: true },
             { group:'beta', name: "Journal", toolType: "journal", active: true },
             { group:'rc1', name: "Early Alert", toolType: "earlyalert", active: true },
-            { group:'rc1', name: "Accommodation", toolType: "accommodation", active: true }
+            { group:'rc1', name: "MAP", toolType: "earlyalert", active: false },
+            { group:'rc1', name: "Accommodation", toolType: "accommodation", active: true },
+            { group:'rc1', name: "Legacy Remarks", toolType: "earlyalert", active: false },
+            { group:'rc1', name: "----------------", toolType: "earlyalert", active: false },
+            
+            { group:'rc1', name: "Config Link", toolType: "earlyalert", active: false },
+            { group:'rc1', name: "Program Viewer", toolType: "earlyalert", active: false },
+            { group:'rc1', name: "MAP Help", toolType: "earlyalert", active: false }
+
 
             /*
              { group:'rc1', name: "SIS", toolType: "StudentInformationSystem", active: true },

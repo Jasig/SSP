@@ -53,6 +53,19 @@ background: transparent;
  background-repeat: no-repeat;
 }
 
+.mapPrintIcon {
+background-image: url('/ssp/images/print-icon.png') !important;
+background: transparent;
+ border-style:none;
+ background-repeat: no-repeat;
+}
+
+.mapEmailIcon {
+background-image: url('/ssp/images/email-icon.png') !important;
+background: transparent;
+ border-style:none;
+ background-repeat: no-repeat;
+}
 /*
 .early-alert-tree-panel .x-tree-icon-parent
 {

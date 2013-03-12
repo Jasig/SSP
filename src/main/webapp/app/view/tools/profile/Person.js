@@ -17,10 +17,10 @@
  * under the License.
  */
 Ext.define('Ssp.view.tools.profile.Person', {
-    extend: 'Ext.form.Panel',
+    extend: 'Ext.form.FieldContainer',
     alias: 'widget.profileperson',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
         sspConfig: 'sspConfig'
@@ -30,126 +30,66 @@ Ext.define('Ssp.view.tools.profile.Person', {
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
-            border: 0,
-            bodyPadding: 0,
-            layout: 'anchor',
-            defaults: {
-                anchor: '100%'
+            fieldLabel: '',
+            layout: 'hbox',
+            margin: '0 0 0 0',
+			height: '150',
+            defaultType: 'displayfield',
+            fieldDefaults: {
+                msgTarget: 'side'
             },
+            
             items: [{
-                xtype: 'fieldcontainer',
-                fieldLabel: '',
-                layout: 'hbox',
-                margin: '5 0 0 0',
+                xtype: 'label',
+                html: '<img src=""  height="120" width="100" />',
+                text: '',
+                itemId: 'studentImage'
+            }, {
+                xtype: 'fieldset',
+                border: 0,
+                padding: '0 0 0 5',
+                title: '',
                 defaultType: 'displayfield',
-                fieldDefaults: {
-                    msgTarget: 'side'
-                    //labelAlign: 'right',
-                    //labelWidth: 80
+                defaults: {
+                    anchor: '100%'
                 },
+                //flex: .40,
                 items: [{
-                    xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    defaultType: 'displayfield',
-                    defaults: {
-                        anchor: '100%'
-                    },
-                    flex: .40,
-                    items: [{
-                        fieldLabel: '',
-                        name: 'name',
-                        itemId: 'studentName'
-                    }, {
-                        fieldLabel: 'ID',
-                        itemId: 'studentId',
-                        name: 'schoolId',
-                        labelWidth: 70
-                    }, {
-                        fieldLabel: 'DOB',
-                        name: 'birthDate',
-                        itemId: 'birthDate',
-                        labelWidth: 30
-                    }, {
-                        fieldLabel: 'Phone',
-                        name: 'homePhone',
-                        labelWidth: 40
-                    }, {
-                        fieldLabel: '',
-                        name: 'primaryEmailAddress'
-                    }, {
-                        fieldLabel: 'Student Type',
-                        name: 'studentType',
-                        itemId: 'studentType',
-                        labelWidth: 80
-                    }, {
-                        fieldLabel: 'SSP Status',
-                        name: 'programStatus',
-                        itemId: 'programStatus',
-                        labelWidth: 70
-                    }, {
-                        fieldLabel: 'Academic Program',
-                        name: 'academicPrograms',
-                        itemId: 'academicPrograms',
-                        labelWidth: 120
-                    }                   
-                    ]
+                    fieldLabel: '',
+                    name: 'name',
+                    itemId: 'studentName',
                 
                 }, {
-                    xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    defaultType: 'displayfield',
-                    defaults: {
-                        anchor: '100%'
-                    },
-                    flex: .30,
-                    items: [{
-                        fieldLabel: 'GPA',
-                        name: 'cumGPA',
-                        itemId: 'cumGPA'
-                    }, {
-                        fieldLabel: 'Hrs Earned',
-                        name: 'hrsEarned',
-                        itemId: 'hrsEarned'
-                    }, {
-                        fieldLabel: 'Hrs Attempted',
-                        name: 'hrsAttempted',
-                        itemId: 'hrsAttempted'
-                    }, {
-                        fieldLabel: 'Reg',
-                        name: 'registeredTerms'
-                    }, {
-                        fieldLabel: 'Payment',
-                        name: 'paymentStatus'
-                    }, {
-                        fieldLabel: 'Early Alerts (Open/Total)',
-                        itemId: 'earlyAlert',
-                        name: 'earlyAlert'
-                    }]
-                
+                    fieldLabel: 'ID',
+                    itemId: 'studentId',
+                    name: 'schoolId',
+                    labelWidth: 60
                 }, {
-                    xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    defaultType: 'displayfield',
-                    defaults: {
-                        anchor: '100%'
-                    },
-                    padding: 0,
-                    flex: .30,
-                    items: [{
-                        xtype: 'profileservicereasons'
-                    }, 
-					{
-                            xtype: 'tbspacer',
-                            height: '20'
-                        },
-					{
-                        xtype: 'profilespecialservicegroups'
-                    }]
+                    fieldLabel: 'DOB',
+                    name: 'birthDate',
+                    itemId: 'birthDate',
+                    labelWidth: 30
+                }, {
+                    fieldLabel: 'Phone',
+                    name: 'homePhone',
+                    labelWidth: 40
+                }, {
+                    fieldLabel: '',
+                    name: 'primaryEmailAddress'
+                }, {
+                    fieldLabel: 'Student Type',
+                    name: 'studentType',
+                    itemId: 'studentType',
+                    labelWidth: 80
+                }, {
+                    fieldLabel: 'SSP Status',
+                    name: 'programStatus',
+                    itemId: 'programStatus',
+                    labelWidth: 70
                 }]
+            
             }]
+        
         });
         
         return me.callParent(arguments);

@@ -10705,8 +10705,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         programStatusField: '#programStatus',
 
         gpaField: '#cumGPA',
-        hoursEarnedField: '#hrsEarned',
-        hoursAttemptedField: '#hrsAttempted',
+        //hoursEarnedField: '#hrsEarned',
+        //hoursAttemptedField: '#hrsAttempted',
 
         academicProgramsField: '#academicPrograms',
 
@@ -10819,10 +10819,12 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
         }
 
+
         // load service reasons
         if (personResponse.serviceReasons != null) {
             me.profileServiceReasonsStore.loadData(me.person.get('serviceReasons'));
         }
+
 
         // load general student record
         me.getView().loadRecord(me.person);
@@ -10884,8 +10886,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
 	destroy: function() {
         var me=this;
-        //me.appEventsController.removeEvent({eventName: 'emailCoach', callBackFunc: me.onEmailCoach, scope: me});
-        
         return me.callParent( arguments );
     },
 
@@ -11070,9 +11070,8 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
  */
 Ext.define('Ssp.view.tools.profile.Coach', {
     extend: 'Ext.form.Panel',
-    alias : 'widget.profilecoach',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
+    alias: 'widget.profilecoach',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.profile.ProfileCoachViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
@@ -11080,74 +11079,129 @@ Ext.define('Ssp.view.tools.profile.Coach', {
     },
     width: '100%',
     height: '100%',
-    initComponent: function() { 
-        var me=this;
-        Ext.apply(me, 
-                {
-                    border: 0,  
-                    bodyPadding: 0,
-                    layout: 'anchor',
-                    defaults: {
-                        anchor: '100%'  
-                    },
-					items: [{
-                        xtype: 'fieldcontainer',
-                        fieldLabel: '',
-                        layout: 'hbox',
-                        margin: '0 5 0 0',
-                        defaultType: 'displayfield',
-                        fieldDefaults: {
-                            msgTarget: 'side',
-                            labelAlign: 'right',
-                            labelWidth: 100
-                        },
-                        items: [{
-                            xtype: 'fieldset',
-                            border: 0,
-                            title: '',
-                            defaultType: 'displayfield',
-                            defaults: {
-                                anchor: '100%'
-                            },
-                            flex: .55,
-                            items:[{
-                        
-                                    fieldLabel: me.sspConfig.get('coachFieldLabel'),
-                                    name: 'coachName',
-                                    itemId: 'coachName',
-                                    labelWidth: 80
-                                },{
-                                    fieldLabel: 'Phone',
-                                    name: 'coachWorkPhone',
-                                    itemId: 'coachWorkPhone',
-                                    labelWidth: 80
-                                },{
-                                    fieldLabel: 'Email',
-                                    name: 'coachPrimaryEmailAddress',
-                                    itemId: 'coachPrimaryEmailAddress',
-                                    labelWidth: 80
-                                },{
-                                    fieldLabel: 'Department',
-                                    name: 'coachDepartmentName',
-                                    itemId: 'coachDepartmentName',
-                                    labelWidth: 80
-                                },{
-                                    fieldLabel: 'Office',
-                                    name: 'coachOfficeLocation',
-                                    itemId: 'coachOfficeLocation',
-                                    labelWidth: 80
-                                }]
-                            
-                        }]
-                               
-                      }]
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            border: 1,
+            bodyPadding: 0,
+            layout: 'anchor',
+            
+            items: [{
+                xtype: 'fieldcontainer',
+                fieldLabel: '',
+                layout: 'hbox',
+                margin: '5 5 5 5',
+                defaultType: 'displayfield',
+				anchor: '100% , 60%',
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                items: [{
+                    xtype: 'label',
+                    html: '<img src=""  height="150" width="150" />',
+                    text: '',
+                    itemId: 'coachImage'
+                }, {
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
                     
-                });
+                    padding: '0 5 15 5',
+                    
+                    flex: .30,
+                    items: [{
+                    
+                        fieldLabel: 'Assigned Coach',
+                        name: 'coachName',
+                        itemId: 'coachName',
+                        labelAlign: 'top',
+                        labelPad: 0,
+						flex: 1
+                    }, {
+                        xtype: 'tbspacer',
+                        height: '10'
+                    }, {
+                        fieldLabel: 'Phone',
+                        name: 'coachWorkPhone',
+                        itemId: 'coachWorkPhone',
+                        labelWidth: 80,
+						flex: 1
+                    
+                    }, {
+                        fieldLabel: '',
+                        name: 'coachPrimaryEmailAddress',
+                        itemId: 'coachPrimaryEmailAddress',
+						flex: 1
+                    }, {
+                        xtype: 'tbspacer',
+                        height: '10'
+                    }, {
+                        fieldLabel: '',
+                        name: 'coachDepartmentName',
+                        itemId: 'coachDepartmentName'
+                    
+                    }, {
+                        fieldLabel: '',
+                        name: 'coachOfficeLocation',
+                        itemId: 'coachOfficeLocation',
+						flex: 1
+                    
+                    }, {
+                        fieldLabel: 'Coach Type',
+                        name: 'coachType',
+                        itemId: 'coachType',
+                    flex: 1
+                    
+                    }]
+                
+                }, {
+                    xtype: 'fieldset',
+                    border: 1,
+                    title: 'Most recent activity of this coach with the record',
+                    cls: 'makeTitleBold',
+                    
+                    defaultType: 'displayfield',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    flex: .50,
+                    padding: '0 5 5 5',
+                    items: [{
+                        fieldLabel: 'Date',
+                        name: 'coachLastServiceDate',
+                        itemId: 'coachLastServiceDate',
+                        labelWidth: 80,
+                        labelSeperator: false
+                    
+                    }, {
+                        xtype: 'tbspacer',
+                        height: '10'
+                    }, {
+                        fieldLabel: 'Last Service Provided',
+                        name: 'coachLastServiceProvided',
+                        itemId: 'coachLastServiceProvided',
+                        labelAlign: 'top',
+                        labelPad: 0,
+                        labelWidth: 150
+                    
+                    }]
+                
+                }]
+            
+            }, {
+                xtype: 'recentsspactivity',
+				anchor: '100% , 40%'
+            
+            }]
         
-         return me.callParent(arguments);
+        });
+        
+        return me.callParent(arguments);
     }
     
 });
+
 /*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
@@ -19042,63 +19096,77 @@ Ext.define('Ssp.view.ToolsMenu', {
  * under the License.
  */
 Ext.define('Ssp.view.tools.profile.Profile', {
-	extend: 'Ext.form.Panel',
-	alias : 'widget.profile',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
+    extend: 'Ext.form.Panel',
+    alias: 'widget.profile',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
     
     width: '100%',
-	height: '100%',
-    initComponent: function() {	
-		var me=this;
-    	Ext.apply(me, 
-				{
-		    	    layout: 'fit',
-		            title: 'Profile',
-		            padding: 0,
-		            border: 0,
-					preventHeader: true,
-					items: [
-						Ext.createWidget('tabpanel', {
-						    width: '100%',
-						    height: '100%',
-						    activeTab: 0,
-						    itemId: 'profileTabs',
-						    items: [{ 
-						    	      title: 'Dashboard',
-						    	      autoScroll: true,
-						    		  items: [{xtype: 'profileperson'}]
-						    		},{ 
-						    		  title: 'Placement',
-						    		  autoScroll: true,
-									  items: [{xtype: 'placement'}]
-						    		  //items: [{xtype: 'profilespecialservicegroups'}]
-									  
-						    		},{ 
-						    		  title: 'Transcript',
-						    		  autoScroll: true,
-									  items: [{xtype: 'transcript'}]
-						    		  //items: [{xtype: 'profilereferralsources'}]
-									  
-						    		},{ 
-						    		  title: 'Contact',
-						    		  autoScroll: true,
-						    		  items: [{xtype: 'profilecontact'}]
-                                      //items: [{xtype: 'profileservicereasons'}]
-									  
-						    		},{ 
-						    		  title: 'Coach',
-						    		  autoScroll: true,
-						    		  items: [{xtype: 'profilecoach'}]
-							    	}]
-						})
-				    ]
-				});	     
-    	
-    	return me.callParent(arguments);
-	}
+    height: '100%',
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            layout: 'fit',
+            title: 'Profile',
+            padding: 0,
+            border: 0,
+            preventHeader: true,
+            items: [Ext.createWidget('tabpanel', {
+                width: '100%',
+                height: '100%',
+                activeTab: 0,
+                itemId: 'profileTabs',
+                items: [{
+                    title: 'Dashboard',
+                    autoScroll: true,
+                    items: [{
+                        xtype: 'profiledashboard'
+                    }]
+                }, {
+                    title: 'Details',
+                    autoScroll: true,
+                    items: [{
+                        xtype: 'profiledetails'
+                    }]
+                }, {
+                    title: 'Transcript',
+                    autoScroll: true,
+                    items: [{
+                        xtype: 'transcript'
+                    }]
+                }, {
+                    title: 'Placement',
+                    autoScroll: true,
+                    items: [{
+                        xtype: 'placement'
+                    }]
+                }, {
+                    title: 'Contact',
+                    autoScroll: true,
+                    items: [{
+                        xtype: 'profilecontact'
+                    }]
+                }, {
+                    title: 'Coach',
+                    autoScroll: true,
+                    items: [{
+                        xtype: 'profilecoach'
+                    }]
+                }, {
+                    title: 'Schedule',
+                    autoScroll: true,
+                    items: [{
+                        xtype: 'profileschedule'
+                    }]
+                }
+				]
+            })]
+        });
+        
+        return me.callParent(arguments);
+    }
 });
+
 /*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
@@ -19117,9 +19185,306 @@ Ext.define('Ssp.view.tools.profile.Profile', {
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.tools.profile.Person', {
+Ext.define('Ssp.view.tools.profile.Details', {
     extend: 'Ext.form.Panel',
-    alias: 'widget.profileperson',
+    alias: 'widget.profiledetails',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    inject: {
+        columnRendererUtils: 'columnRendererUtils',
+        sspConfig: 'sspConfig'
+    },
+    width: '100%',
+    height: '100%',
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            border: 0,
+            bodyPadding: 0,
+            layout: 'anchor',
+            defaults: {
+                anchor: '100%'
+            },
+            items: [{
+                xtype: 'fieldcontainer',
+                fieldLabel: '',
+                layout: 'hbox',
+                margin: '0 0 0 0',
+				padding: '0 0 0 0',
+                defaultType: 'displayfield',
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                items: [{
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    flex: .45,
+                    items: [{
+                        xtype: 'profileperson'
+                    },
+					{
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+					layout: 'hbox',
+					   padding: ' 0 0 0 0',
+                        margin: '0 0 0 0',
+                    defaultType: 'displayfield',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                   
+                    items: [
+					{
+						xtype: 'fieldset',
+						border: 0,
+						title: '',
+						layout: 'vbox',
+						defaultType: 'displayfield',
+						padding: ' 0 0 0 0',
+						margin: '0 0 0 0',
+						defaults: {
+							anchor: '100%'
+						},
+						width: '120',
+						//flex: .40,
+						items: [{
+						
+							xtype: 'button',
+							text: 'SSN',
+							autowidth: 'false',
+							padding: '0 33 5 33'
+						}, 
+						{
+                        xtype: 'tbspacer',
+                        height: '10'
+                    },
+						
+						{
+							xtype: 'textfield',
+							itemId: 'ssn',
+							fieldLabel: '',
+							disabled: true,
+							width: '100'
+						}]
+					},
+					{
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    layout: 'vbox',
+					padding: ' 0 0 0 0',
+                        margin: '0 0 0 5',
+                    defaultType: 'displayfield',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                   
+                    items: [
+					{
+                        fieldLabel: 'Gender',
+                        name: 'gender',
+                        itemId: 'gender'
+                    },
+					{
+                        fieldLabel: 'Marital Status',
+                        name: 'maritalStatus',
+                        itemId: 'maritalStatus'
+                    },
+					
+                    {
+                        fieldLabel: 'Etnicity',
+                        name: 'etnicity',
+                        itemId: 'etnicity'
+                    },
+                    {
+                        fieldLabel: 'Race',
+                        name: 'race',
+                        itemId: 'race'
+                    }
+					]}
+					]}
+					, {
+                        xtype: 'profileacademicprogram',
+                    },
+					{
+                        fieldLabel: 'Intended Program at Admit',
+                        itemId: 'intendedProgram',
+                        name: 'intendedProgram',
+                        labelAlign: 'top',
+                        labelPad: 0,
+						margin: '0 0 10 0'
+                    }
+					]
+                
+                }, {
+                    xtype: 'fieldset',
+                    border: 1,
+                    title: '',
+                    defaultType: 'displayfield',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    flex: .25,
+					height: '470',
+					margin: '0 0 10 0',
+                    items: [{
+                        fieldLabel: 'GPA',
+                        name: 'cumGPA',
+                        itemId: 'cumGPA',
+						labelWidth: 30
+                    }, {
+                        xtype: 'tbspacer',
+                        height: '10'
+                    }, {
+                        fieldLabel: 'FA GPA',
+                        name: 'faGPA',
+                        itemId: 'faGPA',
+						labelWidth: 60
+                    }, {
+                        fieldLabel: 'Standing',
+                        name: 'standing',
+                        itemId: 'standing',
+						labelWidth: 60
+                    }, {
+                        fieldLabel: 'Restrictions',
+                        name: 'restrictions',
+                        itemId: 'restrictions',
+						labelWidth: 80
+                    }, {
+                        fieldLabel: 'Hrs Earned',
+                        name: 'hrsEarned',
+                        itemId: 'hrsEarned',
+						labelWidth: 80
+                    }, {
+                        fieldLabel: 'Hrs Attempted',
+                        name: 'hrsAttempted',
+                        itemId: 'hrsAttempted',
+						labelWidth: 100
+                    }, {
+                        fieldLabel: '<a href="">Comp Rate</a>',
+                        name: 'compRate',
+                        itemId: 'compRate',
+						labelWidth: 80
+                    }, {
+                        fieldLabel: 'Transfer Hrs',
+                        name: 'transferHrs',
+                        itemId: 'transferHrs',
+						labelWidth: 80
+                    }, {
+                        fieldLabel: 'Reg',
+                        name: 'registeredTerms',
+                        itemId: 'registeredTerms',
+						labelWidth: 30
+                    }, {
+                        fieldLabel: 'Payment',
+                        name: 'paymentStatus',
+                        itemId: 'paymentStatus',
+						labelWidth: 80
+                    }, {
+                        fieldLabel: 'Balance',
+                        name: 'balance',
+                        itemId: 'balance',
+						labelWidth: 80
+                    }, {
+                        xtype: 'tbspacer',
+                        height: '10'
+                    }, {
+                        fieldLabel: 'FASFA',
+                        name: 'fasfa',
+                        itemId: 'fasfa',
+						labelWidth: 60
+                    
+                    }, {
+                        fieldLabel: 'FA Award',
+                        name: 'faAward',
+                        itemId: 'faAward',
+						labelWidth: 80
+                    
+                    }, {
+                        fieldLabel: 'FA Amount',
+                        name: 'faAmount',
+                        itemId: 'faAmount',
+						labelWidth: 80
+                    
+                    }, {
+                        fieldLabel: 'Loan Amount',
+                        name: 'loanAmount',
+                        itemId: 'loanAmount',
+						labelWidth: 80
+                    
+                    }, {
+                        xtype: 'tbspacer',
+                        height: '10'
+                    }, {
+                        fieldLabel: 'SAP',
+                        name: 'sap',
+                        itemId: 'sap',
+						labelWidth: 30
+                    }, {
+                        fieldLabel: 'F1',
+                        name: 'f1',
+                        itemId: 'f1',
+						labelWidth: 30
+                    }]
+                
+                }, {
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    padding: 0,
+					margin: '0 0 0 5',
+                    flex: .30,
+                    items: [{
+                        fieldLabel: 'Residency',
+                        name: 'residency',
+                        itemId: 'residency',
+						labelWidth: 80
+                    }, {
+                        xtype: 'tbspacer',
+                        height: '20'
+                    }, {
+                        xtype: 'recenttermactivity'
+                    }]
+                }]
+            }]
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.profile.Dashboard', {
+    extend: 'Ext.form.Panel',
+    alias: 'widget.profiledashboard',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
     inject: {
@@ -19141,114 +19506,378 @@ Ext.define('Ssp.view.tools.profile.Person', {
                 xtype: 'fieldcontainer',
                 fieldLabel: '',
                 layout: 'hbox',
-                margin: '5 0 0 0',
+                margin: '0 0 0 0',
+                padding: '0 0 0 0',
                 defaultType: 'displayfield',
+                flex: '.90',
                 fieldDefaults: {
                     msgTarget: 'side'
-                    //labelAlign: 'right',
-                    //labelWidth: 80
                 },
                 items: [{
                     xtype: 'fieldset',
                     border: 0,
                     title: '',
                     defaultType: 'displayfield',
+                    margin: '0 0 0 0',
                     defaults: {
                         anchor: '100%'
                     },
-                    flex: .40,
+                    flex: .45,
                     items: [{
-                        fieldLabel: '',
-                        name: 'name',
-                        itemId: 'studentName'
+                        fieldLabel: '<a href="">Watch</a>',
+                        name: 'watchStudent',
+                        itemId: 'watchStudent',
+                        padding: '0 0 0 0',
+                        labelWidth: 20,
+                        margin: '0 0 1 5'
+                    
                     }, {
-                        fieldLabel: 'ID',
-                        itemId: 'studentId',
-                        name: 'schoolId',
-                        labelWidth: 70
+                        xtype: 'profileperson',
+						
                     }, {
-                        fieldLabel: 'DOB',
-                        name: 'birthDate',
-                        itemId: 'birthDate',
+                        xtype: 'profileacademicprogram',
+						
+                    }]
+                
+                }, {
+                    xtype: 'fieldset',
+                    border: 1,
+                    title: '',
+                    defaultType: 'displayfield',
+                    margin: '0 0 0 2',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    flex: .25,
+                    height: '370',
+					
+                    items: [{
+                        fieldLabel: 'GPA',
+                        name: 'cumGPA',
+                        itemId: 'cumGPA',
                         labelWidth: 30
+                    
                     }, {
-                        fieldLabel: 'Phone',
-                        name: 'homePhone',
-                        labelWidth: 40
+                    
+                        name: 'compRate',
+                        itemId: 'compRate',
+                        labelWidth: 80
+                    
                     }, {
-                        fieldLabel: '',
-                        name: 'primaryEmailAddress'
+                        fieldLabel: 'Standing',
+                        name: 'standing',
+                        itemId: 'standing',
+                        labelWidth: 60
                     }, {
-                        fieldLabel: 'Student Type',
-                        name: 'studentType',
-                        itemId: 'studentType',
+                        fieldLabel: 'Restrictions',
+                        name: 'restrictions',
+                        itemId: 'restrictions',
                         labelWidth: 80
                     }, {
-                        fieldLabel: 'SSP Status',
-                        name: 'programStatus',
-                        itemId: 'programStatus',
-                        labelWidth: 70
+                        xtype: 'tbspacer',
+                        height: '10'
                     }, {
+                        fieldLabel: 'Reg',
+                        name: 'registeredTerms',
+                        itemId: 'registeredTerms',
+                        labelWidth: 30
+                    }, {
+                        fieldLabel: 'Payment',
+                        name: 'paymentStatus',
+                        itemId: 'paymentStatus',
+                        labelWidth: 50
+                    }, {
+                        fieldLabel: 'FA Award',
+                        name: 'faAward',
+                        itemId: 'faAward',
+                        labelWidth: 60
+                    
+                    }, {
+                        fieldLabel: 'SAP',
+                        name: 'sap',
+                        itemId: 'sap',
+                        labelWidth: 30
+                    }, {
+                        fieldLabel: 'F1',
+                        name: 'f1',
+                        itemId: 'f1',
+                        labelWidth: 30
+                    }, {
+                        xtype: 'tbspacer',
+                        height: '10'
+                    }, {
+                        fieldLabel: 'Early Alerts',
+                        itemId: 'earlyAlert',
+                        name: 'earlyAlert',
+                        labelAlign: 'top',
+                        labelPad: 0
+                    }, {
+                        fieldLabel: 'Action Plan',
+                        itemId: 'actionPlan',
+                        name: 'actionPlan',
+                        labelAlign: 'top',
+                        labelPad: 0
+                    }]
+                
+                }, {
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    padding: '0 0 0 5',
+                    margin: '0 0 0 0',
+                    flex: .30,
+                    items: [{
+                        xtype: 'profileservicereasons'
+                    }, {
+                        xtype: 'tbspacer',
+                        height: '20'
+                    }, {
+                        xtype: 'profilespecialservicegroups'
+                    }]
+                }]
+            }, {
+                xtype: 'recentsspactivity',
+                flex: '.10'
+            }]
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.profile.Person', {
+    extend: 'Ext.form.FieldContainer',
+    alias: 'widget.profileperson',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    inject: {
+        columnRendererUtils: 'columnRendererUtils',
+        sspConfig: 'sspConfig'
+    },
+    width: '100%',
+    height: '100%',
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            fieldLabel: '',
+            layout: 'hbox',
+            margin: '0 0 0 0',
+			height: '150',
+            defaultType: 'displayfield',
+            fieldDefaults: {
+                msgTarget: 'side'
+            },
+            
+            items: [{
+                xtype: 'label',
+                html: '<img src=""  height="120" width="100" />',
+                text: '',
+                itemId: 'studentImage'
+            }, {
+                xtype: 'fieldset',
+                border: 0,
+                padding: '0 0 0 5',
+                title: '',
+                defaultType: 'displayfield',
+                defaults: {
+                    anchor: '100%'
+                },
+                //flex: .40,
+                items: [{
+                    fieldLabel: '',
+                    name: 'name',
+                    itemId: 'studentName',
+                
+                }, {
+                    fieldLabel: 'ID',
+                    itemId: 'studentId',
+                    name: 'schoolId',
+                    labelWidth: 60
+                }, {
+                    fieldLabel: 'DOB',
+                    name: 'birthDate',
+                    itemId: 'birthDate',
+                    labelWidth: 30
+                }, {
+                    fieldLabel: 'Phone',
+                    name: 'homePhone',
+                    labelWidth: 40
+                }, {
+                    fieldLabel: '',
+                    name: 'primaryEmailAddress'
+                }, {
+                    fieldLabel: 'Student Type',
+                    name: 'studentType',
+                    itemId: 'studentType',
+                    labelWidth: 80
+                }, {
+                    fieldLabel: 'SSP Status',
+                    name: 'programStatus',
+                    itemId: 'programStatus',
+                    labelWidth: 70
+                }]
+            
+            }]
+        
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.profile.AcademicProgram', {
+    extend: 'Ext.form.Panel',
+    alias: 'widget.profileacademicprogram',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    inject: {
+        columnRendererUtils: 'columnRendererUtils',
+        sspConfig: 'sspConfig'
+    },
+    width: '100%',
+    height: '100%',
+	autoScroll: true,
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            border: 1,
+            bodyPadding: 0,
+            margin: '0 0 7 0',
+            layout: 'anchor',
+            defaults: {
+                anchor: '100%'
+            },
+            items: [{
+                xtype: 'fieldcontainer',
+                fieldLabel: '',
+                //layout: 'hbox',
+                margin: '0 0 0 2',
+                defaultType: 'displayfield',
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                
+                items: [{
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    layout: 'hbox',
+					height: 35,
+					margin: '0 0 0 0',
+                    padding: '0 0 0 0',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    //flex: .40,
+                    items: [
+					{
+                        xtype: 'tbspacer',
+                       flex: .50
+                    },
+					{
+                        tooltip: 'Email MAP',
+                        text: '',
+                        width: 30,
+                        height: 30,
+                        cls: 'mapEmailIcon',
+                        xtype: 'button',
+                        itemId: 'emailMAPButton'
+                    }, {
+                        tooltip: 'Print MAP',
+                        text: '',
+                        width: 30,
+                        height: 30,
+                        cls: 'mapPrintIcon',
+                        xtype: 'button',
+                        itemId: 'printMAPButton'
+                    },
+					{
+                        xtype: 'tbspacer',
+                       flex: .05
+                    },]
+                }, {
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    defaults: {
+                        anchor: '100%'
+                    },
+					margin: '0 0 0 0',
+					padding: '0 0 5 0',
+                    //flex: .40,
+                    items: [{
                         fieldLabel: 'Academic Program',
                         name: 'academicPrograms',
                         itemId: 'academicPrograms',
                         labelWidth: 120
-                    }                   
-                    ]
-                
-                }, {
-                    xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    defaultType: 'displayfield',
-                    defaults: {
-                        anchor: '100%'
-                    },
-                    flex: .30,
-                    items: [{
-                        fieldLabel: 'GPA',
-                        name: 'cumGPA',
-                        itemId: 'cumGPA'
                     }, {
-                        fieldLabel: 'Hrs Earned',
-                        name: 'hrsEarned',
-                        itemId: 'hrsEarned'
+                        fieldLabel: 'MAP',
+                        itemId: 'onPlan',
+                        name: 'onPlan',
+                        labelWidth: 70
                     }, {
-                        fieldLabel: 'Hrs Attempted',
-                        name: 'hrsAttempted',
-                        itemId: 'hrsAttempted'
+                        fieldLabel: 'Name',
+                        name: 'mapName',
+                        itemId: 'mapName',
+                        labelWidth: 30
                     }, {
-                        fieldLabel: 'Reg',
-                        name: 'registeredTerms'
+                        fieldLabel: 'Advisor',
+                        name: 'advisor',
+                        itemId: 'advisor',
+                        labelWidth: 40
                     }, {
-                        fieldLabel: 'Payment',
-                        name: 'paymentStatus'
+                        fieldLabel: 'Last Updated',
+                        name: 'mapLastUpdated',
+                        itemId: 'mapLastUpdated'
                     }, {
-                        fieldLabel: 'Early Alerts (Open/Total)',
-                        itemId: 'earlyAlert',
-                        name: 'earlyAlert'
+                        fieldLabel: 'MAP Projected Grad',
+                        name: 'mapProjected',
+                        itemId: 'mapProjected',
+                        labelWidth: 120
                     }]
                 
-                }, {
-                    xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    defaultType: 'displayfield',
-                    defaults: {
-                        anchor: '100%'
-                    },
-                    padding: 0,
-                    flex: .30,
-                    items: [{
-                        xtype: 'profileservicereasons'
-                    }, 
-					{
-                            xtype: 'tbspacer',
-                            height: '20'
-                        },
-					{
-                        xtype: 'profilespecialservicegroups'
-                    }]
                 }]
             }]
         });
@@ -19258,6 +19887,231 @@ Ext.define('Ssp.view.tools.profile.Person', {
     
 });
 
+Ext.define('Ssp.view.tools.profile.RecentTermActivity', {
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.recenttermactivity',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    width: '100%',
+    height: '100%',
+    title: 'Recent Term Activity',
+    autoScroll: true,
+    inject: {        //store: 'recentTermActivityStore'
+    },
+    initComponent: function(){
+        var me = this;
+        Ext.applyIf(me, {
+            //store: me.store,
+            xtype: 'gridcolumn',
+            columns: [{
+                dataIndex: 'term',
+                text: 'Term',
+                flex: 1
+            }, {
+                dataIndex: 'onPlan',
+                text: 'MAP',
+                flex: 1
+            }, {
+            
+                dataIndex: 'cumGPA',
+                text: 'GPA',
+                flex: 1
+            }, {
+            
+                dataIndex: 'load',
+                text: 'Load',
+                flex: 1
+            }],
+            viewConfig: {}
+        });
+        
+        me.callParent(arguments);
+    }
+});
+
+Ext.define('Ssp.view.tools.profile.RecentSSPActivity', {
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.recentsspactivity',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    width: '100%',
+    height: '100%',
+    title: 'Recent SSP Activity for this Student',
+    autoScroll: true,
+    inject: {
+        //store: 'recentActivityStore'
+    },
+    initComponent: function(){
+        var me = this;
+        Ext.applyIf(me, {
+            //store: me.store,
+            xtype: 'gridcolumn',
+            columns: [{
+                dataIndex: 'coach',
+                text: 'Coach',
+				flex: 1
+            }, {
+                dataIndex: 'service',
+                text: 'Service',
+				flex: 1
+            }, {
+            
+                dataIndex: 'recentDate',
+                text: 'Date',
+				flex: 1
+            }],
+            viewConfig: {}
+        });
+        
+        me.callParent(arguments);
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.profile.Schedule', {
+    extend: 'Ext.form.Panel',
+    alias: 'widget.profileschedule',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    width: '100%',
+    height: '100%',
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            border: 1,
+            bodyPadding: 0,
+            layout: 'anchor',
+            defaults: {
+                anchor: '100%'
+            },
+            items: [
+			{
+                xtype: 'profilecurrentschedule',
+                anchor: '100% , 50%'
+				
+            }, {
+                xtype: 'tbspacer',
+                height: '10'
+            }, {
+                xtype: 'profiledroppedcourses',
+                anchor: '100% , 50%'
+            }
+			]
+        
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});
+
+Ext.define('Ssp.view.tools.profile.CurrentSchedule', {
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.profilecurrentschedule',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    width: '100%',
+    height: '100%',
+    autoScroll: true,
+	title: 'Current Schedule',
+    inject: {
+        //store: 'currentScheduleStore'
+    },
+    initComponent: function(){
+        var me = this;
+        Ext.applyIf(me, {
+            //store: me.store,
+            xtype: 'gridcolumn',
+            columns: [{
+                dataIndex: 'course',
+                text: 'Course',
+				flex: 1
+            }, {
+                dataIndex: 'creditHrs',
+                text: 'Cr Hrs',
+				flex: 1
+            }, {
+            
+                dataIndex: 'courseTitle',
+                text: 'Course Title',
+				flex: 1
+            },
+			{
+                dataIndex: 'term',
+                text: 'Term',
+                flex: 1
+            }, {
+            
+                dataIndex: 'instructor',
+                text: 'Instructor',
+                flex: 1
+            }
+			],
+            viewConfig: {}
+        });
+        
+        me.callParent(arguments);
+    }
+});
+Ext.define('Ssp.view.tools.profile.DroppedCourses', {
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.profiledroppedcourses',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    width: '100%',
+    height: '100%',
+    autoScroll: true,
+	title: 'Dropped Courses',
+    inject: {
+        //store: 'droppedCoursesStore'
+    },
+    initComponent: function(){
+        var me = this;
+        Ext.applyIf(me, {
+            //store: me.store,
+            xtype: 'gridcolumn',
+            columns: [{
+                dataIndex: 'course',
+                text: 'Course',
+				flex: 1
+            }, {
+                dataIndex: 'creditHrs',
+                text: 'Cr Hrs',
+				flex: 1
+            }, {
+            
+                dataIndex: 'courseTitle',
+                text: 'Course Title',
+				flex: 1
+            },
+			{
+                dataIndex: 'term',
+                text: 'Term',
+                flex: 1
+            }, {
+            
+                dataIndex: 'instructor',
+                text: 'Instructor',
+                flex: 1
+            }
+			],
+            viewConfig: {}
+        });
+        
+        me.callParent(arguments);
+    }
+});
 /*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
@@ -25448,7 +26302,15 @@ Ext.define('Ssp.store.Tools', {
             { group:'beta', name: "Action Plan", toolType: "actionplan", active: true },
             { group:'beta', name: "Journal", toolType: "journal", active: true },
             { group:'rc1', name: "Early Alert", toolType: "earlyalert", active: true },
-            { group:'rc1', name: "Accommodation", toolType: "accommodation", active: true }
+            { group:'rc1', name: "MAP", toolType: "earlyalert", active: false },
+            { group:'rc1', name: "Accommodation", toolType: "accommodation", active: true },
+            { group:'rc1', name: "Legacy Remarks", toolType: "earlyalert", active: false },
+            { group:'rc1', name: "----------------", toolType: "earlyalert", active: false },
+            
+            { group:'rc1', name: "Config Link", toolType: "earlyalert", active: false },
+            { group:'rc1', name: "Program Viewer", toolType: "earlyalert", active: false },
+            { group:'rc1', name: "MAP Help", toolType: "earlyalert", active: false }
+
 
             /*
              { group:'rc1', name: "SIS", toolType: "StudentInformationSystem", active: true },
