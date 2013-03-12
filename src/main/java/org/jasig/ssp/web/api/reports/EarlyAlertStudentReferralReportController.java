@@ -157,8 +157,9 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 		SearchParameters.addDateTermToMap(termDate, parameters);
 		SearchParameters.addProgramStatusToMap(programStatus, parameters, programStatusService);
 		SearchParameters.addEarlyAlertReferralToMap(earlyAlertReferralId, parameters, earlyAlertReferralsService);
-		SearchParameters.addStudentCount(peopleInfo, parameters);
-		generateReport( response,  parameters, processReports(peopleInfo),  REPORT_URL, 
+		List<EarlyAlertStudentReportTO> processedPeople = processReports(peopleInfo);
+		SearchParameters.addStudentCount(processedPeople, parameters);
+		generateReport( response,  parameters, processedPeople,  REPORT_URL, 
 				 reportType, REPORT_FILE_TITLE);
 	}
 	
