@@ -68,6 +68,7 @@ import com.google.common.collect.Maps;
 public class EarlyAlertCaseCountsReportController extends ReportBaseController {
 	
 	private static String REPORT_URL = "/reports/earlyAlertCaseCounts.jasper";
+	private static String REPORT_URL_CSV = "/reports/earlyAlertCaseCounts_csv.jasper";
 	private static String REPORT_FILE_TITLE = "Early_Alert_Case_Counts_Report";
 
 	private static final Logger LOGGER = LoggerFactory
@@ -156,7 +157,7 @@ public class EarlyAlertCaseCountsReportController extends ReportBaseController {
 		SearchParameters.addCampusToParameters(campus, parameters);
 		
 		SearchParameters.addTermsToMap(terms, parameters);
-		generateReport( response,  parameters, caseLoads,  REPORT_URL, 
+		generateReport( response,  parameters, caseLoads,  reportType.equals("csv") ? REPORT_URL_CSV : REPORT_URL, 
 				 reportType, REPORT_FILE_TITLE);
 	}
 
