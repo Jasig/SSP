@@ -20,7 +20,6 @@ package org.jasig.ssp.web.api.reports;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -34,12 +33,6 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.AbstractReference;
 import org.jasig.ssp.model.reference.Campus;
-import org.jasig.ssp.model.reference.EarlyAlertOutcome;
-import org.jasig.ssp.model.reference.EarlyAlertReferral;
-import org.jasig.ssp.model.reference.ProgramStatus;
-import org.jasig.ssp.model.reference.ReferralSource;
-import org.jasig.ssp.model.reference.SpecialServiceGroup;
-import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.ReferenceService;
@@ -242,11 +235,12 @@ public class SearchParameters {
 
 	static final Map<String, Object> addDateTermToMap(final DateTerm dateTerm,
 			final Map<String, Object> parameters) {
-		parameters.put(START_DATE, dateTerm.startDateString());
-		parameters.put(END_DATE, dateTerm.endDateString());
-		parameters.put(TERM, dateTerm.getTermName());
-		parameters.put(TERM_NAME, dateTerm.getTermName());
-		parameters.put(TERM_CODE, dateTerm.getTermCode());
+		
+		parameters.put(START_DATE, dateTerm.getStartDate() == null ? NOT_USED :dateTerm.startDateString());
+		parameters.put(END_DATE,  dateTerm.getEndDate() == null ? NOT_USED :dateTerm.endDateString());
+		parameters.put(TERM, dateTerm.getTerm() == null ? NOT_USED : dateTerm.getTermName());
+		parameters.put(TERM_NAME, dateTerm.getTerm() == null ? NOT_USED : dateTerm.getTermName());
+		parameters.put(TERM_CODE, dateTerm.getTerm() == null ? NOT_USED : dateTerm.getTermCode());
 		return parameters;
 	}
 

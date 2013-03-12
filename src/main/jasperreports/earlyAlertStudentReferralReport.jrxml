@@ -141,12 +141,12 @@
 				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="d574f3da-59c5-4167-8e87-ca5fc5f4c0c2" x="125" y="101" width="100" height="16"/>
+				<reportElement uuid="d574f3da-59c5-4167-8e87-ca5fc5f4c0c2" x="125" y="85" width="100" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{termName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="10" y="101" width="100" height="16"/>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="11" y="85" width="100" height="16"/>
 				<textElement/>
 				<text><![CDATA[Term:]]></text>
 			</staticText>
