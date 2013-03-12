@@ -89,7 +89,8 @@ public class StudentIntakeRequestManager {
 			taskService.create(studentIntakeTask);
 			
 			SubjectAndBody studentIntakeMessage = messageTemplateService.createStudentIntakeTaskMessage(studentIntakeTask);
-				messageService.createMessage(student, appointment.getIntakeEmail()+","+student.getSecondaryEmailAddress(), studentIntakeMessage);
+			String ccString = buildCCString(appointment.getIntakeEmail(), student.getSecondaryEmailAddress());
+			messageService.createMessage(student, ccString, studentIntakeMessage);
 				
 			clearIntakeData(student);
 			
@@ -102,6 +103,33 @@ public class StudentIntakeRequestManager {
 		}
 		
 		
+	}
+
+
+
+	private String buildCCString(String intakeEmail,
+			String secondaryEmailAddress) 
+	{
+		StringBuilder builder = new StringBuilder();
+		if(intakeEmail != null && !"".equals(intakeEmail))
+		{
+			builder.append(intakeEmail);
+			
+			if(secondaryEmailAddress != null && !"".equals(secondaryEmailAddress))
+			{
+				builder.append(",");
+				builder.append(secondaryEmailAddress);
+			}
+
+		}
+		else
+		{
+			if(secondaryEmailAddress != null && !"".equals(secondaryEmailAddress))
+			{
+				builder.append(secondaryEmailAddress);
+			}
+		}
+		return builder.toString();
 	}
 
 
