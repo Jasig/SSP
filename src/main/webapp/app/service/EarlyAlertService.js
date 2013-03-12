@@ -85,6 +85,7 @@ Ext.define('Ssp.service.EarlyAlertService', {
         var node = me.cleanResponses( earlyAlertId );
         var success = function( response, view ){
             var r = Ext.decode(response.responseText);
+            me.resetEarlyAlertResponsesStore();
             if (r.rows.length > 0)
             {
                
@@ -166,6 +167,11 @@ Ext.define('Ssp.service.EarlyAlertService', {
         });
 
         me.treeStore.getRootNode().appendChild(records);
+    },
+
+    resetEarlyAlertResponsesStore: function() {
+        var me = this;
+        me.currentEarlyAlertResponsesGridStore.removeAll();
     },
     
     populateEarlyAlertResponses: function( node, records ){
