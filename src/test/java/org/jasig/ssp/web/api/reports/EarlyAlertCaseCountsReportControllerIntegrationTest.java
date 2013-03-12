@@ -87,8 +87,8 @@ public class EarlyAlertCaseCountsReportControllerIntegrationTest
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(3);
-		expectedReportBodyLines.add("TERM,TOTAL STUDENTS,TOTAL CASES,TOTAL RESPONDED TO,,TOTAL CLOSED,,");
-		expectedReportBodyLines.add("FA12,6,16,9,(56.2)%,,2,(12.5)%");
+		expectedReportBodyLines.add("TERM,TOTAL STUDENTS,TOTAL CASES,TOTAL RESPONDED TO,,TOTAL CLOSED,");
+		expectedReportBodyLines.add("FA12,6,16,9,56.2%,2,12.5%");
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 
@@ -117,8 +117,8 @@ public class EarlyAlertCaseCountsReportControllerIntegrationTest
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		// same as in testGetAddressLabelsReturnsAllStudentsIfNoFiltersSet(), but
 		// Dennis Ritchie is missing
-		expectedReportBodyLines.add("TERM,TOTAL STUDENTS,TOTAL CASES,TOTAL RESPONDED TO,,TOTAL CLOSED,,");
-		expectedReportBodyLines.add( "All,6,16,9,(56.2)%,,2,(12.5)%");
+		expectedReportBodyLines.add("TERM,TOTAL STUDENTS,TOTAL CASES,TOTAL RESPONDED TO,,TOTAL CLOSED,");
+		expectedReportBodyLines.add( "All,6,16,9,56.2%,2,12.5%");
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
