@@ -19,6 +19,7 @@
 package org.jasig.ssp.dao.report;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.ProjectionList;
@@ -30,10 +31,9 @@ import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.sql.JoinType;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.jasig.ssp.dao.PersonDao;
-import org.jasig.ssp.model.CaseloadRecord;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
@@ -46,16 +46,10 @@ public class DisabilityServiceReportDao extends PersonDao {
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<DisabilityServicesReportTO> getDisabilityReport(PersonSearchFormTO form,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
-		Criteria criteria = this.setBasicSearchCriteria(createCriteria(sAndP),  form);
-		criteria.add(Restrictions.isNotNull("studentType"));
+		List<UUID> ids = getStudentUUIDs(form);
 		
-		// item count
-		Long totalRows = 0L;
-		if ((sAndP != null) && sAndP.isPaged()) {
-			totalRows = (Long) criteria.setProjection(Projections.rowCount())
-					.uniqueResult();
-		}
-
+		Criteria criteria = createCriteria(sAndP);
+		criteria.add(Restrictions.in("id", ids));
 		// clear the row count projection
 		criteria.setProjection(null);
 
@@ -69,11 +63,6 @@ public class DisabilityServiceReportDao extends PersonDao {
 		addBasicStudentProperties(projections, criteria);
 		criteria.setResultTransformer(new AliasToBeanResultTransformer(
 				DisabilityServicesReportTO.class));
-
-		// Add Paging
-		if (sAndP != null) {
-			sAndP.addAll(criteria);
-		}
 
 		return new PagingWrapper<DisabilityServicesReportTO>(totalRows, criteria.list());
 
