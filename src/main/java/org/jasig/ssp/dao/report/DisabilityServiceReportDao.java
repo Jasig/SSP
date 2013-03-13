@@ -64,7 +64,7 @@ public class DisabilityServiceReportDao extends PersonDao {
 		criteria.setResultTransformer(new AliasToBeanResultTransformer(
 				DisabilityServicesReportTO.class));
 
-		return new PagingWrapper<DisabilityServicesReportTO>(totalRows, criteria.list());
+		return new PagingWrapper<DisabilityServicesReportTO>(ids.size(), criteria.list());
 
 	}
 	
