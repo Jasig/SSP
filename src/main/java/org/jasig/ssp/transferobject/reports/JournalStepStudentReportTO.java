@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.transferobject.reports;
 
+import java.util.UUID;
+
 public class JournalStepStudentReportTO extends BaseStudentReportTO {
 
 	/**
@@ -25,6 +27,7 @@ public class JournalStepStudentReportTO extends BaseStudentReportTO {
 	 */
 	private static final long serialVersionUID = 6054716071286423025L;
 	String journalStepDetailName;
+	UUID journalEntryDetailId;
 
 	/**
 	 * 
