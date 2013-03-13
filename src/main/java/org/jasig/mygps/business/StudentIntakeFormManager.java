@@ -2413,7 +2413,7 @@ public class StudentIntakeFormManager { // NOPMD
 		// educationLevelCompletedQuestion value is
 		// B2D05BB9-5056-A51A-80FDFE0D53E6EB07
 		noDiplomaLastYearAttendedQuestion
-				.setVisibilityExpression("hasValueForQuestionId('B2D05BB9-5056-A51A-80FDFE0D53E6EB07', '"
+				.setVisibilityExpression("hasValueForQuestionId('5d967ba0-e086-4426-85d5-29bc86da9295', '"
 						+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
 						+ "')");
 
@@ -2430,9 +2430,9 @@ public class StudentIntakeFormManager { // NOPMD
 		noDiplomaHighestGradeCompletedQuestion.setRequired(true);
 		// DEPENDENCY -> noDiplomaHighestGradeCompletedQuestion shown when
 		// educationLevelCompletedQuestion value is
-		// B2D05BB9-5056-A51A-80FDFE0D53E6EB07
+		// 5d967ba0-e086-4426-85d5-29bc86da9295
 		noDiplomaHighestGradeCompletedQuestion
-				.setVisibilityExpression("hasValueForQuestionId('B2D05BB9-5056-A51A-80FDFE0D53E6EB07', '"
+				.setVisibilityExpression("hasValueForQuestionId('5d967ba0-e086-4426-85d5-29bc86da9295', '"
 						+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
 						+ "')");
 
@@ -2449,9 +2449,9 @@ public class StudentIntakeFormManager { // NOPMD
 		gedYearOfGedQuestion.setRequired(true);
 		// DEPENDENCY -> gedYearOfGedQuestion shown when
 		// educationLevelCompletedQuestion value is
-		// B2D05BF8-5056-A51A-8053E140B84D65A4
+		// 710add1c-7b53-4cbe-86cb-8d7c5837d68b
 		gedYearOfGedQuestion
-				.setVisibilityExpression("hasValueForQuestionId('B2D05BF8-5056-A51A-8053E140B84D65A4', '"
+				.setVisibilityExpression("hasValueForQuestionId('710add1c-7b53-4cbe-86cb-8d7c5837d68b', '"
 						+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
 						+ "')");
 
@@ -2468,9 +2468,9 @@ public class StudentIntakeFormManager { // NOPMD
 		highSchoolYearGraduatedQuestion.setRequired(true);
 		// DEPENDENCY -> highSchoolYearGraduatedQuestion shown when
 		// educationLevelCompletedQuestion value is
-		// B2D05C27-5056-A51A-80D26A4742E0AB64
+		// f4780d23-fd8a-4758-b772-18606dca32f0
 		highSchoolYearGraduatedQuestion
-				.setVisibilityExpression("hasValueForQuestionId('B2D05C27-5056-A51A-80D26A4742E0AB64', '"
+				.setVisibilityExpression("hasValueForQuestionId('f4780d23-fd8a-4758-b772-18606dca32f0', '"
 						+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
 						+ "')");
 
@@ -2487,9 +2487,9 @@ public class StudentIntakeFormManager { // NOPMD
 		highSchoolAttendedQuestion.setRequired(true);
 		// DEPENDENCY -> highSchoolAttendedQuestion shown when
 		// educationLevelCompletedQuestion value is
-		// B2D05C27-5056-A51A-80D26A4742E0AB64
+		// f4780d23-fd8a-4758-b772-18606dca32f0
 		highSchoolAttendedQuestion
-				.setVisibilityExpression("hasValueForQuestionId('B2D05C27-5056-A51A-80D26A4742E0AB64', '"
+				.setVisibilityExpression("hasValueForQuestionId('f4780d23-fd8a-4758-b772-18606dca32f0', '"
 						+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
 						+ "')");
 
@@ -2507,9 +2507,9 @@ public class StudentIntakeFormManager { // NOPMD
 		someCollegeCreditsLastYearAttendedQuestion.setRequired(true);
 		// DEPENDENCY -> someCollegeCreditsLastYearAttendedQuestion shown when
 		// educationLevelCompletedQuestion value is
-		// B2D05C36-5056-A51A-80E7C017F4882593
+		// c5111182-9e2f-4252-bb61-d2cfa9700af7
 		someCollegeCreditsLastYearAttendedQuestion
-				.setVisibilityExpression("hasValueForQuestionId('B2D05C36-5056-A51A-80E7C017F4882593', '"
+				.setVisibilityExpression("hasValueForQuestionId('c5111182-9e2f-4252-bb61-d2cfa9700af7', '"
 						+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
 						+ "')");
 
@@ -2527,9 +2527,9 @@ public class StudentIntakeFormManager { // NOPMD
 		otherPleaseExplainQuestion.setRequired(true);
 		// DEPENDENCY -> otherPleaseExplainQuestion shown when
 		// educationLevelCompletedQuestion value is
-		// B2D05C65-5056-A51A-8024DC8A118A585C
+		// 247165ae-3db4-4679-ac95-ca96488c3b27
 		otherPleaseExplainQuestion
-				.setVisibilityExpression("hasValueForQuestionId('B2D05C65-5056-A51A-8024DC8A118A585C', '"
+				.setVisibilityExpression("hasValueForQuestionId('247165ae-3db4-4679-ac95-ca96488c3b27', '"
 						+ SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID
 						+ "')");
 
