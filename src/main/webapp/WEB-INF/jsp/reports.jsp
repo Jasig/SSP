@@ -1808,7 +1808,7 @@
 								</td>
 								<td>	
 									<div class="ea-input">
-											Journal Entry created.
+											Student entered into SSP.
 									</div>
 								</td>
 							</tr>
