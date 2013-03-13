@@ -5159,6 +5159,7 @@ Ext.define('Ssp.util.Constants',{
         GRID_ITEM_EDIT_ICON_PATH: '/ssp/images/edit-icon.jpg',
         GRID_ITEM_CLOSE_ICON_PATH: '/ssp/images/close-icon.jpg',
         GRID_ITEM_MAIL_REPLY_ICON_PATH: '/ssp/images/mail-reply-icon.png',
+        DEFAULT_NO_STUDENT_PHOTO_URL:'/ssp/images/no-photo.jpg',
         
         // CAN BE APPLIED TO THE LABEL OF A FIELD TO SHOW A RED REQUIRED ASTERISK
         REQUIRED_ASTERISK_DISPLAY: '<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>',
@@ -10760,7 +10761,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var me = this;
         var id = me.personLite.get('id');
         me.resetForm();
-
+       
         if (id != "") {
             // display loader
             me.getView().setLoading(true);
@@ -20058,7 +20059,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
             items: [{
                 xtype: 'image',
                 fieldLabel: '',
-                src: 'photoUrl',
+                src: Ssp.util.Constants.DEFAULT_NO_STUDENT_PHOTO_URL,
                 itemId: 'studentPhoto',
                 width:150,
                 height:150
@@ -25205,17 +25206,18 @@ Ext.define('Ssp.model.Person', {
     },
     
     getPhotoUrl: function(){
-    	return  this.get('photoUrl')   	
+    	var url =  this.get('photoUrl')   	
+    	if(url == null || url == "") 	
+    		url = Ssp.util.Constants.DEFAULT_NO_STUDENT_PHOTO_URL;
+
+    	return url;
     },    
     
     setPhotoUrl: function( value ){
     	var me=this;
     	if (value != "")
     	{
-        	if ( me.get('photoUrl') != null)
-        	{
-        		me.set('photoUrl',value);
-        	}    		
+        	me.set('photoUrl', value);		
     	}
     },
     

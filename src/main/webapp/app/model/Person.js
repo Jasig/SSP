@@ -140,17 +140,18 @@ Ext.define('Ssp.model.Person', {
     },
     
     getPhotoUrl: function(){
-    	return  this.get('photoUrl')   	
+    	var url =  this.get('photoUrl')   	
+    	if(url == null || url == "") 	
+    		url = Ssp.util.Constants.DEFAULT_NO_STUDENT_PHOTO_URL;
+
+    	return url;
     },    
     
     setPhotoUrl: function( value ){
     	var me=this;
     	if (value != "")
     	{
-        	if ( me.get('photoUrl') != null)
-        	{
-        		me.set('photoUrl',value);
-        	}    		
+        	me.set('photoUrl', value);		
     	}
     },
     

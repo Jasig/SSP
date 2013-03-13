@@ -62,7 +62,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var me = this;
         var id = me.personLite.get('id');
         me.resetForm();
-
+       
         if (id != "") {
             // display loader
             me.getView().setLoading(true);
