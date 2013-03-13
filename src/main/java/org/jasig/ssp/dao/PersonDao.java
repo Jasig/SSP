@@ -356,17 +356,28 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 
 	}
 	
+	private Boolean setCoachAlias(Criteria criteria, String alias, Boolean created){
+		if(created.equals(true))
+			return created;
+		criteria.createAlias("coach", alias);
+		return true;
+	}
+	
 	protected Criteria setBasicSearchCriteria(Criteria criteria, final PersonSearchFormTO personSearchTO){
-		criteria.createAlias("coach", "c");
+		Boolean coachCriteriaCreated = false;
 		if (personSearchTO.getCoach() != null
 				&& personSearchTO.getCoach().getId() != null) {
-			
+			coachCriteriaCreated = setCoachAlias( criteria,  "c", coachCriteriaCreated);
 			criteria.add(Restrictions.eq("c.id",
 					personSearchTO.getCoach().getId()));
+		}else{
+			
 		}
 		
 		if (personSearchTO.getHomeDepartment() != null
 				&& personSearchTO.getHomeDepartment().length() > 0) {
+			coachCriteriaCreated = setCoachAlias( criteria,  "c", coachCriteriaCreated);
+			
 			criteria.createAlias("c.staffDetails", "coachStaffDetails");
 			criteria.add(Restrictions.eq("coachStaffDetails.departmentName",
 					personSearchTO.getHomeDepartment()));
@@ -436,11 +447,14 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		}
 		
 		if (personSearchTO.getDisabilityIsNotNull() != null && personSearchTO.getDisabilityIsNotNull() == true) {
-			criteria.add(Restrictions.isNotNull("disability"));
+			criteria.createAlias("disability", "personDisability");
+			criteria.add(Restrictions.isNotNull("personDisability.id"));
 		}
 		
 		if (personSearchTO.getDisabilityStatusId() != null) {
-			criteria.createAlias("disability", "personDisability");
+			if (personSearchTO.getDisabilityIsNotNull() == null || personSearchTO.getDisabilityIsNotNull() == false)
+				criteria.createAlias("disability", "personDisability");
+			
 			criteria.add(Restrictions.eq(
 					"personDisability.disabilityStatus.id",
 					personSearchTO.getDisabilityStatusId()));
