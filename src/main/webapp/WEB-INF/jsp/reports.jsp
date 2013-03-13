@@ -195,7 +195,21 @@
 			</div>
 			<div class="ea-buttons">
 				<div>
-					<button class="switch-date-range-type button" value="setbyrange"></button>
+					<table>
+						<tbody>
+							<tr>
+								<td>
+									<button class="switch-date-range-type button" value="setbyrange">
+									</button>
+									</td>
+									<td>	
+										<div class="ea-input">
+											Student entered in SSP.
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 				</div>
 			</div>
 		</div>
@@ -387,7 +401,21 @@
 			</div>
 			<div class="ea-buttons">
 				<div>
-					<button class="switch-date-range-type button" value="setbyrange"></button>
+					<table>
+						<tbody>
+							<tr>
+								<td>
+									<button class="switch-date-range-type button" value="setbyrange">
+									</button>
+									</td>
+									<td>	
+										<div class="ea-input">
+											Student entered in SSP.
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 				</div>
 			</div>
 		</div>
@@ -536,7 +564,21 @@
 			</div>
 			<div class="ea-buttons">
 				<div>
-					<button class="switch-date-range-type button" value="setbyrange"></button>
+					<table>
+						<tbody>
+							<tr>
+								<td>
+									<button class="switch-date-range-type button" value="setbyrange">
+									</button>
+									</td>
+									<td>	
+										<div class="ea-input">
+											Journal Entry Created.
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 				</div>
 			</div>
 		</div>
@@ -913,7 +955,21 @@
 			</div>
 			<div class="ea-buttons">
 				<div>
-					<button class="switch-date-range-type button" value="setbyrange"></button>
+					<table>
+						<tbody>
+							<tr>
+								<td>
+									<button class="switch-date-range-type button" value="setbyrange">
+									</button>
+									</td>
+									<td>	
+										<div class="ea-input">
+										Early Alert created.
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 				</div>
 			</div>
 		</div>
@@ -1034,7 +1090,21 @@
 			</div>
 			<div class="ea-buttons">
 				<div>
-					<button class="switch-date-range-type button" value="setbyrange"></button>
+					<table>
+						<tbody>
+							<tr>
+								<td>
+									<button class="switch-date-range-type button" value="setbyrange">
+									</button>
+									</td>
+									<td>	
+										<div class="ea-input">
+											Early Alert Response created.
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 				</div>
 			</div>
 		</div>
@@ -1312,7 +1382,21 @@
 			</div>
 			<div class="ea-buttons">
 				<div>
-					<button class="switch-date-range-type button" value="setbyrange"></button>
+					<table>
+						<tbody>
+							<tr>
+								<td>
+									<button class="switch-date-range-type button" value="setbyrange">
+									</button>
+									</td>
+									<td>	
+										<div class="ea-input">
+											Early Alert Response created.
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 				</div>
 			</div>
 		</div>
@@ -1464,7 +1548,21 @@
 			</div>
 			<div class="ea-buttons">
 				<div>
-					<button class="switch-date-range-type button" value="setbyrange"></button>
+					<table>
+						<tbody>
+							<tr>
+								<td>
+									<button class="switch-date-range-type button" value="setbyrange">
+									</button>
+								</td>
+								<td>	
+									<div class="ea-input">
+											Early Alert Response created.
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
@@ -1701,9 +1799,24 @@
 			</div>
 			<div class="ea-buttons">
 				<div>
-					<button class="switch-date-range-type button" value="setbyrange"></button>
+					<table>
+						<tbody>
+							<tr>
+								<td>
+									<button class="switch-date-range-type button" value="setbyrange">
+									</button>
+								</td>
+								<td>	
+									<div class="ea-input">
+											Journal Entry created.
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
+			
 		</div>
 
 		<!-- Actual Start Term -->
@@ -1912,10 +2025,22 @@
 				</div>
 				<div class="ea-clear"></div>
 			</div>
-			<div class="ea-buttons">
-				<div>
-					<button class="switch-date-range-type button" value="setbyrange"></button>
-				</div>
+			<div>
+				<table>
+					<tbody>
+						<tr>
+							<td>
+								<button class="switch-date-range-type button" value="setbyrange">
+								</button>
+							</td>
+							<td>	
+								<div class="ea-input">
+										Student entered in SSP.
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 
@@ -2111,9 +2236,21 @@
 				<div class="ea-clear"></div>
 			</div>
 			<div class="ea-buttons">
-				<div>
-					<button class="switch-date-range-type button" value="setbyrange"></button>
-				</div>
+				<table>
+					<tbody>
+						<tr>
+							<td>
+								<button class="switch-date-range-type button" value="setbyrange">
+								</button>
+							</td>
+							<td>	
+								<div class="ea-input">
+										Journal Entry created.
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 		<!-- output type -->

@@ -174,7 +174,7 @@ var ssp = ssp || {};
 			
 			if(button.length == 0)
 				return;
-			var section = button.parent().parent().parent();
+			var section = button.closest(".ea-time-span");
 			var term = section.find('.ea-term');
 			var dateRange = section.find('.ea-date-range');
 			var value = button.val();
@@ -210,7 +210,7 @@ var ssp = ssp || {};
 			$(switchDateRangeType).click(function(event) {
 				var value = $(event.target).val();
 				var button = $(event.target);
-				var section = button.parent().parent().parent();
+				var section = button.closest(".ea-time-span");
 				var term = section.find('.ea-term');
 				var dateRange = section.find('.ea-date-range');
 				if(value == 'setbyrange'){
