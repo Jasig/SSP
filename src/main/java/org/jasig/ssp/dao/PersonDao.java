@@ -560,11 +560,6 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		criteria.setResultTransformer(new AliasToBeanResultTransformer(
 				DisabilityServicesReportTO.class));
 
-		// Add Paging
-		if (sAndP != null) {
-			sAndP.addAll(criteria);
-		}
-
 		return new PagingWrapper<DisabilityServicesReportTO>(ids.size(), criteria.list());
 
 	}
