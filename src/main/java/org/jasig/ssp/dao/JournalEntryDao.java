@@ -148,7 +148,7 @@ public class JournalEntryDao
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<JournalStepStudentReportTO> getJournalStepStudentReportTOsFromCriteria(JournalStepSearchFormTO personSearchForm,  
 			SortingAndPaging sAndP){
-		final Criteria criteria = createCriteria();
+		final Criteria criteria = createCriteria(sAndP);
 		
 		setPersonCriteria(criteria,personSearchForm);
 		
@@ -167,14 +167,19 @@ public class JournalEntryDao
 			criteria.createAlias("journalEntryDetails", "journalEntryDetails", joinType);
 			criteria.createAlias("journalEntryDetails.journalStepJournalStepDetail", "journalStepJournalStepDetail", joinType);
 			criteria.createAlias("journalStepJournalStepDetail.journalStepDetail", "journalStepDetail", joinType);
-			criteria.add(Restrictions.in("journalStepDetail.id", personSearchForm.getJournalStepDetailIds()));
+			if(personSearchForm.getJournalStepDetailIds() != null && !personSearchForm.getJournalStepDetailIds().isEmpty())
+				criteria.add(Restrictions.in("journalStepDetail.id", personSearchForm.getJournalStepDetailIds()));
 		}else{
 			criteria.createAlias("journalEntryDetails", "journalEntryDetails", JoinType.LEFT_OUTER_JOIN);
 			criteria.createAlias("journalEntryDetails.journalStepJournalStepDetail", "journalStepJournalStepDetail", JoinType.LEFT_OUTER_JOIN);
 			criteria.createAlias("journalStepJournalStepDetail.journalStepDetail", "journalStepDetail", JoinType.LEFT_OUTER_JOIN);
-			Criterion isNotIds =Restrictions.not(Restrictions.in("journalStepDetail.id", personSearchForm.getJournalStepDetailIds()));
-			Criterion isNull = Restrictions.isNull("journalStepDetail.id");
-			criteria.add(Restrictions.or(isNotIds, isNull));
+			if(personSearchForm.getJournalStepDetailIds() != null && !personSearchForm.getJournalStepDetailIds().isEmpty()){
+				Criterion isNotIds = Restrictions.not(Restrictions.in("journalStepDetail.id", personSearchForm.getJournalStepDetailIds()));
+				Criterion isNull = Restrictions.isNull("journalStepDetail.id");
+				criteria.add(Restrictions.or(isNotIds, isNull));
+			}else{
+				criteria.add(Restrictions.isNull("journalStepDetail.id"));
+			}
 		}
 		
 		ProjectionList projections = Projections.projectionList();
@@ -182,7 +187,6 @@ public class JournalEntryDao
 		addBasicStudentProperties( projections, criteria);
 		
 		projections.add(Projections.groupProperty("journalStepDetail.name").as("journalentry_journalStepDetailName"));
-		sAndP.addAll(criteria);
 		criteria.setProjection(projections);
 		criteria.setResultTransformer(
 				new NamespacedAliasToBeanResultTransformer(
