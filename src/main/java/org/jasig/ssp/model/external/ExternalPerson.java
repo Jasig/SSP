@@ -116,7 +116,11 @@ public class ExternalPerson extends AbstractExternalData implements
 	@Column(length = 50)
 	@Size(max = 50)
 	private String coachSchoolId;
-	
+
+	@Column(length = 100)
+	@Size(max = 100)
+	private String photoUrl;
+
 	@Nullable
 	private Boolean nonLocalAddress;
 
@@ -336,4 +340,19 @@ public class ExternalPerson extends AbstractExternalData implements
 	public void setNonLocalAddress(Boolean nonLocalAddress) {
 		this.nonLocalAddress = nonLocalAddress;
 	}
+
+	/**
+	 * @return the photoUrl
+	 */
+	public String getPhotoUrl() {
+		return photoUrl;
+	}
+
+	/**
+	 * @param photoUrl the photoUrl to set
+	 */
+	public void setPhotoUrl(String photoUrl) {
+		this.photoUrl = photoUrl;
+	}
+
 }
