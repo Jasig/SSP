@@ -26,11 +26,13 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
@@ -128,6 +130,7 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 			final SortingAndPaging sAndP) {
 		final Criteria query = createCriteria();
 		query.add(Restrictions.eq("showInStudentIntake", true));
+		sAndP.appendSortField("name", SortDirection.ASC);
 		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 
