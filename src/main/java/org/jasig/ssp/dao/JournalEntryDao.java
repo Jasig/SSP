@@ -183,7 +183,7 @@ public class JournalEntryDao
 		}
 		
 		ProjectionList projections = Projections.projectionList();
-		
+		projections.add(Projections.distinct(Projections.groupProperty("journalEntryDetails.id").as("journalentry_journalEntryDetailId")));
 		addBasicStudentProperties( projections, criteria);
 		
 		projections.add(Projections.groupProperty("journalStepDetail.name").as("journalentry_journalStepDetailName"));
