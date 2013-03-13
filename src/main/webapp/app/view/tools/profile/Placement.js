@@ -51,7 +51,8 @@ Ext.define('Ssp.view.tools.profile.Placement', {
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'takenDate',
-                    text: 'Date'
+                    text: 'Date',
+					renderer: Ext.util.Format.dateRenderer('m/d/Y')
                 }
             ],
             viewConfig: {
