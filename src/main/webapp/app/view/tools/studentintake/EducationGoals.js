@@ -23,12 +23,6 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.studentintake.EducationGoalsViewController',
-    inject:{
-    	formUtils: 'formRendererUtils',
-        weeklyCourseWorkHourRangesStore: 'weeklyCourseWorkHourRangesStore',
-        registrationLoadRangesStore: 'registrationLoadRangesStore',
-        futureTermsStore: 'futureTermsStore'
-    },
 	width: "100%",
     height: "100%", 
     initComponent: function() {
@@ -124,45 +118,6 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				        items: [
 				            {boxLabel: "Yes", itemId: "additionalAcademicProgramInformationNeededCheckOn", name: "additionalAcademicProgramInformationNeeded", inputValue:"true"},
 				            {boxLabel: "No", itemId: "additionalAcademicProgramInformationNeededCheckOff", name: "additionalAcademicProgramInformationNeeded", inputValue:"false"}]
-					},{
-				        xtype: 'combobox',
-				        name: 'registrationLoadName',
-				        itemId: 'fieldRegistrationLoadCombo',
-				        fieldLabel: 'Field Registration Load',
-				        emptyText: 'Select One',
-				        store: me.registrationLoadRangesStore,
-				        valueField: 'name',
-				        displayField: 'rangeLabel',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: true
-					},{
-				        xtype: 'combobox',
-				        name: 'courseWorkWeeklyHoursName',
-				        itemId: 'courseWorkWeeklyHoursCombo',
-				        fieldLabel: 'Hours per Week for Coursework',
-				        emptyText: 'Select One',
-				        store: me.weeklyCourseWorkHourRangesStore,
-				        valueField: 'name',
-				        displayField: 'rangeLabel',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: true
-					},{
-				        xtype: 'combobox',
-				        name: 'anticipatedGraduationDateTermCode',
-				        itemId: 'anticipatedGraduationDateTermCodeCombo',
-				        fieldLabel: 'Anticipated Graduation Date',
-				        emptyText: 'Select One',
-				        store: me.futureTermsStore,
-				        valueField: 'code',
-				        displayField: 'name',
-				        mode: 'local',
-				        typeAhead: true,
-				        queryMode: 'local',
-				        allowBlank: true
 					}]
 				    
 				    }]

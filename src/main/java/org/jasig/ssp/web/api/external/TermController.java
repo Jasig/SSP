@@ -19,7 +19,6 @@
 package org.jasig.ssp.web.api.external;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.jasig.ssp.factory.external.ExternalTOFactory;
 import org.jasig.ssp.factory.external.TermTOFactory;
@@ -106,19 +105,6 @@ public class TermController extends AbstractExternalController<TermTO, Term> {
 		}
 
 		return super.instantiateTO(model);
-	}
-	
-	@RequestMapping(value = "/future", method = RequestMethod.GET)
-	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
-	public @ResponseBody
-	List<TermTO> futureTerms() throws ObjectNotFoundException,
-			ValidationException {		
-		final List<Term> models = getService().getCurrentAndFutureTerms();
-		if (models == null) {
-			return null;
-		}
-
-		return getFactory().asTOList(models);
 	}
 	
 }

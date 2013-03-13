@@ -226,10 +226,9 @@ public class IntakeControllerIntegrationTest {
 	 * 
 	 * This test assumes that there is at least 1 valid, active
 	 * ChallengeReferral in the test database.
-	 * @throws ObjectNotFoundException 
 	 */
 	@Test
-	public void testControllerRefData() throws ObjectNotFoundException {
+	public void testControllerRefData() {
 		final Map<String, Object> data = controller.referenceData();
 
 		assertNotNull("The map should not have been null.", data);

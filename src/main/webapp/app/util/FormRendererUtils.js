@@ -497,24 +497,6 @@ Ext.define('Ssp.util.FormRendererUtils',{
 	 * 
 	 * @returns - returns the sorted array
 	 */
-    valueSortByField: function( arrayToSort, fieldName ){
-    	return Ext.Array.sort(arrayToSort, function(a, b){
-    		 var nameA=a[fieldName], nameB=b[fieldName]
-    		 if (nameA < nameB) //sort string ascending
-    		  return -1
-    		 if (nameA > nameB)
-    		  return 1
-    		 return 0 //default return value (no sorting)
-    		});
-    },  
-    
-    /**
-	 * @params
-	 * @arrayToSort - the array to sort props on
-	 * @fieldName - the field name to sort on
-	 * 
-	 * @returns - returns the sorted array
-	 */
     alphaSortByField: function( arrayToSort, fieldName ){
     	return Ext.Array.sort(arrayToSort, function(a, b){
     		 var nameA=a[fieldName].toLowerCase(), nameB=b[fieldName].toLowerCase()
@@ -524,7 +506,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
     		  return 1
     		 return 0 //default return value (no sorting)
     		});
-    },
+    },    
     
     /**
      * @params

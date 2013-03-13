@@ -249,8 +249,6 @@ Ext.require([
     'Ssp.store.People',
     'Ssp.store.Placement',
     'Ssp.store.PeopleSearchLite',
-    'Ssp.store.reference.RegistrationLoadRanges', 
-    'Ssp.store.reference.WeeklyCourseWorkHourRanges', 
     'Ssp.store.reference.PersonalityTypes',
     'Ssp.store.reference.ProgramStatuses',
     'Ssp.store.reference.ProgramStatusChangeReasons',
@@ -258,7 +256,6 @@ Ext.require([
     'Ssp.store.reference.ServiceReasons',
     'Ssp.store.reference.SpecialServiceGroups',
     'Ssp.store.reference.States', 
-    'Ssp.store.external.FutureTerms',
     'Ssp.store.Students',
     'Ssp.store.Search',
     'Ssp.store.reference.StudentStatuses',
@@ -365,7 +362,6 @@ var apiUrls = [
   {name: 'personPrintTask', url: 'person/{id}/task/print'},
   {name: 'personSearch', url: 'person/search'},
   {name: 'placement', url: 'person/{id}/test'},
-  {name: 'registrationLoadRanges', url: 'reference/config/?name=registration_load_ranges'},
   {name: 'selfHelpGuides', url: 'selfHelpGuides/search'},
   {name: 'selfHelpGuideQuestions', url: 'selfHelpGuides/selfHelpGuideQuestions'},
   {name: 'personProgramStatus', url: 'person/{id}/programStatus'},
@@ -376,9 +372,7 @@ var apiUrls = [
   {name: 'session', url: 'session'},
   {name: 'specialServiceGroup', url: 'reference/specialServiceGroup'},
   {name: 'studentIntakeTool', url: 'tool/studentIntake'},
-  {name: 'studentType', url: 'reference/studentType'},
-  {name: 'futureTerms', url: 'reference/term/future'},
-  {name: 'weeklyCourseWorkHourRanges', url: 'reference/config/?name=weekly_course_work_hour_ranges'}
+  {name: 'studentType', url: 'reference/studentType'}
 ];
 
 Ext.onReady(function(){	
@@ -774,9 +768,6 @@ Ext.onReady(function(){
 				    studentsStore: 'Ssp.store.Students',
 				    studentStatusesStore: 'Ssp.store.reference.StudentStatuses',
 				    studentTypesStore: 'Ssp.store.reference.StudentTypes',
-				    registrationLoadRangesStore: 'Ssp.store.reference.RegistrationLoadRanges', 
-				    weeklyCourseWorkHourRangesStore: 'Ssp.store.reference.WeeklyCourseWorkHourRanges',
-				    futureTermsStore:'Ssp.store.external.FutureTerms',
 				    tasksStore: 'Ssp.store.Tasks',
 				    toolsStore: 'Ssp.store.Tools',
 			    	veteranStatusesStore: 'Ssp.store.reference.VeteranStatuses',

@@ -84,19 +84,6 @@ public class PersonEducationGoal
 
 	@Column
 	private Boolean additionalAcademicProgramInformationNeeded;
-	
-	@Column(length = 50)
-	@Size(max = 50)
-	private String courseWorkWeeklyHoursName;
-	
-	@Column(length = 50)
-	@Size(max = 50)
-	private String registrationLoadName;
-	
-	@Column(length = 50)
-	@Size(max = 50)
-	private String anticipatedGraduationDateTermCode;
-	
 
 	public PersonEducationGoal() {
 		super();
@@ -187,49 +174,6 @@ public class PersonEducationGoal
 	public void setAdditionalAcademicProgramInformationNeeded(
 			final boolean additionalAcademicProgramInformationNeeded) {
 		this.additionalAcademicProgramInformationNeeded = additionalAcademicProgramInformationNeeded;
-	}
-
-	/**
-	 * @return the courseWorkWeeklyHoursName
-	 */
-	public String getCourseWorkWeeklyHoursName() {
-		return courseWorkWeeklyHoursName;
-	}
-
-	/**
-	 * @param courseWorkWeeklyHoursName the courseWorkWeeklyHoursName to set
-	 */
-	public void setCourseWorkWeeklyHoursName(String courseWorkWeeklyHoursName) {
-		this.courseWorkWeeklyHoursName = courseWorkWeeklyHoursName;
-	}
-
-	/**
-	 * @return the registrationLoadName
-	 */
-	public String getRegistrationLoadName() {
-		return registrationLoadName;
-	}
-
-	/**
-	 * @param registrationLoadName the registrationLoadName to set
-	 */
-	public void setRegistrationLoadName(String registrationLoadName) {
-		this.registrationLoadName = registrationLoadName;
-	}
-
-	/**
-	 * @return the anticipatedGraduationDateTermCode
-	 */
-	public String getAnticipatedGraduationDateTermCode() {
-		return anticipatedGraduationDateTermCode;
-	}
-
-	/**
-	 * @param anticipatedGraduationDateTermCode the anticipatedGraduationDateTermCode to set
-	 */
-	public void setAnticipatedGraduationDateTermCode(
-			String anticipatedGraduationDateTermCode) {
-		this.anticipatedGraduationDateTermCode = anticipatedGraduationDateTermCode;
 	}
 
 	@Override
