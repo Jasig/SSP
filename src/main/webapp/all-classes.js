@@ -10874,7 +10874,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
         studentRecordComp.setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + me.person.get('schoolId'));
         studentCoachButton.setText('<u>Coach: ' + coachName + '</u>');
-
+		
         me.appEventsController.assignEvent({
             eventName: 'emailCoach',
             callBackFunc: me.onEmailCoach,
@@ -10893,7 +10893,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var transcript = new Ssp.model.Transcript(transcriptResponse);
         var gpa = transcript.get('gpa');
         if ( gpa ) {
-            me.getGpaField().setValue(gpa.gradePointAverage);
+			var gpaFormatted = Ext.util.Format.number(gpa.gradePointAverage, '0.00');
+            me.getGpaField().setValue(gpaFormatted);
             me.getHoursEarnedField().setValue(gpa.creditHoursForGpa);
             me.getHoursAttemptedField().setValue(gpa.creditHoursAttempted);
         }
@@ -10947,6 +10948,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     }
 
 });
+
 /*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
