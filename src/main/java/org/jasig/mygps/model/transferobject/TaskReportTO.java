@@ -51,9 +51,9 @@ public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
 			description = task.getDescription();
 			dueDate = task.getDueDate();
 		} else {
-			challengeName = task.getChallenge().getName();
-			challengeReferralName = task.getChallengeReferral().getName();
-			description = task.getChallengeReferral().getPublicDescription();
+			challengeName = task.getChallenge() == null ? null : task.getChallenge().getName();
+			challengeReferralName = task.getChallengeReferral() == null ? null : task.getChallengeReferral().getName();
+			description = task.getChallengeReferral() == null ? null : task.getChallengeReferral().getPublicDescription();
 			dueDate = null;
 		}
 
