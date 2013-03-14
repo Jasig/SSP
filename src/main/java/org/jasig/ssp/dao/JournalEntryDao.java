@@ -279,8 +279,8 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 			criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate"));
 
 		}else{
-			criteria.createAlias("person.programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);	
-			
+			criteria.createAlias("person.programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
+			criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate"));	
 		}
 		if (personSearchForm.getSpecialServiceGroupIds() != null) {
 			criteria.createAlias("person.specialServiceGroups",
