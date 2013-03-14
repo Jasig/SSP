@@ -45,18 +45,19 @@ public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
 	}
 
 	public TaskReportTO(final Task task) {
-		if (task.getType().equals(Task.CUSTOM_ACTION_PLAN_TASK)) {
+		if (Task.CUSTOM_ACTION_PLAN_TASK.equals(task.getType())) {
 			challengeName = "Custom Action Plan Task";
 			challengeReferralName = task.getName();
 			description = task.getDescription();
-			dueDate = task.getDueDate();
 		} else {
 			challengeName = task.getChallenge() == null ? null : task.getChallenge().getName();
 			challengeReferralName = task.getChallengeReferral() == null ? null : task.getChallengeReferral().getName();
 			description = task.getChallengeReferral() == null ? null : task.getChallengeReferral().getPublicDescription();
-			dueDate = null;
+			// SSP-822... fallback to descr if no publicDescr
+			description = (task.getChallengeReferral() != null && (description == null || description.trim().isEmpty())) ? task.getChallengeReferral().getDescription() : description;
 		}
 
+		dueDate = task.getDueDate();
 		createdBy = task.getCreatedBy().getId();
 		type = task.getType();
 	}
