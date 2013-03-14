@@ -810,8 +810,8 @@ Ext.define('Ssp.view.tools.sis.Assessment', {
                 },
                 {
                     xtype: 'gridcolumn',
-                    text: 'Date',
-				    renderer: Ext.util.Format.dateRenderer('m/d/Y')
+                    dataIndex: 'string',
+                    text: 'Date'
                 }
             ],
             viewConfig: {
@@ -18550,30 +18550,23 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
                 xtype: 'toolbar',
                 dock: 'top',
                 items: [{
-                    xtype: 'container',
-                    layout: 'vbox',
-                    items: [{
-                        xtype: 'label',
-                        text: 'Fill out the following forms with assigned coach details and appointment information'
-                    }, {
-                        xtype: 'tbspacer',
-                        height: '10'
-                    }, {
-                        xtype: 'container',
-                        layout: 'hbox',
-                        items: [{
-                            xtype: 'button',
-                            itemId: 'saveButton',
-                            text: 'Save'
-                        }, {
-                            xtype: 'tbspacer',
-                            height: '20'
-                        }, {
-                            xtype: 'button',
-                            itemId: 'cancelButton',
-                            text: 'Cancel',
-                        }]
-                    }]
+                    xtype: 'button',
+                    itemId: 'saveButton',
+                    text: 'Save'
+                    
+                }, '-', {
+                    xtype: 'button',
+                    itemId: 'cancelButton',
+                    text: 'Cancel'
+                }]
+            
+            }, {
+                xtype: 'toolbar',
+                
+                items: [{
+                
+                    xtype: 'label',
+                    text: 'Fill out the following forms with assigned coach details and appointment information'
                 }]
             }, {
                 dock: 'bottom',
@@ -18627,7 +18620,6 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
     }
     
 });
-
 /*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
