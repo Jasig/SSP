@@ -97,11 +97,12 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 
 	public void addDisabilityAgenciesName(List<String> disabilityAgenciesName) {
 		for(String disabilityAgencyName:disabilityAgenciesName)
-			if(!this.disabilityAgenciesName.contains(disabilityAgencyName))
-				this.disabilityAgenciesName.add(disabilityAgencyName);
+			addDisabilityAgenciesName(disabilityAgencyName);
 	}
 
 	public void addDisabilityAgenciesName(String disabilityAgenciesName) {
+		if(disabilityAgenciesName == null || disabilityAgenciesName.isEmpty())
+			return;
 		if(!this.disabilityAgenciesName.contains(disabilityAgenciesName))
 			this.disabilityAgenciesName.add(disabilityAgenciesName);
 	}
@@ -109,6 +110,8 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 	public String getAgencyContacts() {
 		if(agencyContacts == null || agencyContacts.length() == 0){
 			agencyContacts = "";
+			if(disabilityAgenciesName == null || disabilityAgenciesName.size() == 0)
+				return agencyContacts;
 			for(String disabilityAgencyName:disabilityAgenciesName){
 				agencyContacts = addValueToStringList(agencyContacts, disabilityAgencyName);
 			}
@@ -135,11 +138,12 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 	
 	public void addDisabilityAgenciesCreatedDate(List<Date> disabilityAgenciesCreatedDate) {
 		for(Date disabilityAgencyCreatedDate:disabilityAgenciesCreatedDate)
-			if(!this.disabilityAgenciesCreatedDate.contains(disabilityAgencyCreatedDate))
-				this.disabilityAgenciesCreatedDate.add(disabilityAgencyCreatedDate);
+			addDisabilityAgenciesCreatedDate(disabilityAgencyCreatedDate);
 	}
 
-	public void addDisabilityAgenciesCreatedDate(Date disabilityAgenciesCreatedDate) {		
+	public void addDisabilityAgenciesCreatedDate(Date disabilityAgenciesCreatedDate) {	
+		if(disabilityAgenciesCreatedDate == null)
+			return;
 		if(!this.disabilityAgenciesCreatedDate.contains(disabilityAgenciesCreatedDate))
 			this.disabilityAgenciesCreatedDate.add(disabilityAgenciesCreatedDate);
 	}
@@ -151,8 +155,11 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 	public String getAssignmentDates() {
 		if(assignmentDates == null || assignmentDates.length() == 0){
 				assignmentDates = "";
+			if(disabilityAgenciesCreatedDate == null || disabilityAgenciesCreatedDate.size() == 0)
+				return assignmentDates;
 			for(Date disabilityAgencyCreatedDate:disabilityAgenciesCreatedDate)
 				assignmentDates = addValueToStringList(assignmentDates, DATE_FORMATTER.format(disabilityAgencyCreatedDate));
+			
 		}
 		return assignmentDates;
 	}
@@ -236,13 +243,14 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 
 	public void addDisabilityTypes(List<String> disabilityTypes) {
 		for(String disabilityType:disabilityTypes)
-			if(!this.disabilityTypes.contains(disabilityType))
-				this.disabilityTypes.add(disabilityType);
+			addDisabilityTypes(disabilityType);
 	}
 
-	public void addDisabilityTypes(String programStatus) {
-		if(!this.disabilityTypes.contains(programStatus))
-			this.disabilityTypes.add(programStatus);
+	public void addDisabilityTypes(String disabilityType) {
+		if(disabilityType == null)
+			return;
+		if(!this.disabilityTypes.contains(disabilityType))
+			this.disabilityTypes.add(disabilityType);
 	}
 	
 	public void setdisabilityTypesName(String disabilityTypesName) {
@@ -250,8 +258,11 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 	}
 
 	public String getdisabilityTypesName() {
+		
 		if(disabilityTypesName == null || disabilityTypesName.length() == 0){
 			disabilityTypesName = "";
+			if(disabilityTypes == null || disabilityTypes.size() == 0)
+				return disabilityTypesName;
 			for(String disabilityType:disabilityTypes){
 				disabilityTypesName = addValueToStringList(disabilityTypesName, disabilityType);
 			}
