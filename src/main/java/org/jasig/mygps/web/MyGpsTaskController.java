@@ -18,6 +18,10 @@
  */
 package org.jasig.mygps.web; // NOPMD
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +29,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.mail.SendFailedException;
+import javax.servlet.http.HttpServletResponse;
 
 import org.jasig.mygps.model.transferobject.TaskReportTO;
 import org.jasig.ssp.model.ObjectStatus;
@@ -56,6 +61,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Controller
 @RequestMapping("/1/mygps/task")
@@ -246,8 +259,8 @@ public class MyGpsTaskController extends AbstractBaseController {
 
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
 	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
-	public ModelAndView print() {
-		final Map<String, Object> model = new HashMap<String, Object>();
+	@ResponseBody
+	public void print(final HttpServletResponse response) throws JRException, IOException {
 		final SortingAndPaging sAndP = new SortingAndPaging(
 				ObjectStatus.ACTIVE);
 
@@ -258,18 +271,50 @@ public class MyGpsTaskController extends AbstractBaseController {
 			final Person student = securityService.currentUser().getPerson();
 			tasks = taskService.getAllForPerson(student, false, requestor,
 					sAndP);
-			model.put("studentName",
-					student.getFirstName() + " " + student.getLastName());
 		} else {
 			final String sessionId = securityService.getSessionId();
 			tasks = taskService.getAllForSessionId(sessionId, false, sAndP);
-			model.put("studentName", "");
 		}
 
-		model.put("myBeanData",
-				tasks == null ? null : TaskReportTO.tasksToTaskReportTOs(tasks));
+		List<TaskReportTO> taskTos = (tasks == null || tasks.isEmpty()) ?
+				Lists.<TaskReportTO>newArrayList() :
+				TaskReportTO.tasksToTaskReportTOs(tasks);
 
-		return new ModelAndView("actionPlanReport", model);
+		JRDataSource beanDS;
+		if (taskTos.isEmpty()) {
+			beanDS = new JREmptyDataSource();
+		} else {
+			beanDS = new JRBeanCollectionDataSource(taskTos);
+		}
+		final Map<String, Object> parameters = Maps.newHashMap();
+
+		response.addHeader("Content-Disposition", "attachment");
+		response.setContentType("application/pdf");
+
+		final InputStream is = getClass().getResourceAsStream(
+				"/reports/studentTasks.jasper");
+		try {
+			final ByteArrayOutputStream os = new ByteArrayOutputStream();
+			try {
+				JasperFillManager
+						.fillReportToStream(is, os, parameters, beanDS);
+				final InputStream decodedInput = new ByteArrayInputStream(
+						os.toByteArray());
+
+				response.setHeader(
+						"Content-disposition",
+						"attachment; filename=StudentTasks.pdf");
+
+				JasperExportManager.exportReportToPdfStream(decodedInput,
+						response.getOutputStream());
+				response.flushBuffer();
+			} finally {
+				os.close();
+			}
+		} finally {
+			is.close();
+		}
+
 	}
 
 	@Override

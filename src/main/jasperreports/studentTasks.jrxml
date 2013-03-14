@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="studentActionPlan" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aac79acd-053b-4b36-bb85-9b85200e4ec8">
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="json">
+		<![CDATA[]]>
+	</queryString>
+	<field name="challengeName" class="java.lang.String">
+		<fieldDescription><![CDATA[challengeName]]></fieldDescription>
+	</field>
+	<field name="challengeReferralName" class="java.lang.String"/>
+	<field name="description" class="java.lang.String"/>
+	<field name="dueDate" class="java.util.Date"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="38" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="0" width="572" height="35" backcolor="#70C2E7"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="210" y="9" width="152" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Student Action Plan]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="9"/>
+	</columnHeader>
+	<detail>
+		<band height="91" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="3f413d04-9936-495d-9ee0-e48d32a27ddb" x="0" y="24" width="572" height="24" backcolor="#DFDFDF"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="19f089d6-00fb-46ae-bc54-ef0012f8f77f" x="0" y="4" width="572" height="20" backcolor="#AFAAAA"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="97c5210e-6cd2-4b77-b581-cd9cbb0afd91" x="14" y="8" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Challenge:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bfd5eaa1-6125-4568-b50f-05d99ebe2ddb" x="14" y="28" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Action Step]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9a161e3c-553f-4a16-8780-14af67dddbfc" x="472" y="28" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Target Date]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="28e389f0-d564-4828-8efa-4d5d91ee40e9" x="114" y="8" width="403" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{challengeName} == null || $F{challengeName}.isEmpty()) ? "UNKNOWN" : $F{challengeName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="0555938f-0ca6-44ad-93ea-2818cdcc7270" x="14" y="52" width="421" height="36"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[(($F{challengeReferralName} == null || $F{challengeReferralName}.isEmpty()) && ($F{description} == null || $F{description}.isEmpty()))
+  ? "UNKNOWN" :
+    ((($F{challengeReferralName} == null || $F{challengeReferralName}.isEmpty())
+        ? ""
+        : ($F{challengeReferralName} + (($F{description} == null || $F{description}.isEmpty()) ? "" : ": "))) +
+         (($F{description} == null || $F{description}.isEmpty()) ? "" : $F{description}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="46f52ea4-2379-4e13-bf72-0673e49deb70" x="472" y="52" width="78" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dueDate} == null ? "UNKNOWN" : $F{dueDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
