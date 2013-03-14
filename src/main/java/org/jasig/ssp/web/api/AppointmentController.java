@@ -21,6 +21,7 @@ package org.jasig.ssp.web.api;
 import java.util.UUID;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.jasig.mygps.business.StudentIntakeRequestManager;
 import org.jasig.ssp.factory.AppointmentTOFactory;
@@ -111,11 +112,28 @@ public class AppointmentController
 			throws ObjectNotFoundException, ValidationException {
 
 		AppointmentTO appointment = super.save(id, personId, obj);
+		processStudentIntakeRequest(obj, appointment);
+		return appointment;
+		
+	}
+
+	private void processStudentIntakeRequest(final AppointmentTO obj,
+			AppointmentTO appointment) throws ObjectNotFoundException {
 		if(obj.isStudentIntakeRequested() && appointment != null)
 		{
 			intakeRequestManager.processStudentIntakeRequest(appointment);
 		}
-		return appointment;
-		
 	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	@DynamicPermissionChecking
+	public @ResponseBody
+	AppointmentTO create(@PathVariable @NotNull final UUID personId,
+			@Valid @RequestBody @NotNull final AppointmentTO obj)
+			throws ValidationException, ObjectNotFoundException {
+
+		AppointmentTO appointment = super.create(personId, obj);
+		processStudentIntakeRequest(obj, appointment);
+		return appointment;
+	}	
 }
