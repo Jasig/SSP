@@ -584,6 +584,12 @@
 
 <script type="text/javascript">
     var ${n} = {};
+    
+    function validateForm(form)
+    {
+    	return form;
+    }
+
     ${n}.jQuery = jQuery.noConflict(true);
 
     ${n}.jQuery(function() {
