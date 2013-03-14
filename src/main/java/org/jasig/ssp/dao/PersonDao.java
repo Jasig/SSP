@@ -532,24 +532,24 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 				
 		addBasicStudentProperties(projections, criteria);
 		
-		Criteria demographics = criteria.createAlias("demographics", "demographics");
-		demographics.createAlias("demographics.ethnicity", "ethnicity");
-		demographics.createAlias("demographics.veteranStatus", "veteranStatus");
+		Criteria demographics = criteria.createAlias("demographics", "demographics", JoinType.LEFT_OUTER_JOIN);
+		demographics.createAlias("demographics.ethnicity", "ethnicity", JoinType.LEFT_OUTER_JOIN);
+		demographics.createAlias("demographics.veteranStatus", "veteranStatus", JoinType.LEFT_OUTER_JOIN);
 		
-		criteria.createAlias("disabilityAgencies", "disabilityAgencies");
+		criteria.createAlias("disabilityAgencies", "disabilityAgencies", JoinType.LEFT_OUTER_JOIN);
 		
-		criteria.createAlias("disabilityAgencies.disabilityAgency", "disabilityAgency");
+		criteria.createAlias("disabilityAgencies.disabilityAgency", "disabilityAgency", JoinType.LEFT_OUTER_JOIN);
 		if (form.getDisabilityTypeId() == null)
-			criteria.createAlias("disabilityTypes", "personDisabilityTypes");
+			criteria.createAlias("disabilityTypes", "personDisabilityTypes", JoinType.LEFT_OUTER_JOIN);
 		
-		criteria.createAlias("personDisabilityTypes.disabilityType", "disabilityType");
+		criteria.createAlias("personDisabilityTypes.disabilityType", "disabilityType", JoinType.LEFT_OUTER_JOIN);
 		if (form.getDisabilityStatusId() == null) {
 			criteria.createAlias("disability", "personDisability");
 		}
 		
-		criteria.createAlias("personDisability.disabilityStatus", "disabilityStatus");
+		criteria.createAlias("personDisability.disabilityStatus", "disabilityStatus", JoinType.LEFT_OUTER_JOIN);
 		
-		criteria.createAlias("educationGoal", "educationGoal");
+		criteria.createAlias("educationGoal", "educationGoal", JoinType.LEFT_OUTER_JOIN);
 		
 		Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
 		if ( dialect instanceof SQLServerDialect) {
