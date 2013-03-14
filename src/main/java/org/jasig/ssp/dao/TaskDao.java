@@ -76,6 +76,7 @@ public class TaskDao
 
 		final Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.eq("sessionId", sessionId));
+		criteria.add(Restrictions.eq("person.id", SspUser.ANONYMOUS_PERSON_ID));
 		return criteria.list();
 	}
 
@@ -85,7 +86,7 @@ public class TaskDao
 
 		final Criteria criteria = createCriteria(sAndP);
 		criteria.add(Restrictions.eq("sessionId", sessionId));
-
+		criteria.add(Restrictions.eq("person.id", SspUser.ANONYMOUS_PERSON_ID));
 		addCompleteRestriction(complete, criteria);
 
 		return criteria.list();
