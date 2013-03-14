@@ -53,7 +53,7 @@
 </script>
 
 <!-- SSP Application -->
-<script type="text/javascript" src="<c:url value="/app.js" />"></script>
+<script type="text/javascript" src="<c:url value="/app-all.js" />"></script>
 
 <div class="sspOuter">
 	<div id="${n}ssp"></div>
