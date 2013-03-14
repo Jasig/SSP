@@ -232,7 +232,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 
 		List<Task> tasks;
 
-		if (securityService.isAuthenticated()) {
+		if (securityService.currentlyAuthenticatedUser() != null ) {
 			final Person student = securityService.currentUser().getPerson();
 			tasks = (List<Task>) taskService.getAllForPerson(student,
 					securityService.currentUser(), sAndP)
