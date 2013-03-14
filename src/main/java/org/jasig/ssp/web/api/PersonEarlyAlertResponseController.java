@@ -192,28 +192,8 @@ public class PersonEarlyAlertResponseController extends
 			@Valid @RequestBody final EarlyAlertResponseTO obj)
 			throws ObjectNotFoundException, ValidationException {
 
-		checkPermissionForOp("WRITE");
+		throw new AccessDeniedException("EarlyAlertResponses are read-only after creation.");
 
-		if (id == null) {
-			throw new ValidationException(
-					"You submitted without an id to the save method.  Did you mean to create?");
-		}
-
-		// ensure earlyAlertId is set to path variable
-		final EarlyAlertResponseTO earlyAlertResponseTO = obj;
-
-		if (earlyAlertResponseTO.getEarlyAlertId() == null) {
-			earlyAlertResponseTO.setEarlyAlertId(earlyAlertId);
-		}
-
-		final EarlyAlertResponse model = factory.from(earlyAlertResponseTO);
-
-		final EarlyAlertResponse savedT = service.save(model);
-		if (null != savedT) {
-			return instantiateTO(savedT);
-		}
-
-		return null;
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
