@@ -30,6 +30,11 @@
 
 <c:set var="not_applicable" value="Not Used" />
 <c:set var="all_found" value="ALL" />
+<c:set var="date_range_student" value = "Date Range Student Entered:"/>
+<c:set var="date_range_activity" value = "Date Range Activity Created:"/>
+<c:set var="date_range_early_alert" value = "Date Range Early Alert Created:"/>
+<c:set var="date_range_early_response" value = "Date Range Early Response Created:"/>
+<c:set var="date_range_journal_entry" value = "Date Range Journal Entry Created:"/>
 
 <script src="<rs:resourceURL value="/rs/jquery/1.6.1/jquery-1.6.1.min.js"/>" type="text/javascript"></script>
 <script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"></script>
@@ -162,6 +167,13 @@
 		</div>
 		<div class="ea-clear"></div>
 
+		<!-- Date Range Description -->
+		<div class="ea-input">
+		</div>
+		<div class="ea-label">
+			<span>${date_range_student}</span>
+		</div>
+		<div class="ea-clear"></div>
 
 		<!-- Date Range Selection -->
 		<div class="ea-time-span">
@@ -195,21 +207,10 @@
 			</div>
 			<div class="ea-buttons">
 				<div>
-					<table>
-						<tbody>
-							<tr>
-								<td>
+					
 									<button class="switch-date-range-type button" value="setbyrange">
 									</button>
-									</td>
-									<td>	
-										<div class="ea-input">
-											Student entered in SSP.
-										</div>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+									
 				</div>
 			</div>
 		</div>
@@ -369,6 +370,14 @@
 		<div class="ea-clear"></div>
 
 
+		<!-- Date Range Description -->
+		<div class="ea-input">
+		</div>
+		<div class="ea-label">
+			<span>${date_range_student}</span>
+		</div>
+		<div class="ea-clear"></div>
+		
 		<!-- Date Range Selection -->
 		<div class="ea-time-span">
 			<div class="ea-term">
@@ -401,21 +410,10 @@
 			</div>
 			<div class="ea-buttons">
 				<div>
-					<table>
-						<tbody>
-							<tr>
-								<td>
+
 									<button class="switch-date-range-type button" value="setbyrange">
 									</button>
-									</td>
-									<td>	
-										<div class="ea-input">
-											Student entered in SSP.
-										</div>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+									
 				</div>
 			</div>
 		</div>
@@ -532,6 +530,14 @@
 		</div>
 		<div class="ea-clear"></div>
 		
+		<!-- Date Range Description -->
+		<div class="ea-input">
+		</div>
+		<div class="ea-label">
+			<span>${date_range_activity}</span>
+		</div>
+		<div class="ea-clear"></div>
+		
 		<!-- Date Range Selection -->
 		<div class="ea-time-span">
 			<div class="ea-term">
@@ -564,22 +570,9 @@
 			</div>
 			<div class="ea-buttons">
 				<div>
-					<table>
-						<tbody>
-							<tr>
-								<td>
 									<button class="switch-date-range-type button" value="setbyrange">
 									</button>
-									</td>
-									<td>	
-										<div class="ea-input">
-											Journal Entry Created.
-										</div>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-				</div>
+					</div>
 			</div>
 		</div>
 
@@ -923,6 +916,14 @@
 		</div>
 		<div class="ea-clear"></div>
 		
+		<!-- Date Range Description -->
+		<div class="ea-input">
+		</div>
+		<div class="ea-label">
+			<span>${date_range_early_alert}</span>
+		</div>
+		<div class="ea-clear"></div>
+		
 		<!-- Semester Date Range Selection -->
 		<div class="ea-time-span">
 			<div class="ea-term">
@@ -955,21 +956,10 @@
 			</div>
 			<div class="ea-buttons">
 				<div>
-					<table>
-						<tbody>
-							<tr>
-								<td>
+
 									<button class="switch-date-range-type button" value="setbyrange">
 									</button>
-									</td>
-									<td>	
-										<div class="ea-input">
-										Early Alert created.
-										</div>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+
 				</div>
 			</div>
 		</div>
@@ -1058,6 +1048,14 @@
 		</div>
 		<div class="ea-clear"></div>
 		
+		<!-- Date Range Description -->
+		<div class="ea-input">
+		</div>
+		<div class="ea-label">
+			<span>${date_range_early_response}</span>
+		</div>
+		<div class="ea-clear"></div>
+		
 		<!-- Semester -->
 		<div class="ea-time-span">
 			<div class="ea-term">
@@ -1090,21 +1088,9 @@
 			</div>
 			<div class="ea-buttons">
 				<div>
-					<table>
-						<tbody>
-							<tr>
-								<td>
 									<button class="switch-date-range-type button" value="setbyrange">
 									</button>
-									</td>
-									<td>	
-										<div class="ea-input">
-											Early Alert Response created.
-										</div>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+									
 				</div>
 			</div>
 		</div>
@@ -1350,6 +1336,14 @@
 		</div>
 		<div class="ea-clear"></div>
 
+		<!-- Date Range Description -->
+		<div class="ea-input">
+		</div>
+		<div class="ea-label">
+			<span>${date_range_early_response}</span>
+		</div>
+		<div class="ea-clear"></div>
+		
 		<!-- Semester -->
 		<div class="ea-time-span">
 			<div class="ea-term">
@@ -1382,21 +1376,10 @@
 			</div>
 			<div class="ea-buttons">
 				<div>
-					<table>
-						<tbody>
-							<tr>
-								<td>
+					
 									<button class="switch-date-range-type button" value="setbyrange">
 									</button>
-									</td>
-									<td>	
-										<div class="ea-input">
-											Early Alert Response created.
-										</div>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+									
 				</div>
 			</div>
 		</div>
@@ -1516,6 +1499,13 @@
 		</div>
 		<div class="ea-clear"></div>
 
+		<!-- Date Range Description -->
+		<div class="ea-input">
+		</div>
+		<div class="ea-label">
+			<span>${date_range_early_response}</span>
+		</div>
+		<div class="ea-clear"></div>
 		<!-- Semester -->
 		<div class="ea-time-span">
 			<div class="ea-term">
@@ -1548,21 +1538,9 @@
 			</div>
 			<div class="ea-buttons">
 				<div>
-					<table>
-						<tbody>
-							<tr>
-								<td>
 									<button class="switch-date-range-type button" value="setbyrange">
 									</button>
-								</td>
-								<td>	
-									<div class="ea-input">
-											Early Alert Response created.
-									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+								
 				</div>
 			</div>
 		</div>
@@ -1767,6 +1745,13 @@
 		<div class="ea-clear"></div>
 
 
+		<!-- Date Range Description -->
+		<div class="ea-input">
+		</div>
+		<div class="ea-label">
+				<span>${date_range_student}</span>
+		</div>
+		<div class="ea-clear"></div>
 		<!-- Date Range Selection -->
 		<div class="ea-time-span">
 			<div class="ea-term">
@@ -1799,21 +1784,9 @@
 			</div>
 			<div class="ea-buttons">
 				<div>
-					<table>
-						<tbody>
-							<tr>
-								<td>
 									<button class="switch-date-range-type button" value="setbyrange">
 									</button>
-								</td>
-								<td>	
-									<div class="ea-input">
-											Student entered into SSP.
-									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+								
 				</div>
 			</div>
 			
@@ -1994,7 +1967,21 @@
 		</div>
 		<div class="ea-clear"></div>
 
+		<!-- Date Range Description -->
+		<div class="ea-input">
+		</div>
+		<div class="ea-label">
+				<span>${date_range_student}</span>
+		</div>
+		<div class="ea-clear"></div>
 
+		<!-- Date Range Description -->
+		<div class="ea-input">
+		</div>
+		<div class="ea-label">
+				<span>${date_range_student}</span>
+		</div>
+		<div class="ea-clear"></div>
 		<!-- Date Range Selection -->
 		<div class="ea-time-span">
 			<div class="ea-term">
@@ -2026,21 +2013,8 @@
 				<div class="ea-clear"></div>
 			</div>
 			<div>
-				<table>
-					<tbody>
-						<tr>
-							<td>
 								<button class="switch-date-range-type button" value="setbyrange">
 								</button>
-							</td>
-							<td>	
-								<div class="ea-input">
-										Student entered in SSP.
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
 			</div>
 		</div>
 
@@ -2205,6 +2179,13 @@
 		</div>
 		<div class="ea-clear"></div>
 
+		<!-- Date Range Description -->
+		<div class="ea-input">
+		</div>
+		<div class="ea-label">
+			<span>${date_range_journal_entry}</span>
+		</div>
+		<div class="ea-clear"></div>
 		<!-- Semester -->
 		<div class="ea-time-span">
 			<div class="ea-term">
@@ -2236,21 +2217,11 @@
 				<div class="ea-clear"></div>
 			</div>
 			<div class="ea-buttons">
-				<table>
-					<tbody>
-						<tr>
-							<td>
+
 								<button class="switch-date-range-type button" value="setbyrange">
 								</button>
 							</td>
-							<td>	
-								<div class="ea-input">
-										Journal Entry created.
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+							
 			</div>
 		</div>
 		<!-- output type -->
