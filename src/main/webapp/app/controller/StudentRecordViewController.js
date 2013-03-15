@@ -26,11 +26,6 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
         personLite: 'personLite'
 	},
 	
-    config: {
-        personViewHistoryUrl: ''
-       
-    },
-	
     control: {
 		view: {
 			collapse: 'onCollapsed',
@@ -44,16 +39,10 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
         },
         'emailCoachButton': {
             click: 'onEmailCoachButtonClick'
-        },
+        }
 	},
 	
     init: function() {
-		var me=this;
-		var personId = me.personLite.get('id');
-		
-		me.personViewHistoryUrl = me.apiProperties.getAPIContext() + me.apiProperties.getItemUrl('personViewHistory');
-		
-        me.personViewHistoryUrl = me.personViewHistoryUrl.replace('{id}',personId);
  		return this.callParent(arguments);
     },
     

@@ -9044,11 +9044,6 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
         personLite: 'personLite'
 	},
 	
-    config: {
-        personViewHistoryUrl: ''
-       
-    },
-	
     control: {
 		view: {
 			collapse: 'onCollapsed',
@@ -9062,16 +9057,10 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
         },
         'emailCoachButton': {
             click: 'onEmailCoachButtonClick'
-        },
+        }
 	},
 	
     init: function() {
-		var me=this;
-		var personId = me.personLite.get('id');
-		
-		me.personViewHistoryUrl = me.apiProperties.getAPIContext() + me.apiProperties.getItemUrl('personViewHistory');
-		
-        me.personViewHistoryUrl = me.personViewHistoryUrl.replace('{id}',personId);
  		return this.callParent(arguments);
     },
     
@@ -10619,7 +10608,6 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
 		appEventsController: 'appEventsController'
     },
     config: {
-    	personViewHistoryUrl: '',
     	printConfidentialityAgreementUrl: ''
     },
     control: {
@@ -10635,12 +10623,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
             callBackFunc: me.onViewCoachHistory,
             scope: me
         });
-		
-		
-		me.personViewHistoryUrl = me.apiProperties.getAPIContext() + me.apiProperties.getItemUrl('personViewHistory');
-		
-		me.personViewHistoryUrl = me.personViewHistoryUrl.replace('{id}',personId);
-		
+
 		me.printConfidentialityAgreementUrl = me.apiProperties.getContext() + me.apiProperties.getItemUrl('printConfidentialityDisclosureAgreement');
 		return this.callParent(arguments);
     },
@@ -10656,8 +10639,10 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
 	
 	onViewCoachHistory: function(){
       var me=this;
-        me.apiProperties.getReporter().load({
-            url:me.personViewHistoryUrl,
+      var personId = me.personLite.get('id');
+      var personViewHistoryUrl = (me.apiProperties.getAPIContext() + me.apiProperties.getItemUrl('personViewHistory')).replace('{id}',personId);
+      me.apiProperties.getReporter().load({
+            url:personViewHistoryUrl,
             params: ""
         });
     }
