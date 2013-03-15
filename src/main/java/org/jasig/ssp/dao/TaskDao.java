@@ -129,7 +129,7 @@ public class TaskDao
 		criteria.add(Restrictions.eq("sessionId", sessionId));
 		criteria.add(Restrictions.eq("challengeReferral.id",
 				challengeReferralId));
-
+		criteria.add(Restrictions.eq("person.id", SspUser.ANONYMOUS_PERSON_ID));
 		addCompleteRestriction(complete, criteria);
 
 		return criteria.list();

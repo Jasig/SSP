@@ -266,7 +266,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 
 		List<Task> tasks;
 
-		if (securityService.isAuthenticated()) {
+		if (securityService.currentlyAuthenticatedUser() != null) {
 			final SspUser requestor = securityService.currentUser();
 			final Person student = securityService.currentUser().getPerson();
 			tasks = taskService.getAllForPerson(student, false, requestor,
