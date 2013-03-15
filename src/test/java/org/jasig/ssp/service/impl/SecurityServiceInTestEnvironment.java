@@ -26,6 +26,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.MockUser;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.SecurityService;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 
@@ -35,7 +36,7 @@ import com.google.common.collect.Lists;
  * A Security Service for use in a test environment. Allows an integration test
  * to directly set the User that will be used in the test.
  */
-public class SecurityServiceInTestEnvironment implements SecurityService {
+public class SecurityServiceInTestEnvironment implements SecurityService, DisposableBean {
 
 	private transient SspUser current;
 
@@ -181,4 +182,17 @@ public class SecurityServiceInTestEnvironment implements SecurityService {
 		return false;
 	}
 
+	@Override
+	public void destroy() throws Exception {
+		SspUser current = currentUser();
+		if ( current == null ) {
+			return;
+		}
+		// can't use setCurrent((Person)null): it NPEs.
+		// need to make sure SspUser clears its Person, though, b/c it might
+		// be stored as an unmanaged ThreadLocal
+		current.setPerson(null);
+		setCurrent((SspUser)null);
+
+	}
 }

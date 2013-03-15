@@ -26,6 +26,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jasig.ssp.model.Person;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 
 public class SspUser extends User implements Serializable {
 
@@ -34,17 +36,13 @@ public class SspUser extends User implements Serializable {
 			.fromString("46DA4CB4-6EB4-4B91-8E39-8F9FA4D85552");
 	public static final String ANONYMOUS_PERSON_LASTNAME = "User";
 	public static final String ANONYMOUS_PERSON_USERNAME = "anonymousUser";
+	private static final String REQUEST_PERSON_KEY = "org.jasig.ssp.security.sspuser.person";
 
 	private static final long serialVersionUID = -8125829986440987725L;
 
 	private String emailAddress;
 
-	/**
-	 * Persisted Person data.
-	 * <p>
-	 * Marked transient because it needs refreshed each request from Hibernate.
-	 */
-	private transient Person person;
+	private ThreadLocal<Person> person = new ThreadLocal<Person>();
 
 	public SspUser(final String username, final String password,
 			final boolean enabled, final boolean accountNonExpired,
@@ -64,11 +62,31 @@ public class SspUser extends User implements Serializable {
 	}
 
 	public Person getPerson() {
-		return person;
+		// Prefer Spring-managed RequestAttributes b/c they're automatically
+		// cleaned up per request (it's really just ThreadLocals underneath
+		// but spring makes sure they're released at the end of the
+		// request/response cycle)
+		final RequestAttributes requestAttributes =
+				RequestContextHolder.getRequestAttributes();
+		if ( requestAttributes == null ) {
+			// most likely running outside a web request, e.g. a scheduled job.
+			// fall back to our own threadlocal and it's up to the caller to
+			// cleanup properly
+			return person.get();
+		}
+		return (Person)requestAttributes
+				.getAttribute(REQUEST_PERSON_KEY, RequestAttributes.SCOPE_REQUEST);
 	}
 
 	public void setPerson(final Person person) {
-		this.person = person;
+		// see getPerson() for the whys
+		final RequestAttributes requestAttributes =
+				RequestContextHolder.getRequestAttributes();
+		if ( requestAttributes == null ) {
+			this.person.set(person);
+		} else {
+			requestAttributes.setAttribute(REQUEST_PERSON_KEY, person, RequestAttributes.SCOPE_REQUEST);
+		}
 	}
 
 	@Override

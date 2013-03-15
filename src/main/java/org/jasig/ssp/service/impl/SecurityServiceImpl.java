@@ -125,10 +125,6 @@ public class SecurityServiceImpl implements SecurityService {
 				LOGGER.error("Did not find the person's domain object");
 				return null;
 			}
-		} else if (!sessionFactory.getCurrentSession().contains(
-				sspUser.getPerson())) {
-			sspUser.setPerson(personService
-					.load(sspUser.getPerson().getId()));
 		}
 
 		return sspUser;
