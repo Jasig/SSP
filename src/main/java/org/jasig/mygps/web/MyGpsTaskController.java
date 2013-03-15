@@ -109,41 +109,6 @@ public class MyGpsTaskController extends AbstractBaseController {
 		this.securityService = securityService;
 	}
 
-	/*
-	 * Allow external services to create tasks for a student, provided they have
-	 * the correct security token.
-	 * 
-	 * @param name - name of the task
-	 * 
-	 * @param description - description of the task
-	 * 
-	 * @param studentId - a student id of the student receiving the task
-	 */
-	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
-	@RequestMapping(value = "/createTaskForStudent", method = RequestMethod.POST)
-	public @ResponseBody
-	boolean createTaskForStudent(@RequestParam("name") final String name,
-			@RequestParam("description") final String description,
-			@RequestParam("studentId") final String studentId,
-			@RequestParam("dueDate") final Date dueDate)
-			throws ObjectNotFoundException, ValidationException,
-			SendFailedException {
-
-		final Person student = personService.personFromUsername(studentId);
-		if (student == null) {
-			throw new ObjectNotFoundException(
-					"Unable to acquire person for supplied student id "
-							+ studentId, "Person");
-		}
-
-		final String session = securityService.getSessionId();
-		final Task task = taskService.createCustomTaskForPerson(name,
-				description, student, session);
-
-		taskService.sendNoticeToStudentOnCustomTask(task);
-
-		return true;
-	}
 	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "/createCustom", method = RequestMethod.GET)
 	public @ResponseBody
