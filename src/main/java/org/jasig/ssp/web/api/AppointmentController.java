@@ -110,18 +110,24 @@ public class AppointmentController
 			@PathVariable final UUID personId,
 			@Valid @RequestBody final AppointmentTO obj)
 			throws ObjectNotFoundException, ValidationException {
-
-		AppointmentTO appointment = super.save(id, personId, obj);
-		processStudentIntakeRequest(obj, appointment);
-		return appointment;
+		
+		//TODO This bit of defensive code is kludgy because it's necessitated by the student intake 
+		//request piggybacking on this API call.  This has to be refactored and clean up
+		AppointmentTO appointment = null;
+		if(obj.getStartTime() != null && obj.getEndTime() != null)
+		{
+			 appointment = super.save(id, personId, obj);
+		}
+		processStudentIntakeRequest(obj, personId);
+		return appointment == null ? obj : appointment;
 		
 	}
 
 	private void processStudentIntakeRequest(final AppointmentTO obj,
-			AppointmentTO appointment) throws ObjectNotFoundException {
-		if(obj.isStudentIntakeRequested() && appointment != null)
+			UUID personId) throws ObjectNotFoundException {
+		if(obj.isStudentIntakeRequested() && personId != null)
 		{
-			intakeRequestManager.processStudentIntakeRequest(appointment);
+			intakeRequestManager.processStudentIntakeRequest(obj,personId);
 		}
 	}
 	
@@ -132,8 +138,14 @@ public class AppointmentController
 			@Valid @RequestBody @NotNull final AppointmentTO obj)
 			throws ValidationException, ObjectNotFoundException {
 
-		AppointmentTO appointment = super.create(personId, obj);
-		processStudentIntakeRequest(obj, appointment);
-		return appointment;
+		//TODO This bit of defensive code is kludgy because it's necessitated by the student intake 
+		//request piggybacking on this API call.  This has to be refactored and clean up
+		AppointmentTO appointment = null;
+		if(obj.getStartTime() != null && obj.getEndTime() != null)
+		{
+			 appointment = super.create(personId, obj);
+		}
+		processStudentIntakeRequest(obj, personId);
+		return obj;
 	}	
 }
