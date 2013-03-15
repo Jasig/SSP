@@ -9658,11 +9658,15 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     saveAppointment: function(){
     	var me=this;
     	var jsonData, personId;
-    	if (me.appointment.get('appointmentDate') != null && me.appointment.get('startTime') != null && me.appointment.get('endTime') !=null && me.appointment.get('studentIntakeRequested'))
-		{
-    		// Fix dates for GMT offset to UTC
-    		me.currentPersonAppointment.set( 'startTime', me.formUtils.fixDateOffsetWithTime(me.appointment.getStartDate() ) );
-    		me.currentPersonAppointment.set( 'endTime', me.formUtils.fixDateOffsetWithTime( me.appointment.getEndDate() ) );
+    		if(me.appointment.get('startTime') && me.appointment.get('appointmentDate'))
+    		{
+    			// Fix dates for GMT offset to UTC
+    			me.currentPersonAppointment.set( 'startTime', me.formUtils.fixDateOffsetWithTime(me.appointment.getStartDate() ) );
+    		}
+    		if(me.appointment.get('endTime') && me.appointment.get('appointmentDate'))
+    		{
+    			me.currentPersonAppointment.set( 'endTime', me.formUtils.fixDateOffsetWithTime( me.appointment.getEndDate() ) );
+    		}
     		me.currentPersonAppointment.set(  'studentIntakeRequested', me.appointment.get('studentIntakeRequested'));
     		me.currentPersonAppointment.set(  'intakeEmail', me.appointment.get('intakeEmail'));
     		
@@ -9674,11 +9678,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     				                               {success: me.saveAppointmentSuccess,
     			                                    failure: me.saveAppointmentFailure,
     			                                    scope: me } );
-		}else{
-			// no appointment is required
-			// load students view
-			me.loadStudentToolsView();			
-		}
     },
     
     saveAppointmentSuccess: function( r, scope ){

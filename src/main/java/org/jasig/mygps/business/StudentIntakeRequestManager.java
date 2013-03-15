@@ -2,6 +2,7 @@ package org.jasig.mygps.business;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.mail.SendFailedException;
 
@@ -59,9 +60,9 @@ public class StudentIntakeRequestManager {
 	
 
 	
-	public void processStudentIntakeRequest(AppointmentTO appointment) throws ObjectNotFoundException
+	public void processStudentIntakeRequest(AppointmentTO obj, UUID personId) throws ObjectNotFoundException
 	{
-		Person student = personDao.get(appointment.getPersonId());
+		Person student = personDao.get(personId);
 		
 		Task studentIntakeTask = createIntakeTask(student);
 		
@@ -71,7 +72,7 @@ public class StudentIntakeRequestManager {
 			taskService.create(studentIntakeTask);
 			
 			SubjectAndBody studentIntakeMessage = messageTemplateService.createStudentIntakeTaskMessage(studentIntakeTask);
-			String ccString = buildCCString(appointment.getIntakeEmail(), student.getSecondaryEmailAddress());
+			String ccString = buildCCString(obj.getIntakeEmail(), student.getSecondaryEmailAddress());
 			messageService.createMessage(student, ccString, studentIntakeMessage);
 				
 			clearIntakeData(student);
@@ -124,7 +125,6 @@ public class StudentIntakeRequestManager {
 		studentIntakeTask.setName("Student Intake");
 		studentIntakeTask.setPerson(student);
 		studentIntakeTask.setLink("<a href='intake.html'>Click Here To Fill Out Student Intake</a>");
-		studentIntakeTask.setDueDate(new Date(Calendar.getInstance().getTimeInMillis()+259200000));
 		studentIntakeTask.setSessionId(securityService.getSessionId());
 		studentIntakeTask.setConfidentialityLevel(confidentialityLevelService.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE));
 		return studentIntakeTask;
