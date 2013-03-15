@@ -54,6 +54,8 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	private boolean showInStudentIntake;
 
 	private boolean showInSelfHelpSearch;
+	
+	private String selfHelpGuideQuestion;
 
 	private String tags;
 
@@ -73,6 +75,8 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		selfHelpGuideDescription = model.getSelfHelpGuideDescription();
 		showInStudentIntake = model.isShowInStudentIntake();
 		showInSelfHelpSearch = model.isShowInSelfHelpSearch();
+		selfHelpGuideQuestion = model.getSelfHelpGuideQuestion();
+		
 		tags = model.getTags();
 
 		if (model.getDefaultConfidentialityLevel() != null) {
@@ -153,5 +157,13 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 	public void setDefaultConfidentialityLevelId(
 			final UUID defaultConfidentialityLevelId) {
 		this.defaultConfidentialityLevelId = defaultConfidentialityLevelId;
+	}
+
+	public String getSelfHelpGuideQuestion() {
+		return selfHelpGuideQuestion;
+	}
+
+	public void setSelfHelpGuideQuestion(String selfHelpGuideQuestion) {
+		this.selfHelpGuideQuestion = selfHelpGuideQuestion;
 	}
 }
