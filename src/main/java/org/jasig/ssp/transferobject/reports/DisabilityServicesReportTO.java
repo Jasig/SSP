@@ -29,6 +29,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonDisabilityAgency;
 import org.jasig.ssp.model.PersonDisabilityType;
 import org.jasig.ssp.model.PersonProgramStatus;
+import org.jasig.ssp.model.external.ExternalStudentAcademicProgram;
 import org.jasig.ssp.model.reference.DisabilityType;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PersonTO;
@@ -305,6 +306,27 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 		
 		if(person.getDisability() != null && person.getDisability().getDisabilityStatus() != null)
 			setOdsStatus(person.getDisability().getDisabilityStatus().getName());
+	}
+	
+	public void updateMajorFromAcademicPrograms(List<ExternalStudentAcademicProgram> academicPrograms){
+		if(academicPrograms != null && academicPrograms.isEmpty()){
+			ArrayList<String> majors = new ArrayList<String>();
+			for(ExternalStudentAcademicProgram academicProgram:academicPrograms)
+				if(academicProgram.getProgramName() != null && !academicProgram.getProgramName().isEmpty())
+					majors.add(academicProgram.getProgramName());
+			if(!majors.isEmpty()){
+				String majorsStr = "";
+				for(String maj:majors)
+					this.addValueToStringList(majorsStr, maj);
+				setMajor(majorsStr);
+			}
+		}
+		
+		String plannedMajor = getMajor();
+		if(plannedMajor == null || plannedMajor.trim().isEmpty())
+			return;
+		if(!plannedMajor.trim().contains("Planned Major:"))
+			setMajor("Planned Major: " + plannedMajor);
 	}
 	
 	public void processDuplicate(BaseStudentReportTO reportTO){

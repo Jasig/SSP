@@ -131,7 +131,7 @@ public class DisabilityServicesReportControllerIntegrationTest
 				null, 
 				null, 
 				null, 
-				null, 
+				null,
 				null, 
 				null, 
 				null, 
@@ -155,8 +155,8 @@ public class DisabilityServicesReportControllerIntegrationTest
 		// Dennis Ritchie is missing
 		expectedReportBodyLines.add("STUDENT NAME,ID,ILP,DISABILITY,SSP STATUS,ODS STATUS,ODS REASON FOR INELIGIBILTY,ODS REG DATE,INTERPRETER,REG STATUS,MAJOR,VET STATUS,ETHNICITY,ASSIGNMENT DATES\t,AGENCY CONTACTS,SSP COACH");
 		expectedReportBodyLines.add("test Mumford coach1student0,coach1student0,,ADD/ADHD,Active,Test Disability ,,,,,Physics,Dependent of ,American ,10/01/2012,MH - Other,test coach1");
-		expectedReportBodyLines.add("test Mumford coach1student2,coach1student2,,SP,Non-,Ineligible,,,,,ENGISH,Montgomery ,Asian Pacific ,10/01/2012,BSVI - BVR,test coach1");
-		expectedReportBodyLines.add("test Mumford coach1student4,coach1student4,,LD,No-Show,Eligible,,,,,Biology,VEAP,Prefer Not To ,10/01/2012,Test Disability Agency ,test coach1");
+		expectedReportBodyLines.add("test Mumford coach1student2,coach1student2,,SP,Non-,Ineligible,,,,,Planned Major: ENGISH,Montgomery ,Asian Pacific ,10/01/2012,BSVI - BVR,test coach1");
+		expectedReportBodyLines.add("test Mumford coach1student4,coach1student4,,LD,No-Show,Eligible,,,,,Planned Major: Biology,VEAP,Prefer Not To ,10/01/2012,Test Disability Agency ,test coach1");
 		
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}

@@ -35,6 +35,7 @@ import net.sf.jasperreports.engine.JRException;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.JournalEntryDetail;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.JournalStepDetail;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.JournalEntryService;
@@ -185,6 +186,7 @@ public class JournalSessionDetailsReportController extends ReportBaseController 
 		personSearchForm.setJournalStepDetailIds(cleanJournalStepDetailIds);
 		
 		personSearchForm.setHasStepDetails(hasStepDetails);
+		
 		
 		final List<JournalStepStudentReportTO> reports = (List<JournalStepStudentReportTO>)
 				Lists.newArrayList(journalEntryService.getJournalStepStudentReportTOsFromCriteria(

@@ -1643,6 +1643,8 @@
 		<div class="ea-clear"></div>
 
 
+		
+
 		<!-- Assigned Counselor -->
 		<div class="ea-input">
 			<select id="disabilityServicesAssignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
@@ -1753,45 +1755,37 @@
 		</div>
 		<div class="ea-clear"></div>
 		<!-- Date Range Selection -->
-		<div class="ea-time-span">
-			<div class="ea-term">
-				<div class="ea-input">
-					<select id="disabilityServicesTermCode" name="termCode" class="input-term-group">
-						<option value="">${not_applicable}</option>
-						</select>
-				</div>
-				<div class="ea-label">
-					<span>Term:</span>
-				</div>
-				<div class="ea-clear"></div>
-			</div>
-			<div class="ea-date-range">
-				<!-- Date From -->
-				<div class="ea-input">
-					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="disabilityServicesCreateDateFrom">
-				</div>
-				<div class="ea-label">
-					<span>Student Added From (inclusive)::</span>
-				</div>
-				<div class="ea-clear"></div><!-- Date To -->
-				<div class="ea-input">
-					<input class="input-calendar-type" type="textbox" name="createDateTo" id="disabilityServicesCreateDateTo">
-				</div>
-				<div class="ea-label">
-					<span>Student Added To (exclusive)::</span>
-				</div>
-				<div class="ea-clear"></div>
-			</div>
-			<div class="ea-buttons">
-				<div>
-									<button class="switch-date-range-type button" value="setbyrange">
-									</button>
-								
-				</div>
-			</div>
+		
 			
+		<div class="ea-date-range">
+			<!-- Date From -->
+			<div class="ea-input">
+				<input class="input-calendar-type" type="textbox" name="createDateFrom" id="disabilityServicesCreateDateFrom">
+			</div>
+			<div class="ea-label">
+				<span>Student Added From (inclusive)::</span>
+			</div>
+			<div class="ea-clear"></div><!-- Date To -->
+			<div class="ea-input">
+				<input class="input-calendar-type" type="textbox" name="createDateTo" id="disabilityServicesCreateDateTo">
+			</div>
+			<div class="ea-label">
+				<span>Student Added To (exclusive)::</span>
+			</div>
+			<div class="ea-clear"></div>
 		</div>
-
+		
+		<div class="ea-input">
+			<select id="disabilityServicesTermRegisteredForCode" name="registeredForTermCode" class="input-term-group">
+				<option value="">${not_applicable}</option>
+				</select>
+		</div>
+		<div class="ea-label">
+			<span>Term Registered:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+			
 		<!-- Actual Start Term -->
 		<div class="ea-input">
 			<select id="disabilityServicesActualStartTerm" name="actualStartTerm" class="input-term-group">

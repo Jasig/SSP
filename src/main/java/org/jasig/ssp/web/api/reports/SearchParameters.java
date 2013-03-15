@@ -76,6 +76,7 @@ public class SearchParameters {
 	private static final String PROGRAM_STATUS_NAME = "programStatusName";
 	private static final String REPORT_DATE = "reportDate";
 	private static final String HOME_DEPARTMENT_NAME = "homeDepartment";
+	private static final String TERM_REGISTERED_FOR = "termRegisteredFor";
     
 	private static final String REPORT_TITLE = "ReportTitle";
 	private static final String DATA_FILE = "DataFile";
@@ -222,6 +223,19 @@ public class SearchParameters {
 			throws ObjectNotFoundException {
 		addUUIDSToMap(REFERRAL_SOURCE_NAMES, NOT_USED, referralSourcesIds, parameters,
 				(ReferenceService) referralSourcesService);
+	}
+	
+	static final void addRegisteredForTerm(final String registeredForTermCode, 
+			final Map<String, Object> parameters, 
+			PersonSearchFormTO form, TermService termService) throws ObjectNotFoundException{
+		
+		if(registeredForTermCode == null || registeredForTermCode.isEmpty()){
+			addTerm(TERM_REGISTERED_FOR, NOT_USED, null, null, parameters);
+			return;
+		}
+		Term registeredTerm = termService.getByCode(registeredForTermCode);
+		form.setTermRegisteredFor(registeredTerm);
+		addTerm(TERM_REGISTERED_FOR, NOT_USED, registeredTerm.getName(), registeredTerm.getReportYear(), parameters);
 	}
 
 	@SuppressWarnings("rawtypes")

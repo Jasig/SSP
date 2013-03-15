@@ -34,10 +34,12 @@ import net.sf.jasperreports.engine.JRException;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.external.ExternalStudentAcademicProgram;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.external.ExternalStudentAcademicProgramService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.DisabilityStatusService;
@@ -100,6 +102,9 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 	protected transient StudentTypeService studentTypeService;	
 	
 	@Autowired
+	protected transient ExternalStudentAcademicProgramService academicProgramService;
+	
+	@Autowired
 	protected transient ServiceReasonService serviceReasonService;	
 	
 	@Autowired
@@ -141,7 +146,7 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 			final @RequestParam(required = false) String actualStartTerm,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
-			final @RequestParam(required = false) String termCode,
+			final @RequestParam(required = false) String registeredForTermCode,
 			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) String rosterStatus,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
@@ -151,6 +156,8 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
 		SearchParameters.addOdsCoach(odsCoachId, parameters, personSearchForm, personService, personTOFactory);
+		
+		SearchParameters.addRegisteredForTerm(registeredForTermCode, parameters, personSearchForm, termService);
 		
 		SearchParameters.addReferenceLists(studentTypeIds, 
 				specialServiceGroupIds, 
@@ -166,7 +173,7 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 		
 		SearchParameters.addDateRange(createDateFrom, 
 				createDateTo, 
-				termCode, 
+				null, 
 				parameters, 
 				personSearchForm, 
 				termService);
@@ -204,11 +211,28 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 				Integer index = compressedReport.indexOf(reportTO);
 				if(index != null && index >= 0)
 				{
+					try{
 					DisabilityServicesReportTO compressedReportTo = compressedReport.get(index);
 					compressedReportTo.processDuplicate(reportTO);
+					}catch(Exception e){
+						continue;
+					}
 				}else{
-					//reportTO.setCurrentRegistrationStatus(registrationStatusByTermService);
+					try{
+					if(personSearchForm.getTermRegisteredFor() != null){
+						RegistrationStatusByTerm termStatus = registrationStatusByTermService.getForTerm(reportTO.getSchoolId(), registeredForTermCode);
+						if(termStatus == null || termStatus.getRegisteredCourseCount() <= 0)
+							continue;
+					}
+					reportTO.setCurrentRegistrationStatus(registrationStatusByTermService);
+					
+					List<ExternalStudentAcademicProgram> academicPrograms = academicProgramService.getAcademicProgramsBySchoolId(reportTO.getSchoolId());
+					reportTO.updateMajorFromAcademicPrograms(academicPrograms);
+					
 					compressedReport.add(reportTO);
+					}catch(Exception e){
+						continue;
+					}
 				}
 			}
 		}
