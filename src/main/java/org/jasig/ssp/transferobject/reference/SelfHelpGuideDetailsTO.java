@@ -78,8 +78,12 @@ public class SelfHelpGuideDetailsTO extends SelfHelpGuideTO implements TransferO
 		active = ObjectStatus.ACTIVE.equals(model.getObjectStatus());
 
 		questions = Lists.newArrayList();
+		
 		for (SelfHelpGuideQuestion question : model.getSelfHelpGuideQuestions()) {
-			questions.add(new SelfHelpGuideQuestionTO(question)); // NOPMD
+			if(ObjectStatus.ACTIVE.equals(question.getObjectStatus()))
+			{
+				questions.add(new SelfHelpGuideQuestionTO(question)); // NOPMD
+			}
 		}
 	}
 
