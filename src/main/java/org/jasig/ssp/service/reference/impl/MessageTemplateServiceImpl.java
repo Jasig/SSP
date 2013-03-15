@@ -176,7 +176,7 @@ public class MessageTemplateServiceImpl extends
 								+ "/");
 		messageParams.put("description", linkedDescription);
 
-		messageParams.put("dueDateFormatted", formatDate(task.getDueDate()));
+		messageParams.put("dueDateFormatted",task.getDueDate() == null ? "" : formatDate(task.getDueDate()));
 
 		return populateFromTemplate(
 				MessageTemplate.NEW_STUDENT_INTAKE_TASK_EMAIL_ID,
