@@ -115,7 +115,7 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 				dateFormat, true));
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	@ResponseBody
 	public void getEarlyAlertStudentReport(

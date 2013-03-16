@@ -83,7 +83,7 @@
 
 <div class="hideable-form generalStudent-form" style="display:none">
 	<h1>General Student Report</h1>
-	<form action="/ssp/api/1/report/AddressLabels/" method="post"
+	<form action="/ssp/api/1/report/AddressLabels/" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">
 		
 		
@@ -285,7 +285,7 @@
 
 <div class="hideable-form counselor-case-management-report" style="display:none">
 	<h1>Counselor Case Management Report</h1>
-	<form action="/ssp/api/1/report/pretransitioned" method="post"
+	<form action="/ssp/api/1/report/pretransitioned" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">
 
 		<!-- Home Department -->
@@ -604,7 +604,7 @@
 
 <div class="hideable-form special-services-form" style="display:none">
 	<h1>Special Services</h1>
-	<form action="/ssp/api/1/report/SpecialServices/" method="post" class="alert-form">
+	<form action="/ssp/api/1/report/SpecialServices/" method="get" class="alert-form">
 
 		<!-- Student Type -->
 		<div class="ea-input">
@@ -832,7 +832,7 @@
 
 <div class="hideable-form early-alert-student-report" style="display:none">
 	<h1>Early Alert Student Report</h1>
-	<form action="/ssp/api/1/report/earlyalertstudent" method="post"
+	<form action="/ssp/api/1/report/earlyalertstudent" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		
 		<!-- Home Department -->
@@ -989,7 +989,7 @@
 
 <div class="hideable-form early-alert-student-referral-report" style="display:none">
 	<h1>Early Alert Student Referral Report</h1>
-	<form action="/ssp/api/1/report/earlyalertstudentreferral" method="post"
+	<form action="/ssp/api/1/report/earlyalertstudentreferral" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		
 		<!-- Home Department -->
@@ -1118,7 +1118,7 @@
 
 <div class="hideable-form early-alert-student-progress-report" style="display:none">
 	<h1>Early Alert Student Progress Report</h1>
-	<form action="/ssp/api/1/report/earlyalertstudentprogress" method="post"
+	<form action="/ssp/api/1/report/earlyalertstudentprogress" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		
 		<!-- Home Department -->
@@ -1244,7 +1244,7 @@
 
 <div class="hideable-form early-alert-student-outreach-report" style="display:none">
 	<h1>Early Alert Student Outreach Report</h1>
-	<form action="/ssp/api/1/report/earlyalertstudentoutcome" method="post"
+	<form action="/ssp/api/1/report/earlyalertstudentoutcome" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		<input type="hidden" id="earlyAlertStudentOutreachOutcomeType" name="outcomeType" value="earlyAlertOutreachIds"/>
 		<!-- Home Department -->
@@ -1406,7 +1406,7 @@
 
 <div class="hideable-form early-alert-student-outcome-report" style="display:none">
 	<h1>Early Alert Student Outcome Report</h1>
-	<form action="/ssp/api/1/report/earlyalertstudentoutcome" method="post"
+	<form action="/ssp/api/1/report/earlyalertstudentoutcome" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		<input type="hidden" id="earlyAlertStudentOutcomeOutcomeType"  name="outcomeType" value="earlyAlertOutcome"/>
 		<!-- Home Department -->
@@ -1628,7 +1628,7 @@
 
 <div class="hideable-form disability-services-report" style="display:none">
 	<h1>Disability Services Report</h1>
-	<form action="/ssp/api/1/report/disabilityservices/" method="post"
+	<form action="/ssp/api/1/report/disabilityservices/" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">
 
 		<!-- Home Department -->
@@ -1854,7 +1854,7 @@
 
 <div class="hideable-form disability-accomodation-report" style="display:none">
 	<h1>Disability Services Report</h1>
-	<form action="/ssp/api/1/report/disabilityservices/" method="post"
+	<form action="/ssp/api/1/report/disabilityservices/" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">
 
 		<!-- Home Department -->
@@ -2080,7 +2080,7 @@
 
 <div class="hideable-form journal-session-detail-report" style="display:none">
 	<h1>Journal Session Details Report</h1>
-	<form action="/ssp/api/1/report/journalsessiondetail" method="post"
+	<form action="/ssp/api/1/report/journalsessiondetail" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		<!-- Home Department -->
 		<div class="ea-input">
