@@ -84,7 +84,7 @@ public class SpecialServicesReportController extends ReportBaseController {
 	@Autowired
 	private transient StudentTypeService studentTypeService;
 
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	public @ResponseBody
 	void getSpecialServices(

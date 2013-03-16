@@ -102,7 +102,7 @@ public class EarlyAlertStudentOutreachReportController extends ReportBaseControl
 	}
 
 	@PreAuthorize(Permission.SECURITY_REPORT_READ)
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public void getEarlyAlertStudentOutreachReport(
 			final HttpServletResponse response,
