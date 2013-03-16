@@ -26,8 +26,8 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="summary"/>
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="73"/>
-	<property name="ireport.y" value="13"/>
+	<property name="ireport.x" value="460"/>
+	<property name="ireport.y" value="93"/>
 	<parameter name="programStatusName" class="java.lang.String"/>
 	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
 	<parameter name="referralSourceNames" class="java.lang.String"/>
@@ -81,7 +81,7 @@
 	<field name="interpreter" class="java.lang.String">
 		<fieldDescription><![CDATA[interpreter]]></fieldDescription>
 	</field>
-	<field name="registrationStatus" class="java.lang.String">
+	<field name="registrationStatus" class="java.lang.Integer">
 		<fieldDescription><![CDATA[registrationStatus]]></fieldDescription>
 	</field>
 	<field name="coachName" class="java.lang.String">
@@ -530,8 +530,8 @@
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="bfe75fbc-2d49-404e-a8ed-db43d5476a83" x="820" y="3" width="62" height="16"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{registrationStatus}]]></textFieldExpression>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{registrationStatus} != null && $F{registrationStatus} > 0 ? "Y":"N"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="15a01dba-6891-4af6-bf33-4e2125afd3de" x="1127" y="3" width="128" height="16"/>
