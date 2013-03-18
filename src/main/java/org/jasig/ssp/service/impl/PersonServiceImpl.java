@@ -441,6 +441,11 @@ public class PersonServiceImpl implements PersonService {
 		this.registrationStatusByTermService = registrationStatusByTermService;
 	}
 
+	protected void setEarlyAlertService(
+			final EarlyAlertService earlyAlertService) {
+		this.earlyAlertService = earlyAlertService;
+	}
+
 	@Override
 	public List<Person> peopleFromListOfIds(final List<UUID> personIds,
 			final SortingAndPaging sAndP) {

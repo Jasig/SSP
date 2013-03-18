@@ -32,9 +32,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.easymock.EasyMock;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -58,6 +60,8 @@ public class PersonServiceTest {
 	private transient PersonDao dao;
 
 	private transient RegistrationStatusByTermService registrationStatusByTermService;
+	
+	private transient EarlyAlertService earlyAlertService;
 
 	private static final String TEST_USER_ID = "12345";
 
@@ -68,6 +72,8 @@ public class PersonServiceTest {
 		service.setDao(dao);
 		registrationStatusByTermService = createMock(RegistrationStatusByTermService.class);
 		service.setRegistrationStatusByTermService(registrationStatusByTermService);
+		earlyAlertService =  createMock(EarlyAlertService.class);
+		service.setEarlyAlertService(earlyAlertService);
 	}
 
 	@Test
@@ -78,7 +84,16 @@ public class PersonServiceTest {
 		expect(dao.getAll(isA(SortingAndPaging.class))).andReturn(
 				new PagingWrapper<Person>(daoAll));
 
+		expect(registrationStatusByTermService
+				.applyRegistrationStatusForCurrentTerm(daoAll.get(0)))
+				.andReturn(daoAll.get(0)).anyTimes();		
+		
+		expect(registrationStatusByTermService
+				.applyCurrentAndFutureRegistrationStatuses(daoAll.get(0)))
+				.andReturn(daoAll.get(0)).anyTimes();
+		
 		replay(dao);
+		replay(registrationStatusByTermService);
 
 		final Collection<Person> all = service.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
@@ -97,6 +112,9 @@ public class PersonServiceTest {
 				.applyRegistrationStatusForCurrentTerm(daoOne))
 				.andReturn(daoOne).anyTimes();
 
+		expect(registrationStatusByTermService
+				.applyCurrentAndFutureRegistrationStatuses(daoOne))
+				.andReturn(daoOne).anyTimes();
 		replay(dao);
 		replay(registrationStatusByTermService);
 
@@ -116,6 +134,9 @@ public class PersonServiceTest {
 				.applyRegistrationStatusForCurrentTerm(daoOne))
 				.andReturn(daoOne).anyTimes();
 
+		expect(registrationStatusByTermService
+				.applyCurrentAndFutureRegistrationStatuses(daoOne))
+				.andReturn(daoOne).anyTimes();
 		replay(dao);
 		replay(registrationStatusByTermService);
 
@@ -136,6 +157,9 @@ public class PersonServiceTest {
 				.applyRegistrationStatusForCurrentTerm(daoOne))
 				.andReturn(daoOne).anyTimes();
 
+		expect(registrationStatusByTermService
+				.applyCurrentAndFutureRegistrationStatuses(daoOne))
+				.andReturn(daoOne).anyTimes();
 		replay(dao);
 		replay(registrationStatusByTermService);
 
@@ -152,6 +176,10 @@ public class PersonServiceTest {
 		expect(dao.fromUsername(TEST_USER_ID)).andReturn(person);
 		expect(registrationStatusByTermService
 				.applyRegistrationStatusForCurrentTerm(person))
+				.andReturn(person).anyTimes();
+	
+		expect(registrationStatusByTermService
+				.applyCurrentAndFutureRegistrationStatuses(person))
 				.andReturn(person).anyTimes();
 
 		replay(dao);
