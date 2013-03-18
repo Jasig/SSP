@@ -24,10 +24,12 @@ import java.util.List;
 import org.jasig.ssp.dao.SelfHelpGuideQuestionResponseDao;
 import org.jasig.ssp.dao.SelfHelpGuideResponseDao;
 import org.jasig.ssp.dao.reference.ChallengeDao;
+import org.jasig.ssp.factory.reference.impl.ChallengeReferralTOFactoryImpl;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SelfHelpGuideQuestionResponse;
 import org.jasig.ssp.model.SelfHelpGuideResponse;
 import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.model.reference.SelfHelpGuide;
 import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
 import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
@@ -35,6 +37,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonSelfHelpGuideResponseService;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
 import org.jasig.ssp.transferobject.SelfHelpGuideResponseTO;
+import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -145,21 +148,21 @@ public class PersonSelfHelpGuideResponseServiceImpl
 		// Get identified challenges
 		final List<ChallengeTO> challengeTOs = new ArrayList<ChallengeTO>();
 
-		int count = 0;
+		
 		for (Challenge challenge : challengeDao
 				.selectAffirmativeBySelfHelpGuideResponseId(response.getId())) {
 
-			count = challengeReferralService
+			List<ChallengeReferral> referrals = challengeReferralService
 					.getChallengeReferralCountByChallengeAndQuery(challenge,
 							"", referralSAndP);
 
-			if (count > 0) {
+			if (!referrals.isEmpty()) {
 				final ChallengeTO challengeTO = new ChallengeTO(); // NOPMD
 				challengeTO.setDescription(challenge
 						.getSelfHelpGuideDescription());
 				challengeTO.setId(challenge.getId());
 				challengeTO.setName(challenge.getName());
-
+				challengeTO.setChallengeChallengeReferrals(ChallengeReferralTO.toTOList(referrals));
 				challengeTOs.add(challengeTO);
 			}
 		}

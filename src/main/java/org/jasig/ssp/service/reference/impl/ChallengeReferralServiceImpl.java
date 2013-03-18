@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jasig.ssp.dao.reference.ChallengeReferralDao;
@@ -69,12 +70,14 @@ public class ChallengeReferralServiceImpl extends
 	}
 
 	@Override
-	public int getChallengeReferralCountByChallengeAndQuery(
+	public List<ChallengeReferral> getChallengeReferralCountByChallengeAndQuery(
 			final Challenge challenge, final String query,
 			final SortingAndPaging sAndP) {
 
 		int count = 0;
 
+		List<ChallengeReferral> referrals = new ArrayList<ChallengeReferral>();
+		
 		for (final ChallengeReferral challengeReferral : dao
 				.byChallengeIdAndQuery(
 						challenge.getId(), query)) {
@@ -85,7 +88,7 @@ public class ChallengeReferralServiceImpl extends
 
 			boolean isEmpty = false;
 
-			if (securityService.isAuthenticated()) {
+			if (securityService.currentlyAuthenticatedUser() != null ) {
 				final Person student = securityService.currentUser()
 						.getPerson();
 				isEmpty = taskService.getAllForPersonAndChallengeReferral(
@@ -99,11 +102,11 @@ public class ChallengeReferralServiceImpl extends
 			}
 
 			if (isEmpty) {
-				count++;
+				referrals.add(challengeReferral);
 			}
 		}
 
-		return count;
+		return referrals;
 	}
 
 	@Override
