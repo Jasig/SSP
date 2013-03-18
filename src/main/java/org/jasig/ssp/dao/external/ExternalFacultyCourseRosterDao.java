@@ -21,6 +21,8 @@ package org.jasig.ssp.dao.external;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -80,6 +82,8 @@ public class ExternalFacultyCourseRosterDao extends
 		return createCriteria()
 				.add(Restrictions.eq("facultySchoolId", facultySchoolId))
 				.add(Restrictions.eq("formattedCourse", formattedCourse))
+				.addOrder(Order.asc("lastName"))
+				.addOrder(Order.asc("firstName"))
 				.list();
 	}
 
@@ -103,11 +107,14 @@ public class ExternalFacultyCourseRosterDao extends
 			throw new ObjectNotFoundException("Must specify a term code",
 					ExternalFacultyCourseRoster.class.getName());
 		}
-		return createCriteria()
-				.add(Restrictions.eq("facultySchoolId", facultySchoolId))
-				.add(Restrictions.eq("formattedCourse", formattedCourse))
-				.add(Restrictions.eq("termCode", termCode))
-				.list();
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("facultySchoolId", facultySchoolId))
+		.add(Restrictions.eq("formattedCourse", formattedCourse))
+		.add(Restrictions.eq("termCode", termCode))
+		.addOrder(Order.asc("lastName"))
+		.addOrder(Order.asc("firstName"));
+		
+		return criteria.list();
 
 	}
 
