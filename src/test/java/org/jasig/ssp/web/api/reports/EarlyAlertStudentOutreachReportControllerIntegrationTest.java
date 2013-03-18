@@ -20,10 +20,15 @@ package org.jasig.ssp.web.api.reports;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
 
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.service.stub.Stubs;
 import org.jasig.ssp.util.service.stub.Stubs.EarlyAlertOutcomeFixture;
@@ -31,6 +36,7 @@ import org.jasig.ssp.util.service.stub.Stubs.TermFixture;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
@@ -40,7 +46,7 @@ public class EarlyAlertStudentOutreachReportControllerIntegrationTest extends
 
 
 	@Autowired
-	private transient EarlyAlertStudentOutreachReportController controller;
+	private transient EarlyAlertStudentOutcomeReportController controller;
 
 
 	/**
@@ -52,22 +58,28 @@ public class EarlyAlertStudentOutreachReportControllerIntegrationTest extends
 			throws IOException, ObjectNotFoundException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		
-		controller.getEarlyAlertStudentOutreachReport(response, 
-				null, 
+		controller.getEarlyAlertStudentOutcomeReport(response,
+				 "earlyAlertOutreachIds",
+				ObjectStatus.ACTIVE,
 				null,
-				Lists.newArrayList(EarlyAlertOutcomeFixture.WAITING_FOR_RESPONSE.id()), 
-				TermFixture.FALL_2012.code(), 
-				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
-				null, 
-				null, 
+				Stubs.HomeDepartmentFixture.MATHEMATICS.name(),
+				Stubs.PersonFixture.COACH_1.id(),	
+				Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()),
+				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
+				Stubs.ProgramStatusFixture.ACTIVE.id(),
+				Lists.newArrayList(Stubs.SpecialServiceGroupFixture.TEST_SSG.id()),
+				Lists.newArrayList(Stubs.EarlyAlertOutcomeFixture.WAITING_FOR_RESPONSE.id()),
+				Stubs.TermFixture.FALL_2012.code(),
+				Stubs.DateFixture.START_FALL_2012.date(),
+				Stubs.DateFixture.END_FALL_2012.date(),
 				"csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add("COACH,TOTAL EARLY ,PHONE CALLS,EMAILS,LETTERS,TEXTS,IN PERSON");
-		expectedReportBodyLines.add("test Mumford coach1,4,0,0,4,0,0");
+		expectedReportBodyLines.add("FIRST,MIDDLE,LAST,STUDENT ID,EMAIL(SCHOOL),OUTREACH,COUNSELOR");
+		expectedReportBodyLines.add(",,,,,,");
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
 
@@ -79,7 +91,13 @@ public class EarlyAlertStudentOutreachReportControllerIntegrationTest extends
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 
-		controller.getEarlyAlertStudentOutreachReport(response, 
+		controller.getEarlyAlertStudentOutcomeReport(response, 
+				"earlyAlertOutreachIds",
+				null,
+				null,
+				null,
+				null,
+				null,
 				null,
 				null,
 				null,
@@ -90,8 +108,10 @@ public class EarlyAlertStudentOutreachReportControllerIntegrationTest extends
 				"csv");;
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		//TODO Understand why no filters does not bring back a result!
-		expectedReportBodyLines.add("COACH,TOTAL EARLY ,PHONE CALLS,EMAILS,LETTERS,TEXTS,IN PERSON");
-		expectedReportBodyLines.add("test Mumford coach1,5,0,0,4,0,1");
+		expectedReportBodyLines.add("FIRST,MIDDLE,LAST,STUDENT ID,EMAIL(SCHOOL),OUTREACH,COUNSELOR");
+		expectedReportBodyLines.add("test,Mumford,coach1student1,coach1student1,coach1student1@unicon.net,In Person,test coach1");
+		expectedReportBodyLines.add("test,Mumford,coach1student2,coach1student2,coach1student2@unicon.net,Letter,test coach1");
+		expectedReportBodyLines.add("test,Mumford,coach1student3,coach1student3,coach1student3@unicon.net,Letter,test coach1");
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}

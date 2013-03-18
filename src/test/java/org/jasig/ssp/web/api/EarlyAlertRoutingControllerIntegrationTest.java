@@ -111,7 +111,7 @@ public class EarlyAlertRoutingControllerIntegrationTest {
 				obj);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = org.jasig.ssp.web.api.validation.ValidationException.class)
 	public void testControllerMismatchingCampusIds()
 			throws ObjectNotFoundException, ValidationException {
 		// arrange

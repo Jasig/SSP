@@ -104,7 +104,7 @@ public class DisabilityServicesReportControllerIntegrationTest
 		// the filtering criteria
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		expectedReportBodyLines.add("STUDENT NAME,ID,ILP,DISABILITY,SSP STATUS,ODS STATUS,ODS REASON FOR INELIGIBILTY,ODS REG DATE,INTERPRETER,REG STATUS,MAJOR,VET STATUS,ETHNICITY,ASSIGNMENT DATES\t,AGENCY CONTACTS,SSP COACH");
-		expectedReportBodyLines.add( ",,,,,,,,,,,,,,,");
+		expectedReportBodyLines.add( ",,,,,,,,,N,,,,,,");
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
@@ -154,9 +154,9 @@ public class DisabilityServicesReportControllerIntegrationTest
 		// same as in testGetAddressLabelsReturnsAllStudentsIfNoFiltersSet(), but
 		// Dennis Ritchie is missing
 		expectedReportBodyLines.add("STUDENT NAME,ID,ILP,DISABILITY,SSP STATUS,ODS STATUS,ODS REASON FOR INELIGIBILTY,ODS REG DATE,INTERPRETER,REG STATUS,MAJOR,VET STATUS,ETHNICITY,ASSIGNMENT DATES\t,AGENCY CONTACTS,SSP COACH");
-		expectedReportBodyLines.add("test Mumford coach1student0,coach1student0,,ADD/ADHD,Active,Test Disability ,,,,,Physics,Dependent of ,American ,10/01/2012,MH - Other,test coach1");
-		expectedReportBodyLines.add("test Mumford coach1student2,coach1student2,,SP,Non-,Ineligible,,,,,Planned Major: ENGISH,Montgomery ,Asian Pacific ,10/01/2012,BSVI - BVR,test coach1");
-		expectedReportBodyLines.add("test Mumford coach1student4,coach1student4,,LD,No-Show,Eligible,,,,,Planned Major: Biology,VEAP,Prefer Not To ,10/01/2012,Test Disability Agency ,test coach1");
+		expectedReportBodyLines.add("test Mumford coach1student0,coach1student0,,ADD/ADHD,Active,Test Disability Status,,,,N,Planned Major: Physics,Dependent of Veteran,American Indian/Alaskan Native,10/01/2012,MH - Other,test coach1");
+		expectedReportBodyLines.add("test Mumford coach1student2,coach1student2,,SP,Non-participating,Ineligible,,,,N,Planned Major: ENGISH,Montgomery County Reservist,Asian Pacific Islander,10/01/2012,BSVI - BVR,test coach1");
+		expectedReportBodyLines.add("test Mumford coach1student4,coach1student4,,LD,No-Show,Eligible,,,,N,Planned Major: Biology,VEAP,Prefer Not To Answer,10/01/2012,Test Disability Agency - VA,test coach1");
 		
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}

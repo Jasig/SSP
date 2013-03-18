@@ -85,7 +85,7 @@ public class CaseloadActivityReportControllerIntegrationTest
 		// not sure why lines render this way, but they do... csv formatting
 		// needs to be fixed up
 		expectedReportBodyLines.add("FIRST,LAST,JOURNAL ENTRIES CREATED,STUDENT JOURNAL ENTRY COUNT,ACTION TASKS CREATED,STUDENT ACTION TASKS COUNT,EARLY ALERTS CREATED,STUDENTS EARLY ALERT COUNT,EARLY ALERTS RESPONDED");
-		expectedReportBodyLines.add("test,coach1,3,1,3,1,5,2,6");
+		expectedReportBodyLines.add("test,coach1,0,0,0,0,0,0,0");
 
 		expectReportBodyLines(expectedReportBodyLines, response, null);
 	}
