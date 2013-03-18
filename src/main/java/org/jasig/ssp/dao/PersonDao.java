@@ -539,13 +539,12 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		criteria.createAlias("disabilityAgencies", "disabilityAgencies", JoinType.LEFT_OUTER_JOIN);
 		
 		criteria.createAlias("disabilityAgencies.disabilityAgency", "disabilityAgency", JoinType.LEFT_OUTER_JOIN);
-		if (form.getDisabilityTypeId() == null)
-			criteria.createAlias("disabilityTypes", "personDisabilityTypes", JoinType.LEFT_OUTER_JOIN);
+		
+		criteria.createAlias("disabilityTypes", "personDisabilityTypes", JoinType.LEFT_OUTER_JOIN);
 		
 		criteria.createAlias("personDisabilityTypes.disabilityType", "disabilityType", JoinType.LEFT_OUTER_JOIN);
-		if (form.getDisabilityStatusId() == null) {
-			criteria.createAlias("disability", "personDisability");
-		}
+		criteria.createAlias("disability", "personDisability");
+		
 		
 		criteria.createAlias("personDisability.disabilityStatus", "disabilityStatus", JoinType.LEFT_OUTER_JOIN);
 		
