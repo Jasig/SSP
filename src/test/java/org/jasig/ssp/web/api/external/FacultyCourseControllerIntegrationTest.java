@@ -253,7 +253,6 @@ public class FacultyCourseControllerIntegrationTest {
 
 		final WriteableExternalFacultyCourse course = new WriteableExternalFacultyCourse();
 		course.setFacultySchoolId(Stubs.PersonFixture.KEN.schoolId());
-		course.setTermCode(Stubs.TermFixture.FALL_2012.code());
 		// prob. not worth the trouble to model a "stub" type for courses since
 		// we don't actually *have* a 1st class course entity in our ext. model
 		// we just happen to know that KEN already instructs MTH101 in term FA12
@@ -261,8 +260,8 @@ public class FacultyCourseControllerIntegrationTest {
 		course.setFormattedCourse("MTH101");
 		course.setTermCode(Stubs.TermFixture.SPRING_2013.code());
 		course.setTitle("College Algebra");
-		course.setSectionCode("Aa");
-		course.setSectionNumber("1");
+		course.setSectionCode("default");
+		course.setSectionNumber("default");
 
 		final WriteableExternalFacultyCourseRoster roster = new WriteableExternalFacultyCourseRoster();
 		roster.setFacultySchoolId(Stubs.PersonFixture.KEN.schoolId());
@@ -273,9 +272,9 @@ public class FacultyCourseControllerIntegrationTest {
 		roster.setPrimaryEmailAddress(Stubs.PersonFixture.KEVIN_SMITH.primaryEmailAddress());
 		roster.setSchoolId(Stubs.PersonFixture.KEVIN_SMITH.schoolId());
 		roster.setTermCode(Stubs.TermFixture.SPRING_2013.code());
-		roster.setSectionCode("Aa");
-		roster.setSectionNumber("1");
-		roster.setStatusCode("WK");
+		roster.setSectionCode("default");
+		roster.setSectionNumber("default");
+		roster.setStatusCode(null);
 
 		sessionFactory.getCurrentSession().save(course);
 		sessionFactory.getCurrentSession().save(roster);
@@ -283,15 +282,16 @@ public class FacultyCourseControllerIntegrationTest {
 
 		final PagedResponse<ExternalFacultyCourseRosterTO> modifiedEnrollments =
 				controller.getRoster(Stubs.PersonFixture.KEN.schoolId(),
-						"MTH101", null);
+						"MTH101", Stubs.TermFixture.SPRING_2013.code());
 
 		assertEquals(2, modifiedEnrollments.getRows().size());
 		final Iterator<ExternalFacultyCourseRosterTO> modifiedEnrollmentsIterator =
 				modifiedEnrollments.getRows().iterator();
-		assertEquals(Stubs.PersonFixture.KEVIN_SMITH.schoolId(),
-				modifiedEnrollmentsIterator.next().getSchoolId());
 		assertEquals(Stubs.PersonFixture.STUDENT_0.schoolId(),
 				modifiedEnrollmentsIterator.next().getSchoolId());
+		assertEquals(Stubs.PersonFixture.KEVIN_SMITH.schoolId(),
+				modifiedEnrollmentsIterator.next().getSchoolId());
+		
 		
 
 	}
@@ -350,8 +350,7 @@ public class FacultyCourseControllerIntegrationTest {
 						"MTH101", Stubs.TermFixture.SPRING_2013.code());
 
 		assertEquals(1, modifiedEnrollments.getRows().size());
-		
-		
+			
 		assertEquals(Stubs.PersonFixture.KEVIN_SMITH.schoolId(),
 				modifiedEnrollments.getRows().iterator().next().getSchoolId());
 	}
