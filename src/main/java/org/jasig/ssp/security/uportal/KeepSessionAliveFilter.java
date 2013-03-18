@@ -22,6 +22,7 @@ package org.jasig.ssp.security.uportal;
 import org.jasig.portlet.utils.rest.CrossContextRestApiInvoker;
 import org.jasig.portlet.utils.rest.RestResponse;
 import org.jasig.portlet.utils.rest.SimpleCrossContextRestApiInvoker;
+import org.jasig.ssp.util.http.HttpServletGetRequestWrapper;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -71,8 +72,10 @@ public class KeepSessionAliveFilter implements Filter {
             long delta = System.currentTimeMillis() - lastUpdate.longValue();
             if(delta >= interval) {
                 final CrossContextRestApiInvoker rest = new SimpleCrossContextRestApiInvoker();
+                //ensures request is GET going into REST Invoker
+                HttpServletGetRequestWrapper wrap = new HttpServletGetRequestWrapper(httpServletRequest);
                 final Map<String, String[]> params = new HashMap<String, String[]>();
-                final RestResponse rr = rest.invoke(httpServletRequest, httpServletResponse, "/ssp-platform/api/session.json", params);
+                final RestResponse rr = rest.invoke(wrap, httpServletResponse, "/ssp-platform/api/session.json", params);
                 httpServletRequest.getSession(false).setAttribute(SESSION_KEEP_ALIVE_ATTRIBUTE_KEY,System.currentTimeMillis());
             }
         } else {
