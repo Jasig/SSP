@@ -77,6 +77,11 @@ public class SecurityServiceInTestEnvironment implements SecurityService, Dispos
 		}
 	}
 
+	@Override
+	public void afterRequest() {
+		SspUser.afterRequest();
+	}
+
 	/**
 	 * Set the current user.
 	 * 
