@@ -78,4 +78,8 @@
 	<include file="org/jasig/ssp/database/integrationchangesets/i000004.xml" />
 
 	<include file="org/jasig/ssp/database/changesets/000019.xml" />
+
+	<!-- Intentionally skipping 20 - 24 (and others) for the 1.1.x series. -->
+	<include file="org/jasig/ssp/database/changesets/000025.xml" />
+
 </databaseChangeLog>
