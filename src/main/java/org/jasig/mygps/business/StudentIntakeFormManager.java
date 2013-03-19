@@ -582,7 +582,7 @@ public class StudentIntakeFormManager { // NOPMD
 			formSectionTO.getFormQuestionById(
 					SECTION_DEMOGRAPHICS_QUESTION_PRIMARYCAREGIVER_ID)
 					.setValueBoolean(
-							student.getDemographics().getPrimaryCaregiver());
+							student.getDemographics().getPrimaryCaregiver() == null ? false : student.getDemographics().getPrimaryCaregiver());
 
 			// How Many Children
 			formSectionTO.getFormQuestionById(
@@ -599,7 +599,7 @@ public class StudentIntakeFormManager { // NOPMD
 			formSectionTO.getFormQuestionById(
 					SECTION_DEMOGRAPHICS_QUESTION_CHILDCARENEEDED_ID)
 					.setValueBoolean(
-							student.getDemographics().getChildCareNeeded());
+							student.getDemographics().getChildCareNeeded() == null ? false : student.getDemographics().getChildCareNeeded());
 
 			// Childcare Arrangements
 			if (student.getDemographics().getChildCareArrangement() == null) {
@@ -625,7 +625,7 @@ public class StudentIntakeFormManager { // NOPMD
 			// Employed
 			formSectionTO.getFormQuestionById(
 					SECTION_DEMOGRAPHICS_QUESTION_EMPLOYED_ID).setValueBoolean(
-					student.getDemographics().getEmployed());
+					student.getDemographics().getEmployed() == null ? false : student.getDemographics().getEmployed());
 
 			// Employer
 			formSectionTO.getFormQuestionById(
@@ -680,8 +680,7 @@ public class StudentIntakeFormManager { // NOPMD
 			formSectionTO.getFormQuestionById(
 					SECTION_EDUCATIONPLAN_QUESTION_COMPLETEDORIENTATION_ID)
 					.setValueBoolean(
-							student.getEducationPlan()
-									.isNewOrientationComplete());
+							student.getEducationPlan().isNewOrientationComplete());
 
 			// Registered for Classes
 			formSectionTO
