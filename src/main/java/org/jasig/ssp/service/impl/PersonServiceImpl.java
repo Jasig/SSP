@@ -107,9 +107,6 @@ public class PersonServiceImpl implements PersonService {
 	@Autowired
 	private transient EarlyAlertService earlyAlertService;
 
-	@Value("#{configProperties.scheduled_coach_sync_enabled}")
-	private boolean scheduledCoachSyncEnabled;
-
 	/**
 	 * If <code>true</code>, each individual coach synchronized by
 	 * {@link #syncCoaches()} will be written in its own transaction. If false,
@@ -544,19 +541,6 @@ public class PersonServiceImpl implements PersonService {
 		return coachUsernames;
 	}
 
-	@Scheduled(fixedDelay = 300000)
-	// run every 5 minutes
-	public void syncCoachesOnSchedule() {
-		if ( !(scheduledCoachSyncEnabled) ) {
-			LOGGER.debug("Scheduled coach sync disabled. Abandoning sync job");
-			return;
-		}
-		LOGGER.info("Scheduled coach sync starting.");
-		PagingWrapper<Person> localCoaches = syncCoaches();
-		LOGGER.info("Scheduled coach sync complete. Local coach count {}",
-				localCoaches.getResults());
-	}
-
 	@Override
 	public PagingWrapper<Person> getAllAssignedCoaches(SortingAndPaging sAndP) {
 		return dao.getAllAssignedCoaches(sAndP);
@@ -610,7 +594,8 @@ public class PersonServiceImpl implements PersonService {
 		return currentCoachesSet;
 	}
 
-	private PagingWrapper<Person> syncCoaches() {
+	@Override
+	public PagingWrapper<Person> syncCoaches() {
 		long methodStart = new Date().getTime();
 		final Collection<Person> coaches = Lists.newArrayList();
 

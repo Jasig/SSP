@@ -323,8 +323,6 @@ public class TaskServiceImpl
 	}
 
 	@Override
-	@Scheduled(cron = "0 0 1 * * *")
-	// run at 1 am every day
 	public void sendAllTaskReminderNotifications() {
 
 		final SortingAndPaging sAndP = new SortingAndPaging(

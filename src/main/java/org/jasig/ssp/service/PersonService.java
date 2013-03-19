@@ -277,4 +277,6 @@ public interface PersonService extends AuditableCrudService<Person> {
 	public PagingWrapper<BaseStudentReportTO> getStudentReportTOsFromCriteria(
 			final PersonSearchFormTO personSearchFormTO,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException;
+
+	PagingWrapper<Person> syncCoaches();
 }

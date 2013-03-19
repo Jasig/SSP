@@ -200,8 +200,6 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	@Scheduled(fixedDelay = 150000)
-	// run 2.5 minutes after the end of the last invocation
 	public void sendQueuedMessages() {
 
 		LOGGER.info("BEGIN : sendQueuedMessages()");
