@@ -203,4 +203,9 @@ public class SecurityServiceImpl implements SecurityService {
 	public String getSessionId() {
 		return RequestContextHolder.currentRequestAttributes().getSessionId();
 	}
+
+	@Override
+	public void afterRequest() {
+		SspUser.afterRequest();
+	}
 }

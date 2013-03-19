@@ -95,8 +95,6 @@ public class ExternalPersonServiceImpl
 	private transient int lastRecord = 0;
 
 	@Override
-	@Scheduled(fixedDelay = 300000)
-	// run every 5 minutes
 	public void syncWithPerson() {
 		LOGGER.info(
 				"BEGIN : Person and ExternalPerson Sync.  Selecting {} records starting at {}",

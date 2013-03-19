@@ -87,4 +87,12 @@ public interface SecurityService {
 	 * @return the current user, or if null, the admin
 	 */
 	SspUser currentFallingBackToAdmin();
+
+	/**
+	 * Cleanup any request-bound resources that might be bound to the
+	 * current security context. This is <em>not</em> a logout. This should
+	 * <em>not</em> attempt to replace per-request resource
+	 * management already performed by SpringSecurity.
+	 */
+	void afterRequest();
 }

@@ -44,9 +44,11 @@
 	<mvc:annotation-driven />
 	
 	<mvc:interceptors>
-		<bean class="org.springframework.orm.hibernate4.support.OpenSessionInViewInterceptor">
-			<property name="sessionFactory" ref="sessionFactory" />
-		</bean>
+        <!-- Had to move the OpenSessionInViewInterceptor up into a Servlet
+        Filter so the SpringSecurity Authentication initialization process
+        caches a Person in the current SspUser that can be used further
+        downstream in the same request. Once we decouple SspUser and Person
+        we should be able to move the session open back down here -->
         <bean class="org.jasig.ssp.security.SspCurrentUserInterceptor" />
 	</mvc:interceptors>
 	
