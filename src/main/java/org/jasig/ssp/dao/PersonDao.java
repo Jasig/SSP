@@ -560,6 +560,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			projections.add(Projections.groupProperty("disabilityAgency.createdDate").as("disabilityAgencyCreatedDate"));
 			projections.add(Projections.groupProperty("educationGoal.plannedMajor").as("major"));
 			projections.add(Projections.groupProperty("disabilityStatus.name").as("odsStatus"));
+			projections.add(Projections.groupProperty("personDisability.createdDate").as("odsRegistrationDate"));
+			projections.add(Projections.groupProperty("personDisability.noDocumentation").as("noDocumentation"));
+			projections.add(Projections.groupProperty("personDisability.inadequateDocumentation").as("inadequateDocumentation"));
+			projections.add(Projections.groupProperty("personDisability.noDisability").as("noDisability"));
+			projections.add(Projections.groupProperty("personDisability.noSpecialEd").as("noSpecialEd"));
 		} else {
 			projections.add(Projections.groupProperty("ethnicity.name").as("ethnicity"));
 			projections.add(Projections.groupProperty("veteranStatus.name").as("veteranStatus"));
@@ -568,6 +573,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			projections.add(Projections.groupProperty("disabilityAgency.createdDate").as("disabilityAgencyCreatedDate"));
 			projections.add(Projections.groupProperty("educationGoal.plannedMajor").as("major"));
 			projections.add(Projections.groupProperty("disabilityStatus.name").as("odsStatus"));
+			projections.add(Projections.groupProperty("personDisability.createdDate").as("odsRegistrationDate"));
+			projections.add(Projections.groupProperty("personDisability.noDocumentation").as("noDocumentation"));
+			projections.add(Projections.groupProperty("personDisability.inadequateDocumentation").as("inadequateDocumentation"));
+			projections.add(Projections.groupProperty("personDisability.noDisability").as("noDisability"));
+			projections.add(Projections.groupProperty("personDisability.noSpecialEd").as("noSpecialEd"));
 		}
 		
 		criteria.setResultTransformer(new AliasToBeanResultTransformer(

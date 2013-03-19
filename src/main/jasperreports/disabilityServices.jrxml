@@ -1,24 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Licensed to Jasig under one or more contributor license
-    agreements. See the NOTICE file distributed with this work
-    for additional information regarding copyright ownership.
-    Jasig licenses this file to you under the Apache License,
-    Version 2.0 (the "License"); you may not use this file
-    except in compliance with the License. You may obtain a
-    copy of the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on
-    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations
-    under the License.
-
--->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="disabilityServices.jasper" pageWidth="1548" pageHeight="612" orientation="Landscape" columnWidth="1508" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f9f700f2-fa61-4172-90b1-b8f9677f8bee">
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
@@ -26,8 +6,8 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="summary"/>
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="460"/>
-	<property name="ireport.y" value="93"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="programStatusName" class="java.lang.String"/>
 	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
 	<parameter name="referralSourceNames" class="java.lang.String"/>
@@ -76,11 +56,8 @@
 	<field name="odsReason" class="java.lang.String">
 		<fieldDescription><![CDATA[odsReason]]></fieldDescription>
 	</field>
-	<field name="odsRegistrationDate" class="java.util.Date">
-		<fieldDescription><![CDATA[odsRegistrationDate]]></fieldDescription>
-	</field>
-	<field name="interpreter" class="java.lang.String">
-		<fieldDescription><![CDATA[interpreter]]></fieldDescription>
+	<field name="odsRegistrationDateString" class="java.lang.String">
+		<fieldDescription><![CDATA[odsRegistrationDateString]]></fieldDescription>
 	</field>
 	<field name="registrationStatus" class="java.lang.Integer">
 		<fieldDescription><![CDATA[registrationStatus]]></fieldDescription>
@@ -406,63 +383,56 @@
 				<text><![CDATA[ODS REASON FOR INELIGIBILTY]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="7fb79f93-1a84-4545-ae5f-f0411ff12a92" mode="Opaque" x="654" y="0" width="78" height="14"/>
+				<reportElement uuid="7fb79f93-1a84-4545-ae5f-f0411ff12a92" mode="Opaque" x="654" y="0" width="89" height="14"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[ODS REG DATE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="1d27d029-b53e-4849-adfb-f99c7257336b" mode="Opaque" x="732" y="0" width="84" height="14"/>
-				<textElement textAlignment="Center">
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[INTERPRETER]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="9cc3b052-984c-4edc-9086-5a303c3d3d39" mode="Opaque" x="1370" y="0" width="110" height="14"/>
+				<reportElement uuid="9cc3b052-984c-4edc-9086-5a303c3d3d39" mode="Opaque" x="1293" y="0" width="110" height="14"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[SSP COACH]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="1986e05a-ec4a-46de-8d79-e5534fd7f511" mode="Opaque" x="886" y="0" width="75" height="14"/>
+				<reportElement uuid="1986e05a-ec4a-46de-8d79-e5534fd7f511" mode="Opaque" x="809" y="0" width="75" height="14"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[MAJOR]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="f48db932-8a08-4079-bc2a-1ba74dd632e3" mode="Opaque" x="820" y="0" width="62" height="14"/>
+				<reportElement uuid="f48db932-8a08-4079-bc2a-1ba74dd632e3" mode="Opaque" x="743" y="0" width="62" height="14"/>
 				<textElement textAlignment="Center">
 					<font size="9" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[REG STATUS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="368dd47d-1cae-44a4-ba38-e10c284179fd" mode="Opaque" x="1127" y="0" width="128" height="14"/>
+				<reportElement uuid="368dd47d-1cae-44a4-ba38-e10c284179fd" mode="Opaque" x="1050" y="0" width="128" height="14"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[ASSIGNMENT DATES	]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="a58f22f4-06f5-4226-beeb-1892fa1afa33" mode="Opaque" x="961" y="0" width="96" height="14"/>
+				<reportElement uuid="a58f22f4-06f5-4226-beeb-1892fa1afa33" mode="Opaque" x="884" y="0" width="96" height="14"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[VET STATUS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="1f71ddf2-63f3-4276-a0e6-07806690d928" mode="Opaque" x="1057" y="0" width="70" height="14"/>
+				<reportElement uuid="1f71ddf2-63f3-4276-a0e6-07806690d928" mode="Opaque" x="980" y="0" width="70" height="14"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[ETHNICITY]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="d50ddcda-987f-4d94-80b8-56e725410243" mode="Opaque" x="1255" y="0" width="115" height="14"/>
+				<reportElement uuid="d50ddcda-987f-4d94-80b8-56e725410243" mode="Opaque" x="1178" y="0" width="115" height="14"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
@@ -527,47 +497,42 @@
 				<textFieldExpression><![CDATA[$F{odsReason}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="4bb79470-0d13-43f6-ad29-2d6c0e3a9ff1" x="654" y="3" width="78" height="16"/>
+				<reportElement uuid="4bb79470-0d13-43f6-ad29-2d6c0e3a9ff1" x="654" y="3" width="89" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{odsRegistrationDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{odsRegistrationDateString}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="4c7203f3-de3f-4d03-a78b-6f60240211a1" x="732" y="3" width="88" height="16"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{interpreter}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="681d70b3-65c6-4ad9-bf7f-bd29293da4ff" x="886" y="3" width="75" height="16"/>
+				<reportElement uuid="681d70b3-65c6-4ad9-bf7f-bd29293da4ff" x="809" y="3" width="75" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{major}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="bfe75fbc-2d49-404e-a8ed-db43d5476a83" x="820" y="3" width="62" height="16"/>
+				<reportElement uuid="bfe75fbc-2d49-404e-a8ed-db43d5476a83" x="743" y="3" width="66" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{registrationStatus} != null && $F{registrationStatus} > 0 ? "Y":"N"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="15a01dba-6891-4af6-bf33-4e2125afd3de" x="1127" y="3" width="128" height="16"/>
+				<reportElement uuid="15a01dba-6891-4af6-bf33-4e2125afd3de" x="1050" y="3" width="128" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{assignmentDates}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="45ba8225-260f-41af-b424-cf2b982579d5" x="961" y="3" width="96" height="16"/>
+				<reportElement uuid="45ba8225-260f-41af-b424-cf2b982579d5" x="884" y="3" width="96" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{veteranStatus}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="dae9b576-3960-4e4a-b69e-7c168879c43d" x="1057" y="3" width="70" height="16"/>
+				<reportElement uuid="dae9b576-3960-4e4a-b69e-7c168879c43d" x="980" y="3" width="70" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{ethnicity}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="29702cce-db6c-4135-b497-f1a5b8970c1b" x="1255" y="3" width="115" height="16"/>
+				<reportElement uuid="29702cce-db6c-4135-b497-f1a5b8970c1b" x="1178" y="3" width="115" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{agencyContacts}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="9970d598-99bb-4344-8ae7-6602c3327da0" x="1370" y="3" width="110" height="16"/>
+				<reportElement uuid="9970d598-99bb-4344-8ae7-6602c3327da0" x="1293" y="3" width="110" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{coachName}]]></textFieldExpression>
 			</textField>
