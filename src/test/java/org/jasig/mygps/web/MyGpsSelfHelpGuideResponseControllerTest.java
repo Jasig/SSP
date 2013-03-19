@@ -28,8 +28,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
+import java.util.Date;
 import java.util.UUID;
 
+import org.apache.poi.util.StringUtil;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SelfHelpGuideResponse;
 import org.jasig.ssp.model.reference.SelfHelpGuide;
@@ -41,6 +43,7 @@ import org.jasig.ssp.service.reference.SelfHelpGuideQuestionService;
 import org.jasig.ssp.service.reference.SelfHelpGuideService;
 import org.jasig.ssp.transferobject.SelfHelpGuideResponseTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jfree.util.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -129,6 +132,7 @@ public class MyGpsSelfHelpGuideResponseControllerTest {
 	@Test
 	public void initiate() throws Exception {
 		Person bob = new Person(UUID.randomUUID());
+		String sessionId = (new Date()).toString();
 		securityService.setCurrent(bob);
 
 		UUID selfHelpGuideId = UUID.randomUUID();
@@ -139,7 +143,7 @@ public class MyGpsSelfHelpGuideResponseControllerTest {
 		expect(selfHelpGuideService.get(selfHelpGuideId)).andReturn(
 				selfHelpGuide);
 
-		expect(service.initiateSelfHelpGuideResponse(selfHelpGuide, bob))
+		expect(service.initiateSelfHelpGuideResponse(selfHelpGuide, bob,sessionId))
 				.andReturn(selfHelpGuideResponse);
 
 		replay(service);

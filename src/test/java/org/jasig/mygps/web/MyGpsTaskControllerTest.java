@@ -75,7 +75,7 @@ public class MyGpsTaskControllerTest {
 	private static final String TEST_TASK_SESSION_ID = "12345";
 
 	private static final String TEST_TASK_EMAIL = "asdf@a.com";
-
+ 
 	@Before
 	public void setUp() {
 		service = createMock(TaskService.class);
@@ -88,6 +88,7 @@ public class MyGpsTaskControllerTest {
 		controller = new MyGpsTaskController(service, challengeService,
 				challengeReferralService, personService, securityService);
 	}
+
 
 	@Test
 	public void createCustom() throws Exception { // NOPMD

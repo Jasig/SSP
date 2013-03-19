@@ -88,11 +88,11 @@ public class PersonSelfHelpGuideResponseServiceImpl
 	@Transactional(readOnly = false)
 	public SelfHelpGuideResponse initiateSelfHelpGuideResponse(
 			final SelfHelpGuide selfHelpGuide,
-			final Person person)
+			final Person person,final String sessionId)
 			throws ObjectNotFoundException {
 		final SelfHelpGuideResponse response =
 				SelfHelpGuideResponse.createDefaultForSelfHelpGuideAndPerson(
-						selfHelpGuide, person);
+						selfHelpGuide, person, sessionId);
 
 		dao.save(response);
 
