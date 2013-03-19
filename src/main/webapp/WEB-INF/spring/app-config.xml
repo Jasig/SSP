@@ -87,6 +87,7 @@
 				<entry key="database.app.username" value="#{configProperties.db_username}" />
 				<entry key="database.admin.username" value="#{configProperties.db_admin_username}" />
 				<entry key="set.mssql.snapshot.isolation" value="#{configProperties.db_liquibase_set_mssql_snapshot_isolation}" />
+				<entry key="strip.journal.comment.markup" value="#{configProperties.db_liquibase_strip_journal_comment_markup}" />
 			</util:map>
 		</property>
 	</bean>
