@@ -25,6 +25,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SelfHelpGuideResponse;
 import org.jasig.ssp.model.reference.SelfHelpGuide;
 import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
+import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.PersonSelfHelpGuideResponseService;
 import org.jasig.ssp.service.SecurityService;
@@ -36,6 +37,7 @@ import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -97,6 +99,7 @@ public class MyGpsSelfHelpGuideResponseController extends
 
 		final SelfHelpGuideResponse response = service
 				.get(selfHelpGuideResponseId);
+		verifyOwnership(response);
 		return service.completeSelfHelpGuideResponse(response);
 	}
 	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
@@ -107,7 +110,8 @@ public class MyGpsSelfHelpGuideResponseController extends
 			throws Exception {
 		final SelfHelpGuideResponse response = service
 				.get(selfHelpGuideResponseId);
-
+		
+		verifyOwnership(response);
 		return service.getSelfHelpGuideResponseFor(response,
 				new SortingAndPaging(ObjectStatus.ACTIVE));
 	}
@@ -118,7 +122,8 @@ public class MyGpsSelfHelpGuideResponseController extends
 			throws Exception {
 		final SelfHelpGuide guide = selfHelpGuideService.get(selfHelpGuideId);
 		final Person person = securityService.currentUser().getPerson();
-		return service.initiateSelfHelpGuideResponse(guide, person).toString();
+		final String sessionId = securityService.getSessionId();
+		return service.initiateSelfHelpGuideResponse(guide, person, sessionId).toString();
 	}
 	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	@RequestMapping(value = "answer", method = RequestMethod.GET)
@@ -127,14 +132,36 @@ public class MyGpsSelfHelpGuideResponseController extends
 			final @RequestParam("selfHelpGuideResponseId") UUID selfHelpGuideResponseId,
 			final @RequestParam("selfHelpGuideQuestionId") UUID selfHelpGuideQuestionId,
 			final @RequestParam("response") boolean response) throws Exception {
+		
 		final SelfHelpGuideResponse selfHelpGuideResponse = service
 				.get(selfHelpGuideResponseId);
+		
+		verifyOwnership(selfHelpGuideResponse);
+		
 		final SelfHelpGuideQuestion selfHelpGuideQuestion = selfHelpGuideQuestionService
 				.get(selfHelpGuideQuestionId);
 
 		return service.answerSelfHelpGuideQuestion(
 				selfHelpGuideResponse,
 				selfHelpGuideQuestion, response);
+	}
+
+	private void verifyOwnership(SelfHelpGuideResponse selfHelpGuideResponse) throws AccessDeniedException
+	{
+		if(securityService.currentlyAuthenticatedUser() != null)
+		{
+			if(!securityService.currentlyAuthenticatedUser().getPerson().getId().equals(selfHelpGuideResponse.getPerson().getId()))
+			{
+				throw new AccessDeniedException("You do not have access to modify this self help guide response.");
+			}
+		}
+		else
+		{
+			if(!(SspUser.ANONYMOUS_PERSON_ID.equals(selfHelpGuideResponse.getPerson().getId()) && selfHelpGuideResponse.getSessionId().equals(securityService.getSessionId())))
+			{
+				throw new AccessDeniedException("You do not have access to modify this self help guide response.");
+			}
+		}
 	}
 
 	@Override

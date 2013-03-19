@@ -75,7 +75,7 @@ public class MyGpsTaskControllerTest {
 	private static final String TEST_TASK_SESSION_ID = "12345";
 
 	private static final String TEST_TASK_EMAIL = "asdf@a.com";
-
+ 
 	@Before
 	public void setUp() {
 		service = createMock(TaskService.class);
@@ -89,34 +89,6 @@ public class MyGpsTaskControllerTest {
 				challengeReferralService, personService, securityService);
 	}
 
-	@Test
-	public void createTaskForStudent() throws Exception { // NOPMD
-		final Person student = new Person();
-		student.setUsername("student id");
-		final Task task = new Task();
-
-		expect(personService.personFromUsername(student.getUsername()))
-				.andReturn(
-						student);
-		securityService.setSessionId(TEST_TASK_SESSION_ID);
-		expect(
-				service.createCustomTaskForPerson(TEST_TASK_NAME,
-						TEST_TASK_DESCRIPTION, student,
-						TEST_TASK_SESSION_ID)).andReturn(task);
-		service.sendNoticeToStudentOnCustomTask(task);
-
-		replay(personService);
-		replay(service);
-
-		assertTrue(
-				"Task creation should have returned success.",
-				controller.createTaskForStudent(TEST_TASK_NAME,
-						TEST_TASK_DESCRIPTION,
-						student.getUsername(), new Date()));
-
-		verify(personService);
-		verify(service);
-	}
 
 	@Test
 	public void createCustom() throws Exception { // NOPMD

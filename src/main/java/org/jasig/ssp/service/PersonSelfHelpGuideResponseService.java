@@ -30,7 +30,7 @@ public interface PersonSelfHelpGuideResponseService
 
 	SelfHelpGuideResponse initiateSelfHelpGuideResponse(
 			SelfHelpGuide selfHelpGuide,
-			Person person)
+			Person person, String sessionId)
 			throws ObjectNotFoundException;
 
 	boolean answerSelfHelpGuideQuestion(

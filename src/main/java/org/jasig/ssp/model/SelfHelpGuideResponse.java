@@ -49,6 +49,9 @@ public class SelfHelpGuideResponse
 
 	@Column(nullable = false)
 	private boolean earlyAlertSent;
+	
+	@Column(length = 32, updatable = false)
+	private String sessionId;
 
 	/**
 	 * Associated person. Changes to this Person are not persisted.
@@ -117,7 +120,7 @@ public class SelfHelpGuideResponse
 	}
 
 	public static SelfHelpGuideResponse createDefaultForSelfHelpGuideAndPerson(
-			final SelfHelpGuide guide, final Person person) {
+			final SelfHelpGuide guide, final Person person, String sessionId) {
 
 		final SelfHelpGuideResponse response = new SelfHelpGuideResponse();
 		response.setCancelled(false);
@@ -126,6 +129,7 @@ public class SelfHelpGuideResponse
 		response.setEarlyAlertSent(false);
 		response.setPerson(person);
 		response.setSelfHelpGuide(guide);
+		response.setSessionId(sessionId);
 
 		return response;
 	}
@@ -153,5 +157,13 @@ public class SelfHelpGuideResponse
 		// collections are not included here
 
 		return result;
+	}
+
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
 	}
 }
