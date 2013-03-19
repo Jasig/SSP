@@ -20943,6 +20943,9 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
                 items: [{
                     xtype: 'panel',
                     title: 'Tasks',
+                    width: '100%',
+                    height: '100%',
+                    autoScroll: true,
                     items: [{
                         xtype: 'tabpanel',
                         activeTab: 0,
@@ -20992,10 +20995,16 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
                     xtype: 'displayactionplangoals',
                     itemId: 'goalsPanel',
                     flex: 1,
+                    width: '100%',
+                    height: '100%',
+                    autoScroll: true,
                     hidden: !me.authenticatedPerson.hasAccess('ACTION_PLAN_GOALS_PANEL')
                 }, {
                     xtype: 'displaystrengths',
                     itemId: 'strengthsPanel',
+                    width: '100%',
+                    height: '100%',
+                    autoScroll: true,
                     hidden: !me.authenticatedPerson.hasAccess('ACTION_PLAN_STRENGTHS_PANEL')
                 }]
             }],
