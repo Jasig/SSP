@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="schema" value="public" dbms="postgresql" />
+    <property name="schema" value="dbo" dbms="mssql" />
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <!-- We only do this for mssql b/c we happen to know that this problem
+    only affects mssql deployments in the wild. A PostgresSQL version would
+    probably be simpler and regexp based.
+
+    Also allow you to shut this off via config if you're sure you've dealt
+    with the problem independently and don't want to run the risk
+    of accidentally editing good comments on the off chance the assumptions
+    in this script are invalid-->
+    <changeSet id="Strip journal entry comment markup" author="dan.mccallum"
+               dbms="mssql" >
+        <preConditions onFail="CONTINUE">
+            <changeLogPropertyDefined property="strip.journal.comment.markup" value="true"/>
+        </preConditions>
+        <sql><![CDATA[
+
+-- Script for stripping out markup from Journal Entry comments created
+-- as side-effects of Early Alert responses. After running this, sanity
+-- check the contents of journal_entry.comment with a query like:
+--
+--    SELECT [id], [comment] FROM [dbo].[journal_entry]
+--
+-- If you suspect problems you can restore some or all records from
+-- journal_entry_bak. E.g. to completely restore:
+--
+--    DELETE FROM [dbo].[journal_entry]
+--    INSERT INTO [dbo].[journal_entry] SELECT * FROM [dbo].[journal_entry_bak]
+--
+-- Otherwise that table can be dropped after you've
+-- decided everything looks good:
+--
+--    DROP TABLE [dbo].[journal_entry_bak]
+--
+--
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- From http://stackoverflow.com/questions/457701/best-way-to-strip-html-tags-from-a-string-in-sql-server
+CREATE FUNCTION [dbo].[udf_StripHTML] (@HTMLText VARCHAR(MAX))
+RETURNS VARCHAR(MAX) AS
+BEGIN
+   DECLARE @Start INT
+   DECLARE @End INT
+   DECLARE @Length INT
+   SET @Start = CHARINDEX('<',@HTMLText)
+   SET @End = CHARINDEX('>',@HTMLText,CHARINDEX('<',@HTMLText))
+   SET @Length = (@End - @Start) + 1
+   WHILE @Start > 0 AND @End > 0 AND @Length > 0
+   BEGIN
+       SET @HTMLText = STUFF(@HTMLText,@Start,@Length,'')
+       SET @Start = CHARINDEX('<',@HTMLText)
+       SET @End = CHARINDEX('>',@HTMLText,CHARINDEX('<',@HTMLText))
+       SET @Length = (@End - @Start) + 1
+   END
+   RETURN LTRIM(RTRIM(@HTMLText))
+END
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[journal_entry_bak]') AND type in (N'U'))
+DROP TABLE [dbo].[journal_entry_bak]
+GO
+
+CREATE TABLE [dbo].[journal_entry_bak](
+	[id] [uniqueidentifier] NOT NULL,
+	[created_date] [datetime] NOT NULL,
+	[modified_date] [datetime] NOT NULL,
+	[created_by] [uniqueidentifier] NOT NULL,
+	[modified_by] [uniqueidentifier] NOT NULL,
+	[object_status] [int] NOT NULL,
+	[entry_date] [datetime] NOT NULL,
+	[comment] [nvarchar](max) NULL,
+	[confidentiality_level_id] [uniqueidentifier] NOT NULL,
+	[journal_source_id] [uniqueidentifier] NOT NULL,
+	[journal_track_id] [uniqueidentifier] NULL,
+	[person_id] [uniqueidentifier] NOT NULL,
+ CONSTRAINT [PK_JOURNAL_ENTRY_BAK] PRIMARY KEY CLUSTERED
+(
+	[id] ASC
+))
+GO
+
+-- Populate the backup table
+INSERT INTO [dbo].[journal_entry_bak]
+SELECT * FROM [dbo].[journal_entry]
+
+-- Special handling of first line so we don't end up with a blank at the
+-- top of the markup-stripped comment. Only update entries where the
+-- source is "Early Alert Response". Use the ID in case the deployment
+-- happened to change that source name.
+UPDATE [dbo].[journal_entry]
+SET [comment] = REPLACE([comment], '<html><body>'+CHAR(13)+CHAR(10)+'<p><b>Early Alert', 'Early Alert')
+WHERE [journal_source_id] = 'B2D07A00-5056-A51A-80B5-F725F1C5C3E2'
+
+-- Strip out all markup, with special handling for name/value lines
+-- formatted as table cells. Only update entries where the
+-- source is "Early Alert Response". Use the ID in case the deployment
+-- happened to change that source name.
+UPDATE [dbo].[journal_entry]
+SET [comment] = ([dbo].[udf_StripHTML](REPLACE([comment], '</th><td>', ': ')))
+WHERE [journal_source_id] = 'B2D07A00-5056-A51A-80B5-F725F1C5C3E2'
+
+DROP FUNCTION [dbo].[udf_StripHTML]
+
+        ]]></sql>
+    </changeSet>
+
+</databaseChangeLog>
