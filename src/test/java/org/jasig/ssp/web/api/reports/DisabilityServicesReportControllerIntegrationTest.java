@@ -47,136 +47,136 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 public class DisabilityServicesReportControllerIntegrationTest
-		extends AbstractReportControllerIntegrationTest  {
+        extends AbstractReportControllerIntegrationTest  {
 
-	@Autowired
-	private transient DisabilityServicesReportController controller;
-	@Autowired
-	private transient PersonService personService;
-	@Autowired
-	protected transient SecurityService securityService;
-	@Autowired
-	protected transient ProgramStatusService programStatusService;
-	@Autowired
-	protected transient SpecialServiceGroupService ssgService;
-	@Autowired
-	protected transient StudentTypeService studentTypeService;
-	@Autowired
-	protected transient DisabilityStatusService disabilityStatusService;
-	@Autowired
-	protected transient ReferralSourceService referralSourceService;
+    @Autowired
+    private transient DisabilityServicesReportController controller;
+    @Autowired
+    private transient PersonService personService;
+    @Autowired
+    protected transient SecurityService securityService;
+    @Autowired
+    protected transient ProgramStatusService programStatusService;
+    @Autowired
+    protected transient SpecialServiceGroupService ssgService;
+    @Autowired
+    protected transient StudentTypeService studentTypeService;
+    @Autowired
+    protected transient DisabilityStatusService disabilityStatusService;
+    @Autowired
+    protected transient ReferralSourceService referralSourceService;
 
-	/**
-	 * {@link #testGetCaseloadWithFilters()}, 
-	 * Test to make sure all the filters are implemented properly.
-	 */
-	@Test
-	public void testGetDisabilityeServicesReportFilters()
-			throws IOException, ObjectNotFoundException, JRException {
-		final MockHttpServletResponse response = new MockHttpServletResponse();
-		final UUID coachId = Stubs.PersonFixture.ADVISOR_0.id();
-		final UUID odsCoachId = Stubs.PersonFixture.ADVISOR_0.id();
-		
-		controller.getDisabilityServicesReport(response, 
-				ObjectStatus.ACTIVE, 
-				coachId, 
-				odsCoachId, 
-				getReferences(disabilityStatusService, 1).get(0), 
-				null, 
-				getReferences(programStatusService, 1).get(0), 
-				getReferences(ssgService, 2), 
-				getReferences(referralSourceService, 2), 
-				getReferences(studentTypeService, 2), 
-				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
-				null, //anticipatedStartYear
-				null, //anticipatedStartTerm
-				2013, //actualStartYear
-				"FA12", //actualStartTerm
-				null, //startDate
-				null, //endDate
-				"FA12", //termRange
-				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
-				null,//roster status
-				"csv");
+    /**
+     * {@link #testGetCaseloadWithFilters()},
+     * Test to make sure all the filters are implemented properly.
+     */
+    @Test
+    public void testGetDisabilityeServicesReportFilters()
+            throws IOException, ObjectNotFoundException, JRException {
+        final MockHttpServletResponse response = new MockHttpServletResponse();
+        final UUID coachId = Stubs.PersonFixture.ADVISOR_0.id();
+        final UUID odsCoachId = Stubs.PersonFixture.ADVISOR_0.id();
 
-		// "body" is the actual results and the header that describes its columns.
-		// This is as opposed to rows which precede the header, which describe
-		// the filtering criteria
-		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		expectedReportBodyLines.add("STUDENT NAME,ID,ILP,DISABILITY,SSP STATUS,ODS STATUS,ODS REASON FOR INELIGIBILTY,ODS REG DATE,INTERPRETER,REG STATUS,MAJOR,VET STATUS,ETHNICITY,ASSIGNMENT DATES\t,AGENCY CONTACTS,SSP COACH");
-		expectedReportBodyLines.add( ",,,,,,,,,,,,,,,");
+        controller.getDisabilityServicesReport(response,
+                ObjectStatus.ACTIVE,
+                coachId,
+                odsCoachId,
+                getReferences(disabilityStatusService, 1).get(0),
+                null,
+                getReferences(programStatusService, 1).get(0),
+                getReferences(ssgService, 2),
+                getReferences(referralSourceService, 2),
+                getReferences(studentTypeService, 2),
+                Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
+                null, //anticipatedStartYear
+                null, //anticipatedStartTerm
+                2013, //actualStartYear
+                "FA12", //actualStartTerm
+                null, //startDate
+                null, //endDate
+                "FA12", //termRange
+                Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
+                null,//roster status
+                "csv");
 
-		expectReportBodyLines(expectedReportBodyLines, response, null);
-	}
+        // "body" is the actual results and the header that describes its columns.
+        // This is as opposed to rows which precede the header, which describe
+        // the filtering criteria
+        final List<String> expectedReportBodyLines = new ArrayList<String>(4);
+        expectedReportBodyLines.add("STUDENT NAME,ID,ILP,DISABILITY,SSP STATUS,ODS STATUS,ODS REASON FOR INELIGIBILTY,ODS REG DATE,REG STATUS,MAJOR,VET STATUS,ETHNICITY,ASSIGNMENT DATES\t,AGENCY CONTACTS,SSP COACH");
+        expectedReportBodyLines.add( ",,,,,,,,N,,,,,,");
 
-	@Test
-	public void testGetDisablityServicesReportNoFilter()
-			throws IOException, ObjectNotFoundException, JRException {
+        expectReportBodyLines(expectedReportBodyLines, response, null);
+    }
 
-		final Person dennisRitchie =
-				personService.get(Stubs.PersonFixture.DMR.id());
-		final Person kevinSmith =
-				personService.get(Stubs.PersonFixture.KEVIN_SMITH.id());
-		dennisRitchie.setCoach(kevinSmith);
-		personService.save(dennisRitchie);
-		sessionFactory.getCurrentSession().flush();
+    @Test
+    public void testGetDisablityServicesReportNoFilter()
+            throws IOException, ObjectNotFoundException, JRException {
 
-		final MockHttpServletResponse response = new MockHttpServletResponse();
-		// Alan Turing, i.e. the coach assigned to our test student users
-		// in our standard fixture
-		final UUID coachId = Stubs.PersonFixture.ADVISOR_0.id();
-		final UUID odsCoachId = Stubs.PersonFixture.ADVISOR_0.id();
-		controller.getDisabilityServicesReport(response, 
-				ObjectStatus.ACTIVE, 
-				null, 
-				null, 
-				null, 
-				null, 
-				null, 
-				null, 
-				null, 
-				null, 
-				null,
-				null, 
-				null, 
-				2013, 
-				null, 
-				null, 
-				null, 
-				null,
-				null,
-				null,
-				"csv");
-		// "body" is the actual results and the header that describes its columns.
-		// This is as opposed to rows which precede the header, which describe
-		// the filtering criteria
-		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
-		// same as in testGetAddressLabelsReturnsAllStudentsIfNoFiltersSet(), but
-		// Dennis Ritchie is missing
-		expectedReportBodyLines.add("STUDENT NAME,ID,ILP,DISABILITY,SSP STATUS,ODS STATUS,ODS REASON FOR INELIGIBILTY,ODS REG DATE,INTERPRETER,REG STATUS,MAJOR,VET STATUS,ETHNICITY,ASSIGNMENT DATES\t,AGENCY CONTACTS,SSP COACH");
-		expectedReportBodyLines.add("test Mumford coach1student0,coach1student0,,ADD/ADHD,Active,Test Disability ,,,,,Physics,Dependent of ,American ,10/01/2012,MH - Other,test coach1");
-		expectedReportBodyLines.add("test Mumford coach1student2,coach1student2,,SP,Non-,Ineligible,,,,,ENGISH,Montgomery ,Asian Pacific ,10/01/2012,BSVI - BVR,test coach1");
-		expectedReportBodyLines.add("test Mumford coach1student4,coach1student4,,LD,No-Show,Eligible,,,,,Biology,VEAP,Prefer Not To ,10/01/2012,Test Disability Agency ,test coach1");
-		
-		expectReportBodyLines(expectedReportBodyLines, response, null);
-	}
-	
-	private List<UUID> getReferences(ReferenceService referenceService, int count){
-		PagingWrapper<AbstractReference> references = referenceService.getAll(null);
-		List<UUID> referenceIds = new ArrayList<UUID>();
-		Integer index = new Integer(0);
-		for(AbstractReference reference:references.getRows()){
-			if(count == index++)
-				break;
-			
-			referenceIds.add(reference.getId());
-		}
-		return referenceIds;
-	}
+        final Person dennisRitchie =
+                personService.get(Stubs.PersonFixture.DMR.id());
+        final Person kevinSmith =
+                personService.get(Stubs.PersonFixture.KEVIN_SMITH.id());
+        dennisRitchie.setCoach(kevinSmith);
+        personService.save(dennisRitchie);
+        sessionFactory.getCurrentSession().flush();
 
-	@Override
-	protected Predicate<String> afterHeader() {
-		return afterLineContaining("Disability Services Report");
-	}
+        final MockHttpServletResponse response = new MockHttpServletResponse();
+        // Alan Turing, i.e. the coach assigned to our test student users
+        // in our standard fixture
+        final UUID coachId = Stubs.PersonFixture.ADVISOR_0.id();
+        final UUID odsCoachId = Stubs.PersonFixture.ADVISOR_0.id();
+        controller.getDisabilityServicesReport(response,
+                ObjectStatus.ACTIVE,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                2013,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "csv");
+        // "body" is the actual results and the header that describes its columns.
+        // This is as opposed to rows which precede the header, which describe
+        // the filtering criteria
+        final List<String> expectedReportBodyLines = new ArrayList<String>(4);
+        // same as in testGetAddressLabelsReturnsAllStudentsIfNoFiltersSet(), but
+        // Dennis Ritchie is missing
+        expectedReportBodyLines.add("STUDENT NAME,ID,ILP,DISABILITY,SSP STATUS,ODS STATUS,ODS REASON FOR INELIGIBILTY,ODS REG DATE,REG STATUS,MAJOR,VET STATUS,ETHNICITY,ASSIGNMENT DATES\t,AGENCY CONTACTS,SSP COACH");
+        expectedReportBodyLines.add("test Mumford coach1student0,coach1student0,,ADD/ADHD,Active,Test Disability Status,,08/20/2012,N,Planned Major: Physics,Dependent of Veteran,American Indian/Alaskan Native,10/01/2012,MH - Other,test coach1");
+        expectedReportBodyLines.add("test Mumford coach1student2,coach1student2,,SP,Non-participating,Ineligible,,08/20/2012,N,Planned Major: ENGISH,Montgomery County Reservist,Asian Pacific Islander,10/01/2012,BSVI - BVR,test coach1");
+        expectedReportBodyLines.add("test Mumford coach1student4,coach1student4,,LD,No-Show,Eligible,,08/20/2012,N,Planned Major: Biology,VEAP,Prefer Not To Answer,10/01/2012,Test Disability Agency - VA,test coach1");
+
+        expectReportBodyLines(expectedReportBodyLines, response, null);
+    }
+
+    private List<UUID> getReferences(ReferenceService referenceService, int count){
+        PagingWrapper<AbstractReference> references = referenceService.getAll(null);
+        List<UUID> referenceIds = new ArrayList<UUID>();
+        Integer index = new Integer(0);
+        for(AbstractReference reference:references.getRows()){
+            if(count == index++)
+                break;
+
+            referenceIds.add(reference.getId());
+        }
+        return referenceIds;
+    }
+
+    @Override
+    protected Predicate<String> afterHeader() {
+        return afterLineContaining("Disability Services Report");
+    }
 
 }

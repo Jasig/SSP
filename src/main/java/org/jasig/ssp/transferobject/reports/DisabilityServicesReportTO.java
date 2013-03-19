@@ -49,7 +49,6 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 		this.agencyContacts = agencyContact;
 		this.odsReason = odsReason;
 		this.odsRegistrationDate = odsRegistrationDate;
-		this.interpreter = interpreter;
 		this.assignmentDates = assignmentDate;
 		this.major = major;
 		this.veteranStatus = verteranSatus;
@@ -70,7 +69,6 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 	private String odsStatus;
 	private String odsReason;
 	private Date odsRegistrationDate;
-	private String interpreter;
 
 	private String assignmentDates;
 	private String major;
@@ -80,6 +78,12 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 	private List<Date> disabilityAgenciesCreatedDate = new ArrayList<Date>();
 	private String disabilityAgencyName = null;
 	private Date disabilityAgencyCreatedDate = null;
+	
+
+	private Boolean noDocumentation = false;
+	private Boolean inadequateDocumentation = false;
+	private Boolean noDisability = false;
+	private Boolean noSpecialEd = false;
 	
 	
 	public String getDisabilityAgencyName() {
@@ -174,12 +178,38 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 	}
 
 	public String getOdsReason() {
-		return odsReason;
+		odsReason = "";
+		if(noDocumentation)
+			odsReason = "None ";
+		if(inadequateDocumentation) 
+			odsReason = odsReason + "I ";
+		if(noDisability) 
+			odsReason = odsReason + "NA ";
+		if(noSpecialEd) 
+			odsReason = odsReason + "NSE";
+		return odsReason.trim();
 	}
 
 	public void setOdsReason(String odsReason) {
 		this.odsReason = odsReason;
 	}
+	
+	private String odsRegistrationDateString;
+	
+	public void setOdsRegistrationDateString(String odsRegistrationDateString) {
+		this.odsRegistrationDateString = odsRegistrationDateString;
+	}
+	
+	public String getOdsRegistrationDateString() {
+		
+		Date date = getOdsRegistrationDate();
+		if(date == null)
+			odsRegistrationDateString = "";
+		else
+			odsRegistrationDateString = DATE_FORMATTER.format(date);
+		return odsRegistrationDateString;
+	}
+
 
 	public Date getOdsRegistrationDate() {
 		return odsRegistrationDate;
@@ -189,13 +219,6 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 		this.odsRegistrationDate = odsRegistrationDate;
 	}
 
-	public String getInterpreter() {
-		return interpreter;
-	}
-
-	public void setInterpreter(String interpreter) {
-		this.interpreter = interpreter;
-	}
 	
 	public String getMajor() {
 		return major;
@@ -228,9 +251,6 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 	public void setDisabilityTypes(List<String> disabilityTypes) {
 		this.disabilityTypes = disabilityTypes;
 	}
-
-
-
 	
 	public String getDisabilityType() {
 		return disabilityType;
@@ -268,6 +288,77 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 			}
 		}
 		return disabilityTypesName;
+	}
+	
+
+	/**
+	 * @return the noDocumentation
+	 */
+	public Boolean getNoDocumentation() {
+		return noDocumentation;
+	}
+
+
+
+	/**
+	 * @param noDocumentation the noDocumentation to set
+	 */
+	public void setNoDocumentation(Boolean noDocumentation) {
+		this.noDocumentation = noDocumentation;
+	}
+
+
+
+	/**
+	 * @return the inadequateDocumentation
+	 */
+	public Boolean getInadequateDocumentation() {
+		return inadequateDocumentation;
+	}
+
+
+
+	/**
+	 * @param inadequateDocumentation the inadequateDocumentation to set
+	 */
+	public void setInadequateDocumentation(Boolean inadequateDocumentation) {
+		this.inadequateDocumentation = inadequateDocumentation;
+	}
+
+
+
+	/**
+	 * @return the noDisability
+	 */
+	public Boolean getNoDisability() {
+		return noDisability;
+	}
+
+
+
+	/**
+	 * @param noDisability the noDisability to set
+	 */
+	public void setNoDisability(Boolean noDisability) {
+		this.noDisability = noDisability;
+	}
+
+
+
+	/**
+	 * @return the noSpecialEd
+	 */
+	public Boolean getNoSpecialEd() {
+		return noSpecialEd;
+	}
+
+
+
+	/**
+	 * @param noSpecialEd the noSpecialEd to set
+	 */
+	public void setNoSpecialEd(Boolean noSpecialEd) {
+		this.noSpecialEd = noSpecialEd;
 	}
 	
 	public void setPerson(Person person) {
