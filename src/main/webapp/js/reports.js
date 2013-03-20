@@ -22,6 +22,8 @@ var ssp = ssp || {};
 (function($, fluid) {
 	ssp.ReportSelector = function(container, options) {
 		var easeRate = 400;
+		var requests = 1;
+		var timer = setInterval(checkIfReady, 100);
 
 		// load the report form
 		var loadReportForm = function(containerId) {
@@ -35,40 +37,55 @@ var ssp = ssp || {};
 		}
 
 		var loadGroupInput = function(url, container) {
+			requests++;
 			$.getJSON(url, function(data) {
+				requests--;
+				
 				$.each(data.rows, function(i, row) {
 					addSelectItem(row.id, row.name, container);
 				});
 
 			}).error(function(jqXHR, textStatus, errorThrown) {
 				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				requests--;
 			});
 		}
 		
 		var loadCoachInput = function(url, container) {
+			requests++;
 			$.getJSON(url, function(data) {
+				requests--;
+				
 				$.each(data.rows, function(i, row) {
 					addSelectItem(row.id, row.lastName + ", " + row.firstName, container);
 				});
 
 			}).error(function(jqXHR, textStatus, errorThrown) {
 				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				requests--;
 			});
 		}
 		
 		var loadTermInput = function(url, container) {
+			requests++;
 			$.getJSON(url, function(data) {
+				requests--;
+				
 				$.each(data.rows, function(i, row) {
 					addSelectItem(row.code, row.name, container);
 				});
 
 			}).error(function(jqXHR, textStatus, errorThrown) {
 				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				requests--;
 			});
 		}	
 		
 		var loadConfigInput = function(url, container) {
+			requests++;
 			$.getJSON(url, function(data) {
+				requests--;
+				
 				var values = $.parseJSON(data.value);
 				for(var index in values){
 					addSelectItem(index, values[index], container);
@@ -76,13 +93,18 @@ var ssp = ssp || {};
 
 			}).error(function(jqXHR, textStatus, errorThrown) {
 				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				requests--;
 			});
 		}
 		
 		var loadReportYearInput = function(url, container) {
+			requests++;
 			$.getJSON(url, function(data) {
 				var values = new Array();
+				requests--;
+				
 				$.each(data.rows, function(i, row) {
+					
 					if($.inArray(row.reportYear, values) < 0){
 						values.push(row.reportYear);
 						addSelectItem(row.reportYear, row.reportYear, container);
@@ -92,32 +114,42 @@ var ssp = ssp || {};
 			}).error(function(jqXHR, textStatus, errorThrown) {
 				var headers = jqXHR.getAllResponseHeaders();
 				alert(headers + " " + textStatus + " " + errorThrown);
+				requests--;
 			});
 		}
 		
 		var loadHomeDepartmentInput = function(url, container) {
+			requests++;
 			$.getJSON(url, function(data) {
+				requests--;
+				
 				$.each(data, function(i, datum) {
 					addSelectItem(datum, datum, container);
 				});
-
 			}).error(function(jqXHR, textStatus, errorThrown) {
 				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				requests--;
 			});
 		}
 
 		var loadTextForm = function(url, container) {
+			requests++;
 			$.getJSON(url, function(data) {
+				requests--;
+				
 				$.each(data.rows, function(i, row) {
 					$.each(data.rows, function(i, row) {
 						$(container).html(row.text);
 					});
 				});
-
+				
 			}).error(function(jqXHR, textStatus, errorThrown) {
 				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				requests--;
 			});
 		}
+		
+		
 
 		// load Forms
 		var loadForm = function() {
@@ -167,7 +199,19 @@ var ssp = ssp || {};
 			loadTextForm(
 					"/ssp/api/1/reference/confidentialityDisclosureAgreement/",
 					that.locate('confidentialityAgreementFormContent'));
+			
+					
+			requests--;
 		}
+		
+		function checkIfReady() {
+		        if (requests === 0) {
+		            clearInterval(timer);
+					loadPage();
+		        }
+		 }
+
+		    
 		
 		var initializeDateRange = function(){
 			var button = $('.switch-date-range-type').filter(':visible');
@@ -263,14 +307,11 @@ var ssp = ssp || {};
 
 		var loadingMessage = that.locate('loadingMessage');
 		var reportsSelect = that.locate('reportsSelect');
-				
-    		loadingMessage.slideDown(easeRate, function() {
-    			loadForm();	
-        		loadingMessage.slideUp(easeRate);
-			reportsSelectChange();
-    		});
+		loadingMessage.slideDown(easeRate, function() {
+			loadForm();	
+		});
         	
-		
+		function loadPage(){
 		//add here to include in drop down
 		reportsSelect
 				.append('<option value="generalStudentForm">General Student Report</option>');
@@ -315,6 +356,9 @@ var ssp = ssp || {};
 		
 		reportsSelect
 		.append('<option value="journalSessionDetail">Journal Step Detail Report</option>');
+		reportsSelectChange();
+		loadingMessage.slideUp(easeRate);
+		}
 		
 		//TODO Controller Generated but DAO's incomplete at this time.
 		//reportsSelect
