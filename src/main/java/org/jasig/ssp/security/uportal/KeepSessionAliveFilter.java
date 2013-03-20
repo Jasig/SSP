@@ -46,6 +46,14 @@ public class KeepSessionAliveFilter implements Filter {
     private final String SESSION_KEEP_ALIVE_ATTRIBUTE_KEY = KeepSessionAliveFilter.class.getName() +"_SESSION_KEEP_ALIVE";
     private int interval = 10 * 60 * 1000; // DEFAULT TO 10 minutes (in milliseconds)
 
+    /**
+     * Set per-session interval in minutes after which the next request hitting
+     * this filter will attempt to touch the uPortal session. To disable, set
+     * to a value less than zero. To run on every request set to zero. Default
+     * is 10 minutes.
+     *
+     * @param interval
+     */
     public void setInterval(int interval)
     {
         this.interval = interval * 60 * 1000;
@@ -64,6 +72,9 @@ public class KeepSessionAliveFilter implements Filter {
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response,
                          final FilterChain chain) throws IOException, ServletException {
+        if ( interval < 0 ) {
+            return;
+        }
         final HttpServletRequest httpServletRequest = (HttpServletRequest)request;
         final HttpServletResponse httpServletResponse = (HttpServletResponse)response;
         Long lastUpdate = (Long)httpServletRequest.getSession(false).getAttribute(SESSION_KEEP_ALIVE_ATTRIBUTE_KEY);
