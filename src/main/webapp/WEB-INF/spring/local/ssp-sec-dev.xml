@@ -65,4 +65,12 @@ It allows ssp to be run outside in absence of uportal.
 	</beans:bean>
 
 	<beans:bean id="ldapPersonAttributesService" class="org.jasig.ssp.service.impl.LdapPersonAttributesService" />
+
+	<!-- Doesn't really have anything to do with "security" per se, but was
+	previously located in security-config.xml, so ended up in
+	security-config-uportal.xml when we started trying to split up uPortal
+	and standalone beans more aggressively. Following that lead, the
+	standalone bean flavor also ended up in this file, named in a way that
+	suggests it is somehow security related. -->
+	<beans:bean id="keepSessionAliveFilter" class="org.jasig.ssp.util.http.NoOpFilter" />
 </beans:beans>
