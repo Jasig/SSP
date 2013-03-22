@@ -21880,7 +21880,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponseDetails',{
 		            xtype: 'multiselect',
 		            name: 'earlyAlertOutreachIds',
 		            itemId: 'earlyAlertOutreachList',
-		            fieldLabel: 'Suggestions',
+		            fieldLabel: 'Outreach',
 		            store: me.selectedOutreachesStore,
 		            displayField: 'name',
 		            anchor: '95%'
