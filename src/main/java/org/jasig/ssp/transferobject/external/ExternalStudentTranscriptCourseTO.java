@@ -21,11 +21,6 @@ package org.jasig.ssp.transferobject.external;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
 
 public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<ExternalStudentTranscriptCourse>,
@@ -46,13 +41,6 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 		termCode = model.getTermCode();
 		creditType = model.getCreditType();
 		
-		sectionCode = model.getSectionCode();
-		audited = model.getAudited();
-		statusCode = model.getStatusCode();
-		
-		firstName = model.getFirstName();
-		lastName = model.getLastName();
-		middleName = model.getMiddleName();
 	}
 	
 	public ExternalStudentTranscriptCourseTO()
@@ -70,15 +58,6 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 	private BigDecimal creditEarned;
 	private String termCode;
 	private String creditType;
-
-	private String sectionCode;
-	private String audited;
-	private String statusCode;
-	
-	private String firstName;
-	private String lastName;
-	private String middleName;
-	
 	/**
 	 * @param schoolId
 	 * @param subjectAbbreviation
@@ -92,23 +71,11 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 	 * @param termCode
 	 * @param creditType
 	 */
-	public ExternalStudentTranscriptCourseTO(final String schoolId, 	
-			final String firstName,
-			final String middleName,
-			final String lastName,
-			final String subjectAbbreviation, 
-			final String number, 
-			final String formattedCourse,
-			final String sectionNumber, 
-			final String title, 
-			final String description,
-			final String grade, 
-			final BigDecimal creditEarned, 
-			final String termCode,
-			final String creditType, 
-			final String sectionCode,
-	final String audited,
-	final String statusCode) {
+	public ExternalStudentTranscriptCourseTO(final String schoolId,
+			final String subjectAbbreviation, final String number, final String formattedCourse,
+			final String sectionNumber, final String title, final String description,
+			final String grade, final BigDecimal creditEarned, final String termCode,
+			final String creditType) {
 		
 		super();
 		this.schoolId = schoolId;
@@ -122,13 +89,6 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 		this.creditEarned = creditEarned;
 		this.termCode = termCode;
 		this.creditType = creditType;
-		this.sectionCode = sectionCode;
-		this.audited = audited;
-		this.statusCode = statusCode;
-		
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.middleName = middleName;
 	}
 	/**
 	 * @return the schoolId
@@ -261,89 +221,5 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 	 */
 	public void setCreditType(final String creditType) {
 		this.creditType = creditType;
-	}
-
-	/**
-	 * @return the statusCode
-	 */
-	public String getStatusCode() {
-		return statusCode;
-	}
-
-	/**
-	 * @param statusCode the statusCode to set
-	 */
-	public void setStatusCode(String statusCode) {
-		this.statusCode = statusCode;
-	}
-
-	/**
-	 * @return the sectionCode
-	 */
-	public String getSectionCode() {
-		return sectionCode;
-	}
-
-	/**
-	 * @param sectionCode the sectionCode to set
-	 */
-	public void setSectionCode(String sectionCode) {
-		this.sectionCode = sectionCode;
-	}
-
-	/**
-	 * @return the audited
-	 */
-	public String getAudited() {
-		return audited;
-	}
-
-	/**
-	 * @param audited the audited to set
-	 */
-	public void setAudited(String audited) {
-		this.audited = audited;
-	}
-
-	/**
-	 * @return the firstName
-	 */
-	public String getFirstName() {
-		return firstName;
-	}
-
-	/**
-	 * @param firstName the firstName to set
-	 */
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	/**
-	 * @return the lastName
-	 */
-	public String getLastName() {
-		return lastName;
-	}
-
-	/**
-	 * @param lastName the lastName to set
-	 */
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	/**
-	 * @return the middleName
-	 */
-	public String getMiddleName() {
-		return middleName;
-	}
-
-	/**
-	 * @param middleName the middleName to set
-	 */
-	public void setMiddleName(String middleName) {
-		this.middleName = middleName;
 	}
 }
