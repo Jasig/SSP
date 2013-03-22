@@ -87,6 +87,5 @@
 	<include file="org/jasig/ssp/database/changesets/000023.xml" />
 	<include file="org/jasig/ssp/database/changesets/000024.xml" />
 	<include file="org/jasig/ssp/database/changesets/000025.xml" />
-	<include file="org/jasig/ssp/database/changesets/000022.xml" />
 
 </databaseChangeLog>
