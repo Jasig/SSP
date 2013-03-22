@@ -73,6 +73,7 @@ public class KeepSessionAliveFilter implements Filter {
     public void doFilter(final ServletRequest request, final ServletResponse response,
                          final FilterChain chain) throws IOException, ServletException {
         if ( interval < 0 ) {
+            chain.doFilter(request, response);
             return;
         }
         final HttpServletRequest httpServletRequest = (HttpServletRequest)request;
