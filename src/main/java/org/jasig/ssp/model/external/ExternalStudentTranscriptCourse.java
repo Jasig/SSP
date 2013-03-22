@@ -98,6 +98,33 @@ public class ExternalStudentTranscriptCourse extends AbstractExternalData
 	@NotEmpty
 	@Size(max = 25)
 	private String creditType;
+	
+	@Column(nullable = true, length = 128)
+	@Size(max = 128)
+	private String sectionCode;
+
+	@Column(nullable = true, length = 1)
+	@Size(max = 1)
+	private String audited;
+	
+	@Column(nullable = true, length = 50)
+	@Size(max = 50)
+	private String statusCode;
+	
+	
+	@Column(nullable = true, length = 50)
+	@Size(max = 50)
+	private String firstName;
+	
+	
+	@Column(nullable = true, length = 50)
+	@Size(max = 50)
+	private String middleName;
+	
+	
+	@Column(nullable = true, length = 50)
+	@Size(max = 50)
+	private String lastName;
 
 	/**
 	 * @return the schoolId
@@ -262,5 +289,90 @@ public class ExternalStudentTranscriptCourse extends AbstractExternalData
 	 */
 	public void setCreditType(final String creditType) {
 		this.creditType = creditType;
+	}
+
+	/**
+	 * @return the sectionCode
+	 */
+	public String getSectionCode() {
+		return sectionCode;
+	}
+
+	/**
+	 * @param sectionCode the sectionCode to set
+	 */
+	public void setSectionCode(String sectionCode) {
+		this.sectionCode = sectionCode;
+	}
+
+
+	/**
+	 * @return the audited
+	 */
+	public String getAudited() {
+		return audited;
+	}
+
+	/**
+	 * @param audited the audited to set
+	 */
+	public void setAudited(String audited) {
+		this.audited = audited;
+	}
+
+	/**
+	 * @return the status_code
+	 */
+	public String getStatusCode() {
+		return statusCode;
+	}
+
+	/**
+	 * @param status_code the status_code to set
+	 */
+	public void setStatusCode(String statusCode) {
+		this.statusCode = statusCode;
+	}
+
+	/**
+	 * @return the firstName
+	 */
+	public String getFirstName() {
+		return firstName;
+	}
+
+	/**
+	 * @param firstName the firstName to set
+	 */
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	/**
+	 * @return the middleName
+	 */
+	public String getMiddleName() {
+		return middleName;
+	}
+
+	/**
+	 * @param middleName the middleName to set
+	 */
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+
+	/**
+	 * @return the lastName
+	 */
+	public String getLastName() {
+		return lastName;
+	}
+
+	/**
+	 * @param lastName the lastName to set
+	 */
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 }
