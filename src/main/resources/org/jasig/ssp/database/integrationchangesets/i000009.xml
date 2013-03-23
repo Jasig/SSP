@@ -39,16 +39,16 @@
 
 	<changeSet author='jim.stanley'
 		id='Remove null constraints for 1.2 fields'>
-		<dropNotNullConstraint tableName="external_faculty_course" columnName="section_number" />
-		<dropNotNullConstraint tableName="external_faculty_course" columnName="section_code" />
-		<dropNotNullConstraint tableName="external_faculty_course_roster" columnName="section_number" />
-		<dropNotNullConstraint tableName="external_faculty_course_roster" columnName="section_code" />
+		<dropNotNullConstraint tableName="external_faculty_course" columnName="section_number" columnDataType="${nvarchar.type}(10)" />
+		<dropNotNullConstraint tableName="external_faculty_course" columnName="section_code" columnDataType="${nvarchar.type}(128)"  />
+		<dropNotNullConstraint tableName="external_faculty_course_roster" columnName="section_number" columnDataType="${nvarchar.type}(10)" />
+		<dropNotNullConstraint tableName="external_faculty_course_roster" columnName="section_code" columnDataType="${nvarchar.type}(128)" />
 		
 		<rollback>
-			<addNotNullConstraint tableName="external_faculty_course" columnName="section_number" />
-			<addNotNullConstraint tableName="external_faculty_course" columnName="section_code" />
-			<addNotNullConstraint tableName="external_faculty_course_roster" columnName="section_number" />
-			<addNotNullConstraint tableName="external_faculty_course_roster" columnName="section_code" />
+			<addNotNullConstraint tableName="external_faculty_course" columnName="section_number" columnDataType="${nvarchar.type}(10)" />
+			<addNotNullConstraint tableName="external_faculty_course" columnName="section_code" columnDataType="${nvarchar.type}(128)" />
+			<addNotNullConstraint tableName="external_faculty_course_roster" columnName="section_number" columnDataType="${nvarchar.type}(10)" />
+			<addNotNullConstraint tableName="external_faculty_course_roster" columnName="section_code" columnDataType="${nvarchar.type}(128)" />
 		</rollback>		
 	</changeSet>
 	
@@ -133,8 +133,8 @@
  			FROM person
  			WHERE external_student_transcript_course.school_id = person.school_id;]]>
 		</sql>
-		<addNotNullConstraint tableName="external_student_transcript_course" columnName="first_name" />
-		<addNotNullConstraint tableName="external_student_transcript_course" columnName="last_name" />
+		<addNotNullConstraint tableName="external_student_transcript_course" columnName="first_name" columnDataType="${nvarchar.type}(50)" />
+		<addNotNullConstraint tableName="external_student_transcript_course" columnName="last_name" columnDataType="${nvarchar.type}(50)" />
 		
 		<dropView viewName="v_external_student_transcript_course" />
 		<createView viewName="v_external_student_transcript_course">
@@ -162,17 +162,17 @@
 	
 	<changeSet author='jim.stanley'
 		id='All nulls drop term_code in external_student_transcript'>
-		<dropNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_for_gpa" />
-		<dropNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_earned" />
-		<dropNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_attempted" />
-		<dropNotNullConstraint tableName="external_student_transcript" columnName="total_quality_points" />
-		<addNotNullConstraint tableName="external_student_transcript" columnName="grade_point_average" />
+		<dropNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_for_gpa" columnDataType="decimal(9,2)" />
+		<dropNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_earned" columnDataType="decimal(9,2)" />
+		<dropNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_attempted" columnDataType="decimal(9,2)" />
+		<dropNotNullConstraint tableName="external_student_transcript" columnName="total_quality_points" columnDataType="decimal(9,2)" />
+		<addNotNullConstraint tableName="external_student_transcript" columnName="grade_point_average" columnDataType="decimal(9,2)" />
 		<rollback>
-			<addNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_for_gpa" />
-			<addNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_earned" />
-			<addNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_attempted" />
-			<addNotNullConstraint tableName="external_student_transcript" columnName="total_quality_points" />
-			<dropNotNullConstraint tableName="external_student_transcript" columnName="grade_point_average" />
+			<addNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_for_gpa" columnDataType="decimal(9,2)" />
+			<addNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_earned" columnDataType="decimal(9,2)" />
+			<addNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_attempted" columnDataType="decimal(9,2)" />
+			<addNotNullConstraint tableName="external_student_transcript" columnName="total_quality_points" columnDataType="decimal(9,2)" />
+			<dropNotNullConstraint tableName="external_student_transcript" columnName="grade_point_average" columnDataType="decimal(9,2)" />
 		</rollback>		
 	</changeSet>
 	
