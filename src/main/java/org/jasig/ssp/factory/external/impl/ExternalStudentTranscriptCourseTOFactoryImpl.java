@@ -20,10 +20,8 @@ package org.jasig.ssp.factory.external.impl;
 
 import org.jasig.ssp.dao.external.ExternalDataDao;
 import org.jasig.ssp.factory.external.ExternalStudentTranscriptCourseTOFactory;
-import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
 import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.external.ExternalStudentFinancialAidTO;
 import org.jasig.ssp.transferobject.external.ExternalStudentTranscriptCourseTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
