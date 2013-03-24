@@ -48,16 +48,16 @@ public class ExternalStudentRecordsTO implements ExternalDataTO<ExternalStudentR
 	private List<ExternalStudentAcademicProgramTO> programs;
 	private List<ExternalStudentTermCoursesTO> terms;
 	/**
-	 * @return the gpq
+	 * @return the gpa
 	 */
-	public ExternalStudentTranscriptTO getGpq() {
+	public ExternalStudentTranscriptTO getGpa() {
 		return gpa;
 	}
 	/**
-	 * @param gpq the gpq to set
+	 * @param gpa the gpa to set
 	 */
-	public void setGpq(ExternalStudentTranscriptTO gpq) {
-		this.gpa = gpq;
+	public void setGpa(ExternalStudentTranscriptTO gpa) {
+		this.gpa = gpa;
 	}
 	/**
 	 * @return the programs

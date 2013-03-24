@@ -33,13 +33,13 @@ public class ExternalStudentRecordsLite extends AbstractExternalData implements
 	private ExternalStudentTranscript gpa;
 	private List<ExternalStudentAcademicProgram> programs;
 	/**
-	 * @return the gpq
+	 * @return the gpa
 	 */
 	public ExternalStudentTranscript getGPA() {
 		return gpa;
 	}
 	/**
-	 * @param gpq the gpq to set
+	 * @param gpa the gpa to set
 	 */
 	public void setGPA(ExternalStudentTranscript gpa) {
 		this.gpa = gpa;

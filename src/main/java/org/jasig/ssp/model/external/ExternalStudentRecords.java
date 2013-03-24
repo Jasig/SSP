@@ -40,7 +40,7 @@ public class ExternalStudentRecords extends AbstractExternalData implements
 		return gpa;
 	}
 	/**
-	 * @param gpq the gpa to set
+	 * @param gpa the gpa to set
 	 */
 	public void setGPA(ExternalStudentTranscript gpa) {
 		this.gpa = gpa;
