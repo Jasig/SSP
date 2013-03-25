@@ -73,25 +73,110 @@
 	</changeSet>
 
 	<changeSet author='jim.stanley'
-		id='Add fields to external_student_transcript_course'>
-		
+		id='Add first_name to external_student_transcript_course'>
+		<preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="external_student_transcript_course" columnName="first_name"/></not>
+        </preConditions>
 		<addColumn tableName="external_student_transcript_course">
 			<column name="first_name" type="${nvarchar.type}(50)">
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
+		<dropView viewName="v_external_student_transcript_course" />
+		<createView viewName="v_external_student_transcript_course">
+			select ROW_NUMBER() OVER (ORDER BY school_id, subject_abbreviation, number) as id, 
+			school_id, first_name, subject_abbreviation, number, formatted_course, section_number, 
+		    title, description, grade, credit_earned, term_code, credit_type
+			from external_student_transcript_course
+		</createView>
+
+		<sql>grant all on external_student_transcript_course to ${database.app.username}</sql>
+		<sql>grant all on v_external_student_transcript_course to ${database.app.username}</sql>
 		
+		<rollback>
+			<dropView viewName="v_external_student_transcript_course" />
+			<dropColumn tableName="external_student_transcript_course" columnName="first_name" />
+			<createView viewName="v_external_student_transcript_course">
+				select ROW_NUMBER() OVER (ORDER BY school_id, subject_abbreviation, number) as id, 
+				school_id, subject_abbreviation, number, formatted_course, section_number, 
+				title, description, grade, credit_earned, term_code, credit_type 
+				from external_student_transcript_course
+			</createView>
+		</rollback>		
+	</changeSet>
+	
+	<changeSet author='jim.stanley'
+		id='Add middle_name to external_student_transcript_course'>
+		<preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="external_student_transcript_course" columnName="middle_name"/></not>
+        </preConditions>
 		<addColumn tableName="external_student_transcript_course">
 			<column name="middle_name" type="${nvarchar.type}(50)">
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
+		<dropView viewName="v_external_student_transcript_course" />
+		<createView viewName="v_external_student_transcript_course">
+			select ROW_NUMBER() OVER (ORDER BY school_id, subject_abbreviation, number) as id, 
+			school_id, first_name, middle_name, subject_abbreviation, number, formatted_course, section_number, 
+			title, description, grade, credit_earned, term_code, credit_type
+			from external_student_transcript_course
+		</createView>
+
+		<sql>grant all on external_student_transcript_course to ${database.app.username}</sql>
+		<sql>grant all on v_external_student_transcript_course to ${database.app.username}</sql>
+		
+		<rollback>
+			<dropView viewName="v_external_student_transcript_course" />
+			<dropColumn tableName="external_student_transcript_course" columnName="middle_name" />
+			<createView viewName="v_external_student_transcript_course">
+				select ROW_NUMBER() OVER (ORDER BY school_id, subject_abbreviation, number) as id, 
+				school_id, first_name, subject_abbreviation, number, formatted_course, section_number, 
+				title, description, grade, credit_earned, term_code, credit_type 
+				from external_student_transcript_course
+			</createView>
+		</rollback>		
+	</changeSet>
+	
+	
+		<changeSet author='jim.stanley'
+		id='Add last_name to external_student_transcript_course'>
+		<preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="external_student_transcript_course" columnName="last_name"/></not>
+        </preConditions>
 		<addColumn tableName="external_student_transcript_course">
 			<column name="last_name" type="${nvarchar.type}(50)">
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
+		<dropView viewName="v_external_student_transcript_course" />
+		<createView viewName="v_external_student_transcript_course">
+			select ROW_NUMBER() OVER (ORDER BY school_id, subject_abbreviation, number) as id, 
+			school_id, first_name, middle_name, last_name, subject_abbreviation, number, formatted_course, section_number, 
+			title, description, grade, credit_earned, term_code, credit_type
+			from external_student_transcript_course
+		</createView>
+
+		<sql>grant all on external_student_transcript_course to ${database.app.username}</sql>
+		<sql>grant all on v_external_student_transcript_course to ${database.app.username}</sql>
 		
+		<rollback>
+			<dropView viewName="v_external_student_transcript_course" />
+			<dropColumn tableName="external_student_transcript_course" columnName="last_name" />
+			<createView viewName="v_external_student_transcript_course">
+				select ROW_NUMBER() OVER (ORDER BY school_id, subject_abbreviation, number) as id, 
+				school_id, first_name, middle_name, subject_abbreviation, number, formatted_course, section_number, 
+				title, description, grade, credit_earned, term_code, credit_type
+				from external_student_transcript_course
+			</createView>
+		</rollback>		
+	</changeSet>
+	
+	<changeSet author='jim.stanley'
+		id='Add fields to external_student_transcript_course'>
+		<preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="external_student_transcript_course" columnName="audited"/></not>
+        </preConditions>
 		<addColumn tableName="external_student_transcript_course">
 			<column name="audited" type="char(1)">
 				<constraints nullable="true" />
@@ -108,6 +193,35 @@
 				<constraints nullable="true" />
 			</column>
 		</addColumn>
+		<dropView viewName="v_external_student_transcript_course" />
+		<createView viewName="v_external_student_transcript_course">
+			select ROW_NUMBER() OVER (ORDER BY school_id, subject_abbreviation, number) as id, 
+			school_id, first_name, middle_name, last_name, subject_abbreviation, number, formatted_course, section_number, 
+			section_code, title, description, grade, credit_earned, term_code, credit_type, audited, status_code
+			from external_student_transcript_course
+		</createView>
+
+		<sql>grant all on external_student_transcript_course to ${database.app.username}</sql>
+		<sql>grant all on v_external_student_transcript_course to ${database.app.username}</sql>
+		
+		<rollback>
+			<dropView viewName="v_external_student_transcript_course" />
+			<dropColumn tableName="external_student_transcript_course" columnName="audited" />
+			<dropColumn tableName="external_student_transcript_course" columnName="status_code" />
+			<dropColumn tableName="external_student_transcript_course" columnName="section_code" />
+			<createView viewName="v_external_student_transcript_course">
+				select ROW_NUMBER() OVER (ORDER BY school_id, subject_abbreviation, number) as id, 
+			school_id, first_name, middle_name, last_name, subject_abbreviation, number, formatted_course, section_number, 
+			title, description, grade, credit_earned, term_code, credit_type
+			from external_student_transcript_course
+			</createView>
+		</rollback>		
+	</changeSet>
+		
+		
+		
+		
+ 	<changeSet author='jim.stanley' id='Fill in required data to external_student_transcript_course'>
 		<sql>
 		<![CDATA[
 			UPDATE external_student_transcript_course
@@ -115,7 +229,6 @@
  				middle_name = 'dummy_middle_name', 
  				last_name = 'dummy_last_name']]>
 		</sql>
-		
 		<sql>
 		<![CDATA[
 			UPDATE external_student_transcript_course
@@ -136,51 +249,28 @@
 		<addNotNullConstraint tableName="external_student_transcript_course" columnName="first_name" columnDataType="${nvarchar.type}(50)" />
 		<addNotNullConstraint tableName="external_student_transcript_course" columnName="last_name" columnDataType="${nvarchar.type}(50)" />
 		
-		<dropView viewName="v_external_student_transcript_course" />
-		<createView viewName="v_external_student_transcript_course">
-			select ROW_NUMBER() OVER (ORDER BY school_id, subject_abbreviation, number) as id, 
-			school_id, first_name, last_name, middle_name, subject_abbreviation, number, formatted_course, section_number, 
-			section_code, title, description, grade, credit_earned, term_code, credit_type, audited, status_code
-			from external_student_transcript_course
-		</createView>
-
-		<sql>grant all on external_student_transcript_course to ${database.app.username}</sql>
-		<sql>grant all on v_external_student_transcript_course to ${database.app.username}</sql>
 		
 		<rollback>
-			<dropView viewName="v_external_student_transcript_course" />
-			<dropColumn tableName="external_student_transcript_course" columnName="audited" />
-			<dropColumn tableName="external_student_transcript_course" columnName="status_code" />
-			<createView viewName="v_external_student_transcript_course">
-				select ROW_NUMBER() OVER (ORDER BY school_id, subject_abbreviation, number) as id, 
-				school_id, subject_abbreviation, number, formatted_course, section_number, 
-				title, description, grade, credit_earned, term_code, credit_type 
-				from external_student_transcript_course
-			</createView>
+			<dropNotNullConstraint tableName="external_student_transcript_course" columnName="first_name"  />
+			<dropNotNullConstraint tableName="external_student_transcript_course" columnName="last_name"  />
 		</rollback>		
 	</changeSet>
 	
 	<changeSet author='jim.stanley'
 		id='All nulls drop term_code in external_student_transcript'>
-		<dropNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_for_gpa" columnDataType="decimal(9,2)" />
-		<dropNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_earned" columnDataType="decimal(9,2)" />
-		<dropNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_attempted" columnDataType="decimal(9,2)" />
-		<dropNotNullConstraint tableName="external_student_transcript" columnName="total_quality_points" columnDataType="decimal(9,2)" />
-		<addNotNullConstraint tableName="external_student_transcript" columnName="grade_point_average" columnDataType="decimal(9,2)" />
+		<dropNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_for_gpa"  />
+		<dropNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_earned" />
+		<dropNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_attempted"  />
+		<dropNotNullConstraint tableName="external_student_transcript" columnName="total_quality_points" />
+		<addNotNullConstraint tableName="external_student_transcript" columnName="grade_point_average" />
 		<rollback>
-			<addNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_for_gpa" columnDataType="decimal(9,2)" />
-			<addNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_earned" columnDataType="decimal(9,2)" />
-			<addNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_attempted" columnDataType="decimal(9,2)" />
-			<addNotNullConstraint tableName="external_student_transcript" columnName="total_quality_points" columnDataType="decimal(9,2)" />
-			<dropNotNullConstraint tableName="external_student_transcript" columnName="grade_point_average" columnDataType="decimal(9,2)" />
+			<addNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_for_gpa" />
+			<addNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_earned"  />
+			<addNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_attempted" />
+			<addNotNullConstraint tableName="external_student_transcript" columnName="total_quality_points" />
+			<dropNotNullConstraint tableName="external_student_transcript" columnName="grade_point_average" />
 		</rollback>		
 	</changeSet>
 	
-	<changeSet author='jim.stanley'
-		id='Drop table and view external_students_by_course'>
-		<dropView viewName="v_external_students_by_course"/>
-		<dropTable tableName="external_students_by_course"/>
-		<rollback>
-		</rollback>		
-	</changeSet>
+	
 </databaseChangeLog>
