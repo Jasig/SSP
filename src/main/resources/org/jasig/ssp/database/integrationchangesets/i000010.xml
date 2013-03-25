@@ -39,10 +39,10 @@
 	<changeSet author='jim.stanley'
 		id='Make adjustments for External Tables 1.2 fields'>
 		<dropView viewName="v_external_student_transcript_course" />
-		<dropNotNullConstraint tableName="external_student_transcript_course" columnName="credit_type" />
+		<dropNotNullConstraint tableName="external_student_transcript_course" columnName="credit_type" columnDataType="${nvarchar.type}(25)" />
 		<modifyDataType tableName="external_student_transcript_course" columnName="status_code"  newDataType="${nvarchar.type}(2)"/>
 		<rollback>
-			<addNotNullConstraint tableName="external_student_transcript_course" columnName="credit_type" />
+			<addNotNullConstraint tableName="external_student_transcript_course" columnName="credit_type" columnDataType="${nvarchar.type}(25)" />
 			<modifyDataType tableName="external_student_transcript_course" columnName="status_code"  newDataType="${nvarchar.type}(50)"/>
 		</rollback>
 		
