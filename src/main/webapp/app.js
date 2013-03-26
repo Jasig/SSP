@@ -120,6 +120,11 @@ Ext.require([
     'Ssp.view.admin.forms.crg.EditChallenge',
     'Ssp.view.admin.forms.crg.EditReferral',
 
+    //CASELOAD REASSIGNMENT TOOLS
+    'Ssp.view.admin.forms.caseload.CaseloadReassignment',
+    'Ssp.view.admin.forms.caseload.CaseloadReassignmentSource',
+    'Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget',
+    
     //MyGPS ADMIN TOOLS
     'Ssp.view.admin.forms.shg.SelfHelpGuideAdmin',
     'Ssp.view.admin.forms.shg.SelfHelpGuidesDisplayAdmin',
@@ -194,6 +199,7 @@ Ext.require([
 	'Ssp.model.tool.journal.JournalEntryDetail',
 	'Ssp.model.tool.shg.SelfHelpGuides',
 	'Ssp.model.tool.shg.SelfHelpGuideQuestions',
+	'Ssp.model.tool.caseload.CaseloadReassignmentRequest',
 	'Ssp.model.reference.AbstractReference',
     'Ssp.model.reference.Challenge',
     'Ssp.model.reference.ChallengeCategory',
@@ -356,6 +362,7 @@ var apiUrls = [
   {name: 'personAppointment', url: 'person/{id}/appointment'},
   {name: 'personAssessment', url: 'person/{id}/test'},
   {name: 'personCaseload', url: 'person/caseload'},
+  {name: 'personCaseloadId', url: 'person/{id}/caseload'},
   {name: 'personMasterCaseload', url: 'person/{id}/caseload'},
   {name: 'personChallenge', url: 'person/{id}/challenge'},
   {name: 'personCoach', url: 'person/coach'},
@@ -727,6 +734,7 @@ Ext.onReady(function(){
 					campusEarlyAlertRoutingsStore: 'Ssp.store.reference.CampusEarlyAlertRoutings',
 					campusServicesStore: 'Ssp.store.reference.CampusServices',
 					caseloadStore: 'Ssp.store.Caseload',
+					reassignCaseloadStore: 'Ssp.store.Caseload',
 					challengesStore: 'Ssp.store.reference.Challenges',
 					challengeCategoriesStore: 'Ssp.store.reference.ChallengeCategories',
 					challengeReferralsStore: 'Ssp.store.reference.ChallengeReferrals',

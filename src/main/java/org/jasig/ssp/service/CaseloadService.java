@@ -27,6 +27,7 @@ import org.jasig.ssp.model.CaseloadRecord;
 import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ProgramStatus;
+import org.jasig.ssp.transferobject.CaseloadReassignmentRequestTO;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.reports.CaseLoadSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -125,4 +126,6 @@ public interface CaseloadService {
 			Date programStatusDateFrom,
 			Date programStatusDateTo,
 			String homeDepartment);
+
+	void reassignStudents(CaseloadReassignmentRequestTO obj) throws ObjectNotFoundException;
 }
