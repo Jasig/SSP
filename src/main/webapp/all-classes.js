@@ -3045,7 +3045,14 @@ Ext.define('Ssp.model.CaseloadPerson', {
              {name: 'numberOfEarlyAlerts', type: 'string'},
              {name: 'studentIntakeComplete', type: 'boolean'},
              {name: 'currentAppointmentStartTime', type: 'date', dateFormat: 'time'},
-             {name: 'currentProgramStatusName', type: 'string'}],            
+             {name: 'currentProgramStatusName', type: 'string'},
+             {
+            	 name: 'fullName',
+            	 convert: function(value, record) {
+            		 return record.get('firstName') + ' '+ record.get('lastName');
+            	 }
+             },
+             ],            
              
      getFullName: function(){ 
       	var firstName = this.get('firstName') || "";
@@ -4495,7 +4502,10 @@ Ext.define('Ssp.util.FormRendererUtils',{
             }
             if (store) {
                 store = Ext.StoreManager.lookup(store);
-                me.down('pagingtoolbar').bindStore(store);
+                if(me.down('pagingtoolbar'))
+                {
+                	me.down('pagingtoolbar').bindStore(store);
+                }
                 me.bindStore(store);
             } else {
                 me.getView().refresh();
@@ -5458,7 +5468,14 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     						      		                  }
     						    		                }
     						    		           ]
-    									}
+		    									   },
+		       									   {
+			       										text: 'Re-Assignment',
+			       										title: 'Re-Assignment',
+			       										store: 'Re-Assignment',
+			       								        form: 'caseloadreassignment',
+			       										leaf: true
+		       								       },
     							]
     						},{
     							text: 'Student Intake',
@@ -6119,6 +6136,13 @@ Ext.define('Ssp.service.CaseloadService', {
 		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personCaseload') );
     	return baseUrl;
     },
+    
+    getBaseUrlForIdCaseload: function(id){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personCaseloadId') );
+		baseUrl = baseUrl.replace('{id}',id);
+    	return baseUrl;
+    },    
 
     getCaseload: function( programStatusId, callbacks ){
     	var me=this;
@@ -6178,7 +6202,7 @@ Ext.define('Ssp.service.CaseloadService', {
 	    };
 	    
 		me.apiProperties.makeRequest({
-			url: me.getBaseUrl()+'/'+personId+'/caseload',
+			url:me.getBaseUrlForIdCaseload(personId),
 			method: 'GET',
 			successFunc: success,
 			failureFunc: failure,
@@ -23871,7 +23895,14 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
 	 	REQUIRED_PERMISSIONS_SELF_HELP_GUIDE_EDIT_BUTTON:['ROLE_SELF_HELP_GUIDE_ADMIN_READ'],
 	 	REQUIRED_PERMISSIONS_SELF_HELP_GUIDE_DELETE_BUTTON:['ROLE_SELF_HELP_GUIDE_ADMIN_WRITE'],
 	 	REQUIRED_PERMISSIONS_SELF_HELP_GUIDE_ADD_BUTTON:['ROLE_SELF_HELP_GUIDE_ADMIN_WRITE'],
-	 	REQUIRED_PERMISSIONS_SELF_HELP_GUIDE_SAVE_BUTTON:['ROLE_SELF_HELP_GUIDE_ADMIN_WRITE']
+	 	REQUIRED_PERMISSIONS_SELF_HELP_GUIDE_SAVE_BUTTON:['ROLE_SELF_HELP_GUIDE_ADMIN_WRITE'],
+    
+    	/*Caseload Reassignment */
+ 		REQUIRED_PERMISSIONS_CASELOAD_REASSIGNMENT_SAVE_BUTTON:['ROLE_PERSON_WRITE'],
+ 		REQUIRED_PERMISSIONS_CASELOAD_REASSIGNMENT_REMOVE_BUTTON:['ROLE_PERSON_WRITE'],
+ 		REQUIRED_PERMISSIONS_CASELOAD_REASSIGNMENT_ADD_BUTTON:['ROLE_PERSON_WRITE'],
+ 		REQUIRED_PERMISSIONS_CASELOAD_REASSIGNMENT_ADD_ALL_BUTTON:['ROLE_PERSON_WRITE']
+    
     },
     
     /**

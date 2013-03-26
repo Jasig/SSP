@@ -186,7 +186,14 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     						      		                  }
     						    		                }
     						    		           ]
-    									}
+		    									   },
+		       									   {
+			       										text: 'Re-Assignment',
+			       										title: 'Re-Assignment',
+			       										store: 'Re-Assignment',
+			       								        form: 'caseloadreassignment',
+			       										leaf: true
+		       								       },
     							]
     						},{
     							text: 'Student Intake',

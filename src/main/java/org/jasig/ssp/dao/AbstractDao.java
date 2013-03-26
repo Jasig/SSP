@@ -23,11 +23,13 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 public abstract class AbstractDao<T> {
 
@@ -41,6 +43,9 @@ public abstract class AbstractDao<T> {
 	protected transient SessionFactory sessionFactory;
 
 	protected transient Class<T> persistentClass;
+	
+	@Value("#{configProperties.db_batchsize}")
+	private int batchsize = 300;
 
 	public AbstractDao(@NotNull final Class<T> persistentClass) {
 		this.persistentClass = persistentClass;
@@ -81,6 +86,10 @@ public abstract class AbstractDao<T> {
 	protected Criteria createCriteria() {
 		return sessionFactory.getCurrentSession().createCriteria(
 				this.persistentClass);
+	}
+
+	protected Query createHqlQuery(String query) {
+		return sessionFactory.getCurrentSession().createQuery(query);
 	}
 
 	/**
@@ -136,5 +145,9 @@ public abstract class AbstractDao<T> {
 	protected PagingWrapper<T> processCriteriaWithStatusSortingAndPaging(
 			@NotNull final Criteria query, final SortingAndPaging sAndP) {
 		return processCriteriaWithSortingAndPaging(query, sAndP, true);
+	}
+
+	protected int getBatchsize() {
+		return batchsize;
 	}
 }

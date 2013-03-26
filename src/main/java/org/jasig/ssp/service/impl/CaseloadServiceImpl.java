@@ -46,6 +46,7 @@ import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
+import org.jasig.ssp.transferobject.CaseloadReassignmentRequestTO;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.reports.CaseLoadSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -66,7 +67,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 
 	@Autowired
 	private transient CaseloadDao dao;
-
+	
 	@Autowired
 	private transient AppointmentService appointmentService;
 
@@ -221,6 +222,12 @@ public class CaseloadServiceImpl implements CaseloadService {
 
 	private SortedSet<CoachPersonLiteTO> getAllCurrentCoachesSortedByName(String homeDepartment) {
 		return personService.getAllCurrentCoachesLite(CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_AND_ID_COMPARATOR, homeDepartment);
+	}
+
+	@Override
+	public void reassignStudents(CaseloadReassignmentRequestTO obj) throws ObjectNotFoundException {
+		Person coach = personService.get(obj.getCoachId());
+		dao.reassignStudents(obj,coach);
 	}
 
 }

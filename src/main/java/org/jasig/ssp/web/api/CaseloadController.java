@@ -24,11 +24,13 @@ import org.jasig.ssp.factory.CaseloadRecordTOFactory;
 import org.jasig.ssp.model.CaseloadRecord;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.ProgramStatus;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.CaseloadService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
+import org.jasig.ssp.transferobject.CaseloadReassignmentRequestTO;
 import org.jasig.ssp.transferobject.CaseloadRecordTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -39,6 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -71,7 +74,7 @@ public class CaseloadController extends AbstractBaseController {
 	protected Logger getLogger() {
 		return LOGGER;
 	}
-
+ 
 	@RequestMapping(value = "/caseload", method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<CaseloadRecordTO> myCaseload(
@@ -91,7 +94,7 @@ public class CaseloadController extends AbstractBaseController {
 		final PagingWrapper<CaseloadRecord> caseload = service.caseLoadFor(
 				programStatus, securityService.currentUser().getPerson(),
 				SortingAndPaging.createForSingleSortWithPaging(status, start, limit,
-						sort, sortDirection, null));
+						sort, sortDirection, "lastName"));
 
 		return new PagedResponse<CaseloadRecordTO>(true, caseload.getResults(),
 				factory.asTOList(caseload.getRows()));
@@ -117,9 +120,19 @@ public class CaseloadController extends AbstractBaseController {
 		final PagingWrapper<CaseloadRecord> caseload = service.caseLoadFor(
 				programStatus, personService.get(personId),
 				SortingAndPaging.createForSingleSortWithPaging(status, start, limit,
-						sort, sortDirection, null));
+						sort, sortDirection, "lastName"));
 
 		return new PagedResponse<CaseloadRecordTO>(true, caseload.getResults(),
 				factory.asTOList(caseload.getRows()));
+	}
+	
+	@RequestMapping(value = "/caseload", method = RequestMethod.POST)
+	@PreAuthorize(Permission.SECURITY_PERSON_WRITE)
+	public @ResponseBody
+	CaseloadReassignmentRequestTO reassignStudents(
+			final @RequestBody CaseloadReassignmentRequestTO obj)
+			throws IllegalArgumentException, ObjectNotFoundException {
+		service.reassignStudents(obj);
+		return obj;
 	}
 }

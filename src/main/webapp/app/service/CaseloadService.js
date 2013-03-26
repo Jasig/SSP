@@ -32,6 +32,13 @@ Ext.define('Ssp.service.CaseloadService', {
 		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personCaseload') );
     	return baseUrl;
     },
+    
+    getBaseUrlForIdCaseload: function(id){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personCaseloadId') );
+		baseUrl = baseUrl.replace('{id}',id);
+    	return baseUrl;
+    },    
 
     getCaseload: function( programStatusId, callbacks ){
     	var me=this;
@@ -91,7 +98,7 @@ Ext.define('Ssp.service.CaseloadService', {
 	    };
 	    
 		me.apiProperties.makeRequest({
-			url: me.getBaseUrl()+'/'+personId+'/caseload',
+			url:me.getBaseUrlForIdCaseload(personId),
 			method: 'GET',
 			successFunc: success,
 			failureFunc: failure,
