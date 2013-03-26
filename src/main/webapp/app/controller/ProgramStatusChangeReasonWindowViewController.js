@@ -92,6 +92,8 @@ Ext.define('Ssp.controller.ProgramStatusChangeReasonWindowViewController', {
     saveProgramStatusFailure: function( r, scope){
     	var me=scope;
     	me.getView().setLoading( false );
+        me.appEventsController.getApplication().fireEvent('setNonParticipatingProgramStatusComplete');
+        me.close();
     },    
     
     onCancelClick: function( button ){
