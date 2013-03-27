@@ -400,7 +400,7 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 	}
 	
 	public void updateMajorFromAcademicPrograms(List<ExternalStudentAcademicProgram> academicPrograms){
-		if(academicPrograms != null && academicPrograms.isEmpty()){
+		if(academicPrograms != null && !academicPrograms.isEmpty()){
 			ArrayList<String> majors = new ArrayList<String>();
 			for(ExternalStudentAcademicProgram academicProgram:academicPrograms)
 				if(academicProgram.getProgramName() != null && !academicProgram.getProgramName().isEmpty())
@@ -408,8 +408,9 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 			if(!majors.isEmpty()){
 				String majorsStr = "";
 				for(String maj:majors)
-					this.addValueToStringList(majorsStr, maj);
+					majorsStr = this.addValueToStringList(majorsStr, maj);
 				setMajor(majorsStr);
+				return;
 			}
 		}
 		
