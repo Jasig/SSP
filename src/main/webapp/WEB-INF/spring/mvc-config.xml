@@ -50,6 +50,12 @@
         downstream in the same request. Once we decouple SspUser and Person
         we should be able to move the session open back down here -->
         <bean class="org.jasig.ssp.security.SspCurrentUserInterceptor" />
+        <bean id="webContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+            <property name="cacheSeconds" value="0"/>
+            <property name="useExpiresHeader" value="true"/>
+            <property name="useCacheControlHeader" value="true"/>
+            <property name="useCacheControlNoStore" value="true"/>
+        </bean>
 	</mvc:interceptors>
 	
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
