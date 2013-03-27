@@ -557,7 +557,11 @@
 						<exclude>**/*.jsb3</exclude>
 						<exclude>src/main/webapp/app-all.js</exclude>
 						<exclude>src/main/webapp/all-classes.js</exclude>
+						<exclude>license-header-defs.xml</exclude>
 					</excludes>
+					<headerDefinitions>
+						<headerDefinition>license-header-defs.xml</headerDefinition>
+					</headerDefinitions>
 					<mapping>
 						<!-- Defaults don't have any mapping for the following -->
 						<coffee>SCRIPT_STYLE</coffee>
@@ -566,6 +570,8 @@
 						<jrxml>XML_STYLE</jrxml>
 						<less>DOUBLESLASH_STYLE</less>
 						<scss>DOUBLESLASH_STYLE</scss>
+						<htm>HTML_STYLE</htm>
+						<html>HTML_STYLE</html>
 
 						!<!-- Cannot detect extension-less files, which affects
 							the following in our case. Have to add licenses to
