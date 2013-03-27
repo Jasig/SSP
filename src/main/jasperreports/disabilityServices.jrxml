@@ -25,9 +25,9 @@
     <property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
     <property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
     <property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="summary"/>
-    <property name="ireport.zoom" value="1.0"/>
+    <property name="ireport.zoom" value="1.5"/>
     <property name="ireport.x" value="0"/>
-    <property name="ireport.y" value="0"/>
+    <property name="ireport.y" value="204"/>
     <parameter name="programStatusName" class="java.lang.String"/>
     <parameter name="specialServiceGroupNames" class="java.lang.String"/>
     <parameter name="referralSourceNames" class="java.lang.String"/>
@@ -396,14 +396,14 @@
                 <text><![CDATA[SSP STATUS]]></text>
             </staticText>
             <staticText>
-                <reportElement uuid="f2af5a5e-8883-4e32-921b-cfae205228b4" mode="Opaque" x="497" y="0" width="157" height="14"/>
+                <reportElement uuid="f2af5a5e-8883-4e32-921b-cfae205228b4" mode="Opaque" x="497" y="0" width="97" height="14"/>
                 <textElement textAlignment="Center">
                     <font size="9"/>
                 </textElement>
-                <text><![CDATA[ODS REASON FOR INELIGIBILTY]]></text>
+                <text><![CDATA[INELIGIBILTY]]></text>
             </staticText>
             <staticText>
-                <reportElement uuid="7fb79f93-1a84-4545-ae5f-f0411ff12a92" mode="Opaque" x="654" y="0" width="89" height="14"/>
+                <reportElement uuid="7fb79f93-1a84-4545-ae5f-f0411ff12a92" mode="Opaque" x="594" y="0" width="87" height="14"/>
                 <textElement textAlignment="Center">
                     <font size="9"/>
                 </textElement>
@@ -417,14 +417,14 @@
                 <text><![CDATA[SSP COACH]]></text>
             </staticText>
             <staticText>
-                <reportElement uuid="1986e05a-ec4a-46de-8d79-e5534fd7f511" mode="Opaque" x="809" y="0" width="75" height="14"/>
+                <reportElement uuid="1986e05a-ec4a-46de-8d79-e5534fd7f511" mode="Opaque" x="749" y="0" width="135" height="14"/>
                 <textElement textAlignment="Center">
                     <font size="9"/>
                 </textElement>
                 <text><![CDATA[MAJOR]]></text>
             </staticText>
             <staticText>
-                <reportElement uuid="f48db932-8a08-4079-bc2a-1ba74dd632e3" mode="Opaque" x="743" y="0" width="62" height="14"/>
+                <reportElement uuid="f48db932-8a08-4079-bc2a-1ba74dd632e3" mode="Opaque" x="683" y="0" width="66" height="14"/>
                 <textElement textAlignment="Center">
                     <font size="9" isUnderline="false"/>
                 </textElement>
@@ -468,9 +468,9 @@
         </band>
     </columnHeader>
     <detail>
-        <band height="21" splitType="Stretch">
+        <band height="27" splitType="Stretch">
             <rectangle>
-                <reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="3" y="3" width="1477" height="16" backcolor="#E4E4E4">
+                <reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="3" y="3" width="1477" height="20" backcolor="#E4E4E4">
                     <printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
                 </reportElement>
                 <graphicElement>
@@ -478,81 +478,81 @@
                 </graphicElement>
             </rectangle>
             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                <reportElement uuid="da4c0010-a6bc-4016-836e-daa0149f7735" stretchType="RelativeToBandHeight" x="8" y="3" width="196" height="16"/>
+                <reportElement uuid="da4c0010-a6bc-4016-836e-daa0149f7735" stretchType="RelativeToBandHeight" x="8" y="3" width="196" height="20"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
                     <font size="8"/>
                 </textElement>
                 <textFieldExpression><![CDATA[($F{firstName} == null ? "" : $F{firstName}) + ( $F{middleName} == null ? "" : " " + $F{middleName} )  + ($F{lastName} == null ? "" : " " + $F{lastName})]]></textFieldExpression>
             </textField>
             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                <reportElement uuid="dc91cd22-3c43-404a-b445-c02cd090c250" stretchType="RelativeToBandHeight" x="204" y="3" width="75" height="16"/>
+                <reportElement uuid="dc91cd22-3c43-404a-b445-c02cd090c250" stretchType="RelativeToBandHeight" x="204" y="3" width="75" height="20"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
                     <font size="8"/>
                 </textElement>
                 <textFieldExpression><![CDATA[($F{schoolId} == null ? "" : $F{schoolId})]]></textFieldExpression>
             </textField>
             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                <reportElement uuid="d22d3cb7-2cc0-431e-889a-5ab8d11ae874" x="278" y="3" width="31" height="16"/>
+                <reportElement uuid="d22d3cb7-2cc0-431e-889a-5ab8d11ae874" x="278" y="3" width="31" height="20"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
                 <textFieldExpression><![CDATA[$F{isIlp}]]></textFieldExpression>
             </textField>
             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                <reportElement uuid="38f4248d-b512-4939-a59b-10dc3c8d3513" isPrintRepeatedValues="false" x="309" y="3" width="59" height="16"/>
+                <reportElement uuid="38f4248d-b512-4939-a59b-10dc3c8d3513" isPrintRepeatedValues="false" x="309" y="3" width="59" height="20"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
                 <textFieldExpression><![CDATA[$F{disabilityTypesName}]]></textFieldExpression>
             </textField>
             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                <reportElement uuid="cbc0e657-1ff1-4bce-bf2c-fbd582fa810b" x="368" y="3" width="60" height="16"/>
+                <reportElement uuid="cbc0e657-1ff1-4bce-bf2c-fbd582fa810b" x="368" y="3" width="60" height="20"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
                 <textFieldExpression><![CDATA[$F{currentProgramStatusName}]]></textFieldExpression>
             </textField>
             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                <reportElement uuid="da478bb6-9280-40c2-9eb5-cea8c868e614" x="428" y="3" width="69" height="16"/>
+                <reportElement uuid="da478bb6-9280-40c2-9eb5-cea8c868e614" x="428" y="3" width="69" height="20"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
                 <textFieldExpression><![CDATA[$F{odsStatus}]]></textFieldExpression>
             </textField>
             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                <reportElement uuid="ea368692-bb36-4c3b-9278-378eb25d72bc" x="497" y="3" width="157" height="16"/>
+                <reportElement uuid="ea368692-bb36-4c3b-9278-378eb25d72bc" x="497" y="3" width="97" height="20"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
                 <textFieldExpression><![CDATA[$F{odsReason}]]></textFieldExpression>
             </textField>
             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                <reportElement uuid="4bb79470-0d13-43f6-ad29-2d6c0e3a9ff1" x="654" y="3" width="89" height="16"/>
+                <reportElement uuid="4bb79470-0d13-43f6-ad29-2d6c0e3a9ff1" x="594" y="3" width="89" height="20"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
                 <textFieldExpression><![CDATA[$F{odsRegistrationDateString}]]></textFieldExpression>
             </textField>
             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                <reportElement uuid="681d70b3-65c6-4ad9-bf7f-bd29293da4ff" x="809" y="3" width="75" height="16"/>
+                <reportElement uuid="681d70b3-65c6-4ad9-bf7f-bd29293da4ff" x="749" y="3" width="135" height="20"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
                 <textFieldExpression><![CDATA[$F{major}]]></textFieldExpression>
             </textField>
             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                <reportElement uuid="bfe75fbc-2d49-404e-a8ed-db43d5476a83" x="743" y="3" width="66" height="16"/>
+                <reportElement uuid="bfe75fbc-2d49-404e-a8ed-db43d5476a83" x="683" y="3" width="66" height="20"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
                 <textFieldExpression><![CDATA[$F{registrationStatus} != null && $F{registrationStatus} > 0 ? "Y":"N"]]></textFieldExpression>
             </textField>
             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                <reportElement uuid="15a01dba-6891-4af6-bf33-4e2125afd3de" x="1050" y="3" width="128" height="16"/>
+                <reportElement uuid="15a01dba-6891-4af6-bf33-4e2125afd3de" x="1050" y="3" width="128" height="20"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
                 <textFieldExpression><![CDATA[$F{assignmentDates}]]></textFieldExpression>
             </textField>
             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                <reportElement uuid="45ba8225-260f-41af-b424-cf2b982579d5" x="884" y="3" width="96" height="16"/>
+                <reportElement uuid="45ba8225-260f-41af-b424-cf2b982579d5" x="884" y="3" width="96" height="20"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
                 <textFieldExpression><![CDATA[$F{veteranStatus}]]></textFieldExpression>
             </textField>
             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                <reportElement uuid="dae9b576-3960-4e4a-b69e-7c168879c43d" x="980" y="3" width="70" height="16"/>
+                <reportElement uuid="dae9b576-3960-4e4a-b69e-7c168879c43d" x="980" y="3" width="70" height="20"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
                 <textFieldExpression><![CDATA[$F{ethnicity}]]></textFieldExpression>
             </textField>
             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                <reportElement uuid="29702cce-db6c-4135-b497-f1a5b8970c1b" x="1178" y="3" width="115" height="16"/>
+                <reportElement uuid="29702cce-db6c-4135-b497-f1a5b8970c1b" x="1178" y="3" width="115" height="20"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
                 <textFieldExpression><![CDATA[$F{agencyContacts}]]></textFieldExpression>
             </textField>
             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                <reportElement uuid="9970d598-99bb-4344-8ae7-6602c3327da0" x="1293" y="3" width="110" height="16"/>
+                <reportElement uuid="9970d598-99bb-4344-8ae7-6602c3327da0" x="1293" y="3" width="110" height="20"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
                 <textFieldExpression><![CDATA[$F{coachName}]]></textFieldExpression>
             </textField>
