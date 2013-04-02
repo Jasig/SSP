@@ -35,7 +35,7 @@ Ext.define('Ssp.store.Tools', {
             { group:'beta', name: "Action Plan", toolType: "actionplan", active: true },
             { group:'beta', name: "Journal", toolType: "journal", active: true },
             { group:'rc1', name: "Early Alert", toolType: "earlyalert", active: true },
-            { group:'rc1', name: "MAP", toolType: "earlyalert", active: false },
+            { group:'rc1', name: "MAP", toolType: "map", active: true },
             { group:'rc1', name: "Accommodation", toolType: "accommodation", active: true },
             { group:'rc1', name: "Legacy Remarks", toolType: "earlyalert", active: false },
             { group:'rc1', name: "----------------", toolType: "earlyalert", active: false },
@@ -66,7 +66,10 @@ Ext.define('Ssp.store.Tools', {
     	
     	Ext.Array.each( tools, function( tool, index){
     		var toolSecurityIdentifier = tool.toolType.toUpperCase() + '_TOOL';
-    		if ( me.authenticatedPerson.hasAccess( toolSecurityIdentifier ) )
+
+            // TODO MAP HACK FOR DEV. TAKE THE UNCONDITIONAL MAP GRANT OUT!!
+    		if ( toolSecurityIdentifier === "MAP_TOOL" ||
+                me.authenticatedPerson.hasAccess( toolSecurityIdentifier ) )
     		{
     			sspSecureTools.push( tool );
     		}

@@ -298,6 +298,121 @@
                     "name": "DisabilityTypes.js",
                     "path": "/app/view/tools/accommodation/"
                 },
+				{
+                    "clsName": "Ssp.controller.tool.map.EmailPlanController",
+                    "name": "EmailPlanController.js",
+                    "path": "/app/controller/tool/map/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.map.PrintPlanController",
+                    "name": "PrintPlanController.js",
+                    "path": "/app/controller/tool/map/"
+                },
+				{
+                    "clsName": "Ssp.controller.tool.map.MAPViewController",
+                    "name": "MAPViewController.js",
+                    "path": "/app/controller/tool/map/"
+                },
+				{
+                    "clsName": "Ssp.view.tools.map.MAP",
+                    "name": "MAP.js",
+                    "path": "/app/view/tools/map/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.map.MAPTool",
+                    "name": "MAPTool.js",
+                    "path": "/app/view/tools/map/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.map.CoursesView",
+                    "name": "CoursesView.js",
+                    "path": "/app/view/tools/map/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.map.SemesterPanel",
+                    "name": "SemesterPanel.js",
+                    "path": "/app/view/tools/map/"
+                },
+				{
+                    "clsName": "Ssp.view.tools.map.SemesterPanelContainer",
+                    "name": "SemesterPanelContainer.js",
+                    "path": "/app/view/tools/map/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.map.FAView",
+                    "name": "FAView.js",
+                    "path": "/app/view/tools/map/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.map.MAPView",
+                    "name": "MAPView.js",
+                    "path": "/app/view/tools/map/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.map.MovePlan",
+                    "name": "MovePlan.js",
+                    "path": "/app/view/tools/map/"
+                },
+				{
+                    "clsName": "Ssp.view.tools.map.PlanTool",
+                    "name": "PlanTool.js",
+                    "path": "/app/view/tools/map/"
+                },
+				{
+                    "clsName": "Ssp.view.tools.map.LoadPlans",
+                    "name": "LoadPlans.js",
+                    "path": "/app/view/tools/map/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.map.PlanNotes",
+                    "name": "PlanNotes.js",
+                    "path": "/app/view/tools/map/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.map.LoadTemplates",
+                    "name": "LoadTemplates.js",
+                    "path": "/app/view/tools/map/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.map.SaveTemplate",
+                    "name": "SaveTemplate.js",
+                    "path": "/app/view/tools/map/"
+                },
+				{
+                    "clsName": "Ssp.view.tools.map.SavePlan",
+                    "name": "SavePlan.js",
+                    "path": "/app/view/tools/map/"
+                },
+				{
+                    "clsName": "Ssp.view.tools.map.CourseNotes",
+                    "name": "CourseNotes.js",
+                    "path": "/app/view/tools/map/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.map.TermNotes",
+                    "name": "TermNotes.js",
+                    "path": "/app/view/tools/map/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.map.EmailPlan",
+                    "name": "EmailPlan.js",
+                    "path": "/app/view/tools/map/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.map.PrintPlan",
+                    "name": "PrintPlan.js",
+                    "path": "/app/view/tools/map/"
+                },
+				 {
+                    "clsName": "Ssp.view.tools.map.CourseDetails",
+                    "name": "CourseDetails.js",
+                    "path": "/app/view/tools/map/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.map.CoursesGrid",
+                    "name": "CoursesGrid.js",
+                    "path": "/app/view/tools/map/"
+                },
                 {
                     "clsName": "Ssp.view.tools.displacedworker.DisplacedWorker",
                     "name": "DisplacedWorker.js",

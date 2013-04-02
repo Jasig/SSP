@@ -1,0 +1,229 @@
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.PlanTool', {
+    extend: 'Ext.form.FieldContainer',
+    alias: 'widget.plantool',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    inject: {
+        columnRendererUtils: 'columnRendererUtils'
+        //sspConfig: 'sspConfig'
+    },
+    width: '100%',
+    height: '100%',
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            fieldLabel: '',
+            layout: 'hbox',
+            margin: '0 0 0 0',
+            padding: ' 0 0 0 0',
+            height: '40',
+            defaultType: 'displayfield',
+            fieldDefaults: {
+                msgTarget: 'side'
+            },
+            
+            items: [{
+                xtype: 'tbspacer',
+                flex: .02
+            }, 
+            {
+                xtype: 'fieldset',
+                border: 0,
+                padding: '0 0 0 0',
+                title: '',
+                defaultType: 'displayfield',
+                layout: 'vbox',
+                width: 80,
+                cls: 'center-align',
+                defaults: {
+                    anchor: '100%'
+                },
+                
+                items: [{
+                    tooltip: 'View all',
+                    width: 30,
+                    height: 30,
+                    cls: 'overviewIcon',
+                    xtype: 'button',
+                    itemId: 'planOverviewButton',
+                    align: 'center',
+                    padding: '0 0 0 0'
+                }, {
+                    xtype: 'label',
+                    text: 'View All'
+                
+                }]
+            
+            }, 
+             {
+                xtype: 'fieldset',
+                border: 0,
+                padding: '0 0 0 0',
+                title: '',
+                defaultType: 'displayfield',
+                layout: 'vbox',
+                width: 80,
+                cls: 'center-align',
+                defaults: {
+                    anchor: '100%'
+                },
+                
+                items: [{
+                    tooltip: 'Financial Aid',
+                    width: 30,
+                    height: 30,
+                    cls: 'mapFAIcon',
+                    xtype: 'button',
+                    itemId: 'planFAButton',
+                    align: 'center',
+                    padding: '0 0 0 0'
+                }, {
+                    xtype: 'label',
+                    text: 'Financial Aid'
+                
+                }]
+            
+            }, 
+            {
+                xtype: 'fieldset',
+                border: 0,
+                padding: '0 0 0 0',
+                title: '',
+                defaultType: 'displayfield',
+                layout: 'vbox',
+                width: 80,
+                cls: 'center-align',
+                
+                defaults: {
+                    anchor: '100%'
+                },
+                
+                items: [{
+                    tooltip: 'Plan Notes',
+                    width: 30,
+                    height: 30,
+                    cls: 'mapNotesIcon',
+                    xtype: 'button',
+                    itemId: 'planNotesButton',
+                    align: 'center',
+                    padding: '0 0 0 0'
+                }, {
+                    xtype: 'label',
+                    text: 'Plan Notes'
+                
+                }]
+            
+            }, 
+            {
+                xtype: 'tbspacer',
+                flex: .10
+            },
+            {
+                xtype: 'fieldset',
+                border: 0,
+                padding: '0 0 0 0',
+                title: '',
+                defaultType: 'displayfield',
+                layout: 'vbox',
+                width: 80,
+                cls: 'center-align',
+                defaults: {
+                    anchor: '100%'
+                },
+                
+                items: [{
+                    tooltip: 'Email Plan',
+                    width: 30,
+                    height: 30,
+                    cls: 'planEmailIcon',
+                    xtype: 'button',
+                    itemId: 'emailPlanButton',
+                    align: 'center',
+                    padding: '0 0 0 0'
+                }, {
+                    xtype: 'label',
+                    text: 'Email Plan'
+                
+                }]
+            
+            }, {
+                xtype: 'fieldset',
+                border: 0,
+                padding: '0 0 0 0',
+                title: '',
+                defaultType: 'displayfield',
+                layout: 'vbox',
+                width: 80,
+                cls: 'center-align',
+                defaults: {
+                    anchor: '100%'
+                },
+                
+                items: [{
+                    tooltip: 'Print Plan',
+                    width: 30,
+                    height: 30,
+                    cls: 'mapPrintIcon',
+                    xtype: 'button',
+                    itemId: 'printPlanButton',
+                    align: 'center',
+                    padding: '0 0 0 0'
+                }, {
+                    xtype: 'label',
+                    text: 'Print Plan'
+                
+                }]
+            
+            },{
+                xtype: 'tbspacer',
+                flex: 1
+            }, {
+                xtype: 'fieldset',
+                border: 0,
+                padding: '0 0 0 0',
+                title: '',
+                defaultType: 'displayfield',
+                layout: 'vbox',
+                defaults: {
+                    anchor: '100%'
+                },
+                items: [{
+                    fieldLabel: 'Plan Title',
+                    itemId: 'planName',
+                    name: 'planName',
+                    labelWidth: 120
+                
+                }, {
+                    fieldLabel: 'Student is Currently',
+                    itemId: 'onPlan',
+                    name: 'onPlan',
+                    labelWidth: 150
+                
+                }]
+            
+            }, {}]
+        
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});

@@ -2529,6 +2529,3366 @@ Ext.define('Ssp.view.tools.accommodation.DisabilityTypes', {
  * specific language governing permissions and limitations
  * under the License.
  */
+Ext.define('Ssp.controller.tool.map.EmailPlanController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	appEventsController: 'appEventsController'
+       
+    },
+    control: {
+    	optionsEmailView: '#optionsEmailView',
+    	
+    	'optionsEmailFormat': {
+    	   selector: '#optionsEmailFormat',
+    	   listeners: {
+            change: 'onoptionsEmailFormatClick'
+           }
+        },
+        
+        'emailmatrixFormat': {
+    	   selector: '#emailmatrixFormat',
+    	   listeners: {
+            change: 'onemailmatrixFormatClick'
+           }
+        }
+    },
+    
+	init: function() {
+		var me=this;
+		me.optionsEmailView().hide();
+		
+		return this.callParent(arguments);
+    },
+    
+    onoptionsEmailFormatClick: function(cb, nv, ov){
+        var me=this;
+        if (nv){
+        me.optionsEmailView().show();
+        }
+    
+    },
+    
+    onemailmatrixFormatClick: function(cb, nv, ov){
+        var me=this;
+        if (nv){
+        me.optionsEmailView().hide();
+        }
+    }
+    
+    
+
+	
+	
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.tool.map.PrintPlanController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	appEventsController: 'appEventsController'
+       
+    },
+    control: {
+    	optionsPrintView: '#optionsPrintView',
+    	
+    	'optionsPrintFormat': {
+    	   selector: '#optionsPrintFormat',
+    	   listeners: {
+            change: 'onoptionsPrintClick'
+           }
+        },
+        
+        'printmatrixFormat': {
+    	   selector: '#printmatrixFormat',
+    	   listeners: {
+            change: 'onprintmatrixFormatClick'
+           }
+        }
+    },
+    
+	init: function() {
+		var me=this;
+		me.getOptionsPrintView().hide();
+		
+		return this.callParent(arguments);
+    },
+    
+    onoptionsPrintClick: function(cb, nv, ov){
+        var me=this;
+        if (nv){
+        me.getOptionsPrintView().show();
+        }
+    
+    },
+    
+    onprintmatrixFormatClick: function(cb, nv, ov){
+        var me=this;
+        if (nv){
+        me.getOptionsPrintView().hide();
+        }
+    }
+    
+    
+
+	
+	
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.tool.map.MAPViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	appEventsController: 'appEventsController'
+       
+    },
+    control: {
+    	'planFAButton': {
+    	   selector: '#planFAButton',
+    	   listeners: {
+            click: 'onFAButtonClick'
+           }
+        },
+        
+        'planNotesButton':{
+         selector: '#planNotesButton',
+           listeners: {
+            click: 'onplanNotesButtonClick'
+           }
+        },
+        
+        'loadSavedPlanButton':{
+           selector: '#loadSavedPlanButton',
+           listeners: {
+            click: 'onloadSavedPlanButtonClick'
+           }
+        },
+        
+        'loadTemplateButton':{
+           selector: '#loadTemplateButton',
+           listeners: {
+            click: 'onloadTemplateButtonClick'
+           }
+        },
+        
+        'saveTemplateButton':{
+           selector: '#saveTemplateButton',
+           listeners: {
+            click: 'onsaveTemplateButtonClick'
+           }
+        },
+        
+        'savePlanButton':{
+           selector: '#savePlanButton',
+           listeners: {
+            click: 'onsavePlanButtonClick'
+           }
+        },
+        
+        'emailPlanButton':{
+           selector: '#emailPlanButton',
+           listeners: {
+            click: 'onemailPlanButtonClick'
+           }
+        },
+        
+        'printPlanButton':{
+           selector: '#printPlanButton',
+           listeners: {
+            click: 'onprintPlanButtonClick'
+           }
+        }
+    },
+    
+	init: function() {
+		var me=this;
+		
+		
+		return this.callParent(arguments);
+    },
+    
+    onFAButtonClick: function(button){
+        var me=this;
+        var faPopUp = Ext.create('Ssp.view.tools.map.FAView');
+        faPopUp.setPosition(300,50);
+        faPopUp.show();
+ 
+    },
+    
+    onplanNotesButtonClick: function(button){
+        var me=this;
+        var notestPopUp = Ext.create('Ssp.view.tools.map.PlanNotes');
+        notestPopUp.setPosition(300,50);
+        notestPopUp.show();
+ 
+    },
+    
+    onloadSavedPlanButtonClick: function(button){
+        var me=this;
+        var allPlansPopUp = Ext.create('Ssp.view.tools.map.LoadPlans');
+        allPlansPopUp.setPosition(300,50);
+        allPlansPopUp.show();
+ 
+    },
+    
+    onloadTemplateButtonClick: function(button){
+        var me=this;
+        var allTemplatesPopUp = Ext.create('Ssp.view.tools.map.LoadTemplates');
+        allTemplatesPopUp.setPosition(300,50);
+        allTemplatesPopUp.show();
+ 
+    },
+    
+    onsaveTemplateButtonClick: function(button){
+        var me=this;
+        var saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate');
+        saveTemplatePopUp.setPosition(300,50);
+        saveTemplatePopUp.show();
+ 
+    },
+    
+    onsavePlanButtonClick: function(button){
+        var me=this;
+        var savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan');
+        savePlanPopUp.setPosition(300,50);
+        savePlanPopUp.show();
+ 
+    },
+    
+    onemailPlanButtonClick: function(button){
+        var me=this;
+        var emailPlanPopUp = Ext.create('Ssp.view.tools.map.EmailPlan');
+        emailPlanPopUp.setPosition(300,50);
+        emailPlanPopUp.show();
+ 
+    },
+    
+    onprintPlanButtonClick: function(button){
+        var me=this;
+        var printPlanPopUp = Ext.create('Ssp.view.tools.map.PrintPlan');
+        printPlanPopUp.setPosition(300,50);
+        printPlanPopUp.show();
+ 
+    },
+    
+    ontermNotesButtonClick: function(button){
+        var me=this;
+        var termNotesPopUp = Ext.create('Ssp.view.tools.map.CourseNotes');
+        termNotesPopUp.setPosition(300,50);
+        termNotesPopUp.show();
+ 
+    }
+
+	
+	
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.MAP', {
+   extend: 'Ext.panel.Panel',
+    alias : 'widget.map',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    //controller: 'Ssp.controller.tool.actionplan.ActionPlanToolViewController',
+    width: '100%',
+    height: '100%',   
+     layout: {
+                type: 'fit'
+            },
+    initComponent: function() { 
+        Ext.apply(this,
+		{items: [
+		{
+		xtype: 'maptool'
+		}
+		]});
+
+        return this.callParent(arguments);
+    }
+        
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.MAPTool', {
+	extend : 'Ext.container.Container',
+	alias : 'widget.maptool',
+	mixins : [ 'Deft.mixin.Injectable', 'Deft.mixin.Controllable' ],
+	// controller:
+	// 'Ssp.controller.tool.actionplan.ActionPlanToolViewController',
+	width : '100%',
+	height : '100%',
+	layout : {
+		type : 'hbox',
+		align : 'stretch'
+	},
+	initComponent : function() {
+		Ext.apply(this, {
+			items : [ {
+				xtype : 'coursesview',
+				width : 300
+			}, {
+				xtype : 'mapview',
+				flex : 1
+			}
+
+			]
+		});
+
+		return this.callParent(arguments);
+	}
+
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.CoursesView', {
+    extend: 'Ext.form.Panel',
+    alias: 'widget.coursesview',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    //controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
+    
+    width: '100%',
+    height: '100%',
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            layout: {
+                type: 'fit'
+            },
+            padding: 0,
+            preventHeader: true,
+            items: [{
+                xtype: 'fieldcontainer',
+                fieldLabel: '',
+                layout: 'vbox',
+                margin: '0 0 0 0',
+                padding: '0 0 0 0',
+                width: '100%',
+                height: '100%',
+                items: [
+                {
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    margin: '0 0 0 0',
+                    padding: '5 0 5 5',
+                    layout: 'hbox',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    items: [{
+                        xtype: 'combobox',
+                        name: 'coursesCombo',
+                        fieldLabel: '',
+                        emptyText: 'Select From - All Courses',
+                        valueField: 'courseType',
+                        displayField: 'courseType',
+                        mode: 'local',
+                        queryMode: 'local',
+                        allowBlank: true,
+                        itemId: 'coursesTypeCombo',
+                        width: 285
+                    }]
+                
+                    },
+                    {
+                        xtype: 'container',
+                        autoEl: 'hr'
+                    },
+                    {
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    margin: '0 0 0 0',
+                    padding: '5 0 5 5',
+                    layout: 'hbox',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    items: [{
+                        xtype: 'combobox',
+                        name: 'programCombo',
+                        fieldLabel: '',
+                        emptyText: 'Filter by Program',
+                        valueField: 'code',
+                        displayField: 'longName',
+                        mode: 'local',
+                        queryMode: 'local',
+                        allowBlank: true,
+                        itemId: 'programCombo',
+                        width: 260
+                    }, {
+                        tooltip: 'Reset to All Programs',
+                        text: '',
+                        width: 30,
+                        height: 25,
+                        cls: 'mapClearSearchIcon',
+                        xtype: 'button',
+                        itemId: 'cancelProgramSearchButton'
+                    }]
+                
+                }, {
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    margin: '0 0 0 0',
+					padding: '0 0 5 5',
+                    layout: 'hbox',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    
+                    items: [{
+                        xtype: 'combobox',
+                        name: 'transferCombo',
+                        fieldLabel: '',
+                        emptyText: 'Filter by Transfer',
+                        valueField: 'code',
+                        displayField: 'transfer',
+                        mode: 'local',
+                        typeAhead: true,
+                        queryMode: 'local',
+                        allowBlank: true,
+                        itemId: 'transferCombo',
+                        width: 260
+                    }, {
+                        tooltip: 'Reset to All Transfer Types',
+                        text: '',
+                        width: 30,
+                        height: 25,
+                        cls: 'mapClearSearchIcon',
+                        xtype: 'button',
+                        itemId: 'cancelTransferSearchButton'
+                    }]
+                
+                }, {
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'textfield',
+                    margin: '0 0 0 0',
+					padding: '0 0 5 5',
+                    layout: 'hbox',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    
+                    items: [
+					{
+						 xtype: 'tbspacer',
+                       width: 75
+					},
+					
+					{
+                       fieldLabel: 'Filter By',
+                        name: 'filterBy',
+                        itemId: 'filterBy',
+                        maxLength: 50,
+                        allowBlank:true,
+						labelWidth:50
+                    }, {
+                        tooltip: 'Clear Filter',
+                        text: '',
+                        width: 30,
+                        height: 25,
+                        cls: 'mapClearSearchIcon',
+                        xtype: 'button',
+                        itemId: 'cancelFilterButton'
+                    }]
+                
+                },
+                {
+                    xtype : 'container',
+                    flex: 1,
+                    width: '100%',
+                    height: '100%',
+                    layout: 'card',
+                    //autoScroll: true,
+                    items : [
+                        {xtype:'coursesgrid', itemId:'allcoursesgrid', flex:1},
+                        {xtype:'coursesgrid', itemId:'electivesgrid', flex:1},
+                        {xtype:'coursesgrid', itemId:'defined1grid', flex:1},
+                        {xtype:'coursesgrid', itemId:'defined2grid', flex:1},
+                        {xtype:'coursesgrid', itemId:'defined3grid', flex:1},
+                        {xtype:'coursesgrid', itemId:'holdcoursesgrid', flex:1}
+                        
+                    ]
+                }
+            
+                ]
+            }
+            
+            
+            ]
+        
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.SemesterPanel', {
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.semesterpanel',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    //controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
+    minHeight: '200',
+    minWidth: '200',
+    autoHeight: true,
+    autoScroll: true,
+    columnLines: false,
+    
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            title: 'Semester',
+            hideHeaders: true,
+            tools: [{
+                xtype: 'button',
+                itemId: 'termNotesButton',
+                width: 20,
+                height: 20,
+                cls: 'editPencilIcon',
+                text:'',
+                tooltip: 'Term Notes',
+                listeners: {
+                    click: function() {
+                        var termNotesPopUp = Ext.create('Ssp.view.tools.map.TermNotes');
+                        termNotesPopUp.center();
+                        termNotesPopUp.show();
+                    }
+                  }
+            }],
+            columns: [{
+                text: '',
+                dataIndex: 'planItem',
+                xtype: 'gridcolumn'
+            }, 
+            {
+                text: '',
+                dataIndex: 'crHrs',
+                xtype: 'gridcolumn'
+            }, 
+            {
+                xtype: 'actioncolumn',
+                width: 65,
+                items: [{
+                    icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
+                    tooltip: 'Edit planItem',
+                    handler: function(grid, rowIndex, colIndex){
+                        //goto CourseNotes.js
+                        
+                    },
+                    
+                    scope: me
+                }, {
+                    icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
+                    tooltip: 'Delete planItem',
+                    handler: function(grid, rowIndex, colIndex){
+                        
+                    },
+                    scope: me
+                }]
+            }],
+            dockedItems: [{
+                dock: 'bottom',
+                xtype: 'toolbar',
+                height: '25',
+                items: [
+                {
+                    xtype: 'tbspacer',
+                    flex: .5
+                },{
+                    text: 'Term Cr. Hrs:',
+                    xtype: 'label'
+                }, {
+                    text: '',
+                    name: 'termCrHrs',
+                    itemId: 'termCrHrs',
+                    xtype: 'label'
+                }
+                ,
+                 {
+                    xtype: 'tbspacer',
+                    flex: .5
+                }]
+            }]
+        
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.SemesterPanelContainer', {
+	extend : 'Ext.form.Panel',
+	alias : 'widget.semesterpanelcontainer',
+	mixins : [ 'Deft.mixin.Injectable', 'Deft.mixin.Controllable' ],
+
+	inject : {
+		columnRendererUtils : 'columnRendererUtils'
+		//sspConfig : 'sspConfig'
+	},
+	width : '100%',
+	height : '100%',
+	
+	initComponent : function() {
+		var me = this;
+		Ext.apply(me, {
+			border : 0,
+			bodyPadding : 0,
+			layout : 'fit',
+            autoScroll : true,
+            defaults : {
+                anchor : '100% ,100%'
+            },
+			items : [ {
+				xtype : 'container',
+				fieldLabel : '',
+				layout : 'hbox',
+				margin : '0 0 0 0',
+				padding : '2 2 2 2',
+				width : '100%',
+				height : '100%',
+				autoScroll : true,
+				autoHeight: true,
+                minHeight: 0,
+				flex : 1,
+				items : [ {
+					xtype : 'fieldset',
+					border: 0,
+					title : '',
+					padding : '2 2 2 2',
+					margin : '0 0 0 0',
+					itemId : 'row1',
+					autoScroll: true,
+					flex : 1,
+					items : [ {
+						xtype : 'semesterpanel'
+
+					}, {
+						xtype : 'tbspacer',
+						height : '5'
+					}, {
+						xtype : 'semesterpanel'
+					}, {
+						xtype : 'tbspacer',
+						height : '5'
+					}, {
+						xtype : 'semesterpanel'
+					}, {
+						xtype : 'tbspacer',
+						height : '5'
+					}, {
+						xtype : 'semesterpanel'
+					}, {
+                        xtype : 'tbspacer',
+                        height : '5'
+                    }, {
+                        xtype : 'semesterpanel'
+                    }, {
+                        xtype : 'tbspacer',
+                        height : '5'
+                    }, {
+                        xtype : 'semesterpanel'
+                    } ]
+
+				}, {
+					xtype : 'fieldset',
+					border : 0,
+					title : '',
+					padding : '2 2 2 2',
+					margin : '0 0 0 0',
+					itemId : 'row2',
+					flex : 1,
+
+					items : [ {
+						xtype : 'semesterpanel'
+
+					}, {
+						xtype : 'tbspacer',
+						height : '5'
+					}, {
+						xtype : 'semesterpanel'
+					}, {
+						xtype : 'tbspacer',
+						height : '5'
+					}, {
+						xtype : 'semesterpanel'
+					}, {
+						xtype : 'tbspacer',
+						height : '5'
+					}, {
+						xtype : 'semesterpanel'
+					} , {
+                        xtype : 'tbspacer',
+                        height : '5'
+                    }, {
+                        xtype : 'semesterpanel'
+                    }, {
+                        xtype : 'tbspacer',
+                        height : '5'
+                    }, {
+                        xtype : 'semesterpanel'
+                    }]
+
+				}, {
+					xtype : 'fieldset',
+					border : 0,
+					title : '',
+					padding : '2 2 2 2',
+					margin : '0 0 0 0',
+					itemId : 'row3',
+					flex : 1,
+
+					items : [ {
+						xtype : 'semesterpanel'
+
+					}, {
+						xtype : 'tbspacer',
+						height : '5'
+					}, {
+						xtype : 'semesterpanel'
+					}, {
+						xtype : 'tbspacer',
+						height : '5'
+					}, {
+						xtype : 'semesterpanel'
+					}, {
+						xtype : 'tbspacer',
+						height : '5'
+					}, {
+						xtype : 'semesterpanel'
+					} , {
+                        xtype : 'tbspacer',
+                        height : '5'
+                    }, {
+                        xtype : 'semesterpanel'
+                    }, {
+                        xtype : 'tbspacer',
+                        height : '5'
+                    }, {
+                        xtype : 'semesterpanel'
+                    }]
+
+				} ]
+			} ]
+		});
+
+		return me.callParent(arguments);
+	}
+
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.FAView', {
+    extend: 'Ext.window.Window',
+    alias: 'widget.faview',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    inject: {
+        columnRendererUtils: 'columnRendererUtils'
+        //sspConfig: 'sspConfig'
+    },
+    height: 500,
+    width: 500,
+    resizable: true,
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            title: 'Financial Aid',
+            items: [{
+                xtype: 'form',
+                flex: 1,
+                border: 0,
+                frame: false,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                 width: '100%',
+                height: '100%',
+                bodyPadding: 0,
+                autoScroll: true,
+                itemId: 'faForm',
+                items: [{
+                xtype: 'fieldcontainer',
+                fieldLabel: '',
+                layout: 'vbox',
+                align: 'stretch',
+                defaultType: 'displayfield',
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                items: [ {
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    margin: '0 0 0 2',
+                    padding: '0 0 0 5',
+                    layout: 'vbox',
+                    align: 'stretch',
+                    
+                    items: [
+                    {
+                        fieldLabel: 'GPA',
+                        name: 'cumGPA',
+                        itemId: 'cumGPA',
+                        labelWidth: 30
+                    
+                    },  
+                    {
+                        xtype: 'tbspacer',
+                        height: '10'
+                    }, {
+                        fieldLabel: 'Standing',
+                        name: 'standing',
+                        itemId: 'standing',
+                        labelWidth: 60
+                    }, {
+                        fieldLabel: 'Restrictions',
+                        name: 'restrictions',
+                        itemId: 'restrictions',
+                        labelWidth: 80
+                    }, {
+                        xtype: 'tbspacer',
+                        height: '10'
+                    },
+                    {
+                        fieldLabel: 'FA GPA',
+                        name: 'faGPA',
+                        itemId: 'faGPA',
+                        labelWidth: 50
+                    }, 
+                    {
+                        xtype: 'tbspacer',
+                        height: '10'
+                    },
+                    {
+                        fieldLabel: 'Hrs Earned',
+                        name: 'hrsEarned',
+                        itemId: 'hrsEarned',
+						labelWidth: 80
+                    }, {
+                        fieldLabel: 'Hrs Attempted',
+                        name: 'hrsAttempted',
+                        itemId: 'hrsAttempted',
+						labelWidth: 100
+                    }, {
+                        fieldLabel: '<a href="">Comp Rate</a>',
+                        name: 'compRate',
+                        itemId: 'compRate',
+						labelWidth: 80
+                    },
+                    {
+                        xtype: 'tbspacer',
+                        height: '10'
+                    },
+                    
+                    ]
+                
+                },
+                {
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    layout: 'hbox',
+                    align: 'stretch',
+                    padding: 0,
+					margin: '0 0 0 5',
+                    
+                    items: [{
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    layout: 'vbox',
+                    align: 'stretch',
+                    padding: 0,
+                    margin: '0 0 0 5',
+                    items: [ 
+                     {
+                        fieldLabel: 'Reg',
+                        name: 'registeredTerms',
+                        itemId: 'registeredTerms',
+                        labelWidth: 30
+                    }, {
+                        fieldLabel: 'Payment',
+                        name: 'paymentStatus',
+                        itemId: 'paymentStatus',
+                        labelWidth: 80
+                    },, {
+                        fieldLabel: 'Balance',
+                        name: 'balance',
+                        itemId: 'balance',
+                        labelWidth: 80
+                    }       
+                            ]
+                },
+                {
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    layout: 'vbox',
+                    align: 'stretch',
+                    padding: 0,
+                    margin: '0 0 0 5',
+                    items: [        
+                           
+                    
+                    {
+                        fieldLabel: 'SAP',
+                        name: 'sap',
+                        itemId: 'sap',
+                        labelWidth: 30
+                    }, {
+                        fieldLabel: 'F1',
+                        name: 'f1',
+                        itemId: 'f1',
+                        labelWidth: 30
+                    }]
+                }
+                ]}
+                
+                ,
+                {
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    layout: 'vbox',
+                    align: 'stretch',
+                    padding: '0 0 0 5',
+					margin: '0 0 0 5',
+                   
+                    items: [{
+                        fieldLabel: 'FASFA',
+                        name: 'fasfa',
+                        itemId: 'fasfa',
+						labelWidth: 60
+                    
+                    }, {
+                        fieldLabel: 'FA Award',
+                        name: 'faAward',
+                        itemId: 'faAward',
+						labelWidth: 80
+                    
+                    }, {
+                        fieldLabel: 'FA Amount',
+                        name: 'faAmount',
+                        itemId: 'faAmount',
+						labelWidth: 80
+                    
+                    }, {
+                        fieldLabel: 'Loan Amount',
+                        name: 'loanAmount',
+                        itemId: 'loanAmount',
+						labelWidth: 80
+                    
+                    }]
+                }
+                ]
+            }]
+            }]
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.MAPView', {
+    extend: 'Ext.form.Panel',
+    alias: 'widget.mapview',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.map.MAPViewController',
+    
+    width: '100%',
+    height: '100%',
+  initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            layout: {
+                type: 'fit'
+            },
+            autoScroll: true,
+            padding: 0,
+            preventHeader: true,
+            border: 0,
+            margin: '0 0 0 0 ',
+            minWidth: '500',
+            items: [{
+    			xtype: 'semesterpanelcontainer',
+    			flex:1
+            }],
+            dockedItems: [{
+                dock: 'top',
+                xtype: 'toolbar',
+				height: '25',
+                items: [{
+                    tooltip: 'Create New Plan',
+                    text: '<u>New Plan</u>',
+                    //width: 30,
+                    height: 22,
+                   // cls: 'emailIcon',
+                    xtype: 'button',
+                    itemId: 'createNewPlanButton'
+                }, {
+                    tooltip: 'Load Saved Plan',
+                    text: '<u>Load Saved Plan</u>',
+                    height: 22,
+                    xtype: 'button',
+                    itemId: 'loadSavedPlanButton'
+                },
+				{
+                    tooltip: 'Load Template',
+                    text: '<u>Load Template</u>',
+                    height: 22,
+                    xtype: 'button',
+                    itemId: 'loadTemplateButton'
+                },
+                
+				 
+                 {
+                    xtype: 'button',
+                    text: 'Save',
+                    itemId: 'addTool',
+                    height: 22,
+                    menu: {
+                    items: [
+                        
+                        {
+                            xtype: 'button',
+                            text: 'Save Plan As',
+                            itemId: 'savePlanButton'
+                        },
+                        {
+                            xtype: 'button',
+                            text: 'Save Template As' ,
+                            itemId: 'saveTemplateButton'
+                        }
+                    ]
+                    }
+                },
+                {
+                    xtype: 'tbspacer',
+                    flex: .05
+                }
+                
+				]
+            },
+			{
+                xtype: 'plantool'
+                
+                
+            },
+			{
+                xtype: 'moveplan'
+                
+                
+            }
+			]
+            
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.MovePlan', {
+    extend: 'Ext.form.FieldContainer',
+    alias: 'widget.moveplan',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    inject: {
+        columnRendererUtils: 'columnRendererUtils'
+        //sspConfig: 'sspConfig'
+    },
+    width: '100%',
+    height: '100%',
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            fieldLabel: '',
+            layout: 'hbox',
+            margin: '0 0 0 0',
+			padding: ' 2 0 0 0',
+            height: '38',
+            defaultType: 'displayfield',
+			style: 'background-color: lightgrey;',
+            fieldDefaults: {
+                msgTarget: 'side'
+            },
+            
+            items: [
+			
+			{
+                
+                    tooltip: 'Move Plan Backward',
+                    width: 30,
+                    height: 30,
+                    cls: 'planMoveBackwardIcon',
+                    xtype: 'button',
+                    itemId: 'movePlanBackwardButton'
+                }, {
+                    tooltip: 'Move Plan Forward',
+                    width: 30,
+                    height: 30,
+                    cls: 'planMoveForwardIcon',
+                    xtype: 'button',
+                    itemId: 'movePlanForwardButton'
+                }, {
+                    xtype: 'tbspacer',
+                    flex: 1
+                }, {
+                    fieldLabel: 'Current Total Plan Cr Hrs',
+                    itemId: 'planHrs',
+                    name: 'planHrs',
+                    labelWidth: 150
+                
+                }, {
+                    fieldLabel: 'Dev Cr Hrs',
+                    itemId: 'devHrs',
+                    name: 'devHrs',
+                    labelWidth: 100
+                
+                }
+]
+        
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.PlanTool', {
+    extend: 'Ext.form.FieldContainer',
+    alias: 'widget.plantool',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    inject: {
+        columnRendererUtils: 'columnRendererUtils'
+        //sspConfig: 'sspConfig'
+    },
+    width: '100%',
+    height: '100%',
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            fieldLabel: '',
+            layout: 'hbox',
+            margin: '0 0 0 0',
+            padding: ' 0 0 0 0',
+            height: '40',
+            defaultType: 'displayfield',
+            fieldDefaults: {
+                msgTarget: 'side'
+            },
+            
+            items: [{
+                xtype: 'tbspacer',
+                flex: .02
+            }, 
+            {
+                xtype: 'fieldset',
+                border: 0,
+                padding: '0 0 0 0',
+                title: '',
+                defaultType: 'displayfield',
+                layout: 'vbox',
+                width: 80,
+                cls: 'center-align',
+                defaults: {
+                    anchor: '100%'
+                },
+                
+                items: [{
+                    tooltip: 'View all',
+                    width: 30,
+                    height: 30,
+                    cls: 'overviewIcon',
+                    xtype: 'button',
+                    itemId: 'planOverviewButton',
+                    align: 'center',
+                    padding: '0 0 0 0'
+                }, {
+                    xtype: 'label',
+                    text: 'View All'
+                
+                }]
+            
+            }, 
+             {
+                xtype: 'fieldset',
+                border: 0,
+                padding: '0 0 0 0',
+                title: '',
+                defaultType: 'displayfield',
+                layout: 'vbox',
+                width: 80,
+                cls: 'center-align',
+                defaults: {
+                    anchor: '100%'
+                },
+                
+                items: [{
+                    tooltip: 'Financial Aid',
+                    width: 30,
+                    height: 30,
+                    cls: 'mapFAIcon',
+                    xtype: 'button',
+                    itemId: 'planFAButton',
+                    align: 'center',
+                    padding: '0 0 0 0'
+                }, {
+                    xtype: 'label',
+                    text: 'Financial Aid'
+                
+                }]
+            
+            }, 
+            {
+                xtype: 'fieldset',
+                border: 0,
+                padding: '0 0 0 0',
+                title: '',
+                defaultType: 'displayfield',
+                layout: 'vbox',
+                width: 80,
+                cls: 'center-align',
+                
+                defaults: {
+                    anchor: '100%'
+                },
+                
+                items: [{
+                    tooltip: 'Plan Notes',
+                    width: 30,
+                    height: 30,
+                    cls: 'mapNotesIcon',
+                    xtype: 'button',
+                    itemId: 'planNotesButton',
+                    align: 'center',
+                    padding: '0 0 0 0'
+                }, {
+                    xtype: 'label',
+                    text: 'Plan Notes'
+                
+                }]
+            
+            }, 
+            {
+                xtype: 'tbspacer',
+                flex: .10
+            },
+            {
+                xtype: 'fieldset',
+                border: 0,
+                padding: '0 0 0 0',
+                title: '',
+                defaultType: 'displayfield',
+                layout: 'vbox',
+                width: 80,
+                cls: 'center-align',
+                defaults: {
+                    anchor: '100%'
+                },
+                
+                items: [{
+                    tooltip: 'Email Plan',
+                    width: 30,
+                    height: 30,
+                    cls: 'planEmailIcon',
+                    xtype: 'button',
+                    itemId: 'emailPlanButton',
+                    align: 'center',
+                    padding: '0 0 0 0'
+                }, {
+                    xtype: 'label',
+                    text: 'Email Plan'
+                
+                }]
+            
+            }, {
+                xtype: 'fieldset',
+                border: 0,
+                padding: '0 0 0 0',
+                title: '',
+                defaultType: 'displayfield',
+                layout: 'vbox',
+                width: 80,
+                cls: 'center-align',
+                defaults: {
+                    anchor: '100%'
+                },
+                
+                items: [{
+                    tooltip: 'Print Plan',
+                    width: 30,
+                    height: 30,
+                    cls: 'mapPrintIcon',
+                    xtype: 'button',
+                    itemId: 'printPlanButton',
+                    align: 'center',
+                    padding: '0 0 0 0'
+                }, {
+                    xtype: 'label',
+                    text: 'Print Plan'
+                
+                }]
+            
+            },{
+                xtype: 'tbspacer',
+                flex: 1
+            }, {
+                xtype: 'fieldset',
+                border: 0,
+                padding: '0 0 0 0',
+                title: '',
+                defaultType: 'displayfield',
+                layout: 'vbox',
+                defaults: {
+                    anchor: '100%'
+                },
+                items: [{
+                    fieldLabel: 'Plan Title',
+                    itemId: 'planName',
+                    name: 'planName',
+                    labelWidth: 120
+                
+                }, {
+                    fieldLabel: 'Student is Currently',
+                    itemId: 'onPlan',
+                    name: 'onPlan',
+                    labelWidth: 150
+                
+                }]
+            
+            }, {}]
+        
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.LoadPlans', {
+    extend: 'Ext.window.Window',
+    alias: 'widget.loadplans',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    inject: {
+        columnRendererUtils: 'columnRendererUtils',
+        //sspConfig: 'sspConfig'
+    },
+    height: 500,
+    width: 700,
+    resizable: true,
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            title: 'Load Plan',
+            items: [{
+                xtype: 'form',
+                flex: 1,
+                border: 0,
+                frame: false,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                 width: '100%',
+                height: '100%',
+                bodyPadding: 0,
+                autoScroll: true,
+                itemId: 'planForm',
+                items: [{
+                xtype: 'fieldcontainer',
+                fieldLabel: '',
+                layout: 'vbox',
+                align: 'stretch',
+                padding: '2 2 2 2',
+                defaultType: 'displayfield',
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                items: [ 
+                       {
+                        xtype: 'label',
+                        padding: '2 0 0 5',
+                        text: 'Double Click to open a plan. Currently Active Plans are Blue or Red depending on Status',
+                        style: 'font-weight: bold',
+                        } ,
+                        {
+                            xtype: 'fieldset',
+                            border: 0,
+                            title: '',
+                            margin: '0 0 0 2',
+                            padding: '0 0 0 5',
+                            layout: 'hbox',
+                            align: 'stretch',
+                            items: [
+                                {
+                                    xtype: 'label',
+                                    padding: '2 15 0 0',
+                                    text: 'Blue: Current/ Normal'
+                                },
+                                {
+                                    xtype: 'label',
+                                    padding: '2 15 0 5',
+                                    text: 'Red: Restricted / Important'
+                                },
+                                {
+                                    xtype: 'label',
+                                    padding: '2 0 0 5',
+                                    text: 'Black: Saved Plan'
+                                },
+                                ]
+                        },
+                        {
+                            xtype: 'fieldset',
+                            border: 0,
+                            title: '',
+                            margin: '0 0 0 2',
+                            padding: '0 0 0 5',
+                            layout: 'vbox',
+                            align: 'stretch',
+                            items: [
+                            {
+                            xtype: 'gridpanel',
+                            title: '',
+                            id: 'allPlansGridPanel',
+                            width: '100%',
+                            height: '100%',
+                            border: true,
+                            autoScroll: true,
+                            columnLines: true,
+                            columns: [{
+                                text: 'Plan Title',
+                                width: '450',
+                                dataIndex: 'plan',
+                                sortable: true
+                            }, {
+                                text: 'Date/ Time',
+                                width: '150',
+                                dataIndex: 'date',
+                                sortable: true,
+                                renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
+                                
+                            }, {
+                                text: 'Advisor',
+                                width: '100',
+                                sortable: true,
+                                dataIndex: 'advisor'
+                                
+                            }]
+                        }
+                        ]}
+                    ]
+            }],
+               
+                    dockedItems: [{
+                        xtype: 'toolbar',
+                        dock: 'top',
+                        items: [{
+                            xtype: 'button',
+                            itemId: 'openButton',
+                            text: 'Open'
+                            
+                        }, '-', {
+                            xtype: 'button',
+                            itemId: 'cancelButton',
+                            text: 'Cancel'
+                        }]
+                    
+                    }]
+                
+               
+            }]
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.PlanNotes', {
+    extend: 'Ext.window.Window',
+    alias: 'widget.plannotes',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    height: 500,
+    width: 500,
+    resizable: true,
+    initComponent: function() {
+		var me=this;
+		Ext.apply(me, 
+				{
+					layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            title: 'Plan Notes',
+            items:[{
+                xtype: 'form',
+                flex: 1,
+                border: 0,
+                frame: false,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                width: '100%',
+                height: '100%',
+                bodyPadding: 0,
+                autoScroll: true,
+                itemId: 'notesForm',
+                fieldDefaults: {
+                        msgTarget: 'side',
+                        labelAlign: 'left',
+                        labelWidth: 100
+                    },
+               
+				    items: [
+				   {
+				        fieldLabel: 'Advisor/Coach Notes',
+				        name: 'coachnotes',
+				        allowBlank:true,
+				        itemId: 'coachnotes',
+				        xtype: 'textareafield',
+				        autoscroll: true,
+				        flex:1
+				    },{
+				        fieldLabel: 'Student Notes',
+				        name: 'studentnotes',
+				        allowBlank:true,
+				        itemId: 'addressLine1',
+				        xtype: 'textareafield',
+				         flex:1,
+				        autoscroll: true
+				    },{
+				        fieldLabel: 'Academic Goals',
+				        name: 'academicgoals',
+				        allowBlank:true,
+				        itemId: 'academicgoals',
+				        xtype: 'textareafield',
+				        flex:1,
+				        autoscroll: true
+				    }]
+				    ,
+				    dockedItems: [{
+		                xtype: 'toolbar',
+		                dock: 'top',
+		                items: [{
+		                    xtype: 'button',
+		                    itemId: 'saveButton',
+		                    text: 'Save'
+		                    
+		                }, '-', {
+		                    xtype: 'button',
+		                    itemId: 'cancelButton',
+		                    text: 'Cancel'
+		                }]
+		            
+		            }]
+		            }]
+				});
+		
+		return me.callParent(arguments);
+	}
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.LoadTemplates', {
+    extend: 'Ext.window.Window',
+    alias: 'widget.loadtemplates',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    inject: {
+        columnRendererUtils: 'columnRendererUtils',
+        //sspConfig: 'sspConfig'
+    },
+    height: 500,
+    width: 700,
+    resizable: true,
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            title: 'Load Template',
+           items: [{
+                xtype: 'form',
+                flex: 1,
+                border: 0,
+                frame: false,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                 width: '100%',
+                height: '100%',
+                bodyPadding: 10,
+                autoScroll: true,
+                itemId: 'faForm',
+                items: [
+                {
+                    xtype: 'fieldcontainer',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    layout: 'hbox',
+                    align: 'stretch',
+                    padding: 0,
+                    margin: '0 0 0 0',
+                    
+                    items: [
+                    {
+                        xtype : 'label',
+                        text: 'Filter By:'
+                    },  
+                    {
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    layout: 'vbox',
+                    align: 'stretch',
+                    padding: 0,
+                    margin: '0 0 0 5',
+                    items: [ 
+                             {
+                                xtype: 'combobox',
+                                name: 'programCombo',
+                                fieldLabel: '',
+                                emptyText: 'Specific Program',
+                                valueField: 'program',
+                                displayField: 'program',
+                                mode: 'local',
+                                typeAhead: true,
+                                queryMode: 'local',
+                                allowBlank: true,
+                                itemId: 'programCombo',
+                                width: 250
+                            },
+                            {
+                                    xtype: 'tbspacer',
+                                    width: 30
+                            },
+                            {
+                                xtype: 'combobox',
+                                name: 'divisionCombo',
+                                fieldLabel: '',
+                                emptyText: 'Specific Division',
+                                valueField: 'division',
+                                displayField: 'division',
+                                mode: 'local',
+                                typeAhead: true,
+                                queryMode: 'local',
+                                allowBlank: true,
+                                itemId: 'divisionCombo',
+                                width: 250
+                            }    
+                       ]
+                },
+                {
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'radio',
+                    layout: 'vbox',
+                    align: 'stretch',
+                    padding: '0 0 0 20',
+                    margin: '0 0 0 0',
+                    items: [        
+                     
+                            {
+                                 inputValue: 'All',
+                                    boxLabel: 'All',
+                                    labelWidth: 50
+                                },
+                                {
+                                    inputValue: 'Private',
+                                    boxLabel: 'Private',
+                                    labelWidth: 50
+                                },
+                                {
+                                    inputValue: 'Public',
+                                    boxLabel: 'Public',
+                                    labelWidth: 50
+                                    }
+                            ]
+                          }
+                        
+                        ]
+                    },
+                    {
+                            xtype: 'container',
+                            defaultType: 'textfield',
+                            padding: '0 0 0 0',
+                            layout: {
+                                align: 'stretch',
+                                type: 'vbox'
+                            },
+                            items: [
+                            {
+                                fieldLabel: 'Template Name',
+                                name: 'templateName',
+                                itemId: 'templateName',
+                                maxLength: 50,
+                                allowBlank:true,
+                                labelWidth:100
+                            }]},
+             
+                        {
+                                xtype: 'label',
+                                text: 'Double Click to load a template',
+                                padding: '0 0 0 10'
+                            },
+                            {
+                            xtype: 'gridpanel',
+                            title: '',
+                            id: 'allPlansGridPanel',
+                            width: '100%',
+                            height: '100%',
+                            border: true,
+                            autoScroll: true,
+                            columnLines: true,
+                            columns: [
+                            {
+                                text: 'Type',
+                                width: '75',
+                                dataIndex: 'type',
+                                sortable: true
+                            },{
+                                text: 'Plan Title',
+                                width: '400',
+                                dataIndex: 'plan',
+                                sortable: true
+                            }, {
+                                text: 'Date/ Time',
+                                width: '125',
+                                dataIndex: 'date',
+                                sortable: true,
+                                renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
+                                
+                            }, {
+                                text: 'Advisor',
+                                width: '100',
+                                sortable: true,
+                                dataIndex: 'advisor'
+                                
+                            }
+                            ]}
+            
+            
+            
+            
+            
+            
+            ]
+            
+            }]
+        });
+        
+        return me.callParent(arguments);
+    }
+                            
+    
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.SaveTemplate', {
+    extend: 'Ext.window.Window',
+    alias: 'widget.savetemplate',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    inject: {
+        columnRendererUtils: 'columnRendererUtils'
+        //sspConfig: 'sspConfig'
+    },
+    height: 500,
+    width: 850,
+    resizable: true,
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            title: 'Save Template',
+            items: [{
+                xtype: 'form',
+                flex: 1,
+                border: 0,
+                frame: false,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                 width: '100%',
+               height: '100%',
+                bodyPadding: 5,
+                autoScroll: true,
+                itemId: 'faSaveTemplate',
+                items: [
+                        {
+                            xtype: 'fieldset',
+                            border: 0,
+                            title: '',
+                            layout: 'hbox',
+                            align: 'stretch',
+                            padding: '0 0 15 0',
+        					margin: '0 0 0 5',
+                            width: '100%',
+                            height: '100%',
+                            items: [{
+                				    	xtype:'checkbox',
+                			    	fieldLabel: 'Active Plan',
+                			    	name: 'activeplan',
+                			    	labelWidth: 65,
+                			    	checked: true
+                			    },
+                			    {
+                                    xtype: 'tbspacer',
+                                    width: 20
+                                },
+                			    {
+                			    	xtype:'checkbox',
+                			    	fieldLabel: 'Private to Me ',
+                			    	name: 'private',
+                			    	labelWidth: 80
+                			    }
+                			    ]},
+                			{
+                                    xtype: 'fieldset',
+                                    border: 0,
+                                    title: '',
+                                    defaultType: 'displayfield',
+                                    layout: 'hbox',
+                                    align: 'stretch',
+                                    padding: '0 0 15 0',
+                					margin: '0 0 0 5',
+                                    
+                                    items: [{
+        		                        xtype: 'combobox',
+        	                        name: 'programCombo',
+        	                        fieldLabel: '',
+        	                        emptyText: 'Specific Program',
+        	                        valueField: 'program',
+        	                        displayField: 'program',
+        	                        mode: 'local',
+        	                        typeAhead: true,
+        	                        queryMode: 'local',
+        	                        allowBlank: true,
+        	                        itemId: 'programCombo',
+        	                        width: 250
+        	                    },
+        	                    {
+                                    xtype: 'tbspacer',
+                                    width: 10
+                                },
+        	                    {
+        	                        xtype: 'combobox',
+        	                        name: 'divisionCombo',
+        	                        fieldLabel: '',
+        	                        emptyText: 'Specific Division',
+        	                        valueField: 'division',
+        	                        displayField: 'division',
+        	                        mode: 'local',
+        	                        typeAhead: true,
+        	                        queryMode: 'local',
+        	                        allowBlank: true,
+        	                        itemId: 'divisionCombo',
+        	                        width: 250
+        	                    },
+        	                    {
+                                    xtype: 'tbspacer',
+                                    width: 10
+                                },
+        	                    {
+        	                        xtype: 'combobox',
+        	                        name: 'departmentCombo',
+        	                        fieldLabel: '',
+        	                        emptyText: 'Specific Department',
+        	                        valueField: 'department',
+        	                        displayField: 'department',
+        	                        mode: 'local',
+        	                        typeAhead: true,
+        	                        queryMode: 'local',
+        	                        allowBlank: true,
+        	                        itemId: 'departmentCombo',
+        	                        width: 250
+        	                    }
+        	                    ]},
+        			    	{
+                            xtype: 'container',
+                            defaultType: 'textfield',
+        			    	border: 1,
+                            margin: '0 0 0 2',
+                            padding: '0 0 0 5',
+                            //flex: 1,
+                            layout: {
+                                align: 'stretch',
+                                type: 'vbox'
+                            },
+                            items: [
+				               {
+            				        fieldLabel: 'Plan Title',
+            				        name: 'plantitle',
+            				        itemId: 'plantitle',
+            				        maxLength: 50,
+            				        allowBlank:false
+            				        
+            				    },{
+            				        fieldLabel: 'Contact Name',
+            				        name: 'contactName',
+            				        itemId: 'contactName',
+            				        maxLength: 50,
+            				        allowBlank:false
+            				        
+            				    },{
+            				        fieldLabel: 'Contact Title',
+            				        name: 'contactTitle',
+            				        itemId: 'contactTitle',
+            				        maxLength: 50,
+            				        allowBlank:true
+            				    },{
+            				        fieldLabel: 'Contact Phone',
+            				        name: 'contactphone',
+            				        itemId: 'contactphone',
+            				        allowBlank:false
+            				    },
+            				   {
+            				        fieldLabel: 'Academic',
+            				        name: 'academic',
+            				        allowBlank:true,
+            				        itemId: 'academic'
+            				    },{
+            				        fieldLabel: 'Career Data',
+            				        name: 'careerdata',
+            				        allowBlank:true,
+            				        itemId: 'careerdata'
+            				    },{
+            				        fieldLabel: 'Advisor/Coach Notes',
+            				        name: 'coachnotes',
+            				        allowBlank:true,
+            				        itemId: 'coachnotes',
+            				        xtype: 'textareafield'
+            				    },{
+            				        fieldLabel: 'Student Notes',
+            				    name: 'studentnotes',
+            			        allowBlank:true,
+            			        itemId: 'addressLine1',
+            			        xtype: 'textareafield'
+                			    },{
+                			        fieldLabel: 'Academic Goals',
+                			        name: 'academicgoals',
+                			        allowBlank:true,
+                			        itemId: 'academicgoals',
+                			        xtype: 'textareafield'
+                			    }
+            			    ]
+                    
+                    }
+                    ],
+                        dockedItems: [{
+                        xtype: 'toolbar',
+                        dock: 'top',
+                        items: [{
+                            xtype: 'button',
+                            itemId: 'saveButton',
+                            text: 'Save'
+                            
+                        }, '-', {
+                            xtype: 'button',
+                            itemId: 'cancelButton',
+                            text: 'Cancel'
+                        }]
+                    
+                    }]
+            }
+            
+            ]
+            
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.SavePlan', {
+    extend: 'Ext.window.Window',
+    alias: 'widget.saveplan',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    inject: {
+        columnRendererUtils: 'columnRendererUtils'
+        //sspConfig: 'sspConfig'
+    },
+    height: 500,
+    width: 850,
+    resizable: true,
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            title: 'Save Plan',
+            items: [{
+                xtype: 'form',
+                flex: 1,
+                border: 0,
+                frame: false,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                 width: '100%',
+               height: '100%',
+                bodyPadding: 5,
+                autoScroll: true,
+                itemId: 'faSavePlan',
+                items: [
+                        {
+                            xtype: 'fieldset',
+                            defaultType: 'checkbox',
+                            border: 0,
+                            title: '',
+                            layout: 'hbox',
+                            align: 'stretch',
+                            padding: '0 0 15 0',
+        					margin: '0 0 0 5',
+                            width: '100%',
+                            height: '100%',
+                            items: [{
+                				    
+                			    	fieldLabel: 'Active Plan',
+                			    	name: 'activeplan',
+                			    	labelWidth: 65,
+                			    	checked: true,
+                			    	labelAlign: 'before',
+                			    	inputValue: 'activeplan'
+                			    },
+                			    {
+                                    xtype: 'tbspacer',
+                                    width: 20
+                                },
+                			    {
+                			    	
+                			    	boxLabel: 'Important / Caution',
+                			    	name: 'importantplan',
+                			    	labelWidth: 130,
+                			    	boxLabelAlign: 'before',
+                			    	inputValue: 'importantplan'
+                			    
+                			    },
+                			    {
+                                    xtype: 'tbspacer',
+                                    width: 20
+                                },
+                			    {
+                			    	
+                			    	boxLabel: 'Required For Financial Aid(SAP)',
+                			    	name: 'sapplan',
+                			    	labelWidth: 200,
+                			    	boxLabelAlign: 'before',
+                			    	inputValue: 'sap'
+                			    },
+                			    {
+                                    xtype: 'tbspacer',
+                                    width: 20
+                                },
+                			    {
+                			    	
+                			    	boxLabel: 'F1 visa',
+                			    	name: 'f1',
+                			    	labelWidth: 70,
+                			    	boxLabelAlign: 'before',
+                			    	inputValue: 'f1'
+                			    }
+                			    ]},
+        			    	{
+                            xtype: 'container',
+                            defaultType: 'textfield',
+        			    	border: 1,
+                            margin: '0 0 0 2',
+                            padding: '0 0 0 5',
+                            //flex: 1,
+                            layout: {
+                                align: 'stretch',
+                                type: 'vbox'
+                            },
+                            items: [
+				               {
+            				        fieldLabel: 'Plan Title',
+            				        name: 'plantitle',
+            				        itemId: 'plantitle',
+            				        maxLength: 50,
+            				        allowBlank:false
+            				        
+            				    },{
+            				        fieldLabel: 'Contact Name',
+            				        name: 'contactName',
+            				        itemId: 'contactName',
+            				        maxLength: 50,
+            				        allowBlank:false
+            				        
+            				    },{
+            				        fieldLabel: 'Contact Title',
+            				        name: 'contactTitle',
+            				        itemId: 'contactTitle',
+            				        maxLength: 50,
+            				        allowBlank:true
+            				    },{
+            				        fieldLabel: 'Contact Phone',
+            				        name: 'contactphone',
+            				        itemId: 'contactphone',
+            				        allowBlank:false
+            				    },
+            				   {
+            				        fieldLabel: 'Academic',
+            				        name: 'academic',
+            				        allowBlank:true,
+            				        itemId: 'academic'
+            				    },{
+            				        fieldLabel: 'Career Data',
+            				        name: 'careerdata',
+            				        allowBlank:true,
+            				        itemId: 'careerdata'
+            				    },{
+            				        fieldLabel: 'Advisor/Coach Notes',
+            				        name: 'coachnotes',
+            				        allowBlank:true,
+            				        itemId: 'coachnotes',
+            				        xtype: 'textareafield'
+            				    },{
+            				        fieldLabel: 'Student Notes',
+            				    name: 'studentnotes',
+            			        allowBlank:true,
+            			        itemId: 'addressLine1',
+            			        xtype: 'textareafield'
+                			    },{
+                			        fieldLabel: 'Academic Goals',
+                			        name: 'academicgoals',
+                			        allowBlank:true,
+                			        itemId: 'academicgoals',
+                			        xtype: 'textareafield'
+                			    }
+            			    ]
+                    
+                    }
+                    ],
+                        dockedItems: [{
+                        xtype: 'toolbar',
+                        dock: 'top',
+                        items: [{
+                            xtype: 'button',
+                            itemId: 'saveButton',
+                            text: 'Save'
+                            
+                        }, '-', {
+                            xtype: 'button',
+                            itemId: 'cancelButton',
+                            text: 'Cancel'
+                        }]
+                    
+                    }]
+            }
+            
+            ]
+            
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.CourseNotes', {
+    extend: 'Ext.window.Window',
+    alias: 'widget.coursenotes',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    height: 500,
+    width: 500,
+    resizable: true,
+    initComponent: function() {
+		var me=this;
+		Ext.apply(me, 
+				{
+					layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            title: 'Course Notes',
+            items:[{
+                xtype: 'form',
+                flex: 1,
+                border: 0,
+                frame: false,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                width: '100%',
+                height: '100%',
+                bodyPadding: 10,
+                autoScroll: true,
+                itemId: 'coursenotesForm',
+                fieldDefaults: {
+                        msgTarget: 'side',
+                        labelAlign: 'left',
+                        labelWidth: 100
+                    },
+               
+				    items: [
+				   {
+				        fieldLabel: 'Advisor/Coach Notes',
+				        name: 'coachnotes',
+				        allowBlank:true,
+				        itemId: 'coachnotes',
+				        xtype: 'textareafield',
+				        autoscroll: true,
+				        flex:1
+				    },{
+				        fieldLabel: 'Student Notes',
+				        name: 'studentnotes',
+				        allowBlank:true,
+				        itemId: 'addressLine1',
+				        xtype: 'textareafield',
+				         flex:1,
+				        autoscroll: true
+				    },
+				    {
+				        fieldLabel: 'Credit hours(over ride)',
+				        name: 'crHrs',
+				        allowBlank:true,
+				        itemId: 'crHrs',
+				        xtype: 'textfield'
+				        //flex:1,
+				        
+				    },
+				    {
+                    name: 'importantcourseplan',
+                    inputValue: 'importantcourseplan',
+                    xtype:'checkbox',
+                    padding: '0 0 0 105',
+                    labelSeparator: '',
+                    hideLabel: true,
+                    boxLabel: 'Mark As Important',
+                    fieldLabel: 'Mark As Important' 
+                    },
+                    {
+                    xtype:'checkbox',
+                    padding: '0 0 0 105',
+                    labelSeparator: '',
+                    hideLabel: true,   
+                    boxLabel: 'Mark As Program Elective',
+                    name: 'electiveplan',
+                    inputValue: 'electiveplan'
+                    
+                    }
+				    ]
+				    ,
+				    dockedItems: [{
+		                xtype: 'toolbar',
+		                dock: 'top',
+		                items: [{
+		                    xtype: 'button',
+		                    itemId: 'saveButton',
+		                    text: 'Save'
+		                    
+		                }, '-', {
+		                    xtype: 'button',
+		                    itemId: 'cancelButton',
+		                    text: 'Cancel'
+		                }]
+		            
+		            }]
+		            }]
+				});
+		
+		return me.callParent(arguments);
+	}
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.TermNotes', {
+    extend: 'Ext.window.Window',
+    alias: 'widget.termnotes',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    height: 500,
+    width: 500,
+    resizable: true,
+    initComponent: function() {
+		var me=this;
+		Ext.apply(me, 
+				{
+					layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            title: 'Term Notes',
+            items:[{
+                xtype: 'form',
+                flex: 1,
+                border: 0,
+                frame: false,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                width: '100%',
+                height: '100%',
+                bodyPadding: 0,
+                autoScroll: true,
+                itemId: 'termnotesForm',
+                fieldDefaults: {
+                        msgTarget: 'side',
+                        labelAlign: 'left',
+                        labelWidth: 100
+                    },
+               
+				    items: [
+				   {
+				        fieldLabel: 'Advisor/Coach Notes',
+				        name: 'coachnotes',
+				        allowBlank:true,
+				        itemId: 'coachnotes',
+				        xtype: 'textareafield',
+				        autoscroll: true,
+				        flex:1
+				    },{
+				        fieldLabel: 'Student Notes',
+				        name: 'studentnotes',
+				        allowBlank:true,
+				        itemId: 'addressLine1',
+				        xtype: 'textareafield',
+				         flex:1,
+				        autoscroll: true
+				    },
+				    {
+                        name: 'importanttermplan',
+                        inputValue: 'importanttermplan',
+                        xtype:'checkbox',
+                        padding: '0 0 0 105',
+                        labelSeparator: '',
+                        hideLabel: true,
+                        boxLabel: 'Mark As Important',
+                        fieldLabel: 'Mark As Important' 
+                        }]
+				    ,
+				    dockedItems: [{
+		                xtype: 'toolbar',
+		                dock: 'top',
+		                items: [{
+		                    xtype: 'button',
+		                    itemId: 'saveButton',
+		                    text: 'Save'
+		                    
+		                }, '-', {
+		                    xtype: 'button',
+		                    itemId: 'cancelButton',
+		                    text: 'Cancel'
+		                }]
+		            
+		            }]
+		            }]
+				});
+		
+		return me.callParent(arguments);
+	}
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.EmailPlan', {
+    extend: 'Ext.window.Window',
+    alias: 'widget.emailplan',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.map.EmailPlanController',
+    inject: {
+        columnRendererUtils: 'columnRendererUtils'
+        //sspConfig: 'sspConfig'
+    },
+    height: 500,
+    width: 700,
+    resizable: true,
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            title: 'Email Plan',
+            items: [{
+                xtype: 'form',
+                flex: 1,
+                border: 0,
+                frame: false,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                 width: '100%',
+               height: '100%',
+                bodyPadding: 5,
+                autoScroll: true,
+                itemId: 'faEmailPlan',
+                items: [
+                        {
+                        	xtype: 'fieldset',
+                            border: 0,
+                            title: '',
+                            defaultType: 'radio',
+                            margin: '0 0 0 2',
+                            padding: '0 0 0 5',
+                            layout: 'vbox',
+                            align: 'stretch' ,
+                            items: [ {
+                                checked: true,
+                                boxLabel: 'Email MAP with Options',
+                                name: 'optionsEmail',
+                                inputValue: 'optionsEmail',
+                                itemId: 'optionsEmailFormat'
+                            },
+                            {
+                                boxLabel: 'Email MAP in Matrix Format',
+                                name: 'optionsEmail',
+                                inputValue: 'emailmatrixFormat',
+                                itemId: 'emailmatrixFormat'
+                            }]
+                            },
+                            {
+                            	xtype: 'fieldset',
+                                border: 0,
+                                title: '',
+                                defaultType: 'radio',
+                                margin: '0 0 0 2',
+                                padding: '0 0 0 5',
+                                layout: 'vbox',
+                                align: 'stretch' ,
+                                itemId: 'optionsEmailView',
+                                items: [{
+                                    checked: true,
+                                    boxLabel: 'With Course Description',
+                                    name: 'courseDescriptionEmail',
+                                    inputValue: 'courseDescEmail'
+                                },
+                                {
+                                    boxLabel: 'Without Course Description',
+                                    name: 'courseDescriptionEmail',
+                                    inputValue: 'withoutcourseDescEmail'
+                                },
+                                {
+                                    checked: true,
+                                    boxLabel: 'With Header/Footer',
+                                    name: 'headerEmail',
+                                    inputValue: 'headerEmail'
+                                },
+                                {
+                                    boxLabel: 'Without Header/Footer',
+                                    name: 'headerEmail',
+                                    inputValue: 'footerEmail'
+                                },
+                                {
+                				    
+                                    name: 'totalTimeExpected',
+                                    inputValue: 'totalTimeExpected',
+                                    xtype:'checkbox',
+                                    //padding: '0 0 0 105',
+                                    labelSeparator: '',
+                                    hideLabel: true,
+                                    boxLabel: 'Total Time Expected Outside Class'
+                                    //fieldLabel: 'Mark As Important' 
+                                    },
+                                    {
+                    				    
+                                    name: 'finAidInfo',
+                                    inputValue: 'finAidInfo',
+                                    xtype:'checkbox',
+                                    //padding: '0 0 0 105',
+                                    labelSeparator: '',
+                                    hideLabel: true,
+                                    boxLabel: 'Display FinAid Information'
+                                    }
+                                ]
+                                },
+                                {
+                                	xtype: 'container',
+                                    defaultType: 'textfield',
+                                    margin: '0 0 0 2',
+                                    padding: '0 0 0 5',
+                                    //flex: 1,
+                                    layout: {
+                                        align: 'stretch',
+                                        type: 'vbox'
+                                    },
+                                    items: [
+                                       {
+                                    	   xtype: 'container',
+                                           defaultType: 'textfield',
+                                           margin: '0 0 0 0',
+                                           padding: '0 0 0 0',
+                                           width: '100%',
+                                           layout: {
+                                               align: 'stretch',
+                                               type: 'hbox'
+                                           },
+                                       items: [
+                                                   {
+                                                    name: 'checkEmailTo',
+                                                    inputValue: 'checkEmailTo',
+                                                    xtype:'checkbox',
+                                                    padding: '0 5 0 0',
+                                                    labelSeparator: '',
+                                                    hideLabel: true
+                                                    } , 
+                                                    {
+                                                    	xtype: 'textfield',
+                                                    	name: 'emailTo',
+                                                    	fieldLabel: 'To',
+                                                    	labelWidth: 30
+                                                    }    
+                                                     ]
+                                                  },
+                                                  {
+                                               	   xtype: 'container',
+                                                  title: '',
+                                                  margin: '0 0 0 0',
+                                                  padding: '5 0 5 0',
+                                                  layout: 'hbox',
+                                                  align: 'stretch' ,
+                                                  items: [
+                                                           {
+                                                           name: 'checkEmailCC',
+                                                           inputValue: 'checkEmailCC',
+                                                           xtype:'checkbox',
+                                                           padding: '0 5 0 0',
+                                                           labelSeparator: '',
+                                                           hideLabel: true
+                                                           }  , 
+                                                           {
+                                                           	xtype: 'textfield',
+                                                           	name: 'emailCC1',
+                                                           	fieldLabel: 'cc',
+                                                           	labelWidth: 30
+                                                           }  
+                                                            ]
+                                               },
+                                    {
+                                    	xtype: 'textfield',
+                                    	name: 'emailCC2',
+                                    	fieldLabel: 'cc',
+                                    	labelWidth: 48
+                                    },
+                                    {
+                                    	xtype: 'textareafield',
+                                    	name: 'EmailNotes',
+                                    	fieldLabel: 'Notes',
+                                    	labelWidth: 48
+                                    }
+                                    ]
+                                    }
+                         
+                                ],
+                                    dockedItems: [{
+                                    xtype: 'toolbar',
+                                    dock: 'top',
+                                    items: [{
+                                        xtype: 'button',
+                                        itemId: 'sendEmailButton',
+                                        text: 'Send Email'
+                                        
+                                    }, '-', {
+                                        xtype: 'button',
+                                        itemId: 'cancelButton',
+                                        text: 'Cancel'
+                                    }]
+                                
+                                }]
+                        }
+                        
+                        ]
+            
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.PrintPlan', {
+    extend: 'Ext.window.Window',
+    alias: 'widget.printplan',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.map.PrintPlanController',
+    inject: {
+        columnRendererUtils: 'columnRendererUtils'
+        //sspConfig: 'sspConfig'
+    },
+    height: 450,
+    width: 500,
+    resizable: true,
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            title: 'Print Plan',
+            items: [{
+                xtype: 'form',
+                flex: 1,
+                border: 0,
+                frame: false,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                 width: '100%',
+               height: '100%',
+                bodyPadding: 5,
+                autoScroll: true,
+                itemId: 'faPrintPlan',
+                items: [
+                {
+                	xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'radio',
+                    margin: '0 0 0 2',
+                    padding: '0 0 0 5',
+                    layout: 'vbox',
+                    align: 'stretch' ,
+                    items: [ {
+                        boxLabel: 'Print MAP with Options',
+                        name: 'optionsPrint',
+                        inputValue: 'optionsPrint',
+                        itemId: 'optionsPrintFormat'
+                    },
+                    {
+                        boxLabel: 'Print MAP in Matrix Format',
+                        name: 'optionsPrint',
+                        inputValue: 'printmatrixFormat',
+                        itemId: 'printmatrixFormat'
+                    }]
+                    },
+                    {xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'radio',
+                    margin: '0 0 0 2',
+                    padding: '10 0 0 5',
+                    //hide : true,
+                    layout: 'vbox',
+                    align: 'stretch'  ,
+                    itemId: 'optionsPrintView',
+                        items: [{
+                            checked: true,
+                            boxLabel: 'With Course Description',
+                            name: 'courseDescriptionPrint',
+                            inputValue: 'courseDescPrint'
+                        },
+                        {
+                            boxLabel: 'Without Course Description',
+                            name: 'courseDescriptionPrint',
+                            inputValue: 'withoutcourseDescPrint'
+                        },
+                        {
+                            checked: true,
+                            boxLabel: 'With Header/Footer',
+                            name: 'headerPrint',
+                            inputValue: 'headerPrint'
+                        },
+                        {
+                            boxLabel: 'Without Header/Footer',
+                            name: 'headerPrint',
+                            inputValue: 'footerPrint'
+                        },
+                        {
+        				    
+                            name: 'totalTimeExpected',
+                            inputValue: 'totalTimeExpected',
+                            xtype:'checkbox',
+                            //padding: '0 0 0 105',
+                            labelSeparator: '',
+                            hideLabel: true,
+                            boxLabel: 'Total Time Expected Outside Class'
+                            //fieldLabel: 'Mark As Important' 
+                            },
+                            {
+            				    
+                            name: 'finAidInfo',
+                            inputValue: 'finAidInfo',
+                            xtype:'checkbox',
+                            //padding: '0 0 0 105',
+                            labelSeparator: '',
+                            hideLabel: true,
+                            boxLabel: 'Display FinAid Information'
+                            }
+                        ]
+                        }
+                 
+                        ],
+                            dockedItems: [{
+                            xtype: 'toolbar',
+                            dock: 'top',
+                            items: [{
+                                xtype: 'button',
+                                itemId: 'sendPrintButton',
+                                text: 'Print'
+                                
+                            }, '-', {
+                                xtype: 'button',
+                                itemId: 'cancelButton',
+                                text: 'Cancel'
+                            }]
+                        
+                        }]
+                }
+                
+                ]
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.CourseDetails', {
+    extend: 'Ext.window.Window',
+    alias: 'widget.coursedetails',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    inject: {
+        columnRendererUtils: 'columnRendererUtils'
+        //sspConfig: 'sspConfig'
+    },
+    height: 400,
+    width: 600,
+    resizable: true,
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            title: 'Course Details',
+            items: [{
+                xtype: 'form',
+                flex: 1,
+                border: 0,
+                frame: false,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                 width: '100%',
+               height: '100%',
+                bodyPadding: 5,
+                autoScroll: true,
+                itemId: 'faSavePlan',
+                items: [
+                        
+        			    	{
+                            xtype: 'container',
+                            defaultType: 'displayfield',
+        			    	border: 1,
+                            margin: '0 0 0 2',
+                            padding: '0 0 0 5',
+                            //flex: 1,
+                            layout: {
+                                align: 'stretch',
+                                type: 'vbox'
+                            },
+                            items: [
+                                    {
+                                        xtype: 'fieldset',
+                                        border: 0,
+                                        title: '',
+                                        defaultType: 'displayfield',
+                                        margin: '0 0 0 2',
+                                        padding: '0 0 0 5',
+                                        layout: 'vbox',
+                                        align: 'stretch',
+                                        
+                                        items: [
+                    				               {
+                                				        fieldLabel: '',
+                                				        name: 'course',
+                                				        itemId: 'course'
+                                				        
+                                				    },{
+                                				        fieldLabel: '',
+                                				        name: 'courseDetails',
+                                				        itemId: 'courseDetails'
+                                				        
+                                				    }
+                                				    ]},
+                                				    {
+                                                        xtype: 'fieldset',
+                                                        border: 1,
+                                                        title: '',
+                                                        defaultType: 'displayfield',
+                                                        margin: '0 0 0 2',
+                                                        padding: '0 0 0 5',
+                                                        layout: 'vbox',
+                                                        align: 'stretch',
+                                                        
+                                                        items: [
+                                        				    {
+                                        				        fieldLabel: 'Max Credit Hours',
+                                        				        name: 'maxcreditHrs',
+                                        				        itemId: 'maxcreditHrs'
+                                        				        
+                                        				    },{
+                                        				        fieldLabel: 'Min Credit Hours',
+                                        				        name: 'minCreditHrs',
+                                        				        itemId: 'minCreditHrs'
+                                        				        
+                                        				    },
+                                        				    {
+                                        				        fieldLabel: 'Department',
+                                        				        name: 'department',
+                                        				        itemId: 'department'
+                                        				        
+                                        				    },{
+                                        				        fieldLabel: 'Division',
+                                        				        name: 'division',
+                                        				        itemId: 'division'
+                                        				    },
+                                        				    {
+                                                                fieldLabel: 'Transfer / Meta Data',
+                                                                name: 'division',
+                                                                itemId: 'division'
+                                                            }
+                                				    
+                                				    ]},
+                                				    {
+                                                        xtype: 'fieldset',
+                                                        border: 1,
+                                                        title: '',
+                                                        defaultType: 'displayfield',
+                                                        margin: '0 0 0 2',
+                                                        padding: '0 0 0 5',
+                                                        layout: 'vbox',
+                                                        align: 'stretch',
+                                                        
+                                                        items: [
+                                        				    {
+                                        				        fieldLabel: 'Co /Prerequisite',
+                                        				        name: 'prereqs',
+                                        				        itemId: 'prereqs'
+                                        				        
+                                        				    },{
+                                        				    	fieldLabel:  '<a href="">Master Syllabus</a>',
+                                                                name: 'mastersyllabus',
+                                                                itemId: 'mastersyllabus'
+                                        				        
+                                        				    },
+                                        				    {
+                                        				        fieldLabel: '<a href="">Academic Link</a>',
+                                                                name: 'academiclink',
+                                                                itemId: 'academiclink'
+                                        				        
+                                        				    }
+                                				    ]}
+            			    ]
+                    
+                    }
+                    ]
+            }
+            
+            ]
+            
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.tools.map.CoursesGrid', {
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.coursesgrid',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    //controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
+    width: 290,
+    minHeight: 500,
+    height: '100%',
+    border: 0,
+    title: 'All Courses',
+    autoScroll: true,
+    hideHeaders: true,
+    columnLines: false,
+    listeners: {
+    itemdblclick: function() {
+        var courseDetailsPopUp = Ext.create('Ssp.view.tools.map.CourseDetails');
+        courseDetailsPopUp.center();
+        courseDetailsPopUp.show();
+        }
+    },
+    
+    initComponent: function(){
+        var me = this;
+        Ext.apply(me, {
+            
+                        columns: [{
+                            text: 'course',
+                            dataIndex: 'course',
+                            xtype: 'gridcolumn'
+                        },
+                         {
+                           xtype: 'gridcolumn',
+                            dataIndex: 'crHrs',
+                            text: 'crHrs',
+                            width: 50
+                        },
+                        {
+                           xtype: 'gridcolumn',
+                            dataIndex: 'type',
+                            text: 'type',
+                            width: 50
+                            
+                        }
+                        ],
+
+                viewConfig: {
+                    //markDirty:false
+                }
+                   
+        });
+        
+        return me.callParent(arguments);
+    }
+    
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 Ext.define('Ssp.view.tools.displacedworker.DisplacedWorker', {
 	extend: 'Ext.panel.Panel',
 	alias : 'widget.displacedworker',
@@ -10476,7 +13836,10 @@ Ext.define('Ssp.controller.ToolsViewController', {
     loadTool: function(toolType){
         var me = this;
         var comp;
-        if (me.authenticatedPerson.hasAccess(toolType.toUpperCase() + '_TOOL')) {
+console.log(toolType);
+        if ( // TODO MAP HACK FOR DEV. TAKE THE UNCONDITIONAL MAP GRANT OUT!!
+            toolType.toUpperCase() === "MAP" ||
+            me.authenticatedPerson.hasAccess(toolType.toUpperCase() + '_TOOL')) {
             comp = me.formUtils.loadDisplay('tools', toolType, true, {});
         }
         else {
@@ -26811,7 +30174,7 @@ Ext.define('Ssp.store.Tools', {
             { group:'beta', name: "Action Plan", toolType: "actionplan", active: true },
             { group:'beta', name: "Journal", toolType: "journal", active: true },
             { group:'rc1', name: "Early Alert", toolType: "earlyalert", active: true },
-            { group:'rc1', name: "MAP", toolType: "earlyalert", active: false },
+            { group:'rc1', name: "MAP", toolType: "map", active: true },
             { group:'rc1', name: "Accommodation", toolType: "accommodation", active: true },
             { group:'rc1', name: "Legacy Remarks", toolType: "earlyalert", active: false },
             { group:'rc1', name: "----------------", toolType: "earlyalert", active: false },
@@ -26842,7 +30205,10 @@ Ext.define('Ssp.store.Tools', {
     	
     	Ext.Array.each( tools, function( tool, index){
     		var toolSecurityIdentifier = tool.toolType.toUpperCase() + '_TOOL';
-    		if ( me.authenticatedPerson.hasAccess( toolSecurityIdentifier ) )
+
+            // TODO MAP HACK FOR DEV. TAKE THE UNCONDITIONAL MAP GRANT OUT!!
+    		if ( toolSecurityIdentifier === "MAP_TOOL" ||
+                me.authenticatedPerson.hasAccess( toolSecurityIdentifier ) )
     		{
     			sspSecureTools.push( tool );
     		}
