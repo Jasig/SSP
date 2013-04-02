@@ -109,6 +109,29 @@ Ext.require([
     'Ssp.view.admin.AdminForms',
     'Ssp.view.admin.forms.AbstractReferenceAdmin',
     'Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin',
+	
+	//MAP Views
+    'Ssp.view.tools.map.MAP',
+	'Ssp.view.tools.map.MAPTool',
+	'Ssp.view.tools.map.CoursesView',
+    'Ssp.view.tools.map.SemesterPanel',
+    'Ssp.view.tools.map.SemesterPanelContainer',
+    'Ssp.view.tools.map.MAPTool',
+    'Ssp.view.tools.map.FAView',
+	'Ssp.view.tools.map.MAPView',
+    'Ssp.view.tools.map.MovePlan',
+    'Ssp.view.tools.map.PlanTool',
+    'Ssp.view.tools.map.LoadPlans',
+	'Ssp.view.tools.map.PlanNotes',
+	'Ssp.view.tools.map.LoadTemplates',
+	'Ssp.view.tools.map.SaveTemplate',
+	'Ssp.view.tools.map.SavePlan',
+    'Ssp.view.tools.map.CourseNotes',
+    'Ssp.view.tools.map.TermNotes',
+    'Ssp.view.tools.map.EmailPlan',
+    'Ssp.view.tools.map.PrintPlan',
+    'Ssp.view.tools.map.CourseDetails',
+    'Ssp.view.tools.map.CoursesGrid',
     
     // COUNSELING REFERENCE GUIDE ADMIN VIEWS
     'Ssp.view.admin.forms.crg.ChallengeAdmin',
@@ -124,7 +147,7 @@ Ext.require([
     'Ssp.view.admin.forms.caseload.CaseloadReassignment',
     'Ssp.view.admin.forms.caseload.CaseloadReassignmentSource',
     'Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget',
-    
+
     //MyGPS ADMIN TOOLS
     'Ssp.view.admin.forms.shg.SelfHelpGuideAdmin',
     'Ssp.view.admin.forms.shg.SelfHelpGuidesDisplayAdmin',

@@ -104,7 +104,10 @@ Ext.define('Ssp.controller.ToolsViewController', {
     loadTool: function(toolType){
         var me = this;
         var comp;
-        if (me.authenticatedPerson.hasAccess(toolType.toUpperCase() + '_TOOL')) {
+
+        if ( // TODO MAP HACK FOR DEV. TAKE THE UNCONDITIONAL MAP GRANT OUT!!
+            toolType.toUpperCase() === "MAP" ||
+            me.authenticatedPerson.hasAccess(toolType.toUpperCase() + '_TOOL')) {
             comp = me.formUtils.loadDisplay('tools', toolType, true, {});
         }
         else {

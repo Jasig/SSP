@@ -66,6 +66,56 @@ background: transparent;
  border-style:none;
  background-repeat: no-repeat;
 }
+
+.planMoveBackwardIcon {
+background-image: url('/ssp/images/backward.png') !important;
+background: transparent;
+ border-style:none;
+ background-repeat: no-repeat;
+}
+
+.planMoveForwardIcon {
+background-image: url('/ssp/images/forward.png') !important;
+background: transparent;
+ border-style:none;
+ background-repeat: no-repeat;
+}
+
+.mapNotesIcon {
+background-image: url('/ssp/images/notes.png') !important;
+background: transparent;
+ border-style:none;
+ background-repeat: no-repeat;
+}
+
+.planEmailIcon {
+background-image: url('/ssp/images/email-icon.png') !important;
+background: transparent;
+ border-style:none;
+ background-repeat: no-repeat;
+}
+
+.mapFAIcon {
+background-image: url('/ssp/images/dollar2.png') !important;
+background: transparent;
+ border-style:none;
+ background-repeat: no-repeat;
+}
+
+.mapClearSearchIcon {
+background-image: url('/ssp/images/cancelsearchIcon.png') !important;
+background: transparent;
+ border-style:none;
+ background-repeat: no-repeat;
+}
+
+.overviewIcon {
+background-image: url('/ssp/images/document.png') !important;
+background: transparent;
+ border-style:none;
+ background-repeat: no-repeat;
+}
+
 /*
 .early-alert-tree-panel .x-tree-icon-parent
 {
