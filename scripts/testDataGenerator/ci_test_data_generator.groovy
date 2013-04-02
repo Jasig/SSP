@@ -57,7 +57,7 @@ class Constants{
 	static final FULL_DATA_BASE_LOCATION_CHANGESET = './src/main/resources/org/jasig/ssp/database/testDataChangesets/'
 	static final BASE_LOCATION_CHANGESET = FULL_DATA_BASE_LOCATION_CHANGESET
 	static final WRITE_UPORTAL_USERS = true;
-	static final BASE_LOCATION_UPORTAL_USERS = null // location for uPortal user files, eg:  "./externalLibs/"
+	static final BASE_LOCATION_UPORTAL_USERS = './externalLibs/' // location for uPortal user files, eg:  "./externalLibs/"
 	static final author = "james.stanley"
 	static final fileDescription = "Adding Large Randomized Data Set"
 
@@ -124,6 +124,9 @@ class Constants{
 	static final COACH_ROLE = 'SSP_COACH'
 	static final FACULTY_ROLE = 'SSP_FACULTY'
 	static final STUDENT_ROLE = 'SSP_STUDENT'
+	static final DEVELOPER_ROLE = 'SSP_DEVELOPER'
+	static final MANAGER_ROLE = 'SSP_MANAGER'
+	static final SUPPORT_STAFF_ROLE  = 'SSP_SUPPORT_STAFF'
 	
 	static final TRANSCRIPT_HOURS_CAP = 36 //generates transcript course listings based on this number (TRANSCRIPT_HOURS_CAP/3 == number of classes created)
 	
@@ -552,9 +555,14 @@ xml.databaseChangeLog( xmlns : "http://www.liquibase.org/xml/ns/dbchangelog"
 					 ) {
 					 changeSet(author:author, id:fileDescription) {
 						 	
-							ArrayList<UUID> rollbackList = new ArrayList<UUID>()
 							ArrayList<GroovyPerson> groovyPersons = new ArrayList<GroovyPerson>()
-							generatePeople(xml, null, "", 0, TOTAL_NUMBER_OF_COACHES, rollbackList, groovyPersons)
+							ArrayList<UUID> rollbackList = new ArrayList<UUID>()
+							
+							generateFixedPeople(xml, groovyPersons)
+							generatePeople(xml, null, "", 0, TOTAL_NUMBER_OF_COACHES, groovyPersons)							
+							groovyPersons.each { person ->
+								rollbackList.add(person.id)
+							}
 							generateRollbacks(xml, 'person', rollbackList)
 							
 							if(WRITE_UPORTAL_USERS == true){
@@ -565,8 +573,29 @@ xml.databaseChangeLog( xmlns : "http://www.liquibase.org/xml/ns/dbchangelog"
 					 }
 }
 
+ArrayList<UUID> generateFixedPeople(xml, groovyPersons) {
 
-ArrayList<UUID> generatePeople(xml, coachId, coachSuffix, startIndex, endIndex, rollbackList, groovyPersons){
+	def supportStaffer = makePerson(UUID.randomUUID(), SUPPORT_STAFF_ROLE, null, 'Staff' , null, 1)
+	addPerson(xml, supportStaffer, null, null, null, null, null)
+	writeuPortalUser(supportStaffer)
+	groovyPersons.add(supportStaffer)
+	
+	def manager = makePerson(UUID.randomUUID(), MANAGER_ROLE, null, 'Manager' , null, 1)
+	addPerson(xml, manager, null, null, null, null, null)
+	writeuPortalUser(manager)
+	groovyPersons.add(manager)
+	
+	def developer = makePerson(UUID.randomUUID(), DEVELOPER_ROLE, null, 'Dev' , null, 1)
+	addPerson(xml, developer, null, null, null, null, null)
+	writeuPortalUser(developer)
+	groovyPersons.add(developer)
+	
+	return groovyPersons
+}
+
+
+					
+ArrayList<GroovyPerson> generatePeople(xml, coachId, coachSuffix, startIndex, endIndex, groovyPersons){
 	 def earlyAlertIds = new ArrayList<UUID>()
 	 def earlyAlertResponseIds = new ArrayList<UUID>()
 	 def programStatusPersonIds = new ArrayList<UUID>()
@@ -589,7 +618,6 @@ ArrayList<UUID> generatePeople(xml, coachId, coachSuffix, startIndex, endIndex, 
 	 
 	 for(Integer i = startIndex; i < endIndex; i++){
 		 UUID personId = UUID.randomUUID()
-		 rollbackList.add(personId)
 		 if(coachId == null) {
 			 
 			 // make coach
@@ -599,7 +627,7 @@ ArrayList<UUID> generatePeople(xml, coachId, coachSuffix, startIndex, endIndex, 
 			 addPerson(xml, groovyPerson, null, coachId, null, null, null)
 			 
 			 Integer multiplier = i%STUDENT_MULTIPLIER
-			 rollbackList = generatePeople(xml, personId, i, startIndex, multiplier * BASE_NUMBER_OF_STUDENTS, rollbackList, groovyPersons)
+			 groovyPersons = generatePeople(xml, personId, i, startIndex, multiplier * BASE_NUMBER_OF_STUDENTS, groovyPersons)
 		 } else if(i > 0 && i%FACULTY_MOD == 0) {
 		 	//make faculty
 		 	 def groovyPerson = makePerson(personId, FACULTY_ROLE, null, coachSuffix , null, i)
@@ -633,6 +661,7 @@ ArrayList<UUID> generatePeople(xml, coachId, coachSuffix, startIndex, endIndex, 
 			addPerson(xml, groovyPerson, studentTypeId, coachId, personDisabilityId, personDemographicsId, personEducationGoalId)
 			facultyMemberStudents.add(groovyPerson)
 			students.add(groovyPerson)
+			groovyPersons.add(groovyPerson)
 			
 			
 			def programStatusPersonId = generateProgramStatusPersonId(xml, personId, i)
@@ -716,7 +745,7 @@ ArrayList<UUID> generatePeople(xml, coachId, coachSuffix, startIndex, endIndex, 
 	 generateRollbacksByPersons(xml, 'external_student_transcript', 'school_id', students)
 	 generateRollbacksByPersons(xml, 'external_student_transcript_course', 'school_id', students)
 	 
-	 return rollbackList;
+	 return groovyPersons
 }
 
 def generatePersondisabilityId(xml, personId, i) {	
@@ -1239,8 +1268,7 @@ GroovyPerson makePerson(personId, role, coachId, userNameSuffix, studentTypeId, 
 			person.student_type_id = studentTypeId.toString()			
 	}
 	
-	def readableRole = role == COACH_ROLE? 'Coach': (role == FACULTY_ROLE? 'Faculty': 'Student')
-	println "Made Person: ${person.first_name} $person.last_name, username: $username, role: $readableRole"
+	println "Made Person: ${person.first_name} $person.last_name, username: $username, role: $person.role"
     return person
 }
 
@@ -1276,8 +1304,7 @@ GroovyTranscript makeTranscript(student) {
 
 void writeuPortUsers(groovyPersons){
 	for(GroovyPerson groovyPerson:groovyPersons){
-		if(groovyPerson.coach_id == null)
-			writeuPortalUser(groovyPerson);
+		writeuPortalUser(groovyPerson);
 	}
 }
 
