@@ -52,14 +52,14 @@ class Constants{
 	]
 
 	/* Change Sets, change as needed */
-	static final fileName = "test-data-ci.xml";
+	static final fileName = "demo_data.xml";
 	static final TEST_LOCATION_CHANGESET = null // file path to save location, eg: './src/test/resources/org/jasig/ssp/database/testDataChangesets/'
 	static final FULL_DATA_BASE_LOCATION_CHANGESET = './src/main/resources/org/jasig/ssp/database/testDataChangesets/'
 	static final BASE_LOCATION_CHANGESET = FULL_DATA_BASE_LOCATION_CHANGESET
 	static final WRITE_UPORTAL_USERS = true;
 	static final BASE_LOCATION_UPORTAL_USERS = './externalLibs/' // location for uPortal user files, eg:  "./externalLibs/"
-	static final author = "james.stanley"
-	static final fileDescription = "Adding Large Randomized Data Set"
+	static final author = "demo.data.script.generator"
+	static final fileDescription = "Adding Demo Data Set"
 
 
 	/* parameter values for generation */
@@ -95,8 +95,8 @@ class Constants{
 	static final EARLY_ALERT_REFERRAL_ID_PARAMS = [max:10,mod:14] // array size 10
 	static final EARLY_ALERT_SUGGESTION_ID_PARAMS = [max:10,mod:6] // array size 10
 	static final JOURNAL_SOURCE_ID_PARAMS = [max:9,mod:8] // array size 9
-	static final CONFIDENTIALITY_LEVEL_ID_PARAMS = [max:12,mod:12] // array size 12
-	static final CHALLENGE_ID_PARAMS = [max:30,mod:30] // array size 30
+	static final CONFIDENTIALITY_LEVEL_ID_PARAMS = [max:11,mod:11] // array size 11
+	static final CHALLENGE_ID_PARAMS = [max:28,mod:28] // array size 30
 	static final CHALLENGE_REFERRAL_ID_PARAMS = [max:56,mod:46] // array size 56
 	static final JOURNAL_TRACK_ID_PARAMS = [max:3,mod:3] // array size 3
 	static final JOURNAL_STEP_ID_PARAMS = [max:1,mod:1] // array size 3
@@ -105,13 +105,13 @@ class Constants{
 	static final REFERRAL_SOURCE_ID_PARAMS = [max:3,mod:5] // array size 2
 
 	static final DISABILITY_AGENCY_PARAMS = [max:6,mod:6] // array size 6
-	static final DISABILITY_ACCOMMODATION_PARAMS = [max:21,mod:21] // array size 21
-	static final DISABILITY_STATUS_PARAMS = [max:5,mod:5] // array size 5
-	static final DISABILITY_TYPE_PARAMS = [max:14,mod:14] // array size 14
+	static final DISABILITY_ACCOMMODATION_PARAMS = [max:20,mod:20] // array size 20
+	static final DISABILITY_STATUS_PARAMS = [max:4,mod:4] // array size 4
+	static final DISABILITY_TYPE_PARAMS = [max:13,mod:13] // array size 14
 	static final EDUCATION_GOAL_PARAMS = [max:9,mod:9] // array size 9
 	static final MAJOR_PARAMS = [max:9,mod:9] // array size 9
 	static final VETERAN_STATUS_PARAMS = [max:6,mod:6] // array size 6
-	static final ETHNICITY_PARAMS = [max:8,mod:8] // array size 8
+	static final ETHNICITY_PARAMS = [max:7,mod:7] // array size 7
 	static final SERVICE_REASON_PARAMS = [max:2,mod:4] // array size 2
 
 	static final ANTICIPATED_START_TERM = "FA12"
@@ -214,7 +214,6 @@ class Constants{
 	] as String[]
 
 	static final confidentialityLevelIds = [
-		"afe3e3e6-87fa-11e1-91b2-0026b9e7ff4c",
 		"b2d077a7-4055-0510-7957-4a09f93a0346",
 		"b2d078b8-5056-a51a-8057-4a09f93a0347",
 		"b2d07906-5056-a51a-80fd-9d19f636e501",
@@ -236,7 +235,6 @@ class Constants{
 		"471afc02-ab5c-11f1-a997-0026b9e7ff5d"]	as String[]
 
 	static final challengeIds = [
-		"01bb0a62-1756-4ea2-857d-5821ee54a1b9",
 		"07b5c3ac-3bdf-4d12-b65d-94cb55167998",
 		"1f5b63a9-9b50-412b-9971-23602f87444c",
 		"22d23035-74f0-40f1-ac41-47a22c798af7",
@@ -263,7 +261,6 @@ class Constants{
 		"dbb8741c-ece0-4830-8ebf-774151cb6a1b",
 		"eb0dc2c0-3157-43c1-8b2e-55a5c2e2f4c3",
 		"f067c6ca-50ad-447a-ad12-f47dffdce42e",
-		"f5bb0a62-1756-4ea2-857d-5821ee44a1d0",
 		"f6bb0a62-1756-4ea2-857d-5821ee44a1da",
 		"fb206a68-78db-489d-9d5d-dce554f54eed"
 	] as String[]
@@ -343,7 +340,6 @@ class Constants{
 		"85138559-4d40-420d-bd78-119276a7b42c",
 		"90ed8cf5-040c-4f68-83c3-863120da0388",
 		"9c49cb24-0949-4472-988b-2f539fbe5843",
-		"9e15bba9-b955-477f-968c-4336b9401f58",
 		"a1d9b1c8-6841-46f5-9dda-5b7e4130fd42",
 		"a3b9e31e-b3af-41b3-b602-151b60253938",
 		"c2d81565-0dd5-4f1a-ad54-2640f4fd7749",
@@ -361,7 +357,6 @@ class Constants{
 	] as String[]
 
 	static final disabilityStatusIds = [
-		"00df56f6-f673-42ed-b73d-d4bceda0d24b",
 		"24d12b6f-1d58-4f13-ac5e-c09cd249ba43",
 		"5dab94e2-d5a0-4203-b462-8d0841d63786",
 		"c2609cdf-6aa2-4948-b0e3-3779f2541783",
@@ -374,7 +369,6 @@ class Constants{
 		"35ed9080-e88b-473a-83a4-565c5c56a756",
 		"4afd60bf-a5ea-4215-abb9-8276a6b68827",
 		"6babd878-46ba-4106-b5e4-3651fdbf3a71",
-		"914d2329-28d0-4c79-b81e-c421af56476f",
 		"92a689f2-1850-4d7a-ae58-0ce349cfde6d",
 		"960e507a-2c82-4d6e-bf55-b12e4f0a3a86",
 		"997df364-627b-4fae-a58a-646e20d7ab6f",
@@ -393,8 +387,8 @@ class Constants{
 	] as String[]
 
 	static final specialServiceGroupIds = [
-		'40b6b8aa-bca1-11e1-9344-037cb4088c72',
-		"f6201a04-bb31-4ca5-b606-609f3ad09f87"] as String[]
+		'40b6b8aa-bca1-11e1-9344-037cb4088c72', //evil
+		"f6201a04-bb31-4ca5-b606-609f3ad09f87"] as String[] //evil.... whole table?
 
 	static final def eol = System.properties.'line.separator'
 
@@ -443,7 +437,6 @@ class Constants{
 		"83e7967f-fc67-408c-929f-fc361eece175",
 		"9f73e1f0-66aa-47f6-a7bc-2daecb915207",
 		"dec0364a-d576-424d-94ce-79544c21e8c8",
-		"f6201a04-bb31-4ca5-b606-609f3ad09f87",
 		"fa80f025-5405-4355-9747-84dd3fa66df6",
 		"ff149156-a02f-4e9d-bfb2-ef9dfb32eef2"
 	] as String[]
@@ -557,7 +550,7 @@ xml.databaseChangeLog( xmlns : "http://www.liquibase.org/xml/ns/dbchangelog"
 						 	
 							ArrayList<GroovyPerson> groovyPersons = new ArrayList<GroovyPerson>()
 							ArrayList<UUID> rollbackList = new ArrayList<UUID>()
-							
+							generateRequiredTestData(xml)
 							generateFixedPeople(xml, groovyPersons)
 							generatePeople(xml, null, "", 0, TOTAL_NUMBER_OF_COACHES, groovyPersons)							
 							groovyPersons.each { person ->
@@ -571,6 +564,70 @@ xml.databaseChangeLog( xmlns : "http://www.liquibase.org/xml/ns/dbchangelog"
 								writeuPortUsers(groovyPersons)
 							}
 					 }
+}
+					 
+void generateRequiredTestData(xml) {
+	def i = 1
+	specialServiceGroupIds.each { id ->
+		xml.insert(tableName:'special_service_group') { 
+			xml.column(name:"id", "${id}")
+			xml.column(name:"name", "Group ${i}")
+			xml.column(name:"description", "A Special Service group for people who fall into Group ${i}")
+			addCreatedModified(xml, null, null)
+			addObjectStatus(xml, null)
+		}
+		i++
+	}	
+	generateRollbacks(xml, 'special_service_group', specialServiceGroupIds)
+	
+	i = 1	
+	referralSourceIds.each { id ->
+		xml.insert(tableName:'referral_source') {
+			xml.column(name:"id", "${id}")
+			xml.column(name:"name", "Referral Source ${i}")
+			xml.column(name:"description", "Referred from source ${i}")
+			addCreatedModified(xml, null, null)
+			addObjectStatus(xml, null)
+		}
+		i++
+	}
+	generateRollbacks(xml, 'referral_source', referralSourceIds)
+	
+	i = 1
+	serviceReasonIds.each { id ->
+		xml.insert(tableName:'service_reason') {
+			xml.column(name:"id", "${id}")
+			xml.column(name:"name", "Service Reason ${i}")
+			xml.column(name:"description", "Reason for service ${i}")
+			addCreatedModified(xml, null, null)
+			addObjectStatus(xml, null)
+		}
+	}
+	generateRollbacks(xml, 'service_reason', serviceReasonIds)	
+
+	i = 1
+	journalStepIds.each { id ->
+		xml.insert(tableName:'journal_step') {
+			xml.column(name:"id", "${id}")
+			xml.column(name:"name", "Journal Step ${i}")
+			xml.column(name:"description", "Step for Journal ${i}")
+			addCreatedModified(xml, null, null)
+			addObjectStatus(xml, null)
+		}
+	}
+	generateRollbacks(xml, 'journal_step', journalStepIds)
+	
+	i = 1
+	journalStepDetailIds.each{ id ->
+		xml.insert(tableName:'journal_step_detail') {
+			xml.column(name:"id", "${id}")
+			xml.column(name:"name", "Journal Step Detail ${i}")
+			xml.column(name:"description", "Detail  ${i} for Journal Step")
+			addCreatedModified(xml, null, null)
+			addObjectStatus(xml, null)
+		}
+	}
+	generateRollbacks(xml, 'journal_step_detail', journalStepDetailIds)
 }
 
 ArrayList<UUID> generateFixedPeople(xml, groovyPersons) {
@@ -821,8 +878,7 @@ void generateTerms(xml){
 			dateString = offSetDate(dateString, 92)
 			xml.column(name:"end_date", value:dateString)
 			xml.column(name:"report_year", getYear(dateString))
-		}
-		
+		}		
 	}
 	
 	xml.rollback{
@@ -962,6 +1018,8 @@ void addExternalStudentTranscriptCourse(xml, student) {
 		xml.column(name:"credit_earned", value:3.00 )
 		xml.column(name:"term_code", value:course.term )
 		xml.column(name:"credit_type", value:"Institutional" )
+		xml.column(name:"first_name", value:student.first_name )
+		xml.column(name:"last_name", value:student.last_name )
 	}
 }
 
