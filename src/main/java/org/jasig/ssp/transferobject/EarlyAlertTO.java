@@ -64,7 +64,7 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 	private UUID closedById;
 
 	private String closedByName;
-
+	
 	private Set<EarlyAlertReasonTO> earlyAlertReasonIds;
 
 	private Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds;
@@ -113,6 +113,8 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 					+ (closedBy.getMiddleName() == null || closedBy.getMiddleName().length() == 0 ? "" : " " + closedBy.getMiddleName())
 					+ " " + closedBy.getLastName();
 		}
+		
+		
 
 		personId = earlyAlert.getPerson() == null ? null : earlyAlert
 				.getPerson().getId();
@@ -372,4 +374,5 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 	public void setSendEmailToStudent(final Boolean sendEmailToStudent) {
 		this.sendEmailToStudent = sendEmailToStudent;
 	}
+
 }

@@ -25,6 +25,7 @@ import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
 
 /**
  * Transfer object for copy to and from equivalent Auditable models.
@@ -151,5 +152,6 @@ public abstract class AbstractAuditableTO<T extends Auditable>
 		createdDate = model.getCreatedDate();
 		modifiedDate = model.getModifiedDate();
 		objectStatus = model.getObjectStatus();
+		
 	}
 }

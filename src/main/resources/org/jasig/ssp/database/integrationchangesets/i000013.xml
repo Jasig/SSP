@@ -1,0 +1,385 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<property name="schema" value="public" dbms="postgresql" />
+	<property name="schema" value="dbo" dbms="mssql" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	<property name="externalUser" value="a new UUID" />
+	<property name="check_for_manage_integration_database_config_sql"
+			  value="select count(id) from config where name='manage_integration_database'" />
+	<property name="should_manage_integration_database_sql"
+			  value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
+
+<changeSet id="add 2.0 fields to external_person" author="jim.stanley">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip adding the 2.0 fields to the external_person table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+		<dropView viewName="v_external_person" />
+		<addColumn tableName="external_person">
+			<column name="residency_county" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		
+		<addColumn tableName="external_person">
+			<column name="f1_status" type="char(1)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		
+		<modifyDataType tableName="external_person" columnName="photo_url" newDataType="${nvarchar.type}(250)"/>
+		<createView viewName="v_external_person">
+			select ROW_NUMBER() OVER (ORDER BY school_id) as id,
+			school_id, username, first_name, middle_name, last_name, birth_date, primary_email_address,
+			address_line_1, address_line_2, city, state, zip_code, residency_county, home_phone, work_phone, cell_phone,
+			office_location, office_hours, department_name, actual_start_term, actual_start_year,
+			marital_status, ethnicity, gender, is_local, f1_status, balance_owed, coach_school_id, non_local_address, photo_url
+			from external_person
+		</createView>
+		<sql>grant all on v_external_person to ${database.app.username}</sql>
+
+		<rollback>
+			<dropView viewName="v_external_person" />
+			<dropColumn tableName="external_person" columnName="residency_county" />
+			<dropColumn tableName="external_person" columnName="f1_status" />
+			<modifyDataType tableName="external_person" columnName="photo_url" newDataType="${nvarchar.type}(100)"/>
+			
+			<createView viewName="v_external_person">
+			select ROW_NUMBER() OVER (ORDER BY school_id) as id,
+			school_id, username, first_name, middle_name, last_name, birth_date, primary_email_address,
+			address_line_1, address_line_2, city, state, zip_code, home_phone, work_phone, cell_phone,
+			office_location, office_hours, department_name, actual_start_term, actual_start_year,
+			marital_status, ethnicity, gender, is_local, balance_owed, coach_school_id, non_local_address, photo_url
+			from external_person
+			</createView>
+			<sql>grant all on v_external_person to ${database.app.username}</sql>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="add 2.0 faculty to external_student_transcript_course" author="jim.stanley">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip adding the 2.0 fields to the external_student_transcript_course table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<addColumn tableName="external_student_transcript_course">
+			<column name="faculty_school_id" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+
+
+		<rollback>
+			<dropColumn tableName="external_student_transcript_course" columnName="faculty_school_id" />
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Update external_student_transcript_course view for fields 2.0" author="jim.stanley">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip adding fields 2.0 to the v_external_student_transcript_course view for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+		<dropView viewName="v_external_student_transcript_course" />
+		<createView viewName="v_external_student_transcript_course">
+			select ROW_NUMBER() OVER (ORDER BY school_id, subject_abbreviation, number) as id, 
+			school_id, first_name, last_name, middle_name, subject_abbreviation, number, formatted_course, section_number, 
+			section_code, title, description, grade, credit_earned, term_code, credit_type, audited, status_code, faculty_school_id
+			from external_student_transcript_course
+		</createView>
+		<sql>grant all on v_external_student_transcript_course to ${database.app.username}</sql>
+		<rollback>
+			<dropView viewName="v_external_student_transcript_course" />
+			<createView viewName="v_external_student_transcript_course">
+			select ROW_NUMBER() OVER (ORDER BY school_id, subject_abbreviation, number) as id, 
+			school_id, first_name, last_name, middle_name, subject_abbreviation, number, formatted_course, section_number, 
+			section_code, title, description, grade, credit_earned, term_code, credit_type, audited, status_code
+			from external_student_transcript_course
+			</createView>
+			<sql>grant all on v_external_student_transcript_course to ${database.app.username}</sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="add intend_prog_adm to ext_stu_acad_prog" author="jim.stanley">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip adding the intend_prog_adm field to the external_student_academic_program table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		
+		<addColumn tableName="external_student_academic_program">
+			<column name="intended_program_at_admit" type="${nvarchar.type}(100)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+
+		<rollback>
+			<dropColumn tableName="external_student_academic_program" columnName="intended_program_at_admit" />
+
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Update V ext_stu_acad_prog with intend_prog_adm" author="jim.stanley">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip adding the section_code field to the v_external_student_academic_program view for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+		<dropView viewName="v_external_student_academic_program" />
+		<createView viewName="v_external_student_academic_program">
+			select ROW_NUMBER() OVER (ORDER BY school_id) as id, school_id, degree_code, degree_name, program_code,
+			program_name, intended_program_at_admit from external_student_academic_program
+		</createView>
+
+		<sql>grant all on v_external_student_academic_program to ${database.app.username}</sql>
+		<rollback>
+			<dropView viewName="v_external_student_academic_program" />
+			<createView viewName="v_external_student_academic_program">
+			select ROW_NUMBER() OVER (ORDER BY school_id) as id, school_id, degree_code, degree_name, program_code,
+			program_name from external_student_academic_program
+			</createView>
+
+			<sql>grant all on v_external_student_academic_program to ${database.app.username}</sql>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="add academic_standing to external_student_transcript" author="jim.stanley">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip adding the academic_standing field to the external_student_transcript table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<addColumn tableName="external_student_transcript">
+			<column name="academic_standing" type="${nvarchar.type}(50)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		
+		<addColumn tableName="external_student_transcript">
+			<column name="credit_hours_not_completed" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<addColumn tableName="external_student_transcript">
+			<column name="credit_completion_rate" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		
+		<addColumn tableName="external_student_transcript">
+			<column name="gpa_trend_indicator" type="${nvarchar.type}(25)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		
+		<addColumn tableName="external_student_transcript">
+			<column name="current_restrictions" type="${nvarchar.type}(100)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="external_student_transcript" columnName="academic_standing" />
+			<dropColumn tableName="external_student_transcript" columnName="credit_hours_not_completed" />
+			<dropColumn tableName="external_student_transcript" columnName="credit_completion_rate" />
+			<dropColumn tableName="external_student_transcript" columnName="gpa_trend_indicator" />
+			<dropColumn tableName="external_student_transcript" columnName="current_restrictions" />
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Update ext stud trans view for academic standing" author="jim.stanley">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip adding the academic_standing field to the v_external_student_transcript view for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+		<dropView viewName="v_external_student_transcript" />
+		<createView viewName="v_external_student_transcript">
+			select ROW_NUMBER() OVER (ORDER BY school_id) as id, school_id, credit_hours_for_gpa, 
+			credit_hours_earned, credit_hours_attempted, total_quality_points, 
+			grade_point_average, academic_standing, credit_hours_not_completed, 
+			credit_completion_rate, current_restrictions, gpa_trend_indicator from external_student_transcript
+		</createView>
+		<sql>grant all on v_external_student_transcript to ${database.app.username}</sql>
+		<rollback>
+			<dropView viewName="v_external_student_transcript" />
+			<createView viewName="v_external_student_transcript">
+				select ROW_NUMBER() OVER (ORDER BY school_id) as id, school_id, credit_hours_for_gpa, 
+			credit_hours_earned, credit_hours_attempted, total_quality_points, 
+			grade_point_average   from external_student_transcript
+			</createView>
+			<sql>grant all on v_external_student_transcript to ${database.app.username}</sql>
+		</rollback>
+	</changeSet>
+	
+	
+
+	
+	<changeSet author='jim.stanley'
+		id='Add Table External Student Financial Aid'>
+		<createTable tableName="external_student_financial_aid">
+			<column name="school_id" type="${nvarchar.type}(50)">
+				<constraints nullable="false" unique="true" />
+			</column>
+			<column name="financial_aid_gpa" type="decimal(9,2)">
+				<constraints nullable="false" />
+			</column>
+			<column name="gpa_20_b_hrs_needed" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+			<column name="gpa_20_a_hrs_needed" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+			<column name="needed_for_67ptc_completion" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+			
+			<column name="current_year_financial_aid_award" type="char(1)">
+				<constraints nullable="true" />
+			</column>
+			
+			<column name="sap_status" type="char(1)">
+				<constraints nullable="false" />
+			</column>
+			<column name="fafsa_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="financial_aid_remaining" type="decimal(9,2)">
+				<constraints nullable="false" />
+			</column>
+			<column name="original_loan_amount" type="decimal(9,2)">
+				<constraints nullable="false" />
+			</column>
+			<column name="remaining_loan_amount" type="decimal(9,2)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createView viewName="v_external_student_financial_aid">
+			select ROW_NUMBER() OVER (ORDER BY school_id) as id, school_id, financial_aid_gpa, gpa_20_b_hrs_needed, gpa_20_a_hrs_needed, 
+			needed_for_67ptc_completion, current_year_financial_aid_award, sap_status, fafsa_date, financial_aid_remaining,
+			 original_loan_amount, remaining_loan_amount from external_student_financial_aid
+		</createView>
+
+		<sql>grant all on external_student_financial_aid to ${database.app.username}</sql>
+		<sql>grant all on v_external_student_financial_aid to ${database.app.username}</sql>
+		<rollback>
+			<dropView viewName="v_external_student_financial_aid" />
+			<dropTable tableName="external_student_financial_aid" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+		
+	</changeSet>
+	
+	<changeSet author='jim.stanley'
+		id='Add Table External Student Transcript Term'>
+		<createTable tableName="external_student_transcript_term">
+			<column name="school_id" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="credit_hours_for_gpa" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+			<column name="credit_hours_earned" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+			<column name="credit_hours_attempted" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+			<column name="credit_hours_not_completed" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+			
+			<column name="credit_completion_rate" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+			
+			<column name="total_quality_points" type="decimal(9,2)">
+				<constraints nullable="true" />
+			</column>
+			<column name="grade_point_average" type="decimal(9,2)">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="term_code" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		
+		<createIndex tableName="external_student_transcript_term"
+					 indexName="idx_external_student_transcript_term_business_key">
+			<column name="school_id" />
+			<column name="term_code" />
+		</createIndex>
+
+		
+		<createView viewName="v_external_student_transcript_term">
+			select ROW_NUMBER() OVER (ORDER BY school_id, term_code) as id, school_id, term_code, credit_hours_for_gpa, 
+			credit_hours_earned, credit_hours_attempted, 
+			credit_hours_not_completed, credit_completion_rate, 
+			total_quality_points, grade_point_average from external_student_transcript_term
+		</createView>
+
+		<sql>grant all on external_student_transcript_term to ${database.app.username}</sql>
+		<sql>grant all on v_external_student_transcript_term to ${database.app.username}</sql>
+		<rollback>
+			<dropIndex tableName="external_student_transcript_term"
+					   indexName="idx_external_student_transcript_term_business_key" />
+			<dropView viewName="v_external_student_transcript_term" />
+			<dropTable tableName="external_student_transcript_term" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+		
+	</changeSet>
+</databaseChangeLog>

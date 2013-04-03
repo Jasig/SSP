@@ -31,8 +31,9 @@ public class ExternalStudentRecords extends AbstractExternalData implements
 	private static final long serialVersionUID = -4432569410223412913L;
 
 	private ExternalStudentTranscript gpa;
+	private ExternalStudentFinancialAid financialAid;
 	private List<ExternalStudentAcademicProgram> programs;
-	private List<ExternalStudentTermCourses> terms;
+	private List<ExternalStudentTranscriptCourse> terms;
 	/**
 	 * @return the gpa
 	 */
@@ -62,14 +63,26 @@ public class ExternalStudentRecords extends AbstractExternalData implements
 	/**
 	 * @return the terms
 	 */
-	public List<ExternalStudentTermCourses> getTerms() {
+	public List<ExternalStudentTranscriptCourse> getTerms() {
 		return terms;
 	}
 	/**
 	 * @param terms the terms to set
 	 */
-	public void setTerms(List<ExternalStudentTermCourses> terms) {
+	public void setTerms(List<ExternalStudentTranscriptCourse> terms) {
 		this.terms = terms;
+	}
+	/**
+	 * @return the financialAid
+	 */
+	public ExternalStudentFinancialAid getFinancialAid() {
+		return financialAid;
+	}
+	/**
+	 * @param financialAid the financialAid to set
+	 */
+	public void setFinancialAid(ExternalStudentFinancialAid financialAid) {
+		this.financialAid = financialAid;
 	}
 
 }

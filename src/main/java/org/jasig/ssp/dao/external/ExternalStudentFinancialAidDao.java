@@ -18,37 +18,21 @@
  */
 package org.jasig.ssp.dao.external;
 
-import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
-import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
+import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
 import org.springframework.stereotype.Repository;
 
-
 @Repository
-public class ExternalStudentTranscriptCourseDao extends
-		AbstractExternalDataDao<ExternalStudentTranscriptCourse> {
-	
-	public ExternalStudentTranscriptCourseDao()
-	{
-		super(ExternalStudentTranscriptCourse.class);
-	}
+public class ExternalStudentFinancialAidDao extends AbstractExternalDataDao<ExternalStudentFinancialAid> {
 
-	
-	@SuppressWarnings("unchecked")
-	public List<ExternalStudentTranscriptCourse> getTranscriptsBySchoolId(String schoolId){
-		Criteria criteria = createCriteria();
-		criteria.add(Restrictions.eq("schoolId", schoolId));
-		return (List<ExternalStudentTranscriptCourse>)criteria.list();
-		
+	protected ExternalStudentFinancialAidDao() {
+		super(ExternalStudentFinancialAid.class);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<ExternalStudentTranscriptCourse> getTranscriptsBySchoolIdAndTermCode(String schoolId, String termCode){
+	public ExternalStudentFinancialAid getStudentFinancialAidBySchoolId(String schoolId){
 		Criteria criteria = createCriteria();
-		criteria.add(Restrictions.eq("schoolId", schoolId));
-		criteria.add(Restrictions.eq("termCode", termCode));
-		return (List<ExternalStudentTranscriptCourse>)criteria.list();
+		criteria.add(Restrictions.eq("schoolId", schoolId));		
+		return (ExternalStudentFinancialAid)criteria.uniqueResult();
 	}
 }

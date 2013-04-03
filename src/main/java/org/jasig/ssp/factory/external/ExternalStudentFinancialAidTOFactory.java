@@ -16,16 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.external;
+package org.jasig.ssp.factory.external;
 
-import java.util.List;
+import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
+import org.jasig.ssp.transferobject.external.ExternalStudentFinancialAidTO;
 
-import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
-
-public interface ExternalStudentTranscriptCourseService extends
-		ExternalDataService<ExternalStudentTranscriptCourse> {
-	
-	List<ExternalStudentTranscriptCourse> getTranscriptsBySchoolId(String schoolId);
-	List<ExternalStudentTranscriptCourse> getTranscriptsBySchoolIdAndTermCode(String schoolId, String termCode);
+public interface ExternalStudentFinancialAidTOFactory extends
+	ExternalTOFactory<ExternalStudentFinancialAidTO, ExternalStudentFinancialAid> {
 
 }

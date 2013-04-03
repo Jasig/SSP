@@ -406,6 +406,16 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false, updatable = false)
 	private Date studentIntakeRequestDate;
+	
+	@Column(length = 50)
+	@Size(max = 50)
+	@Nullable
+	private String residencyCounty;
+	
+	@Column(length = 1, name = "f1_status")
+	@Size(max = 1)
+	@Nullable
+	private String f1Status;
 
 	/**
 	 * Set when last someone completed the student intake tool for this person.
@@ -1259,6 +1269,10 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 				studentIntakeRequestDate);
 		result *= hashField("studentIntakeCompleteDate",
 				studentIntakeCompleteDate);
+		result *= hashField("residencyCounty",
+					residencyCounty);		
+		result *= hashField("f1Status",
+				f1Status);
 
 		// not all fields included. only the business or non-expensive set
 		// fields are included in the hashCode
@@ -1279,6 +1293,34 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	public void setCurrentAndFutureRegistrationStatuses(
 			List<RegistrationStatusByTerm> currentAndFutureRegistrationStatuses) {
 		this.currentAndFutureRegistrationStatuses = currentAndFutureRegistrationStatuses;
+	}
+
+	/**
+	 * @return the residencyCounty
+	 */
+	public String getResidencyCounty() {
+		return residencyCounty;
+	}
+
+	/**
+	 * @param residencyCounty the residencyCounty to set
+	 */
+	public void setResidencyCounty(String residencyCounty) {
+		this.residencyCounty = residencyCounty;
+	}
+
+	/**
+	 * @return the f1Status
+	 */
+	public String getF1Status() {
+		return f1Status;
+	}
+
+	/**
+	 * @param f1Status the f1Status to set
+	 */
+	public void setF1Status(String f1Status) {
+		this.f1Status = f1Status;
 	}
 
 }

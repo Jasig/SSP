@@ -30,6 +30,12 @@ public class ExternalStudentAcademicProgramTO implements Serializable,
 		super();
 	}
 	
+	public ExternalStudentAcademicProgramTO(ExternalStudentAcademicProgram model){
+		super();
+		from(model);
+	}
+	
+	
 	/**
 	 * @param degreeCode
 	 * @param degreeName
@@ -37,12 +43,13 @@ public class ExternalStudentAcademicProgramTO implements Serializable,
 	 * @param programName
 	 */
 	public ExternalStudentAcademicProgramTO(String degreeCode,
-			String degreeName, String programCode, String programName) {
+			String degreeName, String programCode, String programName, String intendedProgramAtAdmit) {
 		super();
 		this.degreeCode = degreeCode;
 		this.degreeName = degreeName;
 		this.programCode = programCode;
 		this.programName = programName;
+		this.intendedProgramAtAdmit = intendedProgramAtAdmit;
 	}
 
 	/**
@@ -53,6 +60,7 @@ public class ExternalStudentAcademicProgramTO implements Serializable,
 	private String degreeName;
 	private String programCode;
 	private String programName;
+	private String intendedProgramAtAdmit;
 	
 	
 	@Override
@@ -61,6 +69,7 @@ public class ExternalStudentAcademicProgramTO implements Serializable,
 		degreeName = model.getDegreeCode();
 		programCode = model.getProgramCode();
 		programName = model.getProgramName();
+		intendedProgramAtAdmit = model.getIntendedProgramAtAdmit();
 	}
 
 	/**
@@ -117,6 +126,20 @@ public class ExternalStudentAcademicProgramTO implements Serializable,
 	 */
 	public void setProgramName(String programName) {
 		this.programName = programName;
+	}
+
+	/**
+	 * @return the intendedProgramAtAdmit
+	 */
+	public String getIntendedProgramAtAdmit() {
+		return intendedProgramAtAdmit;
+	}
+
+	/**
+	 * @param intendedProgramAtAdmit the intendedProgramAtAdmit to set
+	 */
+	public void setIntendedProgramAtAdmit(String intendedProgramAtAdmit) {
+		this.intendedProgramAtAdmit = intendedProgramAtAdmit;
 	}
 
 }

@@ -32,6 +32,7 @@ public class ExternalStudentRecordsLite extends AbstractExternalData implements
 
 	private ExternalStudentTranscript gpa;
 	private List<ExternalStudentAcademicProgram> programs;
+	private ExternalStudentFinancialAid financialAid;
 	/**
 	 * @return the gpa
 	 */
@@ -55,6 +56,18 @@ public class ExternalStudentRecordsLite extends AbstractExternalData implements
 	 */
 	public void setPrograms(List<ExternalStudentAcademicProgram> programs) {
 		this.programs = programs;
+	}
+	/**
+	 * @return the financialAid
+	 */
+	public ExternalStudentFinancialAid getFinancialAid() {
+		return financialAid;
+	}
+	/**
+	 * @param financialAid the financialAid to set
+	 */
+	public void setFinancialAid(ExternalStudentFinancialAid financialAid) {
+		this.financialAid = financialAid;
 	}
 
 }

@@ -72,6 +72,12 @@ Serializable, ExternalData {
 	@NotEmpty
 	@Size(max = 100)
 	private String programName;
+	
+	@Column(nullable = false, length = 100)
+	@NotNull
+	@NotEmpty
+	@Size(max = 100)
+	private String intendedProgramAtAdmit;
 
 	/**
 	 * @return the schoolId
@@ -141,6 +147,20 @@ Serializable, ExternalData {
 	 */
 	public void setProgramName(final String programName) {
 		this.programName = programName;
+	}
+
+	/**
+	 * @return the intendedProgramAtAdmit
+	 */
+	public String getIntendedProgramAtAdmit() {
+		return intendedProgramAtAdmit;
+	}
+
+	/**
+	 * @param intendedProgramAtAdmit the intendedProgramAtAdmit to set
+	 */
+	public void setIntendedProgramAtAdmit(String intendedProgramAtAdmit) {
+		this.intendedProgramAtAdmit = intendedProgramAtAdmit;
 	}
 
 }
