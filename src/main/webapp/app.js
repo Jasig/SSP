@@ -401,7 +401,7 @@ var apiUrls = [
   {name: 'personalityType', url: 'reference/personalityType'},
   {name: 'personTranscript', url: 'person/{id}/transcript'},
   {name: 'personEmailTask', url: 'person/{id}/task/email'},
-  {name: 'personViewHistory', url: 'report/{id}/History'},
+  {name: 'personViewHistory', url: 'person/{id}/history/print'},
   {name: 'personPrintTask', url: 'person/{id}/task/print'},
   {name: 'personSearch', url: 'person/search'},
   {name: 'placement', url: 'person/{id}/test'},

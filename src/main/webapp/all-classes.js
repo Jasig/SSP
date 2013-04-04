@@ -13893,15 +13893,16 @@ Ext.define('Ssp.controller.tool.profile.PlacementViewController', {
 	init: function() {
 		var me=this;
 		var personId = me.personLite.get('id');
-
-    	// hide the loader
-    	me.getView().setLoading( true );
-    	
-		me.service.getAll( personId, {
-			success: me.getPlacementSuccess,
-			failure: me.getPlacementFailure,
-			scope: me			
-		});
+		if(personId != ""){
+	    	// hide the loader
+	    	me.getView().setLoading( true );
+	    	
+			me.service.getAll( personId, {
+				success: me.getPlacementSuccess,
+				failure: me.getPlacementFailure,
+				scope: me			
+			});
+		}
 		
 		return this.callParent(arguments);
     },
@@ -14073,6 +14074,7 @@ Ext.define('Ssp.model.RecentStudentActivity', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name: 'activity', type: 'string'},
         {name: 'coachName', type: 'string'},
+        {name: 'coachId', type: 'string'},
         {name: 'activityDateFormatted', type: 'string'},
         {name: 'activityDate', type: 'date', dateFormat: 'time'}],
         
@@ -14107,6 +14109,7 @@ Ext.define('Ssp.model.RecentStudentActivity', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name: 'activity', type: 'string'},
         {name: 'coachName', type: 'string'},
+        {name: 'coachId', type: 'string'},
         {name: 'activityDateFormatted', type: 'string'},
         {name: 'activityDate', type: 'date', dateFormat: 'time'}],
         
@@ -14518,6 +14521,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
         person: 'currentPerson',
         personLite: 'personLite',
         personService: 'personService',
+        activityService: 'transcriptService',
         sspConfig: 'sspConfig'
     },
     
@@ -14528,19 +14532,16 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
     	coachDepartmentNameField: '#coachDepartmentName',
     	coachOfficeLocationField: '#coachOfficeLocation',
     	coachPrimaryEmailAddressField: '#coachPrimaryEmailAddress',
-    	coachPhotoUrlField: '#coachPhotoUrl'
-    		
-    	
-    	
-    },
+    	coachPhotoUrlField: '#coachPhotoUrl',
+    	coachLastServiceDateField: '#coachLastServiceDate',
+    	coachLastServiceProvidedField: '#coachLastServiceProvided'
+     },
 	init: function() {
 		var me=this;
 		
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');
 		var id =  me.personLite.get('id');
 		me.getView().getForm().reset();
-
-				
 		
 		if (id != "")
 		{
@@ -14550,6 +14551,11 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 				success: me.getPersonSuccess,
 				failure: me.getPersonFailure,
 				scope: me
+			});
+			me.activityService.getRecentStudentActivity( id, {
+				success: me.getTranscriptSuccess,
+				failure: me.getTranscriptFailure,
+				scope: me			
 			});
 		}
 		
@@ -14584,10 +14590,6 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 		coachOfficeLocationField.setValue( me.person.getCoachOfficeLocation() );
 		coachPrimaryEmailAddressField.setValue( me.person.getCoachPrimaryEmailAddress() );
 		coachPhotoUrlField.setSrc( me.person.getCoachPhotoUrl() );
-		
-
-		
-		
 		// hide the loader
     	me.getView().setLoading( false ); 
     },
@@ -14595,6 +14597,28 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
     getPersonFailure: function( response, scope){
     	var me=scope;
     	me.getView().setLoading( false );
+    },
+    
+    getTranscriptSuccess: function( r, scope ){
+    	var me=scope;
+    	var coachLastServiceDateField = me.getCoachLastServiceDateField();
+		var coachLastServiceProvidedField = me.getCoachLastServiceProvidedField();
+		
+        Ext.Array.each(r, function(recentStudentActivityRaw) {
+        	if(recentStudentActivityRaw.coachId ===  me.person.getCoachId() ){
+        		var recentStudentActivity = Ext.create('Ssp.model.RecentStudentActivity', recentStudentActivityRaw);    
+        		coachLastServiceDateField.setValue(recentStudentActivity.getFormattedRecentActivityDate(recentStudentActivityRaw.activityDate));
+        		coachLastServiceProvidedField.setValue(recentStudentActivityRaw.activity);
+        		return;
+        	}
+                
+        });
+        me.getView().setLoading( false );
+    },
+    
+    getTranscriptFailure: function( response, scope ){
+    	var me=scope;
+    	me.getView().setLoading( false );  	
     }
 });
 /*
@@ -14629,14 +14653,15 @@ Ext.define('Ssp.controller.tool.profile.CurrentDroppedScheduleViewController', {
 		var personId = me.personLite.get('id');
 
         me.store.removeAll();
-
-    	me.getView().setLoading( true );
-    	
-		me.service.getCurrentCourses( personId, {
-			success: me.getTranscriptSuccess,
-			failure: me.getTranscriptFailure,
-			scope: me			
-		});
+        if(personId != ""){
+	    	me.getView().setLoading( true );
+	    	
+			me.service.getCurrentCourses( personId, {
+				success: me.getTranscriptSuccess,
+				failure: me.getTranscriptFailure,
+				scope: me			
+			});
+		}
 		
 		return this.callParent(arguments);
     },
@@ -14696,14 +14721,15 @@ Ext.define('Ssp.controller.tool.profile.CurrentScheduleViewController', {
 		var personId = me.personLite.get('id');
 
         me.store.removeAll();
-
-    	me.getView().setLoading( true );
-    	
-		me.service.getCurrentCourses( personId, {
-			success: me.getTranscriptSuccess,
-			failure: me.getTranscriptFailure,
-			scope: me			
-		});
+        if(personId != ""){
+	    	me.getView().setLoading( true );
+	    	
+			me.service.getCurrentCourses( personId, {
+				success: me.getTranscriptSuccess,
+				failure: me.getTranscriptFailure,
+				scope: me			
+			});
+		}
 		
 		return this.callParent(arguments);
     },
@@ -15016,14 +15042,16 @@ Ext.define('Ssp.controller.tool.profile.ProfileRecentStudentActivityViewControll
 		var personId = me.personLite.get('id');
 
         me.store.removeAll();
-
-    	me.getView().setLoading( true );
+        if (personId != "")
+		{
+        	me.getView().setLoading( true );
     	
-		me.service.getRecentStudentActivity( personId, {
-			success: me.getTranscriptSuccess,
-			failure: me.getTranscriptFailure,
-			scope: me			
-		});
+    		me.service.getRecentStudentActivity( personId, {
+    			success: me.getTranscriptSuccess,
+    			failure: me.getTranscriptFailure,
+    			scope: me			
+    		});
+		}
 		
 		return this.callParent(arguments);
     },
@@ -19752,14 +19780,15 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
 		var personId = me.personLite.get('id');
 
         me.store.removeAll();
-
-    	me.getView().setLoading( true );
-    	
-		me.service.getFull( personId, {
-			success: me.getTranscriptSuccess,
-			failure: me.getTranscriptFailure,
-			scope: me			
-		});
+        if(personId != ""){
+	    	me.getView().setLoading( true );
+	    	
+			me.service.getFull( personId, {
+				success: me.getTranscriptSuccess,
+				failure: me.getTranscriptFailure,
+				scope: me			
+			});
+        }
 		
 		return this.callParent(arguments);
     },
@@ -23631,11 +23660,6 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         fieldLabel: 'Ethnicity',
                         name: 'ethnicity',
                         itemId: 'ethnicity'
-                    },
-                    {
-                        fieldLabel: 'Race',
-                        name: 'race',
-                        itemId: 'race'
                     }
 					]}
 					]}
