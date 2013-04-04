@@ -235,7 +235,6 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	}
 	
 	
-	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "/transcript/recentstudentactivity", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
@@ -258,43 +257,48 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		
 		for(EarlyAlertTO earlyAlert:earlyAlertTOs){
 			if(earlyAlert.getClosedDate() != null){
-			recentActivities.add(new RecentActivityTO(earlyAlert.getClosedByName(), 
+			recentActivities.add(new RecentActivityTO(earlyAlert.getClosedById(), earlyAlert.getClosedByName(), 
 					"Early Alert Closed", 
 					earlyAlert.getClosedDate()));
 			}else{
-				recentActivities.add(new RecentActivityTO(getPersonLiteName(earlyAlert.getCreatedBy()), 
+				recentActivities.add(new RecentActivityTO(earlyAlert.getCreatedBy().getId(),
+						getPersonLiteName(earlyAlert.getCreatedBy()), 
 						"Early Alert Created", 
 						earlyAlert.getCreatedDate()));
 			}
 		}
 		
 		for(JournalEntryTO journalEntry:journalEntriesTOs){
-				recentActivities.add(new RecentActivityTO(getPersonLiteName(journalEntry.getCreatedBy()), 
+				recentActivities.add(new RecentActivityTO(journalEntry.getCreatedBy().getId(),
+						getPersonLiteName(
+						journalEntry.getCreatedBy()), 
 						"Journal Entry", 
 						journalEntry.getEntryDate()));
 		}
 		
 		for(TaskTO action:actionsTOs){
 			if(action.isCompleted()){
-				recentActivities.add(new RecentActivityTO(getPersonLiteName(action.getModifiedBy()), 
+				recentActivities.add(new RecentActivityTO(action.getModifiedBy().getId(),
+						getPersonLiteName(action.getModifiedBy()), 
 						"Action Plan Task Created", 
 						action.getCompletedDate()));
 			}else{
-			recentActivities.add(new RecentActivityTO(getPersonLiteName(action.getCreatedBy()), 
+			recentActivities.add(new RecentActivityTO(action.getCreatedBy().getId(),
+					getPersonLiteName(action.getCreatedBy()), 
 					"Action Plan Task Created", 
 					action.getCreatedDate()));
 			}
 		}
 		
-		
-		
 		if(person.getStudentIntakeCompleteDate() != null){
-			recentActivities.add(new RecentActivityTO(person.getCoach().getFullName(), 
+			recentActivities.add(new RecentActivityTO(person.getCoach().getId(),
+					person.getCoach().getFullName(), 
 					"Student Intake Completed", 
 					person.getStudentIntakeCompleteDate()));
 		}
 		if(person.getStudentIntakeRequestDate() != null){
-			recentActivities.add(new RecentActivityTO(person.getCoach().getFullName(), 
+			recentActivities.add(new RecentActivityTO(person.getCoach().getId(),
+					person.getCoach().getFullName(), 
 					"Student Intake Requested", 
 					person.getStudentIntakeRequestDate()));
 		}

@@ -2,6 +2,7 @@ package org.jasig.ssp.transferobject;
 
 import java.util.Comparator;
 import java.util.Date;
+import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
@@ -23,16 +24,18 @@ public class RecentActivityTO {
 	private String coachName;
 	private String activity;
 	private Date activityDate;
+	private UUID coachId;
 	/**
 	 * @param coachName
 	 * @param activity
 	 * @param activityDate
 	 */
-	public RecentActivityTO(String coachName, String activity, Date activityDate) {
+	public RecentActivityTO(UUID coachId, String coachName, String activity, Date activityDate) {
 		super();
 		this.coachName = coachName;
 		this.activity = activity;
 		this.activityDate = activityDate;
+		this.coachId = coachId;
 	}
 	/**
 	 * @return the coachName
@@ -69,6 +72,18 @@ public class RecentActivityTO {
 	 */
 	public void setActivityDate(Date activityDate) {
 		this.activityDate = activityDate;
+	}
+	/**
+	 * @return the coachId
+	 */
+	public UUID getCoachId() {
+		return coachId;
+	}
+	/**
+	 * @param coachId the coachId to set
+	 */
+	public void setCoachId(UUID coachId) {
+		this.coachId = coachId;
 	} 
 
 }

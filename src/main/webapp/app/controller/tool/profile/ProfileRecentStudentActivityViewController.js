@@ -30,14 +30,16 @@ Ext.define('Ssp.controller.tool.profile.ProfileRecentStudentActivityViewControll
 		var personId = me.personLite.get('id');
 
         me.store.removeAll();
-
-    	me.getView().setLoading( true );
+        if (personId != "")
+		{
+        	me.getView().setLoading( true );
     	
-		me.service.getRecentStudentActivity( personId, {
-			success: me.getTranscriptSuccess,
-			failure: me.getTranscriptFailure,
-			scope: me			
-		});
+    		me.service.getRecentStudentActivity( personId, {
+    			success: me.getTranscriptSuccess,
+    			failure: me.getTranscriptFailure,
+    			scope: me			
+    		});
+		}
 		
 		return this.callParent(arguments);
     },

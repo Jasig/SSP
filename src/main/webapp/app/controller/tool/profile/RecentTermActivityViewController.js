@@ -30,15 +30,15 @@ Ext.define('Ssp.controller.tool.profile.RecentTermActivityViewController', {
 		var personId = me.personLite.get('id');
 
         me.store.removeAll();
-
-    	me.getView().setLoading( true );
-    	
-		me.service.getTerm( personId, {
-			success: me.getTranscriptSuccess,
-			failure: me.getTranscriptFailure,
-			scope: me			
-		});
-		
+        if(personId != ""){
+	    	me.getView().setLoading( true );
+	    	
+			me.service.getTerm( personId, {
+				success: me.getTranscriptSuccess,
+				failure: me.getTranscriptFailure,
+				scope: me			
+			});
+	    }
 		return this.callParent(arguments);
     },
     
@@ -46,13 +46,10 @@ Ext.define('Ssp.controller.tool.profile.RecentTermActivityViewController', {
     	var me=scope;
 
         var termTranscripts = [];
-        var transcript = new Ssp.model.Transcript(r);
-
-        Ext.Array.each(r, function(termTranscriptRaw) {
-                var termTranscript = Ext.create('Ssp.model.TermTranscript', termTranscriptRaw);
+        Ext.Array.each(r, function(term) {
+                var termTranscript = Ext.create('Ssp.model.TermTranscript', term);
                 termTranscripts.push(termTranscript);
         });
-
 
         me.store.loadData(termTranscripts);
         me.getView().setLoading( false );

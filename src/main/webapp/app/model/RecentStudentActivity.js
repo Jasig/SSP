@@ -20,6 +20,7 @@ Ext.define('Ssp.model.RecentStudentActivity', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name: 'activity', type: 'string'},
         {name: 'coachName', type: 'string'},
+        {name: 'coachId', type: 'string'},
         {name: 'activityDateFormatted', type: 'string'},
         {name: 'activityDate', type: 'date', dateFormat: 'time'}],
         

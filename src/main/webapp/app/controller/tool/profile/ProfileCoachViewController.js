@@ -25,6 +25,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
         person: 'currentPerson',
         personLite: 'personLite',
         personService: 'personService',
+        activityService: 'transcriptService',
         sspConfig: 'sspConfig'
     },
     
@@ -35,19 +36,16 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
     	coachDepartmentNameField: '#coachDepartmentName',
     	coachOfficeLocationField: '#coachOfficeLocation',
     	coachPrimaryEmailAddressField: '#coachPrimaryEmailAddress',
-    	coachPhotoUrlField: '#coachPhotoUrl'
-    		
-    	
-    	
-    },
+    	coachPhotoUrlField: '#coachPhotoUrl',
+    	coachLastServiceDateField: '#coachLastServiceDate',
+    	coachLastServiceProvidedField: '#coachLastServiceProvided'
+     },
 	init: function() {
 		var me=this;
 		
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');
 		var id =  me.personLite.get('id');
 		me.getView().getForm().reset();
-
-				
 		
 		if (id != "")
 		{
@@ -57,6 +55,11 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 				success: me.getPersonSuccess,
 				failure: me.getPersonFailure,
 				scope: me
+			});
+			me.activityService.getRecentStudentActivity( id, {
+				success: me.getTranscriptSuccess,
+				failure: me.getTranscriptFailure,
+				scope: me			
 			});
 		}
 		
@@ -91,10 +94,6 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 		coachOfficeLocationField.setValue( me.person.getCoachOfficeLocation() );
 		coachPrimaryEmailAddressField.setValue( me.person.getCoachPrimaryEmailAddress() );
 		coachPhotoUrlField.setSrc( me.person.getCoachPhotoUrl() );
-		
-
-		
-		
 		// hide the loader
     	me.getView().setLoading( false ); 
     },
@@ -102,5 +101,27 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
     getPersonFailure: function( response, scope){
     	var me=scope;
     	me.getView().setLoading( false );
+    },
+    
+    getTranscriptSuccess: function( r, scope ){
+    	var me=scope;
+    	var coachLastServiceDateField = me.getCoachLastServiceDateField();
+		var coachLastServiceProvidedField = me.getCoachLastServiceProvidedField();
+		
+        Ext.Array.each(r, function(recentStudentActivityRaw) {
+        	if(recentStudentActivityRaw.coachId ===  me.person.getCoachId() ){
+        		var recentStudentActivity = Ext.create('Ssp.model.RecentStudentActivity', recentStudentActivityRaw);    
+        		coachLastServiceDateField.setValue(recentStudentActivity.getFormattedRecentActivityDate(recentStudentActivityRaw.activityDate));
+        		coachLastServiceProvidedField.setValue(recentStudentActivityRaw.activity);
+        		return;
+        	}
+                
+        });
+        me.getView().setLoading( false );
+    },
+    
+    getTranscriptFailure: function( response, scope ){
+    	var me=scope;
+    	me.getView().setLoading( false );  	
     }
 });

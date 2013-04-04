@@ -30,14 +30,15 @@ Ext.define('Ssp.controller.tool.profile.CurrentScheduleViewController', {
 		var personId = me.personLite.get('id');
 
         me.store.removeAll();
-
-    	me.getView().setLoading( true );
-    	
-		me.service.getCurrentCourses( personId, {
-			success: me.getTranscriptSuccess,
-			failure: me.getTranscriptFailure,
-			scope: me			
-		});
+        if(personId != ""){
+	    	me.getView().setLoading( true );
+	    	
+			me.service.getCurrentCourses( personId, {
+				success: me.getTranscriptSuccess,
+				failure: me.getTranscriptFailure,
+				scope: me			
+			});
+		}
 		
 		return this.callParent(arguments);
     },

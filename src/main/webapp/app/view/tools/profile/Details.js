@@ -132,11 +132,6 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         fieldLabel: 'Ethnicity',
                         name: 'ethnicity',
                         itemId: 'ethnicity'
-                    },
-                    {
-                        fieldLabel: 'Race',
-                        name: 'race',
-                        itemId: 'race'
                     }
 					]}
 					]}
