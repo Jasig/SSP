@@ -47,6 +47,57 @@
 				</dependency>
 			</dependencies>
 		</profile>
+		
+		<profile>
+			<id>nonProdJs</id>
+			<build>
+			</build>
+		</profile>
+		<profile>
+			<id>prodJs</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>1.2.1</version>
+					<executions>
+					  <execution>
+						<id>sencha.bat</id>
+						<phase>compile</phase>
+						<goals>
+						  <goal>exec</goal>
+						</goals>
+					  </execution>
+					</executions>
+					<configuration>
+					  <executable>sencha.bat</executable>
+					  <!-- optional -->
+					  <workingDirectory>..\src\main\webapp</workingDirectory>
+					  <arguments>
+						<argument>build</argument>
+						<argument>-p</argument>
+						<argument>${basedir}\src\main\webapp\ssp.jsb3</argument>
+						<argument>-d</argument>
+						<argument>${basedir}\src\main\webapp\.</argument>
+					  </arguments>
+					</configuration>
+					</plugin>
+				</plugins>			
+				<pluginManagement>
+					<plugins>			
+						<plugin>
+						  <groupId>org.codehaus.mojo</groupId>
+						  <artifactId>exec-maven-plugin</artifactId>
+						  <version>1.2.1</version>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
 	</profiles>
 
 	<dependencies>
@@ -465,7 +516,6 @@
 	<build>
 
 		<plugins>
-		
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jasperreports-maven-plugin</artifactId>

@@ -32,7 +32,15 @@
 <link href="<c:url value="/resources/css/ssp-ext-theme.css" />" rel="stylesheet" type="text/css" />
 
 <!-- ExtJS Lib -->
-<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/ext-all.js" />"></script>
+<c:choose>
+	<c:when test="${useMinified}">
+		<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/ext-all.js" />"></script>
+	</c:when>
+	<c:otherwise>
+		<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/ext.js" />"></script>
+	</c:otherwise>
+</c:choose>
+
 <script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/CheckColumn.js" />"></script>
 <script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/form/MultiSelect.js" />"></script>
 <script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/form/ItemSelector.js" />"></script>   
@@ -53,8 +61,14 @@
 </script>
 
 <!-- SSP Application -->
-<script type="text/javascript" src="<c:url value="/app-all.js" />"></script>
-
+<c:choose>
+	<c:when test="${useMinified}">
+		<script type="text/javascript" src="<c:url value="/app-all.js" />"></script>
+	</c:when>
+	<c:otherwise>
+		<script type="text/javascript" src="<c:url value="/app.js" />"></script>
+	</c:otherwise>
+</c:choose>
 <div class="sspOuter">
 	<div id="${n}ssp"></div>
 </div>
