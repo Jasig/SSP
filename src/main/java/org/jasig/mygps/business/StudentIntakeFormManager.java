@@ -355,6 +355,7 @@ public class StudentIntakeFormManager { // NOPMD
 	 * @return A form transfer object filled with current user data.
 	 */
 	public FormTO populate() throws ObjectNotFoundException { // NOPMD
+
 		final FormTO formTO = create();
 		Person student = securityService.currentUser().getPerson();
 
@@ -362,8 +363,12 @@ public class StudentIntakeFormManager { // NOPMD
 		// person instance was loaded in a previous request
 		student = personService.get(student.getId());
 		
-		formTO.setCompleted(student.getStudentIntakeCompleteDate()== null ? false : true);
-
+		boolean completed = student.getStudentIntakeCompleteDate()== null ? false : true;
+			
+		formTO.setCompleted(completed);
+        if(!completed)
+        {
+        	
 		/* Confidentiality disclosure */
 
 		FormSectionTO formSectionTO = formTO
@@ -897,10 +902,9 @@ public class StudentIntakeFormManager { // NOPMD
 		}
 
 		challengeQuestion.setValues(challengeQuestionValues);
-
+        }
 		return formTO;
 	}
-
 	public Person save(final FormTO formTO) throws ObjectNotFoundException { // NOPMD
 
 		// Refresh Person from Hibernate so lazy-loading works in case the
@@ -1486,13 +1490,15 @@ public class StudentIntakeFormManager { // NOPMD
 			// TODO Add EducationGoal.OtherDescription field
 			// studentEducationGoal.setOtherDescription(educationGoalSection.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_OTHERDESCRIPTION_ID).getValue());
 
-			studentEducationGoal.setHowSureAboutMajor(Integer
-					.valueOf(educationGoalSection.getFormQuestionById(
-							SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID)
-							.getValue()));
+			String majorSureOfValue = educationGoalSection.getFormQuestionById(
+					SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID)
+					.getValue();
+			studentEducationGoal.setHowSureAboutMajor(majorSureOfValue == null ? null : Integer
+					.valueOf(majorSureOfValue));
 
-			studentEducationGoal.setHowSureAboutOccupation(
-					Integer.valueOf(educationGoalSection.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_SUREOF_ID).getValue()));
+			String careerSureOfValue = educationGoalSection.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_SUREOF_ID).getValue();
+			studentEducationGoal.setHowSureAboutOccupation(careerSureOfValue == null ? null : 
+					Integer.valueOf(careerSureOfValue));
 			
 			studentEducationGoal.setAdditionalAcademicProgramInformationNeeded(
 					SspStringUtils.booleanFromString(educationGoalSection.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_ADDITIONAL_INFO_ID).getValue()));
