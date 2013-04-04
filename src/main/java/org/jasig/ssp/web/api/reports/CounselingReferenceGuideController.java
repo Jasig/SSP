@@ -116,7 +116,7 @@ public class CounselingReferenceGuideController extends AbstractBaseController {
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 
-		final PagingWrapper<Challenge> challengeWrapper = challengeService.getAll(null);
+		final PagingWrapper<Challenge> challengeWrapper = challengeService.getAll(new SortingAndPaging(ObjectStatus.Active));
 		final List<ChallengeTO> challengeTOs = challengeTOactory.asTOList(challengeWrapper.getRows());	
 		
 		
