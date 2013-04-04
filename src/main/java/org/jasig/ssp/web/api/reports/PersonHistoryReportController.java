@@ -112,7 +112,7 @@ public class PersonHistoryReportController extends AbstractBaseController {
 	protected transient SecurityService securityService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	@PreAuthorize(Permission.SECURITY_REPORT_READ)
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
 	void getAddressLabels(
 			final HttpServletResponse response,
