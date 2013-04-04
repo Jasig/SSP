@@ -16,19 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.CourseTranscript', {
-    extend: 'Ssp.model.AbstractBase',
-    fields: [{name: 'termCode', type: 'string'},
-        {name: 'formattedCourse', type: 'string'},
-        {name: 'title', type: 'string'},
-        {name: 'creditType', type: 'string'},
-        {name: 'grade', type: 'string'},
-        {name: 'audited', type: 'string'},
-        {name: 'creditEarned', type: 'number'},
-        {name: 'facultyName', type: 'string'},
-        {name: 'facultySchoolId', type: 'string'},
-        {name: 'sectionCode', type: 'string'},
-        {name: 'statusCode', type: 'string'},
-        {name: 'subjectAbbreviation', type: 'string'},
-        {name: 'sectionNumber', type: 'string'}]
+Ext.define('Ssp.model.external.FinancialAid', {
+    extend: 'Ssp.model.external.AbstractExternal',
+    fields: [{name: 'schoolId', type: 'string'},
+             {name: 'financialAidGpa', type: 'auto'},
+             {name: 'gpa20BHrsNeeded', type: 'auto'},
+             {name: 'gpa20AHrsNeeded', type: 'auto'},
+             {name: 'neededFor67PtcCompletion', type: 'auto'},
+             {name: 'currentYearFinancialAidAward', type: 'string'},
+             {name: 'sapStatus', type: 'string'},
+             {name: 'fafsaDate', type: 'date', dateFormat: 'time'},
+             {name: 'currentYearFinancialAidAward', type: 'string'},
+             {name: 'financialAidRemaining', type: 'auto'},
+             {name: 'originalLoanAmount', type: 'auto'}
+             ],
+
 });

@@ -203,6 +203,8 @@ Ext.require([
 	'Ssp.model.Placement',
 	'Ssp.model.PersonProgramStatus',
 	'Ssp.model.CourseTranscript',
+	'Ssp.model.TermTranscript',
+	'Ssp.model.RecentStudentActivity',
 	'Ssp.model.Transcript',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
@@ -650,6 +652,39 @@ Ext.onReady(function(){
 						fn: function(){
 							return Ext.create('Ext.data.Store',{
 								model: 'Ssp.model.CourseTranscript'
+							});
+						},
+						singleton: true
+					},
+					currentScheduleStore: {
+						fn: function(){
+							return Ext.create('Ext.data.Store',{
+								model: 'Ssp.model.CourseTranscript'
+							});
+						},
+						singleton: true
+					},
+					currentDroppedScheduleStore:{
+						fn: function(){
+							return Ext.create('Ext.data.Store',{
+								model: 'Ssp.model.CourseTranscript'
+							});
+						},
+						singleton: true
+					},
+					
+					termTranscriptsStore: {
+						fn: function(){
+							return Ext.create('Ext.data.Store',{
+								model: 'Ssp.model.TermTranscript'
+							});
+						},
+						singleton: true
+					},
+					recentStudentActivitiesStore: {
+						fn: function(){
+							return Ext.create('Ext.data.Store',{
+								model: 'Ssp.model.RecentStudentActivity'
 							});
 						},
 						singleton: true

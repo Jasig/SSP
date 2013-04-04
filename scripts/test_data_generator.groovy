@@ -36,6 +36,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID
 import org.jasig.ssp.model.Person
+import org.jasig.ssp.model.ObjectStatus
 import static Constants.*
 class Constants{
 	
@@ -68,6 +69,8 @@ class Constants{
 	static final MAXIMUM_JOURNAL_ENTRIES = 8 as Integer
 	static final MAXIMUM_JOURNAL_STEP_JOURNAL_STEP_DETAILS = 2 as Integer
 	static final MAXIMUM_JOURNAL_ENTRY_DETAILS = 2 as Integer
+	static final MAXIMUM_JOURNAL_STEPS = 15 as Integer
+	static final MAXIMUM_JOURNAL_STEP_DETAILS = 3 as Integer
 	
 	static final FREQUENCY_OF_EARLY_ALERT_RESPONSE = 3 as Integer
 	static final FREQUENCY_OF_EARLY_ALERT_SUGGESTION = 2 as Integer
@@ -103,6 +106,10 @@ class Constants{
 	static final VETERAN_STATUS_PARAMS = [max:6,mod:6] // array size 6
 	static final ETHNICITY_PARAMS = [max:8,mod:8] // array size 8
 	static final SERVICE_REASON_PARAMS = [max:2,mod:4] // array size 2
+	static final MARITAL_STATUS_PARAMS = [max:6,mod:8] // array size 6
+	static final GENDER_PARAMS = [max:2,mod:2] // array size 2
+	static final PHOTO_URL_PARAMS = [max:2,mod:4] // array size 2
+	static final F1_STATUS_PARAMS = [max:3,mod:3] // array size 2
 	
 	static final ANTICIPATED_START_TERM = "FA12"
 	static final ANTICIPATED_START_YEAR = 2013
@@ -124,6 +131,11 @@ static final programStatusIds = ["b2d12527-5056-a51a-8054-113116baab88",
 	"b2d125c3-5056-a51a-8004-f1dbabde80c2",
 	"b2d125e3-5056-a51a-800f-6891bc7d1ddc",
 	"b2d12640-5056-a51a-80cc-91264965731a"] as String[]
+	
+static final photoUrls = ['http://profile.ak.fbcdn.net/hprofile-ak-snc6/c40.40.499.499/s160x160/263085_10150254378006108_5560048_n.jpg',
+	'http://www.pecjazz.org/uploads/1/2/9/4/12947551/9100741.jpg'] as String[]
+
+static final f1Statuses = ["Y","N", "O"] as String[]
 	
 static final earlyAlertOutreachIds = ["3383d46f-8051-4a86-886d-a3efe75b8f3a",
 	"612ed2c5-6d9a-4cda-9007-b22756888ca8",
@@ -373,6 +385,16 @@ static final educationGoalIds = ["00afdf46-2f0e-46e4-9d56-bc45b9266642",
 "efeb5536-d634-4b79-80bc-1e1041dcd3ff"
 ] as String[]
 
+static final maritalStatusIds = ["4e8d1ee2-6862-463f-b3f6-9c96d85873fe",
+"76521a04-b531-4c25-b6a6-609f3a123456",
+"a159c9bf-4e94-4f68-874a-3065e2d9651e",
+"c1d6598e-622d-428c-b7c2-1c4283d73126",
+"c30d2993-0e96-4b70-9fd1-15f83ce281c1",
+"f415d6c7-9723-42ea-8bb6-9417ca8fec6f"
+] as String[]
+
+static final genderIds = ["M","F"] as String[]
+
 static final majorIds = ["Physics", 
 	"MATH", 
 	"ENGISH", 
@@ -420,8 +442,10 @@ xml.databaseChangeLog( xmlns : "http://www.liquibase.org/xml/ns/dbchangelog"
 						 	
 							ArrayList<UUID> rollbackList = new ArrayList<UUID>()
 							ArrayList<GroovyPerson> groovyPersons = new ArrayList<GroovyPerson>()
-							generatePeople(xml, null, "", 0, TOTAL_NUMBER_OF_COACHES, rollbackList, groovyPersons)
+							ArrayList<UUID> journalStepJournalStepDetailIds  = generateJournalStepJournalStepDetails(xml);
+							generatePeople(xml, null, "", 0, TOTAL_NUMBER_OF_COACHES, rollbackList, groovyPersons, journalStepJournalStepDetailIds)
 							generateRollbacks(xml, 'person', rollbackList)
+							generateRollbacks(xml, 'journal_step_journal_step_detail', journalStepJournalStepDetailIds)
 							
 							if(WRITE_UPORTAL_USERS == true){
 								def ldif_writer = new FileWriter('./src/main/config/devExternal/users_1.ldif')
@@ -432,7 +456,7 @@ xml.databaseChangeLog( xmlns : "http://www.liquibase.org/xml/ns/dbchangelog"
 }
 
 
-ArrayList<UUID> generatePeople(xml, coachId, coachSuffix, startIndex, endIndex, rollbackList, groovyPersons){
+ArrayList<UUID> generatePeople(xml, coachId, coachSuffix, startIndex, endIndex, rollbackList, groovyPersons, journalStepJournalStepDetailIds){
 	 ArrayList<UUID> earlyAlertIds = new ArrayList<UUID>()
 	 ArrayList<UUID> earlyAlertResponseIds = new ArrayList<UUID>()
 	 ArrayList<UUID> programStatusPersonIds = new ArrayList<UUID>()
@@ -448,7 +472,6 @@ ArrayList<UUID> generatePeople(xml, coachId, coachSuffix, startIndex, endIndex, 
 	 ArrayList<UUID> personDemographicsIds = new ArrayList<UUID>()
 	 ArrayList<UUID> personServiceReasonIds = new ArrayList<UUID>()
 	 ArrayList<UUID> journalEntryDetailIds = new ArrayList<UUID>()
-	 ArrayList<UUID> journalStepJournalStepDetailIds = new ArrayList<UUID>()
 	 
 	 for(Integer i = startIndex; i < endIndex; i++){
 		 UUID personId = UUID.randomUUID();
@@ -458,7 +481,7 @@ ArrayList<UUID> generatePeople(xml, coachId, coachSuffix, startIndex, endIndex, 
 			 addPerson(xml, personId, true, null, BASE_COACH_NAME , null, i, null, null, null, null, null, null, null, null, null)
 			 groovyPersons.add(makePerson(personId, true, null, BASE_COACH_NAME , null, i))
 			 Integer multiplier = i%STUDENT_MULTIPLIER
-			 rollbackList = generatePeople(xml, personId, BASE_COACH_NAME+i, startIndex, multiplier * BASE_NUMBER_OF_STUDENTS, rollbackList, groovyPersons)
+			 rollbackList = generatePeople(xml, personId, BASE_COACH_NAME+i, startIndex, multiplier * BASE_NUMBER_OF_STUDENTS, rollbackList, groovyPersons, journalStepJournalStepDetailIds)
 		 }else{
 			studentTypeId = retrieveListValue(studentTypeIds, i, STUDENT_TYPE_ID_PARAMS)
 			UUID personDisabilityId = null
@@ -481,7 +504,9 @@ ArrayList<UUID> generatePeople(xml, coachId, coachSuffix, startIndex, endIndex, 
 			personDemographicsIds.add(personDemographicsId)
 			String ethnicityId =  retrieveListValue(ethnicityIds, i, ETHNICITY_PARAMS)
 			String veteranStatusId =  retrieveListValue(veteranStatusIds, i, VETERAN_STATUS_PARAMS)
-			addPersonDemographics(xml, personDemographicsId, personId, ethnicityId, veteranStatusId, null)
+			String genderId =  retrieveListValue(genderIds, i, GENDER_PARAMS)
+			String maritalStatusId =  retrieveListValue(maritalStatusIds, i, MARITAL_STATUS_PARAMS)
+			addPersonDemographics(xml, personDemographicsId, personId, ethnicityId, veteranStatusId, maritalStatusId, genderId, null)
 			
 			addPerson(xml, personId, true, 
 				coachId, 
@@ -567,7 +592,6 @@ ArrayList<UUID> generatePeople(xml, coachId, coachSuffix, startIndex, endIndex, 
 	 generateRollbacks(xml, 'early_alert', earlyAlertIds)
 	 generateRollbacks(xml, 'journal_entry', journalIds)
 	 generateRollbacks(xml, 'journal_entry_detail', journalEntryDetailIds)
-	 generateRollbacks(xml, 'journal_step_journal_step_detail', journalStepJournalStepDetailIds)
 	 generateRollbacks(xml, 'task', taskIds)
 	 generateRollbacksManyToMany(xml, "early_alert_early_alert_reason", "early_alert_id", earlyAlertIds)
 	 generateRollbacksManyToMany(xml, "early_alert_early_alert_suggestion", "early_alert_id", earlyAlertIds)
@@ -640,8 +664,9 @@ ArrayList<UUID> generateJournalEntryDetails(xml, journalEntryId, i, objectStatus
 		UUID journalEntryDetailId = UUID.randomUUID();
 		objectStatus = null
 		journalEntryDetailIds.add(journalEntryDetailId)
-		UUID journalStepJournalStepDetailId = addJournalStepJournalStepDetail(xml, i + k, objectStatus)
-		journalStepJournalStepDetailIds.add(journalStepJournalStepDetailId)
+		UUID journalStepJournalStepDetailId = retrieveListValueUUID(journalStepJournalStepDetailIds, i+k, [max:journalStepJournalStepDetailIds.size(),mod:journalStepJournalStepDetailIds.size() + 4])
+		if(journalStepJournalStepDetailId == null)
+			continue;
 		addJournalEntryDetail(xml, journalEntryDetailId.toString(), journalEntryId, journalStepJournalStepDetailId, objectStatus)
 	}
 	return journalStepJournalStepDetailIds;
@@ -652,27 +677,86 @@ void addJournalEntryDetail(xml, id, journalEntryId, journalStepJournalStepDetail
 	xml.insert(tableName:"journal_entry_detail"){
 		xml.column(name:"id",  value:id.toString())
 		xml.column(name:"journal_step_journal_step_detail_id",  value:journalStepJournalStepDetailId.toString())
-		xml.column(name:"journal_entry_id",  value:journalEntryId)
+		xml.column(name:"journal_entry_id",  value:journalEntryId.toString())
 		addCreatedModified(xml, null, null)
 		addObjectStatus(xml, objectStatus)
 	}
 }
 
+List<UUID> generateJournalStepJournalStepDetails(xml){
+	ArrayList<UUID> journalStepIds = new ArrayList<UUID>()
+	ArrayList<UUID> journalStepDetailIds = new ArrayList<UUID>()
+	ArrayList<UUID> journalStepJournalStepDetailIds = new ArrayList<UUID>()
+	ObjectStatus objectStatus = null;
+	for(Integer i = 0; i < MAXIMUM_JOURNAL_STEPS; i++){
+		
+		UUID journalStepId = addJournalStep(xml, getJournalStepName(i,""), 
+			getJournalStepName(i ,"Description of "), i + 1000, i%4 == 0?true:false, objectStatus)
+		journalStepIds.add(journalStepId)
+		
+		for(Integer k = 0; k < MAXIMUM_JOURNAL_STEP_DETAILS; k++){
+			UUID journalStepDetailId = addJournalStepDetail(xml,  getJournalStepDetailName(i,k, ""), 
+				getJournalStepDetailName(i,k, "Description of "), 200 + 100*i + k, objectStatus)
+			journalStepDetailIds.add(journalStepDetailId)
+			UUID journalStepJournalStepDetailId = addJournalStepJournalStepDetail(xml, 
+				journalStepId, 
+				journalStepDetailId, objectStatus)
+			journalStepJournalStepDetailIds.add(journalStepJournalStepDetailId);
+		}
+	}
+	
+	generateRollbacks(xml, 'journal_step', journalStepIds)
+	generateRollbacks(xml, 'journal_step_detail', journalStepDetailIds)
+	return journalStepJournalStepDetailIds;
+}
 
-UUID addJournalStepJournalStepDetail(xml, i, objectStatus){
+String getJournalStepDetailName(i,k, prefix){
+	return prefix + "Journal Step Detail" + k + "for step" + i;
+}
+
+String getJournalStepName(i, prefix){
+	return prefix + "Journal Step" +  i;
+}
+
+
+UUID addJournalStepJournalStepDetail(xml, journalStepId, journalStepDetailId,  objectStatus){
 	UUID id = UUID.randomUUID()
-	String journal_step_detail_id = retrieveListValue(journalStepDetailIds, i, JOURNAL_STEP_DETAIL_ID_PARAMS)
-	String journal_step_id = retrieveListValue(journalStepIds, i, JOURNAL_STEP_ID_PARAMS)
 	
 	xml.insert(tableName:"journal_step_journal_step_detail"){
 		xml.column(name:"id",  value:id.toString())
-		xml.column(name:"journal_step_detail_id",  value:journal_step_detail_id.toString())
-		xml.column(name:"journal_step_id",  value:journal_step_id)
+		xml.column(name:"journal_step_detail_id",  value:journalStepDetailId.toString())
+		xml.column(name:"journal_step_id",  value:journalStepId.toString())
 		addCreatedModified(xml, null, null)
 		addObjectStatus(xml, objectStatus)
 	}
 	
 	return id;
+}
+UUID addJournalStep(xml, name, description, sort_order, used_for_transition, objectStatus){
+	UUID id = UUID.randomUUID()
+	xml.insert(tableName:"journal_step"){
+		xml.column(name:"id",  value:id)
+		xml.column(name:"name",  value:name)
+		xml.column(name:"description",  value:description)
+		xml.column(name:"sort_order",  value:sort_order)
+		xml.column(name:"used_for_transition",  value:used_for_transition)
+		addCreatedModified(xml, null, null)
+		addObjectStatus(xml, objectStatus)
+	}
+	return id
+}
+
+UUID addJournalStepDetail(xml, name, description, sort_order, objectStatus){
+	UUID id = UUID.randomUUID()
+	xml.insert(tableName:"journal_step_detail"){
+		xml.column(name:"id",  value:id.toString())
+		xml.column(name:"name",  value:name)
+		xml.column(name:"description",  value:description)
+		xml.column(name:"sort_order",  value:sort_order)
+		addCreatedModified(xml, null, null)
+		addObjectStatus(xml, objectStatus)
+	}
+	return id
 }
 
 
@@ -713,13 +797,13 @@ ArrayList<UUID> generateEarlyAlerts(xml, personId, coachId, i, startDate, earlyA
 							getDateWithOffSet(startDate, EARLY_ALERT_OFF_SET_DATE_PARAMS, i), 
 							closedDate, 
 							coachId, 1, campusId)
-		if(k%FREQUENCY_OF_EARLY_ALERT_REASON != 0)
-			generateManyToMany(xml, earlyAlertId, earlyAlertReasonIds, i, k, 10, EARLY_ALERT_REASON_ID_PARAMS, 
+	
+	generateManyToMany(xml, earlyAlertId, earlyAlertReasonIds, i, k, 3, EARLY_ALERT_REASON_ID_PARAMS, 
 							"early_alert_early_alert_reason", 
 							"early_alert_id", 
 							"early_alert_reason_id")
-	   if(k%FREQUENCY_OF_EARLY_ALERT_SUGGESTION != 0)
-			generateManyToMany(xml, earlyAlertId, earlyAlertSuggestionIds, i, k, 10, EARLY_ALERT_SUGGESTION_ID_PARAMS,
+	   
+			generateManyToMany(xml, earlyAlertId, earlyAlertSuggestionIds, i, k, 4, EARLY_ALERT_SUGGESTION_ID_PARAMS,
 				"early_alert_early_alert_suggestion",
 				"early_alert_id",
 				"early_alert_suggestion_id")
@@ -747,7 +831,7 @@ ArrayList<UUID> generateEarlyAlertResponses(xml, earlyAlertId, startDate, i, ear
 			1)
 		generateManyToMany(xml, earlyAlertResponseId, earlyAlertOutreachIds, i, k, 5, EARLY_ALERT_OUTREACH_ID_PARAMS, 
 						"early_alert_response_early_alert_outreach", "early_alert_response_id", "early_alert_outreach_id")
-		generateManyToMany(xml, earlyAlertResponseId, earlyAlertReferralIds, i, k, 10, EARLY_ALERT_REFERRAL_ID_PARAMS,
+		generateManyToMany(xml, earlyAlertResponseId, earlyAlertReferralIds, i, k, 3, EARLY_ALERT_REFERRAL_ID_PARAMS,
 			"early_alert_response_early_alert_referral", "early_alert_response_id", "early_alert_referral_id")
 	}
 }
@@ -807,9 +891,17 @@ String retrieveListValue(list, i, params){
 	return idValue
 }
 
+UUID retrieveListValueUUID(list, i, params){
+	index = i%params.mod;
+	UUID idValue = null;
+	if(index < params.max)
+		idValue = list[index]
+	return idValue
+}
+
 void generateManyToMany(xml, id, manyIds, i, k, manyIdsSize, params, tableName, idName, manyIdName){
 	ArrayList<String> usedIds = new ArrayList<String>()
-	for(Integer l = 0; l < (i+k)%MAX_MANY_TO_MANY; l++){
+	for(Integer l = 0; l < ((i+k)%manyIdsSize) + 1; l++){
 		manyId = retrieveListValue(manyIds, i + k + l, params)
 		
 		if(manyId == null)
@@ -858,7 +950,8 @@ void addPerson(xml,
 		xml.column(name:"state", value:"AZ")
 		xml.column(name:"photo_url", value:"http://img.youtube.com/vi/gcC1nPNYFzk/0.jpg")
 		xml.column(name:"zip_code", value:"85201")
-		xml.column(name:"photo_url", value:"")
+		xml.column(name:"photo_url", value: retrieveListValue(photoUrls, i, PHOTO_URL_PARAMS))
+		xml.column(name:"f1_status", value: retrieveListValue(f1Statuses, i, F1_STATUS_PARAMS))
 		xml.column(name:"school_id",  value:userNameSuffix + i)
 		
 		if(personDisabilityId != null)
@@ -901,7 +994,6 @@ GroovyPerson makePerson(personId, isCoach, coachId, userNameSuffix, studentTypeI
 	person.city = "Mesa"
 	person.state = "AZ"
 	person.zip_code = "85201"
-	person.photo_url = ""
 	person.school_id = userNameSuffix + i
 	person.created_by = "58ba5ee3-734e-4ae9-b9c5-943774b4de41"
 	person.modified_by = "58ba5ee3-734e-4ae9-b9c5-943774b4de41"
@@ -1022,11 +1114,14 @@ void addPersonEducationGoal(xml, id, personId, educationGoalId, plannedMajor, de
 	}
 }
 
-void addPersonDemographics(xml, id, personId, ethnicityId, veteranStatusId, objectStatus){
+void addPersonDemographics(xml, id, personId, ethnicityId, veteranStatusId, maritalStatusId, genderId, objectStatus){
 	xml.insert(tableName:"person_demographics"){
 		xml.column(name:"id",  value:id.toString())
 		xml.column(name:"ethnicity_id",  value:ethnicityId.toString())
 		xml.column(name:"veteran_status_id",  value:veteranStatusId)
+		if(maritalStatusId != null && maritalStatusId.length() > 0)
+			xml.column(name:"marital_status_id",  value:maritalStatusId)
+		xml.column(name:"gender",  value:genderId)
 		addCreatedModified(xml, null, null)
 		addObjectStatus(xml, objectStatus)
 	}
@@ -1129,29 +1224,6 @@ void addTask(xml, id, index, name, description, personId, coachId, entryDate, du
 		addObjectStatus(xml, objectStatus)
 	}
 }
-
-void addJournalStep(xml, id, personId, name, description, objectStatus, sort_order){
-	xml.insert(tableName:"journal_step"){
-		xml.column(name:"id",  value:challengeId.toString())
-		xml.column(name:"name",  value:name)
-		xml.column(name:"description",  value:description)
-		xml.column(name:"sort_order",  value:sort_order)
-		addCreatedModified(xml, null, null)
-		addObjectStatus(xml, objectStatus)
-	}
-}
-
-void addJournalStepDetail(xml, id, personId, name, description, objectStatus, sort_order){
-	xml.insert(tableName:"journal_step_detail"){
-		xml.column(name:"id",  value:challengeId.toString())
-		xml.column(name:"name",  value:name)
-		xml.column(name:"description",  value:description)
-		xml.column(name:"sort_order",  value:sort_order)
-		addCreatedModified(xml, null, null)
-		addObjectStatus(xml, objectStatus)
-	}
-}
-
 
 void addCreatedModified(xml, created_by, created_date){
 	xml.column(name:"created_date",  value:created_date == null ? base_created_date.toString() : created_date)

@@ -20,7 +20,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
     extend: 'Ext.form.Panel',
     alias: 'widget.profiledetails',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    controller: 'Ssp.controller.tool.profile.ProfilePersonDetailsViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
         sspConfig: 'sspConfig'
@@ -129,9 +129,9 @@ Ext.define('Ssp.view.tools.profile.Details', {
                     },
 					
                     {
-                        fieldLabel: 'Etnicity',
-                        name: 'etnicity',
-                        itemId: 'etnicity'
+                        fieldLabel: 'Ethnicity',
+                        name: 'ethnicity',
+                        itemId: 'ethnicity'
                     },
                     {
                         fieldLabel: 'Race',
@@ -145,8 +145,8 @@ Ext.define('Ssp.view.tools.profile.Details', {
                     },
 					{
                         fieldLabel: 'Intended Program at Admit',
-                        itemId: 'intendedProgram',
-                        name: 'intendedProgram',
+                        itemId: 'intendedProgramAtAdmit',
+                        name: 'intendedProgramAtAdmit',
                         labelAlign: 'top',
                         labelPad: 0,
 						margin: '0 0 10 0'
@@ -174,33 +174,33 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         height: '10'
                     }, {
                         fieldLabel: 'FA GPA',
-                        name: 'faGPA',
-                        itemId: 'faGPA',
+                        name: 'financialAidGpa',
+                        itemId: 'financialAidGpa',
 						labelWidth: 60
                     }, {
                         fieldLabel: 'Standing',
-                        name: 'standing',
-                        itemId: 'standing',
+                        name: 'academicStanding',
+                        itemId: 'academicStanding',
 						labelWidth: 60
                     }, {
                         fieldLabel: 'Restrictions',
-                        name: 'restrictions',
-                        itemId: 'restrictions',
+                        name: 'currentRestrictions',
+                        itemId: 'currentRestrictions',
 						labelWidth: 80
                     }, {
                         fieldLabel: 'Hrs Earned',
-                        name: 'hrsEarned',
-                        itemId: 'hrsEarned',
+                        name: 'creditHoursEarned',
+                        itemId: 'creditHoursEarned',
 						labelWidth: 80
                     }, {
                         fieldLabel: 'Hrs Attempted',
-                        name: 'hrsAttempted',
-                        itemId: 'hrsAttempted',
+                        name: 'creditHoursAttempted',
+                        itemId: 'creditHoursAttempted',
 						labelWidth: 100
                     }, {
                         fieldLabel: '<a href="">Comp Rate</a>',
-                        name: 'compRate',
-                        itemId: 'compRate',
+                        name: 'creditCompletionRate',
+                        itemId: 'creditCompletionRate',
 						labelWidth: 80
                     }, {
                         fieldLabel: 'Transfer Hrs',
@@ -219,34 +219,34 @@ Ext.define('Ssp.view.tools.profile.Details', {
 						labelWidth: 80
                     }, {
                         fieldLabel: 'Balance',
-                        name: 'balance',
-                        itemId: 'balance',
+                        name: 'remainingLoanAmount',
+                        itemId: 'remainingLoanAmount',
 						labelWidth: 80
                     }, {
                         xtype: 'tbspacer',
                         height: '10'
                     }, {
-                        fieldLabel: 'FASFA',
-                        name: 'fasfa',
-                        itemId: 'fasfa',
+                        fieldLabel: 'FAFSA',
+                        name: 'fafsaDate',
+                        itemId: 'fafsaDate',
 						labelWidth: 60
                     
                     }, {
                         fieldLabel: 'FA Award',
-                        name: 'faAward',
-                        itemId: 'faAward',
+                        name: 'currentYearFinancialAidAward',
+                        itemId: 'currentYearFinancialAidAward',
 						labelWidth: 80
                     
                     }, {
                         fieldLabel: 'FA Amount',
-                        name: 'faAmount',
-                        itemId: 'faAmount',
+                        name: 'financialAidRemaining',
+                        itemId: 'financialAidRemaining',
 						labelWidth: 80
                     
                     }, {
                         fieldLabel: 'Loan Amount',
-                        name: 'loanAmount',
-                        itemId: 'loanAmount',
+                        name: 'originalLoanAmount',
+                        itemId: 'originalLoanAmount',
 						labelWidth: 80
                     
                     }, {
@@ -254,13 +254,13 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         height: '10'
                     }, {
                         fieldLabel: 'SAP',
-                        name: 'sap',
-                        itemId: 'sap',
+                        name: 'sapStatus',
+                        itemId: 'sapStatus',
 						labelWidth: 30
                     }, {
                         fieldLabel: 'F1',
-                        name: 'f1',
-                        itemId: 'f1',
+                        name: 'f1Status',
+                        itemId: 'f1Status',
 						labelWidth: 30
                     }]
                 
@@ -277,8 +277,8 @@ Ext.define('Ssp.view.tools.profile.Details', {
                     flex: .30,
                     items: [{
                         fieldLabel: 'Residency',
-                        name: 'residency',
-                        itemId: 'residency',
+                        name: 'residencyCounty',
+                        itemId: 'residencyCounty',
 						labelWidth: 80
                     }, {
                         xtype: 'tbspacer',

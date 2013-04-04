@@ -45,10 +45,12 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                     msgTarget: 'side'
                 },
                 items: [{
-                    xtype: 'label',
-                    html: '<img src=""  height="150" width="150" />',
-                    text: '',
-                    itemId: 'coachImage'
+                	xtype: 'image',
+                    fieldLabel: '',
+                    src: Ssp.util.Constants.DEFAULT_NO_STUDENT_PHOTO_URL,
+                    itemId: 'coachPhotoUrl',
+                    width:150,
+                    height:150
                 }, {
                     xtype: 'fieldset',
                     border: 0,

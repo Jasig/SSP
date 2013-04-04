@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
+Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: ['Deft.mixin.Injectable'],
     inject: {
@@ -43,6 +43,11 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         studentTypeField: '#studentType',
         programStatusField: '#programStatus',
         f1StatusField: '#f1Status',
+        residencyCountyField: '#residencyCounty',
+        maritalStatusField: '#maritalStatus',
+        genderField: '#gender',
+        ethnicityField: '#ethnicity',
+    	
 
         gpaField: '#cumGPA',
         
@@ -51,26 +56,23 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         creditCompletionRateField: '#creditCompletionRate',
         currentYearFinancialAidAwardField: '#currentYearFinancialAidAward',
         academicProgramsField: '#academicPrograms',
+        intendedProgramAtAdmitField: '#intendedProgramAtAdmit',
         sapStatusField: '#sapStatus',
-     
-
-        earlyAlertField: '#earlyAlert',
-        actionPlanField: '#actionPlan',
-		
-		'serviceReasonEdit': {
-            click: 'onServiceReasonEditButtonClick'
-        },
-        
-        'serviceGroupEdit': {
-            click: 'onServiceGroupEditButtonClick'
-        }
+        fafsaDateField: '#fafsaDate',
+       
+        financialAidGpaField: '#financialAidGpa',
+        creditHoursEarnedField: '#creditHoursEarned',
+        creditHoursAttemptedField: '#creditHoursAttempted',
+        creditCompletionRateField: '#creditCompletionRate',
+        remainingLoanAmountField: '#remainingLoanAmount',
+        financialAidRemainingField: '#financialAidRemaining',
+        originalLoanAmountField: '#originalLoanAmount',
     
     },
     init: function(){
         var me = this;
         var id = me.personLite.get('id');
         me.resetForm();
-       
         if (id != "") {
             // display loader
             me.getView().setLoading(true);
@@ -100,14 +102,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     resetForm: function() {
         var me = this;
         me.getView().getForm().reset();
-
-        // Set defined configured label for the studentId field
-        var studentIdAlias = me.sspConfig.get('studentIdAlias');
-        me.getStudentIdField().setFieldLabel(studentIdAlias);
-
     },
 
-    newServiceSuccessHandler: function(name, callback, serviceResponses) {
+   newServiceSuccessHandler: function(name, callback, serviceResponses) {
         var me = this;
         return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response) {
             serviceResponses.successes[name] = response;
@@ -150,26 +147,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var birthDateField = me.getBirthDateField();
         var studentTypeField = me.getStudentTypeField();
         var programStatusField = me.getProgramStatusField();
-        var earlyAlertField = me.getEarlyAlertField();
-        var actionPlanField = me.getActionPlanField();
+
 
         var fullName = me.person.getFullName();
         var coachName = me.person.getCoachFullName();
-
-        // load special service groups
-        if (personResponse.specialServiceGroups != null) {
-            me.profileSpecialServiceGroupsStore.loadData(me.person.get('specialServiceGroups'));
-        }
-
-        // load referral sources
-        if (personResponse.referralSources != null) {
-            me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
-        }
-
-        // load service reasons
-        if (personResponse.serviceReasons != null) {
-            me.profileServiceReasonsStore.loadData(me.person.get('serviceReasons'));
-        }
 
         // load general student record
         me.getView().loadRecord(me.person);
@@ -180,8 +161,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         studentTypeField.setValue(me.person.getStudentTypeName());
         photoUrlField.setSrc(me.person.getPhotoUrl());
         programStatusField.setValue(me.person.getProgramStatusName());
-        earlyAlertField.setValue(me.person.getEarlyAlertRatio());
-        actionPlanField.setValue(me.person.getActionPlanSummary());
+       
 
         var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
         var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
@@ -209,21 +189,26 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var gpa = transcript.get('gpa');
         if ( gpa ) {
 			var gpaFormatted = Ext.util.Format.number(gpa.gradePointAverage, '0.00');
-			if(gpa.gpaTrendIndicator && gpa.gpaTrendIndicator.length > 0)
-				gpaFormatted += "  " + gpa.gpaTrendIndicator;
             me.getGpaField().setValue(gpaFormatted);
             me.getAcademicStandingField().setValue(gpa.academicStanding);
             me.getCreditCompletionRateField().setValue(gpa.creditCompletionRate + '%');
             me.getCurrentRestrictionsField().setValue(gpa.currentRestrictions)
 
+            me.getCreditHoursEarnedField().setValue(gpa.creditHoursEarned)
+            me.getCreditHoursAttemptedField().setValue(gpa.creditHoursAttempted)
         }
         var programs = transcript.get('programs');
         if ( programs ) {
             var programNames = [];
+            var intendedProgramsAtAdmit = [];
             Ext.Array.each(programs, function(program) {
-                programNames.push(program.programName);
+            	if(program.programName && program.programName.length > 0)
+            		programNames.push(program.programName);
+            	if(program.intendedProgramAtAdmit && program.intendedProgramAtAdmit.length > 0)
+            		intendedProgramsAtAdmit.push(program.intendedProgramAtAdmit);
             });
             me.getAcademicProgramsField().setValue(programNames.join(', '));
+            me.getIntendedProgramAtAdmitField().setValue(intendedProgramsAtAdmit.join(', '));
         }
         
 
@@ -232,6 +217,13 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             
         	me.getCurrentYearFinancialAidAwardField().setValue(financialAid.currentYearFinancialAidAward);
         	me.getSapStatusField().setValue(financialAid.sapStatus);
+        	
+        	me.getSapStatusField().setValue(financialAid.sapStatus);
+        	me.getFafsaDateField().setValue(Ext.util.Format.date(new Date(financialAid.fafsaDate),'m/d/Y'));
+        	me.getRemainingLoanAmountField().setValue(Ext.util.Format.usMoney(financialAid.remainingLoanAmount));
+        	me.getFinancialAidRemainingField().setValue(Ext.util.Format.usMoney(financialAid.financialAidRemaining));
+        	me.getOriginalLoanAmountField().setValue(Ext.util.Format.usMoney(financialAid.originalLoanAmount));
+        	me.getFinancialAidGpaField().setValue(financialAid.financialAidGpa);
         }
     },
 
@@ -257,19 +249,5 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             window.location = 'mailto:' + me.person.getCoachPrimaryEmailAddress();
         }
     },
-	
-	onServiceReasonEditButtonClick: function(button){
-        var me=this;
-        
-        var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
-        
-    },
-    
-    onServiceGroupEditButtonClick: function(button){
-        var me=this;
-        
-        var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
-        
-    }
 	
 });

@@ -16,14 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
+Ext.define('Ssp.controller.tool.profile.ProfileRecentStudentActivityViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
     	service: 'transcriptService',
         personLite: 'personLite',
-        store: 'courseTranscriptsStore'
+        store: 'recentStudentActivitiesStore'
     },
 	init: function() {
 		var me=this;
@@ -33,7 +33,7 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
 
     	me.getView().setLoading( true );
     	
-		me.service.getFull( personId, {
+		me.service.getRecentStudentActivity( personId, {
 			success: me.getTranscriptSuccess,
 			failure: me.getTranscriptFailure,
 			scope: me			
@@ -45,17 +45,16 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
     getTranscriptSuccess: function( r, scope ){
     	var me=scope;
 
-        var courseTranscripts = [];
-        var transcript = new Ssp.model.Transcript(r);
-        var terms = transcript.get('terms');
-        if ( terms ) {
-            Ext.Array.each(terms, function(term) {
-                    var courseTranscript = Ext.create('Ssp.model.CourseTranscript', term);
-                    courseTranscripts.push(courseTranscript);
-            });
-        }
+        var recentStudentActivities = [];
 
-        me.store.loadData(courseTranscripts);
+        Ext.Array.each(r, function(recentStudentActivityRaw) {
+                var recentStudentActivity = Ext.create('Ssp.model.RecentStudentActivity', recentStudentActivityRaw);
+                recentStudentActivity.setActivityDateFormatted(recentStudentActivity.getFormattedRecentActivityDate(recentStudentActivityRaw.activityDate));
+                recentStudentActivities.push(recentStudentActivity);
+        });
+
+
+        me.store.loadData(recentStudentActivities);
         me.getView().setLoading( false );
     },
     

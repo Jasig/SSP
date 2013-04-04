@@ -16,19 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.CourseTranscript', {
+Ext.define('Ssp.model.RecentStudentActivity', {
     extend: 'Ssp.model.AbstractBase',
-    fields: [{name: 'termCode', type: 'string'},
-        {name: 'formattedCourse', type: 'string'},
-        {name: 'title', type: 'string'},
-        {name: 'creditType', type: 'string'},
-        {name: 'grade', type: 'string'},
-        {name: 'audited', type: 'string'},
-        {name: 'creditEarned', type: 'number'},
-        {name: 'facultyName', type: 'string'},
-        {name: 'facultySchoolId', type: 'string'},
-        {name: 'sectionCode', type: 'string'},
-        {name: 'statusCode', type: 'string'},
-        {name: 'subjectAbbreviation', type: 'string'},
-        {name: 'sectionNumber', type: 'string'}]
+    fields: [{name: 'activity', type: 'string'},
+        {name: 'coachName', type: 'string'},
+        {name: 'activityDateFormatted', type: 'string'},
+        {name: 'activityDate', type: 'date', dateFormat: 'time'}],
+        
+      getFormattedRecentActivityDate: function(){
+        	return Ext.util.Format.date( this.get('activityDate'),'m/d/Y');
+       },
+
+	   setActivityDateFormatted: function(formattedDate){
+        	this.data.activityDateFormatted = formattedDate;
+       }
+
 });

@@ -11247,6 +11247,21 @@ Ext.define('Ssp.service.TranscriptService', {
         var me = this;
 		me.doGet(personId, callbacks,  me.getBaseUrl( personId ) + "/full" );
     },
+    
+    getTerm: function( personId, callbacks ){
+        var me = this;
+		me.doGet(personId, callbacks,  me.getBaseUrl( personId ) + "/term" );
+    },
+    
+    getRecentStudentActivity: function( personId, callbacks ){
+        var me = this;
+		me.doGet(personId, callbacks,  me.getBaseUrl( personId ) + "/recentstudentactivity" );
+    },
+    
+    getCurrentCourses: function( personId, callbacks ){
+        var me = this;
+		me.doGet(personId, callbacks,  me.getBaseUrl( personId ) + "/currentcourses" );
+    },
 
     doGet: function( personId, callbacks, url ) {
         var me=this;
@@ -13836,7 +13851,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
     loadTool: function(toolType){
         var me = this;
         var comp;
-console.log(toolType);
+
         if ( // TODO MAP HACK FOR DEV. TAKE THE UNCONDITIONAL MAP GRANT OUT!!
             toolType.toUpperCase() === "MAP" ||
             me.authenticatedPerson.hasAccess(toolType.toUpperCase() + '_TOOL')) {
@@ -14054,11 +14069,84 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.Transcript', {
+Ext.define('Ssp.model.RecentStudentActivity', {
     extend: 'Ssp.model.AbstractBase',
-    fields: [{name: 'gpa', type: 'auto'},
-             {name: 'programs', type: 'auto'},
-             {name: 'terms', type: 'auto'}]
+    fields: [{name: 'activity', type: 'string'},
+        {name: 'coachName', type: 'string'},
+        {name: 'activityDateFormatted', type: 'string'},
+        {name: 'activityDate', type: 'date', dateFormat: 'time'}],
+        
+      getFormattedRecentActivityDate: function(){
+        	return Ext.util.Format.date( this.get('activityDate'),'m/d/Y');
+       },
+
+	   setActivityDateFormatted: function(formattedDate){
+        	this.data.activityDateFormatted = formattedDate;
+       }
+
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.RecentStudentActivity', {
+    extend: 'Ssp.model.AbstractBase',
+    fields: [{name: 'activity', type: 'string'},
+        {name: 'coachName', type: 'string'},
+        {name: 'activityDateFormatted', type: 'string'},
+        {name: 'activityDate', type: 'date', dateFormat: 'time'}],
+        
+      getFormattedRecentActivityDate: function(){
+        	return Ext.util.Format.date( this.get('activityDate'),'m/d/Y');
+       },
+
+	   setActivityDateFormatted: function(formattedDate){
+        	this.data.activityDateFormatted = formattedDate;
+       }
+
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.model.TermTranscript', {
+    extend: 'Ssp.model.AbstractBase',
+    fields: [{name: 'creditCompletionRate', type: 'auto'},
+        {name: 'creditHoursAttempted', type: 'auto'},
+        {name: 'creditHoursEarned', type: 'auto'},
+        {name: 'creditHoursForGpa', type: 'auto'},
+        {name: 'creditHoursNotCompleted', type: 'auto'},
+        {name: 'termCode', type: 'auto'},
+        {name: 'totalQualityPoints', type: 'auto'},
+        {name: 'gradePointAverage', type: 'auto'}]
 });
 /*
  * Licensed to Jasig under one or more contributor license
@@ -14084,8 +14172,17 @@ Ext.define('Ssp.model.CourseTranscript', {
         {name: 'formattedCourse', type: 'string'},
         {name: 'title', type: 'string'},
         {name: 'creditType', type: 'string'},
-        {name: 'grade', type: 'string'}]
+        {name: 'grade', type: 'string'},
+        {name: 'audited', type: 'string'},
+        {name: 'creditEarned', type: 'number'},
+        {name: 'facultyName', type: 'string'},
+        {name: 'facultySchoolId', type: 'string'},
+        {name: 'sectionCode', type: 'string'},
+        {name: 'statusCode', type: 'string'},
+        {name: 'subjectAbbreviation', type: 'string'},
+        {name: 'sectionNumber', type: 'string'}]
 });
+
 /*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
@@ -14130,12 +14227,20 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         birthDateField: '#birthDate',
         studentTypeField: '#studentType',
         programStatusField: '#programStatus',
+        f1StatusField: '#f1Status',
 
         gpaField: '#cumGPA',
-
+        
+        academicStandingField: '#academicStanding',
+        currentRestrictionsField: '#currentRestrictions',
+        creditCompletionRateField: '#creditCompletionRate',
+        currentYearFinancialAidAwardField: '#currentYearFinancialAidAward',
         academicProgramsField: '#academicPrograms',
+        sapStatusField: '#sapStatus',
+     
 
         earlyAlertField: '#earlyAlert',
+        actionPlanField: '#actionPlan',
 		
 		'serviceReasonEdit': {
             click: 'onServiceReasonEditButtonClick'
@@ -14231,6 +14336,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var studentTypeField = me.getStudentTypeField();
         var programStatusField = me.getProgramStatusField();
         var earlyAlertField = me.getEarlyAlertField();
+        var actionPlanField = me.getActionPlanField();
 
         var fullName = me.person.getFullName();
         var coachName = me.person.getCoachFullName();
@@ -14260,6 +14366,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         photoUrlField.setSrc(me.person.getPhotoUrl());
         programStatusField.setValue(me.person.getProgramStatusName());
         earlyAlertField.setValue(me.person.getEarlyAlertRatio());
+        actionPlanField.setValue(me.person.getActionPlanSummary());
 
         var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
         var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
@@ -14276,6 +14383,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     getPersonFailure: function() {
         // nothing to do
     },
+    
+
 
     getTranscriptSuccess: function(serviceResponses) {
         var me = this;
@@ -14285,7 +14394,13 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var gpa = transcript.get('gpa');
         if ( gpa ) {
 			var gpaFormatted = Ext.util.Format.number(gpa.gradePointAverage, '0.00');
+			if(gpa.gpaTrendIndicator && gpa.gpaTrendIndicator.length > 0)
+				gpaFormatted += "  " + gpa.gpaTrendIndicator;
             me.getGpaField().setValue(gpaFormatted);
+            me.getAcademicStandingField().setValue(gpa.academicStanding);
+            me.getCreditCompletionRateField().setValue(gpa.creditCompletionRate + '%');
+            me.getCurrentRestrictionsField().setValue(gpa.currentRestrictions)
+
         }
         var programs = transcript.get('programs');
         if ( programs ) {
@@ -14294,6 +14409,14 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
                 programNames.push(program.programName);
             });
             me.getAcademicProgramsField().setValue(programNames.join(', '));
+        }
+        
+
+        var financialAid = transcript.get('financialAid');
+        if ( financialAid ) {
+            
+        	me.getCurrentYearFinancialAidAwardField().setValue(financialAid.currentYearFinancialAidAward);
+        	me.getSapStatusField().setValue(financialAid.sapStatus);
         }
     },
 
@@ -14404,7 +14527,9 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
     	coachWorkPhoneField: '#coachWorkPhone',
     	coachDepartmentNameField: '#coachDepartmentName',
     	coachOfficeLocationField: '#coachOfficeLocation',
-    	coachPrimaryEmailAddressField: '#coachPrimaryEmailAddress'
+    	coachPrimaryEmailAddressField: '#coachPrimaryEmailAddress',
+    	coachPhotoUrlField: '#coachPhotoUrl'
+    		
     	
     	
     },
@@ -14440,16 +14565,13 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 		var coachDepartmentNameField = me.getCoachDepartmentNameField();
 		var coachOfficeLocationField = me.getCoachOfficeLocationField();
 		var coachPrimaryEmailAddressField = me.getCoachPrimaryEmailAddressField();
+		var coachPhotoUrlField = me.getCoachPhotoUrlField();
 		
 		var id= me.personLite.get('id');
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');
 		
 		// load the person data
 		me.person.populateFromGenericObject(r);		
-		
-    	
-   	
-			
 		
 		// load general student record
 		me.getView().loadRecord( me.person );
@@ -14461,6 +14583,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 		coachDepartmentNameField.setValue( me.person.getCoachDepartmentName() );
 		coachOfficeLocationField.setValue( me.person.getCoachOfficeLocation() );
 		coachPrimaryEmailAddressField.setValue( me.person.getCoachPrimaryEmailAddress() );
+		coachPhotoUrlField.setSrc( me.person.getCoachPhotoUrl() );
 		
 
 		
@@ -14472,6 +14595,458 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
     getPersonFailure: function( response, scope){
     	var me=scope;
     	me.getView().setLoading( false );
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.tool.profile.CurrentDroppedScheduleViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	service: 'transcriptService',
+        personLite: 'personLite',
+        store: 'currentDroppedScheduleStore'
+    },
+	init: function() {
+		var me=this;
+		var personId = me.personLite.get('id');
+
+        me.store.removeAll();
+
+    	me.getView().setLoading( true );
+    	
+		me.service.getCurrentCourses( personId, {
+			success: me.getTranscriptSuccess,
+			failure: me.getTranscriptFailure,
+			scope: me			
+		});
+		
+		return this.callParent(arguments);
+    },
+    
+    getTranscriptSuccess: function( r, scope ){
+    	var me=scope;
+
+        var currentScheduleDroppedCourses = [];
+
+        Ext.Array.each(r, function(courseTranscriptRaw) {
+                if(courseTranscriptRaw.statusCode === "W" || courseTranscriptRaw.statusCode === "RW"){
+					var courseTranscript = Ext.create('Ssp.model.CourseTranscript', courseTranscriptRaw);
+					currentScheduleDroppedCourses.push(courseTranscript);
+				}
+                	
+        });
+
+
+        me.store.loadData(currentScheduleDroppedCourses);
+        me.getView().setLoading( false );
+    },
+    
+    getTranscriptFailure: function( response, scope ){
+    	var me=scope;
+    	me.getView().setLoading( false );  	
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.tool.profile.CurrentScheduleViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	service: 'transcriptService',
+        personLite: 'personLite',
+        store: 'currentScheduleStore'
+    },
+	init: function() {
+		var me=this;
+		var personId = me.personLite.get('id');
+
+        me.store.removeAll();
+
+    	me.getView().setLoading( true );
+    	
+		me.service.getCurrentCourses( personId, {
+			success: me.getTranscriptSuccess,
+			failure: me.getTranscriptFailure,
+			scope: me			
+		});
+		
+		return this.callParent(arguments);
+    },
+    
+    getTranscriptSuccess: function( r, scope ){
+    	var me=scope;
+
+        var currentScheduledCourses = [];
+
+        Ext.Array.each(r, function(courseTranscriptRaw) {
+                if(courseTranscriptRaw.statusCode === "E"){
+					var courseTranscript = Ext.create('Ssp.model.CourseTranscript', courseTranscriptRaw);
+                	currentScheduledCourses.push(courseTranscript);
+				}
+        });
+
+
+        me.store.loadData(currentScheduledCourses);
+        me.getView().setLoading( false );
+    },
+    
+    getTranscriptFailure: function( response, scope ){
+    	var me=scope;
+    	me.getView().setLoading( false );  	
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: ['Deft.mixin.Injectable'],
+    inject: {
+        apiProperties: 'apiProperties',
+        appEventsController: 'appEventsController',
+        person: 'currentPerson',
+        personLite: 'personLite',
+        personService: 'personService',
+        transcriptService: 'transcriptService',
+        profileReferralSourcesStore: 'profileReferralSourcesStore',
+        profileServiceReasonsStore: 'profileServiceReasonsStore',
+        profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
+        sspConfig: 'sspConfig',
+		formUtils: 'formRendererUtils'
+    },
+    
+    control: {
+        nameField: '#studentName',
+        photoUrlField: '#studentPhoto',
+
+        
+        studentIdField: '#studentId',
+        birthDateField: '#birthDate',
+        studentTypeField: '#studentType',
+        programStatusField: '#programStatus',
+        f1StatusField: '#f1Status',
+        residencyCountyField: '#residencyCounty',
+        maritalStatusField: '#maritalStatus',
+        genderField: '#gender',
+        ethnicityField: '#ethnicity',
+    	
+
+        gpaField: '#cumGPA',
+        
+        academicStandingField: '#academicStanding',
+        currentRestrictionsField: '#currentRestrictions',
+        creditCompletionRateField: '#creditCompletionRate',
+        currentYearFinancialAidAwardField: '#currentYearFinancialAidAward',
+        academicProgramsField: '#academicPrograms',
+        intendedProgramAtAdmitField: '#intendedProgramAtAdmit',
+        sapStatusField: '#sapStatus',
+        fafsaDateField: '#fafsaDate',
+       
+        financialAidGpaField: '#financialAidGpa',
+        creditHoursEarnedField: '#creditHoursEarned',
+        creditHoursAttemptedField: '#creditHoursAttempted',
+        creditCompletionRateField: '#creditCompletionRate',
+        remainingLoanAmountField: '#remainingLoanAmount',
+        financialAidRemainingField: '#financialAidRemaining',
+        originalLoanAmountField: '#originalLoanAmount',
+    
+    },
+    init: function(){
+        var me = this;
+        var id = me.personLite.get('id');
+        me.resetForm();
+        if (id != "") {
+            // display loader
+            me.getView().setLoading(true);
+
+            var serviceResponses = {
+                failures: {},
+                successes: {},
+                responseCnt: 0,
+                expectedResponseCnt: 2
+            }
+
+            me.personService.get(id, {
+                success: me.newServiceSuccessHandler('person', me.getPersonSuccess, serviceResponses),
+                failure: me.newServiceFailureHandler('person', me.getPersonFailure, serviceResponses),
+                scope: me
+            });
+            me.transcriptService.getSummary(id, {
+                success: me.newServiceSuccessHandler('transcript', me.getTranscriptSuccess, serviceResponses),
+                failure: me.newServiceFailureHandler('transcript', me.getTranscriptFailure, serviceResponses),
+                scope: me
+            });
+        }
+        
+        return me.callParent(arguments);
+    },
+
+    resetForm: function() {
+        var me = this;
+        me.getView().getForm().reset();
+    },
+
+   newServiceSuccessHandler: function(name, callback, serviceResponses) {
+        var me = this;
+        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response) {
+            serviceResponses.successes[name] = response;
+        });
+    },
+
+    newServiceFailureHandler: function(name, callback, serviceResponses) {
+        var me = this;
+        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response) {
+            serviceResponses.failures[name] = response;
+        });
+    },
+
+    newServiceHandler: function(name, callback, serviceResponses, serviceResponsesCallback) {
+        return function(r, scope) {
+            var me = scope;
+            serviceResponses.responseCnt++;
+            if ( serviceResponsesCallback ) {
+                serviceResponsesCallback.apply(me, [name, serviceResponses, r]);
+            }
+            if ( callback ) {
+                callback.apply(me, [ serviceResponses ]);
+            }
+            me.afterServiceHandler(serviceResponses);
+        };
+    },
+
+    getPersonSuccess: function(serviceResponses) {
+        var me = this;
+        var personResponse = serviceResponses.successes.person;
+        me.person.populateFromGenericObject(personResponse);
+
+        // load and render person data
+        me.profileSpecialServiceGroupsStore.removeAll();
+        me.profileReferralSourcesStore.removeAll();
+        me.profileServiceReasonsStore.removeAll();
+
+        var nameField = me.getNameField();
+        var photoUrlField = me.getPhotoUrlField();
+        var birthDateField = me.getBirthDateField();
+        var studentTypeField = me.getStudentTypeField();
+        var programStatusField = me.getProgramStatusField();
+
+
+        var fullName = me.person.getFullName();
+        var coachName = me.person.getCoachFullName();
+
+        // load general student record
+        me.getView().loadRecord(me.person);
+
+        // load additional values
+        nameField.setValue(fullName);
+        birthDateField.setValue(me.person.getFormattedBirthDate());
+        studentTypeField.setValue(me.person.getStudentTypeName());
+        photoUrlField.setSrc(me.person.getPhotoUrl());
+        programStatusField.setValue(me.person.getProgramStatusName());
+       
+
+        var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
+        var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
+        studentRecordComp.setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + me.person.get('schoolId'));
+        studentCoachButton.setText('<u>Coach: ' + coachName + '</u>');
+		
+        me.appEventsController.assignEvent({
+            eventName: 'emailCoach',
+            callBackFunc: me.onEmailCoach,
+            scope: me
+        });
+    },
+
+    getPersonFailure: function() {
+        // nothing to do
+    },
+    
+
+
+    getTranscriptSuccess: function(serviceResponses) {
+        var me = this;
+        var transcriptResponse = serviceResponses.successes.transcript;
+
+        var transcript = new Ssp.model.Transcript(transcriptResponse);
+        var gpa = transcript.get('gpa');
+        if ( gpa ) {
+			var gpaFormatted = Ext.util.Format.number(gpa.gradePointAverage, '0.00');
+            me.getGpaField().setValue(gpaFormatted);
+            me.getAcademicStandingField().setValue(gpa.academicStanding);
+            me.getCreditCompletionRateField().setValue(gpa.creditCompletionRate + '%');
+            me.getCurrentRestrictionsField().setValue(gpa.currentRestrictions)
+
+            me.getCreditHoursEarnedField().setValue(gpa.creditHoursEarned)
+            me.getCreditHoursAttemptedField().setValue(gpa.creditHoursAttempted)
+        }
+        var programs = transcript.get('programs');
+        if ( programs ) {
+            var programNames = [];
+            var intendedProgramsAtAdmit = [];
+            Ext.Array.each(programs, function(program) {
+            	if(program.programName && program.programName.length > 0)
+            		programNames.push(program.programName);
+            	if(program.intendedProgramAtAdmit && program.intendedProgramAtAdmit.length > 0)
+            		intendedProgramsAtAdmit.push(program.intendedProgramAtAdmit);
+            });
+            me.getAcademicProgramsField().setValue(programNames.join(', '));
+            me.getIntendedProgramAtAdmitField().setValue(intendedProgramsAtAdmit.join(', '));
+        }
+        
+
+        var financialAid = transcript.get('financialAid');
+        if ( financialAid ) {
+            
+        	me.getCurrentYearFinancialAidAwardField().setValue(financialAid.currentYearFinancialAidAward);
+        	me.getSapStatusField().setValue(financialAid.sapStatus);
+        	
+        	me.getSapStatusField().setValue(financialAid.sapStatus);
+        	me.getFafsaDateField().setValue(Ext.util.Format.date(new Date(financialAid.fafsaDate),'m/d/Y'));
+        	me.getRemainingLoanAmountField().setValue(Ext.util.Format.usMoney(financialAid.remainingLoanAmount));
+        	me.getFinancialAidRemainingField().setValue(Ext.util.Format.usMoney(financialAid.financialAidRemaining));
+        	me.getOriginalLoanAmountField().setValue(Ext.util.Format.usMoney(financialAid.originalLoanAmount));
+        	me.getFinancialAidGpaField().setValue(financialAid.financialAidGpa);
+        }
+    },
+
+    getTranscriptFailure: function() {
+        // nothing to do
+    },
+
+    afterServiceHandler: function(serviceResponses) {
+        var me = this;
+        if ( serviceResponses.responseCnt >= serviceResponses.expectedResponseCnt ) {
+            me.getView().setLoading(false);
+        }
+    },
+
+	destroy: function() {
+        var me=this;
+        return me.callParent( arguments );
+    },
+
+    onEmailCoach: function(){
+        var me = this;
+        if (me.person.getCoachPrimaryEmailAddress()) {
+            window.location = 'mailto:' + me.person.getCoachPrimaryEmailAddress();
+        }
+    },
+	
+});
+
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.tool.profile.ProfileRecentStudentActivityViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	service: 'transcriptService',
+        personLite: 'personLite',
+        store: 'recentStudentActivitiesStore'
+    },
+	init: function() {
+		var me=this;
+		var personId = me.personLite.get('id');
+
+        me.store.removeAll();
+
+    	me.getView().setLoading( true );
+    	
+		me.service.getRecentStudentActivity( personId, {
+			success: me.getTranscriptSuccess,
+			failure: me.getTranscriptFailure,
+			scope: me			
+		});
+		
+		return this.callParent(arguments);
+    },
+    
+    getTranscriptSuccess: function( r, scope ){
+    	var me=scope;
+
+        var recentStudentActivities = [];
+
+        Ext.Array.each(r, function(recentStudentActivityRaw) {
+                var recentStudentActivity = Ext.create('Ssp.model.RecentStudentActivity', recentStudentActivityRaw);
+                recentStudentActivity.setActivityDateFormatted(recentStudentActivity.getFormattedRecentActivityDate(recentStudentActivityRaw.activityDate));
+                recentStudentActivities.push(recentStudentActivity);
+        });
+
+
+        me.store.loadData(recentStudentActivities);
+        me.getView().setLoading( false );
+    },
+    
+    getTranscriptFailure: function( response, scope ){
+    	var me=scope;
+    	me.getView().setLoading( false );  	
     }
 });
 /*
@@ -14521,10 +15096,12 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                     msgTarget: 'side'
                 },
                 items: [{
-                    xtype: 'label',
-                    html: '<img src=""  height="150" width="150" />',
-                    text: '',
-                    itemId: 'coachImage'
+                	xtype: 'image',
+                    fieldLabel: '',
+                    src: Ssp.util.Constants.DEFAULT_NO_STUDENT_PHOTO_URL,
+                    itemId: 'coachPhotoUrl',
+                    width:150,
+                    height:150
                 }, {
                     xtype: 'fieldset',
                     border: 0,
@@ -14873,7 +15450,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         xtype: 'fieldset',
                         border: 0,
                         title: '',
-                        flex: .60,
+                        flex: .80,
                         defaultType: 'displayfield',
                         padding: '0 0 10 0',
                         defaults: {
@@ -14902,7 +15479,9 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         }, , {
                             fieldLabel: 'DOB',
                             name: 'birthDate',
-                            itemId: 'birthDate'
+                            itemId: 'birthDate',
+                            height: '60',
+                            	
                         }]
                     }]
                 }, {
@@ -19193,11 +19772,8 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
         var terms = transcript.get('terms');
         if ( terms ) {
             Ext.Array.each(terms, function(term) {
-                Ext.Array.each(term.courses, function(course) {
-                    var courseTranscript = Ext.create('Ssp.model.CourseTranscript', course);
-                    courseTranscript.set('termCode', term.code);
+                    var courseTranscript = Ext.create('Ssp.model.CourseTranscript', term);
                     courseTranscripts.push(courseTranscript);
-                });
             });
         }
 
@@ -22943,7 +23519,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
     extend: 'Ext.form.Panel',
     alias: 'widget.profiledetails',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    controller: 'Ssp.controller.tool.profile.ProfilePersonDetailsViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
         sspConfig: 'sspConfig'
@@ -23052,9 +23628,9 @@ Ext.define('Ssp.view.tools.profile.Details', {
                     },
 					
                     {
-                        fieldLabel: 'Etnicity',
-                        name: 'etnicity',
-                        itemId: 'etnicity'
+                        fieldLabel: 'Ethnicity',
+                        name: 'ethnicity',
+                        itemId: 'ethnicity'
                     },
                     {
                         fieldLabel: 'Race',
@@ -23068,8 +23644,8 @@ Ext.define('Ssp.view.tools.profile.Details', {
                     },
 					{
                         fieldLabel: 'Intended Program at Admit',
-                        itemId: 'intendedProgram',
-                        name: 'intendedProgram',
+                        itemId: 'intendedProgramAtAdmit',
+                        name: 'intendedProgramAtAdmit',
                         labelAlign: 'top',
                         labelPad: 0,
 						margin: '0 0 10 0'
@@ -23097,33 +23673,33 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         height: '10'
                     }, {
                         fieldLabel: 'FA GPA',
-                        name: 'faGPA',
-                        itemId: 'faGPA',
+                        name: 'financialAidGpa',
+                        itemId: 'financialAidGpa',
 						labelWidth: 60
                     }, {
                         fieldLabel: 'Standing',
-                        name: 'standing',
-                        itemId: 'standing',
+                        name: 'academicStanding',
+                        itemId: 'academicStanding',
 						labelWidth: 60
                     }, {
                         fieldLabel: 'Restrictions',
-                        name: 'restrictions',
-                        itemId: 'restrictions',
+                        name: 'currentRestrictions',
+                        itemId: 'currentRestrictions',
 						labelWidth: 80
                     }, {
                         fieldLabel: 'Hrs Earned',
-                        name: 'hrsEarned',
-                        itemId: 'hrsEarned',
+                        name: 'creditHoursEarned',
+                        itemId: 'creditHoursEarned',
 						labelWidth: 80
                     }, {
                         fieldLabel: 'Hrs Attempted',
-                        name: 'hrsAttempted',
-                        itemId: 'hrsAttempted',
+                        name: 'creditHoursAttempted',
+                        itemId: 'creditHoursAttempted',
 						labelWidth: 100
                     }, {
                         fieldLabel: '<a href="">Comp Rate</a>',
-                        name: 'compRate',
-                        itemId: 'compRate',
+                        name: 'creditCompletionRate',
+                        itemId: 'creditCompletionRate',
 						labelWidth: 80
                     }, {
                         fieldLabel: 'Transfer Hrs',
@@ -23142,34 +23718,34 @@ Ext.define('Ssp.view.tools.profile.Details', {
 						labelWidth: 80
                     }, {
                         fieldLabel: 'Balance',
-                        name: 'balance',
-                        itemId: 'balance',
+                        name: 'remainingLoanAmount',
+                        itemId: 'remainingLoanAmount',
 						labelWidth: 80
                     }, {
                         xtype: 'tbspacer',
                         height: '10'
                     }, {
-                        fieldLabel: 'FASFA',
-                        name: 'fasfa',
-                        itemId: 'fasfa',
+                        fieldLabel: 'FAFSA',
+                        name: 'fafsaDate',
+                        itemId: 'fafsaDate',
 						labelWidth: 60
                     
                     }, {
                         fieldLabel: 'FA Award',
-                        name: 'faAward',
-                        itemId: 'faAward',
+                        name: 'currentYearFinancialAidAward',
+                        itemId: 'currentYearFinancialAidAward',
 						labelWidth: 80
                     
                     }, {
                         fieldLabel: 'FA Amount',
-                        name: 'faAmount',
-                        itemId: 'faAmount',
+                        name: 'financialAidRemaining',
+                        itemId: 'financialAidRemaining',
 						labelWidth: 80
                     
                     }, {
                         fieldLabel: 'Loan Amount',
-                        name: 'loanAmount',
-                        itemId: 'loanAmount',
+                        name: 'originalLoanAmount',
+                        itemId: 'originalLoanAmount',
 						labelWidth: 80
                     
                     }, {
@@ -23177,13 +23753,13 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         height: '10'
                     }, {
                         fieldLabel: 'SAP',
-                        name: 'sap',
-                        itemId: 'sap',
+                        name: 'sapStatus',
+                        itemId: 'sapStatus',
 						labelWidth: 30
                     }, {
                         fieldLabel: 'F1',
-                        name: 'f1',
-                        itemId: 'f1',
+                        name: 'f1Status',
+                        itemId: 'f1Status',
 						labelWidth: 30
                     }]
                 
@@ -23200,8 +23776,8 @@ Ext.define('Ssp.view.tools.profile.Details', {
                     flex: .30,
                     items: [{
                         fieldLabel: 'Residency',
-                        name: 'residency',
-                        itemId: 'residency',
+                        name: 'residencyCounty',
+                        itemId: 'residencyCounty',
 						labelWidth: 80
                     }, {
                         xtype: 'tbspacer',
@@ -23312,20 +23888,20 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         labelWidth: 30
                     
                     }, {
-                    
-                        name: 'compRate',
-                        itemId: 'compRate',
+                    	fieldLabel: 'Comp Rate',
+                        name: 'creditCompletionRate',
+                        itemId: 'creditCompletionRate',
                         labelWidth: 80
                     
                     }, {
                         fieldLabel: 'Standing',
-                        name: 'standing',
-                        itemId: 'standing',
+                        name: 'academicStanding',
+                        itemId: 'academicStanding',
                         labelWidth: 60
                     }, {
                         fieldLabel: 'Restrictions',
-                        name: 'restrictions',
-                        itemId: 'restrictions',
+                        name: 'currentRestrictions',
+                        itemId: 'currentRestrictions',
                         labelWidth: 80
                     }, {
                         xtype: 'tbspacer',
@@ -23342,19 +23918,19 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         labelWidth: 50
                     }, {
                         fieldLabel: 'FA Award',
-                        name: 'faAward',
-                        itemId: 'faAward',
+                        name: 'currentYearFinancialAidAward',
+                        itemId: 'currentYearFinancialAidAward',
                         labelWidth: 60
                     
                     }, {
                         fieldLabel: 'SAP',
-                        name: 'sap',
-                        itemId: 'sap',
+                        name: 'sapStatus',
+                        itemId: 'sapStatus',
                         labelWidth: 30
                     }, {
                         fieldLabel: 'F1',
-                        name: 'f1',
-                        itemId: 'f1',
+                        name: 'f1Status',
+                        itemId: 'f1Status',
                         labelWidth: 30
                     }, {
                         xtype: 'tbspacer',
@@ -23463,7 +24039,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
                 },
                 //flex: .40,
                 items: [{
-                    fieldLabel: '',
+                    fieldLabel: 'Full Name',
                     name: 'name',
                     itemId: 'studentName',
                 
@@ -23482,7 +24058,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
                     name: 'homePhone',
                     labelWidth: 40
                 }, {
-                    fieldLabel: '',
+                    fieldLabel: 'Email:',
                     name: 'primaryEmailAddress'
                 }, {
                     fieldLabel: 'Student Type',
@@ -23665,11 +24241,12 @@ Ext.define('Ssp.view.tools.profile.RecentTermActivity', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.recenttermactivity',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.profile.RecentTermActivityViewController',
     width: '100%',
     height: '100%',
     title: 'Recent Term Activity',
     autoScroll: true,
-    inject: {        //store: 'recentTermActivityStore'
+    inject: {       store: 'termTranscriptsStore'
     },
     initComponent: function(){
         var me = this;
@@ -23677,7 +24254,7 @@ Ext.define('Ssp.view.tools.profile.RecentTermActivity', {
             //store: me.store,
             xtype: 'gridcolumn',
             columns: [{
-                dataIndex: 'term',
+                dataIndex: 'termCode',
                 text: 'Term',
                 flex: 1
             }, {
@@ -23685,14 +24262,17 @@ Ext.define('Ssp.view.tools.profile.RecentTermActivity', {
                 text: 'MAP',
                 flex: 1
             }, {
-            
-                dataIndex: 'cumGPA',
+                dataIndex: 'gradePointAverage',
                 text: 'GPA',
                 flex: 1
             }, {
-            
-                dataIndex: 'load',
+                dataIndex: 'creditHoursAttempted',
                 text: 'Load',
+                flex: 1
+            },
+			{
+                dataIndex: 'creditHoursEarned',
+                text: 'Earned',
                 flex: 1
             }],
             viewConfig: {}
@@ -23724,12 +24304,13 @@ Ext.define('Ssp.view.tools.profile.RecentSSPActivity', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.recentsspactivity',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.profile.ProfileRecentStudentActivityViewController',
     width: '100%',
     height: '100%',
     title: 'Recent SSP Activity for this Student',
     autoScroll: true,
     inject: {
-        //store: 'recentActivityStore'
+        store: 'recentStudentActivitiesStore'
     },
     initComponent: function(){
         var me = this;
@@ -23737,16 +24318,16 @@ Ext.define('Ssp.view.tools.profile.RecentSSPActivity', {
             //store: me.store,
             xtype: 'gridcolumn',
             columns: [{
-                dataIndex: 'coach',
+                dataIndex: 'coachName',
                 text: 'Coach',
 				flex: 1
             }, {
-                dataIndex: 'service',
+                dataIndex: 'activity',
                 text: 'Service',
 				flex: 1
             }, {
             
-                dataIndex: 'recentDate',
+                dataIndex: 'activityDateFormatted',
                 text: 'Date',
 				flex: 1
             }],
@@ -23832,12 +24413,13 @@ Ext.define('Ssp.view.tools.profile.CurrentSchedule', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.profilecurrentschedule',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.profile.CurrentScheduleViewController',
     width: '100%',
     height: '100%',
     autoScroll: true,
 	title: 'Current Schedule',
     inject: {
-        //store: 'currentScheduleStore'
+        store: 'currentScheduleStore'
     },
     initComponent: function(){
         var me = this;
@@ -23845,27 +24427,32 @@ Ext.define('Ssp.view.tools.profile.CurrentSchedule', {
             //store: me.store,
             xtype: 'gridcolumn',
             columns: [{
-                dataIndex: 'course',
+                dataIndex: 'formattedCourse',
                 text: 'Course',
 				flex: 1
             }, {
-                dataIndex: 'creditHrs',
+                dataIndex: 'creditEarned',
                 text: 'Cr Hrs',
 				flex: 1
             }, {
             
-                dataIndex: 'courseTitle',
+                dataIndex: 'title',
                 text: 'Course Title',
 				flex: 1
             },
 			{
-                dataIndex: 'term',
+                dataIndex: 'termCode',
                 text: 'Term',
                 flex: 1
             }, {
             
-                dataIndex: 'instructor',
+                dataIndex: 'facultyName',
                 text: 'Instructor',
+                flex: 1
+            }, {
+            
+                dataIndex: 'audited',
+                text: 'Audited',
                 flex: 1
             }
 			],
@@ -23897,12 +24484,13 @@ Ext.define('Ssp.view.tools.profile.DroppedCourses', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.profiledroppedcourses',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.profile.CurrentDroppedScheduleViewController',
     width: '100%',
     height: '100%',
     autoScroll: true,
 	title: 'Dropped Courses',
     inject: {
-        //store: 'droppedCoursesStore'
+        store: 'currentDroppedScheduleStore'
     },
     initComponent: function(){
         var me = this;
@@ -23910,27 +24498,32 @@ Ext.define('Ssp.view.tools.profile.DroppedCourses', {
             //store: me.store,
             xtype: 'gridcolumn',
             columns: [{
-                dataIndex: 'course',
+                dataIndex: 'formattedCourse',
                 text: 'Course',
 				flex: 1
             }, {
-                dataIndex: 'creditHrs',
+                dataIndex: 'creditEarned',
                 text: 'Cr Hrs',
 				flex: 1
             }, {
             
-                dataIndex: 'courseTitle',
+                dataIndex: 'title',
                 text: 'Course Title',
 				flex: 1
             },
 			{
-                dataIndex: 'term',
+                dataIndex: 'termCode',
                 text: 'Term',
                 flex: 1
             }, {
             
-                dataIndex: 'instructor',
+                dataIndex: 'facultyName',
                 text: 'Instructor',
+                flex: 1
+            }, {
+            
+                dataIndex: 'audited',
+                text: 'Audited',
                 flex: 1
             }
 			],
@@ -28594,8 +29187,19 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'currentProgramStatusName', type: 'auto'},
     		 {name: 'registeredTerms', type: 'string'},
     		 {name: 'paymentStatus', type: 'string'},
+    		 {name: 'residencyCounty', type: 'string'},
+    		 {name: 'f1Status', type: 'string'},
              {name: 'activeAlertsCount', type: 'int'},
-             {name: 'closedAlertsCount', type: 'int'}],
+             {name: 'closedAlertsCount', type: 'int'},
+             {name: 'maritalStatus', type: 'string'},
+             {name: 'ethnicity', type: 'string'},
+             {name: 'gender', type: 'string'},
+             {name: 'actionPlanTaskOpenCount', type: 'int'},
+             {name: 'actionPlanTaskClosedCount', type: 'int'},
+             {name: 'lastActionPlanCompletedDate', type: 'date', dateFormat: 'time'},
+             ],
+             
+             
     		 		 
     getFullName: function(){ 
     	var firstName = this.get('firstName') || "";
@@ -28652,6 +29256,14 @@ Ext.define('Ssp.model.Person', {
     	return ((coach != null)? coach.departmentName : "");   	
     },
     
+    getCoachPhotoUrl: function(){
+    	var coach = this.get('coach');
+    	var coachPhotoUrl = ((coach != null)? coach.photoUrl : "");   	
+    	if(coachPhotoUrl == null || coachPhotoUrl == "") 	
+    		coachPhotoUrl = Ssp.util.Constants.DEFAULT_NO_STUDENT_PHOTO_URL;
+    	return coachPhotoUrl;
+    },    
+    
     getStudentTypeId: function(){
     	var studentType = this.get('studentType');
     	return ((studentType != null)? studentType.id : "");   	
@@ -28695,6 +29307,10 @@ Ext.define('Ssp.model.Person', {
 
     getEarlyAlertRatio: function() {
         return this.get('activeAlertsCount') + '/' + (this.get('activeAlertsCount') + this.get('closedAlertsCount'));
+    },
+    
+    getActionPlanSummary: function() {
+        return this.get('actionPlanTaskOpenCount') + '/' + (this.get('actionPlanTaskOpenCount') + this.get('actionPlanTaskClosedCount')) + " " +  Ext.util.Format.date( this.get('lastActionPlanCompletedDate'),'m/d/Y');
     },
  
     buildAddress: function(){

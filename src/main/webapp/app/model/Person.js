@@ -60,8 +60,19 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'currentProgramStatusName', type: 'auto'},
     		 {name: 'registeredTerms', type: 'string'},
     		 {name: 'paymentStatus', type: 'string'},
+    		 {name: 'residencyCounty', type: 'string'},
+    		 {name: 'f1Status', type: 'string'},
              {name: 'activeAlertsCount', type: 'int'},
-             {name: 'closedAlertsCount', type: 'int'}],
+             {name: 'closedAlertsCount', type: 'int'},
+             {name: 'maritalStatus', type: 'string'},
+             {name: 'ethnicity', type: 'string'},
+             {name: 'gender', type: 'string'},
+             {name: 'actionPlanTaskOpenCount', type: 'int'},
+             {name: 'actionPlanTaskClosedCount', type: 'int'},
+             {name: 'lastActionPlanCompletedDate', type: 'date', dateFormat: 'time'},
+             ],
+             
+             
     		 		 
     getFullName: function(){ 
     	var firstName = this.get('firstName') || "";
@@ -118,6 +129,14 @@ Ext.define('Ssp.model.Person', {
     	return ((coach != null)? coach.departmentName : "");   	
     },
     
+    getCoachPhotoUrl: function(){
+    	var coach = this.get('coach');
+    	var coachPhotoUrl = ((coach != null)? coach.photoUrl : "");   	
+    	if(coachPhotoUrl == null || coachPhotoUrl == "") 	
+    		coachPhotoUrl = Ssp.util.Constants.DEFAULT_NO_STUDENT_PHOTO_URL;
+    	return coachPhotoUrl;
+    },    
+    
     getStudentTypeId: function(){
     	var studentType = this.get('studentType');
     	return ((studentType != null)? studentType.id : "");   	
@@ -161,6 +180,10 @@ Ext.define('Ssp.model.Person', {
 
     getEarlyAlertRatio: function() {
         return this.get('activeAlertsCount') + '/' + (this.get('activeAlertsCount') + this.get('closedAlertsCount'));
+    },
+    
+    getActionPlanSummary: function() {
+        return this.get('actionPlanTaskOpenCount') + '/' + (this.get('actionPlanTaskOpenCount') + this.get('actionPlanTaskClosedCount')) + " " +  Ext.util.Format.date( this.get('lastActionPlanCompletedDate'),'m/d/Y');
     },
  
     buildAddress: function(){

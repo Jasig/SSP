@@ -20,12 +20,13 @@ Ext.define('Ssp.view.tools.profile.DroppedCourses', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.profiledroppedcourses',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.profile.CurrentDroppedScheduleViewController',
     width: '100%',
     height: '100%',
     autoScroll: true,
 	title: 'Dropped Courses',
     inject: {
-        //store: 'droppedCoursesStore'
+        store: 'currentDroppedScheduleStore'
     },
     initComponent: function(){
         var me = this;
@@ -33,27 +34,32 @@ Ext.define('Ssp.view.tools.profile.DroppedCourses', {
             //store: me.store,
             xtype: 'gridcolumn',
             columns: [{
-                dataIndex: 'course',
+                dataIndex: 'formattedCourse',
                 text: 'Course',
 				flex: 1
             }, {
-                dataIndex: 'creditHrs',
+                dataIndex: 'creditEarned',
                 text: 'Cr Hrs',
 				flex: 1
             }, {
             
-                dataIndex: 'courseTitle',
+                dataIndex: 'title',
                 text: 'Course Title',
 				flex: 1
             },
 			{
-                dataIndex: 'term',
+                dataIndex: 'termCode',
                 text: 'Term',
                 flex: 1
             }, {
             
-                dataIndex: 'instructor',
+                dataIndex: 'facultyName',
                 text: 'Instructor',
+                flex: 1
+            }, {
+            
+                dataIndex: 'audited',
+                text: 'Audited',
                 flex: 1
             }
 			],

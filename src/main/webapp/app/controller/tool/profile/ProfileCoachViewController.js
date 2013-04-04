@@ -34,7 +34,9 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
     	coachWorkPhoneField: '#coachWorkPhone',
     	coachDepartmentNameField: '#coachDepartmentName',
     	coachOfficeLocationField: '#coachOfficeLocation',
-    	coachPrimaryEmailAddressField: '#coachPrimaryEmailAddress'
+    	coachPrimaryEmailAddressField: '#coachPrimaryEmailAddress',
+    	coachPhotoUrlField: '#coachPhotoUrl'
+    		
     	
     	
     },
@@ -70,16 +72,13 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 		var coachDepartmentNameField = me.getCoachDepartmentNameField();
 		var coachOfficeLocationField = me.getCoachOfficeLocationField();
 		var coachPrimaryEmailAddressField = me.getCoachPrimaryEmailAddressField();
+		var coachPhotoUrlField = me.getCoachPhotoUrlField();
 		
 		var id= me.personLite.get('id');
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');
 		
 		// load the person data
 		me.person.populateFromGenericObject(r);		
-		
-    	
-   	
-			
 		
 		// load general student record
 		me.getView().loadRecord( me.person );
@@ -91,6 +90,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 		coachDepartmentNameField.setValue( me.person.getCoachDepartmentName() );
 		coachOfficeLocationField.setValue( me.person.getCoachOfficeLocation() );
 		coachPrimaryEmailAddressField.setValue( me.person.getCoachPrimaryEmailAddress() );
+		coachPhotoUrlField.setSrc( me.person.getCoachPhotoUrl() );
 		
 
 		

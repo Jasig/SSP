@@ -16,14 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
+Ext.define('Ssp.controller.tool.profile.RecentTermActivityViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
     	service: 'transcriptService',
         personLite: 'personLite',
-        store: 'courseTranscriptsStore'
+        store: 'termTranscriptsStore'
     },
 	init: function() {
 		var me=this;
@@ -33,7 +33,7 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
 
     	me.getView().setLoading( true );
     	
-		me.service.getFull( personId, {
+		me.service.getTerm( personId, {
 			success: me.getTranscriptSuccess,
 			failure: me.getTranscriptFailure,
 			scope: me			
@@ -45,17 +45,16 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
     getTranscriptSuccess: function( r, scope ){
     	var me=scope;
 
-        var courseTranscripts = [];
+        var termTranscripts = [];
         var transcript = new Ssp.model.Transcript(r);
-        var terms = transcript.get('terms');
-        if ( terms ) {
-            Ext.Array.each(terms, function(term) {
-                    var courseTranscript = Ext.create('Ssp.model.CourseTranscript', term);
-                    courseTranscripts.push(courseTranscript);
-            });
-        }
 
-        me.store.loadData(courseTranscripts);
+        Ext.Array.each(r, function(termTranscriptRaw) {
+                var termTranscript = Ext.create('Ssp.model.TermTranscript', termTranscriptRaw);
+                termTranscripts.push(termTranscript);
+        });
+
+
+        me.store.loadData(termTranscripts);
         me.getView().setLoading( false );
     },
     

@@ -16,19 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.CourseTranscript', {
+Ext.define('Ssp.model.TermTranscript', {
     extend: 'Ssp.model.AbstractBase',
-    fields: [{name: 'termCode', type: 'string'},
-        {name: 'formattedCourse', type: 'string'},
-        {name: 'title', type: 'string'},
-        {name: 'creditType', type: 'string'},
-        {name: 'grade', type: 'string'},
-        {name: 'audited', type: 'string'},
-        {name: 'creditEarned', type: 'number'},
-        {name: 'facultyName', type: 'string'},
-        {name: 'facultySchoolId', type: 'string'},
-        {name: 'sectionCode', type: 'string'},
-        {name: 'statusCode', type: 'string'},
-        {name: 'subjectAbbreviation', type: 'string'},
-        {name: 'sectionNumber', type: 'string'}]
+    fields: [{name: 'creditCompletionRate', type: 'auto'},
+        {name: 'creditHoursAttempted', type: 'auto'},
+        {name: 'creditHoursEarned', type: 'auto'},
+        {name: 'creditHoursForGpa', type: 'auto'},
+        {name: 'creditHoursNotCompleted', type: 'auto'},
+        {name: 'termCode', type: 'auto'},
+        {name: 'totalQualityPoints', type: 'auto'},
+        {name: 'gradePointAverage', type: 'auto'}]
 });

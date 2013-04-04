@@ -20,12 +20,13 @@ Ext.define('Ssp.view.tools.profile.RecentSSPActivity', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.recentsspactivity',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.profile.ProfileRecentStudentActivityViewController',
     width: '100%',
     height: '100%',
     title: 'Recent SSP Activity for this Student',
     autoScroll: true,
     inject: {
-        //store: 'recentActivityStore'
+        store: 'recentStudentActivitiesStore'
     },
     initComponent: function(){
         var me = this;
@@ -33,16 +34,16 @@ Ext.define('Ssp.view.tools.profile.RecentSSPActivity', {
             //store: me.store,
             xtype: 'gridcolumn',
             columns: [{
-                dataIndex: 'coach',
+                dataIndex: 'coachName',
                 text: 'Coach',
 				flex: 1
             }, {
-                dataIndex: 'service',
+                dataIndex: 'activity',
                 text: 'Service',
 				flex: 1
             }, {
             
-                dataIndex: 'recentDate',
+                dataIndex: 'activityDateFormatted',
                 text: 'Date',
 				flex: 1
             }],

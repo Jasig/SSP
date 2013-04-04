@@ -57,7 +57,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
                 },
                 //flex: .40,
                 items: [{
-                    fieldLabel: '',
+                    fieldLabel: 'Full Name',
                     name: 'name',
                     itemId: 'studentName',
                 
@@ -76,7 +76,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
                     name: 'homePhone',
                     labelWidth: 40
                 }, {
-                    fieldLabel: '',
+                    fieldLabel: 'Email:',
                     name: 'primaryEmailAddress'
                 }, {
                     fieldLabel: 'Student Type',
