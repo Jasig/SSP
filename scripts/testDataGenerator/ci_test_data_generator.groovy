@@ -1326,7 +1326,7 @@ GroovyPerson makePerson(personId, role, coachId, userNameSuffix, studentTypeId, 
 			person.student_type_id = studentTypeId.toString()			
 	}
 	
-	println "Made Person: ${person.first_name} $person.last_name, username: $username, role: $person.role"
+	println "${person.first_name} $person.last_name,$username,$person.role"
     return person
 }
 
