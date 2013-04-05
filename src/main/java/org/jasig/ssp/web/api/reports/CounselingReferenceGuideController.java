@@ -85,6 +85,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 import com.google.common.collect.Maps;
 
@@ -116,7 +118,7 @@ public class CounselingReferenceGuideController extends AbstractBaseController {
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 
-		final PagingWrapper<Challenge> challengeWrapper = challengeService.getAll(new SortingAndPaging(ObjectStatus.Active));
+		final PagingWrapper<Challenge> challengeWrapper = challengeService.getAll(new SortingAndPaging(ObjectStatus.ACTIVE));
 		final List<ChallengeTO> challengeTOs = challengeTOactory.asTOList(challengeWrapper.getRows());	
 		
 		
