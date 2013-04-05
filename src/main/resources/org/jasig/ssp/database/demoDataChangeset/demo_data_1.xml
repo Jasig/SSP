@@ -30,7 +30,7 @@
 	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
 	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 
-	<changeSet id="Fix demo data issues - school_id is person.id, not person.school_id" author="tyler.bain">
+	<changeSet id="Fix demo data- person.school_id references" author="tyler.bain">
 		<sql>update external_faculty_course_roster set school_id = (select school_id from person p where cast(p.id as varchar) = external_faculty_course_roster.school_id)</sql>
 		<sql>update external_student_transcript set school_id = (select school_id from person p where cast(p.id as varchar) = external_student_transcript.school_id)</sql>
 		<sql>update external_student_transcript_course set school_id = (select school_id from person p where cast(p.id as varchar) = external_student_transcript_course.school_id)</sql>
