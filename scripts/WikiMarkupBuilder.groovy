@@ -69,6 +69,7 @@ def main() {
 		rows.add(name:fields[0], username:fields[1], role:fields[2])
 	}
 	addTableStart(writer)
+	addHeader(writer)
 	def activeCoach
 	rows.each { row -> 
 		if(row.role == COACH_ROLE) {
