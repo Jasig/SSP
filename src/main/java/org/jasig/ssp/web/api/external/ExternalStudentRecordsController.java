@@ -18,11 +18,22 @@
  */
 package org.jasig.ssp.web.api.external;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.JsonSerializer;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ser.impl.JsonSerializerMap;
 import org.jasig.ssp.factory.EarlyAlertTOFactory;
 import org.jasig.ssp.factory.JournalEntryTOFactory;
 import org.jasig.ssp.factory.TaskTOFactory;
@@ -56,6 +67,7 @@ import org.jasig.ssp.service.external.ExternalStudentTranscriptCourseService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptTermService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.JournalEntryTO;
 import org.jasig.ssp.transferobject.PagedResponse;
@@ -101,6 +113,9 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	
 	@Autowired
 	private transient TaskService taskService;
+	
+	@Autowired
+	private transient ConfigService configService;
 	
 	@Autowired
 	private transient EarlyAlertTOFactory earlyAlertTOFactory;
@@ -214,14 +229,48 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		Term currentTerm = termService.getCurrentTerm();
 		List<ExternalStudentTranscriptCourseTO> courses = externalStudentTranscriptCourseFactory.asTOList(
 				externalStudentTranscriptCourseService.getTranscriptsBySchoolIdAndTermCode(schoolId, currentTerm.getCode()));
+		Map<String,String> mappings = statusCodeMappings();
+		
+		String defaultStatusCode = getDefaultStatusCode(mappings);
 		
 		for(ExternalStudentTranscriptCourseTO course:courses){
 			Person person = personService.getBySchoolId(course.getFacultySchoolId());
 			if(person != null)
 				course.setFacultyName(person.getFullName());
+			
+			if(mappings != null){
+				if(mappings.containsKey(course.getStatusCode())){
+					course.setStatusCode(mappings.get(course.getStatusCode()));
+				}else if(defaultStatusCode != null)
+					course.setStatusCode(defaultStatusCode);
+			}
 		}
-		
 		return courses;
+	}
+	
+	private String getDefaultStatusCode(Map<String,String> mappings){
+		String v = null;
+		if(mappings.containsKey("default"))
+			v = mappings.get("default");
+		return v;
+	}
+	private Map<String,String> statusCodeMappings() throws ObjectNotFoundException{
+		String codeMappings = configService.getByName("status_code_mappings").getValue();
+		ObjectMapper m = new ObjectMapper();
+		Map<String,String> statusCodeMap = null;
+	    try {
+			statusCodeMap = m.readValue(codeMappings, new HashMap<String,String>().getClass());
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return statusCodeMap;
 	}
 	
 	@RequestMapping(value = "/transcript/term", method = RequestMethod.GET)

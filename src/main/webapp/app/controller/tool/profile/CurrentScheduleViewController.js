@@ -23,7 +23,7 @@ Ext.define('Ssp.controller.tool.profile.CurrentScheduleViewController', {
     	apiProperties: 'apiProperties',
     	service: 'transcriptService',
         personLite: 'personLite',
-        store: 'currentScheduleStore'
+        store: 'currentScheduleStore',
     },
 	init: function() {
 		var me=this;
@@ -45,14 +45,11 @@ Ext.define('Ssp.controller.tool.profile.CurrentScheduleViewController', {
     
     getTranscriptSuccess: function( r, scope ){
     	var me=scope;
-
         var currentScheduledCourses = [];
-
         Ext.Array.each(r, function(courseTranscriptRaw) {
-                if(courseTranscriptRaw.statusCode === "E"){
-					var courseTranscript = Ext.create('Ssp.model.CourseTranscript', courseTranscriptRaw);
-                	currentScheduledCourses.push(courseTranscript);
-				}
+			var courseTranscript = Ext.create('Ssp.model.CourseTranscript', courseTranscriptRaw);
+             currentScheduledCourses.push(courseTranscript);
+				
         });
 
 

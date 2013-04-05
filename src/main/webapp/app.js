@@ -418,7 +418,7 @@ var apiUrls = [
   {name: 'studentIntakeTool', url: 'tool/studentIntake'},
   {name: 'studentType', url: 'reference/studentType'},
   {name: 'futureTerms', url: 'reference/term/future'},
-  {name: 'weeklyCourseWorkHourRanges', url: 'reference/config/?name=weekly_course_work_hour_ranges'}
+  {name: 'weeklyCourseWorkHourRanges', url: 'reference/config/?name=weekly_course_work_hour_ranges'},
 ];
 
 Ext.onReady(function(){	

@@ -36,13 +36,13 @@ Ext.define('Ssp.view.tools.profile.Schedule', {
                 xtype: 'profilecurrentschedule',
                 anchor: '100% , 50%'
 				
-            }, {
+            }/*, {
                 xtype: 'tbspacer',
                 height: '10'
             }, {
                 xtype: 'profiledroppedcourses',
                 anchor: '100% , 50%'
-            }
+            }*/
 			]
         
         });

@@ -58,6 +58,11 @@ Ext.define('Ssp.view.tools.profile.CurrentSchedule', {
                 flex: 1
             }, {
             
+                dataIndex: 'statusCode',
+                text: 'Status',
+                flex: 1
+            }, {
+            
                 dataIndex: 'audited',
                 text: 'Audited',
                 flex: 1

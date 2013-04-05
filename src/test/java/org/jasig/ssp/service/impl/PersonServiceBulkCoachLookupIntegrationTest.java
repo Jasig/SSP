@@ -148,7 +148,8 @@ public class PersonServiceBulkCoachLookupIntegrationTest {
 				personFixture.firstName(), personFixture.lastName(),
 				personFixture.primaryEmailAddress(),
 				null, personFixture.departmentName(),
-				personFixture.workPhone());
+				personFixture.workPhone(),
+				personFixture.photoUrl());
 	}
 
 	@Test

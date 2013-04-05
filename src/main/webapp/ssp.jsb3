@@ -788,11 +788,6 @@
                     "name": "ProfileToolViewController.js",
                     "path": "/app/controller/tool/profile/"
                 },
-                {
-                    "clsName": "Ssp.controller.tool.profile.RecentTermActivityViewController",
-                    "name": "RecentTermActivityViewController.js",
-                    "path": "/app/controller/tool/profile/"
-                },
             	{
                     "clsName": "Ssp.model.RecentStudentActivity",
                     "name": "RecentStudentActivity.js",
@@ -812,6 +807,16 @@
                     "clsName": "Ssp.model.CourseTranscript",
                     "name": "CourseTranscript.js",
                     "path": "/app/model/"
+                },
+				{
+                    "clsName": "Ssp.model.FinancialAid",
+                    "name": "FinancialAid.js",
+                    "path": "/app/model/"
+                },
+				{
+                    "clsName": "Ssp.controller.tool.profile.RecentTermActivityViewController",
+                    "name": "RecentTermActivityViewController.js",
+                    "path": "/app/controller/tool/profile/"
                 },
                 {
                     "clsName": "Ssp.controller.tool.profile.ProfilePersonViewController",
