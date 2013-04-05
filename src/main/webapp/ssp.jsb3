@@ -787,16 +787,36 @@
                     "clsName": "Ssp.controller.tool.profile.ProfileToolViewController",
                     "name": "ProfileToolViewController.js",
                     "path": "/app/controller/tool/profile/"
-                },                
+                },
+            	{
+                    "clsName": "Ssp.model.RecentStudentActivity",
+                    "name": "RecentStudentActivity.js",
+                    "path": "/app/model/"
+                },
+				{
+                    "clsName": "Ssp.model.RecentStudentActivity",
+                    "name": "RecentStudentActivity.js",
+                    "path": "/app/model/"
+                },
                 {
-                    "clsName": "Ssp.model.Transcript",
-                    "name": "Transcript.js",
+                    "clsName": "Ssp.model.TermTranscript",
+                    "name": "TermTranscript.js",
                     "path": "/app/model/"
                 },
                 {
                     "clsName": "Ssp.model.CourseTranscript",
                     "name": "CourseTranscript.js",
                     "path": "/app/model/"
+                },
+				{
+                    "clsName": "Ssp.model.FinancialAid",
+                    "name": "FinancialAid.js",
+                    "path": "/app/model/"
+                },
+				{
+                    "clsName": "Ssp.controller.tool.profile.RecentTermActivityViewController",
+                    "name": "RecentTermActivityViewController.js",
+                    "path": "/app/controller/tool/profile/"
                 },
                 {
                     "clsName": "Ssp.controller.tool.profile.ProfilePersonViewController",
@@ -813,6 +833,27 @@
                     "name": "ProfileCoachViewController.js",
                     "path": "/app/controller/tool/profile/"
                 },
+			  	{
+	                 "clsName": "Ssp.controller.tool.profile.CurrentDroppedScheduleViewController",
+                    "name": "CurrentDroppedScheduleViewController.js",
+                    "path": "/app/controller/tool/profile/"
+                },
+				{
+	                 "clsName": "Ssp.controller.tool.profile.CurrentScheduleViewController",
+                    "name": "CurrentScheduleViewController.js",
+                    "path": "/app/controller/tool/profile/"
+                },
+				{
+	                 "clsName": "Ssp.controller.tool.profile.ProfilePersonDetailsViewController",
+                    "name": "ProfilePersonDetailsViewController.js",
+                    "path": "/app/controller/tool/profile/"
+                },
+				{
+	                 "clsName": "Ssp.controller.tool.profile.ProfileRecentStudentActivityViewController",
+                    "name": "ProfileRecentStudentActivityViewController.js",
+                    "path": "/app/controller/tool/profile/"
+                },
+
                 {
                     "clsName": "Ssp.view.tools.profile.Coach",
                     "name": "Coach.js",
@@ -886,6 +927,11 @@
                 {
                     "clsName": "Ssp.model.external.AbstractExternal",
                     "name": "AbstractExternal.js",
+                    "path": "/app/model/external/"
+                },
+                {
+                    "clsName": "Ssp.model.external.FinancialAid",
+                    "name": "FinancialAid.js",
                     "path": "/app/model/external/"
                 },
                 {

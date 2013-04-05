@@ -20,5 +20,6 @@ Ext.define('Ssp.model.Transcript', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name: 'gpa', type: 'auto'},
              {name: 'programs', type: 'auto'},
-             {name: 'terms', type: 'auto'}]
+             {name: 'financialAid', type: 'auto'},
+             {name: 'terms', type: 'auto'}],
 });

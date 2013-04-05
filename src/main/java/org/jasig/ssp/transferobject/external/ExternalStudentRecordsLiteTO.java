@@ -19,9 +19,13 @@
 package org.jasig.ssp.transferobject.external;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.jasig.ssp.model.external.ExternalStudentAcademicProgram;
+import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
 import org.jasig.ssp.model.external.ExternalStudentRecordsLite;
+import org.jasig.ssp.model.external.ExternalStudentTermCourses;
 
 public class ExternalStudentRecordsLiteTO implements ExternalDataTO<ExternalStudentRecordsLite>,
 		Serializable {
@@ -40,13 +44,35 @@ public class ExternalStudentRecordsLiteTO implements ExternalDataTO<ExternalStud
 	
 	private List<ExternalStudentAcademicProgramTO> programs;
 	
+	private ExternalStudentFinancialAidTO financialAid;
 
+	/**
+	 * @return the financialAid
+	 */
+	public ExternalStudentFinancialAidTO getFinancialAid() {
+		return financialAid;
+	}
+
+	/**
+	 * @param financialAid the financialAid to set
+	 */
+	public void setFinancialAid(ExternalStudentFinancialAidTO financialAid) {
+		this.financialAid = financialAid;
+	}
 
 	@Override
 	public void from(ExternalStudentRecordsLite model) {
-		// nothing to do... need access to TO factories to actually the
-		// programs association, so for consistency we require the client
-		// to fully hydrate any TO associations.
+		if ( model.getGPA() != null ) {
+			this.gpa = new ExternalStudentTranscriptTO(model.getGPA());
+		}
+		if ( model.getPrograms() != null && !model.getPrograms().isEmpty()) {
+			this.programs = new ArrayList<ExternalStudentAcademicProgramTO>();
+			for(ExternalStudentAcademicProgram program:model.getPrograms())
+				this.programs.add(new ExternalStudentAcademicProgramTO(program));
+		}
+		
+		if( model.getFinancialAid() != null)
+			financialAid = new ExternalStudentFinancialAidTO(model.getFinancialAid());
 	}
 
 	/**

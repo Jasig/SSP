@@ -51,5 +51,9 @@ public class ExternalStudentTranscriptCourseServiceImpl extends
 			String schoolId) {
 		return dao.getTranscriptsBySchoolId(schoolId);
 	}
+	
+	public List<ExternalStudentTranscriptCourse> getTranscriptsBySchoolIdAndTermCode(String schoolId, String termCode){
+		return dao.getTranscriptsBySchoolIdAndTermCode(schoolId, termCode);
+	}
 
 }

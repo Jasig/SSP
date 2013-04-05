@@ -20,11 +20,12 @@ Ext.define('Ssp.view.tools.profile.RecentTermActivity', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.recenttermactivity',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.profile.RecentTermActivityViewController',
     width: '100%',
     height: '100%',
     title: 'Recent Term Activity',
     autoScroll: true,
-    inject: {        //store: 'recentTermActivityStore'
+    inject: {       store: 'termTranscriptsStore'
     },
     initComponent: function(){
         var me = this;
@@ -32,7 +33,7 @@ Ext.define('Ssp.view.tools.profile.RecentTermActivity', {
             //store: me.store,
             xtype: 'gridcolumn',
             columns: [{
-                dataIndex: 'term',
+                dataIndex: 'termCode',
                 text: 'Term',
                 flex: 1
             }, {
@@ -40,14 +41,17 @@ Ext.define('Ssp.view.tools.profile.RecentTermActivity', {
                 text: 'MAP',
                 flex: 1
             }, {
-            
-                dataIndex: 'cumGPA',
+                dataIndex: 'gradePointAverage',
                 text: 'GPA',
                 flex: 1
             }, {
-            
-                dataIndex: 'load',
+                dataIndex: 'creditHoursAttempted',
                 text: 'Load',
+                flex: 1
+            },
+			{
+                dataIndex: 'creditHoursEarned',
+                text: 'Earned',
                 flex: 1
             }],
             viewConfig: {}

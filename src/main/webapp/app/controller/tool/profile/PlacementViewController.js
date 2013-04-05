@@ -28,15 +28,16 @@ Ext.define('Ssp.controller.tool.profile.PlacementViewController', {
 	init: function() {
 		var me=this;
 		var personId = me.personLite.get('id');
-
-    	// hide the loader
-    	me.getView().setLoading( true );
-    	
-		me.service.getAll( personId, {
-			success: me.getPlacementSuccess,
-			failure: me.getPlacementFailure,
-			scope: me			
-		});
+		if(personId != ""){
+	    	// hide the loader
+	    	me.getView().setLoading( true );
+	    	
+			me.service.getAll( personId, {
+				success: me.getPlacementSuccess,
+				failure: me.getPlacementFailure,
+				scope: me			
+			});
+		}
 		
 		return this.callParent(arguments);
     },

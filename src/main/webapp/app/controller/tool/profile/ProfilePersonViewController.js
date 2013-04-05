@@ -42,12 +42,20 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         birthDateField: '#birthDate',
         studentTypeField: '#studentType',
         programStatusField: '#programStatus',
+        f1StatusField: '#f1Status',
 
         gpaField: '#cumGPA',
-
+        
+        academicStandingField: '#academicStanding',
+        currentRestrictionsField: '#currentRestrictions',
+        creditCompletionRateField: '#creditCompletionRate',
+        currentYearFinancialAidAwardField: '#currentYearFinancialAidAward',
         academicProgramsField: '#academicPrograms',
+        sapStatusField: '#sapStatus',
+     
 
         earlyAlertField: '#earlyAlert',
+        actionPlanField: '#actionPlan',
 		
 		'serviceReasonEdit': {
             click: 'onServiceReasonEditButtonClick'
@@ -143,6 +151,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var studentTypeField = me.getStudentTypeField();
         var programStatusField = me.getProgramStatusField();
         var earlyAlertField = me.getEarlyAlertField();
+        var actionPlanField = me.getActionPlanField();
 
         var fullName = me.person.getFullName();
         var coachName = me.person.getCoachFullName();
@@ -172,6 +181,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         photoUrlField.setSrc(me.person.getPhotoUrl());
         programStatusField.setValue(me.person.getProgramStatusName());
         earlyAlertField.setValue(me.person.getEarlyAlertRatio());
+        actionPlanField.setValue(me.person.getActionPlanSummary());
 
         var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
         var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
@@ -188,6 +198,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     getPersonFailure: function() {
         // nothing to do
     },
+    
+
 
     getTranscriptSuccess: function(serviceResponses) {
         var me = this;
@@ -197,7 +209,13 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var gpa = transcript.get('gpa');
         if ( gpa ) {
 			var gpaFormatted = Ext.util.Format.number(gpa.gradePointAverage, '0.00');
+			if(gpa.gpaTrendIndicator && gpa.gpaTrendIndicator.length > 0)
+				gpaFormatted += "  " + gpa.gpaTrendIndicator;
             me.getGpaField().setValue(gpaFormatted);
+            me.getAcademicStandingField().setValue(gpa.academicStanding);
+            me.getCreditCompletionRateField().setValue(gpa.creditCompletionRate + '%');
+            me.getCurrentRestrictionsField().setValue(gpa.currentRestrictions)
+
         }
         var programs = transcript.get('programs');
         if ( programs ) {
@@ -206,6 +224,14 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
                 programNames.push(program.programName);
             });
             me.getAcademicProgramsField().setValue(programNames.join(', '));
+        }
+        
+
+        var financialAid = transcript.get('financialAid');
+        if ( financialAid ) {
+            
+        	me.getCurrentYearFinancialAidAwardField().setValue(financialAid.currentYearFinancialAidAward);
+        	me.getSapStatusField().setValue(financialAid.sapStatus);
         }
     },
 

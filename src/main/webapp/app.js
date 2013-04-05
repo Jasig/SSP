@@ -203,6 +203,8 @@ Ext.require([
 	'Ssp.model.Placement',
 	'Ssp.model.PersonProgramStatus',
 	'Ssp.model.CourseTranscript',
+	'Ssp.model.TermTranscript',
+	'Ssp.model.RecentStudentActivity',
 	'Ssp.model.Transcript',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
@@ -399,7 +401,7 @@ var apiUrls = [
   {name: 'personalityType', url: 'reference/personalityType'},
   {name: 'personTranscript', url: 'person/{id}/transcript'},
   {name: 'personEmailTask', url: 'person/{id}/task/email'},
-  {name: 'personViewHistory', url: 'report/{id}/History'},
+  {name: 'personViewHistory', url: 'person/{id}/history/print'},
   {name: 'personPrintTask', url: 'person/{id}/task/print'},
   {name: 'personSearch', url: 'person/search'},
   {name: 'placement', url: 'person/{id}/test'},
@@ -416,7 +418,7 @@ var apiUrls = [
   {name: 'studentIntakeTool', url: 'tool/studentIntake'},
   {name: 'studentType', url: 'reference/studentType'},
   {name: 'futureTerms', url: 'reference/term/future'},
-  {name: 'weeklyCourseWorkHourRanges', url: 'reference/config/?name=weekly_course_work_hour_ranges'}
+  {name: 'weeklyCourseWorkHourRanges', url: 'reference/config/?name=weekly_course_work_hour_ranges'},
 ];
 
 Ext.onReady(function(){	
@@ -650,6 +652,39 @@ Ext.onReady(function(){
 						fn: function(){
 							return Ext.create('Ext.data.Store',{
 								model: 'Ssp.model.CourseTranscript'
+							});
+						},
+						singleton: true
+					},
+					currentScheduleStore: {
+						fn: function(){
+							return Ext.create('Ext.data.Store',{
+								model: 'Ssp.model.CourseTranscript'
+							});
+						},
+						singleton: true
+					},
+					currentDroppedScheduleStore:{
+						fn: function(){
+							return Ext.create('Ext.data.Store',{
+								model: 'Ssp.model.CourseTranscript'
+							});
+						},
+						singleton: true
+					},
+					
+					termTranscriptsStore: {
+						fn: function(){
+							return Ext.create('Ext.data.Store',{
+								model: 'Ssp.model.TermTranscript'
+							});
+						},
+						singleton: true
+					},
+					recentStudentActivitiesStore: {
+						fn: function(){
+							return Ext.create('Ext.data.Store',{
+								model: 'Ssp.model.RecentStudentActivity'
 							});
 						},
 						singleton: true

@@ -87,6 +87,7 @@ public class Stubs {
 		private final String departmentName;
 		private final String primaryEmailAddress;
 		private final String workPhone;
+		private final String photoUrl = null;
 
 		PersonFixture(String id, String username, String schoolId,
 					  String firstName, String middleName, String lastName,
@@ -128,7 +129,8 @@ public class Stubs {
 		}
 		public String departmentName() { return departmentName; }
 		public String workPhone() { return workPhone; }
-		public String primaryEmailAddress() { return primaryEmailAddress; }
+		public String primaryEmailAddress() { return primaryEmailAddress;}
+		public String photoUrl() { return photoUrl;}
 	}
 
 	public static enum CampusFixture {

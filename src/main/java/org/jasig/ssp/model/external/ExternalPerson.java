@@ -119,6 +119,16 @@ public class ExternalPerson extends AbstractExternalData implements
 	
 	@Nullable
 	private Boolean nonLocalAddress;
+	
+	@Column(length = 50)
+	@Size(max = 50)
+	@Nullable
+	private String residencyCounty;
+	
+	@Column(length = 1, name = "f1_status")
+	@Size(max = 1)
+	@Nullable
+	private String f1Status;
 
 	public String getSchoolId() {
 		return schoolId;
@@ -335,6 +345,34 @@ public class ExternalPerson extends AbstractExternalData implements
 
 	public void setNonLocalAddress(Boolean nonLocalAddress) {
 		this.nonLocalAddress = nonLocalAddress;
+	}
+
+	/**
+	 * @return the residencyCounty
+	 */
+	public String getResidencyCounty() {
+		return residencyCounty;
+	}
+
+	/**
+	 * @param residencyCounty the residencyCounty to set
+	 */
+	public void setResidencyCounty(String residencyCounty) {
+		this.residencyCounty = residencyCounty;
+	}
+
+	/**
+	 * @return the f1Status
+	 */
+	public String getF1Status() {
+		return f1Status;
+	}
+
+	/**
+	 * @param f1Status the f1Status to set
+	 */
+	public void setF1Status(String f1Status) {
+		this.f1Status = f1Status;
 	}
 
 }

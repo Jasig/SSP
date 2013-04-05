@@ -74,7 +74,7 @@ import com.google.common.collect.Maps;
  * Mapped to URI path <code>/1/person</code>
  */
 @Controller
-@RequestMapping("/1/report/{personId}/History")
+@RequestMapping("/1/person")
 public class PersonHistoryReportController extends ReportBaseController {
 
 	private static final String REPORT_URL = "/reports/studentHistoryMaster.jasper";
@@ -103,8 +103,8 @@ public class PersonHistoryReportController extends ReportBaseController {
 	@Autowired
 	protected transient SecurityService securityService;
 
-	@RequestMapping(method = RequestMethod.GET)
-	@PreAuthorize(Permission.SECURITY_REPORT_READ)
+	@RequestMapping(value = "/{personId}/history/print", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
 	void getAddressLabels(
 			final HttpServletResponse response,

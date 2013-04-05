@@ -130,6 +130,8 @@ public class CoachPersonLiteTO implements Serializable {
 	private String officeLocation;
 
 	private String departmentName;
+	
+	private String photoUrl;
 
 	/**
 	 * Empty constructor. Should only ever be used for unit tests or ORMs.
@@ -160,7 +162,8 @@ public class CoachPersonLiteTO implements Serializable {
 			@NotNull final String primaryEmailAddress,
 			final String officeLocation,
 			final String departmentName,
-			final String workPhone) {
+			final String workPhone,
+			final String photoUrl) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -168,6 +171,7 @@ public class CoachPersonLiteTO implements Serializable {
 		this.officeLocation = officeLocation;
 		this.departmentName = departmentName;
 		this.workPhone = workPhone;
+		this.photoUrl = photoUrl;
 	}
 
 	/**
@@ -186,6 +190,7 @@ public class CoachPersonLiteTO implements Serializable {
 		firstName = person.getFirstName();
 		lastName = person.getLastName();
 		primaryEmailAddress = person.getPrimaryEmailAddress();
+		photoUrl =  person.getPhotoUrl();
 		// officeLocation = null; // TODO: load data from external source
 		// departmentName = null; // TODO: load data from external source
 	}
@@ -322,6 +327,8 @@ public class CoachPersonLiteTO implements Serializable {
 			return false;
 		if (workPhone != null ? !workPhone.equals(that.workPhone) : that.workPhone != null)
 			return false;
+		if (photoUrl != null ? !photoUrl.equals(that.photoUrl) : that.photoUrl != null)
+			return false;
 
 		return true;
 	}
@@ -343,5 +350,19 @@ public class CoachPersonLiteTO implements Serializable {
 				", officeLocation='" + officeLocation + '\'' +
 				", departmentName='" + departmentName + '\'' +
 				'}';
+	}
+
+	/**
+	 * @return the photoUrl
+	 */
+	public String getPhotoUrl() {
+		return photoUrl;
+	}
+
+	/**
+	 * @param photoUrl the photoUrl to set
+	 */
+	public void setPhotoUrl(String photoUrl) {
+		this.photoUrl = photoUrl;
 	}
 }

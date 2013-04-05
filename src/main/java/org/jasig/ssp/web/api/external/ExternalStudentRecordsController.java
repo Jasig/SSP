@@ -18,33 +18,70 @@
  */
 package org.jasig.ssp.web.api.external;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.JsonSerializer;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ser.impl.JsonSerializerMap;
+import org.jasig.ssp.factory.EarlyAlertTOFactory;
+import org.jasig.ssp.factory.JournalEntryTOFactory;
+import org.jasig.ssp.factory.TaskTOFactory;
 import org.jasig.ssp.factory.external.ExternalStudentAcademicProgramTOFactory;
-import org.jasig.ssp.factory.external.ExternalStudentRecordsLiteTOFactory;
+import org.jasig.ssp.factory.external.ExternalStudentFinancialAidTOFactory;
 import org.jasig.ssp.factory.external.ExternalStudentRecordsTOFactory;
 import org.jasig.ssp.factory.external.ExternalStudentTestTOFactory;
 import org.jasig.ssp.factory.external.ExternalStudentTranscriptCourseTOFactory;
+import org.jasig.ssp.factory.external.ExternalStudentTranscriptTermTOFactory;
+import org.jasig.ssp.model.EarlyAlert;
+import org.jasig.ssp.model.JournalEntry;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Task;
+import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
 import org.jasig.ssp.model.external.ExternalStudentRecords;
 import org.jasig.ssp.model.external.ExternalStudentRecordsLite;
-import org.jasig.ssp.model.external.ExternalStudentTermCourses;
-import org.jasig.ssp.model.external.ExternalStudentTranscript;
-import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
+import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.Permission;
+import org.jasig.ssp.service.EarlyAlertService;
+import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.external.ExternalStudentAcademicProgramService;
+import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
 import org.jasig.ssp.service.external.ExternalStudentTestService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptCourseService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
+import org.jasig.ssp.service.external.ExternalStudentTranscriptTermService;
+import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.transferobject.EarlyAlertTO;
+import org.jasig.ssp.transferobject.JournalEntryTO;
+import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.PersonLiteTO;
+import org.jasig.ssp.transferobject.RecentActivityTO;
+import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.external.ExternalStudentFinancialAidTO;
 import org.jasig.ssp.transferobject.external.ExternalStudentRecordsLiteTO;
 import org.jasig.ssp.transferobject.external.ExternalStudentRecordsTO;
-import org.jasig.ssp.transferobject.external.ExternalStudentTermCoursesTO;
 import org.jasig.ssp.transferobject.external.ExternalStudentTestTO;
-import org.jasig.ssp.transferobject.external.ExternalStudentTranscriptTO;
+import org.jasig.ssp.transferobject.external.ExternalStudentTranscriptCourseTO;
+import org.jasig.ssp.transferobject.external.ExternalStudentTranscriptTermTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.AbstractBaseController;
 import org.jasig.ssp.web.api.tool.IntakeController;
 import org.slf4j.Logger;
@@ -57,10 +94,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.common.collect.Lists;
-
-import java.util.List;
-
 @Controller
 @RequestMapping("/1/person/{id}")
 public class ExternalStudentRecordsController extends AbstractBaseController {
@@ -68,6 +101,30 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	
 	@Autowired
 	private transient PersonService personService;
+	
+	@Autowired
+	private transient TermService termService;
+	
+	@Autowired
+	private transient EarlyAlertService earlyAlertService;
+	
+	@Autowired
+	private transient JournalEntryService journalEntryService;
+	
+	@Autowired
+	private transient TaskService taskService;
+	
+	@Autowired
+	private transient ConfigService configService;
+	
+	@Autowired
+	private transient EarlyAlertTOFactory earlyAlertTOFactory;
+	
+	@Autowired
+	private transient JournalEntryTOFactory journalEntryTOFactory;
+	
+	@Autowired
+	private transient TaskTOFactory taskTOFactory;
 	
 	@Autowired
 	private transient ExternalStudentTranscriptService externalStudentTranscriptService;
@@ -85,6 +142,12 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	private transient  ExternalStudentTranscriptCourseService externalStudentTranscriptCourseService;
 	
 	@Autowired
+	private transient  ExternalStudentTranscriptTermService externalStudentTranscriptTermService;
+	
+	@Autowired
+	private transient  ExternalStudentTranscriptTermTOFactory externalStudentTranscriptTermTOFactory;
+	
+	@Autowired
 	private transient  ExternalStudentTranscriptCourseTOFactory externalStudentTranscriptCourseFactory;
 	
 	@Autowired
@@ -93,8 +156,15 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	@Autowired
 	private transient ExternalStudentTestService externalStudentTestService;
 	
-
+	@Autowired
+	private transient ExternalStudentFinancialAidService externalStudentFinancialAidService;
 	
+	@Autowired
+	private transient ExternalStudentFinancialAidTOFactory externalStudentFinancialAidTOFactory;
+	
+	@Autowired
+	private transient SecurityService securityService;
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(IntakeController.class);
 	@Override
@@ -120,24 +190,14 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 			throws ObjectNotFoundException {
 		String schoolId = getStudentId(id);
 		final ExternalStudentRecordsLite record = new ExternalStudentRecordsLite();
-		ExternalStudentTranscript transcript = externalStudentTranscriptService.getRecordsBySchoolId(schoolId);
+
 		record.setPrograms(externalStudentAcademicProgramService.getAcademicProgramsBySchoolId(schoolId));
-		record.setGPA(transcript);
+		record.setGPA(externalStudentTranscriptService.getRecordsBySchoolId(schoolId));
+		record.setFinancialAid(externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId));
+		
 
 		ExternalStudentRecordsLiteTO recordTO = new ExternalStudentRecordsLiteTO(record);
 
-		// Have to hydrate the TO ourselves b/c building a collection of TOs
-		// in the "correct" way requires access to the corresponding Factory.
-
-		// in general TO constructors can't handle null arguments. multi-valued
-		// associations are a special case, though. See below.
-		if ( record.getGPA() != null ) {
-			recordTO.setGpa(new ExternalStudentTranscriptTO(record.getGPA()));
-		}
-
-		// This is standard handling for multi-valued TO associations, which
-		// converts null associations to empty lists.
-		recordTO.setPrograms(programFactory.asTOList(record.getPrograms()));
 		return recordTO;
 	}
 	
@@ -147,33 +207,160 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	ExternalStudentRecordsTO loadFullStudentRecords(final @PathVariable UUID id)
 			throws ObjectNotFoundException {
 		String schoolId = getStudentId(id);
-		ExternalStudentTranscript transcript = externalStudentTranscriptService.getRecordsBySchoolId(schoolId);
-		final ExternalStudentRecords record = new ExternalStudentRecords();
-		record.setGPA(transcript);
-		record.setPrograms(externalStudentAcademicProgramService.getAcademicProgramsBySchoolId(schoolId));
-		List<ExternalStudentTranscriptCourse> courses = externalStudentTranscriptCourseService.getTranscriptsBySchoolId(schoolId);
-		Map<String, ExternalStudentTermCourses> coursesByTerm = new HashMap<String,ExternalStudentTermCourses>();
 		
-		for(ExternalStudentTranscriptCourse course:courses){
-			if(coursesByTerm.containsKey(course.getTermCode())){
-				ExternalStudentTermCourses termCourses = coursesByTerm.get(course.getTermCode());
-				termCourses.addCourse(course);
+		final ExternalStudentRecords record = new ExternalStudentRecords();
+		
+		record.setPrograms(externalStudentAcademicProgramService.getAcademicProgramsBySchoolId(schoolId));
+		record.setGPA(externalStudentTranscriptService.getRecordsBySchoolId(schoolId));
+		record.setFinancialAid(externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId));
+		record.setTerms(externalStudentTranscriptCourseService.getTranscriptsBySchoolId(schoolId));
+		
+		ExternalStudentRecordsTO recordTO = new ExternalStudentRecordsTO(record);
+		return recordTO;
+	}
+	
+	@RequestMapping(value = "/transcript/currentcourses", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	public @ResponseBody
+	List<ExternalStudentTranscriptCourseTO> loadCurrentCourses(final @PathVariable UUID id)
+			throws ObjectNotFoundException {
+		String schoolId = getStudentId(id);
+		
+		Term currentTerm = termService.getCurrentTerm();
+		List<ExternalStudentTranscriptCourseTO> courses = externalStudentTranscriptCourseFactory.asTOList(
+				externalStudentTranscriptCourseService.getTranscriptsBySchoolIdAndTermCode(schoolId, currentTerm.getCode()));
+		Map<String,String> mappings = statusCodeMappings();
+		
+		String defaultStatusCode = getDefaultStatusCode(mappings);
+		
+		for(ExternalStudentTranscriptCourseTO course:courses){
+			Person person = personService.getBySchoolId(course.getFacultySchoolId());
+			if(person != null)
+				course.setFacultyName(person.getFullName());
+			
+			if(mappings != null){
+				if(mappings.containsKey(course.getStatusCode())){
+					course.setStatusCode(mappings.get(course.getStatusCode()));
+				}else if(defaultStatusCode != null)
+					course.setStatusCode(defaultStatusCode);
+			}
+		}
+		return courses;
+	}
+	
+	private String getDefaultStatusCode(Map<String,String> mappings){
+		String v = null;
+		if(mappings.containsKey("default"))
+			v = mappings.get("default");
+		return v;
+	}
+	private Map<String,String> statusCodeMappings() throws ObjectNotFoundException{
+		String codeMappings = configService.getByName("status_code_mappings").getValue();
+		ObjectMapper m = new ObjectMapper();
+		Map<String,String> statusCodeMap = null;
+	    try {
+			statusCodeMap = m.readValue(codeMappings, new HashMap<String,String>().getClass());
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return statusCodeMap;
+	}
+	
+	@RequestMapping(value = "/transcript/term", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	public @ResponseBody
+	List<ExternalStudentTranscriptTermTO> loadTermStudentRecords(final @PathVariable UUID id)
+			throws ObjectNotFoundException {
+		String schoolId = getStudentId(id);
+		return externalStudentTranscriptTermTOFactory.asTOList(
+				externalStudentTranscriptTermService.getExternalStudentTranscriptTermsBySchoolId(schoolId));
+	}
+	
+	
+	@RequestMapping(value = "/transcript/recentstudentactivity", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	public @ResponseBody
+	List<RecentActivityTO> loadRecentStudentActivity(final @PathVariable UUID id)
+			throws ObjectNotFoundException {
+		List<RecentActivityTO> recentActivities = new ArrayList<RecentActivityTO>();
+		Person person = personService.get(id);
+		SortingAndPaging sAndP = SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ACTIVE, 0, 20, "createdDate", "DESC", "createdDate");
+		PagingWrapper<EarlyAlert> earlyAlerts = earlyAlertService.getAllForPerson(person, sAndP);
+		SspUser currentUser = securityService.currentUser();
+		List<EarlyAlertTO> earlyAlertTOs = earlyAlertTOFactory.asTOList(earlyAlerts.getRows());
+		
+		PagingWrapper<JournalEntry> journalEntries = journalEntryService.getAllForPerson(person, currentUser, sAndP);
+		
+		List<JournalEntryTO> journalEntriesTOs = journalEntryTOFactory.asTOList(journalEntries.getRows());
+		
+		PagingWrapper<Task> actions = taskService.getAllForPerson(person, currentUser, sAndP);
+		
+		List<TaskTO> actionsTOs = taskTOFactory.asTOList(actions.getRows());
+		
+		for(EarlyAlertTO earlyAlert:earlyAlertTOs){
+			if(earlyAlert.getClosedDate() != null){
+			recentActivities.add(new RecentActivityTO(earlyAlert.getClosedById(), earlyAlert.getClosedByName(), 
+					"Early Alert Closed", 
+					earlyAlert.getClosedDate()));
 			}else{
-				coursesByTerm.put(course.getTermCode(), new ExternalStudentTermCourses(course));
+				recentActivities.add(new RecentActivityTO(earlyAlert.getCreatedBy().getId(),
+						getPersonLiteName(earlyAlert.getCreatedBy()), 
+						"Early Alert Created", 
+						earlyAlert.getCreatedDate()));
 			}
 		}
 		
-		ExternalStudentRecordsTO recordTO = factory.from(record);
-		recordTO.setPrograms(programFactory.asTOList(record.getPrograms()));
-		List<ExternalStudentTermCoursesTO> coursesTermTOs = new ArrayList<ExternalStudentTermCoursesTO>();
-		for(ExternalStudentTermCourses crousesForTerm:coursesByTerm.values())
-		{
-			ExternalStudentTermCoursesTO to = new ExternalStudentTermCoursesTO(crousesForTerm);
-			to.setCourses(externalStudentTranscriptCourseFactory.asTOList(crousesForTerm.getCourses()));
-			coursesTermTOs.add(to);
+		for(JournalEntryTO journalEntry:journalEntriesTOs){
+				recentActivities.add(new RecentActivityTO(journalEntry.getCreatedBy().getId(),
+						getPersonLiteName(
+						journalEntry.getCreatedBy()), 
+						"Journal Entry", 
+						journalEntry.getEntryDate()));
 		}
-		recordTO.setTerms(coursesTermTOs);
-		return recordTO;
+		
+		for(TaskTO action:actionsTOs){
+			if(action.isCompleted()){
+				recentActivities.add(new RecentActivityTO(action.getModifiedBy().getId(),
+						getPersonLiteName(action.getModifiedBy()), 
+						"Action Plan Task Created", 
+						action.getCompletedDate()));
+			}else{
+			recentActivities.add(new RecentActivityTO(action.getCreatedBy().getId(),
+					getPersonLiteName(action.getCreatedBy()), 
+					"Action Plan Task Created", 
+					action.getCreatedDate()));
+			}
+		}
+		
+		if(person.getStudentIntakeCompleteDate() != null){
+			recentActivities.add(new RecentActivityTO(person.getCoach().getId(),
+					person.getCoach().getFullName(), 
+					"Student Intake Completed", 
+					person.getStudentIntakeCompleteDate()));
+		}
+		if(person.getStudentIntakeRequestDate() != null){
+			recentActivities.add(new RecentActivityTO(person.getCoach().getId(),
+					person.getCoach().getFullName(), 
+					"Student Intake Requested", 
+					person.getStudentIntakeRequestDate()));
+		}
+			
+		Collections.sort(recentActivities, RecentActivityTO.RECENT_ACTIVITY_TO_DATE_COMPARATOR);
+		if(recentActivities.size() > 20)
+			recentActivities = recentActivities.subList(0, 20);
+		
+		return recentActivities;
+	}
+	
+	private String getPersonLiteName(PersonLiteTO person){
+		return person.getFirstName() + " " + person.getLastName();
 	}
 	
 	/**
@@ -195,6 +382,21 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		String schoolId = getStudentId(id);
 		
 		return externalStudentTestTOFactory.asTOList(externalStudentTestService.getStudentTestResults(schoolId));
+	}
+	
+	@RequestMapping(value = "/financialaid/summary", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	public @ResponseBody
+	ExternalStudentFinancialAidTO loadFinancialAidSummary(final @PathVariable UUID id)
+			throws ObjectNotFoundException {
+		String schoolId = getStudentId(id);
+		
+		ExternalStudentFinancialAid record = externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId);
+		
+
+		final ExternalStudentFinancialAidTO recordTO = externalStudentFinancialAidTOFactory.from(record);
+		
+		return recordTO;
 	}
 	
 	String getStudentId(UUID id) throws ObjectNotFoundException{

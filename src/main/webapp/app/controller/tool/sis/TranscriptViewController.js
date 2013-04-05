@@ -30,14 +30,15 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
 		var personId = me.personLite.get('id');
 
         me.store.removeAll();
-
-    	me.getView().setLoading( true );
-    	
-		me.service.getFull( personId, {
-			success: me.getTranscriptSuccess,
-			failure: me.getTranscriptFailure,
-			scope: me			
-		});
+        if(personId != ""){
+	    	me.getView().setLoading( true );
+	    	
+			me.service.getFull( personId, {
+				success: me.getTranscriptSuccess,
+				failure: me.getTranscriptFailure,
+				scope: me			
+			});
+        }
 		
 		return this.callParent(arguments);
     },
@@ -50,11 +51,8 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
         var terms = transcript.get('terms');
         if ( terms ) {
             Ext.Array.each(terms, function(term) {
-                Ext.Array.each(term.courses, function(course) {
-                    var courseTranscript = Ext.create('Ssp.model.CourseTranscript', course);
-                    courseTranscript.set('termCode', term.code);
+                    var courseTranscript = Ext.create('Ssp.model.CourseTranscript', term);
                     courseTranscripts.push(courseTranscript);
-                });
             });
         }
 

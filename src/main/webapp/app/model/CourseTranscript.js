@@ -22,5 +22,13 @@ Ext.define('Ssp.model.CourseTranscript', {
         {name: 'formattedCourse', type: 'string'},
         {name: 'title', type: 'string'},
         {name: 'creditType', type: 'string'},
-        {name: 'grade', type: 'string'}]
+        {name: 'grade', type: 'string'},
+        {name: 'audited', type: 'string'},
+        {name: 'creditEarned', type: 'number'},
+        {name: 'facultyName', type: 'string'},
+        {name: 'facultySchoolId', type: 'string'},
+        {name: 'sectionCode', type: 'string'},
+        {name: 'statusCode', type: 'string'},
+        {name: 'subjectAbbreviation', type: 'string'},
+        {name: 'sectionNumber', type: 'string'}]
 });

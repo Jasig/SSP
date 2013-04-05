@@ -21,8 +21,10 @@ package org.jasig.ssp.transferobject; // NOPMD
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
+import javax.persistence.Column;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -31,10 +33,12 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonDemographics;
 import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.model.PersonReferralSource;
 import org.jasig.ssp.model.PersonServiceReason;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
+import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.model.reference.ReferralSource;
@@ -118,21 +122,14 @@ public class PersonTO // NOPMD
 
 	private String strengths;
 
-	@Nullable
 	private Boolean abilityToBenefit;
 
-	@Nullable
-	@Size(max = 20)
 	private String anticipatedStartTerm;
 
-	@Nullable
 	private Integer anticipatedStartYear;
 
-	@Nullable
-	@Size(max = 20)
 	private String actualStartTerm;
 
-	@Nullable
 	private Integer actualStartYear;
 
 	private Date studentIntakeRequestDate;
@@ -158,6 +155,21 @@ public class PersonTO // NOPMD
 	private String paymentStatus;
 	
 	private String registeredTerms;
+	
+	private String residencyCounty;
+	
+	private String f1Status;
+	
+	private String gender;
+	
+	private String maritalStatus;
+	
+	private String ethnicity;
+	
+	private Integer actionPlanTaskOpenCount = new Integer(0);
+	private Integer actionPlanTaskClosedCount = new Integer(0);
+	private Date lastActionPlanCompletedDate;
+	
 
 	/**
 	 * Empty constructor
@@ -208,6 +220,17 @@ public class PersonTO // NOPMD
 		schoolId = model.getSchoolId();
 		enabled = !(model.isDisabled());
 		studentIntakeCompleteDate = model.getStudentIntakeCompleteDate();
+		f1Status = model.getF1Status();
+		residencyCounty = model.getResidencyCounty();
+		if(model.getDemographics() != null){
+			if(model.getDemographics().getGender() != null)
+				gender = model.getDemographics().getGender().name();
+			if(model.getDemographics().getMaritalStatus() != null)
+				maritalStatus = model.getDemographics().getMaritalStatus().getName();
+			if(model.getDemographics().getEthnicity() != null)
+				ethnicity = model.getDemographics().getEthnicity().getName();
+		}
+		
 
 		final Person coachPerson = model.getCoach();
 		if (coachPerson == null) {
@@ -218,7 +241,9 @@ public class PersonTO // NOPMD
 					coachPerson.getPrimaryEmailAddress(),
 					coachPerson.getNullSafeOfficeLocation(),
 					coachPerson.getNullSafeDepartmentName(),
-					coachPerson.getWorkPhone());
+					coachPerson.getWorkPhone(),
+					coachPerson.getPhotoUrl()
+					);
 		}
 
 		strengths = model.getStrengths();
@@ -314,6 +339,24 @@ public class PersonTO // NOPMD
 		
 		this.paymentStatus = getCurrentAndFuturePaymentStatuses(model);
 		this.registeredTerms = getCurrentAndFutureTerms(model);
+		Set<Task> tasks = model.getTasks();
+		if(tasks != null && !tasks.isEmpty())
+			setActionPlanCountsAndDate(tasks);
+		
+	}
+	
+	private void setActionPlanCountsAndDate(Set<Task> tasks){
+		for(Task task:tasks){		
+			if(task.getCompletedDate() == null)
+				actionPlanTaskOpenCount++;
+			else{
+				actionPlanTaskClosedCount++;
+				if(lastActionPlanCompletedDate == null)
+					lastActionPlanCompletedDate = task.getCompletedDate();
+				else if(lastActionPlanCompletedDate.before(task.getCompletedDate()))
+					lastActionPlanCompletedDate = task.getCompletedDate();
+			}
+		}
 	}
 
 	private String getCurrentAndFutureTerms(Person model) {
@@ -339,7 +382,7 @@ public class PersonTO // NOPMD
 		StringBuilder builder = new StringBuilder();
 		for (RegistrationStatusByTerm registrationStatusByTerm : currentAndFutureRegistrationStatuses) 
 		{
-			builder.append(registrationStatusByTerm.getTuitionPaid() + " ");
+			builder.append(registrationStatusByTerm.getTermCode() + "=" + registrationStatusByTerm.getTuitionPaid() + " ");
 		}
 		return builder.toString().trim();
 	}	
@@ -785,5 +828,120 @@ public class PersonTO // NOPMD
 	public void setPaymentStatus(String paymentStatus) {
 		this.paymentStatus = paymentStatus;
 	}
+
+	/**
+	 * @return the residencyCounty
+	 */
+	public String getResidencyCounty() {
+		return residencyCounty;
+	}
+
+	/**
+	 * @param residencyCounty the residencyCounty to set
+	 */
+	public void setResidencyCounty(String residencyCounty) {
+		this.residencyCounty = residencyCounty;
+	}
+
+	/**
+	 * @return the f1Status
+	 */
+	public String getF1Status() {
+		return f1Status;
+	}
+
+	/**
+	 * @param f1Status the f1Status to set
+	 */
+	public void setF1Status(String f1Status) {
+		this.f1Status = f1Status;
+	}
+
+
+
+	/**
+	 * @return the gender
+	 */
+	public String getGender() {
+		return gender;
+	}
+
+	/**
+	 * @param gender the gender to set
+	 */
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	/**
+	 * @return the maritalStatus
+	 */
+	public String getMaritalStatus() {
+		return maritalStatus;
+	}
+
+	/**
+	 * @param maritalStatus the maritalStatus to set
+	 */
+	public void setMaritalStatus(String maritalStatus) {
+		this.maritalStatus = maritalStatus;
+	}
+
+	/**
+	 * @return the ethnicity
+	 */
+	public String getEthnicity() {
+		return ethnicity;
+	}
+
+	/**
+	 * @param ethnicity the ethnicity to set
+	 */
+	public void setEthnicity(String ethnicity) {
+		this.ethnicity = ethnicity;
+	}
+
+	/**
+	 * @return the actionPlanTaskOpenCount
+	 */
+	public Integer getActionPlanTaskOpenCount() {
+		return actionPlanTaskOpenCount;
+	}
+
+	/**
+	 * @param actionPlanTaskOpenCount the actionPlanTaskOpenCount to set
+	 */
+	public void setActionPlanTaskOpenCount(Integer actionPlanTaskOpenCount) {
+		this.actionPlanTaskOpenCount = actionPlanTaskOpenCount;
+	}
+
+	/**
+	 * @return the actionPlanTaskClosedCount
+	 */
+	public Integer getActionPlanTaskClosedCount() {
+		return actionPlanTaskClosedCount;
+	}
+
+	/**
+	 * @param actionPlanTaskClosedCount the actionPlanTaskClosedCount to set
+	 */
+	public void setActionPlanTaskClosedCount(Integer actionPlanTaskClosedCount) {
+		this.actionPlanTaskClosedCount = actionPlanTaskClosedCount;
+	}
+
+	/**
+	 * @return the lastActionPlanCompletedDate
+	 */
+	public Date getLastActionPlanCompletedDate() {
+		return lastActionPlanCompletedDate;
+	}
+
+	/**
+	 * @param lastActionPlanCompletedDate the lastActionPlanCompletedDate to set
+	 */
+	public void setLastActionPlanCompletedDate(Date lastActionPlanCompletedDate) {
+		this.lastActionPlanCompletedDate = lastActionPlanCompletedDate;
+	}
+
 
 }

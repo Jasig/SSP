@@ -345,7 +345,7 @@ public class PersonController extends AbstractBaseController {
 		return new ServiceResponse(true);
 	}
 
-	@RequestMapping(value = "/{id}/history/print", method = RequestMethod.GET)
+	//@RequestMapping(value = "/{id}/history/print", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
 	PersonTO historyPrint(final @PathVariable UUID id)

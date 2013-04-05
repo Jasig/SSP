@@ -269,6 +269,18 @@ public class ExternalPersonServiceImpl
 						externalPerson.getNonLocalAddress()))) {
 			person.setNonLocalAddress(externalPerson.getNonLocalAddress());
 		}
+		
+		if ((person.getResidencyCounty()== null) ||
+				(!person.getResidencyCounty().equals(
+						externalPerson.getResidencyCounty()))) {
+			person.setResidencyCounty(externalPerson.getResidencyCounty());
+		}
+		
+		if ((person.getF1Status()== null) ||
+				(!person.getF1Status().equals(
+						externalPerson.getF1Status()))) {
+			person.setF1Status(externalPerson.getF1Status());
+		}
 
 		setCoachForPerson(person, externalPerson.getCoachSchoolId());
 

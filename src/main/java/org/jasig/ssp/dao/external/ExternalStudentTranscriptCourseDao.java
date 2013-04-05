@@ -43,4 +43,12 @@ public class ExternalStudentTranscriptCourseDao extends
 		return (List<ExternalStudentTranscriptCourse>)criteria.list();
 		
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ExternalStudentTranscriptCourse> getTranscriptsBySchoolIdAndTermCode(String schoolId, String termCode){
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("schoolId", schoolId));
+		criteria.add(Restrictions.eq("termCode", termCode));
+		return (List<ExternalStudentTranscriptCourse>)criteria.list();
+	}
 }

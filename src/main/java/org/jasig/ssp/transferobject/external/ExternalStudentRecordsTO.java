@@ -19,9 +19,13 @@
 package org.jasig.ssp.transferobject.external;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.jasig.ssp.model.external.ExternalStudentAcademicProgram;
 import org.jasig.ssp.model.external.ExternalStudentRecords;
+import org.jasig.ssp.model.external.ExternalStudentTermCourses;
+import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
 
 
 public class ExternalStudentRecordsTO implements ExternalDataTO<ExternalStudentRecords>,
@@ -31,6 +35,13 @@ public class ExternalStudentRecordsTO implements ExternalDataTO<ExternalStudentR
 	{
 		super();
 	}
+	
+	public ExternalStudentRecordsTO(ExternalStudentRecords model)
+	{
+		super();
+		from(model);
+	}
+
 
 	/**
 	 * 
@@ -42,11 +53,36 @@ public class ExternalStudentRecordsTO implements ExternalDataTO<ExternalStudentR
 		if ( model.getGPA() != null ) {
 			this.gpa = new ExternalStudentTranscriptTO(model.getGPA());
 		}
+		if ( model.getPrograms() != null && !model.getPrograms().isEmpty()) {
+			this.programs = new ArrayList<ExternalStudentAcademicProgramTO>();
+			for(ExternalStudentAcademicProgram program:model.getPrograms())
+				this.programs.add(new ExternalStudentAcademicProgramTO(program));
+		}
+		if ( model.getTerms() != null && !model.getTerms().isEmpty()) {
+			this.terms = new ArrayList<ExternalStudentTranscriptCourseTO>();
+			for(ExternalStudentTranscriptCourse term:model.getTerms())
+				this.terms.add(new ExternalStudentTranscriptCourseTO(term));
+		}
+		if(model.getFinancialAid() != null)
+			financialAid = new ExternalStudentFinancialAidTO(model.getFinancialAid());
 	}
 	
 	private ExternalStudentTranscriptTO gpa;
 	private List<ExternalStudentAcademicProgramTO> programs;
-	private List<ExternalStudentTermCoursesTO> terms;
+	private List<ExternalStudentTranscriptCourseTO> terms;
+	private ExternalStudentFinancialAidTO financialAid;
+	/**
+	 * @return the financial
+	 */
+	public ExternalStudentFinancialAidTO getFinancialAid() {
+		return financialAid;
+	}
+	/**
+	 * @param financial the financial to set
+	 */
+	public void setFinancialAid(ExternalStudentFinancialAidTO financial) {
+		this.financialAid = financial;
+	}
 	/**
 	 * @return the gpa
 	 */
@@ -76,13 +112,13 @@ public class ExternalStudentRecordsTO implements ExternalDataTO<ExternalStudentR
 	/**
 	 * @return the terms
 	 */
-	public List<ExternalStudentTermCoursesTO> getTerms() {
+	public List<ExternalStudentTranscriptCourseTO> getTerms() {
 		return terms;
 	}
 	/**
 	 * @param terms the terms to set
 	 */
-	public void setTerms(List<ExternalStudentTermCoursesTO> terms) {
+	public void setTerms(List<ExternalStudentTranscriptCourseTO> terms) {
 		this.terms = terms;
 	}
 

@@ -27,6 +27,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<gmaven.runtime>1.8</gmaven.runtime>
+		<sencha.skip>false</sencha.skip>
 	</properties>
 
 	<scm>
@@ -47,6 +48,38 @@
 				</dependency>
 			</dependencies>
 		</profile>
+
+		<profile>
+			<id>WINS</id>
+			<activation>
+				<os>
+					<family>Windows</family>
+				</os>
+			</activation>
+			<properties>
+				<sencha.cmd>sencha.bat</sencha.cmd>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>LINUX</id>
+			<activation>
+				<os>
+					<family>unix</family>
+				</os>
+			</activation>
+			<properties>
+				<sencha.cmd>sencha</sencha.cmd>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>SKIP_SENCHA</id>
+			<properties>
+				<sencha.skip>true</sencha.skip>
+			</properties>
+		</profile>
+
 	</profiles>
 
 	<dependencies>
@@ -465,7 +498,6 @@
 	<build>
 
 		<plugins>
-		
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jasperreports-maven-plugin</artifactId>
@@ -518,6 +550,33 @@
 						<version>${groovy.version}</version>
 					</dependency>
 				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<executions>
+					<execution>
+						<id>sencha</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<skip>${sencha.skip}</skip>
+					<executable>${sencha.cmd}</executable>
+					<!-- optional -->
+					<workingDirectory>${basedir}/src/main/webapp</workingDirectory>
+					<arguments>
+						<argument>build</argument>
+						<argument>-p</argument>
+						<argument>${basedir}/src/main/webapp/ssp.jsb3</argument>
+						<argument>-d</argument>
+						<argument>${basedir}/src/main/webapp/</argument>
+					</arguments>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>com.mycila.maven-license-plugin</groupId>

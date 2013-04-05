@@ -18,17 +18,23 @@
  */
 package org.jasig.ssp.portlet.ssp;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 @Controller
 @RequestMapping("VIEW")
 public final class SspPortletController {
-
+	
+	@Value("#{configProperties.ssp_main_use_minifed_js}")
+	private boolean sspMainUseMinifiedJs = true;
+	
 	@RenderMapping
-	public String show() {
-		return "ssp-main";
+	public ModelAndView show(){
+		return new ModelAndView("ssp-main", "useMinified", sspMainUseMinifiedJs);
 	}
 
 }

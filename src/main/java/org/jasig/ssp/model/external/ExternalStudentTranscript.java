@@ -58,6 +58,33 @@ public class ExternalStudentTranscript extends AbstractExternalData implements
 	
 	@Column(nullable = true)
 	private BigDecimal gradePointAverage;
+	
+	@Column(nullable = true)
+	private BigDecimal creditHoursEarned;
+	
+	@Column(nullable = true)
+	private BigDecimal creditCompletionRate;
+	
+	@Column(nullable = true)
+	private BigDecimal creditHoursNotCompleted;
+	
+	@Column(nullable = false, length = 100)
+	@NotNull
+	@NotEmpty
+	@Size(max = 100)
+	private String currentRestrictions;
+	
+	@Column(nullable = false, length = 50)
+	@NotNull
+	@NotEmpty
+	@Size(max = 50)
+	private String academicStanding;
+	
+	@Column(nullable = false, length = 25)
+	@NotNull
+	@NotEmpty
+	@Size(max = 25)
+	private String gpaTrendIndicator;
 
 	/**
 	 * @return the schoolId
@@ -109,6 +136,20 @@ public class ExternalStudentTranscript extends AbstractExternalData implements
 	}
 
 	/**
+	 * @return the creditHoursEarned
+	 */
+	public BigDecimal getCreditHoursEarned() {
+		return creditHoursEarned;
+	}
+
+	/**
+	 * @param creditHoursEarned the creditHoursEarned to set
+	 */
+	public void setCreditHoursEarned(BigDecimal creditHoursEarned) {
+		this.creditHoursEarned = creditHoursEarned;
+	}
+
+	/**
 	 * @param totalQualityPoints the totalQualityPoints to set
 	 */
 	public void setTotalQualityPoints(final BigDecimal totalQualityPoints) {
@@ -127,5 +168,75 @@ public class ExternalStudentTranscript extends AbstractExternalData implements
 	 */
 	public void setGradePointAverage(final BigDecimal gradePointAverage) {
 		this.gradePointAverage = gradePointAverage;
+	}
+
+	/**
+	 * @return the creditCompletionRate
+	 */
+	public BigDecimal getCreditCompletionRate() {
+		return creditCompletionRate;
+	}
+
+	/**
+	 * @param creditCompletionRate the creditCompletionRate to set
+	 */
+	public void setCreditCompletionRate(BigDecimal creditCompletionRate) {
+		this.creditCompletionRate = creditCompletionRate;
+	}
+
+	/**
+	 * @return the creditHoursNotCompleted
+	 */
+	public BigDecimal getCreditHoursNotCompleted() {
+		return creditHoursNotCompleted;
+	}
+
+	/**
+	 * @param creditHoursNotCompleted the creditHoursNotCompleted to set
+	 */
+	public void setCreditHoursNotCompleted(BigDecimal creditHoursNotCompleted) {
+		this.creditHoursNotCompleted = creditHoursNotCompleted;
+	}
+
+	/**
+	 * @return the currentRestrictions
+	 */
+	public String getCurrentRestrictions() {
+		return currentRestrictions;
+	}
+
+	/**
+	 * @param currentRestrictions the currentRestrictions to set
+	 */
+	public void setCurrentRestrictions(String currentRestrictions) {
+		this.currentRestrictions = currentRestrictions;
+	}
+
+	/**
+	 * @return the academicStanding
+	 */
+	public String getAcademicStanding() {
+		return academicStanding;
+	}
+
+	/**
+	 * @param academicStanding the academicStanding to set
+	 */
+	public void setAcademicStanding(String academicStanding) {
+		this.academicStanding = academicStanding;
+	}
+
+	/**
+	 * @return the gpaTrendIndicator
+	 */
+	public String getGpaTrendIndicator() {
+		return gpaTrendIndicator;
+	}
+
+	/**
+	 * @param gpaTrendIndicator the gpaTrendIndicator to set
+	 */
+	public void setGpaTrendIndicator(String gpaTrendIndicator) {
+		this.gpaTrendIndicator = gpaTrendIndicator;
 	}
 }

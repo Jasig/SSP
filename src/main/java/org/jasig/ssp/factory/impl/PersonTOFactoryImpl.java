@@ -110,6 +110,8 @@ public class PersonTOFactoryImpl extends
 		model.setActualStartTerm(tObject.getActualStartTerm());
 		model.setActualStartYear(tObject.getActualStartYear());
 		model.setStudentIntakeRequestDate(tObject.getStudentIntakeRequestDate());
+		model.setResidencyCounty(tObject.getResidencyCounty());
+		model.setF1Status(tObject.getF1Status());
 		model.setStudentType((tObject.getStudentType() == null)
 				|| (tObject.getStudentType().getId() == null) ? null // NOPMD
 				: studentTypeService.get(tObject.getStudentType().getId()));

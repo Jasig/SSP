@@ -92,20 +92,20 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         labelWidth: 30
                     
                     }, {
-                    
-                        name: 'compRate',
-                        itemId: 'compRate',
+                    	fieldLabel: 'Comp Rate',
+                        name: 'creditCompletionRate',
+                        itemId: 'creditCompletionRate',
                         labelWidth: 80
                     
                     }, {
                         fieldLabel: 'Standing',
-                        name: 'standing',
-                        itemId: 'standing',
+                        name: 'academicStanding',
+                        itemId: 'academicStanding',
                         labelWidth: 60
                     }, {
                         fieldLabel: 'Restrictions',
-                        name: 'restrictions',
-                        itemId: 'restrictions',
+                        name: 'currentRestrictions',
+                        itemId: 'currentRestrictions',
                         labelWidth: 80
                     }, {
                         xtype: 'tbspacer',
@@ -122,19 +122,19 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         labelWidth: 50
                     }, {
                         fieldLabel: 'FA Award',
-                        name: 'faAward',
-                        itemId: 'faAward',
+                        name: 'currentYearFinancialAidAward',
+                        itemId: 'currentYearFinancialAidAward',
                         labelWidth: 60
                     
                     }, {
                         fieldLabel: 'SAP',
-                        name: 'sap',
-                        itemId: 'sap',
+                        name: 'sapStatus',
+                        itemId: 'sapStatus',
                         labelWidth: 30
                     }, {
                         fieldLabel: 'F1',
-                        name: 'f1',
-                        itemId: 'f1',
+                        name: 'f1Status',
+                        itemId: 'f1Status',
                         labelWidth: 30
                     }, {
                         xtype: 'tbspacer',

@@ -65,6 +65,8 @@ public class ExternalFacultyCourseRosterTOFactoryImpl
 		model.setFormattedCourse(tObject.getFormattedCourse());
 		model.setPrimaryEmailAddress(tObject.getPrimaryEmailAddress());
 		model.setStatusCode(tObject.getStatusCode());
+		model.setSectionCode(tObject.getSectionCode());
+		model.setSectionNumber(tObject.getSectionNumber());
 
 		return model;
 	}

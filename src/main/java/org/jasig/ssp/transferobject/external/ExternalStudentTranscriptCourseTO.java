@@ -32,6 +32,10 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 		Serializable {
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6238162986848364288L;
 	@Override
 	public void from(ExternalStudentTranscriptCourse model) {
 		schoolId = model.getSchoolId();
@@ -53,6 +57,13 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 		firstName = model.getFirstName();
 		lastName = model.getLastName();
 		middleName = model.getMiddleName();
+		facultySchoolId = model.getFacultySchoolId();		
+	}
+	
+	public ExternalStudentTranscriptCourseTO(ExternalStudentTranscriptCourse model)
+	{
+		super();
+		from(model);
 	}
 	
 	public ExternalStudentTranscriptCourseTO()
@@ -78,6 +89,9 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 	private String firstName;
 	private String lastName;
 	private String middleName;
+	
+	private String facultySchoolId;
+	private String facultyName;
 	
 	/**
 	 * @param schoolId
@@ -107,6 +121,7 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 			final String termCode,
 			final String creditType, 
 			final String sectionCode,
+			final String facultySchoolId,
 	final String audited,
 	final String statusCode) {
 		
@@ -129,6 +144,7 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.middleName = middleName;
+		this.facultySchoolId = facultySchoolId;
 	}
 	/**
 	 * @return the schoolId
@@ -345,5 +361,33 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 	 */
 	public void setMiddleName(String middleName) {
 		this.middleName = middleName;
+	}
+
+	/**
+	 * @return the facultySchoolId
+	 */
+	public String getFacultySchoolId() {
+		return facultySchoolId;
+	}
+
+	/**
+	 * @param facultySchoolId the facultySchoolId to set
+	 */
+	public void setFacultySchoolId(String facultySchoolId) {
+		this.facultySchoolId = facultySchoolId;
+	}
+
+	/**
+	 * @return the facultyName
+	 */
+	public String getFacultyName() {
+		return facultyName;
+	}
+
+	/**
+	 * @param facultyName the facultyName to set
+	 */
+	public void setFacultyName(String facultyName) {
+		this.facultyName = facultyName;
 	}
 }

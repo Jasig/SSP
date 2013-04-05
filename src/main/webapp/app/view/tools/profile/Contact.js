@@ -92,7 +92,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         xtype: 'fieldset',
                         border: 0,
                         title: '',
-                        flex: .60,
+                        flex: .80,
                         defaultType: 'displayfield',
                         padding: '0 0 10 0',
                         defaults: {
@@ -121,7 +121,9 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         }, , {
                             fieldLabel: 'DOB',
                             name: 'birthDate',
-                            itemId: 'birthDate'
+                            itemId: 'birthDate',
+                            height: '60',
+                            	
                         }]
                     }]
                 }, {

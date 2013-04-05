@@ -26,5 +26,6 @@ public interface ExternalStudentTranscriptCourseService extends
 		ExternalDataService<ExternalStudentTranscriptCourse> {
 	
 	List<ExternalStudentTranscriptCourse> getTranscriptsBySchoolId(String schoolId);
+	List<ExternalStudentTranscriptCourse> getTranscriptsBySchoolIdAndTermCode(String schoolId, String termCode);
 
 }
