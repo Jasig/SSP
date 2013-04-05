@@ -974,7 +974,7 @@ void addExternalFacultyCourseRoster(xml, course, students) {
 	students.each() { student ->
 		xml.insert(tableName:"external_faculty_course_roster") {
 			xml.column(name:"faculty_school_id", value:course.facultyId )
-			xml.column(name:"school_id", value: student.id )
+			xml.column(name:"school_id", value: student.school_id)
 			xml.column(name:"first_name", value:student.first_name )
 			xml.column(name:"middle_name", value:student.middle_name)
 			xml.column(name:"last_name", value:student.last_name )
@@ -990,7 +990,7 @@ void addExternalFacultyCourseRoster(xml, course, students) {
 
 void addExternalStudentTranscript(xml, transcript, student) {	
 	xml.insert(tableName:"external_student_transcript") {
-		xml.column(name:"school_id", value: student.id )
+		xml.column(name:"school_id", value: student.school_id )
 		xml.column(name:"credit_hours_for_gpa", value:transcript.earnedHours)
 		xml.column(name:"credit_hours_earned", value:transcript.earnedHours )
 		xml.column(name:"credit_hours_attempted", value:transcript.attemptedHours )
@@ -1007,7 +1007,7 @@ void addExternalStudentTranscriptCourse(xml, student) {
 	def grade = getRandomValueFromArray(['A', 'B', 'C', 'D', 'F'])
 	
 	xml.insert(tableName:"external_student_transcript_course") {
-		xml.column(name:"school_id", value: student.id )
+		xml.column(name:"school_id", value: student.school_id )
 		xml.column(name:"subject_abbreviation", value:"${coursePrefix}" )
 		xml.column(name:"number", value:courseSuffix.toInteger() )
 		xml.column(name:"formatted_course", value: course.formattedCourse )
@@ -1026,7 +1026,7 @@ void addExternalStudentTranscriptCourse(xml, student) {
 void addExternalStudentTest(xml, student) {
 	def subTest = getRandomValueFromArray(['MATH', 'CHEM', 'LIT', 'COMP'])
 	xml.insert(tableName:"external_student_test") {
-		xml.column(name:"school_id", value:student.id  )
+		xml.column(name:"school_id", value:student.school_id  )
 		xml.column(name:"test_name", value:"Scholastic Assessment Test"  )
 		xml.column(name:"test_code", value:"SAT"  )
 		xml.column(name:"sub_test_code", value:subTest  )
@@ -1038,7 +1038,7 @@ void addExternalStudentTest(xml, student) {
 	
 	subTest = getRandomValueFromArray(['MATH', 'CHEM', 'LIT', 'COMP'])
 	xml.insert(tableName:"external_student_test") {
-		xml.column(name:"school_id", value:student.id  )
+		xml.column(name:"school_id", value:student.school_id  )
 		xml.column(name:"test_name", value:"American College Testing"  )
 		xml.column(name:"test_code", value:"ACT"  )
 		xml.column(name:"sub_test_code", value:subTest  )
@@ -1052,7 +1052,7 @@ void addExternalStudentTest(xml, student) {
 void addExternalStudentAcademicProgram(xml, student) {
 	def major = getRandomValueFromArray(majorIds)	
 	xml.insert(tableName:"external_student_academic_program") {
-		xml.column(name:"school_id", value:student.id )
+		xml.column(name:"school_id", value:student.school_id )
 		xml.column(name:"degree_code", value:"BA" )
 		xml.column(name:"degree_name", value:"Applied ${major}" )
 		xml.column(name:"program_code", value:UUID.randomUUID() )
@@ -1062,7 +1062,7 @@ void addExternalStudentAcademicProgram(xml, student) {
 
 void addExternalRegistrationStatusByTerm(xml, student) {
 	xml.insert(tableName:"external_registration_status_by_term") {
-		xml.column(name:"school_id", value:student.id )
+		xml.column(name:"school_id", value:student.school_id )
 		xml.column(name:"term_code", value:ACTUAL_START_TERM )
 		xml.column(name:"registered_course_count", value:4 )
 		xml.column(name:"tuition_paid", value:"Y" )
@@ -1336,7 +1336,7 @@ GroovyCourse makeCourse(facultyMember) {
 	def suffix = getRandomValueFromArray(courseSuffixes)
 	
 	if(facultyMember != null) {
-		course.facultyId = facultyMember.id
+		course.facultyId = facultyMember.school_id
 	}
 	course.term = ACTUAL_START_TERM
 	course.formattedCourse = prefix+suffix
