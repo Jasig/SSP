@@ -76,7 +76,7 @@
 					<configuration>
 					  <executable>sencha.bat</executable>
 					  <!-- optional -->
-					  <workingDirectory>..\src\main\webapp</workingDirectory>
+					  <workingDirectory>${basedir}\src\main\webapp</workingDirectory>
 					  <arguments>
 						<argument>build</argument>
 						<argument>-p</argument>
