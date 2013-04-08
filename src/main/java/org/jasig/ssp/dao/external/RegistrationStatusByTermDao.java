@@ -68,4 +68,13 @@ public class RegistrationStatusByTermDao extends
 
 		return processCriteriaWithSortingAndPaging(query, sAndP, false);
 	}
+	
+	public PagingWrapper<RegistrationStatusByTerm> getAllForPerson(
+			final String schoolId, final SortingAndPaging sAndP) {
+		final Criteria query = createCriteria();
+		query.add(Restrictions.eq("schoolId", schoolId));
+		query.add(Restrictions.gt("registeredCourseCount", 0));
+
+		return processCriteriaWithSortingAndPaging(query, sAndP, false);
+	}
 }

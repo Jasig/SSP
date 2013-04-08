@@ -30,10 +30,15 @@ import org.apache.commons.lang.StringUtils;
 import org.jasig.mygps.model.transferobject.TaskReportTO;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonProgramStatus;
+import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
 import org.jasig.ssp.model.external.ExternalStudentTranscript;
+import org.jasig.ssp.model.external.ExternalStudentTranscriptTerm;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
+import org.jasig.ssp.service.external.ExternalStudentTranscriptTermService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 
@@ -104,9 +109,12 @@ public class BaseStudentReportTO implements Serializable {
 	private Boolean isIlp;
 	
 	private String actualStartTerm;
+	private String academicStanding;
 	private Integer actualStartYear;
 	private BigDecimal gradePointAverage;
-	
+	private BigDecimal lastTermGradePointAverage;
+	private String lastTermRegistered;
+	private String financialAidStatus;
 	private Person person;
 	
 	public UUID getId() {
@@ -604,19 +612,102 @@ public void setCurrentRegistrationStatus(RegistrationStatusByTermService registr
 	   if(getSchoolId() != null && !getSchoolId().isEmpty()){
 		   RegistrationStatusByTerm termStatus = registrationStatusByTermService
 				.getForCurrentTerm(getSchoolId());
-		   if(termStatus != null)
+		   if(termStatus != null){
 			   setRegistrationStatus(termStatus.getRegisteredCourseCount());
+		   }
 	   }
 }
 
-public void setStudentTranscript(ExternalStudentTranscriptService externalStudentTranscriptService )
+public void setLastTermGPAAndLastTermRegistered(ExternalStudentTranscriptTermService externalStudentTranscriptTermService, Term currentTerm)
+		throws ObjectNotFoundException {
+
+   if(getSchoolId() != null && !getSchoolId().isEmpty()){
+	   List<ExternalStudentTranscriptTerm> termTranscripts = externalStudentTranscriptTermService.
+			   getExternalStudentTranscriptTermsBySchoolId(getSchoolId());
+
+	   for(ExternalStudentTranscriptTerm transcript:termTranscripts){
+		   if(transcript.getCreditHoursAttempted().floatValue() > 0.0){
+			   if(currentTerm == null || !transcript.getTermCode().equals(currentTerm.getCode())){
+				   setLastTermGradePointAverage(transcript.getGradePointAverage());
+				   setLastTermRegistered(transcript.getTermCode());
+			   	   return;
+			   }
+		   }
+	   }
+   }
+}
+
+public void setStudentTranscript(ExternalStudentTranscriptService externalStudentTranscriptService, 
+		ExternalStudentFinancialAidService externalStudentFinancialAidService )
 		throws ObjectNotFoundException {
 	if(getSchoolId() != null && !getSchoolId().isEmpty()){
 		ExternalStudentTranscript transcript = externalStudentTranscriptService
 			.getRecordsBySchoolId(getSchoolId());
-		if(transcript != null)
+		if(transcript != null){
 			this.setGradePointAverage(transcript.getGradePointAverage());
+			this.setAcademicStanding(transcript.getAcademicStanding());
+		}
+		ExternalStudentFinancialAid financialAid = externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(getSchoolId());
+		if(financialAid != null){
+			financialAidStatus = financialAid.getCurrentYearFinancialAidAward();
+		}
 	}
+}
+
+/**
+ * @return the academicStanding
+ */
+public String getAcademicStanding() {
+	return academicStanding;
+}
+
+/**
+ * @param academicStanding the academicStanding to set
+ */
+public void setAcademicStanding(String academicStanding) {
+	this.academicStanding = academicStanding;
+}
+
+/**
+ * @return the financialAidStatus
+ */
+public String getFinancialAidStatus() {
+	return financialAidStatus;
+}
+
+/**
+ * @param financialAidStatus the financialAidStatus to set
+ */
+public void setFinancialAidStatus(String financialAidStatus) {
+	this.financialAidStatus = financialAidStatus;
+}
+
+/**
+ * @return the lastTermGradePointAverage
+ */
+public BigDecimal getLastTermGradePointAverage() {
+	return lastTermGradePointAverage;
+}
+
+/**
+ * @param lastTermGradePointAverage the lastTermGradePointAverage to set
+ */
+public void setLastTermGradePointAverage(BigDecimal lastTermGradePointAverage) {
+	this.lastTermGradePointAverage = lastTermGradePointAverage;
+}
+
+/**
+ * @return the lastTermRegistered
+ */
+public String getLastTermRegistered() {
+	return lastTermRegistered;
+}
+
+/**
+ * @param lastTermRegistered the lastTermRegistered to set
+ */
+public void setLastTermRegistered(String lastTermRegistered) {
+	this.lastTermRegistered = lastTermRegistered;
 }
 
 }

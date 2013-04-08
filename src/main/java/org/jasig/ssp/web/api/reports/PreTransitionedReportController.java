@@ -34,11 +34,15 @@ import net.sf.jasperreports.engine.JRException;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
+import org.jasig.ssp.service.external.ExternalStudentTranscriptTermService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
+import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
@@ -100,7 +104,17 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 	protected transient ExternalStudentTranscriptService externalStudentTranscriptService;
 	
 	@Autowired
+	protected transient ExternalStudentTranscriptTermService externalStudentTranscriptTermService;
+	
+	@Autowired
+	protected transient TermService termService;
+	
+	
+	@Autowired
 	protected transient RegistrationStatusByTermService registrationStatusByTermService;
+	
+	@Autowired
+	protected transient ExternalStudentFinancialAidService externalStudentFinancialAidService;
 
 	// @Autowired
 	// private transient PersonTOFactory factory;
@@ -187,11 +201,12 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 		
 		final PagingWrapper<BaseStudentReportTO> reports = personService.getStudentReportTOsFromCriteria(
 				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
-		
+		Term currentTerm = termService.getCurrentTerm();
 		List<BaseStudentReportTO> compressedReports = this.processStudentReportTOs(reports);
 		for(BaseStudentReportTO report:compressedReports){
-			report.setStudentTranscript(externalStudentTranscriptService);
+			report.setStudentTranscript(externalStudentTranscriptService, externalStudentFinancialAidService);
 			report.setCurrentRegistrationStatus(registrationStatusByTermService);
+			report.setLastTermGPAAndLastTermRegistered(externalStudentTranscriptTermService, currentTerm);
 		}
 		
 		SearchParameters.addStudentCount(compressedReports, parameters);
