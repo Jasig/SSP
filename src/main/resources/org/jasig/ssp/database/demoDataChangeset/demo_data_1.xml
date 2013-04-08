@@ -26,19 +26,79 @@
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-
-	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
-	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
-
+		
 	<changeSet id="Fix demo data- person.school_id references" author="tyler.bain">
-		<sql>update external_faculty_course_roster set school_id = (select school_id from person p where cast(p.id as varchar) = external_faculty_course_roster.school_id OR p.school_id = external_faculty_course_roster.school_id)</sql>
-		<sql>update external_student_transcript set school_id = (select school_id from person p where cast(p.id as varchar) = external_student_transcript.school_id OR p.school_id = external_student_transcript.school_id)</sql>
-		<sql>update external_student_transcript_course set school_id = (select school_id from person p where cast(p.id as varchar) = external_student_transcript_course.school_id OR p.school_id = external_student_transcript_course.school_id)</sql>
-		<sql>update external_student_test set school_id = (select school_id from person p where cast(p.id as varchar) = external_student_test.school_id OR p.school_id = external_student_test.school_id)</sql>
-		<sql>update external_student_academic_program set school_id = (select school_id from person p where cast(p.id as varchar) = external_student_academic_program.school_id OR p.school_id = external_student_academic_program.school_id)</sql>
-	
-		<sql>update external_faculty_course set faculty_school_id = (select school_id from person p where cast(p.id as varchar) = external_faculty_course.faculty_school_id OR p.school_id = external_faculty_course.faculty_school_id)</sql>
-		<sql>update external_faculty_course_roster set faculty_school_id = (select school_id from person p where cast(p.id as varchar) = external_faculty_course_roster.faculty_school_id OR p.school_id = external_faculty_course_roster.faculty_school_id)</sql>
+		<sql>
+			update external_faculty_course_roster set school_id = 
+			(select school_id from person p 
+			 where cast(p.id as varchar) = external_faculty_course_roster.school_id 
+			 OR p.school_id = external_faculty_course_roster.school_id)
+			where exists
+			(select school_id from person p 
+			 where cast(p.id as varchar) = external_faculty_course_roster.school_id 
+			 OR p.school_id = external_faculty_course_roster.school_id)
+		</sql>
+		<sql>	
+			update external_faculty_course_roster set faculty_school_id =
+			(select username from external_person xp where xp.school_id = external_faculty_course_roster.faculty_school_id)
+			where faculty_school_id not in (select school_id from person);
+		</sql>
+		<sql>	
+			update external_faculty_course set faculty_school_id = 
+			(select school_id from person p where cast(p.id as varchar) = external_faculty_course.faculty_school_id
+			OR p.school_id = external_faculty_course.faculty_school_id)
+			where exists
+			(select school_id from person p where cast(p.id as varchar) = external_faculty_course.faculty_school_id
+			OR p.school_id = external_faculty_course.faculty_school_id)
+		</sql>
+		<sql>	
+			update external_student_transcript set school_id = 
+			(select school_id from person p where cast(p.id as varchar) = external_student_transcript.school_id 
+			OR p.school_id = external_student_transcript.school_id)
+			where exists
+			(select school_id from person p where cast(p.id as varchar) = external_student_transcript.school_id 
+			OR p.school_id = external_student_transcript.school_id)
+		</sql>
+		<sql>	
+			update external_student_transcript_course set school_id = 
+			(select school_id from person p where cast(p.id as varchar) = external_student_transcript_course.school_id 
+			OR p.school_id = external_student_transcript_course.school_id)
+			where exists
+			(select school_id from person p where cast(p.id as varchar) = external_student_transcript_course.school_id 
+			OR p.school_id = external_student_transcript_course.school_id)
+		</sql>
+		<sql>	
+			update external_student_test set school_id = 
+			(select school_id from person p where cast(p.id as varchar) = external_student_test.school_id 
+			OR p.school_id = external_student_test.school_id)
+			where exists
+			(select school_id from person p where cast(p.id as varchar) = external_student_test.school_id 
+			OR p.school_id = external_student_test.school_id)
+		</sql>
+		<sql>	
+			update external_student_academic_program set school_id = 
+			(select school_id from person p where cast(p.id as varchar) = external_student_academic_program.school_id 
+			OR p.school_id = external_student_academic_program.school_id)
+			where exists
+			(select school_id from person p where cast(p.id as varchar) = external_student_academic_program.school_id 
+			OR p.school_id = external_student_academic_program.school_id)
+		</sql>
+		<sql>	
+			update external_registration_status_by_term set school_id = 
+			(select school_id from person p where cast(p.id as varchar) = external_registration_status_by_term.school_id 
+			OR p.school_id = external_registration_status_by_term.school_id)
+			where exists
+			(select school_id from person p where cast(p.id as varchar) = external_registration_status_by_term.school_id 
+			OR p.school_id = external_registration_status_by_term.school_id)
+		</sql>
+		<sql>	
+			update external_person set school_id = 
+			(select school_id from person p where cast(p.id as varchar) = external_person.school_id 
+			OR p.school_id = external_person.school_id)
+			where exists
+			(select school_id from person p where cast(p.id as varchar) = external_person.school_id 
+			OR p.school_id = external_person.school_id)
+		</sql>
 	</changeSet>
 
 </databaseChangeLog>
