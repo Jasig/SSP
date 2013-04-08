@@ -808,12 +808,7 @@
                     "name": "CourseTranscript.js",
                     "path": "/app/model/"
                 },
-				{
-                    "clsName": "Ssp.model.FinancialAid",
-                    "name": "FinancialAid.js",
-                    "path": "/app/model/"
-                },
-				{
+                {
                     "clsName": "Ssp.controller.tool.profile.RecentTermActivityViewController",
                     "name": "RecentTermActivityViewController.js",
                     "path": "/app/controller/tool/profile/"
