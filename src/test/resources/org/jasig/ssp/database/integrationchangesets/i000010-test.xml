@@ -1,0 +1,1676 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	<property name="externalUser" value="a9a337fc-c35e-4bcc-91a8-06de3b6b441e" />
+	<property name="check_for_manage_integration_database_config_sql"
+		value="select count(id) from config where name='manage_integration_database'" />
+	<property name="should_manage_integration_database_sql"
+		value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
+
+	<changeSet id="add external_course data" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_term table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<insert tableName="external_course">
+			<column name="code" value="MATH-101" />
+			<column name="title" value="MATH-101" />
+			<column name="formatted_course" value="MATH-101" />
+			<column name="subject_abbreviation" value="MATH" />
+			<column name="number" value="101" />
+			<column name="description" value="This is Math 101" />
+			<column name="max_credit_hours" value="3" />
+			<column name="min_credit_hours" value="3" />
+		</insert>
+		<insert tableName="external_course">
+			<column name="code" value="ENG-101" />
+			<column name="title" value="ENG-101" />
+			<column name="formatted_course" value="ENG-101" />
+			<column name="subject_abbreviation" value="ENG" />
+			<column name="number" value="101" />
+			<column name="description" value="This is ENG 101" />
+			<column name="max_credit_hours" value="3" />
+			<column name="min_credit_hours" value="3" />
+		</insert>
+		<insert tableName="external_course">
+			<column name="code" value="BIO-101" />
+			<column name="title" value="BIO-101" />
+			<column name="formatted_course" value="BIO-101" />
+			<column name="subject_abbreviation" value="BIO" />
+			<column name="number" value="101" />
+			<column name="description" value="This is BIO 101" />
+			<column name="max_credit_hours" value="3" />
+			<column name="min_credit_hours" value="3" />
+		</insert>
+		<insert tableName="external_course">
+			<column name="code" value="ART-101" />
+			<column name="title" value="ART-101" />
+			<column name="formatted_course" value="ART-101" />
+			<column name="subject_abbreviation" value="ART" />
+			<column name="number" value="101" />
+			<column name="description" value="This is ART 101" />
+			<column name="max_credit_hours" value="3" />
+			<column name="min_credit_hours" value="3" />
+		</insert>
+		<insert tableName="external_course">
+			<column name="code" value="MATH-201" />
+			<column name="title" value="MATH-201" />
+			<column name="formatted_course" value="MATH-201" />
+			<column name="subject_abbreviation" value="MATH" />
+			<column name="number" value="201" />
+			<column name="description" value="This is Math 201" />
+			<column name="max_credit_hours" value="4" />
+			<column name="min_credit_hours" value="5" />
+		</insert>
+		<insert tableName="external_course">
+			<column name="code" value="ENG-201" />
+			<column name="title" value="ENG-201" />
+			<column name="formatted_course" value="ENG-201" />
+			<column name="subject_abbreviation" value="ENG" />
+			<column name="number" value="201" />
+			<column name="description" value="This is ENG 201" />
+			<column name="max_credit_hours" value="4" />
+			<column name="min_credit_hours" value="5" />
+		</insert>
+		<insert tableName="external_course">
+			<column name="code" value="BIO-201" />
+			<column name="title" value="BIO-201" />
+			<column name="formatted_course" value="BIO-201" />
+			<column name="subject_abbreviation" value="BIO" />
+			<column name="number" value="201" />
+			<column name="description" value="This is BIO 201" />
+			<column name="max_credit_hours" value="3" />
+			<column name="min_credit_hours" value="3" />
+		</insert>
+		<insert tableName="external_course">
+			<column name="code" value="ART-201" />
+			<column name="title" value="ART-201" />
+			<column name="formatted_course" value="ART-201" />
+			<column name="subject_abbreviation" value="ART" />
+			<column name="number" value="201" />
+			<column name="description" value="This is ART 201" />
+			<column name="max_credit_hours" value="4" />
+			<column name="min_credit_hours" value="5" />
+		</insert>	
+		<insert tableName="external_course">
+			<column name="code" value="MATH-301" />
+			<column name="title" value="MATH-301" />
+			<column name="formatted_course" value="MATH-301" />
+			<column name="subject_abbreviation" value="MATH" />
+			<column name="number" value="301" />
+			<column name="description" value="This is Math 301" />
+			<column name="max_credit_hours" value="4" />
+			<column name="min_credit_hours" value="5" />
+		</insert>
+		<insert tableName="external_course">
+			<column name="code" value="ENG-301" />
+			<column name="title" value="ENG-301" />
+			<column name="formatted_course" value="ENG-301" />
+			<column name="subject_abbreviation" value="ENG" />
+			<column name="number" value="301" />
+			<column name="description" value="This is ENG 301" />
+			<column name="max_credit_hours" value="4" />
+			<column name="min_credit_hours" value="5" />
+		</insert>
+		<insert tableName="external_course">
+			<column name="code" value="BIO-301" />
+			<column name="title" value="BIO-301" />
+			<column name="formatted_course" value="BIO-301" />
+			<column name="subject_abbreviation" value="BIO" />
+			<column name="number" value="301" />
+			<column name="description" value="This is BIO 301" />
+			<column name="max_credit_hours" value="3" />
+			<column name="min_credit_hours" value="4" />
+		</insert>
+		<insert tableName="external_course">
+			<column name="code" value="ART-301" />
+			<column name="title" value="ART-301" />
+			<column name="formatted_course" value="ART-301" />
+			<column name="subject_abbreviation" value="ART" />
+			<column name="number" value="301" />
+			<column name="description" value="This is ART 301" />
+			<column name="max_credit_hours" value="4" />
+			<column name="min_credit_hours" value="5" />
+		</insert>
+		<insert tableName="external_course">
+			<column name="code" value="MATH-401" />
+			<column name="title" value="MATH-401" />
+			<column name="formatted_course" value="MATH-401" />
+			<column name="subject_abbreviation" value="MATH" />
+			<column name="number" value="401" />
+			<column name="description" value="This is Math 401" />
+			<column name="max_credit_hours" value="4" />
+			<column name="min_credit_hours" value="5" />
+		</insert>
+		<insert tableName="external_course">
+			<column name="code" value="ENG-401" />
+			<column name="title" value="ENG-401" />
+			<column name="formatted_course" value="ENG-401" />
+			<column name="subject_abbreviation" value="ENG" />
+			<column name="number" value="301" />
+			<column name="description" value="This is ENG 401" />
+			<column name="max_credit_hours" value="4" />
+			<column name="min_credit_hours" value="5" />
+		</insert>
+		<insert tableName="external_course">
+			<column name="code" value="BIO-401" />
+			<column name="title" value="BIO-401" />
+			<column name="formatted_course" value="BIO-401" />
+			<column name="subject_abbreviation" value="BIO" />
+			<column name="number" value="401" />
+			<column name="description" value="This is BIO 401" />
+			<column name="max_credit_hours" value="3" />
+			<column name="min_credit_hours" value="4" />
+		</insert>
+		<insert tableName="external_course">
+			<column name="code" value="ART-401" />
+			<column name="title" value="ART-401" />
+			<column name="formatted_course" value="ART-401" />
+			<column name="subject_abbreviation" value="ART" />
+			<column name="number" value="401" />
+			<column name="description" value="This is ART 401" />
+			<column name="max_credit_hours" value="4" />
+			<column name="min_credit_hours" value="5" />
+		</insert>	
+		<insert tableName="external_course">
+			<column name="code" value="HIS-101" />
+			<column name="title" value="HIS-101" />
+			<column name="formatted_course" value="HIS-101" />
+			<column name="subject_abbreviation" value="HIS" />
+			<column name="number" value="101" />
+			<column name="description" value="This is ART 101" />
+			<column name="max_credit_hours" value="4" />
+			<column name="min_credit_hours" value="5" />
+		</insert>
+		<insert tableName="external_course">
+			<column name="code" value="HIS-201" />
+			<column name="title" value="HIS-201" />
+			<column name="formatted_course" value="HIS-201" />
+			<column name="subject_abbreviation" value="HIS" />
+			<column name="number" value="201" />
+			<column name="description" value="This is ART 201" />
+			<column name="max_credit_hours" value="4" />
+			<column name="min_credit_hours" value="5" />
+		</insert>
+		<insert tableName="external_course">
+			<column name="code" value="HIS-301" />
+			<column name="title" value="HIS-301" />
+			<column name="formatted_course" value="HIS-301" />
+			<column name="subject_abbreviation" value="HIS" />
+			<column name="number" value="301" />
+			<column name="description" value="This is ART 301" />
+			<column name="max_credit_hours" value="4" />
+			<column name="min_credit_hours" value="5" />
+		</insert>
+		<insert tableName="external_course">
+			<column name="code" value="HIS-401" />
+			<column name="title" value="HIS-401" />
+			<column name="formatted_course" value="HIS-401" />
+			<column name="subject_abbreviation" value="HIS" />
+			<column name="number" value="401" />
+			<column name="description" value="This is ART 401" />
+			<column name="max_credit_hours" value="4" />
+			<column name="min_credit_hours" value="5" />
+		</insert>														
+		<rollback>
+			<delete tableName="external_term">
+				<where>code = 'MATH-101'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'ENG-101'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'BIO-101'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'ART-101'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'MATH-201'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'ENG-201'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'BIO-201'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'ART-201'</where>
+			</delete>	
+			<delete tableName="external_term">
+				<where>code = 'MATH-301'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'ENG-301'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'BIO-301'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'ART-301'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'MATH-401'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'ENG-401'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'BIO-401'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'ART-401'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'HIS-101'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'HIS-201'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'HIS-301'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>code = 'HIS-401'</where>
+			</delete>											
+		</rollback>
+	</changeSet>
+	<changeSet id="Add additional test terms" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_term table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<insert tableName="external_term">
+			<column name="name" value="Fall 2013" />
+			<column name="code" value="FA13" />
+			<column name="start_date" value="2013-06-20T00:00:00" />
+			<column name="end_date" value="2013-08-28T00:00:00" />
+			<column name="report_year" value="2014" />
+		</insert>
+		<insert tableName="external_term">
+			<column name="name" value="Spring 2014" />
+			<column name="code" value="SP14" />
+			<column name="start_date" value="2014-03-03T00:00:00" />
+			<column name="end_date" value="2014-05-15T00:00:00" />
+			<column name="report_year" value="2014" />
+		</insert>
+		<insert tableName="external_term">
+			<column name="name" value="Fall 2014" />
+			<column name="code" value="FA14" />
+			<column name="start_date" value="2014-06-20T00:00:00" />
+			<column name="end_date" value="2014-08-28T00:00:00" />
+			<column name="report_year" value="2015" />
+		</insert>
+		<insert tableName="external_term">
+			<column name="name" value="Spring 2015" />
+			<column name="code" value="SP15" />
+			<column name="start_date" value="2015-03-03T00:00:00" />
+			<column name="end_date" value="2015-05-15T00:00:00" />
+			<column name="report_year" value="2015" />
+		</insert>
+		<insert tableName="external_term">
+			<column name="name" value="Fall 2015" />
+			<column name="code" value="FA15" />
+			<column name="start_date" value="2015-06-20T00:00:00" />
+			<column name="end_date" value="2015-08-28T00:00:00" />
+			<column name="report_year" value="2016" />
+		</insert>
+		<insert tableName="external_term">
+			<column name="name" value="Spring 2016" />
+			<column name="code" value="SP16" />
+			<column name="start_date" value="2016-03-03T00:00:00" />
+			<column name="end_date" value="2016-05-15T00:00:00" />
+			<column name="report_year" value="2016" />
+		</insert>		
+		<rollback>
+			<delete tableName="external_term">
+				<where>name = 'Fall 2013' AND code = 'FA13'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>name = 'Spring 2014' AND code = 'SP14'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>name = 'Fall 2014' AND code = 'FA14'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>name = 'Spring 2015' AND code = 'SP15'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>name = 'Fall 2015' AND code = 'FA15'</where>
+			</delete>
+			<delete tableName="external_term">
+				<where>name = 'Spring 2016' AND code = 'SP16'</where>
+			</delete>
+		</rollback>
+	</changeSet>	
+	<changeSet id="add test course terms" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_term table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-101" />
+			<column name="term_code" value="SP16" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-201" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-201" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-201" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-201" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-201" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-201" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-201" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-201" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-201" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-201" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-201" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-201" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-201" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-201" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-201" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-201" />
+			<column name="term_code" value="SP16" />
+		</insert>		
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-301" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-301" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-301" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-301" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-301" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-301" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-301" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-301" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-301" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-301" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-301" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-301" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-301" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-301" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-301" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-301" />
+			<column name="term_code" value="SP16" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-401" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-401" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-401" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-401" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-401" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-401" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-401" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-401" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-401" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-401" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-401" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-401" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-401" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-401" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-401" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="MATH-401" />
+			<column name="term_code" value="SP16" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-101" />
+			<column name="term_code" value="SP16" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-201" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-201" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-201" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-201" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-201" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-201" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-201" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-201" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-201" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-201" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-201" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-201" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-201" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-201" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-201" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-201" />
+			<column name="term_code" value="SP16" />
+		</insert>		
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-301" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-301" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-301" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-301" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-301" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-301" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-301" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-301" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-301" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-301" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-301" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-301" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-301" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-301" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-301" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-301" />
+			<column name="term_code" value="SP16" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-401" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-401" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-401" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-401" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-401" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-401" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-401" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-401" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-401" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-401" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-401" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-401" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-401" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-401" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-401" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ENG-401" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-101" />
+			<column name="term_code" value="SP16" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-201" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-201" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-201" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-201" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-201" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-201" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-201" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-201" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-201" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-201" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-201" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-201" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-201" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-201" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-201" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-201" />
+			<column name="term_code" value="SP16" />
+		</insert>		
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-301" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-301" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-301" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-301" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-301" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-301" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-301" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-301" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-301" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-301" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-301" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-301" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-301" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-301" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-301" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-301" />
+			<column name="term_code" value="SP16" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-401" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-401" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-401" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-401" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-401" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-401" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-401" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-401" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-401" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-401" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-401" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-401" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-401" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-401" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-401" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="ART-401" />
+			<column name="term_code" value="SP16" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-101" />
+			<column name="term_code" value="SP16" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-201" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-201" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-201" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-201" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-201" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-201" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-201" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-201" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-201" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-201" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-201" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-201" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-201" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-201" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-201" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-201" />
+			<column name="term_code" value="SP16" />
+		</insert>		
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-301" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-301" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-301" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-301" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-301" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-301" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-301" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-301" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-301" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-301" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-301" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-301" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-301" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-301" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-301" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-301" />
+			<column name="term_code" value="SP16" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-401" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-401" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-401" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-401" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-401" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-401" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-401" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-401" />
+			<column name="term_code" value="SP16" />
+		</insert>	
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-401" />
+			<column name="term_code" value="FA12" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-401" />
+			<column name="term_code" value="SP13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-401" />
+			<column name="term_code" value="FA13" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-401" />
+			<column name="term_code" value="SP14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-401" />
+			<column name="term_code" value="FA14" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-401" />
+			<column name="term_code" value="SP15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-401" />
+			<column name="term_code" value="FA15" />
+		</insert>
+		<insert tableName="external_course_term">
+			<column name="course_code" value="HIS-401" />
+			<column name="term_code" value="SP16" />
+		</insert>																								
+		<rollback>
+			<delete tableName="external_term">
+			</delete>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+		
+	<property name="schema" value="public" dbms="postgresql" />
+	<property name="schema" value="dbo" dbms="mssql" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+
+	<changeSet id="map plan table" author="tony.arland">
+		<createTable tableName="map_plan">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false" foreignKeyName="map_plan_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true" foreignKeyName="map_plan_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="map_plan_person_id"
+					references="person(id)" />
+			</column>
+			<column name="owner_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="map_plan_owner_person_id"
+					references="person(id)" />
+			</column>									
+			<column name="name" type="${nvarchar.type}(200)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on map_plan to ${database.app.username}</sql>
+		<rollback>
+			<dropTable tableName="map_plan" />
+		</rollback>
+
+	</changeSet>
+	
+	
+	<changeSet id="map plan courses" author="tony.arland">
+		<createTable tableName="map_plan_courses">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false" foreignKeyName="map_plan_courses_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true" foreignKeyName="map_plan_courses_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="map_plan_person_id"
+					references="person(id)" />
+			</column>	
+			<column name="plan_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="map_plan_courses_plan_id"
+					references="map_plan(id)" />
+			</column>
+												
+			<column name="formatted_course" type="${nvarchar.type}(30)"/>
+			
+			<column name="course_code" type="${nvarchar.type}(30)"/>
+			
+			<column name="course_title" type="${nvarchar.type}(30)"/>
+			
+			<column name="course_description" type="${nvarchar.type}(5000)"/>
+			
+			<column name="credit_hours" type="int">
+				<constraints nullable="false" />
+			</column>	
+
+			<column name="is_dev" type="boolean">
+				<constraints nullable="false" />
+			</column>	
+
+			<column name="order_in_term" type="int">
+				<constraints nullable="false" />
+			</column>									
+		</createTable>
+
+		<sql>grant all on map_plan_courses to ${database.app.username}</sql>
+		<rollback>
+			<dropTable tableName="map_plan_courses" />
+		</rollback>
+	</changeSet>
+		
+</databaseChangeLog>
