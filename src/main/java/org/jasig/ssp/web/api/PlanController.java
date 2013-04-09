@@ -125,6 +125,7 @@ public class PlanController  extends AbstractBaseController {
 		}
 
 		final Plan model = getFactory().from(obj);
+		getService().save(model);
 
 		if (null != model) {
 			final Plan createdModel = getFactory().from(obj);

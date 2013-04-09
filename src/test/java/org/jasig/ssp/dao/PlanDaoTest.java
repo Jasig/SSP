@@ -48,7 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 // many (most?) other DAO tests commit by default... here we're just testing
 // reads, so we know that any fixture setup needs to be rolled back
-@TransactionConfiguration(defaultRollback = false)
+@TransactionConfiguration(defaultRollback = true)
 
 @Transactional
 public class PlanDaoTest {
