@@ -87,14 +87,19 @@ public class PlanController  extends AbstractBaseController {
 	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
-	PlanTO get(final @PathVariable UUID personId) throws ObjectNotFoundException,
+	PagedResponse<PlanTO> get(final @PathVariable UUID personId,
+			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) Integer start,
+			final @RequestParam(required = false) Integer limit) throws ObjectNotFoundException,
 			ValidationException {
-		final Plan model = getService().getCurrentForStudent(personId);
-		if (model == null) {
-			return null;
-		}
+		// Run getAll
+		final PagingWrapper<Plan> data = getService().getAllForStudent(
+				SortingAndPaging.createForSingleSortWithPaging(
+						status == null ? ObjectStatus.ALL : status, start,
+						limit, null, null, null),personId);
 
-		return new PlanTO(model);
+		return new PagedResponse<PlanTO>(true, data.getResults(), getFactory()
+				.asTOList(data.getRows()));		
 	}
 
 	/**
@@ -159,7 +164,7 @@ public class PlanController  extends AbstractBaseController {
 
 		final Plan model = getFactory().from(obj);
 		//If the currently logged in user is not the owner of this plan
-		//We need to create a clone then save it.
+		//we need to create a clone then save it.
 		SspUser currentUser = getSecurityService().currentlyAuthenticatedUser();
 		if(currentUser.getPerson().getId().equals(model.getOwner()))
 		{
@@ -170,7 +175,7 @@ public class PlanController  extends AbstractBaseController {
 		}
 		else
 		{
-			final Plan clonedPlan = getService().cloneAndSave(model);
+			final Plan clonedPlan = getService().copyAndSaveWithNewOwner(model);
 			if (null != clonedPlan) {
 				return new PlanTO(model);
 			}

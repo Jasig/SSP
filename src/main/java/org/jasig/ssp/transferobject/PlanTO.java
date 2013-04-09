@@ -21,7 +21,6 @@ package org.jasig.ssp.transferobject;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
 

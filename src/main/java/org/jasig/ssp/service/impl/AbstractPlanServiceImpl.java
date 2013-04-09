@@ -44,10 +44,6 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan> extends  
 		return getDao().save(obj);
 	}
 	
-	public  T cloneAndSave(T obj) throws CloneNotSupportedException {
-		return getDao().cloneAndSave(obj,getSecurityService().currentUser().getPerson());
-	}
-	
 	@Override
 	protected abstract AbstractPlanDao<T> getDao();
 

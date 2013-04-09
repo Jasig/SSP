@@ -18,11 +18,15 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.dao.PlanDao;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.service.PlanService;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +55,24 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 	@Override
 	public Plan getCurrentForStudent(UUID personId) {
 		return dao.getActivePlanForStudent(personId);
+	}
+
+	@Override
+	public PagingWrapper<Plan> getAllForStudent(
+			SortingAndPaging sAndP,UUID personId) {
+		return getDao().getAllForStudent(sAndP, personId);
+	}
+	
+	@Override
+	public Plan copyAndSaveWithNewOwner(Plan obj) throws CloneNotSupportedException {
+		//Load all previous plans for this student and save them as inactive.
+		List<Plan> allForStudent = getDao().getAllForStudent(obj.getPerson().getId());
+		for (Plan plan : allForStudent) 
+		{
+			plan.setObjectStatus(ObjectStatus.INACTIVE);
+			getDao().save(plan);
+		}
+		return getDao().cloneAndSave(obj,getSecurityService().currentUser().getPerson());
 	}
 	
 }

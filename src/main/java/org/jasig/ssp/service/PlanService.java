@@ -21,15 +21,20 @@ package org.jasig.ssp.service;
 import java.util.UUID;
 
 import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 /**
  * Person service
  */
 public interface PlanService extends AbstractPlanService<Plan> {
 
-	Plan cloneAndSave(Plan plan) throws CloneNotSupportedException;
+	Plan copyAndSaveWithNewOwner(Plan plan) throws CloneNotSupportedException;
 
 	Plan getCurrentForStudent(UUID personId);
+
+	PagingWrapper<Plan> getAllForStudent(
+			SortingAndPaging createForSingleSortWithPaging,UUID personId);
 
 
 	
