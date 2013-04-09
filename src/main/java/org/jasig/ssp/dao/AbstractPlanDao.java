@@ -1,6 +1,7 @@
 package org.jasig.ssp.dao;
 
 import org.jasig.ssp.model.AbstractPlan;
+import org.jasig.ssp.model.Person;
 
 public abstract class  AbstractPlanDao<T extends AbstractPlan> extends AbstractAuditableCrudDao<T> implements
 AuditableCrudDao<T> {
@@ -9,5 +10,5 @@ AuditableCrudDao<T> {
 		super(persistentClass);
 	}
 
-	public abstract T cloneAndSave(T plan) throws CloneNotSupportedException;
+	public abstract T cloneAndSave(T plan, Person owner) throws CloneNotSupportedException;
 }

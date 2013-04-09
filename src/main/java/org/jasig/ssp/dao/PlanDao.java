@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
 import org.springframework.stereotype.Repository;
 
@@ -34,7 +35,9 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 	}
 
 	@Override
-	public Plan cloneAndSave(Plan plan) throws CloneNotSupportedException {
-		return save(plan.clone());
+	public Plan cloneAndSave(Plan plan,Person owner) throws CloneNotSupportedException {
+		Plan clone = plan.clone();
+		clone.setOwner(owner);
+		return save(clone);
 	}
 }

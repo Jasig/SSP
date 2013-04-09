@@ -43,6 +43,7 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 	 */
 	public PlanTO(Plan model) {
 		super();
+		from(model);
 	}	
 
 	@Override

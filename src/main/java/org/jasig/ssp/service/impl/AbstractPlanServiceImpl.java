@@ -24,7 +24,9 @@ import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
 import org.jasig.ssp.service.AbstractPlanService;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.web.api.validation.ValidationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -34,15 +36,26 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan> extends  AbstractAuditableCrudService<T> implements AbstractPlanService<T> {
 
+	@Autowired
+	private SecurityService securityService;
+	
 	@Override
 	public T save(T obj) {
 		return getDao().save(obj);
 	}
 	
 	public  T cloneAndSave(T obj) throws CloneNotSupportedException {
-		return getDao().cloneAndSave(obj);
+		return getDao().cloneAndSave(obj,getSecurityService().currentUser().getPerson());
 	}
 	
 	@Override
 	protected abstract AbstractPlanDao<T> getDao();
+
+	public SecurityService getSecurityService() {
+		return securityService;
+	}
+
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
+	}
 }
