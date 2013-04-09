@@ -15,6 +15,9 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name="map_plan")
@@ -24,6 +27,7 @@ public class Plan extends AbstractPlan  {
 	private static final long serialVersionUID = -681245136521277249L;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "plan")
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@OrderBy("orderInTerm")	
 	private List<PlanCourse> planCourses = new ArrayList<PlanCourse>(0);
 	

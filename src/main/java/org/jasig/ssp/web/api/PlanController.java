@@ -63,8 +63,7 @@ public class PlanController  extends AbstractBaseController {
 	protected Logger getLogger() {
 		return LOGGER;
 	}
-
-
+	
 	@Autowired
 	private PlanService service;
 	

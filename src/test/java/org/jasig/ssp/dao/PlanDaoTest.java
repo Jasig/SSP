@@ -179,7 +179,8 @@ public class PlanDaoTest {
 		course.setOrderInTerm(new Integer(1));
 		course.setCreatedBy(person);
 		course.setPlan(plan);
-		
+		course.setPerson(person);
+		course.setCreditHours(3);
 		plan.getPlanCourses().add(course);
 		
 		dao.save(plan);
@@ -222,7 +223,8 @@ public class PlanDaoTest {
 		course.setOrderInTerm(1);
 		course.setCreatedBy(person);
 		course.setPlan(plan);
-		
+		course.setPerson(person);
+		course.setCreditHours(4);
 		plan.getPlanCourses().add(course);
 		
 		dao.save(plan);

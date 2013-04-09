@@ -5,7 +5,7 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.Size;
 
 @MappedSuperclass
-public class AbstractPlanCourse extends AbstractAuditable implements Cloneable {
+public abstract class AbstractPlanCourse extends AbstractAuditable implements Cloneable {
 
 	private static final long serialVersionUID = 4387422660830382586L;
 

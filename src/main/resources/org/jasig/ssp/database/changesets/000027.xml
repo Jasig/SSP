@@ -74,8 +74,8 @@
 	</changeSet>
 	
 	
-	<changeSet id="map plan courses" author="tony.arland">
-		<createTable tableName="map_plan_courses">
+	<changeSet id="map plan course" author="tony.arland">
+		<createTable tableName="map_plan_course">
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
@@ -84,11 +84,11 @@
 			</column>
 			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" foreignKeyName="map_plan_courses_created_by_person_id"
+				<constraints nullable="false" foreignKeyName="map_plan_course_created_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true" foreignKeyName="map_plan_courses_modified_by_person_id"
+				<constraints nullable="true" foreignKeyName="map_plan_course_modified_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
@@ -99,7 +99,7 @@
 					references="person(id)" />
 			</column>	
 			<column name="plan_id" type="uuid">
-				<constraints nullable="false" foreignKeyName="map_plan_courses_plan_id"
+				<constraints nullable="false" foreignKeyName="map_plan_course_plan_id"
 					references="map_plan(id)" />
 			</column>
 												
@@ -109,7 +109,9 @@
 			
 			<column name="course_title" type="${nvarchar.type}(30)"/>
 			
-			<column name="course_description" type="${nvarchar.type}(5000)"/>
+			<column name="course_description" type="${nvarchar.type}(500)"/>
+			
+			<column name="term_code" type="${nvarchar.type}(30)"/>
 			
 			<column name="credit_hours" type="int">
 				<constraints nullable="false" />
@@ -124,9 +126,9 @@
 			</column>									
 		</createTable>
 
-		<sql>grant all on map_plan_courses to ${database.app.username}</sql>
+		<sql>grant all on map_plan_course to ${database.app.username}</sql>
 		<rollback>
-			<dropTable tableName="map_plan_courses" />
+			<dropTable tableName="map_plan_course" />
 		</rollback>
 	</changeSet>
 		

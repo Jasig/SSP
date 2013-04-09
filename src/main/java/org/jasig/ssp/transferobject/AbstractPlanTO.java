@@ -20,14 +20,13 @@ package org.jasig.ssp.transferobject;
 
 import org.jasig.ssp.model.AbstractPlan;
 
-/**
- */
-public abstract class AbstractPlanTO<T extends AbstractPlan> extends AbstractAuditableTO<T>
-		implements TransferObject<T> {
+public abstract class AbstractPlanTO<T extends AbstractPlan> extends
+		AbstractAuditableTO<T> implements TransferObject<T> {
 
 	private String name;
-	
+
 	private String ownerId;
+
 	/**
 	 * Empty constructor.
 	 */
@@ -35,7 +34,6 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends AbstractAud
 		super();
 	}
 
-	
 	@Override
 	public void from(T model) {
 		super.from(model);
@@ -43,21 +41,17 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends AbstractAud
 		this.setOwnerId(model.getOwner().getId().toString());
 	}
 
-
 	public String getName() {
 		return name;
 	}
-
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
-
 	public String getOwnerId() {
 		return ownerId;
 	}
-
 
 	public void setOwnerId(String ownerId) {
 		this.ownerId = ownerId;

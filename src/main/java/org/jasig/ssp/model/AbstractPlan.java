@@ -11,19 +11,18 @@ import org.hibernate.annotations.Immutable;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class AbstractPlan extends AbstractAuditable implements Cloneable {
+public abstract class AbstractPlan extends AbstractAuditable implements
+		Cloneable {
 
 	@Column(length = 200)
 	@Size(max = 200)
 	private String name;
-	
+
 	@Immutable
 	@NotNull
 	@ManyToOne()
-	@JoinColumn(name = "owner_id", updatable = false, nullable = false)	
+	@JoinColumn(name = "owner_id", updatable = false, nullable = false)
 	private Person owner;
-	
-
 
 	public String getName() {
 		return name;
@@ -52,5 +51,5 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 	public void setOwner(Person owner) {
 		this.owner = owner;
 	}
-	
+
 }
