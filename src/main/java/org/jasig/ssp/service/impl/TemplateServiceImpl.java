@@ -42,12 +42,6 @@ public  class TemplateServiceImpl extends AbstractPlanServiceImpl<Template> impl
 		return dao;
 	}
 
-	@Override
-	public Template cloneAndSave(Template obj)
-			throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 
 }
