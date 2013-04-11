@@ -105,7 +105,7 @@
 
 	<!-- Hibernate Session Factory -->
 	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+		class="org.jasig.ssp.util.hibernate.TypeRegistryOverridingLocalSessionFactoryBean"
 		depends-on="liquibase,uuidCustomType">
 		<property name="dataSource" ref="sspDataSource" />
 		<property name="packagesToScan" value="org.jasig.ssp.model" />
@@ -120,6 +120,17 @@
 		</property>
 		<property name="namingStrategy">
 			<bean class="org.hibernate.cfg.ImprovedNamingStrategy" />
+		</property>
+		<property name="basicTypeOverrides">
+			<list>
+				<bean class="org.jasig.ssp.util.hibernate.ConfigurableTimestampType">
+					<constructor-arg type="org.hibernate.type.descriptor.sql.TimestampTypeDescriptor">
+						<bean class="org.jasig.ssp.util.hibernate.ConfigurableTimestampTypeDescriptor">
+							<constructor-arg type="java.lang.String" value="#{configProperties.db_time_zone}" />
+						</bean>
+					</constructor-arg>
+				</bean>
+			</list>
 		</property>
 	</bean>
 
