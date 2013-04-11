@@ -40,6 +40,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 		earlyAlertSuggestionsStore: 'earlyAlertSuggestionsStore',
     	educationGoalsStore: 'educationGoalsStore',
     	educationLevelsStore: 'educationLevelsStore',
+    	electiveStore: 'electiveStore',
     	employmentShiftsStore: 'employmentShiftsStore',
     	ethnicitiesStore: 'ethnicitiesStore',
     	formUtils: 'formRendererUtils',
@@ -80,7 +81,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 	onItemClick: function(view,record,item,index,eventObj) {
 		var storeName = "";
 		var columns = null;
-		var storeLoadOptions = null;
+
 		if (record.raw != undefined )
 		{
 			if ( record.raw.form != "")
@@ -93,19 +94,18 @@ Ext.define('Ssp.controller.AdminViewController', {
 				{
 					columns = record.raw.columns;
 				}
-				if (record.raw.storeLoadOptions)
-			      {
-			         storeLoadOptions = record.raw.storeLoadOptions;
-			      }
-			      this.loadAdmin( record.raw.title, record.raw.form, storeName, storeLoadOptions, columns );   
+				var options = {
+					interfaceOptions: record.raw.interfaceOptions,
+					viewConfig: record.raw.viewConfig
+				}
+				this.loadAdmin( record.raw.title, record.raw.form, storeName, columns, options);
 			}
 		}
 	},
 
-	//loadAdmin: function( title ,form, storeName, columns ) {
-	loadAdmin: function( title ,form, storeName, storeLoadOptions, columns ) {
+	loadAdmin: function( title ,form, storeName, columns, options ) {
 		var me=this;
-		var comp = this.formUtils.loadDisplay('adminforms',form, true, {});
+		var comp = this.formUtils.loadDisplay('adminforms',form, true, options);
 		var store = null;
 		
 		// set a store if defined
@@ -120,13 +120,13 @@ Ext.define('Ssp.controller.AdminViewController', {
 				if (columns != null)
 				{
 					// comp.reconfigure(store, columns); // ,columns
-					me.formUtils.reconfigureGridPanel(comp, store, columns);
+					me.formUtils.reconfigureGridPanel(comp, store, options, columns);
 				}else{
 					// comp.reconfigure(store);
-					me.formUtils.reconfigureGridPanel(comp, store);
+					me.formUtils.reconfigureGridPanel(comp, store, options);
 				}
 				
-				comp.getStore().load(storeLoadOptions);
+				comp.getStore().load();
 			}
 		}
 		

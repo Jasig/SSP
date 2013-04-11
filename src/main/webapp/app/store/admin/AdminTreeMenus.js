@@ -441,10 +441,67 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 form: '',
                 expanded: false,
                 children: [{
+                    text: 'Electives',
+                    title: 'Electives',
+                    store: 'elective',
+                    viewConfig: {
+                        markDirty: false
+                    },
+                    interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible:false,
+                        dragAndDropReorder: true
+                    },
+                    form: 'AbstractReferenceAdmin',
+                    leaf: true,
+                    columns: [
+                        { header: 'Order',
+                            dataIndex: 'sortOrder',
+                            required: true,
+                            field: {
+                                xtype: 'textfield'
+                            },
+                            flex: .1 },
+                        { header: 'Active',
+                            required: true,
+                            dataIndex: 'active',
+                            defaultValue: true,
+                            flex: .2,
+                            renderer: me.columnRendererUtils.renderActive,
+                            field: {
+                                xtype: 'checkbox'
+                            }
+                        },
+                        { header: 'Elective Name',
+                            dataIndex: 'name',
+                            required: true,
+                            defaultValue: "",
+                            field: {
+                                xtype: 'textfield'
+                            },
+                            flex: .2 },
+                        {	header: 'Elective Code',
+                            dataIndex: 'code',
+                            defaultValue: "",
+                            required: true,
+                            field: {
+                                xtype: 'textfield'
+                            },
+                            flex: .1
+                        },
+                        {	header: 'Description',
+                            dataIndex: 'description',
+                            defaultValue: "",
+                            field: {
+                                xtype: 'textfield'
+                            },
+                            flex: 1
+                        }
+                    ]},
+                {
 				    text: 'Colors',
 				    title: 'Color Management',
 				    store: 'colors',
-					//storeLoadOptions: { params: { status: 'ALL' } },
 				    form: 'AbstractReferenceAdmin',
 				    leaf: true,
 				    columns: [
@@ -525,7 +582,9 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     text: 'Tags',
                     title: 'Tag Management',
                     store: 'tags',
-					storeLoadOptions: { params: { status: 'ALL' } },
+                    viewConfig: {
+                        markDirty: false
+                    },
                     form: 'AbstractReferenceAdminWithoutDelete',
                     leaf: true,
                     columns: [
