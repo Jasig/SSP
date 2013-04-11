@@ -73,9 +73,9 @@ public class PlanController  extends AbstractBaseController {
 	@Autowired
 	private transient SecurityService securityService;
 
-
+ 
 	/**
-	 * Retrieves the specified instance from persistent storage.
+	 * Retrieves the specified list from persistent storage.
 	 * 
 	 * @param id
 	 *            The specific id to use to lookup the associated data.
@@ -100,6 +100,29 @@ public class PlanController  extends AbstractBaseController {
 
 		return new PagedResponse<PlanTO>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));		
+	}
+	
+	/**
+	 * Retrieves the current entity from persistent storage.
+	 * 
+	 * @param id
+	 *            The specific id to use to lookup the associated data.
+	 * @return The specified instance if found.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If that specified data is not invalid.
+	 */	
+	@RequestMapping(value="/current", method = RequestMethod.GET)
+	public @ResponseBody
+	PlanTO getCurrentForStudent(final @PathVariable UUID personId) throws ObjectNotFoundException,
+			ValidationException {
+		final Plan model = getService().getCurrentForStudent(personId);
+		if (model == null) {
+			return null;
+		}
+
+		return new PlanTO(model);
 	}
 
 	/**
