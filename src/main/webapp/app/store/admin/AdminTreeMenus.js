@@ -445,8 +445,56 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 							        form: 'AbstractReferenceAdmin',
 									leaf: true
 								}]
+    						}, {
+    							text: 'MAP',
+    							title: 'MAP',
+    							form: '',
+    							expanded: false,
+    							children: [{
+    								text: 'Elective Types',
+    								title: 'Elective Types',
+    								store: 'elective',
+	    							form: 'AbstractReferenceAdmin',
+	    							leaf: true,
+	    							columns: [
+	    							          	{ header: 'Order',  
+	    							        	  dataIndex: 'sortOrder',
+	    							        	  required: true,
+	    							        	  field: {
+	    							        		  xtype: 'textfield'
+	    							        	  },
+	    							        	  flex: .2 }, 
+	    							        	  { header: 'Elective Name',  
+	          							        	dataIndex: 'name',
+	          							        	required: true,
+	          							        	field: {
+	          							        		xtype: 'checkbox'
+	          							        	},
+	          							          flex: 1 }, 
+	          							          {	header: 'Elective Code',
+	          							        	dataIndex: 'color',
+	          							        	field: {
+	          							        		xtype: 'textfield'
+	          							        	},
+	          							        	flex: .2	          							        	  
+	          							          }, 
+	          							          {	header: 'Description',
+		          							        dataIndex: 'description',
+		          							        field: {
+		          							        	xtype: 'textfield'
+		          							        },
+		          							        flex: .2	          							        	  
+		          							      },
+		          							      {	header: 'Color',
+		          							        dataIndex: 'color',
+		          							        field: {
+		          							        	xtype: 'textfield'
+		          							        },
+		          							        flex: .2	          							        	  
+		          							      }  
+		          							     ]
+    							}]
     						}
-    	                   
     	        ]
 
     	    };
