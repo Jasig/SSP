@@ -95,7 +95,7 @@
 				<constraints nullable="false" />
 			</column>
 			<column name="person_id" type="uuid">
-				<constraints nullable="false" foreignKeyName="map_plan_person_id"
+				<constraints nullable="false" foreignKeyName="map_plan_course_person_id"
 					references="person(id)" />
 			</column>	
 			<column name="plan_id" type="uuid">
