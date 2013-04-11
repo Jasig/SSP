@@ -23,6 +23,7 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Plan;
@@ -33,6 +34,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.PlanLiteTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -69,6 +71,9 @@ public class PlanController  extends AbstractBaseController {
 	
 	@Autowired
 	private PlanTOFactory factory;
+	
+	@Autowired
+	private PlanLiteTOFactory liteFactory;
 	
 	@Autowired
 	private transient SecurityService securityService;
@@ -125,6 +130,34 @@ public class PlanController  extends AbstractBaseController {
 		return new PlanTO(model);
 	}
 
+	/**
+	 * Retrieves the specified list from persistent storage.  
+	 * 
+	 * @param id
+	 *            The specific id to use to lookup the associated data.
+	 * @return The specified instance if found.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If that specified data is not invalid.
+	 */
+	@RequestMapping(value="/summary", method = RequestMethod.GET)
+	public @ResponseBody
+	PagedResponse<PlanLiteTO> getSummary(final @PathVariable UUID personId,
+			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) Integer start,
+			final @RequestParam(required = false) Integer limit) throws ObjectNotFoundException,
+			ValidationException {
+		// Run getAll
+		final PagingWrapper<Plan> data = getService().getAllForStudent(
+				SortingAndPaging.createForSingleSortWithPaging(
+						status == null ? ObjectStatus.ALL : status, start,
+						limit, null, null, null),personId);
+
+		return new PagedResponse<PlanLiteTO>(true, data.getResults(), getLiteFactory()
+				.asTOList(data.getRows()));		
+	}
+	
 	/**
 	 * Persist a new instance of the specified object.
 	 * <p>
@@ -248,5 +281,13 @@ public class PlanController  extends AbstractBaseController {
 
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
+	}
+
+	public PlanLiteTOFactory getLiteFactory() {
+		return liteFactory;
+	}
+
+	public void setLiteFactory(PlanLiteTOFactory liteFactory) {
+		this.liteFactory = liteFactory;
 	}
 }
