@@ -88,9 +88,17 @@
 	<bean id="securityService"
 		class="org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment" />
 
+	<!--<bean id="timestampTypeDescriptorInitializer" class="org.jasig.ssp.util.hibernate.TimestampTypeInitializer">-->
+		<!--<property name="timestampTypeDescriptor" ref="timestampTypeDescriptor" />-->
+	<!--</bean>-->
+
+	<bean id="timestampTypeDescriptor" class="org.jasig.ssp.util.hibernate.ConfigurableTimestampTypeDescriptor">
+		<constructor-arg type="java.lang.String" value="#{configProperties.db_time_zone}" />
+	</bean>
+
 	<!-- Hibernate Session Factory -->
 	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+		class="org.jasig.ssp.util.hibernate.TypeRegistryOverridingLocalSessionFactoryBean"
 		depends-on="liquibase,uuidCustomType">
 		<property name="dataSource" ref="sspDataSource" />
 		<property name="packagesToScan" value="org.jasig.ssp.model" />
@@ -109,10 +117,34 @@
 		<property name="namingStrategy">
 			<bean class="org.hibernate.cfg.ImprovedNamingStrategy" />
 		</property>
+		<property name="basicTypeOverrides">
+			<list>
+				<bean class="org.jasig.ssp.util.hibernate.ConfigurableTimestampType">
+					<constructor-arg type="org.hibernate.type.descriptor.sql.TimestampTypeDescriptor">
+						<bean class="org.jasig.ssp.util.hibernate.ConfigurableTimestampTypeDescriptor">
+							<constructor-arg type="java.lang.String" value="#{configProperties.db_time_zone}" />
+						</bean>
+					</constructor-arg>
+				</bean>
+			</list>
+		</property>
 	</bean>
 
-	<bean id="sspDataSource" class="org.apache.commons.dbcp.BasicDataSource"
-		destroy-method="close">
+	<!-- We need to be able to flush and reload the entire conn pool, e.g.
+		b/c Postgres connections cache the current default timezone but we
+		have tests that need to manipulate that default. Can't do this
+		with the DBCP API, though. So we make the actual datasource a prototype
+		bean so we get a new instance every time we reference it. But all
+		references actually go through this Groovy wrapper bean, which
+		exposes a method for disposing of the current underlying datasource
+		and loading up a new one -->
+	<bean id="sspDataSource" class="org.jasig.ssp.util.database.ReloadableBasicDataSourceWrapper"
+			destroy-method="close">
+		<property name="basicDataSourcePrototypeName" value="sspDataSourcePrototype" />
+	</bean>
+
+	<bean id="sspDataSourcePrototype" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" scope="prototype">
 		<property name="driverClassName" value="#{configProperties.db_driver_class}" />
 		<property name="url" value="#{configProperties.db_url}" />
 		<property name="username" value="#{configProperties.db_username}" />
