@@ -45,8 +45,8 @@
 		
 		<insert tableName="person_staff_details">
 			<column name="id" value="0a0f1083-3cb1-1e4a-813c-b16039520001" />
-			<column name="created_date" value="2013-02-06 14:18:59.046-07"/>
-			<column name="modified_date" value="2013-02-06 14:18:59.046-07"/>
+			<column name="created_date" value="2013-02-06T14:18:59"/>
+			<column name="modified_date" value="2013-02-06T14:18:59"/>
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
 			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
 			<column name="object_status" value="1"/>
