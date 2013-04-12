@@ -16,17 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.store.external.FutureTerms', {
-	extend: 'Ssp.store.reference.AbstractReferences',
-	model: 'Ssp.model.external.Term',
-    mixins: [ 'Deft.mixin.Injectable' ],
-    inject: {
-    	apiProperties: 'apiProperties'
-    },
-   
-    constructor: function(){
-		this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('futureTerms')});
-    	return; 
-    }
+Ext.define('Ssp.model.external.Course', {
+    extend: 'Ssp.model.external.AbstractExternal',
+    fields: [{name: 'code', type: 'string'},
+             {name: 'formattedCourse', type: 'string'},
+             {name: 'subjectAbbreviation', type: 'string'},
+             {name: 'number', type: 'string'},
+             {name: 'title', type: 'string'},
+             {name: 'description', type: 'string'},
+             {name: 'maxCreditHours', type: 'float'},
+             {name: 'minCreditHours', type: 'float'},
+             ]
+
 });

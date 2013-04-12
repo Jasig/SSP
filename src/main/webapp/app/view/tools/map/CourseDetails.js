@@ -20,6 +20,7 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
     extend: 'Ext.window.Window',
     alias: 'widget.coursedetails',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.map.CoursesGridController',
     inject: {
         columnRendererUtils: 'columnRendererUtils'
         //sspConfig: 'sspConfig'
@@ -99,13 +100,13 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                                                         items: [
                                         				    {
                                         				        fieldLabel: 'Max Credit Hours',
-                                        				        name: 'maxcreditHrs',
-                                        				        itemId: 'maxcreditHrs'
+                                        				        name: 'maxCreditHours',
+                                        				        itemId: 'maxCreditHours'
                                         				        
                                         				    },{
                                         				        fieldLabel: 'Min Credit Hours',
-                                        				        name: 'minCreditHrs',
-                                        				        itemId: 'minCreditHrs'
+                                        				        name: 'minCreditHours',
+                                        				        itemId: 'minCreditHours'
                                         				        
                                         				    },
                                         				    {

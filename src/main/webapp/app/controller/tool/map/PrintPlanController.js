@@ -63,9 +63,5 @@ Ext.define('Ssp.controller.tool.map.PrintPlanController', {
         me.getOptionsPrintView().hide();
         }
     }
-    
-    
 
-	
-	
 });

@@ -226,6 +226,7 @@ Ext.require([
 	'Ssp.model.tool.earlyalert.EarlyAlertResponseGrid',
 	'Ssp.model.tool.journal.JournalEntry',
 	'Ssp.model.tool.journal.JournalEntryDetail',
+	'Ssp.model.tool.map.SemesterCourse',
 	'Ssp.model.tool.shg.SelfHelpGuides',
 	'Ssp.model.tool.shg.SelfHelpGuideQuestions',
 	'Ssp.model.tool.caseload.CaseloadReassignmentRequest',
@@ -238,6 +239,7 @@ Ext.require([
     'Ssp.model.reference.JournalStepDetail',
 	'Ssp.model.reference.ConfidentialityLevel',
 	'Ssp.model.reference.ConfidentialityDisclosureAgreement',
+	'Ssp.model.external.Course',
 	'Ssp.model.ApiUrl',
 	'Ssp.mixin.ApiProperties',
 	'Ssp.mixin.controller.ItemSelectorInitializer',
@@ -302,7 +304,9 @@ Ext.require([
     'Ssp.store.reference.SpecialServiceGroups',
     'Ssp.store.reference.States', 
     'Ssp.store.external.FutureTerms',
+    'Ssp.store.external.Courses',
     'Ssp.store.Students',
+	'Ssp.store.SemesterCourses',
     'Ssp.store.Search',
     'Ssp.store.reference.StudentStatuses',
     'Ssp.store.reference.StudentTypes',
@@ -329,11 +333,12 @@ Ext.require([
     'Ssp.service.SpecialServiceGroupService',
     'Ssp.service.StudentIntakeService',
     'Ssp.service.TranscriptService',
+	'Ssp.service.MapPlanService',
     'Ssp.controller.ApplicationEventsController',
     'Ext.tab.*',
 	'Ext.util.Filter',
 	'Ext.data.TreeStore',
-	'Ext.dd.DropTarget',
+	'Ext.dd.*',
 	'Ext.data.Store',
 	'Ext.form.field.VTypes',
 	'Ext.form.field.Text',
@@ -408,6 +413,7 @@ var apiUrls = [
   {name: 'personViewHistory', url: 'person/{id}/history/print'},
   {name: 'personPrintTask', url: 'person/{id}/task/print'},
   {name: 'personSearch', url: 'person/search'},
+  {name: 'personMapPlan', url: 'person/{id}/map/plan'},
   {name: 'placement', url: 'person/{id}/test'},
   {name: 'registrationLoadRanges', url: 'reference/config/?name=registration_load_ranges'},
   {name: 'selfHelpGuides', url: 'selfHelpGuides/search'},
@@ -422,6 +428,7 @@ var apiUrls = [
   {name: 'studentIntakeTool', url: 'tool/studentIntake'},
   {name: 'studentType', url: 'reference/studentType'},
   {name: 'futureTerms', url: 'reference/term/future'},
+  {name: 'courses', url: 'reference/course/all'},
   {name: 'weeklyCourseWorkHourRanges', url: 'reference/config/?name=weekly_course_work_hour_ranges'},
 ];
 
@@ -855,6 +862,7 @@ Ext.onReady(function(){
 				    registrationLoadRangesStore: 'Ssp.store.reference.RegistrationLoadRanges', 
 				    weeklyCourseWorkHourRangesStore: 'Ssp.store.reference.WeeklyCourseWorkHourRanges',
 				    futureTermsStore:'Ssp.store.external.FutureTerms',
+					coursesStore:'Ssp.store.external.Courses',
 				    tasksStore: 'Ssp.store.Tasks',
 				    toolsStore: 'Ssp.store.Tools',
 			    	veteranStatusesStore: 'Ssp.store.reference.VeteranStatuses',
@@ -880,7 +888,8 @@ Ext.onReady(function(){
 			        searchService: 'Ssp.service.SearchService',
 			        specialServiceGroupService: 'Ssp.service.SpecialServiceGroupService',
 			        studentIntakeService: 'Ssp.service.StudentIntakeService',
-			        transcriptService: 'Ssp.service.TranscriptService'
+			        transcriptService: 'Ssp.service.TranscriptService',
+			        mapPlanService: 'Ssp.service.MapPlanService'
 				});
 				
 				Ext.application({

@@ -20,7 +20,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
     extend: 'Ext.form.Panel',
     alias: 'widget.coursesview',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
+    //controller: 'Ssp.controller.tool.map.CoursesViewController',
     
     width: '100%',
     height: '100%',
@@ -157,11 +157,21 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 					
 					{
                        fieldLabel: 'Filter By',
+						xtype:"textfield",
                         name: 'filterBy',
                         itemId: 'filterBy',
                         maxLength: 50,
                         allowBlank:true,
-						labelWidth:50
+						labelWidth:50,
+						enableKeyEvents:true,
+						listeners:{
+							keyup: function(textField, e, eOpts) {
+		                        var searchString = textField.getValue().trim();
+								var coursesGrid = Ext.getCmp("coursesGridSingleton");
+								coursesGrid.getStore().filterBy(getFilterRecord('title', searchString)); 
+		                    }
+						},
+						
                     }, {
                         tooltip: 'Clear Filter',
                         text: '',
@@ -169,18 +179,27 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                         height: 25,
                         cls: 'mapClearSearchIcon',
                         xtype: 'button',
-                        itemId: 'cancelFilterButton'
+                        itemId: 'cancelFilterButton',
+						listeners:{
+							click : function(cancelButton, t, opts) {
+								var parent =  cancelButton.findParentByType("fieldset");
+								var filterBy = parent.getComponent("filterBy");
+								filterBy.setValue("");
+								var coursesGrid = Ext.getCmp("coursesGridSingleton");
+								coursesGrid.getStore().filterBy(getFilterRecord('title', "")); 
+		                    }
+						},
                     }]
                 
                 },
                 {
-                    xtype : 'container',
+                    xtype : 'coursesgrid',
                     flex: 1,
                     width: '100%',
                     height: '100%',
                     layout: 'card',
-                    //autoScroll: true,
-                    items : [
+                    autoScroll: true,
+                    /*items : [
                         {xtype:'coursesgrid', itemId:'allcoursesgrid', flex:1},
                         {xtype:'coursesgrid', itemId:'electivesgrid', flex:1},
                         {xtype:'coursesgrid', itemId:'defined1grid', flex:1},
@@ -188,7 +207,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                         {xtype:'coursesgrid', itemId:'defined3grid', flex:1},
                         {xtype:'coursesgrid', itemId:'holdcoursesgrid', flex:1}
                         
-                    ]
+                    ]*/
                 }
             
                 ]
@@ -200,6 +219,55 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
         });
         
         return me.callParent(arguments);
-    }
-    
+    },
 });
+
+function getFilterRecord(field, searchString){
+	var f = [];
+	f.push({
+		filter: function(record){
+			return filterString(searchString, field, record);
+		}
+	});
+	var len = f.length;
+	return function(record){
+		for (var i = 0; i < len; i++){
+			if(!f[i].filter(record)){
+				return false;
+			}
+		}
+		return true;
+	}
+}
+function filterString(value, dataIndex, record){
+	var val = record.get(dataIndex);
+	if (typeof val != "string"){
+		return value.length == 0;
+	}
+	return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
+}
+
+/*function getFilterRecord(field, searchString) {    
+	var f = [];    
+	f.push({
+		filter: function(record){            
+			return filterString(searchString, field, record);        
+		}    
+	});     
+	var len = f.length;    
+	return function(record){        
+		for (var i = 0; i < len; i++){            
+			if (!f[i].filter(record)){                
+				return false;            
+			}        
+		}        
+		return true;    
+	};
+}
+function filterString(value, dataIndex, record) {    
+	var val = record.get(dataIndex);    
+	if (typeof val != "string")     {        
+		return value.length == 0;    
+	}    
+	return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
+}*/

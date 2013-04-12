@@ -298,6 +298,26 @@
                     "name": "DisabilityTypes.js",
                     "path": "/app/view/tools/accommodation/"
                 },
+                {
+                    "clsName": "Ssp.controller.tool.map.CoursesGridController",
+                    "name": "CoursesGridController.js",
+                    "path": "/app/controller/tool/map/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.map.FAViewController",
+                    "name": "FAViewController.js",
+                    "path": "/app/controller/tool/map/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.map.SemesterPanelContainerViewController",
+                    "name": "SemesterPanelContainerViewController.js",
+                    "path": "/app/controller/tool/map/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.map.SemesterPanelViewController",
+                    "name": "SemesterPanelViewController.js",
+                    "path": "/app/controller/tool/map/"
+                },
 				{
                     "clsName": "Ssp.controller.tool.map.EmailPlanController",
                     "name": "EmailPlanController.js",
@@ -930,6 +950,11 @@
                     "path": "/app/model/external/"
                 },
                 {
+                    "clsName": "Ssp.model.external.Course",
+                    "name": "Course.js",
+                    "path": "/app/model/external/"
+                },
+                {
                     "clsName": "Ssp.model.external.Term",
                     "name": "Term.js",
                     "path": "/app/model/external/"
@@ -937,6 +962,11 @@
                 {
                     "clsName": "Ssp.store.external.FutureTerms",
                     "name": "FutureTerms.js",
+                    "path": "/app/store/external/"
+                },
+                {
+                    "clsName": "Ssp.store.external.Courses",
+                    "name": "Courses.js",
                     "path": "/app/store/external/"
                 },
                 {
@@ -1598,6 +1628,11 @@
                     "clsName": "Ssp.model.tool.earlyalert.EarlyAlertResponse",
                     "name": "EarlyAlertResponse.js",
                     "path": "/app/model/tool/earlyalert/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.map.SemesterCourse",
+                    "name": "SemesterCourse.js",
+                    "path": "/app/model/tool/map/"
                 },
                 {
                     "clsName": "Ssp.model.tool.journal.JournalEntry",

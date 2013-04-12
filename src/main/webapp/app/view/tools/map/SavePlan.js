@@ -46,7 +46,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                     type: 'vbox'
                 },
                  width: '100%',
-               height: '100%',
+                height: '100%',
                 bodyPadding: 5,
                 autoScroll: true,
                 itemId: 'faSavePlan',
@@ -143,8 +143,8 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
             				        allowBlank:true
             				    },{
             				        fieldLabel: 'Contact Phone',
-            				        name: 'contactphone',
-            				        itemId: 'contactphone',
+            				        name: 'contactPhone',
+            				        itemId: 'contactPhone',
             				        allowBlank:false
             				    },
             				   {
@@ -172,7 +172,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                 			    },{
                 			        fieldLabel: 'Academic Goals',
                 			        name: 'academicgoals',
-                			        allowBlank:true,
+                			        allowBlank: true,
                 			        itemId: 'academicgoals',
                 			        xtype: 'textareafield'
                 			    }
@@ -186,7 +186,16 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                         items: [{
                             xtype: 'button',
                             itemId: 'saveButton',
-                            text: 'Save'
+                            text: 'Save',
+							
+							savePlan: function(){
+								me = this;
+								me.hide();
+							},
+                            listeners:{
+                            	click: 'savePlan',
+								scope: me
+                            }
                             
                         }, '-', {
                             xtype: 'button',
@@ -200,7 +209,6 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
             ]
             
         });
-        
         return me.callParent(arguments);
     }
     

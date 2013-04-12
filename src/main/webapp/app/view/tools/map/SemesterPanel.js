@@ -20,7 +20,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.semesterpanel',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
+    //controller: 'Ssp.controller.tool.map.SemesterPanelViewController',
     minHeight: '200',
     minWidth: '200',
     autoHeight: true,
@@ -30,8 +30,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
-            title: 'Semester',
-            hideHeaders: true,
+            hideHeaders: false,
             tools: [{
                 xtype: 'button',
                 itemId: 'termNotesButton',
@@ -49,15 +48,43 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                   }
             }],
             columns: [{
-                text: '',
-                dataIndex: 'planItem',
-                xtype: 'gridcolumn'
+                text: 'Title',
+                dataIndex: 'title',
+                xtype: 'gridcolumn',
+				width:80
             }, 
+			{
+				text: 'Course',
+                dataIndex: 'formattedCourse',
+                xtype: 'gridcolumn',
+				width:80
+            },
+			{
+                dataIndex: 'description',
+                xtype: 'gridcolumn',
+				hidden: true,
+				hideable:false
+            },
             {
-                text: '',
-                dataIndex: 'crHrs',
-                xtype: 'gridcolumn'
+                text: 'Hrs',
+                dataIndex: 'maxCreditHours',
+                xtype: 'gridcolumn',
+				width:40
             }, 
+			{
+                text: 'Min Hrs',
+                dataIndex: 'minCreditHours',
+                xtype: 'gridcolumn',
+				hidden: true,
+				hideable:false
+            },
+			{
+                dataIndex: 'code',
+                xtype: 'gridcolumn',
+				hidden: true,
+				hideable:false
+            },
+			
             {
                 xtype: 'actioncolumn',
                 width: 65,
@@ -66,7 +93,6 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                     tooltip: 'Edit planItem',
                     handler: function(grid, rowIndex, colIndex){
                         //goto CourseNotes.js
-                        
                     },
                     
                     scope: me
@@ -74,15 +100,45 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                     icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
                     tooltip: 'Delete planItem',
                     handler: function(grid, rowIndex, colIndex){
-                        
+                        me.getStore().removeAt(rowIndex);
+						var semesterBottomDock = me.getDockedComponent("semesterBottomDock");
+						updateSemesterHours(me.getStore(), semesterBottomDock);
                     },
                     scope: me
                 }]
             }],
+			viewConfig: {
+			        plugins: {
+			            ptype: 'gridviewdragdrop',
+						ddGroup: 'ddGroupForCourses',
+						dropGroup: 'coursesDDGroup',
+						dragGroup: 'coursesDDGroup',
+						pluginId: 'semesterviewdragdrop',
+			        },
+			        listeners: {
+			            drop: function(node, data, dropRec, dropPosition) {
+							var store = me.getStore();
+							var semesterBottomDock = me.getDockedComponent("semesterBottomDock");
+							updateSemesterHours(store, semesterBottomDock);
+							
+							var parent =  me.findParentByType("semesterpanelcontainer");
+							
+							var panels = parent.query("semesterpanel")
+							//TODO this is extremely messing must be a way to set a listener on drag
+							panels.forEach(function(panel){
+								var store = panel.getStore();
+								var semesterBottomDock = panel.getDockedComponent("semesterBottomDock");
+								updateSemesterHours(store, semesterBottomDock);
+							})
+							
+			            },
+			        }
+			    },
             dockedItems: [{
                 dock: 'bottom',
                 xtype: 'toolbar',
                 height: '25',
+				itemId: "semesterBottomDock",
                 items: [
                 {
                     xtype: 'tbspacer',
@@ -94,7 +150,8 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                     text: '',
                     name: 'termCrHrs',
                     itemId: 'termCrHrs',
-                    xtype: 'label'
+                    xtype: 'label',
+					width: 20
                 }
                 ,
                  {
@@ -109,3 +166,15 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
     }
     
 });
+
+function updateSemesterHours(store, semesterBottomDock){
+	var models = store.getRange(0);
+	var totalHours = 0;
+	models.forEach(function(model){
+		totalHours += model.get('maxCreditHours');
+	});
+	var termCreditHours = semesterBottomDock.getComponent('termCrHrs');
+	termCreditHours.setText("" + totalHours + "");
+}
+
+

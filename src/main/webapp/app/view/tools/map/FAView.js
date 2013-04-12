@@ -20,7 +20,7 @@ Ext.define('Ssp.view.tools.map.FAView', {
     extend: 'Ext.window.Window',
     alias: 'widget.faview',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    controller: 'Ssp.controller.tool.map.FAViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils'
         //sspConfig: 'sspConfig'
@@ -82,13 +82,13 @@ Ext.define('Ssp.view.tools.map.FAView', {
                         height: '10'
                     }, {
                         fieldLabel: 'Standing',
-                        name: 'standing',
-                        itemId: 'standing',
+                        name: 'academicStanding',
+                        itemId: 'academicStanding',
                         labelWidth: 60
                     }, {
                         fieldLabel: 'Restrictions',
-                        name: 'restrictions',
-                        itemId: 'restrictions',
+                        name: 'currentRestrictions',
+                        itemId: 'currentRestrictions',
                         labelWidth: 80
                     }, {
                         xtype: 'tbspacer',
@@ -96,8 +96,8 @@ Ext.define('Ssp.view.tools.map.FAView', {
                     },
                     {
                         fieldLabel: 'FA GPA',
-                        name: 'faGPA',
-                        itemId: 'faGPA',
+                        name: 'financialAidGpa',
+                        itemId: 'financialAidGpa',
                         labelWidth: 50
                     }, 
                     {
@@ -106,18 +106,18 @@ Ext.define('Ssp.view.tools.map.FAView', {
                     },
                     {
                         fieldLabel: 'Hrs Earned',
-                        name: 'hrsEarned',
-                        itemId: 'hrsEarned',
+                        name: 'creditHoursEarned',
+                        itemId: 'creditHoursEarned',
 						labelWidth: 80
                     }, {
                         fieldLabel: 'Hrs Attempted',
-                        name: 'hrsAttempted',
-                        itemId: 'hrsAttempted',
+                        name: 'creditHoursAttempted',
+                        itemId: 'creditHoursAttempted',
 						labelWidth: 100
                     }, {
                         fieldLabel: '<a href="">Comp Rate</a>',
-                        name: 'compRate',
-                        itemId: 'compRate',
+                        name: 'creditCompletionRate',
+                        itemId: 'creditCompletionRate',
 						labelWidth: 80
                     },
                     {
@@ -160,8 +160,8 @@ Ext.define('Ssp.view.tools.map.FAView', {
                         labelWidth: 80
                     },, {
                         fieldLabel: 'Balance',
-                        name: 'balance',
-                        itemId: 'balance',
+                        name: 'remainingLoanAmount',
+                        itemId: 'remainingLoanAmount',
                         labelWidth: 80
                     }       
                             ]
@@ -180,13 +180,13 @@ Ext.define('Ssp.view.tools.map.FAView', {
                     
                     {
                         fieldLabel: 'SAP',
-                        name: 'sap',
-                        itemId: 'sap',
+                        name: 'sapStatus',
+                        itemId: 'sapStatus',
                         labelWidth: 30
                     }, {
                         fieldLabel: 'F1',
-                        name: 'f1',
-                        itemId: 'f1',
+                        name: 'f1Status',
+                        itemId: 'f1Status',
                         labelWidth: 30
                     }]
                 }
@@ -205,26 +205,26 @@ Ext.define('Ssp.view.tools.map.FAView', {
                    
                     items: [{
                         fieldLabel: 'FASFA',
-                        name: 'fasfa',
-                        itemId: 'fasfa',
+                        name: 'fafsaDate',
+                        itemId: 'fafsaDate',
 						labelWidth: 60
                     
                     }, {
                         fieldLabel: 'FA Award',
-                        name: 'faAward',
-                        itemId: 'faAward',
+                        name: 'currentYearFinancialAidAward',
+                        itemId: 'currentYearFinancialAidAward',
 						labelWidth: 80
                     
                     }, {
-                        fieldLabel: 'FA Amount',
-                        name: 'faAmount',
-                        itemId: 'faAmount',
+                        fieldLabel: 'FA Amount Remaining',
+                        name: 'financialAidRemaining',
+                        itemId: 'financialAidRemaining',
 						labelWidth: 80
                     
                     }, {
                         fieldLabel: 'Loan Amount',
-                        name: 'loanAmount',
-                        itemId: 'loanAmount',
+                        name: 'originalLoanAmount',
+                        itemId: 'originalLoanAmount',
 						labelWidth: 80
                     
                     }]

@@ -16,17 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.store.external.FutureTerms', {
-	extend: 'Ssp.store.reference.AbstractReferences',
-	model: 'Ssp.model.external.Term',
+Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
+    extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
-    inject: {
-    	apiProperties: 'apiProperties'
+	init: function() {
+		var me=this;
+	
+		return me.callParent(arguments);
     },
-   
-    constructor: function(){
-		this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('futureTerms')});
-    	return; 
-    }
+    
+    
 });

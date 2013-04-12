@@ -16,52 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.controller.tool.map.EmailPlanController', {
+Ext.define('Ssp.controller.tool.map.CoursesGridController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	appEventsController: 'appEventsController'
-       
+        store: 'coursesStore',
+        formUtils: 'formRendererUtils',
     },
-    control: {
-    	optionsEmailView: '#optionsEmailView',
-    	
-    	'optionsEmailFormat': {
-    	   selector: '#optionsEmailFormat',
-    	   listeners: {
-            change: 'onoptionsEmailFormatClick'
-           }
-        },
-        
-        'emailmatrixFormat': {
-    	   selector: '#emailmatrixFormat',
-    	   listeners: {
-            change: 'onemailmatrixFormatClick'
-           }
-        }
-    },
-    
 	init: function() {
 		var me=this;
-		me.getOptionsEmailView().hide();
 		
-		return this.callParent(arguments);
+		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
+		me.store.load();
+		
+		return me.callParent(arguments);
     },
     
-    onoptionsEmailFormatClick: function(cb, nv, ov){
-        var me=this;
-        if (nv){
-        me.getOptionsEmailView().show();
-        }
     
-    },
-    
-    onemailmatrixFormatClick: function(cb, nv, ov){
-        var me=this;
-        if (nv){
-        me.getOptionsEmailView().hide();
-        }
-    }
-	
 });

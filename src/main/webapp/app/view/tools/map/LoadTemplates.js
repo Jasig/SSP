@@ -166,7 +166,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                             {
                             xtype: 'gridpanel',
                             title: '',
-                            id: 'allPlansGridPanel',
+                            id: 'allPlansTemplateGridPanel',
                             width: '100%',
                             height: '100%',
                             border: true,
