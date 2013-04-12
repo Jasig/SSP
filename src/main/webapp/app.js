@@ -132,6 +132,10 @@ Ext.require([
     'Ssp.view.tools.map.PrintPlan',
     'Ssp.view.tools.map.CourseDetails',
     'Ssp.view.tools.map.CoursesGrid',
+	
+	'Ssp.view.tools.legacyremarks.LegacyRemarks',
+	'Ssp.view.tools.documents.Documents',
+	'Ssp.view.tools.documents.UploadDocuments',
     
     // COUNSELING REFERENCE GUIDE ADMIN VIEWS
     'Ssp.view.admin.forms.crg.ChallengeAdmin',

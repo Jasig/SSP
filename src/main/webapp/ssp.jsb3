@@ -1020,6 +1020,16 @@
                     "path": "/app/controller/tool/document/"
                 },
                 {
+                    "clsName": "Ssp.controller.tool.documents.DocumentsViewController",
+                    "name": "DocumentsViewController.js",
+                    "path": "/app/controller/tool/documents/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.documents.UploadDocumentsViewController",
+                    "name": "UploadDocumentsViewController.js",
+                    "path": "/app/controller/tool/documents/"
+                },
+                {
                     "clsName": "Ssp.controller.tool.sis.TranscriptViewController",
                     "name": "TranscriptViewController.js",
                     "path": "/app/controller/tool/sis/"
@@ -1403,6 +1413,16 @@
                     "clsName": "Ssp.view.tools.document.EditDocument",
                     "name": "EditDocument.js",
                     "path": "/app/view/tools/document/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.documents.Documents",
+                    "name": "Documents.js",
+                    "path": "/app/view/tools/documents/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.documents.UploadDocuments",
+                    "name": "UploadDocuments.js",
+                    "path": "/app/view/tools/documents/"
                 },
                 {
                     "clsName": "Ssp.view.admin.forms.AbstractReferenceAdmin",
