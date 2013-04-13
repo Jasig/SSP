@@ -42,7 +42,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanelContainer', {
 			items : [ {
 				xtype : 'container',
 				fieldLabel : '',
-				layout : 'hbox',
+				layout : 'vbox',
 				margin : '0 0 0 0',
 				padding : '2 2 2 2',
 				width : '100%',

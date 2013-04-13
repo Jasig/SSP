@@ -21,9 +21,6 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
     alias: 'widget.semesterpanel',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     //controller: 'Ssp.controller.tool.map.SemesterPanelViewController',
-    minHeight: '200',
-    minWidth: '200',
-    autoHeight: true,
     autoScroll: true,
     columnLines: false,
     
@@ -31,6 +28,10 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
         var me = this;
         Ext.apply(me, {
             hideHeaders: false,
+			height: '260',
+		    width: '285',
+			minHeight: '260',
+			maxWidth: '285',
             tools: [{
                 xtype: 'button',
                 itemId: 'termNotesButton',
