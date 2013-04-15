@@ -49,7 +49,7 @@ public class ExternalCourseDaoTest {
 		} catch (final ObjectNotFoundException e) {
 			fail("Course was not found");
 		}
-
+		assertEquals(course.getIsDev(), true);
 		assertNotNull("Course was not found", course);
 
 	}

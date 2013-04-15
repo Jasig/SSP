@@ -33,8 +33,8 @@
 	<preConditions onFail="HALT">
 		<runningAs username="${database.admin.username}" />
 	</preConditions>
- 
- <include file="org/jasig/ssp/database/changesets/000001.xml" />
+
+	<include file="org/jasig/ssp/database/changesets/000001.xml" />
 
 	<include file="org/jasig/ssp/database/changesets/000002.xml" />
 
@@ -94,15 +94,13 @@
 	<include file="org/jasig/ssp/database/integrationchangesets/i000008.xml" />
 	
 	<include file="org/jasig/ssp/database/changesets/000025.xml" />
-
 	<include file="org/jasig/ssp/database/integrationchangesets/i000009.xml" />
 	<include file="org/jasig/ssp/database/integrationchangesets/i000010.xml" />
 	<include file="org/jasig/ssp/database/integrationchangesets/i000011.xml" />
 	<include file="org/jasig/ssp/database/integrationchangesets/i000012.xml" />
-	<include file="org/jasig/ssp/database/integrationchangesets/i000013.xml" />
-	
-	<include file="org/jasig/ssp/database/changesets/000026.xml" />
 	<include file="org/jasig/ssp/database/changesets/000027.xml" />
 	<include file="org/jasig/ssp/database/integrationchangesets/i000014.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000015.xml" />
 	
+
 </databaseChangeLog>

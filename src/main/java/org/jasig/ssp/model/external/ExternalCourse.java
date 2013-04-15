@@ -35,6 +35,9 @@ public class ExternalCourse extends AbstractExternalData implements ExternalData
 	@Column(nullable = false)
 	private Integer maxCreditHours,minCreditHours;
 	
+	@Column(nullable = false)
+	private Boolean isDev;
+	
 	
 
 	public String getSubjectAbbreviation() {
@@ -91,5 +94,13 @@ public class ExternalCourse extends AbstractExternalData implements ExternalData
 
 	public void setMinCreditHours(Integer minCreditHours) {
 		this.minCreditHours = minCreditHours;
+	}
+
+	public Boolean getIsDev() {
+		return isDev;
+	}
+
+	public void setIsDev(Boolean isDev) {
+		this.isDev = isDev;
 	}
 }
