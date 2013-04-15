@@ -44,6 +44,7 @@ import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.transferobject.CaseloadReassignmentRequestTO;
 import org.jasig.ssp.transferobject.reports.CaseLoadSearchTO;
 import org.jasig.ssp.util.hibernate.MultipleCountProjection;
+import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.hibernate.OrderAsString;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -102,25 +103,28 @@ public class CaseloadDao extends AbstractDao<Person> {
 		// Set Columns to Return: id, firstName, middleName, lastName,
 		// schoolId
 		final ProjectionList projections = Projections.projectionList();
-		projections.add(Projections.property("id").as("personId"));
-		projections.add(Projections.property("firstName").as("firstName"));
-		projections.add(Projections.property("middleName").as("middleName"));
-		projections.add(Projections.property("lastName").as("lastName"));
-		projections.add(Projections.property("schoolId").as("schoolId"));
+		projections.add(Projections.property("id").as("clr_personId"));
+		projections.add(Projections.property("firstName").as("clr_firstName"));
+		projections.add(Projections.property("middleName").as("clr_middleName"));
+		projections.add(Projections.property("lastName").as("clr_lastName"));
+		projections.add(Projections.property("schoolId").as("clr_schoolId"));
 		projections.add(Projections.property("studentIntakeCompleteDate").as(
-				"studentIntakeCompleteDate"));
+				"clr_studentIntakeCompleteDate"));
 
 		// Join to Student Type
 		query.createAlias("studentType", "studentType",
 				JoinType.LEFT_OUTER_JOIN);
 		// add StudentTypeName Column
 		projections.add(Projections.property("studentType.name").as(
-				"studentTypeName"));
+				"clr_studentTypeName"));
 
 		query.setProjection(projections);
 
-		query.setResultTransformer(new AliasToBeanResultTransformer(
-				CaseloadRecord.class));
+//		query.setResultTransformer(new AliasToBeanResultTransformer(
+//				CaseloadRecord.class));
+		query.setResultTransformer(
+				new NamespacedAliasToBeanResultTransformer(
+						CaseloadRecord.class, "clr_"));
 
 		// Add Paging
 		if (sAndP != null) {
