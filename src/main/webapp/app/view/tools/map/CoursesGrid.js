@@ -77,15 +77,23 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
                          {
                            xtype: 'gridcolumn',
                             dataIndex: 'minCreditHours',
-                            text: 'Min H',
+                            text: 'Credit Hours',
                             width: 40
                         },
                         {
                             xtype: 'gridcolumn',
                              dataIndex: 'maxCreditHours',
                              text: 'Max H',
-                             width: 40
-                         }
+                             hidden:true,
+							 hideable: false,
+                         },
+                         {
+                             xtype: 'gridcolumn',
+                              dataIndex: 'isDev',
+                              text: 'Development',
+ 							 hidden:true,
+ 							 hideable: false,
+                          },
                         ],
                 		viewConfig: {
 								copy: true,

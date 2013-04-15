@@ -65,13 +65,17 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
                     fieldLabel: 'Current Total Plan Cr Hrs',
                     itemId: 'planHrs',
                     name: 'planHrs',
-                    labelWidth: 150
+                    id: 'currentTotalPlanCrHrs',
+                    labelWidth: 150,
+                    width: 180
                 
                 }, {
                     fieldLabel: 'Dev Cr Hrs',
-                    itemId: 'devHrs',
-                    name: 'devHrs',
-                    labelWidth: 100
+                    itemId: 'currentPlanTotalDevCrHrs',
+                    name: 'currentPlanTotalDevCrHrs',
+					id:'currentPlanTotalDevCrHrs',
+                    labelWidth: 100,
+                    width: 130
                 
                 }
 ]

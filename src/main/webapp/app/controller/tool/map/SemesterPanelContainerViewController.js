@@ -53,6 +53,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	             scope: me
 	         });
 	    }
+		me.appEventsController.assignEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
+		me.appEventsController.assignEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
+		me.futureTermsStore.addListener("load", me.onCreateNewMapPlan, me);
+		me.getView().setLoading(true);
 		return me.callParent(arguments);
     },
     resetForm: function() {
@@ -98,15 +102,19 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 
     getMapPlanServiceFailure: function() {
 		var me = this;
-    	me.futureTermsStore.addListener("load", me.createNewPlan, me);
     	me.futureTermsStore.load();
     },
+ 
 	onViewReady: function(){
-		
+		 
 	},
-	createNewPlan:function(){
+	
+	onCreateNewMapPlan:function(){
 		me = this;
 		var view  = me.getView().getComponent("semestersets");
+		view.removeAll(true);
+		Ext.getCmp('currentTotalPlanCrHrs').setValue(0);
+		Ext.getCmp('currentPlanTotalDevCrHrs').setValue(0);
     	var terms = me.futureTermsStore.getRange(0);
 		terms = me.formUtils.valueSortByField( terms, 'startDate' );
 		if(terms.length == 0){
@@ -120,12 +128,13 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		i = k = 0;
 		terms.forEach(function(term){
 			if(termsets.hasOwnProperty(term.get("reportYear"))){
-				termsets[term.get("reportYear")].push(term);
+				termsets[term.get("reportYear")][termsets[term.get("reportYear")].length] = term;
 			}else if(term.get("reportYear") > endYear){
 				return termsets;
 			}else{
 				k = 0;
-				termsets[term.get("reportYear")]=[term];
+				termsets[term.get("reportYear")]=[];
+				termsets[term.get("reportYear")][0] = term;
 			};
 		});
 		termsets.forEach(function(termSet){
@@ -137,35 +146,51 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				margin : '0 0 0 0',
 				layout : 'hbox',
 				autoScroll : true,
-				minHeight: 280,
+				minHeight: 262,
 				itemId : 'year' + termSet[0].get("reportYear"),
 				flex : 1,
 			}));
+		
 			termSet.forEach(function(term){
-				yearView.add(me.createSemesterPanel(term.get("name") + "("  + term.get('code') + ")"));
+				var termCode = term.get('code');
+				var panelName = term.get("name") + "("  + term.get('code') + ")";
+				yearView.add(me.createSemesterPanel(panelName, termCode));
 			});
 		});
+		me.getView().setLoading(false);
     },
 	
-	createSemesterPanel: function(semesterName){
+	createSemesterPanel: function(semesterName, termCode){
 		var semesterStore = new Ssp.store.SemesterCourses();
 		me.semesterStores.push(semesterStore);
 		return new Ssp.view.tools.map.SemesterPanel({
 			title:semesterName,
-			itemId:semesterName,
+			itemId:termCode,
 			store: semesterStore
 		});
 	},
 	afterServiceHandler: function(serviceResponses) {
         var me = this;
         if ( serviceResponses.responseCnt >= serviceResponses.expectedResponseCnt ) {
-            me.getView().setLoading(false);
+            //me.getView().setLoading(false);
         }
     },
+
+	onSaveMapPlan: function(){
+		var me = this;
+		mapPlanService.save(me.personLite.get('id'), me.semesterStores, me.onSaveComplete);
+	},
+	
+	onSaveComplete: function(){
+		var me = this;
+		me.getView().setLoading(false);
+	},
 
 	destroy: function() {
         var me=this;
 		me.futureTermsStore.removeListener("load", me.createNewPlan, me);
+		me.appEventsController.removeEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
+        me.appEventsController.removeEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
         return me.callParent( arguments );
     },
 	

@@ -65,10 +65,14 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     xtype: 'button',
                     itemId: 'planOverviewButton',
                     align: 'center',
-                    padding: '0 0 0 0'
+                    padding: '0 0 0 0',
+                	hidden: true,
+					hideable: false
                 }, {
                     xtype: 'label',
-                    text: 'View All'
+                    text: 'View All',
+                	hidden: true,
+					hideable: false
                 
                 }]
             
@@ -94,11 +98,14 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     xtype: 'button',
                     itemId: 'planFAButton',
                     align: 'center',
-                    padding: '0 0 0 0'
+                    padding: '0 0 0 0',
+					hidden: true,
+					hideable: false
                 }, {
                     xtype: 'label',
-                    text: 'Financial Aid'
-                
+                    text: 'Financial Aid',
+                	hidden: true,
+					hideable: false
                 }]
             
             }, 
@@ -124,10 +131,14 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     xtype: 'button',
                     itemId: 'planNotesButton',
                     align: 'center',
-                    padding: '0 0 0 0'
+                    padding: '0 0 0 0',
+					hidden: true,
+					hideable: false
                 }, {
                     xtype: 'label',
-                    text: 'Plan Notes'
+                    text: 'Plan Notes',
+                	hidden: true,
+					hideable: false
                 
                 }]
             
@@ -157,10 +168,14 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     xtype: 'button',
                     itemId: 'emailPlanButton',
                     align: 'center',
-                    padding: '0 0 0 0'
+                    padding: '0 0 0 0',
+					hidden: true,
+					hideable: false
                 }, {
                     xtype: 'label',
-                    text: 'Email Plan'
+                    text: 'Email Plan',
+                	hidden: true,
+					hideable: false
                 
                 }]
             
@@ -215,7 +230,9 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     fieldLabel: 'Student is Currently',
                     itemId: 'onPlan',
                     name: 'onPlan',
-                    labelWidth: 150
+                    labelWidth: 150,
+					hidden: true,
+					hideable: false
                 
                 }]
             

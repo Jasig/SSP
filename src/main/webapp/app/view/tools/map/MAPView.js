@@ -41,9 +41,10 @@ Ext.define('Ssp.view.tools.map.MAPView', {
     			flex:1
             },	{
     			xtype: 'faview',
-				hidden:false,
 				itemId: 'faPopUp',
-    			flex:1
+    			flex:1,
+				hidden:true,
+				hideable:false
             }],
             dockedItems: [{
                 dock: 'top',
@@ -69,7 +70,9 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                     text: '<u>Load Template</u>',
                     height: 22,
                     xtype: 'button',
-                    itemId: 'loadTemplateButton'
+                    itemId: 'loadTemplateButton',
+					hidden: true,
+					hideable:false
                 },
                 
 				 
@@ -89,7 +92,9 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                         {
                             xtype: 'button',
                             text: 'Save Template As' ,
-                            itemId: 'saveTemplateButton'
+                            itemId: 'saveTemplateButton',
+							hidden:true,
+							hideable:false
                         }
                     ]
                     }

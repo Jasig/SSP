@@ -23,6 +23,40 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
     //controller: 'Ssp.controller.tool.map.SemesterPanelViewController',
     autoScroll: true,
     columnLines: false,
+	updateAllHours: function(me){
+		var parent =  me.findParentByType("semesterpanelcontainer");
+		var panels = parent.query("semesterpanel");
+		var planHours = 0;
+		var devHours = 0;
+		panels.forEach(function(panel){
+			var store = panel.getStore();
+			var semesterBottomDock = panel.getDockedComponent("semesterBottomDock");
+			var hours = me.updateSemesterHours(store, semesterBottomDock);
+			planHours += hours.planHours;
+			devHours += hours.devHours;
+		})
+		Ext.getCmp('currentTotalPlanCrHrs').setValue(planHours);
+		Ext.getCmp('currentPlanTotalDevCrHrs').setValue(devHours);
+		
+	},
+	
+	updateSemesterHours: function(store, semesterBottomDock){
+		var models = store.getRange(0);
+		var totalHours = 0;
+		var totalDevHours = 0;
+		models.forEach(function(model){
+			totalHours += model.get('minCreditHours');
+			if(model.get('isDev')){
+				totalDevHours += model.get('minCreditHours');
+			}
+		});
+		var termCreditHours = semesterBottomDock.getComponent('termCrHrs');
+		termCreditHours.setText("" + totalHours + "");
+		var hours = new Object();
+		hours.planHours = totalHours;
+		hours.devHours = totalDevHours;
+		return hours;
+	},
     
     initComponent: function(){
         var me = this;
@@ -58,7 +92,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 				text: 'Course',
                 dataIndex: 'formattedCourse',
                 xtype: 'gridcolumn',
-				width:80
+				width:100
             },
 			{
                 dataIndex: 'description',
@@ -67,20 +101,25 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 				hideable:false
             },
             {
-                text: 'Hrs',
+                text: '',
                 dataIndex: 'maxCreditHours',
                 xtype: 'gridcolumn',
-				width:40
+				hidden: true,
+				hideable:false
             }, 
 			{
-                text: 'Min Hrs',
+                text: 'Credit Hrs',
                 dataIndex: 'minCreditHours',
+                xtype: 'gridcolumn',
+            },
+			{
+                dataIndex: 'code',
                 xtype: 'gridcolumn',
 				hidden: true,
 				hideable:false
             },
-			{
-                dataIndex: 'code',
+            {
+                dataIndex: 'isDev',
                 xtype: 'gridcolumn',
 				hidden: true,
 				hideable:false
@@ -102,8 +141,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                     tooltip: 'Delete planItem',
                     handler: function(grid, rowIndex, colIndex){
                         me.getStore().removeAt(rowIndex);
-						var semesterBottomDock = me.getDockedComponent("semesterBottomDock");
-						updateSemesterHours(me.getStore(), semesterBottomDock);
+						me.updateAllHours(me);
                     },
                     scope: me
                 }]
@@ -118,20 +156,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 			        },
 			        listeners: {
 			            drop: function(node, data, dropRec, dropPosition) {
-							var store = me.getStore();
-							var semesterBottomDock = me.getDockedComponent("semesterBottomDock");
-							updateSemesterHours(store, semesterBottomDock);
-							
-							var parent =  me.findParentByType("semesterpanelcontainer");
-							
-							var panels = parent.query("semesterpanel")
-							//TODO this is extremely messing must be a way to set a listener on drag
-							panels.forEach(function(panel){
-								var store = panel.getStore();
-								var semesterBottomDock = panel.getDockedComponent("semesterBottomDock");
-								updateSemesterHours(store, semesterBottomDock);
-							})
-							
+							me.updateAllHours(me);
 			            },
 			        }
 			    },
@@ -167,15 +192,3 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
     }
     
 });
-
-function updateSemesterHours(store, semesterBottomDock){
-	var models = store.getRange(0);
-	var totalHours = 0;
-	models.forEach(function(model){
-		totalHours += model.get('maxCreditHours');
-	});
-	var termCreditHours = semesterBottomDock.getComponent('termCrHrs');
-	termCreditHours.setText("" + totalHours + "");
-}
-
-

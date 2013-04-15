@@ -83,6 +83,12 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
            listeners: {
             click: 'onprintPlanButtonClick'
            }
+        },
+		'createNewPlanButton':{
+           selector: '#createNewPlanButton',
+           listeners: {
+              click: 'oncreateNewMapPlanButton'
+           }
         }
     },
     resetForm: function() {
@@ -158,6 +164,11 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(me.termNotesPopUp == null || me.termNotesPopUp.isDestroyed)
         	me.termNotesPopUp = Ext.create('Ssp.view.tools.map.CourseNotes',{hidden:true});
 		me.termNotesPopUp.show();
+    },
+
+	oncreateNewMapPlanButton: function(button){
+        var me=this;
+		this.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
     },
 
 	destroy:function(){

@@ -62,7 +62,9 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                         queryMode: 'local',
                         allowBlank: true,
                         itemId: 'coursesTypeCombo',
-                        width: 285
+                        width: 285,
+						hidden: true,
+						hideable: false
                     }]
                 
                     },
@@ -91,7 +93,9 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                         queryMode: 'local',
                         allowBlank: true,
                         itemId: 'programCombo',
-                        width: 260
+                        width: 260,
+						hidden: true,
+						hideable: false
                     }, {
                         tooltip: 'Reset to All Programs',
                         text: '',
@@ -99,7 +103,9 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                         height: 25,
                         cls: 'mapClearSearchIcon',
                         xtype: 'button',
-                        itemId: 'cancelProgramSearchButton'
+                        itemId: 'cancelProgramSearchButton',
+						hidden: true,
+						hideable: false
                     }]
                 
                 }, {
@@ -126,7 +132,9 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                         queryMode: 'local',
                         allowBlank: true,
                         itemId: 'transferCombo',
-                        width: 260
+                        width: 260,
+						hidden: true,
+						hideable: false
                     }, {
                         tooltip: 'Reset to All Transfer Types',
                         text: '',
@@ -134,7 +142,9 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                         height: 25,
                         cls: 'mapClearSearchIcon',
                         xtype: 'button',
-                        itemId: 'cancelTransferSearchButton'
+                        itemId: 'cancelTransferSearchButton',
+						hidden: true,
+						hideable: false
                     }]
                 
                 }, {

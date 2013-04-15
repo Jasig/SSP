@@ -22,8 +22,8 @@ Ext.define('Ssp.model.tool.map.SemesterCourse', {
 			 {name:'code', type: 'string'},
 			 {name:'formattedCourse', type: 'string'},
 			 {name:'description', type: 'string'},
-             {name:'maxCreditHours', type: 'float'},
              {name:'minCreditHours', type: 'float'},
              {name:'termCode', type: 'string'},
+             {name:'isDev', type: 'boolean'}
              ]
 });

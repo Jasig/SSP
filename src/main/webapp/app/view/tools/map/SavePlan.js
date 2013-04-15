@@ -22,7 +22,8 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
     inject: {
-        columnRendererUtils: 'columnRendererUtils'
+        columnRendererUtils: 'columnRendererUtils',
+		appEventsController: 'appEventsController',
         //sspConfig: 'sspConfig'
     },
     height: 500,
@@ -191,7 +192,9 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
 							savePlan: function(){
 								me = this;
 								me.hide();
+								this.appEventsController.getApplication().fireEvent('onSaveMapPlan');
 							},
+							
                             listeners:{
                             	click: 'savePlan',
 								scope: me
@@ -200,7 +203,15 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                         }, '-', {
                             xtype: 'button',
                             itemId: 'cancelButton',
-                            text: 'Cancel'
+                            text: 'Cancel',
+							cancel: function(){
+								me = this;
+								me.hide();
+							},
+							listeners:{
+                            	click: 'cancel',
+								scope: me
+                            }
                         }]
                     
                     }]
