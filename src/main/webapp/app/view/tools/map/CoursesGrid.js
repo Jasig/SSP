@@ -34,14 +34,7 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
     hideHeaders: false,
     columnLines: false,
 	itemId: 'coursesGrid',
-	id:'coursesGridSingleton',
-    listeners: {
-    itemdblclick: function() {
-        var courseDetailsPopUp = Ext.create('Ssp.view.tools.map.CourseDetails');
-        courseDetailsPopUp.center();
-        courseDetailsPopUp.show();
-        }
-    },
+    
     
     initComponent: function(){
         var me = this;

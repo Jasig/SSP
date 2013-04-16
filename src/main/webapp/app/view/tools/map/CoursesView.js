@@ -176,8 +176,9 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 						enableKeyEvents:true,
 						listeners:{
 							keyup: function(textField, e, eOpts) {
+								var me = this;
 		                        var searchString = textField.getValue().trim();
-								var coursesGrid = Ext.getCmp("coursesGridSingleton");
+		                        var coursesGrid = me.getView().query('#coursesGrid')[0];
 								coursesGrid.getStore().filterBy(getFilterRecord('title', searchString)); 
 		                    }
 						},
@@ -195,7 +196,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 								var parent =  cancelButton.findParentByType("fieldset");
 								var filterBy = parent.getComponent("filterBy");
 								filterBy.setValue("");
-								var coursesGrid = Ext.getCmp("coursesGridSingleton");
+								var coursesGrid = me.getView().query('#coursesGrid')[0];
 								coursesGrid.getStore().filterBy(getFilterRecord('title', "")); 
 		                    }
 						},

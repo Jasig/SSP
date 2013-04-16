@@ -33,5 +33,30 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
 		return me.callParent(arguments);
     },
     
+    control:{
+    	view:{
+    		    itemdblclick: 'onItemDblClick'
+    		}
+    },
+    
+    onItemDblClick: function(grid, record, item, index, e, eOpts) {
+		var me = this;
+    	if(me.courseDetailsPopUp == null || me.courseDetailsPopUp.isDestroyed){
+    		me.courseDetailsPopUp = Ext.create('Ssp.view.tools.map.CourseDetails');
+    		me.courseDetailsPopUp.center();
+    	}
+		me.courseDetailsPopUp.query("#title_formatted_course")[0].setValue(record.get("title") + " : " + record.get("formattedCourse"));
+		me.courseDetailsPopUp.query("#description")[0].setValue(record.get("description"));
+		me.courseDetailsPopUp.query("#minCreditHours")[0].setValue(record.get("minCreditHours"));
+		me.courseDetailsPopUp.query("#maxCreditHours")[0].setValue(record.get("maxCreditHours"));
+		me.courseDetailsPopUp.show();
+    },
+
+    destroy:function(){
+	    var me=this;
+		if(me.courseDetailsPopUp != null && !me.courseDetailsPopUp.isDestroyed)
+			me.courseDetailsPopUp.close();
+    }
+    
     
 });

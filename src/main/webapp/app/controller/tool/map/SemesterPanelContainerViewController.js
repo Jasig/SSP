@@ -30,33 +30,22 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     
 	control: {
 	    	view: {
-				afterrender: 'onViewReady'
+				afterlayout: {
+					fn: 'onAfterLayout',
+					single: true
+				}
 	    	},
 	},
+
 	semesterStores: [],
 	init: function() {
 		var me=this;
 		var id = me.personLite.get('id');
 	    me.resetForm();
-	    
-	    if (id != "") {
-			me.getView().setLoading(true);
-			var serviceResponses = {
-                failures: {},
-                successes: {},
-                responseCnt: 0,
-                expectedResponseCnt: 1
-            }
-	    	 me.mapPlanService.get(id, {
-	             success: me.newServiceSuccessHandler('map', me.getMapPlanServiceSuccess, serviceResponses),
-	             failure: me.newServiceFailureHandler('map', me.getMapPlanServiceFailure, serviceResponses),
-	             scope: me
-	         });
-	    }
+
 		me.appEventsController.assignEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
 		me.futureTermsStore.addListener("load", me.onCreateNewMapPlan, me);
-		me.getView().setLoading(true);
 		return me.callParent(arguments);
     },
     resetForm: function() {
@@ -105,13 +94,35 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     	me.futureTermsStore.load();
     },
  
-	onViewReady: function(){
+	onAfterLayout: function(){
+		var me = this;
+		console.log('onAfterLayout');
+		me.getView().setLoading(true);
+		var id = me.personLite.get('id');
+	    
+	    if (id != "") {
+			me.getView().setLoading(true);
+			var serviceResponses = {
+                failures: {},
+                successes: {},
+                responseCnt: 0,
+                expectedResponseCnt: 1
+            }
+	    	 me.mapPlanService.get(id, {
+	             success: me.newServiceSuccessHandler('map', me.getMapPlanServiceSuccess, serviceResponses),
+	             failure: me.newServiceFailureHandler('map', me.getMapPlanServiceFailure, serviceResponses),
+	             scope: me
+	         });
+	    }
 		 
 	},
 	
 	onCreateNewMapPlan:function(){
-		me = this;
+		var me = this;
 		var view  = me.getView().getComponent("semestersets");
+		if(view == null){
+			return;
+		}
 		view.removeAll(true);
 		Ext.getCmp('currentTotalPlanCrHrs').setValue(0);
 		Ext.getCmp('currentPlanTotalDevCrHrs').setValue(0);
@@ -161,6 +172,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     },
 	
 	createSemesterPanel: function(semesterName, termCode){
+		var me = this;
 		var semesterStore = new Ssp.store.SemesterCourses();
 		me.semesterStores.push(semesterStore);
 		return new Ssp.view.tools.map.SemesterPanel({
