@@ -178,7 +178,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 							keyup: function(textField, e, eOpts) {
 								var me = this;
 		                        var searchString = textField.getValue().trim();
-		                        var coursesGrid = me.getView().query('#coursesGrid')[0];
+		                        var coursesGrid = me.findParentByType('coursesview').query('#coursesGrid')[0];
 								coursesGrid.getStore().filterBy(getFilterRecord('title', searchString)); 
 		                    }
 						},
@@ -193,10 +193,11 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                         itemId: 'cancelFilterButton',
 						listeners:{
 							click : function(cancelButton, t, opts) {
+								var me = this;
 								var parent =  cancelButton.findParentByType("fieldset");
 								var filterBy = parent.getComponent("filterBy");
 								filterBy.setValue("");
-								var coursesGrid = me.getView().query('#coursesGrid')[0];
+								var coursesGrid = me.findParentByType('coursesview').query('#coursesGrid')[0];
 								coursesGrid.getStore().filterBy(getFilterRecord('title', "")); 
 		                    }
 						},
@@ -257,28 +258,3 @@ function filterString(value, dataIndex, record){
 	}
 	return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
 }
-
-/*function getFilterRecord(field, searchString) {    
-	var f = [];    
-	f.push({
-		filter: function(record){            
-			return filterString(searchString, field, record);        
-		}    
-	});     
-	var len = f.length;    
-	return function(record){        
-		for (var i = 0; i < len; i++){            
-			if (!f[i].filter(record)){                
-				return false;            
-			}        
-		}        
-		return true;    
-	};
-}
-function filterString(value, dataIndex, record) {    
-	var val = record.get(dataIndex);    
-	if (typeof val != "string")     {        
-		return value.length == 0;    
-	}    
-	return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
-}*/
