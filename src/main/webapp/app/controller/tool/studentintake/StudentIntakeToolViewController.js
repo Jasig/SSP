@@ -37,16 +37,13 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     	militaryAffiliationsStore: 'militaryAffiliationsStore',
         personLite: 'personLite',
         person: 'currentPerson',
-        
         statesStore: 'statesStore',
         service: 'studentIntakeService',
         studentStatusesStore: 'studentStatusesStore',
         studentIntake: 'currentStudentIntake',
     	veteranStatusesStore: 'veteranStatusesStore',
     	registrationLoadRangesStore: 'registrationLoadRangesStore',
-    	futureTermsStore:'futureTermsStore',
-    	weeklyCourseWorkHourRangesStore:'weeklyCourseWorkHourRangesStore'
-    	
+    	weeklyCourseWorkHourRangesStore:'weeklyCourseWorkHourRangesStore',    	
     }, 
     config: {
     	studentIntakeForm: null
@@ -115,7 +112,6 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			failure: me.getStudentIntakeFailure,
 			scope: me
 		});
-		
 		return me.callParent(arguments);
     },
 
@@ -223,7 +219,6 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var educationLevels = me.formUtils.alphaSortByField( formData.data.referenceData.educationLevels, 'name' );
 		var fundingSources = me.formUtils.alphaSortByField( formData.data.referenceData.fundingSources, 'name' );
 		var studentStatuses =  me.formUtils.alphaSortByField( formData.data.referenceData.studentStatuses, 'name' );
-		var futureTerms =  me.formUtils.valueSortByField( formData.data.referenceData.futureTerms, 'startDate' );
 		var weeklyCourseWorkHourRanges =  JSON.parse(formData.data.referenceData.weeklyCourseWorkHourRanges);
 		weeklyCourseWorkHourRanges = me.formUtils.valueSortByField( weeklyCourseWorkHourRanges, 'rangeStart' );
 		var registrationLoadRanges = JSON.parse(formData.data.referenceData.registrationLoadRanges);
@@ -246,7 +241,6 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		me.statesStore.loadData( formData.data.referenceData.states );
 		me.studentStatusesStore.loadData( studentStatuses );
 		me.veteranStatusesStore.loadData( formData.data.referenceData.veteranStatuses );
-		me.futureTermsStore.loadData( futureTerms );
 		me.registrationLoadRangesStore.loadData(registrationLoadRanges);
 		me.weeklyCourseWorkHourRangesStore.loadData(weeklyCourseWorkHourRanges);
 		

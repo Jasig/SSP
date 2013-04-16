@@ -960,8 +960,8 @@
                     "path": "/app/model/external/"
                 },
                 {
-                    "clsName": "Ssp.store.external.FutureTerms",
-                    "name": "FutureTerms.js",
+                    "clsName": "Ssp.store.external.Terms",
+                    "name": "Terms.js",
                     "path": "/app/store/external/"
                 },
                 {

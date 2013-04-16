@@ -61,16 +61,18 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
-            hideHeaders: false,
+            hideHeaders: true,
 			height: '260',
-		    width: '285',
+		    width: '220',
 			minHeight: '260',
-			maxWidth: '285',
+			maxWidth: '220',
             tools: [{
                 xtype: 'button',
                 itemId: 'termNotesButton',
                 width: 20,
                 height: 20,
+                hidden:true,
+                hideable:false,
                 cls: 'editPencilIcon',
                 text:'',
                 tooltip: 'Term Notes',
@@ -83,34 +85,32 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                   }
             }],
             columns: [{
-                text: 'Title',
                 dataIndex: 'title',
                 xtype: 'gridcolumn',
-				width:80
+				hidden: true,
+				hideable: false
             }, 
 			{
-				text: 'Course',
                 dataIndex: 'formattedCourse',
                 xtype: 'gridcolumn',
-				width:100
+				width:145
             },
 			{
                 dataIndex: 'description',
                 xtype: 'gridcolumn',
 				hidden: true,
-				hideable:false
+				hideable: false
             },
             {
-                text: '',
                 dataIndex: 'maxCreditHours',
                 xtype: 'gridcolumn',
 				hidden: true,
 				hideable:false
             }, 
 			{
-                text: 'Credit Hrs',
                 dataIndex: 'minCreditHours',
                 xtype: 'gridcolumn',
+				width:25
             },
 			{
                 dataIndex: 'code',
@@ -127,12 +127,16 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 			
             {
                 xtype: 'actioncolumn',
-                width: 65,
+                width: 45,
                 items: [{
                     icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
                     tooltip: 'Edit planItem',
                     handler: function(grid, rowIndex, colIndex){
-                        //goto CourseNotes.js
+                    	var minCreditHours =  grid.getStore().getAt(rowIndex).get('minCreditHours');
+                    	var coursePlanDetails = Ext.create('Ssp.view.tools.map.CourseNotes');
+                    	coursePlanDetails.query('#creditHours')[0].setValue(minCreditHours);
+						coursePlanDetails.center();
+                        coursePlanDetails.show();
                     },
                     
                     scope: me
