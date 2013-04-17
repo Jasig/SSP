@@ -578,6 +578,12 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+					currentMapPlan: {
+				        fn: function(){
+				            return new Ssp.model.tool.map.Plan({id:""});
+				        },
+				        singleton: true
+				    },			        
 			        currentTask:{
 				        fn: function(){
 				            return new Ssp.model.tool.actionplan.Task({id:""});
@@ -845,6 +851,7 @@ Ext.onReady(function(){
 			    	peopleStore: 'Ssp.store.People',
 			    	personalityTypesStore: 'Ssp.store.reference.PersonalityTypes',
 			    	placementStore: 'Ssp.store.Placement',
+			    	planStore: 'Ssp.store.Plan',
 			    	programStatusesStore: 'Ssp.store.reference.ProgramStatuses',
 			    	programStatusChangeReasonsStore: 'Ssp.store.reference.ProgramStatusChangeReasons',
 				    referralSourcesStore: 'Ssp.store.reference.ReferralSources',

@@ -26,6 +26,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		formUtils: 'formRendererUtils',
 		person: 'currentPerson',
         personLite: 'personLite',
+    	currentMapPlan: 'currentMapPlan'
     },
     
 	control: {
@@ -42,7 +43,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var me=this;
 		var id = me.personLite.get('id');
 	    me.resetForm();
-
+		if(me.termsStore.getTotalCount() == 0)
+			me.termsStore.load();
+		
 		me.appEventsController.assignEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
@@ -85,13 +88,13 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 
     getMapPlanServiceSuccess: function(serviceResponses) {
         var me = this;
-        var mapResponse = serviceResponses.successes.map.rows;
-		if(mapResponse == null || mapResponse.length == 0)
+        var mapResponse = serviceResponses.successes.map;
+		if(mapResponse == null)
 			me.getMapPlanServiceFailure();
        	 else{
-			/****TODO  Create and pass in a MapPlan here *****/
-			var mapPlan = Ext.create('Ssp.model.Plan');
-			me.onCreateMapPlan(mapPlan);
+			me.currentMapPlan.populateFromGenericObject(Ext.decode(mapResponse.responseText));
+			me.onCreateMapPlan();
+			me.populateTermStores();
 		}
     },
 
@@ -137,9 +140,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				stores[term.get('code')] = new Ssp.store.SemesterCourses();
 			});
 		} else {
-			terms = me.termsStore.getTermsFromTermCodes(me.mapPlan.getTermCodes());
+			terms = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(mapPlan));
 			terms.forEach(function(term){
-				stores[term.get('code')] = me.mapPlan.getStoreFromTermCode(term.get('code'));
+				stores[term.get('code')] = new Ssp.store.SemesterCourses();
 			});	
 		}
 		termsStores = new Object();
@@ -150,11 +153,26 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	onCreateNewMapPlan:function(){
 		var me = this;
-		me.onCreateMapPlan(null);
+		me.onCreateMapPlan();
 	},
-
+	populatePlanStores:function(){
+		var me = this;
+		var planCourses = me.currentMapPlan.get('planCourses');
+		planCourses.forEach(function(planCourse){
+			var termStore = me.semesterStores[planCourse.termCode];
+			var semesterCourse = new Ssp.model.tool.map.SemesterCourse();
+			semesterCourse.set('title',planCourse.courseTitle);
+			semesterCourse.set('code', planCourse.courseCode);
+			semesterCourse.set('formattedCourse', planCourse.formattedCourse);
+			semesterCourse.set('description', planCourse.courseDescription);
+			semesterCourse.set('minCreditHours', planCourse.creditHours);
+			semesterCourse.set('termCode', planCourse.termCode);
+			semesterCourse.set('isDev',  planCourse.isDev);
+			termStore.add(semesterCourse);
+		}) 
+	},
 	
-	onCreateMapPlan:function(mapPlan){
+	onCreateMapPlan:function(){
 		var me = this;
 		var view  = me.getView().getComponent("semestersets");
 		if(view == null){
@@ -162,7 +180,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		}
 		view.removeAll(true);
 		
-		var termsAndStores = me.getTermsAndStores(mapPlan);
+		var termsAndStores = me.getTermsAndStores(me.currentMapPlan);
 		var terms = termsAndStores.terms;
 		me.semesterStores = termsAndStores.stores;
 		

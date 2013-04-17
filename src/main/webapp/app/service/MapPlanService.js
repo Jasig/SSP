@@ -37,24 +37,32 @@ Ext.define('Ssp.service.MapPlanService', {
 		var me=this;
 		var url = me.getBaseUrl(personId);
 	    var success = function( response, view ){
-	    	var r = Ext.decode(response.responseText);
-    		callbacks.success( r, callbacks.scope );
+			callbacks.success( response, callbacks.scope );
 	    };
-
 	    var failure = function( response ){
 	    	me.apiProperties.handleError( response );	    	
 	    	callbacks.failure( response, callbacks.scope );
 	    };
 	    
 		me.apiProperties.makeRequest({
-			url: url, //+'/'+personId,
+			url: url+'/current', 
 			method: 'GET',
 			successFunc: success,
 			failureFunc: failure,
 			scope: me
 		});    	
     },
-    
+	  
+    getTermCodes: function(mapPlan){ 
+    			    var termCodes = [];
+    			    var i = 0;
+    		    	var planCourses = mapPlan.get('planCourses');
+    		    	planCourses.forEach(function(planCourse){
+    		    		if(termCodes.indexOf(planCourse.termCode) < 0)
+    		    			termCodes[i++] = planCourse.termCode;
+    		    	})
+    		    	return termCodes;
+    		    	}  ,  
     save: function( personId, jsonData, callbacks ){
 		var me=this;
 		var url = me.getBaseUrl(personId);

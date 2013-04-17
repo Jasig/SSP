@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.PlanCourse', {
+Ext.define('Ssp.model.tool.map.PlanCourse', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'termCode',type:'string'},
              {name:'courseCode',type:'string'},
@@ -24,5 +24,6 @@ Ext.define('Ssp.model.PlanCourse', {
              {name:'courseTitle',type:'string'},
              {name:'courseDescription',type:'string'},
              {name:'creditHours', type:'int'},
-             {name:'orderInTerm',type:'int'}]
+             {name:'orderInTerm',type:'int'},
+             {name:'isDev',type:'boolean'}]
 });

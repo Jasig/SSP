@@ -16,12 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.Plan', {
+Ext.define('Ssp.model.tool.map.Plan', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'name',type:'string'},
              {name:'ownerId',type:'string'},
-             {name:'personId', type:'string'}].
-    hasMany: {model: 'Ssp.model.PlanCourse',
+             {name:'personId', type:'string'},
+             {name:'planCourses',
+       		  type:'auto',
+       		  convert: function(data,model)
+	       		  {
+	       			  data = (data && !Ext.isArray(data) ) ? [data] : data;
+	       			  return data;
+	       		  }
+              }             
+             ],
+    hasMany: {model: 'Ssp.model.tool.map.PlanCourse',
     		  name: 'planCourses',
     		  associationKey: 'planCourses'}
+    		        		  
 });
