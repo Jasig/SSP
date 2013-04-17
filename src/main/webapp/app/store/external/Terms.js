@@ -47,24 +47,40 @@ Ext.define('Ssp.store.external.Terms', {
     	var store = Ext.create('Ext.data.Store', {
 		     	model: "Ssp.model.external.Term",
 		     });
-    	store.loadData(me.getCurrentAndFutureTerms())
+    	store.loadData(me.getCurrentAndFutureTerms());
     	return store;
     },
 
-	getTermsFromTermCodes: function(termCodes){
+	getTermsFromTermCodesStore: function(termCodes){
 		var me = this;
 		var terms = [];
 		termCodes.forEach(function(termCode){
 			var index = me.find( 'code', termCode);
 			terms.push(me.getAt(index));
 		});
-		return terms;
+		var store = Ext.create('Ext.data.Store', {
+		     	model: "Ssp.model.external.Term",
+		     });
+    	store.loadData(terms);
+		store.sort('startDate', 'DESC');
+		return store;
+	},
+
+	getTermsFromTermCodes: function(termCodes){
+		var me = this;
+		return me.getTermsFromTermCodesStore(termCodes).getRange(0);
 	},
     
-    getCurrentAndFutureTerms: function(){
+    getCurrentAndFutureTerms: function(maximum){
     	var me = this;
-		var currentTermIndex = me.findBy(me.isCurrentTerm)
-    	return me.getRange(0, currentTermIndex);
+		var startIndex = 0
+		var currentTermIndex = me.findBy(me.isCurrentTerm);
+		if(maximum){
+			var startReportYear = me.getAt(currentTermIndex).get("reportYear");
+			startReportYear + 5;
+			startIndex = me.find('reportYear', startReportYear);
+		}
+    	return me.getRange(startIndex, currentTermIndex);
     },
     
     getFutureTerms: function(){

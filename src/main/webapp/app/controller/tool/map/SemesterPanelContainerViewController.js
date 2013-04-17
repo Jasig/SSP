@@ -34,7 +34,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				afterlayout: {
 					fn: 'onAfterLayout',
 					single: true
-				}
+				},
 	    	},
 	},
 
@@ -95,6 +95,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			me.currentMapPlan.populateFromGenericObject(Ext.decode(mapResponse.responseText));
 			me.onCreateMapPlan();
 			me.populatePlanStores();
+			me.updateAllPlanHours();
 		}
     },
 
@@ -130,25 +131,23 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		 
 	},
 	
-	getTermsAndStores: function(mapPlan){
+	getTerms: function(mapPlan){
 		var me = this;
 		var terms;
-		var stores = [];
+		me.semesterStores = [];
 		if(mapPlan == null){
-			terms = me.termsStore.getCurrentAndFutureTerms();
-			terms.forEach(function(term){
-				stores[term.get('code')] = new Ssp.store.SemesterCourses();
-			});
+			terms = me.termsStore.getCurrentAndFutureTerms(5);
 		} else {
 			terms = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(mapPlan));
-			terms.forEach(function(term){
-				stores[term.get('code')] = new Ssp.store.SemesterCourses();
-			});	
 		}
-		termsStores = new Object();
-		termsStores.terms = terms;
-		termsStores.stores = stores;
-		return termsStores;
+		return terms;
+	},
+	
+	fillSemesterStores: function(terms){
+		var me = this;
+		terms.forEach(function(term){
+			me.semesterStores[term.get('code')] = new Ssp.store.SemesterCourses();
+		});
 	},
 	
 	onCreateNewMapPlan:function(){
@@ -180,31 +179,24 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		}
 		view.removeAll(true);
 		
-		var termsAndStores = me.getTermsAndStores(me.currentMapPlan);
-		var terms = termsAndStores.terms;
-		me.semesterStores = termsAndStores.stores;
+		var terms = me.getTerms(me.currentMapPlan);
 		
 		if(terms.length == 0){
-			return me.callParent(arguments);
+			return;
 		}
-		var startYear =  terms[0].get("reportYear");
-		var endYear = startYear + 5;
-		var currentYear = startYear;
+		
+		me.fillSemesterStores(terms);
+
 		var termsets = [];
-		termsets[startYear] = [];
-		i = k = 0;
 		terms.reverse().forEach(function(term){
 			if(termsets.hasOwnProperty(term.get("reportYear"))){
 				termsets[term.get("reportYear")][termsets[term.get("reportYear")].length] = term;
-			}else if(term.get("reportYear") > endYear){
-				return termsets;
 			}else{
-				k = 0;
 				termsets[term.get("reportYear")]=[];
 				termsets[term.get("reportYear")][0] = term;
 			};
 		});
-		var panels = [];
+
 		termsets.forEach(function(termSet){
 			var yearView = view.add(new Ext.form.FieldSet({
 				xtype : 'fieldset',
@@ -222,11 +214,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			termSet.forEach(function(term){
 				var termCode = term.get('code');
 				var panelName = term.get("name");
-				me.semesterStores;
 				yearView.add(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode]));
 			});
 		});
-		me.updateAllPlanHours();
 		me.getView().setLoading(false);
     },
 	
