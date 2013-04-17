@@ -94,7 +94,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
        	 else{
 			me.currentMapPlan.populateFromGenericObject(Ext.decode(mapResponse.responseText));
 			me.onCreateMapPlan();
-			me.populateTermStores();
+			me.populatePlanStores();
 		}
     },
 

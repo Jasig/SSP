@@ -20,6 +20,7 @@ package org.jasig.ssp.dao;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Collection;
 import java.util.UUID;
 
 import org.hibernate.Session;
@@ -28,9 +29,13 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.PlanService;
+import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,17 +50,13 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
-
-// many (most?) other DAO tests commit by default... here we're just testing
-// reads, so we know that any fixture setup needs to be rolled back
-@TransactionConfiguration(defaultRollback = true)
-
+@TransactionConfiguration(defaultRollback = false)
 @Transactional
 public class PlanDaoTest {
 
 	@Autowired
 	private transient PlanDao dao;
-	 
+	  
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
 
@@ -64,6 +65,14 @@ public class PlanDaoTest {
 	
 	@Autowired
 	protected transient SessionFactory sessionFactory;
+	
+	@Autowired
+	private 
+	transient TermService termService;
+	
+	@Autowired
+	private 
+	transient PlanService planService;
 
 	/**
 	 * Setup the security service for the tests
@@ -126,10 +135,53 @@ public class PlanDaoTest {
 	}	
 
 	@Test
-	public void testPlanDaoSaveWithChildren() throws ObjectNotFoundException {
-		// test student = ken thompson
+	public void testPlanDaoSaveWithChildren() throws ObjectNotFoundException, CloneNotSupportedException {
+		// test student = james gosling
 		final Person person = personService.get(UUID
-				.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea"));
+				.fromString("1010e4a0-1001-0110-1011-4ffc02fe81ff"));
+		
+		Plan plan = new Plan();
+		plan.setPerson(person);
+		plan.setName("TestPlan");
+		plan.setOwner(person);
+		plan.setObjectStatus(ObjectStatus.ACTIVE);
+		
+		Collection<Term> all = getTermService().getAll(null).getRows();
+		for (Term term : all) {
+			
+			for(int i = 1; i < 6; i++)
+			{
+				
+				PlanCourse course = new PlanCourse();
+				course.setCourseCode("MAT-"+i);
+				course.setCourseDescription("TEST"+i);
+				course.setCourseTitle("TEST"+i);
+				course.setFormattedCourse("TEST"+i);
+				course.setOrderInTerm(new Integer(i));
+				course.setIsDev(false);
+				course.setCreatedBy(person);
+				course.setPlan(plan);
+				course.setPerson(person);
+				course.setCreditHours(3);
+				course.setTermCode(term.getCode());
+				plan.getPlanCourses().add(course);
+			}
+		}
+		
+
+		
+		
+		dao.save(plan);
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+		
+		
+	}	
+	@Test
+	public void testPlanDaoSaveAndCloneWithChildren2() throws ObjectNotFoundException, CloneNotSupportedException {
+		// test student = james gosling
+		final Person person = personService.get(UUID
+				.fromString("1010e4a0-1001-0110-1011-4ffc02fe81ff"));
 		
 		Plan plan = new Plan();
 		plan.setPerson(person);
@@ -142,13 +194,15 @@ public class PlanDaoTest {
 		course.setCourseDescription("TEST");
 		course.setCourseTitle("TEST");
 		course.setFormattedCourse("TEST");
-		course.setOrderInTerm(new Integer(1));
+		course.setOrderInTerm(1);
+		course.setTermCode("SP13");
 		course.setIsDev(true);
-		course.setOrderInTerm(new Integer(1));
+		course.setOrderInTerm(1);
 		course.setCreatedBy(person);
 		course.setPlan(plan);
 		course.setPerson(person);
-		course.setCreditHours(3);
+		course.setCreditHours(4);
+		
 		plan.getPlanCourses().add(course);
 		
 		dao.save(plan);
@@ -156,7 +210,7 @@ public class PlanDaoTest {
 		final Session session = sessionFactory.getCurrentSession();
 		session.flush();
 		
-		Plan loadedPlan = dao.load(plan.getId());
+		Plan loadedPlan = dao.load(plan.getId()).clone();
 		assertEquals(loadedPlan.getPlanCourses().size(), 1);
 		PlanCourse planCourse = loadedPlan.getPlanCourses().get(0);
 		assertEquals(planCourse.getCourseCode(),"MAT");
@@ -167,8 +221,8 @@ public class PlanDaoTest {
 		assertEquals(planCourse.getOrderInTerm(), new Integer(1));
 		assertEquals(planCourse.getOrderInTerm(), new Integer(1));
 		
-	}	
-
+	}
+	
 	@Test
 	public void testPlanDaoSaveAndCloneWithChildren() throws ObjectNotFoundException, CloneNotSupportedException {
 		// test student = ken thompson
@@ -257,5 +311,21 @@ public class PlanDaoTest {
 		
 		
 		
+	}
+
+	public TermService getTermService() {
+		return termService;
+	}
+
+	public void setTermService(TermService termService) {
+		this.termService = termService;
+	}
+
+	public PlanService getPlanService() {
+		return planService;
+	}
+
+	public void setPlanService(PlanService planService) {
+		this.planService = planService;
 	}
 }
