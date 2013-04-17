@@ -64,54 +64,6 @@ public class ElectiveController
 	protected ElectiveController() {
 		super(Elective.class, ElectiveTO.class);
 	}
-
-	/**
-	 * Retrieve every instance in the database filtered by the supplied status.
-	 * 
-	 * @param status
-	 *            Filter by this status.
-	 * @param start
-	 *            First result (0-based index) to return. Parameter must be a
-	 *            positive, non-zero integer. Often comes from client as a
-	 *            parameter labeled <code>start</code>. A null value indicates
-	 *            to return rows starting from index 0.
-	 * @param limit
-	 *            Maximum number of results to return. Parameter must be a
-	 *            positive, non-zero integer. Often comes from client as a
-	 *            parameter labeled <code>limit</code>. A null value indicates
-	 *            return all rows from the start parameter to the end of the
-	 *            data.
-	 * @param sort
-	 *            Property name. If null or empty string, the default sort will
-	 *            be used. If non-empty, must be a case-sensitive model property
-	 *            name. Often comes from client as a parameter labeled
-	 *            <code>sort</code>. Example sort expression:
-	 *            <code>propertyName</code>
-	 * @param sortDirection
-	 *            Ascending/descending keyword. If null or empty string, the
-	 *            default sort will be used. Must be <code>ASC</code> or
-	 *            <code>DESC</code>.
-	 * @return All entities in the database filtered by the supplied status.
-	 */
-	@RequestMapping(method = RequestMethod.GET)
-	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
-	public @ResponseBody
-	PagedResponse<ElectiveTO> getAll(
-			final @RequestParam(required = false) ObjectStatus status,
-			final @RequestParam(required = false) Integer start,
-			final @RequestParam(required = false) Integer limit,
-			final @RequestParam(required = false) String sort,
-			final @RequestParam(required = false) String sortDirection) {
-
-		// Run getAll
-		final PagingWrapper<Elective> data = getService().getAll(
-				SortingAndPaging.createForSingleSortWithPaging(
-						status == null ? ObjectStatus.ALL : status, start,
-						limit, sort, sortDirection, "name"));
-
-		return new PagedResponse<ElectiveTO>(true, data.getResults(), getFactory()
-				.asTOList(data.getRows()));
-	}
 	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ElectiveController.class);

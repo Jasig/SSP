@@ -454,6 +454,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     								text: 'Elective Types',
     								title: 'Elective Types',
     								store: 'elective',
+    								storeLoadOptions: { params: { status: 'ACTIVE' } },
 	    							form: 'AbstractReferenceAdmin',
 	    							leaf: true,
 	    							columns: [
