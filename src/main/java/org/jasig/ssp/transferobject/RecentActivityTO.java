@@ -13,7 +13,7 @@ public class RecentActivityTO {
 	public static class RecentActivityTOActivityDateComparator implements Comparator<RecentActivityTO> {
 		 @Override
 		    public int compare(RecentActivityTO o1, RecentActivityTO o2) {
-		        return o1.getActivityDate().compareTo(o2.getActivityDate());
+		        return o2.getActivityDate().compareTo(o1.getActivityDate());
 		    }
 
 	}

@@ -25,7 +25,8 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
         person: 'currentPerson',
         personLite: 'personLite',
         personService: 'personService',
-        activityService: 'transcriptService',
+        studentActivityService: 'studentActivityService',
+        studentActivitiesStore: 'studentActivitiesStore',
         sspConfig: 'sspConfig'
     },
     
@@ -56,10 +57,11 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 				failure: me.getPersonFailure,
 				scope: me
 			});
-			me.activityService.getRecentStudentActivity( id, {
-				success: me.getTranscriptSuccess,
-				failure: me.getTranscriptFailure,
-				scope: me			
+			me.studentActivitiesStore.removeAll();
+			me.studentActivityService.getAll( id, {
+				success: me.getStudentActivitySuccess,
+				failure: me.getStudentActivitySuccess,
+				scope: me
 			});
 		}
 		
@@ -68,9 +70,8 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
     
     getPersonSuccess: function( r, scope ){
     	var me=scope;
-		
-		
-		var coachNameField = me.getCoachNameField();
+
+    	var coachNameField = me.getCoachNameField();
 		var coachWorkPhoneField = me.getCoachWorkPhoneField();
 		var coachDepartmentNameField = me.getCoachDepartmentNameField();
 		var coachOfficeLocationField = me.getCoachOfficeLocationField();
@@ -103,24 +104,25 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
     	me.getView().setLoading( false );
     },
     
-    getTranscriptSuccess: function( r, scope ){
+    getStudentActivitySuccess: function( r, scope ){
     	var me=scope;
-    	var coachLastServiceDateField = me.getCoachLastServiceDateField();
-		var coachLastServiceProvidedField = me.getCoachLastServiceProvidedField();
+    	var serviceDate = me.getCoachLastServiceDateField();
+		var lastService = me.getCoachLastServiceProvidedField();
 		
-        Ext.Array.each(r, function(recentStudentActivityRaw) {
-        	if(recentStudentActivityRaw.coachId ===  me.person.getCoachId() ){
-        		var recentStudentActivity = Ext.create('Ssp.model.RecentStudentActivity', recentStudentActivityRaw);    
-        		coachLastServiceDateField.setValue(recentStudentActivity.getFormattedRecentActivityDate(recentStudentActivityRaw.activityDate));
-        		coachLastServiceProvidedField.setValue(recentStudentActivityRaw.activity);
-        		return;
-        	}
-                
-        });
+		
+		me.studentActivitiesStore.loadData(r);
+		var activity = me.studentActivitiesStore.getCoachLastActivity(me.person.getCoachId());
+		if(activity){
+			serviceDate.setValue(activity.get('activityDateFormatted'));
+			lastService.setValue(activity.get('activity'));
+		}else{
+			serviceDate.setValue("");
+			lastService.setValue("No Record Found");
+		}
         me.getView().setLoading( false );
     },
     
-    getTranscriptFailure: function( response, scope ){
+    getStudentActivityFailure: function( response, scope ){
     	var me=scope;
     	me.getView().setLoading( false );  	
     }

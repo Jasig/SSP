@@ -16,20 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.RecentStudentActivity', {
+Ext.define('Ssp.model.StudentActivity', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name: 'activity', type: 'string'},
         {name: 'coachName', type: 'string'},
         {name: 'coachId', type: 'string'},
         {name: 'activityDateFormatted', type: 'string'},
         {name: 'activityDate', type: 'date', dateFormat: 'time'}],
-        
-      getFormattedRecentActivityDate: function(){
-        	return Ext.util.Format.date( this.get('activityDate'),'m/d/Y');
-       },
-
-	   setActivityDateFormatted: function(formattedDate){
-        	this.data.activityDateFormatted = formattedDate;
-       }
-
+      
+        constructor: function(){
+        	this.callParent(arguments);
+        	this.data.activityDateFormatted = Ext.util.Format.date( this.get('activityDate'),'m/d/Y');
+        }
 });

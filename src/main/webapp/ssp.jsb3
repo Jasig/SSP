@@ -709,6 +709,11 @@
                     "path": "/app/service/"
                 },
                 {
+                    "clsName": "Ssp.service.StudentActivityService",
+                    "name": "StudentActivityService.js",
+                    "path": "/app/service/"
+                },
+                {
                     "clsName": "Ssp.service.AccommodationService",
                     "name": "AccommodationService.js",
                     "path": "/app/service/"
@@ -809,13 +814,8 @@
                     "path": "/app/controller/tool/profile/"
                 },
             	{
-                    "clsName": "Ssp.model.RecentStudentActivity",
-                    "name": "RecentStudentActivity.js",
-                    "path": "/app/model/"
-                },
-				{
-                    "clsName": "Ssp.model.RecentStudentActivity",
-                    "name": "RecentStudentActivity.js",
+                    "clsName": "Ssp.model.StudentActivity",
+                    "name": "StudentActivity.js",
                     "path": "/app/model/"
                 },
                 {
@@ -968,6 +968,11 @@
                     "clsName": "Ssp.store.external.Courses",
                     "name": "Courses.js",
                     "path": "/app/store/external/"
+                },
+                {
+                    "clsName": "Ssp.store.StudentActivities",
+                    "name": "StudentActivities.js",
+                    "path": "/app/store/"
                 },
                 {
                     "clsName": "Ssp.controller.tool.studentintake.StudentIntakeToolViewController",

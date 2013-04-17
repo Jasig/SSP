@@ -284,14 +284,15 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	}
 	
 	
-	@RequestMapping(value = "/transcript/recentstudentactivity", method = RequestMethod.GET)
+	@RequestMapping(value = "/studentactivity", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
 	List<RecentActivityTO> loadRecentStudentActivity(final @PathVariable UUID id)
 			throws ObjectNotFoundException {
 		List<RecentActivityTO> recentActivities = new ArrayList<RecentActivityTO>();
 		Person person = personService.get(id);
-		SortingAndPaging sAndP = SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ACTIVE, 0, 20, "createdDate", "DESC", "createdDate");
+		UUID coachId = person.getCoach().getId();
+		SortingAndPaging sAndP = SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ACTIVE, 0, 1000, "createdDate", "DESC", "createdDate");
 		PagingWrapper<EarlyAlert> earlyAlerts = earlyAlertService.getAllForPerson(person, sAndP);
 		SspUser currentUser = securityService.currentUser();
 		List<EarlyAlertTO> earlyAlertTOs = earlyAlertTOFactory.asTOList(earlyAlerts.getRows());
@@ -352,10 +353,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 					person.getStudentIntakeRequestDate()));
 		}
 			
-		Collections.sort(recentActivities, RecentActivityTO.RECENT_ACTIVITY_TO_DATE_COMPARATOR);
-		if(recentActivities.size() > 20)
-			recentActivities = recentActivities.subList(0, 20);
-		
+		Collections.sort(recentActivities, RecentActivityTO.RECENT_ACTIVITY_TO_DATE_COMPARATOR);	
 		return recentActivities;
 	}
 	

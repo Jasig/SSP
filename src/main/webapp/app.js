@@ -208,7 +208,7 @@ Ext.require([
 	'Ssp.model.PersonProgramStatus',
 	'Ssp.model.CourseTranscript',
 	'Ssp.model.TermTranscript',
-	'Ssp.model.RecentStudentActivity',
+	'Ssp.model.StudentActivity',
 	'Ssp.model.Transcript',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
@@ -251,6 +251,7 @@ Ext.require([
 	'Ssp.store.Coaches',
 	'Ssp.store.Caseload',
     'Ssp.store.Tasks',
+    'Ssp.store.StudentActivities',
     'Ssp.store.Goals',
     'Ssp.store.SelfHelpGuides',
     'Ssp.store.SelfHelpGuideQuestions',
@@ -407,6 +408,7 @@ var apiUrls = [
   {name: 'personJournalEntry', url: 'person/{id}/journalEntry'},
   {name: 'personTask', url: 'person/{id}/task'},
   {name: 'personTaskGroup', url: 'person/{id}/task/group'},
+  {name: 'studentActivities', url: 'person/{id}/studentactivity'},
   {name: 'personalityType', url: 'reference/personalityType'},
   {name: 'personTranscript', url: 'person/{id}/transcript'},
   {name: 'personEmailTask', url: 'person/{id}/task/email'},
@@ -698,14 +700,6 @@ Ext.onReady(function(){
 						},
 						singleton: true
 					},
-					recentStudentActivitiesStore: {
-						fn: function(){
-							return Ext.create('Ext.data.Store',{
-								model: 'Ssp.model.RecentStudentActivity'
-							});
-						},
-						singleton: true
-					},
 			        treeStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.TreeStore',{
@@ -871,6 +865,7 @@ Ext.onReady(function(){
 				    termsStore:'Ssp.store.external.Terms',
 					coursesStore:'Ssp.store.external.Courses',
 				    tasksStore: 'Ssp.store.Tasks',
+				    studentActivitiesStore: 'Ssp.store.StudentActivities',
 				    toolsStore: 'Ssp.store.Tools',
 			    	veteranStatusesStore: 'Ssp.store.reference.VeteranStatuses',
 			        yesNoStore: 'Ssp.store.reference.YesNo',
@@ -896,7 +891,8 @@ Ext.onReady(function(){
 			        specialServiceGroupService: 'Ssp.service.SpecialServiceGroupService',
 			        studentIntakeService: 'Ssp.service.StudentIntakeService',
 			        transcriptService: 'Ssp.service.TranscriptService',
-			        mapPlanService: 'Ssp.service.MapPlanService'
+			        mapPlanService: 'Ssp.service.MapPlanService',
+			        studentActivityService: 'Ssp.service.StudentActivityService'
 				});
 				
 				Ext.application({
