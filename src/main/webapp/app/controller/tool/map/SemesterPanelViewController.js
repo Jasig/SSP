@@ -24,6 +24,4 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	
 		return me.callParent(arguments);
     },
-    
-    
 });

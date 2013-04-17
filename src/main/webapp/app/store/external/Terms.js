@@ -16,231 +16,68 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
-    extend: 'Deft.mvc.ViewController',
+Ext.define('Ssp.store.external.Terms', {
+	extend: 'Ssp.store.reference.AbstractReferences',
+	model: 'Ssp.model.external.Term',
+	remoteSort: true,
     mixins: [ 'Deft.mixin.Injectable' ],
-    inject:{
-		appEventsController: 'appEventsController',
-    	termsStore:'termsStore',
-    	mapPlanService:'mapPlanService',
-		formUtils: 'formRendererUtils',
-		person: 'currentPerson',
-        personLite: 'personLite',
+    inject: {
+    	apiProperties: 'apiProperties'
+    },
+   
+    constructor: function(){
+		var me = this;
+		me.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('terms'),
+    		autoLoad: true});
+    	return; 
     },
     
-	control: {
-	    	view: {
-				afterlayout: {
-					fn: 'onAfterLayout',
-					single: true
-				}
-	    	},
-	},
-
-	semesterStores: [],
-	init: function() {
-		var me=this;
-		var id = me.personLite.get('id');
-	    me.resetForm();
-
-		me.appEventsController.assignEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
-		me.termsStore.addListener("load", me.onCreateNewMapPlan, me);
-		return me.callParent(arguments);
+    getCurrentAndFutureTermsStore: function(){
+		var me = this;
+    	var store = Ext.create('Ext.data.Store', {
+		     	model: "Ssp.model.external.Term",
+		     });
+    	store.loadData(me.getCurrentAndFutureTerms())
+    	return store;
     },
-    resetForm: function() {
-        var me = this;
-        me.getView().getForm().reset();
+
+    getFutureTermsStore: function(){
+		var me = this;
+    	var store = Ext.create('Ext.data.Store', {
+		     	model: "Ssp.model.external.Term",
+		     });
+    	store.loadData(me.getCurrentAndFutureTerms())
+    	return store;
+    },
+
+	getTermsFromTermCodes: function(termCodes){
+		var me = this;
+		var terms = [];
+		termCodes.forEach(function(termCode){
+			var index = me.find( 'code', termCode);
+			terms.push(me.getAt(index));
+		});
+		return terms;
+	},
+    
+    getCurrentAndFutureTerms: function(){
+    	var me = this;
+		var currentTermIndex = me.findBy(me.isCurrentTerm)
+    	return me.getRange(0, currentTermIndex);
     },
     
-    newServiceSuccessHandler: function(name, callback, serviceResponses) {
-        var me = this;
-        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response) {
-            serviceResponses.successes[name] = response;
-        });
+    getFutureTerms: function(){
+    	var me = this;
+    	var currentTermIndex = me.findBy(me.isCurrentTerm) - 1;
+    	return me.getRange(0, currentTermIndex);
     },
-
-    newServiceFailureHandler: function(name, callback, serviceResponses) {
-        var me = this;
-        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response) {
-            serviceResponses.failures[name] = response;
-        });
+    
+    isCurrentTerm: function(record, id){
+    	var me = this;
+    	if(record.get('startDate').getTime() >= (new Date()).getTime())
+    		return false;
+    	return true;
     },
-
-    newServiceHandler: function(name, callback, serviceResponses, serviceResponsesCallback) {
-        return function(r, scope) {
-            var me = scope;
-            serviceResponses.responseCnt++;
-            if ( serviceResponsesCallback ) {
-                serviceResponsesCallback.apply(me, [name, serviceResponses, r]);
-            }
-            if ( callback ) {
-                callback.apply(me, [ serviceResponses ]);
-            }
-            me.afterServiceHandler(serviceResponses);
-        };
-    },
-
-    getMapPlanServiceSuccess: function(serviceResponses) {
-        var me = this;
-        var mapResponse = serviceResponses.successes.map.rows;
-		if(mapResponse == null || mapResponse.length == 0)
-			me.getMapPlanServiceFailure();
-       	 else{
-			/****TODO  Create and pass in a MapPlan here *****/
-			var mapPlan = Ext.create('Ssp.model.Plan');
-			me.onCreateMapPlan(mapPlan);
-		}
-    },
-
-    getMapPlanServiceFailure: function() {
-		var me = this;
-		if(me.termsStore.getTotalCount() == 0)
-			me.termsStore.load();
-		else{
-			me.onCreateMapPlan();
-		}
-    },
- 
-	onAfterLayout: function(){
-		var me = this;
-		console.log('onAfterLayout');
-		me.getView().setLoading(true);
-		var id = me.personLite.get('id');
-	    
-	    if (id != "") {
-			me.getView().setLoading(true);
-			var serviceResponses = {
-                failures: {},
-                successes: {},
-                responseCnt: 0,
-                expectedResponseCnt: 1
-            }
-	    	 me.mapPlanService.get(id, {
-	             success: me.newServiceSuccessHandler('map', me.getMapPlanServiceSuccess, serviceResponses),
-	             failure: me.newServiceFailureHandler('map', me.getMapPlanServiceFailure, serviceResponses),
-	             scope: me
-	         });
-	    }
-		 
-	},
-	
-	getTermsAndStores: function(mapPlan){
-		var me = this;
-		var terms;
-		var stores = [];
-		if(mapPlan == null){
-			terms = me.termsStore.getCurrentAndFutureTerms();
-			terms.forEach(function(term){
-				stores[term.get('code')] = new Ssp.store.SemesterCourses();
-			});
-		} else {
-			terms = me.termsStore.getTermsFromTermCodes(mapPlan.getTermCodes());
-			terms.forEach(function(term){
-				stores[term.get('code')] = mapPlan.getStoreFromTermCode(term.get('code'));
-			});	
-		}
-		termsStores = new Object();
-		termsStores.terms = terms;
-		termsStores.stores = stores;
-		return termsStores;
-	},
-	
-	onCreateNewMapPlan:function(){
-		var me = this;
-		me.onCreateMapPlan(null);
-	},
-
-	
-	onCreateMapPlan:function(mapPlan){
-		var me = this;
-		var view  = me.getView().getComponent("semestersets");
-		if(view == null){
-			return;
-		}
-		view.removeAll(true);
-		Ext.getCmp('currentTotalPlanCrHrs').setValue(0);
-		Ext.getCmp('currentPlanTotalDevCrHrs').setValue(0);
-		
-		var termsAndStores = me.getTermsAndStores(mapPlan);
-		var terms = termsAndStores.terms;
-		me.semesterStores = termsAndStores.stores;
-		
-		if(terms.length == 0){
-			return me.callParent(arguments);
-		}
-		var startYear =  terms[0].get("reportYear");
-		var endYear = startYear + 5;
-		var currentYear = startYear;
-		var termsets = [];
-		termsets[startYear] = [];
-		i = k = 0;
-		terms.reverse().forEach(function(term){
-			if(termsets.hasOwnProperty(term.get("reportYear"))){
-				termsets[term.get("reportYear")][termsets[term.get("reportYear")].length] = term;
-			}else if(term.get("reportYear") > endYear){
-				return termsets;
-			}else{
-				k = 0;
-				termsets[term.get("reportYear")]=[];
-				termsets[term.get("reportYear")][0] = term;
-			};
-		});
-		termsets.forEach(function(termSet){
-			var yearView = view.add(new Ext.form.FieldSet({
-				xtype : 'fieldset',
-				border: 0,
-				title : '',
-				padding : '2 2 2 2',
-				margin : '0 0 0 0',
-				layout : 'hbox',
-				autoScroll : true,
-				minHeight: 262,
-				itemId : 'year' + termSet[0].get("reportYear"),
-				flex : 1,
-			}));
-		
-			termSet.forEach(function(term){
-				var termCode = term.get('code');
-				var panelName = term.get("name");
-				me.semesterStores;
-				yearView.add(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode]));
-			});
-		});
-		me.getView().setLoading(false);
-    },
-	
-	createSemesterPanel: function(semesterName, termCode, semesterStore){
-		var me = this;
-		return new Ssp.view.tools.map.SemesterPanel({
-			title:semesterName,
-			itemId:termCode,
-			store: semesterStore
-		});
-	},
-	
-	afterServiceHandler: function(serviceResponses) {
-        var me = this;
-        if ( serviceResponses.responseCnt >= serviceResponses.expectedResponseCnt ) {
-            //me.getView().setLoading(false);
-        }
-    },
-
-	onSaveMapPlan: function(){
-		var me = this;
-		mapPlanService.save(me.personLite.get('id'), me.semesterStores, me.onSaveComplete);
-	},
-	
-	onSaveComplete: function(){
-		var me = this;
-		me.getView().setLoading(false);
-	},
-
-	destroy: function() {
-        var me=this;
-		me.termsStore.removeListener("load", me.onCreateNewMapPlan, me);
-		me.appEventsController.removeEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
-        me.appEventsController.removeEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
-        return me.callParent( arguments );
-    },
+    
 });

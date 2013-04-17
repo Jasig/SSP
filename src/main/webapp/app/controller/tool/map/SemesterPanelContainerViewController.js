@@ -45,6 +45,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 
 		me.appEventsController.assignEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
+		me.appEventsController.assignEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
+		
 		me.termsStore.addListener("load", me.onCreateNewMapPlan, me);
 		return me.callParent(arguments);
     },
@@ -159,8 +161,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			return;
 		}
 		view.removeAll(true);
-		Ext.getCmp('currentTotalPlanCrHrs').setValue(0);
-		Ext.getCmp('currentPlanTotalDevCrHrs').setValue(0);
 		
 		var termsAndStores = me.getTermsAndStores(mapPlan);
 		var terms = termsAndStores.terms;
@@ -186,6 +186,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				termsets[term.get("reportYear")][0] = term;
 			};
 		});
+		var panels = [];
 		termsets.forEach(function(termSet){
 			var yearView = view.add(new Ext.form.FieldSet({
 				xtype : 'fieldset',
@@ -207,6 +208,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				yearView.add(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode]));
 			});
 		});
+		me.updateAllPlanHours();
 		me.getView().setLoading(false);
     },
 	
@@ -235,12 +237,49 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var me = this;
 		me.getView().setLoading(false);
 	},
+	
+	updateAllPlanHours: function(){
+		var me = this;
+		var parent =  me.getView();
+		var panels = parent.query("semesterpanel");
+		var planHours = 0;
+		var devHours = 0;
+		panels.forEach(function(panel){
+			var store = panel.getStore();
+			var semesterBottomDock = panel.getDockedComponent("semesterBottomDock");
+			var hours = me.updateTermHours(store, semesterBottomDock);
+			planHours += hours.planHours;
+			devHours += hours.devHours;
+		})
+		Ext.getCmp('currentTotalPlanCrHrs').setValue(planHours);
+		Ext.getCmp('currentPlanTotalDevCrHrs').setValue(devHours);
+		
+	},
+	
+	updateTermHours: function(store, semesterBottomDock){
+		var models = store.getRange(0);
+		var totalHours = 0;
+		var totalDevHours = 0;
+		models.forEach(function(model){
+			totalHours += model.get('minCreditHours');
+			if(model.get('isDev')){
+				totalDevHours += model.get('minCreditHours');
+			}
+		});
+		var termCreditHours = semesterBottomDock.getComponent('termCrHrs');
+		termCreditHours.setText("" + totalHours + "");
+		var hours = new Object();
+		hours.planHours = totalHours;
+		hours.devHours = totalDevHours;
+		return hours;
+	},
 
 	destroy: function() {
         var me=this;
 		me.termsStore.removeListener("load", me.onCreateNewMapPlan, me);
 		me.appEventsController.removeEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
         me.appEventsController.removeEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
+		me.appEventsController.removeEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
         return me.callParent( arguments );
     },
 });

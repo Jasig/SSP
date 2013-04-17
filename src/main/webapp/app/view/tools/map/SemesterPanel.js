@@ -20,43 +20,12 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.semesterpanel',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+	inject:{
+		appEventsController: 'appEventsController'
+	},
     //controller: 'Ssp.controller.tool.map.SemesterPanelViewController',
     autoScroll: true,
     columnLines: false,
-	updateAllHours: function(me){
-		var parent =  me.findParentByType("semesterpanelcontainer");
-		var panels = parent.query("semesterpanel");
-		var planHours = 0;
-		var devHours = 0;
-		panels.forEach(function(panel){
-			var store = panel.getStore();
-			var semesterBottomDock = panel.getDockedComponent("semesterBottomDock");
-			var hours = me.updateSemesterHours(store, semesterBottomDock);
-			planHours += hours.planHours;
-			devHours += hours.devHours;
-		})
-		Ext.getCmp('currentTotalPlanCrHrs').setValue(planHours);
-		Ext.getCmp('currentPlanTotalDevCrHrs').setValue(devHours);
-		
-	},
-	
-	updateSemesterHours: function(store, semesterBottomDock){
-		var models = store.getRange(0);
-		var totalHours = 0;
-		var totalDevHours = 0;
-		models.forEach(function(model){
-			totalHours += model.get('minCreditHours');
-			if(model.get('isDev')){
-				totalDevHours += model.get('minCreditHours');
-			}
-		});
-		var termCreditHours = semesterBottomDock.getComponent('termCrHrs');
-		termCreditHours.setText("" + totalHours + "");
-		var hours = new Object();
-		hours.planHours = totalHours;
-		hours.devHours = totalDevHours;
-		return hours;
-	},
     
     initComponent: function(){
         var me = this;
@@ -138,14 +107,13 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 						coursePlanDetails.center();
                         coursePlanDetails.show();
                     },
-                    
                     scope: me
                 }, {
                     icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
                     tooltip: 'Delete planItem',
                     handler: function(grid, rowIndex, colIndex){
                         me.getStore().removeAt(rowIndex);
-						me.updateAllHours(me);
+						me.appEventsController.getApplication().fireEvent('updateAllPlanHours');
                     },
                     scope: me
                 }]
@@ -160,7 +128,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 			        },
 			        listeners: {
 			            drop: function(node, data, dropRec, dropPosition) {
-							me.updateAllHours(me);
+							me.appEventsController.getApplication().fireEvent('updateAllPlanHours');
 			            },
 			        }
 			    },
