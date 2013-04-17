@@ -135,9 +135,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				stores[term.get('code')] = new Ssp.store.SemesterCourses();
 			});
 		} else {
-			terms = me.termsStore.getTermsFromTermCodes(me.mapPlan.getTermCodes());
+			terms = me.termsStore.getTermsFromTermCodes(mapPlan.getTermCodes());
 			terms.forEach(function(term){
-				stores[term.get('code')] = me.mapPlan.getStoreFromTermCode(term.get('code'));
+				stores[term.get('code')] = mapPlan.getStoreFromTermCode(term.get('code'));
 			});	
 		}
 		termsStores = new Object();
