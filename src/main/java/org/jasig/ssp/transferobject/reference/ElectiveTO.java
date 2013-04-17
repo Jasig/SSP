@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.jasig.ssp.model.reference.Color;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.Elective;
 import org.jasig.ssp.transferobject.TransferObject;
 
@@ -34,10 +34,7 @@ public class ElectiveTO extends AbstractReferenceTO<Elective>
 
 	private static final long serialVersionUID = 6475160974734656210L;
 
-	private String code;
-
-	private Color color;
-	
+	private String code;	
 	private Integer sortOrder;
 
 	public ElectiveTO() {
@@ -58,8 +55,8 @@ public class ElectiveTO extends AbstractReferenceTO<Elective>
 	public final void from(final Elective model) {
 		super.from(model);
 		code = model.getCode();
-		color = model.getColor();
 		sortOrder = model.getSortOrder();
+		
 	}
 
 	public static List<ElectiveTO> toTOList(
@@ -79,14 +76,6 @@ public class ElectiveTO extends AbstractReferenceTO<Elective>
 		this.code = code;
 	}
 
-	public Color getColor() {
-		return color;
-	}
-
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
 	public Integer getSortOrder() {
 		return sortOrder;
 	}
@@ -94,4 +83,16 @@ public class ElectiveTO extends AbstractReferenceTO<Elective>
 	public void setSortOrder(Integer sortOrder) {
 		this.sortOrder = sortOrder;
 	}	
+	
+	public Boolean getActive() {
+		return this.getObjectStatus().equals(ObjectStatus.ACTIVE);
+	}
+	
+	public void setActive(Boolean active) {
+		if(active) {
+			this.setObjectStatus(ObjectStatus.ACTIVE);
+		} else {
+			this.setObjectStatus(ObjectStatus.INACTIVE);
+		}		
+	}
 }

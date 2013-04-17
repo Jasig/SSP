@@ -19,6 +19,6 @@
 Ext.define('Ssp.model.reference.Elective', {
 	extend: 'Ssp.model.reference.AbstractReference',
     fields: [{name: 'code', type: 'string'},
-             {name: 'color', type: 'string'},
-             {name: 'sortOrder', type: 'integer'}]
+             {name: 'sortOrder', type: 'integer'},
+             {name: 'active', type: 'boolean'}]
 });

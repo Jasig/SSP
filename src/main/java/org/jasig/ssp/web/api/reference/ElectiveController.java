@@ -20,15 +20,24 @@ package org.jasig.ssp.web.api.reference;
 
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.factory.reference.ElectiveTOFactory;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.Elective;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.reference.ElectiveService;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.reference.ElectiveTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/1/reference/elective")
@@ -56,6 +65,54 @@ public class ElectiveController
 		super(Elective.class, ElectiveTO.class);
 	}
 
+	/**
+	 * Retrieve every instance in the database filtered by the supplied status.
+	 * 
+	 * @param status
+	 *            Filter by this status.
+	 * @param start
+	 *            First result (0-based index) to return. Parameter must be a
+	 *            positive, non-zero integer. Often comes from client as a
+	 *            parameter labeled <code>start</code>. A null value indicates
+	 *            to return rows starting from index 0.
+	 * @param limit
+	 *            Maximum number of results to return. Parameter must be a
+	 *            positive, non-zero integer. Often comes from client as a
+	 *            parameter labeled <code>limit</code>. A null value indicates
+	 *            return all rows from the start parameter to the end of the
+	 *            data.
+	 * @param sort
+	 *            Property name. If null or empty string, the default sort will
+	 *            be used. If non-empty, must be a case-sensitive model property
+	 *            name. Often comes from client as a parameter labeled
+	 *            <code>sort</code>. Example sort expression:
+	 *            <code>propertyName</code>
+	 * @param sortDirection
+	 *            Ascending/descending keyword. If null or empty string, the
+	 *            default sort will be used. Must be <code>ASC</code> or
+	 *            <code>DESC</code>.
+	 * @return All entities in the database filtered by the supplied status.
+	 */
+	@RequestMapping(method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
+	public @ResponseBody
+	PagedResponse<ElectiveTO> getAll(
+			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) Integer start,
+			final @RequestParam(required = false) Integer limit,
+			final @RequestParam(required = false) String sort,
+			final @RequestParam(required = false) String sortDirection) {
+
+		// Run getAll
+		final PagingWrapper<Elective> data = getService().getAll(
+				SortingAndPaging.createForSingleSortWithPaging(
+						status == null ? ObjectStatus.ALL : status, start,
+						limit, sort, sortDirection, "name"));
+
+		return new PagedResponse<ElectiveTO>(true, data.getResults(), getFactory()
+				.asTOList(data.getRows()));
+	}
+	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ElectiveController.class);
 

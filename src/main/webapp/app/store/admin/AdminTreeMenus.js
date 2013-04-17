@@ -462,41 +462,44 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 	    							        	  required: true,
 	    							        	  field: {
 	    							        		  xtype: 'textfield'
+	    							        	    },
+	    							          	  flex: .1 }, 
+	    							        	  { header: 'Active',
+						    		                required: true,
+						      		                dataIndex: 'active', 
+						      		                flex: .2,
+						      		                renderer: me.columnRendererUtils.renderActive,
+						      		                field: {
+						      		                    xtype: 'checkbox',
+						      		                    fieldLabel: 'Active'
+						      		                }  
 	    							        	  },
-	    							        	  flex: .2 }, 
 	    							        	  { header: 'Elective Name',  
 	          							        	dataIndex: 'name',
 	          							        	required: true,
 	          							        	field: {
-	          							        		xtype: 'checkbox'
-	          							        	},
-	          							          flex: 1 }, 
+	          							        		xtype: 'textfield'
+	          							        	},	          				
+	          							            flex: .2 }, 
 	          							          {	header: 'Elective Code',
-	          							        	dataIndex: 'color',
+	          							        	dataIndex: 'code',
+	          							        	required: true,
 	          							        	field: {
 	          							        		xtype: 'textfield'
 	          							        	},
-	          							        	flex: .2	          							        	  
+	          							        	flex: .1	          							        	  
 	          							          }, 
 	          							          {	header: 'Description',
 		          							        dataIndex: 'description',
 		          							        field: {
 		          							        	xtype: 'textfield'
 		          							        },
-		          							        flex: .2	          							        	  
-		          							      },
-		          							      {	header: 'Color',
-		          							        dataIndex: 'color',
-		          							        field: {
-		          							        	xtype: 'textfield'
-		          							        },
-		          							        flex: .2	          							        	  
-		          							      }  
+		          							        flex: 1	          							        	  
+		          							      }
 		          							     ]
     							}]
-    						}
-    	        ]
-
+    						}    	
+    			]
     	    };
     	
     	Ext.apply(me,{

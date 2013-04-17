@@ -30,6 +30,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.model.ObjectStatus;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -43,10 +44,6 @@ public class Elective
 	@Column(nullable = false, length = 10)
 	@Size(max = 10)
 	private String code;
-	
-	@ManyToOne()
-	@JoinColumn(name = "color_id")
-	private Color color;
 	
 	@Column(nullable = true)
 	private Integer sortOrder;
@@ -91,20 +88,24 @@ public class Elective
 		this.code = code;
 	}
 
-	public Color getColor() {
-		return color;
-	}
-
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
 	public Integer getSortOrder() {
 		return sortOrder;
 	}
 
 	public void setSortOrder(Integer order) {
 		this.sortOrder = order;
+	}
+	
+	public Boolean getActive() {
+		return this.getObjectStatus().equals(ObjectStatus.ACTIVE);
+	}
+	
+	public void setActive(Boolean active) {
+		if(active) {
+			this.setObjectStatus(ObjectStatus.ACTIVE);
+		} else {
+			this.setObjectStatus(ObjectStatus.INACTIVE);
+		}		
 	}
 	
 	@Override
@@ -117,7 +118,6 @@ public class Elective
 		int result = hashPrime() * super.hashCode();
 		
 		result *= hashField("code", code);
-		result *= hashField("color", color);
 		result *= hashField("order", sortOrder);
 		
 		return result;

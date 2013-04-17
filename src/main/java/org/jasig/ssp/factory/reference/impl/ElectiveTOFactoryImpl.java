@@ -52,7 +52,6 @@ public class ElectiveTOFactoryImpl extends
 		final Elective model = super.from(tObject);
 
 		model.setCode(tObject.getCode());
-		model.setColor(tObject.getColor());
 		model.setSortOrder(tObject.getSortOrder());
 
 		return model;

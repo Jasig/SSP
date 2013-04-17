@@ -158,6 +158,15 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	    return strHtml;
 	},
 	
+	renderActive: function(val, metadata, record) {
+		console.log(record);
+		var active = (record.get('active') == true) ? "Active" : "Inactive";
+		var strHtml = '<div style="white-space:normal !important;">';
+		strHtml += '<p>' + active + '</p>'
+		strHtml += '</div>';
+		return strHtml;
+	},
+	
 	/**
 	 * This method is used to return an object with id values
 	 * an array format expected by the ExtJS multiSelect or itemSelect

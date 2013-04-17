@@ -274,6 +274,7 @@ Ext.require([
 	'Ssp.store.reference.EarlyAlertReasons',
 	'Ssp.store.reference.EarlyAlertReferrals',
 	'Ssp.store.reference.EarlyAlertSuggestions',
+	'Ssp.store.reference.Elective',
     'Ssp.store.reference.EmploymentShifts',
     'Ssp.store.reference.Ethnicities',
     'Ssp.store.reference.FundingSources',
