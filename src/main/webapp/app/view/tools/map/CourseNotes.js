@@ -114,12 +114,29 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 		                items: [{
 		                    xtype: 'button',
 		                    itemId: 'saveButton',
-		                    text: 'Save'
+		                    text: 'Save',
+		                    listeners: {
+		                    	click:function(){
+		                    		me = this;
+		                    		var minCreditHours = me.query('#creditHours')[0].getValue();
+		                    		var mapCourse = me.semesterStore.getAt(me.rowIndex);
+		                    		mapCourse.set('minCreditHours', minCreditHours);
+		                    		me.close();
+		                    	},
+		                    	scope: me
+		                    }
 		                    
 		                }, '-', {
 		                    xtype: 'button',
 		                    itemId: 'cancelButton',
-		                    text: 'Cancel'
+		                    text: 'Cancel',
+		                    
+		                    listeners: {
+		                    	click:function(){
+		                    		me.close();
+		                    	},
+		                    	scope: me
+		                    }
 		                }]
 		            
 		            }]

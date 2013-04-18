@@ -101,11 +101,9 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                     icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
                     tooltip: 'Edit planItem',
                     handler: function(grid, rowIndex, colIndex){
-                    	var minCreditHours =  grid.getStore().getAt(rowIndex).get('minCreditHours');
-                    	var coursePlanDetails = Ext.create('Ssp.view.tools.map.CourseNotes');
-                    	coursePlanDetails.query('#creditHours')[0].setValue(minCreditHours);
-						coursePlanDetails.center();
-                        coursePlanDetails.show();
+						var me = this;
+                    	me.appEventsController.getApplication().fireEvent('onViewCourseNotes',{store:grid.getStore(),
+                    		rowIndex: rowIndex});
                     },
                     scope: me
                 }, {
@@ -113,7 +111,6 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                     tooltip: 'Delete planItem',
                     handler: function(grid, rowIndex, colIndex){
                         me.getStore().removeAt(rowIndex);
-						me.appEventsController.getApplication().fireEvent('updateAllPlanHours');
                     },
                     scope: me
                 }]
@@ -126,11 +123,6 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 						dragGroup: 'coursesDDGroup',
 						pluginId: 'semesterviewdragdrop',
 			        },
-			        listeners: {
-			            drop: function(node, data, dropRec, dropPosition) {
-							me.appEventsController.getApplication().fireEvent('updateAllPlanHours');
-			            },
-			        }
 			    },
             dockedItems: [{
                 dock: 'bottom',

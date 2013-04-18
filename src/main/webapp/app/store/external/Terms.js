@@ -77,8 +77,9 @@ Ext.define('Ssp.store.external.Terms', {
 		var currentTermIndex = me.findBy(me.isCurrentTerm);
 		if(maximum){
 			var startReportYear = me.getAt(currentTermIndex).get("reportYear");
-			startReportYear + 5;
-			startIndex = me.find('reportYear', startReportYear);
+			startIndex = me.find('reportYear', startReportYear + maximum);
+			if(startIndex == -1)
+				startIndex = 0;
 		}
     	return me.getRange(startIndex, currentTermIndex);
     },

@@ -45,10 +45,11 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	    me.resetForm();
 		if(me.termsStore.getTotalCount() == 0)
 			me.termsStore.load();
-		
+		me.currentMapPlan = null;	
 		me.appEventsController.assignEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
+		me.appEventsController.assignEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
 		
 		me.termsStore.addListener("load", me.onCreateNewMapPlan, me);
 		return me.callParent(arguments);
@@ -89,7 +90,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     getMapPlanServiceSuccess: function(serviceResponses) {
         var me = this;
         var mapResponse = serviceResponses.successes.map;
-		if(mapResponse == null)
+		if(!mapResponse || !mapResponse.responseText || mapResponse.responseText.trim().length == 0)
 			me.getMapPlanServiceFailure();
        	 else{
 			me.currentMapPlan.populateFromGenericObject(Ext.decode(mapResponse.responseText));
@@ -101,11 +102,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 
     getMapPlanServiceFailure: function() {
 		var me = this;
-		if(me.termsStore.getTotalCount() == 0)
-			me.termsStore.load();
-		else{
-			me.onCreateMapPlan();
-		}
+		me.currentMapPlan = null;
+		me.onCreateMapPlan();
+		me.updateAllPlanHours();
     },
  
 	onAfterLayout: function(){
@@ -135,7 +134,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var me = this;
 		var terms;
 		me.semesterStores = [];
-		if(mapPlan == null){
+		if(!mapPlan){
 			terms = me.termsStore.getCurrentAndFutureTerms(5);
 		} else {
 			terms = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(mapPlan));
@@ -152,10 +151,13 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	onCreateNewMapPlan:function(){
 		var me = this;
+		me.currentMapPlan = null;
 		me.onCreateMapPlan();
 	},
 	populatePlanStores:function(){
 		var me = this;
+		if(!me.currentMapPlan)
+			return;
 		var planCourses = me.currentMapPlan.get('planCourses');
 		planCourses.forEach(function(planCourse){
 			var termStore = me.semesterStores[planCourse.termCode];
@@ -281,13 +283,31 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		hours.devHours = totalDevHours;
 		return hours;
 	},
+	
+	//TODO This method should probably be at the Semester Panel Level
+	onViewCourseNotes: function(args){
+		var me = this;
+    	var minCreditHours =  args.store.getAt(args.rowIndex).get('minCreditHours');
+    	if(me.coursePlanDetails == null || me.coursePlanDetails.isDestroyed){
+    		me.coursePlanDetails = Ext.create('Ssp.view.tools.map.CourseNotes');
+    		me.coursePlanDetails.query('#creditHours')[0].setValue(minCreditHours);
+    		me.coursePlanDetails.rowIndex = args.rowIndex;
+    		me.coursePlanDetails.semesterStore = args.store;
+    		me.coursePlanDetails.center();
+    		me.coursePlanDetails.show();
+    	}
+	},
 
 	destroy: function() {
         var me=this;
+		if(me.coursePlanDetails != null && !me.coursePlanDetails.isDestroyed){
+			me.coursePlanDetails.close();
+		}
 		me.termsStore.removeListener("load", me.onCreateNewMapPlan, me);
 		me.appEventsController.removeEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
         me.appEventsController.removeEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
         return me.callParent( arguments );
     },
 });

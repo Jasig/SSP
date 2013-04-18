@@ -20,8 +20,22 @@ Ext.define('Ssp.store.SemesterCourses', {
     extend: 'Ext.data.Store',
     model: 'Ssp.model.tool.map.SemesterCourse',
     mixins: [ 'Deft.mixin.Injectable' ],
+	inject:{
+		appEventsController: 'appEventsController'
+	},
 	constructor: function(){
 		Ext.apply(this);
 		return this.callParent(arguments);
+	},
+	
+	listeners:{
+		datachanged: function(){
+			var me = this;
+			me.appEventsController.getApplication().fireEvent('updateAllPlanHours');
+		},
+		update: function(){
+			var me = this;
+			me.appEventsController.getApplication().fireEvent('updateAllPlanHours');
+		}
 	},
 });
