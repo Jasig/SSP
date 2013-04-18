@@ -92,7 +92,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
         var mapResponse = serviceResponses.successes.map;
 		if(!mapResponse || !mapResponse.responseText || mapResponse.responseText.trim().length == 0)
 			me.getMapPlanServiceFailure();
-       	 else{
+       	else{
+			me.currentMapPlan = Ext.create('Ssp.model.tool.map.Plan');
 			me.currentMapPlan.populateFromGenericObject(Ext.decode(mapResponse.responseText));
 			me.onCreateMapPlan();
 			me.populatePlanStores();
