@@ -471,8 +471,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 						      		                flex: .2,
 						      		                renderer: me.columnRendererUtils.renderActive,
 						      		                field: {
-						      		                    xtype: 'checkbox',
-						      		                    fieldLabel: 'Active'
+						      		                    xtype: 'checkbox'
 						      		                }  
 	    							        	  },
 	    							        	  { header: 'Elective Name',  

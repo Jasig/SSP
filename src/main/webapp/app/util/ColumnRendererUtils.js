@@ -159,8 +159,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	},
 	
 	renderActive: function(val, metadata, record) {
-		console.log(record);
-		var active = (record.get('active') == true) ? "Active" : "Inactive";
+		var active = record.get('active') ? "Yes" : "No";
 		var strHtml = '<div style="white-space:normal !important;">';
 		strHtml += '<p>' + active + '</p>'
 		strHtml += '</div>';

@@ -23,12 +23,24 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.Elective;
 import org.jasig.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
+/**
+ * The <code>@JsonIgnoreProperties(ignoreUnknown = true)</code> is here b/c
+ * front-end admin tools don't use a proper
+ * <code>Ext.data.writer.Writer</code> (see
+ * <code>AbstractReferenceAdminViewController.addRecord()</code> and
+ * <code>editRecord()</code>. So it's hard for us to control what fields get
+ * passed back to the server and which don't. E.g. the 'persist' config
+ * on <code>Ext.data.Field</code> is useless. Of course, silently ignoring
+ * inbound fields you don't know about isn't bad default practice anyway.
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ElectiveTO extends AbstractReferenceTO<Elective>
 		implements TransferObject<Elective>, Serializable {
 
@@ -83,16 +95,5 @@ public class ElectiveTO extends AbstractReferenceTO<Elective>
 	public void setSortOrder(Integer sortOrder) {
 		this.sortOrder = sortOrder;
 	}	
-	
-	public Boolean getActive() {
-		return this.getObjectStatus().equals(ObjectStatus.ACTIVE);
-	}
-	
-	public void setActive(Boolean active) {
-		if(active) {
-			this.setObjectStatus(ObjectStatus.ACTIVE);
-		} else {
-			this.setObjectStatus(ObjectStatus.INACTIVE);
-		}		
-	}
+
 }
