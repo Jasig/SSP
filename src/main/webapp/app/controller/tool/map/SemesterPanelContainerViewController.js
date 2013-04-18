@@ -162,6 +162,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var planCourses = me.currentMapPlan.get('planCourses');
 		planCourses.forEach(function(planCourse){
 			var termStore = me.semesterStores[planCourse.termCode];
+			termStore.suspendEvents();
 			var semesterCourse = new Ssp.model.tool.map.SemesterCourse();
 			semesterCourse.set('title',planCourse.courseTitle);
 			semesterCourse.set('code', planCourse.courseCode);
@@ -171,6 +172,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			semesterCourse.set('termCode', planCourse.termCode);
 			semesterCourse.set('isDev',  planCourse.isDev);
 			termStore.add(semesterCourse);
+			termStore.resumeEvents();
 		}) 
 	},
 	
