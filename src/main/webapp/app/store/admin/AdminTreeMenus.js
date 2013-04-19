@@ -454,8 +454,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     								text: 'Elective Types',
     								title: 'Elective Types',
     								store: 'elective',
-    								storeLoadOptions: { params: { status: 'ALL' } },
-	    							form: 'AbstractReferenceAdmin',
+    								storeLoadOptions: { params: { status: 'ALL', sort: 'sortOrder' } },    								
+	    							form: 'ElectiveAdmin',
 	    							leaf: true,
 	    							columns: [
 	    							          	{ header: 'Order',  

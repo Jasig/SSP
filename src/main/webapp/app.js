@@ -176,6 +176,9 @@ Ext.require([
     'Ssp.view.admin.forms.campus.EarlyAlertRoutingsAdmin',
     'Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',
     
+    // MAP ADMIN VIEWS
+    'Ssp.view.admin.forms.map.ElectiveAdmin',
+    
     // ERROR DISPLAYS
     'Ssp.view.ErrorWindow',
     
