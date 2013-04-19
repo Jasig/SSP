@@ -20,7 +20,9 @@ Ext.define('Ssp.service.MapPlanService', {
     extend: 'Ssp.service.AbstractService',   		
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
-    	apiProperties: 'apiProperties'
+    	apiProperties: 'apiProperties',
+    	currentMapPlan: 'currentMapPlan',
+        personLite: 'personLite'
     },
     initComponent: function() {
 		return this.callParent( arguments );
@@ -54,35 +56,64 @@ Ext.define('Ssp.service.MapPlanService', {
     },
 	  
     getTermCodes: function(mapPlan){ 
-    			    var termCodes = [];
-    			    var i = 0;
-    		    	var planCourses = mapPlan.get('planCourses');
-    		    	planCourses.forEach(function(planCourse){
-    		    		if(termCodes.indexOf(planCourse.termCode) < 0)
-    		    			termCodes[i++] = planCourse.termCode;
-    		    	})
-    		    	return termCodes;
-    		    	}  ,  
-    save: function( personId, jsonData, callbacks ){
+    	var termCodes = [];
+    	var i = 0;
+    	var planCourses = mapPlan.get('planCourses');
+    	planCourses.forEach(function(planCourse){
+    	if(termCodes.indexOf(planCourse.termCode) < 0)
+    		termCodes[i++] = planCourse.termCode;
+    	  })
+    	return termCodes;
+    	},
+    	
+    updateCurrentMap: function(semesterStores){ 
+        var me = this;
+        me.currentMapPlan.set('ownerId',me.personLite.get('id'));
+        me.currentMapPlan.set('personId',me.personLite.get('id'));
+        
+        var i = 0;
+        var planCourses = new Array();
+        for(var index in semesterStores){
+        	var semesterStore = semesterStores[index];
+            var models = semesterStore.getRange();
+            models.forEach(function(model){
+            	var planCourse = new Object();
+            		planCourse.courseTitle = model.get('title');
+            		planCourse.courseCode = model.get('code');
+            		planCourse.termCode = index;
+            		planCourse.creditHours = model.get('minCreditHours');
+            		planCourse.formattedCourse = model.get('formattedCourse');
+            		planCourse.courseDescription = model.get('description');
+            		planCourse.orderInTerm = i;
+            		planCourse.isDev = model.get('isDev');
+            		planCourses[i++] = planCourse;
+            	})
+            }
+            me.currentMapPlan.set('planCourses',planCourses);
+            }, 
+            
+    save: function(semesterStores, callbacks ){
 		var me=this;
-		var url = me.getBaseUrl(personId);
+		var url = me.getBaseUrl(me.currentMapPlan.get('personId'));
 	    var success = function( response, view ){
 	    	var r = Ext.decode(response.responseText);
-			callbacks.success( r, callbacks.scope );
+			//callbacks.success( r, callbacks.scope );
 	    };
 
 	    var failure = function( response ){
 	    	me.apiProperties.handleError( response );	    	
-	    	callbacks.failure( response, callbacks.scope );
+	    	//callbacks.failure( response, callbacks.scope );
 	    };
 		
+	    me.updateCurrentMap(semesterStores);
+	    
 		// save
-		if (personId=="")
+		if (!me.currentMapPlan.get('id') || me.currentMapPlan.get('id') == '')
 		{				
 			me.apiProperties.makeRequest({
     			url: url,
     			method: 'POST',
-    			jsonData: jsonData,
+    			jsonData: me.currentMapPlan.data,
     			successFunc: success,
     			failureFunc: failure,
     			scope: me
@@ -90,13 +121,14 @@ Ext.define('Ssp.service.MapPlanService', {
 		}else{
 			// update
     		me.apiProperties.makeRequest({
-    			url: url, //"/"+personId,
+    			url: url, 
     			method: 'PUT',
-    			jsonData: jsonData,
+    			jsonData: me.currentMapPlan.data,
     			successFunc: success,
     			failureFunc: failure,
     			scope: me
     		});	
 		}	
-    }
+    },
+    	
 });

@@ -61,10 +61,10 @@ public class PlanCourseTOFactoryImpl extends AbstractAuditableTOFactory<PlanCour
 		model.setCourseDescription(tObject.getCourseDescription());
 		model.setCourseTitle(tObject.getCourseTitle());
 		model.setCreditHours(tObject.getCreditHours());
+		model.setTermCode(tObject.getTermCode());
 		model.setFormattedCourse(tObject.getFormattedCourse());
 		model.setIsDev(tObject.isDev());
 		model.setOrderInTerm(tObject.getOrderInTerm());
-		model.setPerson(getPersonService().get(UUID.fromString(tObject.getPersonId())));
 		return model;
 	}
 

@@ -104,9 +104,10 @@ public class PlanControllerIntegrationTest {
 	 * @throws ObjectNotFoundException
 	 *             If object could not be found.
 	 * @throws ValidationException 
+	 * @throws CloneNotSupportedException 
 	 */
 	@Test
-	public void testControllerGet() throws ObjectNotFoundException, ValidationException {
+	public void testControllerGet() throws ObjectNotFoundException, ValidationException, CloneNotSupportedException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -127,9 +128,10 @@ public class PlanControllerIntegrationTest {
 	 * @throws ObjectNotFoundException
 	 *             If object could not be found.
 	 * @throws ValidationException 
+	 * @throws CloneNotSupportedException 
 	 */
 	@Test
-	public void testControllerGetSummary() throws ObjectNotFoundException, ValidationException {
+	public void testControllerGetSummary() throws ObjectNotFoundException, ValidationException, CloneNotSupportedException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
@@ -148,7 +150,7 @@ public class PlanControllerIntegrationTest {
 	}	
 	
 	@Test
-	public void testControllerCreate() throws ObjectNotFoundException, ValidationException {
+	public void testControllerCreate() throws ObjectNotFoundException, ValidationException, CloneNotSupportedException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);

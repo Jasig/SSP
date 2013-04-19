@@ -17,10 +17,10 @@
  * under the License.
  */
 Ext.define('Ssp.view.tools.map.PlanTool', {
-    extend: 'Ext.form.FieldContainer',
+    extend: 'Ext.form.Panel',
     alias: 'widget.plantool',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    controller: 'Ssp.controller.tool.map.MapPlanToolViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils'
         //sspConfig: 'sspConfig'
@@ -222,8 +222,8 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 },
                 items: [{
                     fieldLabel: 'Plan Title',
-                    itemId: 'planName',
-                    name: 'planName',
+                    itemId: 'name',
+                    name: 'name',
                     labelWidth: 120
                 
                 }, {

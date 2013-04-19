@@ -72,6 +72,7 @@ public class Plan extends AbstractPlan  {
 		for (PlanCourse planCourse : planCourses) {
 			PlanCourse planCourseClone = planCourse.clone();
 			planCourseClone.setPlan(clone);
+			planCourseClone.setPerson(clone.getPerson());
 			clone.getPlanCourses().add(planCourseClone);
 		}
 		return clone;

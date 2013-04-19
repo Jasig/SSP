@@ -171,7 +171,7 @@ public class PlanDaoTest {
 
 		
 		
-		dao.save(plan);
+		planService.copyAndSave(plan);
 		final Session session = sessionFactory.getCurrentSession();
 		session.flush();
 		

@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,26 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service;
+Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject:{
+		appEventsController: 'appEventsController',
+		formUtils: 'formRendererUtils',
+    	currentMapPlan: 'currentMapPlan'
+    },
+    
+	control: {
+	},
 
-import java.util.UUID;
-
-import org.jasig.ssp.model.Plan;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
-
-/**
- * Person service
- */
-public interface PlanService extends AbstractPlanService<Plan> {
-
-	Plan copyAndSave(Plan plan) throws CloneNotSupportedException;
-
-	Plan getCurrentForStudent(UUID personId);
-
-	PagingWrapper<Plan> getAllForStudent(
-			SortingAndPaging createForSingleSortWithPaging,UUID personId);
-
-
-	
-}
+	semesterStores: [],
+	init: function() {
+		var me=this;
+		me.getView().loadRecord( me.currentMapPlan );
+	    me.resetForm();
+		return me.callParent(arguments);
+    },
+    resetForm: function() {
+        var me = this;
+        me.getView().getForm().reset();
+    }
+});

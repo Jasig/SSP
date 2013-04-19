@@ -64,7 +64,7 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 	}
 	
 	@Override
-	public Plan copyAndSaveWithNewOwner(Plan obj) throws CloneNotSupportedException {
+	public Plan copyAndSave(Plan obj) throws CloneNotSupportedException {
 		//Load all previous plans for this student and save them as inactive.
 		List<Plan> allForStudent = getDao().getAllForStudent(obj.getPerson().getId());
 		for (Plan plan : allForStudent) 

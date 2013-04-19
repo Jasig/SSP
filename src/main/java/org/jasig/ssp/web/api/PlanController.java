@@ -165,18 +165,19 @@ public class PlanController  extends AbstractBaseController {
 	 *             If specified object could not be found.
 	 * @throws ValidationException
 	 *             If the specified data contains an id (since it shouldn't).
+	 * @throws CloneNotSupportedException 
 	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
 	PlanTO create(@Valid @RequestBody final PlanTO obj) throws ObjectNotFoundException,
-			ValidationException {
+			ValidationException, CloneNotSupportedException {
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"It is invalid to send an entity with an ID to the create method. Did you mean to use the save method instead?");
 		}
 
 		final Plan model = getFactory().from(obj);
-		getService().save(model);
+		getService().copyAndSave(model);
 
 		if (null != model) {
 			final Plan createdModel = getFactory().from(obj);
@@ -227,7 +228,7 @@ public class PlanController  extends AbstractBaseController {
 		}
 		else
 		{
-			final Plan clonedPlan = getService().copyAndSaveWithNewOwner(model);
+			final Plan clonedPlan = getService().copyAndSave(model);
 			if (null != clonedPlan) {
 				return new PlanTO(model);
 			}
