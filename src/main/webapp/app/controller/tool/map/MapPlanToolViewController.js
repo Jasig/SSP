@@ -31,8 +31,8 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
 	semesterStores: [],
 	init: function() {
 		var me=this;
-		me.getView().loadRecord( me.currentMapPlan );
 	    me.resetForm();
+	    me.getView().loadRecord( me.currentMapPlan );
 		return me.callParent(arguments);
     },
     resetForm: function() {
