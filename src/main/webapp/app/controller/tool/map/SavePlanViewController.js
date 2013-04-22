@@ -35,6 +35,8 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 	init: function() {
 		var me=this;
 	    me.resetForm();
+	   // me.currentMapPlan.set('name','test_test_ui');
+	    me.getView().query('form')[0].loadRecord( me.currentMapPlan );
 		return me.callParent(arguments);
     },
     resetForm: function() {
@@ -43,6 +45,5 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
     },
     onShow: function(){
     	var me=this;
-	    me.getView().query('form')[0].loadRecord( me.currentMapPlan );
     },
 });
