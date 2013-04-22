@@ -64,13 +64,18 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
            }
         },
         
-        'savePlanButton':{
-           selector: '#savePlanButton',
+        'savePlanAsButton':{
+           selector: '#savePlanAsButton',
            listeners: {
-            click: 'onsavePlanButtonClick'
+            click: 'onsavePlanAsButtonClick'
            }
         },
-        
+        'savePlanButton':{
+            selector: '#savePlanButton',
+            listeners: {
+             click: 'onsavePlanButtonClick'
+            }
+         },       
         'emailPlanButton':{
            selector: '#emailPlanButton',
            listeners: {
@@ -139,6 +144,13 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
     },
     
     onsavePlanButtonClick: function(button){
+        var me=this;
+		if(me.savePlanPopUp == null || me.savePlanPopUp.isDestroyed)
+        	me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true});
+		me.savePlanPopUp.show();
+    },
+
+    onsavePlanAsButtonClick: function(button){
         var me=this;
 		if(me.savePlanPopUp == null || me.savePlanPopUp.isDestroyed)
         	me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true});

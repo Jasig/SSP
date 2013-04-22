@@ -245,13 +245,23 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 
 	onSaveMapPlan: function(){
 		var me = this;
-		me.mapPlanService.save(me.semesterStores, me.onSaveComplete, me.currentMapPlan);
+		me.getView().setLoading(true);
+		var callbacks = new Object();
+		callbacks.success = me.onSaveCompleteSuccess;
+		callbacks.failure = me.onSaveCompleteFailure;
+		me.mapPlanService.save(me.semesterStores, callbacks, me.currentMapPlan,me.getView());
+
 	},
 	
-	onSaveComplete: function(){
+	onSaveCompleteSuccess: function(view){
 		var me = this;
-		me.getView().setLoading(false);
+		Ext.Msg.alert('Your changes have been saved.'); 	
+		view.setLoading(false);
 	},
+	onSaveCompleteFailure: function(view){
+		var me = this;
+		view.setLoading(false);
+	},	
 	updateAllPlanHours: function(){
 		var me = this;
 		var parent =  me.getView();

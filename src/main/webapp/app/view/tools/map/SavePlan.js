@@ -20,11 +20,10 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
     extend: 'Ext.window.Window',
     alias: 'widget.saveplan',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    controller: 'Ssp.controller.tool.map.SavePlanViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
 		appEventsController: 'appEventsController',
-        //sspConfig: 'sspConfig'
     },
     height: 200,
     width: 850,
@@ -130,8 +129,8 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                             items: [
 				               {
             				        fieldLabel: 'Plan Title',
-            				        name: 'plantitle',
-            				        itemId: 'plantitle',
+            				        name: 'name',
+            				        itemId: 'name',
             				        maxLength: 50,
             				        allowBlank:false
             				        
