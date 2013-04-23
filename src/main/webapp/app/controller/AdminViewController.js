@@ -58,6 +58,7 @@ Ext.define('Ssp.controller.AdminViewController', {
         statesStore: 'statesStore',
         studentStatusesStore: 'studentStatusesStore',
         studentTypesStore: 'studentTypesStore',
+		tagTypesStore: 'tagTypesStore',
     	veteranStatusesStore: 'veteranStatusesStore'
     },
 
@@ -78,6 +79,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 	onItemClick: function(view,record,item,index,eventObj) {
 		var storeName = "";
 		var columns = null;
+		var storeLoadOptions = null;
 		if (record.raw != undefined )
 		{
 			if ( record.raw.form != "")
@@ -90,12 +92,17 @@ Ext.define('Ssp.controller.AdminViewController', {
 				{
 					columns = record.raw.columns;
 				}
-				this.loadAdmin( record.raw.title, record.raw.form, storeName, columns );         
+				if (record.raw.storeLoadOptions)
+			      {
+			         storeLoadOptions = record.raw.storeLoadOptions;
+			      }
+			      this.loadAdmin( record.raw.title, record.raw.form, storeName, storeLoadOptions, columns );   
 			}
 		}
 	},
 
-	loadAdmin: function( title ,form, storeName, columns ) {
+	//loadAdmin: function( title ,form, storeName, columns ) {
+	loadAdmin: function( title ,form, storeName, storeLoadOptions, columns ) {
 		var me=this;
 		var comp = this.formUtils.loadDisplay('adminforms',form, true, {});
 		var store = null;
@@ -118,7 +125,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 					me.formUtils.reconfigureGridPanel(comp, store);
 				}
 				
-				comp.getStore().load();
+				comp.getStore().load(storeLoadOptions);
 			}
 		}
 		

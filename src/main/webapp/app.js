@@ -108,6 +108,7 @@ Ext.require([
     'Ssp.view.tools.studentsuccess.StudentSuccess',
     'Ssp.view.admin.AdminForms',
     'Ssp.view.admin.forms.AbstractReferenceAdmin',
+	 'Ssp.view.admin.forms.AbstractReferenceAdminWithoutDelete',
     'Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin',
 	
 	//MAP Views
@@ -313,6 +314,7 @@ Ext.require([
     'Ssp.store.Search',
     'Ssp.store.reference.StudentStatuses',
     'Ssp.store.reference.StudentTypes',
+	'Ssp.store.reference.TagTypes',
     'Ssp.store.Tools',
     'Ssp.store.reference.VeteranStatuses',
     'Ssp.store.reference.YesNo',
@@ -433,6 +435,8 @@ var apiUrls = [
   {name: 'studentType', url: 'reference/studentType'},
   {name: 'terms', url: 'reference/term/?sort=startDate&start=0&limit=10000&sortDirection=DESC'},
   {name: 'courses', url: 'reference/course/all'},
+  {name: 'tagType', url: 'reference/tagType'},
+  {name: 'futureTerms', url: 'reference/term/future'},
   {name: 'weeklyCourseWorkHourRanges', url: 'reference/config/?name=weekly_course_work_hour_ranges'},
 ];
 
@@ -866,6 +870,8 @@ Ext.onReady(function(){
 				    weeklyCourseWorkHourRangesStore: 'Ssp.store.reference.WeeklyCourseWorkHourRanges',
 				    termsStore:'Ssp.store.external.Terms',
 					coursesStore:'Ssp.store.external.Courses',
+				    futureTermsStore:'Ssp.store.external.FutureTerms',
+					tagTypesStore: 'Ssp.store.reference.TagTypes',
 				    tasksStore: 'Ssp.store.Tasks',
 				    studentActivitiesStore: 'Ssp.store.StudentActivities',
 				    toolsStore: 'Ssp.store.Tools',

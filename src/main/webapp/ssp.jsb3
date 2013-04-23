@@ -1475,6 +1475,11 @@
                     "path": "/app/view/admin/forms/"
                 },
                 {
+                    "clsName": "Ssp.view.admin.forms.AbstractReferenceAdminWithoutDelete",
+                    "name": "AbstractReferenceAdminWithoutDelete.js",
+                    "path": "/app/view/admin/forms/"
+                },
+                {
                     "clsName": "Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin",
                     "name": "ConfidentialityDisclosureAgreementAdmin.js",
                     "path": "/app/view/admin/forms/"

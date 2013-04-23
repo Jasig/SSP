@@ -41,6 +41,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
     },
     
 	init: function() {
+		var me=this;
 		return this.callParent(arguments);
     },
 
@@ -65,18 +66,34 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		var record = e.record;
 		var id = record.get('id');
 		var jsonData = record.data;
-		Ext.Ajax.request({
-			url: editor.grid.getStore().getProxy().url+"/"+id,
-			method: 'PUT',
-			headers: { 'Content-Type': 'application/json' },
-			jsonData: jsonData,
-			success: function(response, view) {
-				var r = Ext.decode(response.responseText);
-				record.commit();
-				editor.grid.getStore().sync();
-			},
-			failure: this.apiProperties.handleError
-		}, this);
+		var store = editor.grid.getStore();
+		var doUpdate = true;
+		if (store.$className == 'Ssp.store.reference.TagTypes') {
+			var checkValue = record.get('code');
+			store.filter([{filterFn: function(item) { return item.get("code") == checkValue; }}])
+			if (store.count() > 1) {
+				doUpdate = false;
+			}
+			store.clearFilter();
+		}
+		if (doUpdate) {
+			Ext.Ajax.request({
+				url: editor.grid.getStore().getProxy().url + "/" + id,
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				jsonData: jsonData,
+				success: function(response, view){
+					var r = Ext.decode(response.responseText);
+					record.commit();
+					editor.grid.getStore().sync();
+				},
+				failure: this.apiProperties.handleError
+			}, this);
+		} else {
+			Ext.Msg.alert('This code already exists.Please chnage it');
+		}
 	},
 	
 	addRecord: function(button){
