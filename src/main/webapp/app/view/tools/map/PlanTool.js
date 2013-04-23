@@ -53,6 +53,8 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 layout: 'vbox',
                 width: 80,
                 cls: 'center-align',
+				hidden: true,
+				hideable: false,
                 defaults: {
                     anchor: '100%'
                 },
@@ -86,6 +88,8 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 layout: 'vbox',
                 width: 80,
                 cls: 'center-align',
+				hidden: true,
+				hideable: false,
                 defaults: {
                     anchor: '100%'
                 },
@@ -118,6 +122,8 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 layout: 'vbox',
                 width: 80,
                 cls: 'center-align',
+				hidden: true,
+				hideable: false,
                 
                 defaults: {
                     anchor: '100%'
@@ -144,6 +150,8 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
             
             }, 
             {
+				hidden: true,
+				hideable: false,
                 xtype: 'tbspacer',
                 flex: .10
             },
@@ -156,6 +164,8 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 layout: 'vbox',
                 width: 80,
                 cls: 'center-align',
+				hidden: true,
+				hideable: false,
                 defaults: {
                     anchor: '100%'
                 },
@@ -224,7 +234,8 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     fieldLabel: 'Plan Title',
                     itemId: 'name',
                     name: 'name',
-                    labelWidth: 120
+                    labelWidth: 60,
+					width:180
                 
                 }, {
                     fieldLabel: 'Student is Currently',

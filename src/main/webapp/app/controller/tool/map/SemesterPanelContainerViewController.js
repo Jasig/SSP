@@ -25,6 +25,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     	mapPlanService:'mapPlanService',
 		formUtils: 'formRendererUtils',
 		person: 'currentPerson',
+		authenticatedPerson: 'authenticatedPerson',
         personLite: 'personLite',
     	currentMapPlan: 'currentMapPlan'
     },
@@ -108,9 +109,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     getMapPlanServiceFailure: function() {
 		var me = this;
 
-		me.onCreateMapPlan();
+		me.onCreateNewMapPlan();
 		me.updateAllPlanHours();
 		me.currentMapPlan.set('personId',me.personLite.get('id'));
+		me.currentMapPlan.set('ownerId',me.personLite.get('id'));
     },
  
 	onAfterLayout: function(){
@@ -158,6 +160,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	onCreateNewMapPlan:function(){
 		var me = this;
+		me.currentMapPlan.clearMapPlan();
+		me.currentMapPlan.set('personId',  me.personLite.get('id'));
+		me.currentMapPlan.set('ownerId',  me.authenticatedPerson.get('id'));
+		me.currentMapPlan.set('name','New Plan');
 		me.onCreateMapPlan();
 	},
 	populatePlanStores:function(){
@@ -218,6 +224,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				yearView.add(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode]));
 			});
 		});
+		me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
 		me.getView().setLoading(false);
     },
 	

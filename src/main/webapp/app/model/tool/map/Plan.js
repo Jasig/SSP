@@ -32,6 +32,27 @@ Ext.define('Ssp.model.tool.map.Plan', {
              ],
     hasMany: {model: 'Ssp.model.tool.map.PlanCourse',
     		  name: 'planCourses',
-    		  associationKey: 'planCourses'}
+    		  associationKey: 'planCourses'},
+
+	clearPlanCourses:function(){
+				var me = this;
+				var currentCourses =  me.get('planCourses');
+				while(currentCourses.length > 0) {
+				    currentCourses.pop(); 
+				}
+			},
+	
+	clearMapPlan:function(){
+				var me = this;
+				me.clearPlanCourses();
+				me.set('ownerId','');
+				me.set('personId','');
+				me.set('name','');
+				me.set('id','');
+				me.set('createdBy','');
+				me.set('modifiedBy','');
+				me.set('createdDate',null);
+				me.set('modifiedDate',null);
+			}
     		        		  
 });

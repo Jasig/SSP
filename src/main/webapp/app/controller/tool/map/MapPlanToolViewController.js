@@ -25,18 +25,26 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
     	currentMapPlan: 'currentMapPlan'
     },
     
-	control: {
-	},
-
-	semesterStores: [],
 	init: function() {
 		var me=this;
 	    me.resetForm();
-	    me.getView().loadRecord( me.currentMapPlan );
+		me.currentMapPlan.addListener()
+	    me.getView().loadRecord(me.currentMapPlan);
+		me.appEventsController.getApplication().addListener("onUpdateCurrentMapPlanPlanToolView", me.onUpdateCurrentMapPlan, me);
 		return me.callParent(arguments);
     },
     resetForm: function() {
         var me = this;
         me.getView().getForm().reset();
-    }
+    },
+
+	onUpdateCurrentMapPlan: function(){
+		var me = this;
+		me.getView().loadRecord(me.currentMapPlan);
+	},
+	
+	destroy: function(){
+		var me = this;
+		me.appEventsController.getApplication().removeListener("onUpdateCurrentMapPlanPlanToolView", me.onUpdateCurrentMapPlan, me);
+	}
 });

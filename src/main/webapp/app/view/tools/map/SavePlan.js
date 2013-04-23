@@ -24,6 +24,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
     inject: {
         columnRendererUtils: 'columnRendererUtils',
 		appEventsController: 'appEventsController',
+		currentMapPlan: 'currentMapPlan',
     },
     height: 200,
     width: 850,
@@ -36,6 +37,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                 type: 'vbox'
             },
             title: 'Save Plan',
+			
             items: [{
                 xtype: 'form',
                 flex: 1,
@@ -212,8 +214,11 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
 							
 							savePlan: function(){
 								me = this;
-								me.hide();
-								this.appEventsController.getApplication().fireEvent('onSaveMapPlan');
+								var values = me.query("form")[0].getValues();
+								me.currentMapPlan.set('name', values.name);
+								me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+								me.appEventsController.getApplication().fireEvent('onSaveMapPlan');
+								me.close();
 							},
 							
                             listeners:{
@@ -227,7 +232,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                             text: 'Cancel',
 							cancel: function(){
 								me = this;
-								me.hide();
+								me.close();
 							},
 							listeners:{
                             	click: 'cancel',

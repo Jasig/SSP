@@ -22,7 +22,8 @@ Ext.define('Ssp.service.MapPlanService', {
     inject: {
     	apiProperties: 'apiProperties',
     	currentMapPlan: 'currentMapPlan',
-        personLite: 'personLite'
+        personLite: 'personLite',
+		authenticatedPerson: 'authenticatedPerson'
     },
     initComponent: function() {
 		return this.callParent( arguments );
@@ -69,14 +70,11 @@ Ext.define('Ssp.service.MapPlanService', {
     	
     updateCurrentMap: function(semesterStores){ 
         var me = this;
-        me.currentMapPlan.set('ownerId',me.personLite.get('id'));
-        me.currentMapPlan.set('personId',me.personLite.get('id'));
+        me.currentMapPlan.set('personId',  me.personLite.get('id'));
+		me.currentMapPlan.set('ownerId',  me.authenticatedPerson.get('id'));
         
         var i = 0;
-		var currentCourses =  me.currentMapPlan.get('planCourses');
-		while(currentCourses.length > 0) {
-		    currentCourses.pop(); 
-		}
+		me.currentMapPlan.clearPlanCourses();
         var planCourses = new Array();
         for(var index in semesterStores){
         	var semesterStore = semesterStores[index];
