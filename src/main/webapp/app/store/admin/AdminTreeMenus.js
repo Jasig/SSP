@@ -443,7 +443,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 children: [{
                     text: 'Tag Types',
                     title: 'Tag Type Management',
-                    store: 'tagTypes',
+                    store: 'tags',
 					storeLoadOptions: { params: { status: 'ALL' } },
                     form: 'AbstractReferenceAdminWithoutDelete',
                     leaf: true,

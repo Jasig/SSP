@@ -18,8 +18,8 @@
  */
 package org.jasig.ssp.service.reference;
 
-import org.jasig.ssp.model.reference.TagType;
+import org.jasig.ssp.model.reference.Tag;
 import org.jasig.ssp.service.ReferenceService;
 
-public interface TagTypeService extends ReferenceService<TagType> {
+public interface TagService extends ReferenceService<Tag> {
 }

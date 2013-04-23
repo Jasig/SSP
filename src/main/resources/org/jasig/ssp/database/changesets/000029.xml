@@ -33,8 +33,8 @@
 	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 
 
-	<changeSet id="tag type table" author="archna.jindal">
-		<createTable tableName="tag_type">
+	<changeSet id="tag table" author="archna.jindal">
+		<createTable tableName="tag">
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
@@ -50,11 +50,11 @@
 			</column>	
 			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" foreignKeyName="challenge_created_by_person_id"
+				<constraints nullable="false" foreignKeyName="tag_created_by_person_id"
 				references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true" foreignKeyName="challenge_modified_by_person_id"
+				<constraints nullable="true" foreignKeyName="tag_modified_by_person_id"
 				references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
@@ -62,16 +62,16 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on tag_type to ${database.app.username}</sql>
+		<sql>grant all on tag to ${database.app.username}</sql>
 		<rollback>
-			<dropTable tableName="tag_type" />
+			<dropTable tableName="tag" />
 		</rollback>
 
 	</changeSet>
 	
-	<changeSet id="tagcode must be unique" author="archna.jindal">
-		<addUniqueConstraint tableName="tag_type"
-			columnNames="code" constraintName="unique_tag_code" />
+	<changeSet id="code in tag table must be unique" author="archna.jindal">
+		<addUniqueConstraint tableName="tag"
+			columnNames="code" constraintName="unique_tagcode" />
 	</changeSet>
 	
 	

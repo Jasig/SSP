@@ -58,7 +58,7 @@ Ext.define('Ssp.controller.AdminViewController', {
         statesStore: 'statesStore',
         studentStatusesStore: 'studentStatusesStore',
         studentTypesStore: 'studentTypesStore',
-		tagTypesStore: 'tagTypesStore',
+		tagsStore: 'tagsStore',
     	veteranStatusesStore: 'veteranStatusesStore'
     },
 

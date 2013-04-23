@@ -16,20 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.dao.reference;
+package org.jasig.ssp.factory.reference;
 
-import org.springframework.stereotype.Repository;
-import org.jasig.ssp.dao.AuditableCrudDao;
-import org.jasig.ssp.model.reference.TagType;
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.reference.Tag;
+import org.jasig.ssp.transferobject.reference.TagTO;
 
 /**
- * Data access class for the TagType reference entity.
+ * Tag transfer object factory
+ * 
  */
-@Repository
-public class TagTypeDao extends AbstractReferenceAuditableCrudDao<TagType>
-		implements AuditableCrudDao<TagType> {
-
-	public TagTypeDao() {
-		super(TagType.class);
-	}
+public interface TagTOFactory extends
+		TOFactory<TagTO, Tag> {
 }

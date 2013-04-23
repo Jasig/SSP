@@ -1,4 +1,4 @@
-/*
+/**
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,11 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.store.reference.TagTypes', {
-    extend: 'Ssp.store.reference.AbstractReferences',
-    model: 'Ssp.model.reference.TagType',
-    constructor: function(){
-    	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('tagType')});
-    }
-});
+package org.jasig.ssp.dao.reference;
+
+import org.springframework.stereotype.Repository;
+import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.reference.Tag;
+
+/**
+ * Data access class for the Tag reference entity.
+ */
+@Repository
+public class TagDao extends AbstractReferenceAuditableCrudDao<Tag>
+		implements AuditableCrudDao<Tag> {
+
+	public TagDao() {
+		super(Tag.class);
+	}
+}

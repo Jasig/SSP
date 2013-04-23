@@ -16,47 +16,42 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.factory.reference.impl;
+package org.jasig.ssp.service.reference.impl;
 
-import org.jasig.ssp.dao.reference.TagTypeDao;
-import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
-import org.jasig.ssp.factory.reference.TagTypeTOFactory;
-import org.jasig.ssp.model.reference.TagType;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.reference.TagTypeTO;
+import org.jasig.ssp.dao.reference.TagDao;
+import org.jasig.ssp.model.reference.Tag;
+import org.jasig.ssp.service.reference.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * TagType transfer object factory implementation
+ * Tag service implementation
  * 
+ * @author archna.jindal
  * 
  */
 @Service
-@Transactional(readOnly = true)
-public class TagTypeTOFactoryImpl
-		extends
-		AbstractReferenceTOFactory<TagTypeTO, TagType>
-		implements TagTypeTOFactory {
-
-	public TagTypeTOFactoryImpl() {
-		super(TagTypeTO.class,
-				TagType.class);
-	}
+@Transactional
+public class TagServiceImpl extends
+		AbstractReferenceService<Tag>
+		implements TagService {
 
 	@Autowired
-	private transient TagTypeDao dao;
+	transient private TagDao dao;
 
 	@Override
-	protected TagTypeDao getDao() {
+	protected TagDao getDao() {
 		return dao;
 	}
 
-	@Override
-	public TagType from(final TagTypeTO tObject) throws ObjectNotFoundException {
-		TagType model = super.from(tObject);
-		model.setCode(tObject.getCode());
-		return model;
+	/**
+	 * Sets the data access object
+	 * 
+	 * @param dao
+	 *            the data access object
+	 */
+	protected void setDao(final TagDao dao) {
+		this.dao = dao;
 	}
 }

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.reference.TagType', {
+Ext.define('Ssp.model.reference.Tag', {
 	extend: 'Ssp.model.reference.AbstractReference',
     fields: [
 			{name: 'code', type: 'string'},

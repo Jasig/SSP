@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,16 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.factory.reference;
-
-import org.jasig.ssp.factory.TOFactory;
-import org.jasig.ssp.model.reference.TagType;
-import org.jasig.ssp.transferobject.reference.TagTypeTO;
-
-/**
- * TagType transfer object factory
- * 
- */
-public interface TagTypeTOFactory extends
-		TOFactory<TagTypeTO, TagType> {
-}
+Ext.define('Ssp.store.reference.Tags', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.Tag',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('tag')});
+    }
+});

@@ -1,4 +1,5 @@
 /**
+ /**
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -19,45 +20,51 @@
 package org.jasig.ssp.web.api.reference;
 
 import org.jasig.ssp.factory.TOFactory;
-import org.jasig.ssp.factory.reference.TagTypeTOFactory;
-import org.jasig.ssp.model.reference.TagType;
+import org.jasig.ssp.factory.reference.TagTOFactory;
+import org.jasig.ssp.model.reference.Tag;
 import org.jasig.ssp.service.AuditableCrudService;
-import org.jasig.ssp.service.reference.TagTypeService;
-import org.jasig.ssp.transferobject.reference.TagTypeTO;
+import org.jasig.ssp.service.reference.TagService;
+import org.jasig.ssp.transferobject.reference.TagTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * Tag controller
+ * 
+ * @author archna.jindal
+ * 
+ */
 @Controller
-@RequestMapping("/1/reference/tagType")
-public class TagTypeController
+@RequestMapping("/1/reference/tag")
+public class TagController
 		extends
-		AbstractAuditableReferenceController<TagType, TagTypeTO> {
+		AbstractAuditableReferenceController<Tag, TagTO> {
 
 	@Autowired
-	protected transient TagTypeService service;
+	protected transient TagService service;
 
 	@Override
-	protected AuditableCrudService<TagType> getService() {
+	protected AuditableCrudService<Tag> getService() {
 		return service;
 	}
 
 	@Autowired
-	protected transient TagTypeTOFactory factory;
+	protected transient TagTOFactory factory;
 
 	@Override
-	protected TOFactory<TagTypeTO, TagType> getFactory() {
+	protected TOFactory<TagTO, Tag> getFactory() {
 		return factory;
 	}
 
-	protected TagTypeController() {
-		super(TagType.class, TagTypeTO.class);
+	protected TagController() {
+		super(Tag.class, TagTO.class);
 	}
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(TagTypeController.class);
+			.getLogger(StudentTypeController.class);
 
 	@Override
 	protected Logger getLogger() {

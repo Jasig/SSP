@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.jasig.ssp.model.reference.TagType;
+import org.jasig.ssp.model.reference.Tag;
 import org.jasig.ssp.transferobject.TransferObject;
 import org.jasig.ssp.model.ObjectStatus;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -30,29 +30,29 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import com.google.common.collect.Lists;
 
 /**
- * TagType transfer object
+ *Tag transfer object
  * 
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TagTypeTO
-		extends AbstractReferenceTO<TagType>
-		implements TransferObject<TagType> { 
+public class TagTO
+		extends AbstractReferenceTO<Tag>
+		implements TransferObject<Tag> { 
 
 	private String code;
 
 	/**
 	 * Empty constructor
 	 */
-	public TagTypeTO() {
+	public TagTO() {
 		super();
 	}
 	
-	public TagTypeTO(final TagType model) {
+	public TagTO(final Tag model) {
 		super();
 		from(model);
 	}
 
-	public TagTypeTO(final UUID id, final String name,
+	public TagTO(final UUID id, final String name,
 			final String description) {
 		super(id, name, description);
 	}
@@ -60,10 +60,10 @@ public class TagTypeTO
 	
 
 	@Override
-	public final void from(final TagType model) {
-		if (model == null) {
+	public final void from(final Tag model) {
+		/*if (model == null) {
 			throw new IllegalArgumentException("Model can not be null.");
-		}
+		}*/
 
 		super.from(model);
 		code = model.getCode();
@@ -72,11 +72,11 @@ public class TagTypeTO
 
 	
 
-	public static List<TagTypeTO> toTOList(
-			final Collection<TagType> models) {
-		final List<TagTypeTO> tObjects = Lists.newArrayList();
-		for (final TagType model : models) {
-			tObjects.add(new TagTypeTO(model)); 
+	public static List<TagTO> toTOList(
+			final Collection<Tag> models) {
+		final List<TagTO> tObjects = Lists.newArrayList();
+		for (final Tag model : models) {
+			tObjects.add(new TagTO(model)); 
 		}
 
 		return tObjects;
@@ -90,15 +90,5 @@ public class TagTypeTO
 		this.code = code;
 	}
 	
-	/*public Boolean getActive() {
-		return this.getObjectStatus().equals(ObjectStatus.ACTIVE);
-		}
-		
-	public void setActive(Boolean active) {
-		if(active) {
-		this.setObjectStatus(ObjectStatus.ACTIVE);
-		} else {
-		this.setObjectStatus(ObjectStatus.INACTIVE);
-		}	
-	}*/
+	
 }

@@ -29,22 +29,26 @@ import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
 
 /**
- * TagType reference object.
+ * Tag reference object.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class TagType
+public class Tag
 		extends AbstractReference
 		implements Auditable {
 
-	private static final long serialVersionUID  = 7607015313995397895L;
+	//private static final long serialVersionUID  = 7607015313995397895L;
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1951851647836192289L;
 	private String code;
 
 	/**
 	 * Constructor
 	 */
-	public TagType() {
+	public Tag() {
 		super();
 	}
 
@@ -55,7 +59,7 @@ public class TagType
 	 *            Identifier; required
 	 */
 
-	public TagType(@NotNull final UUID id) {
+	public Tag(@NotNull final UUID id) {
 		super(id);
 	}
 
@@ -71,7 +75,7 @@ public class TagType
 	 * @param description
 	 *            Description; max 64000 characters
 	 */
-	public TagType(@NotNull final UUID id, @NotNull final String name,
+	public Tag(@NotNull final UUID id, @NotNull final String name,
 			final String description) {
 		super(id, name, description);
 	}

@@ -68,7 +68,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		var jsonData = record.data;
 		var store = editor.grid.getStore();
 		var doUpdate = true;
-		if (store.$className == 'Ssp.store.reference.TagTypes') {
+		if (store.$className == 'Ssp.store.reference.Tags') {
 			var checkValue = record.get('code');
 			store.filter([{filterFn: function(item) { return item.get("code") == checkValue; }}])
 			if (store.count() > 1) {
@@ -92,7 +92,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 				failure: this.apiProperties.handleError
 			}, this);
 		} else {
-			Ext.Msg.alert('This code already exists.Please chnage it');
+			Ext.Msg.alert('This code already exists.');
 		}
 	},
 	
