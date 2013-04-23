@@ -34,6 +34,7 @@ Ext.define('Ssp.service.MapPlanService', {
 		baseUrl = baseUrl.replace('{id}', id);
 		return baseUrl;
     },
+ 
     
     get: function( personId, callbacks ){
 		var me=this;
@@ -72,6 +73,10 @@ Ext.define('Ssp.service.MapPlanService', {
         me.currentMapPlan.set('personId',me.personLite.get('id'));
         
         var i = 0;
+		var currentCourses =  me.currentMapPlan.get('planCourses');
+		while(currentCourses.length > 0) {
+		    currentCourses.pop(); 
+		}
         var planCourses = new Array();
         for(var index in semesterStores){
         	var semesterStore = semesterStores[index];
@@ -81,16 +86,16 @@ Ext.define('Ssp.service.MapPlanService', {
             		planCourse.courseTitle = model.get('title');
             		planCourse.courseCode = model.get('code');
             		planCourse.termCode = index;
-            		planCourse.creditHours = model.get('minCreditHours');
+            		planCourse.creditHours = model.get('creditHours');
             		planCourse.formattedCourse = model.get('formattedCourse');
             		planCourse.courseDescription = model.get('description');
             		planCourse.orderInTerm = i;
             		planCourse.isDev = model.get('isDev');
             		planCourses[i++] = planCourse;
-            	})
-            }
-            me.currentMapPlan.set('planCourses',planCourses);
-            }, 
+            })
+         }
+         me.currentMapPlan.set('planCourses',planCourses);
+    }, 
             
     save: function(semesterStores, callbacks, currentMapPlan, view ){
 		var me=this;
@@ -129,6 +134,29 @@ Ext.define('Ssp.service.MapPlanService', {
     			scope: me
     		});	
 		}	
+    },
+    
+    print: function(semesterStores, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl(me.currentMapPlan.get('personId'));
+	    var success = function( response, view ){
+			callbacks.success( response, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );
+		    callbacks.failure( response, callbacks.scope );
+	    };
+		
+	    me.updateCurrentMap(semesterStores);			
+		me.apiProperties.makeRequest({
+   			url: url+'/print',
+   			method: 'POST',
+   			jsonData: me.currentMapPlan.data,
+   			successFunc: success,
+   			failureFunc: failure,
+   			scope: me
+   		});					
     },
     	
 });

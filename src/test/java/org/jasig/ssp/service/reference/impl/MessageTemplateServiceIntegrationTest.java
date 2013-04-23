@@ -22,22 +22,31 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.factory.GoalTOFactory;
 import org.jasig.ssp.factory.TaskTOFactory;
+import org.jasig.ssp.factory.reference.PlanTOFactory;
 import org.jasig.ssp.model.EarlyAlert;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.model.PlanCourse;
 import org.jasig.ssp.model.SubjectAndBody;
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.GoalService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.GoalTO;
+import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.util.service.stub.Stubs;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -89,6 +98,12 @@ public class MessageTemplateServiceIntegrationTest {
 
 	@Autowired
 	private transient TaskTOFactory taskTOFactory;
+	
+	@Autowired
+	private transient PlanService planService;
+	
+	@Autowired
+	private transient PlanTOFactory planTOFactory;
 
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
@@ -196,4 +211,5 @@ public class MessageTemplateServiceIntegrationTest {
 
 		assertSubjectAndBody(subjAndBody, "CourseNameHere", "CourseNameHere");
 	}
+	
 }

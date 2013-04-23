@@ -22,8 +22,8 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.map.PrintPlanController',
     inject: {
-        columnRendererUtils: 'columnRendererUtils'
-        //sspConfig: 'sspConfig'
+        columnRendererUtils: 'columnRendererUtils',
+        appEventsController: 'appEventsController'
     },
     height: 450,
     width: 500,
@@ -136,12 +136,27 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                             items: [{
                                 xtype: 'button',
                                 itemId: 'sendPrintButton',
-                                text: 'Print'
+                                text: 'Print',
+                                listeners:{
+                                	click: function(){
+                                		me = this;
+                                		me.appEventsController.getApplication().fireEvent('onPrintMapPlan');
+                                		me.close();
+                                	},
+                                	scope: me
+                                }
                                 
                             }, '-', {
                                 xtype: 'button',
                                 itemId: 'cancelButton',
-                                text: 'Cancel'
+                                text: 'Cancel',
+                                listeners: {
+    		                    	click:function(){
+    		                    		me = this;
+    		                    		me.close();
+    		                    	},
+    		                    	scope: me
+    		                    }
                             }]
                         
                         }]

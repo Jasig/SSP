@@ -104,7 +104,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	init: function() {
 		var me=this;
 		var view = me.getView();
-	    //
 		return this.callParent(arguments);
     },
 
@@ -183,6 +182,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
         var me=this;
 		this.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
     },
+    
 
 	destroy:function(){
 	    var me=this;

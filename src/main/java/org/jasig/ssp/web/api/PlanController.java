@@ -20,6 +20,7 @@ package org.jasig.ssp.web.api;
 
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
@@ -28,8 +29,10 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PlanLiteTO;
 import org.jasig.ssp.transferobject.PlanTO;
@@ -63,6 +66,12 @@ public class PlanController  extends AbstractBaseController {
 	
 	@Autowired
 	private PlanService service;
+	
+	@Autowired
+	private PersonService personService;
+	
+	@Autowired
+	private TermService termService;
 	
 	@Autowired
 	private PlanTOFactory factory;
@@ -186,6 +195,27 @@ public class PlanController  extends AbstractBaseController {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Returns an html page valid for printing
+	 * <p>
+	 *
+	 * 
+	 * @param obj
+	 *            instance to print.
+	 * @return html text strem
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 */
+	@RequestMapping(value = "/print", method = RequestMethod.POST)
+	public @ResponseBody
+	String print(final HttpServletResponse response,
+			 @RequestBody final PlanTO obj) throws ObjectNotFoundException {
+
+		
+		final String output = service.createMapPlanPrintScreen(obj);
+		return output;
 	}
 
 	/**

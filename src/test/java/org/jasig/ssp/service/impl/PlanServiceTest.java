@@ -33,13 +33,26 @@ import java.util.UUID;
 
 import org.jasig.ssp.dao.PlanDao;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.model.PlanCourse;
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.transferobject.PlanCourseTO;
+import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * {@link PlanServiceImpl} test suite
@@ -47,13 +60,22 @@ import org.junit.Test;
  * @author tony.arland
  * 
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("../service-testConfig.xml")
+@TransactionConfiguration(defaultRollback = false)
+@Transactional
 public class PlanServiceTest {
 
 	private transient PlanServiceImpl service;
 	
 	private transient PlanDao dao;
-
-
+	
+	  
+	@Autowired
+	private transient PersonService personService;
+	
+	@Autowired
+	private transient TermService termService;
 
 	@Before
 	public void setUp() {
@@ -120,6 +142,39 @@ public class PlanServiceTest {
 		service.delete(id);
 
 		verify(dao);
+	}
+	
+	@Test
+	public void createMapPlanPrintOutTest() throws ObjectNotFoundException {
+		
+		PlanTO plan = new PlanTO();
+		plan.setName("TestPlan");
+		plan.setObjectStatus(ObjectStatus.ACTIVE);
+		
+		Collection<Term> all = termService.getAll(null).getRows();
+		for (Term term : all) {
+			if(term.getReportYear() < 2008 || term.getReportYear() > 2013)
+				continue;
+			
+			for(int i = 1; i < 6; i++)
+			{
+				
+				PlanCourseTO course = new PlanCourseTO();
+				course.setCourseCode("MAT-"+i);
+				course.setCourseDescription("TEST"+i);
+				course.setCourseTitle("TEST"+i);
+				course.setFormattedCourse("TEST"+i);
+				course.setOrderInTerm(new Integer(i));
+				course.setIsDev(false);
+				course.setCreditHours(3);
+				course.setTermCode(term.getCode());
+				plan.getPlanCourses().add(course);
+			}
+		}
+		
+		final String string = service.createMapPlanPrintScreen(plan);
+		assertNotNull("Save() result should not have been null.", string);
+
 	}
 
 }

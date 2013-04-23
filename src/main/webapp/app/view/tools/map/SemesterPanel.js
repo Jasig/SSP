@@ -70,6 +70,11 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 				hidden: true,
 				hideable: false
             },
+			{
+                dataIndex: 'creditHours',
+                xtype: 'gridcolumn',
+				width:25
+            },
             {
                 dataIndex: 'maxCreditHours',
                 xtype: 'gridcolumn',
@@ -79,7 +84,8 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 			{
                 dataIndex: 'minCreditHours',
                 xtype: 'gridcolumn',
-				width:25
+				hidden: true,
+				hideable:false
             },
 			{
                 dataIndex: 'code',

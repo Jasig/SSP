@@ -870,7 +870,7 @@ Ext.onReady(function(){
 				    weeklyCourseWorkHourRangesStore: 'Ssp.store.reference.WeeklyCourseWorkHourRanges',
 				    termsStore:'Ssp.store.external.Terms',
 					coursesStore:'Ssp.store.external.Courses',
-				    futureTermsStore:'Ssp.store.external.FutureTerms',
+				    termsStore:'Ssp.store.external.Terms',
 					tagTypesStore: 'Ssp.store.reference.TagTypes',
 				    tasksStore: 'Ssp.store.Tasks',
 				    studentActivitiesStore: 'Ssp.store.StudentActivities',

@@ -75,11 +75,18 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        autoscroll: true
 				    },
 				    {
+				    	xtype: 'numberfield',
+				        anchor: '100%',
+				        name: 'bottles',
+				        fieldLabel: 'Bottles of Beer',
+				        maxValue: 99,
+				        allowDecimals: false,
+				        minValue: 0,
+				        step: 1,
 				        fieldLabel: 'Credit hours(over ride)',
 				        name: 'creditHours',
 				        allowBlank:true,
 				        itemId: 'creditHours',
-				        xtype: 'textfield'
 				        //flex:1,
 				        
 				    },
@@ -118,9 +125,9 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 		                    listeners: {
 		                    	click:function(){
 		                    		me = this;
-		                    		var minCreditHours = me.query('#creditHours')[0].getValue();
+		                    		var creditHours = me.query('#creditHours')[0].getValue();
 		                    		var mapCourse = me.semesterStore.getAt(me.rowIndex);
-		                    		mapCourse.set('minCreditHours', minCreditHours);
+		                    		mapCourse.set('creditHours', creditHours);
 		                    		me.close();
 		                    	},
 		                    	scope: me
@@ -133,6 +140,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 		                    
 		                    listeners: {
 		                    	click:function(){
+		                    		me = this;
 		                    		me.close();
 		                    	},
 		                    	scope: me

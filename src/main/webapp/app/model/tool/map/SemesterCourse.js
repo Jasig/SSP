@@ -23,7 +23,29 @@ Ext.define('Ssp.model.tool.map.SemesterCourse', {
 			 {name:'formattedCourse', type: 'string'},
 			 {name:'description', type: 'string'},
              {name:'minCreditHours', type: 'float'},
+			 {name:'maxCreditHours', type: 'float'},
+			 {name:'creditHours', type: 'float'},
              {name:'termCode', type: 'string'},
              {name:'isDev', type: 'boolean'}
-             ]
+             ],
+	constructor: function(planCourse){
+					var me = this;
+		        	this.callParent(arguments);
+					if(planCourse){
+						if( planCourse.courseTitle)
+							me.set('title', planCourse.courseTitle);
+						if(planCourse.courseCode)
+							me.set('code', planCourse.courseCode);
+						if(planCourse.courseDescription)
+							me.set('description', planCourse.courseDescription);
+						if(!planCourse.minCeditHours  && planCourse.creditHours){
+							me.set('minCreditHours', planCourse.creditHours <= 2 ? 0 :  planCourse.creditHours - 2);
+							me.set('maxCreditHours', planCourse.creditHours + 2);
+						}
+						if(planCourse.dev)
+							me.set('isDev',  planCourse.dev);
+					}else if(!me.get('creditHours')) {
+		        		me.set('creditHours', me.get('minCreditHours'));
+					}
+		        }
 });
