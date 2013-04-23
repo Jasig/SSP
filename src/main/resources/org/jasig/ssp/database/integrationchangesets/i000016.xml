@@ -33,7 +33,7 @@
 	<property name="should_manage_integration_database_sql"
 			  value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
 
-<changeSet id="Add is_dev to external course" author="tony.arland">
+<changeSet id="change number from int to varchar" author="tony.arland">
 		<preConditions onFail="CONTINUE"
 					   onFailMessage="Skip adding the 2.0 fields to the external_person table for integration database">
 			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
