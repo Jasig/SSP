@@ -33,39 +33,41 @@ Ext.define('Ssp.view.tools.profile.CurrentSchedule', {
         Ext.applyIf(me, {
             //store: me.store,
             xtype: 'gridcolumn',
-            columns: [{
-                dataIndex: 'formattedCourse',
-                text: 'Course',
-				flex: 1
-            }, {
-                dataIndex: 'creditEarned',
-                text: 'Cr Hrs',
-				flex: 1
-            }, {
-            
-                dataIndex: 'title',
-                text: 'Course Title',
-				flex: 1
-            },
+            columns: [
 			{
                 dataIndex: 'termCode',
                 text: 'Term',
-                flex: 1
+                flex: .10
             }, {
+                dataIndex: 'formattedCourse',
+                text: 'Course',
+				flex: .14
+            },  {
+            
+                dataIndex: 'title',
+                text: 'Course Title',
+				flex: .30
+            },
+			{
+                dataIndex: 'creditEarned',
+                text: 'Cr Hrs',
+				flex: .07
+            },
+			{
             
                 dataIndex: 'facultyName',
                 text: 'Instructor',
-                flex: 1
+                flex: .25
             }, {
             
                 dataIndex: 'statusCode',
                 text: 'Status',
-                flex: 1
+                flex: .07
             }, {
             
                 dataIndex: 'audited',
                 text: 'Audited',
-                flex: 1
+                flex: .07
             }
 			],
             viewConfig: {}
