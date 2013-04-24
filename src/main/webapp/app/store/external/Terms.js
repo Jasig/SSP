@@ -33,21 +33,30 @@ Ext.define('Ssp.store.external.Terms', {
     	return; 
     },
     
-    getCurrentAndFutureTermsStore: function(){
+    getCurrentAndFutureTermsStore: function(sortEarliestFirst){
 		var me = this;
     	var store = Ext.create('Ext.data.Store', {
 		     	model: "Ssp.model.external.Term",
 		     });
     	store.loadData(me.getCurrentAndFutureTerms())
+		me.sortStoreByDate(store, sortEarliestFirst);
     	return store;
     },
 
-    getFutureTermsStore: function(){
+	sortStoreByDate: function(store, sortEarliestFirst){
+		if(sortEarliestFirst)
+			store.sort('startDate','ASC');
+		else
+			store.sort('startDate','DESC');
+	},
+
+    getFutureTermsStore: function(sortEarliestFirst){
 		var me = this;
     	var store = Ext.create('Ext.data.Store', {
 		     	model: "Ssp.model.external.Term",
 		     });
-    	store.loadData(me.getCurrentAndFutureTerms());
+    	store.loadData(me.getFutureTerms());
+		me.sortStoreByDate(store, sortEarliestFirst);
     	return store;
     },
 

@@ -26,7 +26,8 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
     inject:{
     	formUtils: 'formRendererUtils',
         weeklyCourseWorkHourRangesStore: 'weeklyCourseWorkHourRangesStore',
-        registrationLoadRangesStore: 'registrationLoadRangesStore'
+        registrationLoadRangesStore: 'registrationLoadRangesStore',
+		termsStore: 'termsStore'
     },
 	width: "100%",
     height: "100%", 

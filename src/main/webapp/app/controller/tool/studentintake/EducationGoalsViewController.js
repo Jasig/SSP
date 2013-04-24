@@ -73,7 +73,7 @@ Ext.define('Ssp.controller.tool.studentintake.EducationGoalsViewController', {
 	
 	initialiseGraduationDates: function(){
 		var me = this;
-		var futureTermsStore = me.termsStore.getCurrentAndFutureTermsStore();
+		var futureTermsStore = me.termsStore.getCurrentAndFutureTermsStore(true);
 		var currentCode = me.getAnticipatedGraduationDateTermCodeCombo().getValue();
 		me.getAnticipatedGraduationDateTermCodeCombo().bindStore(futureTermsStore);
 		me.getAnticipatedGraduationDateTermCodeCombo().setValue(currentCode);
