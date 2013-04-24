@@ -97,13 +97,14 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                         itemId: 'coachOfficeLocation',
 						flex: 1
                     
-                    }, {
+                    }
+					/*, {
                         fieldLabel: 'Coach Type',
                         name: 'coachType',
                         itemId: 'coachType',
                     flex: 1
                     
-                    }]
+                    }*/]
                 
                 }, {
                     xtype: 'fieldset',
