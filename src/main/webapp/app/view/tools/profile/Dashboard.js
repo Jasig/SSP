@@ -57,7 +57,8 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         anchor: '100%'
                     },
                     flex: .45,
-                    items: [{
+                    items: [
+					/*{
                         fieldLabel: '<a href="">Watch</a>',
                         name: 'watchStudent',
                         itemId: 'watchStudent',
@@ -65,7 +66,8 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         labelWidth: 20,
                         margin: '0 0 1 5'
                     
-                    }, {
+                    },*/
+					{
                         xtype: 'profileperson',
 						
                     }, {
