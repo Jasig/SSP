@@ -71,7 +71,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
                     },
                    
                     items: [
-					{
+					/*{
 						xtype: 'fieldset',
 						border: 0,
 						title: '',
@@ -103,7 +103,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
 							disabled: true,
 							width: '100'
 						}]
-					},
+					},*/
 					{
                     xtype: 'fieldset',
                     border: 0,
