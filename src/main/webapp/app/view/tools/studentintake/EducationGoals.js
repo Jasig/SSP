@@ -128,7 +128,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				        xtype: 'combobox',
 				        name: 'registrationLoadName',
 				        itemId: 'fieldRegistrationLoadCombo',
-				        fieldLabel: 'Field Registration',
+				        fieldLabel: 'Registration Load',
 				        emptyText: 'Select One',
 				        store: me.registrationLoadRangesStore,
 				        valueField: 'name',
