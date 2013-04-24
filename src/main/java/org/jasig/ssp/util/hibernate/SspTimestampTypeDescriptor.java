@@ -23,7 +23,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.TimeZone;
 
 import org.hibernate.type.descriptor.ValueBinder;
 import org.hibernate.type.descriptor.ValueExtractor;
@@ -32,31 +31,26 @@ import org.hibernate.type.descriptor.java.JavaTypeDescriptor;
 import org.hibernate.type.descriptor.sql.BasicBinder;
 import org.hibernate.type.descriptor.sql.BasicExtractor;
 import org.hibernate.type.descriptor.sql.TimestampTypeDescriptor;
+import org.jasig.ssp.util.SspTimeZones;
 
 /**
- * Structured a little bit differently than {@link TimestampTypeDescriptor} b/c
- * we assume this class is instantiated and managed as a singleton by Spring.
- * Based on <a href="http://stackoverflow.com/a/3430957">a StackOverflow answer</a>.
+ * Same as {@link TimestampTypeDescriptor} but always specifies a
+ * <code>java.util.Calendar</code> when reading and writing JDBC
+ * <code>Timestamps</code>. This allows us to configure the
+ * <code>TimeZone</code> in which those <code>Timestamps</code> are interpreted.
+ * We do so globally in {@link SspTimeZones}.
+ *
+ * <p>Based on <a href="http://stackoverflow.com/a/3430957">a StackOverflow answer</a>.</p>
+ *
+ * @see SspDateTypeDescriptor
  */
-public class ConfigurableTimestampTypeDescriptor extends TimestampTypeDescriptor {
-
-	private static final TimeZone DEFAULT_TIMEZONE = TimeZone.getTimeZone("UTC");
-
-	private TimeZone timeZone;
-
-	public ConfigurableTimestampTypeDescriptor() {
-		this.timeZone = DEFAULT_TIMEZONE;
-	}
-
-	public ConfigurableTimestampTypeDescriptor(String timeZoneId) {
-		this.timeZone = TimeZone.getTimeZone(timeZoneId);
-	}
+public class SspTimestampTypeDescriptor extends TimestampTypeDescriptor {
 
 	public <X> ValueBinder<X> getBinder(final JavaTypeDescriptor<X> javaTypeDescriptor) {
 		return new BasicBinder<X>( javaTypeDescriptor, this ) {
 			@Override
 			protected void doBind(PreparedStatement st, X value, int index, WrapperOptions options) throws SQLException {
-				st.setTimestamp( index, javaTypeDescriptor.unwrap( value, Timestamp.class, options ), Calendar.getInstance(ConfigurableTimestampTypeDescriptor.this.timeZone) );
+				st.setTimestamp( index, javaTypeDescriptor.unwrap( value, Timestamp.class, options ), Calendar.getInstance(SspTimeZones.INSTANCE.getDbTimeZone()) );
 			}
 		};
 	}
@@ -65,7 +59,7 @@ public class ConfigurableTimestampTypeDescriptor extends TimestampTypeDescriptor
 		return new BasicExtractor<X>( javaTypeDescriptor, this ) {
 			@Override
 			protected X doExtract(ResultSet rs, String name, WrapperOptions options) throws SQLException {
-				return javaTypeDescriptor.wrap( rs.getTimestamp( name, Calendar.getInstance(ConfigurableTimestampTypeDescriptor.this.timeZone) ), options );
+				return javaTypeDescriptor.wrap( rs.getTimestamp( name, Calendar.getInstance(SspTimeZones.INSTANCE.getDbTimeZone()) ), options );
 			}
 		};
 	}

@@ -737,6 +737,42 @@ Ext.define('Ssp.util.FormRendererUtils',{
 	fixDateOffset: function( dateToFix ) {
 		return new Date(dateToFix.toUTCString().substr(0, 25));
 	},
+
+    /**
+     * Builds an object with a toJSON method that will format dates
+     * in exactly the way we want when we know we don't need/want
+     * to include a time component. The resulting object is intended to be used
+     * with Ext.JSON.doEncode(). We do not just add a toJSON method to the given
+     * Date object b/c logic in doEncode() will ignore that method if it
+     * believes the object to be serialized is a Date.
+     *
+     * Note that if you were using a Ext.*.Writer to serialize your object, you
+     * *might* not need to use this b/c at least the base Writer will honor
+     * date formatting options set directly on Model fields.
+     *
+     * Because this only cares about the date portion of the given date we
+     * assuming formatting in local time works fine. This doesn't mean local
+     * time is always correct when performing calculations with this date, e.g.
+     * "is this date in the future or the past?" In those cases it is up to
+     * the calling context to "fix up" the date for calculation, probably
+     * using additional information from the server w/r/t the timezone in
+     * which it assumes dates without time components "live". But on the server
+     * we need to assume that there is a single timezone in which all time
+     * component-less dates exist, so sending or receiving a timezone in these
+     * fields doesn't actually serve a purpose (or at least receiving a
+     * timezone does not).
+     *
+     * @param origDate
+     * @return {{formattedStr: (*|String|String), toJSON: Function}}
+     */
+    toJSONStringifiableDate: function ( origDate ) {
+        return {
+            formattedStr: Ext.Date.format(origDate, 'Y-m-d'),
+            toJSON: function() {
+                return '"' + this.formattedStr + '"';
+            }
+        }
+    },
 	
 	/**
 	 * Fix a date to correct for the GMT Offset in ExtJS.
