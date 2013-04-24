@@ -47,6 +47,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		if(me.termsStore.getTotalCount() == 0)
 			me.termsStore.load();
 		me.appEventsController.assignEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
+		me.appEventsController.assignEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadPlanCompleteMapPlan, scope: me});
+		
 		me.appEventsController.assignEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onPrintMapPlan', callBackFunc: me.onPrintMapPlan, scope: me});
 
@@ -105,14 +107,18 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			me.updateAllPlanHours();
 		}
     },
-
+    onLoadPlanCompleteMapPlan: function () {
+    	var me = this;
+		me.onCreateMapPlan();
+		me.populatePlanStores();
+		me.updateAllPlanHours();    	
+    },
     getMapPlanServiceFailure: function() {
 		var me = this;
-
 		me.onCreateNewMapPlan();
 		me.updateAllPlanHours();
 		me.currentMapPlan.set('personId',me.personLite.get('id'));
-		me.currentMapPlan.set('ownerId',me.personLite.get('id'));
+		me.currentMapPlan.set('ownerId',me.authenticatedPerson.get('id'));
     },
  
 	onAfterLayout: function(){
@@ -129,7 +135,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
                 responseCnt: 0,
                 expectedResponseCnt: 1
             }
-	    	 me.mapPlanService.get(id, {
+	    	 me.mapPlanService.getCurrent(id, {
 	             success: me.newServiceSuccessHandler('map', me.getMapPlanServiceSuccess, serviceResponses),
 	             failure: me.newServiceFailureHandler('map', me.getMapPlanServiceFailure, serviceResponses),
 	             scope: me
@@ -370,6 +376,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.appEventsController.removeEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
         me.appEventsController.removeEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onPrintMapPlan', callBackFunc: me.onPrintMapPlan, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadPlanCompleteMapPlan, scope: me});
 
         me.appEventsController.removeEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});

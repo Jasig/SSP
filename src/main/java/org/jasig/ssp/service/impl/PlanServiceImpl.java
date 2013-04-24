@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.dao.PlanDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -131,6 +133,15 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 		}
 		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanPrintScreen(student, owner, plan, totalPlanCreditHours, courses);
 		return subjectAndBody.getBody();
+	}
+	
+	@Override
+	public Plan get(@NotNull final UUID id) throws ObjectNotFoundException {
+		final Plan obj = getDao().get(id);
+		if(obj == null)
+			throw new ObjectNotFoundException(id, this.getClass().getName());
+		return obj;
+
 	}
 	
 }

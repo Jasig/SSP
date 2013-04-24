@@ -26,6 +26,8 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 	private String name;
 
 	private String ownerId;
+	
+	private String ownerName;
 
 	/**
 	 * Empty constructor.
@@ -39,6 +41,7 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 		super.from(model);
 		this.setName(model.getName());
 		this.setOwnerId(model.getOwner().getId().toString());
+		this.setOwnerName(model.getOwner().getFirstName()+" "+model.getOwner().getLastName());
 	}
 
 	public String getName() {
@@ -55,6 +58,14 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 
 	public void setOwnerId(String ownerId) {
 		this.ownerId = ownerId;
+	}
+
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
 	}
 
 }

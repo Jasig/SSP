@@ -20,7 +20,10 @@ Ext.define('Ssp.model.tool.map.Plan', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'name',type:'string'},
              {name:'ownerId',type:'string'},
+             {name:'ownerName',type:'string'},
              {name:'personId', type:'string'},
+             {name: 'objectStatus', type: 'string'},
+             {name: 'modifiedDate', type: 'date', dateFormat: 'time'},             
              {name:'planCourses',
        		  type:'auto',
        		  convert: function(data,model)

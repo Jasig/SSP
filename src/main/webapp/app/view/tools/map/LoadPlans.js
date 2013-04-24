@@ -20,6 +20,7 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
     extend: 'Ext.window.Window',
     alias: 'widget.loadplans',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.map.LoadPlanViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
         //sspConfig: 'sspConfig'
@@ -113,12 +114,12 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                             columns: [{
                                 text: 'Plan Title',
                                 width: '450',
-                                dataIndex: 'plan',
+                                dataIndex: 'name',
                                 sortable: true
                             }, {
                                 text: 'Date/ Time',
                                 width: '150',
-                                dataIndex: 'date',
+                                dataIndex: 'modifiedDate',
                                 sortable: true,
                                 renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
                                 
@@ -126,8 +127,7 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                                 text: 'Advisor',
                                 width: '100',
                                 sortable: true,
-                                dataIndex: 'advisor'
-                                
+                                dataIndex: 'ownerName'
                             }]
                         }
                         ]}

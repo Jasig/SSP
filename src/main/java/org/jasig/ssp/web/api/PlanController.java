@@ -110,7 +110,25 @@ public class PlanController  extends AbstractBaseController {
 		return new PagedResponse<PlanTO>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));		
 	}
-	
+
+	/**
+	 * Retrieves the specified list from persistent storage.
+	 * 
+	 * @param id
+	 *            The specific id to use to lookup the associated data.
+	 * @return The specified instance if found.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If that specified data is not invalid.
+	 */
+	@RequestMapping(value="/{id}", method = RequestMethod.GET)
+	public @ResponseBody
+	PlanTO getPlan(final @PathVariable UUID personId,final @PathVariable UUID id) throws ObjectNotFoundException,
+			ValidationException {
+		Plan model = getService().get(id);
+		return new PlanTO(model);
+	}	
 	/**
 	 * Retrieves the current entity from persistent storage.
 	 * 

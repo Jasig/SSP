@@ -37,7 +37,7 @@ Ext.define('Ssp.service.MapPlanService', {
     },
  
     
-    get: function( personId, callbacks ){
+    getCurrent: function( personId, callbacks ){
 		var me=this;
 		var url = me.getBaseUrl(personId);
 	    var success = function( response, view ){
@@ -56,7 +56,26 @@ Ext.define('Ssp.service.MapPlanService', {
 			scope: me
 		});    	
     },
-	  
+    
+    getPlan: function( planId, personId, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl(personId);
+	    var success = function( response, view ){
+			callbacks.success( response, callbacks.scope );
+	    };
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		me.apiProperties.makeRequest({
+			url: url+'/'+planId, 
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});    	
+    },
     getTermCodes: function(mapPlan){ 
     	var termCodes = [];
     	var i = 0;
