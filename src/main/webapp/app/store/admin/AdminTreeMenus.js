@@ -441,8 +441,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 form: '',
                 expanded: false,
                 children: [{
-                    text: 'Tag Types',
-                    title: 'Tag Type Management',
+                    text: 'Tags',
+                    title: 'Tag Management',
                     store: 'tags',
 					storeLoadOptions: { params: { status: 'ALL' } },
                     form: 'AbstractReferenceAdminWithoutDelete',
