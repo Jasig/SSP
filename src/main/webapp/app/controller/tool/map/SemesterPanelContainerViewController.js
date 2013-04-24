@@ -355,6 +355,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			creditHours.setMaxValue(courseRecord.get('maxCreditHours'));
     		me.coursePlanDetails.rowIndex = args.rowIndex;
     		me.coursePlanDetails.semesterStore = args.store;
+			me.coursePlanDetails.setTitle(courseRecord.get('formattedCourse') + ' - ' + courseRecord.get('title'));
     		me.coursePlanDetails.center();
     		me.coursePlanDetails.show();
     	}
