@@ -26,11 +26,9 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
 	},
 
     width: 290,
-    minHeight: 500,
-    height: '100%',
     border: 0,
     title: 'All Courses',
-    scroll: 'vertical',
+    scroll: true,
     hideHeaders: false,
     columnLines: false,
 	itemId: 'coursesGrid',
@@ -49,17 +47,18 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
                             hideable: false
                         },
                         {
+                            xtype: 'gridcolumn',
+                            dataIndex: 'formattedCourse',
+                            text: 'Course',
+                            width: 80
+                        },
+                        {
                              xtype: 'gridcolumn',
                              dataIndex: 'title',
                              text: 'Title',
-                             width: 100
+                             width: 160
                          },
-						 {
-                             xtype: 'gridcolumn',
-                             dataIndex: 'formattedCourse',
-                             text: 'Course',
-                             width: 120
-                         },
+						 
 						{
                             xtype: 'gridcolumn',
                              dataIndex: 'description',

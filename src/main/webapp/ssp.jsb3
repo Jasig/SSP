@@ -448,6 +448,11 @@
                     "name": "CoursesGrid.js",
                     "path": "/app/view/tools/map/"
                 },
+                 {
+                    "clsName": "Ssp.view.tools.map.CoursesGridPanel",
+                    "name": "CoursesGridPanel.js",
+                    "path": "/app/view/tools/map/"
+                },
                 {
                     "clsName": "Ssp.view.tools.displacedworker.DisplacedWorker",
                     "name": "DisplacedWorker.js",

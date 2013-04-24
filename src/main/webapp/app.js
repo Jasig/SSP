@@ -133,6 +133,7 @@ Ext.require([
     'Ssp.view.tools.map.PrintPlan',
     'Ssp.view.tools.map.CourseDetails',
     'Ssp.view.tools.map.CoursesGrid',
+	'Ssp.view.tools.map.CoursesGridPanel',
 	
 	'Ssp.view.tools.legacyremarks.LegacyRemarks',
 	'Ssp.view.tools.documents.Documents',

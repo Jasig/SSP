@@ -78,8 +78,8 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                     				               {
                                 				        fieldLabel: 'Course',
 														labelWidth:120,
-                                				        name: 'title_formatted_course',
-                                				        itemId: 'title_formatted_course'
+                                				        name: 'formatted_course_title',
+                                				        itemId: 'formatted_course_title'
                                 				    },{
                                 				        fieldLabel: 'Course Description',
 														labelWidth:120,

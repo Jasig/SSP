@@ -179,8 +179,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 								var me = this;
 		                        var searchString = textField.getValue().trim();
 		                        var coursesGrid = me.findParentByType('coursesview').query('#coursesGrid')[0];
-								coursesGrid.getStore().filterBy(getFilterRecord('title', searchString)); 
-								coursesGrid.getStore().filterBy(getFilterRecord('formattedCourse', searchString));
+								coursesGrid.getStore().filterBy(getFilterRecord(['title', 'formattedCourse'], searchString)); 
 		                    }
 						},
 						
@@ -199,30 +198,14 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 								var filterBy = parent.getComponent("filterBy");
 								filterBy.setValue("");
 								var coursesGrid = me.findParentByType('coursesview').query('#coursesGrid')[0];
-								formattedCourse
-								coursesGrid.getStore().filterBy(getFilterRecord('title', "")); 
-								coursesGrid.getStore().filterBy(getFilterRecord('formattedCourse', "")); 
+								coursesGrid.getStore().filterBy(getFilterRecord(['title', 'formattedCourse'], "")); 
 		                    }
 						},
                     }]
                 
                 },
                 {
-                    xtype : 'coursesgrid',
-                    flex: 1,
-                    width: '100%',
-                    height: '100%',
-                    layout: 'card',
-                    autoScroll: true,
-                    /*items : [
-                        {xtype:'coursesgrid', itemId:'allcoursesgrid', flex:1},
-                        {xtype:'coursesgrid', itemId:'electivesgrid', flex:1},
-                        {xtype:'coursesgrid', itemId:'defined1grid', flex:1},
-                        {xtype:'coursesgrid', itemId:'defined2grid', flex:1},
-                        {xtype:'coursesgrid', itemId:'defined3grid', flex:1},
-                        {xtype:'coursesgrid', itemId:'holdcoursesgrid', flex:1}
-                        
-                    ]*/
+                    xtype : 'coursesgridpanel',
                 }
             
                 ]
@@ -237,11 +220,11 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
     },
 });
 
-function getFilterRecord(field, searchString){
+function getFilterRecord(fields, searchString){
 	var f = [];
 	f.push({
 		filter: function(record){
-			return filterString(searchString, field, record);
+			return filterString(searchString, fields, record);
 		}
 	});
 	var len = f.length;
@@ -254,10 +237,15 @@ function getFilterRecord(field, searchString){
 		return true;
 	}
 }
-function filterString(value, dataIndex, record){
-	var val = record.get(dataIndex);
-	if (typeof val != "string"){
-		return value.length == 0;
-	}
-	return val.toLowerCase().indexOf(value.toLowerCase()) > -1;
+
+function filterString(value, fields, record){
+	var matches = false;
+	fields.forEach(function(field){
+		var val = record.get(field);
+		if (typeof val == "string"){
+			if(val.toLowerCase().indexOf(value.toLowerCase()) > -1)
+				matches = true;
+		}
+	});
+	return matches;
 }
