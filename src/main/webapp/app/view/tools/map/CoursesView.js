@@ -180,6 +180,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 		                        var searchString = textField.getValue().trim();
 		                        var coursesGrid = me.findParentByType('coursesview').query('#coursesGrid')[0];
 								coursesGrid.getStore().filterBy(getFilterRecord('title', searchString)); 
+								coursesGrid.getStore().filterBy(getFilterRecord('formattedCourse', searchString));
 		                    }
 						},
 						
@@ -198,7 +199,9 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 								var filterBy = parent.getComponent("filterBy");
 								filterBy.setValue("");
 								var coursesGrid = me.findParentByType('coursesview').query('#coursesGrid')[0];
+								formattedCourse
 								coursesGrid.getStore().filterBy(getFilterRecord('title', "")); 
+								coursesGrid.getStore().filterBy(getFilterRecord('formattedCourse', "")); 
 		                    }
 						},
                     }]
