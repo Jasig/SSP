@@ -64,7 +64,7 @@ Ext.define('Ssp.view.tools.profile.AcademicProgram', {
                         xtype: 'tbspacer',
                        flex: .50
                     },
-					{
+					/*{
                         tooltip: 'Email MAP',
                         text: '',
                         width: 30,
@@ -72,7 +72,8 @@ Ext.define('Ssp.view.tools.profile.AcademicProgram', {
                         cls: 'mapEmailIcon',
                         xtype: 'button',
                         itemId: 'emailMAPButton'
-                    }, {
+                    }, */
+					{
                         tooltip: 'Print MAP',
                         text: '',
                         width: 30,
