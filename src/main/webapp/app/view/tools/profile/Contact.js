@@ -59,14 +59,6 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                     padding: 0,
                     flex: .60,
                     items: [{
-                        fieldLabel: '',
-                        name: 'name',
-                        itemId: 'studentName',
-                        padding: '0 0 0 10',
-                        height: '20',
-                        style: 'font-weight:bold;color: #00008B'
-                    
-                    }, {
                         xtype: 'fieldset',
                         border: 1,
                         cls: 'ssp-form',
@@ -123,7 +115,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                             name: 'birthDate',
                             itemId: 'birthDate',
                             height: '60',
-                            	
+                        
                         }]
                     }]
                 }, {
@@ -158,18 +150,15 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                             anchor: '100%'
                         },
                         
-                        items: [
-                      {
-            						xtype: 'button', 
-            						itemId: 'editButton', 
-            						name: 'editButton',
-            						text:'Edit', 
-                                    anchor: '33%',
-                                    buttonAlign: 'right',                        
-             						action: 'edit'
-            		 },
-                       
-                       {
+                        items: [{
+                            xtype: 'button',
+                            itemId: 'editButton',
+                            name: 'editButton',
+                            text: 'Edit',
+                            anchor: '33%',
+                            buttonAlign: 'right',
+                            action: 'edit'
+                        }, {
                             fieldLabel: 'In Use',
                             name: 'alternateAddressInUse',
                             labelWidth: 80,
