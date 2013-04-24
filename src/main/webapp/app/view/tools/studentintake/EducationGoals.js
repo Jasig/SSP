@@ -26,8 +26,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
     inject:{
     	formUtils: 'formRendererUtils',
         weeklyCourseWorkHourRangesStore: 'weeklyCourseWorkHourRangesStore',
-        registrationLoadRangesStore: 'registrationLoadRangesStore',
-		termsStore: 'termsStore'
+        registrationLoadRangesStore: 'registrationLoadRangesStore'
     },
 	width: "100%",
     height: "100%", 
@@ -128,7 +127,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				        xtype: 'combobox',
 				        name: 'registrationLoadName',
 				        itemId: 'fieldRegistrationLoadCombo',
-				        fieldLabel: 'Field Registration Load',
+				        fieldLabel: 'Field Registration',
 				        emptyText: 'Select One',
 				        store: me.registrationLoadRangesStore,
 				        valueField: 'name',
@@ -156,7 +155,6 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				        itemId: 'anticipatedGraduationDateTermCodeCombo',
 				        fieldLabel: 'Anticipated Graduation Date',
 				        emptyText: 'Select One',
-						store:  me.termsStore.getCurrentAndFutureTermsStore(),
 				        valueField: 'code',
 				        displayField:'name',
 				        typeAhead: true,

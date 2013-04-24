@@ -44,18 +44,14 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var me=this;
 		var id = me.personLite.get('id');
 	    me.resetForm();
-		if(me.termsStore.getTotalCount() == 0)
-			me.termsStore.load();
+
 		me.appEventsController.assignEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadPlanCompleteMapPlan, scope: me});
-		
 		me.appEventsController.assignEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onPrintMapPlan', callBackFunc: me.onPrintMapPlan, scope: me});
 
 		me.appEventsController.assignEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
-		
-		me.termsStore.addListener("load", me.onCreateNewMapPlan, me);
+
 		return me.callParent(arguments);
     },
     resetForm: function() {
@@ -107,24 +103,29 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			me.updateAllPlanHours();
 		}
     },
-    onLoadPlanCompleteMapPlan: function () {
-    	var me = this;
-		me.onCreateMapPlan();
-		me.populatePlanStores();
-		me.updateAllPlanHours();    	
-    },
+
     getMapPlanServiceFailure: function() {
 		var me = this;
 		me.onCreateNewMapPlan();
 		me.updateAllPlanHours();
 		me.currentMapPlan.set('personId',me.personLite.get('id'));
-		me.currentMapPlan.set('ownerId',me.authenticatedPerson.get('id'));
+		me.currentMapPlan.set('ownerId',me.personLite.get('id'));
     },
  
 	onAfterLayout: function(){
 		var me = this;
-		console.log('onAfterLayout');
+
 		me.getView().setLoading(true);
+		if(me.termsStore.getTotalCount() == 0){
+			me.termsStore.addListener("load", me.onTermsStoreLoad, me);
+			me.termsStore.load();
+		}else{
+			me.fireInitialiseMap();
+		}
+	},
+	
+	fireInitialiseMap: function(){
+		var me = this;
 		var id = me.personLite.get('id');
 	    
 	    if (id != "") {
@@ -135,13 +136,12 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
                 responseCnt: 0,
                 expectedResponseCnt: 1
             }
-	    	 me.mapPlanService.getCurrent(id, {
+	    	 me.mapPlanService.get(id, {
 	             success: me.newServiceSuccessHandler('map', me.getMapPlanServiceSuccess, serviceResponses),
 	             failure: me.newServiceFailureHandler('map', me.getMapPlanServiceFailure, serviceResponses),
 	             scope: me
 	         });
 	    }
-		 
 	},
 	
 	getTerms: function(mapPlan){
@@ -164,6 +164,12 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		});
 	},
 	
+	onTermsStoreLoad:function(){
+		var me = this;
+		me.termsStore.removeListener( "onTermsStoreLoad", me.onTermsStoreLoad, me );
+		me.fireInitialiseMap();
+	},
+	
 	onCreateNewMapPlan:function(){
 		var me = this;
 		me.currentMapPlan.clearMapPlan();
@@ -172,6 +178,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.currentMapPlan.set('name','New Plan');
 		me.onCreateMapPlan();
 	},
+
+
 	populatePlanStores:function(){
 		var me = this;
 		var planCourses = me.currentMapPlan.get('planCourses');
@@ -376,7 +384,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.appEventsController.removeEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
         me.appEventsController.removeEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onPrintMapPlan', callBackFunc: me.onPrintMapPlan, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadPlanCompleteMapPlan, scope: me});
 
         me.appEventsController.removeEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
