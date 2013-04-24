@@ -25,8 +25,8 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
         columnRendererUtils: 'columnRendererUtils',
         appEventsController: 'appEventsController'
     },
-    height: 450,
-    width: 500,
+    height: 200,
+    width: 200,
     resizable: true,
     initComponent: function(){
         var me = this;
@@ -46,7 +46,7 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                     type: 'vbox'
                 },
                  width: '100%',
-               height: '100%',
+                height: '100%',
                 bodyPadding: 5,
                 autoScroll: true,
                 itemId: 'faPrintPlan',
@@ -60,6 +60,8 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                     padding: '0 0 0 5',
                     layout: 'vbox',
                     align: 'stretch' ,
+					hidden: true,
+					hideable: false,
                     items: [ {
                         boxLabel: 'Print MAP with Options',
                         name: 'optionsPrint',
