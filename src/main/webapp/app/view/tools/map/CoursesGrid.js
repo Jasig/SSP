@@ -28,7 +28,6 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
     width: 290,
     border: 0,
     title: 'All Courses',
-    scroll: true,
     hideHeaders: false,
     columnLines: false,
 	itemId: 'coursesGrid',
