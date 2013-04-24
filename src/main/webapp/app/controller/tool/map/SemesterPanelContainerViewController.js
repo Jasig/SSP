@@ -136,7 +136,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
                 responseCnt: 0,
                 expectedResponseCnt: 1
             }
-	    	 me.mapPlanService.get(id, {
+	    	 me.mapPlanService.getCurrent(id, {
 	             success: me.newServiceSuccessHandler('map', me.getMapPlanServiceSuccess, serviceResponses),
 	             failure: me.newServiceFailureHandler('map', me.getMapPlanServiceFailure, serviceResponses),
 	             scope: me
