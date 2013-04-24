@@ -142,17 +142,14 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         xtype: 'tbspacer',
                         height: '10'
                     }, {
-                        fieldLabel: 'Early Alerts',
+                        fieldLabel: '',
                         itemId: 'earlyAlert',
-                        name: 'earlyAlert',
-                        labelAlign: 'top',
-                        labelPad: 0
+                        name: 'earlyAlert'
+                        
                     }, {
-                        fieldLabel: 'Action Plan',
+                        fieldLabel: '',
                         itemId: 'actionPlan',
-                        name: 'actionPlan',
-                        labelAlign: 'top',
-                        labelPad: 0
+                        name: 'actionPlan'
                     }]
                 
                 }, {

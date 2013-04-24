@@ -180,8 +180,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         studentTypeField.setValue(me.person.getStudentTypeName());
         photoUrlField.setSrc(me.person.getPhotoUrl());
         programStatusField.setValue(me.person.getProgramStatusName());
-        earlyAlertField.setValue(me.person.getEarlyAlertRatio());
-        actionPlanField.setValue(me.person.getActionPlanSummary());
+        earlyAlertField.setValue('<span style="color:#15428B">Early Alerts:  </span>' + me.person.getEarlyAlertRatio());
+        actionPlanField.setValue('<span style="color:#15428B">Action Plan:  </span>' + me.person.getActionPlanSummary());
 
         var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
         var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
