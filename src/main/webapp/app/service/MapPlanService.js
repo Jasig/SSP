@@ -164,8 +164,22 @@ Ext.define('Ssp.service.MapPlanService', {
 	    	me.apiProperties.handleError( response );
 		    callbacks.failure( response, callbacks.scope );
 	    };
+	
+		/**** TODO when semesterStores is null this is printing from somewhere 
+		      other than the map tool.  planCourses as brought in need to be
+			  converted to semesterCourses because of some inconsistencies
+			   this needs to be corrected                                        *****/			
+		 
+		if(semesterStores == null){
+			var planCourses = me.currentMapPlan.get('planCourses');
+			var semsetersStore = new Ssp.store.SemesterCourses();
+			semesterStores = [semsetersStore];
+			planCourses.forEach(function(planCourse){
+				semsetersStore.add(new Ssp.model.tool.map.SemesterCourse(planCourse));
+			})
+		}
+	    me.updateCurrentMap(semesterStores);
 		
-	    me.updateCurrentMap(semesterStores);			
 		me.apiProperties.makeRequest({
    			url: url+'/print',
    			method: 'POST',

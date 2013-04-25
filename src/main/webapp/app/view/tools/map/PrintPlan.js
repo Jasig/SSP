@@ -142,7 +142,7 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                                 listeners:{
                                 	click: function(){
                                 		me = this;
-                                		me.appEventsController.getApplication().fireEvent('onPrintMapPlan');
+                                		me.appEventsController.getApplication().fireEvent(me.printEvent);
                                 		me.close();
                                 	},
                                 	scope: me

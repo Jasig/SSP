@@ -24,6 +24,7 @@ Ext.define('Ssp.view.tools.profile.AcademicProgram', {
         columnRendererUtils: 'columnRendererUtils',
         sspConfig: 'sspConfig'
     },
+    controller: 'Ssp.controller.tool.profile.AcademicProgramViewController',
     width: '100%',
     height: '100%',
 	autoScroll: true,
@@ -80,7 +81,7 @@ Ext.define('Ssp.view.tools.profile.AcademicProgram', {
                         height: 30,
                         cls: 'mapPrintIcon',
                         xtype: 'button',
-                        itemId: 'printMAPButton'
+                        itemId: 'printPlanButton'
                     },
 					{
                         xtype: 'tbspacer',

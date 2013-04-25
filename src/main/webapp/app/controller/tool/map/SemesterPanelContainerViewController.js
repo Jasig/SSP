@@ -271,7 +271,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		callbacks.success = me.onSaveCompleteSuccess;
 		callbacks.failure = me.onSaveCompleteFailure;
 		me.mapPlanService.save(me.semesterStores, callbacks, me.currentMapPlan,me.getView());
-
 	},
 	
 	onShowMain: function(){
@@ -300,41 +299,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var me = this;
 		view.setLoading(false);
 	},	
-	
-	onPrintMapPlan: function(){
-		var me = this;
-		me.getView().setLoading(true);
-		var serviceResponses = {
-                failures: {},
-                successes: {},
-                responseCnt: 0,
-                expectedResponseCnt: 1
-            }
-		me.mapPlanService.print(me.semesterStores, {
-            success: me.newServiceSuccessHandler('printMap', me.printMapPlanServiceSuccess, serviceResponses),
-            failure: me.newServiceFailureHandler('printMap', me.printMapPlanServiceFailure, serviceResponses),
-            scope: me
-        });
-	},
-	
-	 printMapPlanServiceSuccess: function(serviceResponses) {
-	        var me = this;
-	        var mapResponse = serviceResponses.successes.printMap;
-	       	me.onPrintComplete(mapResponse.responseText);
-			me.getView().setLoading(false);
-	 },
-
-	printMapPlanServiceFailure: function() {
-		var me = this;
-		me.getView().setLoading(false);
-	},
-	
-	onPrintComplete: function(htmlPrint){
-    	var targetElement = Ext.getCmp('PrintablePanelId');
-        var myWindow = window.open('', '', 'width=500,height=600');
-        myWindow.document.write(htmlPrint);
-        myWindow.print();
-	},
 
 	updateAllPlanHours: function(){
 		var me = this;
@@ -395,6 +359,42 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     		me.coursePlanDetails.center();
     		me.coursePlanDetails.show();
     	}
+	},
+	
+	
+	onPrintMapPlan: function(){
+		var me = this;
+		me.getView().setLoading(true);
+		var serviceResponses = {
+                failures: {},
+                successes: {},
+                responseCnt: 0,
+                expectedResponseCnt: 1
+            }
+		me.mapPlanService.print(me.semesterStores, {
+            success: me.newServiceSuccessHandler('printMap', me.printMapPlanServiceSuccess, serviceResponses),
+            failure: me.newServiceFailureHandler('printMap', me.printMapPlanServiceFailure, serviceResponses),
+            scope: me
+        });
+	},
+	
+	 printMapPlanServiceSuccess: function(serviceResponses) {
+	        var me = this;
+	        var mapResponse = serviceResponses.successes.printMap;
+	       	me.onPrintComplete(mapResponse.responseText);
+			me.getView().setLoading(false);
+	 },
+
+	printMapPlanServiceFailure: function() {
+		var me = this;
+		me.getView().setLoading(false);
+	},
+	
+	onPrintComplete: function(htmlPrint){
+    	var targetElement = Ext.getCmp('PrintablePanelId');
+        var myWindow = window.open('', '', 'width=500,height=600');
+        myWindow.document.write(htmlPrint);
+        myWindow.print();
 	},
 
 	destroy: function() {

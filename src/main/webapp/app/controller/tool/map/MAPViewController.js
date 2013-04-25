@@ -173,8 +173,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
     
     onprintPlanButtonClick: function(button){
         var me=this;
-		if(me.printPlanPopUp == null || me.printPlanPopUp.isDestroyed)
+		if(me.printPlanPopUp == null || me.printPlanPopUp.isDestroyed){
 			me.printPlanPopUp = Ext.create('Ssp.view.tools.map.PrintPlan',{hidden:true});
+		}
+		me.printPlanPopUp.printEvent = 'onPrintMapPlan';	
 		me.printPlanPopUp.show();
     },
     

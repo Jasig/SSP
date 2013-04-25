@@ -888,7 +888,11 @@
                     "name": "ProfileRecentStudentActivityViewController.js",
                     "path": "/app/controller/tool/profile/"
                 },
-
+				{
+	                "clsName": "Ssp.controller.tool.profile.AcademicProgramViewController",
+                    "name": "AcademicProgramViewController.js",
+                    "path": "/app/controller/tool/profile/"
+                },
                 {
                     "clsName": "Ssp.view.tools.profile.Coach",
                     "name": "Coach.js",

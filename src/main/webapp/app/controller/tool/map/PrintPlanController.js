@@ -21,7 +21,7 @@ Ext.define('Ssp.controller.tool.map.PrintPlanController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	appEventsController: 'appEventsController'
+    	appEventsController: 'appEventsController',
        
     },
     control: {
@@ -45,7 +45,6 @@ Ext.define('Ssp.controller.tool.map.PrintPlanController', {
 	init: function() {
 		var me=this;
 		me.getOptionsPrintView().hide();
-		
 		return this.callParent(arguments);
     },
     
@@ -62,6 +61,6 @@ Ext.define('Ssp.controller.tool.map.PrintPlanController', {
         if (nv){
         me.getOptionsPrintView().hide();
         }
-    }
+    },
 
 });
