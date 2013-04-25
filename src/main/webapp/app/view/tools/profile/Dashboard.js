@@ -57,22 +57,21 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         anchor: '100%'
                     },
                     flex: .45,
-                    items: [
-					/*{
-                        fieldLabel: '<a href="">Watch</a>',
-                        name: 'watchStudent',
-                        itemId: 'watchStudent',
-                        padding: '0 0 0 0',
-                        labelWidth: 20,
-                        margin: '0 0 1 5'
-                    
-                    },*/
-					{
+                    items: [                    /*{
+                     fieldLabel: '<a href="">Watch</a>',
+                     name: 'watchStudent',
+                     itemId: 'watchStudent',
+                     padding: '0 0 0 0',
+                     labelWidth: 20,
+                     margin: '0 0 1 5'
+                     
+                     },*/
+                    {
                         xtype: 'profileperson',
-						
+                    
                     }, {
                         xtype: 'profileacademicprogram',
-						
+                    
                     }]
                 
                 }, {
@@ -86,29 +85,23 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                     },
                     flex: .25,
                     height: '370',
-					
+                    
                     items: [{
                         fieldLabel: 'GPA',
                         name: 'cumGPA',
-                        itemId: 'cumGPA',
-                        labelWidth: 30
-                    
+                        itemId: 'cumGPA'
                     }, {
-                    	fieldLabel: 'Comp Rate',
+                        fieldLabel: 'Comp Rate',
                         name: 'creditCompletionRate',
-                        itemId: 'creditCompletionRate',
-                        labelWidth: 80
-                    
+                        itemId: 'creditCompletionRate'
                     }, {
                         fieldLabel: 'Standing',
                         name: 'academicStanding',
-                        itemId: 'academicStanding',
-                        labelWidth: 60
+                        itemId: 'academicStanding'
                     }, {
                         fieldLabel: 'Restrictions',
                         name: 'currentRestrictions',
-                        itemId: 'currentRestrictions',
-                        labelWidth: 80
+                        itemId: 'currentRestrictions'
                     }, {
                         xtype: 'tbspacer',
                         height: '10'
@@ -125,29 +118,27 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                     }, {
                         fieldLabel: 'FA Award',
                         name: 'currentYearFinancialAidAward',
-                        itemId: 'currentYearFinancialAidAward',
-                        labelWidth: 60
+                        itemId: 'currentYearFinancialAidAward'
                     
                     }, {
                         fieldLabel: 'SAP',
                         name: 'sapStatus',
-                        itemId: 'sapStatus',
-                        labelWidth: 30
+                        itemId: 'sapStatus'
                     }, {
                         fieldLabel: 'F1',
                         name: 'f1Status',
                         itemId: 'f1Status',
-                        labelWidth: 30
+                        labelWidth: 15
                     }, {
                         xtype: 'tbspacer',
                         height: '10'
                     }, {
-                        fieldLabel: '',
+                        fieldLabel: 'Early Alerts',
                         itemId: 'earlyAlert',
                         name: 'earlyAlert'
-                        
+                    
                     }, {
-                        fieldLabel: '',
+                        fieldLabel: 'Action Plan',
                         itemId: 'actionPlan',
                         name: 'actionPlan'
                     }]

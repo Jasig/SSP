@@ -36,7 +36,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     control: {
         nameField: '#studentName',
         photoUrlField: '#studentPhoto',
-
+		primaryEmailAddressField: '#primaryEmailAddress',
         
         studentIdField: '#studentId',
         birthDateField: '#birthDate',
@@ -146,15 +146,18 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         me.profileServiceReasonsStore.removeAll();
 
         var nameField = me.getNameField();
+		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
         var photoUrlField = me.getPhotoUrlField();
         var birthDateField = me.getBirthDateField();
         var studentTypeField = me.getStudentTypeField();
         var programStatusField = me.getProgramStatusField();
         var earlyAlertField = me.getEarlyAlertField();
         var actionPlanField = me.getActionPlanField();
+		var studentIdField = me.getStudentIdField();
 
         var fullName = me.person.getFullName();
         var coachName = me.person.getCoachFullName();
+		
 
         // load special service groups
         if (personResponse.specialServiceGroups != null) {
@@ -175,13 +178,24 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         me.getView().loadRecord(me.person);
 
         // load additional values
-        nameField.setValue(fullName);
-        birthDateField.setValue(me.person.getFormattedBirthDate());
-        studentTypeField.setValue(me.person.getStudentTypeName());
+		nameField.setFieldLabel('');
+        nameField.setValue('<span style="color:#15428B">Full Name:  </span>' + fullName);
+		studentIdField.setFieldLabel('');
+        studentIdField.setValue('<span style="color:#15428B">' + me.sspConfig.get('studentIdAlias') + ':  </span>' + me.person.get('schoolId'));
+		primaryEmailAddressField.setFieldLabel('');
+        primaryEmailAddressField.setValue('<span style="color:#15428B">Email:  </span>' + me.person.get('primaryEmailAddress'));
+		birthDateField.setFieldLabel('');
+        birthDateField.setValue('<span style="color:#15428B">DOB:  </span>' + me.person.getFormattedBirthDate());
+		studentTypeField.setFieldLabel('');
+        studentTypeField.setValue('<span style="color:#15428B">Student Type:  </span>' + me.person.getStudentTypeName());
         photoUrlField.setSrc(me.person.getPhotoUrl());
-        programStatusField.setValue(me.person.getProgramStatusName());
+		programStatusField.setFieldLabel('');
+        programStatusField.setValue('<span style="color:#15428B">SSP Status:  </span>' + me.person.getProgramStatusName());
+		earlyAlertField.setFieldLabel('');
         earlyAlertField.setValue('<span style="color:#15428B">Early Alerts:  </span>' + me.person.getEarlyAlertRatio());
+		actionPlanField.setFieldLabel('');
         actionPlanField.setValue('<span style="color:#15428B">Action Plan:  </span>' + me.person.getActionPlanSummary());
+		
 
         var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
         var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
@@ -211,10 +225,14 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 			var gpaFormatted = Ext.util.Format.number(gpa.gradePointAverage, '0.00');
 			if(gpa.gpaTrendIndicator && gpa.gpaTrendIndicator.length > 0)
 				gpaFormatted += "  " + gpa.gpaTrendIndicator;
-            me.getGpaField().setValue(gpaFormatted);
-            me.getAcademicStandingField().setValue(gpa.academicStanding);
-            me.getCreditCompletionRateField().setValue(gpa.creditCompletionRate + '%');
-            me.getCurrentRestrictionsField().setValue(gpa.currentRestrictions)
+			me.getGpaField().setFieldLabel('');
+            me.getGpaField().setValue('<span style="color:#15428B">GPA:  </span>' + gpaFormatted);
+			me.getAcademicStandingField().setFieldLabel('');
+            me.getAcademicStandingField().setValue('<span style="color:#15428B">Standing:  </span>' + gpa.academicStanding);
+			me.getCreditCompletionRateField().setFieldLabel('');
+            me.getCreditCompletionRateField().setValue('<span style="color:#15428B">Comp Rate:  </span>' + gpa.creditCompletionRate + '%');
+            me.getCurrentRestrictionsField().setFieldLabel('');
+			me.getCurrentRestrictionsField().setValue('<span style="color:#15428B">Restrictions:  </span>' + gpa.currentRestrictions)
 
         }
         var programs = transcript.get('programs');
@@ -223,15 +241,17 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             Ext.Array.each(programs, function(program) {
                 programNames.push(program.programName);
             });
-            me.getAcademicProgramsField().setValue(programNames.join(', '));
+			me.getAcademicProgramsField().setFieldLabel('');
+            me.getAcademicProgramsField().setValue('<span style="color:#15428B">Academic Program:  </span>' + programNames.join(', '));
         }
         
 
         var financialAid = transcript.get('financialAid');
         if ( financialAid ) {
-            
-        	me.getCurrentYearFinancialAidAwardField().setValue(financialAid.currentYearFinancialAidAward);
-        	me.getSapStatusField().setValue(financialAid.sapStatus);
+            me.getCurrentYearFinancialAidAwardField().setFieldLabel('');
+        	me.getCurrentYearFinancialAidAwardField().setValue('<span style="color:#15428B">FA Award:  </span>' + financialAid.currentYearFinancialAidAward);
+        	me.getSapStatusField().setFieldLabel('');
+			me.getSapStatusField().setValue('<span style="color:#15428B">SAP:  </span>' + financialAid.sapStatus);
         }
     },
 

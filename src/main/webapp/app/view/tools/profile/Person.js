@@ -64,30 +64,27 @@ Ext.define('Ssp.view.tools.profile.Person', {
                 }, {
                     fieldLabel: 'ID',
                     itemId: 'studentId',
-                    name: 'schoolId',
-                    labelWidth: 60
+                    name: 'schoolId'
                 }, {
                     fieldLabel: 'DOB',
                     name: 'birthDate',
-                    itemId: 'birthDate',
-                    labelWidth: 30
+                    itemId: 'birthDate'
                 }, {
                     fieldLabel: 'Phone',
                     name: 'homePhone',
-                    labelWidth: 40
+                    labelWidth: 38
                 }, {
-                    fieldLabel: 'Email:',
-                    name: 'primaryEmailAddress'
+                    fieldLabel: 'Email',
+                    name: 'primaryEmailAddress',
+					itemId: 'primaryEmailAddress'
                 }, {
                     fieldLabel: 'Student Type',
                     name: 'studentType',
-                    itemId: 'studentType',
-                    labelWidth: 80
+                    itemId: 'studentType'
                 }, {
                     fieldLabel: 'SSP Status',
                     name: 'programStatus',
-                    itemId: 'programStatus',
-                    labelWidth: 70
+                    itemId: 'programStatus'
                 }]
             
             }]
