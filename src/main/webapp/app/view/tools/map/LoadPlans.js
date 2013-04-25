@@ -61,12 +61,12 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                     msgTarget: 'side'
                 },
                 items: [ 
-                       {
-                        xtype: 'label',
-                        padding: '2 0 0 5',
-                        text: 'Double Click to open a plan. Currently Active Plans are Blue or Red depending on Status',
-                        style: 'font-weight: bold',
-                        } ,
+//                       {
+//                        xtype: 'label',
+//                        padding: '2 0 0 5',
+//                        text: 'Double Click to open a plan. Currently Active Plans are Blue or Red depending on Status',
+//                        style: 'font-weight: bold',
+//                        } ,
                         {
                             xtype: 'fieldset',
                             border: 0,
@@ -104,7 +104,7 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                             items: [
                             {
                             xtype: 'gridpanel',
-                            title: '',
+                            title: 'Load Plan',
                             id: 'allPlansGridPanel',
                             width: '100%',
                             height: '100%',

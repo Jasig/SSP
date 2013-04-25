@@ -43,6 +43,7 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 		personId = me.personLite.get('id');
 	    
 		var successFunc = function(response,view){
+			
 	    	var r, records;
 	    	var data=[];
 	    	r = Ext.decode(response.responseText);
@@ -52,6 +53,16 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 	    	
 	    	if (r != null)
 	    	{
+	    		if(r.results == 0)
+	    		{
+			         Ext.Msg.confirm({
+			 		     title:'Create New Plan?',
+			 		     msg: 'New plans have been found for this student.  Create a new one?',
+			 		     buttons: Ext.Msg.YESNO,
+			 		     fn: me.initNewPlan,
+			 		     scope: me
+			 		   });	    			
+	    		}
 	    		Ext.Object.each(r,function(key,value){
 		    		var plans = value;
 		    		Ext.Array.each(plans,function(plan,index){
@@ -103,14 +114,26 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 	onLoadCompleteSuccess: function(serviceResponses){
         var me = this;
 		if(!serviceResponses || !serviceResponses.responseText || serviceResponses.responseText.trim().length == 0) {
-			me.failure();
+
        	} else {
        		me.scope.currentMapPlan.populateFromGenericObject(Ext.decode(serviceResponses.responseText));
 			me.scope.appEventsController.getApplication().fireEvent('onLoadMapPlan');
 			me.scope.getView().hide();
 		}
 	},
-	
+
+	initNewPlan: function( btnId ){
+		var me=this;
+		if (btnId=="yes")
+		{
+			me.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
+		}
+		else
+		{
+			me.appEventsController.getApplication().fireEvent('onShowMain');
+		}
+		me.getView().hide();
+	},
 	onLoadCompleteFailure: function(serviceResponses){
 		var me = this;
 		view.setLoading(false);
