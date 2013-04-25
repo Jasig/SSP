@@ -250,11 +250,12 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	createSemesterPanel: function(semesterName, termCode, semesterStore){
 		var me = this;
-		return new Ssp.view.tools.map.SemesterPanel({
+		var semesterPanel =  new Ssp.view.tools.map.SemesterPanel({
 			title:semesterName,
 			itemId:termCode,
-			store: semesterStore
+			store:semesterStore
 		});
+		return semesterPanel;
 	},
 	
 	afterServiceHandler: function(serviceResponses) {
@@ -307,7 +308,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var planHours = 0;
 		var devHours = 0;
 		panels.forEach(function(panel){
-			var store = panel.getStore();
+			var storeGrid = panel.query("semestergrid")[0];
+			var store = storeGrid.getStore();
 			var semesterBottomDock = panel.getDockedComponent("semesterBottomDock");
 			var hours = me.updateTermHours(store, semesterBottomDock);
 			planHours += hours.planHours;

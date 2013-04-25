@@ -17,24 +17,23 @@
  * under the License.
  */
 Ext.define('Ssp.view.tools.map.SemesterPanel', {
-    extend: 'Ext.grid.Panel',
+    extend: 'Ext.Panel',
     alias: 'widget.semesterpanel',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
 	inject:{
 		appEventsController: 'appEventsController'
 	},
     //controller: 'Ssp.controller.tool.map.SemesterPanelViewController',
-    autoScroll: true,
     columnLines: false,
-    
+    layout: {
+                type: 'fit'
+            },
+	height: 258,
+	width: 220,
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
-            hideHeaders: true,
-			height: '260',
-		    width: '220',
-			minHeight: '260',
-			maxWidth: '220',
+			
             tools: [{
                 xtype: 'button',
                 itemId: 'termNotesButton',
@@ -53,83 +52,12 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                     }
                   }
             }],
-            columns: [{
-                dataIndex: 'title',
-                xtype: 'gridcolumn',
-				hidden: true,
-				hideable: false
-            }, 
-			{
-                dataIndex: 'formattedCourse',
-                xtype: 'gridcolumn',
-				width:145
-            },
-			{
-                dataIndex: 'description',
-                xtype: 'gridcolumn',
-				hidden: true,
-				hideable: false
-            },
-			{
-                dataIndex: 'creditHours',
-                xtype: 'gridcolumn',
-				width:25
-            },
-            {
-                dataIndex: 'maxCreditHours',
-                xtype: 'gridcolumn',
-				hidden: true,
-				hideable:false
-            }, 
-			{
-                dataIndex: 'minCreditHours',
-                xtype: 'gridcolumn',
-				hidden: true,
-				hideable:false
-            },
-			{
-                dataIndex: 'code',
-                xtype: 'gridcolumn',
-				hidden: true,
-				hideable:false
-            },
-            {
-                dataIndex: 'isDev',
-                xtype: 'gridcolumn',
-				hidden: true,
-				hideable:false
-            },
-			
-            {
-                xtype: 'actioncolumn',
-                width: 45,
-                items: [{
-                    icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
-                    tooltip: 'Edit planItem',
-                    handler: function(grid, rowIndex, colIndex){
-						var me = this;
-                    	me.appEventsController.getApplication().fireEvent('onViewCourseNotes',{store:grid.getStore(),
-                    		rowIndex: rowIndex});
-                    },
-                    scope: me
-                }, {
-                    icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
-                    tooltip: 'Delete planItem',
-                    handler: function(grid, rowIndex, colIndex){
-                        me.getStore().removeAt(rowIndex);
-                    },
-                    scope: me
-                }]
-            }],
-			viewConfig: {
-			        plugins: {
-			            ptype: 'gridviewdragdrop',
-						ddGroup: 'ddGroupForCourses',
-						dropGroup: 'coursesDDGroup',
-						dragGroup: 'coursesDDGroup',
-						pluginId: 'semesterviewdragdrop',
-			        },
-			    },
+			items : [ {
+				store: me.store,
+				scroll: true,
+				xtype : 'semestergrid',
+			} ],
+           
             dockedItems: [{
                 dock: 'bottom',
                 xtype: 'toolbar',
@@ -143,7 +71,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                     text: 'Term Cr. Hrs:',
                     xtype: 'label'
                 }, {
-                    text: '',
+                    text: '0',
                     name: 'termCrHrs',
                     itemId: 'termCrHrs',
                     xtype: 'label',
