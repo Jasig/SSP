@@ -21,7 +21,9 @@ Ext.define('Ssp.view.tools.map.MAPView', {
     alias: 'widget.mapview',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.map.MAPViewController',
-    
+    inject:{
+		currentMapPlan: 'currentMapPlan',
+    },	
     width: '100%',
     height: '100%',
   initComponent: function(){
@@ -92,7 +94,8 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                         {
                             xtype: 'button',
                             text: 'Save Plan',
-                            itemId: 'savePlanButton'
+                            itemId: 'savePlanButton',
+                            hidden: me.currentMapPlan.get('id') != ""
                         },                        
                         {
                             xtype: 'button',

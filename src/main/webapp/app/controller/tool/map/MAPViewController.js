@@ -104,6 +104,11 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	init: function() {
 		var me=this;
 		var view = me.getView();
+		
+		if(me.currentMapPlan.get('id') == '')
+			me.getView().queryById('savePlanButton').hide();
+		else
+			me.getView().queryById('savePlanButton').show();
 		return this.callParent(arguments);
     },
 
