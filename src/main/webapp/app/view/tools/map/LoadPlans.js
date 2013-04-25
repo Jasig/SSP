@@ -113,19 +113,19 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                             columnLines: true,
                             columns: [{
                                 text: 'Plan Title',
-                                width: '450',
+                                width: '900',
                                 dataIndex: 'name',
                                 sortable: true
                             }, {
                                 text: 'Date/ Time',
-                                width: '150',
+                                width: '900',
                                 dataIndex: 'modifiedDate',
                                 sortable: true,
                                 renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
                                 
                             }, {
                                 text: 'Advisor',
-                                width: '100',
+                                width: '900',
                                 sortable: true,
                                 dataIndex: 'ownerName'
                             }]

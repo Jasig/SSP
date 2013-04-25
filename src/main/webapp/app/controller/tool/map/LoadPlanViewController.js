@@ -55,6 +55,7 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 	    		Ext.Object.each(r,function(key,value){
 		    		var plans = value;
 		    		Ext.Array.each(plans,function(plan,index){
+		    			if(plan.name)
 		    			data.push(plan);
 		    		},this);
 		    	},this);		    		
@@ -94,7 +95,6 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
         if (record) 
         {	
         	 me.mapPlanService.getPlan(record.get('id'),record.get('personId'), callbacks)
-        	//me.displayEditor();
         }else{
      	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
         }    	
@@ -106,7 +106,6 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 			me.failure();
        	} else {
        		me.scope.currentMapPlan.populateFromGenericObject(Ext.decode(serviceResponses.responseText));
-			console.log(me.scope.currentMapPlan);
 			me.scope.appEventsController.getApplication().fireEvent('onLoadMapPlan');
 			me.scope.getView().hide();
 		}

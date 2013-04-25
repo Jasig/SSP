@@ -26,7 +26,7 @@ public class Plan extends AbstractPlan  {
 	
 	private static final long serialVersionUID = -681245136521277249L;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "plan", orphanRemoval=true)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "plan", orphanRemoval=true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@OrderBy("orderInTerm")	
 	private List<PlanCourse> planCourses = new ArrayList<PlanCourse>(0);
