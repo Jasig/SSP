@@ -67,32 +67,32 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
 //                        text: 'Double Click to open a plan. Currently Active Plans are Blue or Red depending on Status',
 //                        style: 'font-weight: bold',
 //                        } ,
-                        {
-                            xtype: 'fieldset',
-                            border: 0,
-                            title: '',
-                            margin: '0 0 0 2',
-                            padding: '0 0 0 5',
-                            layout: 'hbox',
-                            align: 'stretch',
-                            items: [
-                                {
-                                    xtype: 'label',
-                                    padding: '2 15 0 0',
-                                    text: 'Blue: Current/ Normal'
-                                },
-                                {
-                                    xtype: 'label',
-                                    padding: '2 15 0 5',
-                                    text: 'Red: Restricted / Important'
-                                },
-                                {
-                                    xtype: 'label',
-                                    padding: '2 0 0 5',
-                                    text: 'Black: Saved Plan'
-                                },
-                                ]
-                        },
+//                        {
+//                            xtype: 'fieldset',
+//                            border: 0,
+//                            title: '',
+//                            margin: '0 0 0 2',
+//                            padding: '0 0 0 5',
+//                            layout: 'hbox',
+//                            align: 'stretch',
+//                            items: [
+//                                {
+//                                    xtype: 'label',
+//                                    padding: '2 15 0 0',
+//                                    text: 'Blue: Current/ Normal'
+//                                },
+//                                {
+//                                    xtype: 'label',
+//                                    padding: '2 15 0 5',
+//                                    text: 'Red: Restricted / Important'
+//                                },
+//                                {
+//                                    xtype: 'label',
+//                                    padding: '2 0 0 5',
+//                                    text: 'Black: Saved Plan'
+//                                },
+//                                ]
+//                        },
                         {
                             xtype: 'fieldset',
                             border: 0,
@@ -113,22 +113,25 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                             columnLines: true,
                             columns: [{
                                 text: 'Plan Title',
-                                width: '900',
                                 dataIndex: 'name',
                                 sortable: true
                             }, {
                                 text: 'Date/ Time',
-                                width: '900',
                                 dataIndex: 'modifiedDate',
                                 sortable: true,
                                 renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
                                 
                             }, {
                                 text: 'Advisor',
-                                width: '900',
                                 sortable: true,
                                 dataIndex: 'ownerName'
-                            }]
+                            }, {
+                                text: 'Status',
+                                sortable: true,
+                                dataIndex: 'objectStatus'
+                            }
+                            
+                            ]
                         }
                         ]}
                     ]
