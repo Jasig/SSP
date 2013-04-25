@@ -156,7 +156,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
         var me = this;
         var mapResponse = serviceResponses.successes.map;
 		if(!mapResponse || !mapResponse.responseText || mapResponse.responseText.trim().length == 0) {
-			 me.getOnPlanField.setValue("Plan Does Not Exist.");
+			 me.getOnPlanField().setValue("Plan Does Not Exist.");
 			me.getPrintPlanButton().hide();
        	} else {
 			me.currentMapPlan.populateFromGenericObject(Ext.decode(mapResponse.responseText));
