@@ -107,6 +107,7 @@ Ext.define('Ssp.service.MapPlanService', {
             		planCourse.formattedCourse = model.get('formattedCourse');
             		planCourse.courseDescription = model.get('description');
             		planCourse.orderInTerm = i;
+					planCourse.objectStatus = 'ACTIVE';
             		planCourse.isDev = model.get('isDev');
             		planCourses[i++] = planCourse;
             })
@@ -159,7 +160,9 @@ Ext.define('Ssp.service.MapPlanService', {
 	    var success = function( response, view ){
 			callbacks.success( response, callbacks.scope );
 	    };
-
+		var objectStatus = me.currentMapPlan.get('objectStatus');
+		if(objectStatus != 'ACTIVE' || objectStatus != 'INACTIVE')
+			me.currentMapPlan.set('objectStatus','ACTIVE');
 	    var failure = function( response ){
 	    	me.apiProperties.handleError( response );
 		    callbacks.failure( response, callbacks.scope );

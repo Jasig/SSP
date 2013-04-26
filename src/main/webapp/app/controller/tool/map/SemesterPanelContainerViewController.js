@@ -393,9 +393,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	},
 	
 	onPrintComplete: function(htmlPrint){
-    	var targetElement = Ext.getCmp('PrintablePanelId');
+		var me = this;
         var myWindow = window.open('', '', 'width=500,height=600');
         myWindow.document.write(htmlPrint);
+		myWindow.document.title = me.currentMapPlan.get("name");
         myWindow.print();
 	},
 
