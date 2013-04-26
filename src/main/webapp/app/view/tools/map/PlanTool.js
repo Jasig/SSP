@@ -232,11 +232,17 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 },
                 items: [{
                     fieldLabel: 'Plan Title',
+					xtype:'textareafield',
                     itemId: 'name',
                     name: 'name',
-                    labelWidth: 60,
-					width:180
-                
+                    labelWidth: 55,
+					width:200,
+					height:40,
+					style: 'border: none;',
+					frame: false,
+					readOnly: true,
+					fieldStyle:"border:none 0px black; margin-top:2px; background-image:none",
+					editable:false,
                 }, {
                     fieldLabel: 'Student is Currently',
                     itemId: 'onPlan',
@@ -244,7 +250,6 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     labelWidth: 150,
 					hidden: true,
 					hideable: false
-                
                 }]
             
             }, {}]
