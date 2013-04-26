@@ -147,11 +147,13 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 	@Override
 	public Plan save(Plan obj) {
 		//If plan has been marked as active, we must mark all other plans as inactive
+		Plan newObject = super.save(obj);
+		obj = null;
 		if(ObjectStatus.ACTIVE.equals(obj.getObjectStatus()))
 		{
 			getDao().markOldPlansAsInActive(obj);
 		}	
-		return super.save(obj);
+		return newObject;
 	}
 	
 }
