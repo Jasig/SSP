@@ -46,6 +46,7 @@ Ext.define('Ssp.util.Constants',{
     		        	Ssp.util.Constants.EDUCATION_LEVEL_OTHER_ID,
     		        	Ssp.util.Constants.FUNDING_SOURCE_OTHER_ID,
     		        	Ssp.util.Constants.CHALLENGE_OTHER_ID,
+    		        	Ssp.util.Constants.EARLY_ALERT_STUDENT_TYPE,
     		        	Ssp.util.Constants.OTHER_EARLY_ALERT_OUTCOME_ID,
     		        	Ssp.util.Constants.OTHER_EARLY_ALERT_REASON_ID,
     		        	Ssp.util.Constants.OTHER_EARLY_ALERT_SUGGESTION_ID,
@@ -82,6 +83,10 @@ Ext.define('Ssp.util.Constants',{
         
         // CHALLENGES - ID VALUES RELATED TO STUDENT INTAKE CHALLENGES
         CHALLENGE_OTHER_ID: '365e8c95-f356-4f1f-8d79-4771ae8b0291',
+
+        //EARLY ALERT STUDENT TYPE - ID VALUE THAT IS USED WHEN EA IS PLACED ON STUDENT
+        //WITHOUT A STUDENT TYPE
+        EARLY_ALERT_STUDENT_TYPE: 'b2d05939-5056-a51a-8004-d803265d2645',
     
         // EARLY ALERT OUTCOME - ID VALUES RELATED TO EARLY ALERT OUTCOMES
         OTHER_EARLY_ALERT_OUTCOME_ID: '0a080114-3799-1bf5-8137-9a778e200004',
