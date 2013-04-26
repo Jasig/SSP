@@ -1,0 +1,153 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<!-- Converts 'timestamp with time zone' to 'timestamp without time zone'.
+
+	This file is for 2.0.0-related updates. See the file with
+	changeSet "remove challenge_challenge_referral.modified_date timezone (pg)"
+	for more details on how this works in general. The 2.0.0-related changeSets
+	are a little bit different b/c the switch to application-configurable
+	persistent timezones occurred while the tables in question were still
+	under development. This means there is no meaningful data in these
+	tables in the wild. So we only need to be concerned about data *type*
+	migration, not data *value* migration.
+
+	**Like "remove challenge_challenge_referral.modified_date timezone (pg)"
+	and its ilk, though, the changeSets in this file will not work properly
+	unless PostgresDateTypeConverter is registered with Liquibasee as
+	a plugin. This will happen automatically
+	when running liquibase from within the app. If you're running from the
+	command line, though, you need to be sure to add the application classes
+	to the Liquibase classpath.**
+
+	Intentionally does not include the 'elective' table since that will not
+	be added to the 2.0.0 master until after this change goes in. So its
+	db types should be correct by default.
+	-->
+
+	<changeSet id="require PostgresDateTypeConverter (2)" author="dan.mccallum">
+		<preConditions onFail="HALT"
+					   onFailMessage="PostgresDateTypeConverter plugin not found.">
+			<customPrecondition className="org.jasig.ssp.util.RequirePostgresDateTypeConverter" />
+		</preConditions>
+	</changeSet>
+
+	<changeSet id="remove tag.modified_date timezone (pg)"
+			   author="dan.mccallum" dbms="postgresql">
+
+		<preConditions onFail="MARK_RAN"
+					   onFailMessage="Timezone already stripped from tag.modified_date">
+			<sqlCheck expectedResult="timestamp with time zone">
+				select data_type from information_schema.columns where table_name = 'tag' and column_name = 'modified_date'
+			</sqlCheck>
+		</preConditions>
+
+		<!-- Our custom PostgresDateTypeConverter is going to take care
+			of mapping 'datetime' to 'timestamp without time zone' -->
+		<modifyDataType tableName="tag" columnName="modified_date" newDataType="datetime" />
+
+	</changeSet>
+
+	<changeSet id="remove tag.created_date timezone (pg)"
+			   author="dan.mccallum" dbms="postgresql">
+
+		<preConditions onFail="MARK_RAN"
+					   onFailMessage="Timezone already stripped from tag.created_date">
+			<sqlCheck expectedResult="timestamp with time zone">
+				select data_type from information_schema.columns where table_name = 'tag' and column_name = 'created_date'
+			</sqlCheck>
+		</preConditions>
+
+		<!-- Our custom PostgresDateTypeConverter is going to take care
+			of mapping 'datetime' to 'timestamp without time zone' -->
+		<modifyDataType tableName="tag" columnName="created_date" newDataType="datetime" />
+
+	</changeSet>
+
+	<changeSet id="remove map_plan.modified_date timezone (pg)"
+			   author="dan.mccallum" dbms="postgresql">
+
+		<preConditions onFail="MARK_RAN"
+					   onFailMessage="Timezone already stripped from map_plan.modified_date">
+			<sqlCheck expectedResult="timestamp with time zone">
+				select data_type from information_schema.columns where table_name = 'map_plan' and column_name = 'modified_date'
+			</sqlCheck>
+		</preConditions>
+
+		<!-- Our custom PostgresDateTypeConverter is going to take care
+			of mapping 'datetime' to 'timestamp without time zone' -->
+		<modifyDataType tableName="map_plan" columnName="modified_date" newDataType="datetime" />
+
+	</changeSet>
+
+	<changeSet id="remove map_plan.created_date timezone (pg)"
+			   author="dan.mccallum" dbms="postgresql">
+
+		<preConditions onFail="MARK_RAN"
+					   onFailMessage="Timezone already stripped from map_plan.created_date">
+			<sqlCheck expectedResult="timestamp with time zone">
+				select data_type from information_schema.columns where table_name = 'map_plan' and column_name = 'created_date'
+			</sqlCheck>
+		</preConditions>
+
+		<!-- Our custom PostgresDateTypeConverter is going to take care
+			of mapping 'datetime' to 'timestamp without time zone' -->
+		<modifyDataType tableName="map_plan" columnName="created_date" newDataType="datetime" />
+
+	</changeSet>
+
+	<changeSet id="remove map_plan_course.modified_date timezone (pg)"
+			   author="dan.mccallum" dbms="postgresql">
+
+		<preConditions onFail="MARK_RAN"
+					   onFailMessage="Timezone already stripped from map_plan_course.modified_date">
+			<sqlCheck expectedResult="timestamp with time zone">
+				select data_type from information_schema.columns where table_name = 'map_plan_course' and column_name = 'modified_date'
+			</sqlCheck>
+		</preConditions>
+
+		<!-- Our custom PostgresDateTypeConverter is going to take care
+			of mapping 'datetime' to 'timestamp without time zone' -->
+		<modifyDataType tableName="map_plan_course" columnName="modified_date" newDataType="datetime" />
+
+	</changeSet>
+
+	<changeSet id="remove map_plan_course.created_date timezone (pg)"
+			   author="dan.mccallum" dbms="postgresql">
+
+		<preConditions onFail="MARK_RAN"
+					   onFailMessage="Timezone already stripped from map_plan_course.created_date">
+			<sqlCheck expectedResult="timestamp with time zone">
+				select data_type from information_schema.columns where table_name = 'map_plan_course' and column_name = 'created_date'
+			</sqlCheck>
+		</preConditions>
+
+		<!-- Our custom PostgresDateTypeConverter is going to take care
+			of mapping 'datetime' to 'timestamp without time zone' -->
+		<modifyDataType tableName="map_plan_course" columnName="created_date" newDataType="datetime" />
+
+	</changeSet>
+
+</databaseChangeLog>
