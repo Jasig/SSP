@@ -45,9 +45,11 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var id = me.personLite.get('id');
 	    me.resetForm();
 
+		me.appEventsController.assignEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onShowMain', callBackFunc: me.onShowMain, scope: me});
 		
+		me.appEventsController.assignEvent({eventName: 'onSaveAsMapPlan', callBackFunc: me.onSaveAsMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onPrintMapPlan', callBackFunc: me.onPrintMapPlan, scope: me});
 
@@ -110,6 +112,13 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		}
     },
 
+    onLoadMapPlan: function () {
+    	var me = this;
+		me.onCreateMapPlan();
+		me.populatePlanStores();
+		me.updateAllPlanHours();  
+		me.getView().setLoading(false);
+    },
     getMapPlanServiceFailure: function() {
 		var me = this;
 		me.onCreateNewMapPlan();
@@ -265,15 +274,24 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
         }
     },
 
+	onSaveAsMapPlan: function(){
+		var me = this;
+		me.save(true);
+
+
+	},
 	onSaveMapPlan: function(){
+		var me = this;
+		me.save(false);
+	},	
+	save: function(saveAs) {
 		var me = this;
 		me.getView().setLoading(true);
 		var callbacks = new Object();
 		callbacks.success = me.onSaveCompleteSuccess;
 		callbacks.failure = me.onSaveCompleteFailure;
-		me.mapPlanService.save(me.semesterStores, callbacks, me.currentMapPlan,me.getView());
-	},
-	
+		me.mapPlanService.save(me.semesterStores, callbacks, me.currentMapPlan,me.getView(),saveAs);
+		},
 	onShowMain: function(){
     	var me=this;
     	var mainView = Ext.ComponentQuery.query('mainview')[0];
@@ -410,9 +428,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
         me.appEventsController.removeEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onPrintMapPlan', callBackFunc: me.onPrintMapPlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onShowMain', callBackFunc: me.onCreateNewMapPlan, scope: me});
-
+		me.appEventsController.removeEvent({eventName: 'onSaveAsMapPlan', callBackFunc: me.onSaveAsMapPlan, scope: me});
         me.appEventsController.removeEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadMapPlan, scope: me});
         
 		return me.callParent( arguments );
     },

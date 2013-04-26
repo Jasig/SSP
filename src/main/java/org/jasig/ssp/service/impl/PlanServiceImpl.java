@@ -97,12 +97,10 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 	
 	@Override
 	public Plan copyAndSave(Plan obj) throws CloneNotSupportedException {
-		//Load all previous plans for this student and save them as inactive.
-		List<Plan> allForStudent = getDao().getAllForStudent(obj.getPerson().getId());
-		for (Plan plan : allForStudent) 
+		//If plan has been marked as active, we must mark all other plans as inactive
+		if(ObjectStatus.ACTIVE.equals(obj.getObjectStatus()))
 		{
-			plan.setObjectStatus(ObjectStatus.INACTIVE);
-			getDao().save(plan);
+			getDao().markOldPlansAsInActive(obj);
 		}
 		return getDao().cloneAndSave(obj,getSecurityService().currentUser().getPerson());
 	}
@@ -142,6 +140,16 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 			throw new ObjectNotFoundException(id, this.getClass().getName());
 		return obj;
 
+	}
+	
+	@Override
+	public Plan save(Plan obj) {
+		//If plan has been marked as active, we must mark all other plans as inactive
+		if(ObjectStatus.ACTIVE.equals(obj.getObjectStatus()))
+		{
+			getDao().markOldPlansAsInActive(obj);
+		}	
+		return super.save(obj);
 	}
 	
 }

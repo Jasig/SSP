@@ -33,7 +33,10 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 	control: {
     	'openButton': {
 			click: 'onOpenClick'
-		},		
+		},	
+		'cancelButton': {
+			click: 'onCloseClick'
+		}
 	},
 
 	init: function() {
@@ -138,5 +141,8 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 		var me = this;
 		view.setLoading(false);
 	},	    
-    
+	onCloseClick: function(){
+		var me = this;
+		me.getView().hide();
+	},    
 });

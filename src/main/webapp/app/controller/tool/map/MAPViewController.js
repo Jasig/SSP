@@ -151,16 +151,14 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
     onsavePlanButtonClick: function(button){
         var me=this;
 		if(me.savePlanPopUp == null || me.savePlanPopUp.isDestroyed)
-        	me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true});
-		console.log(me.currentMapPlan);
+        	me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
 		me.savePlanPopUp.show();
     },
 
     onsavePlanAsButtonClick: function(button){
         var me=this;
 		if(me.savePlanPopUp == null || me.savePlanPopUp.isDestroyed)
-        	me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true});
-		console.log(me.currentMapPlan);
+        	me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:true});
 		me.savePlanPopUp.show();
     },
     

@@ -264,10 +264,12 @@ public class PlanController  extends AbstractBaseController {
 		}
 
 		final Plan model = getFactory().from(obj);
+		SspUser currentUser = getSecurityService().currentlyAuthenticatedUser();
+		
+		Plan oldPlan = getService().get(id);
 		//If the currently logged in user is not the owner of this plan
 		//we need to create a clone then save it.
-		SspUser currentUser = getSecurityService().currentlyAuthenticatedUser();
-		if(currentUser.getPerson().getId().equals(model.getOwner()))
+		if(currentUser.getPerson().getId().equals(oldPlan.getOwner().getId()))
 		{
 			final Plan savedPlan = getService().save(model);
 			if (null != savedPlan) {

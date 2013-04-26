@@ -28,6 +28,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
     },
     height: 200,
     width: 850,
+    saveAs: null,
     resizable: true,
     initComponent: function(){
         var me = this;
@@ -211,20 +212,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                             xtype: 'button',
                             itemId: 'saveButton',
                             text: 'Save',
-							
-							savePlan: function(){
-								me = this;
-								var values = me.query("form")[0].getValues();
-								me.currentMapPlan.set('name', values.name);
-								me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
-								me.appEventsController.getApplication().fireEvent('onSaveMapPlan');
-								me.close();
-							},
-							
-                            listeners:{
-                            	click: 'savePlan',
-								scope: me
-                            }
+
                             
                         }, '-', {
                             xtype: 'button',

@@ -28,15 +28,34 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 	control: {
 		view: {
 			show: 'onShow'
-		}
+		},
+    	'saveButton': {
+			click: 'onSaveClick'
+		},
 	},
-
 	semesterStores: [],
 	init: function() {
 		var me=this;
 	    me.resetForm();
 	    me.getView().query('form')[0].loadRecord( me.currentMapPlan );
 		return me.callParent(arguments);
+    },
+    onSaveClick: function(){
+    	me = this;
+    	var values =  me.getView().query('form')[0].getValues();
+    	me.currentMapPlan.set('name', values.name);
+    	me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox')[0].value) ? 'ACTIVE' : 'INACTIVE')
+    	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+    	if(me.getView().saveAs)
+    	{
+    		me.appEventsController.getApplication().fireEvent('onSaveAsMapPlan');
+    	}
+    	else
+    	{
+    		me.appEventsController.getApplication().fireEvent('onSaveMapPlan');
+    	}
+    	
+    	me.getView().close();
     },
     resetForm: function() {
         var me = this;

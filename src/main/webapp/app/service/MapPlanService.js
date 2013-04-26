@@ -115,7 +115,7 @@ Ext.define('Ssp.service.MapPlanService', {
          me.currentMapPlan.set('planCourses',planCourses);
     }, 
             
-    save: function(semesterStores, callbacks, currentMapPlan, view ){
+    save: function(semesterStores, callbacks, currentMapPlan, view, saveAs ){
 		var me=this;
 		var url = me.getBaseUrl(currentMapPlan.get('personId'));
 	    var success = function( response ){
@@ -131,8 +131,9 @@ Ext.define('Ssp.service.MapPlanService', {
 	    me.updateCurrentMap(semesterStores);
 	    
 		// save
-		if (!me.currentMapPlan.get('id') || me.currentMapPlan.get('id') == '')
-		{				
+		if ((!me.currentMapPlan.get('id') || me.currentMapPlan.get('id') == '') || saveAs )
+		{	
+			me.currentMapPlan.set('id','');
 			me.apiProperties.makeRequest({
     			url: url,
     			method: 'POST',
@@ -144,7 +145,7 @@ Ext.define('Ssp.service.MapPlanService', {
 		}else{
 			// update
     		me.apiProperties.makeRequest({
-    			url: url, 
+    			url: url+'/'+me.currentMapPlan.get('id'), 
     			method: 'PUT',
     			jsonData: me.currentMapPlan.data,
     			successFunc: success,
