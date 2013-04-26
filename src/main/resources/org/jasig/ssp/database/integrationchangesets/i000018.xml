@@ -1,0 +1,90 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+					 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					 xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<property name="schema" value="public" dbms="postgresql" />
+	<property name="schema" value="dbo" dbms="mssql" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	<property name="externalUser" value="a new UUID" />
+	<property name="check_for_manage_integration_database_config_sql"
+			  value="select count(id) from config where name='manage_integration_database'" />
+	<property name="should_manage_integration_database_sql"
+			  value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
+
+
+	<!-- We obviously don't control external data, so this needs to be
+	coordinated with changes to upstream ETL scripts that *are* responsible
+	for populating this table. But for terms in general, it is reasonable to
+	expect that the actual dataset is so stable that the ETL job might update
+	this table very infrequently. So we go ahead and adjust the timezone on the
+	terms for you.
+
+	Same thing needs to happen for Postgres and that changeSet appears
+	immediately below. This intentionally breaks from the convention established
+	in similar internal data changeSet files where we split mssql and postgresql
+	changeSets into separate files. In the internal data case, those changesets
+	were so large splitting them up made sense. Makes less sense here. -->
+	<changeSet id="refactor external_term timestamps (mssql)" author="dan.mccallum" dbms='mssql'>
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip refactor external_term timestamps (mssql)">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='external_term' />
+			<param name='columnName' value='start_date' />
+			<param name='idColumnName' value='code' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='external_term' />
+			<param name='columnName' value='end_date' />
+			<param name='idColumnName' value='code' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+	</changeSet>
+
+	<!-- Same as immediately above, but for Postgres -->
+	<changeSet id="refactor external_term timestamps (pg)" author="dan.mccallum" dbms='postgresql'>
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip refactor external_term timestamps (pg)">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+		<update tableName='external_term'>
+			<column name='start_date' valueComputed='(start_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='external_term'>
+			<column name='end_date' valueComputed='(end_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+	</changeSet>
+
+</databaseChangeLog>
