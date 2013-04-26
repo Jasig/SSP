@@ -42,7 +42,7 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 	public Plan cloneAndSave(Plan plan,Person owner) throws CloneNotSupportedException {
 		Plan clone = plan.clone();
 		clone.setOwner(owner);
-		clone.setObjectStatus(ObjectStatus.ACTIVE);
+		clone.setObjectStatus(plan.getObjectStatus());
 		return save(clone);
 	}
 	

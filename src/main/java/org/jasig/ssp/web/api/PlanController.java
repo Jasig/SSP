@@ -203,8 +203,8 @@ public class PlanController  extends AbstractBaseController {
 					"It is invalid to send an entity with an ID to the create method. Did you mean to use the save method instead?");
 		}
 
-		final Plan model = getFactory().from(obj);
-		getService().copyAndSave(model);
+		Plan model = getFactory().from(obj);
+		model = getService().copyAndSave(model);
 
 		if (null != model) {
 			final Plan createdModel = getFactory().from(obj);
