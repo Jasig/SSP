@@ -102,7 +102,11 @@ Ext.define('Ssp.service.MapPlanService', {
             	var planCourse = new Object();
             		planCourse.courseTitle = model.get('title');
             		planCourse.courseCode = model.get('code');
-            		planCourse.termCode = model.get('termCode');
+					//TODO This has to do with conflicts with print and save
+					if(!model.get('termCode') || model.get('termCode') == "")
+            			planCourse.termCode = index;
+					else
+						planCourse.termCode = model.get('termCode');
             		planCourse.creditHours = model.get('creditHours');
             		planCourse.formattedCourse = model.get('formattedCourse');
             		planCourse.courseDescription = model.get('description');

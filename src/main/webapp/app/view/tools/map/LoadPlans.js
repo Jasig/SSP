@@ -105,7 +105,6 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                             {
                             xtype: 'gridpanel',
                             title: 'Load Plan',
-                            id: 'allPlansGridPanel',
                             width: '100%',
                             height: '100%',
                             border: true,

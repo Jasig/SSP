@@ -165,9 +165,23 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.semesterStores = [];
 		var planCourses = me.currentMapPlan.get('planCourses');
 		if(!planCourses || planCourses.length == 0){
-			terms = me.termsStore.getCurrentAndFutureTerms(5);
+			var terms = me.termsStore.getCurrentAndFutureTerms(5);
 		} else {
-			terms = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(mapPlan));
+			var terms = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(mapPlan));
+			var addedTerms = me.termsStore.getCurrentAndFutureTerms(5);
+			addedTerms.forEach(function(termToAdd){
+				var termCodeToAdd = termToAdd.get("code");
+				var addTerm = true;
+				terms.forEach(function(term){
+					if(term.get("code") == termCodeToAdd){
+						addTerm = false;
+						return;
+					}
+				});
+				if(addTerm){
+					terms.push(termToAdd);
+				}
+			})
 		}
 		return terms;
 	},
