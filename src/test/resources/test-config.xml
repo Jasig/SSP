@@ -32,17 +32,21 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
 
 	<!-- Properties file configuration of existing beans -->
-	<bean id="configProperties" class="org.jasig.ssp.util.spring.PlaceholderDereferencingPropertiesFactoryBean">
+	<bean id="configProperties" class="org.jasig.ssp.config.ConfigPostProcessingPropertiesFactoryBean">
 		<constructor-arg type="java.util.Properties">
-			<bean class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-				<property name="ignoreResourceNotFound" value="true" />
-				<property name="locations">
-					<list>
-						<value>classpath:ssp-config.default.properties</value>
-						<value>classpath:ssp-config.test.properties</value>
-						<value>file:${SSP_TESTCONFIGDIR}/ssp-config.properties</value>
-					</list>
-				</property>
+			<bean class="org.jasig.ssp.util.spring.PlaceholderDereferencingPropertiesFactoryBean">
+				<constructor-arg type="java.util.Properties">
+					<bean class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+						<property name="ignoreResourceNotFound" value="true" />
+						<property name="locations">
+							<list>
+								<value>classpath:ssp-config.default.properties</value>
+								<value>classpath:ssp-config.test.properties</value>
+								<value>file:${SSP_TESTCONFIGDIR}/ssp-config.properties</value>
+							</list>
+						</property>
+					</bean>
+				</constructor-arg>
 			</bean>
 		</constructor-arg>
 	</bean>
@@ -72,6 +76,8 @@
 				<entry key="database.app.username" value="#{configProperties.db_username}" />
 				<entry key="database.admin.username" value="#{configProperties.db_admin_username}" />
 				<entry key="set.mssql.snapshot.isolation" value="#{configProperties.db_liquibase_set_mssql_snapshot_isolation}" />
+				<entry key="database.timezone.legacy" value="#{configProperties.db_time_zone_legacy}" />
+				<entry key="database.timezone" value="#{configProperties.db_time_zone}" />
 			</util:map>
 		</property>
 	</bean>

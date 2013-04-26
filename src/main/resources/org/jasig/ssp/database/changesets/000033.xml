@@ -1,0 +1,428 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<!-- Fixes up timestamps in Postgres 'timestamp without time zone'
+	fields in "internal" db tables that were present in 1.1. We're trying
+	to keep changesets separate for the various minor releases to make
+	back-porting a little easier. These migrations can only be applied once
+	per field, so we can't just have one monster changeset lurking in the
+	upgrade path that will "accidentally" reapply all the fixups that
+	might have already been applied in a previous upgrade. -->
+	<changeSet id='refactor 1.1 timestamps (pg)' author='dan.mccallum' dbms='postgresql'>
+		<update tableName='appointment'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='appointment'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='appointment'>
+			<column name='start_time' valueComputed='(start_time AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='appointment'>
+			<column name='end_time' valueComputed='(end_time AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='campus'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='campus'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='category'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='category'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='challenge'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='challenge'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='challenge_category'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='challenge_category'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='challenge_referral'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='challenge_referral'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='child_care_arrangement'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='child_care_arrangement'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='citizenship'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='citizenship'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='confidentiality_disclosure_agreement'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='confidentiality_disclosure_agreement'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='confidentiality_level'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='confidentiality_level'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='config'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='config'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='early_alert'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='early_alert'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='early_alert_outcome'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='early_alert_outcome'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='early_alert_outreach'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='early_alert_outreach'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='early_alert_reason'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='early_alert_reason'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='early_alert_referral'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='early_alert_referral'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='early_alert_response'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='early_alert_response'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='early_alert_routing'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='early_alert_routing'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='early_alert_suggestion'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='early_alert_suggestion'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='education_goal'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='education_goal'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='education_level'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='education_level'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='ethnicity'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='ethnicity'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='funding_source'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='funding_source'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='goal'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='goal'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='journal_entry'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='journal_entry'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='journal_entry_detail'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='journal_entry_detail'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='journal_source'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='journal_source'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='journal_step'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='journal_step'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='journal_step_detail'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='journal_step_detail'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='journal_step_journal_step_detail'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='journal_step_journal_step_detail'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='journal_track'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='journal_track'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='journal_track_journal_step'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='journal_track_journal_step'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='marital_status'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='marital_status'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='message'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='message'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='message'>
+			<column name='sent_date' valueComputed='(sent_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='message_template'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='message_template'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person'>
+			<column name='student_intake_request_date' valueComputed='(student_intake_request_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person'>
+			<column name='student_intake_complete_date' valueComputed='(student_intake_complete_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_challenge'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_challenge'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_confidentiality_disclosure_agreement'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_confidentiality_disclosure_agreement'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_demographics'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_demographics'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_education_goal'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_education_goal'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_education_level'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_education_level'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_education_plan'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_education_plan'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_funding_source'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_funding_source'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_program_status'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_program_status'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_program_status'>
+			<column name='effective_date' valueComputed='(effective_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_program_status'>
+			<column name='expiration_date' valueComputed='(expiration_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_referral_source'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_referral_source'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_service_reason'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_service_reason'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_special_service_group'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_special_service_group'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_tool'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_tool'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='program_status'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='program_status'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='program_status_change_reason'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='program_status_change_reason'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='referral_source'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='referral_source'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='self_help_guide'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='self_help_guide'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='self_help_guide_group'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='self_help_guide_group'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='self_help_guide_question'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='self_help_guide_question'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='self_help_guide_question_response'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='self_help_guide_question_response'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='self_help_guide_response'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='self_help_guide_response'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='service_reason'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='service_reason'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='special_service_group'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='special_service_group'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='student_status'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='student_status'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='student_type'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='student_type'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='task'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='task'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='task'>
+			<column name='completed_date' valueComputed='(completed_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='task'>
+			<column name='reminder_sent_date' valueComputed='(reminder_sent_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='veteran_status'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='veteran_status'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+	</changeSet>
+</databaseChangeLog>

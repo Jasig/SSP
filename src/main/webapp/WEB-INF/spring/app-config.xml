@@ -88,6 +88,8 @@
 				<entry key="database.admin.username" value="#{configProperties.db_admin_username}" />
 				<entry key="set.mssql.snapshot.isolation" value="#{configProperties.db_liquibase_set_mssql_snapshot_isolation}" />
 				<entry key="strip.journal.comment.markup" value="#{configProperties.db_liquibase_strip_journal_comment_markup}" />
+				<entry key="database.timezone.legacy" value="#{configProperties.db_time_zone_legacy}" />
+				<entry key="database.timezone" value="#{configProperties.db_time_zone}" />
 			</util:map>
 		</property>
 	</bean>
