@@ -111,11 +111,11 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
     },
     
     onprintPlanButtonClick: function(button){
-       /* var me=this;
+       var me=this;
 		if(me.printPlanPopUp == null || me.printPlanPopUp.isDestroyed)
 			me.printPlanPopUp = Ext.create('Ssp.view.tools.map.PrintPlan',{hidden:true});
 		me.printPlanPopUp.printEvent = 'onPrintCurrentMapPlan';
-		me.printPlanPopUp.show();*/
+		me.printPlanPopUp.show();
     },
 
     resetForm: function() {

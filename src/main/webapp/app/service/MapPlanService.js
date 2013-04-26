@@ -102,7 +102,7 @@ Ext.define('Ssp.service.MapPlanService', {
             	var planCourse = new Object();
             		planCourse.courseTitle = model.get('title');
             		planCourse.courseCode = model.get('code');
-            		planCourse.termCode = index;
+            		planCourse.termCode = model.get('termCode');
             		planCourse.creditHours = model.get('creditHours');
             		planCourse.formattedCourse = model.get('formattedCourse');
             		planCourse.courseDescription = model.get('description');
