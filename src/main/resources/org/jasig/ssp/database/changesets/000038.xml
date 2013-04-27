@@ -99,15 +99,6 @@ Total Plan Hours: $totalPlanHours
 			</tr>
 		</table>
 	#end
-	<table style="width:80%">
-		<tbody>
-		<tr>
-		<td style="text-align:center">
-		<b>CREDIT HOURS FOR PLAN: $totalPlanCreditHours</b>
-		</td>
-		</tr>
-		</tbody>
-	</table>
 </div>
 	<div>
 	<p style="padding-left:20px">
