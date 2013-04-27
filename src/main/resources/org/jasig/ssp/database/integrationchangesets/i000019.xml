@@ -1,0 +1,95 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<property name="schema" value="public" dbms="postgresql" />
+	<property name="schema" value="dbo" dbms="mssql" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	<property name="externalUser" value="a new UUID" />
+	<property name="check_for_manage_integration_database_config_sql"
+			  value="select count(id) from config where name='manage_integration_database'" />
+	<property name="should_manage_integration_database_sql"
+			  value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
+
+
+	<!-- # This file is for fields present through 1.1, but please note
+	 view handling issues with backporting described below. # -->
+
+	<changeSet id="harmonize external_person field widths" author="dan.mccallum">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip modifications to external_person fields widths in integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<dropView viewName="v_external_person" />
+
+		<!-- both were ${nvarchar.type}(10) -->
+		<modifyDataType tableName="external_person" columnName="marital_status" newDataType="${nvarchar.type}(80)" />
+		<modifyDataType tableName="external_person" columnName="ethnicity" newDataType="${nvarchar.type}(80)" />
+
+		<!-- When and if this is actually back-ported, you'll want to be careful
+		to make sure that the view is recreated in a state that makese sense
+		for your version's db state. Note that re-running this changeSet later,
+		e.g. in a subsequent upgrade *should* be safe, since any intermediate
+		changes which resulted in view modifications should have already
+		run as part of that upgrade.-->
+		<createView viewName="v_external_person">
+			select ROW_NUMBER() OVER (ORDER BY school_id) as id,
+			school_id, username, first_name, middle_name, last_name, birth_date, primary_email_address,
+			address_line_1, address_line_2, city, state, zip_code, residency_county, home_phone, work_phone, cell_phone,
+			office_location, office_hours, department_name, actual_start_term, actual_start_year,
+			marital_status, ethnicity, gender, is_local, f1_status, balance_owed, coach_school_id, non_local_address, photo_url
+			from external_person
+		</createView>
+		<sql>grant all on v_external_person to ${database.app.username}</sql>
+	</changeSet>
+
+	<changeSet id="harmonize external_faculty_course_roster field widths" author="dan.mccallum">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip modifications to external_faculty_course_roster fields widths in integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<dropView viewName="v_external_faculty_course_roster" />
+
+		<!-- was ${nvarchar.type}(50) -->
+		<modifyDataType tableName="external_faculty_course_roster" columnName="primary_email_address" newDataType="${nvarchar.type}(100)" />
+
+		<!-- See notes on view handling above. -->
+		<createView viewName="v_external_faculty_course_roster">
+			select ROW_NUMBER() OVER (ORDER BY faculty_school_id) as id, faculty_school_id, school_id, first_name, middle_name, last_name, primary_email_address, term_code, formatted_course, status_code from external_faculty_course_roster
+		</createView>
+		<sql>grant all on v_external_faculty_course_roster to ${database.app.username}</sql>
+	</changeSet>
+
+
+
+</databaseChangeLog>

@@ -104,6 +104,11 @@
 	<include file="org/jasig/ssp/database/integrationchangesets/i000011-test.xml" /> <!--  MAP external test data -->
 	<include file="org/jasig/ssp/database/changesets/000031.xml" />
 	<include file="org/jasig/ssp/database/integrationchangesets/i000017.xml" />
+
+	<include file="org/jasig/ssp/database/integrationchangesets/i000019.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000020.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000021.xml" />
+	<include file="org/jasig/ssp/database/changesets/000039.xml" />
 	
 
 

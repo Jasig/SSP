@@ -106,8 +106,8 @@ public class ExternalPerson extends AbstractExternalData implements
 
 	private Integer actualStartYear;
 
-	@Column(length = 10)
-	@Size(max = 10)
+	@Column(length = 80)
+	@Size(max = 80)
 	private String maritalStatus, ethnicity;
 
 	@Column(length = 1)

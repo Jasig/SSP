@@ -19,16 +19,34 @@ public class ExternalCourse extends AbstractExternalData implements ExternalData
 
 	private static final long serialVersionUID = 1529384456357160956L;
 	
-	@Column(nullable = false, length = 20)
+	@Column(nullable = false, length = 50)
 	@NotNull
 	@NotEmpty
-	@Size(max = 20)
-	private String code,formattedCourse,subjectAbbreviation, title;
+	@Size(max = 35)
+	private String code;
+
+	@Column(nullable = false, length = 35)
+	@NotNull
+	@NotEmpty
+	@Size(max = 35)
+	private String formattedCourse;
+
+	@Column(nullable = false, length = 10)
+	@NotNull
+	@NotEmpty
+	@Size(max = 10)
+	private String subjectAbbreviation;
+
+	@Column(nullable = false, length = 100)
+	@NotNull
+	@NotEmpty
+	@Size(max = 100)
+	private String title;
 	
-	@Column(nullable = false, length = 2000)
+	@Column(nullable = false, length = 2500)
 	@NotNull
 	@NotEmpty
-	@Size(max = 2000)	
+	@Size(max = 2500)
 	private String description;
 	
 	
