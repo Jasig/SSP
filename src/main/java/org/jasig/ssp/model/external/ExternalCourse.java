@@ -1,14 +1,13 @@
 package org.jasig.ssp.model.external;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -18,6 +17,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class ExternalCourse extends AbstractExternalData implements ExternalData, Serializable {
 
 	private static final long serialVersionUID = 1529384456357160956L;
+	public static final String BOOLEAN_YES = "Y";
+	public static final String BOOLEAN_NO = "N";
 	
 	@Column(nullable = false, length = 50)
 	@NotNull
@@ -48,15 +49,13 @@ public class ExternalCourse extends AbstractExternalData implements ExternalData
 	@NotEmpty
 	@Size(max = 2500)
 	private String description;
-	
-	
+
 	@Column(nullable = false)
 	private Integer maxCreditHours,minCreditHours;
-	
-	@Column(nullable = false)
-	private Boolean isDev;
-	
-	
+
+	@Column(nullable = false, length = 1)
+	@Size(max = 1)
+	private String isDev;
 
 	public String getSubjectAbbreviation() {
 		return subjectAbbreviation;
@@ -115,10 +114,18 @@ public class ExternalCourse extends AbstractExternalData implements ExternalData
 	}
 
 	public Boolean getIsDev() {
-		return isDev;
+		String isDevTrimmed = StringUtils.trimToNull(isDev);
+		if ( isDevTrimmed == null ) {
+			// non-nullable field so no point in returning null here
+			return false;
+		}
+		return BOOLEAN_YES.equalsIgnoreCase(isDevTrimmed);
 	}
 
 	public void setIsDev(Boolean isDev) {
-		this.isDev = isDev;
+		if ( isDev == null ) {
+			this.isDev = BOOLEAN_NO;
+		}
+		this.isDev = isDev ? BOOLEAN_YES : BOOLEAN_NO;
 	}
 }

@@ -99,24 +99,6 @@
 		<!-- was ${nvarchar.type}(2000) -->
 		<modifyDataType tableName="external_course" columnName="description" newDataType="${nvarchar.type}(2500)" />
 
-		<!-- Keeping this here b/c conversion is still under discussion
-		(SSP-1077). Obviously, if it does need to go in, it will need to be
-		in a separate changeset. -->
-		<!--<addColumn tableName="external_course">-->
-			<!--<column name="is_dev_new" type="char(1)" defaultValue="N" />-->
-		<!--</addColumn>-->
-		<!--<update tableName="external_course">-->
-			<!--<column name="is_dev_new" valueComputed="Y" />-->
-			<!--<where>is_dev</where>-->
-		<!--</update>-->
-		<!--<update tableName="external_course">-->
-			<!--<column name="is_dev_new" valueComputed="N" />-->
-			<!--<where>not is_dev</where>-->
-		<!--</update>-->
-		<!--<dropColumn tableName="external_course" columnName="is_dev" />-->
-		<!--<renameColumn tableName="external_course" oldColumnName="is_dev_new" newColumnName="is_dev" />-->
-		<!--<addNotNullConstraint tableName="external_course" columnName="is_dev" columnDataType="char(1)" />-->
-
 		<!-- When and if this is actually back-ported, you'll want to be careful
 		to make sure that the view is recreated in a state that makese sense
 		for your version's db state. Note that re-running this changeSet later,
