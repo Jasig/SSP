@@ -234,7 +234,13 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		String defaultStatusCode = getDefaultStatusCode(mappings);
 		
 		for(ExternalStudentTranscriptCourseTO course:courses){
-			Person person = personService.getBySchoolId(course.getFacultySchoolId());
+			Person person = null;
+			try{
+				person = personService.getBySchoolId(course.getFacultySchoolId());
+			}finally
+			{
+				
+			}
 			if(person != null)
 				course.setFacultyName(person.getFullName());
 			

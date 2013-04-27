@@ -38,7 +38,7 @@ public interface PlanService extends AbstractPlanService<Plan> {
 	PagingWrapper<Plan> getAllForStudent(
 			SortingAndPaging createForSingleSortWithPaging,UUID personId);
 
-	String createMapPlanPrintScreen(PlanTO plan) throws ObjectNotFoundException;
+	String createMapPlanPrintScreen(PlanTO plan, String institutionName) throws ObjectNotFoundException;
 
 
 	

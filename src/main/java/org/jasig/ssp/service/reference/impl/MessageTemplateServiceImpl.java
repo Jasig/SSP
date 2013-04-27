@@ -242,8 +242,10 @@ public class MessageTemplateServiceImpl extends
 	}
 	
 	@Override
-	public SubjectAndBody createMapPlanPrintScreen(final Person student,final Person owner, final PlanTO plan, final Float totalPlanCreditHours,
-			final List<TermCourses> termCourses) {
+	public SubjectAndBody createMapPlanPrintScreen(final Person student,final Person owner, final PlanTO plan, 
+			final Float totalPlanCreditHours,
+			final List<TermCourses> termCourses,
+			final String institutionName) {
 
 		final Map<String, Object> messageParams = new HashMap<String, Object>();
 		messageParams.put("title", plan.getName());
@@ -255,7 +257,9 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("coachPhone2", owner.getHomePhone());
 		messageParams.put("coachFullName", owner.getFullName());
 		messageParams.put("coachEmail", owner.getPrimaryEmailAddress());
-		messageParams.put("totalPlanCreditHours", totalPlanCreditHours);
+		messageParams.put("totalPlanHours", totalPlanCreditHours);
+		messageParams.put("institution", institutionName);
+		messageParams.put("createdDateFormatted", formatDate(new Date()));
 
 		return populateFromTemplate(MessageTemplate.PRINT_MAP_PLAN_ID,
 				messageParams);

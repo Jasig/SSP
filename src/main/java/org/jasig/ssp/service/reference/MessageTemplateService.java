@@ -71,5 +71,6 @@ public interface MessageTemplateService extends
 			Map<String, Object> messageParams);
 	
 	public SubjectAndBody createMapPlanPrintScreen(final Person student, final Person owner, final PlanTO plan, final Float totalPlanCreditHours,
-			final List<TermCourses> termCourses);
+			final List<TermCourses> termCourses,
+			String institutionName);
 }

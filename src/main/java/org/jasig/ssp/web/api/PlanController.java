@@ -27,12 +27,14 @@ import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PlanLiteTO;
 import org.jasig.ssp.transferobject.PlanTO;
@@ -81,6 +83,9 @@ public class PlanController  extends AbstractBaseController {
 	
 	@Autowired
 	private transient SecurityService securityService;
+	
+	@Autowired
+	private transient ConfigService configService;
 
  
 	/**
@@ -231,8 +236,8 @@ public class PlanController  extends AbstractBaseController {
 	String print(final HttpServletResponse response,
 			 @RequestBody final PlanTO obj) throws ObjectNotFoundException {
 
-		
-		final String output = service.createMapPlanPrintScreen(obj);
+		Config institutionName = configService.getByName("inst_name");
+		final String output = service.createMapPlanPrintScreen(obj, institutionName.getValue());
 		return output;
 	}
 
