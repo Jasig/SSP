@@ -129,8 +129,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
     
     onloadSavedPlanButtonClick: function(button){
         var me=this; 
-		if(me.allPlansPopUp == null || me.allPlansPopUp.isDestroyed)
-			me.allPlansPopUp = Ext.create('Ssp.view.tools.map.LoadPlans',{hidden:true});
+		me.allPlansPopUp = Ext.create('Ssp.view.tools.map.LoadPlans',{hidden:true});
 		me.allPlansPopUp.show();
     },
     
