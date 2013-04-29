@@ -46,13 +46,11 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     	     	
     	var addVisible = true;
     	var deleteVisible = true;
-    	console.log(me.interfaceOptions);
     	if(me.interfaceOptions !== undefined) { 
     		addVisible = me.interfaceOptions.addButtonVisible;
     		deleteVisible = me.interfaceOptions.deleteButtonVisible;    		
     	}
 
-    	console.log(me);
     	Ext.apply(me,
     			{
     		      plugins: cellEditor,
@@ -103,7 +101,6 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     	        					jsonData: jsonData,
     	        					success: function(response, view) {
     	        						var r = Ext.decode(response.responseText);
-    	        						console.log(me);
     	        						me.getController().getRecordPager().onLoad();
     	        						me.getController().getRecordPager().doRefresh();
     	        					},
