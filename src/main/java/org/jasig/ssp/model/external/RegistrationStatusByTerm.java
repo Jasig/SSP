@@ -55,10 +55,8 @@ public class RegistrationStatusByTerm extends AbstractExternalData
 	@NotNull
 	@Column(nullable = false, length = 25)
 	private int registeredCourseCount;
-	
-	@NotNull
-	@NotEmpty
-	@Column(nullable = false, length = 1)
+
+	@Column(nullable = true, length = 1)
 	private String tuitionPaid;
 
 	public String getSchoolId() {
