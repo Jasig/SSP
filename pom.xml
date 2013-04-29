@@ -58,6 +58,9 @@
 			</activation>
 			<properties>
 				<sencha.cmd>sencha.bat</sencha.cmd>
+				<sencha.working.dir>${basedir}\src\main\webapp</sencha.working.dir>
+				<sencha.project.file>${basedir}\src\main\webapp\ssp.jsb3</sencha.project.file>
+				<sencha.output.dir>${basedir}\src\main\webapp\</sencha.output.dir>
 			</properties>
 		</profile>
 
@@ -70,6 +73,9 @@
 			</activation>
 			<properties>
 				<sencha.cmd>sencha</sencha.cmd>
+				<sencha.working.dir>${basedir}/src/main/webapp</sencha.working.dir>
+				<sencha.project.file>${basedir}/src/main/webapp/ssp.jsb3</sencha.project.file>
+				<sencha.output.dir>${basedir}/src/main/webapp/</sencha.output.dir>
 			</properties>
 		</profile>
 
@@ -568,13 +574,13 @@
 					<skip>${sencha.skip}</skip>
 					<executable>${sencha.cmd}</executable>
 					<!-- optional -->
-					<workingDirectory>${basedir}/src/main/webapp</workingDirectory>
+					<workingDirectory>${sencha.working.dir}</workingDirectory>
 					<arguments>
 						<argument>build</argument>
 						<argument>-p</argument>
-						<argument>${basedir}/src/main/webapp/ssp.jsb3</argument>
+						<argument>${sencha.project.file}</argument>
 						<argument>-d</argument>
-						<argument>${basedir}/src/main/webapp/</argument>
+						<argument>${sencha.output.dir}</argument>
 					</arguments>
 				</configuration>
 			</plugin>
