@@ -70,7 +70,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                 			    	fieldLabel: 'Active Plan',
                 			    	name: 'activeplan',
                 			    	labelWidth: 65,
-                			    	checked: true,
+                			    	checked: false,
                 			    	labelAlign: 'before',
                 			    	inputValue: 'activeplan'
                 			    },
