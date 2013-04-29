@@ -22,7 +22,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.model.external.ExternalStudentTest;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
 
 public class ExternalStudentTestTO implements Serializable, ExternalDataTO<ExternalStudentTest> {
 	/**
@@ -35,7 +39,11 @@ public class ExternalStudentTestTO implements Serializable, ExternalDataTO<Exter
 	private String testCode;
 	private String subTestCode;
 	private String subTestName;
+
+	@JsonSerialize(using = DateOnlySerializer.class)
+	@JsonDeserialize(using = DateOnlyDeserializer.class)
 	private Date takenDate;
+
 	private BigDecimal score;
 	private String status;
 	

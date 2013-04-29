@@ -948,7 +948,7 @@ Ext.define('Ssp.model.Placement', {
             		 return record.get('name') + ' '+ record.get('subTestName');
             	 }
              },             
-             {name: 'takenDate',type: 'date', dateFormat: 'time'}]
+             {name: 'takenDate',type: 'date', dateFormat: 'c'}]
 });
 /*
  * Licensed to Jasig under one or more contributor license
