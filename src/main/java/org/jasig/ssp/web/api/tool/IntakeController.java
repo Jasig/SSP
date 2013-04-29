@@ -219,8 +219,8 @@ public class IntakeController extends AbstractBaseController {
 		refData.put("genders", Genders.values());
 		refData.put("states", States.values());
 		refData.put("futureTerms",termService.getCurrentAndFutureTerms());
-		refData.put("weeklyCourseWorkHourRanges", configService.getByName("registration_load_ranges").getValue());
-		refData.put("registrationLoadRanges", configService.getByName("weekly_course_work_hour_ranges").getValue());
+		refData.put("registrationLoadRanges", configService.getByName("registration_load_ranges").getValue());
+		refData.put("weeklyCourseWorkHourRanges", configService.getByName("weekly_course_work_hour_ranges").getValue());
 		return refData;
 	}
 
