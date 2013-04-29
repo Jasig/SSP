@@ -58,9 +58,9 @@
 			</activation>
 			<properties>
 				<sencha.cmd>sencha.bat</sencha.cmd>
-				<sencha.working.dir>"${basedir}"\src\main\webapp</sencha.working.dir>
-				<sencha.project.file>"${basedir}"\src\main\webapp\ssp.jsb3</sencha.project.file>
-				<sencha.output.dir>"${basedir}"\src\main\webapp\</sencha.output.dir>
+				<sencha.working.dir>src\main\webapp</sencha.working.dir>
+				<sencha.project.file>"${basedir}\src\main\webapp\ssp.jsb3"</sencha.project.file>
+				<sencha.output.dir>"${basedir}\src\main\webapp\"</sencha.output.dir>
 			</properties>
 		</profile>
 
