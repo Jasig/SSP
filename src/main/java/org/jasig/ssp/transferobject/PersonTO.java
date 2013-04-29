@@ -388,7 +388,8 @@ public class PersonTO // NOPMD
 		StringBuilder builder = new StringBuilder();
 		for (RegistrationStatusByTerm registrationStatusByTerm : currentAndFutureRegistrationStatuses) 
 		{
-			builder.append(registrationStatusByTerm.getTermCode() + "=" + registrationStatusByTerm.getTuitionPaid() + " ");
+			if(registrationStatusByTerm.getTuitionPaid() != null && !registrationStatusByTerm.getTuitionPaid().trim().isEmpty())
+				builder.append(registrationStatusByTerm.getTermCode() + "=" + registrationStatusByTerm.getTuitionPaid() + " ");
 		}
 		return builder.toString().trim();
 	}	
