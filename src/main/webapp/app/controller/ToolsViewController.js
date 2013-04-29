@@ -107,7 +107,6 @@ Ext.define('Ssp.controller.ToolsViewController', {
 
 		//TAKE OUT LEGACY AND DOCUMENTS GRANT
         if ( // TODO MAP HACK FOR DEV. TAKE THE UNCONDITIONAL MAP GRANT OUT!!
-            toolType.toUpperCase() === "MAP" ||
 			toolType.toUpperCase() === "LEGACYREMARKS" ||
 			toolType.toUpperCase() === "DOCUMENTS" ||
             me.authenticatedPerson.hasAccess(toolType.toUpperCase() + '_TOOL')) {

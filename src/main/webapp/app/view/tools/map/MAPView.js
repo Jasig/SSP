@@ -23,6 +23,7 @@ Ext.define('Ssp.view.tools.map.MAPView', {
     controller: 'Ssp.controller.tool.map.MAPViewController',
     inject:{
 		currentMapPlan: 'currentMapPlan',
+        authenticatedPerson: 'authenticatedPerson',
     },	
     width: '100%',
     height: '100%',
@@ -65,6 +66,7 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                     text: '<u>Load Saved Plan</u>',
                     height: 22,
                     xtype: 'button',
+	                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_LOAD_BUTTON'),
                     itemId: 'loadSavedPlanButton'
                 },
 				{
@@ -83,6 +85,7 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                     text: 'Save',
                     itemId: 'addTool',
                     height: 22,
+	                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_SAVE_BUTTON'),
                     menu: {
                     items: [
                         

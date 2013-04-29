@@ -22,8 +22,8 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.map.MapPlanToolViewController',
     inject: {
-        columnRendererUtils: 'columnRendererUtils'
-        //sspConfig: 'sspConfig'
+        columnRendererUtils: 'columnRendererUtils',
+        authenticatedPerson: 'authenticatedPerson',
     },
     width: '100%',
     height: '100%',
@@ -209,6 +209,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     cls: 'mapPrintIcon',
                     xtype: 'button',
                     itemId: 'printPlanButton',
+	                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON'),
                     align: 'center',
                     padding: '0 0 0 0'
                 }, {

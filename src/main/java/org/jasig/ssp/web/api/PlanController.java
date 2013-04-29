@@ -30,6 +30,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
@@ -46,6 +47,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -100,6 +102,7 @@ public class PlanController  extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<PlanTO> get(final @PathVariable UUID personId,
@@ -128,6 +131,7 @@ public class PlanController  extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
 	public @ResponseBody
 	PlanTO getPlan(final @PathVariable UUID personId,final @PathVariable UUID id) throws ObjectNotFoundException,
@@ -146,6 +150,7 @@ public class PlanController  extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */	
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(value="/current", method = RequestMethod.GET)
 	public @ResponseBody
 	PlanTO getCurrentForStudent(final @PathVariable UUID personId) throws ObjectNotFoundException,
@@ -200,6 +205,7 @@ public class PlanController  extends AbstractBaseController {
 	 *             If the specified data contains an id (since it shouldn't).
 	 * @throws CloneNotSupportedException 
 	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_WRITE')")
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
 	PlanTO create(@Valid @RequestBody final PlanTO obj) throws ObjectNotFoundException,
@@ -232,6 +238,7 @@ public class PlanController  extends AbstractBaseController {
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.
 	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(value = "/print", method = RequestMethod.POST)
 	public @ResponseBody
 	String print(final HttpServletResponse response,
@@ -256,6 +263,7 @@ public class PlanController  extends AbstractBaseController {
 	 *             If the specified id is null.
 	 * @throws CloneNotSupportedException 
 	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_WRITE')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
 	PlanTO save(@PathVariable final UUID id, @Valid @RequestBody final PlanTO obj)
@@ -304,6 +312,7 @@ public class PlanController  extends AbstractBaseController {
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.
 	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_WRITE')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
 	ServiceResponse delete(@PathVariable final UUID id)
