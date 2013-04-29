@@ -26,6 +26,7 @@ import javax.validation.Valid;
 import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.security.SspUser;
@@ -267,14 +268,15 @@ public class PlanController  extends AbstractBaseController {
 		if (obj.getId() == null) {
 			obj.setId(id);
 		}
-
+		Plan oldPlan = getService().get(id);
+		Person oldOwner = oldPlan.getOwner();
+		
 		final Plan model = getFactory().from(obj);
 		SspUser currentUser = getSecurityService().currentlyAuthenticatedUser();
 		
-		Plan oldPlan = getService().get(id);
 		//If the currently logged in user is not the owner of this plan
 		//we need to create a clone then save it.
-		if(currentUser.getPerson().getId().equals(oldPlan.getOwner().getId()))
+		if(currentUser.getPerson().getId().equals(oldOwner.getId()))
 		{
 			final Plan savedPlan = getService().save(model);
 			if (null != savedPlan) {
