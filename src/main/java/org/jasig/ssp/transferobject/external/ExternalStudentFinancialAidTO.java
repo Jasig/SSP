@@ -54,6 +54,8 @@ public class ExternalStudentFinancialAidTO implements Serializable,
 	
 	BigDecimal remainingLoanAmount;
 	
+	BigDecimal balanceOwed;
+	
 	public ExternalStudentFinancialAidTO(){
 		super();
 	}
@@ -94,6 +96,13 @@ public class ExternalStudentFinancialAidTO implements Serializable,
 	public ExternalStudentFinancialAidTO(ExternalStudentFinancialAid model){
 		super();
 		from(model);
+	}
+
+	
+	public ExternalStudentFinancialAidTO(ExternalStudentFinancialAid model, BigDecimal balanceOwed){
+		super();
+		from(model);
+		this.balanceOwed = balanceOwed;
 	}
 
 	/**
@@ -248,6 +257,20 @@ public class ExternalStudentFinancialAidTO implements Serializable,
 	 */
 	public void setRemainingLoanAmount(BigDecimal remainingLoanAmount) {
 		this.remainingLoanAmount = remainingLoanAmount;
+	}
+
+	/**
+	 * @return the balanceOwed
+	 */
+	public BigDecimal getBalanceOwed() {
+		return balanceOwed;
+	}
+
+	/**
+	 * @param balanceOwed the balanceOwed to set
+	 */
+	public void setBalanceOwed(BigDecimal balanceOwed) {
+		this.balanceOwed = balanceOwed;
 	}
 
 	@Override

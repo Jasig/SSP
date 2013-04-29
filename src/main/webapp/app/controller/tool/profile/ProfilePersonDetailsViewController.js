@@ -64,7 +64,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         creditHoursEarnedField: '#creditHoursEarned',
         creditHoursAttemptedField: '#creditHoursAttempted',
         creditCompletionRateField: '#creditCompletionRate',
-        remainingLoanAmountField: '#remainingLoanAmount',
+        balanceOwedField: '#balanceOwed',
         financialAidRemainingField: '#financialAidRemaining',
         originalLoanAmountField: '#originalLoanAmount',
     
@@ -238,8 +238,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 			me.getSapStatusField().setValue('<span style="color:#15428B">SAP:  </span>' + financialAid.sapStatus);
         	me.getFafsaDateField().setFieldLabel('');
 			me.getFafsaDateField().setValue('<span style="color:#15428B">FAFSA:  </span>' + Ext.util.Format.date(new Date(financialAid.fafsaDate),'m/d/Y'));
-        	me.getRemainingLoanAmountField().setFieldLabel('');
-			me.getRemainingLoanAmountField().setValue('<span style="color:#15428B">Balance:  </span>' + Ext.util.Format.usMoney(financialAid.remainingLoanAmount));
+        	me.getBalanceOwedField().setFieldLabel('');
+			me.getBalanceOwedField().setValue('<span style="color:#15428B">Balance:  </span>' + Ext.util.Format.usMoney(financialAid.balanceOwed));
         	me.getFinancialAidRemainingField().setFieldLabel('');
 			me.getFinancialAidRemainingField().setValue('<span style="color:#15428B">FA Amount:  </span>' + Ext.util.Format.usMoney(financialAid.financialAidRemaining));
         	me.getOriginalLoanAmountField().setFieldLabel('');

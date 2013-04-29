@@ -45,7 +45,7 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
         creditHoursEarnedField: '#creditHoursEarned',
         creditHoursAttemptedField: '#creditHoursAttempted',
         creditCompletionRateField: '#creditCompletionRate',
-        remainingLoanAmountField: '#remainingLoanAmount',
+        balanceOwedField: '#balanceOwed',
         financialAidRemainingField: '#financialAidRemaining',
         originalLoanAmountField: '#originalLoanAmount',
     
@@ -135,7 +135,7 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
         	
         	me.getSapStatusField().setValue(financialAid.sapStatus);
         	me.getFafsaDateField().setValue(Ext.util.Format.date(new Date(financialAid.fafsaDate),'m/d/Y'));
-        	me.getRemainingLoanAmountField().setValue(Ext.util.Format.usMoney(financialAid.remainingLoanAmount));
+        	me.getBalanceOwedField().setValue(Ext.util.Format.usMoney(financialAid.balanceOwed));
         	me.getFinancialAidRemainingField().setValue(Ext.util.Format.usMoney(financialAid.financialAidRemaining));
         	me.getOriginalLoanAmountField().setValue(Ext.util.Format.usMoney(financialAid.originalLoanAmount));
         	me.getFinancialAidGpaField().setValue(financialAid.financialAidGpa);

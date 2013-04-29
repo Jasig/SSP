@@ -202,8 +202,8 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         labelWidth: 80
                     }, {
                         fieldLabel: 'Balance',
-                        name: 'remainingLoanAmount',
-                        itemId: 'remainingLoanAmount'
+                        name: 'balanceOwed',
+                        itemId: 'balanceOwed'
                     }, {
                         xtype: 'tbspacer',
                         height: '10'
