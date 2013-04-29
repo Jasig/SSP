@@ -426,7 +426,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	onPrintComplete: function(htmlPrint){
 		var me = this;
-        var myWindow = window.open('', '', 'width=500,height=600');
+        var myWindow = window.open('', '', 'width=500,height=600,scrollbars=yes');
         myWindow.document.write(htmlPrint);
 		myWindow.document.title = me.currentMapPlan.get("name");
         myWindow.print();
