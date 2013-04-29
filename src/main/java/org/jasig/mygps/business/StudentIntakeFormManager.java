@@ -51,6 +51,7 @@ import org.jasig.ssp.model.PersonEducationGoal;
 import org.jasig.ssp.model.PersonEducationLevel;
 import org.jasig.ssp.model.PersonEducationPlan;
 import org.jasig.ssp.model.PersonFundingSource;
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChildCareArrangement;
 import org.jasig.ssp.model.reference.Citizenship;
@@ -69,6 +70,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonConfidentialityDisclosureAgreementService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ChildCareArrangementService;
 import org.jasig.ssp.service.reference.CitizenshipService;
 import org.jasig.ssp.service.reference.EducationGoalService;
@@ -158,6 +160,9 @@ public class StudentIntakeFormManager { // NOPMD
 
 	@Autowired
 	private transient SecurityService securityService;
+	
+	@Autowired
+	private transient TermService termService;
 
 	// Default value for unfilled drop-down
 	public static final String DEFAULT_DROPDOWN_LIST_LABEL = "-- Select One --";
@@ -287,6 +292,12 @@ public class StudentIntakeFormManager { // NOPMD
 			.fromString("dad92c0e-c185-4baa-b114-9cbedebeacd5");
 	public static final UUID SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID = UUID
 			.fromString("8055f756-afc1-487f-a67f-1e66d5db3907");
+	public static final UUID SECTION_EDUCATIONGOAL_QUESTION_REGISTRATION_LOAD_ID = UUID
+			.fromString("c0a8017b-3e18-1685-813e-18e6986e0010");	
+	public static final UUID SECTION_EDUCATIONGOAL_QUESTION_COURSEWORK_LOAD_ID = UUID
+			.fromString("c0a8017b-3e18-1685-813e-18e6986e0011");
+	public static final UUID SECTION_EDUCATIONGOAL_QUESTION_GRADUATION_DATE_ID = UUID
+			.fromString("c0a8017b-3e18-1685-813e-18e698730047");	
 	public static final UUID SECTION_EDUCATIONGOAL_QUESTION_GOALDESCRIPTION_ID = UUID
 			.fromString("a222b26f-c325-443e-8df8-5db3079353c3");
 	public static final UUID SECTION_EDUCATIONGOAL_QUESTION_OTHERDESCRIPTION_ID = UUID
@@ -1487,6 +1498,24 @@ public class StudentIntakeFormManager { // NOPMD
 							.getFormQuestionById(
 									SECTION_EDUCATIONGOAL_QUESTION_MILITARYBRANCHDESCRIPTION_ID)
 							.getValue());
+			
+			studentEducationGoal
+			.setRegistrationLoadName(educationGoalSection
+					.getFormQuestionById(
+							SECTION_EDUCATIONGOAL_QUESTION_REGISTRATION_LOAD_ID)
+					.getValue());
+			
+			studentEducationGoal
+			.setAnticipatedGraduationDateTermCode(educationGoalSection
+					.getFormQuestionById(
+							SECTION_EDUCATIONGOAL_QUESTION_GRADUATION_DATE_ID)
+					.getValue());	
+			
+			studentEducationGoal
+			.setCourseWorkWeeklyHoursName(educationGoalSection
+					.getFormQuestionById(
+							SECTION_EDUCATIONGOAL_QUESTION_COURSEWORK_LOAD_ID)
+					.getValue());			
 
 			// TODO Add EducationGoal.OtherDescription field
 			// studentEducationGoal.setOtherDescription(educationGoalSection.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_OTHERDESCRIPTION_ID).getValue());
@@ -2551,7 +2580,7 @@ public class StudentIntakeFormManager { // NOPMD
 		return eduLevelSection;
 	}
 
-	private FormSectionTO buildEducationGoalSection() {
+	private FormSectionTO buildEducationGoalSection() throws ObjectNotFoundException {
 
 		final FormSectionTO eduGoalSection = new FormSectionTO();
 		final List<FormQuestionTO> eduGoalSectionQuestions = new ArrayList<FormQuestionTO>();
@@ -2732,7 +2761,67 @@ public class StudentIntakeFormManager { // NOPMD
 		additionalInfoQuestion.setOptions(additionalInfoQuestionOptions);
 		additionalInfoQuestion.setType(FORM_TYPE_RADIOLIST);
 
-		eduGoalSectionQuestions.add(additionalInfoQuestion);			
+		eduGoalSectionQuestions.add(additionalInfoQuestion);	
+		
+
+		// Registration Load
+		final FormQuestionTO registrationLoadQuestion = new FormQuestionTO();
+		final List<FormOptionTO> registrationLoadQuestionOptions = new ArrayList<FormOptionTO>();
+
+		//Hard coded values, will eventually be replaced with a proper referenec type
+		registrationLoadQuestionOptions.add(new FormOptionTO(UUID.fromString("c0a8017b-3e18-1685-813e-18e698700024"),"1-6","LT"));
+		registrationLoadQuestionOptions.add(new FormOptionTO(UUID.fromString("c0a8017b-3e18-1685-813e-18e698700025"),"7-12","PT"));
+		registrationLoadQuestionOptions.add(new FormOptionTO(UUID.fromString("c0a8017b-3e18-1685-813e-18e698700026"),"13 or more","FT"));
+		
+		registrationLoadQuestion
+				.setId(SECTION_EDUCATIONGOAL_QUESTION_REGISTRATION_LOAD_ID);
+		registrationLoadQuestion.setLabel("Registration Load");
+		registrationLoadQuestion
+				.setOptions(registrationLoadQuestionOptions);
+		registrationLoadQuestion.setType(FORM_TYPE_RADIOLIST);
+
+		eduGoalSectionQuestions.add(registrationLoadQuestion);		
+
+		// Coursework Load
+		final FormQuestionTO courseworkQuestion = new FormQuestionTO();
+		final List<FormOptionTO> courseworkQuestionOptions = new ArrayList<FormOptionTO>();
+		//Hard coded values, will eventually be replaced with a proper referenec type
+		courseworkQuestionOptions.add(new FormOptionTO(UUID.fromString("c0a8017b-3df4-113d-813d-f40156610004"),"0-5","LTPT"));
+		courseworkQuestionOptions.add(new FormOptionTO(UUID.fromString("c0a8017b-3e18-1685-813e-18e6986e0012"),"6-10","Moderate"));
+		courseworkQuestionOptions.add(new FormOptionTO(UUID.fromString("c0a8017b-3e18-1685-813e-18e6986e000b"),"11-15","LTFT"));
+		courseworkQuestionOptions.add(new FormOptionTO(UUID.fromString("c0a8017b-3e18-1685-813e-18e6986e000c"),"16-20","STFT"));
+		courseworkQuestionOptions.add(new FormOptionTO(UUID.fromString("c0a8017b-3e18-1685-813e-18e6986e000d"),"More Than 20","HVFT"));		
+
+		
+		courseworkQuestion
+				.setId(SECTION_EDUCATIONGOAL_QUESTION_COURSEWORK_LOAD_ID);
+		courseworkQuestion.setLabel("Hours per Week for Coursework");
+		courseworkQuestion
+				.setOptions(courseworkQuestionOptions);
+		courseworkQuestion.setType(FORM_TYPE_RADIOLIST);
+
+		eduGoalSectionQuestions.add(courseworkQuestion);
+		
+		
+		// Anticipated Graduation Date
+		final FormQuestionTO graduationDateQuestion = new FormQuestionTO();
+		final List<FormOptionTO> graduationDateQuestionOptions = new ArrayList<FormOptionTO>();
+		
+		List<Term> currentAndFutureTerms = termService.getCurrentAndFutureTerms();
+		for (Term term : currentAndFutureTerms) {
+			graduationDateQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),term.getName(),term.getCode()));
+		}
+		
+		
+		graduationDateQuestion
+				.setId(SECTION_EDUCATIONGOAL_QUESTION_GRADUATION_DATE_ID);
+		graduationDateQuestion.setLabel("Anticipated Graduation Date");
+		graduationDateQuestion
+				.setOptions(graduationDateQuestionOptions);
+		graduationDateQuestion.setType(FORM_TYPE_RADIOLIST);
+
+		eduGoalSectionQuestions.add(graduationDateQuestion);	
+		
 		
 		// Add questions to section
 		eduGoalSection.setQuestions(eduGoalSectionQuestions);
