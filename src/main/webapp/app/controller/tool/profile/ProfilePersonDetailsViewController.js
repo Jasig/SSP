@@ -30,13 +30,13 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         profileServiceReasonsStore: 'profileServiceReasonsStore',
         profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
         sspConfig: 'sspConfig',
-		formUtils: 'formRendererUtils'
+        formUtils: 'formRendererUtils'
     },
     
     control: {
         nameField: '#studentName',
         photoUrlField: '#studentPhoto',
-
+        
         
         studentIdField: '#studentId',
         birthDateField: '#birthDate',
@@ -47,9 +47,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         maritalStatusField: '#maritalStatus',
         genderField: '#gender',
         ethnicityField: '#ethnicity',
-    	primaryEmailAddressField: '#primaryEmailAddress',
-
+        primaryEmailAddressField: '#primaryEmailAddress',
+        
         gpaField: '#cumGPA',
+        transferHrsField: '#transferHrs',
         
         academicStandingField: '#academicStanding',
         currentRestrictionsField: '#currentRestrictions',
@@ -59,7 +60,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         intendedProgramAtAdmitField: '#intendedProgramAtAdmit',
         sapStatusField: '#sapStatus',
         fafsaDateField: '#fafsaDate',
-       
+        
         financialAidGpaField: '#financialAidGpa',
         creditHoursEarnedField: '#creditHoursEarned',
         creditHoursAttemptedField: '#creditHoursAttempted',
@@ -76,14 +77,14 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         if (id != "") {
             // display loader
             me.getView().setLoading(true);
-
+            
             var serviceResponses = {
                 failures: {},
                 successes: {},
                 responseCnt: 0,
-                expectedResponseCnt: 2
+                expectedResponseCnt: 3
             }
-
+            
             me.personService.get(id, {
                 success: me.newServiceSuccessHandler('person', me.getPersonSuccess, serviceResponses),
                 failure: me.newServiceFailureHandler('person', me.getPersonFailure, serviceResponses),
@@ -94,144 +95,149 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
                 failure: me.newServiceFailureHandler('transcript', me.getTranscriptFailure, serviceResponses),
                 scope: me
             });
+            me.transcriptService.getFull(id, {
+                success: me.newServiceSuccessHandler('transcriptFull', me.getTranscriptFullSuccess, serviceResponses),
+                failure: me.newServiceFailureHandler('transcriptFull', me.getTranscriptFullFailure, serviceResponses),
+                scope: me
+            });
         }
         
         return me.callParent(arguments);
     },
-
-    resetForm: function() {
+    
+    resetForm: function(){
         var me = this;
         me.getView().getForm().reset();
-		
-		// Set defined configured label for the studentId field
+        
+        // Set defined configured label for the studentId field
         var studentIdAlias = me.sspConfig.get('studentIdAlias');
         me.getStudentIdField().setFieldLabel(studentIdAlias);
     },
-
-   newServiceSuccessHandler: function(name, callback, serviceResponses) {
+    
+    newServiceSuccessHandler: function(name, callback, serviceResponses){
         var me = this;
-        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response) {
+        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response){
             serviceResponses.successes[name] = response;
         });
     },
-
-    newServiceFailureHandler: function(name, callback, serviceResponses) {
+    
+    newServiceFailureHandler: function(name, callback, serviceResponses){
         var me = this;
-        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response) {
+        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response){
             serviceResponses.failures[name] = response;
         });
     },
-
-    newServiceHandler: function(name, callback, serviceResponses, serviceResponsesCallback) {
-        return function(r, scope) {
+    
+    newServiceHandler: function(name, callback, serviceResponses, serviceResponsesCallback){
+        return function(r, scope){
             var me = scope;
             serviceResponses.responseCnt++;
-            if ( serviceResponsesCallback ) {
+            if (serviceResponsesCallback) {
                 serviceResponsesCallback.apply(me, [name, serviceResponses, r]);
             }
-            if ( callback ) {
-                callback.apply(me, [ serviceResponses ]);
+            if (callback) {
+                callback.apply(me, [serviceResponses]);
             }
             me.afterServiceHandler(serviceResponses);
         };
     },
-
-    getPersonSuccess: function(serviceResponses) {
+    
+    getPersonSuccess: function(serviceResponses){
         var me = this;
         var personResponse = serviceResponses.successes.person;
         me.person.populateFromGenericObject(personResponse);
-
+        
         // load and render person data
         me.profileSpecialServiceGroupsStore.removeAll();
         me.profileReferralSourcesStore.removeAll();
         me.profileServiceReasonsStore.removeAll();
-
+        
         var nameField = me.getNameField();
-		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
+        var primaryEmailAddressField = me.getPrimaryEmailAddressField();
         var photoUrlField = me.getPhotoUrlField();
         var birthDateField = me.getBirthDateField();
         var studentTypeField = me.getStudentTypeField();
         var programStatusField = me.getProgramStatusField();
-		var studentIdField = me.getStudentIdField();
-
+        var studentIdField = me.getStudentIdField();
+        
         var fullName = me.person.getFullName();
         var coachName = me.person.getCoachFullName();
-
+        
         // load general student record
         me.getView().loadRecord(me.person);
-
+        
         // load additional values
-		nameField.setFieldLabel('');
+        nameField.setFieldLabel('');
         nameField.setValue('<span style="color:#15428B">Full Name:  </span>' + fullName);
-		studentIdField.setFieldLabel('');
+        studentIdField.setFieldLabel('');
         studentIdField.setValue('<span style="color:#15428B">' + me.sspConfig.get('studentIdAlias') + ':  </span>' + me.person.get('schoolId'));
-		primaryEmailAddressField.setFieldLabel('');
+        primaryEmailAddressField.setFieldLabel('');
         primaryEmailAddressField.setValue('<span style="color:#15428B">Email:  </span>' + me.person.get('primaryEmailAddress'));
-		birthDateField.setFieldLabel('');
+        birthDateField.setFieldLabel('');
         birthDateField.setValue('<span style="color:#15428B">DOB:  </span>' + me.person.getFormattedBirthDate());
-		studentTypeField.setFieldLabel('');
+        studentTypeField.setFieldLabel('');
         studentTypeField.setValue('<span style="color:#15428B">Student Type:  </span>' + me.person.getStudentTypeName());
         photoUrlField.setSrc(me.person.getPhotoUrl());
-		programStatusField.setFieldLabel('');
+        programStatusField.setFieldLabel('');
         programStatusField.setValue('<span style="color:#15428B">SSP Status:  </span>' + me.person.getProgramStatusName());
-       
-
+        
+        
         var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
         var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
         studentRecordComp.setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + me.person.get('schoolId'));
         studentCoachButton.setText('<u>Coach: ' + coachName + '</u>');
-		
+        
         me.appEventsController.assignEvent({
             eventName: 'emailCoach',
             callBackFunc: me.onEmailCoach,
             scope: me
         });
     },
-
-    getPersonFailure: function() {
+    
+    getPersonFailure: function(){
         // nothing to do
     },
     
-
-
-    getTranscriptSuccess: function(serviceResponses) {
+    
+    
+    getTranscriptSuccess: function(serviceResponses){
         var me = this;
         var transcriptResponse = serviceResponses.successes.transcript;
-
+        
         var transcript = new Ssp.model.Transcript(transcriptResponse);
         var gpa = transcript.get('gpa');
-        if ( gpa ) {
-			var gpaFormatted = Ext.util.Format.number(gpa.gradePointAverage, '0.00');
-			me.getGpaField().setFieldLabel('');
+        if (gpa) {
+            var gpaFormatted = Ext.util.Format.number(gpa.gradePointAverage, '0.00');
+            me.getGpaField().setFieldLabel('');
             me.getGpaField().setValue('<span style="color:#15428B">GPA:  </span>' + gpaFormatted);
-			me.getAcademicStandingField().setFieldLabel('');
+            me.getAcademicStandingField().setFieldLabel('');
             me.getAcademicStandingField().setValue('<span style="color:#15428B">Standing:  </span>' + gpa.academicStanding);
             me.getCreditCompletionRateField().setValue(gpa.creditCompletionRate + '%');
-			me.getCurrentRestrictionsField().setFieldLabel('');
+            me.getCurrentRestrictionsField().setFieldLabel('');
             me.getCurrentRestrictionsField().setValue('<span style="color:#15428B">Restrictions:  </span>' + gpa.currentRestrictions);
-			me.getCreditHoursEarnedField().setFieldLabel('');
+            me.getCreditHoursEarnedField().setFieldLabel('');
             me.getCreditHoursEarnedField().setValue('<span style="color:#15428B">Hrs Earned:  </span>' + gpa.creditHoursEarned);
-			me.getCreditHoursAttemptedField().setFieldLabel('');
+            me.getCreditHoursAttemptedField().setFieldLabel('');
             me.getCreditHoursAttemptedField().setValue('<span style="color:#15428B">Hrs Attempted:  </span>' + gpa.creditHoursAttempted);
         }
         var programs = transcript.get('programs');
-        if ( programs ) {
+        if (programs) {
             var programNames = [];
             var intendedProgramsAtAdmit = [];
-            Ext.Array.each(programs, function(program) {
-            	if(program.programName && program.programName.length > 0)
-            		programNames.push(program.programName);
-            	if(program.intendedProgramAtAdmit && program.intendedProgramAtAdmit.length > 0)
-            		intendedProgramsAtAdmit.push(program.intendedProgramAtAdmit);
+            Ext.Array.each(programs, function(program){
+                if (program.programName && program.programName.length > 0) 
+                    programNames.push(program.programName);
+                if (program.intendedProgramAtAdmit && program.intendedProgramAtAdmit.length > 0) 
+                    intendedProgramsAtAdmit.push(program.intendedProgramAtAdmit);
             });
-			me.getAcademicProgramsField().setFieldLabel('');
+            me.getAcademicProgramsField().setFieldLabel('');
             me.getAcademicProgramsField().setValue('<span style="color:#15428B">Academic Program:  </span>' + programNames.join(', '));
             me.getIntendedProgramAtAdmitField().setValue(intendedProgramsAtAdmit.join(', '));
         }
         
-
+        
         var financialAid = transcript.get('financialAid');
-        if ( financialAid ) {
+        if (financialAid) {
             me.getCurrentYearFinancialAidAwardField().setFieldLabel('');
         	me.getCurrentYearFinancialAidAwardField().setValue('<span style="color:#15428B">FA Award:  </span>' + financialAid.currentYearFinancialAidAward);
         	me.getSapStatusField().setFieldLabel('');
@@ -246,30 +252,69 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 			me.getOriginalLoanAmountField().setValue('<span style="color:#15428B">Loan Amount:  </span>' + Ext.util.Format.usMoney(financialAid.originalLoanAmount));
         	me.getFinancialAidGpaField().setFieldLabel('');
 			me.getFinancialAidGpaField().setValue('<span style="color:#15428B">FA GPA:  </span>' + financialAid.financialAidGpa);
+
         }
     },
-
-    getTranscriptFailure: function() {
+    
+    getTranscriptFailure: function(){
         // nothing to do
     },
-
-    afterServiceHandler: function(serviceResponses) {
+    
+    
+    getTranscriptFullSuccess: function(serviceResponses){
         var me = this;
-        if ( serviceResponses.responseCnt >= serviceResponses.expectedResponseCnt ) {
+        var transcriptFullResponse = serviceResponses.successes.transcriptFull;
+        var transferHours = 0;
+        var transcript = new Ssp.model.Transcript(transcriptFullResponse);
+        var terms = transcript.get('terms');
+        if (terms) {
+            Ext.Array.each(terms, function(term){
+                var courseTranscript = Ext.create('Ssp.model.CourseTranscript', term);
+                var creditType = courseTranscript.get('creditType');
+                if (creditType == 'transfer') {
+                    var credit = courseTranscript.get('creditEarned');
+					if (!isNaN(credit)) 
+                    	transferHours += credit;
+                }
+            });
+        }
+        
+        if (transferHours > 0) {
+            me.getTransferHrsField().setFieldLabel('');
+            me.getTransferHrsField().setValue('<span style="color:#15428B">Transfer Hrs:  </span>' + transferHours);
+        }
+        
+    },
+    
+    getTranscriptFullFailure: function(){
+        // nothing to do
+    },
+    
+    getStudentIntakeSuccess: function(serviceResponses){
+        var me = this;
+        
+        me.getRemainingLoanAmountField().setFieldLabel('');
+        me.getRemainingLoanAmountField().setValue('<span style="color:#15428B">Balance:  </span>');
+        
+    },
+    
+    afterServiceHandler: function(serviceResponses){
+        var me = this;
+        if (serviceResponses.responseCnt >= serviceResponses.expectedResponseCnt) {
             me.getView().setLoading(false);
         }
     },
-
-	destroy: function() {
-        var me=this;
-        return me.callParent( arguments );
+    
+    destroy: function(){
+        var me = this;
+        return me.callParent(arguments);
     },
-
+    
     onEmailCoach: function(){
         var me = this;
         if (me.person.getCoachPrimaryEmailAddress()) {
             window.location = 'mailto:' + me.person.getCoachPrimaryEmailAddress();
         }
     },
-	
+
 });
