@@ -231,7 +231,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 	
 	onPrintComplete: function(htmlPrint){
     	var targetElement = Ext.getCmp('PrintablePanelId');
-        var myWindow = window.open('', '', 'width=500,height=600');
+        var myWindow = window.open('', '', 'width=500,height=600,scrollbars=yes');
         myWindow.document.write(htmlPrint);
         myWindow.print();
 	},
