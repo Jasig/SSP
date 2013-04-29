@@ -571,12 +571,11 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		var store = null;
 		var view = Ext.ComponentQuery.query(containerAlias.toLowerCase())[0];
 		
-		if (view.items.length > 0 && removeExisting==true)
+		if (view.items.length > 0 && removeExisting==true)			
 			view.removeAll();
 
 		// create the new widget
 		comp =  Ext.widget(compAlias.toLowerCase(), args);	
-		
 		// add to the container
 		view.add( comp );
 		
@@ -612,10 +611,10 @@ Ext.define('Ssp.util.FormRendererUtils',{
      * Method to allow a gridPanel to be reconfigured to display
      * a new set of columns or a new store of data.
      */
-    reconfigureGridPanel: function(gridPanel, store, columns) {
+    reconfigureGridPanel: function(gridPanel, store, interfaceOptions, columns) {
     	var me = gridPanel,
             headerCt = me.headerCt;
-
+    	
         if (me.lockable) {
             me.reconfigureLockable(store, columns);
         } else {
@@ -624,7 +623,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
                 headerCt.removeAll();
                 headerCt.add(columns);
             }
-            if (store) {
+            if (store) {            	
                 store = Ext.StoreManager.lookup(store);
                 if(me.down('pagingtoolbar'))
                 {

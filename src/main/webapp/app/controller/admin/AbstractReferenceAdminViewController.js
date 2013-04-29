@@ -65,15 +65,26 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		var record = e.record;
 		var id = record.get('id');
 		var jsonData = record.data;
+		var store = editor.grid.getStore();
+		
+		persistMethod= record.data.createdDate != null ? 'PUT' : 'POST';
+		
 		Ext.Ajax.request({
 			url: editor.grid.getStore().getProxy().url+"/"+id,
-			method: 'PUT',
+			method: persistMethod,
 			headers: { 'Content-Type': 'application/json' },
 			jsonData: jsonData,
 			success: function(response, view) {
-				var r = Ext.decode(response.responseText);
-				record.commit();
-				editor.grid.getStore().sync();
+				if(persistMethod == "PUT") {
+					var r = Ext.decode(response.responseText);
+					record.commit();
+					editor.grid.getStore().sync();
+					record.persisted = true;
+				} else {
+					var r = Ext.decode(response.responseText);
+					record.populateFromGenericObject(r);
+			       	store.totalCount = store.totalCount+1;
+				}
 			},
 			failure: this.apiProperties.handleError
 		}, this);
@@ -92,24 +103,25 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 			return false;
 		}
 		
-		// default the name property
-		item.set('name','default');
-		//additional required columns defined in the Admin Tree Menus Store
+		//set default values
 		Ext.Array.each(grid.columns,function(col,index){
-       		if (col.required==true)
-       			item.set(col.dataIndex,'default');
+			if(col.defaultValue != null) {
+   				item.set(col.dataIndex, col.defaultValue);
+   			} else if(col.dataIndex == "sortOrder") {
+   				item.set('sortOrder',store.getTotalCount()+1);
+			} else {
+				if (col.required==true) {       			
+	       			item.set(col.dataIndex,'default');
+	       		}
+   			}
        	});
-		
-		// If the object type has a sort order prop
-		// then set the sort order to the next available
-		// item in the database
-		if (item.sortOrder != null)
-		{
-			item.set('sortOrder',store.getTotalCount()+1);
-		}
+
+		store.insert(0, item );
+		grid.plugins[0].startEdit(0, 0);
+       	grid.plugins[0].editor.items.getAt(0).selectText();
 
 		// Save the item
-		Ext.Ajax.request({
+	/*	Ext.Ajax.request({
 			url: grid.getStore().getProxy().url,
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
@@ -125,6 +137,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 			},
 			failure: me.apiProperties.handleError
 		}, me);
+		*/
 	},
 
     deleteConfirmation: function( button ) {

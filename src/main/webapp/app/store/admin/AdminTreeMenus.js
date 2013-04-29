@@ -25,6 +25,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 	autoLoad: false,
     constructor: function(){
     	var me=this;
+    	
     	var items = {
     	    	text: 'Administrative Tools',
     	    	title: 'Administrative Tools',
@@ -454,8 +455,13 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
     								text: 'Elective Types',
     								title: 'Elective Types',
     								store: 'elective',
-    								storeLoadOptions: { params: { status: 'ALL', sort: 'sortOrder' } },    								
-	    							form: 'ElectiveAdmin',
+    								//storeLoadOptions: { params: { status: 'ALL', sort: 'sortOrder' } }, //this logic performed on backend, though client side logic is still in place. 
+    								interfaceOptions: {
+    									addVisible: true, 
+    									deleteVisible:false,
+    									dragAndDropReorder: true
+    								},
+	    							form: 'AbstractReferenceAdmin',
 	    							leaf: true,
 	    							columns: [
 	    							          	{ header: 'Order',  
@@ -468,6 +474,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 	    							        	  { header: 'Active',
 						    		                required: true,
 						      		                dataIndex: 'active', 
+						      		                defaultValue: true,
 						      		                flex: .2,
 						      		                renderer: me.columnRendererUtils.renderActive,
 						      		                field: {
@@ -477,12 +484,14 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 	    							        	  { header: 'Elective Name',  
 	          							        	dataIndex: 'name',
 	          							        	required: true,
+	          							        	defaultValue: "",
 	          							        	field: {
 	          							        		xtype: 'textfield'
 	          							        	},	          				
 	          							            flex: .2 }, 
 	          							          {	header: 'Elective Code',
 	          							        	dataIndex: 'code',
+	          							        	defaultValue: "",
 	          							        	required: true,
 	          							        	field: {
 	          							        		xtype: 'textfield'
@@ -491,6 +500,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 	          							          }, 
 	          							          {	header: 'Description',
 		          							        dataIndex: 'description',
+		          							        defaultValue: "",
 		          							        field: {
 		          							        	xtype: 'textfield'
 		          							        },
