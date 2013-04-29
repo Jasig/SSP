@@ -34,15 +34,13 @@
 			  value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
 
 
-	<!-- # This file is for fields present through 1.2, but please note
-	 view handling issues with backporting described below. #
+	<!--
+	 **** Fixes a bad view definition in i000020.xml. Please use these only as a
+	 pair.  -->
 
-	 **** The view definition at the bottom is incorrect!! Please use this
-	 changeset only in coordination with i000023.xml which fixes it. -->
-
-	<changeSet id="harmonize external_student_transcript_course field widths" author="dan.mccallum">
+	<changeSet id="fix v_external_student_transcript_course definition" author="dan.mccallum">
 		<preConditions onFail="CONTINUE"
-					   onFailMessage="Skip modifications to external_student_transcript_course fields widths in integration database">
+					   onFailMessage="Skip v_external_student_transcript_course correction">
 			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
 			</sqlCheck>
 			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
@@ -51,21 +49,10 @@
 
 		<dropView viewName="v_external_student_transcript_course" />
 
-		<!-- was ${nvarchar.type}(2500) -->
-		<modifyDataType tableName="external_student_transcript_course" columnName="title" newDataType="${nvarchar.type}(100)" />
-		<!-- was ${nvarchar.type}(100) -->
-		<modifyDataType tableName="external_student_transcript_course" columnName="description" newDataType="${nvarchar.type}(2500)" />
-
-		<!-- When and if this is actually back-ported, you'll want to be careful
-		to make sure that the view is recreated in a state that makese sense
-		for your version's db state. Note that re-running this changeSet later,
-		e.g. in a subsequent upgrade *should* be safe, since any intermediate
-		changes which resulted in view modifications should have already
-		run as part of that upgrade.-->
 		<createView viewName="v_external_student_transcript_course">
 			select ROW_NUMBER() OVER (ORDER BY school_id, subject_abbreviation, number) as id,
 			school_id, first_name, last_name, middle_name, subject_abbreviation, number, formatted_course, section_number,
-			section_code, title, description, grade, credit_earned, term_code, credit_type, audited, status_code
+			section_code, title, description, grade, credit_earned, term_code, credit_type, audited, status_code, faculty_school_id
 			from external_student_transcript_course
 		</createView>
 		<sql>grant all on v_external_student_transcript_course to ${database.app.username}</sql>
