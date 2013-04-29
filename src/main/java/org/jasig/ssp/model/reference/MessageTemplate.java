@@ -67,6 +67,9 @@ public class MessageTemplate
 
 	public static final UUID NEW_STUDENT_INTAKE_TASK_EMAIL_ID = UUID
 			.fromString("9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0");
+	
+	public static final UUID PRINT_MAP_PLAN_ID = UUID
+			.fromString("aa2e0356-46df-4acd-ab3e-b96a6aa943d3");
 
 	@NotNull
 	@Column(name = "subject", nullable = false, length = 250)

@@ -20,7 +20,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
     extend: 'Ext.window.Window',
     alias: 'widget.coursenotes',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    height: 500,
+    height: 200,
     width: 500,
     resizable: true,
     initComponent: function() {
@@ -60,6 +60,8 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        itemId: 'coachnotes',
 				        xtype: 'textareafield',
 				        autoscroll: true,
+						hidden: true,
+						hideable: false,
 				        flex:1
 				    },{
 				        fieldLabel: 'Student Notes',
@@ -67,37 +69,49 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        allowBlank:true,
 				        itemId: 'addressLine1',
 				        xtype: 'textareafield',
-				         flex:1,
+						hidden: true,
+						hideable: false,
+				        flex:1,
 				        autoscroll: true
 				    },
 				    {
+				    	xtype: 'numberfield',
+				        anchor: '100%',
+				        name: 'bottles',
+				        fieldLabel: 'Bottles of Beer',
+				        maxValue: 99,
+				        allowDecimals: false,
+				        minValue: 0,
+				        step: 1,
 				        fieldLabel: 'Credit hours(over ride)',
-				        name: 'crHrs',
+				        name: 'creditHours',
 				        allowBlank:true,
-				        itemId: 'crHrs',
-				        xtype: 'textfield'
+				        itemId: 'creditHours',
 				        //flex:1,
 				        
 				    },
 				    {
-                    name: 'importantcourseplan',
-                    inputValue: 'importantcourseplan',
-                    xtype:'checkbox',
-                    padding: '0 0 0 105',
-                    labelSeparator: '',
-                    hideLabel: true,
-                    boxLabel: 'Mark As Important',
-                    fieldLabel: 'Mark As Important' 
+                    	name: 'importantcourseplan',
+                    	inputValue: 'importantcourseplan',
+                    	xtype:'checkbox',
+                    	padding: '0 0 0 105',
+                    	labelSeparator: '',
+                    	hideLabel: true,
+                    	boxLabel: 'Mark As Important',
+                    	fieldLabel: 'Mark As Important',
+						hidden: true,
+						hideable: false
                     },
                     {
                     xtype:'checkbox',
-                    padding: '0 0 0 105',
-                    labelSeparator: '',
-                    hideLabel: true,   
-                    boxLabel: 'Mark As Program Elective',
-                    name: 'electiveplan',
-                    inputValue: 'electiveplan'
-                    
+                    	padding: '0 0 0 105',
+                    	labelSeparator: '',
+                    	hideLabel: true,   
+                    	boxLabel: 'Mark As Program Elective',
+                    	name: 'electiveplan',
+                    	inputValue: 'electiveplan',
+						hidden: true,
+						hideable: false
                     }
 				    ]
 				    ,
@@ -107,12 +121,30 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 		                items: [{
 		                    xtype: 'button',
 		                    itemId: 'saveButton',
-		                    text: 'Save'
+		                    text: 'Save',
+		                    listeners: {
+		                    	click:function(){
+		                    		me = this;
+		                    		var creditHours = me.query('#creditHours')[0].getValue();
+		                    		var mapCourse = me.semesterStore.getAt(me.rowIndex);
+		                    		mapCourse.set('creditHours', creditHours);
+		                    		me.close();
+		                    	},
+		                    	scope: me
+		                    }
 		                    
 		                }, '-', {
 		                    xtype: 'button',
 		                    itemId: 'cancelButton',
-		                    text: 'Cancel'
+		                    text: 'Cancel',
+		                    
+		                    listeners: {
+		                    	click:function(){
+		                    		me = this;
+		                    		me.close();
+		                    	},
+		                    	scope: me
+		                    }
 		                }]
 		            
 		            }]

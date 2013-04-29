@@ -65,7 +65,7 @@ public class ExternalCourseTOFactoryImpl
 		model.setMinCreditHours(tObject.getMinCreditHours());
 		model.setSubjectAbbreviation(tObject.getSubjectAbbreviation());
 		model.setTitle(tObject.getTitle());
-
+		model.setIsDev(tObject.getIsDev());
 		return model;
 	}
 }

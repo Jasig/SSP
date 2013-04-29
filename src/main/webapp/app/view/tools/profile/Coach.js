@@ -75,7 +75,7 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                         fieldLabel: 'Phone',
                         name: 'coachWorkPhone',
                         itemId: 'coachWorkPhone',
-                        labelWidth: 80,
+                        labelWidth: 40,
 						flex: 1
                     
                     }, {
@@ -97,13 +97,14 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                         itemId: 'coachOfficeLocation',
 						flex: 1
                     
-                    }, {
+                    }
+					/*, {
                         fieldLabel: 'Coach Type',
                         name: 'coachType',
                         itemId: 'coachType',
                     flex: 1
                     
-                    }]
+                    }*/]
                 
                 }, {
                     xtype: 'fieldset',
@@ -121,7 +122,7 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                         fieldLabel: 'Date',
                         name: 'coachLastServiceDate',
                         itemId: 'coachLastServiceDate',
-                        labelWidth: 80,
+                        labelWidth: 35,
                         labelSeperator: false
                     
                     }, {

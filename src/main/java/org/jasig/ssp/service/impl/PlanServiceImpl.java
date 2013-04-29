@@ -18,18 +18,38 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.dao.PlanDao;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.model.PlanCourse;
+import org.jasig.ssp.model.SubjectAndBody;
+import org.jasig.ssp.model.TermCourses;
+import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
+import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.MessageTemplateService;
+import org.jasig.ssp.transferobject.PlanCourseTO;
+import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.jasig.ssp.factory.reference.PlanTOFactory;
+
+import com.google.common.collect.Lists;
 
 /**
  * Person service implementation
@@ -42,6 +62,18 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 
 	@Autowired
 	private PlanDao dao;
+	
+	@Autowired
+	private MessageTemplateService messageTemplateService;
+	
+	@Autowired
+	private TermService termService;
+	
+	@Autowired
+	private PersonService personService;
+	
+	@Autowired
+	private PlanTOFactory planTOFactory;
 	
 	@Override
 	protected PlanDao getDao() {
@@ -64,15 +96,62 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 	}
 	
 	@Override
-	public Plan copyAndSaveWithNewOwner(Plan obj) throws CloneNotSupportedException {
-		//Load all previous plans for this student and save them as inactive.
-		List<Plan> allForStudent = getDao().getAllForStudent(obj.getPerson().getId());
-		for (Plan plan : allForStudent) 
+	public Plan copyAndSave(Plan obj) throws CloneNotSupportedException {
+		Plan cloneAndSave = getDao().cloneAndSave(obj,getSecurityService().currentUser().getPerson());
+		obj = null;
+		//If plan has been marked as active, we must mark all other plans as inactive
+		if(ObjectStatus.ACTIVE.equals(cloneAndSave.getObjectStatus()))
 		{
-			plan.setObjectStatus(ObjectStatus.INACTIVE);
-			getDao().save(plan);
+			getDao().markOldPlansAsInActive(cloneAndSave);
 		}
-		return getDao().cloneAndSave(obj,getSecurityService().currentUser().getPerson());
+		return cloneAndSave;
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public String createMapPlanPrintScreen(final PlanTO plan, String institutionName) throws ObjectNotFoundException {
+		Person student = personService.get(UUID.fromString(plan.getPersonId()));
+		Person owner = personService.get(UUID.fromString(plan.getOwnerId()));
+		Map<String,TermCourses> semesterCourses = new HashMap<String, TermCourses>();
+		for(PlanCourseTO course : plan.getPlanCourses()){
+			if(!semesterCourses.containsKey(course.getTermCode())){
+				Term term = termService.getByCode(course.getTermCode());
+				TermCourses termCourses = new TermCourses(term);
+				termCourses.addCourse(course);
+				semesterCourses.put(term.getCode(), termCourses);
+			}else{
+				semesterCourses.get(course.getTermCode()).addCourse(course);
+			}
+		}
+		List<TermCourses> courses =  Lists.newArrayList(semesterCourses.values());
+		Collections.sort(courses, TermCourses.TERM_START_DATE_COMPARATOR);
+		Float totalPlanCreditHours = new Float(0);
+		
+		for(TermCourses termCourses : courses){
+			Collections.sort(termCourses.getCourses(), PlanCourseTO.TERM_ORDER_COMPARATOR);
+			totalPlanCreditHours = totalPlanCreditHours + termCourses.getTotalCreditHours();
+		}
+		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanPrintScreen(student, owner, plan, totalPlanCreditHours, courses, institutionName);
+		return subjectAndBody.getBody();
+	}
+	
+	@Override
+	public Plan get(@NotNull final UUID id) throws ObjectNotFoundException {
+		final Plan obj = getDao().get(id);
+		if(obj == null)
+			throw new ObjectNotFoundException(id, this.getClass().getName());
+		return obj;
+
+	}
+	
+	@Override
+	public Plan save(Plan obj) {
+		//If plan has been marked as active, we must mark all other plans as inactive
+		if(ObjectStatus.ACTIVE.equals(obj.getObjectStatus()))
+		{
+			getDao().markOldPlansAsInActive(obj);
+		}	
+		return super.save(obj);
 	}
 	
 }

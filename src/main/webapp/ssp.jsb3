@@ -298,6 +298,41 @@
                     "name": "DisabilityTypes.js",
                     "path": "/app/view/tools/accommodation/"
                 },
+                {
+                    "clsName": "Ssp.controller.tool.map.CoursesGridController",
+                    "name": "CoursesGridController.js",
+                    "path": "/app/controller/tool/map/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.map.FAViewController",
+                    "name": "FAViewController.js",
+                    "path": "/app/controller/tool/map/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.map.SemesterPanelContainerViewController",
+                    "name": "SemesterPanelContainerViewController.js",
+                    "path": "/app/controller/tool/map/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.map.MapPlanToolViewController",
+                    "name": "MapPlanToolViewController.js",
+                    "path": "/app/controller/tool/map/"
+                }, 
+                {
+                    "clsName": "Ssp.controller.tool.map.LoadPlanViewController",
+                    "name": "LoadPlanViewController.js",
+                    "path": "/app/controller/tool/map/"
+                },                   
+                {
+                    "clsName": "Ssp.controller.tool.map.SavePlanViewController",
+                    "name": "SavePlanViewController.js",
+                    "path": "/app/controller/tool/map/"
+                },                            
+                {
+                    "clsName": "Ssp.controller.tool.map.SemesterPanelViewController",
+                    "name": "SemesterPanelViewController.js",
+                    "path": "/app/controller/tool/map/"
+                },
 				{
                     "clsName": "Ssp.controller.tool.map.EmailPlanController",
                     "name": "EmailPlanController.js",
@@ -326,6 +361,11 @@
                 {
                     "clsName": "Ssp.view.tools.map.CoursesView",
                     "name": "CoursesView.js",
+                    "path": "/app/view/tools/map/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.map.SemesterGrid",
+                    "name": "SemesterGrid.js",
                     "path": "/app/view/tools/map/"
                 },
                 {
@@ -411,6 +451,11 @@
                 {
                     "clsName": "Ssp.view.tools.map.CoursesGrid",
                     "name": "CoursesGrid.js",
+                    "path": "/app/view/tools/map/"
+                },
+                 {
+                    "clsName": "Ssp.view.tools.map.CoursesGridPanel",
+                    "name": "CoursesGridPanel.js",
                     "path": "/app/view/tools/map/"
                 },
                 {
@@ -689,6 +734,11 @@
                     "path": "/app/service/"
                 },
                 {
+                    "clsName": "Ssp.service.StudentActivityService",
+                    "name": "StudentActivityService.js",
+                    "path": "/app/service/"
+                },
+                {
                     "clsName": "Ssp.service.AccommodationService",
                     "name": "AccommodationService.js",
                     "path": "/app/service/"
@@ -789,13 +839,8 @@
                     "path": "/app/controller/tool/profile/"
                 },
             	{
-                    "clsName": "Ssp.model.RecentStudentActivity",
-                    "name": "RecentStudentActivity.js",
-                    "path": "/app/model/"
-                },
-				{
-                    "clsName": "Ssp.model.RecentStudentActivity",
-                    "name": "RecentStudentActivity.js",
+                    "clsName": "Ssp.model.StudentActivity",
+                    "name": "StudentActivity.js",
                     "path": "/app/model/"
                 },
                 {
@@ -848,7 +893,11 @@
                     "name": "ProfileRecentStudentActivityViewController.js",
                     "path": "/app/controller/tool/profile/"
                 },
-
+				{
+	                "clsName": "Ssp.controller.tool.profile.AcademicProgramViewController",
+                    "name": "AcademicProgramViewController.js",
+                    "path": "/app/controller/tool/profile/"
+                },
                 {
                     "clsName": "Ssp.view.tools.profile.Coach",
                     "name": "Coach.js",
@@ -930,14 +979,29 @@
                     "path": "/app/model/external/"
                 },
                 {
+                    "clsName": "Ssp.model.external.Course",
+                    "name": "Course.js",
+                    "path": "/app/model/external/"
+                },
+                {
                     "clsName": "Ssp.model.external.Term",
                     "name": "Term.js",
                     "path": "/app/model/external/"
                 },
                 {
-                    "clsName": "Ssp.store.external.FutureTerms",
-                    "name": "FutureTerms.js",
+                    "clsName": "Ssp.store.external.Terms",
+                    "name": "Terms.js",
                     "path": "/app/store/external/"
+                },
+                {
+                    "clsName": "Ssp.store.external.Courses",
+                    "name": "Courses.js",
+                    "path": "/app/store/external/"
+                },
+                {
+                    "clsName": "Ssp.store.StudentActivities",
+                    "name": "StudentActivities.js",
+                    "path": "/app/store/"
                 },
                 {
                     "clsName": "Ssp.controller.tool.studentintake.StudentIntakeToolViewController",
@@ -1018,6 +1082,16 @@
                     "clsName": "Ssp.controller.tool.document.EditDocumentViewController",
                     "name": "EditDocumentViewController.js",
                     "path": "/app/controller/tool/document/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.documents.DocumentsViewController",
+                    "name": "DocumentsViewController.js",
+                    "path": "/app/controller/tool/documents/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.documents.UploadDocumentsViewController",
+                    "name": "UploadDocumentsViewController.js",
+                    "path": "/app/controller/tool/documents/"
                 },
                 {
                     "clsName": "Ssp.controller.tool.sis.TranscriptViewController",
@@ -1405,8 +1479,23 @@
                     "path": "/app/view/tools/document/"
                 },
                 {
+                    "clsName": "Ssp.view.tools.documents.Documents",
+                    "name": "Documents.js",
+                    "path": "/app/view/tools/documents/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.documents.UploadDocuments",
+                    "name": "UploadDocuments.js",
+                    "path": "/app/view/tools/documents/"
+                },
+                {
                     "clsName": "Ssp.view.admin.forms.AbstractReferenceAdmin",
                     "name": "AbstractReferenceAdmin.js",
+                    "path": "/app/view/admin/forms/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.AbstractReferenceAdminWithoutDelete",
+                    "name": "AbstractReferenceAdminWithoutDelete.js",
                     "path": "/app/view/admin/forms/"
                 },
                 {
@@ -1578,6 +1667,11 @@
                     "clsName": "Ssp.model.tool.earlyalert.EarlyAlertResponse",
                     "name": "EarlyAlertResponse.js",
                     "path": "/app/model/tool/earlyalert/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.map.SemesterCourse",
+                    "name": "SemesterCourse.js",
+                    "path": "/app/model/tool/map/"
                 },
                 {
                     "clsName": "Ssp.model.tool.journal.JournalEntry",
@@ -1880,6 +1974,11 @@
                     "path": "/app/model/reference/"
                 },
                 {
+                    "clsName": "Ssp.model.reference.Tag",
+                    "name": "Tag.js",
+                    "path": "/app/model/reference/"
+                },
+                {
                     "clsName": "Ssp.model.reference.VeteranStatus",
                     "name": "VeteranStatus.js",
                     "path": "/app/model/reference/"
@@ -1982,6 +2081,11 @@
                 {
                     "clsName": "Ssp.store.reference.StudentTypes",
                     "name": "StudentTypes.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.Tags",
+                    "name": "Tags.js",
                     "path": "/app/store/reference/"
                 },
                 {

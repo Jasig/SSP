@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,8 +30,10 @@ import java.util.UUID;
 import org.jasig.ssp.dao.reference.MessageTemplateDao;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Task;
+import org.jasig.ssp.model.TermCourses;
 import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.VelocityTemplateService;
@@ -38,6 +41,7 @@ import org.jasig.ssp.service.reference.ConfigException;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.GoalTO;
+import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -234,6 +238,30 @@ public class MessageTemplateServiceImpl extends
 			final Map<String, Object> messageParams) {
 		return populateFromTemplate(
 				MessageTemplate.EARLYALERT_RESPONSETOFACULTYFROMCOACH_ID,
+				messageParams);
+	}
+	
+	@Override
+	public SubjectAndBody createMapPlanPrintScreen(final Person student,final Person owner, final PlanTO plan, 
+			final Float totalPlanCreditHours,
+			final List<TermCourses> termCourses,
+			final String institutionName) {
+
+		final Map<String, Object> messageParams = new HashMap<String, Object>();
+		messageParams.put("title", plan.getName());
+		messageParams.put("termCourses", termCourses);
+		messageParams.put("studentFullName", student.getFullName());
+		messageParams.put("studentEmail", student.getPrimaryEmailAddress());
+		messageParams.put("studentSchoolId", student.getSchoolId());
+		messageParams.put("coachPhone1", owner.getCellPhone());
+		messageParams.put("coachPhone2", owner.getHomePhone());
+		messageParams.put("coachFullName", owner.getFullName());
+		messageParams.put("coachEmail", owner.getPrimaryEmailAddress());
+		messageParams.put("totalPlanHours", totalPlanCreditHours);
+		messageParams.put("institution", institutionName);
+		messageParams.put("createdDateFormatted", formatDate(new Date()));
+
+		return populateFromTemplate(MessageTemplate.PRINT_MAP_PLAN_ID,
 				messageParams);
 	}
 }

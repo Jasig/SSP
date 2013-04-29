@@ -21,7 +21,10 @@ Ext.define('Ssp.view.tools.map.MAPView', {
     alias: 'widget.mapview',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.map.MAPViewController',
-    
+    inject:{
+		currentMapPlan: 'currentMapPlan',
+        authenticatedPerson: 'authenticatedPerson',
+    },	
     width: '100%',
     height: '100%',
   initComponent: function(){
@@ -39,6 +42,12 @@ Ext.define('Ssp.view.tools.map.MAPView', {
             items: [{
     			xtype: 'semesterpanelcontainer',
     			flex:1
+            },	{
+    			xtype: 'faview',
+				itemId: 'faPopUp',
+    			flex:1,
+				hidden:true,
+				hideable:false
             }],
             dockedItems: [{
                 dock: 'top',
@@ -57,6 +66,7 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                     text: '<u>Load Saved Plan</u>',
                     height: 22,
                     xtype: 'button',
+	                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_LOAD_BUTTON'),
                     itemId: 'loadSavedPlanButton'
                 },
 				{
@@ -64,7 +74,9 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                     text: '<u>Load Template</u>',
                     height: 22,
                     xtype: 'button',
-                    itemId: 'loadTemplateButton'
+                    itemId: 'loadTemplateButton',
+					hidden: true,
+					hideable:false
                 },
                 
 				 
@@ -73,18 +85,27 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                     text: 'Save',
                     itemId: 'addTool',
                     height: 22,
+	                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_SAVE_BUTTON'),
                     menu: {
                     items: [
                         
                         {
                             xtype: 'button',
                             text: 'Save Plan As',
-                            itemId: 'savePlanButton'
+                            itemId: 'savePlanAsButton'
                         },
                         {
                             xtype: 'button',
+                            text: 'Save Plan',
+                            itemId: 'savePlanButton',
+                            hidden: me.currentMapPlan.get('id') != ""
+                        },                        
+                        {
+                            xtype: 'button',
                             text: 'Save Template As' ,
-                            itemId: 'saveTemplateButton'
+                            itemId: 'saveTemplateButton',
+							hidden:true,
+							hideable:false
                         }
                     ]
                     }

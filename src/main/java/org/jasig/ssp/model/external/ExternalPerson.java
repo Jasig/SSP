@@ -26,6 +26,8 @@ import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -59,6 +61,7 @@ public class ExternalPerson extends AbstractExternalData implements
 	@Size(max = 50)
 	private String middleName;
 
+	@Temporal(TemporalType.DATE)
 	private Date birthDate;
 
 	@Column(length = 100)
@@ -103,8 +106,8 @@ public class ExternalPerson extends AbstractExternalData implements
 
 	private Integer actualStartYear;
 
-	@Column(length = 10)
-	@Size(max = 10)
+	@Column(length = 80)
+	@Size(max = 80)
 	private String maritalStatus, ethnicity;
 
 	@Column(length = 1)

@@ -26,12 +26,12 @@ Ext.define('Ssp.view.tools.profile.RecentSSPActivity', {
     title: 'Recent SSP Activity for this Student',
     autoScroll: true,
     inject: {
-        store: 'recentStudentActivitiesStore'
+        store: 'studentActivitiesStore'
     },
     initComponent: function(){
         var me = this;
         Ext.applyIf(me, {
-            //store: me.store,
+            store: me.store.getMostRecentActivitiesStore(),
             xtype: 'gridcolumn',
             columns: [{
                 dataIndex: 'coachName',

@@ -35,6 +35,8 @@ public class ExternalCourseTO implements ExternalDataTO<ExternalCourse> {
 	private Integer maxCreditHours;
 	
 	private Integer minCreditHours;
+	
+	private Boolean isDev;
 
 	public ExternalCourseTO() {
 		super();
@@ -54,6 +56,7 @@ public class ExternalCourseTO implements ExternalDataTO<ExternalCourse> {
 		this.setMinCreditHours(model.getMinCreditHours());
 		this.setSubjectAbbreviation(model.getSubjectAbbreviation());
 		this.setTitle(model.getTitle());
+		this.setIsDev(model.getIsDev());
 	}
 
 	public String getCode() {
@@ -110,6 +113,14 @@ public class ExternalCourseTO implements ExternalDataTO<ExternalCourse> {
 
 	public void setMinCreditHours(Integer minCreditHours) {
 		this.minCreditHours = minCreditHours;
+	}
+
+	public Boolean getIsDev() {
+		return isDev;
+	}
+
+	public void setIsDev(Boolean isDev) {
+		this.isDev = isDev;
 	}
 
 

@@ -23,26 +23,39 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
     	apiProperties: 'apiProperties',
     	service: 'transcriptService',
         personLite: 'personLite',
-        store: 'courseTranscriptsStore'
+        store: 'courseTranscriptsStore',
+		termsStore: 'termsStore'
     },
 	init: function() {
 		var me=this;
 		var personId = me.personLite.get('id');
 
         me.store.removeAll();
-        if(personId != ""){
+		if(personId != ""){
 	    	me.getView().setLoading( true );
-	    	
+	    	if(me.termsStore.getTotalCount() <= 0){
+				me.termsStore.addListener("load", me.termStoreLoaded, me, {single:true});
+			}else{
+				me.termStoreLoaded();
+			}
+			
+	    }
+		
+		return this.callParent(arguments);
+    },
+    
+	termStoreLoaded: function(){
+		var me = this;
+		var personId = me.personLite.get('id');
+		if(personId != ""){
 			me.service.getFull( personId, {
 				success: me.getTranscriptSuccess,
 				failure: me.getTranscriptFailure,
 				scope: me			
 			});
-        }
-		
-		return this.callParent(arguments);
-    },
-    
+		}
+	},
+	
     getTranscriptSuccess: function( r, scope ){
     	var me=scope;
 
@@ -52,11 +65,26 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
         if ( terms ) {
             Ext.Array.each(terms, function(term) {
                     var courseTranscript = Ext.create('Ssp.model.CourseTranscript', term);
+					var termIndex = me.termsStore.find("code", courseTranscript.get("termCode"));
+					if(termIndex >= 0){
+						var term = me.termsStore.getAt(termIndex);
+						courseTranscript.set("termStartDate", term.get("startDate"));
+					}
                     courseTranscripts.push(courseTranscript);
+					
             });
         }
 
         me.store.loadData(courseTranscripts);
+		me.store.sort([
+		    {
+		        property : 'termStartDate',
+		        direction: 'DESC'
+		    },
+		    {
+		        property : 'formattedCourse',
+		        direction: 'ASC'
+		    }]);
         me.getView().setLoading( false );
     },
     

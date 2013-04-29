@@ -17,13 +17,13 @@
  * under the License.
  */
 Ext.define('Ssp.view.tools.map.PlanTool', {
-    extend: 'Ext.form.FieldContainer',
+    extend: 'Ext.form.Panel',
     alias: 'widget.plantool',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    controller: 'Ssp.controller.tool.map.MapPlanToolViewController',
     inject: {
-        columnRendererUtils: 'columnRendererUtils'
-        //sspConfig: 'sspConfig'
+        columnRendererUtils: 'columnRendererUtils',
+        authenticatedPerson: 'authenticatedPerson',
     },
     width: '100%',
     height: '100%',
@@ -53,6 +53,8 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 layout: 'vbox',
                 width: 80,
                 cls: 'center-align',
+				hidden: true,
+				hideable: false,
                 defaults: {
                     anchor: '100%'
                 },
@@ -65,10 +67,14 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     xtype: 'button',
                     itemId: 'planOverviewButton',
                     align: 'center',
-                    padding: '0 0 0 0'
+                    padding: '0 0 0 0',
+                	hidden: true,
+					hideable: false
                 }, {
                     xtype: 'label',
-                    text: 'View All'
+                    text: 'View All',
+                	hidden: true,
+					hideable: false
                 
                 }]
             
@@ -82,6 +88,8 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 layout: 'vbox',
                 width: 80,
                 cls: 'center-align',
+				hidden: true,
+				hideable: false,
                 defaults: {
                     anchor: '100%'
                 },
@@ -94,11 +102,14 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     xtype: 'button',
                     itemId: 'planFAButton',
                     align: 'center',
-                    padding: '0 0 0 0'
+                    padding: '0 0 0 0',
+					hidden: true,
+					hideable: false
                 }, {
                     xtype: 'label',
-                    text: 'Financial Aid'
-                
+                    text: 'Financial Aid',
+                	hidden: true,
+					hideable: false
                 }]
             
             }, 
@@ -111,6 +122,8 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 layout: 'vbox',
                 width: 80,
                 cls: 'center-align',
+				hidden: true,
+				hideable: false,
                 
                 defaults: {
                     anchor: '100%'
@@ -124,15 +137,21 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     xtype: 'button',
                     itemId: 'planNotesButton',
                     align: 'center',
-                    padding: '0 0 0 0'
+                    padding: '0 0 0 0',
+					hidden: true,
+					hideable: false
                 }, {
                     xtype: 'label',
-                    text: 'Plan Notes'
+                    text: 'Plan Notes',
+                	hidden: true,
+					hideable: false
                 
                 }]
             
             }, 
             {
+				hidden: true,
+				hideable: false,
                 xtype: 'tbspacer',
                 flex: .10
             },
@@ -145,6 +164,8 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 layout: 'vbox',
                 width: 80,
                 cls: 'center-align',
+				hidden: true,
+				hideable: false,
                 defaults: {
                     anchor: '100%'
                 },
@@ -157,10 +178,14 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     xtype: 'button',
                     itemId: 'emailPlanButton',
                     align: 'center',
-                    padding: '0 0 0 0'
+                    padding: '0 0 0 0',
+					hidden: true,
+					hideable: false
                 }, {
                     xtype: 'label',
-                    text: 'Email Plan'
+                    text: 'Email Plan',
+                	hidden: true,
+					hideable: false
                 
                 }]
             
@@ -184,6 +209,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     cls: 'mapPrintIcon',
                     xtype: 'button',
                     itemId: 'printPlanButton',
+	                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON'),
                     align: 'center',
                     padding: '0 0 0 0'
                 }, {
@@ -207,16 +233,24 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 },
                 items: [{
                     fieldLabel: 'Plan Title',
-                    itemId: 'planName',
-                    name: 'planName',
-                    labelWidth: 120
-                
+					xtype:'textareafield',
+                    itemId: 'name',
+                    name: 'name',
+                    labelWidth: 55,
+					width:200,
+					height:40,
+					style: 'border: none;',
+					frame: false,
+					readOnly: true,
+					fieldStyle:"border:none 0px black; margin-top:2px; background-image:none",
+					editable:false,
                 }, {
                     fieldLabel: 'Student is Currently',
                     itemId: 'onPlan',
                     name: 'onPlan',
-                    labelWidth: 150
-                
+                    labelWidth: 150,
+					hidden: true,
+					hideable: false
                 }]
             
             }, {}]

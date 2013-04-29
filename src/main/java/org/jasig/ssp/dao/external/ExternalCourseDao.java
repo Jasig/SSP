@@ -23,6 +23,8 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.external.ExternalCourse;
@@ -101,7 +103,9 @@ public class ExternalCourseDao extends AbstractExternalDataDao<ExternalCourse> {
 
 	@SuppressWarnings("unchecked")
 	public List<ExternalCourse> getAll() {
-		List<ExternalCourse> result = createCriteria().list();
+		Criteria criteria = createCriteria();
+		criteria.addOrder(Order.asc("formattedCourse"));
+		List<ExternalCourse> result = criteria.list();
 		return result;
 	}
 

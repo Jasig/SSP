@@ -19,6 +19,7 @@
 package org.jasig.ssp.transferobject.external;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,13 @@ public class ExternalStudentRecordsTO implements ExternalDataTO<ExternalStudentR
 	{
 		super();
 		from(model);
+	}
+	
+	public ExternalStudentRecordsTO(ExternalStudentRecords model, BigDecimal balanceOwed)
+	{
+		super();
+		from(model);
+		getFinancialAid().setBalanceOwed(balanceOwed);
 	}
 
 

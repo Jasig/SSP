@@ -21,22 +21,22 @@ Ext.define('Ssp.controller.tool.profile.ProfileRecentStudentActivityViewControll
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	service: 'transcriptService',
+    	studentActivityService: 'studentActivityService',
         personLite: 'personLite',
-        store: 'recentStudentActivitiesStore'
+        studentActivitiesStore: 'studentActivitiesStore'
     },
 	init: function() {
 		var me=this;
 		var personId = me.personLite.get('id');
 
-        me.store.removeAll();
+        me.studentActivitiesStore.removeAll();
         if (personId != "")
 		{
         	me.getView().setLoading( true );
     	
-    		me.service.getRecentStudentActivity( personId, {
-    			success: me.getTranscriptSuccess,
-    			failure: me.getTranscriptFailure,
+    		me.studentActivityService.getAll( personId, {
+    			success: me.getStudentActivitySuccess,
+    			failure: me.getStudentActivityFailure,
     			scope: me			
     		});
 		}
@@ -44,23 +44,14 @@ Ext.define('Ssp.controller.tool.profile.ProfileRecentStudentActivityViewControll
 		return this.callParent(arguments);
     },
     
-    getTranscriptSuccess: function( r, scope ){
+    getStudentActivitySuccess: function( r, scope ){
     	var me=scope;
-
-        var recentStudentActivities = [];
-
-        Ext.Array.each(r, function(recentStudentActivityRaw) {
-                var recentStudentActivity = Ext.create('Ssp.model.RecentStudentActivity', recentStudentActivityRaw);
-                recentStudentActivity.setActivityDateFormatted(recentStudentActivity.getFormattedRecentActivityDate(recentStudentActivityRaw.activityDate));
-                recentStudentActivities.push(recentStudentActivity);
-        });
-
-
-        me.store.loadData(recentStudentActivities);
+        me.studentActivitiesStore.loadData(r);
+		me.getView().store = me.studentActivitiesStore.getMostRecentActivitiesStore();
         me.getView().setLoading( false );
     },
     
-    getTranscriptFailure: function( response, scope ){
+    getStudentActivityFailure: function( response, scope ){
     	var me=scope;
     	me.getView().setLoading( false );  	
     }

@@ -22,11 +22,11 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.map.PrintPlanController',
     inject: {
-        columnRendererUtils: 'columnRendererUtils'
-        //sspConfig: 'sspConfig'
+        columnRendererUtils: 'columnRendererUtils',
+        appEventsController: 'appEventsController'
     },
-    height: 450,
-    width: 500,
+    height: 200,
+    width: 200,
     resizable: true,
     initComponent: function(){
         var me = this;
@@ -46,7 +46,7 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                     type: 'vbox'
                 },
                  width: '100%',
-               height: '100%',
+                height: '100%',
                 bodyPadding: 5,
                 autoScroll: true,
                 itemId: 'faPrintPlan',
@@ -60,6 +60,8 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                     padding: '0 0 0 5',
                     layout: 'vbox',
                     align: 'stretch' ,
+					hidden: true,
+					hideable: false,
                     items: [ {
                         boxLabel: 'Print MAP with Options',
                         name: 'optionsPrint',
@@ -136,12 +138,27 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                             items: [{
                                 xtype: 'button',
                                 itemId: 'sendPrintButton',
-                                text: 'Print'
+                                text: 'Print',
+                                listeners:{
+                                	click: function(){
+                                		me = this;
+                                		me.appEventsController.getApplication().fireEvent(me.printEvent);
+                                		me.close();
+                                	},
+                                	scope: me
+                                }
                                 
                             }, '-', {
                                 xtype: 'button',
                                 itemId: 'cancelButton',
-                                text: 'Cancel'
+                                text: 'Cancel',
+                                listeners: {
+    		                    	click:function(){
+    		                    		me = this;
+    		                    		me.close();
+    		                    	},
+    		                    	scope: me
+    		                    }
                             }]
                         
                         }]

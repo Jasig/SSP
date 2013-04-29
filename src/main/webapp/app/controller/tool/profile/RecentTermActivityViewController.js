@@ -23,7 +23,8 @@ Ext.define('Ssp.controller.tool.profile.RecentTermActivityViewController', {
     	apiProperties: 'apiProperties',
     	service: 'transcriptService',
         personLite: 'personLite',
-        store: 'termTranscriptsStore'
+        store: 'termTranscriptsStore',
+		termsStore: 'termsStore'
     },
 	init: function() {
 		var me=this;
@@ -32,26 +33,50 @@ Ext.define('Ssp.controller.tool.profile.RecentTermActivityViewController', {
         me.store.removeAll();
         if(personId != ""){
 	    	me.getView().setLoading( true );
-	    	
+	    	if(me.termsStore.getTotalCount() <= 0){
+				me.termsStore.addListener("load", me.termStoreLoaded, me, {single:true});
+			}
+			
+	    }
+		return this.callParent(arguments);
+    },
+    
+	termStoreLoaded: function(){
+		var me = this;
+		var personId = me.personLite.get('id');
+		if(personId != ""){
 			me.service.getTerm( personId, {
 				success: me.getTranscriptSuccess,
 				failure: me.getTranscriptFailure,
 				scope: me			
 			});
-	    }
-		return this.callParent(arguments);
-    },
-    
+		}
+	},
+	
     getTranscriptSuccess: function( r, scope ){
     	var me=scope;
 
         var termTranscripts = [];
-        Ext.Array.each(r, function(term) {
-                var termTranscript = Ext.create('Ssp.model.TermTranscript', term);
+        Ext.Array.each(r, function(rawDatum) {
+                var termTranscript = Ext.create('Ssp.model.TermTranscript', rawDatum);
+				var termIndex = me.termsStore.find("code", termTranscript.get("termCode"));
+				if(termIndex >= 0){
+					var term = me.termsStore.getAt(termIndex);
+					termTranscript.set("termStartDate", term.get("startDate"));
+				}
                 termTranscripts.push(termTranscript);
         });
 
         me.store.loadData(termTranscripts);
+		me.store.sort([
+		    {
+		        property : 'termStartDate',
+		        direction: 'DESC'
+		    },
+		    {
+		        property : 'formattedCourse',
+		        direction: 'ASC'
+		    }]);
         me.getView().setLoading( false );
     },
     

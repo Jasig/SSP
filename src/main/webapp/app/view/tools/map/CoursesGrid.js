@@ -20,50 +20,82 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.coursesgrid',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
+    controller: 'Ssp.controller.tool.map.CoursesGridController',
+	inject: {
+	        store: 'coursesStore'
+	},
+
     width: 290,
-    minHeight: 500,
-    height: '100%',
     border: 0,
     title: 'All Courses',
-    autoScroll: true,
-    hideHeaders: true,
+    hideHeaders: false,
     columnLines: false,
-    listeners: {
-    itemdblclick: function() {
-        var courseDetailsPopUp = Ext.create('Ssp.view.tools.map.CourseDetails');
-        courseDetailsPopUp.center();
-        courseDetailsPopUp.show();
-        }
-    },
+	itemId: 'coursesGrid',
+    
     
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
-            
+            			store: this.store,
+						
                         columns: [{
-                            text: 'course',
-                            dataIndex: 'course',
-                            xtype: 'gridcolumn'
-                        },
-                         {
-                           xtype: 'gridcolumn',
-                            dataIndex: 'crHrs',
-                            text: 'crHrs',
-                            width: 50
+                            text: 'code',
+                            dataIndex: 'code',
+                            xtype: 'gridcolumn',
+                            hidden: true,
+                            hideable: false
                         },
                         {
+                            xtype: 'gridcolumn',
+                            dataIndex: 'formattedCourse',
+                            text: 'Course',
+                            width: 80
+                        },
+                        {
+                             xtype: 'gridcolumn',
+                             dataIndex: 'title',
+                             text: 'Title',
+                             width: 160
+                         },
+						 
+						{
+                            xtype: 'gridcolumn',
+                             dataIndex: 'description',
+                             text: 'Course',
+							 hidden:true,
+							 hideable: false,
+                         },
+                         {
                            xtype: 'gridcolumn',
-                            dataIndex: 'type',
-                            text: 'type',
-                            width: 50
-                            
-                        }
+                            dataIndex: 'minCreditHours',
+                            text: 'Credit Hours',
+                            width: 40
+                        },
+                        {
+                            xtype: 'gridcolumn',
+                             dataIndex: 'maxCreditHours',
+                             text: 'Max H',
+                             hidden:true,
+							 hideable: false,
+                         },
+                         {
+                             xtype: 'gridcolumn',
+                              dataIndex: 'isDev',
+                              text: 'Development',
+ 							 hidden:true,
+ 							 hideable: false,
+                          },
                         ],
-
-                viewConfig: {
-                    //markDirty:false
-                }
+                		viewConfig: {
+								copy: true,
+						        plugins: {
+						            ptype: 'gridviewdragdrop',
+									ddGroup: 'ddGroupForCourses',
+									dragGroup: 'coursesDDGroup',
+									dragText: 'Drag and drop course onto desired semester.'
+						        },
+					
+						    },
                    
         });
         

@@ -18,16 +18,20 @@
  */
 package org.jasig.ssp.service.reference;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Task;
+import org.jasig.ssp.model.TermCourses;
 import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.service.ReferenceService;
 import org.jasig.ssp.transferobject.GoalTO;
+import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.TaskTO;
 
 /**
@@ -65,4 +69,8 @@ public interface MessageTemplateService extends
 
 	SubjectAndBody createEarlyAlertResponseToFacultyMessage(
 			Map<String, Object> messageParams);
+	
+	public SubjectAndBody createMapPlanPrintScreen(final Person student, final Person owner, final PlanTO plan, final Float totalPlanCreditHours,
+			final List<TermCourses> termCourses,
+			String institutionName);
 }

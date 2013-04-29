@@ -31,7 +31,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
     },
     
     control: {
-    	nameField: '#studentName',
+    	
     	birthDateField: '#birthDate',
     	addressField: '#address',
     	alternateAddressInUseField: '#alternateAddressInUse',
@@ -72,10 +72,6 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
     
     getPersonSuccess: function( r, scope ){
     	var me=scope;
-		
-		
-		var nameField = me.getNameField();
-		
 		var birthDateField = me.getBirthDateField();
 		
 		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
@@ -97,7 +93,6 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
 		me.getView().loadRecord( me.person );
 		
 		// load additional values
-		nameField.setValue( fullName );
 		
 		birthDateField.setValue( me.person.getFormattedBirthDate() );
 		

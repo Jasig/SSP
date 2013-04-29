@@ -3,6 +3,7 @@ package org.jasig.ssp.dao;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
@@ -41,7 +42,7 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 	public Plan cloneAndSave(Plan plan,Person owner) throws CloneNotSupportedException {
 		Plan clone = plan.clone();
 		clone.setOwner(owner);
-		clone.setObjectStatus(ObjectStatus.ACTIVE);
+		clone.setObjectStatus(plan.getObjectStatus());
 		return save(clone);
 	}
 	
@@ -50,5 +51,16 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 		criteria.add(Restrictions.eq("person.id",personId));
 		return processCriteriaWithStatusSortingAndPaging(criteria,
 				sAndP);
+	}
+
+	public int markOldPlansAsInActive(Plan plan) {
+		int updatedEntities = 0;
+		String markOldPlansAsInActiveBaseQuery = "update Plan p set p.objectStatus = :objectStatus where p.person = :person and p != :plan";
+		updatedEntities += createHqlQuery( markOldPlansAsInActiveBaseQuery )
+				.setInteger("objectStatus", ObjectStatus.INACTIVE.ordinal() )
+				.setEntity("person", plan.getPerson())
+				.setEntity("plan", plan)
+				.executeUpdate();
+		return updatedEntities;
 	}
 }

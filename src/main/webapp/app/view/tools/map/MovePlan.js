@@ -44,20 +44,23 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
             items: [
 			
 			{
-                
                     tooltip: 'Move Plan Backward',
                     width: 30,
                     height: 30,
                     cls: 'planMoveBackwardIcon',
                     xtype: 'button',
-                    itemId: 'movePlanBackwardButton'
+                    itemId: 'movePlanBackwardButton',
+                    hidden: true,
+					hideable: false
                 }, {
                     tooltip: 'Move Plan Forward',
                     width: 30,
                     height: 30,
                     cls: 'planMoveForwardIcon',
                     xtype: 'button',
-                    itemId: 'movePlanForwardButton'
+                    itemId: 'movePlanForwardButton',
+                    hidden: true,
+                    hideable: false
                 }, {
                     xtype: 'tbspacer',
                     flex: 1
@@ -65,13 +68,17 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
                     fieldLabel: 'Current Total Plan Cr Hrs',
                     itemId: 'planHrs',
                     name: 'planHrs',
-                    labelWidth: 150
+                    id: 'currentTotalPlanCrHrs',
+                    labelWidth: 150,
+                    width: 180
                 
                 }, {
                     fieldLabel: 'Dev Cr Hrs',
-                    itemId: 'devHrs',
-                    name: 'devHrs',
-                    labelWidth: 100
+                    itemId: 'currentPlanTotalDevCrHrs',
+                    name: 'currentPlanTotalDevCrHrs',
+					id:'currentPlanTotalDevCrHrs',
+                    labelWidth: 100,
+                    width: 130
                 
                 }
 ]

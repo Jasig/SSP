@@ -129,7 +129,6 @@ public abstract class AbstractDao<T> {
 		// Query results
 		@SuppressWarnings(UNCHECKED)
 		final List<Q> results = query.list();
-
 		// If there is no total yet, take it from the size of the results
 		if (null == totalRows) {
 			totalRows = Long.valueOf(results.size());

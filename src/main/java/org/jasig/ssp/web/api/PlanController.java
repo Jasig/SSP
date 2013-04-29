@@ -20,24 +20,29 @@ package org.jasig.ssp.web.api;
 
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.Permission;
-import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.PlanLiteTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.reference.AbstractAuditableReferenceController;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,10 +73,22 @@ public class PlanController  extends AbstractBaseController {
 	private PlanService service;
 	
 	@Autowired
+	private PersonService personService;
+	
+	@Autowired
+	private TermService termService;
+	
+	@Autowired
 	private PlanTOFactory factory;
 	
 	@Autowired
+	private PlanLiteTOFactory liteFactory;
+	
+	@Autowired
 	private transient SecurityService securityService;
+	
+	@Autowired
+	private transient ConfigService configService;
 
  
 	/**
@@ -85,6 +102,7 @@ public class PlanController  extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<PlanTO> get(final @PathVariable UUID personId,
@@ -101,7 +119,26 @@ public class PlanController  extends AbstractBaseController {
 		return new PagedResponse<PlanTO>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));		
 	}
-	
+
+	/**
+	 * Retrieves the specified list from persistent storage.
+	 * 
+	 * @param id
+	 *            The specific id to use to lookup the associated data.
+	 * @return The specified instance if found.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If that specified data is not invalid.
+	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
+	@RequestMapping(value="/{id}", method = RequestMethod.GET)
+	public @ResponseBody
+	PlanTO getPlan(final @PathVariable UUID personId,final @PathVariable UUID id) throws ObjectNotFoundException,
+			ValidationException {
+		Plan model = getService().get(id);
+		return new PlanTO(model);
+	}	
 	/**
 	 * Retrieves the current entity from persistent storage.
 	 * 
@@ -113,6 +150,7 @@ public class PlanController  extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */	
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(value="/current", method = RequestMethod.GET)
 	public @ResponseBody
 	PlanTO getCurrentForStudent(final @PathVariable UUID personId) throws ObjectNotFoundException,
@@ -126,6 +164,34 @@ public class PlanController  extends AbstractBaseController {
 	}
 
 	/**
+	 * Retrieves the specified list from persistent storage.  
+	 * 
+	 * @param id
+	 *            The specific id to use to lookup the associated data.
+	 * @return The specified instance if found.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If that specified data is not invalid.
+	 */
+	@RequestMapping(value="/summary", method = RequestMethod.GET)
+	public @ResponseBody
+	PagedResponse<PlanLiteTO> getSummary(final @PathVariable UUID personId,
+			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) Integer start,
+			final @RequestParam(required = false) Integer limit) throws ObjectNotFoundException,
+			ValidationException {
+		// Run getAll
+		final PagingWrapper<Plan> data = getService().getAllForStudent(
+				SortingAndPaging.createForSingleSortWithPaging(
+						status == null ? ObjectStatus.ALL : status, start,
+						limit, null, null, null),personId);
+
+		return new PagedResponse<PlanLiteTO>(true, data.getResults(), getLiteFactory()
+				.asTOList(data.getRows()));		
+	}
+	
+	/**
 	 * Persist a new instance of the specified object.
 	 * <p>
 	 * Must not include an id.
@@ -137,18 +203,20 @@ public class PlanController  extends AbstractBaseController {
 	 *             If specified object could not be found.
 	 * @throws ValidationException
 	 *             If the specified data contains an id (since it shouldn't).
+	 * @throws CloneNotSupportedException 
 	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_WRITE')")
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
 	PlanTO create(@Valid @RequestBody final PlanTO obj) throws ObjectNotFoundException,
-			ValidationException {
+			ValidationException, CloneNotSupportedException {
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"It is invalid to send an entity with an ID to the create method. Did you mean to use the save method instead?");
 		}
 
-		final Plan model = getFactory().from(obj);
-		getService().save(model);
+		Plan model = getFactory().from(obj);
+		model = getService().copyAndSave(model);
 
 		if (null != model) {
 			final Plan createdModel = getFactory().from(obj);
@@ -157,6 +225,28 @@ public class PlanController  extends AbstractBaseController {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Returns an html page valid for printing
+	 * <p>
+	 *
+	 * 
+	 * @param obj
+	 *            instance to print.
+	 * @return html text strem
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
+	@RequestMapping(value = "/print", method = RequestMethod.POST)
+	public @ResponseBody
+	String print(final HttpServletResponse response,
+			 @RequestBody final PlanTO obj) throws ObjectNotFoundException {
+
+		Config institutionName = configService.getByName("inst_name");
+		final String output = service.createMapPlanPrintScreen(obj, institutionName.getValue());
+		return output;
 	}
 
 	/**
@@ -173,6 +263,7 @@ public class PlanController  extends AbstractBaseController {
 	 *             If the specified id is null.
 	 * @throws CloneNotSupportedException 
 	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_WRITE')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public @ResponseBody
 	PlanTO save(@PathVariable final UUID id, @Valid @RequestBody final PlanTO obj)
@@ -185,12 +276,15 @@ public class PlanController  extends AbstractBaseController {
 		if (obj.getId() == null) {
 			obj.setId(id);
 		}
-
+		Plan oldPlan = getService().get(id);
+		Person oldOwner = oldPlan.getOwner();
+		
 		final Plan model = getFactory().from(obj);
+		SspUser currentUser = getSecurityService().currentlyAuthenticatedUser();
+		
 		//If the currently logged in user is not the owner of this plan
 		//we need to create a clone then save it.
-		SspUser currentUser = getSecurityService().currentlyAuthenticatedUser();
-		if(currentUser.getPerson().getId().equals(model.getOwner()))
+		if(currentUser.getPerson().getId().equals(oldOwner.getId()))
 		{
 			final Plan savedPlan = getService().save(model);
 			if (null != savedPlan) {
@@ -199,7 +293,7 @@ public class PlanController  extends AbstractBaseController {
 		}
 		else
 		{
-			final Plan clonedPlan = getService().copyAndSaveWithNewOwner(model);
+			final Plan clonedPlan = getService().copyAndSave(model);
 			if (null != clonedPlan) {
 				return new PlanTO(model);
 			}
@@ -218,6 +312,7 @@ public class PlanController  extends AbstractBaseController {
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.
 	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_WRITE')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
 	ServiceResponse delete(@PathVariable final UUID id)
@@ -248,5 +343,13 @@ public class PlanController  extends AbstractBaseController {
 
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
+	}
+
+	public PlanLiteTOFactory getLiteFactory() {
+		return liteFactory;
+	}
+
+	public void setLiteFactory(PlanLiteTOFactory liteFactory) {
+		this.liteFactory = liteFactory;
 	}
 }

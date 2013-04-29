@@ -19,6 +19,7 @@
 package org.jasig.ssp.transferobject.external;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +31,10 @@ import org.jasig.ssp.model.external.ExternalStudentTermCourses;
 public class ExternalStudentRecordsLiteTO implements ExternalDataTO<ExternalStudentRecordsLite>,
 		Serializable {
 	
-	public ExternalStudentRecordsLiteTO(ExternalStudentRecordsLite model){
+	public ExternalStudentRecordsLiteTO(ExternalStudentRecordsLite model, BigDecimal balanceOwed){
 		super();
 		from(model);
+		financialAid.setBalanceOwed(balanceOwed);
 	}
 
 	/**
@@ -72,7 +74,7 @@ public class ExternalStudentRecordsLiteTO implements ExternalDataTO<ExternalStud
 		}
 		
 		if( model.getFinancialAid() != null)
-			financialAid = new ExternalStudentFinancialAidTO(model.getFinancialAid());
+			financialAid = new ExternalStudentFinancialAidTO(model.getFinancialAid(), null);
 	}
 
 	/**

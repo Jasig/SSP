@@ -190,9 +190,8 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	/**
 	 * Birth date
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@Column(name = "birth_date")
-	@Past
 	private Date birthDate;
 
 	/**
@@ -359,10 +358,11 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	/**
 	 * Photo URL.
 	 * 
-	 * Maximum length of 100.
+	 * Maximum length of 250.
 	 */
-	@Column(length = 100)
-	@Size(max = 100)
+	@Nullable
+	@Column(length = 250)
+	@Size(max = 250)
 	private String photoUrl;
 
 	/**

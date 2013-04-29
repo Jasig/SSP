@@ -20,13 +20,15 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
     extend: 'Ext.window.Window',
     alias: 'widget.saveplan',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    controller: 'Ssp.controller.tool.map.SavePlanViewController',
     inject: {
-        columnRendererUtils: 'columnRendererUtils'
-        //sspConfig: 'sspConfig'
+        columnRendererUtils: 'columnRendererUtils',
+		appEventsController: 'appEventsController',
+		currentMapPlan: 'currentMapPlan',
     },
-    height: 500,
+    height: 200,
     width: 850,
+    saveAs: null,
     resizable: true,
     initComponent: function(){
         var me = this;
@@ -36,6 +38,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                 type: 'vbox'
             },
             title: 'Save Plan',
+			
             items: [{
                 xtype: 'form',
                 flex: 1,
@@ -46,7 +49,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                     type: 'vbox'
                 },
                  width: '100%',
-               height: '100%',
+                height: '100%',
                 bodyPadding: 5,
                 autoScroll: true,
                 itemId: 'faSavePlan',
@@ -67,7 +70,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                 			    	fieldLabel: 'Active Plan',
                 			    	name: 'activeplan',
                 			    	labelWidth: 65,
-                			    	checked: true,
+                			    	checked: false,
                 			    	labelAlign: 'before',
                 			    	inputValue: 'activeplan'
                 			    },
@@ -81,7 +84,9 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                 			    	name: 'importantplan',
                 			    	labelWidth: 130,
                 			    	boxLabelAlign: 'before',
-                			    	inputValue: 'importantplan'
+                			    	inputValue: 'importantplan',
+									hidden: true,
+									hideable: false
                 			    
                 			    },
                 			    {
@@ -94,7 +99,9 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                 			    	name: 'sapplan',
                 			    	labelWidth: 200,
                 			    	boxLabelAlign: 'before',
-                			    	inputValue: 'sap'
+                			    	inputValue: 'sap',
+									hidden: true,
+									hideable: false
                 			    },
                 			    {
                                     xtype: 'tbspacer',
@@ -106,7 +113,9 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                 			    	name: 'f1',
                 			    	labelWidth: 70,
                 			    	boxLabelAlign: 'before',
-                			    	inputValue: 'f1'
+                			    	inputValue: 'f1',
+									hidden: true,
+									hideable: false
                 			    }
                 			    ]},
         			    	{
@@ -123,8 +132,8 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                             items: [
 				               {
             				        fieldLabel: 'Plan Title',
-            				        name: 'plantitle',
-            				        itemId: 'plantitle',
+            				        name: 'name',
+            				        itemId: 'name',
             				        maxLength: 50,
             				        allowBlank:false
             				        
@@ -133,48 +142,64 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
             				        name: 'contactName',
             				        itemId: 'contactName',
             				        maxLength: 50,
-            				        allowBlank:false
+            				        allowBlank:true,
+									hidden: true,
+									hideable: false
             				        
             				    },{
             				        fieldLabel: 'Contact Title',
             				        name: 'contactTitle',
             				        itemId: 'contactTitle',
             				        maxLength: 50,
-            				        allowBlank:true
+            				        allowBlank:true,
+									hidden: true,
+									hideable: false
             				    },{
             				        fieldLabel: 'Contact Phone',
-            				        name: 'contactphone',
-            				        itemId: 'contactphone',
-            				        allowBlank:false
+            				        name: 'contactPhone',
+            				        itemId: 'contactPhone',
+            				        allowBlank:true,
+									hidden: true,
+									hideable: false
             				    },
             				   {
             				        fieldLabel: 'Academic',
             				        name: 'academic',
             				        allowBlank:true,
-            				        itemId: 'academic'
+            				        itemId: 'academic',
+									hidden: true,
+									hideable: false
             				    },{
             				        fieldLabel: 'Career Data',
             				        name: 'careerdata',
             				        allowBlank:true,
-            				        itemId: 'careerdata'
+            				        itemId: 'careerdata',
+									hidden: true,
+									hideable: false
             				    },{
             				        fieldLabel: 'Advisor/Coach Notes',
             				        name: 'coachnotes',
             				        allowBlank:true,
             				        itemId: 'coachnotes',
-            				        xtype: 'textareafield'
+            				        xtype: 'textareafield',
+									hidden: true,
+									hideable: false
             				    },{
             				        fieldLabel: 'Student Notes',
             				    name: 'studentnotes',
             			        allowBlank:true,
             			        itemId: 'addressLine1',
-            			        xtype: 'textareafield'
+            			        xtype: 'textareafield',
+								hidden: true,
+								hideable: false
                 			    },{
                 			        fieldLabel: 'Academic Goals',
                 			        name: 'academicgoals',
-                			        allowBlank:true,
+                			        allowBlank: true,
                 			        itemId: 'academicgoals',
-                			        xtype: 'textareafield'
+                			        xtype: 'textareafield',
+									hidden: true,
+									hideable: false
                 			    }
             			    ]
                     
@@ -186,12 +211,21 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                         items: [{
                             xtype: 'button',
                             itemId: 'saveButton',
-                            text: 'Save'
+                            text: 'Save',
+
                             
                         }, '-', {
                             xtype: 'button',
                             itemId: 'cancelButton',
-                            text: 'Cancel'
+                            text: 'Cancel',
+							cancel: function(){
+								me = this;
+								me.close();
+							},
+							listeners:{
+                            	click: 'cancel',
+								scope: me
+                            }
                         }]
                     
                     }]
@@ -200,7 +234,6 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
             ]
             
         });
-        
         return me.callParent(arguments);
     }
     

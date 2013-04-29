@@ -1,0 +1,63 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<property name="schema" value="public" dbms="postgresql" />
+	<property name="schema" value="dbo" dbms="mssql" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	<property name="externalUser" value="a new UUID" />
+	<property name="check_for_manage_integration_database_config_sql"
+			  value="select count(id) from config where name='manage_integration_database'" />
+	<property name="should_manage_integration_database_sql"
+			  value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
+
+
+	<!--
+	 **** Fixes a bad view definition in i000020.xml. Please use these only as a
+	 pair.  -->
+
+	<changeSet id="fix v_external_student_transcript_course definition" author="dan.mccallum">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip v_external_student_transcript_course correction">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<dropView viewName="v_external_student_transcript_course" />
+
+		<createView viewName="v_external_student_transcript_course">
+			select ROW_NUMBER() OVER (ORDER BY school_id, subject_abbreviation, number) as id,
+			school_id, first_name, last_name, middle_name, subject_abbreviation, number, formatted_course, section_number,
+			section_code, title, description, grade, credit_earned, term_code, credit_type, audited, status_code, faculty_school_id
+			from external_student_transcript_course
+		</createView>
+		<sql>grant all on v_external_student_transcript_course to ${database.app.username}</sql>
+	</changeSet>
+
+
+
+</databaseChangeLog>

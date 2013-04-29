@@ -40,6 +40,7 @@ import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.PlanCourseTO;
+import org.jasig.ssp.transferobject.PlanLiteTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.TaskTO;
@@ -103,15 +104,16 @@ public class PlanControllerIntegrationTest {
 	 * @throws ObjectNotFoundException
 	 *             If object could not be found.
 	 * @throws ValidationException 
+	 * @throws CloneNotSupportedException 
 	 */
 	@Test
-	public void testControllerGet() throws ObjectNotFoundException, ValidationException {
+	public void testControllerGet() throws ObjectNotFoundException, ValidationException, CloneNotSupportedException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
 		controller.create(createPlan());
-		PagedResponse<PlanTO> result = controller.get(PERSON_ID, ObjectStatus.INACTIVE, null, null);
+		PagedResponse<PlanTO> result = controller.get(PERSON_ID, ObjectStatus.ACTIVE, null, null);
 
 		assertNotNull(
 				"Returned PersonTO from the controller should not have been null.",
@@ -120,8 +122,35 @@ public class PlanControllerIntegrationTest {
 
 	}
 	
+	/**
+	 * Test the {@link PersonController#get(UUID)} action.
+	 * 
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
+	 * @throws ValidationException 
+	 * @throws CloneNotSupportedException 
+	 */
 	@Test
-	public void testControllerCreate() throws ObjectNotFoundException, ValidationException {
+	public void testControllerGetSummary() throws ObjectNotFoundException, ValidationException, CloneNotSupportedException {
+		assertNotNull(
+				"Controller under test was not initialized by the container correctly.",
+				controller);
+
+		controller.create(createPlan());
+		PagedResponse<PlanLiteTO> result = controller.getSummary(PERSON_ID, ObjectStatus.ACTIVE, null, null);
+
+		assertNotNull(
+				"Returned PersonTO from the controller should not have been null.",
+				result);
+		assertTrue(result.getRows().size() > 0);
+		
+		assertTrue(result.getRows().iterator().next().getPersonId() != null);
+
+
+	}	
+	
+	@Test
+	public void testControllerCreate() throws ObjectNotFoundException, ValidationException, CloneNotSupportedException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);

@@ -17,26 +17,30 @@
  * under the License.
  */
 Ext.define('Ssp.view.tools.map.SemesterPanel', {
-    extend: 'Ext.grid.Panel',
+    extend: 'Ext.Panel',
     alias: 'widget.semesterpanel',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
-    minHeight: '200',
-    minWidth: '200',
-    autoHeight: true,
-    autoScroll: true,
+	inject:{
+		appEventsController: 'appEventsController'
+	},
+    //controller: 'Ssp.controller.tool.map.SemesterPanelViewController',
     columnLines: false,
-    
+    layout: {
+                type: 'fit'
+            },
+	height: 258,
+	width: 220,
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
-            title: 'Semester',
-            hideHeaders: true,
+			
             tools: [{
                 xtype: 'button',
                 itemId: 'termNotesButton',
                 width: 20,
                 height: 20,
+                hidden:true,
+                hideable:false,
                 cls: 'editPencilIcon',
                 text:'',
                 tooltip: 'Term Notes',
@@ -48,41 +52,17 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                     }
                   }
             }],
-            columns: [{
-                text: '',
-                dataIndex: 'planItem',
-                xtype: 'gridcolumn'
-            }, 
-            {
-                text: '',
-                dataIndex: 'crHrs',
-                xtype: 'gridcolumn'
-            }, 
-            {
-                xtype: 'actioncolumn',
-                width: 65,
-                items: [{
-                    icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
-                    tooltip: 'Edit planItem',
-                    handler: function(grid, rowIndex, colIndex){
-                        //goto CourseNotes.js
-                        
-                    },
-                    
-                    scope: me
-                }, {
-                    icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
-                    tooltip: 'Delete planItem',
-                    handler: function(grid, rowIndex, colIndex){
-                        
-                    },
-                    scope: me
-                }]
-            }],
+			items : [ {
+				store: me.store,
+				scroll: true,
+				xtype : 'semestergrid',
+			} ],
+           
             dockedItems: [{
                 dock: 'bottom',
                 xtype: 'toolbar',
                 height: '25',
+				itemId: "semesterBottomDock",
                 items: [
                 {
                     xtype: 'tbspacer',
@@ -91,10 +71,11 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                     text: 'Term Cr. Hrs:',
                     xtype: 'label'
                 }, {
-                    text: '',
+                    text: '0',
                     name: 'termCrHrs',
                     itemId: 'termCrHrs',
-                    xtype: 'label'
+                    xtype: 'label',
+					width: 20
                 }
                 ,
                  {

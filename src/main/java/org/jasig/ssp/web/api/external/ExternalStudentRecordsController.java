@@ -20,6 +20,7 @@ package org.jasig.ssp.web.api.external;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -47,7 +48,9 @@ import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonDemographics;
 import org.jasig.ssp.model.Task;
+import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
 import org.jasig.ssp.model.external.ExternalStudentRecords;
 import org.jasig.ssp.model.external.ExternalStudentRecordsLite;
@@ -57,9 +60,11 @@ import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonDemographicsService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TaskService;
+import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.ExternalStudentAcademicProgramService;
 import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
 import org.jasig.ssp.service.external.ExternalStudentTestService;
@@ -142,6 +147,9 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	private transient  ExternalStudentTranscriptCourseService externalStudentTranscriptCourseService;
 	
 	@Autowired
+	private transient  ExternalPersonService externalStudentService;
+	
+	@Autowired
 	private transient  ExternalStudentTranscriptTermService externalStudentTranscriptTermService;
 	
 	@Autowired
@@ -161,6 +169,9 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	
 	@Autowired
 	private transient ExternalStudentFinancialAidTOFactory externalStudentFinancialAidTOFactory;
+	
+	@Autowired
+	private transient PersonDemographicsService personDemographicsService;
 	
 	@Autowired
 	private transient SecurityService securityService;
@@ -193,10 +204,9 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 
 		record.setPrograms(externalStudentAcademicProgramService.getAcademicProgramsBySchoolId(schoolId));
 		record.setGPA(externalStudentTranscriptService.getRecordsBySchoolId(schoolId));
-		record.setFinancialAid(externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId));
-		
+		record.setFinancialAid(externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId));		
 
-		ExternalStudentRecordsLiteTO recordTO = new ExternalStudentRecordsLiteTO(record);
+		ExternalStudentRecordsLiteTO recordTO = new ExternalStudentRecordsLiteTO(record, getBalancedOwed(id, schoolId));
 
 		return recordTO;
 	}
@@ -213,9 +223,9 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		record.setPrograms(externalStudentAcademicProgramService.getAcademicProgramsBySchoolId(schoolId));
 		record.setGPA(externalStudentTranscriptService.getRecordsBySchoolId(schoolId));
 		record.setFinancialAid(externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId));
-		record.setTerms(externalStudentTranscriptCourseService.getTranscriptsBySchoolId(schoolId));
+		record.setTerms(externalStudentTranscriptCourseService.getTranscriptsBySchoolId(schoolId));		
 		
-		ExternalStudentRecordsTO recordTO = new ExternalStudentRecordsTO(record);
+		ExternalStudentRecordsTO recordTO = new ExternalStudentRecordsTO(record, getBalancedOwed(id, schoolId));
 		return recordTO;
 	}
 	
@@ -234,7 +244,13 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		String defaultStatusCode = getDefaultStatusCode(mappings);
 		
 		for(ExternalStudentTranscriptCourseTO course:courses){
-			Person person = personService.getBySchoolId(course.getFacultySchoolId());
+			Person person = null;
+			try{
+				person = personService.getBySchoolId(course.getFacultySchoolId());
+			}finally
+			{
+				
+			}
 			if(person != null)
 				course.setFacultyName(person.getFullName());
 			
@@ -246,6 +262,30 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 			}
 		}
 		return courses;
+	}
+	
+	private BigDecimal getBalancedOwed(UUID id, String schoolId) throws ObjectNotFoundException{
+		BigDecimal balanceOwed = null;
+		try{
+			PersonDemographics demographics = personDemographicsService.get(id);
+			balanceOwed = demographics.getBalanceOwed();
+		}catch(Exception exception){
+			
+		}finally{
+			
+		}
+		
+		if(balanceOwed == null){
+			try{
+				ExternalPerson externalPerson = externalStudentService.getBySchoolId(schoolId);
+				balanceOwed = externalPerson.getBalanceOwed();
+			}catch(Exception exception){
+				
+			}finally{
+				
+			}
+		}
+		return balanceOwed;
 	}
 	
 	private String getDefaultStatusCode(Map<String,String> mappings){
@@ -284,14 +324,15 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	}
 	
 	
-	@RequestMapping(value = "/transcript/recentstudentactivity", method = RequestMethod.GET)
+	@RequestMapping(value = "/studentactivity", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
 	List<RecentActivityTO> loadRecentStudentActivity(final @PathVariable UUID id)
 			throws ObjectNotFoundException {
 		List<RecentActivityTO> recentActivities = new ArrayList<RecentActivityTO>();
 		Person person = personService.get(id);
-		SortingAndPaging sAndP = SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ACTIVE, 0, 20, "createdDate", "DESC", "createdDate");
+		UUID coachId = person.getCoach().getId();
+		SortingAndPaging sAndP = SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ACTIVE, 0, 1000, "createdDate", "DESC", "createdDate");
 		PagingWrapper<EarlyAlert> earlyAlerts = earlyAlertService.getAllForPerson(person, sAndP);
 		SspUser currentUser = securityService.currentUser();
 		List<EarlyAlertTO> earlyAlertTOs = earlyAlertTOFactory.asTOList(earlyAlerts.getRows());
@@ -352,10 +393,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 					person.getStudentIntakeRequestDate()));
 		}
 			
-		Collections.sort(recentActivities, RecentActivityTO.RECENT_ACTIVITY_TO_DATE_COMPARATOR);
-		if(recentActivities.size() > 20)
-			recentActivities = recentActivities.subList(0, 20);
-		
+		Collections.sort(recentActivities, RecentActivityTO.RECENT_ACTIVITY_TO_DATE_COMPARATOR);	
 		return recentActivities;
 	}
 	

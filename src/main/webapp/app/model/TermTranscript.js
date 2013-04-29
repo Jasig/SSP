@@ -25,5 +25,6 @@ Ext.define('Ssp.model.TermTranscript', {
         {name: 'creditHoursNotCompleted', type: 'auto'},
         {name: 'termCode', type: 'auto'},
         {name: 'totalQualityPoints', type: 'auto'},
-        {name: 'gradePointAverage', type: 'auto'}]
+        {name: 'gradePointAverage', type: 'auto'},
+		{name: 'termStartDate', type: 'date', dateFormat: 'time'}]
 });

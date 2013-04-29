@@ -20,12 +20,13 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
     extend: 'Ext.window.Window',
     alias: 'widget.coursedetails',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    //controller: 'Ssp.controller.tool.map.CoursesGridController',
     inject: {
         columnRendererUtils: 'columnRendererUtils'
         //sspConfig: 'sspConfig'
     },
     height: 400,
-    width: 600,
+    width: 650,
     resizable: true,
     initComponent: function(){
         var me = this;
@@ -44,11 +45,11 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                     align: 'stretch',
                     type: 'vbox'
                 },
-                 width: '100%',
-               height: '100%',
+                width: '100%',
+                height: '100%',
                 bodyPadding: 5,
                 autoScroll: true,
-                itemId: 'faSavePlan',
+                itemId: 'courseDetailsPopupWindow',
                 items: [
                         
         			    	{
@@ -75,15 +76,16 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                                         
                                         items: [
                     				               {
-                                				        fieldLabel: '',
-                                				        name: 'course',
-                                				        itemId: 'course'
-                                				        
+                                				        fieldLabel: 'Course',
+														labelWidth:120,
+                                				        name: 'formatted_course_title',
+                                				        itemId: 'formatted_course_title'
                                 				    },{
-                                				        fieldLabel: '',
-                                				        name: 'courseDetails',
-                                				        itemId: 'courseDetails'
-                                				        
+                                				        fieldLabel: 'Course Description',
+														labelWidth:120,
+                                				        name: 'description',
+                                				        itemId: 'description',
+														width: 500
                                 				    }
                                 				    ]},
                                 				    {
@@ -99,29 +101,35 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                                                         items: [
                                         				    {
                                         				        fieldLabel: 'Max Credit Hours',
-                                        				        name: 'maxcreditHrs',
-                                        				        itemId: 'maxcreditHrs'
-                                        				        
+                                        				        name: 'maxCreditHours',
+                                        				        itemId: 'maxCreditHours',
+                                        				        width: 200
                                         				    },{
                                         				        fieldLabel: 'Min Credit Hours',
-                                        				        name: 'minCreditHrs',
-                                        				        itemId: 'minCreditHrs'
-                                        				        
+                                        				        name: 'minCreditHours',
+                                        				        itemId: 'minCreditHours',
+																 width: 200
                                         				    },
                                         				    {
                                         				        fieldLabel: 'Department',
                                         				        name: 'department',
-                                        				        itemId: 'department'
+                                        				        itemId: 'department',
+                                        				        hidden: true,
+                                        				        hideable: false
                                         				        
                                         				    },{
                                         				        fieldLabel: 'Division',
                                         				        name: 'division',
-                                        				        itemId: 'division'
+                                        				        itemId: 'division',
+                                        				        hidden: true,
+                                        				        hideable: false
                                         				    },
                                         				    {
                                                                 fieldLabel: 'Transfer / Meta Data',
                                                                 name: 'division',
-                                                                itemId: 'division'
+                                                                itemId: 'division',
+                                        				        hidden: true,
+                                        				        hideable: false
                                                             }
                                 				    
                                 				    ]},
@@ -139,18 +147,24 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                                         				    {
                                         				        fieldLabel: 'Co /Prerequisite',
                                         				        name: 'prereqs',
-                                        				        itemId: 'prereqs'
+                                        				        itemId: 'prereqs',
+                                        				        hidden: true,
+                                        				        hideable: false
                                         				        
                                         				    },{
                                         				    	fieldLabel:  '<a href="">Master Syllabus</a>',
                                                                 name: 'mastersyllabus',
-                                                                itemId: 'mastersyllabus'
+                                                                itemId: 'mastersyllabus',
+                                        				        hidden: true,
+                                        				        hideable: false
                                         				        
                                         				    },
                                         				    {
                                         				        fieldLabel: '<a href="">Academic Link</a>',
                                                                 name: 'academiclink',
-                                                                itemId: 'academiclink'
+                                                                itemId: 'academiclink',
+                                        				        hidden: true,
+                                        				        hideable: false
                                         				        
                                         				    }
                                 				    ]}

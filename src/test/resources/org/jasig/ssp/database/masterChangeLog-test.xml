@@ -98,8 +98,18 @@
 	
 	<include file="org/jasig/ssp/database/changesets/000026.xml" />
 	<include file="org/jasig/ssp/database/changesets/000027.xml" />
-	<include file="org/jasig/ssp/database/integrationchangesets/i000009-test.xml" /> <!--  MAP external test data -->
-	
+	<include file="org/jasig/ssp/database/integrationchangesets/i000009-test.xml" /> 
+	<include file="org/jasig/ssp/database/integrationchangesets/i000010-test.xml" /> 
+	<include file="org/jasig/ssp/database/integrationchangesets/i000015.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000011-test.xml" /> <!--  MAP external test data -->
+	<include file="org/jasig/ssp/database/changesets/000031.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000017.xml" />
 
+	<include file="org/jasig/ssp/database/integrationchangesets/i000019.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000020.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000021.xml" />
+	<include file="org/jasig/ssp/database/changesets/000039.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000022.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000023.xml" />
 
 </databaseChangeLog>

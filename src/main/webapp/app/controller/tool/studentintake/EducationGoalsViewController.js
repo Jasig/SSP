@@ -22,7 +22,8 @@ Ext.define('Ssp.controller.tool.studentintake.EducationGoalsViewController', {
     inject: {
     	formUtils: 'formRendererUtils',
     	model: 'currentStudentIntake',
-    	sspConfig: 'sspConfig'
+    	sspConfig: 'sspConfig',
+		termsStore: 'termsStore'
     },
     control: {
     	careerDecidedCheckOn: '#careerDecidedCheckOn',
@@ -30,10 +31,12 @@ Ext.define('Ssp.controller.tool.studentintake.EducationGoalsViewController', {
     	confidentInAbilitiesCheckOn: '#confidentInAbilitiesCheckOn',
     	confidentInAbilitiesCheckOff: '#confidentInAbilitiesCheckOff',
     	additionalAcademicProgramInformationNeededCheckOn: '#additionalAcademicProgramInformationNeededCheckOn',
-    	additionalAcademicProgramInformationNeededCheckOff: '#additionalAcademicProgramInformationNeededCheckOff'
+    	additionalAcademicProgramInformationNeededCheckOff: '#additionalAcademicProgramInformationNeededCheckOff',
+		anticipatedGraduationDateTermCodeCombo: '#anticipatedGraduationDateTermCodeCombo'
     },
 	init: function() {
 		var me=this;
+
 		var personEducationGoal = me.model.get('personEducationGoal');
 		var careerDecided = me.model.get('personEducationGoal').get('careerDecided')
 		var confidentInAbilities = me.model.get('personEducationGoal').get('confidentInAbilities');
@@ -51,6 +54,28 @@ Ext.define('Ssp.controller.tool.studentintake.EducationGoalsViewController', {
 			me.getAdditionalAcademicProgramInformationNeededCheckOff().setValue( !additionalAcademicProgramInformationNeeded );
 		}		
 
+		if(me.termsStore.getTotalCount() == 0){
+				me.termsStore.addListener("load", me.onTermsStoreLoad, me);
+				me.termsStore.load();
+		}else{
+			me.initialiseGraduationDates();
+		}
+	
+		
 		return me.callParent(arguments);
-    }
+    },
+	
+	onTermsStoreLoad:function(){
+		var me = this;
+		me.termsStore.removeListener( "onTermsStoreLoad", me.onTermsStoreLoad, me );
+		me.initialiseGraduationDates();
+	},
+	
+	initialiseGraduationDates: function(){
+		var me = this;
+		var futureTermsStore = me.termsStore.getCurrentAndFutureTermsStore(true);
+		var currentCode = me.getAnticipatedGraduationDateTermCodeCombo().getValue();
+		me.getAnticipatedGraduationDateTermCodeCombo().bindStore(futureTermsStore);
+		me.getAnticipatedGraduationDateTermCodeCombo().setValue(currentCode);
+	}
 });

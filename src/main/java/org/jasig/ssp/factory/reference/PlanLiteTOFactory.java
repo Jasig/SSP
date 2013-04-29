@@ -1,4 +1,4 @@
-/*
+/**
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,20 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.RecentStudentActivity', {
-    extend: 'Ssp.model.AbstractBase',
-    fields: [{name: 'activity', type: 'string'},
-        {name: 'coachName', type: 'string'},
-        {name: 'coachId', type: 'string'},
-        {name: 'activityDateFormatted', type: 'string'},
-        {name: 'activityDate', type: 'date', dateFormat: 'time'}],
-        
-      getFormattedRecentActivityDate: function(){
-        	return Ext.util.Format.date( this.get('activityDate'),'m/d/Y');
-       },
+package org.jasig.ssp.factory.reference;
 
-	   setActivityDateFormatted: function(formattedDate){
-        	this.data.activityDateFormatted = formattedDate;
-       }
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.transferobject.PlanLiteTO;
 
-});
+public interface PlanLiteTOFactory extends
+		TOFactory<PlanLiteTO, Plan> {
+}

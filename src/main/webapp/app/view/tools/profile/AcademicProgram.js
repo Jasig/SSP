@@ -24,6 +24,7 @@ Ext.define('Ssp.view.tools.profile.AcademicProgram', {
         columnRendererUtils: 'columnRendererUtils',
         sspConfig: 'sspConfig'
     },
+    controller: 'Ssp.controller.tool.profile.AcademicProgramViewController',
     width: '100%',
     height: '100%',
 	autoScroll: true,
@@ -64,7 +65,7 @@ Ext.define('Ssp.view.tools.profile.AcademicProgram', {
                         xtype: 'tbspacer',
                        flex: .50
                     },
-					{
+					/*{
                         tooltip: 'Email MAP',
                         text: '',
                         width: 30,
@@ -72,14 +73,15 @@ Ext.define('Ssp.view.tools.profile.AcademicProgram', {
                         cls: 'mapEmailIcon',
                         xtype: 'button',
                         itemId: 'emailMAPButton'
-                    }, {
+                    }, */
+					{
                         tooltip: 'Print MAP',
                         text: '',
                         width: 30,
                         height: 30,
                         cls: 'mapPrintIcon',
                         xtype: 'button',
-                        itemId: 'printMAPButton'
+                        itemId: 'printPlanButton'
                     },
 					{
                         xtype: 'tbspacer',
@@ -100,31 +102,32 @@ Ext.define('Ssp.view.tools.profile.AcademicProgram', {
                         fieldLabel: 'Academic Program',
                         name: 'academicPrograms',
                         itemId: 'academicPrograms',
-                        labelWidth: 120
+                        //labelWidth: 120
                     }, {
                         fieldLabel: 'MAP',
                         itemId: 'onPlan',
                         name: 'onPlan',
-                        labelWidth: 70
+                        labelWidth: 26
                     }, {
                         fieldLabel: 'Name',
                         name: 'mapName',
                         itemId: 'mapName',
-                        labelWidth: 30
+                        labelWidth: 35
                     }, {
                         fieldLabel: 'Advisor',
                         name: 'advisor',
                         itemId: 'advisor',
-                        labelWidth: 40
+                        labelWidth: 42
                     }, {
                         fieldLabel: 'Last Updated',
                         name: 'mapLastUpdated',
-                        itemId: 'mapLastUpdated'
+                        itemId: 'mapLastUpdated',
+						labelWidth: 60
                     }, {
                         fieldLabel: 'MAP Projected Grad',
                         name: 'mapProjected',
                         itemId: 'mapProjected',
-                        labelWidth: 120
+                        labelWidth: 110
                     }]
                 
                 }]

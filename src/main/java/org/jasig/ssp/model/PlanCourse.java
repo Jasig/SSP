@@ -1,5 +1,7 @@
 package org.jasig.ssp.model;
 
+import java.util.Comparator;
+
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -8,11 +10,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.jasig.ssp.model.TermCourses.TermCoursesTermDateComparator;
+
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name="map_plan_course")
 public class PlanCourse extends AbstractPlanCourse {
 
+	
 	private static final long serialVersionUID = -6316130725863888876L;
 
 	@NotNull

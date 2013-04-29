@@ -165,8 +165,8 @@
       <column name='person_id' value='a7a4b8cc-167d-4b04-816f-c7a508b5fcc0' />
       <column name='course_name' value='Course Name0' />
       <column name='course_title' value='Course Title0' />
-      <column name='created_date' value='Tue Aug 21 00:00:00 MST 2012' />
-      <column name='modified_date' value='Tue Aug 21 00:00:00 MST 2012' />
+      <column name='created_date' value='2012-08-21T00:00:00' />
+      <column name='modified_date' value='2012-08-21T00:00:00' />
       <column name='created_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='modified_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='campus_id' value='901e104b-4dc7-43f5-a38e-581015e204e1' />
@@ -300,8 +300,8 @@
       <column name='person_id' value='ee40d268-23e7-4c8a-aae8-e428b5369441' />
       <column name='course_name' value='Course Name1' />
       <column name='course_title' value='Course Title1' />
-      <column name='created_date' value='Wed Aug 22 00:00:00 MST 2012' />
-      <column name='modified_date' value='Wed Aug 22 00:00:00 MST 2012' />
+      <column name='created_date' value='2012-08-22T00:00:00' />
+      <column name='modified_date' value='2012-08-22T00:00:00' />
       <column name='created_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='modified_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='campus_id' value='901e104b-4dc7-43f5-a38e-581015e204e1' />
@@ -312,8 +312,8 @@
       <column name='person_id' value='ee40d268-23e7-4c8a-aae8-e428b5369441' />
       <column name='course_name' value='Course Name1' />
       <column name='course_title' value='Course Title1' />
-      <column name='created_date' value='Wed Aug 22 00:00:00 MST 2012' />
-      <column name='modified_date' value='Wed Aug 22 00:00:00 MST 2012' />
+      <column name='created_date' value='2012-08-22T00:00:00' />
+      <column name='modified_date' value='2012-08-22T00:00:00' />
       <column name='created_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='modified_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='campus_id' value='901e104b-4dc7-43f5-a38e-581015e204e1' />
@@ -471,8 +471,8 @@
       <column name='person_id' value='7775db6b-efac-457b-a23d-654f9adaf203' />
       <column name='course_name' value='Course Name2' />
       <column name='course_title' value='Course Title2' />
-      <column name='created_date' value='Thu Aug 23 00:00:00 MST 2012' />
-      <column name='modified_date' value='Thu Aug 23 00:00:00 MST 2012' />
+      <column name='created_date' value='2012-08-23T00:00:00' />
+      <column name='modified_date' value='2012-08-23T00:00:00' />
       <column name='created_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='modified_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='campus_id' value='901e104b-4dc7-43f5-a38e-581015e204e1' />
@@ -483,8 +483,8 @@
       <column name='person_id' value='7775db6b-efac-457b-a23d-654f9adaf203' />
       <column name='course_name' value='Course Name2' />
       <column name='course_title' value='Course Title2' />
-      <column name='created_date' value='Thu Aug 23 00:00:00 MST 2012' />
-      <column name='modified_date' value='Thu Aug 23 00:00:00 MST 2012' />
+      <column name='created_date' value='2012-08-23T00:00:00' />
+      <column name='modified_date' value='2012-08-23T00:00:00' />
       <column name='created_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='modified_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='campus_id' value='901e104b-4dc7-43f5-a38e-581015e204e1' />
@@ -543,8 +543,8 @@
       <column name='person_id' value='7775db6b-efac-457b-a23d-654f9adaf203' />
       <column name='course_name' value='Course Name2' />
       <column name='course_title' value='Course Title2' />
-      <column name='created_date' value='Thu Aug 23 00:00:00 MST 2012' />
-      <column name='modified_date' value='Thu Aug 23 00:00:00 MST 2012' />
+      <column name='created_date' value='2012-08-23T00:00:00' />
+      <column name='modified_date' value='2012-08-22T00:00:00' />
       <column name='created_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='modified_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='campus_id' value='901e104b-4dc7-43f5-a38e-581015e204e1' />
@@ -766,8 +766,8 @@
       <column name='person_id' value='9cf20577-5db6-4e51-8352-98ef22ea0538' />
       <column name='course_name' value='Course Name3' />
       <column name='course_title' value='Course Title3' />
-      <column name='created_date' value='Fri Aug 24 00:00:00 MST 2012' />
-      <column name='modified_date' value='Fri Aug 24 00:00:00 MST 2012' />
+      <column name='created_date' value='2012-08-24T00:00:00' />
+      <column name='modified_date' value='2012-08-22T00:00:00' />
       <column name='created_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='modified_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='campus_id' value='901e104b-4dc7-43f5-a38e-581015e204e1' />
@@ -778,8 +778,8 @@
       <column name='person_id' value='9cf20577-5db6-4e51-8352-98ef22ea0538' />
       <column name='course_name' value='Course Name3' />
       <column name='course_title' value='Course Title3' />
-      <column name='created_date' value='Fri Aug 24 00:00:00 MST 2012' />
-      <column name='modified_date' value='Fri Aug 24 00:00:00 MST 2012' />
+      <column name='created_date' value='2012-08-24T00:00:00' />
+      <column name='modified_date' value='2012-08-24T00:00:00' />
       <column name='created_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='modified_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='campus_id' value='901e104b-4dc7-43f5-a38e-581015e204e1' />
@@ -838,8 +838,8 @@
       <column name='person_id' value='9cf20577-5db6-4e51-8352-98ef22ea0538' />
       <column name='course_name' value='Course Name3' />
       <column name='course_title' value='Course Title3' />
-      <column name='created_date' value='Fri Aug 24 00:00:00 MST 2012' />
-      <column name='modified_date' value='Fri Aug 24 00:00:00 MST 2012' />
+      <column name='created_date' value='2012-08-24T00:00:00' />
+      <column name='modified_date' value='2012-08-24T00:00:00' />
       <column name='created_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='modified_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='campus_id' value='901e104b-4dc7-43f5-a38e-581015e204e1' />
@@ -898,10 +898,10 @@
       <column name='person_id' value='9cf20577-5db6-4e51-8352-98ef22ea0538' />
       <column name='course_name' value='Course Name3' />
       <column name='course_title' value='Course Title3' />
-      <column name='closed_date' value='Sat Sep 22 00:00:00 MST 2012' />
+      <column name='closed_date' value='2012-09-22T00:00:00' />
       <column name='closed_by_id' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
-      <column name='created_date' value='Fri Aug 24 00:00:00 MST 2012' />
-      <column name='modified_date' value='Fri Aug 24 00:00:00 MST 2012' />
+      <column name='created_date' value='2012-08-24T00:00:00' />
+      <column name='modified_date' value='2012-08-24T00:00:00' />
       <column name='created_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='modified_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='campus_id' value='901e104b-4dc7-43f5-a38e-581015e204e1' />
@@ -1091,8 +1091,8 @@
       <column name='person_id' value='fca06d1b-742a-46b2-b7d8-eb9efa738d07' />
       <column name='course_name' value='Course Name4' />
       <column name='course_title' value='Course Title4' />
-      <column name='created_date' value='Sat Aug 25 00:00:00 MST 2012' />
-      <column name='modified_date' value='Sat Aug 25 00:00:00 MST 2012' />
+      <column name='created_date' value='2012-08-25T00:00:00' />
+      <column name='modified_date' value='2012-08-25T00:00:00' />
       <column name='created_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='modified_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='campus_id' value='901e104b-4dc7-43f5-a38e-581015e204e1' />
@@ -1103,8 +1103,8 @@
       <column name='person_id' value='fca06d1b-742a-46b2-b7d8-eb9efa738d07' />
       <column name='course_name' value='Course Name4' />
       <column name='course_title' value='Course Title4' />
-      <column name='created_date' value='Sat Aug 25 00:00:00 MST 2012' />
-      <column name='modified_date' value='Sat Aug 25 00:00:00 MST 2012' />
+      <column name='created_date' value='2012-08-25T00:00:00' />
+      <column name='modified_date' value='2012-08-25T00:00:00' />
       <column name='created_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='modified_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='campus_id' value='901e104b-4dc7-43f5-a38e-581015e204e1' />
@@ -1131,8 +1131,8 @@
       <column name='person_id' value='fca06d1b-742a-46b2-b7d8-eb9efa738d07' />
       <column name='course_name' value='Course Name4' />
       <column name='course_title' value='Course Title4' />
-      <column name='created_date' value='Sat Aug 25 00:00:00 MST 2012' />
-      <column name='modified_date' value='Sat Aug 25 00:00:00 MST 2012' />
+      <column name='created_date' value='2012-08-25T00:00:00' />
+      <column name='modified_date' value='2012-08-25T00:00:00' />
       <column name='created_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='modified_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='campus_id' value='901e104b-4dc7-43f5-a38e-581015e204e1' />
@@ -1155,10 +1155,10 @@
       <column name='person_id' value='fca06d1b-742a-46b2-b7d8-eb9efa738d07' />
       <column name='course_name' value='Course Name4' />
       <column name='course_title' value='Course Title4' />
-      <column name='closed_date' value='Sun Sep 23 00:00:00 MST 2012' />
+      <column name='closed_date' value='2012-09-23T00:00:00' />
       <column name='closed_by_id' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
-      <column name='created_date' value='Sat Aug 25 00:00:00 MST 2012' />
-      <column name='modified_date' value='Sat Aug 25 00:00:00 MST 2012' />
+      <column name='created_date' value='2012-08-25T00:00:00' />
+      <column name='modified_date' value='2012-08-25T00:00:00' />
       <column name='created_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='modified_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='campus_id' value='901e104b-4dc7-43f5-a38e-581015e204e1' />
@@ -1173,8 +1173,8 @@
       <column name='person_id' value='fca06d1b-742a-46b2-b7d8-eb9efa738d07' />
       <column name='course_name' value='Course Name4' />
       <column name='course_title' value='Course Title4' />
-      <column name='created_date' value='Sat Aug 25 00:00:00 MST 2012' />
-      <column name='modified_date' value='Sat Aug 25 00:00:00 MST 2012' />
+      <column name='created_date' value='2012-08-25T00:00:00' />
+      <column name='modified_date' value='2012-08-25T00:00:00' />
       <column name='created_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='modified_by' value='47ccb6cd-9d7c-49ce-852d-9422aea5f9f3' />
       <column name='campus_id' value='901e104b-4dc7-43f5-a38e-581015e204e1' />

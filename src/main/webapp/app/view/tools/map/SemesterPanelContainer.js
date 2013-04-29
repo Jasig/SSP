@@ -20,10 +20,9 @@ Ext.define('Ssp.view.tools.map.SemesterPanelContainer', {
 	extend : 'Ext.form.Panel',
 	alias : 'widget.semesterpanelcontainer',
 	mixins : [ 'Deft.mixin.Injectable', 'Deft.mixin.Controllable' ],
-
+	controller:'Ssp.controller.tool.map.SemesterPanelContainerViewController',
 	inject : {
-		columnRendererUtils : 'columnRendererUtils'
-		//sspConfig : 'sspConfig'
+		appEventsController: 'appEventsController'
 	},
 	width : '100%',
 	height : '100%',
@@ -35,13 +34,15 @@ Ext.define('Ssp.view.tools.map.SemesterPanelContainer', {
 			bodyPadding : 0,
 			layout : 'fit',
             autoScroll : true,
+			itemId: 'semesterpanel',
+			store: me.store,
             defaults : {
                 anchor : '100% ,100%'
             },
 			items : [ {
 				xtype : 'container',
 				fieldLabel : '',
-				layout : 'hbox',
+				layout : 'vbox',
 				margin : '0 0 0 0',
 				padding : '2 2 2 2',
 				width : '100%',
@@ -49,125 +50,8 @@ Ext.define('Ssp.view.tools.map.SemesterPanelContainer', {
 				autoScroll : true,
 				autoHeight: true,
                 minHeight: 0,
+				itemId: "semestersets",
 				flex : 1,
-				items : [ {
-					xtype : 'fieldset',
-					border: 0,
-					title : '',
-					padding : '2 2 2 2',
-					margin : '0 0 0 0',
-					itemId : 'row1',
-					autoScroll: true,
-					flex : 1,
-					items : [ {
-						xtype : 'semesterpanel'
-
-					}, {
-						xtype : 'tbspacer',
-						height : '5'
-					}, {
-						xtype : 'semesterpanel'
-					}, {
-						xtype : 'tbspacer',
-						height : '5'
-					}, {
-						xtype : 'semesterpanel'
-					}, {
-						xtype : 'tbspacer',
-						height : '5'
-					}, {
-						xtype : 'semesterpanel'
-					}, {
-                        xtype : 'tbspacer',
-                        height : '5'
-                    }, {
-                        xtype : 'semesterpanel'
-                    }, {
-                        xtype : 'tbspacer',
-                        height : '5'
-                    }, {
-                        xtype : 'semesterpanel'
-                    } ]
-
-				}, {
-					xtype : 'fieldset',
-					border : 0,
-					title : '',
-					padding : '2 2 2 2',
-					margin : '0 0 0 0',
-					itemId : 'row2',
-					flex : 1,
-
-					items : [ {
-						xtype : 'semesterpanel'
-
-					}, {
-						xtype : 'tbspacer',
-						height : '5'
-					}, {
-						xtype : 'semesterpanel'
-					}, {
-						xtype : 'tbspacer',
-						height : '5'
-					}, {
-						xtype : 'semesterpanel'
-					}, {
-						xtype : 'tbspacer',
-						height : '5'
-					}, {
-						xtype : 'semesterpanel'
-					} , {
-                        xtype : 'tbspacer',
-                        height : '5'
-                    }, {
-                        xtype : 'semesterpanel'
-                    }, {
-                        xtype : 'tbspacer',
-                        height : '5'
-                    }, {
-                        xtype : 'semesterpanel'
-                    }]
-
-				}, {
-					xtype : 'fieldset',
-					border : 0,
-					title : '',
-					padding : '2 2 2 2',
-					margin : '0 0 0 0',
-					itemId : 'row3',
-					flex : 1,
-
-					items : [ {
-						xtype : 'semesterpanel'
-
-					}, {
-						xtype : 'tbspacer',
-						height : '5'
-					}, {
-						xtype : 'semesterpanel'
-					}, {
-						xtype : 'tbspacer',
-						height : '5'
-					}, {
-						xtype : 'semesterpanel'
-					}, {
-						xtype : 'tbspacer',
-						height : '5'
-					}, {
-						xtype : 'semesterpanel'
-					} , {
-                        xtype : 'tbspacer',
-                        height : '5'
-                    }, {
-                        xtype : 'semesterpanel'
-                    }, {
-                        xtype : 'tbspacer',
-                        height : '5'
-                    }, {
-                        xtype : 'semesterpanel'
-                    }]
-
-				} ]
 			} ]
 		});
 

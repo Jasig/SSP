@@ -19,11 +19,17 @@ public class ExternalCourseTerm extends AbstractExternalData implements External
 
 	private static final long serialVersionUID = 1529384456357160956L;
 	
-	@Column(nullable = false, length = 20)
+	@Column(nullable = false, length = 50)
 	@NotNull
 	@NotEmpty
-	@Size(max = 20)
-	private String courseCode,termCode;
+	@Size(max = 50)
+	private String courseCode;
+
+	@Column(nullable = false, length = 25)
+	@NotNull
+	@NotEmpty
+	@Size(max = 25)
+	private String termCode;
 	
 
 	public String getCourseCode() {

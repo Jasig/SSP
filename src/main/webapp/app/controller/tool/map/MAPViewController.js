@@ -21,12 +21,14 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	appEventsController: 'appEventsController'
-       
+    	appEventsController: 'appEventsController',
+		columnRendererUtils : 'columnRendererUtils',
+    	currentMapPlan: 'currentMapPlan'
     },
     control: {
     	'planFAButton': {
     	   selector: '#planFAButton',
+    	   hidden: true,
     	   listeners: {
             click: 'onFAButtonClick'
            }
@@ -34,6 +36,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
         
         'planNotesButton':{
          selector: '#planNotesButton',
+         hidden: true,
            listeners: {
             click: 'onplanNotesButtonClick'
            }
@@ -41,6 +44,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
         
         'loadSavedPlanButton':{
            selector: '#loadSavedPlanButton',
+           hidden: true,
            listeners: {
             click: 'onloadSavedPlanButtonClick'
            }
@@ -48,6 +52,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
         
         'loadTemplateButton':{
            selector: '#loadTemplateButton',
+           hidden: true,
            listeners: {
             click: 'onloadTemplateButtonClick'
            }
@@ -60,13 +65,18 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
            }
         },
         
-        'savePlanButton':{
-           selector: '#savePlanButton',
+        'savePlanAsButton':{
+           selector: '#savePlanAsButton',
            listeners: {
-            click: 'onsavePlanButtonClick'
+            click: 'onsavePlanAsButtonClick'
            }
         },
-        
+        'savePlanButton':{
+            selector: '#savePlanButton',
+            listeners: {
+             click: 'onsavePlanButtonClick'
+            }
+         },       
         'emailPlanButton':{
            selector: '#emailPlanButton',
            listeners: {
@@ -79,88 +89,127 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
            listeners: {
             click: 'onprintPlanButtonClick'
            }
+        },
+		'createNewPlanButton':{
+           selector: '#createNewPlanButton',
+           listeners: {
+              click: 'oncreateNewMapPlanButton'
+           }
         }
     },
-    
+    resetForm: function() {
+        var me = this;
+        me.getView().getForm().reset();
+    },
 	init: function() {
 		var me=this;
+		var view = me.getView();
 		
-		
+		if(me.currentMapPlan.get('id') == '')
+			me.getView().queryById('savePlanButton').hide();
+		else
+			me.getView().queryById('savePlanButton').show();
 		return this.callParent(arguments);
     },
+
     
     onFAButtonClick: function(button){
         var me=this;
-        var faPopUp = Ext.create('Ssp.view.tools.map.FAView');
-        faPopUp.setPosition(300,50);
-        faPopUp.show();
- 
+		if(me.faPopUp == null || me.faPopUp.isDestroyed)
+       		me.faPopUp = Ext.create('Ssp.view.tools.map.FAView',{hidden:true});
+		me.faPopUp.show();
     },
     
     onplanNotesButtonClick: function(button){
         var me=this;
-        var notestPopUp = Ext.create('Ssp.view.tools.map.PlanNotes');
-        notestPopUp.setPosition(300,50);
-        notestPopUp.show();
- 
+		if(me.notesPopUp == null || me.notesPopUp.isDestroyed)
+       		me.notesPopUp = Ext.create('Ssp.view.tools.map.PlanNotes',{hidden:true});
+		me.notesPopUp.show();
     },
     
     onloadSavedPlanButtonClick: function(button){
-        var me=this;
-        var allPlansPopUp = Ext.create('Ssp.view.tools.map.LoadPlans');
-        allPlansPopUp.setPosition(300,50);
-        allPlansPopUp.show();
- 
+        var me=this; 
+		me.allPlansPopUp = Ext.create('Ssp.view.tools.map.LoadPlans',{hidden:true});
+		me.allPlansPopUp.show();
     },
     
     onloadTemplateButtonClick: function(button){
         var me=this;
-        var allTemplatesPopUp = Ext.create('Ssp.view.tools.map.LoadTemplates');
-        allTemplatesPopUp.setPosition(300,50);
-        allTemplatesPopUp.show();
- 
+        if(me.allTemplatesPopUp == null || me.allTemplatesPopUp.isDestroyed)
+			me.allTemplatesPopUp = Ext.create('Ssp.view.tools.map.LoadTemplates',{hidden:true});
+		me.allTemplatesPopUp.show();
     },
     
     onsaveTemplateButtonClick: function(button){
         var me=this;
-        var saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate');
-        saveTemplatePopUp.setPosition(300,50);
-        saveTemplatePopUp.show();
- 
+		if(me.saveTemplatePopUp == null || me.saveTemplatePopUp.isDestroyed)
+         	me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true});
+		 me.saveTemplatePopUp.show();
     },
     
     onsavePlanButtonClick: function(button){
         var me=this;
-        var savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan');
-        savePlanPopUp.setPosition(300,50);
-        savePlanPopUp.show();
- 
+        me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+		me.savePlanPopUp.show();
+    },
+
+    onsavePlanAsButtonClick: function(button){
+        var me=this;
+        me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:true});
+		me.savePlanPopUp.show();
     },
     
     onemailPlanButtonClick: function(button){
         var me=this;
-        var emailPlanPopUp = Ext.create('Ssp.view.tools.map.EmailPlan');
-        emailPlanPopUp.setPosition(300,50);
-        emailPlanPopUp.show();
- 
+		if(me.emailPlanPopUp == null || me.emailPlanPopUp.isDestroyed)
+         	me.emailPlanPopUp = Ext.create('Ssp.view.tools.map.EmailPlan',{hidden:true});
+		me.emailPlanPopUp.show();
     },
     
     onprintPlanButtonClick: function(button){
         var me=this;
-        var printPlanPopUp = Ext.create('Ssp.view.tools.map.PrintPlan');
-        printPlanPopUp.setPosition(300,50);
-        printPlanPopUp.show();
- 
+		if(me.printPlanPopUp == null || me.printPlanPopUp.isDestroyed){
+			me.printPlanPopUp = Ext.create('Ssp.view.tools.map.PrintPlan',{hidden:true});
+		}
+		me.printPlanPopUp.printEvent = 'onPrintMapPlan';	
+		me.printPlanPopUp.show();
     },
     
     ontermNotesButtonClick: function(button){
         var me=this;
-        var termNotesPopUp = Ext.create('Ssp.view.tools.map.CourseNotes');
-        termNotesPopUp.setPosition(300,50);
-        termNotesPopUp.show();
- 
-    }
+		if(me.termNotesPopUp == null || me.termNotesPopUp.isDestroyed)
+        	me.termNotesPopUp = Ext.create('Ssp.view.tools.map.CourseNotes',{hidden:true});
+		me.termNotesPopUp.show();
+    },
 
-	
+	oncreateNewMapPlanButton: function(button){
+        var me=this;
+		this.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
+    },
+    
+
+	destroy:function(){
+	    var me=this;
+		if(me.faPopUp != null && !me.faPopUp.isDestroyed)
+			me.faPopUp.close();
+		if(me.notesPopUp != null && !me.notesPopUp.isDestroyed)
+	    	me.notesPopUp.close();
+	    //me.allPlansPopUp.close();
+		if(me.allTemplatesPopUp != null && !me.allTemplatesPopUp.isDestroyed)
+	    	me.allTemplatesPopUp.close();
+		if(me.saveTemplatePopUp != null && !me.saveTemplatePopUp.isDestroyed)
+	    	me.saveTemplatePopUp.close();
+		if(me.savePlanPopUp != null && !me.savePlanPopUp.isDestroyed)
+	    	me.savePlanPopUp.close();
+		if(me.emailPlanPopUp != null && !me.emailPlanPopUp.isDestroyed)
+	    	me.emailPlanPopUp.close();
+		if(me.printPlanPopUp != null && !me.printPlanPopUp.isDestroyed)
+	    	me.printPlanPopUp.close();
+		if(me.termNotesPopUp != null && !me.termNotesPopUp.isDestroyed)
+	    	me.termNotesPopUp.close();
+		if(me.allPlansPopUp != null && !me.allPlansPopUp.isDestroyed)
+		    me.allPlansPopUp.close();
+	    return me.callParent( arguments );
+	}
 	
 });

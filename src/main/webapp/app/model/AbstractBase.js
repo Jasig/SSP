@@ -34,12 +34,11 @@ Ext.define('Ssp.model.AbstractBase', {
  		                        lastName: value.lastName || ''};	
  		            return obj;
  		      }
-             }
-             ,{name: 'createdDate', type: 'date', dateFormat: 'time'}
+             },
+             {name: 'createdDate', type: 'date', dateFormat: 'time'},
              /*,{name: 'objectStatus', type: 'string'}*/
-             /*,
-             {name: 'modifiedDate', type: 'date', dateFormat: 'time'},
-             */],
+              {name: 'modifiedDate', type: 'date', dateFormat: 'time'},
+             ],
     
 	populateFromGenericObject: function( record ){
 		if (record != null)
@@ -60,6 +59,14 @@ Ext.define('Ssp.model.AbstractBase', {
 
     getCreatedById: function(){
     	return this.get('createdBy').id + ' ' + this.get('createdBy').id;
-    }
+    },
+    
+    getFormattedCreatedDate: function(){
+    	return Ext.util.Format.date( this.get('createdDate'),'m/d/Y');   	
+    },
+    
+    getFormattedModifiedDate: function(){
+    	return Ext.util.Format.date( this.get('createdDate'),'m/d/Y');   	
+    },
 
 });

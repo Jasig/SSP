@@ -1,0 +1,880 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+					 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					 xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<!-- Fixes up timestamps in SQLServer 'datetime' fields in "internal" db
+	tables that were present in 1.1. We're trying to keep changesets separate
+	for the various minor releases to make back-porting a little easier. These
+	migrations can only be applied once per field, so we can't just have one
+	monster changeset lurking in the upgrade path that will "accidentally"
+	reapply all the fixups that might have already been applied in a previous
+	upgrade.
+
+	This deliberately excludes migrations of fields for which handling
+	is still somewhat in doubt and any external tables. Specifically:
+
+		task.due_date
+		journal_entry.entry_date
+		external_term.start_date
+		external_term.end_date
+
+	See https://issues.jasig.org/browse/SSP-1080 for more on those fields
+	and similar problems in fields added layer.
+
+	Unlike Postgres, none of our SQLServer date/time columns have included
+	timezone data. So this also migrates several fields using this same
+	MSSQLDateTimeTimezoneRefactor approach that, for Postgres, require special
+	handling. These would be the so-called "audit timestamp" fields on the
+	following tables:
+
+		person
+		challenge_challenge_referral
+		person_staff_details
+	-->
+
+	<changeSet id='refactor 1.1 timestamps (mssql)' author='dan.mccallum' dbms='mssql'>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='appointment' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='appointment' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='appointment' />
+			<param name='columnName' value='start_time' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='appointment' />
+			<param name='columnName' value='end_time' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='campus' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='campus' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='category' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='category' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='challenge' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='challenge' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='challenge_category' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='challenge_category' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='challenge_referral' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='challenge_referral' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='child_care_arrangement' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='child_care_arrangement' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='citizenship' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='citizenship' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='confidentiality_disclosure_agreement' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='confidentiality_disclosure_agreement' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='confidentiality_level' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='confidentiality_level' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='config' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='config' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='early_alert' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='early_alert' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='early_alert_outcome' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='early_alert_outcome' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='early_alert_outreach' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='early_alert_outreach' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='early_alert_reason' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='early_alert_reason' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='early_alert_referral' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='early_alert_referral' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='early_alert_response' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='early_alert_response' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='early_alert_routing' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='early_alert_routing' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='early_alert_suggestion' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='early_alert_suggestion' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='education_goal' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='education_goal' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='education_level' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='education_level' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='ethnicity' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='ethnicity' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='funding_source' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='funding_source' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='goal' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='goal' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='journal_entry' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='journal_entry' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='journal_entry_detail' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='journal_entry_detail' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='journal_source' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='journal_source' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='journal_step' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='journal_step' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='journal_step_detail' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='journal_step_detail' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='journal_step_journal_step_detail' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='journal_step_journal_step_detail' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='journal_track' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='journal_track' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='journal_track_journal_step' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='journal_track_journal_step' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='marital_status' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='marital_status' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='message' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='message' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='message' />
+			<param name='columnName' value='sent_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='message_template' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='message_template' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person' />
+			<param name='columnName' value='student_intake_request_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person' />
+			<param name='columnName' value='student_intake_complete_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_challenge' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_challenge' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_confidentiality_disclosure_agreement' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_confidentiality_disclosure_agreement' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_demographics' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_demographics' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_education_goal' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_education_goal' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_education_level' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_education_level' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_education_plan' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_education_plan' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_funding_source' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_funding_source' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_program_status' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_program_status' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_program_status' />
+			<param name='columnName' value='effective_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_program_status' />
+			<param name='columnName' value='expiration_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_referral_source' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_referral_source' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_service_reason' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_service_reason' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_special_service_group' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_special_service_group' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_tool' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_tool' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='program_status' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='program_status' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='program_status_change_reason' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='program_status_change_reason' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='referral_source' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='referral_source' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='self_help_guide' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='self_help_guide' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='self_help_guide_group' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='self_help_guide_group' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='self_help_guide_question' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='self_help_guide_question' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='self_help_guide_question_response' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='self_help_guide_question_response' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='self_help_guide_response' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='self_help_guide_response' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='service_reason' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='service_reason' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='special_service_group' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='special_service_group' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='student_status' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='student_status' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='student_type' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='student_type' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='task' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='task' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='task' />
+			<param name='columnName' value='completed_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='task' />
+			<param name='columnName' value='reminder_sent_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='veteran_status' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='veteran_status' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='challenge_challenge_referral' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='challenge_challenge_referral' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_staff_details' />
+			<param name='columnName' value='created_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
+			<param name='tableName' value='person_staff_details' />
+			<param name='columnName' value='modified_date' />
+			<param name='origTimeZoneId' value='${database.timezone.legacy}' />
+			<param name='newTimeZoneId' value='${database.timezone}' />
+		</customChange>
+	</changeSet>
+</databaseChangeLog>

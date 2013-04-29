@@ -77,10 +77,12 @@ public class PlanTOFactoryImpl extends AbstractAuditableTOFactory<PlanTO, Plan>
 		model.setOwner(getPersonService().get(UUID.fromString(tObject.getOwnerId())));
 		model.setPerson(getPersonService().get(UUID.fromString(tObject.getPersonId())));
 		model.setName(tObject.getName());
+		model.getPlanCourses().clear();
 		List<PlanCourseTO> planCourses = tObject.getPlanCourses();
 		for (PlanCourseTO planCourseTO : planCourses) {
 			PlanCourse planCourse = getPlanCourseTOFactory().from(planCourseTO);
 			planCourse.setPlan(model);
+			planCourse.setPerson(model.getPerson());
 			model.getPlanCourses().add(planCourse);
 		}
 		return model;

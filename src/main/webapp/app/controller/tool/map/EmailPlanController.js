@@ -44,7 +44,7 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
     
 	init: function() {
 		var me=this;
-		me.optionsEmailView().hide();
+		me.getOptionsEmailView().hide();
 		
 		return this.callParent(arguments);
     },
@@ -52,7 +52,7 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
     onoptionsEmailFormatClick: function(cb, nv, ov){
         var me=this;
         if (nv){
-        me.optionsEmailView().show();
+        me.getOptionsEmailView().show();
         }
     
     },
@@ -60,12 +60,8 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
     onemailmatrixFormatClick: function(cb, nv, ov){
         var me=this;
         if (nv){
-        me.optionsEmailView().hide();
+        me.getOptionsEmailView().hide();
         }
     }
-    
-    
-
-	
 	
 });

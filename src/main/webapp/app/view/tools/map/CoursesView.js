@@ -20,7 +20,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
     extend: 'Ext.form.Panel',
     alias: 'widget.coursesview',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
+    //controller: 'Ssp.controller.tool.map.CoursesViewController',
     
     width: '100%',
     height: '100%',
@@ -62,7 +62,9 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                         queryMode: 'local',
                         allowBlank: true,
                         itemId: 'coursesTypeCombo',
-                        width: 285
+                        width: 285,
+						hidden: true,
+						hideable: false
                     }]
                 
                     },
@@ -91,7 +93,9 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                         queryMode: 'local',
                         allowBlank: true,
                         itemId: 'programCombo',
-                        width: 260
+                        width: 260,
+						hidden: true,
+						hideable: false
                     }, {
                         tooltip: 'Reset to All Programs',
                         text: '',
@@ -99,7 +103,9 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                         height: 25,
                         cls: 'mapClearSearchIcon',
                         xtype: 'button',
-                        itemId: 'cancelProgramSearchButton'
+                        itemId: 'cancelProgramSearchButton',
+						hidden: true,
+						hideable: false
                     }]
                 
                 }, {
@@ -126,7 +132,9 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                         queryMode: 'local',
                         allowBlank: true,
                         itemId: 'transferCombo',
-                        width: 260
+                        width: 260,
+						hidden: true,
+						hideable: false
                     }, {
                         tooltip: 'Reset to All Transfer Types',
                         text: '',
@@ -134,7 +142,9 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                         height: 25,
                         cls: 'mapClearSearchIcon',
                         xtype: 'button',
-                        itemId: 'cancelTransferSearchButton'
+                        itemId: 'cancelTransferSearchButton',
+						hidden: true,
+						hideable: false
                     }]
                 
                 }, {
@@ -157,11 +167,22 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 					
 					{
                        fieldLabel: 'Filter By',
+						xtype:"textfield",
                         name: 'filterBy',
                         itemId: 'filterBy',
                         maxLength: 50,
                         allowBlank:true,
-						labelWidth:50
+						labelWidth:50,
+						enableKeyEvents:true,
+						listeners:{
+							keyup: function(textField, e, eOpts) {
+								var me = this;
+		                        var searchString = textField.getValue().trim();
+		                        var coursesGrid = me.findParentByType('coursesview').query('#coursesGrid')[0];
+								coursesGrid.getStore().filterBy(getFilterRecord(['title', 'formattedCourse'], searchString)); 
+		                    }
+						},
+						
                     }, {
                         tooltip: 'Clear Filter',
                         text: '',
@@ -169,26 +190,22 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                         height: 25,
                         cls: 'mapClearSearchIcon',
                         xtype: 'button',
-                        itemId: 'cancelFilterButton'
+                        itemId: 'cancelFilterButton',
+						listeners:{
+							click : function(cancelButton, t, opts) {
+								var me = this;
+								var parent =  cancelButton.findParentByType("fieldset");
+								var filterBy = parent.getComponent("filterBy");
+								filterBy.setValue("");
+								var coursesGrid = me.findParentByType('coursesview').query('#coursesGrid')[0];
+								coursesGrid.getStore().filterBy(getFilterRecord(['title', 'formattedCourse'], "")); 
+		                    }
+						},
                     }]
                 
                 },
                 {
-                    xtype : 'container',
-                    flex: 1,
-                    width: '100%',
-                    height: '100%',
-                    layout: 'card',
-                    //autoScroll: true,
-                    items : [
-                        {xtype:'coursesgrid', itemId:'allcoursesgrid', flex:1},
-                        {xtype:'coursesgrid', itemId:'electivesgrid', flex:1},
-                        {xtype:'coursesgrid', itemId:'defined1grid', flex:1},
-                        {xtype:'coursesgrid', itemId:'defined2grid', flex:1},
-                        {xtype:'coursesgrid', itemId:'defined3grid', flex:1},
-                        {xtype:'coursesgrid', itemId:'holdcoursesgrid', flex:1}
-                        
-                    ]
+                    xtype : 'coursesgridpanel',
                 }
             
                 ]
@@ -200,6 +217,35 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
         });
         
         return me.callParent(arguments);
-    }
-    
+    },
 });
+
+function getFilterRecord(fields, searchString){
+	var f = [];
+	f.push({
+		filter: function(record){
+			return filterString(searchString, fields, record);
+		}
+	});
+	var len = f.length;
+	return function(record){
+		for (var i = 0; i < len; i++){
+			if(!f[i].filter(record)){
+				return false;
+			}
+		}
+		return true;
+	}
+}
+
+function filterString(value, fields, record){
+	var matches = false;
+	fields.forEach(function(field){
+		var val = record.get(field);
+		if (typeof val == "string"){
+			if(val.toLowerCase().indexOf(value.toLowerCase()) > -1)
+				matches = true;
+		}
+	});
+	return matches;
+}

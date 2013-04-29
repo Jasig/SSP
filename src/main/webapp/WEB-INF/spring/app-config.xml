@@ -88,6 +88,8 @@
 				<entry key="database.admin.username" value="#{configProperties.db_admin_username}" />
 				<entry key="set.mssql.snapshot.isolation" value="#{configProperties.db_liquibase_set_mssql_snapshot_isolation}" />
 				<entry key="strip.journal.comment.markup" value="#{configProperties.db_liquibase_strip_journal_comment_markup}" />
+				<entry key="database.timezone.legacy" value="#{configProperties.db_time_zone_legacy}" />
+				<entry key="database.timezone" value="#{configProperties.db_time_zone}" />
 			</util:map>
 		</property>
 	</bean>
@@ -103,10 +105,12 @@
 	<bean id="uuidCustomType" class="org.jasig.ssp.util.uuid.UUIDCustomTypeSetup"
 		init-method="initSettings" />
 
+	<bean id="sspTimeZones" class="org.jasig.ssp.util.SspTimeZones" />
+
 	<!-- Hibernate Session Factory -->
 	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
-		depends-on="liquibase,uuidCustomType">
+		class="org.jasig.ssp.util.hibernate.TypeRegistryOverridingLocalSessionFactoryBean"
+		depends-on="sspTimeZones,liquibase,uuidCustomType">
 		<property name="dataSource" ref="sspDataSource" />
 		<property name="packagesToScan" value="org.jasig.ssp.model" />
 		<property name="entityInterceptor">
@@ -120,6 +124,20 @@
 		</property>
 		<property name="namingStrategy">
 			<bean class="org.hibernate.cfg.ImprovedNamingStrategy" />
+		</property>
+		<property name="basicTypeOverrides">
+			<list>
+				<bean class="org.jasig.ssp.util.hibernate.ConfigurableTimestampType">
+					<constructor-arg type="org.hibernate.type.descriptor.sql.TimestampTypeDescriptor">
+						<bean class="org.jasig.ssp.util.hibernate.SspTimestampTypeDescriptor" />
+					</constructor-arg>
+				</bean>
+				<bean class="org.jasig.ssp.util.hibernate.ConfigurableDateType">
+					<constructor-arg type="org.hibernate.type.descriptor.sql.DateTypeDescriptor">
+						<bean class="org.jasig.ssp.util.hibernate.SspDateTypeDescriptor" />
+					</constructor-arg>
+				</bean>
+			</list>
 		</property>
 	</bean>
 

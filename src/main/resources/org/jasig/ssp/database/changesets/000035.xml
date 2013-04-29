@@ -1,0 +1,107 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<!-- Fixes up timestamps in Postgres 'timestamp without time zone'
+	fields in "internal" db tables that were present in 1.2. We're trying
+	to keep changesets separate for the various minor releases to make
+	back-porting a little easier. These migrations can only be applied once
+	per field, so we can't just have one monster changeset lurking in the
+	upgrade path that will "accidentally" reapply all the fixups that
+	might have already been applied in a previous upgrade. -->
+	<changeSet id='refactor 1.2 timestamps (pg)' author='dan.mccallum' dbms='postgresql'>
+		<update tableName='campus_service'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='campus_service'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='disability_accommodation'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='disability_accommodation'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='disability_agency'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='disability_agency'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='disability_status'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='disability_status'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='disability_type'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='disability_type'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='lassi'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='lassi'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='military_affiliation'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='military_affiliation'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_disability'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_disability'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_disability_accommodation'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_disability_accommodation'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_disability_agency'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_disability_agency'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_disability_type'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='person_disability_type'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='personality_type'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='personality_type'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+	</changeSet>
+</databaseChangeLog>

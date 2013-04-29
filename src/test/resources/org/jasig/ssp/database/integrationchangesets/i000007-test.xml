@@ -184,7 +184,7 @@
       <column name='test_code'>HT0_0</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -263,7 +263,7 @@
       <column name='test_code'>HT0_1</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -342,7 +342,7 @@
       <column name='test_code'>HT0_2</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -433,7 +433,7 @@
       <column name='test_code'>HT1_0</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -512,7 +512,7 @@
       <column name='test_code'>HT1_1</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -591,7 +591,7 @@
       <column name='test_code'>HT1_2</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -682,7 +682,7 @@
       <column name='test_code'>HT2_0</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -761,7 +761,7 @@
       <column name='test_code'>HT2_1</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -840,7 +840,7 @@
       <column name='test_code'>HT2_2</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -931,7 +931,7 @@
       <column name='test_code'>HT3_0</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -1010,7 +1010,7 @@
       <column name='test_code'>HT3_1</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -1089,7 +1089,7 @@
       <column name='test_code'>HT3_2</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -1180,7 +1180,7 @@
       <column name='test_code'>HT4_0</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -1259,7 +1259,7 @@
       <column name='test_code'>HT4_1</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -1338,7 +1338,7 @@
       <column name='test_code'>HT4_2</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -1510,7 +1510,7 @@
       <column name='test_code'>HT0_0</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -1589,7 +1589,7 @@
       <column name='test_code'>HT0_1</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -1668,7 +1668,7 @@
       <column name='test_code'>HT0_2</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -1759,7 +1759,7 @@
       <column name='test_code'>HT1_0</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -1838,7 +1838,7 @@
       <column name='test_code'>HT1_1</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -1917,7 +1917,7 @@
       <column name='test_code'>HT1_2</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -2008,7 +2008,7 @@
       <column name='test_code'>HT2_0</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -2087,7 +2087,7 @@
       <column name='test_code'>HT2_1</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -2166,7 +2166,7 @@
       <column name='test_code'>HT2_2</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -2257,7 +2257,7 @@
       <column name='test_code'>HT3_0</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -2336,7 +2336,7 @@
       <column name='test_code'>HT3_1</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -2415,7 +2415,7 @@
       <column name='test_code'>HT3_2</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -2506,7 +2506,7 @@
       <column name='test_code'>HT4_0</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -2585,7 +2585,7 @@
       <column name='test_code'>HT4_1</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>
@@ -2664,7 +2664,7 @@
       <column name='test_code'>HT4_2</column>
       <column name='sub_test_code' />
       <column name='sub_test_name' />
-      <column name='test_date'>Wed Feb 27 11:33:36 MST 2013</column>
+      <column name='test_date'>2013-02-27T11:33:36</column>
       <column name='score'>95</column>
       <column name='status'>good</column>
     </insert>

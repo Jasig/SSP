@@ -48,11 +48,6 @@ Ext.define('Ssp.service.TranscriptService', {
 		me.doGet(personId, callbacks,  me.getBaseUrl( personId ) + "/term" );
     },
     
-    getRecentStudentActivity: function( personId, callbacks ){
-        var me = this;
-		me.doGet(personId, callbacks,  me.getBaseUrl( personId ) + "/recentstudentactivity" );
-    },
-    
     getCurrentCourses: function( personId, callbacks ){
         var me = this;
 		me.doGet(personId, callbacks,  me.getBaseUrl( personId ) + "/currentcourses" );

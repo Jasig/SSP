@@ -28,7 +28,8 @@ Ext.define('Ssp.model.external.FinancialAid', {
              {name: 'fafsaDate', type: 'date', dateFormat: 'time'},
              {name: 'currentYearFinancialAidAward', type: 'string'},
              {name: 'financialAidRemaining', type: 'auto'},
-             {name: 'originalLoanAmount', type: 'auto'}
+             {name: 'originalLoanAmount', type: 'auto'},
+             {name: 'balanceOwed', type: 'auto'}
              ],
 
 });
