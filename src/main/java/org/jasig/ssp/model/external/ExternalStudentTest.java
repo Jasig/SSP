@@ -74,7 +74,7 @@ public class ExternalStudentTest extends AbstractExternalData implements
 	/**
 	 * Entity creation time stamp.
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@Column(nullable = false, updatable = false)
 	private Date testDate;
 	
