@@ -106,7 +106,10 @@ Ext.define('Ssp.controller.ToolsViewController', {
         var comp;
 
 		//TAKE OUT LEGACY AND DOCUMENTS GRANT
-        if (me.authenticatedPerson.hasAccess(toolType.toUpperCase() + '_TOOL')) {
+        if ( // TODO MAP HACK FOR DEV. TAKE THE UNCONDITIONAL MAP GRANT OUT!!
+			toolType.toUpperCase() === "LEGACYREMARKS" ||
+			toolType.toUpperCase() === "DOCUMENTS" ||
+            me.authenticatedPerson.hasAccess(toolType.toUpperCase() + '_TOOL')) {
             comp = me.formUtils.loadDisplay('tools', toolType, true, {});
         }
         else {
