@@ -181,10 +181,9 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         name: 'creditHoursAttempted',
                         itemId: 'creditHoursAttempted'
                     }, {
-                        fieldLabel: '<a href="">Comp Rate</a>',
+                        fieldLabel: 'Comp Rate',
                         name: 'creditCompletionRate',
-                        itemId: 'creditCompletionRate',
-                        labelWidth: 68
+                        itemId: 'creditCompletionRate'
                     }, {
                         fieldLabel: 'Transfer Hrs',
                         name: 'transferHrs',
@@ -199,7 +198,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         fieldLabel: 'Payment',
                         name: 'paymentStatus',
                         itemId: 'paymentStatus',
-                        labelWidth: 80
+                        labelWidth: 50
                     }, {
                         fieldLabel: 'Balance',
                         name: 'balanceOwed',

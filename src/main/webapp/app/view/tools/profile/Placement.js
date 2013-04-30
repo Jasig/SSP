@@ -36,23 +36,27 @@ Ext.define('Ssp.view.tools.profile.Placement', {
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'type',
-                    text: 'Type'
+                    text: 'Type',
+					flex: 1
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'score',
-                    text: 'Score'
+                    text: 'Score',
+					flex: 1
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'status',
-                    text: 'Status'
+                    text: 'Status',
+					flex: 1
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'takenDate',
                     text: 'Date',
-					renderer: Ext.util.Format.dateRenderer('m/d/Y')
+					renderer: Ext.util.Format.dateRenderer('m/d/Y'),
+					flex: 1
                 }
             ],
             viewConfig: {
