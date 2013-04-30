@@ -28,7 +28,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
     layout: {
                 type: 'fit'
             },
-	height: 168,
+	height: 200,
 	width: 225,
     initComponent: function(){
         var me = this;
