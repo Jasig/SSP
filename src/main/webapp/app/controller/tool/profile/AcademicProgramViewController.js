@@ -238,7 +238,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 
 	destroy: function() {
         var me=this;
-		me.appEventsController.removeEvent({eventName: 'onPrintCurrentMapPlan', callBackFunc: me.onPrintMapPlan, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onPrintCurrentMapPlan', callBackFunc: me.onPrintCurrentMapPlan, scope: me});
 		if(me.emailPlanPopUp != null && !me.emailPlanPopUp.isDestroyed)
 	    	me.emailPlanPopUp.close();
 		if(me.printPlanPopUp != null && !me.printPlanPopUp.isDestroyed)
