@@ -2818,7 +2818,7 @@ public class StudentIntakeFormManager { // NOPMD
 		graduationDateQuestion.setLabel("Anticipated Graduation Date");
 		graduationDateQuestion
 				.setOptions(graduationDateQuestionOptions);
-		graduationDateQuestion.setType(FORM_TYPE_RADIOLIST);
+		graduationDateQuestion.setType(FORM_TYPE_SELECT);
 
 		eduGoalSectionQuestions.add(graduationDateQuestion);	
 		
