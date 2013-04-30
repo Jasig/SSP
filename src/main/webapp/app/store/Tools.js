@@ -67,7 +67,11 @@ Ext.define('Ssp.store.Tools', {
     	
     	Ext.Array.each( tools, function( tool, index){
     		var toolSecurityIdentifier = tool.toolType.toUpperCase() + '_TOOL';
-    		if (me.authenticatedPerson.hasAccess( toolSecurityIdentifier ) )
+            // TODO MAP HACK FOR DEV. TAKE THE UNCONDITIONAL MAP GRANT OUT!!
+			//TAKE OUT LEGACY AND DOCUMENTS GRANT
+    		if ( toolSecurityIdentifier === "LEGACYREMARKS_TOOL" ||
+				toolSecurityIdentifier === "DOCUMENTS_TOOL" ||
+                me.authenticatedPerson.hasAccess( toolSecurityIdentifier ) )
     		{
     			sspSecureTools.push( tool );
     		}
