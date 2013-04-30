@@ -206,6 +206,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.currentMapPlan.set('ownerId',  me.authenticatedPerson.get('id'));
 		me.currentMapPlan.set('name','New Plan');
 		me.onCreateMapPlan();
+		me.populatePlanStores();
+		me.updateAllPlanHours();
 	},
 
 
@@ -268,8 +270,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			});
 		});
 		me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
-		me.appEventsController.getApplication().fireEvent("onUpdateSaveOption");
-		
 		me.getView().setLoading(false);
     },
 	
