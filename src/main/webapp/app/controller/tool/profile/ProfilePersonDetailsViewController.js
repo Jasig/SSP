@@ -243,7 +243,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         	me.getSapStatusField().setFieldLabel('');
 			me.getSapStatusField().setValue('<span style="color:#15428B">SAP:  </span>' + financialAid.sapStatus);
         	me.getFafsaDateField().setFieldLabel('');
-			me.getFafsaDateField().setValue('<span style="color:#15428B">FAFSA:  </span>' + Ext.util.Format.date(new Date(financialAid.fafsaDate),'m/d/Y'));
+			me.getFafsaDateField().setValue('<span style="color:#15428B">FAFSA:  </span>' + Ext.util.Format.date(Ext.Date.parse(financialAid.fafsaDate, 'c'),'m/d/Y'));
         	me.getBalanceOwedField().setFieldLabel('');
 			me.getBalanceOwedField().setValue('<span style="color:#15428B">Balance:  </span>' + Ext.util.Format.usMoney(financialAid.balanceOwed));
         	me.getFinancialAidRemainingField().setFieldLabel('');

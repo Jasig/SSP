@@ -25,7 +25,7 @@ Ext.define('Ssp.model.external.FinancialAid', {
              {name: 'neededFor67PtcCompletion', type: 'auto'},
              {name: 'currentYearFinancialAidAward', type: 'string'},
              {name: 'sapStatus', type: 'string'},
-             {name: 'fafsaDate', type: 'date', dateFormat: 'time'},
+             {name: 'fafsaDate', type: 'date', dateFormat: 'c'},
              {name: 'currentYearFinancialAidAward', type: 'string'},
              {name: 'financialAidRemaining', type: 'auto'},
              {name: 'originalLoanAmount', type: 'auto'},

@@ -22,7 +22,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
 
 public class ExternalStudentFinancialAidTO implements Serializable,
 		ExternalDataTO<ExternalStudentFinancialAid> {
@@ -45,7 +49,9 @@ public class ExternalStudentFinancialAidTO implements Serializable,
 	String currentYearFinancialAidAward;
 	
 	String sapStatus;
-	
+
+	@JsonSerialize(using = DateOnlySerializer.class)
+	@JsonDeserialize(using = DateOnlyDeserializer.class)
 	Date fafsaDate;
 	
 	BigDecimal financialAidRemaining;

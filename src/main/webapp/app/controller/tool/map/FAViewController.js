@@ -134,7 +134,7 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
         	me.getSapStatusField().setValue(financialAid.sapStatus);
         	
         	me.getSapStatusField().setValue(financialAid.sapStatus);
-        	me.getFafsaDateField().setValue(Ext.util.Format.date(new Date(financialAid.fafsaDate),'m/d/Y'));
+        	me.getFafsaDateField().setValue(Ext.util.Format.date(Ext.Date.parse(financialAid.fafsaDate, 'c'),'m/d/Y'));
         	me.getBalanceOwedField().setValue(Ext.util.Format.usMoney(financialAid.balanceOwed));
         	me.getFinancialAidRemainingField().setValue(Ext.util.Format.usMoney(financialAid.financialAidRemaining));
         	me.getOriginalLoanAmountField().setValue(Ext.util.Format.usMoney(financialAid.originalLoanAmount));
