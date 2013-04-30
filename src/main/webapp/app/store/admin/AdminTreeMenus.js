@@ -442,8 +442,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
                 form: '',
                 expanded: false,
                 children: [{
-    				text: 'Elective Types',
-    				title: 'Elective Types',
+    				text: 'Electives',
+    				title: 'Electives',
     				store: 'elective',
     				//storeLoadOptions: { params: { status: 'ALL', sort: 'sortOrder' } }, //this logic performed on backend, though client side logic is still in place. 
     				interfaceOptions: {
