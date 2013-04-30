@@ -23,11 +23,14 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang.time.DateUtils;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
@@ -44,11 +47,13 @@ import org.jasig.ssp.factory.external.ExternalStudentRecordsTOFactory;
 import org.jasig.ssp.factory.external.ExternalStudentTestTOFactory;
 import org.jasig.ssp.factory.external.ExternalStudentTranscriptCourseTOFactory;
 import org.jasig.ssp.factory.external.ExternalStudentTranscriptTermTOFactory;
+import org.jasig.ssp.factory.reference.PlanTOFactory;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonDemographics;
+import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
@@ -62,6 +67,7 @@ import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonDemographicsService;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.external.ExternalPersonService;
@@ -77,6 +83,7 @@ import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.JournalEntryTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PersonLiteTO;
+import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.RecentActivityTO;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.external.ExternalStudentFinancialAidTO;
@@ -120,6 +127,9 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	private transient TaskService taskService;
 	
 	@Autowired
+	private transient PlanService planService;
+	
+	@Autowired
 	private transient ConfigService configService;
 	
 	@Autowired
@@ -130,6 +140,9 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	
 	@Autowired
 	private transient TaskTOFactory taskTOFactory;
+	
+	@Autowired
+	private transient PlanTOFactory planTOFactory;
 	
 	@Autowired
 	private transient ExternalStudentTranscriptService externalStudentTranscriptService;
@@ -333,6 +346,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		Person person = personService.get(id);
 		UUID coachId = person.getCoach().getId();
 		SortingAndPaging sAndP = SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ACTIVE, 0, 1000, "createdDate", "DESC", "createdDate");
+
 		PagingWrapper<EarlyAlert> earlyAlerts = earlyAlertService.getAllForPerson(person, sAndP);
 		SspUser currentUser = securityService.currentUser();
 		List<EarlyAlertTO> earlyAlertTOs = earlyAlertTOFactory.asTOList(earlyAlerts.getRows());
@@ -344,6 +358,12 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		PagingWrapper<Task> actions = taskService.getAllForPerson(person, currentUser, sAndP);
 		
 		List<TaskTO> actionsTOs = taskTOFactory.asTOList(actions.getRows());
+		
+		PagingWrapper<Plan> plans = planService.getAllForStudent(
+				SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ALL, 0,1000, null, null, null), 
+				id);
+		
+		List<PlanTO> planTOs = planTOFactory.asTOList(plans.getRows());
 		
 		for(EarlyAlertTO earlyAlert:earlyAlertTOs){
 			if(earlyAlert.getClosedDate() != null){
@@ -377,6 +397,24 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 					getPersonLiteName(action.getCreatedBy()), 
 					"Action Plan Task Created", 
 					action.getCreatedDate()));
+			}
+		}
+		
+		for(PlanTO planTO:planTOs){
+			Date testDate = DateUtils.addDays(planTO.getCreatedDate(), 1);
+			String planName = planTO.getName();
+			if(planTO.getModifiedDate().before(testDate)){
+				recentActivities.add(new RecentActivityTO(planTO.getCreatedBy().getId(),
+						getPersonLiteName(
+								planTO.getCreatedBy()), 
+						"Map Plan (" + planName + ") Created", 
+						planTO.getModifiedDate()));
+			}else{
+				recentActivities.add(new RecentActivityTO(planTO.getModifiedBy().getId(),
+					getPersonLiteName(
+							planTO.getModifiedBy()), 
+					"Map Plan (" + planName + ") Updated", 
+					planTO.getModifiedDate()));
 			}
 		}
 		
