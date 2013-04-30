@@ -34,7 +34,8 @@ public class ExternalStudentRecordsLiteTO implements ExternalDataTO<ExternalStud
 	public ExternalStudentRecordsLiteTO(ExternalStudentRecordsLite model, BigDecimal balanceOwed){
 		super();
 		from(model);
-		financialAid.setBalanceOwed(balanceOwed);
+		if(financialAid != null)
+			financialAid.setBalanceOwed(balanceOwed);
 	}
 
 	/**
