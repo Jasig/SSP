@@ -271,7 +271,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
             Ext.Array.each(terms, function(term){
                 var courseTranscript = Ext.create('Ssp.model.CourseTranscript', term);
                 var creditType = courseTranscript.get('creditType');
-                if (creditType == 'transfer') {
+				var creditTypeUpper = creditType.toUpperCase();
+                if (creditTypeUpper == 'TRANSFER') {
                     var credit = courseTranscript.get('creditEarned');
 					if (!isNaN(credit)) 
                     	transferHours += credit;
