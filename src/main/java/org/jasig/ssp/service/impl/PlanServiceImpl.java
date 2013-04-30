@@ -97,9 +97,9 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 	
 	@Override
 	public Plan copyAndSave(Plan obj) throws CloneNotSupportedException {
+		//If plan has been marked as active, we must mark all other plans as inactive
 		Plan cloneAndSave = getDao().cloneAndSave(obj,getSecurityService().currentUser().getPerson());
 		obj = null;
-		//If plan has been marked as active, we must mark all other plans as inactive
 		if(ObjectStatus.ACTIVE.equals(cloneAndSave.getObjectStatus()))
 		{
 			getDao().markOldPlansAsInActive(cloneAndSave);
