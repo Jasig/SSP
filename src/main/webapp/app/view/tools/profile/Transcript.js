@@ -17,10 +17,9 @@
  * under the License.
  */
 Ext.define('Ssp.view.tools.profile.Transcript', {
-	extend: 'Ext.grid.Panel',
-	alias: 'widget.transcript',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.transcript',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.sis.TranscriptViewController',
     inject: {
         store: 'courseTranscriptsStore'
@@ -28,49 +27,48 @@ Ext.define('Ssp.view.tools.profile.Transcript', {
     width: '100%',
     height: '100%',
     autoScroll: true,
-    initComponent: function() {
+    initComponent: function(){
         var me = this;
-
+        
         Ext.applyIf(me, {
             store: me.store,
-            columns: [
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'formattedCourse',
-                    text: 'Course',
-                    flex: 1
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'title',
-                    text: 'Title',
-                    flex: 1
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'creditType',
-                    text: 'Credit Type',
-                    flex: 1
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'grade',
-                    text: 'Grade',
-                    sortable: 'false',
-                    flex: 1
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'termCode',
-                    text: 'Term',
-                    flex: 1
-                }
-            ],
+            columns: [{
+                xtype: 'gridcolumn',
+                dataIndex: 'termCode',
+                text: 'Term',
+                flex: .10
+            }, {
+                xtype: 'gridcolumn',
+                dataIndex: 'formattedCourse',
+                text: 'Course',
+                flex: .15
+            }, {
+                xtype: 'gridcolumn',
+                dataIndex: 'title',
+                text: 'Course Title',
+                flex: .30
+            }, {
+                xtype: 'gridcolumn',
+                dataIndex: 'creditEarned',
+                text: 'Cr Hrs',
+                flex: .10
+            }, {
+                xtype: 'gridcolumn',
+                dataIndex: 'grade',
+                text: 'Grade',
+                sortable: 'false',
+                flex: .20
+            }, {
+                xtype: 'gridcolumn',
+                dataIndex: 'creditType',
+                text: 'Credit Type',
+                flex: .20
+            }],
             viewConfig: {
-                markDirty:false
+                markDirty: false
             }
         });
-
+        
         me.callParent(arguments);
     }
 });
