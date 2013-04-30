@@ -268,6 +268,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			});
 		});
 		me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+		me.appEventsController.getApplication().fireEvent("onUpdateSaveOption");
+		
 		me.getView().setLoading(false);
     },
 	

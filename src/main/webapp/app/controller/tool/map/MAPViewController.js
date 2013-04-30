@@ -105,14 +105,20 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		var me=this;
 		var view = me.getView();
 		
+		me.onUpdateSaveOption();
+		
+		me.appEventsController.assignEvent({eventName: 'onUpdateSaveOption', callBackFunc: me.onUpdateSaveOption, scope: me});
+
+		return this.callParent(arguments);
+    },
+
+    onUpdateSaveOption: function(){
+        var me=this;
 		if(me.currentMapPlan.get('id') == '')
 			me.getView().queryById('savePlanButton').hide();
 		else
 			me.getView().queryById('savePlanButton').show();
-		return this.callParent(arguments);
-    },
-
-    
+    },   
     onFAButtonClick: function(button){
         var me=this;
 		if(me.faPopUp == null || me.faPopUp.isDestroyed)
@@ -190,6 +196,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 
 	destroy:function(){
 	    var me=this;
+		me.appEventsController.removeEvent({eventName: 'onUpdateSaveOption', callBackFunc: me.onUpdateSaveOption, scope: me});
+		
 		if(me.faPopUp != null && !me.faPopUp.isDestroyed)
 			me.faPopUp.close();
 		if(me.notesPopUp != null && !me.notesPopUp.isDestroyed)
