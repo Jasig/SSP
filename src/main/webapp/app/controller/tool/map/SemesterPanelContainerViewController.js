@@ -258,7 +258,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				margin : '0 0 0 0',
 				layout : 'hbox',
 				autoScroll : true,
-				minHeight: 170,
+				minHeight: 204,
 				itemId : 'year' + termSet[0].get("reportYear"),
 				flex : 1,
 			}));
