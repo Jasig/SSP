@@ -47,7 +47,8 @@ public class ExternalStudentRecordsTO implements ExternalDataTO<ExternalStudentR
 	{
 		super();
 		from(model);
-		getFinancialAid().setBalanceOwed(balanceOwed);
+		if(getFinancialAid() != null)
+			getFinancialAid().setBalanceOwed(balanceOwed);
 	}
 
 
