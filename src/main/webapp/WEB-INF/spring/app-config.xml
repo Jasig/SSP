@@ -89,6 +89,7 @@
 				<entry key="set.mssql.snapshot.isolation" value="#{configProperties.db_liquibase_set_mssql_snapshot_isolation}" />
 				<entry key="strip.journal.comment.markup" value="#{configProperties.db_liquibase_strip_journal_comment_markup}" />
 				<entry key="strip.tuition.paid.is.y" value="#{configProperties.db_liquibase_strip_tuition_paid_is_y}" />
+				<entry key="convert.external.term.timestamps" value="#{configProperties.db_liquibase_convert_external_term_timestamps}" />
 				<entry key="database.timezone.legacy" value="#{configProperties.db_time_zone_legacy}" />
 				<entry key="database.timezone" value="#{configProperties.db_time_zone}" />
 			</util:map>

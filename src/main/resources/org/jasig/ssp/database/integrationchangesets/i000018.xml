@@ -53,6 +53,7 @@
 			</sqlCheck>
 			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
 			</sqlCheck>
+			<changeLogPropertyDefined property="convert.external.term.timestamps" value="true"/>
 		</preConditions>
 		<customChange class='org.jasig.ssp.util.liquibase.MSSQLDateTimeTimezoneRefactor'>
 			<param name='tableName' value='external_term' />
@@ -78,6 +79,7 @@
 			</sqlCheck>
 			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
 			</sqlCheck>
+			<changeLogPropertyDefined property="convert.external.term.timestamps" value="true"/>
 		</preConditions>
 		<update tableName='external_term'>
 			<column name='start_date' valueComputed='(start_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
