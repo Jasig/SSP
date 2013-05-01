@@ -172,7 +172,7 @@ public class PlanServiceTest {
 			}
 		}
 		
-		final String string = service.createMapPlanPrintScreen(plan);
+		final String string = service.createMapPlanPrintScreen(plan, "foo");
 		assertNotNull("Save() result should not have been null.", string);
 
 	}
