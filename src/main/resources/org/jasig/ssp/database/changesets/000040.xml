@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to Jasig under one or more contributor license agreements. 
+	See the NOTICE file distributed with this work for additional information 
+	regarding copyright ownership. Jasig licenses this file to you under the 
+	Apache License, Version 2.0 (the "License"); you may not use this file except 
+	in compliance with the License. You may obtain a copy of the License at: 
+	http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable 
+	law or agreed to in writing, software distributed under the License is distributed 
+	on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
+	express or implied. See the License for the specific language governing permissions 
+	and limitations under the License. -->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+http://www.liquibase.org/xml/ns/dbchangelog-ext
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet id="color table" author="tyler.bain">
+		<createTable tableName="color">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			
+			<column name="name" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="description" type="${nvarchar.type}(150)" />
+			
+			<column name="code" type="${nvarchar.type}(10)">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="hex_code" type="${nvarchar.type}(25)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false" foreignKeyName="challenge_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true" foreignKeyName="challenge_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on color to ${database.app.username}</sql>
+		<rollback>
+			<dropTable tableName="color" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="Add default colors" author="tyler.bain">
+		<insert tableName="color">
+			<column name="id" value="0ada03c8-6ec0-49c8-987c-e33a4d439ee3" />
+			<column name="name" value="Orange" />
+			<column name="description" value="Default for important courses" />
+			<column name="code" value="ORANGE"/>
+			<column name="hex_code" value="FFA500"/>
+			<column name="created_date" valueDate="2013-04-30T10:00:00" />
+			<column name="modified_date" valueDate="2012-04-30T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="color">
+				<where>id = '0ada03c8-6ec0-49c8-987c-e33a4d439ee3'</where>
+			</delete>
+		</rollback>
+		
+		<insert tableName="color">
+			<column name="id" value="f7a4b243-a1bd-4c28-b557-fc1f6b8439eb" />
+			<column name="name" value="Yellow" />
+			<column name="description" value="Default for transcripted courses" />
+			<column name="code" value="YELLOW"/>
+			<column name="hex_code" value="FFFF00"/>
+			<column name="created_date" valueDate="2013-04-30T10:00:00" />
+			<column name="modified_date" valueDate="2012-04-30T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="color">
+				<where>id = 'f7a4b243-a1bd-4c28-b557-fc1f6b8439eb'</where>
+			</delete>
+		</rollback>
+		
+		<insert tableName="color">
+			<column name="id" value="d0770680-f0ef-4dab-ad0b-7f175ede779d" />
+			<column name="name" value="Red" />
+			<column name="description" value="Red" />
+			<column name="code" value="RED"/>
+			<column name="hex_code" value="FF0000"/>
+			<column name="created_date" valueDate="2013-04-30T10:00:00" />
+			<column name="modified_date" valueDate="2012-04-30T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="color">
+				<where>id = 'd0770680-f0ef-4dab-ad0b-7f175ede779d'</where>
+			</delete>
+		</rollback>
+		
+		<insert tableName="color">
+			<column name="id" value="ff5733f2-ba81-4daa-8c78-50915c935506" />
+			<column name="name" value="Purple" />
+			<column name="description" value="Purple" />
+			<column name="code" value="PURPLE"/>
+			<column name="hex_code" value="800080"/>
+			<column name="created_date" valueDate="2013-04-30T10:00:00" />
+			<column name="modified_date" valueDate="2012-04-30T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="color">
+				<where>id = 'ff5733f2-ba81-4daa-8c78-50915c935506'</where>
+			</delete>
+		</rollback>
+		
+		<insert tableName="color">
+			<column name="id" value="64502a6d-c4f6-4850-87b9-856aab5955de" />
+			<column name="name" value="Green" />
+			<column name="description" value="Green" />
+			<column name="code" value="GREEN"/>
+			<column name="hex_code" value="008000"/>
+			<column name="created_date" valueDate="2013-04-30T10:00:00" />
+			<column name="modified_date" valueDate="2012-04-30T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="color">
+				<where>id = '64502a6d-c4f6-4850-87b9-856aab5955de'</where>
+			</delete>
+		</rollback>
+		
+		<insert tableName="color">
+			<column name="id" value="5985772a-cda6-4a08-b76d-27b0e4e601f2" />
+			<column name="name" value="Brown" />
+			<column name="description" value="Brown" />
+			<column name="code" value="BROWN"/>
+			<column name="hex_code" value="A52A2A"/>
+			<column name="created_date" valueDate="2013-04-30T10:00:00" />
+			<column name="modified_date" valueDate="2012-04-30T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="color">
+				<where>id = '5985772a-cda6-4a08-b76d-27b0e4e601f2'</where>
+			</delete>
+		</rollback>
+		
+		<insert tableName="color">
+			<column name="id" value="8442bfcc-b44c-4b70-a99c-2b67691568ae" />
+			<column name="name" value="Aqua" />
+			<column name="description" value="Aqua" />
+			<column name="code" value="AQUA"/>
+			<column name="hex_code" value="00FFFF"/>
+			<column name="created_date" valueDate="2013-04-30T10:00:00" />
+			<column name="modified_date" valueDate="2012-04-30T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="color">
+				<where>id = '8442bfcc-b44c-4b70-a99c-2b67691568ae'</where>
+			</delete>
+		</rollback>
+		
+		<insert tableName="color">
+			<column name="id" value="27d1dfde-2f16-4365-9315-32c32998d84e" />
+			<column name="name" value="Fuchsia" />
+			<column name="description" value="Fuchsia" />
+			<column name="code" value="FUCHSIA"/>
+			<column name="hex_code" value="FF00FF"/>
+			<column name="created_date" valueDate="2013-04-30T10:00:00" />
+			<column name="modified_date" valueDate="2012-04-30T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="color">
+				<where>id = '27d1dfde-2f16-4365-9315-32c32998d84e'</where>
+			</delete>
+		</rollback>
+		
+		<insert tableName="color">
+			<column name="id" value="2615ab88-cc09-48d4-a404-0774d71bf8a4" />
+			<column name="name" value="Gray" />
+			<column name="description" value="Gray" />
+			<column name="code" value="GRAY"/>
+			<column name="hex_code" value="808080"/>
+			<column name="created_date" valueDate="2013-04-30T10:00:00" />
+			<column name="modified_date" valueDate="2012-04-30T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="color">
+				<where>id = '2615ab88-cc09-48d4-a404-0774d71bf8a4'</where>
+			</delete>
+		</rollback>
+		
+		<insert tableName="color">
+			<column name="id" value="8dad87be-936b-450d-8f4a-f733b679a7dd" />
+			<column name="name" value="Light Blue" />
+			<column name="description" value="Light Blue" />
+			<column name="code" value="LT_BLUE"/>
+			<column name="hex_code" value="ADD8E6"/>
+			<column name="created_date" valueDate="2013-04-30T10:00:00" />
+			<column name="modified_date" valueDate="2012-04-30T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="color">
+				<where>id = '8dad87be-936b-450d-8f4a-f733b679a7dd'</where>
+			</delete>
+		</rollback>
+		
+		<insert tableName="color">
+			<column name="id" value="43cbb2d1-4f5b-4dc7-ad71-f59df121d8fb" />
+			<column name="name" value="Light Green" />
+			<column name="description" value="Light Green" />
+			<column name="code" value="LT_GREEN"/>
+			<column name="hex_code" value="90EE90"/>
+			<column name="created_date" valueDate="2013-04-30T10:00:00" />
+			<column name="modified_date" valueDate="2012-04-30T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="color">
+				<where>id = '43cbb2d1-4f5b-4dc7-ad71-f59df121d8fb'</where>
+			</delete>
+		</rollback>
+		
+		<insert tableName="color">
+			<column name="id" value="2f70bc51-7173-4d83-9c7a-17cca2e8d4db" />
+			<column name="name" value="Pink" />
+			<column name="description" value="Pink" />
+			<column name="code" value="PINK"/>
+			<column name="hex_code" value="FFA500"/>
+			<column name="created_date" valueDate="2013-04-30T10:00:00" />
+			<column name="modified_date" valueDate="2012-04-30T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="color">
+				<where>id = '2f70bc51-7173-4d83-9c7a-17cca2e8d4db'</where>
+			</delete>
+		</rollback>
+		
+		<insert tableName="color">
+			<column name="id" value="9a6b915b-91c8-49d5-8e1a-47c67c5aed59" />
+			<column name="name" value="Salmon" />
+			<column name="description" value="Salmon" />
+			<column name="code" value="SALMON"/>
+			<column name="hex_code" value="FA8072"/>
+			<column name="created_date" valueDate="2013-04-30T10:00:00" />
+			<column name="modified_date" valueDate="2012-04-30T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="color">
+				<where>id = '9a6b915b-91c8-49d5-8e1a-47c67c5aed59'</where>
+			</delete>
+		</rollback>
+		
+		<insert tableName="color">
+			<column name="id" value="93e117d8-bd62-4bff-a812-94cae3a65a12" />
+			<column name="name" value="Tan" />
+			<column name="description" value="Tan" />
+			<column name="code" value="TAN"/>
+			<column name="hex_code" value="D2B48C"/>
+			<column name="created_date" valueDate="2013-04-30T10:00:00" />
+			<column name="modified_date" valueDate="2012-04-30T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="color">
+				<where>id = '93e117d8-bd62-4bff-a812-94cae3a65a12'</where>
+			</delete>
+		</rollback>
+		
+		<insert tableName="color">
+			<column name="id" value="e0432f26-ba18-43bd-9475-d3cd899e2f8c" />
+			<column name="name" value="Violet" />
+			<column name="description" value="Violet" />
+			<column name="code" value="VIOLET"/>
+			<column name="hex_code" value="EE82EE"/>
+			<column name="created_date" valueDate="2013-04-30T10:00:00" />
+			<column name="modified_date" valueDate="2012-04-30T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="color">
+				<where>id = 'e0432f26-ba18-43bd-9475-d3cd899e2f8c'</where>
+			</delete>
+		</rollback>
+		
+	</changeSet>
+	
+
+
+</databaseChangeLog>

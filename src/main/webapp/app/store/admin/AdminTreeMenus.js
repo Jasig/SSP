@@ -441,6 +441,87 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 form: '',
                 expanded: false,
                 children: [{
+				    text: 'Colors',
+				    title: 'Color Management',
+				    store: 'colors',
+					//storeLoadOptions: { params: { status: 'ALL' } },
+				    form: 'AbstractReferenceAdmin',
+				    leaf: true,
+				    columns: [
+						{
+				        header: 'Active',
+				        required: true,
+				        dataIndex: 'active',
+				        renderer: me.columnRendererUtils.renderActive,
+				        flex: .20,
+				        field: {
+				            xtype: 'checkbox',
+				            
+				        	}
+				    	}, {
+				        header: 'Color Name',
+				        dataIndex: 'name',
+				        required: true,
+				        field: {
+				            xtype: 'textfield'
+				        },
+				        flex: .20
+				    }, {
+				        header: 'Color Code',
+				        dataIndex: 'code',
+				        required: true,
+				        field: {
+				            xtype: 'textfield'
+				        },
+				        flex: .20
+				    }, {
+				        header: 'Hex Code',
+				        dataIndex: 'hexCode',
+				        renderer: me.columnRendererUtils.renderHex,
+				        required: true,				        
+				        editor: Ext.create('Ext.form.TriggerField', {
+				            onTriggerClick: function(e) {
+				            	var triggerField = this;	
+				            	console.log(me);
+				            	console.log(triggerField);
+				            	var colorPicker = Ext.create('Ext.picker.Color', {
+				                    style: {
+				                        backgroundColor: "#fff"
+				                    } ,	
+				                    listeners: {
+				                        scope:me,
+				                        select: function(picker, selColor) {	                        
+				                        	triggerField.setValue(selColor);
+				                        	window.close();
+				                        }
+				                    },
+				            	});
+				                var window = Ext.create('Ext.window.Window', {
+				                        title: 'Select Color',
+				                        resizable: false,
+				                        draggable: false,
+				                        closeAction: 'hide',
+				                        width: 150,
+				                        height: 135,
+				                        border: false,
+				                        hidden: true,
+				                        layout:'fit',
+				                        floating: true,
+				                        items: [colorPicker]
+				                    });
+				                window.show(); 
+				            }
+				        }),
+				        flex: .20
+				    }, {
+				        header: 'Description',
+				        dataIndex: 'description',
+				        field: {
+				            xtype: 'textfield'
+				        },
+				        flex: 1
+				    }]
+				}, {
                     text: 'Tags',
                     title: 'Tag Management',
                     store: 'tags',

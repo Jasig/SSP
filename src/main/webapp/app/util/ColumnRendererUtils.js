@@ -166,6 +166,19 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 		return strHtml;
 	},
 	
+	renderHex: function(val, metadata, record) {
+		var hexCode = record.get('hexCode');
+		var strHtml = '<div>';
+		strHtml += '<div style="float:left;width:49%">';
+		strHtml += hexCode;
+		strHtml += '</div>'
+		strHtml += '<div style="background-color:#' + hexCode + ';width:49%;float:right;">';
+		strHtml += '<p>&nbsp;</p>'
+		strHtml += '</div>'
+		strHtml += '</div>';
+		return strHtml;
+	},
+	
 	/**
 	 * This method is used to return an object with id values
 	 * an array format expected by the ExtJS multiSelect or itemSelect

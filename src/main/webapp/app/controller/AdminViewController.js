@@ -27,6 +27,7 @@ Ext.define('Ssp.controller.AdminViewController', {
     	challengeReferralsStore: 'challengeReferralsStore',
     	childCareArrangementsStore: 'childCareArrangementsStore',
     	citizenshipsStore: 'citizenshipsStore',
+    	colorsStore: 'colorsStore',
     	confidentialityLevelsStore: 'confidentialityLevelsStore',
     	disabilityAccommodationsStore: 'disabilityAccommodationsStore',
     	disabilityAgenciesStore: 'disabilityAgenciesStore',
