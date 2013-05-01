@@ -16,15 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.store.admin.AdminTreeMenus', {
-    extend: 'Ext.data.TreeStore',
-    mixins: ['Deft.mixin.Injectable'],
+Ext.define('Ssp.store.admin.AdminTreeMenus',{
+	extend: 'Ext.data.TreeStore',
+    mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         columnRendererUtils: 'columnRendererUtils'
     },
-    autoLoad: false,
+	autoLoad: false,
     constructor: function(){
-        var me = this;
+    	var me=this;
+    	var me = this;
         var items = {
             text: 'Administrative Tools',
             title: 'Administrative Tools',
@@ -441,6 +442,63 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 form: '',
                 expanded: false,
                 children: [{
+    				text: 'Electives',
+    				title: 'Electives',
+    				store: 'elective',
+    				//storeLoadOptions: { params: { status: 'ALL', sort: 'sortOrder' } }, //this logic performed on backend, though client side logic is still in place. 
+    				interfaceOptions: {
+    					addButtonVisible: true, 
+    					deleteButtonVisible: false,
+    					dragAndDropReorder: true
+    				},
+	    			form: 'AbstractReferenceAdmin',
+	    			leaf: true,
+	    			columns: [{
+	    				header: 'Order',  
+	    			    dataIndex: 'sortOrder',
+	    				required: true,
+	    				field: {
+	    					xtype: 'textfield'
+	    				},
+	    				flex: .1 
+	    			}, { 
+	    				header: 'Active',
+						required: true,
+						dataIndex: 'active', 
+						defaultValue: true,
+						flex: .2,
+						renderer: me.columnRendererUtils.renderActive,
+						field: {
+							xtype: 'checkbox'
+						}  
+	    			}, {
+	    				header: 'Elective Name',  
+	          			dataIndex: 'name',
+	          			required: true,
+	          			defaultValue: "",
+	          			field: {
+	          				xtype: 'textfield'
+	          			},	          				
+	          			flex: .2 
+	          		}, {
+	          			header: 'Elective Code',
+	          			dataIndex: 'code',
+	          			defaultValue: "",
+	          			required: true,
+	          			field: {
+	          				xtype: 'textfield'
+	          			},
+	          			flex: .1	          							        	  
+	          		}, {	
+	          			header: 'Description',
+		          		dataIndex: 'description',
+		          		defaultValue: "",
+		          		field: {
+		          			xtype: 'textfield'
+		          		},
+		          	 flex: 1	          							        	  
+		          	}]
+    			}, {
                     text: 'Tags',
                     title: 'Tag Management',
                     store: 'tags',
@@ -496,6 +554,6 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
         });
         return me.callParent(arguments);
     }
-    
-    
+
+
 });

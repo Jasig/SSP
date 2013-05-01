@@ -39,6 +39,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 		earlyAlertSuggestionsStore: 'earlyAlertSuggestionsStore',
     	educationGoalsStore: 'educationGoalsStore',
     	educationLevelsStore: 'educationLevelsStore',
+    	electiveStore: 'electiveStore',
     	employmentShiftsStore: 'employmentShiftsStore',
     	ethnicitiesStore: 'ethnicitiesStore',
     	formUtils: 'formRendererUtils',
@@ -80,6 +81,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 		var storeName = "";
 		var columns = null;
 		var storeLoadOptions = null;
+
 		if (record.raw != undefined )
 		{
 			if ( record.raw.form != "")
@@ -93,18 +95,17 @@ Ext.define('Ssp.controller.AdminViewController', {
 					columns = record.raw.columns;
 				}
 				if (record.raw.storeLoadOptions)
-			      {
-			         storeLoadOptions = record.raw.storeLoadOptions;
-			      }
-			      this.loadAdmin( record.raw.title, record.raw.form, storeName, storeLoadOptions, columns );   
+				{
+					storeLoadOptions = record.raw.storeLoadOptions;
+				}				
+				this.loadAdmin( record.raw.title, record.raw.form, storeName, storeLoadOptions, columns, record.raw.interfaceOptions );
 			}
 		}
 	},
 
-	//loadAdmin: function( title ,form, storeName, columns ) {
-	loadAdmin: function( title ,form, storeName, storeLoadOptions, columns ) {
+	loadAdmin: function( title ,form, storeName, storeLoadOptions, columns, interfaceOptions ) {
 		var me=this;
-		var comp = this.formUtils.loadDisplay('adminforms',form, true, {});
+		var comp = this.formUtils.loadDisplay('adminforms',form, true, {interfaceOptions: interfaceOptions});
 		var store = null;
 		
 		// set a store if defined
@@ -119,10 +120,10 @@ Ext.define('Ssp.controller.AdminViewController', {
 				if (columns != null)
 				{
 					// comp.reconfigure(store, columns); // ,columns
-					me.formUtils.reconfigureGridPanel(comp, store, columns);
+					me.formUtils.reconfigureGridPanel(comp, store, interfaceOptions, columns);
 				}else{
 					// comp.reconfigure(store);
-					me.formUtils.reconfigureGridPanel(comp, store);
+					me.formUtils.reconfigureGridPanel(comp, store, interfaceOptions);
 				}
 				
 				comp.getStore().load(storeLoadOptions);
