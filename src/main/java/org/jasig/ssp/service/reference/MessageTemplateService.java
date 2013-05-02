@@ -31,6 +31,7 @@ import org.jasig.ssp.model.TermCourses;
 import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.service.ReferenceService;
 import org.jasig.ssp.transferobject.GoalTO;
+import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.TaskTO;
 
@@ -70,7 +71,11 @@ public interface MessageTemplateService extends
 	SubjectAndBody createEarlyAlertResponseToFacultyMessage(
 			Map<String, Object> messageParams);
 	
-	public SubjectAndBody createMapPlanPrintScreen(final Person student, final Person owner, final PlanTO plan, final Float totalPlanCreditHours,
+	public SubjectAndBody createMapPlanMatrixOutput(final Person student, final Person owner, final PlanTO plan, final Float totalPlanCreditHours,
+			final List<TermCourses> termCourses,
+			String institutionName);
+	
+	public SubjectAndBody createMapPlanFullOutput(final Person student, final Person owner, final PlanOutputTO plan, final Float totalPlanCreditHours,
 			final List<TermCourses> termCourses,
 			String institutionName);
 }

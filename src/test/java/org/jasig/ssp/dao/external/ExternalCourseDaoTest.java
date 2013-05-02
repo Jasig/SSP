@@ -45,7 +45,7 @@ public class ExternalCourseDaoTest {
 	public void testGetByCourseCode() {
 		ExternalCourse course = null;
 		try {
-			course = dao.getByCourseCode("MATH-101");
+			course = dao.getByCode("MATH-101");
 		} catch (final ObjectNotFoundException e) {
 			fail("Course was not found");
 		}

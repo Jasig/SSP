@@ -160,7 +160,7 @@ public class PlanController  extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */	
-	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	@RequestMapping(value="/current", method = RequestMethod.GET)
 	public @ResponseBody
 	PlanTO getCurrentForStudent(final @PathVariable UUID personId) throws ObjectNotFoundException,
@@ -294,8 +294,11 @@ public class PlanController  extends AbstractBaseController {
 		Config institutionName = configService.getByName("inst_name");
 		SubjectAndBody output = null;
 		
-		if(planOutputDataTO.getOutputFormat().equals(OUTPUT_FORMAT_MATRIX))
+		if(planOutputDataTO.getOutputFormat().equals(OUTPUT_FORMAT_MATRIX)) {
 			output = service.createMapPlanMatirxOutput(planOutputDataTO.getPlan(), institutionName.getValue());
+		} else{
+			output = service.createMapPlanFullOutput(planOutputDataTO, institutionName.getValue());
+		}
 		
 		return output;
 	}

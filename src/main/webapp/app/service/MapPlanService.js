@@ -56,6 +56,46 @@ Ext.define('Ssp.service.MapPlanService', {
 			scope: me
 		});    	
     },
+
+	getSummary: function( personId, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl(personId);
+	    var success = function( response, view ){
+			callbacks.success( response, callbacks.scope );
+	    };
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		me.apiProperties.makeRequest({
+			url: url+'/summary', 
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});    	
+    },
+
+	getCurrentSummary: function( personId, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl(personId);
+	    var success = function( response, view ){
+			callbacks.success( response, callbacks.scope );
+	    };
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		me.apiProperties.makeRequest({
+			url: url+'/currentsummary', 
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});    	
+    },
     
     getPlan: function( planId, personId, callbacks ){
 		var me=this;

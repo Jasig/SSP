@@ -41,6 +41,7 @@ import org.jasig.ssp.service.reference.ConfigException;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.GoalTO;
+import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -242,12 +243,56 @@ public class MessageTemplateServiceImpl extends
 	}
 	
 	@Override
-	public SubjectAndBody createMapPlanPrintScreen(final Person student,final Person owner, final PlanTO plan, 
+	public SubjectAndBody createMapPlanMatrixOutput(final Person student,final Person owner, final PlanTO plan, 
+			final Float totalPlanCreditHours,
+			final List<TermCourses> termCourses,
+			final String institutionName) {
+		
+		final Map<String, Object> messageParams =  addParamsToMapPlan(
+				student,
+				owner, 
+				plan, 
+				totalPlanCreditHours,
+				termCourses,
+				institutionName);
+		
+		return populateFromTemplate(MessageTemplate.OUTPUT_MAP_PLAN_MATRIX_ID, messageParams);
+	}
+	
+	@Override
+	public SubjectAndBody createMapPlanFullOutput(final Person student,final Person owner, final PlanOutputTO planOutput, 
 			final Float totalPlanCreditHours,
 			final List<TermCourses> termCourses,
 			final String institutionName) {
 
-		final Map<String, Object> messageParams = new HashMap<String, Object>();
+		final Map<String, Object> messageParams = addParamsToMapPlan(
+				student,
+				owner, 
+				planOutput.getPlan(), 
+				totalPlanCreditHours,
+				termCourses,
+				institutionName);
+
+		messageParams.put("includeCourseDescription", planOutput.getIncludeCourseDescription());
+		messageParams.put("includeFinancialAidInformation", planOutput.getIncludeFinancialAidInformation());
+		messageParams.put("includeHeaderFooter", planOutput.getIncludeHeaderFooter());
+		messageParams.put("includeTotalTimeExpected", planOutput.getIncludeTotalTimeExpected());
+		
+		return populateFromTemplate(MessageTemplate.OUTPUT_MAP_PLAN_FULL_ID,
+				messageParams);
+	}
+	
+	@SuppressWarnings("unused")
+	private Map<String, Object> addParamsToMapPlan(
+			final Person student,
+			final Person owner, 
+			final PlanTO plan, 
+			final Float totalPlanCreditHours,
+			final List<TermCourses> termCourses,
+			final String institutionName){
+		
+		final Map<String, Object> messageParams = new HashMap<String, Object>(); 
+		
 		messageParams.put("title", plan.getName());
 		messageParams.put("termCourses", termCourses);
 		messageParams.put("studentFullName", student.getFullName());
@@ -260,8 +305,8 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("totalPlanHours", totalPlanCreditHours);
 		messageParams.put("institution", institutionName);
 		messageParams.put("createdDateFormatted", formatDate(new Date()));
-
-		return populateFromTemplate(MessageTemplate.PRINT_MAP_PLAN_ID,
-				messageParams);
+		
+		return messageParams;
+		
 	}
 }

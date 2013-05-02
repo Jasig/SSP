@@ -41,6 +41,7 @@ import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.PlanCourseTO;
+import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -112,6 +113,32 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 	public SubjectAndBody createMapPlanMatirxOutput(final PlanTO plan, String institutionName) throws ObjectNotFoundException {
 		Person student = personService.get(UUID.fromString(plan.getPersonId()));
 		Person owner = personService.get(UUID.fromString(plan.getOwnerId()));
+		
+		
+		List<TermCourses> courses = collectTermCourses(plan);
+		Float totalPlanCreditHours = calculateTotalPlanHours(courses);
+		
+		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanMatrixOutput(student, owner, plan, totalPlanCreditHours, courses, institutionName);
+		return subjectAndBody;
+	}
+	
+	@Override
+	public SubjectAndBody createMapPlanFullOutput(PlanOutputTO planOutput, String institutionName) throws ObjectNotFoundException
+	{
+		PlanTO plan = planOutput.getPlan();
+		
+		Person student = personService.get(UUID.fromString(plan.getPersonId()));
+		Person owner = personService.get(UUID.fromString(plan.getOwnerId()));
+		
+		
+		List<TermCourses> courses = collectTermCourses(plan);
+		Float totalPlanCreditHours = calculateTotalPlanHours(courses);
+		
+		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanFullOutput(student, owner, planOutput, totalPlanCreditHours, courses, institutionName);
+		return subjectAndBody;
+	}
+	
+	private List<TermCourses> collectTermCourses(PlanTO plan) throws ObjectNotFoundException{
 		Map<String,TermCourses> semesterCourses = new HashMap<String, TermCourses>();
 		for(PlanCourseTO course : plan.getPlanCourses()){
 			if(!semesterCourses.containsKey(course.getTermCode())){
@@ -125,15 +152,16 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 		}
 		List<TermCourses> courses =  Lists.newArrayList(semesterCourses.values());
 		Collections.sort(courses, TermCourses.TERM_START_DATE_COMPARATOR);
+		return courses;
+	}
+	
+	private Float calculateTotalPlanHours(List<TermCourses> courses){
 		Float totalPlanCreditHours = new Float(0);
-		
 		for(TermCourses termCourses : courses){
 			Collections.sort(termCourses.getCourses(), PlanCourseTO.TERM_ORDER_COMPARATOR);
 			totalPlanCreditHours = totalPlanCreditHours + termCourses.getTotalCreditHours();
 		}
-		
-		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanPrintScreen(student, owner, plan, totalPlanCreditHours, courses, institutionName);
-		return subjectAndBody;
+		return totalPlanCreditHours;
 	}
 	
 	@Override

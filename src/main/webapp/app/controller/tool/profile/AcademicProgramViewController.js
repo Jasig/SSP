@@ -29,6 +29,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 		mapPlanService: 'mapPlanService',
 		currentMapPlan: 'currentMapPlan',
 		termsStore: 'termsStore',
+		authenticatedPerson: 'authenticatedPerson',
     },
     
     control: {
