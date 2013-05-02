@@ -122,12 +122,11 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
 										var form = me.query('form')[0];
 										var record = new Ssp.model.tool.map.PlanOutputData();
 										form.getForm().updateRecord(record);
-                                		me.appEventsController.getApplication().fireEvent(me.printEvent, me.store);
+                                		me.appEventsController.getApplication().fireEvent(me.printEvent, record);
                                 		me.close();
                                 	},
                                 	scope: me
                                 }
-                                
                             }, '-', {
                                 xtype: 'button',
                                 itemId: 'cancelButton',
