@@ -18,18 +18,9 @@
  */
 package org.jasig.ssp.service.external;
 
-import java.util.List;
-
 import org.jasig.ssp.model.external.ExternalCourse;
-import org.jasig.ssp.service.ObjectNotFoundException;
 
-public interface ExternalCourseService extends
-		ExternalDataService<ExternalCourse> {
-
-	ExternalCourse getByCourseCode(String courseCode)
-			throws ObjectNotFoundException;
-
-	List<ExternalCourse> getAllCourses();
+public interface ExternalCourseService extends ExternalReferenceDataService<ExternalCourse> {
 
 	Boolean validateCourseForTerm(String courseCode, String termCode);
 

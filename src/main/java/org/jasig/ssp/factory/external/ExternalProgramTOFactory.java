@@ -16,16 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.external;
+package org.jasig.ssp.factory.external;
 
-import java.util.List;
+import org.jasig.ssp.model.external.ExternalProgram;
+import org.jasig.ssp.transferobject.external.ExternalProgramTO;
 
-import org.jasig.ssp.model.external.Term;
-import org.jasig.ssp.service.ObjectNotFoundException;
-
-public interface TermService extends ExternalReferenceDataService<Term> {
-
-	Term getCurrentTerm() throws ObjectNotFoundException;
-
-	List<Term> getCurrentAndFutureTerms() throws ObjectNotFoundException;
+/**
+ * Program transfer object factory
+ * 
+ * @author tony.arland
+ */
+public interface ExternalProgramTOFactory extends ExternalTOFactory<ExternalProgramTO, ExternalProgram> {
+	
 }

@@ -37,69 +37,12 @@ import org.springframework.stereotype.Repository;
  * Data access class for the External Person entity
  */
 @Repository
-public class ExternalCourseDao extends AbstractExternalDataDao<ExternalCourse> {
+public class ExternalCourseDao extends AbstractExternalReferenceDataDao<ExternalCourse> {
 
 	public ExternalCourseDao() {
 		super(ExternalCourse.class);
 	}
 
-	/**
-	 * Retrieves the specified instance from persistent storage.
-	 * 
-	 * @param courseCode
-	 *            the courseCode value
-	 * @return The specified instance if found
-	 * @throws ObjectNotFoundException
-	 *             If object was not found.
-	 */
-	public ExternalCourse getByCourseCode(@NotNull final String courseCode)
-			throws ObjectNotFoundException {
-		if (StringUtils.isBlank(courseCode)) {
-			throw new ObjectNotFoundException(courseCode,
-					ExternalCourse.class.getName());
-		}
-
-		final ExternalCourse obj = (ExternalCourse) createCriteria()
-				.add(Restrictions.eq("code", courseCode)).uniqueResult();
-
-		if (obj == null) {
-			throw new ObjectNotFoundException(courseCode,
-					ExternalCourse.class.getName());
-		}
-
-		return obj;
-	}
-	
-	/**
-	 * Retrieves the specified instance from persistent storage.
-	 * 
-	 * @param username
-	 *            the username value
-	 * @return The specified instance if found
-	 * @throws ObjectNotFoundException
-	 *             If object was not found.
-	 */
-	@SuppressWarnings("unchecked")
-	public List<ExternalCourse> getByKeyword(@NotNull final String keyword)
-			throws ObjectNotFoundException {
-		if (StringUtils.isBlank(keyword)) {
-			throw new ObjectNotFoundException(keyword,
-					ExternalCourse.class.getName());
-		}
-
-		List<ExternalCourse> result = createHqlQuery( "select from org.jasig.ssp.model.external.ExternalCourse ec where upper(:keyword%) " +
-				" like upper(ec.title) or upper(:keyword%) like upper(ec.formattedCourse) order by ec.formattedCourse asc" )
-		.setEntity( "keyword", keyword )
-		.list();
-
-		return result;
-	}
-
-	@Override
-	@Deprecated
-	public PagingWrapper<ExternalCourse> getAll(ObjectStatus status) {
-		return null;
-	}
 
 	@SuppressWarnings("unchecked")
 	public List<ExternalCourse> getAll() {

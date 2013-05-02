@@ -20,12 +20,19 @@ package org.jasig.ssp.service.external;
 
 import java.util.List;
 
-import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
 
-public interface TermService extends ExternalReferenceDataService<Term> {
-
-	Term getCurrentTerm() throws ObjectNotFoundException;
-
-	List<Term> getCurrentAndFutureTerms() throws ObjectNotFoundException;
+/**
+ * Base class which provides a building block for creating an external data
+ * service.
+ * 
+ * @param <T>
+ *            Any external data model class.
+ */
+public interface ExternalReferenceDataService<T> extends ExternalDataService<T> {
+	
+	T getByCode(final String code) throws ObjectNotFoundException;
+	
+	List<T> getAll();
+	
 }

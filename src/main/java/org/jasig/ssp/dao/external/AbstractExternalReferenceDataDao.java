@@ -18,12 +18,18 @@
  */
 package org.jasig.ssp.dao.external;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AbstractDao;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.external.ExternalProgram;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -37,25 +43,14 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
  * @param <T>
  *            Any <code>ExternalData</code> model.
  */
-public abstract class AbstractExternalDataDao<T>
+public abstract class AbstractExternalReferenceDataDao<T>
 		extends AbstractDao<T>
 		implements ExternalDataDao<T> {
 
-	protected AbstractExternalDataDao(@NotNull final Class<T> persistentClass) {
+	protected AbstractExternalReferenceDataDao(@NotNull final Class<T> persistentClass) {
 		super(persistentClass);
 	}
 
-	@Override
-	public PagingWrapper<T> getAll(final ObjectStatus status) {
-		return processCriteriaWithSortingAndPaging(createCriteria(),
-				new SortingAndPaging(status), false);
-	}
-
-	@Override
-	public PagingWrapper<T> getAll(final SortingAndPaging sAndP) {
-		return processCriteriaWithSortingAndPaging(createCriteria(),
-				sAndP, false);
-	}
 	
 	/**
 	 * Retrieves the specified instance from persistent storage.
@@ -66,19 +61,36 @@ public abstract class AbstractExternalDataDao<T>
 	 * @throws ObjectNotFoundException
 	 *             If object was not found.
 	 */
+	@SuppressWarnings("unchecked")
 	public T getByCode(@NotNull final String code)
 			throws ObjectNotFoundException {
 		if (StringUtils.isBlank(code)) {
-			throw new ObjectNotFoundException(code, Term.class.getName());
+			throw new ObjectNotFoundException(code, persistentClass.getName());
 		}
 
 		final T obj = (T) createCriteria().add(
 				Restrictions.eq("code", code)).uniqueResult();
 
 		if (obj == null) {
-			throw new ObjectNotFoundException(code, Term.class.getName());
+			throw new ObjectNotFoundException(code, persistentClass.getName());
 		}
 
 		return obj;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<T> getAll() {
+		Criteria criteria = createCriteria();
+		criteria.addOrder(Order.asc("code"));
+		List<T> result = criteria.list();
+		return result;
+	}
+	
+
+	@Override
+	@Deprecated
+	public PagingWrapper<T> getAll(SortingAndPaging sAndP) {
+		throw new NotImplementedException("Use getAll()");
+	}
+
 }

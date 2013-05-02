@@ -16,16 +16,45 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.external;
+package org.jasig.ssp.transferobject.external;
 
-import java.util.List;
+import org.jasig.ssp.model.external.ExternalProgram;
 
-import org.jasig.ssp.model.external.Term;
-import org.jasig.ssp.service.ObjectNotFoundException;
+public class ExternalProgramTO implements ExternalDataTO<ExternalProgram> {
 
-public interface TermService extends ExternalReferenceDataService<Term> {
+	private String code;
 
-	Term getCurrentTerm() throws ObjectNotFoundException;
+	private String name;
+	
+	public ExternalProgramTO() {
+		super();
+	}
 
-	List<Term> getCurrentAndFutureTerms() throws ObjectNotFoundException;
+	public ExternalProgramTO(final ExternalProgram model) {
+		super();
+		from(model);
+	}
+
+	@Override
+	public final void from(final ExternalProgram model) {
+		this.setCode(model.getCode());
+		this.setName(model.getName());
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 }

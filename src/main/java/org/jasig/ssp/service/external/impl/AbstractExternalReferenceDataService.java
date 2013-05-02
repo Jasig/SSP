@@ -16,16 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.external;
+package org.jasig.ssp.service.external.impl;
 
 import java.util.List;
 
-import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.dao.external.AbstractExternalReferenceDataDao;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.external.ExternalDataService;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface TermService extends ExternalReferenceDataService<Term> {
+/**
+ * Base class which provides a building block for creating an external data
+ * service.
+ * 
+ * @param <T>
+ *            Any external data model class.
+ */
+@Transactional
+public abstract class AbstractExternalReferenceDataService<T> extends AbstractExternalDataService<T> implements
+		ExternalDataService<T> {
+ 
+	public T getByCode(String code) throws ObjectNotFoundException {
+		return ((AbstractExternalReferenceDataDao<T>)getDao()).getByCode(code);
+	}
+	
+	public List<T> getAll() {
+		return ((AbstractExternalReferenceDataDao<T>)getDao()).getAll();
+	}
 
-	Term getCurrentTerm() throws ObjectNotFoundException;
-
-	List<Term> getCurrentAndFutureTerms() throws ObjectNotFoundException;
 }

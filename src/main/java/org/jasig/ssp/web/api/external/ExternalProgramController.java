@@ -22,12 +22,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jasig.ssp.factory.external.ExternalCourseTOFactory;
+import org.jasig.ssp.factory.external.ExternalProgramTOFactory;
 import org.jasig.ssp.model.external.ExternalCourse;
+import org.jasig.ssp.model.external.ExternalProgram;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.external.ExternalCourseService;
+import org.jasig.ssp.service.external.ExternalProgramService;
 import org.jasig.ssp.transferobject.external.ExternalCourseTO;
 import org.jasig.ssp.transferobject.external.ExternalCourseTermResponseTO;
+import org.jasig.ssp.transferobject.external.ExternalProgramTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,30 +45,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/1/reference/course")
-public class ExternalCourseController extends AbstractExternalController<ExternalCourseTO, ExternalCourse> {
+@RequestMapping("/1/reference/program")
+public class ExternalProgramController extends AbstractExternalController<ExternalProgramTO, ExternalProgram> {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(ExternalCourseController.class);
+			.getLogger(ExternalProgramController.class);
 
 	@Autowired
-	protected transient ExternalCourseService service;
+	protected transient ExternalProgramService service;
 
 	@Override
-	protected ExternalCourseService getService() {
+	protected ExternalProgramService getService() {
 		return service;
 	}
 
 	@Autowired
-	protected transient ExternalCourseTOFactory factory;
+	protected transient ExternalProgramTOFactory factory;
 
 	@Override
-	protected ExternalCourseTOFactory getFactory() {
+	protected ExternalProgramTOFactory getFactory() {
 		return factory;
 	}
 
-	protected ExternalCourseController() {
-		super(ExternalCourseTO.class, ExternalCourse.class);
+	protected ExternalProgramController() {
+		super(ExternalProgramTO.class, ExternalProgram.class);
 	}
 
 	@Override
@@ -75,10 +79,10 @@ public class ExternalCourseController extends AbstractExternalController<Externa
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
-	List<ExternalCourseTO> getAllCourses() {
-		List<ExternalCourseTO> response = new ArrayList<ExternalCourseTO>();
-		List<ExternalCourse> allCourses = getService().getAll();
-		for (ExternalCourse externalCourse : allCourses) {
+	List<ExternalProgramTO> getAllPrograms() {
+		List<ExternalProgramTO> response = new ArrayList<ExternalProgramTO>();
+		List<ExternalProgram> allPrograms = getService().getAll();
+		for (ExternalProgram externalCourse : allPrograms) {
 			response.add(getFactory().from(externalCourse));
 		}
 		return response;
@@ -87,25 +91,14 @@ public class ExternalCourseController extends AbstractExternalController<Externa
 	@RequestMapping(value = "/{code}", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
-	ExternalCourseTO get(final @PathVariable String code) throws ObjectNotFoundException,
+	ExternalProgramTO get(final @PathVariable String code) throws ObjectNotFoundException,
 			ValidationException {
-		final ExternalCourse model = getService().getByCode(code);
+		final ExternalProgram model = getService().getByCode(code);
 		if (model == null) {
 			return null;
 		}
-		return new ExternalCourseTO(model);
+		return new ExternalProgramTO(model);
 	}
 	
-	@RequestMapping(value = "/validateTerm", method = RequestMethod.GET)
-	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
-	public @ResponseBody
-	ExternalCourseTermResponseTO validateTerm(final @RequestParam String courseCode, final @RequestParam String termCode) throws ObjectNotFoundException,
-			ValidationException {
-		final Boolean model = getService().validateCourseForTerm(courseCode,termCode);
-		if (model == null) {
-			return new ExternalCourseTermResponseTO(false);
-		}
-		return new ExternalCourseTermResponseTO(model);
-	}
 	
 }

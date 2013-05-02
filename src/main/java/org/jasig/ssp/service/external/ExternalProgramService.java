@@ -18,14 +18,11 @@
  */
 package org.jasig.ssp.service.external;
 
-import java.util.List;
+import org.jasig.ssp.model.external.ExternalProgram;
 
-import org.jasig.ssp.model.external.Term;
-import org.jasig.ssp.service.ObjectNotFoundException;
+public interface ExternalProgramService extends
+		ExternalReferenceDataService<ExternalProgram> {
 
-public interface TermService extends ExternalReferenceDataService<Term> {
 
-	Term getCurrentTerm() throws ObjectNotFoundException;
 
-	List<Term> getCurrentAndFutureTerms() throws ObjectNotFoundException;
 }

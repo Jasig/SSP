@@ -18,9 +18,9 @@
  */
 package org.jasig.ssp.service.external.impl;
 
-import org.jasig.ssp.dao.external.ExternalCourseDao;
-import org.jasig.ssp.model.external.ExternalCourse;
-import org.jasig.ssp.service.external.ExternalCourseService;
+import org.jasig.ssp.dao.external.ExternalProgramDao;
+import org.jasig.ssp.model.external.ExternalProgram;
+import org.jasig.ssp.service.external.ExternalProgramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,25 +32,21 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class ExternalCourseServiceImpl extends AbstractExternalReferenceDataService<ExternalCourse>
-		implements ExternalCourseService {
+public class ExternalProgramServiceImpl extends AbstractExternalReferenceDataService<ExternalProgram>
+		implements ExternalProgramService {
 
 	@Autowired
-	transient private ExternalCourseDao dao;
+	transient private ExternalProgramDao dao;
 
 	@Override
-	protected ExternalCourseDao getDao() {
+	protected ExternalProgramDao getDao() {
 		return dao;
 	}
 
-	protected void setDao(final ExternalCourseDao dao) {
+	protected void setDao(final ExternalProgramDao dao) {
 		this.dao = dao;
 	}
 
-	@Override
-	public Boolean validateCourseForTerm(String courseCode, String termCode) {
-		return dao.validateCourseForTerm( courseCode,  termCode);
-	}
 
 
 }

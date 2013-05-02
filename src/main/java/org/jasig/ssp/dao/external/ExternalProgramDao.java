@@ -16,16 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.external;
+package org.jasig.ssp.dao.external;
 
 import java.util.List;
 
-import org.jasig.ssp.model.external.Term;
+import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+import org.jasig.ssp.model.external.ExternalCourse;
+import org.jasig.ssp.model.external.ExternalProgram;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.stereotype.Repository;
 
-public interface TermService extends ExternalReferenceDataService<Term> {
+/**
+ * Data access class for the External Person entity
+ */
+@Repository
+public class ExternalProgramDao extends AbstractExternalReferenceDataDao<ExternalProgram> {
 
-	Term getCurrentTerm() throws ObjectNotFoundException;
+	public ExternalProgramDao() {
+		super(ExternalProgram.class);
+	}
 
-	List<Term> getCurrentAndFutureTerms() throws ObjectNotFoundException;
 }

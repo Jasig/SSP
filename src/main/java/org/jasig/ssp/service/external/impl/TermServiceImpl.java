@@ -18,7 +18,6 @@
  */
 package org.jasig.ssp.service.external.impl;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.jasig.ssp.dao.external.TermDao;
@@ -36,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class TermServiceImpl extends AbstractExternalDataService<Term>
+public class TermServiceImpl extends AbstractExternalReferenceDataService<Term>
 		implements TermService {
 
 	@Autowired
@@ -49,11 +48,6 @@ public class TermServiceImpl extends AbstractExternalDataService<Term>
 
 	protected void setDao(final TermDao dao) {
 		this.dao = dao;
-	}
-
-	@Override
-	public Term getByCode(final String code) throws ObjectNotFoundException {
-		return getDao().getByCode(code);
 	}
 
 	@Override
