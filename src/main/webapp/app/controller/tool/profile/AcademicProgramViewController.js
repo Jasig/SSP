@@ -45,12 +45,12 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 	         click: 'onprintPlanButtonClick'
 	        }
 	     },       
-	   /* 'emailPlanButton':{
+	    'emailPlanButton':{
 	       selector: '#emailPlanButton',
 	       listeners: {
 	        click: 'onemailPlanButtonClick'
 	       }
-	    },*/
+	    },
     
     },
     init: function(){
@@ -75,6 +75,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
             }
         }
         me.appEventsController.assignEvent({eventName: 'onPrintCurrentMapPlan', callBackFunc: me.onPrintCurrentMapPlan, scope: me});
+        me.appEventsController.assignEvent({eventName: 'onEmailCurrentMapPlan', callBackFunc: me.onEmailCurrentMapPlan, scope: me});
         return me.callParent(arguments);
     },
     
@@ -107,6 +108,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
         var me=this;
 		if(me.emailPlanPopUp == null || me.emailPlanPopUp.isDestroyed)
          	me.emailPlanPopUp = Ext.create('Ssp.view.tools.map.EmailPlan',{hidden:true});
+		me.emailPlanPopUp.emailEvent = 'onEmailCurrentMapPlan';
 		me.emailPlanPopUp.show();
     },
     
@@ -158,6 +160,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 		if(!mapResponse || !mapResponse.responseText || mapResponse.responseText.trim().length == 0) {
 			 me.getOnPlanField().setValue("Plan Does Not Exist.");
 			me.getPrintPlanButton().hide();
+			me.getEmailPlanButton().hide();
        	} else {
 			me.currentMapPlan.populateFromGenericObject(Ext.decode(mapResponse.responseText));
 			var lastTerm = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(me.currentMapPlan))[0];
@@ -165,6 +168,8 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 	        me.getMapNameField().setValue(me.currentMapPlan.get("name")),
 	        me.getMapLastUpdatedField().setValue(me.currentMapPlan.getFormattedModifiedDate());
 	        me.getMapProjectedField().setValue(lastTerm.get("code"));
+	        me.getPrintPlanButton().show();
+			me.getEmailPlanButton().show();
 	        me.personService.get(me.currentMapPlan.get('ownerId'), {
                 success: me.newServiceSuccessHandler('person', me.getPersonSuccess, serviceResponses),
                 failure: me.newServiceFailureHandler('person', me.getPersonFailure, serviceResponses),
@@ -176,6 +181,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 
     getMapPlanServiceFailure: function() {
 		me.getPrintPlanButton().hide();
+		me.getEmailPlanButton().hide();
     },
     
     getPersonSuccess: function(serviceResponses) {
@@ -201,7 +207,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
         }
     },
 
-	onPrintCurrentMapPlan: function(){
+	onEmailCurrentMapPlan: function(metaData){
 		var me = this;
 		me.getView().setLoading(true);
 		var serviceResponses = {
@@ -210,7 +216,39 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
                 responseCnt: 0,
                 expectedResponseCnt: 1
             }
-		me.mapPlanService.print(null, {
+		me.mapPlanService.email(null, metaData, {
+            success: me.newServiceSuccessHandler('emailMap', me.emailMapPlanServiceSuccess, serviceResponses),
+            failure: me.newServiceFailureHandler('emailMap', me.emailMapPlanServiceFailure, serviceResponses),
+            scope: me
+        });
+	},
+	
+	 emailMapPlanServiceSuccess: function(serviceResponses) {
+	        var me = this;
+	        var mapResponse = serviceResponses.successes.emailMap;
+	       	me.onEmailComplete(mapResponse.responseText);
+			me.getView().setLoading(false);
+	 },
+
+	emailMapPlanServiceFailure: function() {
+		var me = this;
+		me.getView().setLoading(false);
+	},
+	
+	onEmailComplete: function(responseText){
+		Ext.Msg.alert('SSP Email Service', responseText);
+	},
+	
+	onPrintCurrentMapPlan: function(metaData){
+		var me = this;
+		me.getView().setLoading(true);
+		var serviceResponses = {
+                failures: {},
+                successes: {},
+                responseCnt: 0,
+                expectedResponseCnt: 1
+            }
+		me.mapPlanService.print(null, metaData, {
             success: me.newServiceSuccessHandler('printMap', me.printMapPlanServiceSuccess, serviceResponses),
             failure: me.newServiceFailureHandler('printMap', me.printMapPlanServiceFailure, serviceResponses),
             scope: me
@@ -239,6 +277,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 	destroy: function() {
         var me=this;
 		me.appEventsController.removeEvent({eventName: 'onPrintCurrentMapPlan', callBackFunc: me.onPrintCurrentMapPlan, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onEmailCurrentMapPlan', callBackFunc: me.onEmailCurrentMapPlan, scope: me});
 		if(me.emailPlanPopUp != null && !me.emailPlanPopUp.isDestroyed)
 	    	me.emailPlanPopUp.close();
 		if(me.printPlanPopUp != null && !me.printPlanPopUp.isDestroyed)

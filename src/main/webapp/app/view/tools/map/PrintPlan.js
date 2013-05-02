@@ -25,8 +25,8 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
         columnRendererUtils: 'columnRendererUtils',
         appEventsController: 'appEventsController'
     },
-    height: 200,
-    width: 200,
+    height: 300,
+    width: 400,
     resizable: true,
     initComponent: function(){
         var me = this;
@@ -60,74 +60,51 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                     padding: '0 0 0 5',
                     layout: 'vbox',
                     align: 'stretch' ,
-					hidden: true,
-					hideable: false,
                     items: [ {
                         boxLabel: 'Print MAP with Options',
-                        name: 'optionsPrint',
-                        inputValue: 'optionsPrint',
-                        itemId: 'optionsPrintFormat'
+                        name: 'outputFormat',
+                        inputValue: 'fullFormat',
+                        itemId: 'fullFormat'
                     },
                     {
+						checked: true,
                         boxLabel: 'Print MAP in Matrix Format',
-                        name: 'optionsPrint',
-                        inputValue: 'printmatrixFormat',
-                        itemId: 'printmatrixFormat'
+                        name: 'outputFormat',
+                        inputValue: 'matrixFormat',
+                        itemId: 'matrixFormat'
                     }]
                     },
                     {xtype: 'fieldset',
                     border: 0,
                     title: '',
-                    defaultType: 'radio',
+                    defaultType: 'checkbox',
                     margin: '0 0 0 2',
                     padding: '10 0 0 5',
-                    //hide : true,
                     layout: 'vbox',
                     align: 'stretch'  ,
                     itemId: 'optionsPrintView',
                         items: [{
                             checked: true,
                             boxLabel: 'With Course Description',
-                            name: 'courseDescriptionPrint',
-                            inputValue: 'courseDescPrint'
-                        },
-                        {
-                            boxLabel: 'Without Course Description',
-                            name: 'courseDescriptionPrint',
-                            inputValue: 'withoutcourseDescPrint'
+                            name: 'includeCourseDescription',
                         },
                         {
                             checked: true,
                             boxLabel: 'With Header/Footer',
-                            name: 'headerPrint',
-                            inputValue: 'headerPrint'
+                            name: 'includeHeaderFooter',
                         },
                         {
-                            boxLabel: 'Without Header/Footer',
-                            name: 'headerPrint',
-                            inputValue: 'footerPrint'
-                        },
-                        {
-        				    
-                            name: 'totalTimeExpected',
-                            inputValue: 'totalTimeExpected',
-                            xtype:'checkbox',
-                            //padding: '0 0 0 105',
+							checked: true,
+                            name: 'includeTotalTimeExpected',
                             labelSeparator: '',
-                            hideLabel: true,
                             boxLabel: 'Total Time Expected Outside Class'
-                            //fieldLabel: 'Mark As Important' 
-                            },
-                            {
-            				    
-                            name: 'finAidInfo',
-                            inputValue: 'finAidInfo',
-                            xtype:'checkbox',
-                            //padding: '0 0 0 105',
+                         },
+                         {
+							checked: true,
+                            name: 'includeFinancialAidInformation',
                             labelSeparator: '',
-                            hideLabel: true,
                             boxLabel: 'Display FinAid Information'
-                            }
+                         }
                         ]
                         }
                  
@@ -142,7 +119,10 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                                 listeners:{
                                 	click: function(){
                                 		me = this;
-                                		me.appEventsController.getApplication().fireEvent(me.printEvent);
+										var form = me.query('form')[0];
+										var record = new Ssp.model.tool.map.PlanOutputData();
+										form.getForm().updateRecord(record);
+                                		me.appEventsController.getApplication().fireEvent(me.printEvent, me.store);
                                 		me.close();
                                 	},
                                 	scope: me

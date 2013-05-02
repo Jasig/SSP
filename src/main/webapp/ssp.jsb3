@@ -1668,9 +1668,26 @@
                     "name": "EarlyAlertResponse.js",
                     "path": "/app/model/tool/earlyalert/"
                 },
+               
+                
                 {
                     "clsName": "Ssp.model.tool.map.SemesterCourse",
                     "name": "SemesterCourse.js",
+                    "path": "/app/model/tool/map/"
+                },
+                                {
+                    "clsName": "Ssp.model.tool.map.PlanCourse",
+                    "name": "PlanCourse.js",
+                    "path": "/app/model/tool/map/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.map.Plan",
+                    "name": "Plan.js",
+                    "path": "/app/model/tool/map/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.map.PlanOutputData",
+                    "name": "PlanOutputData.js",
                     "path": "/app/model/tool/map/"
                 },
                 {

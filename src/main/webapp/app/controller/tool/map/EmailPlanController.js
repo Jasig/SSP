@@ -27,15 +27,15 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
     control: {
     	optionsEmailView: '#optionsEmailView',
     	
-    	'optionsEmailFormat': {
-    	   selector: '#optionsEmailFormat',
+    	'fullFormat': {
+    	   selector: '#fullFormat',
     	   listeners: {
             change: 'onoptionsEmailFormatClick'
            }
         },
         
-        'emailmatrixFormat': {
-    	   selector: '#emailmatrixFormat',
+        'matrixFormat': {
+    	   selector: '#matrixFormat',
     	   listeners: {
             change: 'onemailmatrixFormatClick'
            }
@@ -44,6 +44,23 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
     
 	init: function() {
 		var me=this;
+		Ext.apply(Ext.form.field.VTypes, {
+
+		    //  vtype validation function
+		    multiemail : function(val, field) {
+		        var email = /^([\w\-\'\-]+)(\.[\w-\'\-]+)*@([\w\-]+\.){1,5}([A-Za-z]){2,4}$/;
+				var addresses = val.split(',');
+				var matches = true;
+				addresses.forEach(function(address){
+					if(!email.test(address.trim())){
+						matches = false;
+						return;
+					}
+				});
+		        return matches;
+		    },
+		    multiemailText : "This field needs to be in comma delimited email format: abcd@ssp.org,abcd@ssp.org",
+		});
 		me.getOptionsEmailView().hide();
 		
 		return this.callParent(arguments);

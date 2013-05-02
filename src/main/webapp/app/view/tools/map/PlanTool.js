@@ -138,13 +138,9 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     itemId: 'planNotesButton',
                     align: 'center',
                     padding: '0 0 0 0',
-					hidden: true,
-					hideable: false
                 }, {
                     xtype: 'label',
                     text: 'Plan Notes',
-                	hidden: true,
-					hideable: false
                 
                 }]
             
@@ -164,8 +160,6 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 layout: 'vbox',
                 width: 80,
                 cls: 'center-align',
-				hidden: true,
-				hideable: false,
                 defaults: {
                     anchor: '100%'
                 },
@@ -177,15 +171,12 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     cls: 'planEmailIcon',
                     xtype: 'button',
                     itemId: 'emailPlanButton',
+                    hidden:	!me.authenticatedPerson.hasAccess('MAP_TOOL_EMAIL_BUTTON'),
                     align: 'center',
                     padding: '0 0 0 0',
-					hidden: true,
-					hideable: false
                 }, {
                     xtype: 'label',
                     text: 'Email Plan',
-                	hidden: true,
-					hideable: false
                 
                 }]
             

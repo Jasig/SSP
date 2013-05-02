@@ -20,17 +20,21 @@ package org.jasig.ssp.web.api;
 
 import java.util.UUID;
 
+import javax.mail.SendFailedException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
+import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.Permission;
+import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
@@ -39,6 +43,7 @@ import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PlanLiteTO;
+import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -60,6 +65,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/1/person/{personId}/map/plan")
 public class PlanController  extends AbstractBaseController {
 
+	static final private String OUTPUT_FORMAT_MATRIX = "matrixFormat";
+	static final private String OUTPUT_FULL_MATRIX = "fullFormat";
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PlanController.class);
@@ -89,6 +96,9 @@ public class PlanController  extends AbstractBaseController {
 	
 	@Autowired
 	private transient ConfigService configService;
+	
+	@Autowired
+	private transient MessageService messageService;
 
  
 	/**
@@ -242,10 +252,51 @@ public class PlanController  extends AbstractBaseController {
 	@RequestMapping(value = "/print", method = RequestMethod.POST)
 	public @ResponseBody
 	String print(final HttpServletResponse response,
-			 @RequestBody final PlanTO obj) throws ObjectNotFoundException {
+			 @RequestBody final PlanOutputTO planOutputDataTO) throws ObjectNotFoundException {
 
+		SubjectAndBody message = getOutput(planOutputDataTO);
+		if(message != null)
+			return message.getBody();
+		
+		return null;
+	}
+	
+	
+	/**
+	 * Returns an html page valid for printing
+	 * <p>
+	 *
+	 * 
+	 * @param obj
+	 *            instance to print.
+	 * @return html text strem
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws SendFailedException 
+	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
+	@RequestMapping(value = "/email", method = RequestMethod.POST)
+	public @ResponseBody
+	String email(final HttpServletResponse response,
+			 @RequestBody final PlanOutputTO planOutputDataTO) throws ObjectNotFoundException {
+		SubjectAndBody messageText = getOutput(planOutputDataTO);
+		if(messageText == null)
+			return null;
+
+	    Message message = messageService.createMessage(planOutputDataTO.getEmailTo(), 
+							planOutputDataTO.getEmailCC(),
+							messageText);
+		
+		return "Map Plan has been queued.";
+	}
+	
+	private SubjectAndBody getOutput(PlanOutputTO planOutputDataTO) throws ObjectNotFoundException{
 		Config institutionName = configService.getByName("inst_name");
-		final String output = service.createMapPlanPrintScreen(obj, institutionName.getValue());
+		SubjectAndBody output = null;
+		
+		if(planOutputDataTO.getOutputFormat().equals(OUTPUT_FORMAT_MATRIX))
+			output = service.createMapPlanMatirxOutput(planOutputDataTO.getPlan(), institutionName.getValue());
+		
 		return output;
 	}
 

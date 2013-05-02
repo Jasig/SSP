@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -38,7 +39,7 @@ public interface PlanService extends AbstractPlanService<Plan> {
 	PagingWrapper<Plan> getAllForStudent(
 			SortingAndPaging createForSingleSortWithPaging,UUID personId);
 
-	String createMapPlanPrintScreen(PlanTO plan, String institutionName) throws ObjectNotFoundException;
+	SubjectAndBody createMapPlanMatirxOutput(PlanTO plan, String institutionName) throws ObjectNotFoundException;
 
 
 	

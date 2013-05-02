@@ -36,6 +36,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
+import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
@@ -172,8 +173,9 @@ public class PlanServiceTest {
 			}
 		}
 		
-		final String string = service.createMapPlanPrintScreen(plan, "foo");
-		assertNotNull("Save() result should not have been null.", string);
+
+		final SubjectAndBody messageText = service.createMapPlanMatirxOutput(plan, "new institution");
+		assertNotNull("Save() result should not have been null.", messageText);
 
 	}
 

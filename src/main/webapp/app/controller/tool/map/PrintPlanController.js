@@ -27,15 +27,15 @@ Ext.define('Ssp.controller.tool.map.PrintPlanController', {
     control: {
     	optionsPrintView: '#optionsPrintView',
     	
-    	'optionsPrintFormat': {
-    	   selector: '#optionsPrintFormat',
+    	'fullFormat': {
+    	   selector: '#fullFormat',
     	   listeners: {
             change: 'onoptionsPrintClick'
            }
         },
         
-        'printmatrixFormat': {
-    	   selector: '#printmatrixFormat',
+        'matrixFormat': {
+    	   selector: '#matrixFormat',
     	   listeners: {
             change: 'onprintmatrixFormatClick'
            }

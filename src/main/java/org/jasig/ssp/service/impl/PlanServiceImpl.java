@@ -109,7 +109,7 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 	
 	@Override
 	@Transactional(readOnly=true)
-	public String createMapPlanPrintScreen(final PlanTO plan, String institutionName) throws ObjectNotFoundException {
+	public SubjectAndBody createMapPlanMatirxOutput(final PlanTO plan, String institutionName) throws ObjectNotFoundException {
 		Person student = personService.get(UUID.fromString(plan.getPersonId()));
 		Person owner = personService.get(UUID.fromString(plan.getOwnerId()));
 		Map<String,TermCourses> semesterCourses = new HashMap<String, TermCourses>();
@@ -131,8 +131,9 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 			Collections.sort(termCourses.getCourses(), PlanCourseTO.TERM_ORDER_COMPARATOR);
 			totalPlanCreditHours = totalPlanCreditHours + termCourses.getTotalCreditHours();
 		}
+		
 		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanPrintScreen(student, owner, plan, totalPlanCreditHours, courses, institutionName);
-		return subjectAndBody.getBody();
+		return subjectAndBody;
 	}
 	
 	@Override

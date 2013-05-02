@@ -22,6 +22,7 @@ Ext.define('Ssp.view.tools.profile.AcademicProgram', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     inject: {
         columnRendererUtils: 'columnRendererUtils',
+		authenticatedPerson: 'authenticatedPerson',
         sspConfig: 'sspConfig'
     },
     controller: 'Ssp.controller.tool.profile.AcademicProgramViewController',
@@ -65,15 +66,16 @@ Ext.define('Ssp.view.tools.profile.AcademicProgram', {
                         xtype: 'tbspacer',
                        flex: .50
                     },
-					/*{
+					{
                         tooltip: 'Email MAP',
                         text: '',
                         width: 30,
                         height: 30,
                         cls: 'mapEmailIcon',
                         xtype: 'button',
-                        itemId: 'emailMAPButton'
-                    }, */
+                        itemId: 'emailPlanButton',
+                        hidden:	!me.authenticatedPerson.hasAccess('MAP_TOOL_EMAIL_BUTTON'),
+                    }, 
 					{
                         tooltip: 'Print MAP',
                         text: '',
@@ -81,7 +83,8 @@ Ext.define('Ssp.view.tools.profile.AcademicProgram', {
                         height: 30,
                         cls: 'mapPrintIcon',
                         xtype: 'button',
-                        itemId: 'printPlanButton'
+                        itemId: 'printPlanButton',
+                        hidden:	!me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON'),
                     },
 					{
                         xtype: 'tbspacer',

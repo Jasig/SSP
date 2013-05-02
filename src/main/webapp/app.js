@@ -232,6 +232,7 @@ Ext.require([
 	'Ssp.model.tool.map.SemesterCourse',
 	'Ssp.model.tool.map.Plan',
 	'Ssp.model.tool.map.PlanCourse',
+	'Ssp.model.tool.map.PlanOutputData',
 	'Ssp.model.tool.shg.SelfHelpGuides',
 	'Ssp.model.tool.shg.SelfHelpGuideQuestions',
 	'Ssp.model.tool.caseload.CaseloadReassignmentRequest',

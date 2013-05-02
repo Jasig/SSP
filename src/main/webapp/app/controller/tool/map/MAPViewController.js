@@ -169,6 +169,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
         var me=this;
 		if(me.emailPlanPopUp == null || me.emailPlanPopUp.isDestroyed)
          	me.emailPlanPopUp = Ext.create('Ssp.view.tools.map.EmailPlan',{hidden:true});
+		me.emailPlanPopUp.emailEvent = 'onEmailMapPlan';
 		me.emailPlanPopUp.show();
     },
     

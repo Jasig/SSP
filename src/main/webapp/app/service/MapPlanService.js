@@ -149,7 +149,7 @@ Ext.define('Ssp.service.MapPlanService', {
 		}else{
 			// update
     		me.apiProperties.makeRequest({
-    			url: url+'/'+me.currentMapPlan.get('id'), 
+    			url: url+'/'+ me.currentMapPlan.get('id'), 
     			method: 'PUT',
     			jsonData: me.currentMapPlan.data,
     			successFunc: success,
@@ -159,26 +159,51 @@ Ext.define('Ssp.service.MapPlanService', {
 		}	
     },
     
-    print: function(semesterStores, callbacks ){
-		var me=this;
+    print: function(semesterStores, outputData, callbacks ){
+		var me = this;
+    	me.outputMap(semesterStores, callbacks, outputData, 'print');
+    },
+    
+    email: function(semesterStores, outputData, callbacks ){
+		var me = this;
+    	me.outputMap(semesterStores, callbacks, outputData, 'email');
+    },
+    
+    outputMap: function(semesterStores, callbacks, outputData, outputType){
+    	var me=this;
 		var url = me.getBaseUrl(me.currentMapPlan.get('personId'));
 	    var success = function( response, view ){
 			callbacks.success( response, callbacks.scope );
 	    };
-		var objectStatus = me.currentMapPlan.get('objectStatus');
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	 
+	    	callbacks.failure(view);
+	    };
+	    me.prepareMapOutput(semesterStores, outputData)
+		me.apiProperties.makeRequest({
+   			url: url+'/' + outputType,
+   			method: 'POST',
+   			jsonData: outputData.data,
+   			successFunc: success,
+   			failureFunc: failure,
+   			scope: me
+   		});
+    },
+    
+    prepareMapOutput: function(semesterStores, outputData){
+    	/**** TODO when semesterStores is null this is printing from somewhere 
+	      other than the map tool.  planCourses as brought in need to be
+		  converted to semesterCourses because of some inconsistencies
+		   this needs to be corrected                                        *****/		
+		var me = this;	
+    	var objectStatus = me.currentMapPlan.get('objectStatus');
 		if(objectStatus != 'ACTIVE' || objectStatus != 'INACTIVE')
 			me.currentMapPlan.set('objectStatus','ACTIVE');
 	    var failure = function( response ){
 	    	me.apiProperties.handleError( response );
 		    callbacks.failure( response, callbacks.scope );
 	    };
-	
-		/**** TODO when semesterStores is null this is printing from somewhere 
-		      other than the map tool.  planCourses as brought in need to be
-			  converted to semesterCourses because of some inconsistencies
-			   this needs to be corrected                                        *****/			
-		 
-		if(semesterStores == null){
+    	if(semesterStores == null){
 			var planCourses = me.currentMapPlan.get('planCourses');
 			var semsetersStore = new Ssp.store.SemesterCourses();
 			semesterStores = [semsetersStore];
@@ -187,15 +212,7 @@ Ext.define('Ssp.service.MapPlanService', {
 			})
 		}
 	    me.updateCurrentMap(semesterStores);
-		
-		me.apiProperties.makeRequest({
-   			url: url+'/print',
-   			method: 'POST',
-   			jsonData: me.currentMapPlan.data,
-   			successFunc: success,
-   			failureFunc: failure,
-   			scope: me
-   		});					
-    },
+	    outputData.set("plan",me.currentMapPlan.data);
+    }
     	
 });
