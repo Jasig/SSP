@@ -408,8 +408,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
                 expectedResponseCnt: 1
             }
 		me.mapPlanService.email(me.semesterStores, metaData, {
-            success: me.newServiceSuccessHandler('emailMap', me.printMapPlanServiceSuccess, serviceResponses),
-            failure: me.newServiceFailureHandler('emailMap', me.printMapPlanServiceFailure, serviceResponses),
+            success: me.newServiceSuccessHandler('emailMap', me.emailMapPlanServiceSuccess, serviceResponses),
+            failure: me.newServiceFailureHandler('emailMap', me.emailMapPlanServiceFailure, serviceResponses),
             scope: me
         });
 	},
