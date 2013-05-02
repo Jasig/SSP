@@ -59,6 +59,13 @@ public class ExternalCourseDaoTest {
 		List<ExternalCourse> courses = null;
 		courses = dao.getAll();
 		assertEquals(20, courses.size());
-	}	
+	}
+	
+	@Test
+	public void testGetTermCode()
+	{
+		System.out.print(dao.validateCourseForTerm("MATH-101", "FA15"));
+		assertEquals(dao.validateCourseForTerm("MATH-101", "FA15"), true);
+	}
 
 }

@@ -30,6 +30,7 @@ import java.util.Iterator;
 
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.external.ExternalCourseTO;
+import org.jasig.ssp.transferobject.external.ExternalCourseTermResponseTO;
 import org.jasig.ssp.transferobject.external.TermTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Test;
@@ -81,6 +82,31 @@ public class ExternalCourseControllerIntegrationTest {
 		assertEquals("Returned Course.title did not match.", "MATH-101",
 				obj.getTitle());
 	}
+	
+	/**
+	 * Test the {@link ExternalCourseController#get(String)} action.
+	 * 
+	 * @throws ValidationException
+	 *             If validation error occurred.
+	 * @throws ObjectNotFoundException
+	 *             If object could not be found.
+	 */
+	@Test
+	public void testControllerCourseTerm() throws ObjectNotFoundException,
+			ValidationException {
+		assertNotNull(
+				"Controller under test was not initialized by the container correctly.",
+				controller);
+
+		final ExternalCourseTermResponseTO obj = controller.validateTerm("MATH-101", "FA15");
+
+		assertNotNull(
+				"Returned TermTO from the controller should not have been null.",
+				obj);
+
+		assertEquals("Returned Course.title did not match.", true,
+				obj.isValid());
+	}	
 
 	/**
 	 * Test that the {@link ExternalCourseController#get(String)} action returns the

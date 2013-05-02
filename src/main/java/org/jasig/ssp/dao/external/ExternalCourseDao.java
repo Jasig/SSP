@@ -114,4 +114,12 @@ public class ExternalCourseDao extends AbstractExternalDataDao<ExternalCourse> {
 	public PagingWrapper<ExternalCourse> getAll(SortingAndPaging sAndP) {
 		return null;
 	}
+
+	public Boolean validateCourseForTerm(String code, String termCode) {
+		String baseValidateCourseHqlQuery = "from ExternalCourseTerm ect where ect.courseCode = :courseCode and ect.termCode = :termCode";
+		return createHqlQuery(baseValidateCourseHqlQuery)
+		.setString("courseCode", code)
+		.setString("termCode", termCode)
+		.list().size() > 0 ;
+	}
 }

@@ -27,6 +27,7 @@ import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.external.ExternalCourseService;
 import org.jasig.ssp.transferobject.external.ExternalCourseTO;
+import org.jasig.ssp.transferobject.external.ExternalCourseTermResponseTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -71,6 +73,7 @@ public class ExternalCourseController extends AbstractExternalController<Externa
 	}
 
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	List<ExternalCourseTO> getAllCourses() {
 		List<ExternalCourseTO> response = new ArrayList<ExternalCourseTO>();
@@ -91,5 +94,17 @@ public class ExternalCourseController extends AbstractExternalController<Externa
 			return null;
 		}
 		return new ExternalCourseTO(model);
+	}
+	
+	@RequestMapping(value = "/validateTerm", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
+	public @ResponseBody
+	ExternalCourseTermResponseTO validateTerm(final @RequestParam String courseCode, final @RequestParam String termCode) throws ObjectNotFoundException,
+			ValidationException {
+		final Boolean model = getService().validateCourseForTerm(courseCode,termCode);
+		if (model == null) {
+			return new ExternalCourseTermResponseTO(false);
+		}
+		return new ExternalCourseTermResponseTO(model);
 	}
 }

@@ -16,22 +16,37 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.external;
+package org.jasig.ssp.transferobject.external;
 
-import java.util.List;
 
-import org.jasig.ssp.model.external.ExternalCourse;
-import org.jasig.ssp.service.ObjectNotFoundException;
+public class ExternalCourseTermResponseTO implements ExternalDataTO<Boolean> {
 
-public interface ExternalCourseService extends
-		ExternalDataService<ExternalCourse> {
 
-	ExternalCourse getByCourseCode(String courseCode)
-			throws ObjectNotFoundException;
+	private boolean valid = false;
+	
+	public ExternalCourseTermResponseTO() {
+		super();
+	}
 
-	List<ExternalCourse> getAllCourses();
+	public ExternalCourseTermResponseTO(final Boolean model) {
+		super();
+		from(model);
+	}
 
-	Boolean validateCourseForTerm(String courseCode, String termCode);
+	@Override
+	public final void from(final Boolean model) {
+		setValid(model);
+	}
+
+	public boolean isValid() {
+		return valid;
+	}
+
+	public void setValid(boolean valid) {
+		this.valid = valid;
+	}
+
+
 
 
 }

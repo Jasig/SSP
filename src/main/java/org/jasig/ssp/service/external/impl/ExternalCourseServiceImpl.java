@@ -64,5 +64,10 @@ public class ExternalCourseServiceImpl extends AbstractExternalDataService<Exter
 		return dao.getAll();
 	}
 
+	@Override
+	public Boolean validateCourseForTerm(String courseCode, String termCode) {
+		return dao.validateCourseForTerm( courseCode,  termCode);
+	}
+
 
 }
