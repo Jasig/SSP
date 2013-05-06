@@ -60,7 +60,7 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 	    		{
 			         Ext.Msg.confirm({
 			 		     title:'Create New Plan?',
-			 		     msg: 'New plans have been found for this student.  Create a new one?',
+			 		     msg: 'No new plans have been found for this student.  Create a new one?',
 			 		     buttons: Ext.Msg.YESNO,
 			 		     fn: me.initNewPlan,
 			 		     scope: me
