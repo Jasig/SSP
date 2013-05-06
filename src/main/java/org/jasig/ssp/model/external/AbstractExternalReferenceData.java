@@ -21,32 +21,31 @@ package org.jasig.ssp.model.external;
 import java.io.Serializable;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Immutable;
 import org.hibernate.validator.constraints.NotEmpty;
 
-@Entity
 @Immutable
-@Table(name = "v_external_program")
-public class ExternalProgram extends AbstractExternalReferenceData implements ExternalData, Serializable {
+@MappedSuperclass
+public class AbstractExternalReferenceData extends AbstractExternalData implements ExternalData, Serializable {
 
 	private static final long serialVersionUID = 1529384456357160956L;
 	
-	@Column(nullable = false, length = 100)
+	@Column(nullable = false, length = 50)
 	@NotNull
 	@NotEmpty
 	@Size(max = 35)
-	private String name;
+	private String code;
 
-	public String getName() {
-		return name;
+
+	public String getCode() {
+		return code;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setCode(String code) {
+		this.code = code;
 	}
 }

@@ -38,7 +38,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Immutable
 @Table(name = "v_external_term")
-public class Term extends AbstractExternalData implements Serializable,
+public class Term extends AbstractExternalReferenceData implements Serializable,
 		ExternalData {
 
 	private static final long serialVersionUID = 7709074056601029932L;
@@ -49,11 +49,6 @@ public class Term extends AbstractExternalData implements Serializable,
 	@Size(max = 80)
 	private String name;
 
-	@Column(nullable = false, length = 25)
-	@NotNull
-	@NotEmpty
-	@Size(max = 25)
-	private String code;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
@@ -73,7 +68,7 @@ public class Term extends AbstractExternalData implements Serializable,
 
 	public Term(final String code) {
 		super();
-		this.code = code;
+		this.setCode(code);
 	}
 
 	public String getName() {
@@ -86,18 +81,6 @@ public class Term extends AbstractExternalData implements Serializable,
 	 */
 	public void setName(final String name) {
 		this.name = name;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	/**
-	 * @param code
-	 *            the code
-	 */
-	public void setCode(final String code) {
-		this.code = code;
 	}
 
 	public Date getStartDate() {

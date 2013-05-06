@@ -16,31 +16,38 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.model.external;
+package org.jasig.ssp.transferobject.external;
 
-import java.io.Serializable;
+import org.jasig.ssp.model.external.ExternalDivision;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+public class ExternalDivisionTO implements ExternalDataTO<ExternalDivision> {
 
-import org.hibernate.annotations.Immutable;
-import org.hibernate.validator.constraints.NotEmpty;
+	private String code;
 
-@Entity
-@Immutable
-@Table(name = "v_external_program")
-public class ExternalProgram extends AbstractExternalReferenceData implements ExternalData, Serializable {
-
-	private static final long serialVersionUID = 1529384456357160956L;
-	
-	@Column(nullable = false, length = 100)
-	@NotNull
-	@NotEmpty
-	@Size(max = 35)
 	private String name;
+	
+	public ExternalDivisionTO() {
+		super();
+	}
+
+	public ExternalDivisionTO(final ExternalDivision model) {
+		super();
+		from(model);
+	}
+
+	@Override
+	public final void from(final ExternalDivision model) {
+		this.setCode(model.getCode());
+		this.setName(model.getName());
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
 
 	public String getName() {
 		return name;
@@ -49,4 +56,5 @@ public class ExternalProgram extends AbstractExternalReferenceData implements Ex
 	public void setName(String name) {
 		this.name = name;
 	}
+
 }

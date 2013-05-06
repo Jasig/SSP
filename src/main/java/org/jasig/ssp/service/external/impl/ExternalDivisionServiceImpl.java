@@ -18,31 +18,35 @@
  */
 package org.jasig.ssp.service.external.impl;
 
-import java.util.List;
-
-import org.jasig.ssp.dao.external.AbstractExternalReferenceDataDao;
-import org.jasig.ssp.model.external.AbstractExternalReferenceData;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.external.ExternalDataService;
+import org.jasig.ssp.dao.external.ExternalDivisionDao;
+import org.jasig.ssp.model.external.ExternalDivision;
+import org.jasig.ssp.service.external.ExternalDivisionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Base class which provides a building block for creating an external data
- * service.
+ * Term service implementation
  * 
- * @param <T>
- *            Any external data model class.
+ * @author jon.adams
  */
+@Service
 @Transactional
-public abstract class AbstractExternalReferenceDataService<T extends AbstractExternalReferenceData> extends AbstractExternalDataService<T> implements
-		ExternalDataService<T> {
- 
-	public T getByCode(String code) throws ObjectNotFoundException {
-		return ((AbstractExternalReferenceDataDao<T>)getDao()).getByCode(code);
+public class ExternalDivisionServiceImpl extends AbstractExternalReferenceDataService<ExternalDivision>
+		implements ExternalDivisionService {
+
+	@Autowired
+	transient private ExternalDivisionDao dao;
+
+	@Override
+	protected ExternalDivisionDao getDao() {
+		return dao;
 	}
-	
-	public List<T> getAll() {
-		return ((AbstractExternalReferenceDataDao<T>)getDao()).getAll();
+
+	protected void setDao(final ExternalDivisionDao dao) {
+		this.dao = dao;
 	}
+
+
 
 }

@@ -16,19 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.dao.external;
+package org.jasig.ssp.service.external;
 
-import org.jasig.ssp.model.external.ExternalProgram;
-import org.springframework.stereotype.Repository;
+import org.jasig.ssp.model.external.ExternalDivision;
 
-/**
- * Data access class for the External Person entity
- */
-@Repository
-public class ExternalProgramDao extends AbstractExternalReferenceDataDao<ExternalProgram> {
+public interface ExternalDivisionService extends
+		ExternalReferenceDataService<ExternalDivision> {
 
-	public ExternalProgramDao() {
-		super(ExternalProgram.class);
-	}
+
 
 }

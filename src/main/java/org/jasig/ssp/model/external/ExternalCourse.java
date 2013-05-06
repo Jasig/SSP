@@ -32,17 +32,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Immutable
 @Table(name = "v_external_course")
-public class ExternalCourse extends AbstractExternalData implements ExternalData, Serializable {
+public class ExternalCourse extends AbstractExternalReferenceData implements ExternalData, Serializable {
 
 	private static final long serialVersionUID = 1529384456357160956L;
 	public static final String BOOLEAN_YES = "Y";
 	public static final String BOOLEAN_NO = "N";
 	
-	@Column(nullable = false, length = 50)
-	@NotNull
-	@NotEmpty
-	@Size(max = 35)
-	private String code;
 
 	@Column(nullable = false, length = 35)
 	@NotNull
@@ -89,14 +84,6 @@ public class ExternalCourse extends AbstractExternalData implements ExternalData
 
 	public void setFormattedCourse(String formattedCourse) {
 		this.formattedCourse = formattedCourse;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
 	}
 
 	public String getTitle() {

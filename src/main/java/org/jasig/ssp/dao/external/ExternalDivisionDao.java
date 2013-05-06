@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.dao.external;
 
+import org.jasig.ssp.model.external.ExternalDivision;
 import org.jasig.ssp.model.external.ExternalProgram;
 import org.springframework.stereotype.Repository;
 
@@ -25,10 +26,10 @@ import org.springframework.stereotype.Repository;
  * Data access class for the External Person entity
  */
 @Repository
-public class ExternalProgramDao extends AbstractExternalReferenceDataDao<ExternalProgram> {
+public class ExternalDivisionDao extends AbstractExternalReferenceDataDao<ExternalDivision> {
 
-	public ExternalProgramDao() {
-		super(ExternalProgram.class);
+	public ExternalDivisionDao() {
+		super(ExternalDivision.class);
 	}
 
 }

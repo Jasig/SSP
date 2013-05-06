@@ -31,11 +31,11 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Immutable
-@Table(name = "v_external_program")
-public class ExternalProgram extends AbstractExternalReferenceData implements ExternalData, Serializable {
+@Table(name = "v_external_division")
+public class ExternalDivision extends AbstractExternalReferenceData implements ExternalData, Serializable {
 
 	private static final long serialVersionUID = 1529384456357160956L;
-	
+
 	@Column(nullable = false, length = 100)
 	@NotNull
 	@NotEmpty
@@ -49,4 +49,5 @@ public class ExternalProgram extends AbstractExternalReferenceData implements Ex
 	public void setName(String name) {
 		this.name = name;
 	}
+
 }

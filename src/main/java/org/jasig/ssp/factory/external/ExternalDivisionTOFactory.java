@@ -16,19 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.dao.external;
+package org.jasig.ssp.factory.external;
 
+import org.jasig.ssp.model.external.ExternalDivision;
 import org.jasig.ssp.model.external.ExternalProgram;
-import org.springframework.stereotype.Repository;
+import org.jasig.ssp.transferobject.external.ExternalDivisionTO;
+import org.jasig.ssp.transferobject.external.ExternalProgramTO;
 
 /**
- * Data access class for the External Person entity
+ * Program transfer object factory
+ * 
+ * @author tony.arland
  */
-@Repository
-public class ExternalProgramDao extends AbstractExternalReferenceDataDao<ExternalProgram> {
-
-	public ExternalProgramDao() {
-		super(ExternalProgram.class);
-	}
-
+public interface ExternalDivisionTOFactory extends ExternalTOFactory<ExternalDivisionTO, ExternalDivision> {
+	
 }
