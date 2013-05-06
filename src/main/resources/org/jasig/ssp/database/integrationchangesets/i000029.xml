@@ -39,6 +39,13 @@
 	("harmonize external_faculty_course_roster field widths") (SSP-1077) -->
 	<changeSet id="restore missing columns external course roster view"
 			author="dan.mccallum">
+		<preConditions onFail="CONTINUE"
+					onFailMessage="Skip creating the external_course_term and external_course table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
 		<dropView viewName="v_external_faculty_course_roster" />
 		<createView viewName="v_external_faculty_course_roster">
 			select ROW_NUMBER() OVER (ORDER BY faculty_school_id) as id, faculty_school_id, school_id, first_name, middle_name, last_name, primary_email_address, term_code, formatted_course, status_code, section_code, section_number from external_faculty_course_roster
