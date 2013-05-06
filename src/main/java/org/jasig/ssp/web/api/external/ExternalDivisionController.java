@@ -83,7 +83,7 @@ public class ExternalDivisionController extends AbstractExternalController<Exter
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
-	List<ExternalDivisionTO> getAllPrograms() {
+	List<ExternalDivisionTO> getAllDivisions() {
 		List<ExternalDivisionTO> response = new ArrayList<ExternalDivisionTO>();
 		List<ExternalDivision> allDivisions = getService().getAll();
 		for (ExternalDivision externalDivision : allDivisions) {
