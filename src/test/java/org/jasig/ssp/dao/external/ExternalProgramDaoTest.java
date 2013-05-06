@@ -25,6 +25,7 @@ import static org.junit.Assert.fail;
 import java.util.List;
 
 import org.jasig.ssp.model.external.ExternalCourse;
+import org.jasig.ssp.model.external.ExternalProgram;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,36 +37,36 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("../dao-testConfig.xml")
 @Transactional
-public class ExternalCourseDaoTest {
+public class ExternalProgramDaoTest {
 
 	@Autowired
-	private transient ExternalCourseDao dao;
+	private transient ExternalProgramDao dao;
 
 	@Test
-	public void testGetByCourseCode() {
-		ExternalCourse course = null;
+	public void testGetByProgramCode() {
+		ExternalProgram program = null;
 		try {
-			course = dao.getByCode("MATH-101");
+			program = dao.getByCode("MATH");
 		} catch (final ObjectNotFoundException e) {
 			fail("Course was not found");
 		}
-		assertEquals(course.getIsDev(), "Y");
-		assertNotNull("Course was not found", course);
+		assertEquals(program.getName(), "MATH");
+		assertNotNull("Course was not found", program);
 
 	}
 	
 	@Test
 	public void testGetAll() {
-		List<ExternalCourse> courses = null;
+		List<ExternalProgram> courses = null;
 		courses = dao.getAll();
-		assertEquals(20, courses.size());
+		assertEquals(1, courses.size());
 	}
 	
-	@Test
-	public void testGetTermCode()
-	{
-		System.out.print(dao.validateCourseForTerm("MATH-101", "FA15"));
-		assertEquals(dao.validateCourseForTerm("MATH-101", "FA15"), true);
-	}
+//	@Test
+//	public void testGetTermCode()
+//	{
+//		System.out.print(dao.validateCourseForTerm("MATH-101", "FA15"));
+//		assertEquals(dao.validateCourseForTerm("MATH-101", "FA15"), true);
+//	}
 
 }

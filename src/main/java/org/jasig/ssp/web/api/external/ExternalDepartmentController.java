@@ -83,7 +83,7 @@ public class ExternalDepartmentController extends AbstractExternalController<Ext
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
-	List<ExternalDepartmentTO> getAllPrograms() {
+	List<ExternalDepartmentTO> getAllDepartments() {
 		List<ExternalDepartmentTO> response = new ArrayList<ExternalDepartmentTO>();
 		List<ExternalDepartment> allDepartments = getService().getAll();
 		for (ExternalDepartment department : allDepartments) {
