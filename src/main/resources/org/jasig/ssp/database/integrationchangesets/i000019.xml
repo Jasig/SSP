@@ -69,6 +69,7 @@
 		<sql>grant all on v_external_person to ${database.app.username}</sql>
 	</changeSet>
 
+    <!-- !! The createView at the bottom is wrong! Be sure to fix with i000029.xml !! -->
 	<changeSet id="harmonize external_faculty_course_roster field widths" author="dan.mccallum">
 		<preConditions onFail="CONTINUE"
 					   onFailMessage="Skip modifications to external_faculty_course_roster fields widths in integration database">
