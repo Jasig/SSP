@@ -103,7 +103,7 @@ public class TagController
 				.asTOList(data.getRows()));
 
 	}
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value = "/facet", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	List<TagTO> facetSearch(
