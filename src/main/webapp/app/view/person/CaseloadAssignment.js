@@ -84,13 +84,6 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
                     xtype: 'tbspacer',
                     flex: 1
                 }, {
-                    xtype: 'checkboxfield',
-                    boxLabel: "Reset the student to Active status on the assigned " + me.sspConfig.get('coachFieldLabel') + "'s Caseload",
-                    itemId: 'resetActiveStatusCheck',
-                    name: 'setActiveStatus',
-                    //hidden: (( me.model.get('currentProgramStatusName').toLowerCase() == 'active' && me.model.get('id') != "")? true : false),
-                    inputValue: false
-                }, {
                     xtype: 'button',
                     itemId: 'printButton',
                     tooltip: 'Print Appointment Form',

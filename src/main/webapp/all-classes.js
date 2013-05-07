@@ -9233,7 +9233,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     		click: 'onEmailClick'
     	},
     	
-    	resetActiveStatusCheck: '#resetActiveStatusCheck'
     },
     
 	init: function() {
@@ -9467,7 +9466,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	if (r.id != "")
 		{
     		// new student save an Active program status
-    		if ( me.person.get('id') == "" || me.getResetActiveStatusCheck().checked == true)
+    		// non-new student w/o status (Early Alert generated but not sent, or logged in, etc) also gets Active status
+    		if ( (me.person.get('id') == "") || (r.currentProgramStatusName == null ) )
     		{
     			personProgramStatus = new Ssp.model.PersonProgramStatus();
     			personProgramStatus.set('programStatusId',Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);
@@ -18578,13 +18578,6 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
                 , {
                     xtype: 'tbspacer',
                     flex: 1
-                }, {
-                    xtype: 'checkboxfield',
-                    boxLabel: "Reset the student to Active status on the assigned " + me.sspConfig.get('coachFieldLabel') + "'s Caseload",
-                    itemId: 'resetActiveStatusCheck',
-                    name: 'setActiveStatus',
-                    //hidden: (( me.model.get('currentProgramStatusName').toLowerCase() == 'active' && me.model.get('id') != "")? true : false),
-                    inputValue: false
                 }, {
                     xtype: 'button',
                     itemId: 'printButton',
