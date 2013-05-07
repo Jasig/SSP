@@ -20,6 +20,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.semestergrid',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    controller:'Ssp.controller.tool.map.SemesterGridViewController',
 	inject:{
 		appEventsController: 'appEventsController'
 	},
@@ -101,13 +102,13 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
                 }]
             }],
 			viewConfig: {
-			        plugins: {
+			    plugins: {
 			            ptype: 'gridviewdragdrop',
 						ddGroup: 'ddGroupForCourses',
 						dropGroup: 'coursesDDGroup',
 						dragGroup: 'coursesDDGroup',
 						pluginId: 'semesterviewdragdrop',
-			    },
+			    }
 			},
         });
         

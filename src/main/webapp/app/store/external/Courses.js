@@ -25,7 +25,7 @@ Ext.define('Ssp.store.external.Courses', {
     },
    
     constructor: function(){
-    	Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('courses') ),
+    	Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('course') + '/search' ),
 			  autoLoad: false });
     	return this.callParent(arguments);	    
     }

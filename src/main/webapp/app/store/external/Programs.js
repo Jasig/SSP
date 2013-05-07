@@ -16,21 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.external.AbstractExternal', {
-    extend: 'Ext.data.Model',
-    fields: [{name: 'name', type: 'string'},
-             {name: 'code', type: 'string'}],
-    
-	populateFromGenericObject: function( record ){
-		if (record != null)
-		{
-			for (fieldName in this.data)
-	    	{
-				if ( record[fieldName] )
-	    		{
-	    			this.set( fieldName, record[fieldName] );
-	    		}
-	    	}
-		}
-    }
+Ext.define('Ssp.store.external.Programs', {
+	extend: 'Ssp.store.reference.AbstractReferences',
+	model: 'Ssp.model.external.AbstractExternal',
+	remoteSort: true,
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties'
+    },
+   
+    constructor: function(){
+		var me = this;
+		me.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('programs'),
+    		autoLoad: true});
+    	return; 
+    },
 });

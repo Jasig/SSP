@@ -20,7 +20,16 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
     extend: 'Ext.form.Panel',
     alias: 'widget.coursesview',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.map.CoursesViewController',
+    inject: {
+    	apiProperties: 'apiProperties',
+    	appEventsController: 'appEventsController',
+		columnRendererUtils : 'columnRendererUtils',
+		programs: 'programsStore',
+		tags: 'tagsStore',
+		departments: 'departmentsStore',
+		divisions: 'divisionsStore',
+    },
+    controller: 'Ssp.controller.tool.map.CoursesViewController',
     
     width: '100%',
     height: '100%',
@@ -41,113 +50,183 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                 width: '100%',
                 height: '100%',
                 items: [
+                    {
+				    xtype: 'fieldset',
+				    border: 0,
+				    title: '',
+				    margin: '0 0 0 0',
+				    padding: '5 0 5 5',
+				    layout: 'hbox',
+				    defaults: {
+				        anchor: '100%'
+				    },
+				    items: [{
+				        xtype: 'combobox',
+				        name: 'program',
+				        store: me.programs,
+				        fieldLabel: '',
+				        emptyText: 'Filter by Program',
+				        valueField: 'code',
+				        displayField: 'name',
+				        mode: 'local',
+				        queryMode: 'local',
+				        allowBlank: true,
+				        itemId: 'program',
+				        width: 260,
+				    }, {
+				        tooltip: 'Reset to All Programs',
+				        text: '',
+				        width: 30,
+				        height: 25,
+				        name: 'programCancel',
+				        cls: 'mapClearSearchIcon',
+				        xtype: 'button',
+				        itemId: 'programCancel',
+				    }]
+				},
+
                 {
-                    xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    margin: '0 0 0 0',
-                    padding: '5 0 5 5',
-                    layout: 'hbox',
-                    defaults: {
-                        anchor: '100%'
-                    },
-                    items: [{
-                        xtype: 'combobox',
-                        name: 'coursesCombo',
-                        fieldLabel: '',
-                        emptyText: 'Select From - All Courses',
-                        valueField: 'courseType',
-                        displayField: 'courseType',
-                        mode: 'local',
-                        queryMode: 'local',
-                        allowBlank: true,
-                        itemId: 'coursesTypeCombo',
-                        width: 285,
-						hidden: true,
-						hideable: false
-                    }]
-                
-                    },
-                    {
-                        xtype: 'container',
-                        autoEl: 'hr'
-                    },
-                    {
-                    xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    margin: '0 0 0 0',
-                    padding: '5 0 5 5',
-                    layout: 'hbox',
-                    defaults: {
-                        anchor: '100%'
-                    },
-                    items: [{
-                        xtype: 'combobox',
-                        name: 'programCombo',
-                        fieldLabel: '',
-                        emptyText: 'Filter by Program',
-                        valueField: 'code',
-                        displayField: 'longName',
-                        mode: 'local',
-                        queryMode: 'local',
-                        allowBlank: true,
-                        itemId: 'programCombo',
-                        width: 260,
-						hidden: true,
-						hideable: false
-                    }, {
-                        tooltip: 'Reset to All Programs',
-                        text: '',
-                        width: 30,
-                        height: 25,
-                        cls: 'mapClearSearchIcon',
-                        xtype: 'button',
-                        itemId: 'cancelProgramSearchButton',
-						hidden: true,
-						hideable: false
-                    }]
-                
-                }, {
-                    xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    defaultType: 'displayfield',
-                    margin: '0 0 0 0',
-					padding: '0 0 5 5',
-                    layout: 'hbox',
-                    defaults: {
-                        anchor: '100%'
-                    },
-                    
-                    items: [{
-                        xtype: 'combobox',
-                        name: 'transferCombo',
-                        fieldLabel: '',
-                        emptyText: 'Filter by Transfer',
-                        valueField: 'code',
-                        displayField: 'transfer',
-                        mode: 'local',
-                        typeAhead: true,
-                        queryMode: 'local',
-                        allowBlank: true,
-                        itemId: 'transferCombo',
-                        width: 260,
-						hidden: true,
-						hideable: false
-                    }, {
-                        tooltip: 'Reset to All Transfer Types',
-                        text: '',
-                        width: 30,
-                        height: 25,
-                        cls: 'mapClearSearchIcon',
-                        xtype: 'button',
-                        itemId: 'cancelTransferSearchButton',
-						hidden: true,
-						hideable: false
-                    }]
-                
-                }, {
+				    xtype: 'fieldset',
+				    border: 0,
+				    title: '',
+				    margin: '0 0 0 0',
+				    padding: '5 0 5 5',
+				    layout: 'hbox',
+				    defaults: {
+				        anchor: '100%'
+				    },
+				    items: [{
+				        xtype: 'combobox',
+				        name: 'tag',
+				        fieldLabel: '',
+				        store: me.tags,
+				        emptyText: 'Filter by Tag',
+				        valueField: 'code',
+				        displayField: 'name',
+				        mode: 'local',
+				        queryMode: 'local',
+				        allowBlank: true,
+				        itemId: 'tag',
+				        width: 260,
+				    }, {
+				        tooltip: 'Reset to All Tags',
+				        text: '',
+				        width: 30,
+				        height: 25,
+				        name: 'tagCancel',
+				        cls: 'mapClearSearchIcon',
+				        xtype: 'button',
+				        itemId: 'tagCancel',
+				    }]
+				},
+                {
+				    xtype: 'fieldset',
+				    border: 0,
+				    title: '',
+				    margin: '0 0 0 0',
+				    padding: '5 0 5 5',
+				    layout: 'hbox',
+				    defaults: {
+				        anchor: '100%'
+				    },
+				    items: [{
+				        xtype: 'combobox',
+				        name: 'term',
+				        fieldLabel: '',
+				        emptyText: 'Filter by Term',
+				        valueField: 'code',
+				        displayField: 'name',
+				        mode: 'local',
+				        queryMode: 'local',
+				        allowBlank: true,
+				        itemId: 'term',
+				        width: 260,
+				    }, {
+				        tooltip: 'Reset to All Terms',
+				        text: '',
+				        width: 30,
+				        height: 25,
+				        name: 'tagCancel',
+				        cls: 'mapClearSearchIcon',
+				        xtype: 'button',
+				        itemId: 'termCancel',
+				    }]
+				},
+                {
+				    xtype: 'fieldset',
+				    border: 0,
+				    title: '',
+				    margin: '0 0 0 0',
+				    padding: '5 0 5 5',
+				    layout: 'hbox',
+				    hidden:true,
+				    defaults: {
+				        anchor: '100%'
+				    },
+				    items: [{
+				        xtype: 'combobox',
+				        name: 'department',
+				        store: me.departments,
+				        fieldLabel: '',
+				        emptyText: 'Filter by Department',
+				        valueField: 'code',
+				        displayField: 'name',
+				        mode: 'local',
+				        queryMode: 'local',
+				        allowBlank: true,
+				        itemId: 'department',
+				        width: 260,
+				    }, {
+				        tooltip: 'Reset to All Departments',
+				        text: '',
+				        width: 30,
+				        height: 25,
+				        name: 'departmentCancel',
+				        cls: 'mapClearSearchIcon',
+				        xtype: 'button',
+				        itemId: 'departmentCancel',
+				    }]
+				},
+                {
+				    xtype: 'fieldset',
+				    border: 0,
+				    title: '',
+				    margin: '0 0 0 0',
+				    padding: '5 0 5 5',
+				    layout: 'hbox',
+				    hidden: true,
+				    defaults: {
+				        anchor: '100%'
+				    },
+				    items: [{
+				        xtype: 'combobox',
+				        name: 'division',
+				        store: me.divisions,
+				        fieldLabel: '',
+				        emptyText: 'Filter by Division',
+				        valueField: 'code',
+				        displayField: 'name',
+				        mode: 'local',
+				        queryMode: 'local',
+				        allowBlank: true,
+				        itemId: 'division',
+				        width: 260,
+				    }, {
+				        tooltip: 'Reset to All Division',
+				        text: '',
+				        width: 30,
+				        height: 25,
+				        name: 'divisionCancel',
+				        cls: 'mapClearSearchIcon',
+				        xtype: 'button',
+				        itemId: 'divisionCancel',
+				    }]
+				},
+				 {
+                    xtype: 'container',
+                    autoEl: 'hr'
+                },
+                 {
                     xtype: 'fieldset',
                     border: 0,
                     title: '',

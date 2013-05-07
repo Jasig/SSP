@@ -344,6 +344,7 @@ Ext.require([
     'Ssp.service.StudentIntakeService',
     'Ssp.service.TranscriptService',
 	'Ssp.service.MapPlanService',
+	'Ssp.service.CourseService', 
     'Ssp.controller.ApplicationEventsController',
     'Ext.tab.*',
 	'Ext.util.Filter',
@@ -441,8 +442,11 @@ var apiUrls = [
   {name: 'studentIntakeTool', url: 'tool/studentIntake'},
   {name: 'studentType', url: 'reference/studentType'},
   {name: 'terms', url: 'reference/term/?sort=startDate&start=0&limit=10000&sortDirection=DESC'},
-  {name: 'courses', url: 'reference/course/all'},
-  {name: 'tag', url: 'reference/tag'},
+  {name: 'course', url: 'reference/course'},
+  {name: 'program', url: 'reference/program/facet'},
+  {name: 'department', url: 'reference/department/facet'},
+  {name: 'division', url: 'reference/division/facet'},
+  {name: 'tag', url: 'reference/tag/facet'},
   {name: 'futureTerms', url: 'reference/term/future'},
   {name: 'weeklyCourseWorkHourRanges', url: 'reference/config/?name=weekly_course_work_hour_ranges'},
 ];
@@ -878,6 +882,9 @@ Ext.onReady(function(){
 				    registrationLoadRangesStore: 'Ssp.store.reference.RegistrationLoadRanges', 
 				    weeklyCourseWorkHourRangesStore: 'Ssp.store.reference.WeeklyCourseWorkHourRanges',
 				    termsStore:'Ssp.store.external.Terms',
+				    programsStore:'Ssp.store.external.Programs',
+				    divisionsStore:'Ssp.store.external.Divisions',
+				    departmentsStore:'Ssp.store.external.Departments',
 					coursesStore:'Ssp.store.external.Courses',
 					tagsStore: 'Ssp.store.reference.Tags',
 				    tasksStore: 'Ssp.store.Tasks',
@@ -908,7 +915,8 @@ Ext.onReady(function(){
 			        studentIntakeService: 'Ssp.service.StudentIntakeService',
 			        transcriptService: 'Ssp.service.TranscriptService',
 			        mapPlanService: 'Ssp.service.MapPlanService',
-			        studentActivityService: 'Ssp.service.StudentActivityService'
+			        studentActivityService: 'Ssp.service.StudentActivityService',
+			        courseService: 'Ssp.service.CourseService'
 				});
 				
 				Ext.application({

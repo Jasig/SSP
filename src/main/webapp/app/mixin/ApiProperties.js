@@ -125,8 +125,21 @@ Ext.define('Ssp.mixin.ApiProperties', {
 		{
 			scope = args.scope;
 		}
+		var paramString= "";
+		if (args.params != undefined && args.params != null)
+		{
+			 for(var index in args.params){
+		        var param = args.params[index];
+		        paramString = paramString + index + "=" + param + "&";
+			 }
+			
+			if(paramString != undefined && paramString.length > 0){
+				var paramString  = "?" + paramString.substring(0, paramString.length - 1);
+			}
+		}
+		
 		Ext.Ajax.request({
-			url: args.url,
+			url: args.url + paramString,
 			method: args.method,
 			headers: { 'Content-Type': contentType },
 			jsonData: args.jsonData || '',

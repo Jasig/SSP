@@ -299,6 +299,11 @@
                     "path": "/app/view/tools/accommodation/"
                 },
                 {
+                    "clsName": "Ssp.controller.tool.map.CoursesViewController",
+                    "name": "CoursesViewController.js",
+                    "path": "/app/controller/tool/map/"
+                },
+                {
                     "clsName": "Ssp.controller.tool.map.CoursesGridController",
                     "name": "CoursesGridController.js",
                     "path": "/app/controller/tool/map/"
@@ -331,6 +336,11 @@
                 {
                     "clsName": "Ssp.controller.tool.map.SemesterPanelViewController",
                     "name": "SemesterPanelViewController.js",
+                    "path": "/app/controller/tool/map/"
+                },
+                 {
+                    "clsName": "Ssp.controller.tool.map.SemesterGridViewController",
+                    "name": "SemesterGridViewController.js",
                     "path": "/app/controller/tool/map/"
                 },
 				{
@@ -718,6 +728,12 @@
                     "name": "SearchService.js",
                     "path": "/app/service/"
                 },
+                
+                {
+                    "clsName": "Ssp.service.CourseService",
+                    "name": "CourseService.js",
+                    "path": "/app/service/"
+                },
                 {
                     "clsName": "Ssp.service.SpecialServiceGroupService",
                     "name": "SpecialServiceGroupService.js",
@@ -991,6 +1007,21 @@
                 {
                     "clsName": "Ssp.store.external.Terms",
                     "name": "Terms.js",
+                    "path": "/app/store/external/"
+                },
+                {
+                    "clsName": "Ssp.store.external.Departments",
+                    "name": "Departments.js",
+                    "path": "/app/store/external/"
+                },
+                 {
+                    "clsName": "Ssp.store.external.Programs",
+                    "name": "Programs.js",
+                    "path": "/app/store/external/"
+                },
+                {
+                    "clsName": "Ssp.store.external.Divisions",
+                    "name": "Divisions.js",
                     "path": "/app/store/external/"
                 },
                 {
