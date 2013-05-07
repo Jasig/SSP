@@ -5,3 +5,4 @@ catalina.home_IS_UNDEFINED
 overlays
 /src/main/webapp/app-all.js
 /src/main/webapp/all-classes.js
+FooController.java

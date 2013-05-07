@@ -25,7 +25,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.model.Task;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
 import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
 
 /**
@@ -43,6 +47,8 @@ public class TaskTO
 
 	private boolean deletable;
 
+	@JsonSerialize(using = DateOnlySerializer.class)
+	@JsonDeserialize(using = DateOnlyDeserializer.class)
 	private Date dueDate;
 
 	private Date completedDate;

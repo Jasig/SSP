@@ -40,6 +40,13 @@ namespace 'mygps.model'
 				# TODO: Extract to utility function.
 				parseDate = ( msSinceEpoch ) ->
 					if msSinceEpoch?
-						new Date( msSinceEpoch ) 
+						d = new Date( msSinceEpoch )
+						# Gets date back to midnight browser-local time. msSinceEpoch is
+						# a ISO8601 date without a timezone, so is interpreted in UTC.
+						# If then rendered in browser local time (which is what happens for
+						# all date rendering both in MyGPS and SSP-proper), the output would
+						# reflect the previous calendar day for most SSP deployments.
+						d.setTime(d.getTime() + (d.getTimezoneOffset() * 60 * 1000))
+						d
 					else null
 				return new Task( taskTO.id, taskTO.type, taskTO.name, taskTO.description, taskTO.link, taskTO.details, parseDate( taskTO.dueDate ), taskTO.completed, taskTO.deletable, taskTO.challengeId, taskTO.challengeReferralId )

@@ -44,6 +44,7 @@ import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.jsonserializer.DateTimeRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -111,8 +112,8 @@ public class MessageTemplateServiceImpl extends
 	}
 
 	private String formatDate(final Date date) {
-		final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy",
-				Locale.getDefault());
+		final SimpleDateFormat format =
+				DateTimeRepresentation.newDateFormatter("MM/dd/yyyy");
 		return format.format(date);
 	}
 

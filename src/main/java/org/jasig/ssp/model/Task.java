@@ -66,7 +66,7 @@ public class Task // NOPMD by jon.adams
 	@Size(max = 64000)
 	private String description;
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@Column
 	private Date dueDate;
 

@@ -19,14 +19,71 @@
 
 # CoffeeScript build file for MyGPS
 
-# Copy this file to some path outside the source control tree, edit the below
-# variables with the correct paths for your environment, and run it manually
-# any time any *.coffee file is updated.
+# This **only** works with Node.js v0.8.16, CoffeeScript v1.4.0, and Closure
+# Compiler 121212. Otherwise will run into any number of problems, ranging from
+# unexpected file ordering to significantly different compiler output to
+# outright compilation failure.
 #
-# To run this build file, ensure CoffeeScript is installed and in your path,
-# then change your working directory to the location of this (copied) file
-# and run:
-#  cake build
+# To install these libraries:
+#
+#  - Node: Download and install platform-specific package from:
+#
+#        http://nodejs.org/dist/v0.8.16/
+#
+#      If you need to uninstall a previous, global installation, this
+#      script works (tested on OSX Mountain Lion to uninstall 0.10.5):
+#
+#        https://raw.github.com/gist/2697848/uninstall-node.sh
+#
+#      That script was originally found here:
+#
+#        http://stackoverflow.com/questions/9044788/how-do-i-uninstall-nodejs-installed-from-pkg-mac-os-x
+#
+#  - CoffeeScript: Simplest is to just install it via npm ("Node Package
+#      Manager"). Assuming a global install:
+#
+#        %> sudo npm install -g coffee-script@1.4.0
+#
+#      To uninstall a previous, global version:
+#
+#        %> sudo npm uninstall -g coffee-script
+#
+#      Verify install. Should look like:
+#
+#        %> node --version
+#        v0.8.16
+#        %> coffee --version
+#        CoffeeScript version 1.4.0
+#
+#  - Closure Compiler: You'll need the "121212" release. Download from:
+#
+#      https://code.google.com/p/closure-compiler/downloads/list
+#
+#    Verify install. Should look like:
+#
+#        %> $ java -jar /path/to/your/closure/compiler.jar --version
+#        Closure Compiler (http://code.google.com/closure/compiler)
+#        Version: 20121212 (revision 2388)
+#        Built on: 2012/12/12 17:42
+#
+#
+# Then copy this file to some path outside the source control tree, edit the
+# below variables with the correct paths for your environment, and run it
+# manually any time any *.coffee file is updated.
+#
+# To run this build file change your working directory to the location of this
+# (copied) file and run:
+#
+#  %> cake build
+#
+# It's a good idea to make sure you can reproduce the current compiled output
+# with that command before making any changes to *.coffee source files.
+#
+# Before you check anything in, re-apply the JASIG license headers:
+#
+#  %> mvn license:format
+#
+# Windows? Yeah, you're on you're own...
 
 
 # Version number to append to the compiled MyGPS.js file.
