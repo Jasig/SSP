@@ -18,8 +18,13 @@
  */
 package org.jasig.ssp.dao.reference;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Query;
 import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.external.ExternalProgram;
 import org.jasig.ssp.model.reference.Tag;
 
 /**
@@ -31,5 +36,55 @@ public class TagDao extends AbstractReferenceAuditableCrudDao<Tag>
 
 	public TagDao() {
 		super(Tag.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Tag> facetSearch(String programCode, String termCode) {
+		String query = buildTagSearchQuery(programCode, termCode);		
+		Query hqlQuery = createHqlQuery(query.toString());
+		buildTagSearchParamList(programCode, termCode, hqlQuery);		
+		List<Tag> result = hqlQuery
+		.list();
+		return result;	
+		}
+
+	private void buildTagSearchParamList(String programCode, String termCode,
+			Query hqlQuery) {
+		if(!StringUtils.isEmpty(programCode))
+		{
+			hqlQuery.setString("programCode", programCode);
+		}
+		if(!StringUtils.isEmpty(termCode))
+		{
+			hqlQuery.setString("termCode", termCode);
+		}		
+	}
+
+	private String buildTagSearchQuery(String programCode, String termCode) {
+		StringBuilder query = new StringBuilder();
+		query.append(" select distinct t from Tag t , ExternalCourseTag ect , ExternalCourse ec ");
+		if(!StringUtils.isEmpty(programCode))
+		{
+			query.append(" ,ExternalCourseProgram ecp ");
+		}
+		if(!StringUtils.isEmpty(termCode))
+		{
+			query.append(" ,ExternalCourseTerm ectr ");
+		}
+		query.append(" where ");
+		query.append(" t.code = ect.tag ");
+		query.append(" and ect.courseCode = ec.code  ");
+		
+		if(!StringUtils.isEmpty(programCode))
+		{
+			query.append(" and ec.code = ecp.courseCode ");
+			query.append(" and ecp.programCode = :programCode ");
+		}	
+		if(!StringUtils.isEmpty(termCode))
+		{
+			query.append(" and ec.code = ectr.courseCode ");
+			query.append(" and ectr.termCode = :termCode  ");
+		}
+		return query.toString();		
 	}
 }

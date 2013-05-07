@@ -19,6 +19,8 @@
  */
 package org.jasig.ssp.web.api.reference;
 
+import java.util.List;
+
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.factory.reference.TagTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
@@ -58,7 +60,7 @@ public class TagController
 	protected transient TagService service;
 
 	@Override
-	protected AuditableCrudService<Tag> getService() {
+	protected TagService getService() {
 		return service;
 	}
 
@@ -66,7 +68,7 @@ public class TagController
 	protected transient TagTOFactory factory;
 
 	@Override
-	protected TOFactory<TagTO, Tag> getFactory() {
+	protected TagTOFactory getFactory() {
 		return factory;
 	}
 
@@ -101,4 +103,16 @@ public class TagController
 				.asTOList(data.getRows()));
 
 	}
+	@RequestMapping(method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
+	public @ResponseBody
+	List<TagTO> facetSearch(
+			final @RequestParam(required = false) String programCode,
+			final @RequestParam(required = false) String termCode) {
+
+		List<Tag> data = getService().facetSearch(programCode,termCode);
+
+		return getFactory().asTOList(data);
+
+	}	
 }

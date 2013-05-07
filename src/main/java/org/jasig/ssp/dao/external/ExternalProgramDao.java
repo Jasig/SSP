@@ -40,13 +40,13 @@ public class ExternalProgramDao extends AbstractExternalReferenceDataDao<Externa
 	public List<ExternalProgram> facetSearch(String tag, String termCode) {
 		String query = buildProgramSearchQuery(tag, termCode);		
 		Query hqlQuery = createHqlQuery(query.toString());
-		buildCourseSearchParamList(tag, termCode, hqlQuery);		
+		buildProgramSearchParamList(tag, termCode, hqlQuery);		
 		List<ExternalProgram> result = hqlQuery
 		.list();
 		return result;	
 		}
 
-	private void buildCourseSearchParamList(String tag, String termCode,
+	private void buildProgramSearchParamList(String tag, String termCode,
 			Query hqlQuery) {
 		if(!StringUtils.isEmpty(termCode))
 		{

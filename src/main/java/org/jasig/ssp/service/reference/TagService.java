@@ -18,8 +18,12 @@
  */
 package org.jasig.ssp.service.reference;
 
+import java.util.List;
+
 import org.jasig.ssp.model.reference.Tag;
 import org.jasig.ssp.service.ReferenceService;
 
 public interface TagService extends ReferenceService<Tag> {
+
+	List<Tag> facetSearch(String programCode, String termCode);
 }

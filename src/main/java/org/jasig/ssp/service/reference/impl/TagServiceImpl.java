@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
+import java.util.List;
+
 import org.jasig.ssp.dao.reference.TagDao;
 import org.jasig.ssp.model.reference.Tag;
 import org.jasig.ssp.service.reference.TagService;
@@ -53,5 +55,10 @@ public class TagServiceImpl extends
 	 */
 	protected void setDao(final TagDao dao) {
 		this.dao = dao;
+	}
+
+	@Override
+	public List<Tag> facetSearch(String programCode, String termCode) {
+		return dao.facetSearch(programCode,termCode);
 	}
 }

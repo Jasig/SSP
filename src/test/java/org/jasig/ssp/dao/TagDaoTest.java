@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.dao.external;
+package org.jasig.ssp.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -24,8 +24,10 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import org.jasig.ssp.dao.reference.TagDao;
 import org.jasig.ssp.model.external.ExternalCourse;
 import org.jasig.ssp.model.external.ExternalProgram;
+import org.jasig.ssp.model.reference.Tag;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,34 +37,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("../dao-testConfig.xml")
+@ContextConfiguration("dao-testConfig.xml")
 @Transactional
-public class ExternalProgramDaoTest {
+public class TagDaoTest {
 
 	@Autowired
-	private transient ExternalProgramDao dao;
+	private transient TagDao dao;
 
-	public void testGetByProgramCode() {
-		ExternalProgram program = null;
-		try {
-			program = dao.getByCode("MATH");
-		} catch (final ObjectNotFoundException e) {
-			fail("Course was not found");
-		}
-		assertEquals(program.getName(), "MATH");
-		assertNotNull("Course was not found", program);
-
-	}
-	
-	public void testGetAll() {
-		List<ExternalProgram> courses = null;
-		courses = dao.getAll();
-		assertEquals(1, courses.size());
-	}
-	
 	public void testGetFacetSearch()
 	{
-		List<ExternalProgram> result = dao.facetSearch(null, "FA13");
+		List<Tag> result = dao.facetSearch("MATH", null);
 		assertEquals(result.size(), 0);
 	}
 
