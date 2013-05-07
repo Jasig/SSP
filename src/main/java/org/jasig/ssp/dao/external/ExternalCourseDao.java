@@ -73,7 +73,6 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 			String termCode) {
 		
 		String query = buildCourseSearchQuery(programCode, tag, termCode);		
-		System.out.print(query.toString());
 		Query hqlQuery = createHqlQuery(query.toString());
 		buildCourseSearchParamList(programCode, tag, termCode, hqlQuery);		
 		List<ExternalCourse> result = hqlQuery
