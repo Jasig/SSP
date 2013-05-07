@@ -11858,7 +11858,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     
     onAddClick: function(button){
     	var me=this;
-    	var successFunc;
+    	var successFunc, failureFunc;
     	var form = this.getView().getForm();
     	var model = this.model;
     	var jsonData;
@@ -11866,8 +11866,24 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     	if ( form.isValid() )
     	{
     		form.updateRecord();
-    		
+
+			// Can't use model.set('dueDate') to set our date string here b/c
+			// the types don't match. Doing so will cause that field to become
+			// undefined. So we just set the underlying field to our string. But
+			// then we also try to be good citizens and revert back to the
+			// original value after the call completes. Reverting on success
+			// really shouldn't matter b/c the UI should reload. And failure
+			// handling in general is a bit squishy. So there's no real
+			// guarantee the form is actually still usable following an AJAX
+			// failure. But this at least gives us a fighting chance. Other
+			// option would be taking a deep copy of the model's "raw" fields to
+			// manipulate before sending over the wire as JSON. We're not doing
+			// that anywhere else in the app though.
+			var origDueDate = model.data.dueDate;
+			model.data.dueDate = me.formUtils.toJSONStringifiableDate( model.data.dueDate );
+
 			successFunc = function(response ,view){
+					model.data.dueDate = origDueDate;
 		    	   Ext.Msg.confirm({
 		    		     title:'Success',
 		    		     msg: 'The task was saved successfully. Would you like to create another task?',
@@ -11875,10 +11891,12 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 		    		     fn: me.createTaskConfirmResult,
 		    		     scope: me
 		    		});
-			};	
-    		
-			// fix timestamp due to GMT Date, set to UTC Date
-    		model.set('dueDate', me.formUtils.fixDateOffsetWithTime( model.data.dueDate ) );
+			};
+
+			failureFunc = function(response) {
+				model.data.dueDate = origDueDate;
+				me.apiProperties.handleError(response);
+			}
 
     		if (id == "")
     		{
@@ -11890,7 +11908,8 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 	    			url: me.url,
 	    			method: 'POST',
 	    			jsonData: model.data,
-	    			successFunc: successFunc
+	    			successFunc: successFunc,
+	    			failureFunc: failureFunc
 	    		});
     		}else{
     			
@@ -11905,7 +11924,8 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 	    			url: me.url+"/"+id,
 	    			method: 'PUT',
 	    			jsonData: model.data,
-	    			successFunc: successFunc
+	    			successFunc: successFunc,
+	    			failureFunc: failureFunc
 	    		});    			
     		}
     	}else{
@@ -19610,6 +19630,15 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
     layout: 'auto',
 	width: '100%',
     height: '100%',
+	dueDateMsg: 'Task due dates are always interpreted in the institution\'s time zone.',
+	dueDateRenderer: function() {
+		var me = this;
+		return function(value,metaData,record) {
+			// http://www.sencha.com/forum/showthread.php?179016
+			metaData.tdAttr = 'data-qtip="' + me.dueDateMsg + '"';
+			return me.columnRendererUtils.renderTaskDueDate(value,metaData,record);
+		}
+	},
     initComponent: function(){
     	var me=this;
     	var sm = Ext.create('Ext.selection.CheckboxModel');
@@ -19710,7 +19739,15 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	        header: 'Due Date',
 		    	        width: 150,
 		    	        dataIndex: 'dueDate',
-		    	        renderer: me.columnRendererUtils.renderTaskDueDate
+		    	        renderer: me.dueDateRenderer(),
+						listeners: {
+							render: function(field){
+								Ext.create('Ext.tip.ToolTip',{
+									target: field.getEl(),
+									html: me.dueDateMsg
+								});
+							}
+						}
 		    	    }]
     	
 
@@ -19805,7 +19842,16 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				    	fieldLabel: 'Target Date',
 				    	altFormats: 'm/d/Y|m-d-Y',
 				        name: 'dueDate',
-				        allowBlank:false    	
+				        allowBlank:false,
+				        showToday:false, // else 'today' would be browser-local 'today'
+				        listeners: {
+				            render: function(field){
+				                Ext.create('Ext.tip.ToolTip',{
+				                    target: field.getEl(),
+				                    html: 'Use this to set the target completion date in the institution\'s time zone.'
+				                });
+				            }
+				        }
 				    }]
 				    }],
 				    
@@ -24637,7 +24683,7 @@ Ext.define('Ssp.model.tool.actionplan.Task', {
     fields: [{name:'name',type:'string'},
              {name:'description',type:'string'},
              {name:'link',type:'string'},
-             {name:'dueDate', type:'date', dateFormat: 'time'},
+             {name:'dueDate', type:'date', dateFormat: 'c'},
              {name:'reminderSentDate', type:'date', dateFormat:'time'},
              {name: 'confidentialityLevel',
                  convert: function(value, record) {

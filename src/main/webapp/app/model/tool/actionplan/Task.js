@@ -21,7 +21,7 @@ Ext.define('Ssp.model.tool.actionplan.Task', {
     fields: [{name:'name',type:'string'},
              {name:'description',type:'string'},
              {name:'link',type:'string'},
-             {name:'dueDate', type:'date', dateFormat: 'time'},
+             {name:'dueDate', type:'date', dateFormat: 'c'},
              {name:'reminderSentDate', type:'date', dateFormat:'time'},
              {name: 'confidentialityLevel',
                  convert: function(value, record) {
