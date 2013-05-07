@@ -18,10 +18,14 @@
  */
 package org.jasig.ssp.service.external;
 
+import java.util.List;
+
 import org.jasig.ssp.model.external.ExternalProgram;
 
 public interface ExternalProgramService extends
 		ExternalReferenceDataService<ExternalProgram> {
+
+	List<ExternalProgram> facetSearch(String tag, String termCode);
 
 
 

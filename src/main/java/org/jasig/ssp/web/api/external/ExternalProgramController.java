@@ -82,8 +82,22 @@ public class ExternalProgramController extends AbstractExternalController<Extern
 	List<ExternalProgramTO> getAllPrograms() {
 		List<ExternalProgramTO> response = new ArrayList<ExternalProgramTO>();
 		List<ExternalProgram> allPrograms = getService().getAll();
-		for (ExternalProgram externalCourse : allPrograms) {
-			response.add(getFactory().from(externalCourse));
+		for (ExternalProgram externalProgram : allPrograms) {
+			response.add(getFactory().from(externalProgram));
+		}
+		return response;
+	}
+	
+	@RequestMapping(value = "/facet", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
+	public @ResponseBody
+	List<ExternalProgramTO> facetSearch(
+			final @RequestParam(required = false) String tag,
+			final @RequestParam(required = false) String termCode) {
+		List<ExternalProgramTO> response = new ArrayList<ExternalProgramTO>();
+		List<ExternalProgram> allPrograms = getService().facetSearch(tag,termCode);
+		for (ExternalProgram externalProgram : allPrograms) {
+			response.add(getFactory().from(externalProgram));
 		}
 		return response;
 	}

@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.service.external.impl;
 
+import java.util.List;
+
 import org.jasig.ssp.dao.external.ExternalProgramDao;
 import org.jasig.ssp.model.external.ExternalProgram;
 import org.jasig.ssp.service.external.ExternalProgramService;
@@ -45,6 +47,11 @@ public class ExternalProgramServiceImpl extends AbstractExternalReferenceDataSer
 
 	protected void setDao(final ExternalProgramDao dao) {
 		this.dao = dao;
+	}
+
+	@Override
+	public List<ExternalProgram> facetSearch(String tag, String termCode) {
+		return dao.facetSearch(tag,termCode);
 	}
 
 
