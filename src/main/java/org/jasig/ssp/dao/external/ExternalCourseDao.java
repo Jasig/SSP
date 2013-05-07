@@ -24,6 +24,7 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
@@ -64,5 +65,92 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 		.setString("courseCode", code)
 		.setString("termCode", termCode)
 		.list().size() > 0 ;
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public List<ExternalCourse> search(String programCode, String tag,
+			String termCode) {
+		
+		String query = buildCourseSearchQuery(programCode, tag, termCode);		
+		System.out.print(query.toString());
+		Query hqlQuery = createHqlQuery(query.toString());
+		buildCourseSearchParamList(programCode, tag, termCode, hqlQuery);		
+		List<ExternalCourse> result = hqlQuery
+		.list();
+
+		return result;
+	}
+
+
+	private void buildCourseSearchParamList(String programCode, String tag,
+			String termCode, Query hqlQuery) {
+		if(!StringUtils.isEmpty(programCode))
+		{
+			hqlQuery.setString("programCode", programCode);
+		}
+		if(!StringUtils.isEmpty(termCode))
+		{
+			hqlQuery.setString("termCode", termCode);
+		}
+		if(!StringUtils.isEmpty(tag))
+		{
+			hqlQuery.setString("tag", tag);
+		}
+	}
+
+
+	private String buildCourseSearchQuery(String programCode, String tag,
+			String termCode) {
+		boolean firstWhereCondition = true;
+		StringBuilder query = new StringBuilder();
+		query.append(" select distinct ec from ExternalCourse ec ");
+		if(!StringUtils.isEmpty(programCode))
+		{
+			query.append(" ,ExternalCourseProgram ecp ");
+		}
+		if(!StringUtils.isEmpty(tag))
+		{
+			query.append(" ,ExternalCourseTag ectg ");
+		}
+		if(!StringUtils.isEmpty(termCode))
+		{
+			query.append(" ,ExternalCourseTerm ectr ");
+		}
+		if(!StringUtils.isEmpty(programCode))
+		{
+			query.append(" where ");
+			query.append(" ec.code = ecp.courseCode ");
+			query.append(" and ecp.programCode = :programCode  ");
+			firstWhereCondition = false;
+		}	
+		if(!StringUtils.isEmpty(tag))
+		{
+			if(!firstWhereCondition)
+			{
+				query.append(" and ");
+			}
+			else
+			{
+				query.append(" where ");
+			}
+			query.append(" ec.code = ectg.courseCode ");
+			query.append(" and ectg.tag = :tag ");
+			firstWhereCondition = false;
+		}	
+		if(!StringUtils.isEmpty(termCode))
+		{
+			if(!firstWhereCondition)
+			{
+				query.append(" and ");
+			}
+			else
+			{
+				query.append(" where ");
+			}			
+			query.append(" ec.code = ectr.courseCode ");
+			query.append(" and ectr.termCode = :termCode  ");
+		}
+		return query.toString();
 	}
 }

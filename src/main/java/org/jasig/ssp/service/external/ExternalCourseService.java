@@ -18,11 +18,15 @@
  */
 package org.jasig.ssp.service.external;
 
+import java.util.List;
+
 import org.jasig.ssp.model.external.ExternalCourse;
 
 public interface ExternalCourseService extends ExternalReferenceDataService<ExternalCourse> {
 
 	Boolean validateCourseForTerm(String courseCode, String termCode);
+
+	List<ExternalCourse> search(String programCode, String tag, String termCode);
 
 
 }

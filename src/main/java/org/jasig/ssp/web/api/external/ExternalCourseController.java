@@ -20,8 +20,10 @@ package org.jasig.ssp.web.api.external;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.jasig.ssp.factory.external.ExternalCourseTOFactory;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.external.ExternalCourse;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -78,6 +80,20 @@ public class ExternalCourseController extends AbstractExternalController<Externa
 	List<ExternalCourseTO> getAllCourses() {
 		List<ExternalCourseTO> response = new ArrayList<ExternalCourseTO>();
 		List<ExternalCourse> allCourses = getService().getAll();
+		for (ExternalCourse externalCourse : allCourses) {
+			response.add(getFactory().from(externalCourse));
+		}
+		return response;
+	}
+	
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
+	public @ResponseBody
+	List<ExternalCourseTO> searchCourses(final @RequestParam(required = false) String programCode,
+			final @RequestParam(required = false) String tag,
+			final @RequestParam(required = false) String termCode) {
+		List<ExternalCourseTO> response = new ArrayList<ExternalCourseTO>();
+		List<ExternalCourse> allCourses = getService().search(programCode,tag,termCode);
 		for (ExternalCourse externalCourse : allCourses) {
 			response.add(getFactory().from(externalCourse));
 		}

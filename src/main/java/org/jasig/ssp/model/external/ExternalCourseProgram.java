@@ -40,42 +40,42 @@ public class ExternalCourseProgram extends AbstractExternalData implements Exter
 	@NotNull
 	@NotEmpty
 	@Size(max = 50)
-	private String course_code;
+	private String courseCode;
 	
 	@Column(nullable = false, length = 50)
 	@NotNull
 	@NotEmpty
 	@Size(max = 50)
-	private String program_code;	
+	private String programCode;	
 
 	@Column(nullable = false, length = 100)
 	@NotNull
 	@NotEmpty
 	@Size(max = 100)
-	private String program_name;
+	private String programName;
 
-	public String getCourse_code() {
-		return course_code;
+	public String getCourseCode() {
+		return courseCode;
 	}
 
-	public void setCourse_code(String course_code) {
-		this.course_code = course_code;
+	public void setCourseCode(String courseCode) {
+		this.courseCode = courseCode;
 	}
 
-	public String getProgram_code() {
-		return program_code;
+	public String getProgramCode() {
+		return programCode;
 	}
 
-	public void setProgram_code(String program_code) {
-		this.program_code = program_code;
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
 	}
 
-	public String getProgram_name() {
-		return program_name;
+	public String getProgramName() {
+		return programName;
 	}
 
-	public void setProgram_name(String program_name) {
-		this.program_name = program_name;
+	public void setProgramName(String programName) {
+		this.programName = programName;
 	}
 
 

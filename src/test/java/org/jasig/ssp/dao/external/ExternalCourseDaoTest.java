@@ -41,7 +41,6 @@ public class ExternalCourseDaoTest {
 	@Autowired
 	private transient ExternalCourseDao dao;
 
-	@Test
 	public void testGetByCourseCode() {
 		ExternalCourse course = null;
 		try {
@@ -54,14 +53,18 @@ public class ExternalCourseDaoTest {
 
 	}
 	
-	@Test
 	public void testGetAll() {
 		List<ExternalCourse> courses = null;
 		courses = dao.getAll();
 		assertEquals(20, courses.size());
 	}
 	
-	@Test
+	public void testSearch() {
+		List<ExternalCourse> courses = null;
+		courses = dao.search("", "", "FA12");
+		assertEquals(20, courses.size());
+	}
+	
 	public void testGetTermCode()
 	{
 		System.out.print(dao.validateCourseForTerm("MATH-101", "FA15"));

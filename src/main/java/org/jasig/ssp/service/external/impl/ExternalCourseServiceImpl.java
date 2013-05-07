@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.service.external.impl;
 
+import java.util.List;
+
 import org.jasig.ssp.dao.external.ExternalCourseDao;
 import org.jasig.ssp.model.external.ExternalCourse;
 import org.jasig.ssp.service.external.ExternalCourseService;
@@ -50,6 +52,12 @@ public class ExternalCourseServiceImpl extends AbstractExternalReferenceDataServ
 	@Override
 	public Boolean validateCourseForTerm(String courseCode, String termCode) {
 		return dao.validateCourseForTerm( courseCode,  termCode);
+	}
+
+	@Override
+	public List<ExternalCourse> search(String programCode, String tag,
+			String termCode) {
+		return dao.search(programCode,tag,termCode);
 	}
 
 
