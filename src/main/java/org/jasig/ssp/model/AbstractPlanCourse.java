@@ -22,7 +22,6 @@ import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.jasig.ssp.model.reference.Elective;
@@ -56,7 +55,7 @@ public abstract class AbstractPlanCourse<T extends AbstractPlan> extends Abstrac
 	private Integer creditHours;
 	
 	@Column(nullable = false)
-	private Boolean isDev;
+	private Boolean isDev = false;
 
 	@Column(nullable = false)
 	private Integer orderInTerm;
@@ -71,10 +70,10 @@ public abstract class AbstractPlanCourse<T extends AbstractPlan> extends Abstrac
 	
 	
 	@Column(nullable = false)
-	private Boolean isImportant;
+	private Boolean isImportant = false;
 	
 	@Column(nullable = false)
-	private Boolean isTranscript;	
+	private Boolean isTranscript = false;	
 	
 	@ManyToOne()
 	@JoinColumn(name = "elective_id", updatable = false, nullable = true)

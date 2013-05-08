@@ -38,7 +38,7 @@ public class TermNotes extends AbstractAuditable implements Cloneable {
 	private String termCode;
 	
 	@Column(nullable = false)
-	private Boolean isImportant;
+	private Boolean isImportant = false;
 
 	public Template getTemplate() {
 		return template;

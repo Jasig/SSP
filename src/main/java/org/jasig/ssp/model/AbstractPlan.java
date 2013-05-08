@@ -68,13 +68,13 @@ public abstract class AbstractPlan extends AbstractAuditable implements
 	private String studentNotes;
 	
 	@Column(nullable = false)
-	private Boolean isFinancialAid;
+	private Boolean isFinancialAid = false;
 
 	@Column(nullable = false)
-	private Boolean isImportant;
+	private Boolean isImportant = false;
 	
 	@Column(name="is_f1_visa",nullable = false)
-	private Boolean isF1Visa;	
+	private Boolean isF1Visa = false;	
 	
 	@Column(length = 2000)
 	@Size(max = 2000)
