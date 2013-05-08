@@ -69,38 +69,25 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		var store = editor.grid.getStore();
 		persistMethod= record.data.createdDate != null ? 'PUT' : 'POST';
 
-		var doUpdate = true;
-		if (store.$className == 'Ssp.store.reference.Tags') {
-			var checkValue = record.get('code');
-			store.filter([{filterFn: function(item) { return item.get("code") == checkValue; }}])
-			if (store.count() > 1) {
-				doUpdate = false;
-			}
-			store.clearFilter();
-		}
-		if (doUpdate) {
-			Ext.Ajax.request({
-				url: editor.grid.getStore().getProxy().url+"/"+id,
-				method: persistMethod,
-				headers: { 'Content-Type': 'application/json' },
-				jsonData: jsonData,
-				success: function(response, view) {
-					if(persistMethod == "PUT") {
-						var r = Ext.decode(response.responseText);
-						record.commit();
-						editor.grid.getStore().sync();
-						record.persisted = true;
-					} else {
-						var r = Ext.decode(response.responseText);
-						record.populateFromGenericObject(r);
-						store.totalCount = store.totalCount+1;
-					}
-				},
-				failure: this.apiProperties.handleError
-			}, this);
-		} else {
-			Ext.Msg.alert('This code already exists.');
-		}
+		Ext.Ajax.request({
+			url: editor.grid.getStore().getProxy().url+"/"+id,
+			method: persistMethod,
+			headers: { 'Content-Type': 'application/json' },
+			jsonData: jsonData,
+			success: function(response, view) {
+				if(persistMethod == "PUT") {
+					var r = Ext.decode(response.responseText);
+					record.commit();
+					editor.grid.getStore().sync();
+					record.persisted = true;
+				} else {
+					var r = Ext.decode(response.responseText);
+					record.populateFromGenericObject(r);
+					store.totalCount = store.totalCount+1;
+				}
+			},
+			failure: this.apiProperties.handleError
+		}, this);
 	},
 	
 	addRecord: function(button){

@@ -585,8 +585,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     viewConfig: {
                         markDirty: false
                     },
-                    form: 'AbstractReferenceAdminWithoutDelete',
-                    leaf: true,
+                    interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible:false
+                    },
+                    form: 'AbstractReferenceAdmin',
+                    leaf: true,         
                     columns: [
 						{
                         header: 'Active',
