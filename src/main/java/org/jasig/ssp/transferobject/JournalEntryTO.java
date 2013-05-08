@@ -28,9 +28,13 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.reference.JournalSource;
 import org.jasig.ssp.model.reference.JournalTrack;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
 import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 
@@ -45,6 +49,8 @@ public class JournalEntryTO
 
 	private static final long serialVersionUID = -2188963893970704753L;
 
+	@JsonSerialize(using = DateOnlySerializer.class)
+	@JsonDeserialize(using = DateOnlyDeserializer.class)
 	@NotNull
 	private Date entryDate;
 

@@ -110,19 +110,8 @@ public class TaskDao
 		// this query. You really want to preserve that May 5, though, b/c we
 		// don't *actually* want date-only values interpreted in the persistent
 		// timezone, at least not in this case.
-		criteria.add(Restrictions.gt("dueDate", persistentMidnight()));
+		criteria.add(Restrictions.gt("dueDate", SspTimeZones.INSTANCE.midnightTodayInDbTimeZone()));
 		return criteria.list();
-	}
-
-	private Date persistentMidnight() {
-		Calendar localCal = Calendar.getInstance();
-		Calendar persistentCal = Calendar.getInstance();
-		persistentCal.setTimeZone(SspTimeZones.INSTANCE.getDbTimeZone());
-		persistentCal.set(localCal.get(Calendar.YEAR),
-				localCal.get(Calendar.MONTH),
-				localCal.get(Calendar.DAY_OF_MONTH),
-				0, 0, 0);
-		return new Date(persistentCal.getTimeInMillis());
 	}
 
 	@SuppressWarnings(UNCHECKED)

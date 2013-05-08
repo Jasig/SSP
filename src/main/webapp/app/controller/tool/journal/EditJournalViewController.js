@@ -37,7 +37,12 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     },
 
     control: {
-    	entryDateField: '#entryDateField',
+    	entryDateField: {
+			selector: '#entryDateField',
+			listeners: {
+				select: 'onEntryDateSelect'
+			}
+		},
     	
     	removeJournalTrackButton: {
     		selector: '#removeJournalTrackButton',
@@ -109,6 +114,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		if ( me.model.get('entryDate') == null)
 		{
 			me.getEntryDateField().setValue( new Date() );
+			me.model.set('entryDate', me.getEntryDateField().getValue());
 		}
 		
 		me.inited=true;
@@ -161,8 +167,9 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     			Ext.Msg.alert('SSP Error','You have a Journal Track set in your entry. Please select the associated details for this Journal Entry.');  			
     		}else{
 
-    			// fix date from GMT to UTC
-        		record.set('entryDate', me.formUtils.fixDateOffsetWithTime( record.data.entryDate ) );
+				// fix date from GMT to UTC
+				var origEntryDate = record.data.entryDate;
+				record.data.entryDate = me.formUtils.toJSONStringifiableDate( record.data.entryDate );
 
     			jsonData = record.data;
     			    			
@@ -185,9 +192,15 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     			me.getView().setLoading( true );
     			
     			me.journalEntryService.save( me.personLite.get('id'), jsonData, {
-    				success: me.saveSuccess,
-    				failure: me.saveFailure,
-    				scope: me
+    				success: function(r, scope) {
+						record.data.entryDate = origEntryDate;
+						scope.saveSuccess(r, scope);
+					},
+					failure: function(r, scope) {
+						record.data.entryDate = origEntryDate;
+						me.saveFailure(r, scope);
+					},
+					scope: me
     			});
     		}			
 		}
@@ -206,6 +219,11 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 	
 	onCancelClick: function(button){
 		this.displayMain();
+	},
+
+	onEntryDateSelect: function(comp, newValue, eOpts) {
+		var me = this;
+		me.model.set('entryDate', newValue);
 	},
 
 	onConfidentialityLevelComboSelect: function(comp, records, eOpts){

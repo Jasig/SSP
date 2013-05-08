@@ -47,7 +47,7 @@ public class JournalEntry
 
 	private static final long serialVersionUID = 1477217415946557983L;
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date entryDate;
 
 	private String comment;
