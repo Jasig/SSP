@@ -28,7 +28,7 @@ Ext.define('Ssp.store.external.Divisions', {
     constructor: function(){
 		var me = this;
 		me.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('divisions'),
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('division'),
     		autoLoad: true});
     	return; 
     },

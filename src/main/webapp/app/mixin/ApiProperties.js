@@ -230,7 +230,10 @@ Ext.define('Ssp.mixin.ApiProperties', {
 	 * 	the returned item is returned by name from the apiUrlStore.
 	 */
 	getItemUrl: function( itemName ){
-		var record = this.apiUrlStore.findRecord('name', itemName);
+		var index = this.apiUrlStore.findExact('name', itemName);
+		if(index == undefined || index < 0 )
+			return "";
+		var record = this.apiUrlStore.getAt(index);
 		var url = "";
 		if (record != null)
 			url = record.get('url');

@@ -28,7 +28,7 @@ Ext.define('Ssp.store.external.Programs', {
     constructor: function(){
 		var me = this;
 		me.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('programs'),
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('program'),
     		autoLoad: true});
     	return; 
     },

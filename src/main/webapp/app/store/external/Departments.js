@@ -28,7 +28,7 @@ Ext.define('Ssp.store.external.Departments', {
     constructor: function(){
 		var me = this;
 		me.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('departments'),
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('department'),
     		autoLoad: true});
     	return; 
     },
