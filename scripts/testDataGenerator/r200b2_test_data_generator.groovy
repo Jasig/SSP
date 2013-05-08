@@ -52,7 +52,8 @@ class Constants{
 	static final COURSES_PER_MAIN_TERM = 40 //SP and FA
 	static final COURSES_PER_OFF_TERM = 10 //SU and WN
 	
-	static final TAG_PERCENTAGE = 15 // out of 100 (e.g. 15 = 15% chance)
+	static final HONORS_PERCENTAGE = 15 // out of 100 (e.g. 15 = 15% chance)
+	static final DISTANCE_LEARNING_PERCENTAGE = 15 // out of 100 (e.g. 15 = 15% chance)
 	
 	static final DATE_FORMATTER = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
 	
@@ -122,41 +123,50 @@ class Constants{
 		'ENG':'989a9679-d925-4475-acbb-8bd9d81fcb04'		
 	]
 	
-	
-
-	static final coursePrefixes = [
-		'MAT', 'PHY', 'CHM', 'CST', 'PSY', 'AES', 'HST', 'ECN', 'BIO', 'COM', 'AST', 'IEE', 'SCL', 'PHL', 'EEE', 'MIC'
+	static final tagIds = [
+		'DL':'deac8cef-f87a-441e-ae64-495f1a78806b',
+		'TAG':'2f87ea59-70b5-43f2-8387-664173806298',
+		'HON':'4c38893f-cdd6-4b18-a685-fd3cf8e64cbc',
 	]
 	
 	static final courseSuffixes = [
-		'100', '101', '102', '121', '212', '220', '228', '265', '300', '306', '328', '315', '316', '421', '443', '451', '484' 
+		'Introduction to',
+		'Foundational',
+		'College level',
+		'Basics of',
+		'General',
+		'Laboratory Section:',
+		'Principles of',
+		'Fundamentals of',
+		'Survey',
+		'Elementary',
+		'Special Topic:',
+		'Exploratory',		
+		'Inquiry into',
+		'International',
+		'Topic:',
+		'Enterprise',
+		'Applied',
+		'Analytical',
+		'Honors',
+		'Higher',
+		'Advanced',		
+		'Individualized',
+		'Experimental',
+		'Quantitative',
+		'Creative',
+		'Investigation',
+		'Entrepreneurial',
+		'Integrative'
+	]	
+	
+	static final courseAbbreviations = [
+		'MAT', 'PHY', 'CHM', 'CST', 'PSY', 'AES', 'HST', 'ECN',
+		'BIO', 'COM', 'AST', 'IEE', 'SCL', 'PHL', 'EEE', 'MIC',
+		'LIT', 'ENG', 'FLM', 'GEO', 'POL', 'FIN', 'EDU'
 	]
 	
-	static final courseDescriptions = [
-		'100':'Introduction to',
-		'101':'Foundational',
-		'102':'College level',
-		'121':'Basics of',
-		'156':'Laboratory Section: ',
-		
-		'212':'Principles of',
-		'220':'Fundamentals of',
-		'228':'Special Topic:',
-		'235':'Exploratory',
-		'265':'Sophomore level',
-		
-		'300':'Inquiry',
-		'306':'International',
-		'328':'Topic:',
-		'315':'Enterprise',
-		'316':'Junior level',
-		
-		'421':'Senior level',
-		'443':'Honors',
-		'451':'Higher',
-		'484':'Advanced',  
-		'494':'Individualized',
-		
+	static final courseDescriptions = [	
 		'MAT':'Mathematics',
 		'PHY':'Physics',
 		'CHM':'Chemistry',
@@ -172,10 +182,20 @@ class Constants{
 		'SCL':'Sociology',
 		'PHL':'Philosophy',
 		'EEE':'Electrical Engineering',
-		'MIC':'Microbiology'
+		'MIC':'Microbiology',
+		'LIT':'Literature',
+		'ENG':'English',
+		'FLM':'Film',
+		'GEO':'Geography',
+		'POL':'Political Science',
+		'FIN':'Finance',
+		'EDU':'Education'	
 	]
 	
-	static final arts_programs = ['PSY', 'HST', 'ECN', 'COM', 'SCL', 'PHL']
+	static final arts_programs = [
+		'PSY', 'HST', 'ECN', 'COM', 'SCL', 'PHL', 'LIT', 'ENG', 
+		'FLM', 'GEO', 'POL', 'FIN', 'EDU' 
+	]
 	
 	static final programs = [
 		'MAT-AS':'Associates of Science in Mathematics',
@@ -194,6 +214,13 @@ class Constants{
 		'PHL-AA':'Associates of Arts in Philosophy',
 		'EEE-AS':'Associates of Science in Electrical Engineering',
 		'MIC-AS':'Associates of Science in Microbiology',
+		'LIT-AA':'Literature',
+		'ENG-AA':'Associates of Arts in English',
+		'FLM-AA':'Associates of Arts in Film',
+		'GEO-AA':'Associates of Arts in Geography',
+		'POL-AA':'Associates of Arts in Political Science',
+		'FIN-AA':'Associates of Arts in Finance',
+		'EDU-AA':'Associates of Arts in Education',
 		
 		'MAT-BS':'Bachelors of Science in Mathematics',
 		'PHY-BS':'Bachelors of Science in Physics',
@@ -210,7 +237,14 @@ class Constants{
 		'SCL-BA':'Bachelors of Arts in Sociology',
 		'PHL-BA':'Bachelors of Arts in Philosophy',
 		'EEE-BS':'Bachelors of Science in Electrical Engineering',
-		'MIC-BS':'Bachelors of Science in Microbiology'		
+		'MIC-BS':'Bachelors of Science in Microbiology',
+		'LIT-BA':'Bachelors of Arts in Literature',
+		'ENG-BA':'Bachelors of Arts in English',
+		'FLM-BA':'Bachelors of Arts in Film',
+		'GEO-BA':'Bachelors of Arts in Geography',
+		'POL-BA':'Bachelors of Arts in Political Science',
+		'FIN-BA':'Bachelors of Arts in Finance',
+		'EDU-BA':'Bachelors of Arts in Education'
 	]
 	
 	def static final divisions = [
@@ -270,7 +304,6 @@ xml.databaseChangeLog( xmlns : "http://www.liquibase.org/xml/ns/dbchangelog"
 						def electives = generateElectives(xml) 						
 						def terms = generateExternalTerms(xml)
 						def courses = generateExternalCoursesAndTermAssoc(xml, terms, tagIds, electives)
-							
 					 }
 }
 					 
@@ -287,13 +320,9 @@ def generatePrograms(xml) {
 }
 
 def generateTags(xml) {
-	
-	def tagIds = new ArrayList<UUID>()
-	
-	def id = UUID.randomUUID()
-	tagIds.add(id)
+
 	xml.insert(tableName:'tag') {
-		xml.column(name:"id", value:UUID.randomUUID())
+		xml.column(name:"id", value:tagIds['DL'])
 		xml.column(name:"name", value:"Distance Learning")
 		xml.column(name:"code", value:"DL")
 		xml.column(name:"description", value:"Distance Learning Course")
@@ -301,21 +330,17 @@ def generateTags(xml) {
 		addObjectStatus(xml, null)
 	}
 	
-	id = UUID.randomUUID()
-	tagIds.add(id)
 	xml.insert(tableName:'tag') {
-		xml.column(name:"id", value:UUID.randomUUID())
+		xml.column(name:"id", value:tagIds['TAG'])
 		xml.column(name:"name", value:"Transfer Guarantee")
 		xml.column(name:"code", value:"TAG")
 		xml.column(name:"description", value:"Transfer Assurance Guarantee for the state")
 		addCreatedModified(xml, null, null)
 		addObjectStatus(xml, null)
 	}
-	
-	id = UUID.randomUUID()
-	tagIds.add(id)
+
 	xml.insert(tableName:'tag') {
-		xml.column(name:"id", value:UUID.randomUUID())
+		xml.column(name:"id", value:tagIds['HON'])
 		xml.column(name:"name", value:"Honors")
 		xml.column(name:"code", value:"HON")
 		xml.column(name:"description", value:"Honors Course")
@@ -419,13 +444,19 @@ def generateExternalCoursesAndTermAssoc(xml, terms, tagIds, electiveIds) {
 				addExternalCourseProgram(xml, course, programCodeAssoc)				
 			}
 			
-			/*	external_course_tag not added yet	
-			if(new Random().nextInt(100) < TAG_PERCENTAGE) {
+			if(course.isHonors) {
 				xml.insert(tableName:'external_course_tag') {
-					...
+					xml.column(name:"course_code", value:course.code)
+					xml.column(name:"tag", value:'HON')
 				}
 			}
-			*/	
+			
+			if(course.isDistanceLearning) {
+				xml.insert(tableName:'external_course_tag') {
+					xml.column(name:"course_code", value:course.code)
+					xml.column(name:"tag", value:'DL')
+				}
+			}
 			
 			courses.add(course)
 		}
@@ -442,6 +473,9 @@ def generateExternalCoursesAndTermAssoc(xml, terms, tagIds, electiveIds) {
 			}
 			
 			xml.delete(tableName:'external_course_program'){
+				xml.where("course_code='${course.code}'")
+			}
+			xml.delete(tableName:'external_course_tag'){
 				xml.where("course_code='${course.code}'")
 			}
 		}
@@ -465,10 +499,11 @@ def makeTerm(year, code) {
 def makeExternalCourse(courses) {
 	def course = new GroovyExternalCourse()	
 	
-	def abbreviation = getRandomValueFromCollection(coursePrefixes)
-	def number = getRandomValueFromCollection(courseSuffixes)
+	def abbreviation = getRandomValueFromCollection(courseAbbreviations)
+	def number = new Random().nextInt(399)+101
 	def code = "${abbreviation}-${number}"
 	def numMatchingCourses = countMatchingCourses(courses, "${abbreviation}${number}")
+	def courseBuzzWord = getRandomValueFromCollection(courseSuffixes)
 	
 	if(numMatchingCourses > 0) {
 		code = code + "-${numMatchingCourses}"
@@ -478,13 +513,26 @@ def makeExternalCourse(courses) {
 	course.formattedCourse = "${abbreviation}${number}"
 	course.subjectAbbreviation = abbreviation
 	course.number = number
-	course.title = "${courseDescriptions[number]} ${courseDescriptions[abbreviation]}"
-	course.description = "${courseDescriptions[number]} ${courseDescriptions[abbreviation]}"
+	course.title = "${courseBuzzWord} ${courseDescriptions[abbreviation]}"
+	course.description = "${courseBuzzWord} ${courseDescriptions[abbreviation]}"
 	course.maxCreditHours = getRandomIntWithinRange(3, 4)
 	course.minCreditHours = getRandomIntWithinRange(2, 3)
 	course.isDev = 'N'
 	
-	return course	
+	if((new Random().nextInt(100)) < HONORS_PERCENTAGE 
+	   || courseBuzzWord == 'Honors' ) {
+		course.isHonors = true
+	} else {
+		course.isHonors = false
+	}
+	
+	if((new Random().nextInt(100)) < DISTANCE_LEARNING_PERCENTAGE) {
+		course.isDistanceLearning = true
+	} else {
+		course.isDistanceLearning = false
+	}
+
+	 return course	
 }
 
 def makeElective(name, code, sortOrder) {
@@ -630,5 +678,9 @@ class GroovyExternalCourse {
 	Integer maxCreditHours
 	Integer minCreditHours
 	String isDev
+	
+	//script specific variables, not to persist
+	Boolean isHonors
+	Boolean isDistanceLearning	
 }
 
