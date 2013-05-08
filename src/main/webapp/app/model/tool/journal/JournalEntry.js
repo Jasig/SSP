@@ -19,7 +19,7 @@
 Ext.define('Ssp.model.tool.journal.JournalEntry', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'comment',type:'string'},
-             {name:'entryDate',type: 'date',dateFormat:'time', defaultValue: new Date()},
+             {name:'entryDate',type: 'date',dateFormat:'c'},
              {name:'confidentialityLevel',
                  convert: function(value, record) {
                 	 var defaultConfidentialityLevelId = Ssp.util.Constants.DEFAULT_SYSTEM_CONFIDENTIALITY_LEVEL_ID;

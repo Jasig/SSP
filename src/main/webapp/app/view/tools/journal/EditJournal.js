@@ -44,7 +44,16 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			    	itemId: 'entryDateField',
 			    	altFormats: 'm/d/Y|m-d-Y',
 			        name: 'entryDate',
-			        allowBlank:false
+			        allowBlank:false,
+			        showToday:false, // because this would be 'today' browser time,
+			        listeners: {
+			            render: function(field){
+			            Ext.create('Ext.tip.ToolTip',{
+			                target: field.getEl(),
+			                html: 'Use this to set the calendar date, in the institution\'s time zone, on which the journaled session actually occurred. The system will not attempt to convert this value to or from your current time zone.'
+			            });
+			        }
+			     }
 			     },{
 			        xtype: 'combobox',
 			        itemId: 'confidentialityLevelCombo',

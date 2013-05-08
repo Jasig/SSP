@@ -5229,6 +5229,76 @@ Ext.define('Ssp.util.Constants',{
  * specific language governing permissions and limitations
  * under the License.
  */
+Ext.define('Ssp.util.Util', {  
+    extend: 'Ext.Component',
+	mixins: [ 'Deft.mixin.Injectable' ],
+	inject: {
+		apiProperties: 'apiProperties'
+	},
+
+	initComponent: function() {
+		return this.callParent( arguments );
+	},
+
+    loaderXTemplateRenderer: function(loader, response, active) {
+        var tpl = new Ext.XTemplate(response.responseText);
+        var targetComponent = loader.getTarget();
+        var cleanArr = Ext.create( 'Ssp.util.TemplateDataUtil' ).prepareTemplateData( targetComponent.store );
+        targetComponent.update( tpl.apply( cleanArr ) );
+        return true;
+    },
+
+	getCurrentServerDate: function(opts) {
+
+		if ( !(opts.success) ) {
+			return;
+		}
+
+		var me = this;
+
+		me.apiProperties.makeRequest({
+			url: me.apiProperties.createUrl( me.apiProperties.getItemUrl('serverDateTime') ),
+			method: 'GET',
+			successFunc: function(r) {
+				if (r && r.responseText ) {
+					var jsonData = Ext.decode(r.responseText);
+					var date = Ext.Date.parse(jsonData.date, 'c');
+					opts.success.apply(opts.scope, [date]);
+				} else if (opts.failure) {
+					opts.failure.apply(opts.scope, [r]);
+				}
+			},
+			failureFunc: function(r) {
+				if (opts.failure) {
+					opts.failure.apply(opts.scope, [r]);
+				} else {
+					me.apiProperties.handleError( r );
+				}
+			},
+			scope: me
+		});
+
+
+	}
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 Ext.define('Ssp.store.Caseload', {
     // extend: 'Ext.data.Store',
     extend: 'Ssp.store.reference.AbstractReferences',
@@ -13925,7 +13995,8 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     	formUtils: 'formRendererUtils',
     	journalEntryService: 'journalEntryService',
     	model: 'currentJournalEntry',
-    	personLite: 'personLite'
+    	personLite: 'personLite',
+    	util: 'util'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -13935,7 +14006,12 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     },
 
     control: {
-    	entryDateField: '#entryDateField',
+    	entryDateField: {
+			selector: '#entryDateField',
+			listeners: {
+				select: 'onEntryDateSelect'
+			}
+		},
     	
     	removeJournalTrackButton: {
     		selector: '#removeJournalTrackButton',
@@ -14006,7 +14082,23 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		me.getJournalTrackCombo().setValue( journalTrackId );			
 		if ( me.model.get('entryDate') == null)
 		{
-			me.getEntryDateField().setValue( new Date() );
+			me.getEntryDateField().setLoading(true);
+			me.util.getCurrentServerDate({
+				success: function(date) {
+					me.getEntryDateField().setValue(date);
+					me.model.set('entryDate', me.getEntryDateField().getValue());
+					me.getEntryDateField().setLoading(false);
+				},
+				failure: function() {
+					// probably not what you want, but a reasonable default
+					// given that most users will be in the server's timezone
+					me.getEntryDateField().setValue( new Date() );
+					me.model.set('entryDate', me.getEntryDateField().getValue());
+					me.getEntryDateField().setLoading(false);
+				},
+				scope: me
+			});
+
 		}
 		
 		me.inited=true;
@@ -14059,8 +14151,9 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     			Ext.Msg.alert('SSP Error','You have a Journal Track set in your entry. Please select the associated details for this Journal Entry.');  			
     		}else{
 
-    			// fix date from GMT to UTC
-        		record.set('entryDate', me.formUtils.fixDateOffsetWithTime( record.data.entryDate ) );
+				// fix date from GMT to UTC
+				var origEntryDate = record.data.entryDate;
+				record.data.entryDate = me.formUtils.toJSONStringifiableDate( record.data.entryDate );
 
     			jsonData = record.data;
     			    			
@@ -14083,9 +14176,15 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     			me.getView().setLoading( true );
     			
     			me.journalEntryService.save( me.personLite.get('id'), jsonData, {
-    				success: me.saveSuccess,
-    				failure: me.saveFailure,
-    				scope: me
+    				success: function(r, scope) {
+						record.data.entryDate = origEntryDate;
+						scope.saveSuccess(r, scope);
+					},
+					failure: function(r, scope) {
+						record.data.entryDate = origEntryDate;
+						me.saveFailure(r, scope);
+					},
+					scope: me
     			});
     		}			
 		}
@@ -14104,6 +14203,11 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 	
 	onCancelClick: function(button){
 		this.displayMain();
+	},
+
+	onEntryDateSelect: function(comp, newValue, eOpts) {
+		var me = this;
+		me.model.set('entryDate', newValue);
 	},
 
 	onConfidentialityLevelComboSelect: function(comp, records, eOpts){
@@ -21118,6 +21222,21 @@ Ext.define('Ssp.view.tools.journal.Journal', {
     },
 	width: '100%',
 	height: '100%',
+	// Probably want to add more clarification when and if we display other
+	// timestamp-based audit fields. See example of problematic scenarios in
+	// https://issues.jasig.org/browse/SSP-1093 comments.
+	entryDateMsg: 'This represents the user-specified creation date for a journal entry date. It can be used, for example, to back-date entries. These dates are assumed to refer calendar dates in the institution\'s time zone.',
+	entryDateFormatter: function() {
+		return Ext.util.Format.dateRenderer('m/d/Y');
+	},
+	entryDateRenderer: function() {
+		var me = this;
+		return function(value,metaData) {
+			// http://www.sencha.com/forum/showthread.php?179016
+			metaData.tdAttr = 'data-qtip="' + me.entryDateMsg + '"';
+			return me.entryDateFormatter()(value);
+		}
+	},
 	initComponent: function() {	
 		var me=this;
     	var sm = Ext.create('Ext.selection.CheckboxModel');
@@ -21174,11 +21293,18 @@ Ext.define('Ssp.view.tools.journal.Journal', {
 					    	            scope: me
 					    	        }]
 				                },
-	    		                { header: 'Date',  
+	    		                { header: 'Entry Date',
 		    		                  dataIndex: 'entryDate',
 		    		                  flex: 1,
-		    		                  //renderer: Ext.util.Format.dateRenderer('m/d/Y g:i A')
-									  renderer: Ext.util.Format.dateRenderer('m/d/Y')
+										renderer: me.entryDateRenderer(),
+										listeners: {
+											render: function(field){
+												Ext.create('Ext.tip.ToolTip',{
+													target: field.getEl(),
+													html: me.entryDateMsg
+												});
+											}
+										}
 	    		                },
 	    		                { header: 'Entered By',  
 	    		                  dataIndex: 'createdBy',
@@ -21258,7 +21384,16 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			    	itemId: 'entryDateField',
 			    	altFormats: 'm/d/Y|m-d-Y',
 			        name: 'entryDate',
-			        allowBlank:false
+			        allowBlank:false,
+			        showToday:false, // because this would be 'today' browser time,
+			        listeners: {
+			            render: function(field){
+			            Ext.create('Ext.tip.ToolTip',{
+			                target: field.getEl(),
+			                html: 'Use this to set the calendar date, in the institution\'s time zone, on which the journaled session actually occurred. The system will not attempt to convert this value to or from your current time zone.'
+			            });
+			        }
+			     }
 			     },{
 			        xtype: 'combobox',
 			        itemId: 'confidentialityLevelCombo',
@@ -24891,7 +25026,7 @@ Ext.define('Ssp.model.tool.earlyalert.EarlyAlertResponse', {
 Ext.define('Ssp.model.tool.journal.JournalEntry', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'comment',type:'string'},
-             {name:'entryDate',type: 'date',dateFormat:'time', defaultValue: new Date()},
+             {name:'entryDate',type: 'date',dateFormat:'c'},
              {name:'confidentialityLevel',
                  convert: function(value, record) {
                 	 var defaultConfidentialityLevelId = Ssp.util.Constants.DEFAULT_SYSTEM_CONFIDENTIALITY_LEVEL_ID;

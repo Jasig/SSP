@@ -449,6 +449,11 @@
                     "path": "/app/util/"
                 },
                 {
+                    "clsName": "Ssp.util.Util",
+                    "name": "Util.js",
+                    "path": "/app/util/"
+                },
+                {
                     "clsName": "Ssp.store.Caseload",
                     "name": "Caseload.js",
                     "path": "/app/store/"

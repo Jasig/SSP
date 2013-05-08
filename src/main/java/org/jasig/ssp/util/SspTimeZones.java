@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.util;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -94,6 +96,31 @@ public class SspTimeZones implements InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		initTimeZones();
 		registerAsGlobal();
+	}
+
+	/**
+	 * Produce a date that represents the current calendar date as determined
+	 * by the JVM default timezone but interpreted in the timezone used for
+	 * persistent dates. E.g. if JVM local time is Jan 2, 2013, any time of
+	 * day EST and the <code>dbTimeZone</code> is UTC, the returned date will
+	 * represent Jan 2, 2013 00:00:00 UTC.
+	 *
+	 * @return
+	 */
+	public Date midnightTodayInDbTimeZone() {
+		return midnightThisDateInDbTimeZone(new Date());
+	}
+
+	public Date midnightThisDateInDbTimeZone(Date date) {
+		Calendar localCal = Calendar.getInstance();
+		localCal.setTimeInMillis(date.getTime());
+		Calendar persistentCal = Calendar.getInstance();
+		persistentCal.setTimeZone(SspTimeZones.INSTANCE.getDbTimeZone());
+		persistentCal.set(localCal.get(Calendar.YEAR),
+				localCal.get(Calendar.MONTH),
+				localCal.get(Calendar.DAY_OF_MONTH),
+				0, 0, 0);
+		return new Date(persistentCal.getTimeInMillis());
 	}
 
 	private void initTimeZones() {
