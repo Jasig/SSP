@@ -282,7 +282,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		{
     		// new student save an Active program status
     		// non-new student w/o status (Early Alert generated but not sent, or logged in, etc) also gets Active status
-    		if ( me.person.get('id') == "" || !me.person.get('currentProgramStatusName') )
+    		if ( (me.person.get('id') == "") || (r.currentProgramStatusName == null ) )
     		{
     			personProgramStatus = new Ssp.model.PersonProgramStatus();
     			personProgramStatus.set('programStatusId',Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);
