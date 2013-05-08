@@ -131,26 +131,9 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 
 		store.insert(0, item );
 		grid.plugins[0].startEdit(0, 0);
-       	grid.plugins[0].editor.items.getAt(0).selectText();
-
-		// Save the item
-	/*	Ext.Ajax.request({
-			url: grid.getStore().getProxy().url,
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			jsonData: item.data,
-			success: function(response, view) {
-				var r = Ext.decode(response.responseText);
-				item.populateFromGenericObject(r);
-				store.insert(0, item );
-		       	grid.plugins[0].startEdit(0, 0);
-		       	grid.plugins[0].editor.items.getAt(0).selectText();
-		       	store.totalCount = store.totalCount+1;
-		       	me.getRecordPager().onLoad();
-			},
-			failure: me.apiProperties.handleError
-		}, me);
-		*/
+		if(grid.plugins[0].editor.items.getAt(0).xtype == "textfield") {
+			grid.plugins[0].editor.items.getAt(0).selectText();
+		}
 	},
 
     deleteConfirmation: function( button ) {
