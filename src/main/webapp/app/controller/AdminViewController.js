@@ -120,10 +120,10 @@ Ext.define('Ssp.controller.AdminViewController', {
 				if (columns != null)
 				{
 					// comp.reconfigure(store, columns); // ,columns
-					me.formUtils.reconfigureGridPanel(comp, store, options, columns);
+					me.formUtils.reconfigureGridPanel(comp, store, columns);
 				}else{
 					// comp.reconfigure(store);
-					me.formUtils.reconfigureGridPanel(comp, store, options);
+					me.formUtils.reconfigureGridPanel(comp, store);
 				}
 				
 				comp.getStore().load();

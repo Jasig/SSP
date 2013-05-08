@@ -611,7 +611,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
      * Method to allow a gridPanel to be reconfigured to display
      * a new set of columns or a new store of data.
      */
-    reconfigureGridPanel: function(gridPanel, store, interfaceOptions, columns) {
+    reconfigureGridPanel: function(gridPanel, store, columns) {
     	var me = gridPanel,
             headerCt = me.headerCt;
     	
