@@ -103,9 +103,8 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                         headers: { 'Content-Type': 'application/json' },
                         jsonData: jsonData,
                         success: function(response, view) {
-                            var r = Ext.decode(response.responseText);
-                            me.getController().getRecordPager().onLoad();
-                            me.getController().getRecordPager().doRefresh();
+                            var r = Ext.decode(response.responseText);  
+                            store.load(store.params);
                         },
                         failure: me.apiProperties.handleError
                     }, this);
