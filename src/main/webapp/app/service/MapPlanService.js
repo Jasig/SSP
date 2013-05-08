@@ -212,12 +212,12 @@ Ext.define('Ssp.service.MapPlanService', {
     outputMap: function(semesterStores, callbacks, outputData, outputType){
     	var me=this;
 		var url = me.getBaseUrl(me.currentMapPlan.get('personId'));
-	    var success = function( response, view ){
+	    var success = function( response ){
 			callbacks.success( response, callbacks.scope );
 	    };
 	    var failure = function( response ){
 	    	me.apiProperties.handleError( response );	 
-	    	callbacks.failure(view);
+	    	callbacks.failure(response, callbacks.scope);
 	    };
 	    me.prepareMapOutput(semesterStores, outputData)
 		me.apiProperties.makeRequest({

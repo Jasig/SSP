@@ -133,8 +133,14 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 		
 		List<TermCourses> courses = collectTermCourses(plan);
 		Float totalPlanCreditHours = calculateTotalPlanHours(courses);
+		Float totalPlanDevHours = calculateTotalPlanDevHours(courses);
 		
-		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanFullOutput(student, owner, planOutput, totalPlanCreditHours, courses, institutionName);
+		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanFullOutput(student, owner, 
+				planOutput, 
+				totalPlanCreditHours, 
+				totalPlanDevHours, 
+				courses, 
+				institutionName);
 		return subjectAndBody;
 	}
 	
@@ -158,8 +164,15 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 	private Float calculateTotalPlanHours(List<TermCourses> courses){
 		Float totalPlanCreditHours = new Float(0);
 		for(TermCourses termCourses : courses){
-			Collections.sort(termCourses.getCourses(), PlanCourseTO.TERM_ORDER_COMPARATOR);
 			totalPlanCreditHours = totalPlanCreditHours + termCourses.getTotalCreditHours();
+		}
+		return totalPlanCreditHours;
+	}
+	
+	private Float calculateTotalPlanDevHours(List<TermCourses> courses){
+		Float totalPlanCreditHours = new Float(0);
+		for(TermCourses termCourses : courses){
+			totalPlanCreditHours = totalPlanCreditHours +  termCourses.getTotalDevCreditHours();
 		}
 		return totalPlanCreditHours;
 	}

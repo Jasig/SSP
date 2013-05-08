@@ -42,6 +42,7 @@ public class TermCourses {
 	Term term;
 	List<PlanCourseTO> courses;
 	Float totalCreditHours;
+	Float totalDevCreditHours;
 	
 	
 	/**
@@ -77,8 +78,11 @@ public class TermCourses {
 	
 	private void updateCreditHours(){
 		totalCreditHours = new Float(0);
+		totalDevCreditHours = new Float(0);
 		for(PlanCourseTO course:courses){
 			totalCreditHours = totalCreditHours + new Float(course.getCreditHours());
+			if(course.isDev())
+				totalDevCreditHours = totalDevCreditHours + new Float(course.getCreditHours());
 		}
 	}
 	/**
@@ -95,6 +99,20 @@ public class TermCourses {
 	 */
 	public Float getTotalCreditHours() {
 		return totalCreditHours;
+	}
+	
+	/**
+	 * @param totalDevCreditHours the totalDevCreditHours to set
+	 */
+	public void setTotalDevHours(Float totalDevCreditHours) {
+		this.totalDevCreditHours = totalDevCreditHours;
+	}
+	
+	/**
+	 * @return the totalDevCreditHours
+	 */
+	public Float getTotalDevCreditHours() {
+		return totalDevCreditHours;
 	}
 	
 	/**

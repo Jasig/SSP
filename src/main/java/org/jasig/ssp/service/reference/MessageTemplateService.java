@@ -75,7 +75,9 @@ public interface MessageTemplateService extends
 			final List<TermCourses> termCourses,
 			String institutionName);
 	
-	public SubjectAndBody createMapPlanFullOutput(final Person student, final Person owner, final PlanOutputTO plan, final Float totalPlanCreditHours,
+	public SubjectAndBody createMapPlanFullOutput(final Person student, final Person owner, final PlanOutputTO plan, 
+			final Float totalPlanCreditHours,
+			final Float totalPlanDevHours,
 			final List<TermCourses> termCourses,
 			String institutionName);
 }

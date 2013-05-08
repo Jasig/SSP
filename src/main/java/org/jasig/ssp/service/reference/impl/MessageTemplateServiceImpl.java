@@ -263,6 +263,7 @@ public class MessageTemplateServiceImpl extends
 	@Override
 	public SubjectAndBody createMapPlanFullOutput(final Person student,final Person owner, final PlanOutputTO planOutput, 
 			final Float totalPlanCreditHours,
+			final Float totalPlanDevHours,
 			final List<TermCourses> termCourses,
 			final String institutionName) {
 
@@ -278,6 +279,7 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("includeFinancialAidInformation", planOutput.getIncludeFinancialAidInformation());
 		messageParams.put("includeHeaderFooter", planOutput.getIncludeHeaderFooter());
 		messageParams.put("includeTotalTimeExpected", planOutput.getIncludeTotalTimeExpected());
+		messageParams.put("totalPlanDevHours", totalPlanDevHours);
 		
 		return populateFromTemplate(MessageTemplate.OUTPUT_MAP_PLAN_FULL_ID,
 				messageParams);
