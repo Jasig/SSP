@@ -108,7 +108,6 @@ Ext.require([
     'Ssp.view.tools.studentsuccess.StudentSuccess',
     'Ssp.view.admin.AdminForms',
     'Ssp.view.admin.forms.AbstractReferenceAdmin',
-	 'Ssp.view.admin.forms.AbstractReferenceAdminWithoutDelete',
     'Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin',
 	
 	//MAP Views
