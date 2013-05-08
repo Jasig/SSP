@@ -19,32 +19,37 @@
 package org.jasig.ssp.model;
 
 import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.jasig.ssp.model.reference.Elective;
+
 @MappedSuperclass
-public abstract class AbstractPlanCourse extends AbstractAuditable implements Cloneable {
+public abstract class AbstractPlanCourse<T extends AbstractPlan> extends AbstractAuditable implements Cloneable {
 
 	private static final long serialVersionUID = 4387422660830382586L;
 
-	@Column(length = 200 , nullable = false)
-	@Size(max = 200)
+	@Column(length = 50 , nullable = false)
+	@Size(max = 50)
 	private String termCode;
 	
-	@Column(length = 200 , nullable = false)
-	@Size(max = 200)	
+	@Column(length = 50 , nullable = false)
+	@Size(max = 50)	
 	private String courseCode;
 	
-	@Column(length = 200 , nullable = false)
-	@Size(max = 200)
+	@Column(length = 35 , nullable = false)
+	@Size(max = 35)
 	private String formattedCourse;
 
 	@Column(length = 200 , nullable = false)
 	@Size(max = 200)	
 	private String courseTitle;
 	
-	@Column(length = 200, nullable = false)
-	@Size(max = 200)	
+	@Column(length = 2000, nullable = false)
+	@Size(max = 2000)	
 	private String courseDescription;
 	
 	@Column(nullable = false)
@@ -55,6 +60,28 @@ public abstract class AbstractPlanCourse extends AbstractAuditable implements Cl
 
 	@Column(nullable = false)
 	private Integer orderInTerm;
+	
+	@Column(length = 2000)
+	@Size(max = 2000)
+	private String studentNotes;
+	
+	@Column(length = 2000)
+	@Size(max = 2000)
+	private String contactNotes;
+	
+	
+	@Column(nullable = false)
+	private Boolean isImportant;
+	
+	@Column(nullable = false)
+	private Boolean isTranscript;	
+	
+	@ManyToOne()
+	@JoinColumn(name = "elective_id", updatable = false, nullable = true)
+	private Elective elective;
+	
+	public abstract T getParent();
+	
 	
 	@Override
 	protected int hashPrime() {
@@ -128,6 +155,56 @@ public abstract class AbstractPlanCourse extends AbstractAuditable implements Cl
 
 	public void setOrderInTerm(Integer orderInTerm) {
 		this.orderInTerm = orderInTerm;
+	}
+
+
+	public String getStudentNotes() {
+		return studentNotes;
+	}
+
+
+	public void setStudentNotes(String studentNotes) {
+		this.studentNotes = studentNotes;
+	}
+
+
+	public String getContactNotes() {
+		return contactNotes;
+	}
+
+
+	public void setContactNotes(String contactNotes) {
+		this.contactNotes = contactNotes;
+	}
+
+
+	public Boolean getIsImportant() {
+		return isImportant;
+	}
+
+
+	public void setIsImportant(Boolean isImportant) {
+		this.isImportant = isImportant;
+	}
+
+
+	public Boolean getIsTranscript() {
+		return isTranscript;
+	}
+
+
+	public void setIsTranscript(Boolean isTranscript) {
+		this.isTranscript = isTranscript;
+	}
+
+
+	public Elective getElective() {
+		return elective;
+	}
+
+
+	public void setElective(Elective elective) {
+		this.elective = elective;
 	}
 
 	

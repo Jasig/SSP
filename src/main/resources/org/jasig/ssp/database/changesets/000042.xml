@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+		
+	<property name="schema" value="public" dbms="postgresql" />
+	<property name="schema" value="dbo" dbms="mssql" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+
+	<changeSet id="map template table" author="tony.arland">
+		<createTable tableName="map_template">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false" foreignKeyName="map_template_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true" foreignKeyName="map_template_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="person_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="map_template_person_id"
+					references="person(id)" />
+			</column>
+			<column name="owner_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="map_template_owner_person_id"
+					references="person(id)" />
+			</column>									
+			<column name="name" type="${nvarchar.type}(200)">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="contact_title" type="${nvarchar.type}(200)"/>
+			<column name="contact_phone" type="${nvarchar.type}(200)"/>
+			<column name="contact_email" type="${nvarchar.type}(200)"/>
+			<column name="contact_name" type="${nvarchar.type}(200)"/>
+			<column name="contact_notes" type="${nvarchar.type}(2000)"/>
+			<column name="student_notes" type="${nvarchar.type}(2000)"/>
+			
+			<column name="is_financial_aid" type="boolean">
+				<constraints nullable="false" />
+			</column>
+				
+			<column name="is_important" type="boolean">
+				<constraints nullable="false" />
+			</column>
+				
+			<column name="is_f1_visa" type="boolean">
+				<constraints nullable="false" />
+			</column>
+					
+			<column name="academic_goals" type="${nvarchar.type}(2000)"/>
+			<column name="career_link" type="${nvarchar.type}(2000)"/>
+						
+			<column name="is_private" type="boolean">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="program_code" type="${nvarchar.type}(50)"/>
+
+			<column name="division_code" type="${nvarchar.type}(50)"/>
+			
+			<column name="department_code" type="${nvarchar.type}(50)"/>
+		</createTable>
+
+		<sql>grant all on map_template to ${database.app.username}</sql>
+		<rollback>
+			<dropTable tableName="map_template" />
+		</rollback>
+
+	</changeSet>
+	
+	
+	<changeSet id="map template course" author="tony.arland">
+		<createTable tableName="map_template_course">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false" foreignKeyName="map_template_course_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true" foreignKeyName="map_template_course_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="template_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="map_template_course_plan_id"
+					references="map_template(id)" />
+			</column>
+												
+			<column name="formatted_course" type="${nvarchar.type}(35)"/>
+			
+			<column name="course_code" type="${nvarchar.type}(50)"/>
+			
+			<column name="course_title" type="${nvarchar.type}(100)"/>
+			
+			<column name="course_description" type="${nvarchar.type}(2500)"/>
+			
+			<column name="term_code" type="${nvarchar.type}(50)"/>
+			
+			<column name="credit_hours" type="int">
+				<constraints nullable="false" />
+			</column>	
+
+			<column name="is_dev" type="boolean">
+				<constraints nullable="false" />
+			</column>	
+
+			<column name="order_in_term" type="int">
+				<constraints nullable="false" />
+			</column>	
+			
+			<column name="contact_notes" type="${nvarchar.type}(2000)"/>
+			
+			<column name="student_notes" type="${nvarchar.type}(2000)"/>
+			
+			<column name="is_private" type="boolean">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="is_important" type="boolean">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="is_transcript" type="boolean">
+				<constraints nullable="false" />
+			</column>	
+			
+			<column name="elective_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="map_template_course_elective_id"
+					references="elective(id)" />
+			</column>
+																												
+		</createTable>
+
+		<sql>grant all on map_template_course to ${database.app.username}</sql>
+		<rollback>
+			<dropTable tableName="map_template_course" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="map term note" author="tony.arland">
+		<createTable tableName="map_term_note">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false" foreignKeyName="map_term_note_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true" foreignKeyName="map_term_note_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="plan_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="map_term_note_plan_id"
+					references="map_plan(id)" />
+			</column>
+			<column name="template_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="map_term_note_owner_template_id"
+					references="map_template(id)" />
+			</column>
+			<column name="term_code" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="contact_notes" type="${nvarchar.type}(2000)"/>
+			
+			<column name="student_notes" type="${nvarchar.type}(2000)"/>
+				
+			<column name="is_important" type="boolean">
+				<constraints nullable="false" />
+			</column>
+				
+		</createTable>
+
+		<sql>grant all on map_term_note to ${database.app.username}</sql>
+		<rollback>
+			<dropTable tableName="map_term_note" />
+		</rollback>
+
+	</changeSet>
+	
+	<changeSet id="map plan phase 2" author="tony.arland">
+	    
+	<addColumn tableName="map_plan">
+		<column name="contact_title" type="${nvarchar.type}(200)" />
+	</addColumn>
+	
+	<addColumn tableName="map_plan">
+		<column name="contact_phone" type="${nvarchar.type}(200)"/>
+	</addColumn>		
+	
+	<addColumn tableName="map_plan">
+		<column name="contact_email" type="${nvarchar.type}(200)"/>
+	</addColumn>
+	
+	<addColumn tableName="map_plan">
+		<column name="contact_name" type="${nvarchar.type}(200)"/>
+	</addColumn>
+
+	<addColumn tableName="map_plan">
+		<column name="contact_notes" type="${nvarchar.type}(2000)"/>
+	</addColumn>
+				
+	<addColumn tableName="map_plan">
+		<column name="student_notes" type="${nvarchar.type}(2000)"/>
+	</addColumn>
+	
+	<addColumn tableName="map_plan">
+		<column name="based_on_template_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="map_plan_template_id"
+						references="map_template(id)" />
+		</column>			
+	</addColumn>
+	
+	<addColumn tableName="map_plan">
+		<column name="is_financial_aid" type="boolean" defaultValueBoolean="false">
+			<constraints nullable="false" />
+		</column>
+	</addColumn>
+	
+	<addColumn tableName="map_plan">
+		<column name="is_important" type="boolean" defaultValueBoolean="false">
+			<constraints nullable="false" />
+		</column>
+	</addColumn>
+	
+	<addColumn tableName="map_plan">
+		<column name="is_f1_visa" type="boolean" defaultValueBoolean="false">
+			<constraints nullable="false" />
+		</column>
+	</addColumn>
+				
+	<addColumn tableName="map_plan">
+		<column name="academic_goals" type="${nvarchar.type}(2000)"/>
+	</addColumn>
+	
+	<addColumn tableName="map_plan">
+		<column name="career_link" type="${nvarchar.type}(2000)"/>
+	</addColumn>	
+	
+	<addColumn tableName="map_plan_course">
+		<column name="contact_notes" type="${nvarchar.type}(2000)"/>
+	</addColumn>		
+			
+	<addColumn tableName="map_plan_course">
+		<column name="student_notes" type="${nvarchar.type}(2000)"/>
+	</addColumn>
+
+	<addColumn tableName="map_plan_course">
+		<column name="is_important" type="boolean" defaultValueBoolean="false">
+			<constraints nullable="false" />
+		</column>
+	</addColumn>
+
+	<addColumn tableName="map_plan_course">
+		<column name="is_transcript" type="boolean" defaultValueBoolean="false">
+			<constraints nullable="false" />
+		</column>
+	</addColumn>
+	
+	<addColumn tableName="map_plan_course">
+		<column name="elective_id" type="uuid">
+			<constraints nullable="true" foreignKeyName="map_plan_course_elective_id"	references="elective(id)" />
+		</column>
+	</addColumn>	
+
+</changeSet>
+
+	<changeSet id="map plan phase 2 part 2" author="tony.arland">
+	<addColumn tableName="map_plan">
+		<column name="academic_link" type="${nvarchar.type}(2000)"/>
+	</addColumn>
+	</changeSet>	
+	    			
+</databaseChangeLog>

@@ -132,4 +132,5 @@
 	<include file="org/jasig/ssp/database/integrationchangesets/i000029.xml" />
 	<include file="org/jasig/ssp/database/integrationchangesets/i000030.xml" />
 	<include file="org/jasig/ssp/database/changesets/000041.xml" />
+	<include file="org/jasig/ssp/database/changesets/000042.xml" />
 </databaseChangeLog>

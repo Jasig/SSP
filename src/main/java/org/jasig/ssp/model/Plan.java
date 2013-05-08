@@ -49,6 +49,10 @@ public class Plan extends AbstractPlan  {
 	@OrderBy("orderInTerm")	
 	private List<PlanCourse> planCourses = new ArrayList<PlanCourse>(0);
 	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "plan", orphanRemoval=true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	private List<TermNotes> termNotes = new ArrayList<TermNotes>(0);
+	
 	@NotNull
 	@ManyToOne()
 	@JoinColumn(name = "person_id", updatable = false, nullable = false)
@@ -94,6 +98,14 @@ public class Plan extends AbstractPlan  {
 			clone.getPlanCourses().add(planCourseClone);
 		}
 		return clone;
+	}
+
+	public List<TermNotes> getTermNotes() {
+		return termNotes;
+	}
+
+	public void setTermNotes(List<TermNotes> termNotes) {
+		this.termNotes = termNotes;
 	}
 	 
 }

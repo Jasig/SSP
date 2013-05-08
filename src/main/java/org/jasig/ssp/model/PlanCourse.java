@@ -33,7 +33,7 @@ import org.jasig.ssp.model.TermCourses.TermCoursesTermDateComparator;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name="map_plan_course")
-public class PlanCourse extends AbstractPlanCourse {
+public class PlanCourse extends AbstractPlanCourse<Plan> {
 
 	
 	private static final long serialVersionUID = -6316130725863888876L;
@@ -78,5 +78,10 @@ public class PlanCourse extends AbstractPlanCourse {
 		clone.setPerson(this.getPerson());
 		clone.setTermCode(this.getTermCode());
 		return clone;
+	}
+
+	@Override
+	public Plan getParent() {
+		return plan;
 	}
 }
