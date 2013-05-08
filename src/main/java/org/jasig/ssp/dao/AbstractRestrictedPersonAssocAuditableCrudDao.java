@@ -66,13 +66,13 @@ public abstract class AbstractRestrictedPersonAssocAuditableCrudDao<T extends Re
 			} catch (ObjectNotFoundException e) {
 				LOGGER.error(e.getLocalizedMessage());
 			}
-			criteria.add(Restrictions.or(
-					Restrictions.in("confidentialityLevel", levels),
-					Restrictions.eq("createdBy.id", requestor.getPerson()
-							.getId())));
-			LOGGER.debug("Number of Confidentiality Levels for user {}",
-					levels.size());
 		}
+		criteria.add(Restrictions.or(
+				Restrictions.in("confidentialityLevel", levels),
+				Restrictions.eq("createdBy.id", requestor.getPerson()
+						.getId())));
+		LOGGER.debug("Number of Confidentiality Levels for user {}",
+				levels.size());
 	}
 
 	@Override
