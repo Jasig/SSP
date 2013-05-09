@@ -55,30 +55,22 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				    items: [
 				   {
 				        fieldLabel: 'Advisor/Coach Notes',
-				        name: 'coachnotes',
+				        name: 'coachNotes',
 				        allowBlank:true,
-				        itemId: 'coachnotes',
 				        xtype: 'textareafield',
 				        autoscroll: true,
-						hidden: true,
-						hideable: false,
 				        flex:1
 				    },{
 				        fieldLabel: 'Student Notes',
-				        name: 'studentnotes',
+				        name: 'studentNotes',
 				        allowBlank:true,
-				        itemId: 'addressLine1',
 				        xtype: 'textareafield',
-						hidden: true,
-						hideable: false,
 				        flex:1,
 				        autoscroll: true
 				    },
 				    {
 				    	xtype: 'numberfield',
 				        anchor: '100%',
-				        name: 'bottles',
-				        fieldLabel: 'Bottles of Beer',
 				        maxValue: 99,
 				        allowDecimals: false,
 				        minValue: 0,
@@ -91,16 +83,14 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        
 				    },
 				    {
-                    	name: 'importantcourseplan',
-                    	inputValue: 'importantcourseplan',
+                    	name: 'important',
+                    	inputValue: 'important',
                     	xtype:'checkbox',
                     	padding: '0 0 0 105',
                     	labelSeparator: '',
                     	hideLabel: true,
                     	boxLabel: 'Mark As Important',
                     	fieldLabel: 'Mark As Important',
-						hidden: true,
-						hideable: false
                     },
                     {
                     xtype:'checkbox',
@@ -108,8 +98,8 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                     	labelSeparator: '',
                     	hideLabel: true,   
                     	boxLabel: 'Mark As Program Elective',
-                    	name: 'electiveplan',
-                    	inputValue: 'electiveplan',
+                    	name: 'elective',
+                    	inputValue: 'elective',
 						hidden: true,
 						hideable: false
                     }
@@ -125,9 +115,8 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 		                    listeners: {
 		                    	click:function(){
 		                    		me = this;
-		                    		var creditHours = me.query('#creditHours')[0].getValue();
-		                    		var mapCourse = me.semesterStore.getAt(me.rowIndex);
-		                    		mapCourse.set('creditHours', creditHours);
+									var mapCourse = me.semesterStore.getAt(me.rowIndex);
+									me.query('form')[0].getForm().updateRecord(mapCourse);
 		                    		me.close();
 		                    	},
 		                    	scope: me

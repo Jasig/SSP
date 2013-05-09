@@ -387,6 +387,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     	if(me.coursePlanDetails == null || me.coursePlanDetails.isDestroyed){
     		me.coursePlanDetails = Ext.create('Ssp.view.tools.map.CourseNotes');
 			var creditHours = me.coursePlanDetails.query('#creditHours')[0];
+			me.coursePlanDetails.query('form')[0].getForm().loadRecord(courseRecord);
     		creditHours.setValue(courseRecord.get('creditHours'));
 		    creditHours.setMinValue(courseRecord.get('minCreditHours'));
 			creditHours.setMaxValue(courseRecord.get('maxCreditHours'));

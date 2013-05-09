@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 Ext.define('Ssp.model.tool.map.SemesterCourse', {
 	extend: 'Ssp.model.AbstractBase',
     fields: [{name:'title', type: 'string'},
@@ -26,7 +27,11 @@ Ext.define('Ssp.model.tool.map.SemesterCourse', {
 			 {name:'maxCreditHours', type: 'float'},
 			 {name:'creditHours', type: 'float'},
              {name:'termCode', type: 'string'},
-             {name:'isDev', type: 'boolean'}
+             {name:'isDev', type: 'boolean'},
+			{name:'studentNotes', type: 'string'},
+			{name:'coachNotes', type: 'string'},
+			{name:'important', type: 'boolean'},
+			{name:'elective', type: 'boolean'}
              ],
 	constructor: function(planCourse){
 					var me = this;
