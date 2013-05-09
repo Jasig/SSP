@@ -274,6 +274,8 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("includeHeaderFooter", planOutput.getIncludeHeaderFooter());
 		messageParams.put("includeTotalTimeExpected", planOutput.getIncludeTotalTimeExpected());
 		messageParams.put("totalPlanDevHours", totalPlanDevHours);
+		messageParams.put("planContactNotes", null);
+		messageParams.put("planStudentNotes", null);
 		
 		return populateFromTemplate(MessageTemplate.OUTPUT_MAP_PLAN_FULL_ID,
 				messageParams);

@@ -28,5 +28,4 @@ public interface ExternalCourseService extends ExternalReferenceDataService<Exte
 
 	List<ExternalCourse> search(String programCode, String tag, String termCode);
 
-
 }

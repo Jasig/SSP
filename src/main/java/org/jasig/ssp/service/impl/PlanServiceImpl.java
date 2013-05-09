@@ -38,6 +38,7 @@ import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
+import org.jasig.ssp.service.external.ExternalCourseService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.PlanCourseTO;
@@ -72,6 +73,10 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 	
 	@Autowired
 	private PersonService personService;
+	
+	@Autowired
+	private ExternalCourseService courseService;
+
 	
 	@Autowired
 	private PlanTOFactory planTOFactory;
@@ -146,10 +151,13 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 	
 	private List<TermCourses> collectTermCourses(PlanTO plan) throws ObjectNotFoundException{
 		Map<String,TermCourses> semesterCourses = new HashMap<String, TermCourses>();
-		for(PlanCourseTO course : plan.getPlanCourses()){
+		
+		List<Term> futureTerms = termService.getCurrentAndFutureTerms().subList(0, 6);
+		for(PlanCourseTO course : plan.getPlanCourses()){				
 			if(!semesterCourses.containsKey(course.getTermCode())){
 				Term term = termService.getByCode(course.getTermCode());
 				TermCourses termCourses = new TermCourses(term);
+				course.setPlanToOffer(getPlanToOfferTerms(course, futureTerms));
 				termCourses.addCourse(course);
 				semesterCourses.put(term.getCode(), termCourses);
 			}else{
@@ -159,6 +167,21 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 		List<TermCourses> courses =  Lists.newArrayList(semesterCourses.values());
 		Collections.sort(courses, TermCourses.TERM_START_DATE_COMPARATOR);
 		return courses;
+	}
+	
+	private String getPlanToOfferTerms(PlanCourseTO course, List<Term> futureTerms) throws ObjectNotFoundException{
+		
+		String planToOffer = "";
+		Integer offeredTerms = 0;
+		for(Term offeredTerm:futureTerms){
+			if(courseService.validateCourseForTerm(course.getCourseCode(), offeredTerm.getCode())){
+				planToOffer = planToOffer + offeredTerm.getName() + " ";
+				offeredTerms = offeredTerms + 1;
+			}
+			if(offeredTerms >= 4)
+				break;
+		}
+		return planToOffer;
 	}
 	
 	private Float calculateTotalPlanHours(List<TermCourses> courses){

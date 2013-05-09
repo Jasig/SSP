@@ -38,6 +38,22 @@ public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 	
 	private String personId;
 	
+	/**
+	 * @return the planToOffer
+	 */
+	public String getPlanToOffer() {
+		return planToOffer;
+	}
+
+	/**
+	 * @param planToOffer the planToOffer to set
+	 */
+	public void setPlanToOffer(String planToOffer) {
+		this.planToOffer = planToOffer;
+	}
+
+	private String planToOffer;
+	
 	
 
 	public PlanCourseTO(PlanCourse planCourse) {

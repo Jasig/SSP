@@ -283,7 +283,7 @@ public class PlanController  extends AbstractBaseController {
 		if(messageText == null)
 			return null;
 
-	    Message message = messageService.createMessage(planOutputDataTO.getEmailTo(), 
+	    messageService.createMessage(planOutputDataTO.getEmailTo(), 
 							planOutputDataTO.getEmailCC(),
 							messageText);
 		
@@ -297,6 +297,7 @@ public class PlanController  extends AbstractBaseController {
 		if(planOutputDataTO.getOutputFormat().equals(OUTPUT_FORMAT_MATRIX)) {
 			output = service.createMapPlanMatirxOutput(planOutputDataTO.getPlan(), institutionName.getValue());
 		} else{
+			
 			output = service.createMapPlanFullOutput(planOutputDataTO, institutionName.getValue());
 		}
 		
