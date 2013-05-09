@@ -438,7 +438,7 @@ var apiUrls = [
   {name: 'programStatus', url: 'reference/programStatus'},
   {name: 'programStatusChangeReason', url: 'reference/programStatusChangeReason'},
   {name: 'referralSource', url: 'reference/referralSource'},
-  {name: 'serviceReasons', url: 'reference/serviceReason'},
+  {name: 'serviceReason', url: 'reference/serviceReason'},
   {name: 'session', url: 'session'},
   {name: 'specialServiceGroup', url: 'reference/specialServiceGroup'},
   {name: 'studentIntakeTool', url: 'tool/studentIntake'},
