@@ -23,7 +23,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 	inject:{
 		appEventsController: 'appEventsController'
 	},
-    //controller: 'Ssp.controller.tool.map.SemesterPanelViewController',
+    controller: 'Ssp.controller.tool.map.SemesterPanelViewController',
     columnLines: false,
     layout: {
                 type: 'fit'
@@ -39,24 +39,35 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 itemId: 'termNotesButton',
                 width: 20,
                 height: 20,
-                hidden:true,
-                hideable:false,
                 cls: 'editPencilIcon',
                 text:'',
                 tooltip: 'Term Notes',
-                listeners: {
-                    click: function() {
-                        var termNotesPopUp = Ext.create('Ssp.view.tools.map.TermNotes');
-                        termNotesPopUp.center();
-                        termNotesPopUp.show();
-                    }
-                  }
+                
             }],
 			items : [ {
 				store: me.store,
 				scroll: true,
 				xtype : 'semestergrid',
-			} ],
+			}, 
+			{
+				xtype: 'form',
+				hidden:true,
+				hideable:false,
+				items:[
+						{
+		               		name: 'contactNotes',
+		                	xtype: 'textfield',
+							hidden: true,
+							hideable:false,
+		             	},
+		 				{
+			            	name: 'studentNotes',
+			            	xtype: 'textfield',
+							hidden: true,
+							hideable:false,
+			        	}
+				]
+			}],
            
             dockedItems: [{
                 dock: 'bottom',

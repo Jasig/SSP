@@ -36,7 +36,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
         
         'planNotesButton':{
          selector: '#planNotesButton',
-         hidden: true,
            listeners: {
             click: 'onplanNotesButtonClick'
            }
@@ -44,15 +43,13 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
         
         'loadSavedPlanButton':{
            selector: '#loadSavedPlanButton',
-           hidden: true,
-           listeners: {
+            listeners: {
             click: 'onloadSavedPlanButtonClick'
            }
         },
         
         'loadTemplateButton':{
            selector: '#loadTemplateButton',
-           hidden: true,
            listeners: {
             click: 'onloadTemplateButtonClick'
            }
@@ -90,6 +87,14 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
             click: 'onprintPlanButtonClick'
            }
         },
+
+		'planOverviewButton':{
+           selector: '#planOverviewButton',
+           listeners: {
+            click: 'onplanOverviewButtonClick'
+           }
+        },
+
 		'createNewPlanButton':{
            selector: '#createNewPlanButton',
            listeners: {
@@ -130,8 +135,22 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
         var me=this;
 		if(me.notesPopUp == null || me.notesPopUp.isDestroyed)
        		me.notesPopUp = Ext.create('Ssp.view.tools.map.PlanNotes',{hidden:true});
+		var form =  me.notesPopUp.query('form')[0].getForm();
+		form.loadRecord(me.currentMapPlan);
+		me.notesPopUp.query('[name=saveButton]')[0].addListener('click', me.onPlanNotesSave, me, {single:true});
+	    me.notesPopUp.center();
 		me.notesPopUp.show();
     },
+
+
+
+	onPlanNotesSave: function(button){
+		var me = this;
+		var form =  button.findParentByType('form').getForm();
+		form.updateRecord(me.currentMapPlan);
+		me.notesPopUp.close();
+	},
+
     
     onloadSavedPlanButtonClick: function(button){
         var me=this; 
@@ -172,6 +191,11 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.emailPlanPopUp.emailEvent = 'onEmailMapPlan';
 		me.emailPlanPopUp.show();
     },
+
+	onplanOverviewButtonClick: function(button){
+		var me=this;
+		me.appEventsController.getApplication().fireEvent('onShowMapPlanOverView');
+	},
     
     onprintPlanButtonClick: function(button){
         var me=this;
@@ -191,7 +215,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 
 	oncreateNewMapPlanButton: function(button){
         var me=this;
-		this.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
+		me.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
     },
     
 

@@ -55,25 +55,22 @@ Ext.define('Ssp.view.tools.map.PlanNotes', {
 				    items: [
 				   {
 				        fieldLabel: 'Advisor/Coach Notes',
-				        name: 'coachnotes',
+				        name: 'contactNotes',
 				        allowBlank:true,
-				        itemId: 'coachnotes',
 				        xtype: 'textareafield',
 				        autoscroll: true,
 				        flex:1
 				    },{
 				        fieldLabel: 'Student Notes',
-				        name: 'studentnotes',
+				        name: 'studentNotes',
 				        allowBlank:true,
-				        itemId: 'addressLine1',
 				        xtype: 'textareafield',
 				         flex:1,
 				        autoscroll: true
 				    },{
 				        fieldLabel: 'Academic Goals',
-				        name: 'academicgoals',
+				        name: 'academicGoals',
 				        allowBlank:true,
-				        itemId: 'academicgoals',
 				        xtype: 'textareafield',
 				        flex:1,
 				        autoscroll: true
@@ -84,13 +81,19 @@ Ext.define('Ssp.view.tools.map.PlanNotes', {
 		                dock: 'top',
 		                items: [{
 		                    xtype: 'button',
-		                    itemId: 'saveButton',
+		                    name: 'saveButton',
 		                    text: 'Save'
 		                    
 		                }, '-', {
 		                    xtype: 'button',
-		                    itemId: 'cancelButton',
-		                    text: 'Cancel'
+		                    name: 'cancelButton',
+		                    text: 'Cancel',
+							listeners:{
+								click:function(){
+									this.close();
+								},
+								scope: me
+							}
 		                }]
 		            
 		            }]

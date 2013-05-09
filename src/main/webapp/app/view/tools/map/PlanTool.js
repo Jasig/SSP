@@ -53,8 +53,6 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 layout: 'vbox',
                 width: 80,
                 cls: 'center-align',
-				hidden: true,
-				hideable: false,
                 defaults: {
                     anchor: '100%'
                 },
@@ -68,13 +66,9 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     itemId: 'planOverviewButton',
                     align: 'center',
                     padding: '0 0 0 0',
-                	hidden: true,
-					hideable: false
                 }, {
                     xtype: 'label',
                     text: 'View All',
-                	hidden: true,
-					hideable: false
                 
                 }]
             
@@ -122,8 +116,6 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 layout: 'vbox',
                 width: 80,
                 cls: 'center-align',
-				hidden: true,
-				hideable: false,
                 
                 defaults: {
                     anchor: '100%'

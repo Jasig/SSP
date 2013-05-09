@@ -25,5 +25,10 @@ Ext.define('Ssp.model.tool.map.PlanCourse', {
              {name:'courseDescription',type:'string'},
              {name:'creditHours', type:'int'},
              {name:'orderInTerm',type:'int'},
-             {name:'isDev',type:'boolean'}]
+             {name:'isDev',type:'boolean'},
+             {name:'contactNotes',type:'string'},
+             {name:'studentNotes',type:'string'},
+             {name:'isImportant',type:'boolean'},
+             {name:'isTranscript',type:'boolean'},
+             {name:'electiveId',type:'string'}]
 });

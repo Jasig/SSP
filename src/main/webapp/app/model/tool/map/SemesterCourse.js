@@ -28,10 +28,11 @@ Ext.define('Ssp.model.tool.map.SemesterCourse', {
 			 {name:'creditHours', type: 'float'},
              {name:'termCode', type: 'string'},
              {name:'isDev', type: 'boolean'},
-			{name:'studentNotes', type: 'string'},
-			{name:'coachNotes', type: 'string'},
-			{name:'important', type: 'boolean'},
-			{name:'elective', type: 'boolean'}
+			 {name:'studentNotes', type: 'string'},
+			 {name:'contactNotes', type: 'string'},
+			 {name:'isImportant', type: 'boolean'},
+			 {name:'isTranscript', type: 'boolean'},
+			 {name:'electiveId', type: 'string'}
              ],
 	constructor: function(planCourse){
 					var me = this;

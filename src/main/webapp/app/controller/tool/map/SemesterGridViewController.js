@@ -52,7 +52,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     	var courseValidation = serviceResponses.successes.validCourse;
     	
     	if(!courseValidation.valid){
-    		Ext.MessageBox.confirm("Course Not Avaiable", "Course not available in term. Add anyway?", me.handleInvalidCourse, me);
+    		Ext.MessageBox.confirm("Course Not Avaiable For Term", "This course is not scheduled to be offered in this term.  Are you sure you want to add it?", me.handleInvalidCourse, me);
     	}
     },
     

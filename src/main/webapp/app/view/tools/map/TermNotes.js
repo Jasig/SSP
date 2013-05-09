@@ -45,7 +45,7 @@ Ext.define('Ssp.view.tools.map.TermNotes', {
                 height: '100%',
                 bodyPadding: 0,
                 autoScroll: true,
-                itemId: 'termnotesForm',
+                name: 'termnotesForm',
                 fieldDefaults: {
                         msgTarget: 'side',
                         labelAlign: 'left',
@@ -55,24 +55,22 @@ Ext.define('Ssp.view.tools.map.TermNotes', {
 				    items: [
 				   {
 				        fieldLabel: 'Advisor/Coach Notes',
-				        name: 'coachnotes',
 				        allowBlank:true,
-				        itemId: 'coachnotes',
+				        name: 'contactNotes',
 				        xtype: 'textareafield',
 				        autoscroll: true,
 				        flex:1
 				    },{
 				        fieldLabel: 'Student Notes',
-				        name: 'studentnotes',
+				        name: 'studentNotes',
 				        allowBlank:true,
-				        itemId: 'addressLine1',
 				        xtype: 'textareafield',
-				         flex:1,
+				        flex:1,
 				        autoscroll: true
 				    },
 				    {
-                        name: 'importanttermplan',
-                        inputValue: 'importanttermplan',
+                        name: 'isImportant',
+                        inputValue: 'isImportant',
                         xtype:'checkbox',
                         padding: '0 0 0 105',
                         labelSeparator: '',
@@ -86,13 +84,19 @@ Ext.define('Ssp.view.tools.map.TermNotes', {
 		                dock: 'top',
 		                items: [{
 		                    xtype: 'button',
-		                    itemId: 'saveButton',
+		                    name: 'saveButton',
 		                    text: 'Save'
 		                    
 		                }, '-', {
 		                    xtype: 'button',
-		                    itemId: 'cancelButton',
-		                    text: 'Cancel'
+		                    name: 'cancelButton',
+		                    text: 'Cancel',
+							listeners:{
+								click:function(){
+									this.close();
+								},
+								scope: me
+							}
 		                }]
 		            
 		            }]
