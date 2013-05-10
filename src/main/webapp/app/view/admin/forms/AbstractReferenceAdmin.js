@@ -39,7 +39,24 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     							controller: me.getController(),
     							listeners: {
 	    							cancelEdit: function(rowEditor, item){
-	    								item.store.load();
+	    								var columns = rowEditor.grid.columns;
+	    								var record = rowEditor.context.record
+	    								var sortInfo = {};
+	    								
+	    								for (var i=0; i < columns.length; i++ ) {
+	    									if(columns[i].sortState != null 
+	    										&& columns[i].sortState != undefined) {
+	    										
+	    										sortInfo = {	    								
+	    		    							    sort: record.getServerSideFieldName(columns[i].dataIndex),
+	    		    							    sortDirection: columns[i].sortState
+	    	    								}
+	    									}
+	    								}    	
+	    								
+	    								item.store.load({
+	    									params: sortInfo
+	    							    });
 	    					        }
     							}
     					});

@@ -68,5 +68,18 @@ Ext.define('Ssp.model.AbstractBase', {
     getFormattedModifiedDate: function(){
     	return Ext.util.Format.date( this.get('createdDate'),'m/d/Y');   	
     },
+    
+    /* Used in conjunction with sorting on loading/refreshing the grid view. 
+     * objectStatus is translated into the 'active' field when loading to and
+     * from the backend, otherwise return the name as passed. If future 
+     * fields have the same sort of translation as active/objectStatus do, 
+     * add those exceptions here. 
+     */
+    getServerSideFieldName: function( fieldName ) {
+    	if(fieldName == 'active') {
+    		return 'objectStatus';
+    	}     	
+    	return fieldName;
+    },
 
 });
