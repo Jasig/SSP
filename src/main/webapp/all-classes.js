@@ -2008,19 +2008,21 @@ Ext.define('Ssp.controller.tool.accommodation.AccommodationToolViewController', 
 				personDisabilityTypes: []
 			};
 						
-			// date saved as null is ok 
+			// date saved as null is ok
+			var origEligibleLetterDate = accommodationData.personDisability.eligibleLetterDate;
 			if (accommodationData.personDisability.eligibleLetterDate != null)
 			{
 				// account for date offset
-				accommodationData.personDisability.eligibleLetterDate = me.formUtils.fixDateOffset( accommodationData.personDisability.eligibleLetterDate );
+				accommodationData.personDisability.eligibleLetterDate = me.formUtils.toJSONStringifiableDate( accommodationData.personDisability.eligibleLetterDate );
 			}
 
-			// date saved as null is ok 
+			// date saved as null is ok
+			var origIneligibleLetterDate = accommodationData.personDisability.ineligibleLetterDate;
 			if (accommodationData.personDisability.ineligibleLetterDate != null)
 			{
 				// account for date offset
-                accommodationData.personDisability.ineligibleLetterDate = me.formUtils.fixDateOffset( accommodationData.personDisability.ineligibleLetterDate );
-			}			
+				accommodationData.personDisability.ineligibleLetterDate = me.formUtils.toJSONStringifiableDate( accommodationData.personDisability.ineligibleLetterDate );
+			}
 			
 			// cleans properties that will be unable to be saved if not null
 			// arrays set to strings should be null rather than string in saved
@@ -2044,8 +2046,16 @@ Ext.define('Ssp.controller.tool.accommodation.AccommodationToolViewController', 
 			me.getView().setLoading( true );
 			
 			me.service.save(me.personLite.get('id'), accommodationData, {
-				success: me.saveAccommodationSuccess,
-				failure: me.saveAccommodationFailure,
+				success: function(r,scope){
+					accommodationData.personDisability.eligibleLetterDate = origEligibleLetterDate;
+					accommodationData.personDisability.ineligibleLetterDate = origIneligibleLetterDate;
+					scope.saveAccommodationSuccess(r,scope);
+				},
+				failure: function(r,scope){
+					accommodationData.personDisability.eligibleLetterDate = origEligibleLetterDate;
+					accommodationData.personDisability.ineligibleLetterDate = origIneligibleLetterDate;
+					me.saveAccommodationFailure(r, scope);
+				},
 				scope: me
 			});
 
@@ -2129,7 +2139,15 @@ Ext.define('Ssp.view.tools.accommodation.General', {
 		                xtype: 'displayfield',
 		                name: 'odsRegistrationDate',
 		                fieldLabel: 'ODS Registration Date',
-		                renderer: Ext.util.Format.dateRenderer('m/d/Y')
+		                renderer: Ext.util.Format.dateRenderer('m/d/Y'),
+						listeners: {
+							render: function(field){
+								Ext.create('Ext.tip.ToolTip',{
+									target: field.getEl(),
+									html: 'This is the date on which Accommodation data for this student was first received. It is shown in institution-local time. E.g. for a May 9, 11pm submission on the US west coast to an east coast school, this would display the "next" day, i.e. May 10.'
+								});
+							}
+						}
 		            },{
                         xtype: 'combobox',
                         name: 'disabilityStatusId',
@@ -2303,7 +2321,16 @@ Ext.define('Ssp.view.tools.accommodation.Disposition', {
         				    	altFormats: 'm/d/Y|m-d-Y',
         				    	invalidText: '{0} is not a valid date - it must be in the format: 06/02/2012 or 06-02-2012',
         				        name: 'eligibleLetterDate',
-        				        allowBlank:true
+        				        allowBlank:true,
+        				        showToday:false, // b/c 'today' would be browser-local
+								listeners: {
+									render: function(field){
+										Ext.create('Ext.tip.ToolTip',{
+											target: field.getEl(),
+											html: 'This is the date on which the Eligibility Letter for this student was received, in the institution\'s time zone. The system will not attempt to convert this value to or from your current time zone.'
+										});
+									}
+								}
         				    },
                             {
                                 xtype: 'checkboxfield',
@@ -2317,7 +2344,16 @@ Ext.define('Ssp.view.tools.accommodation.Disposition', {
         				    	altFormats: 'm/d/Y|m-d-Y',
         				    	invalidText: '{0} is not a valid date - it must be in the format: 06/02/2012 or 06-02-2012',
         				        name: 'ineligibleLetterDate',
-        				        allowBlank:true
+        				        allowBlank:true,
+        				        showToday:false, // b/c 'today' would be browser-local
+								listeners: {
+									render: function(field){
+										Ext.create('Ext.tip.ToolTip',{
+											target: field.getEl(),
+											html: 'This is the date on which the Ineligibility Letter for this student was received, in the institution\'s time zone. The system will not attempt to convert this value to or from your current time zone.'
+										});
+									}
+								}
         				    },
                             {
                                 xtype: 'checkboxfield',
@@ -3306,7 +3342,7 @@ Ext.define('Ssp.model.tool.accommodation.PersonDisabilityAccommodation', {
 Ext.define('Ssp.model.tool.accommodation.PersonDisability', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name: 'personId', type: 'string'},
-             {name: 'odsRegistrationDate', type: 'date', dateFormat: 'time', useNull: true},
+             {name: 'odsRegistrationDate', type: 'date', dateFormat: 'c', useNull: true},
              {name: 'disabilityStatusId', type: 'string'},
              {name: 'intakeCounselor', type: 'string'},
              {name: 'referredBy', type: 'string'},
@@ -3318,9 +3354,9 @@ Ext.define('Ssp.model.tool.accommodation.PersonDisability', {
              {name: 'documentsRequestedFrom', type: 'string'},
              {name: 'rightsAndDuties', type: 'string'},	 
              {name: 'eligibleLetterSent', type: 'boolean', useNull:true},
-             {name: 'eligibleLetterDate', type: 'date', dateFormat: 'time'},
+             {name: 'eligibleLetterDate', type: 'date', dateFormat: 'c'},
              {name: 'ineligibleLetterSent', type: 'boolean', useNull:true},
-             {name: 'ineligibleLetterDate', type: 'date', dateFormat: 'time'},
+             {name: 'ineligibleLetterDate', type: 'date', dateFormat: 'c'},
              {name: 'noDocumentation', type: 'boolean', useNull:true},
              {name: 'inadequateDocumentation', type: 'boolean', useNull:true},
              {name: 'noDisability', type: 'boolean', useNull:true},
@@ -3387,10 +3423,6 @@ Ext.define('Ssp.model.tool.accommodation.AccommodationForm', {
    		      convert: function(value, record) {
 		            var personDisability = Ext.create('Ssp.model.tool.accommodation.PersonDisability',{});
 		            personDisability.populateFromGenericObject( value );
-		            if (value !== null)
-		            {
-		            	personDisability.set('odsRegistrationDate',value.createdDate);
-		            }
 		            return personDisability;
 		      	}
              },

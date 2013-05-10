@@ -23,7 +23,14 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.model.PersonDisability;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
+import org.jasig.ssp.transferobject.jsonserializer.DateTimeRepresentation;
+import org.jasig.ssp.util.SspTimeZones;
 
 public class PersonDisabilityTO
 		extends AbstractAuditableTO<PersonDisability>
@@ -42,8 +49,10 @@ public class PersonDisabilityTO
 
 	private String intakeCounselor, referredBy, contactName, recordsRequestedFrom, documentsRequestedFrom,
 				   rightsAndDuties, tempEligibilityDescription, medicationList, 
-				   functionalLimitations;	
-		
+				   functionalLimitations;
+
+	@JsonSerialize(using = DateOnlySerializer.class)
+	@JsonDeserialize(using = DateOnlyDeserializer.class)
 	private Date eligibleLetterDate, ineligibleLetterDate;
 	
 	public PersonDisabilityTO() {
@@ -268,5 +277,11 @@ public class PersonDisabilityTO
 
 	public void setIneligibleLetterDate(Date ineligibleLetterDate) {
 		this.ineligibleLetterDate = ineligibleLetterDate;
+	}
+
+	@JsonProperty
+	@JsonSerialize(using = DateOnlySerializer.class)
+	public Date getOdsRegistrationDate() {
+		return SspTimeZones.INSTANCE.midnightThisDateInDbTimeZone(getCreatedDate());
 	}
 }
