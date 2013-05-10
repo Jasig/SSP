@@ -80,7 +80,16 @@ Ext.define('Ssp.view.tools.accommodation.Disposition', {
         				    	altFormats: 'm/d/Y|m-d-Y',
         				    	invalidText: '{0} is not a valid date - it must be in the format: 06/02/2012 or 06-02-2012',
         				        name: 'eligibleLetterDate',
-        				        allowBlank:true
+        				        allowBlank:true,
+        				        showToday:false, // b/c 'today' would be browser-local
+								listeners: {
+									render: function(field){
+										Ext.create('Ext.tip.ToolTip',{
+											target: field.getEl(),
+											html: 'This is the date on which the Eligibility Letter for this student was received, in the institution\'s time zone. The system will not attempt to convert this value to or from your current time zone.'
+										});
+									}
+								}
         				    },
                             {
                                 xtype: 'checkboxfield',
@@ -94,7 +103,16 @@ Ext.define('Ssp.view.tools.accommodation.Disposition', {
         				    	altFormats: 'm/d/Y|m-d-Y',
         				    	invalidText: '{0} is not a valid date - it must be in the format: 06/02/2012 or 06-02-2012',
         				        name: 'ineligibleLetterDate',
-        				        allowBlank:true
+        				        allowBlank:true,
+        				        showToday:false, // b/c 'today' would be browser-local
+								listeners: {
+									render: function(field){
+										Ext.create('Ext.tip.ToolTip',{
+											target: field.getEl(),
+											html: 'This is the date on which the Eligibility Letter for this student was received, in the institution\'s time zone. The system will not attempt to convert this value to or from your current time zone.'
+										});
+									}
+								}
         				    },
                             {
                                 xtype: 'checkboxfield',

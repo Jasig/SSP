@@ -34,10 +34,6 @@ Ext.define('Ssp.model.tool.accommodation.AccommodationForm', {
    		      convert: function(value, record) {
 		            var personDisability = Ext.create('Ssp.model.tool.accommodation.PersonDisability',{});
 		            personDisability.populateFromGenericObject( value );
-		            if (value !== null)
-		            {
-		            	personDisability.set('odsRegistrationDate',value.createdDate);
-		            }
 		            return personDisability;
 		      	}
              },

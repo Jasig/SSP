@@ -363,19 +363,21 @@ Ext.define('Ssp.controller.tool.accommodation.AccommodationToolViewController', 
 				personDisabilityTypes: []
 			};
 						
-			// date saved as null is ok 
+			// date saved as null is ok
+			var origEligibleLetterDate = accommodationData.personDisability.eligibleLetterDate;
 			if (accommodationData.personDisability.eligibleLetterDate != null)
 			{
 				// account for date offset
-				accommodationData.personDisability.eligibleLetterDate = me.formUtils.fixDateOffset( accommodationData.personDisability.eligibleLetterDate );
+				accommodationData.personDisability.eligibleLetterDate = me.formUtils.toJSONStringifiableDate( accommodationData.personDisability.eligibleLetterDate );
 			}
 
-			// date saved as null is ok 
+			// date saved as null is ok
+			var origIneligibleLetterDate = accommodationData.personDisability.ineligibleLetterDate;
 			if (accommodationData.personDisability.ineligibleLetterDate != null)
 			{
 				// account for date offset
-                accommodationData.personDisability.ineligibleLetterDate = me.formUtils.fixDateOffset( accommodationData.personDisability.ineligibleLetterDate );
-			}			
+				accommodationData.personDisability.ineligibleLetterDate = me.formUtils.toJSONStringifiableDate( accommodationData.personDisability.ineligibleLetterDate );
+			}
 			
 			// cleans properties that will be unable to be saved if not null
 			// arrays set to strings should be null rather than string in saved
@@ -399,8 +401,16 @@ Ext.define('Ssp.controller.tool.accommodation.AccommodationToolViewController', 
 			me.getView().setLoading( true );
 			
 			me.service.save(me.personLite.get('id'), accommodationData, {
-				success: me.saveAccommodationSuccess,
-				failure: me.saveAccommodationFailure,
+				success: function(r,scope){
+					accommodationData.personDisability.eligibleLetterDate = origEligibleLetterDate;
+					accommodationData.personDisability.ineligibleLetterDate = origIneligibleLetterDate;
+					scope.saveAccommodationSuccess(r,scope);
+				},
+				failure: function(r,scope){
+					accommodationData.personDisability.eligibleLetterDate = origEligibleLetterDate;
+					accommodationData.personDisability.ineligibleLetterDate = origIneligibleLetterDate;
+					me.saveAccommodationFailure(r, scope);
+				},
 				scope: me
 			});
 
