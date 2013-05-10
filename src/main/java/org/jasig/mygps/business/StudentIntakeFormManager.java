@@ -33,7 +33,6 @@ import org.jasig.mygps.model.transferobject.FormOptionTO;
 import org.jasig.mygps.model.transferobject.FormQuestionTO;
 import org.jasig.mygps.model.transferobject.FormSectionTO;
 import org.jasig.mygps.model.transferobject.FormTO;
-import org.jasig.mygps.web.MyGpsStudentIntakeController;
 import org.jasig.ssp.dao.PersonChallengeDao;
 import org.jasig.ssp.dao.PersonEducationGoalDao;
 import org.jasig.ssp.dao.PersonEducationLevelDao;
@@ -79,9 +78,7 @@ import org.jasig.ssp.service.reference.MaritalStatusService;
 import org.jasig.ssp.service.reference.StudentStatusService;
 import org.jasig.ssp.service.reference.VeteranStatusService;
 import org.jasig.ssp.service.tool.PersonToolService;
-import org.jasig.ssp.transferobject.jsonserializer.DateTimeRepresentation;
 import org.jasig.ssp.util.SspStringUtils;
-import org.jasig.ssp.util.SspTimeZones;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -1636,7 +1633,7 @@ public class StudentIntakeFormManager { // NOPMD
 	}
 
 	private SimpleDateFormat newBirthDateFormatter() {
-		return DateTimeRepresentation.newDateFormatter("MM/dd/yyyy", Locale.US);
+		return new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 	}
 
 	private FormSectionTO buildConfidentialitySection()

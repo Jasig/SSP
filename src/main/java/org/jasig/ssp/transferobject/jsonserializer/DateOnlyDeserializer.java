@@ -35,7 +35,7 @@ public class DateOnlyDeserializer extends JsonDeserializer<Date> {
 	public Date deserialize(JsonParser jp, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 		String text = jp.getText();
-		SimpleDateFormat formatter = DateTimeRepresentation.newDateFormatter();
+		SimpleDateFormat formatter = DateOnlyFormatting.dateFormatter();
 		try {
 			return formatter.parse(text);
 		} catch (ParseException e) {

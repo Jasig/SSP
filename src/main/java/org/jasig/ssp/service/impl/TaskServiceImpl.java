@@ -48,9 +48,7 @@ import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.TaskTO;
-import org.jasig.ssp.transferobject.jsonserializer.DateTimeRepresentation;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
-import org.jasig.ssp.util.SspTimeZones;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -346,30 +344,12 @@ public class TaskServiceImpl
 			for (final Task task : tasks) {
 
 				// Calculate reminder window start date
-
-				// All dates in the db are interpreted in a timezone which
-				// usually isn't the JVM default timezone. So interpret first
-				// in that timezone, then extract the relevant "date only" parts
-				// and apply them to a calendar in the JVM-local timezone, which
-				// we assume is the zone in which due dates should actually
-				// be enforced.
-				Calendar tempCalendar = Calendar.getInstance();
-				tempCalendar.setTimeZone(SspTimeZones.INSTANCE.getDbTimeZone());
-				tempCalendar.setTime(task.getDueDate());
-
-				startDateCalendar.set(tempCalendar.get(Calendar.YEAR),
-						tempCalendar.get(Calendar.MONTH),
-						tempCalendar.get(Calendar.DAY_OF_MONTH),
-						0, 0, 0);
-
+				startDateCalendar.setTime(task.getDueDate());
 				startDateCalendar.add(Calendar.HOUR,
 						getNumberOfDaysPriorForTaskReminder() * 24 * -1);
 
 				// Due date
-				dueDateCalendar.set(tempCalendar.get(Calendar.YEAR),
-						tempCalendar.get(Calendar.MONTH),
-						tempCalendar.get(Calendar.DAY_OF_MONTH),
-						0, 0, 0);
+				dueDateCalendar.setTime(task.getDueDate());
 
 				if (now.after(startDateCalendar)
 						&& (now.before(dueDateCalendar))) {

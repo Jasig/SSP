@@ -16,33 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.transferobject.jsonserializer;
+package org.jasig.ssp.util;
 
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.SerializerProvider;
-import org.codehaus.jackson.map.ser.std.SerializerBase;
+public class DateTimeUtils {
 
-public class DateOnlySerializer extends SerializerBase<Date>  {
-
-	public DateOnlySerializer() {
-		super(Date.class);
-	}
-	@Override
-	public void serialize(Date value, JsonGenerator jgen,
-						  SerializerProvider provider)
-			throws IOException, JsonProcessingException {
-		if ( value == null ) {
-			jgen.writeNull();
-		} else {
-			SimpleDateFormat formatter = DateOnlyFormatting.dateFormatter();
-			jgen.writeString(formatter.format(value));
-		}
+	public static Date midnight() {
+		return midnightOn(new Date());
 	}
 
+	public static Date midnightOn(Date on) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(on.getTime());
+		cal.set(Calendar.HOUR, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return new Date(cal.getTimeInMillis());
+	}
 }

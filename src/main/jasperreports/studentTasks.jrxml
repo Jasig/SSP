@@ -103,7 +103,7 @@
 			<textField>
 				<reportElement uuid="46f52ea4-2379-4e13-bf72-0673e49deb70" x="472" y="52" width="78" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$F{dueDate} == null ? "" : org.jasig.ssp.transferobject.jsonserializer.DateTimeRepresentation.newDateFormatter("MM/dd/yyyy").format($F{dueDate})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{dueDate} == null ? "" : new SimpleDateFormat("MM/dd/yyyy").format($F{dueDate})]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

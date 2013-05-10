@@ -52,7 +52,7 @@ public class SspDateTypeDescriptor extends DateTypeDescriptor {
 		return new BasicBinder<X>( javaTypeDescriptor, this ) {
 			@Override
 			protected void doBind(PreparedStatement st, X value, int index, WrapperOptions options) throws SQLException {
-				st.setDate( index, javaTypeDescriptor.unwrap( value, Date.class, options ), Calendar.getInstance(SspTimeZones.INSTANCE.getDbTimeZone()) );
+				st.setDate( index, javaTypeDescriptor.unwrap( value, Date.class, options ), Calendar.getInstance(SspTimeZones.INSTANCE.getDateOnlyDbTimeZone()) );
 			}
 		};
 	}
@@ -61,7 +61,7 @@ public class SspDateTypeDescriptor extends DateTypeDescriptor {
 		return new BasicExtractor<X>( javaTypeDescriptor, this ) {
 			@Override
 			protected X doExtract(ResultSet rs, String name, WrapperOptions options) throws SQLException {
-				return javaTypeDescriptor.wrap( rs.getDate( name, Calendar.getInstance(SspTimeZones.INSTANCE.getDbTimeZone()) ), options );
+				return javaTypeDescriptor.wrap( rs.getDate( name, Calendar.getInstance(SspTimeZones.INSTANCE.getDateOnlyDbTimeZone()) ), options );
 			}
 		};
 	}

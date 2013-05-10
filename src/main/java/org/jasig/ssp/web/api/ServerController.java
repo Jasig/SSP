@@ -23,8 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.jasig.ssp.transferobject.jsonserializer.DateTimeRepresentation;
-import org.jasig.ssp.util.SspTimeZones;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlyFormatting;
+import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,9 +45,8 @@ public class ServerController extends AbstractBaseController {
 	public @ResponseBody
 	Map<String,Object> getDateTimeProfile() {
 		final Date now = new Date();
-		final TimeZone timeZone = TimeZone.getDefault();
 		final Map<String,Object> profile = new HashMap<String,Object>();
-		profile.put("date", DateTimeRepresentation.newDateFormatter().format(SspTimeZones.INSTANCE.midnightTodayInDbTimeZone()));
+		profile.put("date", DateOnlyFormatting.dateFormatter().format(DateTimeUtils.midnight()));
 		profile.put("timestamp", now.getTime());
 		return profile;
 	}

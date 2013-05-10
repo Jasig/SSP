@@ -30,6 +30,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
+import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.SspTimeZones;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -101,16 +102,7 @@ public class TaskDao
 		criteria.add(Restrictions.isNull("completedDate"));
 		criteria.add(Restrictions.isNull("reminderSentDate"));
 		criteria.add(Restrictions.isNotNull("dueDate"));
-
-		// if you just pass a new java.util.Date here it will be coerced to
-		// a java.sql.Date like you'd expect from the Hibernate mappings. But
-		// that will involve interpreting the given date in the configured
-		// "persistent timezone". E.g. if the persistent timezone is UTC, late
-		// in the day on May 5 on the US west coast becomes midnight May 6 in
-		// this query. You really want to preserve that May 5, though, b/c we
-		// don't *actually* want date-only values interpreted in the persistent
-		// timezone, at least not in this case.
-		criteria.add(Restrictions.gt("dueDate", SspTimeZones.INSTANCE.midnightTodayInDbTimeZone()));
+		criteria.add(Restrictions.gt("dueDate", DateTimeUtils.midnight()));
 		return criteria.list();
 	}
 
