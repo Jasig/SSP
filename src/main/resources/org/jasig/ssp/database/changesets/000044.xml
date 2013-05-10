@@ -35,5 +35,9 @@
 		<addColumn tableName="map_template">
 			<column name="academic_link" type="${nvarchar.type}(2000)"/>
 		</addColumn>		
-	</changeSet>    
+	</changeSet> 
+	
+    <changeSet id="drop map_template person_id" author="tony.arland">
+		<dropColumn tableName="map_template" columnName="person_id" />
+	</changeSet>	
 </databaseChangeLog>

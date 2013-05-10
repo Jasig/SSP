@@ -23,7 +23,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
-import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -41,12 +40,6 @@ public class TemplateDao extends AbstractPlanDao<Template> implements
 	@Autowired
 	private transient SecurityService securityService;
 	
-	@Override
-	public Template cloneAndSave(Template plan, Person owner)
-			throws CloneNotSupportedException {
-		return null;
-	}
-
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<Template> getAll(
 			SortingAndPaging createForSingleSortWithPaging, Boolean isPrivate,

@@ -55,7 +55,7 @@ public class Template extends AbstractPlan implements Cloneable{
 	private String departmentCode;
 	
 	@Column(nullable = false)
-	private Boolean isPrivate;
+	private Boolean isPrivate = false;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "template", orphanRemoval=true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
