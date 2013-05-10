@@ -108,7 +108,12 @@ public class SspTimeZones implements InitializingBean {
 	 * @return
 	 */
 	public Date midnightTodayInDbTimeZone() {
+		return midnightThisDateInDbTimeZone(new Date());
+	}
+
+	public Date midnightThisDateInDbTimeZone(Date date) {
 		Calendar localCal = Calendar.getInstance();
+		localCal.setTimeInMillis(date.getTime());
 		Calendar persistentCal = Calendar.getInstance();
 		persistentCal.setTimeZone(SspTimeZones.INSTANCE.getDbTimeZone());
 		persistentCal.set(localCal.get(Calendar.YEAR),

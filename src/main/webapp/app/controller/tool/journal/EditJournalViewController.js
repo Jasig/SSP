@@ -27,7 +27,8 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     	formUtils: 'formRendererUtils',
     	journalEntryService: 'journalEntryService',
     	model: 'currentJournalEntry',
-    	personLite: 'personLite'
+    	personLite: 'personLite',
+    	util: 'util'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -113,8 +114,23 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		me.getJournalTrackCombo().setValue( journalTrackId );			
 		if ( me.model.get('entryDate') == null)
 		{
-			me.getEntryDateField().setValue( new Date() );
-			me.model.set('entryDate', me.getEntryDateField().getValue());
+			me.getEntryDateField().setLoading(true);
+			me.util.getCurrentServerDate({
+				success: function(date) {
+					me.getEntryDateField().setValue(date);
+					me.model.set('entryDate', me.getEntryDateField().getValue());
+					me.getEntryDateField().setLoading(false);
+				},
+				failure: function() {
+					// probably not what you want, but a reasonable default
+					// given that most users will be in the server's timezone
+					me.getEntryDateField().setValue( new Date() );
+					me.model.set('entryDate', me.getEntryDateField().getValue());
+					me.getEntryDateField().setLoading(false);
+				},
+				scope: me
+			});
+
 		}
 		
 		me.inited=true;

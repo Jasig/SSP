@@ -253,6 +253,7 @@ Ext.require([
 	'Ssp.util.ColumnRendererUtils',
 	'Ssp.util.TreeRendererUtils',
 	'Ssp.util.Constants',
+	'Ssp.util.Util',
 	'Ssp.store.Coaches',
 	'Ssp.store.Caseload',
     'Ssp.store.Tasks',
@@ -440,6 +441,8 @@ var apiUrls = [
   {name: 'referralSource', url: 'reference/referralSource'},
   {name: 'serviceReason', url: 'reference/serviceReason'},
   {name: 'session', url: 'session'},
+  {name: 'server', url: 'server'},
+  {name: 'serverDateTime', url: 'server/datetime'},
   {name: 'specialServiceGroup', url: 'reference/specialServiceGroup'},
   {name: 'studentIntakeTool', url: 'tool/studentIntake'},
   {name: 'studentType', url: 'reference/studentType'},
@@ -557,6 +560,12 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 				    },
+					util:{
+						fn: function(){
+							return new Ssp.util.Util({});
+						},
+						singleton: true
+					},
 			        appEventsController:{
 				        fn: function(){
 				            return new Ssp.controller.ApplicationEventsController({});

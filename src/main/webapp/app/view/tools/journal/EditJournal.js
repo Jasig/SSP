@@ -44,7 +44,8 @@ Ext.define('Ssp.view.tools.journal.EditJournal',{
 			    	itemId: 'entryDateField',
 			    	altFormats: 'm/d/Y|m-d-Y',
 			        name: 'entryDate',
-			        allowBlank:false
+			        allowBlank:false,
+			        showToday:false
 			     },{
 			        xtype: 'combobox',
 			        itemId: 'confidentialityLevelCombo',

@@ -17,17 +17,54 @@
  * under the License.
  */
 Ext.define('Ssp.util.Util', {  
-    extend: 'Ext.Component',   		
-	
-    initComponent: function() {
+    extend: 'Ext.Component',
+	mixins: [ 'Deft.mixin.Injectable' ],
+	inject: {
+		apiProperties: 'apiProperties'
+	},
+
+	initComponent: function() {
 		return this.callParent( arguments );
-    }, 
-    
+	},
+
     loaderXTemplateRenderer: function(loader, response, active) {
         var tpl = new Ext.XTemplate(response.responseText);
         var targetComponent = loader.getTarget();
         var cleanArr = Ext.create( 'Ssp.util.TemplateDataUtil' ).prepareTemplateData( targetComponent.store );
         targetComponent.update( tpl.apply( cleanArr ) );
         return true;
-    }
+    },
+
+	getCurrentServerDate: function(opts) {
+
+		if ( !(opts.success) ) {
+			return;
+		}
+
+		var me = this;
+
+		me.apiProperties.makeRequest({
+			url: me.apiProperties.createUrl( me.apiProperties.getItemUrl('serverDateTime') ),
+			method: 'GET',
+			successFunc: function(r) {
+				if (r && r.responseText ) {
+					var jsonData = Ext.decode(r.responseText);
+					var date = Ext.Date.parse(jsonData.date, 'c');
+					opts.success.apply(opts.scope, [date]);
+				} else if (opts.failure) {
+					opts.failure.apply(opts.scope, [r]);
+				}
+			},
+			failureFunc: function(r) {
+				if (opts.failure) {
+					opts.failure.apply(opts.scope, [r]);
+				} else {
+					me.apiProperties.handleError( r );
+				}
+			},
+			scope: me
+		});
+
+
+	}
 });

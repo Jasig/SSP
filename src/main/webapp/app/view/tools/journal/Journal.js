@@ -87,7 +87,7 @@ Ext.define('Ssp.view.tools.journal.Journal', {
 					    	            scope: me
 					    	        }]
 				                },
-	    		                { header: 'Date',  
+	    		                { header: 'Entry Date',
 		    		                  dataIndex: 'entryDate',
 		    		                  flex: 1,
 		    		                  //renderer: Ext.util.Format.dateRenderer('m/d/Y g:i A')
