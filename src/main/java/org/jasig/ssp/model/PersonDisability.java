@@ -101,13 +101,13 @@ public class PersonDisability // NOPMD
 	
 	private Boolean eligibleLetterSent;	
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@Column(nullable = false)
 	private Date eligibleLetterDate;	
 
 	private Boolean ineligibleLetterSent;	
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@Column(nullable = false)
 	private Date ineligibleLetterDate;		
 
@@ -222,11 +222,11 @@ public class PersonDisability // NOPMD
 	}
 
 	public Date getEligibleLetterDate() {
-		return eligibleLetterDate;
+		return eligibleLetterDate == null ? null : new Date(eligibleLetterDate.getTime());
 	}
 
 	public void setEligibleLetterDate(final Date eligibleLetterDate) {
-		this.eligibleLetterDate = eligibleLetterDate;
+		this.eligibleLetterDate = eligibleLetterDate == null ? null : new Date(eligibleLetterDate.getTime());
 	}
 
 	public Boolean getIneligibleLetterSent() {
@@ -238,11 +238,11 @@ public class PersonDisability // NOPMD
 	}
 
 	public Date getIneligibleLetterDate() {
-		return ineligibleLetterDate;
+		return ineligibleLetterDate == null ? null : new Date(ineligibleLetterDate.getTime());
 	}
 
 	public void setIneligibleLetterDate(final Date ineligibleLetterDate) {
-		this.ineligibleLetterDate = ineligibleLetterDate;
+		this.ineligibleLetterDate = ineligibleLetterDate == null ? null : new Date(ineligibleLetterDate.getTime());
 	}
 
 	public Boolean getNoDocumentation() {
