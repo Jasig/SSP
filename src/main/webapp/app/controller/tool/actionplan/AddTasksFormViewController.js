@@ -34,7 +34,13 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     	model: 'currentTask',
     	url: ''
     },    
-    control: {  
+    control: {
+        'dueDate': {
+            listeners: {
+            beforerender: 'foo'
+            }
+        },
+
     	'addButton': {
 			click: 'onAddClick'
 		},
@@ -43,7 +49,13 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 			click: 'onCloseClick'
 		}
 	},
- 
+
+    foo: function(component) {
+        console.log('before render');
+        component.getPicker().todayText='foo';
+        return true;
+    },
+
 	init: function(){
 		var me=this;
 		

@@ -80,9 +80,10 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				        allowBlank: false,
 				        forceSelection: true
 					},{
-				    	xtype: 'datefield',
+				    	xtype: 'mydatefield',
 				    	fieldLabel: 'Target Date',
 				    	altFormats: 'm/d/Y|m-d-Y',
+                           itemId: "dueDate",
 				        name: 'dueDate',
 				        allowBlank:false,
 				        showToday:false

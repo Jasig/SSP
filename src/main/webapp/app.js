@@ -25,6 +25,7 @@ Ext.Loader.setConfig({
 });
 
 Ext.require([
+    'Ssp.util.MyDatePicker',
     'Ssp.view.admin.AdminMain',
     'Ssp.view.admin.AdminTreeMenu',
     'Ssp.view.admin.AdminForms',
