@@ -85,7 +85,15 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				    	altFormats: 'm/d/Y|m-d-Y',
 				        name: 'dueDate',
 				        allowBlank:false,
-				        showToday:false
+				        showToday:false, // else 'today' would be browser-local 'today'
+				        listeners: {
+				            render: function(field){
+				                Ext.create('Ext.tip.ToolTip',{
+				                    target: field.getEl(),
+				                    html: 'Use this to set the target completion date in the institution\'s time zone.'
+				                });
+				            }
+				        }
 				    }]
 				    }],
 				    

@@ -32,6 +32,15 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
     layout: 'auto',
 	width: '100%',
     height: '100%',
+	dueDateMsg: 'Task due dates are always interpreted in the institution\'s time zone.',
+	dueDateRenderer: function() {
+		var me = this;
+		return function(value,metaData,record) {
+			// http://www.sencha.com/forum/showthread.php?179016
+			metaData.tdAttr = 'data-qtip="' + me.dueDateMsg + '"';
+			return me.columnRendererUtils.renderTaskDueDate(value,metaData,record);
+		}
+	},
     initComponent: function(){
     	var me=this;
     	var sm = Ext.create('Ext.selection.CheckboxModel');
@@ -132,7 +141,15 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	        header: 'Due Date',
 		    	        width: 150,
 		    	        dataIndex: 'dueDate',
-		    	        renderer: me.columnRendererUtils.renderTaskDueDate
+		    	        renderer: me.dueDateRenderer(),
+						listeners: {
+							render: function(field){
+								Ext.create('Ext.tip.ToolTip',{
+									target: field.getEl(),
+									html: me.dueDateMsg
+								});
+							}
+						}
 		    	    }]
     	
 
