@@ -90,33 +90,34 @@ public class TemplateController  extends AbstractBaseController {
 	private transient MessageService messageService;
 
  
-//	/**
-//	 * Retrieves the specified list from persistent storage.
-//	 * 
-//	 * @param id
-//	 *            The specific id to use to lookup the associated data.
-//	 * @return The specified instance if found.
-//	 * @throws ObjectNotFoundException
-//	 *             If specified object could not be found.
-//	 * @throws ValidationException
-//	 *             If that specified data is not invalid.
-//	 */
-//	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
-//	@RequestMapping(method = RequestMethod.GET)
-//	public @ResponseBody
-//	PagedResponse<TemplateTO> get(
-//			final @RequestParam(required = false) Boolean status,
-//			final @RequestParam(required = false) String divisionCode,
-//			final @RequestParam(required = false) String programCode) throws ObjectNotFoundException,
-//			ValidationException {
-//		// Run getAll
-//		final PagingWrapper<Plan> data = getService().getAllForStudent(
-//				SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ALL , 
-//						 null, null, null , null,  null));
-//
-//		return new PagedResponse<TemplateTO>(true, data.getResults(), getFactory()
-//				.asTOList(data.getRows()));		
-//	}
+	/**
+	 * Retrieves the specified list from persistent storage.
+	 * 
+	 * @param id
+	 *            The specific id to use to lookup the associated data.
+	 * @return The specified instance if found.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If that specified data is not invalid.
+	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
+	@RequestMapping(method = RequestMethod.GET)
+	public @ResponseBody
+	PagedResponse<TemplateTO> get(
+			final @RequestParam(required = false) Boolean isPrivate,
+			final @RequestParam(required = false) ObjectStatus objectStatus,
+			final @RequestParam(required = false) String divisionCode,
+			final @RequestParam(required = false) String programCode) throws ObjectNotFoundException,
+			ValidationException {
+		final PagingWrapper<Template> data = getService().getAll(
+				SortingAndPaging.createForSingleSortWithPaging(
+						objectStatus == null ? ObjectStatus.ALL : objectStatus, null,
+						null, null, null, null),isPrivate,divisionCode,programCode);
+
+		return new PagedResponse<TemplateTO>(true, data.getResults(), getFactory()
+				.asTOList(data.getRows()));		
+	}
 
 	/**
 	 * Retrieves the specified list from persistent storage.
@@ -132,7 +133,7 @@ public class TemplateController  extends AbstractBaseController {
 	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
 	public @ResponseBody
-	TemplateTO getTemplate(final @PathVariable UUID personId,final @PathVariable UUID id) throws ObjectNotFoundException,
+	TemplateTO getTemplate(final @PathVariable UUID id) throws ObjectNotFoundException,
 			ValidationException {
 		Template model = getService().get(id);
 		return new TemplateTO(model);
@@ -153,13 +154,14 @@ public class TemplateController  extends AbstractBaseController {
 	public @ResponseBody
 	PagedResponse<TemplateTO> getSummary(
 			final @RequestParam(required = false) Boolean status,
+			final @RequestParam(required = false) ObjectStatus objectStatus,
 			final @RequestParam(required = false) String divisionCode,
 			final @RequestParam(required = false) String programCode) throws ObjectNotFoundException,
 			ValidationException {
 		// Run getAll
 		final PagingWrapper<Template> data = getService().getAll(
 				SortingAndPaging.createForSingleSortWithPaging(
-						 ObjectStatus.ALL, null,
+						objectStatus == null ? ObjectStatus.ALL : objectStatus, null,
 						null, null, null, null),status,divisionCode,programCode);
 
 		return new PagedResponse<TemplateTO>(true, data.getResults(), getFactory()
