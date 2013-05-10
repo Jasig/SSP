@@ -23,8 +23,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
+import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.web.api.reports.SpecialServicesReportController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,7 +89,10 @@ public class SpecialServicesReportingTO implements Serializable {
 		final Iterator<PersonSpecialServiceGroup> pssIter = person
 				.getSpecialServiceGroups().iterator();
 		while (pssIter.hasNext()) {
-			retVal.add(pssIter.next().getSpecialServiceGroup().getName());
+			PersonSpecialServiceGroup pssg = pssIter.next();
+			if(pssg.getObjectStatus().compareTo(ObjectStatus.ACTIVE) == 0){
+				retVal.add(pssg.getSpecialServiceGroup().getName());
+			}
 		}
 		return retVal;
 	}

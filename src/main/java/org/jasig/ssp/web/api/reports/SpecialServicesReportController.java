@@ -95,7 +95,7 @@ public class SpecialServicesReportController extends AbstractBaseController {
 
 		final List<Person> people = personService
 				.peopleFromSpecialServiceGroups(specialServiceGroupIds,
-						SortingAndPaging.createForSingleSort(status, null,
+						SortingAndPaging.createForSingleSort(status != null? status : ObjectStatus.ACTIVE, null,
 								null, null, null, null));
 
 		final List<PersonTO> personTOs = personTOFactory.asTOList(people);

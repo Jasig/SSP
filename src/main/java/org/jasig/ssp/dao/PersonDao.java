@@ -263,7 +263,12 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 					"personSpecialServiceGroups")
 					.add(Restrictions
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
-									specialServiceGroups));
+									specialServiceGroups))
+					.add(Restrictions.eq("personSpecialServiceGroups.objectStatus", sAndP.getStatus()));
+		}else{
+			//pull back specialServiceGroup recs per person if the specialServiceGroup rec status is Active
+	    	criteria.createAlias("specialServiceGroups", "specialServiceGroup");
+	    	criteria.add(Restrictions.eq("specialServiceGroup.objectStatus", sAndP.getStatus()));
 		}
 
 		// don't bring back any non-students, there will likely be a better way
