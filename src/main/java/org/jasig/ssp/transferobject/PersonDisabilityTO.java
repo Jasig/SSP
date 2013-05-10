@@ -29,7 +29,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.model.PersonDisability;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
-import org.jasig.ssp.transferobject.jsonserializer.DateTimeRepresentation;
+import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.SspTimeZones;
 
 public class PersonDisabilityTO
@@ -282,6 +282,6 @@ public class PersonDisabilityTO
 	@JsonProperty
 	@JsonSerialize(using = DateOnlySerializer.class)
 	public Date getOdsRegistrationDate() {
-		return SspTimeZones.INSTANCE.midnightThisDateInDbTimeZone(getCreatedDate());
+		return DateTimeUtils.midnightOn(getCreatedDate());
 	}
 }

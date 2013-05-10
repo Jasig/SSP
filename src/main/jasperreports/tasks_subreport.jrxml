@@ -40,7 +40,7 @@
 			<textField>
 				<reportElement uuid="46f52ea4-2379-4e13-bf72-0673e49deb70" x="477" y="0" width="78" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$F{dueDate} == null ? "" : org.jasig.ssp.transferobject.jsonserializer.DateTimeRepresentation.newDateFormatter("MM/dd/yyyy").format($F{dueDate})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{dueDate} == null ? "" : new SimpleDateFormat("MM/dd/yyyy").format($F{dueDate})]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement uuid="8b92d5ba-6e97-4684-ac32-26fd3eba2a48" positionType="Float" x="77" y="36" width="400" height="1"/>

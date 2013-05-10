@@ -22,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -39,7 +38,6 @@ import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.TaskTO;
-import org.jasig.ssp.transferobject.jsonserializer.DateTimeRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -107,9 +105,7 @@ public class MessageTemplateServiceImpl extends
 	}
 
 	private String formatDate(final Date date) {
-		final SimpleDateFormat format =
-				DateTimeRepresentation.newDateFormatter("MM/dd/yyyy");
-		return format.format(date);
+		return new SimpleDateFormat("MM/dd/yyyy").format(date);
 	}
 
 	@Override

@@ -56,8 +56,8 @@ public class SspTimeZones implements InitializingBean {
 	 * Although usually instantiated and injected as a Spring bean, the
 	 * current config sometimes needs to be accessed statically so we allow
 	 * callers to register a particular instance here for that purpose. E.g.
-	 * Jackson JSON de/serialization needs access to current configuration via
-	 * this field.
+	 * you could theoretically use this field from Jackson JSON de/serialization
+	 * plugins.
 	 *
 	 * <p>Make sure this field is properly initialized prior to serving
 	 * any JSON API calls and/or executing any Hibernate database interactions.
@@ -98,31 +98,6 @@ public class SspTimeZones implements InitializingBean {
 		registerAsGlobal();
 	}
 
-	/**
-	 * Produce a date that represents the current calendar date as determined
-	 * by the JVM default timezone but interpreted in the timezone used for
-	 * persistent dates. E.g. if JVM local time is Jan 2, 2013, any time of
-	 * day EST and the <code>dbTimeZone</code> is UTC, the returned date will
-	 * represent Jan 2, 2013 00:00:00 UTC.
-	 *
-	 * @return
-	 */
-	public Date midnightTodayInDbTimeZone() {
-		return midnightThisDateInDbTimeZone(new Date());
-	}
-
-	public Date midnightThisDateInDbTimeZone(Date date) {
-		Calendar localCal = Calendar.getInstance();
-		localCal.setTimeInMillis(date.getTime());
-		Calendar persistentCal = Calendar.getInstance();
-		persistentCal.setTimeZone(SspTimeZones.INSTANCE.getDbTimeZone());
-		persistentCal.set(localCal.get(Calendar.YEAR),
-				localCal.get(Calendar.MONTH),
-				localCal.get(Calendar.DAY_OF_MONTH),
-				0, 0, 0);
-		return new Date(persistentCal.getTimeInMillis());
-	}
-
 	private void initTimeZones() {
 		setDbTimeZoneId(dbTimeZoneId);
 	}
@@ -138,6 +113,22 @@ public class SspTimeZones implements InitializingBean {
 
 	public TimeZone getDbTimeZone() {
 		return this.dbTimeZone;
+	}
+
+	/** No point in this being configurable until and if we have some sort
+	 * of multi-tenancy support where timezones are institution-scoped. In
+	 * lieu of that, we need it to always be the JVM default so rendering
+	 * in reports and db queries are simple and sane. E.g. if filtering on
+	 * a {@code java.sql.Date} for everything matching "today", can just
+	 * pass a {@code new Date()}. Otherwise have to do all kinds of
+	 * {@code Calendar} manipulation, which is pointless anyway, since the
+	 * <em>actual</em> semantics of these dates is always "institution-local
+	 * time" for all our current use cases.
+	 *
+	 * @return
+	 */
+	public TimeZone getDateOnlyDbTimeZone() {
+		return TimeZone.getDefault();
 	}
 
 }

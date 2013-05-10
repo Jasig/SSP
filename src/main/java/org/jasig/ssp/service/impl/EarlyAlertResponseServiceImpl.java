@@ -65,7 +65,7 @@ import org.jasig.ssp.transferobject.reports.EarlyAlertStudentResponseOutcomeRepo
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
-import org.jasig.ssp.util.SspTimeZones;
+import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -367,7 +367,7 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 				.generateContentFromTemplate(
 						messageTemplate.getBody(),
 						messageTemplate.bodyTemplateId(), templateParameters));
-		journalEntry.setEntryDate(SspTimeZones.INSTANCE.midnightTodayInDbTimeZone());
+		journalEntry.setEntryDate(DateTimeUtils.midnight());
 		journalEntry.setJournalSource(journalSourceService
 				.get(JournalSource.JOURNALSOURCE_EARLYALERT_ID));
 		journalEntry.setJournalTrack(journalTrackService
