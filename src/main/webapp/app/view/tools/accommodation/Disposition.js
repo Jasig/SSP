@@ -109,7 +109,7 @@ Ext.define('Ssp.view.tools.accommodation.Disposition', {
 									render: function(field){
 										Ext.create('Ext.tip.ToolTip',{
 											target: field.getEl(),
-											html: 'This is the date on which the Eligibility Letter for this student was received, in the institution\'s time zone. The system will not attempt to convert this value to or from your current time zone.'
+											html: 'This is the date on which the Ineligibility Letter for this student was received, in the institution\'s time zone. The system will not attempt to convert this value to or from your current time zone.'
 										});
 									}
 								}
