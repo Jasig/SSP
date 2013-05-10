@@ -21,11 +21,9 @@ package org.jasig.ssp.dao;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -56,13 +54,6 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 		return activePlan;
 	}
 
-	@Override
-	public Plan cloneAndSave(Plan plan,Person owner) throws CloneNotSupportedException {
-		Plan clone = plan.clone();
-		clone.setOwner(owner);
-		clone.setObjectStatus(plan.getObjectStatus());
-		return save(clone);
-	}
 	
 	public PagingWrapper<Plan> getAllForStudent(final SortingAndPaging sAndP,UUID personId) {
 		Criteria criteria = createCriteria();

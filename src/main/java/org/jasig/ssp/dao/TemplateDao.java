@@ -18,20 +18,67 @@
  */
 package org.jasig.ssp.dao;
 
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Template;
+import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public  class  TemplateDao extends AbstractPlanDao<Template> implements
-AuditableCrudDao<Template> {
+public class TemplateDao extends AbstractPlanDao<Template> implements
+		AuditableCrudDao<Template> {
 
-public TemplateDao() {
-	super(Template.class);
-}
+	public TemplateDao() {
+		super(Template.class);
+	}
+	@Autowired
+	private transient SecurityService securityService;
+	
+	@Override
+	public Template cloneAndSave(Template plan, Person owner)
+			throws CloneNotSupportedException {
+		return null;
+	}
 
-@Override
-public Template cloneAndSave(Template plan,Person owner) throws CloneNotSupportedException {
-	return null;
-}
+	@SuppressWarnings("unchecked")
+	public PagingWrapper<Template> getAll(
+			SortingAndPaging createForSingleSortWithPaging, Boolean isPrivate,
+			String divisionCode, String programCode) {
+		
+				Criteria criteria = createCriteria();
+				if(isPrivate != null)
+				{
+					criteria.add(Restrictions.eq("isPrivate", isPrivate));
+					if(isPrivate)
+					{
+						criteria.add(Restrictions.eq("owner", getSecurityService().currentlyAuthenticatedUser()));
+					}
+				}
+				if(StringUtils.isEmpty(programCode))
+				{
+					criteria.add(Restrictions.eq("programCode", programCode));
+				}
+				if(StringUtils.isEmpty(divisionCode))
+				{
+					criteria.add(Restrictions.eq("divisionCode", divisionCode));
+				}					
+					
+				List<Template> result = criteria.list();
+				return new PagingWrapper<Template>(result.size(), result);
+	}
+
+	public SecurityService getSecurityService() {
+		return securityService;
+	}
+
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
+	}
 }

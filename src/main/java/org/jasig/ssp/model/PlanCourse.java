@@ -63,18 +63,12 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 	@Override
 	protected PlanCourse clone() throws CloneNotSupportedException {
 		PlanCourse clone = new PlanCourse();
-		clone.setCourseCode(this.getCourseCode());
-		clone.setCourseDescription(this.getCourseDescription());
-		clone.setCourseTitle(this.getCourseTitle());
-		clone.setCourseDescription(this.getCourseDescription());
-		clone.setCreditHours(this.getCreditHours());
-		clone.setFormattedCourse(this.getFormattedCourse());
-		clone.setIsDev(this.isDev());
-		clone.setOrderInTerm(this.getOrderInTerm());
 		clone.setPerson(this.getPerson());
-		clone.setTermCode(this.getTermCode());
+		cloneCommonFields(clone);
 		return clone;
 	}
+
+
 
 	@Override
 	public Plan getParent() {

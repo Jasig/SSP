@@ -38,7 +38,7 @@ import org.hibernate.annotations.CascadeType;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name="map_template")
-public class Template extends AbstractPlan {
+public class Template extends AbstractPlan implements Cloneable{
 
 	private static final long serialVersionUID = 1308748010487627451L;
 	
@@ -60,11 +60,11 @@ public class Template extends AbstractPlan {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "template", orphanRemoval=true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@OrderBy("orderInTerm")	
-	private List<TemplateCourse> planCourses = new ArrayList<TemplateCourse>(0);	
+	private List<TemplateCourse> templateCourses = new ArrayList<TemplateCourse>(0);	
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "template", orphanRemoval=true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
-	private List<TermNotes> termNotes = new ArrayList<TermNotes>(0);
+	private List<TermNote> termNotes = new ArrayList<TermNote>(0);
 	
 	public String getProgramCode() {
 		return programCode;
@@ -98,12 +98,54 @@ public class Template extends AbstractPlan {
 		this.isPrivate = isPrivate;
 	}
 
-	public List<TemplateCourse> getPlanCourses() {
-		return planCourses;
+	public List<TemplateCourse> getTemplateCourses() {
+		return templateCourses;
 	}
 
-	public void setPlanCourses(List<TemplateCourse> planCourses) {
-		this.planCourses = planCourses;
+	public void setTemplateCourses(List<TemplateCourse> planCourses) {
+		this.templateCourses = planCourses;
+	}
+
+	@Override
+	public Template clonePlan() throws CloneNotSupportedException {
+		return this.clone();
+	}
+	
+	@Override
+	public Template clone() throws CloneNotSupportedException {
+		Template clone = new Template();
+		cloneCommonFields(clone);
+		clone.setIsPrivate(this.getIsPrivate());
+		clone.setDepartmentCode(this.getDepartmentCode());
+		clone.setDivisionCode(this.getDepartmentCode());
+		clone.setProgramCode(this.getProgramCode());
+		List<TemplateCourse> planCourses = this.getTemplateCourses();
+		for (TemplateCourse planCourse : planCourses) {
+			TemplateCourse planCourseClone = planCourse.clone();
+			planCourseClone.setTemplate(clone);
+			clone.getTemplateCourses().add(planCourseClone);
+		}
+		List<TermNote> termNotes = this.getTermNotes();
+		for (TermNote termNote : termNotes) {
+			TermNote termNoteClone = termNote.clone();
+			termNoteClone.setTemplate(clone);
+			clone.getTermNotes().add(termNoteClone);
+		}
+		return clone;
+	}
+
+	public List<TermNote> getTermNotes() {
+		return termNotes;
+	}
+
+	public void setTermNotes(List<TermNote> termNotes) {
+		this.termNotes = termNotes;
+	}
+
+
+	@Override
+	public List<? extends AbstractPlanCourse<?>> getCourses() {
+		return templateCourses;
 	}
 
 }

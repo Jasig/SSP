@@ -20,7 +20,9 @@ package org.jasig.ssp.factory.reference;
 
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.model.PlanCourse;
+import org.jasig.ssp.model.TemplateCourse;
 import org.jasig.ssp.transferobject.PlanCourseTO;
+import org.jasig.ssp.transferobject.TemplateCourseTO;
 
-public interface PlanCourseTOFactory extends TOFactory<PlanCourseTO, PlanCourse> {
+public interface TemplateCourseTOFactory extends TOFactory<TemplateCourseTO, TemplateCourse> {
 }

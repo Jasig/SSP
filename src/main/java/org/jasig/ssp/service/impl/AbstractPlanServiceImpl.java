@@ -18,14 +18,16 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.dao.AbstractPlanDao;
 import org.jasig.ssp.model.AbstractPlan;
-import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
 import org.jasig.ssp.service.AbstractPlanService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.SecurityService;
-import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +44,15 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan> extends  
 	@Override
 	public T save(T obj) {
 		return getDao().save(obj);
+	}
+	
+	@Override
+	public T get(@NotNull final UUID id) throws ObjectNotFoundException {
+		final T obj = getDao().get(id);
+		if(obj == null)
+			throw new ObjectNotFoundException(id, this.getClass().getName());
+		return obj;
+
 	}
 	
 	@Override

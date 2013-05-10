@@ -19,8 +19,14 @@
 package org.jasig.ssp.factory.reference;
 
 import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
+import org.jasig.ssp.model.TermNote;
 import org.jasig.ssp.transferobject.PlanCourseTO;
+import org.jasig.ssp.transferobject.PlanTO;
+import org.jasig.ssp.transferobject.TermNoteTO;
 
-public interface PlanCourseTOFactory extends TOFactory<PlanCourseTO, PlanCourse> {
+public interface TermNoteTOFactory extends TOFactory<TermNoteTO, TermNote> {
+	
+	
 }

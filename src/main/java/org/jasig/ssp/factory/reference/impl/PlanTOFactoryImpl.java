@@ -31,13 +31,16 @@ import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
 import org.jasig.ssp.factory.reference.PlanCourseTOFactory;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
 import org.jasig.ssp.factory.reference.SelfHelpGuideTOFactory;
+import org.jasig.ssp.factory.reference.TermNoteTOFactory;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
+import org.jasig.ssp.model.TermNote;
 import org.jasig.ssp.model.reference.SelfHelpGuide;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.transferobject.PlanCourseTO;
 import org.jasig.ssp.transferobject.PlanTO;
+import org.jasig.ssp.transferobject.TermNoteTO;
 import org.jasig.ssp.transferobject.reference.SelfHelpGuideTO;
 
 @Service
@@ -58,6 +61,10 @@ public class PlanTOFactoryImpl extends AbstractAuditableTOFactory<PlanTO, Plan>
 	@Autowired
 	private PlanCourseTOFactory planCourseTOFactory;
 	
+	
+	@Autowired
+	private TermNoteTOFactory termNoteTOFactory;
+	
 	@Override
 	protected PlanDao getDao() {
 		return dao;
@@ -77,6 +84,23 @@ public class PlanTOFactoryImpl extends AbstractAuditableTOFactory<PlanTO, Plan>
 		model.setOwner(getPersonService().get(UUID.fromString(tObject.getOwnerId())));
 		model.setPerson(getPersonService().get(UUID.fromString(tObject.getPersonId())));
 		model.setName(tObject.getName());
+		model.setAcademicGoals(tObject.getAcademicGoals());
+		model.setAcademicLink(tObject.getAcademicLink());
+		model.setCareerLink(tObject.getCareerLink());
+		model.setContactEmail(tObject.getContactEmail());
+		model.setContactName(tObject.getContactName());
+		model.setContactNotes(tObject.getContactNotes());
+		model.setContactPhone(tObject.getContactPhone());
+		model.setContactTitle(tObject.getContactTitle());
+		model.setIsF1Visa(tObject.getIsF1Visa());
+		model.setIsFinancialAid(tObject.getIsFinancialAid());
+		model.setStudentNotes(tObject.getStudentNotes());
+		model.getTermNotes().clear();
+		List<TermNoteTO> termNotes = tObject.getTermNotes();
+		for (TermNoteTO termNoteTO : termNotes) {
+			TermNote noteModel = getTermNoteTOFactory().from(termNoteTO);
+			noteModel.setPlan(model);
+		}		
 		model.getPlanCourses().clear();
 		List<PlanCourseTO> planCourses = tObject.getPlanCourses();
 		for (PlanCourseTO planCourseTO : planCourses) {
@@ -96,7 +120,13 @@ public class PlanTOFactoryImpl extends AbstractAuditableTOFactory<PlanTO, Plan>
 		this.planCourseTOFactory = planCourseTOFactory;
 	}
 		
-		
+	public TermNoteTOFactory getTermNoteTOFactory() {
+		return termNoteTOFactory;
+	}
+
+	public void setTermNoteTOFactory(TermNoteTOFactory termNoteTOFactory) {
+		this.termNoteTOFactory = termNoteTOFactory;
+	}		
 		
 
 }

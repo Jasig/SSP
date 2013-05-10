@@ -92,6 +92,22 @@ public abstract class AbstractPlanCourse<T extends AbstractPlan> extends Abstrac
 		return 0;
 	}
 
+	protected void cloneCommonFields(AbstractPlanCourse<T> clone) {
+		clone.setCourseCode(this.getCourseCode());
+		clone.setCourseDescription(this.getCourseDescription());
+		clone.setCourseTitle(this.getCourseTitle());
+		clone.setCourseDescription(this.getCourseDescription());
+		clone.setCreditHours(this.getCreditHours());
+		clone.setFormattedCourse(this.getFormattedCourse());
+		clone.setIsDev(this.isDev());
+		clone.setOrderInTerm(this.getOrderInTerm());
+		clone.setTermCode(this.getTermCode());
+		clone.setContactNotes(this.getContactNotes());
+		clone.setElective(this.getElective());
+		clone.setIsImportant(this.getIsImportant());
+		clone.setIsTranscript(this.getIsTranscript());
+		clone.setStudentNotes(this.getStudentNotes());
+	}
 	public String getTermCode() {
 		return termCode;
 	}

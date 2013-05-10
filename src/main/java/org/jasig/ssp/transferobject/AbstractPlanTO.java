@@ -18,6 +18,9 @@
  */
 package org.jasig.ssp.transferobject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jasig.ssp.model.AbstractPlan;
 
 public abstract class AbstractPlanTO<T extends AbstractPlan> extends
@@ -29,6 +32,31 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 	
 	private String ownerName;
 
+	private String contactTitle;
+	
+	private String contactName;
+	
+	private String contactPhone;
+
+	private String contactEmail;
+	
+	private String contactNotes;
+	
+	private String studentNotes;
+	
+	private Boolean isFinancialAid = false;
+
+	private Boolean isImportant = false;
+	
+	private Boolean isF1Visa = false;	
+	
+	private String academicGoals;
+	
+	private String academicLink;
+	
+	private String careerLink;	
+	
+	private List<TermNoteTO> termNotes = new ArrayList<TermNoteTO>();
 	/**
 	 * Empty constructor.
 	 */
@@ -42,6 +70,18 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 		this.setName(model.getName());
 		this.setOwnerId(model.getOwner().getId().toString());
 		this.setOwnerName(model.getOwner().getFirstName()+" "+model.getOwner().getLastName());
+		this.setAcademicGoals(model.getAcademicGoals());
+		this.setAcademicLink(model.getAcademicLink());
+		this.setCareerLink(model.getCareerLink());
+		this.setContactEmail(model.getContactEmail());
+		this.setContactName(model.getContactName());
+		this.setContactNotes(model.getContactNotes());
+		this.setContactPhone(model.getContactPhone());
+		this.setContactTitle(model.getContactTitle());
+		this.setIsF1Visa(model.getIsF1Visa());
+		this.setIsFinancialAid(model.getIsFinancialAid());
+		this.setIsImportant(model.getIsImportant());
+		this.setStudentNotes(model.getStudentNotes());
 	}
 
 	public String getName() {
@@ -66,6 +106,110 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 
 	public void setOwnerName(String ownerName) {
 		this.ownerName = ownerName;
+	}
+
+	public String getContactTitle() {
+		return contactTitle;
+	}
+
+	public void setContactTitle(String contactTitle) {
+		this.contactTitle = contactTitle;
+	}
+
+	public String getContactName() {
+		return contactName;
+	}
+
+	public void setContactName(String contactName) {
+		this.contactName = contactName;
+	}
+
+	public String getContactPhone() {
+		return contactPhone;
+	}
+
+	public void setContactPhone(String contactPhone) {
+		this.contactPhone = contactPhone;
+	}
+
+	public String getContactEmail() {
+		return contactEmail;
+	}
+
+	public void setContactEmail(String contactEmail) {
+		this.contactEmail = contactEmail;
+	}
+
+	public String getContactNotes() {
+		return contactNotes;
+	}
+
+	public void setContactNotes(String contactNotes) {
+		this.contactNotes = contactNotes;
+	}
+
+	public String getStudentNotes() {
+		return studentNotes;
+	}
+
+	public void setStudentNotes(String studentNotes) {
+		this.studentNotes = studentNotes;
+	}
+
+	public Boolean getIsFinancialAid() {
+		return isFinancialAid;
+	}
+
+	public void setIsFinancialAid(Boolean isFinancialAid) {
+		this.isFinancialAid = isFinancialAid;
+	}
+
+	public Boolean getIsImportant() {
+		return isImportant;
+	}
+
+	public void setIsImportant(Boolean isImportant) {
+		this.isImportant = isImportant;
+	}
+
+	public Boolean getIsF1Visa() {
+		return isF1Visa;
+	}
+
+	public void setIsF1Visa(Boolean isF1Visa) {
+		this.isF1Visa = isF1Visa;
+	}
+
+	public String getAcademicGoals() {
+		return academicGoals;
+	}
+
+	public void setAcademicGoals(String academicGoals) {
+		this.academicGoals = academicGoals;
+	}
+
+	public String getAcademicLink() {
+		return academicLink;
+	}
+
+	public void setAcademicLink(String academicLink) {
+		this.academicLink = academicLink;
+	}
+
+	public String getCareerLink() {
+		return careerLink;
+	}
+
+	public void setCareerLink(String careerLink) {
+		this.careerLink = careerLink;
+	}
+
+	public List<TermNoteTO> getTermNotes() {
+		return termNotes;
+	}
+
+	public void setTermNotes(List<TermNoteTO> termNotes) {
+		this.termNotes = termNotes;
 	}
 
 }

@@ -8,8 +8,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 @Entity
-@Table(name="map_term_notes")
-public class TermNotes extends AbstractAuditable implements Cloneable {
+@Table(name="map_term_note")
+public class TermNote extends AbstractAuditable implements Cloneable {
 
 	/**
 	 * 
@@ -99,4 +99,16 @@ public class TermNotes extends AbstractAuditable implements Cloneable {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	@Override
+	public TermNote clone()
+	{
+		TermNote clone = new TermNote();
+		clone.setContactNotes(this.getContactNotes());
+		clone.setIsImportant(this.getIsImportant());
+		clone.setStudentNotes(this.getStudentNotes());
+		clone.setTermCode(this.getTermCode());
+		return clone;
+	}
+	
 }

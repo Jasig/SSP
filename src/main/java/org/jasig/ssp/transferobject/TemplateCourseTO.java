@@ -16,11 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.factory.reference;
+package org.jasig.ssp.transferobject;
 
-import org.jasig.ssp.factory.TOFactory;
-import org.jasig.ssp.model.PlanCourse;
-import org.jasig.ssp.transferobject.PlanCourseTO;
+import org.jasig.ssp.model.Template;
+import org.jasig.ssp.model.TemplateCourse;
 
-public interface PlanCourseTOFactory extends TOFactory<PlanCourseTO, PlanCourse> {
+public class TemplateCourseTO extends AbstractPlanCourseTO<Template,TemplateCourse> {
+
+
+	public TemplateCourseTO(TemplateCourse planCourse) {
+		super();
+		from(planCourse);
+	}
+
+	/**
+	 * Empty constructor.
+	 */
+	public TemplateCourseTO() {
+		super();
+	}
+
+	@Override
+	public void from(TemplateCourse model) {
+		super.from(model);
+	}
 }

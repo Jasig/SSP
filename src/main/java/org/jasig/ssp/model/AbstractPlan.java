@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -29,8 +31,7 @@ import org.hibernate.annotations.Immutable;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
-public abstract class AbstractPlan extends AbstractAuditable implements
-		Cloneable {
+public abstract class AbstractPlan extends AbstractAuditable implements Cloneable {
 
 	@Column(length = 200)
 	@Size(max = 200)
@@ -88,6 +89,10 @@ public abstract class AbstractPlan extends AbstractAuditable implements
 	@Size(max = 2000)
 	private String careerLink;
 	
+
+	public abstract <T extends AbstractPlan> T clonePlan() throws CloneNotSupportedException;
+	
+	public abstract List<? extends AbstractPlanCourse<?>> getCourses();
 	
 	public String getName() {
 		return name;
@@ -108,6 +113,8 @@ public abstract class AbstractPlan extends AbstractAuditable implements
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	
 
 	public Person getOwner() {
 		return owner;
@@ -211,6 +218,24 @@ public abstract class AbstractPlan extends AbstractAuditable implements
 
 	public void setCareerLink(String careerLink) {
 		this.careerLink = careerLink;
+	}
+
+	public <T extends AbstractPlan> void cloneCommonFields(T clone) {
+		clone.setAcademicGoals(this.academicGoals);
+		clone.setAcademicLink(this.getAcademicLink());
+		clone.setCareerLink(this.getCareerLink());
+		clone.setContactEmail(this.contactEmail);
+		clone.setContactName(this.getContactName());
+		clone.setContactNotes(this.getContactNotes());
+		clone.setContactPhone(this.getContactPhone());
+		clone.setContactTitle(this.getContactTitle());
+		clone.setIsF1Visa(this.getIsF1Visa());
+		clone.setIsFinancialAid(this.getIsFinancialAid());
+		clone.setIsImportant(this.getIsImportant());
+		clone.setStudentNotes(this.getStudentNotes());
+		clone.setName(this.getName());
+		//Copying person by should be changed if we're cloning on saving with a new advisor
+		clone.setOwner(this.getOwner());
 	}
 
 }

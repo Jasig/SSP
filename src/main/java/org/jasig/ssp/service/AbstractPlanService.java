@@ -18,6 +18,10 @@
  */
 package org.jasig.ssp.service;
 
+import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.model.AbstractPlan;
 
 /**
@@ -25,5 +29,8 @@ import org.jasig.ssp.model.AbstractPlan;
  */
 public interface AbstractPlanService<T extends AbstractPlan> extends AuditableCrudService<T> {
 
-	
+	@Override
+	public T get(@NotNull final UUID id) throws ObjectNotFoundException;
+
+	public T copyAndSave(T model) throws CloneNotSupportedException;
 }

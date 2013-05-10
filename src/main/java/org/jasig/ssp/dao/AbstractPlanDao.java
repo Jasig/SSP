@@ -28,5 +28,10 @@ AuditableCrudDao<T> {
 		super(persistentClass);
 	}
 
-	public abstract T cloneAndSave(T plan, Person owner) throws CloneNotSupportedException;
+	public T cloneAndSave(T plan,Person owner) throws CloneNotSupportedException {
+		T clone = plan.clonePlan();
+		clone.setOwner(owner);
+		clone.setObjectStatus(plan.getObjectStatus());
+		return save(clone);
+	}
 }

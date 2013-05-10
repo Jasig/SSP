@@ -107,7 +107,7 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 		}
 		return cloneAndSave;
 	}
-	
+	   
 	@Override
 	@Transactional(readOnly=true)
 	public SubjectAndBody createMapPlanMatirxOutput(final PlanTO plan, String institutionName) throws ObjectNotFoundException {
@@ -177,14 +177,7 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 		return totalPlanCreditHours;
 	}
 	
-	@Override
-	public Plan get(@NotNull final UUID id) throws ObjectNotFoundException {
-		final Plan obj = getDao().get(id);
-		if(obj == null)
-			throw new ObjectNotFoundException(id, this.getClass().getName());
-		return obj;
 
-	}
 	
 	@Override
 	public Plan save(Plan obj) {

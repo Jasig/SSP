@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name="map_template_course")
-public class TemplateCourse extends AbstractPlanCourse<Template> {
+public class TemplateCourse extends AbstractPlanCourse<Template> implements Cloneable {
 
 	/**
 	 * 
@@ -23,10 +23,6 @@ public class TemplateCourse extends AbstractPlanCourse<Template> {
 	@JoinColumn(name = "template_id", updatable = false, nullable = false)	
 	private Template template;
 	
-	@NotNull
-	@ManyToOne()
-	@JoinColumn(name = "person_id", updatable = false, nullable = false)
-	private Person person;
 
 	public Template getTemplate() {
 		return template;
@@ -40,4 +36,12 @@ public class TemplateCourse extends AbstractPlanCourse<Template> {
 	public Template getParent() {
 		return template;
 	}
+	
+	@Override
+	protected TemplateCourse clone() throws CloneNotSupportedException {
+		TemplateCourse clone = new TemplateCourse();
+		cloneCommonFields(clone);
+		return clone;
+	}
+
 }

@@ -20,9 +20,10 @@ package org.jasig.ssp.transferobject;
 
 import java.util.Comparator;
 
+import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
 
-public class PlanCourseTO extends AbstractPlanCourseTO<PlanCourse> {
+public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 
 	public static class PlanCourseIndexComparator implements Comparator<PlanCourseTO> {
 		 @Override

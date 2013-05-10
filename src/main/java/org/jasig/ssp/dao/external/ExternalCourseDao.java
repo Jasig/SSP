@@ -71,10 +71,10 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 	@SuppressWarnings("unchecked")
 	public List<ExternalCourse> search(String programCode, String tag,
 			String termCode) {
+		Query hqlQuery = createHqlQuery(buildCourseSearchQuery(programCode, tag, termCode));
 		
-		String query = buildCourseSearchQuery(programCode, tag, termCode);		
-		Query hqlQuery = createHqlQuery(query.toString());
-		buildCourseSearchParamList(programCode, tag, termCode, hqlQuery);		
+		buildCourseSearchParamList(programCode, tag, termCode, hqlQuery);	
+		
 		List<ExternalCourse> result = hqlQuery
 		.list();
 

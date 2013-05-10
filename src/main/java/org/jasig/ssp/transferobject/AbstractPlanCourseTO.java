@@ -18,9 +18,10 @@
  */
 package org.jasig.ssp.transferobject;
 
+import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.AbstractPlanCourse;
 
-public class AbstractPlanCourseTO<T extends AbstractPlanCourse> extends
+public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlanCourse<P>> extends
 		AbstractAuditableTO<T> implements TransferObject<T> {
 
 	private String termCode;

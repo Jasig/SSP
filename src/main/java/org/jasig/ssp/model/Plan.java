@@ -51,7 +51,7 @@ public class Plan extends AbstractPlan  {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "plan", orphanRemoval=true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
-	private List<TermNotes> termNotes = new ArrayList<TermNotes>(0);
+	private List<TermNote> termNotes = new ArrayList<TermNote>(0);
 	
 	@NotNull
 	@ManyToOne()
@@ -86,9 +86,7 @@ public class Plan extends AbstractPlan  {
 	@Override
 	public Plan clone() throws CloneNotSupportedException {
 		Plan clone = new Plan();
-		clone.setName(this.getName());
-		//Copying person by should be changed if we're cloning on saving with a new advisor
-		clone.setOwner(this.getOwner());
+		cloneCommonFields(clone);
 		clone.setPerson(this.getPerson());
 		List<PlanCourse> planCourses = this.getPlanCourses();
 		for (PlanCourse planCourse : planCourses) {
@@ -97,15 +95,31 @@ public class Plan extends AbstractPlan  {
 			planCourseClone.setPerson(clone.getPerson());
 			clone.getPlanCourses().add(planCourseClone);
 		}
+		List<TermNote> termNotes = this.getTermNotes();
+		for (TermNote termNote : termNotes) {
+			TermNote termNoteClone = termNote.clone();
+			termNoteClone.setPlan(clone);
+			clone.getTermNotes().add(termNoteClone);
+		}
 		return clone;
 	}
 
-	public List<TermNotes> getTermNotes() {
+	public List<TermNote> getTermNotes() {
 		return termNotes;
 	}
 
-	public void setTermNotes(List<TermNotes> termNotes) {
+	public void setTermNotes(List<TermNote> termNotes) {
 		this.termNotes = termNotes;
 	}
-	 
+
+	@Override
+	public Plan clonePlan() throws CloneNotSupportedException {
+		return this.clone();
+	}
+
+	@Override
+	public List<? extends AbstractPlanCourse<?>> getCourses() {
+		return planCourses;
+	}
+
 }

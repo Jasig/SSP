@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
+import org.jasig.ssp.model.TermNote;
 
 /**
  */
@@ -53,6 +54,11 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 		for (PlanCourse planCourse : planCourses) {
 			PlanCourseTO courseTO = new PlanCourseTO(planCourse);
 			this.getPlanCourses().add(courseTO);
+		}
+		List<TermNote> termNotes = model.getTermNotes();
+		for (TermNote termNote : termNotes) {
+			TermNoteTO termNoteTO = new TermNoteTO(termNote);
+			this.getTermNotes().add(termNoteTO);
 		}
 	}
 	public String getPersonId() {
