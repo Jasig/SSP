@@ -31,6 +31,21 @@ Ext.define('Ssp.view.tools.journal.Journal', {
     },
 	width: '100%',
 	height: '100%',
+	// Probably want to add more clarification when and if we display other
+	// timestamp-based audit fields. See example of problematic scenarios in
+	// https://issues.jasig.org/browse/SSP-1093 comments.
+	entryDateMsg: 'This represents the user-specified creation date for a journal entry date. It can be used, for example, to back-date entries. These dates are assumed to refer calendar dates in the institution\'s time zone.',
+	entryDateFormatter: function() {
+		return Ext.util.Format.dateRenderer('m/d/Y');
+	},
+	entryDateRenderer: function() {
+		var me = this;
+		return function(value,metaData) {
+			// http://www.sencha.com/forum/showthread.php?179016
+			metaData.tdAttr = 'data-qtip="' + me.entryDateMsg + '"';
+			return me.entryDateFormatter()(value);
+		}
+	},
 	initComponent: function() {	
 		var me=this;
     	var sm = Ext.create('Ext.selection.CheckboxModel');
@@ -90,8 +105,15 @@ Ext.define('Ssp.view.tools.journal.Journal', {
 	    		                { header: 'Entry Date',
 		    		                  dataIndex: 'entryDate',
 		    		                  flex: 1,
-		    		                  //renderer: Ext.util.Format.dateRenderer('m/d/Y g:i A')
-									  renderer: Ext.util.Format.dateRenderer('m/d/Y')
+										renderer: me.entryDateRenderer(),
+										listeners: {
+											render: function(field){
+												Ext.create('Ext.tip.ToolTip',{
+													target: field.getEl(),
+													html: me.entryDateMsg
+												});
+											}
+										}
 	    		                },
 	    		                { header: 'Entered By',  
 	    		                  dataIndex: 'createdBy',
