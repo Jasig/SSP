@@ -1717,6 +1717,11 @@
                     "path": "/app/model/tool/map/"
                 },
                 {
+                    "clsName": "Ssp.model.tool.map.TermNote",
+                    "name": "TermNote.js",
+                    "path": "/app/model/tool/map/"
+                },
+                {
                     "clsName": "Ssp.model.tool.map.PlanOutputData",
                     "name": "PlanOutputData.js",
                     "path": "/app/model/tool/map/"
