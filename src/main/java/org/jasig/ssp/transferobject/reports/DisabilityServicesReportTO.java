@@ -37,9 +37,7 @@ import org.jasig.ssp.transferobject.PersonTO;
 public class DisabilityServicesReportTO extends BaseStudentReportTO {
 	
 	final private static String DEFAULT_DATE_FORMAT = "MM/dd/yyyy";
-	
-	final private static SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(DEFAULT_DATE_FORMAT,Locale.US);
-	
+
 	public DisabilityServicesReportTO(Person model, Boolean ilp,
 			String disabilityCode, String agencyContact, String sspStatus,
 			String odsReason, Date odsRegistrationDate, String interpreter,
@@ -163,7 +161,7 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 			if(disabilityAgenciesCreatedDate == null || disabilityAgenciesCreatedDate.size() == 0)
 				return assignmentDates;
 			for(Date disabilityAgencyCreatedDate:disabilityAgenciesCreatedDate)
-				assignmentDates = addValueToStringList(assignmentDates, DATE_FORMATTER.format(disabilityAgencyCreatedDate));
+				assignmentDates = addValueToStringList(assignmentDates, dateFormatter().format(disabilityAgencyCreatedDate));
 			
 		}
 		return assignmentDates;
@@ -207,7 +205,7 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 		if(date == null)
 			odsRegistrationDateString = "";
 		else
-			odsRegistrationDateString = DATE_FORMATTER.format(date);
+			odsRegistrationDateString = dateFormatter().format(date);
 		return odsRegistrationDateString;
 	}
 
@@ -377,7 +375,7 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 		for(PersonDisabilityAgency disabilityAgency:person.getDisabilityAgencies())
 		{
 			disabilityAgents.append(disabilityAgency.getDisabilityAgency().getName() + " ");
-			disabilityAssignmentDates.append(DATE_FORMATTER.format(disabilityAgency.getCreatedDate()) + " ");
+			disabilityAssignmentDates.append(dateFormatter().format(disabilityAgency.getCreatedDate()) + " ");
 		}
 		setAgencyContacts(disabilityAgents.toString());
 		setAssignmentDates(disabilityAssignmentDates.toString());
@@ -425,5 +423,9 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 		super.processDuplicate(reportTO);
 		this.addDisabilityAgenciesCreatedDate(((DisabilityServicesReportTO)reportTO).getDisabilityAgenciesCreatedDate());
 		this.addDisabilityAgenciesName(((DisabilityServicesReportTO)reportTO).getDisabilityAgenciesName());
+	}
+
+	private SimpleDateFormat dateFormatter() {
+		return new SimpleDateFormat(DEFAULT_DATE_FORMAT,Locale.US);
 	}
 }
