@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.transferobject;
 
+import java.util.UUID;
+
 import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.AbstractPlanCourse;
 
@@ -33,6 +35,16 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 	private String courseTitle;
 
 	private String courseDescription;
+	
+	private String studentNotes;
+	
+	private String contactNotes;
+	
+	private Boolean isImportant;
+	
+	private Boolean isTranscript;
+	
+	private UUID electiveId;
 
 	private Integer creditHours;
 
@@ -58,6 +70,12 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 		this.setIsDev(model.isDev());
 		this.setOrderInTerm(model.getOrderInTerm());
 		this.setTermCode(model.getTermCode());
+		this.setContactNotes(model.getContactNotes());
+		this.setStudentNotes(model.getStudentNotes());
+		this.setIsImportant(model.getIsImportant());
+		this.setIsTranscript(model.getIsTranscript());
+		if(model.getElective() != null)
+			this.setElectiveId(model.getElective().getId());
 	}
 
 	public String getTermCode() {
@@ -122,6 +140,83 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 
 	public void setOrderInTerm(Integer orderInTerm) {
 		this.orderInTerm = orderInTerm;
+	}
+
+	/**
+	 * @return the studentNotes
+	 */
+	public String getStudentNotes() {
+		return studentNotes;
+	}
+
+	/**
+	 * @param studentNotes the studentNotes to set
+	 */
+	public void setStudentNotes(String studentNotes) {
+		this.studentNotes = studentNotes;
+	}
+
+	/**
+	 * @return the contactNotes
+	 */
+	public String getContactNotes() {
+		return contactNotes;
+	}
+
+	/**
+	 * @param contactNotes the contactNotes to set
+	 */
+	public void setContactNotes(String contactNotes) {
+		this.contactNotes = contactNotes;
+	}
+
+	/**
+	 * @return the isImportant
+	 */
+	public Boolean getIsImportant() {
+		return isImportant;
+	}
+
+	/**
+	 * @param isImportant the isImportant to set
+	 */
+	public void setIsImportant(Boolean isImportant) {
+		this.isImportant = isImportant;
+	}
+
+	/**
+	 * @return the isTranscript
+	 */
+	public Boolean getIsTranscript() {
+		return isTranscript;
+	}
+
+	/**
+	 * @param isTranscript the isTranscript to set
+	 */
+	public void setIsTranscript(Boolean isTranscript) {
+		this.isTranscript = isTranscript;
+	}
+
+	/**
+	 * @return the electiveId
+	 */
+	public UUID getElectiveId() {
+		return electiveId;
+	}
+
+	/**
+	 * @param electiveId the electiveId to set
+	 */
+	public void setElectiveId(UUID electiveId) {
+		this.electiveId = electiveId;
+	}
+
+	/**
+	 * @return the isDev
+	 */
+	public Boolean getIsDev() {
+		return isDev;
 	}
 
 }

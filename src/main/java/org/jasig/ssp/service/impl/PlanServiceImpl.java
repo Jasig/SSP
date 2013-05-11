@@ -44,6 +44,7 @@ import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.PlanCourseTO;
 import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
+import org.jasig.ssp.transferobject.TermNoteTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,12 +152,21 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 	
 	private List<TermCourses> collectTermCourses(PlanTO plan) throws ObjectNotFoundException{
 		Map<String,TermCourses> semesterCourses = new HashMap<String, TermCourses>();
-		
+		List<TermNoteTO> termNotes = plan.getTermNotes();
 		List<Term> futureTerms = termService.getCurrentAndFutureTerms().subList(0, 6);
 		for(PlanCourseTO course : plan.getPlanCourses()){				
 			if(!semesterCourses.containsKey(course.getTermCode())){
 				Term term = termService.getByCode(course.getTermCode());
+				
+				
 				TermCourses termCourses = new TermCourses(term);
+				int termNoteIndex = termNotes.indexOf(term);
+				if(termNoteIndex > -1){
+					TermNoteTO termNote = termNotes.get(termNoteIndex);
+					termCourses.setContactNotes(termNote.getContactNotes());
+					termCourses.setStudentNotes(termNote.getStudentNotes());
+					termCourses.setIsImportant(termNote.getIsImportant());
+				}
 				course.setPlanToOffer(getPlanToOfferTerms(course, futureTerms));
 				termCourses.addCourse(course);
 				semesterCourses.put(term.getCode(), termCourses);

@@ -48,25 +48,6 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 				store: me.store,
 				scroll: true,
 				xtype : 'semestergrid',
-			}, 
-			{
-				xtype: 'form',
-				hidden:true,
-				hideable:false,
-				items:[
-						{
-		               		name: 'contactNotes',
-		                	xtype: 'textfield',
-							hidden: true,
-							hideable:false,
-		             	},
-		 				{
-			            	name: 'studentNotes',
-			            	xtype: 'textfield',
-							hidden: true,
-							hideable:false,
-			        	}
-				]
 			}],
            
             dockedItems: [{

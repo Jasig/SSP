@@ -55,7 +55,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				    items: [
 				   {
 				        fieldLabel: 'Advisor/Coach Notes',
-				        name: 'coachNotes',
+				        name: 'contactNotes',
 				        allowBlank:true,
 				        xtype: 'textareafield',
 				        autoscroll: true,
@@ -83,8 +83,8 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        
 				    },
 				    {
-                    	name: 'important',
-                    	inputValue: 'important',
+                    	name: 'isImportant',
+                    	inputValue: 'isImportant',
                     	xtype:'checkbox',
                     	padding: '0 0 0 105',
                     	labelSeparator: '',
@@ -98,10 +98,8 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                     	labelSeparator: '',
                     	hideLabel: true,   
                     	boxLabel: 'Mark As Program Elective',
-                    	name: 'elective',
-                    	inputValue: 'elective',
-						hidden: true,
-						hideable: false
+                    	name: 'isElective',
+                    	inputValue: 'isElective',
                     }
 				    ]
 				    ,

@@ -229,6 +229,7 @@ Ext.require([
 	'Ssp.model.tool.journal.JournalEntry',
 	'Ssp.model.tool.journal.JournalEntryDetail',
 	'Ssp.model.tool.map.SemesterCourse',
+	'Ssp.model.tool.map.TermNote',
 	'Ssp.model.tool.map.Plan',
 	'Ssp.model.tool.map.PlanCourse',
 	'Ssp.model.tool.map.PlanOutputData',

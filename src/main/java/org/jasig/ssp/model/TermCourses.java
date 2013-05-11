@@ -18,7 +18,6 @@
  */
 package org.jasig.ssp.model;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -39,10 +38,14 @@ public class TermCourses {
 	public static final TermCoursesTermDateComparator TERM_START_DATE_COMPARATOR =
 			new TermCoursesTermDateComparator();
 	
-	Term term;
-	List<PlanCourseTO> courses;
-	Float totalCreditHours;
-	Float totalDevCreditHours;
+	private Term term;
+	private List<PlanCourseTO> courses;
+	private Float totalCreditHours;
+	private Float totalDevCreditHours;
+	private String contactNotes;
+	private String studentNotes;
+	private Boolean isImportant;
+	private Boolean isElective;
 	
 	
 	/**
@@ -120,6 +123,60 @@ public class TermCourses {
 	 */
 	public void setTotalCreditHours(Float totalCreditHours) {
 		this.totalCreditHours = totalCreditHours;
+	}
+	/**
+	 * @return the contactNotes
+	 */
+	public String getContactNotes() {
+		return contactNotes;
+	}
+	/**
+	 * @param contactNotes the contactNotes to set
+	 */
+	public void setContactNotes(String contactNotes) {
+		this.contactNotes = contactNotes;
+	}
+	/**
+	 * @return the studentNotes
+	 */
+	public String getStudentNotes() {
+		return studentNotes;
+	}
+	/**
+	 * @param studentNotes the studentNotes to set
+	 */
+	public void setStudentNotes(String studentNotes) {
+		this.studentNotes = studentNotes;
+	}
+	/**
+	 * @return the isImportant
+	 */
+	public Boolean getIsImportant() {
+		return isImportant;
+	}
+	/**
+	 * @param isImportant the isImportant to set
+	 */
+	public void setIsImportant(Boolean isImportant) {
+		this.isImportant = isImportant;
+	}
+	/**
+	 * @return the isElective
+	 */
+	public Boolean getIsElective() {
+		return isElective;
+	}
+	/**
+	 * @param isElective the isElective to set
+	 */
+	public void setIsElective(Boolean isElective) {
+		this.isElective = isElective;
+	}
+	/**
+	 * @param totalDevCreditHours the totalDevCreditHours to set
+	 */
+	public void setTotalDevCreditHours(Float totalDevCreditHours) {
+		this.totalDevCreditHours = totalDevCreditHours;
 	}
 
 }

@@ -347,6 +347,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			var storeGrid = panel.query("semestergrid")[0];
 			var store = storeGrid.getStore();
 			var semesterBottomDock = panel.getDockedComponent("semesterBottomDock");
+			
 			var hours = me.updateTermHours(store, semesterBottomDock);
 			planHours += hours.planHours;
 			devHours += hours.devHours;

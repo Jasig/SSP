@@ -116,6 +116,7 @@ Ext.define('Ssp.service.MapPlanService', {
 			scope: me
 		});    	
     },
+    
     getTermCodes: function(mapPlan){ 
     	var termCodes = [];
     	var i = 0;
@@ -126,7 +127,7 @@ Ext.define('Ssp.service.MapPlanService', {
     	  })
     	return termCodes;
     	},
-    	
+    
     updateCurrentMap: function(semesterStores){ 
         var me = this;
         me.currentMapPlan.set('personId',  me.personLite.get('id'));
@@ -150,6 +151,11 @@ Ext.define('Ssp.service.MapPlanService', {
             		planCourse.creditHours = model.get('creditHours');
             		planCourse.formattedCourse = model.get('formattedCourse');
             		planCourse.courseDescription = model.get('description');
+            		planCourse.studentNotes = model.get('studentNotes');
+            		planCourse.contactNotes = model.get('contactNotes');
+            		planCourse.isImportant = model.get('isImportant');
+            		planCourse.isTranscript = model.get('isTranscript');
+            		planCourse.electiveId = model.get('electiveId');
             		planCourse.orderInTerm = i;
 					planCourse.objectStatus = 'ACTIVE';
             		planCourse.isDev = model.get('isDev');
@@ -181,7 +187,7 @@ Ext.define('Ssp.service.MapPlanService', {
 			me.apiProperties.makeRequest({
     			url: url,
     			method: 'POST',
-    			jsonData: me.currentMapPlan.data,
+    			jsonData: me.currentMapPlan.getSimpleJsonData(),
     			successFunc: success,
     			failureFunc: failure,
     			scope: me
@@ -191,7 +197,7 @@ Ext.define('Ssp.service.MapPlanService', {
     		me.apiProperties.makeRequest({
     			url: url+'/'+ me.currentMapPlan.get('id'), 
     			method: 'PUT',
-    			jsonData: me.currentMapPlan.data,
+    			jsonData: me.currentMapPlan.getSimpleJsonData(),
     			successFunc: success,
     			failureFunc: failure,
     			scope: me
@@ -252,7 +258,7 @@ Ext.define('Ssp.service.MapPlanService', {
 			})
 		}
 	    me.updateCurrentMap(semesterStores);
-	    outputData.set("plan",me.currentMapPlan.data);
+	    outputData.set("plan",me.currentMapPlan.getSimpleJsonData());
     }
     	
 });

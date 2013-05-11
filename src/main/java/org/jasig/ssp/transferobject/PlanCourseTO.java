@@ -37,20 +37,6 @@ public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 			new PlanCourseIndexComparator();
 	
 	private String personId;
-	
-	/**
-	 * @return the planToOffer
-	 */
-	public String getPlanToOffer() {
-		return planToOffer;
-	}
-
-	/**
-	 * @param planToOffer the planToOffer to set
-	 */
-	public void setPlanToOffer(String planToOffer) {
-		this.planToOffer = planToOffer;
-	}
 
 	private String planToOffer;
 	
@@ -80,5 +66,19 @@ public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 
 	public void setPersonId(String personId) {
 		this.personId = personId;
+	}
+	
+	/**
+	 * @return the planToOffer
+	 */
+	public String getPlanToOffer() {
+		return planToOffer;
+	}
+
+	/**
+	 * @param planToOffer the planToOffer to set
+	 */
+	public void setPlanToOffer(String planToOffer) {
+		this.planToOffer = planToOffer;
 	}
 }

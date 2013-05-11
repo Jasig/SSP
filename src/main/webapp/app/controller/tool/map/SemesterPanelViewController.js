@@ -19,6 +19,9 @@
 Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
+	inject:{
+		currentMapPlan:'currentMapPlan'
+	},
 	init: function() {
 		var me=this;
 	
@@ -37,8 +40,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		var me = this;
 		if(me.termNotesPopUp == null || me.termNotesPopUp.isDestroyed)
         	me.termNotesPopUp = Ext.create('Ssp.view.tools.map.TermNotes');
-	
-		me.setFormValues(me.termNotesPopUp.query('form')[0], me.getView().query('form')[0]);
+		
+	    var termNote = me.currentMapPlan.getTermNoteByTermCode(me.getView().itemId);
+	    me.termNotesPopUp.query('form')[0].getForm().loadRecord(termNote);
+	   
 		me.termNotesPopUp.query('[name=saveButton]')[0].addListener('click', me.onTermNotesSave, me, {single:true});
 		
         me.termNotesPopUp.center();
@@ -47,16 +52,11 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 
 	onTermNotesSave: function(button){
 		var me = this;
-		me.setFormValues(me.getView().query('form')[0], button.findParentByType('form'));
+		 var termNote = me.currentMapPlan.getTermNoteByTermCode(me.getView().itemId);
+		me.termNotesPopUp.query('form')[0].getForm().updateRecord(termNote);
 		me.termNotesPopUp.close();
 	},
-	
-	setFormValues: function(viewToSet, viewToGet){
-		var form = viewToSet.getForm();
-		var inputForm = viewToGet.getForm();
-		form.findField("contactNotes").setValue(inputForm.findField("contactNotes").getValue());
-		form.findField("studentNotes").setValue(inputForm.findField("studentNotes").getValue());
-	},
+
 	
 	destroy: function(){
 		var me=this;

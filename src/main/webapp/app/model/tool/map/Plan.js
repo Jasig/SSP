@@ -27,16 +27,17 @@ Ext.define('Ssp.model.tool.map.Plan', {
              {name:'contactName',type:'string'},
              {name:'contactNotes',type:'string'},
              {name:'studentNotes',type:'string'},
-             {name:'basedOnTemplateId',type:'string'},
-             {name:'isFinancialAid',type:'string'},
-             {name:'isImportant',type:'string'},
-             {name:'isF1Visa',type:'string'},
+             //{name:'basedOnTemplateId',type:'string'},
+             {name:'isFinancialAid',type:'boolean'},
+             {name:'isImportant',type:'boolean'},
+             {name:'isF1Visa',type:'boolean'},
              {name:'academicGoals',type:'string'},
              {name:'careerLink',type:'string'},
              {name:'academicLink',type:'string'},
              {name:'personId', type:'string'},
              {name: 'objectStatus', type: 'string'},
-             {name: 'modifiedDate', type: 'date', dateFormat: 'time'},             
+             {name: 'modifiedDate', type: 'date', dateFormat: 'time'},
+             
              {name:'planCourses',
        		  type:'auto',
        		  convert: function(data,model)
@@ -44,11 +45,22 @@ Ext.define('Ssp.model.tool.map.Plan', {
 	       			  data = (data && !Ext.isArray(data) ) ? [data] : data;
 	       			  return data;
 	       		  }
-              }             
+              },
+              {name:'termNotes',
+           		  type:'auto',
+           		  convert: function(data,model)
+    	       		  {
+    	       			  data = (data && !Ext.isArray(data) ) ? [data] : data;
+    	       			  return data;
+    	       		  }
+                  }  
              ],
-    hasMany: {model: 'Ssp.model.tool.map.PlanCourse',
+    hasMany: [{model: 'Ssp.model.tool.map.PlanCourse',
     		  name: 'planCourses',
     		  associationKey: 'planCourses'},
+    		  {model: 'Ssp.model.tool.map.TermNote',
+        		  name: 'termNotes',
+        		  associationKey: 'termNotes'}],
 
 	clearPlanCourses:function(){
 				var me = this;
@@ -57,18 +69,98 @@ Ext.define('Ssp.model.tool.map.Plan', {
 				    currentCourses.pop(); 
 				}
 			},
+			
+			
+	getTermNoteByTermCode: function(termCode){
+		var me = this;
+		var termNotes =  me.get('termNotes');
+		if(!termNotes){
+			termNotes = [];
+			me.set('termNotes', termNotes);
+		}
+		var foundNote;
+		termNotes.forEach(function(termNote){
+			if(termNote.get('termCode') == termCode)
+			{
+				foundNote = termNote;
+			}
+			});
+		if(!foundNote){
+			foundNote = new Ssp.model.tool.map.TermNote();
+			foundNote.set('termCode', termCode);
+			termNotes.push(foundNote);
+		}
+		
+		return foundNote;
+	},
+	clearTermNotes:function(){
+				var me = this;
+				var termNotes =  me.get('termNotes');
+				if(!termNotes)
+					return;
+				while(termNotes.length > 0) {
+					termNotes.pop(); 
+				}
+			},
 	
 	clearMapPlan:function(){
 				var me = this;
 				me.clearPlanCourses();
+				me.clearTermNotes();
 				me.set('ownerId','');
 				me.set('personId','');
 				me.set('name','');
 				me.set('id','');
 				me.set('createdBy','');
 				me.set('modifiedBy','');
+				me.set('contactTitle','');
+	             me.set('contactPhone','');
+	             me.set('contactEmail','');
+	             me.set('contactName','');
+	             me.set('contactNotes','');
+	             me.set('studentNotes','');
+	             //me.set('basedOnTemplateId','');
+	             me.set('isFinancialAid',false);
+	             me.set('isImportant',false);
+	             me.set('isF1Visa',false);
+	             me.set('academicGoals','');
+	             me.set('careerLink','');
+	             me.set('academicLink','');
 				me.set('createdDate',null);
 				me.set('modifiedDate',null);
-			}
+			},
+			
+	getSimpleJsonData: function(){
+		var me = this;
+		var simpleData = {};
+		var termNotes = me.get('termNotes')
+		simpleData.termNotes = [];
+		termNotes.forEach(function(termNote){
+			simpleData.termNotes.push(termNote.data);
+		})
+		simpleData.planCourses = me.get('planCourses');
+		simpleData.ownerId = me.get('ownerId');
+		simpleData.personId = me.get('personId');
+		simpleData.name = me.get('name');
+		simpleData.id = me.get('id');
+		simpleData.createdBy = me.get('createdBy');
+		simpleData.modifiedBy = me.get('modifiedBy');
+		simpleData.contactTitle = me.get('contactTitle');
+         simpleData.contactPhone = me.get('contactPhone');
+         simpleData.contactEmail = me.get('contactEmail');
+         simpleData.contactName = me.get('contactName');
+         simpleData.contactNotes = me.get('contactNotes');
+         simpleData.studentNotes = me.get('studentNotes');
+         //simpleData.basedOnTemplateId = me.get('basedOnTemplateId');
+         simpleData.isFinancialAid = me.get('isFinancialAid');
+         simpleData.isImportant = me.get('isImportant');
+         simpleData.isF1Visa = me.get('isF1Visa');
+         simpleData.academicGoals = me.get('academicGoals');
+         simpleData.careerLink = me.get('careerLink');
+         simpleData.academicLink = me.get('academicLink');
+		simpleData.createdDate = me.get('createdDate');
+		simpleData.modifiedDate = me.get('modifiedDate');
+		return simpleData;
+	}
     		        		  
 });
