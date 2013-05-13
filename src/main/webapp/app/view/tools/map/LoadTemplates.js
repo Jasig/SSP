@@ -22,7 +22,9 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     inject: {
         columnRendererUtils: 'columnRendererUtils',
-        //sspConfig: 'sspConfig'
+        programsStore: 'programsStore',
+        departmentsStore: 'departmentsStore',
+        divisionsStore: 'divisionsStore',
     },
     height: 500,
     width: 700,
@@ -77,16 +79,15 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                     items: [ 
                              {
                                 xtype: 'combobox',
-                                name: 'programCombo',
+                                name: 'program',
+                                store: me.programsStore,
                                 fieldLabel: '',
                                 emptyText: 'Specific Program',
-                                valueField: 'program',
-                                displayField: 'program',
+                                valueField: 'code',
+                                displayField: 'name',
                                 mode: 'local',
                                 typeAhead: true,
-                                queryMode: 'local',
                                 allowBlank: true,
-                                itemId: 'programCombo',
                                 width: 250
                             },
                             {
@@ -95,16 +96,28 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                             },
                             {
                                 xtype: 'combobox',
-                                name: 'divisionCombo',
+                                name: 'department',
+                                store: me.departmentsStore,
                                 fieldLabel: '',
                                 emptyText: 'Specific Division',
-                                valueField: 'division',
-                                displayField: 'division',
+                                valueField: 'code',
+                                displayField: 'name',
                                 mode: 'local',
                                 typeAhead: true,
-                                queryMode: 'local',
                                 allowBlank: true,
-                                itemId: 'divisionCombo',
+                                width: 250
+                            },
+                            {
+                                xtype: 'combobox',
+                                name: 'division',
+                                store: me.divisionsStore,
+                                fieldLabel: '',
+                                emptyText: 'Specific Division',
+                                valueField: 'code',
+                                displayField: 'name',
+                                mode: 'local',
+                                typeAhead: true,
+                                allowBlank: true,
                                 width: 250
                             }    
                        ]
@@ -198,11 +211,6 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                                 
                             }
                             ]}
-            
-            
-            
-            
-            
             
             ]
             
