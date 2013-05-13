@@ -116,9 +116,9 @@ public class Template extends AbstractPlan implements Cloneable{
 	public Template clone() throws CloneNotSupportedException {
 		Template clone = new Template();
 		cloneCommonFields(clone);
-		//clone.setIsPrivate(this.getIsPrivate());
-		clone.setIsImportant(false);
-		clone.setIsF1Visa(true);
+		clone.setIsPrivate(this.getIsPrivate());
+		clone.setIsImportant(this.getIsImportant());
+		clone.setIsF1Visa(this.getIsF1Visa());
 		clone.setDepartmentCode(this.getDepartmentCode());
 		clone.setDivisionCode(this.getDepartmentCode());
 		clone.setProgramCode(this.getProgramCode());
