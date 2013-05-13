@@ -76,7 +76,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                 			    {
                 			    	xtype:'checkbox',
                 			    	fieldLabel: 'Private to Me ',
-                			    	name: 'private',
+                			    	name: 'isPrivate',
                 			    	labelWidth: 80
                 			    }
                 			    ]},
@@ -174,7 +174,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
             				        allowBlank:false
             				    },
             				   {
-            				        fieldLabel: 'Academic Link',
+            				        fieldLabel: 'AcademicLink',
             				        name: 'academicLink',
             				        allowBlank:true,
             				    },{

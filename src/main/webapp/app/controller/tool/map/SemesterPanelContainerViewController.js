@@ -96,7 +96,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
         };
     },
 
-    getMapPlanServiceSuccess: function(serviceResponses) {
+    getMapPlanServiceSuccess: function(serviceResponses, isTemplate) {
         var me = this;
         var mapResponse = serviceResponses.successes.map;
 		if(!mapResponse || !mapResponse.responseText || mapResponse.responseText.trim().length == 0) {
@@ -111,10 +111,13 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			me.allPlansPopUp.show();
        	} else {
 			me.currentMapPlan.populateFromGenericObject(Ext.decode(mapResponse.responseText));
+			if(isTemplate){
+				me.currentMapPlan.set("planCourses", me.currentMapPlan.get('templateCourses'));
+			}
 			me.onCreateMapPlan();
 			me.populatePlanStores();
 			me.updateAllPlanHours();
-			me.currentMapPlan.set('isTemplate', true);
+			me.currentMapPlan.set('isTemplate', false);
 		}
     },
 
@@ -236,7 +239,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			return;
 		}
 		view.removeAll(true);
-		
+
 		var terms = me.getTerms(me.currentMapPlan);
 		
 		if(terms.length == 0){
@@ -305,7 +308,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	onSaveMapPlan: function(){
 		var me = this;
 		me.save(false);
-	},	
+	},
+		
 	save: function(saveAs) {
 		var me = this;
 		me.getView().setLoading(true);
@@ -378,8 +382,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 
 	onSaveTemplateCompleteSuccess: function(serviceResponses){
     var me = this;
-    me.getMapPlanServiceSuccess(serviceResponses);
-    me.currentMapPlan.set("isTemplate", true)
+    me.getMapPlanServiceSuccess(serviceResponses, true);
+    
     Ext.Msg.alert('Your changes have been saved.');   
     me.getView().setLoading(false);
   },

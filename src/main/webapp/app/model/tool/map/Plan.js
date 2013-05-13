@@ -40,9 +40,19 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			 {name:'departmentCode',type:'string'},
 			  {name:'programCode',type:'string'},
 			  {name:'divisionCode',type:'string'},
+			 {name:'isPrivate',type:'boolean'},
              {name: 'modifiedDate', type: 'date', dateFormat: 'time'},
              
              {name:'planCourses',
+       		  type:'auto',
+       		  convert: function(data,model)
+	       		  {
+	       			  data = (data && !Ext.isArray(data) ) ? [data] : data;
+	       			  return data;
+	       		  }
+              },
+
+			{name:'templateCourses',
        		  type:'auto',
        		  convert: function(data,model)
 	       		  {
@@ -62,6 +72,9 @@ Ext.define('Ssp.model.tool.map.Plan', {
     hasMany: [{model: 'Ssp.model.tool.map.PlanCourse',
     		  name: 'planCourses',
     		  associationKey: 'planCourses'},
+			  {model: 'Ssp.model.tool.map.PlanCourse',
+		    		  name: 'templateCourses',
+		    		  associationKey: 'templateCourses'},
     		  {model: 'Ssp.model.tool.map.TermNote',
         		  name: 'termNotes',
         		  associationKey: 'termNotes'}],
@@ -71,6 +84,10 @@ Ext.define('Ssp.model.tool.map.Plan', {
 				var currentCourses =  me.get('planCourses');
 				while(currentCourses.length > 0) {
 				    currentCourses.pop(); 
+				}
+				var currentTemplateCourses =  me.get('templateCourses');
+				while(currentTemplateCourses.length > 0) {
+				    currentTemplateCourses.pop(); 
 				}
 			},
 			
@@ -173,7 +190,10 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			simpleData.departmentCode = me.get('departmentCode');
 			simpleData.divisionCode = me.get('divisionCode');
 			simpleData.programCode = me.get('programCode');
-			simpleData.isPrivate = me.get('isPrivate');
+			if(me.get('isPrivate'))
+				simpleData.isPrivate = me.get('isPrivate');
+			else
+				simpleData.isPrivate = true;
 		}else{
 			simpleData.planCourses = me.get('planCourses');
 			simpleData.personId = me.get('personId');
