@@ -18,20 +18,13 @@
  */
 package org.jasig.ssp.service;
 
-import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
-/**
- * Person service
- */
-public interface TemplateService extends AuditableCrudService<Template> {
+public interface TemplateService extends AbstractPlanService<Template> {
 
 	PagingWrapper<Template> getAll(SortingAndPaging createForSingleSortWithPaging,
 			Boolean status, String divisionCode, String programCode);
 
-	Template copyAndSave(Template model) throws CloneNotSupportedException;
-
-	
 }

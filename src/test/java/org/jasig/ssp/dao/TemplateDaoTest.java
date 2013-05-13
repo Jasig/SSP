@@ -36,6 +36,7 @@ import org.jasig.ssp.service.TemplateService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -131,16 +132,16 @@ public class TemplateDaoTest {
 	}	
 
 	
-	public void testTemplateDaoSaveWithChildren() throws ObjectNotFoundException, CloneNotSupportedException {
-		// test student = james gosling
+	public void testTemplateDaoSaveWithChildren() throws ObjectNotFoundException, CloneNotSupportedException, ValidationException {
+		// test student = ken thompson
 		final Person person = personService.get(UUID
-				.fromString("46da4cb4-6eb4-4b91-8e39-8f9fa4d85552"));
+				.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea"));
 		
 		Template template = new Template();
 		template.setName("TestTemplate");
 		template.setOwner(person);
 		template.setObjectStatus(ObjectStatus.ACTIVE);
-		
+		template.setIsPrivate(false);
 		Collection<Term> all = getTermService().getAll(null).getRows();
 		for (Term term : all) {
 			
@@ -161,11 +162,11 @@ public class TemplateDaoTest {
 				template.getTemplateCourses().add(course);
 			}
 		}
+		templateService.save(template);
+        
 		
-
 		
-		
-		templateService.copyAndSave(template);
+		templateService.copyAndSave(template,person);
 		final Session session = sessionFactory.getCurrentSession();
 		session.flush();
 		

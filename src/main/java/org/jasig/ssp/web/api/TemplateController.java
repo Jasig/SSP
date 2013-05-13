@@ -194,7 +194,7 @@ public class TemplateController  extends AbstractBaseController {
 
 		Template model = getFactory().from(obj);
 		
-		model = getService().copyAndSave(model);
+		model = getService().copyAndSave(model,securityService.currentlyAuthenticatedUser().getPerson());
 
 		if (null != model) {
 			final Template createdModel = getFactory().from(obj);
@@ -317,7 +317,8 @@ public class TemplateController  extends AbstractBaseController {
 		{
 			obj.setId(null);
 			Template model = getFactory().from(obj);
-			final Template clonedPlan = getService().copyAndSave(model);
+			final Template clonedPlan = getService().copyAndSave(model,securityService.currentlyAuthenticatedUser().getPerson());
+
 			if (null != clonedPlan) {
 				return new TemplateTO(clonedPlan);
 			}

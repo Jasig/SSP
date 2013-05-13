@@ -23,6 +23,7 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.AbstractPlan;
+import org.jasig.ssp.model.Person;
 
 /**
  * Person service
@@ -32,5 +33,5 @@ public interface AbstractPlanService<T extends AbstractPlan> extends AuditableCr
 	@Override
 	public T get(@NotNull final UUID id) throws ObjectNotFoundException;
 
-	public T copyAndSave(T model) throws CloneNotSupportedException;
+	public T copyAndSave(T model, Person newOwner) throws CloneNotSupportedException;
 }

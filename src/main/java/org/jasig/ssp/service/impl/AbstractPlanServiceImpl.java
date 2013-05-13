@@ -24,6 +24,7 @@ import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.dao.AbstractPlanDao;
 import org.jasig.ssp.model.AbstractPlan;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
 import org.jasig.ssp.service.AbstractPlanService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -64,5 +65,10 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan> extends  
 
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
+	}
+	
+	@Override
+	public T copyAndSave(T model, Person newOwner) throws CloneNotSupportedException {
+		return getDao().cloneAndSave(model, newOwner);
 	}
 }

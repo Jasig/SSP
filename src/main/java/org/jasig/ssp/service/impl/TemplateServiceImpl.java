@@ -45,11 +45,6 @@ public  class TemplateServiceImpl extends AbstractPlanServiceImpl<Template> impl
 	}
 
 	@Override
-	public Template copyAndSave(Template model) throws CloneNotSupportedException {
-		return dao.cloneAndSave(model, null);
-	}
-
-	@Override
 	public PagingWrapper<Template> getAll(
 			SortingAndPaging createForSingleSortWithPaging, Boolean status,
 			String divisionCode, String programCode) {
