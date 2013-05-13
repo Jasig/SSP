@@ -60,10 +60,6 @@ public class PlanCourseTOFactoryImpl extends AbstractAuditableTOFactory<PlanCour
 		model.setCourseCode(tObject.getCourseCode());
 		model.setCourseDescription(tObject.getCourseDescription());
 		model.setCourseTitle(tObject.getCourseTitle());
-		model.setContactNotes(tObject.getContactNotes());
-		model.setStudentNotes(tObject.getStudentNotes());
-		model.setIsImportant(tObject.getIsImportant());
-		model.setIsTranscript(tObject.getIsTranscript());
 		model.setCreditHours(tObject.getCreditHours());
 		model.setTermCode(tObject.getTermCode());
 		model.setFormattedCourse(tObject.getFormattedCourse());

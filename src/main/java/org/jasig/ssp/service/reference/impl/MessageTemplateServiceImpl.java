@@ -293,8 +293,6 @@ public class MessageTemplateServiceImpl extends
 		final Map<String, Object> messageParams = new HashMap<String, Object>(); 
 		
 		messageParams.put("title", plan.getName());
-		messageParams.put("planContactNotes", plan.getContactNotes());
-		messageParams.put("planStudentNotes", plan.getStudentNotes());
 		messageParams.put("termCourses", termCourses);
 		messageParams.put("studentFullName", student.getFullName());
 		messageParams.put("studentEmail", student.getPrimaryEmailAddress());

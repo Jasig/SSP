@@ -139,16 +139,6 @@
                     "path": "/app/store/"
                 },
                 {
-                    "clsName": "Ssp.store.Plan",
-                    "name": "Plan.js",
-                    "path": "/app/store/"
-                },
-                {
-                    "clsName": "Ssp.store.PlanTemplates",
-                    "name": "PlanTemplates.js",
-                    "path": "/app/store/"
-                },
-                {
                     "clsName": "Ssp.model.reference.DisabilityStatus",
                     "name": "DisabilityStatus.js",
                     "path": "/app/model/reference/"
@@ -342,17 +332,7 @@
                     "clsName": "Ssp.controller.tool.map.SavePlanViewController",
                     "name": "SavePlanViewController.js",
                     "path": "/app/controller/tool/map/"
-                },
-                {
-                    "clsName": "Ssp.controller.tool.map.LoadTemplateViewController",
-                    "name": "LoadTemplateViewController.js",
-                    "path": "/app/controller/tool/map/"
-                },    
-                 {
-                    "clsName": "Ssp.controller.tool.map.SaveTemplateViewController",
-                    "name": "SaveTemplateViewController.js",
-                    "path": "/app/controller/tool/map/"
-                },                               
+                },                            
                 {
                     "clsName": "Ssp.controller.tool.map.SemesterPanelViewController",
                     "name": "SemesterPanelViewController.js",

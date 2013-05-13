@@ -37,7 +37,6 @@ Ext.define('Ssp.model.tool.map.Plan', {
              {name:'personId', type:'string'},
              {name: 'objectStatus', type: 'string'},
              {name: 'modifiedDate', type: 'date', dateFormat: 'time'},
-             {name: 'isTemplate', type: 'boolean'},
              
              {name:'planCourses',
        		  type:'auto',
