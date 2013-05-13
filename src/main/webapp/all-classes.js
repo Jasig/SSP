@@ -23827,3 +23827,4 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 		return me.callParent(arguments);
 	}	
 });
+
