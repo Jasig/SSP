@@ -42,9 +42,11 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     },
     onSaveClick: function(){
     	me = this;
+		
     	var form =  me.getView().query('form')[0].getForm();
 		form.updateRecord(me.currentMapPlan);
-    	me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox')[0].value) ? 'ACTIVE' : 'INACTIVE')
+    	me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox')[0].value) ? 'ACTIVE' : 'INACTIVE');
+		me.currentMapPlan.set('isTemplate', true);
     	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
     	if(me.getView().saveAs)
     	{
@@ -54,7 +56,6 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     	{
     		me.appEventsController.getApplication().fireEvent('onSaveTemplatePlan');
     	}
-    	
     	me.getView().close();
     },
     resetForm: function() {

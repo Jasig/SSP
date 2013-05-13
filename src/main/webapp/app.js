@@ -432,7 +432,7 @@ var apiUrls = [
   {name: 'personPrintTask', url: 'person/{id}/task/print'},
   {name: 'personSearch', url: 'person/search'},
   {name: 'personMapPlan', url: 'person/{id}/map/plan'},
-  {name: 'templatePlan', url: 'person/{id}/map/template'},
+  {name: 'templatePlan', url: 'reference/map/template'},
   {name: 'placement', url: 'person/{id}/test'},
   {name: 'registrationLoadRanges', url: 'reference/config/?name=registration_load_ranges'},
   {name: 'selfHelpGuides', url: 'selfHelpGuides/search'},

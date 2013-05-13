@@ -363,30 +363,30 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		mainView.add( arrViewItems );	
 	},	
 	
-	onSaveCompleteSuccess: function(view){
+	onSaveCompleteSuccess: function(serviceResponses){
 		var me = this;
 		Ext.Msg.alert('Your changes have been saved.'); 
 		me.getMapPlanServiceSuccess(serviceResponses);
 		me.currentMapPlan.set("isTemplate", false)
-		view.setLoading(false);
+		me.getView().setLoading(false);
 	},
 	
-	onSaveCompleteFailure: function(view){
+	onSaveCompleteFailure: function(serviceResponses){
 		var me = this;
-		view.setLoading(false);
+		me.getView().setLoading(false);
 	},	
 
-	 onSaveTemplateCompleteSuccess: function(serviceResponses){
+	onSaveTemplateCompleteSuccess: function(serviceResponses){
     var me = this;
     me.getMapPlanServiceSuccess(serviceResponses);
     me.currentMapPlan.set("isTemplate", true)
     Ext.Msg.alert('Your changes have been saved.');   
-    view.setLoading(false);
+    me.getView().setLoading(false);
   },
   
-  onSaveTemplateCompleteFailure: function(view){
+  onSaveTemplateCompleteFailure: function(serviceResponses){
     var me = this;
-    view.setLoading(false);
+    me.getView().setLoading(false);
   },  
 	updateAllPlanHours: function(){
 		var me = this;

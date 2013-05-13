@@ -37,6 +37,9 @@ Ext.define('Ssp.model.tool.map.Plan', {
              {name:'personId', type:'string'},
              {name: 'objectStatus', type: 'string'},
              {name: 'isTemplate', type: 'boolean'},
+			 {name:'departmentCode',type:'string'},
+			  {name:'programCode',type:'string'},
+			  {name:'divisionCode',type:'string'},
              {name: 'modifiedDate', type: 'date', dateFormat: 'time'},
              
              {name:'planCourses',
@@ -127,6 +130,10 @@ Ext.define('Ssp.model.tool.map.Plan', {
 	             me.set('academicGoals','');
 	             me.set('careerLink','');
 	             me.set('academicLink','');
+				me.set('departmentCode','');
+				me.set('divisionCode','');
+				me.set('isPrivate',false);
+				me.set('programCode','');
 				me.set('createdDate',null);
 				me.set('modifiedDate',null);
 			},
@@ -139,9 +146,9 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		termNotes.forEach(function(termNote){
 			simpleData.termNotes.push(termNote.data);
 		})
-		simpleData.planCourses = me.get('planCourses');
+		
 		simpleData.ownerId = me.get('ownerId');
-		simpleData.personId = me.get('personId');
+		
 		simpleData.name = me.get('name');
 		simpleData.id = me.get('id');
 		simpleData.createdBy = me.get('createdBy');
@@ -161,6 +168,16 @@ Ext.define('Ssp.model.tool.map.Plan', {
          simpleData.academicLink = me.get('academicLink');
 		simpleData.createdDate = me.get('createdDate');
 		simpleData.modifiedDate = me.get('modifiedDate');
+		if(me.get('isTemplate')){
+			simpleData.templateCourses = me.get('planCourses');
+			simpleData.departmentCode = me.get('departmentCode');
+			simpleData.divisionCode = me.get('divisionCode');
+			simpleData.programCode = me.get('programCode');
+			simpleData.isPrivate = me.get('isPrivate');
+		}else{
+			simpleData.planCourses = me.get('planCourses');
+			simpleData.personId = me.get('personId');
+		}
 		return simpleData;
 	}
     		        		  

@@ -35,6 +35,12 @@ Ext.define('Ssp.service.MapPlanService', {
 		baseUrl = baseUrl.replace('{id}', id);
 		return baseUrl;
     },
+
+	getTemplateBaseUrl: function(){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('templatePlan') );
+		return baseUrl;
+    },
  
     
     getCurrent: function( personId, callbacks ){
@@ -162,7 +168,10 @@ Ext.define('Ssp.service.MapPlanService', {
             		planCourses[i++] = planCourse;
             })
          }
-         me.currentMapPlan.set('planCourses',planCourses);
+		if(!me.currentMapPlan.get('isTemplate'))
+         	me.currentMapPlan.set('planCourses',planCourses);
+		else
+			me.currentMapPlan.set('templateCourses',planCourses);
     }, 
 
     
@@ -207,7 +216,7 @@ Ext.define('Ssp.service.MapPlanService', {
     
     saveTemplate: function(semesterStores, callbacks, currentMapPlan, view, saveAs ){
 		var me=this;
-		var url = me.getBaseUrl(currentMapPlan.get('personId'));
+		var url = me.getTemplateBaseUrl();
 	    var success = function( response ){
 	    	callbacks.success( response, callbacks.scope );
 	    };
