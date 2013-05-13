@@ -72,11 +72,10 @@ Ext.define('Ssp.view.tools.map.MAPView', {
 				{
                     tooltip: 'Load Template',
                     text: '<u>Load Template</u>',
+                    hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_LOAD_BUTTON'),
                     height: 22,
                     xtype: 'button',
                     itemId: 'loadTemplateButton',
-					hidden: true,
-					hideable:false
                 },
                 
 				 
@@ -104,8 +103,6 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                             xtype: 'button',
                             text: 'Save Template As' ,
                             itemId: 'saveTemplateButton',
-							hidden:true,
-							hideable:false
                         }
                     ]
                     }

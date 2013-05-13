@@ -20,10 +20,12 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
     extend: 'Ext.window.Window',
     alias: 'widget.savetemplate',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
+    controller: 'Ssp.controller.tool.map.SaveTemplateViewController',
     inject: {
-        columnRendererUtils: 'columnRendererUtils'
-        //sspConfig: 'sspConfig'
+        columnRendererUtils: 'columnRendererUtils',
+        programsStore: 'programsStore',
+        departmentsStore: 'departmentsStore',
+        divisionsStore: 'divisionsStore',
     },
     height: 500,
     width: 850,
@@ -49,7 +51,6 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                height: '100%',
                 bodyPadding: 5,
                 autoScroll: true,
-                itemId: 'faSaveTemplate',
                 items: [
                         {
                             xtype: 'fieldset',
@@ -64,7 +65,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                             items: [{
                 				    	xtype:'checkbox',
                 			    	fieldLabel: 'Active Plan',
-                			    	name: 'activeplan',
+                			    	name: 'objectStatus',
                 			    	labelWidth: 65,
                 			    	checked: true
                 			    },
@@ -91,16 +92,16 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                                     
                                     items: [{
         		                        xtype: 'combobox',
-        	                        name: 'programCombo',
+        	                        name: 'programCode',
+									store: me.programsStore,
         	                        fieldLabel: '',
         	                        emptyText: 'Specific Program',
-        	                        valueField: 'program',
-        	                        displayField: 'program',
+        	                        valueField: 'code',
+        	                        displayField: 'name',
         	                        mode: 'local',
         	                        typeAhead: true,
         	                        queryMode: 'local',
         	                        allowBlank: true,
-        	                        itemId: 'programCombo',
         	                        width: 250
         	                    },
         	                    {
@@ -109,16 +110,15 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                                 },
         	                    {
         	                        xtype: 'combobox',
-        	                        name: 'divisionCombo',
+        	                        name: 'divisionCode',
+									store: me.divisionsStore,
         	                        fieldLabel: '',
         	                        emptyText: 'Specific Division',
-        	                        valueField: 'division',
-        	                        displayField: 'division',
+        	                        valueField: 'code',
+        	                        displayField: 'name',
         	                        mode: 'local',
         	                        typeAhead: true,
-        	                        queryMode: 'local',
         	                        allowBlank: true,
-        	                        itemId: 'divisionCombo',
         	                        width: 250
         	                    },
         	                    {
@@ -127,16 +127,15 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                                 },
         	                    {
         	                        xtype: 'combobox',
-        	                        name: 'departmentCombo',
+        	                        name: 'departmentCode',
+									store: me.departmentsStore,
         	                        fieldLabel: '',
         	                        emptyText: 'Specific Department',
-        	                        valueField: 'department',
-        	                        displayField: 'department',
+        	                        valueField: 'code',
+        	                        displayField: 'name',
         	                        mode: 'local',
         	                        typeAhead: true,
-        	                        queryMode: 'local',
         	                        allowBlank: true,
-        	                        itemId: 'departmentCombo',
         	                        width: 250
         	                    }
         	                    ]},
@@ -154,57 +153,48 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                             items: [
 				               {
             				        fieldLabel: 'Plan Title',
-            				        name: 'plantitle',
-            				        itemId: 'plantitle',
+            				        name: 'name',
             				        maxLength: 50,
             				        allowBlank:false
             				        
             				    },{
             				        fieldLabel: 'Contact Name',
             				        name: 'contactName',
-            				        itemId: 'contactName',
             				        maxLength: 50,
             				        allowBlank:false
             				        
             				    },{
             				        fieldLabel: 'Contact Title',
             				        name: 'contactTitle',
-            				        itemId: 'contactTitle',
             				        maxLength: 50,
             				        allowBlank:true
             				    },{
             				        fieldLabel: 'Contact Phone',
-            				        name: 'contactphone',
-            				        itemId: 'contactphone',
+            				        name: 'contactPhone',
             				        allowBlank:false
             				    },
             				   {
-            				        fieldLabel: 'Academic',
-            				        name: 'academic',
+            				        fieldLabel: 'Academic Link',
+            				        name: 'academicLink',
             				        allowBlank:true,
-            				        itemId: 'academic'
             				    },{
-            				        fieldLabel: 'Career Data',
-            				        name: 'careerdata',
+            				        fieldLabel: 'Career Link',
+            				        name: 'careerLink',
             				        allowBlank:true,
-            				        itemId: 'careerdata'
             				    },{
             				        fieldLabel: 'Advisor/Coach Notes',
-            				        name: 'coachnotes',
+            				        name: 'contactNotes',
             				        allowBlank:true,
-            				        itemId: 'coachnotes',
             				        xtype: 'textareafield'
             				    },{
             				        fieldLabel: 'Student Notes',
-            				    name: 'studentnotes',
+            				    name: 'studentNotes',
             			        allowBlank:true,
-            			        itemId: 'addressLine1',
             			        xtype: 'textareafield'
                 			    },{
                 			        fieldLabel: 'Academic Goals',
-                			        name: 'academicgoals',
+                			        name: 'academicGoals',
                 			        allowBlank:true,
-                			        itemId: 'academicgoals',
                 			        xtype: 'textareafield'
                 			    }
             			    ]
@@ -221,8 +211,15 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                             
                         }, '-', {
                             xtype: 'button',
-                            itemId: 'cancelButton',
-                            text: 'Cancel'
+                            text: 'Cancel',
+                            cancel: function(){
+								me = this;
+								me.close();
+							},
+							listeners:{
+                            	click: 'cancel',
+								scope: me
+                            }
                         }]
                     
                     }]

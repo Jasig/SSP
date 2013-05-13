@@ -164,24 +164,63 @@ Ext.define('Ssp.service.MapPlanService', {
          }
          me.currentMapPlan.set('planCourses',planCourses);
     }, 
-            
+
+    
     save: function(semesterStores, callbacks, currentMapPlan, view, saveAs ){
 		var me=this;
 		var url = me.getBaseUrl(currentMapPlan.get('personId'));
 	    var success = function( response ){
-	    	var r = Ext.decode(response.responseText);
-	    	callbacks.success(view);
+	    	callbacks.success( response, callbacks.scope );
 	    };
 
 	    var failure = function( response ){
 	    	me.apiProperties.handleError( response );	 
-	    	callbacks.failure(view);
+	    	callbacks.failure( response, callbacks.scope );
 	    };
 		
 	    me.updateCurrentMap(semesterStores);
 	    
 		// save
-		if ((!me.currentMapPlan.get('id') || me.currentMapPlan.get('id') == '') || saveAs )
+		if ((!me.currentMapPlan.get('id') || me.currentMapPlan.get('id') == '') || saveAs || currentMapPlan.get('isTemplate') == true)
+		{	
+			me.currentMapPlan.set('id','');
+			me.apiProperties.makeRequest({
+    			url: url,
+    			method: 'POST',
+    			jsonData: me.currentMapPlan.getSimpleJsonData(),
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});				
+		}else{
+			// update
+    		me.apiProperties.makeRequest({
+    			url: url+'/'+ me.currentMapPlan.get('id'), 
+    			method: 'PUT',
+    			jsonData: me.currentMapPlan.getSimpleJsonData(),
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});	
+		}	
+    },
+    
+    saveTemplate: function(semesterStores, callbacks, currentMapPlan, view, saveAs ){
+		var me=this;
+		var url = me.getBaseUrl(currentMapPlan.get('personId'));
+	    var success = function( response ){
+	    	callbacks.success( response, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	 
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+		
+	    me.updateCurrentMap(semesterStores);
+	    
+		// save
+		if ((!me.currentMapPlan.get('id') || me.currentMapPlan.get('id') == '') || saveAs || currentMapPlan.get('isTemplate') == false )
 		{	
 			me.currentMapPlan.set('id','');
 			me.apiProperties.makeRequest({

@@ -49,6 +49,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.appEventsController.assignEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onShowMain', callBackFunc: me.onShowMain, scope: me});
 		
+		me.appEventsController.assignEvent({eventName: 'onSaveAsTemplatePlan', callBackFunc: me.onSaveAsTemplatePlan, scope: me});
+		me.appEventsController.assignEvent({eventName: 'onSaveTemplatePlan', callBackFunc: me.onSaveTemplatePlan, scope: me});
+		
 		me.appEventsController.assignEvent({eventName: 'onSaveAsMapPlan', callBackFunc: me.onSaveAsMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onPrintMapPlan', callBackFunc: me.onPrintMapPlan, scope: me});
@@ -111,6 +114,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			me.onCreateMapPlan();
 			me.populatePlanStores();
 			me.updateAllPlanHours();
+			me.currentMapPlan.set('isTemplate', true);
 		}
     },
 
@@ -306,10 +310,43 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var me = this;
 		me.getView().setLoading(true);
 		var callbacks = new Object();
-		callbacks.success = me.onSaveCompleteSuccess;
-		callbacks.failure = me.onSaveCompleteFailure;
-		me.mapPlanService.save(me.semesterStores, callbacks, me.currentMapPlan,me.getView(),saveAs);
-		},
+		 var serviceResponses = {
+            failures: {},
+            successes: {},
+            responseCnt: 0,
+            expectedResponseCnt: 1
+        }
+    callbacks.success = me.newServiceSuccessHandler('map', me.onSaveCompleteSuccess, serviceResponses);
+    callbacks.failure = me.newServiceFailureHandler('map', me.onSaveCompleteFailure, serviceResponses);
+    callbacks.scope = me;
+    me.mapPlanService.save(me.semesterStores, callbacks, me.currentMapPlan, me.getView(), saveAs);
+  },
+  
+  onSaveAsTemplatePlan: function(){
+    var me = this;
+    me.saveTemplate(true);
+  },
+  onSaveTemplatePlan: function(){
+    var me = this;
+    me.saveTemplate(false);
+  },  
+  
+  
+  saveTemplate: function(saveAs) {
+    var me = this;
+    me.getView().setLoading(true);
+    var callbacks = new Object();
+    var serviceResponses = {
+            failures: {},
+            successes: {},
+            responseCnt: 0,
+            expectedResponseCnt: 1
+        }
+    callbacks.success = me.newServiceSuccessHandler('map', me.onSaveTemplateCompleteSuccess, serviceResponses);
+    callbacks.failure = me.newServiceFailureHandler('map', me.onSaveTemplateCompleteFailure, serviceResponses);
+    callbacks.scope = me;
+    me.mapPlanService.saveTemplate(me.semesterStores, callbacks, me.currentMapPlan, me.getView(), saveAs);
+  },
 	onShowMain: function(){
     	var me=this;
     	var mainView = Ext.ComponentQuery.query('mainview')[0];
@@ -328,7 +365,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	onSaveCompleteSuccess: function(view){
 		var me = this;
-		Ext.Msg.alert('Your changes have been saved.'); 	
+		Ext.Msg.alert('Your changes have been saved.'); 
+		me.getMapPlanServiceSuccess(serviceResponses);
+		me.currentMapPlan.set("isTemplate", false)
 		view.setLoading(false);
 	},
 	
@@ -337,6 +376,18 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		view.setLoading(false);
 	},	
 
+	 onSaveTemplateCompleteSuccess: function(serviceResponses){
+    var me = this;
+    me.getMapPlanServiceSuccess(serviceResponses);
+    me.currentMapPlan.set("isTemplate", true)
+    Ext.Msg.alert('Your changes have been saved.');   
+    view.setLoading(false);
+  },
+  
+  onSaveTemplateCompleteFailure: function(view){
+    var me = this;
+    view.setLoading(false);
+  },  
 	updateAllPlanHours: function(){
 		var me = this;
 		var parent =  me.getView();
@@ -502,12 +553,18 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		}
 		me.termsStore.removeListener("load", me.onCreateNewMapPlan, me);
 		me.appEventsController.removeEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
-        me.appEventsController.removeEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
+        
 		me.appEventsController.removeEvent({eventName: 'onPrintMapPlan', callBackFunc: me.onPrintMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onShowMapPlanOverView', callBackFunc: me.onShowMapPlanOverView, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onEmailMapPlan', callBackFunc: me.onEmailMapPlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onShowMain', callBackFunc: me.onCreateNewMapPlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onSaveAsMapPlan', callBackFunc: me.onSaveAsMapPlan, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
+		
+		me.appEventsController.removeEvent({eventName: 'onSaveAsTemplatePlan', callBackFunc: me.onSaveAsTemplatePlan, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onSaveTemplatePlan', callBackFunc: me.onSaveTemplatePlan, scope: me});
+
+		  
         me.appEventsController.removeEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadMapPlan, scope: me});
