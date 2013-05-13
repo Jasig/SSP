@@ -46,9 +46,17 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 		from(model);
 	}
 
+	public TemplateTO() {
+		super();
+	}
+
 	@Override
 	public void from(Template model) {
 		super.from(model);
+		this.setIsPrivate(model.getIsPrivate());
+		this.setDepartmentCode(model.getDepartmentCode());
+		this.setDivisionCode(model.getDivisionCode());
+		this.setProgramCode(model.getProgramCode());
 		List<TemplateCourse> templateCourses = model.getTemplateCourses();
 		for (TemplateCourse templateCourse : templateCourses) {
 			this.getTemplateCourses().add(new TemplateCourseTO(templateCourse));

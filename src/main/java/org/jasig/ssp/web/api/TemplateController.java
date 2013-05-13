@@ -153,7 +153,7 @@ public class TemplateController  extends AbstractBaseController {
 	@RequestMapping(value="/summary", method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<TemplateTO> getSummary(
-			final @RequestParam(required = false) Boolean status,
+			final @RequestParam(required = false) Boolean isPrivate,
 			final @RequestParam(required = false) ObjectStatus objectStatus,
 			final @RequestParam(required = false) String divisionCode,
 			final @RequestParam(required = false) String programCode) throws ObjectNotFoundException,
@@ -162,7 +162,7 @@ public class TemplateController  extends AbstractBaseController {
 		final PagingWrapper<Template> data = getService().getAll(
 				SortingAndPaging.createForSingleSortWithPaging(
 						objectStatus == null ? ObjectStatus.ALL : objectStatus, null,
-						null, null, null, null),status,divisionCode,programCode);
+						null, null, null, null),isPrivate,divisionCode,programCode);
 
 		return new PagedResponse<TemplateTO>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));		
@@ -194,7 +194,7 @@ public class TemplateController  extends AbstractBaseController {
 
 		Template model = getFactory().from(obj);
 		
-		model = getService().copyAndSave(model,securityService.currentlyAuthenticatedUser().getPerson());
+		model = getService().save(model);
 
 		if (null != model) {
 			final Template createdModel = getFactory().from(obj);
@@ -294,7 +294,7 @@ public class TemplateController  extends AbstractBaseController {
 			throw new ValidationException(
 					"You submitted without an id to the save method.  Did you mean to create?");
 		}
-
+        
 		if (obj.getId() == null) {
 			obj.setId(id);
 		}

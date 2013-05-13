@@ -18,8 +18,6 @@
  */
 package org.jasig.ssp.dao;
 
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -40,12 +38,11 @@ public class TemplateDao extends AbstractPlanDao<Template> implements
 	@Autowired
 	private transient SecurityService securityService;
 	
-	@SuppressWarnings("unchecked")
 	public PagingWrapper<Template> getAll(
-			SortingAndPaging createForSingleSortWithPaging, Boolean isPrivate,
+			SortingAndPaging sNp, Boolean isPrivate,
 			String divisionCode, String programCode) {
 		
-				Criteria criteria = createCriteria();
+				Criteria criteria = createCriteria(sNp);
 				if(isPrivate != null)
 				{
 					criteria.add(Restrictions.eq("isPrivate", isPrivate));
@@ -54,17 +51,17 @@ public class TemplateDao extends AbstractPlanDao<Template> implements
 						criteria.add(Restrictions.eq("owner", getSecurityService().currentlyAuthenticatedUser()));
 					}
 				}
-				if(StringUtils.isEmpty(programCode))
+				if(!StringUtils.isEmpty(programCode))
 				{
 					criteria.add(Restrictions.eq("programCode", programCode));
 				}
-				if(StringUtils.isEmpty(divisionCode))
+				if(!StringUtils.isEmpty(divisionCode))
 				{
 					criteria.add(Restrictions.eq("divisionCode", divisionCode));
 				}					
 					
-				List<Template> result = criteria.list();
-				return new PagingWrapper<Template>(result.size(), result);
+				return processCriteriaWithStatusSortingAndPaging(criteria,
+				 				sNp);
 	}
 
 	public SecurityService getSecurityService() {

@@ -47,7 +47,7 @@ public class TemplateTOFactoryImpl extends AbstractAuditableTOFactory<TemplateTO
 	public TemplateTOFactoryImpl() {
 		super(TemplateTO.class, Template.class);
 	}
-
+ 
 	@Autowired
 	private transient TemplateDao dao;
 
@@ -81,7 +81,7 @@ public class TemplateTOFactoryImpl extends AbstractAuditableTOFactory<TemplateTO
 		model.setName(tObject.getName());
 		model.setDepartmentCode(tObject.getDepartmentCode());
 		model.setDivisionCode(tObject.getDivisionCode());
-		model.setIsPrivate(tObject.getIsImportant());
+		model.setIsPrivate(tObject.getIsPrivate());
 		model.setProgramCode(tObject.getProgramCode());
 		model.getTemplateCourses().clear();
 		List<TemplateCourseTO> planCourses = tObject.getTemplateCourses();

@@ -21,27 +21,22 @@ package org.jasig.ssp.factory.reference.impl;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.PlanDao;
-import org.jasig.ssp.dao.reference.SelfHelpGuideDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
-import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
 import org.jasig.ssp.factory.reference.PlanCourseTOFactory;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
-import org.jasig.ssp.factory.reference.SelfHelpGuideTOFactory;
 import org.jasig.ssp.factory.reference.TermNoteTOFactory;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
 import org.jasig.ssp.model.TermNote;
-import org.jasig.ssp.model.reference.SelfHelpGuide;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.transferobject.PlanCourseTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.TermNoteTO;
-import org.jasig.ssp.transferobject.reference.SelfHelpGuideTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
