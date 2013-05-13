@@ -4,3 +4,4 @@ catalina.home_IS_UNDEFINED
 
 /src/main/webapp/MyGPS/scripts/mygps
 overlays
+FooController.java
