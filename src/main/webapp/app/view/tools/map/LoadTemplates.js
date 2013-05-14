@@ -20,11 +20,13 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
     extend: 'Ext.window.Window',
     alias: 'widget.loadtemplates',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+	controller: 'Ssp.controller.tool.map.LoadTemplateViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
         programsStore: 'programsStore',
         departmentsStore: 'departmentsStore',
         divisionsStore: 'divisionsStore',
+        store: 'planTemplatesSummaryStore',
     },
     height: 500,
     width: 700,
@@ -79,7 +81,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                     items: [ 
                              {
                                 xtype: 'combobox',
-                                name: 'program',
+                                itemId: 'program',
                                 store: me.programsStore,
                                 fieldLabel: '',
                                 emptyText: 'Specific Program',
@@ -96,7 +98,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                             },
                             {
                                 xtype: 'combobox',
-                                name: 'department',
+                                itemId: 'department',
                                 store: me.departmentsStore,
                                 fieldLabel: '',
                                 emptyText: 'Specific Division',
@@ -109,7 +111,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                             },
                             {
                                 xtype: 'combobox',
-                                name: 'division',
+                                itemId: 'division',
                                 store: me.divisionsStore,
                                 fieldLabel: '',
                                 emptyText: 'Specific Division',
@@ -170,12 +172,6 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                                 allowBlank:true,
                                 labelWidth:100
                             }]},
-             
-                        {
-                                xtype: 'label',
-                                text: 'Double Click to load a template',
-                                padding: '0 0 0 10'
-                            },
                             {
                             xtype: 'gridpanel',
                             title: '',
@@ -185,6 +181,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                             border: true,
                             autoScroll: true,
                             columnLines: true,
+                            store: me.store,
                             columns: [
                             {
                                 text: 'Type',
@@ -192,14 +189,14 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                                 dataIndex: 'type',
                                 sortable: true
                             },{
-                                text: 'Plan Title',
+                                text: 'Template Title',
                                 width: '400',
-                                dataIndex: 'plan',
+                                dataIndex: 'name',
                                 sortable: true
                             }, {
                                 text: 'Date/ Time',
                                 width: '125',
-                                dataIndex: 'date',
+                                dataIndex: 'modifiedDate',
                                 sortable: true,
                                 renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
                                 
@@ -207,12 +204,54 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                                 text: 'Advisor',
                                 width: '100',
                                 sortable: true,
-                                dataIndex: 'advisor'
+                                dataIndex: 'ownerName'
+                                
+                            },
+							{
+                                text: 'dpartment',
+                                width: '100',
+                                sortable: true,
+                                dataIndex: 'departmentCode',
+								hidden: true,
+								hideable:false
+                                
+                            },
+							{
+                                text: 'progrram',
+                                width: '100',
+                                sortable: true,
+                                dataIndex: 'programCode',
+								hidden: true,
+								hideable:false
+                                
+                            },
+							{
+                                text: 'division',
+                                width: '100',
+                                sortable: true,
+                                dataIndex: 'divisionCode',
+								hidden: true,
+								hideable:false
                                 
                             }
                             ]}
             
-            ]
+            ],
+            dockedItems: [{
+                xtype: 'toolbar',
+                dock: 'top',
+                items: [{
+                    xtype: 'button',
+                    itemId: 'openButton',
+                    text: 'Open'
+                    
+                }, '-', {
+                    xtype: 'button',
+                    itemId: 'cancelButton',
+                    text: 'Cancel'
+                }]
+            
+            }]
             
             }]
         });

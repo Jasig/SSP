@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.store.PlanTemplates', {
+Ext.define('Ssp.store.PlanTemplatesSummary', {
     extend: 'Ext.data.Store',
     model: 'Ssp.model.tool.map.Plan',
     mixins: [ 'Deft.mixin.Injectable' ],
@@ -24,10 +24,8 @@ Ext.define('Ssp.store.PlanTemplates', {
         apiProperties: 'apiProperties'
     },
 	constructor: function(){
-		Ext.apply(this, {
-							proxy: this.apiProperties.getProxy(this.apiProperties.getItemUrl('planTemplate')),
-							autoLoad: false
-						});
+		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('templatePlan') + '/summary' ),
+			  autoLoad: true });
 		return this.callParent(arguments);
 	}
 });

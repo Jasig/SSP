@@ -82,6 +82,26 @@ Ext.define('Ssp.service.MapPlanService', {
 			scope: me
 		});    	
     },
+    
+    getTemplateSummary: function(callbacks ){
+		var me=this;
+		var url = me.getTemplateBaseUrl(personId);
+	    var success = function( response, view ){
+			callbacks.success( response, callbacks.scope );
+	    };
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		me.apiProperties.makeRequest({
+			url: url+'/summary', 
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});    	
+    },
 
 	getCurrentSummary: function( personId, callbacks ){
 		var me=this;
@@ -106,6 +126,26 @@ Ext.define('Ssp.service.MapPlanService', {
     getPlan: function( planId, personId, callbacks ){
 		var me=this;
 		var url = me.getBaseUrl(personId);
+	    var success = function( response, view ){
+			callbacks.success( response, callbacks.scope );
+	    };
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		me.apiProperties.makeRequest({
+			url: url+'/'+planId, 
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});    	
+    },
+    
+    getTemplate: function( planId, callbacks ){
+		var me=this;
+		var url = me.getTemplateBaseUrl();
 	    var success = function( response, view ){
 			callbacks.success( response, callbacks.scope );
 	    };
@@ -168,10 +208,7 @@ Ext.define('Ssp.service.MapPlanService', {
             		planCourses[i++] = planCourse;
             })
          }
-		if(!me.currentMapPlan.get('isTemplate'))
-         	me.currentMapPlan.set('planCourses',planCourses);
-		else
-			me.currentMapPlan.set('templateCourses',planCourses);
+         me.currentMapPlan.set('planCourses',planCourses);
     }, 
 
     

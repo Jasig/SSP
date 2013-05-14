@@ -81,7 +81,6 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO> imple
 		}
 		return cloneAndSave;
 	}
-	
 	@Override
 	public Plan save(Plan obj) {
 		//If plan has been marked as active, we must mark all other plans as inactive

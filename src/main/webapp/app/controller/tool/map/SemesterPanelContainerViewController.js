@@ -46,6 +46,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	    me.resetForm();
 
 		me.appEventsController.assignEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadMapPlan, scope: me});
+		me.appEventsController.assignEvent({eventName: 'onLoadTemplatePlan', callBackFunc: me.onLoadTemplatePlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onShowMain', callBackFunc: me.onShowMain, scope: me});
 		
@@ -128,6 +129,17 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.updateAllPlanHours();  
 		me.getView().setLoading(false);
     },
+    
+    onLoadTemplatePlan: function () {
+    	var me = this;
+    	me.currentMapPlan.set("planCourses", me.currentMapPlan.get('templateCourses'));
+    	me.currentMapPlan.set('isTemplate', true);
+		me.onCreateMapPlan();
+		me.populatePlanStores();
+		me.updateAllPlanHours();  
+		me.getView().setLoading(false);
+    },
+    
     getMapPlanServiceFailure: function() {
 		var me = this;
 		me.onCreateNewMapPlan();
@@ -572,6 +584,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
         me.appEventsController.removeEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadMapPlan, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onLoadTemplatePlan', callBackFunc: me.onLoadMapPlan, scope: me});
         
 		return me.callParent( arguments );
     },

@@ -25,6 +25,10 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
 		columnRendererUtils : 'columnRendererUtils',
 		store: 'coursesStore',
 		termsStore: 'termsStore',
+		programs: 'programsStore',
+		tags: 'tagsStore',
+		departments: 'departmentsStore',
+		divisions: 'divisionsStore',
     },
     control: {
     	'program': {
@@ -112,7 +116,11 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
     },
 	init: function() {
 		var me=this;
-		var view = me.getView();		
+		var view = me.getView();
+		me.programs.load();
+		me.divisions.load();
+		me.departments.load();
+		me.tags.load();		
 		if(me.termsStore.getTotalCount() == 0){
 			me.termsStore.addListener("load", me.onTermsStoreLoad, me);
 			me.termsStore.load();
@@ -228,7 +236,7 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
 
 	destroy:function(){
 	    var me=this;
-		
+	    return me.callParent( arguments );
 	}
 	
 });

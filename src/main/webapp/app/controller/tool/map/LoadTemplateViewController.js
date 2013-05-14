@@ -23,10 +23,13 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 		appEventsController: 'appEventsController',
 		formUtils: 'formRendererUtils',
     	currentMapPlan: 'currentMapPlan',
-    	store: 'templateStore',
+    	store: 'planTemplatesSummaryStore',
         personLite: 'personLite',
     	apiProperties: 'apiProperties',
-    	mapPlanService:'mapPlanService'
+    	mapPlanService:'mapPlanService',
+		programsStore: 'programsStore',
+        departmentsStore: 'departmentsStore',
+        divisionsStore: 'divisionsStore',
 
     },
     
@@ -36,59 +39,61 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 		},	
 		'cancelButton': {
 			click: 'onCloseClick'
-		}
+		},
+	   'program': {
+    	   selector: '#program',
+    	   listeners: {
+            select: 'onProgramSelect'
+           }
+        },
+          'department':{
+           selector: '#department',
+           hidden: false,
+           listeners: {
+            select: 'onDepartmentSelect'
+           }
+        },
+         'division':{
+           selector: '#division',
+           listeners: {
+            select: 'onDivisionSelect'
+           }
+        },
+        /*
+        'programCancel':{
+            selector: '#programCancel',
+            hidden: true,
+              listeners: {
+               click: 'onProgramCancelClick'
+              }
+           },
+           
+        'departmentCancel':{
+            selector: '#departmentCancel',
+            hidden: false,
+            listeners: {
+             click: 'onDepartmentCancelClick'
+            }
+         },
+        
+        
+        'divisionCancel':{
+           selector: '#divisionCancel',
+           listeners: {
+            click: 'onDivisionCancelClick'
+           }
+        },*/
+			
 	},
 
 	init: function() {
 		var me=this;
 	    me.resetForm();
-	    
-	    
-		var successFunc = function(response,view){
-			
-	    	var r, records;
-	    	var data=[];
-	    	r = Ext.decode(response.responseText);
-	    	
-	    	// hide the loader
-	    	me.getView().setLoading( false );
-	    	
-	    	if (r != null)
-	    	{
-	    		if(r.results == 0)
-	    		{
-			         Ext.Msg.confirm({
-			 		     title:'Create New Template?',
-			 		     msg: 'No templates have been found for the search criteria.  Create a new one?',
-			 		     buttons: Ext.Msg.YESNO,
-			 		     fn: me.initNewPlan,
-			 		     scope: me
-			 		   });	    			
-	    		}
-	    		Ext.Object.each(r,function(key,value){
-		    		var plans = value;
-		    		Ext.Array.each(plans,function(plan,index){
-		    			if(plan.name)
-		    			data.push(plan);
-		    		},this);
-		    	},this);		    		
-
-	    		me.store.loadData(data);
-	    	}
-		};
-		
-		me.templatePlanUrl = me.apiProperties.getItemUrl('loadTemplates');
-
-    	me.getView().setLoading( true );
-
-		me.apiProperties.makeRequest({
-			url: me.apiProperties.createUrl(me.templatePlanUrl+'/summary'),
-			method: 'GET',
-			successFunc: successFunc 
-		});
-		
-		me.formUtils.reconfigureGridPanel( me.getView().query('gridpanel')[0], me.store);
-	    
+	    me.store.load();
+		//TODO this should be automatic
+		me.programsStore.load();
+		me.departmentsStore.load();
+		me.divisionsStore.load();
 		return me.callParent(arguments);
     },
     resetForm: function() {
@@ -142,5 +147,77 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 	onCloseClick: function(){
 		var me = this;
 		me.getView().hide();
-	},    
+	},
+	
+	 onProgramSelect: function(){
+	        var me=this;
+	        me.handleSelect(me);
+	        var params = {};
+	        me.setParam(params, me.getProgram(), "programCode");
+	        me.doFaceting([me.getTag(), me.getTerm()], params);
+	    },  
+	    
+	    onProgramCancelClick: function(button){
+	        var me=this;
+	        me.getProgram().setValue("");
+	        me.handleSelect(me);
+	    },
+	    
+	    onDepartmentSelect: function(){
+	        var me=this;
+			me.handleSelect(me);
+	    }, 
+	    
+	    onDepartmentCancelClick: function(button){
+	        var me=this;
+	        me.getDepartment().setValue("");
+	        handleSelect(me);
+	    },
+	    
+	    onDivisionSelect: function(){
+	        var me=this;
+			handleSelect(me);
+	    },   
+	    
+	    onDivisionCancelClick: function(button){
+	        var me=this;
+	        me.getDivision().setValue("");
+	        handleSelect(me);
+	    },
+	    
+	    handleSelect: function(me){
+	    	var params = {};
+	    	me.setParam(params, me.getProgram(), 'programCode');
+	    	me.setParam(params, me.getTag(), 'tag');
+	    	me.setParam(params, me.getDepartment(), 'department');
+	    	me.setParam(params, me.getDivision(), 'division');
+	    	me.setParam(params, me.getTerm(), 'termCode');
+	    	me.store.on('load', this.onLoad, this, {single: true});
+	    	me.store.load({params: params});
+	    	me.doFaceting(params);
+	    },
+	    
+	    doFaceting: function(params){
+	    	var me = this;
+	    	var facets = [me.getProgram(), me.getTag()];
+	    	facets.forEach(function(facet){
+	    		facet.getStore().load({params:params});
+	    	});
+	    },
+	    
+	    onLoadComplete: function(){
+	    	//here if we need to rebind stores.
+	    },
+	    
+	    setParam: function(params, field, fieldName){
+	    	if(field.getValue() && field.getValue().length > 0)
+	    		params[fieldName] = field.getValue();
+	    },
+	    
+		
+		destroy:function(){
+		    var me=this;
+		    return me.callParent( arguments );
+		}
+		
 });

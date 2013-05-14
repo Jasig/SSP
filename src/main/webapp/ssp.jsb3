@@ -1025,6 +1025,16 @@
                     "path": "/app/store/external/"
                 },
                 {
+                    "clsName": "Ssp.store.Plan",
+                    "name": "Plan.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.PlanTemplatesSummary",
+                    "name": "PlanTemplatesSummary.js",
+                    "path": "/app/store/"
+                },
+                {
                     "clsName": "Ssp.store.external.Departments",
                     "name": "Departments.js",
                     "path": "/app/store/external/"
@@ -1714,7 +1724,7 @@
                     "name": "SemesterCourse.js",
                     "path": "/app/model/tool/map/"
                 },
-                                {
+                {
                     "clsName": "Ssp.model.tool.map.PlanCourse",
                     "name": "PlanCourse.js",
                     "path": "/app/model/tool/map/"

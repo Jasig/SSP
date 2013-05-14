@@ -91,7 +91,7 @@ public class TermNoteTO extends AbstractAuditableTO<TermNote> {
 		if (obj == null)
 			return false;
 		if(obj.getClass().equals(Term.class)){
-				return ((Term)obj).getClass().equals(termCode);
+				return ((Term)obj).getCode().equals(termCode);
 		}
 			
 		if (getClass() != obj.getClass())
