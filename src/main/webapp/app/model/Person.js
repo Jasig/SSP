@@ -57,6 +57,7 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'referralSources', type: 'auto'},
     		 {name: 'serviceReasons', type: 'auto'},
     		 {name: 'studentIntakeCompleteDate', type: 'date', dateFormat: 'time'},
+    		 {name: 'formattedStudentIntakeCompleteDate', type: 'date', dateFormat: 'c'},
     		 {name: 'currentProgramStatusName', type: 'auto'},
     		 {name: 'registeredTerms', type: 'string'},
     		 {name: 'paymentStatus', type: 'string'},
@@ -222,6 +223,7 @@ Ext.define('Ssp.model.Person', {
      */ 
     setPropsNullForSave: function( jsonData ){
 		delete jsonData.studentIntakeCompleteDate;
+		delete jsonData.formattedStudentIntakeCompleteDate;
 		delete jsonData.currentProgramStatusName;
 
 		if ( jsonData.studentType == "")
