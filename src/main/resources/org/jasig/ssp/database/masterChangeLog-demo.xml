@@ -27,5 +27,6 @@
     <include file="org/jasig/ssp/database/masterChangeLog-qa.xml"/>
     <include file="org/jasig/ssp/database/demoDataChangeset/demo_data.xml" />
     <include file="org/jasig/ssp/database/demoDataChangeset/demo_data_1.xml" />
+	<include file="org/jasig/ssp/database/demoDataChangeset/demo_data_2.xml" />
 
 </databaseChangeLog>
