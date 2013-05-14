@@ -871,7 +871,7 @@ String getDateWithOffSet(dateString, dayOffsetParams, index){
 	cal.setTime(date)
 	if(dayOffsetParams != null)
 		cal.add(Calendar.DAY_OF_MONTH, dayOffsetParams.baseOffsetDays + index%dayOffsetParams.mod);
-	return new Date(cal.getTimeInMillis()).toString();
+	return dateFormat.format(new Date(cal.getTimeInMillis()));
 }
 
 String offSetDate(dateString, dayOffsetParams){
