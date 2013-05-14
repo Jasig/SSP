@@ -93,5 +93,8 @@
 	<!-- Intentionally skipping a swath of changesets for 1.2.1 -->
 	<include file="org/jasig/ssp/database/changesets/000031.xml" />
 	<include file="org/jasig/ssp/database/integrationchangesets/i000017.xml" />
-
+	<include file="org/jasig/ssp/database/integrationchangesets/i000019.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000020.xml" />
+	<!-- Intentionally skipping another swath of changesets for 1.2.1 -->
+	<include file="org/jasig/ssp/database/integrationchangesets/i000029.xml" />
 </databaseChangeLog>
