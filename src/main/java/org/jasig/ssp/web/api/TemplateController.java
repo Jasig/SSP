@@ -270,7 +270,7 @@ public class TemplateController  extends AbstractBaseController {
 		SubjectAndBody output = null;
 		
 		if(templateOutputDataTO.getOutputFormat().equals(TemplateService.OUTPUT_FORMAT_MATRIX)) {
-			output = service.createMatirxOutput(templateOutputDataTO.getTemplate(), institutionName.getValue());
+			output = service.createMatirxOutput(templateOutputDataTO.getNonOutputTO(), institutionName.getValue());
 		} else{
 			output = service.createFullOutput(templateOutputDataTO, institutionName.getValue());
 		}
