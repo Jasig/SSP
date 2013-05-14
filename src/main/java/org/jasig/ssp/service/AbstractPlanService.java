@@ -24,14 +24,27 @@ import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.SubjectAndBody;
+import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
+import org.jasig.ssp.transferobject.AbstractPlanTO;
+import org.jasig.ssp.transferobject.PlanOutputTO;
+import org.jasig.ssp.transferobject.PlanTO;
 
 /**
  * Person service
  */
-public interface AbstractPlanService<T extends AbstractPlan> extends AuditableCrudService<T> {
+public interface AbstractPlanService<T extends AbstractPlan,TO extends AbstractPlanTO<T>> extends AuditableCrudService<T> {
 
+	static final public String OUTPUT_FORMAT_MATRIX = "matrixFormat";
+	
+	static final public String OUTPUT_FULL_MATRIX = "fullFormat";
+	
 	@Override
 	public T get(@NotNull final UUID id) throws ObjectNotFoundException;
 
 	public T copyAndSave(T model, Person newOwner) throws CloneNotSupportedException;
+	
+	SubjectAndBody createMatirxOutput(TO plan, String institutionName) throws ObjectNotFoundException;
+	
+	SubjectAndBody createFullOutput(AbstractPlanOutputTO<T,TO> plan, String institutionName) throws ObjectNotFoundException;
 }

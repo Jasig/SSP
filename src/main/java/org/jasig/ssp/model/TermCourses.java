@@ -23,10 +23,13 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.transferobject.AbstractPlanCourseTO;
+import org.jasig.ssp.transferobject.AbstractPlanTO;
 import org.jasig.ssp.transferobject.PlanCourseTO;
 
-public class TermCourses {
+public class TermCourses<T extends AbstractPlan, TO extends AbstractPlanTO<T>> {
 	
+	@SuppressWarnings("rawtypes")
 	public static class TermCoursesTermDateComparator implements Comparator<TermCourses> {
 		 @Override
 		    public int compare(TermCourses o1, TermCourses o2) {
@@ -39,7 +42,7 @@ public class TermCourses {
 			new TermCoursesTermDateComparator();
 	
 	private Term term;
-	private List<PlanCourseTO> courses;
+	private List<AbstractPlanCourseTO<T,? extends AbstractPlanCourse<T>>> courses;
 	private Float totalCreditHours;
 	private Float totalDevCreditHours;
 	private String contactNotes;
@@ -63,18 +66,18 @@ public class TermCourses {
 	/**
 	 * @return the courses
 	 */
-	public List<PlanCourseTO> getCourses() {
+	public List<AbstractPlanCourseTO<T,? extends AbstractPlanCourse<T>>> getCourses() {
 		return courses;
 	}
 	/**
 	 * @param courses the courses to set
 	 */
-	public void setCourses(List<PlanCourseTO> courses) {
+	public void setCourses(List<AbstractPlanCourseTO<T,? extends AbstractPlanCourse<T>>> courses) {
 		this.courses = courses;
 		updateCreditHours();
 	}
 
-	public void addCourse(PlanCourseTO planCourse){
+	public void addCourse(AbstractPlanCourseTO<T,? extends AbstractPlanCourse<T>> planCourse){
 		courses.add(planCourse);
 		updateCreditHours();
 	}
@@ -82,7 +85,7 @@ public class TermCourses {
 	private void updateCreditHours(){
 		totalCreditHours = new Float(0);
 		totalDevCreditHours = new Float(0);
-		for(PlanCourseTO course:courses){
+		for(AbstractPlanCourseTO<T,? extends AbstractPlanCourse<T>> course:courses){
 			totalCreditHours = totalCreditHours + new Float(course.getCreditHours());
 			if(course.isDev())
 				totalDevCreditHours = totalDevCreditHours + new Float(course.getCreditHours());
@@ -94,7 +97,7 @@ public class TermCourses {
 	public TermCourses(Term term) {
 		super();
 		this.term = term;
-		this.courses = new ArrayList<PlanCourseTO>();
+		this.courses = new ArrayList<AbstractPlanCourseTO<T,? extends AbstractPlanCourse<T>>>();
 	}
 	
 	/**

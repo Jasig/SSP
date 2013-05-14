@@ -19,10 +19,11 @@
 package org.jasig.ssp.service;
 
 import org.jasig.ssp.model.Template;
+import org.jasig.ssp.transferobject.TemplateTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
-public interface TemplateService extends AbstractPlanService<Template> {
+public interface TemplateService extends AbstractPlanService<Template,TemplateTO> {
 
 	PagingWrapper<Template> getAll(SortingAndPaging createForSingleSortWithPaging,
 			Boolean status, String divisionCode, String programCode);

@@ -65,9 +65,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/1/person/{personId}/map/plan")
 public class PlanController  extends AbstractBaseController {
 
-	static final private String OUTPUT_FORMAT_MATRIX = "matrixFormat";
-	static final private String OUTPUT_FULL_MATRIX = "fullFormat";
-
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PlanController.class);
 
@@ -294,11 +291,11 @@ public class PlanController  extends AbstractBaseController {
 		Config institutionName = configService.getByName("inst_name");
 		SubjectAndBody output = null;
 		
-		if(planOutputDataTO.getOutputFormat().equals(OUTPUT_FORMAT_MATRIX)) {
-			output = service.createMapPlanMatirxOutput(planOutputDataTO.getPlan(), institutionName.getValue());
+		if(planOutputDataTO.getOutputFormat().equals(PlanService.OUTPUT_FORMAT_MATRIX)) {
+			output = service.createMatirxOutput(planOutputDataTO.getNonOutputTO(), institutionName.getValue());
 		} else{
 			
-			output = service.createMapPlanFullOutput(planOutputDataTO, institutionName.getValue());
+			output = service.createFullOutput(planOutputDataTO, institutionName.getValue());
 		}
 		
 		return output;

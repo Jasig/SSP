@@ -18,6 +18,9 @@
  */
 package org.jasig.ssp.transferobject;
 
+import java.util.List;
+
+import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.Plan;
 
 /**
@@ -53,6 +56,11 @@ public class PlanLiteTO extends AbstractPlanTO<Plan> {
 	}
 	public void setPersonId(String personId) {
 		this.personId = personId;
+	}
+	@Override
+	public List<? extends AbstractPlanCourseTO<Plan, ? extends AbstractPlanCourse<Plan>>> getCourses() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

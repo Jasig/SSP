@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
@@ -30,6 +31,8 @@ import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.TermCourses;
 import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.service.ReferenceService;
+import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
+import org.jasig.ssp.transferobject.AbstractPlanTO;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
@@ -71,13 +74,13 @@ public interface MessageTemplateService extends
 	SubjectAndBody createEarlyAlertResponseToFacultyMessage(
 			Map<String, Object> messageParams);
 	
-	public SubjectAndBody createMapPlanMatrixOutput(final Person student, final Person owner, final PlanTO plan, final Float totalPlanCreditHours,
-			final List<TermCourses> termCourses,
+	public <T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanMatrixOutput(final Person student, final Person owner, final TO plan, final Float totalPlanCreditHours,
+			final List<TermCourses<T, TO>> courses,
 			String institutionName);
 	
-	public SubjectAndBody createMapPlanFullOutput(final Person student, final Person owner, final PlanOutputTO plan, 
+	public  <T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanFullOutput(final Person student, final Person owner, final AbstractPlanOutputTO<T,TO> plan, 
 			final Float totalPlanCreditHours,
 			final Float totalPlanDevHours,
-			final List<TermCourses> termCourses,
+			final List<TermCourses<T, TO>> termCourses,
 			String institutionName);
 }

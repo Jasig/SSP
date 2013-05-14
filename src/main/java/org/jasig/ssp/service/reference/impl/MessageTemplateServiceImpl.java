@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.jasig.ssp.dao.reference.MessageTemplateDao;
+import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
@@ -37,6 +38,8 @@ import org.jasig.ssp.service.VelocityTemplateService;
 import org.jasig.ssp.service.reference.ConfigException;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
+import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
+import org.jasig.ssp.transferobject.AbstractPlanTO;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
@@ -238,9 +241,9 @@ public class MessageTemplateServiceImpl extends
 	}
 	
 	@Override
-	public SubjectAndBody createMapPlanMatrixOutput(final Person student,final Person owner, final PlanTO plan, 
+	public <T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanMatrixOutput(final Person student, final Person owner, TO plan, 
 			final Float totalPlanCreditHours,
-			final List<TermCourses> termCourses,
+			final List<TermCourses<T, TO>> termCourses,
 			final String institutionName) {
 		
 		final Map<String, Object> messageParams =  addParamsToMapPlan(
@@ -250,25 +253,26 @@ public class MessageTemplateServiceImpl extends
 				totalPlanCreditHours,
 				termCourses,
 				institutionName);
-		
+		 
 		return populateFromTemplate(MessageTemplate.OUTPUT_MAP_PLAN_MATRIX_ID, messageParams);
 	}
 	
 	@Override
-	public SubjectAndBody createMapPlanFullOutput(final Person student,final Person owner, final PlanOutputTO planOutput, 
+	public <T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanFullOutput(final Person student,final Person owner, 
+			final AbstractPlanOutputTO<T, TO> planOutput, 
 			final Float totalPlanCreditHours,
 			final Float totalPlanDevHours,
-			final List<TermCourses> termCourses,
+			final List<TermCourses<T, TO>> termCourses,
 			final String institutionName) {
-
+ 
 		final Map<String, Object> messageParams = addParamsToMapPlan(
 				student,
 				owner, 
-				planOutput.getPlan(), 
+				planOutput.getNonOutputTO(), 
 				totalPlanCreditHours,
 				termCourses,
 				institutionName);
-
+ 
 		messageParams.put("includeCourseDescription", planOutput.getIncludeCourseDescription());
 		messageParams.put("includeFinancialAidInformation", planOutput.getIncludeFinancialAidInformation());
 		messageParams.put("includeHeaderFooter", planOutput.getIncludeHeaderFooter());
@@ -282,12 +286,12 @@ public class MessageTemplateServiceImpl extends
 	}
 	
 	@SuppressWarnings("unused")
-	private Map<String, Object> addParamsToMapPlan(
+	private <T extends AbstractPlan,TO extends AbstractPlanTO<T>> Map<String, Object> addParamsToMapPlan(
 			final Person student,
 			final Person owner, 
-			final PlanTO plan, 
+			final TO plan, 
 			final Float totalPlanCreditHours,
-			final List<TermCourses> termCourses,
+			final List<TermCourses<T,TO>> termCourses,
 			final String institutionName){
 		
 		final Map<String, Object> messageParams = new HashMap<String, Object>(); 

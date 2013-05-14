@@ -31,7 +31,7 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 /**
  * Person service
  */
-public interface PlanService extends AbstractPlanService<Plan> {
+public interface PlanService extends AbstractPlanService<Plan,PlanTO> {
 
 	Plan copyAndSave(Plan plan) throws CloneNotSupportedException;
 
@@ -39,11 +39,6 @@ public interface PlanService extends AbstractPlanService<Plan> {
 
 	PagingWrapper<Plan> getAllForStudent(
 			SortingAndPaging createForSingleSortWithPaging,UUID personId);
-
-	SubjectAndBody createMapPlanMatirxOutput(PlanTO plan, String institutionName) throws ObjectNotFoundException;
-	
-	
-	SubjectAndBody createMapPlanFullOutput(PlanOutputTO plan, String institutionName) throws ObjectNotFoundException;
 	
 
 

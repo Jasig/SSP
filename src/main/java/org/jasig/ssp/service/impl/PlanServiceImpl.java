@@ -18,41 +18,19 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
-import javax.validation.constraints.NotNull;
-
 import org.jasig.ssp.dao.PlanDao;
+import org.jasig.ssp.factory.reference.PlanTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
-import org.jasig.ssp.model.PlanCourse;
-import org.jasig.ssp.model.SubjectAndBody;
-import org.jasig.ssp.model.TermCourses;
-import org.jasig.ssp.model.external.Term;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
-import org.jasig.ssp.service.external.ExternalCourseService;
-import org.jasig.ssp.service.external.TermService;
-import org.jasig.ssp.service.reference.MessageTemplateService;
-import org.jasig.ssp.transferobject.PlanCourseTO;
-import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
-import org.jasig.ssp.transferobject.TermNoteTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.jasig.ssp.factory.reference.PlanTOFactory;
-
-import com.google.common.collect.Lists;
 
 /**
  * Person service implementation
@@ -61,22 +39,12 @@ import com.google.common.collect.Lists;
  */
 @Service
 @Transactional
-public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements PlanService {
+public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO> implements PlanService {
 
 	@Autowired
 	private PlanDao dao;
 	
-	@Autowired
-	private MessageTemplateService messageTemplateService;
-	
-	@Autowired
-	private TermService termService;
-	
-	@Autowired
-	private PersonService personService;
-	
-	@Autowired
-	private ExternalCourseService courseService;
+
 
 	
 	@Autowired
@@ -114,102 +82,102 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 		return cloneAndSave;
 	}
 	   
-	@Override
-	@Transactional(readOnly=true)
-	public SubjectAndBody createMapPlanMatirxOutput(final PlanTO plan, String institutionName) throws ObjectNotFoundException {
-		Person student = personService.get(UUID.fromString(plan.getPersonId()));
-		Person owner = personService.get(UUID.fromString(plan.getOwnerId()));
-		
-		
-		List<TermCourses> courses = collectTermCourses(plan);
-		Float totalPlanCreditHours = calculateTotalPlanHours(courses);
-		
-		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanMatrixOutput(student, owner, plan, totalPlanCreditHours, courses, institutionName);
-		return subjectAndBody;
-	}
-	
-	@Override
-	public SubjectAndBody createMapPlanFullOutput(PlanOutputTO planOutput, String institutionName) throws ObjectNotFoundException
-	{
-		PlanTO plan = planOutput.getPlan();
-		
-		Person student = personService.get(UUID.fromString(plan.getPersonId()));
-		Person owner = personService.get(UUID.fromString(plan.getOwnerId()));
-		
-		
-		List<TermCourses> courses = collectTermCourses(plan);
-		Float totalPlanCreditHours = calculateTotalPlanHours(courses);
-		Float totalPlanDevHours = calculateTotalPlanDevHours(courses);
-		
-		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanFullOutput(student, owner, 
-				planOutput, 
-				totalPlanCreditHours, 
-				totalPlanDevHours, 
-				courses, 
-				institutionName);
-		return subjectAndBody;
-	}
-	
-	private List<TermCourses> collectTermCourses(PlanTO plan) throws ObjectNotFoundException{
-		Map<String,TermCourses> semesterCourses = new HashMap<String, TermCourses>();
-		List<TermNoteTO> termNotes = plan.getTermNotes();
-		List<Term> futureTerms = termService.getCurrentAndFutureTerms().subList(0, 6);
-		for(PlanCourseTO course : plan.getPlanCourses()){				
-			if(!semesterCourses.containsKey(course.getTermCode())){
-				Term term = termService.getByCode(course.getTermCode());
-				
-				
-				TermCourses termCourses = new TermCourses(term);
-				int termNoteIndex = termNotes.indexOf(term);
-				if(termNoteIndex > -1){
-					TermNoteTO termNote = termNotes.get(termNoteIndex);
-					termCourses.setContactNotes(termNote.getContactNotes());
-					termCourses.setStudentNotes(termNote.getStudentNotes());
-					termCourses.setIsImportant(termNote.getIsImportant());
-				}
-				course.setPlanToOffer(getPlanToOfferTerms(course, futureTerms));
-				termCourses.addCourse(course);
-				semesterCourses.put(term.getCode(), termCourses);
-			}else{
-				semesterCourses.get(course.getTermCode()).addCourse(course);
-			}
-		}
-		List<TermCourses> courses =  Lists.newArrayList(semesterCourses.values());
-		Collections.sort(courses, TermCourses.TERM_START_DATE_COMPARATOR);
-		return courses;
-	}
-	
-	private String getPlanToOfferTerms(PlanCourseTO course, List<Term> futureTerms) throws ObjectNotFoundException{
-		
-		String planToOffer = "";
-		Integer offeredTerms = 0;
-		for(Term offeredTerm:futureTerms){
-			if(courseService.validateCourseForTerm(course.getCourseCode(), offeredTerm.getCode())){
-				planToOffer = planToOffer + offeredTerm.getName() + " ";
-				offeredTerms = offeredTerms + 1;
-			}
-			if(offeredTerms >= 4)
-				break;
-		}
-		return planToOffer;
-	}
-	
-	private Float calculateTotalPlanHours(List<TermCourses> courses){
-		Float totalPlanCreditHours = new Float(0);
-		for(TermCourses termCourses : courses){
-			totalPlanCreditHours = totalPlanCreditHours + termCourses.getTotalCreditHours();
-		}
-		return totalPlanCreditHours;
-	}
-	
-	private Float calculateTotalPlanDevHours(List<TermCourses> courses){
-		Float totalPlanCreditHours = new Float(0);
-		for(TermCourses termCourses : courses){
-			totalPlanCreditHours = totalPlanCreditHours +  termCourses.getTotalDevCreditHours();
-		}
-		return totalPlanCreditHours;
-	}
-	
+//	@Override
+//	@Transactional(readOnly=true)
+//	public SubjectAndBody createMapPlanMatirxOutput(final PlanTO plan, String institutionName) throws ObjectNotFoundException {
+//		Person student = personService.get(UUID.fromString(plan.getPersonId()));
+//		Person owner = personService.get(UUID.fromString(plan.getOwnerId()));
+//		
+//		
+//		List<TermCourses> courses = collectTermCourses(plan);
+//		Float totalPlanCreditHours = calculateTotalPlanHours(courses);
+//		
+//		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanMatrixOutput(student, owner, plan, totalPlanCreditHours, courses, institutionName);
+//		return subjectAndBody;
+//	}
+//	
+//	@Override
+//	public SubjectAndBody createMapPlanFullOutput(PlanOutputTO planOutput, String institutionName) throws ObjectNotFoundException
+//	{
+//		PlanTO plan = planOutput.getPlan();
+//		
+//		Person student = personService.get(UUID.fromString(plan.getPersonId()));
+//		Person owner = personService.get(UUID.fromString(plan.getOwnerId()));
+//		
+//		
+//		List<TermCourses> courses = collectTermCourses(plan);
+//		Float totalPlanCreditHours = calculateTotalPlanHours(courses);
+//		Float totalPlanDevHours = calculateTotalPlanDevHours(courses);
+//		
+//		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanFullOutput(student, owner, 
+//				planOutput, 
+//				totalPlanCreditHours, 
+//				totalPlanDevHours, 
+//				courses, 
+//				institutionName);
+//		return subjectAndBody;
+//	}
+//	
+//	private List<TermCourses> collectTermCourses(PlanTO plan) throws ObjectNotFoundException{
+//		Map<String,TermCourses> semesterCourses = new HashMap<String, TermCourses>();
+//		List<TermNoteTO> termNotes = plan.getTermNotes();
+//		List<Term> futureTerms = termService.getCurrentAndFutureTerms().subList(0, 6);
+//		for(PlanCourseTO course : plan.getPlanCourses()){				
+//			if(!semesterCourses.containsKey(course.getTermCode())){
+//				Term term = termService.getByCode(course.getTermCode());
+//				
+//				
+//				TermCourses termCourses = new TermCourses(term);
+//				int termNoteIndex = termNotes.indexOf(term);
+//				if(termNoteIndex > -1){
+//					TermNoteTO termNote = termNotes.get(termNoteIndex);
+//					termCourses.setContactNotes(termNote.getContactNotes());
+//					termCourses.setStudentNotes(termNote.getStudentNotes());
+//					termCourses.setIsImportant(termNote.getIsImportant());
+//				}
+//				course.setPlanToOffer(getPlanToOfferTerms(course, futureTerms));
+//				termCourses.addCourse(course);
+//				semesterCourses.put(term.getCode(), termCourses);
+//			}else{
+//				semesterCourses.get(course.getTermCode()).addCourse(course);
+//			}
+//		}
+//		List<TermCourses> courses =  Lists.newArrayList(semesterCourses.values());
+//		Collections.sort(courses, TermCourses.TERM_START_DATE_COMPARATOR);
+//		return courses;
+//	}
+//	
+//	private String getPlanToOfferTerms(PlanCourseTO course, List<Term> futureTerms) throws ObjectNotFoundException{
+//		
+//		String planToOffer = "";
+//		Integer offeredTerms = 0;
+//		for(Term offeredTerm:futureTerms){
+//			if(courseService.validateCourseForTerm(course.getCourseCode(), offeredTerm.getCode())){
+//				planToOffer = planToOffer + offeredTerm.getName() + " ";
+//				offeredTerms = offeredTerms + 1;
+//			}
+//			if(offeredTerms >= 4)
+//				break;
+//		}
+//		return planToOffer;
+//	}
+//	
+//	private Float calculateTotalPlanHours(List<TermCourses> courses){
+//		Float totalPlanCreditHours = new Float(0);
+//		for(TermCourses termCourses : courses){
+//			totalPlanCreditHours = totalPlanCreditHours + termCourses.getTotalCreditHours();
+//		}
+//		return totalPlanCreditHours;
+//	}
+//	
+//	private Float calculateTotalPlanDevHours(List<TermCourses> courses){
+//		Float totalPlanCreditHours = new Float(0);
+//		for(TermCourses termCourses : courses){
+//			totalPlanCreditHours = totalPlanCreditHours +  termCourses.getTotalDevCreditHours();
+//		}
+//		return totalPlanCreditHours;
+//	}
+//	
 
 	
 	@Override
@@ -221,5 +189,5 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan> implements P
 		}	
 		return super.save(obj);
 	}
-	
+
 }

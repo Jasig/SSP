@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateCourse;
 import org.jasig.ssp.model.TermNote;
@@ -115,6 +116,11 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 			result.add(new TemplateTO(template));
 		}
 		return result;
+	}
+
+	@Override
+	public List<TemplateCourseTO> getCourses() {
+		return templateCourses;
 	}
 
 

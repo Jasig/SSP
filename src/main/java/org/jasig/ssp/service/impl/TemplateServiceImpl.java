@@ -21,6 +21,7 @@ package org.jasig.ssp.service.impl;
 import org.jasig.ssp.dao.TemplateDao;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.service.TemplateService;
+import org.jasig.ssp.transferobject.TemplateTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public  class TemplateServiceImpl extends AbstractPlanServiceImpl<Template> implements TemplateService {
+public  class TemplateServiceImpl extends AbstractPlanServiceImpl<Template,TemplateTO> implements TemplateService {
 
 	@Autowired
 	private transient TemplateDao dao;

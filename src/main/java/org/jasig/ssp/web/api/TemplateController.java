@@ -20,13 +20,16 @@ package org.jasig.ssp.web.api;
 
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.TemplateTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Template;
+import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -37,6 +40,7 @@ import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.TemplateOutputTO;
 import org.jasig.ssp.transferobject.TemplateTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -52,7 +56,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+ 
 @Controller
 @RequestMapping("/1/reference/map/template")
 public class TemplateController  extends AbstractBaseController {
@@ -64,7 +68,7 @@ public class TemplateController  extends AbstractBaseController {
 	protected Logger getLogger() {
 		return LOGGER;
 	}
-	
+	 
 	@Autowired
 	private TemplateService service;
 	
@@ -100,7 +104,7 @@ public class TemplateController  extends AbstractBaseController {
 	 *             If specified object could not be found.
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
-	 */
+	 */ 
 	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
@@ -138,7 +142,7 @@ public class TemplateController  extends AbstractBaseController {
 		Template model = getService().get(id);
 		return new TemplateTO(model);
 	}	
-
+ 
 	/**
 	 * Retrieves the specified list from persistent storage.  
 	 * 
@@ -167,6 +171,7 @@ public class TemplateController  extends AbstractBaseController {
 		return new PagedResponse<TemplateTO>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));		
 	}
+	
 	
 	/**
 	 * Persist a new instance of the specified object.
@@ -205,29 +210,29 @@ public class TemplateController  extends AbstractBaseController {
 		return null;
 	}
 	
-//	/**
-//	 * Returns an html page valid for printing
-//	 * <p>
-//	 *
-//	 * 
-//	 * @param obj
-//	 *            instance to print.
-//	 * @return html text strem
-//	 * @throws ObjectNotFoundException
-//	 *             If specified object could not be found.
-//	 */
-//	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
-//	@RequestMapping(value = "/print", method = RequestMethod.POST)
-//	public @ResponseBody
-//	String print(final HttpServletResponse response,
-//			 @RequestBody final PlanOutputTO planOutputDataTO) throws ObjectNotFoundException {
-//
-//		SubjectAndBody message = getOutput(planOutputDataTO);
-//		if(message != null)
-//			return message.getBody();
-//		
-//		return null;
-//	}
+	/**
+	 * Returns an html page valid for printing
+	 * <p>
+	 *
+	 * 
+	 * @param obj
+	 *            instance to print.
+	 * @return html text strem
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
+	@RequestMapping(value = "/print", method = RequestMethod.POST)
+	public @ResponseBody
+	String print(final HttpServletResponse response,
+			 @RequestBody final TemplateOutputTO planOutputDataTO) throws ObjectNotFoundException {
+
+		SubjectAndBody message = getOutput(planOutputDataTO);
+		if(message != null)
+			return message.getBody();
+		
+		return null;
+	}
 	
 //	
 //	/**
@@ -258,21 +263,22 @@ public class TemplateController  extends AbstractBaseController {
 //		return "Map Plan has been queued.";
 //	}
 //	
-//	private SubjectAndBody getOutput(PlanOutputTO planOutputDataTO) throws ObjectNotFoundException{
-//		Config institutionName = configService.getByName("inst_name");
-//		SubjectAndBody output = null;
-//		
-//		if(planOutputDataTO.getOutputFormat().equals(OUTPUT_FORMAT_MATRIX)) {
-//			output = service.createMapPlanMatirxOutput(planOutputDataTO.getPlan(), institutionName.getValue());
-//		} else{
-//			output = service.createMapPlanFullOutput(planOutputDataTO, institutionName.getValue());
-//		}
-//		
-//		return output;
-//	}
+	@SuppressWarnings("unchecked")
+	private SubjectAndBody getOutput(TemplateOutputTO templateOutputDataTO) throws ObjectNotFoundException{
+		Config institutionName = configService.getByName("inst_name");
+		SubjectAndBody output = null;
+		
+		if(templateOutputDataTO.getOutputFormat().equals(TemplateService.OUTPUT_FORMAT_MATRIX)) {
+			output = service.createMatirxOutput(templateOutputDataTO.getTemplate(), institutionName.getValue());
+		} else{
+			output = service.createFullOutput(templateOutputDataTO, institutionName.getValue());
+		}
+		
+		return output;
+	}
 
 	/**
-	 * Persist any changes to the plan instance.
+	 * Persist any changes to the template instance.
 	 * 
 	 * @param id
 	 *            Explicit id to the instance to persist.
@@ -298,8 +304,8 @@ public class TemplateController  extends AbstractBaseController {
 		if (obj.getId() == null) {
 			obj.setId(id);
 		}
-		final Template oldPlan = getService().get(id);
-		final Person oldOwner = oldPlan.getOwner();
+		final Template oldTemplate = getService().get(id);
+		final Person oldOwner = oldTemplate.getOwner();
 		
 		SspUser currentUser = getSecurityService().currentlyAuthenticatedUser();
 		
@@ -308,19 +314,19 @@ public class TemplateController  extends AbstractBaseController {
 		if(currentUser.getPerson().getId().equals(oldOwner.getId()))
 		{
 			final Template model = getFactory().from(obj);
-			Template savedPlan = getService().save(model);
+			Template savedTemplate = getService().save(model);
 			if (null != model) {
-				return new TemplateTO(savedPlan);
+				return new TemplateTO(savedTemplate);
 			}
 		}
 		else
 		{
 			obj.setId(null);
 			Template model = getFactory().from(obj);
-			final Template clonedPlan = getService().copyAndSave(model,securityService.currentlyAuthenticatedUser().getPerson());
+			final Template clonedTemplate = getService().copyAndSave(model,securityService.currentlyAuthenticatedUser().getPerson());
 
-			if (null != clonedPlan) {
-				return new TemplateTO(clonedPlan);
+			if (null != clonedTemplate) {
+				return new TemplateTO(clonedTemplate);
 			}
 		}
 		return null;

@@ -38,7 +38,7 @@ public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 	
 	private String personId;
 
-	private String planToOffer;
+
 	
 	
 
@@ -66,19 +66,5 @@ public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 
 	public void setPersonId(String personId) {
 		this.personId = personId;
-	}
-	
-	/**
-	 * @return the planToOffer
-	 */
-	public String getPlanToOffer() {
-		return planToOffer;
-	}
-
-	/**
-	 * @param planToOffer the planToOffer to set
-	 */
-	public void setPlanToOffer(String planToOffer) {
-		this.planToOffer = planToOffer;
 	}
 }

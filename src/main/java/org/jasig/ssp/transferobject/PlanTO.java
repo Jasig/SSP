@@ -21,6 +21,7 @@ package org.jasig.ssp.transferobject;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
 import org.jasig.ssp.model.TermNote;
@@ -70,8 +71,12 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 	public List<PlanCourseTO> getPlanCourses() {
 		return planCourses;
 	}
-	public void sePlantCourses(List<PlanCourseTO> planCourses) {
+	public void setPlantCourses(List<PlanCourseTO> planCourses) {
 		this.planCourses = planCourses;
+	}
+	@Override
+	public List<PlanCourseTO> getCourses() {
+		return planCourses;
 	}
 
 }

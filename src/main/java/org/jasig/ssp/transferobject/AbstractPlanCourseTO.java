@@ -51,6 +51,8 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 	private Boolean isDev;
 
 	private Integer orderInTerm;
+	
+	private String planToOffer;
 
 	/**
 	 * Empty constructor.
@@ -217,6 +219,14 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 	 */
 	public Boolean getIsDev() {
 		return isDev;
+	}
+
+	public String getPlanToOffer() {
+		return planToOffer;
+	}
+
+	public void setPlanToOffer(String planToOffer) {
+		this.planToOffer = planToOffer;
 	}
 
 }

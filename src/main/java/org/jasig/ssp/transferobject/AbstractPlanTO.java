@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jasig.ssp.model.AbstractPlan;
+import org.jasig.ssp.model.AbstractPlanCourse;
 
 public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 		AbstractAuditableTO<T> implements TransferObject<T> {
@@ -82,7 +83,10 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 		this.setIsFinancialAid(model.getIsFinancialAid());
 		this.setIsImportant(model.getIsImportant());
 		this.setStudentNotes(model.getStudentNotes());
+		
 	}
+	
+	public abstract List<? extends AbstractPlanCourseTO<T,? extends AbstractPlanCourse<T>>> getCourses();
 
 	public String getName() {
 		return name;
