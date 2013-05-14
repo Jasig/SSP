@@ -139,16 +139,6 @@
                     "path": "/app/store/"
                 },
                 {
-                    "clsName": "Ssp.store.Plan",
-                    "name": "Plan.js",
-                    "path": "/app/store/"
-                },
-                {
-                    "clsName": "Ssp.store.PlanTemplates",
-                    "name": "PlanTemplates.js",
-                    "path": "/app/store/"
-                },
-                {
                     "clsName": "Ssp.model.reference.DisabilityStatus",
                     "name": "DisabilityStatus.js",
                     "path": "/app/model/reference/"
@@ -1719,8 +1709,6 @@
                     "name": "EarlyAlertResponse.js",
                     "path": "/app/model/tool/earlyalert/"
                 },
-               
-                
                 {
                     "clsName": "Ssp.model.tool.map.SemesterCourse",
                     "name": "SemesterCourse.js",
@@ -1735,6 +1723,16 @@
                     "clsName": "Ssp.model.tool.map.Plan",
                     "name": "Plan.js",
                     "path": "/app/model/tool/map/"
+                },
+                {
+                    "clsName": "Ssp.store.Plan",
+                    "name": "Plan.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.PlanTemplates",
+                    "name": "PlanTemplates.js",
+                    "path": "/app/store/"
                 },
                 {
                     "clsName": "Ssp.model.tool.map.TermNote",
