@@ -149,11 +149,6 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 		return totalPlanCreditHours;
 	}
 
-	private List<TermCourses<T, TO>> collectTermCourses(PlanTO plan) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	private Float calculateTotalPlanHours(List<TermCourses<T,TO>> courses) {
 		Float totalPlanCreditHours = new Float(0);
 		for(TermCourses<T,TO> termCourses : courses){
@@ -161,7 +156,6 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 		}
 		return totalPlanCreditHours;
 	}
-	
 
 	private List<TermCourses<T,TO>> collectTermCourses(TO plan) throws ObjectNotFoundException {
 		Map<String,TermCourses<T,TO>> semesterCourses = new HashMap<String, TermCourses<T,TO>>();

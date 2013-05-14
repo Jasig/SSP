@@ -25,6 +25,7 @@ import javax.validation.Valid;
 
 import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.TemplateTOFactory;
+import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
@@ -234,35 +235,35 @@ public class TemplateController  extends AbstractBaseController {
 		return null;
 	}
 	
-//	
-//	/**
-//	 * Returns an html page valid for printing
-//	 * <p>
-//	 *
-//	 * 
-//	 * @param obj
-//	 *            instance to print.
-//	 * @return html text strem
-//	 * @throws ObjectNotFoundException
-//	 *             If specified object could not be found.
-//	 * @throws SendFailedException 
-//	 */
-//	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
-//	@RequestMapping(value = "/email", method = RequestMethod.POST)
-//	public @ResponseBody
-//	String email(final HttpServletResponse response,
-//			 @RequestBody final PlanOutputTO planOutputDataTO) throws ObjectNotFoundException {
-//		SubjectAndBody messageText = getOutput(planOutputDataTO);
-//		if(messageText == null)
-//			return null;
-//
-//	    Message message = messageService.createMessage(planOutputDataTO.getEmailTo(), 
-//							planOutputDataTO.getEmailCC(),
-//							messageText);
-//		
-//		return "Map Plan has been queued.";
-//	}
-//	
+	
+	/**
+	 * Returns an html page valid for printing
+	 * <p>
+	 *
+	 * 
+	 * @param obj
+	 *            instance to print.
+	 * @return html text strem
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws SendFailedException 
+	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
+	@RequestMapping(value = "/email", method = RequestMethod.POST)
+	public @ResponseBody
+	String email(final HttpServletResponse response,
+			 @RequestBody final TemplateOutputTO planOutputDataTO) throws ObjectNotFoundException {
+		SubjectAndBody messageText = getOutput(planOutputDataTO);
+		if(messageText == null)
+			return null;
+
+	   messageService.createMessage(planOutputDataTO.getEmailTo(), 
+							planOutputDataTO.getEmailCC(),
+							messageText);
+		
+		return "Map Plan has been queued.";
+	}
+	
 	@SuppressWarnings("unchecked")
 	private SubjectAndBody getOutput(TemplateOutputTO templateOutputDataTO) throws ObjectNotFoundException{
 		Config institutionName = configService.getByName("inst_name");
