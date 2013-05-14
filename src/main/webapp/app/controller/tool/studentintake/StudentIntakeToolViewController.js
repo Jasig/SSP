@@ -461,10 +461,10 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 						
 			// date saved as null is ok if using External Data Sync Routine
 			// and the date will not validate because the date field is disabled under
-			// this mode. See SSPConfig and studentintake.PersonalViewController for additional detail.  
+			// this mode. See SSPConfig and studentintake.PersonalViewController for additional detail.
+			var origBirthDate = intakeData.person.birthDate;
 			if (intakeData.person.birthDate != null)
 			{
-				// Restore orig after save??? really should be taking copies of *.data above, i guess
 				intakeData.person.birthDate = me.formUtils.toJSONStringifiableDate(intakeData.person.birthDate);
 			}
 
@@ -494,8 +494,14 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			me.getView().setLoading( true );
 			
 			me.service.save(me.personLite.get('id'), intakeData, {
-				success: me.saveStudentIntakeSuccess,
-				failure: me.saveStudentIntakeFailure,
+				success: function(r, scope) {
+					intakeData.person.birthDate = origBirthDate;
+					me.saveStudentIntakeSuccess(r,scope);
+				},
+				failure: function(r, scope) {
+					intakeData.person.birthDate = origBirthDate;
+					me.saveStudentIntakeFailure(r,scope);
+				},
 				scope: me
 			});
 
