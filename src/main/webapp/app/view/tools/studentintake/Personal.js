@@ -56,8 +56,16 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				       items: [{
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Intake Completion Date',
-				        name: 'studentIntakeCompleteDate',
-				        renderer: Ext.util.Format.dateRenderer('m/d/Y')
+				        name: 'formattedStudentIntakeCompleteDate',
+				        renderer: Ext.util.Format.dateRenderer('m/d/Y'),
+				        listeners: {
+				            render: function(field){
+				                Ext.create('Ext.tip.ToolTip',{
+				                    target: field.getEl(),
+				                    html: 'This is the date on which intake data for this student was most recently received. It is shown in institution-local time. E.g. for a May 9, 11pm submission on the US west coast to an east coast school, this would display the "next" day, i.e. May 10.'
+				                });
+				            }
+				        }
 				    },{
 				        fieldLabel: 'First Name',
 				        name: 'firstName',

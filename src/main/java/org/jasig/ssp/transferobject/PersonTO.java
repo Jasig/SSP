@@ -29,6 +29,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.model.ObjectStatus;
@@ -48,6 +49,8 @@ import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 
 import com.google.common.collect.Lists;
+
+import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.collections.Pair;
 
 /**
@@ -612,6 +615,13 @@ public class PersonTO // NOPMD
 			final Date studentIntakeCompleteDate) {
 		this.studentIntakeCompleteDate = (studentIntakeCompleteDate == null ? null
 				: new Date(studentIntakeCompleteDate.getTime()));
+	}
+
+	@JsonProperty
+	@JsonSerialize(using = DateOnlySerializer.class)
+	public Date getFormattedStudentIntakeCompleteDate() {
+		Date timestamp = getStudentIntakeCompleteDate();
+		return timestamp == null ? null : DateTimeUtils.midnightOn(timestamp);
 	}
 
 	public String getStrengths() {
