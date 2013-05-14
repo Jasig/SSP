@@ -190,9 +190,8 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	/**
 	 * Birth date
 	 */
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@Column(name = "birth_date")
-	@Past
 	private Date birthDate;
 
 	/**

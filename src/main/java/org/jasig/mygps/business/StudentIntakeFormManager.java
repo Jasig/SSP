@@ -77,7 +77,9 @@ import org.jasig.ssp.service.reference.MaritalStatusService;
 import org.jasig.ssp.service.reference.StudentStatusService;
 import org.jasig.ssp.service.reference.VeteranStatusService;
 import org.jasig.ssp.service.tool.PersonToolService;
+import org.jasig.ssp.transferobject.jsonserializer.DateTimeRepresentation;
 import org.jasig.ssp.util.SspStringUtils;
+import org.jasig.ssp.util.SspTimeZones;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -404,8 +406,7 @@ public class StudentIntakeFormManager { // NOPMD
 				SECTION_PERSONAL_QUESTION_BIRTHDATE_ID)
 				.setValue(
 						student.getBirthDate() == null ? null
-								: new SimpleDateFormat(
-										"MM/dd/yyyy", Locale.US).format(student
+								: newBirthDateFormatter().format(student
 										.getBirthDate()));
 
 		// School Email
@@ -957,7 +958,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		try {
 			student.setBirthDate(birthDateQuestion.getValue() == null ? null
-					: new SimpleDateFormat("MM/dd/yyyy", Locale.US)
+					: newBirthDateFormatter()
 							.parse(birthDateQuestion.getValue()));
 		} catch (final ParseException pe) {
 			// just leave the birthDate alone
@@ -1603,6 +1604,10 @@ public class StudentIntakeFormManager { // NOPMD
 		student.setStudentIntakeCompleteDate(new Date());
 
 		return personService.save(student);
+	}
+
+	private SimpleDateFormat newBirthDateFormatter() {
+		return DateTimeRepresentation.newDateFormatter("MM/dd/yyyy", Locale.US);
 	}
 
 	private FormSectionTO buildConfidentialitySection()

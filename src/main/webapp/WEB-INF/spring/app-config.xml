@@ -103,10 +103,12 @@
 	<bean id="uuidCustomType" class="org.jasig.ssp.util.uuid.UUIDCustomTypeSetup"
 		init-method="initSettings" />
 
+	<bean id="sspTimeZones" class="org.jasig.ssp.util.SspTimeZones" />
+
 	<!-- Hibernate Session Factory -->
 	<bean id="sessionFactory"
 		class="org.jasig.ssp.util.hibernate.TypeRegistryOverridingLocalSessionFactoryBean"
-		depends-on="liquibase,uuidCustomType">
+		depends-on="sspTimeZones,liquibase,uuidCustomType">
 		<property name="dataSource" ref="sspDataSource" />
 		<property name="packagesToScan" value="org.jasig.ssp.model" />
 		<property name="entityInterceptor">
@@ -125,9 +127,12 @@
 			<list>
 				<bean class="org.jasig.ssp.util.hibernate.ConfigurableTimestampType">
 					<constructor-arg type="org.hibernate.type.descriptor.sql.TimestampTypeDescriptor">
-						<bean class="org.jasig.ssp.util.hibernate.ConfigurableTimestampTypeDescriptor">
-							<constructor-arg type="java.lang.String" value="#{configProperties.db_time_zone}" />
-						</bean>
+						<bean class="org.jasig.ssp.util.hibernate.SspTimestampTypeDescriptor" />
+					</constructor-arg>
+				</bean>
+				<bean class="org.jasig.ssp.util.hibernate.ConfigurableDateType">
+					<constructor-arg type="org.hibernate.type.descriptor.sql.DateTypeDescriptor">
+						<bean class="org.jasig.ssp.util.hibernate.SspDateTypeDescriptor" />
 					</constructor-arg>
 				</bean>
 			</list>

@@ -464,8 +464,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			// this mode. See SSPConfig and studentintake.PersonalViewController for additional detail.  
 			if (intakeData.person.birthDate != null)
 			{
-				// account for date offset
-				intakeData.person.birthDate = me.formUtils.fixDateOffset( intakeData.person.birthDate );			
+				// Restore orig after save??? really should be taking copies of *.data above, i guess
+				intakeData.person.birthDate = me.formUtils.toJSONStringifiableDate(intakeData.person.birthDate);
 			}
 
 			// cleans properties that will be unable to be saved if not null
