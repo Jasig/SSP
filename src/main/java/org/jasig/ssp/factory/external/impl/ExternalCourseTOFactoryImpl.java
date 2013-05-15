@@ -53,7 +53,6 @@ public class ExternalCourseTOFactoryImpl
 	@Override
 	public ExternalCourse from(final ExternalCourseTO tObject) throws ObjectNotFoundException {
 		final ExternalCourse model = super.from(tObject);
-
 		model.setCode(tObject.getCode());
 		model.setDescription(tObject.getDescription());
 		model.setFormattedCourse(tObject.getFormattedCourse());

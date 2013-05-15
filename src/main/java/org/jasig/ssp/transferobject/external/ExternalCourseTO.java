@@ -37,6 +37,8 @@ public class ExternalCourseTO implements ExternalDataTO<ExternalCourse> {
 	private Integer minCreditHours;
 	
 	private Boolean isDev;
+	
+	private String tags;
 
 	public ExternalCourseTO() {
 		super();
@@ -121,6 +123,14 @@ public class ExternalCourseTO implements ExternalDataTO<ExternalCourse> {
 
 	public void setIsDev(Boolean isDev) {
 		this.isDev = isDev;
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
 	}
 
 

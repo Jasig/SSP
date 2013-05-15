@@ -25,6 +25,7 @@ import java.util.UUID;
 import org.jasig.ssp.factory.external.ExternalCourseTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.external.ExternalCourse;
+import org.jasig.ssp.model.reference.Tag;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.external.ExternalCourseService;
@@ -109,7 +110,17 @@ public class ExternalCourseController extends AbstractExternalController<Externa
 		if (model == null) {
 			return null;
 		}
-		return new ExternalCourseTO(model);
+		ExternalCourseTO externalCourseTO = new ExternalCourseTO(model);
+		
+		//Kludge:  for the sake of implementation time we are pivoting these tags on the client side.  
+		List<Tag> tags = service.getAllTagsForCourse(code);
+		StringBuilder tagBuilder = new StringBuilder();
+		for (Tag tag : tags) {
+			tagBuilder.append(tag.getCode()+" ");
+		}
+		//end Kludge.
+		externalCourseTO.setTags(tagBuilder.toString().trim());
+		return externalCourseTO;
 	}
 	
 	@RequestMapping(value = "/validateTerm", method = RequestMethod.GET)

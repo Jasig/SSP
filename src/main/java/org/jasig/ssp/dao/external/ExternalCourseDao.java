@@ -29,6 +29,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.external.ExternalCourse;
+import org.jasig.ssp.model.reference.Tag;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -59,6 +60,11 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Tag> getTagsForCourse(String code) {
+		String getTagsForCourseBaseQuery = "select distinct tag from Tag tag, ExternalCourseTag ect where tag.code = ect.tag and ect.courseCode = :courseCode";
+		return createHqlQuery(getTagsForCourseBaseQuery).setString("courseCode", code).list();
+	}
 	public Boolean validateCourseForTerm(String code, String termCode) {
 		String baseValidateCourseHqlQuery = "from ExternalCourseTerm ect where ect.courseCode = :courseCode and ect.termCode = :termCode";
 		return createHqlQuery(baseValidateCourseHqlQuery)

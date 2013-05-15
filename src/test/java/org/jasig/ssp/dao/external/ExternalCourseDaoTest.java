@@ -25,6 +25,7 @@ import static org.junit.Assert.fail;
 import java.util.List;
 
 import org.jasig.ssp.model.external.ExternalCourse;
+import org.jasig.ssp.model.reference.Tag;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,6 +59,13 @@ public class ExternalCourseDaoTest {
 		courses = dao.getAll();
 		assertEquals(20, courses.size());
 	}
+	
+	@Test
+	public void testGetTags() {
+		List<Tag> tags = dao.getTagsForCourse("MATH-101");
+		assertEquals(1, tags.size());
+	}
+	
 	
 	public void testSearch() {
 		List<ExternalCourse> courses = null;

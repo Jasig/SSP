@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.jasig.ssp.dao.external.ExternalCourseDao;
 import org.jasig.ssp.model.external.ExternalCourse;
+import org.jasig.ssp.model.reference.Tag;
 import org.jasig.ssp.service.external.ExternalCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,5 +61,8 @@ public class ExternalCourseServiceImpl extends AbstractExternalReferenceDataServ
 		return dao.search(programCode,tag,termCode);
 	}
 
-
+	@Override
+	public List<Tag> getAllTagsForCourse(String courseCode) {
+		return dao.getTagsForCourse(courseCode);
+	}
 }
