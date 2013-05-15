@@ -163,7 +163,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 			me.getPrintPlanButton().hide();
 			me.getEmailPlanButton().hide();
        	} else {
-			me.currentMapPlan.populateFromGenericObject(Ext.decode(mapResponse.responseText));
+			me.currentMapPlan.loadFromServer(Ext.decode(mapResponse.responseText));
 			var lastTerm = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(me.currentMapPlan))[0];
 	        me.getOnPlanField().setValue("Plan Exists.")
 	        me.getMapNameField().setValue(me.currentMapPlan.get("name")),

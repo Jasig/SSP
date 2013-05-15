@@ -111,7 +111,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				me.allPlansPopUp = Ext.create('Ssp.view.tools.map.LoadPlans',{hidden:true,onInit:true});
 			me.allPlansPopUp.show();
        	} else {
-			me.currentMapPlan.populateFromGenericObject(Ext.decode(mapResponse.responseText));
+			me.currentMapPlan.loadFromServer(Ext.decode(mapResponse.responseText));
 			if(isTemplate){
 				me.currentMapPlan.set("planCourses", me.currentMapPlan.get('templateCourses'));
 			}

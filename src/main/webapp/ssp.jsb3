@@ -1025,16 +1025,6 @@
                     "path": "/app/store/external/"
                 },
                 {
-                    "clsName": "Ssp.store.Plan",
-                    "name": "Plan.js",
-                    "path": "/app/store/"
-                },
-                {
-                    "clsName": "Ssp.store.PlanTemplatesSummary",
-                    "name": "PlanTemplatesSummary.js",
-                    "path": "/app/store/"
-                },
-                {
                     "clsName": "Ssp.store.external.Departments",
                     "name": "Departments.js",
                     "path": "/app/store/external/"
@@ -1753,6 +1743,16 @@
                     "clsName": "Ssp.model.tool.map.PlanOutputData",
                     "name": "PlanOutputData.js",
                     "path": "/app/model/tool/map/"
+                },
+                {
+                    "clsName": "Ssp.store.Plan",
+                    "name": "Plan.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.PlanTemplatesSummary",
+                    "name": "PlanTemplatesSummary.js",
+                    "path": "/app/store/"
                 },
                 {
                     "clsName": "Ssp.model.tool.journal.JournalEntry",

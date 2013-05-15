@@ -103,7 +103,7 @@ set body = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http
 			#end
 			#if("$!termCourse.contactNotes" != "" || "$!termCourse.studentNotes" != "")
 			<tr>
-				<td colspan="2" style="padding-top: 5px; padding-top: 5px; padding-left:10px; padding-right:10px;border-top:1px solid #ABABAB;">
+				<td colspan="2" style="padding-top: 5px; padding-bottom: 5px; padding-left:10px; padding-right:10px;border-top:1px solid #ABABAB;">
 					#if("$termCourse.contactNotes" != "")
 					<span style="color:#ABABAB"><strong>Advisor Notes:</strong></span> $termCourse.contactNotes
 					#end
@@ -126,11 +126,11 @@ set body = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http
 	#if("$!planContactNotes" != "" || "$!planStudentNotes" != "")
 		<p style="padding-left:20px;margin-top:15px">
 		#if("$!planContactNotes" != "")
-			<span style="color:#ABABAB"><strong>Notes to student:</strong></span>$!planContactNotes</span>
+			<span style="color:#ABABAB"><strong>Advisor Notes:</strong></span>&nbsp;&nbsp;&nbsp;$!planContactNotes
 		#end
 		#if("$!planStudentNotes" != "")
 			<span style="line-height:20px">&nbsp;<br></span>
-			<span style="color:#ABABAB"><strong>Student notes:</strong></span> $!planStudentNotes
+			<span style="color:#ABABAB"><strong>Student notes:</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;$!planStudentNotes
 		#end
 		</p>
 	#end

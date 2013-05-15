@@ -155,6 +155,19 @@ Ext.define('Ssp.model.tool.map.Plan', {
 				me.set('modifiedDate',null);
 			},
 			
+	loadFromServer : function(objectData){
+		var me = this;
+		me.populateFromGenericObject( objectData );
+		var termNotes = me.get('termNotes')
+		var recordTermNotes = [];
+		if(termNotes && termNotes.length > 0)
+		termNotes.forEach(function(termNote){
+			var recordTermNote = new Ssp.model.tool.map.TermNote();
+			recordTermNote.populateFromGenericObject(termNote);
+			recordTermNotes.push(recordTermNote);
+		})
+		me.set('termNotes', recordTermNotes);
+	}, 		
 	getSimpleJsonData: function(){
 		var me = this;
 		var simpleData = {};
