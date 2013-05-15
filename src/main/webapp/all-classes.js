@@ -26175,6 +26175,519 @@ Ext.define('Ssp.controller.admin.crg.AssociateChallengeReferralsAdminViewControl
  * specific language governing permissions and limitations
  * under the License.
  */
+Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentTargetViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	store: 'challengeReferralsStore',
+    	caseloadService: 'caseloadService',
+    	formUtils: 'formRendererUtils',
+    	model: 'currentChallengeReferral',
+    	reassignCaseloadStore: 'reassignCaseloadStore',
+        caseloadStore: 'caseloadStore',
+    	appEventsController: 'appEventsController'
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'editreferral',
+        coachStore: 'coachesStore',
+        reassignCaseloadStore: 'reassignCaseloadStore',
+    	formToDisplay: 'caseloadreassignment',
+    	containerToLoadInto: 'adminforms'
+    },
+    control: {
+		'removeButton': {
+			click: 'onRemove'
+		},   
+		'saveButton': {
+			click: 'onSave'
+		}		
+    },       
+	init: function() {
+		var me=this;
+		me.reassignCaseloadStore.removeAll(false);
+		me.formUtils.reconfigureGridPanel( me.getView(), me.reassignCaseloadStore);
+    	me.appEventsController.assignEvent({eventName: 'studentAdded', callBackFunc: me.onStudentAdded, scope: me});
+		return me.callParent(arguments);
+    },
+    onRemove: function(button) {
+		var me=this;
+        if (me.getView().getSelectionModel().getSelection().length > 0) 
+        {		
+        	me.reassignCaseloadStore.remove(me.getView().getSelectionModel().getSelection());
+    		me.formUtils.reconfigureGridPanel( me.getView(), me.reassignCaseloadStore);
+        }else{
+     	   Ext.Msg.alert('SSP Error', 'Please select an item to remove.'); 
+        }
+	},
+    onSave: function(button) {
+    	var me=this;
+    	var url=me.getBaseUrl();
+    	var jsonData;
+    	var coachId = this.getView().query('combobox')[0].getValue();
+    	if(!coachId)
+    	{
+      	   Ext.Msg.alert('SSP Error', 'Please select a target coach.'); 
+      	   return;
+    	}
+    	if(me.reassignCaseloadStore.getCount() < 1)
+    	{
+       	   Ext.Msg.alert('SSP Error', 'Please select a students to reassign.'); 
+      	   return;
+    	}
+    	var reassignmentRequest = new Ssp.model.tool.caseload.CaseloadReassignmentRequest();
+    	reassignmentRequest.set('coachId',coachId);
+    	var studentIds = new Array();
+    	for(var i=0; i < me.reassignCaseloadStore.getCount(); i++)
+    	{
+    		studentIds[i] = me.reassignCaseloadStore.getAt(i).get('schoolId');
+    	}
+    	reassignmentRequest.set('studentIds',studentIds);
+    	jsonData = reassignmentRequest.data;
+    	var success = function(){
+    		var me=this;
+    	    Ext.Msg.alert(me.reassignCaseloadStore.getCount()+' student(s) have been updated.'); 
+
+    		me.displayMain();
+    	};
+    	var failure = function(){
+       	   Ext.Msg.alert('SSP Error', 'There was an error while trying to save.'); 
+    	};
+    	
+		me.apiProperties.makeRequest({
+			url: url,
+			method: 'POST',
+			jsonData: jsonData,
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});		
+	},
+	onStudentAdded: function(){
+		var me=this;
+		me.formUtils.reconfigureGridPanel( me.getView(), me.reassignCaseloadStore);
+	},
+    getBaseUrl: function(){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personCaseload') );
+		return baseUrl;
+    },
+	displayMain: function(){
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+	}
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiProperties: 'apiProperties',
+    	caseloadService: 'caseloadService',
+    	store: 'caseloadStore',
+    	formUtils: 'formRendererUtils',
+        coachesStore: 'coachesStore',
+        reassignCaseloadStore: 'reassignCaseloadStore',
+    	appEventsController: 'appEventsController'
+        
+    },
+    config: {
+    	containerToLoadInto: 'adminforms',
+    	formToDisplay: 'editreferral'
+    },
+    control: {
+		'addAllButton': {
+			click: 'onAddAllButtonClick'
+		},
+		'addButton': {
+			click: 'onAddClick'
+		},		
+		'sourceCoachBox': {
+				change: 'onCoachChange'
+    		}
+    },       
+	init: function() {
+		var me=this;
+		me.store.removeAll();
+	     me.formUtils.reconfigureGridPanel( me.getView(), me.store);
+		return me.callParent(arguments);
+    },
+     onCoachChange: function(combobox, newValue,oldValue,eOpts) {
+    	var me=this;
+    	me.getView().setLoading(true);
+    	var success = function(){
+    		me.getView().setLoading(false);
+    	}
+    	var failure = function(){
+	     	Ext.Msg.alert('SSP Error', 'There was an issue in loading assigned students for this coach.'); 
+    	}
+    	me.coachId = newValue;
+    	me.caseloadService.getCaseloadById(me.coachId, {success: success, failure: failure, scope: me});
+		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
+	},   
+	onAddAllButtonClick: function(button) {
+		var me=this;
+		if(me.store.getCount()>0)
+		{
+			me.reassignCaseloadStore.add(me.store.data.items);
+			me.store.removeAll(false);
+			me.appEventsController.getApplication().fireEvent('studentAdded');
+		}
+	},
+	onAddClick: function(button){
+		me=this;
+		if(me.getView().getSelectionModel().getSelection().length > 0)
+		{
+			for(var i=0; i<me.getView().getSelectionModel().getSelection().length; i++)
+			{
+				me.reassignCaseloadStore.add(me.getView().getSelectionModel().getSelection()[i]);
+			}
+			me.store.remove(me.getView().getSelectionModel().getSelection());
+			me.appEventsController.getApplication().fireEvent('studentAdded');
+		}
+		else
+		{
+	     	   Ext.Msg.alert('SSP Error', 'Please select a student or students to add.'); 
+		}
+	}
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	coachesStore: 'coachesStore'
+    },
+	init: function() {
+		this.coachesStore.load();	
+		return this.callParent(arguments);
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget', {
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.caseloadassignmenttarget',
+	title: 'Students to Re-Assign',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.caseload.CaseloadReassignmentTargetViewController',
+    inject: {
+        apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson',
+        coachesStore: 'coachesStore',
+        reassignCaseloadStore: 'reassignCaseloadStore'
+    },
+	height: '100%',
+	width: '100%',
+
+    initComponent: function(){
+    	var me=this;
+    	Ext.apply(me,
+    			{
+		          viewConfig: {
+		        	  plugins: {
+		                  ptype: 'gridviewdragdrop',
+		                  dropGroup: 'gridtogrid',
+		                  enableDrag: false
+		        	  },
+		          },
+    		      autoScroll: true,
+    		      selType: 'rowmodel',
+    		      multiSelect: true,    		      
+    		      columns: [
+       		                { 
+        		               header: 'School ID',  
+        		               dataIndex: 'schoolId',
+        		               field: {
+        		                  xtype: 'textfield'
+        		               },
+        		               flex: 1
+        		             },     		                
+    		                { 
+    		                  header: 'Name',  
+    		                  dataIndex: 'fullName',
+    		                  field: {
+    		                      xtype: 'textfield'
+    		                  },
+    		                  flex: 2
+    		                },
+    		                { 
+      		                  header: 'Student Type',  
+      		                  dataIndex: 'studentTypeName',
+      		                  field: {
+      		                      xtype: 'textfield'
+      		                  },
+      		                  flex: 1
+      		                }    		                
+    		            ],
+    	    		           dockedItems: [
+    	    		      		       		{
+    	    		       		               xtype: 'toolbar',
+    	    		         		           dock: 'top',
+    	    		        		               items: [{
+    	    		        		   		        xtype: 'combobox',
+    	    		        		   		        name: 'targetCoachBox',
+    	    		        		   		        itemId: 'targetCoachBox',
+    	    		        		   		        fieldLabel: 'Assign To Coach',
+    	    		        		   		        emptyText: 'Select One',
+    	    		        		   		        store: this.coachesStore,
+    	    		        		   		        valueField: 'id',
+    	    		        		   		        displayField: 'fullName',
+    	    		        		   		        mode: 'local',
+    	    		        		   		        typeAhead: true,
+    	    		        		   		        queryMode: 'local',
+    	    		        		   		        allowBlank: true
+    	    		        		                       }]  
+    	    		      		       		  },     		       		
+    	    		      		              {
+    	    		      		               xtype: 'toolbar',
+    	    		      		               items: [{
+    	    		      		                   text: 'Remove',
+    	    		      		                   xtype: 'button',
+    	    		      		                   hidden: !me.authenticatedPerson.hasAccess('CASELOAD_REASSIGNMENT_REMOVE_BUTTON'),
+    	    		      		                   action: 'remove',
+    	    		      		                   itemId: 'removeButton'
+    	    		      		               },
+    	    		      		               {
+    	    		      		                   text: 'Save',
+    	    		      		                   xtype: 'button',
+    	    		      		                   hidden: !me.authenticatedPerson.hasAccess('CASELOAD_REASSIGNMENT_SAVE_BUTTON'),
+    	    		      		                   action: 'save',
+    	    		      		                   itemId: 'saveButton'
+    	    		      		               }]
+    	    		      		           }]      	
+    	});
+    	
+    	return me.callParent(arguments);
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
+	extend: 'Ext.grid.Panel',
+	alias : 'widget.caseloadassignmentsource',
+	title: 'Assigned Students',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewController',
+    inject: {
+        apiProperties: 'apiProperties',
+        authenticatedPerson: 'authenticatedPerson',
+        coachesStore: 'coachesStore',
+        reassignCaseloadStore: 'reassignCaseloadStore'
+    },
+	height: '100%',
+	width: '100%',
+
+    initComponent: function(){
+    	var me=this;
+    	Ext.apply(me,
+    			{
+		          viewConfig: {
+		        	  plugins: {
+		                  ptype: 'gridviewdragdrop',
+		                  dragGroup: 'gridtogrid',
+		                  enableDrag: true,
+		        	  },
+		          },
+    		      autoScroll: true,
+    		      selType: 'rowmodel',
+    		      multiSelect: true,    		      
+    		      columns: [
+    		                { 
+      		                  header: 'School ID',  
+      		                  dataIndex: 'schoolId',
+      		                  field: {
+      		                      xtype: 'textfield'
+      		                  },
+      		                  flex: 1
+      		                },    		                
+    		                { 
+    		                  header: 'Name',  
+    		                  dataIndex: 'fullName',
+    		                  field: {
+    		                      xtype: 'textfield'
+    		                  },
+    		                  flex: 2
+    		                },
+    		                { 
+      		                  header: 'Student Type',  
+      		                  dataIndex: 'studentTypeName',
+      		                  field: {
+      		                      xtype: 'textfield'
+      		                  },
+      		                  flex: 1
+      		                }    		                
+    		            ],
+    		        
+    		           dockedItems: [
+     		       		{
+      		               xtype: 'toolbar',
+        		           dock: 'top',
+       		               items: [{
+       		   		        xtype: 'combobox',
+       		   		        name: 'sourceCoachBox',
+       		   		        itemId: 'sourceCoachBox',
+       		   		        fieldLabel: 'Currently Assigned To',
+       		   		        emptyText: 'Select One',
+       		   		        store: this.coachesStore,
+       		   		        valueField: 'id',
+    		   		        displayField: 'fullName',
+       		   		        mode: 'local',
+    				        editable: false
+       		                       }]  
+     		       		  },     		       		
+     		              {
+     		               xtype: 'toolbar',
+     		               items: [{
+     		                   text: 'Add',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CASELOAD_REASSIGNMENT_ADD_BUTTON'),
+     		                   action: 'add',
+     		                   itemId: 'addButton'
+     		               }, '-', {
+     		                   text: 'Add All',
+     		                   xtype: 'button',
+     		                   hidden: !me.authenticatedPerson.hasAccess('CASELOAD_REASSIGNMENT_ADD_ALL_BUTTON'),
+     		                   action: 'addAll',
+     		                   itemId: 'addAllButton'
+     		               }]
+     		           }]    	
+    	});
+    	
+    	return me.callParent(arguments);
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignment', {
+	extend: 'Ext.container.Container',
+	alias : 'widget.caseloadreassignment',
+	title: 'Caseload Re-Assignment',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.caseload.CaseloadReassignmentViewController',
+	height: '100%',
+	width: '100%',
+	layout: {
+        type: 'hbox',
+        align: 'stretch'
+    },
+    initComponent: function(){
+		Ext.apply(this,{
+	          items: [
+	                  {
+	                  	xtype: 'caseloadassignmentsource', 
+	                  	flex: 1
+	                  },{
+		                xtype: 'caseloadassignmenttarget', 
+		                flex: 1
+		              }
+	                 ]});
+    	return this.callParent(arguments);
+    }
+});
+/*
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 Ext.define('Ssp.view.admin.forms.crg.AssociateChallengeReferralsAdmin', {
 	extend: 'Ext.tree.Panel',
 	alias : 'widget.displaychallengereferralsadmin',
