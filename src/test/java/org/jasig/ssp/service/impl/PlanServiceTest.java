@@ -144,37 +144,39 @@ public class PlanServiceTest {
 		verify(dao);
 	}
 	
-//	@Test
-//	public void createMapPlanPrintOutTest() throws ObjectNotFoundException {
-//		
-//		PlanTO plan = new PlanTO();
-//		plan.setName("TestPlan");
-//		plan.setObjectStatus(ObjectStatus.ACTIVE);
-//		
-//		Collection<Term> all = termService.getAll(null).getRows();
-//		for (Term term : all) {
-//			if(term.getReportYear() < 2008 || term.getReportYear() > 2013)
-//				continue;
-//			
-//			for(int i = 1; i < 6; i++)
-//			{
-//				
-//				PlanCourseTO course = new PlanCourseTO();
-//				course.setCourseCode("MAT-"+i);
-//				course.setCourseDescription("TEST"+i);
-//				course.setCourseTitle("TEST"+i);
-//				course.setFormattedCourse("TEST"+i);
-//				course.setOrderInTerm(new Integer(i));
-//				course.setIsDev(false);
-//				course.setCreditHours(3);
-//				course.setTermCode(term.getCode());
-//				plan.getPlanCourses().add(course);
-//			}
-//		}
-//		
-//		final String string = service.createMapPlanPrintScreen(plan);
-//		assertNotNull("Save() result should not have been null.", string);
-//
-//	}
+
+	@Test
+	public void createMapPlanPrintOutTest() throws ObjectNotFoundException {
+		
+		PlanTO plan = new PlanTO();
+		plan.setName("TestPlan");
+		plan.setObjectStatus(ObjectStatus.ACTIVE);
+		
+		Collection<Term> all = termService.getAll(null).getRows();
+		for (Term term : all) {
+			if(term.getReportYear() < 2008 || term.getReportYear() > 2013)
+				continue;
+			
+			for(int i = 1; i < 6; i++)
+			{
+				
+				PlanCourseTO course = new PlanCourseTO();
+				course.setCourseCode("MAT-"+i);
+				course.setCourseDescription("TEST"+i);
+				course.setCourseTitle("TEST"+i);
+				course.setFormattedCourse("TEST"+i);
+				course.setOrderInTerm(new Integer(i));
+				course.setIsDev(false);
+				course.setCreditHours(3);
+				course.setTermCode(term.getCode());
+				plan.getPlanCourses().add(course);
+			}
+		}
+		
+
+		final SubjectAndBody messageText = service.createMatirxOutput(plan, "new institution");
+		assertNotNull("Save() result should not have been null.", messageText);
+
+	}
 
 }

@@ -278,13 +278,13 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("includeHeaderFooter", planOutput.getIncludeHeaderFooter());
 		messageParams.put("includeTotalTimeExpected", planOutput.getIncludeTotalTimeExpected());
 		messageParams.put("totalPlanDevHours", totalPlanDevHours);
-		messageParams.put("planContactNotes", planOutput.getPlan().getContactNotes());
-		messageParams.put("planStudentNotes", planOutput.getPlan().getStudentNotes());
+		messageParams.put("planContactNotes", planOutput.getNonOutputTO().getContactNotes());
+		messageParams.put("planStudentNotes", planOutput.getNonOutputTO().getStudentNotes());
 		
-		messageParams.put("contactEmail", planOutput.getPlan().getContactEmail());
-		messageParams.put("contactPhone", planOutput.getPlan().getContactPhone());
-		messageParams.put("contactTitle", planOutput.getPlan().getContactTitle());
-		messageParams.put("contactName", planOutput.getPlan().getContactName());
+		messageParams.put("contactEmail", planOutput.getNonOutputTO().getContactEmail());
+		messageParams.put("contactPhone", planOutput.getNonOutputTO().getContactPhone());
+		messageParams.put("contactTitle", planOutput.getNonOutputTO().getContactTitle());
+		messageParams.put("contactName", planOutput.getNonOutputTO().getContactName());
 		
 		return populateFromTemplate(MessageTemplate.OUTPUT_MAP_PLAN_FULL_ID,
 				messageParams);
