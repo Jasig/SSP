@@ -167,13 +167,13 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 				
 				
 				TermCourses<T,TO> termCourses = new TermCourses<T,TO>(term);
-				int termNoteIndex = termNotes.indexOf(term);
-				if(termNoteIndex > -1){
-					TermNoteTO termNote = termNotes.get(termNoteIndex);
-					termCourses.setContactNotes(termNote.getContactNotes());
-					termCourses.setStudentNotes(termNote.getStudentNotes());
-					termCourses.setIsImportant(termNote.getIsImportant());
-				} 
+				for(TermNoteTO termNote:termNotes){
+					if(termNote.getTermCode().equals(term.getCode())){
+						termCourses.setContactNotes(termNote.getContactNotes());
+						termCourses.setStudentNotes(termNote.getStudentNotes());
+						termCourses.setIsImportant(termNote.getIsImportant());
+					}
+				}
 				course.setPlanToOffer(getPlanToOfferTerms(course, futureTerms));
 				termCourses.addCourse(course);
 				semesterCourses.put(term.getCode(), termCourses);
