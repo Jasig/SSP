@@ -121,7 +121,6 @@ public class ElectiveController
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			for(String json: jsonList) {	
-				
 				ElectiveTO elective = mapper.readValue(json, ElectiveTO.class);
 				electives.add(elective);				
 			}

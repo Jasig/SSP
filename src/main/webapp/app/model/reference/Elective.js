@@ -20,6 +20,7 @@ Ext.define('Ssp.model.reference.Elective', {
 	extend: 'Ssp.model.reference.AbstractReference',
     fields: [{name: 'code', type: 'string'},
              {name: 'sortOrder', type: 'integer'},
+             {name: 'color', type: 'string'},
 
              // Note that these convert() functions set up below are called
              // during object init, deserialization, *and* as a side-effect of

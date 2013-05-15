@@ -25,8 +25,12 @@ import java.util.UUID;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.reference.Color;
 import org.jasig.ssp.model.reference.Elective;
 import org.jasig.ssp.transferobject.TransferObject;
+import org.jasig.ssp.web.api.reference.AbstractAuditableReferenceController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
@@ -48,6 +52,7 @@ public class ElectiveTO extends AbstractReferenceTO<Elective>
 
 	private String code;	
 	private Integer sortOrder;
+	private UUID color;
 
 	public ElectiveTO() {
 		super();
@@ -68,6 +73,9 @@ public class ElectiveTO extends AbstractReferenceTO<Elective>
 		super.from(model);
 		code = model.getCode();
 		sortOrder = model.getSortOrder();
+		if(model.getColor() != null) {
+			color = model.getColor().getId();
+		}
 		
 	}
 
@@ -94,6 +102,13 @@ public class ElectiveTO extends AbstractReferenceTO<Elective>
 
 	public void setSortOrder(Integer sortOrder) {
 		this.sortOrder = sortOrder;
-	}	
+	}
 
+	public UUID getColor() {
+		return color;
+	}
+
+	public void setColor(UUID color) {
+		this.color = color;
+	}		
 }

@@ -18,6 +18,10 @@
  */
 Ext.define('Ssp.util.ColumnRendererUtils',{
 	extend: 'Ext.Component',
+	mixins: ['Deft.mixin.Injectable'],
+    inject: {
+    	colorsStore: 'colorsStore',
+    },
 
 	initComponent: function() {
 		return this.callParent( arguments );
@@ -179,6 +183,27 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 		return strHtml;
 	},
 	
+	renderElectiveColor: function(val, metadata, record) {
+		var colorsStore = Ext.getStore('colorsStore');
+		var color = colorsStore.findRecord('id', val);
+		
+		if(color == null || color.data == null) {
+			return '';
+		}
+		
+		var hexCode = color.data.hexCode;
+		var colorName = color.data.name;
+		
+		var strHtml = '<div>';
+		strHtml += '<div style="float:left;width:49%">';
+		strHtml += colorName;
+		strHtml += '</div>'
+		strHtml += '<div style="background-color:#' + hexCode + ';width:49%;float:right;">';
+		strHtml += '<p>&nbsp;</p>'
+		strHtml += '</div>'
+		strHtml += '</div>';
+		return strHtml;		
+	},
 	/**
 	 * This method is used to return an object with id values
 	 * an array format expected by the ExtJS multiSelect or itemSelect

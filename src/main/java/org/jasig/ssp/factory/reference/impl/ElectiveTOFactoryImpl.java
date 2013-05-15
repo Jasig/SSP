@@ -24,8 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.reference.ElectiveDao;
 import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
 import org.jasig.ssp.factory.reference.ElectiveTOFactory;
+import org.jasig.ssp.model.reference.Color;
 import org.jasig.ssp.model.reference.Elective;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.reference.ColorService;
+import org.jasig.ssp.service.reference.ElectiveService;
+import org.jasig.ssp.service.reference.impl.ColorServiceImpl;
+import org.jasig.ssp.transferobject.reference.ColorTO;
 import org.jasig.ssp.transferobject.reference.ElectiveTO;
 
 @Service
@@ -34,6 +39,9 @@ public class ElectiveTOFactoryImpl extends
 		AbstractReferenceTOFactory<ElectiveTO, Elective>
 		implements ElectiveTOFactory {
 
+	@Autowired
+	protected transient ColorService colorService;
+	
 	public ElectiveTOFactoryImpl() {
 		super(ElectiveTO.class, Elective.class);
 	}
@@ -50,10 +58,12 @@ public class ElectiveTOFactoryImpl extends
 	public Elective from(final ElectiveTO tObject)
 			throws ObjectNotFoundException {
 		final Elective model = super.from(tObject);
-
+		
 		model.setCode(tObject.getCode());
-		model.setSortOrder(tObject.getSortOrder());
-
+		model.setSortOrder(tObject.getSortOrder());	
+		if(tObject.getColor() != null) {
+			model.setColor(colorService.get(tObject.getColor()));
+		}
 		return model;
 	}
 

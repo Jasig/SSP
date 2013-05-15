@@ -20,7 +20,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
     extend: 'Ext.data.TreeStore',
     mixins: ['Deft.mixin.Injectable'],
     inject: {
-        columnRendererUtils: 'columnRendererUtils'
+        columnRendererUtils: 'columnRendererUtils',
     },
     autoLoad: false,
     constructor: function(){
@@ -487,7 +487,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                             field: {
                                 xtype: 'textfield'
                             },
-                            flex: .1
+                            flex: .2
                         },
                         {	header: 'Description',
                             dataIndex: 'description',
@@ -496,6 +496,19 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                                 xtype: 'textfield'
                             },
                             flex: 1
+                        },
+                        {	header: 'Color',
+                            dataIndex: 'color',
+                            renderer: me.columnRendererUtils.renderElectiveColor,
+                            required: true,
+                           	field: { 
+                           		xtype: 'combo',
+                        	    store: Ext.StoreMgr.lookup("colorsStore"),
+                        	    displayField: 'name',
+                        	    valueField: 'id',
+                        	    forceSelection: true	
+                           	},
+                            flex: .2
                         }
                     ]},
                 {
@@ -539,8 +552,6 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 				        editor: Ext.create('Ext.form.TriggerField', {
 				            onTriggerClick: function(e) {
 				            	var triggerField = this;	
-				            	console.log(me);
-				            	console.log(triggerField);
 				            	var colorPicker = Ext.create('Ext.picker.Color', {
 				                    style: {
 				                        backgroundColor: "#fff"

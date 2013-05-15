@@ -120,8 +120,24 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                         headers: { 'Content-Type': 'application/json' },
                         jsonData: jsonData,
                         success: function(response, view) {
-                            var r = Ext.decode(response.responseText);  
-                            store.load(store.params);
+                            var r = Ext.decode(response.responseText); 
+                            var columns = me.columns;                            
+                            var record = store.findRecord("id", r.id); 
+                            var sortInfo = {};	
+                            
+							for (var i=0; i < columns.length; i++ ) {
+								if(columns[i].sortState != null 
+									&& columns[i].sortState != undefined) {									
+									sortInfo = {	    								
+	    							    sort: record.getServerSideFieldName(columns[i].dataIndex),
+	    							    sortDirection: columns[i].sortState
+    								}
+								}
+							}    	
+							
+							store.load({
+								params: sortInfo
+						    });
                         },
                         failure: me.apiProperties.handleError
                     }, this);

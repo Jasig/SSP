@@ -48,6 +48,10 @@ public class Elective
 	@Column(nullable = true)
 	private Integer sortOrder;
 	
+	@ManyToOne()
+	@JoinColumn(name = "color_id", nullable = false)
+	private Color color;
+	
 	/**
 	 * Constructor
 	 */
@@ -107,7 +111,15 @@ public class Elective
 			this.setObjectStatus(ObjectStatus.INACTIVE);
 		}		
 	}
-	
+		
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
 	@Override
 	protected int hashPrime() {
 		return 337;

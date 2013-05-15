@@ -71,9 +71,7 @@ public class ColorTO
 		hexCode = model.getHexCode();
 		
 	}
-
 	
-
 	public static List<ColorTO> toTOList(
 			final Collection<Color> models) {
 		final List<ColorTO> tObjects = Lists.newArrayList();
