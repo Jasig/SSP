@@ -174,6 +174,8 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		var termNotes = me.get('termNotes')
 		simpleData.termNotes = [];
 		termNotes.forEach(function(termNote){
+			termNote.set("id","");
+			termNote.set("objectStatus","ACTIVE");
 			simpleData.termNotes.push(termNote.data);
 		})
 		
