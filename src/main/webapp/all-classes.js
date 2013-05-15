@@ -6922,7 +6922,13 @@ Ext.define('Ssp.service.EarlyAlertService', {
         Ext.Array.each( records, function(record, index){
             record.leaf=true;
             record.nodeType='early alert response';
-            record.gridDisplayDetails=me.earlyAlertOutcomesStore.getById(record.earlyAlertOutcomeId).get('name');
+            record.gridDisplayDetails='';
+            if ( record.earlyAlertOutcomeId ) {
+                var outcome = me.earlyAlertOutcomesStore.getById(record.earlyAlertOutcomeId);
+                if ( outcome ) {
+                    record.gridDisplayDetails = outcome.get('name');
+                }
+            }
 			dataArray.push(record);
         });
 		
@@ -15310,8 +15316,16 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
     bindEarlyAlertToView: function() {
         var me = this;
         var campus = me.campusesStore.getById( me.model.get('campusId') );
-        var reasonId = ((me.model.get('earlyAlertReasonIds') != null )?me.model.get('earlyAlertReasonIds')[0].id : me.model.get('earlyAlertReasonId') );
-        var reason = me.reasonsStore.getById( reasonId );
+        var reasonId;
+        if ( me.model.get('earlyAlertReasonIds') && me.model.get('earlyAlertReasonId').length ) {
+            reasonId = me.model.get('earlyAlertReasonIds')[0].id;
+        } else {
+            reasonId = me.model.get('earlyAlertReasonId');
+        }
+        var reason;
+        if ( reasonId ) {
+            reason = me.reasonsStore.getById( reasonId );
+        }
 
         // Reset and populate general fields comments, etc.
         me.getView().getForm().reset();
@@ -15447,7 +15461,8 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseDetailsViewControll
 		me.getCreatedByField().setValue( me.model.getCreatedByPersonName() );
 		
 		// display outcome
-		me.getOutcomeField().setValue( outcome.get('name') );
+
+		me.getOutcomeField().setValue( (outcome)? outcome.get('name') : '' );
 
 		// Outreaches
 		selectedOutreaches = me.formUtils.getSimpleItemsForDisplay( me.outreachesStore, me.model.get('earlyAlertOutreachIds'), 'Outreaches' );
