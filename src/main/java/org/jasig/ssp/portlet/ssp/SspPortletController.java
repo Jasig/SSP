@@ -30,7 +30,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 public final class SspPortletController {
 	
 	@Value("#{configProperties.ssp_main_use_minifed_js}")
-	private boolean sspMainUseMinifiedJs = false;
+	private boolean sspMainUseMinifiedJs = true;
 	
 	@RenderMapping
 	public ModelAndView show(){
