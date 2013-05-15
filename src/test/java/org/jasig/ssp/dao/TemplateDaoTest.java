@@ -19,6 +19,7 @@
 package org.jasig.ssp.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -36,6 +37,7 @@ import org.jasig.ssp.service.TemplateService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,7 +59,7 @@ public class TemplateDaoTest {
 
 	@Autowired
 	private transient TemplateDao dao;
-	  
+	   
 	@Autowired
 	private transient SecurityServiceInTestEnvironment securityService;
 
@@ -258,6 +260,13 @@ public class TemplateDaoTest {
 		
 	}
 	
+	public void testGetAll()
+	{
+		PagingWrapper<Template> all = dao.getAll(SortingAndPaging.createForSingleSortWithPaging(
+						ObjectStatus.ALL , null,
+						null, null, null, null), null, null, null, null);
+		assertTrue(all.getRows().size() > 0);
+	}
 	public void testTemplateDaoSaveWithChildren2() throws ObjectNotFoundException, CloneNotSupportedException {
 		// test student = ken thompson
 		final Person person = personService.get(UUID

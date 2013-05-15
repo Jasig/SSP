@@ -48,9 +48,9 @@ public  class TemplateServiceImpl extends AbstractPlanServiceImpl<Template,Templ
 	@Override
 	public PagingWrapper<Template> getAll(
 			SortingAndPaging createForSingleSortWithPaging, Boolean isPrivate,
-			String divisionCode, String programCode) {
+			String divisionCode, String programCode, String departmentCode) {
 		return getDao().getAll(createForSingleSortWithPaging,  isPrivate,
-			 divisionCode,  programCode);
+			 divisionCode,  programCode, departmentCode);
 	}
 
 }

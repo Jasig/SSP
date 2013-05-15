@@ -16,16 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service;
+package org.jasig.ssp.factory.reference;
 
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.Template;
-import org.jasig.ssp.transferobject.TemplateTO;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.transferobject.PlanLiteTO;
+import org.jasig.ssp.transferobject.TemplateLiteTO;
 
-public interface TemplateService extends AbstractPlanService<Template,TemplateTO> {
-
-	PagingWrapper<Template> getAll(SortingAndPaging createForSingleSortWithPaging,
-			Boolean status, String divisionCode, String programCode, String departmentCode);
-
+public interface TemplateLiteTOFactory extends
+		TOFactory<TemplateLiteTO, Template> {
 }

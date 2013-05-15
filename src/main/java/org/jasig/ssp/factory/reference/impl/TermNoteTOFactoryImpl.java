@@ -48,7 +48,7 @@ public class TermNoteTOFactoryImpl extends AbstractAuditableTOFactory<TermNoteTO
 	
 	@Override
 	public TermNote from(TermNoteTO tObject) throws ObjectNotFoundException {
-		TermNote model = super.from(tObject);
+		TermNote model = new TermNote();
 		model.setContactNotes(tObject.getContactNotes());
 		model.setIsImportant(tObject.getIsImportant());
 		model.setStudentNotes(tObject.getStudentNotes());

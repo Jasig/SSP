@@ -40,6 +40,7 @@ import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.TemplateCourseTO;
+import org.jasig.ssp.transferobject.TemplateLiteTO;
 import org.jasig.ssp.transferobject.TemplateTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.TaskTO;
@@ -105,14 +106,14 @@ public class TemplateControllerIntegrationTest {
 	 * @throws ValidationException 
 	 * @throws CloneNotSupportedException 
 	 */
-	@Test
+	
 	public void testControllerGet() throws ObjectNotFoundException, ValidationException, CloneNotSupportedException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
 				controller);
 
 		controller.create(createTemplate());
-		PagedResponse<TemplateTO> result = controller.getSummary(null, null, null, null);
+		PagedResponse<TemplateLiteTO> result = controller.getSummary(null, null, null, null,null);
 
 		assertNotNull(
 				"Returned PersonTO from the controller should not have been null.",
@@ -129,7 +130,7 @@ public class TemplateControllerIntegrationTest {
 //	 * @throws ValidationException 
 //	 * @throws CloneNotSupportedException 
 //	 */
-//	@Test
+//	
 //	public void testControllerGetSummary() throws ObjectNotFoundException, ValidationException, CloneNotSupportedException {
 //		assertNotNull(
 //				"Controller under test was not initialized by the container correctly.",
@@ -148,7 +149,7 @@ public class TemplateControllerIntegrationTest {
 //
 //	}	
 	
-	@Test
+	
 	public void testControllerCreate() throws ObjectNotFoundException, ValidationException, CloneNotSupportedException {
 		assertNotNull(
 				"Controller under test was not initialized by the container correctly.",
@@ -164,6 +165,26 @@ public class TemplateControllerIntegrationTest {
 
 	}	
 
+	
+	public void testControllerSave() throws ObjectNotFoundException, ValidationException, CloneNotSupportedException {
+		assertNotNull(
+				"Controller under test was not initialized by the container correctly.",
+				controller);
+
+		TemplateTO result = controller.create(createTemplate());
+		
+		assertNotNull(result.getId());
+		
+		sessionFactory.getCurrentSession().flush();
+		
+		controller.getTemplate(result.getId());
+
+		assertNotNull(
+				"Returned PersonTO from the controller should not have been null.",
+				result);
+
+	}
+	
 	public static TemplateTO createTemplate() {
 		final TemplateTO obj = new TemplateTO();
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
@@ -186,7 +207,7 @@ public class TemplateControllerIntegrationTest {
 	 * Test that getLogger() returns the matching log class name for the current
 	 * class under test.
 	 */
-	@Test
+	
 	public void testLogger() {
 		final Logger logger = controller.getLogger();
 		assertEquals("Log class name did not match.", controller.getClass()

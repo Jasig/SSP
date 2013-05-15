@@ -93,9 +93,12 @@ public class PlanTOFactoryImpl extends AbstractAuditableTOFactory<PlanTO, Plan>
 		model.getTermNotes().clear();
 		List<TermNoteTO> termNotes = tObject.getTermNotes();
 		for (TermNoteTO termNoteTO : termNotes) {
-			TermNote noteModel = getTermNoteTOFactory().from(termNoteTO);
-			model.getTermNotes().add(noteModel);
-			noteModel.setPlan(model);
+			if(termNoteTO!=null)
+			{
+				TermNote noteModel = getTermNoteTOFactory().from(termNoteTO);
+				model.getTermNotes().add(noteModel);
+				noteModel.setPlan(model);
+			}
 		}		
 		model.getPlanCourses().clear();
 		List<PlanCourseTO> planCourses = tObject.getPlanCourses();

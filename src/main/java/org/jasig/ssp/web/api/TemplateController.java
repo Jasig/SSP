@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
+import org.jasig.ssp.factory.reference.TemplateLiteTOFactory;
 import org.jasig.ssp.factory.reference.TemplateTOFactory;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
@@ -41,6 +42,7 @@ import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.TemplateLiteTO;
 import org.jasig.ssp.transferobject.TemplateOutputTO;
 import org.jasig.ssp.transferobject.TemplateTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -83,7 +85,7 @@ public class TemplateController  extends AbstractBaseController {
 	private TemplateTOFactory factory;
 	
 	@Autowired
-	private PlanLiteTOFactory liteFactory;
+	private TemplateLiteTOFactory liteFactory;
 	
 	@Autowired
 	private transient SecurityService securityService;
@@ -113,12 +115,13 @@ public class TemplateController  extends AbstractBaseController {
 			final @RequestParam(required = false) Boolean isPrivate,
 			final @RequestParam(required = false) ObjectStatus objectStatus,
 			final @RequestParam(required = false) String divisionCode,
-			final @RequestParam(required = false) String programCode) throws ObjectNotFoundException,
+			final @RequestParam(required = false) String programCode,
+			final @RequestParam(required = false) String departmentCode) throws ObjectNotFoundException,
 			ValidationException {
 		final PagingWrapper<Template> data = getService().getAll(
 				SortingAndPaging.createForSingleSortWithPaging(
 						objectStatus == null ? ObjectStatus.ALL : objectStatus, null,
-						null, null, null, null),isPrivate,divisionCode,programCode);
+						null, null, null, null),isPrivate,divisionCode,programCode,departmentCode);
 
 		return new PagedResponse<TemplateTO>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));		
@@ -157,19 +160,20 @@ public class TemplateController  extends AbstractBaseController {
 	 */
 	@RequestMapping(value="/summary", method = RequestMethod.GET)
 	public @ResponseBody
-	PagedResponse<TemplateTO> getSummary(
+	PagedResponse<TemplateLiteTO> getSummary(
 			final @RequestParam(required = false) Boolean isPrivate,
 			final @RequestParam(required = false) ObjectStatus objectStatus,
 			final @RequestParam(required = false) String divisionCode,
-			final @RequestParam(required = false) String programCode) throws ObjectNotFoundException,
+			final @RequestParam(required = false) String programCode,
+			final @RequestParam(required = false) String departmentCode) throws ObjectNotFoundException,
 			ValidationException {
 		// Run getAll
 		final PagingWrapper<Template> data = getService().getAll(
 				SortingAndPaging.createForSingleSortWithPaging(
 						objectStatus == null ? ObjectStatus.ALL : objectStatus, null,
-						null, null, null, null),isPrivate,divisionCode,programCode);
+						null, null, null, null),isPrivate,divisionCode,programCode,departmentCode);
 
-		return new PagedResponse<TemplateTO>(true, data.getResults(), getFactory()
+		return new PagedResponse<TemplateLiteTO>(true, data.getResults(), getLiteFactory()
 				.asTOList(data.getRows()));		
 	}
 	
@@ -264,7 +268,6 @@ public class TemplateController  extends AbstractBaseController {
 		return "Map Plan has been queued.";
 	}
 	
-	@SuppressWarnings("unchecked")
 	private SubjectAndBody getOutput(TemplateOutputTO templateOutputDataTO) throws ObjectNotFoundException{
 		Config institutionName = configService.getByName("inst_name");
 		SubjectAndBody output = null;
@@ -376,11 +379,12 @@ public class TemplateController  extends AbstractBaseController {
 		this.securityService = securityService;
 	}
 
-	public PlanLiteTOFactory getLiteFactory() {
+	public TemplateLiteTOFactory getLiteFactory() {
 		return liteFactory;
 	}
 
-	public void setLiteFactory(PlanLiteTOFactory liteFactory) {
+	public void setLiteFactory(TemplateLiteTOFactory liteFactory) {
 		this.liteFactory = liteFactory;
 	}
+
 }

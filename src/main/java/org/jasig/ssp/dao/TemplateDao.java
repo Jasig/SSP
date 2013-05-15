@@ -40,7 +40,7 @@ public class TemplateDao extends AbstractPlanDao<Template> implements
 	
 	public PagingWrapper<Template> getAll(
 			SortingAndPaging sNp, Boolean isPrivate,
-			String divisionCode, String programCode) {
+			String divisionCode, String programCode, String departmentCode) {
 		
 				Criteria criteria = createCriteria(sNp);
 				if(isPrivate != null)
@@ -59,7 +59,10 @@ public class TemplateDao extends AbstractPlanDao<Template> implements
 				{
 					criteria.add(Restrictions.eq("divisionCode", divisionCode));
 				}					
-					
+				if(!StringUtils.isEmpty(departmentCode))
+				{
+					criteria.add(Restrictions.eq("departmentCode", departmentCode));
+				}
 				return processCriteriaWithStatusSortingAndPaging(criteria,
 				 				sNp);
 	}
