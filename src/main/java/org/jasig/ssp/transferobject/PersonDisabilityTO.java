@@ -282,6 +282,7 @@ public class PersonDisabilityTO
 	@JsonProperty
 	@JsonSerialize(using = DateOnlySerializer.class)
 	public Date getOdsRegistrationDate() {
-		return DateTimeUtils.midnightOn(getCreatedDate());
+		Date timestamp = getCreatedDate();
+		return timestamp == null ? null : DateTimeUtils.midnightOn(timestamp);
 	}
 }
