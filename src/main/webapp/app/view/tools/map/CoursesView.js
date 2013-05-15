@@ -55,7 +55,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				    border: 0,
 				    title: '',
 				    margin: '0 0 0 0',
-				    padding: '5 0 5 5',
+				    padding: '5 0 0 5',
 				    layout: 'hbox',
 				    defaults: {
 				        anchor: '100%'
@@ -90,7 +90,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				    border: 0,
 				    title: '',
 				    margin: '0 0 0 0',
-				    padding: '5 0 5 5',
+				    padding: '5 0 0 5',
 				    layout: 'hbox',
 				    defaults: {
 				        anchor: '100%'
@@ -124,7 +124,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				    border: 0,
 				    title: '',
 				    margin: '0 0 0 0',
-				    padding: '5 0 5 5',
+				    padding: '5 0 0 5',
 				    layout: 'hbox',
 				    defaults: {
 				        anchor: '100%'
@@ -157,7 +157,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				    border: 0,
 				    title: '',
 				    margin: '0 0 0 0',
-				    padding: '5 0 5 5',
+				    padding: '5 0 0 5',
 				    layout: 'hbox',
 				    hidden:true,
 				    defaults: {
@@ -192,7 +192,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				    border: 0,
 				    title: '',
 				    margin: '0 0 0 0',
-				    padding: '5 0 5 5',
+				    padding: '5 0 0 5',
 				    layout: 'hbox',
 				    hidden: true,
 				    defaults: {

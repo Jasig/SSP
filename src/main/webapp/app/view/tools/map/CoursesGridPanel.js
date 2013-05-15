@@ -23,7 +23,7 @@ Ext.define('Ssp.view.tools.map.CoursesGridPanel', {
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     width: '100%',
-    height: 450,
+    height: 430,
     scroll: true,
     layout: {
                 type: 'fit'
