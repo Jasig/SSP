@@ -51,7 +51,7 @@ public class MSSQL2008DateTypeConverter extends MSSQLTypeConverter {
 
 	@Override
 	public int getPriority() {
-		return PrioritizedService.PRIORITY_DATABASE + 1;
+		return super.getPriority()+1;
 	}
 
 	@Override
