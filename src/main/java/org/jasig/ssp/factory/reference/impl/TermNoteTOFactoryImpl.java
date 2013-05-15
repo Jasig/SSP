@@ -23,11 +23,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.dao.TermNoteDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.reference.TermNoteTOFactory;
 import org.jasig.ssp.model.TermNote;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.TermNoteTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +37,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class TermNoteTOFactoryImpl extends AbstractAuditableTOFactory<TermNoteTO, TermNote>
 		implements TermNoteTOFactory {
+	
+	@Autowired
+	private transient TermNoteDao dao;
 
 	public TermNoteTOFactoryImpl() {
 		super(TermNoteTO.class, TermNote.class);
@@ -43,7 +48,7 @@ public class TermNoteTOFactoryImpl extends AbstractAuditableTOFactory<TermNoteTO
 
 	@Override
 	protected AuditableCrudDao<TermNote> getDao() {
-		return null;
+		return dao;
 	}
 	
 	@Override
