@@ -26,6 +26,12 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
     	currentMapPlan: 'currentMapPlan'
     },
     control: {
+		view: {
+			afterlayout: {
+				fn: 'onAfterLayout',
+				single: true
+			},
+    	},
     	'planFAButton': {
     	   selector: '#planFAButton',
     	   hidden: true,
@@ -117,6 +123,23 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		return this.callParent(arguments);
     },
 
+	onAfterLayout: function(){
+		var me = this;
+		me.setPlanNotesButtonIcon();
+	},
+	
+	setPlanNotesButtonIcon: function(){
+		var me = this;
+		var contactNotes = me.currentMapPlan.get("contactNotes");
+		var studentNotes = me.currentMapPlan.get("studentNotes");
+		if((contactNotes && contactNotes.length > 0) ||
+			(studentNotes && studentNotes.length > 0) ){
+			me.getPlanNotesButton().setIcon(Ssp.util.Constants.EDIT_PLAN_NOTE_ICON_PATH);
+			return;
+		}
+        me.getPlanNotesButton().setIcon(Ssp.util.Constants.ADD_PLAN_NOTE_ICON_PATH);
+	},
+
     onUpdateSaveOption: function(){
         var me=this;
 		if(me.currentMapPlan.get('id') == '')
@@ -148,6 +171,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		var me = this;
 		var form =  button.findParentByType('form').getForm();
 		form.updateRecord(me.currentMapPlan);
+		me.setPlanNotesButtonIcon();
 		me.notesPopUp.close();
 	},
 

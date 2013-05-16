@@ -110,7 +110,18 @@ Ext.define('Ssp.util.Constants',{
         // ICON PATHS FOR ACTION STYLE GRID BUTTONS NOT APPLIED THROUGH CSS 
         GRID_ITEM_DELETE_ICON_PATH: '/ssp/images/delete-icon.png',
         GRID_ITEM_EDIT_ICON_PATH: '/ssp/images/edit-icon.jpg',
-		GRID_ITEM_HAS_NOTES_ICON_PATH: '/ssp/images/pencil.png',
+
+		
+		EDIT_PLAN_NOTE_ICON_PATH: '/ssp/images/edit-existing-notes-large-glossy.png',
+		ADD_PLAN_NOTE_ICON_PATH: '/ssp/images/notes.png',
+		
+		EDIT_TERM_NOTE_ICON_PATH: '/ssp/images/edit-existing-notes-small.png',
+		ADD_TERM_NOTE_ICON_PATH: '/ssp/images/edit-icon.jpg',
+		
+		EDIT_COURSE_NOTE_ICON_PATH: '/ssp/images/edit-existing-notes-large.png',
+		ADD_COURSE_NOTE_ICON_PATH: '/ssp/images/edit-icon.jpg',
+
+		
         GRID_ITEM_CLOSE_ICON_PATH: '/ssp/images/close-icon.jpg',
         GRID_ITEM_MAIL_REPLY_ICON_PATH: '/ssp/images/mail-reply-icon.png',
         DEFAULT_NO_STUDENT_PHOTO_URL:'/ssp/images/no-photo.jpg',

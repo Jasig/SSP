@@ -85,12 +85,12 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
                 width: 45,
 				renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 							var me = this;
-							if((record.data.coachNotes != undefined && record.data.coachNotes.length > 0) ||
+							if((record.data.contactNotes != undefined && record.data.contactNotes.length > 0) ||
 								(record.data.studentNotes != undefined && record.data.studentNotes.length > 0) ){
-								me.items[0].icon = Ssp.util.Constants.GRID_ITEM_HAS_NOTES_ICON_PATH;
+								me.items[0].icon = Ssp.util.Constants.EDIT_COURSE_NOTE_ICON_PATH;
 								return;
 							}
-				             me.items[0].icon = Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH;
+				             me.items[0].icon = Ssp.util.Constants.ADD_COURSE_NOTE_ICON_PATH;
 				         },
 	                items: [{
 	                    icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
