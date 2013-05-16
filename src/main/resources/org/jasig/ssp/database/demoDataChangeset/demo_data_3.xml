@@ -44,11 +44,11 @@
 			<column name="report_year" value="2012" />
 		</insert>
 	</changeSet>
-	<changeSet id="Add demo test term SP12" author="dan.mccallum">
+	<changeSet id="Add demo test term SP13" author="dan.mccallum">
 		<preConditions onFail="MARK_RAN"
-					   onFailMessage="SP12 term exists, skipping insert">
+					   onFailMessage="SP13 term exists, skipping insert">
 			<tableExists tableName="config" />
-			<sqlCheck expectedResult="0">select count(code) from v_external_term where code = 'SP12'
+			<sqlCheck expectedResult="0">select count(code) from v_external_term where code = 'SP13'
 			</sqlCheck>
 		</preConditions>
 		<insert tableName="external_term">
