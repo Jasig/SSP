@@ -20,7 +20,7 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
     extend: 'Ext.window.Window',
     alias: 'widget.coursedetails',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.map.CoursesGridController',
+    controller: 'Ssp.controller.tool.map.CoursesGridController',
     inject: {
         columnRendererUtils: 'columnRendererUtils'
         //sspConfig: 'sspConfig'
@@ -114,22 +114,16 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                                         				        fieldLabel: 'Department',
                                         				        name: 'department',
                                         				        itemId: 'department',
-                                        				        hidden: true,
-                                        				        hideable: false
                                         				        
                                         				    },{
                                         				        fieldLabel: 'Division',
                                         				        name: 'division',
                                         				        itemId: 'division',
-                                        				        hidden: true,
-                                        				        hideable: false
                                         				    },
                                         				    {
                                                                 fieldLabel: 'Transfer / Meta Data',
                                                                 name: 'division',
                                                                 itemId: 'division',
-                                        				        hidden: true,
-                                        				        hideable: false
                                                             }
                                 				    
                                 				    ]},
@@ -146,25 +140,20 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                                                         items: [
                                         				    {
                                         				        fieldLabel: 'Co /Prerequisite',
-                                        				        name: 'prereqs',
-                                        				        itemId: 'prereqs',
-                                        				        hidden: true,
-                                        				        hideable: false
+                                        				        name: 'prerequisites',
+                                        				        itemId: 'prerequisites',
                                         				        
                                         				    },{
                                         				    	fieldLabel:  '<a href="">Master Syllabus</a>',
-                                                                name: 'mastersyllabus',
-                                                                itemId: 'mastersyllabus',
-                                        				        hidden: true,
-                                        				        hideable: false
+                                                                name: 'masterSyllabus',
+                                                                itemId: 'masterSyllabus',
+
                                         				        
                                         				    },
                                         				    {
                                         				        fieldLabel: '<a href="">Academic Link</a>',
-                                                                name: 'academiclink',
-                                                                itemId: 'academiclink',
-                                        				        hidden: true,
-                                        				        hideable: false
+                                                                name: 'academicLink',
+                                                                itemId: 'academicLink',
                                         				        
                                         				    }
                                 				    ]}

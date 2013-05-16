@@ -20,7 +20,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.semestergrid',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    controller:'Ssp.controller.tool.map.SemesterGridViewController',
+	controller: 'Ssp.controller.tool.map.SemesterGridViewController',
 	inject:{
 		appEventsController: 'appEventsController'
 	},
@@ -28,7 +28,6 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 	hideHeaders: true,
  	width: 210,
     border: 0,
-	selType: 'cellmodel',
     
     initComponent: function(){
         var me = this;
@@ -80,34 +79,6 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 				hidden: true,
 				hideable:false
             },
-			{
-                 xtype: 'gridcolumn',
-                  dataIndex: 'coachNotes',
-                  text: 'Coach Notes',
-				  hidden:true,
-				  hideable: false,
-              },
-			  {
-                 xtype: 'gridcolumn',
-                 dataIndex: 'studentNotes',
-                 text: 'Student Notes',
-				 hidden:true,
-				 hideable: false,
-              },
-			  {
-                 xtype: 'gridcolumn',
-                 dataIndex: 'important',
-                 text: 'Important',
-				 hidden:true,
-				 hideable: false,
-              },
-			{
-                 xtype: 'gridcolumn',
-                 dataIndex: 'elective',
-                 text: 'elective',
-				 hidden:true,
-				 hideable: false,
-              },
 			
             {
                 xtype: 'actioncolumn',
@@ -121,34 +92,34 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 							}
 				             me.items[0].icon = Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH;
 				         },
-                items: [{
-                    icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
-                    tooltip: 'Edit planItem',
-					name: 'edit_button',
-                    handler: function(grid, rowIndex, colIndex){
-						var me = this;
-                    	me.appEventsController.getApplication().fireEvent('onViewCourseNotes',{store:grid.getStore(),
-                    		rowIndex: rowIndex});
-                    },
-                    scope: me,
-					
-                }, {
-                    icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
-                    tooltip: 'Delete planItem',
-                    handler: function(grid, rowIndex, colIndex){
-                        me.getStore().removeAt(rowIndex);
-                    },
-                    scope: me
-                }]
-            }],
+	                items: [{
+	                    icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
+	                    tooltip: 'Edit planItem',
+						name: 'edit_button',
+	                    handler: function(grid, rowIndex, colIndex){
+							var me = this;
+	                    	me.appEventsController.getApplication().fireEvent('onViewCourseNotes',{store:grid.getStore(),
+	                    		rowIndex: rowIndex});
+	                    },
+	                    scope: me,
+
+	                }, {
+	                    icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
+	                    tooltip: 'Delete planItem',
+	                    handler: function(grid, rowIndex, colIndex){
+	                        me.getStore().removeAt(rowIndex);
+	                    },
+	                    scope: me
+	                }]
+	            }],
 			viewConfig: {
-			    plugins: {
+			        plugins: {
 			            ptype: 'gridviewdragdrop',
 						ddGroup: 'ddGroupForCourses',
 						dropGroup: 'coursesDDGroup',
 						dragGroup: 'coursesDDGroup',
 						pluginId: 'semesterviewdragdrop',
-			    }
+			    },
 			},
         });
         

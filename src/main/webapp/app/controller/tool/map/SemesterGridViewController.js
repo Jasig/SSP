@@ -25,7 +25,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 	
 	init: function() {
 		var me=this;
-		this.getView().view.addListener("drop", me.onDrop, me);
+		me.getView().view.addListener("beforedrop", me.onDrop, me);
 		return me.callParent(arguments);
     },
 
@@ -45,6 +45,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
             failure: me.newServiceFailureHandler('validCourse', me.onValidateFailure, serviceResponses),
             scope: me
         });
+		return true;
     },
     
     onValidateSuccess: function(serviceResponses){

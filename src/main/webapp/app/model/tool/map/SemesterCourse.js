@@ -56,7 +56,7 @@ Ext.define('Ssp.model.tool.map.SemesterCourse', {
 		        },
 	getBoolean: function(fieldName){
 		var me = this;
-		if(me.get(fieldName) == 'on' || me.get(fieldName) == true || me.get(fieldName) == 1, me.get(fieldName) == 'true')
+		if(me.get(fieldName) == 'on' || me.get(fieldName) == true || me.get(fieldName) == 1 || me.get(fieldName) == 'true')
 			return true;
 		return false;
 	}
