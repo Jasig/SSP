@@ -38,6 +38,9 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		var me=this;
 	    me.resetForm();
 	    me.getView().query('form')[0].loadRecord( me.currentMapPlan );
+
+	    me.getView().query('checkbox[name=objectStatus]')[0].setValue(me.currentMapPlan.getAsBoolean('objectStatus',"ACTIVE"));
+		me.setCheckBox('checkbox[name=isPrivate]', 'isPrivate');
 		return me.callParent(arguments);
     },
     onSaveClick: function(){
@@ -45,7 +48,9 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		
     	var form =  me.getView().query('form')[0].getForm();
 		form.updateRecord(me.currentMapPlan);
-    	me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox')[0].value) ? 'ACTIVE' : 'INACTIVE');
+    	me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox[name=objectStatus]')[0].getValue()) ? 'ACTIVE' : 'INACTIVE');
+		me.setField('checkbox[name=isPrivate]', 'isPrivate');
+		
 		if(!me.currentMapPlan.get('isTemplate')){
 			me.currentMapPlan.set('id', '');
 			me.currentMapPlan.set('isTemplate', true);
@@ -63,9 +68,19 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     },
     resetForm: function() {
         var me = this;
-        //me.getView().getForm().reset();
+        me.getView().query('form')[0].getForm().reset();
     },
     onShow: function(){
     	var me=this;
     },
+
+	setCheckBox: function(query, fieldName){
+		var me=this;
+		me.getView().query(query)[0].setValue(me.currentMapPlan.getBoolean(fieldName));
+	},
+	
+	setField: function(query, fieldName){
+		var me=this;
+		me.currentMapPlan.set(fieldName, me.getView().query(query)[0].getValue());
+	}
 });

@@ -26,8 +26,8 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
 		appEventsController: 'appEventsController',
 		currentMapPlan: 'currentMapPlan',
     },
-    height: 200,
-    width: 850,
+    height: 500,
+    width: 550,
     saveAs: null,
     resizable: true,
     initComponent: function(){
@@ -48,7 +48,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                     align: 'stretch',
                     type: 'vbox'
                 },
-                 width: '100%',
+                 width: '80%',
                 height: '100%',
                 bodyPadding: 5,
                 autoScroll: true,
@@ -68,11 +68,12 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                             items: [{
                 				    
                 			    	fieldLabel: 'Active Plan',
-                			    	name: 'activeplan',
+                			    	name: 'objectStatus',
+									itemId:'objectStatus',
                 			    	labelWidth: 65,
                 			    	checked: false,
                 			    	labelAlign: 'before',
-                			    	inputValue: 'activeplan'
+                			    	inputValue: 'objectStatus'
                 			    },
                 			    {
                                     xtype: 'tbspacer',
@@ -81,12 +82,11 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                 			    {
                 			    	
                 			    	boxLabel: 'Important / Caution',
-                			    	name: 'importantplan',
+                			    	name: 'isImportant',
                 			    	labelWidth: 130,
                 			    	boxLabelAlign: 'before',
-                			    	inputValue: 'importantplan',
-									hidden: true,
-									hideable: false
+                			    	inputValue: 'isImportant',
+									itemId:'isImportant',
                 			    
                 			    },
                 			    {
@@ -96,12 +96,11 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                 			    {
                 			    	
                 			    	boxLabel: 'Required For Financial Aid(SAP)',
-                			    	name: 'sapplan',
+                			    	name: 'isFinancialAid',
                 			    	labelWidth: 200,
                 			    	boxLabelAlign: 'before',
-                			    	inputValue: 'sap',
-									hidden: true,
-									hideable: false
+                			    	inputValue: 'isFinancialAid',
+									itemId:'isFinancialAid',
                 			    },
                 			    {
                                     xtype: 'tbspacer',
@@ -110,12 +109,11 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                 			    {
                 			    	
                 			    	boxLabel: 'F1 visa',
-                			    	name: 'f1',
+                			    	name: 'isF1Visa',
                 			    	labelWidth: 70,
                 			    	boxLabelAlign: 'before',
-                			    	inputValue: 'f1',
-									hidden: true,
-									hideable: false
+                			    	inputValue: 'isF1Visa',
+									itemId:'isF1Visa',
                 			    }
                 			    ]},
         			    	{
@@ -124,10 +122,11 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
         			    	border: 1,
                             margin: '0 0 0 2',
                             padding: '0 0 0 5',
+							width: '80%',
                             //flex: 1,
                             layout: {
                                 align: 'stretch',
-                                type: 'vbox'
+                                type: 'vbox',
                             },
                             items: [
 				               {
@@ -135,71 +134,69 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
             				        name: 'name',
             				        itemId: 'name',
             				        maxLength: 50,
+									width: '80%',
             				        allowBlank:false
-            				        
             				    },{
             				        fieldLabel: 'Contact Name',
             				        name: 'contactName',
             				        itemId: 'contactName',
             				        maxLength: 50,
+									width: '80%',
             				        allowBlank:true,
-									hidden: true,
-									hideable: false
             				        
             				    },{
             				        fieldLabel: 'Contact Title',
             				        name: 'contactTitle',
             				        itemId: 'contactTitle',
             				        maxLength: 50,
+									width: '80%',
             				        allowBlank:true,
-									hidden: true,
-									hideable: false
             				    },{
+	            				    fieldLabel: 'Contact Email',
+	            				    name: 'contactEmail',
+	            				    itemId: 'contactEmail',
+									width: '80%',
+	            				   allowBlank:true,
+	            				 },{
             				        fieldLabel: 'Contact Phone',
             				        name: 'contactPhone',
             				        itemId: 'contactPhone',
+									width: '80%',
             				        allowBlank:true,
-									hidden: true,
-									hideable: false
             				    },
             				   {
             				        fieldLabel: 'Academic',
-            				        name: 'academic',
+            				        name: 'academicLink',
             				        allowBlank:true,
-            				        itemId: 'academic',
-									hidden: true,
-									hideable: false
+									width: '80%',
+            				        itemId: 'academicLink',
             				    },{
             				        fieldLabel: 'Career Data',
-            				        name: 'careerdata',
+            				        name: 'careerLink',
             				        allowBlank:true,
-            				        itemId: 'careerdata',
-									hidden: true,
-									hideable: false
+									width: '80%',
+            				        itemId: 'careerLink',
             				    },{
             				        fieldLabel: 'Advisor/Coach Notes',
-            				        name: 'coachnotes',
+            				        name: 'contactNotes',
             				        allowBlank:true,
-            				        itemId: 'coachnotes',
+            				        itemId: 'contactNotes',
+									width: '80%',
             				        xtype: 'textareafield',
-									hidden: true,
-									hideable: false
             				    },{
             				        fieldLabel: 'Student Notes',
-            				    name: 'studentnotes',
-            			        allowBlank:true,
-            			        itemId: 'addressLine1',
-            			        xtype: 'textareafield',
-								hidden: true,
-								hideable: false
+            				    	name: 'studentNotes',
+            			        	allowBlank:true,
+            			        	itemId: 'studentNotes',
+            			        	xtype: 'textareafield',
+									width: '80%',
                 			    },{
                 			        fieldLabel: 'Academic Goals',
-                			        name: 'academicgoals',
+                			        name: 'academicGoals',
                 			        allowBlank: true,
-                			        itemId: 'academicgoals',
+                			        itemId: 'academicGoals',
                 			        xtype: 'textareafield',
-									hidden: true,
-									hideable: false
+									width: '80%',
                 			    }
             			    ]
                     

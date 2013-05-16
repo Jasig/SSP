@@ -53,5 +53,11 @@ Ext.define('Ssp.model.tool.map.SemesterCourse', {
 					}else if(!me.get('creditHours')) {
 		        		me.set('creditHours', me.get('minCreditHours'));
 					}
-		        }
+		        },
+	getBoolean: function(fieldName){
+		var me = this;
+		if(me.get(fieldName) == 'on' || me.get(fieldName) == true || me.get(fieldName) == 1, me.get(fieldName) == 'true')
+			return true;
+		return false;
+	}
 });

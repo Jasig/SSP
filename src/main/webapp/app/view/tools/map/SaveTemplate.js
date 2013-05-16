@@ -27,7 +27,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
         departmentsStore: 'departmentsStore',
         divisionsStore: 'divisionsStore',
     },
-    height: 500,
+    height: 580,
     width: 850,
     resizable: true,
     initComponent: function(){
@@ -66,6 +66,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                 				    	xtype:'checkbox',
                 			    	fieldLabel: 'Active Plan',
                 			    	name: 'objectStatus',
+									itemId: 'objectStatus',
                 			    	labelWidth: 65,
                 			    	checked: true
                 			    },
@@ -77,6 +78,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                 			    	xtype:'checkbox',
                 			    	fieldLabel: 'Private to Me ',
                 			    	name: 'isPrivate',
+									itemId: 'isPrivate',
                 			    	labelWidth: 80
                 			    }
                 			    ]},
@@ -154,46 +156,60 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
 				               {
             				        fieldLabel: 'Plan Title',
             				        name: 'name',
+									itemId: 'name',
             				        maxLength: 50,
             				        allowBlank:false
             				        
             				    },{
             				        fieldLabel: 'Contact Name',
             				        name: 'contactName',
+									itemId: 'contactName',
             				        maxLength: 50,
             				        allowBlank:false
             				        
             				    },{
             				        fieldLabel: 'Contact Title',
             				        name: 'contactTitle',
+            				        itemId: 'contactTitle',
             				        maxLength: 50,
             				        allowBlank:true
             				    },{
+	            				   fieldLabel: 'Contact Email',
+	            				   name: 'contactEmail',
+		            			   itemId: 'contactEmail',
+	            				   allowBlank:false
+	            				},{
             				        fieldLabel: 'Contact Phone',
             				        name: 'contactPhone',
+            				        itemId: 'contactPhone',
             				        allowBlank:false
             				    },
             				   {
             				        fieldLabel: 'AcademicLink',
             				        name: 'academicLink',
+            				        itemId: 'academicLink',
             				        allowBlank:true,
             				    },{
             				        fieldLabel: 'Career Link',
             				        name: 'careerLink',
+            				        itemId: 'careerLink',
             				        allowBlank:true,
             				    },{
             				        fieldLabel: 'Advisor/Coach Notes',
             				        name: 'contactNotes',
+            				        itemId: 'contactNotes',
             				        allowBlank:true,
             				        xtype: 'textareafield'
             				    },{
             				        fieldLabel: 'Student Notes',
-            				    name: 'studentNotes',
-            			        allowBlank:true,
-            			        xtype: 'textareafield'
+            				    	name: 'studentNotes',
+            				    	itemId: 'studentNotes',
+            			        	allowBlank:true,
+            			        	xtype: 'textareafield'
                 			    },{
                 			        fieldLabel: 'Academic Goals',
                 			        name: 'academicGoals',
+                			        itemId: 'academicGoals',
                 			        allowBlank:true,
                 			        xtype: 'textareafield'
                 			    }

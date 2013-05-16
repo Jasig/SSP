@@ -114,6 +114,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		
 		return foundNote;
 	},
+	
 	clearTermNotes:function(){
 				var me = this;
 				var termNotes =  me.get('termNotes');
@@ -161,11 +162,13 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		var termNotes = me.get('termNotes')
 		var recordTermNotes = [];
 		if(termNotes && termNotes.length > 0)
-		termNotes.forEach(function(termNote){
-			var recordTermNote = new Ssp.model.tool.map.TermNote();
-			recordTermNote.populateFromGenericObject(termNote);
-			recordTermNotes.push(recordTermNote);
-		})
+		{
+			termNotes.forEach(function(termNote){
+				var recordTermNote = new Ssp.model.tool.map.TermNote();
+				recordTermNote.populateFromGenericObject(termNote);
+				recordTermNotes.push(recordTermNote);
+			})
+		}
 		me.set('termNotes', recordTermNotes);
 	}, 		
 	getSimpleJsonData: function(){
@@ -180,24 +183,24 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		})
 		
 		simpleData.ownerId = me.get('ownerId');
-		
+		simpleData.objectStatus = me.getObjectStatus();
 		simpleData.name = me.get('name');
 		simpleData.id = me.get('id');
 		simpleData.createdBy = me.get('createdBy');
 		simpleData.modifiedBy = me.get('modifiedBy');
 		simpleData.contactTitle = me.get('contactTitle');
-         simpleData.contactPhone = me.get('contactPhone');
-         simpleData.contactEmail = me.get('contactEmail');
-         simpleData.contactName = me.get('contactName');
-         simpleData.contactNotes = me.get('contactNotes');
-         simpleData.studentNotes = me.get('studentNotes');
+        simpleData.contactPhone = me.get('contactPhone');
+        simpleData.contactEmail = me.get('contactEmail');
+        simpleData.contactName = me.get('contactName');
+        simpleData.contactNotes = me.get('contactNotes');
+        simpleData.studentNotes = me.get('studentNotes');
          //simpleData.basedOnTemplateId = me.get('basedOnTemplateId');
-         simpleData.isFinancialAid = me.get('isFinancialAid');
-         simpleData.isImportant = me.get('isImportant');
-         simpleData.isF1Visa = me.get('isF1Visa');
-         simpleData.academicGoals = me.get('academicGoals');
-         simpleData.careerLink = me.get('careerLink');
-         simpleData.academicLink = me.get('academicLink');
+        simpleData.isFinancialAid = me.getBoolean('isFinancialAid');
+        simpleData.isImportant = me.getBoolean('isImportant');
+        simpleData.isF1Visa = me.getBoolean('isF1Visa');
+        simpleData.academicGoals = me.get('academicGoals');
+        simpleData.careerLink = me.get('careerLink');
+        simpleData.academicLink = me.get('academicLink');
 		simpleData.createdDate = me.get('createdDate');
 		simpleData.modifiedDate = me.get('modifiedDate');
 		if(me.get('isTemplate')){
@@ -205,15 +208,33 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			simpleData.departmentCode = me.get('departmentCode');
 			simpleData.divisionCode = me.get('divisionCode');
 			simpleData.programCode = me.get('programCode');
-			if(me.get('isPrivate'))
-				simpleData.isPrivate = me.get('isPrivate');
-			else
-				simpleData.isPrivate = true;
+			simpleData.isPrivate = me.getBoolean('isPrivate');
 		}else{
 			simpleData.planCourses = me.get('planCourses');
 			simpleData.personId = me.get('personId');
 		}
 		return simpleData;
-	}
+	},
+	
+	getBoolean:function(fieldName){
+		var me = this;
+		if(me.get(fieldName) == 'on' || me.get(fieldName) == true || me.get(fieldName) == 1 || me.get(fieldName) == 'true')
+			return true;
+		return false;
+	},
+	
+	getObjectStatus:function(){
+		var me = this;
+		if(me.getBoolean('objectStatus') || me.get('objectStatus') == 'ACTIVE')
+			return 'ACTIVE';
+		return 'INACTIVE';
+	},
+	
+	getAsBoolean:function(fieldName, yesValue){
+		var me = this;
+		if(me.getBoolean(fieldName) || me.get(fieldName) == yesValue)
+			return true;
+		 return false;
+	},
     		        		  
 });

@@ -199,8 +199,8 @@ Ext.define('Ssp.service.MapPlanService', {
             		planCourse.courseDescription = model.get('description');
             		planCourse.studentNotes = model.get('studentNotes');
             		planCourse.contactNotes = model.get('contactNotes');
-            		planCourse.isImportant = model.get('isImportant');
-            		planCourse.isTranscript = model.get('isTranscript');
+            		planCourse.isImportant = me.getBoolean(model, 'isImportant');
+            		planCourse.isTranscript = me.getBoolean(model, 'isTranscript');
             		planCourse.electiveId = model.get('electiveId');
             		planCourse.orderInTerm = i;
 					planCourse.objectStatus = 'ACTIVE';
@@ -210,6 +210,13 @@ Ext.define('Ssp.service.MapPlanService', {
          }
          me.currentMapPlan.set('planCourses',planCourses);
     }, 
+
+	getBoolean: function(model, fieldName){
+		var me = model;
+		if(me.get(fieldName) == 'on' || me.get(fieldName) == true || me.get(fieldName) == 1, me.get(fieldName) == 'true')
+			return true;
+		return false;
+	},
 
     
     save: function(semesterStores, callbacks, currentMapPlan, view, saveAs ){
