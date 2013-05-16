@@ -20,8 +20,9 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
     extend: 'Ext.window.Window',
     alias: 'widget.coursenotes',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    height: 200,
-    width: 500,
+	inject: {electiveStore : 'electiveStore'},
+    height: 390,
+    width: 480,
     resizable: true,
     initComponent: function() {
 		var me=this;
@@ -84,6 +85,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				    },
 				    {
                     	name: 'isImportant',
+						itemId: 'isImportant',
                     	inputValue: 'isImportant',
                     	xtype:'checkbox',
                     	padding: '0 0 0 105',
@@ -93,14 +95,19 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                     	fieldLabel: 'Mark As Important',
                     },
                     {
-                    xtype:'checkbox',
-                    	padding: '0 0 0 105',
-                    	labelSeparator: '',
-                    	hideLabel: true,   
-                    	boxLabel: 'Mark As Program Elective',
-                    	name: 'isElective',
-                    	inputValue: 'isElective',
-                    }
+                        xtype: 'combobox',
+                        itemId: 'electiveId',
+						name: 'electiveId',
+                        store: me.electiveStore,
+                        fieldLabel: '',
+                        emptyText: 'Elective',
+                        valueField: 'id',
+                        displayField: 'name',
+                        mode: 'local',
+                        typeAhead: true,
+                        allowBlank: true,
+                        width: 250
+                    },
 				    ]
 				    ,
 				    dockedItems: [{

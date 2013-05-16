@@ -27,7 +27,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		person: 'currentPerson',
 		authenticatedPerson: 'authenticatedPerson',
         personLite: 'personLite',
-    	currentMapPlan: 'currentMapPlan'
+    	currentMapPlan: 'currentMapPlan',
+		electiveStore : 'electiveStore',
     },
     
 	control: {
@@ -456,6 +457,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     		me.coursePlanDetails.rowIndex = args.rowIndex;
     		me.coursePlanDetails.semesterStore = args.store;
 			me.coursePlanDetails.setTitle(courseRecord.get('formattedCourse') + ' - ' + courseRecord.get('title'));
+			me.electiveStore.load();
     		me.coursePlanDetails.center();
     		me.coursePlanDetails.show();
     	}
