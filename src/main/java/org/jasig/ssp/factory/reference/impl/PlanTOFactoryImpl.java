@@ -89,6 +89,7 @@ public class PlanTOFactoryImpl extends AbstractAuditableTOFactory<PlanTO, Plan>
 		model.setContactTitle(tObject.getContactTitle());
 		model.setIsF1Visa(tObject.getIsF1Visa());
 		model.setIsFinancialAid(tObject.getIsFinancialAid());
+		model.setIsImportant(tObject.getIsImportant());
 		model.setStudentNotes(tObject.getStudentNotes());
 		model.getTermNotes().clear();
 		List<TermNoteTO> termNotes = tObject.getTermNotes();
