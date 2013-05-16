@@ -1910,6 +1910,11 @@
                     "path": "/app/controller/admin/crg/"
                 },
                 {
+                    "clsName": "Ssp.model.tool.caseload.CaseloadReassignmentRequest",
+                    "name": "CaseloadReassignmentRequest.js",
+                    "path": "/app/model/tool/caseload/"
+                },
+                {
                     "clsName": "Ssp.controller.admin.caseload.CaseloadReassignmentTargetViewController",
                     "name": "CaseloadReassignmentTargetViewController.js",
                     "path": "/app/controller/admin/caseload/"
