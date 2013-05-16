@@ -71,10 +71,7 @@ public abstract class AbstractPlanCourse<T extends AbstractPlan> extends Abstrac
 	
 	@Column(nullable = false)
 	private Boolean isImportant = false;
-	
-	@Column(nullable = false)
-	private Boolean isTranscript = false;	
-	
+
 	@ManyToOne()
 	@JoinColumn(name = "elective_id", updatable = false, nullable = true)
 	private Elective elective;
@@ -105,7 +102,6 @@ public abstract class AbstractPlanCourse<T extends AbstractPlan> extends Abstrac
 		clone.setContactNotes(this.getContactNotes());
 		clone.setElective(this.getElective());
 		clone.setIsImportant(this.getIsImportant());
-		clone.setIsTranscript(this.getIsTranscript());
 		clone.setStudentNotes(this.getStudentNotes());
 	}
 	public String getTermCode() {
@@ -201,17 +197,6 @@ public abstract class AbstractPlanCourse<T extends AbstractPlan> extends Abstrac
 	public void setIsImportant(Boolean isImportant) {
 		this.isImportant = isImportant;
 	}
-
-
-	public Boolean getIsTranscript() {
-		return isTranscript;
-	}
-
-
-	public void setIsTranscript(Boolean isTranscript) {
-		this.isTranscript = isTranscript;
-	}
-
 
 	public Elective getElective() {
 		return elective;

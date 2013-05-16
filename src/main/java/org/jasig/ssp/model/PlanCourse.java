@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -26,11 +27,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Formula;
+
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name="map_plan_course")
 public class PlanCourse extends AbstractPlanCourse<Plan> {
 
+	//Hibernate calculated attributes only support native sql and not hql :( 
+	//tokens in all caps refer to map_plan_course COLUMNS not member attributes.
+	private static final String IS_TRANSCRIPT_FORMULA = " ( select count(*) > 0 from external_student_transcript_course estc " +
+														" join  person p on p.school_id = estc.school_id " +
+														" where p.id = PERSON_ID and estc.formatted_course = FORMATTED_COURSE ) ";
 	
 	private static final long serialVersionUID = -6316130725863888876L;
 
@@ -43,6 +51,11 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 	@ManyToOne()
 	@JoinColumn(name = "person_id", updatable = false, nullable = false)
 	private Person person;
+	
+	
+	@Formula(IS_TRANSCRIPT_FORMULA)
+	private Boolean isTranscript;	
+	
 
 	public Person getPerson() {
 		return person;
@@ -73,5 +86,13 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 	@Override
 	public Plan getParent() {
 		return plan;
+	}
+
+	public Boolean getIsTranscript() {
+		return isTranscript;
+	}
+
+	public void setIsTranscript(Boolean isTranscript) {
+		this.isTranscript = isTranscript;
 	}
 }

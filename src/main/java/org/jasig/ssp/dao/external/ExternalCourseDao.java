@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -57,7 +58,7 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 	@Override
 	@Deprecated
 	public PagingWrapper<ExternalCourse> getAll(SortingAndPaging sAndP) {
-		return null;
+		throw new NotImplementedException("Use getAll()");
 	}
 
 	@SuppressWarnings("unchecked")

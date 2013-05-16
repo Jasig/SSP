@@ -75,7 +75,6 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 		this.setContactNotes(model.getContactNotes());
 		this.setStudentNotes(model.getStudentNotes());
 		this.setIsImportant(model.getIsImportant());
-		this.setIsTranscript(model.getIsTranscript());
 		if(model.getElective() != null)
 			this.setElectiveId(model.getElective().getId());
 	}
