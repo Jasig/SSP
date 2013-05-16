@@ -28,5 +28,6 @@
     <include file="org/jasig/ssp/database/demoDataChangeset/demo_data.xml" />
     <include file="org/jasig/ssp/database/demoDataChangeset/demo_data_1.xml" />
 	<include file="org/jasig/ssp/database/demoDataChangeset/demo_data_2.xml" />
+	<include file="org/jasig/ssp/database/demoDataChangeset/demo_data_4.xml" />
 
 </databaseChangeLog>
