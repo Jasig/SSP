@@ -181,6 +181,13 @@ Ext.require([
     'Ssp.view.admin.forms.campus.CampusEarlyAlertRoutingsAdmin',
     'Ssp.view.admin.forms.campus.EarlyAlertRoutingsAdmin',
     'Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',
+	
+	//CONFIG ADMIN VIEWS
+	'Ssp.view.admin.forms.config.ConfigurationOptionsAdmin',
+    'Ssp.view.admin.forms.config.ConfigurationOptionsDisplayAdmin',
+	'Ssp.view.admin.forms.config.MessageTemplatesAdmin',
+    'Ssp.view.admin.forms.config.MessageTemplatesDisplayAdmin',
+	'Ssp.view.admin.forms.config.MessageTemplateDetails',
     
     // ERROR DISPLAYS
     'Ssp.view.ErrorWindow',
@@ -212,6 +219,7 @@ Ext.require([
 	'Ssp.model.TermTranscript',
 	'Ssp.model.StudentActivity',
 	'Ssp.model.Transcript',
+	'Ssp.model.MessageTemplates',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
 	'Ssp.model.tool.studentintake.PersonEducationGoal',
@@ -280,6 +288,7 @@ Ext.require([
     'Ssp.store.reference.Citizenships',
     'Ssp.store.reference.Colors',
 	'Ssp.store.reference.ConfidentialityLevels',
+	'Ssp.store.reference.ConfigurationOptions',
 	'Ssp.store.reference.DisabilityAccommodations',
 	'Ssp.store.reference.DisabilityAgencies',
 	'Ssp.store.reference.DisabilityStatuses',
@@ -301,6 +310,7 @@ Ext.require([
     'Ssp.store.reference.Lassis',
     'Ssp.store.reference.MaritalStatuses',
     'Ssp.store.reference.MilitaryAffiliations',
+	'Ssp.store.reference.MessageTemplates',
     'Ssp.store.People',
     'Ssp.store.Placement',
     'Ssp.store.PeopleSearchLite',
@@ -384,6 +394,7 @@ var apiUrls = [
   {name: 'confidentialityDisclosureAgreement', url: 'reference/confidentialityDisclosureAgreement'},
   {name: 'printConfidentialityDisclosureAgreement', url: '/forms/ConfidentialityAgreement.jsp'},
   {name: 'confidentialityLevel', url: 'reference/confidentialityLevel'},
+  {name: 'config', url: 'reference/config'},
   {name: 'configuration', url: 'reference/configuration'},
   {name: 'disabilityAccommodation', url: 'reference/disabilityAccommodation'},
   {name: 'accommodationTool', url: 'tool/accommodation'},
@@ -407,6 +418,7 @@ var apiUrls = [
   {name: 'lassi', url: 'reference/lassi'},
   {name: 'maritalStatus', url: 'reference/maritalStatus'},
   {name: 'militaryAffiliation', url: 'reference/militaryAffiliation'},
+  {name: 'messageTemplate', url: 'reference/messageTemplate'},
   {name: 'studentStatus', url: 'reference/studentStatus'},
   {name: 'veteranStatus', url: 'reference/veteranStatus'},
   {name: 'person', url: 'person'},
@@ -825,6 +837,12 @@ Ext.onReady(function(){
 				    	},
 				    	singleton: true
 				    },
+					currentMessageTemplate:{
+				        fn: function(){
+				            return new Ssp.model.MessageTemplates({id:""});
+				    	},
+				        singleton: true
+			        },
 			        // STORES
 					abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
 				    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
@@ -841,6 +859,7 @@ Ext.onReady(function(){
 				    citizenshipsStore: 'Ssp.store.reference.Citizenships',
 			    	coachesStore: 'Ssp.store.Coaches',
 				    confidentialityDisclosureAgreementsStore: 'Ssp.store.reference.ConfidentialityDisclosureAgreements',
+					configurationOptionsStore: 'Ssp.store.reference.ConfigurationOptions',
 				    colorsStore: 'Ssp.store.reference.Colors',
 				    confidentialityLevelsStore: 'Ssp.store.reference.ConfidentialityLevels',
 				    disabilityAccommodationsStore: 'Ssp.store.reference.DisabilityAccommodations',
@@ -873,6 +892,7 @@ Ext.onReady(function(){
 			        lassisStore: 'Ssp.store.reference.Lassis',
 			        maritalStatusesStore: 'Ssp.store.reference.MaritalStatuses',
 			    	militaryAffiliationsStore: 'Ssp.store.reference.MilitaryAffiliations',
+					messageTemplatesStore: 'Ssp.store.reference.MessageTemplates',
 			    	peopleSearchLiteStore: 'Ssp.store.PeopleSearchLite',			    	
 			    	peopleStore: 'Ssp.store.People',
 			    	personalityTypesStore: 'Ssp.store.reference.PersonalityTypes',

@@ -2273,8 +2273,82 @@
                     "clsName": "Ssp.view.admin.forms.shg.SelfHelpGuidesDisplayAdmin",
                     "name": "SelfHelpGuidesDisplayAdmin.js",
                     "path": "/app/view/admin/forms/shg/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.config.ConfigurationOptionsAdminViewController",
+                    "name": "ConfigurationOptionsAdminViewController.js",
+                    "path": "/app/controller/admin/config/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.config.ConfigurationOptionsDisplayAdminViewController",
+                    "name": "ConfigurationOptionsDisplayAdminViewController.js",
+                    "path": "/app/controller/admin/config/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.config.MessageTemplateDetailsAdminViewController",
+                    "name": "MessageTemplateDetailsAdminViewController.js",
+                    "path": "/app/controller/admin/config/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.config.MessageTemplatesAdminViewController",
+                    "name": "MessageTemplatesAdminViewController.js",
+                    "path": "/app/controller/admin/config/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.config.MessageTemplatesDisplayAdminViewController",
+                    "name": "MessageTemplatesDisplayAdminViewController.js",
+                    "path": "/app/controller/admin/config/"
+                },
+                {
+                    "clsName": "Ssp.model.MessageTemplates",
+                    "name": "MessageTemplates.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.ConfigurationOption",
+                    "name": "ConfigurationOption.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.MessageTemplate",
+                    "name": "MessageTemplate.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.ConfigurationOptions",
+                    "name": "ConfigurationOptions.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.MessageTemplates",
+                    "name": "MessageTemplates.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.ConfigurationOptionsAdmin",
+                    "name": "ConfigurationOptionsAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.ConfigurationOptionsDisplayAdmin",
+                    "name": "ConfigurationOptionsDisplayAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.MessageTemplateDetails",
+                    "name": "MessageTemplateDetails.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.MessageTemplatesAdmin",
+                    "name": "MessageTemplatesAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.MessageTemplatesDisplayAdmin",
+                    "name": "MessageTemplatesDisplayAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
                 }
-                
             ]
         },
         {

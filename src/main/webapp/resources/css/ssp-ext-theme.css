@@ -232,3 +232,12 @@ background:#ffff00 !important;
 .studentpanel .x-panel-header-text {
 	padding-left: 15px;
 }
+
+.configgrid .x-grid-row .x-grid-cell-inner {
+    white-space: normal;
+}
+
+.configgrid .x-grid-row-over .x-grid-cell-inner {
+   font-weight: bold;
+   white-space: normal;
+}
