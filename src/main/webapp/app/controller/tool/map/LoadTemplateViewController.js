@@ -30,7 +30,6 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 		programsStore: 'programsStore',
         departmentsStore: 'departmentsStore',
         divisionsStore: 'divisionsStore',
-
     },
     
 	control: {
@@ -59,7 +58,7 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
             select: 'onDivisionSelect'
            }
         },
-        /*
+
         'programCancel':{
             selector: '#programCancel',
             hidden: true,
@@ -82,7 +81,22 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
            listeners: {
             click: 'onDivisionCancelClick'
            }
-        },*/
+        },
+		'objectStatusFilter':{
+            selector: '#objectStatusFilter',
+            hidden: false,
+            listeners: {
+             select: 'onObjectStatusFilterSelect'
+            }
+         },
+
+		'typeFilter':{
+            selector: '#typeFilter',
+            hidden: false,
+            listeners: {
+             select: 'onTypeFilterSelect'
+            }
+         },
 			
 	},
 
@@ -154,7 +168,6 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 	        me.handleSelect(me);
 	        var params = {};
 	        me.setParam(params, me.getProgram(), "programCode");
-	        me.doFaceting([me.getTag(), me.getTerm()], params);
 	    },  
 	    
 	    onProgramCancelClick: function(button){
@@ -171,38 +184,28 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 	    onDepartmentCancelClick: function(button){
 	        var me=this;
 	        me.getDepartment().setValue("");
-	        handleSelect(me);
+	        me.handleSelect(me);
 	    },
 	    
 	    onDivisionSelect: function(){
 	        var me=this;
-			handleSelect(me);
+			me.handleSelect(me);
 	    },   
 	    
 	    onDivisionCancelClick: function(button){
 	        var me=this;
 	        me.getDivision().setValue("");
-	        handleSelect(me);
+	        me.handleSelect(me);
 	    },
 	    
 	    handleSelect: function(me){
 	    	var params = {};
 	    	me.setParam(params, me.getProgram(), 'programCode');
-	    	me.setParam(params, me.getTag(), 'tag');
-	    	me.setParam(params, me.getDepartment(), 'department');
-	    	me.setParam(params, me.getDivision(), 'division');
-	    	me.setParam(params, me.getTerm(), 'termCode');
+	    	me.setParam(params, me.getDepartment(), 'departmentCode');
+	    	me.setParam(params, me.getDivision(), 'divisionCode');
+			params["objectStatus"] = "ALL"; //Object status and object type filtered client side.
 	    	me.store.on('load', this.onLoad, this, {single: true});
 	    	me.store.load({params: params});
-	    	me.doFaceting(params);
-	    },
-	    
-	    doFaceting: function(params){
-	    	var me = this;
-	    	var facets = [me.getProgram(), me.getTag()];
-	    	facets.forEach(function(facet){
-	    		facet.getStore().load({params:params});
-	    	});
 	    },
 	    
 	    onLoadComplete: function(){
@@ -213,6 +216,32 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 	    	if(field.getValue() && field.getValue().length > 0)
 	    		params[fieldName] = field.getValue();
 	    },
+	
+		onTypeFilterSelect:function(){
+			var me = this;
+			var type = me.getTypeFilter().getValue();
+			switch(type){
+				case "ALL":me.store.clearFilter(false);
+				break;
+				case "PRIVATE":me.store.filter("isPrivate", true);
+				break;
+				case "PUBLIC":me.store.filter("isPrivate", false);
+				break;
+			}
+		},
+		
+		onObjectStatusFilterSelect:function(){
+				var me = this;
+				var objectStatus = me.getObjectStatusFilter().getValue();
+				switch(objectStatus){
+					case "ALL":me.store.clearFilter(false);
+					break;
+					case "ACTIVE":me.store.filter("objectStatus", "ACTIVE");
+					break;
+					case "INACTIVE":me.store.filter("objectStatus", "INACTIVE");
+					break;
+				}
+		},
 	    
 		
 		destroy:function(){

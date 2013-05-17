@@ -29,215 +29,17 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
         store: 'planTemplatesSummaryStore',
     },
     height: 500,
-    width: 700,
+    width: 900,
     resizable: true,
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
             layout: {
                 align: 'stretch',
-                type: 'vbox'
+                type: 'hbox'
             },
             title: 'Load Template',
-           items: [{
-                xtype: 'form',
-                flex: 1,
-                border: 0,
-                frame: false,
-                layout: {
-                    align: 'stretch',
-                    type: 'vbox'
-                },
-                 width: '100%',
-                height: '100%',
-                bodyPadding: 10,
-                autoScroll: true,
-                itemId: 'faForm',
-                items: [
-                {
-                    xtype: 'fieldcontainer',
-                    border: 0,
-                    title: '',
-                    defaultType: 'displayfield',
-                    layout: 'hbox',
-                    align: 'stretch',
-                    padding: 0,
-                    margin: '0 0 0 0',
-                    
-                    items: [
-                    {
-                        xtype : 'label',
-                        text: 'Filter By:'
-                    },  
-                    {
-                    xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    defaultType: 'displayfield',
-                    layout: 'vbox',
-                    align: 'stretch',
-                    padding: 0,
-                    margin: '0 0 0 5',
-                    items: [ 
-                             {
-                                xtype: 'combobox',
-                                itemId: 'program',
-                                store: me.programsStore,
-                                fieldLabel: '',
-                                emptyText: 'Specific Program',
-                                valueField: 'code',
-                                displayField: 'name',
-                                mode: 'local',
-                                typeAhead: true,
-                                allowBlank: true,
-                                width: 250
-                            },
-                            {
-                                    xtype: 'tbspacer',
-                                    width: 30
-                            },
-                            {
-                                xtype: 'combobox',
-                                itemId: 'department',
-                                store: me.departmentsStore,
-                                fieldLabel: '',
-                                emptyText: 'Specific Division',
-                                valueField: 'code',
-                                displayField: 'name',
-                                mode: 'local',
-                                typeAhead: true,
-                                allowBlank: true,
-                                width: 250
-                            },
-                            {
-                                xtype: 'combobox',
-                                itemId: 'division',
-                                store: me.divisionsStore,
-                                fieldLabel: '',
-                                emptyText: 'Specific Division',
-                                valueField: 'code',
-                                displayField: 'name',
-                                mode: 'local',
-                                typeAhead: true,
-                                allowBlank: true,
-                                width: 250
-                            }    
-                       ]
-                },
-                {
-                    xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    defaultType: 'radio',
-                    layout: 'vbox',
-                    align: 'stretch',
-                    padding: '0 0 0 20',
-                    margin: '0 0 0 0',
-                    items: [        
-                     
-                            {
-                                 inputValue: 'All',
-                                    boxLabel: 'All',
-                                    labelWidth: 50
-                                },
-                                {
-                                    inputValue: 'Private',
-                                    boxLabel: 'Private',
-                                    labelWidth: 50
-                                },
-                                {
-                                    inputValue: 'Public',
-                                    boxLabel: 'Public',
-                                    labelWidth: 50
-                                    }
-                            ]
-                          }
-                        
-                        ]
-                    },
-                    {
-                            xtype: 'container',
-                            defaultType: 'textfield',
-                            padding: '0 0 0 0',
-                            layout: {
-                                align: 'stretch',
-                                type: 'vbox'
-                            },
-                            items: [
-                            {
-                                fieldLabel: 'Template Name',
-                                name: 'templateName',
-                                itemId: 'templateName',
-                                maxLength: 50,
-                                allowBlank:true,
-                                labelWidth:100
-                            }]},
-                            {
-                            xtype: 'gridpanel',
-                            title: '',
-                            id: 'allPlansTemplateGridPanel',
-                            width: '100%',
-                            height: '100%',
-                            border: true,
-                            autoScroll: true,
-                            columnLines: true,
-                            store: me.store,
-                            columns: [
-                            {
-                                text: 'Type',
-                                width: '75',
-                                dataIndex: 'type',
-                                sortable: true
-                            },{
-                                text: 'Template Title',
-                                width: '400',
-                                dataIndex: 'name',
-                                sortable: true
-                            }, {
-                                text: 'Date/ Time',
-                                width: '125',
-                                dataIndex: 'modifiedDate',
-                                sortable: true,
-                                renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
-                                
-                            }, {
-                                text: 'Advisor',
-                                width: '100',
-                                sortable: true,
-                                dataIndex: 'ownerName'
-                                
-                            },
-							{
-                                text: 'dpartment',
-                                width: '100',
-                                sortable: true,
-                                dataIndex: 'departmentCode',
-								hidden: true,
-								hideable:false
-                                
-                            },
-							{
-                                text: 'progrram',
-                                width: '100',
-                                sortable: true,
-                                dataIndex: 'programCode',
-								hidden: true,
-								hideable:false
-                                
-                            },
-							{
-                                text: 'division',
-                                width: '100',
-                                sortable: true,
-                                dataIndex: 'divisionCode',
-								hidden: true,
-								hideable:false
-                                
-                            }
-                            ]}
-            
-            ],
-            dockedItems: [{
+			dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'top',
                 items: [{
@@ -250,10 +52,295 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                     itemId: 'cancelButton',
                     text: 'Cancel'
                 }]
+            }],
+           items: [
+				
+				{
+                xtype: 'form',
+                flex: 1,
+                border: 0,
+                frame: false,
+				title: "Filters",
+				titleAlign:"center",
+                layout: {
+                    align: 'stretch',
+                    type: 'hbox'
+                },
+                width: 330,
+                height: '80%',
+                bodyPadding: 10,
+                autoScroll: true,
+                items: [
+                {
+                    xtype: 'fieldcontainer',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    layout: 'hbox',
+                    align: 'stretch',
+                    padding: 0,
+                    margin: '0 0 0 0',
+                    
+                    items: [
+                      
+                    {
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    defaultType: 'displayfield',
+                    layout: 'vbox',
+                    align: 'stretch',
+                    padding: 0,
+                    margin: '0 0 0 5',
+                    items: [ 
+                             {
+						    xtype: 'fieldset',
+						    border: 0,
+						    title: '',
+						    margin: '0 0 0 0',
+						    padding: '0 0 0 5',
+						    layout: 'hbox',
+						    defaults: {
+						        anchor: '100%'
+						    },
+						    items: [{
+						        xtype: 'combobox',
+						        name: 'program',
+						        store: me.programsStore,
+						        fieldLabel: 'Program',
+								labelWidth:80,
+						        emptyText: 'Filter by Program',
+						        valueField: 'code',
+						        displayField: 'name',
+						        mode: 'local',
+						        queryMode: 'local',
+						        allowBlank: true,
+						        itemId: 'program',
+						        width: 260,
+						    	}, {
+							        tooltip: 'Reset to All Programs',
+							        text: '',
+							        width: 30,
+							        height: 25,
+							        name: 'programCancel',
+							        cls: 'mapClearSearchIcon',
+							        xtype: 'button',
+							        itemId: 'programCancel',
+							    }]
+							},
+							{
+							    xtype: 'fieldset',
+							    border: 0,
+							    title: '',
+							    margin: '0 0 0 0',
+							    padding: '0 0 0 5',
+							    layout: 'hbox',
+							    defaults: {
+							        anchor: '100%'
+							    	},
+							    items: [{
+							        xtype: 'combobox',
+							        name: 'department',
+							        store: me.departmentsStore,
+							        fieldLabel: 'Department',
+									labelWidth:80,
+							        emptyText: 'Filter by Department',
+							        valueField: 'code',
+							        displayField: 'name',
+							        mode: 'local',
+							        queryMode: 'local',
+							        allowBlank: true,
+							        itemId: 'department',
+							        width: 260,
+							    	}, {
+							        tooltip: 'Reset to All Departments',
+							        text: '',
+							        width: 30,
+							        height: 25,
+							        name: 'departmentCancel',
+							        cls: 'mapClearSearchIcon',
+							        xtype: 'button',
+							        itemId: 'departmentCancel',
+							    	}]
+							},{
+							    xtype: 'fieldset',
+							    border: 0,
+							    title: '',
+							    margin: '0 0 0 0',
+							    padding: '0 0 0 5',
+							    layout: 'hbox',
+							    defaults: {
+							        anchor: '100%'
+							    	},
+							    items: [{
+							        xtype: 'combobox',
+							        name: 'division',
+							        store: me.divisionsStore,
+							        fieldLabel: 'Division',
+									labelWidth:80,
+							        emptyText: 'Filter by Division',
+							        valueField: 'code',
+							        displayField: 'name',
+							        mode: 'local',
+							        queryMode: 'local',
+							        allowBlank: true,
+							        itemId: 'division',
+							        width: 260,
+							    	}, {
+							        tooltip: 'Reset to All Divisions',
+							        text: '',
+							        width: 30,
+							        height: 25,
+							        name: 'divisionCancel',
+							        cls: 'mapClearSearchIcon',
+							        xtype: 'button',
+							        itemId: 'divisionCancel',
+							    	}]
+							},{
+						    xtype: 'fieldset',
+						    border: 0,
+						    title: '',
+						    margin: '0 0 0 0',
+						    padding: '0 0 0 5',
+						    layout: 'hbox',
+						    defaults: {
+						        anchor: '100%'
+						    	},
+						    items: [{
+						        	xtype: 'combobox',
+						        	name: 'isPrivateFilter',
+						        	fieldLabel: 'Type',
+									labelWidth:80,
+									store: Ext.create('Ext.data.Store', {
+									    fields: ['value', 'name'],
+									    	data : [
+										        	{"value":"ALL","name":"ALL"},
+										        	{"value":"PUBLIC","name":"PUBLIC"},
+										        	{"value":"PRIVATE","name":"PRIVATE"}
+										    	],
+									}),
+								
+						        		emptyText: 'Filter by Template Type',
+						        		valueField: 'value',
+						        		displayField: 'name',
+										value: "ALL",
+						        		mode: 'local',
+						        		queryMode: 'local',
+						        		allowBlank: false,
+						        		itemId: 'typeFilter',
+						        		width: 290,
+						    		}]
+								},{
+					    	xtype: 'fieldset',
+					    	border: 0,
+					    	title: '',
+					    	margin: '0 0 0 0',
+					    	padding: '0 0 0 5',
+					    	layout: 'hbox',
+					    	defaults: {
+					        		anchor: '100%'
+					    			},
+					    	items: [{
+				        		xtype: 'combobox',
+				        		name: 'objectStatusFilter',
+				        		fieldLabel: 'Status',
+								labelWidth:80,
+				        		emptyText: 'Filter by Status',
+								store: Ext.create('Ext.data.Store', {
+								    fields: ['value', 'name'],
+								    	data : [
+									        	{"value":"ALL","name":"ALL"},
+									        	{"value":"ACTIVE","name":"ACTIVE"},
+									        	{"value":"INACTIVE","name":"INACTIVE"}
+									    	],
+								}),
+				        		valueField: 'name',
+				        		displayField: 'name',
+								defaultValue: "ALL",
+								value:'ALL',
+				        		mode: 'local',
+				        		queryMode: 'local',
+				        		allowBlank: false,
+				        		itemId: 'objectStatusFilter',
+				        		width: 290,
+				    			}]
+							},
+							{
+                            xtype: 'fieldset',
+					    	border: 0,
+					    	title: '',
+					    	margin: '0 0 0 0',
+					    	padding: '0 0 0 5',
+					    	layout: 'hbox',
+					    	defaults: {
+					        		anchor: '100%'
+					    			},
+                            items: [
+                            	{
+								xtype: 'textfield',
+                                fieldLabel: 'Title',
+                                name: 'templateNameFilter',
+                                itemId: 'templateNameFilter',
+                                maxLength: 50,
+                                allowBlank:true,
+                                labelWidth:80,
+								width: 290,
+								enableKeyEvents:true,
+								listeners:{
+									keyup: function(textField, e, eOpts) {
+										var me = this;
+				                        var searchString = textField.getValue().trim();
+				                        var templatesGrid = me.findParentByType('loadtemplates').query('#allPlansTemplateGridPanel')[0];
+										templatesGrid.getStore().filterBy(getFilterRecord(['name'], searchString)); 
+				                    }
+								},
+                            }]},
+                            
             
-            }]
-            
-            }]
+            ]}],
+         }]
+		},	{
+         xtype: 'gridpanel',
+         title: '',
+         id: 'allPlansTemplateGridPanel',
+         width: 555,
+         height: '100%',
+         border: true,
+         autoScroll: true,
+         columnLines: true,
+         store: me.store,
+         columns: [
+         {
+             text: 'Type',
+             width: 45,
+             dataIndex: 'isPrivate',
+             sortable: true,
+				renderer:me.columnRendererUtils.renderTemplatePrivate
+         },	{
+                 text: 'Status',
+                 width: 55,
+                 dataIndex: 'objectStatus',
+                 sortable: true
+          },{
+             text: 'Template Title',
+             width: 200,
+             dataIndex: 'name',
+             sortable: true
+         }, {
+             text: 'Date/ Time',
+             width: 125,
+             dataIndex: 'modifiedDate',
+             sortable: true,
+             renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
+             
+         }, {
+             text: 'Advisor',
+             width: 120,
+             sortable: true,
+             dataIndex: 'ownerName'
+             
+         }
+         ]}]
         });
         
         return me.callParent(arguments);

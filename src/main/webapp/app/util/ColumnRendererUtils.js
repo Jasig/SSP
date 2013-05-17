@@ -247,4 +247,8 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 		}
 		return isImportant == true ? "Yes":"";
 	},
+	
+	renderTemplatePrivate: function(value, metadata, record) {
+		return record.get('isPrivate') == true ? "Private":"Public";
+	},
 });
