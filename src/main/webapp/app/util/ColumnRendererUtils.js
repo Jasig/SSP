@@ -221,5 +221,30 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 			selectedIds.push(item["id"]);
 		});
 		return selectedIds;
-	}
+	},
+	
+	renderBackgroundColorActive: function(value, metadata, record) {
+	    if(record.get('objectStatus') == 'ACTIVE'){
+			metadata.style="background-color:#C5D7F1;";
+		}
+		return value;
+	},
+	
+	renderDateBackgroundColorActive: function(value, metadata, record) {
+	    if(record.get('objectStatus') == 'ACTIVE'){
+			metadata.style="background-color:#C5D7F1;";
+		}
+		return Ext.util.Format.date( record.get('createdDate','Y-m-d g:i A'));
+	},
+	
+	renderImportant: function(value, metadata, record) {
+		if (record.get('objectStatus') == 'ACTIVE') {
+	       metadata.style = "background-color:#C5D7F1";
+	    };
+		var isImportant = (record.get('isImportant') || record.get('isFinancialAid') || record.get('isF1Visa'));
+	    if(isImportant){
+			metadata.style += ";color:#BF1C10;"
+		}
+		return isImportant == true ? "Yes":"";
+	},
 });
