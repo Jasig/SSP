@@ -1730,8 +1730,8 @@
                     "path": "/app/store/"
                 },
                 {
-                    "clsName": "Ssp.store.PlanTemplates",
-                    "name": "PlanTemplates.js",
+                    "clsName": "Ssp.store.PlanTemplatesSummary",
+                    "name": "PlanTemplatesSummary.js",
                     "path": "/app/store/"
                 },
                 {

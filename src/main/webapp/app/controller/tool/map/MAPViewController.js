@@ -132,9 +132,11 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		var me = this;
 		var contactNotes = me.currentMapPlan.get("contactNotes");
 		var studentNotes = me.currentMapPlan.get("studentNotes");
+		var academicGoals = me.currentMapPlan.get("academicGoals");
 		if((contactNotes && contactNotes.length > 0) ||
-			(studentNotes && studentNotes.length > 0) ){
-			me.getPlanNotesButton().setIcon(Ssp.util.Constants.EDIT_PLAN_NOTE_ICON_PATH);
+			(studentNotes && studentNotes.length > 0) ||
+			(academicGoals && academicGoals.length > 0)){
+			me.getPlanNotesButton().setIcon(Ssp.util.Constants.EDIT_TERM_NOTE_ICON_PATH);
 			return;
 		}
         me.getPlanNotesButton().setIcon(Ssp.util.Constants.ADD_PLAN_NOTE_ICON_PATH);
