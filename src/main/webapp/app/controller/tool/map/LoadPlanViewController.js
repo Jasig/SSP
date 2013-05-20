@@ -119,7 +119,7 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 		if(!serviceResponses || !serviceResponses.responseText || serviceResponses.responseText.trim().length == 0) {
 
        	} else {
-       		me.scope.currentMapPlan.populateFromGenericObject(Ext.decode(serviceResponses.responseText));
+       		me.scope.currentMapPlan.loadFromServer(Ext.decode(serviceResponses.responseText));
 			me.scope.appEventsController.getApplication().fireEvent('onLoadMapPlan');
 			me.scope.getView().hide();
 		}
