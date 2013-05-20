@@ -44,11 +44,11 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 tooltip: 'Term Notes',
                 
             }],
-			items : [ {
+			items : [ /*{
 				store: me.store,
 				scroll: true,
 				xtype : 'semestergrid',
-			}],
+			}*/],
            
             dockedItems: [{
                 dock: 'bottom',

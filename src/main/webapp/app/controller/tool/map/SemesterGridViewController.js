@@ -20,14 +20,26 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject:{
-    	courseService:"courseService"
+    	courseService:"courseService",
+		termsStore:"termsStore",
     },
+	control: {
+	    	view: {
+				afterlayout: {
+					fn: 'onAfterLayout',
+					single: true
+				},
+	    	},
+	},
 	
 	init: function() {
 		var me=this;
 		me.getView().view.addListener("beforedrop", me.onDrop, me);
 		return me.callParent(arguments);
     },
+
+	onAfterLayout:function(){
+	},
 
     
     onDrop: function(node, data, dropRec, dropPosition){

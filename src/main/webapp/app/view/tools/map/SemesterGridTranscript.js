@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.tools.map.SemesterGrid', {
+Ext.define('Ssp.view.tools.map.SemesterGridTranscript', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.semestergrid',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
@@ -113,15 +113,6 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 	                    scope: me
 	                }]
 	            }],
-			viewConfig: {
-			        plugins: {
-			            ptype: 'gridviewdragdrop',
-						ddGroup: 'ddGroupForCourses',
-						dropGroup: 'coursesDDGroup',
-						dragGroup: 'coursesDDGroup',
-						pluginId: 'semesterviewdragdrop',
-			    },
-			},
         });
         
         return me.callParent(arguments);
