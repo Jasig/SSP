@@ -61,7 +61,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.appEventsController.assignEvent({eventName: 'onEmailMapPlan', callBackFunc: me.onEmailMapPlan, scope: me});
 
 		me.appEventsController.assignEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
 
 		return me.callParent(arguments);
     },
@@ -304,9 +303,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			});
 			semesterPanel.add(semesterGrid);
 		}else{
-			var semesterGrid = new Ssp.view.tools.map.SemesterGridTranscript({
+		 	var semesterGrid = new Ssp.view.tools.map.SemesterGrid({
 				store:semesterStore,
 				scroll: true,
+				enableDragAndDrop: false
 			});
 			semesterPanel.add(semesterGrid);
 		}
@@ -458,26 +458,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		return hours;
 	},
 	
-	//TODO This method should probably be at the Semester Panel Level
-	onViewCourseNotes: function(args){
-		var me = this;
-		var courseRecord = args.store.getAt(args.rowIndex);
 
-    	if(me.coursePlanDetails == null || me.coursePlanDetails.isDestroyed){
-    		me.coursePlanDetails = Ext.create('Ssp.view.tools.map.CourseNotes');
-			var creditHours = me.coursePlanDetails.query('#creditHours')[0];
-			me.coursePlanDetails.query('form')[0].getForm().loadRecord(courseRecord);
-    		creditHours.setValue(courseRecord.get('creditHours'));
-		    creditHours.setMinValue(courseRecord.get('minCreditHours'));
-			creditHours.setMaxValue(courseRecord.get('maxCreditHours'));
-    		me.coursePlanDetails.rowIndex = args.rowIndex;
-    		me.coursePlanDetails.semesterStore = args.store;
-			me.coursePlanDetails.setTitle(courseRecord.get('formattedCourse') + ' - ' + courseRecord.get('title'));
-			me.electiveStore.load();
-    		me.coursePlanDetails.center();
-    		me.coursePlanDetails.show();
-    	}
-	},
 	
 	onEmailMapPlan: function(metaData){
 		var me = this;
@@ -593,7 +574,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 
 		  
         me.appEventsController.removeEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadMapPlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onLoadTemplatePlan', callBackFunc: me.onLoadMapPlan, scope: me});
         

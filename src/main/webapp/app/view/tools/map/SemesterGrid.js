@@ -22,18 +22,58 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
 	controller: 'Ssp.controller.tool.map.SemesterGridViewController',
 	inject:{
-		appEventsController: 'appEventsController'
+		appEventsController: 'appEventsController',
+		electiveStore: 'electiveStore',
+		colorsStore: 'colorsStore'
 	},
     columnLines: false,
 	hideHeaders: true,
  	width: 210,
     border: 0,
-    
+	enableDragAndDrop: true,
     initComponent: function(){
-        var me = this;
+        var me = this;       
         Ext.apply(me, {
-            
-            columns: [{
+            columns: [
+            	{
+		            xtype: 'gridcolumn',
+		            width: 10,
+		            height: 5,
+		            toolTip:'Orange indicates Course is Important',
+		            flex:0,
+		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+		            	var isImportant = record.get('isImportant');
+		            	var color = isImportant ? '#ff9900' : 'rgba(0,0,0,0.0)';
+						metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;'
+			         },		            
+		        },
+            	{
+		            xtype: 'gridcolumn',
+		            width: 10,
+		            height: 5,
+		            toolTip:'Yellow indicates course is already on students\' transcript',
+		            flex:0,
+		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+		            	var isTranscript = record.get('isTranscript');
+		            	var color = isTranscript ? '#ffff00' : 'rgba(0,0,0,0.0)';
+						metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
+			         }		            
+		        },
+            	{
+		            xtype: 'gridcolumn',
+		            width: 10,
+		            height: 5,
+		            flex:0,
+		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+		            	var me=this;
+		            	var elective = me.electiveStore.getById(record.get('electiveId'))
+		            	var colorId = elective ? elective.get('color') : null;
+		            	var color = colorId ? me.colorsStore.getById(colorId) : null;
+		            	var colorCode = color ? '#'+color.get('hexCode') : 'rgba(0,0,0,0.0)';
+						metaData.style = 'background-color: '+colorCode+'; background-image: none; margin:2px 2px 2px 2px;'
+			         }		            
+		        },
+		        {
                 dataIndex: 'title',
                 xtype: 'gridcolumn',
 				hidden: true,
@@ -42,17 +82,13 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 			{
                 dataIndex: 'formattedCourse',
                 xtype: 'gridcolumn',
+		            flex:2,
 				width:145
-            },
-			{
-                dataIndex: 'description',
-                xtype: 'gridcolumn',
-				hidden: true,
-				hideable: false
             },
 			{
                 dataIndex: 'creditHours',
                 xtype: 'gridcolumn',
+		            flex:0,
 				width:25
             },
             {
@@ -83,15 +119,15 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
             {
                 xtype: 'actioncolumn',
                 width: 45,
-				name:"actions",
+		            flex:0,
 				renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 							var me = this;
-							if((record.data.contactNotes != undefined && record.data.contactNotes.length > 0) ||
+							if((record.data.coachNotes != undefined && record.data.coachNotes.length > 0) ||
 								(record.data.studentNotes != undefined && record.data.studentNotes.length > 0) ){
-								me.items[0].icon = Ssp.util.Constants.EDIT_COURSE_NOTE_ICON_PATH;
+								me.items[0].icon = Ssp.util.Constants.GRID_ITEM_HAS_NOTES_ICON_PATH;
 								return;
 							}
-				             me.items[0].icon = Ssp.util.Constants.ADD_COURSE_NOTE_ICON_PATH;
+				             me.items[0].icon = Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH;
 				         },
 	                items: [{
 	                    icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
@@ -120,6 +156,8 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 						dropGroup: 'coursesDDGroup',
 						dragGroup: 'coursesDDGroup',
 						pluginId: 'semesterviewdragdrop',
+						enableDrag: me.enableDragAndDrop,
+						enableDrop: me.enableDragAndDrop
 			    },
 			},
         });

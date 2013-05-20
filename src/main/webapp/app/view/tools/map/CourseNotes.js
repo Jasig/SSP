@@ -20,10 +20,15 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
     extend: 'Ext.window.Window',
     alias: 'widget.coursenotes',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-	inject: {electiveStore : 'electiveStore'},
+	inject: {
+		electiveStore : 'electiveStore',
+	    formUtils: 'formRendererUtils',
+
+	},
     height: 390,
     width: 480,
     resizable: true,
+    parentGrid: null,
     initComponent: function() {
 		var me=this;
 		Ext.apply(me, 

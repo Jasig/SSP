@@ -156,6 +156,7 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 			}			
 			query.append(" ec.code = ectr.courseCode ");
 			query.append(" and ectr.termCode = :termCode  ");
+			query.append(" order by ec.formattedCourse desc ");
 		}
 		return query.toString();
 	}

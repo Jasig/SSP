@@ -3,7 +3,7 @@
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
  * Jasig licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
+ * Version 2.0 (the 'License'); you may not use this file
  * except in compliance with the License. You may obtain a
  * copy of the License at:
  *
@@ -11,7 +11,7 @@
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * an 'AS IS' BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
@@ -20,28 +20,59 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject:{
-    	courseService:"courseService",
-		termsStore:"termsStore",
+		appEventsController: 'appEventsController',
+    	courseService:'courseService',
+		electiveStore: 'electiveStore',
+		colorsStore: 'colorsStore',
+    	formUtils: 'formRendererUtils',
     },
-	control: {
-	    	view: {
-				afterlayout: {
-					fn: 'onAfterLayout',
-					single: true
-				},
-	    	},
-	},
 	
 	init: function() {
 		var me=this;
-		me.getView().view.addListener("beforedrop", me.onDrop, me);
+		me.appEventsController.assignEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
+        if(me.electiveStore.data.length == 0)
+        {
+        	me.electiveStore.load();
+        }
+        if(me.colorsStore.data.length == 0)
+        {
+        	me.colorsStore.load();
+        } 
+		me.getView().view.addListener('beforedrop', me.onDrop, me);
 		return me.callParent(arguments);
     },
+	//TODO This method should probably be at the Semester Panel Level
+	onViewCourseNotes: function(args){
+		var me = this;
+		var courseRecord = args.store.getAt(args.rowIndex);
+    		me.coursePlanDetails = Ext.create('Ssp.view.tools.map.CourseNotes');
+    		me.coursePlanDetails.parentGrid = me.getView();
+			var creditHours = me.coursePlanDetails.query('#creditHours')[0];
+			if(courseRecord.modelName = 'Ssp.model.external.Course')
+			{
+				var planCourse = new Ssp.model.tool.map.SemesterCourse(courseRecord.data);
+				var index = args.store.indexOf(courseRecord);
+				var array = new Array();
+				array[0] = planCourse;
+				args.store.insert( index != -1 ? index : args.rowIndex ,array);
+				args.store.remove(courseRecord);
 
-	onAfterLayout:function(){
-	},
-
-    
+			}
+			else
+			{
+				var planCourse = courseRecord;
+			}
+			me.coursePlanDetails.query('form')[0].getForm().loadRecord(planCourse);
+    		creditHours.setValue(planCourse.get('creditHours'));
+		    creditHours.setMinValue(planCourse.get('minCreditHours'));
+			creditHours.setMaxValue(planCourse.get('maxCreditHours'));
+    		me.coursePlanDetails.rowIndex = args.rowIndex;
+    		me.coursePlanDetails.semesterStore = args.store;
+			me.coursePlanDetails.setTitle(planCourse.get('formattedCourse') + ' - ' + planCourse.get('title'));
+			//me.electiveStore.load();
+    		me.coursePlanDetails.center();
+    		me.coursePlanDetails.show();
+	},    
     onDrop: function(node, data, dropRec, dropPosition){
     	var me = this;
     	me.droppedData = data.records[0];
@@ -65,14 +96,14 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     	var courseValidation = serviceResponses.successes.validCourse;
     	
     	if(!courseValidation.valid){
-    		Ext.MessageBox.confirm("Course Not Avaiable For Term", "This course is not scheduled to be offered in this term.  Are you sure you want to add it?", me.handleInvalidCourse, me);
+    		Ext.MessageBox.confirm('Course Not Avaiable For Term', 'This course is not scheduled to be offered in this term.  Are you sure you want to add it?', me.handleInvalidCourse, me);
     	}
     },
     
     handleInvalidCourse: function(buttonId){
 		var me = this;
     	if(buttonId != 'yes'){
-        	var index = me.getView().getStore().find("code", me.droppedData.get('code'));
+        	var index = me.getView().getStore().find('code', me.droppedData.get('code'));
 			if(index >= 0)
         		me.getView().getStore().removeAt(index);
     	}
@@ -112,5 +143,10 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 
 	afterServiceHandler: function(serviceResponses){
 		
-	}
+	},
+	destroy: function() {
+        var me=this;
+		me.appEventsController.removeEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
+		return me.callParent( arguments );
+    },
 });
