@@ -76,7 +76,7 @@
 			<staticText>
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="2" y="47" width="100" height="15"/>
 				<textElement/>
-				<text><![CDATA[Counselor/Coach:]]></text>
+				<text><![CDATA[Coach:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d" positionType="Float" x="117" y="62" width="117" height="15" isPrintWhenDetailOverflows="true"/>
@@ -209,7 +209,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[COUNSELOR]]></text>
+				<text><![CDATA[COACH]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="124ebeaf-0e33-4be5-8b4a-4aec9524882d" x="447" y="0" width="99" height="16"/>

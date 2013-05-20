@@ -98,14 +98,14 @@
 		</div>
 		<div class="ea-clear"></div>
 
-		<!-- Assigned Counselor -->
+		<!-- Assigned Coach -->
 		<div class="ea-input">
 			<select id="assignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
 				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Assigned Counselor:</span>
+			<span>Assigned Coach:</span>
 		</div>
 		<div class="ea-clear"></div>		
 		
@@ -284,7 +284,7 @@
 
 
 <div class="hideable-form counselor-case-management-report" style="display:none">
-	<h1>Counselor Case Management Report</h1>
+	<h1>Coach Case Management Report</h1>
 	<form action="/ssp/api/1/report/pretransitioned" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">
 
@@ -300,14 +300,14 @@
 		<div class="ea-clear"></div>
 
 
-		<!-- Assigned Counselor -->
+		<!-- Assigned Coach -->
 		<div class="ea-input">
 			<select id="assignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
 				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Assigned Counselor:</span>
+			<span>Assigned Coach:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -471,14 +471,14 @@
 	<form action="/ssp/api/1/report/caseloadactivity" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">
 
-		<!-- Assigned Counselor -->
+		<!-- Assigned Coach -->
 		<div class="ea-input">
 			<select id="assignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
 				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Assigned Counselor:</span>
+			<span>Assigned Coach:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -859,14 +859,14 @@
 		<div class="ea-clear"></div>
 		-->
 		
-		<!-- Assigned Counselor -->
+		<!-- Assigned Coach -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentCounselorGroup" name="coachId" class="input-assigned-counselor-group">
 				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Assigned Counselor:</span>
+			<span>Assigned Coach:</span>
 		</div>
 		<div class="ea-clear"></div>		
 		
@@ -1015,14 +1015,14 @@
 		</div>
 		<div class="ea-clear"></div>
 -->
-		<!-- Assigned Counselor -->
+		<!-- Assigned Coach -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentReferralCounselorGroup" name="coachId" class="input-assigned-counselor-group">
 				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Assigned Counselor:</span>
+			<span>Assigned Coach:</span>
 		</div>
 		<div class="ea-clear"></div>		
 		
@@ -1144,14 +1144,14 @@
 		</div>
 		<div class="ea-clear"></div>
 		 -->
-		<!-- Assigned Counselor -->
+		<!-- Assigned Coach -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentProgressCounselorGroup" name="coachId" class="input-assigned-counselor-group">
 				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Assigned Counselor:</span>
+			<span>Assigned Coach:</span>
 		</div>
 		<div class="ea-clear"></div>		
 		
@@ -1270,14 +1270,14 @@
 		</div>
 		<div class="ea-clear"></div>
 		-->
-		<!-- Assigned Counselor -->
+		<!-- Assigned Coach -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentOutreachCounselorGroup" name="coachId" class="input-assigned-counselor-group">
 				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Assigned Counselor:</span>
+			<span>Assigned Coach:</span>
 		</div>
 		<div class="ea-clear"></div>		
 		
@@ -1432,14 +1432,14 @@
 		</div>
 		<div class="ea-clear"></div>
 		-->
-		<!-- Assigned Counselor -->
+		<!-- Assigned Coach -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentOutcomeCounselorGroup" name="coachId" class="input-assigned-counselor-group">
 				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Assigned Counselor:</span>
+			<span>Assigned Coach:</span>
 		</div>
 		<div class="ea-clear"></div>		
 		
@@ -1643,14 +1643,14 @@
 		<div class="ea-clear"></div>
 
 
-		<!-- Assigned Counselor -->
+		<!-- Assigned Coach -->
 		<div class="ea-input">
 			<select id="disabilityServicesAssignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
 				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Assigned Counselor:</span>
+			<span>Assigned Coach:</span>
 		</div>
 		<div class="ea-clear"></div>	
 		
@@ -1875,14 +1875,14 @@
 		<div class="ea-clear"></div>
 
 
-		<!-- Assigned Counselor -->
+		<!-- Assigned Coach -->
 		<div class="ea-input">
 			<select id="disabilityAccomodationAssignedCounselorGroup" name="coachId" class="input-assigned-counselor-group">
 				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Assigned Counselor:</span>
+			<span>Assigned Coach:</span>
 		</div>
 		<div class="ea-clear"></div>	
 		
@@ -2100,14 +2100,14 @@
 		<div class="ea-clear"></div>
 
 		
-		<!-- Assigned Counselor -->
+		<!-- Assigned Coach -->
 		<div class="ea-input">
 			<select id="journalSessionDetailCounselorGroup" name="coachId" class="input-assigned-counselor-group">
 				<option value="">${all_found}</option>
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Assigned Counselor:</span>
+			<span>Assigned Coach:</span>
 		</div>
 		<div class="ea-clear"></div>		
 		

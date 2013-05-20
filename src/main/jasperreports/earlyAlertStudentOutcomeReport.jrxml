@@ -116,7 +116,7 @@
 			<staticText>
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="36" width="100" height="15"/>
 				<textElement/>
-				<text><![CDATA[Counselor/Coach:]]></text>
+				<text><![CDATA[Coach:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="9f2796d0-86f4-4520-af01-8ad5a5faefec" positionType="Float" x="119" y="21" width="119" height="15" isPrintWhenDetailOverflows="true"/>
@@ -311,7 +311,7 @@ data.JRBeanCollectionDataSource($P{outcomeTotals})]]></dataSourceExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[COUNSELOR]]></text>
+				<text><![CDATA[COACH]]></text>
 			</staticText>
 			<textField>
 				<reportElement uuid="ef31687e-cef9-45e5-bea2-176636b5e16f" x="452" y="7" width="145" height="16"/>

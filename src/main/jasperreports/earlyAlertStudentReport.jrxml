@@ -97,7 +97,7 @@
 			<staticText>
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="13" y="33" width="100" height="15"/>
 				<textElement/>
-				<text><![CDATA[Counselor/Coach:]]></text>
+				<text><![CDATA[Coach:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d" positionType="Float" x="128" y="48" width="117" height="15" isPrintWhenDetailOverflows="true"/>

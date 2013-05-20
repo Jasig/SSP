@@ -181,7 +181,7 @@
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[ADVISOR NAME]]></text>
+				<text><![CDATA[COACH NAME]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="56b81aec-c74e-4f01-ab16-5a839da3d4bd" x="625" y="3" width="62" height="26"/>

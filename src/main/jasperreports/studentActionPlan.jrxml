@@ -206,7 +206,7 @@
 			<staticText>
 				<reportElement uuid="31c85540-0ffd-493d-99a5-902fb2391e3e" x="313" y="66" width="175" height="20"/>
 				<textElement/>
-				<text><![CDATA[Counselor/Coach Signature]]></text>
+				<text><![CDATA[Coach Signature]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="ea9e3cd5-fc3a-4dbf-beac-8b57baeb68ae" x="189" y="65" width="95" height="20"/>
