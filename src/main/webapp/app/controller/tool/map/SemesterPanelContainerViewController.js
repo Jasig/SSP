@@ -185,9 +185,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var me = this;
 		var terms;
 		me.semesterStores = [];
-		var planCourses = me.currentMapPlan.get('planCourses');
 		var termsStore = me.termsStore.getCurrentAndFutureTermsStore(5);			
-		if(!planCourses || planCourses.length == 0){
+		if(mapPlan){
 			var mapTerms = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(mapPlan));
 			mapTerms.forEach(function(mapTerm){
 				if(termsStore.find("code", mapTerm.get("code")) < 0)
@@ -281,6 +280,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			termSet.forEach(function(term){
 				var termCode = term.get('code');
 				var panelName = term.get("name");
+				var isPast = me.termsStore.isPastTerm(termCode);
 				yearView.add(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode]));
 			});
 		});
@@ -290,11 +290,12 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	createSemesterPanel: function(semesterName, termCode, semesterStore){
 		var me = this;
-		var semesterPanel =  new Ssp.view.tools.map.SemesterPanel({
+		var semesterPanel = new Ssp.view.tools.map.SemesterPanel({
 			title:semesterName,
 			itemId:termCode,
 			store:semesterStore
 		});
+
 		return semesterPanel;
 	},
 	
