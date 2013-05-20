@@ -63,6 +63,7 @@ import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentResponseOutcomeReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
+import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.DateTimeUtils;
@@ -432,13 +433,8 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	}
 	
 	@Override
-	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertResponseCountByCoaches(List<Person> coaches, 
-			Date createDateFrom, 
-			Date createDateTo,
-			List<UUID> studentTypeIds, 
-			List<UUID> serviceReasonIds,
-			SortingAndPaging sAndP){
-		return dao.getStudentEarlyAlertResponseCountByCoaches(coaches, createDateFrom, createDateTo, studentTypeIds, serviceReasonIds, sAndP);
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertResponseCountByCoaches(EntityCountByCoachSearchForm form){
+		return dao.getStudentEarlyAlertResponseCountByCoaches(form);
 	}
 	
 	@Override

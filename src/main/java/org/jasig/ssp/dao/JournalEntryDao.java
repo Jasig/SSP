@@ -33,6 +33,7 @@ import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.sql.JoinType;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.JournalStepSearchFormTO;
@@ -55,8 +56,16 @@ public class JournalEntryDao
 	public Long getJournalCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
 
 		final Criteria query = createCriteria();
+		
+		EntityCountByCoachSearchForm form = new EntityCountByCoachSearchForm(null, 
+				createDateFrom, 
+				createDateTo, 
+				studentTypeIds,
+				null,
+				null,
+				null);
 
-		setCriteria( query,  createDateFrom,  createDateTo, studentTypeIds, null);
+		setCriteria( query,  form);
 		
 		// restrict to coach
 		query.add(Restrictions.eq("createdBy", coach));
@@ -71,8 +80,15 @@ public class JournalEntryDao
 	public Long getStudentJournalCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
 
 		final Criteria query = createCriteria();
- 
-		setCriteria( query,  createDateFrom,  createDateTo, studentTypeIds, null);
+		EntityCountByCoachSearchForm form = new EntityCountByCoachSearchForm(null, 
+				createDateFrom, 
+				createDateTo, 
+				studentTypeIds,
+				null,
+				null,
+				null);
+		
+		setCriteria( query,  form);
 		
 		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", coach))
         .setProjection(Projections.countDistinct("person")).list().get(0);
@@ -82,20 +98,15 @@ public class JournalEntryDao
 	
 
 	@SuppressWarnings("unchecked")
-	public PagingWrapper<EntityStudentCountByCoachTO> getStudentJournalCountForCoaches(List<Person> coaches, 
-			Date createDateFrom, 
-			Date createDateTo, 
-			List<UUID> studentTypeIds, 
-			List<UUID> serviceReasonIds,
-			SortingAndPaging sAndP) {
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentJournalCountForCoaches(EntityCountByCoachSearchForm form) {
 
 		final Criteria query = createCriteria();
  
-		setCriteria( query,  createDateFrom,  createDateTo, studentTypeIds, serviceReasonIds);
-		query.add(Restrictions.in("createdBy", coaches));
+		setCriteria(query, form);
+		query.add(Restrictions.in("createdBy", form.getCoaches()));
 		// item count
 		Long totalRows = 0L;
-		if ((sAndP != null) && sAndP.isPaged()) {
+		if ((form.getSAndP() != null) && form.getSAndP().isPaged()) {
 				totalRows = (Long) query.setProjection(Projections.rowCount())
 							.uniqueResult();
 		}		
@@ -110,36 +121,46 @@ public class JournalEntryDao
 		return new PagingWrapper<EntityStudentCountByCoachTO>(totalRows, (List<EntityStudentCountByCoachTO>)query.list());
 	}
 	
-	private Criteria setCriteria(Criteria query, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, List<UUID> serviceReasonIds){
+	private Criteria setCriteria(Criteria query, EntityCountByCoachSearchForm form){
 		// add possible studentTypeId Check
-		if (studentTypeIds != null && !studentTypeIds.isEmpty() || serviceReasonIds != null && !serviceReasonIds.isEmpty())
+		if (form.getStudentTypeIds() != null && !form.getStudentTypeIds().isEmpty() || 
+				form.getServiceReasonIds() != null && !form.getServiceReasonIds().isEmpty() ||
+				form.getSpecialServiceGroupIds()!= null && !form.getSpecialServiceGroupIds().isEmpty())
 		{
 			query.createAlias("person",
 					"person");
 		}
-		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
+		if (form.getStudentTypeIds() != null && !form.getStudentTypeIds().isEmpty()) {
 		
 			
 			query.add(Restrictions
-						.in("person.studentType.id",studentTypeIds));
+						.in("person.studentType.id",form.getStudentTypeIds()));
 					
 		}		
 		
-		if (createDateFrom != null) {
+		if (form.getCreateDateFrom() != null) {
 			query.add(Restrictions.ge("createdDate",
-					createDateFrom));
+					form.getCreateDateFrom()));
 		}
 
-		if (createDateTo != null) {
+		if (form.getCreateDateTo() != null) {
 			query.add(Restrictions.le("createdDate",
-					createDateTo));
+					form.getCreateDateTo()));
 		}
 		
-		if(serviceReasonIds != null && !serviceReasonIds.isEmpty()){
+		if(form.getServiceReasonIds() != null && !form.getServiceReasonIds().isEmpty()){
 			query.createAlias("person.serviceReasons", "serviceReasons");
 			query.createAlias("serviceReasons.serviceReason", "serviceReason");
 			query.add(Restrictions
-					.in("serviceReason.id",serviceReasonIds));
+					.in("serviceReason.id",form.getServiceReasonIds()));
+			
+		}
+		
+		if(form.getSpecialServiceGroupIds()!= null && !form.getSpecialServiceGroupIds().isEmpty()){
+			query.createAlias("person.specialServiceGroups", "specialServiceGroups");
+			query.createAlias("serviceReasons.specialServiceGroup", "specialServiceGroup");
+			query.add(Restrictions
+					.in("serviceServiceGroup.id",form.getSpecialServiceGroupIds()));
 			
 		}
 		return query;	

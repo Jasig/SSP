@@ -31,6 +31,7 @@ import java.util.UUID;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonProgramStatusService;
+import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.transferobject.reports.JournalStepSearchFormTO;
 import org.jasig.ssp.transferobject.reports.JournalStepStudentReportTO;
@@ -102,9 +103,8 @@ public class JournalEntryServiceImpl
 	}
 	
 	@Override
-	public PagingWrapper<EntityStudentCountByCoachTO> getStudentJournalCountForCoaches(List<Person> coaches, 
-			Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, List<UUID> serviceReasonIds, SortingAndPaging sAndP){
-		return dao.getStudentJournalCountForCoaches(coaches, createDateFrom, createDateTo, studentTypeIds, serviceReasonIds, sAndP);
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentJournalCountForCoaches(EntityCountByCoachSearchForm form){
+		return dao.getStudentJournalCountForCoaches(form);
 	}
 	
 	@Override

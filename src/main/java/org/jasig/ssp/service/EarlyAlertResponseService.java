@@ -31,6 +31,7 @@ import org.jasig.ssp.transferobject.EarlyAlertResponseTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentResponseOutcomeReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
+import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
@@ -92,12 +93,7 @@ public interface EarlyAlertResponseService
 	 * @param sAndP
 	 * @return
 	 */
-	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertResponseCountByCoaches(List<Person> coaches, 
-			Date createDateFrom, 
-			Date createDateTo,
-			List<UUID> studentTypeIds, 
-			List<UUID> serviceReasonIds,
-			SortingAndPaging sAndP);
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertResponseCountByCoaches(EntityCountByCoachSearchForm form);
 
 	
 	/**

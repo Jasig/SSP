@@ -41,6 +41,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
+import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
@@ -435,20 +436,15 @@ public class EarlyAlertDao extends
 	}
 	
 	@SuppressWarnings("unchecked")
-	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(List<Person> coaches, 
-			Date createDateFrom,
-			Date createDateTo, 
-			List<UUID> studentTypeIds,
-			List<UUID> serviceReasonIds,
-			SortingAndPaging sAndP) {
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(EntityCountByCoachSearchForm form) {
 
 		final Criteria query = createCriteria();
  
-		setBasicCriteria( query,  createDateFrom,  createDateTo, studentTypeIds, serviceReasonIds);
-		query.add(Restrictions.in("createdBy", coaches));
+		setBasicCriteria( query,  form);
+		query.add(Restrictions.in("createdBy", form.getCoaches()));
 		// item count
 		Long totalRows = 0L;
-		if ((sAndP != null) && sAndP.isPaged()) {
+		if ((form.getSAndP() != null) && form.getSAndP().isPaged()) {
 			totalRows = (Long) query.setProjection(Projections.countDistinct("createdBy"))
 					.uniqueResult();
 		}
@@ -465,40 +461,46 @@ public class EarlyAlertDao extends
 		return new PagingWrapper<EntityStudentCountByCoachTO>(totalRows,  (List<EntityStudentCountByCoachTO>)query.list());
 	}
 	
-	private Criteria setBasicCriteria(Criteria query, 
-			Date createDateFrom, 
-			Date createDateTo, 
-			List<UUID> studentTypeIds, 
-			List<UUID> serviceReasonIds){
-		if (studentTypeIds != null && !studentTypeIds.isEmpty() || serviceReasonIds != null && !serviceReasonIds.isEmpty())
+	private Criteria setBasicCriteria(Criteria query, EntityCountByCoachSearchForm form){
+		// add possible studentTypeId Check
+		if (form.getStudentTypeIds() != null && !form.getStudentTypeIds().isEmpty() || 
+				form.getServiceReasonIds() != null && !form.getServiceReasonIds().isEmpty() ||
+				form.getSpecialServiceGroupIds()!= null && !form.getSpecialServiceGroupIds().isEmpty())
 		{
 			query.createAlias("person",
 					"person");
 		}
-		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
+		if (form.getStudentTypeIds() != null && !form.getStudentTypeIds().isEmpty()) {
 		
 			
 			query.add(Restrictions
-						.in("person.studentType.id",studentTypeIds));
+						.in("person.studentType.id",form.getStudentTypeIds()));
 					
 		}		
 		
-		if (createDateFrom != null) {
+		if (form.getCreateDateFrom() != null) {
 			query.add(Restrictions.ge("createdDate",
-					createDateFrom));
+					form.getCreateDateFrom()));
 		}
 
-		if (createDateTo != null) {
+		if (form.getCreateDateTo() != null) {
 			query.add(Restrictions.le("createdDate",
-					createDateTo));
+					form.getCreateDateTo()));
 		}
 		
-		if(serviceReasonIds != null && !serviceReasonIds.isEmpty()){
+		if(form.getServiceReasonIds() != null && !form.getServiceReasonIds().isEmpty()){
 			query.createAlias("person.serviceReasons", "serviceReasons");
 			query.createAlias("serviceReasons.serviceReason", "serviceReason");
 			query.add(Restrictions
-					.in("serviceReason.id",serviceReasonIds));
+					.in("serviceReason.id",form.getServiceReasonIds()));
 			
+		}
+		
+		if(form.getSpecialServiceGroupIds()!= null && !form.getSpecialServiceGroupIds().isEmpty()){
+			query.createAlias("person.specialServiceGroups", "specialServiceGroups");
+			query.createAlias("serviceReasons.specialServiceGroup", "specialServiceGroup");
+			query.add(Restrictions
+					.in("serviceServiceGroup.id",form.getSpecialServiceGroupIds()));
 		}
 				
 		return query;

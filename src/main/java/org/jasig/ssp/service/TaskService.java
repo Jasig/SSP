@@ -31,6 +31,7 @@ import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -256,11 +257,6 @@ public interface TaskService
 	Long getStudentTaskCountForCoach(Person coach, Date createDateFrom,
 			Date createDateTo, List<UUID> studentTypeIds);
 	
-	PagingWrapper<EntityStudentCountByCoachTO> getStudentTaskCountForCoaches(List<Person> coaches, 
-			Date createDateFrom, 
-			Date createDateTo, 
-			List<UUID> studentTypeIds, 
-			List<UUID> serviceReasonIds,
-			SortingAndPaging sAndP); 
+	PagingWrapper<EntityStudentCountByCoachTO> getStudentTaskCountForCoaches(EntityCountByCoachSearchForm form); 
 
 }

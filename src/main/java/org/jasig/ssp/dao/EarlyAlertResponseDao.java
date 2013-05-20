@@ -44,6 +44,7 @@ import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentResponseOutcomeReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
+import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
@@ -473,46 +474,46 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 	
 	
 	@SuppressWarnings("unchecked")
-	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertResponseCountByCoaches(List<Person> coaches, 
-			Date createDateFrom, 
-			Date createDateTo, 
-			List<UUID> studentTypeIds, 
-			List<UUID> serviceReasonIds,
-			SortingAndPaging sAndP) {
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertResponseCountByCoaches(EntityCountByCoachSearchForm form) {
 
 		final Criteria query = createCriteria();
  
-		if (createDateFrom != null) {
+		if (form.getCreateDateFrom() != null) {
 			query.add(Restrictions.ge("createdDate",
-					createDateFrom));
+					form.getCreateDateFrom()));
 		}
 
-		if (createDateTo != null) {
+		if (form.getCreateDateTo() != null) {
 			query.add(Restrictions.le("createdDate",
-					createDateTo));
+					form.getCreateDateTo()));
 		}
-		
-		
 		
 		query.createAlias("earlyAlert", "earlyAlert");
 		Criteria personCriteria = query.createAlias("earlyAlert.person", "person");
-		personCriteria.add(Restrictions.in("earlyAlert.createdBy", coaches));
+		personCriteria.add(Restrictions.in("earlyAlert.createdBy", form.getCoaches()));
 		
-		if (studentTypeIds != null && !studentTypeIds.isEmpty()) {
+		if (form.getStudentTypeIds() != null && !form.getStudentTypeIds().isEmpty()) {
 			personCriteria.add(Restrictions
-					.in("person.studentType.id",studentTypeIds));
+					.in("person.studentType.id",form.getStudentTypeIds()));
 		}
 		
-		if (serviceReasonIds != null && !serviceReasonIds.isEmpty()) {
+		if (form.getServiceReasonIds() != null && !form.getServiceReasonIds().isEmpty()) {
 			query.createAlias("person.serviceReasons", "serviceReasons");
 			query.createAlias("serviceReasons.serviceReason", "serviceReason");
 			query.add(Restrictions
-					.in("serviceReason.id",serviceReasonIds));
+					.in("serviceReason.id",form.getServiceReasonIds()));
 		}
 		
+		
+		if (form.getSpecialServiceGroupIds() != null && !form.getSpecialServiceGroupIds().isEmpty()) {
+			query.createAlias("person.specialServiceGroups", "specialServiceGroups");
+			query.createAlias("specialServiceGroups.specialServiceGroup", "specialServiceGroup");
+			query.add(Restrictions
+					.in("specialServiceGroup.id", form.getSpecialServiceGroupIds()));
+		}
 		// item count
 		Long totalRows = 0L;
-		if ((sAndP != null) && sAndP.isPaged()) {
+		if ((form.getSAndP() != null) && form.getSAndP().isPaged()) {
 			totalRows = (Long) query.setProjection(Projections.countDistinct("earlyAlert.createdBy"))
 					.uniqueResult();
 		}

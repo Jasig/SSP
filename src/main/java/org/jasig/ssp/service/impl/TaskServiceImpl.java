@@ -48,6 +48,7 @@ import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -390,8 +391,7 @@ public class TaskServiceImpl
 	}
 	
 	@Override
-	public PagingWrapper<EntityStudentCountByCoachTO> getStudentTaskCountForCoaches(List<Person> coaches, 
-			Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds, List<UUID> serviceReasonIds, SortingAndPaging sAndP) {
-		return dao.getStudentTaskCountForCoaches(coaches, createDateFrom, createDateTo, studentTypeIds, serviceReasonIds, sAndP);
+	public PagingWrapper<EntityStudentCountByCoachTO> getStudentTaskCountForCoaches(EntityCountByCoachSearchForm form) {
+		return dao.getStudentTaskCountForCoaches(form);
 	}
 }

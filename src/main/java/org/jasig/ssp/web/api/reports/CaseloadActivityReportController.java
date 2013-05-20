@@ -43,8 +43,10 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
+import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.reports.CaseLoadActivityReportTO;
+import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -87,6 +89,9 @@ public class CaseloadActivityReportController extends ReportBaseController {
 	protected transient ServiceReasonService serviceReasonService;	
 	
 	@Autowired
+	protected transient SpecialServiceGroupService ssgService;
+	
+	@Autowired
 	protected transient TermService termService;
 	
 	@Autowired
@@ -115,6 +120,7 @@ public class CaseloadActivityReportController extends ReportBaseController {
 			final @RequestParam(required = false) UUID coachId,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) List<UUID> serviceReasonIds,
+			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false) Date createDateFrom,
@@ -128,6 +134,7 @@ public class CaseloadActivityReportController extends ReportBaseController {
 
 		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
 		final List<UUID> cleanServiceReasonIds = SearchParameters.cleanUUIDListOfNulls(serviceReasonIds);
+		final List<UUID> cleanSpecialServiceGroupIds = SearchParameters.cleanUUIDListOfNulls(specialServiceGroupIds);
 		List<Person> coaches = SearchParameters.getCoaches(coachId, homeDepartment, personService);
 		Collections.sort(coaches, Person.PERSON_NAME_AND_ID_COMPARATOR);
 			
@@ -136,6 +143,7 @@ public class CaseloadActivityReportController extends ReportBaseController {
 		SearchParameters.addDateTermToMap(dateTerm, parameters);
 		SearchParameters.addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);
 		SearchParameters.addServiceReasonToMap(cleanServiceReasonIds, parameters, serviceReasonService);
+		SearchParameters.addSpecialGroupsNamesToMap(cleanSpecialServiceGroupIds, parameters, ssgService);
 		
 		SearchParameters.addHomeDepartmentToMap(homeDepartment, parameters);
 		
@@ -146,38 +154,21 @@ public class CaseloadActivityReportController extends ReportBaseController {
 		
 		List<CaseLoadActivityReportTO> caseLoadActivityReportList = new ArrayList<CaseLoadActivityReportTO>();
 		
-		
-		final PagingWrapper<EntityStudentCountByCoachTO> journalCounts = journalEntryService.getStudentJournalCountForCoaches(
-				coaches, 
+		EntityCountByCoachSearchForm form = new EntityCountByCoachSearchForm(coaches, 
 				dateTerm.getStartDate(), 
 				dateTerm.getEndDate(), 
 				cleanStudentTypeIds,
 				cleanServiceReasonIds,
+				cleanSpecialServiceGroupIds,
 				null);
 		
-		final PagingWrapper<EntityStudentCountByCoachTO> taskCounts = taskService.getStudentTaskCountForCoaches(
-				coaches, 
-				dateTerm.getStartDate(), 
-				dateTerm.getEndDate(), 
-				cleanStudentTypeIds, 
-				cleanServiceReasonIds,
-				null);
+		final PagingWrapper<EntityStudentCountByCoachTO> journalCounts = journalEntryService.getStudentJournalCountForCoaches(form);
 		
-		final PagingWrapper<EntityStudentCountByCoachTO> earlyAlertCounts = earlyAlertService.getStudentEarlyAlertCountByCoaches(
-				coaches, 
-				dateTerm.getStartDate(), 
-				dateTerm.getEndDate(), 
-				cleanStudentTypeIds, 
-				cleanServiceReasonIds,
-				null);
+		final PagingWrapper<EntityStudentCountByCoachTO> taskCounts = taskService.getStudentTaskCountForCoaches(form);
 		
-		final PagingWrapper<EntityStudentCountByCoachTO> earlyAlertResponseCounts = earlyAlertResponseService.getStudentEarlyAlertResponseCountByCoaches(
-				coaches, 
-				dateTerm.getStartDate(), 
-				dateTerm.getEndDate(), 
-				cleanStudentTypeIds, 
-				cleanServiceReasonIds,
-				null);
+		final PagingWrapper<EntityStudentCountByCoachTO> earlyAlertCounts = earlyAlertService.getStudentEarlyAlertCountByCoaches(form);
+		
+		final PagingWrapper<EntityStudentCountByCoachTO> earlyAlertResponseCounts = earlyAlertResponseService.getStudentEarlyAlertResponseCountByCoaches(form);
 		
 		
 		 Map<UUID, EntityStudentCountByCoachTO> indexedJournals = getIndexedByCoaches(journalCounts.getRows());
