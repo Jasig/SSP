@@ -62,7 +62,7 @@ public class ExternalCourseDaoTest {
 	
 	@Test
 	public void testGetTags() {
-		List<Tag> tags = dao.getTagsForCourse("MATH-101");
+		List<String> tags = dao.getTagsForCourse("MATH-101");
 		assertEquals(1, tags.size());
 	}
 	

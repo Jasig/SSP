@@ -62,7 +62,7 @@ public class ExternalCourseServiceImpl extends AbstractExternalReferenceDataServ
 	}
 
 	@Override
-	public List<Tag> getAllTagsForCourse(String courseCode) {
+	public List<String> getAllTagsForCourse(String courseCode) {
 		return dao.getTagsForCourse(courseCode);
 	}
 }

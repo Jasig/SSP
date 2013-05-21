@@ -62,8 +62,8 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Tag> getTagsForCourse(String code) {
-		String getTagsForCourseBaseQuery = "select distinct tag from Tag tag, ExternalCourseTag ect where tag.code = ect.tag and ect.courseCode = :courseCode";
+	public List<String> getTagsForCourse(String code) {
+		String getTagsForCourseBaseQuery = "select ect.tag from ExternalCourseTag ect where ect.courseCode = :courseCode ";
 		return createHqlQuery(getTagsForCourseBaseQuery).setString("courseCode", code).list();
 	}
 	public Boolean validateCourseForTerm(String code, String termCode) {

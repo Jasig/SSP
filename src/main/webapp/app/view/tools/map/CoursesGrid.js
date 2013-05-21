@@ -55,7 +55,7 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
                              xtype: 'gridcolumn',
                              dataIndex: 'title',
                              text: 'Title',
-                             width: 160
+                             width: 80
                          },
 						 
 						{
@@ -80,10 +80,9 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
                          },
                          {
                              xtype: 'gridcolumn',
-                              dataIndex: 'isDev',
-                              text: 'Development',
- 							 hidden:true,
- 							 hideable: false,
+                              dataIndex: 'tags',
+                              text: 'Tags',
+                              width: 40
                           },
                         ],
                 		viewConfig: {
