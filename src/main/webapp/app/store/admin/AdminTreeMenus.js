@@ -477,7 +477,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         dataIndex: 'sortOrder',
                         required: true,
                         field: {
-                            xtype: 'textfield'
+                            xtype: 'textfield',
+                            fieldStyle: "margin-bottom:12px;",
                         },
                         flex: .1
                     }, {
@@ -488,7 +489,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         flex: .2,
                         renderer: me.columnRendererUtils.renderActive,
                         field: {
-                            xtype: 'checkbox'
+                            xtype: 'checkbox',
+                            fieldStyle: "margin-bottom:12px;",
                         }
                     }, {
                         header: 'Elective Name',
@@ -496,7 +498,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         required: true,
                         defaultValue: "",
                         field: {
-                            xtype: 'textfield'
+                            xtype: 'textfield',
+                            fieldStyle: "margin-bottom:12px;",
                         },
                         flex: .2
                     }, {
@@ -505,7 +508,9 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         defaultValue: "",
                         required: true,
                         field: {
-                            xtype: 'textfield'
+                            xtype: 'textfield',
+                            fieldStyle: "margin-bottom:12px;",
+                            	
                         },
                         flex: .2
                     }, {
@@ -513,7 +518,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         dataIndex: 'description',
                         defaultValue: "",
                         field: {
-                            xtype: 'textfield'
+                            xtype: 'textfield',
+                            fieldStyle: "margin-bottom:12px;",
                         },
                         flex: 1
                     }, {
@@ -526,7 +532,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                             store: Ext.StoreMgr.lookup("colorsStore"),
                             displayField: 'name',
                             valueField: 'id',
-                            forceSelection: true
+                            forceSelection: true,
                         },
                         flex: .2
                     }]
@@ -544,6 +550,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         flex: .20,
                         field: {
                             xtype: 'checkbox',
+                            fieldStyle: "margin-bottom:12px;",
                         
                         }
                     }, {
@@ -551,7 +558,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         dataIndex: 'name',
                         required: true,
                         field: {
-                            xtype: 'textfield'
+                            xtype: 'textfield',
+                            fieldStyle: "margin-bottom:12px;",
                         },
                         flex: .20
                     }, {
@@ -559,7 +567,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         dataIndex: 'code',
                         required: true,
                         field: {
-                            xtype: 'textfield'
+                            xtype: 'textfield',
+                            fieldStyle: "margin-bottom:12px;",
                         },
                         flex: .20
                     }, {
@@ -603,7 +612,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         header: 'Description',
                         dataIndex: 'description',
                         field: {
-                            xtype: 'textfield'
+                            xtype: 'textfield',
+                            fieldStyle: "margin-bottom:12px;",
                         },
                         flex: 1
                     }]
