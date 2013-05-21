@@ -2105,6 +2105,11 @@
                     "path": "/app/model/reference/"
                 },
                 {
+                	"clsName": "Ssp.model.reference.Color",
+                    "name": "Color.js",
+                    "path": "/app/model/reference/"
+                },
+                {
                     "clsName": "Ssp.model.reference.VeteranStatus",
                     "name": "VeteranStatus.js",
                     "path": "/app/model/reference/"
@@ -2217,6 +2222,11 @@
                 {
                     "clsName": "Ssp.store.reference.Elective",
                     "name": "Elective.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.Colors",
+                    "name": "Colors.js",
                     "path": "/app/store/reference/"
                 },
                 {
