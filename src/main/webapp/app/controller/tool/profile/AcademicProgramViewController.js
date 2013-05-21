@@ -168,7 +168,8 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 	        me.getOnPlanField().setValue("Plan Exists.")
 	        me.getMapNameField().setValue(me.currentMapPlan.get("name")),
 	        me.getMapLastUpdatedField().setValue(me.currentMapPlan.getFormattedModifiedDate());
-	        me.getMapProjectedField().setValue(lastTerm.get("code"));
+			if(lastTerm)
+	        	me.getMapProjectedField().setValue(lastTerm.get("code"));
 	        me.getPrintPlanButton().show();
 			me.getEmailPlanButton().show();
 	        me.personService.get(me.currentMapPlan.get('ownerId'), {
