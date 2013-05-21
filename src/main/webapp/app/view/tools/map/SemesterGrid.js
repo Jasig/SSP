@@ -85,10 +85,20 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 		        flex:1,
 				width:145
             },
+        	{
+	            xtype: 'gridcolumn',
+	            flex:0.5,
+	            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+	            	var me=this;
+	            	var elective = me.electiveStore.getById(record.get('electiveId'))
+	            	value = elective ? elective.get('code') : '';
+	            	return value;
+		         }		            
+	        },            
 			{
                 dataIndex: 'creditHours',
                 xtype: 'gridcolumn',
-		            flex:0,
+	            flex:0.5,
 				width:25
             },
             {
