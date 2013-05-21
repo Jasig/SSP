@@ -44,6 +44,14 @@ Ext.define('Ssp.model.tool.map.SemesterCourse', {
 							me.set('code', planCourse.courseCode);
 						if(planCourse.courseDescription)
 							me.set('description', planCourse.courseDescription);
+						if(planCourse.isTranscript)
+							me.set('isTranscript', planCourse.isTranscript);
+						if(planCourse.isImportant)
+							me.set('isImportant', planCourse.isImportant);		
+						if(planCourse.studentNotes)
+							me.set('studentNotes', planCourse.studentNotes);	
+						if(planCourse.contactNotes)
+							me.set('contactNotes', planCourse.contactNotes);		
 						if(!planCourse.minCeditHours  && planCourse.creditHours){
 							me.set('minCreditHours', planCourse.creditHours <= 2 ? 0 :  planCourse.creditHours - 2);
 							me.set('maxCreditHours', planCourse.creditHours + 2);
