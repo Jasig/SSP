@@ -67,6 +67,13 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
             click: 'onsaveTemplateButtonClick'
            }
         },
+
+		'saveTemplateAsButton':{
+           selector: '#saveTemplateAsButton',
+           listeners: {
+            click: 'onsaveTemplateAsButtonClick'
+           }
+        },
         
         'savePlanAsButton':{
            selector: '#savePlanAsButton',
@@ -74,6 +81,15 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
             click: 'onsavePlanAsButtonClick'
            }
         },
+
+		'notesLabel':{
+           selector: '#notesLabel',
+        },
+
+		'name':{
+           selector: '#name',
+        },
+
         'savePlanButton':{
             selector: '#savePlanButton',
             listeners: {
@@ -86,12 +102,17 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
             click: 'onemailPlanButtonClick'
            }
         },
-        
+        'emailLabel':{
+           selector: '#emailLabel',
+        },
         'printPlanButton':{
            selector: '#printPlanButton',
            listeners: {
             click: 'onprintPlanButtonClick'
            }
+        },
+		'printLabel':{
+           selector: '#printLabel',
         },
 
 		'planOverviewButton':{
@@ -119,6 +140,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.onUpdateSaveOption();
 		
 		me.appEventsController.assignEvent({eventName: 'onUpdateSaveOption', callBackFunc: me.onUpdateSaveOption, scope: me});
+		me.appEventsController.assignEvent({eventName: 'onCurrentMapPlanChangeUpdateMapView', callBackFunc: me.onCurrentMapPlanChange, scope: me});
 
 		return this.callParent(arguments);
     },
@@ -149,6 +171,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		else
 			me.getView().queryById('savePlanButton').show();
     },   
+
     onFAButtonClick: function(button){
         var me=this;
 		if(me.faPopUp == null || me.faPopUp.isDestroyed)
@@ -194,7 +217,14 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
     onsaveTemplateButtonClick: function(button){
         var me=this;
 		if(me.saveTemplatePopUp == null || me.saveTemplatePopUp.isDestroyed)
-         	me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true});
+         	me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+		 me.saveTemplatePopUp.show();
+    },
+
+	onsaveTemplateAsButtonClick: function(button){
+        var me=this;
+		if(me.saveTemplatePopUp == null || me.saveTemplatePopUp.isDestroyed)
+         	me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
 		 me.saveTemplatePopUp.show();
     },
     
@@ -243,11 +273,38 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
         var me=this;
 		me.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
     },
+
+	onCurrentMapPlanChange: function(){
+			var me = this;
+		 if(me.currentMapPlan.get('isTemplate') == true)
+		{
+			me.getSavePlanButton().hide();
+			me.getSaveTemplateAsButton().show();
+			me.getPrintPlanButton().hide();
+			me.getPrintLabel().hide();
+			me.getEmailPlanButton().hide();
+			me.getEmailLabel().hide();
+			me.getName().setFieldLabel("Template Title");
+			me.getNotesLabel().setText("Template Notes");
+			me.getPlanNotesButton().setTooltip("Template Notes");
+		}else{
+			me.getSavePlanButton().show();
+			me.getSaveTemplateAsButton().hide();
+			me.getPrintPlanButton().show();
+			me.getPrintLabel().show();
+			me.getEmailPlanButton().show();
+			me.getEmailLabel().show();
+			me.getName().setFieldLabel("Plan Title");
+			me.getNotesLabel().setText("Plan Notes");
+			me.getPlanNotesButton().setTooltip("Plan Notes");
+		}
+	},
     
 
 	destroy:function(){
 	    var me=this;
 		me.appEventsController.removeEvent({eventName: 'onUpdateSaveOption', callBackFunc: me.onUpdateSaveOption, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onCurrentMapPlanChangeUpdateMapView', callBackFunc: me.onCurrentMapPlanChange, scope: me});
 		
 		if(me.faPopUp != null && !me.faPopUp.isDestroyed)
 			me.faPopUp.close();

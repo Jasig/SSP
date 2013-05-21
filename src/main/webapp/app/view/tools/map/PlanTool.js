@@ -24,6 +24,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
     inject: {
         columnRendererUtils: 'columnRendererUtils',
         authenticatedPerson: 'authenticatedPerson',
+		currentMapPlan: 'currentMapPlan',
     },
     width: '100%',
     height: '100%',
@@ -132,7 +133,9 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     padding: '0 0 0 0',
                 }, {
                     xtype: 'label',
-                    text: 'Plan Notes',
+					itemId: 'notesLabel',
+					width: 80,
+                    text: me.currentMapPlan.get("isTemplate") == true ? 'Template Notes':'Plan Notes',
                 
                 }]
             
@@ -163,11 +166,12 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     cls: 'planEmailIcon',
                     xtype: 'button',
                     itemId: 'emailPlanButton',
-                    hidden:	!me.authenticatedPerson.hasAccess('MAP_TOOL_EMAIL_BUTTON'),
+                    hidden:	!me.authenticatedPerson.hasAccess('MAP_TOOL_EMAIL_BUTTON') || me.currentMapPlan.get("isTemplate") == true,
                     align: 'center',
                     padding: '0 0 0 0',
                 }, {
                     xtype: 'label',
+					itemId: 'emailLabel',
                     text: 'Email Plan',
                 
                 }]
@@ -192,11 +196,12 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     cls: 'mapPrintIcon',
                     xtype: 'button',
                     itemId: 'printPlanButton',
-	                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON'),
+	                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON') || me.currentMapPlan.get("isTemplate") == true,
                     align: 'center',
                     padding: '0 0 0 0'
                 }, {
                     xtype: 'label',
+					itemId: 'printLabel',
                     text: 'Print Plan'
                 
                 }]
@@ -215,11 +220,11 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     anchor: '100%'
                 },
                 items: [{
-                    fieldLabel: 'Plan Title',
+                    fieldLabel: me.currentMapPlan.get("isTemplate") == true ? 'Template Title':'Plan Title',
 					xtype:'textareafield',
                     itemId: 'name',
                     name: 'name',
-                    labelWidth: 55,
+                    labelWidth: 65,
 					width:200,
 					height:40,
 					style: 'border: none;',

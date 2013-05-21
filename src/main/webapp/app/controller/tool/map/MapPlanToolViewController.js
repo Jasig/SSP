@@ -41,6 +41,12 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
 	onUpdateCurrentMapPlan: function(){
 		var me = this;
 		me.getView().loadRecord(me.currentMapPlan);
+		me.onCurrentMapPlanChange();
+	},
+	
+	onCurrentMapPlanChange: function(){
+		var me = this;
+		me.appEventsController.getApplication().fireEvent("onCurrentMapPlanChangeUpdateMapView");
 	},
 	
 	destroy: function(){
