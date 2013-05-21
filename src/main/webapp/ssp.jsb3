@@ -2100,6 +2100,11 @@
                     "path": "/app/model/reference/"
                 },
                 {
+                	"clsName": "Ssp.model.reference.Elective",
+                    "name": "Elective.js",
+                    "path": "/app/model/reference/"
+                },
+                {
                     "clsName": "Ssp.model.reference.VeteranStatus",
                     "name": "VeteranStatus.js",
                     "path": "/app/model/reference/"
@@ -2207,6 +2212,11 @@
                 {
                     "clsName": "Ssp.store.reference.Tags",
                     "name": "Tags.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.Elective",
+                    "name": "Elective.js",
                     "path": "/app/store/reference/"
                 },
                 {
