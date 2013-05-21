@@ -112,25 +112,18 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                                         				    },
                                         				    {
                                         				        fieldLabel: 'Department',
-                                        				        name: 'department',
-                                        				        itemId: 'department',
-                                        				        hidden: true,
-                                        				        hideable: false
+                                        				        name: 'departmentCode',
+                                        				        itemId: 'departmentCode'
                                         				        
                                         				    },{
                                         				        fieldLabel: 'Division',
-                                        				        name: 'division',
-                                        				        itemId: 'division',
-                                        				        hidden: true,
-                                        				        hideable: false
-                                        				    },
-                                        				    {
-                                                                fieldLabel: 'Transfer / Meta Data',
-                                                                name: 'division',
-                                                                itemId: 'division',
-                                        				        hidden: true,
-                                        				        hideable: false
-                                                            }
+                                        				        name: 'divisionCode',
+                                        				        itemId: 'divisionCode'
+                                        				    },{
+                                        				        fieldLabel: 'Tags',
+                                        				        name: 'tags',
+                                        				        itemId: 'tags'
+                                        				    }
                                 				    
                                 				    ]},
                                 				    {
@@ -155,15 +148,13 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                                         				    	fieldLabel:  '<a href="">Master Syllabus</a>',
                                                                 name: 'mastersyllabus',
                                                                 itemId: 'mastersyllabus',
-
-                                        				        
+                                                                labelSeparator : ''
                                         				    },
                                         				    {
                                         				        fieldLabel: '<a href="">Academic Link</a>',
                                                                 name: 'academiclink',
                                                                 itemId: 'academiclink',
-
-                                        				        
+                                                                labelSeparator : ''
                                         				    }
                                 				    ]}
             			    ]

@@ -96,7 +96,16 @@ public class ExternalCourseController extends AbstractExternalController<Externa
 		List<ExternalCourseTO> response = new ArrayList<ExternalCourseTO>();
 		List<ExternalCourse> allCourses = getService().search(programCode,tag,termCode);
 		for (ExternalCourse externalCourse : allCourses) {
-			response.add(getFactory().from(externalCourse));
+			//Kludge:  for the sake of implementation time we are pivoting these tags on the client side.  
+			List<Tag> tags = service.getAllTagsForCourse(externalCourse.getCode());
+			StringBuilder tagBuilder = new StringBuilder();
+			for (Tag tagg : tags) {
+				tagBuilder.append(tagg.getCode()+" ");
+			}
+			ExternalCourseTO to = getFactory().from(externalCourse);
+			to.setTags(tagBuilder.toString().trim());
+			//end Kludge.
+			response.add(to);
 		}
 		return response;
 	}
@@ -118,8 +127,8 @@ public class ExternalCourseController extends AbstractExternalController<Externa
 		for (Tag tag : tags) {
 			tagBuilder.append(tag.getCode()+" ");
 		}
-		//end Kludge.
 		externalCourseTO.setTags(tagBuilder.toString().trim());
+		//end Kludge.
 		return externalCourseTO;
 	}
 	

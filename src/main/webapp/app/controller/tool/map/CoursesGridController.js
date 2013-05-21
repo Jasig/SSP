@@ -1,4 +1,5 @@
 /*
+
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -49,6 +50,12 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
 		me.courseDetailsPopUp.query("#description")[0].setValue(record.get("description"));
 		me.courseDetailsPopUp.query("#minCreditHours")[0].setValue(record.get("minCreditHours"));
 		me.courseDetailsPopUp.query("#maxCreditHours")[0].setValue(record.get("maxCreditHours"));
+		me.courseDetailsPopUp.query("#departmentCode")[0].setValue(record.get("departmentCode"));
+		me.courseDetailsPopUp.query("#divisionCode")[0].setValue(record.get("divisionCode"));
+		me.courseDetailsPopUp.query("#tags")[0].setValue(record.get("tags"));
+		me.courseDetailsPopUp.query("#mastersyllabus")[0].setFieldLabel("<a href=\""+record.get("masterSyllabusLink")+"\">Master Syllabus</a>");
+		me.courseDetailsPopUp.query("#academiclink")[0].setFieldLabel("<a href=\""+record.get("academicLink")+"\">Academic Link</a>");
+		
 		me.courseDetailsPopUp.show();
     },
 

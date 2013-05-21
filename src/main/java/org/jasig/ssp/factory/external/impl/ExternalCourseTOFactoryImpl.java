@@ -61,6 +61,10 @@ public class ExternalCourseTOFactoryImpl
 		model.setSubjectAbbreviation(tObject.getSubjectAbbreviation());
 		model.setTitle(tObject.getTitle());
 		model.setIsDev(tObject.getIsDev());
+		model.setAcademicLink(tObject.getAcademicLink());
+		model.setMasterSyllabusLink(tObject.getMasterSyllabusLink());
+		model.setDepartmentCode(tObject.getDepartmentCode());
+		model.setDivisionCode(tObject.getDepartmentCode());
 		return model;
 	}
 }

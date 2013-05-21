@@ -62,6 +62,14 @@ public class ExternalCourse extends AbstractExternalReferenceData implements Ext
 	@NotEmpty
 	@Size(max = 2500)
 	private String description;
+	
+	@Column(nullable = true, length = 2000)
+	@Size(max = 2500)
+	private String academicLink,masterSyllabusLink;
+
+	@Column(nullable = true, length = 50)
+	@Size(max = 50)
+	private String departmentCode,divisionCode;
 
 	@Column(nullable = false)
 	private Integer maxCreditHours,minCreditHours;
@@ -132,5 +140,37 @@ public class ExternalCourse extends AbstractExternalReferenceData implements Ext
 			this.isDev = BOOLEAN_NO;
 		}
 		this.isDev = isDev ? BOOLEAN_YES : BOOLEAN_NO;
+	}
+
+	public String getAcademicLink() {
+		return academicLink;
+	}
+
+	public void setAcademicLink(String academicLink) {
+		this.academicLink = academicLink;
+	}
+
+	public String getMasterSyllabusLink() {
+		return masterSyllabusLink;
+	}
+
+	public void setMasterSyllabusLink(String masterSyllabusLink) {
+		this.masterSyllabusLink = masterSyllabusLink;
+	}
+
+	public String getDepartmentCode() {
+		return departmentCode;
+	}
+
+	public void setDepartmentCode(String departmentCode) {
+		this.departmentCode = departmentCode;
+	}
+
+	public String getDivisionCode() {
+		return divisionCode;
+	}
+
+	public void setDivisionCode(String divisionCode) {
+		this.divisionCode = divisionCode;
 	}
 }

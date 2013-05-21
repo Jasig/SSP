@@ -39,6 +39,11 @@ public class ExternalCourseTO implements ExternalDataTO<ExternalCourse> {
 	private Boolean isDev;
 	
 	private String tags;
+	
+	private String academicLink,masterSyllabusLink;
+
+	private String departmentCode,divisionCode;
+	
 
 	public ExternalCourseTO() {
 		super();
@@ -59,6 +64,10 @@ public class ExternalCourseTO implements ExternalDataTO<ExternalCourse> {
 		this.setSubjectAbbreviation(model.getSubjectAbbreviation());
 		this.setTitle(model.getTitle());
 		this.setIsDev(model.getIsDev());
+		this.setAcademicLink(model.getAcademicLink());
+		this.setMasterSyllabusLink(model.getMasterSyllabusLink());
+		this.setDepartmentCode(model.getDepartmentCode());
+		this.setDivisionCode(model.getDivisionCode());
 	}
 
 	public String getCode() {
@@ -131,6 +140,38 @@ public class ExternalCourseTO implements ExternalDataTO<ExternalCourse> {
 
 	public void setTags(String tags) {
 		this.tags = tags;
+	}
+
+	public String getAcademicLink() {
+		return academicLink;
+	}
+
+	public void setAcademicLink(String academicLink) {
+		this.academicLink = academicLink;
+	}
+
+	public String getMasterSyllabusLink() {
+		return masterSyllabusLink;
+	}
+
+	public void setMasterSyllabusLink(String masterSyllabusLink) {
+		this.masterSyllabusLink = masterSyllabusLink;
+	}
+
+	public String getDepartmentCode() {
+		return departmentCode;
+	}
+
+	public void setDepartmentCode(String departmentCode) {
+		this.departmentCode = departmentCode;
+	}
+
+	public String getDivisionCode() {
+		return divisionCode;
+	}
+
+	public void setDivisionCode(String divisionCode) {
+		this.divisionCode = divisionCode;
 	}
 
 
