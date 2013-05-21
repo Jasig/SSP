@@ -167,6 +167,9 @@ Ext.define('Ssp.service.MapPlanService', {
     	var termCodes = [];
     	var i = 0;
     	var planCourses = mapPlan.get('planCourses');
+    	if(!planCourses)
+    		return termCodes;
+    	
     	planCourses.forEach(function(planCourse){
     	if(termCodes.indexOf(planCourse.termCode) < 0)
     		termCodes[i++] = planCourse.termCode;
