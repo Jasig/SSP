@@ -82,7 +82,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 			{
                 dataIndex: 'formattedCourse',
                 xtype: 'gridcolumn',
-		            flex:2,
+		        flex:1,
 				width:145
             },
 			{
@@ -115,40 +115,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 				hidden: true,
 				hideable:false
             },
-			
-            {
-                xtype: 'actioncolumn',
-                width: 45,
-		            flex:0,
-				renderer: function(value, metaData, record, rowIndex, colIndex, store) {
-							var me = this;
-							if((record.data.coachNotes != undefined && record.data.coachNotes.length > 0) ||
-								(record.data.studentNotes != undefined && record.data.studentNotes.length > 0) ){
-								me.items[0].icon = Ssp.util.Constants.GRID_ITEM_HAS_NOTES_ICON_PATH;
-								return;
-							}
-				             me.items[0].icon = Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH;
-				         },
-	                items: [{
-	                    icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
-	                    tooltip: 'Edit planItem',
-						name: 'edit_button',
-	                    handler: function(grid, rowIndex, colIndex){
-							var me = this;
-	                    	me.appEventsController.getApplication().fireEvent('onViewCourseNotes',{store:grid.getStore(),
-	                    		rowIndex: rowIndex});
-	                    },
-	                    scope: me,
-
-	                }, {
-	                    icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
-	                    tooltip: 'Delete planItem',
-	                    handler: function(grid, rowIndex, colIndex){
-	                        me.getStore().removeAt(rowIndex);
-	                    },
-	                    scope: me
-	                }]
-	            }],
+       ],
 			viewConfig: {
 			        plugins: {
 			            ptype: 'gridviewdragdrop',

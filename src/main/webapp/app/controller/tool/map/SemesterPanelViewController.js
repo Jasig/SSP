@@ -30,6 +30,12 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
                 click: 'onTermNotesButtonClick'
              }
 		},
+		deleteButton:{
+			selector:"#deleteButton",
+			listeners: {
+                click: 'onDeleteButtonClick'
+             }
+		},		
 		view: {
 			afterlayout: {
 				fn: 'onAfterLayout',
@@ -73,7 +79,19 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
         me.termNotesPopUp.center();
         me.termNotesPopUp.show();
     },
-
+    onDeleteButtonClick: function() {
+		var me = this;
+		var grid = me.getView().query('grid')[0];
+		var record = grid.getView().getSelectionModel().getSelection()[0];
+		if(!record)
+		{
+			 	Ext.Msg.alert('SSP Error', 'Please select an item.'); 
+	    }
+		else
+		{
+			me.getView().query('grid')[0].getView().store.remove(record);
+		}
+    },
 	onTermNotesSave: function(button){
 		var me = this;
 		 var termNote = me.currentMapPlan.getTermNoteByTermCode(me.getView().itemId);

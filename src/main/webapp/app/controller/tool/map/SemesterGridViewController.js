@@ -26,7 +26,11 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 		colorsStore: 'colorsStore',
     	formUtils: 'formRendererUtils',
     },
-	
+    control:{
+    	view:{
+    		    itemdblclick: 'onItemDblClick'
+    		}
+    },	
 	init: function() {
 		var me=this;
 		me.appEventsController.assignEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
@@ -41,21 +45,20 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 		me.getView().view.addListener('beforedrop', me.onDrop, me);
 		return me.callParent(arguments);
     },
-	//TODO This method should probably be at the Semester Panel Level
-	onViewCourseNotes: function(args){
+    onItemDblClick: function(grid, record, item, index, e, eOpts) {
 		var me = this;
-		var courseRecord = args.store.getAt(args.rowIndex);
+		var courseRecord = record;
     		me.coursePlanDetails = Ext.create('Ssp.view.tools.map.CourseNotes');
     		me.coursePlanDetails.parentGrid = me.getView();
 			var creditHours = me.coursePlanDetails.query('#creditHours')[0];
 			if(courseRecord.modelName = 'Ssp.model.external.Course')
 			{
 				var planCourse = new Ssp.model.tool.map.SemesterCourse(courseRecord.data);
-				var index = args.store.indexOf(courseRecord);
+				var indexOf = grid.store.indexOf(courseRecord);
 				var array = new Array();
 				array[0] = planCourse;
-				args.store.insert( index != -1 ? index : args.rowIndex ,array);
-				args.store.remove(courseRecord);
+				grid.store.insert( indexOf != -1 ? indexOf : index ,array);
+				grid.store.remove(courseRecord);
 
 			}
 			else
@@ -66,13 +69,12 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     		creditHours.setValue(planCourse.get('creditHours'));
 		    creditHours.setMinValue(planCourse.get('minCreditHours'));
 			creditHours.setMaxValue(planCourse.get('maxCreditHours'));
-    		me.coursePlanDetails.rowIndex = args.rowIndex;
-    		me.coursePlanDetails.semesterStore = args.store;
+    		me.coursePlanDetails.rowIndex = index;
+    		me.coursePlanDetails.semesterStore = grid.store;
 			me.coursePlanDetails.setTitle(planCourse.get('formattedCourse') + ' - ' + planCourse.get('title'));
-			//me.electiveStore.load();
     		me.coursePlanDetails.center();
     		me.coursePlanDetails.show();
-	},    
+    },
     onDrop: function(node, data, dropRec, dropPosition){
     	var me = this;
     	me.droppedData = data.records[0];
