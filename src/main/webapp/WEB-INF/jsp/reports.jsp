@@ -394,14 +394,14 @@
 			<div class="ea-date-range">
 				<!-- Date From -->
 				<div class="ea-input">
-					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="caseloadActivityCreateDateFrom">
+					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="counselorCaseManagementCreateDateFrom">
 				</div>
 				<div class="ea-label">
 					<span>Student Added From (inclusive)::</span>
 				</div>
 				<div class="ea-clear"></div><!-- Date To -->
 				<div class="ea-input">
-					<input class="input-calendar-type" type="textbox" name="createDateTo" id="caseloadActivityCreateDateTo">
+					<input class="input-calendar-type" type="textbox" name="createDateTo" id="counselorCaseManagementCreateDateTo">
 				</div>
 				<div class="ea-label">
 					<span>Student Added To (exclusive)::</span>
@@ -1360,14 +1360,14 @@
 			<div class="ea-date-range">
 				<!-- Date From -->
 				<div class="ea-input">
-					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentOutcomeCreateDateFrom">
+					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentOutreachCreateDateFrom">
 				</div>
 				<div class="ea-label">
 					<span>Start Date (inclusive)::</span>
 				</div>
 				<div class="ea-clear"></div><!-- Date To -->
 				<div class="ea-input">
-					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentOutcomeCreateDateTo">
+					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentOutreachCreateDateTo">
 				</div>
 				<div class="ea-label">
 					<span>End Date (exclusive)::</span>

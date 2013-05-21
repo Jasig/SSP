@@ -126,11 +126,12 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 			final @RequestParam(required = false) List<UUID> referralSourcesIds,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) List<UUID> serviceReasonIds,
-			final @RequestParam(required = false) Date createDateFromCounselor,
-			final @RequestParam(required = false) Date createDateToCounselor,
+			final @RequestParam(required = false) Date createDateFrom,
+			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false) Integer anticipatedStartYear,
 			final @RequestParam(required = false) String anticipatedStartTerm,
 			final @RequestParam(required = false) String homeDepartment,
+			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 
@@ -151,9 +152,9 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 				referralSourcesService,
 				serviceReasonService);
 		
-		SearchParameters.addDateRange(createDateFromCounselor, 
-				createDateToCounselor, 
-				null, 
+		SearchParameters.addDateRange(createDateFrom, 
+				createDateTo, 
+				termCode, 
 				parameters, 
 				personSearchForm, 
 				null);
