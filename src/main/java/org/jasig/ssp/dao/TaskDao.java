@@ -247,9 +247,9 @@ public class TaskDao
 		
 		if(form.getSpecialServiceGroupIds()!= null && !form.getSpecialServiceGroupIds().isEmpty()){
 			query.createAlias("person.specialServiceGroups", "specialServiceGroups");
-			query.createAlias("serviceReasons.specialServiceGroup", "specialServiceGroup");
+			query.createAlias("specialServiceGroups.specialServiceGroup", "specialServiceGroup");
 			query.add(Restrictions
-					.in("serviceServiceGroup.id",form.getSpecialServiceGroupIds()));
+					.in("specialServiceGroup.id",form.getSpecialServiceGroupIds()));
 			
 		}
 				

@@ -505,7 +505,7 @@
 			<span>Student Type:</span>
 		</div>
 		
-		<!-- Special Service Groups 
+		<!--Special Service Groups -->
 		<div class="ea-input">
 			<select  class="input-special-service-group" id="caseloadActivitySpecialServiceGroupIds" name="specialServiceGroupIds"
 				multiple="multiple">
@@ -515,7 +515,7 @@
 		<div class="ea-label">
 			<span>Special Service Groups:</span>
 		</div>
-		<div class="ea-clear"></div>-->
+		<div class="ea-clear"></div>
 		
 		
 		<div class="ea-clear"></div>
