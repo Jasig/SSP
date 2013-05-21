@@ -52,7 +52,7 @@ public class PretransistionedReportControllerIntegrationTest extends
 			throws IOException, ObjectNotFoundException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		
-		controller.getPreTransitioned(response, null, null, null, null, null, null, null,
+		controller.getPreTransitioned(response, null, null, null, null, null, null, null, null,
 				null, null, null, null, null, "csv");
 
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
@@ -96,6 +96,7 @@ public class PretransistionedReportControllerIntegrationTest extends
 				TermFixture.FALL_2012.year(),
 				TermFixture.FALL_2012.code(), 
 				null,
+				null,
 				"csv");
 
 		// "body" is the actual results and the header that describes its columns.
@@ -132,6 +133,7 @@ public class PretransistionedReportControllerIntegrationTest extends
 				TermFixture.FALL_2012.year(),
 				TermFixture.FALL_2012.code(), 
 				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
+				null,
 				"csv");
 
 		// "body" is the actual results and the header that describes its columns.
