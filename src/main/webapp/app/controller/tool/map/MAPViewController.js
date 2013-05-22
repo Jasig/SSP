@@ -142,8 +142,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.appEventsController.assignEvent({eventName: 'onSavePlanRequest', callBackFunc: me.onSavePlanRequest, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onSaveTemplateRequest', callBackFunc: me.onSaveTemplateRequest, scope: me});
 		
-		me.appEventsController.removeEvent({eventName: 'loadTemplateDialog', callBackFunc: me.loadTemplateDialog, scope: me});
-		me.appEventsController.removeEvent({eventName: 'loadPlanDialog', callBackFunc: me.loadPlanDialog, scope: me});
+		me.appEventsController.assignEvent({eventName: 'loadTemplateDialog', callBackFunc: me.loadTemplateDialog, scope: me});
+		me.appEventsController.assignEvent({eventName: 'loadPlanDialog', callBackFunc: me.loadPlanDialog, scope: me});
 		
 		me.appEventsController.assignEvent({eventName: 'onUpdateSaveOption', callBackFunc: me.onUpdateSaveOption, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onCurrentMapPlanChangeUpdateMapView', callBackFunc: me.onCurrentMapPlanChange, scope: me});
@@ -243,7 +243,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
     planDataChangedLoadingPlans:function(buttonId){
 		var me = this;
 		if(buttonId == "on" || buttonId == "yes"){
-			me.onSavePlanRequest({loaderDialogEventName:"loadPlanDialog"});
+			me.onSavePlanRequest({loaderDialogEventName:'loadPlanDialog'});
 		}else{
 			me.loadPlanDialog();
 		}
@@ -252,7 +252,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	templateDataChangedLoadingPlans:function(buttonId){
 		var me = this;
 		if(buttonId == "on" || buttonId == "yes"){
-			me.onSaveTemplateRequest({loaderDialogEventName:"laodPlanDialog"});
+			me.onSaveTemplateRequest({loaderDialogEventName:'laodPlanDialog'});
 		}	else{
 				me.loadPlanDialog();
 		}
@@ -260,7 +260,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
     
     
     onloadTemplateButtonClick: function(button){
-	var me = this;
+    	var me = this;
     	if(me.currentMapPlan.isDirty(me.semesterStores)){
 			if(me.currentMapPlan.get("isTemplate")){
 				Ext.Msg.confirm("Template Has Changed!", "It appears the template has been altered. Do you wish to save your changes?", me.templateDataChangedLoadingTemplate, me);
@@ -276,7 +276,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
     planDataChangedLoadingTemplate:function(buttonId){
 		var me = this;
 		if(buttonId == "on" || buttonId == "yes"){
-			me.onSavePlanRequest({loaderDialogEventName:"loadTemplateDialog"});
+			me.onSavePlanRequest({loaderDialogEventName:'loadTemplateDialog'});
 		}else{
 				me.loadTemplateDialog();
 		}
@@ -285,7 +285,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	templateDataChangedLoadingTemplate:function(buttonId){
 		var me = this;
 		if(buttonId == "on" || buttonId == "yes"){
-			me.onSaveTemplateRequest({loaderDialogEventName:"loadTemplateDialog"});
+			me.onSaveTemplateRequest({loaderDialogEventName:'loadTemplateDialog'});
 		}else{
 			me.loadTemplateDialog();
 		}
@@ -355,9 +355,36 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
     },
 
 	oncreateNewMapPlanButton: function(button){
-        var me=this;
-		me.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
+		var me = this;
+    	if(me.currentMapPlan.isDirty(me.semesterStores)){
+			if(me.currentMapPlan.get("isTemplate")){
+				Ext.Msg.confirm("Template Has Changed!", "It appears the template has been altered. Do you wish to save your changes?", me.templateDataChangedNewMap, me);
+				
+			}
+			else
+				Ext.Msg.confirm("Map Plan Has Changed!", "It appears the MAP plan has been altered. Do you wish to save your changes?", me.planDataChangedNewMap, me);
+		}else{
+			me.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
+		}
     },
+    
+    planDataChangedNewMap:function(buttonId){
+		var me = this;
+		if(buttonId == "on" || buttonId == "yes"){
+			me.onSavePlanRequest({loaderDialogEventName:'onCreateNewMapPlan'});
+		}else{
+			me.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
+		}
+	},
+	
+	templateDataChangedNewMap:function(buttonId){
+		var me = this;
+		if(buttonId == "on" || buttonId == "yes"){
+			me.onSaveTemplateRequest({loaderDialogEventName:'onCreateNewMapPlan'});
+		}else{
+			me.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
+		}
+	},
 
 	onCurrentMapPlanChange: function(){
 			var me = this;
