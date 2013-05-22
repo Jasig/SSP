@@ -24,6 +24,7 @@ import org.springframework.stereotype.Repository;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.external.ExternalProgram;
 import org.jasig.ssp.model.reference.Tag;
 
@@ -50,6 +51,8 @@ public class TagDao extends AbstractReferenceAuditableCrudDao<Tag>
 
 	private void buildTagSearchParamList(String programCode, String termCode,
 			Query hqlQuery) {
+		
+		hqlQuery.setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal());
 		if(!StringUtils.isEmpty(programCode))
 		{
 			hqlQuery.setString("programCode", programCode);
@@ -73,6 +76,7 @@ public class TagDao extends AbstractReferenceAuditableCrudDao<Tag>
 		}
 		query.append(" where ");
 		query.append(" t.code = ect.tag ");
+		query.append(" and t.objectStatus = :objectStatus ");
 		query.append(" and ect.courseCode = ec.code  ");
 		
 		if(!StringUtils.isEmpty(programCode))
