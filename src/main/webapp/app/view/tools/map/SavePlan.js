@@ -215,17 +215,6 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                             xtype: 'button',
                             itemId: 'cancelButton',
                             text: 'Cancel',
-							cancel: function(){
-								me = this;
-								me.close();
-								if(me.viewToClose){
-									me.viewToClose.close();
-								}
-							},
-							listeners:{
-                            	click: 'cancel',
-								scope: me
-                            }
                         }]
                     
                     }]

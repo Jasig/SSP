@@ -23,7 +23,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
     	apiProperties: 'apiProperties',
     	appEventsController: 'appEventsController',
 		columnRendererUtils : 'columnRendererUtils',
-    	currentMapPlan: 'currentMapPlan'
+    	currentMapPlan: 'currentMapPlan',
+		semesterStores: 'currentSemesterStores'
     },
     control: {
 		view: {
@@ -140,9 +141,13 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.onUpdateSaveOption();
 		me.appEventsController.assignEvent({eventName: 'onSavePlanRequest', callBackFunc: me.onSavePlanRequest, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onSaveTemplateRequest', callBackFunc: me.onSaveTemplateRequest, scope: me});
+		
+		me.appEventsController.removeEvent({eventName: 'loadTemplateDialog', callBackFunc: me.loadTemplateDialog, scope: me});
+		me.appEventsController.removeEvent({eventName: 'loadPlanDialog', callBackFunc: me.loadPlanDialog, scope: me});
+		
 		me.appEventsController.assignEvent({eventName: 'onUpdateSaveOption', callBackFunc: me.onUpdateSaveOption, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onCurrentMapPlanChangeUpdateMapView', callBackFunc: me.onCurrentMapPlanChange, scope: me});
-
+	
 		return this.callParent(arguments);
     },
 
@@ -164,8 +169,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		}
         me.getPlanNotesButton().setIcon(Ssp.util.Constants.ADD_PLAN_NOTE_ICON_PATH);
 	},
-	
-	
 
     onUpdateSaveOption: function(){
         var me=this;
@@ -192,17 +195,18 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	    me.notesPopUp.center();
 		me.notesPopUp.show();
     },
+    
 	onSavePlanRequest: function(values){
         var me=this;
 		if(me.savePlanPopUp == null || me.savePlanPopUp.isDestroyed)
-        	me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false, viewToClose: values.viewToClose});
+        	me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false, viewToClose: values.viewToClose, loaderDialogEventName:values.loaderDialogEventName});
 		me.savePlanPopUp.show();
     },
 
 	onSaveTemplateRequest: function(values){
         var me=this;
 		if(me.saveTemplatePopUp == null || me.saveTemplatePopUp.isDestroyed)
-        	me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false, viewToClose: values.viewToClose});
+        	me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false, viewToClose: values.viewToClose, loaderDialogEventName:values.loaderDialogEventName});
 		me.saveTemplatePopUp.show();
     },
 
@@ -217,17 +221,83 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 
     
     onloadSavedPlanButtonClick: function(button){
+		var me = this;
+    	if(me.currentMapPlan.isDirty(me.semesterStores)){
+			if(me.currentMapPlan.get("isTemplate")){
+				Ext.Msg.confirm("Template Has Changed!", "It appears the template has been altered. Do you wish to save your changes?", me.templateDataChangedLoadingPlans, me);
+				
+			}
+			else
+				Ext.Msg.confirm("Map Plan Has Changed!", "It appears the MAP plan has been altered. Do you wish to save your changes?", me.planDataChangedLoadingPlans, me);
+		}else{
+			me.loadPlanDialog()
+		}
+    },
+    
+    loadPlanDialog: function(button){
         var me=this; 
 		me.allPlansPopUp = Ext.create('Ssp.view.tools.map.LoadPlans',{hidden:true});
 		me.allPlansPopUp.show();
     },
     
+    planDataChangedLoadingPlans:function(buttonId){
+		var me = this;
+		if(buttonId == "on" || buttonId == "yes"){
+			me.onSavePlanRequest({loaderDialogEventName:"loadPlanDialog"});
+		}else{
+			me.loadPlanDialog();
+		}
+	},
+	
+	templateDataChangedLoadingPlans:function(buttonId){
+		var me = this;
+		if(buttonId == "on" || buttonId == "yes"){
+			me.onSaveTemplateRequest({loaderDialogEventName:"laodPlanDialog"});
+		}	else{
+				me.loadPlanDialog();
+		}
+	},
+    
+    
     onloadTemplateButtonClick: function(button){
-        var me=this;
+	var me = this;
+    	if(me.currentMapPlan.isDirty(me.semesterStores)){
+			if(me.currentMapPlan.get("isTemplate")){
+				Ext.Msg.confirm("Template Has Changed!", "It appears the template has been altered. Do you wish to save your changes?", me.templateDataChangedLoadingTemplate, me);
+				
+			}
+			else
+				Ext.Msg.confirm("Map Plan Has Changed!", "It appears the MAP plan has been altered. Do you wish to save your changes?", me.planDataChangedLoadingTemplate, me);
+		}else{
+			me.loadTemplateDialog()
+		}
+    },
+    
+    planDataChangedLoadingTemplate:function(buttonId){
+		var me = this;
+		if(buttonId == "on" || buttonId == "yes"){
+			me.onSavePlanRequest({loaderDialogEventName:"loadTemplateDialog"});
+		}else{
+				me.loadTemplateDialog();
+		}
+	},
+	
+	templateDataChangedLoadingTemplate:function(buttonId){
+		var me = this;
+		if(buttonId == "on" || buttonId == "yes"){
+			me.onSaveTemplateRequest({loaderDialogEventName:"loadTemplateDialog"});
+		}else{
+			me.loadTemplateDialog();
+		}
+	},
+    
+    loadTemplateDialog:function(){
+    	var me=this;
         if(me.allTemplatesPopUp == null || me.allTemplatesPopUp.isDestroyed)
 			me.allTemplatesPopUp = Ext.create('Ssp.view.tools.map.LoadTemplates',{hidden:true});
 		me.allTemplatesPopUp.show();
     },
+    
     
     onsaveTemplateButtonClick: function(button){
         var me=this;
@@ -321,8 +391,12 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.appEventsController.removeEvent({eventName: 'onSavePlanRequest', callBackFunc: me.onSavePlanRequest, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onSaveTemplateRequest', callBackFunc: me.onSaveTemplateRequest, scope: me});
 		
+		me.appEventsController.removeEvent({eventName: 'laodTemplateDialog', callBackFunc: me.laodTemplateDialog, scope: me});
+		me.appEventsController.removeEvent({eventName: 'loadPlanDialog', callBackFunc: me.loadPlanDialog, scope: me});
+		
 		me.appEventsController.removeEvent({eventName: 'onUpdateSaveOption', callBackFunc: me.onUpdateSaveOption, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onCurrentMapPlanChangeUpdateMapView', callBackFunc: me.onCurrentMapPlanChange, scope: me});
+		
 		
 		if(me.faPopUp != null && !me.faPopUp.isDestroyed)
 			me.faPopUp.close();

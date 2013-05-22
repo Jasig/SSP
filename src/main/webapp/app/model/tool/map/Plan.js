@@ -238,5 +238,28 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			return true;
 		 return false;
 	},
+	
+	isDirty: function(semesterStores){
+		var me = this;
+		if(me.dirty)
+			return true;
+			
+		if(semesterStores){
+			for(var index in semesterStores){
+				var semesterStore = semesterStores[index];
+				if(semesterStore.getUpdatedRecords().lenght > 0 || semesterStore.getNewRecords().length > 0)
+					return true;
+			};
+		}
+
+		var termNotes = me.get("termNotes");
+		if(termNotes){
+			termNotes.forEach(function(termNote){
+				if(termNote.dirty)
+					return true;
+			});
+		}
+		return false;
+	},
     		        		  
 });

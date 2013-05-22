@@ -34,32 +34,10 @@ Ext.define('Ssp.controller.tool.map.MAPController', {
 		return this.callParent(arguments);
     },
 	
-	currentMapIsDirty: function(){
-		var me = this;
-		if(me.currentMapPlan.dirty)
-			return true;
-		var isDirty = false;
-		for(var index in me.semesterStores){
-        	var semesterStore = me.semesterStores[index];
-			if(semesterStore.getUpdatedRecords().lenght > 0 || semesterStore.getNewRecords().length > 0)
-				return true;
-		};
-
-		var termNotes = me.currentMapPlan.get("termNotes");
-		if(termNotes){
-			termNotes.forEach(function(termNote){
-				if(termNote.dirty)
-					isDirty = true;
-			});
-		}
-		if(isDirty)
-			return true;
-		return false;
-	},
 	
 	onDestroy:function(){
 		var me = this;
-		if(me.currentMapIsDirty()){
+		if(me.currentMapPlan.isDirty(me.semesterStores)){
 			if(me.currentMapPlan.get("isTemplate"))
 				Ext.Msg.confirm("Template Has Changed!", "It appears the template has been altered. Do you wish to save your changes?", me.templateDataHasChanged, me);
 			else

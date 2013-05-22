@@ -30,10 +30,13 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 			show: 'onShow'
 		},
     	'saveButton': {
-			click: 'onSaveClick'
+			click: 'onSaveClick',
+		},
+		'cancelButton': {
+			click: 'onCancelClick',
 		},
 	},
-	semesterStores: [],
+
 	init: function() {
 		var me=this;
 	    me.resetForm();
@@ -43,6 +46,18 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		me.setCheckBox('checkbox[name=isPrivate]', 'isPrivate');
 		return me.callParent(arguments);
     },
+    
+    onCancelClick: function(){
+    	me = this;
+    	me.getView().close();
+		if(me.getView().viewToClose){
+			me.getView().viewToClose.close();
+		}else if(me.getView().loaderDialogEventName){
+			alert("hitme");
+			me.appEventsController.getApplication().fireEvent(me.getView().loaderDialogEventName);
+		}
+    },
+    
     onSaveClick: function(){
     	me = this;
 		
@@ -64,11 +79,9 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     	{
     		me.appEventsController.getApplication().fireEvent('onSaveTemplatePlan');
     	}
-    	me.getView().close();
-		if(me.getView().viewToClose){
-			me.getView().viewToClose.close();
-		}
+    	me.onCancelClick();
     },
+    
     resetForm: function() {
         var me = this;
         me.getView().query('form')[0].getForm().reset();

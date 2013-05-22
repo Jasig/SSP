@@ -119,7 +119,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			me.onCreateMapPlan();
 			me.populatePlanStores();
 			me.updateAllPlanHours();
-			me.currentMapPlan.set('isTemplate', false);
+			if(isTemplate)
+				me.currentMapPlan.set('isTemplate', isTemplate);
+			else
+				me.currentMapPlan.set('isTemplate', false);
 		}
     },
 

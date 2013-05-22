@@ -30,10 +30,12 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 			show: 'onShow'
 		},
     	'saveButton': {
-			click: 'onSaveClick'
+			click: 'onSaveClick',
+		},
+		'cancelButton': {
+			click: 'onCancelClick',
 		},
 	},
-	semesterStores: [],
 	init: function() {
 		var me=this;
 	    me.resetForm();
@@ -44,6 +46,18 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 		me.setCheckBox('checkbox[name=isF1Visa]', 'isF1Visa');
 		return me.callParent(arguments);
     },
+   
+    onCancelClick: function(){
+    	me = this;
+    	me.getView().close();
+		if(me.getView().viewToClose){
+			me.getView().viewToClose.close();
+		}else if(me.getView().loaderDialogEventName){
+			alert("hitme");
+			me.appEventsController.getApplication().fireEvent(me.getView().loaderDialogEventName);
+		}
+    },
+    
     onSaveClick: function(){
     	me = this;
 	
@@ -64,10 +78,7 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
     	{
     		me.appEventsController.getApplication().fireEvent('onSaveMapPlan');
     	}
-    	me.getView().close();
-		if(me.getView().viewToClose){
-			me.getView().viewToClose.close();
-		}
+    	me.onCancelClick();
     },
     resetForm: function() {
         var me = this;
