@@ -20,18 +20,13 @@ package org.jasig.ssp.dao.external;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.external.ExternalCourse;
-import org.jasig.ssp.model.reference.Tag;
-import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
@@ -63,8 +58,12 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 
 	@SuppressWarnings("unchecked")
 	public List<String> getTagsForCourse(String code) {
-		String getTagsForCourseBaseQuery = "select ect.tag from ExternalCourseTag ect where ect.courseCode = :courseCode ";
-		return createHqlQuery(getTagsForCourseBaseQuery).setString("courseCode", code).list();
+		String getTagsForCourseBaseQuery = "select ect.tag from ExternalCourseTag ect, Tag tag " +
+										   "where ect.courseCode = :courseCode and ect.tag = tag.code and tag.objectStatus = :objectStatus";
+		return createHqlQuery(getTagsForCourseBaseQuery)
+			   .setString("courseCode", code)
+			   .setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal())
+			   .list();
 	}
 	public Boolean validateCourseForTerm(String code, String termCode) {
 		String baseValidateCourseHqlQuery = "from ExternalCourseTerm ect where ect.courseCode = :courseCode and ect.termCode = :termCode";
@@ -101,6 +100,7 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 		}
 		if(!StringUtils.isEmpty(tag))
 		{
+			hqlQuery.setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal());
 			hqlQuery.setString("tag", tag);
 		}
 	}
@@ -118,6 +118,7 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 		if(!StringUtils.isEmpty(tag))
 		{
 			query.append(" ,ExternalCourseTag ectg ");
+			query.append(" ,Tag tag ");
 		}
 		if(!StringUtils.isEmpty(termCode))
 		{
@@ -142,6 +143,8 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 			}
 			query.append(" ec.code = ectg.courseCode ");
 			query.append(" and ectg.tag = :tag ");
+			query.append(" and tag.code = :tag ");
+			query.append(" and tag.objectStatus = :objectStatus ");
 			firstWhereCondition = false;
 		}	
 		if(!StringUtils.isEmpty(termCode))
