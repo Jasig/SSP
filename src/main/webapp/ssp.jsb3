@@ -2225,6 +2225,11 @@
                     "path": "/app/store/reference/"
                 },
                 {
+                    "clsName": "Ssp.store.reference.FacetedTags",
+                    "name": "FacetedTags.js",
+                    "path": "/app/store/reference/"
+                },
+                {
                     "clsName": "Ssp.store.reference.Elective",
                     "name": "Elective.js",
                     "path": "/app/store/reference/"

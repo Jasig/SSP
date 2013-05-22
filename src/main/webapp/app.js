@@ -335,6 +335,7 @@ Ext.require([
     'Ssp.store.reference.StudentStatuses',
     'Ssp.store.reference.StudentTypes',
 	'Ssp.store.reference.Tags',
+	'Ssp.store.reference.FacetedTags',
     'Ssp.store.Tools',
     'Ssp.store.reference.VeteranStatuses',
     'Ssp.store.reference.YesNo',
@@ -466,7 +467,8 @@ var apiUrls = [
   {name: 'program', url: 'reference/program/facet'},
   {name: 'department', url: 'reference/department/all'},//TODO Change to facets.
   {name: 'division', url: 'reference/division/all'},
-  {name: 'tag', url: 'reference/tag/facet'},
+  {name: 'tag', url: 'reference/tag'},
+  {name: 'facetedtag', url: 'reference/tag/facet'},
   {name: 'futureTerms', url: 'reference/term/future'},
   {name: 'weeklyCourseWorkHourRanges', url: 'reference/config/?name=weekly_course_work_hour_ranges'},
 ];
@@ -928,6 +930,7 @@ Ext.onReady(function(){
 				    departmentsStore:'Ssp.store.external.Departments',
 					coursesStore:'Ssp.store.external.Courses',
 					tagsStore: 'Ssp.store.reference.Tags',
+					facetedTagsStore: 'Ssp.store.reference.FacetedTags',
 				    tasksStore: 'Ssp.store.Tasks',
 				    studentActivitiesStore: 'Ssp.store.StudentActivities',
 				    toolsStore: 'Ssp.store.Tools',
