@@ -28,7 +28,7 @@
 		<dropColumn tableName="map_template_course" columnName="is_transcript" />
 	</changeSet>
 	<changeSet id="drop is_transcript from map_plan_course" author="tony.arland">
-	    <dropNotNullConstraint tableName="map_template_course" columnName="is_transcript"/>
+	    <dropNotNullConstraint tableName="map_plan_course" columnName="is_transcript"/>
 		<dropColumn tableName="map_plan_course" columnName="is_transcript" />
 	</changeSet>
 </databaseChangeLog>
