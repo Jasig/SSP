@@ -138,7 +138,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		var view = me.getView();
 		
 		me.onUpdateSaveOption();
-		
+		me.appEventsController.assignEvent({eventName: 'onSavePlanRequest', callBackFunc: me.onSavePlanRequest, scope: me});
+		me.appEventsController.assignEvent({eventName: 'onSaveTemplateRequest', callBackFunc: me.onSaveTemplateRequest, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onUpdateSaveOption', callBackFunc: me.onUpdateSaveOption, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onCurrentMapPlanChangeUpdateMapView', callBackFunc: me.onCurrentMapPlanChange, scope: me});
 
@@ -163,6 +164,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		}
         me.getPlanNotesButton().setIcon(Ssp.util.Constants.ADD_PLAN_NOTE_ICON_PATH);
 	},
+	
+	
 
     onUpdateSaveOption: function(){
         var me=this;
@@ -189,7 +192,19 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	    me.notesPopUp.center();
 		me.notesPopUp.show();
     },
+	onSavePlanRequest: function(values){
+        var me=this;
+		if(me.savePlanPopUp == null || me.savePlanPopUp.isDestroyed)
+        	me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false, viewToClose: values.viewToClose});
+		me.savePlanPopUp.show();
+    },
 
+	onSaveTemplateRequest: function(values){
+        var me=this;
+		if(me.saveTemplatePopUp == null || me.saveTemplatePopUp.isDestroyed)
+        	me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false, viewToClose: values.viewToClose});
+		me.saveTemplatePopUp.show();
+    },
 
 
 	onPlanNotesSave: function(button){
@@ -303,6 +318,9 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 
 	destroy:function(){
 	    var me=this;
+		me.appEventsController.removeEvent({eventName: 'onSavePlanRequest', callBackFunc: me.onSavePlanRequest, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onSaveTemplateRequest', callBackFunc: me.onSaveTemplateRequest, scope: me});
+		
 		me.appEventsController.removeEvent({eventName: 'onUpdateSaveOption', callBackFunc: me.onUpdateSaveOption, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onCurrentMapPlanChangeUpdateMapView', callBackFunc: me.onCurrentMapPlanChange, scope: me});
 		

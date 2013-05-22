@@ -21,10 +21,10 @@ Ext.define('Ssp.view.tools.map.MAP', {
     alias : 'widget.map',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.actionplan.ActionPlanToolViewController',
+    controller: 'Ssp.controller.tool.map.MAPController',
     width: '100%',
     height: '100%',   
-     layout: {
+    layout: {
                 type: 'fit'
             },
     initComponent: function() { 
@@ -37,5 +37,7 @@ Ext.define('Ssp.view.tools.map.MAP', {
 
         return this.callParent(arguments);
     }
+
+	
         
 });

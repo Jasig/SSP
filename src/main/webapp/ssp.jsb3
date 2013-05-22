@@ -363,6 +363,11 @@
                     "name": "PrintPlanController.js",
                     "path": "/app/controller/tool/map/"
                 },
+                {
+                    "clsName": "Ssp.controller.tool.map.MAPController",
+                    "name": "MAPController.js",
+                    "path": "/app/controller/tool/map/"
+                },
 				{
                     "clsName": "Ssp.controller.tool.map.MAPViewController",
                     "name": "MAPViewController.js",

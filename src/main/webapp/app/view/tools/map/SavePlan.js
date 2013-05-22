@@ -218,6 +218,9 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
 							cancel: function(){
 								me = this;
 								me.close();
+								if(me.viewToClose){
+									me.viewToClose.close();
+								}
 							},
 							listeners:{
                             	click: 'cancel',

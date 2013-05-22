@@ -65,6 +65,9 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     		me.appEventsController.getApplication().fireEvent('onSaveTemplatePlan');
     	}
     	me.getView().close();
+		if(me.getView().viewToClose){
+			me.getView().viewToClose.close();
+		}
     },
     resetForm: function() {
         var me = this;

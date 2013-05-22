@@ -166,10 +166,12 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			termNotes.forEach(function(termNote){
 				var recordTermNote = new Ssp.model.tool.map.TermNote();
 				recordTermNote.populateFromGenericObject(termNote);
+				recordTermNote.dirty = false;
 				recordTermNotes.push(recordTermNote);
 			})
 		}
 		me.set('termNotes', recordTermNotes);
+		me.dirty = false;
 	}, 		
 	getSimpleJsonData: function(){
 		var me = this;

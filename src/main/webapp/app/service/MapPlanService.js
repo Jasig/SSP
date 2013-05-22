@@ -202,7 +202,9 @@ Ext.define('Ssp.service.MapPlanService', {
             		planCourse.courseDescription = model.get('description');
             		planCourse.studentNotes = model.get('studentNotes');
             		planCourse.contactNotes = model.get('contactNotes');
+
             		planCourse.isImportant = model.get('isImportant') ==  null ? false : model.get('isImportant');
+
             		planCourse.isTranscript = me.getBoolean(model, 'isTranscript');
             		planCourse.electiveId = model.get('electiveId');
             		planCourse.orderInTerm = i;

@@ -55,6 +55,7 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 		me.setField('checkbox[name=isF1Visa]', 'isF1Visa');
     	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
 		me.currentMapPlan.set('isTemplate', false);
+		
     	if(me.getView().saveAs)
     	{
     		me.appEventsController.getApplication().fireEvent('onSaveAsMapPlan');
@@ -63,7 +64,10 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
     	{
     		me.appEventsController.getApplication().fireEvent('onSaveMapPlan');
     	}
-    		me.getView().close();
+    	me.getView().close();
+		if(me.getView().viewToClose){
+			me.getView().viewToClose.close();
+		}
     },
     resetForm: function() {
         var me = this;

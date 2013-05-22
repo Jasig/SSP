@@ -29,6 +29,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
         personLite: 'personLite',
     	currentMapPlan: 'currentMapPlan',
 		electiveStore : 'electiveStore',
+		semesterStores : 'currentSemesterStores'
     },
     
 	control: {
@@ -40,7 +41,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	    	},
 	},
 
-	semesterStores: [],
+	
 	init: function() {
 		var me=this;
 		var id = me.personLite.get('id');
@@ -180,10 +181,17 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	    }
 	},
 	
+	clearSemesterStores: function(){
+		var me = this;
+		while(me.semesterStores.length > 0) {
+		    me.semesterStores.pop(); 
+		}
+	},
+	
 	getTerms: function(mapPlan){
 		var me = this;
 		var terms;
-		me.semesterStores = [];
+		me.clearSemesterStores()
 		var termsStore = me.termsStore.getCurrentAndFutureTermsStore(5);			
 		if(mapPlan){
 			var mapTerms = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(mapPlan));
@@ -430,8 +438,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			planHours += hours.planHours;
 			devHours += hours.devHours;
 		})
-		Ext.getCmp('currentTotalPlanCrHrs').setValue(planHours);
-		Ext.getCmp('currentPlanTotalDevCrHrs').setValue(devHours);
+		if(Ext.getCmp('currentTotalPlanCrHrs'))
+			Ext.getCmp('currentTotalPlanCrHrs').setValue(planHours);
+		if(Ext.getCmp('currentPlanTotalDevCrHrs'))
+			Ext.getCmp('currentPlanTotalDevCrHrs').setValue(devHours);
 		
 	},
 	

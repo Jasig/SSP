@@ -628,7 +628,13 @@ Ext.onReady(function(){
 				            return new Ssp.model.tool.map.Plan({id:""});
 				        },
 				        singleton: true
-				    },			        
+				    },
+					currentSemesterStores: {
+				        fn: function(){
+				            return [];
+				        },
+				        singleton: true
+				    },
 			        currentTask:{
 				        fn: function(){
 				            return new Ssp.model.tool.actionplan.Task({id:""});

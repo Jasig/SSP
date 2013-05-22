@@ -229,8 +229,11 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                             xtype: 'button',
                             text: 'Cancel',
                             cancel: function(){
-								me = this;
+								var me = this;
 								me.close();
+								if(me.viewToClose){
+									me.viewToClose.close();
+								}
 							},
 							listeners:{
                             	click: 'cancel',
