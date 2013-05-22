@@ -83,6 +83,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		var me = this;
 		var grid = me.getView().query('grid')[0];
 		var record = grid.getView().getSelectionModel().getSelection()[0];
+		if(!grid.enableDragAndDrop && !me.currentMapPlan.get('isTemplate'))
+		{
+		 	Ext.Msg.alert('SSP Error', 'You cannot modify old terms.'); 
+		}
 		if(!record)
 		{
 			 	Ext.Msg.alert('SSP Error', 'Please select an item.'); 
