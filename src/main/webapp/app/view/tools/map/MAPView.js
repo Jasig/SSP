@@ -90,25 +90,25 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                         
                         {
                             xtype: 'button',
-                            text: 'Save Plan As',
+                            text: 'Save Plan As New Plan',
                             itemId: 'savePlanAsButton'
                         },
                         {
                             xtype: 'button',
                             text: 'Save Plan',
                             itemId: 'savePlanButton',
-                            hidden: me.currentMapPlan.get('isTemplate') == true || me.currentMapPlan.get('id') != ""
+                            hidden: me.currentMapPlan.get('isTemplate') == true || !me.currentMapPlan.get('id') || me.currentMapPlan.get('id') == ""
                         }, 
                         {
                             xtype: 'button',
-                            text: 'Save Template As' ,
+                            text: 'Save as New Template' ,
                             itemId: 'saveTemplateAsButton',
-						    hidden: me.currentMapPlan.get('isTemplate') == false
                         },
                         {
                             xtype: 'button',
-                            text: 'Save Template As' ,
+                            text: 'Save Template' ,
                             itemId: 'saveTemplateButton',
+                            hidden: !me.currentMapPlan.get('id') || me.currentMapPlan.get('id') != ""
                         },
                     ]
                     }

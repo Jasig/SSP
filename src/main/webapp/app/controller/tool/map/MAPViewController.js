@@ -390,6 +390,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			var me = this;
 		 if(me.currentMapPlan.get('isTemplate') == true)
 		{
+			if(me.currentMapPlan.get('id') || me.currentMapPlan.get('id') != "" )
+			{
+				me.getSaveTemplateButton.show();
+			}
 			me.getSavePlanButton().hide();
 			me.getSaveTemplateAsButton().show();
 			me.getPrintPlanButton().hide();
@@ -401,7 +405,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.getPlanNotesButton().setTooltip("Template Notes");
 		}else{
 			me.getSavePlanButton().show();
-			me.getSaveTemplateAsButton().hide();
+			me.getSaveTemplateAsButton().show();
 			me.getPrintPlanButton().show();
 			me.getPrintLabel().show();
 			me.getEmailPlanButton().show();
