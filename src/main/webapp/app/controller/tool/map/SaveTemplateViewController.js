@@ -31,8 +31,8 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		},
     	'saveButton': {
 			click: 'onSaveClick'
+	}
 	},
-
 	init: function() {
 		var me=this;
 	    me.resetForm();

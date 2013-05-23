@@ -392,7 +392,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		{
 			if(me.currentMapPlan.get('id') || me.currentMapPlan.get('id') != "" )
 			{
-				me.getSaveTemplateButton.show();
+				me.getSaveTemplateButton().show();
 			}
 			me.getSavePlanButton().hide();
 			me.getSaveTemplateAsButton().show();

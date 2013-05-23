@@ -138,6 +138,7 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
        	} else {
        		me.scope.currentMapPlan.loadFromServer(Ext.decode(serviceResponses.responseText));
 			me.scope.appEventsController.getApplication().fireEvent('onLoadTemplatePlan');
+			me.scope.appEventsController.getApplication().fireEvent("onCurrentMapPlanChangeUpdateMapView");
 			me.scope.getView().hide();
 		}
 	},
