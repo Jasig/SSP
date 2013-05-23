@@ -124,6 +124,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			else
 				me.currentMapPlan.set('isTemplate', false);
 		}
+    	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+
     },
 
     onLoadMapPlan: function () {
@@ -132,6 +134,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.populatePlanStores();
 		me.updateAllPlanHours();  
     	me.currentMapPlan.set('isTemplate', false);
+    	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
 		me.getView().setLoading(false);
     },
     
@@ -142,6 +145,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.onCreateMapPlan();
 		me.populatePlanStores();
 		me.updateAllPlanHours();  
+    	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
 		me.getView().setLoading(false);
     },
     
@@ -406,6 +410,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		Ext.Msg.alert('Your changes have been saved.'); 
 		me.getMapPlanServiceSuccess(serviceResponses);
 		me.currentMapPlan.set("isTemplate", false)
+    	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
 		me.getView().setLoading(false);
 	},
 	
