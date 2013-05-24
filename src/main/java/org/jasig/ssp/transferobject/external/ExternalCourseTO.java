@@ -44,6 +44,8 @@ public class ExternalCourseTO implements ExternalDataTO<ExternalCourse> {
 
 	private String departmentCode,divisionCode;
 	
+	private String number;
+	
 
 	public ExternalCourseTO() {
 		super();
@@ -68,6 +70,7 @@ public class ExternalCourseTO implements ExternalDataTO<ExternalCourse> {
 		this.setMasterSyllabusLink(model.getMasterSyllabusLink());
 		this.setDepartmentCode(model.getDepartmentCode());
 		this.setDivisionCode(model.getDivisionCode());
+		this.setNumber(model.getNumber());
 	}
 
 	public String getCode() {
@@ -172,6 +175,14 @@ public class ExternalCourseTO implements ExternalDataTO<ExternalCourse> {
 
 	public void setDivisionCode(String divisionCode) {
 		this.divisionCode = divisionCode;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
 	}
 
 

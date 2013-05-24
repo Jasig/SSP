@@ -65,6 +65,7 @@ public class ExternalCourseTOFactoryImpl
 		model.setMasterSyllabusLink(tObject.getMasterSyllabusLink());
 		model.setDepartmentCode(tObject.getDepartmentCode());
 		model.setDivisionCode(tObject.getDepartmentCode());
+		model.setNumber(tObject.getNumber());
 		return model;
 	}
 }

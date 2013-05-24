@@ -77,6 +77,10 @@ public class ExternalCourse extends AbstractExternalReferenceData implements Ext
 	@Column(nullable = false, length = 1)
 	@Size(max = 1)
 	private String isDev;
+	
+	@Column(nullable = true, length = 15)
+	@Size(max = 50)	
+	private String number;
 
 	public String getSubjectAbbreviation() {
 		return subjectAbbreviation;
@@ -172,5 +176,13 @@ public class ExternalCourse extends AbstractExternalReferenceData implements Ext
 
 	public void setDivisionCode(String divisionCode) {
 		this.divisionCode = divisionCode;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
 	}
 }
