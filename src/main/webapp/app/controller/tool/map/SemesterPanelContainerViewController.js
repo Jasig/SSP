@@ -191,15 +191,16 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	clearSemesterStores: function(){
 		var me = this;
-		while(me.semesterStores.length > 0) {
-		    me.semesterStores.pop(); 
+		
+		for(var index in me.semesterStores){
+			delete me.semesterStores[index];
 		}
 	},
 	
 	getTerms: function(mapPlan){
 		var me = this;
 		var terms;
-		me.clearSemesterStores()
+		
 		var termsStore = me.termsStore.getCurrentAndFutureTermsStore(5);			
 		if(mapPlan){
 			var mapTerms = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(mapPlan));
@@ -214,6 +215,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	fillSemesterStores: function(terms){
 		var me = this;
+		me.clearSemesterStores();
 		terms.forEach(function(term){
 			me.semesterStores[term.get('code')] = new Ssp.store.SemesterCourses();
 		});

@@ -633,7 +633,7 @@ Ext.onReady(function(){
 				    },
 					currentSemesterStores: {
 				        fn: function(){
-				            return [];
+				            return {};
 				        },
 				        singleton: true
 				    },
