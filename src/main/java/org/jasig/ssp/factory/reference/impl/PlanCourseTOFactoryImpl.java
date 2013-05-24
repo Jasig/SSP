@@ -18,7 +18,6 @@
  */
 package org.jasig.ssp.factory.reference.impl;
 
-import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.reference.PlanCourseTOFactory;

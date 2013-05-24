@@ -21,9 +21,12 @@ package org.jasig.ssp.factory.reference.impl;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.reference.TemplateCourseTOFactory;
+import org.jasig.ssp.model.PlanCourse;
 import org.jasig.ssp.model.TemplateCourse;
+import org.jasig.ssp.model.reference.Elective;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.reference.ElectiveService;
 import org.jasig.ssp.transferobject.TemplateCourseTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +45,9 @@ public class TemplateCourseTOFactoryImpl extends AbstractAuditableTOFactory<Temp
 	@Autowired
 	private PersonService personService;
 	
+	@Autowired
+	private ElectiveService electiveService;
+	
 
 	
 	public PersonService getPersonService() {
@@ -58,17 +64,33 @@ public class TemplateCourseTOFactoryImpl extends AbstractAuditableTOFactory<Temp
 		model.setCourseCode(tObject.getCourseCode());
 		model.setCourseDescription(tObject.getCourseDescription());
 		model.setCourseTitle(tObject.getCourseTitle());
+		model.setContactNotes(tObject.getContactNotes());
+		model.setStudentNotes(tObject.getStudentNotes());
+		model.setIsImportant(tObject.getIsImportant());
 		model.setCreditHours(tObject.getCreditHours());
 		model.setTermCode(tObject.getTermCode());
 		model.setFormattedCourse(tObject.getFormattedCourse());
 		model.setIsDev(tObject.isDev());
 		model.setOrderInTerm(tObject.getOrderInTerm());
+		if(tObject.getElectiveId() != null)
+		{
+			Elective elective = electiveService.get(tObject.getElectiveId());
+			model.setElective(elective);
+		}
 		return model;
 	}
 
 	@Override
 	protected AuditableCrudDao<TemplateCourse> getDao() {
 		return null;
+	}
+
+	public ElectiveService getElectiveService() {
+		return electiveService;
+	}
+
+	public void setElectiveService(ElectiveService electiveService) {
+		this.electiveService = electiveService;
 	}
 
 		
