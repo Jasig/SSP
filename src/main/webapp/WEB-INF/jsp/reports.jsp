@@ -29,12 +29,14 @@
 <c:set var="n"><portlet:namespace/></c:set>
 
 <c:set var="not_applicable" value="Not Used" />
+<c:set var="select_subject_abbreviation" value="Select Subject Abbreviations to get list." />
 <c:set var="all_found" value="ALL" />
 <c:set var="date_range_student" value = "Date Range Student Entered:"/>
 <c:set var="date_range_activity" value = "Date Range Activity Created:"/>
 <c:set var="date_range_early_alert" value = "Date Range Early Alert Created:"/>
 <c:set var="date_range_early_response" value = "Date Range Early Response Created:"/>
 <c:set var="date_range_journal_entry" value = "Date Range Journal Entry Created:"/>
+<c:set var="date_range_map_entry" value = "Date Range Map Entry Created:"/>
 
 <script src="<rs:resourceURL value="/rs/jquery/1.6.1/jquery-1.6.1.min.js"/>" type="text/javascript"></script>
 <script src="http://code.jquery.com/jquery-1.8.0.min.js" type="text/javascript"></script>
@@ -2220,7 +2222,6 @@
 
 								<button class="switch-date-range-type button" value="setbyrange">
 								</button>
-							</td>
 							
 			</div>
 		</div>
@@ -2244,6 +2245,211 @@
 		</div>
 	</form>
 </div><!-- end journal session detail report -->
+
+
+<div class="hideable-form number-courses-in-plan-report" style="display:none">
+	<h1>Journal Session Details Report</h1>
+	<form action="/ssp/api/1/report/map/numbercourses" method="get"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		
+		<!-- Subject Abbreviations -->
+		<div class="ea-input">
+			<select  class="input-subject-abbreviation-group" id="numberCoursesPlanSubjectAbbreviation" name="subjectAbbreviation"
+				>
+				<option value="">${not_applicable}</option>
+				</select>
+		</div>
+		<div class="ea-label">
+			<span>Subject Abbreviations:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Course Numbers -->
+		<div class="ea-input">
+			<select  class="input-course-number-group" id="numberCoursesPlanCourseNumber" name="courseNumber"
+				>
+				<option value="">${select_subject_abbreviation}</option>
+				</select>
+		</div>
+		<div class="ea-label">
+			<span>Course Numbers:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Plan Status -->
+		<div class="ea-input">
+			<select  class="input-plan-status-group" id="numberCoursesPlanStatus" name="planStatus">
+				<option value="">${not_applicable}</option>
+				<option value="onPlan">On Plan</option>
+				<option value="offPlan">Off Plan</option>
+				</select>
+		</div>
+		<div class="ea-label">
+			<span>Plan Status:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Term -->
+		<div class="ea-input">
+			<select id="numberCoursesTermCodes"  name="termCode" class="input-term-group">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Term:</span>
+		</div>
+		<div class="ea-clear"></div>	
+		
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div> 
+
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+</div><!-- end number courses in plan report -->
+
+<div class="hideable-form number-plans-by-advisor-report" style="display:none">
+	<h1>Journal Session Details Report</h1>
+	<form action="/ssp/api/1/report/map/numberplansbyadvisor" method="get"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		
+		<!-- Date Range Description -->
+		<div class="ea-input">
+		</div>
+		<div class="ea-label">
+			<span>${date_range_map_entry}</span>
+		</div>
+		<div class="ea-clear"></div>
+		<!-- Semester -->
+		<div class="ea-time-span">
+			<div class="ea-term">
+				<div class="ea-input">
+					<select id="numberPlansByAdvisorTermCode" name="termCode" class="input-term-group">
+						<option value="">${not_applicable}</option>
+						</select>
+				</div>
+				<div class="ea-label">
+					<span>Term:</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-date-range">
+				<!-- Date From -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="numberPlansByAdvisorCreateDateFrom">
+				</div>
+				<div class="ea-label">
+					<span>Start Date (inclusive)::</span>
+				</div>
+				<div class="ea-clear"></div><!-- Date To -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateTo" id="numberPlansByAdvisorCreateDateTo">
+				</div>
+				<div class="ea-label">
+					<span>End Date (exclusive)::</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-buttons">
+
+					<button class="switch-date-range-type button" value="setbyrange">
+					</button>
+							
+			</div>
+		</div>
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div> 
+
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+</div><!-- number plans by advisor report -->
+
+<div class="hideable-form number-students-by-status-report" style="display:none">
+	<h1>Journal Session Details Report</h1>
+	<form action="/ssp/api/1/report/map/numberstudentsbystatus" method="get"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		
+		<!-- Subject Abbreviations -->
+		<div class="ea-input">
+			<select  class="input-subject-abbreviation-group" id="numberStudentsByStatusSubjectAbbreviations" name="subjectAbbreviation"
+				>
+				<option value="">${not_applicable}</option>
+				</select>
+		</div>
+		<div class="ea-label">
+			<span>Subject Abbreviations:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Course Numbers -->
+		<div class="ea-input">
+			<select  class="input-course-number-group" id="numberStudentsByStatusCourseNumbers" name="courseNumber"
+				>
+				<option value="">${select_subject_abbreviation}</option>
+				</select>
+		</div>
+		<div class="ea-label">
+			<span>Course Numbers:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Term -->
+		<div class="ea-input">
+			<select id="numberStudentsByStatusTermCodes"  name="termCode" class="input-term-group">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Term:</span>
+		</div>
+		<div class="ea-clear"></div>	
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div> 
+
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+</div><!-- number studens by status report -->
 
 	</div>
     

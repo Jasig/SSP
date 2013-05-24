@@ -22,12 +22,13 @@ import java.util.List;
 
 import org.jasig.ssp.model.external.ExternalCourse;
 import org.jasig.ssp.model.reference.Tag;
+import org.jasig.ssp.transferobject.external.SearchExternalCourseTO;
 
 public interface ExternalCourseService extends ExternalReferenceDataService<ExternalCourse> {
 
 	Boolean validateCourseForTerm(String courseCode, String termCode);
 
-	List<ExternalCourse> search(String programCode, String tag, String termCode);
+	List<ExternalCourse> search(SearchExternalCourseTO form);
 	
 	List<String> getAllTagsForCourse(String courseCode);
 

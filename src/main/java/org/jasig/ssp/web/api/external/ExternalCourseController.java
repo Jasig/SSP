@@ -31,6 +31,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.external.ExternalCourseService;
 import org.jasig.ssp.transferobject.external.ExternalCourseTO;
 import org.jasig.ssp.transferobject.external.ExternalCourseTermResponseTO;
+import org.jasig.ssp.transferobject.external.SearchExternalCourseTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,9 +93,15 @@ public class ExternalCourseController extends AbstractExternalController<Externa
 	public @ResponseBody
 	List<ExternalCourseTO> searchCourses(final @RequestParam(required = false) String programCode,
 			final @RequestParam(required = false) String tag,
-			final @RequestParam(required = false) String termCode) {
+			final @RequestParam(required = false) String termCode,
+			final @RequestParam(required = false) String subjectAbbreviation,
+			final @RequestParam(required = false) String courseNumber) {
 		List<ExternalCourseTO> response = new ArrayList<ExternalCourseTO>();
-		List<ExternalCourse> allCourses = getService().search(programCode,tag,termCode);
+		
+		SearchExternalCourseTO form = new SearchExternalCourseTO(programCode, termCode,
+				 subjectAbbreviation, courseNumber,  tag);
+		
+		List<ExternalCourse> allCourses = getService().search(form);
 		for (ExternalCourse externalCourse : allCourses) {
 			//Kludge:  for the sake of implementation time we are pivoting these tags on the client side.  
 			List<String> tags = service.getAllTagsForCourse(externalCourse.getCode());

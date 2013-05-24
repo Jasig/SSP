@@ -149,6 +149,47 @@ var ssp = ssp || {};
 			});
 		}
 		
+		var loadCourseNumberInput = function(url, container) {
+			requests++;
+			$.getJSON(url, function(data) {
+				requests--;
+				container.html('');
+				addSelectItem("", "Not Used", container);
+				var values = [];
+				if(!data || data.length <= 0)
+					return;
+				data.forEach(function(row) {
+					values[row.number] = row.number;
+				});
+				for(var index in values) 
+					addSelectItem(index, index, container);
+
+			}).error(function(jqXHR, textStatus, errorThrown) {
+				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				requests--;
+			});
+		}
+		
+		var loadSubjectAbbreviationInput = function(url, container) {
+			requests++;
+			$.getJSON(url, function(data) {
+				requests--;
+				container.html('');
+				addSelectItem("", "Not Used", container);
+				var values = [];
+				if(!data || data.length <= 0)
+					return;
+				data.forEach(function(row) {
+					values[row.subjectAbbreviation] = row.subjectAbbreviation;
+				});
+				for(var index in values) 
+					addSelectItem(index, index, container);
+			}).error(function(jqXHR, textStatus, errorThrown) {
+				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				requests--;
+			});
+		}
+		
 		
 
 		// load Forms
@@ -200,6 +241,9 @@ var ssp = ssp || {};
 					"/ssp/api/1/reference/confidentialityDisclosureAgreement/",
 					that.locate('confidentialityAgreementFormContent'));
 			
+			loadSubjectAbbreviationInput("/ssp/api/1//reference/course/search", that
+					.locate('subjectAbbreviationGroup'));
+			
 					
 			requests--;
 		}
@@ -235,9 +279,6 @@ var ssp = ssp || {};
 		}
 
 		function addSelectItem(uid, name, container) {
-			var inputs = container.find('input');
-			var id = inputs.length + 1;
-
 			var html = '<option value="' + uid + '">' + name + '</option>';
 			container.append($(html));
 		}
@@ -279,6 +320,14 @@ var ssp = ssp || {};
 				var index = $.inArray("", values);
 				if(index >= 0){
 					$(event.target).find('option').not(":first-child").prop('selected', false);
+				}
+			});
+			
+			$('select[class="input-subject-abbreviation-group"]').change(function(event){
+				var value = $(event.target).val();
+				if(value && value.length > 0){
+					loadCourseNumberInput("/ssp/api/1//reference/course/search?subjectAbbreviation=" + value, that
+							.locate('courseNumberGroup'));
 				}
 			});
 			
@@ -356,6 +405,18 @@ var ssp = ssp || {};
 		
 		reportsSelect
 		.append('<option value="journalSessionDetail">Journal Step Detail Report</option>');
+		
+		reportsSelect
+		.append('<option value="" disabled >- MAP Reports -</option>');
+		
+		reportsSelect
+		.append('<option value="numberCoursesInPlan">Number of Courses in Plans</option>');
+		
+		reportsSelect
+		.append('<option value="numberPlansByAdvisor">Number of Plans by Advisor</option>');
+		
+		reportsSelect
+		.append('<option value="numberStudentsByStatus">Number of Students by Status</option>');
 		reportsSelectChange();
 		loadingMessage.slideUp(easeRate);
 		}
@@ -392,6 +453,9 @@ var ssp = ssp || {};
 							earlyAlertStudentOutcome : '.early-alert-student-outcome-report',
 							journalSessionDetail : '.journal-session-detail-report',
 							earlyAlertClass : '.early-alert-class-report',
+							numberCoursesInPlan : '.number-courses-in-plan-report',
+							numberPlansByAdvisor : '.number-plans-by-advisor-report',
+							numberStudentsByStatus : '.number-students-by-status-report',
 							disabilityServices : '.disability-services-report',
 							programStatusGroup : '.input-program-status-group',
 							studentTypeGroup : '.input-student-type-group',
@@ -403,6 +467,8 @@ var ssp = ssp || {};
 							journalStepDetailGroup : '.input-journal-step-detail-group',
 							campusGroup: '.input-campus-group',
 							termGroup: '.input-term-group',
+							courseNumberGroup: '.input-course-number-group',
+							subjectAbbreviationGroup: '.input-subject-abbreviation-group',
 							reportYearGroup: '.input-report-year-group',
 							earlyAlertOutcomeGroup: '.input-early-alert-outcome-group',
 							disabilityStatusGroup: '.input-disability-status-group',

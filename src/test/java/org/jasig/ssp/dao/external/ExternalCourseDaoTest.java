@@ -27,6 +27,7 @@ import java.util.List;
 import org.jasig.ssp.model.external.ExternalCourse;
 import org.jasig.ssp.model.reference.Tag;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.external.SearchExternalCourseTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +70,8 @@ public class ExternalCourseDaoTest {
 	
 	public void testSearch() {
 		List<ExternalCourse> courses = null;
-		courses = dao.search("", "", "FA12");
+		SearchExternalCourseTO form = new SearchExternalCourseTO(null, "FA12", null, null, null);
+		courses = dao.search(form);
 		assertEquals(20, courses.size());
 	}
 	

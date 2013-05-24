@@ -27,6 +27,7 @@ import org.hibernate.Query;
 import org.hibernate.criterion.Order;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.external.ExternalCourse;
+import org.jasig.ssp.transferobject.external.SearchExternalCourseTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
@@ -75,11 +76,10 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 
 
 	@SuppressWarnings("unchecked")
-	public List<ExternalCourse> search(String programCode, String tag,
-			String termCode) {
-		Query hqlQuery = createHqlQuery(buildCourseSearchQuery(programCode, tag, termCode));
+	public List<ExternalCourse> search(SearchExternalCourseTO form) {
+		Query hqlQuery = createHqlQuery(buildCourseSearchQuery(form));
 		
-		buildCourseSearchParamList(programCode, tag, termCode, hqlQuery);	
+		buildCourseSearchParamList(form, hqlQuery);	
 		
 		List<ExternalCourse> result = hqlQuery
 		.list();
@@ -88,50 +88,83 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 	}
 
 
-	private void buildCourseSearchParamList(String programCode, String tag,
-			String termCode, Query hqlQuery) {
-		if(!StringUtils.isEmpty(programCode))
+	private void buildCourseSearchParamList(SearchExternalCourseTO form, Query hqlQuery) {
+		
+		if(!StringUtils.isEmpty(form.getSubjectAbbreviation()))
 		{
-			hqlQuery.setString("programCode", programCode);
+			hqlQuery.setString("subjectAbbreviation", form.getSubjectAbbreviation());
 		}
-		if(!StringUtils.isEmpty(termCode))
+		
+		if(!StringUtils.isEmpty(form.getCourseNumber()))
 		{
-			hqlQuery.setString("termCode", termCode);
+			hqlQuery.setString("number", form.getCourseNumber());
 		}
-		if(!StringUtils.isEmpty(tag))
+		if(!StringUtils.isEmpty(form.getProgramCode()))
+		{
+			hqlQuery.setString("programCode", form.getProgramCode());
+		}
+		if(!StringUtils.isEmpty(form.getProgramCode()))
+		{
+			hqlQuery.setString("programCode", form.getProgramCode());
+		}
+		if(!StringUtils.isEmpty(form.getTermCode()))
+		{
+			hqlQuery.setString("termCode", form.getTermCode());
+		}
+		if(!StringUtils.isEmpty(form.getTag()))
 		{
 			hqlQuery.setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal());
-			hqlQuery.setString("tag", tag);
+			hqlQuery.setString("tag", form.getTag());
 		}
 	}
 
 
-	private String buildCourseSearchQuery(String programCode, String tag,
-			String termCode) {
+	private String buildCourseSearchQuery(SearchExternalCourseTO form) {
 		boolean firstWhereCondition = true;
 		StringBuilder query = new StringBuilder();
 		query.append(" select distinct ec from ExternalCourse ec ");
-		if(!StringUtils.isEmpty(programCode))
+		
+		if(!StringUtils.isEmpty(form.getSubjectAbbreviation()))
+		{			
+			query.append("where ec.subjectAbbreviation = :subjectAbbreviation ");
+			firstWhereCondition = false;
+		}
+		
+		if(!StringUtils.isEmpty(form.getCourseNumber()))
+		{
+			if(!firstWhereCondition)
+			{
+				query.append(" and ");
+			}
+			else
+			{
+				query.append(" where ");
+			}			
+			query.append("where ec.number = :courseNumber ");
+			firstWhereCondition = false;
+		}
+		
+		if(!StringUtils.isEmpty(form.getProgramCode()))
 		{
 			query.append(" ,ExternalCourseProgram ecp ");
 		}
-		if(!StringUtils.isEmpty(tag))
+		if(!StringUtils.isEmpty(form.getTag()))
 		{
 			query.append(" ,ExternalCourseTag ectg ");
 			query.append(" ,Tag tag ");
 		}
-		if(!StringUtils.isEmpty(termCode))
+		if(!StringUtils.isEmpty(form.getTermCode()))
 		{
 			query.append(" ,ExternalCourseTerm ectr ");
 		}
-		if(!StringUtils.isEmpty(programCode))
+		if(!StringUtils.isEmpty(form.getProgramCode()))
 		{
 			query.append(" where ");
 			query.append(" ec.code = ecp.courseCode ");
 			query.append(" and ecp.programCode = :programCode  ");
 			firstWhereCondition = false;
 		}	
-		if(!StringUtils.isEmpty(tag))
+		if(!StringUtils.isEmpty(form.getTag()))
 		{
 			if(!firstWhereCondition)
 			{
@@ -147,7 +180,7 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 			query.append(" and tag.objectStatus = :objectStatus ");
 			firstWhereCondition = false;
 		}	
-		if(!StringUtils.isEmpty(termCode))
+		if(!StringUtils.isEmpty(form.getTermCode()))
 		{
 			if(!firstWhereCondition)
 			{
@@ -161,6 +194,8 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 			query.append(" and ectr.termCode = :termCode  ");
 			query.append(" order by ec.formattedCourse desc ");
 		}
+		
+		query.append(" order by ec.formattedCourse desc ");
 		return query.toString();
 	}
 }

@@ -24,6 +24,7 @@ import org.jasig.ssp.dao.external.ExternalCourseDao;
 import org.jasig.ssp.model.external.ExternalCourse;
 import org.jasig.ssp.model.reference.Tag;
 import org.jasig.ssp.service.external.ExternalCourseService;
+import org.jasig.ssp.transferobject.external.SearchExternalCourseTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,9 +57,8 @@ public class ExternalCourseServiceImpl extends AbstractExternalReferenceDataServ
 	}
 
 	@Override
-	public List<ExternalCourse> search(String programCode, String tag,
-			String termCode) {
-		return dao.search(programCode,tag,termCode);
+	public List<ExternalCourse> search(SearchExternalCourseTO form) {
+		return dao.search(form);
 	}
 
 	@Override
