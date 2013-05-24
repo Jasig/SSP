@@ -789,6 +789,11 @@
                     "name": "PersonProgramStatusService.js",
                     "path": "/app/service/"
                 },
+                 {
+                    "clsName": "Ssp.service.MapPlanService",
+                    "name": "MapPlanService.js",
+                    "path": "/app/service/"
+                },
                 {
                     "clsName": "Ssp.controller.ApplicationEventsController",
                     "name": "ApplicationEventsController.js",
@@ -890,6 +895,11 @@
                     "path": "/app/model/"
                 },
                 {
+                    "clsName": "Ssp.model.Transcript",
+                    "name": "Transcript.js",
+                    "path": "/app/model/"
+                },
+                {
                     "clsName": "Ssp.model.CourseTranscript",
                     "name": "CourseTranscript.js",
                     "path": "/app/model/"
@@ -949,6 +959,13 @@
                     "name": "ProfileContactViewController.js",
                     "path": "/app/controller/tool/profile/"
                 },
+                
+                {
+                    "clsName": "Ssp.view.tools.legacyremarks.LegacyRemarks",
+                    "name": "LegacyRemarks.js",
+                    "path": "/app/view/tools/legacyremarks/"
+                },
+                
                 {
                     "clsName": "Ssp.view.tools.profile.Contact",
                     "name": "Contact.js",
@@ -1733,6 +1750,11 @@
                     "clsName": "Ssp.model.tool.map.Plan",
                     "name": "Plan.js",
                     "path": "/app/model/tool/map/"
+                },
+                 {
+                    "clsName": "Ssp.store.SemesterCourses",
+                    "name": "SemesterCourses.js",
+                    "path": "/app/store/"
                 },
                 {
                     "clsName": "Ssp.store.Plan",
