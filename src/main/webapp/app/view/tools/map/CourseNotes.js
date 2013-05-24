@@ -29,6 +29,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
     width: 480,
     resizable: true,
     parentGrid: null,
+    enableFields: true,
     initComponent: function() {
 		var me=this;
 		Ext.apply(me, 
@@ -65,6 +66,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        allowBlank:true,
 				        xtype: 'textareafield',
 				        autoscroll: true,
+				        disabled: me.enableFields,
 				        flex:1
 				    },{
 				        fieldLabel: 'Student Notes',
@@ -72,6 +74,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        allowBlank:true,
 				        xtype: 'textareafield',
 				        flex:1,
+				        disabled: me.enableFields,
 				        autoscroll: true
 				    },
 				    {
@@ -85,6 +88,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        name: 'creditHours',
 				        allowBlank:true,
 				        itemId: 'creditHours',
+				        disabled: me.enableFields,
 				        //flex:1,
 				        
 				    },
@@ -98,6 +102,8 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                     	hideLabel: true,
                     	boxLabel: 'Mark As Important',
                     	fieldLabel: 'Mark As Important',
+				        disabled: me.enableFields,
+
                     },
                     {
                         xtype: 'combobox',
@@ -111,7 +117,8 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                         mode: 'local',
                         typeAhead: true,
                         allowBlank: true,
-                        width: 250
+                        width: 250,
+				        disabled: me.enableFields,
                     },
 				    ]
 				    ,
