@@ -48,10 +48,11 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     onItemDblClick: function(grid, record, item, index, e, eOpts) {
 		var me = this;
 		var courseRecord = record;
-    		me.coursePlanDetails = Ext.create('Ssp.view.tools.map.CourseNotes');
+    		me.coursePlanDetails = Ext.create('Ssp.view.tools.map.CourseNotes',{enableFields : me.getView().enableDragAndDrop});
     		me.coursePlanDetails.parentGrid = me.getView();
-    		me.coursePlanDetails.enableFields = me.getView().enableDragAndDrop;
 			var creditHours = me.coursePlanDetails.query('#creditHours')[0];
+
+			
 			if(courseRecord.modelName = 'Ssp.model.external.Course')
 			{
 				var planCourse = new Ssp.model.tool.map.SemesterCourse(courseRecord.data);
@@ -60,7 +61,6 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 				array[0] = planCourse;
 				grid.store.insert( indexOf != -1 ? indexOf : index ,array);
 				grid.store.remove(courseRecord);
-
 			}
 			else
 			{

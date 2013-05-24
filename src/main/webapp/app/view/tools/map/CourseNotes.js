@@ -65,16 +65,18 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        name: 'contactNotes',
 				        allowBlank:true,
 				        xtype: 'textareafield',
+				        itemId: 'contactNotes',
 				        autoscroll: true,
-				        disabled: me.enableFields,
+				        disabled: !me.enableFields,
 				        flex:1
 				    },{
 				        fieldLabel: 'Student Notes',
 				        name: 'studentNotes',
 				        allowBlank:true,
+				        itemId: 'studentNotes',
 				        xtype: 'textareafield',
 				        flex:1,
-				        disabled: me.enableFields,
+				        disabled: !me.enableFields,
 				        autoscroll: true
 				    },
 				    {
@@ -88,7 +90,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        name: 'creditHours',
 				        allowBlank:true,
 				        itemId: 'creditHours',
-				        disabled: me.enableFields,
+				        disabled: !me.enableFields,
 				        //flex:1,
 				        
 				    },
@@ -102,7 +104,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                     	hideLabel: true,
                     	boxLabel: 'Mark As Important',
                     	fieldLabel: 'Mark As Important',
-				        disabled: me.enableFields,
+				        disabled: !me.enableFields,
 
                     },
                     {
@@ -118,7 +120,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                         typeAhead: true,
                         allowBlank: true,
                         width: 250,
-				        disabled: me.enableFields,
+				        disabled: !me.enableFields,
                     },
 				    ]
 				    ,
