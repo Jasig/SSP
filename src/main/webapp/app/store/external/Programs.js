@@ -19,7 +19,6 @@
 Ext.define('Ssp.store.external.Programs', {
 	extend: 'Ssp.store.reference.AbstractReferences',
 	model: 'Ssp.model.external.AbstractExternal',
-	remoteSort: true,
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties'
@@ -30,6 +29,10 @@ Ext.define('Ssp.store.external.Programs', {
 		me.callParent(arguments);
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('program'),
     		autoLoad: true});
-    	return; 
+    	this.addListener('load', this.sortAfterLoad, me);
     },
+
+	sortAfterLoad: function(){
+		this.sort('name','ASC');
+	}
 });
