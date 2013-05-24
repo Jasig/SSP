@@ -20,7 +20,13 @@ Ext.define('Ssp.store.reference.FacetedTags', {
     extend: 'Ssp.store.reference.AbstractReferences',
     model: 'Ssp.model.reference.Tag',
     constructor: function(){
+    	var me = this;
     	this.callParent(arguments);
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('facetedtag')});
-    }
+    	this.addListener('load', this.sortAfterLoad, me);
+    },
+
+	sortAfterLoad: function(){
+		this.sort('name','ASC');
+	}
 });
