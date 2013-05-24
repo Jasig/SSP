@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.dao.external;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.NotImplementedException;
@@ -42,6 +43,7 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 		super(ExternalCourse.class);
 	}
 
+	private static List<ExternalCourse> courseCache = new ArrayList<ExternalCourse>();
 
 	@SuppressWarnings("unchecked")
 	public List<ExternalCourse> getAll() {
@@ -77,6 +79,21 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 
 	@SuppressWarnings("unchecked")
 	public List<ExternalCourse> search(SearchExternalCourseTO form) {
+		//Performance kludge, we are going to cache the unbounded search result
+		synchronized(this)
+		{
+			if(form.isUnbounded())
+			{
+				if(ExternalCourseDao.courseCache.isEmpty())
+				{
+					List<ExternalCourse> all = getAll();
+					ExternalCourseDao.courseCache.addAll(all);
+				}
+				return ExternalCourseDao.courseCache;
+			}
+		}
+		//End kludge
+		
 		Query hqlQuery = createHqlQuery(buildCourseSearchQuery(form));
 		
 		buildCourseSearchParamList(form, hqlQuery);	
@@ -194,8 +211,6 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 			query.append(" and ectr.termCode = :termCode  ");
 			query.append(" order by ec.formattedCourse desc ");
 		}
-		
-		query.append(" order by ec.formattedCourse desc ");
 		return query.toString();
 	}
 }

@@ -1,5 +1,7 @@
 package org.jasig.ssp.transferobject.external;
 
+import org.apache.commons.lang.StringUtils;
+
 public class SearchExternalCourseTO {
 	
 	private String programCode;
@@ -82,5 +84,11 @@ public class SearchExternalCourseTO {
 	 */
 	public void setTag(String tag) {
 		this.tag = tag;
+	}
+	
+	public boolean isUnbounded() {
+	return StringUtils.isEmpty(this.tag) && StringUtils.isEmpty(this.courseNumber)  
+		&& StringUtils.isEmpty(this.programCode) && StringUtils.isEmpty(this.subjectAbbreviation)  
+		&& StringUtils.isEmpty(this.termCode);	
 	}
 }
