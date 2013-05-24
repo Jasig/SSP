@@ -30,9 +30,14 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
 		
 		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
 		me.store.load();
-		
+		me.store.addListener('load', this.sortAfterLoad, this);
 		return me.callParent(arguments);
     },
+	
+	sortAfterLoad: function(){
+		var me = this;
+		me.store.sort('formattedCourse','ASC');
+	},
     
     control:{
     	view:{
