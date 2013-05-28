@@ -34,14 +34,6 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 	init: function() {
 		var me=this;
 		me.appEventsController.assignEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
-        if(me.electiveStore.data.length == 0)
-        {
-        	me.electiveStore.load();
-        }
-        if(me.colorsStore.data.length == 0)
-        {
-        	me.colorsStore.load();
-        } 
 		me.getView().view.addListener('beforedrop', me.onDrop, me);
 		return me.callParent(arguments);
     },

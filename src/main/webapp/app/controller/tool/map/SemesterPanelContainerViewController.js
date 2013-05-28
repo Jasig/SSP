@@ -29,7 +29,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
         personLite: 'personLite',
     	currentMapPlan: 'currentMapPlan',
 		electiveStore : 'electiveStore',
-		semesterStores : 'currentSemesterStores'
+		semesterStores : 'currentSemesterStores',
+		colorsStore: 'colorsStore',
     },
     
 	control: {
@@ -45,8 +46,16 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	init: function() {
 		var me=this;
 		var id = me.personLite.get('id');
+		
 	    me.resetForm();
-
+        if(me.electiveStore.data.length == 0)
+        {
+        	me.electiveStore.load();
+        }
+        if(me.colorsStore.data.length == 0)
+        {
+        	me.colorsStore.load();
+        } 
 		me.appEventsController.assignEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onLoadTemplatePlan', callBackFunc: me.onLoadTemplatePlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
