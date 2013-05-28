@@ -325,6 +325,11 @@ public class TaskServiceImpl
 	@Override
 	public void sendAllTaskReminderNotifications() {
 
+		if ( Thread.currentThread().isInterrupted() ) {
+			LOGGER.info("Abandoning sendAllTaskReminderNotifications because of thread interruption");
+			return;
+		}
+
 		final SortingAndPaging sAndP = new SortingAndPaging(
 				ObjectStatus.ACTIVE);
 
@@ -343,6 +348,11 @@ public class TaskServiceImpl
 			final List<Task> tasks = getAllWhichNeedRemindersSent(sAndP);
 
 			for (final Task task : tasks) {
+
+				if ( Thread.currentThread().isInterrupted() ) {
+					LOGGER.info("Abandoning sendAllTaskReminderNotifications because of thread interruption");
+					break;
+				}
 
 				// Calculate reminder window start date
 				startDateCalendar.setTime(task.getDueDate());
