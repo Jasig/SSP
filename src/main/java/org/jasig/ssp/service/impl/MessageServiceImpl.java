@@ -204,6 +204,10 @@ public class MessageServiceImpl implements MessageService {
 
 		LOGGER.info("BEGIN : sendQueuedMessages()");
 
+		if ( Thread.currentThread().isInterrupted() ) {
+			LOGGER.info("Abandoning sendQueuedMessages because of thread interruption");
+		}
+
 		int startRow = 0;
 		final AtomicReference<SortingAndPaging> sap =
 				new AtomicReference<SortingAndPaging>();
@@ -213,6 +217,12 @@ public class MessageServiceImpl implements MessageService {
 		// a single transaction open while processing what is effectively
 		// an unbounded number of messages.
 		while (true) {
+
+			if ( Thread.currentThread().isInterrupted() ) {
+				LOGGER.info("Abandoning sendQueuedMessages because of thread interruption");
+				break;
+			}
+
 			LOGGER.info("Before message queue processing transaction at start row {}",
 					sap.get().getFirstResult());
 			Pair<PagingWrapper<Message>, Collection<Throwable>> rslt =
@@ -224,6 +234,11 @@ public class MessageServiceImpl implements MessageService {
 					return sendQueuedMessageBatch(sap.get());
 				}
 			});
+
+			if ( Thread.currentThread().isInterrupted() ) {
+				LOGGER.info("Abandoning sendQueuedMessages because of thread interruption");
+				break;
+			}
 
 			PagingWrapper<Message> msgsHandled = rslt.getFirst();
 			int msgHandledCnt = msgsHandled.getRows() == null ? 0 : msgsHandled.getRows().size();
@@ -278,6 +293,10 @@ public class MessageServiceImpl implements MessageService {
 				new Object[] { messages.getRows() == null ? 0 : messages.getRows().size(),
 						sap.getFirstResult(), sap.getMaxResults() });
 		for (final Message message : messages ) {
+			if ( Thread.currentThread().isInterrupted() ) {
+				LOGGER.info("Abandoning sendQueuedMessageBatch because of thread interruption");
+				break;
+			}
 			try {
 				sendMessage(message);
 			} catch (final ObjectNotFoundException e) {

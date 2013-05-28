@@ -41,10 +41,11 @@ public interface ExternalPersonService extends
 
 	/**
 	 * 
+	 *
 	 * @param sAndP
 	 * @return the total number of person records
 	 */
-	long syncWithPerson(final SortingAndPaging sAndP);
+	long syncWithPerson(final SortingAndPaging sAndP) throws InterruptedException;
 
 	void updatePersonFromExternalPerson(final Person person,
 			final ExternalPerson externalPerson);

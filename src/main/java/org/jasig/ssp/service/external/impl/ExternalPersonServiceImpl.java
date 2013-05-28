@@ -38,14 +38,12 @@ import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EthnicityService;
 import org.jasig.ssp.service.reference.MaritalStatusService;
-import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,6 +94,12 @@ public class ExternalPersonServiceImpl
 
 	@Override
 	public void syncWithPerson() {
+
+		if ( Thread.currentThread().isInterrupted() ) {
+			LOGGER.info("Abandoning syncWithPerson because of thread interruption");
+			return;
+		}
+
 		LOGGER.info(
 				"BEGIN : Person and ExternalPerson Sync.  Selecting {} records starting at {}",
 				BATCH_SIZE_FOR_PERSON_, lastRecord);
@@ -108,12 +112,17 @@ public class ExternalPersonServiceImpl
 		Long totalRows = Long.valueOf(0L);
 		try {
 			totalRows = syncWithPerson(sAndP);
+		} catch ( InterruptedException e ) {
+			LOGGER.info("Abandoning syncWithPerson because of thread interruption");
+			Thread.currentThread().interrupt(); // reassert
 		} catch (final Exception e) {
 			LOGGER.error("Failed to sync Person table with ExternalPerson", e);
 		} finally {
-			lastRecord = lastRecord + BATCH_SIZE_FOR_PERSON_;
-			if (lastRecord > totalRows.intValue()) {
-				lastRecord = 0;
+			if ( !(Thread.currentThread().isInterrupted()) ) {
+				lastRecord = lastRecord + BATCH_SIZE_FOR_PERSON_;
+				if (lastRecord > totalRows.intValue()) {
+					lastRecord = 0;
+				}
 			}
 		}
 
@@ -121,8 +130,25 @@ public class ExternalPersonServiceImpl
 	}
 
 	@Override
-	public long syncWithPerson(final SortingAndPaging sAndP) {
+	public long syncWithPerson(final SortingAndPaging sAndP) throws InterruptedException {
+
+		// Use InterruptedExceptions instead of manipulating return value b/c
+		// the return value actually means "total number of possible processable"
+		// rows, so if it is returned gracefully, the caller will likely
+		// incorrectly update its internal state, as is the case with the
+		// scheduled job call site.
+
+		if ( Thread.currentThread().isInterrupted() ) {
+			LOGGER.info("Abandoning syncWithPerson because of thread interruption");
+			throw new InterruptedException();
+		}
+
 		final PagingWrapper<Person> people = personService.getAll(sAndP);
+
+		if ( Thread.currentThread().isInterrupted() ) {
+			LOGGER.info("Abandoning syncWithPerson because of thread interruption");
+			throw new InterruptedException();
+		}
 
 		// allow access to people by schoolId
 		final Map<String, Person> peopleBySchoolId = Maps.newHashMap();
@@ -137,6 +163,11 @@ public class ExternalPersonServiceImpl
 					internalPeopleSchoolIds);
 		}
 
+		if ( Thread.currentThread().isInterrupted() ) {
+			LOGGER.info("Abandoning syncWithPerson because of thread interruption");
+			throw new InterruptedException();
+		}
+
 		// fetch external people by schoolId
 		final PagingWrapper<ExternalPerson> externalPeople =
 				dao.getBySchoolIds(internalPeopleSchoolIds,SortingAndPaging.createForSingleSortWithPaging(
@@ -145,6 +176,12 @@ public class ExternalPersonServiceImpl
 						SortDirection.ASC.toString(), null));
 
 		for (final ExternalPerson externalPerson : externalPeople) {
+
+			if ( Thread.currentThread().isInterrupted() ) {
+				LOGGER.info("Abandoning syncWithPerson because of thread interruption on person {}", externalPerson.getUsername());
+				throw new InterruptedException();
+			}
+
 			LOGGER.debug(
 					"Looking for internal person by external person schoolId {}",
 					externalPerson.getSchoolId());

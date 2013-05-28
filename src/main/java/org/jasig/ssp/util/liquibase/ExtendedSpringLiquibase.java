@@ -19,6 +19,10 @@
 package org.jasig.ssp.util.liquibase;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
+
 import liquibase.Liquibase;
 import liquibase.exception.LiquibaseException;
 import liquibase.integration.spring.SpringLiquibase;
@@ -36,8 +40,19 @@ public class ExtendedSpringLiquibase extends SpringLiquibase {
 
 	private boolean executeEnabled = true;
 
+	@Autowired
+	private ApplicationContext applicationContext;
+
 	@Override
 	public void afterPropertiesSet() throws LiquibaseException {
+		if ( (applicationContext instanceof ConfigurableApplicationContext)
+				&& !(((ConfigurableApplicationContext)applicationContext).isActive()) ) {
+			// this is an attempt to work around accidential re-initialization
+			// by background threads during shutdown. SSP-1273
+			LogFactory.getLogger().info("Liquibase did not run because " +
+					"the current ApplicationContext is shut down is or shutting down.");
+			return;
+		}
 		String shouldRunProperty =
 				System.getProperty(Liquibase.SHOULD_RUN_SYSTEM_PROPERTY);
 		if (shouldRunProperty != null){

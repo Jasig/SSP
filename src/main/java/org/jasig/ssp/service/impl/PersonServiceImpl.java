@@ -599,12 +599,22 @@ public class PersonServiceImpl implements PersonService {
 		long methodStart = new Date().getTime();
 		final Collection<Person> coaches = Lists.newArrayList();
 
+		if ( Thread.currentThread().isInterrupted() ) {
+			LOGGER.info("Abandoning syncCoaches because of thread interruption");
+			return new PagingWrapper<Person>(coaches);
+		}
+
 		final Collection<String> coachUsernames = getAllCoachUsernamesFromDirectory();
 
 		long mergeLoopStart = new Date().getTime();
 		final AtomicLong timeInExternalReads = new AtomicLong();
 		final AtomicLong timeInExternalWrites = new AtomicLong();
 		for (final String coachUsername : coachUsernames) {
+
+			if ( Thread.currentThread().isInterrupted() ) {
+				LOGGER.info("Abandoning syncCoaches on username {} because of thread interruption", coachUsername);
+				break;
+			}
 
 			long singlePersonStart = new Date().getTime();
 
