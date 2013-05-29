@@ -290,9 +290,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				termsets[term.get("reportYear")][0] = term;
 			};
 		});
-
+		var yearViews = new Array();
 		termsets.forEach(function(termSet){
-			var yearView = view.add(new Ext.form.FieldSet({
+			var yearView = new Ext.form.FieldSet({
 				xtype : 'fieldset',
 				border: 0,
 				title : '',
@@ -303,15 +303,19 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				minHeight: 204,
 				itemId : 'year' + termSet[0].get("reportYear"),
 				flex : 1,
-			}));
-		
+			});
+			var semesterPanels = new Array();
 			termSet.forEach(function(term){
 				var termCode = term.get('code');
 				var panelName = term.get("name");
-				var isPast = me.termsStore.isPastTerm(termCode);
+				var isPast = me.termsStore.isPastTerm(termCode);				
 				yearView.add(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode]));
+				semesterPanels.push(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode]));				
 			});
+			yearView.add(semesterPanels);
+			yearViews.push(yearView);
 		});
+		view.add(yearViews);
 		me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
 		me.getView().setLoading(false);
     },
