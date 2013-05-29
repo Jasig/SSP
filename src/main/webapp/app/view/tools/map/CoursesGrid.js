@@ -55,7 +55,7 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
                              xtype: 'gridcolumn',
                              dataIndex: 'title',
                              text: 'Title',
-                             width: 80
+                             width: 130
                          },
 						 
 						{
