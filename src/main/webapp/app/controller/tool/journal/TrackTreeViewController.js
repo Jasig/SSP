@@ -35,17 +35,8 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
     },
     control: {
     	view: {
-    		itemexpand: 'onItemExpand',
-    		itemClick: 'onItemClick'
-    	},
-    	
-    	'saveButton': {
-			click: 'onSaveClick'
-		},
-		
-    	'cancelButton': {
-			click: 'onCancelClick'
-		}
+    		itemexpand: 'onItemExpand'
+    	}
     },
     
 	init: function() {
@@ -53,8 +44,10 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
 		this.journalTrackUrl = this.apiProperties.getItemUrl('journalTrack');
 		this.journalStepUrl = this.apiProperties.getItemUrl('journalStep');
 		this.journalStepDetailUrl = this.apiProperties.getItemUrl('journalStep');
-
-		this.loadSteps();
+		if (this.journalEntry.get('journalTrack') != null) {
+			this.loadSteps();
+		}	
+		
 		
 		return this.callParent(arguments);
     },
@@ -67,6 +60,7 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
     },    
     
     loadSteps: function(){
+		
 		// clear the categories
 		this.treeUtils.clearRootCategories();
 		
@@ -90,6 +84,7 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
     afterJournalStepsLoaded: function( scope ){
     	// after the journal steps load expand them to
     	// display the details under each step
+		var me = this;
     	scope.getView().getView().getTreeStore().getRootNode().expandChildren();
     },
     
@@ -113,65 +108,54 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
     	}
     },
 
-    afterJournalDetailsLoaded: function( scope ){
+    
+	
+	
+	afterJournalDetailsLoaded: function( scope ){
+		var me = this;
     	// after the journal details load select each detail
     	// that is selected in the journal
     	var journalEntryDetails = scope.journalEntry.get("journalEntryDetails");
+		
     	if (journalEntryDetails != "" && journalEntryDetails != null)
     	{
 			Ext.Array.each(journalEntryDetails,function(item,index){
 				var journalStepDetails = item.journalStepDetails;
+				var journalStep = item.journalStep;
+				
 				Ext.Array.each(journalStepDetails,function(innerItem,innerIndex){
 					var id = innerItem.id;
 					var detailNode = scope.getView().getView().getTreeStore().getNodeById(id+'_journalDetail');
-					if (detailNode != null)
+					
+					if (detailNode != null )
 					{
-						detailNode.set('checked',true);
+						var detailNodeParent = detailNode.parentNode;
+					
+						var parentId = journalStep.id;
+						var parentNode = scope.getView().getView().getTreeStore().getNodeById(parentId+'_journalStep');
+						
+						if (detailNodeParent.id == parentNode.id)
+							detailNode.set('checked',true);
 					}
 				});				
 			});    		
     	}
     },    
    
-
-    onItemClick: function(view, record, item, index, e, eOpts){
-    	/*
-    	var me=this;
-    	var journalEntry = me.journalEntry;
-    	var name = me.treeUtils.getNameFromNodeId( record.data.id );
-    	var checked = !record.data.checked;
-    	var id = me.treeUtils.getIdFromNodeId( record.data.id );
-    	var childText = record.data.text;
-    	var parentId = me.treeUtils.getIdFromNodeId( record.data.parentId );
-    	var parentText = record.parentNode.data.text;
-    	var step = null;
-    	var detail = null;
-    	// add/remove the detail from the Journal Entry
-    	if (name=='journalDetail')
-    	{
-    		step = {"id":parentId,"name":parentText};
-    		detail = {"id":id,"name":childText};
-    		if ( checked==true )
-        	{
-    			// add journal detail
-    			journalEntry.addJournalDetail( step, detail );
-        	}else{
-        		// remove journal detail
-        		journalEntry.removeJournalDetail( step, detail );
-        	}
-    	}
-    	*/
-    },
-    
     onSaveClick: function( button ){
+    	var me = this;
+		
+		me.save();
+    },
+	
+	save: function() {
     	var me=this;
     	var journalEntry = me.journalEntry;
     	var tree = me.getView();
     	var treeUtils = me.treeUtils;
     	var records = tree.getView().getChecked();
-    	
     	journalEntry.removeAllJournalEntryDetails();
-    	
+		var je = journalEntry;
     	// add/remove the detail from the Journal Entry
     	Ext.Array.each(records,function(record,index){
         	var id = me.treeUtils.getIdFromNodeId( record.data.id );
@@ -186,14 +170,10 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
     		// add journal detail
     		journalEntry.addJournalDetail( step, detail );
     	},this);
-    	// load the editor
-    	this.displayJournalEditor();
+    	
     },
     
-    onCancelClick: function( button ){
-    	this.displayJournalEditor();
-    },
-
+   
     displayJournalEditor: function(){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
     } 

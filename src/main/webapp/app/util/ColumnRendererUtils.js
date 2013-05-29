@@ -91,6 +91,14 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
         strHtml += '</div>';
 	    return strHtml;		
 	},
+	
+	renderModifiedByDate: function(val, metaData, record) {
+	    return Ext.util.Format.date( record.get('modifiedDate'),'m/d/Y');		
+	},
+	
+	renderModifiedBy: function(val, metaData, record) {
+	    return record.get('modifiedBy').firstName.toUpperCase() + ' ' + record.get('modifiedBy').lastName.toUpperCase();		
+	},	
  
 	renderJournalSourceName: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';

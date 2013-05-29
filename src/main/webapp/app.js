@@ -85,6 +85,7 @@ Ext.require([
     'Ssp.view.tools.journal.EditJournal',
     'Ssp.view.tools.journal.DisplayDetails',
     'Ssp.view.tools.journal.TrackTree',
+	'Ssp.view.tools.journal.JournalList',
     'Ssp.view.tools.earlyalert.EarlyAlert',
     'Ssp.view.tools.earlyalert.EarlyAlertResponse',
     'Ssp.view.tools.earlyalert.EarlyAlertReferrals',

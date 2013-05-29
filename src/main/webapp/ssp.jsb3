@@ -1502,6 +1502,11 @@
                     "path": "/app/view/tools/journal/"
                 },
                 {
+                    "clsName": "Ssp.view.tools.journal.JournalList",
+                    "name": "JournalList.js",
+                    "path": "/app/view/tools/journal/"
+                },
+                {
                     "clsName": "Ssp.view.tools.journal.EditJournal",
                     "name": "EditJournal.js",
                     "path": "/app/view/tools/journal/"

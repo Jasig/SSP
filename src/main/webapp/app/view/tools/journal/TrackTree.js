@@ -25,7 +25,8 @@ Ext.define('Ssp.view.tools.journal.TrackTree', {
     inject: {
         store: 'treeStore'
     },
-	height: 200,
+	itemId: 'trackTreeJournalPanel',
+	height: 400,
 	width: '100%',
 	
     initComponent: function(){
@@ -36,28 +37,7 @@ Ext.define('Ssp.view.tools.journal.TrackTree', {
 			 useArrows: true,
 			 rootVisible: false ,
 			 hideCollapseTool: true,
-
-			 dockedItems: [{
-		               xtype: 'toolbar',
-		               items: [{
-     		                   text: 'Save Details',
-     		                   xtype: 'button',
-     		                   action: 'save',
-     		                   itemId: 'saveButton'
-     		               }, '-', {
-     		                   text: 'Cancel',
-     		                   xtype: 'button',
-     		                   action: 'cancel',
-     		                   itemId: 'cancelButton'
-     		               }]
-		           },{
- 		               xtype: 'toolbar',
-  		               dock: 'top',
-  		               items: [{
-  		                         xtype: 'label',
-  		                         text: 'Select the details for this Journal Session'
-  		                       }]  
-  		            }]			 
+	 
 			 
     });   	
     	

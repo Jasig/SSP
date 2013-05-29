@@ -33,17 +33,23 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
     },
     config: {
     	containerToLoadInto: 'tools',
-    	formToDisplay: 'editjournal',
+    	formToDisplay: 'journal',
     	personJournalUrl: ''
     },
     control: {
     	view: {
-    		viewready: 'onViewReady'
+    		viewready: 'onViewReady',
+			select: 'onJournalClick'
     	},
     	
     	'addButton': {
 			click: 'onAddClick'
-		}
+		},
+		
+		'deleteButton': {
+			click: 'onDeleteClick'
+		},
+		
 	},
     init: function() {
 		var me = this;
@@ -75,8 +81,27 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		me.getView().setLoading( false );
     	if (r.rows.length > 0)
     	{
-    		me.journalEntriesStore.loadData(r.rows);
+    		me.journalEntriesStore.sort([
+		    {
+		        property : 'modifiedDate',
+		        direction: 'DESC'
+		    }]);
+			me.journalEntriesStore.loadData(r.rows);
+			
+			me.model.data = me.journalEntriesStore.getAt(0).data;
+			
+			
+			me.getView().getSelectionModel().select(0);
+		
+			
+			
     	}
+		else{
+            // if no record is available 
+            var je = new Ssp.model.tool.journal.JournalEntry();
+    		me.model.data = je.data;
+			me.callDetails();
+        }
 	},
 
 	getAllJournalEntriesFailure: function( response, scope ) {
@@ -85,28 +110,59 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 	},    
     
     onViewReady: function(comp, obj){
-    	this.appEventsController.assignEvent({eventName: 'editJournalEntry', callBackFunc: this.editJournalEntry, scope: this});
+    	//this.appEventsController.assignEvent({eventName: 'editJournalEntry', callBackFunc: this.editJournalEntry, scope: this});
     	this.appEventsController.assignEvent({eventName: 'deleteJournalEntry', callBackFunc: this.deleteConfirmation, scope: this});
     },    
  
     destroy: function() {
     	var me=this;
     	
-    	me.appEventsController.removeEvent({eventName: 'editJournalEntry', callBackFunc: me.editJournalEntry, scope: me});
+    	//me.appEventsController.removeEvent({eventName: 'editJournalEntry', callBackFunc: me.editJournalEntry, scope: me});
     	me.appEventsController.removeEvent({eventName: 'deleteJournalEntry', callBackFunc: me.deleteConfirmation, scope: me});
 
         return me.callParent( arguments );
     },    
     
     onAddClick: function(button){
+		var me=this;
     	var je = new Ssp.model.tool.journal.JournalEntry();
     	this.model.data = je.data;
-    	this.loadEditor();
+		me.callDetails();
     },
     
     editJournalEntry: function(){
-    	this.loadEditor();
+		//this.getView().getSelectionModel().getSelection()[0].loadRecord();
     },
+	
+	onDeleteClick: function(button){
+    	var grid, record;
+		grid = button.up('grid');
+		record = grid.getView().getSelectionModel().getSelection()[0];
+        if (record) 
+        {	
+			this.model.data=record.data;
+        	this.appEventsController.getApplication().fireEvent('deleteJournalEntry');
+        }else{
+     	   Ext.Msg.alert('SSP Error', 'Please select a journal to delete.'); 
+        }
+    },
+	
+	onJournalClick:function(){
+		var me=this;
+		var record = me.getView().getSelectionModel().getSelection()[0];
+		
+		if (record) 
+        {	
+			me.model.data=record.data;
+			me.callDetails();
+        }
+		
+	},
+	
+	callDetails: function(){
+		Ext.ComponentQuery.query('#editjournalGrid')[0].getController().initForm();
+		Ext.ComponentQuery.query('#editjournalGrid treepanel')[0].getController().init();
+	},
  
     deleteConfirmation: function() {
         var me=this;
@@ -146,6 +202,12 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
  		var store = me.journalEntriesStore;
  		me.getView().setLoading( false );
  		store.remove( store.getById( id ) );
+		console.log(me.journalEntriesStore.data.length);
+		if (me.journalEntriesStore.data.length) {
+			me.model.data = me.journalEntriesStore.getAt(0).data;
+			
+			me.getView().getSelectionModel().select(0);
+		}
  	},
 
  	destroyJournalEntryFailure: function( response, scope ) {
@@ -155,5 +217,8 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
      
     loadEditor: function(){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
+    },
+	loadEditorSelf: function(){
+		var comp = this.formUtils.loadDisplay(this.getFormToDisplay(), this.getFormToDisplay(), true, {});    	
     }
 });

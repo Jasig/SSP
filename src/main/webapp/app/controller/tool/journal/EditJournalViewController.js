@@ -31,9 +31,11 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     	util: 'util'
     },
     config: {
-    	containerToLoadInto: 'tools',
+		containerToLoadInto: 'editjournal',
+		containerToLoadIntoTools: 'tools',
     	mainFormToDisplay: 'journal',
     	sessionDetailsEditorDisplay: 'journaltracktree',
+		journalList: 'journallist',
     	inited: false
     },
 
@@ -74,41 +76,50 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     		} 
     	},
     	
-    	'commentText': {
-    		change: 'onCommentChange'
-    	},
+    	
+		commentText: '#commentText',
     	
     	'saveButton': {
 			click: 'onSaveClick'
 		},
 		
-		'cancelButton': {
-			click: 'onCancelClick'
-		},
 		
-		'addSessionDetailsButton': {
-			click: 'onAddSessionDetailsClick'
-		}
+		journalTrackTree: '#journalTrackTree'
     },
     
 	init: function() {
 		var me=this;
 		// apply confidentiality level filter
 		me.authenticatedPerson.applyConfidentialityLevelsFilter( me.confidentialityLevelsStore );
-		me.initForm();	
+		
+		//me.initForm();	
 		return me.callParent(arguments);
     },   
     
 	initForm: function(){
 		var me=this;
-		var id = this.model.get("id");
+		var id = me.model.get("id");
+		if(id != "")
+		{
+			me.getRemoveJournalTrackButton().show();
+		}
+		else
+		{
+			me.getRemoveJournalTrackButton().hide();
+		}
+		
 		var journalTrackId = "";
-		if ( me.model.get('journalTrack') != null )
+		if ( me.model.get('journalTrack') != null)
 		{
 			journalTrackId = me.model.get('journalTrack').id;
 		}
+		else{
+			me.removeJournalTrackAndSessionDetails();
+		}
+		
 		me.getView().getForm().reset();
-		me.getView().getForm().loadRecord( this.model );
+		me.getView().getForm().loadRecord( me.model );
+		
 		me.getConfidentialityLevelCombo().setValue( me.model.getConfidentialityLevelId() );
 		me.getJournalSourceCombo().setValue( me.model.get('journalSource').id );
 		me.getJournalTrackCombo().setValue( journalTrackId );			
@@ -155,7 +166,13 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		var journalTrackId="";		
 		url = this.url;
 		record = this.model;
+		record.set('comment', me.getCommentText().getValue());
 		id = record.get('id');
+		
+		// for tree
+		if (record.data.journalTrack.id != null || record.data.journalTrack.id != "") {
+			me.getJournalTrackTree().getController().save();
+		}
 		
 		// ensure all required fields are supplied
 		if ( !form.isValid() )
@@ -186,8 +203,12 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 				// fix date from GMT to UTC
 				var origEntryDate = record.data.entryDate;
 				record.data.entryDate = me.formUtils.toJSONStringifiableDate( record.data.entryDate );
+				
+				//record.set('comment', me.getCommentText().getValue());
 
     			jsonData = record.data;
+				
+				
     			    			
     			// null out journalTrack.id prop to prevent failure
     			// from an empty string on null field
@@ -224,7 +245,6 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 	
 	saveSuccess: function( r, scope ) {
 		var me=scope;
-		me.getView().setLoading( false );
 		me.displayMain();
 	},
 
@@ -233,9 +253,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		me.getView().setLoading( false );
 	},
 	
-	onCancelClick: function(button){
-		this.displayMain();
-	},
+	
 
 	onEntryDateSelect: function(comp, newValue, eOpts) {
 		var me = this;
@@ -270,10 +288,17 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     		if (me.inited==true)
     		{
     	   		me.model.removeAllJournalEntryDetails();
-    			me.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');    			
+    			//me.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');    			
     		}
+			if( me.model.get('journalTrack') != null && me.model.get('journalTrack') != "")
+				{
+					
+					me.getJournalTrackTree().getController().loadSteps();
+					
+			}
      	}else{
      		me.removeJournalTrackAndSessionDetails();
+			me.getJournalTrackTree().getController().loadSteps();
      	}
 	},
 	
@@ -289,13 +314,13 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
  		var me=this;
 		me.model.set("journalTrack","");
  		me.model.removeAllJournalEntryDetails();
- 		me.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');
 	},
 	
 	onRemoveJournalTrackButtonClick: function( button ){
 		var me=this;
 		var combo = me.getJournalTrackCombo();
 		combo.clearValue();
+		//me.removeJournalTrackAndSessionDetails();
 		combo.fireEvent('select',{
 			combo: combo,
 			records: [],
@@ -303,24 +328,13 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		});
 	},
 	
-	onCommentChange: function(comp, newValue, oldValue, eOpts){
-		this.model.set('comment',newValue);
-	},
-	
-	onAddSessionDetailsClick: function( button ){
-		if( this.model.get('journalTrack') != null && this.model.get('journalTrack') != "")
-		{
-			this.displaySessionDetails();
-		}else{
-			Ext.Msg.alert('Error', 'A Journal Track is required before selecting details.')
-		}
-	},
 	
 	displayMain: function(){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getMainFormToDisplay(), true, {});
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadIntoTools(), this.getMainFormToDisplay(), true, {});
 	},
 	
 	displaySessionDetails: function(){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getSessionDetailsEditorDisplay(), true, {});
+		var comp = this.formUtils.loadDisplay(this.getContainerToLoadIntoTools(), this.getSessionDetailsEditorDisplay(), true, {});
+		
 	}
 });
