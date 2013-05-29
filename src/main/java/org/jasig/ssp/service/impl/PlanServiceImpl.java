@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.dao.PlanDao;
@@ -26,6 +28,10 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.transferobject.PlanTO;
+import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
+import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
+import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO;
+import org.jasig.ssp.transferobject.reports.SearchPlanTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +96,21 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO> imple
 			getDao().markOldPlansAsInActive(obj);
 		}	
 		return super.save(obj);
+	}
+	
+	@Override
+	public List<PlanAdvisorCountTO> getAdvisorsPlanCount(SearchPlanTO form){
+		return dao.getAdvisorsPlanCount(form);
+	}
+	
+	@Override
+	public List<PlanCourseCountTO> getPlanCourseCount(SearchPlanTO form){
+		return dao.getPlanCourseCount(form);
+	}
+	
+	@Override
+	public List<PlanStudentStatusTO> getPlanStudentStatusByCourse(SearchPlanTO form){
+		return dao.getPlanStudentStatusByCourse(form);
 	}
 
 }

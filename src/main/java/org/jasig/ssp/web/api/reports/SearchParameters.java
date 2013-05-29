@@ -49,6 +49,7 @@ import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
+import org.jasig.ssp.transferobject.reports.SearchPlanTO;
 import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.SortDirection;
@@ -76,6 +77,10 @@ public class SearchParameters {
 	private static final String PROGRAM_STATUS_NAME = "programStatusName";
 	private static final String REPORT_DATE = "reportDate";
 	private static final String HOME_DEPARTMENT_NAME = "homeDepartment";
+	
+	private static final String SUBJECT_ABBREVIAION = "subjectAbbreviation";
+	private static final String COURSE_NUMBER = "courseNumber";
+	private static final String PLAN_STATUS = "planStatus";
     
 	private static final String REPORT_TITLE = "ReportTitle";
 	private static final String DATA_FILE = "DataFile";
@@ -558,5 +563,14 @@ public class SearchParameters {
 		sortFields.add(new Pair<String, SortDirection>(prefix + ".firstName", SortDirection.ASC));
 		sortFields.add(new Pair<String, SortDirection>(prefix + ".middleName", SortDirection.ASC));
 		return new SortingAndPaging(status, sortFields, null, SortDirection.ASC);
+	}
+	
+	static final void addPlanSearchForm(SearchPlanTO form, Map<String,Object> parameters){
+		if(form.getNumber() != null && !form.getNumber().isEmpty())
+			parameters.put(SearchParameters.COURSE_NUMBER, form.getNumber());
+		if(form.getSubjectAbbreviation() != null && !form.getSubjectAbbreviation().isEmpty())
+			parameters.put(SearchParameters.SUBJECT_ABBREVIAION, form.getSubjectAbbreviation());
+		if(form.getPlanStatus() != null && !form.getPlanStatus().isEmpty())
+			parameters.put(SearchParameters.PLAN_STATUS, form.getPlanStatus());
 	}
 }

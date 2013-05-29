@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +26,10 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
+import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
+import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO;
+import org.jasig.ssp.transferobject.reports.SearchPlanTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
@@ -71,5 +76,17 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 				.setEntity("plan", plan)
 				.executeUpdate();
 		return updatedEntities;
+	}
+	
+	public List<PlanAdvisorCountTO> getAdvisorsPlanCount(SearchPlanTO form){
+		return null;
+	}
+	
+	public List<PlanCourseCountTO> getPlanCourseCount(SearchPlanTO form){
+		return null;
+	}
+	
+	public List<PlanStudentStatusTO> getPlanStudentStatusByCourse(SearchPlanTO form){
+		return null;
 	}
 }
