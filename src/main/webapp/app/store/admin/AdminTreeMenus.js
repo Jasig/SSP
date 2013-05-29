@@ -526,13 +526,14 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         header: 'Color',
                         dataIndex: 'color',
                         renderer: me.columnRendererUtils.renderElectiveColor,
-                        required: true,
+                        required: true,                        
                         field: {
                             xtype: 'combo',
                             store: Ext.StoreMgr.lookup("colorsStore"),
                             displayField: 'name',
                             valueField: 'id',
                             forceSelection: true,
+                            allowBlank: false,
                         },
                         flex: .2
                     }]

@@ -49,7 +49,7 @@ public class Elective
 	private Integer sortOrder;
 	
 	@ManyToOne()
-	@JoinColumn(name = "color_id")
+	@JoinColumn(name = "color_id", nullable = false )
 	private Color color;
 	
 	/**
