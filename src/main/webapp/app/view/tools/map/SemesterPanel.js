@@ -30,11 +30,22 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
             },
 	height: 200,
 	width: 225,
+	pastTerm: false,
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
 			
             tools: [{
+                xtype: 'button',
+                itemId: 'pastTermButton',
+                width: 20,
+                height: 20,
+                cls: 'helpIconSmall',
+                text:'',
+                hidden: !me.pastTerm,
+                tooltip: 'This term is in the past and cannot be edited.',
+                
+            },{
                 xtype: 'button',
                 itemId: 'termNotesButton',
                 width: 20,

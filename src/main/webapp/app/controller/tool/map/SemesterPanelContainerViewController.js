@@ -318,7 +318,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	createSemesterPanel: function(semesterName, termCode, semesterStore){
 		var me = this;
-		
 		var semesterPanel = new Ssp.view.tools.map.SemesterPanel({
 			title:semesterName,
 			itemId:termCode,
@@ -335,8 +334,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		 	var semesterGrid = new Ssp.view.tools.map.SemesterGrid({
 				store:semesterStore,
 				scroll: true,
-				enableDragAndDrop: false
+				enableDragAndDrop: false,
 			});
+		 	semesterPanel.tools[0].hidden = false;
 			semesterPanel.add(semesterGrid);
 		}
 

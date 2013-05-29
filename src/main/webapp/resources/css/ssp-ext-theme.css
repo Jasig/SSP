@@ -159,7 +159,9 @@ background-image: url('/ssp/images/email-icon.png') !important;
 .helpIcon {
 background-image: url('/ssp/images/help-icon.png') !important;
 }
-
+.helpIconSmall {
+background-image: url('/ssp/images/help-icon-small.png') !important;
+}
 .multiselect-invalid .x-boundlist {
     border-color: Red !important;
 }
