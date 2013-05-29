@@ -53,6 +53,13 @@ background: transparent;
  background-repeat: no-repeat;
 }
 
+.deleteIcon {
+background-image: url('/ssp/images/delete-icon.png') !important;
+background: transparent;
+ border-style:none;
+ background-repeat: no-repeat;
+}
+
 .mapPrintIcon {
 background-image: url('/ssp/images/print-icon.png') !important;
 background: transparent;

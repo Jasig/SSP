@@ -44,7 +44,6 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     		me.coursePlanDetails.parentGrid = me.getView();
 			var creditHours = me.coursePlanDetails.query('#creditHours')[0];
 
-			
 			if(courseRecord.modelName = 'Ssp.model.external.Course')
 			{
 				var planCourse = new Ssp.model.tool.map.SemesterCourse(courseRecord.data);
