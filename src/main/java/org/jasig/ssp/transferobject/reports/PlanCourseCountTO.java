@@ -22,7 +22,10 @@ public class PlanCourseCountTO {
 
 	private String formattedCourse;
 	private String courseTitle;
+	private String courseCode;
+	private String termCode;
 	private Integer count;
+	
 	/**
 	 * 
 	 */
@@ -64,5 +67,29 @@ public class PlanCourseCountTO {
 	 */
 	public void setCount(Integer count) {
 		this.count = count;
+	}
+	/**
+	 * @return the termCode
+	 */
+	public String getTermCode() {
+		return termCode;
+	}
+	/**
+	 * @param termCode the termCode to set
+	 */
+	public void setTermCode(String termCode) {
+		this.termCode = termCode;
+	}
+	/**
+	 * @return the courseCode
+	 */
+	public String getCourseCode() {
+		return courseCode;
+	}
+	/**
+	 * @param courseCode the courseCode to set
+	 */
+	public void setCourseCode(String courseCode) {
+		this.courseCode = courseCode;
 	}
 }

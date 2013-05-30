@@ -2264,7 +2264,7 @@
 		</div>
 		<div class="ea-clear"></div>
 		
-		<!-- Course Numbers -->
+		<!-- Course Numbers 
 		<div class="ea-input">
 			<select  class="input-course-number-group" id="numberCoursesPlanCourseNumber" name="courseNumber"
 				>
@@ -2273,6 +2273,18 @@
 		</div>
 		<div class="ea-label">
 			<span>Course Numbers:</span>
+		</div>
+		<div class="ea-clear"></div>-->
+		
+		<!-- Formatted Course -->
+		<div class="ea-input">
+			<select  class="input-formatted-course-group" id="numberCoursesPlanFormattedCourse" name="formattedCourse"
+				>
+				<option value="">${select_subject_abbreviation}</option>
+				</select>
+		</div>
+		<div class="ea-label">
+			<span>Course:</span>
 		</div>
 		<div class="ea-clear"></div>
 		
@@ -2408,7 +2420,7 @@
 		</div>
 		<div class="ea-clear"></div>
 		
-		<!-- Course Numbers -->
+		<!-- Course Numbers 
 		<div class="ea-input">
 			<select  class="input-course-number-group" id="numberStudentsByStatusCourseNumbers" name="courseNumber"
 				>
@@ -2417,6 +2429,18 @@
 		</div>
 		<div class="ea-label">
 			<span>Course Numbers:</span>
+		</div>
+		<div class="ea-clear"></div>-->
+		
+		<!-- Formatted Course -->
+		<div class="ea-input">
+			<select  class="input-formatted-course-group" id="numberStudentsByStatusFormattedCourse" name="formattedCourse"
+				>
+				<option value="">${select_subject_abbreviation}</option>
+				</select>
+		</div>
+		<div class="ea-label">
+			<span>Course:</span>
 		</div>
 		<div class="ea-clear"></div>
 		

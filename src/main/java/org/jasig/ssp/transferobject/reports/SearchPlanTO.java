@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.transferobject.reports;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import org.jasig.ssp.model.external.Term;
 public class SearchPlanTO {
 	
 	private String subjectAbbreviation;
+	private String formattedCourse;
 	private String number;
 	private String planStatus;
 	private List<Term> terms;
@@ -40,15 +42,25 @@ public class SearchPlanTO {
 	 * @param dateFrom
 	 * @param dateTo
 	 */
-	public SearchPlanTO(String subjectAbbreviation, String number, String planStatus, List<Term> terms,
+	public SearchPlanTO(String planStatus, String subjectAbbreviation, String number, String formattedCourse, List<Term> terms,
 			Date dateFrom, Date dateTo) {
 		super();
 		this.subjectAbbreviation = subjectAbbreviation;
 		this.number = number;
+		this.formattedCourse = formattedCourse;
 		this.planStatus = planStatus;
 		this.terms = terms;
-		this.dateFrom = dateFrom;
-		this.dateTo = dateTo;
+		if(terms != null && !terms.isEmpty() && terms.size() == 1 && dateFrom == null){
+			this.dateFrom = terms.get(0).getStartDate();
+		} else {
+			this.dateFrom = dateFrom;
+		}
+		
+		if(terms != null && !terms.isEmpty() && terms.size() == 1 && dateTo == null){
+			this.dateTo = terms.get(0).getEndDate();
+		} else {
+			this.dateTo = dateTo;
+		}
 	}
 	
 	/**
@@ -84,6 +96,20 @@ public class SearchPlanTO {
 		return number;
 	}
 	/**
+	 * @return the formattedCourse
+	 */
+	public String getFormattedCourse() {
+		return formattedCourse;
+	}
+
+	/**
+	 * @param formattedCourse the formattedCourse to set
+	 */
+	public void setFormattedCourse(String formattedCourse) {
+		this.formattedCourse = formattedCourse;
+	}
+
+	/**
 	 * @param number the number to set
 	 */
 	public void setNumber(String number) {
@@ -95,6 +121,20 @@ public class SearchPlanTO {
 	public List<Term> getTerms() {
 		return terms;
 	}
+	
+	/**
+	 * @return the terms
+	 */
+	public List<String> getTermCodes() {
+		List<String> termCodes = new ArrayList<String>();
+		if(terms != null && !terms.isEmpty()){
+			for(Term term:terms){
+				termCodes.add(term.getCode());
+			}
+		}
+		return termCodes;
+	}
+	
 	/**
 	 * @param terms the terms to set
 	 */

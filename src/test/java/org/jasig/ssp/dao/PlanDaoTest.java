@@ -21,6 +21,7 @@ package org.jasig.ssp.dao;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.Session;
@@ -35,6 +36,10 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
+import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
+import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO;
+import org.jasig.ssp.transferobject.reports.SearchPlanTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +55,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
-@TransactionConfiguration(defaultRollback = false)
+@TransactionConfiguration(defaultRollback = true)
 @Transactional
 public class PlanDaoTest {
 
@@ -311,6 +316,18 @@ public class PlanDaoTest {
 		
 		
 		
+	}
+	
+	@Test
+	public void  testDaoReportMethodsNull(){
+		SearchPlanTO form = new SearchPlanTO(null, null, null, null, null, null, null);
+		List<PlanCourseCountTO>  planCount = dao.getPlanCourseCount(form);
+		List<PlanAdvisorCountTO>  advisorsCount = dao.getAdvisorsPlanCount(form);
+		List<PlanStudentStatusTO>  studentStatus = dao.getPlanStudentStatusByCourse(form);
+		
+		assertEquals(0, planCount.size());
+		assertEquals(0, advisorsCount.size());
+		assertEquals(0, studentStatus.size());
 	}
 
 	public TermService getTermService() {

@@ -21,7 +21,9 @@ package org.jasig.ssp.web.api.reports;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -46,6 +48,7 @@ import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.transferobject.reports.EarlyAlertTermCaseCountsTO;
 import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
 import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
+import org.jasig.ssp.transferobject.reports.PlanStudentStatusByCourseTO;
 import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO;
 import org.jasig.ssp.transferobject.reports.SearchPlanTO;
 import org.jasig.ssp.util.DateTerm;
@@ -104,13 +107,14 @@ public class MapReportsController extends ReportBaseController {
 			final HttpServletResponse response,		
 			final @RequestParam(required = false) String courseNumber,
 			final @RequestParam(required = false) String subjectAbbreviation,
+			final @RequestParam(required = false) String formattedCourse,
 			final @RequestParam(required = false) String termCode,			
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
 	
 		List<Term> terms = SearchParameters.getTerms(Lists.newArrayList(termCode), termService);
-		SearchPlanTO form = new SearchPlanTO(null, subjectAbbreviation, courseNumber, terms, null, null);
+		SearchPlanTO form = new SearchPlanTO(null, subjectAbbreviation, courseNumber, formattedCourse, terms, null, null);
 		 List<PlanCourseCountTO> counts = planService.getPlanCourseCount(form);
 		 
 		final Map<String, Object> parameters = Maps.newHashMap();
@@ -134,7 +138,7 @@ public class MapReportsController extends ReportBaseController {
 		
 		DateTerm dateTerm = new DateTerm(createDateFrom, createDateTo, termCode, termService);
 		
-		SearchPlanTO form = new SearchPlanTO(null, null, null, Lists.newArrayList(dateTerm.getTerm()), createDateFrom, createDateTo);
+		SearchPlanTO form = new SearchPlanTO(null, null, null, null, Lists.newArrayList(dateTerm.getTerm()), dateTerm.getStartDate(), dateTerm.getEndDate());
 		List<PlanAdvisorCountTO> counts = planService.getAdvisorsPlanCount(form);
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
@@ -152,6 +156,7 @@ public class MapReportsController extends ReportBaseController {
 			final HttpServletResponse response,		
 			final @RequestParam(required = false) String courseNumber,
 			final @RequestParam(required = false) String subjectAbbreviation,
+			final @RequestParam(required = false) String formattedCourse,
 			final @RequestParam(required = false) String planStatus,
 			final @RequestParam(required = false) String termCode,			
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
@@ -161,14 +166,28 @@ public class MapReportsController extends ReportBaseController {
 	
 		List<Term> terms = SearchParameters.getTerms(Lists.newArrayList(termCode), termService);
 		
-		SearchPlanTO form = new SearchPlanTO(planStatus, subjectAbbreviation, courseNumber, terms, null, null);
-		 List<PlanStudentStatusTO> counts = planService.getPlanStudentStatusByCourse(form);
+		SearchPlanTO form = new SearchPlanTO(planStatus, subjectAbbreviation, courseNumber, formattedCourse, terms, null, null);
+		List<PlanStudentStatusTO> studentStatuses = planService.getPlanStudentStatusByCourse(form);
+		
+		Map<String, PlanStudentStatusByCourseTO> courses = new HashMap<String, PlanStudentStatusByCourseTO>();
+		
+		for(PlanStudentStatusTO studentStatus:studentStatuses){
+			if(courses.containsKey(studentStatus.getFormattedCourse().trim()))
+			{
+				PlanStudentStatusByCourseTO course = courses.get(studentStatus.getFormattedCourse().trim());
+				course.addStudentStatus(studentStatus);
+			}else{
+				PlanStudentStatusByCourseTO course = new PlanStudentStatusByCourseTO(studentStatus.getFormattedCourse(), studentStatus.getCourseTitle());
+				course.addStudentStatus(studentStatus);
+				courses.put(studentStatus.getFormattedCourse(), course);
+			}
+		}
 			
-		
 		final Map<String, Object> parameters = Maps.newHashMap();
-		
+		List<PlanStudentStatusByCourseTO> courseList = Lists.newArrayList(courses.values());
+		Collections.sort(courseList, PlanStudentStatusByCourseTO.FORMATTED_COURSE_COMPARATOR);
 		SearchParameters.addTermsToMap(terms , parameters);
-		generateReport( response,  parameters, counts,  REPORT_URL_NUMBER_STUDENTS_BY_STATUS, 
+		generateReport(response,  parameters, courseList,  REPORT_URL_NUMBER_STUDENTS_BY_STATUS, 
 				 reportType, REPORT_FILE_TITLE_NUMBER_STUDENTS_BY_STATUS);
 	}
 

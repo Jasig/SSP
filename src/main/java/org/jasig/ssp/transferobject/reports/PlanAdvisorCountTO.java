@@ -18,13 +18,26 @@
  */
 package org.jasig.ssp.transferobject.reports;
 
+import java.util.Comparator;
+
+
 public class PlanAdvisorCountTO {
 	
-	private String coachName;
-	private Integer activePlanCount;
-	private Integer inactivePlanCount;
-	private Integer totalPlanCount;
 	
+	public static class PlanAdvisorCoachNameComparator implements Comparator<PlanAdvisorCountTO> {
+		 @Override
+		    public int compare(PlanAdvisorCountTO o1, PlanAdvisorCountTO o2) {
+		        return o1.getCoachName().trim().compareTo(o2.getCoachName().trim());
+		    }
+
+	}
+
+	public static final PlanAdvisorCoachNameComparator COACH_NAME_COMPARATOR =
+			new PlanAdvisorCoachNameComparator();
+	
+	private String coachName;
+	private Long activePlanCount;
+	private Long inactivePlanCount;
 	
 	/**
 	 * 
@@ -47,38 +60,32 @@ public class PlanAdvisorCountTO {
 	/**
 	 * @return the activePlanCount
 	 */
-	public Integer getActivePlanCount() {
+	public Long getActivePlanCount() {
 		return activePlanCount;
 	}
 	/**
 	 * @param activePlanCount the activePlanCount to set
 	 */
-	public void setActivePlanCount(Integer activePlanCount) {
+	public void setActivePlanCount(Long activePlanCount) {
 		this.activePlanCount = activePlanCount;
 	}
 	/**
 	 * @return the inactivePlanCount
 	 */
-	public Integer getInactivePlanCount() {
+	public Long getInactivePlanCount() {
 		return inactivePlanCount;
 	}
 	/**
 	 * @param inactivePlanCount the inactivePlanCount to set
 	 */
-	public void setInactivePlanCount(Integer inactivePlanCount) {
+	public void setInactivePlanCount(Long inactivePlanCount) {
 		this.inactivePlanCount = inactivePlanCount;
 	}
 	/**
 	 * @return the totalPlanCount
 	 */
-	public Integer getTotalPlanCount() {
-		return totalPlanCount;
-	}
-	/**
-	 * @param totalPlanCount the totalPlanCount to set
-	 */
-	public void setTotalPlanCount(Integer totalPlanCount) {
-		this.totalPlanCount = totalPlanCount;
+	public Long getTotalPlanCount() {
+		return inactivePlanCount + activePlanCount;
 	}
 
 }

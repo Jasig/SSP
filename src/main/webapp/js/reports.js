@@ -170,6 +170,27 @@ var ssp = ssp || {};
 			});
 		}
 		
+		var loadFormattedCourseInput = function(url, container) {
+			requests++;
+			$.getJSON(url, function(data) {
+				requests--;
+				container.html('');
+				addSelectItem("", "Not Used", container);
+				var values = [];
+				if(!data || data.length <= 0)
+					return;
+				data.forEach(function(row) {
+					values[row.formattedCourse] = row.formattedCourse;
+				});
+				for(var index in values) 
+					addSelectItem(index, index, container);
+
+			}).error(function(jqXHR, textStatus, errorThrown) {
+				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				requests--;
+			});
+		}
+		
 		var loadSubjectAbbreviationInput = function(url, container) {
 			requests++;
 			$.getJSON(url, function(data) {
@@ -325,10 +346,15 @@ var ssp = ssp || {};
 			
 			$('select[class="input-subject-abbreviation-group"]').change(function(event){
 				var value = $(event.target).val();
-				if(value && value.length > 0){
+				/*if(value && value.length > 0){
 					loadCourseNumberInput("/ssp/api/1//reference/course/search?subjectAbbreviation=" + value, that
 							.locate('courseNumberGroup'));
+				}*/
+				if(value && value.length > 0){
+					loadFormattedCourseInput("/ssp/api/1//reference/course/search?subjectAbbreviation=" + value, that
+							.locate('formattedCourseGroup'));
 				}
+				
 			});
 			
 		});
@@ -468,6 +494,7 @@ var ssp = ssp || {};
 							campusGroup: '.input-campus-group',
 							termGroup: '.input-term-group',
 							courseNumberGroup: '.input-course-number-group',
+							formattedCourseGroup: '.input-formatted-course-group',
 							subjectAbbreviationGroup: '.input-subject-abbreviation-group',
 							reportYearGroup: '.input-report-year-group',
 							earlyAlertOutcomeGroup: '.input-early-alert-outcome-group',

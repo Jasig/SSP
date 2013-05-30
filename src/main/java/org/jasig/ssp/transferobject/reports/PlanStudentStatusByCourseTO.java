@@ -18,14 +18,39 @@
  */
 package org.jasig.ssp.transferobject.reports;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO.PlanStudentStatusStudentIdComparator;
+
 public class PlanStudentStatusByCourseTO {
+	
+	public static class PlanStudentStatusFormattedCourseComparator implements Comparator<PlanStudentStatusByCourseTO> {
+		 @Override
+		    public int compare(PlanStudentStatusByCourseTO o1, PlanStudentStatusByCourseTO o2) {
+		        return o1.getFormattedCourse().trim().compareTo(o2.getFormattedCourse().trim());
+		    }
+
+	}
+
+	public static final PlanStudentStatusFormattedCourseComparator FORMATTED_COURSE_COMPARATOR =
+			new PlanStudentStatusFormattedCourseComparator();
 	
 	private String formattedCourse;
 	private String courseTitle;
 	private List<PlanStudentStatusTO> studentStatusByCourse;
 	
+	/**
+	 * @param formattedCourse
+	 * @param courseTitle
+	 */
+	public PlanStudentStatusByCourseTO(String formattedCourse,
+			String courseTitle) {
+		super();
+		this.formattedCourse = formattedCourse;
+		this.courseTitle = courseTitle;
+	}
 	/**
 	 * @return the formattedCourse
 	 */
@@ -54,6 +79,7 @@ public class PlanStudentStatusByCourseTO {
 	 * @return the studentStatusByCourse
 	 */
 	public List<PlanStudentStatusTO> getStudentStatusByCourse() {
+		Collections.sort(studentStatusByCourse, PlanStudentStatusTO.STUDENT_ID_COMPARATOR);
 		return studentStatusByCourse;
 	}
 	/**
@@ -62,6 +88,14 @@ public class PlanStudentStatusByCourseTO {
 	public void setStudentStatusByCourse(
 			List<PlanStudentStatusTO> studentStatusByCourse) {
 		this.studentStatusByCourse = studentStatusByCourse;
+	}
+	
+	public void addStudentStatus(PlanStudentStatusTO studentStatus){
+		this.studentStatusByCourse.add(studentStatus);
+	}
+	
+	public String getCourseName(){
+		return this.formattedCourse.trim() + " - " + this.courseTitle.trim();
 	}
 
 }
