@@ -46,6 +46,9 @@ public abstract class AbstractDao<T> {
 	
 	@Value("#{configProperties.db_batchsize}")
 	private int batchsize = 300;
+	
+	@Value("#{configProperties.cacheLifeSpanInMillis}")
+	private long cacheLifeSpanInMillis = 86400000;
 
 	public AbstractDao(@NotNull final Class<T> persistentClass) {
 		this.persistentClass = persistentClass;
@@ -148,5 +151,13 @@ public abstract class AbstractDao<T> {
 
 	protected int getBatchsize() {
 		return batchsize;
+	}
+
+	public long getCacheLifeSpanInMillis() {
+		return cacheLifeSpanInMillis;
+	}
+
+	public void setCacheLifeSpanInMillis(long cacheLifeSpanInMillis) {
+		this.cacheLifeSpanInMillis = cacheLifeSpanInMillis;
 	}
 }

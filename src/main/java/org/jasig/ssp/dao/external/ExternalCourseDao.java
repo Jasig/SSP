@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.dao.external;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Vector;
 
@@ -25,25 +27,32 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.external.ExternalCourse;
 import org.jasig.ssp.transferobject.external.SearchExternalCourseTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
+import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /**
  * Data access class for the External Person entity
  */
 @Repository
-public class ExternalCourseDao extends AbstractExternalReferenceDataDao<ExternalCourse> {
+public class ExternalCourseDao extends AbstractExternalReferenceDataDao<ExternalCourse> implements InitializingBean {
 
 	public ExternalCourseDao() {
 		super(ExternalCourse.class);
 	}
 
-	private volatile static List<ExternalCourse> courseCache = new Vector<ExternalCourse>();
+	private static List<ExternalCourse> courseCache = new Vector<ExternalCourse>();
+	
+	private static Calendar lastCacheFlush = new GregorianCalendar();
 
 	@SuppressWarnings("unchecked")
 	public List<ExternalCourse> getAll() {
@@ -82,18 +91,9 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 		//Performance kludge, we are going to cache the unbounded search result
 			if(form.isUnbounded())
 			{
-				if(ExternalCourseDao.courseCache.isEmpty())
+				if(ExternalCourseDao.courseCache.isEmpty() || isCacheExpired())
 				{
-					List<ExternalCourse> all = getAll();
-					for (ExternalCourse externalCourse : all) {
-						List<String> tags = getTagsForCourse(externalCourse.getCode());
-						StringBuilder tagBuilder = new StringBuilder();
-						for (String tagg : tags) {
-							tagBuilder.append(tagg+" ");
-						}
-						externalCourse.setPivotedTags(tagBuilder.toString());
-					}
-					ExternalCourseDao.courseCache.addAll(all);
+					flushAndLoadCache();
 				}
 				return ExternalCourseDao.courseCache;
 			}
@@ -107,6 +107,24 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 		.list();
 
 		return result;
+	}
+
+	private boolean isCacheExpired() {
+		return ((Calendar.getInstance().getTimeInMillis()-lastCacheFlush.getTimeInMillis())>getCacheLifeSpanInMillis());
+	}
+
+	public void flushAndLoadCache() {
+		ExternalCourseDao.courseCache.clear();
+		List<ExternalCourse> all = getAll();
+		for (ExternalCourse externalCourse : all) {
+			List<String> tags = getTagsForCourse(externalCourse.getCode());
+			StringBuilder tagBuilder = new StringBuilder();
+			for (String tagg : tags) {
+				tagBuilder.append(tagg+" ");
+			}
+			externalCourse.setPivotedTags(tagBuilder.toString());
+		}
+		ExternalCourseDao.courseCache.addAll(all);
 	}
 
 
@@ -218,4 +236,18 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 		}
 		return query.toString();
 	}
+
+	@Override
+    public void afterPropertiesSet() throws Exception {
+        try {
+            Session session = SessionFactoryUtils.openSession(sessionFactory);
+            TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
+    		flushAndLoadCache();
+    		lastCacheFlush = Calendar.getInstance();            
+        } finally {
+            SessionHolder sessionHolder =
+                    (SessionHolder) TransactionSynchronizationManager.unbindResource(sessionFactory);
+            SessionFactoryUtils.closeSession(sessionHolder.getSession());
+        }
+    }
 }

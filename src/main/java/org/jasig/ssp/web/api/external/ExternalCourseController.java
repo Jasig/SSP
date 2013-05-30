@@ -75,7 +75,14 @@ public class ExternalCourseController extends AbstractExternalController<Externa
 	protected Logger getLogger() {
 		return LOGGER;
 	}
-
+	
+	@RequestMapping(value = "/flush", method = RequestMethod.POST)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
+	public @ResponseBody Boolean flushCache() {
+		service.flushCache();
+		return true;
+	}
+	
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody

@@ -32,4 +32,6 @@ public interface ExternalCourseService extends ExternalReferenceDataService<Exte
 	
 	List<String> getAllTagsForCourse(String courseCode);
 
+	void flushCache();
+
 }

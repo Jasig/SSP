@@ -65,4 +65,9 @@ public class ExternalCourseServiceImpl extends AbstractExternalReferenceDataServ
 	public List<String> getAllTagsForCourse(String courseCode) {
 		return dao.getTagsForCourse(courseCode);
 	}
+
+	@Override
+	public void flushCache() {
+		dao.flushAndLoadCache();
+	}
 }

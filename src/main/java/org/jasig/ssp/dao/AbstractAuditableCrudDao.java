@@ -24,10 +24,13 @@ import java.util.UUID;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.jasig.mygps.business.EarlyAlertManager;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Basic CRUD (create, read, update, delete) methods for {@link Auditable}
@@ -43,6 +46,9 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable>
 	protected AbstractAuditableCrudDao(final Class<T> persistentClass) {
 		super(persistentClass);
 	}
+	
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(AbstractAuditableCrudDao.class);
 
 	@Override
 	@SuppressWarnings(UNCHECKED)
@@ -93,6 +99,7 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable>
 
 	@Override
 	public void delete(final T obj) {
+		LOGGER.error("A hard delete of type "+obj.getClass()+" with the id of "+obj.getId()+" is being executed!");
 		sessionFactory.getCurrentSession().delete(obj);
 	}
 }
