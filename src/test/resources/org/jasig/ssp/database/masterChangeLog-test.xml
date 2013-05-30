@@ -98,6 +98,9 @@
 	
 	<include file="org/jasig/ssp/database/changesets/000026.xml" />
 	<include file="org/jasig/ssp/database/changesets/000027.xml" />
+	<include file="org/jasig/ssp/database/changesets/000028.xml" />
+	<include file="org/jasig/ssp/database/changesets/000029.xml" />
+	<include file="org/jasig/ssp/database/changesets/000030.xml" />
 	<include file="org/jasig/ssp/database/integrationchangesets/i000009-test.xml" /> 
 	<include file="org/jasig/ssp/database/integrationchangesets/i000010-test.xml" /> 
 	<include file="org/jasig/ssp/database/integrationchangesets/i000015.xml" />
@@ -108,6 +111,13 @@
 	<include file="org/jasig/ssp/database/integrationchangesets/i000019.xml" />
 	<include file="org/jasig/ssp/database/integrationchangesets/i000020.xml" />
 	<include file="org/jasig/ssp/database/integrationchangesets/i000021.xml" />
+	<include file="org/jasig/ssp/database/changesets/000032.xml" />
+	<include file="org/jasig/ssp/database/changesets/000033.xml" />
+	<include file="org/jasig/ssp/database/changesets/000034.xml" />
+	<include file="org/jasig/ssp/database/changesets/000035.xml" />
+	<include file="org/jasig/ssp/database/changesets/000036.xml" />
+	<include file="org/jasig/ssp/database/changesets/000037.xml" />
+	<include file="org/jasig/ssp/database/changesets/000038.xml" />
 	<include file="org/jasig/ssp/database/changesets/000039.xml" />
 	<include file="org/jasig/ssp/database/integrationchangesets/i000022.xml" />
 	<include file="org/jasig/ssp/database/integrationchangesets/i000023.xml" />
@@ -126,5 +136,5 @@
 	<include file="org/jasig/ssp/database/changesets/000045.xml" />
 	<include file="org/jasig/ssp/database/changesets/000047.xml" />
 	<include file="org/jasig/ssp/database/changesets/000049.xml" />
-	<include file="org/jasig/ssp/database/integrationchangesets/i000030.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000031.xml" />
 </databaseChangeLog>
