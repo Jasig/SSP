@@ -41,6 +41,7 @@ public class PlanStudentStatusTO {
 	private String planStatus;
 	private ObjectStatus planObjectStatus;
 	private String[] statusDetails;
+	private String statusDetailsAsString;
 	
 	/**
 	 * 
@@ -133,6 +134,22 @@ public class PlanStudentStatusTO {
 	 */
 	public void setFormattedCourse(String formattedCourse) {
 		this.formattedCourse = formattedCourse;
+	}
+
+
+	/**
+	 * @return the statusDetailsAsString
+	 */
+	public String getStatusDetailsAsString() {
+		return statusDetailsAsString;
+	}
+
+
+	/**
+	 * @param statusDetailsAsString the statusDetailsAsString to set
+	 */
+	public void setStatusDetailsAsString(String statusDetailsAsString) {
+		this.statusDetailsAsString = statusDetailsAsString;
 	}
 	
 }

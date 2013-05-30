@@ -28,10 +28,10 @@
 	<parameter name="reportDate" class="java.lang.String"/>
 	<parameter name="parameter1" class="java.lang.String"/>
 	<parameter name="term" class="java.lang.String"/>
-	<field name="activePlanCount" class="java.lang.Integer"/>
-	<field name="inactivePlanCount" class="java.lang.Integer"/>
+	<field name="activePlanCount" class="java.lang.Long"/>
+	<field name="inactivePlanCount" class="java.lang.Long"/>
 	<field name="coachName" class="java.lang.String"/>
-	<field name="totalPlanCount" class="java.lang.Integer"/>
+	<field name="totalPlanCount" class="java.lang.Long"/>
 	<variable name="rowIndex" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>

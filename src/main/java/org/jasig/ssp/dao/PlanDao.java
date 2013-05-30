@@ -185,7 +185,7 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 				new NamespacedAliasToBeanResultTransformer(
 						PlanCourseCountTO.class, "plan_")).list();*/
 		
-		StringBuilder selectPlanCourses = new  StringBuilder("select count(distinct pc.id) as plan_count, " +
+		StringBuilder selectPlanCourses = new  StringBuilder("select count(distinct pc.id) as plan_studentCount, " +
 				"pc.courseCode as plan_courseCode, " +
 				"pc.formattedCourse as plan_formattedCourse, " +
 				"pc.courseTitle as plan_courseTitle, " +
@@ -286,7 +286,7 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 						PlanStudentStatusTO.class, "plan_")).list();*/
 		
 		StringBuilder selectPlanCourses = new  StringBuilder("select " +
-				"person.schoolId as plan_studentId, " +
+				"distinct person.schoolId as plan_studentId, " +
 				"pc.formattedCourse as plan_formattedCourse, " +
 				"pc.courseTitle as plan_courseTitle, " +
 				"p.objectStatus as plan_planObjectStatus " +

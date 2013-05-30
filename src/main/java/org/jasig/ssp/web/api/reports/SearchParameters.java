@@ -153,7 +153,8 @@ public class SearchParameters {
 			throws ObjectNotFoundException{
 		final List<String> termCodes = new ArrayList<String>();
 		final List<String> termNames = new ArrayList<String>();
-		
+		if(terms == null || terms.isEmpty())
+			return;
 		for(Term term:terms){
 			termCodes.add(term.getCode());
 			termNames.add(term.getName());

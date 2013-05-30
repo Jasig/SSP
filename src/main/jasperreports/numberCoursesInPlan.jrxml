@@ -27,10 +27,10 @@
 	<parameter name="termNames" class="java.lang.String"/>
 	<parameter name="reportDate" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="subjectAbbreviation" class="java.lang.String"/>
-	<parameter name="number" class="java.lang.String"/>
+	<parameter name="courseNumber" class="java.lang.String"/>
 	<field name="courseTitle" class="java.lang.String"/>
 	<field name="formattedCourse" class="java.lang.String"/>
-	<field name="studentCount" class="java.lang.Integer"/>
+	<field name="studentCount" class="java.lang.Long"/>
 	<variable name="rowIndex" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -42,7 +42,7 @@
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="false">
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="121" y="31" width="311" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{termNames}]]></textFieldExpression>
@@ -62,7 +62,7 @@
 				<textElement/>
 				<text><![CDATA[Subject Abbreviation:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="false">
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="121" y="51" width="311" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{subjectAbbreviation}]]></textFieldExpression>
@@ -72,10 +72,10 @@
 				<textElement/>
 				<text><![CDATA[Number:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="false">
-				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="121" y="71" width="311" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="121" y="71" width="311" height="20" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{number}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{courseNumber}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

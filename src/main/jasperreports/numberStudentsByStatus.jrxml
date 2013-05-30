@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="numberStudentsByStatus" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d0d692a3-bed1-4808-8436-99637e102c17">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -7,7 +27,7 @@
 	<parameter name="termNames" class="java.lang.String"/>
 	<parameter name="reportDate" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="subjectAbbreviation" class="java.lang.String"/>
-	<parameter name="number" class="java.lang.String"/>
+	<parameter name="courseNumber" class="java.lang.String"/>
 	<parameter name="totalUniqueCourses" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
 	</parameter>
@@ -46,7 +66,7 @@
 				<textElement/>
 				<text><![CDATA[Subject Abbreviation:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="false">
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="111" y="41" width="311" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{subjectAbbreviation}]]></textFieldExpression>
@@ -56,12 +76,12 @@
 				<textElement/>
 				<text><![CDATA[Number:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="false">
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="111" y="61" width="311" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{number}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{courseNumber}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="918e22ca-c9d4-4e84-a65e-b4828debeffb" x="111" y="81" width="311" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{totalUniqueCourses}]]></textFieldExpression>
@@ -71,7 +91,7 @@
 				<textElement/>
 				<text><![CDATA[Total Course:]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="2f57f48f-5397-44c0-a084-56cc06441478" x="111" y="101" width="311" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{totalUniqueStudents}]]></textFieldExpression>
@@ -85,7 +105,7 @@
 	</title>
 	<detail>
 		<band height="136" splitType="Stretch">
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="0" y="1" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{courseName}]]></textFieldExpression>

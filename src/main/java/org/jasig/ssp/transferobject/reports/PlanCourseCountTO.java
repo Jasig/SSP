@@ -24,7 +24,7 @@ public class PlanCourseCountTO {
 	private String courseTitle;
 	private String courseCode;
 	private String termCode;
-	private Integer count;
+	private Long studentCount;
 	
 	/**
 	 * 
@@ -59,14 +59,14 @@ public class PlanCourseCountTO {
 	/**
 	 * @return the count
 	 */
-	public Integer getCount() {
-		return count;
+	public Long getStudentCount() {
+		return studentCount;
 	}
 	/**
 	 * @param count the count to set
 	 */
-	public void setCount(Integer count) {
-		this.count = count;
+	public void setStudentCount(Long studentCount) {
+		this.studentCount = studentCount;
 	}
 	/**
 	 * @return the termCode

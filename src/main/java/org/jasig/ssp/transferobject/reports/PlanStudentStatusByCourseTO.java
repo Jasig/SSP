@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.transferobject.reports;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -39,7 +40,7 @@ public class PlanStudentStatusByCourseTO {
 	
 	private String formattedCourse;
 	private String courseTitle;
-	private List<PlanStudentStatusTO> studentStatusByCourse;
+	private List<PlanStudentStatusTO> studentStatusByCourse = new ArrayList<PlanStudentStatusTO>();
 	
 	/**
 	 * @param formattedCourse

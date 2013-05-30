@@ -346,14 +346,23 @@ var ssp = ssp || {};
 			
 			$('select[class="input-subject-abbreviation-group"]').change(function(event){
 				var value = $(event.target).val();
-				/*if(value && value.length > 0){
+				if(value && value.length > 0){
 					loadCourseNumberInput("/ssp/api/1//reference/course/search?subjectAbbreviation=" + value, that
 							.locate('courseNumberGroup'));
-				}*/
+				}else{
+					var container = that.locate('courseNumberGroup');
+					container.html('');
+					addSelectItem("", "Not Used", container);
+				}
+				/*
 				if(value && value.length > 0){
 					loadFormattedCourseInput("/ssp/api/1//reference/course/search?subjectAbbreviation=" + value, that
 							.locate('formattedCourseGroup'));
-				}
+				}else{
+					var container = that.locate('formattedCourseGroup');
+					container.html('');
+					addSelectItem("", "Not Used", container);
+				}*/
 				
 			});
 			

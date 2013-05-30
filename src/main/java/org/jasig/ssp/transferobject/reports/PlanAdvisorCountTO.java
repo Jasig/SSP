@@ -36,8 +36,9 @@ public class PlanAdvisorCountTO {
 			new PlanAdvisorCoachNameComparator();
 	
 	private String coachName;
-	private Long activePlanCount;
-	private Long inactivePlanCount;
+	private Long activePlanCount  = 0L;
+	private Long inactivePlanCount = 0L;
+	private Long totalPlanCount = 0L;
 	
 	/**
 	 * 
@@ -68,24 +69,31 @@ public class PlanAdvisorCountTO {
 	 */
 	public void setActivePlanCount(Long activePlanCount) {
 		this.activePlanCount = activePlanCount;
+		totalPlanCount = activePlanCount + inactivePlanCount;
 	}
 	/**
 	 * @return the inactivePlanCount
 	 */
 	public Long getInactivePlanCount() {
+		
 		return inactivePlanCount;
 	}
 	/**
 	 * @param inactivePlanCount the inactivePlanCount to set
 	 */
 	public void setInactivePlanCount(Long inactivePlanCount) {
+		totalPlanCount = activePlanCount + inactivePlanCount;
 		this.inactivePlanCount = inactivePlanCount;
 	}
 	/**
 	 * @return the totalPlanCount
 	 */
 	public Long getTotalPlanCount() {
-		return inactivePlanCount + activePlanCount;
+		return totalPlanCount;
+	}
+	
+	public void setTotalPlanCount(Long totalPlanCount) {
+		 this.totalPlanCount = totalPlanCount;
 	}
 
 }

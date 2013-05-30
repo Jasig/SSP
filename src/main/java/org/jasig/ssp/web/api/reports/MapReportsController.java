@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.security.permissions.Permission;
@@ -113,13 +114,17 @@ public class MapReportsController extends ReportBaseController {
 			throws ObjectNotFoundException, JRException, IOException {
 		
 	
-		List<Term> terms = SearchParameters.getTerms(Lists.newArrayList(termCode), termService);
+		List<Term> terms = null;
+		if(!StringUtils.isEmpty(termCode))
+			terms = SearchParameters.getTerms(Lists.newArrayList(termCode), termService);
+		
 		SearchPlanTO form = new SearchPlanTO(null, subjectAbbreviation, courseNumber, formattedCourse, terms, null, null);
 		 List<PlanCourseCountTO> counts = planService.getPlanCourseCount(form);
 		 
 		final Map<String, Object> parameters = Maps.newHashMap();
 		SearchParameters.addTermsToMap( terms, parameters);
 		SearchParameters.addPlanSearchForm(form, parameters);
+
 		
 		generateReport( response,  parameters, counts,  REPORT_URL_NUMBER_COURSES_IN_PLAN, 
 				 reportType, REPORT_FILE_TITLE_NUMBER_COURSES_IN_PLAN);
@@ -137,8 +142,10 @@ public class MapReportsController extends ReportBaseController {
 			throws ObjectNotFoundException, JRException, IOException {
 		
 		DateTerm dateTerm = new DateTerm(createDateFrom, createDateTo, termCode, termService);
-		
-		SearchPlanTO form = new SearchPlanTO(null, null, null, null, Lists.newArrayList(dateTerm.getTerm()), dateTerm.getStartDate(), dateTerm.getEndDate());
+		List<Term> terms = new ArrayList<Term>();
+		if(dateTerm != null && dateTerm.getTerm() != null)
+			terms.add(dateTerm.getTerm());
+		SearchPlanTO form = new SearchPlanTO(null, null, null, null, terms, dateTerm.getStartDate(), dateTerm.getEndDate());
 		List<PlanAdvisorCountTO> counts = planService.getAdvisorsPlanCount(form);
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
@@ -162,31 +169,38 @@ public class MapReportsController extends ReportBaseController {
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
 		
-		
-	
-		List<Term> terms = SearchParameters.getTerms(Lists.newArrayList(termCode), termService);
+		List<Term> terms = null;
+		if(!StringUtils.isEmpty(termCode))
+			terms = SearchParameters.getTerms(Lists.newArrayList(termCode), termService);
 		
 		SearchPlanTO form = new SearchPlanTO(planStatus, subjectAbbreviation, courseNumber, formattedCourse, terms, null, null);
 		List<PlanStudentStatusTO> studentStatuses = planService.getPlanStudentStatusByCourse(form);
 		
 		Map<String, PlanStudentStatusByCourseTO> courses = new HashMap<String, PlanStudentStatusByCourseTO>();
-		
+		List<String> uniqueStudents = new ArrayList<String>();
 		for(PlanStudentStatusTO studentStatus:studentStatuses){
 			if(courses.containsKey(studentStatus.getFormattedCourse().trim()))
 			{
 				PlanStudentStatusByCourseTO course = courses.get(studentStatus.getFormattedCourse().trim());
 				course.addStudentStatus(studentStatus);
+				if(!uniqueStudents.contains(studentStatus.getStudentId()))
+					uniqueStudents.add(studentStatus.getStudentId());
 			}else{
 				PlanStudentStatusByCourseTO course = new PlanStudentStatusByCourseTO(studentStatus.getFormattedCourse(), studentStatus.getCourseTitle());
 				course.addStudentStatus(studentStatus);
 				courses.put(studentStatus.getFormattedCourse(), course);
+				if(!uniqueStudents.contains(studentStatus.getStudentId()))
+					uniqueStudents.add(studentStatus.getStudentId());
 			}
 		}
 			
 		final Map<String, Object> parameters = Maps.newHashMap();
+		parameters.put("totalUniqueCourses", new Integer(courses.size()));
+		parameters.put("totalUniqueStudents", new Integer(uniqueStudents.size()));
 		List<PlanStudentStatusByCourseTO> courseList = Lists.newArrayList(courses.values());
 		Collections.sort(courseList, PlanStudentStatusByCourseTO.FORMATTED_COURSE_COMPARATOR);
 		SearchParameters.addTermsToMap(terms , parameters);
+		SearchParameters.addPlanSearchForm(form, parameters);
 		generateReport(response,  parameters, courseList,  REPORT_URL_NUMBER_STUDENTS_BY_STATUS, 
 				 reportType, REPORT_FILE_TITLE_NUMBER_STUDENTS_BY_STATUS);
 	}
