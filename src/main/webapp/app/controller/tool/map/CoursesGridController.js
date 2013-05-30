@@ -58,8 +58,18 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
 		me.courseDetailsPopUp.query("#departmentCode")[0].setValue(record.get("departmentCode"));
 		me.courseDetailsPopUp.query("#divisionCode")[0].setValue(record.get("divisionCode"));
 		me.courseDetailsPopUp.query("#tags")[0].setValue(record.get("tags"));
-		me.courseDetailsPopUp.query("#mastersyllabus")[0].setFieldLabel("<a href=\""+record.get("masterSyllabusLink")+"\">Master Syllabus</a>");
-		me.courseDetailsPopUp.query("#academiclink")[0].setFieldLabel("<a href=\""+record.get("academicLink")+"\">Academic Link</a>");
+		var masterSylComponent = me.courseDetailsPopUp.query("#mastersyllabus")[0];
+		if(!record.get("masterSyllabusLink") || record.get("masterSyllabusLink") =='')
+		{
+			masterSylComponent.hidden = true;
+		}
+		var academicLinkComponent = me.courseDetailsPopUp.query("#academiclink")[0];
+		if(!record.get("academicLink") || record.get("academicLink") =='')
+		{
+			academicLinkComponent.hidden = true;
+		}
+		masterSylComponent.setFieldLabel("<a href=\""+record.get("masterSyllabusLink")+"\">Master Syllabus</a>");
+		academicLinkComponent.setFieldLabel("<a href=\""+record.get("academicLink")+"\">Academic Link</a>");
 		
 		me.courseDetailsPopUp.show();
     },
