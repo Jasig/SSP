@@ -66,6 +66,7 @@ public class ExternalCourseTOFactoryImpl
 		model.setDepartmentCode(tObject.getDepartmentCode());
 		model.setDivisionCode(tObject.getDepartmentCode());
 		model.setNumber(tObject.getNumber());
+		//transient
 		return model;
 	}
 }

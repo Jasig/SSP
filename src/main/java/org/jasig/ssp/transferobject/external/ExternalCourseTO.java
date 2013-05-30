@@ -71,6 +71,7 @@ public class ExternalCourseTO implements ExternalDataTO<ExternalCourse> {
 		this.setDepartmentCode(model.getDepartmentCode());
 		this.setDivisionCode(model.getDivisionCode());
 		this.setNumber(model.getNumber());
+		this.setTags(model.getPivotedTags());
 	}
 
 	public String getCode() {

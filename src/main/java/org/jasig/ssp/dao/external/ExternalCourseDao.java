@@ -18,8 +18,8 @@
  */
 package org.jasig.ssp.dao.external;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.StringUtils;
@@ -43,7 +43,7 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 		super(ExternalCourse.class);
 	}
 
-	private static List<ExternalCourse> courseCache = new ArrayList<ExternalCourse>();
+	private volatile static List<ExternalCourse> courseCache = new Vector<ExternalCourse>();
 
 	@SuppressWarnings("unchecked")
 	public List<ExternalCourse> getAll() {
@@ -80,18 +80,23 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 	@SuppressWarnings("unchecked")
 	public List<ExternalCourse> search(SearchExternalCourseTO form) {
 		//Performance kludge, we are going to cache the unbounded search result
-		synchronized(this)
-		{
 			if(form.isUnbounded())
 			{
 				if(ExternalCourseDao.courseCache.isEmpty())
 				{
 					List<ExternalCourse> all = getAll();
+					for (ExternalCourse externalCourse : all) {
+						List<String> tags = getTagsForCourse(externalCourse.getCode());
+						StringBuilder tagBuilder = new StringBuilder();
+						for (String tagg : tags) {
+							tagBuilder.append(tagg+" ");
+						}
+						externalCourse.setPivotedTags(tagBuilder.toString());
+					}
 					ExternalCourseDao.courseCache.addAll(all);
 				}
 				return ExternalCourseDao.courseCache;
 			}
-		}
 		//End kludge
 		
 		Query hqlQuery = createHqlQuery(buildCourseSearchQuery(form));

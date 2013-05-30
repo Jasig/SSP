@@ -22,6 +22,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -81,6 +82,10 @@ public class ExternalCourse extends AbstractExternalReferenceData implements Ext
 	@Column(nullable = true, length = 15)
 	@Size(max = 50)	
 	private String number;
+	
+	@Transient
+	private transient String pivotedTags;
+	
 
 	public String getSubjectAbbreviation() {
 		return subjectAbbreviation;
@@ -184,5 +189,13 @@ public class ExternalCourse extends AbstractExternalReferenceData implements Ext
 
 	public void setNumber(String number) {
 		this.number = number;
+	}
+
+	public String getPivotedTags() {
+		return pivotedTags;
+	}
+
+	public void setPivotedTags(String pivotedTags) {
+		this.pivotedTags = pivotedTags;
 	}
 }
