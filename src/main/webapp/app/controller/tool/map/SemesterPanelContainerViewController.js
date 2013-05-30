@@ -118,7 +118,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			//Open Load Saved Plan Screen
 	        var me=this; 
 			if(me.allPlansPopUp == null || me.allPlansPopUp.isDestroyed)
-				me.allPlansPopUp = Ext.create('Ssp.view.tools.map.LoadPlans',{hidden:true,onInit:true});
+				me.allPlansPopUp = Ext.create('Ssp.view.tools.map.LoadPlans',{hidden:true,onInit:true,fromMapLoad:true});
 			me.allPlansPopUp.show();
        	} else {
 			me.currentMapPlan.loadFromServer(Ext.decode(mapResponse.responseText));

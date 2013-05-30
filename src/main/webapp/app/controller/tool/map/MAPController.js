@@ -35,14 +35,6 @@ Ext.define('Ssp.controller.tool.map.MAPController', {
     	currentMapPlan: 'currentMapPlan',
 		semesterStores : 'currentSemesterStores'
     },
-	control: {
-		view: {
-			beforedestroy:{
-				fn: 'onDestroy',
-				single: true,
-			},
-		},
-	},
 	resetForm: function() {
         var me = this;
         me.getView().getForm().reset();
@@ -51,19 +43,6 @@ Ext.define('Ssp.controller.tool.map.MAPController', {
 		var me=this;
 		return this.callParent(arguments);
     },
-	
-	
-	onDestroy:function(){
-		var me = this;
-		if(me.currentMapPlan.isDirty(me.semesterStores)){
-			if(me.currentMapPlan.get("isTemplate"))
-				Ext.Msg.confirm("Template Has Changed!", "It appears the template has been altered. Do you wish to save your changes?", me.templateDataHasChanged, me);
-			else
-				Ext.Msg.confirm("Map Plan Has Changed!", "It appears the MAP plan has been altered. Do you wish to save your changes?", me.planDataHasChanged, me);
-			return false;
-		}
-		return true;
-	},
 	
 	planDataHasChanged:function(buttonId){
 		var me = this;

@@ -29,7 +29,6 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
     	mapPlanService:'mapPlanService'
 
     },
-    
 	control: {
     	'openButton': {
 			click: 'onOpenClick'
@@ -53,18 +52,13 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 	    	
 	    	// hide the loader
 	    	me.getView().setLoading( false );
-	    	
 	    	if (r != null)
 	    	{
-	    		if(r.results == 0)
+	    		if(r.results == 0 && me.getView().fromMapLoad)
 	    		{
-			         Ext.Msg.confirm({
-			 		     title:'Create New Plan?',
-			 		     msg: 'No plans have been found for this student.  Create a new one?',
-			 		     buttons: Ext.Msg.YESNO,
-			 		     fn: me.initNewPlan,
-			 		     scope: me
-			 		   });	    			
+	    			me.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
+	    			me.getView().close();
+	    			return;
 	    		}
 	    		Ext.Object.each(r,function(key,value){
 		    		var plans = value;
@@ -124,19 +118,6 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 			me.scope.appEventsController.getApplication().fireEvent("onCurrentMapPlanChangeUpdateMapView");
 			me.scope.getView().hide();
 		}
-	},
-
-	initNewPlan: function( btnId ){
-		var me=this;
-		if (btnId=="yes")
-		{
-			me.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
-		}
-		else
-		{
-			me.appEventsController.getApplication().fireEvent('onShowMain');
-		}
-		me.getView().hide();
 	},
 	onLoadCompleteFailure: function(serviceResponses){
 		var me = this;
