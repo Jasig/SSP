@@ -106,7 +106,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
         var comp;
 
 		//TAKE OUT LEGACY AND DOCUMENTS GRANT
-        if (me.authenticatedPerson.hasAccess(toolType.toUpperCase() + '_TOOL') || 'DEMOTOOL' === toolType.toUpperCase()) {
+        if (me.authenticatedPerson.hasAccess(toolType.toUpperCase() + '_TOOL') || 'DEMO' === toolType.toUpperCase()) {
             comp = me.formUtils.loadDisplay('tools', toolType, true, {});
         }
         else {

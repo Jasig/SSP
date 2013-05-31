@@ -45,7 +45,7 @@ Ext.define('Ssp.store.Tools', {
             { group:'rc1', name: "Program Viewer", toolType: "earlyalert", active: false },
             { group:'rc1', name: "MAP Help", toolType: "earlyalert", active: false },
 			{ group:'rc1', name: "----------------", toolType: "", active: true },
-			{ group:'rc1', name: "Demo Tool", toolType: "demotool", active: true }
+			{ group:'rc1', name: "Demo Tool", toolType: "demo", active: true }
 
             /*
              { group:'rc1', name: "SIS", toolType: "StudentInformationSystem", active: true },
@@ -68,7 +68,7 @@ Ext.define('Ssp.store.Tools', {
     	
     	Ext.Array.each( tools, function( tool, index){
     		var toolSecurityIdentifier = tool.toolType.toUpperCase() + '_TOOL';
-    		if (me.authenticatedPerson.hasAccess( toolSecurityIdentifier ) || 'DEMOTOOL' === tool.toolType.toUpperCase() )
+    		if (me.authenticatedPerson.hasAccess( toolSecurityIdentifier ) || 'DEMO' === tool.toolType.toUpperCase() )
     		{
     			sspSecureTools.push( tool );
     		}
