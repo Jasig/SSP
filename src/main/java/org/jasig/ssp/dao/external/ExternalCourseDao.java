@@ -125,6 +125,7 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 			externalCourse.setPivotedTags(tagBuilder.toString());
 		}
 		ExternalCourseDao.courseCache.addAll(all);
+		lastCacheFlush = Calendar.getInstance();
 	}
 
 
