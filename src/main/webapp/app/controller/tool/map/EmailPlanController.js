@@ -59,7 +59,7 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
 				});
 		        return matches;
 		    },
-		    multiemailText : "This field needs to be in comma delimited email format: abcd@ssp.org,abcd@ssp.org",
+		    multiemailText : "This field needs to be in comma delimited email format: abcd@ssp.org,abcd@ssp.org"
 		});
 		me.getOptionsEmailView().hide();
 		

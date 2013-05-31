@@ -86,12 +86,12 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                         items: [{
                             checked: true,
                             boxLabel: 'With Course Description',
-                            name: 'includeCourseDescription',
+                            name: 'includeCourseDescription'
                         },
                         {
                             checked: true,
                             boxLabel: 'With Header/Footer',
-                            name: 'includeHeaderFooter',
+                            name: 'includeHeaderFooter'
                         },
                         {
 							checked: true,

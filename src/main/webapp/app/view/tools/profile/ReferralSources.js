@@ -35,8 +35,8 @@ Ext.define('Ssp.view.tools.profile.ReferralSources', {
     		        columns: [
     		                { header: 'Source',  
     		                  dataIndex: 'name',
-    		                  flex: 1,
-    		                }],
+    		                  flex: 1
+    		                }]
 				});
 		
 		return me.callParent(arguments);

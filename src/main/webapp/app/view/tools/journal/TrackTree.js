@@ -36,9 +36,7 @@ Ext.define('Ssp.view.tools.journal.TrackTree', {
 			 store: this.store,
 			 useArrows: true,
 			 rootVisible: false ,
-			 hideCollapseTool: true,
-	 
-			 
+			 hideCollapseTool: true
     });   	
     	
     	return this.callParent(arguments);

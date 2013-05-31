@@ -27,7 +27,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
         personService: 'personService',
         sspConfig: 'sspConfig',
 		authenticatedPerson: 'authenticatedPerson',
-		formUtils: 'formRendererUtils',
+		formUtils: 'formRendererUtils'
     },
     
     control: {
@@ -38,7 +38,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
     	alternateAddressField: '#alternateAddress',
 		primaryEmailAddressField: '#primaryEmailAddress',
 		primaryEmailAddress: {
-            click :    'onPrimaryEmailAddressClick',
+            click :    'onPrimaryEmailAddressClick'
 		},    
         editButton: {
     		click: 'onEditClick'

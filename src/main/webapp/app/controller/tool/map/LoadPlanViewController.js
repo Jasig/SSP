@@ -126,5 +126,5 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 	onCloseClick: function(){
 		var me = this;
 		me.getView().hide();
-	},    
+	}
 });

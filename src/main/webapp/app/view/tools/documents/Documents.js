@@ -31,8 +31,7 @@ Ext.define('Ssp.view.tools.documents.Documents', {
         var me = this;
         Ext.apply(me, {
             layout: {
-                type: 'fit',
-            
+                type: 'fit'
             },
             title: 'Documents Attached to the Student Record',
             autoScroll: true,

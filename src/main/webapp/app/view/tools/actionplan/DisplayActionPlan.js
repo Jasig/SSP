@@ -31,8 +31,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
         var me = this;
         Ext.apply(me, {
             layout: {
-                type: 'fit',
-            
+                type: 'fit'
             },
             title: 'Action Plan',
             autoScroll: true,

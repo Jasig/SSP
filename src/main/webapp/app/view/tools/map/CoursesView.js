@@ -27,7 +27,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 		programs: 'programsStore',
 		tags: 'facetedTagsStore',
 		departments: 'departmentsStore',
-		divisions: 'divisionsStore',
+		divisions: 'divisionsStore'
     },
     controller: 'Ssp.controller.tool.map.CoursesViewController',
     
@@ -72,7 +72,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        queryMode: 'local',
 				        allowBlank: true,
 				        itemId: 'program',
-				        width: 260,
+				        width: 260
 				    }, {
 				        tooltip: 'Reset to All Programs',
 				        text: '',
@@ -81,7 +81,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        name: 'programCancel',
 				        cls: 'mapClearSearchIcon',
 				        xtype: 'button',
-				        itemId: 'programCancel',
+				        itemId: 'programCancel'
 				    }]
 				},
 
@@ -107,7 +107,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        queryMode: 'local',
 				        allowBlank: true,
 				        itemId: 'tag',
-				        width: 260,
+				        width: 260
 				    }, {
 				        tooltip: 'Reset to All Tags',
 				        text: '',
@@ -116,7 +116,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        name: 'tagCancel',
 				        cls: 'mapClearSearchIcon',
 				        xtype: 'button',
-				        itemId: 'tagCancel',
+				        itemId: 'tagCancel'
 				    }]
 				},
                 {
@@ -140,7 +140,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        queryMode: 'local',
 				        allowBlank: true,
 				        itemId: 'term',
-				        width: 260,
+				        width: 260
 				    }, {
 				        tooltip: 'Reset to All Terms',
 				        text: '',
@@ -149,7 +149,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        name: 'tagCancel',
 				        cls: 'mapClearSearchIcon',
 				        xtype: 'button',
-				        itemId: 'termCancel',
+				        itemId: 'termCancel'
 				    }]
 				},
                 {
@@ -175,7 +175,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        queryMode: 'local',
 				        allowBlank: true,
 				        itemId: 'department',
-				        width: 260,
+				        width: 260
 				    }, {
 				        tooltip: 'Reset to All Departments',
 				        text: '',
@@ -184,7 +184,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        name: 'departmentCancel',
 				        cls: 'mapClearSearchIcon',
 				        xtype: 'button',
-				        itemId: 'departmentCancel',
+				        itemId: 'departmentCancel'
 				    }]
 				},
                 {
@@ -210,7 +210,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        queryMode: 'local',
 				        allowBlank: true,
 				        itemId: 'division',
-				        width: 260,
+				        width: 260
 				    }, {
 				        tooltip: 'Reset to All Division',
 				        text: '',
@@ -219,7 +219,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        name: 'divisionCancel',
 				        cls: 'mapClearSearchIcon',
 				        xtype: 'button',
-				        itemId: 'divisionCancel',
+				        itemId: 'divisionCancel'
 				    }]
 				},
 				 {
@@ -260,7 +260,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 		                        var coursesGrid = me.findParentByType('coursesview').query('#coursesGrid')[0];
 								coursesGrid.getStore().filterBy(getFilterRecord(['title', 'formattedCourse'], searchString)); 
 		                    }
-						},
+						}
 						
                     }, {
                         tooltip: 'Clear Filter',
@@ -279,12 +279,12 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 								var coursesGrid = me.findParentByType('coursesview').query('#coursesGrid')[0];
 								coursesGrid.getStore().filterBy(getFilterRecord(['title', 'formattedCourse'], "")); 
 		                    }
-						},
+						}
                     }]
                 
                 },
                 {
-                    xtype : 'coursesgridpanel',
+                    xtype : 'coursesgridpanel'
                 }
             
                 ]
@@ -296,7 +296,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
         });
         
         return me.callParent(arguments);
-    },
+    }
 });
 
 function getFilterRecord(fields, searchString){

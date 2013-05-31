@@ -24,7 +24,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
     inject: {
         columnRendererUtils: 'columnRendererUtils',
         authenticatedPerson: 'authenticatedPerson',
-		currentMapPlan: 'currentMapPlan',
+		currentMapPlan: 'currentMapPlan'
     },
     width: '100%',
     height: '100%',
@@ -66,10 +66,10 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     xtype: 'button',
                     itemId: 'planOverviewButton',
                     align: 'center',
-                    padding: '0 0 0 0',
+                    padding: '0 0 0 0'
                 }, {
                     xtype: 'label',
-                    text: 'View All',
+                    text: 'View All'
                 
                 }]
             
@@ -130,12 +130,12 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     xtype: 'button',
                     itemId: 'planNotesButton',
                     align: 'center',
-                    padding: '0 0 0 0',
+                    padding: '0 0 0 0'
                 }, {
                     xtype: 'label',
 					itemId: 'notesLabel',
 					width: 80,
-                    text: me.currentMapPlan.get("isTemplate") == true ? 'Template Notes':'Plan Notes',
+                    text: me.currentMapPlan.get("isTemplate") == true ? 'Template Notes':'Plan Notes'
                 
                 }]
             
@@ -168,11 +168,11 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     itemId: 'emailPlanButton',
                     hidden:	!me.authenticatedPerson.hasAccess('MAP_TOOL_EMAIL_BUTTON') || me.currentMapPlan.get("isTemplate") == true,
                     align: 'center',
-                    padding: '0 0 0 0',
+                    padding: '0 0 0 0'
                 }, {
                     xtype: 'label',
 					itemId: 'emailLabel',
-                    text: 'Email Plan',
+                    text: 'Email Plan'
                 
                 }]
             
@@ -231,7 +231,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 					frame: false,
 					readOnly: true,
 					fieldStyle:"border:none 0px black; margin-top:2px; background-image:none",
-					editable:false,
+					editable:false
                 }, {
                     fieldLabel: 'Student is Currently',
                     itemId: 'onPlan',

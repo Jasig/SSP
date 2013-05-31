@@ -39,8 +39,8 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
 		        	  plugins: {
 		                  ptype: 'gridviewdragdrop',
 		                  dragGroup: 'gridtotree',
-		                  enableDrag: me.authenticatedPerson.hasAccess('CHALLENGE_CATEGORIES_ADMIN_ASSOCIATIONS'),
-		        	  },
+		                  enableDrag: me.authenticatedPerson.hasAccess('CHALLENGE_CATEGORIES_ADMIN_ASSOCIATIONS')
+		        	  }
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',

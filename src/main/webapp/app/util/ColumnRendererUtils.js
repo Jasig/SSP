@@ -20,7 +20,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	extend: 'Ext.Component',
 	mixins: ['Deft.mixin.Injectable'],
     inject: {
-    	colorsStore: 'colorsStore',
+    	colorsStore: 'colorsStore'
     },
 
 	initComponent: function() {
@@ -258,5 +258,5 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	
 	renderTemplatePrivate: function(value, metadata, record) {
 		return record.get('isPrivate') == true ? "Private":"Public";
-	},
+	}
 });

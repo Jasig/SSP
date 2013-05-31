@@ -188,6 +188,5 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 	    			callbackFunc( callbackScope );
 			}
 		});
-    },    
-    
+    }
 });

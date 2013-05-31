@@ -28,5 +28,5 @@ Ext.define('Ssp.store.JournalEntries', {
 		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('personJournalEntry') ),
 						  autoLoad: false });
 		return this.callParent(arguments);
-	},
+	}
 });

@@ -70,7 +70,7 @@ Ext.define('Ssp.model.Person', {
              {name: 'gender', type: 'string'},
              {name: 'actionPlanTaskOpenCount', type: 'int'},
              {name: 'actionPlanTaskClosedCount', type: 'int'},
-             {name: 'lastActionPlanCompletedDate', type: 'date', dateFormat: 'time'},
+             {name: 'lastActionPlanCompletedDate', type: 'date', dateFormat: 'time'}
              ],
              
              

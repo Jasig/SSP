@@ -23,7 +23,7 @@ Ext.define('Ssp.controller.tool.profile.CurrentScheduleViewController', {
     	apiProperties: 'apiProperties',
     	service: 'transcriptService',
         personLite: 'personLite',
-        store: 'currentScheduleStore',
+        store: 'currentScheduleStore'
     },
 	init: function() {
 		var me=this;

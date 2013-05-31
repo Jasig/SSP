@@ -26,5 +26,5 @@ Ext.define('Ssp.model.MessageTemplates', {
 			 
 		getModifiedByPersonName: function(){
     	return this.get('modifiedBy').firstName + ' ' + this.get('modifiedBy').lastName;
-    },
+    }
 });

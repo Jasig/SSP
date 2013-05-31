@@ -30,11 +30,11 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 			show: 'onShow'
 		},
     	'saveButton': {
-			click: 'onSaveClick',
+			click: 'onSaveClick'
 		},
 		'cancelButton': {
-			click: 'onCancelClick',
-		},
+			click: 'onCancelClick'
+		}
 	},
 	init: function() {
 		var me=this;

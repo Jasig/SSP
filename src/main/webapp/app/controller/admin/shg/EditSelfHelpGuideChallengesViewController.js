@@ -37,7 +37,7 @@ Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideChallengesViewController',
        'gridView': {
     	   refresh: 'onRefresh',
     	   drop: 'onDrop'
-        },
+        }
     },
     
 	init: function() {

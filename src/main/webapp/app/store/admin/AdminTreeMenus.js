@@ -20,7 +20,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
     extend: 'Ext.data.TreeStore',
     mixins: ['Deft.mixin.Injectable'],
     inject: {
-        columnRendererUtils: 'columnRendererUtils',
+        columnRendererUtils: 'columnRendererUtils'
     },
     autoLoad: false,
     constructor: function(){
@@ -191,7 +191,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'Re-Assignment',
                     form: 'caseloadreassignment',
                     leaf: true
-                }, ]
+                } ]
             }, {
                 text: 'Student Intake',
                 title: 'Student Intake',
@@ -478,7 +478,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         required: true,
                         field: {
                             xtype: 'textfield',
-                            fieldStyle: "margin-bottom:12px;",
+                            fieldStyle: "margin-bottom:12px;"
                         },
                         flex: .1
                     }, {
@@ -490,7 +490,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         renderer: me.columnRendererUtils.renderActive,
                         field: {
                             xtype: 'checkbox',
-                            fieldStyle: "margin-bottom:12px;",
+                            fieldStyle: "margin-bottom:12px;"
                         }
                     }, {
                         header: 'Elective Name',
@@ -499,7 +499,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         defaultValue: "",
                         field: {
                             xtype: 'textfield',
-                            fieldStyle: "margin-bottom:12px;",
+                            fieldStyle: "margin-bottom:12px;"
                         },
                         flex: .2
                     }, {
@@ -509,8 +509,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         required: true,
                         field: {
                             xtype: 'textfield',
-                            fieldStyle: "margin-bottom:12px;",
-                            	
+                            fieldStyle: "margin-bottom:12px;"                            	
                         },
                         flex: .2
                     }, {
@@ -519,7 +518,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         defaultValue: "",
                         field: {
                             xtype: 'textfield',
-                            fieldStyle: "margin-bottom:12px;",
+                            fieldStyle: "margin-bottom:12px;"
                         },
                         flex: 1
                     }, {
@@ -533,7 +532,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                             displayField: 'name',
                             valueField: 'id',
                             forceSelection: true,
-                            allowBlank: false,
+                            allowBlank: false
                         },
                         flex: .2
                     }]
@@ -551,8 +550,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         flex: .20,
                         field: {
                             xtype: 'checkbox',
-                            fieldStyle: "margin-bottom:12px;",
-                        
+                            fieldStyle: "margin-bottom:12px;"
                         }
                     }, {
                         header: 'Color Name',
@@ -560,7 +558,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         required: true,
                         field: {
                             xtype: 'textfield',
-                            fieldStyle: "margin-bottom:12px;",
+                            fieldStyle: "margin-bottom:12px;"
                         },
                         flex: .20
                     }, {
@@ -569,7 +567,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         required: true,
                         field: {
                             xtype: 'textfield',
-                            fieldStyle: "margin-bottom:12px;",
+                            fieldStyle: "margin-bottom:12px;"
                         },
                         flex: .20
                     }, {
@@ -590,7 +588,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                                             triggerField.setValue(selColor);
                                             window.close();
                                         }
-                                    },
+                                    }
                                 });
                                 var window = Ext.create('Ext.window.Window', {
                                     title: 'Select Color',
@@ -614,7 +612,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         dataIndex: 'description',
                         field: {
                             xtype: 'textfield',
-                            fieldStyle: "margin-bottom:12px;",
+                            fieldStyle: "margin-bottom:12px;"
                         },
                         flex: 1
                     }]
@@ -638,8 +636,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         renderer: me.columnRendererUtils.renderActive,
                         flex: .20,
                         field: {
-                            xtype: 'checkbox',
-                        
+                            xtype: 'checkbox'
                         }
                     }, {
                         header: 'Tag Name',
@@ -679,6 +676,4 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
         });
         return me.callParent(arguments);
     }
-    
-    
 });

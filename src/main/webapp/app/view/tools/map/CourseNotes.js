@@ -22,7 +22,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
 	inject: {
 		electiveStore : 'electiveStore',
-	    formUtils: 'formRendererUtils',
+	    formUtils: 'formRendererUtils'
 
 	},
     height: 390,
@@ -90,7 +90,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        name: 'creditHours',
 				        allowBlank:true,
 				        itemId: 'creditHours',
-				        disabled: !me.enableFields,
+				        disabled: !me.enableFields
 				        //flex:1,
 				        
 				    },
@@ -104,7 +104,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                     	hideLabel: true,
                     	boxLabel: 'Mark As Important',
                     	fieldLabel: 'Mark As Important',
-				        disabled: !me.enableFields,
+				        disabled: !me.enableFields
 
                     },
                     {
@@ -120,8 +120,8 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                         typeAhead: true,
                         allowBlank: true,
                         width: 250,
-				        disabled: !me.enableFields,
-                    },
+				        disabled: !me.enableFields
+                    }
 				    ]
 				    ,
 				    dockedItems: [{

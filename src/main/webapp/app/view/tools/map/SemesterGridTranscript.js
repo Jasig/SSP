@@ -102,7 +102,7 @@ Ext.define('Ssp.view.tools.map.SemesterGridTranscript', {
 	                    	me.appEventsController.getApplication().fireEvent('onViewCourseNotes',{store:grid.getStore(),
 	                    		rowIndex: rowIndex});
 	                    },
-	                    scope: me,
+	                    scope: me
 
 	                }, {
 	                    icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
@@ -112,7 +112,7 @@ Ext.define('Ssp.view.tools.map.SemesterGridTranscript', {
 	                    },
 	                    scope: me
 	                }]
-	            }],
+	            }]
         });
         
         return me.callParent(arguments);

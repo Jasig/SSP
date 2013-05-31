@@ -63,7 +63,7 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
                              dataIndex: 'description',
                              text: 'Course',
 							 hidden:true,
-							 hideable: false,
+							 hideable: false
                          },
                          {
                            xtype: 'gridcolumn',
@@ -76,14 +76,14 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
                              dataIndex: 'maxCreditHours',
                              text: 'Max H',
                              hidden:true,
-							 hideable: false,
+							 hideable: false
                          },
                          {
                              xtype: 'gridcolumn',
                               dataIndex: 'tags',
                               text: 'Tags',
                               width: 40
-                          },
+                          }
                         ],
                 		viewConfig: {
 								copy: true,
@@ -92,9 +92,9 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
 									ddGroup: 'ddGroupForCourses',
 									dragGroup: 'coursesDDGroup',
 									dragText: 'Drag and drop course onto desired semester.'
-						        },
+						        }
 					
-						    },
+						    }
                    
         });
         

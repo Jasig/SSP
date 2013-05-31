@@ -45,7 +45,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 		            	var isImportant = record.get('isImportant');
 		            	var color = isImportant ? '#ff9900' : 'rgba(0,0,0,0.0)';
 						metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;'
-			         },		            
+			         }
 		        },
             	{
 		            xtype: 'gridcolumn',
@@ -124,7 +124,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
                 xtype: 'gridcolumn',
 				hidden: true,
 				hideable:false
-            },
+            }
        ],
 			viewConfig: {
 			        plugins: {
@@ -135,8 +135,8 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 						pluginId: 'semesterviewdragdrop',
 						enableDrag: me.enableDragAndDrop,
 						enableDrop: me.enableDragAndDrop
-			    },
-			},
+			    }
+			}
         });
         
         return me.callParent(arguments);

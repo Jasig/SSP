@@ -51,7 +51,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanelContainer', {
 				autoHeight: true,
                 minHeight: 0,
 				itemId: "semestersets",
-				flex : 1,
+				flex : 1
 			} ]
 		});
 

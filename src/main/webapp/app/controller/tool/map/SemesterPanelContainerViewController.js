@@ -30,7 +30,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     	currentMapPlan: 'currentMapPlan',
 		electiveStore : 'electiveStore',
 		semesterStores : 'currentSemesterStores',
-		colorsStore: 'colorsStore',
+		colorsStore: 'colorsStore'
     },
     
 	control: {
@@ -38,8 +38,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				afterlayout: {
 					fn: 'onAfterLayout',
 					single: true
-				},
-	    	},
+				}
+	    	}
 	},
 
 	
@@ -302,7 +302,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				autoScroll : true,
 				minHeight: 204,
 				itemId : 'year' + termSet[0].get("reportYear"),
-				flex : 1,
+				flex : 1
 			});
 			var semesterPanels = new Array();
 			termSet.forEach(function(term){
@@ -331,14 +331,14 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		if(!me.termsStore.isPastTerm(termCode)){
 		 	var semesterGrid = new Ssp.view.tools.map.SemesterGrid({
 				store:semesterStore,
-				scroll: true,
+				scroll: true
 			});
 			semesterPanel.add(semesterGrid);
 		}else{
 		 	var semesterGrid = new Ssp.view.tools.map.SemesterGrid({
 				store:semesterStore,
 				scroll: true,
-				enableDragAndDrop: false,
+				enableDragAndDrop: false
 			});
 		 	semesterPanel.tools[0].hidden = false;
 			semesterPanel.add(semesterGrid);
@@ -554,7 +554,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
                 successes: {},
                 responseCnt: 0,
                 expectedResponseCnt: 1,
-				show: true,
+				show: true
             }
 		var metaData = new Ssp.model.tool.map.PlanOutputData();
 		metaData.set('outputFormat', 'fullFormat');
@@ -615,5 +615,5 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.appEventsController.removeEvent({eventName: 'onLoadTemplatePlan', callBackFunc: me.onLoadMapPlan, scope: me});
         
 		return me.callParent( arguments );
-    },
+    }
 });

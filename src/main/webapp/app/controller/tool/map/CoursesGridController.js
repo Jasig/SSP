@@ -41,7 +41,7 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
     inject: {
     	apiProperties: 'apiProperties',
         store: 'coursesStore',
-        formUtils: 'formRendererUtils',
+        formUtils: 'formRendererUtils'
     },
 	init: function() {
 		var me=this;

@@ -39,7 +39,7 @@ Ext.define('Ssp.view.tools.journal.Journal',{
 					  	xtype: 'label',
 						text: 'Journal Entry',
 						padding: '0 0 0 20',
-						style: 'font-weight: bold',
+						style: 'font-weight: bold'
 					  },
 					  {
 	                  	xtype: 'editjournal', 

@@ -47,7 +47,7 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
         creditCompletionRateField: '#creditCompletionRate',
         balanceOwedField: '#balanceOwed',
         financialAidRemainingField: '#financialAidRemaining',
-        originalLoanAmountField: '#originalLoanAmount',
+        originalLoanAmountField: '#originalLoanAmount'
     
     },
     init: function(){
@@ -156,6 +156,6 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
 	destroy: function() {
         var me=this;
         return me.callParent( arguments );
-    },
+    }
 
 });

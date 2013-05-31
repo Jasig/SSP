@@ -260,6 +260,5 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			});
 		}
 		return false;
-	},
-    		        		  
+	}		        		  
 });

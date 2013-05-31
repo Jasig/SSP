@@ -29,7 +29,7 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
     	mapPlanService:'mapPlanService',
 		programsStore: 'programsStore',
         departmentsStore: 'departmentsStore',
-        divisionsStore: 'divisionsStore',
+        divisionsStore: 'divisionsStore'
     },
     
 	control: {
@@ -96,7 +96,7 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
             listeners: {
              select: 'onTypeFilterSelect'
             }
-         },
+         }
 			
 	},
 

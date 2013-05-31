@@ -67,8 +67,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         creditCompletionRateField: '#creditCompletionRate',
         balanceOwedField: '#balanceOwed',
         financialAidRemainingField: '#financialAidRemaining',
-        originalLoanAmountField: '#originalLoanAmount',
-    
+        originalLoanAmountField: '#originalLoanAmount'
     },
     init: function(){
         var me = this;
@@ -317,6 +316,5 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         if (me.person.getCoachPrimaryEmailAddress()) {
             window.location = 'mailto:' + me.person.getCoachPrimaryEmailAddress();
         }
-    },
-
+    }
 });

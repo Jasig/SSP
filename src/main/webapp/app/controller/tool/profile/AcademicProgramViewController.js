@@ -29,7 +29,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 		mapPlanService: 'mapPlanService',
 		currentMapPlan: 'currentMapPlan',
 		termsStore: 'termsStore',
-		authenticatedPerson: 'authenticatedPerson',
+		authenticatedPerson: 'authenticatedPerson'
     },
     
     control: {
@@ -51,7 +51,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 	       listeners: {
 	        click: 'onemailPlanButtonClick'
 	       }
-	    },
+	    }
     
     },
     init: function(){
@@ -166,7 +166,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 			me.currentMapPlan.loadFromServer(Ext.decode(mapResponse.responseText));
 			var lastTerm = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(me.currentMapPlan))[0];
 	        me.getOnPlanField().setValue("Plan Exists.")
-	        me.getMapNameField().setValue(me.currentMapPlan.get("name")),
+	        me.getMapNameField().setValue(me.currentMapPlan.get("name"));
 	        me.getMapLastUpdatedField().setValue(me.currentMapPlan.getFormattedModifiedDate());
 			if(lastTerm)
 	        	me.getMapProjectedField().setValue(lastTerm.get("code"));
@@ -285,6 +285,5 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 		if(me.printPlanPopUp != null && !me.printPlanPopUp.isDestroyed)
 	    	me.printPlanPopUp.close();
         return me.callParent( arguments );
-    },
-	
+    }
 });

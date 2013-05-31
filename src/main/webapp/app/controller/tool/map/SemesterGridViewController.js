@@ -24,7 +24,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     	courseService:'courseService',
 		electiveStore: 'electiveStore',
 		colorsStore: 'colorsStore',
-    	formUtils: 'formRendererUtils',
+    	formUtils: 'formRendererUtils'
     },
     control:{
     	view:{
@@ -44,7 +44,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     		me.coursePlanDetails.parentGrid = me.getView();
 			var creditHours = me.coursePlanDetails.query('#creditHours')[0];
 
-			if(courseRecord.modelName = 'Ssp.model.external.Course')
+			if(courseRecord.modelName == 'Ssp.model.external.Course')
 			{
 				var planCourse = new Ssp.model.tool.map.SemesterCourse(courseRecord.data);
 				var indexOf = grid.store.indexOf(courseRecord);
@@ -142,5 +142,5 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
         var me=this;
 		me.appEventsController.removeEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
 		return me.callParent( arguments );
-    },
+    }
 });

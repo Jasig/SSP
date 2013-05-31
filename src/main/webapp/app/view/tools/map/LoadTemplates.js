@@ -26,7 +26,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
         programsStore: 'programsStore',
         departmentsStore: 'departmentsStore',
         divisionsStore: 'divisionsStore',
-        store: 'planTemplatesSummaryStore',
+        store: 'planTemplatesSummaryStore'
     },
     height: 500,
     width: 900,
@@ -116,7 +116,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 						        queryMode: 'local',
 						        allowBlank: true,
 						        itemId: 'program',
-						        width: 260,
+						        width: 260
 						    	}, {
 							        tooltip: 'Reset to All Programs',
 							        text: '',
@@ -125,7 +125,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        name: 'programCancel',
 							        cls: 'mapClearSearchIcon',
 							        xtype: 'button',
-							        itemId: 'programCancel',
+							        itemId: 'programCancel'
 							    }]
 							},
 							{
@@ -151,7 +151,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        queryMode: 'local',
 							        allowBlank: true,
 							        itemId: 'department',
-							        width: 260,
+							        width: 260
 							    	}, {
 							        tooltip: 'Reset to All Departments',
 							        text: '',
@@ -160,7 +160,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        name: 'departmentCancel',
 							        cls: 'mapClearSearchIcon',
 							        xtype: 'button',
-							        itemId: 'departmentCancel',
+							        itemId: 'departmentCancel'
 							    	}]
 							},{
 							    xtype: 'fieldset',
@@ -185,7 +185,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        queryMode: 'local',
 							        allowBlank: true,
 							        itemId: 'division',
-							        width: 260,
+							        width: 260
 							    	}, {
 							        tooltip: 'Reset to All Divisions',
 							        text: '',
@@ -194,7 +194,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        name: 'divisionCancel',
 							        cls: 'mapClearSearchIcon',
 							        xtype: 'button',
-							        itemId: 'divisionCancel',
+							        itemId: 'divisionCancel'
 							    	}]
 							},{
 						    xtype: 'fieldset',
@@ -217,7 +217,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 										        	{"value":"ALL","name":"ALL"},
 										        	{"value":"PUBLIC","name":"PUBLIC"},
 										        	{"value":"PRIVATE","name":"PRIVATE"}
-										    	],
+										    	]
 									}),
 								
 						        		emptyText: 'Filter by Template Type',
@@ -228,7 +228,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 						        		queryMode: 'local',
 						        		allowBlank: false,
 						        		itemId: 'typeFilter',
-						        		width: 290,
+						        		width: 290
 						    		}]
 								},{
 					    	xtype: 'fieldset',
@@ -252,7 +252,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 									        	{"value":"ALL","name":"ALL"},
 									        	{"value":"ACTIVE","name":"ACTIVE"},
 									        	{"value":"INACTIVE","name":"INACTIVE"}
-									    	],
+									    	]
 								}),
 				        		valueField: 'name',
 				        		displayField: 'name',
@@ -262,7 +262,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 				        		queryMode: 'local',
 				        		allowBlank: false,
 				        		itemId: 'objectStatusFilter',
-				        		width: 290,
+				        		width: 290
 				    			}]
 							},
 							{
@@ -293,8 +293,8 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 				                        var templatesGrid = me.findParentByType('loadtemplates').query('#allPlansTemplateGridPanel')[0];
 										templatesGrid.getStore().filterBy(getFilterRecord(['name'], searchString)); 
 				                    }
-								},
-                            }]},
+								}
+                            }]}
                             
             
             ]}],

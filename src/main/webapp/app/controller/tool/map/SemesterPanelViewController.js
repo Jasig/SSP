@@ -40,8 +40,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 			afterlayout: {
 				fn: 'onAfterLayout',
 				single: true
-			},
-    	},
+			}
+    	}
 	},
 	
 	init: function() {

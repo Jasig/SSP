@@ -393,5 +393,5 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     
     onAddTaskClick: function(button) {
     	this.appEventsController.getApplication().fireEvent('addTask');
-    },  
+    }
 });

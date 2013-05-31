@@ -67,10 +67,10 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                      
                      },*/
                     {
-                        xtype: 'profileperson',
+                        xtype: 'profileperson'
                     
                     }, {
-                        xtype: 'profileacademicprogram',
+                        xtype: 'profileacademicprogram'
                     
                     }]
                 

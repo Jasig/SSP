@@ -31,5 +31,5 @@ Ext.define('Ssp.store.external.Divisions', {
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('division'),
     		autoLoad: true});
     	return; 
-    },
+    }
 });

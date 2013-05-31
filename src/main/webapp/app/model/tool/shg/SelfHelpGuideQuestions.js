@@ -24,6 +24,6 @@ Ext.define('Ssp.model.tool.shg.SelfHelpGuideQuestions', {
              {name:'critical',type:'boolean'},
              {name:'mandatory',type:'boolean'},             
              {name:'selfHelpGuideId',type:'string'},
-             {name:'challengeId',type:'string'},
+             {name:'challengeId',type:'string'}
              ]           
 });

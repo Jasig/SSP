@@ -40,8 +40,8 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
 		        	  plugins: {
 		                  ptype: 'gridviewdragdrop',
 		                  dragGroup: 'gridtogrid',
-		                  enableDrag: true,
-		        	  },
+		                  enableDrag: true
+		        	  }
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',

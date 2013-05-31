@@ -31,7 +31,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			afterlayout: {
 				fn: 'onAfterLayout',
 				single: true
-			},
+			}
     	},
     	'planFAButton': {
     	   selector: '#planFAButton',
@@ -84,11 +84,11 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
         },
 
 		'notesLabel':{
-           selector: '#notesLabel',
+           selector: '#notesLabel'
         },
 
 		'name':{
-           selector: '#name',
+           selector: '#name'
         },
 
         'savePlanButton':{
@@ -104,7 +104,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
            }
         },
         'emailLabel':{
-           selector: '#emailLabel',
+           selector: '#emailLabel'
         },
         'printPlanButton':{
            selector: '#printPlanButton',
@@ -113,7 +113,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
            }
         },
 		'printLabel':{
-           selector: '#printLabel',
+           selector: '#printLabel'
         },
 
 		'planOverviewButton':{

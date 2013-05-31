@@ -40,9 +40,9 @@ Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideChallenges',{
 	                  dropGroup: 'gridtogrid',
 	                  dragGroup: 'gridtogrid',
 			          enableDrop: true,
-			          enableDrag: true,
-	        	  }        
-	                },	        	  
+			          enableDrag: true
+	        	  }
+	           },	        	  
 		      enableDragDrop: true,
 		      selType: 'rowmodel',
 		      columns: [

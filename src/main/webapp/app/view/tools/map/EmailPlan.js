@@ -103,7 +103,7 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                             	   labelWidth: 48,
 								   inputWidth:400,
                             	   rows: 5,
-                            	   grow: true,
+                            	   grow: true
                                }]
                     	},
 						{
@@ -144,12 +144,12 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                                 items: [{
                                     checked: true,
                                     boxLabel: 'With Course Description',
-                                    name: 'includeCourseDescription',
+                                    name: 'includeCourseDescription'
                                 },
                                 {
                                     checked: true,
                                     boxLabel: 'With Header/Footer',
-                                    name: 'includeHeaderFooter',
+                                    name: 'includeHeaderFooter'
                                 },
                                 {
 									checked: true,

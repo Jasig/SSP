@@ -43,7 +43,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
         studentIntake: 'currentStudentIntake',
     	veteranStatusesStore: 'veteranStatusesStore',
     	registrationLoadRangesStore: 'registrationLoadRangesStore',
-    	weeklyCourseWorkHourRangesStore:'weeklyCourseWorkHourRangesStore',    	
+    	weeklyCourseWorkHourRangesStore:'weeklyCourseWorkHourRangesStore'
     }, 
     config: {
     	studentIntakeForm: null

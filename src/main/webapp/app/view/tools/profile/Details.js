@@ -132,7 +132,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
                             }]
                         }]
                     }, {
-                        xtype: 'profileacademicprogram',
+                        xtype: 'profileacademicprogram'
                     }, {
                         fieldLabel: 'Intended Program at Admit',
                         itemId: 'intendedProgramAtAdmit',

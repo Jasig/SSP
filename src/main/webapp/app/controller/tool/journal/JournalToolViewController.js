@@ -48,7 +48,7 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		
 		'deleteButton': {
 			click: 'onDeleteClick'
-		},
+		}
 		
 	},
     init: function() {

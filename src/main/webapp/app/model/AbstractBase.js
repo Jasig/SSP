@@ -37,7 +37,7 @@ Ext.define('Ssp.model.AbstractBase', {
              },
              {name: 'createdDate', type: 'date', dateFormat: 'time'},
              /*,{name: 'objectStatus', type: 'string'}*/
-              {name: 'modifiedDate', type: 'date', dateFormat: 'time'},
+             {name: 'modifiedDate', type: 'date', dateFormat: 'time'}
              ],
     
 	populateFromGenericObject: function( record ){
@@ -80,6 +80,5 @@ Ext.define('Ssp.model.AbstractBase', {
     		return 'objectStatus';
     	}     	
     	return fieldName;
-    },
-
+    }
 });

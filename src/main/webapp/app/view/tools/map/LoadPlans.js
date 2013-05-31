@@ -66,7 +66,7 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                         xtype: 'label',
                         padding: '2 0 0 5',
                         text: 'Select plan then click open to load a plan.',
-                        style: 'font-weight: bold',
+                        style: 'font-weight: bold'
                         } ,
                         {
                             xtype: 'fieldset',
@@ -87,7 +87,7 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                                     xtype: 'label',
                                     padding: '2 0 0 5',
                                     text: 'White background: Saved Plan'
-                                },
+                                }
                                 ]
                         },
                         {
@@ -134,7 +134,7 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
 								width: 160,
                                 dataIndex: 'ownerName',
 								renderer: me.columnRendererUtils.renderBackgroundColorActive
-                            }, 
+                            }
                             ]
                         }
                         ]}

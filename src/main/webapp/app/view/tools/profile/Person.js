@@ -59,7 +59,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
                 items: [{
                     fieldLabel: 'Full Name',
                     name: 'studentName',
-                    itemId: 'studentName',
+                    itemId: 'studentName'
                 
                 }, {
                     fieldLabel: 'ID',

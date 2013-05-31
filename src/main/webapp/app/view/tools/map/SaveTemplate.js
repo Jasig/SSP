@@ -25,7 +25,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
         columnRendererUtils: 'columnRendererUtils',
         programsStore: 'programsStore',
         departmentsStore: 'departmentsStore',
-        divisionsStore: 'divisionsStore',
+        divisionsStore: 'divisionsStore'
     },
     height: 580,
     width: 850,
@@ -188,12 +188,12 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
             				        fieldLabel: 'AcademicLink',
             				        name: 'academicLink',
             				        itemId: 'academicLink',
-            				        allowBlank:true,
+            				        allowBlank:true
             				    },{
             				        fieldLabel: 'Career Link',
             				        name: 'careerLink',
             				        itemId: 'careerLink',
-            				        allowBlank:true,
+            				        allowBlank:true
             				    },{
             				        fieldLabel: 'Advisor/Coach Notes',
             				        name: 'contactNotes',

@@ -39,7 +39,7 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayDetailsAdmin', {
 		                  ptype: 'gridviewdragdrop',
 		                  dragGroup: 'gridtotree',
 		                  enableDrag: me.authenticatedPerson.hasAccess('STEP_DETAILS_ADMIN_ASSOCIATIONS')
-		        	  },
+		        	  }
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',

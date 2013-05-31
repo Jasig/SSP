@@ -37,5 +37,5 @@ Ext.define('Ssp.store.SemesterCourses', {
 			var me = this;
 			me.appEventsController.getApplication().fireEvent('updateAllPlanHours');
 		}
-	},
+	}
 });

@@ -31,6 +31,6 @@ Ext.define('Ssp.model.external.Course', {
              {name: 'description', type: 'string'},
              {name: 'maxCreditHours', type: 'float'},
              {name: 'minCreditHours', type: 'float'},
-             {name: 'isDev', type: 'boolean'},
+             {name: 'isDev', type: 'boolean'}
              ]
 });

@@ -28,7 +28,7 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
 		programs: 'programsStore',
 		tags: 'facetedTagsStore',
 		departments: 'departmentsStore',
-		divisions: 'divisionsStore',
+		divisions: 'divisionsStore'
     },
     control: {
     	'program': {
@@ -107,7 +107,7 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
            listeners: {
             click: 'onDivisionCancelClick'
            }
-        },
+        }
 		
     },
     resetForm: function() {

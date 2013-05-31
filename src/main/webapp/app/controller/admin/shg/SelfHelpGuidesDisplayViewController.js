@@ -24,7 +24,7 @@ Ext.define('Ssp.controller.admin.shg.SelfHelpGuidesDisplayViewController', {
     	store: 'selfHelpGuidesStore',
     	selfHelpGuideQuestionsStore: 'selfHelpGuideQuestionsStore',
     	formUtils: 'formRendererUtils',
-    	model: 'currentSelfHelpGuide',
+    	model: 'currentSelfHelpGuide'
     },
     config: {
     	containerToLoadInto: 'adminforms',

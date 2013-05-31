@@ -30,6 +30,5 @@ Ext.define('Ssp.model.external.FinancialAid', {
              {name: 'financialAidRemaining', type: 'auto'},
              {name: 'originalLoanAmount', type: 'auto'},
              {name: 'balanceOwed', type: 'auto'}
-             ],
-
+             ]
 });

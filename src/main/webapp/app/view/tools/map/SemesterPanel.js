@@ -43,7 +43,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 cls: 'helpIconSmall',
                 text:'',
                 hidden: !me.pastTerm,
-                tooltip: 'This term is in the past and cannot be edited.',
+                tooltip: 'This term is in the past and cannot be edited.'
                 
             },{
                 xtype: 'button',
@@ -52,7 +52,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 height: 20,
                 cls: 'editPencilIcon',
                 text:'',
-                tooltip: 'Term Notes',
+                tooltip: 'Term Notes'
                 
             },{
                 xtype: 'button',
@@ -61,7 +61,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 height: 20,                
                 text:'',
                 cls: 'deleteIcon',
-                tooltip: 'Select a course and press this button to remote it from the term.',
+                tooltip: 'Select a course and press this button to remote it from the term.'
             }],
 			items : [ /*{
 				store: me.store,

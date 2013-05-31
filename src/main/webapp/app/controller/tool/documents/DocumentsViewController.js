@@ -40,7 +40,7 @@ Ext.define('Ssp.controller.tool.documents.DocumentsViewController', {
 			listeners: {
 				click: 'onAddDocumentClick'
 			}
-		},
+		}
 		
 	
 	},
@@ -61,5 +61,5 @@ Ext.define('Ssp.controller.tool.documents.DocumentsViewController', {
     onAddDocumentClick: function(button) {
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {}); 
     	//this.appEventsController.getApplication().fireEvent('addDocument');
-    },  
+    }
 });

@@ -53,8 +53,8 @@ Ext.define('Ssp.view.tools.documents.UploadDocuments', {
                     allowBlank: false,
                     flex: 1,
                     labelAlign: 'top',
-                    padding: 5,
-                }, , {
+                    padding: 5
+                }, {
                     xtype: 'tbspacer',
                     width: 10
                 }, {

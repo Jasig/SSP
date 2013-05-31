@@ -34,7 +34,7 @@ Ext.define('Ssp.model.CaseloadPerson', {
             	 convert: function(value, record) {
             		 return record.get('firstName') + ' '+ record.get('lastName');
             	 }
-             },
+             }
              ],            
              
      getFullName: function(){ 

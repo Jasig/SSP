@@ -78,7 +78,7 @@ Ext.define('Ssp.view.tools.map.FAView', {
                     
                     },  
                     {
-                        xtype: 'tbspacer',
+                        xtype: 'tbspacer'
                     }, {
                         fieldLabel: 'Standing',
                         name: 'academicStanding',
@@ -122,7 +122,7 @@ Ext.define('Ssp.view.tools.map.FAView', {
                     {
                         xtype: 'tbspacer',
                         height: '10'
-                    },
+                    }
                     
                     ]
                 
