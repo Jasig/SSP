@@ -39,24 +39,28 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 		            xtype: 'gridcolumn',
 		            width: 10,
 		            height: 5,
-		            toolTip:'Orange indicates Course is Important',
 		            flex:0,
 		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 		            	var isImportant = record.get('isImportant');
 		            	var color = isImportant ? '#ff9900' : 'rgba(0,0,0,0.0)';
 						metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;'
+						if ( isImportant ) {
+							metaData.tdAttr = 'data-qtip="Orange indicates Course is Important"';
+						}
 			         }
 		        },
             	{
 		            xtype: 'gridcolumn',
 		            width: 10,
 		            height: 5,
-		            toolTip:'Yellow indicates course is already on students\' transcript',
 		            flex:0,
 		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 		            	var isTranscript = record.get('isTranscript');
 		            	var color = isTranscript ? '#ffff00' : 'rgba(0,0,0,0.0)';
 						metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
+						if ( isTranscript ) {
+							metaData.tdAttr = 'data-qtip="Yellow indicates course is already on students\' transcript"';
+						}
 			         }		            
 		        },
             	{
@@ -71,6 +75,9 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 		            	var color = colorId ? me.colorsStore.getById(colorId) : null;
 		            	var colorCode = color ? '#'+color.get('hexCode') : 'rgba(0,0,0,0.0)';
 						metaData.style = 'background-color: '+colorCode+'; background-image: none; margin:2px 2px 2px 2px;'
+						if ( elective ) {
+							metaData.tdAttr = 'data-qtip="This is an elective. Elective code: ' + elective.get('code') + '"';
+						}
 			         }		            
 		        },
 		        {
