@@ -196,6 +196,10 @@ Ext.require([
     
     // REPORT DISPLAY
     'Ssp.view.Report',
+
+	// DEMO COMPONENTS,
+	'Ssp.controller.tool.demo.DemoViewController',
+	'Ssp.view.tools.demo.Demo',
     
     'Ssp.model.SimpleItemDisplay',
     'Ssp.model.ObjectPermission',

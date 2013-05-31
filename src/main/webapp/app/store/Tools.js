@@ -45,7 +45,7 @@ Ext.define('Ssp.store.Tools', {
             { group:'rc1', name: "Program Viewer", toolType: "earlyalert", active: false },
             { group:'rc1', name: "MAP Help", toolType: "earlyalert", active: false },
 			{ group:'rc1', name: "----------------", toolType: "", active: true },
-			{ group:'rc1', name: "Demo Tool", toolType: "demo", active: true }
+            { group:'rc1', name: "Demo Tool", toolType: "demo", active: true }
 
             /*
              { group:'rc1', name: "SIS", toolType: "StudentInformationSystem", active: true },

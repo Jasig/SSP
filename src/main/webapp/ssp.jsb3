@@ -2445,6 +2445,16 @@
                     "clsName": "Ssp.view.admin.forms.config.MessageTemplatesDisplayAdmin",
                     "name": "MessageTemplatesDisplayAdmin.js",
                     "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.demo.DemoViewController",
+                    "name": "DemoViewController.js",
+                    "path": "/app/controller/tool/demo/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.demo.Demo",
+                    "name": "Demo.js",
+                    "path": "/app/view/tools/demo/"
                 }
             ]
         },
