@@ -86,7 +86,7 @@ Ext.define('Ssp.model.Configuration', {
     	      */
     	     {name: 'studentIdMaxValidationLength', 
        	      type: 'number', 
-       	      defaultValue: 8
+       	      defaultValue: 20
        	     },
     	     /*
     	      * Error message for a studentId/schoolId that exceeds the specified maximum validation length.
