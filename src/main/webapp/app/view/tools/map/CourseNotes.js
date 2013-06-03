@@ -22,7 +22,8 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
 	inject: {
 		electiveStore : 'electiveStore',
-	    formUtils: 'formRendererUtils'
+	    formUtils: 'formRendererUtils',
+    	currentMapPlan: 'currentMapPlan'
 
 	},
     height: 390,
@@ -67,7 +68,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        xtype: 'textareafield',
 				        itemId: 'contactNotes',
 				        autoscroll: true,
-				        disabled: !me.enableFields,
+				        disabled: !me.enableFields && !me.currentMapPlan.get('isTemplate'),
 				        flex:1
 				    },{
 				        fieldLabel: 'Student Notes',
@@ -76,7 +77,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        itemId: 'studentNotes',
 				        xtype: 'textareafield',
 				        flex:1,
-				        disabled: !me.enableFields,
+				        disabled: !me.enableFields && !me.currentMapPlan.get('isTemplate'),
 				        autoscroll: true
 				    },
 				    {
@@ -90,7 +91,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        name: 'creditHours',
 				        allowBlank:true,
 				        itemId: 'creditHours',
-				        disabled: !me.enableFields
+				        disabled: !me.enableFields && !me.currentMapPlan.get('isTemplate')
 				        //flex:1,
 				        
 				    },
@@ -104,7 +105,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                     	hideLabel: true,
                     	boxLabel: 'Mark As Important',
                     	fieldLabel: 'Mark As Important',
-				        disabled: !me.enableFields
+				        disabled: !me.enableFields && !me.currentMapPlan.get('isTemplate')
 
                     },
                     {
@@ -120,8 +121,8 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                         typeAhead: true,
                         allowBlank: true,
                         width: 250,
-				        disabled: !me.enableFields
-                    }
+				        disabled: !me.enableFields && !me.currentMapPlan.get('isTemplate')
+                    },
 				    ]
 				    ,
 				    dockedItems: [{

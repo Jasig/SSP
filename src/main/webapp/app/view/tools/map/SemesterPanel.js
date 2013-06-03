@@ -21,7 +21,8 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
     alias: 'widget.semesterpanel',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
 	inject:{
-		appEventsController: 'appEventsController'
+		appEventsController: 'appEventsController',
+    	currentMapPlan: 'currentMapPlan'
 	},
     controller: 'Ssp.controller.tool.map.SemesterPanelViewController',
     columnLines: false,
@@ -34,7 +35,6 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
-			
             tools: [{
                 xtype: 'button',
                 itemId: 'pastTermButton',

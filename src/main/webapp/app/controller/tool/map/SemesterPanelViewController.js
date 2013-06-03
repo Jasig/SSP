@@ -20,7 +20,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
 	inject:{
-		currentMapPlan:'currentMapPlan'
+		currentMapPlan:'currentMapPlan',
+		appEventsController: 'appEventsController'
 	},
 	
 	control:{
@@ -46,6 +47,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	
 	init: function() {
 		var me=this;
+		me.appEventsController.getApplication().addListener("onUpdateCurrentMapPlanPlanToolView", me.updatePastTermButton, me);
 		return me.callParent(arguments);
     },
 
@@ -53,7 +55,18 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		var me = this;
 		me.setTermNoteButton();
 	},
-	
+	updatePastTermButton: function(){
+		var me = this;
+		var helpButton = me.getView().tools[0];
+		if(me.currentMapPlan.get('isTemplate'))
+		{
+			helpButton.hidden = true;
+		}
+		else
+		{
+			helpButton.hidden = !me.getView().pastTerm;
+		}
+	},
 	setTermNoteButton: function(){
 		var me = this;
 		var termNote = me.currentMapPlan.getTermNoteByTermCode(me.getView().itemId);

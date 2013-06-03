@@ -24,6 +24,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 	inject:{
 		appEventsController: 'appEventsController',
 		electiveStore: 'electiveStore',
+    	currentMapPlan: 'currentMapPlan',
 		colorsStore: 'colorsStore'
 	},
     columnLines: false,
@@ -47,7 +48,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 						if ( isImportant ) {
 							metaData.tdAttr = 'data-qtip="Orange indicates Course is Important"';
 						}
-			         }
+			         },		            
 		        },
             	{
 		            xtype: 'gridcolumn',
@@ -60,7 +61,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 						metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
 						if ( isTranscript ) {
 							metaData.tdAttr = 'data-qtip="Yellow indicates course is already on students\' transcript"';
-						}
+						}						
 			         }		            
 		        },
             	{
@@ -77,7 +78,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 						metaData.style = 'background-color: '+colorCode+'; background-image: none; margin:2px 2px 2px 2px;'
 						if ( elective ) {
 							metaData.tdAttr = 'data-qtip="This is an elective. Elective code: ' + elective.get('code') + '"';
-						}
+						}						
 			         }		            
 		        },
 		        {
@@ -140,10 +141,10 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 						dropGroup: 'coursesDDGroup',
 						dragGroup: 'coursesDDGroup',
 						pluginId: 'semesterviewdragdrop',
-						enableDrag: me.enableDragAndDrop,
-						enableDrop: me.enableDragAndDrop
-			    }
-			}
+						enableDrag: me.enableDragAndDrop || me.currentMapPlan.get('isTemplate'),
+						enableDrop: me.enableDragAndDrop || me.currentMapPlan.get('isTemplate')
+			    },
+			},
         });
         
         return me.callParent(arguments);
