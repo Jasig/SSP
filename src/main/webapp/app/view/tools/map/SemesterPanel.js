@@ -61,7 +61,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 height: 20,                
                 text:'',
                 cls: 'deleteIcon',
-                tooltip: 'Select a course and press this button to remote it from the term.'
+                tooltip: 'Select a course and press this button to remove it from the term.'
             }],
 			items : [ /*{
 				store: me.store,
