@@ -66,7 +66,7 @@ Ext.define('Ssp.model.AbstractBase', {
     },
     
     getFormattedModifiedDate: function(){
-    	return Ext.util.Format.date( this.get('createdDate'),'m/d/Y');   	
+    	return Ext.util.Format.date( this.get('modifiedDate'),'m/d/Y');   	
     },
     
     /* Used in conjunction with sorting on loading/refreshing the grid view. 

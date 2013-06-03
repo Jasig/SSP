@@ -242,7 +242,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	    if(record.get('objectStatus') == 'ACTIVE'){
 			metadata.style="background-color:#C5D7F1;";
 		}
-		return Ext.util.Format.date( record.get('createdDate','Y-m-d g:i A'));
+		return Ext.util.Format.date( record.get('modifiedDate'),'Y-m-d g:i A');
 	},
 	
 	renderImportant: function(value, metadata, record) {

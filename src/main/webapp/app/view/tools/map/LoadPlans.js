@@ -119,13 +119,13 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                                 text: 'Plan Title',
                                 dataIndex: 'name',
                                 sortable: true,
-								width: 350,
+								width: 325,
 								renderer: me.columnRendererUtils.renderBackgroundColorActive
                             }, {
                                 text: 'Date/ Time',
                                 dataIndex: 'modifiedDate',
                                 sortable: true,
-								width: 100,
+								width: 125,
                                 renderer: me.columnRendererUtils.renderDateBackgroundColorActive
                                 
                             }, {
