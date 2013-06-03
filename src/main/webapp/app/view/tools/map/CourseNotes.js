@@ -24,7 +24,6 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 		electiveStore : 'electiveStore',
 	    formUtils: 'formRendererUtils',
     	currentMapPlan: 'currentMapPlan'
-
 	},
     height: 390,
     width: 480,
@@ -112,7 +111,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                         xtype: 'combobox',
                         itemId: 'electiveId',
 						name: 'electiveId',
-                        store: me.electiveStore,
+                        store: me.electiveStore.getActiveElectiveStore(),
                         fieldLabel: '',
                         emptyText: 'Elective',
                         valueField: 'id',

@@ -23,5 +23,20 @@ Ext.define('Ssp.store.reference.Elective', {
     	this.callParent(arguments);
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('elective')});
     	this.load();
+    },
+	
+	getActiveElectiveStore: function(){
+		var store = Ext.create('Ext.data.Store', {
+		     	model: "Ssp.model.reference.Elective"
+		     });
+    	store.loadData(this.queryBy(this.isActive).items);
+		return store;
+	},
+	
+	isActive: function(record, id){
+    	var me = this;
+    	if(record.get('objectStatus') == "ACTIVE")
+    		return true;
+    	return false;
     }
 });
