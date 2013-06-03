@@ -49,7 +49,7 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
                             xtype: 'gridcolumn',
                             dataIndex: 'formattedCourse',
                             text: 'Course',
-                            width: 80
+                            width: 75
                         },
                         {
                              xtype: 'gridcolumn',
@@ -68,8 +68,8 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
                          {
                            xtype: 'gridcolumn',
                             dataIndex: 'minCreditHours',
-                            text: 'Credit Hours',
-                            width: 40
+                            text: 'Cr.',
+                            width: 30
                         },
                         {
                             xtype: 'gridcolumn',
