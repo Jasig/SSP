@@ -95,7 +95,9 @@ public class SearchParameters {
 	private static final String DISABILITY_TYPE = "disabilityType";
 	private static final String STUDENT_COUNT = "studentCount";
 	private static final String REPORT_DATE_FORMAT="MMM-dd-yyyy hh:mmaaa";
-	private static final SimpleDateFormat REPORT_DATE_FORMATTER = new SimpleDateFormat(REPORT_DATE_FORMAT);
+	private static final SimpleDateFormat getReportDateFormatter(){
+		return new SimpleDateFormat(REPORT_DATE_FORMAT);
+	}
 	
 	private static final String DEPARTMENT_PLACEHOLDER = "Not Available Yet";
 
@@ -366,7 +368,7 @@ public class SearchParameters {
 	}
 
 	final static void addReportDateToMap(final Map<String, Object> parameters) {	
-		parameters.put(REPORT_DATE, REPORT_DATE_FORMATTER.format(new Date()));
+		parameters.put(REPORT_DATE, getReportDateFormatter().format(new Date()));
 	}
 
 	final static void addReportTitleToMap(final String reportTitle,
