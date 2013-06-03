@@ -308,7 +308,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			termSet.forEach(function(term){
 				var termCode = term.get('code');
 				var panelName = term.get("name");
-				var isPast = me.termsStore.isPastTerm(termCode);				
 				yearView.add(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode]));
 				semesterPanels.push(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode]));				
 			});
