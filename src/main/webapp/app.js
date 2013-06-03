@@ -327,6 +327,7 @@ Ext.require([
     'Ssp.store.reference.States', 
     'Ssp.store.external.Terms',
 	'Ssp.store.external.Programs',
+	'Ssp.store.external.ProgramsFaceted',
 	'Ssp.store.external.Departments',
 	'Ssp.store.external.Divisions',
     'Ssp.store.external.Courses',

@@ -1062,6 +1062,11 @@
                     "path": "/app/store/external/"
                 },
                 {
+                    "clsName": "Ssp.store.external.ProgramsFaceted",
+                    "name": "ProgramsFaceted.js",
+                    "path": "/app/store/external/"
+                },
+                {
                     "clsName": "Ssp.store.external.Divisions",
                     "name": "Divisions.js",
                     "path": "/app/store/external/"

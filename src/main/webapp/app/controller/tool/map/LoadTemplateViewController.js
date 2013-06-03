@@ -108,8 +108,17 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 		me.programsStore.load();
 		me.departmentsStore.load();
 		me.divisionsStore.load();
+		me.programsStore.addListener('load', this.sortAfterLoad, me.programsStore, {single:true});
+		me.departmentsStore.addListener('load', this.sortAfterLoad, me.departmentsStore, {single:true});
+		me.divisionsStore.addListener('load', this.sortAfterLoad, me.divisionsStore, {single:true});
 		return me.callParent(arguments);
     },
+
+	sortAfterLoad: function(){
+		me = this;
+		me.sort('name','ASC');
+	},
+	
     resetForm: function() {
         var me = this;
        // me.getView().getForm().reset();
