@@ -308,13 +308,17 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			termSet.forEach(function(term){
 				var termCode = term.get('code');
 				var panelName = term.get("name");
-				yearView.add(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode]));
-				semesterPanels.push(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode]));				
+				var isPast = me.termsStore.isPastTerm(termCode);
+				semesterPanels.push(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode]));
 			});
 			yearView.add(semesterPanels);
 			yearViews.push(yearView);
 		});
-		view.add(yearViews);
+			
+		Ext.suspendLayouts();
+		view.add(yearViews);	
+		Ext.resumeLayouts(true);	
+		
 		me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
 		me.getView().setLoading(false);
     },
