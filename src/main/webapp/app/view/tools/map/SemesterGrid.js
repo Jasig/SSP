@@ -48,7 +48,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 						if ( isImportant ) {
 							metaData.tdAttr = 'data-qtip="Orange indicates Course is Important"';
 						}
-			         },		            
+			         }		            
 		        },
             	{
 		            xtype: 'gridcolumn',
@@ -143,8 +143,8 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 						pluginId: 'semesterviewdragdrop',
 						enableDrag: me.enableDragAndDrop || me.currentMapPlan.get('isTemplate'),
 						enableDrop: me.enableDragAndDrop || me.currentMapPlan.get('isTemplate')
-			    },
-			},
+			    }
+			}
         });
         
         return me.callParent(arguments);
