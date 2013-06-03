@@ -135,6 +135,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
             }
        ],
 			viewConfig: {
+					copy: true,
 			        plugins: {
 			            ptype: 'gridviewdragdrop',
 						ddGroup: 'ddGroupForCourses',

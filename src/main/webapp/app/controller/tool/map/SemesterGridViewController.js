@@ -71,6 +71,9 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     	var me = this;
     	me.droppedData = data.records[0];
 		var termCode = me.getView().findParentByType('semesterpanel').itemId;
+		var previousSemesterPanel = node.view.findParentByType("semesterpanel");
+				if(previousSemesterPanel != null && previousSemesterPanel != undefined)
+				    me.previousTermCode = previousSemesterPanel.getItemId();
     	var serviceResponses = {
                 failures: {},
                 successes: {},
@@ -91,7 +94,9 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     	
     	if(!courseValidation.valid){
     		Ext.MessageBox.confirm('Course Not Avaiable For Term', 'This course is not scheduled to be offered in this term.  Are you sure you want to add it?', me.handleInvalidCourse, me);
-    	}
+    	}else{
+			me.removeCopiedCourse();
+		}
     },
     
     handleInvalidCourse: function(buttonId){
@@ -100,9 +105,28 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
         	var index = me.getView().getStore().find('code', me.droppedData.get('code'));
 			if(index >= 0)
         		me.getView().getStore().removeAt(index);
-    	}
+    	}else{
+			me.removeCopiedCourse();
+		}
     },
     
+	removeCopiedCourse: function(){
+		var me = this;
+		if(me.previousTermCode == null || me.previousTermCode == undefined)
+			return;
+			
+		var container = me.getView().findParentByType("semesterpanelcontainer");
+		var previousSemester = container.queryById(me.previousTermCode);
+		if(previousSemester != null && previousSemester != undefined){
+			var grid = previousSemester.query("semestergrid")[0];
+			if(grid != null && grid != undefined){
+				var index = grid.getStore().find('code', me.droppedData.get('code'));
+				if(index >= 0)
+					grid.getStore().removeAt(index);
+			}
+		}
+	},
+	
     onValidateFailure: function(validate){
     	var me = this;
     },
