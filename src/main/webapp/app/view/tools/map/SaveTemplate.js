@@ -64,10 +64,10 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                             height: '100%',
                             items: [{
                 				    	xtype:'checkbox',
-                			    	fieldLabel: 'Active Plan',
+                			    	fieldLabel: 'Active Template',
                 			    	name: 'objectStatus',
 									itemId: 'objectStatus',
-                			    	labelWidth: 65,
+                			    	labelWidth: 95,
                 			    	checked: true
                 			    },
                 			    {
@@ -96,7 +96,8 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
         		                        xtype: 'combobox',
         	                        name: 'programCode',
 									store: me.programsStore,
-        	                        fieldLabel: '',
+        	                        fieldLabel: 'Program',
+									labelAlign: "top",
         	                        emptyText: 'Specific Program',
         	                        valueField: 'code',
         	                        displayField: 'name',
@@ -114,7 +115,8 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
         	                        xtype: 'combobox',
         	                        name: 'divisionCode',
 									store: me.divisionsStore,
-        	                        fieldLabel: '',
+        	                        fieldLabel: 'Division',
+									labelAlign: "top",
         	                        emptyText: 'Specific Division',
         	                        valueField: 'code',
         	                        displayField: 'name',
@@ -131,7 +133,8 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
         	                        xtype: 'combobox',
         	                        name: 'departmentCode',
 									store: me.departmentsStore,
-        	                        fieldLabel: '',
+        	                        fieldLabel: 'Department',
+									labelAlign: "top",
         	                        emptyText: 'Specific Department',
         	                        valueField: 'code',
         	                        displayField: 'name',
@@ -228,7 +231,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                         }, '-', {
                             xtype: 'button',
                             text: 'Cancel',
-                            itemID: 'cancelButton'
+                            itemId: 'cancelButton'
                         }]
                     
                     }]

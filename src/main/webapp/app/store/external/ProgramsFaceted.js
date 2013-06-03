@@ -16,10 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.store.external.Divisions', {
+Ext.define('Ssp.store.external.ProgramsFaceted', {
 	extend: 'Ssp.store.reference.AbstractReferences',
 	model: 'Ssp.model.external.AbstractExternal',
-	remoteSort: true,
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties'
@@ -28,10 +27,12 @@ Ext.define('Ssp.store.external.Divisions', {
     constructor: function(){
 		var me = this;
 		me.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('division'),
+		this.addListener('load', this.sortAfterLoad, me);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('programfaceted'),
     		autoLoad: true});
-    	return; 
+    	
     },
+
 	sortAfterLoad: function(){
 		this.sort('name','ASC');
 	}

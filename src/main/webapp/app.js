@@ -465,7 +465,8 @@ var apiUrls = [
   {name: 'studentType', url: 'reference/studentType'},
   {name: 'terms', url: 'reference/term/?sort=startDate&start=0&limit=10000&sortDirection=DESC'},
   {name: 'course', url: 'reference/course'},
-  {name: 'program', url: 'reference/program/facet'},
+  {name: 'program', url: 'reference/program/all'},
+  {name: 'programfaceted', url: 'reference/program/facet'},
   {name: 'department', url: 'reference/department/all'},//TODO Change to facets.
   {name: 'division', url: 'reference/division/all'},
   {name: 'tag', url: 'reference/tag'},
@@ -927,6 +928,7 @@ Ext.onReady(function(){
 				    weeklyCourseWorkHourRangesStore: 'Ssp.store.reference.WeeklyCourseWorkHourRanges',
 				    termsStore:'Ssp.store.external.Terms',
 				    programsStore:'Ssp.store.external.Programs',
+					programsFacetedStore:'Ssp.store.external.ProgramsFaceted',
 				    divisionsStore:'Ssp.store.external.Divisions',
 				    departmentsStore:'Ssp.store.external.Departments',
 					coursesStore:'Ssp.store.external.Courses',

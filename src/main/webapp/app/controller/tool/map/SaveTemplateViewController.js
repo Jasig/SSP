@@ -31,7 +31,10 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		},
     	'saveButton': {
 			click: 'onSaveClick'
-	}
+		},
+		'cancelButton': {
+			click: 'onCancelClick'
+		}
 	},
 	init: function() {
 		var me=this;

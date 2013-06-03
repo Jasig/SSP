@@ -25,7 +25,7 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
 		columnRendererUtils : 'columnRendererUtils',
 		store: 'coursesStore',
 		termsStore: 'termsStore',
-		programs: 'programsStore',
+		programs: 'programsFacetedStore',
 		tags: 'facetedTagsStore',
 		departments: 'departmentsStore',
 		divisions: 'divisionsStore'
