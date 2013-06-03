@@ -212,8 +212,14 @@ Ext.define('Ssp.service.EarlyAlertService', {
 		var dataArray = [];
         Ext.Array.each( records, function(record, index){
             record.leaf=true;
-            record.nodeType='early alert response';
-            record.gridDisplayDetails=me.earlyAlertOutcomesStore.getById(record.earlyAlertOutcomeId).get('name');
+            record.nodeType='early alert response';   
+			record.gridDisplayDetails='';
+            if ( record.earlyAlertOutcomeId ) {
+                var outcome = me.earlyAlertOutcomesStore.getById(record.earlyAlertOutcomeId);
+                if ( outcome ) {
+                    record.gridDisplayDetails = outcome.get('name');
+                }
+            } 	
 			dataArray.push(record);
         });
 		

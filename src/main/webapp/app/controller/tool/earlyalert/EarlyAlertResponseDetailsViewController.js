@@ -55,7 +55,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseDetailsViewControll
 		me.getCreatedByField().setValue( me.model.getCreatedByPersonName() );
 		
 		// display outcome
-		me.getOutcomeField().setValue( outcome.get('name') );
+		me.getOutcomeField().setValue( (outcome)? outcome.get('name') : '' ); 
 
 		// Outreaches
 		selectedOutreaches = me.formUtils.getSimpleItemsForDisplay( me.outreachesStore, me.model.get('earlyAlertOutreachIds'), 'Outreaches' );

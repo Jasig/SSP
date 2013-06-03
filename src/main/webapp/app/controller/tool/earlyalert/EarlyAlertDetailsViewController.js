@@ -114,8 +114,16 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
     bindEarlyAlertToView: function() {
         var me = this;
         var campus = me.campusesStore.getById( me.model.get('campusId') );
-        var reasonId = ((me.model.get('earlyAlertReasonIds') != null )?me.model.get('earlyAlertReasonIds')[0].id : me.model.get('earlyAlertReasonId') );
-        var reason = me.reasonsStore.getById( reasonId );
+        var reasonId;
+        if ( me.model.get('earlyAlertReasonIds') && me.model.get('earlyAlertReasonIds').length ) { 
+            reasonId = me.model.get('earlyAlertReasonIds')[0].id;
+        } else {
+            reasonId = me.model.get('earlyAlertReasonId');
+        }
+        var reason;
+        if ( reasonId ) {
+            reason = me.reasonsStore.getById( reasonId );
+        } 
 
         // Reset and populate general fields comments, etc.
         me.getView().getForm().reset();
