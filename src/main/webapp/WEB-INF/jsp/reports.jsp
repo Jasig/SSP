@@ -2248,7 +2248,7 @@
 
 
 <div class="hideable-form number-courses-in-plan-report" style="display:none">
-	<h1>Journal Session Details Report</h1>
+	<h1>Number Of Course In Plans</h1>
 	<form action="/ssp/api/1/report/map/numbercourses" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		
@@ -2288,7 +2288,7 @@
 		</div>
 		<div class="ea-clear"></div>
 		-->
-		<!-- Plan Status -->
+		<!-- Plan Status 
 		<div class="ea-input">
 			<select  class="input-plan-status-group" id="numberCoursesPlanStatus" name="planStatus">
 				<option value="">${not_applicable}</option>
@@ -2300,7 +2300,7 @@
 			<span>Plan Status:</span>
 		</div>
 		<div class="ea-clear"></div>
-		
+		-->
 		<!-- Term -->
 		<div class="ea-input">
 			<select id="numberCoursesTermCodes"  name="termCode" class="input-term-group">

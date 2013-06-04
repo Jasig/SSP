@@ -155,9 +155,14 @@ public class SearchParameters {
 			throws ObjectNotFoundException{
 		final List<String> termCodes = new ArrayList<String>();
 		final List<String> termNames = new ArrayList<String>();
-		if(terms == null || terms.isEmpty())
+		if(terms == null || terms.isEmpty()){
+			parameters.put(TERM_CODES, NOT_USED);
+			parameters.put(TERM_NAMES, NOT_USED);
 			return;
+		}
 		for(Term term:terms){
+			if(term == null)
+				continue;
 			termCodes.add(term.getCode());
 			termNames.add(term.getName());
 		}
