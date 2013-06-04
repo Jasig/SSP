@@ -73,13 +73,13 @@ import com.google.common.collect.Maps;
 @RequestMapping("/1/report/map")
 public class MapReportsController extends ReportBaseController {
 	private static String REPORT_URL_NUMBER_COURSES_IN_PLAN = "/reports/numberCoursesInPlan.jasper";
-	private static String REPORT_FILE_TITLE_NUMBER_COURSES_IN_PLAN = "NUMBER_OF_COURSES_IN_PLAN";
+	private static String REPORT_FILE_TITLE_NUMBER_COURSES_IN_PLAN = "Number_Of_Courses_In_Plan";
 	
 	private static String REPORT_URL_NUMBER_PLANS_BY_ADVISOR = "/reports/numberPlansByAdvisor.jasper";
-	private static String REPORT_FILE_TITLE_NUMBER_PLANS_BY_ADVISOR = "NUMBER_OF_PLANS_BY_ADVISOR";
+	private static String REPORT_FILE_TITLE_NUMBER_PLANS_BY_ADVISOR = "Number_Of_Plans_By_Advisor";
 	
 	private static String REPORT_URL_NUMBER_STUDENTS_BY_STATUS = "/reports/numberStudentsByStatus.jasper";
-	private static String REPORT_FILE_TITLE_NUMBER_STUDENTS_BY_STATUS = "NUMBER_OF_STUDENTS_BY_STATUS";
+	private static String REPORT_FILE_TITLE_NUMBER_STUDENTS_BY_STATUS = "Number_Of_Students_By_Status";
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CaseloadActivityReportController.class);

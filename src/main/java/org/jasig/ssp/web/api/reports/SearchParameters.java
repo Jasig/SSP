@@ -78,7 +78,7 @@ public class SearchParameters {
 	private static final String REPORT_DATE = "reportDate";
 	private static final String HOME_DEPARTMENT_NAME = "homeDepartment";
 	
-	private static final String SUBJECT_ABBREVIAION = "subjectAbbreviation";
+	private static final String SUBJECT_ABBREVIATION = "subjectAbbreviation";
 	private static final String COURSE_NUMBER = "courseNumber";
 	private static final String PLAN_STATUS = "planStatus";
     
@@ -571,9 +571,15 @@ public class SearchParameters {
 	static final void addPlanSearchForm(SearchPlanTO form, Map<String,Object> parameters){
 		if(form.getNumber() != null && !form.getNumber().isEmpty())
 			parameters.put(SearchParameters.COURSE_NUMBER, form.getNumber());
+		else
+			parameters.put(SearchParameters.COURSE_NUMBER, NOT_USED);
 		if(form.getSubjectAbbreviation() != null && !form.getSubjectAbbreviation().isEmpty())
-			parameters.put(SearchParameters.SUBJECT_ABBREVIAION, form.getSubjectAbbreviation());
+			parameters.put(SearchParameters.SUBJECT_ABBREVIATION, form.getSubjectAbbreviation());
+		else
+			parameters.put(SearchParameters.SUBJECT_ABBREVIATION, NOT_USED);
 		if(form.getPlanStatus() != null && !form.getPlanStatus().isEmpty())
 			parameters.put(SearchParameters.PLAN_STATUS, form.getPlanStatus());
+		else
+			parameters.put(SearchParameters.PLAN_STATUS, NOT_USED);
 	}
 }
