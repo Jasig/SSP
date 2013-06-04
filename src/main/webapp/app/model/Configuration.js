@@ -65,7 +65,7 @@ Ext.define('Ssp.model.Configuration', {
              {
     	      name: 'studentIdAlias', 
     	      type: 'string', 
-    	      defaultValue: 'Tartan ID'
+    	      defaultValue: 'Student ID'
     	     },
     	     /*
     	      * Minimum data length for a studentId/schoolId in the application.
