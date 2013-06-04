@@ -28,4 +28,6 @@ public interface TermService extends ExternalReferenceDataService<Term> {
 	Term getCurrentTerm() throws ObjectNotFoundException;
 
 	List<Term> getCurrentAndFutureTerms() throws ObjectNotFoundException;
+
+	List<Term> facetSearch(String tag, String programCode);
 }

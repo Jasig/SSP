@@ -18,14 +18,17 @@
  */
 package org.jasig.ssp.web.api.external;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jasig.ssp.factory.external.ExternalTOFactory;
 import org.jasig.ssp.factory.external.TermTOFactory;
+import org.jasig.ssp.model.external.ExternalProgram;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.transferobject.external.ExternalProgramTO;
 import org.jasig.ssp.transferobject.external.TermTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
@@ -36,6 +39,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -120,4 +124,17 @@ public class TermController extends AbstractExternalController<TermTO, Term> {
 		return getFactory().asTOList(models);
 	}
 	
+	@RequestMapping(value = "/facet", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
+	public @ResponseBody
+	List<TermTO> facetSearch(
+			final @RequestParam(required = false) String tag,
+			final @RequestParam(required = false) String programCode) {
+		List<TermTO> response = new ArrayList<TermTO>();
+		List<Term> terms = getService().facetSearch(tag,programCode);
+		for (Term term : terms) {
+			response.add(getFactory().from(term));
+		}
+		return response;
+	}
 }

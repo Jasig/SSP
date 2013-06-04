@@ -18,14 +18,13 @@
  */
 package org.jasig.ssp.dao.external;
 
-import java.util.Collection;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -82,4 +81,55 @@ public class TermDao extends AbstractExternalReferenceDataDao<Term> {
 		return processCriteriaWithSortingAndPaging(createCriteria(),
 				sAndP, false);
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<Term> facetSearch(String tag, String programCode) {
+		Query hqlQuery = createHqlQuery(buildProgramSearchQuery(tag, programCode));
+		buildProgramSearchParamList(tag, programCode, hqlQuery);
+		List<Term> result = hqlQuery.list();
+		return result;	}
+
+	private void buildProgramSearchParamList(String tag, String programCode,
+			Query hqlQuery) {
+		
+		hqlQuery.setDate("now", Calendar.getInstance().getTime());
+		if(!StringUtils.isEmpty(programCode))
+		{
+			hqlQuery.setString("programCode", programCode);
+		}
+		if(!StringUtils.isEmpty(tag))
+		{
+			hqlQuery.setString("tag", tag);
+		}			
+	}
+
+	private String buildProgramSearchQuery(String tag, String programCode) {
+		StringBuilder query = new StringBuilder();
+		query.append(" select distinct et from Term et , ExternalCourseTerm ect , ExternalCourse ec ");
+		if(!StringUtils.isEmpty(tag))
+		{
+			query.append(" ,ExternalCourseTag ectg ");
+			
+		}
+		if(!StringUtils.isEmpty(programCode))
+		{
+			query.append(" ,ExternalCourseProgram ecp ");
+		}
+		query.append(" where ");
+		query.append(" et.code = ect.termCode ");
+		query.append(" and ect.courseCode = ec.code  ");
+		query.append(" and et.endDate > :now  ");
+		if(!StringUtils.isEmpty(tag))
+		{
+			query.append(" and ec.code = ectg.courseCode ");
+			query.append(" and ectg.tag = :tag ");
+		}	
+		if(!StringUtils.isEmpty(programCode))
+		{
+			query.append(" and ec.code = ecp.courseCode ");
+			query.append(" and ecp.programCode = :programCode  ");
+		}
+		return query.toString();	
+	}
+	
 }

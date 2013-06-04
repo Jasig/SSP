@@ -23,6 +23,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.external.Term;
@@ -70,5 +71,11 @@ public class TermDaoTest {
 	public void getCurrentTerm() throws ObjectNotFoundException {
 		final Term term = dao.getCurrentTerm();
 		assertEquals("expected Fall2012", "SP13", term.getCode());//May want to rethink this
+	}
+	
+	@Test
+	public void testFacet() throws ObjectNotFoundException {
+		final List<Term> term = dao.facetSearch(null, "MATH");
+		assertEquals("expected Fall2012", 1, term.size());
 	}
 }

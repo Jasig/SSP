@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
-import org.jasig.ssp.model.external.ExternalCourse;
 import org.jasig.ssp.model.external.ExternalProgram;
 import org.springframework.stereotype.Repository;
 
