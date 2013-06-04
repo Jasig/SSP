@@ -40,84 +40,106 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="140" splitType="Stretch">
+		<band height="108" splitType="Stretch">
 			<textField>
-				<reportElement uuid="255b284c-e962-4bd2-a35c-c07141e46079" x="111" y="0" width="198" height="20"/>
+				<reportElement uuid="255b284c-e962-4bd2-a35c-c07141e46079" x="111" y="0" width="198" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false">
-				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="111" y="21" width="311" height="20"/>
+				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="111" y="18" width="311" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{termNames}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="21" width="111" height="20"/>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="18" width="111" height="16"/>
 				<textElement/>
 				<text><![CDATA[Term]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="0" width="111" height="20"/>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="0" width="111" height="16"/>
 				<textElement/>
 				<text><![CDATA[Report Date:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="41" width="111" height="20"/>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="36" width="111" height="16"/>
 				<textElement/>
 				<text><![CDATA[Subject Abbreviation:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="111" y="41" width="311" height="20"/>
+				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="111" y="36" width="311" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{subjectAbbreviation}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="61" width="111" height="20"/>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="53" width="111" height="16"/>
 				<textElement/>
 				<text><![CDATA[Number:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="111" y="61" width="311" height="20"/>
+				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="111" y="53" width="311" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{courseNumber}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="918e22ca-c9d4-4e84-a65e-b4828debeffb" x="111" y="81" width="311" height="20"/>
+				<reportElement uuid="918e22ca-c9d4-4e84-a65e-b4828debeffb" x="111" y="71" width="311" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{totalUniqueCourses}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="81" width="111" height="20"/>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="71" width="111" height="16"/>
 				<textElement/>
 				<text><![CDATA[Total Course:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="2f57f48f-5397-44c0-a084-56cc06441478" x="111" y="101" width="311" height="20"/>
+				<reportElement uuid="2f57f48f-5397-44c0-a084-56cc06441478" x="111" y="89" width="311" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{totalUniqueStudents}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="101" width="111" height="20"/>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="89" width="111" height="16"/>
 				<textElement/>
 				<text><![CDATA[Total Students:]]></text>
 			</staticText>
 		</band>
 	</title>
+	<pageHeader>
+		<band height="31" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="3" width="572" height="26" backcolor="#70C2E7"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="192" y="9" width="214" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Number Of Students By Status]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="6" width="100" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[STUDENT ID]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
 	<detail>
-		<band height="136" splitType="Stretch">
+		<band height="36" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="0" y="1" width="100" height="20"/>
+				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="0" y="1" width="457" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{courseName}]]></textFieldExpression>
 			</textField>
 			<subreport isUsingCache="false">
-				<reportElement uuid="e95f7a88-bf44-47b3-9957-8fef02e66b11" stretchType="RelativeToTallestObject" x="0" y="21" width="572" height="115" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="e95f7a88-bf44-47b3-9957-8fef02e66b11" stretchType="RelativeToTallestObject" x="0" y="17" width="572" height="17" isRemoveLineWhenBlank="true"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{studentStatusByCourse})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/numberStudentsByStatusCourseForm.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
-	<summary>
-		<band height="42" splitType="Stretch"/>
-	</summary>
 </jasperReport>

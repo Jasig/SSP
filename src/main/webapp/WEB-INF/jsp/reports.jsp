@@ -2404,7 +2404,7 @@
 </div><!-- number plans by advisor report -->
 
 <div class="hideable-form number-students-by-status-report" style="display:none">
-	<h1>Journal Session Details Report</h1>
+	<h1>Number Of Students By Status</h1>
 	<form action="/ssp/api/1/report/map/numberstudentsbystatus" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		

@@ -195,7 +195,7 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 		buildQueryWhereClause(selectPlanCourses, form);
 		selectPlanCourses.append(" group by pc.courseCode, pc.formattedCourse, pc.courseTitle, pc.termCode");
 		
-		Query query = createHqlQuery(selectPlanCourses.toString()).setInteger("objectStatus", ObjectStatus.INACTIVE.ordinal() );
+		Query query = createHqlQuery(selectPlanCourses.toString()).setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal() );
 		buildCourseSearchParamList(form,  query);
 		List<PlanCourseCountTO> planCoursesCount = query.setResultTransformer(new NamespacedAliasToBeanResultTransformer(
 								PlanCourseCountTO.class, "plan_")).list();
@@ -294,7 +294,7 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 		
 		buildQueryWhereClause(selectPlanCourses, form);
 		
-		Query query = createHqlQuery(selectPlanCourses.toString()).setInteger("objectStatus", ObjectStatus.INACTIVE.ordinal() );
+		Query query = createHqlQuery(selectPlanCourses.toString()).setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal() );
 		buildCourseSearchParamList(form,  query);
 		List<PlanStudentStatusTO> planStudentStatus = query.setResultTransformer(new NamespacedAliasToBeanResultTransformer(
 				PlanStudentStatusTO.class, "plan_")).list();
