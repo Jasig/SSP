@@ -19,10 +19,13 @@
 package org.jasig.ssp.transferobject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.AbstractPlanCourse;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.TermNote;
 
 public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 		AbstractAuditableTO<T> implements TransferObject<T> {
@@ -83,9 +86,32 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 		this.setIsFinancialAid(model.getIsFinancialAid());
 		this.setIsImportant(model.getIsImportant());
 		this.setStudentNotes(model.getStudentNotes());
+		setTrueModifiedDateAndBy(model);
 		
 	}
 	
+	private void setTrueModifiedDateAndBy(T model) {
+		List<? extends AbstractPlanCourse<?>> courses = model.getCourses();
+		Date latestModifiedDate = model.getModifiedDate();
+		Person latestModifiedBy = model.getModifiedBy();
+		for (AbstractPlanCourse<?> abstractPlanCourse : courses) {
+			if(abstractPlanCourse.getModifiedDate().after(latestModifiedDate))
+			{
+				latestModifiedDate = abstractPlanCourse.getModifiedDate();
+				latestModifiedBy = abstractPlanCourse.getModifiedBy();
+			}
+		}
+		List<? extends TermNote> notes = model.getNotes();
+		for (TermNote termNote : notes) {
+			if(termNote.getModifiedDate().after(latestModifiedDate))
+			{
+				latestModifiedDate = termNote.getModifiedDate();
+				latestModifiedBy = termNote.getModifiedBy();			}
+		}
+		this.setModifiedBy(new PersonLiteTO(latestModifiedBy));
+		this.setModifiedDate(latestModifiedDate);
+	}
+
 	public abstract List<? extends AbstractPlanCourseTO<T,? extends AbstractPlanCourse<T>>> getCourses();
 
 	public String getName() {

@@ -122,4 +122,9 @@ public class Plan extends AbstractPlan  {
 		return planCourses;
 	}
 
+	@Override
+	public List<? extends TermNote> getNotes() {
+		return termNotes;
+	}
+
 }

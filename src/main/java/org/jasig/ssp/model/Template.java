@@ -151,4 +151,9 @@ public class Template extends AbstractPlan implements Cloneable{
 		return templateCourses;
 	}
 
+	@Override
+	public List<? extends TermNote> getNotes() {
+		return termNotes;
+	}
+
 }

@@ -94,6 +94,8 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 	
 	public abstract List<? extends AbstractPlanCourse<?>> getCourses();
 	
+	public abstract List<? extends TermNote> getNotes();
+	
 	public String getName() {
 		return name;
 	}
