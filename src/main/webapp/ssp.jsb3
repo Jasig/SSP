@@ -2141,6 +2141,11 @@
                     "name": "Elective.js",
                     "path": "/app/model/reference/"
                 },
+                 {
+                	"clsName": "Ssp.model.reference.ElectiveActive",
+                    "name": "ElectiveActive.js",
+                    "path": "/app/model/reference/"
+                },
                 {
                 	"clsName": "Ssp.model.reference.Color",
                     "name": "Color.js",

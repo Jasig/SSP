@@ -21,7 +21,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
     alias: 'widget.coursenotes',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
 	inject: {
-		electiveStore : 'electiveStore',
+		electiveStore : 'electiveActiveStore',
 	    formUtils: 'formRendererUtils',
     	currentMapPlan: 'currentMapPlan'
 	},
@@ -111,7 +111,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                         xtype: 'combobox',
                         itemId: 'electiveId',
 						name: 'electiveId',
-                        store: me.electiveStore.getActiveElectiveStore(),
+                        store: me.electiveStore,
                         fieldLabel: '',
                         emptyText: 'Elective',
                         valueField: 'id',
