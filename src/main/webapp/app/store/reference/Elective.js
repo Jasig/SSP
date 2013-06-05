@@ -24,4 +24,8 @@ Ext.define('Ssp.store.reference.Elective', {
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('elective')});
     	this.load();
     },
+    sortInfo:{
+        field:'sortOrder',
+        direction:'ASC'// or 'DESC' (case sensitive for local sorting)
+    }
 });

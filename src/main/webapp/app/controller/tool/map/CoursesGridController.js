@@ -51,18 +51,12 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
 		me.store.load();
 		me.electiveStore.load();
 		me.store.addListener('load', this.sortAfterLoad, me.store,{single:true});
-		me.electiveStore.addListener('load', this.sortElectivesAfterLoad, me.electiveStore, {single:true});
 		return me.callParent(arguments);
     },
 	
 	sortAfterLoad: function(){
 		var me = this;
 		me.sort('formattedCourse','ASC');
-	},
-	
-	sortElectivesAfterLoad: function(){
-		var me = this;
-		me.sort('sortOrder','ASC');
 	},
     
     control:{
