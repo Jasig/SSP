@@ -118,9 +118,18 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 
 		store.insert(0, item );
 		grid.plugins[0].startEdit(0, 0);
-		if(grid.plugins[0].editor.items.getAt(0).xtype == "textfield") {
-			grid.plugins[0].editor.items.getAt(0).selectText();
+		var editorItems = grid.plugins[0].editor.items;
+		if(editorItems.getAt(0).xtype == "textfield") {
+			editorItems.getAt(0).selectText();
 		}
+		
+		//initialize combo boxes to first value (defaults
+		//to a blank entry otherwise, causes validation issues...)
+		Ext.Array.each(editorItems.items, function(item) {
+			if(item.xtype == "combo") {
+				item.setValue(item.store.data.items[0].data.id);
+			}
+		}); 
 	},
 
     deleteConfirmation: function( button ) {

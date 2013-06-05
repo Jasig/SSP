@@ -531,8 +531,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                             store: Ext.StoreMgr.lookup("colorsStore"),
                             displayField: 'name',
                             valueField: 'id',
-                            forceSelection: true,
-                            allowBlank: false
+                            forceSelection: true 
                         },
                         flex: .2
                     }]
