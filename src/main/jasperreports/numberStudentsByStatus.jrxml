@@ -117,26 +117,15 @@
 			</staticText>
 		</band>
 	</pageHeader>
-	<columnHeader>
-		<band height="22" splitType="Stretch">
-			<staticText>
-				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="0" y="6" width="100" height="16"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[STUDENT ID]]></text>
-			</staticText>
-		</band>
-	</columnHeader>
 	<detail>
-		<band height="36" splitType="Stretch">
+		<band height="51" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="0" y="1" width="457" height="16"/>
+				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="0" y="15" width="527" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{courseName}]]></textFieldExpression>
 			</textField>
-			<subreport isUsingCache="false">
-				<reportElement uuid="e95f7a88-bf44-47b3-9957-8fef02e66b11" stretchType="RelativeToTallestObject" x="0" y="17" width="572" height="17" isRemoveLineWhenBlank="true"/>
+			<subreport isUsingCache="true">
+				<reportElement uuid="e95f7a88-bf44-47b3-9957-8fef02e66b11" stretchType="RelativeToTallestObject" x="0" y="31" width="572" height="17" isRemoveLineWhenBlank="true"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{studentStatusByCourse})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/numberStudentsByStatusCourseForm.jasper"]]></subreportExpression>
 			</subreport>

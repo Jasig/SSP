@@ -34,29 +34,56 @@
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<detail>
-		<band height="18" splitType="Stretch">
+	<columnHeader>
+		<band height="16">
 			<rectangle>
-				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="0" y="3" width="505" height="14" backcolor="#E4E4E4">
+				<reportElement uuid="16ac1c10-2b73-4b09-a9fb-9814e574d7b8" mode="Opaque" x="0" y="0" width="130" height="16" backcolor="#E4E4E4"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="5db1d0a3-5499-486c-9e0a-1756dd520e32" x="0" y="0" width="130" height="16" backcolor="#E4E4E4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[STUDENT ID]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="0" y="2" width="505" height="14" backcolor="#E4E4E4">
 					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 				</graphicElement>
 			</rectangle>
+			<rectangle>
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="0" width="505" height="16" backcolor="#E4E4E4">
+					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="16ac1c10-2b73-4b09-a9fb-9814e574d7b8" mode="Transparent" x="0" y="0" width="130" height="16"/>
+			</rectangle>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="0" y="1" width="100" height="16" isRemoveLineWhenBlank="true"/>
-				<textElement/>
+				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="0" y="0" width="130" height="16" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{studentId}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="100" y="1" width="100" height="16" isRemoveLineWhenBlank="true"/>
-				<textElement/>
+				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="130" y="0" width="100" height="16" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{planStatus}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" stretchType="RelativeToTallestObject" x="200" y="1" width="239" height="16" isRemoveLineWhenBlank="true"/>
-				<textElement/>
+				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" stretchType="RelativeToTallestObject" x="230" y="0" width="239" height="16" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{statusDetailsAsString}]]></textFieldExpression>
 			</textField>
 		</band>
