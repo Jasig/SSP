@@ -105,7 +105,14 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 		
 		List<ExternalCourse> result = hqlQuery
 		.list();
-
+		for (ExternalCourse externalCourse : result) {
+			List<String> tags = getTagsForCourse(externalCourse.getCode());
+			StringBuilder tagBuilder = new StringBuilder();
+			for (String tagg : tags) {
+				tagBuilder.append(tagg+" ");
+			}
+			externalCourse.setPivotedTags(tagBuilder.toString());
+		}
 		return result;
 	}
 
