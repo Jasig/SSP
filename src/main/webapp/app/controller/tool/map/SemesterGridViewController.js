@@ -35,6 +35,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 		var me=this;
 		me.appEventsController.assignEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
 		me.getView().view.addListener('beforedrop', me.onDrop, me);
+		
 		return me.callParent(arguments);
     },
     onItemDblClick: function(grid, record, item, index, e, eOpts) {
@@ -66,12 +67,11 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 			me.coursePlanDetails.setTitle(planCourse.get('formattedCourse') + ' - ' + planCourse.get('title'));
     		me.coursePlanDetails.center();
     		me.coursePlanDetails.show();
-    },
     onDrop: function(node, data, dropRec, dropPosition){
     	var me = this;
     	me.droppedData = data.records[0];
 		var termCode = me.getView().findParentByType('semesterpanel').itemId;
-		var previousSemesterPanel = node.view.findParentByType("semesterpanel");
+		var previousSemesterPanel = data.view.findParentByType("semesterpanel");
 				if(previousSemesterPanel != null && previousSemesterPanel != undefined)
 				    me.previousTermCode = previousSemesterPanel.getItemId();
     	var serviceResponses = {
