@@ -142,11 +142,11 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 	}
 	
 	private Float calculateTotalPlanDevHours(List<TermCourses<T, TO>> courses) {
-		Float totalPlanCreditHours = new Float(0);
+		Float totalDevCreditHours = new Float(0);
 		for(TermCourses<T,TO> termCourses : courses){
-			totalPlanCreditHours = totalPlanCreditHours + termCourses.getTotalCreditHours();
+			totalDevCreditHours = totalDevCreditHours + termCourses.getTotalDevCreditHours();
 		}
-		return totalPlanCreditHours;
+		return totalDevCreditHours;
 	}
 
 	private Float calculateTotalPlanHours(List<TermCourses<T,TO>> courses) {
