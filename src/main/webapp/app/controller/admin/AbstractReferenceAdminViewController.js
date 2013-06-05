@@ -127,7 +127,10 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		//to a blank entry otherwise, causes validation issues...)
 		Ext.Array.each(editorItems.items, function(item) {
 			if(item.xtype == "combo") {
-				item.setValue(item.store.data.items[0].data.id);
+				var valueField = (item.valueField == undefined? "id": item.valueField);
+				var store = item.store;
+				var firstComboElement = store.data.items[0];
+				item.setValue(firstComboElement.data[valueField]);
 			}
 		}); 
 	},
