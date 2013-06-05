@@ -115,7 +115,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 title: '',
                 defaultType: 'displayfield',
                 layout: 'vbox',
-                width: 80,
+                width: 85,
                 cls: 'center-align',
                 
                 defaults: {
@@ -134,7 +134,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 }, {
                     xtype: 'label',
 					itemId: 'notesLabel',
-					width: 80,
+					width: 125,
                     text: me.currentMapPlan.get("isTemplate") == true ? 'Template Notes':'Plan Notes'
                 
                 }]
