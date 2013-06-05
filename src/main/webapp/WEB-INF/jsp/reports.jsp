@@ -2304,7 +2304,6 @@
 		<!-- Term -->
 		<div class="ea-input">
 			<select id="numberCoursesTermCodes"  name="termCode" class="input-term-group">
-			<option value="">${not_applicable}</option>
 			</select>
 		</div>
 		<div class="ea-label">
