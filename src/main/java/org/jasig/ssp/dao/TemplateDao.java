@@ -48,8 +48,12 @@ public class TemplateDao extends AbstractPlanDao<Template> implements
 					criteria.add(Restrictions.eq("isPrivate", isPrivate));
 					if(isPrivate)
 					{
-						criteria.add(Restrictions.eq("owner", getSecurityService().currentlyAuthenticatedUser()));
+						criteria.add(Restrictions.eq("owner", getSecurityService().currentlyAuthenticatedUser().getPerson()));
 					}
+				}
+				else
+				{
+					criteria.add(Restrictions.or(Restrictions.eq("isPrivate", false), Restrictions.and(Restrictions.eq("isPrivate", true), Restrictions.eq("owner", getSecurityService().currentlyAuthenticatedUser().getPerson()))));
 				}
 				if(!StringUtils.isEmpty(programCode))
 				{
