@@ -19,7 +19,6 @@
 Ext.define('Ssp.store.external.Departments', {
 	extend: 'Ssp.store.reference.AbstractReferences',
 	model: 'Ssp.model.external.AbstractExternal',
-	remoteSort: true,
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties'
@@ -27,7 +26,9 @@ Ext.define('Ssp.store.external.Departments', {
    
     constructor: function(){
 		var me = this;
+		
 		me.callParent(arguments);
+		this.addListener('load', this.sortAfterLoad, me);
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('department'),
     		autoLoad: true});
     	return; 

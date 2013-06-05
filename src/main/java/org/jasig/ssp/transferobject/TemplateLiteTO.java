@@ -23,6 +23,8 @@ import java.util.List;
 import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.Template;
+import org.jasig.ssp.model.TemplateCourse;
+import org.jasig.ssp.model.TermNote;
 
 /**
  * TO for /summary API call.  In early phases of development this will not hold a lot of meaningful data.
@@ -52,11 +54,16 @@ public class TemplateLiteTO extends AbstractPlanTO<Template> {
 		super();
 		from(model);
 	}	
-
+	
 	@Override
 	public void from(Template model) {
 		super.from(model);
+		this.setIsPrivate(model.getIsPrivate());
+		this.setDepartmentCode(model.getDepartmentCode());
+		this.setDivisionCode(model.getDivisionCode());
+		this.setProgramCode(model.getProgramCode());
 	}
+	
 	@Override
 	public List<? extends AbstractPlanCourseTO<Template, ? extends AbstractPlanCourse<Template>>> getCourses() {
 		return null;

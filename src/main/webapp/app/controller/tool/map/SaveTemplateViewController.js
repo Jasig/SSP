@@ -23,7 +23,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		appEventsController: 'appEventsController',
 		formUtils: 'formRendererUtils',
     	currentMapPlan: 'currentMapPlan',
-		programsStore: 'programsStore',
+		programsStore: 'programsFacetedStore',
         departmentsStore: 'departmentsStore',
         divisionsStore: 'divisionsStore'
     },
@@ -43,21 +43,11 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		var me=this;
 	    me.resetForm();
 	    me.getView().query('form')[0].loadRecord( me.currentMapPlan );
-		me.programsStore.load();
-		me.departmentsStore.load();
-		me.divisionsStore.load();
-		me.programsStore.addListener('load', this.sortAfterLoad, me.programsStore, {single:true});
-		me.departmentsStore.addListener('load', this.sortAfterLoad, me.departmentsStore, {single:true});
-		me.divisionsStore.addListener('load', this.sortAfterLoad, me.divisionsStore, {single:true});
+
 	    me.getView().query('checkbox[name=objectStatus]')[0].setValue(me.currentMapPlan.getAsBoolean('objectStatus',"ACTIVE"));
 		me.setCheckBox('checkbox[name=isPrivate]', 'isPrivate');
 		return me.callParent(arguments);
     },
-
-	sortAfterLoad: function(){
-		me = this;
-		me.sort('name','ASC');
-	},
     
     onCancelClick: function(){
     	me = this;

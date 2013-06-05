@@ -105,23 +105,14 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 	    me.resetForm();
 	    me.store.load();
 		//TODO this should be automatic
-		me.programsStore.load();
-		me.departmentsStore.load();
-		me.divisionsStore.load();
-		me.programsStore.addListener('load', this.sortAfterLoad, me.programsStore, {single:true});
-		me.departmentsStore.addListener('load', this.sortAfterLoad, me.departmentsStore, {single:true});
-		me.divisionsStore.addListener('load', this.sortAfterLoad, me.divisionsStore, {single:true});
+
 		return me.callParent(arguments);
     },
 
-	sortAfterLoad: function(){
-		me = this;
-		me.sort('name','ASC');
-	},
 	
     resetForm: function() {
         var me = this;
-       // me.getView().getForm().reset();
+         me.getView().query("form")[0].getForm().reset();
     },
     onOpenClick: function(button) {
     	var me = this;
@@ -214,12 +205,13 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 	    	me.setParam(params, me.getDepartment(), 'departmentCode');
 	    	me.setParam(params, me.getDivision(), 'divisionCode');
 			params["objectStatus"] = "ALL"; //Object status and object type filtered client side.
-	    	me.store.on('load', this.onLoad, this, {single: true});
+	    	me.store.on('load', me.onLoadComplete, this, {single: true});
 	    	me.store.load({params: params});
 	    },
 	    
 	    onLoadComplete: function(){
-	    	//here if we need to rebind stores.
+			var me = this;
+	    	me.onObjectStatusFilterSelect();
 	    },
 	    
 	    setParam: function(params, field, fieldName){
@@ -229,33 +221,40 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 	
 		onTypeFilterSelect:function(){
 			var me = this;
-			var type = me.getTypeFilter().getValue();
-			switch(type){
-				case "ALL":me.store.clearFilter(false);
-				break;
-				case "PRIVATE":me.store.filter("isPrivate", true);
-				break;
-				case "PUBLIC":me.store.filter("isPrivate", false);
-				break;
-			}
+			me.onObjectStatusFilterSelect();
 		},
 		
 		onObjectStatusFilterSelect:function(){
 				var me = this;
-				var objectStatus = me.getObjectStatusFilter().getValue();
-				switch(objectStatus){
-					case "ALL":me.store.clearFilter(false);
-					break;
-					case "ACTIVE":me.store.filter("objectStatus", "ACTIVE");
-					break;
-					case "INACTIVE":me.store.filter("objectStatus", "INACTIVE");
-					break;
-				}
+				me.values = {}
+				me.values.objectStatus = me.getObjectStatusFilter().getValue();
+				me.values.typeValue = me.getTypeFilter().getValue();
+				me.store.clearFilter(false);
+				me.store.filterBy(me.typeStatusFilter, me);
+				
+		},
+		
+		typeStatusFilter: function(record){
+			var me = this;
+			if(me.values.objectStatus != null && me.values.objectStatus != undefined && me.values.objectStatus != 'ALL')
+			{
+				if(record.get("objectStatus") != me.values.objectStatus)
+					return false;
+			}
+			if(me.values.typeValue != null && me.values.typeValue != undefined && me.values.typeValue != 'ALL')
+			{
+				if(record.get("isPrivate") == true && me.values.typeValue == "PUBLIC")
+					return false;
+				if(record.get("isPrivate") == false && me.values.typeValue == "PRIVATE")
+					return false;
+			}
+			return true;
 		},
 	    
 		
 		destroy:function(){
 		    var me=this;
+		    me.store.clearFilter(false);
 		    return me.callParent( arguments );
 		}
 		

@@ -19,7 +19,6 @@
 Ext.define('Ssp.store.external.Divisions', {
 	extend: 'Ssp.store.reference.AbstractReferences',
 	model: 'Ssp.model.external.AbstractExternal',
-	remoteSort: true,
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties'
@@ -27,7 +26,9 @@ Ext.define('Ssp.store.external.Divisions', {
    
     constructor: function(){
 		var me = this;
+		
 		me.callParent(arguments);
+		this.addListener('load', this.sortAfterLoad, me);
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('division'),
     		autoLoad: true});
     	return; 
@@ -35,4 +36,5 @@ Ext.define('Ssp.store.external.Divisions', {
 	sortAfterLoad: function(){
 		this.sort('name','ASC');
 	}
+
 });

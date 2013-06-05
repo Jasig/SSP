@@ -38,10 +38,9 @@ Ext.define('Ssp.model.tool.map.Plan', {
              {name: 'objectStatus', type: 'string'},
              {name: 'isTemplate', type: 'boolean'},
 			 {name:'departmentCode',type:'string'},
-			  {name:'programCode',type:'string'},
-			  {name:'divisionCode',type:'string'},
+			 {name:'programCode',type:'string'},
+			 {name:'divisionCode',type:'string'},
 			 {name:'isPrivate',type:'boolean'},
-             {name: 'modifiedDate', type: 'date', dateFormat: 'time'},
              
              {name:'planCourses',
        		  type:'auto',

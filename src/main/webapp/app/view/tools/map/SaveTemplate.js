@@ -23,7 +23,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
     controller: 'Ssp.controller.tool.map.SaveTemplateViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
-        programsStore: 'programsStore',
+        programsStore: 'programsFacetedStore',
         departmentsStore: 'departmentsStore',
         divisionsStore: 'divisionsStore'
     },
@@ -157,7 +157,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                             },
                             items: [
 				               {
-            				        fieldLabel: 'Plan Title',
+            				        fieldLabel: 'Template Title',
             				        name: 'name',
 									itemId: 'name',
             				        maxLength: 50,
@@ -188,7 +188,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
             				        allowBlank:false
             				    },
             				   {
-            				        fieldLabel: 'AcademicLink',
+            				        fieldLabel: 'Academic Link',
             				        name: 'academicLink',
             				        itemId: 'academicLink',
             				        allowBlank:true
