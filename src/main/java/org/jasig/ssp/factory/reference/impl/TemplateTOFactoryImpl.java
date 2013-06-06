@@ -106,6 +106,7 @@ public class TemplateTOFactoryImpl extends AbstractAuditableTOFactory<TemplateTO
 		for (TermNoteTO termNoteTO : termNotes) {
 			TermNote noteModel = getTermNoteTOFactory().from(termNoteTO);
 			noteModel.setTemplate(model);
+			model.getTermNotes().add(noteModel);
 		}
 		return model;
 	}
