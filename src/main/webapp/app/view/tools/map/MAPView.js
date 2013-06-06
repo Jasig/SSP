@@ -108,7 +108,7 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                             xtype: 'button',
                             text: 'Save Template' ,
                             itemId: 'saveTemplateButton',
-                            hidden: !me.currentMapPlan.get('id') || me.currentMapPlan.get('id') != ""
+                            hidden: (!me.currentMapPlan.get('id') || me.currentMapPlan.get('id') != "") || me.currentMapPlan.get('isTemplate') == false
                         }
                     ]
                     }

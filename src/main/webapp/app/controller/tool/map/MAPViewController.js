@@ -210,7 +210,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.saveTemplatePopUp.show();
     },
 
-
 	onPlanNotesSave: function(button){
 		var me = this;
 		var form =  button.findParentByType('form').getForm();
@@ -218,7 +217,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.setPlanNotesButtonIcon();
 		me.notesPopUp.close();
 	},
-
     
     onloadSavedPlanButtonClick: function(button){
 		var me = this;
@@ -309,7 +307,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	onsaveTemplateAsButtonClick: function(button){
         var me=this;
 		if(me.saveTemplatePopUp == null || me.saveTemplatePopUp.isDestroyed)
-         	me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+         	me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:true});
 		 me.saveTemplatePopUp.show();
     },
     
@@ -390,7 +388,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			var me = this;
 		 if(me.currentMapPlan.get('isTemplate') == true)
 		{
-			if(me.currentMapPlan.get('id') || me.currentMapPlan.get('id') != "" )
+			if((me.currentMapPlan.get('id') || me.currentMapPlan.get('id') != "") )
 			{
 				me.getSaveTemplateButton().show();
 			}
@@ -406,6 +404,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		}else{
 			me.getSavePlanButton().show();
 			me.getSaveTemplateAsButton().show();
+			me.getSaveTemplateButton().hide();
 			me.getPrintPlanButton().show();
 			me.getPrintLabel().show();
 			me.getEmailPlanButton().show();
