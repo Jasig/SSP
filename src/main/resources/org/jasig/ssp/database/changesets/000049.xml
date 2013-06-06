@@ -24,10 +24,16 @@
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
 	<changeSet id="drop is_transcript from map_template_course" author="tony.arland">
+	    <preConditions>
+	        <columnExists tableName="map_template_course" columnName="is_transcript"/>
+	    </preConditions>
 	    <dropNotNullConstraint tableName="map_template_course" columnName="is_transcript" columnDataType="boolean"/>
 		<dropColumn tableName="map_template_course" columnName="is_transcript" />
 	</changeSet>
 	<changeSet id="drop is_transcript from map_plan_course" author="tony.arland">
+	    <preConditions>
+	        <columnExists tableName="map_plan_course" columnName="is_transcript"/>
+	    </preConditions>	    
 	    <dropNotNullConstraint tableName="map_plan_course" columnName="is_transcript" columnDataType="boolean"/>
 		<dropColumn tableName="map_plan_course" columnName="is_transcript" />
 	</changeSet>
