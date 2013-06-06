@@ -327,6 +327,7 @@ Ext.require([
     'Ssp.store.reference.SpecialServiceGroups',
     'Ssp.store.reference.States', 
     'Ssp.store.external.Terms',
+	'Ssp.store.external.TermsFaceted',
 	'Ssp.store.external.Programs',
 	'Ssp.store.external.ProgramsFaceted',
 	'Ssp.store.external.Departments',
@@ -474,6 +475,7 @@ var apiUrls = [
   {name: 'tag', url: 'reference/tag'},
   {name: 'facetedtag', url: 'reference/tag/facet'},
   {name: 'futureTerms', url: 'reference/term/future'},
+  {name: 'termsfaceted', url: 'reference/term/facet'},
   {name: 'weeklyCourseWorkHourRanges', url: 'reference/config/?name=weekly_course_work_hour_ranges'},
 ];
 
@@ -930,6 +932,7 @@ Ext.onReady(function(){
 				    registrationLoadRangesStore: 'Ssp.store.reference.RegistrationLoadRanges', 
 				    weeklyCourseWorkHourRangesStore: 'Ssp.store.reference.WeeklyCourseWorkHourRanges',
 				    termsStore:'Ssp.store.external.Terms',
+					termsFacetedStore:'Ssp.store.external.TermsFaceted',
 				    programsStore:'Ssp.store.external.Programs',
 					programsFacetedStore:'Ssp.store.external.ProgramsFaceted',
 				    divisionsStore:'Ssp.store.external.Divisions',

@@ -26,6 +26,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 		columnRendererUtils : 'columnRendererUtils',
 		programs: 'programsFacetedStore',
 		tags: 'facetedTagsStore',
+		terms: 'termsFacetedStore',
 		departments: 'departmentsStore',
 		divisions: 'divisionsStore'
     },
@@ -132,6 +133,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				    items: [{
 				        xtype: 'combobox',
 				        name: 'term',
+						store: me.terms,
 				        fieldLabel: '',
 				        emptyText: 'Filter by Term',
 				        valueField: 'code',

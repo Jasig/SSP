@@ -24,11 +24,11 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
     	appEventsController: 'appEventsController',
 		columnRendererUtils : 'columnRendererUtils',
 		store: 'coursesStore',
-		termsStore: 'termsStore',
+		terms: 'termsFacetedStore',
 		programs: 'programsFacetedStore',
-		tags: 'facetedTagsStore',
-		departments: 'departmentsStore',
-		divisions: 'divisionsStore'
+		tags: 'facetedTagsStore'
+		/*departments: 'departmentsStore',
+		divisions: 'divisionsStore'*/
     },
     control: {
     	'program': {
@@ -63,22 +63,6 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
            }
         },
         
-        'department':{
-           selector: '#department',
-           hidden: false,
-           listeners: {
-            select: 'onDepartmentSelect'
-           }
-        },
-        
-        'departmentCancel':{
-            selector: '#departmentCancel',
-            hidden: false,
-            listeners: {
-             click: 'onDepartmentCancelClick'
-            }
-         },
-        
          'term':{
              selector: '#term',
              hidden: false,
@@ -94,20 +78,6 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
                click: 'onTermCancelClick'
               }
            },
-           
-        'division':{
-           selector: '#division',
-           listeners: {
-            select: 'onDivisionSelect'
-           }
-        },
-        
-        'divisionCancel':{
-           selector: '#divisionCancel',
-           listeners: {
-            click: 'onDivisionCancelClick'
-           }
-        }
 		
     },
     resetForm: function() {
@@ -118,15 +88,8 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
 		var me=this;
 		var view = me.getView();
 		me.programs.load();
-		me.divisions.load();
-		me.departments.load();
+		me.terms.load();
 		me.tags.load();		
-		if(me.termsStore.getTotalCount() == 0){
-			me.termsStore.addListener("load", me.onTermsStoreLoad, me);
-			me.termsStore.load();
-	}else{
-		me.initialiseTerms();
-	}
 		return this.callParent(arguments);
     },
     
@@ -134,9 +97,6 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
     onProgramSelect: function(){
         var me=this;
         me.handleSelect(me);
-        var params = {};
-        me.setParam(params, me.getProgram(), "programCode");
-        me.doFaceting([me.getTag(), me.getTerm()], params);
     },  
     
     onProgramCancelClick: function(button){
@@ -148,9 +108,6 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
     onTagSelect: function(){
         var me=this;
         me.handleSelect(me);
-        var params = {};
-        me.setParam(params, me.getTag(), "tagCode");
-        me.doFaceting([me.getProgram(), me.getTerm()], params);
     },  
  
     onTagCancelClick: function(button){
@@ -162,7 +119,6 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
     onTermSelect: function(){
         var me=this;
         me.handleSelect(me);
-        
     }, 
     
     onTermCancelClick: function(button){
@@ -194,45 +150,34 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
     },
     
     handleSelect: function(me){
-    	var params = {};
-    	me.setParam(params, me.getProgram(), 'programCode');
-    	me.setParam(params, me.getTag(), 'tag');
-    	me.setParam(params, me.getDepartment(), 'department');
-    	me.setParam(params, me.getDivision(), 'division');
-    	me.setParam(params, me.getTerm(), 'termCode');
-    	me.store.on('load', this.onLoad, this, {single: true});
+    	var params = me.getAllParams();
     	me.store.load({params: params});
+		var params = me.getAllParams();	
     	me.doFaceting(params);
     },
+
+	getAllParams:function(){
+		var me = this;
+		var params = {};
+		me.setParam(params, me.getProgram(), 'programCode');
+    	me.setParam(params, me.getTag(), 'tag');
+    	me.setParam(params, me.getTerm(), 'termCode');
+		return params;
+	},
     
     doFaceting: function(params){
     	var me = this;
-    	var facets = [me.getProgram(), me.getTag()];
+    	var facets = [me.getProgram(), me.getTag(), me.getTerm()];
     	facets.forEach(function(facet){
     		facet.getStore().load({params:params});
     	});
-    },
-    
-    onLoadComplete: function(){
-    	//here if we need to rebind stores.
     },
     
     setParam: function(params, field, fieldName){
     	if(field.getValue() && field.getValue().length > 0)
     		params[fieldName] = field.getValue();
     },
-    
-    onTermsStoreLoad:function(){
-		var me = this;
-		me.termsStore.removeListener( "onTermsStoreLoad", me.onTermsStoreLoad, me );
-		me.initialiseTerms();
-	},
-	
-	initialiseTerms: function(){
-		var me = this;
-		var futureTermsStore = me.termsStore.getCurrentAndFutureTermsStore(true);
-		me.getTerm().bindStore(futureTermsStore);
-	},
+
 
 	destroy:function(){
 	    var me=this;

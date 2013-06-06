@@ -1052,6 +1052,11 @@
                     "path": "/app/store/external/"
                 },
                 {
+                    "clsName": "Ssp.store.external.TermsFaceted",
+                    "name": "TermsFaceted.js",
+                    "path": "/app/store/external/"
+                },
+                {
                     "clsName": "Ssp.store.external.Departments",
                     "name": "Departments.js",
                     "path": "/app/store/external/"
