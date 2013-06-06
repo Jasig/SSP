@@ -63,6 +63,12 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     	me = this;
 		
     	var form =  me.getView().query('form')[0].getForm();
+    	var nameField = me.getView().query('textfield[name="name"]')[0].getValue();
+    	if(!nameField || nameField == '')
+    	{
+    		Ext.Msg.alert('Error','Please give the template a name.');
+    		return;
+    	}
 		form.updateRecord(me.currentMapPlan);
     	me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox[name=objectStatus]')[0].getValue()) ? 'ACTIVE' : 'INACTIVE');
 		me.setField('checkbox[name=isPrivate]', 'isPrivate');

@@ -61,6 +61,12 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
     	me = this;
 	
     	var form =  me.getView().query('form')[0].getForm();
+    	var nameField = me.getView().query('textfield[name="name"]')[0].getValue();
+    	if(!nameField || nameField == '')
+    	{
+    		Ext.Msg.alert('Error','Please give the plan a name.');
+    	}
+    	
 		form.updateRecord(me.currentMapPlan);
     	me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox[name=objectStatus]')[0].checked) ? 'ACTIVE' : 'INACTIVE');
 		me.setField('checkbox[name=isFinancialAid]', 'isFinancialAid');
