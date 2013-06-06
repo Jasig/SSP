@@ -65,6 +65,7 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
     	if(!nameField || nameField == '')
     	{
     		Ext.Msg.alert('Error','Please give the plan a name.');
+    		return;
     	}
     	
 		form.updateRecord(me.currentMapPlan);
