@@ -160,6 +160,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         var studentIdField = me.getStudentIdField();
         
         var fullName = me.person.getFullName();
+		var firstLastName = me.person.getFirstLastName();
         var coachName = me.person.getCoachFullName();
         
         // load general student record
@@ -167,7 +168,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         
         // load additional values
         nameField.setFieldLabel('');
-        nameField.setValue('<span style="color:#15428B">Full Name:  </span>' + fullName);
+        nameField.setValue('<span style="color:#15428B">Name:  </span>' + firstLastName);
         studentIdField.setFieldLabel('');
         studentIdField.setValue('<span style="color:#15428B">' + me.sspConfig.get('studentIdAlias') + ':  </span>' + me.person.get('schoolId'));
         primaryEmailAddressField.setFieldLabel('');

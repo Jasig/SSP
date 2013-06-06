@@ -81,6 +81,12 @@ Ext.define('Ssp.model.Person', {
     	var lastName = this.get('lastName') || "";
     	return firstName + " " + middleName + " " + lastName;
     },
+
+	getFirstLastName: function(){ 
+    	var firstName = this.get('firstName') || "";
+    	var lastName = this.get('lastName') || "";
+    	return firstName + " " + " " + lastName;
+    },
     
     getFormattedBirthDate: function(){
     	return Ext.util.Format.date( this.get('birthDate'),'m/d/Y');
