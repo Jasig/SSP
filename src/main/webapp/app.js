@@ -255,6 +255,7 @@ Ext.require([
     'Ssp.model.reference.JournalStepDetail',
 	'Ssp.model.reference.ConfidentialityLevel',
 	'Ssp.model.reference.ConfidentialityDisclosureAgreement',
+	'Ssp.model.reference.EarlyAlertReferral',
 	'Ssp.model.external.Course',
 	'Ssp.model.ApiUrl',
 	'Ssp.mixin.ApiProperties',

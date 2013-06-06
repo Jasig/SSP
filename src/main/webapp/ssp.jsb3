@@ -2072,11 +2072,6 @@
                     "path": "/app/model/reference/"
                 },
                 {
-                    "clsName": "Ssp.model.reference.EarlyAlertReferral",
-                    "name": "EarlyAlertReferral.js",
-                    "path": "/app/model/reference/"
-                },
-                {
                     "clsName": "Ssp.model.reference.EarlyAlertSuggestion",
                     "name": "EarlyAlertSuggestion.js",
                     "path": "/app/model/reference/"
