@@ -214,7 +214,11 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         // nothing to do
     },
     
-
+	handleNull: function(value){
+		if(value == null || value == undefined || value == 'null')
+			return "";
+		return value;
+	},
 
     getTranscriptSuccess: function(serviceResponses) {
         var me = this;
@@ -229,11 +233,11 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 			me.getGpaField().setFieldLabel('');
             me.getGpaField().setValue('<span style="color:#15428B">GPA:  </span>' + gpaFormatted);
 			me.getAcademicStandingField().setFieldLabel('');
-            me.getAcademicStandingField().setValue('<span style="color:#15428B">Standing:  </span>' + gpa.academicStanding);
+            me.getAcademicStandingField().setValue('<span style="color:#15428B">Standing:  </span>' + me.handleNull(gpa.academicStanding));
 			me.getCreditCompletionRateField().setFieldLabel('');
-            me.getCreditCompletionRateField().setValue('<span style="color:#15428B">Comp Rate:  </span>' + gpa.creditCompletionRate + '%');
+            me.getCreditCompletionRateField().setValue('<span style="color:#15428B">Comp Rate:  </span>' + me.handleNull(gpa.creditCompletionRate) + '%');
             me.getCurrentRestrictionsField().setFieldLabel('');
-			me.getCurrentRestrictionsField().setValue('<span style="color:#15428B">Restrictions:  </span>' + gpa.currentRestrictions)
+			me.getCurrentRestrictionsField().setValue('<span style="color:#15428B">Restrictions:  </span>' + me.handleNull(gpa.currentRestrictions))
 
         }
         var programs = transcript.get('programs');

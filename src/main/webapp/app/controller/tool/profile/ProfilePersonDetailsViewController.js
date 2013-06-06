@@ -198,7 +198,11 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         // nothing to do
     },
     
-    
+    handleNull: function(value){
+		if(value == null || value == undefined || value == 'null')
+			return "";
+		return value;
+	},
     
     getTranscriptSuccess: function(serviceResponses){
         var me = this;
@@ -207,19 +211,19 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         var transcript = new Ssp.model.Transcript(transcriptResponse);
         var gpa = transcript.get('gpa');
         if (gpa) {
-            var gpaFormatted = Ext.util.Format.number(gpa.gradePointAverage, '0.00');
+            var gpaFormatted = Ext.util.Format.number(me.handleNull(gpa.gradePointAverage), '0.00');
             me.getGpaField().setFieldLabel('');
             me.getGpaField().setValue('<span style="color:#15428B">GPA:  </span>' + gpaFormatted);
             me.getAcademicStandingField().setFieldLabel('');
-            me.getAcademicStandingField().setValue('<span style="color:#15428B">Standing:  </span>' + gpa.academicStanding);
+            me.getAcademicStandingField().setValue('<span style="color:#15428B">Standing:  </span>' + me.handleNull(gpa.academicStanding));
 			me.getCreditCompletionRateField().setFieldLabel('');
-            me.getCreditCompletionRateField().setValue('<span style="color:#15428B">Comp Rate:  </span>' + gpa.creditCompletionRate + '%');
+            me.getCreditCompletionRateField().setValue('<span style="color:#15428B">Comp Rate:  </span>' + me.handleNull(gpa.creditCompletionRate) + '%');
             me.getCurrentRestrictionsField().setFieldLabel('');
-            me.getCurrentRestrictionsField().setValue('<span style="color:#15428B">Restrictions:  </span>' + gpa.currentRestrictions);
+            me.getCurrentRestrictionsField().setValue('<span style="color:#15428B">Restrictions:  </span>' + me.handleNull(gpa.currentRestrictions));
             me.getCreditHoursEarnedField().setFieldLabel('');
-            me.getCreditHoursEarnedField().setValue('<span style="color:#15428B">Hrs Earned:  </span>' + gpa.creditHoursEarned);
+            me.getCreditHoursEarnedField().setValue('<span style="color:#15428B">Hrs Earned:  </span>' + me.handleNull(gpa.creditHoursEarned));
             me.getCreditHoursAttemptedField().setFieldLabel('');
-            me.getCreditHoursAttemptedField().setValue('<span style="color:#15428B">Hrs Attempted:  </span>' + gpa.creditHoursAttempted);
+            me.getCreditHoursAttemptedField().setValue('<span style="color:#15428B">Hrs Attempted:  </span>' + me.handleNull(gpa.creditHoursAttempted));
         }
         var programs = transcript.get('programs');
         if (programs) {

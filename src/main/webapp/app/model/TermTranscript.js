@@ -18,13 +18,13 @@
  */
 Ext.define('Ssp.model.TermTranscript', {
     extend: 'Ssp.model.AbstractBase',
-    fields: [{name: 'creditCompletionRate', type: 'auto'},
-        {name: 'creditHoursAttempted', type: 'auto'},
-        {name: 'creditHoursEarned', type: 'auto'},
-        {name: 'creditHoursForGpa', type: 'auto'},
-        {name: 'creditHoursNotCompleted', type: 'auto'},
-        {name: 'termCode', type: 'auto'},
-        {name: 'totalQualityPoints', type: 'auto'},
-        {name: 'gradePointAverage', type: 'auto'},
+    fields: [{name: 'creditCompletionRate', type: 'string'},
+        {name: 'creditHoursAttempted', type: 'float'},
+        {name: 'creditHoursEarned', type: 'float'},
+        {name: 'creditHoursForGpa', type: 'float'},
+        {name: 'creditHoursNotCompleted', type: 'float'},
+        {name: 'termCode', type: 'string'},
+        {name: 'totalQualityPoints', type: 'float'},
+        {name: 'gradePointAverage', type: 'float'},
 		{name: 'termStartDate', type: 'date', dateFormat: 'time'}]
 });
