@@ -89,10 +89,10 @@ set body = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http
 					
 					#if("$!course.contactNotes" != "" || "$!course.studentNotes" != "")
 						<p style="font-size:10px; margin-top:5px">
-						#if("$!course.contactNotes" != "")
+						#if(!$isPrivate && "$!course.contactNotes" != "")
 							<span style="color:#ABABAB"><strong>Advisor Notes:</strong></span> $course.contactNotes
 						#end
-						#if("$!course.contactNotes" != "" && "$!course.studentNotes" != "")
+						#if(!$isPrivate && "$!course.contactNotes" != "" && "$!course.studentNotes" != "")
 						<br/><br/>
 						#end
 						#if("$!course.studentNotes" != "")
@@ -116,10 +116,10 @@ set body = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http
 			#if("$!termCourse.contactNotes" != "" || "$!termCourse.studentNotes" != "")
 			<tr>
 				<td colspan="2" style="padding-top: 5px; padding-bottom: 5px; padding-left:10px; padding-right:10px;border-top:1px solid #ABABAB;">
-					#if("$termCourse.contactNotes" != "")
+					#if(!$isPrivate && "$termCourse.contactNotes" != "")
 					<span style="color:#ABABAB"><strong>Advisor Notes:</strong></span> $termCourse.contactNotes
 					#end
-					#if("$termCourse.contactNotes" != "" && "$termCourse.studentNotes" != "")
+					#if(!$isPrivate && "$termCourse.contactNotes" != "" && "$termCourse.studentNotes" != "")
 					<br/><br/>
 					#end
 					#if("$termCourse.studentNotes" != "")
@@ -139,10 +139,10 @@ set body = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http
 		</div>
 	#if("$!planContactNotes" != "" || "$!planStudentNotes" != "")
 		<p style="padding-left:20px;margin-top:15px">
-		#if("$!planContactNotes" != "")
+		#if(!$isPrivate && "$!planContactNotes" != "")
 			<span style="color:#ABABAB"><strong>Advisor Notes:</strong></span>&nbsp;&nbsp;&nbsp;$!planContactNotes
 		#end
-		#if("$!planContactNotes" != "" && "$!planStudentNotes" != "")
+		#if(!$isPrivate && "$!planContactNotes" != "" && "$!planStudentNotes" != "")
 		<br/><br/>
 		#end
 		#if("$!planStudentNotes" != "")

@@ -82,5 +82,5 @@ public interface MessageTemplateService extends
 			final Float totalPlanCreditHours,
 			final Float totalPlanDevHours,
 			final List<TermCourses<T, TO>> termCourses,
-			String institutionName);
+			final String institutionName);
 }

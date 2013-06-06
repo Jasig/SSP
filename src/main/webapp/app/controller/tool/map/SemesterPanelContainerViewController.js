@@ -510,7 +510,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.mapPlanService.email(me.semesterStores, metaData, {
             success: me.newServiceSuccessHandler('emailMap', me.emailMapPlanServiceSuccess, serviceResponses),
             failure: me.newServiceFailureHandler('emailMap', me.emailMapPlanServiceFailure, serviceResponses),
-            scope: me
+            scope: me,
+            isPrivate: true
         });
 	},
 	
@@ -543,7 +544,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.mapPlanService.print(me.semesterStores, metaData, {
             success: me.newServiceSuccessHandler('printMap', me.printMapPlanServiceSuccess, serviceResponses),
             failure: me.newServiceFailureHandler('printMap', me.printMapPlanServiceFailure, serviceResponses),
-            scope: me
+            scope: me,
+            isPrivate: true
         });
 	},
 	
@@ -567,7 +569,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.mapPlanService.print(me.semesterStores, metaData, {
             success: me.newServiceSuccessHandler('printMap', me.printMapPlanServiceSuccess, serviceResponses),
             failure: me.newServiceFailureHandler('printMap', me.printMapPlanServiceFailure, serviceResponses),
-            scope: me
+            scope: me,
+            isPrivate: false
         });
 	},
 	

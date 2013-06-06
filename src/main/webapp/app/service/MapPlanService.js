@@ -321,18 +321,18 @@ Ext.define('Ssp.service.MapPlanService', {
 	    	me.apiProperties.handleError( response );	 
 	    	callbacks.failure(response, callbacks.scope);
 	    };
-	    me.prepareMapOutput(semesterStores, outputData)
+	    me.prepareMapOutput(semesterStores, outputData, callbacks.isPrivate)
 		me.apiProperties.makeRequest({
    			url: url+'/' + outputType,
    			method: 'POST',
    			jsonData: outputData.data,
    			successFunc: success,
    			failureFunc: failure,
-   			scope: me
+   			scope: me,
    		});
     },
     
-    prepareMapOutput: function(semesterStores, outputData){
+    prepareMapOutput: function(semesterStores, outputData, isPrivate){
     	/**** TODO when semesterStores is null this is printing from somewhere 
 	      other than the map tool.  planCourses as brought in need to be
 		  converted to semesterCourses because of some inconsistencies
@@ -355,6 +355,7 @@ Ext.define('Ssp.service.MapPlanService', {
 		}
 	    me.updateCurrentMap(semesterStores);
 	    outputData.set("plan",me.currentMapPlan.getSimpleJsonData());
+	    outputData.set("isPrivate",isPrivate);
     }
     	
 });

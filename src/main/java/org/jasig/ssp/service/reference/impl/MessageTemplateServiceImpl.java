@@ -273,6 +273,7 @@ public class MessageTemplateServiceImpl extends
 				termCourses,
 				institutionName);
  
+		messageParams.put("isPrivate", planOutput.getIsPrivate());
 		messageParams.put("includeCourseDescription", planOutput.getIncludeCourseDescription());
 		messageParams.put("includeFinancialAidInformation", planOutput.getIncludeFinancialAidInformation());
 		messageParams.put("includeHeaderFooter", planOutput.getIncludeHeaderFooter());

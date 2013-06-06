@@ -31,6 +31,7 @@ public abstract class AbstractPlanOutputTO<P extends AbstractPlan,T extends Abst
     private String emailTo;
     private String emailCC;
     private String notes;
+    private Boolean isPrivate = false;
     
     public T getNonOutputTO() {
     	return plan;
@@ -88,5 +89,19 @@ public abstract class AbstractPlanOutputTO<P extends AbstractPlan,T extends Abst
 	}
 	public void setNotes(String notes) {
 		this.notes = notes;
+	}
+
+	/**
+	 * @return the isPrivate
+	 */
+	public Boolean getIsPrivate() {
+		return isPrivate;
+	}
+
+	/**
+	 * @param isPrivate the isPrivate to set
+	 */
+	public void setIsPrivate(Boolean isPrivate) {
+		this.isPrivate = isPrivate;
 	}
 }

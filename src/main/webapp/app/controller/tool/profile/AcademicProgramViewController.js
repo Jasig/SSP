@@ -221,7 +221,8 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 		me.mapPlanService.email(null, metaData, {
             success: me.newServiceSuccessHandler('emailMap', me.emailMapPlanServiceSuccess, serviceResponses),
             failure: me.newServiceFailureHandler('emailMap', me.emailMapPlanServiceFailure, serviceResponses),
-            scope: me
+            scope: me,
+            isPrivate: true
         });
 	},
 	
@@ -253,7 +254,8 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 		me.mapPlanService.print(null, metaData, {
             success: me.newServiceSuccessHandler('printMap', me.printMapPlanServiceSuccess, serviceResponses),
             failure: me.newServiceFailureHandler('printMap', me.printMapPlanServiceFailure, serviceResponses),
-            scope: me
+            scope: me,
+            isPrivate: true
         });
 	},
 	

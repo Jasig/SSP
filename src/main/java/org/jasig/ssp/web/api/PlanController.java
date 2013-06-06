@@ -251,6 +251,8 @@ public class PlanController  extends AbstractBaseController {
 	String print(final HttpServletResponse response,
 			 @RequestBody final PlanOutputTO planOutputDataTO) throws ObjectNotFoundException {
 
+		
+			
 		SubjectAndBody message = getOutput(planOutputDataTO);
 		if(message != null)
 			return message.getBody();
