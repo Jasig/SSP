@@ -504,7 +504,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		
 		criteria.setProjection(projections);
 	
-		addBasicStudentProperties(projections, criteria);
+		addBasicStudentProperties(projections, criteria, sAndP.getStatus());
 		
 		criteria.setResultTransformer(new AliasToBeanResultTransformer(
 				BaseStudentReportTO.class));
@@ -530,7 +530,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		
 		criteria.setProjection(projections);
 				
-		addBasicStudentProperties(projections, criteria);
+		addBasicStudentProperties(projections, criteria, sAndP.getStatus());
 		
 		Criteria demographics = criteria.createAlias("demographics", "demographics", JoinType.LEFT_OUTER_JOIN);
 		demographics.createAlias("demographics.ethnicity", "ethnicity", JoinType.LEFT_OUTER_JOIN);
@@ -587,7 +587,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 
 	}
 	
-	private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria){
+	private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria, ObjectStatus status){
 		
 		projections.add(Projections.groupProperty("firstName").as("firstName"));
 		projections.add(Projections.groupProperty("middleName").as("middleName"));
@@ -607,7 +607,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		projections.add(Projections.groupProperty("id").as("id"));
 		
 		criteria.createAlias("programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
-		criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
+		criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN)
+				.add(Restrictions.eq("personSpecialServiceGroups.objectStatus", status));
 		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup", JoinType.LEFT_OUTER_JOIN);
 		
 		projections.add(Projections.groupProperty("specialServiceGroup.name").as("specialServiceGroup"));
