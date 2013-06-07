@@ -41,6 +41,7 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 	init: function() {
 		var me=this;
 	    me.resetForm();
+	    me.store.removeAll();
 	    
 		personId = me.personLite.get('id');
 	    
