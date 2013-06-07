@@ -97,7 +97,8 @@ public final class SortingAndPaging { // NOPMD
 	 * 
 	 *            <p>
 	 *            Will use {@link #DEFAULT_MAXIMUM_RESULTS} if not specified
-	 *            here. Can not exceed {@link #MAXIMUM_ALLOWABLE_RESULTS}.
+	 *            here. Can not exceed {@link #MAXIMUM_ALLOWABLE_RESULTS}
+	 *            unless a value less than zero is specified.
 	 * @param sortFields
 	 *            Ordered list of sort fields and directions
 	 * @param defaultSortProperty
@@ -114,11 +115,14 @@ public final class SortingAndPaging { // NOPMD
 		this.firstResult = (firstResult == null)
 				|| (firstResult < Integer.valueOf(0)) ? Integer.valueOf(0)
 				: firstResult;
-		this.maxResults = maxResults == null
-				? DEFAULT_MAXIMUM_RESULTS
-				: (maxResults > MAXIMUM_ALLOWABLE_RESULTS ? MAXIMUM_ALLOWABLE_RESULTS
-						: (maxResults < Integer.valueOf(1) ? DEFAULT_MAXIMUM_RESULTS
-								: maxResults));
+		if ( maxResults == null ||
+				maxResults > MAXIMUM_ALLOWABLE_RESULTS) {
+			this.maxResults = MAXIMUM_ALLOWABLE_RESULTS;
+		} else if ( maxResults == 0 ) {
+			this.maxResults = DEFAULT_MAXIMUM_RESULTS;
+		} else {
+			this.maxResults = null; // inifinite. see isPaged()
+		}
 		this.sortFields = sortFields;
 		this.defaultSortProperty = defaultSortProperty;
 		this.defaultSortDirection = defaultSortDirection;

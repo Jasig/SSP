@@ -74,6 +74,10 @@ Ext.define('Ssp.mixin.ApiProperties', {
 	getPagingSize: function(){
 		return 20;
 	},
+
+	getInfinitePagingSize: function(){
+		return -1;
+	},
 	
 	getProxy: function(url){
 		var proxyObj = {

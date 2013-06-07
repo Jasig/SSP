@@ -23,8 +23,8 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
     controller: 'Ssp.controller.tool.journal.EditJournalViewController',
     inject: {
         confidentialityLevelsStore: 'confidentialityLevelsStore',
-        journalSourcesStore: 'journalSourcesStore',
-        journalTracksStore: 'journalTracksStore',
+        journalSourcesStore: 'journalSourcesUnpagedStore',
+        journalTracksStore: 'journalTracksUnpagedStore',
         model: 'currentJournalEntry'
     },
 	width: '100%',
@@ -97,7 +97,6 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                         store: me.journalSourcesStore,
                         valueField: 'id',
                         displayField: 'name',
-                        mode: 'local',
                         typeAhead: true,
                         queryMode: 'local',
                         allowBlank: false,

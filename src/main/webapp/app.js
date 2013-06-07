@@ -308,9 +308,11 @@ Ext.require([
     'Ssp.store.reference.FundingSources',
     'Ssp.store.reference.Genders',
     'Ssp.store.reference.JournalSources',
+    'Ssp.store.reference.JournalSourcesUnpaged',
     'Ssp.store.reference.JournalStepDetails',
     'Ssp.store.reference.JournalSteps',
     'Ssp.store.reference.JournalTracks',
+    'Ssp.store.reference.JournalTracksUnpaged',
     'Ssp.store.reference.Lassis',
     'Ssp.store.reference.MaritalStatuses',
     'Ssp.store.reference.MilitaryAffiliations',
@@ -477,7 +479,7 @@ var apiUrls = [
   {name: 'facetedtag', url: 'reference/tag/facet'},
   {name: 'futureTerms', url: 'reference/term/future'},
   {name: 'termsfaceted', url: 'reference/term/facet'},
-  {name: 'weeklyCourseWorkHourRanges', url: 'reference/config/?name=weekly_course_work_hour_ranges'},
+  {name: 'weeklyCourseWorkHourRanges', url: 'reference/config/?name=weekly_course_work_hour_ranges'}
 ];
 
 Ext.onReady(function(){	
@@ -903,9 +905,11 @@ Ext.onReady(function(){
 			    	journalEntriesStore: 'Ssp.store.JournalEntries',
 			    	journalEntryDetailsStore: 'Ssp.store.JournalEntryDetails',
 			    	journalSourcesStore: 'Ssp.store.reference.JournalSources',
+			    	journalSourcesUnpagedStore: 'Ssp.store.reference.JournalSourcesUnpaged',
 			        journalStepsStore: 'Ssp.store.reference.JournalSteps',
 			        journalDetailsStore: 'Ssp.store.reference.JournalStepDetails',
 			        journalTracksStore: 'Ssp.store.reference.JournalTracks',
+			        journalTracksUnpagedStore: 'Ssp.store.reference.JournalTracksUnpaged',
 			        lassisStore: 'Ssp.store.reference.Lassis',
 			        maritalStatusesStore: 'Ssp.store.reference.MaritalStatuses',
 			    	militaryAffiliationsStore: 'Ssp.store.reference.MilitaryAffiliations',

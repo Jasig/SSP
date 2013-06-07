@@ -26,8 +26,8 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
     	formUtils: 'formRendererUtils',
     	service: 'journalEntryService',
         journalEntriesStore: 'journalEntriesStore',
-        journalSourcesStore: 'journalSourcesStore',
-    	journalTracksStore: 'journalTracksStore',
+        journalSourcesStore: 'journalSourcesUnpagedStore',
+    	journalTracksStore: 'journalTracksUnpagedStore',
     	model: 'currentJournalEntry',
     	personLite: 'personLite'
     },
