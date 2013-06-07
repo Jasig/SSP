@@ -31,6 +31,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -45,6 +46,9 @@ public class ExternalPerson extends AbstractExternalData implements
 
 	private static final long serialVersionUID = 7972452789881520560L;
 
+	public static final String BOOLEAN_YES = "Y";
+	public static final String BOOLEAN_NO = "N";
+	
 	@Column(nullable = false, length = 50)
 	@NotNull
 	@NotEmpty
@@ -120,8 +124,9 @@ public class ExternalPerson extends AbstractExternalData implements
 	@Size(max = 50)
 	private String coachSchoolId;
 	
-	@Nullable
-	private Boolean nonLocalAddress;
+	@Column(nullable = false, length = 1)
+	@Size(max = 1)
+	private String nonLocalAddress;
 	
 	@Column(length = 50)
 	@Size(max = 50)
@@ -342,14 +347,6 @@ public class ExternalPerson extends AbstractExternalData implements
 		this.coachSchoolId = coachSchoolId;
 	}
 
-	public Boolean getNonLocalAddress() {
-		return nonLocalAddress;
-	}
-
-	public void setNonLocalAddress(Boolean nonLocalAddress) {
-		this.nonLocalAddress = nonLocalAddress;
-	}
-
 	/**
 	 * @return the residencyCounty
 	 */
@@ -377,5 +374,19 @@ public class ExternalPerson extends AbstractExternalData implements
 	public void setF1Status(String f1Status) {
 		this.f1Status = f1Status;
 	}
+	public Boolean getNonLocalAddress() {
+		String nonLocalAddressTrimmed = StringUtils.trimToNull(nonLocalAddress);
+		if ( nonLocalAddressTrimmed == null ) {
+			// non-nullable field so no point in returning null here
+			return false;
+		}
+		return BOOLEAN_YES.equalsIgnoreCase(nonLocalAddressTrimmed);
+	}
 
+	public void setNonLocalAddress(Boolean nonLocalAddress) {
+		if ( nonLocalAddress == null ) {
+			this.nonLocalAddress = BOOLEAN_NO;
+		}
+		this.nonLocalAddress = nonLocalAddress ? BOOLEAN_YES : BOOLEAN_NO;
+	}
 }
