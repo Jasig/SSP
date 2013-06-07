@@ -83,7 +83,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				    	xtype: 'numberfield',
 				        anchor: '100%',
 				        maxValue: 99,
-				        allowDecimals: false,
+				        allowDecimals: true,
 				        minValue: 0,
 				        step: 1,
 				        fieldLabel: 'Credit hours(over ride)',

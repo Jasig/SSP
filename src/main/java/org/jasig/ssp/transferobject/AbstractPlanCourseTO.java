@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.transferobject;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import org.jasig.ssp.model.AbstractPlan;
@@ -46,7 +47,7 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 	
 	private UUID electiveId;
 
-	private Integer creditHours;
+	private BigDecimal creditHours;
 
 	private Boolean isDev;
 
@@ -119,11 +120,11 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 		this.courseDescription = courseDescription;
 	}
 
-	public Integer getCreditHours() {
+	public BigDecimal getCreditHours() {
 		return creditHours;
 	}
 
-	public void setCreditHours(Integer creditHours) {
+	public void setCreditHours(BigDecimal creditHours) {
 		this.creditHours = creditHours;
 	}
 

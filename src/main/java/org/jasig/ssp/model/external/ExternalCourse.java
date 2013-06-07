@@ -19,6 +19,8 @@
 package org.jasig.ssp.model.external;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -73,7 +75,7 @@ public class ExternalCourse extends AbstractExternalReferenceData implements Ext
 	private String departmentCode,divisionCode;
 
 	@Column(nullable = false)
-	private Integer maxCreditHours,minCreditHours;
+	private BigDecimal maxCreditHours,minCreditHours;
 
 	@Column(nullable = false, length = 1)
 	@Size(max = 1)
@@ -119,19 +121,19 @@ public class ExternalCourse extends AbstractExternalReferenceData implements Ext
 		this.description = description;
 	}
 
-	public Integer getMaxCreditHours() {
+	public BigDecimal getMaxCreditHours() {
 		return maxCreditHours;
 	}
 
-	public void setMaxCreditHours(Integer maxCreditHours) {
+	public void setMaxCreditHours(BigDecimal maxCreditHours) {
 		this.maxCreditHours = maxCreditHours;
 	}
 
-	public Integer getMinCreditHours() {
+	public BigDecimal getMinCreditHours() {
 		return minCreditHours;
 	}
 
-	public void setMinCreditHours(Integer minCreditHours) {
+	public void setMinCreditHours(BigDecimal minCreditHours) {
 		this.minCreditHours = minCreditHours;
 	}
 

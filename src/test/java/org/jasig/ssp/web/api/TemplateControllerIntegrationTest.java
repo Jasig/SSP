@@ -24,6 +24,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -198,7 +199,7 @@ public class TemplateControllerIntegrationTest {
 		course.setFormattedCourse("TEST");
 		course.setOrderInTerm(new Integer(1));
 		course.setIsDev(true);
-		course.setCreditHours(3);
+		course.setCreditHours(new BigDecimal(3.0));
 		obj.getTemplateCourses().add(course);
 		return obj;
 	}

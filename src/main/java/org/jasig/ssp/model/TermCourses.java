@@ -86,9 +86,9 @@ public class TermCourses<T extends AbstractPlan, TO extends AbstractPlanTO<T>> {
 		totalCreditHours = new Float(0);
 		totalDevCreditHours = new Float(0);
 		for(AbstractPlanCourseTO<T,? extends AbstractPlanCourse<T>> course:courses){
-			totalCreditHours = totalCreditHours + new Float(course.getCreditHours());
+			totalCreditHours = totalCreditHours + course.getCreditHours().floatValue();
 			if(course.isDev())
-				totalDevCreditHours = totalDevCreditHours + new Float(course.getCreditHours());
+				totalDevCreditHours = totalDevCreditHours + course.getCreditHours().floatValue();
 		}
 	}
 	/**

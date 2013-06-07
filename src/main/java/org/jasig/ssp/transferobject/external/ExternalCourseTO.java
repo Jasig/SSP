@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.transferobject.external;
 
+import java.math.BigDecimal;
+
 import org.jasig.ssp.model.external.ExternalCourse;
 
 public class ExternalCourseTO implements ExternalDataTO<ExternalCourse> {
@@ -32,9 +34,9 @@ public class ExternalCourseTO implements ExternalDataTO<ExternalCourse> {
 	
 	private String description;
 	
-	private Integer maxCreditHours;
+	private BigDecimal maxCreditHours;
 	
-	private Integer minCreditHours;
+	private BigDecimal minCreditHours;
 	
 	private Boolean isDev;
 	
@@ -114,19 +116,19 @@ public class ExternalCourseTO implements ExternalDataTO<ExternalCourse> {
 		this.description = description;
 	}
 
-	public Integer getMaxCreditHours() {
+	public BigDecimal getMaxCreditHours() {
 		return maxCreditHours;
 	}
 
-	public void setMaxCreditHours(Integer maxCreditHours) {
+	public void setMaxCreditHours(BigDecimal maxCreditHours) {
 		this.maxCreditHours = maxCreditHours;
 	}
 
-	public Integer getMinCreditHours() {
+	public BigDecimal getMinCreditHours() {
 		return minCreditHours;
 	}
 
-	public void setMinCreditHours(Integer minCreditHours) {
+	public void setMinCreditHours(BigDecimal minCreditHours) {
 		this.minCreditHours = minCreditHours;
 	}
 
@@ -185,6 +187,4 @@ public class ExternalCourseTO implements ExternalDataTO<ExternalCourse> {
 	public void setNumber(String number) {
 		this.number = number;
 	}
-
-
 }

@@ -26,6 +26,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -168,7 +169,7 @@ public class PlanServiceTest {
 				course.setFormattedCourse("TEST"+i);
 				course.setOrderInTerm(new Integer(i));
 				course.setIsDev(false);
-				course.setCreditHours(3);
+				course.setCreditHours(new BigDecimal(3.0));
 				course.setTermCode(term.getCode());
 				plan.getPlanCourses().add(course);
 			}

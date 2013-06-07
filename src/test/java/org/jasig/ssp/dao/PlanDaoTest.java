@@ -20,6 +20,7 @@ package org.jasig.ssp.dao;
 
 import static org.junit.Assert.assertEquals;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -167,7 +168,7 @@ public class PlanDaoTest {
 				course.setCreatedBy(person);
 				course.setPlan(plan);
 				course.setPerson(person);
-				course.setCreditHours(3);
+				course.setCreditHours(new BigDecimal(3.0));
 				course.setTermCode(term.getCode());
 				plan.getPlanCourses().add(course);
 			}
@@ -206,7 +207,7 @@ public class PlanDaoTest {
 		course.setCreatedBy(person);
 		course.setPlan(plan);
 		course.setPerson(person);
-		course.setCreditHours(4);
+		course.setCreditHours(new BigDecimal(4.0));
 		
 		plan.getPlanCourses().add(course);
 		
@@ -251,7 +252,7 @@ public class PlanDaoTest {
 		course.setCreatedBy(person);
 		course.setPlan(plan);
 		course.setPerson(person);
-		course.setCreditHours(4);
+		course.setCreditHours(new BigDecimal(4.0));
 		plan.getPlanCourses().add(course);
 		
 		dao.save(plan);
@@ -294,7 +295,7 @@ public class PlanDaoTest {
 		course.setCreatedBy(person);
 		course.setPlan(plan);
 		course.setPerson(person);
-		course.setCreditHours(3);
+		course.setCreditHours(new BigDecimal(3.0));
 		plan.getPlanCourses().add(course);
 		
 		dao.save(plan);

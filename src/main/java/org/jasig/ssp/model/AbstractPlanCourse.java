@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -52,7 +54,7 @@ public abstract class AbstractPlanCourse<T extends AbstractPlan> extends Abstrac
 	private String courseDescription;
 	
 	@Column(nullable = false)
-	private Integer creditHours;
+	private BigDecimal creditHours;
 	
 	@Column(nullable = false)
 	private Boolean isDev = false;
@@ -144,11 +146,11 @@ public abstract class AbstractPlanCourse<T extends AbstractPlan> extends Abstrac
 		this.courseDescription = courseDescription;
 	}
 
-	public Integer getCreditHours() {
+	public BigDecimal getCreditHours() {
 		return creditHours;
 	}
 
-	public void setCreditHours(Integer creditHours) {
+	public void setCreditHours(BigDecimal creditHours) {
 		this.creditHours = creditHours;
 	}
 

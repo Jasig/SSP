@@ -21,6 +21,7 @@ package org.jasig.ssp.dao;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -159,7 +160,7 @@ public class TemplateDaoTest {
 				course.setIsDev(false);
 				course.setCreatedBy(person);
 				course.setTemplate(template);
-				course.setCreditHours(3);
+				course.setCreditHours(new BigDecimal(3.0));
 				course.setTermCode(term.getCode());
 				template.getTemplateCourses().add(course);
 			}
@@ -196,7 +197,7 @@ public class TemplateDaoTest {
 		course.setOrderInTerm(1);
 		course.setCreatedBy(person);
 		course.setTemplate(template);
-		course.setCreditHours(4);
+		course.setCreditHours(new BigDecimal(4.0));
 		
 		template.getTemplateCourses().add(course);
 		
@@ -239,7 +240,7 @@ public class TemplateDaoTest {
 		course.setOrderInTerm(1);
 		course.setCreatedBy(person);
 		course.setTemplate(template);
-		course.setCreditHours(4);
+		course.setCreditHours(new BigDecimal(4.0));
 		template.getTemplateCourses().add(course);
 		
 		dao.save(template);
@@ -287,7 +288,7 @@ public class TemplateDaoTest {
 		course.setOrderInTerm(new Integer(1));
 		course.setCreatedBy(person);
 		course.setTemplate(template);
-		course.setCreditHours(3);
+		course.setCreditHours(new BigDecimal(3.0));
 		template.getTemplateCourses().add(course);
 		
 		dao.save(template);
