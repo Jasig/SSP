@@ -126,6 +126,12 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 	},	    
 	onCloseClick: function(){
 		var me = this;
+		me.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
 		me.getView().hide();
-	}
+	},
+    destroy: function() {
+    	var me = this;
+		me.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
+        return this.callParent( arguments );
+    },  
 });
