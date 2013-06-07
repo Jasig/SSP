@@ -30,31 +30,33 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
             title: 'Administrative Tools',
             form: '',
             expanded: true,
-            children: [{
-                text: 'Student Success',
-                title: 'Student Success',
-                form: '',
-                expanded: false,
-                children: [{
-                    text: 'Campus Services',
-                    title: 'Campus Services',
-                    store: 'campusServices',
-                    form: 'AbstractReferenceAdmin',
-                    leaf: true
-                }, {
-                    text: 'LASSI Skill Components',
-                    title: 'LASSI Skill Components',
-                    store: 'lassis',
-                    form: 'AbstractReferenceAdmin',
-                    leaf: true
-                }, {
-                    text: 'Personality Types',
-                    title: 'Personality Types',
-                    store: 'personalityTypes',
-                    form: 'AbstractReferenceAdmin',
-                    leaf: true
-                }]
-            }, {
+            children: [
+//               {
+//                text: 'Student Success',
+//                title: 'Student Success',
+//                form: '',
+//                expanded: false,
+//                children: [{
+//                    text: 'Campus Services',
+//                    title: 'Campus Services',
+//                    store: 'campusServices',
+//                    form: 'AbstractReferenceAdmin',
+//                    leaf: true
+//                }, {
+//                    text: 'LASSI Skill Components',
+//                    title: 'LASSI Skill Components',
+//                    store: 'lassis',
+//                    form: 'AbstractReferenceAdmin',
+//                    leaf: true
+//                }, {
+//                    text: 'Personality Types',
+//                    title: 'Personality Types',
+//                    store: 'personalityTypes',
+//                    form: 'AbstractReferenceAdmin',
+//                    leaf: true
+//                }]
+//            },
+            {
                 text: 'Accommodation',
                 title: 'Accommodation',
                 form: '',
