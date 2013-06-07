@@ -214,9 +214,11 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         // nothing to do
     },
     
-	handleNull: function(value){
+	handleNull: function(value, defaultValue){
+		if(defaultValue == null || defaultValue == undefined)
+			defaultValue = "";
 		if(value == null || value == undefined || value == 'null')
-			return "";
+			return defaultValue;
 		return value;
 	},
 
@@ -254,9 +256,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var financialAid = transcript.get('financialAid');
         if ( financialAid ) {
             me.getCurrentYearFinancialAidAwardField().setFieldLabel('');
-        	me.getCurrentYearFinancialAidAwardField().setValue('<span style="color:#15428B">FA Award:  </span>' + financialAid.currentYearFinancialAidAward);
+        	me.getCurrentYearFinancialAidAwardField().setValue('<span style="color:#15428B">FA Award:  </span>' + me.handleNull(financialAid.currentYearFinancialAidAward));
         	me.getSapStatusField().setFieldLabel('');
-			me.getSapStatusField().setValue('<span style="color:#15428B">SAP:  </span>' + financialAid.sapStatus);
+			me.getSapStatusField().setValue('<span style="color:#15428B">SAP:  </span>' + me.handleNull(financialAid.sapStatus));
         }
     },
 
