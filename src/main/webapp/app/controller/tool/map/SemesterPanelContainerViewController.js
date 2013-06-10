@@ -302,6 +302,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				itemId : 'year' + termSet[0].get("reportYear"),
 				flex : 1
 			});
+			if(Ext.isIE){  //without this check/alteration, scrollbars appear in IE10 per SSP-1308
+				yearView.minHeight = 214;
+			}
 			var semesterPanels = new Array();
 			termSet.forEach(function(term){
 				var termCode = term.get('code');
