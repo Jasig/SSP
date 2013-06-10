@@ -148,7 +148,7 @@ public class Template extends AbstractPlan implements Cloneable{
 
 	@Override
 	public List<? extends AbstractPlanCourse<?>> getCourses() {
-		return templateCourses;
+		return getTemplateCourses();
 	}
 
 	@Override

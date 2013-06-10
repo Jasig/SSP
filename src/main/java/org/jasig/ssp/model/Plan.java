@@ -119,7 +119,7 @@ public class Plan extends AbstractPlan  {
 
 	@Override
 	public List<? extends AbstractPlanCourse<?>> getCourses() {
-		return planCourses;
+		return getPlanCourses();
 	}
 
 	@Override
