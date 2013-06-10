@@ -81,7 +81,7 @@
 		<dropView viewName="v_external_person" />
 		
 		<update tableName="external_person">
-			<column name="non_local_address" value="N" />
+			<column name="non_local_address" value="0" />
 			<where>non_local_address is null</where>
 		</update>
 		
