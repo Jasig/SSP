@@ -35,7 +35,7 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 
 	//Hibernate calculated attributes only support native sql and not hql :( 
 	//tokens in all caps refer to map_plan_course COLUMNS not member attributes.
-	private static final String IS_TRANSCRIPT_FORMULA = " ( select count(*) > 0 from external_student_transcript_course estc " +
+	private static final String IS_TRANSCRIPT_FORMULA = " ( select count(*) from external_student_transcript_course estc " +
 														" join  person p on p.school_id = estc.school_id " +
 														" where p.id = PERSON_ID and estc.formatted_course = FORMATTED_COURSE ) ";
 	
@@ -53,7 +53,7 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 	
 	
 	@Formula(IS_TRANSCRIPT_FORMULA)
-	private Boolean isTranscript;	
+	private Integer isTranscript;	
 	
 
 	public Person getPerson() {
@@ -88,10 +88,10 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 	}
 
 	public Boolean getIsTranscript() {
-		return isTranscript;
+		return isTranscript == null ? false : isTranscript > 0;
 	}
 
 	public void setIsTranscript(Boolean isTranscript) {
-		this.isTranscript = isTranscript;
+		//NOOP since this is transient 
 	}
 }
