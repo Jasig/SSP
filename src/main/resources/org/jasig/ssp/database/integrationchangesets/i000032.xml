@@ -79,7 +79,12 @@
 		</preConditions>
 
 		<dropView viewName="v_external_person" />
-
+		
+		<update tableName="external_person">
+			<column name="non_local_address" value="N" />
+			<where>non_local_address is null</where>
+		</update>
+		
 		<addColumn tableName="external_person">
 			<column name="non_local_address_new" type="char(1)" defaultValue="N" />
 		</addColumn>
@@ -95,6 +100,12 @@
 		not so much -->
 		<dropColumn tableName="external_person" columnName="non_local_address" />
 		<renameColumn tableName="external_person" oldColumnName="non_local_address_new" newColumnName="non_local_address" />
+		
+		<update tableName="external_person">
+			<column name="non_local_address" value="N" />
+			<where>non_local_address is null</where>
+		</update>		
+		
 		<addNotNullConstraint tableName="external_person" columnName="non_local_address" columnDataType="char(1)" />
 
 		<createView viewName="v_external_person">
