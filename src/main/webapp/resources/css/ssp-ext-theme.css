@@ -161,6 +161,9 @@ background-image: url('/ssp/images/help-icon.png') !important;
 }
 .helpIconSmall {
 background-image: url('/ssp/images/help-icon-small.png') !important;
+	background: transparent;
+ 	border-style:none;
+ 	background-repeat: no-repeat;
 }
 .multiselect-invalid .x-boundlist {
     border-color: Red !important;
