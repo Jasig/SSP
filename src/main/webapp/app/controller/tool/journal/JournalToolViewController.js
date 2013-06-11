@@ -25,7 +25,7 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
         confidentialityLevelsStore: 'confidentialityLevelsStore',
     	formUtils: 'formRendererUtils',
     	service: 'journalEntryService',
-        journalEntriesStore: 'journalEntriesStore',
+        journalEntriesStore: 'journalEntriesUnpagedStore',
         journalSourcesStore: 'journalSourcesUnpagedStore',
     	journalTracksStore: 'journalTracksUnpagedStore',
     	model: 'currentJournalEntry',

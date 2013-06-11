@@ -26,7 +26,7 @@ Ext.define('Ssp.view.tools.journal.JournalList', {
         authenticatedPerson: 'authenticatedPerson',
         columnRendererUtils: 'columnRendererUtils',
         model: 'currentJournalEntry',
-        store: 'journalEntriesStore'
+        store: 'journalEntriesUnpagedStore'
     },
     
     width: '100%',

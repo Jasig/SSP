@@ -1862,6 +1862,11 @@
                     "path": "/app/store/"
                 },
                 {
+                    "clsName": "Ssp.store.JournalEntriesUnpaged",
+                    "name": "JournalEntries.js",
+                    "path": "/app/store/"
+                },
+                {
                     "clsName": "Ssp.store.EarlyAlerts",
                     "name": "EarlyAlerts.js",
                     "path": "/app/store/"
