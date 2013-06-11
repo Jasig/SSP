@@ -103,7 +103,9 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
 							checked: true,
                             name: 'includeFinancialAidInformation',
                             labelSeparator: '',
-                            boxLabel: 'Display FinAid Information'
+                            boxLabel: 'Display FinAid Information',
+                            hidden: true,
+                            hideable: false
                          }
                         ]
                         }
