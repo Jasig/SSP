@@ -26,8 +26,8 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
 		appEventsController: 'appEventsController',
 		currentMapPlan: 'currentMapPlan'
     },
-    height: 500,
-    width: 550,
+    height: 554,
+    width: 684,
     saveAs: null,
     resizable: true,
     initComponent: function(){
@@ -64,7 +64,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                             padding: '0 0 15 0',
         					margin: '0 0 0 5',
                             width: '100%',
-                            height: '100%',
+                            height: 100,
                             items: [{
                 				    
                 			    	fieldLabel: 'Active Plan',

@@ -79,7 +79,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                 			    	fieldLabel: 'Private to Me ',
                 			    	name: 'isPrivate',
 									itemId: 'isPrivate',
-                			    	labelWidth: 80
+                			    	labelWidth: 85
                 			    }
                 			    ]},
                 			{
