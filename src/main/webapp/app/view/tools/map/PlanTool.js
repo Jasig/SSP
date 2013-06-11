@@ -82,9 +82,9 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 defaultType: 'displayfield',
                 layout: 'vbox',
                 width: 80,
+                hidden:true,
+                hideable:false,
                 cls: 'center-align',
-				hidden: true,
-				hideable: false,
                 defaults: {
                     anchor: '100%'
                 },
@@ -93,18 +93,18 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     tooltip: 'Financial Aid',
                     width: 30,
                     height: 30,
+                    hidden:true,
+                    hideable:false,
                     cls: 'mapFAIcon',
                     xtype: 'button',
                     itemId: 'planFAButton',
                     align: 'center',
                     padding: '0 0 0 0',
-					hidden: true,
-					hideable: false
                 }, {
+                	hidden:true,
+                    hideable:false,
                     xtype: 'label',
                     text: 'Financial Aid',
-                	hidden: true,
-					hideable: false
                 }]
             
             }, 
@@ -115,7 +115,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 title: '',
                 defaultType: 'displayfield',
                 layout: 'vbox',
-                width: 85,
+                width: 95,
                 cls: 'center-align',
                 
                 defaults: {
