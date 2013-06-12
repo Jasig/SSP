@@ -27,14 +27,13 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<property name="schema" value="public" dbms="postgresql" />
-	<property name="schema" value="dbo" dbms="mssql" />
+	<property name="schema" value="${database.schema}" />
 	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
 	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 		
 	<changeSet id="Add SessionId to self_help_guide_response" author="tony.arland">
 		<preConditions onFail="MARK_RAN">
-            <not><columnExists tableName="self_help_guide_response" columnName="session_id"/></not>
+            <not><columnExists tableName="self_help_guide_response" columnName="session_id" schemaName="${schema}"/></not>
         </preConditions>
 		<addColumn tableName="self_help_guide_response">
 			<column name="session_id" type="${nvarchar.type}(32)">

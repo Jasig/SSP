@@ -25,11 +25,14 @@
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-	
+
+
+	<property name="schema" value="${database.schema}" />
+
 	<changeSet author='jim.stanley'
 		id='Drop table and view external_course_section'>
 		<preConditions onFail="MARK_RAN">
-           	<tableExists tableName="external_course_section" />
+           	<tableExists tableName="external_course_section" schemaName="${schema}" />
         </preConditions>
 		<dropView viewName="v_external_course_section"/>
 		<dropTable tableName="external_course_section"/>

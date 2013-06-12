@@ -27,8 +27,7 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<property name="schema" value="public" dbms="postgresql" />
-	<property name="schema" value="dbo" dbms="mssql" />
+	<property name="schema" value="${database.schema}" />
 	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
 	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 	<property name="externalUser" value="a new UUID" />
