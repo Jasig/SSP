@@ -61,7 +61,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                             padding: '0 0 15 0',
         					margin: '0 0 0 5',
                             width: '100%',
-                            height: '100%',
+                            height: 100,
                             items: [{
                 				    	xtype:'checkbox',
                 			    	fieldLabel: 'Active Template',
