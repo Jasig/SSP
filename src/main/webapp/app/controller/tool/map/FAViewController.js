@@ -42,10 +42,15 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
         fafsaDateField: '#fafsaDate',
        
         financialAidGpaField: '#financialAidGpa',
+        gpa20BHrsNeededField: '#gpa20BHrsNeeded',
+        gpa20AHrsNeededField: '#gpa20AHrsNeeded',
+        neededFor67PtcCompletionField: '#neededFor67PtcCompletion',
         creditHoursEarnedField: '#creditHoursEarned',
         creditHoursAttemptedField: '#creditHoursAttempted',
         creditCompletionRateField: '#creditCompletionRate',
         balanceOwedField: '#balanceOwed',
+        paymentStatusField: '#paymentStatus',
+		registeredTermsField: '#registeredTerms',
         financialAidRemainingField: '#financialAidRemaining',
         originalLoanAmountField: '#originalLoanAmount'
     
@@ -108,37 +113,48 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
 	        };
 	    },
 
+	    handleNull: function(value){
+			if(value == null || value == undefined || value == 'null')
+				return "";
+			return value;
+		},
 
     getTranscriptSuccess: function(serviceResponses) {
         var me = this;
         var transcriptResponse = serviceResponses.successes.transcript;
 
         var transcript = new Ssp.model.Transcript(transcriptResponse);
+        me.getRegisteredTermsField().setValue(me.handleNull(me.person.get('registeredTerms')));
+        me.getPaymentStatusField().setValue(me.handleNull(me.person.get('paymentStatus')));
         var gpa = transcript.get('gpa');
         if ( gpa ) {
-			var gpaFormatted = Ext.util.Format.number(gpa.gradePointAverage, '0.00');
+        	var gpaFormatted = Ext.util.Format.number(gpa.gradePointAverage, '0.00');
+			if(gpa.gpaTrendIndicator && gpa.gpaTrendIndicator.length > 0)
+				gpaFormatted += "  " + gpa.gpaTrendIndicator;
             me.getGpaField().setValue(gpaFormatted);
-            me.getAcademicStandingField().setValue(gpa.academicStanding);
-            me.getCreditCompletionRateField().setValue(gpa.creditCompletionRate + '%');
-            me.getCurrentRestrictionsField().setValue(gpa.currentRestrictions)
+            me.getAcademicStandingField().setValue(me.handleNull(gpa.academicStanding));
+            me.getCreditCompletionRateField().setValue(me.handleNull(gpa.creditCompletionRate) + '%');
+            me.getCurrentRestrictionsField().setValue(me.handleNull(gpa.currentRestrictions))
 
-            me.getCreditHoursEarnedField().setValue(gpa.creditHoursEarned)
-            me.getCreditHoursAttemptedField().setValue(gpa.creditHoursAttempted)
+            me.getCreditHoursEarnedField().setValue(me.handleNull(gpa.creditHoursEarned));
+            me.getCreditHoursAttemptedField().setValue(me.handleNull(gpa.creditHoursAttempted));
+            me.getGpa20AHrsNeededField().setValue(me.handleNull(gpa.gpa20AHrsNeeded));
+            me.getGpa20BHrsNeededField().setValue(me.handleNull(gpa.gpa20BHrsNeeded));
+            me.getNeededFor67PtcCompletionField().setValue(me.handleNull(gpa.neededFor67PtcCompletion));
         }
         
 
         var financialAid = transcript.get('financialAid');
         if ( financialAid ) {
             
-        	me.getCurrentYearFinancialAidAwardField().setValue(financialAid.currentYearFinancialAidAward);
-        	me.getSapStatusField().setValue(financialAid.sapStatus);
+        	me.getCurrentYearFinancialAidAwardField().setValue(me.handleNull(financialAid.currentYearFinancialAidAward));
+        	me.getSapStatusField().setValue(me.handleNull(financialAid.sapStatus));
         	
-        	me.getSapStatusField().setValue(financialAid.sapStatus);
         	me.getFafsaDateField().setValue(Ext.util.Format.date(Ext.Date.parse(financialAid.fafsaDate, 'c'),'m/d/Y'));
         	me.getBalanceOwedField().setValue(Ext.util.Format.usMoney(financialAid.balanceOwed));
         	me.getFinancialAidRemainingField().setValue(Ext.util.Format.usMoney(financialAid.financialAidRemaining));
         	me.getOriginalLoanAmountField().setValue(Ext.util.Format.usMoney(financialAid.originalLoanAmount));
-        	me.getFinancialAidGpaField().setValue(financialAid.financialAidGpa);
+        	me.getFinancialAidGpaField().setValue(me.handleNull(financialAid.financialAidGpa));
         }
     },
 

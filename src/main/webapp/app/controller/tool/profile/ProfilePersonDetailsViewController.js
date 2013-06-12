@@ -42,12 +42,14 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         birthDateField: '#birthDate',
         studentTypeField: '#studentType',
         programStatusField: '#programStatus',
+        paymentStatusField: '#paymentStatus',
         f1StatusField: '#f1Status',
         residencyCountyField: '#residencyCounty',
         maritalStatusField: '#maritalStatus',
         genderField: '#gender',
         ethnicityField: '#ethnicity',
         primaryEmailAddressField: '#primaryEmailAddress',
+        registeredTermsField: '#registeredTerms',
         
         gpaField: '#cumGPA',
         transferHrsField: '#transferHrs',
@@ -180,7 +182,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         photoUrlField.setSrc(me.person.getPhotoUrl());
         programStatusField.setFieldLabel('');
         programStatusField.setValue('<span style="color:#15428B">SSP Status:  </span>' + me.handleNull(me.person.getProgramStatusName()));
-        
+        me.getRegisteredTermsField().setValue(me.person.get('registeredTerms'));
+        me.getPaymentStatusField().setValue(me.handleNull(me.person.get('paymentStatus')));
         
         var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
         var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];

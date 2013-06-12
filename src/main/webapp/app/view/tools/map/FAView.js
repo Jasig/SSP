@@ -25,7 +25,7 @@ Ext.define('Ssp.view.tools.map.FAView', {
         columnRendererUtils: 'columnRendererUtils'
         //sspConfig: 'sspConfig'
     },
-    height: 500,
+    height: 435,
     width: 500,
     resizable: true,
     initComponent: function(){
@@ -70,6 +70,9 @@ Ext.define('Ssp.view.tools.map.FAView', {
                     align: 'stretch',
                     
                     items: [
+					{
+                        xtype: 'tbspacer'
+                    },
                     {
                         fieldLabel: 'GPA',
                         name: 'cumGPA',
@@ -104,6 +107,20 @@ Ext.define('Ssp.view.tools.map.FAView', {
                         height: '10'
                     },
                     {
+                    	padding: '0 0 0 20',
+                        fieldLabel: 'Hours needed to earn a 2.0 GPA with all A grades',
+                        name: 'gpa20AHrsNeeded',
+                        itemId: 'gpa20AHrsNeeded',
+						labelWidth: 300
+                    },
+                    {
+                    	padding: '0 0 0 20',
+                        fieldLabel: 'Hours needed to earn a 2.0 GPA with all B grades',
+                        name: 'gpa20BHrsNeeded',
+                        itemId: 'gpa20BHrsNeeded',
+						labelWidth: 300
+                    },
+                    {
                         fieldLabel: 'Hrs Earned',
                         name: 'creditHoursEarned',
                         itemId: 'creditHoursEarned',
@@ -118,6 +135,13 @@ Ext.define('Ssp.view.tools.map.FAView', {
                         name: 'creditCompletionRate',
                         itemId: 'creditCompletionRate',
 						labelWidth: 80
+                    },
+                    {
+                    	padding: '0 0 0 20',
+                        fieldLabel: 'Hours need to earn a 67% completion rate',
+                        name: 'neededFor67PtcCompletion',
+                        itemId: 'neededFor67PtcCompletion',
+						labelWidth: 300
                     },
                     {
                         xtype: 'tbspacer',
@@ -138,59 +162,53 @@ Ext.define('Ssp.view.tools.map.FAView', {
 					margin: '0 0 0 5',
                     
                     items: [{
-                    xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    defaultType: 'displayfield',
-                    layout: 'vbox',
-                    align: 'stretch',
-                    padding: 0,
-                    margin: '0 0 0 5',
-                    items: [ 
-                     {
-                        fieldLabel: 'Reg',
-                        name: 'registeredTerms',
-                        itemId: 'registeredTerms',
-                        labelWidth: 30
-                    }, {
-                        fieldLabel: 'Payment',
-                        name: 'paymentStatus',
-                        itemId: 'paymentStatus',
-                        labelWidth: 80
-                    },, {
-                        fieldLabel: 'Balance',
-                        name: 'balanceOwed',
-                        itemId: 'balanceOwed',
-                        labelWidth: 80
-                    }       
-                            ]
-                },
-                {
-                    xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    defaultType: 'displayfield',
-                    layout: 'vbox',
-                    align: 'stretch',
-                    padding: 0,
-                    margin: '0 0 0 5',
-                    items: [        
-                           
-                    
-                    {
-                        fieldLabel: 'SAP',
-                        name: 'sapStatus',
-                        itemId: 'sapStatus',
-                        labelWidth: 30
-                    }, {
-                        fieldLabel: 'F1',
-                        name: 'f1Status',
-                        itemId: 'f1Status',
-                        labelWidth: 30
-                    }]
-                }
-                ]}
-                
+		                    xtype: 'fieldset',
+		                    border: 0,
+		                    title: '',
+		                    defaultType: 'displayfield',
+		                    layout: 'vbox',
+		                    align: 'stretch',
+		                    padding: 0,
+		                    margin: '0 0 0 5',
+		                    items: [ 
+		                     {
+		                        fieldLabel: 'Reg',
+		                        name: 'registeredTerms',
+		                        itemId: 'registeredTerms',
+		                        labelWidth: 30
+		                    }, {
+		                        fieldLabel: 'Payment',
+		                        name: 'paymentStatus',
+		                        itemId: 'paymentStatus',
+		                        labelWidth: 80
+		                    },, {
+		                        fieldLabel: 'Balance',
+		                        name: 'balanceOwed',
+		                        itemId: 'balanceOwed',
+		                        labelWidth: 80
+		                    }]
+                    	},
+                    	{
+		                    xtype: 'fieldset',
+		                    border: 0,
+		                    title: '',
+		                    defaultType: 'displayfield',
+		                    layout: 'vbox',
+		                    align: 'stretch',
+		                    padding: 0,
+		                    margin: '0 0 0 5',
+		                    items: [{
+		                        fieldLabel: 'SAP',
+		                        name: 'sapStatus',
+		                        itemId: 'sapStatus',
+		                        labelWidth: 30
+		                    }, {
+		                        fieldLabel: 'F1',
+		                        name: 'f1Status',
+		                        itemId: 'f1Status',
+		                        labelWidth: 30
+		                    }]
+		                }]}
                 ,
                 {
                     xtype: 'fieldset',
