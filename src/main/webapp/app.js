@@ -794,6 +794,16 @@ Ext.onReady(function(){
 				    	},
 				    	singleton: true
 				    },
+				    earlyAlertDetailsReasonsStore: {
+				    	fn: function(){
+				    		return Ext.create('Ext.data.Store', {
+							     model: 'Ssp.model.SimpleItemDisplay',
+							     storeId: 'earlyAlertDetailsReasonsStore',
+							     sorters: [{property: 'name'}]
+							 });
+				    	},
+				    	singleton: true
+				    },
 				    earlyAlertResponseDetailsOutreachesStore: {
 				    	fn: function(){
 				    		return Ext.create('Ext.data.Store', {

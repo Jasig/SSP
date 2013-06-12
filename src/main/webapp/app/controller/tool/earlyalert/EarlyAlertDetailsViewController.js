@@ -26,6 +26,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
         model: 'currentEarlyAlert',
         personService: 'personService',
         reasonsStore: 'earlyAlertReasonsStore',
+        selectedReasonsStore: 'earlyAlertDetailsReasonsStore',
         suggestionsStore: 'earlyAlertSuggestionsStore',
         selectedSuggestionsStore: 'earlyAlertDetailsSuggestionsStore',
         appEventsController: 'appEventsController',
@@ -52,7 +53,6 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
         
         earlyAlertSuggestionsList: '#earlyAlertSuggestionsList',
         campusField: '#campusField',
-        earlyAlertReasonField: '#earlyAlertReasonField',
         statusField: '#statusField',
         createdByField: '#createdByField',
         closedByField: '#closedByField'
@@ -114,16 +114,6 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
     bindEarlyAlertToView: function() {
         var me = this;
         var campus = me.campusesStore.getById( me.model.get('campusId') );
-        var reasonId;
-        if ( me.model.get('earlyAlertReasonIds') && me.model.get('earlyAlertReasonIds').length ) { 
-            reasonId = me.model.get('earlyAlertReasonIds')[0].id;
-        } else {
-            reasonId = me.model.get('earlyAlertReasonId');
-        }
-        var reason;
-        if ( reasonId ) {
-            reason = me.reasonsStore.getById( reasonId );
-        } 
 
         // Reset and populate general fields comments, etc.
         me.getView().getForm().reset();
@@ -137,8 +127,16 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
         // Campus
         me.getCampusField().setValue( ((campus)? campus.get('name') : "No Campus Defined") );
 
-        // Reason
-        me.getEarlyAlertReasonField().setValue( ((reason)? reason.get('name') : "No Reason Defined") );
+        // Reasons
+        var reasonIds = [];
+        if ( me.model.get('earlyAlertReasonIds') && me.model.get('earlyAlertReasonIds').length ) {
+            reasonIds = me.model.get('earlyAlertReasonIds');
+        } else if ( me.model.get('earlyAlertReasonId') ) {
+            reasonIds = [ me.model.get('earlyAlertReasonId') ];
+        }
+        me.selectedReasonsStore.removeAll();
+        var selectedReasons =  me.formUtils.getSimpleItemsForDisplay( me.reasonsStore, reasonIds, 'Reasons' );
+        me.selectedReasonsStore.loadData( selectedReasons );
 
         // Suggestions
         var selectedSuggestions = me.formUtils.getSimpleItemsForDisplay( me.suggestionsStore, me.model.get('earlyAlertSuggestionIds'), 'Suggestions' );

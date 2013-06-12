@@ -23,6 +23,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
     controller: 'Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController',
     inject: {
         model: 'currentEarlyAlert',
+        selectedReasonsStore: 'earlyAlertDetailsReasonsStore',
         selectedSuggestionsStore: 'earlyAlertDetailsSuggestionsStore',
         authenticatedPerson: 'authenticatedPerson',
         columnRendererUtils: 'columnRendererUtils',
@@ -87,11 +88,13 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
                         
                         name: 'campus'
                     }, {
-                    
-                        fieldLabel: 'Reason',
-                        itemId: 'earlyAlertReasonField',
-                        
-                        name: 'earlyAlertReason'
+                        xtype: 'multiselect',
+                        name: 'earlyAlertReasonIds',
+                        itemId: 'earlyAlertReasonsList',
+                        fieldLabel: 'Reasons',
+                        store: me.selectedReasonsStore,
+                        displayField: 'name',
+                        anchor: '95%'
                     }, {
                         xtype: 'multiselect',
                         name: 'earlyAlertSuggestionIds',
