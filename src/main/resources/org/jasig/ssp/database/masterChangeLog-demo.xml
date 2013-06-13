@@ -31,6 +31,9 @@
 	<include file="org/jasig/ssp/database/demoDataChangeset/demo_data_4.xml" />
 	<include file="org/jasig/ssp/database/demoDataChangeset/r200b2_demo_data.xml" />
 	<include file="org/jasig/ssp/database/demoDataChangeset/demo_data_5.xml" />
-	
+	<include file="org/jasig/ssp/database/trainingDataChangesets/training_data_pre_seeded.xml" />
+	<include file="org/jasig/ssp/database/trainingDataChangesets/training_data_pre_seeded_1.xml" />
+	<include file="org/jasig/ssp/database/trainingDataChangesets/training_data_pre_seeded_2.xml" />
+
 
 </databaseChangeLog>
