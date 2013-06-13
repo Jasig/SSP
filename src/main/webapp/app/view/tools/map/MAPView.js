@@ -127,8 +127,6 @@ Ext.define('Ssp.view.tools.map.MAPView', {
             },
 			{
                 xtype: 'moveplan'
-                
-                
             }
 			]
             

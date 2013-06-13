@@ -200,7 +200,36 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 
                 }]
             
-            },{
+            },	{
+	                xtype: 'fieldset',
+	                border: 0,
+	                padding: '0 0 0 0',
+	                title: '',
+	                defaultType: 'displayfield',
+	                layout: 'vbox',
+	                width: 80,
+	                cls: 'center-align',
+	                defaults: {
+	                    anchor: '100%'
+	                },
+	                items: [{
+	                    tooltip:  me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan',
+	                    width: 30,
+	                    height: 30,
+	                    cls: 'mapMovePlanIcon',
+	                    xtype: 'button',
+	                    itemId: 'movePlanButton',
+		                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON'),
+	                    align: 'center',
+	                    padding: '0 0 0 0'
+	                }, {
+	                    xtype: 'label',
+						itemId: 'movePlanLabel',
+	                    text: me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan',
+
+	                }]
+
+	            },{
                 xtype: 'tbspacer',
                 flex: 1
             }, {
@@ -235,8 +264,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 					hideable: false
                 }]
             
-            }, {}]
-        
+            }]
         });
         
         return me.callParent(arguments);

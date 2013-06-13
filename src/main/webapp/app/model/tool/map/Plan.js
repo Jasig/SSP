@@ -114,6 +114,21 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		return foundNote;
 	},
 	
+	getTermCodes: function(){ 
+		var me = this;
+    	var termCodes = [];
+    	var i = 0;
+    	var planCourses = me.get('planCourses');
+    	if(!planCourses)
+    		return termCodes;
+    	
+    	planCourses.forEach(function(planCourse){
+    	if(termCodes.indexOf(planCourse.termCode) < 0)
+    		termCodes[i++] = planCourse.termCode;
+    	  })
+    	return termCodes;
+    },
+	
 	clearTermNotes:function(){
 				var me = this;
 				var termNotes =  me.get('termNotes');
@@ -171,7 +186,8 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		}
 		me.set('termNotes', recordTermNotes);
 		me.dirty = false;
-	}, 		
+	}, 
+	
 	getSimpleJsonData: function(){
 		var me = this;
 		var simpleData = {};
@@ -217,6 +233,14 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		return simpleData;
 	},
 	
+	cloneMapPlan:function(){
+		var me = this;
+		var clone = new Ssp.model.tool.map.Plan({id:""});
+		var data = me.getSimpleJsonData();
+		clone.loadFromServer(data);
+		return clone;
+	},
+	
 	getBoolean:function(fieldName){
 		var me = this;
 		if(me.get(fieldName) == 'on' || me.get(fieldName) == true || me.get(fieldName) == 1 || me.get(fieldName) == 'true')
@@ -237,6 +261,44 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			return true;
 		 return false;
 	},
+	
+	updateMap: function(semesterStores){ 
+        var me = this;
+        me.set('personId',  me.personLite.get('id'));
+		me.set('ownerId',  me.authenticatedPerson.get('id'));
+        
+        var i = 0;
+		me.clearPlanCourses();
+        var planCourses = new Array();
+        for(var index in semesterStores){
+        	var semesterStore = semesterStores[index];
+            var models = semesterStore.getRange();
+            models.forEach(function(model){
+            	var planCourse = new Object();
+            		planCourse.courseTitle = model.get('title');
+            		planCourse.courseCode = model.get('code');
+					//TODO This has to do with conflicts with print and save
+					if(!model.get('termCode') || model.get('termCode') == "")
+            			planCourse.termCode = index;
+					else
+						planCourse.termCode = model.get('termCode');
+            		planCourse.creditHours = model.get('creditHours');
+            		planCourse.formattedCourse = model.get('formattedCourse');
+            		planCourse.courseDescription = model.get('description');
+            		planCourse.studentNotes = model.get('studentNotes');
+            		planCourse.contactNotes = model.get('contactNotes');
+
+            		planCourse.isImportant = model.get('isImportant') ==  null ? false : model.get('isImportant');
+            		planCourse.isTranscript = model.get('isTranscript') ==  null ? false : model.get('isTranscript');
+            		planCourse.electiveId = model.get('electiveId');
+            		planCourse.orderInTerm = i;
+					planCourse.objectStatus = 'ACTIVE';
+            		planCourse.isDev = model.get('isDev');
+            		planCourses[i++] = planCourse;
+            })
+         }
+         me.set('planCourses',planCourses);
+    },
 	
 	isDirty: function(semesterStores){
 		var me = this;

@@ -373,6 +373,11 @@
                     "name": "MAPViewController.js",
                     "path": "/app/controller/tool/map/"
                 },
+                {
+                    "clsName": "Ssp.controller.tool.map.MovePlanDialogController",
+                    "name": "MovePlanDialogController.js",
+                    "path": "/app/controller/tool/map/"
+                },
 				{
                     "clsName": "Ssp.view.tools.map.MAP",
                     "name": "MAP.js",
@@ -421,6 +426,11 @@
                 {
                     "clsName": "Ssp.view.tools.map.MovePlan",
                     "name": "MovePlan.js",
+                    "path": "/app/view/tools/map/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.map.MovePlanDialog",
+                    "name": "MovePlanDialog.js",
                     "path": "/app/view/tools/map/"
                 },
 				{

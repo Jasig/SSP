@@ -69,6 +69,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.appEventsController.assignEvent({eventName: 'onPrintMapPlan', callBackFunc: me.onPrintMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onShowMapPlanOverView', callBackFunc: me.onShowMapPlanOverView, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onEmailMapPlan', callBackFunc: me.onEmailMapPlan, scope: me});
+		me.appEventsController.assignEvent({eventName: 'onBumpRequested', callBackFunc: me.onBumpRequested, scope: me});
 
 		me.appEventsController.assignEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
 
@@ -597,6 +598,102 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		if(!show)
         	myWindow.print();
 	},
+	
+/************** Methods Required To Support Bump ********************/
+	
+	onBumpRequested: function(args){
+		if(args.endTermCode == args.startTermCode){
+			Ext.Msg.alert('No Bump Required', "Bump does not require change, Start Term and End Term the same.");
+			return;
+		}
+		var me = this;
+		var startTermIndex = me.termsStore.find('code', args.startTermCode);
+		var endTermIndex =  me.termsStore.find('code', args.endTermCode);
+		if(startTermIndex < 0 || endTermIndex < 0){
+				Ext.Msg.alert('Bump not allowed', "Terms to do not fall in allowed range of terms.");
+				return;
+		}
+		var delta = endTermIndex - startTermIndex;
+		var termMap;
+		if(delta < 0){
+			termMap = me.bumpTermsBackwards(startTermIndex, delta, args.split);
+		} else{
+			termMap = me.bumpTermsForwards(endTermIndex, delta, args.split);
+		}
+		me.bumpCourses(termMap);
+		me.onCreateMapPlan();
+		me.populatePlanStores();
+		me.updateAllPlanHours();
+		me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+	},
+	
+	bumpTermsForwards: function(endTermIndex, delta, split){
+		var me = this;
+		var termMap = {};
+		var terms = me.getTerms(me.currentMapPlan);
+		terms.forEach(function(term){
+			var termIndex = me.termsStore.find('code', term.get('code'));
+			if(termIndex >= 0){
+				if(split && endTermIndex > termIndex)
+					termMap[term.get('code')] = term.get('code');
+				else{
+					var bumpedTerm = me.termsStore.getAt(termIndex + delta);
+					if(bumpedTerm != undefined && bumpedTerm != null)
+						termMap[term.get('code')] = bumpedTerm.get('code');
+				}
+			}
+		});
+		return termMap;
+	},
+	
+	bumpTermsBackwards: function(startTermIndex, delta, split){
+		var me = this;
+		var termMap = {};
+		var terms = me.getTerms(me.currentMapPlan);
+		terms.forEach(function(term){
+			var termIndex = me.termsStore.find('code', term.get('code'));
+			if(termIndex >= 0){
+				if(split && startTermIndex < termIndex)
+					termMap[term.get('code')] = term.get('code');
+				else{
+					var bumpedTerm = me.termsStore.getAt(termIndex + delta);
+					if(bumpedTerm != undefined && bumpedTerm != null)
+						termMap[term.get('code')] = bumpedTerm.get('code');
+				}
+			}
+		});
+		return termMap;
+	},
+	
+	bumpCourses:function(termMap){
+		var me = this;
+		var planCourses = me.currentMapPlan.get('planCourses');
+		var coursesToDelete = [];
+		var k = 0;
+		if(planCourses && planCourses.length > 0){
+			for(var i = 0; i < planCourses.length; i++){
+				var planCourse = planCourses[i];
+				var termCode = termMap[planCourse.termCode];
+				if(termCode != null && termCode != "")
+					planCourse.termCode = termMap[planCourse.termCode];
+				else{
+					planCourses.splice(i,1);
+				}
+			}
+		}
+		var termNotes = me.currentMapPlan.get("termNotes");
+		if(termNotes && termNotes.length > 0){
+			for(var i = 0; i < termNotes.length; i++){
+				var termNote = termNotes[i];
+				var termCode = termMap[termNote.get('termCode')];
+				if(termCode != null && termCode != "")
+					termNote.set('termCode', termCode);
+				else{
+					termNotes.splice(i,1);
+				}
+			}
+		}
+	},
 
 	destroy: function() {
         var me=this;
@@ -620,6 +717,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
         me.appEventsController.removeEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadMapPlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onLoadTemplatePlan', callBackFunc: me.onLoadMapPlan, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onBumpRequested', callBackFunc: me.onBumpRequested, scope: me})
         
 		return me.callParent( arguments );
     }

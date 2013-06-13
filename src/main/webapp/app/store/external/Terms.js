@@ -19,7 +19,6 @@
 Ext.define('Ssp.store.external.Terms', {
 	extend: 'Ssp.store.reference.AbstractReferences',
 	model: 'Ssp.model.external.Term',
-	remoteSort: true,
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties'
@@ -28,10 +27,16 @@ Ext.define('Ssp.store.external.Terms', {
     constructor: function(){
 		var me = this;
 		me.callParent(arguments);
+		me.addListener('load', me.sortAfterLoad, me, {single:true});
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('terms'),
     		autoLoad: true});
     	return; 
     },
+
+	sortAfterLoad: function(){
+		var me = this;
+		me.sort('startDate', 'DESC');
+	},
     
     getCurrentAndFutureTermsStore: function(sortEarliestFirst){
 		var me = this;

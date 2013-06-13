@@ -123,6 +123,7 @@ Ext.require([
     'Ssp.view.tools.map.FAView',
 	'Ssp.view.tools.map.MAPView',
     'Ssp.view.tools.map.MovePlan',
+	'Ssp.view.tools.map.MovePlanDialog',
     'Ssp.view.tools.map.PlanTool',
     'Ssp.view.tools.map.LoadPlans',
 	'Ssp.view.tools.map.PlanNotes',

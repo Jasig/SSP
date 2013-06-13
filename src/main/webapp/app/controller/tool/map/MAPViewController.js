@@ -68,6 +68,13 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
             click: 'onsaveTemplateButtonClick'
            }
         },
+		
+		'movePlanButton':{
+           selector: '#movePlanButton',
+           listeners: {
+            click: 'onmovePlanButtonClick'
+           }
+        },
 
 		'saveTemplateAsButton':{
            selector: '#saveTemplateAsButton',
@@ -194,6 +201,14 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.notesPopUp.query('[name=saveButton]')[0].addListener('click', me.onPlanNotesSave, me, {single:true});
 	    me.notesPopUp.center();
 		me.notesPopUp.show();
+    },
+
+	onmovePlanButtonClick: function(button){
+        var me=this;
+		if(me.movePlanPopup == null || me.movePlanPopup.isDestroyed)
+       		me.movePlanPopup = Ext.create('Ssp.view.tools.map.MovePlanDialog',{hidden:true});
+	    me.movePlanPopup.center();
+		me.movePlanPopup.show();
     },
     
 	onSavePlanRequest: function(values){
@@ -447,6 +462,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	    	me.termNotesPopUp.close();
 		if(me.allPlansPopUp != null && !me.allPlansPopUp.isDestroyed)
 		    me.allPlansPopUp.close();
+		if(me.movePlanPopup != null && !me.movePlanPopup.isDestroyed)
+			me.movePlanPopup.close();
 	    return me.callParent( arguments );
 	}
 	

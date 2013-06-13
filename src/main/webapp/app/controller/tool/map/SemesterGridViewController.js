@@ -68,6 +68,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     		me.coursePlanDetails.center();
     		me.coursePlanDetails.show();
     },
+    
     onDrop: function(node, data, dropRec, dropPosition){
     	var me = this;
     	me.droppedData = data.records[0];
