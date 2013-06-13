@@ -28,7 +28,6 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
         sspConfig: 'sspConfig',
 		formUtils: 'formRendererUtils'
     },
-    
     control: {
 
         f1StatusField: '#f1Status',       
@@ -57,27 +56,27 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
     },
     init: function(){
         var me = this;
+       
         var id = me.personLite.get('id');
-        me.resetForm();
-        if (id != "") {
-            // display loader
-            me.getView().setLoading(true);
+	        me.resetForm();
+	        if (id != "") {
+	            // display loader
+	            me.getView().setLoading(true);
 
-            var serviceResponses = {
-                failures: {},
-                successes: {},
-                responseCnt: 0,
-                expectedResponseCnt: 1
-            }
+	            var serviceResponses = {
+	                failures: {},
+	                successes: {},
+	                responseCnt: 0,
+	                expectedResponseCnt: 1
+	            }
 
 
-            me.transcriptService.getSummary(id, {
-                success: me.newServiceSuccessHandler('transcript', me.getTranscriptSuccess, serviceResponses),
-                failure: me.newServiceFailureHandler('transcript', me.getTranscriptFailure, serviceResponses),
-                scope: me
-            });
-        }
-        
+	            me.transcriptService.getSummary(id, {
+	                success: me.newServiceSuccessHandler('transcript', me.getTranscriptSuccess, serviceResponses),
+	                failure: me.newServiceFailureHandler('transcript', me.getTranscriptFailure, serviceResponses),
+	                scope: me
+	            });
+	        }
         return me.callParent(arguments);
     },
 
@@ -138,9 +137,7 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
 
             me.getCreditHoursEarnedField().setValue(me.handleNull(gpa.creditHoursEarned));
             me.getCreditHoursAttemptedField().setValue(me.handleNull(gpa.creditHoursAttempted));
-            me.getGpa20AHrsNeededField().setValue(me.handleNull(gpa.gpa20AHrsNeeded));
-            me.getGpa20BHrsNeededField().setValue(me.handleNull(gpa.gpa20BHrsNeeded));
-            me.getNeededFor67PtcCompletionField().setValue(me.handleNull(gpa.neededFor67PtcCompletion));
+            
         }
         
 
@@ -155,6 +152,9 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
         	me.getFinancialAidRemainingField().setValue(Ext.util.Format.usMoney(financialAid.financialAidRemaining));
         	me.getOriginalLoanAmountField().setValue(Ext.util.Format.usMoney(financialAid.originalLoanAmount));
         	me.getFinancialAidGpaField().setValue(me.handleNull(financialAid.financialAidGpa));
+			me.getGpa20AHrsNeededField().setValue(me.handleNull(financialAid.gpa20AHrsNeeded));
+	        me.getGpa20BHrsNeededField().setValue(me.handleNull(financialAid.gpa20BHrsNeeded));
+			me.getNeededFor67PtcCompletionField().setValue(me.handleNull(financialAid.neededFor67PtcCompletion));
         }
     },
 

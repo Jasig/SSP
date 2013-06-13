@@ -25,8 +25,8 @@ Ext.define('Ssp.view.tools.map.FAView', {
         columnRendererUtils: 'columnRendererUtils'
         //sspConfig: 'sspConfig'
     },
-    height: 435,
-    width: 500,
+    height: 475,
+    width: 380,
     resizable: true,
     initComponent: function(){
         var me = this;
@@ -111,14 +111,16 @@ Ext.define('Ssp.view.tools.map.FAView', {
                         fieldLabel: 'Hours needed to earn a 2.0 GPA with all A grades',
                         name: 'gpa20AHrsNeeded',
                         itemId: 'gpa20AHrsNeeded',
-						labelWidth: 300
+						value: "N/A",
+						labelWidth: 280
                     },
                     {
                     	padding: '0 0 0 20',
                         fieldLabel: 'Hours needed to earn a 2.0 GPA with all B grades',
                         name: 'gpa20BHrsNeeded',
                         itemId: 'gpa20BHrsNeeded',
-						labelWidth: 300
+						value: "N/A",
+						labelWidth: 280
                     },
                     {
                         fieldLabel: 'Hrs Earned',
@@ -131,7 +133,7 @@ Ext.define('Ssp.view.tools.map.FAView', {
                         itemId: 'creditHoursAttempted',
 						labelWidth: 100
                     }, {
-                        fieldLabel: '<a href="">Comp Rate</a>',
+                        fieldLabel: 'Comp Rate',
                         name: 'creditCompletionRate',
                         itemId: 'creditCompletionRate',
 						labelWidth: 80
@@ -141,113 +143,63 @@ Ext.define('Ssp.view.tools.map.FAView', {
                         fieldLabel: 'Hours need to earn a 67% completion rate',
                         name: 'neededFor67PtcCompletion',
                         itemId: 'neededFor67PtcCompletion',
-						labelWidth: 300
+						value: "N/A",
+						labelWidth: 280,
                     },
                     {
                         xtype: 'tbspacer',
                         height: '10'
-                    }
-                    
-                    ]
-                
-                },
-                {
-                    xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    defaultType: 'displayfield',
-                    layout: 'hbox',
-                    align: 'stretch',
-                    padding: 0,
-					margin: '0 0 0 5',
-                    
-                    items: [{
-		                    xtype: 'fieldset',
-		                    border: 0,
-		                    title: '',
-		                    defaultType: 'displayfield',
-		                    layout: 'vbox',
-		                    align: 'stretch',
-		                    padding: 0,
-		                    margin: '0 0 0 5',
-		                    items: [ 
-		                     {
-		                        fieldLabel: 'Reg',
-		                        name: 'registeredTerms',
-		                        itemId: 'registeredTerms',
-		                        labelWidth: 30
-		                    }, {
-		                        fieldLabel: 'Payment',
-		                        name: 'paymentStatus',
-		                        itemId: 'paymentStatus',
-		                        labelWidth: 80
-		                    },, {
-		                        fieldLabel: 'Balance',
-		                        name: 'balanceOwed',
-		                        itemId: 'balanceOwed',
-		                        labelWidth: 80
-		                    }]
-                    	},
-                    	{
-		                    xtype: 'fieldset',
-		                    border: 0,
-		                    title: '',
-		                    defaultType: 'displayfield',
-		                    layout: 'vbox',
-		                    align: 'stretch',
-		                    padding: 0,
-		                    margin: '0 0 0 5',
-		                    items: [{
-		                        fieldLabel: 'SAP',
-		                        name: 'sapStatus',
-		                        itemId: 'sapStatus',
-		                        labelWidth: 30
-		                    }, {
-		                        fieldLabel: 'F1',
-		                        name: 'f1Status',
-		                        itemId: 'f1Status',
-		                        labelWidth: 30
-		                    }]
-		                }]}
-                ,
-                {
-                    xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    defaultType: 'displayfield',
-                    layout: 'vbox',
-                    align: 'stretch',
-                    padding: '0 0 0 5',
-					margin: '0 0 0 5',
-                   
-                    items: [{
+                    },{
+		                fieldLabel: 'Reg',
+                        name: 'registeredTerms',
+                        itemId: 'registeredTerms',
+                        labelWidth: 30
+                    }, {
+                        fieldLabel: 'Payment',
+                        name: 'paymentStatus',
+                        itemId: 'paymentStatus',
+                        labelWidth: 80
+                    }, {
+                        fieldLabel: 'Balance',
+                        name: 'balanceOwed',
+                        itemId: 'balanceOwed',
+                        labelWidth: 80
+                    },{
+                        fieldLabel: 'SAP',
+                        name: 'sapStatus',
+                        itemId: 'sapStatus',
+                        labelWidth: 30
+                    }, {
+                        fieldLabel: 'F1',
+                        name: 'f1Status',
+                        itemId: 'f1Status',
+                        labelWidth: 30
+		             },{
                         fieldLabel: 'FASFA',
                         name: 'fafsaDate',
                         itemId: 'fafsaDate',
 						labelWidth: 60
                     
-                    }, {
+                    },{
                         fieldLabel: 'FA Award',
                         name: 'currentYearFinancialAidAward',
                         itemId: 'currentYearFinancialAidAward',
 						labelWidth: 80
                     
-                    }, {
+                    },{
                         fieldLabel: 'FA Amount Remaining',
                         name: 'financialAidRemaining',
                         itemId: 'financialAidRemaining',
 						labelWidth: 80
                     
-                    }, {
+                    },{
                         fieldLabel: 'Loan Amount',
                         name: 'originalLoanAmount',
                         itemId: 'originalLoanAmount',
 						labelWidth: 80
-                    
-                    }]
-                }
-                ]
-            }]
+                	}]
+				}]
+			}]
             }]
         });
         
