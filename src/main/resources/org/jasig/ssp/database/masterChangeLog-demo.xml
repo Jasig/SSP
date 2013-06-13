@@ -34,6 +34,8 @@
 	<include file="org/jasig/ssp/database/trainingDataChangesets/training_data_pre_seeded.xml" />
 	<include file="org/jasig/ssp/database/trainingDataChangesets/training_data_pre_seeded_1.xml" />
 	<include file="org/jasig/ssp/database/trainingDataChangesets/training_data_pre_seeded_2.xml" />
+	<include file="org/jasig/ssp/database/trainingDataChangesets/training_data_pre_seeded_3.xml" />
+	<include file="org/jasig/ssp/database/trainingDataChangesets/training_data_pre_seeded_4.xml" />
 
 
 </databaseChangeLog>
