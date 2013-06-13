@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+      http://www.liquibase.org/xml/ns/dbchangelog-ext
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+    <!-- Some of the training data has journal_entry records with non-null
+    journal_track_id values, but no corresponding record in
+    journal_entry_detail, which would normally specify the actually selected
+    step/step-detail associations. The UI does not expect this state. So we
+    wipe the tracks from these entries, but make sure the latter have
+    comments so the UI will validate by default. -->
+    <changeSet id="clear training journal entry-track associations" author="dan.mccallum">
+        <update tableName="journal_entry">
+            <column name="comment" value="This entry is not associated with a specific track." />
+            <where>
+                id not in (select journal_entry_id from journal_entry_detail)
+                and comment is null
+            </where>
+        </update>
+        <update tableName="journal_entry">
+            <column name="journal_track_id" value="null" />
+            <where>
+                id not in (select journal_entry_id from journal_entry_detail)
+            </where>
+        </update>
+    </changeSet>
+    
+</databaseChangeLog>
