@@ -64,7 +64,7 @@ public class ScheduledTaskWrapperServiceImpl implements ScheduledTaskWrapperServ
 	// the depths of syncCoaches(), threadlocals will be set
 
 	@Override
-	@Scheduled(fixedDelay = 150000)
+	//@Scheduled(fixedDelay = 150000)
 	// run 2.5 minutes after the end of the last invocation
 	public void sendMessages() {
 		try {
@@ -75,7 +75,7 @@ public class ScheduledTaskWrapperServiceImpl implements ScheduledTaskWrapperServ
 	}
 
 	@Override
-	@Scheduled(fixedDelay = 300000)
+	//@Scheduled(fixedDelay = 300000)
 	// run every 5 minutes
 	public void syncCoaches() {
 		if ( !(scheduledCoachSyncEnabled) ) {
@@ -93,7 +93,7 @@ public class ScheduledTaskWrapperServiceImpl implements ScheduledTaskWrapperServ
 	}
 
 	@Override
-	@Scheduled(fixedDelay = 300000)
+	//@Scheduled(fixedDelay = 300000)
 	// run every 5 minutes
 	public void syncExternalPersons() {
 		try {
@@ -104,7 +104,8 @@ public class ScheduledTaskWrapperServiceImpl implements ScheduledTaskWrapperServ
 	}
 
 	@Override
-	@Scheduled(cron = "0 0 1 * * *")
+	//
+	// @Scheduled(cron = "0 0 1 * * *")
 	// run at 1 am every day
 	public void sendTaskReminders() {
 		try {
