@@ -163,10 +163,12 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         xtype: 'profilespecialservicegroups'
                     }]
                 }]
-            }, {
-                xtype: 'recentsspactivity',
-                flex: '.10'
             }]
+// disabling for performance
+// , {
+//                xtype: 'recentsspactivity',
+//                flex: '.10'
+//            }]
         });
         
         return me.callParent(arguments);
