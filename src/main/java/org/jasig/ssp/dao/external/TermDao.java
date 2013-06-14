@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -45,17 +46,19 @@ public class TermDao extends AbstractExternalReferenceDataDao<Term> {
 	public Term getCurrentTerm() throws ObjectNotFoundException {
 		final Date now = new Date();
 
-		final Criteria query = createCriteria();
-		query.add(Restrictions.lt("startDate", now));
-		query.add(Restrictions.gt("endDate", now));
+		final Criteria query = createCriteria();		
+		query.add(Restrictions.gt("endDate", now));		
+		query.addOrder(Order.asc("startDate"));
+		query.setMaxResults(1);
 
-		final Term term = (Term) query.uniqueResult();
+		@SuppressWarnings("unchecked")
+		final List <Term> term = (List<Term>) query.list();
 
-		if (term == null) {
+		if (term == null || term.isEmpty()) {
 			throw new ObjectNotFoundException("Current Term not Defined",
 					"Term");
 		} else {
-			return term;
+			return term.get(0);
 		}
 	}
 
