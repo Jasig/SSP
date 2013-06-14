@@ -35,6 +35,7 @@ import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.security.PersonAttributesResult;
@@ -762,5 +763,5 @@ public class PersonServiceImpl implements PersonService {
 				personSearchFormTO,
 				sAndP);
 		return people;
-	}
+	} 
 }

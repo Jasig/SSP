@@ -19,9 +19,11 @@
 package org.jasig.ssp.service.impl;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.jasig.ssp.dao.PersonSearchDao;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.PersonSearchResult;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -45,7 +47,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 
 	@Autowired
 	private transient PersonSearchDao dao;
-
+   
 	@Autowired
 	private transient PersonProgramStatusService personProgramStatus;
 
@@ -73,4 +75,10 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 		return new PagingWrapper<PersonSearchResult>(people.getResults(),
 				personSearchResults);
 	}
+
+	@Override
+	public List<Person> search2(PersonSearchRequest from) throws ObjectNotFoundException {
+		return dao.search(from);
+	}
+
 }

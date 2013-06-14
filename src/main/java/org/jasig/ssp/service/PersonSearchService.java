@@ -18,7 +18,10 @@
  */
 package org.jasig.ssp.service;
 
+import java.util.List;
+
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.PersonSearchResult;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -58,4 +61,6 @@ public interface PersonSearchService {
 			Boolean outsideCaseload, String searchTerm, Person advisor,
 			SortingAndPaging sAndP)
 			throws ObjectNotFoundException, ValidationException;
+
+	List<Person> search2(PersonSearchRequest from) throws ObjectNotFoundException;
 }

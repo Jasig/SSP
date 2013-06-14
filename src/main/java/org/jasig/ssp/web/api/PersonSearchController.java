@@ -18,17 +18,25 @@
  */
 package org.jasig.ssp.web.api;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import javax.validation.Valid;
+
+import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
 import org.jasig.ssp.factory.PersonSearchResultTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchResult;
 import org.jasig.ssp.model.reference.ProgramStatus;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonSearchService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.PersonSearchRequestTO;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -38,6 +46,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,6 +71,9 @@ public class PersonSearchController extends AbstractBaseController {
 
 	@Autowired
 	private transient SecurityService securityService;
+	
+	@Autowired
+	private transient PersonSearchRequestTOFactory personSearchRequestFactory;
 
 	@Override
 	protected Logger getLogger() {
@@ -96,5 +108,16 @@ public class PersonSearchController extends AbstractBaseController {
 
 		return new PagedResponse<PersonSearchResultTO>(true,
 				results.getResults(), factory.asTOList(results.getRows()));
+	}
+	
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	@ResponseBody
+	List<PersonSearchResultTO> search2(@Valid @RequestBody final PersonSearchRequestTO obj) throws ObjectNotFoundException {
+		List<PersonSearchResultTO> result = new ArrayList<PersonSearchResultTO>();
+		final List<Person> models = service.search2(personSearchRequestFactory.from(obj));
+		if (models.isEmpty()) {
+			return null;
+		}
+		return result;
 	}
 }
