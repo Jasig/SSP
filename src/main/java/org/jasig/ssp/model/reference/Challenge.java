@@ -25,6 +25,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -58,7 +59,7 @@ public class Challenge extends AbstractReference implements Auditable {
 	 * Just a reference to the questions that reference this Challenge. Think of
 	 * as selfHelpQuideChallenges
 	 */
-	@OneToMany(mappedBy = DATABASE_TABLE_NAME)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, fetch = FetchType.EAGER)
 	private Set<SelfHelpGuideQuestion> selfHelpGuideQuestions = new HashSet<SelfHelpGuideQuestion>(
 			0);
 
@@ -77,7 +78,7 @@ public class Challenge extends AbstractReference implements Auditable {
 	@Column(nullable = false)
 	private boolean showInSelfHelpSearch;
 
-	@OneToMany(mappedBy = DATABASE_TABLE_NAME)
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, fetch = FetchType.EAGER)
 	private Set<ChallengeChallengeReferral> challengeChallengeReferrals = new HashSet<ChallengeChallengeReferral>(
 			0);
 
