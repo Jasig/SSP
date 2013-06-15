@@ -122,8 +122,10 @@ public final class SortingAndPaging { // NOPMD
 			this.maxResults = MAXIMUM_ALLOWABLE_RESULTS;
 		} else if ( maxResults == 0 ) {
 			this.maxResults = DEFAULT_MAXIMUM_RESULTS;
-		} else {
+		} else if ( maxResults < 0 ) {
 			this.maxResults = null; // inifinite. see isPaged()
+		} else {
+			this.maxResults = maxResults;
 		}
 		this.sortFields = sortFields;
 		this.defaultSortProperty = defaultSortProperty;
