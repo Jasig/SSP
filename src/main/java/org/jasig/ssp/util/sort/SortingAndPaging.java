@@ -26,8 +26,6 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.internal.CriteriaImpl;
-import org.hibernate.transform.ResultTransformer;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.util.collections.Pair;
 
@@ -295,21 +293,11 @@ public final class SortingAndPaging { // NOPMD
 		// Only query for total count if query is paged or filtered
 		if (isPaged()
 				|| (filterByStatus && isFilteredByStatus())) {
-			ResultTransformer prevResultTransformer = null;
-			if ( query instanceof CriteriaImpl) {
-				prevResultTransformer = ((CriteriaImpl)query).getResultTransformer();
-			}
 			totalRows = (Long) query.setProjection(
 					Projections.rowCount()).uniqueResult();
 
 			// clear the count projection from the query
 			query.setProjection(null);
-
-			if ( prevResultTransformer != null ) {
-				// the uniqueResult() will wipe out the previously assigned
-				// result transformer
-				query.setResultTransformer(prevResultTransformer);
-			}
 		}
 
 		// Add Sorting and Paging
