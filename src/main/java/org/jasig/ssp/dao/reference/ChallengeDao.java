@@ -21,12 +21,10 @@ package org.jasig.ssp.dao.reference;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
@@ -154,6 +152,7 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 		final Criteria query = createCriteria();
 		final Criteria subQuery = query.createCriteria("challengeCategories");
 		subQuery.add(Restrictions.eq("category.id", categoryId));
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		sAndP.addStatusFilterToCriteria(subQuery);
 
 		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
@@ -180,4 +179,13 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 		sAndP.addStatusFilterToCriteria(subQuery);
 		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
+
+	@Override
+	public PagingWrapper<Challenge> getAll(final SortingAndPaging sAndP) {
+		final Criteria criteria = createCriteria();
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		return processCriteriaWithStatusSortingAndPaging(criteria,
+				sAndP);
+	}
+
 }
