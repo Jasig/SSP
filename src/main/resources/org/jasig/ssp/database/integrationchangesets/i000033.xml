@@ -22,8 +22,25 @@
 				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
-		
-	<changeSet id=" external_course alter min-max cr.hrs to decimal" author="jim.stanley">
+		<property name="schema" value="public" dbms="postgresql" />
+    	<property name="schema" value="dbo" dbms="mssql" />
+  	  	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+    	<property name="externalUser" value="a new UUID" />
+    	<property name="check_for_manage_integration_database_config_sql"
+              value="select count(id) from config where name='manage_integration_database'" />
+    	<property name="should_manage_integration_database_sql"
+              value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
+    	<property name="concat" value="||" dbms="postgresql" />
+   	    <property name="concat" value="+" dbms="mssql" />
+	<changeSet id=" external_course alter min-max cr.hrs to decimal" author="jim.stanley">	
+		<preConditions onFail="CONTINUE"
+					onFailMessage="Skip creating the external_course and external_course table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>    
 		<dropView viewName="v_external_course" />
 		<modifyDataType tableName="external_course" columnName="min_credit_hours" newDataType="decimal(9,2)" />
 		<modifyDataType tableName="external_course" columnName="max_credit_hours" newDataType="decimal(9,2)" />
@@ -32,5 +49,4 @@
 		</createView>	
 		<sql>grant all on v_external_course to ${database.app.username}</sql>
 	</changeSet>
-
 </databaseChangeLog>
