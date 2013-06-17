@@ -35,7 +35,7 @@
    	    <property name="concat" value="+" dbms="mssql" />
 	<changeSet id=" external_course alter min-max cr.hrs to decimal" author="jim.stanley">	
 		<preConditions onFail="CONTINUE"
-					onFailMessage="Skip creating the external_course and external_course table for integration database">
+					onFailMessage="Skip modify data type min_credit_hours and max_credit_hours for external_course table for integration database">
 			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
 			</sqlCheck>
 			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
