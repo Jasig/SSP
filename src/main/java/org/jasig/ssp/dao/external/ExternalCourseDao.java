@@ -84,6 +84,14 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 		.setString("termCode", termCode)
 		.list().size() > 0 ;
 	}
+	
+	public List<ExternalCourse> validCourseCodesForTerm(String[] codes, String termCode){
+		String baseValidateCourseHqlQuery = "from ExternalCourseTerm ect where ect.courseCode = :courseCodes and ect.termCode = :termCode";
+		Query query = createHqlQuery(baseValidateCourseHqlQuery)
+		.setParameterList("courseCodes", codes)
+		.setString("termCode", termCode);
+		return (List<ExternalCourse>)query.list();
+	}
 
 
 	@SuppressWarnings("unchecked")

@@ -602,23 +602,17 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 /************** Methods Required To Support Bump ********************/
 	
 	onBumpRequested: function(args){
-		if(args.endTermCode == args.startTermCode){
-			Ext.Msg.alert('No Bump Required', "Bump does not require change, Start Term and End Term the same.");
-			return;
-		}
 		var me = this;
-		var startTermIndex = me.termsStore.find('code', args.startTermCode);
-		var endTermIndex =  me.termsStore.find('code', args.endTermCode);
-		if(startTermIndex < 0 || endTermIndex < 0){
-				Ext.Msg.alert('Bump not allowed', "Terms to do not fall in allowed range of terms.");
-				return;
-		}
-		var delta = endTermIndex - startTermIndex;
-		var termMap;
-		if(delta < 0){
-			termMap = me.bumpTermsBackwards(startTermIndex, delta, args.split);
-		} else{
-			termMap = me.bumpTermsForwards(endTermIndex, delta, args.split);
+		switch(args.action){
+			case 'movePlan':
+				termMap = me.createBumpTermMap(args)
+			break;
+			case 'insertTerm':
+				termMap = me.createInsertTermMap(args);
+			break;
+			case 'removeTerm':
+				termMap = me.createRemoveTermMap(args);
+			break
 		}
 		me.bumpCourses(termMap);
 		me.onCreateMapPlan();
@@ -627,42 +621,83 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
 	},
 	
-	bumpTermsForwards: function(endTermIndex, delta, split){
+	createBumpTermMap: function(args){
+		if(args.endTermCode == args.startTermCode){
+			Ext.Msg.alert('No Bump Required', "Bump does not require change, Start Term and End Term the same.");
+			return;
+		}
+		var me = this;
+
+		var startTermIndex = me.termsStore.find('code', args.startTermCode);
+		var endTermIndex =  me.termsStore.find('code', args.endTermCode);
+		if(startTermIndex < 0 || endTermIndex < 0){
+				Ext.Msg.alert('Bump not allowed', "Terms to do not fall in allowed range of terms.");
+				return;
+		}
+				
+		var delta = endTermIndex - startTermIndex;
+		return me.bumpTerms(startTermIndex, delta, args.split);
+	},
+	
+	createRemoveTermMap: function(args){
 		var me = this;
 		var termMap = {};
 		var terms = me.getTerms(me.currentMapPlan);
+		var termCodeToRemove = args.startTermCode;
+		var termMap = {};
+		var termCodeReplace;
 		terms.forEach(function(term){
-			var termIndex = me.termsStore.find('code', term.get('code'));
-			if(termIndex >= 0){
-				if(split && endTermIndex > termIndex)
-					termMap[term.get('code')] = term.get('code');
-				else{
-					var bumpedTerm = me.termsStore.getAt(termIndex + delta);
-					if(bumpedTerm != undefined && bumpedTerm != null)
-						termMap[term.get('code')] = bumpedTerm.get('code');
-				}
+			if(termCodeReplace != null && termCodeReplace != "")
+				termMap[term.get('code')] = termCodeReplace;
+			else
+				termMap[term.get('code')] = term.get('code');
+			if(term.get('code') == termCodeToRemove || termCodeReplace != null && termCodeReplace != ""){
+				termCodeReplace = term.get('code');
+			}
+			
+		});
+		return termMap;
+	},
+	
+	createInsertTermMap: function(args){
+		var me = this;
+		var termMap = {};
+		var terms = me.getTerms(me.currentMapPlan);
+		var termCodeToInsert = args.startTermCode;
+		var index = me.termsStore.find('code',terms[terms.length - 1].get('code'))
+		if(index > 0)
+		    termCodeReplace = me.termsStore.getAt(index - 1).get('code');
+		else
+			termCodeReplace = terms[terms.length - 1].get('code');
+		var termMap = {};
+		terms.reverse();
+		terms.forEach(function(term){
+			if(termCodeReplace != null && termCodeReplace != ""){
+				termMap[term.get('code')] = termCodeReplace;
+				termCodeReplace = term.get('code');
+			}else
+				termMap[term.get('code')] = term.get('code');
+			if(term.get('code') == termCodeToInsert){
+				termCodeReplace = null;
 			}
 		});
 		return termMap;
 	},
 	
-	bumpTermsBackwards: function(startTermIndex, delta, split){
+	bumpTerms: function(startTermIndex, delta, split, removeBlankTerms, direction){
 		var me = this;
 		var termMap = {};
 		var terms = me.getTerms(me.currentMapPlan);
 		terms.forEach(function(term){
 			var termIndex = me.termsStore.find('code', term.get('code'));
 			if(termIndex >= 0){
-				if(split && startTermIndex < termIndex)
-					termMap[term.get('code')] = term.get('code');
-				else{
-					var bumpedTerm = me.termsStore.getAt(termIndex + delta);
-					if(bumpedTerm != undefined && bumpedTerm != null)
-						termMap[term.get('code')] = bumpedTerm.get('code');
-				}
+				var bumpedTerm = me.termsStore.getAt(termIndex + delta);
+				if(bumpedTerm != undefined && bumpedTerm != null)
+					termMap[term.get('code')] = bumpedTerm.get('code');
 			}
 		});
 		return termMap;
+		
 	},
 	
 	bumpCourses:function(termMap){

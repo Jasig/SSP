@@ -26,8 +26,8 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 	    formUtils: 'formRendererUtils',
     	currentMapPlan: 'currentMapPlan',
 	},
-    height: 190,
-    width: 246,
+    height: 210,
+    width: 300,
     resizable: true,
     parentGrid: null,
     enableFields: true,
@@ -59,7 +59,16 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
                         labelAlign: 'left',
                         labelWidth: 100
                     },
-				    items: [{
+				    items: [	{
+	                        xtype: 'combobox',
+	                        itemId: 'selectAction',
+							name: 'selectAction',
+	                        fieldLabel: 'Select Action',
+							queryMode: 'local',
+							displayField: 'name',
+							valueField: 'action',
+	                    },
+						{
                         xtype: 'combobox',
                         itemId: 'termCodeToBump',
 						name: 'termCodeToBump',
@@ -70,7 +79,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
                         queryMode: 'local',
                         typeAhead: true,
                         allowBlank: true,
-                        width: 250,
+                        width: 250
                     },
                     {
                         xtype: 'combobox',
@@ -83,16 +92,8 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
                         queryMode: 'local',
                         typeAhead: true,
                         allowBlank: true,
-                        width: 250,
-                    },	{
-	                        xtype: 'checkbox',
-							tooltip: 'Checking this box will create a gap in the plan around the Move From semester',
-	                        itemId: 'splitPlan',
-							name: 'splitPlan',
-	                        fieldLabel: 'Split Plan',
-	                        emptyText: 'Split Plan',
-							value: false,
-	                    }]
+                        width: 250
+                    }]
 				    ,
 				    dockedItems: [{
 		                xtype: 'toolbar',
@@ -134,7 +135,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 							 width: 20,
 			                 height: 20,
 			    	         cls: 'helpIconSmall',
-			    	         tooltip: 'Select split to create a gap in the plan around the "Move From" term/semester.'
+			    	         tooltip: 'Select Split Plan to create a gap in the plan around the "Move From" term/semester.\n Select Remove Plan to remove a term/semester from the course.\n Nothing selected moves the complete map.'
 			    	     }]}]
        
 		            }]

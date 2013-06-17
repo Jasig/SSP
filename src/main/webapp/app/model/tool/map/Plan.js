@@ -129,6 +129,19 @@ Ext.define('Ssp.model.tool.map.Plan', {
     	return termCodes;
     },
 	
+	hasCourse: function(termCode){
+		var me = this;
+		var planCourses = me.get('planCourses');
+    	if(!planCourses)
+    		return false;
+    	for(var i = 0; i < planCourses.length; i++){
+			var planCourse = planCourses[i];
+			if(planCourse.termCode == termCode)
+				return true;
+		}
+    	return false;
+	},
+	
 	clearTermNotes:function(){
 				var me = this;
 				var termNotes =  me.get('termNotes');
@@ -262,11 +275,8 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		 return false;
 	},
 	
-	updateMap: function(semesterStores){ 
+	updatePlanCourses: function(semesterStores){ 
         var me = this;
-        me.set('personId',  me.personLite.get('id'));
-		me.set('ownerId',  me.authenticatedPerson.get('id'));
-        
         var i = 0;
 		me.clearPlanCourses();
         var planCourses = new Array();
