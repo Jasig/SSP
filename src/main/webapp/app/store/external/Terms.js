@@ -103,7 +103,11 @@ Ext.define('Ssp.store.external.Terms', {
 		var startIndex = 0
 		var currentTermIndex = me.findBy(me.isCurrentTerm);
 		var termIndex = me.find('code', termCode)
-    	return termIndex <= currentTermIndex ? false : true;
+		
+		if(me.getAt(termIndex).get('endDate').getTime() <= (new Date()).getTime())
+			return true;
+		else			
+			return termIndex <= currentTermIndex ? false : true;
     },
     
     getFutureTerms: function(){
