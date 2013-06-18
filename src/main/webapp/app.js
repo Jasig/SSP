@@ -191,6 +191,15 @@ Ext.require([
 	'Ssp.view.admin.forms.config.MessageTemplatesAdmin',
     'Ssp.view.admin.forms.config.MessageTemplatesDisplayAdmin',
 	'Ssp.view.admin.forms.config.MessageTemplateDetails',
+	'Ssp.view.admin.forms.config.RegistrationLoadAdmin',
+	'Ssp.view.admin.forms.config.RegistrationLoadAddAdmin',
+	'Ssp.view.admin.forms.config.RegistrationLoadListAdmin',
+	'Ssp.view.admin.forms.config.CourseWorkHoursAdmin',
+	'Ssp.view.admin.forms.config.CourseWorkHoursListAdmin',
+	'Ssp.view.admin.forms.config.CourseWorkHoursAddAdmin',
+	'Ssp.view.admin.forms.config.EnrollmentStatusAdmin',
+	'Ssp.view.admin.forms.config.EnrollmentStatusAddAdmin',
+	'Ssp.view.admin.forms.config.EnrollmentStatusListAdmin',
     
     // ERROR DISPLAYS
     'Ssp.view.ErrorWindow',

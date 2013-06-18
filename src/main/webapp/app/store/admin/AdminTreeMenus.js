@@ -454,7 +454,29 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'messageTemplates',
                     form: 'messagetemplatesadmin',
                     leaf: true
-                }]
+                },
+				{
+					text: 'Enrollment Status Reference Items',
+                    title: 'Enrollment Status Reference Items',
+                    //store: 'messageTemplates',
+                    form: 'enrollmentstatusadmin',
+                    leaf: true
+				},
+				{
+					text: 'Registration Load Reference Items',
+                    title: 'Registration Load Reference Items',
+                    //store: 'messageTemplates',
+                    form: 'registrationloadadmin',
+                    leaf: true
+				},
+				{
+					text: 'CourseWork Hours Reference Items',
+                    title: 'CourseWork Hours Reference Items',
+                    //store: 'messageTemplates',
+                    form: 'courseworkhoursadmin',
+                    leaf: true
+				}
+				]
             }, {
                 text: 'MAP',
                 title: 'MAP',
