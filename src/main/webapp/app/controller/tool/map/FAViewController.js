@@ -125,6 +125,7 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
         var transcript = new Ssp.model.Transcript(transcriptResponse);
         me.getRegisteredTermsField().setValue(me.handleNull(me.person.get('registeredTerms')));
         me.getPaymentStatusField().setValue(me.handleNull(me.person.get('paymentStatus')));
+        me.getF1StatusField().setValue(me.handleNull(me.person.get('f1Status')));
         var gpa = transcript.get('gpa');
         if ( gpa ) {
         	var gpaFormatted = Ext.util.Format.number(gpa.gradePointAverage, '0.00');
