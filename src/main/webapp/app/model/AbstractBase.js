@@ -21,6 +21,10 @@ Ext.define('Ssp.model.AbstractBase', {
     fields: [{name: 'id', type: 'string'},
              {name: 'createdBy',
               convert: function(value, record) {
+					//TODO if object is created on page no value currently available.  
+					//This occurs when working with clonedMap while bumping map
+					if(value == null)
+						return null;
 		            var obj  = {id:value.id || '',
 		                        firstName: value.firstName || '',
 		                        lastName: value.lastName || ''};	
@@ -29,6 +33,8 @@ Ext.define('Ssp.model.AbstractBase', {
              },
              {name: 'modifiedBy',
               convert: function(value, record) {
+					if(value == null)
+						return null;
  		            var obj  = {id:value.id || '',
  		                        firstName: value.firstName || '',
  		                        lastName: value.lastName || ''};	

@@ -203,15 +203,23 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		me.dirty = false;
 	}, 
 	
+	isEmpty: function(str){
+		return (!!str);
+	},
+	
 	getSimpleJsonData: function(){
 		var me = this;
 		var simpleData = {};
 		var termNotes = me.get('termNotes')
 		simpleData.termNotes = [];
 		termNotes.forEach(function(termNote){
-			termNote.set("id","");
-			termNote.set("objectStatus","ACTIVE");
-			simpleData.termNotes.push(termNote.data);
+			var studentNoteHasValue = !me.isEmpty(termNote.get("studentNotes"));
+			var contactNoteHasValue = !me.isEmpty(termNote.get("contactNotes"));
+			if(termNote != null && (studentNoteHasValue || contactNoteHasValue || termNote.get("isImportant"))){
+				termNote.set("id","");
+				termNote.set("objectStatus","ACTIVE");
+				simpleData.termNotes.push(termNote.data);
+			}
 		})
 		
 		simpleData.ownerId = me.get('ownerId');

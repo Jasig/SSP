@@ -31,9 +31,6 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 		termCodeEndField: '#termCodeEnd',
 		selectActionField: {
 		   selector:'#selectAction',
-		   listeners: {
-            change: 'onActionSelected'
-           }
 		},
 		movePlanButton:{
            selector: '#movePlanButton',
@@ -82,7 +79,7 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 
 	getAvailableTerms: function(){
 		var me = this;
-		me.currentMapPlan.updatePlanCourses(me.semesterStores);
+		
 		var termCodes = me.currentMapPlan.getTermCodes();
 		var availableTerms = me.termsStore.getTermsFromTermCodesStore(termCodes);
 		
@@ -90,7 +87,7 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 		if(availableTerms == null || availableTerms.getCount() < 3){
 			me.getTermCodeToBumpField().bindStore(me.currentAndFutureTermsStore);
 			me.getTermCodeEndField().bindStore(me.currentAndFutureTermsStore);
-			return;
+			return me.currentAndFutureTermsStore;
 		}
 		var startIndex = me.currentAndFutureTermsStore.find('code',availableTerms.getAt(0).get("code"));
 		if(startIndex < 0)
@@ -135,21 +132,6 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 		}
 	},
 
-	onActionSelected: function(){
-		var me = this;
-		var action = me.getSelectActionField().getValue();
-		switch(action){
-			case 'movePlan':
-				me.setUIForInsertRemove("Move Plan", "Move From", true);
-			break;
-			case 'insertTerm':
-				me.setUIForInsertRemove("Insert Blank Term", "Term To Insert Blank", false);
-			break;
-			case 'removeTerm':
-				me.setUIForInsertRemove("Remove Term", "Term To Remove", false);
-			break
-		}
-	},
 	
 	setUIForInsertRemove: function(buttonText, dialogTitle, show){
 		var me = this;

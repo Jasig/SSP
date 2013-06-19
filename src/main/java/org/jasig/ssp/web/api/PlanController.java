@@ -403,7 +403,6 @@ public class PlanController  extends AbstractBaseController {
 	PlanTO validatePlan(final HttpServletResponse response,
 			 @RequestBody final PlanTO plan)
 			throws ValidationException, ObjectNotFoundException, CloneNotSupportedException {
-
 		PlanTO validatedTO = getService().validate(plan);
 		return validatedTO;
 	}

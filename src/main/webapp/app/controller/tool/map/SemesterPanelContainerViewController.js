@@ -604,15 +604,20 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	onBumpRequested: function(args){
 		var me = this;
+		me.clonedMap = me.currentMapPlan.clonePlan();
+		me.clonedMap.updatePlanCourses(me.semesterStores);
+		var terms = me.clonedMap.getTermCodes()
+		if(terms.length <= 0) {
+			Ext.Msg.alert('There are no courses to bump. Can not continue.');
+			return; 
+		}
 		var maps = me.createBumpTermMap(args);
 		me.maps	= maps;
 		if(maps == null)
 			return;
-			
-		me.clonedMap = me.currentMapPlan.clonePlan();
 		me.bumpCourses(maps, true);
 		if(maps.numberToRemoveNoTerm > 0){
-			Ext.Msg.alert('Can not move plan, some required terms do not exist. \n Please see administrator to add terms.');
+			Ext.Msg.alert("Move Plan Aborted", 'Can not move plan, some required terms do not exist. \n Please see administrator to add terms.');
 		}else if(maps.numberToRemove > 0){
 			var message = 'Completing the move will overwrite ' + maps.numberToRemove + ' courses. Do you wish to?';
 			
@@ -642,6 +647,14 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	validatePlan: function(plan){
 		var me = this;
+		plan.set("isValid",true);
+		var planCourses = plan.get("planCourses");
+		planCourses.forEach(function(course){
+			course.invalidReasons = "";
+			course.isValidInTerm = true;
+			course.hasCorequisites = true;
+			course.hasPrerequisites = true;
+		});
 		me.getView().setLoading(true);
 		var serviceResponses = {
                 failures: {},
@@ -668,8 +681,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		else{
 			var message = me.clonedMap.getValidationSummary()
 			Ext.Msg.confirm({
-       		     title:'Moving Plan will invalidate courses when moved.',
-       		     msg: message,
+       		     title:'Invalid Courses',
+       		     msg: message + " Do you wish to continue with the move?",
        		     buttons: Ext.Msg.OKCANCEL,
        		     fn: me.onValidateAccept,
        		     scope: me
@@ -804,7 +817,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		}
 		if(evaluate)
 			return;
-		var termNotes = me.currentMapPlan.get("termNotes");
+		var termNotes = me.clonedMap.get("termNotes");
 		if(termNotes && termNotes.length > 0){
 			for(var i = 0; i < termNotes.length; i++){
 				var termNote = termNotes[i];

@@ -26,8 +26,8 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 	    formUtils: 'formRendererUtils',
     	currentMapPlan: 'currentMapPlan',
 	},
-    height: 210,
-    width: 300,
+    height: 220,
+    width: 380,
     resizable: true,
     parentGrid: null,
     enableFields: true,
@@ -69,32 +69,36 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 							valueField: 'action',
 							hidden: true
 	                    },
+							{
+	                        xtype: 'combobox',
+	                        itemId: 'termCodeToBump',
+							name: 'termCodeToBump',
+	                        emptyText: 'Start Term',
+	                        valueField: 'code',
+	                        displayField: 'name',
+	                        queryMode: 'local',
+	                        typeAhead: true,
+	                        allowBlank: true,
+	                        width: 250,
+							labelWidth: 200,
+							fieldLabel:'Start Term: Choose the first term that you want to move. All subsequent terms will also be moved.'
+			            },
 						{
-                        xtype: 'combobox',
-                        itemId: 'termCodeToBump',
-						name: 'termCodeToBump',
-                        fieldLabel: 'Move From',
-                        emptyText: 'Term To Move',
-                        valueField: 'code',
-                        displayField: 'name',
-                        queryMode: 'local',
-                        typeAhead: true,
-                        allowBlank: true,
-                        width: 250
-                    },
-                    {
-                        xtype: 'combobox',
-                        itemId: 'termCodeEnd',
-						name: 'termCodeEnd',
-                        fieldLabel: 'Move To',
-                        emptyText: 'Move To',
-                        valueField: 'code',
-                        displayField: 'name',
-                        queryMode: 'local',
-                        typeAhead: true,
-                        allowBlank: true,
-                        width: 250
-                    }]
+			                
+	                        xtype: 'combobox',
+	                        itemId: 'termCodeEnd',
+							name: 'termCodeEnd',
+	                        emptyText: 'Target Term',
+	                        valueField: 'code',
+	                        displayField: 'name',
+	                        queryMode: 'local',
+	                        typeAhead: true,
+	                        allowBlank: true,
+	                        width: 250,
+							labelWidth: 200,
+							fieldLabel: 'Target Term: Choose the target term to the move term selected abpve (start term). All term and course information will be moved into the new terms in the same order.'
+
+			            }]
 				    ,
 				    dockedItems: [{
 		                xtype: 'toolbar',
@@ -136,7 +140,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 							 width: 20,
 			                 height: 20,
 			    	         cls: 'helpIconSmall',
-			    	         tooltip: 'Select Split Plan to create a gap in the plan around the "Move From" term/semester.\n Select Remove Plan to remove a term/semester from the course.\n Nothing selected moves the complete map.'
+			    	         tooltip: 'Start Term: Choose the first term that you want to move. All subsequent terms will also be moved. Target Term: Choose the target term to he move term selected abose (start term). All term and course information will be moved into the new terms in the same order.'
 			    	     }]}]
        
 		            }]

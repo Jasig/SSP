@@ -205,6 +205,12 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 
 	onmovePlanButtonClick: function(button){
         var me=this;
+		me.currentMapPlan.updatePlanCourses(me.semesterStores);
+		var terms = me.currentMapPlan.getTermCodes()
+		if(terms.length <= 0) {
+			Ext.Msg.alert('Move Plan Impossible','There are no courses to bump. Can not continue.');
+			return; 
+		}
 		if(me.movePlanPopup == null || me.movePlanPopup.isDestroyed)
        		me.movePlanPopup = Ext.create('Ssp.view.tools.map.MovePlanDialog',{hidden:true});
 	    me.movePlanPopup.center();
