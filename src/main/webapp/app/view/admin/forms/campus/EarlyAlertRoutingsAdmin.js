@@ -36,6 +36,7 @@ Ext.define('Ssp.view.admin.forms.campus.EarlyAlertRoutingsAdmin',{
     		      autoScroll: true,
     		      store: me.store,
     		      title: 'Early Alert Routing Groups',
+				  cls: 'configgrid',
      		      columns: [
     		                { header: 'Group Name',  
     		                  dataIndex: 'groupName',

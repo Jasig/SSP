@@ -41,6 +41,7 @@ Ext.define('Ssp.view.admin.forms.shg.SelfHelpGuidesDisplayAdmin', {
     		      autoScroll: true,
     		      selType: 'rowmodel',
     		      enableDragDrop: false,
+				  cls: 'configgrid',
     		      columns: [
     		                { header: 'Self Help Guide',  
     		                  dataIndex: 'name',

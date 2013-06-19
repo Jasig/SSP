@@ -150,6 +150,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
             {
                 plugins: cellEditor,
                 selType: 'rowmodel',
+				cls: 'configgrid',
                 columns: [
                     { header: 'Name',
                         dataIndex: 'name',

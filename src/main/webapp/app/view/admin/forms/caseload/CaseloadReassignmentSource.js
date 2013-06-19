@@ -45,7 +45,8 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',
-    		      multiSelect: true,    		      
+    		      multiSelect: true,   
+				  cls: 'configgrid', 		      
     		      columns: [
     		                { 
       		                  header: 'School ID',  

@@ -39,6 +39,7 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
     			{   
     		      autoScroll: true,
     		      store: me.store,
+				  cls: 'configgrid',
      		      columns: [{
 		    	        xtype:'actioncolumn',
 		    	        width: 100,

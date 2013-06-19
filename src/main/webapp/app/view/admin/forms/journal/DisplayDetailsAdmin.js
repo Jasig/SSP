@@ -43,6 +43,7 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayDetailsAdmin', {
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',
+				  cls: 'configgrid',
     		      columns: [
     		                { header: 'Name',  
     		                  dataIndex: 'name',
