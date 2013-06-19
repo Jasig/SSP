@@ -67,6 +67,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 							queryMode: 'local',
 							displayField: 'name',
 							valueField: 'action',
+							hidden: true
 	                    },
 						{
                         xtype: 'combobox',

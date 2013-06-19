@@ -331,6 +331,27 @@ Ext.define('Ssp.service.MapPlanService', {
    			scope: me,
    		});
     },
+
+	validate: function(plan, callbacks){
+		var me=this;
+		
+		var url = me.getBaseUrl(me.currentMapPlan.get('personId'));
+	    var success = function( response ){
+			callbacks.success( response, callbacks.scope );
+	    };
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	 
+	    	callbacks.failure(response, callbacks.scope);
+	    };
+		me.apiProperties.makeRequest({
+   			url: url+'/validate',
+   			method: 'POST',
+   			jsonData: plan.getSimpleJsonData(),
+   			successFunc: success,
+   			failureFunc: failure,
+   			scope: me,
+   		});
+	},
     
     prepareMapOutput: function(semesterStores, outputData, isPrivate){
     	/**** TODO when semesterStores is null this is printing from somewhere 

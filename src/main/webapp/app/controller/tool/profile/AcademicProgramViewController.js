@@ -182,6 +182,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
     },
 
     getMapPlanServiceFailure: function() {
+    	var me = this;
 		me.getPrintPlanButton().hide();
 		me.getEmailPlanButton().hide();
     },

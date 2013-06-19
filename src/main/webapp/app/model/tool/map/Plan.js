@@ -41,6 +41,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			 {name:'programCode',type:'string'},
 			 {name:'divisionCode',type:'string'},
 			 {name:'isPrivate',type:'boolean'},
+			 {name:'isValid',type:'boolean'},
              
              {name:'planCourses',
        		  type:'auto',
@@ -181,6 +182,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 				me.set('programCode','');
 				me.set('createdDate',null);
 				me.set('modifiedDate',null);
+				me.set('isValid',true);
 			},
 			
 	loadFromServer : function(objectData){
@@ -233,6 +235,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
         simpleData.academicLink = me.get('academicLink');
 		simpleData.createdDate = me.get('createdDate');
 		simpleData.modifiedDate = me.get('modifiedDate');
+		simpleData.isValid = me.get('isValid');
 		if(me.get('isTemplate')){
 			simpleData.templateCourses = me.get('planCourses');
 			simpleData.departmentCode = me.get('departmentCode');
@@ -246,12 +249,18 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		return simpleData;
 	},
 	
-	cloneMapPlan:function(){
+	clonePlan:function(){
 		var me = this;
 		var clone = new Ssp.model.tool.map.Plan({id:""});
 		var data = me.getSimpleJsonData();
 		clone.loadFromServer(data);
 		return clone;
+	},
+	
+	loadPlan:function(planToLoad){
+		var me = this;
+		var data = planToLoad.getSimpleJsonData();
+		me.loadFromServer(data);
 	},
 	
 	getBoolean:function(fieldName){
@@ -297,10 +306,17 @@ Ext.define('Ssp.model.tool.map.Plan', {
             		planCourse.courseDescription = model.get('description');
             		planCourse.studentNotes = model.get('studentNotes');
             		planCourse.contactNotes = model.get('contactNotes');
-
             		planCourse.isImportant = model.get('isImportant') ==  null ? false : model.get('isImportant');
             		planCourse.isTranscript = model.get('isTranscript') ==  null ? false : model.get('isTranscript');
             		planCourse.electiveId = model.get('electiveId');
+            		planCourse.isValidInTerm = model.get('isValidInTerm');
+            		planCourse.hasCorequisites = model.get('hasCorequisites');
+            		planCourse.hasPrerequisites = model.get('hasPrerequisites');
+            		planCourse.invalidReasons = model.get('invalidReasons');
+					planCourse.modifiedBy = model.get('modifiedBy');
+					planCourse.modifiedDate = model.get('modifiedDate');
+					planCourse.createdBy = model.get('createdBy');
+					planCourse.createdDate = model.get('createdDate');
             		planCourse.orderInTerm = i;
 					planCourse.objectStatus = 'ACTIVE';
             		planCourse.isDev = model.get('isDev');
@@ -331,5 +347,45 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			});
 		}
 		return false;
-	}		        		  
+	},
+	
+	getValidationSummary: function(){
+		var me = this;
+		var termInvalidCount = 0;
+		var prerequisiteInvalidCount = 0;
+		var corequisiteInvalidCount = 0;
+		
+		var termInvalid = ""
+		var prerequisiteInvalid = "";
+		var corequisiteInvalid = "";
+		if(me.get("isValid"))
+			return null;
+		
+		me.get('planCourses').forEach(function(planCourse){
+			if(planCourse.validInTerm == false){
+				termInvalidCount++;
+				termInvalid += planCourse.formattedCourse + ','
+			}
+			if(planCourse.hasCorequisites == false){
+				corequisiteInvalidCount++;
+				corequisiteInvalid += planCourse.formattedCourse + ','
+			}
+			if(planCourse.hasPrerequisits == false){
+				prerequisiteInvalidCount++;
+				prerequisiteInvalid += planCourse.formattedCourse + ', '
+			}
+		});
+		
+		var message = "The plan has the following invalid courses";
+		if(termInvalidCount > 0)
+			message += "\n Invalid Terms: " + termInvalidCount + " : " + termInvalid;
+		
+		if(prerequisiteInvalid > 0)
+			message += "\n Terms with invalid prerequisites: " + prerequisiteInvalidCount + " : " + prerequisiteInvalid;
+		
+		if(corequisiteInvalidCount > 0)
+			message += "\n Terms with invalid corequisites: " + corequisiteInvalidCount + " : " + corequisiteInvalid;
+		
+		return message;
+	}
 });

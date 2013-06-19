@@ -50,18 +50,21 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 	init: function() {
 		var me=this;
 		var view = me.getView();
-		me.termsStore.sort('startDate', 'ASC');
+		me.getTermCodeEndField().store = me.termsStore.getCurrentAndFutureTermsStore(true);
+		
+		me.currentAndFutureTermsStore = me.getTermCodeEndField().store
+		me.currentAndFutureTermsStore.sort('startDate', 'ASC');
 
 		var availableTerms = me.getAvailableTerms();
 		
 		me.getTermCodeToBumpField().store = availableTerms;
-		me.getTermCodeEndField().store = me.termsStore;
+		
 		
 		var startTerm = availableTerms.getAt(0);
 		me.getTermCodeToBumpField().setValue(startTerm.get('code'));
 		
-		var indexStartTerm = me.termsStore.find('code', startTerm.get('code'));
-		me.getTermCodeEndField().setValue(me.termsStore.getAt(indexStartTerm + 1).get('code'));
+		var indexStartTerm = me.currentAndFutureTermsStore.find('code', startTerm.get('code'));
+		me.getTermCodeEndField().setValue(me.currentAndFutureTermsStore.getAt(indexStartTerm + 1).get('code'));
 		
 		var actions = Ext.create('Ext.data.Store', {
 		    fields: ['action', 'name'],
@@ -85,14 +88,20 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 		
 		availableTerms.sort('startDate', 'ASC');
 		if(availableTerms == null || availableTerms.getCount() < 3){
-			me.getTermCodeToBumpField().bindStore(me.termsStore);
-			me.getTermCodeEndField().bindStore(me.termsStore);
+			me.getTermCodeToBumpField().bindStore(me.currentAndFutureTermsStore);
+			me.getTermCodeEndField().bindStore(me.currentAndFutureTermsStore);
 			return;
 		}
-		var startIndex = me.termsStore.find('code',availableTerms.getAt(0).get("code"));
-		var endIndex = me.termsStore.find('code',availableTerms.getAt(availableTerms.getCount() - 1).get("code"));
+		var startIndex = me.currentAndFutureTermsStore.find('code',availableTerms.getAt(0).get("code"));
+		if(startIndex < 0)
+			startIndex = 0;
+		var endIndex = me.currentAndFutureTermsStore.find('code',availableTerms.getAt(availableTerms.getCount() - 1).get("code"));
+		if(endIndex < 0)
+			endIndex = me.currentAndFutureTermsStore.getCount() - 1;
+		if(endIndex < 0)
+			return;
 		availableTerms.removeAll();
-		availableTerms.loadRecords(me.termsStore.getRange(startIndex, endIndex));
+		availableTerms.loadRecords(me.currentAndFutureTermsStore.getRange(startIndex, endIndex));
 		return availableTerms;
 	},
 
@@ -104,7 +113,7 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 		me.getView().close();
 		me.bumpParams = {startTermCode:startTermCode, endTermCode:endTermCode, action:action};
 		if(action == 'removeTerm' && me.currentMapPlan.hasCourse(startTermCode)){
-			var startTerm = me.termsStore.findRecord('code', startTermCode);
+			var startTerm = me.currentAndFutureTermsStore.findRecord('code', startTermCode);
 			var message = startTerm.get('name') + ' has courses. Are you sure you want to delete it?'
 			Ext.Msg.confirm({
        		     title:'Delete Term With Courses?',
@@ -154,7 +163,6 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 	
 	destroy:function(){
 	    var me=this;
-		me.termsStore.sort('startDate', 'DESC');
 	    return me.callParent( arguments );
 	}
 	

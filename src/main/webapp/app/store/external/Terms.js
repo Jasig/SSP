@@ -43,7 +43,7 @@ Ext.define('Ssp.store.external.Terms', {
     	var store = Ext.create('Ext.data.Store', {
 		     	model: "Ssp.model.external.Term"
 		     });
-    	store.loadData(me.getCurrentAndFutureTerms())
+    	store.loadRecords(me.getCurrentAndFutureTerms());
 		me.sortStoreByDate(store, sortEarliestFirst);
     	return store;
     },

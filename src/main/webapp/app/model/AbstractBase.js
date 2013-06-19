@@ -45,7 +45,8 @@ Ext.define('Ssp.model.AbstractBase', {
 		{
 			for (fieldName in this.data)
 	    	{
-				if ( record[fieldName] )
+				//TODO this was orginally if(record[fieldName]) this does not work for booleans
+				if (fieldName in record)
 	    		{
 	    			this.set( fieldName, record[fieldName] );
 	    		}

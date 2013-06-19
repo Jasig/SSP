@@ -454,7 +454,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     var me = this;
     me.getView().setLoading(false);
   },  
-	updateAllPlanHours: function(){
+  
+  updateAllPlanHours: function(){
 		var me = this;
 		var parent =  me.getView();
 		var panels = parent.query("semesterpanel");
@@ -603,28 +604,107 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	onBumpRequested: function(args){
 		var me = this;
-		switch(args.action){
-			case 'movePlan':
-				termMap = me.createBumpTermMap(args)
-			break;
-			case 'insertTerm':
-				termMap = me.createInsertTermMap(args);
-			break;
-			case 'removeTerm':
-				termMap = me.createRemoveTermMap(args);
-			break
+		var maps = me.createBumpTermMap(args);
+		me.maps	= maps;
+		if(maps == null)
+			return;
+			
+		me.clonedMap = me.currentMapPlan.clonePlan();
+		me.bumpCourses(maps, true);
+		if(maps.numberToRemoveNoTerm > 0){
+			Ext.Msg.alert('Can not move plan, some required terms do not exist. \n Please see administrator to add terms.');
+		}else if(maps.numberToRemove > 0){
+			var message = 'Completing the move will overwrite ' + maps.numberToRemove + ' courses. Do you wish to?';
+			
+			var messageBox = Ext.Msg.confirm({
+       		     title:'Delete Courses ?',
+       		     msg: message,
+       		     buttons: Ext.Msg.YESNOCANCEL,
+       		     fn: me.completeBump,
+       		     scope: me
+       		});
+			messageBox.msgButtons['yes'].setText("Overwrite Courses");
+		    messageBox.msgButtons['no'].setText("Append Courses");
+		    messageBox.msgButtons['cancel'].setText("Cancel");
+		}else
+			me.completeBump('yes');
+	},
+	
+	completeBump: function(btnId){
+		if (btnId=="yes" || btnId=="no")
+     	{
+			var me = this;
+			me.maps.overwrite = btnId;
+			me.bumpCourses(me.maps);
+			me.validatePlan(me.clonedMap);
 		}
-		me.bumpCourses(termMap);
-		me.onCreateMapPlan();
-		me.populatePlanStores();
-		me.updateAllPlanHours();
-		me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+	},
+	
+	validatePlan: function(plan){
+		var me = this;
+		me.getView().setLoading(true);
+		var serviceResponses = {
+                failures: {},
+                successes: {},
+                responseCnt: 0,
+                expectedResponseCnt: 1,
+				show: true
+            }
+		me.mapPlanService.validate(me.clonedMap, {
+            success: me.newServiceSuccessHandler('validatePlan', me.validateMapPlanServiceSuccess, serviceResponses),
+            failure: me.newServiceFailureHandler('validatePlan', me.validateMapPlanServiceFailure, serviceResponses),
+            scope: me,
+            isPrivate: true
+        });
+	},
+	
+	validateMapPlanServiceSuccess: function(serviceResponses){
+		var me = this;
+		me.getView().setLoading(false);
+		var mapResponse = serviceResponses.successes.validatePlan;
+		me.clonedMap.loadFromServer(Ext.decode(mapResponse.responseText));
+	    if(me.clonedMap.get("isValid"))
+	    	me.onValidateAccept('ok');
+		else{
+			var message = me.clonedMap.getValidationSummary()
+			Ext.Msg.confirm({
+       		     title:'Moving Plan will invalidate courses when moved.',
+       		     msg: message,
+       		     buttons: Ext.Msg.OKCANCEL,
+       		     fn: me.onValidateAccept,
+       		     scope: me
+       		});
+		}
+	},
+	
+	validateMapPlanServiceFailure: function(serviceResponses){
+		var me = this;
+		
+		me.getView().setLoading(false);
+		Ext.Msg.confirm({
+  		     title:'Server Error On Validation',
+  		     msg: "Server Error unable to validate. Should continue?",
+  		     buttons: Ext.Msg.OKCANCEL,
+  		     fn: me.onValidateAccept,
+  		     scope: me
+  		});
+	},
+	
+	onValidateAccept: function(btnId){
+		var me = this;
+		if(btnId == 'ok'){
+			me.currentMapPlan.loadPlan(me.clonedMap);
+			me.onCreateMapPlan();
+			me.populatePlanStores();
+			me.updateAllPlanHours();
+			me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+		}
 	},
 	
 	createBumpTermMap: function(args){
 		if(args.endTermCode == args.startTermCode){
 			Ext.Msg.alert('No Bump Required', "Bump does not require change, Start Term and End Term the same.");
-			return;
+			return null;
 		}
 		var me = this;
 
@@ -632,100 +712,112 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var endTermIndex =  me.termsStore.find('code', args.endTermCode);
 		if(startTermIndex < 0 || endTermIndex < 0){
 				Ext.Msg.alert('Bump not allowed', "Terms to do not fall in allowed range of terms.");
-				return;
+				return null;
 		}
 				
 		var delta = endTermIndex - startTermIndex;
+			
 		return me.bumpTerms(startTermIndex, delta, args.split);
 	},
 	
-	createRemoveTermMap: function(args){
+	bumpTerms: function(startTermIndex, delta){
 		var me = this;
 		var termMap = {};
-		var terms = me.getTerms(me.currentMapPlan);
-		var termCodeToRemove = args.startTermCode;
-		var termMap = {};
-		var termCodeReplace;
-		terms.forEach(function(term){
-			if(termCodeReplace != null && termCodeReplace != "")
-				termMap[term.get('code')] = termCodeReplace;
-			else
-				termMap[term.get('code')] = term.get('code');
-			if(term.get('code') == termCodeToRemove || termCodeReplace != null && termCodeReplace != ""){
-				termCodeReplace = term.get('code');
-			}
-			
-		});
-		return termMap;
-	},
-	
-	createInsertTermMap: function(args){
-		var me = this;
-		var termMap = {};
-		var terms = me.getTerms(me.currentMapPlan);
-		var termCodeToInsert = args.startTermCode;
-		var index = me.termsStore.find('code',terms[terms.length - 1].get('code'))
-		if(index > 0)
-		    termCodeReplace = me.termsStore.getAt(index - 1).get('code');
-		else
-			termCodeReplace = terms[terms.length - 1].get('code');
-		var termMap = {};
-		terms.reverse();
-		terms.forEach(function(term){
-			if(termCodeReplace != null && termCodeReplace != ""){
-				termMap[term.get('code')] = termCodeReplace;
-				termCodeReplace = term.get('code');
-			}else
-				termMap[term.get('code')] = term.get('code');
-			if(term.get('code') == termCodeToInsert){
-				termCodeReplace = null;
-			}
-		});
-		return termMap;
-	},
-	
-	bumpTerms: function(startTermIndex, delta, split, removeBlankTerms, direction){
-		var me = this;
-		var termMap = {};
-		var terms = me.getTerms(me.currentMapPlan);
+		var bumpedTermMap = {};
+		
+		var terms = me.getTerms(me.clonedMap);
+		replaceTermCodes = false;
+		var numberToRemove = 0;
 		terms.forEach(function(term){
 			var termIndex = me.termsStore.find('code', term.get('code'));
 			if(termIndex >= 0){
-				var bumpedTerm = me.termsStore.getAt(termIndex + delta);
-				if(bumpedTerm != undefined && bumpedTerm != null)
-					termMap[term.get('code')] = bumpedTerm.get('code');
+				if (termIndex == startTermIndex){
+					replaceTermCodes = true;
+				}
+				if(replaceTermCodes == false)
+					termMap[term.get('code')] = term.get('code');
+				else{
+					var bumpedTerm = me.termsStore.getAt(termIndex + delta);
+					if(bumpedTerm != undefined && bumpedTerm != null){
+						if(termMap[bumpedTerm.get('code')] == bumpedTerm.get('code')){
+							bumpedTermMap[bumpedTerm.get('code')]  = true;
+						}					
+						termMap[term.get('code')] = bumpedTerm.get('code');
+					}else{
+						termMap[term.get('code')] = false;
+					}
+				}
 			}
 		});
-		return termMap;
-		
+		var maps = {};
+		maps.termMap = termMap;
+		maps.bumpedTermMap = bumpedTermMap;
+		return maps;
 	},
 	
-	bumpCourses:function(termMap){
+	bumpCourses:function(maps, evaluate){
 		var me = this;
-		var planCourses = me.currentMapPlan.get('planCourses');
+		if(evaluate){
+		 	maps.numberToRemoveNoTerm = 0;
+			maps.numberToRemove = 0;
+		}
+		var planCourses = me.clonedMap.get('planCourses');
 		var coursesToDelete = [];
 		var k = 0;
+		var transcriptedTerms = {};
+		var termMap = maps.termMap;
+		var bumpedTermMap = maps.bumpedTermMap;
 		if(planCourses && planCourses.length > 0){
+			var transcriptedTerms = {};
 			for(var i = 0; i < planCourses.length; i++){
 				var planCourse = planCourses[i];
-				var termCode = termMap[planCourse.termCode];
-				if(termCode != null && termCode != "")
-					planCourse.termCode = termMap[planCourse.termCode];
-				else{
-					planCourses.splice(i,1);
+				if(planCourse.isTranscript){
+					transcriptedTerms[termCode] = termCode;
+				}
+			}
+			for(var i = 0; i < planCourses.length; i++){
+				var planCourse = planCourses[i];
+				if(planCourse.isTranscript)
+					continue;
+				var currentCourseTerm = planCourse.termCode;
+				var termCourseCode = termMap[currentCourseTerm];
+				if(termCourseCode == false){
+					maps.numberToRemoveNoTerm++;
+					continue;
+				}
+				if(termCourseCode != null && termCourseCode != ""){
+					//Following if statements removes courses from terms that have been bumped and terms that are to be put in transcripted terms
+					if(((maps.overwrite == "yes" || evaluate) && bumpedTermMap[currentCourseTerm] == true) || (transcriptedTerms[termCourseCode] != undefined && transcriptedTerms[termCourseCode] != null)){
+						if(evaluate){
+							if(bumpedTermMap[currentCourseTerm])
+								maps.numberToRemove++;
+						}else{
+							planCourses.splice(i,1);
+							i--;
+						}
+					}else{
+						if(!evaluate)
+							planCourse.termCode = termCourseCode;
+					}
 				}
 			}
 		}
+		if(evaluate)
+			return;
 		var termNotes = me.currentMapPlan.get("termNotes");
 		if(termNotes && termNotes.length > 0){
 			for(var i = 0; i < termNotes.length; i++){
 				var termNote = termNotes[i];
-				var termCode = termMap[termNote.get('termCode')];
-				if(termCode != null && termCode != "")
-					termNote.set('termCode', termCode);
-				else{
-					termNotes.splice(i,1);
-				}
+				var currentNoteTerm = termNote.get('termCode')
+				var termCode = termMap[currentNoteTerm];
+				if(termCode != null && termCode != ""){
+					//Following if statements removes notes from terms that have been bumped and notes that are to be put in transcripted terms
+					if(bumpedTermMap[currentNoteTerm] == true || (transcriptedTerms[currentNoteTerm] != undefined && transcriptedTerms[termCode] != null)){
+						termNotes.splice(i,1);
+					}else{
+						termNote.set('termCode', termCode);
+					}
+				}	
 			}
 		}
 	},
