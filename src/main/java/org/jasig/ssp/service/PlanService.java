@@ -52,5 +52,5 @@ public interface PlanService extends AbstractPlanService<Plan,PlanTO> {
 	List<PlanCourseCountTO> getPlanCourseCount(SearchPlanTO form);
 	
 	List<PlanStudentStatusTO> getPlanStudentStatusByCourse(SearchPlanTO form);
-	
+		
 }

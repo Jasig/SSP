@@ -18,8 +18,16 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.jasig.ssp.dao.TemplateDao;
+import org.jasig.ssp.model.AbstractPlanCourse;
+import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.model.PlanCourse;
 import org.jasig.ssp.model.Template;
+import org.jasig.ssp.model.TemplateCourse;
 import org.jasig.ssp.service.TemplateService;
 import org.jasig.ssp.transferobject.TemplateTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -27,6 +35,8 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
 
 /**
  * 

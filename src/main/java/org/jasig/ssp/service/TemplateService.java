@@ -27,5 +27,5 @@ public interface TemplateService extends AbstractPlanService<Template,TemplateTO
 
 	PagingWrapper<Template> getAll(SortingAndPaging createForSingleSortWithPaging,
 			Boolean status, String divisionCode, String programCode, String departmentCode);
-
+	
 }

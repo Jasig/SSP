@@ -77,6 +77,11 @@ public class PlanCourseTOFactoryImpl extends AbstractAuditableTOFactory<PlanCour
 			Elective elective = electiveService.get(tObject.getElectiveId());
 			model.setElective(elective);
 		}
+		
+		model.setIsValidInTerm(tObject.isValidInTerm());
+		model.setHasPrerequisites(tObject.hasPrerequisites());
+		model.setHasCorequisites(tObject.hasCorequisites());
+		model.setInvalidReasons(tObject.getInvalidReasons());
 		return model;
 	}
 

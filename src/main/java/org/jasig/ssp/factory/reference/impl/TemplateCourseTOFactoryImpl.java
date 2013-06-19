@@ -77,6 +77,11 @@ public class TemplateCourseTOFactoryImpl extends AbstractAuditableTOFactory<Temp
 			Elective elective = electiveService.get(tObject.getElectiveId());
 			model.setElective(elective);
 		}
+		
+		model.setIsValidInTerm(tObject.isValidInTerm());
+		model.setHasPrerequisites(tObject.hasPrerequisites());
+		model.setHasCorequisites(tObject.hasCorequisites());
+		model.setInvalidReasons(tObject.getInvalidReasons());
 		return model;
 	}
 
@@ -92,8 +97,5 @@ public class TemplateCourseTOFactoryImpl extends AbstractAuditableTOFactory<Temp
 	public void setElectiveService(ElectiveService electiveService) {
 		this.electiveService = electiveService;
 	}
-
-		
-		
 
 }

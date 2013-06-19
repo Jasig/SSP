@@ -24,6 +24,7 @@ import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 import org.jasig.ssp.model.reference.Elective;
@@ -77,6 +78,18 @@ public abstract class AbstractPlanCourse<T extends AbstractPlan> extends Abstrac
 	@ManyToOne()
 	@JoinColumn(name = "elective_id", updatable = false, nullable = true)
 	private Elective elective;
+	
+	@Transient
+	private transient boolean isValidInTerm = true;
+	
+	@Transient
+	private transient boolean hasPrerequisites = true;
+	
+	@Transient
+	private transient boolean hasCorequisites = true;
+	
+	@Transient
+	private transient String invalidReasons;
 	
 	public abstract T getParent();
 	
@@ -207,6 +220,70 @@ public abstract class AbstractPlanCourse<T extends AbstractPlan> extends Abstrac
 
 	public void setElective(Elective elective) {
 		this.elective = elective;
+	}
+
+
+	/**
+	 * @return the isValidInTerm
+	 */
+	public boolean isValidInTerm() {
+		return isValidInTerm;
+	}
+
+
+	/**
+	 * @param isValidInTerm the isValidInTerm to set
+	 */
+	public void setIsValidInTerm(boolean isValidInTerm) {
+		this.isValidInTerm = isValidInTerm;
+	}
+
+
+	/**
+	 * @return the hasPrerequisites
+	 */
+	public boolean hasPrerequisites() {
+		return hasPrerequisites;
+	}
+
+
+	/**
+	 * @param hasPrerequisites the hasPrerequisites to set
+	 */
+	public void setHasPrerequisites(boolean hasPrerequisites) {
+		this.hasPrerequisites = hasPrerequisites;
+	}
+
+
+	/**
+	 * @return the hasCorequisites
+	 */
+	public boolean hasCorequisites() {
+		return hasCorequisites;
+	}
+
+
+	/**
+	 * @param hasCorequisites the hasCorequisites to set
+	 */
+	public void setHasCorequisites(boolean hasCorequisites) {
+		this.hasCorequisites = hasCorequisites;
+	}
+
+
+	/**
+	 * @return the invalidReasons
+	 */
+	public String getInvalidReasons() {
+		return invalidReasons;
+	}
+
+
+	/**
+	 * @param invalidReasons the invalidReasons to set
+	 */
+	public void setInvalidReasons(String invalidReasons) {
+		this.invalidReasons = invalidReasons;
 	}
 
 	

@@ -30,6 +30,8 @@ import org.jasig.ssp.dao.AbstractPlanDao;
 import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.model.PlanCourse;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.TermCourses;
 import org.jasig.ssp.model.external.Term;
@@ -139,6 +141,38 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 				courses, 
 				institutionName);
 		return subjectAndBody;
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public TO validate(TO model){
+		List<? extends AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courses = model.getCourses();
+		Map<String, List<String>> coursesByTerm = new HashMap<String, List<String>>();
+		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>  course: courses){
+			course.setIsValidInTerm(true);//Set all courses valid in term
+			if(coursesByTerm.containsKey(course.getTermCode())){
+				coursesByTerm.get(course.getTermCode()).add(course.getCourseCode());
+			}else {
+				List<String> termCourses = Lists.newArrayList(course.getCourseCode());
+				coursesByTerm.put(course.getTermCode(), termCourses);
+			}
+		}
+		for(String termCode: coursesByTerm.keySet()){
+			List<String> validCourseCodes = this.getCourseService().getValidCourseCodesForTerm(termCode, coursesByTerm.get(termCode));
+			for(String courseCode:coursesByTerm.get(termCode)){
+				if(validCourseCodes.contains(courseCode)){
+					continue;
+				}else{
+					for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course: courses){
+					  if(course.getCourseCode() == courseCode && course.getTermCode() == termCode){
+						  course.setIsValidInTerm(false);
+						  model.setIsValid(false);
+					  }
+					}
+				}
+			}
+		}
+		return model;
 	}
 	
 	private Float calculateTotalPlanDevHours(List<TermCourses<T, TO>> courses) {

@@ -18,6 +18,9 @@
  */
 package org.jasig.ssp.web.api;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.mail.SendFailedException;
@@ -42,6 +45,7 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.PlanCourseTO;
 import org.jasig.ssp.transferobject.PlanLiteTO;
 import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
@@ -60,6 +64,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.common.collect.Lists;
 
 @Controller
 @RequestMapping("/1/person/{personId}/map/plan")
@@ -375,6 +381,31 @@ public class PlanController  extends AbstractBaseController {
 			throws ObjectNotFoundException {
 		getService().delete(id);
 		return new ServiceResponse(true);
+	}
+	
+	/**
+	 * Persist any changes to the plan instance.
+	 * 
+	 * @param id
+	 *            Explicit id to the instance to persist.
+	 * @param obj
+	 *            Full instance to persist.
+	 * @return The update data object instance.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If the specified id is null.
+	 * @throws CloneNotSupportedException 
+	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_WRITE')")
+	@RequestMapping(value = "/validate", method = RequestMethod.POST)
+	public @ResponseBody
+	PlanTO validatePlan(final HttpServletResponse response,
+			 @RequestBody final PlanTO plan)
+			throws ValidationException, ObjectNotFoundException, CloneNotSupportedException {
+
+		PlanTO validatedTO = getService().validate(plan);
+		return validatedTO;
 	}
 
 	public PlanService getService() {

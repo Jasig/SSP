@@ -45,9 +45,10 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 	public PlanTO(Plan model) {
 		super();
 		from(model);
-	}	
+	}
+	
 
-	@Override
+	// This is totally wrong just so that validation can take place without hitting plan is modifi
 	public void from(Plan model) {
 		super.from(model);
 		this.setPersonId(model.getPerson().getId().toString());
@@ -62,6 +63,7 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 			this.getTermNotes().add(termNoteTO);
 		}
 	}
+
 	public String getPersonId() {
 		return personId;
 	}

@@ -18,7 +18,6 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -112,5 +111,4 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO> imple
 	public List<PlanStudentStatusTO> getPlanStudentStatusByCourse(SearchPlanTO form){
 		return dao.getPlanStudentStatusByCourse(form);
 	}
-
 }

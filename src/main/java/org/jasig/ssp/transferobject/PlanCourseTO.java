@@ -38,10 +38,6 @@ public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 	
 	private String personId;
 
-
-	
-	
-
 	public PlanCourseTO(PlanCourse planCourse) {
 		super();
 		from(planCourse);
