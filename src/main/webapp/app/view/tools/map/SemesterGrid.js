@@ -35,6 +35,9 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
     initComponent: function(){
         var me = this;       
         Ext.apply(me, {
+			invalidRecord: function(record) { 
+						            return record.get('validInTerm') === false || record.get('hasCorequisites')  === false || record.get('hasPrerequisites')  === false; 
+						        },
             columns: [
             	{
 		            xtype: 'gridcolumn',
@@ -86,12 +89,19 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
                 xtype: 'gridcolumn',
 				hidden: true,
 				hideable: false
+				
             }, 
 			{
                 dataIndex: 'formattedCourse',
                 xtype: 'gridcolumn',
 		        flex:1,
-				width:145
+				width:145,
+				renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+		            	var me=this;
+					    if(me.invalidRecord(record))
+					    	metaData.style = 'font-style:italic;color:#AAA';
+						return value;
+			        }		
             },
         	{
 	            xtype: 'gridcolumn',
@@ -100,6 +110,8 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 	            	var me=this;
 	            	var elective = me.electiveStore.getById(record.get('electiveId'))
 	            	value = elective ? elective.get('code') : '';
+					if(me.invalidRecord(record))
+				    	metaData.style = 'font-style:italic;color:#AAA';
 	            	return value;
 		         }		            
 	        },            
@@ -107,7 +119,13 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
                 dataIndex: 'creditHours',
                 xtype: 'gridcolumn',
 	            flex:0.5,
-				width:25
+				width:25,
+				renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+		            	var me=this;
+						if(me.invalidRecord(record))
+					    	metaData.style = 'font-style:italic;color:#AAA';
+						return value;
+			        }		
             },
             {
                 dataIndex: 'maxCreditHours',

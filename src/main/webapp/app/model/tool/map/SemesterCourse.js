@@ -32,7 +32,11 @@ Ext.define('Ssp.model.tool.map.SemesterCourse', {
 			 {name:'contactNotes', type: 'string'},
 			 {name:'isImportant', type: 'boolean'},
 			 {name:'isTranscript', type: 'boolean'},
-			 {name:'electiveId', type: 'string'}
+			 {name:'validInTerm',type:'boolean', defaultValue:true, convert: null},
+             {name:'hasCorequisites',type:'boolean', defaultValue:true, convert: null},
+             {name:'hasPrerequisites',type:'boolean', defaultValue:true, convert: null},
+             {name:'invalidReasons',type:'string'},
+             {name:'electiveId',type:'string'}
              ],
 	constructor: function(planCourse){
 					var me = this;
