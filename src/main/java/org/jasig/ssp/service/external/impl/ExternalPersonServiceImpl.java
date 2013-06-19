@@ -31,6 +31,7 @@ import org.jasig.ssp.model.PersonDemographics;
 import org.jasig.ssp.model.PersonStaffDetails;
 import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.model.reference.Genders;
+import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PersonStaffDetailsService;
@@ -38,6 +39,7 @@ import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EthnicityService;
 import org.jasig.ssp.service.reference.MaritalStatusService;
+import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -77,7 +79,11 @@ public class ExternalPersonServiceImpl
 
 	@Autowired
 	private transient EthnicityService ethnicityService;
+	
+	@Autowired
+	private transient StudentTypeService studentTypeService;
 
+	
 	@Override
 	public ExternalPerson getBySchoolId(final String schoolId)
 			throws ObjectNotFoundException {
@@ -320,6 +326,8 @@ public class ExternalPersonServiceImpl
 		}
 
 		setCoachForPerson(person, externalPerson.getCoachSchoolId());
+		
+		setStudentTypeForPerson(person, externalPerson.getStudentType());
 
 		if ((StringUtils.isBlank(externalPerson.getDepartmentName())
 				&& StringUtils.isBlank(externalPerson.getOfficeHours())
@@ -493,6 +501,61 @@ public class ExternalPersonServiceImpl
 		} catch (final ObjectNotFoundException e) {
 			LOGGER.warn(
 					"Coach referenced in external table not available in system",
+					e);
+			return null;
+		}
+	}
+	
+	private void setStudentTypeForPerson(final Person person, final String externStudentType)
+	{
+		if (configService.getByNameNullOrDefaultValue(
+				"studentTypeSetFromExternalData").equalsIgnoreCase("false")) {
+			LOGGER.debug("Skipping all student type assignment processing for person "
+					+ "schoolId '{}' because that operation has been disabled "
+					+ "via configuration.", person.getSchoolId());
+			return;
+		}
+		
+		if (person.getStudentType() == null) {   
+			if (externStudentType != null) {
+				LOGGER.debug("Assigning student_type '{}' to person " +
+						"schoolId '{}'", externStudentType, person.getSchoolId());
+				person.setStudentType(getInternalStudentType(externStudentType));
+			}// else ignore
+		} else {
+			if (externStudentType == null) {
+				if ( configService.getByNameNullOrDefaultValue(
+						"studentTypeUnsetFromExternalData")
+						.equalsIgnoreCase("true") ) {
+					LOGGER.debug("Deleting student type assignment for person schoolId '{}'",
+							person.getSchoolId());
+					person.setStudentType(null);
+				} else {
+					LOGGER.debug("Skipping student type assignment deletion for "
+							+ "person schoolId '{}' because that operation has "
+							+ "been disabled via configuration.",
+							person.getSchoolId());
+				}
+			} else if (!externStudentType.equals(person.getStudentType().getName())) {
+				StudentType studentType = getInternalStudentType(externStudentType);
+				if ( studentType == null ) {
+					// lookup problem already logged
+					LOGGER.debug("Student Type with name '{}' does not exist so "
+							+ "skipping student_type assignment for person schoolId '{}'",
+							externStudentType, person.getSchoolId());
+				} else {
+					person.setStudentType(getInternalStudentType(externStudentType));
+				}
+			}// else equals, so ignore
+		}
+	}
+	
+	private StudentType getInternalStudentType(final String studentType) {
+		try {
+			return studentTypeService.getByName(studentType);
+		} catch (final ObjectNotFoundException e) {
+			LOGGER.warn(
+					"Student_Type referenced in external table not available in system",
 					e);
 			return null;
 		}
