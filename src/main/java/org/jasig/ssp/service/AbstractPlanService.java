@@ -46,5 +46,5 @@ public interface AbstractPlanService<T extends AbstractPlan,TO extends AbstractP
 	
 	SubjectAndBody createFullOutput(AbstractPlanOutputTO<T,TO> plan, String institutionName) throws ObjectNotFoundException;
 	
-	public TO validate(TO model);
+	public TO validate(TO model) throws ObjectNotFoundException;
 }

@@ -63,7 +63,7 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 	
 	private transient boolean hasCorequisites = true;
 	
-	private transient String invalidReasons;
+	private transient String invalidReasons = new String();
 
 	/**
 	 * Empty constructor.
@@ -298,7 +298,9 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 	 * @param invalidReasons the invalidReasons to set
 	 */
 	public void setInvalidReasons(String invalidReasons) {
-		this.invalidReasons = invalidReasons;
+		if(invalidReasons == null)
+			invalidReasons = new String();
+		this.invalidReasons = this.invalidReasons + invalidReasons;
 	}
 
 }

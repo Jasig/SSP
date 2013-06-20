@@ -18,7 +18,7 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,23 +30,23 @@ import org.jasig.ssp.dao.AbstractPlanDao;
 import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.Plan;
-import org.jasig.ssp.model.PlanCourse;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.TermCourses;
+import org.jasig.ssp.model.external.ExternalCourseRequisite;
+import org.jasig.ssp.model.external.RequisiteCode;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
 import org.jasig.ssp.service.AbstractPlanService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.external.ExternalCourseRequisiteService;
 import org.jasig.ssp.service.external.ExternalCourseService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.AbstractPlanCourseTO;
 import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
 import org.jasig.ssp.transferobject.AbstractPlanTO;
-import org.jasig.ssp.transferobject.PlanCourseTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.TermNoteTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +75,9 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 	
 	@Autowired
 	private ExternalCourseService courseService;
+	
+	@Autowired
+	private ExternalCourseRequisiteService courseRequisiteService;
 	
 	@Override
 	public T save(T obj) {
@@ -145,11 +148,13 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 	
 	@Override
 	@Transactional(readOnly=true)
-	public TO validate(TO model){
+	public TO validate(TO model) throws ObjectNotFoundException{
 		List<? extends AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courses = model.getCourses();
 		Map<String, List<String>> coursesByTerm = new HashMap<String, List<String>>();
+		Map<String, AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courseCodeCourse = new HashMap<String,AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>();
 		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>  course: courses){
 			course.setIsValidInTerm(true);//Set all courses valid in term
+			courseCodeCourse.put(course.getCourseCode(), course);
 			if(coursesByTerm.containsKey(course.getTermCode())){
 				coursesByTerm.get(course.getTermCode()).add(course.getCourseCode());
 			}else {
@@ -158,20 +163,82 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 			}
 		}
 		for(String termCode: coursesByTerm.keySet()){
-			List<String> validCourseCodes = this.getCourseService().getValidCourseCodesForTerm(termCode, coursesByTerm.get(termCode));
-			for(String courseCode:coursesByTerm.get(termCode)){
+			List<String> validCourseCodes = getCourseService().getValidCourseCodesForTerm(termCode, coursesByTerm.get(termCode));
+			List<String> courseCodesTerm = coursesByTerm.get(termCode);
+			for(String courseCode:courseCodesTerm){
 				if(validCourseCodes.contains(courseCode)){
 					continue;
 				}else{
-					for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course: courses){
-					  if(course.getCourseCode() == courseCode && course.getTermCode() == termCode){
-						  course.setIsValidInTerm(false);
-						  model.setIsValid(false);
-					  }
-					}
+					  AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course = courseCodeCourse.get(courseCode);
+					  course.setIsValidInTerm(false);
+					  model.setIsValid(false);
+					  course.setInvalidReasons("Course: " + course.getFormattedCourse() + " is not current offered in term.");
 				}
 			}
 		}
+		model = validatePrerequisites(model);
+		return model;
+	}
+	
+	public TO validatePrerequisites(TO model) throws ObjectNotFoundException{
+		List<? extends AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courses = model.getCourses();
+		List<String> requiringCourseCodes = new ArrayList<String>();
+		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>  course: courses){
+			requiringCourseCodes.add(course.getCourseCode());
+		}
+		Map<String, Term> termCodeTerm = new HashMap<String, Term>();
+		Map<String, String> courseCodeTermCode = new HashMap<String,String>();
+		Map<String, AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courseCodeCourse = new HashMap<String,AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>();
+		List<ExternalCourseRequisite> requisiteCourses = getCourseRequisiteService().getRequisitesForCourses(requiringCourseCodes);
+		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>  course: courses){
+			
+			if(!termCodeTerm.containsKey(course.getTermCode())){
+				termCodeTerm.put(course.getTermCode(), getTermService().getByCode(course.getTermCode()));
+			}
+			courseCodeTermCode.put(course.getCourseCode(), course.getTermCode());
+			courseCodeCourse.put(course.getCourseCode(), course);
+		}
+		
+		for(ExternalCourseRequisite  requisiteCourse: requisiteCourses){
+			AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> requiringCourse = courseCodeCourse.get(requisiteCourse.getRequiredCourseCode());
+			AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> requiredCourse = courseCodeCourse.get(requisiteCourse.getRequiredCourseCode());
+			if(courseCodeTermCode.containsKey(requisiteCourse.getRequiredCourseCode())){
+				String requiredTermCode = courseCodeTermCode.get(requisiteCourse.getRequiredCourseCode());
+				String requireingTermCode = courseCodeTermCode.get(requisiteCourse.getRequiredCourseCode());
+				Term requiredTerm = termCodeTerm.get(requiredTermCode);
+				Term requireingTerm = termCodeTerm.get(requireingTermCode);
+				requiringCourse.setInvalidReasons(null);
+				if(requisiteCourse.getRequisiteCode().equals(RequisiteCode.CO)){
+					if(!requiredTerm.getCode().equals(requireingTerm.getCode())){
+						requiringCourse.setHasCorequisites(false);
+						requiringCourse.setInvalidReasons("Corequisite" + requiredCourse.getFormattedCourse() + " is not in same term.");
+					}		
+				}else if(requisiteCourse.getRequisiteCode().equals(RequisiteCode.PRE_CO)){
+					if(requiredTerm.getCode().equals(requireingTerm.getCode())){
+						continue;
+					}
+					if(requireingTerm.getStartDate().before(requiredTerm.getStartDate())){
+						requiringCourse.setHasCorequisites(false);
+						requiringCourse.setInvalidReasons("Pre/Corequisite " + requiredCourse.getFormattedCourse() + " is not in before term.");
+					}
+				}else if(requisiteCourse.getRequisiteCode().equals(RequisiteCode.PRE)){
+					if(requiredTerm.getCode().equals(requireingTerm.getCode())){
+						requiringCourse.setHasCorequisites(false);
+						requiringCourse.setInvalidReasons("Prerequisite " + requiredCourse.getFormattedCourse() + " is in same term.");
+					}
+					if(requireingTerm.getStartDate().before(requiredTerm.getStartDate())){
+						requiringCourse.setHasCorequisites(false);
+						requiringCourse.setInvalidReasons("Prerequisite " + requiredCourse.getFormattedCourse() + " is not in before term.");
+					}
+				}
+				
+			}else{
+				requiringCourse.setHasCorequisites(false);
+				requiringCourse.setHasPrerequisites(false);
+				requiringCourse.setInvalidReasons("Pre/co requisite is missing");
+			}
+		}
+		
 		return model;
 	}
 	
@@ -216,9 +283,11 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 			}
 		}
 		List<TermCourses<T,TO>> courses =  Lists.newArrayList(semesterCourses.values());
-		Collections.sort(courses, TermCourses.TERM_START_DATE_COMPARATOR);
+	
 		return courses;
 	}
+	
+	
 
 	private String getPlanToOfferTerms(
 			AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course,
@@ -265,5 +334,13 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 
 	public void setCourseService(ExternalCourseService courseService) {
 		this.courseService = courseService;
+	}
+	
+	public ExternalCourseRequisiteService getCourseRequisiteService() {
+		return courseRequisiteService;
+	}
+
+	public void setCourseService(ExternalCourseRequisiteService courseRequisiteService) {
+		this.courseRequisiteService = courseRequisiteService;
 	}
 }
