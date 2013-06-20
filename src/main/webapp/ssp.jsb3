@@ -1052,6 +1052,11 @@
                     "path": "/app/model/external/"
                 },
                 {
+                    "clsName": "Ssp.model.external.CourseRequisite",
+                    "name": "CourseRequisite.js",
+                    "path": "/app/model/external/"
+                },
+                {
                     "clsName": "Ssp.model.external.Term",
                     "name": "Term.js",
                     "path": "/app/model/external/"

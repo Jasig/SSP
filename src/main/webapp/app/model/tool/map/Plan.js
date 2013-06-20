@@ -333,6 +333,74 @@ Ext.define('Ssp.model.tool.map.Plan', {
          }
          me.set('planCourses',planCourses);
     },
+    
+    validateCourseRequisites: function(courseRequisites, termsStore){
+		var me = this;
+    	var planCourses = me.get('planCourses');
+    	var validationResponse = {};
+    	validationResponse.valid = true;
+    	if(!planCourses || courseRequisites.length <= 0){
+    		
+    		
+    		return validationResponse;
+    	}
+    	var requiringCourse;
+    	var requiredCourses = [];
+    	for(var k = 0; k < planCourses.length; k++){
+    		course = planCourses[k];
+    		if(course.code == courseRequisites[0].requiringCourseCode)
+    			requiringCourse = course;
+    		for(var i = 0; i < courseRequisites.length; i++){
+    			if(course.code == courseRequisites[i].requiredCourseCode){
+    				course.requisiteCode
+        			requiredCourses.push(course);
+        			courseRequisites.split(i,1);
+        			break;
+    			}
+    		}
+    		if(courseRequisites.length == 0)
+    			break;
+    	}
+    	
+    	if(courseRequisites.length != 0){
+    		validationResponse.valid = false;
+    		validationResponse.message = " " + courseRequisites.length + " pre/co requisites are not currently on plan: ";
+    	}
+    	
+    	if(requiredCourses.length <= 0)
+    		return validationResponse;
+    	var requiringCourseTermIndex = termsStore.find("code", requiringCourse.termCode);
+    	var startMessageAdded = false;
+    	
+    	requiredCourses.forEach(function(requiredCourse){
+    		 var index = termsStore.find("code", requiredCourse.termCode);
+    		 var startMessage = "The following pre/co requisites are on plan but in the wrong term: ";
+    		 var isValid = true;
+    		 switch(requiredCourse.requisite_code){
+    		 	case "PRE":
+    		 		if(index <= requiringCourseTermIndex)
+    		 			isValid = false;
+    		 		break;
+    		 		
+    		 	case "PRE_CO":
+    		 		if(index <= requiringCourseTermIndex)
+    		 			isValid = false;
+    		 		break;
+    		 	case "CO":
+    		 		if(index <= requiringCourseTermIndex)
+    		 			isValid = false;
+    		 		break;	
+    		 }
+    		 if(isValid == false && startMessageAdded == false){
+    			 validationResponse.message += startMessage;
+    			 startMessageAdded = true;
+    		 }
+    		 if(isValid == false)
+    			 validationResponse.message += requiredCourse.formattedCourse + ", ";
+    	});
+    	return validationResponse;
+    	
+    },
 	
 	isDirty: function(semesterStores){
 		var me = this;

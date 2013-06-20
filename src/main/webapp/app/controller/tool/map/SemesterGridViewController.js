@@ -24,7 +24,9 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     	courseService:'courseService',
 		electiveStore: 'electiveStore',
 		colorsStore: 'colorsStore',
-    	formUtils: 'formRendererUtils'
+    	formUtils: 'formRendererUtils',
+		currentMapPlan: 'currentMapPlan',
+		semesterStores : 'currentSemesterStores'
     },
     control:{
     	view:{
@@ -83,19 +85,56 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
                 expectedResponseCnt: 1
             }
     	me.courseService.validateCourse(me.droppedData.get('code'), termCode,  {
-            success: me.newServiceSuccessHandler('validCourse', me.onValidateSuccess, serviceResponses),
+            success: me.newServiceSuccessHandler('validCourse', me.onTermValidateSuccess, serviceResponses),
             failure: me.newServiceFailureHandler('validCourse', me.onValidateFailure, serviceResponses),
             scope: me
         });
 		return true;
     },
     
+    onTermValidateSuccess: function(serviceResponses){
+		var me = this;
+    	me.courseTermValidation = serviceResponses.successes.validCourse;
+    	var serviceResponses = {
+                failures: {},
+                successes: {},
+                responseCnt: 0,
+                expectedResponseCnt: 1
+            }
+    	me.courseService.getCourseRequirements(me.droppedData.get('code'),  {
+            success: me.newServiceSuccessHandler('courseRequisites', me.onValidateSuccess, serviceResponses),
+            failure: me.newServiceFailureHandler('courseRequisites', me.onValidateFailure, serviceResponses),
+            scope: me
+        });
+    	
+    },
+    
     onValidateSuccess: function(serviceResponses){
 		var me = this;
-    	var courseValidation = serviceResponses.successes.validCourse;
+    	var courseRequisites = serviceResponses.successes.courseRequisites;
+		me.currentMapPlan.updatePlanCourses(me.semesterStores);
+    	var validationResponse = me.currentMapPlan.validateCourseRequisites(courseRequisites);
+    	var confirm = {}
+    	confirm.valid = true;
+    	confirm.title = "";
+    	confirm.message = ""
+    	if(!me.courseTermValidation.valid){
+    		confirm.valid = false;
+    		confirm.title = 'Course Not Avaiable For Term';
+    		confirm.message = 'This course is not scheduled to be offered in this term.'
+    		
+    	}
+    	if(!validationResponse.valid){
+    		confirm.valid = false;
+    		confirm.title += ' Course Requisites Missing';
+    		confirm.message = validationResponse.message;
+    	}
     	
-    	if(!courseValidation.valid){
-    		Ext.MessageBox.confirm('Course Not Avaiable For Term', 'This course is not scheduled to be offered in this term.  Are you sure you want to add it?', me.handleInvalidCourse, me);
+    	if(confirm.valid == false){
+    		confirm.message += " Are you sure you want to add it?";
+    	}
+    	if(confirm.valid == false){
+    		Ext.MessageBox.confirm(confirm.title, confirm.message, me.handleInvalidCourse, me);
     	}else{
 			me.removeCopiedCourse();
 		}

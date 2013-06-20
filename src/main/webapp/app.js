@@ -267,6 +267,7 @@ Ext.require([
 	'Ssp.model.reference.ConfidentialityDisclosureAgreement',
 	'Ssp.model.reference.EarlyAlertReferral',
 	'Ssp.model.external.Course',
+	'Ssp.model.external.CourseRequisite',
 	'Ssp.model.ApiUrl',
 	'Ssp.mixin.ApiProperties',
 	'Ssp.mixin.controller.ItemSelectorInitializer',
@@ -486,6 +487,7 @@ var apiUrls = [
   {name: 'programfaceted', url: 'reference/program/facet'},
   {name: 'department', url: 'reference/department/all'},//TODO Change to facets.
   {name: 'division', url: 'reference/division/all'},
+  {name: 'courserequisite', url: 'reference/courserequisites'},
   {name: 'tag', url: 'reference/tag'},
   {name: 'facetedtag', url: 'reference/tag/facet'},
   {name: 'futureTerms', url: 'reference/term/future'},
