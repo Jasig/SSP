@@ -26,7 +26,8 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 		colorsStore: 'colorsStore',
     	formUtils: 'formRendererUtils',
 		currentMapPlan: 'currentMapPlan',
-		semesterStores : 'currentSemesterStores'
+		semesterStores : 'currentSemesterStores',
+		mapPlanService:'mapPlanService',
     },
     control:{
     	view:{
@@ -78,6 +79,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 		var previousSemesterPanel = data.view.findParentByType("semesterpanel");
 				if(previousSemesterPanel != null && previousSemesterPanel != undefined)
 				    me.previousTermCode = previousSemesterPanel.getItemId();
+		me.getView().setLoading(true);
     	var serviceResponses = {
                 failures: {},
                 successes: {},
@@ -86,7 +88,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
             }
     	me.courseService.validateCourse(me.droppedData.get('code'), termCode,  {
             success: me.newServiceSuccessHandler('validCourse', me.onTermValidateSuccess, serviceResponses),
-            failure: me.newServiceFailureHandler('validCourse', me.onValidateFailure, serviceResponses),
+            failure: me.newServiceFailureHandler('validatedFailed', me.onValidateFailure, serviceResponses),
             scope: me
         });
 		return true;
@@ -101,37 +103,59 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
                 responseCnt: 0,
                 expectedResponseCnt: 1
             }
+		me.requiringCourseCode = me.droppedData.get('code');
     	me.courseService.getCourseRequirements(me.droppedData.get('code'),  {
-            success: me.newServiceSuccessHandler('courseRequisites', me.onValidateSuccess, serviceResponses),
-            failure: me.newServiceFailureHandler('courseRequisites', me.onValidateFailure, serviceResponses),
+            success: me.newServiceSuccessHandler('courseRequisites', me.onCourseRequirements, serviceResponses),
+            failure: me.newServiceFailureHandler('validatedFailed', me.onValidateFailure, serviceResponses),
             scope: me
         });
     	
     },
+
+	onCourseRequirements: function(serviceResponses){
+		var me = this;
+		me.courseRequisites = serviceResponses.successes.courseRequisites;
+		if(me.courseRequisites == null || me.courseRequisites.length <= 0){
+			me.onValidateSuccess();
+			return;
+		}
+		me.currentMapPlan.updatePlanCourses(me.semesterStores);
+		me.mapPlanService.validate(me.currentMapPlan, {
+            success: me.newServiceSuccessHandler('validatedPlan', me.onValidateSuccess, serviceResponses),
+            failure: me.newServiceFailureHandler('validatedFailed', me.onValidateFailure, serviceResponses),
+            scope: me,
+            isPrivate: true
+        });
+	},
     
     onValidateSuccess: function(serviceResponses){
 		var me = this;
-    	var courseRequisites = serviceResponses.successes.courseRequisites;
-		me.currentMapPlan.updatePlanCourses(me.semesterStores);
-    	var validationResponse = me.currentMapPlan.validateCourseRequisites(courseRequisites);
+		 me.getView().setLoading(false);
+    	var courseRequisites = me.courseRequisites;
+		var validationResponse = null;
+		if(me.courseRequisites != null && me.courseRequisites.length > 0){
+			var mapResponse = serviceResponses.successes.validatedPlan;
+			me.currentMapPlan.loadFromServer(Ext.decode(mapResponse.responseText));
+			validationResponse = me.currentMapPlan.getCourseValidation(me.requiringCourseCode, courseRequisites);
+		}
     	var confirm = {}
     	confirm.valid = true;
     	confirm.title = "";
     	confirm.message = ""
-    	if(!me.courseTermValidation.valid){
+    	if(!me.courseTermValidation.valid && validationResponse == null){
     		confirm.valid = false;
     		confirm.title = 'Course Not Avaiable For Term';
     		confirm.message = 'This course is not scheduled to be offered in this term.'
     		
     	}
-    	if(!validationResponse.valid){
+    	if(validationResponse != null && !validationResponse.valid){
     		confirm.valid = false;
-    		confirm.title += ' Course Requisites Missing';
-    		confirm.message = validationResponse.message;
+    		confirm.title = ' Course Generates Following Concerns';
+    		confirm.message += validationResponse.message;
     	}
     	
     	if(confirm.valid == false){
-    		confirm.message += " Are you sure you want to add it?";
+    		confirm.message += " \n Are you sure you want to add the course?";
     	}
     	if(confirm.valid == false){
     		Ext.MessageBox.confirm(confirm.title, confirm.message, me.handleInvalidCourse, me);
@@ -170,6 +194,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 	
     onValidateFailure: function(validate){
     	var me = this;
+    	 me.getView().setLoading(false);
     },
     
     newServiceSuccessHandler: function(name, callback, serviceResponses) {

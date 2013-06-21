@@ -647,14 +647,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	validatePlan: function(plan){
 		var me = this;
-		plan.set("isValid",true);
-		var planCourses = plan.get("planCourses");
-		planCourses.forEach(function(course){
-			course.invalidReasons = "";
-			course.isValidInTerm = true;
-			course.hasCorequisites = true;
-			course.hasPrerequisites = true;
-		});
+		
 		me.getView().setLoading(true);
 		var serviceResponses = {
                 failures: {},
@@ -679,14 +672,16 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	    if(me.clonedMap.get("isValid"))
 	    	me.onValidateAccept('ok');
 		else{
-			var message = me.clonedMap.getValidationSummary()
-			Ext.Msg.confirm({
-       		     title:'Invalid Courses',
-       		     msg: message + " Do you wish to continue with the move?",
-       		     buttons: Ext.Msg.OKCANCEL,
-       		     fn: me.onValidateAccept,
-       		     scope: me
-       		});
+			var validationResponse = me.clonedMap.getPlanValidation();
+			if(!validationResponse.valid){
+				Ext.Msg.confirm({
+       		     	title:'Invalid Courses',
+       		     	msg: validationResponse.message + "\n Do you wish to continue with the move?",
+       		     	buttons: Ext.Msg.OKCANCEL,
+       		     	fn: me.onValidateAccept,
+       		     	scope: me
+       			});
+			}
 		}
 	},
 	

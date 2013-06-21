@@ -334,7 +334,10 @@ Ext.define('Ssp.service.MapPlanService', {
 
 	validate: function(plan, callbacks){
 		var me=this;
+		if(me.currentMapPlan.get("isTemplate"))
+			me.currentMapPlan.set("personId","");
 		
+		plan.clearValidation();
 		var url = me.getBaseUrl(me.currentMapPlan.get('personId'));
 	    var success = function( response ){
 			callbacks.success( response, callbacks.scope );

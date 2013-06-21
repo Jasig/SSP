@@ -334,40 +334,48 @@ Ext.define('Ssp.model.tool.map.Plan', {
          me.set('planCourses',planCourses);
     },
     
-    validateCourseRequisites: function(courseRequisites, termsStore){
+    validateCourseRequisites: function(courseRequisites, termsStore, coursesStore){
 		var me = this;
     	var planCourses = me.get('planCourses');
-    	var validationResponse = {};
-    	validationResponse.valid = true;
+    	var validationResponse = {valid:true, message:""};
     	if(!planCourses || courseRequisites.length <= 0){
-    		
-    		
-    		return validationResponse;
+     		return validationResponse;
     	}
     	var requiringCourse;
     	var requiredCourses = [];
+
+		for(var k = 0; k < planCourses.length; k++){
+    		course = planCourses[k];
+    		if(course.courseCode == courseRequisites[0].requiringCourseCode)
+    			requiringCourse = course;
+    	}
+		
     	for(var k = 0; k < planCourses.length; k++){
     		course = planCourses[k];
-    		if(course.code == courseRequisites[0].requiringCourseCode)
-    			requiringCourse = course;
     		for(var i = 0; i < courseRequisites.length; i++){
-    			if(course.code == courseRequisites[i].requiredCourseCode){
-    				course.requisiteCode
+    			if(course.courseCode == courseRequisites[i].requiredCourseCode){
+    				course.requisiteCode = courseRequisites[i].requisiteCode;
         			requiredCourses.push(course);
-        			courseRequisites.split(i,1);
+					courseRequisites.splice(i,1);
         			break;
     			}
     		}
-    		if(courseRequisites.length == 0)
-    			break;
     	}
     	
-    	if(courseRequisites.length != 0){
+    	if(courseRequisites.length > 0){
     		validationResponse.valid = false;
     		validationResponse.message = " " + courseRequisites.length + " pre/co requisites are not currently on plan: ";
+			for(var i = 0; i < courseRequisites.length; i++){
+				var course = coursesStore.findRecord('code', courseRequisites[i].requiredCourseCode);
+				var formattedCourse = courseRequisites[i].requiredCourseCode + "(C)";
+				if(course != null)
+					formattedCourse = course.get("formattedCourse");
+				validationResponse.message += formattedCourse + ", ";
+			}
+			validationResponse.message.slice(0, -2);
     	}
     	
-    	if(requiredCourses.length <= 0)
+    	if(requiredCourses.length > requiredCourses.length)
     		return validationResponse;
     	var requiringCourseTermIndex = termsStore.find("code", requiringCourse.termCode);
     	var startMessageAdded = false;
@@ -376,28 +384,31 @@ Ext.define('Ssp.model.tool.map.Plan', {
     		 var index = termsStore.find("code", requiredCourse.termCode);
     		 var startMessage = "The following pre/co requisites are on plan but in the wrong term: ";
     		 var isValid = true;
-    		 switch(requiredCourse.requisite_code){
+    		 switch(requiredCourse.requisiteCode){
     		 	case "PRE":
-    		 		if(index <= requiringCourseTermIndex)
+    		 		if(index >= requiringCourseTermIndex)
     		 			isValid = false;
     		 		break;
     		 		
     		 	case "PRE_CO":
-    		 		if(index <= requiringCourseTermIndex)
+    		 		if(index > requiringCourseTermIndex)
     		 			isValid = false;
     		 		break;
     		 	case "CO":
-    		 		if(index <= requiringCourseTermIndex)
+    		 		if(index != requiringCourseTermIndex)
     		 			isValid = false;
     		 		break;	
     		 }
     		 if(isValid == false && startMessageAdded == false){
     			 validationResponse.message += startMessage;
+				 validationResponse.valid = false;
     			 startMessageAdded = true;
     		 }
     		 if(isValid == false)
     			 validationResponse.message += requiredCourse.formattedCourse + ", ";
     	});
+		if(startMessageAdded)
+			validationResponse.message.slice(0, -2);
     	return validationResponse;
     	
     },
@@ -410,7 +421,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		if(semesterStores){
 			for(var index in semesterStores){
 				var semesterStore = semesterStores[index];
-				if(semesterStore.getUpdatedRecords().lenght > 0 || semesterStore.getNewRecords().length > 0)
+				if(semesterStore.getUpdatedRecords().length > 0 || semesterStore.getNewRecords().length > 0)
 					return true;
 			};
 		}
@@ -425,7 +436,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		return false;
 	},
 	
-	getValidationSummary: function(){
+	getPlanValidation: function(){
 		var me = this;
 		var termInvalidCount = 0;
 		var prerequisiteInvalidCount = 0;
@@ -434,10 +445,13 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		var termInvalid = ""
 		var prerequisiteInvalid = "";
 		var corequisiteInvalid = "";
+		var validationResponse = {message:"",valid:true};
 		if(me.get("isValid"))
-			return null;
-		
-		me.get('planCourses').forEach(function(planCourse){
+			return validationResponse;
+		var planCourses = me.get('planCourses');
+		for(var i = 0; i < planCourses.length; i++){
+			var planCourse = planCourses[i];
+
 			if(planCourse.validInTerm == false){
 				termInvalidCount++;
 				termInvalid += planCourse.formattedCourse + ','
@@ -449,19 +463,88 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			if(planCourse.hasPrerequisits == false){
 				prerequisiteInvalidCount++;
 				prerequisiteInvalid += planCourse.formattedCourse + ', '
-			}
-		});
+			}		}
 		
-		var message = "The plan has the following invalid courses";
+		validationResponse.message = "The plan has the following invalid courses";
+		validationResponse.valid = false;
 		if(termInvalidCount > 0)
-			message += "\n Invalid Terms: " + termInvalidCount + " : " + termInvalid;
+			validationResponse.message += "\n Invalid Terms: " + termInvalidCount + " : " + termInvalid;
 		
-		if(prerequisiteInvalid > 0)
-			message += "\n Terms with invalid prerequisites: " + prerequisiteInvalidCount + " : " + prerequisiteInvalid;
+		if(prerequisiteInvalidCount > 0)
+			validationResponse.message += "\n Terms with invalid prerequisites: " + prerequisiteInvalidCount + " : " + prerequisiteInvalid;
 		
 		if(corequisiteInvalidCount > 0)
-			message += "\n Terms with invalid corequisites: " + corequisiteInvalidCount + " : " + corequisiteInvalid;
+			validationResponse.message += "\n Terms with invalid corequisites: " + corequisiteInvalidCount + " : " + corequisiteInvalid;
 		
-		return message;
+		return validationResponse;
+	},
+	
+	clearValidation: function(){
+		var me = this;
+		me.set("isValid",true);
+		var planCourses = me.get("planCourses");
+		planCourses.forEach(function(course){
+			course.invalidReasons = "";
+			course.isValidInTerm = true;
+			course.hasCorequisites = true;
+			course.hasPrerequisites = true;
+		});
+	},
+	
+	getCourseValidation: function(requiringCourseCode, courseRequisites){
+		var me = this;
+		var termInvalidCount = 0;
+		var prerequisiteInvalidCount = 0;
+		var corequisiteInvalidCount = 0;
+		
+		var termInvalid = ""
+		var prerequisiteInvalid = "";
+		var corequisiteInvalid = "";
+		var validationResponse = {message:"",valid:true};
+		if(me.get("isValid"))
+			return validationResponse;
+		var planCourses = me.get('planCourses');
+		var courseIsValid = true;
+		var invalidMessages = "";
+		var coreCourseInvalidMessages = "";
+		var relatedCoursesInvalid = false;
+		for(var i = 0; i < planCourses.length; i++){
+			var planCourse = planCourses[i];
+			var isARequisite = false;
+			var isCoreCourse = false;
+			for(var k = 0; k < courseRequisites.length; k++){
+				var courseRequisite = courseRequisites[k];
+				if(planCourse.courseCode == courseRequisite.requiredCourseCode ||  planCourse.courseCode == courseRequisite.requiringCourseCode){
+					
+					isARequisite = true;
+				}
+			}
+			if(isARequisite == false)
+				continue;
+			
+			if(planCourse.validInTerm === false || planCourse.hasCorequisites == false || planCourse.hasPrerequisits == false){
+				courseIsValid = false;
+			}else
+				continue;
+			
+			if(planCourse.courseCode == requiringCourseCode)
+				coreCourseInvalidMessages += planCourse.courseCode + " : " + planCourse.invalidReasons + "\n";
+			else{
+				relatedCoursesInvalid = true;
+				invalidMessages +=  planCourse.courseCode + " : " + planCourse.invalidReasons + " \n";
+			}
+		}
+		if(!courseIsValid){
+			validationResponse.valid = false;
+			validationResponse.message = "Adding course will generate the following concerns: \n" + coreCourseInvalidMessages;
+		}
+		if(relatedCoursesInvalid){
+			if(coreCourseInvalidMessages.length > 0)
+				validationResponse.message += "additional concerns were found in related courses: " + invalidMessages;
+			else
+				validationResponse.message += invalidMessages;
+		}
+
+		return validationResponse;
 	}
 });

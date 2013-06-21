@@ -81,10 +81,10 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 	                        allowBlank: true,
 	                        width: 250,
 							labelWidth: 200,
+							labelSeparator : "",
 							fieldLabel:'Start Term: Choose the first term that you want to move. All subsequent terms will also be moved.'
 			            },
 						{
-			                
 	                        xtype: 'combobox',
 	                        itemId: 'termCodeEnd',
 							name: 'termCodeEnd',
@@ -96,6 +96,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 	                        allowBlank: true,
 	                        width: 250,
 							labelWidth: 200,
+							labelSeparator : "",
 							fieldLabel: 'Target Term: Choose the target term to the move term selected abpve (start term). All term and course information will be moved into the new terms in the same order.'
 
 			            }]
