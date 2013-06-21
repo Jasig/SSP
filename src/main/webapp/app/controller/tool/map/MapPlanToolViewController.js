@@ -22,15 +22,16 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
     inject:{
 		appEventsController: 'appEventsController',
 		formUtils: 'formRendererUtils',
-    	currentMapPlan: 'currentMapPlan'
+    	currentMapPlan: 'currentMapPlan',
+    	mapPlanService:'mapPlanService',
     },
     
 	init: function() {
 		var me=this;
 	    me.resetForm();
-		me.currentMapPlan.addListener()
+		me.currentMapPlan.addListener();
 	    me.getView().loadRecord(me.currentMapPlan);
-		me.appEventsController.getApplication().addListener("onUpdateCurrentMapPlanPlanToolView", me.onUpdateCurrentMapPlan, me);
+	   		me.appEventsController.getApplication().addListener("onUpdateCurrentMapPlanPlanToolView", me.onUpdateCurrentMapPlan, me);
 		return me.callParent(arguments);
     },
     resetForm: function() {
@@ -38,6 +39,21 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
         me.getView().getForm().reset();
     },
 
+    updatePlanStatus: function(){
+    	me.getView().setLoading(true);
+ 		var callbacks = new Object();
+ 		var serviceResponses = {
+             failures: {},
+             successes: {},
+             responseCnt: 0,
+             expectedResponseCnt: 1
+         }
+ 		callbacks.success = me.newServiceSuccessHandler('planStatus', me.onPlanStatusSuccess, serviceResponses);
+ 		callbacks.failure = me.newServiceFailureHandler('planStatus', me.onPlanStatusFailure, serviceResponses);
+ 		callbacks.scope = me;
+ 		me.mapPlanService.planStatus(me.currentMapPlan, callbacks);
+    },
+    
 	onUpdateCurrentMapPlan: function(){
 		var me = this;
 		me.getView().loadRecord(me.currentMapPlan);
