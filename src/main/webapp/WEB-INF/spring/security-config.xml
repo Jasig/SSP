@@ -23,9 +23,11 @@
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-		http://www.springframework.org/schema/security  http://www.springframework.org/schema/security/spring-security-3.0.xsd
-		http://www.springframework.org/schema/util	  http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+		http://www.springframework.org/schema/security  http://www.springframework.org/schema/security/spring-security-3.1.xsd
+		http://www.springframework.org/schema/util	  http://www.springframework.org/schema/util/spring-util-3.1.xsd
+		http://www.springframework.org/schema/security/oauth2	http://www.springframework.org/schema/security/spring-security-oauth2.xsd">
 
 	<beans:import resource="uportal/security-config-uportal.xml"/>
 	<beans:import resource="local/ssp-sec-local.xml"/>
@@ -33,41 +35,90 @@
 
 	<global-method-security pre-post-annotations="enabled" />
 
-	<http use-expressions="true">
-		<custom-filter position="PRE_AUTH_FILTER" ref="uPortalFilter"/>
-		<session-management session-fixation-protection="none" />
+    <http pattern="/api/1/oauth/token" create-session="stateless" authentication-manager-ref="oauth2ClientAuthenticationManager">
+        <intercept-url pattern="/api/1/oauth/token" access="IS_AUTHENTICATED_FULLY" />
+        <anonymous enabled="false" />
+        <http-basic entry-point-ref="oauth2ClientAuthenticationEntryPoint" />
+        <access-denied-handler ref="oauth2AccessDeniedHandler" />
+    </http>
 
-		<intercept-url pattern="/images/**" access="permitAll" />
-		<intercept-url pattern="/scripts/**" access="permitAll" />
-		<intercept-url pattern="/styles/**" access="permitAll" />
-		<intercept-url pattern="/login.jsp" access="isAnonymous()" />
-		<intercept-url pattern="/404.jsp" access="permitAll"/>
-		<intercept-url pattern="/500.jsp" access="permitAll"/>
-		<intercept-url pattern="/accessDenied.htm" access="permitAll"/>
-		<intercept-url pattern="/invalidSession.htm" access="permitAll"/>
-		<intercept-url pattern="/secTest.jsp" access="permitAll"/>
-		
-		<intercept-url pattern="/index.html" access="isAuthenticated()" />
-		
-		<!-- Use for compiling jsb3 file from SSP app.
-		<intercept-url pattern="/index.html" access="permitAll" />
-		-->
-		 
-		<form-login login-page="/login.jsp" 
-			default-target-url="/index.html"
-			authentication-failure-url="/login.jsp?login_error=1" />
+    <http pattern="/api/1/**" create-session="stateless">
+        <anonymous enabled="false" />
+        <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
+        <!--<custom-filter position="PRE_AUTH_FILTER" ref="uPortalFilter"/>-->
+        <access-denied-handler ref="oauth2AccessDeniedHandler" />
+    </http>
 
-		<access-denied-handler error-page="/accessDenied.htm" />
+    <oauth:resource-server id="resourceServerFilter" resource-id="ssp" token-services-ref="oauth2TokenServices" entry-point-ref="oauth2ClientAuthenticationManager" />
 
-		<!-- remember-me data-source-ref="sspDataSource" /-->
+    <authentication-manager id="oauth2ClientAuthenticationManager">
+        <authentication-provider user-service-ref="oauth2ClientDetailsService" />
+    </authentication-manager>
 
-		<logout logout-success-url="/login.jsp" />
-	</http>
+    <beans:bean id="oauth2ClientAuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+        <beans:property name="realmName" value="ssp/client" />
+        <beans:property name="typeName" value="Basic" />
+    </beans:bean>
+
+    <beans:bean id="oauth2AccessDeniedHandler" class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler" />
+
+	<!--<http use-expressions="true">-->
+		<!--<custom-filter position="PRE_AUTH_FILTER" ref="uPortalFilter"/>-->
+		<!--<session-management session-fixation-protection="none" />-->
+
+		<!--<intercept-url pattern="/images/**" access="permitAll" />-->
+		<!--<intercept-url pattern="/scripts/**" access="permitAll" />-->
+		<!--<intercept-url pattern="/styles/**" access="permitAll" />-->
+		<!--<intercept-url pattern="/login.jsp" access="isAnonymous()" />-->
+		<!--<intercept-url pattern="/404.jsp" access="permitAll"/>-->
+		<!--<intercept-url pattern="/500.jsp" access="permitAll"/>-->
+		<!--<intercept-url pattern="/accessDenied.htm" access="permitAll"/>-->
+		<!--<intercept-url pattern="/invalidSession.htm" access="permitAll"/>-->
+		<!--<intercept-url pattern="/secTest.jsp" access="permitAll"/>-->
+		<!---->
+		<!--<intercept-url pattern="/index.html" access="isAuthenticated()" />-->
+		<!---->
+		<!--&lt;!&ndash; Use for compiling jsb3 file from SSP app.-->
+		<!--<intercept-url pattern="/index.html" access="permitAll" />-->
+		<!--&ndash;&gt;-->
+		 <!---->
+		<!--<form-login login-page="/login.jsp" -->
+			<!--default-target-url="/index.html"-->
+			<!--authentication-failure-url="/login.jsp?login_error=1" />-->
+
+		<!--<access-denied-handler error-page="/accessDenied.htm" />-->
+
+		<!--&lt;!&ndash; remember-me data-source-ref="sspDataSource" /&ndash;&gt;-->
+
+		<!--<logout logout-success-url="/login.jsp" />-->
+	<!--</http>-->
 
 	<beans:bean name="uPortalFilter" class="org.jasig.ssp.security.uportal.UPortalPreAuthenticatedProcessingFilter">
 		<beans:property name="authenticationManager" ref="authenticationManager"></beans:property> 
 	</beans:bean>
 
 	<beans:bean name="requestCleanupServletFilter" class=" org.jasig.ssp.security.RequestCleanupServletFilter" />
+
+    <oauth:authorization-server token-endpoint-url="/api/1/oauth/token"
+                                client-details-service-ref="oauth2ClientDetailsService"
+                                token-services-ref="oauth2TokenServices">
+      <oauth:authorization-code disabled="true" />
+      <oauth:implicit disabled="true" />
+      <oauth:refresh-token disabled="true" />
+      <oauth:client-credentials />
+      <oauth:password disabled="true" />
+    </oauth:authorization-server>
+
+    <oauth:client-details-service id="oauth2ClientDetailsService">
+        <oauth:client client-id="my-client-with-secret" authorized-grant-types="client_credentials" secret="secret" />
+    </oauth:client-details-service>
+
+    <beans:bean id="oauth2TokenStore" class="org.springframework.security.oauth2.provider.token.InMemoryTokenStore" />
+
+    <beans:bean id="oauth2TokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
+        <beans:property name="tokenStore" ref="oauth2TokenStore" />
+        <beans:property name="supportRefreshToken" value="false" />
+        <beans:property name="clientDetailsService" ref="oauth2ClientDetailsService" />
+    </beans:bean>
 
 </beans:beans>
