@@ -21,16 +21,18 @@ Ext.define('Ssp.model.external.AbstractExternal', {
     fields: [{name: 'name', type: 'string'},
              {name: 'code', type: 'string'}],
     
-	populateFromGenericObject: function( record ){
+ 	populateFromGenericObject: function( record ){
 		if (record != null)
 		{
 			for (fieldName in this.data)
 	    	{
 				//TODO this was orginally if(record[fieldName]) this does not work for booleans
-				if (record[fieldName] != undefined && record[fieldName] != null)
-	    		{
-	    			this.set( fieldName, record[fieldName] );
-	    		}
+				// Revisit this at some point
+				if ( record typeof === 'object' && fieldName in record ) {
+				  this.set( fieldName, record[fieldName] );
+				} else {
+				  this.set(fieldName, null);
+				}
 	    	}
 		}
     }
