@@ -327,7 +327,7 @@ public class ExternalPersonServiceImpl
 
 		setCoachForPerson(person, externalPerson.getCoachSchoolId());
 		
-		setStudentTypeForPerson(person, externalPerson.getStudentTypeCode());
+		setStudentTypeForPerson(person, externalPerson.getStudentType());
 
 		if ((StringUtils.isBlank(externalPerson.getDepartmentName())
 				&& StringUtils.isBlank(externalPerson.getOfficeHours())
