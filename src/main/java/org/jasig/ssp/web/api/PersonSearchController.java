@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.web.api;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -80,7 +81,6 @@ public class PersonSearchController extends AbstractBaseController {
 		return LOGGER;
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<PersonSearchResultTO> search(
 			final @RequestParam String searchTerm,
@@ -112,12 +112,26 @@ public class PersonSearchController extends AbstractBaseController {
 	
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	@ResponseBody
-	List<PersonSearchResultTO> search2(@Valid @RequestBody final PersonSearchRequestTO obj) throws ObjectNotFoundException {
-		List<PersonSearchResultTO> result = new ArrayList<PersonSearchResultTO>();
-		final List<Person> models = service.search2(personSearchRequestFactory.from(obj));
-		if (models.isEmpty()) {
-			return null;
-		}
-		return result;
+	@RequestMapping(method = RequestMethod.GET)
+	PagedResponse<PersonSearchResultTO>  search2(	
+	 final @RequestParam(required = false) String studentId,
+	 final @RequestParam(required = false) String programStatus,
+	 final @RequestParam(required = false) String coachId,
+	 final @RequestParam(required = false) String declaredMajor,
+	 final @RequestParam(required = false) BigDecimal hoursEarnedMin,
+	 final @RequestParam(required = false) BigDecimal hoursEarnedMax,
+	 final @RequestParam(required = false) BigDecimal gpaEarnedMin,
+	 final @RequestParam(required = false) BigDecimal gpaEarnedMax,
+	 final @RequestParam(required = false) Boolean currentlyRegistered,
+	 final @RequestParam(required = false) String sapStatus,
+	 final @RequestParam(required = false)String mapStatus,
+	 final @RequestParam(required = false)String planStatus,
+	 final @RequestParam(required = false) Boolean myCaseload) throws ObjectNotFoundException, ValidationException 
+	 {
+		
+		final PagingWrapper<PersonSearchResult> models = service.search2(personSearchRequestFactory.from(studentId,programStatus,coachId,declaredMajor,
+				hoursEarnedMin,hoursEarnedMax,gpaEarnedMin,gpaEarnedMax,currentlyRegistered,sapStatus,mapStatus,planStatus,myCaseload));
+		return new PagedResponse<PersonSearchResultTO>(true,
+				models.getResults(), factory.asTOList(models.getRows()));	
 	}
 }

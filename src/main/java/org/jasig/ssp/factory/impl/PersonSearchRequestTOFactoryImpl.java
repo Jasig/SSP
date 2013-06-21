@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.factory.impl;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import org.jasig.ssp.dao.PersonDao;
@@ -80,6 +81,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		model.setSapStatus(to.getSapStatus());
 		model.setStudentId(to.getStudentId());
 		model.setPlanStatus(to.getPlanStatus());
+		model.setMyCaseload(to.getMyCaseload());
 		return model;
 	}
 
@@ -97,5 +99,29 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 
 	public void setProgramStatusDao(ProgramStatusDao programStatusDao) {
 		this.programStatusDao = programStatusDao;
+	}
+
+
+	@Override
+	public PersonSearchRequest from(String studentId, String programStatus,
+			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
+			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
+			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,
+			String sapStatus, String mapStatus, String planStatus, Boolean myCaseload) throws ObjectNotFoundException {
+		PersonSearchRequestTO to = new PersonSearchRequestTO();
+		to.setStudentId(studentId);
+		to.setProgramStatus(programStatus == null ? null : UUID.fromString(programStatus));
+		to.setCoachId(coachId == null ? null : UUID.fromString(coachId));
+		to.setDeclaredMajor(declaredMajor);
+		to.setHoursEarnedMin(hoursEarnedMin);
+		to.setHoursEarnedMax(hoursEarnedMax);
+		to.setGpaEarnedMin(gpaEarnedMin);
+		to.setGpaEarnedMax(gpaEarnedMax);
+		to.setCurrentlyRegistered(currentlyRegistered);
+		to.setSapStatus(sapStatus);
+		to.setMapStatus(mapStatus);
+		to.setPlanStatus(planStatus);
+		to.setMyCaseload(myCaseload);
+		return from(to);
 	}
 }

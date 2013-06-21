@@ -51,6 +51,8 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	private String mapStatus;
 	
 	private String planStatus;
+	
+	private Boolean myCaseload;
 
 	
 	
@@ -153,6 +155,14 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 
 	public void setPlanStatus(String planStatus) {
 		this.planStatus = planStatus;
+	}
+
+	public Boolean getMyCaseload() {
+		return myCaseload;
+	}
+
+	public void setMyCaseload(Boolean myCaseload) {
+		this.myCaseload = myCaseload;
 	}
 
 }

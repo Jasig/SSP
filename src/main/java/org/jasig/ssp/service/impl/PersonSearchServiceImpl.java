@@ -77,8 +77,17 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	}
 
 	@Override
-	public List<Person> search2(PersonSearchRequest from) throws ObjectNotFoundException {
-		return dao.search(from);
+	public PagingWrapper<PersonSearchResult> search2(PersonSearchRequest from) throws ObjectNotFoundException, ValidationException {
+		List<Person> people = dao.search(from);
+		
+		final Collection<PersonSearchResult> personSearchResults = Lists
+				.newArrayList();
+		for (final Person person : people) {
+			personSearchResults.add(new PersonSearchResult(person, // NOPMD
+					personProgramStatus));
+		}
+		return new PagingWrapper<PersonSearchResult>(people.size(),
+				personSearchResults);
 	}
 
 }

@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,22 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.factory;
+Ext.define('Ssp.store.FinancialAidSAPStatus', {
+    extend: 'Ext.data.Store',
+    mixins: [ 'Deft.mixin.Injectable'],
+    model: 'Ssp.model.FilterDiscreteValues',
+    autoLoad: false,
+    constructor: function(){
+        var me=this;
+        me.callParent( arguments );
+		Ext.apply(this, { proxy: '' ,
+			  autoLoad: false });
 
-import java.math.BigDecimal;
-import java.util.UUID;
-
-import org.jasig.ssp.model.PersonSearchRequest;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.PersonSearchRequestTO;
-
-public interface PersonSearchRequestTOFactory extends
-		TOFactory<PersonSearchRequestTO, PersonSearchRequest> {
-
-	PersonSearchRequest from(String studentId, String programStatus,
-			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
-			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
-			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,
-			String sapStatus, String mapStatus, String planStatus, Boolean myCaseload) throws ObjectNotFoundException;
-
-}
+        // set the model
+        me.load();
+        return me;
+    },
+    load: function() {
+        var me=this;
+        var values = [{ displayValue:'Eligible', code: 'ELIGIBLE', booleanValue: true },
+                      { displayValue:'Ineligible', code: 'INELIGIBLE', booleanValue: false }
+        ];
+        // set the model
+        me.loadData( values );
+        return me;    	
+    	
+    }
+           
+});

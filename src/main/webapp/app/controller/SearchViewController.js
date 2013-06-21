@@ -59,20 +59,20 @@ Ext.define('Ssp.controller.SearchViewController', {
     	},    	
     	
     	searchGridPager: '#searchGridPager',
-    	searchText: {
-    		selector: '#searchText',
-		    listeners:{   
-		        keypress: 'onSearchKeyPress'  
-		    } 
-    	},
+//    	searchText: {
+//    		selector: '#searchText',
+//		    listeners:{   
+//		        keypress: 'onSearchKeyPress'  
+//		    } 
+//    	},
     	
-    	searchCaseloadCheck: '#searchCaseloadCheck',
+//    	searchCaseloadCheck: '#searchCaseloadCheck',
     	searchBar: '#searchBar',
     	caseloadBar: '#caseloadBar',
 
-    	'searchButton': {
-    		click: 'onSearchClick'
-    	},
+//    	'searchButton': {
+//    		click: 'onSearchClick'
+//    	},
     	
     	'displaySearchBarButton': {
     		click: 'onDisplaySearchBarClick'
@@ -129,8 +129,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     	// set the search results to the stored
 	   	// search results
-		me.getSearchText().setValue( me.searchCriteria.get('searchTerm') );
-	   	me.getSearchCaseloadCheck().setValue( !me.searchCriteria.get('outsideCaseload') );
+		//me.getSearchText().setValue( me.searchCriteria.get('searchTerm') );
+	   	//me.getSearchCaseloadCheck().setValue( !me.searchCriteria.get('outsideCaseload') );
 		
 		
 		return me.callParent(arguments);
@@ -516,8 +516,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 	
 	setSearchCriteria: function(){
 		var me=this;
-		var outsideCaseload = !me.getSearchCaseloadCheck().getValue();
-		var searchTerm = me.getSearchText().value;
+		//var outsideCaseload = !me.getSearchCaseloadCheck().getValue();
+		//var searchTerm = me.getSearchText().value;
 		// store search term
 		me.searchCriteria.set('searchTerm', searchTerm);
 		me.searchCriteria.set('outsideCaseload', outsideCaseload);

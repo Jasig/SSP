@@ -62,5 +62,5 @@ public interface PersonSearchService {
 			SortingAndPaging sAndP)
 			throws ObjectNotFoundException, ValidationException;
 
-	List<Person> search2(PersonSearchRequest from) throws ObjectNotFoundException;
+	PagingWrapper<PersonSearchResult> search2(PersonSearchRequest from) throws ObjectNotFoundException, ValidationException;
 }

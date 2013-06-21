@@ -41,6 +41,7 @@ import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.external.impl.TermServiceImpl;
 import org.jasig.ssp.service.reference.ConfigService;
@@ -66,6 +67,9 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	
 	@Autowired
 	private transient TermService termService;
+	
+	@Autowired
+	private transient SecurityService securityService;
 
 	FileWriter fileWriter;
 
@@ -293,7 +297,8 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 		if(hasCoach(personSearchRequest))
 		{
-			query.setEntity("coach", personSearchRequest.getCoach());
+			Person coach = personSearchRequest.getMyCaseload() != null && personSearchRequest.getMyCaseload() ? securityService.currentlyAuthenticatedUser().getPerson() : personSearchRequest.getCoach();
+			query.setEntity("coach", coach);
 		}
 		
 		if(hasDeclaredMajor(personSearchRequest))
@@ -406,18 +411,23 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" esap.programCode = :programCode");
-			stringBuilder.append(" esap.schoolId = p.schoolId");
+			stringBuilder.append(" and esap.schoolId = p.schoolId");
 		}
 	}
 
 
 	private void buildCoach(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) 
 	{
-		if(hasCoach(personSearchRequest))
+		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" p.coach = :coach ");
 		}
+	}
+
+
+	private boolean hasMyCaseload(PersonSearchRequest personSearchRequest) {
+		return personSearchRequest.getMyCaseload() != null && personSearchRequest.getMyCaseload();
 	}
 
 
@@ -449,6 +459,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			idOrNameBuilder.append(" or ");
 			idOrNameBuilder.append(" p.schoolId like '%:studentIdOrName%' ");
 			idOrNameBuilder.append(" ) ");
+			//can't bind using 'like' so we find and replace instead
 			stringBuilder.append(idOrNameBuilder.toString().replace(":studentIdOrName", personSearchRequest.getStudentId().toUpperCase()));
 		}
 	}

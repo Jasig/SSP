@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,22 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.factory;
-
-import java.math.BigDecimal;
-import java.util.UUID;
-
-import org.jasig.ssp.model.PersonSearchRequest;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.PersonSearchRequestTO;
-
-public interface PersonSearchRequestTOFactory extends
-		TOFactory<PersonSearchRequestTO, PersonSearchRequest> {
-
-	PersonSearchRequest from(String studentId, String programStatus,
-			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
-			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
-			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,
-			String sapStatus, String mapStatus, String planStatus, Boolean myCaseload) throws ObjectNotFoundException;
-
-}
+Ext.define('Ssp.model.FilterDiscreteValues', {
+    extend: 'Ext.data.Model',
+    fields: [{name:'programStatus',type:'string'},
+             {name:'name',type:'string'},
+             {name:'coachId',type:'string'},
+             {name:'declaredMajor',type:'string'},
+             {name:'hoursEarnedMin',type:'float'},
+             {name:'hoursEarnedMax',type:'float'},
+             {name:'gpaMin',type:'float'},
+             {name:'gpaMax',type:'float'},
+             {name:'currentlyRegistered',type:'string'},
+             {name:'financialAidStatus',type:'string'},
+             {name:'mapStatus',type:'string'},
+             {name:'planStatus',type:'string'},
+             {name:'myCaseload',type:'boolean'}
+             ]
+});

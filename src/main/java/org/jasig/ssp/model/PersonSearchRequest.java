@@ -71,6 +71,8 @@ public class PersonSearchRequest {
 	private String sapStatus;
 	
 	private String mapStatus;
+	
+	private Boolean myCaseload;
 
 
 	public PersonSearchRequest() {
@@ -195,6 +197,16 @@ public class PersonSearchRequest {
 
 	public void setPlanStatus(String planStatus) {
 		this.planStatus = planStatus;
+	}
+
+
+	public Boolean getMyCaseload() {
+		return myCaseload;
+	}
+
+
+	public void setMyCaseload(Boolean myCaseload) {
+		this.myCaseload = myCaseload;
 	}
 
 

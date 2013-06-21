@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,22 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.factory;
-
-import java.math.BigDecimal;
-import java.util.UUID;
-
-import org.jasig.ssp.model.PersonSearchRequest;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.PersonSearchRequestTO;
-
-public interface PersonSearchRequestTOFactory extends
-		TOFactory<PersonSearchRequestTO, PersonSearchRequest> {
-
-	PersonSearchRequest from(String studentId, String programStatus,
-			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
-			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
-			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,
-			String sapStatus, String mapStatus, String planStatus, Boolean myCaseload) throws ObjectNotFoundException;
-
-}
+Ext.define('Ssp.model.FilterDiscreteValues', {
+    extend: 'Ext.data.Model',
+    fields: [{name:'displayValue',type:'string'},
+             {name:'code',type:'string'},
+             {name:'booleanValue',type:'boolean'}]
+});

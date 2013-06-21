@@ -50,7 +50,10 @@ Ext.define('Ssp.service.SearchService', {
 			if ( queryStr ) {
 				queryStr += "&";
 			}
-			queryStr += paramName + "=" + params[paramName];
+			if(params[paramName] || !params[paramName] == '')
+			{
+				queryStr += paramName + "=" + params[paramName];
+			}
 		}
 		if ( !("sort" in params) ) {
 			if ( queryStr ) {
@@ -88,6 +91,37 @@ Ext.define('Ssp.service.SearchService', {
 		me.searchWithParams({
 			searchTerm: searchTerm,
 			outsideCaseload: outsideCaseload
+		}, callbacks);
+    },
+    search2: function( 
+    		 studentId,
+    		 programStatus,
+    		 coachId,
+    		 declaredMajor,
+    		 hoursEarnedMin,
+    		 hoursEarnedMax,
+    		 gpaEarnedMin,
+    		 gpaEarnedMax,
+    		 currentlyRegistered,
+    		 sapStatus,
+    		 mapStatus,
+    		 planStatus,
+    		 myCaseload,
+    		callbacks ){
+    	var me = this;
+		me.searchWithParams({
+   		 studentId: studentId,
+		 programStatus: programStatus,
+		 coachId: coachId,
+		 declaredMajor: declaredMajor,
+		 hoursEarnedMin: hoursEarnedMin,
+		 hoursEarnedMax: hoursEarnedMax,
+		 gpaEarnedMin: gpaEarnedMin,
+		 gpaEarnedMax: gpaEarnedMax,
+		 currentlyRegistered: currentlyRegistered,
+		 sapStatus: sapStatus,
+		 mapStatus: mapStatus,
+		 planStatus: planStatus
 		}, callbacks);
     }
 });

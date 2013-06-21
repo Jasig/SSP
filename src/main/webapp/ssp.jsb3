@@ -825,6 +825,11 @@
                     "path": "/app/controller/"
                 },
                 {
+                    "clsName": "Ssp.controller.SearchFormViewController",
+                    "name": "SearchFormViewController.js",
+                    "path": "/app/controller/"
+                },                
+                {
                     "clsName": "Ssp.controller.StudentRecordViewController",
                     "name": "StudentRecordViewController.js",
                     "path": "/app/controller/"
@@ -1322,6 +1327,11 @@
                     "path": "/app/model/"
                 },
                 {
+                    "clsName": "Ssp.model.FilterDiscreteValues",
+                    "name": "FilterDiscreteValues.js",
+                    "path": "/app/model/"
+                },                
+                {
                     "clsName": "Ssp.controller.admin.AdminItemAssociationViewController",
                     "name": "AdminItemAssociationViewController.js",
                     "path": "/app/controller/admin/"
@@ -1350,7 +1360,12 @@
                     "clsName": "Ssp.view.Search",
                     "name": "Search.js",
                     "path": "/app/view/"
-                },
+                },  
+                                {
+                    "clsName": "Ssp.view.SearchForm",
+                    "name": "SearchForm.js",
+                    "path": "/app/view/"
+                },              
                 {
                     "clsName": "Ssp.view.StudentRecord",
                     "name": "StudentRecord.js",
@@ -1962,9 +1977,24 @@
                     "path": "/app/store/"
                 },
                 {
-                    "clsName": "Ssp.store.reference.YesNo",
-                    "name": "YesNo.js",
-                    "path": "/app/store/reference/"
+                    "clsName": "Ssp.store.PlanStatus",
+                    "name": "PlanStatus.js",
+                    "path": "/app/store/"
+                },   
+                {
+                    "clsName": "Ssp.store.FinancialAidSAPStatus",
+                    "name": "FinancialAidSAPStatus.js",
+                    "path": "/app/store/"
+                }, 
+                {
+                    "clsName": "Ssp.store.MAPStatus",
+                    "name": "MAPStatus.js",
+                    "path": "/app/store/"
+                },   
+                                                                         {
+                    "clsName": "Ssp.store.CurrentlyRegistered",
+                    "name": "CurrentlyRegistered.js",
+                    "path": "/app/store/"
                 },
                 {
                     "clsName": "Ssp.controller.admin.crg.AssociateChallengeCategoriesAdminViewController",
