@@ -54,13 +54,16 @@
 			<column name="required_course_code" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
 			</column>
+			<column name="required_formatted_course" type="${nvarchar.type}(35)">
+				<constraints nullable="false" />
+			</column>
 			<column name="requisite_code" type="${nvarchar.type}(8)">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
 
 		<createView viewName="v_external_course_requisite">
-			select ROW_NUMBER() OVER (ORDER BY requiring_course_code, required_course_code) as id, requiring_course_code, required_course_code, requisite_code from external_course_requisite
+			select ROW_NUMBER() OVER (ORDER BY requiring_course_code, required_course_code) as id, requiring_course_code, required_course_code, required_formatted_course, requisite_code from external_course_requisite
 		</createView>
 
 		<sql>grant all on external_course_requisite to ${database.app.username}</sql>

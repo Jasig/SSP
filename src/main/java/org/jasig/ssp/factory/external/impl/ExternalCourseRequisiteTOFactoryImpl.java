@@ -34,6 +34,7 @@ public class ExternalCourseRequisiteTOFactoryImpl
 		model.setRequiredCourseCode(tObject.getRequiredCourseCode());
 		model.setRequiringCourseCode(tObject.getRequiringCourseCode());
 		model.setRequisiteCode(tObject.getRequisiteCode());
+		model.setRequiredFormattedCourse(tObject.getRequiredFormattedCourse());
 		return model;
 	}
 }

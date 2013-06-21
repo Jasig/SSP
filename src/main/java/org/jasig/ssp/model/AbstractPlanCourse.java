@@ -242,7 +242,7 @@ public abstract class AbstractPlanCourse<T extends AbstractPlan> extends Abstrac
 	/**
 	 * @return the hasPrerequisites
 	 */
-	public boolean hasPrerequisites() {
+	public boolean getHasPrerequisites() {
 		return hasPrerequisites;
 	}
 
@@ -258,7 +258,7 @@ public abstract class AbstractPlanCourse<T extends AbstractPlan> extends Abstrac
 	/**
 	 * @return the hasCorequisites
 	 */
-	public boolean hasCorequisites() {
+	public boolean getHasCorequisites() {
 		return hasCorequisites;
 	}
 

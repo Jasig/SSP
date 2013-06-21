@@ -19,7 +19,7 @@ public class ExternalCourseRequisiteDao extends
 	public List<ExternalCourseRequisite> getRequisitesForCourse(
 			String requiringCourseCode) {
 		Criteria criteria = this.createCriteria();
-		criteria.add(Restrictions.eq("requiringCourseCode", requiringCourseCode));
+		criteria.add(Restrictions.or(Restrictions.eq("requiringCourseCode", requiringCourseCode), Restrictions.eq("requiredCourseCode", requiringCourseCode)));
 		return (List<ExternalCourseRequisite>)criteria.list();
 	}
 

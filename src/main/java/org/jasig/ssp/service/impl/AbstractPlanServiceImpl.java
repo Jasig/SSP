@@ -26,6 +26,7 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.AbstractPlanDao;
 import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.AbstractPlanCourse;
@@ -33,6 +34,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.TermCourses;
 import org.jasig.ssp.model.external.ExternalCourseRequisite;
+import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
 import org.jasig.ssp.model.external.RequisiteCode;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
@@ -42,6 +44,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.ExternalCourseRequisiteService;
 import org.jasig.ssp.service.external.ExternalCourseService;
+import org.jasig.ssp.service.external.ExternalStudentTranscriptCourseService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.AbstractPlanCourseTO;
@@ -78,6 +81,9 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 	
 	@Autowired
 	private ExternalCourseRequisiteService courseRequisiteService;
+	
+	@Autowired
+	private ExternalStudentTranscriptCourseService studentTranscriptService;
 	
 	@Override
 	public T save(T obj) {
@@ -148,7 +154,8 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 	
 	@Override
 	@Transactional(readOnly=true)
-	public TO validate(TO model) throws ObjectNotFoundException{
+	public TO validate(TO model, String studentSchoolId) throws ObjectNotFoundException{
+
 		List<? extends AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courses = model.getCourses();
 		Map<String, List<String>> coursesByTerm = new HashMap<String, List<String>>();
 		Map<String, AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courseCodeCourse = new HashMap<String,AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>();
@@ -172,15 +179,15 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 					  AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course = courseCodeCourse.get(courseCode);
 					  course.setIsValidInTerm(false);
 					  model.setIsValid(false);
-					  course.setInvalidReasons("Course: " + course.getFormattedCourse() + " is not current offered in term.");
+					  course.setInvalidReasons("Course: " + course.getFormattedCourse() + " is not currently offered in the selected term.");
 				}
 			}
 		}
-		model = validatePrerequisites(model);
+		model = validatePrerequisites(model, studentSchoolId);
 		return model;
 	}
 	
-	public TO validatePrerequisites(TO model) throws ObjectNotFoundException{
+	public TO validatePrerequisites(TO model, String studentSchoolId) throws ObjectNotFoundException{
 		List<? extends AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courses = model.getCourses();
 		List<String> requiringCourseCodes = new ArrayList<String>();
 		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>  course: courses){
@@ -199,19 +206,32 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 			courseCodeCourse.put(course.getCourseCode(), course);
 		}
 		
+		List<String> transcriptedCourseCodeCourse = new ArrayList<String>();
+	
+		if(StringUtils.isNotBlank(studentSchoolId)){
+			List<ExternalStudentTranscriptCourse> transcriptedCourses = studentTranscriptService.getTranscriptsBySchoolId(studentSchoolId);
+			for(ExternalStudentTranscriptCourse transcriptedCourse:transcriptedCourses){
+				transcriptedCourseCodeCourse.add(transcriptedCourse.getFormattedCourse());
+			}
+		}
+		
 		for(ExternalCourseRequisite  requisiteCourse: requisiteCourses){
-			AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> requiringCourse = courseCodeCourse.get(requisiteCourse.getRequiredCourseCode());
+			if(transcriptedCourseCodeCourse.contains(requisiteCourse.getRequiredFormattedCourse())){
+				continue;
+			}
+			AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> requiringCourse = courseCodeCourse.get(requisiteCourse.getRequiringCourseCode());
 			AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> requiredCourse = courseCodeCourse.get(requisiteCourse.getRequiredCourseCode());
 			if(courseCodeTermCode.containsKey(requisiteCourse.getRequiredCourseCode())){
 				String requiredTermCode = courseCodeTermCode.get(requisiteCourse.getRequiredCourseCode());
-				String requireingTermCode = courseCodeTermCode.get(requisiteCourse.getRequiredCourseCode());
+				String requireingTermCode = courseCodeTermCode.get(requisiteCourse.getRequiringCourseCode());
 				Term requiredTerm = termCodeTerm.get(requiredTermCode);
 				Term requireingTerm = termCodeTerm.get(requireingTermCode);
 				requiringCourse.setInvalidReasons(null);
 				if(requisiteCourse.getRequisiteCode().equals(RequisiteCode.CO)){
 					if(!requiredTerm.getCode().equals(requireingTerm.getCode())){
 						requiringCourse.setHasCorequisites(false);
-						requiringCourse.setInvalidReasons("Corequisite" + requiredCourse.getFormattedCourse() + " is not in same term.");
+						model.setIsValid(false);
+						requiringCourse.setInvalidReasons(" Corequisite " + requiredCourse.getFormattedCourse() + " is not in same term.");
 					}		
 				}else if(requisiteCourse.getRequisiteCode().equals(RequisiteCode.PRE_CO)){
 					if(requiredTerm.getCode().equals(requireingTerm.getCode())){
@@ -219,23 +239,27 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 					}
 					if(requireingTerm.getStartDate().before(requiredTerm.getStartDate())){
 						requiringCourse.setHasCorequisites(false);
-						requiringCourse.setInvalidReasons("Pre/Corequisite " + requiredCourse.getFormattedCourse() + " is not in before term.");
+						requiringCourse.setHasPrerequisites(false);
+						model.setIsValid(false);
+						requiringCourse.setInvalidReasons(" Pre/Corequisite " + requiredCourse.getFormattedCourse() + " is not in previous term.");
 					}
 				}else if(requisiteCourse.getRequisiteCode().equals(RequisiteCode.PRE)){
 					if(requiredTerm.getCode().equals(requireingTerm.getCode())){
-						requiringCourse.setHasCorequisites(false);
-						requiringCourse.setInvalidReasons("Prerequisite " + requiredCourse.getFormattedCourse() + " is in same term.");
-					}
-					if(requireingTerm.getStartDate().before(requiredTerm.getStartDate())){
-						requiringCourse.setHasCorequisites(false);
-						requiringCourse.setInvalidReasons("Prerequisite " + requiredCourse.getFormattedCourse() + " is not in before term.");
+						requiringCourse.setHasPrerequisites(false);
+						model.setIsValid(false);
+						requiringCourse.setInvalidReasons(" Prerequisite " + requiredCourse.getFormattedCourse() + " is in same term.");
+					}else if(requireingTerm.getStartDate().before(requiredTerm.getStartDate())){
+						requiringCourse.setHasPrerequisites(false);
+						model.setIsValid(false);
+						requiringCourse.setInvalidReasons(" Prerequisite " + requiredCourse.getFormattedCourse() + " is not in previous term.");
 					}
 				}
 				
 			}else{
 				requiringCourse.setHasCorequisites(false);
 				requiringCourse.setHasPrerequisites(false);
-				requiringCourse.setInvalidReasons("Pre/co requisite is missing");
+				model.setIsValid(false);
+				requiringCourse.setInvalidReasons(" Pre/co requisite + " + requisiteCourse.getRequiredCourseCode() + " is missing.");
 			}
 		}
 		

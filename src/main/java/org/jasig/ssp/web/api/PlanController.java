@@ -27,6 +27,7 @@ import javax.mail.SendFailedException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
 import org.jasig.ssp.model.Message;
@@ -403,7 +404,12 @@ public class PlanController  extends AbstractBaseController {
 	PlanTO validatePlan(final HttpServletResponse response,
 			 @RequestBody final PlanTO plan)
 			throws ValidationException, ObjectNotFoundException, CloneNotSupportedException {
-		PlanTO validatedTO = getService().validate(plan);
+		String schoolId = null;
+		if(StringUtils.isNotBlank(plan.getPersonId())){
+			Person student = personService.get(UUID.fromString(plan.getPersonId()));
+			schoolId = student.getSchoolId();
+		}
+		PlanTO validatedTO = getService().validate(plan, schoolId);
 		return validatedTO;
 	}
 

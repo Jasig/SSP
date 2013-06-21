@@ -11,11 +11,28 @@ public class ExternalCourseRequisiteTO implements
 		this.setRequiringCourseCode(model.getRequiringCourseCode());
 		this.setRequiredCourseCode(model.getRequiredCourseCode());
 		this.setRequisiteCode(model.getRequisiteCode());
+		this.setRequiredFormattedCourse(model.getRequiredFormattedCourse());
 	}
 	
 	private String requiringCourseCode;
 
 	private String requiredCourseCode;
+	
+	private String requiredFormattedCourse;
+
+	/**
+	 * @return the requiredFormattedCourse
+	 */
+	public String getRequiredFormattedCourse() {
+		return requiredFormattedCourse;
+	}
+
+	/**
+	 * @param requiredFormattedCourse the requiredFormattedCourse to set
+	 */
+	public void setRequiredFormattedCourse(String requiredFormattedCourse) {
+		this.requiredFormattedCourse = requiredFormattedCourse;
+	}
 
 	/**
 	 * Requisite Code.

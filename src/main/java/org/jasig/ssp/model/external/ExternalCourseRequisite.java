@@ -35,6 +35,12 @@ public class ExternalCourseRequisite extends AbstractExternalData implements
 	@NotEmpty
 	@Size(max = 50)
 	private String requiredCourseCode;
+	
+	@Column(nullable = false, length = 35)
+	@NotNull
+	@NotEmpty
+	@Size(max = 35)
+	private String requiredFormattedCourse;
 
 
 	/**
@@ -93,6 +99,22 @@ public class ExternalCourseRequisite extends AbstractExternalData implements
 	 */
 	public void setRequisiteCode(RequisiteCode requisiteCode) {
 		this.requisiteCode = requisiteCode;
+	}
+
+
+	/**
+	 * @return the requiredFormattedCourse
+	 */
+	public String getRequiredFormattedCourse() {
+		return requiredFormattedCourse;
+	}
+
+
+	/**
+	 * @param requiredFormattedCourse the requiredFormattedCourse to set
+	 */
+	public void setRequiredFormattedCourse(String requiredFormattedCourse) {
+		this.requiredFormattedCourse = requiredFormattedCourse;
 	}
 
 }

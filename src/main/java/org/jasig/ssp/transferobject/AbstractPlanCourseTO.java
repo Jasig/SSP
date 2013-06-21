@@ -91,8 +91,8 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 		
 		// validation transients 
 		this.setIsValidInTerm(model.isValidInTerm());
-		this.setHasPrerequisites(model.hasPrerequisites());
-		this.setHasCorequisites(model.hasCorequisites());
+		this.setHasPrerequisites(model.getHasPrerequisites());
+		this.setHasCorequisites(model.getHasCorequisites());
 		this.setInvalidReasons(model.getInvalidReasons());
 	}
 
@@ -259,10 +259,11 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 		this.isValidInTerm = isValidInTerm;
 	}
 
+	
 	/**
 	 * @return the hasPrerequisites
 	 */
-	public boolean hasPrerequisites() {
+	public boolean getHasPrerequisites() {
 		return hasPrerequisites;
 	}
 
@@ -273,10 +274,11 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 		this.hasPrerequisites = hasPrerequisites;
 	}
 
+
 	/**
 	 * @return the hasCorequisites
 	 */
-	public boolean hasCorequisites() {
+	public boolean getHasCorequisites() {
 		return hasCorequisites;
 	}
 
@@ -300,6 +302,8 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 	public void setInvalidReasons(String invalidReasons) {
 		if(invalidReasons == null)
 			invalidReasons = new String();
+		else
+			this.invalidReasons = this.invalidReasons + " ";
 		this.invalidReasons = this.invalidReasons + invalidReasons;
 	}
 
