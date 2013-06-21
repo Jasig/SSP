@@ -27,7 +27,7 @@ Ext.define('Ssp.model.external.AbstractExternal', {
 			for (fieldName in this.data)
 	    	{
 				//TODO this was orginally if(record[fieldName]) this does not work for booleans
-				if ( fieldName in record)
+				if (record[fieldName] != undefined && record[fieldName] != null)
 	    		{
 	    			this.set( fieldName, record[fieldName] );
 	    		}
