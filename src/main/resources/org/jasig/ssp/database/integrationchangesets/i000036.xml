@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to Jasig under one or more contributor license agreements. 
+	See the NOTICE file distributed with this work for additional information 
+	regarding copyright ownership. Jasig licenses this file to you under the 
+	Apache License, Version 2.0 (the "License"); you may not use this file except 
+	in compliance with the License. You may obtain a copy of the License at: 
+	http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable 
+	law or agreed to in writing, software distributed under the License is distributed 
+	on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
+	express or implied. See the License for the specific language governing permissions 
+	and limitations under the License. -->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+http://www.liquibase.org/xml/ns/dbchangelog-ext
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	
+	<changeSet id="Provide code column in external_person table" author="greg.elliott">
+		<preConditions onFail="MARK_RAN"
+					   onFailMessage="code column already exists in external_person table">
+			<not><columnExists tableName="external_person" columnName="student_type_code"/></not>
+		</preConditions>
+		
+		<dropView viewName="v_external_person" />
+		
+		<addColumn tableName="external_person">
+			<column name="student_type_code" type="${nvarchar.type}(10)" />
+		</addColumn>
+		
+		<createView viewName="v_external_person">
+			select ROW_NUMBER() OVER (ORDER BY school_id) as id,* from external_person
+		</createView>
+		<sql>grant all on v_external_person to ${database.app.username}</sql>
+		
+		<rollback>
+			<dropColumn tableName="external_person" columnName="student_type_code"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="Provide code column in student_type table" author="greg.elliott">
+		<preConditions onFail="MARK_RAN"
+					   onFailMessage="code column already exists in student_type table">
+			<not><columnExists tableName="student_type" columnName="code"/></not>
+		</preConditions>
+		<addColumn tableName="student_type">
+			<column name="code" type="${nvarchar.type}(10)">
+				<constraints nullable="false" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="student_type" columnName="code"/>
+		</rollback>
+	</changeSet>
+	
+	<!--populate student_type.code with value from student_type.name-->
+	<changeSet id="Add values for code in student_type table" author="greg.elliott">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="code column does not exist in student_type table">
+			<columnExists tableName="student_type" columnName="code"/>
+		</preConditions>
+		<update tableName="student_type">
+			<column name="code" valueComputed="name" />
+		</update>
+	</changeSet>
+</databaseChangeLog>

@@ -20,42 +20,50 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
 	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 	
-	<changeSet id="Provide code column in external_person table" author="greg.elliott">
-		<preConditions onFail="MARK_RAN"
-					   onFailMessage="code column already exists in external_person table">
-			<not><columnExists tableName="external_person" columnName="student_type_code"/></not>
-		</preConditions>
-		<addColumn tableName="external_person">
-			<column name="student_type_code" type="${nvarchar.type}(10)" />
-		</addColumn>
-		<rollback>
-			<dropColumn tableName="external_person" columnName="student_type_code"/>
-		</rollback>
-	</changeSet>
+	<changeSet id="add config for studentTypeSetFromExternalData" author="paul.spaude">
+		<insert tableName="config">
+			<column name="id" value="33F3C840-D903-11E2-A28F-0800200C9A66" />
+			<column name="name" value="studentTypeSetFromExternalData" />
+			<column name="description"
+					value="Student type is always set from external data if this is set to true.  It will overwrite any local changes for student type." />
+			<column name="value">true</column>
+			<column name="default_value">true</column>
+			<column name="created_date" valueDate="2013-06-18T12:00:00" />
+			<column name="modified_date" valueDate="2012-06-18T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="102" />
+		</insert>
 
-	<changeSet id="Provide code column in student_type table" author="greg.elliott">
-		<preConditions onFail="MARK_RAN"
-					   onFailMessage="code column already exists in student_type table">
-			<not><columnExists tableName="student_type" columnName="code"/></not>
-		</preConditions>
-		<addColumn tableName="student_type">
-			<column name="code" type="${nvarchar.type}(10)" defaultValue="NullCode">
-				<constraints nullable="false" />
-			</column>
-		</addColumn>
 		<rollback>
-			<dropColumn tableName="student_type" columnName="code"/>
+			<delete tableName="config">
+				<where>id='33F3C840-D903-11E2-A28F-0800200C9A66'</where>
+			</delete>
 		</rollback>
 	</changeSet>
 	
-	<!--populate student_type.code with value from student_type.name-->
-	<changeSet id="Add values for code in student_type table" author="greg.elliott">
-		<preConditions onFail="CONTINUE"
-					   onFailMessage="code column does not exist in student_type table">
-			<columnExists tableName="student_type" columnName="code"/>
-		</preConditions>
-		<update tableName="student_type">
-			<column name="code" valueComputed="name" />
-		</update>
+	<changeSet id="add config for studentTypeUnsetFromExternalData" author="paul.spaude">	
+		<insert tableName="config">
+			<column name="id" value="5D62D170-D904-11E2-A28F-0800200C9A66" />
+			<column name="name" value="studentTypeUnsetFromExternalData" />
+			<column name="description"
+					value="All student type assignments to be deleted based on external data, overwriting any local changes or externally assigned student type." />
+			<column name="value">false</column>
+			<column name="default_value">false</column>
+			<column name="created_date" valueDate="2013-06-18T12:00:00" />
+			<column name="modified_date" valueDate="2012-06-18T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="102" />
+		</insert>
+
+		<rollback>
+			<delete tableName="config">
+				<where>id='5D62D170-D904-11E2-A28F-0800200C9A66'</where>
+			</delete>
+		</rollback>
 	</changeSet>
+	
 </databaseChangeLog>
