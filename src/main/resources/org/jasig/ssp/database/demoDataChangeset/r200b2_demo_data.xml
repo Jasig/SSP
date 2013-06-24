@@ -585,141 +585,141 @@
     <insert tableName='external_term'>
       <column name='name' value='Spring 2012' />
       <column name='code' value='SP2012' />
-      <column name='start_date' value='Sat Jan 07 00:00:00 MST 2012' />
-      <column name='end_date' value='Mon Apr 30 00:00:00 MST 2012' />
+      <column name='start_date' value='2012-01-07T00:00:00' />
+      <column name='end_date' value='2012-04-30T00:00:00' />
       <column name='report_year' value='2012' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Summer 2012' />
       <column name='code' value='SU2012' />
-      <column name='start_date' value='Sun May 20 00:00:00 MST 2012' />
-      <column name='end_date' value='Thu Jul 12 00:00:00 MST 2012' />
+      <column name='start_date' value='2012-05-20T00:00:00' />
+      <column name='end_date' value='2012-07-12T00:00:00' />
       <column name='report_year' value='2012' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Fall 2012' />
       <column name='code' value='FA2012' />
-      <column name='start_date' value='Wed Aug 22 00:00:00 MST 2012' />
-      <column name='end_date' value='Thu Dec 06 00:00:00 MST 2012' />
+      <column name='start_date' value='2012-08-22T00:00:00' />
+      <column name='end_date' value='2012-12-06T00:00:00' />
       <column name='report_year' value='2012' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Winter 2012' />
       <column name='code' value='WN2012' />
-      <column name='start_date' value='Tue Oct 16 00:00:00 MST 2012' />
-      <column name='end_date' value='Thu Dec 06 00:00:00 MST 2012' />
+      <column name='start_date' value='2012-10-16T00:00:00' />
+      <column name='end_date' value='2012-12-06T00:00:00' />
       <column name='report_year' value='2012' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Spring 2013' />
       <column name='code' value='SP2013' />
-      <column name='start_date' value='Mon Jan 07 00:00:00 MST 2013' />
-      <column name='end_date' value='Tue Apr 30 00:00:00 MST 2013' />
+      <column name='start_date' value='2013-01-07T00:00:00' />
+      <column name='end_date' value='2013-04-30T00:00:00' />
       <column name='report_year' value='2013' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Summer 2013' />
       <column name='code' value='SU2013' />
-      <column name='start_date' value='Mon May 20 00:00:00 MST 2013' />
-      <column name='end_date' value='Fri Jul 12 00:00:00 MST 2013' />
+      <column name='start_date' value='2013-05-20T00:00:00' />
+      <column name='end_date' value='2013-07-12T00:00:00' />
       <column name='report_year' value='2013' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Fall 2013' />
       <column name='code' value='FA2013' />
-      <column name='start_date' value='Thu Aug 22 00:00:00 MST 2013' />
-      <column name='end_date' value='Fri Dec 06 00:00:00 MST 2013' />
+      <column name='start_date' value='2013-08-22T00:00:00' />
+      <column name='end_date' value='2013-12-06T00:00:00' />
       <column name='report_year' value='2013' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Winter 2013' />
       <column name='code' value='WN2013' />
-      <column name='start_date' value='Wed Oct 16 00:00:00 MST 2013' />
-      <column name='end_date' value='Fri Dec 06 00:00:00 MST 2013' />
+      <column name='start_date' value='2013-10-16T00:00:00' />
+      <column name='end_date' value='2013-12-06T00:00:00' />
       <column name='report_year' value='2013' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Spring 2014' />
       <column name='code' value='SP2014' />
-      <column name='start_date' value='Tue Jan 07 00:00:00 MST 2014' />
-      <column name='end_date' value='Wed Apr 30 00:00:00 MST 2014' />
+      <column name='start_date' value='2014-01-07T00:00:00' />
+      <column name='end_date' value='2014-04-30T00:00:00' />
       <column name='report_year' value='2014' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Summer 2014' />
       <column name='code' value='SU2014' />
-      <column name='start_date' value='Tue May 20 00:00:00 MST 2014' />
-      <column name='end_date' value='Sat Jul 12 00:00:00 MST 2014' />
+      <column name='start_date' value='2014-05-20T00:00:00' />
+      <column name='end_date' value='2014-07-12T00:00:00' />
       <column name='report_year' value='2014' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Fall 2014' />
       <column name='code' value='FA2014' />
-      <column name='start_date' value='Fri Aug 22 00:00:00 MST 2014' />
-      <column name='end_date' value='Sat Dec 06 00:00:00 MST 2014' />
+      <column name='start_date' value='2014-08-22T00:00:00' />
+      <column name='end_date' value='2014-12-06T00:00:00' />
       <column name='report_year' value='2014' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Winter 2014' />
       <column name='code' value='WN2014' />
-      <column name='start_date' value='Thu Oct 16 00:00:00 MST 2014' />
-      <column name='end_date' value='Sat Dec 06 00:00:00 MST 2014' />
+      <column name='start_date' value='2014-10-16T00:00:00' />
+      <column name='end_date' value='2014-12-06T00:00:00' />
       <column name='report_year' value='2014' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Spring 2015' />
       <column name='code' value='SP2015' />
-      <column name='start_date' value='Wed Jan 07 00:00:00 MST 2015' />
-      <column name='end_date' value='Thu Apr 30 00:00:00 MST 2015' />
+      <column name='start_date' value='2015-01-07T00:00:00' />
+      <column name='end_date' value='2015-04-30T00:00:00' />
       <column name='report_year' value='2015' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Summer 2015' />
       <column name='code' value='SU2015' />
-      <column name='start_date' value='Wed May 20 00:00:00 MST 2015' />
-      <column name='end_date' value='Sun Jul 12 00:00:00 MST 2015' />
+      <column name='start_date' value='2015-05-20T00:00:00' />
+      <column name='end_date' value='2015-07-12T00:00:00' />
       <column name='report_year' value='2015' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Fall 2015' />
       <column name='code' value='FA2015' />
-      <column name='start_date' value='Sat Aug 22 00:00:00 MST 2015' />
-      <column name='end_date' value='Sun Dec 06 00:00:00 MST 2015' />
+      <column name='start_date' value='2015-08-22T00:00:00' />
+      <column name='end_date' value='2015-12-06T00:00:00' />
       <column name='report_year' value='2015' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Winter 2015' />
       <column name='code' value='WN2015' />
-      <column name='start_date' value='Fri Oct 16 00:00:00 MST 2015' />
-      <column name='end_date' value='Sun Dec 06 00:00:00 MST 2015' />
+      <column name='start_date' value='2015-10-16T00:00:00' />
+      <column name='end_date' value='2015-12-06T00:00:00' />
       <column name='report_year' value='2015' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Spring 2016' />
       <column name='code' value='SP2016' />
-      <column name='start_date' value='Thu Jan 07 00:00:00 MST 2016' />
-      <column name='end_date' value='Sat Apr 30 00:00:00 MST 2016' />
+      <column name='start_date' value='2016-01-07T00:00:00' />
+      <column name='end_date' value='2016-04-30T00:00:00' />
       <column name='report_year' value='2016' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Summer 2016' />
       <column name='code' value='SU2016' />
-      <column name='start_date' value='Fri May 20 00:00:00 MST 2016' />
-      <column name='end_date' value='Tue Jul 12 00:00:00 MST 2016' />
+      <column name='start_date' value='2016-05-20T00:00:00' />
+      <column name='end_date' value='2016-07-12T00:00:00' />
       <column name='report_year' value='2016' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Fall 2016' />
       <column name='code' value='FA2016' />
-      <column name='start_date' value='Mon Aug 22 00:00:00 MST 2016' />
-      <column name='end_date' value='Tue Dec 06 00:00:00 MST 2016' />
+      <column name='start_date' value='2016-08-22T00:00:00' />
+      <column name='end_date' value='2016-12-06T00:00:00' />
       <column name='report_year' value='2016' />
     </insert>
     <insert tableName='external_term'>
       <column name='name' value='Winter 2016' />
       <column name='code' value='WN2016' />
-      <column name='start_date' value='Sun Oct 16 00:00:00 MST 2016' />
-      <column name='end_date' value='Tue Dec 06 00:00:00 MST 2016' />
+      <column name='start_date' value='2016-10-16T00:00:00' />
+      <column name='end_date' value='2016-12-06T00:00:00' />
       <column name='report_year' value='2016' />
     </insert>
     <rollback>
