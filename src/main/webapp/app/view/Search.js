@@ -66,6 +66,7 @@ Ext.define('Ssp.view.Search', {
                 items: [
   	           {
   	              	xtype: 'searchForm', 
+  	              	hidden: true,
                     flex: 1
   	           },                       
 //               {

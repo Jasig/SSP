@@ -252,6 +252,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.preferences.set('SEARCH_GRID_VIEW_TYPE',0);
 		me.getCaseloadBar().hide();
 		me.getSearchBar().show();
+		Ext.ComponentQuery.query('searchForm')[0].show();
+
 		me.setGridView();
 	},
 
