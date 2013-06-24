@@ -81,7 +81,22 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 						metaData.style = 'background-color: '+colorCode+'; background-image: none; margin:2px 2px 2px 2px;'
 						if ( elective ) {
 							metaData.tdAttr = 'data-qtip="This is an elective. Elective code: ' + elective.get('code') + '"';
-						}						
+						}
+						return elective;						
+			         }		            
+		        },
+				{
+		            xtype: 'gridcolumn',
+		            width: 5,
+		            height: 5,
+		            flex:0,
+		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+		            		var isDev = record.get('isDev');
+			            	var color = isDev ? '#ff0000' : 'rgba(0,0,0,0.0)';
+							metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
+							if ( isDev ) {
+								metaData.tdAttr = 'data-qtip="Red indicates course is a dev course."';
+							}					
 			         }		            
 		        },
 		        {
@@ -95,7 +110,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
                 dataIndex: 'formattedCourse',
                 xtype: 'gridcolumn',
 		        flex:1,
-				width:145,
+				width:140,
 				renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 		            	var me=this;
 					    if(me.invalidRecord(record))
@@ -108,6 +123,10 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 	            flex:0.5,
 	            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 	            	var me=this;
+					if((record.data.contactNotes != undefined && record.data.contactNotes.length > 0) ||
+													(record.data.studentNotes != undefined && record.data.studentNotes.length > 0) ){
+						return '<img src="/ssp/images/' + Ssp.util.Constants.EDIT_COURSE_NOTE_NAME + '" />'
+					}
 	            	var elective = me.electiveStore.getById(record.get('electiveId'))
 	            	value = elective ? elective.get('code') : '';
 					if(me.invalidRecord(record))
