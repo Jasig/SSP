@@ -39,7 +39,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
                 align: 'stretch',
                 type: 'vbox'
             },
-            title: 'Move Plan',
+            title: me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan',
             items:[{
                 xtype: 'form',
                 flex: 1,
@@ -107,7 +107,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 		                items: [{
 		                    xtype: 'button',
 		                    itemId: 'movePlanButton',
-		                    text: 'Move Plan',
+		                    text: me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan',
 		                }, '-', {
 		                    xtype: 'button',
 		                    itemId: 'cancelButton',

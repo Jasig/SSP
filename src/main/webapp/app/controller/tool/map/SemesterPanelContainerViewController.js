@@ -656,7 +656,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
                 expectedResponseCnt: 1,
 				show: true
             }
-		me.mapPlanService.validate(me.clonedMap, {
+		me.mapPlanService.validate(me.clonedMap, me.currentMapPlan.get("isTemplate"),{
             success: me.newServiceSuccessHandler('validatePlan', me.validateMapPlanServiceSuccess, serviceResponses),
             failure: me.newServiceFailureHandler('validatePlan', me.validateMapPlanServiceFailure, serviceResponses),
             scope: me,
@@ -668,7 +668,11 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var me = this;
 		me.getView().setLoading(false);
 		var mapResponse = serviceResponses.successes.validatePlan;
+		
 		me.clonedMap.loadFromServer(Ext.decode(mapResponse.responseText));
+		if(me.currentMapPlan.get("isTemplate")){
+			me.clonedMap.set("planCourses", me.clonedMap.get('templateCourses'));
+		}
 	    if(me.clonedMap.get("isValid"))
 	    	me.onValidateAccept('ok');
 		else{
@@ -701,7 +705,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	onValidateAccept: function(btnId){
 		var me = this;
 		if(btnId == 'ok'){
-			me.currentMapPlan.loadPlan(me.clonedMap);
+			me.currentMapPlan.loadPlan(me.clonedMap, true);
 			me.onCreateMapPlan();
 			me.populatePlanStores();
 			me.updateAllPlanHours();

@@ -332,13 +332,19 @@ Ext.define('Ssp.service.MapPlanService', {
    		});
     },
 
-	validate: function(plan, callbacks){
+	validate: function(plan, isTemplate, callbacks){
 		var me=this;
-		if(me.currentMapPlan.get("isTemplate"))
-			me.currentMapPlan.set("personId","");
-		
+		if(plan == null){
+	    	callbacks.failure("Plan not found", callbacks.scope);
+		}
+			var url = me.getBaseUrl(plan.get('personId'));
+		if(isTemplate){
+			plan.set("personId","");
+			plan.set("isTemplate",isTemplate);
+			url = me.getTemplateBaseUrl();
+		}
 		plan.clearValidation();
-		var url = me.getBaseUrl(me.currentMapPlan.get('personId'));
+	
 	    var success = function( response ){
 			callbacks.success( response, callbacks.scope );
 	    };
@@ -350,6 +356,27 @@ Ext.define('Ssp.service.MapPlanService', {
    			url: url+'/validate',
    			method: 'POST',
    			jsonData: plan.getSimpleJsonData(),
+   			successFunc: success,
+   			failureFunc: failure,
+   			scope: me,
+   		});
+	},
+	
+	planStatus: function(plan, callbacks){
+		var me=this;
+		if(plan.get("isTemplate"))
+			return callbacks.faliure("Is template, no plan status.", callbacks.scope);
+		
+		var url = me.getBaseUrl(plan.get('personId'));
+	    var success = function( response ){
+			callbacks.success( response, callbacks.scope );
+	    };
+	    var failure = function( response ){
+	    	callbacks.failure(response, callbacks.scope);
+	    };
+		me.apiProperties.makeRequest({
+   			url: url+'/planstatus',
+   			method: 'POST',
    			successFunc: success,
    			failureFunc: failure,
    			scope: me,

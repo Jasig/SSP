@@ -23,6 +23,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.TemplateLiteTOFactory;
 import org.jasig.ssp.factory.reference.TemplateTOFactory;
@@ -41,6 +42,7 @@ import org.jasig.ssp.service.TemplateService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.TemplateLiteTO;
 import org.jasig.ssp.transferobject.TemplateOutputTO;
@@ -353,6 +355,28 @@ public class TemplateController  extends AbstractBaseController {
 			throws ObjectNotFoundException {
 		getService().delete(id);
 		return new ServiceResponse(true);
+	}
+	
+	/**
+	 * Validate the plan instance.
+	 * 
+	 * @param id
+	 *            Explicit id to the instance to persist.
+	 * @param obj
+	 *            Full instance of plan object.
+	 * @return The validated data object instance.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_WRITE')")
+	@RequestMapping(value = "/validate", method = RequestMethod.POST)
+	public @ResponseBody
+	TemplateTO validatePlan(final HttpServletResponse response,
+			 @RequestBody final TemplateTO plan)
+			throws ObjectNotFoundException {
+
+		TemplateTO validatedTO = getService().validate(plan, null);
+		return validatedTO;
 	}
 
 	public TemplateService getService() {

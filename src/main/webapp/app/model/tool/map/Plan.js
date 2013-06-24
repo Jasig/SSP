@@ -244,6 +244,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		simpleData.createdDate = me.get('createdDate');
 		simpleData.modifiedDate = me.get('modifiedDate');
 		simpleData.isValid = me.get('isValid');
+		
 		if(me.get('isTemplate')){
 			simpleData.templateCourses = me.get('planCourses');
 			simpleData.departmentCode = me.get('departmentCode');
@@ -265,10 +266,15 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		return clone;
 	},
 	
-	loadPlan:function(planToLoad){
+	loadPlan:function(planToLoad, retainTemplateStatus){
 		var me = this;
+		var isTemplate = me.get('isTemplate');
 		var data = planToLoad.getSimpleJsonData();
 		me.loadFromServer(data);
+		if(retainTemplateStatus){
+			me.get('isTemplate', isTemplate);
+			me.set("planCourses", me.get('templateCourses'));
+		}
 	},
 	
 	getBoolean:function(fieldName){
