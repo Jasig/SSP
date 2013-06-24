@@ -79,8 +79,8 @@ public class TemplateCourseTOFactoryImpl extends AbstractAuditableTOFactory<Temp
 		}
 		
 		model.setIsValidInTerm(tObject.isValidInTerm());
-		model.setHasPrerequisites(tObject.hasPrerequisites());
-		model.setHasCorequisites(tObject.hasCorequisites());
+		model.setHasPrerequisites(tObject.getHasPrerequisites());
+		model.setHasCorequisites(tObject.getHasCorequisites());
 		model.setInvalidReasons(tObject.getInvalidReasons());
 		return model;
 	}
