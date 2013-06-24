@@ -256,16 +256,36 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 					readOnly: true,
 					fieldStyle:"border:none 0px black; margin-top:2px; background-image:none",
 					editable:false
-                }, {
-                    fieldLabel: 'Student is Currently',
-                    itemId: 'onPlan',
-                    name: 'onPlan',
-                    labelWidth: 115,
-					width:200,
-					fieldStyle:"text-align:left",
-                    hidden: me.currentMapPlan.get("isTemplate")
+                }, 	{
+		                xtype: 'fieldset',
+		                border: 0,
+		                padding: '0 0 0 0',
+		                title: '',
+						itemId:'onPlanFieldSet',
+		                defaultType: 'displayfield',
+		                layout: 'hbox',
+		                defaults: {
+		                    anchor: '100%'
+		                },
+		                items: [
+							{
+								 xtype: 'button',
+								 width: 20,
+				                 height: 20,
+								itemId:'onPlanStatusDetails',
+				    	         cls: 'helpIconSmall',
+				    	         tooltip: 'Student is currently on plan.'
+				    	     },{
+                    		fieldLabel: 'Student is Currently',
+		                    itemId: 'onPlan',
+		                    name: 'onPlan',
+		                    labelWidth: 115,
+							width:200,
+							fieldStyle:"text-align:left",
+		                    hidden: me.currentMapPlan.get("isTemplate")
 
-                }]
+		                }]
+				}]
             
             }]
         });
