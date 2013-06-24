@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.factory.external.ExternalPersonPlanStatusTOFactory;
 import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
 import org.jasig.ssp.model.Message;
@@ -35,6 +36,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.SubjectAndBody;
+import org.jasig.ssp.model.external.ExternalPersonPlanStatus;
 import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.Permission;
@@ -43,6 +45,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.external.ExternalPersonPlanStatusService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.PagedResponse;
@@ -51,6 +54,7 @@ import org.jasig.ssp.transferobject.PlanLiteTO;
 import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.external.ExternalPersonPlanStatusTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -103,6 +107,12 @@ public class PlanController  extends AbstractBaseController {
 	
 	@Autowired
 	private transient MessageService messageService;
+	
+	@Autowired
+	private transient ExternalPersonPlanStatusService planStatusService;
+	
+	@Autowired
+	private ExternalPersonPlanStatusTOFactory planStatusFactory;
 
  
 	/**
@@ -173,7 +183,6 @@ public class PlanController  extends AbstractBaseController {
 		if (model == null) {
 			return null;
 		}
-
 		return new PlanTO(model);
 	}
 
@@ -385,25 +394,22 @@ public class PlanController  extends AbstractBaseController {
 	}
 	
 	/**
-	 * Persist any changes to the plan instance.
+	 * Validate the plan instance.
 	 * 
 	 * @param id
 	 *            Explicit id to the instance to persist.
 	 * @param obj
-	 *            Full instance to persist.
-	 * @return The update data object instance.
+	 *            Full instance of plan object.
+	 * @return The validated data object instance.
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.
-	 * @throws ValidationException
-	 *             If the specified id is null.
-	 * @throws CloneNotSupportedException 
 	 */
 	@PreAuthorize("hasRole('ROLE_PERSON_MAP_WRITE')")
 	@RequestMapping(value = "/validate", method = RequestMethod.POST)
 	public @ResponseBody
 	PlanTO validatePlan(final HttpServletResponse response,
 			 @RequestBody final PlanTO plan)
-			throws ValidationException, ObjectNotFoundException, CloneNotSupportedException {
+			throws ObjectNotFoundException {
 		String schoolId = null;
 		if(StringUtils.isNotBlank(plan.getPersonId())){
 			Person student = personService.get(UUID.fromString(plan.getPersonId()));
@@ -411,6 +417,35 @@ public class PlanController  extends AbstractBaseController {
 		}
 		PlanTO validatedTO = getService().validate(plan, schoolId);
 		return validatedTO;
+	}
+	
+	/**
+	 * Return plan status for given student.
+	 * 
+	 * @param personId
+	 *            Explicit personId to the instance to persist.
+	 * @return The current plan status of the student.
+	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_WRITE')")
+	@RequestMapping(value = "/planstatus", method = RequestMethod.POST)
+	public @ResponseBody
+	ExternalPersonPlanStatusTO getPlanStatus(final HttpServletResponse response,
+			@PathVariable final UUID personId)
+			throws ObjectNotFoundException {
+		if(personId == null){
+			return null;
+		}
+		String schoolId = null;
+		Person student = personService.get(personId);
+		schoolId = student.getSchoolId();
+		//TODO not the cleanest way to handle but clientside generates 500 error in console
+		// Currently plan status is not required.
+		try{
+			return planStatusFactory.from(planStatusService.getBySchoolId(schoolId));
+		}catch(Exception exp)
+		{
+			return null;
+		}
 	}
 
 	public PlanService getService() {
