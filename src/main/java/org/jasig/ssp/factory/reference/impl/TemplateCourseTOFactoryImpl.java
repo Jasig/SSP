@@ -21,7 +21,6 @@ package org.jasig.ssp.factory.reference.impl;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.reference.TemplateCourseTOFactory;
-import org.jasig.ssp.model.PlanCourse;
 import org.jasig.ssp.model.TemplateCourse;
 import org.jasig.ssp.model.reference.Elective;
 import org.jasig.ssp.service.ObjectNotFoundException;
