@@ -225,6 +225,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 	                }, {
 	                    xtype: 'label',
 						itemId: 'movePlanLabel',
+						width: 125,
 	                    text: me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan',
 
 	                }]
@@ -259,9 +260,11 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     fieldLabel: 'Student is Currently',
                     itemId: 'onPlan',
                     name: 'onPlan',
-                    labelWidth: 150,
-					hidden: true,
-					hideable: false
+                    labelWidth: 115,
+					width:200,
+					fieldStyle:"text-align:left",
+                    hidden: me.currentMapPlan.get("isTemplate")
+
                 }]
             
             }]

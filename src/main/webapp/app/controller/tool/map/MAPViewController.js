@@ -40,7 +40,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
             click: 'onFAButtonClick'
            }
         },
-        
+
+		'onPlan':'#onPlan',
+        'onPlanStatusDetails':'#onPlanStatusDetails',
+		'onPlanFieldSet':'#onPlanFieldSet',
         'planNotesButton':{
          selector: '#planNotesButton',
            listeners: {
@@ -74,6 +77,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
            listeners: {
             click: 'onmovePlanButtonClick'
            }
+        },
+
+		'movePlanLabel':{
+           selector: '#movePlanLabel'
         },
 
 		'saveTemplateAsButton':{
@@ -422,6 +429,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.getName().setFieldLabel("Template Title");
 			me.getNotesLabel().setText("Template Notes");
 			me.getPlanNotesButton().setTooltip("Template Notes");
+			
+			me.getMovePlanLabel().setText("Move Template");
+			me.getMovePlanButton().setTooltip("Move Template");
+			me.getOnPlanFieldSet().hide();
 		}else{
 			me.getSavePlanButton().show();
 			me.getSaveTemplateAsButton().show();
@@ -433,6 +444,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.getName().setFieldLabel("Plan Title");
 			me.getNotesLabel().setText("Plan Notes");
 			me.getPlanNotesButton().setTooltip("Plan Notes");
+			
+			me.getMovePlanLabel().setText("Move Plan");
+			me.getMovePlanButton().setTooltip("Move Plan");
+			me.getOnPlanFieldSet().show();
 		}
 	},
     

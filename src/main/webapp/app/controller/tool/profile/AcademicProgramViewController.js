@@ -172,12 +172,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 	        	me.getMapProjectedField().setValue(lastTerm.get("code"));
 	        me.getPrintPlanButton().show();
 			me.getEmailPlanButton().show();
-	        me.personService.get(me.currentMapPlan.get('ownerId'), {
-                success: me.newServiceSuccessHandler('person', me.getPersonSuccess, serviceResponses),
-                failure: me.newServiceFailureHandler('person', me.getPersonFailure, serviceResponses),
-                scope: me
-            });
-	        
+			me.updatePlanStatus();
 		}
     },
 
@@ -189,8 +184,9 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
     
     getPersonSuccess: function(serviceResponses) {
         var me = this;
-        var mapResponse = serviceResponses.successes.map;
-		if(!mapResponse || !mapResponse.responseText || mapResponse.responseText.trim().length == 0) {
+        var person = serviceResponses.successes.person;
+		if(!person) {
+			return;
        	} else {
        		var personResponse = serviceResponses.successes.person;
        		var advisor = new Ssp.model.Person();
@@ -218,7 +214,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
                 successes: {},
                 responseCnt: 0,
                 expectedResponseCnt: 1
-            }
+            };
 		me.mapPlanService.email(null, metaData, {
             success: me.newServiceSuccessHandler('emailMap', me.emailMapPlanServiceSuccess, serviceResponses),
             failure: me.newServiceFailureHandler('emailMap', me.emailMapPlanServiceFailure, serviceResponses),
@@ -278,6 +274,68 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
         myWindow.document.write(htmlPrint);
         myWindow.print();
 	},
+	
+	updatePlanStatus: function(){
+		var me=this;
+    	if(me.currentMapPlan.get('isTemplate') == true || me.currentMapPlan.get('personId') == ""){
+    		me.getOnPlanField().setValue("");
+    		return;
+    	}
+    	me.getView().setLoading(true);
+ 		var callbacks = new Object();
+ 		var serviceResponses = {
+             failures: {},
+             successes: {},
+             responseCnt: 0,
+             expectedResponseCnt: 1
+         }
+ 		callbacks.success = me.newServiceSuccessHandler('planStatus', me.onPlanStatusSuccess, serviceResponses);
+ 		callbacks.failure = me.newServiceFailureHandler('planStatus', me.onPlanStatusFailure, serviceResponses);
+ 		callbacks.scope = me;
+ 		me.mapPlanService.planStatus(me.currentMapPlan, callbacks);
+    },
+    
+
+	onPlanStatusSuccess:function(serviceResponses){
+		var me = this;
+		me.getView().setLoading(false);
+		var planStatus = serviceResponses.successes.planStatus;
+		if(planStatus.status == "ON")
+			me.getOnPlanField().setValue("On Plan");
+		else if(planStatus.status == "OFF")
+			me.getOnPlanField().setValue("Off Plan");
+		else
+			me.getOnPlanField().setValue("No Status");
+		var serviceResponses = {
+                failures: {},
+                successes: {},
+                responseCnt: 0,
+                expectedResponseCnt: 1
+            };
+		me.personService.get(me.currentMapPlan.get('ownerId'), {
+            success: me.newServiceSuccessHandler('person', me.getPersonSuccess, serviceResponses),
+            failure: me.newServiceFailureHandler('person', me.getPersonFailure, serviceResponses),
+            scope: me
+        });
+	},
+	
+	onPlanStatusFailure:function(){
+		var me = this;
+		me.getView().setLoading(false);
+		me.getOnPlanField().setValue("No Status");
+		var serviceResponses = {
+                failures: {},
+                successes: {},
+                responseCnt: 0,
+                expectedResponseCnt: 1
+            };
+		me.personService.get(me.currentMapPlan.get('ownerId'), {
+            success: me.newServiceSuccessHandler('person', me.getPersonSuccess, serviceResponses),
+            failure: me.newServiceFailureHandler('person', me.getPersonFailure, serviceResponses),
+            scope: me
+        });
+	},
+	
 
 	destroy: function() {
         var me=this;
