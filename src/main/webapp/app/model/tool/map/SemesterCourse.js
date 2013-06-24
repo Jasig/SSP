@@ -16,60 +16,171 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-Ext.define('Ssp.model.tool.map.SemesterCourse', {
-	extend: 'Ssp.model.AbstractBase',
-    fields: [{name:'title', type: 'string'},
-			 {name:'code', type: 'string'},
-			 {name:'formattedCourse', type: 'string'},
-			 {name:'description', type: 'string'},
-             {name:'minCreditHours', type: 'float'},
-			 {name:'maxCreditHours', type: 'float'},
-			 {name:'creditHours', type: 'float'},
-             {name:'termCode', type: 'string'},
-             {name:'isDev', type: 'boolean'},
-			 {name:'studentNotes', type: 'string'},
-			 {name:'contactNotes', type: 'string'},
-			 {name:'isImportant', type: 'boolean'},
-			 {name:'isTranscript', type: 'boolean'},
-			 {name:'validInTerm',type:'boolean', defaultValue:true, convert: null},
-             {name:'hasCorequisites',type:'boolean', defaultValue:true, convert: null},
-             {name:'hasPrerequisites',type:'boolean', defaultValue:true, convert: null},
-             {name:'invalidReasons',type:'string'},
-             {name:'electiveId',type:'string'}
-             ],
-	constructor: function(planCourse){
-					var me = this;
-		        	this.callParent(arguments);
-					if(planCourse){
-						if( planCourse.courseTitle)
-							me.set('title', planCourse.courseTitle);
-						if(planCourse.courseCode)
-							me.set('code', planCourse.courseCode);
-						if(planCourse.courseDescription)
-							me.set('description', planCourse.courseDescription);
-						if(planCourse.isTranscript)
-							me.set('isTranscript', planCourse.isTranscript);
-						if(planCourse.isImportant)
-							me.set('isImportant', planCourse.isImportant);		
-						if(planCourse.studentNotes)
-							me.set('studentNotes', planCourse.studentNotes);	
-						if(planCourse.contactNotes)
-							me.set('contactNotes', planCourse.contactNotes);		
-						if(!planCourse.minCeditHours  && planCourse.creditHours){
-							me.set('minCreditHours', planCourse.creditHours <= 2 ? 0 :  planCourse.creditHours - 2);
-							me.set('maxCreditHours', planCourse.creditHours + 2);
+Ext.define('Ssp.view.tools.map.SemesterGrid', {
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.semestergrid',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+	controller: 'Ssp.controller.tool.map.SemesterGridViewController',
+	inject:{
+		appEventsController: 'appEventsController',
+		electiveStore: 'electiveStore',
+    	currentMapPlan: 'currentMapPlan',
+		colorsStore: 'colorsStore'
+	},
+    columnLines: false,
+	hideHeaders: true,
+ 	width: 210,
+    border: 0,
+	enableDragAndDrop: true,
+    initComponent: function(){
+        var me = this;       
+        Ext.apply(me, {
+			invalidRecord: function(record) { 
+						            return record.get('validInTerm') === false || record.get('hasCorequisites')  === false || record.get('hasPrerequisites')  === false; 
+						        },
+            columns: [
+            	{
+		            xtype: 'gridcolumn',
+		            width: 10,
+		            height: 5,
+		            flex:0,
+		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+		            	var isImportant = record.get('isImportant');
+		            	var color = isImportant ? '#ff9900' : 'rgba(0,0,0,0.0)';
+						metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;'
+						if ( isImportant ) {
+							metaData.tdAttr = 'data-qtip="Orange indicates Course is Important"';
 						}
-						if(planCourse.dev)
-							me.set('isDev',  planCourse.dev);
-					}else if(!me.get('creditHours')) {
-		        		me.set('creditHours', me.get('minCreditHours'));
-					}
+			         }		            
 		        },
-	getBoolean: function(fieldName){
-		var me = this;
-		if(me.get(fieldName) == 'on' || me.get(fieldName) == true || me.get(fieldName) == 1 || me.get(fieldName) == 'true')
-			return true;
-		return false;
-	}
+            	{
+		            xtype: 'gridcolumn',
+		            width: 10,
+		            height: 5,
+		            flex:0,
+		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+		            	var isTranscript = record.get('isTranscript');
+		            	var color = isTranscript ? '#ffff00' : 'rgba(0,0,0,0.0)';
+						metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
+						if ( isTranscript ) {
+							metaData.tdAttr = 'data-qtip="Yellow indicates course is already on students\' transcript"';
+						}						
+			         }		            
+		        },
+            	{
+		            xtype: 'gridcolumn',
+		            width: 10,
+		            height: 5,
+		            flex:0,
+		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+		            	var me=this;
+		            	var elective = me.electiveStore.getById(record.get('electiveId'))
+		            	var colorId = elective ? elective.get('color') : null;
+		            	var color = colorId ? me.colorsStore.getById(colorId) : null;
+		            	var colorCode = color ? '#'+color.get('hexCode') : 'rgba(0,0,0,0.0)';
+						metaData.style = 'background-color: '+colorCode+'; background-image: none; margin:2px 2px 2px 2px;'
+						if ( elective ) {
+							metaData.tdAttr = 'data-qtip="This is an elective. Elective code: ' + elective.get('code') + '"';
+						}						
+			         }		            
+		        },
+				{
+		            xtype: 'gridcolumn',
+		            width: 5,
+		            height: 5,
+		            flex:0,
+		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+		            		var isDev = record.get('isDev');
+			            	var color = isDev ? '#ff0000' : 'rgba(0,0,0,0.0)';
+							metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
+							if ( isDev ) {
+								metaData.tdAttr = 'data-qtip="Red indicates course is a dev course."';
+							}					
+			         }		            
+		        },
+		        {
+                dataIndex: 'title',
+                xtype: 'gridcolumn',
+				hidden: true,
+				hideable: false
+				
+            }, 
+			{
+                dataIndex: 'formattedCourse',
+                xtype: 'gridcolumn',
+		        flex:1,
+				width:140,
+				renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+		            	var me=this;
+					    if(me.invalidRecord(record))
+					    	metaData.style = 'font-style:italic;color:#AAA';
+						return value;
+			        }		
+            },
+        	{
+	            xtype: 'gridcolumn',
+	            flex:0.5,
+	            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+	            	var me=this;
+	            	var elective = me.electiveStore.getById(record.get('electiveId'))
+	            	value = elective ? elective.get('code') : '';
+					if(me.invalidRecord(record))
+				    	metaData.style = 'font-style:italic;color:#AAA';
+	            	return value;
+		         }		            
+	        },            
+			{
+                dataIndex: 'creditHours',
+                xtype: 'gridcolumn',
+	            flex:0.5,
+				width:25,
+				renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+		            	var me=this;
+						if(me.invalidRecord(record))
+					    	metaData.style = 'font-style:italic;color:#AAA';
+						return value;
+			        }		
+            },
+            {
+                dataIndex: 'maxCreditHours',
+                xtype: 'gridcolumn',
+				hidden: true,
+				hideable:false
+            }, 
+			{
+                dataIndex: 'minCreditHours',
+                xtype: 'gridcolumn',
+				hidden: true,
+				hideable:false
+            },
+			{
+                dataIndex: 'code',
+                xtype: 'gridcolumn',
+				hidden: true,
+				hideable:false
+            },
+            {
+                dataIndex: 'isDev',
+                xtype: 'gridcolumn',
+				hidden: true,
+				hideable:false
+            }
+       ],
+			viewConfig: {
+					copy: true,
+			        plugins: {
+			            ptype: 'gridviewdragdrop',
+						ddGroup: 'ddGroupForCourses',
+						dropGroup: 'coursesDDGroup',
+						dragGroup: 'coursesDDGroup',
+						pluginId: 'semesterviewdragdrop',
+						enableDrag: me.enableDragAndDrop || me.currentMapPlan.get('isTemplate'),
+						enableDrop: me.enableDragAndDrop || me.currentMapPlan.get('isTemplate')
+			    }
+			}
+        });
+        
+        return me.callParent(arguments);
+    }
+    
 });
