@@ -69,39 +69,6 @@ Ext.define('Ssp.view.Search', {
   	              	hidden: true,
                     flex: 1
   	           },                       
-//               {
-//                    xtype: 'textfield',
-//                    itemId: 'searchText',
-//                    enableKeyEvents: true,
-//                    emptyText: 'Name or ' + me.sspConfig.get('studentIdAlias'),
-//                    hidden: true,
-//                    width: 200
-//                },
-//                {
-//                    xtype: 'button',
-//                    tooltip: 'Find a Student',
-//                    itemId: 'searchButton',
-//                    width: 32,
-//                    height: 32,
-//                    hidden: true,
-//                    cls: 'searchIcon'
-//                }, {
-//                    xtype: 'tbspacer',
-//                    width: 5
-//                }
-//                , {
-//                    xtype: 'checkboxfield',
-//                    boxLabel: 'My Caseload',
-//                    itemId: 'searchCaseloadCheck',
-//                    name: 'searchInCaseload',
-//                    hidden: true,
-//                    hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH'),
-//                    inputValue: false
-//                }, 
-//                {
-//                    xtype: 'tbspacer',
-//                    flex: 1
-//                },
                 {
                     tooltip: 'Display Caseload Filters',
                     text: '',
@@ -122,7 +89,7 @@ Ext.define('Ssp.view.Search', {
                     itemId: 'caseloadStatusCombo',
                     name: 'programStatusId',
                     fieldLabel: '',
-                    emptyText: 'Select One',
+                    emptyText: 'All',
                     store: me.programStatusesStore,
                     valueField: 'id',
                     displayField: 'name',
@@ -136,7 +103,7 @@ Ext.define('Ssp.view.Search', {
                     labelWidth: 125
                 }, {
                     xtype: 'button',
-                    tooltip: 'Retrieve My Caseload',
+                    tooltip: 'Retrieve My Caseload (leave field blank for all program statuses)',
                     itemId: 'retrieveCaseloadButton',
                     width: 32,
                     height: 32,
