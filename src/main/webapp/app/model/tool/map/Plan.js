@@ -273,7 +273,8 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		me.loadFromServer(data);
 		if(retainTemplateStatus){
 			me.get('isTemplate', isTemplate);
-			me.set("planCourses", me.get('templateCourses'));
+			if(isTemplate)
+				me.set("planCourses", me.get('templateCourses'));
 		}
 	},
 	
