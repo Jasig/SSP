@@ -407,8 +407,8 @@ def generateExternalTerms(xml) {
 			xml.insert(tableName:'external_term') {
 				xml.column(name:"name", value:term.name)
 				xml.column(name:"code", value:term.code)
-				xml.column(name:"start_date", value:term.startDate)
-				xml.column(name:"end_date", value:term.endDate)
+				xml.column(name:"start_date", value:DATE_FORMATTER.format(term.startDate))
+				xml.column(name:"end_date", value:DATE_FORMATTER.format(term.endDate))
 				xml.column(name:"report_year", value:term.reportYear)
 			}			
 		}

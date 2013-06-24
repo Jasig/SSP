@@ -31,11 +31,11 @@
         <sql>
             update external_faculty_course_roster set school_id =
             (select school_id from person p
-            where cast(p.id as varchar) = external_faculty_course_roster.school_id
+            where cast(p.id as varchar(36)) = external_faculty_course_roster.school_id
             OR p.school_id = external_faculty_course_roster.school_id)
             where exists
             (select school_id from person p
-            where cast(p.id as varchar) = external_faculty_course_roster.school_id
+            where cast(p.id as varchar(36)) = external_faculty_course_roster.school_id
             OR p.school_id = external_faculty_course_roster.school_id)
         </sql>
         <sql>
@@ -45,82 +45,82 @@
         </sql>
         <sql>
             update external_faculty_course set faculty_school_id =
-            (select school_id from person p where cast(p.id as varchar) = external_faculty_course.faculty_school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_faculty_course.faculty_school_id
             OR p.school_id = external_faculty_course.faculty_school_id)
             where exists
-            (select school_id from person p where cast(p.id as varchar) = external_faculty_course.faculty_school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_faculty_course.faculty_school_id
             OR p.school_id = external_faculty_course.faculty_school_id)
         </sql>
         <sql>
             update external_student_transcript set school_id =
-            (select school_id from person p where cast(p.id as varchar) = external_student_transcript.school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_student_transcript.school_id
             OR p.school_id = external_student_transcript.school_id)
             where exists
-            (select school_id from person p where cast(p.id as varchar) = external_student_transcript.school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_student_transcript.school_id
             OR p.school_id = external_student_transcript.school_id)
         </sql>
         <sql>
             update external_student_transcript_course set school_id =
-            (select school_id from person p where cast(p.id as varchar) = external_student_transcript_course.school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_student_transcript_course.school_id
             OR p.school_id = external_student_transcript_course.school_id)
             where exists
-            (select school_id from person p where cast(p.id as varchar) = external_student_transcript_course.school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_student_transcript_course.school_id
             OR p.school_id = external_student_transcript_course.school_id)
         </sql>
         <sql>
             update external_student_transcript_course set faculty_school_id =
-            (select school_id from person p where cast(p.id as varchar) = external_student_transcript_course.faculty_school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_student_transcript_course.faculty_school_id
             OR p.school_id = external_student_transcript_course.faculty_school_id)
             where exists
-            (select school_id from person p where cast(p.id as varchar) = external_student_transcript_course.faculty_school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_student_transcript_course.faculty_school_id
             OR p.school_id = external_student_transcript_course.faculty_school_id)
         </sql>
         <sql>
             update external_student_test set school_id =
-            (select school_id from person p where cast(p.id as varchar) = external_student_test.school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_student_test.school_id
             OR p.school_id = external_student_test.school_id)
             where exists
-            (select school_id from person p where cast(p.id as varchar) = external_student_test.school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_student_test.school_id
             OR p.school_id = external_student_test.school_id)
         </sql>
         <sql>
             update external_student_academic_program set school_id =
-            (select school_id from person p where cast(p.id as varchar) = external_student_academic_program.school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_student_academic_program.school_id
             OR p.school_id = external_student_academic_program.school_id)
             where exists
-            (select school_id from person p where cast(p.id as varchar) = external_student_academic_program.school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_student_academic_program.school_id
             OR p.school_id = external_student_academic_program.school_id)
         </sql>
         <sql>
             update external_registration_status_by_term set school_id =
-            (select school_id from person p where cast(p.id as varchar) = external_registration_status_by_term.school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_registration_status_by_term.school_id
             OR p.school_id = external_registration_status_by_term.school_id)
             where exists
-            (select school_id from person p where cast(p.id as varchar) = external_registration_status_by_term.school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_registration_status_by_term.school_id
             OR p.school_id = external_registration_status_by_term.school_id)
         </sql>
         <sql>
             update external_student_financial_aid set school_id =
-            (select school_id from person p where cast(p.id as varchar) = external_student_financial_aid.school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_student_financial_aid.school_id
             OR p.school_id = external_student_financial_aid.school_id)
             where exists
-            (select school_id from person p where cast(p.id as varchar) = external_student_financial_aid.school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_student_financial_aid.school_id
             OR p.school_id = external_student_financial_aid.school_id)
         </sql>
         <sql>
             update external_student_transcript_term set school_id =
-            (select school_id from person p where cast(p.id as varchar) = external_student_transcript_term.school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_student_transcript_term.school_id
             OR p.school_id = external_student_transcript_term.school_id)
             where exists
-            (select school_id from person p where cast(p.id as varchar) = external_student_transcript_term.school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_student_transcript_term.school_id
             OR p.school_id = external_student_transcript_term.school_id)
         </sql>
         <sql>
             update external_person set school_id =
-            (select school_id from person p where cast(p.id as varchar) = external_person.school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_person.school_id
             OR p.school_id = external_person.school_id)
             where exists
-            (select school_id from person p where cast(p.id as varchar) = external_person.school_id
+            (select school_id from person p where cast(p.id as varchar(36)) = external_person.school_id
             OR p.school_id = external_person.school_id)
         </sql>
     </changeSet>
