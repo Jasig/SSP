@@ -127,7 +127,7 @@ Ext.define('Ssp.view.Search', {
                     displayField: 'name',
                     mode: 'local',
                     typeAhead: false,
-                    editable: false,
+                    editable: true,
                     queryMode: 'local',
                     allowBlank: true,
                     forceSelection: false,
