@@ -430,10 +430,11 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	onSaveCompleteSuccess: function(serviceResponses){
 		var me = this;
 		Ext.Msg.alert('Your changes have been saved.'); 
+		me.getView().setLoading(false);
 		me.getMapPlanServiceSuccess(serviceResponses);
 		me.currentMapPlan.set("isTemplate", false)
     	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
-		me.getView().setLoading(false);
+		
 	},
 	
 	onSaveCompleteFailure: function(serviceResponses){
@@ -443,11 +444,12 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 
 	onSaveTemplateCompleteSuccess: function(serviceResponses){
     var me = this;
+    me.getView().setLoading(false);
     me.getMapPlanServiceSuccess(serviceResponses, true);
     
     Ext.Msg.alert('Your changes have been saved.'); 
 	me.currentMapPlan.set("isTemplate", true)
-    me.getView().setLoading(false);
+   
   },
   
   onSaveTemplateCompleteFailure: function(serviceResponses){
