@@ -46,6 +46,8 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 		var courseRecord = record;
     		me.coursePlanDetails = Ext.create('Ssp.view.tools.map.CourseNotes',{enableFields : me.getView().enableDragAndDrop});
     		me.coursePlanDetails.parentGrid = me.getView();
+    		
+    		
 			var creditHours = me.coursePlanDetails.query('#creditHours')[0];
 
 			if(courseRecord.modelName == 'Ssp.model.external.Course')
@@ -65,6 +67,12 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     		creditHours.setValue(planCourse.get('creditHours'));
 		    creditHours.setMinValue(planCourse.get('minCreditHours'));
 			creditHours.setMaxValue(planCourse.get('maxCreditHours'));
+			//me.coursePlanDetails.query('#electiveId')[0].value = me.coursePlanDetails.electiveStore.getById(planCourse.get('electiveId'));
+			if(!me.coursePlanDetails.electiveStore.getById(planCourse.get('electiveId')))
+			{
+				me.coursePlanDetails.electiveStore.add(me.electiveStore.getById(planCourse.get('electiveId')));
+			}
+			me.coursePlanDetails.query('#electiveId')[0].select(me.coursePlanDetails.electiveStore.getById(planCourse.get('electiveId')));
     		me.coursePlanDetails.rowIndex = index;
     		me.coursePlanDetails.semesterStore = grid.store;
 			me.coursePlanDetails.setTitle(planCourse.get('formattedCourse') + ' - ' + planCourse.get('title'));

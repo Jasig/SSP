@@ -22,7 +22,6 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
 	controller: 'Ssp.controller.tool.map.MovePlanDialogController',
 	inject: {
-		electiveStore : 'electiveActiveStore',
 	    formUtils: 'formRendererUtils',
     	currentMapPlan: 'currentMapPlan',
 	},

@@ -2327,8 +2327,8 @@
                     "path": "/app/store/reference/"
                 },
                 {
-                	"clsName": "Ssp.store.reference.ElectiveActive",
-                    "name": "ElectiveActive.js",
+                	"clsName": "Ssp.store.reference.MapElective",
+                    "name": "MapElective.js",
                     "path": "/app/store/reference/"
                 },
                 {

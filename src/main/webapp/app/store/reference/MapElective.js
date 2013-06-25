@@ -16,12 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.store.reference.ElectiveActive', {
+Ext.define('Ssp.store.reference.MapElective', {
     extend: 'Ssp.store.reference.AbstractReferences',
     model: 'Ssp.model.reference.Elective',
     constructor: function(){
-    	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('elective') + "/?status=ACTIVE"});
-    	this.load();
-    },
+    	var me=this;
+    	me.callParent(arguments);
+    	Ext.apply(me.getProxy(),{url: me.getProxy().url + me.apiProperties.getItemUrl('elective')});
+    	me.load();
+		me.filter('objectStatus', 'ACTIVE');    
+		},
+    sortInfo:{
+        field:'sortOrder',
+        direction:'ASC'// or 'DESC' (case sensitive for local sorting)
+    }
+//    filterByStatus: function(record,id) {
+//    	console.log(record);
+//    	if(record.get('objectStatus') == 'ACTIVE')
+//    		return true;
+//    	else
+//    		return false;
+//    }
 });
