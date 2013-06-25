@@ -82,11 +82,11 @@ Ext.define('Ssp.model.tool.map.Plan', {
 	clearPlanCourses:function(){
 				var me = this;
 				var currentCourses =  me.get('planCourses');
-				while(currentCourses.length > 0) {
+				while(currentCourses && currentCourses.length > 0) {
 				    currentCourses.pop(); 
 				}
 				var currentTemplateCourses =  me.get('templateCourses');
-				while(currentTemplateCourses.length > 0) {
+				while(currentTemplateCourses && currentTemplateCourses.length > 0) {
 				    currentTemplateCourses.pop(); 
 				}
 			},
