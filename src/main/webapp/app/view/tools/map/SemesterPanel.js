@@ -35,7 +35,21 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
-            tools: [{
+            tools: [
+			{
+                xtype: 'button',
+                itemId: 'isImportantTermButton',
+                width: 10,
+                height: 20,
+                cls: 'importantIconSmall',
+                text:'',
+                hidden: true,
+                tooltip: 'This is an important term!'
+                
+            },	{
+                    xtype: 'tbspacer',
+                    flex: .8
+                },{
                 xtype: 'button',
                 itemId: 'pastTermButton',
                 width: 20,

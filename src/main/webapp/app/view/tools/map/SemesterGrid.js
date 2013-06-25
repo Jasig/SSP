@@ -123,11 +123,20 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 	            flex:0.5,
 	            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 	            	var me=this;
+	            	var elective = me.electiveStore.getById(record.get('electiveId'))
 					if((record.data.contactNotes != undefined && record.data.contactNotes.length > 0) ||
 													(record.data.studentNotes != undefined && record.data.studentNotes.length > 0) ){
+						if(record.data.contactNotes && record.data.contactNotes.length > 0)
+							metaData.tdAttr = 'data-qtip="Contact Notes: ' + record.data.contactNotes;
+						if(record.data.contactNotes && record.data.contactNotes.length > 0)
+							metaData.tdAttr += ' Student Notes: ' + record.data.studentNotes 
+						if(elective)
+							metaData.tdAttr += ' Elective: ' + elective.get('name');
+						
+						metaData.tdAttr += '"';
 						return '<img src="/ssp/images/' + Ssp.util.Constants.EDIT_COURSE_NOTE_NAME + '" />'
 					}
-	            	var elective = me.electiveStore.getById(record.get('electiveId'))
+	            	
 	            	value = elective ? elective.get('code') : '';
 					if(me.invalidRecord(record))
 				    	metaData.style = 'font-style:italic;color:#AAA';

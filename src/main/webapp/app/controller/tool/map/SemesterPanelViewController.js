@@ -31,6 +31,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
                 click: 'onTermNotesButtonClick'
              }
 		},
+		isImportantTermButton:'#isImportantTermButton',
 		deleteButton:{
 			selector:"#deleteButton",
 			listeners: {
@@ -71,12 +72,19 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		var me = this;
 		var termNote = me.currentMapPlan.getTermNoteByTermCode(me.getView().itemId);
 		var button = me.getTermNotesButton();
-		if((termNote != undefined && termNote.data.contactNotes && termNote.data.contactNotes.length > 0) ||
+		var isImportantTermButton = me.getIsImportantTermButton();
+		if(termNote != undefined && termNote != null && termNote.data.isImportant){
+			isImportantTermButton.show();
+			Ext.select('.importantIconSmall').setStyle('left', '1px');
+		}else{
+			isImportantTermButton.hide();
+		}
+		if((termNote != undefined && termNote != null && termNote.data.contactNotes && termNote.data.contactNotes.length > 0) ||
 			(termNote.data.studentNotes != undefined && termNote.data.studentNotes.length > 0) ){
 			button.setIcon(Ssp.util.Constants.EDIT_TERM_NOTE_ICON_PATH);
 			return;
 		}
-	          button.setIcon(Ssp.util.Constants.ADD_TERM_NOTE_ICON_PATH);
+	     button.setIcon(Ssp.util.Constants.ADD_TERM_NOTE_ICON_PATH);
 	},
 	
 	onTermNotesButtonClick: function() {

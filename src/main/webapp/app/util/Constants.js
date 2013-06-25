@@ -111,7 +111,7 @@ Ext.define('Ssp.util.Constants',{
         GRID_ITEM_DELETE_ICON_PATH: '/ssp/images/delete-icon.png',
         GRID_ITEM_EDIT_ICON_PATH: '/ssp/images/edit-icon.png',
 
-		
+        EDIT_COURSE_NOTE_NAME:'edit-existing-notes-large.png',
 		EDIT_PLAN_NOTE_ICON_PATH: '/ssp/images/edit-existing-notes-large-glossy.png',
 		ADD_PLAN_NOTE_ICON_PATH: '/ssp/images/notes.png',
 		
