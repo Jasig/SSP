@@ -67,7 +67,6 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     		creditHours.setValue(planCourse.get('creditHours'));
 		    creditHours.setMinValue(planCourse.get('minCreditHours'));
 			creditHours.setMaxValue(planCourse.get('maxCreditHours'));
-			//me.coursePlanDetails.query('#electiveId')[0].value = me.coursePlanDetails.electiveStore.getById(planCourse.get('electiveId'));
 			if(!me.coursePlanDetails.electiveStore.getById(planCourse.get('electiveId')))
 			{
 				me.coursePlanDetails.electiveStore.add(me.electiveStore.getById(planCourse.get('electiveId')));
