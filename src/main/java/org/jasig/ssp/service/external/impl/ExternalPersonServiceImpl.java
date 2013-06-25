@@ -544,7 +544,7 @@ public class ExternalPersonServiceImpl
 							+ "skipping student_type assignment for person schoolId '{}'",
 							externStudentType, person.getSchoolId());
 				} else {
-					person.setStudentType(getInternalStudentType(externStudentType));
+					person.setStudentType(studentType);
 				}
 			}// else equals, so ignore
 		}
