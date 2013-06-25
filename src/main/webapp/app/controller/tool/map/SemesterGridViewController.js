@@ -120,7 +120,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 			return;
 		}
 		me.currentMapPlan.updatePlanCourses(me.semesterStores);
-		me.mapPlanService.validate(me.currentMapPlan, {
+		me.mapPlanService.validate(me.currentMapPlan, me.currentMapPlan.get('isTemplate'), {
             success: me.newServiceSuccessHandler('validatedPlan', me.onValidateSuccess, serviceResponses),
             failure: me.newServiceFailureHandler('validatedFailed', me.onValidateFailure, serviceResponses),
             scope: me,
