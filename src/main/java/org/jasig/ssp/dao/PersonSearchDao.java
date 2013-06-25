@@ -438,9 +438,10 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" rbt.termCode = :currentTerm");
 			stringBuilder.append(" and rbt.schoolId = p.schoolId ");
-			stringBuilder.append(" and "+ (personSearchRequest.getCurrentlyRegistered() ? " rbt.registeredCourseCount >= 0 " : " rbt.registeredCourseCount < 1 "));
+			stringBuilder.append(" and "+ (personSearchRequest.getCurrentlyRegistered() ? " rbt.registeredCourseCount > 0 " : " rbt.registeredCourseCount < 1 "));
 		}
 	}
+
 
 	private void buildStudentIdOrName(PersonSearchRequest personSearchRequest,
 			FilterTracker filterTracker, StringBuilder stringBuilder) {
@@ -463,9 +464,11 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		}
 	}
 
+
 	private boolean hasStudentId(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getStudentId() != null;
 	}
+
 
 	private void buildJoins(PersonSearchRequest personSearchRequest,
 			StringBuilder stringBuilder) 
@@ -478,6 +481,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		{
 			stringBuilder.append(" left join p.programStatuses as programStatuses ");
 			stringBuilder.append(" left join programStatuses.programStatus as programStatus ");
+			
 		}
 	}
 
@@ -485,6 +489,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	{
 		return !StringUtils.isEmpty(personSearchRequest.getPlanStatus());
 	}
+
 
 	private boolean hasMapStatus(PersonSearchRequest personSearchRequest) {
 		return !StringUtils.isEmpty(personSearchRequest.getMapStatus());
@@ -544,6 +549,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	{
 		return personSearchRequest.getCurrentlyRegistered() != null;
 	}
+
 
 	private void appendAndOrWhere(StringBuilder stringBuilder, FilterTracker filterTracker) 
 	{
