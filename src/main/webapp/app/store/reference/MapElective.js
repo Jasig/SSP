@@ -30,11 +30,4 @@ Ext.define('Ssp.store.reference.MapElective', {
         field:'sortOrder',
         direction:'ASC'// or 'DESC' (case sensitive for local sorting)
     }
-//    filterByStatus: function(record,id) {
-//    	console.log(record);
-//    	if(record.get('objectStatus') == 'ACTIVE')
-//    		return true;
-//    	else
-//    		return false;
-//    }
 });
