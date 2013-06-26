@@ -269,7 +269,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		var me=this;
 		var grid = me.getView();
 		var store;
-		var sortableColumns = false;
+		var sortableColumns = true;
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');
 		if ( me.preferences.get('SEARCH_GRID_VIEW_TYPE')==1 )
 		{
