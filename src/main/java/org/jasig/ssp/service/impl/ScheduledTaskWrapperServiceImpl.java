@@ -93,7 +93,7 @@ public class ScheduledTaskWrapperServiceImpl implements ScheduledTaskWrapperServ
 	}
 
 	@Override
-	@Scheduled(fixedDelay = 300000)
+	//@Scheduled(fixedDelay = 300000)
 	// run every 5 minutes
 	public void syncExternalPersons() {
 		try {
