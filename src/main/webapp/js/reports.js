@@ -46,7 +46,7 @@ var ssp = ssp || {};
 				});
 
 			}).error(function(jqXHR, textStatus, errorThrown) {
-				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				handerServerError(jqXHR + " " + textStatus + " " + errorThrown);
 				requests--;
 			});
 		}
@@ -61,7 +61,7 @@ var ssp = ssp || {};
 				});
 
 			}).error(function(jqXHR, textStatus, errorThrown) {
-				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				handerServerError(jqXHR + " " + textStatus + " " + errorThrown);
 				requests--;
 			});
 		}
@@ -76,7 +76,7 @@ var ssp = ssp || {};
 				});
 
 			}).error(function(jqXHR, textStatus, errorThrown) {
-				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				handerServerError(jqXHR + " " + textStatus + " " + errorThrown);
 				requests--;
 			});
 		}	
@@ -92,7 +92,7 @@ var ssp = ssp || {};
 				}
 
 			}).error(function(jqXHR, textStatus, errorThrown) {
-				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				handerServerError(jqXHR + " " + textStatus + " " + errorThrown);
 				requests--;
 			});
 		}
@@ -127,7 +127,7 @@ var ssp = ssp || {};
 					addSelectItem(datum, datum, container);
 				});
 			}).error(function(jqXHR, textStatus, errorThrown) {
-				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				handerServerError(jqXHR + " " + textStatus + " " + errorThrown);
 				requests--;
 			});
 		}
@@ -144,9 +144,13 @@ var ssp = ssp || {};
 				});
 				
 			}).error(function(jqXHR, textStatus, errorThrown) {
-				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				handerServerError(jqXHR + " " + textStatus + " " + errorThrown);
 				requests--;
 			});
+		}
+		
+		var handerServerError = function(jqXHR, textStatus, errorThrown){
+			window.console&&console.log("Error loading references.");
 		}
 		
 		var loadCourseNumberInput = function(url, container) {
@@ -165,7 +169,7 @@ var ssp = ssp || {};
 					addSelectItem(index, index, container);
 
 			}).error(function(jqXHR, textStatus, errorThrown) {
-				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				handerServerError(jqXHR + " " + textStatus + " " + errorThrown);
 				requests--;
 			});
 		}
@@ -186,7 +190,7 @@ var ssp = ssp || {};
 					addSelectItem(index, index, container);
 
 			}).error(function(jqXHR, textStatus, errorThrown) {
-				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				handerServerError(jqXHR + " " + textStatus + " " + errorThrown);
 				requests--;
 			});
 		}
@@ -206,7 +210,7 @@ var ssp = ssp || {};
 				for(var index in values) 
 					addSelectItem(index, index, container);
 			}).error(function(jqXHR, textStatus, errorThrown) {
-				alert(jqXHR + " " + textStatus + " " + errorThrown);
+				handerServerError(jqXHR + " " + textStatus + " " + errorThrown);
 				requests--;
 			});
 		}
