@@ -76,6 +76,7 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 	protected PlanCourse clone() throws CloneNotSupportedException {
 		PlanCourse clone = new PlanCourse();
 		clone.setPerson(this.getPerson());
+		clone.setIsTranscript(this.getIsTranscript());
 		cloneCommonFields(clone);
 		return clone;
 	}
@@ -92,6 +93,6 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 	}
 
 	public void setIsTranscript(Boolean isTranscript) {
-		//NOOP since this is transient 
+		this.isTranscript = isTranscript == false ? 0 : 1;
 	}
 }

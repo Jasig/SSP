@@ -161,7 +161,7 @@ public class PlanController  extends AbstractBaseController {
 	PlanTO getPlan(final @PathVariable UUID personId,final @PathVariable UUID id) throws ObjectNotFoundException,
 			ValidationException {
 		Plan model = getService().get(id);
-		return new PlanTO(model);
+		return validatePlan(new PlanTO(model));
 	}	
 	/**
 	 * Retrieves the current entity from persistent storage.
@@ -183,7 +183,7 @@ public class PlanController  extends AbstractBaseController {
 		if (model == null) {
 			return null;
 		}
-		return new PlanTO(model);
+		return validatePlan(new PlanTO(model));
 	}
 
 	/**
@@ -244,7 +244,7 @@ public class PlanController  extends AbstractBaseController {
 		if (null != model) {
 			final Plan createdModel = getFactory().from(obj);
 			if (null != createdModel) {
-				return new PlanTO(model);
+				return validatePlan(new PlanTO(model));
 			}
 		}
 		return null;
@@ -358,7 +358,7 @@ public class PlanController  extends AbstractBaseController {
 			final Plan model = getFactory().from(obj);
 			Plan savedPlan = getService().save(model);
 			if (null != model) {
-				return new PlanTO(savedPlan);
+				return validatePlan(new PlanTO(savedPlan));
 			}
 		}
 		else
@@ -367,7 +367,7 @@ public class PlanController  extends AbstractBaseController {
 			Plan model = getFactory().from(obj);
 			final Plan clonedPlan = getService().copyAndSave(model);
 			if (null != clonedPlan) {
-				return new PlanTO(clonedPlan);
+				return validatePlan(new PlanTO(clonedPlan));
 			}
 		}
 
@@ -446,6 +446,15 @@ public class PlanController  extends AbstractBaseController {
 		{
 			return null;
 		}
+	}
+	
+	private PlanTO validatePlan(PlanTO plan) throws ObjectNotFoundException{
+		String schoolId = null;
+		if(StringUtils.isNotBlank(plan.getPersonId())){
+			Person student = personService.get(UUID.fromString(plan.getPersonId()));
+			schoolId = student.getSchoolId();
+		}
+		return getService().validate(plan, schoolId);
 	}
 
 	public PlanService getService() {

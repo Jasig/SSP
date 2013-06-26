@@ -146,7 +146,7 @@ public class TemplateController  extends AbstractBaseController {
 	TemplateTO getTemplate(final @PathVariable UUID id) throws ObjectNotFoundException,
 			ValidationException {
 		Template model = getService().get(id);
-		return new TemplateTO(model);
+		return validatePlan(new TemplateTO(model));
 	}	
  
 	/**
@@ -211,7 +211,7 @@ public class TemplateController  extends AbstractBaseController {
 		if (null != model) {
 			final Template createdModel = getFactory().from(obj);
 			if (null != createdModel) {
-				return new TemplateTO(model);
+				return validatePlan(new TemplateTO(model));
 			}
 		}
 		return null;
@@ -322,7 +322,7 @@ public class TemplateController  extends AbstractBaseController {
 			final Template model = getFactory().from(obj);
 			Template savedTemplate = getService().save(model);
 			if (null != model) {
-				return new TemplateTO(savedTemplate);
+				return validatePlan(new TemplateTO(savedTemplate));
 			}
 		}
 		else
@@ -332,7 +332,7 @@ public class TemplateController  extends AbstractBaseController {
 			final Template clonedTemplate = getService().copyAndSave(model,securityService.currentlyAuthenticatedUser().getPerson());
 
 			if (null != clonedTemplate) {
-				return new TemplateTO(clonedTemplate);
+				return validatePlan(new TemplateTO(clonedTemplate));
 			}
 		}
 		return null;
@@ -377,6 +377,10 @@ public class TemplateController  extends AbstractBaseController {
 
 		TemplateTO validatedTO = getService().validate(plan, null);
 		return validatedTO;
+	}
+	
+	private TemplateTO validatePlan(TemplateTO plan) throws ObjectNotFoundException{
+		return getService().validate(plan, null);
 	}
 
 	public TemplateService getService() {
