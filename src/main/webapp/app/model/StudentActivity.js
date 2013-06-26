@@ -17,7 +17,7 @@
  * under the License.
  */
 Ext.define('Ssp.model.StudentActivity', {
-    extend: 'Ssp.model.AbstractBase',
+	extend: 'Ext.data.Model',
     fields: [{name: 'activity', type: 'string'},
         {name: 'coachName', type: 'string'},
         {name: 'coachId', type: 'string'},

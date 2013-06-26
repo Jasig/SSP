@@ -40,14 +40,15 @@ Ext.define('Ssp.controller.tool.profile.ProfileRecentStudentActivityViewControll
     			scope: me			
     		});
 		}
-		
 		return this.callParent(arguments);
     },
-    
+    onContainerClick : function(){
+		var me = this;
+	},
     getStudentActivitySuccess: function( r, scope ){
     	var me=scope;
         me.studentActivitiesStore.loadData(r);
-		me.getView().store = me.studentActivitiesStore.getMostRecentActivitiesStore();
+		me.getView().bindStore(me.studentActivitiesStore.getMostRecentActivitiesStore());
         me.getView().setLoading( false );
     },
     
