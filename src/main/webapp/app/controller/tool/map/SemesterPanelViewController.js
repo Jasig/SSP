@@ -82,6 +82,12 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		if((termNote != undefined && termNote != null && termNote.data.contactNotes && termNote.data.contactNotes.length > 0) ||
 			(termNote.data.studentNotes != undefined && termNote.data.studentNotes.length > 0) ){
 			button.setIcon(Ssp.util.Constants.EDIT_TERM_NOTE_ICON_PATH);
+			var tooltip = "Term Notes: "
+			if(termNote.data.contactNotes && termNote.data.contactNotes.length > 0)
+				tooltip += "Contact Notes: " + termNote.data.contactNotes + " ";
+			if(termNote.data.studentNotes && termNote.data.studentNotes.length > 0)
+					tooltip += "Student Notes: " + termNote.data.studentNotes + " ";	
+			button.setTooltip(tooltip);
 			return;
 		}
 	     button.setIcon(Ssp.util.Constants.ADD_TERM_NOTE_ICON_PATH);

@@ -179,6 +179,16 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			(studentNotes && studentNotes.length > 0) ||
 			(academicGoals && academicGoals.length > 0)){
 			me.getPlanNotesButton().setIcon(Ssp.util.Constants.EDIT_TERM_NOTE_ICON_PATH);
+			var tooltip = "Plan Notes: ";
+			if(contactNotes && contactNotes.length > 0)
+				tooltip += "Contact Notes: " + contactNotes + " ";
+			
+			if(studentNotes && studentNotes.length > 0)
+				tooltip += "Student Notes: " + studentNotes + " ";
+			
+			if(academicGoals && academicGoals.length > 0)
+				tooltip += "Academic Goals: " + academicGoals;
+			me.getPlanNotesButton().setTooltip(tooltip);
 			return;
 		}
         me.getPlanNotesButton().setIcon(Ssp.util.Constants.ADD_PLAN_NOTE_ICON_PATH);
