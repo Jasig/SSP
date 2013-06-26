@@ -29,6 +29,8 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
     },
 	width: '100%',
     height: '100%',
+	//minHeight: 1,
+	autoScroll: true,
     itemId: 'editjournalGrid',
     initComponent: function(){
         var me = this;
@@ -41,7 +43,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                 fieldLabel: '',
                 layout: 'hbox',
                 defaultType: 'displayfield',
-				border: 1,
+				border: 0,
                 fieldDefaults: {
                     msgTarget: 'side'
                 },
@@ -54,6 +56,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                     defaults: {
                         anchor: '100%,100%'
                     },
+					
                     flex: .60,
                     
                     items: [{
@@ -106,10 +109,11 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                         xtype: 'textareafield',
                         fieldLabel: 'Comment (Optional)',
                         itemId: 'commentText',
-                        anchor: '98%',
                         name: 'comment',
-						minHeight: 1,
-						flex:1
+						//minHeight: 1,
+						//flex:1,
+						height: 250,
+                        anchor: '98%'
                     }]
                 
                 }, {
