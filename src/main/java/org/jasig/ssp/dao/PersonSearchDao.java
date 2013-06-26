@@ -457,7 +457,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			idOrNameBuilder.append(" or ");
 			idOrNameBuilder.append(" upper(p.firstName ||' '|| p.lastName) like '%:studentIdOrName%' ");
 			idOrNameBuilder.append(" or ");
-			idOrNameBuilder.append(" p.schoolId like '%:studentIdOrName%' ");
+			idOrNameBuilder.append(" upper(p.schoolId) like '%:studentIdOrName%' ");
 			idOrNameBuilder.append(" ) ");
 			//can't bind using 'like' so we find and replace instead
 			stringBuilder.append(idOrNameBuilder.toString().replace(":studentIdOrName", personSearchRequest.getStudentId().toUpperCase()));
