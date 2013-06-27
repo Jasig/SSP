@@ -137,15 +137,10 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	},  	
     searchSuccess: function( r, scope){
     	var me=scope;
-    	console.log('yay');
-//    	me.getView().setLoading( false );
-//		me.selectFirstItem();
-//		me.getSearchGridPager().onLoad();
+    	me.getView().collapse();
     },
 
     searchFailure: function( r, scope){
     	var me=scope;
-    	console.log('boo');
-    	//me.getView().setLoading( false );
     },	
 });
