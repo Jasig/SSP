@@ -75,6 +75,15 @@ background: transparent;
  width:80px;
 }
 
+.transcriptIcon {
+background-image: url('/ssp/images/icon-transcript.png') !important;
+background: transparent;
+ border-style:none;
+ background-repeat: no-repeat;
+ width:22px;
+}
+
+
 
 .mapEmailIcon {
 background-image: url('/ssp/images/email-icon.png') !important;

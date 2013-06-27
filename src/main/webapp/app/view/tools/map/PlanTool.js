@@ -231,6 +231,36 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 	                }]
 
 	            },{
+			                xtype: 'fieldset',
+			                border: 0,
+			                padding: '0 0 0 0',
+			                title: '',
+			                defaultType: 'displayfield',
+			                layout: 'vbox',
+			                width: 80,
+			                cls: 'center-align',
+							hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON') || me.currentMapPlan.get("isTemplate") == true,
+			                defaults: {
+			                    anchor: '100%'
+			                },
+			                items: [{
+			                    tooltip:  'View of Student\'s Transcript',
+			                    width: 30,
+			                    height: 30,
+			                    cls: 'transcriptIcon',
+			                    xtype: 'button',
+			                    itemId: 'showStudentTranscript',
+			                    align: 'center',
+			                    padding: '0 0 0 0'
+			                }, {
+			                    xtype: 'label',
+								itemId: 'showStudentTranscriptLabel',
+								width: 125,
+			                    text: 'Transcript',
+
+			                }]
+
+			            },{
                 xtype: 'tbspacer',
                 flex: 1
             }, {

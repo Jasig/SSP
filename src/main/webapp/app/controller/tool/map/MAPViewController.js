@@ -83,6 +83,13 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
            selector: '#movePlanLabel'
         },
 
+		'showStudentTranscript':{
+           selector: '#showStudentTranscript',
+		   listeners: {
+	            click: 'onShowStudentTranscript'
+	        }
+        },
+
 		'saveTemplateAsButton':{
            selector: '#saveTemplateAsButton',
            listeners: {
@@ -227,6 +234,13 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
        		me.faPopUp = Ext.create('Ssp.view.tools.map.FAView',{hidden:true});
 		me.faPopUp.show();
     },
+
+	onShowStudentTranscript: function(button){
+		var me=this;
+		if(me.showStudentTranscriptPopup == null || me.showStudentTranscriptPopup.isDestroyed)
+       		me.showStudentTranscriptPopup = Ext.create('Ssp.view.tools.map.StudentTranscriptViewer',{hidden:true});
+		me.showStudentTranscriptPopup.show();
+	},
     
     onplanNotesButtonClick: function(button){
         var me=this;
@@ -515,6 +529,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		    me.allPlansPopUp.close();
 		if(me.movePlanPopup != null && !me.movePlanPopup.isDestroyed)
 			me.movePlanPopup.close();
+		if(me.showStudentTranscriptPopup != null && !me.showStudentTranscriptPopup.isDestroyed)
+			me.showStudentTranscriptPopup.close();
 	    return me.callParent( arguments );
 	}
 	
