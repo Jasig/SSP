@@ -20,15 +20,11 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
 	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 	
-	<changeSet id="Provide code column in student_type table" author="paul.spaude">
-		<addColumn tableName="student_type">
-			<column name="code" type="${nvarchar.type}(10)" valueComputed="name">								
-			</column>
-		</addColumn>	
-		<addNotNullConstraint columnName="code" tableName="student_type" columnDataType="${nvarchar.type}(10)" /> 
-		<addUniqueConstraint columnNames="code" tableName="student_type" />		
-		<rollback>
-			<dropColumn tableName="student_type" columnName="code" />
-		</rollback>
+	<changeSet id="set default value for studentTypeSetFromExternalData to false" author="paul.spaude">
+		<update tableName="config">
+			<column name="value">false</column>
+			<column name="default_value">false</column>
+			<where>id = '33f3c840-d903-11e2-a28f-0800200c9a66'</where>
+		</update>
 	</changeSet>	
 </databaseChangeLog>
