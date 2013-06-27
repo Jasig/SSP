@@ -295,7 +295,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			}			
 		}
 		
-		if(hasCoach(personSearchRequest))
+		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
 		{
 			Person coach = personSearchRequest.getMyCaseload() != null && personSearchRequest.getMyCaseload() ? securityService.currentlyAuthenticatedUser().getPerson() : personSearchRequest.getCoach();
 			query.setEntity("coach", coach);
@@ -356,7 +356,8 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if(hasMapStatus(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" esps.status <= :mapStatus ");
+			stringBuilder.append(" esps.status = :mapStatus ");
+			stringBuilder.append(" and esps.schoolId = p.schoolId ");
 		}
 	}
 
@@ -379,6 +380,8 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			{
 				stringBuilder.append(" est.creditHoursEarned <= :hoursEarnedMax ");
 			}	
+			stringBuilder.append(" and est.schoolId = p.schoolId ");
+
 		}
 	}
 
@@ -400,7 +403,9 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			if(personSearchRequest.getGpaEarnedMax() != null && personSearchRequest.getGpaEarnedMin() == null)
 			{
 				stringBuilder.append(" est.gradePointAverage <= :gpaEarnedMax ");
-			}			
+			}		
+			stringBuilder.append(" and est.schoolId = p.schoolId ");
+
 		}
 	}
 
@@ -523,7 +528,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 		if(hasMapStatus(personSearchRequest))
 		{
-			stringBuilder.append(", ExternalStudentPlanningStatus esps ");
+			stringBuilder.append(", ExternalPersonPlanStatus esps ");
 		}
 		
 		if(hasFinancialAidStatus(personSearchRequest))

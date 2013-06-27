@@ -33,8 +33,8 @@ Ext.define('Ssp.store.FinancialAidSAPStatus', {
     },
     load: function() {
         var me=this;
-        var values = [{ displayValue:'Eligible', code: 'ELIGIBLE', booleanValue: true },
-                      { displayValue:'Ineligible', code: 'INELIGIBLE', booleanValue: false }
+        var values = [{ displayValue:'Eligible', code: 'Y', booleanValue: true },
+                      { displayValue:'Ineligible', code: 'N', booleanValue: false }
         ];
         // set the model
         me.loadData( values );

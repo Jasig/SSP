@@ -42,9 +42,9 @@ public class PersonSearchRequest {
 	
 	public static final String PLAN_STATUS_INACTIVE = "Inactive";
 
-	public static final String MAP_STATUS_ON_PLAN = "On Plan";
+	public static final String MAP_STATUS_ON_PLAN = "ON_PLAN";
 	
-	public static final String MAP_STATUS_OFF_PLAN = "Off Plan";
+	public static final String MAP_STATUS_OFF_PLAN = "OFF_PLAN";
 
 	
 	// id of the student
