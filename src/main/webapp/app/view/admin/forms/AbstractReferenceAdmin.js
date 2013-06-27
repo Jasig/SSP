@@ -63,9 +63,11 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     	     	
     	var addVisible = true;
     	var deleteVisible = true;
+    	var headerInstructions = null;
     	if(me.interfaceOptions !== undefined) { 
     		addVisible = me.interfaceOptions.addButtonVisible;
-    		deleteVisible = me.interfaceOptions.deleteButtonVisible;    		
+    		deleteVisible = me.interfaceOptions.deleteButtonVisible;    
+    		headerInstructions = me.interfaceOptions.headerInstructions
     	}
 
         // Special handling for view config so we don't accidentally clobber
@@ -198,7 +200,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                         dock: 'top',
                         items: [{
                             xtype: 'label',
-                            text: 'Double-click to edit an item.'
+                            text: headerInstructions != null? headerInstructions : 'Double-click to edit an item.'
                         }]
                     }]
             });
