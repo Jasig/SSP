@@ -429,7 +429,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		if(semesterStores){
 			for(var index in semesterStores){
 				var semesterStore = semesterStores[index];
-				if(semesterStore.getUpdatedRecords().length > 0 || semesterStore.getNewRecords().length > 0)
+				if(semesterStore.getUpdatedRecords().length > 0 || semesterStore.getNewRecords().length > 0 || semesterStore.getRemovedRecords( ).length > 0)
 					return true;
 			};
 		}
