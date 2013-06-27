@@ -50,8 +50,34 @@ Ext.define('Ssp.model.tool.map.SemesterCourse', {
 							me.set('description', planCourse.courseDescription);
 						if(planCourse.isTranscript)
 							me.set('isTranscript', planCourse.isTranscript);
+						else
+							me.set('isTranscript', false);
+						if(planCourse.duplicateOfTranscript)
+								me.set('duplicateOfTranscript', planCourse.duplicateOfTranscript);
+						else
+							me.set('duplicateOfTranscript', false);
 						if(planCourse.isImportant)
-							me.set('isImportant', planCourse.isImportant);		
+							me.set('isImportant', planCourse.isImportant);	
+						else
+							me.set('isImportant', false);
+							
+						if(planCourse.validInTerm)
+								me.set('validInTerm', planCourse.validInTerm);	
+							else
+								me.set('validInTerm', false);
+						
+						if(planCourse.hasCorequisites)
+							me.set('hasCorequisites', planCourse.hasCorequisites);	
+						else
+							me.set('hasCorequisites', false);
+							
+						if(planCourse.hasPrerequisites)
+								me.set('hasPrerequisites', planCourse.hasPrerequisites);	
+							else
+								me.set('hasPrerequisites', false);
+							
+						if(planCourse.invalidReasons)
+								me.set('description', planCourse.invalidReasons);		
 						if(planCourse.studentNotes)
 							me.set('studentNotes', planCourse.studentNotes);	
 						if(planCourse.contactNotes)

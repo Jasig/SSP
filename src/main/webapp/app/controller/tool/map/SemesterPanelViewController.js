@@ -49,6 +49,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	init: function() {
 		var me=this;
 		me.appEventsController.getApplication().addListener("onUpdateCurrentMapPlanPlanToolView", me.updatePastTermButton, me);
+		me.getIsImportantTermButton().addListener("move", me.setTermNoteButton, me);
 		return me.callParent(arguments);
     },
 

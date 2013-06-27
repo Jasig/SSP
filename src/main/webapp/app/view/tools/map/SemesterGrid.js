@@ -41,7 +41,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
             columns: [
             	{
 		            xtype: 'gridcolumn',
-		            width: 10,
+		            width: 5,
 		            height: 5,
 		            flex:0,
 		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
@@ -55,21 +55,28 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 		        },
             	{
 		            xtype: 'gridcolumn',
-		            width: 10,
+		            width: 5,
 		            height: 5,
 		            flex:0,
 		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 		            	var isTranscript = record.get('isTranscript');
+		            	var duplicatedOfTranscript = record.get('duplicateOfTranscript');
 		            	var color = isTranscript ? '#ffff00' : 'rgba(0,0,0,0.0)';
-						metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
+		            	color = duplicatedOfTranscript ? '#0000FF' : color;
+						
 						if ( isTranscript ) {
-							metaData.tdAttr = 'data-qtip="Yellow indicates course is already on students\' transcript"';
-						}						
+							if(!duplicatedOfTranscript)
+								metaData.tdAttr = 'data-qtip="Yellow indicates course is already on students\' transcript"';
+							else{
+								metaData.tdAttr = 'data-qtip="Blue indicates course is a duplicate of one on students\' transcript but in a different term."';
+							}
+						}
+						metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
 			         }		            
 		        },
             	{
 		            xtype: 'gridcolumn',
-		            width: 10,
+		            width: 5,
 		            height: 5,
 		            flex:0,
 		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
@@ -110,11 +117,13 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
                 dataIndex: 'formattedCourse',
                 xtype: 'gridcolumn',
 		        flex:1,
-				width:140,
+				width:160,
 				renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 		            	var me=this;
-					    if(me.invalidRecord(record))
-					    	metaData.style = 'font-style:italic;color:#AAA';
+					    if(me.invalidRecord(record)){
+					    	metaData.style = 'font-style:italic;color:#FF0000';
+							metaData.tdAttr = 'data-qtip="Concerns:' + record.get("invalidReasons") + '"';
+						}
 						return value;
 			        }		
             },
@@ -139,7 +148,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 	            	
 	            	value = elective ? elective.get('code') : '';
 					if(me.invalidRecord(record))
-				    	metaData.style = 'font-style:italic;color:#AAA';
+				    	metaData.style = 'font-style:italic;color:#FF0000';
 	            	return value;
 		         }		            
 	        },            
@@ -151,7 +160,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 				renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 		            	var me=this;
 						if(me.invalidRecord(record))
-					    	metaData.style = 'font-style:italic;color:#AAA';
+					    	metaData.style = 'font-style:italic;color:#FF0000';
 						return value;
 			        }		
             },

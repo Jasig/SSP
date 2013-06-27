@@ -785,7 +785,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			var transcriptedTerms = {};
 			for(var i = 0; i < planCourses.length; i++){
 				var planCourse = planCourses[i];
-				if(planCourse.isTranscript){
+				if(planCourse.isTranscript  && !planCourse.duplicateOfTranscript){
 					transcriptedTerms[termCode] = termCode;
 				}
 			}
@@ -795,7 +795,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 					continue;
 				var currentCourseTerm = planCourse.termCode;
 				var termCourseCode = termMap[currentCourseTerm];
-				if(termCourseCode == false){
+				if(termCourseCode == false && !planCourse.duplicateOfTranscript){
 					maps.numberToRemoveNoTerm++;
 					continue;
 				}

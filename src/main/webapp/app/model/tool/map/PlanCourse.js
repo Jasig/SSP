@@ -30,6 +30,7 @@ Ext.define('Ssp.model.tool.map.PlanCourse', {
              {name:'studentNotes',type:'string'},
              {name:'isImportant',type:'boolean'},
              {name:'isTranscript',type:'boolean'},
+             {name:'duplicateOfTranscript',type:'boolean'},
              {name:'validInTerm',type:'boolean', defaultValue:true, convert: null},
              {name:'hasCorequisites',type:'boolean', defaultValue:true, convert: null},
              {name:'hasPrerequisites',type:'boolean', defaultValue:true, convert: null},

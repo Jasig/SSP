@@ -55,6 +55,7 @@ public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 		super.from(model);
 		this.setPersonId(model.getPerson().getId().toString());
 		this.setIsTranscript(model.getIsTranscript());
+		this.setDuplicateOfTranscript(model.getDuplicateOfTranscript());
 	}
 
 	public String getPersonId() {

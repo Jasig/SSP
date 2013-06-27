@@ -59,6 +59,8 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 	
 	private transient boolean isValidInTerm = true;
 	
+	private transient boolean duplicateOfTranscript = true;
+	
 	private transient boolean hasPrerequisites = true;
 	
 	private transient boolean hasCorequisites = true;
@@ -305,6 +307,20 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 		else
 			this.invalidReasons = this.invalidReasons + " ";
 		this.invalidReasons = this.invalidReasons + invalidReasons;
+	}
+
+	/**
+	 * @return the duplicateOfTranscript
+	 */
+	public boolean getDuplicateOfTranscript() {
+		return duplicateOfTranscript;
+	}
+
+	/**
+	 * @param duplicateOfTranscript the duplicateOfTranscript to set
+	 */
+	public void setDuplicateOfTranscript(boolean duplicateOfTranscript) {
+		this.duplicateOfTranscript = duplicateOfTranscript;
 	}
 
 }

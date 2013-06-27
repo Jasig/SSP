@@ -38,6 +38,11 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 	private static final String IS_TRANSCRIPT_FORMULA = " ( select count(*) from external_student_transcript_course estc " +
 														" join  person p on p.school_id = estc.school_id " +
 														" where p.id = PERSON_ID and estc.formatted_course = FORMATTED_COURSE ) ";
+	//We test for if the transcript course and the terms are the same. then invert the logic combined with isTranscript to determine
+	//if course is a duplicate.
+	private static final String DUPLICATES_TRANSCRIPT_FORMULA = " ( select count(*) from external_student_transcript_course estc " +
+			" join  person p on p.school_id = estc.school_id " +
+			" where p.id = PERSON_ID and estc.formatted_course = FORMATTED_COURSE AND estc.term_code = TERM_CODE) ";
 	
 	private static final long serialVersionUID = -6316130725863888876L;
 
@@ -54,6 +59,9 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 	
 	@Formula(IS_TRANSCRIPT_FORMULA)
 	private Integer isTranscript;	
+	
+	@Formula(DUPLICATES_TRANSCRIPT_FORMULA)
+	private Integer duplicateOfTranscript = 1;
 	
 
 	public Person getPerson() {
@@ -94,5 +102,13 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 
 	public void setIsTranscript(Boolean isTranscript) {
 		this.isTranscript = isTranscript == false ? 0 : 1;
+	}
+	
+	public Boolean getDuplicateOfTranscript() {
+		return duplicateOfTranscript == 0 && isTranscript > 0 ? true : false;
+	}
+
+	public void setDuplicateOfTranscript(Boolean duplicateOfTranscript) {
+		this.duplicateOfTranscript = duplicateOfTranscript == false ? 1 : 0;
 	}
 }

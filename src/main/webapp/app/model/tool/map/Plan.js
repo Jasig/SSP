@@ -323,6 +323,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
             		planCourse.contactNotes = model.get('contactNotes');
             		planCourse.isImportant = model.get('isImportant') ==  null ? false : model.get('isImportant');
             		planCourse.isTranscript = model.get('isTranscript') ==  null ? false : model.get('isTranscript');
+					planCourse.duplicateOfTranscript = model.get('duplicateOfTranscript') ==  null ? false : model.get('duplicateOfTranscript');
             		planCourse.electiveId = model.get('electiveId');
             		planCourse.isValidInTerm = model.get('isValidInTerm');
             		planCourse.hasCorequisites = model.get('hasCorequisites');
@@ -441,6 +442,17 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			});
 		}
 		return false;
+	},
+	
+	getPlanCourseFromCourseCode: function(courseCode){
+		var me = this;
+		var planCourses = me.get('planCourses');
+		for(var i = 0; i < planCourses.length; i++){
+			var planCourse = planCourses[i];
+			if(planCourse.courseCode == courseCode)
+				return planCourse;
+		}
+		return null;
 	},
 	
 	getPlanValidation: function(){

@@ -24,10 +24,15 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     	courseService:'courseService',
 		electiveStore: 'electiveStore',
 		colorsStore: 'colorsStore',
+		transcriptStore: 'courseTranscriptsStore',
+		transcriptService: 'transcriptService',
     	formUtils: 'formRendererUtils',
 		currentMapPlan: 'currentMapPlan',
 		semesterStores : 'currentSemesterStores',
 		mapPlanService:'mapPlanService',
+		personLite: 'personLite',
+		person: 'currentPerson',
+		termsStore: 'termsStore'
     },
     control:{
     	view:{
@@ -38,9 +43,76 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 		var me=this;
 		me.appEventsController.assignEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
 		me.getView().view.addListener('beforedrop', me.onDrop, me);
-		
+		var personId = me.personLite.get('id');
+        
+		if(personId != ""){
+	    	me.getView().setLoading( true );
+	    	if(me.termsStore.getCount() <= 0){
+				me.termsStore.addListener("load", me.termStoreLoaded, me, {single:true});
+				me.termsStore.load();
+			}else{
+				me.termStoreLoaded();
+			}
+			
+	    }
 		return me.callParent(arguments);
     },
+
+	termStoreLoaded: function(){
+		var me = this;
+		var personId = me.personLite.get('id');
+		if(personId != ""){
+			var schoolId = me.person.get('schoolId');
+			if(me.transcriptStore.getCount() > 0){
+				if(me.transcriptStore.findRecord('schoolId', schoolId))
+					return;
+				me.transcriptStore.removeAll();
+			}
+			me.transcriptService.getFull( personId, {
+				success: me.getTranscriptSuccess,
+				failure: me.getTranscriptFailure,
+				scope: me			
+			});
+		}
+	},
+
+	getTranscriptSuccess: function( r, scope ){
+    	var me=scope;
+
+        var courseTranscripts = [];
+        var transcript = new Ssp.model.Transcript(r);
+        var terms = transcript.get('terms');
+        if ( terms ) {
+            Ext.Array.each(terms, function(term) {
+                    var courseTranscript = Ext.create('Ssp.model.CourseTranscript', term);
+					var termIndex = me.termsStore.find("code", courseTranscript.get("termCode"));
+					if(termIndex >= 0){
+						var term = me.termsStore.getAt(termIndex);
+						courseTranscript.set("termStartDate", term.get("startDate"));
+					}
+                    courseTranscripts.push(courseTranscript);
+					
+            });
+        }
+
+        me.transcriptStore.loadData(courseTranscripts);
+		me.transcriptStore.sort([
+		    {
+		        property : 'termStartDate',
+		        direction: 'DESC'
+		    },
+		    {
+		        property : 'formattedCourse',
+		        direction: 'ASC'
+		    }]);
+        me.getView().setLoading( false );
+    },
+    
+    getTranscriptFailure: function( response, scope ){
+    	var me=scope;
+    	me.getView().setLoading( false );  	
+    },
+
     onItemDblClick: function(grid, record, item, index, e, eOpts) {
 		var me = this;
 		var courseRecord = record;
@@ -89,6 +161,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
                 responseCnt: 0,
                 expectedResponseCnt: 1
             }
+		me.requiringFormattedCourse = me.droppedData.get('formattedCourse');
     	me.courseService.validateCourse(me.droppedData.get('code'), termCode,  {
             success: me.newServiceSuccessHandler('validCourse', me.onTermValidateSuccess, serviceResponses),
             failure: me.newServiceFailureHandler('validatedFailed', me.onValidateFailure, serviceResponses),
@@ -144,17 +217,61 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     	var confirm = {}
     	confirm.valid = true;
     	confirm.title = "";
-    	confirm.message = ""
+    	confirm.message = "";
+		var record = null;
+		for(termCode in me.semesterStores){
+			var semesterStore = me.semesterStores[termCode];
+			record = semesterStore.findRecord("formattedCourse", me.requiringFormattedCourse);
+			if(record){
+				break;
+			}
+		}
     	if(!me.courseTermValidation.valid && validationResponse == null){
     		confirm.valid = false;
     		confirm.title = 'Course Not Avaiable For Term';
-    		confirm.message = 'This course is not scheduled to be offered in this term.'
-    		
+    		confirm.message = 'This course is not scheduled to be offered in this term. ';
+			if(record){
+				record.set("validInTerm", false);
+				var invalidReasons = record.get("invalidReasons");
+				if(!invalidReasons)
+					invalidReasons = "";
+				invalidReasons += "Course not in current term.";
+				record.set("invalidReasons", invalidReasons);
+			}
     	}
+		var transcript = me.transcriptStore.findRecord("formattedCourse", me.requiringFormattedCourse);
+		if(transcript){
+			var transcriptCourseTermCode = transcript.get('termCode');
+			var transcriptTerm = me.termsStore.findRecord("code", transcriptCourseTermCode);
+			if(record){
+				record.set("isTranscript", true);
+				if(record.get("termCode")  != transcriptCourseTermCode);
+					record.set("duplicateOfTranscript", true);
+			}
+		}
+		
+		if(transcript && record.get("duplicateOfTranscript")){
+			confirm.valid = false;
+    		confirm.title = ' Course Is Transcript';
+    		var termName = "";
+    		if(transcriptTerm)
+    			termName = transcriptTerm.get("name");
+    		
+    		confirm.message += 'Student has taken class, previously in term: ' + termName;
+		}
+		
     	if(validationResponse != null && !validationResponse.valid){
     		confirm.valid = false;
     		confirm.title = ' Course Generates Following Concerns';
     		confirm.message += validationResponse.message;
+			if(record){
+				record.set("hasPrerequisites", false);
+				var invalidReasons = record.get("invalidReasons");
+				if(!invalidReasons)
+					invalidReasons = "";
+				invalidReasons += validationResponse.message;
+				record.set("invalidReasons", invalidReasons);
+			}
     	}
     	
     	if(confirm.valid == false){
