@@ -121,7 +121,8 @@ Ext.define('Ssp.service.SearchService', {
 		 currentlyRegistered: currentlyRegistered,
 		 sapStatus: sapStatus,
 		 mapStatus: mapStatus,
-		 planStatus: planStatus
+		 planStatus: planStatus,
+		 myCaseload: myCaseload
 		}, callbacks);
     }
 });
