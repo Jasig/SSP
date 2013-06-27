@@ -436,10 +436,11 @@ Ext.define('Ssp.model.tool.map.Plan', {
 
 		var termNotes = me.get("termNotes");
 		if(termNotes){
-			termNotes.forEach(function(termNote){
+			for(var i = 0; i < termNotes.length; i++){
+				var termNote = termNotes[i];
 				if(termNote.dirty)
 					return true;
-			});
+			}
 		}
 		return false;
 	},

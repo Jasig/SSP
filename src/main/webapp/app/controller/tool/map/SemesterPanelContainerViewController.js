@@ -253,14 +253,25 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	populatePlanStores:function(){
 		var me = this;
 		var planCourses = me.currentMapPlan.get('planCourses');
+		var courses = {};
 		if(planCourses && planCourses.length > 0){
 			planCourses.forEach(function(planCourse){
-				var termStore = me.semesterStores[planCourse.termCode];
-				termStore.suspendEvents();
 				var semesterCourse = new Ssp.model.tool.map.SemesterCourse(planCourse);
-				termStore.add(semesterCourse);
-				termStore.resumeEvents();
+				var semesterSet = courses[planCourse.termCode];
+				if(!semesterSet)
+					semesterSet = [];
+				semesterSet.push(semesterCourse);
+				courses[planCourse.termCode] = semesterSet;
 			}) 
+		}
+		if(planCourses && planCourses.length > 0){
+			for(index in courses){
+				var termStore = me.semesterStores[index];
+				termStore.suspendEvents();
+				termStore.loadRecords(courses[index]);
+				termStore.sync();
+				termStore.resumeEvents();
+			}
 		}
 	},
 	
@@ -429,7 +440,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	onSaveCompleteSuccess: function(serviceResponses){
 		var me = this;
-		Ext.Msg.alert('Save Successful', 'Your changes have been saved.'); 
+		Ext.Msg.alert('Your changes have been saved.'); 
 		me.getView().setLoading(false);
 		me.getMapPlanServiceSuccess(serviceResponses);
 		me.currentMapPlan.set("isTemplate", false)
