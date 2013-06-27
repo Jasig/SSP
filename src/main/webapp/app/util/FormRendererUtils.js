@@ -553,7 +553,14 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		var selectedIds = [];
 		for ( prop in values )
 		{
-			selectedIds.push( {id: values[prop]} );
+			if(values[prop] instanceof Array) {
+				var nestedValues = values[prop]
+				for(nestedProp in nestedValues) {
+					selectedIds.push( {id: nestedValues[nestedProp]} );
+				}
+			} else {
+				selectedIds.push( {id: values[prop]} );
+			}
 		}
 		return selectedIds;
     },    
