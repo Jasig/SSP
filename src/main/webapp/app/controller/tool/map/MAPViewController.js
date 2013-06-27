@@ -168,6 +168,25 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	onAfterLayout: function(){
 		var me = this;
 		me.setPlanNotesButtonIcon();
+		me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.toolsNavCallBack, scope: me});
+	},
+	
+	toolsNavCallBack: function(toolsRecord, toolsViewController) {
+		var me = this;
+		
+		if(me.currentMapPlan.isDirty(me.semesterStores)) {
+			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+				if(btn === 'yes'){
+					me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+					me.savePlanPopUp.show();
+				} else if(btn === 'no') {
+					toolsViewController.loadTool(toolsRecord.get('toolType'));
+				}
+			});	
+			//return false to halt navigation in ToolsViewController#onItemClick
+			return false;
+		}
+		return true;
 	},
 	
 	setPlanNotesButtonIcon: function(){
@@ -460,10 +479,11 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.getOnPlanFieldSet().show();
 		}
 	},
-    
-
+	
 	destroy:function(){
 	    var me=this;
+	    me.appEventsController.removeEvent({eventName: 'toolsNav', callBackFunc: function() {console.log("toolsNav remove!!");}, scope: me});
+	    
 		me.appEventsController.removeEvent({eventName: 'onSavePlanRequest', callBackFunc: me.onSavePlanRequest, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onSaveTemplateRequest', callBackFunc: me.onSaveTemplateRequest, scope: me});
 		

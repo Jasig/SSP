@@ -429,7 +429,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	onSaveCompleteSuccess: function(serviceResponses){
 		var me = this;
-		Ext.Msg.alert('Your changes have been saved.'); 
+		Ext.Msg.alert('Save Successful', 'Your changes have been saved.'); 
 		me.getView().setLoading(false);
 		me.getMapPlanServiceSuccess(serviceResponses);
 		me.currentMapPlan.set("isTemplate", false)
