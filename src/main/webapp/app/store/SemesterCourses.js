@@ -23,7 +23,7 @@ Ext.define('Ssp.store.SemesterCourses', {
 	        type: 'memory',
 	        reader: {
 	            type: 'json',
-	            root: 'users'
+	            root: 'courses'
 	        }
 	    },
     mixins: [ 'Deft.mixin.Injectable' ],
