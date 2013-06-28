@@ -126,8 +126,40 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 						}
 						return value;
 			        }		
-            },
-        	{
+            },            
+			{
+                dataIndex: 'creditHours',
+                xtype: 'gridcolumn',
+	            flex:0.5,
+				width:25,
+				renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+		            	var me=this;
+						if(me.invalidRecord(record))
+					    	metaData.style = 'font-style:italic;color:#FF0000';
+						return value;
+			        }		
+            },{
+                dataIndex: 'maxCreditHours',
+                xtype: 'gridcolumn',
+				hidden: true,
+				hideable:false
+            }, 
+			{
+                dataIndex: 'minCreditHours',
+                xtype: 'gridcolumn',
+				hidden: true,
+				hideable:false
+            },{
+                dataIndex: 'code',
+                xtype: 'gridcolumn',
+				hidden: true,
+				hideable:false
+            },{
+                dataIndex: 'isDev',
+                xtype: 'gridcolumn',
+				hidden: true,
+				hideable:false
+            },{
 	            xtype: 'gridcolumn',
 	            flex:0.5,
 	            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
@@ -145,49 +177,11 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 						metaData.tdAttr += '"';
 						return '<img src="/ssp/images/' + Ssp.util.Constants.EDIT_COURSE_NOTE_NAME + '" />'
 					}
-	            	
-	            	value = elective ? elective.get('code') : '';
 					if(me.invalidRecord(record))
 				    	metaData.style = 'font-style:italic;color:#FF0000';
-	            	return value;
+	            	return "";
 		         }		            
-	        },            
-			{
-                dataIndex: 'creditHours',
-                xtype: 'gridcolumn',
-	            flex:0.5,
-				width:25,
-				renderer: function(value, metaData, record, rowIndex, colIndex, store) {
-		            	var me=this;
-						if(me.invalidRecord(record))
-					    	metaData.style = 'font-style:italic;color:#FF0000';
-						return value;
-			        }		
-            },
-            {
-                dataIndex: 'maxCreditHours',
-                xtype: 'gridcolumn',
-				hidden: true,
-				hideable:false
-            }, 
-			{
-                dataIndex: 'minCreditHours',
-                xtype: 'gridcolumn',
-				hidden: true,
-				hideable:false
-            },
-			{
-                dataIndex: 'code',
-                xtype: 'gridcolumn',
-				hidden: true,
-				hideable:false
-            },
-            {
-                dataIndex: 'isDev',
-                xtype: 'gridcolumn',
-				hidden: true,
-				hideable:false
-            }
+	        }
        ],
 			viewConfig: {
 					copy: true,
