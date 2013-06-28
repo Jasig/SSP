@@ -485,7 +485,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 children: [{
                     text: 'Electives',
                     title: 'Electives',
-                    store: 'elective',
+                    store: 'electivesAll',
                     viewConfig: {
                         markDirty: false
                     },

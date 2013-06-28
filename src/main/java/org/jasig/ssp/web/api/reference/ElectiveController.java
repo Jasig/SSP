@@ -90,27 +90,6 @@ public class ElectiveController
 	protected Logger getLogger() {
 		return LOGGER;
 	}
-	
-	@RequestMapping(method = RequestMethod.GET)
-	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
-	public @ResponseBody
-	PagedResponse<ElectiveTO> getAll(
-			final @RequestParam(required = false) ObjectStatus status,
-			final @RequestParam(required = false) Integer start,
-			final @RequestParam(required = false) Integer limit,
-			final @RequestParam(required = false) String sort,
-			final @RequestParam(required = false) String sortDirection) {
-
-		// Run getAll
-		final PagingWrapper<Elective> data = getService().getAll(
-				SortingAndPaging.createForSingleSortWithPaging(
-						status == null ? ObjectStatus.ALL : status, start,
-						limit, sort, sortDirection, "sortOrder"));
-
-		return new PagedResponse<ElectiveTO>(true, data.getResults(), getFactory()
-				.asTOList(data.getRows()));
-	}
-	
 
 	@RequestMapping(method = RequestMethod.PUT)
 	public @ResponseBody

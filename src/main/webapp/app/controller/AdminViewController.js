@@ -42,6 +42,7 @@ Ext.define('Ssp.controller.AdminViewController', {
     	educationGoalsStore: 'educationGoalsStore',
     	educationLevelsStore: 'educationLevelsStore',
     	electiveStore: 'electiveStore',
+    	electivesAllStore: 'electivesAllStore',
     	employmentShiftsStore: 'employmentShiftsStore',
     	ethnicitiesStore: 'ethnicitiesStore',
     	formUtils: 'formRendererUtils',
