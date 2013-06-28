@@ -344,7 +344,6 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 			throws ObjectNotFoundException {
 		List<RecentActivityTO> recentActivities = new ArrayList<RecentActivityTO>();
 		Person person = personService.get(id);
-		UUID coachId = person.getCoach().getId();
 		SortingAndPaging sAndP = SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ACTIVE, 0, 1000, "createdDate", "DESC", "createdDate");
 
 		PagingWrapper<EarlyAlert> earlyAlerts = earlyAlertService.getAllForPerson(person, sAndP);
