@@ -73,36 +73,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 
                 }]
             
-            }, 
-             {
-                xtype: 'fieldset',
-                border: 0,
-                padding: '0 0 0 0',
-                title: '',
-                defaultType: 'displayfield',
-                layout: 'vbox',
-                width: 80,
-                cls: 'center-align',
-                defaults: {
-                    anchor: '100%'
-                },
-                
-                items: [{
-                    tooltip: 'Financial Aid',
-                    width: 30,
-                    height: 30,
-                    cls: 'mapFAIcon',
-                    xtype: 'button',
-                    itemId: 'planFAButton',
-                    align: 'center',
-                    padding: '0 0 0 0',
-                }, {
-                    xtype: 'label',
-                    text: 'Financial Aid',
-                }]
-            
-            }, 
-            {
+            }, {
                 xtype: 'fieldset',
                 border: 0,
                 padding: '0 0 0 0',
@@ -230,6 +201,33 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 
 	                }]
 
+	            },{
+	                xtype: 'fieldset',
+	                border: 0,
+	                padding: '0 0 0 0',
+	                title: '',
+	                defaultType: 'displayfield',
+	                layout: 'vbox',
+	                width: 80,
+	                cls: 'center-align',
+	                defaults: {
+	                    anchor: '100%'
+	                },
+	                
+	                items: [{
+	                    tooltip: 'Financial Aid',
+	                    width: 30,
+	                    height: 30,
+	                    cls: 'mapFAIcon',
+	                    xtype: 'button',
+	                    itemId: 'planFAButton',
+	                    align: 'center',
+	                    padding: '0 0 0 0',
+	                }, {
+	                    xtype: 'label',
+	                    text: 'Financial Aid',
+	                }]
+	            
 	            },{
 			                xtype: 'fieldset',
 			                border: 0,
