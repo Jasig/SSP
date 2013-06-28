@@ -139,7 +139,9 @@ Ext.require([
     'Ssp.view.tools.map.CoursesGrid',
 	'Ssp.view.tools.map.CoursesGridPanel',
 	
-	'Ssp.view.tools.legacyremarks.LegacyRemarks',
+	//PERSON NOTES TOOL
+	'Ssp.view.tools.notes.Notes',
+	
 	'Ssp.view.tools.documents.Documents',
 	'Ssp.view.tools.documents.UploadDocuments',
     
@@ -153,6 +155,7 @@ Ext.require([
     'Ssp.view.admin.forms.crg.EditChallenge',
     'Ssp.view.admin.forms.crg.EditReferral',
 
+	
     //CASELOAD REASSIGNMENT TOOLS
     'Ssp.view.admin.forms.caseload.CaseloadReassignment',
     'Ssp.view.admin.forms.caseload.CaseloadReassignmentSource',
@@ -270,6 +273,7 @@ Ext.require([
 	'Ssp.model.reference.EarlyAlertReferral',
 	'Ssp.model.external.Course',
 	'Ssp.model.external.CourseRequisite',
+	'Ssp.model.external.PersonNote',
 	'Ssp.model.ApiUrl',
 	'Ssp.mixin.ApiProperties',
 	'Ssp.mixin.controller.ItemSelectorInitializer',
@@ -352,6 +356,7 @@ Ext.require([
 	'Ssp.store.external.Departments',
 	'Ssp.store.external.Divisions',
     'Ssp.store.external.Courses',
+    'Ssp.store.external.PersonNotes',
     'Ssp.store.Students',
 	'Ssp.store.SemesterCourses',
     'Ssp.store.Search',
@@ -379,6 +384,7 @@ Ext.require([
     'Ssp.service.JournalEntryService',
     'Ssp.service.PersonService',
     'Ssp.service.PlacementService',
+	'Ssp.service.PersonNoteService',
     'Ssp.service.ProgramStatusService',
     'Ssp.service.ReferralSourceService',
     'Ssp.service.SearchService',
@@ -467,6 +473,7 @@ var apiUrls = [
   {name: 'studentActivities', url: 'person/{id}/studentactivity'},
   {name: 'personalityType', url: 'reference/personalityType'},
   {name: 'personTranscript', url: 'person/{id}/transcript'},
+  {name: 'personNote', url: 'person/{schoolId}/note'},
   {name: 'personEmailTask', url: 'person/{id}/task/email'},
   {name: 'personViewHistory', url: 'person/{id}/history/print'},
   {name: 'personPrintTask', url: 'person/{id}/task/print'},
@@ -974,6 +981,7 @@ Ext.onReady(function(){
 				    programsStore:'Ssp.store.external.Programs',
 					programsFacetedStore:'Ssp.store.external.ProgramsFaceted',
 				    divisionsStore:'Ssp.store.external.Divisions',
+				    personNotesStore:'Ssp.store.external.PersonNotes',
 				    departmentsStore:'Ssp.store.external.Departments',
 					coursesStore:'Ssp.store.external.Courses',
 					tagsStore: 'Ssp.store.reference.Tags',
@@ -1003,6 +1011,7 @@ Ext.onReady(function(){
 			        journalEntryService: 'Ssp.service.JournalEntryService',
 			        personService: 'Ssp.service.PersonService',
 			        placementService: 'Ssp.service.PlacementService',
+					personNoteService: 'Ssp.service.PersonNoteService',
 			        personProgramStatusService: 'Ssp.service.PersonProgramStatusService',
 			        programStatusService: 'Ssp.service.ProgramStatusService',
 			        referralSourceService: 'Ssp.service.ReferralSourceService',

@@ -976,9 +976,15 @@
                 },
                 
                 {
-                    "clsName": "Ssp.view.tools.legacyremarks.LegacyRemarks",
-                    "name": "LegacyRemarks.js",
-                    "path": "/app/view/tools/legacyremarks/"
+                    "clsName": "Ssp.controller.tool.notes.NotesViewController",
+                    "name": "NotesViewController.js",
+                    "path": "/app/controller/tool/notes/"
+                },
+                
+                {
+                    "clsName": "Ssp.view.tools.notes.Notes",
+                    "name": "Notes.js",
+                    "path": "/app/view/tools/notes/"
                 },
                 
                 {
@@ -1105,6 +1111,18 @@
                     "clsName": "Ssp.store.StudentActivities",
                     "name": "StudentActivities.js",
                     "path": "/app/store/"
+                },
+                
+                {
+                    "clsName": "Ssp.model.external.PersonNote",
+                    "name": "PersonNote.js",
+                    "path": "/app/model/external/"
+                },
+                
+                {
+                    "clsName": "Ssp.store.external.PersonNotes",
+                    "name": "PersonNotes.js",
+                    "path": "/app/store/external/"
                 },
                 {
                     "clsName": "Ssp.controller.tool.studentintake.StudentIntakeToolViewController",
