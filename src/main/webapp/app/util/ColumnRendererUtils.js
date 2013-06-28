@@ -202,8 +202,8 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	},
 	
 	renderElectiveColor: function(val, metadata, record) {
-		var colorsStore = Ext.getStore('colorsStore');
-		var color = colorsStore.findRecord('id', val);
+		var colorsAllStore = Ext.getStore('colorsAllStore');
+		var color = colorsAllStore.findRecord('id', val);
 		
 		if(color == null || color.data == null) {
 			return '';
@@ -215,10 +215,10 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 		var strHtml = '<div>';
 		strHtml += '<div style="float:left;width:49%">';
 		strHtml += colorName;
-		strHtml += '</div>'
+		strHtml += '</div>';
 		strHtml += '<div style="background-color:#' + hexCode + ';width:49%;float:right;">';
-		strHtml += '<p>&nbsp;</p>'
-		strHtml += '</div>'
+		strHtml += '<p>&nbsp;</p>';
+		strHtml += '</div>';
 		strHtml += '</div>';
 		return strHtml;		
 	},
