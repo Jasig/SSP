@@ -82,6 +82,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		model.setStudentId(to.getStudentId());
 		model.setPlanStatus(to.getPlanStatus());
 		model.setMyCaseload(to.getMyCaseload());
+		model.setMyPlans(to.getMyPlans());
 		return model;
 	}
 
@@ -107,7 +108,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,
-			String sapStatus, String mapStatus, String planStatus, Boolean myCaseload) throws ObjectNotFoundException {
+			String sapStatus, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans) throws ObjectNotFoundException {
 		PersonSearchRequestTO to = new PersonSearchRequestTO();
 		to.setStudentId(studentId);
 		to.setProgramStatus(programStatus == null ? null : UUID.fromString(programStatus));
@@ -122,6 +123,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		to.setMapStatus(mapStatus);
 		to.setPlanStatus(planStatus);
 		to.setMyCaseload(myCaseload);
+		to.setMyPlans(myPlans);
 		return from(to);
 	}
 }

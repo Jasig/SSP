@@ -96,6 +96,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				me.getView().query('combobox[name=mapStatus]')[0].value,
 				me.getView().query('combobox[name=planStatus]')[0].value,
 				me.getView().query('checkbox[name=myCaseload]')[0].value,
+				me.getView().query('checkbox[name=myPlans]')[0].value,
 				{
 				success: me.searchSuccess,
 				failure: me.searchFailure,

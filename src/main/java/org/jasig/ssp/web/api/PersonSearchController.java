@@ -126,11 +126,12 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) String sapStatus,
 	 final @RequestParam(required = false)String mapStatus,
 	 final @RequestParam(required = false)String planStatus,
-	 final @RequestParam(required = false) Boolean myCaseload) throws ObjectNotFoundException, ValidationException 
+	 final @RequestParam(required = false) Boolean myCaseload,
+	 final @RequestParam(required = false) Boolean myPlans) throws ObjectNotFoundException, ValidationException 
 	 {
 		
 		final PagingWrapper<PersonSearchResult> models = service.search2(personSearchRequestFactory.from(studentId,programStatus,coachId,declaredMajor,
-				hoursEarnedMin,hoursEarnedMax,gpaEarnedMin,gpaEarnedMax,currentlyRegistered,sapStatus,mapStatus,planStatus,myCaseload));
+				hoursEarnedMin,hoursEarnedMax,gpaEarnedMin,gpaEarnedMax,currentlyRegistered,sapStatus,mapStatus,planStatus,myCaseload,myPlans));
 		return new PagedResponse<PersonSearchResultTO>(true,
 				models.getResults(), factory.asTOList(models.getRows()));	
 	}

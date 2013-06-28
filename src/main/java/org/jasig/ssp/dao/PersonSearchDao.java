@@ -207,7 +207,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		// currentlyRegistered 
 		buildCurrentlyRegistered(personSearchRequest, filterTracker,stringBuilder);
 		
-		// coach
+		// coach && myCaseload
 		buildCoach(personSearchRequest, filterTracker, stringBuilder);		
 		
 		// programStatus
@@ -230,6 +230,24 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		  
 		//financialAidStatus
 		buildFinancialAidStatus(personSearchRequest,filterTracker, stringBuilder);
+		
+		//myPlans
+		buildMyPlans(personSearchRequest,filterTracker, stringBuilder);
+	}
+
+
+	private void buildMyPlans(PersonSearchRequest personSearchRequest,
+			FilterTracker filterTracker, StringBuilder stringBuilder) {
+		if(hasMyPlans(personSearchRequest))
+		{
+			appendAndOrWhere(stringBuilder,filterTracker);
+			stringBuilder.append(" plan.owner = :owner ");
+		}
+	}
+
+
+	private boolean hasMyPlans(PersonSearchRequest personSearchRequest) {
+		return personSearchRequest.getMyPlans() != null && personSearchRequest.getMyPlans();
 	}
 
 
@@ -331,6 +349,11 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if(hasCurrentlyRegistered(personSearchRequest))
 		{
 			query.setEntity("currentTerm", currentTerm);
+		}
+		
+		if(hasMyPlans(personSearchRequest))
+		{
+			query.setEntity("owner", securityService.currentlyAuthenticatedUser().getPerson());
 		}
 	}
 
@@ -488,6 +511,10 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			stringBuilder.append(" left join programStatuses.programStatus as programStatus ");
 			
 		}
+		if(hasMyPlans(personSearchRequest))
+		{
+			stringBuilder.append(" left join p.plans as plan ");
+		}		
 	}
 
 	private boolean hasPlanStatus(PersonSearchRequest personSearchRequest) 

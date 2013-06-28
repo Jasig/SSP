@@ -211,10 +211,14 @@ Ext.define('Ssp.view.SearchForm',{
                     fieldLabel: 'My Caseload',
                     name: 'myCaseload'
                 },
+                {
+                    xtype: 'checkboxfield',
+                    fieldLabel: 'My Plans',
+                    name: 'myPlans'
+                }             
             ]
               
         });
-
         return this.callParent(arguments);
     }	
 });
