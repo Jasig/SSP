@@ -58,7 +58,8 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 		if ( me.person.get('id') != "")
 		{			
 			me.getCoachCombo().setDisabled( me.sspConfig.get('coachSetFromExternalData') );
-			var url = me.apiProperties.createUrl('reference/config?name=studentTypeSetFromExternalData');
+			var url = me.apiProperties.createUrl(me.apiProperties.getItemUrl('config')
+				+'/?name=studentTypeSetFromExternalData');
 			
 			Ext.Ajax.request({
 				url: url,	
