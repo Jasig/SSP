@@ -84,6 +84,7 @@ Ext.define('Ssp.service.SearchService', {
 			},
 			scope: me
 		});
+		me.store.sort('sortableName','ASC');
 	},
 
     search: function( searchTerm, outsideCaseload, callbacks ){

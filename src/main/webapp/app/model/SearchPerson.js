@@ -25,7 +25,13 @@ Ext.define('Ssp.model.SearchPerson', {
              {name: 'lastName', type: 'string'},
              {name: 'photoUrl', type: 'string'},
              {name: 'currentProgramStatusName', type: 'string'},
-             {name: 'coach', type: 'auto'}],
+             {name: 'coach', type: 'auto'},
+             {
+                 name: 'sortableName',
+                 convert: function(value, record) {
+                     return record.get('lastName') + ' '+ record.get('firstName');
+                 }
+             },],
 
      getFullName: function(){ 
     	var me=this;

@@ -59,20 +59,9 @@ Ext.define('Ssp.controller.SearchViewController', {
     	},    	
     	
     	searchGridPager: '#searchGridPager',
-//    	searchText: {
-//    		selector: '#searchText',
-//		    listeners:{   
-//		        keypress: 'onSearchKeyPress'  
-//		    } 
-//    	},
-    	
-//    	searchCaseloadCheck: '#searchCaseloadCheck',
     	searchBar: '#searchBar',
     	caseloadBar: '#caseloadBar',
 
-//    	'searchButton': {
-//    		click: 'onSearchClick'
-//    	},
     	
     	'displaySearchBarButton': {
     		click: 'onDisplaySearchBarClick'

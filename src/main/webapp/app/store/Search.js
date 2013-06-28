@@ -31,5 +31,4 @@ Ext.define('Ssp.store.Search', {
 							autoSync: false,
 						});
 		return me.callParent(arguments);
-	}
-});
+}});

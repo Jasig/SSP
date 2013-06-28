@@ -80,7 +80,6 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     },    
 	search: function(){
 		var me=this;
-		console.log(me.getView());
 		
 		me.searchService.search2( 
 				me.getView().query('textfield[name=studentId]')[0].value,
