@@ -233,6 +233,9 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 		//myPlans
 		buildMyPlans(personSearchRequest,filterTracker, stringBuilder);
+		
+		appendAndOrWhere(stringBuilder, filterTracker);
+		stringBuilder.append(" p.studentType != null ");
 	}
 
 
