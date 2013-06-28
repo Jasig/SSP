@@ -133,6 +133,11 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	},  
 	onSearchClick: function(button){
 		var me=this;
+		if(!me.getView().getForm().isDirty())
+		{
+	     	Ext.Msg.alert('SSP Error', 'Please enter some filter values.'); 
+	     	return;
+		}
 		me.search();	
 	},  	
     searchSuccess: function( r, scope){
