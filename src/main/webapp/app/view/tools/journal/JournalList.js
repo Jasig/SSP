@@ -61,19 +61,23 @@ Ext.define('Ssp.view.tools.journal.JournalList', {
                 renderer: me.columnRendererUtils.renderModifiedByDate
             }, {
                 header: 'Modified By',
-                dataIndex: 'modifiedBy',
+                dataIndex: 'journalModifiedBy',
                 flex: 1,
-                renderer: me.columnRendererUtils.renderModifiedBy
+                renderer: me.columnRendererUtils.renderJournalModifiedBy,
+				sortable: true
             }, {
                 header: 'Source',
-                dataIndex: 'journalSource',
+                dataIndex: 'journalS',
                 flex: 1,
-                renderer: me.columnRendererUtils.renderJournalSourceName
+                renderer: me.columnRendererUtils.renderJournalSourceName,
+				sortable: true
+			
             }, {
                 header: 'Confidentiality',
-                dataIndex: 'confidentialityLevel',
+                dataIndex: 'journalCFlevel',
                 flex: 1,
-                renderer: me.columnRendererUtils.renderConfidentialityLevelName
+                renderer: me.columnRendererUtils.renderConfidentialityLevelName,
+				sortable: true
             }, {
                 header: 'Entry Date',
                 dataIndex: 'entryDate',
@@ -91,11 +95,11 @@ Ext.define('Ssp.view.tools.journal.JournalList', {
             
             }, {
                 header: 'Entered By',
-                dataIndex: 'createdBy',
+                dataIndex: 'journalCreatedBy',
                 flex: 1,
-                renderer: me.columnRendererUtils.renderCreatedBy
+                renderer: me.columnRendererUtils.renderJournalCreatedBy,
+				sortable: true
             }],
-            
             dockedItems: [{
                 dock: 'top',
                 xtype: 'toolbar',

@@ -36,6 +36,18 @@ Ext.define('Ssp.model.tool.journal.JournalEntry', {
                  }
    		      },
 			 {name:'journalSource', type:'auto'},
+			 {name: 'journalS', convert: function(value, record) {
+			 	return record.get('journalSource').name;
+			 }},
+			  {name: 'journalModifiedBy', convert: function(value, record) {
+			 	return record.get('modifiedBy').firstName + ' ' + record.get('modifiedBy').lastName;		
+			 }},
+			  {name: 'journalCreatedBy', convert: function(value, record) {
+			 	return record.get('createdBy').firstName + ' ' + record.get('createdBy').lastName;		
+			 }},
+			 {name: 'journalCFlevel', convert: function(value, record) {
+			 	return record.get('confidentialityLevel').name;	
+			 }},
 			 {name:'journalTrack', type:'auto'},
 			 {name:'journalEntryDetails',type:'auto',defaultValue:[]}],
 	

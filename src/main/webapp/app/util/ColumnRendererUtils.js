@@ -84,6 +84,11 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	    return record.get('createdBy').firstName.toUpperCase() + ' ' + record.get('createdBy').lastName.toUpperCase();		
 	},	
 	
+	renderJournalCreatedBy:function(val, metaData, record) {
+		return val.toUpperCase();
+	    
+	},	
+	
 	renderCreatedByDateAndName: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
         strHtml += '<p>' + record.get('createdBy').firstName.toUpperCase() + ' ' + record.get('createdBy').lastName.toUpperCase() + '</p>';
@@ -99,10 +104,15 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	renderModifiedBy: function(val, metaData, record) {
 	    return record.get('modifiedBy').firstName.toUpperCase() + ' ' + record.get('modifiedBy').lastName.toUpperCase();		
 	},	
+	
+	renderJournalModifiedBy: function(val, metaData, record) {
+		return val.toUpperCase();
+	   
+	},
  
 	renderJournalSourceName: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
-        strHtml += '<p>' + record.get('journalSource').name.toUpperCase() + '</p>';
+        strHtml += '<p>' + val + '</p>';
          strHtml += '</div>';
 	    return strHtml;		
 	},	
