@@ -202,9 +202,12 @@ set body = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http
 		<strong>Total MAP Credit HRS: TERM:</strong> $totalPlanHours <strong>DEV:</strong> $totalPlanDevHours
 		</p>
 		</div>
-	#if($includeHeaderFooter)
-	<div style="width: 980px">
-		<div style="left:10px;margin-top:30px">
+	#if($includeFinancialAidInformation)
+	<div style="margin-left:20px; width: 940px; border:2px solid #ABABAB">
+		<p style="text-align:center; color:#ABABAB;">
+		<strong> Academic Plan Created For Financial Aid Appeal</strong> 
+		</p>
+		<div style="left:10px; margin-left:60px">
 		<p style="text-align:left; color:#000000;">
 		<strong>Attempted Hours - </strong> $!attemptedHours
 		</p>
@@ -213,16 +216,15 @@ set body = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http
 		</p>
 		<p style="text-align:left; color:#000000;">
 		<strong>Current Completion Rate - </strong> $!completionRage
-		</p>
-		<p style="text-align:left; color:#000000;text-indent:15px;">
-		<strong>Number of hours needed to earn 67% completion rate - </strong> $!neededFor67PercentCompletion
+		<br/>
+		Number of hours needed to earn 67% completion rate - $!neededFor67PercentCompletion
 		</p>
 		<p style="text-align:left; color:#000000;">
 		<strong>Financial Aid Cum GPA - </strong> $!financialAidGpa
+		<br/>
+		Number of needed to earn a 2.0 Cum GPA with all B -  $!hoursNeededB
 		</p>
-		<p style="text-align:left; color:#000000;text-indent:15px;">
-		<strong>Number of needed to earn a 2.0 Cum GPA with all B - </strong> $!hoursNeededB
-		</p>
+		</div>
 	</div>
 	#end
 	#if("$!planContactNotes" != "" || "$!planStudentNotes" != "")
