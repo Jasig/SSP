@@ -159,7 +159,7 @@
             </column>        
         </createTable>
 
-        <sql>grant all on person_disability to ssp</sql>
+        <sql>grant all on person_disability to ${database.app.username}</sql>
         <rollback>
             <dropTable tableName="person_disability" />
         </rollback>
@@ -222,7 +222,7 @@
             </column>
         </createTable>
 
-        <sql>grant all on person_disability_agency to ssp</sql>
+        <sql>grant all on person_disability_agency to ${database.app.username}</sql>
         <rollback>
             <dropTable tableName="person_disability_agency" />
         </rollback>
@@ -270,7 +270,7 @@
             </column>
         </createTable>
 
-        <sql>grant all on person_disability_accommodation to ssp</sql>
+        <sql>grant all on person_disability_accommodation to ${database.app.username}</sql>
         <rollback>
             <dropTable tableName="person_disability_accommodation" />
         </rollback>
@@ -318,7 +318,7 @@
             </column>
         </createTable>
 
-        <sql>grant all on person_disability_type to ssp</sql>
+        <sql>grant all on person_disability_type to ${database.app.username}</sql>
         <rollback>
             <dropTable tableName="person_disability_type" />
         </rollback>
