@@ -160,6 +160,12 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		var view = me.getView();
 		
 		me.onUpdateSaveOption();
+
+		//need to remove toolsNav before adding it, without this
+		//the first time you loaded the MAP page it would not catch this event
+		me.appEventsController.removeEvent({eventName: 'toolsNav', scope: me.application}); 
+		me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me.application});		
+		
 		me.appEventsController.assignEvent({eventName: 'onSavePlanRequest', callBackFunc: me.onSavePlanRequest, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onSaveTemplateRequest', callBackFunc: me.onSaveTemplateRequest, scope: me});
 		
@@ -170,16 +176,16 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.appEventsController.assignEvent({eventName: 'onCurrentMapPlanChangeUpdateMapView', callBackFunc: me.onCurrentMapPlanChange, scope: me});
 	
 		return this.callParent(arguments);
-    },
+    },    
 
 	onAfterLayout: function(){
-		var me = this;
+		var me = this;		
 		me.setPlanNotesButtonIcon();
-		me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.toolsNavCallBack, scope: me});
 	},
-	
-	toolsNavCallBack: function(toolsRecord, toolsViewController) {
-		var me = this;
+		
+	onToolsNav: function(toolsRecord, toolsViewController) {
+		var application = this; //scope is application, so 'this' is application
+		var me = application.getController("Ssp.controller.tool.map.MAPViewController");
 		
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
@@ -496,7 +502,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	
 	destroy:function(){
 	    var me=this;
-	    me.appEventsController.removeEvent({eventName: 'toolsNav', callBackFunc: function() {console.log("toolsNav remove!!");}, scope: me});
+	    
+	    me.appEventsController.removeEvent({eventName: 'toolsNav', scope: me.application});
 	    
 		me.appEventsController.removeEvent({eventName: 'onSavePlanRequest', callBackFunc: me.onSavePlanRequest, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onSaveTemplateRequest', callBackFunc: me.onSaveTemplateRequest, scope: me});
