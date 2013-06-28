@@ -17,7 +17,7 @@
  * under the License.
  */
 Ext.define('Ssp.model.external.CourseRequisite', {
-    extend: 'Ssp.model.external.AbstractExternal',
+    extend: 'Ext.data.Model',
     fields: [{name: 'requiringCourseCode', type: 'string'},
              {name: 'requiredCourseCode', type: 'string'},
              {name: 'requisiteCode', type: 'string'}
