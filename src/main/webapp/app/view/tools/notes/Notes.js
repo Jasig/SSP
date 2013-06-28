@@ -16,52 +16,64 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.tools.legacyremarks.LegacyRemarks', {
+Ext.define('Ssp.view.tools.notes.Notes', {
 	extend: 'Ext.grid.Panel',
-	alias: 'widget.legacyremarks',
+	alias: 'widget.personnotes',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
+   inject: {
+       store: 'personNotesStore',
+    },
     minHeight: '400',
     width: '100%',
     height: '100%',
+    controller: 'Ssp.controller.tool.notes.NotesViewController',
     autoScroll: true,
-	title: 'Legacy System Remarks/Notes and Communication to Student',
+	title: 'Notes and Communication to Student',
+	renderDate: function(val, metaData, record) {
+		    return Ext.util.Format.date( record.get('date'),'m/d/Y');		
+	},
+	columnWrap: function(val, metaData, record){
+	    return '<div style="white-space:normal !important;">'+ val +'</div>';
+	},
     initComponent: function() {
         var me = this;
 
         Ext.applyIf(me, {
             store: me.store,
             columns: [
+				{
+					xtype: 'gridcolumn',
+				    dataIndex: 'date',
+				    text: 'Date',
+				    flex: .10,
+					renderer: me.renderDate
+				},
                 {
                     xtype: 'gridcolumn',
-                    dataIndex: 'type',
+                    dataIndex: 'noteType',
                     text: 'Type',
-                    flex: .10
+                    flex: .05
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'author',
                     text: 'Author',
-                    flex: .20
+                    flex: .10
                 },
                 {
                     xtype: 'gridcolumn',
-                    dataIndex: 'remark',
-                    text: 'Remark',
-                    flex: .20
+                    dataIndex: 'department',
+                    text: 'Department',
+                    flex: .10
                 },
                 {
                     xtype: 'gridcolumn',
-                    dataIndex: 'dateandtime',
-                    text: 'Date and Time',
-                    flex: .20
-                },
-                {
-                    xtype: 'gridcolumn',
-                    dataIndex: 'comment',
-                    text: 'Comment',
+                    dataIndex: 'note',
+                    text: 'Note',
 					sortable: 'false',
-                    flex: .30
+                    flex: .65,
+					renderer: me.columnWrap
                 }
             ],
             viewConfig: {
