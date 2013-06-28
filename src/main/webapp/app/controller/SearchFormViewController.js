@@ -75,11 +75,12 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     searchSuccess: function( r, scope){
     	var me=scope;
     	me.getView().setLoading( false );
-		me.selectFirstItem();
-		me.getSearchGridPager().onLoad();
+		me.getView().collapse();
+		me.appEventsController.getApplication().fireEvent("onPersonSearchSuccess");
     },    
 	search: function(){
 		var me=this;
+		console.log(me.getView());
 		
 		me.searchService.search2( 
 				me.getView().query('textfield[name=studentId]')[0].value,
@@ -140,12 +141,9 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		}
 		me.search();	
 	},  	
-    searchSuccess: function( r, scope){
-    	var me=scope;
-    	me.getView().collapse();
-    },
 
     searchFailure: function( r, scope){
     	var me=scope;
+		me.appEventsController.getApplication().fireEvent("onPersonSearchFailure");
     },	
 });

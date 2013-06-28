@@ -59,9 +59,20 @@ Ext.define('Ssp.controller.SearchViewController', {
     	},    	
     	
     	searchGridPager: '#searchGridPager',
+//    	searchText: {
+//    		selector: '#searchText',
+//		    listeners:{   
+//		        keypress: 'onSearchKeyPress'  
+//		    } 
+//    	},
+    	
+//    	searchCaseloadCheck: '#searchCaseloadCheck',
     	searchBar: '#searchBar',
     	caseloadBar: '#caseloadBar',
 
+//    	'searchButton': {
+//    		click: 'onSearchClick'
+//    	},
     	
     	'displaySearchBarButton': {
     		click: 'onDisplaySearchBarClick'
@@ -120,8 +131,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	// search results
 		//me.getSearchText().setValue( me.searchCriteria.get('searchTerm') );
 	   	//me.getSearchCaseloadCheck().setValue( !me.searchCriteria.get('outsideCaseload') );
-		
-		
+				
 		return me.callParent(arguments);
     },
     
@@ -152,7 +162,9 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.appEventsController.assignEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
 	   	me.appEventsController.assignEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
 	   	me.appEventsController.assignEvent({eventName: 'setNonParticipatingProgramStatusComplete', callBackFunc: me.onSetNonParticipatingProgramStatusComplete, scope: me});
-	
+		me.appEventsController.assignEvent({eventName: 'onPersonSearchSuccess', callBackFunc: me.searchSuccess, scope: me});
+		me.appEventsController.assignEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
+		
 	   	me.initSearchGrid();
 
 	   	// load program statuses
@@ -165,7 +177,10 @@ Ext.define('Ssp.controller.SearchViewController', {
     	me.appEventsController.removeEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'retrieveCaseload', callBackFunc: me.onRetrieveCaseload, scope: me});
-	   	return me.callParent( arguments );
+	   	me.appEventsController.removeEvent({eventName: 'onPersonSearchSuccess', callBackFunc: me.searchSuccess, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
+		
+		return me.callParent( arguments );
     },
     
     initSearchGrid: function(){
@@ -437,10 +452,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	     	 break;
     	     	 
     		case 'non-participating':
-    			Ext.create('Ssp.view.ProgramStatusChangeReasonWindow', {
-    			    height: 150,
-    			    width: 500
-    			}).show();
+    			me.setProgramStatus(action);
     			break;
     	}
     },
@@ -451,15 +463,30 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	var programStatusId = "";
 	   	if (personId != "")
 	   	{
+			var person = me.caseloadStore.findRecord("personId", personId);
+			if(!person)
+			  	person = me.searchStore.findRecord("id", personId);
+			
+			if(action == 'non-participating'){
+				Ext.create('Ssp.view.ProgramStatusChangeReasonWindow', {
+    			    height: 150,
+    			    width: 500
+    			}).show();
+				person.set("currentProgramStatusName", "Non-participating");
+				return;
+			}
 	   		if (action=='active')
 	   		{
 	   			programStatusId = Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID;
+				person.set("currentProgramStatusName", "Active");
 	   		}
 	   		
 	   		if (action=='no-show')
 	   		{
 	   			programStatusId = Ssp.util.Constants.NO_SHOW_PROGRAM_STATUS_ID;
+				person.set("currentProgramStatusName", "No-Show");
 	   		}
+			
 	   		personProgramStatus = new Ssp.model.PersonProgramStatus();
 	   		personProgramStatus.set('programStatusId', programStatusId );
 	   		personProgramStatus.set('effectiveDate', Ext.Date.now() );
@@ -552,15 +579,17 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}
 	},
 
-    searchSuccess: function( r, scope){
-    	var me=scope;
+    searchSuccess: function(){
+    	var me=this;
     	me.getView().setLoading( false );
 		me.selectFirstItem();
 		me.getSearchGridPager().onLoad();
     },
 
-    searchFailure: function( r, scope){
-    	var me=scope;
+    searchFailure: function(){
+    	var me=this;
+		me.personLite.set('id', "");
+    	me.appEventsController.getApplication().fireEvent('loadPerson');
     	me.getView().setLoading( false );
     },
     
