@@ -163,9 +163,6 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         xtype: 'profilespecialservicegroups'
                     }]
                 }]
-            }, {
-                xtype: 'recentsspactivity',
-                flex: '.10'
             }]
         });
         

@@ -28,7 +28,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         transcriptService: 'transcriptService',
         profileReferralSourcesStore: 'profileReferralSourcesStore',
         profileServiceReasonsStore: 'profileServiceReasonsStore',
-        profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
         sspConfig: 'sspConfig',
 		formUtils: 'formRendererUtils'
     },
@@ -143,7 +142,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         me.person.populateFromGenericObject(personResponse);
 
         // load and render person data
-        me.profileSpecialServiceGroupsStore.removeAll();
         me.profileReferralSourcesStore.removeAll();
         me.profileServiceReasonsStore.removeAll();
 
@@ -161,11 +159,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		var firstLastName = me.person.getFirstLastName();
         var coachName = me.person.getCoachFullName();
 		
-
-        // load special service groups
-        if (personResponse.specialServiceGroups != null) {
-            me.profileSpecialServiceGroupsStore.loadData(me.person.get('specialServiceGroups'));
-        }
 
         // load referral sources
         if (personResponse.referralSources != null) {
