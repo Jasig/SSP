@@ -21,6 +21,7 @@ Ext.define('Ssp.controller.person.CoachViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	appEventsController: 'appEventsController',
+		apiProperties: 'apiProperties',
     	coachesStore: 'coachesStore',
     	person: 'currentPerson', 	
     	sspConfig: 'sspConfig',
@@ -55,9 +56,27 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 		var me=this;
 
 		if ( me.person.get('id') != "")
-		{
+		{			
 			me.getCoachCombo().setDisabled( me.sspConfig.get('coachSetFromExternalData') );
-			me.getStudentTypeCombo().setDisabled( me.sspConfig.get('studentTypeSetFromExternalData') );			
+			var url = me.apiProperties.createUrl('reference/config?name=studentTypeSetFromExternalData');
+			
+			Ext.Ajax.request({
+				url: url,	
+				method: 'GET',
+				headers: { 'Content-Type': 'application/json' },					
+				success: function(response, view) {
+						var r = Ext.decode(response.responseText);					
+						if (r.value.trim().toLowerCase() === 'true'){					
+							me.getStudentTypeCombo().setDisabled(true); 							
+						} else {
+							me.getStudentTypeCombo().setDisabled(false);
+						}
+				},
+				failure: function () {
+					 me.getStudentTypeCombo().setDisabled(false); 
+					this.apiProperties.handleError
+				}
+			}, this);				
 		}
 		
 		me.studentTypesStore.load();
