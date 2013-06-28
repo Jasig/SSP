@@ -41,8 +41,6 @@ import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
 import org.jasig.ssp.transferobject.AbstractPlanTO;
 import org.jasig.ssp.transferobject.GoalTO;
-import org.jasig.ssp.transferobject.PlanOutputTO;
-import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -286,12 +284,21 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("contactPhone", planOutput.getNonOutputTO().getContactPhone());
 		messageParams.put("contactTitle", planOutput.getNonOutputTO().getContactTitle());
 		messageParams.put("contactName", planOutput.getNonOutputTO().getContactName());
+		if(planOutput.getFinancialAid() != null){
+			messageParams.put("neededFor67PercentCompletion", planOutput.getFinancialAid().getNeededFor67PtcCompletion());
+			messageParams.put("financialAidGpa", planOutput.getFinancialAid().getFinancialAidGpa());
+			messageParams.put("hoursNeededB", planOutput.getFinancialAid().getGpa20BHrsNeeded());
+		}
+		if(planOutput.getGpa() != null){
+			messageParams.put("attemptedHours", planOutput.getGpa().getCreditHoursAttempted());
+			messageParams.put("completedHours", planOutput.getGpa().getCreditHoursEarned());
+			messageParams.put("completionRage", planOutput.getGpa().getCreditCompletionRate());
+		}
 		
 		return populateFromTemplate(MessageTemplate.OUTPUT_MAP_PLAN_FULL_ID,
 				messageParams);
 	}
 	
-	@SuppressWarnings("unused")
 	private <T extends AbstractPlan,TO extends AbstractPlanTO<T>> Map<String, Object> addParamsToMapPlan(
 			final Person student,
 			final Person owner, 

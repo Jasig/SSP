@@ -46,6 +46,8 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.ExternalPersonPlanStatusService;
+import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
+import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.PagedResponse;
@@ -113,6 +115,12 @@ public class PlanController  extends AbstractBaseController {
 	
 	@Autowired
 	private ExternalPersonPlanStatusTOFactory planStatusFactory;
+	
+	@Autowired
+	private ExternalStudentFinancialAidService externalStudentFinancialAidService;
+	
+	@Autowired
+	private ExternalStudentTranscriptService externalStudentTranscriptService;
 
  
 	/**
@@ -312,7 +320,10 @@ public class PlanController  extends AbstractBaseController {
 		if(planOutputDataTO.getOutputFormat().equals(PlanService.OUTPUT_FORMAT_MATRIX)) {
 			output = service.createMatirxOutput(planOutputDataTO.getNonOutputTO(), institutionName.getValue());
 		} else{
-			
+			UUID personID = UUID.fromString(planOutputDataTO.getPlan().getPersonId());
+			String schoolId = personService.get(personID).getSchoolId();
+			planOutputDataTO.setFinancialAid(externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId));
+			planOutputDataTO.setGpa(externalStudentTranscriptService.getRecordsBySchoolId(schoolId));
 			output = service.createFullOutput(planOutputDataTO, institutionName.getValue());
 		}
 		

@@ -19,9 +19,12 @@
 package org.jasig.ssp.transferobject;
 
 import org.jasig.ssp.model.AbstractPlan;
+import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
+import org.jasig.ssp.model.external.ExternalStudentTranscript;
 
 public abstract class AbstractPlanOutputTO<P extends AbstractPlan,T extends AbstractPlanTO<P>> {
-	
+
+
 	private T plan;
 	private String outputFormat;
     private Boolean includeCourseDescription;
@@ -32,6 +35,8 @@ public abstract class AbstractPlanOutputTO<P extends AbstractPlan,T extends Abst
     private String emailCC;
     private String notes;
     private Boolean isPrivate = false;
+    private ExternalStudentFinancialAid financialAid;
+    private ExternalStudentTranscript gpa;
     
     public T getNonOutputTO() {
     	return plan;
@@ -103,5 +108,34 @@ public abstract class AbstractPlanOutputTO<P extends AbstractPlan,T extends Abst
 	 */
 	public void setIsPrivate(Boolean isPrivate) {
 		this.isPrivate = isPrivate;
+	}
+	
+	
+	/**
+	 * @return the financialAid
+	 */
+	public ExternalStudentFinancialAid getFinancialAid() {
+		return financialAid;
+	}
+
+	/**
+	 * @param financialAid the financialAid to set
+	 */
+	public void setFinancialAid(ExternalStudentFinancialAid financialAid) {
+		this.financialAid = financialAid;
+	}
+
+	/**
+	 * @return the gpa
+	 */
+	public ExternalStudentTranscript getGpa() {
+		return gpa;
+	}
+
+	/**
+	 * @param gpa the gpa to set
+	 */
+	public void setGpa(ExternalStudentTranscript gpa) {
+		this.gpa = gpa;
 	}
 }
