@@ -220,53 +220,53 @@ var ssp = ssp || {};
 		// load Forms
 		var loadForm = function() {
 			
-			loadGroupInput("/ssp/api/1/reference/programStatus/", that
+			loadGroupInput("/ssp/api/1/reference/programStatus/?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('programStatusGroup'));
-			loadGroupInput("/ssp/api/1/reference/studentType/", that
+			loadGroupInput("/ssp/api/1/reference/studentType/?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('studentTypeGroup'));
-			loadGroupInput("/ssp/api/1/reference/specialServiceGroup/", that
+			loadGroupInput("/ssp/api/1/reference/specialServiceGroup/?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('specialServiceGroup'));
-			loadGroupInput("/ssp/api/1/reference/referralSource/", that
+			loadGroupInput("/ssp/api/1/reference/referralSource/?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('referralSourceGroup'));
-			loadGroupInput("/ssp/api/1/reference/earlyAlertReferral/", that
+			loadGroupInput("/ssp/api/1/reference/earlyAlertReferral/?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('earlyAlertReferralGroup'));
-			loadGroupInput("/ssp/api/1/reference/campus/", that
+			loadGroupInput("/ssp/api/1/reference/campus/?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('campusGroup'));
-			loadGroupInput("/ssp/api/1/reference/earlyAlertOutcome/", that
+			loadGroupInput("/ssp/api/1/reference/earlyAlertOutcome/?sort=name&start=0&limit=-1&sortDirection=ASC", that
 							.locate('earlyAlertOutcomeGroup'));	
 			
-			loadGroupInput("/ssp/api/1/reference/serviceReason/", that
+			loadGroupInput("/ssp/api/1/reference/serviceReason/?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('serviceReasonGroup'));	
 			
-			loadGroupInput("/ssp/api/1/reference/disabilityStatus/", that
+			loadGroupInput("/ssp/api/1/reference/disabilityStatus/?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('disabilityStatusGroup'));	
 			
-			loadGroupInput("/ssp/api/1/reference/disabilityType/", that
+			loadGroupInput("/ssp/api/1/reference/disabilityType/?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('disabilityTypeGroup'));
 			
-			loadGroupInput("/ssp/api/1/reference/journalStepDetail/", that
+			loadGroupInput("/ssp/api/1/reference/journalStepDetail/?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('journalStepDetailGroup'));
 			
-			loadTermInput("/ssp/api/1/reference/term/?sort=startDate&start=0&limit=10000&sortDirection=DESC", that
+			loadTermInput("/ssp/api/1/reference/term/?sort=startDate&start=0&limit=-1&sortDirection=DESC", that
 					.locate('termGroup'));
 			
-			loadReportYearInput("/ssp/api/1/reference/term/?sort=startDate&start=0&limit=10000&sortDirection=DESC", that
+			loadReportYearInput("/ssp/api/1/reference/term/?sort=startDate&start=0&limit=-1&sortDirection=DESC", that
 					.locate('reportYearGroup'));
 			
 			loadConfigInput("/ssp/api/1/reference/config/?name=status_code_mappings", that
 					.locate('rosterStatusCodeGroup'));
 			
 			// 1000 limit is max allowed by server side
-			loadCoachInput("/ssp/api/1/person/coach/?sort=lastName&page=1&start=0&limit=1000&sortDirection=ASC", that
+			loadCoachInput("/ssp/api/1/person/coach/?sort=lastName&page=1&start=0&limit=-1&sortDirection=ASC", that
 					.locate('assignedCounselorGroup'));			
 
-			loadHomeDepartmentInput("/ssp/api/1/personStaffDetails/homeDepartments", that
+			loadHomeDepartmentInput("/ssp/api/1/personStaffDetails/homeDepartments/?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('homeDepartmentGroup'))
 			loadTextForm(
-					"/ssp/api/1/reference/confidentialityDisclosureAgreement/",
+					"/ssp/api/1/reference/confidentialityDisclosureAgreement/?sort=name&start=0&limit=-1&sortDirection=ASC",
 					that.locate('confidentialityAgreementFormContent'));
 			
-			loadSubjectAbbreviationInput("/ssp/api/1//reference/course/search", that
+			loadSubjectAbbreviationInput("/ssp/api/1//reference/course/search?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('subjectAbbreviationGroup'));
 			
 					
