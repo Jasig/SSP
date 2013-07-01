@@ -157,33 +157,6 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 	
 	@SuppressWarnings("unchecked")
 	public List<PlanCourseCountTO> getPlanCourseCount(SearchPlanTO form){
-		/*Criteria criteria = createCriteria();
-		
-		criteria.createAlias("planCourses", "planCourses");
-		
-		if(!form.getTermCodes().isEmpty())
-			criteria.add(Restrictions.in("planCourses.termCode", form.getTermCodes()));
-		
-		if(form.getSubjectAbbreviation() != null &&!form.getSubjectAbbreviation().isEmpty())
-			criteria.add(Restrictions.eq("planCourses.subjectAbbreviation", form.getSubjectAbbreviation()));
-		
-		if(form.getNumber() != null &&!form.getNumber().isEmpty())
-			criteria.add(Restrictions.eq("planCourses.courseNumber", form.getNumber()));
-		
-		if(form.getFormattedCourse() != null &&!form.getFormattedCourse().isEmpty())
-			criteria.add(Restrictions.eq("planCourses.formattedCourse", form.getFormattedCourse()));
-		
-		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
-		
-		criteria.setProjection(Projections.projectionList().
-        		add(Projections.countDistinct("planCourses.id").as("plan_count")).
-        		add(Projections.groupProperty("planCourses.courseCode").as("plan_courseCode")).
-        		add(Projections.groupProperty("planCourses.formattedCourse").as("plan_formattedCourse")).
-        		add(Projections.groupProperty("planCourses.courseTitle").as("plan_courseTitle")).
-        		add(Projections.groupProperty("planCourses.termCode").as("plan_termCode")));
-		List<PlanCourseCountTO> planCoursesCountCriteria = criteria.setResultTransformer(
-				new NamespacedAliasToBeanResultTransformer(
-						PlanCourseCountTO.class, "plan_")).list();*/
 		
 		StringBuilder selectPlanCourses = new  StringBuilder("select count(distinct pc.id) as plan_studentCount, " +
 				"pc.courseCode as plan_courseCode, " +
@@ -252,47 +225,19 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 	
 	@SuppressWarnings("unchecked")
 	public List<PlanStudentStatusTO> getPlanStudentStatusByCourse(SearchPlanTO form){
-		/*Criteria criteria = createCriteria();
-		criteria.createAlias("planCourses", "planCourses");
-		
-		criteria.createAlias("person", "person");
-		
-		criteria.createAlias("schoolId", "planCourses");
-		
-		
-		if(!form.getTermCodes().isEmpty())
-				criteria.add(Restrictions.in("planCourses.termCode", form.getTermCodes()));
-		
-		if(form.getSubjectAbbreviation() != null &&!form.getSubjectAbbreviation().isEmpty())
-			criteria.add(Restrictions.eq("planCourses.subjectAbbreviation", form.getSubjectAbbreviation()));
-		
-		if(form.getNumber() != null &&!form.getNumber().isEmpty())
-			criteria.add(Restrictions.eq("planCourses.courseNumber", form.getNumber()));
-		
-		if(form.getFormattedCourse() != null &&!form.getFormattedCourse().isEmpty())
-			criteria.add(Restrictions.eq("planCourses.formattedCourse", form.getFormattedCourse()));
-		
-		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
-		
-		
-		criteria.setProjection(Projections.projectionList().
-        		add(Projections.property("person.schoolId").as("plan_studentId")).
-        		add(Projections.property("planCourses.courseTitle").as("plan_courseTitle")).
-        		add(Projections.property("planCourses.formattedCourse").as("plan_formattedCourse")).
-        		add(Projections.property("objectStatus").as("plan_planObjectStatus")));
-		
-		List<PlanStudentStatusTO> planStudentStatusCriteria = criteria.setResultTransformer(
-				new NamespacedAliasToBeanResultTransformer(
-						PlanStudentStatusTO.class, "plan_")).list();*/
 		
 		StringBuilder selectPlanCourses = new  StringBuilder("select " +
 				"distinct person.schoolId as plan_studentId, " +
 				"pc.formattedCourse as plan_formattedCourse, " +
 				"pc.courseTitle as plan_courseTitle, " +
-				"p.objectStatus as plan_planObjectStatus " +
-				"from Plan p, Person person, PlanCourse pc, ExternalCourse ec ");
+				"p.objectStatus as plan_planObjectStatus, " +
+				"ps.statusReason as plan_statusDetails, " +
+				"ps.status as plan_planStatus " +
+				"from Plan p, Person person, PlanCourse pc, ExternalCourse ec, ExternalPersonPlanStatus ps");
 		
 		buildQueryWhereClause(selectPlanCourses, form);
+		selectPlanCourses.append(" and ps.schoolId = person.schoolId");
+		
 		
 		Query query = createHqlQuery(selectPlanCourses.toString()).setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal() );
 		buildCourseSearchParamList(form,  query);
