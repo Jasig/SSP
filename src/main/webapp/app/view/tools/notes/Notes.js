@@ -31,7 +31,7 @@ Ext.define('Ssp.view.tools.notes.Notes', {
     autoScroll: true,
 	title: 'Notes and Communication to Student',
 	renderDate: function(val, metaData, record) {
-		    return Ext.util.Format.date( record.get('date'),'m/d/Y');		
+		    return Ext.util.Format.date( record.get('dateNoteTaken'),'m/d/Y');		
 	},
 	columnWrap: function(val, metaData, record){
 	    return '<div style="white-space:normal !important;">'+ val +'</div>';
@@ -44,7 +44,7 @@ Ext.define('Ssp.view.tools.notes.Notes', {
             columns: [
 				{
 					xtype: 'gridcolumn',
-				    dataIndex: 'date',
+				    dataIndex: 'dateNoteTaken',
 				    text: 'Date',
 				    flex: .10,
 					renderer: me.renderDate
