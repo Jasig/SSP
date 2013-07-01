@@ -29,7 +29,7 @@ Ext.define('Ssp.store.StudentActivities', {
 			maxiumum = 20;
 		var me = this;
 		var mostRecentActivityStore = Ext.create('Ext.data.Store',{
-			model: 'Ssp.model.StudentActivity',
+			model: 'Ssp.model.StudentActivity'
 		});
 		mostRecentActivityStore.loadRecords(me.getRange(0, maxiumum));
 		return mostRecentActivityStore;

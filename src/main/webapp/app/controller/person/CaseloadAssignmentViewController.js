@@ -46,7 +46,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	
     	'emailButton': {
     		click: 'onEmailClick'
-    	},
+    	}
     	
     },
     

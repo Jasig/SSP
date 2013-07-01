@@ -27,7 +27,7 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
 		appEventsController: 'appEventsController',
 		formUtils: 'formRendererUtils',
     	currentMapPlan: 'currentMapPlan',
-    	mapPlanService:'mapPlanService',
+    	mapPlanService:'mapPlanService'
     },
     
 	init: function() {

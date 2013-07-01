@@ -31,7 +31,7 @@ Ext.define('Ssp.model.SearchPerson', {
                  convert: function(value, record) {
                      return record.get('lastName') + ' '+ record.get('firstName');
                  }
-             },],
+             }],
 
      getFullName: function(){ 
     	var me=this;

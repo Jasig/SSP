@@ -45,7 +45,7 @@ Ext.define('Ssp.view.tools.profile.RecentSSPActivity', {
                 dataIndex: 'activityDateFormatted',
                 text: 'Date',
 				flex: 1
-            }],
+            }]
         });
         
         me.callParent(arguments);

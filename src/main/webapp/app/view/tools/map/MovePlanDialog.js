@@ -23,7 +23,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 	controller: 'Ssp.controller.tool.map.MovePlanDialogController',
 	inject: {
 	    formUtils: 'formRendererUtils',
-    	currentMapPlan: 'currentMapPlan',
+    	currentMapPlan: 'currentMapPlan'
 	},
     height: 220,
     width: 380,
@@ -106,7 +106,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 		                items: [{
 		                    xtype: 'button',
 		                    itemId: 'movePlanButton',
-		                    text: me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan',
+		                    text: me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan'
 		                }, '-', {
 		                    xtype: 'button',
 		                    itemId: 'cancelButton',

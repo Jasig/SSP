@@ -44,7 +44,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 cls: 'importantIconSmall',
                 text:'',
                 hidden: true,
-                tooltip: 'This is an important term!',
+                tooltip: 'This is an important term!'
                 
             },	{
                     xtype: 'tbspacer',

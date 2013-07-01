@@ -80,7 +80,7 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
                  name: 'lastStudentIntakeRequestDate',
                  value: ((me.model.getFormattedStudentIntakeRequestDate().length > 0) ? me.person.getFormattedStudentIntakeRequestDate() : 'No requests have been sent')
                  }*/
-                , {
+                 {
                     xtype: 'tbspacer',
                     flex: 1
                 }, {
@@ -100,9 +100,7 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
                     height: 30,
                     cls: 'emailIcon'
                 }]
-            }],
-            
-            items: []
+            }]
         });
         
         return me.callParent(arguments);

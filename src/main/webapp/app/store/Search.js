@@ -28,7 +28,7 @@ Ext.define('Ssp.store.Search', {
 		Ext.apply(me, {
 							proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personSearch')),
 							autoLoad: false,
-							autoSync: false,
+							autoSync: false
 						});
 		return me.callParent(arguments);
 }});

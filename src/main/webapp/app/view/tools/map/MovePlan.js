@@ -22,7 +22,7 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     inject: {
         columnRendererUtils: 'columnRendererUtils',
-        termsStore: 'termsStore',
+        termsStore: 'termsStore'
     },
     width: '100%',
     height: '100%',

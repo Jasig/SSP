@@ -24,20 +24,20 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
     	appEventsController: 'appEventsController',
 		termsStore:'termsStore',
 		currentMapPlan: 'currentMapPlan',
-		semesterStores : 'currentSemesterStores',
+		semesterStores : 'currentSemesterStores'
     },
     control: {
     	termCodeToBumpField: '#termCodeToBump',
 		termCodeEndField: '#termCodeEnd',
 		selectActionField: {
-		   selector:'#selectAction',
+		   selector:'#selectAction'
 		},
 		movePlanButton:{
            selector: '#movePlanButton',
            listeners: {
             click: 'onMovePlan'
            }
-        },
+        }
     },
     resetForm: function() {
         var me = this;

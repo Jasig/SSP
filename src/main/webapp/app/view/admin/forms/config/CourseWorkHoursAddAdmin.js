@@ -72,7 +72,7 @@ Ext.define('Ssp.view.admin.forms.config.CourseWorkHoursAddAdmin', {
                 name: 'rangeLabel',
                 allowBlank: false,
 				itemId: 'cwLabel'
-            }, ],
+            }],
             
             dockedItems: [{
                 dock: 'top',

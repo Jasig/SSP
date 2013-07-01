@@ -73,7 +73,7 @@ Ext.define('Ssp.view.admin.forms.config.RegistrationLoadAddAdmin', {
                 name: 'rangeLabel',
                 allowBlank: false,
 				itemId: 'rlLabel'
-            }, ],
+            }],
             
             dockedItems: [{
                 dock: 'top',
