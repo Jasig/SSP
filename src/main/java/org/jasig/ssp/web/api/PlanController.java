@@ -283,8 +283,28 @@ public class PlanController  extends AbstractBaseController {
 		
 		return null;
 	}
-	
-	
+
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
+	@RequestMapping(value="/print", method = RequestMethod.GET)
+	public @ResponseBody
+	String print(final @PathVariable UUID personId) throws ObjectNotFoundException,
+			ValidationException {
+		PlanOutputTO planOutputDataTO = new PlanOutputTO();
+		
+		final Plan model = getService().getCurrentForStudent(personId);
+		if (model == null) {
+			return null;
+		}
+		planOutputDataTO.setPlan(new PlanTO(model));
+		planOutputDataTO.setOutputFormat("fullFormat");
+
+		SubjectAndBody message = getOutput(planOutputDataTO);
+		if(message != null)
+			return message.getBody();
+		
+		return null;
+	}
+
 	/**
 	 * Returns an html page valid for printing
 	 * <p>

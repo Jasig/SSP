@@ -1503,12 +1503,17 @@
 
   namespace('mygps.viewmodel', {
     HomeViewModel: HomeViewModel = (function(_super) {
+      var getCurrentMap;
 
       __extends(HomeViewModel, _super);
 
       function HomeViewModel(session, taskService) {
         HomeViewModel.__super__.constructor.call(this, session, taskService);
         this.canContactCoach = ko.dependentObservable(this.evaluateCanContactCoach, this);
+        this.currentMapJson = ko.dependentObservable(this.evaluateShowMap, this);
+        this.showMap = ko.observable(false);
+        this.personId = ko.dependentObservable(this.evaluatePersonId, this);
+        this.mapUrl = ko.dependentObservable(this.evaluateMapUrl, this);
       }
 
       HomeViewModel.prototype.load = function() {
@@ -1518,6 +1523,47 @@
       HomeViewModel.prototype.evaluateCanContactCoach = function() {
         var _ref, _ref1;
         return ((_ref = this.session) != null ? (_ref1 = _ref.authenticatedPerson()) != null ? _ref1.coach() : void 0 : void 0) != null;
+      };
+
+      HomeViewModel.prototype.evaluatePersonId = function() {
+        var _ref, _ref1;
+        return (_ref = this.session) != null ? (_ref1 = _ref.authenticatedPerson()) != null ? _ref1.id() : void 0 : void 0;
+      };
+
+      HomeViewModel.prototype.evaluateMapUrl = function() {
+        return "/ssp/api/1/person/" + this.personId() + "/map/plan/print";
+      };
+
+      getCurrentMap = function(personId, callback) {
+        return $.ajax({
+          type: "GET",
+          url: "/ssp/api/1/person/" + personId + "/map/plan/current",
+          dataType: "json",
+          success: function(result) {
+            return callback(result);
+          },
+          error: function(fault) {
+            return callback(false);
+          }
+        });
+      };
+
+      HomeViewModel.prototype.evaluateShowMap = function() {
+        var _ref, _ref1, _ref2, _ref3;
+        if (((_ref = this.session) != null ? (_ref1 = _ref.authenticatedPerson()) != null ? _ref1.id() : void 0 : void 0) != null) {
+          return getCurrentMap((_ref2 = this.session) != null ? (_ref3 = _ref2.authenticatedPerson()) != null ? _ref3.id() : void 0 : void 0, this.showMap);
+        }
+      };
+
+      ko.bindingHandlers.popupWindow = {
+        init: function(element, valueAccessor) {
+          var values;
+          values = ko.utils.unwrapObservable(valueAccessor());
+          $(element).click(function() {
+            return window.open(ko.utils.unwrapObservable(values.url), "ChildWindow", "height=" + values.height + ",width=" + values.width);
+          });
+          return false;
+        }
       };
 
       return HomeViewModel;
