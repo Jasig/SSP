@@ -47,6 +47,7 @@ import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.TemplateLiteTO;
 import org.jasig.ssp.transferobject.TemplateOutputTO;
 import org.jasig.ssp.transferobject.TemplateTO;
+import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -161,6 +162,7 @@ public class TemplateController  extends AbstractBaseController {
 	 *             If that specified data is not invalid.
 	 */
 	@RequestMapping(value="/summary", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
 	public @ResponseBody
 	PagedResponse<TemplateLiteTO> getSummary(
 			final @RequestParam(required = false) Boolean isPrivate,
