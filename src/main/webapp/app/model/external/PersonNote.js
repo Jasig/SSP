@@ -23,7 +23,7 @@ Ext.define('Ssp.model.external.PersonNote', {
     		 {name: 'noteType', type: 'string'},
     		 {name: 'department', type: 'string'},
     		 {name: 'author', type: 'string'},
-             {name: 'date', type: 'date', dateFormat: 'c'},
+             {name: 'dateNoteTaken', type: 'date', dateFormat: 'c'},
              {name: 'note', type: 'string'}
              ]
 });

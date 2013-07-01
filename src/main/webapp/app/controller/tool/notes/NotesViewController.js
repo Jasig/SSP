@@ -48,17 +48,12 @@ Ext.define('Ssp.controller.tool.notes.NotesViewController', {
 		}
 	},
 	
-    getTranscriptSuccess: function( r, scope ){
+    getTranscriptSuccess: function( records, scope ){
     	var me=scope;
-
-        var notes = [];
-        var note = new Ssp.model.external.PersonNote(r);
-
-
-        me.store.loadData(r);
+        me.store.loadData(records);
 		me.store.sort([
 		    {
-		        property : 'date',
+		        property : 'dateNoteTaken',
 		        direction: 'DESC'
 		    },
 		    {

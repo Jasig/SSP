@@ -41,8 +41,7 @@ Ext.define('Ssp.service.PersonNoteService', {
     doGet: function( personId, callbacks, url ) {
         var me=this;
         var success = function( response ){
-            var r = Ext.decode(response.responseText);
-            callbacks.success( r, callbacks.scope );
+            callbacks.success( Ext.decode(response.responseText), callbacks.scope );
         };
 
         var failure = function( response ){
