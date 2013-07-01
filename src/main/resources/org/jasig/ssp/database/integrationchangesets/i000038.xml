@@ -63,7 +63,7 @@
 			<column name="department" type="${nvarchar.type}(80)">
 				<constraints nullable="true" />
 			</column>
-			<column name="date" type="date">
+			<column name="date_note_taken" type="date">
 				<constraints nullable="false" />
 			</column>
 			<column name="note" type="text">
@@ -72,7 +72,7 @@
 		</createTable>
 
 		<createView viewName="v_external_person_note">
-			select ROW_NUMBER() OVER (ORDER BY code) as id, code, school_id, note_type, author, department, date, note from external_person_note
+			select ROW_NUMBER() OVER (ORDER BY code) as id, code, school_id, note_type, author, department, date_note_taken, note from external_person_note
 		</createView>
 
 		<sql>grant all on external_person_note to ${database.app.username}</sql>
