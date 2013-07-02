@@ -59,6 +59,31 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		{
 			me.authenticatedPerson.showUnauthorizedAccessAlert();
 		}
+
+		//Associative Object handling
+		var rowEditor = editor.editor;
+		var rowFields = rowEditor.items.items;			
+		
+		Ext.each(rowFields, function(item) {
+			if(item.store != undefined && item.store != null) {
+				item.store.clearFilter(true);
+			}
+			
+			if(item.associativeField != undefined) {	
+				var activeOrSelectedFilter = Ext.create('Ext.util.Filter', {
+					filterFn: function(storeItem) { 
+						if(storeItem.data.active == true || 
+						   storeItem.data.id == e.record.get(item.associativeField)) {
+							return true;
+						}
+						return false;
+					}
+				});
+				
+				item.store.filter(activeOrSelectedFilter);
+			}
+		});
+		
     	return access;
     },
     
@@ -67,7 +92,13 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		var id = record.get('id');
 		var jsonData = record.data;
 		var store = editor.grid.getStore();
-		persistMethod= record.data.createdDate != null ? 'PUT' : 'POST';
+		var persistMethod= record.data.createdDate != null ? 'PUT' : 'POST';
+		
+		Ext.each(editor.editor.items.items, function(item) {
+			if(item.store != undefined && item.store != null) {
+				item.store.clearFilter(true);
+			}			
+		});
 
 		Ext.Ajax.request({
 			url: editor.grid.getStore().getProxy().url+"/"+id,

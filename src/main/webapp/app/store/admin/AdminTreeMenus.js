@@ -20,7 +20,11 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
     extend: 'Ext.data.TreeStore',
     mixins: ['Deft.mixin.Injectable'],
     inject: {
-        columnRendererUtils: 'columnRendererUtils'
+        columnRendererUtils: 'columnRendererUtils',
+        colorsStore: 'colorsStore',
+        colorsUnpagedStore: 'colorsUnpagedStore',
+        colorsAllStore: 'colorsAllStore',
+        colorsAllUnpagedStore: 'colorsAllUnpagedStore'
     },
     autoLoad: false,
     constructor: function(){
@@ -553,10 +557,11 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         required: true,                        
                         field: {
                             xtype: 'combo',
-                            store: Ext.StoreMgr.lookup("colorsStore"),
+                            store: Ext.getStore("colorsAllUnpagedStore"),
                             displayField: 'name',
                             valueField: 'id',
-                            forceSelection: true 
+                            forceSelection: true,
+                            associativeField: 'color'
                         },
                         flex: .2
                     }]

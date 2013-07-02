@@ -19,10 +19,13 @@
 Ext.define('Ssp.store.reference.Colors', {
     extend: 'Ssp.store.reference.AbstractReferences',
     model: 'Ssp.model.reference.Color',
-    storeId: 'colorsStore',
-    constructor: function(){
-    	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('color')});
-    	this.load(); //preload for elective screen
+    constructor: function(args) {
+    	this.callParent(arguments); 
+    	Ext.apply(this.getProxy(),{
+    		url: this.getProxy().url + this.apiProperties.getItemUrl('color'), 
+    		extraParams: this.extraParams
+    	});
+    	this.load(); //load on instantiation for elective screen
+    	return this;
     }
 });

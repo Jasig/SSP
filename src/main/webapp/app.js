@@ -308,7 +308,6 @@ Ext.require([
     'Ssp.store.reference.ChildCareArrangements',
     'Ssp.store.reference.Citizenships',
     'Ssp.store.reference.Colors',
-    'Ssp.store.reference.ColorsAll',
 	'Ssp.store.reference.ConfidentialityLevels',
 	'Ssp.store.reference.ConfigurationOptions',
 	'Ssp.store.reference.DisabilityAccommodations',
@@ -915,8 +914,41 @@ Ext.onReady(function(){
 			    	coachesStore: 'Ssp.store.Coaches',
 				    confidentialityDisclosureAgreementsStore: 'Ssp.store.reference.ConfidentialityDisclosureAgreements',
 					configurationOptionsStore: 'Ssp.store.reference.ConfigurationOptions',
-				    colorsStore: 'Ssp.store.reference.Colors',
-				    colorsAllStore: 'Ssp.store.reference.ColorsAll',
+				    colorsStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.Colors', {
+							     storeId: 'colorsStore'						    
+							 });
+				    	},
+				    	singleton: true
+				    }, 
+				    colorsUnpagedStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.Colors', {
+							     storeId: 'colorsUnpagedStore',		
+							     extraParams: {limit: "-1"}
+							 });
+				    	},
+				    	singleton: true
+				    },
+				    colorsAllStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.Colors', {
+							     storeId: 'colorsAllStore',		
+							     extraParams: {status: "ALL"}
+							 });
+				    	},
+				    	singleton: true
+				    },
+				    colorsAllUnpagedStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.Colors', {
+							     storeId: 'colorsAllUnpagedStore',		
+							     extraParams: {status: "ALL", limit: "-1"}
+							 });
+				    	},
+				    	singleton: true
+				    },
 				    confidentialityLevelsStore: 'Ssp.store.reference.ConfidentialityLevels',
 				    disabilityAccommodationsStore: 'Ssp.store.reference.DisabilityAccommodations',
 				    disabilityAgenciesStore: 'Ssp.store.reference.DisabilityAgencies',

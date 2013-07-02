@@ -43,6 +43,12 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
 	    								var record = rowEditor.context.record
 	    								var sortInfo = {};
 	    								
+	    								Ext.each(rowEditor.editor.items.items, function(item) {
+	    									if(item.store != undefined && item.store != null) {
+	    										item.store.clearFilter(true);
+	    									}			
+	    								});
+	    								
 	    								for (var i=0; i < columns.length; i++ ) {
 	    									if(columns[i].sortState != null 
 	    										&& columns[i].sortState != undefined) {
