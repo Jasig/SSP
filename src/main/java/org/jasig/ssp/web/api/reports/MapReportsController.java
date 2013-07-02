@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
 
 import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.security.permissions.Permission;
@@ -109,6 +110,7 @@ public class MapReportsController extends ReportBaseController {
 			final @RequestParam(required = false) String courseNumber,
 			final @RequestParam(required = false) String subjectAbbreviation,
 			final @RequestParam(required = false) String formattedCourse,
+			final @RequestParam(required = false) PlanStatus planStatus,
 			final @RequestParam(required = false) String termCode,			
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
@@ -118,7 +120,7 @@ public class MapReportsController extends ReportBaseController {
 		if(!StringUtils.isEmpty(termCode))
 			terms = SearchParameters.getTerms(Lists.newArrayList(termCode), termService);
 		
-		SearchPlanTO form = new SearchPlanTO(null, subjectAbbreviation, courseNumber, formattedCourse, terms, null, null);
+		SearchPlanTO form = new SearchPlanTO(planStatus, subjectAbbreviation, courseNumber, formattedCourse, terms, null, null);
 		 List<PlanCourseCountTO> counts = planService.getPlanCourseCount(form);
 		 
 		final Map<String, Object> parameters = Maps.newHashMap();
@@ -164,7 +166,7 @@ public class MapReportsController extends ReportBaseController {
 			final @RequestParam(required = false) String courseNumber,
 			final @RequestParam(required = false) String subjectAbbreviation,
 			final @RequestParam(required = false) String formattedCourse,
-			final @RequestParam(required = false) String planStatus,
+			final @RequestParam(required = false) PlanStatus planStatus,
 			final @RequestParam(required = false) String termCode,			
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, JRException, IOException {
@@ -173,7 +175,7 @@ public class MapReportsController extends ReportBaseController {
 		if(!StringUtils.isEmpty(termCode))
 			terms = SearchParameters.getTerms(Lists.newArrayList(termCode), termService);
 		
-		SearchPlanTO form = new SearchPlanTO(planStatus, subjectAbbreviation, courseNumber, formattedCourse, terms, null, null);
+		SearchPlanTO form = new SearchPlanTO(null, subjectAbbreviation, courseNumber, formattedCourse, terms, null, null);
 		List<PlanStudentStatusTO> studentStatuses = planService.getPlanStudentStatusByCourse(form);
 		
 		Map<String, PlanStudentStatusByCourseTO> courses = new HashMap<String, PlanStudentStatusByCourseTO>();

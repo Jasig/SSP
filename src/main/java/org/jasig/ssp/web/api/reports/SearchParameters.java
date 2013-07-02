@@ -582,8 +582,8 @@ public class SearchParameters {
 			parameters.put(SearchParameters.SUBJECT_ABBREVIATION, form.getSubjectAbbreviation());
 		else
 			parameters.put(SearchParameters.SUBJECT_ABBREVIATION, NOT_USED);
-		if(form.getPlanStatus() != null && !form.getPlanStatus().isEmpty())
-			parameters.put(SearchParameters.PLAN_STATUS, form.getPlanStatus());
+		if(form.getPlanStatus() != null)
+			parameters.put(SearchParameters.PLAN_STATUS, form.getPlanStatus().toString());
 		else
 			parameters.put(SearchParameters.PLAN_STATUS, NOT_USED);
 	}

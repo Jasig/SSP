@@ -163,9 +163,12 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 				"pc.formattedCourse as plan_formattedCourse, " +
 				"pc.courseTitle as plan_courseTitle, " +
 				"pc.termCode as plan_termCode " +
-				"from Plan p, PlanCourse pc, Person person, ExternalCourse ec ");
+				"from Plan p, PlanCourse pc, Person person, ExternalCourse ec, ExternalPersonPlanStatus ps ");
 		
 		buildQueryWhereClause(selectPlanCourses, form);
+		if(form.getPlanStatus() != null)
+			selectPlanCourses.append(" and ps.schoolId = person.schoolId");
+		
 		selectPlanCourses.append(" group by pc.courseCode, pc.formattedCourse, pc.courseTitle, pc.termCode");
 		
 		Query query = createHqlQuery(selectPlanCourses.toString()).setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal() );
@@ -199,6 +202,11 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 			query.append(" and ec.formattedCourse = :formattedCourse ");
 		}
 		
+		if(form.getPlanStatus() != null)
+		{
+			query.append(" and ps.status = :planStatus ");
+		}
+		
 		
 	}
 	
@@ -220,6 +228,11 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 		if(!form.getTermCodes().isEmpty())
 		{
 			hqlQuery.setParameterList("termCodes", form.getTermCodes());
+		}
+		
+		if(form.getPlanStatus() != null)
+		{
+			hqlQuery.setString("planStatus", form.getPlanStatus().toString());
 		}
 	}
 	
