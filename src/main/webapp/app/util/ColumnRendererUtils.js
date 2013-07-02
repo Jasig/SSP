@@ -20,7 +20,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	extend: 'Ext.Component',
 	mixins: ['Deft.mixin.Injectable'],
     inject: {
-    	
+    	colorsAllUnpagedStore: 'colorsAllUnpagedStore'
     },
     
 	initComponent: function() {
@@ -202,9 +202,10 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	},
 	
 	renderElectiveColor: function(val, metadata, record) {
-		var colorsAllStore = Ext.getStore('colorsAllUnpagedStore');
-		colorsAllStore.clearFilter(true);
-		var color = colorsAllStore.findRecord('id', val);
+		var me = this; 
+		var colorsStore = me.colorsAllUnpagedStore;
+		colorsStore.clearFilter(true);
+		var color = colorsStore.findRecord('id', val);
 		
 		if(color == null || color.data == null) {
 			return '';

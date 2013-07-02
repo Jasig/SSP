@@ -25,7 +25,11 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     controller: 'Ssp.controller.admin.AbstractReferenceAdminViewController',
     inject: {
         apiProperties: 'apiProperties',
-        authenticatedPerson: 'authenticatedPerson'
+        authenticatedPerson: 'authenticatedPerson',
+        colorsStore: 'colorsStore',
+        colorsUnpagedStore: 'colorsUnpagedStore',
+        colorsAllStore: 'colorsAllStore',
+        colorsAllUnpagedStore: 'colorsAllUnpagedStore'
     },
 	height: '100%',
 	width: '100%',

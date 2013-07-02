@@ -557,7 +557,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         required: true,                        
                         field: {
                             xtype: 'combo',
-                            store: Ext.getStore("colorsAllUnpagedStore"),
+                            store: me.colorsAllUnpagedStore,
                             displayField: 'name',
                             valueField: 'id',
                             forceSelection: true,
