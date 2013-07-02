@@ -145,7 +145,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
                 return earlyAlertId === n.data.id;
             }, me, true);
 		me.treeStore.suspendEvents();
-		originalChild.set('noOfResponses',count);
+		if (originalChild != null) {originalChild.set('noOfResponses',count);}
         me.treeStore.resumeEvents();
 		
 	},

@@ -194,6 +194,7 @@ Ext.define('Ssp.service.EarlyAlertService', {
             record.expanded=false;
         });
 
+		me.treeStore.getRootNode().removeAll();
         me.treeStore.getRootNode().appendChild(records);
     },
 
