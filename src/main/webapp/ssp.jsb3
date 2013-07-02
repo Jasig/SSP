@@ -2355,11 +2355,6 @@
                     "path": "/app/store/reference/"
                 },
                 {
-                    "clsName": "Ssp.store.reference.ColorsAll",
-                    "name": "ColorsAll.js",
-                    "path": "/app/store/reference/"
-                },
-                {
                     "clsName": "Ssp.store.reference.VeteranStatuses",
                     "name": "VeteranStatuses.js",
                     "path": "/app/store/reference/"
