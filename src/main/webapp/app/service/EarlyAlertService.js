@@ -96,11 +96,7 @@ Ext.define('Ssp.service.EarlyAlertService', {
         };
         
         // clear the early alerts
-        me.treeStore.setRootNode({
-            text: 'EarlyAlerts',
-            leaf: false,
-            expanded: false
-        });
+		me.treeStore.getRootNode().removeAll();
         
         me.apiProperties.makeRequest({
             url: me.getBaseUrl(personId),
