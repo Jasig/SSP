@@ -75,15 +75,15 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
 		var me = this;
 		me.getView().setLoading(false);
 		var planStatus = serviceResponses.successes.planStatus;
-		if(!planStatus || !planStatus.responseText || planStatus.responseText.trim().length == 0){
-			me.getOnPlanField().setValue("No Status");
-			me.getOnPlanStatusDetails().setTooltip("Currently, there is no status given for this student.");
-		}
-		planStatus = planStatus.responseText;
-		if(planStatus.status == "ON"){
+		if(planStatus.responseText && planStatus.responseText.length > 1)
+		   planStatus = Ext.decode(planStatus.responseText);
+		else
+			planStatus = null;
+			
+		if(planStatus && planStatus.status == "ON"){
 			me.getOnPlanField().setValue("On Plan");
 			me.getOnPlanStatusDetails().setTooltip("Student is currently on plan.");
-		}else if(planStatus.status == "OFF"){
+		}else if(planStatus && planStatus.status == "OFF"){
 			me.getOnPlanField().setValue("Off Plan");
 			me.getOnPlanStatusDetails().setTooltip(planStatus.statusReason);
 		}
