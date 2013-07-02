@@ -24,7 +24,10 @@ Ext.define('Ssp.model.SearchPerson', {
              {name: 'middleName', type: 'string'},
              {name: 'lastName', type: 'string'},
              {name: 'photoUrl', type: 'string'},
+			 {name: 'coachFirstName', type: 'string'},
+			 {name: 'coachLastName', type: 'string'},
              {name: 'currentProgramStatusName', type: 'string'},
+			 {name:'coachId', type: 'string'},
              {name: 'coach', type: 'auto'},
              {
                  name: 'sortableName',
@@ -43,8 +46,12 @@ Ext.define('Ssp.model.SearchPerson', {
      
      getCoachFullName: function(){
     	var me=this;
-      	var firstName = me.get('coach')? me.get('coach').firstName : "";
-      	var lastName = me.get('coach')? me.get('coach').lastName : "";
+		var firstName = me.get('coachFirstName');
+		var lastName = me.get('coachLastName');
+		if( me.get('coach')){
+      		firstName = me.get('coach')? me.get('coach').firstName : "";
+      		astName = me.get('coach')? me.get('coach').lastName : "";
+		}
       	return firstName + " " + lastName;
      }
 });

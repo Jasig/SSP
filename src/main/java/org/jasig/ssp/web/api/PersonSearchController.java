@@ -26,10 +26,12 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
+import org.jasig.ssp.factory.PersonSearchResult2TOFactory;
 import org.jasig.ssp.factory.PersonSearchResultTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchResult;
+import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -38,6 +40,7 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PersonSearchRequestTO;
+import org.jasig.ssp.transferobject.PersonSearchResult2TO;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -69,6 +72,9 @@ public class PersonSearchController extends AbstractBaseController {
 
 	@Autowired
 	private transient PersonSearchResultTOFactory factory;
+	
+	@Autowired
+	private transient PersonSearchResult2TOFactory factory2;
 
 	@Autowired
 	private transient SecurityService securityService;
@@ -113,7 +119,7 @@ public class PersonSearchController extends AbstractBaseController {
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.GET)
-	PagedResponse<PersonSearchResultTO>  search2(	
+	PagedResponse<PersonSearchResult2TO>  search2(	
 	 final @RequestParam(required = false) String studentId,
 	 final @RequestParam(required = false) String programStatus,
 	 final @RequestParam(required = false) String coachId,
@@ -130,9 +136,9 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) Boolean myPlans) throws ObjectNotFoundException, ValidationException 
 	 {
 		
-		final PagingWrapper<PersonSearchResult> models = service.search2(personSearchRequestFactory.from(studentId,programStatus,coachId,declaredMajor,
+		final PagingWrapper<PersonSearchResult2> models = service.search2(personSearchRequestFactory.from(studentId,programStatus,coachId,declaredMajor,
 				hoursEarnedMin,hoursEarnedMax,gpaEarnedMin,gpaEarnedMax,currentlyRegistered,sapStatus,mapStatus,planStatus,myCaseload,myPlans));
-		return new PagedResponse<PersonSearchResultTO>(true,
-				models.getResults(), factory.asTOList(models.getRows()));	
+		return new PagedResponse<PersonSearchResult2TO>(true,
+				models.getResults(), factory2.asTOList(models.getRows()));	
 	}
 }

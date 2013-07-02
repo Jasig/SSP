@@ -38,6 +38,7 @@ import org.hibernate.type.StringType;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchRequest;
+import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -45,6 +46,8 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.external.impl.TermServiceImpl;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
+import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,13 +179,21 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 	
 	@SuppressWarnings("unchecked")
-	public List<Person> search(PersonSearchRequest personSearchRequest) throws ObjectNotFoundException 
+	public List<PersonSearchResult2> search(PersonSearchRequest personSearchRequest) throws ObjectNotFoundException 
 	{
 		FilterTracker filterTracker = new FilterTracker();
 		Term currentTerm = termService.getCurrentTerm();
 		
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(" select distinct p ");
+		stringBuilder.append(" select distinct p.id as person_id, p.firstName as person_firstName, " +
+				"p.middleName as person_middleName, " +
+				"p.lastName as person_lastName, " +
+				"p.schoolId as person_schoolId, " +
+				"programStatus.name as person_currentProgramStatusName, " +
+				"p.coach.firstName as person_coachFirstName, " +
+				"p.coach.lastName as person_coachLastName, " +
+				"p.coach.id as person_coachId, " +
+				"p.photoUrl as person_photoUrl");
 		
 		buildFrom(personSearchRequest,stringBuilder);
 		
@@ -193,7 +204,8 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		Query query = createHqlQuery(stringBuilder.toString());
 		
 		addBindParams(personSearchRequest,query,currentTerm);
-		
+		query.setResultTransformer(new NamespacedAliasToBeanResultTransformer(
+				PersonSearchResult2.class, "person_")).list();
 		return query.list();
 	}
 
@@ -236,6 +248,8 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 		appendAndOrWhere(stringBuilder, filterTracker);
 		stringBuilder.append(" p.studentType != null ");
+		
+		stringBuilder.append(" and programStatuses.expirationDate IS NULL");
 	}
 
 
@@ -280,7 +294,9 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" programStatus = :programStatus ");
-		}		
+		}
+		
+		
 	}
 
 
@@ -508,12 +524,11 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		{
 			stringBuilder.append(" left join p.plans as plan ");
 		}
-		if(hasProgramStatus(personSearchRequest))
-		{
-			stringBuilder.append(" left join p.programStatuses as programStatuses ");
-			stringBuilder.append(" left join programStatuses.programStatus as programStatus ");
+		
+		stringBuilder.append(" left join p.programStatuses as programStatuses ");
+		stringBuilder.append(" left join programStatuses.programStatus as programStatus ");
 			
-		}
+		
 		if(hasMyPlans(personSearchRequest))
 		{
 			stringBuilder.append(" left join p.plans as plan ");

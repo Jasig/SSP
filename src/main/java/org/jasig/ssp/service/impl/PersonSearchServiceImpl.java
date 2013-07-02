@@ -25,6 +25,7 @@ import org.jasig.ssp.dao.PersonSearchDao;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.PersonSearchResult;
+import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonProgramStatusService;
@@ -77,17 +78,10 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	}
 
 	@Override
-	public PagingWrapper<PersonSearchResult> search2(PersonSearchRequest from) throws ObjectNotFoundException, ValidationException {
+	public PagingWrapper<PersonSearchResult2> search2(PersonSearchRequest from) throws ObjectNotFoundException, ValidationException {
 		
-		List<Person> people = dao.search(from);
-		final Collection<PersonSearchResult> personSearchResults = Lists
-				.newArrayList();
-		for (final Person person : people) {
-			personSearchResults.add(new PersonSearchResult(person, 
-					personProgramStatus));
-		}
-		return new PagingWrapper<PersonSearchResult>(people.size(),
-				personSearchResults);
+		List<PersonSearchResult2> results = dao.search(from);
+		return new PagingWrapper<PersonSearchResult2>(results.size(), results);
 	}
 
 }
