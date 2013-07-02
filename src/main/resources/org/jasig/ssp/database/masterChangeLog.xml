@@ -29,11 +29,6 @@
 	<!-- Try to match spacing in masterChangeLog-test.xml as manual comparison 
 		will be necessary from time to time -->
 
-	<!-- Script can only run as user sspDbAdmin -->
-	<preConditions onFail="HALT">
-		<runningAs username="${database.admin.username}" />
-	</preConditions>
-
 	<include file="org/jasig/ssp/database/changesets/000001.xml" />
 
 	<include file="org/jasig/ssp/database/changesets/000002.xml" />
