@@ -199,6 +199,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     },
     
     verifyTranscript : function(record, confirm){
+		var me = this;
     	var transcript = me.transcriptStore.findRecord("formattedCourse", me.requiringFormattedCourse);
 		if(transcript){
 			var transcriptCourseTermCode = transcript.get('termCode');
