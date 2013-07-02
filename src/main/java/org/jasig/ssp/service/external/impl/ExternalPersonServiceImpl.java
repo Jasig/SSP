@@ -201,6 +201,18 @@ public class ExternalPersonServiceImpl
 		return people.getResults();
 	}
 
+	@Override
+	public void updatePersonFromExternalPerson(final Person person) {
+		try {
+			updatePersonFromExternalPerson(person, getBySchoolId(person.getSchoolId()));
+		} catch ( ObjectNotFoundException e ) {
+			LOGGER.debug("Skipping external data sync for "
+					+ "person [id: {}] [schoolId: {}] because "
+					+ "there is no corresponding external record.",
+					person.getId(), person.getSchoolId());
+		}
+	}
+
 	/**
 	 * Modifies state of Person for values of ExternalPerson that are different.
 	 * 

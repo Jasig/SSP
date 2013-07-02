@@ -191,6 +191,7 @@ public class PersonServiceImpl implements PersonService {
 				// try to create the person
 				try {
 					person = create(person);
+					externalPersonService.updatePersonFromExternalPerson(person);
 					LOGGER.info("Successfully Created Account for {}",
 							username);
 				} catch (final ObjectExistsException oee) {

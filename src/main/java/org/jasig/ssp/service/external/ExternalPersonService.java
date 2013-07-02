@@ -49,6 +49,14 @@ public interface ExternalPersonService extends
 
 	void updatePersonFromExternalPerson(final Person person,
 			final ExternalPerson externalPerson);
+
+	/**
+	 * Sync external data, if any, into the given Person instance. Will exit
+	 * quietly if there is no corresponding external data.
+	 *
+	 * @param person
+	 */
+	void updatePersonFromExternalPerson(final Person person);
 	
 	List<String> getAllDepartmentNames();
 }
