@@ -196,7 +196,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 	                }, {
 	                    xtype: 'label',
 						itemId: 'movePlanLabel',
-						width: 125,
+						width: 50,
 	                    text: me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan',
 
 	                }]
