@@ -43,12 +43,12 @@ namespace 'mygps.viewmodel'
 				return @session?.authenticatedPerson()?.id()
 
 			evaluateMapUrl: () ->
-				return "/ssp/api/1/person/" + @personId() + "/map/plan/print"
+				return "/ssp/api/1/mygps/plan/print"
            
 			getCurrentMap = (personId, callback) ->
                 $.ajax({
 	                type: "GET"
-	                url: "/ssp/api/1/person/" + personId + "/map/plan/current"
+	                url: "/ssp/api/1/mygps/plan/current"
 	                dataType: "json"
 	                success: (result) ->
                         callback(result)

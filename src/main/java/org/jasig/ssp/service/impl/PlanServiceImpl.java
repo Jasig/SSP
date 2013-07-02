@@ -21,11 +21,21 @@ package org.jasig.ssp.service.impl;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.PlanDao;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.model.SubjectAndBody;
+import org.jasig.ssp.model.reference.Config;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
+import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
+import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
+import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
+import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
 import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
@@ -44,12 +54,23 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO> implements PlanService {
+public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOutputTO>
+		implements PlanService {
 
 	@Autowired
 	private PlanDao dao;
 	
+	@Autowired
+	private PersonService personService;
 
+	@Autowired
+	private ConfigService configService;
+
+	@Autowired
+	private ExternalStudentFinancialAidService externalStudentFinancialAidService;
+
+	@Autowired
+	private ExternalStudentTranscriptService externalStudentTranscriptService;
 
 	
 	@Autowired
@@ -60,6 +81,12 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO> imple
 		return dao;
 	}
 
+	@Override
+	protected UUID getPersonIdPlannedFor(PlanTO model) {
+		String personId = model.getPersonId();
+		return StringUtils.isBlank(personId) ? null : UUID.fromString(personId);
+	}
+
 	public void setDao(PlanDao dao) {
 		this.dao = dao;
 	}
@@ -67,6 +94,23 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO> imple
 	@Override
 	public Plan getCurrentForStudent(UUID personId) {
 		return dao.getActivePlanForStudent(personId);
+	}
+
+	@Override
+	public SubjectAndBody createOutput(PlanOutputTO planOutputDataTO) throws ObjectNotFoundException {
+		SubjectAndBody output = null;
+
+		if(planOutputDataTO.getOutputFormat().equals(PlanService.OUTPUT_FORMAT_MATRIX)) {
+			output = createMatrixOutput(planOutputDataTO.getNonOutputTO());
+		} else{
+			UUID personID = UUID.fromString(planOutputDataTO.getPlan().getPersonId());
+			String schoolId = personService.get(personID).getSchoolId();
+			planOutputDataTO.setFinancialAid(externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId));
+			planOutputDataTO.setGpa(externalStudentTranscriptService.getRecordsBySchoolId(schoolId));
+			output = createFullOutput(planOutputDataTO);
+		}
+
+		return output;
 	}
 
 	@Override
@@ -111,4 +155,5 @@ public  class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO> imple
 	public List<PlanStudentStatusTO> getPlanStudentStatusByCourse(SearchPlanTO form){
 		return dao.getPlanStudentStatusByCourse(form);
 	}
+
 }

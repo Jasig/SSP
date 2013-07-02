@@ -37,7 +37,7 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 /**
  * Person service
  */
-public interface PlanService extends AbstractPlanService<Plan,PlanTO> {
+public interface PlanService extends AbstractPlanService<Plan,PlanTO,PlanOutputTO> {
 
 	Plan copyAndSave(Plan plan) throws CloneNotSupportedException;
 

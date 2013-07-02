@@ -710,6 +710,11 @@ public class PersonServiceImpl implements PersonService {
 		return pw;
 	}
 
+	@Override
+	public String getSchoolIdForPersonId(UUID personId) throws ObjectNotFoundException {
+		return get(personId).getSchoolId();
+	}
+
 	private <V> V withCoachSyncTransaction(Callable<V> callable) {
 		if ( perCoachSyncTransactions ) {
 			return withTransaction.withNewTransactionAndUncheckedExceptions(callable);

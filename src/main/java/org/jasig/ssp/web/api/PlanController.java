@@ -116,12 +116,6 @@ public class PlanController  extends AbstractBaseController {
 	
 	@Autowired
 	private ExternalPersonPlanStatusTOFactory planStatusFactory;
-	
-	@Autowired
-	private ExternalStudentFinancialAidService externalStudentFinancialAidService;
-	
-	@Autowired
-	private ExternalStudentTranscriptService externalStudentTranscriptService;
 
  
 	/**
@@ -277,30 +271,7 @@ public class PlanController  extends AbstractBaseController {
 	String print(final HttpServletResponse response,
 			 @RequestBody final PlanOutputTO planOutputDataTO) throws ObjectNotFoundException {
 
-		
-			
-		SubjectAndBody message = getOutput(planOutputDataTO);
-		if(message != null)
-			return message.getBody();
-		
-		return null;
-	}
-
-	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
-	@RequestMapping(value="/print", method = RequestMethod.GET)
-	public @ResponseBody
-	String print(final @PathVariable UUID personId) throws ObjectNotFoundException,
-			ValidationException {
-		PlanOutputTO planOutputDataTO = new PlanOutputTO();
-		
-		final Plan model = getService().getCurrentForStudent(personId);
-		if (model == null) {
-			return null;
-		}
-		planOutputDataTO.setPlan(new PlanTO(model));
-		planOutputDataTO.setOutputFormat("fullFormat");
-
-		SubjectAndBody message = getOutput(planOutputDataTO);
+		SubjectAndBody message = service.createOutput(planOutputDataTO);
 		if(message != null)
 			return message.getBody();
 		
@@ -324,7 +295,7 @@ public class PlanController  extends AbstractBaseController {
 	public @ResponseBody
 	String email(final HttpServletResponse response,
 			 @RequestBody final PlanOutputTO planOutputDataTO) throws ObjectNotFoundException {
-		SubjectAndBody messageText = getOutput(planOutputDataTO);
+		SubjectAndBody messageText = service.createOutput(planOutputDataTO);
 		if(messageText == null)
 			return null;
 
@@ -333,23 +304,6 @@ public class PlanController  extends AbstractBaseController {
 							messageText);
 		
 		return "Map Plan has been queued.";
-	}
-	
-	private SubjectAndBody getOutput(PlanOutputTO planOutputDataTO) throws ObjectNotFoundException{
-		Config institutionName = configService.getByName("inst_name");
-		SubjectAndBody output = null;
-		
-		if(planOutputDataTO.getOutputFormat().equals(PlanService.OUTPUT_FORMAT_MATRIX)) {
-			output = service.createMatirxOutput(planOutputDataTO.getNonOutputTO(), institutionName.getValue());
-		} else{
-			UUID personID = UUID.fromString(planOutputDataTO.getPlan().getPersonId());
-			String schoolId = personService.get(personID).getSchoolId();
-			planOutputDataTO.setFinancialAid(externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId));
-			planOutputDataTO.setGpa(externalStudentTranscriptService.getRecordsBySchoolId(schoolId));
-			output = service.createFullOutput(planOutputDataTO, institutionName.getValue());
-		}
-		
-		return output;
 	}
 
 	/**
@@ -443,12 +397,7 @@ public class PlanController  extends AbstractBaseController {
 	PlanTO validatePlan(final HttpServletResponse response,
 			 @RequestBody final PlanTO plan)
 			throws ObjectNotFoundException {
-		String schoolId = null;
-		if(StringUtils.isNotBlank(plan.getPersonId())){
-			Person student = personService.get(UUID.fromString(plan.getPersonId()));
-			schoolId = student.getSchoolId();
-		}
-		PlanTO validatedTO = getService().validate(plan, schoolId);
+		PlanTO validatedTO = getService().validate(plan);
 		return validatedTO;
 	}
 	
@@ -487,7 +436,7 @@ public class PlanController  extends AbstractBaseController {
 			Person student = personService.get(UUID.fromString(plan.getPersonId()));
 			schoolId = student.getSchoolId();
 		}
-		return getService().validate(plan, schoolId);
+		return getService().validate(plan);
 	}
 
 	public PlanService getService() {

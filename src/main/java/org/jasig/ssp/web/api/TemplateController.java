@@ -236,7 +236,7 @@ public class TemplateController  extends AbstractBaseController {
 	String print(final HttpServletResponse response,
 			 @RequestBody final TemplateOutputTO planOutputDataTO) throws ObjectNotFoundException {
 
-		SubjectAndBody message = getOutput(planOutputDataTO);
+		SubjectAndBody message = getService().createOutput(planOutputDataTO);
 		if(message != null)
 			return message.getBody();
 		
@@ -261,7 +261,7 @@ public class TemplateController  extends AbstractBaseController {
 	public @ResponseBody
 	String email(final HttpServletResponse response,
 			 @RequestBody final TemplateOutputTO planOutputDataTO) throws ObjectNotFoundException {
-		SubjectAndBody messageText = getOutput(planOutputDataTO);
+		SubjectAndBody messageText = getService().createOutput(planOutputDataTO);
 		if(messageText == null)
 			return null;
 
@@ -270,19 +270,6 @@ public class TemplateController  extends AbstractBaseController {
 							messageText);
 		
 		return "Map Plan has been queued.";
-	}
-	
-	private SubjectAndBody getOutput(TemplateOutputTO templateOutputDataTO) throws ObjectNotFoundException{
-		Config institutionName = configService.getByName("inst_name");
-		SubjectAndBody output = null;
-		
-		if(templateOutputDataTO.getOutputFormat().equals(TemplateService.OUTPUT_FORMAT_MATRIX)) {
-			output = service.createMatirxOutput(templateOutputDataTO.getNonOutputTO(), institutionName.getValue());
-		} else{
-			output = service.createFullOutput(templateOutputDataTO, institutionName.getValue());
-		}
-		
-		return output;
 	}
 
 	/**
@@ -377,12 +364,12 @@ public class TemplateController  extends AbstractBaseController {
 			 @RequestBody final TemplateTO plan)
 			throws ObjectNotFoundException {
 
-		TemplateTO validatedTO = getService().validate(plan, null);
+		TemplateTO validatedTO = getService().validate(plan);
 		return validatedTO;
 	}
 	
 	private TemplateTO validatePlan(TemplateTO plan) throws ObjectNotFoundException{
-		return getService().validate(plan, null);
+		return getService().validate(plan);
 	}
 
 	public TemplateService getService() {

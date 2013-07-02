@@ -176,7 +176,7 @@ public class PlanServiceTest {
 		}
 		
 
-		final SubjectAndBody messageText = service.createMatirxOutput(plan, "new institution");
+		final SubjectAndBody messageText = service.createMatrixOutput(plan);
 		assertNotNull("Save() result should not have been null.", messageText);
 
 	}

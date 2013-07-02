@@ -281,4 +281,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 			final SortingAndPaging sAndP) throws ObjectNotFoundException;
 
 	PagingWrapper<Person> syncCoaches();
+
+	String getSchoolIdForPersonId(UUID personId) throws ObjectNotFoundException;
+
 }

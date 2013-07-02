@@ -37,6 +37,7 @@ import org.jasig.ssp.model.external.ExternalCourseRequisite;
 import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
 import org.jasig.ssp.model.external.RequisiteCode;
 import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
 import org.jasig.ssp.service.AbstractPlanService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -46,6 +47,7 @@ import org.jasig.ssp.service.external.ExternalCourseRequisiteService;
 import org.jasig.ssp.service.external.ExternalCourseService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptCourseService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.AbstractPlanCourseTO;
 import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
@@ -62,7 +64,10 @@ import com.google.common.collect.Lists;
  * @author tony.arland
  */
 @Transactional
-public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extends AbstractPlanTO<T>> extends  AbstractAuditableCrudService<T> implements AbstractPlanService<T,TO> {
+public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
+		TO extends AbstractPlanTO<T>, TOO extends AbstractPlanOutputTO<T,TO>>
+	extends  AbstractAuditableCrudService<T>
+	implements AbstractPlanService<T,TO, TOO> {
 
 	@Autowired
 	private SecurityService securityService;
@@ -84,6 +89,9 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 	
 	@Autowired
 	private ExternalStudentTranscriptCourseService studentTranscriptService;
+
+	@Autowired
+	private transient ConfigService configService;
 	
 	@Override
 	public T save(T obj) {
@@ -114,10 +122,14 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 	public T copyAndSave(T model, Person newOwner) throws CloneNotSupportedException {
 		return getDao().cloneAndSave(model, newOwner);
 	}
+
+	protected String getInstitutionName() {
+		return configService.getByNameNullOrDefaultValue("inst_name");
+	}
 	
 	@Override
 	@Transactional(readOnly=true)
-	public SubjectAndBody createMatirxOutput(final TO outputPlan, String institutionName) throws ObjectNotFoundException {
+	public SubjectAndBody createMatrixOutput(final TO outputPlan) throws ObjectNotFoundException {
 		
 		//TODO eventually find a better  way to set the student when in context
 		Person student = outputPlan instanceof PlanTO ?  personService.get(UUID.fromString(((PlanTO)outputPlan).getPersonId())) : null;
@@ -127,11 +139,11 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 		List<TermCourses<T,TO>> courses = collectTermCourses(outputPlan);
 		Float totalPlanCreditHours = calculateTotalPlanHours(courses);
 		 
-		SubjectAndBody subjectAndBody = getMessageTemplateService().createMapPlanMatrixOutput(student, owner, outputPlan, totalPlanCreditHours, courses, institutionName);
+		SubjectAndBody subjectAndBody = getMessageTemplateService().createMapPlanMatrixOutput(student, owner, outputPlan, totalPlanCreditHours, courses, getInstitutionName());
 		return subjectAndBody;
 	}
 	@Override
-	public SubjectAndBody createFullOutput(AbstractPlanOutputTO<T,TO> planOutput, String institutionName) throws ObjectNotFoundException
+	public SubjectAndBody createFullOutput(TOO planOutput) throws ObjectNotFoundException
 	{
 		TO plan = planOutput.getNonOutputTO();
 		//TODO eventually find a better way to set the student when in context
@@ -147,14 +159,14 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 				planOutput, 
 				totalPlanCreditHours, 
 				totalPlanDevHours, 
-				courses, 
-				institutionName);
+				courses,
+				getInstitutionName());
 		return subjectAndBody;
 	}
 	
 	@Override
 	@Transactional(readOnly=true)
-	public TO validate(TO model, String studentSchoolId) throws ObjectNotFoundException{
+	public TO validate(TO model) throws ObjectNotFoundException{
 
 		List<? extends AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courses = model.getCourses();
 		Map<String, List<String>> coursesByTerm = new HashMap<String, List<String>>();
@@ -183,11 +195,11 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 				}
 			}
 		}
-		model = validatePrerequisites(model, studentSchoolId);
+		model = validatePrerequisites(model);
 		return model;
 	}
 	
-	public TO validatePrerequisites(TO model, String studentSchoolId) throws ObjectNotFoundException{
+	public TO validatePrerequisites(TO model) throws ObjectNotFoundException{
 		List<? extends AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courses = model.getCourses();
 		List<String> requiringCourseCodes = new ArrayList<String>();
 		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>  course: courses){
@@ -207,7 +219,9 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 		}
 		
 		List<String> transcriptedCourseCodeCourse = new ArrayList<String>();
-	
+
+		String studentSchoolId = getSchoolIdPlannedFor(model);
+
 		if(StringUtils.isNotBlank(studentSchoolId)){
 			List<ExternalStudentTranscriptCourse> transcriptedCourses = studentTranscriptService.getTranscriptsBySchoolId(studentSchoolId);
 			for(ExternalStudentTranscriptCourse transcriptedCourse:transcriptedCourses){
@@ -265,7 +279,14 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan, TO extend
 		
 		return model;
 	}
-	
+
+	protected String getSchoolIdPlannedFor(TO model) throws ObjectNotFoundException {
+		UUID personId = getPersonIdPlannedFor(model);
+		return personId == null ? null : personService.getSchoolIdForPersonId(personId);
+	}
+
+	protected abstract UUID getPersonIdPlannedFor(TO model);
+
 	private Float calculateTotalPlanDevHours(List<TermCourses<T, TO>> courses) {
 		Float totalDevCreditHours = new Float(0);
 		for(TermCourses<T,TO> termCourses : courses){
