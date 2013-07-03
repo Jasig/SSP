@@ -40,7 +40,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
             click: 'onFAButtonClick'
            }
         },
-
+		'planFAFieldSet': '#planFAFieldSet',
+		'planTranscriptFieldSet': '#planTranscriptFieldSet',
 		'onPlan':'#onPlan',
         'onPlanStatusDetails':'#onPlanStatusDetails',
 		'onPlanFieldSet':'#onPlanFieldSet',
@@ -472,13 +473,15 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.getSavePlanButton().hide();
 			me.getSaveTemplateAsButton().show();
 			me.getPrintPlanButton().hide();
+			me.getPlanFAButton().hide();
 			me.getPrintLabel().hide();
 			me.getEmailPlanButton().hide();
 			me.getEmailLabel().hide();
 			me.getName().setFieldLabel("Template Title");
 			me.getNotesLabel().setText("Template Notes");
 			me.getPlanNotesButton().setTooltip("Template Notes");
-			
+			me.getPlanFAFieldSet().hide();
+			me.getPlanTranscriptFieldSet().hide();
 			me.getMovePlanLabel().setText("Move Template");
 			me.getMovePlanButton().setTooltip("Move Template");
 			me.getOnPlanFieldSet().hide();
@@ -487,6 +490,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.getSaveTemplateAsButton().show();
 			me.getSaveTemplateButton().hide();
 			me.getPrintPlanButton().show();
+			me.getPlanFAFieldSet().show();
+			me.getPlanTranscriptFieldSet().show();
 			me.getPrintLabel().show();
 			me.getEmailPlanButton().show();
 			me.getEmailLabel().show();

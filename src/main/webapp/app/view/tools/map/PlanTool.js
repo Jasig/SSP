@@ -104,7 +104,37 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 
                 }]
             
-            }, 
+            }, 	{
+		                xtype: 'fieldset',
+		                border: 0,
+		                padding: '0 0 0 0',
+		                title: '',
+		                defaultType: 'displayfield',
+		                layout: 'vbox',
+		                width: 80,
+		                cls: 'center-align',
+		                defaults: {
+		                    anchor: '100%'
+		                },
+		                items: [{
+		                    tooltip:  me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan',
+		                    width: 30,
+		                    height: 30,
+		                    cls: 'mapMovePlanIcon',
+		                    xtype: 'button',
+		                    itemId: 'movePlanButton',
+			                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON'),
+		                    align: 'center',
+		                    padding: '0 0 0 0'
+		                }, {
+		                    xtype: 'label',
+							itemId: 'movePlanLabel',
+							width: 50,
+		                    text: me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan',
+
+		                }]
+
+		            },
             {
 				hidden: true,
 				hideable: false,
@@ -178,38 +208,10 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 	                title: '',
 	                defaultType: 'displayfield',
 	                layout: 'vbox',
+					itemId: 'planFAFieldSet',
 	                width: 80,
 	                cls: 'center-align',
-	                defaults: {
-	                    anchor: '100%'
-	                },
-	                items: [{
-	                    tooltip:  me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan',
-	                    width: 30,
-	                    height: 30,
-	                    cls: 'mapMovePlanIcon',
-	                    xtype: 'button',
-	                    itemId: 'movePlanButton',
-		                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON'),
-	                    align: 'center',
-	                    padding: '0 0 0 0'
-	                }, {
-	                    xtype: 'label',
-						itemId: 'movePlanLabel',
-						width: 50,
-	                    text: me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan',
-
-	                }]
-
-	            },{
-	                xtype: 'fieldset',
-	                border: 0,
-	                padding: '0 0 0 0',
-	                title: '',
-	                defaultType: 'displayfield',
-	                layout: 'vbox',
-	                width: 80,
-	                cls: 'center-align',
+	                hidden:  me.currentMapPlan.get("isTemplate") == true,
 	                defaults: {
 	                    anchor: '100%'
 	                },
@@ -222,10 +224,12 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 	                    xtype: 'button',
 	                    itemId: 'planFAButton',
 	                    align: 'center',
-	                    padding: '0 0 0 0',
+	                    hidden:  me.currentMapPlan.get("isTemplate") == true,
+	                    padding: '0 0 0 0'
 	                }, {
 	                    xtype: 'label',
-	                    text: 'Financial Aid',
+	                    hidden:  me.currentMapPlan.get("isTemplate") == true,
+	                    text: 'Financial Aid'
 	                }]
 	            
 	            },{
@@ -236,8 +240,9 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 			                defaultType: 'displayfield',
 			                layout: 'vbox',
 			                width: 80,
+							itemId: 'planTranscriptFieldSet',
 			                cls: 'center-align',
-							hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON') || me.currentMapPlan.get("isTemplate") == true,
+							hidden:  me.currentMapPlan.get("isTemplate") == true,
 			                defaults: {
 			                    anchor: '100%'
 			                },
@@ -249,12 +254,15 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 			                    xtype: 'button',
 			                    itemId: 'showStudentTranscript',
 			                    align: 'center',
+			                    hidden:  me.currentMapPlan.get("isTemplate") == true,
 			                    padding: '0 0 0 0'
+			                    
 			                }, {
 			                    xtype: 'label',
 								itemId: 'showStudentTranscriptLabel',
 								width: 125,
-			                    text: 'Transcript',
+								hidden:  me.currentMapPlan.get("isTemplate") == true,
+			                    text: 'Transcript'
 
 			                }]
 
