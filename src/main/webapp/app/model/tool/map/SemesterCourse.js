@@ -31,7 +31,8 @@ Ext.define('Ssp.model.tool.map.SemesterCourse', {
 			 {name:'studentNotes', type: 'string'},
 			 {name:'contactNotes', type: 'string'},
 			 {name:'isImportant', type: 'boolean'},
-			 {name:'isTranscript', type: 'boolean'},
+			 {name:'isTranscript', type: 'boolean', defaultValue:false},
+			 {name:'duplicateOfTranscript', type: 'boolean', defaultValue:false},
 			 {name:'validInTerm',type:'boolean', defaultValue:true, convert: null},
              {name:'hasCorequisites',type:'boolean', defaultValue:true, convert: null},
              {name:'hasPrerequisites',type:'boolean', defaultValue:true, convert: null},
@@ -42,20 +43,25 @@ Ext.define('Ssp.model.tool.map.SemesterCourse', {
 					var me = this;
 		        	this.callParent(arguments);
 					if(planCourse){
-						if( planCourse.courseTitle)
+						if(planCourse.courseTitle)
 							me.set('title', planCourse.courseTitle);
+							
 						if(planCourse.courseCode)
 							me.set('code', planCourse.courseCode);
+							
 						if(planCourse.courseDescription)
 							me.set('description', planCourse.courseDescription);
+							
 						if(planCourse.isTranscript)
 							me.set('isTranscript', planCourse.isTranscript);
 						else
 							me.set('isTranscript', false);
+							
 						if(planCourse.duplicateOfTranscript)
-								me.set('duplicateOfTranscript', planCourse.duplicateOfTranscript);
+							me.set('duplicateOfTranscript', planCourse.duplicateOfTranscript);
 						else
 							me.set('duplicateOfTranscript', false);
+							
 						if(planCourse.isImportant)
 							me.set('isImportant', planCourse.isImportant);	
 						else

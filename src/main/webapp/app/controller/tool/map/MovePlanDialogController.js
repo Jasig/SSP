@@ -47,21 +47,16 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 	init: function() {
 		var me=this;
 		var view = me.getView();
-		me.getTermCodeEndField().store = me.termsStore.getCurrentAndFutureTermsStore(true);
-		
-		me.currentAndFutureTermsStore = me.getTermCodeEndField().store
-		me.currentAndFutureTermsStore.sort('startDate', 'ASC');
-
+		me.currentAndFutureTermsStore = me.termsStore.getCurrentAndFutureTermsStore(true);
 		var availableTerms = me.getAvailableTerms();
 		
-		me.getTermCodeToBumpField().store = availableTerms;
-		
+		var allowedTerms = me.getAllowedTerms();
 		
 		var startTerm = availableTerms.getAt(0);
 		me.getTermCodeToBumpField().setValue(startTerm.get('code'));
 		
-		var indexStartTerm = me.currentAndFutureTermsStore.find('code', startTerm.get('code'));
-		me.getTermCodeEndField().setValue(me.currentAndFutureTermsStore.getAt(indexStartTerm + 1).get('code'));
+		var indexStartTerm = allowedTerms.find('code', startTerm.get('code'));
+		me.getTermCodeEndField().setValue(allowedTerms.getAt(indexStartTerm + 1).get('code'));
 		
 		var actions = Ext.create('Ext.data.Store', {
 		    fields: ['action', 'name'],
@@ -71,8 +66,9 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 		        {"action":"removeTerm", "name":"Remove Term"}
 		    ]
 		});
-		
-		me.getSelectActionField().store = actions;
+		me.getTermCodeToBumpField().bindStore(availableTerms);
+		me.getTermCodeEndField().bindStore(me.allowedTerms);
+		me.getSelectActionField().bindStore(actions);
 		me.getSelectActionField().setValue('movePlan');
 		return this.callParent(arguments);
     },
@@ -85,21 +81,38 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 		
 		availableTerms.sort('startDate', 'ASC');
 		if(availableTerms == null || availableTerms.getCount() < 3){
-			me.getTermCodeToBumpField().bindStore(me.currentAndFutureTermsStore);
-			me.getTermCodeEndField().bindStore(me.currentAndFutureTermsStore);
 			return me.currentAndFutureTermsStore;
 		}
-		var startIndex = me.currentAndFutureTermsStore.find('code',availableTerms.getAt(0).get("code"));
-		if(startIndex < 0)
-			startIndex = 0;
-		var endIndex = me.currentAndFutureTermsStore.find('code',availableTerms.getAt(availableTerms.getCount() - 1).get("code"));
-		if(endIndex < 0)
-			endIndex = me.currentAndFutureTermsStore.getCount() - 1;
-		if(endIndex < 0)
-			return;
-		availableTerms.removeAll();
-		availableTerms.loadRecords(me.currentAndFutureTermsStore.getRange(startIndex, endIndex));
+		if(!me.currentMapPlan.get("isTemplate")){
+			var startIndex = me.currentAndFutureTermsStore.find('code',availableTerms.getAt(0).get("code"));
+			if(startIndex < 0)
+				startIndex = 0;
+			var endIndex = me.currentAndFutureTermsStore.find('code',availableTerms.getAt(availableTerms.getCount() - 1).get("code"));
+			if(endIndex < 0)
+				endIndex = me.currentAndFutureTermsStore.getCount() - 1;
+			if(endIndex < 0)
+				return;
+			availableTerms.removeAll();
+			availableTerms.loadRecords(me.currentAndFutureTermsStore.getRange(startIndex, endIndex));
+		}
+    
 		return availableTerms;
+	},
+	
+	getAllowedTerms: function(availableTerms){
+		if(!me.currentMapPlan.get("isTemplate"))
+			return me.currentAndFutureTermsStore;
+		var sIndex = me.termsStore.find('code', availableTerms.getAt(0).get('code'));
+		var eIndex = me.termsStore.find('code', availableTerms.getAt(availableTerms.getCount() - 1).get('code'));
+		var allowedTerms = Ext.create('Ext.data.Store', {
+	     	model: "Ssp.model.external.Term"
+	     });
+		if(sIndex > eIndex){
+			allowedTerms.loadRecords(me.currentAndFutureTermsStore.getRange(eIndex, sIndex));
+		}else
+			allowedTerms.loadRecords(me.currentAndFutureTermsStore.getRange(sIndex, eIndex));
+		allowedTerms.sort('startDate', 'ASC');	
+		return allowedTerms;
 	},
 
     onMovePlan: function(){

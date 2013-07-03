@@ -63,12 +63,12 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 		            flex:0,
 		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 		            	var isTranscript = record.get('isTranscript');
-		            	var duplicatedOfTranscript = record.get('duplicateOfTranscript');
+		            	var duplicateOfTranscript = record.get('duplicateOfTranscript');
 		            	var color = isTranscript ? '#ffff00' : 'rgba(0,0,0,0.0)';
-		            	color = duplicatedOfTranscript ? '#0000FF' : color;
+		            	color = duplicateOfTranscript ? '#0000FF' : color;
 						
 						if ( isTranscript ) {
-							if(!duplicatedOfTranscript)
+							if(!duplicateOfTranscript)
 								metaData.tdAttr = 'data-qtip="Yellow indicates course is already on students\' transcript"';
 							else{
 								metaData.tdAttr = 'data-qtip="Blue indicates course is a duplicate of one on students\' transcript but in a different term."';
@@ -101,7 +101,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 		            height: 5,
 		            flex:0,
 		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
-		            		var isDev = record.get('isDev');
+		            		var isDev = record.isDev();
 			            	var color = isDev ? '#ff0000' : 'rgba(0,0,0,0.0)';
 							metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
 							if ( isDev ) {

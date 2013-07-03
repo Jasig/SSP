@@ -39,5 +39,7 @@ public class TemplateCourseTO extends AbstractPlanCourseTO<Template,TemplateCour
 	@Override
 	public void from(TemplateCourse model) {
 		super.from(model);
+		this.setIsTranscript(false);
+		this.setDuplicateOfTranscript(false);
 	}
 }
