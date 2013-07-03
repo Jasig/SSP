@@ -91,8 +91,8 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
 				            flex:0,
 							text: 'D',
 				            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
-				            		var isDev = record.get('isDev');
-									if ( isDev ) {
+				            		var isDev = record.isDev();
+									if ( isDev == true) {
 										metaData.tdAttr = 'data-qtip="D indicates course is a dev course."';
 										return "D"
 									}

@@ -158,6 +158,8 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 				break;
 			}
 		}
+		
+		record.set("isDev", me.droppedData.isDev());
     	if(!me.courseTermValidation.valid && validationResponse == null){
     		confirm.valid = false;
     		confirm.title = 'Course Not Avaiable For Term';
