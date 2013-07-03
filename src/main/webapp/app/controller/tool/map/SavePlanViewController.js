@@ -74,8 +74,7 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 		me.setField('checkbox[name=isImportant]', 'isImportant');
 		me.setField('checkbox[name=isF1Visa]', 'isF1Visa');
     	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
-		me.currentMapPlan.set('isTemplate', false);
-		
+		me.currentMapPlan.setIsTemplate(false);
     	if(me.getView().saveAs)
     	{
     		me.appEventsController.getApplication().fireEvent('onSaveAsMapPlan');

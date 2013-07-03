@@ -341,7 +341,7 @@ Ext.define('Ssp.service.MapPlanService', {
 			var url = me.getBaseUrl(plan.get('personId'));
 		if(isTemplate){
 			plan.set("personId","");
-			plan.set("isTemplate",isTemplate);
+			plan.setIsTemplate(isTemplate);
 			url = me.getTemplateBaseUrl();
 		}
 		plan.clearValidation();

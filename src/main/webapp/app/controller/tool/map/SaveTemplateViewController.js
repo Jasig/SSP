@@ -75,7 +75,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		
 		if(!me.currentMapPlan.get('isTemplate')){
 			me.currentMapPlan.set('id', '');
-			me.currentMapPlan.set('isTemplate', true);
+			me.currentMapPlan.setIsTemplate(true);
 		}
     	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
     	if(me.getView().saveAs)

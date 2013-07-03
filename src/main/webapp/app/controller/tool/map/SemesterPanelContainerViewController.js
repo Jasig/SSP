@@ -128,9 +128,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			me.populatePlanStores();
 			me.updateAllPlanHours();
 			if(isTemplate)
-				me.currentMapPlan.set('isTemplate', isTemplate);
+				me.currentMapPlan.setIsTemplate(isTemplate);
 			else
-				me.currentMapPlan.set('isTemplate', false);
+				me.currentMapPlan.setIsTemplate(false);
 		}
     	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
 
@@ -141,7 +141,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.onCreateMapPlan();
 		me.populatePlanStores();
 		me.updateAllPlanHours();  
-    	me.currentMapPlan.set('isTemplate', false);
+    	me.currentMapPlan.setIsTemplate(false);
     	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
 		me.getView().setLoading(false);
     },
@@ -149,7 +149,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     onLoadTemplatePlan: function () {
     	var me = this;
     	me.currentMapPlan.set("planCourses", me.currentMapPlan.get('templateCourses'));
-    	me.currentMapPlan.set('isTemplate', true);
+    	me.currentMapPlan.setIsTemplate(true);
 		me.onCreateMapPlan();
 		me.populatePlanStores();
 		me.updateAllPlanHours();  
@@ -242,14 +242,13 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.currentMapPlan.set('ownerId',  me.authenticatedPerson.get('id'));
 		me.currentMapPlan.set('name','New Plan');
 		me.currentMapPlan.set('termNotes',[]);
-		me.currentMapPlan.set('isTemplate', false);
+		me.currentMapPlan.setIsTemplate(false);
 		me.onCreateMapPlan();
 		me.populatePlanStores();
 		me.updateAllPlanHours();
 		me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
 	},
-
-
+	 
 	populatePlanStores:function(){
 		var me = this;
 		var planCourses = me.currentMapPlan.get('planCourses');
@@ -443,7 +442,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		Ext.Msg.alert('Your changes have been saved.'); 
 		me.getView().setLoading(false);
 		me.getMapPlanServiceSuccess(serviceResponses);
-		me.currentMapPlan.set("isTemplate", false)
+		me.currentMapPlan.setIsTemplate(false);
     	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
 		
 	},
@@ -459,8 +458,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     me.getMapPlanServiceSuccess(serviceResponses, true);
     
     Ext.Msg.alert('Your changes have been saved.'); 
-	me.currentMapPlan.set("isTemplate", true)
-   
+	me.currentMapPlan.setIsTemplate(true);  
   },
   
   onSaveTemplateCompleteFailure: function(serviceResponses){

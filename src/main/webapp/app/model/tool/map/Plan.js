@@ -91,7 +91,14 @@ Ext.define('Ssp.model.tool.map.Plan', {
 				}
 			},
 			
-			
+	
+	
+    setIsTemplate: function(value){
+        var me = this;
+        me.set("isTemplate", value);
+		me.dirty = false;
+    },
+		
 	getTermNoteByTermCode: function(termCode){
 		var me = this;
 		var termNotes =  me.get('termNotes');
@@ -109,6 +116,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		if(!foundNote){
 			foundNote = new Ssp.model.tool.map.TermNote();
 			foundNote.set('termCode', termCode);
+			foundNote.dirty = false;
 			termNotes.push(foundNote);
 		}
 		
