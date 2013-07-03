@@ -50,7 +50,10 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 		me.currentAndFutureTermsStore = me.termsStore.getCurrentAndFutureTermsStore(true);
 		var availableTerms = me.getAvailableTerms();
 		
-		var allowedTerms = me.getAllowedTerms();
+		var allowedTerms = me.getAllowedTerms(availableTerms);
+		
+		me.getTermCodeToBumpField().bindStore(availableTerms);
+		me.getTermCodeEndField().bindStore(allowedTerms);
 		
 		var startTerm = availableTerms.getAt(0);
 		me.getTermCodeToBumpField().setValue(startTerm.get('code'));
@@ -66,8 +69,7 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 		        {"action":"removeTerm", "name":"Remove Term"}
 		    ]
 		});
-		me.getTermCodeToBumpField().bindStore(availableTerms);
-		me.getTermCodeEndField().bindStore(me.allowedTerms);
+		
 		me.getSelectActionField().bindStore(actions);
 		me.getSelectActionField().setValue('movePlan');
 		return this.callParent(arguments);
@@ -100,6 +102,7 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 	},
 	
 	getAllowedTerms: function(availableTerms){
+		var me = this;
 		if(!me.currentMapPlan.get("isTemplate"))
 			return me.currentAndFutureTermsStore;
 		var sIndex = me.termsStore.find('code', availableTerms.getAt(0).get('code'));
@@ -107,10 +110,10 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 		var allowedTerms = Ext.create('Ext.data.Store', {
 	     	model: "Ssp.model.external.Term"
 	     });
-		if(sIndex > eIndex){
-			allowedTerms.loadRecords(me.currentAndFutureTermsStore.getRange(eIndex, sIndex));
+		if(sIndex < eIndex){
+			allowedTerms.loadRecords(me.termsStore.getRange(sIndex));
 		}else
-			allowedTerms.loadRecords(me.currentAndFutureTermsStore.getRange(sIndex, eIndex));
+			allowedTerms.loadRecords(me.termsStore.getRange(0, sIndex));
 		allowedTerms.sort('startDate', 'ASC');	
 		return allowedTerms;
 	},

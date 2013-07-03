@@ -720,6 +720,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			me.onCreateMapPlan();
 			me.populatePlanStores();
 			me.updateAllPlanHours();
+			me.currentMapPlan.dirty = true;
 			me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
 		}
 	},
