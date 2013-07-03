@@ -32,6 +32,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
     layout: 'auto',
 	width: '100%',
     height: '100%',
+	minHeight: 200,
 	dueDateMsg: 'Task due dates are always interpreted in the institution\'s time zone.',
 	dueDateRenderer: function() {
 		var me = this;

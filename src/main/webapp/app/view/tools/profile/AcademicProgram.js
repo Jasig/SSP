@@ -35,6 +35,10 @@ Ext.define('Ssp.view.tools.profile.AcademicProgram', {
             border: 1,
             bodyPadding: 0,
             margin: '0 0 7 0',
+			width: '100%',
+			height: '100%',
+			minHeight: 208,		
+			minWidth: 208,
             layout: 'anchor',
             defaults: {
                 anchor: '100%'
