@@ -499,7 +499,15 @@ Ext.define('Ssp.controller.SearchViewController', {
 	               scope: me 
 	           });    		
 	   	}else{
-	   		Ext.Msg.alert('SSP Error','Unable to determine student to set to No-Show status');
+	   		var msg = "";
+	   		if (action=='no-show')
+	   			msg = 'No-Show';
+	   		if (action=='non-participating')
+	   			msg = 'Non-Participating';
+	   		if (action=='active')
+	   			msg = 'Active';
+	   		
+	   		Ext.Msg.alert('SSP Error','Unable to determine student to set to ' + msg + ' status.');
 	   	}
     },
     
