@@ -832,6 +832,20 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		if (selectedItems.length==0)
 			selectedItems.push({name:'No ' + noItemsPropertyLabel});
 		return selectedItems;
+    },
+    
+    filterAssociativeComboStore: function(store, idToMatch) {
+    	var activeOrSelectedFilter = Ext.create('Ext.util.Filter', {
+			filterFn: function(storeItem) {
+				if(storeItem.data.active == true || 
+				   storeItem.data.id == idToMatch) {
+					return true;
+				}
+				return false;
+			}
+		});
+    	
+    	store.filter(activeOrSelectedFilter);
     }
 });
 

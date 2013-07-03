@@ -490,6 +490,10 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     text: 'Electives',
                     title: 'Electives',
                     store: 'electivesAll',
+                    sort: {
+                    	field: 'sortOrder',
+                    	direction: 'ASC' //or 'DESC'
+                    },
                     viewConfig: {
                         markDirty: false
                     },
@@ -498,7 +502,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         deleteButtonVisible: false,
                         dragAndDropReorder: true,
                         headerInstructions: "Double-click to edit and drag to re-order items."
-                    },
+                    },                    
                     form: 'AbstractReferenceAdmin',
                     leaf: true,
                     columns: [{

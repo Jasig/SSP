@@ -23,7 +23,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 	controller: 'Ssp.controller.tool.map.SemesterGridViewController',
 	inject:{
 		appEventsController: 'appEventsController',
-		electiveStore: 'electiveStore',
+		electiveStore: 'electivesAllUnpagedStore',
     	currentMapPlan: 'currentMapPlan',
 		colorsStore: 'colorsStore', 
 		colorsUnpagedStore: 'colorsUnpagedStore', 

@@ -16,16 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.store.reference.Elective', {
+Ext.define('Ssp.store.reference.Electives', {
     extend: 'Ssp.store.reference.AbstractReferences',
     model: 'Ssp.model.reference.Elective',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('elective')});
-    	this.load();
-    },
-    sortInfo:{
-        field:'sortOrder',
-        direction:'ASC'// or 'DESC' (case sensitive for local sorting)
+    	Ext.apply(this.getProxy(),{
+    		url: this.getProxy().url + this.apiProperties.getItemUrl('elective'),
+    		extraParams: this.extraParams
+    	});
+    	this.load();    	
     }
 });

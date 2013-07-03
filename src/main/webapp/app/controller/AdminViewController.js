@@ -43,7 +43,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 		earlyAlertSuggestionsStore: 'earlyAlertSuggestionsStore',
     	educationGoalsStore: 'educationGoalsStore',
     	educationLevelsStore: 'educationLevelsStore',
-    	electiveStore: 'electiveStore',
+    	electiveStore: 'electivesStore',
     	electivesAllStore: 'electivesAllStore',
     	employmentShiftsStore: 'employmentShiftsStore',
     	ethnicitiesStore: 'ethnicitiesStore',
@@ -100,7 +100,8 @@ Ext.define('Ssp.controller.AdminViewController', {
 				}
 				var options = {
 					interfaceOptions: record.raw.interfaceOptions,
-					viewConfig: record.raw.viewConfig
+					viewConfig: record.raw.viewConfig,
+					sort: record.raw.sort
 				}
 				this.loadAdmin( record.raw.title, record.raw.form, storeName, columns, options);
 			}
@@ -131,6 +132,10 @@ Ext.define('Ssp.controller.AdminViewController', {
 				}
 				
 				comp.getStore().load();
+				if(options.sort != null && options.sort != undefined) {
+					var sort = options.sort					
+					comp.getStore().sort(sort.field, (sort.direction != null && sort.direction != undefined) ? sort.direction : "ASC");
+				}
 			}
 		}
 		

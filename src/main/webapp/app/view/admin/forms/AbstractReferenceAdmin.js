@@ -38,6 +38,8 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     initComponent: function(){
     	var me=this;
 
+    	var sort = me.sort;
+    	
     	var cellEditor = Ext.create('Ext.grid.plugin.RowEditing', { 
     							clicksToEdit: 2,
     							controller: me.getController(),
@@ -45,7 +47,6 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
 	    							cancelEdit: function(rowEditor, item){
 	    								var columns = rowEditor.grid.columns;
 	    								var record = rowEditor.context.record
-	    								var sortInfo = {};
 	    								
 	    								Ext.each(rowEditor.editor.items.items, function(item) {
 	    									if(item.store != undefined && item.store != null) {
@@ -53,24 +54,14 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
 	    									}			
 	    								});
 	    								
-	    								for (var i=0; i < columns.length; i++ ) {
-	    									if(columns[i].sortState != null 
-	    										&& columns[i].sortState != undefined) {
-	    										
-	    										sortInfo = {	    								
-	    		    							    sort: record.getServerSideFieldName(columns[i].dataIndex),
-	    		    							    sortDirection: columns[i].sortState
-	    	    								}
-	    									}
-	    								}    	
-	    								
-	    								item.store.load({
-	    									params: sortInfo
-	    							    });
-	    					        }
+	    								if(sort != null && sort != undefined) {
+	    									store.sort(sort.field, sort.direction);
+	    								}	    					        
+	    							}
     							}
     					});
     	     	
+    	
     	var addVisible = true;
     	var deleteVisible = true;
     	var headerInstructions = null;
@@ -135,21 +126,11 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                             var r = Ext.decode(response.responseText); 
                             var columns = me.columns;                            
                             var record = store.findRecord("id", r.id); 
-                            var sortInfo = {};	
-                            
-							for (var i=0; i < columns.length; i++ ) {
-								if(columns[i].sortState != null 
-									&& columns[i].sortState != undefined) {									
-									sortInfo = {	    								
-	    							    sort: record.getServerSideFieldName(columns[i].dataIndex),
-	    							    sortDirection: columns[i].sortState
-    								}
-								}
-							}    	
-							
-							store.load({
-								params: sortInfo
-						    });
+                            			
+							store.load();
+							if(sort != null && sort != undefined) {
+								store.sort(sort.field, sort.direction);
+							}
                         },
                         failure: me.apiProperties.handleError
                     }, this);

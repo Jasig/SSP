@@ -28,7 +28,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		authenticatedPerson: 'authenticatedPerson',
         personLite: 'personLite',
     	currentMapPlan: 'currentMapPlan',
-		electiveStore : 'electiveStore',
+		electiveStore : 'electivesStore',
 		semesterStores : 'currentSemesterStores',
 		colorsStore: 'colorsStore'
     },

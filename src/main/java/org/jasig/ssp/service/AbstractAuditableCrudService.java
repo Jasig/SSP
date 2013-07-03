@@ -61,12 +61,7 @@ public abstract class AbstractAuditableCrudService<T extends Auditable>
 
 	@Override
 	public T get(@NotNull final UUID id) throws ObjectNotFoundException {
-		final T obj = getDao().get(id);
-		if (ObjectStatus.ACTIVE.equals(obj.getObjectStatus())) {
-			return obj;
-		}
-
-		throw new ObjectNotFoundException(id, this.getClass().getName());
+		return getDao().get(id);
 	}
 
 	@Override

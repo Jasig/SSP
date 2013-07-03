@@ -319,9 +319,7 @@ Ext.require([
 	'Ssp.store.reference.EarlyAlertReasons',
 	'Ssp.store.reference.EarlyAlertReferrals',
 	'Ssp.store.reference.EarlyAlertSuggestions',
-	'Ssp.store.reference.Elective',
-	'Ssp.store.reference.ElectivesAll',
-	'Ssp.store.reference.MapElective',
+	'Ssp.store.reference.Electives',
     'Ssp.store.reference.EmploymentShifts',
     'Ssp.store.reference.Ethnicities',
     'Ssp.store.reference.FundingSources',
@@ -965,9 +963,42 @@ Ext.onReady(function(){
 					earlyAlertSuggestionsStore: 'Ssp.store.reference.EarlyAlertSuggestions',	    
 				    educationGoalsStore: 'Ssp.store.reference.EducationGoals',
 			    	educationLevelsStore: 'Ssp.store.reference.EducationLevels',
-			    	electiveStore: 'Ssp.store.reference.Elective',
-			    	electivesAllStore: 'Ssp.store.reference.ElectivesAll',
-			    	mapElectiveStore: 'Ssp.store.reference.MapElective',
+			    	electivesStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.Electives', {
+							     storeId: 'electivesStore',
+							     extraParams: {sort: "sortOrder", sortDirection: "ASC" }
+							 });
+					    },
+					    singleton: true
+					},
+					electivesUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.Electives', {
+							     storeId: 'electivesUnpagedStore',
+							     extraParams: {sort: "sortOrder", sortDirection: "ASC", limit: "-1"}
+							 });
+					    },
+					    singleton: true
+					},
+					electivesAllStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.Electives', {
+							     storeId: 'electivsAllStore',		
+							     extraParams: {sort: "sortOrder", sortDirection: "ASC", status: "ALL"}
+							 });
+					    },
+					    singleton: true
+					},
+					electivesAllUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.Electives', {
+							     storeId: 'electivsAllUnpagedStore',		
+							     extraParams: {sort: "sortOrder", sortDirection: "ASC", status: "ALL", limit: "-1"}
+							 });
+					    },
+					    singleton: true
+					},
 			    	employmentShiftsStore: 'Ssp.store.reference.EmploymentShifts',
 			    	ethnicitiesStore: 'Ssp.store.reference.Ethnicities',
 			    	fundingSourcesStore: 'Ssp.store.reference.FundingSources',

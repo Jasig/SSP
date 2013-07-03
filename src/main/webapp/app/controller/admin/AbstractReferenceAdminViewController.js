@@ -21,7 +21,8 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	authenticatedPerson: 'authenticatedPerson'
+    	authenticatedPerson: 'authenticatedPerson', 
+    	formRendererUtils: 'formRendererUtils'
     },  
     control: {
 		view: {
@@ -70,17 +71,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 			}
 			
 			if(item.associativeField != undefined) {	
-				var activeOrSelectedFilter = Ext.create('Ext.util.Filter', {
-					filterFn: function(storeItem) { 
-						if(storeItem.data.active == true || 
-						   storeItem.data.id == e.record.get(item.associativeField)) {
-							return true;
-						}
-						return false;
-					}
-				});
-				
-				item.store.filter(activeOrSelectedFilter);
+				me.formRendererUtils.filterAssociativeComboStore(item.store, e.record.get(item.associativeField));
 			}
 		});
 		

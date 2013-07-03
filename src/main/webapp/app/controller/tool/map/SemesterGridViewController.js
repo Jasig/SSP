@@ -22,7 +22,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     inject:{
 		appEventsController: 'appEventsController',
     	courseService:'courseService',
-		electiveStore: 'electiveStore',
+		electiveStore: 'electivesAllUnpagedStore',
 		colorsStore: 'colorsStore',
 		transcriptStore: 'courseTranscriptsStore',
     	formUtils: 'formRendererUtils',
@@ -30,7 +30,8 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 		semesterStores : 'currentSemesterStores',
 		mapPlanService:'mapPlanService',
 		person: 'currentPerson',
-		termsStore: 'termsStore'
+		termsStore: 'termsStore',
+		formRendererUtils: 'formRendererUtils'
     },
     control:{
     	view:{
@@ -67,10 +68,14 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 			{
 				var planCourse = courseRecord;
 			}
+	
+			me.electiveStore.clearFilter(true);
+			me.formRendererUtils.filterAssociativeComboStore(me.electiveStore, record.get('electiveId'));	
+		
 			me.coursePlanDetails.query('form')[0].getForm().loadRecord(planCourse);
     		creditHours.setValue(planCourse.get('creditHours'));
 		    creditHours.setMinValue(planCourse.get('minCreditHours'));
-			creditHours.setMaxValue(planCourse.get('maxCreditHours'));
+		    creditHours.setMaxValue(planCourse.get('maxCreditHours'));
 			me.coursePlanDetails.query('#electiveId')[0].select(me.coursePlanDetails.electiveStore.getById(planCourse.get('electiveId')));
     		me.coursePlanDetails.rowIndex = index;
     		me.coursePlanDetails.semesterStore = grid.store;

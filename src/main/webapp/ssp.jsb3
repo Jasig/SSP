@@ -2340,13 +2340,8 @@
                     "path": "/app/store/reference/"
                 },
                 {
-                    "clsName": "Ssp.store.reference.Elective",
-                    "name": "Elective.js",
-                    "path": "/app/store/reference/"
-                },
-                {
-                	"clsName": "Ssp.store.reference.MapElective",
-                    "name": "MapElective.js",
+                    "clsName": "Ssp.store.reference.Electives",
+                    "name": "Electives.js",
                     "path": "/app/store/reference/"
                 },
                 {
