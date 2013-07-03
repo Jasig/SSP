@@ -24,6 +24,7 @@ Ext.define('Ssp.view.SearchForm',{
     controller: 'Ssp.controller.SearchFormViewController',
 	title: 'Search',
     inject: {
+     	appEventsController: 'appEventsController',
     	programStatusesStore: 'programStatusesStore',
         coachesStore: 'coachesStore',
         planStatusStore: 'planStatusStore',  
@@ -38,6 +39,7 @@ Ext.define('Ssp.view.SearchForm',{
         align: 'stretch'
     },    
     scroll: 'vertical',
+    
 	initComponent: function() {
     	var me=this;
         Ext.applyIf(me, {
@@ -46,6 +48,18 @@ Ext.define('Ssp.view.SearchForm',{
             	toolFirst: true,
             	buttonAlign: 'left'
             	},
+			defaults:{
+			    	  enableKeyEvents:true,
+			    	  listeners:{
+			    	    specialKey:{
+								scope: me,
+								fn: function(field, el) {
+				    	      			if(el.getKey() == Ext.EventObject.ENTER)
+				    	    				this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
+				    	    		}	
+			    	  			}
+							}
+			    		},
             tools: [
                     {
                         text: 'Search',

@@ -40,8 +40,11 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     },
     control: {
     	view: {
-			viewready: 'onViewReady'
-    	},  
+			afterlayout: {
+				fn: 'onAfterLayout',
+				single: true
+			}
+    	},
     'searchStudentButton': {
 		click: 'onSearchClick'
 		},
@@ -50,26 +53,25 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     	}
     },
     
-    
 	init: function() {
 		var me=this;    	
 
 	   	// ensure the selected person is not loaded twice
 		// once on load and once on selection
 	   	me.personLite.set('id','');
-		
 		return me.callParent(arguments);
     },
 
-	onViewReady: function(comp, eobj){
+	onAfterLayout: function(comp, eobj){
 		var me=this;
-
+		me.appEventsController.assignEvent({eventName: 'onStudentSearchRequested', callBackFunc: me.onSearchClick, scope: me});
 	   	// load program statuses
 		me.getProgramStatuses();	
 	},
 
     destroy: function() {
     	var me=this;
+    	me.appEventsController.removeEvent({eventName: 'onStudentSearchRequested', callBackFunc: me.onSearchClick, scope: me});
 	   	return me.callParent( arguments );
     },
     searchSuccess: function( r, scope){
