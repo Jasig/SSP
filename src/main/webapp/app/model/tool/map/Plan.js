@@ -453,15 +453,48 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		return false;
 	},
 	
-	getPlanCourseFromCourseCode: function(courseCode){
+	getPlanCourseFromCourseCode: function(courseCode, termCode){
 		var me = this;
 		var planCourses = me.get('planCourses');
 		for(var i = 0; i < planCourses.length; i++){
 			var planCourse = planCourses[i];
-			if(planCourse.courseCode == courseCode)
-				return planCourse;
+			if(planCourse.courseCode == courseCode){
+				if(termCode != null){
+					if(planCourse.termCode == termCode)
+						return planCourse;
+				}else{
+					return planCourse;
+				}
+			}
 		}
 		return null;
+	},
+	
+	repopulatePlanStores:function(semesterStores, markDirty){
+		var me = this;
+		var planCourses = me.get('planCourses');
+		var courses = {};
+		if(planCourses && planCourses.length > 0){
+			planCourses.forEach(function(planCourse){
+				var semesterCourse = new Ssp.model.tool.map.SemesterCourse(planCourse);
+				var semesterSet = courses[planCourse.termCode];
+				if(!semesterSet)
+					semesterSet = [];
+				semesterSet.push(semesterCourse);
+				courses[planCourse.termCode] = semesterSet;
+			}) 
+		}
+		if(planCourses && planCourses.length > 0){
+			for(index in courses){
+				var termStore = semesterStores[index];
+				termStore.suspendEvents();
+				termStore.loadRecords(courses[index], {addRecords:false});
+				termStore.sync();
+				termStore.resumeEvents();
+			}
+		}
+		if(markDirty != null)
+			me.dirty = markDirty;
 	},
 	
 	getPlanValidation: function(){

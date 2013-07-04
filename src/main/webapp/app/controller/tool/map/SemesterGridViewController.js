@@ -41,7 +41,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 	init: function() {
 		var me=this;
 		me.appEventsController.assignEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
-		me.getView().view.addListener('beforedrop', me.onDrop, me);
+		me.getView().view.addListener('drop', me.onDrop, me);
 		return me.callParent(arguments);
     },
 	
@@ -84,54 +84,26 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     		me.coursePlanDetails.show();
     },
     
-    onDrop: function(node, data, dropRec, dropPosition){
-    	var me = this;
-    	me.droppedData = data.records[0];
-		var termCode = me.getView().findParentByType('semesterpanel').itemId;
+    onDrop: function(node, data, overModel, dropPosition, eOpts){
+		var me = this;
 		var previousSemesterPanel = data.view.findParentByType("semesterpanel");
-				if(previousSemesterPanel != null && previousSemesterPanel != undefined)
-				    me.previousTermCode = previousSemesterPanel.getItemId();
-		me.getView().setLoading(true);
-    	var serviceResponses = {
-                failures: {},
-                successes: {},
-                responseCnt: 0,
-                expectedResponseCnt: 1
-            }
-		me.requiringFormattedCourse = me.droppedData.get('formattedCourse');
-    	me.courseService.validateCourse(me.droppedData.get('code'), termCode,  {
-            success: me.newServiceSuccessHandler('validCourse', me.onTermValidateSuccess, serviceResponses),
-            failure: me.newServiceFailureHandler('validatedFailed', me.onValidateFailure, serviceResponses),
-            scope: me
-        });
+		if(previousSemesterPanel != undefined && previousSemesterPanel != null){
+    		me.droppedFromStore = data.view.getStore();
+		}
+		me.droppedRecord = data.records[0];
+		me.validateCourses();
 		return true;
     },
-    
-    onTermValidateSuccess: function(serviceResponses){
+
+
+	validateCourses: function(){
 		var me = this;
-    	me.courseTermValidation = serviceResponses.successes.validCourse;
-    	var serviceResponses = {
+		var serviceResponses = {
                 failures: {},
                 successes: {},
                 responseCnt: 0,
                 expectedResponseCnt: 1
-            }
-		me.requiringCourseCode = me.droppedData.get('code');
-    	me.courseService.getCourseRequirements(me.droppedData.get('code'),  {
-            success: me.newServiceSuccessHandler('courseRequisites', me.onCourseRequirements, serviceResponses),
-            failure: me.newServiceFailureHandler('validatedFailed', me.onValidateFailure, serviceResponses),
-            scope: me
-        });
-    	
-    },
-
-	onCourseRequirements: function(serviceResponses){
-		var me = this;
-		me.courseRequisites = serviceResponses.successes.courseRequisites;
-		if(me.courseRequisites == null || me.courseRequisites.length <= 0){
-			me.onValidateSuccess();
-			return;
-		}
+            };
 		me.currentMapPlan.updatePlanCourses(me.semesterStores);
 		me.mapPlanService.validate(me.currentMapPlan, me.currentMapPlan.get('isTemplate'), {
             success: me.newServiceSuccessHandler('validatedPlan', me.onValidateSuccess, serviceResponses),
@@ -144,116 +116,46 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     onValidateSuccess: function(serviceResponses){
 		var me = this;
 		 me.getView().setLoading(false);
-    	var courseRequisites = me.courseRequisites;
-		var validationResponse = null;
-		if(me.courseRequisites != null && me.courseRequisites.length > 0){
-			var mapResponse = serviceResponses.successes.validatedPlan;
-			me.currentMapPlan.loadFromServer(Ext.decode(mapResponse.responseText));
-			validationResponse = me.currentMapPlan.getCourseValidation(me.requiringCourseCode, courseRequisites);
-		}
-    	var confirm = {}
-    	confirm.valid = true;
-    	confirm.title = "";
-    	confirm.message = "";
-		var record = null;
-		for(termCode in me.semesterStores){
-			var semesterStore = me.semesterStores[termCode];
-			record = semesterStore.findRecord("formattedCourse", me.requiringFormattedCourse);
-			if(record){
-				break;
-			}
-		}
-		
-		record.set("isDev", me.droppedData.isDev());
-    	if(!me.courseTermValidation.valid && validationResponse == null){
-    		confirm.valid = false;
-    		confirm.title = 'Course Not Avaiable For Term';
-    		confirm.message = 'This course is not scheduled to be offered in this term. ';
-			if(record){
-				record.set("validInTerm", false);
-				var invalidReasons = record.get("invalidReasons");
-				if(!invalidReasons)
-					invalidReasons = "";
-				invalidReasons += "Course not in current term.";
-				record.set("invalidReasons", invalidReasons);
-			}
-    	}
-		if(me.currentMapPlan.get('isTemplate') === false)
-			me.verifyTranscript(record, confirm);
-		
-    	if(validationResponse != null && !validationResponse.valid){
-    		confirm.valid = false;
-    		confirm.title = ' Course Generates Following Concerns';
-    		confirm.message += validationResponse.message;
-			if(record){
-				record.set("hasPrerequisites", false);
-				var invalidReasons = record.get("invalidReasons");
-				if(!invalidReasons)
-					invalidReasons = "";
-				invalidReasons += validationResponse.message;
-				record.set("invalidReasons", invalidReasons);
-			}
-    	}
-    	
-    	if(confirm.valid == false){
-    		confirm.message += " \n Are you sure you want to add the course?";
-    	}
-    	if(confirm.valid == false){
-    		Ext.MessageBox.confirm(confirm.title, confirm.message, me.handleInvalidCourse, me);
+		var mapResponse = serviceResponses.successes.validatedPlan;
+		var planAsJsonObject = Ext.decode(mapResponse.responseText);
+		me.currentMapPlan.loadFromServer(planAsJsonObject);
+		me.planWasDirty = me.currentMapPlan.dirty
+		me.currentMapPlan.repopulatePlanStores(me.semesterStores, me.currentMapPlan.get("isValid"));
+
+		var panel = me.getView().findParentByType("semesterpanel");
+		var planCourse = me.currentMapPlan.getPlanCourseFromCourseCode(me.droppedRecord.get("code"), panel.getItemId());
+		var invalidReasons = planCourse.invalidReasons;
+    	if(!me.currentMapPlan.get("isValid") &&  invalidReasons != null && invalidReasons.length > 1){
+    		var message = " \n Are you sure you want to add the course? " 
+						+ planCourse.formattedCourse
+						+ " generates the following concerns: " 
+						+ invalidReasons;
+    		Ext.MessageBox.confirm("Adding Course Invalidates Plan", message, me.handleInvalidCourse, me);
     	}else{
 			me.removeCopiedCourse();
-		}
-    },
-    
-    verifyTranscript : function(record, confirm){
-		var me = this;
-    	var transcript = me.transcriptStore.findRecord("formattedCourse", me.requiringFormattedCourse);
-		if(transcript){
-			var transcriptCourseTermCode = transcript.get('termCode');
-			var transcriptTerm = me.termsStore.findRecord("code", transcriptCourseTermCode);
-			if(record){
-				record.set("isTranscript", true);
-				if(record.get("termCode")  != transcriptCourseTermCode);
-					record.set("duplicateOfTranscript", true);
-			}
-		}
-		
-		if(transcript && record.get("duplicateOfTranscript")){
-			confirm.valid = false;
-    		confirm.title = ' Course Is Transcript';
-    		var termName = "";
-    		if(transcriptTerm)
-    			termName = transcriptTerm.get("name");
-    		
-    		confirm.message += 'Student has taken class, previously in term: ' + termName;
 		}
     },
     
     handleInvalidCourse: function(buttonId){
 		var me = this;
     	if(buttonId != 'yes'){
-        	var index = me.getView().getStore().find('code', me.droppedData.get('code'));
-			if(index >= 0)
+        	var index = me.getView().getStore().find('code', me.droppedRecord.get("code"));
+			if(index >= 0){
         		me.getView().getStore().removeAt(index);
+				me.currentMapPlan.dirty = me.planWasDirty
+			}
     	}else{
+			me.currentMapPlan.dirty = true;
 			me.removeCopiedCourse();
 		}
     },
     
 	removeCopiedCourse: function(){
 		var me = this;
-		if(me.previousTermCode == null || me.previousTermCode == undefined)
-			return;
-			
-		var container = me.getView().findParentByType("semesterpanelcontainer");
-		var previousSemester = container.queryById(me.previousTermCode);
-		if(previousSemester != null && previousSemester != undefined){
-			var grid = previousSemester.query("semestergrid")[0];
-			if(grid != null && grid != undefined){
-				var index = grid.getStore().find('code', me.droppedData.get('code'));
-				if(index >= 0)
-					grid.getStore().removeAt(index);
-			}
+		if(me.droppedFromStore){
+			var index = me.droppedFromStore.find('code', me.droppedRecord.get("code"));
+			if(index >= 0)
+				me.droppedFromStore.removeAt(index);
 		}
 	},
 	

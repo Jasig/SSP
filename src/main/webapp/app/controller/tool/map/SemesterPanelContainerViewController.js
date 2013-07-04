@@ -251,27 +251,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	 
 	populatePlanStores:function(){
 		var me = this;
-		var planCourses = me.currentMapPlan.get('planCourses');
-		var courses = {};
-		if(planCourses && planCourses.length > 0){
-			planCourses.forEach(function(planCourse){
-				var semesterCourse = new Ssp.model.tool.map.SemesterCourse(planCourse);
-				var semesterSet = courses[planCourse.termCode];
-				if(!semesterSet)
-					semesterSet = [];
-				semesterSet.push(semesterCourse);
-				courses[planCourse.termCode] = semesterSet;
-			}) 
-		}
-		if(planCourses && planCourses.length > 0){
-			for(index in courses){
-				var termStore = me.semesterStores[index];
-				termStore.suspendEvents();
-				termStore.loadRecords(courses[index]);
-				termStore.sync();
-				termStore.resumeEvents();
-			}
-		}
+		me.currentMapPlan.repopulatePlanStores(me.semesterStores);
 	},
 	
 	onCreateMapPlan:function(){

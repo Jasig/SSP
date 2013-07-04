@@ -114,6 +114,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		if(!grid.enableDragAndDrop && !me.currentMapPlan.get('isTemplate'))
 		{
 		 	Ext.Msg.alert('SSP Error', 'You cannot modify old terms.'); 
+		    return;
 		}
 		if(!record)
 		{
