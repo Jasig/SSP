@@ -35,6 +35,7 @@ import org.jasig.ssp.service.ScheduledTaskWrapperService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.external.ExternalPersonService;
+import org.jasig.ssp.service.external.ExternalPersonSyncTask;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -77,7 +78,7 @@ public class ScheduledTaskWrapperServiceImpl
 	private static final Pattern PERIODIC_TRIGGER_WITH_INITIAL_DELAY_PATTERN = Pattern.compile("^(\\d+)/(\\d+)$");
 
 	@Autowired
-	private transient ExternalPersonService externalPersonService;
+	private transient ExternalPersonSyncTask externalPersonSyncTask;
 
 	@Autowired
 	private transient MessageService messageService;
@@ -453,7 +454,7 @@ public class ScheduledTaskWrapperServiceImpl
 	@Override
 	public void syncExternalPersons() {
 		try {
-			externalPersonService.syncWithPerson();
+			externalPersonSyncTask.exec();
 		} finally {
 			securityService.afterRequest();
 		}

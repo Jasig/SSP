@@ -60,8 +60,6 @@ public class ExternalPersonServiceImpl
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ExternalPersonServiceImpl.class);
 
-	private static final int BATCH_SIZE_FOR_PERSON_ = 1000;
-
 	@Autowired
 	private transient ExternalPersonDao dao;
 
@@ -94,111 +92,6 @@ public class ExternalPersonServiceImpl
 	public ExternalPerson getByUsername(final String username)
 			throws ObjectNotFoundException {
 		return dao.getByUsername(username);
-	}
-
-	private transient int lastRecord = 0;
-
-	@Override
-	public void syncWithPerson() {
-
-		if ( Thread.currentThread().isInterrupted() ) {
-			LOGGER.info("Abandoning syncWithPerson because of thread interruption");
-			return;
-		}
-
-		LOGGER.info(
-				"BEGIN : Person and ExternalPerson Sync.  Selecting {} records starting at {}",
-				BATCH_SIZE_FOR_PERSON_, lastRecord);
-
-		final SortingAndPaging sAndP = SortingAndPaging.createForSingleSortWithPaging(
-				ObjectStatus.ACTIVE, lastRecord, BATCH_SIZE_FOR_PERSON_,
-				"username",
-				SortDirection.ASC.toString(), null);
-
-		Long totalRows = Long.valueOf(0L);
-		try {
-			totalRows = syncWithPerson(sAndP);
-		} catch ( InterruptedException e ) {
-			LOGGER.info("Abandoning syncWithPerson because of thread interruption");
-			Thread.currentThread().interrupt(); // reassert
-		} catch (final Exception e) {
-			LOGGER.error("Failed to sync Person table with ExternalPerson", e);
-		} finally {
-			if ( !(Thread.currentThread().isInterrupted()) ) {
-				lastRecord = lastRecord + BATCH_SIZE_FOR_PERSON_;
-				if (lastRecord > totalRows.intValue()) {
-					lastRecord = 0;
-				}
-			}
-		}
-
-		LOGGER.info("END :  Person and ExternalPerson Sync");
-	}
-
-	@Override
-	public long syncWithPerson(final SortingAndPaging sAndP) throws InterruptedException {
-
-		// Use InterruptedExceptions instead of manipulating return value b/c
-		// the return value actually means "total number of possible processable"
-		// rows, so if it is returned gracefully, the caller will likely
-		// incorrectly update its internal state, as is the case with the
-		// scheduled job call site.
-
-		if ( Thread.currentThread().isInterrupted() ) {
-			LOGGER.info("Abandoning syncWithPerson because of thread interruption");
-			throw new InterruptedException();
-		}
-
-		final PagingWrapper<Person> people = personService.getAll(sAndP);
-
-		if ( Thread.currentThread().isInterrupted() ) {
-			LOGGER.info("Abandoning syncWithPerson because of thread interruption");
-			throw new InterruptedException();
-		}
-
-		// allow access to people by schoolId
-		final Map<String, Person> peopleBySchoolId = Maps.newHashMap();
-		for (final Person person : people) {
-			peopleBySchoolId.put(person.getSchoolId(), person);
-		}
-
-		Set<String> internalPeopleSchoolIds = peopleBySchoolId.keySet();
-		if ( LOGGER.isDebugEnabled() ) {
-			LOGGER.debug(
-					"Candidate internal person schoolIds for sync with external persons {}",
-					internalPeopleSchoolIds);
-		}
-
-		if ( Thread.currentThread().isInterrupted() ) {
-			LOGGER.info("Abandoning syncWithPerson because of thread interruption");
-			throw new InterruptedException();
-		}
-
-		// fetch external people by schoolId
-		final PagingWrapper<ExternalPerson> externalPeople =
-				dao.getBySchoolIds(internalPeopleSchoolIds,SortingAndPaging.createForSingleSortWithPaging(
-						ObjectStatus.ACTIVE, 0, BATCH_SIZE_FOR_PERSON_,
-						"username",
-						SortDirection.ASC.toString(), null));
-
-		for (final ExternalPerson externalPerson : externalPeople) {
-
-			if ( Thread.currentThread().isInterrupted() ) {
-				LOGGER.info("Abandoning syncWithPerson because of thread interruption on person {}", externalPerson.getUsername());
-				throw new InterruptedException();
-			}
-
-			LOGGER.debug(
-					"Looking for internal person by external person schoolId {}",
-					externalPerson.getSchoolId());
-			// get the previously fetched person
-			final Person person = peopleBySchoolId.get(externalPerson
-					.getSchoolId());
-			// upate person from external person
-			updatePersonFromExternalPerson(person, externalPerson);
-		}
-
-		return people.getResults();
 	}
 
 	@Override

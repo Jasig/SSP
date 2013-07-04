@@ -1,0 +1,75 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<property name="schema" value="public" dbms="postgresql" />
+	<property name="schema" value="dbo" dbms="mssql" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet id="add external person sync task batch size config" author="dan.mccallum">
+		<insert tableName="config">
+			<column name="id" value="65f23fe8-e829-11e2-b231-406c8f22c3ce" />
+			<column name="name" value="task_external_person_sync_batch_size" />
+			<column name="description"
+					value="Maximum number of person records to sync from the external person table in a single transaction. Negative values treated as unlimited. A zero (0) will be treated the same way as the web APIs (100 at this writing)." />
+			<column name="value">100</column>
+			<column name="default_value">100</column>
+			<column name="created_date" valueDate="2013-07-08T12:00:00" />
+			<column name="modified_date" valueDate="2013-07-08T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="306" />
+		</insert>
+		<rollback>
+			<delete tableName="config">
+				<where>id='65f23fe8-e829-11e2-b231-406c8f22c3ce'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="add external person sync task max batch config" author="dan.mccallum">
+		<insert tableName="config">
+			<column name="id" value="d22f5bf3-e829-11e2-97e9-406c8f22c3ce" />
+			<column name="name" value="task_external_person_sync_max_batches_per_exec" />
+			<column name="description"
+					value="Maximum number of transactions per execution of the external person sync task. Negative values treated as unlimited. A zero (0) will disable the task." />
+			<column name="value">-1</column>
+			<column name="default_value">-1</column>
+			<column name="created_date" valueDate="2013-07-08T12:00:00" />
+			<column name="modified_date" valueDate="2013-07-08T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="306" />
+		</insert>
+		<rollback>
+			<delete tableName="config">
+				<where>id='d22f5bf3-e829-11e2-97e9-406c8f22c3ce'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

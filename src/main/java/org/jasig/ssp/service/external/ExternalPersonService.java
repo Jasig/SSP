@@ -34,19 +34,6 @@ public interface ExternalPersonService extends
 	ExternalPerson getByUsername(String username)
 			throws ObjectNotFoundException;
 
-	/**
-	 * Scheduled Service that synchronizes the Person and ExternalPerson tables
-	 */
-	void syncWithPerson();
-
-	/**
-	 * 
-	 *
-	 * @param sAndP
-	 * @return the total number of person records
-	 */
-	long syncWithPerson(final SortingAndPaging sAndP) throws InterruptedException;
-
 	void updatePersonFromExternalPerson(final Person person,
 			final ExternalPerson externalPerson);
 
