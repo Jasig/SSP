@@ -104,7 +104,8 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
                 responseCnt: 0,
                 expectedResponseCnt: 1
             };
-		me.currentMapPlan.updatePlanCourses(me.semesterStores);
+		me.setOrderInTerm();
+		me.currentMapPlan.updatePlanCourses(me.semesterStores, true);
 		me.mapPlanService.validate(me.currentMapPlan, me.currentMapPlan.get('isTemplate'), {
             success: me.newServiceSuccessHandler('validatedPlan', me.onValidateSuccess, serviceResponses),
             failure: me.newServiceFailureHandler('validatedFailed', me.onValidateFailure, serviceResponses),
@@ -132,9 +133,19 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 						+ invalidReasons;
     		Ext.MessageBox.confirm("Adding Course Invalidates Plan", message, me.handleInvalidCourse, me);
     	}else{
-			me.removeCopiedCourse();
+			me.setOrderInTerm();
 		}
     },
+
+	setOrderInTerm: function(){
+		var me = this;
+		var store = me.getView().getStore();
+		for(i = 0; i < store.getCount(); i++){
+			var record = store.getAt(i);
+			record.set("orderInTerm", i);
+		}
+		
+	},
     
     handleInvalidCourse: function(buttonId){
 		var me = this;
@@ -142,20 +153,22 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
         	var index = me.getView().getStore().find('code', me.droppedRecord.get("code"));
 			if(index >= 0){
         		me.getView().getStore().removeAt(index);
-				me.currentMapPlan.dirty = me.planWasDirty
+				me.currentMapPlan.dirty = me.planWasDirty;
+				me.getView().getStore().sort("orderInTerm", "ASC");
 			}
+			me.restoreCourse();
     	}else{
 			me.currentMapPlan.dirty = true;
-			me.removeCopiedCourse();
 		}
     },
     
-	removeCopiedCourse: function(){
+	restoreCourse: function(){
 		var me = this;
 		if(me.droppedFromStore){
-			var index = me.droppedFromStore.find('code', me.droppedRecord.get("code"));
-			if(index >= 0)
-				me.droppedFromStore.removeAt(index);
+			var rec = me.droppedRecord.copy(); // clone the record
+			Ext.data.Model.id(rec);// generate unique id
+			me.droppedFromStore.add(rec);
+			me.droppedFromStore.sort("orderInTerm", "ASC");
 		}
 	},
 	

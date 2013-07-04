@@ -307,20 +307,22 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		 return false;
 	},
 	
-	updatePlanCourses: function(semesterStores){ 
+	updatePlanCourses: function(semesterStores, useSemesterTermCode){ 
         var me = this;
-        var i = 0;
+        
 		me.clearPlanCourses();
         var planCourses = new Array();
+		var i = 0;
         for(var index in semesterStores){
         	var semesterStore = semesterStores[index];
             var models = semesterStore.getRange();
+			
             models.forEach(function(model){
             	var planCourse = new Object();
             		planCourse.courseTitle = model.get('title');
             		planCourse.courseCode = model.get('code');
 					//TODO This has to do with conflicts with print and save
-					if(!model.get('termCode') || model.get('termCode') == "")
+					if(useSemesterTermCode || !model.get('termCode') || model.get('termCode') == "")
             			planCourse.termCode = index;
 					else
 						planCourse.termCode = model.get('termCode');
@@ -341,7 +343,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 					planCourse.modifiedDate = model.get('modifiedDate');
 					planCourse.createdBy = model.get('createdBy');
 					planCourse.createdDate = model.get('createdDate');
-            		planCourse.orderInTerm = i;
+            		planCourse.orderInTerm = model.get('orderInTerm');
 					planCourse.objectStatus = 'ACTIVE';
             		planCourse.isDev = model.get('isDev');
             		planCourses[i++] = planCourse;
@@ -483,6 +485,10 @@ Ext.define('Ssp.model.tool.map.Plan', {
 				semesterSet.push(semesterCourse);
 				courses[planCourse.termCode] = semesterSet;
 			}) 
+		}
+		
+		for(termCode in semesterStores){
+			semesterStores[termCode].removeAll();
 		}
 		if(planCourses && planCourses.length > 0){
 			for(index in courses){

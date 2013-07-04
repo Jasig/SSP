@@ -184,36 +184,7 @@ Ext.define('Ssp.service.MapPlanService', {
         
         var i = 0;
 		me.currentMapPlan.clearPlanCourses();
-        var planCourses = new Array();
-        for(var index in semesterStores){
-        	var semesterStore = semesterStores[index];
-            var models = semesterStore.getRange();
-            models.forEach(function(model){
-            	var planCourse = new Object();
-            		planCourse.courseTitle = model.get('title');
-            		planCourse.courseCode = model.get('code');
-					//TODO This has to do with conflicts with print and save
-					if(!model.get('termCode') || model.get('termCode') == "")
-            			planCourse.termCode = index;
-					else
-						planCourse.termCode = model.get('termCode');
-            		planCourse.creditHours = model.get('creditHours');
-            		planCourse.formattedCourse = model.get('formattedCourse');
-            		planCourse.courseDescription = model.get('description');
-            		planCourse.studentNotes = model.get('studentNotes');
-            		planCourse.contactNotes = model.get('contactNotes');
-
-            		planCourse.isImportant = model.get('isImportant') ==  null ? false : model.get('isImportant');
-            		planCourse.isTranscript = model.get('isTranscript') ==  null ? false : model.get('isTranscript');
-					planCourse.duplicateOfTranscript = model.get('duplicateOfTranscript') ==  null ? false : model.get('duplicateOfTranscript');
-            		planCourse.electiveId = model.get('electiveId');
-            		planCourse.orderInTerm = i;
-					planCourse.objectStatus = 'ACTIVE';
-            		planCourse.isDev = model.get('isDev');
-            		planCourses[i++] = planCourse;
-            })
-         }
-         me.currentMapPlan.set('planCourses',planCourses);
+        me.currentMapPlan.updatePlanCourses(semesterStores);
     }, 
 
 	getBoolean: function(model, fieldName){
