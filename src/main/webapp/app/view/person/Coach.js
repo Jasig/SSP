@@ -25,7 +25,7 @@ Ext.define('Ssp.view.person.Coach', {
     inject: {
     	coachesStore: 'coachesStore',
     	sspConfig: 'sspConfig',
-    	studentTypesStore: 'studentTypesStore'
+    	studentTypesStore: 'studentTypesAllUnpagedStore'
     },
 	initComponent: function() {	
 		var me=this;

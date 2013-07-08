@@ -29,7 +29,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
         personLite: 'personLite',
         personService: 'personService',
         personProgramStatusService: 'personProgramStatusService',
-        currentPersonAppointment: 'currentPersonAppointment'
+        currentPersonAppointment: 'currentPersonAppointment',
+        studentTypesStore: 'studentTypesAllUnpagedStore'
     },
     control: {
     	'saveButton':{
@@ -175,6 +176,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
     onSaveClick: function(button){
 		var me=this;
+		me.studentTypesStore.clearFilter(true);
 		me.doSave();
 	},
 
@@ -508,6 +510,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     }, 
     
     onCancelClick: function(button){
+    	this.studentTypesStore.clearFilter(true);
 		this.loadStudentToolsView();
     },
  

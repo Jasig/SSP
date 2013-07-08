@@ -1034,9 +1034,22 @@ Ext.onReady(function(){
 				    specialServiceGroupsStore: 'Ssp.store.reference.SpecialServiceGroups',
 				    specialServiceGroupsBindStore: 'Ssp.store.reference.SpecialServiceGroupsBind',
 				    statesStore: 'Ssp.store.reference.States',
-				    studentsStore: 'Ssp.store.Students',
+				    studentsStore: 'Ssp.store.Students',				    
 				    studentStatusesStore: 'Ssp.store.reference.StudentStatuses',
-				    studentTypesStore: 'Ssp.store.reference.StudentTypes',
+				    studentTypesStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.StudentTypes', {});
+					    },
+					    singleton: true
+					},
+					studentTypesAllUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.StudentTypes', {
+							     extraParams: {status: "ALL", limit: "-1"}
+							 });
+					    },
+					    singleton: true
+					},
 				    registrationLoadRangesStore: 'Ssp.store.reference.RegistrationLoadRanges', 
 				    weeklyCourseWorkHourRangesStore: 'Ssp.store.reference.WeeklyCourseWorkHourRanges',
 				    termsStore:'Ssp.store.external.Terms',
