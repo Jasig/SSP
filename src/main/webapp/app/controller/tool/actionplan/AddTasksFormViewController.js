@@ -41,7 +41,10 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 		
 		'closeButton': {
 			click: 'onCloseClick'
-		}
+		},
+		
+		actionPlanDueDate: '#actionPlanDueDate',
+		confidentialityLevel: '#confidentialityLevel'
 	},
  
 	init: function(){
@@ -55,7 +58,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 		
 		me.initForm();
 		
-    	me.appEventsController.assignEvent({eventName: 'loadTask', callBackFunc: me.initForm, scope: me});    	
+    	me.appEventsController.assignEvent({eventName: 'loadTask', callBackFunc: me.initFormAfterReferal, scope: me});    	
     	
 		return me.callParent(arguments);
 	},
@@ -66,7 +69,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     	// clear confidentiality level filter
     	me.confidentialityLevelsStore.clearFilter();
     	
-    	me.appEventsController.removeEvent({eventName: 'loadTask', callBackFunc: me.initForm, scope: me});
+    	me.appEventsController.removeEvent({eventName: 'loadTask', callBackFunc: me.initFormAfterReferal, scope: me});
     	
         return me.callParent( arguments );
     },	
@@ -75,6 +78,15 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 		this.getView().getForm().reset();
 		this.getView().getForm().loadRecord( this.model );
 		Ext.ComponentQuery.query('#confidentialityLevel')[0].setValue( this.model.get('confidentialityLevel').id );
+	},
+	
+	initFormAfterReferal: function(){
+		if(this.getActionPlanDueDate().getValue())
+		{
+			
+			this.model.set('dueDate', this.getActionPlanDueDate().getValue());
+		}
+		this.getView().getForm().loadRecord( this.model );
 	},
     
     onAddClick: function(button){
