@@ -35,7 +35,6 @@ Ext.define('Ssp.model.tool.map.Plan', {
              {name:'careerLink',type:'string'},
              {name:'academicLink',type:'string'},
              {name:'personId', type:'string'},
-             {name: 'objectStatus', type: 'string'},
              {name: 'isTemplate', type: 'boolean'},
 			 {name:'departmentCode',type:'string'},
 			 {name:'programCode',type:'string'},

@@ -26,9 +26,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         personLite: 'personLite',
         personService: 'personService',
         transcriptService: 'transcriptService',
-        profileReferralSourcesStore: 'profileReferralSourcesStore',
-        profileServiceReasonsStore: 'profileServiceReasonsStore',
-        profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
         sspConfig: 'sspConfig',
         formUtils: 'formRendererUtils'
     },
@@ -147,12 +144,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         var me = this;
         var personResponse = serviceResponses.successes.person;
         me.person.populateFromGenericObject(personResponse);
-        
-        // load and render person data
-        me.profileSpecialServiceGroupsStore.removeAll();
-        me.profileReferralSourcesStore.removeAll();
-        me.profileServiceReasonsStore.removeAll();
-        
+               
         var nameField = me.getNameField();
         var primaryEmailAddressField = me.getPrimaryEmailAddressField();
         var photoUrlField = me.getPhotoUrlField();

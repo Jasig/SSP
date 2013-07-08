@@ -28,6 +28,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         transcriptService: 'transcriptService',
         profileReferralSourcesStore: 'profileReferralSourcesStore',
         profileServiceReasonsStore: 'profileServiceReasonsStore',
+		profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
         sspConfig: 'sspConfig',
 		formUtils: 'formRendererUtils'
     },
@@ -165,9 +166,14 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
         }
 
-        // load service reasons
+        // load service reasonssd
         if (personResponse.serviceReasons != null) {
             me.profileServiceReasonsStore.loadData(me.person.get('serviceReasons'));
+        }
+
+		// load service reasonssd
+        if (personResponse.serviceReasons != null) {
+            me.profileSpecialServiceGroupsStore.loadData(me.person.get('specialServiceGroups'));
         }
 
         // load general student record

@@ -848,7 +848,9 @@ Ext.onReady(function(){
 			        profileSpecialServiceGroupsStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.Store',{
-				            	model: 'Ssp.model.reference.SpecialServiceGroup'
+				            	model: 'Ssp.model.reference.SpecialServiceGroup',
+								filterOnLoad: true,
+								filters: [{property:"objectStatus", value:'ACTIVE'}]
 				            });
 				    	},
 				        singleton: true
@@ -856,7 +858,9 @@ Ext.onReady(function(){
 			        profileReferralSourcesStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.Store',{
-				            	model: 'Ssp.model.reference.ReferralSource'
+				            	model: 'Ssp.model.reference.ReferralSource',
+								filterOnLoad: true,
+								filters: [{property:"objectStatus", value:'ACTIVE'}]
 				            });
 				    	},
 				        singleton: true
@@ -864,7 +868,9 @@ Ext.onReady(function(){
 			        profileServiceReasonsStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.Store',{
-				            	model: 'Ssp.model.reference.ServiceReason'
+				            	model: 'Ssp.model.reference.ServiceReason',
+								filterOnLoad: true,
+								filters: [{property:"objectStatus", value:'ACTIVE'}]
 				            });
 				    	},
 				        singleton: true
