@@ -48,6 +48,10 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		
 		'deleteButton': {
 			click: 'onDeleteClick'
+		},
+		
+		'saveButton': {
+			click: 'onSaveClick'
 		}
 		
 	},
@@ -69,7 +73,7 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
     	me.confidentialityLevelsStore.load({
     		params:{limit:50}
     	});
-    	
+		
 		me.journalSourcesStore.load();
 		me.journalTracksStore.load();
 		
@@ -146,6 +150,12 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
      	   Ext.Msg.alert('SSP Error', 'Please select a journal to delete.'); 
         }
     },
+	
+	onSaveClick: function(button) {
+		var me=this;
+		
+		me.appEventsController.getApplication().fireEvent('saveJournal');
+	},
 	
 	onJournalClick:function(){
 		var me=this;

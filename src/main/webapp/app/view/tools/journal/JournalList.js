@@ -109,7 +109,14 @@ Ext.define('Ssp.view.tools.journal.JournalList', {
                     xtype: 'button',
                     hidden: !me.authenticatedPerson.hasAccess('ADD_JOURNAL_ENTRY_BUTTON'),
                     itemId: 'addButton'
-                }, {
+                }, 
+				{
+                    tooltip: 'Save Journal Note',
+                    text: 'Save',
+                    xtype: 'button',
+                    itemId: 'saveButton'
+                }, 
+				{
                     tooltip: 'Delete Journal Note',
                     text: 'Delete',
                     xtype: 'button',

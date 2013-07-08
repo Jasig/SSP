@@ -77,13 +77,8 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     	},
     	
     	
-		commentText: '#commentText',
+		commentText: '#commentTxt',
     	
-    	'saveButton': {
-			click: 'onSaveClick'
-		},
-		
-		
 		journalTrackTree: '#journalTrackTree'
     },
     
@@ -92,21 +87,22 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		// apply confidentiality level filter
 		me.authenticatedPerson.applyConfidentialityLevelsFilter( me.confidentialityLevelsStore );
 		
-		//me.initForm();	
+		me.appEventsController.assignEvent({eventName: 'saveJournal', callBackFunc: me.onSaveJournal, scope: me}); 
+		
 		return me.callParent(arguments);
     },   
+	
+	destroy: function() {
+    	var me=this;  
+		
+    	me.appEventsController.removeEvent({eventName: 'saveJournal', callBackFunc: me.onSaveJournal, scope: me});
+    	
+        return me.callParent( arguments );
+    },	
     
 	initForm: function(){
 		var me=this;
 		var id = me.model.get("id");
-		if(id != "")
-		{
-			me.getRemoveJournalTrackButton().show();
-		}
-		else
-		{
-			me.getRemoveJournalTrackButton().hide();
-		}
 		
 		var journalTrackId = "";
 		if ( me.model.get('journalTrack') != null)
@@ -156,7 +152,13 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
         return me.callParent( arguments );
     },	
 	
-	onSaveClick: function(button) {
+	onSaveJournal: function(response){
+		var me = this;
+		
+		me.save();
+	},
+	
+	save: function() {
 		var me = this;
 		var record, id, jsonData, url;
 		var form = this.getView().getForm();
@@ -166,12 +168,14 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		var journalTrackId="";		
 		url = this.url;
 		record = this.model;
-		record.set('comment', me.getCommentText().getValue());
+		var comment = Ext.ComponentQuery.query('#commentTxt')[0].getValue();
+		var jTT = Ext.ComponentQuery.query('#journalTrackTree')[0];
+		record.set('comment', comment);
 		id = record.get('id');
 		
 		// for tree
 		if (record.data.journalTrack.id != null || record.data.journalTrack.id != "") {
-			me.getJournalTrackTree().getController().save();
+			jTT.getController().save();
 		}
 		
 		// ensure all required fields are supplied
@@ -300,6 +304,10 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
      		me.removeJournalTrackAndSessionDetails();
 			me.getJournalTrackTree().getController().loadSteps();
      	}
+	},
+	
+	save1 :function(){
+		console.log('save test');
 	},
 	
 	onJournalTrackComboBlur: function( comp, event, eOpts){

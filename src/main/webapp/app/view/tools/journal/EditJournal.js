@@ -108,7 +108,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                     }, {
                         xtype: 'textareafield',
                         fieldLabel: 'Comment (Optional)',
-                        itemId: 'commentText',
+                        itemId: 'commentTxt',
                         name: 'comment',
 						//minHeight: 1,
 						//flex:1,
@@ -166,9 +166,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
 							tooltip: 'Removes the assigned Journal Track and Session Details',
 							text: 'Remove/Reset',
 							xtype: 'button',
-							itemId: 'removeJournalTrackButton',
-							hidden: true
-							//hidden: ((me.model.get('id') == "") ? false : true)
+							itemId: 'removeJournalTrackButton'
 						}]
 					}, {
                         xtype: 'journaltracktree',
@@ -177,17 +175,6 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
 						minHeight: 1
 						
                     }]
-                }]
-            }],
-            
-            
-            dockedItems: [{
-                xtype: 'toolbar',
-                items: [{
-                    text: 'Save',
-                    xtype: 'button',
-                    action: 'save',
-                    itemId: 'saveButton'
                 }]
             }]
         });
