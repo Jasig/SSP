@@ -174,7 +174,6 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
 			    		me.task.set('challengeReferralId', challengeReferral.id);
 		    		}
 		    		me.task.set('challengeId', challengeId);
-		    		me.task.set('confidentialityLevel', {id: confidentialityLevelId});
 		    		me.appEventsController.getApplication().fireEvent('loadTask');
 		    	}		
 			};
