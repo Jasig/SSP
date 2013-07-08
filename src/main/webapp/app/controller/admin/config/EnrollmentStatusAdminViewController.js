@@ -71,9 +71,11 @@ Ext.define('Ssp.controller.admin.config.EnrollmentStatusAdminViewController', {
             var configData = Ext.pluck(me.store.data.items, 'data')[0];
             var valuesString = configData.value;
             var pointer = valuesString.indexOf('default');
+			
             var vsLength = (valuesString.length - 2);
+			
             if (pointer != -1) {
-				var defaultPointer = (pointer - 2);
+				var defaultPointer = (pointer - 1);
 				var subDefault = valuesString.substr(0, defaultPointer);
 				var rest = valuesString.substr(defaultPointer, valuesString.length - 2);
 			}
@@ -84,10 +86,14 @@ Ext.define('Ssp.controller.admin.config.EnrollmentStatusAdminViewController', {
 				var rest = '';
 			}
 			
+		
             if (valuesString.length) {
-                var addString = "," + '"' + me.getEsCodeField().getValue() + '":' +
-                '"' +
-                me.getEsLabelField().getValue();
+				
+					 var addString =  '"' + me.getEsCodeField().getValue() + '":' +
+                	'"' +
+                	me.getEsLabelField().getValue();
+			
+               
                 
             }
             
@@ -96,6 +102,7 @@ Ext.define('Ssp.controller.admin.config.EnrollmentStatusAdminViewController', {
                 '"' +
                 me.getEsLabelField().getValue();
             }
+			
             
             if (me.getEsDefaultField().getValue()) {
                 var addDefaultString = addString + '",' +
@@ -107,7 +114,7 @@ Ext.define('Ssp.controller.admin.config.EnrollmentStatusAdminViewController', {
                 "]";
             }
             else {
-                var addDefaultString = addString ;
+                var addDefaultString = addString + '"';
             }
 			
 			
@@ -115,11 +122,14 @@ Ext.define('Ssp.controller.admin.config.EnrollmentStatusAdminViewController', {
 				var newValueString = subDefault + addDefaultString;
 			}
 			else{
-				if(rest != '')
-					var newValueString = subDefault  + addDefaultString + rest;
+				if(rest != ''){
+					
+						var newValueString = subDefault  + addDefaultString + "," + rest;
+						}
 				else
 					var newValueString = subDefault + addDefaultString + '"' + "}" + "]";
 			}
+		
 			
             configData.value = newValueString;
             var rec = me.store.first();
