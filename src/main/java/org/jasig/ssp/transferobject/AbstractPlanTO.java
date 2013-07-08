@@ -90,37 +90,8 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 		this.setIsImportant(model.getIsImportant());
 		this.setStudentNotes(model.getStudentNotes());
 		this.setIsValid(model.getIsValid());
-		setTrueModifiedDateAndBy(model);
 	}
 	
-	private void setTrueModifiedDateAndBy(T model) {
-		List<? extends AbstractPlanCourse<?>> courses = model.getCourses();
-		Date latestModifiedDate = model.getModifiedDate();
-		Person latestModifiedBy = model.getModifiedBy();
-		for (AbstractPlanCourse<?> abstractPlanCourse : courses) {
-			if(abstractPlanCourse.getModifiedDate() == null)//TODO qualifier is here because validation does not generate modified information
-				continue;
-			if(abstractPlanCourse.getModifiedDate().after(latestModifiedDate))
-			{
-				latestModifiedDate = abstractPlanCourse.getModifiedDate();
-				latestModifiedBy = abstractPlanCourse.getModifiedBy();
-			}
-		}
-		List<? extends TermNote> notes = model.getNotes();
-		for (TermNote termNote : notes) {
-			if(termNote.getModifiedDate() == null)//TODO qualifier is here because validation does not generate modified information
-				continue;
-			if(termNote.getModifiedDate().after(latestModifiedDate))
-			{
-				latestModifiedDate = termNote.getModifiedDate();
-				latestModifiedBy = termNote.getModifiedBy();			}
-		}
-		if(latestModifiedDate == null)
-			return;
-		this.setModifiedBy(new PersonLiteTO(latestModifiedBy));
-		this.setModifiedDate(latestModifiedDate);
-	}
-
 	public abstract List<? extends AbstractPlanCourseTO<T,? extends AbstractPlanCourse<T>>> getCourses();
 
 	public String getName() {

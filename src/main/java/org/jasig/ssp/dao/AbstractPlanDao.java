@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.dao;
 
+import java.util.Calendar;
+
 import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.Person;
 
@@ -34,4 +36,16 @@ AuditableCrudDao<T> {
 		clone.setObjectStatus(plan.getObjectStatus());
 		return save(clone);
 	}
+	
+	@Override
+	public T save(T obj) {
+		
+		//Kludge:  Setting this date so hibernate considers plan level entity 'dirty'
+		//The real date will be set by org.jasig.ssp.dao.AuditableEntityInterceptor
+		//We do this so we naively always update modified date/by when saving a plan.  
+		obj.setModifiedDate(Calendar.getInstance().getTime());
+		//End Kludge
+		return super.save(obj);
+	}
+	
 }

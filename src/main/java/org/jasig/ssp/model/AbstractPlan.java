@@ -92,6 +92,9 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 	
 	@Transient
 	private transient Boolean isValid = true;
+	
+	@Transient
+	private Boolean isDirty = false;	
 
 	public abstract <T extends AbstractPlan> T clonePlan() throws CloneNotSupportedException;
 	
@@ -256,6 +259,14 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 		clone.setIsValid(this.getIsValid());
 		//Copying person by should be changed if we're cloning on saving with a new advisor
 		clone.setOwner(this.getOwner());
+	}
+
+	public Boolean getIsDirty() {
+		return isDirty;
+	}
+
+	public void setIsDirty(Boolean isDirty) {
+		this.isDirty = isDirty;
 	}
 
 }
