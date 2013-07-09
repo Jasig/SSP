@@ -37,10 +37,6 @@
 	<include file="org/jasig/ssp/database/trainingDataChangesets/training_data_pre_seeded_3.xml" />
 	<include file="org/jasig/ssp/database/trainingDataChangesets/training_data_pre_seeded_4.xml" />
 	<include file="org/jasig/ssp/database/trainingDataChangesets/training_data_pre_seeded_5.xml" />
-	<include file="org/jasig/ssp/database/testingintegrationchangesets/i000011-test.xml" />
-	<include file="org/jasig/ssp/database/testingintegrationchangesets/i000012-test.xml" />
-	<include file="org/jasig/ssp/database/testingintegrationchangesets/i000013-test.xml" />
-	<include file="org/jasig/ssp/database/testingintegrationchangesets/i000014-test.xml" />
 
 
 </databaseChangeLog>
