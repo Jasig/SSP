@@ -1035,8 +1035,20 @@ Ext.onReady(function(){
 				    selfHelpGuidesStore: 'Ssp.store.SelfHelpGuides',
 				    selfHelpGuideQuestionsStore: 'Ssp.store.SelfHelpGuideQuestions',
 				    serviceReasonsStore: 'Ssp.store.reference.ServiceReasons',
-				    specialServiceGroupsStore: 'Ssp.store.reference.SpecialServiceGroups',
-				    specialServiceGroupsBindStore: 'Ssp.store.reference.SpecialServiceGroupsBind',
+				    specialServiceGroupsStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.SpecialServiceGroups', { });
+					    },
+					    singleton: true
+					},
+				    specialServiceGroupsAllUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.SpecialServiceGroups', {
+							     extraParams: {status: "ALL", limit: "-1"}
+							 });
+					    },
+					    singleton: true
+					},
 				    statesStore: 'Ssp.store.reference.States',
 				    studentsStore: 'Ssp.store.Students',				    
 				    studentStatusesStore: 'Ssp.store.reference.StudentStatuses',
