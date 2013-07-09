@@ -205,6 +205,20 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>  course: courses){
 			requiringCourseCodes.add(course.getCourseCode());
 		}
+		
+		List<String> transcriptedCourseCodeCourse = new ArrayList<String>();
+		Map<String, ExternalStudentTranscriptCourse> transcriptedCoursesByFormattedCourseCode = new HashMap<String,ExternalStudentTranscriptCourse>();
+
+		String studentSchoolId = getSchoolIdPlannedFor(model);
+
+		if(StringUtils.isNotBlank(studentSchoolId)){
+			List<ExternalStudentTranscriptCourse> transcriptedCourses = studentTranscriptService.getTranscriptsBySchoolId(studentSchoolId);
+			for(ExternalStudentTranscriptCourse transcriptedCourse:transcriptedCourses){
+				transcriptedCourseCodeCourse.add(transcriptedCourse.getFormattedCourse());
+				transcriptedCoursesByFormattedCourseCode.put(transcriptedCourse.getFormattedCourse(), transcriptedCourse);
+			}
+		}
+		
 		Map<String, Term> termCodeTerm = new HashMap<String, Term>();
 		Map<String, String> courseCodeTermCode = new HashMap<String,String>();
 		Map<String, AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courseCodeCourse = new HashMap<String,AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>();
@@ -216,16 +230,14 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 			}
 			courseCodeTermCode.put(course.getCourseCode(), course.getTermCode());
 			courseCodeCourse.put(course.getCourseCode(), course);
-		}
-		
-		List<String> transcriptedCourseCodeCourse = new ArrayList<String>();
-
-		String studentSchoolId = getSchoolIdPlannedFor(model);
-
-		if(StringUtils.isNotBlank(studentSchoolId)){
-			List<ExternalStudentTranscriptCourse> transcriptedCourses = studentTranscriptService.getTranscriptsBySchoolId(studentSchoolId);
-			for(ExternalStudentTranscriptCourse transcriptedCourse:transcriptedCourses){
-				transcriptedCourseCodeCourse.add(transcriptedCourse.getFormattedCourse());
+			
+			// This section sets isTranscript and duplicateOfTranscript since course may be from client.
+			if(transcriptedCoursesByFormattedCourseCode.containsKey(course.getFormattedCourse())){
+				ExternalStudentTranscriptCourse transcriptCourse = transcriptedCoursesByFormattedCourseCode.get(course.getFormattedCourse());
+				course.setIsTranscript(true);
+				if(!transcriptCourse.getTermCode().equals(course.getTermCode())){
+					course.setDuplicateOfTranscript(true);
+				}
 			}
 		}
 		

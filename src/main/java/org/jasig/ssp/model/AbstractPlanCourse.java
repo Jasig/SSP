@@ -226,7 +226,7 @@ public abstract class AbstractPlanCourse<T extends AbstractPlan> extends Abstrac
 	/**
 	 * @return the isValidInTerm
 	 */
-	public boolean isValidInTerm() {
+	public boolean getIsValidInTerm() {
 		return isValidInTerm;
 	}
 

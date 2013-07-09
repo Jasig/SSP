@@ -92,7 +92,7 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 			this.setElectiveId(model.getElective().getId());
 		
 		// validation transients 
-		this.setIsValidInTerm(model.isValidInTerm());
+		this.setIsValidInTerm(model.getIsValidInTerm());
 		this.setHasPrerequisites(model.getHasPrerequisites());
 		this.setHasCorequisites(model.getHasCorequisites());
 		this.setInvalidReasons(model.getInvalidReasons());
@@ -250,7 +250,7 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 	/**
 	 * @return the isValidInTerm
 	 */
-	public boolean isValidInTerm() {
+	public boolean getIsValidInTerm() {
 		return isValidInTerm;
 	}
 

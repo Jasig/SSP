@@ -225,7 +225,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			if(termNote != null && (studentNoteHasValue || contactNoteHasValue || termNote.get("isImportant"))){
 				termNote.set("id","");
 				termNote.set("objectStatus","ACTIVE");
-				simpleData.termNotes.push(termNote.data);
+				simpleData.termNotes.push(termNote.getData());
 			}
 		})
 		
@@ -518,7 +518,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		for(var i = 0; i < planCourses.length; i++){
 			var planCourse = planCourses[i];
 
-			if(planCourse.validInTerm == false){
+			if(planCourse.isValidInTerm == false){
 				termInvalidCount++;
 				termInvalid += planCourse.formattedCourse + ','
 			}
@@ -529,7 +529,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			if(planCourse.hasPrerequisits == false){
 				prerequisiteInvalidCount++;
 				prerequisiteInvalid += planCourse.formattedCourse + ', '
-			}		}
+			}}
 		
 		validationResponse.message = "The plan has the following invalid courses";
 		validationResponse.valid = false;
@@ -588,7 +588,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			if(isARequisite == false)
 				continue;
 			
-			if(planCourse.validInTerm === false || planCourse.hasCorequisites == false || planCourse.hasPrerequisits == false){
+			if(planCourse.isValidInTerm === false || planCourse.hasCorequisites == false || planCourse.hasPrerequisits == false){
 				courseIsValid = false;
 			}else
 				continue;

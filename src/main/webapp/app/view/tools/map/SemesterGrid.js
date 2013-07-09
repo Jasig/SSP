@@ -39,7 +39,7 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
         var me = this;       
         Ext.apply(me, {
 			invalidRecord: function(record) { 
-						            return record.get('validInTerm') === false || record.get('hasCorequisites')  === false || record.get('hasPrerequisites')  === false; 
+						            return record.get('isValidInTerm') === false || record.get('hasCorequisites')  === false || record.get('hasPrerequisites')  === false; 
 						        },
             columns: [
             	{

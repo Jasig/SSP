@@ -34,7 +34,7 @@ Ext.define('Ssp.model.tool.map.SemesterCourse', {
 			 {name:'isImportant', type: 'boolean'},
 			 {name:'isTranscript', type: 'boolean', defaultValue:false},
 			 {name:'duplicateOfTranscript', type: 'boolean', defaultValue:false},
-			 {name:'validInTerm',type:'boolean', defaultValue:true, convert: null},
+			 {name:'isValidInTerm',type:'boolean', defaultValue:true, convert: null},
              {name:'hasCorequisites',type:'boolean', defaultValue:true, convert: null},
              {name:'hasPrerequisites',type:'boolean', defaultValue:true, convert: null},
              {name:'invalidReasons',type:'string'},
@@ -68,10 +68,10 @@ Ext.define('Ssp.model.tool.map.SemesterCourse', {
 						else
 							me.set('isImportant', false);
 							
-						if(planCourse.validInTerm)
-								me.set('validInTerm', planCourse.validInTerm);	
+						if(planCourse.isValidInTerm)
+								me.set('isValidInTerm', planCourse.isValidInTerm);	
 							else
-								me.set('validInTerm', false);
+								me.set('isValidInTerm', false);
 						
 						if(planCourse.hasCorequisites)
 							me.set('hasCorequisites', planCourse.hasCorequisites);	
