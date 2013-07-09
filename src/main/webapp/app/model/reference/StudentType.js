@@ -19,29 +19,5 @@
 Ext.define('Ssp.model.reference.StudentType', {
 	extend: 'Ssp.model.reference.AbstractReference',
     fields: [
-        {name:'requireInitialAppointment',type:'boolean'},
-        // Elective.js or Color.js for documentation about Active/Inactive data loading
-	    {name: 'objectStatus', type: 'string', defaultValue: 'ACTIVE', convert: function(value, record){
-	        if ( !(record.statusFieldsInitialized) || record.synchronizingStatusFields ) {
-	            return value;
-	        }
-	        record.synchronizingStatusFields = true;
-	        record.set('active', 'ACTIVE' === (value && value.toUpperCase()));
-	        record.synchronizingStatusFields = false;
-	        return value;
-	    }},
-	    {name: 'active', type: 'boolean', persist: false, convert: function(value, record){
-	        if ( !(record.statusFieldsInitialized) ) {
-	            record.statusFieldsInitialized = true;
-	            return 'ACTIVE' === record.get('objectStatus');
-	        }
-	
-	        if ( record.synchronizingStatusFields ) {
-	            return value;
-	        }
-	        record.synchronizingStatusFields = true;
-	        record.set('objectStatus', !(!value) ? 'ACTIVE' : 'INACTIVE');
-	        record.synchronizingStatusFields = false;
-	        return value;
-	    }}]
+        {name:'requireInitialAppointment',type:'boolean'}]
 });
