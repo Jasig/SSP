@@ -190,7 +190,15 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         field: {
                             xtype: 'checkbox'
                         }
-                    }]
+                    }, {
+						header: 'Student Type Code',
+						required: true,
+						dataIndex: 'code',
+						field: {
+							xtype: 'textfield'
+						},
+						flex: .25						
+					}]
                 }, {
                     text: 'Re-Assignment',
                     title: 'Re-Assignment',

@@ -41,6 +41,7 @@ public class StudentType
 			.fromString("b2d05939-5056-a51a-8004-d803265d2645");
 
 	private boolean requireInitialAppointment;
+	private String code;
 
 	/**
 	 * Empty constructor
@@ -67,6 +68,8 @@ public class StudentType
 	 *            Identifier; required
 	 * @param name
 	 *            Name; required; max 100 characters
+	 * @param name
+	 *			  Code; required; max 10 characters
 	 */
 
 	public StudentType(final UUID id, final String name) {
@@ -81,7 +84,7 @@ public class StudentType
 	 * @param name
 	 *            Name; required; max 100 characters
 	 * @param description
-	 *            Description; max 150 characters
+	 *            Description; max 150 characters	
 	 */
 	public StudentType(final UUID id, final String name,
 			final String description) {
@@ -102,6 +105,21 @@ public class StudentType
 	public void setRequireInitialAppointment(
 			final boolean requireInitialAppointment) {
 		this.requireInitialAppointment = requireInitialAppointment;
+	}
+	
+	/**
+	 * @return the student type code
+	 */
+	public String isCode() {
+		return code;
+	}
+	
+	/**
+	 * @param studentTypeCode
+	 * 				the student type code to set
+	 */
+	public void setCode(final String code) {
+		this.code = code;
 	}
 
 	@Override

@@ -38,6 +38,7 @@ public class StudentTypeTO
 		implements TransferObject<StudentType> { // NOPMD
 
 	private boolean requireInitialAppointment = false;
+	private String code;
 
 	/**
 	 * Empty constructor
@@ -65,6 +66,7 @@ public class StudentTypeTO
 		super.from(model);
 
 		requireInitialAppointment = model.isRequireInitialAppointment();
+		code = model.isCode();		
 	}
 
 	/**
@@ -83,6 +85,21 @@ public class StudentTypeTO
 		this.requireInitialAppointment = requireInitialAppointment;
 	}
 
+	/**
+	 * @return the student type code
+	 */
+	public String isCode() {
+		return code;
+	}
+	
+	/**
+	 * @param studentTypeCode
+	 * 				the student type code to set
+	 */
+	public void setCode(final String code) {
+		this.code = code;
+	}
+	
 	public static List<StudentTypeTO> toTOList(
 			final Collection<StudentType> models) {
 		final List<StudentTypeTO> tObjects = Lists.newArrayList();
