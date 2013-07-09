@@ -39,7 +39,11 @@ Ext.define('Ssp.view.SearchForm',{
         align: 'stretch'
     },    
     scroll: 'vertical',
-    
+	listeners: {
+	      afterlayout: function() {
+	        Ext.ComponentQuery.query('[name=studentId]')[0].focus();
+	      }
+	},
 	initComponent: function() {
     	var me=this;
         Ext.applyIf(me, {
@@ -51,7 +55,7 @@ Ext.define('Ssp.view.SearchForm',{
 			defaults:{
 			    	  enableKeyEvents:true,
 			    	  listeners:{
-			    	    specialKey:{
+			    	    specialkey:{
 								scope: me,
 								fn: function(field, el) {
 				    	      			if(el.getKey() == Ext.EventObject.ENTER)
@@ -84,7 +88,20 @@ Ext.define('Ssp.view.SearchForm',{
                     fieldLabel: 'Student Name/ID',
                     emptyText: 'Enter Student Name/ID',
                     width: 100,
-                    name: 'studentId'
+                    name: 'studentId',
+					enableKeyEvents:true,
+					listeners: {
+					      afterrender: function(field) {
+					        field.focus(false, 0);
+					      },
+						  specialkey:{
+								scope: me,
+								fn: function(field, el) {
+				    	      			if(el.getKey() == Ext.EventObject.ENTER)
+				    	    				this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
+				    	    		}	
+			    	  		}
+					}
                 },
                 {
 		   		    xtype: 'combobox',
@@ -135,7 +152,17 @@ Ext.define('Ssp.view.SearchForm',{
                      columnWidth: .45,
                      labelAlign: 'right',
                      fieldLabel: 'From',
-                     name: 'hoursEarnedMin'
+                     name: 'hoursEarnedMin',
+					 enableKeyEvents:true,
+					 listeners: {
+                        specialkey:{
+								scope: me,
+								fn: function(field, el) {
+				    	      			if(el.getKey() == Ext.EventObject.ENTER)
+				    	    				this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
+				    	    		}	
+			    	  		}
+                    }
                },
                {
                    xtype: 'numberfield',
@@ -145,7 +172,17 @@ Ext.define('Ssp.view.SearchForm',{
             	   columnWidth: .45,
                    labelAlign: 'right',
                    fieldLabel: 'To',
-                   name: 'hoursEarnedMax'
+                   name: 'hoursEarnedMax',
+				   enableKeyEvents:true,
+				  	listeners: {
+                       	specialkey:{
+								scope: me,
+								fn: function(field, el) {
+				    	      			if(el.getKey() == Ext.EventObject.ENTER)
+				    	    				this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
+				    	    		}	
+			    	  		}
+                   }
               }]
                 },
              {	   layout: 'column',
@@ -166,7 +203,17 @@ Ext.define('Ssp.view.SearchForm',{
                         	   labelAlign: 'right',
                         	   columnWidth: .45,
                         	   fieldLabel: 'From',
-                        	   name: 'gpaMin'
+                        	   name: 'gpaMin',
+							   enableKeyEvents:true,
+							   listeners: {
+		                        	specialkey:{
+											scope: me,
+											fn: function(field, el) {
+							    	      			if(el.getKey() == Ext.EventObject.ENTER)
+							    	    				this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
+							    	    		}	
+						    	  		}
+		                    	}
                            },
                            {
                         	   xtype: 'numberfield',
@@ -178,7 +225,17 @@ Ext.define('Ssp.view.SearchForm',{
                         	   labelAlign: 'right',
                         	   columnWidth: .45,
                         	   fieldLabel: 'To',
-                        	   name: 'gpaMax'
+                        	   name: 'gpaMax',
+							   enableKeyEvents:true,
+							  listeners: {
+		                        specialkey:{
+										scope: me,
+										fn: function(field, el) {
+						    	      			if(el.getKey() == Ext.EventObject.ENTER)
+						    	    				this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
+						    	    		}	
+					    	  		}
+		                    }
                            }              
                 ]},
                 {
@@ -218,17 +275,28 @@ Ext.define('Ssp.view.SearchForm',{
                     name: 'planStatus',
                     store: me.planStatusStore,
    		   		    valueField: 'code',
-		   		    displayField: 'displayValue'                   
+		   		    displayField: 'displayValue'               
                 },
                 {
                     xtype: 'checkboxfield',
                     fieldLabel: 'My Caseload',
-                    name: 'myCaseload'
+                    name: 'myCaseload',
+					enableKeyEvents:true,
+                    listeners: {
+                        change: function() {
+                        	Ext.ComponentQuery.query('[name=planStatus]')[0].focus();
+                        }
+                    }
                 },
                 {
                     xtype: 'checkboxfield',
                     fieldLabel: 'My Plans',
-                    name: 'myPlans'
+                    name: 'myPlans',
+                    listeners: {
+                        change: function() {
+                        	Ext.ComponentQuery.query('[name=planStatus]')[0].focus();
+                        }
+                    }
                 }             
             ]
               
