@@ -713,7 +713,7 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public String getSchoolIdForPersonId(UUID personId) throws ObjectNotFoundException {
-		return get(personId).getSchoolId();
+		return dao.getSchoolIdForPersonId(personId);
 	}
 
 	private <V> V withCoachSyncTransaction(Callable<V> callable) {

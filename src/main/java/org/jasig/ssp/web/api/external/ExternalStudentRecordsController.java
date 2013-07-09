@@ -280,10 +280,9 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	private BigDecimal getBalancedOwed(UUID id, String schoolId) throws ObjectNotFoundException{
 		BigDecimal balanceOwed = null;
 		try{
-			PersonDemographics demographics = personDemographicsService.get(id);
-			balanceOwed = demographics.getBalanceOwed();
+			balanceOwed = personDemographicsService.getBalancedOwed(id);
 		}catch(Exception exception){
-			
+			this.getLogger().error(exception.getMessage());
 		}finally{
 			
 		}
@@ -293,7 +292,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 				ExternalPerson externalPerson = externalStudentService.getBySchoolId(schoolId);
 				balanceOwed = externalPerson.getBalanceOwed();
 			}catch(Exception exception){
-				
+				this.getLogger().error(exception.getMessage());
 			}finally{
 				
 			}
@@ -474,8 +473,8 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		return recordTO;
 	}
 	
-	String getStudentId(UUID id) throws ObjectNotFoundException{
-		return personService.get(id).getSchoolId();
+	String getStudentId(UUID personId) throws ObjectNotFoundException{
+		return personService.getSchoolIdForPersonId(personId);
 	}
 	
 	

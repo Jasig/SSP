@@ -131,6 +131,13 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		criteria.add(Restrictions.in("id", personIds));
 		return criteria.list();
 	}
+	
+	public String getSchoolIdForPersonId(UUID personId){
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("id", personId));
+		criteria.setProjection(Projections.property("schoolId"));
+		return (String)criteria.uniqueResult();
+	}
 
 	/**
 	 * Retrieves the specified Person by their school_id.

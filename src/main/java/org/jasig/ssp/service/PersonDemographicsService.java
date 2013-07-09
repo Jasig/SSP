@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import org.jasig.ssp.model.Person;
@@ -46,6 +47,8 @@ public interface PersonDemographicsService extends
 	PersonDemographics save(PersonDemographics obj)
 			throws ObjectNotFoundException;
 
+	BigDecimal getBalancedOwed(UUID personId);
+	
 	@Override
 	void delete(UUID id) throws ObjectNotFoundException;
 }
