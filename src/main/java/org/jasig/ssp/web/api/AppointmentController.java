@@ -27,6 +27,7 @@ import org.jasig.mygps.business.StudentIntakeRequestManager;
 import org.jasig.ssp.factory.AppointmentTOFactory;
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.model.Appointment;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.AppointmentService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.AppointmentTO;
@@ -35,6 +36,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -84,6 +86,23 @@ public class AppointmentController
 	@Override
 	public String permissionBaseName() {
 		return "APPOINTMENT";
+	}
+	
+	@Override
+	public void checkPermissionForOp(final String operation) {
+		final String apptPermission = "ROLE_PERSON_" + permissionBaseName() + "_"
+				+ operation;	
+		final String personPermission = "ROLE_PERSON_" + operation;
+		//Handles case for tight coupling between appointment and person permissions
+		if (!securityService.hasAuthority(apptPermission)) {
+			if (!securityService.hasAuthority(personPermission)) {
+				LOGGER.warn("Access is denied for Operation. Role required: "
+						+ personPermission + " or " + apptPermission);
+				throw new AccessDeniedException(
+						"Access is denied for Operation. Role required: "
+								+ personPermission + " or " + apptPermission);
+			}
+		}		
 	}
 
 	@RequestMapping(value = "/current", method = RequestMethod.GET)
