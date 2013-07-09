@@ -46,7 +46,7 @@
 		<dropView viewName="v_external_student_transcript_course" />
 
 		<createView viewName="v_external_student_transcript_course">
-			select school_id ${concat} term_code ${concat} formatted_course as id,
+			select school_id ${concat} term_code ${concat} formatted_course ${concat} section_number ${concat} section_code as id,
 			school_id, first_name, last_name, middle_name, subject_abbreviation, number, formatted_course, section_number,
 			section_code, title, description, grade, credit_earned, term_code, credit_type, audited, status_code, faculty_school_id
 			from external_student_transcript_course
