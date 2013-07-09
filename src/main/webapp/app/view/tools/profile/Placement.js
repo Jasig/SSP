@@ -23,7 +23,7 @@ Ext.define('Ssp.view.tools.profile.Placement', {
               'Deft.mixin.Controllable'],	
     width: '100%',
 	height: '100%',
-	minHeight: 200,
+	minHeight: 615,
     controller: 'Ssp.controller.tool.profile.PlacementViewController',
     autoScroll: true,
     inject: {

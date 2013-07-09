@@ -23,7 +23,7 @@ Ext.define('Ssp.view.tools.profile.CurrentSchedule', {
     controller: 'Ssp.controller.tool.profile.CurrentScheduleViewController',
     width: '100%',
     height: '100%',
-	minHeight: 150,
+	minHeight: 615,
     autoScroll: true,
 	title: 'Current Schedule',
     inject: {

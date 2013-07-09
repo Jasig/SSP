@@ -26,12 +26,13 @@ Ext.define('Ssp.view.tools.profile.Transcript', {
     },
 	width: '100%',
 	height: '100%',
-	minHeight: 200,
+	minHeight: 615,
     autoScroll: true,
     initComponent: function(){
         var me = this;
         
         Ext.applyIf(me, {
+        	queryMode:'local',
             store: me.store,
             columns: [{
                 xtype: 'gridcolumn',
