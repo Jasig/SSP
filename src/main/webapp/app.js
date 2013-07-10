@@ -473,7 +473,7 @@ var apiUrls = [
   {name: 'personEmailTask', url: 'person/{id}/task/email'},
   {name: 'personViewHistory', url: 'person/{id}/history/print'},
   {name: 'personPrintTask', url: 'person/{id}/task/print'},
-  {name: 'personSearch', url: 'person/search'},
+  {name: 'personSearch', url: 'person/students/search'},
   {name: 'personMapPlan', url: 'person/{id}/map/plan'},
   {name: 'templatePlan', url: 'reference/map/template'},
   {name: 'placement', url: 'person/{id}/test'},
@@ -1003,6 +1003,16 @@ Ext.onReady(function(){
 					    },
 					    singleton: true
 					},
+					
+					planTemplatesSummaryStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.PlanTemplatesSummary', {
+							     storeId: 'electivsAllUnpagedStore',		
+							     extraParams: {sort: "name", sortDirection: "DESC", status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					}, 
 			    	employmentShiftsStore: 'Ssp.store.reference.EmploymentShifts',
 			    	ethnicitiesStore: 'Ssp.store.reference.Ethnicities',
 			    	fundingSourcesStore: 'Ssp.store.reference.FundingSources',
@@ -1026,7 +1036,7 @@ Ext.onReady(function(){
 			    	personalityTypesStore: 'Ssp.store.reference.PersonalityTypes',
 			    	placementStore: 'Ssp.store.Placement',
 			    	planStore: 'Ssp.store.Plan',
-			    	planTemplatesSummaryStore: 'Ssp.store.PlanTemplatesSummary',
+			    	
 					programStatusesStore: 'Ssp.store.reference.ProgramStatuses',
 			    	programStatusChangeReasonsStore: 'Ssp.store.reference.ProgramStatusChangeReasons',
 				    referralSourcesStore: {
