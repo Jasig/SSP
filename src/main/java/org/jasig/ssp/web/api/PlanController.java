@@ -129,7 +129,7 @@ public class PlanController  extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */
-	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
+	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<PlanTO> get(final @PathVariable UUID personId,
@@ -158,7 +158,7 @@ public class PlanController  extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */
-	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
+	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
 	public @ResponseBody
 	PlanTO getPlan(final @PathVariable UUID personId,final @PathVariable UUID id) throws ObjectNotFoundException,
@@ -177,7 +177,7 @@ public class PlanController  extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */	
-	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(value="/current", method = RequestMethod.GET)
 	public @ResponseBody
 	PlanTO getCurrentForStudent(final @PathVariable UUID personId) throws ObjectNotFoundException,
@@ -265,7 +265,7 @@ public class PlanController  extends AbstractBaseController {
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.
 	 */
-	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
+	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(value = "/print", method = RequestMethod.POST)
 	public @ResponseBody
 	String print(final HttpServletResponse response,
@@ -290,7 +290,7 @@ public class PlanController  extends AbstractBaseController {
 	 *             If specified object could not be found.
 	 * @throws SendFailedException 
 	 */
-	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
+	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(value = "/email", method = RequestMethod.POST)
 	public @ResponseBody
 	String email(final HttpServletResponse response,
