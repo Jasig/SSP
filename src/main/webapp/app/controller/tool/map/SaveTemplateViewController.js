@@ -25,6 +25,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     	currentMapPlan: 'currentMapPlan',
 		programsStore: 'programsFacetedStore',
         departmentsStore: 'departmentsStore',
+        authenticatedPerson: 'authenticatedPerson',
         divisionsStore: 'divisionsStore'
     },
     
@@ -45,7 +46,9 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 	    me.getView().query('form')[0].loadRecord( me.currentMapPlan );
 
 	    me.getView().query('checkbox[name=objectStatus]')[0].setValue(me.currentMapPlan.getAsBoolean('objectStatus',"ACTIVE"));
-		me.setCheckBox('checkbox[name=isPrivate]', 'isPrivate');
+		if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
+			me.getView().query('checkbox[name="isPrivate"]')[0].setValue(true);
+		}
 		return me.callParent(arguments);
     },
     
@@ -59,32 +62,63 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		}
     },
     
-    onSaveClick: function(){
+    onSaveClick:function(){
     	me = this;
-		
-    	var form =  me.getView().query('form')[0].getForm();
     	var nameField = me.getView().query('textfield[name="name"]')[0].getValue();
     	if(!nameField || nameField == '')
     	{
     		Ext.Msg.alert('Error','Please give the template a name.');
     		return;
     	}
-		form.updateRecord(me.currentMapPlan);
-    	me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox[name=objectStatus]')[0].getValue()) ? 'ACTIVE' : 'INACTIVE');
-		me.setField('checkbox[name=isPrivate]', 'isPrivate');
-		
-		if(!me.currentMapPlan.get('isTemplate')){
-			me.currentMapPlan.set('id', '');
-			me.currentMapPlan.setIsTemplate(true);
-		}
-    	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
-    	if(me.getView().saveAs)
-    	{
-    		me.appEventsController.getApplication().fireEvent('onSaveAsTemplatePlan');
+    	var isPrivate = me.getView().query('checkbox[name="isPrivate"]')[0].getValue();
+    	if(!isPrivate){
+    		if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
+    			me.getView().query('checkbox[name="isPrivate"]')[0].setValue(true);
+    			Ext.Msg.alert('Error','You do not have permission to save a public template.');
+        		return;
+    		}else{
+    			var programCode = me.getView().query('combobox[name="programCode"]')[0].getValue();
+    			if(programCode == null || programCode.length <= 1){
+    				var messageBox = Ext.Msg.confirm({
+            		     title:'Save Template No Program Select?',
+            		     msg: "It is recommended that you save a public Template associated to a specific program. " +
+            		     		"None is currently selected. Please select preferred option.",
+            		     buttons: Ext.Msg.YESNOCANCEL,
+            		     fn: me.completeSave,
+            		     scope: me
+            		   });
+    					messageBox.msgButtons['yes'].setText("Save with No Program");
+    					messageBox.msgButtons['no'].setText("Return To Save Dialog");
+    					messageBox.msgButtons['cancel'].setText("Cancel Save");
+    				return;
+    			}
+    		}
     	}
-    	else
-    	{
-    		me.appEventsController.getApplication().fireEvent('onSaveTemplatePlan');
+    	me.completeSave('yes');
+    },
+    
+    completeSave: function(btnId){
+    	me = this;
+    	if(btnId == 'yes'){
+	    	var form =  me.getView().query('form')[0].getForm();
+	    	
+			form.updateRecord(me.currentMapPlan);
+	    	me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox[name=objectStatus]')[0].getValue()) ? 'ACTIVE' : 'INACTIVE');		
+			if(!me.currentMapPlan.get('isTemplate')){
+				me.currentMapPlan.set('id', '');
+				me.currentMapPlan.setIsTemplate(true);
+			}
+	    	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+	    	if(me.getView().saveAs)
+	    	{
+	    		me.appEventsController.getApplication().fireEvent('onSaveAsTemplatePlan');
+	    	}
+	    	else
+	    	{
+	    		me.appEventsController.getApplication().fireEvent('onSaveTemplatePlan');
+	    	}
+    	}else if(btnId == 'no'){
+    		return;
     	}
     	me.onCancelClick();
     },

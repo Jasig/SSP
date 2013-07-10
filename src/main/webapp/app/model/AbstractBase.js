@@ -70,7 +70,13 @@ Ext.define('Ssp.model.AbstractBase', {
                      return value;
                  }
                  record.synchronizingStatusFields = true;
-                 record.set('active', 'ACTIVE' === (value && value.toUpperCase()));
+				 if(value === true || value === false)
+					record.set('active', value);
+				 else if(!value)
+					record.set('active', false);
+				 else
+                 	record.set('active', 'ACTIVE' === (value && value.toUpperCase()));
+
                  record.synchronizingStatusFields = false;
                  return value;
              }},
