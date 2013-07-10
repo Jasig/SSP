@@ -834,11 +834,17 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		return selectedItems;
     },
     
-    filterAssociativeComboStore: function(store, idToMatch) {
+    applyAssociativeStoreFilter: function(store, idToMatch) {
     	var activeOrSelectedFilter = Ext.create('Ext.util.Filter', {
 			filterFn: function(storeItem) {
-				if(storeItem.data.active == true || 
-				   storeItem.data.id == idToMatch) {
+				var storeItemId = storeItem.data.id;
+				if(storeItem.data.active == true) {
+					return true;
+				} else if(idToMatch instanceof Array &&
+						   Ext.Array.indexOf(idToMatch, storeItemId) > -1 ) {
+					return true;
+					
+				} else if(storeItemId == idToMatch) {
 					return true;
 				}
 				return false;

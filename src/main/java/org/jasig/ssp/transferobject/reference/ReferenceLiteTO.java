@@ -106,17 +106,8 @@ public class ReferenceLiteTO<T extends AbstractReference> implements
 		if ( to == null ) {
 			return null;
 		}
-		to.setObjectStatus(combinedObjectStatus(to, associationStatus));
+		to.setObjectStatus(associationStatus);
 		return to;
-	}
-
-	private static <T extends AbstractReference> ObjectStatus
-	combinedObjectStatus(ReferenceLiteTO<T> to, ObjectStatus associationStatus) {
-		ObjectStatus toObjStatus = to.objectStatus;
-		if ( to.getObjectStatus() == null ) {
-			return associationStatus;
-		}
-		return to.objectStatus.and(associationStatus);
 	}
 
 	public static <T extends AbstractReference> List<ReferenceLiteTO<T>> toTOList(

@@ -84,7 +84,7 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 		
 		me.studentTypesStore.load();
 		me.studentTypesStore.clearFilter(true);
-		me.formRendererUtils.filterAssociativeComboStore(me.studentTypesStore, me.person.data.studentType.id);	
+		me.formRendererUtils.applyAssociativeStoreFilter(me.studentTypesStore, me.person.data.studentType.id);	
 		
 		me.coachesStore.load(function(records, operation, success) {
 	          if(!success)

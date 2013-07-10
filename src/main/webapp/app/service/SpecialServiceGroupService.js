@@ -45,7 +45,7 @@ Ext.define('Ssp.service.SpecialServiceGroupService', {
 	    };
 	    
 		me.apiProperties.makeRequest({
-			url: me.getBaseUrl(),
+			url: me.getBaseUrl() + "/?limit=-1&status=ALL",
 			method: 'GET',
 			successFunc: success,
 			failureFunc: failure,

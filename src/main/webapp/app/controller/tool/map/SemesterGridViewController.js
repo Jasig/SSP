@@ -70,7 +70,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 			}
 	
 			me.electiveStore.clearFilter(true);
-			me.formRendererUtils.filterAssociativeComboStore(me.electiveStore, record.get('electiveId'));	
+			me.formRendererUtils.applyAssociativeStoreFilter(me.electiveStore, record.get('electiveId'));	
 		
 			me.coursePlanDetails.query('form')[0].getForm().loadRecord(planCourse);
     		creditHours.setValue(planCourse.get('creditHours'));

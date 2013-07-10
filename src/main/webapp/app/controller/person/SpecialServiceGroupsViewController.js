@@ -22,10 +22,11 @@ Ext.define('Ssp.controller.person.SpecialServiceGroupsViewController', {
     inject: {
     	apiProperties: 'apiProperties',
     	columnRendererUtils: 'columnRendererUtils',
+    	formRendererUtils: 'formRendererUtils',
     	person: 'currentPerson',
-    	store: 'specialServiceGroupsBindStore',
+    	store: 'specialServiceGroupsAllUnpagedStore',
     	service: 'specialServiceGroupService',
-        itemSelectorInitializer: 'itemSelectorInitializer'
+        itemSelectorInitializer: 'itemSelectorInitializer'        
     },
 	init: function() {
 		var me=this;
@@ -42,9 +43,12 @@ Ext.define('Ssp.controller.person.SpecialServiceGroupsViewController', {
 	getAllSuccess: function( r, scope ){
 		var me=scope;
     	var selectedSpecialServiceGroups = me.columnRendererUtils.getSelectedIdsForMultiSelect( me.person.get('specialServiceGroups') );
+
     	if (r.rows.length > 0)
     	{
     		me.store.loadData(r.rows);
+    		me.store.clearFilter(true);
+    		me.formRendererUtils.applyAssociativeStoreFilter(me.store, selectedSpecialServiceGroups);
 
             me.itemSelectorInitializer.defineAndAddSelectorField(me.getView(), selectedSpecialServiceGroups, {
                 itemId: 'specialServiceGroupsItemSelector',

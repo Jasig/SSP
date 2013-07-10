@@ -71,7 +71,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 			}
 			
 			if(item.associativeField != undefined) {	
-				me.formRendererUtils.filterAssociativeComboStore(item.store, e.record.get(item.associativeField));
+				me.formRendererUtils.applyAssociativeStoreFilter(item.store, e.record.get(item.associativeField));
 			}
 		});
 		
