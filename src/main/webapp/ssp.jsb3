@@ -244,11 +244,6 @@
                     "path": "/app/model/reference/"
                 },
                 {
-                    "clsName": "Ssp.store.reference.ReferralSourcesBind",
-                    "name": "ReferralSourcesBind.js",
-                    "path": "/app/store/reference/"
-                },
-                {
                     "clsName": "Ssp.model.reference.SpecialServiceGroup",
                     "name": "SpecialServiceGroup.js",
                     "path": "/app/model/reference/"

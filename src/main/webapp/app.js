@@ -1029,8 +1029,20 @@ Ext.onReady(function(){
 			    	planTemplatesSummaryStore: 'Ssp.store.PlanTemplatesSummary',
 					programStatusesStore: 'Ssp.store.reference.ProgramStatuses',
 			    	programStatusChangeReasonsStore: 'Ssp.store.reference.ProgramStatusChangeReasons',
-				    referralSourcesStore: 'Ssp.store.reference.ReferralSources',
-				    referralSourcesBindStore: 'Ssp.store.reference.ReferralSourcesBind',
+				    referralSourcesStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.ReferralSources', { });
+					    },
+					    singleton: true
+					},
+					referralSourcesAllUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.ReferralSources', {
+					    		extraParams: {status: "ALL", limit: "-1"}
+					    	});
+					    },
+					    singleton: true
+					},
 				    searchStore: 'Ssp.store.Search',
 				    selfHelpGuidesStore: 'Ssp.store.SelfHelpGuides',
 				    selfHelpGuideQuestionsStore: 'Ssp.store.SelfHelpGuideQuestions',

@@ -21,6 +21,9 @@ Ext.define('Ssp.store.reference.ReferralSources', {
     model: 'Ssp.model.reference.ReferralSource',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('referralSource')});   
+    	Ext.apply(this.getProxy(),{
+    		url: this.getProxy().url + this.apiProperties.getItemUrl('referralSource'),
+    		extraParams: this.extraParams
+    	});   
     }
 });

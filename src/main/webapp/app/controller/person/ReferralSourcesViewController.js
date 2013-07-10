@@ -22,8 +22,9 @@ Ext.define('Ssp.controller.person.ReferralSourcesViewController', {
     inject: {
     	apiProperties: 'apiProperties',
     	columnRendererUtils: 'columnRendererUtils',
+    	formRendererUtils: 'formRendererUtils',
     	person: 'currentPerson',
-        store: 'referralSourcesBindStore',
+        store: 'referralSourcesAllUnpagedStore',
         service: 'referralSourceService',
         itemSelectorInitializer: 'itemSelectorInitializer'
     },
@@ -46,6 +47,8 @@ Ext.define('Ssp.controller.person.ReferralSourcesViewController', {
         if (r.rows.length > 0)
         {
             me.store.loadData(r.rows);
+    		me.store.clearFilter(true);
+    		me.formRendererUtils.applyAssociativeStoreFilter(me.store, selectedReferralSources);
 
             me.itemSelectorInitializer.defineAndAddSelectorField(me.getView(), selectedReferralSources, {
                 itemId: 'referralSourcesItemSelector',
