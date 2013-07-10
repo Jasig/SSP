@@ -21,19 +21,23 @@ Ext.define('Ssp.controller.person.ServiceReasonsViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	formUtils: 'formRendererUtils',
+    	columnRendererUtils: 'columnRendererUtils',
         person: 'currentPerson',
-        serviceReasonsStore: 'serviceReasonsStore'
+        serviceReasonsStore: 'serviceReasonsAllUnpagedStore'
     },
     
 	init: function() {
 		var me=this;
+		var selectedServiceReasons =  me.columnRendererUtils.getSelectedIdsForMultiSelect( me.person.get('serviceReasons') );
 
 		var serviceReasonsSuccessFunc = function(records,operation,success){
 			if (records.length > 0)
 	    	{
 	    		var items = [];
 				Ext.Array.each(records,function(item,index){
-	    			items.push(item.raw);
+					if(me.formUtils.filterAssociativeItem(item.get('active'), item.get('id'), selectedServiceReasons)) {
+						items.push(item.raw);
+					}
 	    		});
 				var serviceReasonsFormProps = {
 	    				mainComponentType: 'checkbox',

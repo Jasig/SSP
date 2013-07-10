@@ -834,24 +834,43 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		return selectedItems;
     },
     
+    /*
+     * This method returns true if an associative object should be 
+     * shown, false if it should be hidden. 
+     * If the item is Active, return true
+     * If an item matches the passed ID which should be allowed, return true
+     * If an item has an ID which is is in the passed array of IDs, return true
+     * Else return false
+     * 
+     * @params:
+     * 	store - the store to apply the filter to
+     *  idToMatch - either a single ID or an array of IDs that should 
+     *  			be allowed shown (for instance legacy references 
+     *  			that are INACTIVE but still in use)
+     */
     applyAssociativeStoreFilter: function(store, idToMatch) {
+    	var me = this;
     	var activeOrSelectedFilter = Ext.create('Ext.util.Filter', {
 			filterFn: function(storeItem) {
-				var storeItemId = storeItem.data.id;
-				if(storeItem.data.active == true) {
-					return true;
-				} else if(idToMatch instanceof Array &&
-						   Ext.Array.indexOf(idToMatch, storeItemId) > -1 ) {
-					return true;
-					
-				} else if(storeItemId == idToMatch) {
-					return true;
-				}
-				return false;
+				var storeItemActive = storeItem.data.active;
+				var storeItemId = storeItem.data.id;				
+				return me.filterAssociativeItem(storeItemActive, storeItemId, idToMatch );
 			}
 		});
     	
     	store.filter(activeOrSelectedFilter);
+    },
+    
+    filterAssociativeItem: function(itemActive, itemId, idToMatch) {
+    	if(itemActive == true) {
+			return true;
+		} else if(idToMatch instanceof Array &&
+				   Ext.Array.indexOf(idToMatch, itemId) > -1 ) {
+			return true;			
+		} else if(itemId == idToMatch) {
+			return true;
+		}
+    	return false;
     }
 });
 

@@ -1046,7 +1046,21 @@ Ext.onReady(function(){
 				    searchStore: 'Ssp.store.Search',
 				    selfHelpGuidesStore: 'Ssp.store.SelfHelpGuides',
 				    selfHelpGuideQuestionsStore: 'Ssp.store.SelfHelpGuideQuestions',
-				    serviceReasonsStore: 'Ssp.store.reference.ServiceReasons',
+				    serviceReasonsStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.ServiceReasons', {
+					    	});
+					    },
+					    singleton: true
+					},
+				    serviceReasonsAllUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.ServiceReasons', {
+					    		extraParams: {status: "ALL", limit: "-1"}
+					    	});
+					    },
+					    singleton: true
+					},
 				    specialServiceGroupsStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.SpecialServiceGroups', { });
