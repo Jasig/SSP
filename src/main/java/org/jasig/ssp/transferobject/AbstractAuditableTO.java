@@ -23,9 +23,13 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.jasig.ssp.factory.impl.PersonSpecialServiceGroupTOFactoryImpl;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Transfer object for copy to and from equivalent Auditable models.
@@ -33,8 +37,12 @@ import org.jasig.ssp.model.Person;
  * @param <T>
  *            Any {@link Auditable} model type.
  */
+@JsonIgnoreProperties(ignoreUnknown = true) 
 public abstract class AbstractAuditableTO<T extends Auditable>
 		implements TransferObject<T> {
+	
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(AbstractAuditableTO.class);
 
 	/**
 	 * Empty constructor.
@@ -144,6 +152,8 @@ public abstract class AbstractAuditableTO<T extends Auditable>
 		if (model.getCreatedBy() != null) {
 			createdBy = new PersonLiteTO(model.getCreatedBy());
 		}
+		
+		LOGGER.debug("Model: " + model.getClass().getName() + " MODEL.objectStatus: " + model.getObjectStatus());
 
 		if (model.getModifiedBy() != null) {
 			modifiedBy = new PersonLiteTO(model.getModifiedBy());
