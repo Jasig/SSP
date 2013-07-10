@@ -81,8 +81,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		me.appEventsController.getApplication().fireEvent("onPersonSearchSuccess");
     },    
 	search: function(){
-		var me=this;
-		console.log(me.getView());
+		var me=this;		
 		
 		me.searchService.search2( 
 				me.getView().query('textfield[name=studentId]')[0].value,
