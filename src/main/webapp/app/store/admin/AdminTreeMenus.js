@@ -163,9 +163,24 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     text: 'Student Types',
                     title: 'Student Types',
                     store: 'studentTypes',
-                    form: 'AbstractReferenceAdmin',
+                    interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false,                     
+                    },                    
+					form: 'AbstractReferenceAdmin',
                     leaf: true,
                     columns: [{
+					    header: 'Active',
+                        required: true,
+                        dataIndex: 'active',
+                        defaultValue: true,
+                        flex: .2,
+                        renderer: me.columnRendererUtils.renderActive,
+                        field: {
+                            xtype: 'checkbox',
+                            fieldStyle: "margin-bottom:12px;"
+                        }
+					},{					
                         header: 'Name',
                         dataIndex: 'name',
                         required: true,

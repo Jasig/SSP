@@ -63,7 +63,7 @@ Ext.define('Ssp.controller.AdminViewController', {
     	specialServiceGroupsStore: 'specialServiceGroupsStore',
         statesStore: 'statesStore',
         studentStatusesStore: 'studentStatusesStore',
-        studentTypesStore: 'studentTypesStore',
+        studentTypesStore: 'studentTypesAllUnpagedStore',
 		tagsStore: 'tagsStore',
     	veteranStatusesStore: 'veteranStatusesStore'
     },
