@@ -66,7 +66,7 @@ public class StudentTypeTO
 		super.from(model);
 
 		requireInitialAppointment = model.isRequireInitialAppointment();
-		code = model.isCode();		
+		code = model.getCode();		
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class StudentTypeTO
 	/**
 	 * @return the student type code
 	 */
-	public String isCode() {
+	public String getCode() {
 		return code;
 	}
 	

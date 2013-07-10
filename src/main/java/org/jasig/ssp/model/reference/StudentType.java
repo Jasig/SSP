@@ -67,9 +67,7 @@ public class StudentType
 	 * @param id
 	 *            Identifier; required
 	 * @param name
-	 *            Name; required; max 100 characters
-	 * @param name
-	 *			  Code; required; max 10 characters
+	 *            Name; required; max 100 characters	
 	 */
 
 	public StudentType(final UUID id, final String name) {
@@ -110,7 +108,7 @@ public class StudentType
 	/**
 	 * @return the student type code
 	 */
-	public String isCode() {
+	public String getCode() {
 		return code;
 	}
 	
