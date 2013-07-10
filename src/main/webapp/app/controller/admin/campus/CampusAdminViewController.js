@@ -24,7 +24,7 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
     	campusService: 'campusService',
     	campusEarlyAlertRouting: 'currentCampusEarlyAlertRouting',
     	campusesStore: 'campusesStore',
-    	earlyAlertCoordinatorsStore: 'earlyAlertCoordinatorsStore',
+    	earlyAlertCoordinatorsStore: 'coachesStore',
     	earlyAlertReasonsStore: 'earlyAlertReasonsStore',
     	formUtils: 'formRendererUtils',
     	model: 'currentCampus',

@@ -23,7 +23,7 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.campus.EditCampusViewController',
     inject: {
-    	store: 'earlyAlertCoordinatorsStore'
+    	store: 'coachesStore'
     },
 	title: 'Edit Campus',
 	initComponent: function() {
@@ -48,8 +48,7 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
 			        emptyText: 'Select One',
 			        store: me.store,
 			        valueField: 'id',
-			        displayField: 'displayFullName',
-			        mode: 'local',
+			        displayField: 'fullName',
 			        typeAhead: true,
 			        queryMode: 'local',
 			        allowBlank: false,

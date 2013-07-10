@@ -664,11 +664,6 @@
                     "path": "/app/store/"
                 },
                 {
-                    "clsName": "Ssp.store.EarlyAlertCoordinators",
-                    "name": "EarlyAlertCoordinators.js",
-                    "path": "/app/store/"
-                },
-                {
                     "clsName": "Ssp.store.admin.AdminTreeMenus",
                     "name": "AdminTreeMenus.js",
                     "path": "/app/store/admin/"
