@@ -23,7 +23,7 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
     	appEventsController: 'appEventsController',
     	appointment: 'currentAppointment',
     	formUtils: 'formRendererUtils',
-    	studentTypesStore: 'studentTypesStore'
+    	studentTypesStore: 'studentTypesAllUnpagedStore'
     },
     control: {
     	appointmentDateField: '#appointmentDateField',
