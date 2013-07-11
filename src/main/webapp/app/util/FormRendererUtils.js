@@ -871,6 +871,15 @@ Ext.define('Ssp.util.FormRendererUtils',{
 			return true;
 		}
     	return false;
-    }
+    },
+
+	applyActiveOnlyFilter: function(store) {
+		var me = this;
+		var activeOnlyFilter = Ext.create('Ext.util.Filter', {
+			filterFn: function(storeItem) {
+				return storeItem.data.active;
+			}
+		})
+	}
 });
 

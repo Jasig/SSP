@@ -23,7 +23,7 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewController',
     inject: {
-    	earlyAlertReasonsStore: 'earlyAlertReasonsStore',
+    	earlyAlertReasonsStore: 'earlyAlertReasonsAllUnpagedStore',
     	peopleSearchLiteStore: 'peopleSearchLiteStore',
     	sspConfig: 'sspConfig'
     },
@@ -45,7 +45,6 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
 			        store: me.earlyAlertReasonsStore,
 			        valueField: 'id',
 			        displayField: 'name',
-			        mode: 'local',
 			        typeAhead: true,
 			        queryMode: 'local',
 			        allowBlank: false,

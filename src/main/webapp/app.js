@@ -961,6 +961,15 @@ Ext.onReady(function(){
 				    earlyAlertOutcomesStore: 'Ssp.store.reference.EarlyAlertOutcomes',
 					earlyAlertOutreachesStore: 'Ssp.store.reference.EarlyAlertOutreaches',
 					earlyAlertReasonsStore: 'Ssp.store.reference.EarlyAlertReasons',
+					earlyAlertReasonsAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.EarlyAlertReasons', {
+								storeId: 'earlyAlertReasonsAllUnpagedStore',
+								extraParams: {status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					},
 					earlyAlertReferralsStore: 'Ssp.store.reference.EarlyAlertReferrals',
 					earlyAlertReferralsBindStore: 'Ssp.store.reference.EarlyAlertReferralsBind',
 					earlyAlertsStore: 'Ssp.store.EarlyAlerts',
