@@ -211,7 +211,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 	}, 
 	
 	isEmpty: function(str){
-		return (!!str);
+		return (!str);
 	},
 	
 	getSimpleJsonData: function(){
