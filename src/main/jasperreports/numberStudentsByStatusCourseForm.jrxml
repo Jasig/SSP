@@ -19,7 +19,7 @@
     under the License.
 
 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="numberStudentsByStatusCourseForm" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="855c5b9e-06a2-439f-a729-67b7d6c43e1c">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="numberStudentsByStatusCourseForm" pageWidth="572" pageHeight="792" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="855c5b9e-06a2-439f-a729-67b7d6c43e1c">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -37,7 +37,10 @@
 	<columnHeader>
 		<band height="16">
 			<rectangle>
-				<reportElement uuid="16ac1c10-2b73-4b09-a9fb-9814e574d7b8" mode="Opaque" x="0" y="0" width="130" height="16" backcolor="#E4E4E4"/>
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="0" y="0" width="572" height="14" isPrintInFirstWholeBand="true" backcolor="#E4E4E4"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineColor="#FFFFFF"/>
+				</graphicElement>
 			</rectangle>
 			<staticText>
 				<reportElement uuid="5db1d0a3-5499-486c-9e0a-1756dd520e32" x="0" y="0" width="130" height="16" backcolor="#E4E4E4"/>
@@ -55,8 +58,9 @@
 			</staticText>
 			<staticText>
 				<reportElement uuid="5db1d0a3-5499-486c-9e0a-1756dd520e32" x="211" y="0" width="361" height="16" backcolor="#E4E4E4"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font isBold="true" isItalic="false"/>
+					<paragraph leftIndent="10"/>
 				</textElement>
 				<text><![CDATA[OFF PLAN DETAILS]]></text>
 			</staticText>
