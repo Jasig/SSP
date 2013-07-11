@@ -491,6 +491,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.getSaveTemplateButton().hide();
 			me.getPrintPlanButton().show();
 			me.getPlanFAFieldSet().show();
+			me.getPlanFAButton().show();
 			me.getPlanTranscriptFieldSet().show();
 			me.getPrintLabel().show();
 			me.getEmailPlanButton().show();

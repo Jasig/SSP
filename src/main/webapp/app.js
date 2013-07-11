@@ -1007,7 +1007,7 @@ Ext.onReady(function(){
 					planTemplatesSummaryStore: {
 						fn: function(){
 							return Ext.create('Ssp.store.PlanTemplatesSummary', {
-							     storeId: 'electivsAllUnpagedStore',		
+							     storeId: 'planTemplatesSummaryStore',		
 							     extraParams: {sort: "name", sortDirection: "DESC", status: "ALL", limit: "-1"}
 							});
 						},
