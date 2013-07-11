@@ -25,7 +25,7 @@ Ext.define('Ssp.view.tools.notes.Notes', {
        store: 'personNotesStore',
     },
     minHeight: '400',
-    width: '100%',
+    width: '98%',
     height: '100%',
     controller: 'Ssp.controller.tool.notes.NotesViewController',
     autoScroll: true,
@@ -46,33 +46,33 @@ Ext.define('Ssp.view.tools.notes.Notes', {
 					xtype: 'gridcolumn',
 				    dataIndex: 'dateNoteTaken',
 				    text: 'Date',
-				    flex: .10,
+				    flex: .08,
 					renderer: me.renderDate
 				},
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'noteType',
                     text: 'Type',
-                    flex: .05
+                    flex: .12
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'author',
                     text: 'Author',
-                    flex: .10
+                    flex: .12
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'department',
                     text: 'Department',
-                    flex: .10
+                    flex: .12
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'note',
                     text: 'Note',
 					sortable: 'false',
-                    flex: .65,
+                    flex: .50,
 					renderer: me.columnWrap
                 }
             ],
