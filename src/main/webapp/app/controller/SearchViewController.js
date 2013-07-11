@@ -37,7 +37,7 @@ Ext.define('Ssp.controller.SearchViewController', {
         programStatusService: 'programStatusService',
         searchCriteria: 'searchCriteria',
         searchService: 'searchService',
-        searchStore: 'searchStore',
+        searchStore: 'studentsSearchStore',
         sspConfig: 'sspConfig'
     },
     

@@ -21,7 +21,7 @@ Ext.define('Ssp.service.SearchService', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	store: 'searchStore'
+    	store: 'studentsSearchStore'
     },
     initComponent: function() {
 		return this.callParent( arguments );
@@ -29,8 +29,7 @@ Ext.define('Ssp.service.SearchService', {
     
     getBaseUrl: function(){
 		var me=this;
-		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personSearch') );
-    	return baseUrl;
+		return me.apiProperties.createUrl( me.apiProperties.getItemUrl(me.store.getBaseUrlName()) );
     },
 
 	searchWithParams: function(params, callbacks) {

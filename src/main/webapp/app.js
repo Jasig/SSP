@@ -473,7 +473,8 @@ var apiUrls = [
   {name: 'personEmailTask', url: 'person/{id}/task/email'},
   {name: 'personViewHistory', url: 'person/{id}/history/print'},
   {name: 'personPrintTask', url: 'person/{id}/task/print'},
-  {name: 'personSearch', url: 'person/students/search'},
+  {name: 'studentSearch', url: 'person/students/search'},
+  {name: 'personSearch', url: 'person/search'},
   {name: 'personMapPlan', url: 'person/{id}/map/plan'},
   {name: 'templatePlan', url: 'reference/map/template'},
   {name: 'placement', url: 'person/{id}/test'},
@@ -1063,6 +1064,7 @@ Ext.onReady(function(){
 					    singleton: true
 					},
 				    searchStore: 'Ssp.store.Search',
+				    studentsSearchStore: 'Ssp.store.StudentsSearch',
 				    selfHelpGuidesStore: 'Ssp.store.SelfHelpGuides',
 				    selfHelpGuideQuestionsStore: 'Ssp.store.SelfHelpGuideQuestions',
 				    serviceReasonsStore: {
