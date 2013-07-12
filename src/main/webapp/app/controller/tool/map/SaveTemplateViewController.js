@@ -31,7 +31,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     
 	control: {
 		view: {
-			show: 'onShow'
+			show: 'onShow',
 		},
     	'saveButton': {
 			click: 'onSaveClick'
@@ -42,16 +42,20 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 	},
 	init: function() {
 		var me=this;
-	    me.resetForm();
-	    me.getView().query('form')[0].loadRecord( me.currentMapPlan );
-
+	    me.programsStore.addListener("load", me.onShow, me, {single:true});
+		me.departmentsStore.addListener("load", me.onShow,me, {single:true});
+		me.divisionsStore.addListener("load", me.onShow, me, {single:true});
+		me.programsStore.load();
+		me.departmentsStore.load();
+		me.divisionsStore.load();
+		
 	    me.getView().query('checkbox[name=objectStatus]')[0].setValue(me.currentMapPlan.getAsBoolean('objectStatus',"ACTIVE"));
 		if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
 			me.getView().query('checkbox[name="isPrivate"]')[0].setValue(true);
 		}
 		return me.callParent(arguments);
     },
-    
+
     onCancelClick: function(){
     	me = this;
     	me.getView().close();
@@ -138,6 +142,8 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     },
     onShow: function(){
     	var me=this;
+		me.resetForm();
+	    me.getView().query('form')[0].loadRecord( me.currentMapPlan );
     },
 
 	setCheckBox: function(query, fieldName){
