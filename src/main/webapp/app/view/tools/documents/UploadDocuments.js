@@ -22,7 +22,8 @@ Ext.define('Ssp.view.tools.documents.UploadDocuments', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
 	controller: 'Ssp.controller.tool.documents.UploadDocumentsViewController',
     inject: {
-        store: 'confidentialityLevelsStore'
+    	confidentialityLevelsStore: 'confidentialityLevelsStore',
+    	model: 'currentStudentDocument'
     },
     width: '100%',
     height: '100%',
@@ -43,37 +44,31 @@ Ext.define('Ssp.view.tools.documents.UploadDocuments', {
                 defaultType: 'textfield',
                 border: 0,
                 padding: 0,
+                hidden: me.model.get('id'),
                 layout: 'hbox',
                 defaults: {
                     anchor: '95%'
                 },
                 items: [{
-                    fieldLabel: 'File Location',
-                    name: 'fileLocation',
-                    allowBlank: false,
+                    fieldLabel: 'File',
+                    xtype: 'fileuploadfield',
+                    name: 'file',
+                    allowBlank: me.model.get('id'),
                     flex: 1,
                     labelAlign: 'top',
                     padding: 5
-                }, {
-                    xtype: 'tbspacer',
-                    width: 10
-                }, {
-                    xtype: 'fieldcontainer',
-                    title: 'test',
-					border: 0,
-					layout: 'vbox',
-                    items: [
-					{
-                    xtype: 'tbspacer',
-                    height: 25
-                },{
-                        xtype: 'button',
-                        itemId: 'browseButton',
-                        text: 'Browse'
-                    
-                    }]
                 }]
             }, {
+                xtype: 'textfield',
+                fieldLabel: 'File',
+                name: 'fileName',
+                allowBlank: true,
+                disabled:true,
+                hidden: !me.model.get('id'),
+                anchor: '95%',
+                padding: 5
+            }, 
+            {
                 xtype: 'textfield',
                 fieldLabel: 'Comment',
                 name: 'comment',
@@ -94,7 +89,7 @@ Ext.define('Ssp.view.tools.documents.UploadDocuments', {
                 name: 'confidentialityLevelId',
                 fieldLabel: 'Confidentiality Level',
                 emptyText: 'Select One',
-                store: me.store,
+                store: me.confidentialityLevelsStore,
                 valueField: 'id',
                 displayField: 'name',
                 mode: 'local',
@@ -111,14 +106,12 @@ Ext.define('Ssp.view.tools.documents.UploadDocuments', {
                 xtype: 'toolbar',
                 items: [{
                     xtype: 'button',
-                    itemId: 'addButton',
+                    itemId: 'saveButton',
                     text: 'Save',
-                    action: 'add'
                 }, '-', {
                     xtype: 'button',
                     itemId: 'cancelButton',
                     text: 'Cancel',
-                    action: 'close'
                 }]
             }]
         });

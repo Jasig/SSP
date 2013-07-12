@@ -226,7 +226,6 @@ Ext.require([
 	'Ssp.model.SearchCriteria',
 	'Ssp.model.CaseloadFilterCriteria',
 	'Ssp.model.PersonGoal',
-	'Ssp.model.PersonDocument',
 	'Ssp.model.PersonLite',
 	'Ssp.model.PersonSearchLite',
 	'Ssp.model.Placement',
@@ -253,6 +252,7 @@ Ext.require([
 	'Ssp.model.tool.earlyalert.EarlyAlertResponseGrid',
 	'Ssp.model.tool.journal.JournalEntry',
 	'Ssp.model.tool.journal.JournalEntryDetail',
+	'Ssp.model.tool.documents.StudentDocument',
 	'Ssp.model.tool.map.SemesterCourse',
 	'Ssp.model.tool.map.Plan',
 	'Ssp.model.tool.map.TermNote',
@@ -294,7 +294,7 @@ Ext.require([
     'Ssp.store.JournalEntriesUnpaged',
     'Ssp.store.JournalEntryDetails',
     'Ssp.store.EarlyAlerts',
-    'Ssp.store.Documents',
+    'Ssp.store.StudentDocuments',
 	'Ssp.store.reference.AbstractReferences',
 	'Ssp.store.admin.AdminTreeMenus',
 	'Ssp.store.reference.AnticipatedStartTerms',
@@ -478,6 +478,7 @@ var apiUrls = [
   {name: 'personMapPlan', url: 'person/{id}/map/plan'},
   {name: 'templatePlan', url: 'reference/map/template'},
   {name: 'placement', url: 'person/{id}/test'},
+  {name: 'studentDocument', url: 'person/{id}/studentdocument'},
   {name: 'registrationLoadRanges', url: 'reference/config/?name=registration_load_ranges'},
   {name: 'selfHelpGuides', url: 'selfHelpGuides/search'},
   {name: 'selfHelpGuideQuestions', url: 'selfHelpGuides/selfHelpGuideQuestions'},
@@ -652,6 +653,11 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+			        currentStudentDocument: {
+				        fn: function(){
+				            return new Ssp.model.tool.documents.StudentDocument({id:""});
+				    	},
+				        singleton: true			        },
 			        currentJournalStepDetail:{
 				        fn: function(){
 				            return new Ssp.model.reference.JournalStepDetail({id:""});
@@ -723,7 +729,7 @@ Ext.onReady(function(){
                     },
 			        currentDocument:{
 				        fn: function(){
-				            return new Ssp.model.PersonDocument({id:""});
+				            return new Ssp.model.tool.documents.StudentDocument({id:""});
 				    	},
 				        singleton: true
 			        },
@@ -958,7 +964,6 @@ Ext.onReady(function(){
 				    disabilityAgenciesStore: 'Ssp.store.reference.DisabilityAgencies',
 				    disabilityStatusesStore: 'Ssp.store.reference.DisabilityStatuses',
 				    disabilityTypesStore: 'Ssp.store.reference.DisabilityTypes',
-				    documentsStore: 'Ssp.store.Documents',
 				    earlyAlertOutcomesStore: 'Ssp.store.reference.EarlyAlertOutcomes',
 					earlyAlertOutreachesStore: 'Ssp.store.reference.EarlyAlertOutreaches',
 					earlyAlertReasonsStore: 'Ssp.store.reference.EarlyAlertReasons',
@@ -1046,7 +1051,7 @@ Ext.onReady(function(){
 			    	personalityTypesStore: 'Ssp.store.reference.PersonalityTypes',
 			    	placementStore: 'Ssp.store.Placement',
 			    	planStore: 'Ssp.store.Plan',
-			    	
+			    	planTemplatesSummaryStore: 'Ssp.store.PlanTemplatesSummary',
 					programStatusesStore: 'Ssp.store.reference.ProgramStatuses',
 			    	programStatusChangeReasonsStore: 'Ssp.store.reference.ProgramStatusChangeReasons',
 				    referralSourcesStore: {
@@ -1097,7 +1102,8 @@ Ext.onReady(function(){
 					    singleton: true
 					},
 				    statesStore: 'Ssp.store.reference.States',
-				    studentsStore: 'Ssp.store.Students',				    
+				    studentDocumentsStore: 'Ssp.store.StudentDocuments',
+				    studentsStore: 'Ssp.store.Students',
 				    studentStatusesStore: 'Ssp.store.reference.StudentStatuses',
 				    studentTypesStore: {
 			    		fn: function(){

@@ -16,16 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.store.Documents', {
-    extend: 'Ext.data.Store',
-    model: 'Ssp.model.PersonDocument',
-    mixins: [ 'Deft.mixin.Injectable' ],
-    inject: {
-    	apiProperties: 'apiProperties'
-    },    
-	constructor: function(){
-		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('personDocument') ),
-						  autoLoad: false });
-		return this.callParent(arguments);
-	}
+Ext.define('Ssp.model.tool.documents.StudentDocument', {
+    extend: 'Ssp.model.AbstractBase',
+    fields: [{name:'name',type:'string'},
+             {name:'comment',type:'string'},
+             {name:'confidentialityLevelId',type:'string'},
+             {name:'fileName',type:'string'},
+             {name:'author', type:'string'}]
 });

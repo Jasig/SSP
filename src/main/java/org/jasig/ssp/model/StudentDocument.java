@@ -18,7 +18,6 @@
  */
 package org.jasig.ssp.model;
 
-import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -31,7 +30,7 @@ import org.hibernate.annotations.CascadeType;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 
 @Entity
-public class StudentDocument extends AbstractAuditable  {
+public class StudentDocument extends AbstractAuditable  implements PersonAssocAuditable{
 
 	/**
 	 * 
@@ -60,10 +59,6 @@ public class StudentDocument extends AbstractAuditable  {
 	@Column(length = 2000, nullable = false)
 	@Size(max = 2000)
 	private String fileName;
-	
-	@Column(length = 2000, nullable = false)
-	@Size(max = 2000)
-	private String studentNotes;
 	
 	@Column(length = 2000, nullable = false)
 	@Size(max = 2000)
@@ -132,6 +127,14 @@ public class StudentDocument extends AbstractAuditable  {
 
 	public void setConfidentialityLevel(ConfidentialityLevel confidentialityLevel) {
 		this.confidentialityLevel = confidentialityLevel;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 }

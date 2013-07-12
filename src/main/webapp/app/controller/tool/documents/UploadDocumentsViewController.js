@@ -24,7 +24,8 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
         appEventsController: 'appEventsController',
     	formUtils: 'formRendererUtils',
     	person: 'currentPerson',
-    	model: 'currentDocument'
+    	model: 'currentStudentDocument',
+    	confidentialityLevelsStore: 'confidentialityLevelsStore'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -33,7 +34,9 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
     },
 
     control: {
-    	
+		'saveButton': {
+			click: 'onSaveClick'
+		} ,   	
 		
 		'cancelButton': {
 			click: 'onCancelClick'
@@ -41,7 +44,9 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
     },
     
 	init: function() {
-		
+		var me=this;
+		me.confidentialityLevelsStore.load();
+		me.getView().getForm().loadRecord(me.model);
 		return this.callParent(arguments);
     },
  
@@ -50,7 +55,65 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
 		this.displayMain();
 	},
 	
+	onSaveClick: function(button){
+		this.save();
+	},	
+	save: function(){
+		var me=this;
+		var url = me.getBaseUrl(me.person.get('id'));
+		if(me.getView().getForm().isValid() && !me.model.get('id'))
+        {
+			me.getView().getForm().submit(
+            {
+                url: url,
+                method : 'POST',
+                waitMsg: 'Uploading Student Document...',
+                success: function (fp, o) 
+                {
+                    var success = o.result.success;
+                    if(success)
+                    {
+                    	Ext.Msg.alert('Success', 'File uploaded successfully');
+                    	me.displayMain();
+                    }
+                    else
+                    {
+                    	Ext.Msg.alert('Uploading the student document file failed...');
+                    }
+                }
+            });
+        }
+		else
+		{
+			var url = me.getBaseUrl(me.person.get('id'));
+			var success = function ()
+			{
+            	Ext.Msg.alert('Success', 'Document information updated successfully');
+            	me.displayMain();	
+            };
+            var failure = function()
+            {
+            	Ext.Msg.alert('Updating document failed.  Please contact the system administrator.');
+            };		
+            me.getView().getForm().updateRecord();
+			// update
+    		me.apiProperties.makeRequest({
+    			url: url+'/'+ me.model.get('id'), 
+    			method: 'PUT',
+    			jsonData: me.model.data,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});	
+		}
+	},	
 	displayMain: function(){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
-	}
+	},
+    getBaseUrl: function(id){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('studentDocument') );
+		baseUrl = baseUrl.replace('{id}', id);
+		return baseUrl;
+    }
 });

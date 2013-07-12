@@ -1,4 +1,4 @@
-/*
+/**
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,9 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.PersonDocument', {
-    extend: 'Ssp.model.AbstractBase',
-    fields: [{name:'name',type:'string'},
-             {name:'note',type:'string'},
-             {name: 'confidentialityLevel',type: 'auto'}]
-});
+package org.jasig.ssp.factory.reference;
+
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.model.StudentDocument;
+import org.jasig.ssp.transferobject.PlanTO;
+import org.jasig.ssp.transferobject.StudentDocumentTO;
+
+public interface StudentDocumentTOFactory extends
+		TOFactory<StudentDocumentTO, StudentDocument> {
+}

@@ -17,12 +17,14 @@
  * under the License.
  */
 Ext.define('Ssp.view.tools.documents.Documents', {
-    extend: 'Ext.panel.Panel',
+	extend: 'Ext.grid.Panel',
     alias: 'widget.documents',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
 	controller: 'Ssp.controller.tool.documents.DocumentsViewController',
     inject: {
-        authenticatedPerson: 'authenticatedPerson'
+        authenticatedPerson: 'authenticatedPerson',
+        columnRendererUtils: 'columnRendererUtils',
+        model: 'currentStudentDocument'
     },
     width: '100%',
     height: '100%',
@@ -36,23 +38,21 @@ Ext.define('Ssp.view.tools.documents.Documents', {
             title: 'Documents Attached to the Student Record',
             autoScroll: true,
             padding: 0,
-            
-            items: [{
-                    xtype: 'gridpanel',
-                    width: '100%',
-                    height: '100%',
-                    minHeight: '400',
-                    autoScroll: true,
-                    store: me.store,
-                    columns: [{
+            columns: [{
                         xtype: 'gridcolumn',
-                        dataIndex: 'date',
+                        dataIndex: 'modifiedDate',
                         text: 'Date',
-                        flex: .10
+                        flex: .10,
+                        renderer: me.columnRendererUtils.renderModifiedByDate
+                    }, {
+                        xtype: 'gridcolumn',
+                        dataIndex: 'name',
+                        text: 'Name',
+                        flex: .20
                     }, {
                         xtype: 'gridcolumn',
                         dataIndex: 'fileName',
-                        text: 'Name of File',
+                        text: 'File',
                         flex: .20
                     }, {
                         xtype: 'gridcolumn',
@@ -61,21 +61,17 @@ Ext.define('Ssp.view.tools.documents.Documents', {
                         flex: .20
                     }, {
                         xtype: 'gridcolumn',
-                        dataIndex: 'comments',
+                        dataIndex: 'comment',
                         text: 'Comments',
                         sortable: 'false',
                         flex: .50
                     }],
-                    viewConfig: {
-                        markDirty: false
-                    }
-            }],
             dockedItems: [{
                 dock: 'top',
                 xtype: 'toolbar',
                 items: [{
                     tooltip: 'Add a Document',
-                    width: 40,
+                    width: 60,
                     height: 30,
                     xtype: 'button',
                     itemId: 'addDocumentButton',
@@ -83,14 +79,21 @@ Ext.define('Ssp.view.tools.documents.Documents', {
                 }, {
                     tooltip: 'Edit Document',
                     text: 'Edit',
-                    width: 40,
+                    width: 60,
                     height: 30,
                     xtype: 'button',
                     itemId: 'editDocumentButton'
                 }, {
+                    tooltip: 'Delete Document',
+                    text: 'Delete',
+                    width: 60,
+                    height: 30,
+                    xtype: 'button',
+                    itemId: 'deleteDocumentButton'
+                }, {
                     tooltip: 'Download Document',
                     text: 'Download',
-                    width: 80,
+                    width: 60,
                     height: 30,
                     xtype: 'button',
                     itemId: 'downloadDocumentButton'
