@@ -35,6 +35,7 @@ import org.jasig.ssp.model.external.ExternalStudentTranscript;
 import org.jasig.ssp.model.external.ExternalStudentTranscriptTerm;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
@@ -52,6 +53,8 @@ public class BaseStudentReportTO implements Serializable {
 	private static final long serialVersionUID = 4549055165582379400L;
 	
 	private static String ILP = "ILP";
+	
+	
 	/**
 	 * Construct a transfer object from a related model instance
 	 * 
@@ -88,7 +91,10 @@ public class BaseStudentReportTO implements Serializable {
     private String homePhone;
 	private String studentType;
 	private List<String> studentTypes = new ArrayList<String>();
+	private String studentTypeAsCode;
+	private List<String> studentTypesAsCode = new ArrayList<String>();
 	private String studentTypeNames;
+	private String studentTypeCodes;
 	private Integer registrationStatus;
 	private CoachPersonLiteTO coach;
 	private String coachFirstName;
@@ -115,7 +121,11 @@ public class BaseStudentReportTO implements Serializable {
 	private BigDecimal lastTermGradePointAverage;
 	private String lastTermRegistered;
 	private String financialAidStatus;
+	
 	private Person person;
+	
+	private String currentProgramStatusCode;
+	private UUID currentProgramStatusId;
 	
 	public UUID getId() {
 		return id;
@@ -236,15 +246,33 @@ public class BaseStudentReportTO implements Serializable {
 	public String getCurrentProgramStatusName() {
 		currentProgramStatusName = "";
 		for(ProgramStatusReportTO programStatus:this.getProgramStatuses()){
-			if(programStatus.getExpirationDate() == null && programStatus.getName() != null)
+			if(programStatus.getExpirationDate() == null && programStatus.getName() != null){
 				currentProgramStatusName = addValueToStringList(currentProgramStatusName, 
-						programStatus.getName());		
+						programStatus.getName());
+			}
 		}
 		return currentProgramStatusName;
 	}
 
 	public void setCurrentProgramStatusName(String currentProgramStatusName) {
 		this.currentProgramStatusName = currentProgramStatusName;
+	}
+	
+	public UUID getCurrentProgramStatusId(){
+		 return currentProgramStatusId;
+	}
+	
+	public void setCurrentProgramStatusId(UUID currentProgramStatusId){
+		this.currentProgramStatusId = currentProgramStatusId;
+	}
+	
+	
+	public String getCurrentProgramStatusCode(){
+		 return currentProgramStatusCode;
+	}
+	
+	public void setCurrentProgramStatusCode(String code){
+		this.currentProgramStatusCode = code;
 	}
 	
 	public void setProgramStatusExpirationDate(Date programStatusExpirationDate) {
@@ -502,6 +530,50 @@ public class BaseStudentReportTO implements Serializable {
 			}
 		}
 		return studentTypeNames;
+	}
+	
+	public void setStudentTypesAsCode(List<String> studentTypesAsCode) {
+		this.studentTypesAsCode = studentTypesAsCode;
+	}
+	
+
+	public void setStudentTypeAsCode(String studentTypeAsCode) {
+		this.studentTypeAsCode = studentTypeAsCode;
+		addStudentTypes(studentTypeAsCode);
+	}
+	
+	public String getStudentTypeAsCode(){
+		return studentTypeAsCode;
+	}
+
+	public void addStudentTypesAsCode(List<String> studentTypesAsCode) {
+		for(String studentTypeAsCode:studentTypesAsCode)
+			addStudentTypesAsCode(studentTypeAsCode);
+	}
+
+	public void addStudentTypesAsCode(String studentTypeAsCode) {
+		if(!this.studentTypesAsCode.contains(studentTypeAsCode))
+			this.studentTypesAsCode.add(studentTypeAsCode);
+	}
+	
+	public List<String> getStudentTypesAsCode() {
+			return this.studentTypesAsCode;
+	}
+	
+	
+	
+	public void setStudentTypeCodes(String studentTypeCodes) {
+		this.studentTypeCodes = studentTypeCodes;
+	}
+
+	public String getStudentTypeCodes() {
+		if(studentTypeCodes == null || studentTypeCodes.length() == 0){
+			studentTypeCodes = "";
+			for(String studentType:studentTypesAsCode){
+				studentTypeCodes = addValueToStringList(studentTypeCodes, studentType);
+			}
+		}
+		return studentTypeCodes;
 	}
 
 	public Boolean getIsIlp() {

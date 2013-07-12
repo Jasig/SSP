@@ -622,13 +622,14 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		criteria.createAlias("personProgramStatuses.programStatus", "programStatus", JoinType.LEFT_OUTER_JOIN);
 		
 		projections.add(Projections.groupProperty("programStatus.name").as("programStatusName"));
-		projections.add(Projections.groupProperty("personProgramStatuses.id").as("programStatusId"));
+		projections.add(Projections.groupProperty("programStatus.id").as("programStatusId"));
 		projections.add(Projections.groupProperty("personProgramStatuses.expirationDate").as("programStatusExpirationDate"));
 	
 		// Join to Student Type
 		criteria.createAlias("studentType", "studentType", JoinType.LEFT_OUTER_JOIN);
 		// add StudentTypeName Column
 		projections.add(Projections.groupProperty("studentType.name").as("studentType"));
+		projections.add(Projections.groupProperty("studentType.code").as("studentTypeAsCode"));
 
 		criteria.createAlias("coach", "c");
 		Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();

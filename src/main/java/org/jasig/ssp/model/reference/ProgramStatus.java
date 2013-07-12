@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.model.reference;
 
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -34,6 +36,8 @@ import org.jasig.ssp.model.Auditable;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class ProgramStatus extends AbstractReference implements Auditable {
+	
+
 
 	private static final long serialVersionUID = -6549195550826087907L;
 
@@ -51,6 +55,16 @@ public class ProgramStatus extends AbstractReference implements Auditable {
 
 	public static final UUID NO_SHOW = UUID
 			.fromString("b2d12640-5056-a51a-80cc-91264965731a");
+	
+	public static final Map<String,String> PROGRAM_STATUS_CODES  = new Hashtable<String,String>();
+	static
+    {
+		PROGRAM_STATUS_CODES.put(ACTIVE_ID.toString(), "A");
+		PROGRAM_STATUS_CODES.put(INACTIVE_ID.toString(), "IA");
+		PROGRAM_STATUS_CODES.put(NON_PARTICIPATING_ID.toString(), "NP");
+		PROGRAM_STATUS_CODES.put(NO_SHOW.toString(), "NS");
+		PROGRAM_STATUS_CODES.put(TRANSITIONED_ID.toString(), "T");
+    }
 
 	@Column(nullable = false)
 	@NotNull
