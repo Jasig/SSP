@@ -596,7 +596,11 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     text: 'Colors',
                     title: 'Color Management',
                     store: 'colorsAll',
-                    form: 'AbstractReferenceAdmin',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false,                     
+                    },       
+					form: 'AbstractReferenceAdmin',
                     leaf: true,
                     columns: [{
                         header: 'Active',
