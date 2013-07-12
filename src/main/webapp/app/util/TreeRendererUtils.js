@@ -27,6 +27,10 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 	initComponent: function() {
 		return this.callParent(arguments);
     },
+	
+	getTreeStore: function() {
+		return this.treeStore;
+	},
  
     /*
      * Find a child in the tree.
@@ -118,6 +122,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     	{
     		nodeIdentifier = '_' + nodeName;
     	}
+		
     	Ext.each(records, function(name, index) {
     		var nodeData = {
         	        text: records[index].name,
@@ -125,7 +130,8 @@ Ext.define('Ssp.util.TreeRendererUtils',{
         	        qtip: ((includeToolTip === true)? records[index][toolTipFieldName] : ""),
         	        leaf: isLeaf || false,
         	        expanded: expanded,
-        	        expandable: expandable
+        	        expandable: expandable,
+					qtitle: records[index].objectStatus
         	      };
         	
         	if (enableCheckSelection && isLeaf==true)
@@ -163,6 +169,8 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     	var removeParentWhenNoChildrenExist = treeRequest.get('removeParentWhenNoChildrenExist');
     	var includeToolTip = treeRequest.get('includeToolTip');
     	var toolTipFieldName = treeRequest.get('toolTipFieldName');
+    	var node = treeRequest.get('node');
+		
     	// retrieve items
 		me.apiProperties.makeRequest({
 			url: me.apiProperties.createUrl( url ),
@@ -176,6 +184,65 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 		    	{
 		    		nodes = me.createNodesFromJson(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable, includeToolTip, toolTipFieldName);
 		    		me.appendChildren( nodeToAppendTo, nodes);
+		    	}else{
+		    		me.appendChildren( nodeToAppendTo, []);
+		    		if (removeParentWhenNoChildrenExist==true)
+		    		{
+		    			nodeToAppendTo.remove(true);
+		    		}
+		    	}
+		    	
+	    		if (callbackFunc != null && callbackFunc != "")
+	    			callbackFunc( callbackScope, node );
+			}
+		});
+		return 1;
+    },   
+ 
+    /*
+     * Retrieves items to populate the tree store.
+     * @args.url - The url for the request to get items
+	 * @args.nodeType - An optional name to append to the id to determine the name of node
+	 * @args.isLeaf - Boolean, whether or not the items are branch or leaf nodes
+	 * @args.nodeToAppendTo = the rootNode to append the items
+	 * @args.enableCheckedItems = boolean to determine if a checkbox is created for leaf items in the tree
+     * @args.expanded - boolean to determine whether a branch should appear as expanded
+     * @args.expandable - boolean to determine whether or not the branch can be expanded or collapsed
+     * @args.
+     */
+    getItemsWithParams: function( treeRequest,params ){
+    	var me=this;
+    	var destroyBeforeAppend = treeRequest.get('destroyBeforeAppend');
+    	var url = treeRequest.get('url');
+    	var isLeaf = treeRequest.get('isLeaf');
+    	var enableCheckSelection = treeRequest.get('enableCheckedItems');
+    	var nodeToAppendTo = treeRequest.get('nodeToAppendTo');
+    	var nodeType = treeRequest.get('nodeType');
+    	var expanded = treeRequest.get('expanded');
+    	var expandable = treeRequest.get('expandable');
+    	var callbackFunc = treeRequest.get('callbackFunc');
+    	var callbackScope = treeRequest.get('callbackScope');
+    	var removeParentWhenNoChildrenExist = treeRequest.get('removeParentWhenNoChildrenExist');
+    	var includeToolTip = treeRequest.get('includeToolTip');
+    	var toolTipFieldName = treeRequest.get('toolTipFieldName');
+		
+    	// retrieve items
+		me.apiProperties.makeRequest({
+			url: me.apiProperties.createUrl( url ),
+			method: 'GET',
+			jsonData: '',
+			params: params,
+			successFunc: function(response,view){
+		    	var r = Ext.decode(response.responseText);
+		    	var records = r.rows;
+				
+		    	var nodes = [];
+		    	if (records.length > 0)
+		    	{
+		    		nodes = me.createNodesFromJson(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable, includeToolTip, toolTipFieldName);
+		    		
+					me.appendChildren( nodeToAppendTo, nodes);
+					
 		    	}else{
 		    		me.appendChildren( nodeToAppendTo, []);
 		    		if (removeParentWhenNoChildrenExist==true)

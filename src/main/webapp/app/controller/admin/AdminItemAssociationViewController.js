@@ -60,7 +60,9 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     onItemExpand: function( nodeInt, obj ){
     	var me=this;
     	var node = nodeInt;
+		
     	var id = me.treeUtils.getIdFromNodeId(node.data.id);
+		
     	me.getAssociatedItems(node,id);
     },
 
@@ -89,7 +91,19 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	treeRequest.set('callbackFunc', me.onLoadComplete);
     	treeRequest.set('callbackScope', me);
     	me.treeUtils.getItems( treeRequest );
-    	// me.getView().setLoading( true );
+		
+    }, 
+    
+    getParentItemsWithParams: function(params){
+    	var me=this;
+    	var treeRequest = new Ssp.model.util.TreeRequest();
+    	treeRequest.set('url', me.apiProperties.getItemUrl( me.getParentItemType() ) );
+    	treeRequest.set('nodeType', me.getParentItemType() );
+    	treeRequest.set('isLeaf', false);
+    	treeRequest.set('callbackFunc', me.onLoadCompleteExpand);
+    	treeRequest.set('callbackScope', me);
+    	me.treeUtils.getItemsWithParams( treeRequest, params );
+		
     }, 
     
     getAssociatedItems: function(node, id){
@@ -104,14 +118,34 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	treeRequest.set('enableCheckedItems', true);
     	treeRequest.set('callbackFunc', me.onLoadComplete);
     	treeRequest.set('callbackScope', me);
+		
+		treeRequest.set('node', node);
+		
     	me.treeUtils.getItems( treeRequest );
-    	// me.getView().setLoading( true );
+		
     },
 
-	onLoadComplete: function( scope ){
+	onLoadComplete: function( scope, node ){
 		var me=scope;
-		//me.getView().setLoading( false );
+		
+		if (node.get('qtitle') == 'INACTIVE' && !node.hasChildNodes()) {
+			// remove the node
+			node.remove(true);
+		}
 	},
+	
+	onLoadCompleteExpand: function( scope ){
+		var me=scope;
+		
+		/*scope.getView().getView().getTreeStore().getRootNode().expandChildren(true, function(scope){
+			console.log('done');
+			console.log(scope);
+		}, me);*/
+		scope.getView().getView().getTreeStore().getRootNode().expandChildren();
+		
+	},
+	
+	
     
     onBeforeDrop: function(node, data, overModel, dropPosition, dropHandler, eOpts) {
     	var me=this;
@@ -120,19 +154,27 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	// ensure the drop handler waits for the drop
     	dropHandler.wait=true;
 
+		
     	// handle drop on a folder
         if (!overModel.isLeaf() && dropPosition == 'append')
         {
         	node = overModel;
         	parentId = me.treeUtils.getIdFromNodeId(node.data.id);
-        	associatedItemId = data.records[0].get('id')
+			
+        	associatedItemId = data.records[0].get('id');
         	parentUrl = me.apiProperties.getItemUrl( me.getParentItemType() ) + '/' + parentId + '/' + me.getAssociatedItemType(); 	
         	url = me.apiProperties.createUrl( parentUrl );
-        	me.apiProperties.makeRequest({
+		
+			if (node.get('qtitle') && node.get('qtitle') == 'INACTIVE') {
+				dropHandler.cancelDrop;
+        		return 1;
+			}
+			
+			me.apiProperties.makeRequest({
 				url: url,
 				method: 'POST',
 				jsonData: '"' + associatedItemId + '"',
-				successFunc: function(response, view) {
+				successFunc: function(response, view){
 					me.getAssociatedItems(node, parentId);
 				}
 			});

@@ -18,5 +18,16 @@
  */
 Ext.define('Ssp.model.reference.JournalStepDetail', {
 	extend: 'Ssp.model.reference.AbstractReference',
-    fields: []
+    fields: [
+	{name: 'objectStatus', type: 'string', defaultValue: 'ACTIVE', convert: function(value, record){
+                
+                 if ( !(record.statusFieldsInitialized) || record.synchronizingStatusFields ) {
+                     
+                     return value;
+                 }
+                 record.synchronizingStatusFields = true;
+                 record.set('active', 'ACTIVE' === (value && value.toUpperCase()));
+                 record.synchronizingStatusFields = false;
+                 return value;
+             }}]
 });
