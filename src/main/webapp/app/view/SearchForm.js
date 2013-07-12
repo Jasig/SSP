@@ -154,15 +154,7 @@ Ext.define('Ssp.view.SearchForm',{
                      fieldLabel: 'From',
                      name: 'hoursEarnedMin',
 					 enableKeyEvents:true,
-					 listeners: {
-                        specialkey:{
-								scope: me,
-								fn: function(field, el) {
-				    	      			if(el.getKey() == Ext.EventObject.ENTER)
-				    	    				this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
-				    	    		}	
-			    	  		}
-                    }
+					 itemId: 'hoursEarnedMin'
                },
                {
                    xtype: 'numberfield',
@@ -173,16 +165,8 @@ Ext.define('Ssp.view.SearchForm',{
                    labelAlign: 'right',
                    fieldLabel: 'To',
                    name: 'hoursEarnedMax',
+				   itemId: 'hoursEarnedMax',
 				   enableKeyEvents:true,
-				  	listeners: {
-                       	specialkey:{
-								scope: me,
-								fn: function(field, el) {
-				    	      			if(el.getKey() == Ext.EventObject.ENTER)
-				    	    				this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
-				    	    		}	
-			    	  		}
-                   }
               }]
                 },
              {	   layout: 'column',
@@ -204,16 +188,8 @@ Ext.define('Ssp.view.SearchForm',{
                         	   columnWidth: .45,
                         	   fieldLabel: 'From',
                         	   name: 'gpaMin',
+							   itemId: 'gpaMin',
 							   enableKeyEvents:true,
-							   listeners: {
-		                        	specialkey:{
-											scope: me,
-											fn: function(field, el) {
-							    	      			if(el.getKey() == Ext.EventObject.ENTER)
-							    	    				this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
-							    	    		}	
-						    	  		}
-		                    	}
                            },
                            {
                         	   xtype: 'numberfield',
@@ -226,16 +202,8 @@ Ext.define('Ssp.view.SearchForm',{
                         	   columnWidth: .45,
                         	   fieldLabel: 'To',
                         	   name: 'gpaMax',
+							   itemId: 'gpaMax',
 							   enableKeyEvents:true,
-							  listeners: {
-		                        specialkey:{
-										scope: me,
-										fn: function(field, el) {
-						    	      			if(el.getKey() == Ext.EventObject.ENTER)
-						    	    				this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
-						    	    		}	
-					    	  		}
-		                    }
                            }              
                 ]},
                 {

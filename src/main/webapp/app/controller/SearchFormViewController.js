@@ -50,7 +50,23 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		},
    	'resetStudentSearchButton': {
     		click: 'onResetClick'
-    	}
+    	},
+	'hoursEarnedMin':{
+			specialkey: "specialKeyPressed",
+			change: "hoursEarnedMinChanged"
+	 },
+	'hoursEarnedMax':{
+			specialkey: "specialKeyPressed",
+			change: 'hoursEarnedMaxChanged'
+	 },
+	 'gpaMin':{
+			specialkey: "specialKeyPressed",
+			change: 'gpaMinChanged'
+	 },
+	 'gpaMax':{
+			specialkey: "specialKeyPressed",
+			change: 'gpaMaxChanged'
+	 }
     },
     
 	init: function() {
@@ -141,7 +157,71 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	     	return;
 		}
 		me.search();	
-	},  	
+	},  
+	
+	specialKeyPressed: function(field, el){
+		var me=this;
+		if(el.getKey() == Ext.EventObject.ENTER)
+			me.onSearchClick();
+	},
+	
+	hoursEarnedMinChanged: function(){
+		var me=this;
+		
+		if(me.getHoursEarnedMin().getValue() == null){
+			me.getHoursEarnedMax().setValue(null);
+			return;
+		}
+		if(me.getHoursEarnedMax().getValue() == null){
+				me.getHoursEarnedMax().setValue(me.getHoursEarnedMin().getValue());
+				return;
+		}
+		if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue())
+			me.getHoursEarnedMax().setValue(me.getHoursEarnedMin().getValue())
+	},
+	
+	hoursEarnedMaxChanged: function(){
+		var me=this;
+		if(me.getHoursEarnedMax().getValue() == null){
+			me.getHoursEarnedMin().setValue(null);
+			return;
+		}
+		if(!me.getHoursEarnedMin().getValue()){
+			me.getHoursEarnedMin().setValue(0);
+			return;
+		}
+		if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue())
+			me.getHoursEarnedMin().setValue(me.getHoursEarnedMax().getValue())
+	},
+	
+	gpaMinChanged: function(){
+		var me=this;
+		if(me.getGpaMin().getValue() === null){
+			me.getGpaMax().setValue(null);
+			return;
+		}	
+		if(me.getGpaMax().getValue() == null){
+			me.getGpaMax().setValue(me.getGpaMin().getValue());
+			return;
+		}
+		if(me.getGpaMin().getValue() > me.getGpaMax().getValue())
+			me.getGpaMax().setValue(me.getGpaMin().getValue())
+	},
+	
+	gpaMaxChanged: function(){
+		var me=this;
+		if(me.getGpaMax().getValue() === null){
+			me.getGpaMin().setValue(null);
+			return;
+		}
+		if(!me.getGpaMin().getValue()){
+			me.getGpaMin().setValue(0);
+			return;
+		}
+			
+		if(me.getGpaMin().getValue() > me.getGpaMax().getValue())
+			me.getGpaMin().setValue(me.getGpaMax().getValue())
+	},
 
     searchFailure: function( r, scope){
     	var me=scope;
