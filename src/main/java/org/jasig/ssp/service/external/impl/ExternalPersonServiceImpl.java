@@ -425,24 +425,24 @@ public class ExternalPersonServiceImpl
 			if (externStudentType != null) {
 				LOGGER.debug("Assigning student_type '{}' to person " +
 						"schoolId '{}'", externStudentType, person.getSchoolId());
-				person.setStudentType(getInternalStudentType(externStudentType));
+				person.setStudentType(getInternalStudentTypeCode(externStudentType));
 			}// else ignore
 		} else {
 			if (externStudentType == null) {
 				if ( configService.getByNameNullOrDefaultValue(
 						"studentTypeUnsetFromExternalData")
 						.equalsIgnoreCase("true") ) {
-					LOGGER.debug("Deleting student type assignment for person schoolId '{}'",
+					LOGGER.debug("Deleting student_type assignment for person schoolId '{}'",
 							person.getSchoolId());
 					person.setStudentType(null);
 				} else {
-					LOGGER.debug("Skipping student type assignment deletion for "
+					LOGGER.debug("Skipping student_type assignment deletion for "
 							+ "person schoolId '{}' because that operation has "
 							+ "been disabled via configuration.",
 							person.getSchoolId());
 				}
-			} else if (!externStudentType.equals(person.getStudentType().getName())) {
-				StudentType studentType = getInternalStudentType(externStudentType);
+			} else if (!externStudentType.equals(person.getStudentType().getCode())) {
+				StudentType studentType = getInternalStudentTypeCode(externStudentType);
 				if ( studentType == null ) {
 					// lookup problem already logged
 					LOGGER.debug("Student Type with name '{}' does not exist so "
@@ -455,15 +455,14 @@ public class ExternalPersonServiceImpl
 		}
 	}
 	
-	private StudentType getInternalStudentType(final String studentType) {
-		try {
-			return studentTypeService.getByName(studentType);
-		} catch (final ObjectNotFoundException e) {
-			LOGGER.warn(
-					"Student_Type referenced in external table not available in system",
-					e);
-			return null;
+	private StudentType getInternalStudentTypeCode(final String studentTypeCode) {
+		StudentType internalCode = studentTypeService.getByCode(studentTypeCode);		
+		if (internalCode == null) {
+			LOGGER.warn("Student_Type " +studentTypeCode +" referenced in external table not "
+							+ "available in system");
 		}
+		
+		return internalCode;		
 	}
 
 	@Override

@@ -29,4 +29,6 @@ import org.jasig.ssp.service.ReferenceService;
  */
 public interface StudentTypeService
 		extends ReferenceService<StudentType> {
+	
+	StudentType getByCode(String code);
 }

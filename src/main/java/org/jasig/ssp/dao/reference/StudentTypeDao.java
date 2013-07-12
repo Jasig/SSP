@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.dao.reference;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.reference.StudentType;
 import org.springframework.stereotype.Repository;
@@ -32,5 +34,12 @@ public class StudentTypeDao extends
 
 	public StudentTypeDao() {
 		super(StudentType.class);
+	}
+	
+	public StudentType getByCode(final String code) {
+		// TODO: (performance) Perfect example of data that should be cached
+		final Criteria query = createCriteria();
+		query.add(Restrictions.eq("code", code));
+		return (StudentType) query.uniqueResult();
 	}
 }
