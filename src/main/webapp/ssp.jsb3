@@ -1735,9 +1735,9 @@
                     "path": "/app/model/"
                 },
                 {
-                    "clsName": "Ssp.model.PersonDocument",
-                    "name": "PersonDocument.js",
-                    "path": "/app/model/"
+                    "clsName": "Ssp.model.tool.documents.StudentDocument",
+                    "name": "StudentDocument.js",
+                    "path": "/app/model/tool/documents/"
                 },
                 {
                     "clsName": "Ssp.model.PersonProgramStatus",
@@ -1905,8 +1905,8 @@
                     "path": "/app/store/"
                 },
                 {
-                    "clsName": "Ssp.store.Documents",
-                    "name": "Documents.js",
+                    "clsName": "Ssp.store.StudentDocuments",
+                    "name": "StudentDocuments.js",
                     "path": "/app/store/"
                 },
                 {
