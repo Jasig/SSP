@@ -744,6 +744,11 @@
                     "path": "/app/service/"
                 },
                 {
+                    "clsName": "Ssp.store.StudentsSearch",
+                    "name": "StudentsSearch.js",
+                    "path": "/app/store/"
+                },
+                {
                     "clsName": "Ssp.service.SearchService",
                     "name": "SearchService.js",
                     "path": "/app/service/"
