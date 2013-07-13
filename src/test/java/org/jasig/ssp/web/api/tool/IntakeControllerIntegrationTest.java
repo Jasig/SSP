@@ -18,10 +18,6 @@
  */
 package org.jasig.ssp.web.api.tool;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -44,6 +40,7 @@ import org.jasig.ssp.model.reference.VeteranStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.PersonDemographicsTO;
 import org.jasig.ssp.transferobject.PersonEducationGoalTO;
 import org.jasig.ssp.transferobject.PersonEducationLevelTO;
@@ -51,6 +48,7 @@ import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.transferobject.tool.IntakeFormTO;
+import org.jasig.ssp.util.service.stub.Stubs;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,6 +61,10 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * {@link IntakeController} tests
@@ -83,6 +85,9 @@ public class IntakeControllerIntegrationTest {
 
 	@Autowired
 	private transient PersonTOFactory personTOFactory;
+
+	@Autowired
+	private transient IntakeService intakeService;
 
 	private static final UUID STUDENT_ID = UUID
 			.fromString("7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194");
@@ -230,7 +235,11 @@ public class IntakeControllerIntegrationTest {
 	 */
 	@Test
 	public void testControllerRefData() throws ObjectNotFoundException {
-		final Map<String, Object> data = controller.referenceData();
+
+		final IntakeFormTO intakeFormTO = new IntakeFormTO(
+				intakeService.loadForPerson(Stubs.PersonFixture.STUDENT_0.id()));
+
+		final Map<String, Object> data = controller.referenceData(intakeFormTO);
 
 		assertNotNull("The map should not have been null.", data);
 

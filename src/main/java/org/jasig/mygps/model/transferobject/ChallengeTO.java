@@ -43,7 +43,7 @@ import com.google.common.collect.Lists;
  * @author jon.adams
  * 
  */
-@JsonIgnoreProperties(value = { "selfHelpGuideQuestions" })
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		TransferObject<Challenge>, Serializable {
 

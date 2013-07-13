@@ -40,7 +40,7 @@ import com.google.common.collect.Lists;
 /**
  * Challenge transfer object
  */
-@JsonIgnoreProperties(value = { "selfHelpGuideQuestions" })
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		TransferObject<Challenge>, Serializable {
 
