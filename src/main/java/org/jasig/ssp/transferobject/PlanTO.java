@@ -21,6 +21,7 @@ package org.jasig.ssp.transferobject;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
@@ -73,10 +74,12 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 	public List<PlanCourseTO> getPlanCourses() {
 		return planCourses;
 	}
-	public void setPlantCourses(List<PlanCourseTO> planCourses) {
+	public void setPlanCourses(List<PlanCourseTO> planCourses) {
 		this.planCourses = planCourses;
 	}
+
 	@Override
+	@JsonIgnore
 	public List<PlanCourseTO> getCourses() {
 		return planCourses;
 	}
