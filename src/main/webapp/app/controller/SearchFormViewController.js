@@ -53,19 +53,19 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     	},
 	'hoursEarnedMin':{
 			specialkey: "specialKeyPressed",
-			change: "hoursEarnedMinChanged"
+			blur: "hoursEarnedMinChanged",
 	 },
 	'hoursEarnedMax':{
 			specialkey: "specialKeyPressed",
-			change: 'hoursEarnedMaxChanged'
+			blur: 'hoursEarnedMaxChanged',
 	 },
 	 'gpaMin':{
 			specialkey: "specialKeyPressed",
-			change: 'gpaMinChanged'
+			blur: 'gpaMinChanged',
 	 },
 	 'gpaMax':{
 			specialkey: "specialKeyPressed",
-			change: 'gpaMaxChanged'
+			blur: 'gpaMaxChanged',
 	 }
     },
     
@@ -156,6 +156,31 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	     	Ext.Msg.alert('SSP Error', 'Please enter some filter values.'); 
 	     	return;
 		}
+		var message = "";
+		var valuesInvalid = false;
+		if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
+			valuesInvalid = true;
+			message += "GPA Min is greater than GPA Maximum. ";
+		}
+		
+		if(me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null){
+			me.getGpaMin().setValue(0);
+		}
+		
+		if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue()){
+				valuesInvalid = true;
+				message += "Hours Earned Min is greater than Hours Earned Maximum. ";
+		}
+
+		if(me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null){
+				me.getGpaMin().setValue(0);
+		}
+		
+		if(valuesInvalid == true){
+	     	Ext.Msg.alert('SSP Error', message + "Search will return no values."); 
+	     	return;
+		}
+		
 		me.search();	
 	},  
 	
@@ -168,10 +193,6 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	hoursEarnedMinChanged: function(){
 		var me=this;
 		
-		if(me.getHoursEarnedMin().getValue() == null){
-			me.getHoursEarnedMax().setValue(null);
-			return;
-		}
 		if(me.getHoursEarnedMax().getValue() == null){
 				me.getHoursEarnedMax().setValue(me.getHoursEarnedMin().getValue());
 				return;
@@ -210,10 +231,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	
 	gpaMaxChanged: function(){
 		var me=this;
-		if(me.getGpaMax().getValue() === null){
-			me.getGpaMin().setValue(null);
-			return;
-		}
+
 		if(!me.getGpaMin().getValue()){
 			me.getGpaMin().setValue(0);
 			return;
