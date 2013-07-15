@@ -26,7 +26,7 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
     	campus: 'currentCampus',
     	peopleSearchLiteStore: 'peopleSearchLiteStore',
     	service: 'campusEarlyAlertRoutingService',
-        personService: 'personService',
+        personService: 'personService'
     },
     config: {
     	containerToLoadInto: 'campusearlyalertroutingsadmin',
