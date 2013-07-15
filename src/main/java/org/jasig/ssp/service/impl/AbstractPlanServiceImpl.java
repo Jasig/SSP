@@ -143,6 +143,7 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 		return subjectAndBody;
 	}
 	@Override
+	@Transactional(readOnly=true)
 	public SubjectAndBody createFullOutput(TOO planOutput) throws ObjectNotFoundException
 	{
 		TO plan = planOutput.getNonOutputTO();

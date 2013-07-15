@@ -26,8 +26,10 @@ import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.transferobject.PlanCourseTO;
 import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
+import org.jasig.ssp.transferobject.TermNoteTO;
 import org.jasig.ssp.web.api.AbstractBaseController;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
@@ -62,7 +64,7 @@ public class MyGpsPlanController extends AbstractBaseController {
 		if (model == null) {
 			return null;
 		}
-		return service.validate(new PlanTO(model));
+		return stripAdvisorNotes(service.validate(new PlanTO(model)));
 	}
 
 	// This was previously an overload in PlanController but relocated here
@@ -82,13 +84,39 @@ public class MyGpsPlanController extends AbstractBaseController {
 			return null;
 		}
 		planOutputDataTO.setPlan(new PlanTO(model));
-		planOutputDataTO.setOutputFormat("fullFormat");
+		planOutputDataTO.setOutputFormat(PlanService.OUTPUT_FORMAT_MATRIX);
+		planOutputDataTO = stripAdvisorNotes(planOutputDataTO);
 
 		SubjectAndBody message = service.createOutput(planOutputDataTO);
 		if(message != null)
 			return message.getBody();
 
 		return null;
+	}
+
+	// Put the advisor note-stripping functions here rather than in a service
+	// method b/c we need this for both inputs and outputs, but there's no good
+	// way right now to clone the TO so there's no polite way for a service
+	// operation to filter fields on a TO before passing it on to another
+	// service, as PlanService.createOutput() would need to do. This is
+	// acceptable so long as this is the only place that needs to perfom this
+	// sort of "note stripping", but will need to be refactored if other call
+	// sites need it.
+
+	private PlanOutputTO stripAdvisorNotes(PlanOutputTO planOutputDataTO) {
+		planOutputDataTO.setPlan(stripAdvisorNotes(planOutputDataTO.getPlan()));
+		return planOutputDataTO;
+	}
+
+	private PlanTO stripAdvisorNotes(PlanTO planTO) {
+		planTO.setContactNotes(null);
+		for ( PlanCourseTO courseTO : planTO.getPlanCourses() ) {
+			courseTO.setContactNotes(null);
+		}
+		for ( TermNoteTO termNoteTO : planTO.getTermNotes() ) {
+			termNoteTO.setContactNotes(null);
+		}
+		return planTO;
 	}
 
 	@Override

@@ -97,6 +97,7 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public SubjectAndBody createOutput(PlanOutputTO planOutputDataTO) throws ObjectNotFoundException {
 		SubjectAndBody output = null;
 

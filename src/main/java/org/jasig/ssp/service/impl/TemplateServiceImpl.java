@@ -60,6 +60,7 @@ public  class TemplateServiceImpl extends AbstractPlanServiceImpl<Template,Templ
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public SubjectAndBody createOutput(TemplateOutputTO templateOutputDataTO) throws ObjectNotFoundException {
 
 		SubjectAndBody output = null;
