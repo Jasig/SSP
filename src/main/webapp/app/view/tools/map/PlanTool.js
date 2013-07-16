@@ -48,7 +48,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
             {
                 xtype: 'fieldset',
                 border: 0,
-                padding: '0 0 0 0',
+                padding: '0 0 0 15',
                 title: '',
                 defaultType: 'displayfield',
                 layout: 'vbox',
@@ -111,7 +111,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 		                title: '',
 		                defaultType: 'displayfield',
 		                layout: 'vbox',
-		                width: 80,
+		                width: 100,
 		                cls: 'center-align',
 		                defaults: {
 		                    anchor: '100%'
@@ -121,17 +121,15 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 		                    width: 30,
 		                    height: 30,
 		                    cls: 'mapMovePlanIcon',
-		                    xtype: 'button',
+		                    xtype: 'button',							
 		                    itemId: 'movePlanButton',
 			                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON'),
 		                    align: 'center',
-		                    padding: '0 0 0 0'
+		                    padding: '0 0 0 0'							
 		                }, {
 		                    xtype: 'label',
-							itemId: 'movePlanLabel',
-							width: 50,
-		                    text: me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan',
-
+							itemId: 'movePlanLabel',								
+		                    text: me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan'							
 		                }]
 
 		            },
