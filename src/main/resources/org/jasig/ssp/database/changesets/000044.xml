@@ -40,7 +40,7 @@
 	</changeSet> 
 	
     <changeSet id="drop map_template person_id" author="tony.arland">
-        <preConditions>
+        <preConditions onSqlOutput="TEST">
            <columnExists tableName="map_template" columnName="person_id"/> 
         </preConditions>
         <dropForeignKeyConstraint  constraintName="map_template_person_id" baseTableName="map_template"/>
