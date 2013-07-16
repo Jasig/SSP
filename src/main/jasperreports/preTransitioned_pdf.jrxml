@@ -387,7 +387,7 @@
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[( $F{middleName} == null ? "" : $F{middleName}.substring( 0,1 ) ) + "."]]></textFieldExpression>
+				<textFieldExpression><![CDATA[( ($F{middleName} == null || $F{middleName}.trim().equals("")) ? "" : ($F{middleName}.trim().substring( 0,1 ) + ".") )]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="da4c0010-a6bc-4016-836e-daa0149f7735" stretchType="RelativeToBandHeight" x="72" y="0" width="67" height="14"/>
