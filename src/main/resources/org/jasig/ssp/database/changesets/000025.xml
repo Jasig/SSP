@@ -50,18 +50,18 @@
 -- as side-effects of Early Alert responses. After running this, sanity
 -- check the contents of journal_entry.comment with a query like:
 --
---    SELECT [id], [comment] FROM [dbo].[journal_entry]
+--    SELECT [id], [comment] FROM [${schema}].[journal_entry]
 --
 -- If you suspect problems you can restore some or all records from
 -- journal_entry_bak. E.g. to completely restore:
 --
---    DELETE FROM [dbo].[journal_entry]
---    INSERT INTO [dbo].[journal_entry] SELECT * FROM [dbo].[journal_entry_bak]
+--    DELETE FROM [${schema}].[journal_entry]
+--    INSERT INTO [${schema}].[journal_entry] SELECT * FROM [${schema}].[journal_entry_bak]
 --
 -- Otherwise that table can be dropped after you've
 -- decided everything looks good:
 --
---    DROP TABLE [dbo].[journal_entry_bak]
+--    DROP TABLE [${schema}].[journal_entry_bak]
 --
 --
 SET ANSI_NULLS ON
@@ -71,7 +71,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 -- From http://stackoverflow.com/questions/457701/best-way-to-strip-html-tags-from-a-string-in-sql-server
-CREATE FUNCTION [dbo].[udf_StripHTML] (@HTMLText VARCHAR(MAX))
+CREATE FUNCTION [${schema}].[udf_StripHTML] (@HTMLText VARCHAR(MAX))
 RETURNS VARCHAR(MAX) AS
 BEGIN
    DECLARE @Start INT
@@ -91,11 +91,11 @@ BEGIN
 END
 GO
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[journal_entry_bak]') AND type in (N'U'))
-DROP TABLE [dbo].[journal_entry_bak]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[${schema}].[journal_entry_bak]') AND type in (N'U'))
+DROP TABLE [${schema}].[journal_entry_bak]
 GO
 
-CREATE TABLE [dbo].[journal_entry_bak](
+CREATE TABLE [${schema}].[journal_entry_bak](
 	[id] [uniqueidentifier] NOT NULL,
 	[created_date] [datetime] NOT NULL,
 	[modified_date] [datetime] NOT NULL,
@@ -115,14 +115,14 @@ CREATE TABLE [dbo].[journal_entry_bak](
 GO
 
 -- Populate the backup table
-INSERT INTO [dbo].[journal_entry_bak]
-SELECT * FROM [dbo].[journal_entry]
+INSERT INTO [${schema}].[journal_entry_bak]
+SELECT * FROM [${schema}].[journal_entry]
 
 -- Special handling of first line so we don't end up with a blank at the
 -- top of the markup-stripped comment. Only update entries where the
 -- source is "Early Alert Response". Use the ID in case the deployment
 -- happened to change that source name.
-UPDATE [dbo].[journal_entry]
+UPDATE [${schema}].[journal_entry]
 SET [comment] = REPLACE([comment], '<html><body>'+CHAR(13)+CHAR(10)+'<p><b>Early Alert', 'Early Alert')
 WHERE [journal_source_id] = 'B2D07A00-5056-A51A-80B5-F725F1C5C3E2'
 
@@ -130,11 +130,11 @@ WHERE [journal_source_id] = 'B2D07A00-5056-A51A-80B5-F725F1C5C3E2'
 -- formatted as table cells. Only update entries where the
 -- source is "Early Alert Response". Use the ID in case the deployment
 -- happened to change that source name.
-UPDATE [dbo].[journal_entry]
-SET [comment] = ([dbo].[udf_StripHTML](REPLACE([comment], '</th><td>', ': ')))
+UPDATE [${schema}].[journal_entry]
+SET [comment] = ([${schema}].[udf_StripHTML](REPLACE([comment], '</th><td>', ': ')))
 WHERE [journal_source_id] = 'B2D07A00-5056-A51A-80B5-F725F1C5C3E2'
 
-DROP FUNCTION [dbo].[udf_StripHTML]
+DROP FUNCTION [${schema}].[udf_StripHTML]
 
         ]]></sql>
     </changeSet>
