@@ -198,6 +198,15 @@ public class PersonServiceImpl implements PersonService {
 					if ( oee.getCause() instanceof ConstraintViolationException ) {
 						throw (ConstraintViolationException)oee.getCause();
 					}
+
+					LOGGER.info("Failed to create Account for username {}"
+							+ " and schoolId {}. This is usually just an"
+							+ " innocent result of multiple requests"
+							+ " attempting to lazily create a first-time"
+							+ " user at the same moment. Will attempt to"
+							+ " use an existing user with that username.",
+							new Object[] { username, attr.getSchoolId(), oee });
+
 					// Else don't have to give up in the same way do in the
 					// ConstraintViolationException catch below b/c we happen to
 					// know an insert hasn't been attempted yet under the

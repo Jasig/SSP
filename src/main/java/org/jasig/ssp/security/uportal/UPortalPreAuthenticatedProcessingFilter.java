@@ -212,9 +212,8 @@ public class UPortalPreAuthenticatedProcessingFilter extends GenericFilterBean
 			final AuthenticationException failed) {
 		SecurityContextHolder.clearContext();
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Cleared security context due to exception", failed);
-		}
+		logger.warn("Cleared security context due to exception", failed);
+
 		request.getSession().setAttribute(
 				WebAttributes.AUTHENTICATION_EXCEPTION, failed);
 	}
