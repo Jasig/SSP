@@ -23,15 +23,17 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
+	<property name="schema" value="${database.schema}" />
+
 	<changeSet id="drop is_transcript from map_template_course" author="tony.arland">
 	    <preConditions onFail="MARK_RAN" onFailMessage="is_transcript already dropped">
-	        <columnExists tableName="map_template_course" columnName="is_transcript"/>
+	        <columnExists tableName="map_template_course" columnName="is_transcript" schemaName="${schema}"/>
 	    </preConditions>
 		<dropColumn tableName="map_template_course" columnName="is_transcript" />
 	</changeSet>
 	<changeSet id="drop is_transcript from map_plan_course" author="tony.arland">
 	    <preConditions onFail="MARK_RAN" onFailMessage="is_transcript already dropped">
-	        <columnExists tableName="map_plan_course" columnName="is_transcript"/>
+	        <columnExists tableName="map_plan_course" columnName="is_transcript" schemaName="${schema}"/>
 	    </preConditions>	    
 		<dropColumn tableName="map_plan_course" columnName="is_transcript" />
 	</changeSet>

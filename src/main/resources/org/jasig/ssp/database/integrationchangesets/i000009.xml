@@ -74,7 +74,7 @@
 	<changeSet author='jim.stanley'
 		id='Add first_name to external_student_transcript_course'>
 		<preConditions onFail="MARK_RAN">
-            <not><columnExists tableName="external_student_transcript_course" columnName="first_name"/></not>
+            <not><columnExists tableName="external_student_transcript_course" columnName="first_name" schemaName="${schema}"/></not>
         </preConditions>
 		<addColumn tableName="external_student_transcript_course">
 			<column name="first_name" type="${nvarchar.type}(50)">
@@ -107,7 +107,7 @@
 	<changeSet author='jim.stanley'
 		id='Add middle_name to external_student_transcript_course'>
 		<preConditions onFail="MARK_RAN">
-            <not><columnExists tableName="external_student_transcript_course" columnName="middle_name"/></not>
+            <not><columnExists tableName="external_student_transcript_course" columnName="middle_name" schemaName="${schema}"/></not>
         </preConditions>
 		<addColumn tableName="external_student_transcript_course">
 			<column name="middle_name" type="${nvarchar.type}(50)">
@@ -141,7 +141,7 @@
 		<changeSet author='jim.stanley'
 		id='Add last_name to external_student_transcript_course'>
 		<preConditions onFail="MARK_RAN">
-            <not><columnExists tableName="external_student_transcript_course" columnName="last_name"/></not>
+            <not><columnExists tableName="external_student_transcript_course" columnName="last_name" schemaName="${schema}"/></not>
         </preConditions>
 		<addColumn tableName="external_student_transcript_course">
 			<column name="last_name" type="${nvarchar.type}(50)">
@@ -174,7 +174,7 @@
 	<changeSet author='jim.stanley'
 		id='Add fields to external_student_transcript_course'>
 		<preConditions onFail="MARK_RAN">
-            <not><columnExists tableName="external_student_transcript_course" columnName="audited"/></not>
+            <not><columnExists tableName="external_student_transcript_course" columnName="audited" schemaName="${schema}"/></not>
         </preConditions>
 		<addColumn tableName="external_student_transcript_course">
 			<column name="audited" type="char(1)">

@@ -33,7 +33,7 @@
 		
 	<changeSet id="Add SessionId to self_help_guide_response" author="tony.arland">
 		<preConditions onFail="MARK_RAN">
-            <not><columnExists tableName="self_help_guide_response" columnName="session_id"/></not>
+            <not><columnExists tableName="self_help_guide_response" columnName="session_id" schemaName="${schema}"/></not>
         </preConditions>
 		<addColumn tableName="self_help_guide_response">
 			<column name="session_id" type="${nvarchar.type}(32)">
