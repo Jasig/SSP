@@ -22,10 +22,14 @@ Ext.define('Ssp.store.EarlyAlerts', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties'
-    },    
-	constructor: function(){
-		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('personEarlyAlert') ),
-						  autoLoad: false });
-		return this.callParent(arguments);
+    },
+	constructor: function() {
+		this.callParent(arguments);
+		Ext.apply(this.getProxy(),{
+			url: this.getProxy.url + this.apiProperties.getItemUrl('personEarlyAlert'),
+			extraParams: this.extraParams,
+			autoLoad: false
+		});
+		return this;
 	}
 });

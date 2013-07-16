@@ -77,6 +77,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		{
 			me.model = new Ssp.model.tool.earlyalert.EarlyAlertResponse();
 		}
+		me.filterEarlyAlertOutcomesAndOutreaches();		
 		me.getView().getForm().loadRecord(me.model);
 		me.showHideOtherOutcomeDescription();
 		return me.callParent(arguments);
@@ -100,6 +101,36 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     	//comp[isValid ? 'removeCls' : 'addCls']('multiselect-invalid');
     },
     
+	initEarlyAlertOutcomesStore: function(postProcess, postProcessScope) {
+		var me = this;
+		var eaOutreachesStore = me.getView().outcomesStore;
+		eaOutreachesStore.clearFilter(true);
+		eaOutreachesStore.load();
+		if ( postProcess ) {
+			postProcess.apply(postProcessScope ? postProcessScope : me, [eaOutreachesStore]);
+		}
+	},
+	
+	initEarlyAlertOutreachesStore: function(postProcess, postProcessScope) {
+		var me = this;
+		var eaOutcomesStore = me.getView().outreachesStore;
+		eaOutcomesStore.clearFilter(true);
+		eaOutcomesStore.load();
+		if ( postProcess ) {
+			postProcess.apply(postProcessScope ? postProcessScope : me, [eaOutcomesStore]);
+		}
+	},
+	
+	filterEarlyAlertOutcomesAndOutreaches: function() {
+		var me = this;
+		me.initEarlyAlertOutcomesStore(function(eaOutcomesStore) {
+			me.formUtils.applyAssociativeStoreFilter(eaOutcomesStore, me.model.get('earlyAlertOutcomeId'));
+		}, me);
+		me.initEarlyAlertOutreachesStore(function(eaOutreachesStore) {
+			me.formUtils.applyActiveOnlyFilter(eaOutreachesStore);
+		}, me);
+	},
+	
 	onSaveClick: function(button) {
 		var me = this;
 		var record, id, jsonData, url;
@@ -188,7 +219,20 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		this.displayMain();
 	},
 	
+	destroy: function() {
+		var me = this;
+		me.clearEarlyAlertOutcomesAndOutreachesFilters();
+	},
+	
+	clearEarlyAlertOutcomesAndOutreachesFilters: function() {
+		var me = this;
+		me.getView().earlyAlertOutcomesStore.clearFilter(true);
+		me.getView().earlyAlertOutreachesStore.clearFilter(true);
+	},		
+	
 	displayMain: function(){
+		var me = this;
+		me.clearEarlyAlertOutcomesAndOutreachesFilters();
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {reloadEarlyAlert: true});
 	},
 	

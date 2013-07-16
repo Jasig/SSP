@@ -912,6 +912,15 @@ Ext.onReady(function(){
 				    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
 				    anticipatedStartTermsStore: 'Ssp.store.reference.AnticipatedStartTerms',
 					campusesStore: 'Ssp.store.reference.Campuses',
+					campusesAllUnpagedStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.Campuses', {
+							     storeId: 'campusesAllUnpagedStore',		
+							     extraParams: {status: "ALL", limit: "-1"}
+							 });
+				    	},
+				    	singleton: true
+				    },
 					campusEarlyAlertRoutingsStore: 'Ssp.store.reference.CampusEarlyAlertRoutings',
 					campusServicesStore: 'Ssp.store.reference.CampusServices',
 					caseloadStore: 'Ssp.store.Caseload',
@@ -965,7 +974,25 @@ Ext.onReady(function(){
 				    disabilityStatusesStore: 'Ssp.store.reference.DisabilityStatuses',
 				    disabilityTypesStore: 'Ssp.store.reference.DisabilityTypes',
 				    earlyAlertOutcomesStore: 'Ssp.store.reference.EarlyAlertOutcomes',
-					earlyAlertOutreachesStore: 'Ssp.store.reference.EarlyAlertOutreaches',
+				    earlyAlertOutcomesAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.EarlyAlertOutcomes', {
+								storeId: 'earlyAlertOutcomesAllUnpagedStore',
+								extraParams: {status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					},
+				    earlyAlertOutreachesStore: 'Ssp.store.reference.EarlyAlertOutreaches',
+					earlyAlertOutreachesAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.EarlyAlertOutreaches', {
+								storeId: 'earlyAlertOutreachesAllUnpagedStore',
+								extraParams: {status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					},
 					earlyAlertReasonsStore: 'Ssp.store.reference.EarlyAlertReasons',
 					earlyAlertReasonsAllUnpagedStore: {
 						fn: function(){
@@ -977,9 +1004,27 @@ Ext.onReady(function(){
 						singleton: true
 					},
 					earlyAlertReferralsStore: 'Ssp.store.reference.EarlyAlertReferrals',
+					earlyAlertReferralsAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.EarlyAlertReferrals', {
+								storeId: 'earlyAlertReferralsAllUnpagedStore',
+								extraParams: {status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					},
 					earlyAlertReferralsBindStore: 'Ssp.store.reference.EarlyAlertReferralsBind',
 					earlyAlertsStore: 'Ssp.store.EarlyAlerts',
-					earlyAlertSuggestionsStore: 'Ssp.store.reference.EarlyAlertSuggestions',	    
+					earlyAlertSuggestionsStore: 'Ssp.store.reference.EarlyAlertSuggestions',
+					earlyAlertSuggestionsAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.EarlyAlertSuggestions', {
+								storeId: 'earlyAlertSuggestionsAllUnpagedStore',
+								extraParams: {status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					},
 				    educationGoalsStore: 'Ssp.store.reference.EducationGoals',
 			    	educationLevelsStore: 'Ssp.store.reference.EducationLevels',
 			    	electivesStore: {
