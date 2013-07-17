@@ -54,6 +54,114 @@
   });
 
   namespace('mygps.model', {
+    SelfHelpGuide: SelfHelpGuide = (function() {
+
+      function SelfHelpGuide(id, name, description) {
+        this.id = ko.observable(id);
+        this.name = ko.observable(name);
+        this.description = ko.observable(description);
+      }
+
+      SelfHelpGuide.createFromTransferObject = function(selfHelpGuideTO) {
+        return new SelfHelpGuide(selfHelpGuideTO.id, selfHelpGuideTO.name, selfHelpGuideTO.description);
+      };
+
+      return SelfHelpGuide;
+
+    })()
+  });
+
+  namespace('mygps.model', {
+    SelfHelpGuideQuestion: SelfHelpGuideQuestion = (function() {
+
+      function SelfHelpGuideQuestion(id, headingText, descriptionText, questionText, mandatory) {
+        this.id = ko.observable(id);
+        this.headingText = ko.observable(headingText);
+        this.descriptionText = ko.observable(descriptionText);
+        this.questionText = ko.observable(questionText);
+        this.mandatory = ko.observable(mandatory);
+        this.response = ko.observable(null);
+      }
+
+      SelfHelpGuideQuestion.createFromTransferObject = function(selfHelpGuideQuestionTO) {
+        return new SelfHelpGuideQuestion(selfHelpGuideQuestionTO.id, selfHelpGuideQuestionTO.headingText, selfHelpGuideQuestionTO.challenge.selfHelpGuideDescription, selfHelpGuideQuestionTO.challenge.selfHelpGuideQuestion, selfHelpGuideQuestionTO.mandatory);
+      };
+
+      return SelfHelpGuideQuestion;
+
+    })()
+  });
+
+  namespace('mygps.model', {
+    SelfHelpGuideResponse: SelfHelpGuideResponse = (function() {
+
+      function SelfHelpGuideResponse(id, summaryText, challengesIdentified, triggeredEarlyAlert) {
+        this.id = ko.observable(id);
+        this.summaryText = ko.observable(summaryText);
+        this.challengesIdentified = ko.observable(challengesIdentified);
+        this.triggeredEarlyAlert = ko.observable(triggeredEarlyAlert);
+      }
+
+      SelfHelpGuideResponse.createFromTransferObject = function(selfHelpGuideResponseTO) {
+        var challengeIdentified, challengesIdentified;
+        if (selfHelpGuideResponseTO.challengesIdentified != null) {
+          challengesIdentified = (function() {
+            var _i, _len, _ref, _results;
+            _ref = selfHelpGuideResponseTO.challengesIdentified;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              challengeIdentified = _ref[_i];
+              _results.push(mygps.model.Challenge.createFromTransferObject(challengeIdentified));
+            }
+            return _results;
+          })();
+        }
+        return new SelfHelpGuideResponse(selfHelpGuideResponseTO.id, selfHelpGuideResponseTO.summaryText, challengesIdentified, selfHelpGuideResponseTO.triggeredEarlyAlert);
+      };
+
+      return SelfHelpGuideResponse;
+
+    })()
+  });
+
+  namespace('mygps.model', {
+    Task: Task = (function() {
+
+      function Task(id, type, name, description, link, details, dueDate, completed, deletable, challengeId, challengeReferralId) {
+        this.id = ko.observable(id);
+        this.type = ko.observable(type);
+        this.name = ko.observable(name);
+        this.description = ko.observable(description);
+        this.details = ko.observable(details);
+        this.dueDate = ko.observable(dueDate);
+        this.completed = ko.observable(completed);
+        this.link = ko.observable(link);
+        this.deletable = ko.observable(deletable);
+        this.challengeId = ko.observable(challengeId);
+        this.challengeReferralId = ko.observable(challengeReferralId);
+      }
+
+      Task.createFromTransferObject = function(taskTO) {
+        var parseDate;
+        parseDate = function(msSinceEpoch) {
+          var d;
+          if (msSinceEpoch != null) {
+            d = new Date(msSinceEpoch);
+            d.setTime(d.getTime() + (d.getTimezoneOffset() * 60 * 1000));
+            return d;
+          } else {
+            return null;
+          }
+        };
+        return new Task(taskTO.id, taskTO.type, taskTO.name, taskTO.description, taskTO.link, taskTO.details, parseDate(taskTO.dueDate), taskTO.completed, taskTO.deletable, taskTO.challengeId, taskTO.challengeReferralId);
+      };
+
+      return Task;
+
+    })()
+  });
+
+  namespace('mygps.model', {
     Challenge: Challenge = (function() {
 
       function Challenge(id, name, description, referralCount) {
@@ -69,25 +177,6 @@
       };
 
       return Challenge;
-
-    })()
-  });
-
-  namespace('mygps.model', {
-    ChallengeReferral: ChallengeReferral = (function() {
-
-      function ChallengeReferral(id, name, description, details) {
-        this.id = ko.observable(id);
-        this.name = ko.observable(name);
-        this.description = ko.observable(description);
-        this.details = ko.observable(details);
-      }
-
-      ChallengeReferral.createFromTransferObject = function(challengeReferralTO) {
-        return new ChallengeReferral(challengeReferralTO.id, challengeReferralTO.name, challengeReferralTO.description, challengeReferralTO.details);
-      };
-
-      return ChallengeReferral;
 
     })()
   });
@@ -169,6 +258,126 @@
   });
 
   namespace('mygps.model', {
+    Person: Person = (function() {
+
+      function Person(id, firstName, lastName, phoneNumber, emailAddress, photoURL, coach) {
+        this.id = ko.observable(id);
+        this.firstName = ko.observable(firstName);
+        this.lastName = ko.observable(lastName);
+        this.phoneNumber = ko.observable(phoneNumber);
+        this.photoURL = ko.observable(photoURL);
+        this.coach = ko.observable(coach);
+      }
+
+      Person.createFromTransferObject = function(personTO) {
+        var coach;
+        if (personTO.coach != null) {
+          coach = mygps.model.Person.createFromTransferObject(personTO.coach);
+        }
+        return new Person(personTO.id, personTO.firstName, personTO.lastName, personTO.phoneNumber, personTO.emailAddress, personTO.photoURL, coach);
+      };
+
+      return Person;
+
+    })()
+  });
+
+  namespace('mygps.model', {
+    FormSection: FormSection = (function() {
+
+      function FormSection(id, label, questions) {
+        var question, _i, _len, _ref;
+        this.id = ko.observable(id);
+        this.label = ko.observable(label);
+        this.questions = ko.observableArray(questions);
+        this.valid = ko.dependentObservable(this.evaluateValid, this);
+        this.form = ko.observable(null);
+        _ref = this.questions();
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          question = _ref[_i];
+          question.section(this);
+        }
+      }
+
+      FormSection.prototype.evaluateValid = function() {
+        return !_.any(this.questions(), function(question) {
+          return !question.valid();
+        });
+      };
+
+      FormSection.prototype.validate = function() {
+        var question, _i, _len, _ref;
+        _ref = this.questions();
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          question = _ref[_i];
+          question.validate();
+        }
+      };
+
+      FormSection.createFromTransferObject = function(formSectionTO) {
+        var question, questions;
+        if (formSectionTO.questions != null) {
+          questions = (function() {
+            var _i, _len, _ref, _results;
+            _ref = formSectionTO.questions;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              question = _ref[_i];
+              _results.push(mygps.model.FormQuestion.createFromTransferObject(question));
+            }
+            return _results;
+          })();
+        }
+        return new FormSection(formSectionTO.id, formSectionTO.label, questions);
+      };
+
+      FormSection.toTransferObject = function(formSection) {
+        var formSectionTO, question, questions;
+        if (formSection.questions()) {
+          questions = (function() {
+            var _i, _len, _ref, _results;
+            _ref = formSection.questions();
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              question = _ref[_i];
+              _results.push(mygps.model.FormQuestion.toTransferObject(question));
+            }
+            return _results;
+          })();
+        }
+        formSectionTO = {
+          id: formSection.id(),
+          label: formSection.label(),
+          questions: questions
+        };
+        return formSectionTO;
+      };
+
+      return FormSection;
+
+    })()
+  });
+
+  namespace('mygps.model', {
+    ChallengeReferral: ChallengeReferral = (function() {
+
+      function ChallengeReferral(id, name, description, details) {
+        this.id = ko.observable(id);
+        this.name = ko.observable(name);
+        this.description = ko.observable(description);
+        this.details = ko.observable(details);
+      }
+
+      ChallengeReferral.createFromTransferObject = function(challengeReferralTO) {
+        return new ChallengeReferral(challengeReferralTO.id, challengeReferralTO.name, challengeReferralTO.description, challengeReferralTO.details);
+      };
+
+      return ChallengeReferral;
+
+    })()
+  });
+
+  namespace('mygps.model', {
     FormOption: FormOption = (function() {
 
       function FormOption(id, label, value) {
@@ -194,6 +403,39 @@
       return FormOption;
 
     })()
+  });
+
+  namespace('mygps.model', {
+    SelfHelpGuideContent: SelfHelpGuideContent = (function(_super) {
+
+      __extends(SelfHelpGuideContent, _super);
+
+      function SelfHelpGuideContent(id, name, description, introductoryText, questions) {
+        SelfHelpGuideContent.__super__.constructor.call(this, id, name, description);
+        this.introductoryText = ko.observable(introductoryText);
+        this.questions = ko.observableArray(questions);
+      }
+
+      SelfHelpGuideContent.createFromTransferObject = function(selfHelpGuideContentTO) {
+        var question, questions;
+        if (selfHelpGuideContentTO.questions != null) {
+          questions = (function() {
+            var _i, _len, _ref, _results;
+            _ref = selfHelpGuideContentTO.questions;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              question = _ref[_i];
+              _results.push(mygps.model.SelfHelpGuideQuestion.createFromTransferObject(question));
+            }
+            return _results;
+          })();
+        }
+        return new SelfHelpGuideContent(selfHelpGuideContentTO.id, selfHelpGuideContentTO.name, selfHelpGuideContentTO.description, selfHelpGuideContentTO.introductoryText, questions);
+      };
+
+      return SelfHelpGuideContent;
+
+    })(SelfHelpGuide)
   });
 
   namespace('mygps.model', {
@@ -336,248 +578,6 @@
     })()
   });
 
-  namespace('mygps.model', {
-    FormSection: FormSection = (function() {
-
-      function FormSection(id, label, questions) {
-        var question, _i, _len, _ref;
-        this.id = ko.observable(id);
-        this.label = ko.observable(label);
-        this.questions = ko.observableArray(questions);
-        this.valid = ko.dependentObservable(this.evaluateValid, this);
-        this.form = ko.observable(null);
-        _ref = this.questions();
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          question = _ref[_i];
-          question.section(this);
-        }
-      }
-
-      FormSection.prototype.evaluateValid = function() {
-        return !_.any(this.questions(), function(question) {
-          return !question.valid();
-        });
-      };
-
-      FormSection.prototype.validate = function() {
-        var question, _i, _len, _ref;
-        _ref = this.questions();
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          question = _ref[_i];
-          question.validate();
-        }
-      };
-
-      FormSection.createFromTransferObject = function(formSectionTO) {
-        var question, questions;
-        if (formSectionTO.questions != null) {
-          questions = (function() {
-            var _i, _len, _ref, _results;
-            _ref = formSectionTO.questions;
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              question = _ref[_i];
-              _results.push(mygps.model.FormQuestion.createFromTransferObject(question));
-            }
-            return _results;
-          })();
-        }
-        return new FormSection(formSectionTO.id, formSectionTO.label, questions);
-      };
-
-      FormSection.toTransferObject = function(formSection) {
-        var formSectionTO, question, questions;
-        if (formSection.questions()) {
-          questions = (function() {
-            var _i, _len, _ref, _results;
-            _ref = formSection.questions();
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              question = _ref[_i];
-              _results.push(mygps.model.FormQuestion.toTransferObject(question));
-            }
-            return _results;
-          })();
-        }
-        formSectionTO = {
-          id: formSection.id(),
-          label: formSection.label(),
-          questions: questions
-        };
-        return formSectionTO;
-      };
-
-      return FormSection;
-
-    })()
-  });
-
-  namespace('mygps.model', {
-    Person: Person = (function() {
-
-      function Person(id, firstName, lastName, phoneNumber, emailAddress, photoURL, coach) {
-        this.id = ko.observable(id);
-        this.firstName = ko.observable(firstName);
-        this.lastName = ko.observable(lastName);
-        this.phoneNumber = ko.observable(phoneNumber);
-        this.photoURL = ko.observable(photoURL);
-        this.coach = ko.observable(coach);
-      }
-
-      Person.createFromTransferObject = function(personTO) {
-        var coach;
-        if (personTO.coach != null) {
-          coach = mygps.model.Person.createFromTransferObject(personTO.coach);
-        }
-        return new Person(personTO.id, personTO.firstName, personTO.lastName, personTO.phoneNumber, personTO.emailAddress, personTO.photoURL, coach);
-      };
-
-      return Person;
-
-    })()
-  });
-
-  namespace('mygps.model', {
-    SelfHelpGuide: SelfHelpGuide = (function() {
-
-      function SelfHelpGuide(id, name, description) {
-        this.id = ko.observable(id);
-        this.name = ko.observable(name);
-        this.description = ko.observable(description);
-      }
-
-      SelfHelpGuide.createFromTransferObject = function(selfHelpGuideTO) {
-        return new SelfHelpGuide(selfHelpGuideTO.id, selfHelpGuideTO.name, selfHelpGuideTO.description);
-      };
-
-      return SelfHelpGuide;
-
-    })()
-  });
-
-  namespace('mygps.model', {
-    SelfHelpGuideContent: SelfHelpGuideContent = (function(_super) {
-
-      __extends(SelfHelpGuideContent, _super);
-
-      function SelfHelpGuideContent(id, name, description, introductoryText, questions) {
-        SelfHelpGuideContent.__super__.constructor.call(this, id, name, description);
-        this.introductoryText = ko.observable(introductoryText);
-        this.questions = ko.observableArray(questions);
-      }
-
-      SelfHelpGuideContent.createFromTransferObject = function(selfHelpGuideContentTO) {
-        var question, questions;
-        if (selfHelpGuideContentTO.questions != null) {
-          questions = (function() {
-            var _i, _len, _ref, _results;
-            _ref = selfHelpGuideContentTO.questions;
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              question = _ref[_i];
-              _results.push(mygps.model.SelfHelpGuideQuestion.createFromTransferObject(question));
-            }
-            return _results;
-          })();
-        }
-        return new SelfHelpGuideContent(selfHelpGuideContentTO.id, selfHelpGuideContentTO.name, selfHelpGuideContentTO.description, selfHelpGuideContentTO.introductoryText, questions);
-      };
-
-      return SelfHelpGuideContent;
-
-    })(SelfHelpGuide)
-  });
-
-  namespace('mygps.model', {
-    SelfHelpGuideQuestion: SelfHelpGuideQuestion = (function() {
-
-      function SelfHelpGuideQuestion(id, headingText, descriptionText, questionText, mandatory) {
-        this.id = ko.observable(id);
-        this.headingText = ko.observable(headingText);
-        this.descriptionText = ko.observable(descriptionText);
-        this.questionText = ko.observable(questionText);
-        this.mandatory = ko.observable(mandatory);
-        this.response = ko.observable(null);
-      }
-
-      SelfHelpGuideQuestion.createFromTransferObject = function(selfHelpGuideQuestionTO) {
-        return new SelfHelpGuideQuestion(selfHelpGuideQuestionTO.id, selfHelpGuideQuestionTO.headingText, selfHelpGuideQuestionTO.challenge.selfHelpGuideDescription, selfHelpGuideQuestionTO.challenge.selfHelpGuideQuestion, selfHelpGuideQuestionTO.mandatory);
-      };
-
-      return SelfHelpGuideQuestion;
-
-    })()
-  });
-
-  namespace('mygps.model', {
-    SelfHelpGuideResponse: SelfHelpGuideResponse = (function() {
-
-      function SelfHelpGuideResponse(id, summaryText, challengesIdentified, triggeredEarlyAlert) {
-        this.id = ko.observable(id);
-        this.summaryText = ko.observable(summaryText);
-        this.challengesIdentified = ko.observable(challengesIdentified);
-        this.triggeredEarlyAlert = ko.observable(triggeredEarlyAlert);
-      }
-
-      SelfHelpGuideResponse.createFromTransferObject = function(selfHelpGuideResponseTO) {
-        var challengeIdentified, challengesIdentified;
-        if (selfHelpGuideResponseTO.challengesIdentified != null) {
-          challengesIdentified = (function() {
-            var _i, _len, _ref, _results;
-            _ref = selfHelpGuideResponseTO.challengesIdentified;
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              challengeIdentified = _ref[_i];
-              _results.push(mygps.model.Challenge.createFromTransferObject(challengeIdentified));
-            }
-            return _results;
-          })();
-        }
-        return new SelfHelpGuideResponse(selfHelpGuideResponseTO.id, selfHelpGuideResponseTO.summaryText, challengesIdentified, selfHelpGuideResponseTO.triggeredEarlyAlert);
-      };
-
-      return SelfHelpGuideResponse;
-
-    })()
-  });
-
-  namespace('mygps.model', {
-    Task: Task = (function() {
-
-      function Task(id, type, name, description, link, details, dueDate, completed, deletable, challengeId, challengeReferralId) {
-        this.id = ko.observable(id);
-        this.type = ko.observable(type);
-        this.name = ko.observable(name);
-        this.description = ko.observable(description);
-        this.details = ko.observable(details);
-        this.dueDate = ko.observable(dueDate);
-        this.completed = ko.observable(completed);
-        this.link = ko.observable(link);
-        this.deletable = ko.observable(deletable);
-        this.challengeId = ko.observable(challengeId);
-        this.challengeReferralId = ko.observable(challengeReferralId);
-      }
-
-      Task.createFromTransferObject = function(taskTO) {
-        var parseDate;
-        parseDate = function(msSinceEpoch) {
-          var d;
-          if (msSinceEpoch != null) {
-            d = new Date(msSinceEpoch);
-            d.setTime(d.getTime() + (d.getTimezoneOffset() * 60 * 1000));
-            return d;
-          } else {
-            return null;
-          }
-        };
-        return new Task(taskTO.id, taskTO.type, taskTO.name, taskTO.description, taskTO.link, taskTO.details, parseDate(taskTO.dueDate), taskTO.completed, taskTO.deletable, taskTO.challengeId, taskTO.challengeReferralId);
-      };
-
-      return Task;
-
-    })()
-  });
-
   namespace('mygps.session', {
     Session: Session = (function() {
 
@@ -601,120 +601,6 @@
       return Session;
 
     })()
-  });
-
-  namespace('mygps.service', {
-    AbstractService: AbstractService = (function() {
-
-      function AbstractService(baseURL) {
-        this.baseURL = baseURL;
-      }
-
-      AbstractService.prototype.createURL = function(value) {
-        var _ref;
-        return '/ssp/MyGPS/' + ("" + ((_ref = this.baseURL) != null ? _ref : '') + value);
-      };
-
-      return AbstractService;
-
-    })()
-  });
-
-  namespace('mygps.service', {
-    ChallengeReferralService: ChallengeReferralService = (function(_super) {
-
-      __extends(ChallengeReferralService, _super);
-
-      function ChallengeReferralService(baseURL) {
-        ChallengeReferralService.__super__.constructor.call(this, baseURL);
-      }
-
-      ChallengeReferralService.prototype.getByChallengeId = function(challengeId, callbacks) {
-        return $.ajax({
-          url: this.createURL("/getByChallengeId?challengeId=" + challengeId),
-          dataType: "json",
-          success: function(result) {
-            var challengeReferral, challengeReferrals;
-            challengeReferrals = (function() {
-              var _i, _len, _results;
-              _results = [];
-              for (_i = 0, _len = result.length; _i < _len; _i++) {
-                challengeReferral = result[_i];
-                _results.push(mygps.model.ChallengeReferral.createFromTransferObject(challengeReferral));
-              }
-              return _results;
-            })();
-            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(challengeReferrals) : void 0 : void 0;
-          },
-          error: function(fault) {
-            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-          }
-        });
-      };
-
-      ChallengeReferralService.prototype.search = function(challengeId, query, callbacks) {
-        return $.ajax({
-          url: this.createURL("/search?challengeId=" + challengeId + "&query=" + query),
-          dataType: "json",
-          success: function(result) {
-            var challengeReferral, challengeReferrals;
-            challengeReferrals = (function() {
-              var _i, _len, _results;
-              _results = [];
-              for (_i = 0, _len = result.length; _i < _len; _i++) {
-                challengeReferral = result[_i];
-                _results.push(mygps.model.ChallengeReferral.createFromTransferObject(challengeReferral));
-              }
-              return _results;
-            })();
-            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(challengeReferrals) : void 0 : void 0;
-          },
-          error: function(fault) {
-            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-          }
-        });
-      };
-
-      return ChallengeReferralService;
-
-    })(mygps.service.AbstractService)
-  });
-
-  namespace('mygps.service', {
-    ChallengeService: ChallengeService = (function(_super) {
-
-      __extends(ChallengeService, _super);
-
-      function ChallengeService(baseURL) {
-        ChallengeService.__super__.constructor.call(this, baseURL);
-      }
-
-      ChallengeService.prototype.search = function(query, callbacks) {
-        return $.ajax({
-          url: this.createURL("/search?query=" + query),
-          dataType: "json",
-          success: function(result) {
-            var challenge, challenges;
-            challenges = (function() {
-              var _i, _len, _results;
-              _results = [];
-              for (_i = 0, _len = result.length; _i < _len; _i++) {
-                challenge = result[_i];
-                _results.push(mygps.model.Challenge.createFromTransferObject(challenge));
-              }
-              return _results;
-            })();
-            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(challenges) : void 0 : void 0;
-          },
-          error: function(fault) {
-            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-          }
-        });
-      };
-
-      return ChallengeService;
-
-    })(mygps.service.AbstractService)
   });
 
   namespace('mygps.service', {
@@ -745,239 +631,6 @@
       };
 
       return MessageService;
-
-    })(mygps.service.AbstractService)
-  });
-
-  namespace('mygps.service', {
-    SelfHelpGuideResponseService: SelfHelpGuideResponseService = (function(_super) {
-
-      __extends(SelfHelpGuideResponseService, _super);
-
-      function SelfHelpGuideResponseService(baseURL) {
-        SelfHelpGuideResponseService.__super__.constructor.call(this, baseURL);
-      }
-
-      SelfHelpGuideResponseService.prototype.cancel = function(selfHelpGuideResponseId, callbacks) {
-        return $.ajax({
-          url: this.createURL("/cancel?selfHelpGuideResponseId=" + selfHelpGuideResponseId),
-          dataType: "json",
-          success: function(result) {
-            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
-          },
-          error: function(fault) {
-            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-          }
-        });
-      };
-
-      SelfHelpGuideResponseService.prototype.complete = function(selfHelpGuideResponseId, callbacks) {
-        return $.ajax({
-          url: this.createURL("/complete?selfHelpGuideResponseId=" + selfHelpGuideResponseId),
-          dataType: "json",
-          success: function(result) {
-            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
-          },
-          error: function(fault) {
-            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-          }
-        });
-      };
-
-      SelfHelpGuideResponseService.prototype.getById = function(selfHelpGuideResponseId, callbacks) {
-        return $.ajax({
-          url: this.createURL("/getById?selfHelpGuideResponseId=" + selfHelpGuideResponseId),
-          dataType: "json",
-          success: function(result) {
-            var selfHelpGuideResponse;
-            selfHelpGuideResponse = mygps.model.SelfHelpGuideResponse.createFromTransferObject(result);
-            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(selfHelpGuideResponse) : void 0 : void 0;
-          },
-          error: function(fault) {
-            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-          }
-        });
-      };
-
-      SelfHelpGuideResponseService.prototype.initiate = function(selfHelpGuideId, callbacks) {
-        return $.ajax({
-          url: this.createURL("/initiate?selfHelpGuideId=" + selfHelpGuideId),
-          dataType: "text",
-          success: function(result) {
-            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
-          },
-          error: function(fault) {
-            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-          }
-        });
-      };
-
-      SelfHelpGuideResponseService.prototype.answer = function(selfHelpGuideResponseId, selfHelpGuideQuestionId, response, callbacks) {
-        return $.ajax({
-          url: this.createURL("/answer?selfHelpGuideResponseId=" + selfHelpGuideResponseId + "&selfHelpGuideQuestionId=" + selfHelpGuideQuestionId + "&response=" + response),
-          dataType: "json",
-          success: function(result) {
-            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
-          },
-          error: function(fault) {
-            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-          }
-        });
-      };
-
-      return SelfHelpGuideResponseService;
-
-    })(mygps.service.AbstractService)
-  });
-
-  namespace('mygps.service', {
-    SelfHelpGuideService: SelfHelpGuideService = (function(_super) {
-
-      __extends(SelfHelpGuideService, _super);
-
-      function SelfHelpGuideService(baseURL) {
-        SelfHelpGuideService.__super__.constructor.call(this, baseURL);
-      }
-
-      SelfHelpGuideService.prototype.getAll = function(callbacks) {
-        return $.ajax({
-          url: this.createURL("/getAll"),
-          dataType: "json",
-          success: function(result) {
-            var selfHelpGuide, selfHelpGuides;
-            selfHelpGuides = (function() {
-              var _i, _len, _results;
-              _results = [];
-              for (_i = 0, _len = result.length; _i < _len; _i++) {
-                selfHelpGuide = result[_i];
-                _results.push(mygps.model.SelfHelpGuide.createFromTransferObject(selfHelpGuide));
-              }
-              return _results;
-            })();
-            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(selfHelpGuides) : void 0 : void 0;
-          },
-          error: function(fault) {
-            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-          }
-        });
-      };
-
-      SelfHelpGuideService.prototype.getBySelfHelpGuideGroup = function(selfHelpGuideGroupId, callbacks) {
-        return $.ajax({
-          url: this.createURL("/getBySelfHelpGuideGroup?selfHelpGuideGroupId=" + selfHelpGuideGroupId),
-          dataType: "json",
-          success: function(result) {
-            var selfHelpGuide, selfHelpGuides;
-            selfHelpGuides = (function() {
-              var _i, _len, _results;
-              _results = [];
-              for (_i = 0, _len = result.length; _i < _len; _i++) {
-                selfHelpGuide = result[_i];
-                _results.push(mygps.model.SelfHelpGuide.createFromTransferObject(selfHelpGuide));
-              }
-              return _results;
-            })();
-            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(selfHelpGuides) : void 0 : void 0;
-          },
-          error: function(fault) {
-            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-          }
-        });
-      };
-
-      SelfHelpGuideService.prototype.getContentById = function(selfHelpGuideId, callbacks) {
-        return $.ajax({
-          url: this.createURL("/getContentById?selfHelpGuideId=" + selfHelpGuideId),
-          dataType: "json",
-          success: function(result) {
-            var selfHelpGuideContent;
-            selfHelpGuideContent = mygps.model.SelfHelpGuideContent.createFromTransferObject(result);
-            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(selfHelpGuideContent) : void 0 : void 0;
-          },
-          error: function(fault) {
-            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-          }
-        });
-      };
-
-      return SelfHelpGuideService;
-
-    })(mygps.service.AbstractService)
-  });
-
-  namespace('mygps.service', {
-    SessionService: SessionService = (function(_super) {
-
-      __extends(SessionService, _super);
-
-      function SessionService(baseURL) {
-        SessionService.__super__.constructor.call(this, baseURL);
-      }
-
-      SessionService.prototype.getAuthenticatedPerson = function(callbacks) {
-        return $.ajax({
-          url: this.createURL("/getAuthenticatedPerson"),
-          dataType: "json",
-          success: function(result) {
-            var person;
-            if (result) {
-              person = mygps.model.Person.createFromTransferObject(result);
-            } else {
-              person = null;
-            }
-            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(person) : void 0 : void 0;
-          },
-          error: function(fault) {
-            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-          }
-        });
-      };
-
-      return SessionService;
-
-    })(mygps.service.AbstractService)
-  });
-
-  namespace('mygps.service', {
-    StudentIntakeService: StudentIntakeService = (function(_super) {
-
-      __extends(StudentIntakeService, _super);
-
-      function StudentIntakeService(baseURL) {
-        StudentIntakeService.__super__.constructor.call(this, baseURL);
-      }
-
-      StudentIntakeService.prototype.getForm = function(callbacks) {
-        return $.ajax({
-          url: this.createURL("/getForm"),
-          dataType: "json",
-          success: function(result) {
-            var form;
-            form = mygps.model.Form.createFromTransferObject(result);
-            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(form) : void 0 : void 0;
-          },
-          error: function(fault) {
-            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-          }
-        });
-      };
-
-      StudentIntakeService.prototype.saveForm = function(form, callbacks) {
-        return $.ajax({
-          url: this.createURL("/"),
-          type: "POST",
-          data: JSON.stringify(mygps.model.Form.toTransferObject(form)),
-          contentType: "application/json",
-          success: function(result) {
-            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
-          },
-          error: function(fault) {
-            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-          }
-        });
-      };
-
-      return StudentIntakeService;
 
     })(mygps.service.AbstractService)
   });
@@ -1106,347 +759,461 @@
     })(mygps.service.AbstractService)
   });
 
-  namespace('mygps.viewmodel', {
-    AbstractSessionViewModel: AbstractSessionViewModel = (function() {
+  namespace('mygps.service', {
+    StudentIntakeService: StudentIntakeService = (function(_super) {
 
-      function AbstractSessionViewModel(session) {
-        this.session = session;
-        this.authenticated = ko.dependentObservable(this.evaluateAuthenticated, this);
-        this.authenticatedPersonName = ko.dependentObservable(this.authenticatedPersonName, this);
+      __extends(StudentIntakeService, _super);
+
+      function StudentIntakeService(baseURL) {
+        StudentIntakeService.__super__.constructor.call(this, baseURL);
       }
 
-      AbstractSessionViewModel.prototype.load = function() {};
+      StudentIntakeService.prototype.getForm = function(callbacks) {
+        return $.ajax({
+          url: this.createURL("/getForm"),
+          dataType: "json",
+          success: function(result) {
+            var form;
+            form = mygps.model.Form.createFromTransferObject(result);
+            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(form) : void 0 : void 0;
+          },
+          error: function(fault) {
+            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
+          }
+        });
+      };
 
-      AbstractSessionViewModel.prototype.evaluateAuthenticated = function() {
+      StudentIntakeService.prototype.saveForm = function(form, callbacks) {
+        return $.ajax({
+          url: this.createURL("/"),
+          type: "POST",
+          data: JSON.stringify(mygps.model.Form.toTransferObject(form)),
+          contentType: "application/json",
+          success: function(result) {
+            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
+          },
+          error: function(fault) {
+            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
+          }
+        });
+      };
+
+      return StudentIntakeService;
+
+    })(mygps.service.AbstractService)
+  });
+
+  namespace('mygps.service', {
+    SelfHelpGuideResponseService: SelfHelpGuideResponseService = (function(_super) {
+
+      __extends(SelfHelpGuideResponseService, _super);
+
+      function SelfHelpGuideResponseService(baseURL) {
+        SelfHelpGuideResponseService.__super__.constructor.call(this, baseURL);
+      }
+
+      SelfHelpGuideResponseService.prototype.cancel = function(selfHelpGuideResponseId, callbacks) {
+        return $.ajax({
+          url: this.createURL("/cancel?selfHelpGuideResponseId=" + selfHelpGuideResponseId),
+          dataType: "json",
+          success: function(result) {
+            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
+          },
+          error: function(fault) {
+            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
+          }
+        });
+      };
+
+      SelfHelpGuideResponseService.prototype.complete = function(selfHelpGuideResponseId, callbacks) {
+        return $.ajax({
+          url: this.createURL("/complete?selfHelpGuideResponseId=" + selfHelpGuideResponseId),
+          dataType: "json",
+          success: function(result) {
+            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
+          },
+          error: function(fault) {
+            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
+          }
+        });
+      };
+
+      SelfHelpGuideResponseService.prototype.getById = function(selfHelpGuideResponseId, callbacks) {
+        return $.ajax({
+          url: this.createURL("/getById?selfHelpGuideResponseId=" + selfHelpGuideResponseId),
+          dataType: "json",
+          success: function(result) {
+            var selfHelpGuideResponse;
+            selfHelpGuideResponse = mygps.model.SelfHelpGuideResponse.createFromTransferObject(result);
+            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(selfHelpGuideResponse) : void 0 : void 0;
+          },
+          error: function(fault) {
+            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
+          }
+        });
+      };
+
+      SelfHelpGuideResponseService.prototype.initiate = function(selfHelpGuideId, callbacks) {
+        return $.ajax({
+          url: this.createURL("/initiate?selfHelpGuideId=" + selfHelpGuideId),
+          dataType: "text",
+          success: function(result) {
+            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
+          },
+          error: function(fault) {
+            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
+          }
+        });
+      };
+
+      SelfHelpGuideResponseService.prototype.answer = function(selfHelpGuideResponseId, selfHelpGuideQuestionId, response, callbacks) {
+        return $.ajax({
+          url: this.createURL("/answer?selfHelpGuideResponseId=" + selfHelpGuideResponseId + "&selfHelpGuideQuestionId=" + selfHelpGuideQuestionId + "&response=" + response),
+          dataType: "json",
+          success: function(result) {
+            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
+          },
+          error: function(fault) {
+            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
+          }
+        });
+      };
+
+      return SelfHelpGuideResponseService;
+
+    })(mygps.service.AbstractService)
+  });
+
+  namespace('mygps.service', {
+    ChallengeReferralService: ChallengeReferralService = (function(_super) {
+
+      __extends(ChallengeReferralService, _super);
+
+      function ChallengeReferralService(baseURL) {
+        ChallengeReferralService.__super__.constructor.call(this, baseURL);
+      }
+
+      ChallengeReferralService.prototype.getByChallengeId = function(challengeId, callbacks) {
+        return $.ajax({
+          url: this.createURL("/getByChallengeId?challengeId=" + challengeId),
+          dataType: "json",
+          success: function(result) {
+            var challengeReferral, challengeReferrals;
+            challengeReferrals = (function() {
+              var _i, _len, _results;
+              _results = [];
+              for (_i = 0, _len = result.length; _i < _len; _i++) {
+                challengeReferral = result[_i];
+                _results.push(mygps.model.ChallengeReferral.createFromTransferObject(challengeReferral));
+              }
+              return _results;
+            })();
+            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(challengeReferrals) : void 0 : void 0;
+          },
+          error: function(fault) {
+            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
+          }
+        });
+      };
+
+      ChallengeReferralService.prototype.search = function(challengeId, query, callbacks) {
+        return $.ajax({
+          url: this.createURL("/search?challengeId=" + challengeId + "&query=" + query),
+          dataType: "json",
+          success: function(result) {
+            var challengeReferral, challengeReferrals;
+            challengeReferrals = (function() {
+              var _i, _len, _results;
+              _results = [];
+              for (_i = 0, _len = result.length; _i < _len; _i++) {
+                challengeReferral = result[_i];
+                _results.push(mygps.model.ChallengeReferral.createFromTransferObject(challengeReferral));
+              }
+              return _results;
+            })();
+            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(challengeReferrals) : void 0 : void 0;
+          },
+          error: function(fault) {
+            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
+          }
+        });
+      };
+
+      return ChallengeReferralService;
+
+    })(mygps.service.AbstractService)
+  });
+
+  namespace('mygps.service', {
+    SelfHelpGuideService: SelfHelpGuideService = (function(_super) {
+
+      __extends(SelfHelpGuideService, _super);
+
+      function SelfHelpGuideService(baseURL) {
+        SelfHelpGuideService.__super__.constructor.call(this, baseURL);
+      }
+
+      SelfHelpGuideService.prototype.getAll = function(callbacks) {
+        return $.ajax({
+          url: this.createURL("/getAll"),
+          dataType: "json",
+          success: function(result) {
+            var selfHelpGuide, selfHelpGuides;
+            selfHelpGuides = (function() {
+              var _i, _len, _results;
+              _results = [];
+              for (_i = 0, _len = result.length; _i < _len; _i++) {
+                selfHelpGuide = result[_i];
+                _results.push(mygps.model.SelfHelpGuide.createFromTransferObject(selfHelpGuide));
+              }
+              return _results;
+            })();
+            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(selfHelpGuides) : void 0 : void 0;
+          },
+          error: function(fault) {
+            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
+          }
+        });
+      };
+
+      SelfHelpGuideService.prototype.getBySelfHelpGuideGroup = function(selfHelpGuideGroupId, callbacks) {
+        return $.ajax({
+          url: this.createURL("/getBySelfHelpGuideGroup?selfHelpGuideGroupId=" + selfHelpGuideGroupId),
+          dataType: "json",
+          success: function(result) {
+            var selfHelpGuide, selfHelpGuides;
+            selfHelpGuides = (function() {
+              var _i, _len, _results;
+              _results = [];
+              for (_i = 0, _len = result.length; _i < _len; _i++) {
+                selfHelpGuide = result[_i];
+                _results.push(mygps.model.SelfHelpGuide.createFromTransferObject(selfHelpGuide));
+              }
+              return _results;
+            })();
+            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(selfHelpGuides) : void 0 : void 0;
+          },
+          error: function(fault) {
+            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
+          }
+        });
+      };
+
+      SelfHelpGuideService.prototype.getContentById = function(selfHelpGuideId, callbacks) {
+        return $.ajax({
+          url: this.createURL("/getContentById?selfHelpGuideId=" + selfHelpGuideId),
+          dataType: "json",
+          success: function(result) {
+            var selfHelpGuideContent;
+            selfHelpGuideContent = mygps.model.SelfHelpGuideContent.createFromTransferObject(result);
+            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(selfHelpGuideContent) : void 0 : void 0;
+          },
+          error: function(fault) {
+            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
+          }
+        });
+      };
+
+      return SelfHelpGuideService;
+
+    })(mygps.service.AbstractService)
+  });
+
+  namespace('mygps.service', {
+    ChallengeService: ChallengeService = (function(_super) {
+
+      __extends(ChallengeService, _super);
+
+      function ChallengeService(baseURL) {
+        ChallengeService.__super__.constructor.call(this, baseURL);
+      }
+
+      ChallengeService.prototype.search = function(query, callbacks) {
+        return $.ajax({
+          url: this.createURL("/search?query=" + query),
+          dataType: "json",
+          success: function(result) {
+            var challenge, challenges;
+            challenges = (function() {
+              var _i, _len, _results;
+              _results = [];
+              for (_i = 0, _len = result.length; _i < _len; _i++) {
+                challenge = result[_i];
+                _results.push(mygps.model.Challenge.createFromTransferObject(challenge));
+              }
+              return _results;
+            })();
+            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(challenges) : void 0 : void 0;
+          },
+          error: function(fault) {
+            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
+          }
+        });
+      };
+
+      return ChallengeService;
+
+    })(mygps.service.AbstractService)
+  });
+
+  namespace('mygps.service', {
+    AbstractService: AbstractService = (function() {
+
+      function AbstractService(baseURL) {
+        this.baseURL = baseURL;
+      }
+
+      AbstractService.prototype.createURL = function(value) {
         var _ref;
-        return ((_ref = this.session) != null ? _ref.authenticatedPerson() : void 0) != null;
+        return '/ssp/MyGPS/' + ("" + ((_ref = this.baseURL) != null ? _ref : '') + value);
       };
 
-      AbstractSessionViewModel.prototype.authenticatedPersonName = function() {
-        var person, _ref;
-        person = (_ref = this.session) != null ? _ref.authenticatedPerson() : void 0;
-        if (person != null) {
-          return "" + (person.firstName()) + " " + (person.lastName());
-        }
-        return null;
-      };
-
-      return AbstractSessionViewModel;
+      return AbstractService;
 
     })()
   });
 
-  namespace('mygps.viewmodel', {
-    AbstractTasksViewModel: AbstractTasksViewModel = (function(_super) {
+  namespace('mygps.service', {
+    SessionService: SessionService = (function(_super) {
 
-      __extends(AbstractTasksViewModel, _super);
+      __extends(SessionService, _super);
 
-      function AbstractTasksViewModel(session, taskService) {
-        AbstractTasksViewModel.__super__.constructor.call(this, session);
-        this.taskService = taskService;
-        this.tasks = ko.observableArray([]);
-        this.taskFilters = ko.observableArray(mygps.enumeration.TaskFilter.enumerators);
-        this.selectedTaskFilter = ko.observable(mygps.enumeration.TaskFilter.ACTIVE);
-        this.filteredTasks = ko.dependentObservable(this.filterTasks, this);
-        this.printingTasks = ko.observable(false);
-        this.emailingTasks = ko.observable(false);
+      function SessionService(baseURL) {
+        SessionService.__super__.constructor.call(this, baseURL);
       }
 
-      AbstractTasksViewModel.prototype.load = function() {
-        AbstractTasksViewModel.__super__.load.call(this);
-        this.loadAllTasks();
-      };
-
-      AbstractTasksViewModel.prototype.formatDate = function(value) {
-        var now;
-        if (value != null) {
-          now = new Date();
-          if (value.getFullYear() === now.getFullYear()) {
-            return "" + (value.getMonth() + 1) + "/" + (value.getDate());
-          } else {
-            return "" + (value.getMonth() + 1) + "/" + (value.getDate()) + "/" + (("" + value.getFullYear()).substring(2));
-          }
-        }
-        return "";
-      };
-
-      AbstractTasksViewModel.prototype.filterTasks = function() {
-        return _.select(this.tasks(), this.selectedTaskFilter().filterFunction);
-      };
-
-      AbstractTasksViewModel.prototype.loadAllTasks = function() {
-        var _this = this;
-        this.taskService.getAll({
-          result: function(result) {
-            return _this.tasks(result);
-          },
-          fault: function(fault) {
-            return alert(fault.responseText);
-          }
-        });
-      };
-
-      AbstractTasksViewModel.prototype.selectTaskFilter = function(taskFilter) {
-        this.selectedTaskFilter(taskFilter);
-      };
-
-      AbstractTasksViewModel.prototype.createCustomTask = function(name, description, callbacks) {
-        var _this = this;
-        this.taskService.createCustom(name, description, {
-          result: function(result) {
-            _this.tasks.push(result);
-            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
-          },
-          fault: function(fault) {
-            alert(fault.responseText);
-            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-          }
-        });
-      };
-
-      AbstractTasksViewModel.prototype.createTaskForChallengeReferral = function(challenge, challengeReferral) {
-        var _this = this;
-        this.taskService.createForChallengeReferral(challenge.id(), challengeReferral.id(), {
-          result: function(result) {
-            return _this.tasks.push(result);
-          },
-          fault: function(fault) {
-            return alert(fault.responseText);
-          }
-        });
-      };
-
-      AbstractTasksViewModel.prototype.createTaskForChallengeReferral = function(challenge, challengeReferral, callbacks) {
-        var _this = this;
-        this.taskService.createForChallengeReferral(challenge.id(), challengeReferral.id(), {
-          result: function(result) {
-            _this.tasks.push(result);
-            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
-          },
-          fault: function(fault) {
-            alert(fault.responseText);
-            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-          }
-        });
-      };
-
-      AbstractTasksViewModel.prototype.markTask = function(task, complete) {
-        var _this = this;
-        this.taskService.mark(task.id(), complete, {
-          result: function(result) {
-            return task.completed(complete);
-          },
-          fault: function(fault) {
-            return alert(fault.responseText);
-          }
-        });
-      };
-
-      AbstractTasksViewModel.prototype.deleteTask = function(task) {
-        var _this = this;
-        this.taskService["delete"](task.id(), {
-          result: function(result) {
-            return _this.tasks.remove(task);
-          },
-          fault: function(fault) {
-            return alert(fault.responseText);
-          }
-        });
-      };
-
-      AbstractTasksViewModel.prototype.deleteTask = function(task, callbacks) {
-        var _this = this;
-        this.taskService["delete"](task.id(), {
-          result: function(result) {
-            _this.tasks.remove(task);
-            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
-          },
-          fault: function(fault) {
-            alert(fault.responseText);
-            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-          }
-        });
-      };
-
-      AbstractTasksViewModel.prototype.printTasks = function() {
-        var _this = this;
-        this.printingTasks(true);
-        this.taskService.print({
-          result: function(result) {
-            return _this.printingTasks(false);
-          },
-          fault: function(fault) {
-            alert(fault.responseText);
-            return _this.printingTasks(false);
-          }
-        });
-      };
-
-      AbstractTasksViewModel.prototype.emailTasks = function(emailAddress) {
-        var _this = this;
-        this.emailingTasks(true);
-        this.taskService.email(emailAddress, {
-          result: function(result) {
-            return _this.emailingTasks(false);
-          },
-          fault: function(result) {
-            alert(fault.responseText);
-            return _this.emailingTasks(false);
-          }
-        });
-      };
-
-      AbstractTasksViewModel.prototype.collectEmailAddress = function() {
-        var _this = this;
-        apprise('E-mail address:', {
-          'input': true,
-          'validation': function(value) {
-            if (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) || value === '') {
-              return 'true';
+      SessionService.prototype.getAuthenticatedPerson = function(callbacks) {
+        return $.ajax({
+          url: this.createURL("/getAuthenticatedPerson"),
+          dataType: "json",
+          success: function(result) {
+            var person;
+            if (result) {
+              person = mygps.model.Person.createFromTransferObject(result);
             } else {
-              return 'invalid email address';
+              person = null;
             }
-          }
-        }, function(result) {
-          if (result) {
-            return _this.emailTasks(result);
+            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(person) : void 0 : void 0;
+          },
+          error: function(fault) {
+            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
           }
         });
       };
 
-      return AbstractTasksViewModel;
+      return SessionService;
 
-    })(mygps.viewmodel.AbstractSessionViewModel)
+    })(mygps.service.AbstractService)
   });
 
   namespace('mygps.viewmodel', {
-    ChallengeReferralSearchViewModel: ChallengeReferralSearchViewModel = (function(_super) {
+    StudentIntakeViewModel: StudentIntakeViewModel = (function(_super) {
 
-      __extends(ChallengeReferralSearchViewModel, _super);
+      __extends(StudentIntakeViewModel, _super);
 
-      function ChallengeReferralSearchViewModel(session, taskService, challengeService, challengeReferralService) {
-        ChallengeReferralSearchViewModel.__super__.constructor.call(this, session, taskService);
-        this.challengeService = challengeService;
-        this.challengeReferralService = challengeReferralService;
-        this.query = ko.observable(null);
-        this.challenges = ko.observableArray();
-        this.selectedChallenge = ko.observable(null);
-        this.selectedChallengeName = ko.dependentObservable(this.evaluateSelectedChallengeName, this);
-        this.referrals = ko.dependentObservable(this.evaluateReferrals, this);
-        this.filteredReferrals = ko.dependentObservable(this.filterReferrals, this);
-        this.allowCustomTaskCreation = ko.observable(false);
+      function StudentIntakeViewModel(session, studentIntakeService) {
+        StudentIntakeViewModel.__super__.constructor.call(this, session);
+        this.studentIntakeService = studentIntakeService;
+        this.form = ko.observable(null);
+        this.savingForm = ko.observable(false);
+        this.invalid = ko.observable(false);
+        this.currentSectionIndex = ko.observable(0);
+        this.currentSection = ko.dependentObservable(this.evaluateCurrentSection, this);
+        this.hasPreviousSection = ko.dependentObservable(this.evaluateHasPreviousSection, this);
+        this.hasNextSection = ko.dependentObservable(this.evaluateHasNextSection, this);
+        this.completed = ko.dependentObservable(this.evaluateCompleted, this);
       }
 
-      ChallengeReferralSearchViewModel.prototype.evaluateReferrals = function() {
-        var _ref;
-        return ((_ref = this.selectedChallenge()) != null ? _ref.challengeReferrals() : void 0) || [];
+      StudentIntakeViewModel.prototype.load = function() {
+        StudentIntakeViewModel.__super__.load.call(this);
+        this.loadForm();
       };
 
-      ChallengeReferralSearchViewModel.prototype.evaluateSelectedChallengeName = function() {
-        var _ref;
-        return (_ref = this.selectedChallenge()) != null ? _ref.name() : void 0;
+      StudentIntakeViewModel.prototype.evaluateCurrentSection = function() {
+        var _ref, _ref1;
+        return (_ref = this.form()) != null ? (_ref1 = _ref.sections()) != null ? _ref1[this.currentSectionIndex()] : void 0 : void 0;
       };
 
-      ChallengeReferralSearchViewModel.prototype.filterReferrals = function() {
+      StudentIntakeViewModel.prototype.evaluateCompleted = function() {
+        var _ref;
+        return (_ref = this.form()) != null ? _ref.completed() : void 0;
+      };
+
+      StudentIntakeViewModel.prototype.evaluateHasPreviousSection = function() {
+        if (this.form() != null) {
+          return this.currentSectionIndex() > 0;
+        }
+        return false;
+      };
+
+      StudentIntakeViewModel.prototype.evaluateHasNextSection = function() {
+        if (this.form() != null) {
+          return this.currentSectionIndex() < this.form().sections().length - 1;
+        }
+        return false;
+      };
+
+      StudentIntakeViewModel.prototype.loadForm = function() {
         var _this = this;
-        return _.select(this.referrals(), function(referral) {
-          return !_.any(_this.tasks(), function(task) {
-            return task.challengeReferralId() === referral.id() && !task.completed();
+        this.studentIntakeService.getForm({
+          result: function(result) {
+            return _this.form(result);
+          },
+          fault: function(fault) {
+            var _ref, _ref1;
+            return alert((_ref = (_ref1 = $.parseJSON(fault.responseText)) != null ? _ref1.message : void 0) != null ? _ref : fault.responseText);
+          }
+        });
+      };
+
+      StudentIntakeViewModel.prototype.saveForm = function(callbacks) {
+        var _this = this;
+        this.currentSection().validate();
+        if (this.currentSection().valid()) {
+          this.invalid(false);
+          this.savingForm(true);
+          this.studentIntakeService.saveForm(this.form(), {
+            result: function(result) {
+              _this.savingForm(false);
+              return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
+            },
+            fault: function(fault) {
+              _this.savingForm(false);
+              alert(fault.responseText);
+              return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
+            }
           });
-        });
-      };
-
-      ChallengeReferralSearchViewModel.prototype.load = function(query) {
-        if (query == null) {
-          query = "";
-        }
-        ChallengeReferralSearchViewModel.__super__.load.call(this);
-        this.search(query);
-      };
-
-      ChallengeReferralSearchViewModel.prototype.createTaskForChallengeReferral = function(challenge, challengeReferral) {
-        var _this = this;
-        ChallengeReferralSearchViewModel.__super__.createTaskForChallengeReferral.call(this, challenge, challengeReferral, {
-          result: function(result) {
-            return _this.refresh();
-          },
-          fault: function(fault) {
-            return alert(fault.responseText);
-          }
-        });
-      };
-
-      ChallengeReferralSearchViewModel.prototype.markTask = function(task, complete) {
-        ChallengeReferralSearchViewModel.__super__.markTask.call(this, task, complete);
-        this.refresh();
-      };
-
-      ChallengeReferralSearchViewModel.prototype.deleteTask = function(task) {
-        var _this = this;
-        ChallengeReferralSearchViewModel.__super__.deleteTask.call(this, task, {
-          result: function(result) {
-            return _this.refresh();
-          },
-          fault: function(fault) {
-            return alert(fault.responseText);
-          }
-        });
-      };
-
-      ChallengeReferralSearchViewModel.prototype.search = function(query) {
-        this.query(query);
-        this.reset();
-        if ((query != null)) {
-          this.searchChallenges(query);
+        } else {
+          this.invalid(true);
         }
       };
 
-      ChallengeReferralSearchViewModel.prototype.refresh = function() {
-        return this.searchChallenges(this.query());
+      StudentIntakeViewModel.prototype.moveToPreviousSection = function() {
+        if (this.hasPreviousSection()) {
+          this.currentSectionIndex(this.currentSectionIndex() - 1);
+          this.invalid(false);
+          return true;
+        }
+        return false;
       };
 
-      ChallengeReferralSearchViewModel.prototype.reset = function() {
-        this.challenges.removeAll();
-        return this.selectedChallenge(null);
-      };
-
-      ChallengeReferralSearchViewModel.prototype.selectChallenge = function(challenge) {
-        this.selectedChallenge(challenge);
-        if ((this.selectedChallenge() != null)) {
-          if (this.selectedChallenge().referralCount() > 0 && this.selectedChallenge().challengeReferrals().length === 0) {
-            return this.searchChallengeReferrals(this.selectedChallenge(), this.query());
+      StudentIntakeViewModel.prototype.moveToNextSection = function() {
+        if (this.hasNextSection()) {
+          this.currentSection().validate();
+          if (this.currentSection().valid()) {
+            this.invalid(false);
+            this.currentSectionIndex(this.currentSectionIndex() + 1);
+            return true;
+          } else {
+            this.invalid(true);
           }
         }
+        return false;
       };
 
-      ChallengeReferralSearchViewModel.prototype.searchChallenges = function(query) {
-        var _this = this;
-        this.challengeService.search(query, {
-          result: function(result) {
-            _this.challenges(result);
-            return _this.allowCustomTaskCreation(_this.challenges().length === 0);
-          },
-          fault: function(fault) {
-            return alert(fault.responseText);
-          }
-        });
-      };
+      return StudentIntakeViewModel;
 
-      ChallengeReferralSearchViewModel.prototype.searchChallengeReferrals = function(challenge, query) {
-        var _this = this;
-        return this.challengeReferralService.search(challenge.id(), query, {
-          result: function(result) {
-            return challenge.challengeReferrals(result);
-          },
-          fault: function(fault) {
-            return alert(fault.responseText);
-          }
-        });
-      };
-
-      return ChallengeReferralSearchViewModel;
-
-    })(mygps.viewmodel.AbstractTasksViewModel)
+    })(mygps.viewmodel.AbstractSessionViewModel)
   });
 
   namespace('mygps.viewmodel', {
@@ -1560,8 +1327,7 @@
           var values;
           values = ko.utils.unwrapObservable(valueAccessor());
           $(element).click(function() {
-            return window.open(ko.utils.unwrapObservable(values.url), "ChildWindow", "height=" + values.height + ",width=" + values.width +
-			", resizable=1, scrollbars=1");
+            return window.open(ko.utils.unwrapObservable(values.url), "ChildWindow", "height=" + values.height + ",width=" + values.width, "resizable=1, scrollbars=1");
           });
           return false;
         }
@@ -1570,68 +1336,6 @@
       return HomeViewModel;
 
     })(mygps.viewmodel.AbstractTasksViewModel)
-  });
-
-  namespace('mygps.viewmodel', {
-    LoginViewModel: LoginViewModel = (function() {
-
-      function LoginViewModel() {}
-
-      LoginViewModel.prototype.load = function() {};
-
-      return LoginViewModel;
-
-    })()
-  });
-
-  namespace('mygps.viewmodel', {
-    SelfHelpGuidesViewModel: SelfHelpGuidesViewModel = (function(_super) {
-
-      __extends(SelfHelpGuidesViewModel, _super);
-
-      function SelfHelpGuidesViewModel(session, selfHelpGuideService) {
-        SelfHelpGuidesViewModel.__super__.constructor.call(this, session);
-        this.selfHelpGuideService = selfHelpGuideService;
-        this.selfHelpGuides = ko.observableArray();
-      }
-
-      SelfHelpGuidesViewModel.prototype.load = function(selfHelpGuideGroupId) {
-        if (selfHelpGuideGroupId == null) {
-          selfHelpGuideGroupId = null;
-        }
-        SelfHelpGuidesViewModel.__super__.load.call(this);
-        this.loadSelfHelpGuides(selfHelpGuideGroupId);
-      };
-
-      SelfHelpGuidesViewModel.prototype.loadSelfHelpGuides = function(selfHelpGuideGroupId) {
-        var _this = this;
-        if (selfHelpGuideGroupId == null) {
-          selfHelpGuideGroupId = null;
-        }
-        if (selfHelpGuideGroupId != null) {
-          this.selfHelpGuideService.getBySelfHelpGuideGroup(selfHelpGuideGroupId, {
-            result: function(result) {
-              return _this.selfHelpGuides(result);
-            },
-            fault: function(fault) {
-              return alert(fault.responseText);
-            }
-          });
-        } else {
-          this.selfHelpGuideService.getAll({
-            result: function(result) {
-              return _this.selfHelpGuides(result);
-            },
-            fault: function(fault) {
-              return alert(fault.responseText);
-            }
-          });
-        }
-      };
-
-      return SelfHelpGuidesViewModel;
-
-    })(mygps.viewmodel.AbstractSessionViewModel)
   });
 
   namespace('mygps.viewmodel', {
@@ -1883,113 +1587,408 @@
   });
 
   namespace('mygps.viewmodel', {
-    StudentIntakeViewModel: StudentIntakeViewModel = (function(_super) {
+    SelfHelpGuidesViewModel: SelfHelpGuidesViewModel = (function(_super) {
 
-      __extends(StudentIntakeViewModel, _super);
+      __extends(SelfHelpGuidesViewModel, _super);
 
-      function StudentIntakeViewModel(session, studentIntakeService) {
-        StudentIntakeViewModel.__super__.constructor.call(this, session);
-        this.studentIntakeService = studentIntakeService;
-        this.form = ko.observable(null);
-        this.savingForm = ko.observable(false);
-        this.invalid = ko.observable(false);
-        this.currentSectionIndex = ko.observable(0);
-        this.currentSection = ko.dependentObservable(this.evaluateCurrentSection, this);
-        this.hasPreviousSection = ko.dependentObservable(this.evaluateHasPreviousSection, this);
-        this.hasNextSection = ko.dependentObservable(this.evaluateHasNextSection, this);
-        this.completed = ko.dependentObservable(this.evaluateCompleted, this);
+      function SelfHelpGuidesViewModel(session, selfHelpGuideService) {
+        SelfHelpGuidesViewModel.__super__.constructor.call(this, session);
+        this.selfHelpGuideService = selfHelpGuideService;
+        this.selfHelpGuides = ko.observableArray();
       }
 
-      StudentIntakeViewModel.prototype.load = function() {
-        StudentIntakeViewModel.__super__.load.call(this);
-        this.loadForm();
-      };
-
-      StudentIntakeViewModel.prototype.evaluateCurrentSection = function() {
-        var _ref, _ref1;
-        return (_ref = this.form()) != null ? (_ref1 = _ref.sections()) != null ? _ref1[this.currentSectionIndex()] : void 0 : void 0;
-      };
-
-      StudentIntakeViewModel.prototype.evaluateCompleted = function() {
-        var _ref;
-        return (_ref = this.form()) != null ? _ref.completed() : void 0;
-      };
-
-      StudentIntakeViewModel.prototype.evaluateHasPreviousSection = function() {
-        if (this.form() != null) {
-          return this.currentSectionIndex() > 0;
+      SelfHelpGuidesViewModel.prototype.load = function(selfHelpGuideGroupId) {
+        if (selfHelpGuideGroupId == null) {
+          selfHelpGuideGroupId = null;
         }
-        return false;
+        SelfHelpGuidesViewModel.__super__.load.call(this);
+        this.loadSelfHelpGuides(selfHelpGuideGroupId);
       };
 
-      StudentIntakeViewModel.prototype.evaluateHasNextSection = function() {
-        if (this.form() != null) {
-          return this.currentSectionIndex() < this.form().sections().length - 1;
-        }
-        return false;
-      };
-
-      StudentIntakeViewModel.prototype.loadForm = function() {
+      SelfHelpGuidesViewModel.prototype.loadSelfHelpGuides = function(selfHelpGuideGroupId) {
         var _this = this;
-        this.studentIntakeService.getForm({
+        if (selfHelpGuideGroupId == null) {
+          selfHelpGuideGroupId = null;
+        }
+        if (selfHelpGuideGroupId != null) {
+          this.selfHelpGuideService.getBySelfHelpGuideGroup(selfHelpGuideGroupId, {
+            result: function(result) {
+              return _this.selfHelpGuides(result);
+            },
+            fault: function(fault) {
+              return alert(fault.responseText);
+            }
+          });
+        } else {
+          this.selfHelpGuideService.getAll({
+            result: function(result) {
+              return _this.selfHelpGuides(result);
+            },
+            fault: function(fault) {
+              return alert(fault.responseText);
+            }
+          });
+        }
+      };
+
+      return SelfHelpGuidesViewModel;
+
+    })(mygps.viewmodel.AbstractSessionViewModel)
+  });
+
+  namespace('mygps.viewmodel', {
+    AbstractTasksViewModel: AbstractTasksViewModel = (function(_super) {
+
+      __extends(AbstractTasksViewModel, _super);
+
+      function AbstractTasksViewModel(session, taskService) {
+        AbstractTasksViewModel.__super__.constructor.call(this, session);
+        this.taskService = taskService;
+        this.tasks = ko.observableArray([]);
+        this.taskFilters = ko.observableArray(mygps.enumeration.TaskFilter.enumerators);
+        this.selectedTaskFilter = ko.observable(mygps.enumeration.TaskFilter.ACTIVE);
+        this.filteredTasks = ko.dependentObservable(this.filterTasks, this);
+        this.printingTasks = ko.observable(false);
+        this.emailingTasks = ko.observable(false);
+      }
+
+      AbstractTasksViewModel.prototype.load = function() {
+        AbstractTasksViewModel.__super__.load.call(this);
+        this.loadAllTasks();
+      };
+
+      AbstractTasksViewModel.prototype.formatDate = function(value) {
+        var now;
+        if (value != null) {
+          now = new Date();
+          if (value.getFullYear() === now.getFullYear()) {
+            return "" + (value.getMonth() + 1) + "/" + (value.getDate());
+          } else {
+            return "" + (value.getMonth() + 1) + "/" + (value.getDate()) + "/" + (("" + value.getFullYear()).substring(2));
+          }
+        }
+        return "";
+      };
+
+      AbstractTasksViewModel.prototype.filterTasks = function() {
+        return _.select(this.tasks(), this.selectedTaskFilter().filterFunction);
+      };
+
+      AbstractTasksViewModel.prototype.loadAllTasks = function() {
+        var _this = this;
+        this.taskService.getAll({
           result: function(result) {
-            return _this.form(result);
+            return _this.tasks(result);
           },
           fault: function(fault) {
-            var _ref, _ref1;
-            return alert((_ref = (_ref1 = $.parseJSON(fault.responseText)) != null ? _ref1.message : void 0) != null ? _ref : fault.responseText);
+            return alert(fault.responseText);
           }
         });
       };
 
-      StudentIntakeViewModel.prototype.saveForm = function(callbacks) {
+      AbstractTasksViewModel.prototype.selectTaskFilter = function(taskFilter) {
+        this.selectedTaskFilter(taskFilter);
+      };
+
+      AbstractTasksViewModel.prototype.createCustomTask = function(name, description, callbacks) {
         var _this = this;
-        this.currentSection().validate();
-        if (this.currentSection().valid()) {
-          this.invalid(false);
-          this.savingForm(true);
-          this.studentIntakeService.saveForm(this.form(), {
-            result: function(result) {
-              _this.savingForm(false);
-              return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
-            },
-            fault: function(fault) {
-              _this.savingForm(false);
-              alert(fault.responseText);
-              return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
-            }
-          });
-        } else {
-          this.invalid(true);
-        }
-      };
-
-      StudentIntakeViewModel.prototype.moveToPreviousSection = function() {
-        if (this.hasPreviousSection()) {
-          this.currentSectionIndex(this.currentSectionIndex() - 1);
-          this.invalid(false);
-          return true;
-        }
-        return false;
-      };
-
-      StudentIntakeViewModel.prototype.moveToNextSection = function() {
-        if (this.hasNextSection()) {
-          this.currentSection().validate();
-          if (this.currentSection().valid()) {
-            this.invalid(false);
-            this.currentSectionIndex(this.currentSectionIndex() + 1);
-            return true;
-          } else {
-            this.invalid(true);
+        this.taskService.createCustom(name, description, {
+          result: function(result) {
+            _this.tasks.push(result);
+            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
+          },
+          fault: function(fault) {
+            alert(fault.responseText);
+            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
           }
-        }
-        return false;
+        });
       };
 
-      return StudentIntakeViewModel;
+      AbstractTasksViewModel.prototype.createTaskForChallengeReferral = function(challenge, challengeReferral) {
+        var _this = this;
+        this.taskService.createForChallengeReferral(challenge.id(), challengeReferral.id(), {
+          result: function(result) {
+            return _this.tasks.push(result);
+          },
+          fault: function(fault) {
+            return alert(fault.responseText);
+          }
+        });
+      };
+
+      AbstractTasksViewModel.prototype.createTaskForChallengeReferral = function(challenge, challengeReferral, callbacks) {
+        var _this = this;
+        this.taskService.createForChallengeReferral(challenge.id(), challengeReferral.id(), {
+          result: function(result) {
+            _this.tasks.push(result);
+            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
+          },
+          fault: function(fault) {
+            alert(fault.responseText);
+            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
+          }
+        });
+      };
+
+      AbstractTasksViewModel.prototype.markTask = function(task, complete) {
+        var _this = this;
+        this.taskService.mark(task.id(), complete, {
+          result: function(result) {
+            return task.completed(complete);
+          },
+          fault: function(fault) {
+            return alert(fault.responseText);
+          }
+        });
+      };
+
+      AbstractTasksViewModel.prototype.deleteTask = function(task) {
+        var _this = this;
+        this.taskService["delete"](task.id(), {
+          result: function(result) {
+            return _this.tasks.remove(task);
+          },
+          fault: function(fault) {
+            return alert(fault.responseText);
+          }
+        });
+      };
+
+      AbstractTasksViewModel.prototype.deleteTask = function(task, callbacks) {
+        var _this = this;
+        this.taskService["delete"](task.id(), {
+          result: function(result) {
+            _this.tasks.remove(task);
+            return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
+          },
+          fault: function(fault) {
+            alert(fault.responseText);
+            return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
+          }
+        });
+      };
+
+      AbstractTasksViewModel.prototype.printTasks = function() {
+        var _this = this;
+        this.printingTasks(true);
+        this.taskService.print({
+          result: function(result) {
+            return _this.printingTasks(false);
+          },
+          fault: function(fault) {
+            alert(fault.responseText);
+            return _this.printingTasks(false);
+          }
+        });
+      };
+
+      AbstractTasksViewModel.prototype.emailTasks = function(emailAddress) {
+        var _this = this;
+        this.emailingTasks(true);
+        this.taskService.email(emailAddress, {
+          result: function(result) {
+            return _this.emailingTasks(false);
+          },
+          fault: function(result) {
+            alert(fault.responseText);
+            return _this.emailingTasks(false);
+          }
+        });
+      };
+
+      AbstractTasksViewModel.prototype.collectEmailAddress = function() {
+        var _this = this;
+        apprise('E-mail address:', {
+          'input': true,
+          'validation': function(value) {
+            if (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) || value === '') {
+              return 'true';
+            } else {
+              return 'invalid email address';
+            }
+          }
+        }, function(result) {
+          if (result) {
+            return _this.emailTasks(result);
+          }
+        });
+      };
+
+      return AbstractTasksViewModel;
 
     })(mygps.viewmodel.AbstractSessionViewModel)
+  });
+
+  namespace('mygps.viewmodel', {
+    LoginViewModel: LoginViewModel = (function() {
+
+      function LoginViewModel() {}
+
+      LoginViewModel.prototype.load = function() {};
+
+      return LoginViewModel;
+
+    })()
+  });
+
+  namespace('mygps.viewmodel', {
+    AbstractSessionViewModel: AbstractSessionViewModel = (function() {
+
+      function AbstractSessionViewModel(session) {
+        this.session = session;
+        this.authenticated = ko.dependentObservable(this.evaluateAuthenticated, this);
+        this.authenticatedPersonName = ko.dependentObservable(this.authenticatedPersonName, this);
+      }
+
+      AbstractSessionViewModel.prototype.load = function() {};
+
+      AbstractSessionViewModel.prototype.evaluateAuthenticated = function() {
+        var _ref;
+        return ((_ref = this.session) != null ? _ref.authenticatedPerson() : void 0) != null;
+      };
+
+      AbstractSessionViewModel.prototype.authenticatedPersonName = function() {
+        var person, _ref;
+        person = (_ref = this.session) != null ? _ref.authenticatedPerson() : void 0;
+        if (person != null) {
+          return "" + (person.firstName()) + " " + (person.lastName());
+        }
+        return null;
+      };
+
+      return AbstractSessionViewModel;
+
+    })()
+  });
+
+  namespace('mygps.viewmodel', {
+    ChallengeReferralSearchViewModel: ChallengeReferralSearchViewModel = (function(_super) {
+
+      __extends(ChallengeReferralSearchViewModel, _super);
+
+      function ChallengeReferralSearchViewModel(session, taskService, challengeService, challengeReferralService) {
+        ChallengeReferralSearchViewModel.__super__.constructor.call(this, session, taskService);
+        this.challengeService = challengeService;
+        this.challengeReferralService = challengeReferralService;
+        this.query = ko.observable(null);
+        this.challenges = ko.observableArray();
+        this.selectedChallenge = ko.observable(null);
+        this.selectedChallengeName = ko.dependentObservable(this.evaluateSelectedChallengeName, this);
+        this.referrals = ko.dependentObservable(this.evaluateReferrals, this);
+        this.filteredReferrals = ko.dependentObservable(this.filterReferrals, this);
+        this.allowCustomTaskCreation = ko.observable(false);
+      }
+
+      ChallengeReferralSearchViewModel.prototype.evaluateReferrals = function() {
+        var _ref;
+        return ((_ref = this.selectedChallenge()) != null ? _ref.challengeReferrals() : void 0) || [];
+      };
+
+      ChallengeReferralSearchViewModel.prototype.evaluateSelectedChallengeName = function() {
+        var _ref;
+        return (_ref = this.selectedChallenge()) != null ? _ref.name() : void 0;
+      };
+
+      ChallengeReferralSearchViewModel.prototype.filterReferrals = function() {
+        var _this = this;
+        return _.select(this.referrals(), function(referral) {
+          return !_.any(_this.tasks(), function(task) {
+            return task.challengeReferralId() === referral.id() && !task.completed();
+          });
+        });
+      };
+
+      ChallengeReferralSearchViewModel.prototype.load = function(query) {
+        if (query == null) {
+          query = "";
+        }
+        ChallengeReferralSearchViewModel.__super__.load.call(this);
+        this.search(query);
+      };
+
+      ChallengeReferralSearchViewModel.prototype.createTaskForChallengeReferral = function(challenge, challengeReferral) {
+        var _this = this;
+        ChallengeReferralSearchViewModel.__super__.createTaskForChallengeReferral.call(this, challenge, challengeReferral, {
+          result: function(result) {
+            return _this.refresh();
+          },
+          fault: function(fault) {
+            return alert(fault.responseText);
+          }
+        });
+      };
+
+      ChallengeReferralSearchViewModel.prototype.markTask = function(task, complete) {
+        ChallengeReferralSearchViewModel.__super__.markTask.call(this, task, complete);
+        this.refresh();
+      };
+
+      ChallengeReferralSearchViewModel.prototype.deleteTask = function(task) {
+        var _this = this;
+        ChallengeReferralSearchViewModel.__super__.deleteTask.call(this, task, {
+          result: function(result) {
+            return _this.refresh();
+          },
+          fault: function(fault) {
+            return alert(fault.responseText);
+          }
+        });
+      };
+
+      ChallengeReferralSearchViewModel.prototype.search = function(query) {
+        this.query(query);
+        this.reset();
+        if ((query != null)) {
+          this.searchChallenges(query);
+        }
+      };
+
+      ChallengeReferralSearchViewModel.prototype.refresh = function() {
+        return this.searchChallenges(this.query());
+      };
+
+      ChallengeReferralSearchViewModel.prototype.reset = function() {
+        this.challenges.removeAll();
+        return this.selectedChallenge(null);
+      };
+
+      ChallengeReferralSearchViewModel.prototype.selectChallenge = function(challenge) {
+        this.selectedChallenge(challenge);
+        if ((this.selectedChallenge() != null)) {
+          if (this.selectedChallenge().referralCount() > 0 && this.selectedChallenge().challengeReferrals().length === 0) {
+            return this.searchChallengeReferrals(this.selectedChallenge(), this.query());
+          }
+        }
+      };
+
+      ChallengeReferralSearchViewModel.prototype.searchChallenges = function(query) {
+        var _this = this;
+        this.challengeService.search(query, {
+          result: function(result) {
+            _this.challenges(result);
+            return _this.allowCustomTaskCreation(_this.challenges().length === 0);
+          },
+          fault: function(fault) {
+            return alert(fault.responseText);
+          }
+        });
+      };
+
+      ChallengeReferralSearchViewModel.prototype.searchChallengeReferrals = function(challenge, query) {
+        var _this = this;
+        return this.challengeReferralService.search(challenge.id(), query, {
+          result: function(result) {
+            return challenge.challengeReferrals(result);
+          },
+          fault: function(fault) {
+            return alert(fault.responseText);
+          }
+        });
+      };
+
+      return ChallengeReferralSearchViewModel;
+
+    })(mygps.viewmodel.AbstractTasksViewModel)
   });
 
 }).call(this);
