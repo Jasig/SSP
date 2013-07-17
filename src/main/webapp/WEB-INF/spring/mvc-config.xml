@@ -71,7 +71,9 @@
 		<property name="basename" value="views"/>
 	</bean>
 
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >
+	  <property name="maxUploadSize" value="#{configProperties.student_documents_max_size}"/>
+	</bean>
 
 	<bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="order" value="2" />		

@@ -48,7 +48,6 @@ Ext.define('Ssp.store.Tools', {
 
             /*
              { group:'rc1', name: "SIS", toolType: "StudentInformationSystem", active: true },
-             { group:'rc1', name: "Documents", toolType: "StudentDocuments", active: false },
              { group:'rc1', name: "Displaced Workers", toolType: "DisplacedWorker", active: false },
              { group:'rc1', name: "Student Success", toolType: "StudentSuccess", active: false }
              */

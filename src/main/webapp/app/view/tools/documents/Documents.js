@@ -75,6 +75,7 @@ Ext.define('Ssp.view.tools.documents.Documents', {
                     height: 30,
                     xtype: 'button',
                     itemId: 'addDocumentButton',
+	                hidden: !me.authenticatedPerson.hasAccess('DOCUMENTS_ADD_BUTTON'),
                     text: 'Add'
                 }, {
                     tooltip: 'Edit Document',
@@ -82,6 +83,7 @@ Ext.define('Ssp.view.tools.documents.Documents', {
                     width: 60,
                     height: 30,
                     xtype: 'button',
+	                hidden: !me.authenticatedPerson.hasAccess('DOCUMENTS_EDIT_BUTTON'),
                     itemId: 'editDocumentButton'
                 }, {
                     tooltip: 'Delete Document',
@@ -89,12 +91,14 @@ Ext.define('Ssp.view.tools.documents.Documents', {
                     width: 60,
                     height: 30,
                     xtype: 'button',
+	                hidden: !me.authenticatedPerson.hasAccess('DOCUMENTS_DELETE_BUTTON'),
                     itemId: 'deleteDocumentButton'
                 }, {
                     tooltip: 'Download Document',
                     text: 'Download',
                     width: 60,
                     height: 30,
+	                hidden: !me.authenticatedPerson.hasAccess('DOCUMENTS_DOWNLOAD_BUTTON'),
                     xtype: 'button',
                     itemId: 'downloadDocumentButton'
                 }]

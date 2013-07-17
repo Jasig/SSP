@@ -19,25 +19,28 @@
 package org.jasig.ssp.web.api;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.io.IOUtils;
 import org.jasig.ssp.factory.reference.StudentDocumentTOFactory;
 import org.jasig.ssp.model.FileUploadRepsonse;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.StudentDocument;
-import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.security.permissions.Permission;
+import org.jasig.ssp.security.permissions.ServicePermissions;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.StudentDocumentService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.PagedResponse;
-import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.StudentDocumentTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -45,6 +48,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -98,33 +102,32 @@ public class StudentDocumentController  extends AbstractBaseController {
 	 *             If that specified data is not invalid.
 	 */
 	@RequestMapping(method = RequestMethod.POST)
+	@PreAuthorize("hasRole('ROLE_PERSON_DOCUMENT_WRITE')")
     public @ResponseBody String create(@PathVariable UUID personId,StudentDocumentTO uploadItem, BindingResult result) throws IllegalStateException, IOException, ObjectNotFoundException, ValidationException{
+		
 		 FileUploadRepsonse extjsFormResult = new FileUploadRepsonse();
-         
 	        if (result.hasErrors()){
 	            for(ObjectError error : result.getAllErrors()){
-	                System.err.println("Error: " + error.getCode() +  " - " + error.getDefaultMessage());
+	            	LOGGER.error("Error: " + error.getCode() +  " - " + error.getDefaultMessage());
 	            }
-	             
-	            //set extjs return - error
 	            extjsFormResult.setSuccess(false);
 	            return extjsFormResult.toString();
 	        }
-	        CommonsMultipartFile file = uploadItem.getFile();
-	        String fileLocation = "/Users/Dev/studentdocs/"+file.getOriginalFilename();
-	        file.transferTo(new File(fileLocation));
-	        
-	        StudentDocument doc = getStudentDocumentService().createStudentDocFromUploadBean(uploadItem,fileLocation,personId);
-	        
-	        getStudentDocumentService().save(doc);
-	         
-	        //set extjs return - sucsess
-	        extjsFormResult.setSuccess(true);
-	         
+	        try {
+	        	getStudentDocumentService().createStudentDoc(personId, uploadItem, extjsFormResult);
+	        }
+	        catch(Exception e)
+	        {
+	        	extjsFormResult.setErrorMessage(e.getMessage());
+	        	extjsFormResult.setSuccess(false);
+	        }
 	        return extjsFormResult.toString();
 	 	}
 
+
+
 	@RequestMapping(method = RequestMethod.GET)
+	@PreAuthorize("hasRole('ROLE_PERSON_DOCUMENT_READ')")
 	public @ResponseBody PagedResponse<StudentDocumentTO> getAllForStudent(@PathVariable UUID personId) throws ObjectNotFoundException
 	{
 		PagingWrapper<StudentDocument> result = getStudentDocumentService().getAllForPerson(getPersonService().get(personId), null);
@@ -132,6 +135,7 @@ public class StudentDocumentController  extends AbstractBaseController {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@PreAuthorize("hasRole('ROLE_PERSON_DOCUMENT_WRITE')")
 	public @ResponseBody
 	StudentDocumentTO save(@PathVariable final UUID id, @Valid @RequestBody final StudentDocumentTO obj)
 			throws ValidationException, ObjectNotFoundException, CloneNotSupportedException {
@@ -165,12 +169,27 @@ public class StudentDocumentController  extends AbstractBaseController {
 	 *             If specified object could not be found.
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@PreAuthorize("hasRole('ROLE_PERSON_DOCUMENT_DELETE')")
 	public @ResponseBody
 	ServiceResponse delete(@PathVariable final UUID id)
 			throws ObjectNotFoundException {
 		getStudentDocumentService().delete(id);
 		return new ServiceResponse(true);
 	}
+
+	@RequestMapping(value = "/{id}/file", method = RequestMethod.GET)
+	public void getFile(@PathVariable("id") UUID id,
+			HttpServletResponse response) throws ObjectNotFoundException {
+		try {
+
+			getStudentDocumentService().downloadFile(id, response);
+		} catch (IOException ex) {
+			throw new RuntimeException("IOError writing file to output stream");
+		}
+
+	}
+
+
 	public StudentDocumentService getStudentDocumentService() {
 		return studentDocumentService;
 	}

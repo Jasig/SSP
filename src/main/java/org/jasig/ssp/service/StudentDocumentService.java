@@ -18,10 +18,16 @@
  */
 package org.jasig.ssp.service;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.jasig.ssp.model.FileUploadRepsonse;
 import org.jasig.ssp.model.StudentDocument;
 import org.jasig.ssp.transferobject.StudentDocumentTO;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * Person service
@@ -31,5 +37,15 @@ public interface StudentDocumentService extends PersonAssocAuditableService<Stud
 
 	StudentDocument createStudentDocFromUploadBean(StudentDocumentTO file,
 			String fileLocation, UUID personId) throws ObjectNotFoundException;
+
+	String getStudentDocumentsBaseDir();
+
+	void downloadFile(UUID id, HttpServletResponse response)
+			throws ObjectNotFoundException, FileNotFoundException, IOException;
+
+
+	void createStudentDoc(UUID personId, StudentDocumentTO uploadItem,
+			FileUploadRepsonse extjsFormResult) throws IOException,
+			ObjectNotFoundException, ValidationException;
 		 
 }

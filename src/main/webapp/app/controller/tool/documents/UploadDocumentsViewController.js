@@ -70,22 +70,21 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
                 waitMsg: 'Uploading Student Document...',
                 success: function (fp, o) 
                 {
-                    var success = o.result.success;
-                    if(success)
-                    {
                     	Ext.Msg.alert('Success', 'File uploaded successfully');
                     	me.displayMain();
-                    }
-                    else
-                    {
-                    	Ext.Msg.alert('Uploading the student document file failed...');
-                    }
+                },
+                failure: function (fp,o)
+                {
+                	if(o.result.message)
+                	{
+                		Ext.Msg.alert('Error',o.result.message);
+                	}
+                	console.log(o);
                 }
             });
         }
 		else
 		{
-			var url = me.getBaseUrl(me.person.get('id'));
 			var success = function ()
 			{
             	Ext.Msg.alert('Success', 'Document information updated successfully');

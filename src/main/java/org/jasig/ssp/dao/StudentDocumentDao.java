@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.dao;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,10 +46,8 @@ public class StudentDocumentDao
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<StudentDocument> getAllForPerson(Person person,
 			SortingAndPaging sAndP) {
-		
-		createCriteria().add(Restrictions.eq("person", person))
-		.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE.ordinal()));
-		List<StudentDocument> rows = createCriteria().list();
+		Collection<StudentDocument> rows = createCriteria().add(Restrictions.eq("person", person))
+				.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE)).list();
 		return new PagingWrapper<StudentDocument>(rows);
 	}
 

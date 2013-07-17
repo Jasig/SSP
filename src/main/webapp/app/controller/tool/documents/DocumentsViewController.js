@@ -56,6 +56,12 @@ Ext.define('Ssp.controller.tool.documents.DocumentsViewController', {
 			listeners: {
 				click: 'onDeleteDocumentClick'
 		}
+		},
+		downloadDocumentButton: {
+			selector: '#downloadDocumentButton',
+			listeners: {
+				click: 'onDownloadDocumentClick'
+		}
 	},
 		
 	},
@@ -95,6 +101,14 @@ Ext.define('Ssp.controller.tool.documents.DocumentsViewController', {
         {
       	   Ext.Msg.alert('SSP Error', 'Please select an item to delete.'); 
         }
+    },
+    onDownloadDocumentClick: function(button) {
+    	var me=this;
+		var record = me.getView().getSelectionModel().getSelection()[0];
+    	var url = me.getBaseUrl(me.person.get('id'));
+    	url = url + '/'+record.get('id') + '/file';
+    	window.open(url,'_self')
+
     },   
     onAddDocumentClick: function(button) {
     	var me=this;
