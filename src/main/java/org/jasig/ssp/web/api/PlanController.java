@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.mail.SendFailedException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -44,6 +45,7 @@ import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
+import org.jasig.ssp.service.RequestTrustService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.ExternalPersonPlanStatusService;
 import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
@@ -64,7 +66,9 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.web.util.IpAddressMatcher;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -104,6 +108,9 @@ public class PlanController  extends AbstractBaseController {
 	
 	@Autowired
 	private transient SecurityService securityService;
+
+	@Autowired
+	private transient RequestTrustService requestTrustService;
 	
 	@Autowired
 	private transient ConfigService configService;
@@ -129,14 +136,18 @@ public class PlanController  extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */
-	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(method = RequestMethod.GET)
+	@DynamicPermissionChecking
 	public @ResponseBody
 	PagedResponse<PlanTO> get(final @PathVariable UUID personId,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
-			final @RequestParam(required = false) Integer limit) throws ObjectNotFoundException,
+			final @RequestParam(required = false) Integer limit,
+			final HttpServletRequest request) throws ObjectNotFoundException,
 			ValidationException {
+
+		assertStandardMapReadApiAuthorization(request);
+
 		// Run getAll
 		final PagingWrapper<Plan> data = getService().getAllForStudent(
 				SortingAndPaging.createForSingleSortWithPaging(
@@ -158,11 +169,14 @@ public class PlanController  extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */
-	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
+	@DynamicPermissionChecking
 	public @ResponseBody
-	PlanTO getPlan(final @PathVariable UUID personId,final @PathVariable UUID id) throws ObjectNotFoundException,
+	PlanTO getPlan(final @PathVariable UUID personId,
+				   final @PathVariable UUID id,
+				   final HttpServletRequest request) throws ObjectNotFoundException,
 			ValidationException {
+		assertStandardMapReadApiAuthorization(request);
 		Plan model = getService().get(id);
 		return validatePlan(new PlanTO(model));
 	}	
@@ -177,11 +191,13 @@ public class PlanController  extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */	
-	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_MAP_READ')")
+	@DynamicPermissionChecking
 	@RequestMapping(value="/current", method = RequestMethod.GET)
 	public @ResponseBody
-	PlanTO getCurrentForStudent(final @PathVariable UUID personId) throws ObjectNotFoundException,
+	PlanTO getCurrentForStudent(final @PathVariable UUID personId,
+								final HttpServletRequest request) throws ObjectNotFoundException,
 			ValidationException {
+		assertStandardMapReadApiAuthorization(request);
 		final Plan model = getService().getCurrentForStudent(personId);
 		if (model == null) {
 			return null;
@@ -201,13 +217,15 @@ public class PlanController  extends AbstractBaseController {
 	 *             If that specified data is not invalid.
 	 */
 	@RequestMapping(value="/summary", method = RequestMethod.GET)
-	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_MAP_READ')")
+	@DynamicPermissionChecking
 	public @ResponseBody
 	PagedResponse<PlanLiteTO> getSummary(final @PathVariable UUID personId,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
-			final @RequestParam(required = false) Integer limit) throws ObjectNotFoundException,
+			final @RequestParam(required = false) Integer limit,
+			final HttpServletRequest request) throws ObjectNotFoundException,
 			ValidationException {
+		assertStandardMapReadApiAuthorization(request);
 		// Run getAll
 		final PagingWrapper<Plan> data = getService().getAllForStudent(
 				SortingAndPaging.createForSingleSortWithPaging(
@@ -237,6 +255,7 @@ public class PlanController  extends AbstractBaseController {
 	public @ResponseBody
 	PlanTO create(@Valid @RequestBody final PlanTO obj) throws ObjectNotFoundException,
 			ValidationException, CloneNotSupportedException {
+
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"It is invalid to send an entity with an ID to the create method. Did you mean to use the save method instead?");
@@ -437,6 +456,20 @@ public class PlanController  extends AbstractBaseController {
 			schoolId = student.getSchoolId();
 		}
 		return getService().validate(plan);
+	}
+
+	private void assertStandardMapReadApiAuthorization(HttpServletRequest request)
+			throws AccessDeniedException {
+		if ( securityService.hasAuthority("ROLE_PERSON_READ") ||
+				securityService.hasAuthority("ROLE_PERSON_MAP_READ") ) {
+			return;
+		}
+		try {
+			requestTrustService.assertHighlyTrustedRequest(request);
+		} catch ( AccessDeniedException e ) {
+			throw new AccessDeniedException("Untrusted request with"
+					+ " insufficient permissions.", e);
+		}
 	}
 
 	public PlanService getService() {

@@ -1,0 +1,75 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<property name="schema" value="public" dbms="postgresql" />
+	<property name="schema" value="dbo" dbms="mssql" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet id="add highly trusted IP dis/enablement config" author="dan.mccallum">
+		<insert tableName="config">
+			<column name="id" value="312c069e-ee71-11e2-80f4-406c8f22c3ce" />
+			<column name="name" value="highly_trusted_ips_enabled" />
+			<column name="description"
+					value="Boolean value indicating whether or not to consider highly_trusted_ips" />
+			<column name="value">false</column>
+			<column name="default_value">false</column>
+			<column name="created_date" valueDate="2013-07-16T12:00:00" />
+			<column name="modified_date" valueDate="2013-07-16T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="406" />
+		</insert>
+		<rollback>
+			<delete tableName="config">
+				<where>id='312c069e-ee71-11e2-80f4-406c8f22c3ce'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="add highly trusted IP config" author="dan.mccallum">
+		<insert tableName="config">
+			<column name="id" value="68181d51-ee71-11e2-a87d-406c8f22c3ce" />
+			<column name="name" value="highly_trusted_ips" />
+			<column name="description"
+					value="Comma-delimited list of highly trusted IPs, which will be granted access to select APIs even in the absence of other permissions. Empty list means no IPs will be given this special access. Supports IP ranges, specific IPs, IP4v and IPv6." />
+			<column name="value" value="null" />
+			<column name="default_value" value="" /> <!-- nulls not allowed -->
+			<column name="created_date" valueDate="2013-07-16T12:00:00" />
+			<column name="modified_date" valueDate="2013-07-16T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="407" />
+		</insert>
+		<rollback>
+			<delete tableName="config">
+				<where>id='68181d51-ee71-11e2-a87d-406c8f22c3ce'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>
