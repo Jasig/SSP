@@ -46,7 +46,7 @@ Ext.define('Ssp.service.SearchService', {
 		queryStr = "";
 		for (var paramName in params) {
 			// TODO url encoding?
-			if ( queryStr ) {
+			if ( queryStr && (params[paramName] || !params[paramName] == '')) {
 				queryStr += "&";
 			}
 			if(params[paramName] || !params[paramName] == '')
