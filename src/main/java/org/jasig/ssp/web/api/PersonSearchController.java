@@ -157,7 +157,8 @@ public class PersonSearchController extends AbstractBaseController {
 
 	private void assertSearchApiAuthorization(HttpServletRequest request)
 			throws AccessDeniedException {
-		if ( securityService.hasAuthority(Permission.SECURITY_PERSON_READ) ) {
+		if ( securityService.hasAuthority(Permission.PERSON_READ) ||
+				securityService.hasAuthority("ROLE_PERSON_SEARCH_READ")) {
 			return;
 		}
 		try {
