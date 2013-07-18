@@ -24,7 +24,7 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewControll
     	caseloadService: 'caseloadService',
     	store: 'caseloadStore',
     	formUtils: 'formRendererUtils',
-        coachesStore: 'coachesStore',
+        coachesStore: 'allCoachesStore',
         reassignCaseloadStore: 'reassignCaseloadStore',
     	appEventsController: 'appEventsController'
         

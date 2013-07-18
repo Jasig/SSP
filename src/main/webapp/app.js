@@ -931,6 +931,7 @@ Ext.onReady(function(){
 				    childCareArrangementsStore: 'Ssp.store.reference.ChildCareArrangements',
 				    citizenshipsStore: 'Ssp.store.reference.Citizenships',
 			    	coachesStore: 'Ssp.store.Coaches',
+			    	allCoachesStore: 'Ssp.store.CoachesAll',
 				    confidentialityDisclosureAgreementsStore: 'Ssp.store.reference.ConfidentialityDisclosureAgreements',
 					configurationOptionsStore: 'Ssp.store.reference.ConfigurationOptions',
 				    colorsStore: {
