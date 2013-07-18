@@ -23,7 +23,7 @@ Ext.define('Ssp.view.tools.actionplan.EditGoalForm', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.actionplan.EditGoalFormViewController',
     inject: {
-        store: 'confidentialityLevelsStore'
+        store: 'confidentialityLevelsAllUnpagedStore'
     },
 	initComponent: function() {
         Ext.applyIf(this, {
@@ -56,7 +56,6 @@ Ext.define('Ssp.view.tools.actionplan.EditGoalForm', {
 			        store: this.store,
 			        valueField: 'id',
 			        displayField: 'acronym',
-			        mode: 'local',
 			        typeAhead: true,
 			        queryMode: 'local',
 			        allowBlank: false,

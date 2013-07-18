@@ -23,7 +23,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     	apiProperties: 'apiProperties',
     	appEventsController: 'appEventsController',
     	authenticatedPerson: 'authenticatedPerson',
-    	confidentialityLevelsStore: 'confidentialityLevelsStore',
+    	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
     	formUtils: 'formRendererUtils',
     	model: 'currentTask',
     	personLite: 'personLite'
@@ -51,7 +51,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 		var me=this;
 		
 		// apply confidentiality level filter
-		me.authenticatedPerson.applyConfidentialityLevelsFilter( me.confidentialityLevelsStore );
+		//me.authenticatedPerson.applyConfidentialityLevelsFilter( me.confidentialityLevelsStore );
 		
 		me.url = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personTask') );
 		me.url = me.url.replace('{id}',me.personLite.get('id'));
@@ -78,6 +78,9 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 		this.getView().getForm().reset();
 		this.getView().getForm().loadRecord( this.model );
 		Ext.ComponentQuery.query('#confidentialityLevel')[0].setValue( this.model.get('confidentialityLevel').id );
+		this.formUtils.applyAssociativeStoreFilter(this.confidentialityLevelsStore,this.model.get('confidentialityLevel').id);
+		
+		this.authenticatedPerson.applyConfidentialityLevelsFilter(this.confidentialityLevelsStore);
 	},
 	
 	initFormAfterReferal: function(){
