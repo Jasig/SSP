@@ -520,18 +520,12 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	private void buildJoins(PersonSearchRequest personSearchRequest,
 			StringBuilder stringBuilder) 
 	{
-		if(hasPlanStatus(personSearchRequest))
-		{
-			stringBuilder.append(" left join p.plans as plan ");
-		}
-		
 		stringBuilder.append(" left join p.programStatuses as programStatuses ");
 		stringBuilder.append(" left join programStatuses.programStatus as programStatus ");
-			
 		
-		if(hasMyPlans(personSearchRequest))
+		if(hasMyPlans(personSearchRequest) || hasPlanStatus(personSearchRequest))
 		{
-			stringBuilder.append(" left join p.plans as plan ");
+			stringBuilder.append(" join p.plans as plan ");
 		}		
 	}
 
