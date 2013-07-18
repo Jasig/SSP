@@ -1135,6 +1135,16 @@
                     "path": "/app/controller/tool/studentintake/"
                 },
                 {
+                    "clsName": "Ssp.model.tool.journal.JournalEntry",
+                    "name": "JournalEntry.js",
+                    "path": "/app/model/tool/journal/"
+                },
+                {
+                    "clsName": "Ssp.store.JournalEntriesUnpaged",
+                    "name": "JournalEntriesUnpaged.js",
+                    "path": "/app/store/"
+                },
+                {
                     "clsName": "Ssp.controller.tool.journal.JournalToolViewController",
                     "name": "JournalToolViewController.js",
                     "path": "/app/controller/tool/journal/"
@@ -1840,11 +1850,6 @@
                     "path": "/app/store/"
                 },
                 {
-                    "clsName": "Ssp.model.tool.journal.JournalEntry",
-                    "name": "JournalEntry.js",
-                    "path": "/app/model/tool/journal/"
-                },
-                {
                     "clsName": "Ssp.model.reference.Challenge",
                     "name": "Challenge.js",
                     "path": "/app/model/reference/"
@@ -1896,11 +1901,6 @@
                 },
                 {
                     "clsName": "Ssp.store.JournalEntries",
-                    "name": "JournalEntries.js",
-                    "path": "/app/store/"
-                },
-                {
-                    "clsName": "Ssp.store.JournalEntriesUnpaged",
                     "name": "JournalEntries.js",
                     "path": "/app/store/"
                 },
