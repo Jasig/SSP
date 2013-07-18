@@ -16,7 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.reference.JournalStepDetail', {
-	extend: 'Ssp.model.reference.AbstractReference',
-    fields: []
+Ext.define('Ssp.store.reference.JournalSourcesAllUnpaged', {
+    extend: 'Ext.data.Store',
+    model: 'Ssp.model.reference.JournalSource',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties'
+    },
+    constructor: function(){
+        Ext.apply(this, {
+                proxy: this.apiProperties.getProxy(''),
+                pageSize: this.apiProperties.getInfinitePagingSize(),
+                autoLoad: false,
+                autoSync: false,
+				extraParams: {status: "ALL", limit: "-1"}
+            }
+        );
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('journalSource'),extraParams: this.extraParams});
+        return this.callParent(arguments);
+    }
 });

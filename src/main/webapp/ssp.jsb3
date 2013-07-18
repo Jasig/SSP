@@ -1968,6 +1968,11 @@
                     "path": "/app/store/reference/"
                 },
                 {
+                    "clsName": "Ssp.store.reference.JournalTracksAllUnpaged",
+                    "name": "JournalTracksAllUnpaged.js",
+                    "path": "/app/store/reference/"
+                },
+                {
                     "clsName": "Ssp.store.People",
                     "name": "People.js",
                     "path": "/app/store/"
@@ -2280,6 +2285,11 @@
                 {
                     "clsName": "Ssp.store.reference.JournalSourcesUnpaged",
                     "name": "JournalSourcesUnpaged.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.JournalSourcesAllUnpaged",
+                    "name": "JournalSourcesAllUnpaged.js",
                     "path": "/app/store/reference/"
                 },
                 {

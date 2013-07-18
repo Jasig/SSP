@@ -969,6 +969,16 @@ Ext.onReady(function(){
 				    	singleton: true
 				    },
 				    confidentialityLevelsStore: 'Ssp.store.reference.ConfidentialityLevels',
+					confidentialityLevelsAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.ConfidentialityLevels', {
+								storeId: 'confidentialityLevelsAllUnpagedStore',
+								extraParams: {status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					},
+					
 				    disabilityAccommodationsStore: 'Ssp.store.reference.DisabilityAccommodations',
 				    disabilityAgenciesStore: 'Ssp.store.reference.DisabilityAgencies',
 				    disabilityStatusesStore: 'Ssp.store.reference.DisabilityStatuses',
@@ -1083,10 +1093,12 @@ Ext.onReady(function(){
 			    	journalEntryDetailsStore: 'Ssp.store.JournalEntryDetails',
 			    	journalSourcesStore: 'Ssp.store.reference.JournalSources',
 			    	journalSourcesUnpagedStore: 'Ssp.store.reference.JournalSourcesUnpaged',
+					journalSourcesAllUnpagedStore: 'Ssp.store.reference.JournalSourcesAllUnpaged',
 			        journalStepsStore: 'Ssp.store.reference.JournalSteps',
 			        journalDetailsStore: 'Ssp.store.reference.JournalStepDetails',
 			        journalTracksStore: 'Ssp.store.reference.JournalTracks',
 			        journalTracksUnpagedStore: 'Ssp.store.reference.JournalTracksUnpaged',
+					journalTracksAllUnpagedStore: 'Ssp.store.reference.JournalTracksAllUnpaged',
 			        lassisStore: 'Ssp.store.reference.Lassis',
 			        maritalStatusesStore: 'Ssp.store.reference.MaritalStatuses',
 			    	militaryAffiliationsStore: 'Ssp.store.reference.MilitaryAffiliations',
