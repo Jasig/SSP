@@ -27,7 +27,7 @@ Ext.define('Ssp.store.Coaches', {
 		var me=this;
 		Ext.apply(me, {
 						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCoach')),
-						autoLoad: false,						
+						autoLoad: false						
 					});
 		Ext.apply(this.getProxy(), {
 			extraParams : {

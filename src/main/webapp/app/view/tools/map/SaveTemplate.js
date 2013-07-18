@@ -170,8 +170,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
             				        fieldLabel: 'Contact Name',
             				        name: 'contactName',
 									itemId: 'contactName',
-            				        maxLength: 50,
-            				        
+            				        maxLength: 50            				        
             				    },{
             				        fieldLabel: 'Contact Title',
             				        name: 'contactTitle',
@@ -181,11 +180,11 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
             				    },{
 	            				   fieldLabel: 'Contact Email',
 	            				   name: 'contactEmail',
-		            			   itemId: 'contactEmail',
+		            			   itemId: 'contactEmail'
 	            				},{
             				        fieldLabel: 'Contact Phone',
             				        name: 'contactPhone',
-            				        itemId: 'contactPhone',
+            				        itemId: 'contactPhone'
             				    },
             				   {
             				        fieldLabel: 'Academic Link',

@@ -121,7 +121,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 		var mapResponse = serviceResponses.successes.validatedPlan;
 		var planAsJsonObject = Ext.decode(mapResponse.responseText);
 		me.currentMapPlan.loadFromServer(planAsJsonObject);
-		me.planWasDirty = me.currentMapPlan.dirty
+		me.planWasDirty = me.currentMapPlan.dirty;
 		me.currentMapPlan.repopulatePlanStores(me.semesterStores, me.currentMapPlan.get("isValid"));
 
 		var panel = me.getView().findParentByType("semesterpanel");

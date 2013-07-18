@@ -297,7 +297,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                             }]}
                             
             
-            ]}],
+            ]}]
          }]
 		},	{
          xtype: 'gridpanel',

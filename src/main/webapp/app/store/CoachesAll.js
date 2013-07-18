@@ -27,13 +27,13 @@ Ext.define('Ssp.store.CoachesAll', {
 		var me=this;
 		Ext.apply(me, {
 						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCoach')),
-						autoLoad: false,						
+						autoLoad: false					
 					});
 		Ext.apply(this.getProxy(), {
 			extraParams : {
 				status: 'ALL', 
 				limit: '-1',
-				sort: 'lastName',
+				sort: 'lastName'
 			}
 		});
 		return me.callParent(arguments);

@@ -118,7 +118,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 		                    		me.close();
 		                    	},
 		                    	scope: me
-		                    },
+		                    }
 					
 		                },{
 			                xtype: 'tbspacer',

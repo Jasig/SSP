@@ -165,7 +165,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'studentTypes',
                     interfaceOptions: {
                         addButtonVisible: true,
-                        deleteButtonVisible: false,                     
+                        deleteButtonVisible: false                  
                     },                    
 					form: 'AbstractReferenceAdmin',
                     leaf: true,
@@ -598,7 +598,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'colorsAll',
 					interfaceOptions: {
                         addButtonVisible: true,
-                        deleteButtonVisible: false,                     
+                        deleteButtonVisible: false                    
                     },       
 					form: 'AbstractReferenceAdmin',
                     leaf: true,

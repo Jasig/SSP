@@ -27,7 +27,6 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
         personLite: 'personLite',
     	apiProperties: 'apiProperties',
     	mapPlanService:'mapPlanService'
-
     },
 	control: {
     	'openButton': {
@@ -64,8 +63,9 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 	    		Ext.Object.each(r,function(key,value){
 		    		var plans = value;
 		    		Ext.Array.each(plans,function(plan,index){
-		    			if(plan.name)
-		    			data.push(plan);
+		    			if(plan.name){
+							data.push(plan);
+						}
 		    		},this);
 		    	},this);		    		
 
@@ -103,7 +103,7 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 		record = me.getView().query('gridpanel')[0].getView().getSelectionModel().getSelection()[0];
         if (record) 
         {	
-        	 me.mapPlanService.getPlan(record.get('id'),record.get('personId'), callbacks)
+        	 me.mapPlanService.getPlan(record.get('id'),record.get('personId'), callbacks);
         }else{
      	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
         }    	
@@ -126,14 +126,16 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 	},	    
 	onCloseClick: function(){
 		var me = this;
-		if(me.getView().fromMapLoad)
+		if(me.getView().fromMapLoad){
 			me.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
+		}
 		me.getView().hide();
 	},
     destroy: function() {
     	var me = this;
-		if(me.getView().fromMapLoad)
+		if(me.getView().fromMapLoad){
 			me.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
+		}
         return this.callParent( arguments );
-    },  
+    }  
 });

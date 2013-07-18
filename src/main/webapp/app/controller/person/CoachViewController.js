@@ -76,7 +76,7 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 				},
 				failure: function () {
 					 me.getStudentTypeCombo().setDisabled(false); 
-					this.apiProperties.handleError
+					this.apiProperties.handleError;
 				}
 			}, this);				
 		}

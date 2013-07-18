@@ -44,7 +44,7 @@ Ext.define('Ssp.controller.admin.config.RegistrationLoadAdminViewController', {
 		
 		me.store.clearFilter();
 		
-		me.store.filter([{filterFn: function(item) { return item.get("name") == 'registration_load_ranges'; }}])
+		me.store.filter([{filterFn: function(item) { return item.get("name") == 'registration_load_ranges'; }}]);
 		
 		me.formUtils.reconfigureGridPanel( me.getRegistrationloadlistadmin(), me.store);
 		me.store.load();

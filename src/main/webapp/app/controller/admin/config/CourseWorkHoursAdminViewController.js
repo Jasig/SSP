@@ -44,7 +44,7 @@ Ext.define('Ssp.controller.admin.config.CourseWorkHoursAdminViewController', {
 		
 		me.store.clearFilter();
 		
-		me.store.filter([{filterFn: function(item) { return item.get("name") == 'weekly_course_work_hour_ranges'; }}])
+		me.store.filter([{filterFn: function(item) { return item.get("name") == 'weekly_course_work_hour_ranges'; }}]);
 		
 		me.formUtils.reconfigureGridPanel( me.getCourseworkhourslistadmin(), me.store);
 		me.store.load();

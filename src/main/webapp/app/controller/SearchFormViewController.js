@@ -35,8 +35,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
         programStatusesStore: 'programStatusesStore',
         programStatusService: 'programStatusService',
         searchCriteria: 'searchCriteria',
-        searchService: 'searchService',
-    	programStatusesStore: 'programStatusesStore'
+        searchService: 'searchService'    
     },
     control: {
     	view: {
@@ -53,19 +52,19 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     	},
 	'hoursEarnedMin':{
 			specialkey: "specialKeyPressed",
-			blur: "hoursEarnedMinChanged",
+			blur: "hoursEarnedMinChanged"
 	 },
 	'hoursEarnedMax':{
 			specialkey: "specialKeyPressed",
-			blur: 'hoursEarnedMaxChanged',
+			blur: 'hoursEarnedMaxChanged'
 	 },
 	 'gpaMin':{
 			specialkey: "specialKeyPressed",
-			blur: 'gpaMinChanged',
+			blur: 'gpaMinChanged'
 	 },
 	 'gpaMax':{
 			specialkey: "specialKeyPressed",
-			blur: 'gpaMaxChanged',
+			blur: 'gpaMaxChanged'
 	 }
     },
     
@@ -186,8 +185,9 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	
 	specialKeyPressed: function(field, el){
 		var me=this;
-		if(el.getKey() == Ext.EventObject.ENTER)
+		if(el.getKey() == Ext.EventObject.ENTER){
 			me.onSearchClick();
+		}
 	},
 	
 	hoursEarnedMinChanged: function(){
@@ -197,8 +197,9 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				me.getHoursEarnedMax().setValue(me.getHoursEarnedMin().getValue());
 				return;
 		}
-		if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue())
-			me.getHoursEarnedMax().setValue(me.getHoursEarnedMin().getValue())
+		if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue()){
+			me.getHoursEarnedMax().setValue(me.getHoursEarnedMin().getValue());
+		}
 	},
 	
 	hoursEarnedMaxChanged: function(){
@@ -211,8 +212,9 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			me.getHoursEarnedMin().setValue(0);
 			return;
 		}
-		if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue())
-			me.getHoursEarnedMin().setValue(me.getHoursEarnedMax().getValue())
+		if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue()){
+			me.getHoursEarnedMin().setValue(me.getHoursEarnedMax().getValue());
+		}
 	},
 	
 	gpaMinChanged: function(){
@@ -225,8 +227,9 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			me.getGpaMax().setValue(me.getGpaMin().getValue());
 			return;
 		}
-		if(me.getGpaMin().getValue() > me.getGpaMax().getValue())
-			me.getGpaMax().setValue(me.getGpaMin().getValue())
+		if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
+			me.getGpaMax().setValue(me.getGpaMin().getValue());
+		}
 	},
 	
 	gpaMaxChanged: function(){
@@ -237,12 +240,13 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			return;
 		}
 			
-		if(me.getGpaMin().getValue() > me.getGpaMax().getValue())
-			me.getGpaMin().setValue(me.getGpaMax().getValue())
+		if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
+			me.getGpaMin().setValue(me.getGpaMax().getValue());
+		}
 	},
 
     searchFailure: function( r, scope){
     	var me=scope;
 		me.appEventsController.getApplication().fireEvent("onPersonSearchFailure");
-    },	
+    }
 });

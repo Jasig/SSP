@@ -36,9 +36,7 @@ Ext.define('Ssp.controller.tool.documents.DocumentsViewController', {
     	formToDisplay: 'uploaddocuments'
     },
     
-    control: {
-    	
-    	
+    control: {    		
 		addDocumentButton: {
 			selector: '#addDocumentButton',
 			listeners: {
@@ -62,7 +60,7 @@ Ext.define('Ssp.controller.tool.documents.DocumentsViewController', {
 			listeners: {
 				click: 'onDownloadDocumentClick'
 		}
-	},
+	}
 		
 	},
 	
@@ -107,7 +105,7 @@ Ext.define('Ssp.controller.tool.documents.DocumentsViewController', {
 		var record = me.getView().getSelectionModel().getSelection()[0];
     	var url = me.getBaseUrl(me.person.get('id'));
     	url = url + '/'+record.get('id') + '/file';
-    	window.open(url,'_self')
+    	window.open(url,'_self');
 
     },   
     onAddDocumentClick: function(button) {

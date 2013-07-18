@@ -24,7 +24,7 @@ Ext.define('Ssp.store.StudentsSearch', {
         apiProperties: 'apiProperties'
     },
     config: {
-        baseUrlName: 'studentSearch',
+        baseUrlName: 'studentSearch'
     },
 	constructor: function(){
 		var me=this;

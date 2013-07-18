@@ -22,7 +22,7 @@ Ext.define('Ssp.view.tools.notes.Notes', {
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
    inject: {
-       store: 'personNotesStore',
+       store: 'personNotesStore'
     },
     minHeight: '400',
     width: '98%',

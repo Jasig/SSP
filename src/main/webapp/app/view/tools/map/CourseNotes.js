@@ -123,7 +123,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                         width: 250,
 				        disabled: !me.enableFields && !me.currentMapPlan.get('isTemplate'),
 				        associativeField: 'id'
-                    },
+                    }
 				    ]
 				    ,
 				    dockedItems: [{

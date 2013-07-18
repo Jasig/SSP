@@ -46,7 +46,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     							listeners: {
 	    							cancelEdit: function(rowEditor, item){
 	    								var columns = rowEditor.grid.columns;
-	    								var record = rowEditor.context.record
+	    								var record = rowEditor.context.record;
 	    								
 	    								Ext.each(rowEditor.editor.items.items, function(item) {
 	    									if(item.store != undefined && item.store != null) {
@@ -68,7 +68,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     	if(me.interfaceOptions !== undefined) { 
     		addVisible = me.interfaceOptions.addButtonVisible;
     		deleteVisible = me.interfaceOptions.deleteButtonVisible;    
-    		headerInstructions = me.interfaceOptions.headerInstructions
+    		headerInstructions = me.interfaceOptions.headerInstructions;
     	}
 
         // Special handling for view config so we don't accidentally clobber

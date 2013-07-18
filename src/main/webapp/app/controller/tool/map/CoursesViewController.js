@@ -77,7 +77,7 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
               listeners: {
                click: 'onTermCancelClick'
               }
-           },
+           }
 		
     },
     resetForm: function() {
@@ -174,8 +174,9 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
     },
     
     setParam: function(params, field, fieldName){
-    	if(field.getValue() && field.getValue().length > 0)
+    	if(field.getValue() && field.getValue().length > 0){
     		params[fieldName] = field.getValue();
+		}
     },
 
 

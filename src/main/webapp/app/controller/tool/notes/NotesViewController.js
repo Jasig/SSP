@@ -23,7 +23,7 @@ Ext.define('Ssp.controller.tool.notes.NotesViewController', {
     	apiProperties: 'apiProperties',
     	service: 'personNoteService',
         person: 'currentPerson',
-        store: 'personNotesStore',
+        store: 'personNotesStore'
     },
 	init: function() {
 		var me=this;

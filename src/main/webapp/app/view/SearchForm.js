@@ -51,19 +51,20 @@ Ext.define('Ssp.view.SearchForm',{
             header: {
             	toolFirst: true,
             	buttonAlign: 'left'
-            	},
+            },
 			defaults:{
-			    	  enableKeyEvents:true,
-			    	  listeners:{
+			    	 enableKeyEvents:true,
+			    	 listeners:{
 			    	    specialkey:{
-								scope: me,
-								fn: function(field, el) {
-				    	      			if(el.getKey() == Ext.EventObject.ENTER)
-				    	    				this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
-				    	    		}	
-			    	  			}
-							}
-			    		},
+							scope: me,
+							fn: function(field, el) {
+									if(el.getKey() == Ext.EventObject.ENTER){
+										this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
+									}
+							}	
+			    	  	}
+					}
+			},
             tools: [
                     {
                         text: 'Search',
@@ -95,12 +96,13 @@ Ext.define('Ssp.view.SearchForm',{
 					        field.focus(false, 0);
 					      },
 						  specialkey:{
-								scope: me,
-								fn: function(field, el) {
-				    	      			if(el.getKey() == Ext.EventObject.ENTER)
-				    	    				this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
-				    	    		}	
-			    	  		}
+							scope: me,
+							fn: function(field, el) {
+								if(el.getKey() == Ext.EventObject.ENTER){
+									this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
+								}
+							}	
+			    	  	}
 					}
                 },
                 {
@@ -166,7 +168,7 @@ Ext.define('Ssp.view.SearchForm',{
                    fieldLabel: 'To',
                    name: 'hoursEarnedMax',
 				   itemId: 'hoursEarnedMax',
-				   enableKeyEvents:true,
+				   enableKeyEvents:true
               }]
                 },
              {	   layout: 'column',
@@ -189,7 +191,7 @@ Ext.define('Ssp.view.SearchForm',{
                         	   fieldLabel: 'From',
                         	   name: 'gpaMin',
 							   itemId: 'gpaMin',
-							   enableKeyEvents:true,
+							   enableKeyEvents:true
                            },
                            {
                         	   xtype: 'numberfield',
@@ -203,7 +205,7 @@ Ext.define('Ssp.view.SearchForm',{
                         	   fieldLabel: 'To',
                         	   name: 'gpaMax',
 							   itemId: 'gpaMax',
-							   enableKeyEvents:true,
+							   enableKeyEvents:true
                            }              
                 ]},
                 {
@@ -213,7 +215,7 @@ Ext.define('Ssp.view.SearchForm',{
                     name: 'currentlyRegistered',
                     store: me.currentlyRegisteredStore,
    		   		    valueField: 'booleanValue',
-		   		    displayField: 'displayValue',                     
+		   		    displayField: 'displayValue'                 
                 }, 
                 {
 		   		    xtype: 'combobox',
@@ -223,7 +225,7 @@ Ext.define('Ssp.view.SearchForm',{
                     name: 'financialAidStatus',
                     store: me.financialAidSAPStatus,
    		   		    valueField: 'code',
-		   		    displayField: 'displayValue',                       
+		   		    displayField: 'displayValue'                      
                 },     
                 {
 		   		    xtype: 'combobox',
@@ -233,7 +235,7 @@ Ext.define('Ssp.view.SearchForm',{
                     name: 'mapStatus',
                     store: me.mapStatusStore,
    		   		    valueField: 'code',
-		   		    displayField: 'displayValue',                     
+		   		    displayField: 'displayValue'                   
                 },      
                 {
 		   		    xtype: 'combobox',

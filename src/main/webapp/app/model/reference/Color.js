@@ -20,6 +20,6 @@ Ext.define('Ssp.model.reference.Color', {
 	extend: 'Ssp.model.reference.AbstractReference',
     fields: [
 			{name: 'code', type: 'string'},
-			{name: 'hexCode', type: 'string'},
+			{name: 'hexCode', type: 'string'}
 	]
 });

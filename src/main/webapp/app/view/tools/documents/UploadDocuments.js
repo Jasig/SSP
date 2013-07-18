@@ -107,11 +107,11 @@ Ext.define('Ssp.view.tools.documents.UploadDocuments', {
                 items: [{
                     xtype: 'button',
                     itemId: 'saveButton',
-                    text: 'Save',
-                }, '-', {
+                    text: 'Save'
+					}, '-', {
                     xtype: 'button',
                     itemId: 'cancelButton',
-                    text: 'Cancel',
+                    text: 'Cancel'
                 }]
             }]
         });

@@ -303,7 +303,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     		me.person.populateFromGenericObject( r );
     		me.saveAppointment();
 		}else{
-			Ext.Msg.alert('Error','Error saving student record. Please see your administrator for additional details.')
+			Ext.Msg.alert('Error','Error saving student record. Please see your administrator for additional details.');
 		}    	
     },
     

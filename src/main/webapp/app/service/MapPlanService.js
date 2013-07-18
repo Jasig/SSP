@@ -167,13 +167,14 @@ Ext.define('Ssp.service.MapPlanService', {
     	var termCodes = [];
     	var i = 0;
     	var planCourses = mapPlan.get('planCourses');
-    	if(!planCourses)
+    	if(!planCourses){
     		return termCodes;
+		}
     	
     	planCourses.forEach(function(planCourse){
-    	if(termCodes.indexOf(planCourse.termCode) < 0)
+    	if(termCodes.indexOf(planCourse.termCode) < 0){
     		termCodes[i++] = planCourse.termCode;
-    	  })
+    	  }});
     	return termCodes;
     	},
     
@@ -189,8 +190,9 @@ Ext.define('Ssp.service.MapPlanService', {
 
 	getBoolean: function(model, fieldName){
 		var me = model;
-		if(me.get(fieldName) == 'on' || me.get(fieldName) == true || me.get(fieldName) == 1 || me.get(fieldName) == 'true')
+		if(me.get(fieldName) == 'on' || me.get(fieldName) == true || me.get(fieldName) == 1 || me.get(fieldName) == 'true'){
 			return true;
+		}
 		return false;
 	},
 
@@ -300,7 +302,7 @@ Ext.define('Ssp.service.MapPlanService', {
    			jsonData: outputData.data,
    			successFunc: success,
    			failureFunc: failure,
-   			scope: me,
+   			scope: me
    		});
     },
 
@@ -330,15 +332,15 @@ Ext.define('Ssp.service.MapPlanService', {
    			jsonData: plan.getSimpleJsonData(),
    			successFunc: success,
    			failureFunc: failure,
-   			scope: me,
+   			scope: me
    		});
 	},
 	
 	planStatus: function(plan, callbacks){
 		var me=this;
-		if(plan.get("isTemplate"))
+		if(plan.get("isTemplate")){
 			return callbacks.faliure("Is template, no plan status.", callbacks.scope);
-		
+		}
 		var url = me.getBaseUrl(plan.get('personId'));
 	    var success = function( response ){
 			callbacks.success( response, callbacks.scope );
@@ -351,7 +353,7 @@ Ext.define('Ssp.service.MapPlanService', {
    			method: 'POST',
    			successFunc: success,
    			failureFunc: failure,
-   			scope: me,
+   			scope: me
    		});
 	},
     
@@ -362,8 +364,9 @@ Ext.define('Ssp.service.MapPlanService', {
 		   this needs to be corrected                                        *****/		
 		var me = this;	
     	var objectStatus = me.currentMapPlan.get('objectStatus');
-		if(objectStatus != 'ACTIVE' || objectStatus != 'INACTIVE')
+		if(objectStatus != 'ACTIVE' || objectStatus != 'INACTIVE'){
 			me.currentMapPlan.set('objectStatus','ACTIVE');
+		}
 	    var failure = function( response ){
 	    	me.apiProperties.handleError( response );
 		    callbacks.failure( response, callbacks.scope );
@@ -374,7 +377,7 @@ Ext.define('Ssp.service.MapPlanService', {
 			semesterStores = [semsetersStore];
 			planCourses.forEach(function(planCourse){
 				semsetersStore.add(new Ssp.model.tool.map.SemesterCourse(planCourse));
-			})
+			});
 		}
 	    me.updateCurrentMap(semesterStores);
 	    outputData.set("plan",me.currentMapPlan.getSimpleJsonData());

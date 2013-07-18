@@ -1108,8 +1108,7 @@ Ext.onReady(function(){
 			    	peopleStore: 'Ssp.store.People',
 			    	personalityTypesStore: 'Ssp.store.reference.PersonalityTypes',
 			    	placementStore: 'Ssp.store.Placement',
-			    	planStore: 'Ssp.store.Plan',
-			    	planTemplatesSummaryStore: 'Ssp.store.PlanTemplatesSummary',
+			    	planStore: 'Ssp.store.Plan',			    	
 					programStatusesStore: 'Ssp.store.reference.ProgramStatuses',
 			    	programStatusChangeReasonsStore: 'Ssp.store.reference.ProgramStatusChangeReasons',
 				    referralSourcesStore: {
