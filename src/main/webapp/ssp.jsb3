@@ -964,13 +964,16 @@
                     "name": "ProfileContactViewController.js",
                     "path": "/app/controller/tool/profile/"
                 },
-                
+                {
+                    "clsName": "Ssp.service.PersonNoteService",
+                    "name": "PersonNoteService.js",
+                    "path": "/app/service/"
+                },
                 {
                     "clsName": "Ssp.controller.tool.notes.NotesViewController",
                     "name": "NotesViewController.js",
                     "path": "/app/controller/tool/notes/"
                 },
-                
                 {
                     "clsName": "Ssp.view.tools.notes.Notes",
                     "name": "Notes.js",
