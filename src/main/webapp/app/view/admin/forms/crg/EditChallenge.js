@@ -23,7 +23,7 @@ Ext.define('Ssp.view.admin.forms.crg.EditChallenge',{
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.crg.EditChallengeViewController',
     inject: {
-        confidentialityLevelsStore: 'confidentialityLevelsStore'
+        confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
     },
 	title: 'Edit Challenge',
 	initComponent: function() {

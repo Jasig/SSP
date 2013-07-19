@@ -128,7 +128,7 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
 	onLoadComplete: function( scope, node ){
 		var me=scope;
 		
-		if (node.get('qtitle') == 'INACTIVE' && !node.hasChildNodes()) {
+		if (node != "" && node.get('qtitle') == 'INACTIVE' && !node.hasChildNodes()) {
 			// remove the node
 			node.remove(true);
 		}
