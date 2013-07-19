@@ -248,7 +248,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 		appendAndOrWhere(stringBuilder, filterTracker);
 		stringBuilder.append(" p.studentType != null ");
-		
+		stringBuilder.append(" and p.objectStatus = :activeObjectStatus ");
 		stringBuilder.append(" and programStatuses.expirationDate IS NULL");
 	}
 
@@ -374,6 +374,8 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		{
 			query.setEntity("owner", securityService.currentlyAuthenticatedUser().getPerson());
 		}
+		
+		query.setInteger("activeObjectStatus", ObjectStatus.ACTIVE.ordinal());
 	}
 
 
