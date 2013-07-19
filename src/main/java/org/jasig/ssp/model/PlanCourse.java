@@ -101,7 +101,7 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 	}
 
 	public void setIsTranscript(Boolean isTranscript) {
-		this.isTranscript = isTranscript == false ? 0 : 1;
+		this.isTranscript = (isTranscript == null || isTranscript == false) ? 0 : 1;
 	}
 	
 	public Boolean getDuplicateOfTranscript() {
