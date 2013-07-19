@@ -25,7 +25,7 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
     	formUtils: 'formRendererUtils',
     	person: 'currentPerson',
     	model: 'currentStudentDocument',
-    	confidentialityLevelsStore: 'confidentialityLevelsStore'
+    	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -45,7 +45,9 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
     
 	init: function() {
 		var me=this;
+		me.confidentialityLevelsStore.clearFilter(true);
 		me.confidentialityLevelsStore.load();
+		me.formUtils.applyAssociativeStoreFilter(me.confidentialityLevelsStore, me.model.get('defaultConfidentialityLevelId'));
 		me.getView().getForm().loadRecord(me.model);
 		return this.callParent(arguments);
     },

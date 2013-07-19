@@ -22,7 +22,7 @@ Ext.define('Ssp.view.tools.documents.UploadDocuments', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
 	controller: 'Ssp.controller.tool.documents.UploadDocumentsViewController',
     inject: {
-    	confidentialityLevelsStore: 'confidentialityLevelsStore',
+    	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
     	model: 'currentStudentDocument'
     },
     width: '100%',
