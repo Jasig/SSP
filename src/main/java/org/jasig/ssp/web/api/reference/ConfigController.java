@@ -153,6 +153,11 @@ public class ConfigController
 		return filterSensitiveValues(super.get(id));
 	}
 
+	// Update: as of SSP-1520, the trusted IP list config we were specifically
+	// concerned about is no longer in the db and as such no longer visible
+	// to the config API. But we're leaving this filtering code here as a
+	// precaution anyway.
+	//
 	// Yes, this is absolutely a hack. should either be a flag on the config
 	// itself or services owning sensitive config should register themselves
 	// centrally as such. That this is at the controller level, though, is not

@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.transaction.TransactionConfiguration
 import org.springframework.transaction.annotation.Transactional
+import spock.lang.Ignore
 import spock.lang.Specification
 
 /**
@@ -55,6 +56,7 @@ class ConfigControllerGIntegrationTest extends Specification {
 		securityService.setCurrent(new Person())
 	}
 
+	@Ignore("IP config moved to the file system so is not visible to the Config API")
 	def "trusted IP list obfuscated when retrieved by name without write permission"() {
 		given: "a current user with read permissions only"
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID),
@@ -76,6 +78,7 @@ class ConfigControllerGIntegrationTest extends Specification {
 		configTO.value == "RESTRICTED"
 	}
 
+	@Ignore("IP config moved to the file system so is not visible to the Config API")
 	def "trusted IP list obfuscated when retrieved by ID without write permission"() {
 		given: "a current user with read permissions only"
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID),
@@ -97,6 +100,7 @@ class ConfigControllerGIntegrationTest extends Specification {
 		configTO.value == "RESTRICTED"
 	}
 
+	@Ignore("IP config moved to the file system so is not visible to the Config API")
 	def "trusted IP list obfuscated when retrieved by list without write permission"() {
 		given: "a current user with read permissions only"
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID),
@@ -125,6 +129,7 @@ class ConfigControllerGIntegrationTest extends Specification {
 		foundConfigRecord
 	}
 
+	@Ignore("IP config moved to the file system so is not visible to the Config API")
 	def "trusted IP list returned verbatim when retrieved by name with write permission"() {
 		given: "a current user with read permissions only"
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID),
@@ -146,6 +151,7 @@ class ConfigControllerGIntegrationTest extends Specification {
 		configTO.value == "127.0.0.1"
 	}
 
+	@Ignore("IP config moved to the file system so is not visible to the Config API")
 	def "trusted IP list returned verbatim when retrieved by ID with write permission"() {
 		given: "a current user with read permissions only"
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID),
@@ -167,6 +173,7 @@ class ConfigControllerGIntegrationTest extends Specification {
 		configTO.value == "127.0.0.1"
 	}
 
+	@Ignore("IP config moved to the file system so is not visible to the Config API")
 	def "trusted IP list returned verbatim when retrieved by list with write permission"() {
 		given: "a current user with read permissions only"
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID),

@@ -25,6 +25,7 @@ import org.jasig.ssp.service.RequestTrustService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.reference.ConfigTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.util.IpAddressMatcher;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,9 @@ public class RequestTrustServiceImpl implements RequestTrustService {
 	@Autowired
 	private ConfigService configService;
 
+	@Value("#{configProperties." + HIGHLY_TRUSTED_IPS_CONFIG_NAME + "}")
+	private String highlyTrustedIps;
+
 
 	@Override
 	public void assertHighlyTrustedRequest(HttpServletRequest request) throws AccessDeniedException {
@@ -50,8 +54,7 @@ public class RequestTrustServiceImpl implements RequestTrustService {
 	}
 
 	private void assertRequestFromHighlyTrustedIps(HttpServletRequest request) throws AccessDeniedException {
-		final String trustedIpsStr =
-				StringUtils.trimToNull(configService.getByNameNullOrDefaultValue(HIGHLY_TRUSTED_IPS_CONFIG_NAME));
+		final String trustedIpsStr = StringUtils.trimToNull(highlyTrustedIps);
 		if ( trustedIpsStr == null ) {
 			throw new AccessDeniedException("No highly trusted IPs have been configured.");
 		}
@@ -76,6 +79,8 @@ public class RequestTrustServiceImpl implements RequestTrustService {
 		return Boolean.parseBoolean(enabledStr.toLowerCase());
 	}
 
+	// No longer reading the IP list from the db, but leaving this here
+	// as a precaution anyway
 	@Override
 	public void obfuscateSensitiveConfig(ConfigTO config) {
 		if ( config == null ) {
@@ -84,5 +89,9 @@ public class RequestTrustServiceImpl implements RequestTrustService {
 		if ( HIGHLY_TRUSTED_IPS_CONFIG_NAME.equals(config.getName()) ) {
 			config.setValue(OBFUSCATION);
 		}
+	}
+
+	public void setHighlyTrustedIps(String highlyTrustedIps) {
+		this.highlyTrustedIps = highlyTrustedIps;
 	}
 }
