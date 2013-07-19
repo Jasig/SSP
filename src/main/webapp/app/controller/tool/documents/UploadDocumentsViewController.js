@@ -81,7 +81,7 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
                 	{
                 		Ext.Msg.alert('Error',o.result.message);
                 	}
-                	if(o.result.exception.match('MaxUploadSizeExceededException'))
+                	if(o.result.exception && o.result.exception.match('MaxUploadSizeExceededException'))
                 	{
                 		Ext.Msg.alert('Error','The file your trying to upload is too large.');
                 	}
