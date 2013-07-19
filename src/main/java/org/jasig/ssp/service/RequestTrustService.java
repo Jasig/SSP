@@ -20,9 +20,11 @@ package org.jasig.ssp.service;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.jasig.ssp.transferobject.reference.ConfigTO;
 import org.springframework.security.access.AccessDeniedException;
 
 
 public interface RequestTrustService {
 	void assertHighlyTrustedRequest(HttpServletRequest request) throws AccessDeniedException;
+	void obfuscateSensitiveConfig(ConfigTO config);
 }

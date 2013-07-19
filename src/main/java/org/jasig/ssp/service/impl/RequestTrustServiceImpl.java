@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.service.RequestTrustService;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.transferobject.reference.ConfigTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.util.IpAddressMatcher;
@@ -31,6 +32,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RequestTrustServiceImpl implements RequestTrustService {
+
+	private static final String HIGHLY_TRUSTED_IPS_ENABLED_CONFIG_NAME = "highly_trusted_ips_enabled";
+	private static final String HIGHLY_TRUSTED_IPS_CONFIG_NAME = "highly_trusted_ips";
+	private static final String OBFUSCATION = "RESTRICTED";
 
 	@Autowired
 	private ConfigService configService;
@@ -46,7 +51,7 @@ public class RequestTrustServiceImpl implements RequestTrustService {
 
 	private void assertRequestFromHighlyTrustedIps(HttpServletRequest request) throws AccessDeniedException {
 		final String trustedIpsStr =
-				StringUtils.trimToNull(configService.getByNameNullOrDefaultValue("highly_trusted_ips"));
+				StringUtils.trimToNull(configService.getByNameNullOrDefaultValue(HIGHLY_TRUSTED_IPS_CONFIG_NAME));
 		if ( trustedIpsStr == null ) {
 			throw new AccessDeniedException("No highly trusted IPs have been configured.");
 		}
@@ -67,7 +72,17 @@ public class RequestTrustServiceImpl implements RequestTrustService {
 
 	private boolean allowHighlyTrustedIps() {
 		final String enabledStr =
-				StringUtils.trimToNull(configService.getByNameNullOrDefaultValue("highly_trusted_ips_enabled"));
+				StringUtils.trimToNull(configService.getByNameNullOrDefaultValue(HIGHLY_TRUSTED_IPS_ENABLED_CONFIG_NAME));
 		return Boolean.parseBoolean(enabledStr.toLowerCase());
+	}
+
+	@Override
+	public void obfuscateSensitiveConfig(ConfigTO config) {
+		if ( config == null ) {
+			return;
+		}
+		if ( HIGHLY_TRUSTED_IPS_CONFIG_NAME.equals(config.getName()) ) {
+			config.setValue(OBFUSCATION);
+		}
 	}
 }
