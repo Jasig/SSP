@@ -90,7 +90,7 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	treeRequest.set('isLeaf', false);
     	treeRequest.set('callbackFunc', me.onLoadComplete);
     	treeRequest.set('callbackScope', me);
-    	me.treeUtils.getItems( treeRequest );
+    	me.treeUtils.getItemsWithParams( treeRequest , {limit: '-1'});
 		
     }, 
     
@@ -121,14 +121,14 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
 		
 		treeRequest.set('node', node);
 		
-    	me.treeUtils.getItems( treeRequest );
+    	me.treeUtils.getItemsWithParams( treeRequest , {limit: '-1'});
 		
     },
 
 	onLoadComplete: function( scope, node ){
 		var me=scope;
 		
-		if (node != "" && node.get('qtitle') == 'INACTIVE' && !node.hasChildNodes()) {
+		if (node && node != "" && node.get('qtitle') == 'INACTIVE' && !node.hasChildNodes()) {
 			// remove the node
 			node.remove(true);
 		}
