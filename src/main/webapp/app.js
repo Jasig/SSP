@@ -1225,15 +1225,24 @@ Ext.onReady(function(){
 			        studentActivityService: 'Ssp.service.StudentActivityService',
 			        courseService: 'Ssp.service.CourseService'
 				});
-				
+
+
+				// Do not use 'autoCreateViewport: true' here. It will trigger
+				// initialization of the Deft IoC container before the
+				// Application exists, so some managed components may be only
+				// partially initialized. This is particularly problematic for
+				// AppEventsController which needs a reference to the
+				// Application. If it does not have that reference, the first
+				// components to load (those associated with Viewport) cannot
+				// register Application-scoped events during their
+				// initialization. The resulting deferred event listener
+				// binding has been the direct cause of subtle bugs.
 				Ext.application({
 				    name: 'Ssp',
 				    appFolder: Ext.Loader.getPath('Ssp'),
-					autoCreateViewport: true,
 				    launch: function( app ) {
 				    	var me=this;
-				    	Deft.Injector.providers.appEventsController.value.config.app=me;
-				    	Deft.Injector.providers.appEventsController.value.app=me;
+				    	Deft.Injector.resolve("appEventsController").setApp(me);
 				    	
 				    	// Date patterns for formatting by a description
 				    	// rather than a date format
@@ -1375,7 +1384,15 @@ Ext.onReady(function(){
 			   	    	// load the main view
 			    		Ext.apply(me,{
 				    		items: [{xtype:'sspview'}]
-				    	});	    	
+				    	});
+
+				    	// Since we're not using 'autoCreateViewport: true',
+				    	// we need to create the default view ourselves.
+				    	// (Frankly not sure exactly what the relationship is
+				    	// between this and the xtype-based lookup of the same
+				    	// component type immediately above. But you'll get
+				    	// a blank screen without this explicit create.
+				    	Ext.create( "Ssp.view.Viewport");
 				    	
 				   }
 				});
