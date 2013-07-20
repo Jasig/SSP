@@ -85,6 +85,10 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
                 	{
                 		Ext.Msg.alert('Error','The file your trying to upload is too large.');
                 	}
+                	if(o.result.exception)
+                	{
+                		Ext.Msg.alert('Error','There has been an error uploading your file.  Please contact the system administrator.');
+                	}                	
                 }
             });
         }
