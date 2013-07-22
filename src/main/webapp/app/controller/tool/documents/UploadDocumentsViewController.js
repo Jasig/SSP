@@ -84,7 +84,14 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
                 	}
                 	if(o.result.exception && o.result.exception.match('MaxUploadSizeExceededException'))
                 	{
-                		Ext.Msg.alert('Error','The file you are trying to upload is too large.');
+                		//the configured max size is inside the second set of parens in the exception message...  We will
+                		//parse it out and give it to the user.
+                		var  startPos = o.result.exception.indexOf('(') + 1;
+                		var  endPos = o.result.exception.indexOf(')',startPos);
+                		startPos = o.result.exception.indexOf('(',endPos) +1;
+                		endPos = o.result.exception.indexOf(')',startPos);
+                		var size = Math.round(o.result.exception.substring(startPos,endPos)/1000)
+                		Ext.Msg.alert('Error','The file you are trying to upload is too large.  Max file size is '+size+'kb');
                 		return;
                 	}
                 	if(o.result.exception)
