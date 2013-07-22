@@ -80,14 +80,17 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
                 	if(o.result.message)
                 	{
                 		Ext.Msg.alert('Error',o.result.message);
+                		return;
                 	}
                 	if(o.result.exception && o.result.exception.match('MaxUploadSizeExceededException'))
                 	{
                 		Ext.Msg.alert('Error','The file you are trying to upload is too large.');
+                		return;
                 	}
                 	if(o.result.exception)
                 	{
                 		Ext.Msg.alert('Error','There has been an error uploading your file.  Please contact the system administrator.');
+                		return;
                 	}                	
                 }
             });
