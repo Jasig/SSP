@@ -470,15 +470,15 @@
 				<textFieldExpression><![CDATA[$F{financialAidStatus}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="517f3c55-b58d-4ee8-94e4-9d67e9ff4fa1" x="570" y="0" width="30" height="14"/>
+				<reportElement uuid="517f3c55-b58d-4ee8-94e4-9d67e9ff4fa1" x="543" y="0" width="30" height="14"/>
 				<textElement textAlignment="Center" verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[$F{lastTermGradePointAverage}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="58856228-b85e-4845-a11c-58a3a37d2ee8" x="543" y="0" width="27" height="14"/>
+				<reportElement uuid="58856228-b85e-4845-a11c-58a3a37d2ee8" stretchType="RelativeToBandHeight" x="543" y="14" width="40" height="14"/>
 				<textElement textAlignment="Center" verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[$F{lastTermRegistered}]]></textFieldExpression>
-			</textField>
+			</textField>		
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="97983083-41cf-41f7-b967-db6fc3624cee" stretchType="RelativeToTallestObject" x="600" y="2" width="57" height="28"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
