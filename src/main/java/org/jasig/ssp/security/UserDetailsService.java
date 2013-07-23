@@ -109,13 +109,13 @@ public class UserDetailsService implements SspUserDetailsService {
 	public UserDetails loadUserDetails(final Authentication token)
 			throws UsernameNotFoundException {
 		return loadUserDetails((String) token.getPrincipal(),
-				token.getAuthorities());
+				(Collection<GrantedAuthority>) token.getAuthorities());
 	}
 
 	@Override
 	public UserDetails mapUserFromContext(final DirContextOperations ctx,
-			final String username, final Collection<GrantedAuthority> authority) {
-		return loadUserDetails(username, authority);
+			final String username, final Collection<? extends GrantedAuthority> authority) {
+		return loadUserDetails(username, (Collection<GrantedAuthority>) authority);
 	}
 
 	@Override

@@ -187,7 +187,7 @@ public class SecurityServiceImpl implements SecurityService {
 	@Override
 	public boolean hasAuthority(final String authority) {
 
-		final Collection<GrantedAuthority> authorities = SecurityContextHolder
+		final Collection<? extends GrantedAuthority> authorities = SecurityContextHolder
 				.getContext().getAuthentication().getAuthorities();
 
 		for (GrantedAuthority auth : authorities) {

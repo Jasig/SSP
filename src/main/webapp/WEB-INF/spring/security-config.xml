@@ -35,24 +35,24 @@
 
 	<global-method-security pre-post-annotations="enabled" />
 
-    <http pattern="/api/1/oauth/token" create-session="stateless" authentication-manager-ref="oauth2ClientAuthenticationManager">
-        <intercept-url pattern="/api/1/oauth/token" access="IS_AUTHENTICATED_FULLY" />
+    <http pattern="/1/oauth/token" create-session="stateless" authentication-manager-ref="oauth2ClientAuthenticationManager">
+        <intercept-url pattern="/1/oauth/token" access="IS_AUTHENTICATED_FULLY" />
         <anonymous enabled="false" />
         <http-basic entry-point-ref="oauth2ClientAuthenticationEntryPoint" />
         <access-denied-handler ref="oauth2AccessDeniedHandler" />
     </http>
 
-    <http pattern="/api/1/**" create-session="stateless">
-        <anonymous enabled="false" />
-        <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
-        <!--<custom-filter position="PRE_AUTH_FILTER" ref="uPortalFilter"/>-->
-        <access-denied-handler ref="oauth2AccessDeniedHandler" />
-    </http>
+    <!--<http pattern="/1/**" create-session="stateless">-->
+        <!--<anonymous enabled="false" />-->
+        <!--<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />-->
+        <!--&lt;!&ndash;<custom-filter position="PRE_AUTH_FILTER" ref="uPortalFilter"/>&ndash;&gt;-->
+        <!--<access-denied-handler ref="oauth2AccessDeniedHandler" />-->
+    <!--</http>-->
 
-    <oauth:resource-server id="resourceServerFilter" resource-id="ssp" token-services-ref="oauth2TokenServices" entry-point-ref="oauth2ClientAuthenticationManager" />
+    <oauth:resource-server id="resourceServerFilter" resource-id="ssp" token-services-ref="oauth2TokenServices" entry-point-ref="oauth2ClientAuthenticationEntryPoint" />
 
     <authentication-manager id="oauth2ClientAuthenticationManager">
-        <authentication-provider user-service-ref="oauth2ClientDetailsService" />
+        <authentication-provider user-service-ref="oauth2ClientDetailsUserService" />
     </authentication-manager>
 
     <beans:bean id="oauth2ClientAuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
@@ -99,7 +99,7 @@
 
 	<beans:bean name="requestCleanupServletFilter" class=" org.jasig.ssp.security.RequestCleanupServletFilter" />
 
-    <oauth:authorization-server token-endpoint-url="/api/1/oauth/token"
+    <oauth:authorization-server token-endpoint-url="/1/oauth/token"
                                 client-details-service-ref="oauth2ClientDetailsService"
                                 token-services-ref="oauth2TokenServices">
       <oauth:authorization-code disabled="true" />
@@ -108,6 +108,10 @@
       <oauth:client-credentials />
       <oauth:password disabled="true" />
     </oauth:authorization-server>
+
+    <beans:bean id="oauth2ClientDetailsUserService" class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
+        <beans:constructor-arg ref="oauth2ClientDetailsService" />
+    </beans:bean>
 
     <oauth:client-details-service id="oauth2ClientDetailsService">
         <oauth:client client-id="my-client-with-secret" authorized-grant-types="client_credentials" secret="secret" />
