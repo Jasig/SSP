@@ -26,7 +26,8 @@ Ext.define('Ssp.controller.person.CoachViewController', {
     	person: 'currentPerson', 	
     	sspConfig: 'sspConfig',
         studentTypesStore: 'studentTypesAllUnpagedStore',
-        formRendererUtils: 'formRendererUtils'
+        formRendererUtils: 'formRendererUtils',
+		personService: 'personService'
     },
     config: {
     	inited: false
@@ -55,8 +56,10 @@ Ext.define('Ssp.controller.person.CoachViewController', {
     
 	init: function() {
 		var me=this;
+		var editFlag = me.person.get('id');
+		me.missingCoach = null;
 
-		if ( me.person.get('id') != "")
+		if ( editFlag )
 		{			
 			me.getCoachCombo().setDisabled( me.sspConfig.get('coachSetFromExternalData') );
 			var url = me.apiProperties.createUrl(me.apiProperties.getItemUrl('config')
@@ -79,19 +82,31 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 					this.apiProperties.handleError;
 				}
 			}, this);				
-		}
-		
-		
+		}		
+				
+		me.coachesStore.load(function(records, operation, success) {
+	        if(!success) {
+				Ext.Msg.alert('Error','Unable to load Coaches. Please see your system administrator for assistance.');
+	        } else {
+				if ( editFlag ) {
+					// Must be edit mode. Make best effort at trying to find the
+					// associated coach and inject it into the view. Currently
+					// associated coach might not be in the store already, e.g. if he/she
+					// were "demoted" in the directory system. So, we query to get all
+					// coaches.
+					var currentCoachId = me.person.getCoachId();				
+					if ( !(me.coachesStore.getById(currentCoachId)) ) {						
+						me.lookupMissingCoach(currentCoachId, me.afterMissingCoachLookup, me);
+					} else {						
+						me.getCoachCombo().setValue( me.person.getCoachId() );	
+					}
+				} 
+			}
+		 });
+		 
 		me.studentTypesStore.load();
 		me.studentTypesStore.clearFilter(true);
 		me.formRendererUtils.applyAssociativeStoreFilter(me.studentTypesStore, me.person.data.studentType.id);	
-		
-		me.coachesStore.load(function(records, operation, success) {
-	          if(!success)
-	          {
-	        	  Ext.Msg.alert('Error','Unable to load Coaches. Please see your system administrator for assistance.');
-	          }
-		 });
 		
 		me.initForm();
 		
@@ -100,8 +115,7 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 
 	initForm: function(){
 		var me=this;
-		me.getView().getForm().reset();
-		me.getCoachCombo().setValue( me.person.getCoachId() );
+		me.getView().getForm().reset();		
 		me.getStudentTypeCombo().setValue( me.person.getStudentTypeId() );
 		me.inited=true;
 	},    
@@ -146,5 +160,51 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 		if(studentType != null){
 			me.appEventsController.getApplication().fireEvent('studentTypeChange');
 		}
-	}
+	},
+	
+	destroy: function() {
+		var me = this;		
+		me.maybeClearMissingCoach();
+	},
+	
+	lookupMissingCoach: function(coachId, after, afterScope) {
+		var me = this;
+		me.missingCoach = Ext.create('Ssp.model.Coach', {
+			id: coachId,
+			firstName: "UNKNOWN",
+			lastName: "PERSON"
+		});
+		me.personService.getLite(coachId, { 
+			success: function(person) {
+				if (person) {
+					me.missingCoach = Ext.create('Ssp.model.Coach', {
+						id: person.id,
+						firstName: person.firstName,
+						lastName: person.lastName
+					});					
+				}				
+				after.apply(afterScope);
+			},
+			failure: function() {
+				//likely app can just proceed without current coach in store				
+				after.apply(afterScope);
+			}
+		});					
+	},
+	
+	afterMissingCoachLookup: function() {
+		var me = this;		
+		me.coachesStore.add(me.missingCoach);
+		me.coachesStore.sort('lastName', 'ASC');	
+		me.getCoachCombo().setValue( me.missingCoach );	
+	},
+	
+	maybeClearMissingCoach: function() {
+		var me = this;	
+		if ( me.missingCoach ) {
+			me.coachesStore.remove(me.missingCoach);
+			me.coachesStore.sort('lastName', 'ASC');
+			me.missingCoach = null;
+		}
+	}	
 });
