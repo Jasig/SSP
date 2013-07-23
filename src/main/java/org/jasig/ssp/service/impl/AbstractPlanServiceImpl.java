@@ -319,7 +319,8 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 	private List<TermCourses<T,TO>> collectTermCourses(TO plan) throws ObjectNotFoundException {
 		Map<String,TermCourses<T,TO>> semesterCourses = new HashMap<String, TermCourses<T,TO>>();
 		List<TermNoteTO> termNotes = plan.getTermNotes();
-		List<Term> futureTerms = getTermService().getCurrentAndFutureTerms().subList(0, 6);
+		List<Term> currentAndFutureTerms = getTermService().getCurrentAndFutureTerms();
+		List<Term> futureTerms = currentAndFutureTerms.subList(0, Math.min(6,currentAndFutureTerms.size()));
 		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : plan.getCourses()){				
 			if(!semesterCourses.containsKey(course.getTermCode())){
 				Term term = getTermService().getByCode(course.getTermCode());
