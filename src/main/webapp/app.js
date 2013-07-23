@@ -1262,6 +1262,7 @@ Ext.onReady(function(){
 				    	
 				    	// Global error handling for Ajax calls 
 				    	Ext.override(Ext.data.proxy.Server, {
+				    		simpleSortMode: true,
 				            constructor: function(config)
 				            {
 				                this.callOverridden([config]);
