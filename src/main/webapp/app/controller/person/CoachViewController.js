@@ -161,12 +161,7 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 			me.appEventsController.getApplication().fireEvent('studentTypeChange');
 		}
 	},
-	
-	destroy: function() {
-		var me = this;		
-		me.maybeClearMissingCoach();
-	},
-	
+		
 	lookupMissingCoach: function(coachId, after, afterScope) {
 		var me = this;
 		me.missingCoach = Ext.create('Ssp.model.Coach', {
