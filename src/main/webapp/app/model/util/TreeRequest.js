@@ -26,6 +26,7 @@ Ext.define('Ssp.model.util.TreeRequest', {
              {name: 'enableCheckedItems', type: 'boolean', defaultValue: true},
              {name: 'expanded', type:'boolean',defaultValue: false},
              {name: 'expandable', type:'boolean', defaultValue: true},
+             {name: 'responseFilter', type:'auto'},
              {name: 'callbackFunc',type:'auto'},
              {name: 'callbackScope', type: 'auto'},
              {name: 'removeParentWhenNoChildrenExist', type: 'boolean', defaultValue: false},

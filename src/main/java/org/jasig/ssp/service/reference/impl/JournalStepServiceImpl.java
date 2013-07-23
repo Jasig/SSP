@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
+import java.util.UUID;
+
 import org.jasig.ssp.dao.reference.JournalStepDao;
 import org.jasig.ssp.dao.reference.JournalStepJournalStepDetailDao;
 import org.jasig.ssp.model.ObjectStatus;
@@ -25,6 +27,7 @@ import org.jasig.ssp.model.reference.JournalStep;
 import org.jasig.ssp.model.reference.JournalStepDetail;
 import org.jasig.ssp.model.reference.JournalStepJournalStepDetail;
 import org.jasig.ssp.model.reference.JournalTrack;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.JournalStepService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -61,6 +64,13 @@ public class JournalStepServiceImpl extends
 			final JournalTrack journalTrack,
 			final SortingAndPaging sAndP) {
 		return getDao().getAllForJournalTrack(journalTrack.getId(), sAndP);
+	}
+
+	@Override
+	public PagingWrapper<JournalStepJournalStepDetail> getJournalStepDetailAssociationsForJournalStep(
+			final UUID journalStepId, final SortingAndPaging sAndP)
+			throws ObjectNotFoundException {
+		return journalStepJournalStepDetailDao.getAllForJournalStep(journalStepId, sAndP);
 	}
 
 	@Override

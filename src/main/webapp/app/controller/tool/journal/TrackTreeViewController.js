@@ -69,17 +69,58 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
         // load the steps
         if (journalTrackId != null && journalTrackId != "") {
             var treeRequest = new Ssp.model.util.TreeRequest();
-            treeRequest.set('url', this.journalTrackUrl + '/' + journalTrackId + '/journalStep?sort=name&status=ALL');
+            treeRequest.set('url', this.journalTrackUrl + '/' + journalTrackId + '/journalTrackJournalStep?limit=-1&status=ALL');
             treeRequest.set('nodeType', 'journalStep');
             treeRequest.set('isLeaf', false);
             treeRequest.set('enableCheckedItems', false);
+            treeRequest.set('responseFilter', this.transformJournalTrackJournalStepAssociations);
             treeRequest.set('expanded', false);
             treeRequest.set('callbackFunc', this.afterJournalStepsLoaded);
             treeRequest.set('callbackScope', this);
             this.treeUtils.getItems(treeRequest);
         }
     },
-    
+
+    transformJournalTrackJournalStepAssociations: function(assocs) {
+        // Lots of copy/paste code from transformJournalStepJournalDetailAssociations()
+        // that we're just living with for now
+        var me = this;
+        var transformed = [];
+        Ext.Array.each(assocs, function(assoc, index) {
+            if ( assoc.objectStatus === "ACTIVE" || me.isSelectedJournalTrackJournalStepAssociation(assoc) ) {
+                transformed.push(me.journalStepNodeItemFromTrackAssociation(assoc));
+            }
+        });
+        return me.sortBy(transformed, "name");
+    },
+
+    isSelectedJournalTrackJournalStepAssociation: function(assoc) {
+        // Lots of copy/paste code from isSelectedJournalStepJournalDetailAssociation()
+        // that we're just living with for now
+
+        var me = this;
+        var journalEntryDetails = me.journalEntry.get("journalEntryDetails");
+        if ( !(journalEntryDetails) ) {
+            return false;
+        }
+
+        var assocJournalStepId = assoc.journalStep && assoc.journalStep.id;
+        if ( !(assocJournalStepId) ) {
+            return false;
+        }
+        return journalEntryDetails.some(function(journalEntryDetail, index){
+            if ( journalEntryDetail.objectStatus !== 'ACTIVE' ) {
+                return false;
+            }
+            var journalStep = journalEntryDetail.journalStep;
+            return journalStep && journalStep.id === assocJournalStepId;
+        });
+    },
+
+    journalStepNodeItemFromTrackAssociation: function(assoc) {
+        return assoc.journalStep;
+    },
+
     afterJournalStepsLoaded: function(scope){
         // after the journal steps load expand them to
         // display the details under each step
@@ -95,11 +136,13 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
         var id = me.treeUtils.getIdFromNodeId(node.data.id);
         if (url != "") {
             var treeRequest = new Ssp.model.util.TreeRequest();
-            treeRequest.set('url', url + '/' + id + '/journalStepDetail?sort=name&status=' + 'ALL');
+            // can't sort on name here... these objects have no name
+            treeRequest.set('url', url + '/' + id + '/journalStepJournalStepDetail?limit=-1&status=ALL');
             treeRequest.set('nodeType', 'journalDetail');
             treeRequest.set('isLeaf', true);
             treeRequest.set('nodeToAppendTo', node);
             treeRequest.set('enableCheckedItems', true);
+            treeRequest.set('responseFilter', me.transformJournalStepJournalDetailAssociations);
             treeRequest.set('callbackFunc', me.afterJournalDetailsLoaded);
             treeRequest.set('callbackScope', me);
             treeRequest.set('removeParentWhenNoChildrenExist', true);
@@ -108,11 +151,56 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
             me.treeUtils.getItems(treeRequest);
         }
     },
-    
-    
-    
-    
+
+    transformJournalStepJournalDetailAssociations: function(assocs) {
+        var me = this;
+        var transformed = [];
+        Ext.Array.each(assocs, function(assoc, index) {
+            if ( assoc.objectStatus === "ACTIVE" || me.isSelectedJournalStepJournalDetailAssociation(assoc) ) {
+                transformed.push(me.journalDetailNodeItemFromStepAssociation(assoc));
+            }
+        });
+        return me.sortBy(transformed, "name");
+    },
+
+    isSelectedJournalStepJournalDetailAssociation: function(assoc) {
+        var me = this;
+        var journalEntryDetails = me.journalEntry.get("journalEntryDetails");
+        if ( !(journalEntryDetails) ) {
+            return false;
+        }
+
+        // Journal entry API doesn't actually track step/detail assoc IDs, even
+        // though that's what's happening on the back end.
+        var assocJournalStepId = assoc.journalStep && assoc.journalStep.id;
+        var assocJournalStepDetailId = assoc.journalStepDetail && assoc.journalStepDetail.id;
+        if ( !(assocJournalStepId) || !(assocJournalStepDetailId) ) {
+            return false;
+        }
+        return journalEntryDetails.some(function(journalEntryDetail, index){
+            if ( journalEntryDetail.objectStatus !== 'ACTIVE' ) {
+                return false;
+            }
+            var journalStep = journalEntryDetail.journalStep;
+            if ( !(journalStep && journalStep.id === assocJournalStepId) ) {
+                return false;
+            }
+            var journalStepDetails = journalEntryDetail.journalStepDetails;
+            if ( !(journalStepDetails) ) {
+                return false;
+            }
+            return journalStepDetails.some(function(journalStepDetail, index){
+                return journalStepDetail.id === assocJournalStepDetailId;
+            });
+        });
+    },
+
+    journalDetailNodeItemFromStepAssociation: function(assoc) {
+        return assoc.journalStepDetail;
+    },
+
     afterJournalDetailsLoaded: function(scope, node){
+
         var me = this;
         // after the journal details load select each detail
         // that is selected in the journal
@@ -121,52 +209,45 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
         if (journalEntryDetails != "" && journalEntryDetails != null) {
         
             Ext.Array.each(journalEntryDetails, function(item, index){
-                var journalStepDetails = item.journalStepDetails;
-                var journalStep = item.journalStep;
-                var counter = 0;
-                
-                
-                Ext.Array.each(journalStepDetails, function(innerItem, innerIndex){
-                
-                    var id = innerItem.id;
-                   
-                    var detailNode = scope.getView().getView().getTreeStore().getNodeById(id + '_journalDetail');
-                    
-                    if (detailNode != null) {
-                    
-                        stepNode = detailNode.parentNode;
-                        
-                       
-                        
-                        var parentId = journalStep.id;
-                        
-                        
-                        var parentNode = scope.getView().getView().getTreeStore().getNodeById(parentId + '_journalStep');
-                        
-                        if (stepNode.id == parentNode.id) {
-                            detailNode.set('checked', true);
-                            
+
+                if ( item.objectStatus === 'ACTIVE' ) {
+
+                    var journalStepDetails = item.journalStepDetails;
+                    var journalStep = item.journalStep;
+                    var counter = 0;
+
+                    Ext.Array.each(journalStepDetails, function(innerItem, innerIndex){
+
+                        var id = innerItem.id;
+
+                        var detailNode = scope.getView().getView().getTreeStore().getNodeById(id + '_journalDetail');
+
+                        if (detailNode != null) {
+
+                            stepNode = detailNode.parentNode;
+
+
+
+                            var parentId = journalStep.id;
+
+
+                            var parentNode = scope.getView().getView().getTreeStore().getNodeById(parentId + '_journalStep');
+
+                            if (stepNode.id == parentNode.id) {
+                                detailNode.set('checked', true);
+
+                            }
                         }
-                    }
-                });
+
+                    });
+
+                }
                 
             });
         }
         
         var children = node.childNodes;
         if (children) {
-           
-            var kidsLen = (children.length - 1);
-            for (var i = kidsLen; i >= 0; i--) {
-                var child = node.childNodes[i];
-               
-                var isChecked = child.get('checked');
-                var status = child.get('qtitle');
-                if (!isChecked && status == 'INACTIVE') {
-                    child.remove();
-                }
-            }
-            children = node.childNodes;
             if (node.get('qtitle') == 'INACTIVE' && !children.length) {
                 node.remove();
             }
@@ -213,6 +294,18 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
     
     displayJournalEditor: function(){
         var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
-    }
+    },
+
+    sortBy: function(array, field) {
+        array.sort(function(a,b){
+            var fieldA = a[field];
+            var fieldB = b[field];
+            if ( fieldA < fieldB ) {
+                return -1;
+            }
+            return (fieldA > fieldB) ? 1 : 0;
+        });
+        return array; // just to make chaining easier
+    },
     
 });

@@ -16,32 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.reference;
+package org.jasig.ssp.factory.reference;
 
-import java.util.UUID;
-
-import org.jasig.ssp.model.reference.JournalStep;
-import org.jasig.ssp.model.reference.JournalTrack;
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.reference.JournalStepJournalStepDetail;
 import org.jasig.ssp.model.reference.JournalTrackJournalStep;
-import org.jasig.ssp.service.ReferenceService;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.transferobject.reference.JournalStepJournalStepDetailTO;
+import org.jasig.ssp.transferobject.reference.JournalTrackJournalStepTO;
 
-/**
- * JournalTrackService
- */
-public interface JournalTrackService extends
-		ReferenceService<JournalTrack> {
 
-	JournalTrackJournalStep addJournalStepToJournalTrack(
-			JournalStep journalStep,
-			JournalTrack journalTrack);
-
-	JournalTrackJournalStep removeJournalStepFromJournalTrack(
-			JournalStep journalStep,
-			JournalTrack journalTrack);
-
-	PagingWrapper<JournalTrackJournalStep> getJournalStepAssociationsForJournalTrack(
-			UUID journalTrackId,
-			SortingAndPaging aAndP);
+public interface JournalTrackJournalStepTOFactory extends
+		TOFactory<JournalTrackJournalStepTO, JournalTrackJournalStep> {
 }

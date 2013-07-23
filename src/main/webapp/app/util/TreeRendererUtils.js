@@ -164,6 +164,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     	var nodeType = treeRequest.get('nodeType');
     	var expanded = treeRequest.get('expanded');
     	var expandable = treeRequest.get('expandable');
+		var responseFilter = treeRequest.get('responseFilter');
     	var callbackFunc = treeRequest.get('callbackFunc');
     	var callbackScope = treeRequest.get('callbackScope');
     	var removeParentWhenNoChildrenExist = treeRequest.get('removeParentWhenNoChildrenExist');
@@ -182,6 +183,9 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 		    	var nodes = [];
 		    	if (records.length > 0)
 		    	{
+					if ( responseFilter ) {
+						records = responseFilter.apply(callbackScope, [records]);
+					};
 		    		nodes = me.createNodesFromJson(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable, includeToolTip, toolTipFieldName);
 		    		me.appendChildren( nodeToAppendTo, nodes);
 		    	}else{

@@ -18,10 +18,13 @@
  */
 package org.jasig.ssp.service.reference;
 
+import java.util.UUID;
+
 import org.jasig.ssp.model.reference.JournalStep;
 import org.jasig.ssp.model.reference.JournalStepDetail;
 import org.jasig.ssp.model.reference.JournalStepJournalStepDetail;
 import org.jasig.ssp.model.reference.JournalTrack;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.ReferenceService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -44,9 +47,14 @@ public interface JournalStepService extends
 	PagingWrapper<JournalStep> getAllForJournalTrack(JournalTrack journalTrack,
 			SortingAndPaging sAndP);
 
+	PagingWrapper<JournalStepJournalStepDetail> getJournalStepDetailAssociationsForJournalStep(UUID journalStepId, SortingAndPaging sAndP)
+			throws ObjectNotFoundException;
+
 	JournalStepJournalStepDetail addJournalStepDetailToJournalStep(
 			JournalStepDetail journalStepDetail, JournalStep journalStep);
 
 	JournalStepJournalStepDetail removeJournalStepDetailFromJournalStep(
 			JournalStepDetail journalStepDetail, JournalStep journalStep);
+
+
 }

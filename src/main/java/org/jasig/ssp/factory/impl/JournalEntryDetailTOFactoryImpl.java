@@ -19,6 +19,7 @@
 package org.jasig.ssp.factory.impl;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.jasig.ssp.dao.JournalEntryDetailDao;
@@ -43,6 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 /**
@@ -112,31 +114,39 @@ public class JournalEntryDetailTOFactoryImpl
 
 		model.setJournalEntry(journalEntry);
 
+		// Would be better served by not even trying to store the pointer to the
+		// association if the front end isn't going to preserve that relationship.
+		// This is all just ending up way too complicated.
 		final PagingWrapper<JournalStepJournalStepDetail> jsJsds = journalStepJournalStepDetailDao
 				.getAllForJournalStepDetailAndJournalStep(journalStepDetail
 						.getId(), tObject.getJournalStep().getId(),
-						new SortingAndPaging(ObjectStatus.ACTIVE));
-		if (jsJsds.getResults() == 1) {
-			model.setJournalStepJournalStepDetail(jsJsds.getRows().iterator()
-					.next());
-		} else if (jsJsds.getResults() > 1) {
-			final StringBuilder sb = new StringBuilder();
-			for (final JournalStepJournalStepDetail journalStepJournalStepDetail : jsJsds
-					.getRows()) {
-				if (sb.length() > 0) {
-					sb.append(", ");
-				}
+						SortingAndPaging.createForSingleSortWithPaging(
+								ObjectStatus.ALL, 0, -1, "modifiedDate", "DESC", null));
 
-				sb.append(journalStepJournalStepDetail);
+		List<JournalStepJournalStepDetail> inactiveJsJsds = Lists.newArrayList();
+
+		for ( JournalStepJournalStepDetail jsJsd : jsJsds.getRows() ) {
+			if ( jsJsd.getObjectStatus() == ObjectStatus.ACTIVE ) {
+				// just take the first
+				model.setJournalStepJournalStepDetail(jsJsd);
+				break;
+			} else {
+				inactiveJsJsds.add(jsJsd);
+			}
+		}
+
+		if ( model.getJournalStepJournalStepDetail() == null ) {
+			if ( inactiveJsJsds.isEmpty() ) {
+				throw new ValidationException(
+						"Could not find an association for JournalStep and JournalStepDetail.");
 			}
 
-			LOGGER.error("Multiple Active JournalStepJournalStepDetail objects exists for a Journal Step and Journal Step Detail: "
-					+ sb.toString());
-			throw new ValidationException(
-					"Too many associations for JournalStep and JournalStepDetail were found.");
-		} else {
-			throw new ValidationException(
-					"Could not find an association for JournalStep and JournalStepDetail.");
+			// We have to allow this b/c we have no good way given the typical
+			// usage pattern of these factory objects of figuring out whether
+			// this is really an invalid request or just a reiteration of a
+			// previously selected association that just happened to have been
+			// soft-deleted later on.
+			model.setJournalStepJournalStepDetail(inactiveJsJsds.get(0));
 		}
 
 		return model;
