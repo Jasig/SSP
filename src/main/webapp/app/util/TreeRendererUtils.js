@@ -225,7 +225,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     	var removeParentWhenNoChildrenExist = treeRequest.get('removeParentWhenNoChildrenExist');
     	var includeToolTip = treeRequest.get('includeToolTip');
     	var toolTipFieldName = treeRequest.get('toolTipFieldName');
-		
+		var node = treeRequest.get('node');
     	// retrieve items
 		me.apiProperties.makeRequest({
 			url: me.apiProperties.createUrl( url ),
@@ -252,8 +252,9 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 		    	}
 		    	
 	    		if (callbackFunc != null && callbackFunc != "")
-	    			callbackFunc( callbackScope );
+	    			callbackFunc( callbackScope , node);
 			}
 		});
+		return 1;
     }
 });
