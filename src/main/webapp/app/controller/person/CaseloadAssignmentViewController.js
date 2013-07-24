@@ -56,6 +56,10 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		me.resetAppointmentModels();
 
 		var id = me.personLite.get('id');
+		
+		//Loading store here for coach, student_type, and appointment combos due to timing issue between separate controllers
+		me.studentTypesStore.load(); 
+		
 		// load the person record and init the view
 		if (id.length > 0)
 		{
@@ -63,9 +67,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			
 	    	me.personService.get( id, {success:me.getPersonSuccess, 
 	    									  failure:me.getPersonFailure, 
-	    									  scope: me} );		  
-			//Loading store here for coach, student_type, and appointment combos due to timing issue between separate controllers
-			me.studentTypesStore.load(); 
+	    									  scope: me} );					
 		}else{
 			me.initForms();
 			me.updateTitle();
