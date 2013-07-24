@@ -131,31 +131,39 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	// search results
 		//me.getSearchText().setValue( me.searchCriteria.get('searchTerm') );
 	   	//me.getSearchCaseloadCheck().setValue( !me.searchCriteria.get('outsideCaseload') );
-				
+
 		return me.callParent(arguments);
     },
     
 	onSelectionChange: function(selModel,records,eOpts){ 
 		var me=this;
-		var person = new Ssp.model.Person();
-		// clear the person record
-		me.person.data = person.data;
-		if (records.length > 0)
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('personNav', records, me);  
+
+		if(skipCallBack)
 		{
-			if (records[0].data.id != null)
+			var person = new Ssp.model.Person();
+			// clear the person record
+			me.person.data = person.data;
+			if (records.length > 0)
 			{
-				me.personLite.set('id', records[0].data.id);
-			}else{
-				me.personLite.set('id', records[0].data.personId);
+				me.updatePerson(records);
+				me.appEventsController.getApplication().fireEvent('loadPerson');	
 			}
-			me.personLite.set('firstName', records[0].data.firstName);
-			me.personLite.set('middleName', records[0].data.middleName);
-			me.personLite.set('lastName', records[0].data.lastName);
-			me.personLite.set('displayFullName', records[0].data.firstName + ' ' + records[0].data.lastName);
-			me.appEventsController.getApplication().fireEvent('loadPerson');			
 		}
 	},
-
+    updatePerson: function(records){
+    var me=this;
+		if (records[0].data.id != null)
+		{
+			me.personLite.set('id', records[0].data.id);
+		}else{
+			me.personLite.set('id', records[0].data.personId);
+		}
+		me.personLite.set('firstName', records[0].data.firstName);
+		me.personLite.set('middleName', records[0].data.middleName);
+		me.personLite.set('lastName', records[0].data.lastName);
+		me.personLite.set('displayFullName', records[0].data.firstName + ' ' + records[0].data.lastName);
+	},
 	onViewReady: function(comp, eobj){
 		var me=this;
         me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
@@ -332,17 +340,29 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     onAddPersonClick: function( button ){
     	var me=this;
-    	me.onAddPerson();
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('personButtonAdd',me);  
+        if(skipCallBack)
+        {
+        	me.onAddPerson();
+        }
 	},
 	
 	onEditPersonClick: function( button ){
     	var me=this;
-    	me.onEditPerson();
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('personButtonEdit',me);  
+        if(skipCallBack)
+        {
+        	me.onEditPerson();
+        }
 	},
 
 	onDeletePersonClick: function( button ){
     	var me=this;
-    	me.onDeletePerson();
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('personButtonDelete',me);  
+        if(skipCallBack)
+        {
+        	me.onDeletePerson();
+        }
 	},	
 	
 	onAddPerson: function(){
@@ -429,32 +449,37 @@ Ext.define('Ssp.controller.SearchViewController', {
   
     onSetProgramStatusClick: function( button ){
     	var me=this;
-    	var action = button.action;
-    	switch ( action )
-    	{
-    		case 'active':
-    			me.setProgramStatus( action );
-    			break;
-    		
-    		case 'no-show':
-    			me.setProgramStatus( action );
-    			break;
-    			
-    		case 'transition':
-    	     	/* 
-    	     	 * Temp fix for SSP-434
-    	     	 * 
-    	     	 * Temporarily removing Transition Action from this button.
-    			 * TODO: Ensure that this button takes the user to the Journal Tool and initiates a
-    			 * Journal Entry.
-    			 * // me.appEventsController.getApplication().fireEvent('transitionStudent');
-    	     	 */
-    	     	 break;
-    	     	 
-    		case 'non-participating':
-    			me.setProgramStatus(action);
-    			break;
-    	}
+    	var me=this;
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('personStatusChange',me,button);  
+        if(skipCallBack)
+        {
+        	var action = button.action;
+        	switch ( action )
+        	{
+        	case 'active':
+        		me.setProgramStatus( action );
+        		break;
+        		
+        	case 'no-show':
+        		me.setProgramStatus( action );
+        		break;
+        		
+        	case 'transition':
+        		/* 
+        		 * Temp fix for SSP-434
+        		 * 
+        		 * Temporarily removing Transition Action from this button.
+        		 * TODO: Ensure that this button takes the user to the Journal Tool and initiates a
+        		 * Journal Entry.
+        		 * // me.appEventsController.getApplication().fireEvent('transitionStudent');
+        		 */
+        		break;
+        		
+        	case 'non-participating':
+        		me.setProgramStatus(action);
+        		break;
+        	}
+        }
     },
     
     setProgramStatus: function( action ){
@@ -606,7 +631,11 @@ Ext.define('Ssp.controller.SearchViewController', {
     
 	onRetrieveCaseloadClick: function( button ){
 		var me=this;
-		me.getCaseload();
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('retrieveCaseload',me);  
+        if(skipCallBack)
+        {
+        	me.getCaseload();
+        }
 	},
 	
 	onCaseloadStatusComboSelect: function( comp, records, eOpts ){

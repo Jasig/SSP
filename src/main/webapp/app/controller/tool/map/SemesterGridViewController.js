@@ -93,6 +93,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 		}
 		me.droppedRecord = data.records[0];
 		me.validateCourses();
+		me.currentMapPlan.dirty = true;
 		return true;
     },
 

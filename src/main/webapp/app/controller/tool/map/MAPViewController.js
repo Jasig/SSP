@@ -165,7 +165,27 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		//need to remove toolsNav before adding it, without this
 		//the first time you loaded the MAP page it would not catch this event
 		me.appEventsController.removeEvent({eventName: 'toolsNav', scope: me.application}); 
-		me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me.application});		
+		me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me.application});
+		
+		//need to remove toolsNav before adding it, without this
+		//the first time you loaded the MAP page it would not catch this event
+		me.appEventsController.removeEvent({eventName: 'personNav', scope: me.application}); 
+		me.appEventsController.assignEvent({eventName: 'personNav', callBackFunc: me.onPersonNav, scope: me});	
+		
+		me.appEventsController.removeEvent({eventName: 'personButtonAdd', scope: me.application}); 
+		me.appEventsController.assignEvent({eventName: 'personButtonAdd', callBackFunc: me.onPersonButtonAdd, scope: me});	
+		
+		me.appEventsController.removeEvent({eventName: 'personButtonEdit', scope: me.application}); 
+		me.appEventsController.assignEvent({eventName: 'personButtonEdit', callBackFunc: me.onPersonButtonEdit, scope: me});	
+		
+		me.appEventsController.removeEvent({eventName: 'personButtonDeleted', scope: me.application}); 
+		me.appEventsController.assignEvent({eventName: 'personButtonDeleted', callBackFunc: me.onPersonButtonDelete, scope: me});
+		
+		me.appEventsController.removeEvent({eventName: 'retrieveCaseload', scope: me.application}); 
+		me.appEventsController.assignEvent({eventName: 'retrieveCaseload', callBackFunc: me.onRetrieveCaseload, scope: me});
+		
+		me.appEventsController.removeEvent({eventName: 'personStatusChange', scope: me.application}); 
+		me.appEventsController.assignEvent({eventName: 'personStatusChange', callBackFunc: me.onPersonStatusChange, scope: me});	
 		
 		me.appEventsController.assignEvent({eventName: 'onSavePlanRequest', callBackFunc: me.onSavePlanRequest, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onSaveTemplateRequest', callBackFunc: me.onSaveTemplateRequest, scope: me});
@@ -202,7 +222,121 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		}
 		return true;
 	},
-	
+	onPersonNav: function(records, searchViewController) {
+		var application = this.application; //scope is application, so 'this' is application
+		var me = this;
+
+		if(me.currentMapPlan.isDirty(me.semesterStores)) {
+			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+				if(btn === 'yes'){
+					me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+					me.savePlanPopUp.show();
+				} else if(btn === 'no') {
+				    me.currentMapPlan.dirty = false;
+				    me.semesterStores = {};
+					searchViewController.updatePerson(records);
+			        me.appEventsController.getApplication().fireEvent('loadPerson');  
+				}
+			});	
+			return false;
+		}
+		return true;
+	},
+	onPersonButtonAdd: function(searchViewController){
+		var application = this.application; //scope is application, so 'this' is application
+		var me = this;
+
+		if(me.currentMapPlan.isDirty(me.semesterStores)) {
+			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+				if(btn === 'yes'){
+					me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+					me.savePlanPopUp.show();
+				} else if(btn === 'no') {
+				    me.currentMapPlan.dirty = false;
+				    me.semesterStores = {};
+				    searchViewController.onAddPerson();
+				}
+			});	
+			return false;
+		}
+		return true;
+	},
+	onPersonButtonEdit: function(searchViewController){
+		var application = this.application; //scope is application, so 'this' is application
+		var me = this;
+
+		if(me.currentMapPlan.isDirty(me.semesterStores)) {
+			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+				if(btn === 'yes'){
+					me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+					me.savePlanPopUp.show();
+				} else if(btn === 'no') {
+				    me.currentMapPlan.dirty = false;
+				    me.semesterStores = {};
+				    searchViewController.onEditPerson();
+				}
+			});	
+			return false;
+		}
+		return true;
+	},
+	onPersonButtonDelete: function(searchViewController){
+		var application = this.application; //scope is application, so 'this' is application
+		var me = this;
+
+		if(me.currentMapPlan.isDirty(me.semesterStores)) {
+			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+				if(btn === 'yes'){
+					me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+					me.savePlanPopUp.show();
+				} else if(btn === 'no') {
+				    me.currentMapPlan.dirty = false;
+				    me.semesterStores = {};
+				    searchViewController.onDeletePerson();
+				}
+			});	
+			return false;
+		}
+		return true;
+	},	
+	onRetrieveCaseload: function(searchViewController){
+		var application = this.application; //scope is application, so 'this' is application
+		var me = this;
+
+		if(me.currentMapPlan.isDirty(me.semesterStores)) {
+			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+				if(btn === 'yes'){
+					me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+					me.savePlanPopUp.show();
+				} else if(btn === 'no') {
+				    me.currentMapPlan.dirty = false;
+				    me.semesterStores = {};
+				    searchViewController.getCaseload();
+				}
+			});	
+			return false;
+		}
+		return true;
+	},	
+	onPersonStatusChange: function(searchViewController,button){
+		var application = this.application; //scope is application, so 'this' is application
+		var me = this;
+
+		if(me.currentMapPlan.isDirty(me.semesterStores)) {
+			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+				if(btn === 'yes'){
+					me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+					me.savePlanPopUp.show();
+				} else if(btn === 'no') {
+				    me.currentMapPlan.dirty = false;
+				    me.semesterStores = {};
+				    searchViewController.setProgramStatus(button.action);
+				}
+			});	
+			return false;
+		}
+		return true;
+	},		
 	setPlanNotesButtonIcon: function(){
 		var me = this;
 		var contactNotes = me.currentMapPlan.get("contactNotes");
