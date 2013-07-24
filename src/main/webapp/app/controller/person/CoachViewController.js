@@ -67,7 +67,9 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 	        	  Ext.Msg.alert('Error','Unable to load Coaches. Please see your system administrator for assistance.');
 	          }
 		 });
-		
+
+		me.studentTypesStore.clearFilter(true);	 
+
 		me.initForm();
 		
 		return this.callParent(arguments);
@@ -117,7 +119,9 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 	onStudentTypeComboChange: function(comp, newValue, oldValue, eOpts){
 		var me=this;
 		var studentType, requireInitialAppointment;
-		studentType = me.studentTypesStore.getById(newValue);
+		//Assumes studentTypesStore is loaded in higher controller
+		studentType = me.studentTypesStore.getById(newValue); 
+		
 		if(studentType != null){
 			me.appEventsController.getApplication().fireEvent('studentTypeChange');
 		}
