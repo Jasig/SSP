@@ -63,7 +63,9 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			
 	    	me.personService.get( id, {success:me.getPersonSuccess, 
 	    									  failure:me.getPersonFailure, 
-	    									  scope: me} );
+	    									  scope: me} );		  
+			//Loading store here for coach, student_type, and appointment combos due to timing issue between separate controllers
+			me.studentTypesStore.load(); 
 		}else{
 			me.initForms();
 			me.updateTitle();

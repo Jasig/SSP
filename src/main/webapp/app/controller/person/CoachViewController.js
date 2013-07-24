@@ -103,9 +103,8 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 				} 
 			}
 		 });
-		 
-		me.studentTypesStore.load();
-		me.studentTypesStore.clearFilter(true);
+		
+		me.studentTypesStore.clearFilter(true);	 
 		me.formRendererUtils.applyAssociativeStoreFilter(me.studentTypesStore, me.person.data.studentType.id);	
 		
 		me.initForm();
@@ -156,7 +155,9 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 	onStudentTypeComboChange: function(comp, newValue, oldValue, eOpts){
 		var me=this;
 		var studentType, requireInitialAppointment;
-		studentType = me.studentTypesStore.getById(newValue);
+		//Assumes studentTypesStore is loaded in higher controller
+		studentType = me.studentTypesStore.getById(newValue); 
+		
 		if(studentType != null){
 			me.appEventsController.getApplication().fireEvent('studentTypeChange');
 		}
