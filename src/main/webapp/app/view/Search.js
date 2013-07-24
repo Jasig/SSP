@@ -77,7 +77,8 @@ Ext.define('Ssp.view.Search', {
                     hidden: false,
                     cls: 'displayCaseloadIcon',
                     xtype: 'button',
-                    itemId: 'displayCaseloadBarButton'
+                    itemId: 'displayCaseloadBarButton',
+					hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS')
                 }]
             }, {
                 xtype: 'toolbar',
@@ -105,6 +106,7 @@ Ext.define('Ssp.view.Search', {
                     xtype: 'button',
                     tooltip: 'Retrieve My Caseload (leave field blank for all program statuses)',
                     itemId: 'retrieveCaseloadButton',
+					hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH'),
                     width: 32,
                     height: 32,
                     cls: 'retrieveCaseloadIcon'
