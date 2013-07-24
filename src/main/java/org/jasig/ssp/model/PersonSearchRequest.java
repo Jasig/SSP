@@ -38,9 +38,9 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 public class PersonSearchRequest {
 
 	
-	public static final String PLAN_STATUS_ACTIVE = "Active";
+	public static final String PLAN_STATUS_ACTIVE = "ACTIVE";
 	
-	public static final String PLAN_STATUS_INACTIVE = "Inactive";
+	public static final String PLAN_STATUS_INACTIVE = "INACTIVE";
 
 	public static final String MAP_STATUS_ON_PLAN = "ON_PLAN";
 	
