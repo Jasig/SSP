@@ -36,9 +36,9 @@
 			</sqlCheck>
 			<changeLogPropertyDefined property="external.fa.not.null.drop.y" value="true"/>
 		</preConditions>	
-		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="sap_status" />
+		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="sap_status" columnDataType="char(1)"/>
 		<rollback>
-		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="sap_status" />
+		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="sap_status" columnDataType="char(1)"/>
 		</rollback>
 	</changeSet>
 	<changeSet id="Remove Not Null fafsa_date external_student_fa" author="tony.arland">
@@ -50,9 +50,9 @@
 			</sqlCheck>
 			<changeLogPropertyDefined property="external.fa.not.null.drop.y" value="true"/>
 		</preConditions>	
-		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="fafsa_date" />
+		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="fafsa_date" columnDataType="datetime"/>
 		<rollback>
-		<addNotNullConstraint tableName="external_student_financial_aid" columnName="fafsa_date" />
+		<addNotNullConstraint tableName="external_student_financial_aid" columnName="fafsa_date" columnDataType="datetime"/>
 		</rollback>
 	</changeSet>	
 	<changeSet id="Remove Not Null financial_aid_remaining external_student_fa" author="tony.arland">
@@ -64,9 +64,9 @@
 			</sqlCheck>
 			<changeLogPropertyDefined property="external.fa.not.null.drop.y" value="true"/>
 		</preConditions>	
-		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="financial_aid_remaining" />
+		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="financial_aid_remaining" columnDataType="decimal(9,2)"/>
 		<rollback>
-			<addNotNullConstraint tableName="external_student_financial_aid" columnName="financial_aid_remaining" />
+			<addNotNullConstraint tableName="external_student_financial_aid" columnName="financial_aid_remaining" columnDataType="decimal(9,2)"/>
 		</rollback>
 	</changeSet>	
 	<changeSet id="Remove Not Null original_loan_amount external_student_fa" author="tony.arland">
@@ -78,9 +78,9 @@
 			</sqlCheck>
 			<changeLogPropertyDefined property="external.fa.not.null.drop.y" value="true"/>
 		</preConditions>	
-		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="original_loan_amount" />
+		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="original_loan_amount" columnDataType="decimal(9,2)"/>
 		<rollback>
-			<addNotNullConstraint tableName="external_student_financial_aid" columnName="original_loan_amount" />
+			<addNotNullConstraint tableName="external_student_financial_aid" columnName="original_loan_amount" columnDataType="decimal(9,2)"/>
 		</rollback>
 	</changeSet>
 	<changeSet id="Remove Not Null remaining_loan_amount external_student_fa" author="tony.arland">
@@ -92,9 +92,9 @@
 			</sqlCheck>
 			<changeLogPropertyDefined property="external.fa.not.null.drop.y" value="true"/>
 		</preConditions>	
-		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="remaining_loan_amount" />
+		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="remaining_loan_amount" columnDataType="decimal(9,2)"/>
 		<rollback>
-			<addNotNullConstraint tableName="external_student_financial_aid" columnName="remaining_loan_amount" />
+			<addNotNullConstraint tableName="external_student_financial_aid" columnName="remaining_loan_amount" columnDataType="decimal(9,2)"/>
 		</rollback>
 	</changeSet>		
 
