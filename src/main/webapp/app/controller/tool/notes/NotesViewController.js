@@ -27,20 +27,20 @@ Ext.define('Ssp.controller.tool.notes.NotesViewController', {
     },
 	init: function() {
 		var me=this;
-		var schoolId = me.person.get('schoolId');
+		var id = me.person.get('id');
 
         me.store.removeAll();
-		if(schoolId != ""){
-	    	me.loadNotes(schoolId);
+		if(id != ""){
+	    	me.loadNotes(id);
 	    }
 		
 		return this.callParent(arguments);
     },
     
-    loadNotes: function(schoolId){
+    loadNotes: function(id){
 		var me = this;
-		if(schoolId != ""){
-			me.service.getPersonNotes( schoolId, {
+		if(id != ""){
+			me.service.getPersonNotes( id, {
 				success: me.getTranscriptSuccess,
 				failure: me.getTranscriptFailure,
 				scope: me			

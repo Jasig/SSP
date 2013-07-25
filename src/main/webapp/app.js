@@ -469,7 +469,7 @@ var apiUrls = [
   {name: 'studentActivities', url: 'person/{id}/studentactivity'},
   {name: 'personalityType', url: 'reference/personalityType'},
   {name: 'personTranscript', url: 'person/{id}/transcript'},
-  {name: 'personNote', url: 'person/{schoolId}/note'},
+  {name: 'personNote', url: 'person/{id}/note'},
   {name: 'personEmailTask', url: 'person/{id}/task/email'},
   {name: 'personViewHistory', url: 'person/{id}/history/print'},
   {name: 'personPrintTask', url: 'person/{id}/task/print'},

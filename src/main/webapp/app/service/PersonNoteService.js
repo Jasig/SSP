@@ -26,16 +26,16 @@ Ext.define('Ssp.service.PersonNoteService', {
 		return this.callParent( arguments );
     },
 
-    getBaseUrl: function( schoolId ){
+    getBaseUrl: function( id ){
 		var me=this;
 		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personNote') );
-    	baseUrl = baseUrl.replace('{schoolId}', schoolId);
+    	baseUrl = baseUrl.replace('{id}', id);
     	return baseUrl;
     },
 
-    getPersonNotes: function ( schoolId, callbacks ) {
+    getPersonNotes: function ( id, callbacks ) {
         var me = this;
-        me.doGet(schoolId, callbacks,  me.getBaseUrl( schoolId ) + "/student" );
+        me.doGet(id, callbacks,  me.getBaseUrl( id ) );
     },
 
     doGet: function( personId, callbacks, url ) {
