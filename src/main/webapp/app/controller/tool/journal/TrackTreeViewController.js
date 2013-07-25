@@ -85,13 +85,59 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
         // Lots of copy/paste code from transformJournalStepJournalDetailAssociations()
         // that we're just living with for now
         var me = this;
+        var unique = me.uniqueJournalTrackJournalStepAssociations(assocs);
         var transformed = [];
-        Ext.Array.each(assocs, function(assoc, index) {
+        Ext.Array.each(unique, function(assoc, index) {
             if ( assoc.objectStatus === "ACTIVE" || me.isSelectedJournalTrackJournalStepAssociation(assoc) ) {
                 transformed.push(me.journalStepNodeItemFromTrackAssociation(assoc));
             }
         });
         return me.sortBy(transformed, "name");
+    },
+
+    uniqueJournalTrackJournalStepAssociations: function (assocs) {
+        var me = this;
+        return me.uniqueAssociations(assocs, function(assoc){
+            // really only need the step ID for current usage, but the
+            // track ID sets up the keyspace so we can handle an arbitrary
+            // collection of associations
+            return assoc.journalTrack.id + "_" + assoc.journalStep.id;
+        });
+    },
+
+    // This tries to address the problem where you have multiple track->step
+    // or step->detail associations that bind the same two objects together and
+    // otherwise differ only in their objectStatus. I.e. someone deleted an
+    // association then recreated it later. If the current journal entry
+    // references *any* of those duplicate associations, *all* the duplicated
+    // will appear unless we filter them out. That's what this method does.
+    // Under current usage the identity of the association doesn't actually
+    // matter on the client, so when this filter detect duplicates, it just uses
+    // the first active association from among the duplicates.
+    uniqueAssociations: function(assocs, keyBuilder) {
+        var me = this;
+        var unique = [];
+        var index = {}; // field names: assoc keys from keyBuilder callback
+                        // field values: association objectStatus and "pos"
+                        //               which is an index into the "unique"
+                        //               array
+        Ext.Array.each(assocs, function(assoc, j){
+            var key = keyBuilder.apply(me, [ assoc ]);
+            var indexRecord = index[key];
+            if ( indexRecord && indexRecord.objectStatus !== 'ACTIVE' && assoc.objectStatus === 'ACTIVE' ) {
+                // replace inactive record with active record
+                unique[indexRecord.pos] = assoc;
+                indexRecord.objectStatus = 'ACTIVE';
+            } else if ( !(indexRecord) ) {
+                index[key] = {
+                    objectStatus: assoc.objectStatus,
+                    pos: (unique.push(assoc) - 1)
+                }
+            } else {
+                // true duplicate, do nothing
+            }
+        });
+        return unique;
     },
 
     isSelectedJournalTrackJournalStepAssociation: function(assoc) {
@@ -154,13 +200,25 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
 
     transformJournalStepJournalDetailAssociations: function(assocs) {
         var me = this;
+        var unique = me.uniqueJournalStepJournalDetailAssociations(assocs);
         var transformed = [];
-        Ext.Array.each(assocs, function(assoc, index) {
+        Ext.Array.each(unique, function(assoc, index) {
             if ( assoc.objectStatus === "ACTIVE" || me.isSelectedJournalStepJournalDetailAssociation(assoc) ) {
                 transformed.push(me.journalDetailNodeItemFromStepAssociation(assoc));
             }
         });
         return me.sortBy(transformed, "name");
+    },
+
+    uniqueJournalStepJournalDetailAssociations: function (assocs) {
+        var me = this;
+
+        return me.uniqueAssociations(assocs, function(assoc){
+            // really only need the detail ID for current usage, but the
+            // step ID sets up the keyspace so we can handle an arbitrary
+            // collection of associations
+            return assoc.journalStep.id + "_" + assoc.journalStepDetail.id;
+        });
     },
 
     isSelectedJournalStepJournalDetailAssociation: function(assoc) {
