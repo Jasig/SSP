@@ -302,25 +302,27 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	
 	private String getDefaultStatusCode(Map<String,String> mappings){
 		String v = null;
-		if(mappings.containsKey("default"))
-			v = mappings.get("default");
+		if ( mappings != null ) {
+			if(mappings.containsKey("default")) {
+				v = mappings.get("default");
+			}
+		}
 		return v;
 	}
+	
 	private Map<String,String> statusCodeMappings() throws ObjectNotFoundException{
 		String codeMappings = configService.getByName("status_code_mappings").getValue();
 		ObjectMapper m = new ObjectMapper();
 		Map<String,String> statusCodeMap = null;
-	    try {
+	    try {	    	
 			statusCodeMap = m.readValue(codeMappings, new HashMap<String,String>().getClass());
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//TODO Refactor messages? 
+		} catch (JsonParseException e) {			
+			this.getLogger().error(e.getMessage());
+		} catch (JsonMappingException e) {			
+			this.getLogger().error(e.getMessage());
+		} catch (IOException e) {		
+			this.getLogger().error(e.getMessage());
 		}
 	    return statusCodeMap;
 	}
@@ -477,6 +479,4 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		return personService.getSchoolIdForPersonId(personId);
 	}
 	
-	
-
 }
