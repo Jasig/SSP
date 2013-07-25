@@ -233,7 +233,7 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
 
                             var parentNode = scope.getView().getView().getTreeStore().getNodeById(parentId + '_journalStep');
 
-                            if (stepNode.id == parentNode.id) {
+                            if ((stepNode && parentNode) && (stepNode.id == parentNode.id)) {
                                 detailNode.set('checked', true);
 
                             }

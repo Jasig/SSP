@@ -86,21 +86,13 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     
     init: function(){
         var me = this;
-		
-		
-        // apply confidentiality level filter
-        //me.authenticatedPerson.applyConfidentialityLevelsFilter(me.confidentialityLevelsStore);
         
         me.appEventsController.assignEvent({
             eventName: 'saveJournal',
             callBackFunc: me.onSaveJournal,
             scope: me
         });
-		
-		me.journalTracksStore.clearFilter(true);
-		
-		me.journalSourcesStore.clearFilter(true);
-        
+
         return me.callParent(arguments);
     },
     
@@ -115,7 +107,9 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
         
         return me.callParent(arguments);
     },
-    
+
+    // Currently being called explicitly from the top-level tool controller
+    // (JournalToolViewController) when a JournalEntry is selected
     initForm: function(){
         var me = this;
         var id = me.model.get("id");
@@ -135,10 +129,19 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
         
         me.getView().getForm().reset();
         me.getView().getForm().loadRecord(me.model);
-        
-        me.getConfidentialityLevelCombo().setValue(me.model.getConfidentialityLevelId());
-        me.getJournalSourceCombo().setValue(me.model.get('journalSource').id);
+
+        var confLevelId = me.model.getConfidentialityLevelId();
+        me.formUtils.applyAssociativeStoreFilter(me.confidentialityLevelsStore, confLevelId);
+        me.authenticatedPerson.applyConfidentialityLevelsFilter(me.confidentialityLevelsStore);
+        me.getConfidentialityLevelCombo().setValue(confLevelId);
+
+        var journalSourceId = me.model.get('journalSource').id;
+        me.formUtils.applyAssociativeStoreFilter(me.journalSourcesStore,journalSourceId);
+        me.getJournalSourceCombo().setValue(journalSourceId);
+
+        me.formUtils.applyAssociativeStoreFilter(me.journalTracksStore,journalTrackId);
         me.getJournalTrackCombo().setValue(journalTrackId);
+
         if (me.model.get('entryDate') == null) {
             me.getEntryDateField().setLoading(true);
             me.util.getCurrentServerDate({
@@ -158,39 +161,16 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
             });
             
         }
-		
-        var activeOrSelectedFilter = Ext.create('Ext.util.Filter', {
-            filterFn: function(storeItem){
-                if (storeItem.data.objectStatus == 'ACTIVE' ||
-                storeItem.data.id == journalTrackId) {
-                    return true;
-                }
-                return false;
-            }
-        });
-        
-        me.journalTracksStore.filter(activeOrSelectedFilter);
-		
-		var journalSourceId = me.model.get('journalSource').id;
-		
-		
-		
-		me.formUtils.applyAssociativeStoreFilter(me.journalSourcesStore,journalSourceId);
-		
-		
-		
-		me.formUtils.applyAssociativeStoreFilter(me.confidentialityLevelsStore,me.model.getConfidentialityLevelId());
-		
-		me.authenticatedPerson.applyConfidentialityLevelsFilter(me.confidentialityLevelsStore);
-        
+
         me.inited = true;
     },
     
     destroy: function(){
         var me = this;
-        
-        // clear confidentiality level filter
-        me.confidentialityLevelsStore.clearFilter();
+
+        me.journalTracksStore.clearFilter(true);
+        me.journalSourcesStore.clearFilter(true);
+        me.confidentialityLevelsStore.clearFilter(true);
         
         return me.callParent(arguments);
     },
