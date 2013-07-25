@@ -20,7 +20,7 @@ Ext.define('Ssp.controller.admin.config.EnrollmentStatusAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: ['Deft.mixin.Injectable'],
     inject: {
-        store: 'configurationOptionsStore',
+        store: 'configurationOptionsUnpagedStore',
         formUtils: 'formRendererUtils',
         apiProperties: 'apiProperties'
     },
@@ -50,7 +50,11 @@ Ext.define('Ssp.controller.admin.config.EnrollmentStatusAdminViewController', {
         
         
         me.formUtils.reconfigureGridPanel(me.getEnrollmentstatuslistadmin(), me.store);
-        me.store.load();
+        me.store.load({
+            extraParams: {
+                limit: "-1"
+            }
+        });
         
         
         return me.callParent(arguments);

@@ -934,6 +934,7 @@ Ext.onReady(function(){
 			    	allCoachesStore: 'Ssp.store.CoachesAll',
 				    confidentialityDisclosureAgreementsStore: 'Ssp.store.reference.ConfidentialityDisclosureAgreements',
 					configurationOptionsStore: 'Ssp.store.reference.ConfigurationOptions',
+					configurationOptionsUnpagedStore: 'Ssp.store.reference.ConfigurationOptionsUnpaged',
 				    colorsStore: {
 				    	fn: function(){
 				    		return Ext.create('Ssp.store.reference.Colors', {

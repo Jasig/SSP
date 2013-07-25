@@ -20,7 +20,7 @@ Ext.define('Ssp.controller.admin.config.RegistrationLoadAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-    	store: 'configurationOptionsStore',
+    	store: 'configurationOptionsUnpagedStore',
 		formUtils: 'formRendererUtils',
 		apiProperties: 'apiProperties'
     },
@@ -47,7 +47,11 @@ Ext.define('Ssp.controller.admin.config.RegistrationLoadAdminViewController', {
 		me.store.filter([{filterFn: function(item) { return item.get("name") == 'registration_load_ranges'; }}]);
 		
 		me.formUtils.reconfigureGridPanel( me.getRegistrationloadlistadmin(), me.store);
-		me.store.load();
+		me.store.load({
+            extraParams: {
+                limit: "-1"
+            } 
+        });
 		
 		
 		

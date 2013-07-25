@@ -2524,6 +2524,11 @@
                     "path": "/app/store/reference/"
                 },
                 {
+                    "clsName": "Ssp.store.reference.ConfigurationOptionsUnpaged",
+                    "name": "ConfigurationOptionsUnpaged.js",
+                    "path": "/app/store/reference/"
+                },
+                {
                     "clsName": "Ssp.store.reference.MessageTemplates",
                     "name": "MessageTemplates.js",
                     "path": "/app/store/reference/"

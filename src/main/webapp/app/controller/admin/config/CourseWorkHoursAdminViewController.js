@@ -20,7 +20,7 @@ Ext.define('Ssp.controller.admin.config.CourseWorkHoursAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-    	store: 'configurationOptionsStore',
+    	store: 'configurationOptionsUnpagedStore',
 		formUtils: 'formRendererUtils',
 		apiProperties: 'apiProperties'
     },
@@ -42,12 +42,18 @@ Ext.define('Ssp.controller.admin.config.CourseWorkHoursAdminViewController', {
 	init: function() {
 		var me=this;
 		
+		
+		
 		me.store.clearFilter();
 		
 		me.store.filter([{filterFn: function(item) { return item.get("name") == 'weekly_course_work_hour_ranges'; }}]);
 		
 		me.formUtils.reconfigureGridPanel( me.getCourseworkhourslistadmin(), me.store);
-		me.store.load();
+		me.store.load({
+            extraParams: {
+                limit: "-1"
+            } 
+        });
 		
 		
 		
