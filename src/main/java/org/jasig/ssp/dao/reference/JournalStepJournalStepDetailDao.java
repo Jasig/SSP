@@ -42,6 +42,10 @@ public class JournalStepJournalStepDetailDao extends
 			final SortingAndPaging sAndP) {
 		final Criteria query = createCriteria();
 		query.add(Restrictions.eq("journalStep.id", journalStepId));
+		if("sortOrder".equals(sAndP.getDefaultSortProperty()))
+		{
+			return processCriteriaWithStatusSortingAndPaging(query, new SortingAndPaging(sAndP.getStatus(),sAndP.getFirstResult(),sAndP.getMaxResults(),sAndP.getSortFields(),null,null));
+		}
 		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 

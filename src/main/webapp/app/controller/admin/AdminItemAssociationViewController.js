@@ -118,10 +118,8 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	treeRequest.set('enableCheckedItems', true);
     	treeRequest.set('callbackFunc', me.onLoadComplete);
     	treeRequest.set('callbackScope', me);
-		
 		treeRequest.set('node', node);
-		
-    	me.treeUtils.getItemsWithParams( treeRequest , {limit: '-1'});
+    	me.treeUtils.getItemsWithParams( treeRequest , {limit: '-1', status: 'ACTIVE'});
 		
     },
 
