@@ -24,6 +24,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
     	appEventsController: 'appEventsController',
 		columnRendererUtils : 'columnRendererUtils',
     	currentMapPlan: 'currentMapPlan',
+		formUtils: 'formRendererUtils',
 		semesterStores: 'currentSemesterStores'
     },
     control: {
@@ -161,19 +162,20 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		var view = me.getView();
 		
 		me.onUpdateSaveOption();
-
+		
 		//need to remove toolsNav before adding it, without this
 		//the first time you loaded the MAP page it would not catch this event
 		me.appEventsController.removeEvent({eventName: 'toolsNav', scope: me.application}); 
 		me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me.application});
 		
-		//need to remove toolsNav before adding it, without this
-		//the first time you loaded the MAP page it would not catch this event
 		me.appEventsController.removeEvent({eventName: 'personNav', scope: me.application}); 
 		me.appEventsController.assignEvent({eventName: 'personNav', callBackFunc: me.onPersonNav, scope: me});	
 		
 		me.appEventsController.removeEvent({eventName: 'personButtonAdd', scope: me.application}); 
 		me.appEventsController.assignEvent({eventName: 'personButtonAdd', callBackFunc: me.onPersonButtonAdd, scope: me});	
+		
+		me.appEventsController.removeEvent({eventName: 'personToolbarEdit', scope: me.application}); 
+		me.appEventsController.assignEvent({eventName: 'personToolbarEdit', callBackFunc: me.onPersonToolbarEdit, scope: me});
 		
 		me.appEventsController.removeEvent({eventName: 'personButtonEdit', scope: me.application}); 
 		me.appEventsController.assignEvent({eventName: 'personButtonEdit', callBackFunc: me.onPersonButtonEdit, scope: me});	
@@ -280,6 +282,23 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		}
 		return true;
 	},
+	onPersonToolbarEdit: function(studentRecordViewController){
+		var me = this;
+		if(me.currentMapPlan.isDirty(me.semesterStores)) {
+			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+				if(btn === 'yes'){
+					me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+					me.savePlanPopUp.show();
+				} else if(btn === 'no') {
+				    me.currentMapPlan.dirty = false;
+				    me.semesterStores = {};
+				    studentRecordViewController.studentRecordEdit();
+				}
+			});	
+			return false;
+		}
+		return true;
+	},	
 	onPersonButtonDelete: function(searchViewController){
 		var application = this.application; //scope is application, so 'this' is application
 		var me = this;

@@ -56,10 +56,15 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 	
 	onStudentRecordEditButtonClick: function(button){
         var me=this;
-        
-        var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('personToolbarEdit',me);  
+        if(skipCallBack)
+        {
+        	me.studentRecordEdit();
+        }
     },
-	
+    studentRecordEdit: function(){
+    	var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
+    },
 	onEmailCoachButtonClick: function(button){
         var me=this;
         this.appEventsController.getApplication().fireEvent('emailCoach');
