@@ -44,20 +44,17 @@ Ext.define('Ssp.controller.person.SpecialServiceGroupsViewController', {
 		var me=scope;
     	var selectedSpecialServiceGroups = me.columnRendererUtils.getSelectedIdsForMultiSelect( me.person.get('specialServiceGroups') );
 
-    	if (r.rows.length > 0)
-    	{
-    		me.store.loadData(r.rows);
-    		me.store.clearFilter(true);
-    		me.formRendererUtils.applyAssociativeStoreFilter(me.store, selectedSpecialServiceGroups);
+        me.store.loadData(r.rows);
+        me.store.clearFilter(true);
+        me.formRendererUtils.applyAssociativeStoreFilter(me.store, selectedSpecialServiceGroups);
 
-            me.itemSelectorInitializer.defineAndAddSelectorField(me.getView(), selectedSpecialServiceGroups, {
-                itemId: 'specialServiceGroupsItemSelector',
-                name: 'specialServiceGroups',
-                fieldLabel: 'Service Groups',
-                store: me.store
-            });
+        me.itemSelectorInitializer.defineAndAddSelectorField(me.getView(), selectedSpecialServiceGroups, {
+            itemId: 'specialServiceGroupsItemSelector',
+            name: 'specialServiceGroups',
+            fieldLabel: 'Service Groups',
+            store: me.store
+        });
 
-    	}
 	},
 	
     getAllFailure: function( response, scope ){
