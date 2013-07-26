@@ -45,6 +45,7 @@ Ext.define('Ssp.controller.admin.campus.EditCampusViewController', {
 		var me = this;
 		me.getView().getForm().reset();
 		me.missingEaCoord = null;
+		me.eaCoordStore = me.getView().store;
 		if ( me.model.get('id') ) {
 			// Must be edit mode. Make best effort at trying to find the
 			// associated coach and inject it into the view. Currently
@@ -52,7 +53,7 @@ Ext.define('Ssp.controller.admin.campus.EditCampusViewController', {
 			// were "demoted" in the directory system we query to get all
 			// coaches
 			var eaCoordId = me.model.get('earlyAlertCoordinatorId');
-			if ( !(me.getView().store.getById(eaCoordId)) ) {
+			if ( !(me.eaCoordStore.getById(eaCoordId)) ) {
 				me.lookupMissingEaCoordinator(eaCoordId, me.afterMissingEaCoordinatorLookup, me);
 			} else {
 				me.showForm();
@@ -65,6 +66,7 @@ Ext.define('Ssp.controller.admin.campus.EditCampusViewController', {
 	destroy: function() {
 		var me = this;
 		me.maybeClearMissingEaCoordinator();
+		return me.callParent(arguments);
 	},
 	lookupMissingEaCoordinator: function(eaCoordId, after, afterScope) {
 		var me = this;
@@ -92,17 +94,15 @@ Ext.define('Ssp.controller.admin.campus.EditCampusViewController', {
 	},
 	afterMissingEaCoordinatorLookup: function() {
 		var me = this;
-		var eaStore = me.getView().store;
-		eaStore.add(me.missingEaCoord);
-		eaStore.sort('lastName', 'ASC');
+		me.eaCoordStore.add(me.missingEaCoord);
+		me.eaCoordStore.sort('lastName', 'ASC');
 		me.showForm();
 	},
 	maybeClearMissingEaCoordinator: function() {
 		var me = this;
-		if ( me.missingEaCoord ) {
-			var eaStore = me.getView().store;
-			eaStore.remove(me.missingEaCoord);
-			eaStore.sort('lastName', 'ASC');
+		if ( me.missingEaCoord && me.eaCoordStore) {
+			me.eaCoordStore.remove(me.missingEaCoord);
+			me.eaCoordStore.sort('lastName', 'ASC');
 			me.missingEaCoord = null;
 		}
 	},

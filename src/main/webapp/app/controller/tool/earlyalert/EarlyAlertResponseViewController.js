@@ -103,21 +103,25 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     
 	initEarlyAlertOutcomesStore: function(postProcess, postProcessScope) {
 		var me = this;
-		var eaOutreachesStore = me.getView().outcomesStore;
-		eaOutreachesStore.clearFilter(true);
-		eaOutreachesStore.load();
+        // cache on 'me' b/c we need to clear the filter on destroy, but
+        // by that time the view is gone
+		me.outcomesStore = me.getView().outcomesStore;
+        me.outcomesStore.clearFilter(true);
+        me.outcomesStore.load();
 		if ( postProcess ) {
-			postProcess.apply(postProcessScope ? postProcessScope : me, [eaOutreachesStore]);
+			postProcess.apply(postProcessScope ? postProcessScope : me, [me.outcomesStore]);
 		}
 	},
 	
 	initEarlyAlertOutreachesStore: function(postProcess, postProcessScope) {
 		var me = this;
-		var eaOutcomesStore = me.getView().outreachesStore;
-		eaOutcomesStore.clearFilter(true);
-		eaOutcomesStore.load();
+        // cache on 'me' b/c we need to clear the filter on destroy, but
+        // by that time the view is gone
+		me.outreachesStore = me.getView().outreachesStore;
+        me.outreachesStore.clearFilter(true);
+        me.outreachesStore.load();
 		if ( postProcess ) {
-			postProcess.apply(postProcessScope ? postProcessScope : me, [eaOutcomesStore]);
+			postProcess.apply(postProcessScope ? postProcessScope : me, [me.outreachesStore]);
 		}
 	},
 	
@@ -222,13 +226,20 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 	destroy: function() {
 		var me = this;
 		me.clearEarlyAlertOutcomesAndOutreachesFilters();
+		return me.callParent(arguments);
 	},
 	
 	clearEarlyAlertOutcomesAndOutreachesFilters: function() {
 		var me = this;
-		me.getView().earlyAlertOutcomesStore.clearFilter(true);
-		me.getView().earlyAlertOutreachesStore.clearFilter(true);
-	},		
+		// don't try to get these stores from the view... it's probably already
+		// been destroy()ed
+		if ( me.outcomesStore ) {
+			me.outcomesStore.clearFilter(true);
+		}
+		if ( me.outreachesStore ) {
+			me.outreachesStore.clearFilter(true);
+		}
+	},
 	
 	displayMain: function(){
 		var me = this;

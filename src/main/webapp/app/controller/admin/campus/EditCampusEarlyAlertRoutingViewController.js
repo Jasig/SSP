@@ -89,11 +89,13 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 
 	initEarlyAlertReasonsStore: function(postProcess, postProcessScope) {
 		var me = this;
-		var eaReasonsStore = me.getView().earlyAlertReasonsStore;
-		eaReasonsStore.clearFilter(true);
-		eaReasonsStore.load();
+		// cache on 'me' b/c we need to clear the filter on destroy, but
+		// by that time the view is gone
+		me.eaReasonsStore = me.getView().earlyAlertReasonsStore;
+		me.eaReasonsStore.clearFilter(true);
+		me.eaReasonsStore.load();
 		if ( postProcess ) {
-			postProcess.apply(postProcessScope ? postProcessScope : me, [eaReasonsStore]);
+			postProcess.apply(postProcessScope ? postProcessScope : me, [me.eaReasonsStore]);
 		}
 	},
 
@@ -178,11 +180,16 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 	destroy: function() {
 		var me = this;
 		me.clearEarlyAlertReasonsFilters();
+		return me.callParent(arguments);
 	},
 
 	clearEarlyAlertReasonsFilters: function() {
 		var me = this;
-		me.getView().earlyAlertReasonsStore.clearFilter(true);
+		// don't try to get the store from the view... it's probably already
+		// been destroy()ed
+		if ( me.eaReasonsStore ) {
+			me.eaReasonsStore.clearFilter(true);
+		}
 	},
 	
 	displayMain: function(){

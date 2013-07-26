@@ -133,7 +133,7 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 	},
     destroy: function() {
     	var me = this;
-		if(me.getView().fromMapLoad){
+		if(me.getView() && me.getView().fromMapLoad){ // view might have already been destroy()ed
 			me.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
 		}
         return this.callParent( arguments );
