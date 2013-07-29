@@ -275,9 +275,9 @@
         var options = {
             urls: {
                 person:       '<c:url value="/api/1/person/STUDENTID" />',
-                campus:       '<c:url value="/api/1/reference/campus" />',
-                reason:       '<c:url value="/api/1/reference/earlyAlertReason" />',
-                suggestions:  '<c:url value="/api/1/reference/earlyAlertSuggestion" />',
+                campus:       '<c:url value="/api/1/reference/campus?limit=-1" />',
+                reason:       '<c:url value="/api/1/reference/earlyAlertReason?limit=-1" />',
+                suggestions:  '<c:url value="/api/1/reference/earlyAlertSuggestion?limit=-1" />',
                 submit:       '<c:url value="/api/1/person/STUDENTID/earlyAlert" />',
                 configByName: '<c:url value="/api/1/reference/config?name=CONFIGNAME" />',
                 done:         '${doneUrl}'

@@ -60,6 +60,8 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 	
 	private String careerLink;	
 	
+	private Boolean isValid = true;	
+	
 	private List<TermNoteTO> termNotes = new ArrayList<TermNoteTO>();
 	/**
 	 * Empty constructor.
@@ -67,6 +69,7 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 	public AbstractPlanTO() {
 		super();
 	}
+	
 
 	@Override
 	public void from(T model) {
@@ -86,32 +89,9 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 		this.setIsFinancialAid(model.getIsFinancialAid());
 		this.setIsImportant(model.getIsImportant());
 		this.setStudentNotes(model.getStudentNotes());
-		setTrueModifiedDateAndBy(model);
-		
+		this.setIsValid(model.getIsValid());
 	}
 	
-	private void setTrueModifiedDateAndBy(T model) {
-		List<? extends AbstractPlanCourse<?>> courses = model.getCourses();
-		Date latestModifiedDate = model.getModifiedDate();
-		Person latestModifiedBy = model.getModifiedBy();
-		for (AbstractPlanCourse<?> abstractPlanCourse : courses) {
-			if(abstractPlanCourse.getModifiedDate().after(latestModifiedDate))
-			{
-				latestModifiedDate = abstractPlanCourse.getModifiedDate();
-				latestModifiedBy = abstractPlanCourse.getModifiedBy();
-			}
-		}
-		List<? extends TermNote> notes = model.getNotes();
-		for (TermNote termNote : notes) {
-			if(termNote.getModifiedDate().after(latestModifiedDate))
-			{
-				latestModifiedDate = termNote.getModifiedDate();
-				latestModifiedBy = termNote.getModifiedBy();			}
-		}
-		this.setModifiedBy(new PersonLiteTO(latestModifiedBy));
-		this.setModifiedDate(latestModifiedDate);
-	}
-
 	public abstract List<? extends AbstractPlanCourseTO<T,? extends AbstractPlanCourse<T>>> getCourses();
 
 	public String getName() {
@@ -240,6 +220,20 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 
 	public void setTermNotes(List<TermNoteTO> termNotes) {
 		this.termNotes = termNotes;
+	}
+
+	/**
+	 * @return the isValid
+	 */
+	public Boolean getIsValid() {
+		return isValid;
+	}
+
+	/**
+	 * @param isValid the isValid to set
+	 */
+	public void setIsValid(Boolean isValid) {
+		this.isValid = isValid;
 	}
 
 }

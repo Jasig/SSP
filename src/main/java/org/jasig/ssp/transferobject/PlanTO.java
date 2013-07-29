@@ -21,6 +21,7 @@ package org.jasig.ssp.transferobject;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
@@ -45,9 +46,10 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 	public PlanTO(Plan model) {
 		super();
 		from(model);
-	}	
+	}
+	
 
-	@Override
+	// This is totally wrong just so that validation can take place without hitting plan is modifi
 	public void from(Plan model) {
 		super.from(model);
 		this.setPersonId(model.getPerson().getId().toString());
@@ -62,6 +64,7 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 			this.getTermNotes().add(termNoteTO);
 		}
 	}
+
 	public String getPersonId() {
 		return personId;
 	}
@@ -71,10 +74,12 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 	public List<PlanCourseTO> getPlanCourses() {
 		return planCourses;
 	}
-	public void setPlantCourses(List<PlanCourseTO> planCourses) {
+	public void setPlanCourses(List<PlanCourseTO> planCourses) {
 		this.planCourses = planCourses;
 	}
+
 	@Override
+	@JsonIgnore
 	public List<PlanCourseTO> getCourses() {
 		return planCourses;
 	}

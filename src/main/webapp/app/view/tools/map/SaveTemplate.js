@@ -25,6 +25,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
         columnRendererUtils: 'columnRendererUtils',
         programsStore: 'programsFacetedStore',
         departmentsStore: 'departmentsStore',
+        authenticatedPerson: 'authenticatedPerson',
         divisionsStore: 'divisionsStore'
     },
     height: 580,
@@ -63,7 +64,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                             width: '100%',
                             height: 100,
                             items: [{
-                				    	xtype:'checkbox',
+                				    xtype:'checkbox',
                 			    	fieldLabel: 'Active Template',
                 			    	name: 'objectStatus',
 									itemId: 'objectStatus',
@@ -79,7 +80,9 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                 			    	fieldLabel: 'Private to Me ',
                 			    	name: 'isPrivate',
 									itemId: 'isPrivate',
-                			    	labelWidth: 85
+                			    	labelWidth: 85,
+                			    	value: true,
+                			    	disabled: !me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')
                 			    }
                 			    ]},
                 			{
@@ -167,8 +170,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
             				        fieldLabel: 'Contact Name',
             				        name: 'contactName',
 									itemId: 'contactName',
-            				        maxLength: 50,
-            				        
+            				        maxLength: 50            				        
             				    },{
             				        fieldLabel: 'Contact Title',
             				        name: 'contactTitle',
@@ -178,11 +180,11 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
             				    },{
 	            				   fieldLabel: 'Contact Email',
 	            				   name: 'contactEmail',
-		            			   itemId: 'contactEmail',
+		            			   itemId: 'contactEmail'
 	            				},{
             				        fieldLabel: 'Contact Phone',
             				        name: 'contactPhone',
-            				        itemId: 'contactPhone',
+            				        itemId: 'contactPhone'
             				    },
             				   {
             				        fieldLabel: 'Academic Link',

@@ -46,11 +46,18 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
     
 	init: function() {
 		var me=this;
-		var person;
+		me.getView().setLoading(true);
 		me.getView().getForm().reset();
-		me.getView().getForm().loadRecord( me.model );
+
 		if (me.model.get('id'))
 		{
+
+			me.filterEarlyAlertReasonsForEdit();
+
+			// needs to be loaded before the person lookup callbacks, which
+			// manipulate form state.
+			me.getView().getForm().loadRecord( me.model );
+
             // EA routing model has a person ID, first name, and last name but
             // our form represents this association in an incremental search
             // box. The latter needs to be backed by something resembling a
@@ -61,7 +68,7 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
             // PersonSearchLite mapped from EA routing JSON model. Should
             // be much more efficient. But not sure about unexpected
             // compatibility problems with peopleSearchLiteStore.
-			person = me.model.get('person');
+			var person = me.model.get('person');
             if ( person && person.id ) {
                 me.getView().setLoading(true);
                 me.personService.getSearchLite(person.id, {
@@ -70,24 +77,61 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
                     scope: me
                 });
             }
+		} else {
+			me.filterEarlyAlertReasonsForCreate();
+			me.getView().getForm().loadRecord( me.model );
+			me.showForm();
 		}
+
+
 		return me.callParent(arguments);
     },
 
+	initEarlyAlertReasonsStore: function(postProcess, postProcessScope) {
+		var me = this;
+		// cache on 'me' b/c we need to clear the filter on destroy, but
+		// by that time the view is gone
+		me.eaReasonsStore = me.getView().earlyAlertReasonsStore;
+		me.eaReasonsStore.clearFilter(true);
+		me.eaReasonsStore.load();
+		if ( postProcess ) {
+			postProcess.apply(postProcessScope ? postProcessScope : me, [me.eaReasonsStore]);
+		}
+	},
+
+	filterEarlyAlertReasonsForEdit: function() {
+		var me = this;
+		me.initEarlyAlertReasonsStore(function(eaReasonsStore) {
+			me.formUtils.applyAssociativeStoreFilter(eaReasonsStore, me.model.get('earlyAlertReasonId'));
+		}, me);
+	},
+
+	filterEarlyAlertReasonsForCreate: function() {
+		var me = this;
+		me.initEarlyAlertReasonsStore(function(eaReasonsStore) {
+			me.formUtils.applyActiveOnlyFilter(eaReasonsStore);
+		}, me);
+	},
+
     routingPersonLookupSuccess: function( r, scope ){
     	var me=scope;
-    	me.getView().setLoading(false);
     	if (r && r.id )
     	{
     		me.peopleSearchLiteStore.loadData([r]);
     		me.getPersonCombo().setValue(me.model.get('person').id);
     	}
+		me.showForm();
     },
 
     routingPersonLookupFailure: function( response, scope ){
     	var me=scope;
-    	me.getView().setLoading(false);
+    	me.showForm();
     },
+
+	showForm: function() {
+		var me = this;
+		me.getView().setLoading(false);
+	},
     
 	onSaveClick: function(button) {
 		var me = this;
@@ -132,8 +176,25 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 	onCancelClick: function(button){
 		this.displayMain();
 	},
+
+	destroy: function() {
+		var me = this;
+		me.clearEarlyAlertReasonsFilters();
+		return me.callParent(arguments);
+	},
+
+	clearEarlyAlertReasonsFilters: function() {
+		var me = this;
+		// don't try to get the store from the view... it's probably already
+		// been destroy()ed
+		if ( me.eaReasonsStore ) {
+			me.eaReasonsStore.clearFilter(true);
+		}
+	},
 	
 	displayMain: function(){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+		var me = this;
+		me.clearEarlyAlertReasonsFilters();
+		var comp = me.formUtils.loadDisplay(me.getContainerToLoadInto(), me.getFormToDisplay(), true, {});
 	}
 });

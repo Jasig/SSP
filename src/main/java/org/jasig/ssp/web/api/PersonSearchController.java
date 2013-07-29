@@ -18,34 +18,50 @@
  */
 package org.jasig.ssp.web.api;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
+import org.jasig.ssp.factory.PersonSearchResult2TOFactory;
 import org.jasig.ssp.factory.PersonSearchResultTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchResult;
+import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.reference.ProgramStatus;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonSearchService;
+import org.jasig.ssp.service.RequestTrustService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.PersonSearchRequestTO;
+import org.jasig.ssp.transferobject.PersonSearchResult2TO;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
+import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@PreAuthorize("hasRole('ROLE_PERSON_SEARCH_READ')")
-@RequestMapping("/1/person/search")
+@RequestMapping("/1/person")
 public class PersonSearchController extends AbstractBaseController {
 
 	private static final Logger LOGGER = LoggerFactory
@@ -59,16 +75,26 @@ public class PersonSearchController extends AbstractBaseController {
 
 	@Autowired
 	private transient PersonSearchResultTOFactory factory;
+	
+	@Autowired
+	private transient PersonSearchResult2TOFactory factory2;
 
 	@Autowired
 	private transient SecurityService securityService;
+
+	@Autowired
+	private transient RequestTrustService requestTrustService;
+	
+	@Autowired
+	private transient PersonSearchRequestTOFactory personSearchRequestFactory;
 
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@DynamicPermissionChecking
+	@RequestMapping(value="/search", method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<PersonSearchResultTO> search(
 			final @RequestParam String searchTerm,
@@ -80,8 +106,11 @@ public class PersonSearchController extends AbstractBaseController {
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
-			final @RequestParam(required = false) String sortDirection)
+			final @RequestParam(required = false) String sortDirection,
+			final HttpServletRequest request)
 			throws ObjectNotFoundException, ValidationException {
+
+		assertSearchApiAuthorization(request);
 
 		ProgramStatus programStatus = null;
 		if (null != programStatusId) {
@@ -96,5 +125,47 @@ public class PersonSearchController extends AbstractBaseController {
 
 		return new PagedResponse<PersonSearchResultTO>(true,
 				results.getResults(), factory.asTOList(results.getRows()));
+	}
+
+	@DynamicPermissionChecking
+	@ResponseBody
+	@RequestMapping(value="/students/search", method = RequestMethod.GET)
+	PagedResponse<PersonSearchResult2TO>  search2(	
+	 final @RequestParam(required = false) String studentId,
+	 final @RequestParam(required = false) String programStatus,
+	 final @RequestParam(required = false) String coachId,
+	 final @RequestParam(required = false) String declaredMajor,
+	 final @RequestParam(required = false) BigDecimal hoursEarnedMin,
+	 final @RequestParam(required = false) BigDecimal hoursEarnedMax,
+	 final @RequestParam(required = false) BigDecimal gpaEarnedMin,
+	 final @RequestParam(required = false) BigDecimal gpaEarnedMax,
+	 final @RequestParam(required = false) Boolean currentlyRegistered,
+	 final @RequestParam(required = false) String sapStatus,
+	 final @RequestParam(required = false)String mapStatus,
+	 final @RequestParam(required = false)String planStatus,
+	 final @RequestParam(required = false) Boolean myCaseload,
+	 final @RequestParam(required = false) Boolean myPlans,
+	 final HttpServletRequest request) throws ObjectNotFoundException, ValidationException
+	 {
+		assertSearchApiAuthorization(request);
+
+		final PagingWrapper<PersonSearchResult2> models = service.search2(personSearchRequestFactory.from(studentId,programStatus,coachId,declaredMajor,
+				hoursEarnedMin,hoursEarnedMax,gpaEarnedMin,gpaEarnedMax,currentlyRegistered,sapStatus,mapStatus,planStatus,myCaseload,myPlans));
+		return new PagedResponse<PersonSearchResult2TO>(true,
+				models.getResults(), factory2.asTOList(models.getRows()));	
+	}
+
+	private void assertSearchApiAuthorization(HttpServletRequest request)
+			throws AccessDeniedException {
+		if ( securityService.hasAuthority(Permission.PERSON_READ) ||
+				securityService.hasAuthority("ROLE_PERSON_SEARCH_READ")) {
+			return;
+		}
+		try {
+			requestTrustService.assertHighlyTrustedRequest(request);
+		} catch ( AccessDeniedException e ) {
+			throw new AccessDeniedException("Untrusted request with"
+					+ " insufficient permissions.", e);
+		}
 	}
 }

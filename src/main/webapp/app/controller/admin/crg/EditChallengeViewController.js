@@ -23,7 +23,8 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
     	apiProperties: 'apiProperties',
     	formUtils: 'formRendererUtils',
     	model: 'currentChallenge',
-    	store: 'challengesStore'
+    	store: 'challengesStore',
+        confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
     },
     config: {
     	containerToLoadInto: 'adminforms',
@@ -40,7 +41,11 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
     },
     
 	init: function() {
-		this.getView().getForm().loadRecord(this.model);
+		var me=this;
+		me.confidentialityLevelsStore.clearFilter(true);
+		me.confidentialityLevelsStore.load();
+		me.formUtils.applyAssociativeStoreFilter(me.confidentialityLevelsStore, me.model.get('defaultConfidentialityLevelId'));
+		me.getView().getForm().loadRecord(me.model);
 		return this.callParent(arguments);
     },
     

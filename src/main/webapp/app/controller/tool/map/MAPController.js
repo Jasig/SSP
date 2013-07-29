@@ -33,6 +33,11 @@ Ext.define('Ssp.controller.tool.map.MAPController', {
     	appEventsController: 'appEventsController',
 		columnRendererUtils : 'columnRendererUtils',
     	currentMapPlan: 'currentMapPlan',
+    	transcriptStore: 'courseTranscriptsStore',
+		transcriptService: 'transcriptService',
+    	personLite: 'personLite',
+		person: 'currentPerson',
+		termsStore:'termsStore',
 		semesterStores : 'currentSemesterStores'
     },
 	resetForm: function() {
@@ -41,6 +46,18 @@ Ext.define('Ssp.controller.tool.map.MAPController', {
     },
 	init: function() {
 		var me=this;
+		var personId = me.personLite.get('id');
+        
+		if(personId != ""){
+	    	me.getView().setLoading( true );
+	    	if(me.termsStore.getCount() <= 0){
+				me.termsStore.addListener("load", me.termStoreLoaded, me, {single:true});
+				me.termsStore.load();
+			}else{
+				me.termStoreLoaded();
+			}
+			
+	    }
 		return this.callParent(arguments);
     },
 	
@@ -57,6 +74,61 @@ Ext.define('Ssp.controller.tool.map.MAPController', {
 			me.appEventsController.getApplication().fireEvent('onSaveTemplateRequest', {viewToClose:me.getView()});
 		}
 	},
+	// added here to support semester panels.
+	termStoreLoaded: function(){
+		var me = this;
+		var personId = me.personLite.get('id');
+		if(personId != ""){
+			var schoolId = me.person.get('schoolId');
+			if(me.transcriptStore.getCount() > 0){
+				if(me.transcriptStore.findRecord('schoolId', schoolId))
+					return;
+				me.transcriptStore.removeAll();
+			}
+			me.transcriptService.getFull( personId, {
+				success: me.getTranscriptSuccess,
+				failure: me.getTranscriptFailure,
+				scope: me			
+			});
+		}
+	},
+	
+	getTranscriptSuccess: function( r, scope ){
+    	var me=scope;
+
+        var courseTranscripts = [];
+        var transcript = new Ssp.model.Transcript(r);
+        var terms = transcript.get('terms');
+        if ( terms ) {
+            Ext.Array.each(terms, function(term) {
+                    var courseTranscript = Ext.create('Ssp.model.CourseTranscript', term);
+					var termIndex = me.termsStore.find("code", courseTranscript.get("termCode"));
+					if(termIndex >= 0){
+						var term = me.termsStore.getAt(termIndex);
+						courseTranscript.set("termStartDate", term.get("startDate"));
+					}
+                    courseTranscripts.push(courseTranscript);
+					
+            });
+        }
+
+        me.transcriptStore.loadData(courseTranscripts);
+		me.transcriptStore.sort([
+		    {
+		        property : 'termStartDate',
+		        direction: 'DESC'
+		    },
+		    {
+		        property : 'formattedCourse',
+		        direction: 'ASC'
+		    }]);
+        me.getView().setLoading( false );
+    },
+    
+    getTranscriptFailure: function( response, scope ){
+    	var me=scope;
+    	me.getView().setLoading( false );  	
+    },
 	
 	destroy:function(){
 	    var me=this;

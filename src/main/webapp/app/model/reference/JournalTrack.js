@@ -18,5 +18,19 @@
  */
 Ext.define('Ssp.model.reference.JournalTrack', {
 	extend: 'Ssp.model.reference.AbstractReference',
-    fields: []
+    fields: [
+	{name: 'objectStatus', type: 'string', defaultValue: 'ACTIVE', convert: function(value, record){
+                 // 'objectStatus' is part of the back-end API, so handling is
+                 // similar but slightly different than 'active' b/c we do
+                 // trust 'value' during both initialization and field-to-field
+                 // syncs.
+                 if ( !(record.statusFieldsInitialized) || record.synchronizingStatusFields ) {
+                     
+                     return value;
+                 }
+                 record.synchronizingStatusFields = true;
+                 record.set('active', 'ACTIVE' === (value && value.toUpperCase()));
+                 record.synchronizingStatusFields = false;
+                 return value;
+             }}]
 });

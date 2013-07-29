@@ -55,7 +55,7 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
                              xtype: 'gridcolumn',
                              dataIndex: 'title',
                              text: 'Title',
-                             width: 130
+                             width: 120
                          },
 						 
 						{
@@ -78,13 +78,27 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
                              hidden:true,
 							 hideable: false
                          },
+						   
                          {
                              xtype: 'gridcolumn',
                               dataIndex: 'tags',
                               text: 'Tags',
                               width: 40
-                          }
-                        ],
+                          },
+						  {
+				            xtype: 'gridcolumn',
+				            width: 16,
+				            flex:0,
+							text: 'D',
+				            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+				            		var isDev = record.isDev();
+									if ( isDev == true) {
+										metaData.tdAttr = 'data-qtip="D indicates course is a dev course."';
+										return "D"
+									}
+									return "";					
+					         }		            
+                        }],
                 		viewConfig: {
 								copy: true,
 						        plugins: {

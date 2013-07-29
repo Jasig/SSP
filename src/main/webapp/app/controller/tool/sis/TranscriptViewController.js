@@ -35,6 +35,7 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
 	    	me.getView().setLoading( true );
 	    	if(me.termsStore.getTotalCount() <= 0){
 				me.termsStore.addListener("load", me.termStoreLoaded, me, {single:true});
+				me.termsStore.load();
 			}else{
 				me.termStoreLoaded();
 			}

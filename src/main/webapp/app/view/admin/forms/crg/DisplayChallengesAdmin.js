@@ -45,6 +45,7 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
     		      autoScroll: true,
     		      selType: 'rowmodel',
     		      enableDragDrop: false,
+				  cls: 'configgrid',
     		      columns: [
     		                { header: 'Name',  
     		                  dataIndex: 'name',

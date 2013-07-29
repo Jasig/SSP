@@ -19,6 +19,13 @@
 Ext.define('Ssp.store.SemesterCourses', {
     extend: 'Ext.data.Store',
     model: 'Ssp.model.tool.map.SemesterCourse',
+	proxy: {
+	        type: 'memory',
+	        reader: {
+	            type: 'json',
+	            root: 'courses'
+	        }
+	    },
     mixins: [ 'Deft.mixin.Injectable' ],
 	inject:{
 		appEventsController: 'appEventsController'

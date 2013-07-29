@@ -123,7 +123,7 @@ public class ExternalPerson extends AbstractExternalData implements
 	@Column(length = 50)
 	@Size(max = 50)
 	private String coachSchoolId;
-	
+		
 	@Column(nullable = false, length = 1)
 	@Size(max = 1)
 	private String nonLocalAddress;
@@ -137,6 +137,10 @@ public class ExternalPerson extends AbstractExternalData implements
 	@Size(max = 1)
 	@Nullable
 	private String f1Status;
+	
+	@Column(length = 10, name = "student_type_code")
+	@Size(max = 10)
+	private String studentType;
 
 	public String getSchoolId() {
 		return schoolId;
@@ -345,6 +349,14 @@ public class ExternalPerson extends AbstractExternalData implements
 
 	public void setCoachSchoolId(final String coachSchoolId) {
 		this.coachSchoolId = coachSchoolId;
+	}
+	
+	public String getStudentType() { 
+		return studentType;
+	}
+	
+	public void setStudentType(final String studentTypeCode) {
+		this.studentType = studentTypeCode;
 	}
 
 	/**

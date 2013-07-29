@@ -66,7 +66,7 @@ public class ScheduledTaskCleanup implements ApplicationListener<ContextClosedEv
 	public static int DEFAULT_WAIT_MILLIS = 10000;
 
 
-	@Autowired
+	@Autowired(required = false)
 	private ThreadPoolTaskScheduler scheduler;
 
 	@Autowired
@@ -77,6 +77,9 @@ public class ScheduledTaskCleanup implements ApplicationListener<ContextClosedEv
 
 	@Override
 	public void onApplicationEvent(ContextClosedEvent event) {
+		if ( scheduler == null ) {
+			return;
+		}
 		if ( owningContext.getId().equals(event.getApplicationContext().getId()) ) {
 			shutdownAndAwaitTermination(scheduler.getScheduledExecutor());
 		}

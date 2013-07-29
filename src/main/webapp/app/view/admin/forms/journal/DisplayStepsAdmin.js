@@ -44,6 +44,7 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayStepsAdmin', {
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',
+				  cls: 'configgrid',
     		      enableDragDrop: false,
     		      columns: [
     		                { header: 'Name',  

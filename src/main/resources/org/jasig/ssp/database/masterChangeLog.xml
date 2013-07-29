@@ -29,11 +29,6 @@
 	<!-- Try to match spacing in masterChangeLog-test.xml as manual comparison 
 		will be necessary from time to time -->
 
-	<!-- Script can only run as user sspDbAdmin -->
-	<preConditions onFail="HALT">
-		<runningAs username="${database.admin.username}" />
-	</preConditions>
-
 	<include file="org/jasig/ssp/database/changesets/000001.xml" />
 
 	<include file="org/jasig/ssp/database/changesets/000002.xml" />
@@ -148,4 +143,20 @@
 	<include file="org/jasig/ssp/database/changesets/000052.xml" />
 	<include file="org/jasig/ssp/database/changesets/000053.xml" />
 	<include file="org/jasig/ssp/database/integrationchangesets/i000034.xml" />
+	<include file="org/jasig/ssp/database/changesets/000054.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000035.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000036.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000037.xml" />
+	<include file="org/jasig/ssp/database/changesets/000055.xml" />
+	<include file="org/jasig/ssp/database/changesets/000056.xml" />
+	<include file="org/jasig/ssp/database/changesets/000057.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000038.xml" />
+	<include file="org/jasig/ssp/database/changesets/000058.xml" />
+	<include file="org/jasig/ssp/database/changesets/000059.xml" />
+	<include file="org/jasig/ssp/database/changesets/000060.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000039.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000040.xml" />
+	<include file="org/jasig/ssp/database/changesets/000061.xml" />
+	<include file="org/jasig/ssp/database/changesets/000062.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000041.xml" />
 </databaseChangeLog>

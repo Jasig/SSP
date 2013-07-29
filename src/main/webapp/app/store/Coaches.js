@@ -26,15 +26,15 @@ Ext.define('Ssp.store.Coaches', {
 	constructor: function(){
 		var me=this;
 		Ext.apply(me, {
-						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCoach')+'/?sort=lastName'),
-						autoLoad: false,
-						pageSize: 1000, // max allowed server-side
-						params : {
-							page : 0,
-							start : 0,
-							limit : 1000 // max allowed server-side
-						}
+						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCoach')),
+						autoLoad: false						
 					});
+		Ext.apply(this.getProxy(), {
+			extraParams : {
+				limit: '-1',
+				sort: 'lastName'
+			}
+		});
 		return me.callParent(arguments);
 	}
 });

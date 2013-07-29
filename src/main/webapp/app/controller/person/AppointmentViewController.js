@@ -23,7 +23,7 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
     	appEventsController: 'appEventsController',
     	appointment: 'currentAppointment',
     	formUtils: 'formRendererUtils',
-    	studentTypesStore: 'studentTypesStore'
+    	studentTypesStore: 'studentTypesAllUnpagedStore'
     },
     control: {
     	appointmentDateField: '#appointmentDateField',
@@ -85,7 +85,9 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
     	var appointmentField = me.getAppointmentDateField();
     	var startTimeField = me.getStartTimeField();
     	var endTimeField = me.getEndTimeField();
-    	studentType = me.studentTypesStore.getById(newValue);
+		//Assumes studentTypesStore is loaded in higher controller
+    	studentType = me.studentTypesStore.getById(newValue); 
+		
     	if (studentType != null)
     	{
     		requireAppointment = studentType.get('requireInitialAppointment');

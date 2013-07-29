@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import org.jasig.ssp.dao.PersonDemographicsDao;
@@ -61,6 +62,11 @@ public class PersonDemographicsServiceImpl implements PersonDemographicsService 
 	public PersonDemographics save(final PersonDemographics obj)
 			throws ObjectNotFoundException {
 		return dao.save(obj);
+	}
+	
+	@Override
+	public BigDecimal getBalancedOwed(UUID personId){
+		return dao.getBalanceOwed(personId);
 	}
 
 	@Override

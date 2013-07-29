@@ -70,4 +70,9 @@ public class ExternalCourseServiceImpl extends AbstractExternalReferenceDataServ
 	public void flushCache() {
 		dao.flushAndLoadCache();
 	}
+	
+	@Override
+	public List<String> getValidCourseCodesForTerm(String termCode, List<String> courseCodes){
+		return dao.getValidCourseCodesForTerm(termCode, courseCodes);
+	}
 }

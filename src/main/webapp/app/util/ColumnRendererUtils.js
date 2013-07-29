@@ -20,9 +20,9 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	extend: 'Ext.Component',
 	mixins: ['Deft.mixin.Injectable'],
     inject: {
-    	colorsStore: 'colorsStore'
+    	colorsAllUnpagedStore: 'colorsAllUnpagedStore'
     },
-
+    
 	initComponent: function() {
 		return this.callParent( arguments );
     },
@@ -84,6 +84,11 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	    return record.get('createdBy').firstName.toUpperCase() + ' ' + record.get('createdBy').lastName.toUpperCase();		
 	},	
 	
+	renderJournalCreatedBy:function(val, metaData, record) {
+		return val.toUpperCase();
+	    
+	},	
+	
 	renderCreatedByDateAndName: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
         strHtml += '<p>' + record.get('createdBy').firstName.toUpperCase() + ' ' + record.get('createdBy').lastName.toUpperCase() + '</p>';
@@ -99,10 +104,15 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	renderModifiedBy: function(val, metaData, record) {
 	    return record.get('modifiedBy').firstName.toUpperCase() + ' ' + record.get('modifiedBy').lastName.toUpperCase();		
 	},	
+	
+	renderJournalModifiedBy: function(val, metaData, record) {
+		return val.toUpperCase();
+	   
+	},
  
 	renderJournalSourceName: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
-        strHtml += '<p>' + record.get('journalSource').name.toUpperCase() + '</p>';
+        strHtml += '<p>' + val + '</p>';
          strHtml += '</div>';
 	    return strHtml;		
 	},	
@@ -192,7 +202,9 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	},
 	
 	renderElectiveColor: function(val, metadata, record) {
-		var colorsStore = Ext.getStore('colorsStore');
+		var me = this; 
+		var colorsStore = me.colorsAllUnpagedStore;
+		colorsStore.clearFilter(true);
 		var color = colorsStore.findRecord('id', val);
 		
 		if(color == null || color.data == null) {
@@ -205,10 +217,10 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 		var strHtml = '<div>';
 		strHtml += '<div style="float:left;width:49%">';
 		strHtml += colorName;
-		strHtml += '</div>'
+		strHtml += '</div>';
 		strHtml += '<div style="background-color:#' + hexCode + ';width:49%;float:right;">';
-		strHtml += '<p>&nbsp;</p>'
-		strHtml += '</div>'
+		strHtml += '<p>&nbsp;</p>';
+		strHtml += '</div>';
 		strHtml += '</div>';
 		return strHtml;		
 	},

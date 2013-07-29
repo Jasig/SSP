@@ -22,6 +22,16 @@ Ext.define('Ssp.model.tool.map.TermNote', {
              {name:'contactNotes',type:'string'},
              {name:'termCode',type:'string'},
              {name:'isImportant',type:'boolean'}
-             ]
-    		        		  
+             ],
+    getData: function(){
+		var me = this;
+		var obj = {};
+		var fields = Ssp.model.tool.map.TermNote.getFields();
+		fields.forEach(function(field){
+			if(field.name != 'active'){
+				obj[field.name] = me.get(field.name);
+			}
+		})
+		return obj;
+	}		        		  
 });

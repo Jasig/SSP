@@ -19,7 +19,6 @@
 package org.jasig.ssp.service;
 
 import java.util.UUID;
-
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.Auditable;
@@ -103,4 +102,5 @@ public interface AuditableCrudService<T extends Auditable> {
 	 *                if the specified ID does not exist.
 	 */
 	void delete(UUID id) throws ObjectNotFoundException;
+
 }

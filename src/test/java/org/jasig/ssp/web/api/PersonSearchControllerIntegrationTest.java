@@ -40,6 +40,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -81,7 +82,8 @@ public class PersonSearchControllerIntegrationTest {
 		securityService.setCurrent(new Person(Person.SYSTEM_ADMINISTRATOR_ID),
 				"ROLE_PERSON_CHALLENGE_READ",
 				"ROLE_PERSON_CHALLENGE_WRITE",
-				"ROLE_PERSON_CHALLENGE_DELETE");
+				"ROLE_PERSON_CHALLENGE_DELETE",
+				"ROLE_PERSON_READ");
 	}
 
 	/**
@@ -96,7 +98,7 @@ public class PersonSearchControllerIntegrationTest {
 	public void testControllerSearch() throws ObjectNotFoundException, ValidationException {
 		final PagedResponse<PersonSearchResultTO> results = controller.search(
 				PERSON_LAST_NAME, null, null, Boolean.TRUE, ObjectStatus.ACTIVE, 0,
-				10, null, null);
+				10, null, null, new MockHttpServletRequest());
 
 		assertNotNull("Results list should not have been null.", results);
 		assertNotEmpty("Results list should not have been empty.",
@@ -111,7 +113,7 @@ public class PersonSearchControllerIntegrationTest {
 	public void testControllerCreateWithInvalidData()
 			throws ValidationException, ObjectNotFoundException {
 		controller.search(PERSON_LAST_NAME, UUID.randomUUID(), null, Boolean.FALSE,
-				ObjectStatus.ACTIVE, 0, 10, null, null);
+				ObjectStatus.ACTIVE, 0, 10, null, null, new MockHttpServletRequest());
 		fail("Create with invalid ProgramStatus UUID should have thrown exception.");
 	}
 
@@ -119,7 +121,7 @@ public class PersonSearchControllerIntegrationTest {
 	public void testControllerSearchWithNullTerm()
 			throws ObjectNotFoundException, ValidationException {
 		controller.search(null, null, null, Boolean.TRUE, ObjectStatus.ACTIVE, 0, 10,
-				null, null);
+				null, null, new MockHttpServletRequest());
 		fail("Invalid search should have thrown exception.");
 	}
 
@@ -127,7 +129,7 @@ public class PersonSearchControllerIntegrationTest {
 	public void testControllerSearchWithEmptyTerm()
 			throws ObjectNotFoundException, ValidationException {
 		controller.search(" ", null, null, Boolean.TRUE, ObjectStatus.ACTIVE, 0, 10,
-				null, null);
+				null, null, new MockHttpServletRequest());
 		fail("Invalid search should have thrown exception.");
 	}
 

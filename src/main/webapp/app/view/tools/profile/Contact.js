@@ -110,7 +110,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         }, {
                             fieldLabel: 'Secondary',
                             name: 'secondaryEmailAddress'
-                        }, , {
+                        }, {
                             fieldLabel: 'DOB',
                             name: 'birthDate',
                             itemId: 'birthDate',

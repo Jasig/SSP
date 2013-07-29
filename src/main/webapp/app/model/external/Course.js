@@ -31,6 +31,14 @@ Ext.define('Ssp.model.external.Course', {
              {name: 'description', type: 'string'},
              {name: 'maxCreditHours', type: 'float'},
              {name: 'minCreditHours', type: 'float'},
-             {name: 'isDev', type: 'boolean'}
-             ]
+             {name: 'isDev', type: 'string'}
+             ],
+	isDev: function(){
+			var me = this;
+			if(me.get("isDev") == 'Y') return true;	
+			if(me.get("isDev") == 'y') return true;	
+			if(me.get("isDev") == true) return true;
+			if(me.get("isDev") == "true") return true;	
+			return false;
+	}
 });

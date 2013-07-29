@@ -37,7 +37,7 @@ Ext.define('Ssp.controller.SearchViewController', {
         programStatusService: 'programStatusService',
         searchCriteria: 'searchCriteria',
         searchService: 'searchService',
-        searchStore: 'searchStore',
+        searchStore: 'studentsSearchStore',
         sspConfig: 'sspConfig'
     },
     
@@ -59,20 +59,20 @@ Ext.define('Ssp.controller.SearchViewController', {
     	},    	
     	
     	searchGridPager: '#searchGridPager',
-    	searchText: {
-    		selector: '#searchText',
-		    listeners:{   
-		        keypress: 'onSearchKeyPress'  
-		    } 
-    	},
+//    	searchText: {
+//    		selector: '#searchText',
+//		    listeners:{   
+//		        keypress: 'onSearchKeyPress'  
+//		    } 
+//    	},
     	
-    	searchCaseloadCheck: '#searchCaseloadCheck',
+//    	searchCaseloadCheck: '#searchCaseloadCheck',
     	searchBar: '#searchBar',
     	caseloadBar: '#caseloadBar',
 
-    	'searchButton': {
-    		click: 'onSearchClick'
-    	},
+//    	'searchButton': {
+//    		click: 'onSearchClick'
+//    	},
     	
     	'displaySearchBarButton': {
     		click: 'onDisplaySearchBarClick'
@@ -129,41 +129,50 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     	// set the search results to the stored
 	   	// search results
-		me.getSearchText().setValue( me.searchCriteria.get('searchTerm') );
-	   	me.getSearchCaseloadCheck().setValue( !me.searchCriteria.get('outsideCaseload') );
-		
-		
+		//me.getSearchText().setValue( me.searchCriteria.get('searchTerm') );
+	   	//me.getSearchCaseloadCheck().setValue( !me.searchCriteria.get('outsideCaseload') );
+
 		return me.callParent(arguments);
     },
     
 	onSelectionChange: function(selModel,records,eOpts){ 
 		var me=this;
-		var person = new Ssp.model.Person();
-		// clear the person record
-		me.person.data = person.data;
-		if (records.length > 0)
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('personNav', records, me);  
+
+		if(skipCallBack)
 		{
-			if (records[0].data.id != null)
+			var person = new Ssp.model.Person();
+			// clear the person record
+			me.person.data = person.data;
+			if (records.length > 0)
 			{
-				me.personLite.set('id', records[0].data.id);
-			}else{
-				me.personLite.set('id', records[0].data.personId);
+				me.updatePerson(records);
+				me.appEventsController.getApplication().fireEvent('loadPerson');	
 			}
-			me.personLite.set('firstName', records[0].data.firstName);
-			me.personLite.set('middleName', records[0].data.middleName);
-			me.personLite.set('lastName', records[0].data.lastName);
-			me.personLite.set('displayFullName', records[0].data.firstName + ' ' + records[0].data.lastName);
-			me.appEventsController.getApplication().fireEvent('loadPerson');			
 		}
 	},
-
+    updatePerson: function(records){
+    var me=this;
+		if (records[0].data.id != null)
+		{
+			me.personLite.set('id', records[0].data.id);
+		}else{
+			me.personLite.set('id', records[0].data.personId);
+		}
+		me.personLite.set('firstName', records[0].data.firstName);
+		me.personLite.set('middleName', records[0].data.middleName);
+		me.personLite.set('lastName', records[0].data.lastName);
+		me.personLite.set('displayFullName', records[0].data.firstName + ' ' + records[0].data.lastName);
+	},
 	onViewReady: function(comp, eobj){
 		var me=this;
-        me.appEventsController.assignEvent({eventName: 'collapseSearch', callBackFunc: me.onCollapseSearch, scope: me});
+        me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
 		me.appEventsController.assignEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
 	   	me.appEventsController.assignEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
 	   	me.appEventsController.assignEvent({eventName: 'setNonParticipatingProgramStatusComplete', callBackFunc: me.onSetNonParticipatingProgramStatusComplete, scope: me});
-	
+		me.appEventsController.assignEvent({eventName: 'onPersonSearchSuccess', callBackFunc: me.searchSuccess, scope: me});
+		me.appEventsController.assignEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
+		
 	   	me.initSearchGrid();
 
 	   	// load program statuses
@@ -172,11 +181,14 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     destroy: function() {
     	var me=this;
-        me.appEventsController.removeEvent({eventName: 'collapseSearch', callBackFunc: me.onCollapseSearch, scope: me});
+        me.appEventsController.removeEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
     	me.appEventsController.removeEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'retrieveCaseload', callBackFunc: me.onRetrieveCaseload, scope: me});
-	   	return me.callParent( arguments );
+	   	me.appEventsController.removeEvent({eventName: 'onPersonSearchSuccess', callBackFunc: me.searchSuccess, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
+		
+		return me.callParent( arguments );
     },
     
     initSearchGrid: function(){
@@ -234,7 +246,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.applyColumns();
 	},
 	
-	onCollapseSearch: function() {
+	onToolsNav: function() {
 		var searchView = Ext.ComponentQuery.query('search')[0];
 		searchView.collapse();
 	},
@@ -252,6 +264,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.preferences.set('SEARCH_GRID_VIEW_TYPE',0);
 		me.getCaseloadBar().hide();
 		me.getSearchBar().show();
+		Ext.ComponentQuery.query('searchForm')[0].show();
+
 		me.setGridView();
 	},
 
@@ -267,7 +281,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		var me=this;
 		var grid = me.getView();
 		var store;
-		var sortableColumns = false;
+		var sortableColumns = true;
 		var studentIdAlias = me.sspConfig.get('studentIdAlias');
 		if ( me.preferences.get('SEARCH_GRID_VIEW_TYPE')==1 )
 		{
@@ -326,17 +340,29 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     onAddPersonClick: function( button ){
     	var me=this;
-    	me.onAddPerson();
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('personButtonAdd',me);  
+        if(skipCallBack)
+        {
+        	me.onAddPerson();
+        }
 	},
 	
 	onEditPersonClick: function( button ){
     	var me=this;
-    	me.onEditPerson();
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('personButtonEdit',me);  
+        if(skipCallBack)
+        {
+        	me.onEditPerson();
+        }
 	},
 
 	onDeletePersonClick: function( button ){
     	var me=this;
-    	me.onDeletePerson();
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('personButtonDelete',me);  
+        if(skipCallBack)
+        {
+        	me.onDeletePerson();
+        }
 	},	
 	
 	onAddPerson: function(){
@@ -423,35 +449,37 @@ Ext.define('Ssp.controller.SearchViewController', {
   
     onSetProgramStatusClick: function( button ){
     	var me=this;
-    	var action = button.action;
-    	switch ( action )
-    	{
-    		case 'active':
-    			me.setProgramStatus( action );
-    			break;
-    		
-    		case 'no-show':
-    			me.setProgramStatus( action );
-    			break;
-    			
-    		case 'transition':
-    	     	/* 
-    	     	 * Temp fix for SSP-434
-    	     	 * 
-    	     	 * Temporarily removing Transition Action from this button.
-    			 * TODO: Ensure that this button takes the user to the Journal Tool and initiates a
-    			 * Journal Entry.
-    			 * // me.appEventsController.getApplication().fireEvent('transitionStudent');
-    	     	 */
-    	     	 break;
-    	     	 
-    		case 'non-participating':
-    			Ext.create('Ssp.view.ProgramStatusChangeReasonWindow', {
-    			    height: 150,
-    			    width: 500
-    			}).show();
-    			break;
-    	}
+    	var me=this;
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('personStatusChange',me,button);  
+        if(skipCallBack)
+        {
+        	var action = button.action;
+        	switch ( action )
+        	{
+        	case 'active':
+        		me.setProgramStatus( action );
+        		break;
+        		
+        	case 'no-show':
+        		me.setProgramStatus( action );
+        		break;
+        		
+        	case 'transition':
+        		/* 
+        		 * Temp fix for SSP-434
+        		 * 
+        		 * Temporarily removing Transition Action from this button.
+        		 * TODO: Ensure that this button takes the user to the Journal Tool and initiates a
+        		 * Journal Entry.
+        		 * // me.appEventsController.getApplication().fireEvent('transitionStudent');
+        		 */
+        		break;
+        		
+        	case 'non-participating':
+        		me.setProgramStatus(action);
+        		break;
+        	}
+        }
     },
     
     setProgramStatus: function( action ){
@@ -460,15 +488,30 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	var programStatusId = "";
 	   	if (personId != "")
 	   	{
+			var person = me.caseloadStore.findRecord("personId", personId);
+			if(!person)
+			  	person = me.searchStore.findRecord("id", personId);
+			
+			if(action == 'non-participating'){
+				Ext.create('Ssp.view.ProgramStatusChangeReasonWindow', {
+    			    height: 150,
+    			    width: 500
+    			}).show();
+				person.set("currentProgramStatusName", "Non-participating");
+				return;
+			}
 	   		if (action=='active')
 	   		{
 	   			programStatusId = Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID;
+				person.set("currentProgramStatusName", "Active");
 	   		}
 	   		
 	   		if (action=='no-show')
 	   		{
 	   			programStatusId = Ssp.util.Constants.NO_SHOW_PROGRAM_STATUS_ID;
+				person.set("currentProgramStatusName", "No-Show");
 	   		}
+			
 	   		personProgramStatus = new Ssp.model.PersonProgramStatus();
 	   		personProgramStatus.set('programStatusId', programStatusId );
 	   		personProgramStatus.set('effectiveDate', Ext.Date.now() );
@@ -481,7 +524,15 @@ Ext.define('Ssp.controller.SearchViewController', {
 	               scope: me 
 	           });    		
 	   	}else{
-	   		Ext.Msg.alert('SSP Error','Unable to determine student to set to No-Show status');
+	   		var msg = "";
+	   		if (action=='no-show')
+	   			msg = 'No-Show';
+	   		if (action=='non-participating')
+	   			msg = 'Non-Participating';
+	   		if (action=='active')
+	   			msg = 'Active';
+	   		
+	   		Ext.Msg.alert('SSP Error','Unable to determine student to set to ' + msg + ' status.');
 	   	}
     },
     
@@ -516,8 +567,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 	
 	setSearchCriteria: function(){
 		var me=this;
-		var outsideCaseload = !me.getSearchCaseloadCheck().getValue();
-		var searchTerm = me.getSearchText().value;
+		//var outsideCaseload = !me.getSearchCaseloadCheck().getValue();
+		//var searchTerm = me.getSearchText().value;
 		// store search term
 		me.searchCriteria.set('searchTerm', searchTerm);
 		me.searchCriteria.set('outsideCaseload', outsideCaseload);
@@ -561,15 +612,17 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}
 	},
 
-    searchSuccess: function( r, scope){
-    	var me=scope;
+    searchSuccess: function(){
+    	var me=this;
     	me.getView().setLoading( false );
 		me.selectFirstItem();
 		me.getSearchGridPager().onLoad();
     },
 
-    searchFailure: function( r, scope){
-    	var me=scope;
+    searchFailure: function(){
+    	var me=this;
+		me.personLite.set('id', "");
+    	me.appEventsController.getApplication().fireEvent('loadPerson');
     	me.getView().setLoading( false );
     },
     
@@ -578,7 +631,11 @@ Ext.define('Ssp.controller.SearchViewController', {
     
 	onRetrieveCaseloadClick: function( button ){
 		var me=this;
-		me.getCaseload();
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('retrieveCaseload',me);  
+        if(skipCallBack)
+        {
+        	me.getCaseload();
+        }
 	},
 	
 	onCaseloadStatusComboSelect: function( comp, records, eOpts ){

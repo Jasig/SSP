@@ -38,9 +38,11 @@ import org.jasig.ssp.transferobject.reference.DisabilityAgencyTO;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
+import org.jasig.ssp.service.tool.AccommodationService;
 import org.jasig.ssp.transferobject.PersonDisabilityTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.tool.AccommodationFormTO;
+import org.jasig.ssp.util.service.stub.Stubs;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,6 +75,9 @@ public class AccommodationControllerIntegrationTest {
 
 	@Autowired
 	private transient PersonTOFactory personTOFactory;
+	
+	@Autowired
+	private transient AccommodationService accomodationService; 
 
 	private static final UUID STUDENT_ID = UUID
 			.fromString("7d36a3a9-9f8a-4fa9-8ea0-e6a38d2f4194");
@@ -193,8 +198,12 @@ public class AccommodationControllerIntegrationTest {
 	 * DisabilityAgency in the test database.
 	 */
 	@Test
-	public void testControllerRefData() {
-		final Map<String, Object> data = controller.referenceData();
+	public void testControllerRefData() throws ObjectNotFoundException {
+		final AccommodationFormTO accomodationFormTO = new AccommodationFormTO(
+				accomodationService.loadForPerson(Stubs.PersonFixture.STUDENT_0.id()));
+				
+		
+		final Map<String, Object> data = controller.referenceData(accomodationFormTO);
 
 		assertNotNull("The map should not have been null.", data);
 

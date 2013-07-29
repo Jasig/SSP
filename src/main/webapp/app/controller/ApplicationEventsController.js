@@ -57,7 +57,7 @@ Ext.define('Ssp.controller.ApplicationEventsController', {
 	removeEvent: function( args ){
 		if ( this.getApplication().hasListener( args.eventName ))
 		{
-			this.getApplication().removeListener( args.eventName, args.callBackFunc, args.scope );
+			this.getApplication().removeListener( args.eventName, args.callBackFunc, args.scope);
 		}
 	}
 });

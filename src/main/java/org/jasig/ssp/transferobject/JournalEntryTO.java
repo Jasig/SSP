@@ -28,6 +28,7 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.model.JournalEntry;
@@ -43,6 +44,7 @@ import com.google.common.collect.Sets;
 /**
  * JournalEntry transfer object
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class JournalEntryTO
 		extends AbstractAuditableTO<JournalEntry>
 		implements TransferObject<JournalEntry>, Serializable {

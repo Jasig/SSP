@@ -59,7 +59,7 @@
 	
 	<tx:annotation-driven />
 
-	<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
+	<bean id="liquibase" class="org.jasig.ssp.util.liquibase.ExtendedSpringLiquibase">
 		<property name="dataSource">
 			<bean class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 				<property name="driverClass" value="#{configProperties.db_driver_class}" />
@@ -68,6 +68,7 @@
 				<property name="password" value="#{configProperties.db_admin_password}" />
 			</bean>
 		</property>
+		<property name="executeEnabled" value="#{configProperties.db_liquibase_enabled}" />
 		<property name="changeLog"
 			value="classpath:org/jasig/ssp/database/masterChangeLog-test.xml" />
 		<property name="changeLogParameters">
@@ -182,7 +183,7 @@
 	<bean id="ldapPersonAttributesService" 
 			class="org.jasig.ssp.service.impl.LdapPersonAttributesService"/>
 
-	
+	<bean id="taskScheduler" class="org.jasig.ssp.util.spring.StubTaskScheduler"/>
 			
 	<!-- Don't setup a javaMailSender in here, as the MessageService will 
 	override the send_mail config value - setting it to true, and send mail 

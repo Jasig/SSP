@@ -244,19 +244,9 @@
                     "path": "/app/model/reference/"
                 },
                 {
-                    "clsName": "Ssp.store.reference.ReferralSourcesBind",
-                    "name": "ReferralSourcesBind.js",
-                    "path": "/app/store/reference/"
-                },
-                {
                     "clsName": "Ssp.model.reference.SpecialServiceGroup",
                     "name": "SpecialServiceGroup.js",
                     "path": "/app/model/reference/"
-                },
-                {
-                    "clsName": "Ssp.store.reference.SpecialServiceGroupsBind",
-                    "name": "SpecialServiceGroupsBind.js",
-                    "path": "/app/store/reference/"
                 },
                 {
                     "clsName": "Ssp.controller.tool.accommodation.GeneralViewController",
@@ -373,6 +363,11 @@
                     "name": "MAPViewController.js",
                     "path": "/app/controller/tool/map/"
                 },
+                {
+                    "clsName": "Ssp.controller.tool.map.MovePlanDialogController",
+                    "name": "MovePlanDialogController.js",
+                    "path": "/app/controller/tool/map/"
+                },
 				{
                     "clsName": "Ssp.view.tools.map.MAP",
                     "name": "MAP.js",
@@ -421,6 +416,11 @@
                 {
                     "clsName": "Ssp.view.tools.map.MovePlan",
                     "name": "MovePlan.js",
+                    "path": "/app/view/tools/map/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.map.MovePlanDialog",
+                    "name": "MovePlanDialog.js",
                     "path": "/app/view/tools/map/"
                 },
 				{
@@ -654,11 +654,6 @@
                     "path": "/app/store/"
                 },
                 {
-                    "clsName": "Ssp.store.EarlyAlertCoordinators",
-                    "name": "EarlyAlertCoordinators.js",
-                    "path": "/app/store/"
-                },
-                {
                     "clsName": "Ssp.store.admin.AdminTreeMenus",
                     "name": "AdminTreeMenus.js",
                     "path": "/app/store/admin/"
@@ -749,6 +744,11 @@
                     "path": "/app/service/"
                 },
                 {
+                    "clsName": "Ssp.store.StudentsSearch",
+                    "name": "StudentsSearch.js",
+                    "path": "/app/store/"
+                },
+                {
                     "clsName": "Ssp.service.SearchService",
                     "name": "SearchService.js",
                     "path": "/app/service/"
@@ -814,6 +814,11 @@
                     "name": "SearchViewController.js",
                     "path": "/app/controller/"
                 },
+                {
+                    "clsName": "Ssp.controller.SearchFormViewController",
+                    "name": "SearchFormViewController.js",
+                    "path": "/app/controller/"
+                },                
                 {
                     "clsName": "Ssp.controller.StudentRecordViewController",
                     "name": "StudentRecordViewController.js",
@@ -959,11 +964,20 @@
                     "name": "ProfileContactViewController.js",
                     "path": "/app/controller/tool/profile/"
                 },
-                
                 {
-                    "clsName": "Ssp.view.tools.legacyremarks.LegacyRemarks",
-                    "name": "LegacyRemarks.js",
-                    "path": "/app/view/tools/legacyremarks/"
+                    "clsName": "Ssp.service.PersonNoteService",
+                    "name": "PersonNoteService.js",
+                    "path": "/app/service/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.notes.NotesViewController",
+                    "name": "NotesViewController.js",
+                    "path": "/app/controller/tool/notes/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.notes.Notes",
+                    "name": "Notes.js",
+                    "path": "/app/view/tools/notes/"
                 },
                 
                 {
@@ -1042,6 +1056,11 @@
                     "path": "/app/model/external/"
                 },
                 {
+                    "clsName": "Ssp.model.external.CourseRequisite",
+                    "name": "CourseRequisite.js",
+                    "path": "/app/model/external/"
+                },
+                {
                     "clsName": "Ssp.model.external.Term",
                     "name": "Term.js",
                     "path": "/app/model/external/"
@@ -1086,6 +1105,18 @@
                     "name": "StudentActivities.js",
                     "path": "/app/store/"
                 },
+                
+                {
+                    "clsName": "Ssp.model.external.PersonNote",
+                    "name": "PersonNote.js",
+                    "path": "/app/model/external/"
+                },
+                
+                {
+                    "clsName": "Ssp.store.external.PersonNotes",
+                    "name": "PersonNotes.js",
+                    "path": "/app/store/external/"
+                },
                 {
                     "clsName": "Ssp.controller.tool.studentintake.StudentIntakeToolViewController",
                     "name": "StudentIntakeToolViewController.js",
@@ -1105,6 +1136,16 @@
                     "clsName": "Ssp.controller.tool.studentintake.PersonalViewController",
                     "name": "PersonalViewController.js",
                     "path": "/app/controller/tool/studentintake/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.journal.JournalEntry",
+                    "name": "JournalEntry.js",
+                    "path": "/app/model/tool/journal/"
+                },
+                {
+                    "clsName": "Ssp.store.JournalEntriesUnpaged",
+                    "name": "JournalEntriesUnpaged.js",
+                    "path": "/app/store/"
                 },
                 {
                     "clsName": "Ssp.controller.tool.journal.JournalToolViewController",
@@ -1307,6 +1348,11 @@
                     "path": "/app/model/"
                 },
                 {
+                    "clsName": "Ssp.model.FilterDiscreteValues",
+                    "name": "FilterDiscreteValues.js",
+                    "path": "/app/model/"
+                },                
+                {
                     "clsName": "Ssp.controller.admin.AdminItemAssociationViewController",
                     "name": "AdminItemAssociationViewController.js",
                     "path": "/app/controller/admin/"
@@ -1335,7 +1381,12 @@
                     "clsName": "Ssp.view.Search",
                     "name": "Search.js",
                     "path": "/app/view/"
-                },
+                },  
+                                {
+                    "clsName": "Ssp.view.SearchForm",
+                    "name": "SearchForm.js",
+                    "path": "/app/view/"
+                },              
                 {
                     "clsName": "Ssp.view.StudentRecord",
                     "name": "StudentRecord.js",
@@ -1702,9 +1753,9 @@
                     "path": "/app/model/"
                 },
                 {
-                    "clsName": "Ssp.model.PersonDocument",
-                    "name": "PersonDocument.js",
-                    "path": "/app/model/"
+                    "clsName": "Ssp.model.tool.documents.StudentDocument",
+                    "name": "StudentDocument.js",
+                    "path": "/app/model/tool/documents/"
                 },
                 {
                     "clsName": "Ssp.model.PersonProgramStatus",
@@ -1802,11 +1853,6 @@
                     "path": "/app/store/"
                 },
                 {
-                    "clsName": "Ssp.model.tool.journal.JournalEntry",
-                    "name": "JournalEntry.js",
-                    "path": "/app/model/tool/journal/"
-                },
-                {
                     "clsName": "Ssp.model.reference.Challenge",
                     "name": "Challenge.js",
                     "path": "/app/model/reference/"
@@ -1851,6 +1897,11 @@
                     "name": "Coaches.js",
                     "path": "/app/store/"
                 },
+ {
+                    "clsName": "Ssp.store.CoachesAll",
+                    "name": "CoachesAll.js",
+                    "path": "/app/store/"
+                },                
                 {
                     "clsName": "Ssp.store.Goals",
                     "name": "Goals.js",
@@ -1862,18 +1913,13 @@
                     "path": "/app/store/"
                 },
                 {
-                    "clsName": "Ssp.store.JournalEntriesUnpaged",
-                    "name": "JournalEntries.js",
-                    "path": "/app/store/"
-                },
-                {
                     "clsName": "Ssp.store.EarlyAlerts",
                     "name": "EarlyAlerts.js",
                     "path": "/app/store/"
                 },
                 {
-                    "clsName": "Ssp.store.Documents",
-                    "name": "Documents.js",
+                    "clsName": "Ssp.store.StudentDocuments",
+                    "name": "StudentDocuments.js",
                     "path": "/app/store/"
                 },
                 {
@@ -1927,6 +1973,11 @@
                     "path": "/app/store/reference/"
                 },
                 {
+                    "clsName": "Ssp.store.reference.JournalTracksAllUnpaged",
+                    "name": "JournalTracksAllUnpaged.js",
+                    "path": "/app/store/reference/"
+                },
+                {
                     "clsName": "Ssp.store.People",
                     "name": "People.js",
                     "path": "/app/store/"
@@ -1947,9 +1998,24 @@
                     "path": "/app/store/"
                 },
                 {
-                    "clsName": "Ssp.store.reference.YesNo",
-                    "name": "YesNo.js",
-                    "path": "/app/store/reference/"
+                    "clsName": "Ssp.store.PlanStatus",
+                    "name": "PlanStatus.js",
+                    "path": "/app/store/"
+                },   
+                {
+                    "clsName": "Ssp.store.FinancialAidSAPStatus",
+                    "name": "FinancialAidSAPStatus.js",
+                    "path": "/app/store/"
+                }, 
+                {
+                    "clsName": "Ssp.store.MAPStatus",
+                    "name": "MAPStatus.js",
+                    "path": "/app/store/"
+                },   
+                                                                         {
+                    "clsName": "Ssp.store.CurrentlyRegistered",
+                    "name": "CurrentlyRegistered.js",
+                    "path": "/app/store/"
                 },
                 {
                     "clsName": "Ssp.controller.admin.crg.AssociateChallengeCategoriesAdminViewController",
@@ -2227,6 +2293,11 @@
                     "path": "/app/store/reference/"
                 },
                 {
+                    "clsName": "Ssp.store.reference.JournalSourcesAllUnpaged",
+                    "name": "JournalSourcesAllUnpaged.js",
+                    "path": "/app/store/reference/"
+                },
+                {
                     "clsName": "Ssp.store.reference.MaritalStatuses",
                     "name": "MaritalStatuses.js",
                     "path": "/app/store/reference/"
@@ -2277,13 +2348,8 @@
                     "path": "/app/store/reference/"
                 },
                 {
-                    "clsName": "Ssp.store.reference.Elective",
-                    "name": "Elective.js",
-                    "path": "/app/store/reference/"
-                },
-                {
-                	"clsName": "Ssp.store.reference.ElectiveActive",
-                    "name": "ElectiveActive.js",
+                    "clsName": "Ssp.store.reference.Electives",
+                    "name": "Electives.js",
                     "path": "/app/store/reference/"
                 },
                 {
@@ -2421,6 +2487,22 @@
                     "name": "MessageTemplatesDisplayAdminViewController.js",
                     "path": "/app/controller/admin/config/"
                 },
+		{
+                    "clsName": "Ssp.controller.admin.config.CourseWorkHoursAdminViewController",
+                    "name": "CourseWorkHoursAdminViewController.js",
+                    "path": "/app/controller/admin/config/"
+                },
+		{
+                    "clsName": "Ssp.controller.admin.config.EnrollmentStatusAdminViewController",
+                    "name": "EnrollmentStatusAdminViewController.js",
+                    "path": "/app/controller/admin/config/"
+                },
+		{
+                    "clsName": "Ssp.controller.admin.config.RegistrationLoadAdminViewController",
+                    "name": "RegistrationLoadAdminViewController.js",
+                    "path": "/app/controller/admin/config/"
+                },
+
                 {
                     "clsName": "Ssp.model.MessageTemplates",
                     "name": "MessageTemplates.js",
@@ -2439,6 +2521,11 @@
                 {
                     "clsName": "Ssp.store.reference.ConfigurationOptions",
                     "name": "ConfigurationOptions.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.ConfigurationOptionsUnpaged",
+                    "name": "ConfigurationOptionsUnpaged.js",
                     "path": "/app/store/reference/"
                 },
                 {
@@ -2469,6 +2556,51 @@
                 {
                     "clsName": "Ssp.view.admin.forms.config.MessageTemplatesDisplayAdmin",
                     "name": "MessageTemplatesDisplayAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.CourseWorkHoursAddAdmin",
+                    "name": "CourseWorkHoursAddAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.CourseWorkHoursAdmin",
+                    "name": "CourseWorkHoursAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.CourseWorkHoursListAdmin",
+                    "name": "CourseWorkHoursListAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.EnrollmentStatusAddAdmin",
+                    "name": "EnrollmentStatusAddAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.EnrollmentStatusAdmin",
+                    "name": "EnrollmentStatusAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.EnrollmentStatusListAdmin",
+                    "name": "EnrollmentStatusListAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.RegistrationLoadAddAdmin",
+                    "name": "RegistrationLoadAddAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.RegistrationLoadAdmin",
+                    "name": "RegistrationLoadAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.RegistrationLoadListAdmin",
+                    "name": "RegistrationLoadListAdmin.js",
                     "path": "/app/view/admin/forms/config/"
                 }
             ]

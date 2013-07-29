@@ -22,13 +22,15 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.journal.EditJournalViewController',
     inject: {
-        confidentialityLevelsStore: 'confidentialityLevelsStore',
-        journalSourcesStore: 'journalSourcesUnpagedStore',
-        journalTracksStore: 'journalTracksUnpagedStore',
+        confidentialityLevelsAllUnpagedStore: 'confidentialityLevelsAllUnpagedStore',
+        journalSourcesStore: 'journalSourcesAllUnpagedStore',
+        journalTracksAllUnpagedStore: 'journalTracksAllUnpagedStore',
         model: 'currentJournalEntry'
     },
 	width: '100%',
     height: '100%',
+	//minHeight: 1,
+	autoScroll: true,
     itemId: 'editjournalGrid',
     initComponent: function(){
         var me = this;
@@ -41,7 +43,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                 fieldLabel: '',
                 layout: 'hbox',
                 defaultType: 'displayfield',
-				border: 1,
+				border: 0,
                 fieldDefaults: {
                     msgTarget: 'side'
                 },
@@ -54,6 +56,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                     defaults: {
                         anchor: '100%,100%'
                     },
+					
                     flex: .60,
                     
                     items: [{
@@ -79,10 +82,9 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                         name: 'confidentialityLevelId',
                         fieldLabel: 'Confidentiality Level',
                         emptyText: 'Select One',
-                        store: me.confidentialityLevelsStore,
+                        store: me.confidentialityLevelsAllUnpagedStore,
                         valueField: 'id',
                         displayField: 'name',
-                        mode: 'local',
                         typeAhead: true,
                         queryMode: 'local',
                         allowBlank: false,
@@ -105,11 +107,12 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                     }, {
                         xtype: 'textareafield',
                         fieldLabel: 'Comment (Optional)',
-                        itemId: 'commentText',
-                        anchor: '98%',
+                        itemId: 'commentTxt',
                         name: 'comment',
-						minHeight: 1,
-						flex:1
+						//minHeight: 1,
+						//flex:1,
+						height: 250,
+                        anchor: '98%'
                     }]
                 
                 }, {
@@ -145,10 +148,9 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
 							name: 'journalTrackId',
 							fieldLabel: '',
 							emptyText: 'Select One',
-							store: me.journalTracksStore,
+							store: me.journalTracksAllUnpagedStore,
 							valueField: 'id',
 							displayField: 'name',
-							mode: 'local',
 							typeAhead: true,
 							queryMode: 'local',
 							allowBlank: true,
@@ -162,9 +164,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
 							tooltip: 'Removes the assigned Journal Track and Session Details',
 							text: 'Remove/Reset',
 							xtype: 'button',
-							itemId: 'removeJournalTrackButton',
-							hidden: true
-							//hidden: ((me.model.get('id') == "") ? false : true)
+							itemId: 'removeJournalTrackButton'
 						}]
 					}, {
                         xtype: 'journaltracktree',
@@ -173,17 +173,6 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
 						minHeight: 1
 						
                     }]
-                }]
-            }],
-            
-            
-            dockedItems: [{
-                xtype: 'toolbar',
-                items: [{
-                    text: 'Save',
-                    xtype: 'button',
-                    action: 'save',
-                    itemId: 'saveButton'
                 }]
             }]
         });

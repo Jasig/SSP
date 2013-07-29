@@ -19,7 +19,7 @@
     under the License.
 
 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="numberStudentsByStatusCourseForm" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="855c5b9e-06a2-439f-a729-67b7d6c43e1c">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="numberStudentsByStatusCourseForm" pageWidth="572" pageHeight="792" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="855c5b9e-06a2-439f-a729-67b7d6c43e1c">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -28,8 +28,8 @@
 		<defaultValueExpression><![CDATA["/Users/jamesstanley/Documents/opensource/SSP/src/main/jasperreports/"]]></defaultValueExpression>
 	</parameter>
 	<field name="studentId" class="java.lang.String"/>
-	<field name="planStatus" class="java.lang.String"/>
-	<field name="statusDetailsAsString" class="java.lang.String"/>
+	<field name="planStatus" class="org.jasig.ssp.model.external.PlanStatus"/>
+	<field name="statusDetails" class="java.lang.String"/>
 	<variable name="rowIndex" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -37,7 +37,10 @@
 	<columnHeader>
 		<band height="16">
 			<rectangle>
-				<reportElement uuid="16ac1c10-2b73-4b09-a9fb-9814e574d7b8" mode="Opaque" x="0" y="0" width="130" height="16" backcolor="#E4E4E4"/>
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="0" y="0" width="572" height="14" isPrintInFirstWholeBand="true" backcolor="#E4E4E4"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineColor="#FFFFFF"/>
+				</graphicElement>
 			</rectangle>
 			<staticText>
 				<reportElement uuid="5db1d0a3-5499-486c-9e0a-1756dd520e32" x="0" y="0" width="130" height="16" backcolor="#E4E4E4"/>
@@ -46,45 +49,51 @@
 				</textElement>
 				<text><![CDATA[STUDENT ID]]></text>
 			</staticText>
+			<staticText>
+				<reportElement uuid="5db1d0a3-5499-486c-9e0a-1756dd520e32" x="130" y="0" width="81" height="16" backcolor="#E4E4E4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[PLAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5db1d0a3-5499-486c-9e0a-1756dd520e32" x="211" y="0" width="361" height="16" backcolor="#E4E4E4"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<text><![CDATA[OFF PLAN DETAILS]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="16" splitType="Stretch">
 			<rectangle>
-				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="0" y="2" width="505" height="14" backcolor="#E4E4E4">
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="0" y="2" width="572" height="14" backcolor="#E4E4E4">
 					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 				</graphicElement>
 			</rectangle>
-			<rectangle>
-				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="0" width="505" height="16" backcolor="#E4E4E4">
-					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
-				</reportElement>
-				<graphicElement>
-					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
-				</graphicElement>
-			</rectangle>
-			<rectangle>
-				<reportElement uuid="16ac1c10-2b73-4b09-a9fb-9814e574d7b8" mode="Transparent" x="0" y="0" width="130" height="16"/>
-			</rectangle>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="0" y="0" width="130" height="16" isRemoveLineWhenBlank="true"/>
-				<textElement verticalAlignment="Middle">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{studentId}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="130" y="0" width="100" height="16" isRemoveLineWhenBlank="true"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="130" y="0" width="81" height="16" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{planStatus}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" stretchType="RelativeToTallestObject" x="230" y="0" width="239" height="16" isRemoveLineWhenBlank="true"/>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{statusDetailsAsString}]]></textFieldExpression>
+				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="211" y="0" width="361" height="16" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Top">
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{statusDetails}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

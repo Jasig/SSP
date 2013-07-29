@@ -30,6 +30,7 @@ Ext.require([
     'Ssp.view.admin.AdminForms',
     'Ssp.view.Main',
     'Ssp.view.Search',
+    'Ssp.view.SearchForm',
     'Ssp.view.StudentRecord',
     'Ssp.view.ProgramStatusChangeReasonWindow',
     'Ssp.view.person.CaseloadAssignment',
@@ -123,6 +124,7 @@ Ext.require([
     'Ssp.view.tools.map.FAView',
 	'Ssp.view.tools.map.MAPView',
     'Ssp.view.tools.map.MovePlan',
+	'Ssp.view.tools.map.MovePlanDialog',
     'Ssp.view.tools.map.PlanTool',
     'Ssp.view.tools.map.LoadPlans',
 	'Ssp.view.tools.map.PlanNotes',
@@ -137,7 +139,9 @@ Ext.require([
     'Ssp.view.tools.map.CoursesGrid',
 	'Ssp.view.tools.map.CoursesGridPanel',
 	
-	'Ssp.view.tools.legacyremarks.LegacyRemarks',
+	//PERSON NOTES TOOL
+	'Ssp.view.tools.notes.Notes',
+	
 	'Ssp.view.tools.documents.Documents',
 	'Ssp.view.tools.documents.UploadDocuments',
     
@@ -151,6 +155,7 @@ Ext.require([
     'Ssp.view.admin.forms.crg.EditChallenge',
     'Ssp.view.admin.forms.crg.EditReferral',
 
+	
     //CASELOAD REASSIGNMENT TOOLS
     'Ssp.view.admin.forms.caseload.CaseloadReassignment',
     'Ssp.view.admin.forms.caseload.CaseloadReassignmentSource',
@@ -190,6 +195,15 @@ Ext.require([
 	'Ssp.view.admin.forms.config.MessageTemplatesAdmin',
     'Ssp.view.admin.forms.config.MessageTemplatesDisplayAdmin',
 	'Ssp.view.admin.forms.config.MessageTemplateDetails',
+	'Ssp.view.admin.forms.config.RegistrationLoadAdmin',
+	'Ssp.view.admin.forms.config.RegistrationLoadAddAdmin',
+	'Ssp.view.admin.forms.config.RegistrationLoadListAdmin',
+	'Ssp.view.admin.forms.config.CourseWorkHoursAdmin',
+	'Ssp.view.admin.forms.config.CourseWorkHoursListAdmin',
+	'Ssp.view.admin.forms.config.CourseWorkHoursAddAdmin',
+	'Ssp.view.admin.forms.config.EnrollmentStatusAdmin',
+	'Ssp.view.admin.forms.config.EnrollmentStatusAddAdmin',
+	'Ssp.view.admin.forms.config.EnrollmentStatusListAdmin',
     
     // ERROR DISPLAYS
     'Ssp.view.ErrorWindow',
@@ -212,7 +226,6 @@ Ext.require([
 	'Ssp.model.SearchCriteria',
 	'Ssp.model.CaseloadFilterCriteria',
 	'Ssp.model.PersonGoal',
-	'Ssp.model.PersonDocument',
 	'Ssp.model.PersonLite',
 	'Ssp.model.PersonSearchLite',
 	'Ssp.model.Placement',
@@ -221,6 +234,7 @@ Ext.require([
 	'Ssp.model.TermTranscript',
 	'Ssp.model.StudentActivity',
 	'Ssp.model.Transcript',
+	'Ssp.model.FilterDiscreteValues',
 	'Ssp.model.MessageTemplates',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
@@ -238,6 +252,7 @@ Ext.require([
 	'Ssp.model.tool.earlyalert.EarlyAlertResponseGrid',
 	'Ssp.model.tool.journal.JournalEntry',
 	'Ssp.model.tool.journal.JournalEntryDetail',
+	'Ssp.model.tool.documents.StudentDocument',
 	'Ssp.model.tool.map.SemesterCourse',
 	'Ssp.model.tool.map.Plan',
 	'Ssp.model.tool.map.TermNote',
@@ -257,6 +272,8 @@ Ext.require([
 	'Ssp.model.reference.ConfidentialityDisclosureAgreement',
 	'Ssp.model.reference.EarlyAlertReferral',
 	'Ssp.model.external.Course',
+	'Ssp.model.external.CourseRequisite',
+	'Ssp.model.external.PersonNote',
 	'Ssp.model.ApiUrl',
 	'Ssp.mixin.ApiProperties',
 	'Ssp.mixin.controller.ItemSelectorInitializer',
@@ -277,8 +294,7 @@ Ext.require([
     'Ssp.store.JournalEntriesUnpaged',
     'Ssp.store.JournalEntryDetails',
     'Ssp.store.EarlyAlerts',
-    'Ssp.store.EarlyAlertCoordinators',
-    'Ssp.store.Documents',
+    'Ssp.store.StudentDocuments',
 	'Ssp.store.reference.AbstractReferences',
 	'Ssp.store.admin.AdminTreeMenus',
 	'Ssp.store.reference.AnticipatedStartTerms',
@@ -302,8 +318,7 @@ Ext.require([
 	'Ssp.store.reference.EarlyAlertReasons',
 	'Ssp.store.reference.EarlyAlertReferrals',
 	'Ssp.store.reference.EarlyAlertSuggestions',
-	'Ssp.store.reference.Elective',
-	'Ssp.store.reference.ElectiveActive',
+	'Ssp.store.reference.Electives',
     'Ssp.store.reference.EmploymentShifts',
     'Ssp.store.reference.Ethnicities',
     'Ssp.store.reference.FundingSources',
@@ -337,6 +352,7 @@ Ext.require([
 	'Ssp.store.external.Departments',
 	'Ssp.store.external.Divisions',
     'Ssp.store.external.Courses',
+    'Ssp.store.external.PersonNotes',
     'Ssp.store.Students',
 	'Ssp.store.SemesterCourses',
     'Ssp.store.Search',
@@ -346,7 +362,10 @@ Ext.require([
 	'Ssp.store.reference.FacetedTags',
     'Ssp.store.Tools',
     'Ssp.store.reference.VeteranStatuses',
-    'Ssp.store.reference.YesNo',
+    'Ssp.store.PlanStatus',
+    'Ssp.store.MAPStatus',
+    'Ssp.store.CurrentlyRegistered',
+    'Ssp.store.FinancialAidSAPStatus',
     'Ssp.service.AbstractService',
     'Ssp.service.AppointmentService',
     'Ssp.service.AssessmentService',
@@ -361,6 +380,7 @@ Ext.require([
     'Ssp.service.JournalEntryService',
     'Ssp.service.PersonService',
     'Ssp.service.PlacementService',
+	'Ssp.service.PersonNoteService',
     'Ssp.service.ProgramStatusService',
     'Ssp.service.ReferralSourceService',
     'Ssp.service.SearchService',
@@ -449,13 +469,16 @@ var apiUrls = [
   {name: 'studentActivities', url: 'person/{id}/studentactivity'},
   {name: 'personalityType', url: 'reference/personalityType'},
   {name: 'personTranscript', url: 'person/{id}/transcript'},
+  {name: 'personNote', url: 'person/{id}/note'},
   {name: 'personEmailTask', url: 'person/{id}/task/email'},
   {name: 'personViewHistory', url: 'person/{id}/history/print'},
   {name: 'personPrintTask', url: 'person/{id}/task/print'},
+  {name: 'studentSearch', url: 'person/students/search'},
   {name: 'personSearch', url: 'person/search'},
   {name: 'personMapPlan', url: 'person/{id}/map/plan'},
   {name: 'templatePlan', url: 'reference/map/template'},
   {name: 'placement', url: 'person/{id}/test'},
+  {name: 'studentDocument', url: 'person/{id}/studentdocument'},
   {name: 'registrationLoadRanges', url: 'reference/config/?name=registration_load_ranges'},
   {name: 'selfHelpGuides', url: 'selfHelpGuides/search'},
   {name: 'selfHelpGuideQuestions', url: 'selfHelpGuides/selfHelpGuideQuestions'},
@@ -476,6 +499,7 @@ var apiUrls = [
   {name: 'programfaceted', url: 'reference/program/facet'},
   {name: 'department', url: 'reference/department/all'},//TODO Change to facets.
   {name: 'division', url: 'reference/division/all'},
+  {name: 'courserequisite', url: 'reference/courserequisites'},
   {name: 'tag', url: 'reference/tag'},
   {name: 'facetedtag', url: 'reference/tag/facet'},
   {name: 'futureTerms', url: 'reference/term/future'},
@@ -629,6 +653,11 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+			        currentStudentDocument: {
+				        fn: function(){
+				            return new Ssp.model.tool.documents.StudentDocument({id:""});
+				    	},
+				        singleton: true			        },
 			        currentJournalStepDetail:{
 				        fn: function(){
 				            return new Ssp.model.reference.JournalStepDetail({id:""});
@@ -700,7 +729,7 @@ Ext.onReady(function(){
                     },
 			        currentDocument:{
 				        fn: function(){
-				            return new Ssp.model.PersonDocument({id:""});
+				            return new Ssp.model.tool.documents.StudentDocument({id:""});
 				    	},
 				        singleton: true
 			        },
@@ -825,7 +854,9 @@ Ext.onReady(function(){
 			        profileSpecialServiceGroupsStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.Store',{
-				            	model: 'Ssp.model.reference.SpecialServiceGroup'
+				            	model: 'Ssp.model.reference.SpecialServiceGroup',
+								filterOnLoad: true,
+								filters: [{property:"objectStatus", value:'ACTIVE'}]
 				            });
 				    	},
 				        singleton: true
@@ -833,7 +864,9 @@ Ext.onReady(function(){
 			        profileReferralSourcesStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.Store',{
-				            	model: 'Ssp.model.reference.ReferralSource'
+				            	model: 'Ssp.model.reference.ReferralSource',
+								filterOnLoad: true,
+								filters: [{property:"objectStatus", value:'ACTIVE'}]
 				            });
 				    	},
 				        singleton: true
@@ -841,7 +874,9 @@ Ext.onReady(function(){
 			        profileServiceReasonsStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.Store',{
-				            	model: 'Ssp.model.reference.ServiceReason'
+				            	model: 'Ssp.model.reference.ServiceReason',
+								filterOnLoad: true,
+								filters: [{property:"objectStatus", value:'ACTIVE'}]
 				            });
 				    	},
 				        singleton: true
@@ -877,6 +912,15 @@ Ext.onReady(function(){
 				    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
 				    anticipatedStartTermsStore: 'Ssp.store.reference.AnticipatedStartTerms',
 					campusesStore: 'Ssp.store.reference.Campuses',
+					campusesAllUnpagedStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.Campuses', {
+							     storeId: 'campusesAllUnpagedStore',		
+							     extraParams: {status: "ALL", limit: "-1"}
+							 });
+				    	},
+				    	singleton: true
+				    },
 					campusEarlyAlertRoutingsStore: 'Ssp.store.reference.CampusEarlyAlertRoutings',
 					campusServicesStore: 'Ssp.store.reference.CampusServices',
 					caseloadStore: 'Ssp.store.Caseload',
@@ -887,27 +931,160 @@ Ext.onReady(function(){
 				    childCareArrangementsStore: 'Ssp.store.reference.ChildCareArrangements',
 				    citizenshipsStore: 'Ssp.store.reference.Citizenships',
 			    	coachesStore: 'Ssp.store.Coaches',
+			    	allCoachesStore: 'Ssp.store.CoachesAll',
 				    confidentialityDisclosureAgreementsStore: 'Ssp.store.reference.ConfidentialityDisclosureAgreements',
 					configurationOptionsStore: 'Ssp.store.reference.ConfigurationOptions',
-				    colorsStore: 'Ssp.store.reference.Colors',
+					configurationOptionsUnpagedStore: 'Ssp.store.reference.ConfigurationOptionsUnpaged',
+				    colorsStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.Colors', {
+							     storeId: 'colorsStore'						    
+							 });
+				    	},
+				    	singleton: true
+				    }, 
+				    colorsUnpagedStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.Colors', {
+							     storeId: 'colorsUnpagedStore',		
+							     extraParams: {limit: "-1"}
+							 });
+				    	},
+				    	singleton: true
+				    },
+				    colorsAllStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.Colors', {
+							     storeId: 'colorsAllStore',		
+							     extraParams: {status: "ALL"}
+							 });
+				    	},
+				    	singleton: true
+				    },
+				    colorsAllUnpagedStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.Colors', {
+							     storeId: 'colorsAllUnpagedStore',		
+							     extraParams: {status: "ALL", limit: "-1"}
+							 });
+				    	},
+				    	singleton: true
+				    },
 				    confidentialityLevelsStore: 'Ssp.store.reference.ConfidentialityLevels',
+					confidentialityLevelsAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.ConfidentialityLevels', {
+								storeId: 'confidentialityLevelsAllUnpagedStore',
+								extraParams: {status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					},
+					
 				    disabilityAccommodationsStore: 'Ssp.store.reference.DisabilityAccommodations',
 				    disabilityAgenciesStore: 'Ssp.store.reference.DisabilityAgencies',
 				    disabilityStatusesStore: 'Ssp.store.reference.DisabilityStatuses',
 				    disabilityTypesStore: 'Ssp.store.reference.DisabilityTypes',
-				    documentsStore: 'Ssp.store.Documents',
-				    earlyAlertCoordinatorsStore: 'Ssp.store.EarlyAlertCoordinators',
 				    earlyAlertOutcomesStore: 'Ssp.store.reference.EarlyAlertOutcomes',
-					earlyAlertOutreachesStore: 'Ssp.store.reference.EarlyAlertOutreaches',
+				    earlyAlertOutcomesAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.EarlyAlertOutcomes', {
+								storeId: 'earlyAlertOutcomesAllUnpagedStore',
+								extraParams: {status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					},
+				    earlyAlertOutreachesStore: 'Ssp.store.reference.EarlyAlertOutreaches',
+					earlyAlertOutreachesAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.EarlyAlertOutreaches', {
+								storeId: 'earlyAlertOutreachesAllUnpagedStore',
+								extraParams: {status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					},
 					earlyAlertReasonsStore: 'Ssp.store.reference.EarlyAlertReasons',
+					earlyAlertReasonsAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.EarlyAlertReasons', {
+								storeId: 'earlyAlertReasonsAllUnpagedStore',
+								extraParams: {status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					},
 					earlyAlertReferralsStore: 'Ssp.store.reference.EarlyAlertReferrals',
+					earlyAlertReferralsAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.EarlyAlertReferrals', {
+								storeId: 'earlyAlertReferralsAllUnpagedStore',
+								extraParams: {status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					},
 					earlyAlertReferralsBindStore: 'Ssp.store.reference.EarlyAlertReferralsBind',
 					earlyAlertsStore: 'Ssp.store.EarlyAlerts',
-					earlyAlertSuggestionsStore: 'Ssp.store.reference.EarlyAlertSuggestions',	    
+					earlyAlertSuggestionsStore: 'Ssp.store.reference.EarlyAlertSuggestions',
+					earlyAlertSuggestionsAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.EarlyAlertSuggestions', {
+								storeId: 'earlyAlertSuggestionsAllUnpagedStore',
+								extraParams: {status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					},
 				    educationGoalsStore: 'Ssp.store.reference.EducationGoals',
 			    	educationLevelsStore: 'Ssp.store.reference.EducationLevels',
-			    	electiveStore: 'Ssp.store.reference.Elective',
-					electiveActiveStore: 'Ssp.store.reference.ElectiveActive',
+			    	electivesStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.Electives', {
+							     storeId: 'electivesStore',
+							     extraParams: {sort: "sortOrder", sortDirection: "ASC" }
+							 });
+					    },
+					    singleton: true
+					},
+					electivesUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.Electives', {
+							     storeId: 'electivesUnpagedStore',
+							     extraParams: {sort: "sortOrder", sortDirection: "ASC", limit: "-1"}
+							 });
+					    },
+					    singleton: true
+					},
+					electivesAllStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.Electives', {
+							     storeId: 'electivsAllStore',		
+							     extraParams: {sort: "sortOrder", sortDirection: "ASC", status: "ALL"}
+							 });
+					    },
+					    singleton: true
+					},
+					electivesAllUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.Electives', {
+							     storeId: 'electivsAllUnpagedStore',		
+							     extraParams: {sort: "sortOrder", sortDirection: "ASC", status: "ALL", limit: "-1"}
+							 });
+					    },
+					    singleton: true
+					},
+					
+					planTemplatesSummaryStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.PlanTemplatesSummary', {
+							     storeId: 'planTemplatesSummaryStore',		
+							     extraParams: {sort: "name", sortDirection: "DESC", status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					}, 
 			    	employmentShiftsStore: 'Ssp.store.reference.EmploymentShifts',
 			    	ethnicitiesStore: 'Ssp.store.reference.Ethnicities',
 			    	fundingSourcesStore: 'Ssp.store.reference.FundingSources',
@@ -918,10 +1095,12 @@ Ext.onReady(function(){
 			    	journalEntryDetailsStore: 'Ssp.store.JournalEntryDetails',
 			    	journalSourcesStore: 'Ssp.store.reference.JournalSources',
 			    	journalSourcesUnpagedStore: 'Ssp.store.reference.JournalSourcesUnpaged',
+					journalSourcesAllUnpagedStore: 'Ssp.store.reference.JournalSourcesAllUnpaged',
 			        journalStepsStore: 'Ssp.store.reference.JournalSteps',
 			        journalDetailsStore: 'Ssp.store.reference.JournalStepDetails',
 			        journalTracksStore: 'Ssp.store.reference.JournalTracks',
 			        journalTracksUnpagedStore: 'Ssp.store.reference.JournalTracksUnpaged',
+					journalTracksAllUnpagedStore: 'Ssp.store.reference.JournalTracksAllUnpaged',
 			        lassisStore: 'Ssp.store.reference.Lassis',
 			        maritalStatusesStore: 'Ssp.store.reference.MaritalStatuses',
 			    	militaryAffiliationsStore: 'Ssp.store.reference.MilitaryAffiliations',
@@ -930,22 +1109,74 @@ Ext.onReady(function(){
 			    	peopleStore: 'Ssp.store.People',
 			    	personalityTypesStore: 'Ssp.store.reference.PersonalityTypes',
 			    	placementStore: 'Ssp.store.Placement',
-			    	planStore: 'Ssp.store.Plan',
-			    	planTemplatesSummaryStore: 'Ssp.store.PlanTemplatesSummary',
-			    	programStatusesStore: 'Ssp.store.reference.ProgramStatuses',
+			    	planStore: 'Ssp.store.Plan',			    	
+					programStatusesStore: 'Ssp.store.reference.ProgramStatuses',
 			    	programStatusChangeReasonsStore: 'Ssp.store.reference.ProgramStatusChangeReasons',
-				    referralSourcesStore: 'Ssp.store.reference.ReferralSources',
-				    referralSourcesBindStore: 'Ssp.store.reference.ReferralSourcesBind',
+				    referralSourcesStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.ReferralSources', { });
+					    },
+					    singleton: true
+					},
+					referralSourcesAllUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.ReferralSources', {
+					    		extraParams: {status: "ALL", limit: "-1"}
+					    	});
+					    },
+					    singleton: true
+					},
 				    searchStore: 'Ssp.store.Search',
+				    studentsSearchStore: 'Ssp.store.StudentsSearch',
 				    selfHelpGuidesStore: 'Ssp.store.SelfHelpGuides',
 				    selfHelpGuideQuestionsStore: 'Ssp.store.SelfHelpGuideQuestions',
-				    serviceReasonsStore: 'Ssp.store.reference.ServiceReasons',
-				    specialServiceGroupsStore: 'Ssp.store.reference.SpecialServiceGroups',
-				    specialServiceGroupsBindStore: 'Ssp.store.reference.SpecialServiceGroupsBind',
+				    serviceReasonsStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.ServiceReasons', {
+					    	});
+					    },
+					    singleton: true
+					},
+				    serviceReasonsAllUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.ServiceReasons', {
+					    		extraParams: {status: "ALL", limit: "-1"}
+					    	});
+					    },
+					    singleton: true
+					},
+				    specialServiceGroupsStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.SpecialServiceGroups', { });
+					    },
+					    singleton: true
+					},
+				    specialServiceGroupsAllUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.SpecialServiceGroups', {
+							     extraParams: {status: "ALL", limit: "-1"}
+							 });
+					    },
+					    singleton: true
+					},
 				    statesStore: 'Ssp.store.reference.States',
+				    studentDocumentsStore: 'Ssp.store.StudentDocuments',
 				    studentsStore: 'Ssp.store.Students',
 				    studentStatusesStore: 'Ssp.store.reference.StudentStatuses',
-				    studentTypesStore: 'Ssp.store.reference.StudentTypes',
+				    studentTypesStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.StudentTypes', {});
+					    },
+					    singleton: true
+					},
+					studentTypesAllUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.StudentTypes', {
+							     extraParams: {status: "ALL", limit: "-1"}
+							 });
+					    },
+					    singleton: true
+					},
 				    registrationLoadRangesStore: 'Ssp.store.reference.RegistrationLoadRanges', 
 				    weeklyCourseWorkHourRangesStore: 'Ssp.store.reference.WeeklyCourseWorkHourRanges',
 				    termsStore:'Ssp.store.external.Terms',
@@ -953,6 +1184,7 @@ Ext.onReady(function(){
 				    programsStore:'Ssp.store.external.Programs',
 					programsFacetedStore:'Ssp.store.external.ProgramsFaceted',
 				    divisionsStore:'Ssp.store.external.Divisions',
+				    personNotesStore:'Ssp.store.external.PersonNotes',
 				    departmentsStore:'Ssp.store.external.Departments',
 					coursesStore:'Ssp.store.external.Courses',
 					tagsStore: 'Ssp.store.reference.Tags',
@@ -961,7 +1193,12 @@ Ext.onReady(function(){
 				    studentActivitiesStore: 'Ssp.store.StudentActivities',
 				    toolsStore: 'Ssp.store.Tools',
 			    	veteranStatusesStore: 'Ssp.store.reference.VeteranStatuses',
-			        yesNoStore: 'Ssp.store.reference.YesNo',
+			        planStatusStore: 'Ssp.store.PlanStatus',
+			        financialAidSAPStatus: 'Ssp.store.FinancialAidSAPStatus',
+			        mapStatusStore: 'Ssp.store.MAPStatus',
+			        currentlyRegisteredStore: 'Ssp.store.CurrentlyRegistered',
+			        
+			        
 			        	
 			        // SERVICES
 			        appointmentService: 'Ssp.service.AppointmentService',
@@ -977,6 +1214,7 @@ Ext.onReady(function(){
 			        journalEntryService: 'Ssp.service.JournalEntryService',
 			        personService: 'Ssp.service.PersonService',
 			        placementService: 'Ssp.service.PlacementService',
+					personNoteService: 'Ssp.service.PersonNoteService',
 			        personProgramStatusService: 'Ssp.service.PersonProgramStatusService',
 			        programStatusService: 'Ssp.service.ProgramStatusService',
 			        referralSourceService: 'Ssp.service.ReferralSourceService',
@@ -988,15 +1226,24 @@ Ext.onReady(function(){
 			        studentActivityService: 'Ssp.service.StudentActivityService',
 			        courseService: 'Ssp.service.CourseService'
 				});
-				
+
+
+				// Do not use 'autoCreateViewport: true' here. It will trigger
+				// initialization of the Deft IoC container before the
+				// Application exists, so some managed components may be only
+				// partially initialized. This is particularly problematic for
+				// AppEventsController which needs a reference to the
+				// Application. If it does not have that reference, the first
+				// components to load (those associated with Viewport) cannot
+				// register Application-scoped events during their
+				// initialization. The resulting deferred event listener
+				// binding has been the direct cause of subtle bugs.
 				Ext.application({
 				    name: 'Ssp',
 				    appFolder: Ext.Loader.getPath('Ssp'),
-					autoCreateViewport: true,
 				    launch: function( app ) {
 				    	var me=this;
-				    	Deft.Injector.providers.appEventsController.value.config.app=me;
-				    	Deft.Injector.providers.appEventsController.value.app=me;
+				    	Deft.Injector.resolve("appEventsController").setApp(me);
 				    	
 				    	// Date patterns for formatting by a description
 				    	// rather than a date format
@@ -1016,6 +1263,7 @@ Ext.onReady(function(){
 				    	
 				    	// Global error handling for Ajax calls 
 				    	Ext.override(Ext.data.proxy.Server, {
+				    		simpleSortMode: true,
 				            constructor: function(config)
 				            {
 				                this.callOverridden([config]);
@@ -1138,7 +1386,15 @@ Ext.onReady(function(){
 			   	    	// load the main view
 			    		Ext.apply(me,{
 				    		items: [{xtype:'sspview'}]
-				    	});	    	
+				    	});
+
+				    	// Since we're not using 'autoCreateViewport: true',
+				    	// we need to create the default view ourselves.
+				    	// (Frankly not sure exactly what the relationship is
+				    	// between this and the xtype-based lookup of the same
+				    	// component type immediately above. But you'll get
+				    	// a blank screen without this explicit create.
+				    	Ext.create( "Ssp.view.Viewport");
 				    	
 				   }
 				});

@@ -23,6 +23,7 @@ Ext.define('Ssp.view.tools.profile.RecentTermActivity', {
     controller: 'Ssp.controller.tool.profile.RecentTermActivityViewController',
     width: '100%',
     height: '100%',
+	minHeight: 369,
     title: 'Recent Term Activity',
     autoScroll: true,
     inject: {       store: 'termTranscriptsStore'

@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
+import java.util.UUID;
+
 import org.jasig.ssp.dao.reference.JournalTrackDao;
 import org.jasig.ssp.dao.reference.JournalTrackJournalStepDao;
 import org.jasig.ssp.model.ObjectStatus;
@@ -103,5 +105,11 @@ public class JournalTrackServiceImpl
 		}
 
 		return journalTrackJournalStep;
+	}
+
+	@Override
+	public PagingWrapper<JournalTrackJournalStep> getJournalStepAssociationsForJournalTrack(
+			final UUID journalTrackId, final SortingAndPaging sAndP) {
+		return journalTrackJournalStepDao.getAllForJournalTrack(journalTrackId, sAndP);
 	}
 }

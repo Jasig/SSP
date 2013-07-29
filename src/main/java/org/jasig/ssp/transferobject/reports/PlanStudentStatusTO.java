@@ -21,6 +21,7 @@ package org.jasig.ssp.transferobject.reports;
 import java.util.Comparator;
 
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.external.PlanStatus;
 
 public class PlanStudentStatusTO {
 	
@@ -38,10 +39,9 @@ public class PlanStudentStatusTO {
 	private String studentId;
 	private String courseTitle;
 	private String formattedCourse;
-	private String planStatus;
+	private PlanStatus planStatus;
 	private ObjectStatus planObjectStatus;
-	private String[] statusDetails;
-	private String statusDetailsAsString;
+	private String statusDetails;
 	
 	/**
 	 * 
@@ -66,25 +66,27 @@ public class PlanStudentStatusTO {
 	/**
 	 * @return the planStatus
 	 */
-	public String getPlanStatus() {
+	public PlanStatus getPlanStatus() {
 		return planStatus;
 	}
 	/**
 	 * @param planStatus the planStatus to set
 	 */
-	public void setPlanStatus(String planStatus) {
+	public void setPlanStatus(PlanStatus planStatus) {
 		this.planStatus = planStatus;
 	}
+	
+	
 	/**
 	 * @return the statusDetails
 	 */
-	public String[] getStatusDetails() {
+	public String getStatusDetails() {
 		return statusDetails;
 	}
 	/**
 	 * @param statusDetails the statusDetails to set
 	 */
-	public void setStatusDetails(String[] statusDetails) {
+	public void setStatusDetails(String statusDetails) {
 		this.statusDetails = statusDetails;
 	}
 
@@ -127,29 +129,11 @@ public class PlanStudentStatusTO {
 	public String getFormattedCourse() {
 		return formattedCourse;
 	}
-
-
 	/**
 	 * @param formattedCourse the formattedCourse to set
 	 */
 	public void setFormattedCourse(String formattedCourse) {
 		this.formattedCourse = formattedCourse;
-	}
-
-
-	/**
-	 * @return the statusDetailsAsString
-	 */
-	public String getStatusDetailsAsString() {
-		return statusDetailsAsString;
-	}
-
-
-	/**
-	 * @param statusDetailsAsString the statusDetailsAsString to set
-	 */
-	public void setStatusDetailsAsString(String statusDetailsAsString) {
-		this.statusDetailsAsString = statusDetailsAsString;
 	}
 	
 }

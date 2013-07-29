@@ -23,6 +23,8 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
+    <property name="schema" value="${database.schema}" />
+
     <changeSet id="add object status to term note" author="tony.arland">
 		<addColumn tableName="map_term_note">
 				<column name="object_status" type="int">
@@ -38,8 +40,8 @@
 	</changeSet> 
 	
     <changeSet id="drop map_template person_id" author="tony.arland">
-        <preConditions>
-           <columnExists tableName="map_template" columnName="person_id"/> 
+        <preConditions onFail="MARK_RAN">
+           <columnExists tableName="map_template" columnName="person_id" schemaName="${schema}"/>
         </preConditions>
         <dropForeignKeyConstraint  constraintName="map_template_person_id" baseTableName="map_template"/>
 		<dropColumn tableName="map_template" columnName="person_id" />

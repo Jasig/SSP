@@ -67,6 +67,24 @@ background: transparent;
  background-repeat: no-repeat;
 }
 
+.mapMovePlanIcon {
+background-image: url('/ssp/images/move-plan.png') !important;
+background: transparent;
+ border-style:none;
+ background-repeat: no-repeat;
+ width:48px;
+}
+
+.transcriptIcon {
+background-image: url('/ssp/images/icon-transcript.png') !important;
+background: transparent;
+ border-style:none;
+ background-repeat: no-repeat;
+ width:22px;
+}
+
+
+
 .mapEmailIcon {
 background-image: url('/ssp/images/email-icon.png') !important;
 background: transparent;
@@ -161,6 +179,13 @@ background-image: url('/ssp/images/help-icon.png') !important;
 }
 .helpIconSmall {
 background-image: url('/ssp/images/help-icon-small.png') !important;
+	background: transparent;
+ 	border-style:none;
+ 	background-repeat: no-repeat;
+}
+
+.importantIconSmall {
+background-image: url('/ssp/images/important-icon.png') !important;
 	background: transparent;
  	border-style:none;
  	background-repeat: no-repeat;

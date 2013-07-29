@@ -31,6 +31,7 @@ import org.jasig.ssp.model.PersonDemographics;
 import org.jasig.ssp.model.PersonStaffDetails;
 import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.model.reference.Genders;
+import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PersonStaffDetailsService;
@@ -38,6 +39,7 @@ import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EthnicityService;
 import org.jasig.ssp.service.reference.MaritalStatusService;
+import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -58,8 +60,6 @@ public class ExternalPersonServiceImpl
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ExternalPersonServiceImpl.class);
 
-	private static final int BATCH_SIZE_FOR_PERSON_ = 1000;
-
 	@Autowired
 	private transient ExternalPersonDao dao;
 
@@ -77,7 +77,11 @@ public class ExternalPersonServiceImpl
 
 	@Autowired
 	private transient EthnicityService ethnicityService;
+	
+	@Autowired
+	private transient StudentTypeService studentTypeService;
 
+	
 	@Override
 	public ExternalPerson getBySchoolId(final String schoolId)
 			throws ObjectNotFoundException {
@@ -90,109 +94,16 @@ public class ExternalPersonServiceImpl
 		return dao.getByUsername(username);
 	}
 
-	private transient int lastRecord = 0;
-
 	@Override
-	public void syncWithPerson() {
-
-		if ( Thread.currentThread().isInterrupted() ) {
-			LOGGER.info("Abandoning syncWithPerson because of thread interruption");
-			return;
-		}
-
-		LOGGER.info(
-				"BEGIN : Person and ExternalPerson Sync.  Selecting {} records starting at {}",
-				BATCH_SIZE_FOR_PERSON_, lastRecord);
-
-		final SortingAndPaging sAndP = SortingAndPaging.createForSingleSortWithPaging(
-				ObjectStatus.ACTIVE, lastRecord, BATCH_SIZE_FOR_PERSON_,
-				"username",
-				SortDirection.ASC.toString(), null);
-
-		Long totalRows = Long.valueOf(0L);
+	public void updatePersonFromExternalPerson(final Person person) {
 		try {
-			totalRows = syncWithPerson(sAndP);
-		} catch ( InterruptedException e ) {
-			LOGGER.info("Abandoning syncWithPerson because of thread interruption");
-			Thread.currentThread().interrupt(); // reassert
-		} catch (final Exception e) {
-			LOGGER.error("Failed to sync Person table with ExternalPerson", e);
-		} finally {
-			if ( !(Thread.currentThread().isInterrupted()) ) {
-				lastRecord = lastRecord + BATCH_SIZE_FOR_PERSON_;
-				if (lastRecord > totalRows.intValue()) {
-					lastRecord = 0;
-				}
-			}
+			updatePersonFromExternalPerson(person, getBySchoolId(person.getSchoolId()));
+		} catch ( ObjectNotFoundException e ) {
+			LOGGER.debug("Skipping external data sync for "
+					+ "person [id: {}] [schoolId: {}] because "
+					+ "there is no corresponding external record.",
+					person.getId(), person.getSchoolId());
 		}
-
-		LOGGER.info("END :  Person and ExternalPerson Sync");
-	}
-
-	@Override
-	public long syncWithPerson(final SortingAndPaging sAndP) throws InterruptedException {
-
-		// Use InterruptedExceptions instead of manipulating return value b/c
-		// the return value actually means "total number of possible processable"
-		// rows, so if it is returned gracefully, the caller will likely
-		// incorrectly update its internal state, as is the case with the
-		// scheduled job call site.
-
-		if ( Thread.currentThread().isInterrupted() ) {
-			LOGGER.info("Abandoning syncWithPerson because of thread interruption");
-			throw new InterruptedException();
-		}
-
-		final PagingWrapper<Person> people = personService.getAll(sAndP);
-
-		if ( Thread.currentThread().isInterrupted() ) {
-			LOGGER.info("Abandoning syncWithPerson because of thread interruption");
-			throw new InterruptedException();
-		}
-
-		// allow access to people by schoolId
-		final Map<String, Person> peopleBySchoolId = Maps.newHashMap();
-		for (final Person person : people) {
-			peopleBySchoolId.put(person.getSchoolId(), person);
-		}
-
-		Set<String> internalPeopleSchoolIds = peopleBySchoolId.keySet();
-		if ( LOGGER.isDebugEnabled() ) {
-			LOGGER.debug(
-					"Candidate internal person schoolIds for sync with external persons {}",
-					internalPeopleSchoolIds);
-		}
-
-		if ( Thread.currentThread().isInterrupted() ) {
-			LOGGER.info("Abandoning syncWithPerson because of thread interruption");
-			throw new InterruptedException();
-		}
-
-		// fetch external people by schoolId
-		final PagingWrapper<ExternalPerson> externalPeople =
-				dao.getBySchoolIds(internalPeopleSchoolIds,SortingAndPaging.createForSingleSortWithPaging(
-						ObjectStatus.ACTIVE, 0, BATCH_SIZE_FOR_PERSON_,
-						"username",
-						SortDirection.ASC.toString(), null));
-
-		for (final ExternalPerson externalPerson : externalPeople) {
-
-			if ( Thread.currentThread().isInterrupted() ) {
-				LOGGER.info("Abandoning syncWithPerson because of thread interruption on person {}", externalPerson.getUsername());
-				throw new InterruptedException();
-			}
-
-			LOGGER.debug(
-					"Looking for internal person by external person schoolId {}",
-					externalPerson.getSchoolId());
-			// get the previously fetched person
-			final Person person = peopleBySchoolId.get(externalPerson
-					.getSchoolId());
-			// upate person from external person
-			updatePersonFromExternalPerson(person, externalPerson);
-		}
-
-		return people.getResults();
 	}
 
 	/**
@@ -320,6 +231,8 @@ public class ExternalPersonServiceImpl
 		}
 
 		setCoachForPerson(person, externalPerson.getCoachSchoolId());
+		
+		setStudentTypeForPerson(person, externalPerson.getStudentType());
 
 		if ((StringUtils.isBlank(externalPerson.getDepartmentName())
 				&& StringUtils.isBlank(externalPerson.getOfficeHours())
@@ -496,6 +409,60 @@ public class ExternalPersonServiceImpl
 					e);
 			return null;
 		}
+	}
+	
+	private void setStudentTypeForPerson(final Person person, final String externStudentType)
+	{
+		if (configService.getByNameNullOrDefaultValue(
+				"studentTypeSetFromExternalData").equalsIgnoreCase("false")) {
+			LOGGER.debug("Skipping all student type assignment processing for person "
+					+ "schoolId '{}' because that operation has been disabled "
+					+ "via configuration.", person.getSchoolId());
+			return;
+		}
+		
+		if (person.getStudentType() == null) {   
+			if (externStudentType != null) {
+				LOGGER.debug("Assigning student_type '{}' to person " +
+						"schoolId '{}'", externStudentType, person.getSchoolId());
+				person.setStudentType(getInternalStudentTypeCode(externStudentType));
+			}// else ignore
+		} else {
+			if (externStudentType == null) {
+				if ( configService.getByNameNullOrDefaultValue(
+						"studentTypeUnsetFromExternalData")
+						.equalsIgnoreCase("true") ) {
+					LOGGER.debug("Deleting student_type assignment for person schoolId '{}'",
+							person.getSchoolId());
+					person.setStudentType(null);
+				} else {
+					LOGGER.debug("Skipping student_type assignment deletion for "
+							+ "person schoolId '{}' because that operation has "
+							+ "been disabled via configuration.",
+							person.getSchoolId());
+				}
+			} else if (!externStudentType.equals(person.getStudentType().getCode())) {
+				StudentType studentType = getInternalStudentTypeCode(externStudentType);
+				if ( studentType == null ) {
+					// lookup problem already logged
+					LOGGER.debug("Student Type with name '{}' does not exist so "
+							+ "skipping student_type assignment for person schoolId '{}'",
+							externStudentType, person.getSchoolId());
+				} else {
+					person.setStudentType(studentType);
+				}
+			}// else equals, so ignore
+		}
+	}
+	
+	private StudentType getInternalStudentTypeCode(final String studentTypeCode) {
+		StudentType internalCode = studentTypeService.getByCode(studentTypeCode);		
+		if (internalCode == null) {
+			LOGGER.warn("Student_Type " +studentTypeCode +" referenced in external table not "
+							+ "available in system");
+		}
+		
+		return internalCode;		
 	}
 
 	@Override

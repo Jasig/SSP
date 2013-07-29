@@ -28,7 +28,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         transcriptService: 'transcriptService',
         profileReferralSourcesStore: 'profileReferralSourcesStore',
         profileServiceReasonsStore: 'profileServiceReasonsStore',
-        profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
+		profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
         sspConfig: 'sspConfig',
 		formUtils: 'formRendererUtils'
     },
@@ -52,6 +52,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         currentYearFinancialAidAwardField: '#currentYearFinancialAidAward',
         academicProgramsField: '#academicPrograms',
         sapStatusField: '#sapStatus',
+        registeredTermsField: '#registeredTerms',
+        paymentStatusField: '#paymentStatus',
      
 
         earlyAlertField: '#earlyAlert',
@@ -141,7 +143,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         me.person.populateFromGenericObject(personResponse);
 
         // load and render person data
-        me.profileSpecialServiceGroupsStore.removeAll();
         me.profileReferralSourcesStore.removeAll();
         me.profileServiceReasonsStore.removeAll();
 
@@ -160,19 +161,19 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var coachName = me.person.getCoachFullName();
 		
 
-        // load special service groups
-        if (personResponse.specialServiceGroups != null) {
-            me.profileSpecialServiceGroupsStore.loadData(me.person.get('specialServiceGroups'));
-        }
-
         // load referral sources
         if (personResponse.referralSources != null) {
             me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
         }
 
-        // load service reasons
+        // load service reasonssd
         if (personResponse.serviceReasons != null) {
             me.profileServiceReasonsStore.loadData(me.person.get('serviceReasons'));
+        }
+
+		// load service reasonssd
+        if (personResponse.serviceReasons != null) {
+            me.profileSpecialServiceGroupsStore.loadData(me.person.get('specialServiceGroups'));
         }
 
         // load general student record
@@ -184,18 +185,20 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		studentIdField.setFieldLabel('');
         studentIdField.setValue('<span style="color:#15428B">' + me.sspConfig.get('studentIdAlias') + ':  </span>' + me.person.get('schoolId'));
 		primaryEmailAddressField.setFieldLabel('');
-        primaryEmailAddressField.setValue('<span style="color:#15428B">Email:  </span>' + me.person.get('primaryEmailAddress'));
+        primaryEmailAddressField.setValue('<span style="color:#15428B">Email:  </span>' + me.handleNull(me.person.get('primaryEmailAddress')));
 		birthDateField.setFieldLabel('');
-        birthDateField.setValue('<span style="color:#15428B">DOB:  </span>' + me.person.getFormattedBirthDate());
+        birthDateField.setValue('<span style="color:#15428B">DOB:  </span>' + me.handleNull(me.person.getFormattedBirthDate()));
 		studentTypeField.setFieldLabel('');
-        studentTypeField.setValue('<span style="color:#15428B">Student Type:  </span>' + me.person.getStudentTypeName());
+        studentTypeField.setValue('<span style="color:#15428B">Student Type:  </span>' + me.handleNull(me.person.getStudentTypeName()));
         photoUrlField.setSrc(me.person.getPhotoUrl());
 		programStatusField.setFieldLabel('');
-        programStatusField.setValue('<span style="color:#15428B">SSP Status:  </span>' + me.person.getProgramStatusName());
+        programStatusField.setValue('<span style="color:#15428B">SSP Status:  </span>' + me.handleNull(me.person.getProgramStatusName()));
 		earlyAlertField.setFieldLabel('');
-        earlyAlertField.setValue('<span style="color:#15428B">Early Alerts:  </span>' + me.person.getEarlyAlertRatio());
+        earlyAlertField.setValue('<span style="color:#15428B">Early Alerts:  </span>' + me.handleNull(me.person.getEarlyAlertRatio()));
 		actionPlanField.setFieldLabel('');
-        actionPlanField.setValue('<span style="color:#15428B">Action Plan:  </span>' + me.person.getActionPlanSummary());
+        actionPlanField.setValue('<span style="color:#15428B">Action Plan:  </span>' + me.handleNull(me.person.getActionPlanSummary()));
+        me.getRegisteredTermsField().setValue(me.handleNull(me.person.get('registeredTerms')));
+        me.getPaymentStatusField().setValue(me.handleNull(me.person.get('paymentStatus')));
 		
 
         var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];

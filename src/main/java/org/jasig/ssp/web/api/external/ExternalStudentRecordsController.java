@@ -280,10 +280,9 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	private BigDecimal getBalancedOwed(UUID id, String schoolId) throws ObjectNotFoundException{
 		BigDecimal balanceOwed = null;
 		try{
-			PersonDemographics demographics = personDemographicsService.get(id);
-			balanceOwed = demographics.getBalanceOwed();
+			balanceOwed = personDemographicsService.getBalancedOwed(id);
 		}catch(Exception exception){
-			
+			this.getLogger().error(exception.getMessage());
 		}finally{
 			
 		}
@@ -293,7 +292,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 				ExternalPerson externalPerson = externalStudentService.getBySchoolId(schoolId);
 				balanceOwed = externalPerson.getBalanceOwed();
 			}catch(Exception exception){
-				
+				this.getLogger().error(exception.getMessage());
 			}finally{
 				
 			}
@@ -303,25 +302,27 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	
 	private String getDefaultStatusCode(Map<String,String> mappings){
 		String v = null;
-		if(mappings.containsKey("default"))
-			v = mappings.get("default");
+		if ( mappings != null ) {
+			if(mappings.containsKey("default")) {
+				v = mappings.get("default");
+			}
+		}
 		return v;
 	}
+	
 	private Map<String,String> statusCodeMappings() throws ObjectNotFoundException{
 		String codeMappings = configService.getByName("status_code_mappings").getValue();
 		ObjectMapper m = new ObjectMapper();
 		Map<String,String> statusCodeMap = null;
-	    try {
+	    try {	    	
 			statusCodeMap = m.readValue(codeMappings, new HashMap<String,String>().getClass());
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//TODO Refactor messages? 
+		} catch (JsonParseException e) {			
+			this.getLogger().error(e.getMessage());
+		} catch (JsonMappingException e) {			
+			this.getLogger().error(e.getMessage());
+		} catch (IOException e) {		
+			this.getLogger().error(e.getMessage());
 		}
 	    return statusCodeMap;
 	}
@@ -344,7 +345,6 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 			throws ObjectNotFoundException {
 		List<RecentActivityTO> recentActivities = new ArrayList<RecentActivityTO>();
 		Person person = personService.get(id);
-		UUID coachId = person.getCoach().getId();
 		SortingAndPaging sAndP = SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ACTIVE, 0, 1000, "createdDate", "DESC", "createdDate");
 
 		PagingWrapper<EarlyAlert> earlyAlerts = earlyAlertService.getAllForPerson(person, sAndP);
@@ -475,10 +475,8 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		return recordTO;
 	}
 	
-	String getStudentId(UUID id) throws ObjectNotFoundException{
-		return personService.get(id).getSchoolId();
+	String getStudentId(UUID personId) throws ObjectNotFoundException{
+		return personService.getSchoolIdForPersonId(personId);
 	}
 	
-	
-
 }

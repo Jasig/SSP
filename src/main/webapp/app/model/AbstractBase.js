@@ -21,6 +21,10 @@ Ext.define('Ssp.model.AbstractBase', {
     fields: [{name: 'id', type: 'string'},
              {name: 'createdBy',
               convert: function(value, record) {
+					//TODO if object is created on page no value currently available.  
+					//This occurs when working with clonedMap while bumping map
+					if(value == null)
+						return null;
 		            var obj  = {id:value.id || '',
 		                        firstName: value.firstName || '',
 		                        lastName: value.lastName || ''};	
@@ -29,6 +33,8 @@ Ext.define('Ssp.model.AbstractBase', {
              },
              {name: 'modifiedBy',
               convert: function(value, record) {
+					if(value == null)
+						return null;
  		            var obj  = {id:value.id || '',
  		                        firstName: value.firstName || '',
  		                        lastName: value.lastName || ''};	
@@ -37,7 +43,73 @@ Ext.define('Ssp.model.AbstractBase', {
              },
              {name: 'createdDate', type: 'date', dateFormat: 'time'},
              /*,{name: 'objectStatus', type: 'string'}*/
-             {name: 'modifiedDate', type: 'date', dateFormat: 'time'}
+             {name: 'modifiedDate', type: 'date', dateFormat: 'time'},
+             
+             // Note that these convert() functions set up below are called
+             // during object init, deserialization, *and* as a side-effect of
+             // record.set('...','...'). Docs at
+             // http://docs.sencha.com/extjs/4.1.3/#!/api/Ext.data.Field-cfg-convert
+             // (worth drilling into the comments, esp from 'davydotcom'
+
+             {name: 'objectStatus', type: 'string', defaultValue: 'ACTIVE', convert: function(value, record){
+                 // 'objectStatus' is part of the back-end API, so handling is
+                 // similar but slightly different than 'active' b/c we do
+                 // trust 'value' during both initialization and field-to-field
+                 // syncs.
+                 if ( !(record.statusFieldsInitialized) || record.synchronizingStatusFields ) {
+                     // Don't worry about updating active field if this field
+                     // is changing b/c the object is being
+                     // initialized/deserialized - it will calculate the
+                     // correct value for itself as part of that process.
+                     //
+                     // *Ran into problems  calling record.set() on an instance unbound
+                     // to a store will blow up.
+                     // blows up b/c there is no store currently assigned. So
+                     // definitely want to avoid that. The result is some
+                     // fragile code b/c there's no rule that says you
+                     return value;
+                 }
+                 record.synchronizingStatusFields = true;
+				 if(value === true || value === false)
+					record.set('active', value);
+				 else if(!value)
+					record.set('active', false);
+				 else
+                 	record.set('active', 'ACTIVE' === (value && value.toUpperCase()));
+
+                 record.synchronizingStatusFields = false;
+                 return value;
+             }},
+
+             // The 'persist' flag here doesn't do any good b/c we don't actually
+             // use a proper Ext.data.writer.Writer when sending these things
+             // back to the server (see AbstractReferenceAdminViewController).
+             // But it still accurately expresses our semantics. This is really
+             // a calculated field that exists just to make binding objectStatus
+             // to a checkbox a little easier.
+             {name: 'active', type: 'boolean', persist: false, convert: function(value, record){
+                 if ( !(record.statusFieldsInitialized) ) {
+                     // must be during initialization so don't worry about
+                     // updating objectStatus. 'active' is a calculated field
+                     // when being read from the back end, so ignore 'value'
+                     // and derive our state from objectStatus
+                     //
+                     // Ext.js will guarantee this field is initialized/
+                     // deserialized *after* objectStatus.
+                     record.statusFieldsInitialized = true;
+                     return 'ACTIVE' === record.get('objectStatus');
+                 }
+
+                 if ( record.synchronizingStatusFields ) {
+                     return value;
+                 }
+
+                 // else sync in the other direction
+                 record.synchronizingStatusFields = true;
+                 record.set('objectStatus', !(!value) ? 'ACTIVE' : 'INACTIVE');
+                 record.synchronizingStatusFields = false;
+                 return value;
+             }}
              ],
     
 	populateFromGenericObject: function( record ){
@@ -45,7 +117,9 @@ Ext.define('Ssp.model.AbstractBase', {
 		{
 			for (fieldName in this.data)
 	    	{
-				if ( record[fieldName] )
+				//TODO this was orginally if(record[fieldName]) this does not work for booleans
+				// The current code will lead to anomalous behavior to be fix in future
+				if (record[fieldName] != undefined && record[fieldName] != null)
 	    		{
 	    			this.set( fieldName, record[fieldName] );
 	    		}

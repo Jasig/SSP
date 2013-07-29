@@ -116,8 +116,8 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	 *            Maximum number of results to return. Parameter must be a
 	 *            positive, non-zero integer. Often comes from client as a
 	 *            parameter labeled <code>limit</code>. A null value indicates
-	 *            return all rows from the start parameter to the end of the
-	 *            data.
+	 *            return MAXIMUM_ALLOWABLE_RESULTS rows from the start parameter to the end of the
+	 *            data. A limit less than 0 (typically -1) will bring back all data.
 	 * @param sort
 	 *            Property name. If null or empty string, the default sort will
 	 *            be used. If non-empty, must be a case-sensitive model property

@@ -20,10 +20,9 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
     extend: 'Ext.form.FieldContainer',
     alias: 'widget.moveplan',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
     inject: {
-        columnRendererUtils: 'columnRendererUtils'
-        //sspConfig: 'sspConfig'
+        columnRendererUtils: 'columnRendererUtils',
+        termsStore: 'termsStore'
     },
     width: '100%',
     height: '100%',
@@ -42,26 +41,7 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
             },
             
             items: [
-			
-			{
-                    tooltip: 'Move Plan Backward',
-                    width: 30,
-                    height: 30,
-                    cls: 'planMoveBackwardIcon',
-                    xtype: 'button',
-                    itemId: 'movePlanBackwardButton',
-                    hidden: true,
-					hideable: false
-                }, {
-                    tooltip: 'Move Plan Forward',
-                    width: 30,
-                    height: 30,
-                    cls: 'planMoveForwardIcon',
-                    xtype: 'button',
-                    itemId: 'movePlanForwardButton',
-                    hidden: true,
-                    hideable: false
-                }, {
+               {
                     xtype: 'tbspacer',
                     flex: 1
                 }, {
@@ -80,8 +60,7 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
                     labelWidth: 100,
                     width: 130
                 
-                }
-]
+                }]
         
         });
         

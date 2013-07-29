@@ -23,7 +23,7 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.actionplan.AddTasksFormViewController',
     inject: {
-        store: 'confidentialityLevelsStore'
+        store: 'confidentialityLevelsAllUnpagedStore'
     },
 	width: '100%',
     height: '100%',    
@@ -51,8 +51,7 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				       items: [{
 					    	xtype: 'displayfield',
 					        fieldLabel: 'Task Name',
-					        name: 'name',
-					        allowBlank: false
+					        name: 'name'
 					    },{
 				    	xtype: 'textarea',
 				        fieldLabel: 'Description',
@@ -74,7 +73,6 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				        store: me.store,
 				        valueField: 'id',
 				        displayField: 'name',
-				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
 				        allowBlank: false,
@@ -84,6 +82,7 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				    	fieldLabel: 'Target Date',
 				    	altFormats: 'm/d/Y|m-d-Y',
 				        name: 'dueDate',
+						itemId: 'actionPlanDueDate',
 				        allowBlank:false,
 				        showToday:false, // else 'today' would be browser-local 'today'
 				        listeners: {

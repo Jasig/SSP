@@ -1,0 +1,71 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="add external person sync task trigger config" author="dan.mccallum">
+		<insert tableName="config">
+			<column name="id" value="21a321e8-e03a-11e2-bb74-406c8f22c3ce" />
+			<column name="name" value="task_external_person_sync_trigger" />
+			<column name="description"
+					value="Frequency with which the person and external person tables will be synchronized. This is resource intensive, so should be run during off hours. Specify a number to run the sync every x-many milliseconds. Or specify two numbers separated by a slash (60000/1000) to represent both a period and an initial offset. Or specify a cron expression. See http://www.manpagez.com/man/5/crontab/ for cron expression syntax. Default value means 'daily at 1AM, server-local time.'" />
+			<column name="value">0 0 1 * * *</column>
+			<column name="default_value">0 0 1 * * *</column>
+			<column name="created_date" valueDate="2013-06-28T12:00:00" />
+			<column name="modified_date" valueDate="2013-06-28T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="206" />
+		</insert>
+		<rollback>
+			<delete tableName="config">
+				<where>id='21a321e8-e03a-11e2-bb74-406c8f22c3ce'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="add task re-config task trigger config" author="dan.mccallum">
+		<insert tableName="config">
+			<column name="id" value="161b5557-e03b-11e2-b770-406c8f22c3ce" />
+			<column name="name" value="task_scheduler_config_poll_trigger" />
+			<column name="description"
+					value="Frequency with which execution schedules for background tasks will be checked for new configuration. Specify a number to run the sync every x-many milliseconds.  Or specify two numbers separated by a slash (60000/1000) to represent both a period and an initial offset. Or specify a cron expression. See http://www.manpagez.com/man/5/crontab/ for cron expression syntax. Default value means 'every 15 minutes after an initial offset of 5 minutes.'" />
+			<column name="value">900000/300000</column>
+			<column name="default_value">900000/300000</column>
+			<column name="created_date" valueDate="2013-06-28T12:00:00" />
+			<column name="modified_date" valueDate="2013-06-28T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="216" />
+		</insert>
+		<rollback>
+			<delete tableName="config">
+				<where>id='161b5557-e03b-11e2-b770-406c8f22c3ce'</where>
+			</delete>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

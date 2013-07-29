@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.reference.AbstractReference;
@@ -34,6 +35,7 @@ import org.jasig.ssp.transferobject.NamedTO;
  * @param <T>
  *            Any {@link Auditable} model type.
  */
+@JsonIgnoreProperties(ignoreUnknown = true) 
 public abstract class AbstractReferenceTO<T extends AbstractReference>
 		extends AbstractAuditableTO<T> implements NamedTO {
 

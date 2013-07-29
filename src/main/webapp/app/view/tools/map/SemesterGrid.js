@@ -23,9 +23,12 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 	controller: 'Ssp.controller.tool.map.SemesterGridViewController',
 	inject:{
 		appEventsController: 'appEventsController',
-		electiveStore: 'electiveStore',
+		electiveStore: 'electivesAllUnpagedStore',
     	currentMapPlan: 'currentMapPlan',
-		colorsStore: 'colorsStore'
+		colorsStore: 'colorsStore', 
+		colorsUnpagedStore: 'colorsUnpagedStore', 
+		colorsAllStore: 'colorsAllStore', 
+		colorsAllUnpagedStore: 'colorsAllUnpagedStore'
 	},
     columnLines: false,
 	hideHeaders: true,
@@ -35,10 +38,13 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
     initComponent: function(){
         var me = this;       
         Ext.apply(me, {
+			invalidRecord: function(record) { 
+						            return record.get('isValidInTerm') === false || record.get('hasCorequisites')  === false || record.get('hasPrerequisites')  === false; 
+						        },
             columns: [
             	{
 		            xtype: 'gridcolumn',
-		            width: 10,
+		            width: 5,
 		            height: 5,
 		            flex:0,
 		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
@@ -52,33 +58,55 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
 		        },
             	{
 		            xtype: 'gridcolumn',
-		            width: 10,
+		            width: 5,
 		            height: 5,
 		            flex:0,
 		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 		            	var isTranscript = record.get('isTranscript');
+		            	var duplicateOfTranscript = record.get('duplicateOfTranscript');
 		            	var color = isTranscript ? '#ffff00' : 'rgba(0,0,0,0.0)';
-						metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
+		            	color = duplicateOfTranscript ? '#0000FF' : color;
+						
 						if ( isTranscript ) {
-							metaData.tdAttr = 'data-qtip="Yellow indicates course is already on students\' transcript"';
-						}						
+							if(!duplicateOfTranscript)
+								metaData.tdAttr = 'data-qtip="Yellow indicates course is already on students\' transcript"';
+							else{
+								metaData.tdAttr = 'data-qtip="Blue indicates course is a duplicate of one on students\' transcript but in a different term."';
+							}
+						}
+						metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
 			         }		            
 		        },
             	{
 		            xtype: 'gridcolumn',
-		            width: 10,
+		            width: 5,
 		            height: 5,
 		            flex:0,
 		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 		            	var me=this;
 		            	var elective = me.electiveStore.getById(record.get('electiveId'))
 		            	var colorId = elective ? elective.get('color') : null;
-		            	var color = colorId ? me.colorsStore.getById(colorId) : null;
+		            	var color = colorId ? me.colorsAllUnpagedStore.getById(colorId) : null;
 		            	var colorCode = color ? '#'+color.get('hexCode') : 'rgba(0,0,0,0.0)';
 						metaData.style = 'background-color: '+colorCode+'; background-image: none; margin:2px 2px 2px 2px;'
 						if ( elective ) {
 							metaData.tdAttr = 'data-qtip="This is an elective. Elective code: ' + elective.get('code') + '"';
-						}						
+						}
+						return elective;						
+			         }		            
+		        },
+				{
+		            xtype: 'gridcolumn',
+		            width: 5,
+		            height: 5,
+		            flex:0,
+		            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+		            		var isDev = record.isDev();
+			            	var color = isDev ? '#ff0000' : 'rgba(0,0,0,0.0)';
+							metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
+							if ( isDev ) {
+								metaData.tdAttr = 'data-qtip="Red indicates course is a dev course."';
+							}					
 			         }		            
 		        },
 		        {
@@ -86,30 +114,34 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
                 xtype: 'gridcolumn',
 				hidden: true,
 				hideable: false
+				
             }, 
 			{
                 dataIndex: 'formattedCourse',
                 xtype: 'gridcolumn',
 		        flex:1,
-				width:145
-            },
-        	{
-	            xtype: 'gridcolumn',
-	            flex:0.5,
-	            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
-	            	var me=this;
-	            	var elective = me.electiveStore.getById(record.get('electiveId'))
-	            	value = elective ? elective.get('code') : '';
-	            	return value;
-		         }		            
-	        },            
+				width:160,
+				renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+		            	var me=this;
+					    if(me.invalidRecord(record)){
+					    	metaData.style = 'font-style:italic;color:#FF0000';
+							metaData.tdAttr = 'data-qtip="Concerns:' + record.get("invalidReasons") + '"';
+						}
+						return value;
+			        }		
+            },            
 			{
                 dataIndex: 'creditHours',
                 xtype: 'gridcolumn',
 	            flex:0.5,
-				width:25
-            },
-            {
+				width:25,
+				renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+		            	var me=this;
+						if(me.invalidRecord(record))
+					    	metaData.style = 'font-style:italic;color:#FF0000';
+						return value;
+			        }		
+            },{
                 dataIndex: 'maxCreditHours',
                 xtype: 'gridcolumn',
 				hidden: true,
@@ -120,22 +152,42 @@ Ext.define('Ssp.view.tools.map.SemesterGrid', {
                 xtype: 'gridcolumn',
 				hidden: true,
 				hideable:false
-            },
-			{
+            },{
                 dataIndex: 'code',
                 xtype: 'gridcolumn',
 				hidden: true,
 				hideable:false
-            },
-            {
+            },{
                 dataIndex: 'isDev',
                 xtype: 'gridcolumn',
 				hidden: true,
 				hideable:false
-            }
+            },{
+	            xtype: 'gridcolumn',
+	            flex:0.5,
+	            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+	            	var me=this;
+	            	var elective = me.electiveStore.getById(record.get('electiveId'))
+					if((record.data.contactNotes != undefined && record.data.contactNotes.length > 0) ||
+													(record.data.studentNotes != undefined && record.data.studentNotes.length > 0) ){
+						if(record.data.contactNotes && record.data.contactNotes.length > 0)
+							metaData.tdAttr = 'data-qtip="Contact Notes: ' + record.data.contactNotes;
+						if(record.data.contactNotes && record.data.contactNotes.length > 0)
+							metaData.tdAttr += ' Student Notes: ' + record.data.studentNotes 
+						if(elective)
+							metaData.tdAttr += ' Elective: ' + elective.get('name');
+						
+						metaData.tdAttr += '"';
+						return '<img src="/ssp/images/' + Ssp.util.Constants.EDIT_COURSE_NOTE_NAME + '" />'
+					}
+					if(me.invalidRecord(record))
+				    	metaData.style = 'font-style:italic;color:#FF0000';
+	            	return "";
+		         }		            
+	        }
        ],
 			viewConfig: {
-					copy: true,
+					copy: false,
 			        plugins: {
 			            ptype: 'gridviewdragdrop',
 						ddGroup: 'ddGroupForCourses',

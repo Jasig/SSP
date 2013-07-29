@@ -18,27 +18,37 @@
  */
 package org.jasig.ssp.web.api.reference;
 
+import java.util.UUID;
 import javax.validation.Valid;
 
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.factory.reference.ConfigTOFactory;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.RequestTrustService;
+import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.reference.ConfigTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.common.collect.Lists;
 
 /**
  * Some basic methods for manipulating Config reference data.
@@ -56,6 +66,12 @@ public class ConfigController
 	 */
 	@Autowired
 	protected transient ConfigService service;
+
+	@Autowired
+	protected transient SecurityService securityService;
+
+	@Autowired
+	protected transient RequestTrustService requestTrustService;
 
 	/**
 	 * Auto-wired transfer object factory.
@@ -110,7 +126,63 @@ public class ConfigController
 			throws ObjectNotFoundException {
 		final Config config =
 				((ConfigService) getService()).getByName(name);
-		return config == null ? null : this.getFactory().from(config);
+		return filterSensitiveValues(config == null ? null : this.getFactory().from(config));
+	}
+
+	@Override
+	@RequestMapping(method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
+	public @ResponseBody
+	PagedResponse<ConfigTO> getAll(
+			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) Integer start,
+			final @RequestParam(required = false) Integer limit,
+			final @RequestParam(required = false) String sort,
+			final @RequestParam(required = false) String sortDirection) {
+
+		PagedResponse<ConfigTO> rsp = super.getAll(status, start, limit, sort, sortDirection);
+		return filterSensitiveValues(rsp);
+	}
+
+	@Override
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
+	public @ResponseBody
+	ConfigTO get(final @PathVariable UUID id) throws ObjectNotFoundException,
+			ValidationException {
+		return filterSensitiveValues(super.get(id));
+	}
+
+	// Update: as of SSP-1520, the trusted IP list config we were specifically
+	// concerned about is no longer in the db and as such no longer visible
+	// to the config API. But we're leaving this filtering code here as a
+	// precaution anyway.
+	//
+	// Yes, this is absolutely a hack. should either be a flag on the config
+	// itself or services owning sensitive config should register themselves
+	// centrally as such. That this is at the controller level, though, is not
+	// really the bad part of this... the controller layer owns permissions
+	// enforcement except for confidentiality levels. And for the specific
+	// configs we're dealing with here, filtering at the service layer wouldn't
+	// make sense b/c the config *values* (trusted IPs) need to be readable
+	// there, even if the current user can't change those values.
+	private PagedResponse<ConfigTO> filterSensitiveValues(PagedResponse<ConfigTO> rsp) {
+		if ( securityService.hasAuthority(Permission.REFERENCE_WRITE) ) {
+			return rsp;
+		}
+
+		for ( ConfigTO configTO : rsp.getRows() ) {
+			filterSensitiveValues(configTO);
+		}
+
+		return rsp;
+	}
+
+	private ConfigTO filterSensitiveValues(ConfigTO configTO) {
+		if ( !(securityService.hasAuthority(Permission.REFERENCE_WRITE)) ) {
+			requestTrustService.obfuscateSensitiveConfig(configTO);
+		}
+		return configTO;
 	}
 
 }

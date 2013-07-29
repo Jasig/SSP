@@ -120,7 +120,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 						    	}, {
 							        tooltip: 'Reset to All Programs',
 							        text: '',
-							        width: 30,
+							        width: 23,
 							        height: 25,
 							        name: 'programCancel',
 							        cls: 'mapClearSearchIcon',
@@ -155,7 +155,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							    	}, {
 							        tooltip: 'Reset to All Departments',
 							        text: '',
-							        width: 30,
+							        width: 23,
 							        height: 25,
 							        name: 'departmentCancel',
 							        cls: 'mapClearSearchIcon',
@@ -189,7 +189,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							    	}, {
 							        tooltip: 'Reset to All Divisions',
 							        text: '',
-							        width: 30,
+							        width: 23,
 							        height: 25,
 							        name: 'divisionCancel',
 							        cls: 'mapClearSearchIcon',
@@ -297,7 +297,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                             }]}
                             
             
-            ]}],
+            ]}]
          }]
 		},	{
          xtype: 'gridpanel',

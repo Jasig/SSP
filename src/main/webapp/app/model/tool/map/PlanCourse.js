@@ -29,6 +29,14 @@ Ext.define('Ssp.model.tool.map.PlanCourse', {
              {name:'contactNotes',type:'string'},
              {name:'studentNotes',type:'string'},
              {name:'isImportant',type:'boolean'},
-             {name:'isTranscript',type:'boolean'},
-             {name:'electiveId',type:'string'}]
+             {name:'isTranscript',type:'boolean', defaultValue:false},
+             {name:'duplicateOfTranscript',type:'boolean', defaultValue:false},
+             {name:'isValidInTerm',type:'boolean', defaultValue:true, convert: null},
+             {name:'hasCorequisites',type:'boolean', defaultValue:true, convert: null},
+             {name:'hasPrerequisites',type:'boolean', defaultValue:true, convert: null},
+             {name:'invalidReasons',type:'string'},
+             {name:'electiveId',type:'string'}],
+    isDev: function(){
+        		return this.get("isDev");
+        	}
 });

@@ -48,7 +48,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
             {
                 xtype: 'fieldset',
                 border: 0,
-                padding: '0 0 0 0',
+                padding: '0 0 0 15',
                 title: '',
                 defaultType: 'displayfield',
                 layout: 'vbox',
@@ -73,42 +73,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 
                 }]
             
-            }, 
-             {
-                xtype: 'fieldset',
-                border: 0,
-                padding: '0 0 0 0',
-                title: '',
-                defaultType: 'displayfield',
-                layout: 'vbox',
-                width: 80,
-                hidden:true,
-                hideable:false,
-                cls: 'center-align',
-                defaults: {
-                    anchor: '100%'
-                },
-                
-                items: [{
-                    tooltip: 'Financial Aid',
-                    width: 30,
-                    height: 30,
-                    hidden:true,
-                    hideable:false,
-                    cls: 'mapFAIcon',
-                    xtype: 'button',
-                    itemId: 'planFAButton',
-                    align: 'center',
-                    padding: '0 0 0 0',
-                }, {
-                	hidden:true,
-                    hideable:false,
-                    xtype: 'label',
-                    text: 'Financial Aid',
-                }]
-            
-            }, 
-            {
+            }, {
                 xtype: 'fieldset',
                 border: 0,
                 padding: '0 0 0 0',
@@ -139,7 +104,35 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 
                 }]
             
-            }, 
+            }, 	{
+		                xtype: 'fieldset',
+		                border: 0,
+		                padding: '0 0 0 0',
+		                title: '',
+		                defaultType: 'displayfield',
+		                layout: 'vbox',
+		                width: 100,
+		                cls: 'center-align',
+		                defaults: {
+		                    anchor: '100%'
+		                },
+		                items: [{
+		                    tooltip:  me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan',
+		                    width: 30,
+		                    height: 30,
+		                    cls: 'mapMovePlanIcon',
+		                    xtype: 'button',							
+		                    itemId: 'movePlanButton',
+			                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON'),
+		                    align: 'center',
+		                    padding: '0 0 0 0'							
+		                }, {
+		                    xtype: 'label',
+							itemId: 'movePlanLabel',								
+		                    text: me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan'							
+		                }]
+
+		            },
             {
 				hidden: true,
 				hideable: false,
@@ -206,7 +199,72 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 
                 }]
             
-            },{
+            },	{
+	                xtype: 'fieldset',
+	                border: 0,
+	                padding: '0 0 0 0',
+	                title: '',
+	                defaultType: 'displayfield',
+	                layout: 'vbox',
+					itemId: 'planFAFieldSet',
+	                width: 80,
+	                cls: 'center-align',
+	                hidden:  me.currentMapPlan.get("isTemplate") == true,
+	                defaults: {
+	                    anchor: '100%'
+	                },
+	                
+	                items: [{
+	                    tooltip: 'Financial Aid',
+	                    width: 30,
+	                    height: 30,
+	                    cls: 'mapFAIcon',
+	                    xtype: 'button',
+	                    itemId: 'planFAButton',
+	                    align: 'center',
+	                    hidden:  me.currentMapPlan.get("isTemplate") == true,
+	                    padding: '0 0 0 0'
+	                }, {
+	                    xtype: 'label',
+	                    hidden:  me.currentMapPlan.get("isTemplate") == true,
+	                    text: 'Financial Aid'
+	                }]
+	            
+	            },{
+			                xtype: 'fieldset',
+			                border: 0,
+			                padding: '0 0 0 0',
+			                title: '',
+			                defaultType: 'displayfield',
+			                layout: 'vbox',
+			                width: 80,
+							itemId: 'planTranscriptFieldSet',
+			                cls: 'center-align',
+							hidden:  me.currentMapPlan.get("isTemplate") == true,
+			                defaults: {
+			                    anchor: '100%'
+			                },
+			                items: [{
+			                    tooltip:  'View of Student\'s Transcript',
+			                    width: 30,
+			                    height: 30,
+			                    cls: 'transcriptIcon',
+			                    xtype: 'button',
+			                    itemId: 'showStudentTranscript',
+			                    align: 'center',
+			                    hidden:  me.currentMapPlan.get("isTemplate") == true,
+			                    padding: '0 0 0 0'
+			                    
+			                }, {
+			                    xtype: 'label',
+								itemId: 'showStudentTranscriptLabel',
+								width: 125,
+								hidden:  me.currentMapPlan.get("isTemplate") == true,
+			                    text: 'Transcript'
+
+			                }]
+
+			            },{
                 xtype: 'tbspacer',
                 flex: 1
             }, {
@@ -232,17 +290,38 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 					readOnly: true,
 					fieldStyle:"border:none 0px black; margin-top:2px; background-image:none",
 					editable:false
-                }, {
-                    fieldLabel: 'Student is Currently',
-                    itemId: 'onPlan',
-                    name: 'onPlan',
-                    labelWidth: 150,
-					hidden: true,
-					hideable: false
-                }]
+                }, 	{
+		                xtype: 'fieldset',
+		                border: 0,
+		                padding: '0 0 0 0',
+		                title: '',
+						itemId:'onPlanFieldSet',
+		                defaultType: 'displayfield',
+		                layout: 'hbox',
+		                defaults: {
+		                    anchor: '100%'
+		                },
+		                items: [
+							{
+								 xtype: 'button',
+								 width: 20,
+				                 height: 20,
+								itemId:'onPlanStatusDetails',
+				    	         cls: 'helpIconSmall',
+				    	         tooltip: 'Student is currently on plan.'
+				    	     },{
+                    		fieldLabel: 'Student is Currently',
+		                    itemId: 'onPlan',
+		                    name: 'onPlan',
+		                    labelWidth: 115,
+							width:200,
+							fieldStyle:"text-align:left",
+		                    hidden: me.currentMapPlan.get("isTemplate")
+
+		                }]
+				}]
             
-            }, {}]
-        
+            }]
         });
         
         return me.callParent(arguments);

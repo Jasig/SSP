@@ -63,33 +63,13 @@ Ext.define('Ssp.view.Search', {
                 dock: 'top',
                 itemId: 'searchBar',
                 hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH'),
-                items: [{
-                    xtype: 'textfield',
-                    itemId: 'searchText',
-                    enableKeyEvents: true,
-                    emptyText: 'Name or ' + me.sspConfig.get('studentIdAlias'),
-                    width: 200
-                }, {
-                    xtype: 'button',
-                    tooltip: 'Find a Student',
-                    itemId: 'searchButton',
-                    width: 32,
-                    height: 32,
-                    cls: 'searchIcon'
-                }, {
-                    xtype: 'tbspacer',
-                    width: 5
-                }, {
-                    xtype: 'checkboxfield',
-                    boxLabel: 'My Caseload',
-                    itemId: 'searchCaseloadCheck',
-                    name: 'searchInCaseload',
-                    hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH'),
-                    inputValue: false
-                }, {
-                    xtype: 'tbspacer',
+                items: [
+  	           {
+  	              	xtype: 'searchForm', 
+  	              	hidden: true,
                     flex: 1
-                }, {
+  	           },                       
+                {
                     tooltip: 'Display Caseload Filters',
                     text: '',
                     width: 25,
@@ -97,7 +77,8 @@ Ext.define('Ssp.view.Search', {
                     hidden: false,
                     cls: 'displayCaseloadIcon',
                     xtype: 'button',
-                    itemId: 'displayCaseloadBarButton'
+                    itemId: 'displayCaseloadBarButton',
+					hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS')
                 }]
             }, {
                 xtype: 'toolbar',
@@ -109,13 +90,13 @@ Ext.define('Ssp.view.Search', {
                     itemId: 'caseloadStatusCombo',
                     name: 'programStatusId',
                     fieldLabel: '',
-                    emptyText: 'Select One',
+                    emptyText: 'All',
                     store: me.programStatusesStore,
                     valueField: 'id',
                     displayField: 'name',
                     mode: 'local',
                     typeAhead: false,
-                    editable: false,
+                    editable: true,
                     queryMode: 'local',
                     allowBlank: true,
                     forceSelection: false,
@@ -123,8 +104,9 @@ Ext.define('Ssp.view.Search', {
                     labelWidth: 125
                 }, {
                     xtype: 'button',
-                    tooltip: 'Retrieve My Caseload',
+                    tooltip: 'Retrieve My Caseload (leave field blank for all program statuses)',
                     itemId: 'retrieveCaseloadButton',
+					hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH'),
                     width: 32,
                     height: 32,
                     cls: 'retrieveCaseloadIcon'

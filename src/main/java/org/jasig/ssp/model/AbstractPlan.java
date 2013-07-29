@@ -24,6 +24,7 @@ import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -89,11 +90,16 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 	@Size(max = 2000)
 	private String careerLink;
 	
+	@Transient
+	private transient Boolean isValid = true;
+	
+	@Transient
+	private Boolean isDirty = false;	
 
 	public abstract <T extends AbstractPlan> T clonePlan() throws CloneNotSupportedException;
 	
 	public abstract List<? extends AbstractPlanCourse<?>> getCourses();
-	
+		
 	public abstract List<? extends TermNote> getNotes();
 	
 	public String getName() {
@@ -222,6 +228,20 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 		this.careerLink = careerLink;
 	}
 
+	/**
+	 * @return the isValid
+	 */
+	public Boolean getIsValid() {
+		return isValid;
+	}
+
+	/**
+	 * @param isValid the isValid to set
+	 */
+	public void setIsValid(Boolean isValid) {
+		this.isValid = isValid;
+	}
+
 	public <T extends AbstractPlan> void cloneCommonFields(T clone) {
 		clone.setAcademicGoals(this.academicGoals);
 		clone.setAcademicLink(this.getAcademicLink());
@@ -236,8 +256,17 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 		clone.setIsImportant(this.getIsImportant());
 		clone.setStudentNotes(this.getStudentNotes());
 		clone.setName(this.getName());
+		clone.setIsValid(this.getIsValid());
 		//Copying person by should be changed if we're cloning on saving with a new advisor
 		clone.setOwner(this.getOwner());
+	}
+
+	public Boolean getIsDirty() {
+		return isDirty;
+	}
+
+	public void setIsDirty(Boolean isDirty) {
+		this.isDirty = isDirty;
 	}
 
 }

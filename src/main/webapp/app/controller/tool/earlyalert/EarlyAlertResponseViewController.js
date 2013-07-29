@@ -77,6 +77,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		{
 			me.model = new Ssp.model.tool.earlyalert.EarlyAlertResponse();
 		}
+		me.filterEarlyAlertOutcomesAndOutreaches();		
 		me.getView().getForm().loadRecord(me.model);
 		me.showHideOtherOutcomeDescription();
 		return me.callParent(arguments);
@@ -100,6 +101,40 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     	//comp[isValid ? 'removeCls' : 'addCls']('multiselect-invalid');
     },
     
+	initEarlyAlertOutcomesStore: function(postProcess, postProcessScope) {
+		var me = this;
+        // cache on 'me' b/c we need to clear the filter on destroy, but
+        // by that time the view is gone
+		me.outcomesStore = me.getView().outcomesStore;
+        me.outcomesStore.clearFilter(true);
+        me.outcomesStore.load();
+		if ( postProcess ) {
+			postProcess.apply(postProcessScope ? postProcessScope : me, [me.outcomesStore]);
+		}
+	},
+	
+	initEarlyAlertOutreachesStore: function(postProcess, postProcessScope) {
+		var me = this;
+        // cache on 'me' b/c we need to clear the filter on destroy, but
+        // by that time the view is gone
+		me.outreachesStore = me.getView().outreachesStore;
+        me.outreachesStore.clearFilter(true);
+        me.outreachesStore.load();
+		if ( postProcess ) {
+			postProcess.apply(postProcessScope ? postProcessScope : me, [me.outreachesStore]);
+		}
+	},
+	
+	filterEarlyAlertOutcomesAndOutreaches: function() {
+		var me = this;
+		me.initEarlyAlertOutcomesStore(function(eaOutcomesStore) {
+			me.formUtils.applyAssociativeStoreFilter(eaOutcomesStore, me.model.get('earlyAlertOutcomeId'));
+		}, me);
+		me.initEarlyAlertOutreachesStore(function(eaOutreachesStore) {
+			me.formUtils.applyActiveOnlyFilter(eaOutreachesStore);
+		}, me);
+	},
+	
 	onSaveClick: function(button) {
 		var me = this;
 		var record, id, jsonData, url;
@@ -188,7 +223,27 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		this.displayMain();
 	},
 	
+	destroy: function() {
+		var me = this;
+		me.clearEarlyAlertOutcomesAndOutreachesFilters();
+		return me.callParent(arguments);
+	},
+	
+	clearEarlyAlertOutcomesAndOutreachesFilters: function() {
+		var me = this;
+		// don't try to get these stores from the view... it's probably already
+		// been destroy()ed
+		if ( me.outcomesStore ) {
+			me.outcomesStore.clearFilter(true);
+		}
+		if ( me.outreachesStore ) {
+			me.outreachesStore.clearFilter(true);
+		}
+	},
+	
 	displayMain: function(){
+		var me = this;
+		me.clearEarlyAlertOutcomesAndOutreachesFilters();
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {reloadEarlyAlert: true});
 	},
 	

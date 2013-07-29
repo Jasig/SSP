@@ -37,9 +37,9 @@ Ext.define('Ssp.store.Tools', {
             { group:'rc1', name: "Early Alert", toolType: "earlyalert", active: true },
             { group:'rc1', name: "MAP", toolType: "map", active: true },
             { group:'rc1', name: "Accommodation", toolType: "accommodation", active: true },
+            { group:'rc1', name: "Documents", toolType: "documents", active: true },
+			{ group:'rc1', name: "Notes", toolType: "personnotes", active: true }
 //            { group:'rc1', name: "", toolType: "earlyalert", active: false },
-//            { group:'rc1', name: "Legacy Remarks", toolType: "legacyremarks", active: true },
-//			{ group:'rc1', name: "Documents", toolType: "documents", active: true },
 //            { group:'rc1', name: "----------------", toolType: "earlyalert", active: false },
 //            { group:'rc1', name: "Config Link", toolType: "earlyalert", active: false },
 //            { group:'rc1', name: "Program Viewer", toolType: "earlyalert", active: false },
@@ -48,7 +48,6 @@ Ext.define('Ssp.store.Tools', {
 
             /*
              { group:'rc1', name: "SIS", toolType: "StudentInformationSystem", active: true },
-             { group:'rc1', name: "Documents", toolType: "StudentDocuments", active: false },
              { group:'rc1', name: "Displaced Workers", toolType: "DisplacedWorker", active: false },
              { group:'rc1', name: "Student Success", toolType: "StudentSuccess", active: false }
              */

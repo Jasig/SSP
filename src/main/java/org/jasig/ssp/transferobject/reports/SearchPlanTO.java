@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.model.external.Term;
 
 public class SearchPlanTO {
@@ -29,7 +30,7 @@ public class SearchPlanTO {
 	private String subjectAbbreviation;
 	private String formattedCourse;
 	private String number;
-	private String planStatus;
+	private PlanStatus planStatus;
 	private List<Term> terms;
 	private Date dateFrom;
 	private Date dateTo;
@@ -42,7 +43,7 @@ public class SearchPlanTO {
 	 * @param dateFrom
 	 * @param dateTo
 	 */
-	public SearchPlanTO(String planStatus, String subjectAbbreviation, String number, String formattedCourse, List<Term> terms,
+	public SearchPlanTO(PlanStatus planStatus, String subjectAbbreviation, String number, String formattedCourse, List<Term> terms,
 			Date dateFrom, Date dateTo) {
 		super();
 		this.subjectAbbreviation = subjectAbbreviation;
@@ -66,14 +67,14 @@ public class SearchPlanTO {
 	/**
 	 * @return the planStatus
 	 */
-	public String getPlanStatus() {
+	public PlanStatus getPlanStatus() {
 		return planStatus;
 	}
 
 	/**
 	 * @param planStatus the planStatus to set
 	 */
-	public void setPlanStatus(String planStatus) {
+	public void setPlanStatus(PlanStatus planStatus) {
 		this.planStatus = planStatus;
 	}
 

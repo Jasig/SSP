@@ -25,7 +25,11 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     controller: 'Ssp.controller.admin.AbstractReferenceAdminViewController',
     inject: {
         apiProperties: 'apiProperties',
-        authenticatedPerson: 'authenticatedPerson'
+        authenticatedPerson: 'authenticatedPerson',
+        colorsStore: 'colorsStore',
+        colorsUnpagedStore: 'colorsUnpagedStore',
+        colorsAllStore: 'colorsAllStore',
+        colorsAllUnpagedStore: 'colorsAllUnpagedStore'
     },
 	height: '100%',
 	width: '100%',
@@ -34,38 +38,37 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     initComponent: function(){
     	var me=this;
 
+    	var sort = me.sort;
+    	
     	var cellEditor = Ext.create('Ext.grid.plugin.RowEditing', { 
     							clicksToEdit: 2,
     							controller: me.getController(),
     							listeners: {
 	    							cancelEdit: function(rowEditor, item){
 	    								var columns = rowEditor.grid.columns;
-	    								var record = rowEditor.context.record
-	    								var sortInfo = {};
+	    								var record = rowEditor.context.record;
 	    								
-	    								for (var i=0; i < columns.length; i++ ) {
-	    									if(columns[i].sortState != null 
-	    										&& columns[i].sortState != undefined) {
-	    										
-	    										sortInfo = {	    								
-	    		    							    sort: record.getServerSideFieldName(columns[i].dataIndex),
-	    		    							    sortDirection: columns[i].sortState
-	    	    								}
-	    									}
-	    								}    	
+	    								Ext.each(rowEditor.editor.items.items, function(item) {
+	    									if(item.store != undefined && item.store != null) {
+	    										item.store.clearFilter(true);
+	    									}			
+	    								});
 	    								
-	    								item.store.load({
-	    									params: sortInfo
-	    							    });
-	    					        }
+	    								if(sort != null && sort != undefined) {
+	    									store.sort(sort.field, sort.direction);
+	    								}	    					        
+	    							}
     							}
     					});
     	     	
+    	
     	var addVisible = true;
     	var deleteVisible = true;
+    	var headerInstructions = null;
     	if(me.interfaceOptions !== undefined) { 
     		addVisible = me.interfaceOptions.addButtonVisible;
-    		deleteVisible = me.interfaceOptions.deleteButtonVisible;    		
+    		deleteVisible = me.interfaceOptions.deleteButtonVisible;    
+    		headerInstructions = me.interfaceOptions.headerInstructions;
     	}
 
         // Special handling for view config so we don't accidentally clobber
@@ -123,21 +126,11 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                             var r = Ext.decode(response.responseText); 
                             var columns = me.columns;                            
                             var record = store.findRecord("id", r.id); 
-                            var sortInfo = {};	
-                            
-							for (var i=0; i < columns.length; i++ ) {
-								if(columns[i].sortState != null 
-									&& columns[i].sortState != undefined) {									
-									sortInfo = {	    								
-	    							    sort: record.getServerSideFieldName(columns[i].dataIndex),
-	    							    sortDirection: columns[i].sortState
-    								}
-								}
-							}    	
-							
-							store.load({
-								params: sortInfo
-						    });
+                            			
+							store.load();
+							if(sort != null && sort != undefined) {
+								store.sort(sort.field, sort.direction);
+							}
                         },
                         failure: me.apiProperties.handleError
                     }, this);
@@ -150,6 +143,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
             {
                 plugins: cellEditor,
                 selType: 'rowmodel',
+				cls: 'configgrid',
                 columns: [
                     { header: 'Name',
                         dataIndex: 'name',
@@ -197,7 +191,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                         dock: 'top',
                         items: [{
                             xtype: 'label',
-                            text: 'Double-click to edit an item.'
+                            text: headerInstructions != null? headerInstructions : 'Double-click to edit an item.'
                         }]
                     }]
             });

@@ -54,4 +54,9 @@ public class StudentTypeServiceImpl extends
 	protected void setDao(final StudentTypeDao dao) {
 		this.dao = dao;
 	}
+
+	@Override
+	public StudentType getByCode(String code) {
+		return this.dao.getByCode(code);
+	}
 }

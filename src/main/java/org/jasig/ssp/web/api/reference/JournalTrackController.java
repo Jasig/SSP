@@ -24,10 +24,12 @@ import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.factory.reference.JournalStepTOFactory;
+import org.jasig.ssp.factory.reference.JournalTrackJournalStepTOFactory;
 import org.jasig.ssp.factory.reference.JournalTrackTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.JournalStep;
 import org.jasig.ssp.model.reference.JournalTrack;
+import org.jasig.ssp.model.reference.JournalTrackJournalStep;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -36,6 +38,7 @@ import org.jasig.ssp.service.reference.JournalTrackService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.JournalStepTO;
+import org.jasig.ssp.transferobject.reference.JournalTrackJournalStepTO;
 import org.jasig.ssp.transferobject.reference.JournalTrackTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -74,6 +77,9 @@ public class JournalTrackController
 	@Autowired
 	protected transient JournalStepTOFactory journalStepFactory;
 
+	@Autowired
+	protected transient JournalTrackJournalStepTOFactory journalTrackJournalStepTOFactory;
+
 	@Override
 	protected TOFactory<JournalTrackTO, JournalTrack> getFactory() {
 		return factory;
@@ -89,6 +95,28 @@ public class JournalTrackController
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
+	}
+
+	@RequestMapping(value = "/{journalTrackId}/journalTrackJournalStep", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
+	public @ResponseBody
+	PagedResponse<JournalTrackJournalStepTO> getAllJournalStepAssociationsForJournalTrack(
+			final @PathVariable UUID journalTrackId,
+			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) Integer start,
+			final @RequestParam(required = false) Integer limit,
+			final @RequestParam(required = false) String sort,
+			final @RequestParam(required = false) String sortDirection)
+			throws ObjectNotFoundException {
+
+		final PagingWrapper<JournalTrackJournalStep> data =
+				service.getJournalStepAssociationsForJournalTrack(journalTrackId,
+						SortingAndPaging.createForSingleSortWithPaging(status, start,
+								limit, sort, sortDirection, null));
+
+		return new PagedResponse<JournalTrackJournalStepTO>(true,
+				data.getResults(), journalTrackJournalStepTOFactory
+				.asTOList(data.getRows()));
 	}
 
 	@RequestMapping(value = "/{journalTrackId}/journalStep", method = RequestMethod.GET)

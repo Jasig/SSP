@@ -24,13 +24,15 @@ Ext.define('Ssp.view.tools.profile.Transcript', {
     inject: {
         store: 'courseTranscriptsStore'
     },
-    width: '100%',
-    height: '100%',
+	width: '100%',
+	height: '100%',
+	minHeight: 615,
     autoScroll: true,
     initComponent: function(){
         var me = this;
         
         Ext.applyIf(me, {
+        	queryMode:'local',
             store: me.store,
             columns: [{
                 xtype: 'gridcolumn',

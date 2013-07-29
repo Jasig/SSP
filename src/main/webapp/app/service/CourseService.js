@@ -55,6 +55,12 @@ Ext.define('Ssp.service.CourseService', {
 		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('division') );
     	return baseUrl;
     },
+    
+    getCourseRequisiteUrl: function(  ){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('courserequisite') );
+    	return baseUrl;
+    },
 
     validateCourse: function ( courseCode, termCode, callbacks ) {
         var me = this;
@@ -62,6 +68,12 @@ Ext.define('Ssp.service.CourseService', {
         params['courseCode'] = courseCode;
         params['termCode'] = termCode;
         me.doGet(callbacks,  me.getBaseUrl(  ) + "/validateTerm", params);
+    },
+    
+    getCourseRequirements: function ( courseCode, callbacks ) {
+        var me = this;
+        var params = [];
+        me.doGet(callbacks,  me.getCourseRequisiteUrl() + "/" + courseCode, params);
     },
     
     getFacetedTags: function ( params, callbacks ) {

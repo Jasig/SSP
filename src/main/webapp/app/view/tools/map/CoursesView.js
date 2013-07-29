@@ -77,7 +77,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				    }, {
 				        tooltip: 'Reset to All Programs',
 				        text: '',
-				        width: 30,
+				        width: 23,
 				        height: 25,
 				        name: 'programCancel',
 				        cls: 'mapClearSearchIcon',
@@ -112,7 +112,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				    }, {
 				        tooltip: 'Reset to All Tags',
 				        text: '',
-				        width: 30,
+				        width: 23,
 				        height: 25,
 				        name: 'tagCancel',
 				        cls: 'mapClearSearchIcon',
@@ -146,7 +146,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				    }, {
 				        tooltip: 'Reset to All Terms',
 				        text: '',
-				        width: 30,
+				        width: 23,
 				        height: 25,
 				        name: 'tagCancel',
 				        cls: 'mapClearSearchIcon',
@@ -181,7 +181,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				    }, {
 				        tooltip: 'Reset to All Departments',
 				        text: '',
-				        width: 30,
+				        width: 23,
 				        height: 25,
 				        name: 'departmentCancel',
 				        cls: 'mapClearSearchIcon',
@@ -216,7 +216,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				    }, {
 				        tooltip: 'Reset to All Division',
 				        text: '',
-				        width: 30,
+				        width: 23,
 				        height: 25,
 				        name: 'divisionCancel',
 				        cls: 'mapClearSearchIcon',
@@ -267,7 +267,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                     }, {
                         tooltip: 'Clear Filter',
                         text: '',
-                        width: 30,
+                        width: 23,
                         height: 25,
                         cls: 'mapClearSearchIcon',
                         xtype: 'button',

@@ -29,7 +29,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
         personLite: 'personLite',
         personService: 'personService',
         personProgramStatusService: 'personProgramStatusService',
-        currentPersonAppointment: 'currentPersonAppointment'
+        currentPersonAppointment: 'currentPersonAppointment',
+        studentTypesStore: 'studentTypesAllUnpagedStore'
     },
     control: {
     	'saveButton':{
@@ -46,7 +47,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	
     	'emailButton': {
     		click: 'onEmailClick'
-    	},
+    	}
     	
     },
     
@@ -55,6 +56,10 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		me.resetAppointmentModels();
 
 		var id = me.personLite.get('id');
+		
+		//Loading store here for coach, student_type, and appointment combos due to timing issue between separate controllers
+		me.studentTypesStore.load(); 
+		
 		// load the person record and init the view
 		if (id.length > 0)
 		{
@@ -62,7 +67,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			
 	    	me.personService.get( id, {success:me.getPersonSuccess, 
 	    									  failure:me.getPersonFailure, 
-	    									  scope: me} );
+	    									  scope: me} );					
 		}else{
 			me.initForms();
 			me.updateTitle();
@@ -175,6 +180,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
     onSaveClick: function(button){
 		var me=this;
+		me.studentTypesStore.clearFilter(true);
 		me.doSave();
 	},
 
@@ -301,7 +307,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     		me.person.populateFromGenericObject( r );
     		me.saveAppointment();
 		}else{
-			Ext.Msg.alert('Error','Error saving student record. Please see your administrator for additional details.')
+			Ext.Msg.alert('Error','Error saving student record. Please see your administrator for additional details.');
 		}    	
     },
     
@@ -508,6 +514,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     }, 
     
     onCancelClick: function(button){
+    	this.studentTypesStore.clearFilter(true);
 		this.loadStudentToolsView();
     },
  

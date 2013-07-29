@@ -21,7 +21,7 @@ Ext.define('Ssp.service.SearchService', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	store: 'searchStore'
+    	store: 'studentsSearchStore'
     },
     initComponent: function() {
 		return this.callParent( arguments );
@@ -29,8 +29,7 @@ Ext.define('Ssp.service.SearchService', {
     
     getBaseUrl: function(){
 		var me=this;
-		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personSearch') );
-    	return baseUrl;
+		return me.apiProperties.createUrl( me.apiProperties.getItemUrl(me.store.getBaseUrlName()) );
     },
 
 	searchWithParams: function(params, callbacks) {
@@ -47,10 +46,13 @@ Ext.define('Ssp.service.SearchService', {
 		queryStr = "";
 		for (var paramName in params) {
 			// TODO url encoding?
-			if ( queryStr ) {
+			if ( queryStr && (params[paramName] || !params[paramName] == '')) {
 				queryStr += "&";
 			}
-			queryStr += paramName + "=" + params[paramName];
+			if(params[paramName] || !params[paramName] == '')
+			{
+				queryStr += paramName + "=" + params[paramName];
+			}
 		}
 		if ( !("sort" in params) ) {
 			if ( queryStr ) {
@@ -81,6 +83,7 @@ Ext.define('Ssp.service.SearchService', {
 			},
 			scope: me
 		});
+		me.store.sort('sortableName','ASC');
 	},
 
     search: function( searchTerm, outsideCaseload, callbacks ){
@@ -88,6 +91,40 @@ Ext.define('Ssp.service.SearchService', {
 		me.searchWithParams({
 			searchTerm: searchTerm,
 			outsideCaseload: outsideCaseload
+		}, callbacks);
+    },
+    search2: function( 
+    		 studentId,
+    		 programStatus,
+    		 coachId,
+    		 declaredMajor,
+    		 hoursEarnedMin,
+    		 hoursEarnedMax,
+    		 gpaEarnedMin,
+    		 gpaEarnedMax,
+    		 currentlyRegistered,
+    		 sapStatus,
+    		 mapStatus,
+    		 planStatus,
+    		 myCaseload,
+    		 myPlans,
+    		callbacks ){
+    	var me = this;
+		me.searchWithParams({
+   		 studentId: studentId,
+		 programStatus: programStatus,
+		 coachId: coachId,
+		 declaredMajor: declaredMajor,
+		 hoursEarnedMin: hoursEarnedMin,
+		 hoursEarnedMax: hoursEarnedMax,
+		 gpaEarnedMin: gpaEarnedMin,
+		 gpaEarnedMax: gpaEarnedMax,
+		 currentlyRegistered: currentlyRegistered,
+		 sapStatus: sapStatus,
+		 mapStatus: mapStatus,
+		 planStatus: planStatus,
+		 myCaseload: myCaseload,
+		 myPlans: myPlans
 		}, callbacks);
     }
 });

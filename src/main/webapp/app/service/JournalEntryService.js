@@ -37,8 +37,6 @@ Ext.define('Ssp.service.JournalEntryService', {
     	var me=this;
 	    var success = function( response, view ){
 	    	var r = Ext.decode(response.responseText);
-	    	// filter the inactive items returned in the result
-    		r.rows = me.superclass.filterInactiveChildren( r.rows );
 	    	callbacks.success( r, callbacks.scope );
 	    };
 

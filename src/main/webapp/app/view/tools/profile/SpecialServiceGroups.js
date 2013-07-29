@@ -30,6 +30,7 @@ Ext.define('Ssp.view.tools.profile.SpecialServiceGroups', {
         Ext.apply(me, {
             title: 'Service Groups',
             hideHeaders: true,
+            queryMode:'local',
             store: me.store,
             autoScroll: true,
             tools: [{

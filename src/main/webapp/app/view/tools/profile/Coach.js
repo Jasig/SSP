@@ -142,8 +142,10 @@ Ext.define('Ssp.view.tools.profile.Coach', {
             
             }, {
                 xtype: 'recentsspactivity',
-				anchor: '100% , 40%'
-            
+				anchor: '100% , 40%',
+			    width: '100%',
+				height: '100%',
+				minHeight: 200                     
             }]
         
         });

@@ -31,6 +31,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
                 click: 'onTermNotesButtonClick'
              }
 		},
+		isImportantTermButton:'#isImportantTermButton',
 		deleteButton:{
 			selector:"#deleteButton",
 			listeners: {
@@ -48,6 +49,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	init: function() {
 		var me=this;
 		me.appEventsController.getApplication().addListener("onUpdateCurrentMapPlanPlanToolView", me.updatePastTermButton, me);
+		me.getIsImportantTermButton().addListener("move", me.setTermNoteButton, me);
 		return me.callParent(arguments);
     },
 
@@ -71,12 +73,25 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		var me = this;
 		var termNote = me.currentMapPlan.getTermNoteByTermCode(me.getView().itemId);
 		var button = me.getTermNotesButton();
-		if((termNote != undefined && termNote.data.contactNotes && termNote.data.contactNotes.length > 0) ||
+		var isImportantTermButton = me.getIsImportantTermButton();
+		if(termNote != undefined && termNote != null && termNote.data.isImportant){
+			isImportantTermButton.show();
+			Ext.select('.importantIconSmall').setStyle('left', '1px');
+		}else{
+			isImportantTermButton.hide();
+		}
+		if((termNote != undefined && termNote != null && termNote.data.contactNotes && termNote.data.contactNotes.length > 0) ||
 			(termNote.data.studentNotes != undefined && termNote.data.studentNotes.length > 0) ){
 			button.setIcon(Ssp.util.Constants.EDIT_TERM_NOTE_ICON_PATH);
+			var tooltip = "Term Notes: "
+			if(termNote.data.contactNotes && termNote.data.contactNotes.length > 0)
+				tooltip += "Contact Notes: " + termNote.data.contactNotes + " ";
+			if(termNote.data.studentNotes && termNote.data.studentNotes.length > 0)
+					tooltip += "Student Notes: " + termNote.data.studentNotes + " ";	
+			button.setTooltip(tooltip);
 			return;
 		}
-	          button.setIcon(Ssp.util.Constants.ADD_TERM_NOTE_ICON_PATH);
+	     button.setIcon(Ssp.util.Constants.ADD_TERM_NOTE_ICON_PATH);
 	},
 	
 	onTermNotesButtonClick: function() {
@@ -99,6 +114,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		if(!grid.enableDragAndDrop && !me.currentMapPlan.get('isTemplate'))
 		{
 		 	Ext.Msg.alert('SSP Error', 'You cannot modify old terms.'); 
+		    return;
 		}
 		if(!record)
 		{

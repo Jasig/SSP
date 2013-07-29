@@ -27,10 +27,6 @@ Ext.define('Ssp.controller.MainViewController', {
     	personButtonsVisible: true
     },
     control: {
-    	view: {
-    		add: 'setListeners'
-    	},
-    	
     	'studentViewNav': {
 			click: 'onStudentRecordViewNavClick'
 		},
@@ -41,31 +37,13 @@ Ext.define('Ssp.controller.MainViewController', {
 	},
 	
 	init: function() {
+		this.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
 		this.displayStudentRecordView();
-		
 		return this.callParent(arguments);
     },
-    
-    setListeners: function(container, component, index, obj){
-    	/**
-		 * TODO: Figure out a better workaround than this for loading
-		 * the listener that allows the display to be reset after
-		 * saving the caseload assignment. This works because the Profile
-		 * tool is dynamically added to the tools display after the interface
-		 * is rendered. This event has to be assigned to the application after
-		 * the application's onLaunch method has already fired.
-		 * The issue with using the profile instance is that there may later
-		 * be a requirement to load a different tool than the Profile first in the stack.
-		 */
-		if(component instanceof Ext.ClassManager.get('Ssp.view.tools.profile.Profile'))
-		{
-	       this.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});			
-		}
-    },
-    
+
     destroy: function() {
 	   	this.appEventsController.removeEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
-
         return this.callParent( arguments );
     },
     
@@ -91,7 +69,8 @@ Ext.define('Ssp.controller.MainViewController', {
 			mainView.removeAll();
 		}
 		
-		arrViewItems = [{xtype:'search',flex: 2},
+		arrViewItems = [
+		                {xtype:'search',flex: 2},		                
 					    {xtype: 'studentrecord', flex: 4}];
 		
 		mainView.add( arrViewItems );

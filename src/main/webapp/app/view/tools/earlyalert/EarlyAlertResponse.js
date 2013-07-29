@@ -24,9 +24,8 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
     controller: 'Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController',
     inject: {
         earlyAlert: 'currentEarlyAlert',
-        outcomesStore: 'earlyAlertOutcomesStore',
-        outreachesStore: 'earlyAlertOutreachesStore',
-        referralsStore: 'earlyAlertReferralsStore'
+        outcomesStore: 'earlyAlertOutcomesAllUnpagedStore',
+        outreachesStore: 'earlyAlertOutreachesAllUnpagedStore'
     },
     initComponent: function() {
         var me=this;
@@ -84,6 +83,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
                     fieldLabel: 'Outreach'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
                     store: me.outreachesStore,
                     displayField: 'name',
+					queryMode: 'local',
                     msgTarget: 'side',
                     valueField: 'id',
                     invalidCls: 'multiselect-invalid',

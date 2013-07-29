@@ -47,29 +47,29 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
                 text: 'Responses',
                 flex: .5,
                 dataIndex: 'noOfResponses',
-                sortable: false
+                sortable: true
             }, {
                 text: 'Created By',
                 flex: 1,
                 dataIndex: 'createdBy',
                 renderer: me.columnRendererUtils.renderCreatedBy,
-                sortable: false
+                sortable: true
             }, {
                 text: 'Created Date',
                 flex: 1,
                 dataIndex: 'createdDate',
                 renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A'),
-                sortable: false
+                sortable: true
             }, {
                 text: 'Status',
                 flex: .5,
-                sortable: false,
+                sortable: true,
                 dataIndex: 'closedDate',
                 renderer: me.columnRendererUtils.renderEarlyAlertStatus
             }, {
                 text: 'Details',
                 flex: 2,
-                sortable: false,
+                sortable: true,
                 dataIndex: 'gridDisplayDetails'
             }],
             

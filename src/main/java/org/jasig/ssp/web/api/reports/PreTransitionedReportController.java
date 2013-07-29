@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -35,6 +36,7 @@ import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
@@ -78,8 +80,11 @@ import com.google.common.collect.Maps;
 @RequestMapping("/1/report/pretransitioned")
 public class PreTransitionedReportController extends ReportBaseController { // NOPMD
 	
-	private static final String REPORT_URL = "/reports/preTransitioned.jasper";
+	private static final String REPORT_URL_PDF = "/reports/preTransitioned_pdf.jasper";
+	private static final String REPORT_URL_CSV = "/reports/preTransitioned_csv.jasper";
 	private static final String REPORT_FILE_TITLE = "Counselor_Case_Management_Report";
+	
+
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PreTransitionedReportController.class);
@@ -208,11 +213,12 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 			report.setStudentTranscript(externalStudentTranscriptService, externalStudentFinancialAidService);
 			report.setCurrentRegistrationStatus(registrationStatusByTermService);
 			report.setLastTermGPAAndLastTermRegistered(externalStudentTranscriptTermService, currentTerm);
+			report.setCurrentProgramStatusCode(ProgramStatus.PROGRAM_STATUS_CODES.get(report.getProgramStatusId().toString()));
 		}
 		
 		SearchParameters.addStudentCount(compressedReports, parameters);
 
-		generateReport(response, parameters, compressedReports, REPORT_URL, reportType, REPORT_FILE_TITLE);
+		generateReport(response, parameters, compressedReports, reportType.equals("pdf") ? REPORT_URL_PDF : REPORT_URL_CSV, reportType, REPORT_FILE_TITLE);
 
 	}
 

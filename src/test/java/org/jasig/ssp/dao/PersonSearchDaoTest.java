@@ -23,11 +23,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.UUID;
 
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
@@ -210,6 +212,23 @@ public class PersonSearchDaoTest {
 				+ " status is requested",
 				Lists.newArrayListWithExpectedSize(0),
 				bySchoolIdAndInactiveProgramStatusAndOptionalProgramStatus);
+	}
+	
+	@Test
+	public void testSearch2()
+			throws ObjectNotFoundException {
+			PersonSearchRequest personSearchRequest = new PersonSearchRequest();
+			final Person turing = personService.get(UUID
+					.fromString("252de4a0-7c06-4254-b7d8-4ffc02fe81ff"));
+			personSearchRequest.setCoach(turing);
+			personSearchRequest.setCurrentlyRegistered(true);
+			personSearchRequest.setDeclaredMajor("HIST");
+			personSearchRequest.setGpaEarnedMax(new BigDecimal(5.0));
+			personSearchRequest.setGpaEarnedMin(new BigDecimal(1.0));
+			personSearchRequest.setMapStatus("OFF");
+			personSearchRequest.setProgramStatus(activeProgramStatus);
+			
+			dao.search(personSearchRequest);
 	}
 
 }

@@ -21,6 +21,10 @@ Ext.define('Ssp.store.reference.SpecialServiceGroups', {
     model: 'Ssp.model.reference.SpecialServiceGroup',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('specialServiceGroup')});
+    	Ext.apply(this.getProxy(),{
+    		url: this.getProxy().url + this.apiProperties.getItemUrl('specialServiceGroup'),
+    		extraParams: this.extraParams
+    	});
+    	return this;
     }
 });

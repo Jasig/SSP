@@ -67,6 +67,7 @@ public class PlanCourseTOFactoryImpl extends AbstractAuditableTOFactory<PlanCour
 		model.setStudentNotes(tObject.getStudentNotes());
 		model.setIsImportant(tObject.getIsImportant());
 		model.setIsTranscript(tObject.getIsTranscript());
+		model.setDuplicateOfTranscript(tObject.getDuplicateOfTranscript());
 		model.setCreditHours(tObject.getCreditHours());
 		model.setTermCode(tObject.getTermCode());
 		model.setFormattedCourse(tObject.getFormattedCourse());
@@ -77,6 +78,11 @@ public class PlanCourseTOFactoryImpl extends AbstractAuditableTOFactory<PlanCour
 			Elective elective = electiveService.get(tObject.getElectiveId());
 			model.setElective(elective);
 		}
+		
+		model.setIsValidInTerm(tObject.getIsValidInTerm());
+		model.setHasPrerequisites(tObject.getHasPrerequisites());
+		model.setHasCorequisites(tObject.getHasCorequisites());
+		model.setInvalidReasons(tObject.getInvalidReasons());
 		return model;
 	}
 

@@ -26,7 +26,7 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
     inject: {
         apiProperties: 'apiProperties',
         authenticatedPerson: 'authenticatedPerson',
-        coachesStore: 'coachesStore',
+        allCoachesStore: 'coachesStore',
         reassignCaseloadStore: 'reassignCaseloadStore'
     },
 	height: '100%',
@@ -45,7 +45,8 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',
-    		      multiSelect: true,    		      
+    		      multiSelect: true,   
+				  cls: 'configgrid', 		      
     		      columns: [
     		                { 
       		                  header: 'School ID',  
@@ -83,7 +84,7 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
        		   		        itemId: 'sourceCoachBox',
        		   		        fieldLabel: 'Currently Assigned To',
        		   		        emptyText: 'Select One',
-       		   		        store: this.coachesStore,
+       		   		        store: this.allCoachesStore,
        		   		        valueField: 'id',
     		   		        displayField: 'fullName',
        		   		        mode: 'local',

@@ -58,6 +58,7 @@ public class StudentTypeTOFactoryImpl
 	public StudentType from(final StudentTypeTO tObject) throws ObjectNotFoundException {
 		StudentType model = super.from(tObject);
 		model.setRequireInitialAppointment(tObject.isRequireInitialAppointment());
+		model.setCode(tObject.getCode());
 		return model;
 	}
 }

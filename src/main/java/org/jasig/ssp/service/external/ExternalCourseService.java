@@ -31,6 +31,8 @@ public interface ExternalCourseService extends ExternalReferenceDataService<Exte
 	List<ExternalCourse> search(SearchExternalCourseTO form);
 	
 	List<String> getAllTagsForCourse(String courseCode);
+	
+	List<String> getValidCourseCodesForTerm(String termCode, List<String> courseCodes);
 
 	void flushCache();
 

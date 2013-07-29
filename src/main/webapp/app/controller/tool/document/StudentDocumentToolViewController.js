@@ -94,7 +94,7 @@ Ext.define('Ssp.controller.tool.document.StudentDocumentToolViewController', {
     },    
     
     onAddClick: function(button){
-    	var document = new Ssp.model.PersonDocument();
+    	var document = new Ssp.model.tool.documents.StudentDocument();
     	this.model.data = document.data;
     	this.loadEditor();
     },

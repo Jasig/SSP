@@ -22,15 +22,47 @@ namespace 'mygps.viewmodel'
 	HomeViewModel:
 		
 		class HomeViewModel extends mygps.viewmodel.AbstractTasksViewModel
-			
+
 			constructor: ( session, taskService ) ->
 				super( session, taskService )
 				
 				@canContactCoach = ko.dependentObservable( @evaluateCanContactCoach, this )
+				@currentMapJson = ko.dependentObservable(@evaluateShowMap, this)
+				@showMap = ko.observable(false)
+				@personId = ko.dependentObservable(@evaluatePersonId, this)
+				@mapUrl = ko.dependentObservable(@evaluateMapUrl, this)
 				
 			load: () ->
 				super()
 				return
 				
 			evaluateCanContactCoach: () ->
-				return @session?.authenticatedPerson()?.coach()?;
+				return @session?.authenticatedPerson()?.coach()?
+
+			evaluatePersonId: () ->
+				return @session?.authenticatedPerson()?.id()
+
+			evaluateMapUrl: () ->
+				return "/ssp/api/1/mygps/plan/print"
+           
+			getCurrentMap = (personId, callback) ->
+                $.ajax({
+	                type: "GET"
+	                url: "/ssp/api/1/mygps/plan/current"
+	                dataType: "json"
+	                success: (result) ->
+                        callback(result)
+	                error: (fault) ->
+		                callback(false)
+                })
+
+			evaluateShowMap: () ->
+				if @session?.authenticatedPerson()?.id()?
+                    getCurrentMap(@session?.authenticatedPerson()?.id(), @showMap)
+
+			ko.bindingHandlers.popupWindow = init: (element, valueAccessor) ->
+				values = ko.utils.unwrapObservable(valueAccessor())
+				$(element).click ->
+					window.open(ko.utils.unwrapObservable(values.url), "ChildWindow", "height=" + values.height + ",width=" + values.width, "resizable=1, scrollbars=1")
+
+				false

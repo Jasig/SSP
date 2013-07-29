@@ -28,6 +28,7 @@
 	<parameter name="reportDate" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="subjectAbbreviation" class="java.lang.String"/>
 	<parameter name="courseNumber" class="java.lang.String"/>
+	<parameter name="planStatus" class="java.lang.String" isForPrompting="false"/>
 	<field name="courseTitle" class="java.lang.String"/>
 	<field name="formattedCourse" class="java.lang.String"/>
 	<field name="studentCount" class="java.lang.Long"/>
@@ -36,7 +37,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="80" splitType="Stretch">
+		<band height="94" splitType="Stretch">
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="255b284c-e962-4bd2-a35c-c07141e46079" x="121" y="10" width="198" height="16"/>
 				<textElement/>
@@ -76,6 +77,16 @@
 				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="121" y="61" width="311" height="16" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{courseNumber}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="10" y="77" width="111" height="16"/>
+				<textElement/>
+				<text><![CDATA[Plan Status:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="121" y="77" width="311" height="16" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{planStatus}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

@@ -104,7 +104,7 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="31" splitType="Stretch">
+		<band height="32" splitType="Stretch">
 			<rectangle radius="10">
 				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="3" width="572" height="26" backcolor="#70C2E7"/>
 			</rectangle>
@@ -118,14 +118,14 @@
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="51" splitType="Stretch">
+		<band height="37" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="0" y="15" width="527" height="16"/>
+				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="0" y="3" width="527" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{courseName}]]></textFieldExpression>
 			</textField>
 			<subreport isUsingCache="true">
-				<reportElement uuid="e95f7a88-bf44-47b3-9957-8fef02e66b11" stretchType="RelativeToTallestObject" x="0" y="31" width="572" height="17" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="e95f7a88-bf44-47b3-9957-8fef02e66b11" stretchType="RelativeToTallestObject" x="0" y="20" width="572" height="17" isRemoveLineWhenBlank="true"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{studentStatusByCourse})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/numberStudentsByStatusCourseForm.jasper"]]></subreportExpression>
 			</subreport>

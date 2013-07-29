@@ -19,7 +19,6 @@
 Ext.define('Ssp.store.external.Terms', {
 	extend: 'Ssp.store.reference.AbstractReferences',
 	model: 'Ssp.model.external.Term',
-	remoteSort: true,
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties'
@@ -28,17 +27,23 @@ Ext.define('Ssp.store.external.Terms', {
     constructor: function(){
 		var me = this;
 		me.callParent(arguments);
+		me.addListener('load', me.sortAfterLoad, me, {single:true});
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('terms'),
     		autoLoad: true});
     	return; 
     },
+
+	sortAfterLoad: function(){
+		var me = this;
+		me.sort('startDate', 'DESC');
+	},
     
     getCurrentAndFutureTermsStore: function(sortEarliestFirst){
 		var me = this;
     	var store = Ext.create('Ext.data.Store', {
 		     	model: "Ssp.model.external.Term"
 		     });
-    	store.loadData(me.getCurrentAndFutureTerms())
+    	store.loadRecords(me.getCurrentAndFutureTerms());
 		me.sortStoreByDate(store, sortEarliestFirst);
     	return store;
     },
@@ -98,7 +103,11 @@ Ext.define('Ssp.store.external.Terms', {
 		var startIndex = 0
 		var currentTermIndex = me.findBy(me.isCurrentTerm);
 		var termIndex = me.find('code', termCode)
-    	return termIndex <= currentTermIndex ? false : true;
+		
+		if(me.getAt(termIndex).get('endDate').getTime() <= (new Date()).getTime())
+			return true;
+		else			
+			return termIndex <= currentTermIndex ? false : true;
     },
     
     getFutureTerms: function(){

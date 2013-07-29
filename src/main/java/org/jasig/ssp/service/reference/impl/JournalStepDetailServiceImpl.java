@@ -18,9 +18,15 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jasig.ssp.dao.reference.JournalStepDetailDao;
+import org.jasig.ssp.dao.reference.JournalStepJournalStepDetailDao;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.JournalStep;
 import org.jasig.ssp.model.reference.JournalStepDetail;
+import org.jasig.ssp.model.reference.JournalStepJournalStepDetail;
 import org.jasig.ssp.service.reference.JournalStepDetailService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -42,6 +48,9 @@ public class JournalStepDetailServiceImpl extends
 
 	@Autowired
 	transient private JournalStepDetailDao dao;
+	
+	@Autowired
+	transient private JournalStepJournalStepDetailDao journalStepJournalStepDetailDao;
 
 	protected void setDao(final JournalStepDetailDao dao) {
 		this.dao = dao;
@@ -56,6 +65,19 @@ public class JournalStepDetailServiceImpl extends
 	public PagingWrapper<JournalStepDetail> getAllForJournalStep(
 			final JournalStep journalStep,
 			final SortingAndPaging sAndP) {
-		return dao.getAllForJournalStep(journalStep.getId(), sAndP);
-	}
+		//using sets t
+		Set<JournalStepDetail> details = new HashSet<JournalStepDetail>();
+		PagingWrapper<JournalStepDetail> allForJournalStep = dao.getAllForJournalStep(journalStep.getId(), new SortingAndPaging(ObjectStatus.ALL, sAndP.getFirstResult(), sAndP.getMaxResults(), sAndP.getSortFields(), sAndP.getDefaultSortProperty(), sAndP.getDefaultSortDirection()));
+		PagingWrapper<JournalStepJournalStepDetail> allAssociationsForJournalStep = journalStepJournalStepDetailDao.getAllForJournalStep(journalStep.getId(), new SortingAndPaging(sAndP.getStatus()));
+		for (JournalStepDetail journalStepDetail : allForJournalStep) 
+		{
+			for (JournalStepJournalStepDetail journalStepJournalStepDetail : allAssociationsForJournalStep) {
+				if(journalStepDetail.getId().equals(journalStepJournalStepDetail.getJournalStepDetail().getId()))
+				{
+					details.add(journalStepDetail);
+				}
+			}
+		}
+		return new PagingWrapper<JournalStepDetail>(details);
+	} 
 }

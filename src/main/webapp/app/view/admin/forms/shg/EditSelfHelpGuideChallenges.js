@@ -45,6 +45,7 @@ Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideChallenges',{
 	           },	        	  
 		      enableDragDrop: true,
 		      selType: 'rowmodel',
+			  cls: 'configgrid',
 		      columns: [
 		                { 
 		                  header: 'Question Number',  

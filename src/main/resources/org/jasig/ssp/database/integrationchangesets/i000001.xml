@@ -27,8 +27,7 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext 
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<property name="schema" value="public" dbms="postgresql" />
-	<property name="schema" value="dbo" dbms="mssql" />
+	<property name="schema" value="${database.schema}" />
 	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
 	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 	<property name="externalUser" value="a new UUID" />
@@ -42,7 +41,7 @@
 	<changeSet id="Add manage_integration_database key" author="daniel.bower">
 		<preConditions onFail="CONTINUE"
 			onFailMessage="manage_integration_database key already exists in the config table, skipping creation">
-			<tableExists tableName="config" />
+			<tableExists tableName="config" schemaName="${schema}" />
 			<sqlCheck expectedResult="0">select count(id) from config where
 				name='manage_integration_database'
 			</sqlCheck>

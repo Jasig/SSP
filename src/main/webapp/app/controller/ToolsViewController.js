@@ -95,10 +95,13 @@ Ext.define('Ssp.controller.ToolsViewController', {
     
     onItemClick: function(grid, record, item, index){
         var me = this;
-        if (record.get('active') && me.personLite.get('id') != "") {
+        
+        //Listeners will need to return false to halt navigation from this point. 
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('toolsNav', record, me);  
+        
+        if (record.get('active') && me.personLite.get('id') != "" && skipCallBack) {
             this.loadTool(record.get('toolType'));
-            this.appEventsController.getApplication().fireEvent('collapseSearch');
-        }
+        }       	
     },
     
     loadTool: function(toolType){

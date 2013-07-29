@@ -21,6 +21,9 @@ Ext.define('Ssp.store.reference.ServiceReasons', {
     model: 'Ssp.model.reference.ServiceReason',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('serviceReason')});
+    	Ext.apply(this.getProxy(),{
+    		url: this.getProxy().url + this.apiProperties.getItemUrl('serviceReason'),
+    		extraParams: this.extraParams
+    	});
     }
 });

@@ -22,10 +22,17 @@ Ext.define('Ssp.store.Goals', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties'
-    },    
+    }, 
 	constructor: function(){
-		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('personGoal') ),
-						  autoLoad: false });
-		return this.callParent(arguments);
-	}
+        Ext.apply(this, {
+                proxy: this.apiProperties.getProxy(''),
+                pageSize: this.apiProperties.getInfinitePagingSize(),
+                autoLoad: false,
+                autoSync: false
+            }
+        );
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('personGoal')});
+        return this.callParent(arguments);
+    }   
+	
 });

@@ -21,9 +21,9 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseDetailsViewControll
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	outcomesStore: 'earlyAlertOutcomesStore',
-    	outreachesStore: 'earlyAlertOutreachesStore',
-    	referralsStore: 'earlyAlertReferralsStore',
+    	outcomesStore: 'earlyAlertOutcomesAllUnpagedStore',
+    	outreachesStore: 'earlyAlertOutreachesAllUnpagedStore',
+    	referralsStore: 'earlyAlertReferralsAllUnpagedStore',
     	formUtils: 'formRendererUtils',
         model: 'currentEarlyAlertResponse',
         selectedOutreachesStore: 'earlyAlertResponseDetailsOutreachesStore',

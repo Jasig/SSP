@@ -18,6 +18,13 @@
  */
 package org.jasig.ssp.dao;
 
+import java.math.BigDecimal;
+import java.util.UUID;
+
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.PersonDemographics;
 import org.springframework.stereotype.Repository;
 
@@ -34,5 +41,13 @@ public class PersonDemographicsDao extends
 	 */
 	public PersonDemographicsDao() {
 		super(PersonDemographics.class);
+	}
+	
+	public BigDecimal getBalanceOwed(UUID personId){
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(" select pd.balanceOwed from PersonDemographics as pd, Person as p where p.id = :personId and pd.id = p.demographics.id");
+		Query query = createHqlQuery(stringBuilder.toString());
+		query.setParameter("personId", personId);
+		return (BigDecimal)query.uniqueResult();
 	}
 }

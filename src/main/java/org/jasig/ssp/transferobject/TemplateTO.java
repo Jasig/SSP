@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateCourse;
@@ -119,6 +120,7 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 	}
 
 	@Override
+	@JsonIgnore
 	public List<TemplateCourseTO> getCourses() {
 		return templateCourses;
 	}

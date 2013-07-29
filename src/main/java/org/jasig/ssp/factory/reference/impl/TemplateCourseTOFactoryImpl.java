@@ -21,7 +21,6 @@ package org.jasig.ssp.factory.reference.impl;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.reference.TemplateCourseTOFactory;
-import org.jasig.ssp.model.PlanCourse;
 import org.jasig.ssp.model.TemplateCourse;
 import org.jasig.ssp.model.reference.Elective;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -77,6 +76,11 @@ public class TemplateCourseTOFactoryImpl extends AbstractAuditableTOFactory<Temp
 			Elective elective = electiveService.get(tObject.getElectiveId());
 			model.setElective(elective);
 		}
+		
+		model.setIsValidInTerm(tObject.getIsValidInTerm());
+		model.setHasPrerequisites(tObject.getHasPrerequisites());
+		model.setHasCorequisites(tObject.getHasCorequisites());
+		model.setInvalidReasons(tObject.getInvalidReasons());
 		return model;
 	}
 
@@ -92,8 +96,5 @@ public class TemplateCourseTOFactoryImpl extends AbstractAuditableTOFactory<Temp
 	public void setElectiveService(ElectiveService electiveService) {
 		this.electiveService = electiveService;
 	}
-
-		
-		
 
 }

@@ -31,6 +31,7 @@ Ext.define('Ssp.view.tools.profile.ReferralSources', {
 				{
 			        hideHeaders: true,
 			        autoScroll: true,
+			        queryMode: 'local',
 		            store: me.store,
     		        columns: [
     		                { header: 'Source',  

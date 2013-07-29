@@ -21,6 +21,10 @@ Ext.define('Ssp.store.reference.StudentTypes', {
     model: 'Ssp.model.reference.StudentType',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('studentType')});
+    	Ext.apply(this.getProxy(),{
+    		url: this.getProxy().url + this.apiProperties.getItemUrl('studentType'),
+    		extraParams: this.extraParams
+    		
+    	});
     }
 });

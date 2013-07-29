@@ -1,0 +1,101 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<property name="schema" value="${database.schema}" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet id="Remove Not Null sap_status external_student_fa" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip reset of external_person view">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.fa.not.null.drop.y" value="true"/>
+		</preConditions>	
+		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="sap_status" columnDataType="char(1)"/>
+		<rollback>
+		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="sap_status" columnDataType="char(1)"/>
+		</rollback>
+	</changeSet>
+	<changeSet id="Remove Not Null fafsa_date external_student_fa" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip reset of external_person view">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.fa.not.null.drop.y" value="true"/>
+		</preConditions>	
+		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="fafsa_date" columnDataType="datetime"/>
+		<rollback>
+		<addNotNullConstraint tableName="external_student_financial_aid" columnName="fafsa_date" columnDataType="datetime"/>
+		</rollback>
+	</changeSet>	
+	<changeSet id="Remove Not Null financial_aid_remaining external_student_fa" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip reset of external_person view">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.fa.not.null.drop.y" value="true"/>
+		</preConditions>	
+		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="financial_aid_remaining" columnDataType="decimal(9,2)"/>
+		<rollback>
+			<addNotNullConstraint tableName="external_student_financial_aid" columnName="financial_aid_remaining" columnDataType="decimal(9,2)"/>
+		</rollback>
+	</changeSet>	
+	<changeSet id="Remove Not Null original_loan_amount external_student_fa" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip reset of external_person view">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.fa.not.null.drop.y" value="true"/>
+		</preConditions>	
+		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="original_loan_amount" columnDataType="decimal(9,2)"/>
+		<rollback>
+			<addNotNullConstraint tableName="external_student_financial_aid" columnName="original_loan_amount" columnDataType="decimal(9,2)"/>
+		</rollback>
+	</changeSet>
+	<changeSet id="Remove Not Null remaining_loan_amount external_student_fa" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip reset of external_person view">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.fa.not.null.drop.y" value="true"/>
+		</preConditions>	
+		<dropNotNullConstraint tableName="external_student_financial_aid" columnName="remaining_loan_amount" columnDataType="decimal(9,2)"/>
+		<rollback>
+			<addNotNullConstraint tableName="external_student_financial_aid" columnName="remaining_loan_amount" columnDataType="decimal(9,2)"/>
+		</rollback>
+	</changeSet>		
+
+</databaseChangeLog>

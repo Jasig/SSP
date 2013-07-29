@@ -21,7 +21,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
     alias: 'widget.coursenotes',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
 	inject: {
-		electiveStore : 'electiveActiveStore',
+		electiveStore : 'electivesAllUnpagedStore',
 	    formUtils: 'formRendererUtils',
     	currentMapPlan: 'currentMapPlan'
 	},
@@ -119,9 +119,11 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                         mode: 'local',
                         typeAhead: true,
                         allowBlank: true,
+                        queryMode: 'local',
                         width: 250,
-				        disabled: !me.enableFields && !me.currentMapPlan.get('isTemplate')
-                    },
+				        disabled: !me.enableFields && !me.currentMapPlan.get('isTemplate'),
+				        associativeField: 'id'
+                    }
 				    ]
 				    ,
 				    dockedItems: [{

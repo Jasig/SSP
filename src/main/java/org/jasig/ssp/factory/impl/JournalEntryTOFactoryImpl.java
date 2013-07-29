@@ -86,6 +86,10 @@ public class JournalEntryTOFactoryImpl // NOPMD
 			model.setJournalTrack(journalTrackService.get(tObject
 					.getJournalTrack().getId()));
 		}
+		else
+		{
+			model.setJournalTrack(null);
+		}
 
 		if ((tObject.getConfidentialityLevel() == null)
 				|| (tObject.getConfidentialityLevel().getId() == null)) {

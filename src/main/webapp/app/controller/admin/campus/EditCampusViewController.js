@@ -24,7 +24,8 @@ Ext.define('Ssp.controller.admin.campus.EditCampusViewController', {
     	campusService: 'campusService',
     	formUtils: 'formRendererUtils',
     	model: 'currentCampus',
-    	store: 'campusesStore'
+    	store: 'campusesStore',
+		personService: 'personService'
     },
     config: {
     	containerToLoadInto: 'adminforms',
@@ -41,10 +42,74 @@ Ext.define('Ssp.controller.admin.campus.EditCampusViewController', {
 		}   	
     },
 	init: function() {
-		this.getView().getForm().reset();
-		this.getView().getForm().loadRecord( this.model );
-		return this.callParent(arguments);
-    },
+		var me = this;
+		me.getView().getForm().reset();
+		me.missingEaCoord = null;
+		me.eaCoordStore = me.getView().store;
+		if ( me.model.get('id') ) {
+			// Must be edit mode. Make best effort at trying to find the
+			// associated coach and inject it into the view. Currently
+			// associated coach might not be in the store already, e.g. if she
+			// were "demoted" in the directory system we query to get all
+			// coaches
+			var eaCoordId = me.model.get('earlyAlertCoordinatorId');
+			if ( !(me.eaCoordStore.getById(eaCoordId)) ) {
+				me.lookupMissingEaCoordinator(eaCoordId, me.afterMissingEaCoordinatorLookup, me);
+			} else {
+				me.showForm();
+			}
+		} else {
+			me.showForm();
+		}
+		return me.callParent(arguments);
+	},
+	destroy: function() {
+		var me = this;
+		me.maybeClearMissingEaCoordinator();
+		return me.callParent(arguments);
+	},
+	lookupMissingEaCoordinator: function(eaCoordId, after, afterScope) {
+		var me = this;
+		me.missingEaCoord = Ext.create('Ssp.model.Coach', {
+			id: eaCoordId,
+			firstName: "UNKNOWN",
+			lastName: "PERSON"
+		});
+		me.personService.getLite(eaCoordId, {
+			success: function(person) {
+				if (person) {
+					me.missingEaCoord = Ext.create('Ssp.model.Coach', {
+						id: person.id,
+						firstName: person.firstName,
+						lastName: person.lastName
+					});
+				}
+				after.apply(afterScope);
+			},
+			failure: function() {
+				// likely we can just proceed
+				after.apply(afterScope);
+			}
+		});
+	},
+	afterMissingEaCoordinatorLookup: function() {
+		var me = this;
+		me.eaCoordStore.add(me.missingEaCoord);
+		me.eaCoordStore.sort('lastName', 'ASC');
+		me.showForm();
+	},
+	maybeClearMissingEaCoordinator: function() {
+		var me = this;
+		if ( me.missingEaCoord && me.eaCoordStore) {
+			me.eaCoordStore.remove(me.missingEaCoord);
+			me.eaCoordStore.sort('lastName', 'ASC');
+			me.missingEaCoord = null;
+		}
+	},
+	showForm: function() {
+		var me = this;
+		me.getView().getForm().loadRecord( this.model );
+	},
 	onSaveClick: function(button) {
 		var me = this; 
 		me.getView().getForm().updateRecord();
@@ -57,17 +122,20 @@ Ext.define('Ssp.controller.admin.campus.EditCampusViewController', {
 	},
 	
 	onCancelClick: function(button){
+		var me = this;
+		me.maybeClearMissingEaCoordinator();
 		this.displayMain();
 	},
 
     saveSuccess: function( r, scope ){
 		var me=scope;
+		me.maybeClearMissingEaCoordinator();
 		me.getView().setLoading( false );
 		me.displayMain();
     },
     
     saveFailure: function( response, scope ){
-    	var me=scope;  	
+    	var me=scope;
     	me.getView().setLoading( false );
     },	
 	

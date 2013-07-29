@@ -25,10 +25,12 @@ import javax.validation.constraints.NotNull;
 import org.jasig.ssp.dao.reference.JournalStepDetailDao;
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.factory.reference.JournalStepDetailTOFactory;
+import org.jasig.ssp.factory.reference.JournalStepJournalStepDetailTOFactory;
 import org.jasig.ssp.factory.reference.JournalStepTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.JournalStep;
 import org.jasig.ssp.model.reference.JournalStepDetail;
+import org.jasig.ssp.model.reference.JournalStepJournalStepDetail;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.JournalStepDetailService;
@@ -36,6 +38,7 @@ import org.jasig.ssp.service.reference.JournalStepService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.JournalStepDetailTO;
+import org.jasig.ssp.transferobject.reference.JournalStepJournalStepDetailTO;
 import org.jasig.ssp.transferobject.reference.JournalStepTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -77,6 +80,9 @@ public class JournalStepController
 	@Autowired
 	protected transient JournalStepDetailTOFactory journalStepDetailTOFactory;
 
+	@Autowired
+	protected transient JournalStepJournalStepDetailTOFactory journalStepJournalStepDetailTOFactory;
+
 	@Override
 	protected TOFactory<JournalStepTO, JournalStep> getFactory() {
 		return factory;
@@ -92,6 +98,28 @@ public class JournalStepController
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
+	}
+
+	@RequestMapping(value = "/{journalStepId}/journalStepJournalStepDetail", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
+	public @ResponseBody
+	PagedResponse<JournalStepJournalStepDetailTO> getAllJournalDetailAssociationsForJournalStep(
+			final @PathVariable UUID journalStepId,
+			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) Integer start,
+			final @RequestParam(required = false) Integer limit,
+			final @RequestParam(required = false) String sort,
+			final @RequestParam(required = false) String sortDirection)
+			throws ObjectNotFoundException {
+
+		final PagingWrapper<JournalStepJournalStepDetail> data =
+				getService().getJournalStepDetailAssociationsForJournalStep(journalStepId,
+				SortingAndPaging.createForSingleSortWithPaging(status, start,
+						limit, sort, sortDirection, null));
+
+		return new PagedResponse<JournalStepJournalStepDetailTO>(true,
+				data.getResults(), journalStepJournalStepDetailTOFactory
+					.asTOList(data.getRows()));
 	}
 
 	@RequestMapping(value = "/{journalStepId}/journalStepDetail", method = RequestMethod.GET)

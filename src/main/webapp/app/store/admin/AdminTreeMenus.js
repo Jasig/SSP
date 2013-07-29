@@ -20,7 +20,11 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
     extend: 'Ext.data.TreeStore',
     mixins: ['Deft.mixin.Injectable'],
     inject: {
-        columnRendererUtils: 'columnRendererUtils'
+        columnRendererUtils: 'columnRendererUtils',
+        colorsStore: 'colorsStore',
+        colorsUnpagedStore: 'colorsUnpagedStore',
+        colorsAllStore: 'colorsAllStore',
+        colorsAllUnpagedStore: 'colorsAllUnpagedStore'
     },
     autoLoad: false,
     constructor: function(){
@@ -159,9 +163,24 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     text: 'Student Types',
                     title: 'Student Types',
                     store: 'studentTypes',
-                    form: 'AbstractReferenceAdmin',
+                    interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    },                    
+					form: 'AbstractReferenceAdmin',
                     leaf: true,
                     columns: [{
+					    header: 'Active',
+                        required: true,
+                        dataIndex: 'active',
+                        defaultValue: true,
+                        flex: .2,
+                        renderer: me.columnRendererUtils.renderActive,
+                        field: {
+                            xtype: 'checkbox',
+                            fieldStyle: "margin-bottom:12px;"
+                        }
+					},{					
                         header: 'Name',
                         dataIndex: 'name',
                         required: true,
@@ -186,7 +205,15 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         field: {
                             xtype: 'checkbox'
                         }
-                    }]
+                    }, {
+						header: 'Student Type Code',
+						required: true,
+						dataIndex: 'code',
+						field: {
+							xtype: 'textfield'
+						},
+						flex: .25						
+					}]
                 }, {
                     text: 'Re-Assignment',
                     title: 'Re-Assignment',
@@ -454,7 +481,29 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'messageTemplates',
                     form: 'messagetemplatesadmin',
                     leaf: true
-                }]
+                },
+				{
+					text: 'Enrollment Status Reference Items',
+                    title: 'Enrollment Status Reference Items',
+                    //store: 'messageTemplates',
+                    form: 'enrollmentstatusadmin',
+                    leaf: true
+				},
+				{
+					text: 'Registration Load Reference Items',
+                    title: 'Registration Load Reference Items',
+                    //store: 'messageTemplates',
+                    form: 'registrationloadadmin',
+                    leaf: true
+				},
+				{
+					text: 'CourseWork Hours Reference Items',
+                    title: 'CourseWork Hours Reference Items',
+                    //store: 'messageTemplates',
+                    form: 'courseworkhoursadmin',
+                    leaf: true
+				}
+				]
             }, {
                 text: 'MAP',
                 title: 'MAP',
@@ -463,15 +512,20 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 children: [{
                     text: 'Electives',
                     title: 'Electives',
-                    store: 'elective',
+                    store: 'electivesAll',
+                    sort: {
+                    	field: 'sortOrder',
+                    	direction: 'ASC' //or 'DESC'
+                    },
                     viewConfig: {
                         markDirty: false
                     },
                     interfaceOptions: {
                         addButtonVisible: true,
                         deleteButtonVisible: false,
-                        dragAndDropReorder: true
-                    },
+                        dragAndDropReorder: true,
+                        headerInstructions: "Double-click to edit and drag to re-order items."
+                    },                    
                     form: 'AbstractReferenceAdmin',
                     leaf: true,
                     columns: [{
@@ -530,18 +584,23 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         required: true,                        
                         field: {
                             xtype: 'combo',
-                            store: Ext.StoreMgr.lookup("colorsStore"),
+                            store: me.colorsAllUnpagedStore,
                             displayField: 'name',
                             valueField: 'id',
-                            forceSelection: true 
+                            forceSelection: true,
+                            associativeField: 'color'
                         },
                         flex: .2
                     }]
                 }, {
                     text: 'Colors',
                     title: 'Color Management',
-                    store: 'colors',
-                    form: 'AbstractReferenceAdmin',
+                    store: 'colorsAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                    
+                    },       
+					form: 'AbstractReferenceAdmin',
                     leaf: true,
                     columns: [{
                         header: 'Active',

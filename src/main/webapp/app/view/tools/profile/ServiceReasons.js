@@ -31,7 +31,7 @@ Ext.define('Ssp.view.tools.profile.ServiceReasons', {
             title: 'Service Reasons',
             hideHeaders: true,
             autoScroll: true,
-            
+            queryMode: 'local',
             store: me.store,
             tools: [{
                 xtype: 'button',

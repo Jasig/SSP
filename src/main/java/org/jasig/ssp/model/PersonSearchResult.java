@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.model;
 
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
@@ -82,8 +83,7 @@ public class PersonSearchResult {
 		lastName = person.getLastName();
 		photoUrl = person.getPhotoUrl();
 
-		final PersonProgramStatus pps = personProgramStatusService
-				.getCurrent(id);
+		final PersonProgramStatus pps = getCurrentProgramStatus(person);
 		if (pps != null) {
 			currentProgramStatusName = pps.getProgramStatus().getName();
 		}
@@ -91,6 +91,19 @@ public class PersonSearchResult {
 		if (person.getCoach() != null) {
 			coach = new CoachPersonLiteTO(person.getCoach());
 		}
+	}
+
+	private PersonProgramStatus getCurrentProgramStatus(Person person) {
+		Set<PersonProgramStatus> programStatuses = person.getProgramStatuses();
+		PersonProgramStatus current = null;
+		for (PersonProgramStatus personProgramStatus : programStatuses) 
+		{
+			if(personProgramStatus.getExpirationDate() == null)
+			{
+				current = personProgramStatus;
+			}
+		}
+		return current;
 	}
 
 	public UUID getId() {

@@ -22,19 +22,19 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     inject: {
         appEventsController: 'appEventsController',
         confidentialityLevelsStore: 'confidentialityLevelsStore',
-        campusesStore: 'campusesStore',
+        campusesStore: 'campusesAllUnpagedStore',
         earlyAlertsStore: 'earlyAlertsStore',
         earlyAlertService: 'earlyAlertService',
         earlyAlertResponseService: 'earlyAlertResponseService',
         earlyAlert: 'currentEarlyAlert',
         earlyAlertResponse: 'currentEarlyAlertResponse',
         formUtils: 'formRendererUtils',
-        outcomesStore: 'earlyAlertOutcomesStore',
-        outreachesStore: 'earlyAlertOutreachesStore',
-        reasonsStore: 'earlyAlertReasonsStore',
+        outcomesStore: 'earlyAlertOutcomesAllUnpagedStore',
+        outreachesStore: 'earlyAlertOutreachesAllUnpagedStore',
+        reasonsStore: 'earlyAlertReasonsAllUnpagedStore',
         personLite: 'personLite',
-        referralsStore: 'earlyAlertReferralsStore',
-        suggestionsStore: 'earlyAlertSuggestionsStore',
+        referralsStore: 'earlyAlertReferralsAllUnpagedStore',
+        suggestionsStore: 'earlyAlertSuggestionsAllUnpagedStore',
         treeStore: 'earlyAlertsTreeStore'
     },
     config: {
@@ -57,31 +57,31 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     onViewReady: function(comp, obj){
         var me=this;
         me.campusesStore.load({
-            params:{limit:50}
+            params:{status: "ALL", limit: "-1"}
         });
         
         me.confidentialityLevelsStore.load({
-            params:{limit:50}
+            params:{status: "ALL", limit: "-1"}
         });
         
         me.outcomesStore.load({
-            params:{limit:50}
+            params:{status: "ALL", limit: "-1"}
         });
         
         me.outreachesStore.load({
-            params:{limit:50}
+            params:{status: "ALL", limit: "-1"}
         });
         
         me.reasonsStore.load({
-            params:{limit:50}
+            params:{status: "ALL", limit: "-1"}
         });
         
         me.suggestionsStore.load({
-            params:{limit:50}
+            params:{status: "ALL", limit: "-1"}
         });
         
         me.referralsStore.load({
-            params:{limit:50},
+            params:{status: "ALL", limit: "-1"},
             callback: function(r,options,success) {
                  if(success == true) {
                          me.getEarlyAlerts(); 
@@ -145,7 +145,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
                 return earlyAlertId === n.data.id;
             }, me, true);
 		me.treeStore.suspendEvents();
-		originalChild.set('noOfResponses',count);
+		if (originalChild != null) {originalChild.set('noOfResponses',count);}
         me.treeStore.resumeEvents();
 		
 	},

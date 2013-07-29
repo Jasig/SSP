@@ -240,6 +240,8 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 			me.store.filterBy(me.typeStatusFilter, me);
 	},
 	
+	
+	
 	typeStatusFilter: function(record){
 		var me = this;
 		if(me.values.objectStatus != null && me.values.objectStatus != undefined && me.values.objectStatus != 'ALL')
@@ -254,9 +256,39 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 			if(record.get("isPrivate") == false && me.values.typeValue == "PRIVATE")
 				return false;
 		}
-		return true;
+		return me.filterForPublicTemplates(record);
+	},
+	
+	filterForPublicTemplates: function(record){
+		var me = this;
+		var typeValue = me.getTypeFilter().getValue();
+		var filterValue = true;
+		if(typeValue == 'PUBLIC' && (me.getProgram().getValue() == null || me.getProgram().getValue() < 1))
+		{
+			filterValue = me.hasNoProgram(record);
+			if(filterValue == false)
+				return filterValue;
+		}
+		if(typeValue == 'PUBLIC' && (me.getDepartment().getValue() == null || me.getDepartment().getValue() < 1))
+		{
+			filterValue = me.hasNoDepartment(record);
+			if(filterValue == false)
+				return filterValue;
+		}
+		return filterValue;
 	},
     
+	hasNoProgram: function(record){
+		if(record.get("noProgramCode") == null || record.get("noProgramCode") < 1)
+			return true;
+		return false;
+	},
+	
+	hasNoDepartment: function(record){
+		if(record.get("departmentCode") == null || record.get("departmentCode") < 1)
+			return true;
+		return false;
+	},
 	
 	destroy:function(){
 	    var me=this;

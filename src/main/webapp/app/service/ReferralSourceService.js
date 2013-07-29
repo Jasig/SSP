@@ -45,7 +45,7 @@ Ext.define('Ssp.service.ReferralSourceService', {
 	    };
 	    
 		me.apiProperties.makeRequest({
-			url: me.getBaseUrl(),
+			url: me.getBaseUrl() + "?status=ALL&limit=-1",
 			method: 'GET',
 			successFunc: success,
 			failureFunc: failure,

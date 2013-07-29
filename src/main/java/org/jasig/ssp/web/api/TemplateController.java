@@ -23,6 +23,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.TemplateLiteTOFactory;
 import org.jasig.ssp.factory.reference.TemplateTOFactory;
@@ -41,10 +42,12 @@ import org.jasig.ssp.service.TemplateService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.TemplateLiteTO;
 import org.jasig.ssp.transferobject.TemplateOutputTO;
 import org.jasig.ssp.transferobject.TemplateTO;
+import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -144,7 +147,7 @@ public class TemplateController  extends AbstractBaseController {
 	TemplateTO getTemplate(final @PathVariable UUID id) throws ObjectNotFoundException,
 			ValidationException {
 		Template model = getService().get(id);
-		return new TemplateTO(model);
+		return validatePlan(new TemplateTO(model));
 	}	
  
 	/**
@@ -159,6 +162,7 @@ public class TemplateController  extends AbstractBaseController {
 	 *             If that specified data is not invalid.
 	 */
 	@RequestMapping(value="/summary", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
 	public @ResponseBody
 	PagedResponse<TemplateLiteTO> getSummary(
 			final @RequestParam(required = false) Boolean isPrivate,
@@ -209,7 +213,7 @@ public class TemplateController  extends AbstractBaseController {
 		if (null != model) {
 			final Template createdModel = getFactory().from(obj);
 			if (null != createdModel) {
-				return new TemplateTO(model);
+				return validatePlan(new TemplateTO(model));
 			}
 		}
 		return null;
@@ -232,7 +236,7 @@ public class TemplateController  extends AbstractBaseController {
 	String print(final HttpServletResponse response,
 			 @RequestBody final TemplateOutputTO planOutputDataTO) throws ObjectNotFoundException {
 
-		SubjectAndBody message = getOutput(planOutputDataTO);
+		SubjectAndBody message = getService().createOutput(planOutputDataTO);
 		if(message != null)
 			return message.getBody();
 		
@@ -257,7 +261,7 @@ public class TemplateController  extends AbstractBaseController {
 	public @ResponseBody
 	String email(final HttpServletResponse response,
 			 @RequestBody final TemplateOutputTO planOutputDataTO) throws ObjectNotFoundException {
-		SubjectAndBody messageText = getOutput(planOutputDataTO);
+		SubjectAndBody messageText = getService().createOutput(planOutputDataTO);
 		if(messageText == null)
 			return null;
 
@@ -266,19 +270,6 @@ public class TemplateController  extends AbstractBaseController {
 							messageText);
 		
 		return "Map Plan has been queued.";
-	}
-	
-	private SubjectAndBody getOutput(TemplateOutputTO templateOutputDataTO) throws ObjectNotFoundException{
-		Config institutionName = configService.getByName("inst_name");
-		SubjectAndBody output = null;
-		
-		if(templateOutputDataTO.getOutputFormat().equals(TemplateService.OUTPUT_FORMAT_MATRIX)) {
-			output = service.createMatirxOutput(templateOutputDataTO.getNonOutputTO(), institutionName.getValue());
-		} else{
-			output = service.createFullOutput(templateOutputDataTO, institutionName.getValue());
-		}
-		
-		return output;
 	}
 
 	/**
@@ -320,7 +311,7 @@ public class TemplateController  extends AbstractBaseController {
 			final Template model = getFactory().from(obj);
 			Template savedTemplate = getService().save(model);
 			if (null != model) {
-				return new TemplateTO(savedTemplate);
+				return validatePlan(new TemplateTO(savedTemplate));
 			}
 		}
 		else
@@ -330,7 +321,7 @@ public class TemplateController  extends AbstractBaseController {
 			final Template clonedTemplate = getService().copyAndSave(model,securityService.currentlyAuthenticatedUser().getPerson());
 
 			if (null != clonedTemplate) {
-				return new TemplateTO(clonedTemplate);
+				return validatePlan(new TemplateTO(clonedTemplate));
 			}
 		}
 		return null;
@@ -353,6 +344,32 @@ public class TemplateController  extends AbstractBaseController {
 			throws ObjectNotFoundException {
 		getService().delete(id);
 		return new ServiceResponse(true);
+	}
+	
+	/**
+	 * Validate the plan instance.
+	 * 
+	 * @param id
+	 *            Explicit id to the instance to persist.
+	 * @param obj
+	 *            Full instance of plan object.
+	 * @return The validated data object instance.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_WRITE')")
+	@RequestMapping(value = "/validate", method = RequestMethod.POST)
+	public @ResponseBody
+	TemplateTO validatePlan(final HttpServletResponse response,
+			 @RequestBody final TemplateTO plan)
+			throws ObjectNotFoundException {
+
+		TemplateTO validatedTO = getService().validate(plan);
+		return validatedTO;
+	}
+	
+	private TemplateTO validatePlan(TemplateTO plan) throws ObjectNotFoundException{
+		return getService().validate(plan);
 	}
 
 	public TemplateService getService() {

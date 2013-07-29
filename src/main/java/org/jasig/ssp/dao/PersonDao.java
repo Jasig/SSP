@@ -131,6 +131,13 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		criteria.add(Restrictions.in("id", personIds));
 		return criteria.list();
 	}
+	
+	public String getSchoolIdForPersonId(UUID personId){
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("id", personId));
+		criteria.setProjection(Projections.property("schoolId"));
+		return (String)criteria.uniqueResult();
+	}
 
 	/**
 	 * Retrieves the specified Person by their school_id.
@@ -615,13 +622,14 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		criteria.createAlias("personProgramStatuses.programStatus", "programStatus", JoinType.LEFT_OUTER_JOIN);
 		
 		projections.add(Projections.groupProperty("programStatus.name").as("programStatusName"));
-		projections.add(Projections.groupProperty("personProgramStatuses.id").as("programStatusId"));
+		projections.add(Projections.groupProperty("programStatus.id").as("programStatusId"));
 		projections.add(Projections.groupProperty("personProgramStatuses.expirationDate").as("programStatusExpirationDate"));
 	
 		// Join to Student Type
 		criteria.createAlias("studentType", "studentType", JoinType.LEFT_OUTER_JOIN);
 		// add StudentTypeName Column
 		projections.add(Projections.groupProperty("studentType.name").as("studentType"));
+		projections.add(Projections.groupProperty("studentType.code").as("studentTypeAsCode"));
 
 		criteria.createAlias("coach", "c");
 		Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();

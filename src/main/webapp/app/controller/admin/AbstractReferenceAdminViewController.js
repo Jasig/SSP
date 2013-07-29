@@ -21,7 +21,8 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	authenticatedPerson: 'authenticatedPerson'
+    	authenticatedPerson: 'authenticatedPerson', 
+    	formRendererUtils: 'formRendererUtils'
     },  
     control: {
 		view: {
@@ -59,6 +60,21 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		{
 			me.authenticatedPerson.showUnauthorizedAccessAlert();
 		}
+
+		//Associative Object handling
+		var rowEditor = editor.editor;
+		var rowFields = rowEditor.items.items;			
+		
+		Ext.each(rowFields, function(item) {
+			if(item.store != undefined && item.store != null) {
+				item.store.clearFilter(true);
+			}
+			
+			if(item.associativeField != undefined) {	
+				me.formRendererUtils.applyAssociativeStoreFilter(item.store, e.record.get(item.associativeField));
+			}
+		});
+		
     	return access;
     },
     
@@ -67,7 +83,13 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		var id = record.get('id');
 		var jsonData = record.data;
 		var store = editor.grid.getStore();
-		persistMethod= record.data.createdDate != null ? 'PUT' : 'POST';
+		var persistMethod= record.data.createdDate != null ? 'PUT' : 'POST';
+		
+		Ext.each(editor.editor.items.items, function(item) {
+			if(item.store != undefined && item.store != null) {
+				item.store.clearFilter(true);
+			}			
+		});
 
 		Ext.Ajax.request({
 			url: editor.grid.getStore().getProxy().url+"/"+id,

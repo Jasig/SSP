@@ -53,6 +53,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -114,7 +115,7 @@ public class PlanControllerIntegrationTest {
 				controller);
 
 		controller.create(createPlan());
-		PagedResponse<PlanTO> result = controller.get(PERSON_ID, ObjectStatus.ACTIVE, null, null);
+		PagedResponse<PlanTO> result = controller.get(PERSON_ID, ObjectStatus.ACTIVE, null, null, new MockHttpServletRequest());
 
 		assertNotNull(
 				"Returned PersonTO from the controller should not have been null.",
@@ -138,7 +139,7 @@ public class PlanControllerIntegrationTest {
 				controller);
 
 		controller.create(createPlan());
-		PagedResponse<PlanLiteTO> result = controller.getSummary(PERSON_ID, ObjectStatus.ACTIVE, null, null);
+		PagedResponse<PlanLiteTO> result = controller.getSummary(PERSON_ID, ObjectStatus.ACTIVE, null, null, new MockHttpServletRequest());
 
 		assertNotNull(
 				"Returned PersonTO from the controller should not have been null.",

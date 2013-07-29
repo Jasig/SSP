@@ -22,12 +22,18 @@ Ext.define('Ssp.store.Tasks', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties'
-    },    
+    },   
 	constructor: function(){
-		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('personTaskGroup') ),
-						  autoLoad: false });
-		return this.callParent(arguments);
-	},
+        Ext.apply(this, {
+                proxy: this.apiProperties.getProxy(''),
+                pageSize: this.apiProperties.getInfinitePagingSize(),
+                autoLoad: false,
+                autoSync: false
+            }
+        );
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('personTaskGroup')});
+        return this.callParent(arguments);
+    },
 	
 	groupField: 'group'
 });

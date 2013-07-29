@@ -50,6 +50,7 @@ import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.model.tool.PersonTool;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 /**
@@ -570,6 +571,11 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "coach_id", nullable = true)
 	private Person coach;
+	
+	@Nullable
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="person")
+	@Cascade({ CascadeType.LOCK })
+	private List<Plan> plans;
 
 	@Nullable
 	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
@@ -657,6 +663,7 @@ public final class Person extends AbstractAuditable implements Auditable { // NO
 		referralSources = Sets.newHashSet();
 		programStatuses = Sets.newHashSet();
 		earlyAlerts = Sets.newHashSet();
+		plans = Lists.newArrayList();
 	}
 
 	/**

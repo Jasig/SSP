@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.web.api.tool; // NOPMD by jon.adams
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ import javax.validation.Valid;
 
 import org.jasig.ssp.factory.tool.IntakeFormTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.reference.AbstractReference;
 import org.jasig.ssp.model.reference.EmploymentShifts;
 import org.jasig.ssp.model.reference.Genders;
 import org.jasig.ssp.model.reference.States;
@@ -46,7 +48,12 @@ import org.jasig.ssp.service.reference.VeteranStatusService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.tool.IntakeService;
+import org.jasig.ssp.transferobject.AbstractAuditableTO;
+import org.jasig.ssp.transferobject.PersonChallengeTO;
+import org.jasig.ssp.transferobject.PersonEducationLevelTO;
+import org.jasig.ssp.transferobject.PersonFundingSourceTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.reference.AbstractReferenceTO;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.transferobject.reference.ChildCareArrangementTO;
 import org.jasig.ssp.transferobject.reference.CitizenshipTO;
@@ -72,6 +79,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.common.collect.Lists;
 
 /**
  * Student Intake tool services
@@ -172,7 +181,7 @@ public class IntakeController extends AbstractBaseController {
 			throws ObjectNotFoundException {
 		final IntakeFormTO formTO = new IntakeFormTO(
 				service.loadForPerson(studentId));
-		formTO.setReferenceData(referenceData());
+		formTO.setReferenceData(referenceData(formTO));
 		return formTO;
 	}
 
@@ -182,38 +191,23 @@ public class IntakeController extends AbstractBaseController {
 	 * @return Service response with success value, in the JSON format.
 	 * @throws ObjectNotFoundException 
 	 */
-	public Map<String, Object> referenceData() throws ObjectNotFoundException {
+	public Map<String, Object> referenceData(IntakeFormTO formTO) throws ObjectNotFoundException {
 		final Map<String, Object> refData = new HashMap<String, Object>();
 
-		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
+		final SortingAndPaging sAndP = SortingAndPaging
+				.createForSingleSortWithPaging(ObjectStatus.ALL, 0, -1, null, null, null);
 
-		final List<ChallengeTO> challenges = ChallengeTO
-				.toTOList(challengeService.getAllForIntake(sAndP).getRows(),
-						true);
-
-		refData.put("challenges", challenges);
-
-		refData.put("childCareArrangements", ChildCareArrangementTO
-				.toTOList(childCareArrangementService.getAll(sAndP).getRows()));
-		refData.put("citizenships",
-				CitizenshipTO.toTOList(citizenshipService.getAll(sAndP)
-						.getRows()));
-		refData.put("educationGoals", EducationGoalTO
-				.toTOList(educationGoalService.getAll(sAndP).getRows()));
-		refData.put("educationLevels", EducationLevelTO
-				.toTOList(educationLevelService.getAll(sAndP).getRows()));
-		refData.put("ethnicities",
-				EthnicityTO.toTOList(ethnicityService.getAll(sAndP).getRows()));
-		refData.put("fundingSources", FundingSourceTO
-				.toTOList(fundingSourceService.getAll(sAndP).getRows()));
-		refData.put("maritalStatuses", MaritalStatusTO
-				.toTOList(maritalStatusService.getAll(sAndP).getRows()));
-		refData.put("militaryAffiliations", MilitaryAffiliationTO
-				.toTOList(militaryAffiliationService.getAll(sAndP).getRows()));
-		refData.put("studentStatuses", StudentStatusTO
-				.toTOList(studentStatusService.getAll(sAndP).getRows()));
-		refData.put("veteranStatuses", VeteranStatusTO
-				.toTOList(veteranStatusService.getAll(sAndP).getRows()));
+		refData.put("challenges", challengeReferenceDataFor(formTO, sAndP));
+		refData.put("childCareArrangements", childCareArrangementReferenceDataFor(formTO, sAndP));
+		refData.put("citizenships", citizenshipReferenceDataFor(formTO, sAndP));
+		refData.put("educationGoals", educationGoalReferenceDataFor(formTO, sAndP));
+		refData.put("educationLevels", educationLevelReferenceDataFor(formTO, sAndP));
+		refData.put("ethnicities", ethnicityReferenceDataFor(formTO, sAndP));
+		refData.put("fundingSources", fundingSourceReferenceDataFor(formTO, sAndP));
+		refData.put("maritalStatuses", maritalStatusArrangementReferenceDataFor(formTO, sAndP));
+		refData.put("militaryAffiliations", militaryAffiliationReferenceDataFor(formTO, sAndP));
+		refData.put("studentStatuses", studentStatusReferenceDataFor(formTO, sAndP));
+		refData.put("veteranStatuses", veteranStatusReferenceDataFor(formTO, sAndP));
 
 		refData.put("employmentShifts", EmploymentShifts.values());
 		refData.put("genders", Genders.values());
@@ -222,6 +216,203 @@ public class IntakeController extends AbstractBaseController {
 		refData.put("registrationLoadRanges", configService.getByName("registration_load_ranges").getValue());
 		refData.put("weeklyCourseWorkHourRanges", configService.getByName("weekly_course_work_hour_ranges").getValue());
 		return refData;
+	}
+
+	private List<ChallengeTO> challengeReferenceDataFor(IntakeFormTO formTO,
+														SortingAndPaging sAndP) {
+		return filterInactiveExceptFor(
+				associatedIds(formTO.getPersonChallenges(), PERSON_ASSOC_CHALLENGE_UUID_EXTRACTOR),
+				ChallengeTO.toTOList(challengeService.getAllForIntake(sAndP).getRows(), true));
+	}
+
+	private List<ChildCareArrangementTO> childCareArrangementReferenceDataFor(IntakeFormTO formTO, SortingAndPaging sAndP) {
+		final List<ChildCareArrangementTO> allTOs =
+				ChildCareArrangementTO.toTOList(childCareArrangementService.getAll(sAndP).getRows());
+
+		if ( formTO.getPersonDemographics() == null ||
+				formTO.getPersonDemographics().getChildCareArrangementId() == null ) {
+
+			return filterInactiveExceptFor(Lists.<UUID>newArrayListWithCapacity(0), allTOs);
+
+		}
+
+		return filterInactiveExceptFor(
+				Lists.newArrayList(formTO.getPersonDemographics().getChildCareArrangementId()),
+				allTOs);
+	}
+
+	private List<CitizenshipTO> citizenshipReferenceDataFor(IntakeFormTO formTO, SortingAndPaging sAndP) {
+		final List<CitizenshipTO> allTOs =
+				CitizenshipTO.toTOList(citizenshipService.getAll(sAndP).getRows());
+
+		if ( formTO.getPersonDemographics() == null ||
+				formTO.getPersonDemographics().getCitizenshipId() == null ) {
+
+			return filterInactiveExceptFor(Lists.<UUID>newArrayListWithCapacity(0), allTOs);
+
+		}
+
+		return filterInactiveExceptFor(
+				Lists.newArrayList(formTO.getPersonDemographics().getCitizenshipId()),
+				allTOs);
+	}
+
+	private List<EducationGoalTO> educationGoalReferenceDataFor(IntakeFormTO formTO, SortingAndPaging sAndP) {
+		final List<EducationGoalTO> allTOs =
+				EducationGoalTO.toTOList(educationGoalService.getAll(sAndP).getRows());
+
+		if ( formTO.getPersonEducationGoal() == null ) {
+			return filterInactiveExceptFor(Lists.<UUID>newArrayListWithCapacity(0), allTOs);
+		}
+
+		return filterInactiveExceptFor(
+				Lists.newArrayList(formTO.getPersonEducationGoal().getEducationGoalId()),
+				allTOs);
+	}
+
+	private List<EducationLevelTO> educationLevelReferenceDataFor(IntakeFormTO formTO, SortingAndPaging sAndP) {
+		return filterInactiveExceptFor(
+				associatedIds(formTO.getPersonEducationLevels(), PERSON_ASSOC_EDU_LEVEL_UUID_EXTRACTOR),
+				EducationLevelTO.toTOList(educationLevelService.getAll(sAndP).getRows()));
+	}
+
+	private List<EthnicityTO> ethnicityReferenceDataFor(IntakeFormTO formTO, SortingAndPaging sAndP) {
+		final List<EthnicityTO> allTOs =
+				EthnicityTO.toTOList(ethnicityService.getAll(sAndP).getRows());
+
+		if ( formTO.getPersonDemographics() == null ||
+				formTO.getPersonDemographics().getEthnicityId() == null ) {
+
+			return filterInactiveExceptFor(Lists.<UUID>newArrayListWithCapacity(0), allTOs);
+
+		}
+
+		return filterInactiveExceptFor(
+				Lists.newArrayList(formTO.getPersonDemographics().getEthnicityId()),
+				allTOs);
+	}
+
+	private List<FundingSourceTO> fundingSourceReferenceDataFor(IntakeFormTO formTO,
+														SortingAndPaging sAndP) {
+		return filterInactiveExceptFor(
+				associatedIds(formTO.getPersonFundingSources(), PERSON_ASSOC_FUNDING_SOURCE_UUID_EXTRACTOR),
+				FundingSourceTO.toTOList(fundingSourceService.getAll(sAndP).getRows()));
+	}
+
+	private List<MaritalStatusTO> maritalStatusArrangementReferenceDataFor(IntakeFormTO formTO, SortingAndPaging sAndP) {
+		final List<MaritalStatusTO> allTOs =
+				MaritalStatusTO.toTOList(maritalStatusService.getAll(sAndP).getRows());
+
+		if ( formTO.getPersonDemographics() == null ||
+				formTO.getPersonDemographics().getMaritalStatusId() == null ) {
+
+			return filterInactiveExceptFor(Lists.<UUID>newArrayListWithCapacity(0), allTOs);
+
+		}
+
+		return filterInactiveExceptFor(
+				Lists.newArrayList(formTO.getPersonDemographics().getMaritalStatusId()),
+				allTOs);
+	}
+
+	private List<MilitaryAffiliationTO> militaryAffiliationReferenceDataFor(IntakeFormTO formTO, SortingAndPaging sAndP) {
+		final List<MilitaryAffiliationTO> allTOs =
+				MilitaryAffiliationTO.toTOList(militaryAffiliationService.getAll(sAndP).getRows());
+
+		if ( formTO.getPersonDemographics() == null ||
+				formTO.getPersonDemographics().getMilitaryAffiliationId() == null ) {
+
+			return filterInactiveExceptFor(Lists.<UUID>newArrayListWithCapacity(0), allTOs);
+
+		}
+
+		return filterInactiveExceptFor(
+				Lists.newArrayList(formTO.getPersonDemographics().getMilitaryAffiliationId()),
+				allTOs);
+	}
+
+	private List<StudentStatusTO> studentStatusReferenceDataFor(IntakeFormTO formTO, SortingAndPaging sAndP) {
+		final List<StudentStatusTO> allTOs =
+				StudentStatusTO.toTOList(studentStatusService.getAll(sAndP).getRows());
+
+		if ( formTO.getPersonEducationPlan() == null ||
+				formTO.getPersonEducationPlan().getStudentStatusId() == null) {
+			return filterInactiveExceptFor(Lists.<UUID>newArrayListWithCapacity(0), allTOs);
+		}
+
+		return filterInactiveExceptFor(
+				Lists.newArrayList(formTO.getPersonEducationPlan().getStudentStatusId()),
+				allTOs);
+	}
+
+	private List<VeteranStatusTO> veteranStatusReferenceDataFor(IntakeFormTO formTO, SortingAndPaging sAndP) {
+		final List<VeteranStatusTO> allTOs =
+				VeteranStatusTO.toTOList(veteranStatusService.getAll(sAndP).getRows());
+
+		if ( formTO.getPersonDemographics() == null ||
+				formTO.getPersonDemographics().getVeteranStatusId() == null ) {
+
+			return filterInactiveExceptFor(Lists.<UUID>newArrayListWithCapacity(0), allTOs);
+
+		}
+
+		return filterInactiveExceptFor(
+				Lists.newArrayList(formTO.getPersonDemographics().getVeteranStatusId()),
+				allTOs);
+	}
+
+
+	private <T extends AbstractReferenceTO> List<T>
+	filterInactiveExceptFor(Collection<UUID> ids, List<T> toFilter) {
+		List<T> filtered = Lists.newArrayListWithCapacity(toFilter.size());
+		for ( T filterable : toFilter ) {
+			if ( filterable.getObjectStatus() == ObjectStatus.ACTIVE ||
+					ids.contains(filterable.getId())) {
+				filtered.add(filterable);
+			}
+		}
+		return filtered;
+	}
+
+	private static interface UUIDExtractor<T extends AbstractAuditableTO> {
+		UUID fromTO(T to);
+	}
+
+	private static final UUIDExtractor<PersonChallengeTO> PERSON_ASSOC_CHALLENGE_UUID_EXTRACTOR =
+			new UUIDExtractor<PersonChallengeTO>() {
+				@Override
+				public UUID fromTO(PersonChallengeTO to) {
+					return to.getChallengeId();
+				}
+			};
+
+	private static final UUIDExtractor<PersonEducationLevelTO> PERSON_ASSOC_EDU_LEVEL_UUID_EXTRACTOR =
+			new UUIDExtractor<PersonEducationLevelTO>() {
+				@Override
+				public UUID fromTO(PersonEducationLevelTO to) {
+					return to.getEducationLevelId();
+				}
+			};
+
+	private static final UUIDExtractor<PersonFundingSourceTO> PERSON_ASSOC_FUNDING_SOURCE_UUID_EXTRACTOR =
+			new UUIDExtractor<PersonFundingSourceTO>() {
+				@Override
+				public UUID fromTO(PersonFundingSourceTO to) {
+					return to.getFundingSourceId();
+				}
+			};
+
+	// no personassoc superclass for these Person*TOs, hence the callback
+	private <T extends AbstractAuditableTO> Collection<UUID>
+	associatedIds(List<T> tos, UUIDExtractor<T> uuidExtractor) {
+		List<UUID> uuids = Lists.newArrayList();
+		if ( tos == null ) {
+			return uuids;
+		}
+		for ( T to : tos ) {
+			uuids.add(uuidExtractor.fromTO(to));
+		}
+		return uuids;
 	}
 
 	@Override

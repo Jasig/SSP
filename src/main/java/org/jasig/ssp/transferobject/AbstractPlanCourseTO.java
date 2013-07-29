@@ -21,6 +21,8 @@ package org.jasig.ssp.transferobject;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import javax.persistence.Transient;
+
 import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.AbstractPlanCourse;
 
@@ -54,6 +56,16 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 	private Integer orderInTerm;
 	
 	private String planToOffer;
+	
+	private transient boolean isValidInTerm = true;
+	
+	private transient boolean duplicateOfTranscript = true;
+	
+	private transient boolean hasPrerequisites = true;
+	
+	private transient boolean hasCorequisites = true;
+	
+	private transient String invalidReasons = new String();
 
 	/**
 	 * Empty constructor.
@@ -78,6 +90,12 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 		this.setIsImportant(model.getIsImportant());
 		if(model.getElective() != null)
 			this.setElectiveId(model.getElective().getId());
+		
+		// validation transients 
+		this.setIsValidInTerm(model.getIsValidInTerm());
+		this.setHasPrerequisites(model.getHasPrerequisites());
+		this.setHasCorequisites(model.getHasCorequisites());
+		this.setInvalidReasons(model.getInvalidReasons());
 	}
 
 	public String getTermCode() {
@@ -227,6 +245,82 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 
 	public void setPlanToOffer(String planToOffer) {
 		this.planToOffer = planToOffer;
+	}
+
+	/**
+	 * @return the isValidInTerm
+	 */
+	public boolean getIsValidInTerm() {
+		return isValidInTerm;
+	}
+
+	/**
+	 * @param isValidInTerm the isValidInTerm to set
+	 */
+	public void setIsValidInTerm(boolean isValidInTerm) {
+		this.isValidInTerm = isValidInTerm;
+	}
+
+	
+	/**
+	 * @return the hasPrerequisites
+	 */
+	public boolean getHasPrerequisites() {
+		return hasPrerequisites;
+	}
+
+	/**
+	 * @param hasPrerequisites the hasPrerequisites to set
+	 */
+	public void setHasPrerequisites(boolean hasPrerequisites) {
+		this.hasPrerequisites = hasPrerequisites;
+	}
+
+
+	/**
+	 * @return the hasCorequisites
+	 */
+	public boolean getHasCorequisites() {
+		return hasCorequisites;
+	}
+
+	/**
+	 * @param hasCorequisites the hasCorequisites to set
+	 */
+	public void setHasCorequisites(boolean hasCorequisites) {
+		this.hasCorequisites = hasCorequisites;
+	}
+
+	/**
+	 * @return the invalidReasons
+	 */
+	public String getInvalidReasons() {
+		return invalidReasons;
+	}
+
+	/**
+	 * @param invalidReasons the invalidReasons to set
+	 */
+	public void setInvalidReasons(String invalidReasons) {
+		if(invalidReasons == null)
+			invalidReasons = new String();
+		else
+			this.invalidReasons = this.invalidReasons + " ";
+		this.invalidReasons = this.invalidReasons + invalidReasons;
+	}
+
+	/**
+	 * @return the duplicateOfTranscript
+	 */
+	public boolean getDuplicateOfTranscript() {
+		return duplicateOfTranscript;
+	}
+
+	/**
+	 * @param duplicateOfTranscript the duplicateOfTranscript to set
+	 */
+	public void setDuplicateOfTranscript(boolean duplicateOfTranscript) {
+		this.duplicateOfTranscript = duplicateOfTranscript;
 	}
 
 }

@@ -22,12 +22,12 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
     inject: {
     	apiProperties: 'apiProperties',
     	appEventsController: 'appEventsController',
-        confidentialityLevelsStore: 'confidentialityLevelsStore',
+        confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
     	formUtils: 'formRendererUtils',
     	service: 'journalEntryService',
         journalEntriesStore: 'journalEntriesUnpagedStore',
-        journalSourcesStore: 'journalSourcesUnpagedStore',
-    	journalTracksStore: 'journalTracksUnpagedStore',
+        journalSourcesStore: 'journalSourcesAllUnpagedStore',
+    	journalTracksStore: 'journalTracksAllUnpagedStore',
     	model: 'currentJournalEntry',
     	personLite: 'personLite'
     },
@@ -48,6 +48,10 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		
 		'deleteButton': {
 			click: 'onDeleteClick'
+		},
+		
+		'saveButton': {
+			click: 'onSaveClick'
 		}
 		
 	},
@@ -66,11 +70,18 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		});
 
     	// ensure loading of all confidentiality levels in the database
-    	me.confidentialityLevelsStore.load({
+    	/*me.confidentialityLevelsStore.load({
     		params:{limit:50}
-    	});
-    	
+    	});*/
+		
+		me.confidentialityLevelsStore.clearFilter(true);
+		
+		me.confidentialityLevelsStore.load();
+		
+		
+		
 		me.journalSourcesStore.load();
+		
 		me.journalTracksStore.load();
 		
 		return me.callParent(arguments);
@@ -147,6 +158,12 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
         }
     },
 	
+	onSaveClick: function(button) {
+		var me=this;
+		
+		me.appEventsController.getApplication().fireEvent('saveJournal');
+	},
+	
 	onJournalClick:function(){
 		var me=this;
 		var record = me.getView().getSelectionModel().getSelection()[0];
@@ -202,7 +219,7 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
  		var store = me.journalEntriesStore;
  		me.getView().setLoading( false );
  		store.remove( store.getById( id ) );
-		console.log(me.journalEntriesStore.data.length);
+		
 		if (me.journalEntriesStore.data.length) {
 			me.model.data = me.journalEntriesStore.getAt(0).data;
 			

@@ -26,8 +26,11 @@ Ext.define('Ssp.controller.AdminViewController', {
         challengesStore: 'challengesStore',
     	challengeReferralsStore: 'challengeReferralsStore',
     	childCareArrangementsStore: 'childCareArrangementsStore',
-    	citizenshipsStore: 'citizenshipsStore',
+    	citizenshipsStore: 'citizenshipsStore',    	
     	colorsStore: 'colorsStore',
+        colorsUnpagedStore: 'colorsUnpagedStore',
+        colorsAllStore: 'colorsAllStore',
+        colorsAllUnpagedStore: 'colorsAllUnpagedStore',
     	confidentialityLevelsStore: 'confidentialityLevelsStore',
     	disabilityAccommodationsStore: 'disabilityAccommodationsStore',
     	disabilityAgenciesStore: 'disabilityAgenciesStore',
@@ -40,7 +43,8 @@ Ext.define('Ssp.controller.AdminViewController', {
 		earlyAlertSuggestionsStore: 'earlyAlertSuggestionsStore',
     	educationGoalsStore: 'educationGoalsStore',
     	educationLevelsStore: 'educationLevelsStore',
-    	electiveStore: 'electiveStore',
+    	electiveStore: 'electivesStore',
+    	electivesAllStore: 'electivesAllStore',
     	employmentShiftsStore: 'employmentShiftsStore',
     	ethnicitiesStore: 'ethnicitiesStore',
     	formUtils: 'formRendererUtils',
@@ -59,7 +63,7 @@ Ext.define('Ssp.controller.AdminViewController', {
     	specialServiceGroupsStore: 'specialServiceGroupsStore',
         statesStore: 'statesStore',
         studentStatusesStore: 'studentStatusesStore',
-        studentTypesStore: 'studentTypesStore',
+        studentTypesStore: 'studentTypesAllUnpagedStore',
 		tagsStore: 'tagsStore',
     	veteranStatusesStore: 'veteranStatusesStore'
     },
@@ -96,7 +100,8 @@ Ext.define('Ssp.controller.AdminViewController', {
 				}
 				var options = {
 					interfaceOptions: record.raw.interfaceOptions,
-					viewConfig: record.raw.viewConfig
+					viewConfig: record.raw.viewConfig,
+					sort: record.raw.sort
 				}
 				this.loadAdmin( record.raw.title, record.raw.form, storeName, columns, options);
 			}
@@ -127,6 +132,10 @@ Ext.define('Ssp.controller.AdminViewController', {
 				}
 				
 				comp.getStore().load();
+				if(options.sort != null && options.sort != undefined) {
+					var sort = options.sort					
+					comp.getStore().sort(sort.field, (sort.direction != null && sort.direction != undefined) ? sort.direction : "ASC");
+				}
 			}
 		}
 		

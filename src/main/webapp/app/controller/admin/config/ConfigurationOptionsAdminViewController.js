@@ -23,7 +23,7 @@ Ext.define('Ssp.controller.admin.config.ConfigurationOptionsAdminViewController'
     	configurationOptionsStore: 'configurationOptionsStore'
     },
 	init: function() {
-		this.configurationOptionsStore.load();	
+		this.configurationOptionsStore.clearFilter();
 		return this.callParent(arguments);
     }
 });

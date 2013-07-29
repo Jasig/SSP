@@ -18,10 +18,14 @@
  */
 package org.jasig.ssp.service.reference;
 
+import java.util.UUID;
+
 import org.jasig.ssp.model.reference.JournalStep;
 import org.jasig.ssp.model.reference.JournalTrack;
 import org.jasig.ssp.model.reference.JournalTrackJournalStep;
 import org.jasig.ssp.service.ReferenceService;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 /**
  * JournalTrackService
@@ -36,4 +40,8 @@ public interface JournalTrackService extends
 	JournalTrackJournalStep removeJournalStepFromJournalTrack(
 			JournalStep journalStep,
 			JournalTrack journalTrack);
+
+	PagingWrapper<JournalTrackJournalStep> getJournalStepAssociationsForJournalTrack(
+			UUID journalTrackId,
+			SortingAndPaging aAndP);
 }
