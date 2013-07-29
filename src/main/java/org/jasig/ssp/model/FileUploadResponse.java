@@ -19,7 +19,7 @@
 package org.jasig.ssp.model;
  
  
-public class FileUploadRepsonse {
+public class FileUploadResponse {
  
     private boolean success;
     

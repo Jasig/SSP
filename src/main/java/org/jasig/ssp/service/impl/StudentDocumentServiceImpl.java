@@ -32,12 +32,11 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.StudentDocumentDao;
-import org.jasig.ssp.model.FileUploadRepsonse;
+import org.jasig.ssp.model.FileUploadResponse;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.StudentDocument;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
@@ -212,7 +211,7 @@ public class StudentDocumentServiceImpl extends AbstractAuditableCrudService<Stu
 
 	@Override
 	public void createStudentDoc(UUID personId, StudentDocumentTO uploadItem,
-			FileUploadRepsonse extjsFormResult) throws IOException,
+			FileUploadResponse extjsFormResult) throws IOException,
 			ObjectNotFoundException, ValidationException {
 		CommonsMultipartFile file = uploadItem.getFile();
 		

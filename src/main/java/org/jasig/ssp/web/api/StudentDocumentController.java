@@ -18,23 +18,16 @@
  */
 package org.jasig.ssp.web.api;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.apache.commons.io.IOUtils;
 import org.jasig.ssp.factory.reference.StudentDocumentTOFactory;
-import org.jasig.ssp.model.FileUploadRepsonse;
+import org.jasig.ssp.model.FileUploadResponse;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.StudentDocument;
-import org.jasig.ssp.security.permissions.Permission;
-import org.jasig.ssp.security.permissions.ServicePermissions;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
@@ -48,7 +41,6 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -58,7 +50,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 @Controller
 @RequestMapping("/1/person/{personId}/studentdocument")
@@ -105,7 +96,7 @@ public class StudentDocumentController  extends AbstractBaseController {
 	@PreAuthorize("hasRole('ROLE_PERSON_DOCUMENT_WRITE')")
     public @ResponseBody String create(@PathVariable UUID personId,StudentDocumentTO uploadItem, BindingResult result) throws IllegalStateException, IOException, ObjectNotFoundException, ValidationException{
 		
-		 FileUploadRepsonse extjsFormResult = new FileUploadRepsonse();
+		 FileUploadResponse extjsFormResult = new FileUploadResponse();
 	        if (result.hasErrors()){
 	            for(ObjectError error : result.getAllErrors()){
 	            	LOGGER.error("Error: " + error.getCode() +  " - " + error.getDefaultMessage());

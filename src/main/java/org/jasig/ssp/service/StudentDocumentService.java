@@ -24,7 +24,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.jasig.ssp.model.FileUploadRepsonse;
+import org.jasig.ssp.model.FileUploadResponse;
 import org.jasig.ssp.model.StudentDocument;
 import org.jasig.ssp.transferobject.StudentDocumentTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -45,7 +45,7 @@ public interface StudentDocumentService extends PersonAssocAuditableService<Stud
 
 
 	void createStudentDoc(UUID personId, StudentDocumentTO uploadItem,
-			FileUploadRepsonse extjsFormResult) throws IOException,
+			FileUploadResponse extjsFormResult) throws IOException,
 			ObjectNotFoundException, ValidationException;
 		 
 }
