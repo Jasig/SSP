@@ -58,13 +58,24 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
         
         return this.callParent(arguments);
     },
+	
+	clearTrack: function() {
+		this.treeUtils.clearRootCategories();
+	},
     
-    loadSteps: function(){
-    
+    loadSteps: function( journalTrack ) {
+		var journalTrackId = "";
+		
         // clear the categories
         this.treeUtils.clearRootCategories();
         
-        var journalTrackId = this.journalEntry.get('journalTrack').id;
+        if ( journalTrack ) {
+			journalTrackId = journalTrack;
+		} else {
+			if ( this.journalEntry.get('journalTrack') ) {
+				journalTrackId = this.journalEntry.get('journalTrack').id;
+			}
+		}
         
         // load the steps
         if (journalTrackId != null && journalTrackId != "") {

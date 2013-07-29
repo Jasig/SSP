@@ -43,10 +43,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     
     control: {
         entryDateField: {
-            selector: '#entryDateField',
-            listeners: {
-                select: 'onEntryDateSelect'
-            }
+            selector: '#entryDateField'           
         },
         
         removeJournalTrackButton: {
@@ -65,26 +62,19 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
         },
         
         confidentialityLevelCombo: {
-            selector: '#confidentialityLevelCombo',
-            listeners: {
-                select: 'onConfidentialityLevelComboSelect'
-            }
+            selector: '#confidentialityLevelCombo'          
         },
         
         journalSourceCombo: {
-            selector: '#journalSourceCombo',
-            listeners: {
-                select: 'onJournalSourceComboSelect'
-            }
+            selector: '#journalSourceCombo'           
         },
-        
-        
+             
         commentText: '#commentTxt',
         
         journalTrackTree: '#journalTrackTree'
     },
     
-    init: function(){
+    init: function() {
         var me = this;
         
         me.appEventsController.assignEvent({
@@ -92,35 +82,28 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
             callBackFunc: me.onSaveJournal,
             scope: me
         });
+		
+		me.appEventsController.assignEvent({
+			eventName: 'resetJournal',
+			callBackFunc: me.onResetJournal,
+			scope: me
+		});
 
-        return me.callParent(arguments);
-    },
-    
-    destroy: function(){
-        var me = this;
-        
-        me.appEventsController.removeEvent({
-            eventName: 'saveJournal',
-            callBackFunc: me.onSaveJournal,
-            scope: me
-        });
-        
         return me.callParent(arguments);
     },
 
     // Currently being called explicitly from the top-level tool controller
     // (JournalToolViewController) when a JournalEntry is selected
-    initForm: function(){
+    initForm: function() {
         var me = this;
         var id = me.model.get("id");
         var journalTrackId = "";
-        
+      
 		me.journalTracksStore.clearFilter(true);
 		me.journalSourcesStore.clearFilter(true);
-		me.confidentialityLevelsStore.clearFilter(true);
-		
+		me.confidentialityLevelsStore.clearFilter(true);		
         
-        if (me.model.get('journalTrack') != null) {
+        if ( me.model.get('journalTrack') != null ) {
             journalTrackId = me.model.get('journalTrack').id;
         }
         else {
@@ -142,7 +125,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
         me.formUtils.applyAssociativeStoreFilter(me.journalTracksStore,journalTrackId);
         me.getJournalTrackCombo().setValue(journalTrackId);
 
-        if (me.model.get('entryDate') == null) {
+        if ( me.model.get('entryDate') == null ) {
             me.getEntryDateField().setLoading(true);
             me.util.getCurrentServerDate({
                 success: function(date){
@@ -158,80 +141,96 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
                     me.getEntryDateField().setLoading(false);
                 },
                 scope: me
-            });
-            
+            });            
         }
-
         me.inited = true;
     },
     
-    destroy: function(){
-        var me = this;
-
+    destroy: function() {
+        var me = this;		
         me.journalTracksStore.clearFilter(true);
         me.journalSourcesStore.clearFilter(true);
         me.confidentialityLevelsStore.clearFilter(true);
+
+        me.appEventsController.removeEvent({
+            eventName: 'saveJournal',
+            callBackFunc: me.onSaveJournal,
+            scope: me
+        });
+
+        me.appEventsController.removeEvent({
+            eventName: 'resetJournal',
+            callBackFunc: me.onResetJournal,
+            scope: me
+        });
         
         return me.callParent(arguments);
     },
     
-    onSaveJournal: function(response){
-        var me = this;
-        
+    onSaveJournal: function(response) {
+        var me = this;        
         me.save();
     },
+	
+	onResetJournal: function() {
+		var me = this;	
+		me.removeJournalTrackAndSessionDetails();
+		me.initForm();
+	},
     
-    save: function(){
+    save: function() {
         var me = this;
-        var record, id, jsonData, url;
-        var form = this.getView().getForm();
-        var values = form.getValues();
-        //var handleSuccess = me.saveSuccess;
-        var error = false;
-        var journalTrackId = "";
-        url = this.url;
-        record = this.model;
-        var comment = Ext.ComponentQuery.query('#commentTxt')[0].getValue();
-        var jTT = Ext.ComponentQuery.query('#journalTrackTree')[0];
-        record.set('comment', comment);
-        id = record.get('id');
+        var record = me.model;
+		var id = record.get('id');		
+        var form = me.getView().getForm();  
+		var error = false; 
+		var jsonData;		
         
-        // for tree
-        if (record.data.journalTrack.id != null || record.data.journalTrack.id != "") {
-            jTT.getController().save();
-        }
-        
-        // ensure all required fields are supplied
-        if (!form.isValid()) {
+		//get data from form
+		var trackValue = form.findField('journalTrackId').getValue(); 
+		var confidentialityValue = form.findField('confidentialityLevelId').getValue();
+		var sourceValue = form.findField('journalSourceId').getValue();
+		var comment = Ext.ComponentQuery.query('#commentTxt')[0].getValue();
+        var jTT = Ext.ComponentQuery.query('#journalTrackTree')[0];	
+		               
+         // ensure all required fields are supplied
+        if ( (!form.isValid()) || (!confidentialityValue) || (!sourceValue) ) {
             error = true;
-            Ext.Msg.alert('Error', 'Please correct the errors in your Journal Entry.');
+            Ext.Msg.alert('Error', 'Please complete the required items in your Journal Entry.');
         }
         
         // ensure a comment or journal track are supplied
-        if (record.get('comment') == "" && (record.data.journalTrack.id == null || record.data.journalTrack.id == "")) {
+        if ( (!comment) && (!trackValue) ) {
             error = true;
             Ext.Msg.alert('Error', 'You are required to supply a Comment or Journal Track Details for a Journal Entry.');
         }
         
-        if (error == false) {
-            // if a journal track is selected then validate that the details are set
-            if (record.data.journalTrack != null) {
-                journalTrackId = record.data.journalTrack.id;
-            }
-            if ((journalTrackId != null && journalTrackId != "") && record.data.journalEntryDetails.length == 0) {
+        if ( error == false ) {				
+			//store confidentiality and source
+			record.set('confidentialityLevel', {id:confidentialityValue});
+			record.set('journalSource', {id:sourceValue});	
+			
+			//store comment in model	
+			record.set('comment', comment);			
+			
+			if ( trackValue ) {
+				//store journal track tree		
+				jTT.getController().save();		
+			}
+					
+            // if a journal track is selected then validate that the details are set         
+            if ( trackValue && (record.data.journalEntryDetails.length == 0) ) {
                 Ext.Msg.alert('SSP Error', 'You have a Journal Track set in your entry. Please select the associated details for this Journal Entry.');
             }
             else {
-            
+				//store journal track
+				record.set('journalTrack', {id:trackValue});
+							
                 // fix date from GMT to UTC
                 var origEntryDate = record.data.entryDate;
-                record.data.entryDate = me.formUtils.toJSONStringifiableDate(record.data.entryDate);
-                
-                //record.set('comment', me.getCommentText().getValue());
-                
-                jsonData = record.data;
-                
-                
+                record.data.entryDate = me.formUtils.toJSONStringifiableDate(record.data.entryDate);                
+                             
+                jsonData = record.data;                
                 
                 // null out journalTrack.id prop to prevent failure
                 // from an empty string on null field
@@ -250,117 +249,77 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
                 me.getView().setLoading(true);
                 
                 me.journalEntryService.save(me.personLite.get('id'), jsonData, {
-                    success: function(r, scope){
+                    success: function(r, scope) {
                         record.data.entryDate = origEntryDate;
                         scope.saveSuccess(r, scope);
                     },
-                    failure: function(r, scope){
+                    failure: function(r, scope) {
                         record.data.entryDate = origEntryDate;
                         me.saveFailure(r, scope);
                     },
                     scope: me
                 });
-            }
+            }			
         }
     },
     
-    saveSuccess: function(r, scope){
+    saveSuccess: function(r, scope) {
         var me = scope;
         me.displayMain();
     },
     
-    saveFailure: function(response, scope){
+    saveFailure: function(response, scope) {
         var me = scope;
         me.getView().setLoading(false);
+		me.initForm();
     },
-    
-    
-    
-    onEntryDateSelect: function(comp, newValue, eOpts){
+       
+    onJournalTrackComboSelect: function(comp, records, eOpts) {
         var me = this;
-        me.model.set('entryDate', newValue);
-    },
+		var journalTrack = me.getView().getForm().findField('journalTrackId').getValue();
     
-    onConfidentialityLevelComboSelect: function(comp, records, eOpts){
-        if (records.length > 0) {
-            this.model.set('confidentialityLevel', {
-                id: records[0].get('id')
-            });
-        }
-    },
-    
-    onJournalSourceComboSelect: function(comp, records, eOpts){
-        if (records.length > 0) {
-            this.model.set('journalSource', {
-                id: records[0].get('id')
-            });
-        }
-    },
-    
-    onJournalTrackComboSelect: function(comp, records, eOpts){
-        var me = this;
-        if (records.length > 0) {
-            me.model.set('journalTrack', {
-                "id": records[0].get('id')
-            });
-            
+		if ( records.length > 0 ) {               
             // the inited property prevents the
             // Journal Entry Details from clearing
             // when the ViewController loads, so the details only 
             // clear when a new journal track is selected
             // because the init for the view sets the combo
-            if (me.inited == true) {
-                me.model.removeAllJournalEntryDetails();
-                //me.appEventsController.getApplication().fireEvent('refreshJournalEntryDetails');    			
+            if ( me.inited == true ) {               
+				me.model.getGroupedDetails();   			
             }
-            if (me.model.get('journalTrack') != null && me.model.get('journalTrack') != "") {
-            
-                me.getJournalTrackTree().getController().loadSteps();
-                
+            if ( journalTrack != null && journalTrack != "" ) {                           
+				me.getJournalTrackTree().getController().loadSteps(journalTrack);                
             }
         }
-        else {
-            me.removeJournalTrackAndSessionDetails();
-            me.getJournalTrackTree().getController().loadSteps();
+        else {			
+            me.removeJournalTrackAndSessionDetails();           
         }
     },
     
-    save1: function(){
-        //console.log('save test');
-    },
-    
-    onJournalTrackComboBlur: function(comp, event, eOpts){
-        var me = this;
-        if (comp.getValue() == "") {
+    onJournalTrackComboBlur: function(comp, event, eOpts) {
+        var me = this;	
+        if ( comp.getValue() == "" ) {
             me.removeJournalTrackAndSessionDetails();
-        }
+		}
     },
     
-    removeJournalTrackAndSessionDetails: function(){
-        var me = this;
-        me.model.set("journalTrack", "");
-        me.model.removeAllJournalEntryDetails();
+    removeJournalTrackAndSessionDetails: function() {
+        var me = this;					
+		me.getView().getForm().findField('journalTrackId').clearValue();
+		me.getJournalTrackTree().getController().loadSteps();  		
     },
     
-    onRemoveJournalTrackButtonClick: function(button){
-        var me = this;
-        var combo = me.getJournalTrackCombo();
-        combo.clearValue();
-        //me.removeJournalTrackAndSessionDetails();
-        combo.fireEvent('select', {
-            combo: combo,
-            records: [],
-            eOpts: {}
-        });
+    onRemoveJournalTrackButtonClick: function( button ) {
+        var me = this; 		
+		me.getView().getForm().findField('journalTrackId').clearValue();	
+		me.getJournalTrackTree().getController().clearTrack();		
     },
-    
-    
-    displayMain: function(){
+        
+    displayMain: function() {
         var comp = this.formUtils.loadDisplay(this.getContainerToLoadIntoTools(), this.getMainFormToDisplay(), true, {});
     },
     
-    displaySessionDetails: function(){
-        var comp = this.formUtils.loadDisplay(this.getContainerToLoadIntoTools(), this.getSessionDetailsEditorDisplay(), true, {});
-        
+    displaySessionDetails: function() {
+        var comp = this.formUtils.loadDisplay(this.getContainerToLoadIntoTools(), this.getSessionDetailsEditorDisplay(), true, {});        
     }
 });

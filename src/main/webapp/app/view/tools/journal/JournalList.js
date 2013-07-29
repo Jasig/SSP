@@ -117,6 +117,12 @@ Ext.define('Ssp.view.tools.journal.JournalList', {
                     itemId: 'saveButton'
                 }, 
 				{
+					tooltip: 'Cancel Journal Changes Since Last Save',
+					text: 'Cancel',
+					xtype: 'button',
+					itemId: 'cancelButton'
+				},
+				{
                     tooltip: 'Delete Journal Note',
                     text: 'Delete',
                     xtype: 'button',
