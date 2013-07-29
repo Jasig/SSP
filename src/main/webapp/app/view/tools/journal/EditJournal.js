@@ -162,7 +162,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                             width: 10
                         },{
 							tooltip: 'Removes the assigned Journal Track and Session Details',
-							text: 'Remove/Reset',
+							text: 'Remove',
 							xtype: 'button',
 							itemId: 'removeJournalTrackButton'
 						}]

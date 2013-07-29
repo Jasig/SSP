@@ -52,9 +52,13 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		
 		'saveButton': {
 			click: 'onSaveClick'
-		}
+		},
 		
+		'cancelButton': {
+			click: 'onCancelClick'
+		}		
 	},
+	
     init: function() {
 		var me = this;
 		
@@ -68,17 +72,10 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 			failure: me.getAllJournalEntriesFailure,
 			scope: me
 		});
-
-    	// ensure loading of all confidentiality levels in the database
-    	/*me.confidentialityLevelsStore.load({
-    		params:{limit:50}
-    	});*/
-		
+	
 		me.confidentialityLevelsStore.clearFilter(true);
 		
-		me.confidentialityLevelsStore.load();
-		
-		
+		me.confidentialityLevelsStore.load();		
 		
 		me.journalSourcesStore.load();
 		
@@ -90,8 +87,7 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
     getAllJournalEntriesSuccess: function( r, scope ) {
 		var me=scope;
 		me.getView().setLoading( false );
-    	if (r.rows.length > 0)
-    	{
+    	if ( r.rows.length > 0 ) {
     		me.journalEntriesStore.sort([
 		    {
 		        property : 'modifiedDate',
@@ -99,13 +95,9 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		    }]);
 			me.journalEntriesStore.loadData(r.rows);
 			
-			me.model.data = me.journalEntriesStore.getAt(0).data;
+			me.model.data = me.journalEntriesStore.getAt(0).data;			
 			
-			
-			me.getView().getSelectionModel().select(0);
-		
-			
-			
+			me.getView().getSelectionModel().select(0);			
     	}
 		else{
             // if no record is available 
@@ -120,63 +112,58 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		me.getView().setLoading( false );
 	},    
     
-    onViewReady: function(comp, obj){
-    	//this.appEventsController.assignEvent({eventName: 'editJournalEntry', callBackFunc: this.editJournalEntry, scope: this});
+    onViewReady: function(comp, obj) {    	
     	this.appEventsController.assignEvent({eventName: 'deleteJournalEntry', callBackFunc: this.deleteConfirmation, scope: this});
     },    
  
     destroy: function() {
     	var me=this;
-    	
-    	//me.appEventsController.removeEvent({eventName: 'editJournalEntry', callBackFunc: me.editJournalEntry, scope: me});
+    	    	
     	me.appEventsController.removeEvent({eventName: 'deleteJournalEntry', callBackFunc: me.deleteConfirmation, scope: me});
 
         return me.callParent( arguments );
     },    
     
-    onAddClick: function(button){
+    onAddClick: function( button ) {
 		var me=this;
     	var je = new Ssp.model.tool.journal.JournalEntry();
     	this.model.data = je.data;
 		me.callDetails();
     },
-    
-    editJournalEntry: function(){
-		//this.getView().getSelectionModel().getSelection()[0].loadRecord();
-    },
-	
-	onDeleteClick: function(button){
+    	
+	onDeleteClick: function( button ) {
     	var grid, record;
 		grid = button.up('grid');
 		record = grid.getView().getSelectionModel().getSelection()[0];
-        if (record) 
-        {	
+        if ( record ) {	
 			this.model.data=record.data;
         	this.appEventsController.getApplication().fireEvent('deleteJournalEntry');
-        }else{
+        } else {
      	   Ext.Msg.alert('SSP Error', 'Please select a journal to delete.'); 
         }
     },
 	
 	onSaveClick: function(button) {
-		var me=this;
-		
+		var me=this;		
 		me.appEventsController.getApplication().fireEvent('saveJournal');
 	},
 	
-	onJournalClick:function(){
+	onJournalClick:function() {
 		var me=this;
 		var record = me.getView().getSelectionModel().getSelection()[0];
 		
-		if (record) 
-        {	
+		if ( record ) {	
 			me.model.data=record.data;
 			me.callDetails();
-        }
-		
+        }		
 	},
 	
-	callDetails: function(){
+	onCancelClick: function( button ) {
+		var me = this;		
+		me.appEventsController.getApplication().fireEvent('resetJournal');
+	},
+	
+	callDetails: function() {
 		Ext.ComponentQuery.query('#editjournalGrid')[0].getController().initForm();
 		Ext.ComponentQuery.query('#editjournalGrid treepanel')[0].getController().init();
 	},
@@ -185,7 +172,7 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
         var me=this;
     	var message = 'You are about to delete a Journal Entry. Would you like to continue?';
     	var model = me.model;
-        if (model.get('id') != "") 
+        if ( model.get('id') ) 
         {
            Ext.Msg.confirm({
    		     title:'Delete Journal Entry?',
@@ -194,17 +181,16 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
    		     fn: me.deleteJournalEntry,
    		     scope: me
    		   });
-        }else{
+        } else {
      	   Ext.Msg.alert('SSP Error', 'Unable to delete Journal Entry.'); 
         }
      },
      
-     deleteJournalEntry: function( btnId ){
+     deleteJournalEntry: function( btnId ) {
      	var me=this;
     	var store = me.journalEntriesStore;
      	var id = me.model.get('id');
-     	if (btnId=="yes")
-     	{
+     	if ( btnId == "yes" ) {
      		me.getView().setLoading( true );
      		me.service.destroy( me.personLite.get('id'), id, {
      			success: me.destroyJournalEntrySuccess,
@@ -221,8 +207,7 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
  		store.remove( store.getById( id ) );
 		
 		if (me.journalEntriesStore.data.length) {
-			me.model.data = me.journalEntriesStore.getAt(0).data;
-			
+			me.model.data = me.journalEntriesStore.getAt(0).data;			
 			me.getView().getSelectionModel().select(0);
 		}
  	},
@@ -232,10 +217,10 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
  		me.getView().setLoading( false );
  	},      
      
-    loadEditor: function(){
+    loadEditor: function() {
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});    	
     },
-	loadEditorSelf: function(){
+	loadEditorSelf: function() {
 		var comp = this.formUtils.loadDisplay(this.getFormToDisplay(), this.getFormToDisplay(), true, {});    	
     }
 });
