@@ -18,11 +18,12 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.jasig.ssp.dao.reference.JournalStepDetailDao;
 import org.jasig.ssp.dao.reference.JournalStepJournalStepDetailDao;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.JournalStep;
 import org.jasig.ssp.model.reference.JournalStepDetail;
 import org.jasig.ssp.model.reference.JournalStepJournalStepDetail;
@@ -64,11 +65,19 @@ public class JournalStepDetailServiceImpl extends
 	public PagingWrapper<JournalStepDetail> getAllForJournalStep(
 			final JournalStep journalStep,
 			final SortingAndPaging sAndP) {
-		List<JournalStepDetail> details = new ArrayList<JournalStepDetail>();
-		PagingWrapper<JournalStepJournalStepDetail> allForJournalStep = journalStepJournalStepDetailDao.getAllForJournalStep(journalStep.getId(), sAndP);
-		for (JournalStepJournalStepDetail journalStepJournalStepDetail : allForJournalStep) {
-			details.add(journalStepJournalStepDetail.getJournalStepDetail());
+		//using sets t
+		Set<JournalStepDetail> details = new HashSet<JournalStepDetail>();
+		PagingWrapper<JournalStepDetail> allForJournalStep = dao.getAllForJournalStep(journalStep.getId(), new SortingAndPaging(ObjectStatus.ALL, sAndP.getFirstResult(), sAndP.getMaxResults(), sAndP.getSortFields(), sAndP.getDefaultSortProperty(), sAndP.getDefaultSortDirection()));
+		PagingWrapper<JournalStepJournalStepDetail> allAssociationsForJournalStep = journalStepJournalStepDetailDao.getAllForJournalStep(journalStep.getId(), new SortingAndPaging(sAndP.getStatus()));
+		for (JournalStepDetail journalStepDetail : allForJournalStep) 
+		{
+			for (JournalStepJournalStepDetail journalStepJournalStepDetail : allAssociationsForJournalStep) {
+				if(journalStepDetail.getId().equals(journalStepJournalStepDetail.getJournalStepDetail().getId()))
+				{
+					details.add(journalStepDetail);
+				}
+			}
 		}
 		return new PagingWrapper<JournalStepDetail>(details);
-	}
+	} 
 }
