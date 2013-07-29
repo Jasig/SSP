@@ -18,15 +18,19 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import org.jasig.ssp.dao.reference.JournalStepDao;
 import org.jasig.ssp.dao.reference.JournalStepJournalStepDetailDao;
+import org.jasig.ssp.dao.reference.JournalTrackJournalStepDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.JournalStep;
 import org.jasig.ssp.model.reference.JournalStepDetail;
 import org.jasig.ssp.model.reference.JournalStepJournalStepDetail;
 import org.jasig.ssp.model.reference.JournalTrack;
+import org.jasig.ssp.model.reference.JournalTrackJournalStep;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.JournalStepService;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -49,6 +53,10 @@ public class JournalStepServiceImpl extends
 
 	@Autowired
 	transient private JournalStepJournalStepDetailDao journalStepJournalStepDetailDao;
+	
+	@Autowired
+	transient private JournalTrackJournalStepDao journalTrackJournalStepDao;
+
 
 	protected void setDao(final JournalStepDao dao) {
 		this.dao = dao;
@@ -63,9 +71,21 @@ public class JournalStepServiceImpl extends
 	public PagingWrapper<JournalStep> getAllForJournalTrack(
 			final JournalTrack journalTrack,
 			final SortingAndPaging sAndP) {
-		return getDao().getAllForJournalTrack(journalTrack.getId(), sAndP);
+		Set<JournalStep> steps = new HashSet<JournalStep>();
+		PagingWrapper<JournalStep> allForJournalTrack = getDao().getAllForJournalTrack(journalTrack.getId(), new SortingAndPaging(ObjectStatus.ALL, sAndP.getFirstResult(), sAndP.getMaxResults(), sAndP.getSortFields(), sAndP.getDefaultSortProperty(), sAndP.getDefaultSortDirection()));
+		PagingWrapper<JournalTrackJournalStep> allForJournalTrackAssociations = journalTrackJournalStepDao.getAllForJournalTrack(journalTrack.getId(), new SortingAndPaging(sAndP.getStatus()));
+		for (JournalStep journalStep : allForJournalTrack) 
+		{
+			for (JournalTrackJournalStep journalTrackJournalStep : allForJournalTrackAssociations) {
+				if(journalStep.getId().equals(journalTrackJournalStep.getJournalStep().getId()))
+				{
+					steps.add(journalStep);
+				}
+			}
+		}
+		return new PagingWrapper<JournalStep>(steps);
 	}
-
+	
 	@Override
 	public PagingWrapper<JournalStepJournalStepDetail> getJournalStepDetailAssociationsForJournalStep(
 			final UUID journalStepId, final SortingAndPaging sAndP)
@@ -124,5 +144,13 @@ public class JournalStepServiceImpl extends
 		}
 
 		return journalStepJournalStepDetail;
+	}
+
+	public JournalTrackJournalStepDao getJournalTrackJournalStepDao() {
+		return journalTrackJournalStepDao;
+	}
+
+	public void setJournalTrackJournalStepDao(JournalTrackJournalStepDao journalTrackJournalStepDao) {
+		this.journalTrackJournalStepDao = journalTrackJournalStepDao;
 	}
 }
