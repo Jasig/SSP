@@ -86,6 +86,11 @@ public class CaseloadDao extends AbstractDao<Person> {
 
 		// restrict to coach
 		query.add(Restrictions.eq("coach", coach));
+		if(sAndP.getStatus()!= null)
+		{
+			query.add(Restrictions.eq("objectStatus", sAndP.getStatus()));
+		}
+
 
 		// item count
 		Long totalRows = 0L;
@@ -256,21 +261,6 @@ public class CaseloadDao extends AbstractDao<Person> {
 								specialServiceGroupIds));
 		}
 
-		// item count
-		Long totalRows = 0L;
-		if ((sAndP != null) && sAndP.isPaged()) {
-			query.setProjection(new MultipleCountProjection("c.id;ps.programStatus.id").setDistinct());
-			totalRows = (Long) query.uniqueResult();
-
-			if ( totalRows == 0 ) {
-				Collection<CoachCaseloadRecordCountForProgramStatus> empty =
-						Lists.newArrayListWithCapacity(0);
-				return new PagingWrapper<CoachCaseloadRecordCountForProgramStatus>(0, empty);
-			}
-
-			// clear the row count projection
-			query.setProjection(null);
-		}
 
 		if(homeDepartment == null || homeDepartment.length() <= 0)
 			query.createAlias("coach.staffDetails", "sd", JoinType.LEFT_OUTER_JOIN);
@@ -329,6 +319,21 @@ public class CaseloadDao extends AbstractDao<Person> {
 		query.setResultTransformer(new AliasToBeanResultTransformer(
 				CoachCaseloadRecordCountForProgramStatus.class));
 
+		// item count
+		Long totalRows = 0L;
+		if ((sAndP != null) && sAndP.isPaged()) {
+			query.setProjection(new MultipleCountProjection("c.id;ps.programStatus.id").setDistinct());
+			totalRows = (Long) query.uniqueResult();
+
+			if ( totalRows == 0 ) {
+				Collection<CoachCaseloadRecordCountForProgramStatus> empty =
+						Lists.newArrayListWithCapacity(0);
+				return new PagingWrapper<CoachCaseloadRecordCountForProgramStatus>(0, empty);
+			}
+
+			// clear the row count projection
+			query.setProjection(null);
+		}
 		return sAndP == null
 				? new PagingWrapper<CoachCaseloadRecordCountForProgramStatus>(query.list())
 				: new PagingWrapper<CoachCaseloadRecordCountForProgramStatus>(totalRows, query.list());

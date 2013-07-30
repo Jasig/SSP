@@ -24,7 +24,6 @@ Ext.define('Ssp.controller.SearchFormViewController', {
         appEventsController: 'appEventsController',
         authenticatedPerson: 'authenticatedPerson',
         caseloadFilterCriteria: 'caseloadFilterCriteria',
-        caseloadStore: 'caseloadStore',
         caseloadService: 'caseloadService',
         columnRendererUtils: 'columnRendererUtils',
         formUtils: 'formRendererUtils',
@@ -35,7 +34,9 @@ Ext.define('Ssp.controller.SearchFormViewController', {
         programStatusesStore: 'programStatusesStore',
         programStatusService: 'programStatusService',
         searchCriteria: 'searchCriteria',
-        searchService: 'searchService'    
+        searchService: 'searchService',
+        searchStore: 'studentsSearchStore'
+
     },
     control: {
     	view: {
@@ -83,7 +84,6 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	   	// load program statuses
 		me.getProgramStatuses();	
 	},
-
     destroy: function() {
     	var me=this;
     	me.appEventsController.removeEvent({eventName: 'onStudentSearchRequested', callBackFunc: me.onSearchClick, scope: me});
@@ -91,13 +91,13 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     },
     searchSuccess: function( r, scope){
     	var me=scope;
+    	me.searchStore.pageSize = me.searchStore.data.length;
     	me.getView().setLoading( false );
 		me.getView().collapse();
 		me.appEventsController.getApplication().fireEvent("onPersonSearchSuccess");
     },    
 	search: function(){
 		var me=this;		
-		
 		me.searchService.search2( 
 				me.getView().query('textfield[name=studentId]')[0].value,
 				me.getView().query('combobox[name=programStatus]')[0].value,
