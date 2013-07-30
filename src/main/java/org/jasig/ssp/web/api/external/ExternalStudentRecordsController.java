@@ -190,7 +190,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	private transient SecurityService securityService;
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(IntakeController.class);
+			.getLogger(ExternalStudentRecordsController.class);
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
@@ -282,9 +282,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		try{
 			balanceOwed = personDemographicsService.getBalancedOwed(id);
 		}catch(Exception exception){
-			this.getLogger().error(exception.getMessage());
-		}finally{
-			
+			this.getLogger().error("Failed to load balance owed for internal person id {}", id, exception);
 		}
 		
 		if(balanceOwed == null){
@@ -292,9 +290,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 				ExternalPerson externalPerson = externalStudentService.getBySchoolId(schoolId);
 				balanceOwed = externalPerson.getBalanceOwed();
 			}catch(Exception exception){
-				this.getLogger().error(exception.getMessage());
-			}finally{
-				
+				this.getLogger().error("Failed to load balance owed for external person schoolId {}", schoolId, exception);
 			}
 		}
 		return balanceOwed;
@@ -316,13 +312,9 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		Map<String,String> statusCodeMap = null;
 	    try {	    	
 			statusCodeMap = m.readValue(codeMappings, new HashMap<String,String>().getClass());
-			//TODO Refactor messages? 
-		} catch (JsonParseException e) {			
-			this.getLogger().error(e.getMessage());
-		} catch (JsonMappingException e) {			
-			this.getLogger().error(e.getMessage());
-		} catch (IOException e) {		
-			this.getLogger().error(e.getMessage());
+			//TODO Refactor messages?
+		} catch ( IOException e ) {
+			this.getLogger().error("Failed to deserialize status_code_mappings config", e);
 		}
 	    return statusCodeMap;
 	}
