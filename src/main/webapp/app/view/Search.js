@@ -49,7 +49,6 @@ Ext.define('Ssp.view.Search', {
                 itemId: 'searchGridPager',
                 dock: 'bottom',
                 displayInfo: true,
-                pageSize: me.apiProperties.getPagingSize(),
                 listeners: {
                     afterrender: function(){
                         var a = Ext.query("button[data-qtip=Refresh]");

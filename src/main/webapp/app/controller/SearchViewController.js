@@ -296,6 +296,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	              ];
 		}else{
 			store = me.searchStore;
+			store.pageSize = store.data.length;
 			columns = [
     	              /* { header: "Photo", dataIndex: 'photoUrl', renderer: this.columnRendererUtils.renderPhotoIcon, flex: 50 }, */		        
     	              /*{ sortable: sortableColumns, header: 'Student', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderSearchStudentName, flex: .25 },*/
@@ -307,7 +308,8 @@ Ext.define('Ssp.controller.SearchViewController', {
     	              { sortable: sortableColumns, header: 'Status', dataIndex: 'currentProgramStatusName', flex: .15}
     	              ];		
 		}
-
+		me.getSearchGridPager().bindStore(store);
+		me.refreshPagingToolBar();
 		grid.getView().getRowClass = function(row, index)
 	    {
 			var cls = "";
