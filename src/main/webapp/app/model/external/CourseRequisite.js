@@ -20,6 +20,7 @@ Ext.define('Ssp.model.external.CourseRequisite', {
     extend: 'Ext.data.Model',
     fields: [{name: 'requiringCourseCode', type: 'string'},
              {name: 'requiredCourseCode', type: 'string'},
-             {name: 'requisiteCode', type: 'string'}
+             {name: 'requisiteCode', type: 'string'},
+             {name: 'requiredFormattedCourse', type: 'string'}
              ]
 });

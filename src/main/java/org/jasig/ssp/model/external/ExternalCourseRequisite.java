@@ -67,7 +67,7 @@ public class ExternalCourseRequisite extends AbstractExternalData implements
 	 * Most commonly {@link RequisiteCode#PRE} or
 	 * {@link RequisiteCode#CO}, but other enum values possible.
 	 */
-	@Enumerated(EnumType.ORDINAL)
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private RequisiteCode requisiteCode;
 

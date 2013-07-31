@@ -42,7 +42,9 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
     	apiProperties: 'apiProperties',
         store: 'coursesStore',
 		electiveStore : 'electivesStore',
-        formUtils: 'formRendererUtils'
+        formUtils: 'formRendererUtils',
+		appEventsController: 'appEventsController'
+        
     },
 	init: function() {
 		var me=this;
@@ -51,6 +53,7 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
 		me.store.load();
 		me.electiveStore.load();
 		me.store.addListener('load', this.sortAfterLoad, me.store,{single:true});
+	   	me.appEventsController.getApplication().addListener("onRequisiteLoad", me.showCourseDetails, me);
 		return me.callParent(arguments);
     },
 	
@@ -71,6 +74,7 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
     		me.courseDetailsPopUp = Ext.create('Ssp.view.tools.map.CourseDetails');
     		me.courseDetailsPopUp.center();
     	}
+    	me.courseDetailsPopUp.record = record;
 		me.courseDetailsPopUp.query("#formatted_course_title")[0].setValue( record.get("formattedCourse") + " : " + record.get("title"));
 		me.courseDetailsPopUp.query("#description")[0].setValue(record.get("description"));
 		me.courseDetailsPopUp.query("#minCreditHours")[0].setValue(record.get("minCreditHours"));
@@ -91,9 +95,26 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
 		masterSylComponent.setFieldLabel("<a href=\""+record.get("masterSyllabusLink")+"\">Master Syllabus</a>");
 		academicLinkComponent.setFieldLabel("<a href=\""+record.get("academicLink")+"\">Academic Link</a>");
 		
-		me.courseDetailsPopUp.show();
+		var reqs = '';
+		me.courseRequisitesStore = Ext.create('Ssp.store.external.CourseRequisites');
+		me.courseRequisitesStore.load(record.get('formattedCourse'));
+	    
+		
     },
-
+    showCourseDetails:function(){
+        var me=this;
+        var reqs= '';
+        me.courseRequisitesStore.each(function(req) {
+    	{
+    		reqFormattedCourse = req.get('requiredFormattedCourse') == me.courseDetailsPopUp.record.get("formattedCourse") 
+    		? req.get('requiringCourseCode') : req.get('requiredFormattedCourse');
+    		reqs = reqs + reqFormattedCourse+': '+req.get('requisiteCode')+','
+    	}
+    		});
+            reqs = reqs.substring(0, reqs.length - 1);
+        	me.courseDetailsPopUp.query("#prereqs")[0].setValue(reqs);
+        	me.courseDetailsPopUp.show();
+        },
     destroy:function(){
 	    var me=this;
 		if(me.courseDetailsPopUp != null && !me.courseDetailsPopUp.isDestroyed)

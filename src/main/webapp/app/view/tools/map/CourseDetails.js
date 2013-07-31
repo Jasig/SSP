@@ -138,12 +138,10 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                                                         
                                                         items: [
                                         				    {
-                                        				        fieldLabel: 'Co /Prerequisite',
+                                        				        fieldLabel: 'Requisites',
                                         				        name: 'prereqs',
                                         				        itemId: 'prereqs',
-                                        				        hidden: true,
-                                        				        hideable: false
-                                        				        
+                                        				        fieldStyle:'color:red'
                                         				    },{
                                         				    	fieldLabel:  '<a href="">Master Syllabus</a>',
                                                                 name: 'mastersyllabus',

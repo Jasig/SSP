@@ -23,6 +23,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.ExternalCourseRequisite;
+import org.jasig.ssp.model.external.RequisiteCode;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -37,7 +38,7 @@ public class ExternalCourseRequisiteDao extends
 	public List<ExternalCourseRequisite> getRequisitesForCourse(
 			String requiringCourseCode) {
 		Criteria criteria = this.createCriteria();
-		criteria.add(Restrictions.or(Restrictions.eq("requiringCourseCode", requiringCourseCode), Restrictions.eq("requiredCourseCode", requiringCourseCode)));
+		criteria.add(Restrictions.or(Restrictions.eq("requiringCourseCode", requiringCourseCode), Restrictions.and(Restrictions.eq("requiredCourseCode", requiringCourseCode),Restrictions.ne("requisiteCode", RequisiteCode.PRE))));
 		return (List<ExternalCourseRequisite>)criteria.list();
 	}
 
