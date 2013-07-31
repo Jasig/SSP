@@ -176,7 +176,8 @@ public class ExternalPersonServiceImpl
 			person.setSchoolId(externalPerson.getSchoolId());
 		}
 
-		if (person.getUsername() == null) {
+		if (person.getUsername() == null ||
+				(!person.getUsername().equals(externalPerson.getUsername()))) {
 			person.setUsername(externalPerson.getUsername());
 		}
 
