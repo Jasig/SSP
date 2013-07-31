@@ -37,6 +37,7 @@ import org.jasig.ssp.model.reference.ChildCareArrangement;
 import org.jasig.ssp.model.reference.Citizenship;
 import org.jasig.ssp.model.reference.EmploymentShifts;
 import org.jasig.ssp.model.reference.Ethnicity;
+import org.jasig.ssp.model.reference.Race;
 import org.jasig.ssp.model.reference.Genders;
 import org.jasig.ssp.model.reference.MaritalStatus;
 import org.jasig.ssp.model.reference.MilitaryAffiliation;
@@ -85,6 +86,11 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "ethnicity_id", nullable = true)
 	private Ethnicity ethnicity;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	@JoinColumn(name = "race_id", nullable = true)
+	private Race race;
 
 	@Enumerated(EnumType.STRING)
 	private Genders gender;
@@ -187,6 +193,14 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 
 	public void setEthnicity(final Ethnicity ethnicity) {
 		this.ethnicity = ethnicity;
+	}
+	
+	public Race getRace() {
+		return race;
+	}
+	
+	public void setRace(final Race race) {
+		this.race = race;
 	}
 
 	public Genders getGender() {
@@ -324,6 +338,7 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 		result *= hashField("maritalStatus", maritalStatus);
 		result *= hashField("militaryAffiliation", militaryAffiliation);
 		result *= hashField("ethnicity", ethnicity);
+		result *= hashField("race", race);
 		result *= gender == null ? "gender".hashCode() : gender.hashCode();
 		result *= hashField("citizenship", citizenship);
 		result *= hashField("countryOfCitizenship", countryOfCitizenship);

@@ -74,6 +74,7 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
 		studentIntakeDemographicsForm.getForm().findField("gender").setDisabled(disabled);
 		studentIntakeDemographicsForm.getForm().findField("maritalStatusId").setDisabled(disabled);
 		studentIntakeDemographicsForm.getForm().findField("ethnicityId").setDisabled(disabled);
+		studentIntakeDemographicsForm.getForm().findField("raceId").setDisabled(disabled);
 		
 		var personDemographics = me.model.get('personDemographics');
 		var citizenship = Ext.ComponentQuery.query('#citizenship')[0];

@@ -263,6 +263,13 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
+					text: 'Races',
+                    title: 'Races',
+                    store: 'races',
+                    store: 'races',
+                    form: 'AbstractReferenceAdmin',
+                    leaf: true
+				}, {
                     text: 'Funding Sources',
                     title: 'Funding Sources',
                     store: 'fundingSources',

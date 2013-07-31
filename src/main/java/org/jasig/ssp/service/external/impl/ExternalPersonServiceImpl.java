@@ -38,6 +38,7 @@ import org.jasig.ssp.service.PersonStaffDetailsService;
 import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EthnicityService;
+import org.jasig.ssp.service.reference.RaceService;
 import org.jasig.ssp.service.reference.MaritalStatusService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -77,6 +78,9 @@ public class ExternalPersonServiceImpl
 
 	@Autowired
 	private transient EthnicityService ethnicityService;
+	
+	@Autowired
+	private transient RaceService raceService;
 	
 	@Autowired
 	private transient StudentTypeService studentTypeService;
@@ -314,6 +318,21 @@ public class ExternalPersonServiceImpl
 			} catch (final ObjectNotFoundException e) {
 				LOGGER.error("Ethnicity with name "
 						+ externalPerson.getEthnicity() + " not found");
+			}
+		}
+		
+		if (((demographics.getRace() == null)
+				&& !StringUtils.isBlank(externalPerson.getRace()))
+				||
+				((demographics.getRace() != null) && 
+				!demographics.getRace().getName().equals(
+						externalPerson.getRace()))) {
+			try {
+				demographics.setRace(raceService
+					.getByName(externalPerson.getRace()));
+			} catch (final ObjectNotFoundException e) {
+				LOGGER.error("Race with name " 
+						+ externalPerson.getRace() + " not found");
 			}
 		}
 

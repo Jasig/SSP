@@ -33,7 +33,7 @@ public class PersonDemographicsTO
 	private UUID personId;
 
 	private UUID coachId, maritalStatusId, militaryAffiliationId, ethnicityId,
-			citizenshipId, veteranStatusId, childCareArrangementId;
+			raceId, citizenshipId, veteranStatusId, childCareArrangementId;
 	private Boolean local, primaryCaregiver,
 			childCareNeeded, employed;
 	private Integer numberOfChildren;
@@ -66,6 +66,10 @@ public class PersonDemographicsTO
 		
 		if (model.getEthnicity() != null) {
 			ethnicityId = model.getEthnicity().getId();
+		}
+		
+		if (model.getRace() != null) {
+			raceId = model.getRace().getId();
 		}
 
 		if (model.getCitizenship() != null) {
@@ -141,6 +145,14 @@ public class PersonDemographicsTO
 
 	public void setEthnicityId(final UUID ethnicityId) {
 		this.ethnicityId = ethnicityId;
+	}
+	
+	public UUID getRaceId() {
+		return raceId;
+	}
+	
+	public void setRaceId(final UUID raceId) {
+		this.raceId = raceId;
 	}
 
 	public UUID getCitizenshipId() {

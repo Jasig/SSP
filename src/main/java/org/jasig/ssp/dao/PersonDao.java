@@ -541,6 +541,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		
 		Criteria demographics = criteria.createAlias("demographics", "demographics", JoinType.LEFT_OUTER_JOIN);
 		demographics.createAlias("demographics.ethnicity", "ethnicity", JoinType.LEFT_OUTER_JOIN);
+		demographics.createAlias("demographics.race", "race", JoinType.LEFT_OUTER_JOIN);
 		demographics.createAlias("demographics.veteranStatus", "veteranStatus", JoinType.LEFT_OUTER_JOIN);
 		
 		criteria.createAlias("disabilityAgencies", "disabilityAgencies", JoinType.LEFT_OUTER_JOIN);
@@ -561,6 +562,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		if ( dialect instanceof SQLServerDialect) {
 
 			projections.add(Projections.groupProperty("ethnicity.name").as("ethnicity"));
+			projections.add(Projections.groupProperty("race.name").as("race"));
 			projections.add(Projections.groupProperty("veteranStatus.name").as("veteranStatus"));
 			projections.add(Projections.groupProperty("disabilityAgency.name").as("disabilityAgencyName"));
 			projections.add(Projections.groupProperty("disabilityType.name").as("disabilityType"));
@@ -574,6 +576,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			projections.add(Projections.groupProperty("personDisability.noSpecialEd").as("noSpecialEd"));
 		} else {
 			projections.add(Projections.groupProperty("ethnicity.name").as("ethnicity"));
+			projections.add(Projections.groupProperty("race.name").as("race"));
 			projections.add(Projections.groupProperty("veteranStatus.name").as("veteranStatus"));
 			projections.add(Projections.groupProperty("disabilityType.name").as("disabilityType"));
 			projections.add(Projections.groupProperty("disabilityAgency.name").as("disabilityAgencyName"));

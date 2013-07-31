@@ -31,6 +31,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.ChildCareArrangementService;
 import org.jasig.ssp.service.reference.CitizenshipService;
 import org.jasig.ssp.service.reference.EthnicityService;
+import org.jasig.ssp.service.reference.RaceService;
 import org.jasig.ssp.service.reference.MaritalStatusService;
 import org.jasig.ssp.service.reference.MilitaryAffiliationService;
 import org.jasig.ssp.service.reference.VeteranStatusService;
@@ -63,6 +64,9 @@ public class PersonDemographicsTOFactoryImpl extends
 	
 	@Autowired
 	private transient EthnicityService ethnicityService;
+	
+	@Autowired
+	private transient RaceService raceService;
 
 	@Autowired
 	private transient CitizenshipService citizenshipService;
@@ -100,6 +104,9 @@ public class PersonDemographicsTOFactoryImpl extends
 		
 		model.setEthnicity(tObject.getEthnicityId() == null ? null :
 				ethnicityService.get(tObject.getEthnicityId()));
+				
+		model.setRace(tObject.getRaceId() == null ? null :
+				raceService.get(tObject.getRaceId()));
 
 		model.setCitizenship(tObject.getCitizenshipId() == null ? null :
 				citizenshipService.get(tObject.getCitizenshipId()));

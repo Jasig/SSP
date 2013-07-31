@@ -30,6 +30,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     	educationLevelsStore: 'educationLevelsStore',
     	employmentShiftsStore: 'employmentShiftsStore',
     	ethnicitiesStore: 'ethnicitiesStore',
+		racesStore: 'racesStore',
     	formUtils: 'formRendererUtils',
     	fundingSourcesStore: 'fundingSourcesStore',
     	gendersStore: 'gendersStore',
@@ -232,6 +233,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		me.educationLevelsStore.loadData( educationLevels );
 		me.employmentShiftsStore.loadData( formData.data.referenceData.employmentShifts );
 		me.ethnicitiesStore.loadData( formData.data.referenceData.ethnicities );
+		me.racesStore.loadData( formData.data.referenceData.races );
 		me.fundingSourcesStore.loadData( fundingSources );
 		
 		me.gendersStore.loadData( formData.data.referenceData.genders );

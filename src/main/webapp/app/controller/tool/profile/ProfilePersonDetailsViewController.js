@@ -45,6 +45,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         maritalStatusField: '#maritalStatus',
         genderField: '#gender',
         ethnicityField: '#ethnicity',
+		raceField: '#race',
         primaryEmailAddressField: '#primaryEmailAddress',
         registeredTermsField: '#registeredTerms',
         

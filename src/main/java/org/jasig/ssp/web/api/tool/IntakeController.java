@@ -40,6 +40,7 @@ import org.jasig.ssp.service.reference.CitizenshipService;
 import org.jasig.ssp.service.reference.EducationGoalService;
 import org.jasig.ssp.service.reference.EducationLevelService;
 import org.jasig.ssp.service.reference.EthnicityService;
+import org.jasig.ssp.service.reference.RaceService;
 import org.jasig.ssp.service.reference.FundingSourceService;
 import org.jasig.ssp.service.reference.MaritalStatusService;
 import org.jasig.ssp.service.reference.MilitaryAffiliationService;
@@ -60,6 +61,7 @@ import org.jasig.ssp.transferobject.reference.CitizenshipTO;
 import org.jasig.ssp.transferobject.reference.EducationGoalTO;
 import org.jasig.ssp.transferobject.reference.EducationLevelTO;
 import org.jasig.ssp.transferobject.reference.EthnicityTO;
+import org.jasig.ssp.transferobject.reference.RaceTO;
 import org.jasig.ssp.transferobject.reference.FundingSourceTO;
 import org.jasig.ssp.transferobject.reference.MaritalStatusTO;
 import org.jasig.ssp.transferobject.reference.MilitaryAffiliationTO;
@@ -117,6 +119,9 @@ public class IntakeController extends AbstractBaseController {
 
 	@Autowired
 	private transient EthnicityService ethnicityService;
+	
+	@Autowired
+	private transient RaceService raceService;
 
 	@Autowired
 	private transient FundingSourceService fundingSourceService;
@@ -203,6 +208,7 @@ public class IntakeController extends AbstractBaseController {
 		refData.put("educationGoals", educationGoalReferenceDataFor(formTO, sAndP));
 		refData.put("educationLevels", educationLevelReferenceDataFor(formTO, sAndP));
 		refData.put("ethnicities", ethnicityReferenceDataFor(formTO, sAndP));
+		refData.put("races", raceReferenceDataFor(formTO, sAndP));
 		refData.put("fundingSources", fundingSourceReferenceDataFor(formTO, sAndP));
 		refData.put("maritalStatuses", maritalStatusArrangementReferenceDataFor(formTO, sAndP));
 		refData.put("militaryAffiliations", militaryAffiliationReferenceDataFor(formTO, sAndP));
@@ -289,6 +295,22 @@ public class IntakeController extends AbstractBaseController {
 
 		return filterInactiveExceptFor(
 				Lists.newArrayList(formTO.getPersonDemographics().getEthnicityId()),
+				allTOs);
+	}
+	
+	private List<RaceTO> raceReferenceDataFor(IntakeFormTO formTO, SortingAndPaging sAndP) {
+		final List<RaceTO> allTOs =
+				RaceTO.toTOList(raceService.getAll(sAndP).getRows());
+
+		if ( formTO.getPersonDemographics() == null ||
+				formTO.getPersonDemographics().getRaceId() == null ) {
+
+			return filterInactiveExceptFor(Lists.<UUID>newArrayListWithCapacity(0), allTOs);
+
+		}
+
+		return filterInactiveExceptFor(
+				Lists.newArrayList(formTO.getPersonDemographics().getRaceId()),
 				allTOs);
 	}
 

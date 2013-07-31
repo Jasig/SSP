@@ -42,7 +42,7 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 			String disabilityCode, String agencyContact, String sspStatus,
 			String odsReason, Date odsRegistrationDate, String interpreter,
 			String assignmentDate, String major,
-			String verteranSatus, String ethnicity) {
+			String veteranStatus, String ethnicity, String race) {
 		super(model);
 		this.disabilityTypesName = disabilityCode;
 		this.agencyContacts = agencyContact;
@@ -50,8 +50,9 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 		this.odsRegistrationDate = odsRegistrationDate;
 		this.assignmentDates = assignmentDate;
 		this.major = major;
-		this.veteranStatus = verteranSatus;
+		this.veteranStatus = veteranStatus;
 		this.ethnicity = ethnicity;
+		this.race = race;
 	}
 	
 	
@@ -73,6 +74,7 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 	private String major;
 	private String veteranStatus;
 	private String ethnicity;
+	private String race;
 	private List<String> disabilityAgenciesName = new ArrayList<String>();
 	private List<Date> disabilityAgenciesCreatedDate = new ArrayList<Date>();
 	private String disabilityAgencyName = null;
@@ -243,6 +245,14 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 		this.ethnicity = ethnicity;
 	}
 	
+	public String getRace() {
+		return race;
+	}
+	
+	public void setRace(String race) {
+		this.race = race;
+	}
+	
 	public List<String> getDisabilityTypes() {
 		return disabilityTypes;
 	}
@@ -367,6 +377,8 @@ public class DisabilityServicesReportTO extends BaseStudentReportTO {
 				setEthnicity(person.getDemographics().getEthnicity().getName());
 			if(person.getDemographics().getVeteranStatus() != null)
 				setVeteranStatus(person.getDemographics().getVeteranStatus().getName());
+			if(person.getDemographics().getRace() != null)
+				setRace(person.getDemographics().getRace().getName());
 		}
 		
 		StringBuffer disabilityAgents = new StringBuffer("");

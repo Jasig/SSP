@@ -67,6 +67,7 @@ Ext.define('Ssp.model.Person', {
              {name: 'closedAlertsCount', type: 'int'},
              {name: 'maritalStatus', type: 'string'},
              {name: 'ethnicity', type: 'string'},
+			 {name: 'race', type: 'string'},
              {name: 'gender', type: 'string'},
              {name: 'actionPlanTaskOpenCount', type: 'int'},
              {name: 'actionPlanTaskClosedCount', type: 'int'},

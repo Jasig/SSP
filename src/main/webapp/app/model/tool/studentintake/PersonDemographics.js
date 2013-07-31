@@ -23,6 +23,7 @@ Ext.define('Ssp.model.tool.studentintake.PersonDemographics', {
              {name: 'maritalStatusId', type: 'string'},
              {name: 'citizenshipId', type: 'string'},
              {name: 'ethnicityId', type: 'string'},
+			 {name: 'raceId', type: 'string'},
              {name: 'militaryAffiliationId', type: 'string'},
              {name: 'veteranStatusId', type: 'string'},
              {name: 'primaryCaregiver', type: 'boolean'},

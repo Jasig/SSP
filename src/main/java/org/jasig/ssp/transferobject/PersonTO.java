@@ -175,6 +175,8 @@ public class PersonTO // NOPMD
 	
 	private String ethnicity;
 	
+	private String race;
+	
 	private Integer actionPlanTaskOpenCount = new Integer(0);
 	private Integer actionPlanTaskClosedCount = new Integer(0);
 	private Date lastActionPlanCompletedDate;
@@ -238,6 +240,8 @@ public class PersonTO // NOPMD
 				maritalStatus = model.getDemographics().getMaritalStatus().getName();
 			if(model.getDemographics().getEthnicity() != null)
 				ethnicity = model.getDemographics().getEthnicity().getName();
+			if(model.getDemographics().getRace() != null)
+				race = model.getDemographics().getRace().getName();
 		}
 		
 
@@ -916,6 +920,20 @@ public class PersonTO // NOPMD
 	 */
 	public void setEthnicity(String ethnicity) {
 		this.ethnicity = ethnicity;
+	}	
+	
+	/**
+	 * @return the race
+	 */
+	public String getRace() {
+		return race;
+	}
+
+	/**
+	 * @param race the race to set
+	 */
+	public void setRace(String race) {
+		this.race = race;
 	}
 
 	/**
