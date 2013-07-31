@@ -95,7 +95,6 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
 		masterSylComponent.setFieldLabel("<a href=\""+record.get("masterSyllabusLink")+"\">Master Syllabus</a>");
 		academicLinkComponent.setFieldLabel("<a href=\""+record.get("academicLink")+"\">Academic Link</a>");
 		
-		var reqs = '';
 		me.courseRequisitesStore = Ext.create('Ssp.store.external.CourseRequisites');
 		me.courseRequisitesStore.load(record.get('formattedCourse'));
 	    
