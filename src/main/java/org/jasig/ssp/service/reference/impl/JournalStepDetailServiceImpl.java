@@ -20,6 +20,7 @@ package org.jasig.ssp.service.reference.impl;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jasig.ssp.dao.reference.JournalStepDetailDao;
 import org.jasig.ssp.dao.reference.JournalStepJournalStepDetailDao;
@@ -27,6 +28,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.JournalStep;
 import org.jasig.ssp.model.reference.JournalStepDetail;
 import org.jasig.ssp.model.reference.JournalStepJournalStepDetail;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.JournalStepDetailService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -80,4 +82,10 @@ public class JournalStepDetailServiceImpl extends
 		}
 		return new PagingWrapper<JournalStepDetail>(details);
 	} 
+	
+	@Override
+	public void delete(UUID id) throws ObjectNotFoundException {
+		super.delete(id);
+		dao.softDeleteReferencingAssociations(id);
+	}
 }
