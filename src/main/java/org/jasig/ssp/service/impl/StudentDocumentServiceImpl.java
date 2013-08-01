@@ -181,7 +181,7 @@ public class StudentDocumentServiceImpl extends AbstractAuditableCrudService<Stu
 					"could not find document with id of " + id,
 					StudentDocument.class.toString());
 		}
-		File file = new File(studentDocument.getFileLocation());
+		File file = new File(calculateAbsoluteFileLocation(studentDocument.getFileLocation()));
 		InputStream is = new FileInputStream(file);
 		response.setHeader("Content-Disposition", "attachment; filename="+studentDocument.getFileName()); 
 		// copy it to response's OutputStream
@@ -189,7 +189,11 @@ public class StudentDocumentServiceImpl extends AbstractAuditableCrudService<Stu
 		response.flushBuffer();
 	}
 
-	private synchronized String getCalculateFileLocation(String originalFileName) {
+	private String calculateAbsoluteFileLocation(String relativeFileLocation) {
+		return new File(new File(getStudentDocumentsBaseDir()), relativeFileLocation).getAbsolutePath();
+	}
+
+	private synchronized String calculateNewRelativeFileLocation(String originalFileName) {
 		
 		if(volumes.isEmpty())
 		{
@@ -199,7 +203,7 @@ public class StudentDocumentServiceImpl extends AbstractAuditableCrudService<Stu
 		//base + next volume
 		String volume = volumes.get(lastVolumeIndex++);
 		volume =  "".equals(volume) ? volume : "/"+volume;
-		String location = getStudentDocumentsBaseDir() + volume;
+		String location = volume;
 		//+ year + month + originalFileName
 		location = location+"/"+Calendar.getInstance().get(Calendar.YEAR) +"/"+Calendar.getInstance().get(Calendar.MONTH) + "/"+Calendar.getInstance().getTimeInMillis();
 		
@@ -217,11 +221,12 @@ public class StudentDocumentServiceImpl extends AbstractAuditableCrudService<Stu
 		
 		validateFile(file);
 		
-		String fileLocation = getCalculateFileLocation(file.getOriginalFilename());
-		File savedFile = new File(fileLocation);
+		String relativeFileLocation = calculateNewRelativeFileLocation(file.getOriginalFilename());
+		String absoluteFileLocation = calculateAbsoluteFileLocation(relativeFileLocation);
+		File savedFile = new File(absoluteFileLocation);
 		savedFile.mkdirs();
 		file.transferTo(savedFile);
-		StudentDocument doc = createStudentDocFromUploadBean(uploadItem,fileLocation,personId);
+		StudentDocument doc = createStudentDocFromUploadBean(uploadItem,relativeFileLocation,personId);
 		save(doc);
 		//set extjs return - sucsess
 		extjsFormResult.setSuccess(true);
