@@ -37,6 +37,10 @@
 			<bean class="org.jasig.ssp.util.spring.PlaceholderDereferencingPropertiesFactoryBean">
 				<constructor-arg type="java.util.Properties">
 					<bean class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+						<property name="properties">
+							<value>#{systemProperties}</value>
+						</property>
+						<property name="localOverride" value="true" /> <!-- system props override config files -->
 						<property name="ignoreResourceNotFound" value="true" />
 						<property name="locations">
 							<list>
