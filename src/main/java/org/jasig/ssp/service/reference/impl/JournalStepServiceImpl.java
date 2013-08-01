@@ -145,7 +145,13 @@ public class JournalStepServiceImpl extends
 
 		return journalStepJournalStepDetail;
 	}
-
+	
+	@Override
+	public void delete(UUID id) throws ObjectNotFoundException {
+		super.delete(id);
+		dao.softDeleteReferencingAssociations(id);
+	}
+	
 	public JournalTrackJournalStepDao getJournalTrackJournalStepDao() {
 		return journalTrackJournalStepDao;
 	}
