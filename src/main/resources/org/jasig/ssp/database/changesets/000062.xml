@@ -27,7 +27,7 @@
 	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
 	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 
-	<!-- This got moved into the db. The feature was never released prior to the
+	<!-- This got moved out of the db. The feature was never released prior to the
 	move, so no need for a migration of existing values from the db. -->
 	<changeSet id="delete highly trusted IP config" author="dan.mccallum">
 		<delete tableName="config">
