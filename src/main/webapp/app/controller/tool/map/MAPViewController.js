@@ -216,16 +216,17 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 					me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
 					me.savePlanPopUp.show();
 				} else if(btn === 'no') {
+				    me.currentMapPlan.dirty = false;
+				    me.semesterStores = {};					
 					toolsViewController.loadTool(toolsRecord.get('toolType'));
 				}
 			});	
-			//return false to halt navigation in ToolsViewController#onItemClick
 			return false;
 		}
 		return true;
 	},
 	onPersonNav: function(records, searchViewController) {
-		var application = this.application; //scope is application, so 'this' is application
+		var application = this.application; 
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
@@ -238,6 +239,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 				    me.semesterStores = {};
 					searchViewController.updatePerson(records);
 			        me.appEventsController.getApplication().fireEvent('loadPerson');  
+			        searchViewController.onToolsNav();
 				}
 			});	
 			return false;
@@ -245,7 +247,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		return true;
 	},
 	onPersonButtonAdd: function(searchViewController){
-		var application = this.application; //scope is application, so 'this' is application
+		var application = this.application; 
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
@@ -264,7 +266,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		return true;
 	},
 	onPersonButtonEdit: function(searchViewController){
-		var application = this.application; //scope is application, so 'this' is application
+		var application = this.application; 
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
@@ -300,7 +302,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		return true;
 	},	
 	onPersonButtonDelete: function(searchViewController){
-		var application = this.application; //scope is application, so 'this' is application
+		var application = this.application; 
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
@@ -319,7 +321,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		return true;
 	},	
 	onRetrieveCaseload: function(searchViewController){
-		var application = this.application; //scope is application, so 'this' is application
+		var application = this.application; 
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
@@ -338,7 +340,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		return true;
 	},	
 	onPersonStatusChange: function(searchViewController,button){
-		var application = this.application; //scope is application, so 'this' is application
+		var application = this.application; 
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
