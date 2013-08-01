@@ -173,7 +173,12 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        queryMode: 'local',
 				        allowBlank: true,
 				        forceSelection: true,
-				        itemId: 'state'
+				        itemId: 'state',
+						listeners: {
+								'select': function() {
+								me.statesStore.clearFilter();
+							}
+						}
 					},{
 				        fieldLabel: 'Zip Code',
 				        name: 'zipCode',
