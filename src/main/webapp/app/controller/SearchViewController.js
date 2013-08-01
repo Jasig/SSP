@@ -172,7 +172,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	me.appEventsController.assignEvent({eventName: 'setNonParticipatingProgramStatusComplete', callBackFunc: me.onSetNonParticipatingProgramStatusComplete, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onPersonSearchSuccess', callBackFunc: me.searchSuccess, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
-		
 	   	me.initSearchGrid();
 
 	   	// load program statuses
@@ -250,7 +249,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 		var searchView = Ext.ComponentQuery.query('search')[0];
 		searchView.collapse();
 	},
-	
 	onDisplaySearchBarClick: function( button ){
 		this.displaySearchBar();
 	},
