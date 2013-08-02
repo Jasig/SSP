@@ -517,9 +517,19 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			
 			me.service.save(me.personLite.get('id'), intakeData, {
 				success: function(r, scope) {
+					var newSaveFlag = false;
 					intakeData.person.birthDate = origBirthDate;
-					intakeData.person.studentIntakeCompleteDate = completedDateSave;	
-					me.saveStudentIntakeSuccess(r,scope);
+					
+					//this handles case for displaying completed date on new save and also for re-loading model after all saves
+					if ( completedDateSave ) {
+						intakeData.person.studentIntakeCompleteDate = completedDateSave;	
+					} else {
+						completedDateSave = new Date();
+						intakeData.person.studentIntakeCompleteDate = completedDateSave;
+						newSaveFlag = true;
+					}	
+					
+					me.saveStudentIntakeSuccess(r,scope,newSaveFlag);
 				},
 				failure: function(r, scope) {
 					intakeData.person.birthDate = origBirthDate;
@@ -534,13 +544,16 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		}
 	},
 	
-	saveStudentIntakeSuccess: function(r, scope) {
+	saveStudentIntakeSuccess: function(r, scope, newSaveFlag) {
 		var me=scope;
 
 		me.getView().setLoading( false );
 		
 		if( r.success ) {
-			me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );							
+			me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );
+			if ( newSaveFlag ) {
+				me.onCancelClick(); //rebuild view for new save to show date
+			}
 		}								
 	},
 	
