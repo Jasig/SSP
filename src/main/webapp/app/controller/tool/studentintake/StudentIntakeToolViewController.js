@@ -539,7 +539,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 
 		me.getView().setLoading( false );
 		
-		if( r.success == true ) {
+		if( r.success ) {
 			me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );							
 		}								
 	},
