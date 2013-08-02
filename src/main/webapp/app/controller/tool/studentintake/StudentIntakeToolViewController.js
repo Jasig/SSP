@@ -248,6 +248,14 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		
 		// LOAD RECORDS FOR EACH OF THE FORMS
 		
+		//handles issue of intake completed date not showing after save event and subsequent client-side model reloads
+		var studentIntakeCompleteDate = person.data.studentIntakeCompleteDate;
+		var formattedStudentIntakeCompleteDate = person.data.formattedStudentIntakeCompleteDate;
+		
+		if ( studentIntakeCompleteDate && (!formattedStudentIntakeCompleteDate) ) {
+			person.data.formattedStudentIntakeCompleteDate = Ext.util.Format.date(studentIntakeCompleteDate,'m/d/Y');		
+		}		
+		
 		// format the dates
 		Ext.getCmp('StudentIntakePersonal').loadRecord( person );
 		
@@ -478,7 +486,10 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			{
 				intakeData.person.birthDate = me.formUtils.toJSONStringifiableDate(intakeData.person.birthDate);
 			}
-
+			
+			//save intake completion date so when model strips it below, it can be reloaded
+			var completedDateSave = me.studentIntake.get('person').data.studentIntakeCompleteDate;
+			
 			// cleans properties that will be unable to be saved if not null
 			// arrays set to strings should be null rather than string in saved
 			// json
@@ -507,10 +518,12 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			me.service.save(me.personLite.get('id'), intakeData, {
 				success: function(r, scope) {
 					intakeData.person.birthDate = origBirthDate;
+					intakeData.person.studentIntakeCompleteDate = completedDateSave;	
 					me.saveStudentIntakeSuccess(r,scope);
 				},
 				failure: function(r, scope) {
 					intakeData.person.birthDate = origBirthDate;
+					intakeData.person.studentIntakeCompleteDate = completedDateSave;
 					me.saveStudentIntakeFailure(r,scope);
 				},
 				scope: me
