@@ -169,6 +169,7 @@ public class StudentDocumentController  extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/{id}/file", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('ROLE_PERSON_DOCUMENT_READ')")
 	public void getFile(@PathVariable("id") UUID id,
 			HttpServletResponse response) throws ObjectNotFoundException {
 		try {
