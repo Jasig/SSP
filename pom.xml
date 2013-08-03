@@ -34,7 +34,7 @@
 		<connection>scm:git:git://github.com/Jasig/SSP.git</connection>
 		<developerConnection>scm:git:git@github.com:Jasig/SSP.git</developerConnection>
 		<url>https://github.com/Jasig/SSP</url>
-		<tag>ssp-2.0.0-b3</tag>
+		<tag>rel-2-0-patches</tag>
 	</scm>
 
 	<profiles>
