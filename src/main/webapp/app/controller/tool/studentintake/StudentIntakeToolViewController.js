@@ -248,6 +248,10 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		
 		// LOAD RECORDS FOR EACH OF THE FORMS
 		
+		//Trims blank spaces from zip code fields which causes user experience issues
+		person.data.zipCode = Ext.String.trim(person.data.zipCode);
+		person.data.alternateAddressZipCode = Ext.String.trim(person.data.alternateAddressZipCode);
+		
 		//handles issue of intake completed date not showing after save event and subsequent client-side model reloads
 		var studentIntakeCompleteDate = person.data.studentIntakeCompleteDate;
 		var formattedStudentIntakeCompleteDate = person.data.formattedStudentIntakeCompleteDate;
