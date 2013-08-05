@@ -38,6 +38,9 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
     },    
 	width: '100%',
     height: '100%',
+	minHeight: 1000,
+	minWidth: 600,
+	style: 'padding: 0px 5px 5px 10px',
 	initComponent: function() {	
 		var me=this;
 		Ext.apply(me, 
