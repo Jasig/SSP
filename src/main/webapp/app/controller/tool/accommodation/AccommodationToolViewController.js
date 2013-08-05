@@ -342,8 +342,11 @@ Ext.define('Ssp.controller.tool.accommodation.AccommodationToolViewController', 
 
 		// validate and save the model
 		var validateResult = me.formUtils.validateForms( formsToValidate );
-		if ( validateResult.valid )
-		{
+		if ( validateResult.valid )	{
+			
+			//save ods registration date so when model strips it below, it can be reloaded
+			var completedOdsRegistrationDateSave = me.accommodation.get('personDisability').data.odsRegistrationDate;
+			
 			// update the model with changes from the forms
             accommodationForm.updateRecord( me.accommodation.get('personDisability') );
 	
@@ -402,13 +405,23 @@ Ext.define('Ssp.controller.tool.accommodation.AccommodationToolViewController', 
 			
 			me.service.save(me.personLite.get('id'), accommodationData, {
 				success: function(r,scope){
+					var newSaveFlag = false;
 					accommodationData.personDisability.eligibleLetterDate = origEligibleLetterDate;
 					accommodationData.personDisability.ineligibleLetterDate = origIneligibleLetterDate;
-					scope.saveAccommodationSuccess(r,scope);
+					
+					//this handles case for displaying completed ods registration date on new save and also for restoring it into the model after all saves
+					if ( !completedOdsRegistrationDateSave ) {
+						completedOdsRegistrationDateSave = new Date();
+						newSaveFlag = true;
+					}
+					accommodationData.personDisability.odsRegistrationDate = completedOdsRegistrationDateSave;
+					
+					scope.saveAccommodationSuccess(r,scope,newSaveFlag);
 				},
 				failure: function(r,scope){
 					accommodationData.personDisability.eligibleLetterDate = origEligibleLetterDate;
 					accommodationData.personDisability.ineligibleLetterDate = origIneligibleLetterDate;
+					accommodationData.personDisability.odsRegistrationDate = completedOdsRegistrationDateSave;
 					me.saveAccommodationFailure(r, scope);
 				},
 				scope: me
@@ -419,13 +432,15 @@ Ext.define('Ssp.controller.tool.accommodation.AccommodationToolViewController', 
 		}
 	},
 	
-	saveAccommodationSuccess: function(r, scope) {
+	saveAccommodationSuccess: function(r, scope, newSaveFlag) {
 		var me=scope;
-
 		me.getView().setLoading( false );
 		
-		if( r.success == true ) {
-			me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );							
+		if( r.success ) {
+			me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );
+			if ( newSaveFlag ) {
+				me.onCancelClick(); //rebuild view for new save to show date
+			}										
 		}								
 	},
 	
