@@ -29,7 +29,7 @@ Ext.define('Ssp.controller.admin.journal.AssociateStepDetailsAdminViewController
 		me.callParent(arguments);
 		me.clear();
 		
-		var params = {status: "ALL", limit: "-1"};
+		var params = {status: "ACTIVE", limit: "-1"};
 		this.getParentItemsWithParams(params);
 		
 		//me.getParentItems();	

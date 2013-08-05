@@ -30,7 +30,7 @@ Ext.define('Ssp.controller.admin.journal.AssociateTrackStepsAdminViewController'
 		this.clear();
 		//this.getParentItems();
 		
-		var params = {status: "ALL", limit: "-1"};
+		var params = {status: "ACTIVE", limit: "-1"};
 		this.getParentItemsWithParams(params);
 		
 		return this;
