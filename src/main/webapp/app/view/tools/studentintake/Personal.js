@@ -28,7 +28,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
         statesStore: 'statesStore'
     },
 	width: '100%',
-    height: '100%',    
+    height: '100%',
 	initComponent: function() {
 		var me=this;
 		Ext.apply(me, 
@@ -150,7 +150,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        itemId: 'addressLine1'
 				    },{
 				        fieldLabel: 'Address Line 2',
-				        name: 'addressLine1',
+				        name: 'addressLine2',
 				        maxLength: 50,
 				        allowBlank:true,
 				        itemId: 'addressLine2'
@@ -193,12 +193,18 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    	fieldLabel: 'In Use',
 				    	name: 'alternateAddressInUse'
 				    },{
-				        fieldLabel: 'Address',
+				        fieldLabel: 'Address Line 1',
 				        name: 'alternateAddressLine1',
 				        maxLength: 50,
 				        allowBlank:true,
-				        itemId: 'alternateAddress'
+				        itemId: 'alternateAddressLine1'
 				    },{
+						fieldLabel: 'Address Line 2',
+						name: 'alternateAddressLine2',
+						maxLength: 50,
+						allowBlank: true,
+						itemId: 'alternateAddressLine2'
+					},{
 				        fieldLabel: 'City',
 				        name: 'alternateAddressCity',
 				        maxLength: 50,
