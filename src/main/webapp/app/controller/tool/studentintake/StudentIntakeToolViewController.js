@@ -520,14 +520,12 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 					var newSaveFlag = false;
 					intakeData.person.birthDate = origBirthDate;
 					
-					//this handles case for displaying completed date on new save and also for re-loading model after all saves
-					if ( completedDateSave ) {
-						intakeData.person.studentIntakeCompleteDate = completedDateSave;	
-					} else {
-						completedDateSave = new Date();
-						intakeData.person.studentIntakeCompleteDate = completedDateSave;
+					//this handles case for displaying completed date on new save and also for also for restoring it into the model after all saves
+					if ( !completedDateSave ) {
+						completedDateSave = new Date();						
 						newSaveFlag = true;
-					}	
+					} 					
+					intakeData.person.studentIntakeCompleteDate = completedDateSave;
 					
 					me.saveStudentIntakeSuccess(r,scope,newSaveFlag);
 				},
