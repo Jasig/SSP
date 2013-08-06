@@ -113,20 +113,11 @@ Ext.define('Ssp.model.AbstractBase', {
              ],
     
 	populateFromGenericObject: function( record ){
-		if (record != null)
-		{
 			for (fieldName in this.data)
 	    	{
-				//TODO this was orginally if(record[fieldName]) this does not work for booleans
-				// The current code will lead to anomalous behavior to be fix in future
-				if (record[fieldName] != undefined && record[fieldName] != null)
-	    		{
-	    			this.set( fieldName, record[fieldName] );
-	    		}
+	    		this.set( fieldName, record == null ? null : record[fieldName]);
 	    	}
-		}
     },
-    
     getCreatedByPersonName: function(){
     	return this.get('createdBy').firstName + ' ' + this.get('createdBy').lastName;
     },
