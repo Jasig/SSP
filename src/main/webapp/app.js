@@ -496,7 +496,7 @@ var apiUrls = [
   {name: 'specialServiceGroup', url: 'reference/specialServiceGroup'},
   {name: 'studentIntakeTool', url: 'tool/studentIntake'},
   {name: 'studentType', url: 'reference/studentType'},
-  {name: 'terms', url: 'reference/term/?sort=startDate&start=0&limit=10000&sortDirection=DESC'},
+  {name: 'terms', url: 'reference/term'},
   {name: 'course', url: 'reference/course'},
   {name: 'courseRequisites', url: 'reference/courserequisites/{id}'},
   {name: 'program', url: 'reference/program/all'},

@@ -21,6 +21,7 @@ package org.jasig.ssp.dao;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -50,6 +51,9 @@ import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.external.ExternalStudentRecordsController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -73,6 +77,10 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	
 	@Autowired
 	private transient SecurityService securityService;
+	
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(PersonSearchDao.class);
+
 
 	FileWriter fileWriter;
 
@@ -181,9 +189,22 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	@SuppressWarnings("unchecked")
 	public List<PersonSearchResult2> search(PersonSearchRequest personSearchRequest) throws ObjectNotFoundException 
 	{
+		Term currentTerm;
 		FilterTracker filterTracker = new FilterTracker();
-		Term currentTerm = termService.getCurrentTerm();
-		
+		try
+		{
+			currentTerm = termService.getCurrentTerm();
+		}
+		//If there is no current term, lets degrade silently
+		catch(ObjectNotFoundException e)
+		{
+			LOGGER.error("CURRENT TERM NOT SET, org.jasig.ssp.dao.PersonSearchDao.search(PersonSearchRequest) is being called but will not function properly");
+			currentTerm = new Term();
+			currentTerm.setName("CURRENT TERM NOT SET");
+			currentTerm.setStartDate(Calendar.getInstance().getTime());
+			currentTerm.setEndDate(Calendar.getInstance().getTime());
+			
+		}
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(" select distinct p.id as person_id, p.firstName as person_firstName, " +
 				"p.middleName as person_middleName, " +

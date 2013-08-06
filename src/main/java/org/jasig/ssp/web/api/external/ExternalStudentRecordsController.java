@@ -249,7 +249,16 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 			throws ObjectNotFoundException {
 		String schoolId = getStudentId(id);
 		
-		Term currentTerm = termService.getCurrentTerm();
+		Term currentTerm;
+		try
+		{
+			currentTerm = termService.getCurrentTerm();
+		}
+		catch(ObjectNotFoundException e)
+		{
+			currentTerm = new Term();
+			LOGGER.error("CURRENT TERM NOT SET, org.jasig.ssp.web.api.external.ExternalStudentRecordsController.loadCurrentCourses(UUID) is being called but will not function properly");
+		}
 		List<ExternalStudentTranscriptCourseTO> courses = externalStudentTranscriptCourseFactory.asTOList(
 				externalStudentTranscriptCourseService.getTranscriptsBySchoolIdAndTermCode(schoolId, currentTerm.getCode()));
 		Map<String,String> mappings = statusCodeMappings();
