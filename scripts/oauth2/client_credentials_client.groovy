@@ -7,6 +7,7 @@ import groovyx.net.http.RESTClient
 import groovyx.net.http.HTTPBuilder
 //import groovy.util.slurpersupport.GPathResult
 import static groovyx.net.http.ContentType.URLENC
+import static groovyx.net.http.ContentType.JSON
 
 def client = new RESTClient ( 'http://localhost:8080' )
 
@@ -14,13 +15,34 @@ def site = new HTTPBuilder( 'http://localhost:8080' )
 site.auth.basic 'my-client-with-secret', 'secret'
 
 //def body = [grant_type:'client_credentials']
-site.post(path: '/ssp/api/1/oauth/token',
+def accessToken
+site.post(path: '/ssp/api/oauth/token',
             body: [grant_type:'client_credentials'],
-            requestContentType: URLENC ) { resp ->
+            requestContentType: URLENC ) { resp, reader ->
 
-    println resp.text()
+//    println resp
+
+//        System.out << "Token response: " << reader
+//        println()
+//        System.out << resp
+//        System.out << reader['access_token']
+    accessToken = reader['access_token']
+
+//    println json
 
 }
+
+site.auth.basic "",""
+site.get(path: '/ssp/api/1/person',
+        contentType: JSON,
+        query: ["limit": 1],
+        headers: ['Authorization': "Bearer ${accessToken}"]) { resp, reader ->
+
+    System.out << "Person response: " << reader
+    println()
+
+}
+
 
 //
 //
