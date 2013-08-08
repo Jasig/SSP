@@ -1,27 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Licensed to Jasig under one or more contributor license
-    agreements. See the NOTICE file distributed with this work
-    for additional information regarding copyright ownership.
-    Jasig licenses this file to you under the Apache License,
-    Version 2.0 (the "License"); you may not use this file
-    except in compliance with the License. You may obtain a
-    copy of the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on
-    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations
-    under the License.
-
--->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="journalEntries_subreport" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="b1d47460-50db-4cf5-9fd7-0ba8b48a3b37">
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="191"/>
 	<property name="ireport.y" value="0"/>
 	<field name="entryDate" class="java.util.Date"/>
 	<field name="comment" class="java.lang.String"/>
@@ -30,6 +10,7 @@
 	<field name="createdBy.firstName" class="java.lang.String"/>
 	<field name="createdBy.lastName" class="java.lang.String"/>
 	<field name="journalEntryDetails" class="java.util.Set"/>
+	<field name="journalSource.name" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -56,16 +37,6 @@
 				<textFieldExpression><![CDATA[$F{confidentialityLevel.name}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="3b089129-2012-4d70-96e1-fc7479c4e408" x="0" y="63" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[Session Type:]]></text>
-			</staticText>
-			<textField>
-				<reportElement uuid="d4c8a86e-1efb-4946-a95e-e0ec429c0fd6" x="100" y="63" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{journalTrack.name} == null ? "": $F{journalTrack.name}]]></textFieldExpression>
-			</textField>
-			<staticText>
 				<reportElement uuid="23c2b91a-a15b-4857-8291-f68757e54faf" x="0" y="21" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Entered By:]]></text>
@@ -75,30 +46,50 @@
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{createdBy.firstName} + " " + $F{createdBy.lastName}]]></textFieldExpression>
 			</textField>
-		</band>
-		<band height="16">
-			<subreport>
-				<reportElement uuid="18003255-e953-4d75-90ce-03817fc92dd7" positionType="Float" stretchType="RelativeToTallestObject" x="100" y="0" width="455" height="16"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{journalEntryDetails})]]></dataSourceExpression>
-				<subreportExpression><![CDATA["reports/sessionDetails_subreport.jasper"]]></subreportExpression>
-			</subreport>
 			<staticText>
-				<reportElement uuid="3b089129-2012-4d70-96e1-fc7479c4e408" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="100" height="16"/>
+				<reportElement uuid="21bedd47-3bac-489b-801f-c6cca8871b65" x="0" y="61" width="100" height="20"/>
 				<textElement/>
-				<text><![CDATA[Session Details:]]></text>
+				<text><![CDATA[Source:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="b6728f95-7eae-436e-b5bb-6cca03188ac0" x="100" y="61" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{journalSource.name}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<textField>
+				<reportElement uuid="d4c8a86e-1efb-4946-a95e-e0ec429c0fd6" x="100" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{journalTrack.name} == null ? "": $F{journalTrack.name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3b089129-2012-4d70-96e1-fc7479c4e408" x="0" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Session Type:]]></text>
 			</staticText>
 		</band>
-		<band height="38">
+		<band height="56">
 			<staticText>
-				<reportElement uuid="f7b1223a-7d49-45c5-b2e1-c4cdb347bad3" x="0" y="0" width="100" height="20"/>
+				<reportElement uuid="f7b1223a-7d49-45c5-b2e1-c4cdb347bad3" x="0" y="18" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Comment:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="5d7b5979-80ad-4adb-8790-ba8092b5b0b6" x="100" y="0" width="455" height="38"/>
+				<reportElement uuid="5d7b5979-80ad-4adb-8790-ba8092b5b0b6" x="100" y="18" width="455" height="38"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{comment}]]></textFieldExpression>
 			</textField>
+			<subreport>
+				<reportElement uuid="18003255-e953-4d75-90ce-03817fc92dd7" positionType="Float" stretchType="RelativeToTallestObject" x="100" y="2" width="455" height="16"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{journalEntryDetails})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["reports/sessionDetails_subreport.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="3b089129-2012-4d70-96e1-fc7479c4e408" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="2" width="100" height="16"/>
+				<textElement/>
+				<text><![CDATA[Session Details:]]></text>
+			</staticText>
 		</band>
 	</detail>
 </jasperReport>
