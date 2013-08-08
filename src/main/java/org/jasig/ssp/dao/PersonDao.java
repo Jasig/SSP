@@ -412,6 +412,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
 									personSearchTO
 											.getSpecialServiceGroupIds()));
+		}else if(personSearchTO.getSpecialServiceGroupRequired()){
+			/* Makes sure that at least one special service group has an active status */
+			criteria.createAlias("specialServiceGroups",
+					"personSpecialServiceGroups");
+			criteria.add(Restrictions.eq("personSpecialServiceGroups.objectStatus", ObjectStatus.ACTIVE));
 		}
 
 		if (personSearchTO.getReferralSourcesIds() != null) {
@@ -622,11 +627,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		projections.add(Projections.groupProperty("id").as("id"));
 		
 		criteria.createAlias("programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
-		criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN)
-				.add(Restrictions.eq("personSpecialServiceGroups.objectStatus", status));
+		criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
 		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup", JoinType.LEFT_OUTER_JOIN);
 		
 		projections.add(Projections.groupProperty("specialServiceGroup.name").as("specialServiceGroup"));
+		projections.add(Projections.groupProperty("specialServiceGroup.objectStatus").as("specialServiceGroupObjectStatus"));
 		criteria.createAlias("personProgramStatuses.programStatus", "programStatus", JoinType.LEFT_OUTER_JOIN);
 		
 		projections.add(Projections.groupProperty("programStatus.name").as("programStatusName"));

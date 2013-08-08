@@ -110,6 +110,8 @@ public class SpecialServicesReportController extends ReportBaseController {
 				null,
 				serviceReasonService);
 
+		personSearchForm.setSpecialServiceGroupRequired(true);
+		
 		final PagingWrapper<BaseStudentReportTO> people = personService
 				.getStudentReportTOsFromCriteria(personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
 
@@ -119,7 +121,7 @@ public class SpecialServicesReportController extends ReportBaseController {
 		
 		SearchParameters.addReportTitleToMap(REPORT_TITLE, parameters);
 		SearchParameters.addDataFIleToMap(DATA_FILE, parameters);
-
+		
 		generateReport(response, parameters, compressedReports, REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 

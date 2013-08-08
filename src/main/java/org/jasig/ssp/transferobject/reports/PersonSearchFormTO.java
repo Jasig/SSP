@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.transferobject.PersonTO;
 
 /**
@@ -68,6 +69,10 @@ public class PersonSearchFormTO
 	private String homeDepartment;
 	
 	private String rosterStatus;
+	
+	private Boolean specialServiceGroupRequired = false;
+	
+	private Term termRegisteredFor;  // use this to search for students registered in a specific term. Currently manually implemented
 
 	public String getHomeDepartment() {
 		return homeDepartment;
@@ -247,6 +252,29 @@ public class PersonSearchFormTO
 
 	public void setRosterStatus(String rosterStatus) {
 		this.rosterStatus = rosterStatus;
+	}
+
+	/**
+	 * @return the termRegisteredFor
+	 */
+	public Term getTermRegisteredFor() {
+		return termRegisteredFor;
+	}
+
+	/**
+	 * @param termRegisteredFor the termRegisteredFor to set
+	 */
+	public void setTermRegisteredFor(Term termRegisteredFor) {
+		this.termRegisteredFor = termRegisteredFor;
+	}
+
+	public Boolean getSpecialServiceGroupRequired() {
+		return specialServiceGroupRequired;
+	}
+
+	public void setSpecialServiceGroupRequired(
+			Boolean specialServiceGroupRequired) {
+		this.specialServiceGroupRequired = specialServiceGroupRequired;
 	}
 
 }
