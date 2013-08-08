@@ -70,6 +70,8 @@ public class PersonSearchFormTO
 	
 	private String rosterStatus;
 	
+	private Boolean specialServiceGroupRequired = false;
+	
 	private Term termRegisteredFor;  // use this to search for students registered in a specific term. Currently manually implemented
 
 	public String getHomeDepartment() {
@@ -264,6 +266,15 @@ public class PersonSearchFormTO
 	 */
 	public void setTermRegisteredFor(Term termRegisteredFor) {
 		this.termRegisteredFor = termRegisteredFor;
+	}
+
+	public Boolean getSpecialServiceGroupRequired() {
+		return specialServiceGroupRequired;
+	}
+
+	public void setSpecialServiceGroupRequired(
+			Boolean specialServiceGroupRequired) {
+		this.specialServiceGroupRequired = specialServiceGroupRequired;
 	}
 
 }

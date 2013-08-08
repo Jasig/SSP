@@ -28,6 +28,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.mygps.model.transferobject.TaskReportTO;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.model.external.ExternalStudentTranscript;
@@ -101,6 +102,10 @@ public class BaseStudentReportTO implements Serializable {
 	private List<String> specialServiceGroups = new ArrayList<String>();
 	private String specialServiceGroup;
 	private String specialServiceGroupsName;
+	
+	private List<ObjectStatus> specialServiceGroupObjectStatuses = new ArrayList<ObjectStatus>();
+	private ObjectStatus specialServiceGroupObjectStatus;
+	
 	private Boolean isIlp;
 	
 	private String actualStartTerm;
@@ -402,6 +407,7 @@ public class BaseStudentReportTO implements Serializable {
 		setCurrentProgramStatusName(person.getCurrentProgramStatusName());
 		setRegistrationStatus(person.getRegistrationStatus());
 		setSpecialServiceGroupsName(person.getSpecialServiceGroupsName());
+		setSpecialServiceGroupObjectStatuses(person.getSpecialServiceGroupObjectStatuses());
 		
 		if(getStudentType().equals(ILP))
 			setIsIlp(true);
@@ -419,15 +425,17 @@ public class BaseStudentReportTO implements Serializable {
 		return specialServiceGroup;
 	}
 
-	public void addSpecialServiceGroups(List<String> specialServiceGroups) {
-		for(String specialServiceGroup:specialServiceGroups)
-			if(!this.specialServiceGroups.contains(specialServiceGroup))
+	public void addSpecialServiceGroups(List<String> specialServiceGroups, List<ObjectStatus> specialServiceGroupOjectStatuses) {
+		Integer i = 0;
+		for(String specialServiceGroup:specialServiceGroups){
+			if(!this.specialServiceGroups.contains(specialServiceGroup) && (specialServiceGroupOjectStatuses.size() > i && specialServiceGroupOjectStatuses.get(i).equals(ObjectStatus.ACTIVE)))
 				this.specialServiceGroups.add(specialServiceGroup);
+			i = i + 1;
+		}
 	}
 
 	public void addSpecialServiceGroups(String specialServiceGroup) {
-		if(!this.specialServiceGroups.contains(specialServiceGroup))
-			this.specialServiceGroups.add(specialServiceGroup);
+		this.specialServiceGroups.add(specialServiceGroup);
 	}
 	
 	public List<String> getSpecialServiceGroups() {
@@ -444,15 +452,48 @@ public class BaseStudentReportTO implements Serializable {
 	}
 
 	public String getSpecialServiceGroupsName() {
+		List<String> addedSpecialGroups = new ArrayList<String>();
 		if(specialServiceGroupsName == null || specialServiceGroupsName.length() == 0){
 			specialServiceGroupsName = "";
+			Integer i = 0;
 			for(String specialServiceGroup:specialServiceGroups){
-				if(specialServiceGroup == null)
+				if(specialServiceGroup == null || addedSpecialGroups.contains(specialServiceGroup)){
+					i = i + 1;
 					continue;
+				}
+				addedSpecialGroups.add(specialServiceGroup);
 				specialServiceGroupsName = addValueToStringList(specialServiceGroupsName, specialServiceGroup);
+				i = i + 1;
 			}
 		}
 		return specialServiceGroupsName;
+	}
+
+	
+	public void setSpecialServiceGroupObjectStatus(ObjectStatus specialServiceGroupObjectStatus) {
+		this.specialServiceGroupObjectStatus = specialServiceGroupObjectStatus;
+		addSpecialServiceGroupObjectStatuses(specialServiceGroupObjectStatus);
+	}
+	
+	public ObjectStatus getSpecialServiceGroupObjectStatus(){
+		return specialServiceGroupObjectStatus;
+	}
+
+	public void addSpecialServiceGroupObjectStatuses(List<ObjectStatus> specialServiceGroupObjectStatuses) {
+		for(ObjectStatus specialServiceGroupObjectStatus:specialServiceGroupObjectStatuses)
+				this.specialServiceGroupObjectStatuses.add(specialServiceGroupObjectStatus);
+	}
+
+	public void addSpecialServiceGroupObjectStatuses(ObjectStatus specialServiceGroupObjectStatus) {
+			this.specialServiceGroupObjectStatuses.add(specialServiceGroupObjectStatus);
+	}
+	
+	public List<ObjectStatus> getSpecialServiceGroupObjectStatuses() {
+			return this.specialServiceGroupObjectStatuses;
+	}
+	
+	public void setSpecialServiceGroupObjectStatuses(List<ObjectStatus> specialServiceGroupObjectStatuses) {
+		this.specialServiceGroupObjectStatuses = specialServiceGroupObjectStatuses;
 	}
 	
 	public void setStudentType(String studentType) {
@@ -592,7 +633,7 @@ public class BaseStudentReportTO implements Serializable {
 	}
 	
 	public void processDuplicate(BaseStudentReportTO reportTO){
-		addSpecialServiceGroups(reportTO.getSpecialServiceGroups());
+		addSpecialServiceGroups(reportTO.getSpecialServiceGroups(), reportTO.getSpecialServiceGroupObjectStatuses());
 		addStudentTypes(reportTO.getStudentTypes());
 		addProgramStatuses(reportTO.getProgramStatuses());
 	}
