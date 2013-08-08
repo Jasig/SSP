@@ -72,6 +72,8 @@ Ext.define('Ssp.model.AbstractBase', {
                  record.synchronizingStatusFields = true;
 				 if(value === true || value === false)
 					record.set('active', value);
+                 else if(value === undefined || value === null)
+                    record.set('active', true) // matches the default for objectStatus
 				 else if(!value)
 					record.set('active', false);
 				 else
@@ -106,7 +108,15 @@ Ext.define('Ssp.model.AbstractBase', {
 
                  // else sync in the other direction
                  record.synchronizingStatusFields = true;
-                 record.set('objectStatus', !(!value) ? 'ACTIVE' : 'INACTIVE');
+                 // This field not actually produced by the back end so if it's
+                 // missing make sure we default back to 'ACTIVE'. Else we run
+                 // the risk of accidentally soft-deleting persistent records
+                 // when the client side model is written back to the server.
+                 if ( value === undefined || value === null ) {
+                     record.set('objectStatus', 'ACTIVE'); // the default
+                 } else {
+                     record.set('objectStatus', !(!value) ? 'ACTIVE' : 'INACTIVE');
+                 }
                  record.synchronizingStatusFields = false;
                  return value;
              }}
