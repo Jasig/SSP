@@ -110,7 +110,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
-	@RequestMapping(value = "/createCustom", method = RequestMethod.GET)
+	@RequestMapping(value = "/createCustom", method = RequestMethod.POST)
 	public @ResponseBody
 	TaskTO createCustom(@RequestParam("name") final String name,
 			@RequestParam("description") final String description)
@@ -125,7 +125,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 		return new TaskTO(task);
 	}
 	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
-	@RequestMapping(value = "/createForChallengeReferral", method = RequestMethod.GET)
+	@RequestMapping(value = "/createForChallengeReferral", method = RequestMethod.POST)
 	public @ResponseBody
 	TaskTO createForChallengeReferral(
 			@RequestParam("challengeId") final UUID challengeId,
@@ -147,7 +147,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 		return new TaskTO(task);
 	}
 	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
-	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
 	public @ResponseBody
 	boolean delete(@RequestParam("taskId") final UUID taskId)
 			throws ObjectNotFoundException {
@@ -210,7 +210,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 		return tasks == null ? null : TaskTO.toTOList(tasks);
 	}
 
-	@RequestMapping(value = "/mark", method = RequestMethod.GET)
+	@RequestMapping(value = "/mark", method = RequestMethod.PUT)
 	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
 	public @ResponseBody
 	TaskTO mark(@RequestParam("taskId") final UUID taskId,

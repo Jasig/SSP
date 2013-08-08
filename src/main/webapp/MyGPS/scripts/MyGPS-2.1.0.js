@@ -762,6 +762,7 @@
         return $.ajax({
           url: this.createURL("/cancel?selfHelpGuideResponseId=" + selfHelpGuideResponseId),
           dataType: "json",
+          type: "PUT",
           success: function(result) {
             return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
           },
@@ -774,6 +775,7 @@
       SelfHelpGuideResponseService.prototype.complete = function(selfHelpGuideResponseId, callbacks) {
         return $.ajax({
           url: this.createURL("/complete?selfHelpGuideResponseId=" + selfHelpGuideResponseId),
+          type: "POST",
           dataType: "json",
           success: function(result) {
             return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
@@ -802,6 +804,7 @@
       SelfHelpGuideResponseService.prototype.initiate = function(selfHelpGuideId, callbacks) {
         return $.ajax({
           url: this.createURL("/initiate?selfHelpGuideId=" + selfHelpGuideId),
+          type: "POST",
           dataType: "text",
           success: function(result) {
             return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
@@ -815,6 +818,7 @@
       SelfHelpGuideResponseService.prototype.answer = function(selfHelpGuideResponseId, selfHelpGuideQuestionId, response, callbacks) {
         return $.ajax({
           url: this.createURL("/answer?selfHelpGuideResponseId=" + selfHelpGuideResponseId + "&selfHelpGuideQuestionId=" + selfHelpGuideQuestionId + "&response=" + response),
+          type: "POST",
           dataType: "json",
           success: function(result) {
             return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
@@ -995,6 +999,7 @@
         return $.ajax({
           url: this.createURL("/createCustom?name=" + (encodeURIComponent(name)) + "&description=" + (encodeURIComponent(description))),
           dataType: "json",
+          type: "POST",
           success: function(result) {
             var task;
             task = mygps.model.Task.createFromTransferObject(result);
@@ -1010,6 +1015,7 @@
         return $.ajax({
           url: this.createURL("/createForChallengeReferral?challengeId=" + challengeId + "&challengeReferralId=" + challengeReferralId),
           dataType: "json",
+          type: "POST",
           success: function(result) {
             var task;
             task = mygps.model.Task.createFromTransferObject(result);
@@ -1025,6 +1031,7 @@
         return $.ajax({
           url: this.createURL("/delete?taskId=" + taskId),
           dataType: "json",
+          type: "DELETE",
           success: function(result) {
             return callbacks != null ? typeof callbacks.result === "function" ? callbacks.result(result) : void 0 : void 0;
           },
@@ -1074,6 +1081,7 @@
         return $.ajax({
           url: this.createURL("/mark?taskId=" + taskId + "&complete=" + complete),
           dataType: "json",
+          type: "PUT",
           success: function(result) {
             var task;
             task = mygps.model.Task.createFromTransferObject(result);
@@ -1560,8 +1568,7 @@
           var values;
           values = ko.utils.unwrapObservable(valueAccessor());
           $(element).click(function() {
-            return window.open(ko.utils.unwrapObservable(values.url), "ChildWindow", "height=" + values.height + ",width=" + values.width +
-			", resizable=1, scrollbars=1");
+            return window.open(ko.utils.unwrapObservable(values.url), "ChildWindow", "height=" + values.height + ",width=" + values.width, "resizable=1, scrollbars=1");
           });
           return false;
         }

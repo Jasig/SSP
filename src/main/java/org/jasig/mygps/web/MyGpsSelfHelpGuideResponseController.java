@@ -81,7 +81,7 @@ public class MyGpsSelfHelpGuideResponseController extends
 		this.securityService = securityService;
 	}
 	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
-	@RequestMapping(value = "cancel", method = RequestMethod.GET)
+	@RequestMapping(value = "cancel", method = RequestMethod.PUT)
 	public @ResponseBody
 	boolean cancel(
 			final @RequestParam("selfHelpGuideResponseId") UUID selfHelpGuideResponseId)
@@ -91,7 +91,7 @@ public class MyGpsSelfHelpGuideResponseController extends
 		return service.cancelSelfHelpGuideResponse(response);
 	}
 	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
-	@RequestMapping(value = "complete", method = RequestMethod.GET)
+	@RequestMapping(value = "complete", method = RequestMethod.POST)
 	public @ResponseBody
 	boolean complete(
 			final @RequestParam("selfHelpGuideResponseId") UUID selfHelpGuideResponseId)
@@ -116,7 +116,7 @@ public class MyGpsSelfHelpGuideResponseController extends
 				new SortingAndPaging(ObjectStatus.ACTIVE));
 	}
 	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
-	@RequestMapping(value = "initiate", method = RequestMethod.GET)
+	@RequestMapping(value = "initiate", method = RequestMethod.POST)
 	public @ResponseBody
 	String initiate(final @RequestParam("selfHelpGuideId") UUID selfHelpGuideId)
 			throws Exception {
@@ -126,7 +126,7 @@ public class MyGpsSelfHelpGuideResponseController extends
 		return service.initiateSelfHelpGuideResponse(guide, person, sessionId).toString();
 	}
 	@PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
-	@RequestMapping(value = "answer", method = RequestMethod.GET)
+	@RequestMapping(value = "answer", method = RequestMethod.POST)
 	public @ResponseBody
 	boolean answer(
 			final @RequestParam("selfHelpGuideResponseId") UUID selfHelpGuideResponseId,

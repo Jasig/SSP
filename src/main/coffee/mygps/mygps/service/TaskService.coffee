@@ -30,6 +30,7 @@ namespace 'mygps.service'
 				$.ajax(
 					url: @createURL( "/createCustom?name=#{ encodeURIComponent( name ) }&description=#{ encodeURIComponent( description ) }" )
 					dataType: "json"
+					type: "POST"
 					success: ( result ) ->
 						task = mygps.model.Task.createFromTransferObject( result )
 						callbacks?.result?( task )
@@ -41,6 +42,7 @@ namespace 'mygps.service'
 				$.ajax(
 					url: @createURL( "/createForChallengeReferral?challengeId=#{ challengeId }&challengeReferralId=#{ challengeReferralId }" )
 					dataType: "json"
+					type: "POST"
 					success: ( result ) ->
 						task = mygps.model.Task.createFromTransferObject( result )
 						callbacks?.result?( task )
@@ -52,6 +54,7 @@ namespace 'mygps.service'
 				$.ajax(
 					url: @createURL( "/delete?taskId=#{ taskId }" )
 					dataType: "json"
+					type: "DELETE"
 					success: ( result ) ->
 						callbacks?.result?( result )
 					error: ( fault ) ->
@@ -84,6 +87,7 @@ namespace 'mygps.service'
 				$.ajax(
 					url: @createURL( "/mark?taskId=#{ taskId }&complete=#{ complete }" )
 					dataType: "json"
+					type: "PUT"
 					success: ( result ) ->
 						task = mygps.model.Task.createFromTransferObject( result )
 						callbacks?.result?( task )

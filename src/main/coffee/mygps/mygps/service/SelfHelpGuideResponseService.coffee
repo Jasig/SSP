@@ -30,6 +30,7 @@ namespace 'mygps.service'
 				$.ajax(
 					url: @createURL( "/cancel?selfHelpGuideResponseId=#{ selfHelpGuideResponseId }" )
 					dataType: "json"
+					type: "PUT"
 					success: ( result ) ->
 						callbacks?.result?( result )
 					error: ( fault ) ->
@@ -39,6 +40,7 @@ namespace 'mygps.service'
 			complete: ( selfHelpGuideResponseId, callbacks ) ->
 				$.ajax(
 					url: @createURL( "/complete?selfHelpGuideResponseId=#{ selfHelpGuideResponseId }" )
+					type: "POST"
 					dataType: "json"
 					success: ( result ) ->
 						callbacks?.result?( result )
@@ -60,6 +62,7 @@ namespace 'mygps.service'
 			initiate: ( selfHelpGuideId, callbacks ) ->
 				$.ajax(
 					url: @createURL( "/initiate?selfHelpGuideId=#{ selfHelpGuideId }" )
+					type: "POST"
 					dataType: "text"
 					success: ( result ) ->
 						callbacks?.result?( result )
@@ -70,6 +73,7 @@ namespace 'mygps.service'
 			answer: ( selfHelpGuideResponseId, selfHelpGuideQuestionId, response, callbacks ) ->
 				$.ajax(
 					url: @createURL( "/answer?selfHelpGuideResponseId=#{ selfHelpGuideResponseId }&selfHelpGuideQuestionId=#{ selfHelpGuideQuestionId }&response=#{ response }" )
+					type: "POST"
 					dataType: "json"
 					success: ( result ) ->
 						callbacks?.result?( result )
