@@ -26,7 +26,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
-	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -37,15 +37,17 @@
 	<field name="courseName" class="java.lang.String"/>
 	<field name="courseTitle" class="java.lang.String"/>
 	<field name="earlyAlertReasonIds" class="java.util.Set"/>
-	<field name="earlyAlertSuggestionOtherDescription" class="java.lang.String"/>
 	<field name="comment" class="java.lang.String"/>
 	<field name="closedDate" class="java.util.Date"/>
 	<field name="createdDate" class="java.util.Date"/>
+	<field name="earlyAlertSuggestionIds" class="java.util.Set"/>
+	<field name="earlyAlertSuggestionOtherDescription" class="java.lang.String"/>
+	<field name="earlyAlertReasonOtherDescription" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="117" splitType="Stretch">
+		<band height="118" splitType="Stretch">
 			<textField>
 				<reportElement uuid="0555938f-0ca6-44ad-93ea-2818cdcc7270" stretchType="RelativeToTallestObject" x="101" y="36" width="454" height="19"/>
 				<textElement/>
@@ -106,39 +108,61 @@
 				<subreportExpression><![CDATA["reports/sessionDetails_subsubreport.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
-		<band height="63">
+		<band height="17">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement uuid="1489576d-71df-4ae4-8533-abea18445e33" positionType="Float" stretchType="RelativeToBandHeight" x="100" y="0" width="100" height="16">
+					<printWhenExpression><![CDATA[$F{earlyAlertReasonOtherDescription} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{earlyAlertReasonOtherDescription}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="22">
 			<staticText>
 				<reportElement uuid="0c8ebd89-a64b-4dd1-a2be-c7de77f4b037" x="0" y="0" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Suggestion:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement uuid="6b2902aa-278d-4a7f-a368-cd04147965f1" x="-1" y="20" width="100" height="20"/>
+			<subreport>
+				<reportElement uuid="05823614-2838-44aa-ac47-12b8360f3341" x="101" y="0" width="454" height="20"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{earlyAlertSuggestionIds})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["reports/sessionDetails_subsubreport.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="17">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="89b36b53-f26c-46e7-863a-6bfbc4434e96" positionType="Float" stretchType="RelativeToBandHeight" x="101" y="0" width="100" height="16" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{earlyAlertSuggestionOtherDescription} != null]]></printWhenExpression>
+				</reportElement>
 				<textElement/>
-				<text><![CDATA[Faculty Comment:]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$F{earlyAlertSuggestionOtherDescription}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="21">
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="77a29c24-7b7a-45b7-bb62-1b8101a27ba6" x="100" y="20" width="454" height="20">
+				<reportElement uuid="77a29c24-7b7a-45b7-bb62-1b8101a27ba6" stretchType="RelativeToBandHeight" x="101" y="0" width="454" height="20">
 					<printWhenExpression><![CDATA[$F{comment} != null]]></printWhenExpression>
 				</reportElement>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{comment}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="97815147-4c82-4f31-a7d6-87bfde1e35ea" x="-1" y="40" width="100" height="20"/>
+				<reportElement uuid="6b2902aa-278d-4a7f-a368-cd04147965f1" x="0" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Faculty Comment:]]></text>
+			</staticText>
+		</band>
+		<band height="24">
+			<staticText>
+				<reportElement uuid="97815147-4c82-4f31-a7d6-87bfde1e35ea" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Outcome:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="877ce208-aec0-4aea-a217-86bfe1e2da7d" x="100" y="40" width="454" height="20"/>
+				<reportElement uuid="877ce208-aec0-4aea-a217-86bfe1e2da7d" positionType="Float" stretchType="RelativeToBandHeight" x="101" y="0" width="454" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[($F{closedDate}==null?"Pending":"Closed on " + $F{closedDate})]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement uuid="0c8ebd89-a64b-4dd1-a2be-c7de77f4b037" x="101" y="0" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[Suggestion:]]></text>
-			</staticText>
 		</band>
 	</detail>
 </jasperReport>
