@@ -50,7 +50,7 @@ Ext.define('Ssp.util.ResponseDispatcher',{
         me.getSuccessCallbacks()[opName] = me.newScopedCallback(callback, callbackScope);
         return function(response) {
             me.onSuccess(opName, response);
-        }
+        };
     },
 
     // Returns a function that is typically useful for registering with
@@ -93,9 +93,9 @@ Ext.define('Ssp.util.ResponseDispatcher',{
         var me = this;
         var remainingOps = me.getRemainingOpNames();
         if ( remainingOps ) {
-            me.setRemainingOpNames(remainingOps.filter(function(element){
+            me.setRemainingOpNames(Ext.Array.filter(remainingOps, function(element) {
                 return element !== opName;
-            }));
+            }, me));
             remainingOps = me.getRemainingOpNames();
         }
 

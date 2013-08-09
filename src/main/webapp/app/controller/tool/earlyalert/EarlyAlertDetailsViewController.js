@@ -81,7 +81,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
         } else {
             // still need to go through the request dispatcher so we can fire the
             // 'all clear' once all sync and async data loads have completed
-            responseDispatcher.setSuccessCallback('earlyalert', me.bindEarlyAlertToView, me).apply(responseDispatcher, null);
+            responseDispatcher.setSuccessCallback('earlyalert', me.bindEarlyAlertToView, me).apply(responseDispatcher, []);
         }
 
         me.earlyAlertService.getAllEarlyAlertResponses(personId,
