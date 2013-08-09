@@ -808,11 +808,7 @@ Ext.onReady(function(){
 			        earlyAlertsTreeStore:{
 				        fn: function(){
 				            return Ext.create('Ext.data.TreeStore',{
-				            	model: 'Ssp.model.tool.earlyalert.PersonEarlyAlertTree'
-				                ,proxy: {
-				                	type: 'ajax',
-				                	url: ''
-				                }
+				            	model: 'Ssp.model.tool.earlyalert.PersonEarlyAlertTree'				                
 				            });
 				    	},
 				        singleton: true
