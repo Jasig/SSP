@@ -95,6 +95,10 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
                         store: me.selectedReasonsStore,
                         displayField: 'name',
                         anchor: '95%'
+					}, {
+						fieldLabel: 'Other Reason',
+						name: 'earlyAlertReasonOtherDescription',
+						hidden: !me.model.get('earlyAlertReasonOtherDescription')
                     }, {
                         xtype: 'multiselect',
                         name: 'earlyAlertSuggestionIds',
@@ -103,8 +107,11 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
                         store: me.selectedSuggestionsStore,
                         displayField: 'name',
                         anchor: '95%'
-                    }, {
-                    
+					 }, {
+						fieldLabel: 'Other Suggestion',
+						name: 'earlyAlertSuggestionOtherDescription',
+						hidden: !me.model.get('earlyAlertSuggestionOtherDescription')
+                    }, {                    
                         fieldLabel: 'Comment',
                         name: 'comment'
                     }, {
