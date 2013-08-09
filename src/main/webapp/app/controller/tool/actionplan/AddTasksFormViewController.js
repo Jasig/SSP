@@ -116,8 +116,16 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 			// manipulate before sending over the wire as JSON. We're not doing
 			// that anywhere else in the app though.
 			var origDueDate = model.data.dueDate;
+			var todayDateJSON = me.formUtils.toJSONStringifiableDate( new Date() );
+			var origDueDateJSON = me.formUtils.toJSONStringifiableDate( model.data.dueDate );
+			
 			model.data.dueDate = me.formUtils.toJSONStringifiableDate( model.data.dueDate );
-
+			if (id == "") {
+				if (origDueDateJSON['formattedStr'] < todayDateJSON['formattedStr']) {
+					Ext.Msg.alert('Error', 'Please correct the Target Date.');
+					return;
+				}
+			}
 			successFunc = function(response ,view){
 					model.data.dueDate = origDueDate;
 		    	   Ext.Msg.confirm({
