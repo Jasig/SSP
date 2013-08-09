@@ -49,9 +49,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
                 margin: '5 0 0 0',
                 defaultType: 'displayfield',
                 fieldDefaults: {
-                    msgTarget: 'side',
-                    //labelAlign: 'right',
-                    //labelWidth: 80
+                    msgTarget: 'side'
                 },
                 items: [{
                     xtype: 'fieldset',
@@ -103,7 +101,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
                     }, {
                     
                         fieldLabel: 'Comment',
-                        name: 'comment',
+                        name: 'comment'
                     
                     }, {
                         xtype: 'tbspacer',

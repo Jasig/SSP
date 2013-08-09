@@ -44,8 +44,8 @@ Ext.define('Ssp.view.tools.profile.SpecialServiceGroups', {
             columns: [{
                 header: 'Group',
                 dataIndex: 'name',
-                flex: 1,
-            }],
+                flex: 1
+            }]
         });
         
         return me.callParent(arguments);

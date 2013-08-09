@@ -36,11 +36,11 @@ Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideEditChallenges',{
 	                  {
 	                  	xtype: 'editselfhelpguidechallenges', 
 	                  	flex: 1
-	                  },{
+	                  },
+					  {
 	                  	xtype: 'editselfhelpguideavailablechallengesadmin', 
 	                  	flex: 1
-	                  }
-	                 ]});
+	                  }]});
     	return this.callParent(arguments);
     }
 });

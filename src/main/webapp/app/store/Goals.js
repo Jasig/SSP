@@ -27,5 +27,5 @@ Ext.define('Ssp.store.Goals', {
 		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('personGoal') ),
 						  autoLoad: false });
 		return this.callParent(arguments);
-	},
+	}
 });

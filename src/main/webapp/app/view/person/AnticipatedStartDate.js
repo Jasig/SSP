@@ -23,7 +23,7 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.person.AnticipatedStartDateViewController',
     inject: {
-    	anticipatedStartTermsStore: 'anticipatedStartTermsStore',
+    	anticipatedStartTermsStore: 'anticipatedStartTermsStore'
     },
 	initComponent: function() {	
 		Ext.apply(this, 

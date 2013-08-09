@@ -46,8 +46,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	
     	'emailButton': {
     		click: 'onEmailClick'
-    	},
-    	
+    	}
     },
     
 	init: function() {
@@ -444,8 +443,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 					"Could not overwrite the existing record" +
 					" because the system might have found multiple" +
 					" conflicting records or detected it was at risk of" +
-					" updating the wrong record your edits. Please contact"
-					+ " your system administrators.");
+					" updating the wrong record your edits. Please contact" +
+					" your system administrators.");
 				return false;
 			}
 		}

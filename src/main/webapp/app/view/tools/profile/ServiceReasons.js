@@ -47,7 +47,7 @@ Ext.define('Ssp.view.tools.profile.ServiceReasons', {
                 dataIndex: 'name',
                 flex: 1
             
-            }],
+            }]
         });
         
         return me.callParent(arguments);

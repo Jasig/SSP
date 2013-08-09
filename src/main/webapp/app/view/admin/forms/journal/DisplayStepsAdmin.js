@@ -40,7 +40,7 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayStepsAdmin', {
 		                  ptype: 'gridviewdragdrop',
 		                  dragGroup: 'gridtotree',
 		                  enableDrag: me.authenticatedPerson.hasAccess('TRACKS_STEPS_ADMIN_ASSOCIATIONS')
-		        	  },
+		        	  }
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',

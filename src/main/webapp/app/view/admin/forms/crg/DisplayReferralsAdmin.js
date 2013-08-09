@@ -38,8 +38,8 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayReferralsAdmin', {
 		        	  plugins: {
 		                  ptype: 'gridviewdragdrop',
 		                  dragGroup: 'gridtotree',
-		                  enableDrag: me.authenticatedPerson.hasAccess('CHALLENGE_REFERRALS_ADMIN_ASSOCIATIONS'),
-		        	  },
+		                  enableDrag: me.authenticatedPerson.hasAccess('CHALLENGE_REFERRALS_ADMIN_ASSOCIATIONS')
+		        	  }
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',

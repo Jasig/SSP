@@ -27,7 +27,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
     	authenticatedPerson: 'authenticatedPerson',
     	columnRendererUtils: 'columnRendererUtils',
     	model: 'currentTask',
-        store: 'tasksStore',
+        store: 'tasksStore'
     },
     layout: 'auto',
 	width: '100%',

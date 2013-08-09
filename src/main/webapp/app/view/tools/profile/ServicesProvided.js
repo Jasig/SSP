@@ -32,11 +32,11 @@ Ext.define('Ssp.view.tools.profile.ServicesProvided', {
     		        columns: [
     		                { header: 'Provided By',  
     		                  dataIndex: 'createdBy',
-    		                  flex: .50,
+    		                  flex: .50
     		                },{ header: 'Date Provided',  
     		                  dataIndex: 'createdDate',
-    		                  flex: .50,
-    		                }],
+    		                  flex: .50
+    		                }]
 				});
 		
 		return me.callParent(arguments);

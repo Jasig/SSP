@@ -37,13 +37,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     		itemexpand: 'onItemExpand',
     		itemClick: 'onItemClick',
     		viewready: 'onViewReady'
-    	},
-   	
-    	/*
-    	'searchButton': {
-			click: 'onSearchClick'
-		}
-		*/  	
+    	} 	
     },
     
 	onViewReady: function() {

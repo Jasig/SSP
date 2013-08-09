@@ -29,18 +29,18 @@ Ext.define('Ssp.view.Report',{
     initComponent: function(){
     	var me=this;
     	me.downloadForm = Ext.getBody().createChild({
-    		tag: 'form'
-    		, cls: 'x-hidden'
-    		, id: 'sspPortletReportform'
-    		, target: 'sspPortletIFrame'
+    		tag: 'form', 
+			cls: 'x-hidden', 
+			id: 'sspPortletReportform',
+			target: 'sspPortletIFrame'
     		});
     	
     	me.downloadFrame = Ext.getBody().createChild({
-    		tag: 'iframe'
-    		, cls: 'x-hidden'
-    		, id: 'sspPortletIFrame'
-    		, name: 'iframe'
-    		, src: Ext.SSL_SECURE_URL
+    		tag: 'iframe', 
+			cls: 'x-hidden', 
+			id: 'sspPortletIFrame', 
+			name: 'iframe', 
+			src: Ext.SSL_SECURE_URL
     		});
 
     	return me.callParent(arguments);

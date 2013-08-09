@@ -111,7 +111,6 @@ Ext.define('Ssp.util.TreeRendererUtils',{
      */
     createNodesFromJson: function(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable, includeToolTip, toolTipFieldName){
     	var nodeIdentifier = "";
-    	var enableCheckSelection = enableCheckSelection;
     	var nodes = [];
     	var nodeName = nodeType || "";
     	if (nodeName != "")
@@ -188,6 +187,5 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 	    			callbackFunc( callbackScope );
 			}
 		});
-    },    
-    
+    }   
 });

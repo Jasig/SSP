@@ -47,14 +47,14 @@ Ext.define('Ssp.view.tools.studentintake.StudentIntake', {
 					        	     itemId: 'saveButton', 
 					        	     text:'Save', 
 					        	     action: 'save',
-					        	     hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_SAVE_BUTTON'),
+					        	     hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_SAVE_BUTTON')
 					        	    },
 					                {
 					        	     xtype: 'button', 
 					        	     itemId: 'cancelButton', 
 					        	     text:'Cancel', 
 					        	     action: 'reset',
-					        	     hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_CANCEL_BUTTON'),
+					        	     hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_CANCEL_BUTTON')
 					        	    },
 					        	    {
 					        	    	xtype: 'label',
