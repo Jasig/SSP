@@ -35,61 +35,60 @@
 
 	<global-method-security pre-post-annotations="enabled" />
 
-    <http pattern="/api/oauth/token" create-session="stateless" authentication-manager-ref="oauth2ClientAuthenticationManager">
-        <intercept-url pattern="/api/oauth/token" access="IS_AUTHENTICATED_FULLY" />
-        <anonymous enabled="false" />
-        <http-basic entry-point-ref="oauth2ClientAuthenticationEntryPoint" />
-        <access-denied-handler ref="oauth2AccessDeniedHandler" />
-    </http>
+	<http pattern="/api/oauth/token" create-session="stateless" authentication-manager-ref="oauth2ClientAuthenticationManager">
+		<intercept-url pattern="/api/oauth/token" access="IS_AUTHENTICATED_FULLY" />
+		<anonymous enabled="false" />
+		<http-basic entry-point-ref="oauth2ClientAuthenticationEntryPoint" />
+		<access-denied-handler ref="oauth2AccessDeniedHandler" />
+	</http>
 
-    <http pattern="/api/1/**" create-session="never" entry-point-ref="oauth2AuthenticationEntryPoint">
-        <!-- FIGURE OUT IF WE STILL NEED THIS FIXATION PROTECTION DISABLEMENT... IT WAS ADDED FOR 1ST TIME LOGINS -->
-        <!--<session-management session-fixation-protection="none" />-->
-        <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
-        <custom-filter ref="uPortalFilter" position="PRE_AUTH_FILTER"/>
-        <access-denied-handler ref="oauth2AccessDeniedHandler" />
-    </http>
+	<http pattern="/api/1/**" create-session="never" entry-point-ref="oauth2AuthenticationEntryPoint">
+		<!-- FIGURE OUT IF WE STILL NEED THIS FIXATION PROTECTION DISABLEMENT... IT WAS ADDED FOR 1ST TIME LOGINS -->
+		<!--<session-management session-fixation-protection="none" />-->
+		<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
+		<custom-filter ref="uPortalFilter" position="PRE_AUTH_FILTER"/>
+		<access-denied-handler ref="oauth2AccessDeniedHandler" />
+	</http>
 
-    <!-- NEED TO ADD SOMETHING BACK FOR FORM LOGIN AND LOGOUT IN STANDALONE MODE -->
+	<!-- NEED TO ADD SOMETHING BACK FOR FORM LOGIN AND LOGOUT IN STANDALONE MODE -->
 
-    <oauth:resource-server id="resourceServerFilter" resource-id="ssp" token-services-ref="oauth2TokenServices" />
+	<oauth:resource-server id="resourceServerFilter" resource-id="ssp" token-services-ref="oauth2TokenServices" />
 
-    <authentication-manager id="oauth2ClientAuthenticationManager">
-        <authentication-provider user-service-ref="oauth2ClientDetailsUserService" />
-    </authentication-manager>
+	<authentication-manager id="oauth2ClientAuthenticationManager">
+		<authentication-provider user-service-ref="oauth2ClientDetailsUserService" />
+	</authentication-manager>
 
-    <beans:bean id="oauth2ClientAuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
-        <beans:property name="realmName" value="ssp/client" />
-        <beans:property name="typeName" value="Basic" />
-    </beans:bean>
+	<beans:bean id="oauth2ClientAuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+		<beans:property name="realmName" value="ssp/client" />
+		<beans:property name="typeName" value="Basic" />
+	</beans:bean>
 
-    <beans:bean id="oauth2AuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
-        <beans:property name="realmName" value="ssp/client" />
-    </beans:bean>
+	<beans:bean id="oauth2AuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+		<beans:property name="realmName" value="ssp/client" />
+	</beans:bean>
 
-    <beans:bean id="oauth2AccessDeniedHandler" class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler" />
+	<beans:bean id="oauth2AccessDeniedHandler" class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler" />
 
 	<beans:bean name="uPortalFilter" class="org.jasig.ssp.security.uportal.UPortalPreAuthenticatedProcessingFilter">
-		<beans:property name="authenticationManager" ref="authenticationManager"></beans:property> 
+		<beans:property name="authenticationManager" ref="authenticationManager"></beans:property>
 	</beans:bean>
 
 	<beans:bean name="requestCleanupServletFilter" class=" org.jasig.ssp.security.RequestCleanupServletFilter" />
 
+	<beans:bean id="oauth2ClientDetailsUserService" class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
+		<beans:constructor-arg ref="oauth2ClientDetailsService" />
+	</beans:bean>
 
-    <beans:bean id="oauth2ClientDetailsUserService" class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
-        <beans:constructor-arg ref="oauth2ClientDetailsService" />
-    </beans:bean>
+	<oauth:client-details-service id="oauth2ClientDetailsService">
+		<oauth:client client-id="my-client-with-secret" authorized-grant-types="client_credentials" secret="secret" authorities="ROLE_PERSON_READ" />
+	</oauth:client-details-service>
 
-    <oauth:client-details-service id="oauth2ClientDetailsService">
-        <oauth:client client-id="my-client-with-secret" authorized-grant-types="client_credentials" secret="secret" authorities="ROLE_PERSON_READ" />
-    </oauth:client-details-service>
+	<beans:bean id="oauth2TokenStore" class="org.springframework.security.oauth2.provider.token.InMemoryTokenStore" />
 
-    <beans:bean id="oauth2TokenStore" class="org.springframework.security.oauth2.provider.token.InMemoryTokenStore" />
-
-    <beans:bean id="oauth2TokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
-        <beans:property name="tokenStore" ref="oauth2TokenStore" />
-        <beans:property name="supportRefreshToken" value="false" />
-        <beans:property name="clientDetailsService" ref="oauth2ClientDetailsService" />
-    </beans:bean>
+	<beans:bean id="oauth2TokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
+		<beans:property name="tokenStore" ref="oauth2TokenStore" />
+		<beans:property name="supportRefreshToken" value="false" />
+		<beans:property name="clientDetailsService" ref="oauth2ClientDetailsService" />
+	</beans:bean>
 
 </beans:beans>

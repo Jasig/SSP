@@ -89,14 +89,14 @@
 		
 	</bean>
 
-    <oauth:authorization-server token-endpoint-url="/oauth/token"
-                                client-details-service-ref="oauth2ClientDetailsService"
-                                token-services-ref="oauth2TokenServices">
-        <oauth:authorization-code disabled="true" />
-        <oauth:implicit disabled="true" />
-        <oauth:refresh-token disabled="true" />
-        <oauth:client-credentials />
-        <oauth:password disabled="true" />
-    </oauth:authorization-server>
+	<oauth:authorization-server token-endpoint-url="/oauth/token"
+								client-details-service-ref="oauth2ClientDetailsService"
+								token-services-ref="oauth2TokenServices">
+		<oauth:authorization-code disabled="true" />
+		<oauth:implicit disabled="true" />
+		<oauth:refresh-token disabled="true" />
+		<oauth:client-credentials />
+		<oauth:password disabled="true" />
+	</oauth:authorization-server>
 
 </beans>
