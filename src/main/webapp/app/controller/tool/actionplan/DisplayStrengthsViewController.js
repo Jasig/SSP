@@ -36,10 +36,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
     	},
     	
     	strengthsField: {
-    		selector: '#strengths',
-    		listeners: {
-    			change: 'onStrengthsChange'
-    		}
+    		selector: '#strengths'
     	},
     	
     	saveSuccessMessage: '#saveSuccessMessage'
@@ -47,8 +44,9 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
 	
 	init: function() {
 		var me=this;
-        me.getSaveButton().disabled=true;
-        me.getStrengthsField().setDisabled( !me.authenticatedPerson.hasAccess('ACTION_PLAN_STRENGTHS_FIELD') );
+        me.getSaveButton().setDisabled( !me.authenticatedPerson.hasAccess('ACTION_PLAN_STRENGTHS_FIELD') );
+		me.getStrengthsField().setDisabled( !me.authenticatedPerson.hasAccess('ACTION_PLAN_STRENGTHS_FIELD') );
+       
 
         // display loader
         me.getView().setLoading(true);
@@ -108,20 +106,11 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
     	var me=scope;
     	me.getView().setLoading( false );
 		me.model.commit();
-		me.setSaveButtonState();
 		me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );
     },
 
     savePersonFailure: function( response, scope ){
     	var me=scope;
     	me.getView().setLoading( false );
-    },    
-    
-    onStrengthsChange: function(comp, oldValue, newValue, eOpts){
-    	this.setSaveButtonState();
-    },
-    
-    setSaveButtonState: function(){
-    	this.getSaveButton().disabled = !this.getView().getForm().isDirty();
     }
 });
