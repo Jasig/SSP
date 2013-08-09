@@ -54,8 +54,14 @@
 
 	<oauth:resource-server id="resourceServerFilter" resource-id="ssp" token-services-ref="oauth2TokenServices" />
 
+	<beans:bean id="oauth2PasswordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder">
+		<beans:constructor-arg type="java.lang.CharSequence" value="#{configProperties.oauth2_client_password_encoding_secret}" />
+	</beans:bean>
+
 	<authentication-manager id="oauth2ClientAuthenticationManager">
-		<authentication-provider user-service-ref="oauth2ClientDetailsUserService" />
+		<authentication-provider user-service-ref="oauth2ClientDetailsUserService">
+			<password-encoder ref="oauth2PasswordEncoder" />
+		</authentication-provider>
 	</authentication-manager>
 
 	<beans:bean id="oauth2ClientAuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
@@ -79,9 +85,10 @@
 		<beans:constructor-arg ref="oauth2ClientDetailsService" />
 	</beans:bean>
 
-	<oauth:client-details-service id="oauth2ClientDetailsService">
-		<oauth:client client-id="my-client-with-secret" authorized-grant-types="client_credentials" secret="secret" authorities="ROLE_PERSON_READ" />
-	</oauth:client-details-service>
+	<beans:bean id="oauth2ClientDetailsService" class="org.springframework.security.oauth2.provider.JdbcClientDetailsService">
+		<beans:constructor-arg ref="sspDataSource" />
+		<beans:property name="passwordEncoder" ref="oauth2PasswordEncoder" />
+	</beans:bean>
 
 	<beans:bean id="oauth2TokenStore" class="org.springframework.security.oauth2.provider.token.InMemoryTokenStore" />
 
