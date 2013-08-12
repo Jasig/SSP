@@ -35,7 +35,7 @@ public interface ExternalPersonService extends
 			throws ObjectNotFoundException;
 
 	void updatePersonFromExternalPerson(final Person person,
-			final ExternalPerson externalPerson);
+			final ExternalPerson externalPerson,boolean commit);
 
 	/**
 	 * Sync external data, if any, into the given Person instance. Will exit

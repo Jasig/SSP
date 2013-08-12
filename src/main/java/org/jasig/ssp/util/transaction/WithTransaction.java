@@ -36,4 +36,6 @@ public interface WithTransaction {
 
 	@Transactional
 	<T> T withTransactionAndUncheckedExceptions(Callable<T> work);
+
+	<T> T withNewTransactionAndUncheckedExceptionsReadOnly(Callable<T> work);
 }

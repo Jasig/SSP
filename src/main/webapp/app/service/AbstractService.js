@@ -78,7 +78,7 @@ Ext.define('Ssp.service.AbstractService', {
     	{
     		if (prop == "objectStatus")
     		{
-    			if (item[prop].toLowerCase()=="inactive")
+    			if (item[prop] && item[prop].toLowerCase()=="inactive")
     			{
     				isInactive=true;
     			}

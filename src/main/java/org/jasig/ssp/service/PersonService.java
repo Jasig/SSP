@@ -284,4 +284,6 @@ public interface PersonService extends AuditableCrudService<Person> {
 
 	String getSchoolIdForPersonId(UUID personId) throws ObjectNotFoundException;
 
+	void evict(Person model);
+
 }

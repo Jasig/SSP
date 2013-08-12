@@ -36,6 +36,7 @@ import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.util.transaction.WithTransaction;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+
 import java.io.Serializable;
 import java.util.Map;
 import java.util.UUID;
@@ -74,6 +76,9 @@ public class PersonController extends AbstractBaseController {
 
 	@Autowired
 	protected transient SecurityService securityService;
+	
+	@Autowired
+	private WithTransaction withTransaction;
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
@@ -194,7 +199,9 @@ public class PersonController extends AbstractBaseController {
 			return null;
 		}
 
-		return new PersonTO(model);
+		PersonTO personTO = new PersonTO(model);
+		service.evict(model);
+		return personTO;
 	}
 
 	/**

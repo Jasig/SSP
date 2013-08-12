@@ -29,15 +29,14 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.google.common.collect.Sets;
+import javax.portlet.PortletRequest;
+
 import org.hibernate.exception.ConstraintViolationException;
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.external.ExternalPerson;
-import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.security.PersonAttributesResult;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.service.EarlyAlertService;
@@ -60,16 +59,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Lists;
 import org.springframework.util.StringUtils;
 
-import javax.portlet.PortletRequest;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Person service implementation
@@ -323,8 +320,9 @@ public class PersonServiceImpl implements PersonService {
 			}
 
 			final Person person = new Person();
+			evict(person);
 			externalPersonService.updatePersonFromExternalPerson(person,
-					externalPerson);
+					externalPerson,false);
 			return additionalAttribsForStudent(person);
 		}
 	}
@@ -668,7 +666,7 @@ public class PersonServiceImpl implements PersonService {
 
 								coach.set(new Person()); // NOPMD
 								externalPersonService.updatePersonFromExternalPerson(
-										coach.get(), externalPerson);
+										coach.get(), externalPerson,true);
 
 								long externalPersonSyncEnd = new Date().getTime();
 								long externalPersonSyncElapsed = externalPersonSyncEnd -
@@ -778,5 +776,10 @@ public class PersonServiceImpl implements PersonService {
 				personSearchFormTO,
 				sAndP);
 		return people;
+	}
+
+	@Override
+	public void evict(Person model) {
+		dao.removeFromSession(model);	
 	} 
 }

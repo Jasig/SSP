@@ -101,7 +101,7 @@ public class ExternalPersonServiceImpl
 	@Override
 	public void updatePersonFromExternalPerson(final Person person) {
 		try {
-			updatePersonFromExternalPerson(person, getBySchoolId(person.getSchoolId()));
+			updatePersonFromExternalPerson(person, getBySchoolId(person.getSchoolId()),true);
 		} catch ( ObjectNotFoundException e ) {
 			LOGGER.debug("Skipping external data sync for "
 					+ "person [id: {}] [schoolId: {}] because "
@@ -118,7 +118,7 @@ public class ExternalPersonServiceImpl
 	 */
 	@Override
 	public void updatePersonFromExternalPerson(final Person person,
-			final ExternalPerson externalPerson) {
+			final ExternalPerson externalPerson,boolean commit) {
 
 		LOGGER.debug(
 				"Person and ExternalPerson Sync.  Person school id {}, username {}",
@@ -370,7 +370,10 @@ public class ExternalPersonServiceImpl
 		}
 
 		try {
-			personService.save(person);
+			if(commit)
+			{
+				personService.save(person);
+			}
 		} catch (final ObjectNotFoundException e) {
 			LOGGER.error("person failed to save", e);
 		}

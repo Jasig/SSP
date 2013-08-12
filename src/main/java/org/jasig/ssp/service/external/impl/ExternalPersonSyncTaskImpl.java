@@ -82,7 +82,7 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 			LOGGER.info("Abandoning external person sync because of thread interruption");
 			return;
 		}
-
+ 
 		LOGGER.info("BEGIN : External person sync.");
 
 		int recordsProcessed = 0;
@@ -103,7 +103,7 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 
 			error = null;
 			batch++;
-
+ 
 			// again, look up config every time to allow for relatively immediate
 			// control over runnaway executions
 			int batchSize = getBatchSize();
@@ -276,7 +276,7 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 			final Person person = peopleBySchoolId.get(externalPerson
 					.getSchoolId());
 			// upate person from external person
-			externalPersonService.updatePersonFromExternalPerson(person, externalPerson);
+			externalPersonService.updatePersonFromExternalPerson(person, externalPerson,true);
 
 		}
 

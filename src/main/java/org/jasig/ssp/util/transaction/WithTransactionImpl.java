@@ -38,6 +38,12 @@ public class WithTransactionImpl implements WithTransaction {
 	public <T> T withNewTransactionAndUncheckedExceptions(Callable<T> work) {
 		return doWorkUnchecked(work);
 	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+	public <T> T withNewTransactionAndUncheckedExceptionsReadOnly(Callable<T> work) {
+		return doWorkUnchecked(work);
+	}
 
 	@Override
 	@Transactional

@@ -132,6 +132,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		return criteria.list();
 	}
 	
+	public void removeFromSession(Person person)
+	{
+		sessionFactory.getCurrentSession().evict(person);
+	}
+	
 	public String getSchoolIdForPersonId(UUID personId){
 		Criteria criteria = createCriteria();
 		criteria.add(Restrictions.eq("id", personId));
