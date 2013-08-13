@@ -22,32 +22,30 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
-http://www.liquibase.org/xml/ns/dbchangelog-ext
-http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+	http://www.liquibase.org/xml/ns/dbchangelog-ext
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
 	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	<property name="concat.type" value="||" dbms="postgresql"/>
+    <property name="concat.type" value="+" dbms="mssql"/>
 	
-	<!-- Skipping this file. See precondition below. The name column can contain larger data than the code column. This changeset assumed
-		 users were using the name column like the code column (with small number of chars as an acronym). This assumption was proven false
-		 in real world deployments. New changeset file for the code column is: 000064.xml -->
-		
 	<changeSet id="Provide code column in student_type table" author="paul.spaude">
-		<preConditions onFail="MARK_RAN" 
-			onFailMessage="Skip changeset 000055 success, ignore fail message. See changeset 000064 for addition of the code column to the student_type table.">
+		<preConditions onFail="MARK_RAN" onFailMessage="Code column already exists in student_type table">
 			<not>
-				<tableExists tableName="student_type"/>
+				<columnExists columnName="code"  tableName="student_type"/>
 			</not>
-		</preConditions>		
+		</preConditions>
+		<comment>Add code column to student_type table with temporary generated data. Please change to correct values after execution.</comment>
 		<addColumn tableName="student_type">
-			<column name="code" type="${nvarchar.type}(10)" valueComputed="name">								
+			<column name="code" type="${nvarchar.type}(10)" valueComputed="left(name,5) ${concat.type} right(cast(id as ${nvarchar.type}(36)),5)">								
 			</column>
 		</addColumn>	
 		<addNotNullConstraint columnName="code" tableName="student_type" columnDataType="${nvarchar.type}(10)" /> 
 		<addUniqueConstraint columnNames="code" tableName="student_type" />		
 		<rollback>
-			<dropColumn tableName="student_type" columnName="code" />
+			<dropColumn columnName="code" tableName="student_type" />
 		</rollback>
 	</changeSet>	
 </databaseChangeLog>
