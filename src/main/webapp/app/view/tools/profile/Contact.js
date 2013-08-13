@@ -59,14 +59,6 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                     padding: 0,
                     flex: .60,
                     items: [{
-                        fieldLabel: '',
-                        name: 'name',
-                        itemId: 'studentName',
-                        padding: '0 0 0 10',
-                        height: '20',
-                        style: 'font-weight:bold;color: #00008B'
-                    
-                    }, {
                         xtype: 'fieldset',
                         border: 1,
                         cls: 'ssp-form',
@@ -92,7 +84,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         xtype: 'fieldset',
                         border: 0,
                         title: '',
-                        flex: .60,
+                        flex: .80,
                         defaultType: 'displayfield',
                         padding: '0 0 10 0',
                         defaults: {
@@ -118,10 +110,11 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         }, {
                             fieldLabel: 'Secondary',
                             name: 'secondaryEmailAddress'
-                        }, , {
+                        }, {
                             fieldLabel: 'DOB',
                             name: 'birthDate',
-                            itemId: 'birthDate'
+                            itemId: 'birthDate',
+							height: '60'
                         }]
                     }]
                 }, {

@@ -381,8 +381,8 @@ Ext.define('Ssp.view.tools.profile.SpecialServiceGroups', {
             columns: [{
                 header: 'Group',
                 dataIndex: 'name',
-                flex: 1,
-            }],
+                flex: 1
+            }]
         });
         
         return me.callParent(arguments);
@@ -426,8 +426,8 @@ Ext.define('Ssp.view.tools.profile.ReferralSources', {
     		        columns: [
     		                { header: 'Source',  
     		                  dataIndex: 'name',
-    		                  flex: 1,
-    		                }],
+    		                  flex: 1
+    		                }]
 				});
 		
 		return me.callParent(arguments);
@@ -482,7 +482,7 @@ Ext.define('Ssp.view.tools.profile.ServiceReasons', {
                 dataIndex: 'name',
                 flex: 1
             
-            }],
+            }]
         });
         
         return me.callParent(arguments);
@@ -2702,18 +2702,18 @@ Ext.define('Ssp.view.Report',{
     initComponent: function(){
     	var me=this;
     	me.downloadForm = Ext.getBody().createChild({
-    		tag: 'form'
-    		, cls: 'x-hidden'
-    		, id: 'sspPortletReportform'
-    		, target: 'sspPortletIFrame'
+    		tag: 'form', 
+			cls: 'x-hidden', 
+			id: 'sspPortletReportform',
+			target: 'sspPortletIFrame'
     		});
     	
     	me.downloadFrame = Ext.getBody().createChild({
-    		tag: 'iframe'
-    		, cls: 'x-hidden'
-    		, id: 'sspPortletIFrame'
-    		, name: 'iframe'
-    		, src: Ext.SSL_SECURE_URL
+    		tag: 'iframe', 
+			cls: 'x-hidden', 
+			id: 'sspPortletIFrame', 
+			name: 'iframe', 
+			src: Ext.SSL_SECURE_URL
     		});
 
     	return me.callParent(arguments);
@@ -3087,8 +3087,7 @@ Ext.define('Ssp.model.CaseloadPerson', {
             	 convert: function(value, record) {
             		 return record.get('firstName') + ' '+ record.get('lastName');
             	 }
-             },
-             ],            
+             }],            
              
      getFullName: function(){ 
       	var firstName = this.get('firstName') || "";
@@ -5030,7 +5029,6 @@ Ext.define('Ssp.util.TreeRendererUtils',{
      */
     createNodesFromJson: function(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable, includeToolTip, toolTipFieldName){
     	var nodeIdentifier = "";
-    	var enableCheckSelection = enableCheckSelection;
     	var nodes = [];
     	var nodeName = nodeType || "";
     	if (nodeName != "")
@@ -5107,8 +5105,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 	    			callbackFunc( callbackScope );
 			}
 		});
-    },    
-    
+    }   
 });
 /*
  * Licensed to Jasig under one or more contributor license
@@ -5613,8 +5610,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus',{
 			       										store: 'Re-Assignment',
 			       								        form: 'caseloadreassignment',
 			       										leaf: true
-		       								       },
-    							]
+		       								       }]
     						},{
     							text: 'Student Intake',
     							title: 'Student Intake',
@@ -9399,8 +9395,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	
     	'emailButton': {
     		click: 'onEmailClick'
-    	},
-    	
+    	}
     },
     
 	init: function() {
@@ -9797,8 +9792,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 					"Could not overwrite the existing record" +
 					" because the system might have found multiple" +
 					" conflicting records or detected it was at risk of" +
-					" updating the wrong record your edits. Please contact"
-					+ " your system administrators.");
+					" updating the wrong record your edits. Please contact" +
+					" your system administrators.");
 				return false;
 			}
 		}
@@ -11374,18 +11369,17 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
         personService: 'personService',
         sspConfig: 'sspConfig',
 		authenticatedPerson: 'authenticatedPerson',
-		formUtils: 'formRendererUtils',
+		formUtils: 'formRendererUtils'
     },
     
     control: {
-    	nameField: '#studentName',
     	birthDateField: '#birthDate',
     	addressField: '#address',
     	alternateAddressInUseField: '#alternateAddressInUse',
     	alternateAddressField: '#alternateAddress',
 		primaryEmailAddressField: '#primaryEmailAddress',
 		primaryEmailAddress: {
-            click :    'onPrimaryEmailAddressClick',
+            click :    'onPrimaryEmailAddressClick'
 		},    
         editButton: {
     		click: 'onEditClick'
@@ -11421,7 +11415,6 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
     	var me=scope;
 		
 		
-		var nameField = me.getNameField();
 		
 		var birthDateField = me.getBirthDateField();
 		
@@ -11444,7 +11437,6 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
 		me.getView().loadRecord( me.person );
 		
 		// load additional values
-		nameField.setValue( fullName );
 		
 		birthDateField.setValue( me.person.getFormattedBirthDate() );
 		
@@ -11559,14 +11551,6 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                     padding: 0,
                     flex: .60,
                     items: [{
-                        fieldLabel: '',
-                        name: 'name',
-                        itemId: 'studentName',
-                        padding: '0 0 0 10',
-                        height: '20',
-                        style: 'font-weight:bold;color: #00008B'
-                    
-                    }, {
                         xtype: 'fieldset',
                         border: 1,
                         cls: 'ssp-form',
@@ -11592,7 +11576,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         xtype: 'fieldset',
                         border: 0,
                         title: '',
-                        flex: .60,
+                        flex: .80,
                         defaultType: 'displayfield',
                         padding: '0 0 10 0',
                         defaults: {
@@ -11618,17 +11602,17 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         }, {
                             fieldLabel: 'Secondary',
                             name: 'secondaryEmailAddress'
-                        }, , {
+                        }, {
                             fieldLabel: 'DOB',
                             name: 'birthDate',
-                            itemId: 'birthDate'
+                            itemId: 'birthDate',
+							height: '60'
                         }]
                     }]
                 }, {
                     xtype: 'fieldset',
                     border: 0,
-                    
-                    flex: .05,
+                    flex: .05
                 
                 }, {
                     xtype: 'fieldset',
@@ -11688,7 +11672,6 @@ Ext.define('Ssp.view.tools.profile.Contact', {
     }
     
 });
-
 /*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
@@ -12571,7 +12554,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     
     onAddTaskClick: function(button) {
     	this.appEventsController.getApplication().fireEvent('addTask');
-    },  
+    }  
 });
 /*
  * Licensed to Jasig under one or more contributor license
@@ -12869,13 +12852,7 @@ Ext.define('Ssp.controller.tool.actionplan.TaskTreeViewController', {
     		itemexpand: 'onItemExpand',
     		itemClick: 'onItemClick',
     		viewready: 'onViewReady'
-    	},
-   	
-    	/*
-    	'searchButton': {
-			click: 'onSearchClick'
-		}
-		*/  	
+    	} 	
     },
     
 	onViewReady: function() {
@@ -18120,7 +18097,7 @@ Ext.define('Ssp.view.admin.AdminTreeMenu', {
 				{
 					store: this.store,
 					singleExpand: true,
-					fields: ['title','form','text'],	
+					fields: ['title','form','text']	
 				});
 		
 	     this.callParent(arguments);
@@ -19301,7 +19278,7 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.person.AnticipatedStartDateViewController',
     inject: {
-    	anticipatedStartTermsStore: 'anticipatedStartTermsStore',
+    	anticipatedStartTermsStore: 'anticipatedStartTermsStore'
     },
 	initComponent: function() {	
 		Ext.apply(this, 
@@ -19709,11 +19686,11 @@ Ext.define('Ssp.view.tools.profile.ServicesProvided', {
     		        columns: [
     		                { header: 'Provided By',  
     		                  dataIndex: 'createdBy',
-    		                  flex: .50,
+    		                  flex: .50
     		                },{ header: 'Date Provided',  
     		                  dataIndex: 'createdDate',
-    		                  flex: .50,
-    		                }],
+    		                  flex: .50
+    		                }]
 				});
 		
 		return me.callParent(arguments);
@@ -19782,7 +19759,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
     	authenticatedPerson: 'authenticatedPerson',
     	columnRendererUtils: 'columnRendererUtils',
     	model: 'currentTask',
-        store: 'tasksStore',
+        store: 'tasksStore'
     },
     layout: 'auto',
 	width: '100%',
@@ -20149,8 +20126,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
         var me = this;
         Ext.apply(me, {
             layout: {
-                type: 'fit',
-            
+                type: 'fit'
             },
             title: 'Action Plan',
             autoScroll: true,
@@ -20648,14 +20624,14 @@ Ext.define('Ssp.view.tools.studentintake.StudentIntake', {
 					        	     itemId: 'saveButton', 
 					        	     text:'Save', 
 					        	     action: 'save',
-					        	     hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_SAVE_BUTTON'),
+					        	     hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_SAVE_BUTTON')
 					        	    },
 					                {
 					        	     xtype: 'button', 
 					        	     itemId: 'cancelButton', 
 					        	     text:'Cancel', 
 					        	     action: 'reset',
-					        	     hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_CANCEL_BUTTON'),
+					        	     hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_CANCEL_BUTTON')
 					        	    },
 					        	    {
 					        	    	xtype: 'label',
@@ -21982,9 +21958,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
                 margin: '5 0 0 0',
                 defaultType: 'displayfield',
                 fieldDefaults: {
-                    msgTarget: 'side',
-                    //labelAlign: 'right',
-                    //labelWidth: 80
+                    msgTarget: 'side'
                 },
                 items: [{
                     xtype: 'fieldset',
@@ -22036,7 +22010,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
                     }, {
                     
                         fieldLabel: 'Comment',
-                        name: 'comment',
+                        name: 'comment'
                     
                     }, {
                         xtype: 'tbspacer',
@@ -22720,8 +22694,8 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
 		        	  plugins: {
 		                  ptype: 'gridviewdragdrop',
 		                  dragGroup: 'gridtotree',
-		                  enableDrag: me.authenticatedPerson.hasAccess('CHALLENGE_CATEGORIES_ADMIN_ASSOCIATIONS'),
-		        	  },
+		                  enableDrag: me.authenticatedPerson.hasAccess('CHALLENGE_CATEGORIES_ADMIN_ASSOCIATIONS')
+		        	  }
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',
@@ -22822,8 +22796,8 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayReferralsAdmin', {
 		        	  plugins: {
 		                  ptype: 'gridviewdragdrop',
 		                  dragGroup: 'gridtotree',
-		                  enableDrag: me.authenticatedPerson.hasAccess('CHALLENGE_REFERRALS_ADMIN_ASSOCIATIONS'),
-		        	  },
+		                  enableDrag: me.authenticatedPerson.hasAccess('CHALLENGE_REFERRALS_ADMIN_ASSOCIATIONS')
+		        	  }
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',
@@ -23199,7 +23173,7 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayDetailsAdmin', {
 		                  ptype: 'gridviewdragdrop',
 		                  dragGroup: 'gridtotree',
 		                  enableDrag: me.authenticatedPerson.hasAccess('STEP_DETAILS_ADMIN_ASSOCIATIONS')
-		        	  },
+		        	  }
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',
@@ -23299,7 +23273,7 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayStepsAdmin', {
 		                  ptype: 'gridviewdragdrop',
 		                  dragGroup: 'gridtotree',
 		                  enableDrag: me.authenticatedPerson.hasAccess('TRACKS_STEPS_ADMIN_ASSOCIATIONS')
-		        	  },
+		        	  }
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',
@@ -25516,7 +25490,7 @@ Ext.define('Ssp.store.Goals', {
 		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('personGoal') ),
 						  autoLoad: false });
 		return this.callParent(arguments);
-	},
+	}
 });
 /*
  * Licensed to Jasig under one or more contributor license
@@ -25548,7 +25522,7 @@ Ext.define('Ssp.store.JournalEntries', {
 		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('personJournalEntry') ),
 						  autoLoad: false });
 		return this.callParent(arguments);
-	},
+	}
 });
 /*
  * Licensed to Jasig under one or more contributor license
@@ -26455,7 +26429,7 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget', {
 		                  ptype: 'gridviewdragdrop',
 		                  dropGroup: 'gridtogrid',
 		                  enableDrag: false
-		        	  },
+		        	  }
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',
@@ -26569,8 +26543,8 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
 		        	  plugins: {
 		                  ptype: 'gridviewdragdrop',
 		                  dragGroup: 'gridtogrid',
-		                  enableDrag: true,
-		        	  },
+		                  enableDrag: true
+		        	  }
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',
@@ -28347,7 +28321,7 @@ Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideChallengesViewController',
        'gridView': {
     	   refresh: 'onRefresh',
     	   drop: 'onDrop'
-        },
+        }
     },
     
 	init: function() {
@@ -28673,7 +28647,7 @@ Ext.define('Ssp.controller.admin.shg.SelfHelpGuidesDisplayViewController', {
     	store: 'selfHelpGuidesStore',
     	selfHelpGuideQuestionsStore: 'selfHelpGuideQuestionsStore',
     	formUtils: 'formRendererUtils',
-    	model: 'currentSelfHelpGuide',
+    	model: 'currentSelfHelpGuide'
     },
     config: {
     	containerToLoadInto: 'adminforms',
@@ -28745,7 +28719,7 @@ Ext.define('Ssp.model.tool.shg.SelfHelpGuideQuestions', {
              {name:'critical',type:'boolean'},
              {name:'mandatory',type:'boolean'},             
              {name:'selfHelpGuideId',type:'string'},
-             {name:'challengeId',type:'string'},
+             {name:'challengeId',type:'string'}
              ]           
 });
 
@@ -28937,7 +28911,7 @@ Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideAvailableChallengesAdmin',
 		                  ptype: 'gridviewdragdrop',
 		                  dragGroup: 'gridtogrid',
 		                  enableDrag: true
-		        	  },
+		        	  }
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',
@@ -29004,7 +28978,7 @@ Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideChallenges',{
 	                  dropGroup: 'gridtogrid',
 	                  dragGroup: 'gridtogrid',
 			          enableDrop: true,
-			          enableDrag: true,
+			          enableDrag: true
 	        	  }        
 	                },	        	  
 		      enableDragDrop: true,
@@ -29202,11 +29176,11 @@ Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideEditChallenges',{
 	                  {
 	                  	xtype: 'editselfhelpguidechallenges', 
 	                  	flex: 1
-	                  },{
+	                  },
+					  {
 	                  	xtype: 'editselfhelpguideavailablechallengesadmin', 
 	                  	flex: 1
-	                  }
-	                 ]});
+	                  }]});
     	return this.callParent(arguments);
     }
 });
