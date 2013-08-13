@@ -18,7 +18,7 @@ public class PersistentGrantedAuthority implements GrantedAuthority {
 	@NotNull
 	@NotEmpty
 	@Column(nullable = false, length = 255) // matches up_permission.activity
-	private String role;
+	private String authority;
 
 	// for Hibernate
 	public PersistentGrantedAuthority() {
@@ -26,13 +26,13 @@ public class PersistentGrantedAuthority implements GrantedAuthority {
 	}
 
 	// for app
-	public PersistentGrantedAuthority(String role) {
-		Assert.hasText(role, "A granted authority textual representation is required");
-		this.role = role;
+	public PersistentGrantedAuthority(String authority) {
+		Assert.hasText(authority, "A granted authority textual representation is required");
+		this.authority = authority;
 	}
 
 	public String getAuthority() {
-		return role;
+		return authority;
 	}
 
 	public boolean equals(Object obj) {
@@ -48,10 +48,10 @@ public class PersistentGrantedAuthority implements GrantedAuthority {
 	}
 
 	public int hashCode() {
-		return this.role.hashCode();
+		return this.authority.hashCode();
 	}
 
 	public String toString() {
-		return this.role;
+		return this.authority;
 	}
 }

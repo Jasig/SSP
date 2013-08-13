@@ -69,7 +69,7 @@ import com.google.common.collect.Sets;
 		name="person_class",
 		discriminatorType= DiscriminatorType.STRING
 )
-@DiscriminatorValue("base-person")
+@DiscriminatorValue("user")
 public class Person extends AbstractAuditable implements Auditable { // NOPMD
 
 	private static final long serialVersionUID = 4159658337332259029L;

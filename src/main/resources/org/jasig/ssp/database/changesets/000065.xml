@@ -27,58 +27,9 @@
 	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
 	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 
-	<!-- Plural table name and some column names depart from our conventions but
-	match what JdbcClientDetailsService expects by default -->
-	<changeSet author='dan.mccallum' id='Add oauth_client_details table'>
-		<createTable tableName="oauth_client_details">
-			<column name="client_id" type="${nvarchar.type}(36)">
-				<constraints primaryKey="true" nullable="false" />
-			</column>
-			<column name="client_secret" type="${nvarchar.type}(256)">
-				<constraints nullable="true" />
-			</column>
-			<column name="resource_ids" type="${nvarchar.type}(256)">
-				<constraints nullable="true" />
-			</column>
-			<column name="scope" type="${nvarchar.type}(128)">
-				<constraints nullable="true" />
-			</column>
-			<!-- At this writing, if you had all SSP perms granted, the width,
-			including delimiters would be ~1500. So 2048 should give us
-			plenty of head room. -->
-			<column name="authorities" type="${nvarchar.type}(2048)">
-				<constraints nullable="true" />
-			</column>
-			<column name="web_server_redirect_uri" type="${nvarchar.type}(256)">
-				<constraints nullable="true" />
-			</column>
-			<column name="authorized_grant_types" type="${nvarchar.type}(128)">
-				<constraints nullable="true" />
-			</column>
-			<column name="access_token_validity" type="int">
-				<constraints nullable="true" />
-			</column>
-			<column name="refresh_token_validity" type="int">
-				<constraints nullable="true" />
-			</column>
-			<column name="additional_information" type="${nvarchar.type}(1024)">
-				<constraints nullable="true" />
-			</column>
-		</createTable>
-
-		<sql>grant all on oauth_client_details to ${database.app.username}</sql>
-		<rollback>
-			<dropTable tableName="oauth_client_details" />
-		</rollback>
-	</changeSet>
-
-	<changeSet author="dan.mccallum" id="Drop oauth_client_details table">
-		<dropTable tableName="oauth_client_details" schemaName="${schema}" cascadeConstraints="true"/>
-	</changeSet>
-
 	<changeSet id="Expand person table for oauth2" author="dan.mccallum">
 		<addColumn tableName="person">
-			<column name="person_class" type="${nvarchar.type}(64)" valueComputed="'base-person'" />
+			<column name="person_class" type="${nvarchar.type}(64)" valueComputed="'user'" />
 		</addColumn>
 		<addNotNullConstraint tableName="person" columnName="person_class" schemaName="${schema}" />
 		<addColumn tableName="person">
@@ -104,6 +55,10 @@
 			</column>
 		</createTable>
 		<addUniqueConstraint tableName="person_authority" columnNames="person_id,authority" schemaName="${schema}" />
+		<sql>grant all on person_authority to ${database.app.username}</sql>
+		<rollback>
+			<dropTable tableName="person_authority" cascadeConstraints="true" schemaName="${schema}" />
+		</rollback>
 	</changeSet>
 
 </databaseChangeLog>

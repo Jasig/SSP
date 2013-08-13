@@ -34,18 +34,15 @@ import com.google.common.collect.Sets;
 @DiscriminatorValue("oauth2-client")
 public class OAuth2Client extends Person {
 
-	private static final String BEARER_GRANT_TYPE = "Bearer";
-	private static final Set<String> authorizedGrantTypes = Collections.singleton(BEARER_GRANT_TYPE);
+	private static final String CLIENT_CREDENTIALS_GRANT_TYPE = "client_credentials";
+
+	// We only support client creds at the moment... eventually this should
+	// become a configurable field, but at this point there's no point.
+	private static final Set<String> authorizedGrantTypes = Collections.singleton(CLIENT_CREDENTIALS_GRANT_TYPE);
 
 	@Column(nullable = true, length = 256)
 	@Size(max = 256)
 	private String secret;
-
-	@Transient
-	private String secretChange;
-
-	@Transient
-	private boolean isSecretChange;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name="person_authority", joinColumns=@JoinColumn(name="person_id"))
@@ -57,6 +54,7 @@ public class OAuth2Client extends Person {
 	@Column(name = "oauth2_client_access_token_validity_seconds")
 	private Integer accessTokenValiditySeconds;
 
+
 	public String getSecret() {
 		return secret;
 	}
@@ -67,19 +65,6 @@ public class OAuth2Client extends Person {
 	 */
 	public void setSecret(String secret) {
 		this.secret = secret;
-	}
-
-	public boolean isSecretChange() {
-		return isSecretChange;
-	}
-
-	public String getClientSecretChange() {
-		return secretChange;
-	}
-
-	public void setSecretChange(String secretChange) {
-		this.isSecretChange = !(secretChange == null && secret == null);
-		this.secretChange = secretChange;
 	}
 
 	public Set<String> getAuthorizedGrantTypes() {

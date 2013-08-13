@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.dao.security.oauth2.OAuth2ClientDao;
 import org.jasig.ssp.model.security.oauth2.OAuth2Client;
@@ -29,15 +30,16 @@ import org.springframework.security.oauth2.provider.NoSuchClientException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Service("oauth2ClientDetailsService")
 @Transactional
 public class OAuth2ClientServiceImpl extends AbstractAuditableCrudService<OAuth2Client>
 		implements OAuth2ClientService, ClientDetailsService  {
 
-	private PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
-
 	@Autowired
 	private OAuth2ClientDao oAuth2ClientDao;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
 
 	@Override
 	protected AuditableCrudDao<OAuth2Client> getDao() {
@@ -54,19 +56,31 @@ public class OAuth2ClientServiceImpl extends AbstractAuditableCrudService<OAuth2
 	@Override
 	public OAuth2Client create(final OAuth2Client client) throws ObjectNotFoundException,
 			ValidationException {
-		encodeSecret(client);
+		beforeWriteOf(client);
 		return super.create(client);
 	}
 
 	@Override
 	public OAuth2Client save(OAuth2Client client) throws ObjectNotFoundException, ValidationException {
-		encodeSecret(client);
+		beforeWriteOf(client);
 		return getDao().save(client);
 	}
 
+	private void beforeWriteOf(OAuth2Client client) {
+		encodeSecret(client);
+		ensureSchoolId(client);
+	}
+
 	private void encodeSecret(OAuth2Client client) {
-		if ( client.isSecretChange() ) {
-			client.setSecret(passwordEncoder.encode(client.getClientSecretChange()));
+		client.setSecret(StringUtils.trimToNull(client.getSecret()));
+		if ( client.getSecret() != null ) {
+			client.setSecret(passwordEncoder.encode(client.getSecret()));
+		}
+	}
+
+	private void ensureSchoolId(OAuth2Client client) {
+		if (StringUtils.isBlank(client.getSchoolId()) ) {
+			client.setSchoolId(client.getUsername());
 		}
 	}
 

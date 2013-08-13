@@ -24,6 +24,7 @@ import java.util.Collection;
 import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.security.SspUserDetailsService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
@@ -33,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 
@@ -42,11 +44,24 @@ public class SecurityServiceImpl implements SecurityService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(SecurityServiceImpl.class);
 
+	/**
+	 * You'll get into an infinite loop if you accidentally load the current
+	 * user from persistence during a Hibernate flush. So we always need to
+	 * give the environment at least a shot at short-circuiting that lookup by
+	 * caching the current SspUser in a ThreadLocal in the event the
+	 * current SecurityContext isn't doing it for us (as is the case with an
+	 * authenticated OAuth2 request, for example).
+	 */
+	private static final ThreadLocal<SspUser> currentSspUserFallback = new ThreadLocal<SspUser>();
+
 	@Autowired
 	protected transient SessionFactory sessionFactory;
 
 	@Autowired
 	private transient PersonService personService;
+
+	@Autowired
+	private transient SspUserDetailsService sspUserDetailsService;
 
 	@Override
 	public SspUser anonymousUser() {
@@ -90,15 +105,41 @@ public class SecurityServiceImpl implements SecurityService {
 		}
 
 		if (auth.isAuthenticated()) {
+
 			final Object principal = auth.getPrincipal();
 
 			if (principal instanceof SspUser) {
 				sspUser = (SspUser) principal;
-
 			} else if (principal instanceof String) {
 
 				if (SspUser.ANONYMOUS_PERSON_USERNAME.equals(principal)) {
 					sspUser = anonymousUser();
+				} else if ( auth instanceof OAuth2Authentication ) {
+					// Would rather not have this coupling to OAuth2 here, but
+					// the alternative would be to change the behavior in the
+					// else clause below to *always* try to load a SspUser given
+					// the string Principal value. But the "return null"
+					// behavior in that else clause has been there a long time,
+					// so unsure whether we'd be introducing regressions by
+					// changing it.
+					//
+					// The threadlocal business here isn't just for perf...
+					// you'll get into an infinite loop if Hib tries to lookup
+					// a current user in persistence during a flush.
+					if ( currentSspUserFallback.get() == null ||
+							!(principal.equals(currentSspUserFallback.get().getUsername())) ) {
+
+						// Careful! This will try to create a new Person record
+						// if it can't find one with the given username. This
+						// isn't what we want on an OAuth request, but we
+						// can be reasonably sure that's not going to happen
+						// because we know this particular request has already
+						// been authenticated, which means the corresponding
+						// Person record almost certainly exists.
+						currentSspUserFallback.set((SspUser)sspUserDetailsService.loadUserDetails(
+								(String)principal, auth.getAuthorities()));
+					}
+					sspUser = currentSspUserFallback.get();
 				} else {
 					LOGGER.error("Just tried to get an sspUser object from a user that is "
 							+ principal);
@@ -206,6 +247,7 @@ public class SecurityServiceImpl implements SecurityService {
 
 	@Override
 	public void afterRequest() {
+		currentSspUserFallback.remove();
 		SspUser.afterRequest();
 	}
 }
