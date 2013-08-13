@@ -81,9 +81,14 @@
 
 	<beans:bean name="requestCleanupServletFilter" class=" org.jasig.ssp.security.RequestCleanupServletFilter" />
 
-	<beans:bean id="oauth2ClientDetailsUserService" class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
-		<beans:constructor-arg ref="oauth2ClientDetailsService" />
+	<beans:bean id="oauth2ClientDetailsUserService" class="org.jasig.ssp.service.security.oauth2.impl.SspOauth2ClientServiceImpl">
+
 	</beans:bean>
+
+
+	<!--<beans:bean id="oauth2ClientDetailsUserService" class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">-->
+		<!--<beans:constructor-arg ref="oauth2ClientDetailsService" />-->
+	<!--</beans:bean>-->
 
 	<beans:bean id="oauth2ClientDetailsService" class="org.springframework.security.oauth2.provider.JdbcClientDetailsService">
 		<beans:constructor-arg ref="sspDataSource" />

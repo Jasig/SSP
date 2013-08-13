@@ -1,0 +1,109 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<property name="schema" value="${database.schema}" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<!-- Plural table name and some column names depart from our conventions but
+	match what JdbcClientDetailsService expects by default -->
+	<changeSet author='dan.mccallum' id='Add oauth_client_details table'>
+		<createTable tableName="oauth_client_details">
+			<column name="client_id" type="${nvarchar.type}(36)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="client_secret" type="${nvarchar.type}(256)">
+				<constraints nullable="true" />
+			</column>
+			<column name="resource_ids" type="${nvarchar.type}(256)">
+				<constraints nullable="true" />
+			</column>
+			<column name="scope" type="${nvarchar.type}(128)">
+				<constraints nullable="true" />
+			</column>
+			<!-- At this writing, if you had all SSP perms granted, the width,
+			including delimiters would be ~1500. So 2048 should give us
+			plenty of head room. -->
+			<column name="authorities" type="${nvarchar.type}(2048)">
+				<constraints nullable="true" />
+			</column>
+			<column name="web_server_redirect_uri" type="${nvarchar.type}(256)">
+				<constraints nullable="true" />
+			</column>
+			<column name="authorized_grant_types" type="${nvarchar.type}(128)">
+				<constraints nullable="true" />
+			</column>
+			<column name="access_token_validity" type="int">
+				<constraints nullable="true" />
+			</column>
+			<column name="refresh_token_validity" type="int">
+				<constraints nullable="true" />
+			</column>
+			<column name="additional_information" type="${nvarchar.type}(1024)">
+				<constraints nullable="true" />
+			</column>
+		</createTable>
+
+		<sql>grant all on oauth_client_details to ${database.app.username}</sql>
+		<rollback>
+			<dropTable tableName="oauth_client_details" />
+		</rollback>
+	</changeSet>
+
+	<changeSet author="dan.mccallum" id="Drop oauth_client_details table">
+		<dropTable tableName="oauth_client_details" schemaName="${schema}" cascadeConstraints="true"/>
+	</changeSet>
+
+	<changeSet id="Expand person table for oauth2" author="dan.mccallum">
+		<addColumn tableName="person">
+			<column name="person_class" type="${nvarchar.type}(64)" valueComputed="'base-person'" />
+		</addColumn>
+		<addNotNullConstraint tableName="person" columnName="person_class" schemaName="${schema}" />
+		<addColumn tableName="person">
+			<column name="secret" type="${nvarchar.type}(256)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<addColumn tableName="person">
+			<column name="oauth2_client_access_token_validity_seconds" type="int">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+	</changeSet>
+
+	<changeSet id="Add person_authority table" author="dan.mccallum">
+		<createTable tableName="person_authority">
+			<column name="person_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="person_authority_person_id"
+							 references="person(id)" />
+			</column>
+			<column name="authority" type="${nvarchar.type}(255)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<addUniqueConstraint tableName="person_authority" columnNames="person_id,authority" schemaName="${schema}" />
+	</changeSet>
+
+</databaseChangeLog>

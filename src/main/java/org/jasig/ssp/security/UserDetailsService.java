@@ -57,7 +57,7 @@ public class UserDetailsService implements SspUserDetailsService {
 
 	@Override
 	public UserDetails loadUserDetails(final String username,
-			final Collection<GrantedAuthority> authorities) {
+			final Collection<? extends GrantedAuthority> authorities) {
 		Person person = null;
 
 		try {
@@ -68,7 +68,7 @@ public class UserDetailsService implements SspUserDetailsService {
 					"Unable to load {}'s record., creating user in ssp",
 					username);
 			try {
-				person = personService.createUserAccount(username, authorities);
+				person = personService.createUserAccount(username, (Collection<GrantedAuthority>)authorities);
 			} catch ( ObjectExistsException ee ) {
 				try {
 					person = personService.personFromUsername(username);
@@ -88,7 +88,7 @@ public class UserDetailsService implements SspUserDetailsService {
 		}
 
 		final SspUser sspUser = new SspUser(username, "password",
-				true, true, true, true, authorities);
+				true, true, true, true, (Collection<GrantedAuthority>)authorities);
 
 		sspUser.setPerson(person);
 

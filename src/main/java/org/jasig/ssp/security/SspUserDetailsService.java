@@ -30,6 +30,6 @@ public interface SspUserDetailsService extends
 		UserDetailsContextMapper {
 
 	UserDetails loadUserDetails(final String username,
-			final Collection<GrantedAuthority> authorities);
+			final Collection<? extends GrantedAuthority> authorities);
 
 }

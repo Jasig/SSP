@@ -45,7 +45,7 @@
 	
 	<mvc:annotation-driven />
 
-	<mvc:interceptors>
+	<mvc:interceptors >
         <!-- Had to move the OpenSessionInViewInterceptor up into a Servlet
         Filter so the SpringSecurity Authentication initialization process
         caches a Person in the current SspUser that can be used further

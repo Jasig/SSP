@@ -16,7 +16,7 @@
 	<properties>
 		<apache.httpcomponents.version>4.1.3</apache.httpcomponents.version>
 		<spring.version>3.1.2.RELEASE</spring.version>
-		<spring.security.version>3.1.4.RELEASE</spring.security.version>
+		<spring.security.version>3.1.3.RELEASE</spring.security.version>
 		<resource-server.version>1.0.23</resource-server.version>
 		<jasperreports.version>4.6.0</jasperreports.version>
 		<groovy.version>1.8.6</groovy.version>
