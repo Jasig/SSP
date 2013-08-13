@@ -50,11 +50,11 @@ public class Term extends AbstractExternalReferenceData implements Serializable,
 	private String name;
 
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@Column(nullable = false)
 	private Date startDate;
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@Column(nullable = false)
 	private Date endDate;
 

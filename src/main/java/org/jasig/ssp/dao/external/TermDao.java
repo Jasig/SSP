@@ -18,8 +18,6 @@
  */
 package org.jasig.ssp.dao.external;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -29,6 +27,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
@@ -44,10 +43,10 @@ public class TermDao extends AbstractExternalReferenceDataDao<Term> {
 	}
 
 	public Term getCurrentTerm() throws ObjectNotFoundException {
-		final Date now = new Date();
-
+		final java.util.Date now = DateTimeUtils.midnight();
+		
 		final Criteria query = createCriteria();		
-		query.add(Restrictions.gt("endDate", now));		
+		query.add(Restrictions.ge("endDate", now));		
 		query.addOrder(Order.asc("startDate"));
 		query.setMaxResults(1);
 
@@ -64,10 +63,10 @@ public class TermDao extends AbstractExternalReferenceDataDao<Term> {
 
 	@SuppressWarnings("unchecked")
 	public List<Term> getCurrentAndFutureTerms() throws ObjectNotFoundException {
-		final Date now = new Date();
+		final java.util.Date now = DateTimeUtils.midnight();
 
 		final Criteria query = createCriteria();
-		query.add(Restrictions.gt("endDate", now));
+		query.add(Restrictions.ge("endDate", now));
 
 		final List<Term> terms = (List<Term>) query.list();
 
@@ -95,7 +94,7 @@ public class TermDao extends AbstractExternalReferenceDataDao<Term> {
 	private void buildProgramSearchParamList(String tag, String programCode,
 			Query hqlQuery) {
 		
-		hqlQuery.setDate("now", Calendar.getInstance().getTime());
+		hqlQuery.setDate("now", DateTimeUtils.midnight());
 		if(!StringUtils.isEmpty(programCode))
 		{
 			hqlQuery.setString("programCode", programCode);
@@ -121,7 +120,7 @@ public class TermDao extends AbstractExternalReferenceDataDao<Term> {
 		query.append(" where ");
 		query.append(" et.code = ect.termCode ");
 		query.append(" and ect.courseCode = ec.code  ");
-		query.append(" and et.endDate > :now  ");
+		query.append(" and et.endDate >= :now  ");
 		if(!StringUtils.isEmpty(tag))
 		{
 			query.append(" and ec.code = ectg.courseCode ");

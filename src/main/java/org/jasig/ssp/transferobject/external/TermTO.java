@@ -23,6 +23,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.jasig.ssp.model.external.Term;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer; 
 
 import com.google.common.collect.Lists;
 
@@ -32,8 +36,12 @@ public class TermTO implements ExternalDataTO<Term> {
 
 	private String name;
 
+	@JsonSerialize(using = DateOnlySerializer.class)
+	@JsonDeserialize(using = DateOnlyDeserializer.class) 
 	private Date startDate;
 
+	@JsonSerialize(using = DateOnlySerializer.class)
+	@JsonDeserialize(using = DateOnlyDeserializer.class) 
 	private Date endDate;
 
 	private int reportYear;

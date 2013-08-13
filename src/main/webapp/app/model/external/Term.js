@@ -20,8 +20,8 @@ Ext.define('Ssp.model.external.Term', {
     extend: 'Ssp.model.external.AbstractExternal',
     fields: [{name: 'name', type: 'string'},
              {name: 'code', type: 'string'},
-             {name: 'startDate', type: 'date', dateFormat: 'time'},
-             {name: 'endDate', type: 'date', dateFormat: 'time'},
+             {name: 'startDate', type: 'date', dateFormat: 'c'},
+             {name: 'endDate', type: 'date', dateFormat: 'c'},
              {name: 'reportYear', type: 'int'}
              ]
 });
