@@ -1,0 +1,64 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<property name="schema" value="${database.schema}" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet id="Expand person table for oauth2" author="dan.mccallum">
+		<addColumn tableName="person">
+			<column name="person_class" type="${nvarchar.type}(64)" valueComputed="'user'" />
+		</addColumn>
+		<addNotNullConstraint tableName="person" columnName="person_class" schemaName="${schema}" />
+		<addColumn tableName="person">
+			<column name="secret" type="${nvarchar.type}(256)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<addColumn tableName="person">
+			<column name="oauth2_client_access_token_validity_seconds" type="int">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+	</changeSet>
+
+	<changeSet id="Add person_authority table" author="dan.mccallum">
+		<createTable tableName="person_authority">
+			<column name="person_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="person_authority_person_id"
+							 references="person(id)" />
+			</column>
+			<column name="authority" type="${nvarchar.type}(255)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<addUniqueConstraint tableName="person_authority" columnNames="person_id,authority" schemaName="${schema}" />
+		<sql>grant all on person_authority to ${database.app.username}</sql>
+		<rollback>
+			<dropTable tableName="person_authority" cascadeConstraints="true" schemaName="${schema}" />
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

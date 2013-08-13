@@ -57,7 +57,7 @@ public class UserDetailsService implements SspUserDetailsService {
 
 	@Override
 	public UserDetails loadUserDetails(final String username,
-			final Collection<GrantedAuthority> authorities) {
+			final Collection<? extends GrantedAuthority> authorities) {
 		Person person = null;
 
 		try {
@@ -68,7 +68,7 @@ public class UserDetailsService implements SspUserDetailsService {
 					"Unable to load {}'s record., creating user in ssp",
 					username);
 			try {
-				person = personService.createUserAccount(username, authorities);
+				person = personService.createUserAccount(username, (Collection<GrantedAuthority>)authorities);
 			} catch ( ObjectExistsException ee ) {
 				try {
 					person = personService.personFromUsername(username);
@@ -88,7 +88,7 @@ public class UserDetailsService implements SspUserDetailsService {
 		}
 
 		final SspUser sspUser = new SspUser(username, "password",
-				true, true, true, true, authorities);
+				true, true, true, true, (Collection<GrantedAuthority>)authorities);
 
 		sspUser.setPerson(person);
 
@@ -109,13 +109,13 @@ public class UserDetailsService implements SspUserDetailsService {
 	public UserDetails loadUserDetails(final Authentication token)
 			throws UsernameNotFoundException {
 		return loadUserDetails((String) token.getPrincipal(),
-				token.getAuthorities());
+				(Collection<GrantedAuthority>) token.getAuthorities());
 	}
 
 	@Override
 	public UserDetails mapUserFromContext(final DirContextOperations ctx,
-			final String username, final Collection<GrantedAuthority> authority) {
-		return loadUserDetails(username, authority);
+			final String username, final Collection<? extends GrantedAuthority> authority) {
+		return loadUserDetails(username, (Collection<GrantedAuthority>) authority);
 	}
 
 	@Override

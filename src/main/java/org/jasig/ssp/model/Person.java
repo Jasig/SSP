@@ -26,6 +26,9 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
@@ -61,8 +64,13 @@ import com.google.common.collect.Sets;
  * @author jon.adams
  */
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public final class Person extends AbstractAuditable implements Auditable { // NOPMD
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(
+		name="person_class",
+		discriminatorType= DiscriminatorType.STRING
+)
+@DiscriminatorValue("user")
+public class Person extends AbstractAuditable implements Auditable { // NOPMD
 
 	private static final long serialVersionUID = 4159658337332259029L;
 
