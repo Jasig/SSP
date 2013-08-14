@@ -21,7 +21,7 @@
 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="journalEntries_subreport" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="b1d47460-50db-4cf5-9fd7-0ba8b48a3b37">
 	<property name="ireport.zoom" value="3.0"/>
-	<property name="ireport.x" value="631"/>
+	<property name="ireport.x" value="29"/>
 	<property name="ireport.y" value="0"/>
 	<field name="entryDate" class="java.util.Date"/>
 	<field name="comment" class="java.lang.String"/>
@@ -41,10 +41,10 @@
 				<textElement/>
 				<text><![CDATA[Date]]></text>
 			</staticText>
-			<textField>
-				<reportElement uuid="98e77ac6-4b39-42e3-b2bc-fd5ab395c125" x="100" y="1" width="100" height="20"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="98e77ac6-4b39-42e3-b2bc-fd5ab395c125" x="100" y="1" width="375" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$F{entryDate} == null ? "" : $F{entryDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{entryDate} == null ? "" : new SimpleDateFormat("MM/dd/yyyy HH:mm:ss z").format($F{entryDate})]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="26836d1d-6a73-4a23-83d2-465d3a75162b" x="0" y="41" width="100" height="20"/>
