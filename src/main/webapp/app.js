@@ -1086,7 +1086,14 @@ Ext.onReady(function(){
 					}, 
 			    	employmentShiftsStore: 'Ssp.store.reference.EmploymentShifts',
 			    	ethnicitiesStore: 'Ssp.store.reference.Ethnicities',
-					racesStore: 'Ssp.store.reference.Races',
+					racesStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.Races', {
+							     extraParams: {status: "ALL", limit: "-1"}
+							 });
+					    },
+					    singleton: true
+					},			
 			    	fundingSourcesStore: 'Ssp.store.reference.FundingSources',
 			    	gendersStore: 'Ssp.store.reference.Genders',
 				    goalsStore: 'Ssp.store.Goals',

@@ -21,6 +21,8 @@ Ext.define('Ssp.store.reference.Races', {
     model: 'Ssp.model.reference.Race',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('race')});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('race'), 
+		extraParams: this.extraParams
+		});
     }
 });

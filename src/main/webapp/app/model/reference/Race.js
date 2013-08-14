@@ -18,5 +18,6 @@
  */
 Ext.define('Ssp.model.reference.Race', {
 	extend: 'Ssp.model.reference.AbstractReference',
-    fields: []
+    fields: [        
+		{name:'code', type:'string'}]		
 });

@@ -25,6 +25,7 @@ import org.jasig.ssp.dao.reference.RaceDao;
 import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
 import org.jasig.ssp.factory.reference.RaceTOFactory;
 import org.jasig.ssp.model.reference.Race;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.reference.RaceTO;
 
 @Service
@@ -45,4 +46,10 @@ public class RaceTOFactoryImpl extends
 		return dao;
 	}
 
+	@Override
+	public Race from(final RaceTO tObject) throws ObjectNotFoundException {
+		Race model = super.from(tObject);	
+		model.setCode(tObject.getCode());
+		return model;
+	}
 }

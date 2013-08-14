@@ -2227,6 +2227,11 @@
                     "name": "VeteranStatus.js",
                     "path": "/app/model/reference/"
                 },
+				{
+                    "clsName": "Ssp.model.reference.Race",
+                    "name": "Race.js",
+                    "path": "/app/model/reference/"
+                },
                 {
                     "clsName": "Ssp.store.reference.Campuses",
                     "name": "Campuses.js",
@@ -2360,6 +2365,11 @@
                 {
                     "clsName": "Ssp.store.reference.VeteranStatuses",
                     "name": "VeteranStatuses.js",
+                    "path": "/app/store/reference/"
+                },
+				{
+                    "clsName": "Ssp.store.reference.Races",
+                    "name": "Races.js",
                     "path": "/app/store/reference/"
                 },
                 {
@@ -2603,7 +2613,7 @@
                     "name": "RegistrationLoadListAdmin.js",
                     "path": "/app/view/admin/forms/config/"
                 }
-            ]
+			]
         },
         {
             "name": "Application - Production",

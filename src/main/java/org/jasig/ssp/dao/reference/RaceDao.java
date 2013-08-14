@@ -20,6 +20,8 @@ package org.jasig.ssp.dao.reference;
 
 import org.springframework.stereotype.Repository;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.reference.Race;
 
@@ -32,5 +34,12 @@ public class RaceDao extends AbstractReferenceAuditableCrudDao<Race>
 
 	public RaceDao() {
 		super(Race.class);
+	}
+	
+	public Race getByCode(final String code) {
+		// TODO: (performance) Perfect example of data that should be cached
+		final Criteria query = createCriteria();
+		query.add(Restrictions.eq("code", code));
+		return (Race) query.uniqueResult();
 	}
 }

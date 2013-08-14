@@ -30,6 +30,8 @@ import com.google.common.collect.Lists;
 public class RaceTO
 		extends AbstractReferenceTO<Race>
 		implements TransferObject<Race> { // NOPMD by jon.adams
+	
+	private String code;
 
 	public RaceTO() {
 		super();
@@ -43,6 +45,31 @@ public class RaceTO
 	public RaceTO(final Race model) {
 		super();
 		from(model);
+	}
+	
+	@Override
+	public final void from(final Race model) {
+		if (model == null) {
+			throw new IllegalArgumentException("Model can not be null.");
+		}
+
+		super.from(model);		
+		code = model.getCode();		
+	}
+	
+	/**
+	 * @return the race code
+	 */
+	public String getCode() {
+		return code;
+	}
+	
+	/**
+	 * @param race external ref code
+	 * 				the race code to set
+	 */
+	public void setCode(final String code) {
+		this.code = code;
 	}
 
 	public static List<RaceTO> toTOList(

@@ -19,13 +19,10 @@
 package org.jasig.ssp.service.external.impl;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.external.ExternalDataDao;
 import org.jasig.ssp.dao.external.ExternalPersonDao;
-import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonDemographics;
 import org.jasig.ssp.model.PersonStaffDetails;
@@ -41,16 +38,12 @@ import org.jasig.ssp.service.reference.EthnicityService;
 import org.jasig.ssp.service.reference.RaceService;
 import org.jasig.ssp.service.reference.MaritalStatusService;
 import org.jasig.ssp.service.reference.StudentTypeService;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortDirection;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Maps;
 
 @Service
 @Transactional
@@ -325,14 +318,14 @@ public class ExternalPersonServiceImpl
 				&& !StringUtils.isBlank(externalPerson.getRace()))
 				||
 				((demographics.getRace() != null) && 
-				!demographics.getRace().getName().equals(
+				!demographics.getRace().getCode().equals(
 						externalPerson.getRace()))) {
 			try {
 				demographics.setRace(raceService
-					.getByName(externalPerson.getRace()));
+					.getByCode(externalPerson.getRace()));
 			} catch (final ObjectNotFoundException e) {
-				LOGGER.error("Race with name " 
-						+ externalPerson.getRace() + " not found");
+				LOGGER.error("Race with code " 
+						+ externalPerson.getRace() + " not found. ", e);
 			}
 		}
 
@@ -479,13 +472,13 @@ public class ExternalPersonServiceImpl
 	}
 	
 	private StudentType getInternalStudentTypeCode(final String studentTypeCode) {
-		StudentType internalCode = studentTypeService.getByCode(studentTypeCode);		
-		if (internalCode == null) {
+		try {
+			return studentTypeService.getByCode(studentTypeCode);
+		} catch (final ObjectNotFoundException e) {
 			LOGGER.warn("Student_Type " +studentTypeCode +" referenced in external table not "
-							+ "available in system");
-		}
-		
-		return internalCode;		
+					+ "available in system. ", e);
+			return null;
+		}				
 	}
 
 	@Override
@@ -494,7 +487,7 @@ public class ExternalPersonServiceImpl
 	}
 	
 	@Override
-	public List<String> getAllDepartmentNames(){
+	public List<String> getAllDepartmentNames() {
 		return dao.getAllDepartmentNames();
 	}
 

@@ -18,9 +18,15 @@
  */
 package org.jasig.ssp.service.reference;
 
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.model.reference.Race;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.ReferenceService;
 
 public interface RaceService
 		extends ReferenceService<Race> {
+	
+	Race getByCode(@NotNull final String code)
+		throws ObjectNotFoundException;
 }

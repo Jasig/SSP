@@ -36,6 +36,7 @@ public class Race
 		implements Auditable {
 
 	private static final long serialVersionUID = -2076285639616178555L;
+	private String code;
 
 	/**
 	 * Constructor
@@ -81,11 +82,30 @@ public class Race
 	public Race(final UUID id, final String name, final String description) {
 		super(id, name, description);
 	}
+	
+	/**
+	 * @return the race code
+	 */
+	public String getCode() {
+		return code;
+	}
+	
+	/**
+	 * @param race external ref code
+	 * 				the race code to set
+	 */
+	public void setCode(final String code) {
+		this.code = code;
+	}
 
 	@Override
 	protected int hashPrime() {
 		return 111;
 	}
-
-	// default hashCode okay if no extra fields are added
+	
+	@Override
+	public int hashCode() { // NOPMD by jon.adams
+		return hashPrime() * super.hashCode()
+				* hashField("code", code);
+	}	
 }

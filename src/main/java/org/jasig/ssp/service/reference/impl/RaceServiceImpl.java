@@ -18,8 +18,11 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
+import javax.validation.constraints.NotNull;
+
 import org.jasig.ssp.dao.reference.RaceDao;
 import org.jasig.ssp.model.reference.Race;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.RaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,4 +45,11 @@ public class RaceServiceImpl extends
 	protected RaceDao getDao() {
 		return dao;
 	}
+	
+	@Override
+	public Race getByCode(@NotNull final String code) 
+			throws ObjectNotFoundException {
+		return this.dao.getByCode(code);		
+	}
+	
 }
