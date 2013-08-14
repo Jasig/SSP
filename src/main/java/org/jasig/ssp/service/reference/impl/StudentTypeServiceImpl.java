@@ -18,8 +18,10 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
+import javax.validation.constraints.NotNull;
 import org.jasig.ssp.dao.reference.StudentTypeDao;
 import org.jasig.ssp.model.reference.StudentType;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,7 +58,8 @@ public class StudentTypeServiceImpl extends
 	}
 
 	@Override
-	public StudentType getByCode(String code) {
+	public StudentType getByCode(@NotNull final String code) 
+			throws ObjectNotFoundException {
 		return this.dao.getByCode(code);
 	}
 }

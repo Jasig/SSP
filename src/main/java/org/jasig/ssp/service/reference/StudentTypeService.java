@@ -18,7 +18,9 @@
  */
 package org.jasig.ssp.service.reference;
 
+import javax.validation.constraints.NotNull;
 import org.jasig.ssp.model.reference.StudentType;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.ReferenceService;
 
 /**
@@ -30,5 +32,6 @@ import org.jasig.ssp.service.ReferenceService;
 public interface StudentTypeService
 		extends ReferenceService<StudentType> {
 	
-	StudentType getByCode(String code);
+	StudentType getByCode(@NotNull final String code) 
+			throws ObjectNotFoundException;
 }
