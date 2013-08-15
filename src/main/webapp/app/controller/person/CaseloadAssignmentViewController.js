@@ -326,6 +326,10 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			scope: me
 		};
 		var model=me.person;
+		
+		var parsedResponseText = Ext.decode(response.responseText);
+		var responseDetail = parsedResponseText.detail.details;
+		console.log(responseDetail);
 		var id = model.get('id');
 		if ( id ) {
 			dialogOpts.title = "Conflicting Student Record Updates";
@@ -336,30 +340,70 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 				"Press 'No' to discard your changes and load the existing record into this form.<br/>" +
 				"Press 'Cancel' to do nothing and resume editing.";
 		} else {
-			var conflictingPersonId = me.parseConflictingPersonId(response);
-			if ( conflictingPersonId ) {
+			if("ERROR_USERNAME_EXISTING" === responseDetail.error )
+			{
 				dialogOpts.title = "Student Already on File";
 				dialogOpts.msg = "The student record did not save because another" +
+					" student record already exists for the specified username." +
+					" Do you want to save your changes anyway?" +
 					" student record already exists for the specified external" +
-					" identifier. Do you want to save your changes anyway?<br/><br/>" +
-					"Press 'Yes' to overwrite the existing record with your changes.<br/>" +
-					"Press 'No' to discard your changes and load the existing record into this form.<br/>" +
-					"Press 'Cancel' to do nothing and resume editing.";
-				dialogOpts.personId = conflictingPersonId;
-			} else {
-				dialogOpts.buttons = Ext.Msg.OK;
-				dialogOptsicon = Ext.Msg.ERROR;
-				dialogOpts.fn = function() {
-					// no-op
-				};
-				dialogOpts.title = "Unresolvable Student Record Conflict";
-				dialogOpts.msg = "Your changes could not be saved because" +
-					" they conflict with an existing student record but the" +
-					" exact cause of the conflict could not be determined.<br/><br/>" +
-					" Either contact your system administrator or try" +
-					" searching for an existing student record with the" +
-					" same name and/or identifier.";
+					"<br/><br/>" +
+					
+					" Conflicted Student Username: " + responseDetail.conflictingUsername +
+					"<br/>" +
+					" Conflicted Student School ID: " + responseDetail.conflictingSchoolId +
+					"<br/>" +
+					" Conflicted Student Key: " + responseDetail.conflictingId +
+					"<br/><br/>";
+				
+				    if(responseDetail.conflictingSchoolId !== responseDetail.originalSchoolId)
+				    {
+				    	dialogOpts.msg = dialogOpts.msg + "Furthermore the school id does not match the expected school ID for the username.  " +
+				    	"The expected school id is:  "+ responseDetail.originalSchoolId;
+						dialogOpts.buttons = Ext.Msg.OK;
+						dialogOptsicon = Ext.Msg.ERROR;
+				    }
+				    else
+				    {
+				    	dialogOpts.msg = dialogOpts.msg + "<br/><br/>" +
+				    	"Press 'Yes' to overwrite the existing record with your changes.<br/>" +
+				    	"Press 'No' to discard your changes and load the existing record into this form.<br/>" +
+				    	"Press 'Cancel' to do nothing and resume editing.";
+				    }
+				dialogOpts.personId = responseDetail.conflictingId;			
 			}
+			else
+			if("ERROR_SCHOOL_ID_EXISTING" === responseDetail.error )
+			{
+				dialogOpts.title = "Student Already on File";
+				dialogOpts.msg = "The student record did not save because another" +
+					" student record already exists for the specified school id." +
+					" Do you want to save your changes anyway?" +
+					"<br/><br/>" +
+					
+					" Conflicted Student Username: " + responseDetail.conflictingUsername +
+					"<br/>" +
+					" Conflicted Student School ID: " + responseDetail.conflictingSchoolId +
+					"<br/>" +
+					" Conflicted Student Key: " + responseDetail.conflictingId +
+					"<br/><br/>";
+
+				    if(responseDetail.originalUsername !== responseDetail.conflictingUsername)
+				    {
+				    	dialogOpts.msg = dialogOpts.msg + "Furthermore the username does not match the expected username for the school ID.  " +
+				    	"The expected school id is:  "+ responseDetail.originalSchoolId;
+						dialogOpts.buttons = Ext.Msg.OK;
+						dialogOptsicon = Ext.Msg.ERROR;
+				    }
+				    else
+				    {
+				    	dialogOpts.msg = dialogOpts.msg + "<br/><br/>" +
+				    	"Press 'Yes' to overwrite the existing record with your changes.<br/>" +
+				    	"Press 'No' to discard your changes and load the existing record into this form.<br/>" +
+				    	"Press 'Cancel' to do nothing and resume editing.";
+				    }
+				dialogOpts.personId = responseDetail.conflictingId;			
+			}				
 		}
 		Ext.Msg.show(dialogOpts);
 	},
@@ -371,6 +415,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		}
 		var parsedResponseText = Ext.decode(response.responseText);
 		var responseDetail = parsedResponseText.detail;
+		console.log(responseDetail);
 		if ( !(responseDetail) ) {
 			return null;
 		}

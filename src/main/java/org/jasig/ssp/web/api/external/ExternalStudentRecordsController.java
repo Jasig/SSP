@@ -18,7 +18,6 @@
  */
 package org.jasig.ssp.web.api.external;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -30,14 +29,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang.time.DateUtils;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ser.impl.JsonSerializerMap;
 import org.jasig.ssp.factory.EarlyAlertTOFactory;
 import org.jasig.ssp.factory.JournalEntryTOFactory;
 import org.jasig.ssp.factory.TaskTOFactory;
@@ -52,7 +44,6 @@ import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PersonDemographics;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.external.ExternalPerson;
@@ -81,7 +72,6 @@ import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.JournalEntryTO;
-import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PersonLiteTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.RecentActivityTO;
@@ -95,7 +85,6 @@ import org.jasig.ssp.transferobject.external.ExternalStudentTranscriptTermTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.AbstractBaseController;
-import org.jasig.ssp.web.api.tool.IntakeController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -337,7 +326,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		return externalStudentTranscriptTermTOFactory.asTOList(
 				externalStudentTranscriptTermService.getExternalStudentTranscriptTermsBySchoolId(schoolId));
 	}
-	
+	 
 	
 	@RequestMapping(value = "/studentactivity", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)

@@ -24,19 +24,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.dao.ObjectExistsException;
+import org.jasig.ssp.dao.PersonExistsException;
 import org.jasig.ssp.transferobject.jsonserializer.BooleanPrimitiveToStringSerializer;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 // NON_NULL preserves backward compatibility with any clients which might
 // not be prepared to accept the "detail" field
@@ -142,7 +141,34 @@ public class ServiceResponse implements Serializable {
 		detail.put("lookupFields", toStringMap(e.getLookupFields()));
 		this.detail = detail;
 	}
+	/**
+	 * Uses the message from the given {@link PersonExistsException} and adds
+	 * its custom fields to the <code>detail</code> collection.
+	 *
+	 * @param success
+	 *            If the response should indicate success or not
+	 * @param e
+	 *            Unexpected object existence event to describe
+	 */
+	public ServiceResponse(final boolean success,
+						   final PersonExistsException e) {
+		this(success, e.getMessage());
+		final Map<String,Map<String,String>> detail =
+				new HashMap<String,Map<String, String>>();
+		detail.put("typeInfo", new HashMap<String,String>() {{
+			put("name", e.getName());
+		}});
+		detail.put("details", new HashMap<String,String>() {{
+			put("error",e.getError());
+			put("conflictingId", e.getConflictingId() != null ? e.getConflictingId().toString() : null);
+			put("conflictingUsername", e.getConflictingUsername());
+			put("conflictingSchoolId", e.getConflictingSchoolId());
+			put("originalUsername", e.getOriginalUsername());
+			put("originalSchoolId", e.getOriginalSchoolId());
 
+		}});
+		this.detail = detail;
+	}
 	private Map<String,String> toStringMap(Map<String, ? extends Serializable> from) {
 		if ( from == null ) {
 			return null;

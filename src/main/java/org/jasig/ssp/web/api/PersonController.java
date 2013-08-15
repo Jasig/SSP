@@ -20,6 +20,7 @@ package org.jasig.ssp.web.api;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.jasig.ssp.dao.ObjectExistsException;
+import org.jasig.ssp.dao.PersonExistsException;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -221,7 +222,7 @@ public class PersonController extends AbstractBaseController {
 	@PreAuthorize(Permission.SECURITY_PERSON_WRITE)
 	public @ResponseBody
 	PersonTO create(final @Valid @RequestBody PersonTO obj)
-			throws ObjectNotFoundException, ValidationException {
+			throws  ValidationException, ObjectNotFoundException {
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"You submitted a person with an id to the create method.  Did you mean to save?");
@@ -230,7 +231,7 @@ public class PersonController extends AbstractBaseController {
 		final Person model = factory.from(obj);
 
 		Person createdModel = null;
-		ObjectExistsException conflict = null;
+		PersonExistsException conflict = null;
 		if (null != model) {
 			int retryLimit = 1;
 			do {
@@ -240,16 +241,13 @@ public class PersonController extends AbstractBaseController {
 					if (null != createdModel) {
 						return new PersonTO(createdModel);
 					}
-				} catch ( ObjectExistsException e ) {
+				} catch ( PersonExistsException e ) {
 					LOGGER.info("Person creation conflicted with an existing"
 							+ " record. Will be retried {} times before"
 							+ " raising an error to the caller.", retryLimit, e);
-					conflict = e;
+					conflict = e; 
 					// try to tell the caller which record conflicted, by PK
-					final ObjectExistsException ee = objectExistsExceptionWithId(e);
-					if ( ee != null ) {
-						throw ee;
-					} // else something deleted the person from under us?
+					// else something deleted the person from under us?
 				}
 			} while ( retryLimit-- > 0 );
 			if ( null == createdModel ) {
@@ -261,43 +259,41 @@ public class PersonController extends AbstractBaseController {
 		}
 		return null;
 	}
-
-	private ObjectExistsException objectExistsExceptionWithId(final ObjectExistsException orig) {
-		final Map<String,? extends Serializable> lookupFields = orig.getLookupFields();
-		if ( lookupFields == null || lookupFields.isEmpty() ) {
-			return orig;
-		}
-		if ( lookupFields.containsKey("id") ) {
-			return orig;
-		}
-		Person bySchoolIdOrUsername = null;
-		try {
-			if ( lookupFields.containsKey("schoolId") ) {
-				bySchoolIdOrUsername =
-						service.getBySchoolId((String)lookupFields.get("schoolId"));
-			} else if ( lookupFields.containsKey("username") ) {
-				bySchoolIdOrUsername =
-						service.personFromUsername((String)lookupFields.get("username"));
-			}
-		} catch ( ObjectNotFoundException ee ) {
-			LOGGER.info("Failed to look up conflicting Person record."
-					+ " Original conflict message: {}", orig.getMessage(), ee);
-			return null;
-		} catch ( RuntimeException ee ) {
-			LOGGER.info("Failed to look up conflicting Person record."
-					+ " Original conflict message: {}", orig.getMessage(), ee);
-			return null;
-		}
-		if ( bySchoolIdOrUsername == null ) {
-			LOGGER.info("Failed to look up conflicting Person record."
-					+ " Original conflict message: {}", orig.getMessage());
-			return null;
-		}
-
-		return new ObjectExistsException(Person.class.getName(),
-				new Pair<String,UUID>("id", bySchoolIdOrUsername.getId()).toMap(),
-				orig);
-	}
+  
+//	private PersonExistsException objectExistsExceptionWithId(final PersonExistsException orig,PersonTO origPerson) {
+//		Person bySchoolIdOrUsername = null;
+//		try {
+//			if ( PersonExistsException.ERROR_SCHOOL_ID_EXISTING.equals(orig.getError()) ) {
+//				bySchoolIdOrUsername =
+//						service.getBySchoolId(orig.getOriginalSchoolId());
+//			} else if ( PersonExistsException.ERROR_USERNAME_EXISTING.equals(orig.getError()) ) {
+//				bySchoolIdOrUsername =
+//						service.personFromUsername(orig.getOriginalUsername());
+//				if(!origPerson.getSchoolId().equals(bySchoolIdOrUsername.getSchoolId()))
+//				{
+//					LOGGER.info("Username and schoolid don't match up."
+//							+ " Original conflict message: {}", orig.getMessage());
+//					throw new PersonExistsException(PersonExistsException.ERROR_CONSTRAINT_VIOLATION_SCHOOL_ID,bySchoolIdOrUsername.getId(), bySchoolIdOrUsername.getUsername(), bySchoolIdOrUsername.getSchoolId(),  origPerson.getUsername(), origPerson.getSchoolId(), origPerson.getFirstName()+""+origPerson.getLastName());
+//				}
+//				
+//			}
+//		} catch ( ObjectNotFoundException ee ) {
+//			LOGGER.info("Failed to look up conflicting Person record."
+//					+ " Original conflict message: {}", orig.getMessage(), ee);
+//			return null;
+//		} catch ( RuntimeException ee ) {
+//			LOGGER.info("Failed to look up conflicting Person record."
+//					+ " Original conflict message: {}", orig.getMessage(), ee);
+//			return null;
+//		}
+//		if ( bySchoolIdOrUsername == null ) {
+//			LOGGER.info("Failed to look up conflicting Person record."
+//					+ " Original conflict message: {}", orig.getMessage());
+//			return null;
+//		}
+// 
+//		return new PersonExistsException(orig);
+//	}
 
 	/**
 	 * Persist any changes to the specified instance.

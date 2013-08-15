@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.portlet.PortletRequest;
 
 import org.hibernate.exception.ConstraintViolationException;
-import org.jasig.ssp.dao.ObjectExistsException;
+import org.jasig.ssp.dao.PersonExistsException;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -191,7 +191,7 @@ public class PersonServiceImpl implements PersonService {
 					externalPersonService.updatePersonFromExternalPerson(person);
 					LOGGER.info("Successfully Created Account for {}",
 							username);
-				} catch (final ObjectExistsException oee) {
+				} catch (final PersonExistsException oee) {
 					if ( oee.getCause() instanceof ConstraintViolationException ) {
 						throw (ConstraintViolationException)oee.getCause();
 					}
@@ -232,9 +232,9 @@ public class PersonServiceImpl implements PersonService {
 					// this method returns, which Postgres will refuse with a
 					// "current transaction is aborted" message and the caller
 					// will get an opaque HibernateJdbcException. With an
-					// ObjectExistsException the client has at least some
+					// PersonExistsException the client has at least some
 					// clue as to a reasonable recovery path.
-					throw new ObjectExistsException("Account with user name "
+					throw new PersonExistsException("Account with user name "
 							+ username + " already exists.");
 				}
 
@@ -347,12 +347,12 @@ public class PersonServiceImpl implements PersonService {
 	 * 
 	 * @param obj
 	 *            Model instance
-	 * @throws ObjectExistsException
+	 * @throws PersonExistsException
 	 *             Thrown if any of the specified data has a unique key
 	 *             violation.
 	 */
 	@Override
-	public Person create(final Person obj) {
+	public Person create(final Person obj) throws PersonExistsException {
 
 		LOGGER.debug("Creating User {}", obj);
 
@@ -372,16 +372,14 @@ public class PersonServiceImpl implements PersonService {
 				existing = dao.getBySchoolId(obj.getSchoolId());
 			} catch ( ObjectNotFoundException e ) {}
 			if (null != existing) {
-				throw new ObjectExistsException(Person.class.getName(),
-						new Pair<String,String>("schoolId", obj.getSchoolId()).toMap());
+				throw new PersonExistsException(PersonExistsException.ERROR_SCHOOL_ID_EXISTING,existing.getId(), existing.getUsername(), existing.getSchoolId(),  obj.getUsername(), obj.getSchoolId(), existing.getFullName());
 			}
 		}
 
 		if (obj.getUsername() != null) {
 			final Person existing = dao.fromUsername(obj.getUsername());
 			if (null != existing) {
-				throw new ObjectExistsException(Person.class.getName(),
-						new Pair<String,String>("username", obj.getUsername()).toMap());
+				throw new PersonExistsException(PersonExistsException.ERROR_USERNAME_EXISTING,existing.getId(), existing.getUsername(), existing.getSchoolId(),  obj.getUsername(), obj.getSchoolId(), existing.getFullName());
 			}
 		}
 
@@ -391,14 +389,11 @@ public class PersonServiceImpl implements PersonService {
 		} catch ( ConstraintViolationException e ) {
 			final String constraintName = e.getConstraintName();
 			if ( "uq_person_school_id".equals(constraintName) ) {
-				throw new ObjectExistsException(Person.class.getName(),
-						new Pair<String,String>("schoolId", obj.getSchoolId()).toMap(),
-						e);
+				throw new PersonExistsException(PersonExistsException.ERROR_CONSTRAINT_VIOLATION_SCHOOL_ID,person.getId(), person.getUsername(), person.getSchoolId(),  obj.getUsername(), obj.getSchoolId(), person.getFullName());
+
 			}
 			if ( "unique_person_username".equals(constraintName) ) {
-				throw new ObjectExistsException(Person.class.getName(),
-						new Pair<String,String>("username", obj.getUsername()).toMap(),
-						e);
+				throw new PersonExistsException(PersonExistsException.ERROR_CONSTRAINT_VIOLATION_USERNAME,person.getId(), person.getUsername(), person.getSchoolId(),  obj.getUsername(), obj.getSchoolId(), person.getFullName());
 			}
 			throw e;
 		}

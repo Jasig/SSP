@@ -19,6 +19,7 @@
 package org.jasig.ssp.web.api;
 
 import org.jasig.ssp.dao.ObjectExistsException;
+import org.jasig.ssp.dao.PersonExistsException;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.ServiceResponse;
@@ -99,7 +100,14 @@ public abstract class AbstractBaseController {
 		getLogger().error(ERROR_PREFIX, e);
 		return new ServiceResponse(false, e);
 	}
-
+	@PreAuthorize(Permission.PERMIT_ALL)
+	@ExceptionHandler(PersonExistsException.class)
+	@ResponseStatus(HttpStatus.CONFLICT)
+	public @ResponseBody
+	ServiceResponse handleObjectExists(final PersonExistsException e) {
+	//	getLogger().error(ERROR_PREFIX, e);
+		return new ServiceResponse(false, e);
+	}
 	/**
 	 * Log and return an appropriate message for an internal server error (HTTP
 	 * 500, {@link HttpStatus#INTERNAL_SERVER_ERROR}).
