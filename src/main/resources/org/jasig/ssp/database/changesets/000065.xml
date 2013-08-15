@@ -31,7 +31,7 @@
 		<addColumn tableName="person">
 			<column name="person_class" type="${nvarchar.type}(64)" valueComputed="'user'" />
 		</addColumn>
-		<addNotNullConstraint tableName="person" columnName="person_class" schemaName="${schema}" />
+		<addNotNullConstraint tableName="person" columnName="person_class" columnDataType="${nvarchar.type}(64)" schemaName="${schema}" />
 		<addColumn tableName="person">
 			<column name="secret" type="${nvarchar.type}(256)">
 				<constraints nullable="true" />
