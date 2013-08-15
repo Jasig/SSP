@@ -105,7 +105,10 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 		 });
 		
 		me.studentTypesStore.clearFilter(true);	 
-		me.formRendererUtils.applyAssociativeStoreFilter(me.studentTypesStore, me.person.data.studentType.id);	
+		
+		if ( me.person.data.studentType ) {
+			me.formRendererUtils.applyAssociativeStoreFilter(me.studentTypesStore, me.person.data.studentType.id);	
+		}
 		
 		me.initForm();
 		
