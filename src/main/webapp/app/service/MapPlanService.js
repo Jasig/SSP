@@ -199,7 +199,7 @@ Ext.define('Ssp.service.MapPlanService', {
     
     save: function(semesterStores, callbacks, currentMapPlan, view, saveAs ){
 		var me=this;
-		var url = me.getBaseUrl(currentMapPlan.get('personId'));
+		var url = me.getBaseUrl(me.personLite.get('id'));
 	    var success = function( response ){
 	    	callbacks.success( response, callbacks.scope );
 	    };
