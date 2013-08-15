@@ -112,7 +112,7 @@ public class ExternalPerson extends AbstractExternalData implements
 
 	@Column(length = 80)
 	@Size(max = 80)
-	private String maritalStatus, ethnicity, race;
+	private String maritalStatus, ethnicity;
 
 	@Column(length = 1)
 	@Size(max = 1)
@@ -142,6 +142,10 @@ public class ExternalPerson extends AbstractExternalData implements
 	@Size(max = 10)
 	private String studentType;
 
+	@Column(length = 10, name = "race_code")
+	@Size(max = 10)
+	private String race_code;
+	
 	public String getSchoolId() {
 		return schoolId;
 	}
@@ -320,11 +324,11 @@ public class ExternalPerson extends AbstractExternalData implements
 	}
 
 	public String getRace() {
-		return race;
+		return race_code;
 	}
 	
-	public void setRace(final String race) {
-		this.race = race;
+	public void setRace(final String race_code) {
+		this.race_code = race_code;
 	}
 	
 	public String getGender() {
