@@ -33,17 +33,23 @@ Ext.define('Ssp.view.tools.journal.Journal',{
 	          items: [
 	                  {
 	                  	xtype: 'journallist', 
-	                  	flex: .40
+	                  	flex: .32,
+						maintainFlex: true
 	                  },
 					  {
-					  	xtype: 'label',
-						text: 'Journal Entry',
-						padding: '0 0 0 20',
-						style: 'font-weight: bold'
+					  	xtype : 'splitter',
+						draggable : true,
+						collapsible : true,
+						border: 2,
+						style:{
+							borderColor: 'lightblue',
+							borderStyle:'solid'
+						}
 					  },
+					  
 					  {
 	                  	xtype: 'editjournal', 
-	                  	flex: .60
+	                  	flex: .68
 	                  }
 	                 ]});
     	return this.callParent(arguments);

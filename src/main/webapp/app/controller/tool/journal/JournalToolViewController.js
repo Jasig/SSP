@@ -61,7 +61,6 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 	
     init: function() {
 		var me = this;
-		
 		me.getView().setLoading( true );
 		
 		// clear any existing journal entries
@@ -83,6 +82,22 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		
 		return me.callParent(arguments);
     },
+	
+	getJournalEntries: function(){
+		var me = this;
+		
+		me.getView().setLoading( true );
+		
+		// clear any existing journal entries
+		me.journalEntriesStore.removeAll();
+		
+		me.service.getAll( me.personLite.get('id'), {
+			success: me.getAllJournalEntriesSuccess,
+			failure: me.getAllJournalEntriesFailure,
+			scope: me
+		});
+		
+	},
  
     getAllJournalEntriesSuccess: function( r, scope ) {
 		var me=scope;
@@ -94,9 +109,7 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		        direction: 'DESC'
 		    }]);
 			me.journalEntriesStore.loadData(r.rows);
-			
-			me.model.data = me.journalEntriesStore.getAt(0).data;			
-			
+			me.model.data = me.journalEntriesStore.getAt(0).data;
 			me.getView().getSelectionModel().select(0);			
     	}
 		else{
@@ -105,6 +118,7 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
     		me.model.data = je.data;
 			me.callDetails();
         }
+		
 	},
 
 	getAllJournalEntriesFailure: function( response, scope ) {
@@ -114,12 +128,16 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
     
     onViewReady: function(comp, obj) {    	
     	this.appEventsController.assignEvent({eventName: 'deleteJournalEntry', callBackFunc: this.deleteConfirmation, scope: this});
+		this.appEventsController.assignEvent({eventName: 'getJournals', callBackFunc: this.getJournalEntries, scope: this});
     },    
  
     destroy: function() {
     	var me=this;
     	    	
     	me.appEventsController.removeEvent({eventName: 'deleteJournalEntry', callBackFunc: me.deleteConfirmation, scope: me});
+		
+		me.appEventsController.removeEvent({eventName: 'getJournals', callBackFunc: me.getJournalEntries, scope: me});
+
 
         return me.callParent( arguments );
     },    

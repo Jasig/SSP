@@ -27,10 +27,10 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
         journalTracksAllUnpagedStore: 'journalTracksAllUnpagedStore',
         model: 'currentJournalEntry'
     },
-	width: '100%',
+    width: '100%',
     height: '100%',
-	//minHeight: 1,
-	autoScroll: true,
+    //minHeight: 1,
+    autoScroll: true,
     itemId: 'editjournalGrid',
     initComponent: function(){
         var me = this;
@@ -39,11 +39,16 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
             bodyPadding: 0,
             
             items: [{
+                xtype: 'label',
+                text: 'Journal Entry',
+                padding: '0 0 0 10',
+                style: 'font-weight: bold'
+            }, {
                 xtype: 'fieldcontainer',
                 fieldLabel: '',
                 layout: 'hbox',
                 defaultType: 'displayfield',
-				border: 0,
+                border: 0,
                 fieldDefaults: {
                     msgTarget: 'side'
                 },
@@ -56,8 +61,8 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                     defaults: {
                         anchor: '100%,100%'
                     },
-					
-                    flex: .60,
+                    
+                    flex: .35,
                     
                     items: [{
                         xtype: 'datefield',
@@ -65,7 +70,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                         itemId: 'entryDateField',
                         altFormats: 'm/d/Y|m-d-Y',
                         name: 'entryDate',
-						anchor: '98%',
+                        anchor: '98%',
                         allowBlank: false,
                         showToday: false, // because this would be 'today' browser time,
                         listeners: {
@@ -109,9 +114,9 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                         fieldLabel: 'Comment (Optional)',
                         itemId: 'commentTxt',
                         name: 'comment',
-						//minHeight: 1,
-						//flex:1,
-						height: 250,
+                        //minHeight: 1,
+                        //flex:1,
+                        height: 350,
                         anchor: '98%'
                     }]
                 
@@ -125,53 +130,53 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                     },
                     padding: '0 0 0 5',
                     margin: '0 0 0 0',
-                    flex: .30,
-                    items: [
-						{	xtype: 'label',
-							text: 'Track-Step-Detail',
-							padding: '5 0 5 0'},
-					{
-						xtype: 'fieldset',
-						border: 0,
-						title: '',
-						layout: 'hbox',
-						padding: ' 0 0 0 0',
-						margin: '0 0 0 0',
-						defaultType: 'displayfield',
-						defaults: {
-							anchor: '100%'
-						},
-						
-						items: [{
-							xtype: 'combobox',
-							itemId: 'journalTrackCombo',
-							name: 'journalTrackId',
-							fieldLabel: '',
-							emptyText: 'Select One',
-							store: me.journalTracksAllUnpagedStore,
-							valueField: 'id',
-							displayField: 'name',
-							typeAhead: true,
-							queryMode: 'local',
-							allowBlank: true,
-							forceSelection: false,
-							flex: 1
-						}, 
-						 {
+                    flex: .65,
+                    items: [{
+                        xtype: 'label',
+                        text: 'Track-Step-Detail',
+                        padding: '5 0 5 0',
+						style: 'color: blue'
+                    }, {
+                        xtype: 'fieldset',
+                        border: 0,
+                        title: '',
+                        layout: 'hbox',
+                        padding: ' 0 0 0 0',
+                        margin: '0 0 0 0',
+                        defaultType: 'displayfield',
+                        defaults: {
+                            anchor: '100%'
+                        },
+                        
+                        items: [{
+                            xtype: 'combobox',
+                            itemId: 'journalTrackCombo',
+                            name: 'journalTrackId',
+                            fieldLabel: '',
+                            emptyText: 'Select One',
+                            store: me.journalTracksAllUnpagedStore,
+                            valueField: 'id',
+                            displayField: 'name',
+                            typeAhead: true,
+                            queryMode: 'local',
+                            allowBlank: true,
+                            forceSelection: false,
+                            flex: 1
+                        }, {
                             xtype: 'tbspacer',
                             width: 10
-                        },{
-							tooltip: 'Removes the assigned Journal Track and Session Details',
-							text: 'Remove',
-							xtype: 'button',
-							itemId: 'removeJournalTrackButton'
-						}]
-					}, {
+                        }, {
+                            tooltip: 'Removes the assigned Journal Track and Session Details',
+                            text: 'Remove',
+                            xtype: 'button',
+                            itemId: 'removeJournalTrackButton'
+                        }]
+                    }, {
                         xtype: 'journaltracktree',
                         flex: .90,
                         itemId: 'journalTrackTree',
-						minHeight: 1
-						
+                        minHeight: 1
+                    
                     }]
                 }]
             }]

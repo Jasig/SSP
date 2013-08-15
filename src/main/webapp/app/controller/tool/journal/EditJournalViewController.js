@@ -96,6 +96,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     // (JournalToolViewController) when a JournalEntry is selected
     initForm: function() {
         var me = this;
+		me.getView().setLoading(false);
         var id = me.model.get("id");
         var journalTrackId = "";
       
@@ -265,7 +266,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
     
     saveSuccess: function(r, scope) {
         var me = scope;
-        me.displayMain();
+		me.appEventsController.getApplication().fireEvent('getJournals');
     },
     
     saveFailure: function(response, scope) {
