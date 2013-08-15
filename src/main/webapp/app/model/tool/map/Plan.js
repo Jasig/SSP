@@ -192,6 +192,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			
 	loadFromServer : function(objectData){
 		var me = this;
+		isTemplate = me.get('isTemplate');
 		me.populateFromGenericObject( objectData );
 		var termNotes = me.get('termNotes');
 		var recordTermNotes = [];
@@ -205,6 +206,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		}
 		me.set('termNotes', recordTermNotes);
 		me.dirty = false;
+		me.setIsTemplate(isTemplate);
 	}, 
 	
 	isEmpty: function(str){
@@ -470,15 +472,20 @@ Ext.define('Ssp.model.tool.map.Plan', {
 	getPlanCourseFromCourseCode: function(courseCode, termCode){
 		var me = this;
 		var planCourses = me.get('planCourses');
-		for(var i = 0; i < planCourses.length; i++){
-			var planCourse = planCourses[i];
-			if(planCourse.courseCode == courseCode){
-				if(termCode != null){
-					if(planCourse.termCode == termCode){
+		if(!planCourses)
+			planCourses = me.get('templateCourses');
+		if(planCourses)
+		{
+			for(var i = 0; i < planCourses.length; i++){
+				var planCourse = planCourses[i];
+				if(planCourse.courseCode == courseCode){
+					if(termCode != null){
+						if(planCourse.termCode == termCode){
+							return planCourse;
+						}
+					}else{
 						return planCourse;
 					}
-				}else{
-					return planCourse;
 				}
 			}
 		}
@@ -488,6 +495,8 @@ Ext.define('Ssp.model.tool.map.Plan', {
 	repopulatePlanStores:function(semesterStores, markDirty){
 		var me = this;
 		var planCourses = me.get('planCourses');
+		if(!planCourses)
+			planCourses = me.get('templateCourses');
 		var courses = {};
 		if(planCourses && planCourses.length > 0){
 			planCourses.forEach(function(planCourse){

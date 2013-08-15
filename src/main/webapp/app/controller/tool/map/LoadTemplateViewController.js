@@ -132,7 +132,7 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 		record = me.getView().query('gridpanel')[0].getView().getSelectionModel().getSelection()[0];
         if (record) 
         {	
-        	 me.mapPlanService.getTemplate(record.get('id'), callbacks)
+        	 me.mapPlanService.getTemplate(record.get('id'), callbacks);
         }else{
      	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
         }    	
@@ -146,6 +146,7 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
        		me.scope.currentMapPlan.loadFromServer(Ext.decode(serviceResponses.responseText));
 			me.scope.appEventsController.getApplication().fireEvent('onLoadTemplatePlan');
 			me.scope.appEventsController.getApplication().fireEvent("onCurrentMapPlanChangeUpdateMapView");
+			me.scope.currentMapPlan.set('isTemplate',true);
 			me.scope.getView().hide();
 		}
 	},
