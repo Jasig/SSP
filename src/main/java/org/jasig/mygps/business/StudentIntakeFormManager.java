@@ -62,6 +62,7 @@ import org.jasig.ssp.model.reference.FundingSource;
 import org.jasig.ssp.model.reference.Genders;
 import org.jasig.ssp.model.reference.MaritalStatus;
 import org.jasig.ssp.model.reference.MilitaryAffiliation;
+import org.jasig.ssp.model.reference.Race;
 import org.jasig.ssp.model.reference.StudentStatus;
 import org.jasig.ssp.model.reference.VeteranStatus;
 import org.jasig.ssp.model.tool.Tools;
@@ -75,6 +76,7 @@ import org.jasig.ssp.service.reference.CitizenshipService;
 import org.jasig.ssp.service.reference.EducationGoalService;
 import org.jasig.ssp.service.reference.EthnicityService;
 import org.jasig.ssp.service.reference.MaritalStatusService;
+import org.jasig.ssp.service.reference.RaceService;
 import org.jasig.ssp.service.reference.StudentStatusService;
 import org.jasig.ssp.service.reference.VeteranStatusService;
 import org.jasig.ssp.service.tool.PersonToolService;
@@ -118,6 +120,9 @@ public class StudentIntakeFormManager { // NOPMD
 
 	@Autowired
 	private transient EthnicityService ethnicityService;
+	
+	@Autowired
+	private transient RaceService raceService;	
 
 	@Autowired
 	private transient FundingSourceDao fundingSourceDao;
@@ -217,6 +222,8 @@ public class StudentIntakeFormManager { // NOPMD
 			.fromString("39e4740b-966e-40d2-bbb1-6915e63fe802");
 	public static final UUID SECTION_DEMOGRAPHICS_QUESTION_ETHNICITY_ID = UUID
 			.fromString("c8c6889a-f07e-4f20-9aa1-2f169232578c");
+	public static final UUID SECTION_DEMOGRAPHICS_QUESTION_RACE_ID = UUID
+			.fromString("c0a82b94-405e-182a-8140-5eca264a0000");	
 	public static final UUID SECTION_DEMOGRAPHICS_QUESTION_GENDER_ID = UUID
 			.fromString("e8674ff9-3ae5-48ac-a596-72ea7096295d");
 	public static final UUID SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID = UUID
@@ -517,7 +524,25 @@ public class StudentIntakeFormManager { // NOPMD
 						student.getDemographics().getEthnicity().getId()
 								.toString());
 			}
-
+			// Race
+			if (student.getDemographics().getRace() == null) {
+				formSectionTO
+						.getFormQuestionById(
+								SECTION_DEMOGRAPHICS_QUESTION_RACE_ID)
+						.getOptions()
+						.add(0,
+								new FormOptionTO(UUID.randomUUID(),
+										DEFAULT_DROPDOWN_LIST_LABEL,
+										DEFAULT_DROPDOWN_LIST_VALUE));
+				formSectionTO.getFormQuestionById(
+						SECTION_DEMOGRAPHICS_QUESTION_RACE_ID).setValue(
+						DEFAULT_DROPDOWN_LIST_VALUE);
+			} else {
+				formSectionTO.getFormQuestionById(
+						SECTION_DEMOGRAPHICS_QUESTION_RACE_ID).setValue(
+						student.getDemographics().getRace().getId()
+								.toString());
+			}
 			// Gender
 			if( student.getDemographics().getGender() != null)
 			{
@@ -1143,6 +1168,23 @@ public class StudentIntakeFormManager { // NOPMD
 			}
 		}
 
+		// race
+		final FormQuestionTO raceQuestion = demographicsSection
+				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_RACE_ID);
+
+		if (DEFAULT_DROPDOWN_LIST_VALUE.equals(raceQuestion.getValue())
+				|| (raceQuestion.getValue() == null)) {
+			demographics.setEthnicity(null);
+		} else {
+			final Collection<Race> races = raceService.getAll(
+					new SortingAndPaging(ObjectStatus.ACTIVE)).getRows();
+			for (final Race race : races) {
+				if (race.getName().equals(raceQuestion.getValue())) {
+					demographics.setRace(race);
+					break;
+				}
+			}
+		}
 		// Gender
 		final FormQuestionTO genderQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_GENDER_ID);
@@ -1990,6 +2032,24 @@ public class StudentIntakeFormManager { // NOPMD
 		ethnicityQuestion.setType(FORM_TYPE_SELECT);
 
 		demographicSectionQuestions.add(ethnicityQuestion);
+		
+		// Race
+		final FormQuestionTO raceQuestion = new FormQuestionTO();
+		final List<FormOptionTO> raceQuestionOptions = new ArrayList<FormOptionTO>();
+
+		raceQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_RACE_ID);
+		raceQuestion.setLabel("Race");
+
+		for (final Race race : raceService.getAll(
+				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()) {
+			raceQuestionOptions.add(new FormOptionTO(UUID.randomUUID(),
+					race.getName(), race.getName()));
+		}
+
+		raceQuestion.setOptions(raceQuestionOptions);
+		raceQuestion.setType(FORM_TYPE_SELECT);
+
+		demographicSectionQuestions.add(raceQuestion);		
 
 		// Gender
 		final FormQuestionTO genderQuestion = new FormQuestionTO();
