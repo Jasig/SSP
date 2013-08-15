@@ -122,7 +122,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 			model.data.dueDate = me.formUtils.toJSONStringifiableDate( model.data.dueDate );
 			if (id == "") {
 				if (origDueDateJSON['formattedStr'] < todayDateJSON['formattedStr']) {
-					Ext.Msg.alert('Error', 'Please correct the Target Date.');
+					Ext.Msg.alert('Error', 'The Target Date must be the current or a future date.');
 					return;
 				}
 			}
