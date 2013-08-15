@@ -43,8 +43,7 @@
 	</http>
 
 	<http pattern="/api/1/**" create-session="never" entry-point-ref="oauth2AuthenticationEntryPoint">
-		<!-- FIGURE OUT IF WE STILL NEED THIS FIXATION PROTECTION DISABLEMENT... IT WAS ADDED FOR 1ST TIME LOGINS -->
-		<!--<session-management session-fixation-protection="none" />-->
+		<session-management session-fixation-protection="none" />
 		<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
 		<custom-filter ref="uPortalFilter" position="PRE_AUTH_FILTER"/>
 		<access-denied-handler ref="oauth2AccessDeniedHandler" />
