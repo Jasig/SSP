@@ -1101,6 +1101,11 @@
                     "path": "/app/store/external/"
                 },
                 {
+                    "clsName": "Ssp.store.external.CourseRequisites",
+                    "name": "CourseRequisites.js",
+                    "path": "/app/store/external/"
+                },                
+                {
                     "clsName": "Ssp.store.StudentActivities",
                     "name": "StudentActivities.js",
                     "path": "/app/store/"
@@ -1806,7 +1811,7 @@
                     "clsName": "Ssp.model.tool.map.SemesterCourse",
                     "name": "SemesterCourse.js",
                     "path": "/app/model/tool/map/"
-                },
+                },              
                 {
                     "clsName": "Ssp.model.tool.map.PlanCourse",
                     "name": "PlanCourse.js",
