@@ -341,7 +341,7 @@ Ext.define('Ssp.service.MapPlanService', {
 		if(plan.get("isTemplate")){
 			return callbacks.faliure("Is template, no plan status.", callbacks.scope);
 		}
-		var url = me.getBaseUrl(plan.get('personId'));
+		var url = me.getBaseUrl(me.personLite.get('id'));
 	    var success = function( response ){
 			callbacks.success( response, callbacks.scope );
 	    };

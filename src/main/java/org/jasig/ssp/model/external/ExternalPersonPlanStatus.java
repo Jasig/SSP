@@ -48,7 +48,7 @@ ExternalData, Serializable {
 	@Size(max = 50)
 	private String schoolId;
 	
-	@Enumerated(EnumType.ORDINAL)
+	@Enumerated(EnumType.STRING)
 	@NotNull
 	private PlanStatus status;
 	
