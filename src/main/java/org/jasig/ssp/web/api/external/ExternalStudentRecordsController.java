@@ -258,9 +258,9 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 			Person person = null;
 			try{
 				person = personService.getBySchoolId(course.getFacultySchoolId());
-			}finally
+			}catch(ObjectNotFoundException e)
 			{
-				
+				LOGGER.debug("FACULTY SCHOOL ID WAS NOT RESOLVED WHILE LOADING TRANSCRIPT RECORD.  Factulty School_id: "+course.getFacultySchoolId()+" Student ID: "+course.getSchoolId()+" Course: "+course.getFormattedCourse());
 			}
 			if(person != null)
 				course.setFacultyName(person.getFullName());
@@ -280,16 +280,19 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		try{
 			balanceOwed = personDemographicsService.getBalancedOwed(id);
 		}catch(Exception exception){
-			this.getLogger().error("Failed to load balance owed for internal person id {}", id, exception);
+			getLogger().debug("Failed to load balance owed for internal person id {}", id, exception);
+			return null;
 		}
 		
 		if(balanceOwed == null){
+			ExternalPerson externalPerson;
 			try{
-				ExternalPerson externalPerson = externalStudentService.getBySchoolId(schoolId);
-				balanceOwed = externalPerson.getBalanceOwed();
-			}catch(Exception exception){
-				this.getLogger().error("Failed to load balance owed for external person schoolId {}", schoolId, exception);
+				 externalPerson = externalStudentService.getBySchoolId(schoolId);
+			}catch(ObjectNotFoundException exception){
+				getLogger().debug("Failed to load balance owed for external person schoolId {}", schoolId, exception);
+				return null;
 			}
+			balanceOwed = externalPerson.getBalanceOwed();
 		}
 		return balanceOwed;
 	}
