@@ -345,10 +345,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 				dialogOpts.title = "Student Already on File";
 				dialogOpts.msg = "The student record did not save because another" +
 					" student record already exists for the specified username." +
-					" Do you want to save your changes anyway?" +
-					" student record already exists for the specified external" +
 					"<br/><br/>" +
-					
 					" Conflicted Student Username: " + responseDetail.conflictingUsername +
 					"<br/>" +
 					" Conflicted Student School ID: " + responseDetail.conflictingSchoolId +
@@ -365,7 +362,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 				    }
 				    else
 				    {
-				    	dialogOpts.msg = dialogOpts.msg + "<br/><br/>" +
+				    	dialogOpts.msg = dialogOpts.msg + " Do you want to save your changes anyway?" +
+						"<br/><br/>" +
 				    	"Press 'Yes' to overwrite the existing record with your changes.<br/>" +
 				    	"Press 'No' to discard your changes and load the existing record into this form.<br/>" +
 				    	"Press 'Cancel' to do nothing and resume editing.";
@@ -378,8 +376,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 				dialogOpts.title = "Student Already on File";
 				dialogOpts.msg = "The student record did not save because another" +
 					" student record already exists for the specified school id." +
-					" Do you want to save your changes anyway?" +
-					"<br/><br/>" +
+
 					
 					" Conflicted Student Username: " + responseDetail.conflictingUsername +
 					"<br/>" +
@@ -397,7 +394,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 				    }
 				    else
 				    {
-				    	dialogOpts.msg = dialogOpts.msg + "<br/><br/>" +
+				    	dialogOpts.msg = dialogOpts.msg + " Do you want to save your changes anyway?" +
+						"<br/><br/>" +
 				    	"Press 'Yes' to overwrite the existing record with your changes.<br/>" +
 				    	"Press 'No' to discard your changes and load the existing record into this form.<br/>" +
 				    	"Press 'Cancel' to do nothing and resume editing.";
