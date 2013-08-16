@@ -59,31 +59,6 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 		var editFlag = me.person.get('id');
 		me.missingCoach = null;
 
-		if ( editFlag )
-		{			
-			me.getCoachCombo().setDisabled( me.sspConfig.get('coachSetFromExternalData') );
-			var url = me.apiProperties.createUrl(me.apiProperties.getItemUrl('config')
-				+'/?name=studentTypeSetFromExternalData');
-			
-			Ext.Ajax.request({
-				url: url,	
-				method: 'GET',
-				headers: { 'Content-Type': 'application/json' },					
-				success: function(response, view) {
-						var r = Ext.decode(response.responseText);					
-						if (r.value.trim().toLowerCase() === 'true'){					
-							me.getStudentTypeCombo().setDisabled(true); 							
-						} else {
-							me.getStudentTypeCombo().setDisabled(false);
-						}
-				},
-				failure: function () {
-					 me.getStudentTypeCombo().setDisabled(false); 
-					this.apiProperties.handleError;
-				}
-			}, this);				
-		}		
-				
 		me.coachesStore.load(function(records, operation, success) {
 	        if(!success) {
 				Ext.Msg.alert('Error','Unable to load Coaches. Please see your system administrator for assistance.');
