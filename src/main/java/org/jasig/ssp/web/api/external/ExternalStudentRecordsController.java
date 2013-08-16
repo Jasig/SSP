@@ -257,7 +257,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		for(ExternalStudentTranscriptCourseTO course:courses){
 			Person person = null;
 			try{
-				person = personService.getBySchoolId(course.getFacultySchoolId());
+				person = course.getFacultySchoolId() == null ? null : personService.getBySchoolId(course.getFacultySchoolId());
 			}catch(ObjectNotFoundException e)
 			{
 				LOGGER.debug("FACULTY SCHOOL ID WAS NOT RESOLVED WHILE LOADING TRANSCRIPT RECORD.  Factulty School_id: "+course.getFacultySchoolId()+" Student ID: "+course.getSchoolId()+" Course: "+course.getFormattedCourse());
@@ -278,7 +278,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	private BigDecimal getBalancedOwed(UUID id, String schoolId) throws ObjectNotFoundException{
 		BigDecimal balanceOwed = null;
 		try{
-			balanceOwed = personDemographicsService.getBalancedOwed(id);
+			balanceOwed = id == null ? null : personDemographicsService.getBalancedOwed(id);
 		}catch(Exception exception){
 			getLogger().debug("Failed to load balance owed for internal person id {}", id, exception);
 			return null;
@@ -287,12 +287,12 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		if(balanceOwed == null){
 			ExternalPerson externalPerson;
 			try{
-				 externalPerson = externalStudentService.getBySchoolId(schoolId);
+				 externalPerson = schoolId == null ? null : externalStudentService.getBySchoolId(schoolId);
 			}catch(ObjectNotFoundException exception){
 				getLogger().debug("Failed to load balance owed for external person schoolId {}", schoolId, exception);
 				return null;
 			}
-			balanceOwed = externalPerson.getBalanceOwed();
+			balanceOwed = externalPerson == null ? null : externalPerson.getBalanceOwed();
 		}
 		return balanceOwed;
 	}
