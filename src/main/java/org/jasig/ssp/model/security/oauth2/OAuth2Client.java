@@ -55,6 +55,35 @@ public class OAuth2Client extends Person {
 	private Integer accessTokenValiditySeconds;
 
 
+	public String getClientId() {
+		return getUsername();
+	}
+
+	public void setClientId(String clientId) {
+		setUsername(clientId);
+	}
+
+	// Bit of a hack, but keeps this mapping nicely centralized here in this
+	// class. Specifically it avoids duplicating the mapping in the DAO.
+	//
+	// Some background... the OAuth2 spec refers to a Client's identifier as its
+	// ClientId. So it's nice and symmetric to support that concept and
+	// vocabulary directly on our corresponding model. But because doing this
+	// involves slightly more than a simple getter and setter, you could argue
+	// the mapping should be in the owning service in order to keep our model
+	// POJOs as dumb as possible. But it's hard to keep that abstraction from
+	// leaking, e.g. because the TO class, following conventions, would also
+	// directly implement the username->clientId mapping rather than routing it
+	// through the service. So, for nice, obvious correlation with the OAuth2
+	// spec, and to avoid mapping leakage, we decided to put the mapping here.
+	//
+	// Of course... it still leaks anyway since the front-end needs to know
+	// the physical column name in order for SortingAndPaging to work against
+	// this field without writing extra mapping code.
+	public static String getPhysicalClientIdColumnName() {
+		return "username";
+	}
+
 	public String getSecret() {
 		return secret;
 	}

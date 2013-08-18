@@ -73,7 +73,10 @@ public enum ServicePermissions {
 	MY_GPS_TOOL,
 	
 	STUDENT_INTAKE_READ,
-	STUDENT_INTAKE_WRITE;
+	STUDENT_INTAKE_WRITE,
+
+	API_KEY_READ,
+	API_KEY_WRITE;
 
 	public String asPermissionString() {
 		return "ROLE_" + this;

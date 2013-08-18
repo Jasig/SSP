@@ -9,11 +9,13 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.dao.security.oauth2.OAuth2ClientDao;
+import org.jasig.ssp.factory.OAuth2ClientTOFactory;
 import org.jasig.ssp.model.security.oauth2.OAuth2Client;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.security.oauth2.OAuth2ClientService;
+import org.jasig.ssp.transferobject.OAuth2ClientTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -36,6 +38,9 @@ public class OAuth2ClientServiceImpl extends AbstractAuditableCrudService<OAuth2
 		implements OAuth2ClientService, ClientDetailsService  {
 
 	@Autowired
+	private OAuth2ClientTOFactory factory;
+
+	@Autowired
 	private OAuth2ClientDao oAuth2ClientDao;
 
 	@Autowired
@@ -53,17 +58,36 @@ public class OAuth2ClientServiceImpl extends AbstractAuditableCrudService<OAuth2
 		this.passwordEncoder = passwordEncoder;
 	}
 
+	/**
+	 * Overridden to throw an {@link UnsupportedOperationException}. Use
+	 * {@link #create(org.jasig.ssp.transferobject.OAuth2ClientTO)} so the
+	 * service knows exactly what you're trying to do.
+	 *
+	 * @param client
+	 * @return
+	 * @throws ObjectNotFoundException
+	 * @throws ValidationException
+	 */
 	@Override
 	public OAuth2Client create(final OAuth2Client client) throws ObjectNotFoundException,
 			ValidationException {
-		beforeWriteOf(client);
-		return super.create(client);
+		throw new UnsupportedOperationException("Use create(OAuth2ClientTO)");
 	}
 
+	/**
+	 * Overridden to throw an {@link UnsupportedOperationException}. Use
+	 * {@link #save(org.jasig.ssp.transferobject.OAuth2ClientTO)} so the
+	 * service knows exactly what you're trying to do.
+	 *
+	 * @param client
+	 * @return
+	 * @throws ObjectNotFoundException
+	 * @throws ValidationException
+	 */
 	@Override
-	public OAuth2Client save(OAuth2Client client) throws ObjectNotFoundException, ValidationException {
-		beforeWriteOf(client);
-		return getDao().save(client);
+	public OAuth2Client save(OAuth2Client client) throws ObjectNotFoundException,
+			ValidationException {
+		throw new UnsupportedOperationException("Use save(OAuth2ClientTO)");
 	}
 
 	private void beforeWriteOf(OAuth2Client client) {
@@ -80,13 +104,13 @@ public class OAuth2ClientServiceImpl extends AbstractAuditableCrudService<OAuth2
 
 	private void ensureSchoolId(OAuth2Client client) {
 		if (StringUtils.isBlank(client.getSchoolId()) ) {
-			client.setSchoolId(client.getUsername());
+			client.setSchoolId(client.getClientId());
 		}
 	}
 
 	@Override
 	public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
-		OAuth2Client client = ((OAuth2ClientDao)getDao()).findByUsername(clientId);
+		OAuth2Client client = ((OAuth2ClientDao)getDao()).findByClientId(clientId);
 		return client == null ? null : asClientDetails(client);
 	}
 
@@ -99,11 +123,28 @@ public class OAuth2ClientServiceImpl extends AbstractAuditableCrudService<OAuth2
 		// breadth of ClientDetail features right now, so the list of property
 		// setters here is intentionally short.
 		BaseClientDetails clientDetails = new BaseClientDetails();
-		clientDetails.setClientId(client.getUsername());
+		clientDetails.setClientId(client.getClientId());
 		clientDetails.setClientSecret(client.getSecret());
 		clientDetails.setAccessTokenValiditySeconds(client.getAccessTokenValiditySeconds());
 		clientDetails.setAuthorities(client.getAuthorities());
 		clientDetails.setAuthorizedGrantTypes(client.getAuthorizedGrantTypes());
 		return clientDetails;
+	}
+
+
+
+	@Override
+	public OAuth2Client create(OAuth2ClientTO obj) throws
+			ObjectNotFoundException, ValidationException {
+		final OAuth2Client model = factory.from(obj);
+		beforeWriteOf(model);
+		return super.create(model);
+	}
+
+	@Override
+	public OAuth2Client save(OAuth2ClientTO obj) throws ObjectNotFoundException {
+		final OAuth2Client model = factory.from(obj);
+		beforeWriteOf(model);
+		return getDao().save(model);
 	}
 }

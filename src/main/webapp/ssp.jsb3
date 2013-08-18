@@ -2617,6 +2617,36 @@
                     "clsName": "Ssp.view.admin.forms.config.RegistrationLoadListAdmin",
                     "name": "RegistrationLoadListAdmin.js",
                     "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.model.OAuth2Client",
+                    "name": "OAuth2Client.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.store.OAuth2Clients",
+                    "name": "OAuth2Clients.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.apikey.oauth2.EditOAuth2ClientAdminViewController",
+                    "name": "EditOAuth2ClientAdminViewController.js",
+                    "path": "/app/controller/admin/apikey/oauth2/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.apikey.oauth2.OAuth2ClientAdminViewController",
+                    "name": "OAuth2ClientAdminViewController.js",
+                    "path": "/app/controller/admin/apikey/oauth2/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client",
+                    "name": "EditOAuth2Client.js",
+                    "path": "/app/view/admin/forms/apikey/oauth2/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.apikey.oauth2.OAuth2ClientAdmin",
+                    "name": "OAuth2ClientAdmin.js",
+                    "path": "/app/view/admin/forms/apikey/oauth2/"
                 }
 			]
         },

@@ -14,14 +14,14 @@ public class OAuth2ClientDao extends AbstractAuditableCrudDao<OAuth2Client> {
 		super(OAuth2Client.class);
 	}
 
-	public OAuth2Client findByUsername(String username) {
-		if (StringUtils.isBlank(username)) {
+	public OAuth2Client findByClientId(String clientId) {
+		if (StringUtils.isBlank(clientId)) {
 			throw new IllegalArgumentException("username can not be empty.");
 		}
 
 		final Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(OAuth2Client.class);
-		query.add(Restrictions.eq("username", username));
+		query.add(Restrictions.eq(OAuth2Client.getPhysicalClientIdColumnName(), clientId));
 		return (OAuth2Client) query.uniqueResult();
 	}
 

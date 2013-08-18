@@ -107,6 +107,25 @@
 			<groupId>org.springframework.security.oauth</groupId>
 			<artifactId>spring-security-oauth2</artifactId>
 			<version>1.0.5.RELEASE</version>
+			<exclusions>
+				<!-- 1.0.5 RELEASE needed Jackson 1.9.2 (asl) but historically
+				SSP has managed the Jackson dependency explicitly (1.9.4 at this
+				writing). Normally Maven would manage the problem away, but
+				there's the very clear possibility of accidentally deploying two
+				Jackson jars if one lib dependes on the -asl artifact but
+				another on the -lgpl artifact. FWIW, exactly this sort of
+				accident has occurred in SSP in the past. At one point we
+				we deploying:
+					jackson-core-asl-1.9.4.jar
+					jackson-core-lgpl-1.9.4.jar
+					jackson-mapper-asl-1.9.2.jar
+					jackson-mapper-lgpl-1.9.4.jar
+				-->
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-mapper-asl</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- Jasper -->
@@ -118,6 +137,23 @@
 				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
+				</exclusion>
+				<!-- 1.0.5 RELEASE needed Jackson 1.9.4 (asl) but historically
+				SSP has managed the Jackson dependency explicitly (1.9.4 at this
+				writing). Normally Maven would manage the problem away, but
+				there's the very clear possibility of accidentally deploying two
+				Jackson jars if one lib dependes on the -asl artifact but
+				another on the -lgpl artifact. FWIW, exactly this sort of
+				accident has occurred in SSP in the past. At one point we
+				we deploying:
+					jackson-core-asl-1.9.4.jar
+					jackson-core-lgpl-1.9.4.jar
+					jackson-mapper-asl-1.9.2.jar
+					jackson-mapper-lgpl-1.9.4.jar
+				-->
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-core-asl</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -423,9 +459,15 @@
 		</dependency>
 
 		<!-- Jackson JSON Processor -->
+		<!-- See several related exclusions below -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-lgpl</artifactId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
 			<version>1.9.4</version>
 		</dependency>
 

@@ -412,6 +412,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                             xtype: 'textfield'
                         }
                     }]
+                }, {
+                    text: 'OAuth2 Clients',
+                    title: 'OAuth2 Clients',
+                    store: 'oauth2Clients',
+                    form: 'oauth2clientadmin',
+                    leaf: true
                 }]
             }, {
                 text: 'Early Alert',

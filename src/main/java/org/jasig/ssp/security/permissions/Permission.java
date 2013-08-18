@@ -55,6 +55,10 @@ public class Permission { // NOPMD enum won't work for these values in
 	// Report Permissions/Roles
 	public static final String REPORT_READ = ROLE_PREFIX + "REPORT_READ";
 
+	// API Key Permissions/Roles
+	public static final String API_KEY_READ = ROLE_PREFIX + "API_KEY_READ";
+	public static final String API_KEY_WRITE = ROLE_PREFIX + "API_KEY_WRITE";
+
 	// Wrap the permission role in a hasRole
 	public static final String SECURITY_REFERENCE_WRITE = HAS_ROLE
 			+ REFERENCE_WRITE + END;
@@ -72,5 +76,10 @@ public class Permission { // NOPMD enum won't work for these values in
 			+ PERSON_INSTRUCTION_READ + END;
 
 	public static final String SECURITY_REPORT_READ = HAS_ROLE + REPORT_READ
+			+ END;
+
+	public static final String SECURITY_API_KEY_READ = HAS_ROLE + API_KEY_READ
+			+ END;
+	public static final String SECURITY_API_KEY_WRITE = HAS_ROLE + API_KEY_WRITE
 			+ END;
 }

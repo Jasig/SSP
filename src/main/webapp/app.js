@@ -204,6 +204,10 @@ Ext.require([
 	'Ssp.view.admin.forms.config.EnrollmentStatusAdmin',
 	'Ssp.view.admin.forms.config.EnrollmentStatusAddAdmin',
 	'Ssp.view.admin.forms.config.EnrollmentStatusListAdmin',
+
+    //OAUTH2 ADMIN VIEWS
+    'Ssp.view.admin.forms.apikey.oauth2.OAuth2ClientAdmin',
+    'Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',
     
     // ERROR DISPLAYS
     'Ssp.view.ErrorWindow',
@@ -236,6 +240,7 @@ Ext.require([
 	'Ssp.model.Transcript',
 	'Ssp.model.FilterDiscreteValues',
 	'Ssp.model.MessageTemplates',
+	'Ssp.model.OAuth2Client',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
 	'Ssp.model.tool.studentintake.PersonEducationGoal',
@@ -334,6 +339,7 @@ Ext.require([
     'Ssp.store.reference.MaritalStatuses',
     'Ssp.store.reference.MilitaryAffiliations',
 	'Ssp.store.reference.MessageTemplates',
+    'Ssp.store.OAuth2Clients',
     'Ssp.store.People',
     'Ssp.store.Placement',
     'Ssp.store.PeopleSearchLite',
@@ -454,6 +460,7 @@ var apiUrls = [
   {name: 'messageTemplate', url: 'reference/messageTemplate'},
   {name: 'studentStatus', url: 'reference/studentStatus'},
   {name: 'veteranStatus', url: 'reference/veteranStatus'},
+  {name: 'oauth2Client', url: 'oauth2/client'},
   {name: 'person', url: 'person'},
   {name: 'personAppointment', url: 'person/{id}/appointment'},
   {name: 'personAssessment', url: 'person/{id}/test'},
@@ -1204,6 +1211,7 @@ Ext.onReady(function(){
 			        financialAidSAPStatus: 'Ssp.store.FinancialAidSAPStatus',
 			        mapStatusStore: 'Ssp.store.MAPStatus',
 			        currentlyRegisteredStore: 'Ssp.store.CurrentlyRegistered',
+			        oauth2ClientsStore: 'Ssp.store.OAuth2Clients',
 			        
 			        
 			        	
@@ -1370,6 +1378,18 @@ Ext.onReady(function(){
 				    	        //this.el.scrollIntoView(this.el.up(':scrollable'));
 				    	        return this;
 				    	    }
+				    	});
+
+				    	//http://stackoverflow.com/questions/9704913/confirm-password-validator-extjs-4
+				    	Ext.apply(Ext.form.field.VTypes,{
+				    	    passwordConfirm : function(val, field) {
+				    	        if (field.initialPassField) {
+				    	            var pwd = Ext.getCmp(field.initialPassField);
+				    	            return (val === pwd.getValue());
+				    	        }
+				    	        return true;
+				    	    },
+				    	    passwordConfirmText : 'Passwords/secrets do not match'
 				    	});
 
 				    	/*
