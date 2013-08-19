@@ -25,6 +25,5 @@ import org.jasig.ssp.model.Auditable;
 public interface ReferenceService<T extends Auditable>
 		extends AuditableCrudService<T> {
 
-	public T getByName(@NotNull final String name)
-			throws ObjectNotFoundException;
+	public T getByName(@NotNull final String name);
 }

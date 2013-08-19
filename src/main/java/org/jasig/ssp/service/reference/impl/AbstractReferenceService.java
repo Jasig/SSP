@@ -54,8 +54,7 @@ public abstract class AbstractReferenceService<T extends Auditable>
 	}
 
 	@Override
-	public T getByName(@NotNull final String name)
-			throws ObjectNotFoundException {
+	public T getByName(@NotNull final String name) {
 		return getDao().getByName(name);
 	}
 }

@@ -27,7 +27,10 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonDemographics;
 import org.jasig.ssp.model.PersonStaffDetails;
 import org.jasig.ssp.model.external.ExternalPerson;
+import org.jasig.ssp.model.reference.Ethnicity;
 import org.jasig.ssp.model.reference.Genders;
+import org.jasig.ssp.model.reference.MaritalStatus;
+import org.jasig.ssp.model.reference.Race;
 import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
@@ -283,51 +286,43 @@ public class ExternalPersonServiceImpl
 		} else {
 			demographics = person.getDemographics();
 		}
-
-		if (((demographics.getMaritalStatus() == null)
-				&& !StringUtils.isBlank(externalPerson.getMaritalStatus()))
-				||
-				((demographics.getMaritalStatus() != null) &&
-				!demographics.getMaritalStatus().getName().equals(
-						externalPerson.getMaritalStatus()))) {
-			try {
-				demographics.setMaritalStatus(maritalStatusService
-						.getByName(externalPerson.getMaritalStatus()));
-			} catch (final ObjectNotFoundException e) {
-				LOGGER.error("Marital status with name "
-						+ externalPerson.getMaritalStatus() + " not found");
-			}
-		}
-
-		if (((demographics.getEthnicity() == null)
-				&& !StringUtils.isBlank(externalPerson.getEthnicity()))
-				||
-				((demographics.getEthnicity() != null) &&
-				!demographics.getEthnicity().getName().equals(
-						externalPerson.getEthnicity()))) {
-			try {
-				demographics.setEthnicity(ethnicityService
-						.getByName(externalPerson.getEthnicity()));
-			} catch (final ObjectNotFoundException e) {
-				LOGGER.error("Ethnicity with name "
-						+ externalPerson.getEthnicity() + " not found");
-			}
-		}
+ 
+			//As per SSP-874, how to handle external data overwrites:
+//			Based on jasig-ssp discussions, the rules for the updates to the person_demographics are:
+//			1. Null value from external table: over-write (they may be intentionally desiring the existing value overwritten.
+//			2. Valid value from external table that matches entry in reference table: over-write
+//			3. Invalid value from external table that has no matching entry in reference table: don't over-write
 		
-		if (((demographics.getRace() == null)
-				&& !StringUtils.isBlank(externalPerson.getRace()))
-				||
-				((demographics.getRace() != null) && 
-				!demographics.getRace().getCode().equals(
-						externalPerson.getRace()))) {
-			try {
-				demographics.setRace(raceService
-					.getByCode(externalPerson.getRace()));
-			} catch (final ObjectNotFoundException e) {
-				LOGGER.error("Race with code " 
-						+ externalPerson.getRace() + " not found. ", e);
+			if(externalPerson.getMaritalStatus() == null)
+			{
+				demographics.setMaritalStatus(null);
 			}
-		}
+			else
+			{
+				MaritalStatus maritalStatus = maritalStatusService.getByName(externalPerson.getMaritalStatus());
+				demographics.setMaritalStatus(maritalStatus == null ? demographics.getMaritalStatus() : maritalStatus);
+			}
+			
+			if(externalPerson.getEthnicity() == null)
+			{
+				demographics.setEthnicity(null);
+			}
+			else
+			{
+				Ethnicity ethnicity =ethnicityService.getByName(externalPerson.getEthnicity());
+				demographics.setEthnicity(ethnicity == null ? demographics.getEthnicity() : ethnicity);
+			}
+
+			if(demographics.getRace() == null)
+			{
+				demographics.setRace(null);
+			}
+			else
+			{
+				Race race =raceService.getByName(externalPerson.getRace());
+				demographics.setRace(race == null ? demographics.getRace() : race);
+			}
+			
 
 		if (((demographics.getGender() == null)
 				&& !StringUtils.isBlank(externalPerson.getGender()))
