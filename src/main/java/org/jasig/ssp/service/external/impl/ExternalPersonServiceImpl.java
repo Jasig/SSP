@@ -323,21 +323,22 @@ public class ExternalPersonServiceImpl
 				demographics.setRace(race == null ? demographics.getRace() : race);
 			}
 			
-
-		if (((demographics.getGender() == null)
-				&& !StringUtils.isBlank(externalPerson.getGender()))
-				||
-				((demographics.getGender() != null) &&
-				!demographics.getGender().getCode().equals(
-						externalPerson.getGender()))) {
-			try {
-				demographics.setGender(Genders.valueOf(externalPerson
-						.getGender()));
-			} catch (final IllegalArgumentException e) {
-				LOGGER.error("Gender with code "
-						+ externalPerson.getGender() + " not found");
+			if(externalPerson.getGender() == null)
+			{
+				demographics.setGender(null);
 			}
-		}
+			else
+			{
+				try
+				{
+					Genders gender =Genders.valueOf(externalPerson.getGender());
+					demographics.setGender(gender);
+				}
+				catch (IllegalArgumentException e)
+				{
+					demographics.setGender(null);
+				}
+			}			
 
 		if (externalPerson.getIsLocal() == null) {
 			demographics.setLocal(null);
