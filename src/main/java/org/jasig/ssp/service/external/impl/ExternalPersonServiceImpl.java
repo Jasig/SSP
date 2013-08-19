@@ -313,7 +313,7 @@ public class ExternalPersonServiceImpl
 				demographics.setEthnicity(ethnicity == null ? demographics.getEthnicity() : ethnicity);
 			}
 
-			if(demographics.getRace() == null)
+			if(externalPerson.getRace() == null)
 			{
 				demographics.setRace(null);
 			}
