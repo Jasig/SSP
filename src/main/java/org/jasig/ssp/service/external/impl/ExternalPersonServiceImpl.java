@@ -379,13 +379,13 @@ public class ExternalPersonServiceImpl
 		}
 
 		if (person.getCoach() == null) {
-			if (coachId != null) {
+			if (coachId != null && !coachId.trim().isEmpty()) {
 				LOGGER.debug("Assigning coach schoolId '{}' to person " +
 						"schoolId '{}'", coachId, person.getSchoolId());
 				person.setCoach(getCoach(coachId));
 			}// else ignore
 		} else {
-			if (coachId == null) {
+			if (coachId == null || coachId.trim().isEmpty()) {
 				if ( configService.getByNameNullOrDefaultValue(
 						"coachUnsetFromExternalData")
 						.equalsIgnoreCase("true") ) {
@@ -434,13 +434,13 @@ public class ExternalPersonServiceImpl
 		}
 		
 		if (person.getStudentType() == null) {   
-			if (externStudentType != null) {
+			if (externStudentType != null && !externStudentType.trim().isEmpty()) {
 				LOGGER.debug("Assigning student_type '{}' to person " +
 						"schoolId '{}'", externStudentType, person.getSchoolId());
 				person.setStudentType(getInternalStudentTypeCode(externStudentType));
 			}// else ignore
 		} else {
-			if (externStudentType == null) {
+			if (externStudentType == null || externStudentType.trim().isEmpty()) {
 				if ( configService.getByNameNullOrDefaultValue(
 						"studentTypeUnsetFromExternalData")
 						.equalsIgnoreCase("true") ) {
