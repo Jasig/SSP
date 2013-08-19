@@ -13,7 +13,7 @@ def client = new RESTClient ( 'http://localhost:8080' )
 
 def site = new HTTPBuilder( 'http://localhost:8080' )
 //site.auth.basic 'my-client-with-secret-2', 'secret-2'
-site.auth.basic 'dmac', 'dmac'
+site.auth.basic 'dmac', 'foo'
 
 //def body = [grant_type:'client_credentials']
 def accessToken

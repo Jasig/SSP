@@ -16,20 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.OAuth2Client', {
-    extend: 'Ssp.model.AbstractBase',
-    fields: [{name:'id',type:'string'},
-        {name:'clientId', type:'string'},
-        {name:'firstName', type:'string'},
-        {name:'lastName', type: 'string'},
-        {name:'primaryEmailAddress', type: 'string'},
-        {name:'secret', type: 'string'},
-        {name:'secretChange', type: 'boolean'},
-        {name:'accessTokenValiditySeconds', type:'int', useNull: true},
-        {name: 'displayFullName',
-            convert: function(value, record) {
-                return record.get('firstName') + " " + record.get('lastName');
+Ext.define('Ssp.store.Permissions', {
+    extend: 'Ext.data.Store',
+    model: 'Ssp.model.Permission',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties'
+    },
+    constructor: function(){
+        var me=this;
+        Ext.apply(me, {
+            proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('permission')),
+            autoLoad: false
+        });
+        Ext.apply(this.getProxy(), {
+            extraParams : {
+                status: 'ALL',
+                limit: '-1'
             }
-        },
-        {name:'authorities', type: 'auto'}]
+        });
+        return me.callParent(arguments);
+    }
 });

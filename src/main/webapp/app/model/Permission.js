@@ -16,20 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.OAuth2Client', {
-    extend: 'Ssp.model.AbstractBase',
-    fields: [{name:'id',type:'string'},
-        {name:'clientId', type:'string'},
-        {name:'firstName', type:'string'},
-        {name:'lastName', type: 'string'},
-        {name:'primaryEmailAddress', type: 'string'},
-        {name:'secret', type: 'string'},
-        {name:'secretChange', type: 'boolean'},
-        {name:'accessTokenValiditySeconds', type:'int', useNull: true},
-        {name: 'displayFullName',
-            convert: function(value, record) {
-                return record.get('firstName') + " " + record.get('lastName');
-            }
-        },
-        {name:'authorities', type: 'auto'}]
+Ext.define('Ssp.model.Permission', {
+    extend: 'Ext.data.Model',
+    fields: [{name:'name',type:'string'},
+             {name:'authority',type:'string'}]
 });

@@ -18,6 +18,11 @@
  */
 package org.jasig.ssp.security.permissions;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.jasig.ssp.transferobject.PermissionTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 
@@ -25,6 +30,12 @@ import org.springframework.security.core.authority.GrantedAuthorityImpl;
  * Permissions
  */
 public enum ServicePermissions {
+
+	ACCOMMODATION_READ,
+	ACCOMMODATION_WRITE,
+
+	MAP_PUBLIC_TEMPLATE_WRITE,
+
 	PERSON_APPOINTMENT_READ,
 	PERSON_APPOINTMENT_WRITE,
 	PERSON_APPOINTMENT_DELETE,
@@ -63,6 +74,8 @@ public enum ServicePermissions {
 	PERSON_LEGACY_REMARK_WRITE,	
 	PERSON_INSTRUCTION_READ,
 
+	REPORT_READ,
+
 	REFERENCE_READ,
 	REFERENCE_WRITE,
 
@@ -85,4 +98,12 @@ public enum ServicePermissions {
 	public GrantedAuthority asGrantedAuthority() {
 		return new GrantedAuthorityImpl(asPermissionString());
 	}
+
+	public static final List<PermissionTO> PERMISSION_TRANSFER_OBJECTS
+			= Collections.unmodifiableList(new LinkedList<PermissionTO>() {{
+		final ServicePermissions[] values = ServicePermissions.values();
+		for (ServicePermissions value : values) {
+			add(new PermissionTO(value.name(), value.asPermissionString()));
+		}
+	}});
 }

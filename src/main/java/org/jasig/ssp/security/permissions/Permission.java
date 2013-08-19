@@ -18,6 +18,12 @@
  */
 package org.jasig.ssp.security.permissions;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.commons.collections.ListUtils;
+import org.jasig.ssp.transferobject.PermissionTO;
+
 /**
  * It is simple to mistype in an annotation. This class is an attempt to give
  * slightly more compile time protection.
@@ -82,4 +88,11 @@ public class Permission { // NOPMD enum won't work for these values in
 			+ END;
 	public static final String SECURITY_API_KEY_WRITE = HAS_ROLE + API_KEY_WRITE
 			+ END;
+
+
+	public static final List<PermissionTO> PERMISSION_TRANSFER_OBJECTS =
+			Collections.unmodifiableList(ListUtils.union(
+					DataPermissions.PERMISSION_TRANSFER_OBJECTS,
+					ServicePermissions.PERMISSION_TRANSFER_OBJECTS));
+
 }

@@ -18,6 +18,11 @@
  */
 package org.jasig.ssp.security.permissions;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.jasig.ssp.transferobject.PermissionTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 
@@ -78,4 +83,13 @@ public enum DataPermissions {
 	public GrantedAuthority asGrantedAuthority() {
 		return new GrantedAuthorityImpl(asPermissionString());
 	}
+
+	public static final List<PermissionTO> PERMISSION_TRANSFER_OBJECTS
+			= Collections.unmodifiableList(new LinkedList<PermissionTO>() {{
+		final DataPermissions[] values = DataPermissions.values();
+		for (DataPermissions value : values) {
+			add(new PermissionTO(value.name(), value.asPermissionString()));
+		}
+	}});
+
 }

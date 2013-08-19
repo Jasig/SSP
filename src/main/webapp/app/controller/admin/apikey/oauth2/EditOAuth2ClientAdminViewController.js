@@ -21,7 +21,8 @@ Ext.define('Ssp.controller.admin.apikey.oauth2.EditOAuth2ClientAdminViewControll
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         apiProperties: 'apiProperties',
-        formUtils: 'formRendererUtils'
+        formUtils: 'formRendererUtils',
+        permissionsStore: 'permissionsStore'
     },
     config: {
         containerToLoadInto: 'adminforms',
@@ -41,7 +42,8 @@ Ext.define('Ssp.controller.admin.apikey.oauth2.EditOAuth2ClientAdminViewControll
             listeners: {
                 change: 'onSecretDeleteChange'
             }
-        }
+        },
+        authorities: '#authorities'
     },
     init: function() {
         var me = this;
@@ -68,8 +70,42 @@ Ext.define('Ssp.controller.admin.apikey.oauth2.EditOAuth2ClientAdminViewControll
 
     initForm: function() {
         var me = this;
+        me.getView().setLoading(true);
+        me.initPermissions(me.initFormSuccess,
+                           me.initFormFailure,
+                           me);
+    },
+
+    initPermissions: function(success, failure, scope) {
+        var me = this;
+        me.permissionsStore.load(function(records, operation, storeLoadSuccess) {
+            if ( storeLoadSuccess ) {
+                var checkboxItems = [];
+                Ext.Array.each(records, function(record, idx, all){
+                    checkboxItems.push({
+                        boxLabel: record.get('name'),
+                        name: 'authorities',
+                        inputValue: record.get('authority')
+                    });
+                });
+                me.getAuthorities().add(checkboxItems);
+                success.apply(scope, []);
+            } else {
+                failure.apply(scope, []);
+            }
+        });
+    },
+
+    initFormSuccess: function() {
+        var me = this;
         var view = me.getView();
         view.getForm().loadRecord(view.client);
+        me.getView().setLoading(false);
+    },
+
+    initFormFailure: function() {
+        var me = this;
+        me.getView().setLoading(false);
     },
 
     onSecretDeleteChange: function() {
@@ -164,6 +200,14 @@ Ext.define('Ssp.controller.admin.apikey.oauth2.EditOAuth2ClientAdminViewControll
         } else if ( me.getSecret().getValue().length ) {
             record.set('secretChange', true);
         }
+
+        // Not sure why by form.updateRecord() won't map this field, whereas
+        // loadRecord() works just fine in the other direction
+        var selectedAuthorities = me.getAuthorities().getValue().authorities;
+        if ( typeof selectedAuthorities === 'string' ) {
+            selectedAuthorities = [ selectedAuthorities ];
+        }
+        record.set('authorities', selectedAuthorities);
     },
 
     onCancelClick: function(button){

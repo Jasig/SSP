@@ -1,4 +1,4 @@
-/*
+/**
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,20 +16,36 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.OAuth2Client', {
-    extend: 'Ssp.model.AbstractBase',
-    fields: [{name:'id',type:'string'},
-        {name:'clientId', type:'string'},
-        {name:'firstName', type:'string'},
-        {name:'lastName', type: 'string'},
-        {name:'primaryEmailAddress', type: 'string'},
-        {name:'secret', type: 'string'},
-        {name:'secretChange', type: 'boolean'},
-        {name:'accessTokenValiditySeconds', type:'int', useNull: true},
-        {name: 'displayFullName',
-            convert: function(value, record) {
-                return record.get('firstName') + " " + record.get('lastName');
-            }
-        },
-        {name:'authorities', type: 'auto'}]
-});
+package org.jasig.ssp.transferobject;
+
+
+public class PermissionTO {
+
+	private String name;
+	private String authority;
+
+	public PermissionTO() {
+		// nothing to do
+	}
+
+	public PermissionTO(String name, String authority) {
+		this.name = name;
+		this.authority = authority;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getAuthority() {
+		return authority;
+	}
+
+	public void setAuthority(String authority) {
+		this.authority = authority;
+	}
+}

@@ -47,7 +47,6 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                     anchor: '40%',
                     name: 'clientId',
                     allowBlank: false,
-                    padding: '10 0 0 20',
                     minLength: 1,
                     maxLength: 25,
                     enforceMaxLength: true,
@@ -69,7 +68,6 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                     anchor: '40%',
                     name: 'firstName',
                     allowBlank: false,
-                    padding: '10 0 0 20',
                     minLength: 1,
                     maxLength: 50,
                     enforceMaxLength: true,
@@ -88,7 +86,6 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                     anchor: '40%',
                     name: 'lastName',
                     allowBlank: false,
-                    padding: '10 0 0 20',
                     minLength: 1,
                     maxLength: 50,
                     enforceMaxLength: true,
@@ -108,7 +105,6 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                     name: 'primaryEmailAddress',
                     allowBlank: false,
                     vtype: 'email',
-                    padding: '10 0 0 20',
                     minLength: 1,
                     maxLength: 100,
                     enforceMaxLength: true
@@ -121,7 +117,6 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                     anchor: '40%',
                     name: 'secret',
                     id: 'secret',
-                    padding: '10 0 0 20',
                     minLength: 1,
                     maxLength: 32,
                     enforceMaxLength: true,
@@ -142,8 +137,7 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                     name: 'confirmSecret',
                     id: 'confirmSecret',
                     vtype : 'passwordConfirm',
-                    initialPassField : 'secret',
-                    padding: '10 0 0 20'
+                    initialPassField : 'secret'
                 },
                 {
                     xtype: 'checkboxfield',
@@ -151,7 +145,6 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                     anchor: '40%',
                     name: 'deleteSecret',
                     id: 'deleteSecret',
-                    padding: '10 0 0 20',
                     listeners: {
                         render: function(field){
                             Ext.create('Ext.tip.ToolTip', {
@@ -166,7 +159,6 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                     fieldLabel: 'Token Expiration (seconds)',
                     anchor: '40%',
                     name: 'accessTokenValiditySeconds',
-                    padding: '10 0 0 20',
                     regex: /^[0-9]*$/,
                     regexText: "Can be blank or contain numbers",
                     listeners: {
@@ -179,12 +171,20 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                     }
                 },
                 {
+                    xtype: 'checkboxgroup',
+                    fieldLabel: 'Permissions',
+                    labelWidth: 100,
+                    anchor: '60%',
+                    itemId: 'authorities',
+                    columns: 3, // 'auto' blows up
+                    vertical: true
+                },
+                {
                     xtype: 'checkboxfield',
                     fieldLabel: 'Active',
                     checked: true,
                     anchor: '40%',
                     name: 'active',
-                    padding: '10 0 0 20',
                     listeners: {
                         render: function(field){
                             Ext.create('Ext.tip.ToolTip', {

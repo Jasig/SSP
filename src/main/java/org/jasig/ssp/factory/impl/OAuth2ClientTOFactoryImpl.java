@@ -66,28 +66,20 @@ public class OAuth2ClientTOFactoryImpl
 		if ( !(areFromAuthorities) && !(areToAuthorities) ) {
 			return;
 		}
+
 		if ( !(areToAuthorities) && to.getAuthorities() == null ) {
-			// we know there must be "from" authorities, initialize the target
-			// collection to simplify things later on
 			to.setAuthorities(Lists.<PersistentGrantedAuthority>
 					newArrayListWithCapacity(countAuthoritiesIn(from)));
 		}
-		if ( !(areFromAuthorities) ) {
-			// we know there must be "to" authorities, but they need to be
-			// wiped out
-			to.getAuthorities().clear();
-			return;
-		}
 
-		// We know the target collection is initialized and we know the source
-		// collection is non-null and non-empty, so now make the target
-		// collection contain only the unique entries of the source collection,
-		// the latter having been mapped to persistable entities (components,
-		// actually).
-		to.getAuthorities().retainAll(uniquePersistentGrantedAuthoritiesFrom(from));
+		to.getAuthorities().clear();
+		to.getAuthorities().addAll(uniquePersistentGrantedAuthoritiesFrom(from));
 	}
 
 	private Set<PersistentGrantedAuthority> uniquePersistentGrantedAuthoritiesFrom(OAuth2ClientTO from) {
+		if ( from.getAuthorities() == null ) {
+			return Sets.newHashSet();
+		}
 		Set<PersistentGrantedAuthority> pgas = Sets.newHashSet();
 		for ( String authStr : from.getAuthorities() ) {
 			pgas.add(new PersistentGrantedAuthority(authStr));

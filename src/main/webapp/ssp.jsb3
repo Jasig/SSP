@@ -2619,6 +2619,16 @@
                     "path": "/app/view/admin/forms/config/"
                 },
                 {
+                    "clsName": "Ssp.model.Permission",
+                    "name": "Permission.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.store.Permission",
+                    "name": "Permissions.js",
+                    "path": "/app/store/"
+                },
+                {
                     "clsName": "Ssp.model.OAuth2Client",
                     "name": "OAuth2Client.js",
                     "path": "/app/model/"

@@ -506,8 +506,19 @@ Ext.define('Ssp.util.FormRendererUtils',{
     		  return 1
     		 return 0 //default return value (no sorting)
     		});
-    },  
-    
+    },
+
+    modelSortByField: function( arrayToSort, fieldName ){
+        return Ext.Array.sort(arrayToSort, function(a, b){
+            var nameA= a.get(fieldName), nameB=b.get(fieldName);
+            if (nameA < nameB) //sort string ascending
+                return -1
+            if (nameA > nameB)
+                return 1
+            return 0 //default return value (no sorting)
+        });
+    },
+
     /**
 	 * @params
 	 * @arrayToSort - the array to sort props on

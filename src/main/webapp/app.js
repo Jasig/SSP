@@ -241,6 +241,7 @@ Ext.require([
 	'Ssp.model.FilterDiscreteValues',
 	'Ssp.model.MessageTemplates',
 	'Ssp.model.OAuth2Client',
+	'Ssp.model.Permission',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
 	'Ssp.model.tool.studentintake.PersonEducationGoal',
@@ -340,6 +341,7 @@ Ext.require([
     'Ssp.store.reference.MilitaryAffiliations',
 	'Ssp.store.reference.MessageTemplates',
     'Ssp.store.OAuth2Clients',
+    'Ssp.store.Permissions',
     'Ssp.store.People',
     'Ssp.store.Placement',
     'Ssp.store.PeopleSearchLite',
@@ -461,6 +463,7 @@ var apiUrls = [
   {name: 'studentStatus', url: 'reference/studentStatus'},
   {name: 'veteranStatus', url: 'reference/veteranStatus'},
   {name: 'oauth2Client', url: 'oauth2/client'},
+  {name: 'permission', url: 'reference/permission'},
   {name: 'person', url: 'person'},
   {name: 'personAppointment', url: 'person/{id}/appointment'},
   {name: 'personAssessment', url: 'person/{id}/test'},
@@ -1212,7 +1215,8 @@ Ext.onReady(function(){
 			        mapStatusStore: 'Ssp.store.MAPStatus',
 			        currentlyRegisteredStore: 'Ssp.store.CurrentlyRegistered',
 			        oauth2ClientsStore: 'Ssp.store.OAuth2Clients',
-			        
+			        permissionsStore: 'Ssp.store.Permissions',
+
 			        
 			        	
 			        // SERVICES
