@@ -171,6 +171,22 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                     }
                 },
                 {
+                    xtype: 'fieldcontainer',
+                    layout: 'hbox',
+                    items: [
+                        {
+                            xtype: 'button',
+                            text: 'Select All Permissions',
+                            itemId: 'selectAllPermissions'
+                        },
+                        {
+                            xtype: 'button',
+                            text: 'Deselect All Permissions',
+                            itemId: 'deselectAllPermissions'
+                        }
+                    ]
+                },
+                {
                     xtype: 'checkboxgroup',
                     fieldLabel: 'Permissions',
                     labelWidth: 100,

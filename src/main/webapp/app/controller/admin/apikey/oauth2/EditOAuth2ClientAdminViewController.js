@@ -43,8 +43,15 @@ Ext.define('Ssp.controller.admin.apikey.oauth2.EditOAuth2ClientAdminViewControll
                 change: 'onSecretDeleteChange'
             }
         },
-        authorities: '#authorities'
+        authorities: '#authorities',
+        selectAllPermissions: {
+            click: 'onSelectAllPermissions'
+        },
+        deselectAllPermissions: {
+            click: 'onDeselectAllPermissions'
+        }
     },
+    allAuthorities: [],
     init: function() {
         var me = this;
         if ( me.getView().client ) {
@@ -87,6 +94,7 @@ Ext.define('Ssp.controller.admin.apikey.oauth2.EditOAuth2ClientAdminViewControll
                         name: 'authorities',
                         inputValue: record.get('authority')
                     });
+                    me.allAuthorities.push(record.get('authority'));
                 });
                 me.getAuthorities().add(checkboxItems);
                 success.apply(scope, []);
@@ -94,6 +102,16 @@ Ext.define('Ssp.controller.admin.apikey.oauth2.EditOAuth2ClientAdminViewControll
                 failure.apply(scope, []);
             }
         });
+    },
+
+    onSelectAllPermissions: function() {
+        var me = this;
+        me.getAuthorities().setValue({authorities: me.allAuthorities});
+    },
+
+    onDeselectAllPermissions: function() {
+        var me = this;
+        me.getAuthorities().setValue({authorities: null});
     },
 
     initFormSuccess: function() {
