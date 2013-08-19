@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.ssp.factory.EarlyAlertTOFactory;
@@ -257,7 +258,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		for(ExternalStudentTranscriptCourseTO course:courses){
 			Person person = null;
 			try{
-				person = course.getFacultySchoolId() == null ? null : personService.getBySchoolId(course.getFacultySchoolId());
+				person = StringUtils.isNotBlank(course.getFacultySchoolId()) ? null : personService.getBySchoolId(course.getFacultySchoolId());
 			}catch(ObjectNotFoundException e)
 			{
 				LOGGER.debug("FACULTY SCHOOL ID WAS NOT RESOLVED WHILE LOADING TRANSCRIPT RECORD.  Factulty School_id: "+course.getFacultySchoolId()+" Student ID: "+course.getSchoolId()+" Course: "+course.getFormattedCourse());
