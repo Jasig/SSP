@@ -361,17 +361,37 @@ public class MessageServiceImpl implements MessageService {
 				mimeMessageHelper.setReplyTo(message.getSender()
 						.getEmailAddressWithName());
 			}
- 
-			if (message.getRecipient() != null) { // NOPMD by jon.adams
-				mimeMessageHelper.setTo(message.getRecipient()
-						.getEmailAddressWithName());
-			} else if (message.getRecipientEmailAddress() != null) { // NOPMD
+			
+			if ( message.getRecipient() != null && 
+					StringUtils.isNotBlank(message.getRecipient().getPrimaryEmailAddress() ) 
+					) { // NOPMD by jon.adams			{
+					mimeMessageHelper.setTo(message.getRecipient().getEmailAddressWithName());
+			} else if ( StringUtils.isNotBlank(message.getRecipientEmailAddress()) ) { // NOPMD
 				mimeMessageHelper.setTo(message.getRecipientEmailAddress());
 			} else {
+				StringBuilder errorMsg = new StringBuilder();
+				
+				errorMsg.append("Message " +message.toString() 
+						+" could not be sent. Invalid recipient email address of '");				
+				
+				if (message.getRecipient() != null) {
+						errorMsg.append(message.getRecipient().getPrimaryEmailAddress());
+				} else {
+					errorMsg.append(message.getRecipientEmailAddress());
+				}
+				errorMsg.append("'.");
+				LOGGER.error(errorMsg.toString());
+				
 				return false;
 			}
 
-			if (!validateEmail(message.getRecipientEmailAddress())) {
+			
+			if (message.getRecipient() != null && 
+					!validateEmail(message.getRecipient().getPrimaryEmailAddress())) {
+				throw new SendFailedException("Recipient Email Address '"
+						+ message.getRecipient().getPrimaryEmailAddress() + "' is invalid");
+			}
+			else if (!validateEmail(message.getRecipientEmailAddress())) {
 				throw new SendFailedException("Recipient Email Address '"
 						+ message.getRecipientEmailAddress() + "' is invalid");
 			}
