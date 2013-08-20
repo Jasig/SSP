@@ -133,7 +133,7 @@ public class ExternalFacultyCourseRosterDao extends
 			throw new ObjectNotFoundException("Must specify a term code",
 					ExternalFacultyCourseRoster.class.getName());
 		}
-		if ( StringUtils.isBlank(termCode) ) {
+		if ( StringUtils.isBlank(studentSchoolId) ) {
 			throw new ObjectNotFoundException("Must specify a student school ID",
 					ExternalFacultyCourseRoster.class.getName());
 		}
