@@ -27,6 +27,5 @@ import org.jasig.ssp.service.ReferenceService;
 public interface RaceService
 		extends ReferenceService<Race> {
 	
-	Race getByCode(@NotNull final String code)
-		throws ObjectNotFoundException;
+	Race getByCode(@NotNull final String code);
 }

@@ -47,8 +47,7 @@ public class RaceServiceImpl extends
 	}
 	
 	@Override
-	public Race getByCode(@NotNull final String code) 
-			throws ObjectNotFoundException {
+	public Race getByCode(@NotNull final String code) {
 		return this.dao.getByCode(code);		
 	}
 	

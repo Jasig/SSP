@@ -289,11 +289,11 @@ public class ExternalPersonServiceImpl
  
 			//As per SSP-874, how to handle external data overwrites:
 //			Based on jasig-ssp discussions, the rules for the updates to the person_demographics are:
-//			1. Null value from external table: over-write (they may be intentionally desiring the existing value overwritten.
+//			1. Null/Empty/Blank value from external table: over-write (they may be intentionally desiring the existing value overwritten.
 //			2. Valid value from external table that matches entry in reference table: over-write
 //			3. Invalid value from external table that has no matching entry in reference table: don't over-write
 		
-			if(externalPerson.getMaritalStatus() == null)
+			if(StringUtils.isBlank(externalPerson.getMaritalStatus()))
 			{
 				demographics.setMaritalStatus(null);
 			}
@@ -303,7 +303,7 @@ public class ExternalPersonServiceImpl
 				demographics.setMaritalStatus(maritalStatus == null ? demographics.getMaritalStatus() : maritalStatus);
 			}
 			
-			if(externalPerson.getEthnicity() == null)
+			if(StringUtils.isBlank(externalPerson.getEthnicity()))
 			{
 				demographics.setEthnicity(null);
 			}
@@ -313,17 +313,17 @@ public class ExternalPersonServiceImpl
 				demographics.setEthnicity(ethnicity == null ? demographics.getEthnicity() : ethnicity);
 			}
 
-			if(externalPerson.getRace() == null)
+			if(StringUtils.isBlank(externalPerson.getRace()))
 			{
 				demographics.setRace(null);
 			}
 			else
-			{
-				Race race =raceService.getByName(externalPerson.getRace());
+			{ 
+				Race race =raceService.getByCode(externalPerson.getRace());
 				demographics.setRace(race == null ? demographics.getRace() : race);
 			}
 			
-			if(externalPerson.getGender() == null)
+			if(StringUtils.isBlank(externalPerson.getGender()))
 			{
 				demographics.setGender(null);
 			}
