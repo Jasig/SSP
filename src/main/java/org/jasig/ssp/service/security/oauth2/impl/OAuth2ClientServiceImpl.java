@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.dao.security.oauth2.OAuth2ClientDao;
 import org.jasig.ssp.factory.OAuth2ClientTOFactory;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.security.PersistentGrantedAuthority;
 import org.jasig.ssp.model.security.oauth2.OAuth2Client;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
@@ -131,39 +132,64 @@ public class OAuth2ClientServiceImpl extends AbstractAuditableCrudService<OAuth2
 	public OAuth2Client save(OAuth2ClientTO obj) throws ObjectNotFoundException {
 		OAuth2Client existingModel = oAuth2ClientDao.get(obj.getId());
 		OAuth2Client newModel = null;
-		boolean invalidateTokens = false;
+		boolean invalidateClientOnlyTokens = false;
+		String previousClientId = null;
 		if ( existingModel != null ) {
+			previousClientId = existingModel.getClientId();
 			if ( obj.isSecretChange() ) {
-				invalidateTokens = true;
+				invalidateClientOnlyTokens = true;
 			} else {
 				final List<PersistentGrantedAuthority> existingAuthorities =
 						new ArrayList<PersistentGrantedAuthority>
 								(existingModel.getAuthorities());
 				newModel = factory.from(obj);
-				invalidateTokens = !(areMatching(existingAuthorities, newModel.getAuthorities()));
+				invalidateClientOnlyTokens = !(areMatching(existingAuthorities, newModel.getAuthorities()));
 			}
 		}
+
 		if ( newModel == null ) {
 			newModel = factory.from(obj);
 		}
+
 		beforeWrite(newModel, obj);
 		newModel = getDao().save(newModel);
-		if ( invalidateTokens ) {
-			final Collection<OAuth2AccessToken> tokensByClientId =
-					consumerTokenService.findTokensByClientId(newModel.getClientId());
-			for ( OAuth2AccessToken token : tokensByClientId ) {
-				final OAuth2Authentication authN =
-						resourceServerTokenService.loadAuthentication(token.getValue());
-				if ( authN.isClientOnly() ) {
-					consumerTokenService.revokeToken(token.getValue());
-				}
-			}
 
+		// Save has side-effects on objectStatus so wait until here to check it
+		boolean invalidateAllTokens = false;
+		invalidateAllTokens =
+				existingModel != null &&
+						(!(previousClientId.equals(newModel.getClientId())) ||
+								(newModel.getObjectStatus() != null &&
+									newModel.getObjectStatus() != ObjectStatus.ACTIVE));
 
+		if ( invalidateAllTokens ) {
+			invalidateAllTokensByClientId(previousClientId);
+		} else if ( invalidateClientOnlyTokens ) {
+			invalidateClientOnlyTokensByClientId(previousClientId);;
 		}
+
 		return newModel;
 	}
 
+	private void invalidateAllTokensByClientId(String clientId) {
+		final Collection<OAuth2AccessToken> tokensByClientId =
+				consumerTokenService.findTokensByClientId(clientId);
+		for ( OAuth2AccessToken token : tokensByClientId ) {
+			consumerTokenService.revokeToken(token.getValue());
+		}
+	}
+
+	private void invalidateClientOnlyTokensByClientId(String clientId) {
+		final Collection<OAuth2AccessToken> tokensByClientId =
+				consumerTokenService.findTokensByClientId(clientId);
+		for ( OAuth2AccessToken token : tokensByClientId ) {
+			final OAuth2Authentication authN =
+					resourceServerTokenService.loadAuthentication(token.getValue());
+			if ( authN.isClientOnly() ) {
+				consumerTokenService.revokeToken(token.getValue());
+			}
+		}
+	}
 
 	private void beforeWrite(OAuth2Client client, OAuth2ClientTO from) {
 		if ( from.isSecretChange() ) {

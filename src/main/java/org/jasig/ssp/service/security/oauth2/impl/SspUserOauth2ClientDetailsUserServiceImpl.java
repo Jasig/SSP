@@ -1,6 +1,7 @@
 package org.jasig.ssp.service.security.oauth2.impl;
 
 
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.SspUserDetailsService;
 import org.jasig.ssp.service.security.oauth2.OAuth2ClientService;
@@ -59,7 +60,7 @@ public class SspUserOauth2ClientDetailsUserServiceImpl implements UserDetailsSer
 		// for overriding password.
 		SspUser overlaidUserDetails = new SspUser(origUserDetails.getUsername(),
 				clientDetails.getClientSecret(),
-				origUserDetails.isEnabled(),
+				origUserDetails.getPerson().getObjectStatus() == ObjectStatus.ACTIVE,
 				origUserDetails.isAccountNonExpired(),
 				origUserDetails.isCredentialsNonExpired(),
 				origUserDetails.isAccountNonLocked(),
