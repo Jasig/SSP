@@ -120,17 +120,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
             personEarlyAlert = new Ssp.model.tool.earlyalert.PersonEarlyAlert();
             me.earlyAlert.data = personEarlyAlert.data;
         }
-
-		var pId = me.personLite.get('id');
 		
-		me.treeStore.getRootNode().eachChild(function(record){
-			var eaId = record.get('id');
-            me.earlyAlertService.getAllEarlyAlertCount( pId, eaId, 
-                {success:me.getEarlyAlertCountSuccess, 
-                 failure:me.getEarlyAlertCountFailure, 
-                 scope: me});
-			}
-	    );
     },
 
     getEarlyAlertsFailure: function( r, scope){
@@ -138,24 +128,6 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
         me.getView().setLoading(false);
     },
 	
-	getEarlyAlertCountSuccess: function(personId, earlyAlertId, count, scope) {
-		var me = scope;
-		// update the tree node w/ the count
-		var originalChild = me.treeStore.getRootNode().findChildBy(function(n) {
-                return earlyAlertId === n.data.id;
-            }, me, true);
-		me.treeStore.suspendEvents();
-		if (originalChild != null) {originalChild.set('noOfResponses',count);}
-        me.treeStore.resumeEvents();
-		
-	},
-
-    getEarlyAlertCountFailure: function( r, scope){
-        var me=scope;
-        me.getView().setLoading(false);
-		
-    },
-
     onItemExpand: function(nodeInt, obj){
         var me=this;
         var node = nodeInt;
@@ -170,7 +142,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
             {
                 me.getView().setLoading(true);
                 me.earlyAlertService.getAllEarlyAlertResponses(personId, id,
-                        {success:me.getEarlyAlertResponsesSuccess, 
+                {success:me.getEarlyAlertResponsesSuccess, 
                  failure:me.getEarlyAlertResponsesFailure, 
                  scope: me} 
                 );

@@ -183,14 +183,12 @@ Ext.define('Ssp.service.EarlyAlertService', {
     
     populateEarlyAlerts: function( records, personId ){
         var me=this;
-        
         Ext.Array.each( records, function(record, index){
              // count = me.getAllEarlyAlertCount(personId, record.id);
             //record.iconCls='earlyAlertTreeIcon';
             record.leaf=false;
             record.nodeType='early alert';
             record.gridDisplayDetails=record.courseName + " - " + record.courseTitle ; 
-            record.noOfResponses = 0;
             record.expanded=false;
         });
 

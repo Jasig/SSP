@@ -35,6 +35,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.jasig.ssp.model.reference.Campus;
@@ -93,7 +94,11 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	@ManyToOne
 	@JoinColumn(name = "closed_by_id", nullable = true)
 	private Person closedBy;
+	
+	private static final String RESPONSE_COUNT_FORMULA = "(select count(*) from early_alert_response ear where ear.early_alert_id = ID)";
 
+	@Formula(RESPONSE_COUNT_FORMULA)
+	private int responseCount;
 	/**
 	 * Associated person. Changes to this Person <i>are</i> persisted.
 	 */
@@ -343,5 +348,13 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 		result *= hashField("closedById", closedBy == null ? null : closedBy.getId());
 
 		return result;
+	}
+
+	public int getResponseCount() {
+		return responseCount;
+	}
+
+	public void setResponseCount(int responseCount) {
+		this.responseCount = responseCount;
 	}
 }
