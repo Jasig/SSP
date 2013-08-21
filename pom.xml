@@ -749,6 +749,7 @@
 						</manifest>
 						<manifestEntries>
 							<version>${project.version}</version>
+							<SSP-Artifact>${project.groupId}:${project.artifactId}</SSP-Artifact>
 							<SSP-Artifact-Version>${project.version}</SSP-Artifact-Version>
 							<SSP-Build-Date>${maven.build.timestamp}</SSP-Build-Date>
 							<SSP-SCM-Revision>${buildNumber}</SSP-SCM-Revision>

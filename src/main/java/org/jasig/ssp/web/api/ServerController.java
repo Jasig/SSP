@@ -74,6 +74,7 @@ public class ServerController extends AbstractBaseController {
 	private static final String NOTE_API_FIELD_NAME = "note";
 	private static final String EXTENSIONS_API_FIELD_NAME = "extensions";
 
+	private static final String SSP_VERSION_PROFILE_NAME = "SSP";
 
 	private static final Map<String,String> ENTRY_NAME_MAPPINGS =
 			Collections.unmodifiableMap(new HashMap<String,String>() {{
@@ -87,7 +88,7 @@ public class ServerController extends AbstractBaseController {
 	@Autowired
 	private ServletContext servletContext;
 
-	private Map<String,Object> version;
+	private Map<String,Object> versionProfile;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ServerController.class);
@@ -107,17 +108,17 @@ public class ServerController extends AbstractBaseController {
 	@DynamicPermissionChecking
 	public @ResponseBody
 	Map<String,Object> getVersionProfile(HttpServletRequest  request) throws IOException {
-		maybeCacheVersion();
-		return version;
+		maybeCacheVersionProfile();
+		return versionProfile;
 	}
 
-	private synchronized void maybeCacheVersion() throws IOException {
-		if ( version == null ) {
-			cacheVersion();
+	private synchronized void maybeCacheVersionProfile() throws IOException {
+		if ( versionProfile == null ) {
+			cacheVersionProfile();
 		}
 	}
 
-	private void cacheVersion() throws IOException {
+	private void cacheVersionProfile() throws IOException {
 		Properties prop = new Properties();
 		String properties[] = new String[3];
 
@@ -126,7 +127,8 @@ public class ServerController extends AbstractBaseController {
 			mfStream = servletContext.getResourceAsStream("/META-INF/MANIFEST.MF");
 			Manifest mf = new Manifest(mfStream);
 			final Attributes mainAttributes = mf.getMainAttributes();
-			final Map<String,Object> version = new HashMap<String, Object>();
+			final Map<String,Object> tmpVersionProfile = new HashMap<String, Object>();
+			tmpVersionProfile.put(NAME_API_FIELD_NAME, SSP_VERSION_PROFILE_NAME);
 
 			// For SSP itself the entry format is:
 			//  SSP-<EntryName>
@@ -169,18 +171,18 @@ public class ServerController extends AbstractBaseController {
 				} else if ( rawEntryName.startsWith(SSP_ENTRY_PREFIX) ) {
 					String unqualifiedEntryName = rawEntryName.substring(SSP_ENTRY_PREFIX.length());
 					if ( isWellKnownEntryName(unqualifiedEntryName) ) {
-						mapWellKnownEntryName(unqualifiedEntryName, (String)entry.getValue(), version);
+						mapWellKnownEntryName(unqualifiedEntryName, (String)entry.getValue(), tmpVersionProfile);
 					}
 				}
 			}
 
 			if ( extensions == null ) {
-				version.put(EXTENSIONS_API_FIELD_NAME, Collections.EMPTY_MAP);
+				tmpVersionProfile.put(EXTENSIONS_API_FIELD_NAME, Collections.EMPTY_MAP);
 			} else {
-				version.put(EXTENSIONS_API_FIELD_NAME, Lists.newArrayList(extensions.values()));
+				tmpVersionProfile.put(EXTENSIONS_API_FIELD_NAME, Lists.newArrayList(extensions.values()));
 			}
 
-			this.version = version; // lets not cache it until we're sure we loaded everything
+			this.versionProfile = tmpVersionProfile; // lets not cache it until we're sure we loaded everything
 		} finally {
 			if ( mfStream != null ) {
 				try {
