@@ -19,30 +19,73 @@
 package org.jasig.ssp.web.api;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlyFormatting;
 import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.collect.Sets;
+
 @Controller
 @RequestMapping("/1/server")
 public class ServerController extends AbstractBaseController {
 
+	private static final String SSP_ENTRY_PREFIX = "SSP-";
+	private static final String SSP_EXTENSION_ENTRY_PREFIX = "SSP-Ext-";
+	private static final String SSP_EXTENSION_ENTRY_DELIM = "-";
+
+	private static final String ARTIFACT_ENTRY_NAME = "Artifact";
+	private static final String ARTIFACT_VERSION_ENTRY_NAME = "Artifact-Version";
+	private static final String BUILD_DATE_ENTRY_NAME = "Build-Date";
+	private static final String SCM_REVISION_ENTRY_NAME = "SCM-Revision";
+	private static final String NOTE_ENTRY_NAME = "Note";
+
+	private static final String SSP_ARTIFACT_VERSION_ENTRY_NAME = SSP_ENTRY_PREFIX + ARTIFACT_VERSION_ENTRY_NAME;
+	private static final String SSP_BUILD_DATE_ENTRY_NAME = SSP_ENTRY_PREFIX + BUILD_DATE_ENTRY_NAME;
+	private static final String SSP_SCM_REVISION_ENTRY_NAME = SSP_ENTRY_PREFIX + SCM_REVISION_ENTRY_NAME;
+
+	private static final String ARTIFACT_API_FIELD_NAME = "artifact";
+	private static final String ARTIFACT_VERSION_API_FIELD_NAME = "artifactVersion";
+	private static final String BUILD_DATE_API_FIELD_NAME = "buildDate";
+	private static final String SCM_REVISION_API_FIELD_NAME = "scmRevision";
+	private static final String NOTE_API_FIELD_NAME = "note";
+	private static final String EXTENSIONS_API_FIELD_NAME = "extensions";
+
+
+	private static final Map<String,String> WELL_KNOWN_EXTENSION_ENTRY_NAME_MAPPINGS =
+			Collections.unmodifiableMap(new HashMap<String,String>() {{
+		put(ARTIFACT_ENTRY_NAME, ARTIFACT_API_FIELD_NAME);
+		put(ARTIFACT_VERSION_ENTRY_NAME, ARTIFACT_VERSION_API_FIELD_NAME);
+		put(BUILD_DATE_ENTRY_NAME, BUILD_DATE_API_FIELD_NAME);
+		put(SCM_REVISION_ENTRY_NAME, SCM_REVISION_API_FIELD_NAME);
+		put(NOTE_ENTRY_NAME, NOTE_API_FIELD_NAME);
+	}});
+
 	@Autowired
 	private ServletContext servletContext;
+
+	private Map<String,Object> version;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ServerController.class);
@@ -61,31 +104,98 @@ public class ServerController extends AbstractBaseController {
 	@RequestMapping(value = "/version", method = RequestMethod.GET)
 	@DynamicPermissionChecking
 	public @ResponseBody
-	Map<String,Object> getVersionProfile(HttpServletRequest  request) {
-						
-	    Properties prop = new Properties();
-	    String properties[] = new String[3];
-	    
-	    try {
-	        prop.load(servletContext.getResourceAsStream("/META-INF/MANIFEST.MF"));
-	        properties[0] = prop.getProperty("SSP-Artifact-Version");
-	        properties[1] = prop.getProperty("SSP-Build-Date");
-	        properties[2] = prop.getProperty("SSP-SCM-Revision");
-	    } catch (IOException e) {
-	        LOGGER.error("Error retrieving MANIFEST version information ", e);
-	    }
-				
-		final Map<String,Object> profile = new HashMap<String,Object>();
-		profile.put("artifactVersion", properties[0]);
-		profile.put("buildDate", properties[1]);
-		profile.put("scmRevision", properties[2]);
-		
-		return profile;
+	Map<String,Object> getVersionProfile(HttpServletRequest  request) throws IOException {
+		maybeCacheVersion();
+		return version;
 	}
 
+	private synchronized void maybeCacheVersion() throws IOException {
+		if ( version == null ) {
+			cacheVersion();
+		}
+	}
+
+	private void cacheVersion() throws IOException {
+		Properties prop = new Properties();
+		String properties[] = new String[3];
+
+		InputStream mfStream = null;
+		try {
+			mfStream = servletContext.getResourceAsStream("/META-INF/MANIFEST.MF");
+			Manifest mf = new Manifest(mfStream);
+			final Attributes mainAttributes = mf.getMainAttributes();
+			final Map<String,Object> version = new HashMap<String, Object>();
+
+			// For SSP itself the entry format is:
+			//  SSP-<EntryName>
+			// e.g.:
+			//  SSP-Artifact-Version
+			//
+			// For "extensions" the entry format is:
+			//  SSP-Ext-<ExtensionName>-<EntryName>
+			// e.g.:
+			//  SSP-Ext-UPOverlay-Artifact-Version
+			//
+			// We do not want to accidentally expose any sensitive config
+			// placed into the manifest. So we only output values from recognized
+			// <EntryName> values.
+			Map<String,Object> extensions = null;
+			for ( Map.Entry<Object,Object> entry : mainAttributes.entrySet() ) {
+				String rawEntryName = entry.getKey().toString();
+				if ( rawEntryName.startsWith(SSP_EXTENSION_ENTRY_PREFIX) ) {
+					String[] parsedEntryName = rawEntryName.split(SSP_EXTENSION_ENTRY_DELIM);
+					if ( parsedEntryName.length < 4 ) {
+						continue;
+					}
+					String unqualifiedEntryName =
+							StringUtils.join(parsedEntryName, SSP_EXTENSION_ENTRY_DELIM, 3, parsedEntryName.length);
+					if ( !(isWellKnownEntryName(unqualifiedEntryName)) ) {
+						continue;
+					}
+					String extName = parsedEntryName[2];
+					if ( extensions == null ) {
+						extensions = new HashMap<String,Object>();
+						version.put(EXTENSIONS_API_FIELD_NAME, extensions);
+					}
+					Map<String,Object> thisExtension =
+							(Map<String,Object>)extensions.get(extName);
+					if ( thisExtension == null ) {
+						thisExtension = new HashMap<String,Object>();
+						extensions.put(extName, thisExtension);
+					}
+					mapWellKnownEntryName(unqualifiedEntryName, (String)entry.getValue(), thisExtension);
+				} else if ( rawEntryName.startsWith(SSP_ENTRY_PREFIX) ) {
+					String unqualifiedEntryName = rawEntryName.substring(SSP_ENTRY_PREFIX.length());
+					if ( isWellKnownEntryName(unqualifiedEntryName) ) {
+						mapWellKnownEntryName(unqualifiedEntryName, (String)entry.getValue(), version);
+					}
+				}
+			}
+
+			this.version = version; // lets not cache it until we're sure we loaded everything
+		} finally {
+			if ( mfStream != null ) {
+				try {
+					mfStream.close();
+				} catch ( Exception e ) {}
+			}
+		}
+	}
+
+	private boolean isWellKnownEntryName(String extEntryName) {
+		return WELL_KNOWN_EXTENSION_ENTRY_NAME_MAPPINGS.containsKey(extEntryName);
+	}
+
+	private void mapWellKnownEntryName(String extEntryName,
+									String value,
+									Map<String, Object> into) {
+		into.put(WELL_KNOWN_EXTENSION_ENTRY_NAME_MAPPINGS.get(extEntryName), value);
+	}
 
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
-	}	
+	}
+
+
 }
