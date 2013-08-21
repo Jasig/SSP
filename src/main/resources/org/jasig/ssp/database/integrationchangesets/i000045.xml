@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+http://www.liquibase.org/xml/ns/dbchangelog-ext
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="schema" value="${database.schema}" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	<property name="concat.operator" value="||"  dbms="postgresql"/>
+	<property name="concat.operator" value="+"  dbms="mssql"/>
+	
+	<property name="externalUser" value="a new UUID" />
+	<property name="check_for_manage_integration_database_config_sql"
+		value="select count(id) from config where name='manage_integration_database'" />
+	<property name="should_manage_integration_database_sql"
+		value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
+	
+	<changeSet id="Add natural key to v_external_course" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip Add natural key to external_course">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>		
+		
+		<dropView viewName="v_external_course"/>
+		
+		<addPrimaryKey tableName="external_course" columnNames="code"/>
+		
+		<createView viewName="v_external_course">
+			select code as id,* from external_course
+		</createView>
+		<sql>grant all on v_external_course to ${database.app.username}</sql>		
+	</changeSet>
+	
+	<changeSet id="Add natural key to v_external_course_program" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip Add natural key to v_external_course_program and primary key to external_course_program">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>		
+		
+		<dropView viewName="v_external_course_program"/>
+		
+		<addPrimaryKey tableName="external_course_program" columnNames="program_code,course_code"/>
+		
+		<createView viewName="v_external_course_program">
+			select program_code${concat.operator}course_code as id,* from external_course_program
+		</createView>
+		
+		<sql>grant all on v_external_course_program to ${database.app.username}</sql>		
+	</changeSet>
+	
+	<changeSet id="Add natural key to v_external_course_tag" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip Add natural key to v_external_course_tag and primary key to external_tag">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>		
+		
+		<dropView viewName="v_external_course_tag"/>
+		
+		<addPrimaryKey tableName="external_course_tag" columnNames="course_code,tag"/>
+		
+		<createView viewName="v_external_course_tag">
+			select course_code${concat.operator}tag as id,* from external_course_tag
+		</createView>
+		
+		<sql>grant all on v_external_course_tag to ${database.app.username}</sql>
+				
+	</changeSet>	
+	
+	<changeSet id="Add natural key to v_external_course_term" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip Add natural key to v_external_course_term and primary key to external_course_term">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>		
+		
+		<dropView viewName="v_external_course_term"/>
+		
+		<addPrimaryKey tableName="external_course_term" columnNames="course_code,term_code"/>
+		
+		<createView viewName="v_external_course_term">
+			select course_code${concat.operator}term_code as id,* from external_course_term
+		</createView>
+		
+		<sql>grant all on v_external_course_term to ${database.app.username}</sql>
+				
+	</changeSet>		
+	
+	<changeSet id="Add natural key to v_external_department" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip Add natural key to v_external_department and primary key to external_department">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>		
+		
+		<dropView viewName="v_external_department"/>
+		
+		<addPrimaryKey tableName="external_department" columnNames="code"/>
+		
+		<createView viewName="v_external_department">
+			select code as id,* from external_department
+		</createView>
+		
+		<sql>grant all on v_external_department to ${database.app.username}</sql>
+				
+	</changeSet>	
+	
+	<changeSet id="Add natural key to v_external_division" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip Add natural key to v_external_division and primary key to external_division">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>		
+		
+		<dropView viewName="v_external_division"/>
+		
+		<addPrimaryKey tableName="external_division" columnNames="code"/>
+		
+		<createView viewName="v_external_division">
+			select code as id,* from external_division
+		</createView>
+		
+		<sql>grant all on v_external_division to ${database.app.username}</sql>
+				
+	</changeSet>	
+	
+	<changeSet id="Add natural key to v_external_faculty_course" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip Add natural key to v_external_faculty_course and primary key to external_faculty_course">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>		
+		
+		<dropView viewName="v_external_faculty_course"/>
+		
+		<addPrimaryKey tableName="external_faculty_course" columnNames="formatted_course,faculty_school_id,term_code"/>
+		
+		<createView viewName="v_external_faculty_course">
+			select formatted_course${concat.operator}faculty_school_id${concat.operator}term_code as id,* from external_faculty_course
+		</createView>
+		
+		<sql>grant all on v_external_faculty_course to ${database.app.username}</sql>
+				
+	</changeSet>	
+	
+	<changeSet id="Add natural key to v_external_faculty_course_roster" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip Add natural key to v_external_faculty_course_roster and primary key to external_faculty_course_roster">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>		
+		
+		<dropView viewName="v_external_faculty_course_roster"/>
+		
+		<addPrimaryKey tableName="external_faculty_course_roster" columnNames="formatted_course,faculty_school_id,term_code,school_id"/>
+		
+		<createView viewName="v_external_faculty_course_roster">
+			select formatted_course${concat.operator}faculty_school_id${concat.operator}term_code${concat.operator}school_id as id,* from external_faculty_course_roster
+		</createView>
+		
+		<sql>grant all on v_external_faculty_course to ${database.app.username}</sql>
+				
+	</changeSet>	
+	
+	<changeSet id="Add natural key to v_external_person" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip Add natural key to v_external_person and primary key to external_person">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>		
+		
+		<dropView viewName="v_external_person"/>
+		
+		<addPrimaryKey tableName="external_person" columnNames="school_id"/>
+		
+		<createView viewName="v_external_person">
+			select school_id as id,* from external_person
+		</createView>
+		
+		<sql>grant all on v_external_person to ${database.app.username}</sql>
+				
+	</changeSet>	
+	
+	<changeSet id="Add natural key to v_external_program" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip Add natural key to v_external_program and primary key to external_program">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>		
+		
+		<dropView viewName="v_external_program"/>
+		
+		<addPrimaryKey tableName="external_program" columnNames="code"/>
+		
+		<createView viewName="v_external_program">
+			select code as id,* from external_program
+		</createView>
+		
+		<sql>grant all on v_external_program to ${database.app.username}</sql>
+				
+	</changeSet>	
+	
+	<changeSet id="Add natural key to v_external_registration_status_by_term" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip Add natural key to v_external_registration_status_by_term and primary key to external_registration_status_by_term">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>		
+		
+		<dropView viewName="v_external_registration_status_by_term"/>
+		
+		<addPrimaryKey tableName="external_registration_status_by_term" columnNames="school_id,term_code"/>
+		
+		<createView viewName="v_external_registration_status_by_term">
+			select school_id${concat.operator}term_code as id,* from external_registration_status_by_term
+		</createView>
+		
+		<sql>grant all on v_external_registration_status_by_term to ${database.app.username}</sql>
+				
+	</changeSet>	
+	
+	<changeSet id="Add natural key to v_external_student_academic_program" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip Add natural key to v_external_student_academic_program and primary key to external_student_academic_program">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>		
+		
+		<dropView viewName="v_external_student_academic_program"/>
+		
+		<addPrimaryKey tableName="external_student_academic_program" columnNames="school_id,degree_code,program_code"/>
+		
+		<createView viewName="v_external_student_academic_program">
+			select school_id${concat.operator}degree_code${concat.operator}program_code as id,* from external_student_academic_program
+		</createView>
+		
+		<sql>grant all on v_external_student_academic_program to ${database.app.username}</sql>
+				
+	</changeSet>
+	
+	<changeSet id="Add natural key to v_external_student_test" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip Add natural key to v_external_student_test and primary key to external_student_test">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>		
+		
+		<dropView viewName="v_external_student_test"/>
+		
+		<addPrimaryKey tableName="external_student_test" columnNames="school_id,test_code,sub_test_code"/>
+		
+		<createView viewName="v_external_student_test">
+			select school_id${concat.operator}test_code${concat.operator}sub_test_code as id,* from external_student_test
+		</createView>
+		
+		<sql>grant all on v_external_student_test to ${database.app.username}</sql>
+				
+	</changeSet>	
+	
+	<changeSet id="Add natural key to v_external_student_transcript" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip Add natural key to v_external_student_transcript and primary key to external_student_transcript">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>		
+		
+		<dropView viewName="v_external_student_transcript"/>
+		
+		<addPrimaryKey tableName="external_student_transcript" columnNames="school_id"/>
+		
+		<createView viewName="v_external_student_transcript">
+			select school_id as id,* from external_student_transcript
+		</createView>
+		
+		<sql>grant all on v_external_student_transcript to ${database.app.username}</sql>
+				
+	</changeSet>
+	
+	<changeSet id="Add natural key to v_external_student_transcript_term" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip Add natural key to v_external_student_transcript_term and primary key to external_student_transcript_term">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>		
+		
+		<dropView viewName="v_external_student_transcript_term"/>
+		
+		<addPrimaryKey tableName="external_student_transcript_term" columnNames="school_id,term_code"/>
+		
+		<createView viewName="v_external_student_transcript_term">
+			select school_id${concat.operator}term_code as id,* from external_student_transcript_term
+		</createView>
+		
+		<sql>grant all on v_external_student_transcript_term to ${database.app.username}</sql>
+				
+	</changeSet>	
+	
+	<changeSet id="Add natural key to v_external_term" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip Add natural key to v_external_term and primary key to external_term">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>		
+		
+		<dropView viewName="v_external_term"/>
+		
+		<addPrimaryKey tableName="external_term" columnNames="code"/>
+		
+		<createView viewName="v_external_term">
+			select code as id,* from external_term
+		</createView>
+		
+		<sql>grant all on v_external_term to ${database.app.username}</sql>
+				
+	</changeSet>		
+					
+</databaseChangeLog>
