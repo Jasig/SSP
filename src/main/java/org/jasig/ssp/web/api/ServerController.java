@@ -45,6 +45,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 @Controller
@@ -65,6 +66,7 @@ public class ServerController extends AbstractBaseController {
 	private static final String SSP_BUILD_DATE_ENTRY_NAME = SSP_ENTRY_PREFIX + BUILD_DATE_ENTRY_NAME;
 	private static final String SSP_SCM_REVISION_ENTRY_NAME = SSP_ENTRY_PREFIX + SCM_REVISION_ENTRY_NAME;
 
+	private static final String NAME_API_FIELD_NAME = "name";
 	private static final String ARTIFACT_API_FIELD_NAME = "artifact";
 	private static final String ARTIFACT_VERSION_API_FIELD_NAME = "artifactVersion";
 	private static final String BUILD_DATE_API_FIELD_NAME = "buildDate";
@@ -73,7 +75,7 @@ public class ServerController extends AbstractBaseController {
 	private static final String EXTENSIONS_API_FIELD_NAME = "extensions";
 
 
-	private static final Map<String,String> WELL_KNOWN_EXTENSION_ENTRY_NAME_MAPPINGS =
+	private static final Map<String,String> ENTRY_NAME_MAPPINGS =
 			Collections.unmodifiableMap(new HashMap<String,String>() {{
 		put(ARTIFACT_ENTRY_NAME, ARTIFACT_API_FIELD_NAME);
 		put(ARTIFACT_VERSION_ENTRY_NAME, ARTIFACT_VERSION_API_FIELD_NAME);
@@ -155,21 +157,27 @@ public class ServerController extends AbstractBaseController {
 					String extName = parsedEntryName[2];
 					if ( extensions == null ) {
 						extensions = new HashMap<String,Object>();
-						version.put(EXTENSIONS_API_FIELD_NAME, extensions);
 					}
 					Map<String,Object> thisExtension =
 							(Map<String,Object>)extensions.get(extName);
 					if ( thisExtension == null ) {
 						thisExtension = new HashMap<String,Object>();
+						thisExtension.put(NAME_API_FIELD_NAME, extName);
 						extensions.put(extName, thisExtension);
 					}
-					mapWellKnownEntryName(unqualifiedEntryName, (String)entry.getValue(), thisExtension);
+					mapWellKnownEntryName(unqualifiedEntryName, (String) entry.getValue(), thisExtension);
 				} else if ( rawEntryName.startsWith(SSP_ENTRY_PREFIX) ) {
 					String unqualifiedEntryName = rawEntryName.substring(SSP_ENTRY_PREFIX.length());
 					if ( isWellKnownEntryName(unqualifiedEntryName) ) {
 						mapWellKnownEntryName(unqualifiedEntryName, (String)entry.getValue(), version);
 					}
 				}
+			}
+
+			if ( extensions == null ) {
+				version.put(EXTENSIONS_API_FIELD_NAME, Collections.EMPTY_MAP);
+			} else {
+				version.put(EXTENSIONS_API_FIELD_NAME, Lists.newArrayList(extensions.values()));
 			}
 
 			this.version = version; // lets not cache it until we're sure we loaded everything
@@ -183,13 +191,13 @@ public class ServerController extends AbstractBaseController {
 	}
 
 	private boolean isWellKnownEntryName(String extEntryName) {
-		return WELL_KNOWN_EXTENSION_ENTRY_NAME_MAPPINGS.containsKey(extEntryName);
+		return ENTRY_NAME_MAPPINGS.containsKey(extEntryName);
 	}
 
 	private void mapWellKnownEntryName(String extEntryName,
 									String value,
 									Map<String, Object> into) {
-		into.put(WELL_KNOWN_EXTENSION_ENTRY_NAME_MAPPINGS.get(extEntryName), value);
+		into.put(ENTRY_NAME_MAPPINGS.get(extEntryName), value);
 	}
 
 	@Override
