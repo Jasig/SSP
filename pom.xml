@@ -580,22 +580,7 @@
 					</executions>
 					<configuration>        
 					</configuration>
-			</plugin>      
-			<plugin>
-				<artifactId>maven-war-plugin</artifactId>
-				  <configuration>
-					<archive>
-						<manifest>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-						</manifest>
-						<manifestEntries>
-							<SSP-Artifact-Version>${project.version}</SSP-Artifact-Version>
-							<SSP-Build-Date>${maven.build.timestamp}</SSP-Build-Date>
-							<SSP-SCM-Revision>${buildNumber}</SSP-SCM-Revision>
-						</manifestEntries>
-					</archive>
-				  </configuration>
-			</plugin> 
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jasperreports-maven-plugin</artifactId>
@@ -759,8 +744,14 @@
 					<attachClasses>true</attachClasses>
 					<warName>ssp</warName>
 					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
 						<manifestEntries>
 							<version>${project.version}</version>
+							<SSP-Artifact-Version>${project.version}</SSP-Artifact-Version>
+							<SSP-Build-Date>${maven.build.timestamp}</SSP-Build-Date>
+							<SSP-SCM-Revision>${buildNumber}</SSP-SCM-Revision>
 						</manifestEntries>
 					</archive>
 					<overlays>
