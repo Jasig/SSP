@@ -374,7 +374,19 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 		<sql>grant all on v_external_student_transcript to ${database.app.username}</sql>
 				
 	</changeSet>
-	
+	<changeSet id="drop index on external_student_transcript_term" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip drop index on external_student_transcript_term">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+			<indexExists tableName="external_student_transcript_term" indexName="idx_external_student_transcript_term_business_key" columnNames="school_id,term_code,registered_course_count" />
+		</preConditions>		
+		<dropIndex tableName="external_student_transcript_term" indexName="idx_external_student_transcript_term_business_key" />
+				
+	</changeSet>	
 	<changeSet id="Add natural key to v_external_student_transcript_term" author="tony.arland">
 		<preConditions onFail="CONTINUE"
 			onFailMessage="Skip Add natural key to v_external_student_transcript_term and primary key to external_student_transcript_term">
@@ -386,6 +398,7 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 		</preConditions>		
 		
 		<dropView viewName="v_external_student_transcript_term"/>
+		
 		
 		<addNotNullConstraint tableName="external_student_transcript_term" columnName="school_id" columnDataType="${nvarchar.type}(50)"/>
 		<addNotNullConstraint tableName="external_student_transcript_term" columnName="term_code" columnDataType="${nvarchar.type}(25)"/>
