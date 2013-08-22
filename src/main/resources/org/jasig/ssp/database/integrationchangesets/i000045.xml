@@ -293,12 +293,14 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 		<dropView viewName="v_external_student_test"/>
 		
 		<addNotNullConstraint tableName="external_student_test" columnName="sub_test_code" columnDataType="${nvarchar.type}(25)" />
-		<addUniqueConstraint tableName="external_student_test" columnNames="school_id,test_code,sub_test_code"/>
+		<addNotNullConstraint tableName="external_student_test" columnName="test_date" columnDataType="date" />
+		
+		<addUniqueConstraint tableName="external_student_test" columnNames="school_id,test_code,sub_test_code,test_date"/>
 
-		<addPrimaryKey tableName="external_student_test" columnNames="school_id,test_code,sub_test_code"/>
+		<addPrimaryKey tableName="external_student_test" columnNames="school_id,test_code,sub_test_code,test_date"/>
 		
 		<createView viewName="v_external_student_test">
-			select school_id${concat.operator}test_code${concat.operator}sub_test_code as id,* from external_student_test
+			select school_id${concat.operator}test_code${concat.operator}sub_test_code${concat.operator}test_date as id,* from external_student_test
 		</createView>
 		
 		<sql>grant all on v_external_student_test to ${database.app.username}</sql>
