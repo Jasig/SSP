@@ -80,9 +80,14 @@
 
 	<beans:bean name="requestCleanupServletFilter" class=" org.jasig.ssp.security.RequestCleanupServletFilter" />
 
-	<!-- oauth2ClientDetailsService and oauth2ClientDetailsUserService are defined via component scanning -->
+	<!-- oauth2ClientDetailsService, oauth2ClientDetailsUserService and transactionalOAuth2TokenStore are defined via component scanning -->
 
-	<beans:bean id="oauth2TokenStore" class="org.springframework.security.oauth2.provider.token.InMemoryTokenStore" />
+	<!-- transactionalOAuth2TokenStore looks for oauth2PhysicalTokenStore -->
+	<beans:bean id="oauth2PhysicalTokenStore" class="org.springframework.security.oauth2.provider.token.JdbcTokenStore">
+		<beans:constructor-arg ref="sspDataSource" />
+	</beans:bean>
+
+	<beans:alias name="transactionalOAuth2TokenStore" alias="oauth2TokenStore" />
 
 	<beans:bean id="oauth2TokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
 		<beans:property name="tokenStore" ref="oauth2TokenStore" />
