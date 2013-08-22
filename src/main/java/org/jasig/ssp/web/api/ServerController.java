@@ -112,7 +112,7 @@ public class ServerController extends AbstractBaseController {
 		return versionProfile;
 	}
 
-	private synchronized void maybeCacheVersionProfile() throws IOException {
+    private synchronized void maybeCacheVersionProfile() throws IOException {
 		if ( versionProfile == null ) {
 			cacheVersionProfile();
 		}
@@ -183,6 +183,8 @@ public class ServerController extends AbstractBaseController {
 			}
 
 			this.versionProfile = tmpVersionProfile; // lets not cache it until we're sure we loaded everything
+            convertBuildDate();
+
 		} finally {
 			if ( mfStream != null ) {
 				try {
@@ -191,6 +193,22 @@ public class ServerController extends AbstractBaseController {
 			}
 		}
 	}
+
+    private synchronized void convertBuildDate() {
+        if ( versionProfile != null && versionProfile.containsKey(SSP_BUILD_DATE_ENTRY_NAME) ) {
+            int buildDateConvertToInt = 0;
+
+            try {
+                String dateToConvert =
+                        versionProfile.get(SSP_BUILD_DATE_ENTRY_NAME).toString().replaceAll("[^\\d]","");
+                buildDateConvertToInt = Integer.parseInt(dateToConvert);
+            } catch (NumberFormatException e) {
+                //Do nothing at this time
+            }
+
+            versionProfile.put(SSP_BUILD_DATE_ENTRY_NAME, buildDateConvertToInt);
+        }
+    }
 
 	private boolean isWellKnownEntryName(String extEntryName) {
 		return ENTRY_NAME_MAPPINGS.containsKey(extEntryName);
@@ -206,6 +224,4 @@ public class ServerController extends AbstractBaseController {
 	protected Logger getLogger() {
 		return LOGGER;
 	}
-
-
 }
