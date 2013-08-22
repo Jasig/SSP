@@ -1,3 +1,21 @@
+/**
+ * Licensed to Jasig under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Jasig licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a
+ * copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 //@GrabResolver( name='codehaus.snapshot', root='http://snapshots.repository.codehaus.org', m2compatible='true' )
 //@Grab( 'org.codehaus.groovy.modules.http-builder:http-builder:0.6-SNAPSHOT' )
 @Grapes([
@@ -14,26 +32,31 @@ def client = new RESTClient ( 'http://localhost:8080' )
 def site = new HTTPBuilder( 'http://localhost:8080' )
 //site.auth.basic 'my-client-with-secret-2', 'secret-2'
 site.auth.basic 'dmac', 'foo'
+//site.auth.basic 'MC101', 'MC101'
 
 //def body = [grant_type:'client_credentials']
 def accessToken
 site.post(path: '/ssp/api/oauth/token',
             body: [grant_type:'client_credentials'],
             requestContentType: URLENC ) { resp, reader ->
+//
+////    println resp
+//
+        System.out << "Token response: " << reader
+        println()
+////        System.out << resp
+////        System.out << reader['access_token']
+//
 
-//    println resp
-
-//        System.out << "Token response: " << reader
-//        println()
-//        System.out << resp
-//        System.out << reader['access_token']
     accessToken = reader['access_token']
-
-//    println json
-
+//
+////    println json
+//
 }
 
+//println("Access Token: ${accessToken}")
 site.auth.basic "",""
+//accessToken = "8cab2bd9-d55b-4cb9-bf11-73545917bc57"
 site.get(path: '/ssp/api/1/person',
         contentType: JSON,
         query: ["limit": 1],
