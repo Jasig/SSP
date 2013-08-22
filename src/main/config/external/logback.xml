@@ -31,7 +31,7 @@
 
 	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>${system_id}: %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+			<pattern>${system_id}: %d{HH:mm:ss.SSS} [%thread] %X{req.requestURI} %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
@@ -47,7 +47,7 @@
 		</rollingPolicy>
 		<append>true</append>
 		<encoder>
-			<pattern>${system_id}: %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+			<pattern>${system_id}: %d{HH:mm:ss.SSS} [%thread] %X{req.requestURI} %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
