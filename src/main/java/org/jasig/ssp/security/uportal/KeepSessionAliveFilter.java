@@ -32,6 +32,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,7 +79,12 @@ public class KeepSessionAliveFilter implements Filter {
         }
         final HttpServletRequest httpServletRequest = (HttpServletRequest)request;
         final HttpServletResponse httpServletResponse = (HttpServletResponse)response;
-        Long lastUpdate = (Long)httpServletRequest.getSession(false).getAttribute(SESSION_KEEP_ALIVE_ATTRIBUTE_KEY);
+        final HttpSession session = httpServletRequest.getSession(false);
+        if ( session == null ) {
+            chain.doFilter(request, response);
+            return;
+        }
+        Long lastUpdate = (Long)session.getAttribute(SESSION_KEEP_ALIVE_ATTRIBUTE_KEY);
         if(lastUpdate != null)
         {
             long delta = System.currentTimeMillis() - lastUpdate.longValue();
@@ -88,10 +94,10 @@ public class KeepSessionAliveFilter implements Filter {
                 HttpServletGetRequestWrapper wrap = new HttpServletGetRequestWrapper(httpServletRequest);
                 final Map<String, String[]> params = new HashMap<String, String[]>();
                 final RestResponse rr = rest.invoke(wrap, httpServletResponse, "/ssp-platform/api/session.json", params);
-                httpServletRequest.getSession(false).setAttribute(SESSION_KEEP_ALIVE_ATTRIBUTE_KEY,System.currentTimeMillis());
+                session.setAttribute(SESSION_KEEP_ALIVE_ATTRIBUTE_KEY,System.currentTimeMillis());
             }
         } else {
-            httpServletRequest.getSession(false).setAttribute(SESSION_KEEP_ALIVE_ATTRIBUTE_KEY,System.currentTimeMillis());
+            session.setAttribute(SESSION_KEEP_ALIVE_ATTRIBUTE_KEY,System.currentTimeMillis());
         }
 
         chain.doFilter(request, response);
