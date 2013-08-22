@@ -35,6 +35,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 
@@ -163,7 +164,10 @@ public class SecurityServiceImpl implements SecurityService {
 				sspUser.setPerson(personService.personFromUsername(sspUser
 						.getUsername()));
 			} catch (ObjectNotFoundException e) {
-				LOGGER.error("Did not find the person's domain object");
+				LOGGER.error("SspUser in current security context has no " +
+						"corresponding Person, but could not find that Person" +
+						" in the database. Lookup was by username [" + sspUser
+						.getUsername() + "]");
 				return null;
 			}
 		}
@@ -246,6 +250,7 @@ public class SecurityServiceImpl implements SecurityService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.SUPPORTS)
 	public void afterRequest() {
 		currentSspUserFallback.remove();
 		SspUser.afterRequest();

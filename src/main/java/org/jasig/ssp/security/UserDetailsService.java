@@ -68,7 +68,18 @@ public class UserDetailsService implements SspUserDetailsService {
 					"Unable to load {}'s record., creating user in ssp",
 					username);
 			try {
-				person = personService.createUserAccount(username, (Collection<GrantedAuthority>)authorities);
+				// We happen to know that the PersonService.createUserAccount()
+				// impl always runs in its own transaction, which means the
+				// returned Person isn't actually bound to our Hib session, so
+				// we have to reload it here.
+				Person createdPerson =
+						personService.createUserAccount(username, (Collection<GrantedAuthority>)authorities);
+				try {
+					person = personService.get(createdPerson.getId());
+				} catch ( ObjectNotFoundException eee ) {
+					throw new UsernameNotFoundException("User with username ["
+							+ username + "] could not be read back after being created.");
+				}
 			} catch ( ObjectExistsException ee ) {
 				try {
 					person = personService.personFromUsername(username);

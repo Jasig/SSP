@@ -69,7 +69,7 @@ public class SspUser extends User implements Serializable {
 	// identity. This is also the reason we can't use Spring's
 	// RequestAttributes to store the "current" Person. See class level
 	// comments for more on this and cleanupQueue
-	private final ThreadLocal<Person> person = new ThreadLocal<Person>();
+	private final transient ThreadLocal<Person> person = new ThreadLocal<Person>();
 
 	private static final ThreadLocal<Collection<SspUser>> cleanupQueue =
 			new ThreadLocal<Collection<SspUser>>();
