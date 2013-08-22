@@ -102,7 +102,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			me.set('termNotes', termNotes);
 		}
 		var foundNote;
-		termNotes.forEach(function(termNote){
+		Ext.Array.forEach(termNotes, function(termNote) {
 			if(termNote.get('termCode') == termCode){
 				foundNote = termNote;
 			}});
@@ -125,7 +125,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
     		return termCodes;
 		}
     	
-    	planCourses.forEach(function(planCourse){
+    	Ext.Array.forEach(planCourses, function(planCourse) {
     	if(termCodes.indexOf(planCourse.termCode) < 0){
     		termCodes[i++] = planCourse.termCode;
     	}});
@@ -197,7 +197,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		var termNotes = me.get('termNotes');
 		var recordTermNotes = [];
 		if(termNotes && termNotes.length > 0){
-			termNotes.forEach(function(termNote){
+			Ext.Array.forEach(termNotes, function(termNote) {
 				var recordTermNote = new Ssp.model.tool.map.TermNote();
 				recordTermNote.populateFromGenericObject(termNote);
 				recordTermNote.dirty = false;
@@ -218,7 +218,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		var simpleData = {};
 		var termNotes = me.get('termNotes')
 		simpleData.termNotes = [];
-		termNotes.forEach(function(termNote){
+		Ext.Array.forEach(termNotes, function(termNote) {
 			var studentNoteHasValue = !me.isEmpty(termNote.get("studentNotes"));
 			var contactNoteHasValue = !me.isEmpty(termNote.get("contactNotes"));
 			if(termNote != null && (studentNoteHasValue || contactNoteHasValue || termNote.get("isImportant"))){
@@ -318,7 +318,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
         	var semesterStore = semesterStores[index];
             var models = semesterStore.getRange();
 			
-            models.forEach(function(model){
+            Ext.Array.forEach(models, function(model) {
             	var planCourse = new Object();
             		planCourse.courseTitle = model.get('title');
             		planCourse.courseCode = model.get('code');
@@ -404,7 +404,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
     	var requiringCourseTermIndex = termsStore.find("code", requiringCourse.termCode);
     	var startMessageAdded = false;
     	
-    	requiredCourses.forEach(function(requiredCourse){
+    	Ext.Array.forEach(requiredCourses, function(requiredCourse) {
     		 var index = termsStore.find("code", requiredCourse.termCode);
     		 var startMessage = "The following pre/co requisites are on plan but in the wrong term: ";
     		 var isValid = true;
@@ -499,7 +499,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			planCourses = me.get('templateCourses');
 		var courses = {};
 		if(planCourses && planCourses.length > 0){
-			planCourses.forEach(function(planCourse){
+			Ext.Array.forEach(planCourses, function(planCourse) {
 				var semesterCourse = new Ssp.model.tool.map.SemesterCourse(planCourse);
 				var semesterSet = courses[planCourse.termCode];
 				if(!semesterSet){
@@ -507,7 +507,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 				}
 				semesterSet.push(semesterCourse);
 				courses[planCourse.termCode] = semesterSet;
-			}) 
+			}); 
 		}
 		
 		for(termCode in semesterStores){
@@ -576,7 +576,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		var me = this;
 		me.set("isValid",true);
 		var planCourses = me.get("planCourses");
-		planCourses.forEach(function(course){
+		Ext.Array.forEach(planCourses, function(course) {
 			course.invalidReasons = "";
 			course.isValidInTerm = true;
 			course.hasCorequisites = true;

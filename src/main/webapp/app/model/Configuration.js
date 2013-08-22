@@ -41,6 +41,15 @@ Ext.define('Ssp.model.Configuration', {
     	    	defaultValue: true
     	     },
     	     /*
+    	      * Set this option to true to lock editing of Coach Assignments for records in the system.
+    	      * When this option is set to true, all Coach Assignments will be populated from an external system
+    	      * through the external_data tables/views of this application.
+    	      */
+    	     {name: 'coachSetFromExternalData', 
+    	      type: 'boolean', 
+    	      defaultValue: false
+    	     },    
+    	     /*
     	      * Set this option to the label you would like to see for the studentId values in the system.
     	      * For instance: Use this to label your studentId for your institution's naming convention.
     	      */

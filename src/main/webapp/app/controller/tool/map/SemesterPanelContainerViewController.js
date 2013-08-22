@@ -111,7 +111,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     getMapPlanServiceSuccess: function(serviceResponses, isTemplate) {
         var me = this;
         var mapResponse = serviceResponses.successes.map;
-		if(!mapResponse || !mapResponse.responseText || mapResponse.responseText.trim().length == 0) {
+		if(!mapResponse || !mapResponse.responseText || Ext.String.trim(mapResponse.responseText).length == 0) {
 			if(me.termsStore.isLoading()) {
 				 me.termsStore.on('load', this.getMapPlanServiceFailure, this, {single: true});
 				return;
@@ -212,7 +212,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var termsStore = me.termsStore.getCurrentAndFutureTermsStore(5);			
 		if(mapPlan){
 			var mapTerms = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(mapPlan));
-			mapTerms.forEach(function(mapTerm){
+			Ext.Array.forEach(mapTerms, function(mapTerm) {
 				if(termsStore.find("code", mapTerm.get("code")) < 0)
 						termsStore.add(mapTerm);	
 			});
@@ -224,7 +224,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	fillSemesterStores: function(terms){
 		var me = this;
 		me.clearSemesterStores();
-		terms.forEach(function(term){
+		Ext.Array.forEach(terms, function(term) {
 			me.semesterStores[term.get('code')] = new Ssp.store.SemesterCourses();
 		});
 	},
@@ -271,7 +271,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.fillSemesterStores(terms);
 
 		var termsets = [];
-		terms.forEach(function(term){
+		Ext.Array.forEach(terms, function(term) {
 			if(termsets.hasOwnProperty(term.get("reportYear"))){
 				termsets[term.get("reportYear")][termsets[term.get("reportYear")].length] = term;
 			}else{
@@ -280,7 +280,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			};
 		});
 		var yearViews = new Array();
-		termsets.forEach(function(termSet){
+		Ext.Array.forEach(termsets, function(termSet) {
+			if (termSet) {
 			var yearView = new Ext.form.FieldSet({
 				xtype : 'fieldset',
 				border: 0,
@@ -297,14 +298,15 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				yearView.minHeight = 214;
 			}
 			var semesterPanels = new Array();
-			termSet.forEach(function(term){
+			Ext.Array.forEach(termSet, function(term) {
 				var termCode = term.get('code');
 				var panelName = term.get("name");
 				var isPast = me.termsStore.isPastTerm(termCode);
 				semesterPanels.push(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode]));
 			});
-			yearView.add(semesterPanels);
+			yearView.add(semesterPanels);		
 			yearViews.push(yearView);
+			}
 		});
 			
 		Ext.suspendLayouts();
@@ -452,7 +454,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var panels = parent.query("semesterpanel");
 		var planHours = 0;
 		var devHours = 0;
-		panels.forEach(function(panel){
+		Ext.Array.forEach(panels, function(panel) {
 			var storeGrid = panel.query("semestergrid")[0];
 			var store = storeGrid.getStore();
 			var semesterBottomDock = panel.getDockedComponent("semesterBottomDock");
@@ -460,19 +462,20 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			var hours = me.updateTermHours(store, semesterBottomDock);
 			planHours += hours.planHours;
 			devHours += hours.devHours;
-		})
-		if(Ext.getCmp('currentTotalPlanCrHrs'))
+		});
+		if(Ext.getCmp('currentTotalPlanCrHrs')) {
 			Ext.getCmp('currentTotalPlanCrHrs').setValue(planHours);
-		if(Ext.getCmp('currentPlanTotalDevCrHrs'))
+		}
+		if(Ext.getCmp('currentPlanTotalDevCrHrs')) {
 			Ext.getCmp('currentPlanTotalDevCrHrs').setValue(devHours);
-		
+		}		
 	},
 	
 	updateTermHours: function(store, semesterBottomDock){
 		var models = store.getRange(0);
 		var totalHours = 0;
 		var totalDevHours = 0;
-		models.forEach(function(model){
+		Ext.Array.forEach(models, function(model) {
 			var value = model.get('creditHours');
 			/**** TODO the following is in the constructor but drag and drop does not call the constructor *****/
 			if(!value){
@@ -732,7 +735,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var terms = me.getTerms(me.clonedMap);
 		replaceTermCodes = false;
 		var numberToRemove = 0;
-		terms.forEach(function(term){
+		Ext.Array.forEach(terms, function(term) {
 			var termIndex = me.termsStore.find('code', term.get('code'));
 			if(termIndex >= 0){
 				if (termIndex == startTermIndex){

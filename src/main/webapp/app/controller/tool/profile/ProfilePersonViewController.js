@@ -145,8 +145,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         // load and render person data
         me.profileReferralSourcesStore.removeAll();
         me.profileServiceReasonsStore.removeAll();
-
-        var nameField = me.getNameField();
+		
+        var nameField = me.getNameField();	
 		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
         var photoUrlField = me.getPhotoUrlField();
         var birthDateField = me.getBirthDateField();

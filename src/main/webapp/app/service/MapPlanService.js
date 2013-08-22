@@ -171,11 +171,11 @@ Ext.define('Ssp.service.MapPlanService', {
     		return termCodes;
 		}
     	
-    	planCourses.forEach(function(planCourse){
-    	if(termCodes.indexOf(planCourse.termCode) < 0){
-    		termCodes[i++] = planCourse.termCode;
-    	  }});
-    	return termCodes;
+    	Ext.Array.forEach(planCourses, function(planCourse) {		
+			if( Ext.Array.indexOf(termCodes, planCourse.termCode) < 0 ){
+				termCodes[i++] = planCourse.termCode;
+			  }});
+			return termCodes;
     	},
     
     updateCurrentMap: function(semesterStores){ 
@@ -375,7 +375,7 @@ Ext.define('Ssp.service.MapPlanService', {
 			var planCourses = me.currentMapPlan.get('planCourses');
 			var semsetersStore = new Ssp.store.SemesterCourses();
 			semesterStores = [semsetersStore];
-			planCourses.forEach(function(planCourse){
+			Ext.Array.forEach(planCourses, function(planCourse){
 				semsetersStore.add(new Ssp.model.tool.map.SemesterCourse(planCourse));
 			});
 		}

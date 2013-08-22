@@ -68,7 +68,7 @@ Ext.define('Ssp.store.external.Terms', {
 	getTermsFromTermCodesStore: function(termCodes){
 		var me = this;
 		var terms = [];
-		termCodes.forEach(function(termCode){
+		Ext.Array.forEach(termCodes, function(termCode){
 			var index = me.find( 'code', termCode);
 			terms.push(me.getAt(index));
 		});
