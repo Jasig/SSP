@@ -27,6 +27,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.Query;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -52,6 +53,13 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 	public PlanDao() {
 		super(Plan.class);
 	}
+
+//	@Override
+//	protected Criteria createCriteria() {
+//		Criteria c = super.createCriteria();
+//		c.setFetchMode("planCourses.elective.color", FetchMode.SELECT);
+//		return c;
+//	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Plan> getAllForStudent(UUID id)

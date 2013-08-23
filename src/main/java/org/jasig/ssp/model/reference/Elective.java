@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -47,8 +48,10 @@ public class Elective
 	
 	@Column(nullable = true)
 	private Integer sortOrder;
-	
-	@ManyToOne()
+
+	// Lazy to try to reduce width of PlanCourse queries which had become
+	// too wide for SQLServer
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "color_id", nullable = false )
 	private Color color;
 	

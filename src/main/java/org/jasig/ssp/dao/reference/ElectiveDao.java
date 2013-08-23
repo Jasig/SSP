@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.dao.reference;
 
+import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.reference.Elective;
 import org.springframework.stereotype.Repository;
@@ -31,5 +33,12 @@ public class ElectiveDao extends AbstractReferenceAuditableCrudDao<Elective>
 
 	public ElectiveDao() {
 		super(Elective.class);
+	}
+
+	@Override
+	protected Criteria createCriteria() {
+		Criteria c = super.createCriteria();
+		c.setFetchMode("color", FetchMode.JOIN);
+		return c;
 	}
 }
