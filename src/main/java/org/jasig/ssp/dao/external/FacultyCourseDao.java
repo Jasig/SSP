@@ -58,6 +58,7 @@ public class FacultyCourseDao extends AbstractExternalDataDao<FacultyCourse> {
 				Restrictions.eq("facultySchoolId", facultySchoolId)).list();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public FacultyCourse getCourseByFacultySchoolIdAndFormattedCourse(
 			final String facultySchoolId, final String formattedCourse)
 			throws ObjectNotFoundException {
@@ -65,13 +66,16 @@ public class FacultyCourseDao extends AbstractExternalDataDao<FacultyCourse> {
 			throw new ObjectNotFoundException(formattedCourse,
 					FacultyCourse.class.getName());
 		}
-
-		return (FacultyCourse) createCriteria().add(
+		//KLUDGE, section should really be included but it is not required in the current data model.  If the criteria is not unique 
+		//we nievely pick the first one and cross our fingers.  This should be changed after section_code because part of the natural key
+		List<FacultyCourse> result = createCriteria().add(
 				Restrictions.eq("facultySchoolId", facultySchoolId)).add(
-				Restrictions.eq("formattedCourse", formattedCourse))
-				.uniqueResult();
+				Restrictions.eq("formattedCourse", formattedCourse)).list();
+		return result.size() > 0 ? result.get(0) : null;
+		//END KLUDGE
 	}
 
+	@SuppressWarnings("unchecked")
 	public FacultyCourse getCourseByFacultySchoolIdAndFormattedCourseAndTermCode(
 			final String facultySchoolId, final String formattedCourse,
 			final String termCode) throws ObjectNotFoundException {
@@ -87,10 +91,14 @@ public class FacultyCourseDao extends AbstractExternalDataDao<FacultyCourse> {
 			throw new ObjectNotFoundException("Must specify a term code",
 					FacultyCourse.class.getName());
 		}
-		return (FacultyCourse) createCriteria()
+		//KLUDGE, section should really be included but it is not required in the current data model.  If the criteria is not unique 
+		//we nievely pick the first one and cross our fingers.  This should be changed after section_code because part of the natural key		
+		List<FacultyCourse> result = createCriteria()
 				.add(Restrictions.eq("facultySchoolId", facultySchoolId))
 				.add(Restrictions.eq("formattedCourse", formattedCourse))
-				.add(Restrictions.eq("termCode", termCode))
-				.uniqueResult();
+				.add(Restrictions.eq("termCode", termCode)).list();
+		return result.size() > 0 ? result.get(0) : null;
+		//END KLUDGE
+		
 	}
 }

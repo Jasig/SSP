@@ -118,6 +118,7 @@ public class ExternalFacultyCourseRosterDao extends
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public ExternalFacultyCourseRoster getEnrollment(String facultySchoolId,
 			String formattedCourse, String termCode, String studentSchoolId)
 			throws ObjectNotFoundException {
@@ -137,11 +138,13 @@ public class ExternalFacultyCourseRosterDao extends
 			throw new ObjectNotFoundException("Must specify a student school ID",
 					ExternalFacultyCourseRoster.class.getName());
 		}
-		return (ExternalFacultyCourseRoster) createCriteria()
+		//KLUDGE we should really fetch a unique ExternalFacultyCourseRoster by facultySchoolId/formattedCourse/termCode/schoolId/sectionCode
+		//so we may have dupes.  As a compromise till the data model is fixed we grab the first one and cross our fingers
+		List<ExternalFacultyCourseRoster> result = createCriteria()
 				.add(Restrictions.eq("facultySchoolId", facultySchoolId))
 				.add(Restrictions.eq("formattedCourse", formattedCourse))
 				.add(Restrictions.eq("termCode", termCode))
-				.add(Restrictions.eq("schoolId", studentSchoolId))
-				.uniqueResult();
+				.add(Restrictions.eq("schoolId", studentSchoolId)).list();
+		return result.size() > 0 ? result.get(0) : null;
 	}
 }
