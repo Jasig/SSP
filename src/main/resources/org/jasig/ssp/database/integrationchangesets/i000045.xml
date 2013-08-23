@@ -300,7 +300,7 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 		<addPrimaryKey tableName="external_student_test" columnNames="school_id,test_code,sub_test_code,test_date"/>
 		
 		<createView viewName="v_external_student_test">
-			select school_id${concat.operator}test_code${concat.operator}sub_test_code${concat.operator}test_date as id,* from external_student_test
+			select school_id${concat.operator}test_code${concat.operator}sub_test_code${concat.operator}cast(test_date as ${nvarchar.type}(120)) as id,* from external_student_test
 		</createView>
 		
 		<sql>grant all on v_external_student_test to ${database.app.username}</sql>
