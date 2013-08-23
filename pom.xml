@@ -595,7 +595,7 @@
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
-			charAt equals	<artifactId>jasperreports-maven-plugin</artifactId>
+				<artifactId>jasperreports-maven-plugin</artifactId>
 				<version>1.0-beta-2</version>
 				<configuration>
 					<outputDirectory>${project.build.outputDirectory}/reports</outputDirectory>

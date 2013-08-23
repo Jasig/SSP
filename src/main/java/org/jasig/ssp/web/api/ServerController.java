@@ -194,7 +194,7 @@ public class ServerController extends AbstractBaseController {
 		}
 	}
 
-    private synchronized void convertBuildDate() {
+    private void convertBuildDate() {
         if ( versionProfile != null && versionProfile.containsKey(SSP_BUILD_DATE_ENTRY_NAME) ) {
             int buildDateConvertToInt = 0;
 
