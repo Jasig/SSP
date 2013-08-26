@@ -101,11 +101,12 @@ public class UPortalPreAuthenticatedProcessingFilter extends GenericFilterBean
 	private PreAuthenticatedAuthenticationToken getPreAuthenticatedToken(
 			final HttpServletRequest request) {
 
-		final HttpSession session = request.getSession();
+		final HttpSession session = request.getSession(false);
 
 		if (session == null) {
-			throw new PreAuthenticatedCredentialsNotFoundException(
-					"No http session established");
+			LOGGER.debug("No HttpSession so skipping Uportal "
+					+ "AUTHENTICATION_TOKEN_KEY attribute lookup");
+			return null;
 		}
 
 		final PreAuthenticatedAuthenticationToken token =

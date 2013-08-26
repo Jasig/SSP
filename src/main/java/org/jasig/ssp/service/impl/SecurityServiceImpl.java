@@ -246,6 +246,19 @@ public class SecurityServiceImpl implements SecurityService {
 
 	@Override
 	public String getSessionId() {
+		if ( SecurityContextHolder.getContext()
+				.getAuthentication() instanceof OAuth2Authentication ) {
+			// The session ID lookup below will force creation of a HTTP Session
+			// which is undesirable for an OAuth2 request. Currently we only
+			// support client_credentials authorization grants for OAuth2, for
+			// which there really isn't any good value to use as a session ID,
+			// e.g. the same token ID might be shared across many different app
+			// instances and users. We only use the session ID for anonymous
+			// use cases, though, and if you've got an OAuth2Authentication,
+			// you're not anonymous. So there's not really a need to concoct an
+			// OAuth2-ish session ID.
+			return null;
+		}
 		return RequestContextHolder.currentRequestAttributes().getSessionId();
 	}
 
