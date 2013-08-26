@@ -22,7 +22,9 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     inject: {
     	appEventsController: 'appEventsController',
         person: 'currentPerson',
+        personLite: 'personLite',
         personService: 'personService',
+     	formUtils: 'formRendererUtils',
         sspConfig: 'sspConfig'
     },
     control: {
@@ -157,15 +159,37 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 		me.getView().setLoading( false );
 		if ( r != null)
 		{
-			me.getView().getForm().reset();
-			model.populateFromExternalData( r );
-			me.person.data = model.data;
-			me.getView().loadRecord( me.person );
+			if(r.id == null || r.id === '')
+			{
+				me.getView().getForm().reset();
+				model.populateFromExternalData( r );
+				me.person.data = model.data;
+				me.getView().loadRecord( me.person );				
+			}
+			//If we find an internal record, reload the screen in 'Edit' mode.
+			else
+			{
+				
+				var model = new Ssp.model.Person();
+				me.person.data = model.data;
+				me.personLite.set('id', r.id);
+		    	me.personService.get( r.id, {success:me.getPersonSuccess, 
+					  failure:me.getBySchoolIdFailure, 
+					  scope: me} );	
+			}
+
 		}else{
 			Ext.Msg.alert('SSP Notification','There were no records found with the provided ID. Please try a different value.');
 		}
     },    
-    
+    getPersonSuccess: function( response, scope ){
+    	var me=scope;
+    	var person = new Ssp.model.Person();
+		me.getView().setLoading( false );
+    	me.person.data = person.data;
+    	me.person.populateFromGenericObject(response);   	
+    	me.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});				
+    },    
     getBySchoolIdFailure: function( response, scope ){
     	var me=scope;
     	me.getView().setLoading( false );

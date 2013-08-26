@@ -74,7 +74,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		}
 		
 		me.appEventsController.assignEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
-		
 		return this.callParent(arguments);
     },
 

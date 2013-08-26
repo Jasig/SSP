@@ -71,7 +71,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        width: 350
 			    },{
 			    	xtype: 'button',
-			    	tooltip: 'Load record from external system',
+			    	tooltip: 'Load record from external system (Possible loss of local changes if record is found)',
 			    	text: 'Retrieve from External',
 			    	itemId: 'retrieveFromExternalButton'
 			    },{
