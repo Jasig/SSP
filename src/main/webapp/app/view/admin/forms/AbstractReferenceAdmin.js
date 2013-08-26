@@ -49,12 +49,12 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
 	    								var record = rowEditor.context.record;
 	    								
 	    								Ext.each(rowEditor.editor.items.items, function(item) {
-	    									if(item.store != undefined && item.store != null) {
+	    									if( item.store ) {
 	    										item.store.clearFilter(true);
 	    									}			
 	    								});
 	    								
-	    								if(sort != null && sort != undefined) {
+	    								if( sort ) {
 	    									store.sort(sort.field, sort.direction);
 	    								}	    					        
 	    							}
@@ -65,7 +65,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     	var addVisible = true;
     	var deleteVisible = true;
     	var headerInstructions = null;
-    	if(me.interfaceOptions !== undefined) { 
+    	if( me.interfaceOptions ) {
     		addVisible = me.interfaceOptions.addButtonVisible;
     		deleteVisible = me.interfaceOptions.deleteButtonVisible;    
     		headerInstructions = me.interfaceOptions.headerInstructions;
@@ -83,8 +83,8 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                 ptype: 'gridviewdragdrop',
                     dropGroup: 'gridtogrid',
                     dragGroup: 'gridtogrid',
-                    enableDrop: me.interfaceOptions !== undefined? me.interfaceOptions.dragAndDropReorder : false,
-                    enableDrag: me.interfaceOptions !== undefined? me.interfaceOptions.dragAndDropReorder : false
+                    enableDrop: me.interfaceOptions ? me.interfaceOptions.dragAndDropReorder : false,
+                    enableDrag: me.interfaceOptions ? me.interfaceOptions.dragAndDropReorder : false
             },
             listeners:{
                 drop:function(node, data, mouseOverItem, dropPosition, eOpts){
@@ -128,7 +128,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                             var record = store.findRecord("id", r.id); 
                             			
 							store.load();
-							if(sort != null && sort != undefined) {
+							if( sort ) {
 								store.sort(sort.field, sort.direction);
 							}
                         },
@@ -164,7 +164,6 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                     {
                         xtype: 'pagingtoolbar',
                         dock: 'bottom',
-                        itemId: 'recordPager',
                         displayInfo: true,
                         pageSize: me.apiProperties.getPagingSize()
                     },
@@ -191,7 +190,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                         dock: 'top',
                         items: [{
                             xtype: 'label',
-                            text: headerInstructions != null? headerInstructions : 'Double-click to edit an item.'
+                            text: headerInstructions ? headerInstructions : 'Double-click to edit an item.'
                         }]
                     }]
             });

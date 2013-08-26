@@ -36,9 +36,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 
 		'deleteButton': {
 			click: 'deleteConfirmation'
-		},
-		
-		recordPager: '#recordPager'
+		}
     },
     
 	init: function() {
