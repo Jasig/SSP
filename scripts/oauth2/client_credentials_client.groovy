@@ -26,6 +26,7 @@ import groovyx.net.http.HTTPBuilder
 //import groovy.util.slurpersupport.GPathResult
 import static groovyx.net.http.ContentType.URLENC
 import static groovyx.net.http.ContentType.JSON
+import static groovyx.net.http.Method.POST
 
 def client = new RESTClient ( 'http://localhost:8080' )
 
@@ -66,6 +67,8 @@ site.get(path: '/ssp/api/1/person',
     println()
 
 }
+
+
 //
 //site.get(path: '/ssp/api/1/foo',
 //        headers: ['Authorization': "Bearer ${accessToken}"]) { resp, reader ->
@@ -74,6 +77,21 @@ site.get(path: '/ssp/api/1/person',
 //    println()
 //
 //}
+
+site.request ( POST, JSON ) { req ->
+    uri.path = '/ssp/api/1/reference/earlyAlertOutcome/'
+    headers.'Authorization' = "Bearer ${accessToken}"
+
+    body = '{"name":"foo 3","description":"bar 3"}'
+    response.success = { resp, json ->
+        System.out << "EA Outcome response: " << json
+        println()
+    }
+}
+
+///ssp/api/1/reference/earlyAlertOutcome/
+//POST
+//        {"id":"","createdDate":null,"modifiedDate":null,"name":"foo","description":"bar","sortOrder":0,"createdBy":{"id":"","firstName":"","lastName":""},"modifiedBy":{"id":"","firstName":"","lastName":""},"objectStatus":"ACTIVE","active":true}
 
 
 //
