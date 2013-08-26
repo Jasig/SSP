@@ -75,6 +75,18 @@ public class OAuth2ClientController extends AbstractBaseController {
 				factory.asTOList(clients.getRows()));
 	}
 
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_API_KEY_READ)
+	public @ResponseBody
+	OAuth2ClientTO get(final @PathVariable UUID id) throws ObjectNotFoundException {
+		final OAuth2Client model = service.get(id);
+		if (model == null) {
+			return null;
+		}
+
+		return new OAuth2ClientTO(model);
+	}
+
 	@PreAuthorize(Permission.SECURITY_API_KEY_WRITE)
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody
