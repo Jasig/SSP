@@ -306,9 +306,9 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public Person getBySchoolId(final String schoolId)
+	public Person getBySchoolId(final String schoolId,boolean commitPerson)
 			throws ObjectNotFoundException {
-		try {
+		try { 
 			return additionalAttribsForStudent(dao.getBySchoolId(schoolId));
 		} catch (final ObjectNotFoundException e) {
 			final ExternalPerson externalPerson = externalPersonService
@@ -322,7 +322,7 @@ public class PersonServiceImpl implements PersonService {
 			final Person person = new Person();
 			evict(person);
 			externalPersonService.updatePersonFromExternalPerson(person,
-					externalPerson,false);
+					externalPerson,commitPerson);
 			return additionalAttribsForStudent(person);
 		}
 	}

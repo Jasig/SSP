@@ -414,7 +414,7 @@ public class ExternalPersonServiceImpl
 
 	private Person getCoach(final String coachId) {
 		try {
-			return personService.getBySchoolId(coachId);
+			return personService.getBySchoolId(coachId,false);
 		} catch (final ObjectNotFoundException e) {
 			LOGGER.warn(
 					"Coach referenced in external table not available in system",

@@ -260,7 +260,7 @@ public class PersonEarlyAlertController extends
 		try {
 			personId = UUID.fromString(studentId); // NOPMD by jon.adams
 		} catch (final IllegalArgumentException exc) {
-			final Person person = personService.getBySchoolId(studentId);
+			final Person person = personService.getBySchoolId(studentId,false);
 
 			if (person == null) {
 				throw new ObjectNotFoundException(

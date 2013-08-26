@@ -195,7 +195,7 @@ public class PersonController extends AbstractBaseController {
 	PersonTO bySchoolId(final @PathVariable String id)
 			throws ObjectNotFoundException {
 
-		final Person model = service.getBySchoolId(id);
+		final Person model = service.getBySchoolId(id,false);
 		if (model == null) {
 			return null;
 		}
