@@ -389,10 +389,22 @@ public class PersonServiceImpl implements PersonService {
 		} catch ( ConstraintViolationException e ) {
 			final String constraintName = e.getConstraintName();
 			if ( "uq_person_school_id".equals(constraintName) ) {
+				try {
+					person = dao.getBySchoolId(obj.getSchoolId());
+				} catch (ObjectNotFoundException e1) {
+					//if we can't find the person by school_id after tripping this constraint, we're in big trouble
+					LOGGER.error("Unrecoverable error while trying to create person with school_id: "+obj.getSchoolId()+" Username: "+obj.getUsername());
+				}
 				throw new PersonExistsException(PersonExistsException.ERROR_CONSTRAINT_VIOLATION_SCHOOL_ID,person.getId(), person.getUsername(), person.getSchoolId(),  obj.getUsername(), obj.getSchoolId(), person.getFullName());
-
+ 
 			}
 			if ( "unique_person_username".equals(constraintName) ) {
+				try {
+					person = dao.getByUsername(obj.getUsername());
+				} catch (ObjectNotFoundException e1) {
+					//if we can't find the person by Username after tripping this constraint, we're in big trouble
+					LOGGER.error("Unrecoverable error while trying to create person with school_id: "+obj.getSchoolId()+" Username: "+obj.getUsername());
+				}
 				throw new PersonExistsException(PersonExistsException.ERROR_CONSTRAINT_VIOLATION_USERNAME,person.getId(), person.getUsername(), person.getSchoolId(),  obj.getUsername(), obj.getSchoolId(), person.getFullName());
 			}
 			throw e;
