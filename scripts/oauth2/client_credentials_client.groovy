@@ -37,7 +37,8 @@ site.auth.basic 'dmac', 'foo'
 
 //def body = [grant_type:'client_credentials']
 def accessToken
-site.post(path: '/ssp/api/oauth/token',
+//site.post(path: '/ssp/api/oauth/token',
+site.post(path: '/ssp/api/1/oauth2/token',
             body: [grant_type:'client_credentials'],
             requestContentType: URLENC ) { resp, reader ->
 //
@@ -78,16 +79,16 @@ site.get(path: '/ssp/api/1/person',
 //
 //}
 
-site.request ( POST, JSON ) { req ->
-    uri.path = '/ssp/api/1/reference/earlyAlertOutcome/'
-    headers.'Authorization' = "Bearer ${accessToken}"
-
-    body = '{"name":"foo 3","description":"bar 3"}'
-    response.success = { resp, json ->
-        System.out << "EA Outcome response: " << json
-        println()
-    }
-}
+//site.request ( POST, JSON ) { req ->
+//    uri.path = '/ssp/api/1/reference/earlyAlertOutcome/'
+//    headers.'Authorization' = "Bearer ${accessToken}"
+//
+//    body = '{"name":"foo 3","description":"bar 3"}'
+//    response.success = { resp, json ->
+//        System.out << "EA Outcome response: " << json
+//        println()
+//    }
+//}
 
 ///ssp/api/1/reference/earlyAlertOutcome/
 //POST

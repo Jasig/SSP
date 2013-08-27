@@ -35,8 +35,8 @@
 
 	<global-method-security pre-post-annotations="enabled" />
 
-	<http pattern="/api/oauth/token" create-session="stateless" authentication-manager-ref="oauth2ClientAuthenticationManager">
-		<intercept-url pattern="/api/oauth/token" access="IS_AUTHENTICATED_FULLY" />
+	<http pattern="/api/*/oauth2/token" create-session="stateless" authentication-manager-ref="oauth2ClientAuthenticationManager">
+		<intercept-url pattern="/api/*/oauth2/token" access="IS_AUTHENTICATED_FULLY" />
 		<anonymous enabled="false" />
 		<http-basic entry-point-ref="oauth2ClientAuthenticationEntryPoint" />
 		<access-denied-handler ref="oauth2AccessDeniedHandler" />
