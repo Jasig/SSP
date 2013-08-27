@@ -97,8 +97,6 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 			success: function(response, view) {
 				if(persistMethod == "PUT") {
 					var r = Ext.decode(response.responseText);
-					record.commit();
-					editor.grid.getStore().sync();
 					record.persisted = true;
 				} else {
 					var r = Ext.decode(response.responseText);
