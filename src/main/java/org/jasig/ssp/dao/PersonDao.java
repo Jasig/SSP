@@ -172,6 +172,26 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 
 		return person;
 	}
+	
+	
+	public Person getByUsername(final String username)
+			throws ObjectNotFoundException {
+
+		if (!StringUtils.isNotBlank(username)) {
+			throw new IllegalArgumentException("username can not be empty.");
+		}
+
+		final Person person = (Person) createCriteria().add(
+				Restrictions.eq("username", username)).uniqueResult();
+
+		if (person == null) {
+			throw new ObjectNotFoundException(
+					"Person not found with username: " + username,
+					Person.class.getName());
+		}
+
+		return person;
+	}
 
 	/**
 	 * Retrieves a List of People, likely used by the Address Labels Report

@@ -389,10 +389,26 @@ public class PersonServiceImpl implements PersonService {
 		} catch ( ConstraintViolationException e ) {
 			final String constraintName = e.getConstraintName();
 			if ( "uq_person_school_id".equals(constraintName) ) {
-				throw new PersonExistsException(PersonExistsException.ERROR_CONSTRAINT_VIOLATION_SCHOOL_ID,person.getId(), person.getUsername(), person.getSchoolId(),  obj.getUsername(), obj.getSchoolId(), person.getFullName());
+				person = withTransaction.withNewTransactionAndUncheckedExceptionsReadOnly(new Callable<Person>() {
+
+					@Override
+					public Person call() throws Exception {
+						return dao.getByUsername(obj.getUsername());
+					}
+				});
+				throw new PersonExistsException(PersonExistsException.ERROR_CONSTRAINT_VIOLATION_USERNAME,person.getId(), person.getUsername(), person.getSchoolId(),  obj.getUsername(), obj.getSchoolId(), person.getFullName());
 
 			}
+			
 			if ( "unique_person_username".equals(constraintName) ) {
+				person = withTransaction.withNewTransactionAndUncheckedExceptionsReadOnly(new Callable<Person>() {
+
+					@Override
+					public Person call() throws Exception {
+						dao.getBySchoolId(obj.getSchoolId());
+						return dao.getBySchoolId(obj.getSchoolId());
+					}
+				});
 				throw new PersonExistsException(PersonExistsException.ERROR_CONSTRAINT_VIOLATION_USERNAME,person.getId(), person.getUsername(), person.getSchoolId(),  obj.getUsername(), obj.getSchoolId(), person.getFullName());
 			}
 			throw e;
