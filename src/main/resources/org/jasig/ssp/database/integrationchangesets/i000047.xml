@@ -45,7 +45,6 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 			</sqlCheck>
 			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
 			</sqlCheck>
-			<indexExists indexName="formatted_course_idx"/>
 		</preConditions>		
 		
 		<createIndex tableName="external_student_transcript_course" indexName="formatted_course_idx" >
