@@ -577,20 +577,6 @@
                             <goal>create</goal>
                        </goals>
                      </execution>
-                     <execution>
-                       <id>generate-timestamp</id>
-                       <phase>validate</phase>
-                       <goals>
-                           <goal>create</goal>
-                       </goals>
-                       <configuration>
-                           <format>{0,date,MMddyyyyHHmmss}</format>
-                           <items>
-                               <item>timestamp</item>
-                           </items>
-                           <buildNumberPropertyName>buildDateTime</buildNumberPropertyName>
-                       </configuration>
-                     </execution>
                 </executions>
 			</plugin>
 			<plugin>
@@ -763,7 +749,7 @@
 							<version>${project.version}</version>
 							<SSP-Artifact>${project.groupId}:${project.artifactId}</SSP-Artifact>
 							<SSP-Artifact-Version>${project.version}</SSP-Artifact-Version>
-							<SSP-Build-Date>${buildDateTime}</SSP-Build-Date>
+							<SSP-Build-Date>${timestamp}</SSP-Build-Date>
 							<SSP-SCM-Revision>${buildNumber}</SSP-SCM-Revision>
 						</manifestEntries>
 					</archive>

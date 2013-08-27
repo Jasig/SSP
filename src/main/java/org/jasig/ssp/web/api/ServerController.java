@@ -183,7 +183,6 @@ public class ServerController extends AbstractBaseController {
 			}
 
 			this.versionProfile = tmpVersionProfile; // lets not cache it until we're sure we loaded everything
-            convertBuildDate();
 
 		} finally {
 			if ( mfStream != null ) {
@@ -194,31 +193,38 @@ public class ServerController extends AbstractBaseController {
 		}
 	}
 
-    private void convertBuildDate() {
-        if ( versionProfile != null && versionProfile.containsKey(SSP_BUILD_DATE_ENTRY_NAME) ) {
-            int buildDateConvertToInt = 0;
+    private Long convertBuildDate( final String date ) {
 
-            try {
-                String dateToConvert =
-                        versionProfile.get(SSP_BUILD_DATE_ENTRY_NAME).toString().replaceAll("[^\\d]","");
-                buildDateConvertToInt = Integer.parseInt(dateToConvert);
-            } catch (NumberFormatException e) {
-                //Do nothing at this time
-            }
-
-            versionProfile.put(SSP_BUILD_DATE_ENTRY_NAME, buildDateConvertToInt);
+        try {
+            return Long.parseLong( date.replaceAll("[\\D+]", "") );
+        } catch (NullPointerException n) {
+            return null;
+        } catch (NumberFormatException e) {
+            return null;
         }
     }
 
-	private boolean isWellKnownEntryName(String extEntryName) {
-		return ENTRY_NAME_MAPPINGS.containsKey(extEntryName);
-	}
+    private boolean isWellKnownEntryName(String extEntryName) {
+        return ENTRY_NAME_MAPPINGS.containsKey(extEntryName);
+    }
 
-	private void mapWellKnownEntryName(String extEntryName,
-									String value,
-									Map<String, Object> into) {
-		into.put(ENTRY_NAME_MAPPINGS.get(extEntryName), value);
-	}
+    private void mapWellKnownEntryName(String extEntryName,
+                                       String value,
+                                       Map<String, Object> into) {
+
+        if ( extEntryName.equals(BUILD_DATE_ENTRY_NAME) ) {
+
+            Long valueBuildDateInt = convertBuildDate(value);
+
+            if ( valueBuildDateInt != null ) {
+                into.put(ENTRY_NAME_MAPPINGS.get(extEntryName),valueBuildDateInt);
+            }
+
+        } else {
+            into.put(ENTRY_NAME_MAPPINGS.get(extEntryName), value);
+        }
+
+    }
 
 	@Override
 	protected Logger getLogger() {
