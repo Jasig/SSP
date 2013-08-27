@@ -49,6 +49,9 @@ Ext.define('Ssp.controller.admin.apikey.oauth2.EditOAuth2ClientAdminViewControll
         },
         deselectAllPermissions: {
             click: 'onDeselectAllPermissions'
+        },
+        showPermissions: {
+            click: 'onShowHidePermissions'
         }
     },
     allAuthorities: [],
@@ -114,10 +117,35 @@ Ext.define('Ssp.controller.admin.apikey.oauth2.EditOAuth2ClientAdminViewControll
         me.getAuthorities().setValue({authorities: null});
     },
 
+    onShowHidePermissions: function() {
+        var me = this;
+        me.togglePermissionsVisibility(!(me.getAuthorities().isVisible()));
+    },
+
+    hidePermissions: function() {
+        var me = this;
+        if ( !(me.getAuthorities().isVisible()) ) {
+            return;
+        }
+        me.togglePermissionsVisibility(false);
+    },
+
+    togglePermissionsVisibility: function(visible) {
+        var me = this;
+        me.getAuthorities().setVisible(visible);
+        me.getSelectAllPermissions().setVisible(visible);
+        me.getDeselectAllPermissions().setVisible(visible);
+        me.getShowPermissions().toggleText();
+    },
+
     initFormSuccess: function() {
         var me = this;
         var view = me.getView();
         view.getForm().loadRecord(view.client);
+        // If permissions checkbox group is hidden when the form tries to
+        // load the record nothing will end up checked. So wait to hide
+        // the permissions until the form is initialized.
+        me.hidePermissions();
         me.getView().setLoading(false);
     },
 

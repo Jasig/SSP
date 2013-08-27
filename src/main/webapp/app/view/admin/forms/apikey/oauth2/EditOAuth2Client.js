@@ -176,13 +176,30 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                     items: [
                         {
                             xtype: 'button',
+                            text: 'Hide Permissions',
+                            itemId: 'showPermissions',
+                            nextText: 'Show Permissions',
+                            toggleText: function() {
+                                var me = this;
+                                var nextNext = me.getText();
+                                me.setText(me.nextText);
+                                me.nextText = nextNext;
+                            },
+                            margin: '0 5 0 0'
+                        },
+                        {
+                            xtype: 'button',
                             text: 'Select All Permissions',
-                            itemId: 'selectAllPermissions'
+                            itemId: 'selectAllPermissions',
+                            hidden: true,
+                            margin: '0 5 0 5'
                         },
                         {
                             xtype: 'button',
                             text: 'Deselect All Permissions',
-                            itemId: 'deselectAllPermissions'
+                            itemId: 'deselectAllPermissions',
+                            hidden: true,
+                            margin: '0 0 0 5'
                         }
                     ]
                 },
@@ -190,7 +207,7 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                     xtype: 'checkboxgroup',
                     fieldLabel: 'Permissions',
                     labelWidth: 100,
-                    anchor: '60%',
+                    anchor: '70%',
                     itemId: 'authorities',
                     columns: 3, // 'auto' blows up
                     vertical: true
