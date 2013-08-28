@@ -688,37 +688,9 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         dataIndex: 'hexCode',
                         renderer: me.columnRendererUtils.renderHex,
                         required: true,
-                        editor: Ext.create('Ext.form.TriggerField', {
-                            onTriggerClick: function(e){
-                                var triggerField = this;
-                                var colorPicker = Ext.create('Ext.picker.Color', {
-                                    style: {
-                                        backgroundColor: "#fff"
-                                    },
-                                    listeners: {
-                                        scope: me,
-                                        select: function(picker, selColor){
-                                            triggerField.setValue(selColor);
-                                            window.close();
-                                        }
-                                    }
-                                });
-                                var window = Ext.create('Ext.window.Window', {
-                                    title: 'Select Color',
-                                    resizable: false,
-                                    draggable: false,
-                                    closeAction: 'hide',
-                                    width: 150,
-                                    height: 135,
-                                    border: false,
-                                    hidden: true,
-                                    layout: 'fit',
-                                    floating: true,
-                                    items: [colorPicker]
-                                });
-                                window.show();
-                            }
-                        }),
+                        field: {
+                            xtype: 'sspcolorpicker'
+                        },
                         flex: .20
                     }, {
                         header: 'Description',

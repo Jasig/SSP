@@ -654,6 +654,11 @@
                     "path": "/app/store/"
                 },
                 {
+                    "clsName": "Ssp.view.admin.forms.ColorPicker",
+                    "name": "ColorPicker.js",
+                    "path": "/app/view/admin/forms/"
+                },
+                {
                     "clsName": "Ssp.store.admin.AdminTreeMenus",
                     "name": "AdminTreeMenus.js",
                     "path": "/app/store/admin/"

@@ -25,6 +25,7 @@ Ext.Loader.setConfig({
 });
 
 Ext.require([
+    'Ssp.view.admin.forms.ColorPicker',
     'Ssp.view.admin.AdminMain',
     'Ssp.view.admin.AdminTreeMenu',
     'Ssp.view.admin.AdminForms',
