@@ -213,13 +213,21 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 			report.setStudentTranscript(externalStudentTranscriptService, externalStudentFinancialAidService);
 			report.setCurrentRegistrationStatus(registrationStatusByTermService);
 			report.setLastTermGPAAndLastTermRegistered(externalStudentTranscriptTermService, currentTerm);
-			report.setCurrentProgramStatusCode(ProgramStatus.PROGRAM_STATUS_CODES.get(report.getProgramStatusId().toString()));
+			report.setCurrentProgramStatusCode(programStatusCodeOrNull(report));
 		}
 		
 		SearchParameters.addStudentCount(compressedReports, parameters);
 
 		generateReport(response, parameters, compressedReports, reportType.equals("pdf") ? REPORT_URL_PDF : REPORT_URL_CSV, reportType, REPORT_FILE_TITLE);
 
+	}
+
+	private String programStatusCodeOrNull(BaseStudentReportTO report) {
+		if ( report.getProgramStatusId() == null ) {
+			return null;
+		}
+		String statusIdStr = report.getProgramStatusId().toString();
+		return ProgramStatus.PROGRAM_STATUS_CODES.get(statusIdStr);
 	}
 
 	@Override
