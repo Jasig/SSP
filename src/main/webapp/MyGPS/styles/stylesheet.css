@@ -247,7 +247,7 @@
 }
 .task-list .tasks-listview-container {
   position: relative;
-  height: 552px;
+  height: 562px;
   overflow-x: hidden;
   overflow-y: auto;
   border: 1px solid #000;
@@ -293,7 +293,7 @@
 }
 .task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text {
   height: 85px;
-  padding: 0px 13px 6px 21px;
+  padding: 0px 13px 6px 11px;
 }
 .task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text .task {
   padding: 0px 0px 7px 0px;
@@ -312,8 +312,8 @@
   font-size: 13px;
 }
 .task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text .task .task-description {
-  height: 60px;
-  line-height: 21px;
+  height: 40px;
+  line-height: 30px;
   white-space: normal;
 }
 .task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text .task .task-date {
@@ -326,7 +326,7 @@
   margin: 0px;
 }
 .task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text .task .ui-btn .ui-btn-inner {
-  padding: 5px 33px 6px 33px;
+  padding: 5px 23px 6px 23px;
 }
 .task-list .ui-listview .ui-btn.ui-li .ui-btn-inner.ui-li .ui-btn-text .task .ui-btn .ui-btn-inner .ui-btn-text {
   font-size: 13px;
