@@ -28,7 +28,7 @@ Ext.define('Ssp.view.StudentRecord', {
         Ext.apply(this, {
             title: '',
             collapsible: true,
-            collapseDirection: 'right',
+            collapseDirection: 'left',
             cls: 'studentpanel',
             layout: {
                 type: 'hbox',

@@ -270,6 +270,14 @@ background:#ffff00 !important;
 	padding-left: 15px;
 }
 
+.studentpanel .x-tool-collapse-left, .x-tool-over  {
+	background-position: -15px -165px;
+}
+
+.studentpanel .x-tool-expand-right, .x-tool-over  {
+	background-position: 0px -180px;
+}
+
 .configgrid .x-grid-row .x-grid-cell-inner {
     white-space: normal;
 }
