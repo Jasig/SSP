@@ -286,7 +286,7 @@
 
 
 <div class="hideable-form counselor-case-management-report" style="display:none">
-	<h1>Coach Case Management Report</h1>
+	<h1>Counselor Case Management Report</h1>
 	<form action="/ssp/api/1/report/pretransitioned" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">
 
