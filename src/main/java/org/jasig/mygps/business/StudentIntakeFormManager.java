@@ -1536,12 +1536,13 @@ public class StudentIntakeFormManager { // NOPMD
 					.getFormQuestionById(
 							SECTION_EDUCATIONGOAL_QUESTION_MAJOR_ID)
 					.getValue()));			
-
+			
 			studentEducationGoal.setDescription(educationGoalSection
 					.getFormQuestionById(
-							SECTION_EDUCATIONGOAL_QUESTION_GOALDESCRIPTION_ID)
+							SECTION_EDUCATIONGOAL_QUESTION_OTHERDESCRIPTION_ID)
 					.getValue());
-
+			
+			
 			studentEducationGoal
 					.setMilitaryBranchDescription(educationGoalSection
 							.getFormQuestionById(
@@ -1566,8 +1567,6 @@ public class StudentIntakeFormManager { // NOPMD
 							SECTION_EDUCATIONGOAL_QUESTION_COURSEWORK_LOAD_ID)
 					.getValue());			
 
-			// TODO Add EducationGoal.OtherDescription field
-			// studentEducationGoal.setOtherDescription(educationGoalSection.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_OTHERDESCRIPTION_ID).getValue());
 
 			String majorSureOfValue = educationGoalSection.getFormQuestionById(
 					SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID)
