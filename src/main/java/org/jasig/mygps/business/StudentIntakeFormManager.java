@@ -310,6 +310,8 @@ public class StudentIntakeFormManager { // NOPMD
 			.fromString("4e3eceb7-a832-43b9-bccd-151e77fd3a84");
 	public static final UUID SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_DECIDED_ID = UUID
 			.fromString("3af3632e-d26c-11e1-b2df-0026b9e7ff4c");	
+	public static final UUID SECTION_EDUCATIONGOAL_QUESTION_MAJOR_ID = UUID
+			.fromString("c0a8017b-409b-13b6-8140-9bc1143b0000");	
 	public static final UUID SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_ID = UUID
 			.fromString("6dda82d4-5f6a-4187-bf56-4d26730be054");
 	public static final UUID SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_SUREOF_ID = UUID
@@ -860,6 +862,11 @@ public class StudentIntakeFormManager { // NOPMD
 			 * student.getEducationGoal().getOtherDescription());
 			 */
 
+			//Planned Major
+			
+			formSectionTO.getFormQuestionById(
+					SECTION_EDUCATIONGOAL_QUESTION_MAJOR_ID).setValue(
+					student.getEducationGoal().getPlannedMajor());			
 			// Sure of Major
 			formSectionTO.getFormQuestionById(
 					SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID).setValueInt(
@@ -1503,18 +1510,16 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO educationGoalQuestion = educationGoalSection
 				.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID);
 
-		if ((studentEducationGoal == null)
-				&& (educationGoalQuestion.getValue() != null)) {
+		if (studentEducationGoal == null) {
 			studentEducationGoal = new PersonEducationGoal();
 			student.setEducationGoal(studentEducationGoal);
 		}
 
-		if (studentEducationGoal != null) {
 			final Collection<EducationGoal> educationGoals = educationGoalService
 					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))
 					.getRows();
 			for (final EducationGoal eg : educationGoals) {
-				if (eg.getName().equals(
+				if (educationGoalQuestion.getValue() != null && eg.getName().equals(
 						educationGoalQuestion.getFormOptionByValue(
 								educationGoalQuestion.getValue()).getLabel())) {
 					studentEducationGoal.setEducationGoal(educationGoalService
@@ -1526,6 +1531,11 @@ public class StudentIntakeFormManager { // NOPMD
 					.getFormQuestionById(
 							SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_ID)
 					.getValue());
+			
+			studentEducationGoal.setPlannedMajor((educationGoalSection
+					.getFormQuestionById(
+							SECTION_EDUCATIONGOAL_QUESTION_MAJOR_ID)
+					.getValue()));			
 
 			studentEducationGoal.setDescription(educationGoalSection
 					.getFormQuestionById(
@@ -1579,8 +1589,7 @@ public class StudentIntakeFormManager { // NOPMD
 					educationGoalSection.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_COMPATIBLE_ID).getValue()));
 			
 			studentEducationGoalDao.save(studentEducationGoal);
-		}
-
+ 
 		/* Funding */
 		final FormSectionTO fundingSection = formTO
 				.getFormSectionById(SECTION_FUNDING_ID);
@@ -2713,6 +2722,17 @@ public class StudentIntakeFormManager { // NOPMD
 						+ SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID + "')");
 
 		eduGoalSectionQuestions.add(otherQuestion);
+
+		
+		// Planned Major
+		final FormQuestionTO plannedMajorQuestion = new FormQuestionTO();
+
+		plannedMajorQuestion
+				.setId(SECTION_EDUCATIONGOAL_QUESTION_MAJOR_ID);
+		plannedMajorQuestion.setLabel("What is your planned major?");
+		plannedMajorQuestion.setMaximumLength("50");
+		plannedMajorQuestion.setType(FORM_TYPE_TEXTINPUT);
+		eduGoalSectionQuestions.add(plannedMajorQuestion);
 
 		// Major Certainty
 		final FormQuestionTO majorCertaintyQuestion = new FormQuestionTO();
