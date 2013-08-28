@@ -103,15 +103,15 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				        fieldLabel: 'What grade did you typically earn at your highest level of education?',
 				        columns: 1,
 				        items: [
-				            {boxLabel: 'A', name: 'gradeTypicallyEarned', inputValue: "A"},
-				            {boxLabel: 'A-B', name: 'gradeTypicallyEarned', inputValue: "AB"},
-				            {boxLabel: 'B', name: 'gradeTypicallyEarned', inputValue: "B"},
-				            {boxLabel: 'B-C', name: 'gradeTypicallyEarned', inputValue: "BC"},
-				            {boxLabel: 'C', name: 'gradeTypicallyEarned', inputValue: "C"},
-				            {boxLabel: 'C-D', name: 'gradeTypicallyEarned', inputValue: "CD"},
-				            {boxLabel: 'D', name: 'gradeTypicallyEarned', inputValue: "D"},
-				            {boxLabel: 'D-F', name: 'gradeTypicallyEarned', inputValue: "DF"},
-				            {boxLabel: 'F', name: 'gradeTypicallyEarned', inputValue: "F"}
+				            {boxLabel: 'A', name: 'gradeTypicallyEarned', inputValue: "1"},
+				            {boxLabel: 'A-B', name: 'gradeTypicallyEarned', inputValue: "2"},
+				            {boxLabel: 'B', name: 'gradeTypicallyEarned', inputValue: "3"},
+				            {boxLabel: 'B-C', name: 'gradeTypicallyEarned', inputValue: "4"},
+				            {boxLabel: 'C', name: 'gradeTypicallyEarned', inputValue: "5"},
+				            {boxLabel: 'C-D', name: 'gradeTypicallyEarned', inputValue: "6"},
+				            {boxLabel: 'D', name: 'gradeTypicallyEarned', inputValue: "7"},
+				            {boxLabel: 'D-F', name: 'gradeTypicallyEarned', inputValue: "8"},
+				            {boxLabel: 'F', name: 'gradeTypicallyEarned', inputValue: "9"}
 				    		]
 				    }]
 				    }]
