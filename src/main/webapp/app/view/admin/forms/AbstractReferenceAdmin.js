@@ -53,10 +53,6 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
 	    										item.store.clearFilter(true);
 	    									}			
 	    								});
-	    								
-	    								if( sort ) {
-	    									store.sort(sort.field, sort.direction);
-	    								}	    					        
 	    							}
     							}
     					});
