@@ -331,7 +331,7 @@ public class StudentIntakeFormManager { // NOPMD
 	public static final UUID SECTION_FUNDING_QUESTION_OTHER_ID = UUID
 			.fromString("f6f60253-e62c-4f6c-898b-0392b43bf2d5");
 	public static final UUID SECTION_FUNDING_OTHER_FUNDING_SOURCE_ID = UUID
-			.fromString("B2D05DEC-5056-A51A-8001-FE8BDD379C5B");
+			.fromString("365e8c95-f356-4f1f-8d79-4771ae8b0291");
 
 	// Challenge
 	public static final UUID SECTION_CHALLENGE_ID = UUID
@@ -2939,9 +2939,9 @@ public class StudentIntakeFormManager { // NOPMD
 		otherQuestion.setType(FORM_TYPE_TEXTINPUT);
 		otherQuestion.setRequired(true);
 		// DEPENDENCY -> otherQuestion shown when fundingQuestionTO value is
-		// 'B2D05DEC-5056-A51A-8001FE8BDD379C5B'
+		// '365e8c95-f356-4f1f-8d79-4771ae8b0291'
 		otherQuestion
-				.setVisibilityExpression("hasValueForQuestionId('B2D05DEC-5056-A51A-8001FE8BDD379C5B', '"
+				.setVisibilityExpression("hasValueForQuestionId('365e8c95-f356-4f1f-8d79-4771ae8b0291', '"
 						+ SECTION_FUNDING_QUESTION_FUNDING_ID + "')");
 
 		fundingSectionQuestions.add(otherQuestion);
