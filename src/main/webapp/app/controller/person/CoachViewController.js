@@ -70,11 +70,16 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 					// were "demoted" in the directory system. So, we query to get all
 					// coaches.
 					var currentCoachId = me.person.getCoachId();				
-					if ( !(me.coachesStore.getById(currentCoachId)) ) {						
-						me.lookupMissingCoach(currentCoachId, me.afterMissingCoachLookup, me);
-					} else {						
-						me.getCoachCombo().setValue( me.person.getCoachId() );	
-					}
+
+					//Don't look up or put in combo if ID is not valid
+                    if ( currentCoachId ) {
+                        if ( !(me.coachesStore.getById(currentCoachId)) ) {
+                            console.log("here missing coach");
+                            me.lookupMissingCoach(currentCoachId, me.afterMissingCoachLookup, me);
+                        } else {
+                            me.getCoachCombo().setValue( me.person.getCoachId() );
+                        }
+                    }
 				} 
 			}
 		 });
