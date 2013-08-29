@@ -19,6 +19,7 @@
 package org.jasig.ssp.model;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -35,11 +36,11 @@ public class JournalEntryDetail
 
 	private static final long serialVersionUID = 8777376050728633364L;
 
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "journal_entry_id", nullable = false, updatable = false)
 	private JournalEntry journalEntry;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "journal_step_journal_step_detail_id", nullable = false, updatable = false)
 	private JournalStepJournalStepDetail journalStepJournalStepDetail;
 
