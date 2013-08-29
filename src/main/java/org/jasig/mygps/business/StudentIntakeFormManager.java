@@ -331,7 +331,7 @@ public class StudentIntakeFormManager { // NOPMD
 	public static final UUID SECTION_FUNDING_QUESTION_OTHER_ID = UUID
 			.fromString("f6f60253-e62c-4f6c-898b-0392b43bf2d5");
 	public static final UUID SECTION_FUNDING_OTHER_FUNDING_SOURCE_ID = UUID
-			.fromString("365e8c95-f356-4f1f-8d79-4771ae8b0291");
+			.fromString("B2D05DEC-5056-A51A-8001-FE8BDD379C5B");
 
 	// Challenge
 	public static final UUID SECTION_CHALLENGE_ID = UUID
@@ -387,6 +387,16 @@ public class StudentIntakeFormManager { // NOPMD
 		formTO.setCompleted(completed);
         if(!completed)
         {
+        
+        //blow away old data to be sure we have a tabula rasa
+    	student.setDemographics(null);
+    	student.setEducationGoal(null);
+    	student.setEducationPlan(null);
+    	student.getChallenges().clear();
+    	student.getFundingSources().clear();
+    	student.getEducationLevels().clear();        	
+        	
+        	
         	
 		/* Confidentiality disclosure */
 
@@ -1510,16 +1520,18 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO educationGoalQuestion = educationGoalSection
 				.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID);
 
-		if (studentEducationGoal == null) {
+		if ((studentEducationGoal == null)
+				&& (educationGoalQuestion.getValue() != null)) {
 			studentEducationGoal = new PersonEducationGoal();
 			student.setEducationGoal(studentEducationGoal);
 		}
 
+		if (studentEducationGoal != null) {
 			final Collection<EducationGoal> educationGoals = educationGoalService
 					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))
 					.getRows();
 			for (final EducationGoal eg : educationGoals) {
-				if (educationGoalQuestion.getValue() != null && eg.getName().equals(
+				if (eg.getName().equals(
 						educationGoalQuestion.getFormOptionByValue(
 								educationGoalQuestion.getValue()).getLabel())) {
 					studentEducationGoal.setEducationGoal(educationGoalService
@@ -1536,13 +1548,12 @@ public class StudentIntakeFormManager { // NOPMD
 					.getFormQuestionById(
 							SECTION_EDUCATIONGOAL_QUESTION_MAJOR_ID)
 					.getValue()));			
-			
+
 			studentEducationGoal.setDescription(educationGoalSection
 					.getFormQuestionById(
-							SECTION_EDUCATIONGOAL_QUESTION_OTHERDESCRIPTION_ID)
+							SECTION_EDUCATIONGOAL_QUESTION_GOALDESCRIPTION_ID)
 					.getValue());
-			
-			
+
 			studentEducationGoal
 					.setMilitaryBranchDescription(educationGoalSection
 							.getFormQuestionById(
@@ -1567,6 +1578,8 @@ public class StudentIntakeFormManager { // NOPMD
 							SECTION_EDUCATIONGOAL_QUESTION_COURSEWORK_LOAD_ID)
 					.getValue());			
 
+			// TODO Add EducationGoal.OtherDescription field
+			// studentEducationGoal.setOtherDescription(educationGoalSection.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_OTHERDESCRIPTION_ID).getValue());
 
 			String majorSureOfValue = educationGoalSection.getFormQuestionById(
 					SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID)
@@ -1588,7 +1601,8 @@ public class StudentIntakeFormManager { // NOPMD
 					educationGoalSection.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_COMPATIBLE_ID).getValue()));
 			
 			studentEducationGoalDao.save(studentEducationGoal);
- 
+		}
+
 		/* Funding */
 		final FormSectionTO fundingSection = formTO
 				.getFormSectionById(SECTION_FUNDING_ID);
@@ -2939,9 +2953,9 @@ public class StudentIntakeFormManager { // NOPMD
 		otherQuestion.setType(FORM_TYPE_TEXTINPUT);
 		otherQuestion.setRequired(true);
 		// DEPENDENCY -> otherQuestion shown when fundingQuestionTO value is
-		// '365e8c95-f356-4f1f-8d79-4771ae8b0291'
+		// 'B2D05DEC-5056-A51A-8001FE8BDD379C5B'
 		otherQuestion
-				.setVisibilityExpression("hasValueForQuestionId('365e8c95-f356-4f1f-8d79-4771ae8b0291', '"
+				.setVisibilityExpression("hasValueForQuestionId('B2D05DEC-5056-A51A-8001FE8BDD379C5B', '"
 						+ SECTION_FUNDING_QUESTION_FUNDING_ID + "')");
 
 		fundingSectionQuestions.add(otherQuestion);
