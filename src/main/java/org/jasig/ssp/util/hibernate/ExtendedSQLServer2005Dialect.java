@@ -44,4 +44,62 @@ public class ExtendedSQLServer2005Dialect extends SQLServer2005Dialect {
 	public ViolatedConstraintNameExtracter getViolatedConstraintNameExtracter() {
 		return MS_SQL_EXTRACTER;
 	}
+
+	/**
+	 * Overriden to deal with <a href="https://issues.jasig.org/browse/SSP-1681">SSP-1681</a>.
+	 * Had to copy paste the entire thing, unfortunately, because what we
+	 * really needed to do was override {@code insertRowNumberFunction()},
+	 * which was static.
+	 *
+	 * @param querySqlString
+	 * @param hasOffset
+	 * @return
+	 */
+	@Override
+	public String getLimitString(String querySqlString, boolean hasOffset) {
+		StringBuilder sb = new StringBuilder( querySqlString.trim().toLowerCase() );
+
+		int orderByIndex = sb.indexOf( "order by" );
+		CharSequence orderby = orderByIndex > 0 ? sb.subSequence( orderByIndex, sb.length() )
+				: "ORDER BY CURRENT_TIMESTAMP";
+
+		// Delete the order by clause at the end of the query
+		if ( orderByIndex > 0 ) {
+			sb.delete( orderByIndex, orderByIndex + orderby.length() );
+		}
+
+		// HHH-5715 bug fix
+		replaceDistinctWithGroupBy( sb );
+
+		insertRowNumberFunctionOverride( sb, orderby );
+
+		// Wrap the query within a with statement:
+		sb.insert( 0, "WITH query AS (" ).append( ") SELECT * FROM query " );
+		sb.append( "WHERE __hibernate_row_nr__ >= ? AND __hibernate_row_nr__ < ?" );
+
+		return sb.toString();
+	}
+
+	/**
+	 * Actually an override of
+	 * {@link SQLServer2005Dialect#insertRowNumberFunctionOverride}, which
+	 * is static. (Had to change the name else the compiler will complain.)
+	 *
+	 * <p>Fixes <a href="https://issues.jasig.org/browse/SSP-1681">SSP-1681</a></p>
+	 *
+	 * @param sql
+	 * @param orderby
+	 */
+	protected void insertRowNumberFunctionOverride(StringBuilder sql, CharSequence orderby) {
+		// Find the end of the select statement but be sure to skip any
+		// subselects that might be in the column list, but don't skip *into*
+		// subselects in the table list. We happen to know that subselects in
+		// the column list are named with the substring "formula", so find
+		// the last one of those, then the first occurrance of "from" after that
+		int lastFormulaIndex = Math.max(0, sql.lastIndexOf( "formula" ));
+		int selectEndIndex = sql.indexOf("from", lastFormulaIndex); // FROM constant is private in SQLServer2005Dialect, alas
+
+		// Insert after the select statement the row_number() function:
+		sql.insert( selectEndIndex - 1, ", ROW_NUMBER() OVER (" + orderby + ") as __hibernate_row_nr__" );
+	}
 }
