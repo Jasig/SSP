@@ -25,8 +25,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -85,18 +88,12 @@ public class StudentDocumentServiceImpl extends AbstractAuditableCrudService<Stu
 	
 	@Value("#{configProperties.student_documents_file_types}")
 	private  String studentDocumentsFileTypes  = "";
+
+	private Set<String> fileTypes;
 	
 	private List<String> volumes = new ArrayList<String>();
-	
-	private List<String> fileTypes = new ArrayList<String>();
-	
-	private String fileTypeRegex = "";
 
-	
 	private static int lastVolumeIndex = 0;
-
-	private String regexTemplate = "([^\\.]+(\\.(?i)(:fileTypes))$)";;
-
 
 	private void initVolumes() {
 		
@@ -115,27 +112,22 @@ public class StudentDocumentServiceImpl extends AbstractAuditableCrudService<Stu
 	}
 	
 	private void initFileTypes() {
-		
-		if(StringUtils.isEmpty(getStudentDocumentsFileTypes()))
-		{
-			fileTypes.add("");
-		}
-		else
-		{
-			StringTokenizer tokenizer = new StringTokenizer(getStudentDocumentsFileTypes(), ",");
-			while(tokenizer.hasMoreElements())
-			{
-				fileTypes.add((String) tokenizer.nextElement());
+		// Tree set since we happen to dump this set out onto the screen when
+		// there's a problem, so it's nice to have the accepted file types
+		// sorted
+		fileTypes = new TreeSet<String>();
+		if(!(StringUtils.isEmpty(getStudentDocumentsFileTypes()))) {
+			String[] tokenizedTypes = getStudentDocumentsFileTypes().split(",");
+			for ( String type : tokenizedTypes ) {
+				type = StringUtils.trimToNull(type);
+				if ( type != null ) {
+					if ( type.startsWith(".") ) {
+						type = type.substring(1);
+					}
+					fileTypes.add(type.replaceFirst("\\.", ""));
+				}
 			}
 		}
-		StringBuilder builder = new StringBuilder();
-		for (String fileType : fileTypes) {
-			//we assume format is without .  ei gif not .gif
-			builder.append(fileType+"|");
-		}
-		builder.deleteCharAt(builder.lastIndexOf("|"));
-		
-		fileTypeRegex = StringUtils.replace(regexTemplate, ":fileTypes", builder.toString());
 	}
 	
 	@Override
@@ -234,13 +226,24 @@ public class StudentDocumentServiceImpl extends AbstractAuditableCrudService<Stu
 	
 	private synchronized void validateFile(CommonsMultipartFile file) {
 		//validate file extension 
-		if(fileTypes.isEmpty())
+		if(fileTypes == null)
 		{
 			initFileTypes();
 		}
-		boolean match = Pattern.matches(fileTypeRegex, file.getOriginalFilename());
-		if(!match)
-			throw new IllegalArgumentException("File type not accepted.  Please try one of these types: "+fileTypes.toString());
+		if ( fileTypes.isEmpty() ) {
+			throw new IllegalArgumentException("File upload is disabled because no accepted file types have been configured.");
+		}
+		String fname = file.getOriginalFilename().trim();
+		int extDelimIdx = fname.lastIndexOf(".");
+		if ( extDelimIdx < 0 ) {
+			throw new IllegalArgumentException("File type not accepted.  Please try one of these types: "+fileTypes);
+		}
+		if ( extDelimIdx == fname.length() - 1 ) {
+			throw new IllegalArgumentException("File type not accepted.  Please try one of these types: "+fileTypes);
+		}
+		if ( !(fileTypes.contains(fname.substring(extDelimIdx + 1))) ) {
+			throw new IllegalArgumentException("File type not accepted.  Please try one of these types: "+fileTypes);
+		}
 	}
 
 	public SecurityService getSecurityService() {
@@ -277,11 +280,11 @@ public class StudentDocumentServiceImpl extends AbstractAuditableCrudService<Stu
 		return studentDocumentsVolumes;
 	}
 
-	public  List<String> getFileTypes() {
+	public  Set<String> getFileTypes() {
 		return fileTypes;
 	}
 
-	public  void setFileTypes(List<String> fileTypes) {
+	public  void setFileTypes(Set<String> fileTypes) {
 		this.fileTypes = fileTypes;
 	}
 
