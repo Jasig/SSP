@@ -379,7 +379,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.getPlanNotesButton().setTooltip(tooltip);
 			return;
 		}
-        me.getPlanNotesButton().setIcon(Ssp.util.Constants.ADD_PLAN_NOTE_ICON_PATH);
 	},
 
     onUpdateSaveOption: function(){
