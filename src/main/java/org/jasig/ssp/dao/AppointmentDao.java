@@ -47,7 +47,7 @@ public class AppointmentDao
 		query.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
 
 		// only return the most recently modified appointment
-		query.addOrder(Order.asc("modifiedDate"));
+		query.addOrder(Order.desc("modifiedDate"));
 		query.setMaxResults(1);
 
 		return (Appointment) query.uniqueResult();
