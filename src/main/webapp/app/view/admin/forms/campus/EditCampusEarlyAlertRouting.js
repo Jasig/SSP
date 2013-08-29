@@ -24,8 +24,9 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
     controller: 'Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewController',
     inject: {
     	earlyAlertReasonsStore: 'earlyAlertReasonsAllUnpagedStore',
-    	peopleSearchLiteStore: 'peopleSearchLiteStore',
-    	sspConfig: 'sspConfig'
+    	coachesStore: 'coachesStore',
+    	sspConfig: 'sspConfig',
+    	personService: 'personService'
     },
 	title: 'Edit Routing Group',
 	initComponent: function() {
@@ -64,27 +65,17 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
 			        maxLength: 100,
 			        allowBlank: false
                 },{
-		            xtype: 'combo',
-		            store: me.peopleSearchLiteStore,
+		            xtype: 'combobox',
+		            store: me.coachesStore,
 		            itemId: 'personCombo',
-		            displayField: 'displayFullName',
-		            emptyText: 'Name or ' + me.sspConfig.get('studentIdAlias'),
+		            displayField: 'fullName',
+		            emptyText: 'Select One',
 		            valueField:'id',
-		            typeAhead: false,
+		            typeAhead: true,
 		            fieldLabel: 'Person',
-		            hideTrigger:true,
-		            queryParam: 'searchTerm',
+		            queryMode: 'local',
 		            allowBlank: false,
-		            width: 500,
-
-		            listConfig: {
-		                loadingText: 'Searching...',
-		                emptyText: 'No matching people found.',
-		                getInnerTpl: function() {
-		                    return '{firstName} {lastName}';
-		                }
-		            },
-		            pageSize: 10
+		            width: 300
 		        }],
             
             dockedItems: [{

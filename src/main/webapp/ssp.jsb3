@@ -562,12 +562,7 @@
                     "clsName": "Ssp.model.PersonLite",
                     "name": "PersonLite.js",
                     "path": "/app/model/"
-                },
-                {
-                    "clsName": "Ssp.model.PersonSearchLite",
-                    "name": "PersonSearchLite.js",
-                    "path": "/app/model/"
-                },
+                },            
                 {
                     "clsName": "Ssp.model.tool.accommodation.PersonDisabilityType",
                     "name": "PersonDisabilityType.js",
@@ -662,12 +657,7 @@
                     "clsName": "Ssp.store.admin.AdminTreeMenus",
                     "name": "AdminTreeMenus.js",
                     "path": "/app/store/admin/"
-                },
-                {
-                    "clsName": "Ssp.store.PeopleSearchLite",
-                    "name": "PeopleSearchLite.js",
-                    "path": "/app/store/"
-                },
+                },              
                 {
                     "clsName": "Ssp.store.Search",
                     "name": "Search.js",

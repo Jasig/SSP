@@ -24,7 +24,7 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
     	formUtils: 'formRendererUtils',
     	model: 'currentCampusEarlyAlertRouting',
     	campus: 'currentCampus',
-    	peopleSearchLiteStore: 'peopleSearchLiteStore',
+    	coachesStore: 'coachesStore',
     	service: 'campusEarlyAlertRoutingService',
         personService: 'personService'
     },
@@ -45,13 +45,12 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
     },
     
 	init: function() {
-		var me=this;
-		me.getView().setLoading(true);
+		var me=this;		
 		me.getView().getForm().reset();
+		me.missingEaRoutingPerson = null;
+		me.coachesStore = me.getView().coachesStore;
 
-		if (me.model.get('id'))
-		{
-
+		if ( me.model.get('id') ) {
 			me.filterEarlyAlertReasonsForEdit();
 
 			// needs to be loaded before the person lookup callbacks, which
@@ -68,23 +67,69 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
             // PersonSearchLite mapped from EA routing JSON model. Should
             // be much more efficient. But not sure about unexpected
             // compatibility problems with peopleSearchLiteStore.
-			var person = me.model.get('person');
-            if ( person && person.id ) {
-                me.getView().setLoading(true);
-                me.personService.getSearchLite(person.id, {
-                    success: me.routingPersonLookupSuccess,
-                    failure: me.routingPersonLookupFailure,
-                    scope: me
-                });
-            }
+			// EDIT: The above no longer is true. SSP-1408 Changes Person field 
+			// from search to combobox for coaches only.
+			var personToLookUp = me.model.get('person');
+            if ( personToLookUp && personToLookUp.id ) {                
+                if ( !(me.coachesStore.getById(personToLookUp.id)) ) {
+                	
+                	me.lookupMissingEaRoutingPerson(personToLookUp.id, 
+                			me.afterMissingEaRoutingPersonLookup, me );
+                } else {
+                    me.getPersonCombo().setValue(personToLookUp.id);
+                	me.showForm();
+                }
+             }            
 		} else {
-			me.filterEarlyAlertReasonsForCreate();
-			me.getView().getForm().loadRecord( me.model );
+			me.filterEarlyAlertReasonsForCreate();			
 			me.showForm();
 		}
 
-
 		return me.callParent(arguments);
+    },
+    
+    lookupMissingEaRoutingPerson: function(eaRoutingId, after, afterScope) {
+    	var me = this;
+    	me.missingEaRoutingPerson = Ext.create('Ssp.model.Coach', { 
+    		id: eaRoutingId,
+    		firstName: "UNKNOWN",
+    		lastName: "PERSON"
+    	});
+    	me.personService.getLite(eaRoutingId, {
+    		success: function(person) {
+    			if ( person ) {
+    				me.missingEaRoutingPerson = Ext.create('Ssp.model.Coach', {
+    					id: person.id,
+    					firstName: person.firstName,
+    					lastName: person.lastName    					
+    				});
+    me.getPersonCombo().setValue(person.id);			}
+    			after.apply(afterScope);
+    		},
+    		failure: function() {
+    			//most likely can just proceed
+    			after.apply(afterScope);
+    		}
+    	});    	
+    },
+    
+    afterMissingEaRoutingPersonLookup: function() {
+    	var me = this;
+    	var coachStore = me.getView().coachesStore;
+    	coachStore.add(me.missingEaRoutingPerson);
+    	coachStore.sort('lastName', 'ASC');
+    	me.getPersonCombo().setValue(me.missingEaRoutingPerson);
+    	me.showForm();
+    },
+    
+    maybeClearMissingEaRoutingPerson: function() {
+    	var me = this;
+    	if ( me.missingEaRoutingPerson ) {
+    		var coachStore = me.getView().coachesStore;
+    		coachStore.remove(me.missingEaRoutingPerson);
+    		coachStore.sort('lastName', 'ASC');
+    		me.missingEaRoutingPerson = null;
+    	}
     },
 
 	initEarlyAlertReasonsStore: function(postProcess, postProcessScope) {
@@ -113,24 +158,9 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 		}, me);
 	},
 
-    routingPersonLookupSuccess: function( r, scope ){
-    	var me=scope;
-    	if (r && r.id )
-    	{
-    		me.peopleSearchLiteStore.loadData([r]);
-    		me.getPersonCombo().setValue(me.model.get('person').id);
-    	}
-		me.showForm();
-    },
-
-    routingPersonLookupFailure: function( response, scope ){
-    	var me=scope;
-    	me.showForm();
-    },
-
 	showForm: function() {
 		var me = this;
-		me.getView().setLoading(false);
+		me.getView().getForm().loadRecord( this.model );
 	},
     
 	onSaveClick: function(button) {
@@ -142,9 +172,9 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 			me.getView().getForm().updateRecord();
 			record = me.model;			
 			jsonData = record.data;
-			
+
 			// set the selected person
-			if (me.getPersonCombo().value != "")
+			if ( me.getPersonCombo().value )
 			{
 				jsonData.person={ id:me.getPersonCombo().value };
 			}else{	
@@ -164,6 +194,7 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 
 	saveSuccess: function( r, scope ) {
 		var me=scope;
+		me.maybeClearMissingEaRoutingPerson();
 		me.getView().setLoading( false );
 		me.displayMain();
 	},
@@ -174,12 +205,15 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 	},
 	
 	onCancelClick: function(button){
-		this.displayMain();
+		var me = this;
+		me.maybeClearMissingEaRoutingPerson();
+		me.displayMain();
 	},
 
 	destroy: function() {
 		var me = this;
-		me.clearEarlyAlertReasonsFilters();
+		me.maybeClearMissingEaRoutingPerson();
+		me.clearEarlyAlertReasonsFilters();		
 		return me.callParent(arguments);
 	},
 
