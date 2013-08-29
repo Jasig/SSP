@@ -27,8 +27,7 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
     	earlyAlertCoordinatorsStore: 'coachesStore',
     	earlyAlertReasonsStore: 'earlyAlertReasonsStore',
     	formUtils: 'formRendererUtils',
-    	model: 'currentCampus',
-    	peopleStore: 'peopleStore'
+    	model: 'currentCampus'
     },
     config: {
     	containerToLoadInto: 'adminforms',
@@ -57,7 +56,6 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
 		me.campusesStore.load();
 		me.earlyAlertCoordinatorsStore.load();
 		me.earlyAlertReasonsStore.load();
-		me.peopleStore.load();
 		return this.callParent(arguments);
     },
 

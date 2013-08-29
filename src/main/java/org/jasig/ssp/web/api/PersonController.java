@@ -118,13 +118,21 @@ public class PersonController extends AbstractBaseController {
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection) {
-		// Run getAll
-		final PagingWrapper<Person> people = service.getAll(SortingAndPaging
-				.createForSingleSortWithPaging(status, start, limit, sort, sortDirection,
-						null));
 
-		return new PagedResponse<PersonTO>(true, people.getResults(),
-				factory.asTOList(people.getRows()));
+		// Performance is so terrible against a production-sized dataset that
+		// we've got to turn this op off.
+		throw new UnsupportedOperationException("The 'list all persons' API"
+				+ " is disabled. Consider /1/person/<id> or /1/person/search"
+				+ " and /1/person/students/search instead.");
+
+		// Leaving code commented out b/c we'll want to turn this back on once
+		// performance problems are sorted out.
+//		final PagingWrapper<Person> people = service.getAll(SortingAndPaging
+//				.createForSingleSortWithPaging(status, start, limit, sort, sortDirection,
+//						null));
+//
+//		return new PagedResponse<PersonTO>(true, people.getResults(),
+//				factory.asTOList(people.getRows()));
 	}
 
 	@RequestMapping(value = "/coach", method = RequestMethod.GET)
