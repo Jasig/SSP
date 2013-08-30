@@ -477,12 +477,15 @@ public class PlanController  extends AbstractBaseController {
 	 *            Explicit personId to the instance to persist.
 	 * @return The current plan status of the student.
 	 */
-	@PreAuthorize("hasRole('ROLE_PERSON_MAP_WRITE')")
-	@RequestMapping(value = "/planstatus", method = RequestMethod.POST)
+	@DynamicPermissionChecking
+	@RequestMapping(value = "/planstatus", method = RequestMethod.GET)
 	public @ResponseBody
-	ExternalPersonPlanStatusTO getPlanStatus(final HttpServletResponse response,
+	ExternalPersonPlanStatusTO getPlanStatus(
+			final HttpServletRequest request,
+			final HttpServletResponse response,
 			@PathVariable final UUID personId)
 			throws ObjectNotFoundException {
+		assertStandardMapReadApiAuthorization(request);
 		if(personId == null){
 			return null;
 		}

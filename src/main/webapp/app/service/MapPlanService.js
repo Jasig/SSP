@@ -357,7 +357,7 @@ Ext.define('Ssp.service.MapPlanService', {
 	    };
 		me.apiProperties.makeRequest({
    			url: url+'/planstatus',
-   			method: 'POST',
+   			method: 'GET',
    			successFunc: success,
    			failureFunc: failure,
    			scope: me
