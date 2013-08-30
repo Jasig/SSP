@@ -22,7 +22,7 @@ Ext.define('Ssp.controller.admin.apikey.oauth2.OAuth2ClientAdminViewController',
     inject: {
         apiProperties: 'apiProperties',
         store: 'oauth2ClientsStore',
-        formUtils: 'formRendererUtils',
+        formUtils: 'formRendererUtils'
     },
     config: {
         containerToLoadInto: 'adminforms',

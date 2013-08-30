@@ -375,6 +375,6 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
             return (fieldA > fieldB) ? 1 : 0;
         });
         return array; // just to make chaining easier
-    },
+    }
     
 });
