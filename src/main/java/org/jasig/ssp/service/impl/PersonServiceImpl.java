@@ -196,7 +196,7 @@ public class PersonServiceImpl implements PersonService {
 				throw new UnableToCreateAccountException(// NOPMD
 						"Unable to pull required attributes", onfe);
 			} catch (final PersonExistsException pee ) {
-				LOGGER.info("Tried to add a user that was already present {}",
+				LOGGER.info("Tried to add a user that was already present ({})",
 						username, pee);
 				throw pee;
 			} catch (final ConstraintViolationException sqlException) {
@@ -207,7 +207,7 @@ public class PersonServiceImpl implements PersonService {
 				// getConstraintName() will always be null.)
 				if (sqlException.getConstraintName().equalsIgnoreCase(
 						"unique_person_username")) {
-					LOGGER.info("Tried to add a user that was already present",
+					LOGGER.info("Tried to add a user that was already present ({})",
 							username, sqlException);
 
 					// SSP-397. Have to throw something to rollback the
