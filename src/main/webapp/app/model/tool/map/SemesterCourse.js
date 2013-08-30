@@ -84,7 +84,7 @@ Ext.define('Ssp.model.tool.map.SemesterCourse', {
 								me.set('hasPrerequisites', false);
 							
 						if(planCourse.invalidReasons)
-								me.set('description', planCourse.invalidReasons);		
+								me.set('invalidReasons', planCourse.invalidReasons);
 						if(planCourse.studentNotes)
 							me.set('studentNotes', planCourse.studentNotes);	
 						if(planCourse.contactNotes)
