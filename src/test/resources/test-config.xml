@@ -83,8 +83,10 @@
 				<entry key="set.mssql.snapshot.isolation" value="#{configProperties.db_liquibase_set_mssql_snapshot_isolation}" />
 				<entry key="database.timezone.legacy" value="#{configProperties.db_time_zone_legacy}" />
 				<entry key="database.timezone" value="#{configProperties.db_time_zone}" />
+				<entry key="database.schema" value="#{configProperties['db_schema']?:(configProperties.db_dialect matches '^.*Postgre.*$' ? 'public' : 'dbo')}" />
 			</util:map>
 		</property>
+		<property name="defaultSchema" value="#{configProperties['db_schema']?:(configProperties.db_dialect matches '^.*Postgre.*$' ? 'public' : 'dbo')}" />
 	</bean>
 
 	<!-- Hibernate -->
@@ -183,6 +185,24 @@
 	<bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
 		<constructor-arg ref="ldapContextSource" />
 	</bean>
+
+	<bean id="oauth2PasswordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder">
+		<constructor-arg type="java.lang.CharSequence" value="#{configProperties.oauth2_client_password_encoding_secret}" />
+	</bean>
+
+	<bean id="oauth2PhysicalTokenStore" class="org.springframework.security.oauth2.provider.token.JdbcTokenStore">
+		<constructor-arg ref="sspDataSource" />
+	</bean>
+
+	<alias name="transactionalOAuth2TokenStore" alias="oauth2TokenStore" />
+
+	<bean id="oauth2TokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
+		<property name="tokenStore" ref="oauth2TokenStore" />
+		<property name="supportRefreshToken" value="false" />
+		<property name="clientDetailsService" ref="oauth2ClientDetailsService" />
+	</bean>
+
+	<bean id="mockServletContext" class="org.springframework.mock.web.MockServletContext" />
 	
 	<bean id="ldapPersonAttributesService" 
 			class="org.jasig.ssp.service.impl.LdapPersonAttributesService"/>

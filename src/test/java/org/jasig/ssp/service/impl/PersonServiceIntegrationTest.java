@@ -161,14 +161,14 @@ public class PersonServiceIntegrationTest {
 
 	@Test
 	public void getBySchoolIdKen() throws ObjectNotFoundException {
-		final Person person = service.getBySchoolId("ken.1");
+		final Person person = service.getBySchoolId("ken.1",false);
 		assertNotNull("should have found ken", person);
 		assertEquals("schoolid should be ken", "ken.1", person.getSchoolId());
 	}
 
 	@Test(expected = ObjectNotFoundException.class)
 	public void getBySchoolIdNotInSystem() throws ObjectNotFoundException {
-		service.getBySchoolId("borkborkbork");
+		service.getBySchoolId("borkborkbork",false);
 	}
 
 	@Test
@@ -177,7 +177,7 @@ public class PersonServiceIntegrationTest {
 				.getAll(new SortingAndPaging(
 						ObjectStatus.ACTIVE));
 
-		final Person person = service.getBySchoolId("notInSsp");
+		final Person person = service.getBySchoolId("notInSsp", true);
 
 		final PagingWrapper<Person> after = service
 				.getAll(new SortingAndPaging(

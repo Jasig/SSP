@@ -278,7 +278,7 @@ public class PersonServiceBulkCoachLookupIntegrationTest {
 
 		// this should create the person record
 		Person duplicatePerson =
-				personService.getBySchoolId(duplicatePersonSchoolId);
+				personService.getBySchoolId(duplicatePersonSchoolId, true);
 		assertNotNull(duplicatePerson); // sanity check
 		final Person jamesDoe = person(JAMES_DOE);
 		jamesDoe.setCoach(duplicatePerson);
@@ -303,7 +303,7 @@ public class PersonServiceBulkCoachLookupIntegrationTest {
 
 		// this should create the person record
 		Person duplicatePerson =
-				personService.getBySchoolId(duplicatePersonSchoolId);
+				personService.getBySchoolId(duplicatePersonSchoolId, true);
 		assertNotNull(duplicatePerson); // sanity check
 		final Person jamesDoe = person(JAMES_DOE);
 		jamesDoe.setCoach(duplicatePerson);
