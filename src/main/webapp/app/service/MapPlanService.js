@@ -279,15 +279,22 @@ Ext.define('Ssp.service.MapPlanService', {
 		var me = this;
     	me.outputMap(semesterStores, callbacks, outputData, 'print');
     },
-    
+    printCurrent: function(semesterStores, outputData, callbacks ){
+		var me = this;
+    	me.outputMap(semesterStores, callbacks, outputData, 'printCurrent');
+    },    
     email: function(semesterStores, outputData, callbacks ){
 		var me = this;
     	me.outputMap(semesterStores, callbacks, outputData, 'email');
     },
-    
+    emailCurrent: function(semesterStores, outputData, callbacks ){
+		var me = this;
+    	me.outputMap(semesterStores, callbacks, outputData, 'emailCurrent');
+    },
+        
     outputMap: function(semesterStores, callbacks, outputData, outputType){
     	var me=this;
-		var url = me.getBaseUrl(me.currentMapPlan.get('personId'));
+		var url = me.getBaseUrl(me.personLite.get('id'));
 	    var success = function( response ){
 			callbacks.success( response, callbacks.scope );
 	    };

@@ -297,6 +297,56 @@ public class PlanController  extends AbstractBaseController {
 		return null;
 	}
 
+	
+	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_MAP_READ')")
+	@RequestMapping(value = "/printCurrent", method = RequestMethod.POST)
+	public @ResponseBody
+	String printCurrent(final HttpServletResponse response, final @PathVariable UUID personId,
+			 @RequestBody final PlanOutputTO planOutputDataTO) throws ObjectNotFoundException {
+
+		Plan currentPlan = service.getCurrentForStudent(personId);
+		PlanTO planTO = getFactory().from(currentPlan);
+		planOutputDataTO.setPlan(planTO);
+		SubjectAndBody message = service.createOutput(planOutputDataTO);
+		if(message != null)
+			return message.getBody();
+		
+		return null;
+	}
+	
+	/**
+	 * Returns an html page valid for printing
+	 * <p>
+	 *
+	 * 
+	 * @param obj
+	 *            instance to print.
+	 * @return html text strem
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws SendFailedException 
+	 */
+	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_MAP_READ')")
+	@RequestMapping(value = "/emailCurrent", method = RequestMethod.POST)
+	public @ResponseBody
+	String email(final HttpServletResponse response, final @PathVariable UUID personId,
+			 @RequestBody final PlanOutputTO planOutputDataTO) throws ObjectNotFoundException {
+		
+		
+		Plan currentPlan = service.getCurrentForStudent(personId);
+		PlanTO planTO = getFactory().from(currentPlan);
+		planOutputDataTO.setPlan(planTO);
+		
+		SubjectAndBody messageText = service.createOutput(planOutputDataTO);
+		if(messageText == null)
+			return null;
+
+	    messageService.createMessage(planOutputDataTO.getEmailTo(), 
+							planOutputDataTO.getEmailCC(),
+							messageText);
+		
+		return "Map Plan has been queued.";
+	}	
 	/**
 	 * Returns an html page valid for printing
 	 * <p>
