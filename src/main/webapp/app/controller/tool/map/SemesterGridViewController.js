@@ -87,6 +87,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     
     onDrop: function(node, data, overModel, dropPosition, eOpts){
 		var me = this;
+		me.getView().setLoading(true);
 		var previousSemesterPanel = data.view.findParentByType("semesterpanel");
 		if(previousSemesterPanel != undefined && previousSemesterPanel != null){
     		me.droppedFromStore = data.view.getStore();
@@ -176,6 +177,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 	
     onValidateFailure: function(validate){
     	var me = this;
+    	
     	 me.getView().setLoading(false);
     },
     
