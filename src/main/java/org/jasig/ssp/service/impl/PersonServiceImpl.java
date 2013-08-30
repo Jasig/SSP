@@ -186,37 +186,19 @@ public class PersonServiceImpl implements PersonService {
 				person.setPrimaryEmailAddress(attr.getPrimaryEmailAddress());
 
 				// try to create the person
-				try {
-					person = create(person);
-					externalPersonService.updatePersonFromExternalPerson(person);
-					LOGGER.info("Successfully Created Account for {}",
-							username);
-				} catch (final PersonExistsException oee) {
-					if ( oee.getCause() instanceof ConstraintViolationException ) {
-						throw (ConstraintViolationException)oee.getCause();
-					}
-
-					LOGGER.info("Failed to create Account for username {}"
-							+ " and schoolId {}. This is usually just an"
-							+ " innocent result of multiple requests"
-							+ " attempting to lazily create a first-time"
-							+ " user at the same moment. Will attempt to"
-							+ " use an existing user with that username.",
-							new Object[] { username, attr.getSchoolId(), oee });
-
-					// Else don't have to give up in the same way do in the
-					// ConstraintViolationException catch below b/c we happen to
-					// know an insert hasn't been attempted yet under the
-					// current create() impl.
-					person = personFromUsername(username);
-				}
+				person = create(person);
+				externalPersonService.updatePersonFromExternalPerson(person);
+				LOGGER.info("Successfully Created Account for {}", username);
 
 			} catch (final ObjectNotFoundException onfe) {
 				// personAttributesService may throw this exception, if so,
 				// we can't create the user.
 				throw new UnableToCreateAccountException(// NOPMD
 						"Unable to pull required attributes", onfe);
-
+			} catch (final PersonExistsException pee ) {
+				LOGGER.info("Tried to add a user that was already present {}",
+						username, pee);
+				throw pee;
 			} catch (final ConstraintViolationException sqlException) {
 				// if we received a constraintViolationException of
 				// unique_person_username, then the user might have been
@@ -225,7 +207,8 @@ public class PersonServiceImpl implements PersonService {
 				// getConstraintName() will always be null.)
 				if (sqlException.getConstraintName().equalsIgnoreCase(
 						"unique_person_username")) {
-					LOGGER.info("Tried to add a user that was already present");
+					LOGGER.info("Tried to add a user that was already present",
+							username, sqlException);
 
 					// SSP-397. Have to throw something to rollback the
 					// transaction, else Spring/Hib will attempt a commit when

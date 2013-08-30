@@ -22,6 +22,7 @@ import java.util.Collection;
 
 import org.codehaus.plexus.util.StringUtils;
 import org.jasig.ssp.dao.ObjectExistsException;
+import org.jasig.ssp.dao.PersonExistsException;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.exception.EmailNotFoundException;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
@@ -89,6 +90,16 @@ public class UserDetailsService implements SspUserDetailsService {
 							+ " because an account with that username seemed"
 							+ " to already exist, but was unable to load that"
 							+ " existing account.", eee);
+				}
+			} catch ( PersonExistsException ee ) {
+				try {
+					person = personService.personFromUsername(username);
+				} catch ( ObjectNotFoundException eee ) {
+					throw new UnableToCreateAccountException(
+							"Couldn't create account with username" + username
+									+ " because an account with that username seemed"
+									+ " to already exist, but was unable to load that"
+									+ " existing account.", eee);
 				}
 			}
 		}
