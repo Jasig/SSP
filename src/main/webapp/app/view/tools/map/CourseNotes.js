@@ -118,6 +118,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                         displayField: 'name',
                         mode: 'local',
                         typeAhead: true,
+                        forceSelection: true,
                         allowBlank: true,
                         queryMode: 'local',
                         width: 250,
