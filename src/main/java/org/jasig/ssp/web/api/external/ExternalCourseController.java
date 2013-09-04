@@ -131,11 +131,11 @@ public class ExternalCourseController extends AbstractExternalController<Externa
 		List<String> tags = service.getAllTagsForCourse(code);
 		StringBuilder tagBuilder = new StringBuilder();
 		for (String tag : tags) {
-			tagBuilder.append(tag+" ");
+			tagBuilder.append(tag+",");
 		}
 		externalCourseTO.setTags(tagBuilder.toString().trim());
 		//end Kludge.
-		return externalCourseTO;
+		return externalCourseTO; 
 	}
 	
 	@RequestMapping(value = "/validateTerm", method = RequestMethod.GET)

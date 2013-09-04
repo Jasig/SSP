@@ -64,7 +64,15 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 		strHtml += '</div>';
 	    return strHtml;	
 	},	
-	
+	renderTags: function(val, metaData, record) {
+		var tags = record.get("tags");
+		if(tags && tags.indexOf(",") > 0)
+		{
+			var numTags = tags.split(",").length-1;
+			tags = numTags+' tags';
+		};
+	    return tags;	
+	},	
 	renderConfidentialityLevelName: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
         strHtml += '<p>' + record.get('confidentialityLevel').name.toUpperCase() + '</p>';

@@ -22,7 +22,8 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.map.CoursesGridController',
 	inject: {
-	        store: 'coursesStore'
+	        store: 'coursesStore',
+			columnRendererUtils : 'columnRendererUtils'
 	},
 
     width: 290,
@@ -82,6 +83,7 @@ Ext.define('Ssp.view.tools.map.CoursesGrid', {
                          {
                              xtype: 'gridcolumn',
                               dataIndex: 'tags',
+                              renderer: me.columnRendererUtils.renderTags,                              
                               text: 'Tags',
                               width: 40
                           },

@@ -118,7 +118,7 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 			List<String> tags = getTagsForCourse(externalCourse.getCode());
 			StringBuilder tagBuilder = new StringBuilder();
 			for (String tagg : tags) {
-				tagBuilder.append(tagg+" ");
+				tagBuilder.append(tagg+",");
 			}
 			externalCourse.setPivotedTags(tagBuilder.toString());
 		}
@@ -136,7 +136,7 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 			List<String> tags = getTagsForCourse(externalCourse.getCode());
 			StringBuilder tagBuilder = new StringBuilder();
 			for (String tagg : tags) {
-				tagBuilder.append(tagg+" ");
+				tagBuilder.append(tagg+",");
 			}
 			externalCourse.setPivotedTags(tagBuilder.toString());
 		}
