@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.dao;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -114,7 +115,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 
 		final Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(Person.class);
-		query.add(Restrictions.eq("username", username)).setFlushMode(
+		query.add(Restrictions.eq("username", StringUtils.lowerCase(username))).setFlushMode(
 				FlushMode.COMMIT);
 		return (Person) query.uniqueResult();
 	}
@@ -182,7 +183,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		}
 
 		final Person person = (Person) createCriteria().add(
-				Restrictions.eq("username", username)).uniqueResult();
+				Restrictions.eq("username", StringUtils.lowerCase(username))).uniqueResult();
 
 		if (person == null) {
 			throw new ObjectNotFoundException(
@@ -265,8 +266,15 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	public PagingWrapper<CoachPersonLiteTO> getCoachPersonsLiteByUsernames(
 			final Collection<String> coachUsernames, final SortingAndPaging sAndP, final String homeDepartment) {
 		
+		List<String> normalizedCoachUsernames = new ArrayList<String>();
+		//Normalize usernames as per SSP-1733
+		for (String coachUsername : coachUsernames) 
+		{
+			normalizedCoachUsernames.add(StringUtils.lowerCase(coachUsername));
+		}
+		
 		Criteria criteria = createCriteria()
-				.add(Restrictions.in("username", coachUsernames));
+				.add(Restrictions.in("username", normalizedCoachUsernames));
 		
 		if(homeDepartment != null && homeDepartment.length() > 0){
 			criteria.createAlias("staffDetails", "personStaffDetails")
@@ -286,7 +294,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			criteria.createAlias("staffDetails", "personStaffDetails", JoinType.LEFT_OUTER_JOIN);
 		}
 		
-		criteria.add(Restrictions.in("username", coachUsernames))
+		criteria.add(Restrictions.in("username", normalizedCoachUsernames))
 				.setProjection(Projections.projectionList()
 						.add(Projections.property("id").as("person_id"))
 						.add(Projections.property("firstName").as("person_firstName"))

@@ -82,6 +82,10 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
 		me.courseDetailsPopUp.query("#departmentCode")[0].setValue(record.get("departmentCode"));
 		me.courseDetailsPopUp.query("#divisionCode")[0].setValue(record.get("divisionCode"));
 		me.courseDetailsPopUp.query("#tags")[0].setValue(record.get("tags"));
+		
+		
+		
+		
 		var masterSylComponent = me.courseDetailsPopUp.query("#mastersyllabus")[0];
 		if(!record.get("masterSyllabusLink") || record.get("masterSyllabusLink") =='')
 		{

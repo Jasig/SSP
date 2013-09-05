@@ -87,7 +87,7 @@ public class ExternalPersonDao extends AbstractExternalDataDao<ExternalPerson> {
 		}
 
 		final ExternalPerson obj = (ExternalPerson) createCriteria()
-				.add(Restrictions.eq("username", username)).uniqueResult();
+				.add(Restrictions.eq("username", username).ignoreCase()).uniqueResult();
 
 		if (obj == null) {
 			throw new ObjectNotFoundException(username,

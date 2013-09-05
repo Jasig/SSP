@@ -113,7 +113,7 @@ public class SecurityServiceImpl implements SecurityService {
 				sspUser = (SspUser) principal;
 			} else if (principal instanceof String) {
 
-				if (SspUser.ANONYMOUS_PERSON_USERNAME.equals(principal)) {
+				if (SspUser.ANONYMOUS_PERSON_USERNAME.equalsIgnoreCase(((String)principal))) {
 					sspUser = anonymousUser();
 				} else if ( auth instanceof OAuth2Authentication ) {
 					// Would rather not have this coupling to OAuth2 here, but
@@ -128,7 +128,7 @@ public class SecurityServiceImpl implements SecurityService {
 					// you'll get into an infinite loop if Hib tries to lookup
 					// a current user in persistence during a flush.
 					if ( currentSspUserFallback.get() == null ||
-							!(principal.equals(currentSspUserFallback.get().getUsername())) ) {
+							!(((String) principal).equalsIgnoreCase(currentSspUserFallback.get().getUsername())) ) {
 
 						// Careful! This will try to create a new Person record
 						// if it can't find one with the given username. This

@@ -125,8 +125,8 @@ public class ExternalPersonServiceImpl
 		}
 
 		if (person.getUsername() == null ||
-				(!person.getUsername().equals(externalPerson.getUsername()))) {
-			person.setUsername(externalPerson.getUsername());
+				(!person.getUsername().equalsIgnoreCase(externalPerson.getUsername()))) {
+			person.setUsername(StringUtils.lowerCase(externalPerson.getUsername()));
 		}
 
 		if ((person.getFirstName() == null) ||

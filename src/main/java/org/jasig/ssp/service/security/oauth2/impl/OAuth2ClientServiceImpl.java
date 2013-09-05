@@ -191,7 +191,7 @@ public class OAuth2ClientServiceImpl extends AbstractAuditableCrudService<OAuth2
 
 	private void invalidateAllTokensByClientId(String clientId) {
 		final Collection<OAuth2AccessToken> tokensByClientId =
-				consumerTokenService.findTokensByClientId(clientId);
+				consumerTokenService.findTokensByClientId(StringUtils.lowerCase(clientId));
 		for ( OAuth2AccessToken token : tokensByClientId ) {
 			consumerTokenService.revokeToken(token.getValue());
 		}
@@ -199,7 +199,7 @@ public class OAuth2ClientServiceImpl extends AbstractAuditableCrudService<OAuth2
 
 	private void invalidateClientOnlyTokensByClientId(String clientId) {
 		final Collection<OAuth2AccessToken> tokensByClientId =
-				consumerTokenService.findTokensByClientId(clientId);
+				consumerTokenService.findTokensByClientId(StringUtils.lowerCase(clientId));
 		for ( OAuth2AccessToken token : tokensByClientId ) {
 			final OAuth2Authentication authN =
 					resourceServerTokenService.loadAuthentication(token.getValue());
