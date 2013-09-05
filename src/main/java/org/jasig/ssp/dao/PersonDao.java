@@ -115,7 +115,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 
 		final Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(Person.class);
-		query.add(Restrictions.eq("username", username).ignoreCase()).setFlushMode(
+		query.add(Restrictions.eq("username", StringUtils.lowerCase(username))).setFlushMode(
 				FlushMode.COMMIT);
 		return (Person) query.uniqueResult();
 	}
