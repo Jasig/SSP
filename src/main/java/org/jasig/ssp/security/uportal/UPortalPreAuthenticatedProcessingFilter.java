@@ -132,7 +132,7 @@ public class UPortalPreAuthenticatedProcessingFilter extends GenericFilterBean
 		}
 
 		if (checkForPrincipalChanges &&
-				!currentUser.getName().equals(preAuthToken.getPrincipal())) {
+				!currentUser.getName().equalsIgnoreCase((String)preAuthToken.getPrincipal())) {
 			logger.debug("Pre-authenticated principal has changed to "
 					+ preAuthToken.getPrincipal()
 					+ " and will be reauthenticated");

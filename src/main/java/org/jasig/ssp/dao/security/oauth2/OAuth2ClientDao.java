@@ -33,7 +33,7 @@ public class OAuth2ClientDao extends AbstractAuditableCrudDao<OAuth2Client> {
 	}
 
 	public OAuth2Client findByClientId(String clientId) {
-		if (StringUtils.isBlank(clientId)) {
+		if (StringUtils.isBlank(StringUtils.lowerCase(clientId))) {
 			throw new IllegalArgumentException("username can not be empty.");
 		}
 

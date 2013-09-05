@@ -748,7 +748,7 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 	}
 
 	public void setUsername(@NotNull @NotEmpty final String username) {
-		this.username = username;
+		this.username = StringUtils.lowerCase(username);
 	}
 
 	public String getHomePhone() {
