@@ -97,30 +97,7 @@ public class MyGpsChallengeController extends AbstractBaseController {
 	List<ChallengeTO> search(@RequestParam("query") final String query)
 			throws Exception {
 		try {
-			final List<Challenge> challenges = challengeService
-					.challengeSearch(query);
-
-			final List<ChallengeTO> challengeTOs = Lists.newArrayList();
-
-			for (Challenge challenge : challenges) {
-				ChallengeTO challengeTO = challengeTOFactory.from(challenge);
-
-				List<ChallengeReferral> referrals = challengeReferralService
-						.byChallengeIdNotOnActiveTaskList(challenge,
-								securityService.currentUser().getPerson(),
-								securityService.getSessionId());
-				challengeTO
-						.setChallengeChallengeReferrals(challengeReferralTOFactory
-								.asTOList(referrals));
-				challengeTOs.add(challengeTO);
-			}
-
-			// TODO: (performance) Challenge search service does the
-			// byChallengeIdNotOnActiveTaskList lookup already but doesn't
-			// return the TOs so it has to be done again here. Or better yet,
-			// done as a database set operation instead.
-
-			return challengeTOs;
+			return challengeService.search(query);
 		} catch (Exception e) {
 			LOGGER.error("ERROR : search() : {}", e.getMessage(), e);
 			throw e;

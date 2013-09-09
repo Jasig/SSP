@@ -26,6 +26,7 @@ import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeChallengeReferral;
 import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.service.ReferenceService;
+import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
@@ -46,4 +47,6 @@ public interface ChallengeService extends ReferenceService<Challenge> {
 			ChallengeReferral referral, Challenge challenge);
 
 	PagingWrapper<Challenge> getAllForIntake(SortingAndPaging sAndP);
+
+	List<ChallengeTO> search(String query) throws Exception;
 }

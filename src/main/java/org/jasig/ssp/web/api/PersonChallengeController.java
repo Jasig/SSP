@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.web.api;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.jasig.ssp.factory.PersonChallengeTOFactory;
@@ -160,7 +161,21 @@ public class PersonChallengeController extends
 		return new PagedResponse<ChallengeTO>(true, data.getResults(),
 				challengeTOFactory.asTOList(data.getRows()));
 	}
+	
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	@DynamicPermissionChecking
+	public @ResponseBody
+	List<ChallengeTO> getChallengesForPerson(
+			@RequestParam("query") final String query)
+			throws Exception {
 
+		try {
+			return challengeService.search(query);
+		} catch (Exception e) {
+			LOGGER.error("ERROR : search() : {}", e.getMessage(), e);
+			throw e;
+		}
+	}
 	@Override
 	public String permissionBaseName() {
 		return "CHALLENGE";
