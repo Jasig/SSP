@@ -50,7 +50,7 @@ Ext.define('Ssp.view.StudentRecord', {
             },
 			{
 				xtype: 'tbspacer',
-                flex: .05
+                flex: .03
 			},
 			{
                 tooltip: 'Coaching History',
@@ -65,16 +65,19 @@ Ext.define('Ssp.view.StudentRecord', {
             }, 
 			{
                 xtype: 'tbspacer',
-                flex: .05
+                flex: .03
             },{
                 xtype: 'button',
                 itemId: 'studentRecordEditButton',
-                text: '<u>Edit</u>',
+                text: '',
                 tooltip: 'Edit Student',
-                height: 20,
-                width: 50,
-				cls: "makeTransparent"
+				cls: "editPerson20Icon",
+				width: 23
                 //hidden: !me.authenticatedPerson.hasAccess('EDIT_STUDENT_BUTTON')
+            },
+			{
+                xtype: 'tbspacer',
+                flex: .02
             }],
             items: [{
                 xtype: 'toolsmenu',

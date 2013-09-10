@@ -170,6 +170,14 @@ background: transparent;
 background-image: url('/ssp/images/edit-person-icon.png') !important;
 }
 
+.editPerson20Icon {
+background-image: url('/ssp/images/edit-person-icon_20.png') !important;
+background: transparent;
+border-style:none;
+background-repeat: no-repeat;
+
+}
+
 .emailIcon {
 background-image: url('/ssp/images/email-icon.png') !important;
 }
