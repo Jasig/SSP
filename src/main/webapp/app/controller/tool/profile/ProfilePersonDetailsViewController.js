@@ -157,6 +157,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         var fullName = me.person.getFullName();
 		var firstLastName = me.person.getFirstLastName();
         var coachName = me.person.getCoachFullName();
+		
+		var anticipatedStartYearTermField = Ext.ComponentQuery.query('#anticipatedStartYearTerm', me.getView())[0];
+		
         
         // load general student record
         me.getView().loadRecord(me.person);
@@ -177,6 +180,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         programStatusField.setValue('<span style="color:#15428B">SSP Status:  </span>' + me.handleNull(me.person.getProgramStatusName()));
         me.getRegisteredTermsField().setValue(me.person.get('registeredTerms'));
         me.getPaymentStatusField().setValue(me.handleNull(me.person.get('paymentStatus')));
+		
+		anticipatedStartYearTermField.setFieldLabel('');
+		anticipatedStartYearTermField.setValue('<span style="color:#15428B">Anticipated Start Year/Term:  </span>' + me.person.get('anticipatedStartYear') + '/' + me.person.get('anticipatedStartTerm'));
         
         var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
         var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];

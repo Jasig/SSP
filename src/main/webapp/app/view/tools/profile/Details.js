@@ -159,7 +159,13 @@ Ext.define('Ssp.view.tools.profile.Details', {
                     flex: .25,
                     height: '470',
                     margin: '0 0 10 0',
-                    items: [{
+                    items: [
+					{
+                        fieldLabel: 'Anticipated Start Year/Term',
+                        name: 'anticipatedStartYearTerm',
+                        itemId: 'anticipatedStartYearTerm'
+                    },
+					{
                         fieldLabel: 'GPA',
                         name: 'cumGPA',
                         itemId: 'cumGPA'
