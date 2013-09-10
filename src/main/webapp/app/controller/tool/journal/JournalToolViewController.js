@@ -67,7 +67,7 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		me.journalEntriesStore.removeAll();
 		
 		me.service.getAll( me.personLite.get('id'), {
-			success: me.getAllJournalEntriesSuccess,
+			success: me.getAllInitialJournalEntriesSuccess,
 			failure: me.getAllJournalEntriesFailure,
 			scope: me
 		});
@@ -111,6 +111,29 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 			me.journalEntriesStore.loadData(r.rows);
 			me.model.data = me.journalEntriesStore.getAt(0).data;
 			me.getView().getSelectionModel().select(0);			
+    	}
+		else{
+            // if no record is available 
+            var je = new Ssp.model.tool.journal.JournalEntry();
+    		me.model.data = je.data;
+			me.callDetails();
+        }
+		
+	},
+	
+	getAllInitialJournalEntriesSuccess: function( r, scope ) {
+		var me=scope;
+		me.getView().setLoading( false );
+    	if ( r.rows.length > 0 ) {
+    		me.journalEntriesStore.sort([
+		    {
+		        property : 'modifiedDate',
+		        direction: 'DESC'
+		    }]);
+			me.journalEntriesStore.loadData(r.rows);
+			var je = new Ssp.model.tool.journal.JournalEntry();
+    		me.model.data = je.data;
+			me.callDetails();	
     	}
 		else{
             // if no record is available 
