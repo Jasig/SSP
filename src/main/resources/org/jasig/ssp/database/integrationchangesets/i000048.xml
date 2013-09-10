@@ -49,15 +49,15 @@
 
 		<dropView viewName="v_external_student_transcript_course" />
 		
-		<addNotNullConstraint tableName="external_student_transcript_course" columnName="section_number" columnDataType="${nvarchar.type}(50)"/>
+		<addNotNullConstraint tableName="external_student_transcript_course" columnName="section_code" columnDataType="${nvarchar.type}(50)"/>
 		
-		<addUniqueConstraint tableName="external_student_transcript_course" columnNames="school_id,term_code,formatted_course,section_number"/>
+		<addUniqueConstraint tableName="external_student_transcript_course" columnNames="school_id,term_code,formatted_course,section_code"/>
 		
-		<addPrimaryKey tableName="external_student_transcript_course" columnNames="school_id,term_code,formatted_course,section_number"/>
+		<addPrimaryKey tableName="external_student_transcript_course" columnNames="school_id,term_code,formatted_course,section_code"/>
 		
 		
 		<createView viewName="v_external_student_transcript_course">
-			select school_id${concat.operator}term_code${concat.operator}formatted_course${concat.operator}section_number as id,*
+			select school_id${concat.operator}term_code${concat.operator}formatted_course${concat.operator}section_code as id,*
 			from external_student_transcript_course
 		</createView>
 		
@@ -77,7 +77,7 @@
 		<dropView viewName="v_external_student_transcript_course" />
 		
 		<createView viewName="v_external_student_transcript_course">
-			select school_id${concat.operator}term_code${concat.operator}formatted_course${concat.operator}${nullfunction}(section_number,'null') as id,*
+			select school_id${concat.operator}term_code${concat.operator}formatted_course${concat.operator}${nullfunction}(section_code,'null') as id,*
 			from external_student_transcript_course
 		</createView>
 		
