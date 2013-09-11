@@ -305,8 +305,8 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 		if(invalidReasons == null)
 			invalidReasons = new String();
 		else
-			this.invalidReasons = this.invalidReasons + " ";
-		this.invalidReasons = this.invalidReasons + invalidReasons;
+		if(this.invalidReasons.indexOf(invalidReasons) < 0)
+			this.invalidReasons = this.invalidReasons + " "+ invalidReasons;
 	}
 
 	/**
