@@ -528,7 +528,7 @@
       <column name='name' value='Arts Elective' />
       <column name='description' value='A Arts Elective' />
       <column name='code' value='ART' />
-      <column name='color_id' value='7f000101-3e62-19f8-813e-626ce6040000' />
+      <column name='color_id' value='ff5733f2-ba81-4daa-8c78-50915c935506' />
       <column name='sort_order' value='3' />
       <column name='created_date' value='2012-08-20T00:00:00' />
       <column name='modified_date' value='2012-08-20T00:00:00' />

@@ -109,7 +109,6 @@ class Constants{
 		"9a6b915b-91c8-49d5-8e1a-47c67c5aed59", //"SALMON"
 		"93e117d8-bd62-4bff-a812-94cae3a65a12", //"TAN"
 		"e0432f26-ba18-43bd-9475-d3cd899e2f8c", //"VIOLET"
-		"7f000101-3e62-19f8-813e-626ce6040000", //"MAROON"
 		"8442bfcc-b44c-4b70-a99c-2b67691568ae" //"AQUA"
 
 	]
