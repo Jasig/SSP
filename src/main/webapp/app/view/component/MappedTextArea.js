@@ -23,6 +23,7 @@ Ext.define('Ssp.view.component.MappedTextArea', {
 		parentId: null,
 		validationExpression: '[a-zA-Z]'
 	},
+	maxLength: 255,
 	initComponent: function() {	
 		return this.callParent(arguments);
 	}
