@@ -178,9 +178,15 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                                         		me = this;
 												var form = me.query('form')[0];
 												var record = new Ssp.model.tool.map.PlanOutputData();
-												form.getForm().updateRecord(record);
-                                        		me.appEventsController.getApplication().fireEvent(me.emailEvent, record);
-                                        		me.close();
+												var emailForm = form.getForm();
+												if ( emailForm.isValid()){
+													form.getForm().updateRecord(record);
+	                                        		me.appEventsController.getApplication().fireEvent(me.emailEvent, record);
+	                                        		me.close();
+												}
+												else{
+													Ext.Msg.alert('Error','Please correct the email address in this form.');
+												}
                                         	},
                                         	scope: me
                                         }
