@@ -38,7 +38,9 @@ Ext.define('Ssp.store.Tools', {
             { group:'rc1', name: "MAP", toolType: "map", active: true },
             { group:'rc1', name: "Accommodation", toolType: "accommodation", active: true },
             { group:'rc1', name: "Documents", toolType: "documents", active: true },
-			{ group:'rc1', name: "Notes", toolType: "personnotes", active: true }
+			{ group:'rc1', name: "Notes", toolType: "personnotes", active: true },
+			{ group:'rc1', name: "Caseload Reassign", toolType: "caseloadreassignment", active: true }
+			
 //            { group:'rc1', name: "", toolType: "earlyalert", active: false },
 //            { group:'rc1', name: "----------------", toolType: "earlyalert", active: false },
 //            { group:'rc1', name: "Config Link", toolType: "earlyalert", active: false },
