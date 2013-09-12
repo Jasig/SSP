@@ -101,7 +101,11 @@ Ext.define('Ssp.controller.ToolsViewController', {
         
         if (record.get('active') && me.personLite.get('id') != "" && skipCallBack) {
             this.loadTool(record.get('toolType'));
-        }       	
+        }
+        else
+        if(record.get('toolType') === 'caseloadreassignment' && skipCallBack) {
+            this.loadTool(record.get('toolType'));
+        }
     },
     
     loadTool: function(toolType){
