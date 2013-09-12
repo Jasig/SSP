@@ -71,22 +71,27 @@ Ext.define('Ssp.view.tools.accommodation.General', {
 				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
-				        allowBlank: true
+				        allowBlank: true,
+						editable: false
+						//forceSelection: true
                     },
                     {
                         xtype: 'textareafield',
                         fieldLabel: 'Please Explain Temporary Eligibility',
-                        name: 'tempEligibilityDescription'
+                        name: 'tempEligibilityDescription',
+						maxLength: 50
                     },
                     {
                         xtype: 'textfield',
                         name: 'intakeCounselor',
-                        fieldLabel: 'ODS Counselor'
+                        fieldLabel: 'ODS Counselor',
+						maxLength: 50
                     },
                     {
                         xtype: 'textfield',
                         name: 'referredBy',
-                        fieldLabel: 'Referred to ODS by'
+                        fieldLabel: 'Referred to ODS by',
+						maxLength: 50
                     }]
         });
 
