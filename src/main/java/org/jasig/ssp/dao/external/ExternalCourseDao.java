@@ -120,6 +120,10 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 			for (String tagg : tags) {
 				tagBuilder.append(tagg+",");
 			}
+			if(tagBuilder.length() > 0)
+			{
+				tagBuilder.deleteCharAt(tagBuilder.lastIndexOf(","));
+			}
 			externalCourse.setPivotedTags(tagBuilder.toString());
 		}
 		return result;
@@ -138,7 +142,10 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 			for (String tagg : tags) {
 				tagBuilder.append(tagg+",");
 			}
-			externalCourse.setPivotedTags(tagBuilder.toString());
+			if(tagBuilder.length() > 0)
+			{
+				tagBuilder.deleteCharAt(tagBuilder.lastIndexOf(","));
+			}			externalCourse.setPivotedTags(tagBuilder.toString());
 		}
 		ExternalCourseDao.courseCache.addAll(all);
 		lastCacheFlush = Calendar.getInstance();

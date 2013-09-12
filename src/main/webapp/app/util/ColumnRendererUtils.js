@@ -68,7 +68,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 		var tags = record.get("tags");
 		if(tags && tags.indexOf(",") > 0)
 		{
-			var numTags = tags.split(",").length-1;
+			var numTags = tags.split(",").length;
 			tags = numTags+' tags';
 		};
 	    return tags;	
