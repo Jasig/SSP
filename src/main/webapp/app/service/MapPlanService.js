@@ -281,7 +281,7 @@ Ext.define('Ssp.service.MapPlanService', {
     },
     printCurrent: function(semesterStores, outputData, callbacks ){
 		var me = this;
-    	me.outputMap(semesterStores, callbacks, outputData, 'printCurrent');
+    	me.outputCurrentMap(semesterStores, callbacks, outputData, 'printCurrent');
     },    
     email: function(semesterStores, outputData, callbacks ){
 		var me = this;
@@ -289,9 +289,28 @@ Ext.define('Ssp.service.MapPlanService', {
     },
     emailCurrent: function(semesterStores, outputData, callbacks ){
 		var me = this;
-    	me.outputMap(semesterStores, callbacks, outputData, 'emailCurrent');
+    	me.outputCurrentMap(semesterStores, callbacks, outputData, 'emailCurrent');
     },
-        
+    outputCurrentMap: function(semesterStores, callbacks, outputData, outputType){
+    	var me=this;
+		var url = me.getBaseUrl(me.personLite.get('id'));
+	    var success = function( response ){
+			callbacks.success( response, callbacks.scope );
+	    };
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	 
+	    	callbacks.failure(response, callbacks.scope);
+	    };
+	    outputData.set("plan",null);
+		me.apiProperties.makeRequest({
+   			url: url+'/' + outputType,
+   			method: 'POST',
+   			jsonData: outputData.data,
+   			successFunc: success,
+   			failureFunc: failure,
+   			scope: me
+   		});
+    },        
     outputMap: function(semesterStores, callbacks, outputData, outputType){
     	var me=this;
 		var url = me.getBaseUrl(me.personLite.get('id'));
