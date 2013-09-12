@@ -21,7 +21,7 @@ Ext.define('Ssp.view.component.MappedTextField', {
 	alias : 'widget.mappedtextfield',
 	config: {
 		parentId: null,
-		validationExpression: '[a-zA-Z]'
+		validationExpression: '[a-zA-Z0-9]'
 	},
 	initComponent: function() {	
 		return this.callParent(arguments);
