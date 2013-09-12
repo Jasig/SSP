@@ -68,22 +68,27 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
     		return;
     	}
     	
-		form.updateRecord(me.currentMapPlan);
-    	me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox[name=objectStatus]')[0].checked) ? 'ACTIVE' : 'INACTIVE');
-		me.setField('checkbox[name=isFinancialAid]', 'isFinancialAid');
-		me.setField('checkbox[name=isImportant]', 'isImportant');
-		me.setField('checkbox[name=isF1Visa]', 'isF1Visa');
-    	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
-		me.currentMapPlan.setIsTemplate(false);
-    	if(me.getView().saveAs)
-    	{
-    		me.appEventsController.getApplication().fireEvent('onSaveAsMapPlan');
-    	}
-    	else
-    	{
-    		me.appEventsController.getApplication().fireEvent('onSaveMapPlan');
-    	}
-    	me.onCancelClick();
+		var validateResult = me.formUtils.validateForms( form );
+		
+		if ( validateResult.valid )	{
+			form.updateRecord(me.currentMapPlan);
+			me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox[name=objectStatus]')[0].checked) ? 'ACTIVE' : 'INACTIVE');
+			me.setField('checkbox[name=isFinancialAid]', 'isFinancialAid');
+			me.setField('checkbox[name=isImportant]', 'isImportant');
+			me.setField('checkbox[name=isF1Visa]', 'isF1Visa');
+			me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+			me.currentMapPlan.setIsTemplate(false);
+			if (me.getView().saveAs) {
+				me.appEventsController.getApplication().fireEvent('onSaveAsMapPlan');
+			}
+			else {
+				me.appEventsController.getApplication().fireEvent('onSaveMapPlan');
+			}
+			me.onCancelClick();
+		}
+		else{
+			me.formUtils.displayErrors( validateResult.fields );
+		}
     },
     resetForm: function() {
         var me = this;
