@@ -96,14 +96,30 @@ public class ExternalPersonServiceImpl
 
 	@Override
 	public void updatePersonFromExternalPerson(final Person person) {
+		ExternalPerson externalPerson = null;
+		final String schoolId = person.getSchoolId();
+		final String username = person.getUsername();
 		try {
-			updatePersonFromExternalPerson(person, getBySchoolId(person.getSchoolId()),true);
+			externalPerson = getBySchoolId(schoolId);
 		} catch ( ObjectNotFoundException e ) {
-			LOGGER.debug("Skipping external data sync for "
-					+ "person [id: {}] [schoolId: {}] because "
-					+ "there is no corresponding external record.",
-					person.getId(), person.getSchoolId());
+			try {
+				externalPerson = getByUsername(username);
+			} catch ( ObjectNotFoundException ee ) {
+				// see below
+			}
 		}
+
+		if ( externalPerson != null ) {
+			updatePersonFromExternalPerson(person,externalPerson,true);
+		} else {
+			LOGGER.debug("Skipping external data sync for "
+					+ "person [id: {}] [schoolId: {}] [username: {}]  because "
+					+ "there is no corresponding external record under either key.",
+					new Object[] {
+							person.getId(), schoolId, username
+					});
+		}
+
 	}
 
 	/**
@@ -120,7 +136,15 @@ public class ExternalPersonServiceImpl
 				"Person and ExternalPerson Sync.  Person school id {}, username {}",
 				person.getSchoolId(), person.getUsername());
 
-		if (person.getSchoolId() == null) {
+		// Allow ExternalPerson.schoolId to override that Person field since
+		// the ExternalPerson might have been looked up by username rather than
+		// schoolId and Person.schoolId is not necessarily trustworthy on 1st
+		// time login (https://issues.jasig.org/browse/SSP-1750).
+		//
+		// Comparison here is intentionally case-sensitive pending
+		// https://issues.jasig.org/browse/SSP-1735
+		if (person.getSchoolId() == null ||
+				(!person.getSchoolId().equals(externalPerson.getSchoolId()))) {
 			person.setSchoolId(externalPerson.getSchoolId());
 		}
 
