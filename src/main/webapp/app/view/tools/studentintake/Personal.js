@@ -242,7 +242,8 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        fieldLabel: 'Country',
 				        name: 'alternateAddressCountry',
 				        allowBlank:true,
-				        itemId: 'alternateAddressCountry'
+				        itemId: 'alternateAddressCountry',
+						maxLength: 50
 				    }]
 				    }]
 				});
