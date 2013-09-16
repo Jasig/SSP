@@ -129,11 +129,21 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
-				        allowBlank: true
+				        allowBlank: true,
+						forceSelection: true,
+						listeners:{
+							'change': function() {
+								if (this.getValue() === null) {
+    								this.reset();
+  								}
+							}
+						}
+						
 					},{
 				        fieldLabel: 'Country of citizenship',
 				        itemId: 'countryOfCitizenship',
-				        name: 'countryOfCitizenship'
+				        name: 'countryOfCitizenship',
+						maxLength: 50
 				    },{
 				        xtype: 'combobox',
 				        name: 'militaryAffiliationId',
@@ -145,7 +155,15 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
-				        allowBlank: true
+				        allowBlank: true,
+						forceSelection: true,
+						listeners:{
+							'change': function() {
+								if (this.getValue() === null) {
+    								this.reset();
+  								}
+							}
+						}
 					},{
 				        xtype: 'combobox',
 				        name: 'veteranStatusId',
@@ -157,7 +175,15 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
-				        allowBlank: true
+				        allowBlank: true,
+						forceSelection: true,
+						listeners:{
+							'change': function() {
+								if (this.getValue() === null) {
+    								this.reset();
+  								}
+							}
+						}
 					},{
 				        xtype: "radiogroup",
 				        fieldLabel: "Are you a Primary Caregiver?",
@@ -177,7 +203,8 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        maxValue: 50
 				    },{
 				        fieldLabel: 'Ages? Separate each age with a comma. (1,5,12)',
-				        name: 'childAges'
+				        name: 'childAges',
+						maxLength : 50
 				    },{
 				        xtype: "radiogroup",
 				        fieldLabel: "Childcare Needed?",
@@ -198,7 +225,15 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
-				        allowBlank: true
+				        allowBlank: true,
+						forceSelection: true,
+						listeners:{
+							'change': function() {
+								if (this.getValue() === null) {
+    								this.reset();
+  								}
+							}
+						}
 					},{
 				        xtype: "radiogroup",
 				        itemId: 'isEmployed',
@@ -223,7 +258,15 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
-				        allowBlank: true
+				        allowBlank: true,
+						forceSelection: true,
+						listeners:{
+							'change': function() {
+								if (this.getValue() === null) {
+    								this.reset();
+  								}
+							}
+						}
 					},{
 				        fieldLabel: 'Wage',
 				        itemId: 'wage',
