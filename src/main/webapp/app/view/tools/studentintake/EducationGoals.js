@@ -77,7 +77,8 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 			            },
 			       items: [{
 				        fieldLabel: 'What is your planned major?',
-				        name: 'plannedMajor'
+				        name: 'plannedMajor',
+						maxLength: 50
 				    },{
 			            xtype: "radiogroup",
 			            fieldLabel: "How sure are you about your major?",
@@ -99,7 +100,8 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				            {boxLabel: "No", itemId: "careerDecidedCheckOff", name: "careerDecided", inputValue:"false"}]
 					},{
 				        fieldLabel: 'What is your planned occupation?',
-				        name: 'plannedOccupation'
+				        name: 'plannedOccupation',
+						maxLength: 50
 				    },{
 			            xtype: "radiogroup",
 			            fieldLabel: "How sure are you about your occupation?",
