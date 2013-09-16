@@ -77,7 +77,8 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                                     	vtype: 'multiemail',
                                     	fieldLabel: 'To',
                                     	labelWidth: 30,
-										width:400
+										width:400,
+										allowBlank:false
                                     	}]
                               },
                               {
