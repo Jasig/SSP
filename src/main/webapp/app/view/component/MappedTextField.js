@@ -23,6 +23,7 @@ Ext.define('Ssp.view.component.MappedTextField', {
 		parentId: null,
 		validationExpression: '[a-zA-Z0-9]'
 	},
+	maxLength: 50,
 	initComponent: function() {	
 		return this.callParent(arguments);
 	}
