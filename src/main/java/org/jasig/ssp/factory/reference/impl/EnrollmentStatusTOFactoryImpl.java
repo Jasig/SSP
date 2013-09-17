@@ -22,6 +22,7 @@ import org.jasig.ssp.dao.reference.EnrollmentStatusDao;
 import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
 import org.jasig.ssp.factory.reference.EnrollmentStatusTOFactory;
 import org.jasig.ssp.model.reference.EnrollmentStatus;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.reference.EnrollmentStatusTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,5 +45,13 @@ public class EnrollmentStatusTOFactoryImpl extends
 	protected EnrollmentStatusDao getDao() {
 		return dao;
 	}
+	
+	@Override
+	public EnrollmentStatus from(final EnrollmentStatusTO tObject) throws ObjectNotFoundException {
+		final EnrollmentStatus model = super.from(tObject);
 
+		model.setCode(tObject.getCode());
+		return model;
+	}
+	
 }

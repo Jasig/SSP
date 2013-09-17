@@ -30,6 +30,8 @@ import com.google.common.collect.Lists;
 public class EnrollmentStatusTO extends AbstractReferenceTO<EnrollmentStatus>
 		implements TransferObject<EnrollmentStatus> {
 
+	private String code;
+	
 	public EnrollmentStatusTO() {
 		super();
 	}
@@ -42,8 +44,15 @@ public class EnrollmentStatusTO extends AbstractReferenceTO<EnrollmentStatus>
 	public EnrollmentStatusTO(final EnrollmentStatus model) {
 		super();
 		from(model);
+		setCode(model.getCode());
 	}
 
+	@Override
+	public void from(EnrollmentStatus model) {
+		super.from(model);
+		setCode(model.getCode());
+	};
+	
 	public static List<EnrollmentStatusTO> toTOList(
 			final Collection<EnrollmentStatus> models) {
 		final List<EnrollmentStatusTO> tObjects = Lists.newArrayList();
@@ -51,5 +60,13 @@ public class EnrollmentStatusTO extends AbstractReferenceTO<EnrollmentStatus>
 			tObjects.add(new EnrollmentStatusTO(model));
 		}
 		return tObjects;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 }

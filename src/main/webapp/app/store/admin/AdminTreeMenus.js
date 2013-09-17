@@ -316,12 +316,6 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
-                    text: 'Enrollment Statuses',
-                    title: 'Enrollment Statuses',
-                    store: 'enrollmentStatuses',
-                    form: 'AbstractReferenceAdmin',
-                    leaf: true
-                },{
                     text: 'Funding Sources',
                     title: 'Funding Sources',
                     store: 'fundingSources',
@@ -546,6 +540,52 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'configurationOptions',
                     form: 'configurationoptionsadmin',
                     leaf: true
+                },{
+                    text: 'Enrollment Statuses',
+                    title: 'Enrollment Statuses',
+                    store: 'enrollmentStatuses',
+                    viewConfig: {
+                        markDirty: false
+                    },
+                    interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false
+                    },
+                    form: 'AbstractReferenceAdmin',
+                    leaf: true,
+                    columns: [{
+                        header: 'Active',
+                        required: true,
+                        dataIndex: 'active',
+                        renderer: me.columnRendererUtils.renderActive,
+                        flex: .20,
+                        field: {
+                            xtype: 'checkbox'
+                        }
+                    }, {
+                        header: 'Name',
+                        dataIndex: 'name',
+                        required: true,
+                        field: {
+                            xtype: 'textfield'
+                        },
+                        flex: .20
+                    }, {
+                        header: 'Code',
+                        dataIndex: 'code',
+                        required: true,
+                        field: {
+                            xtype: 'textfield'
+                        },
+                        flex: .20
+                    }, {
+                        header: 'Description',
+                        dataIndex: 'description',
+                        field: {
+                            xtype: 'textfield'
+                        },
+                        flex: 1
+                    }]                    
                 }, {
                     text: 'Message Templates',
                     title: 'Message Templates',

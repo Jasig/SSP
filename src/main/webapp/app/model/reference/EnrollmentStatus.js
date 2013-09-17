@@ -18,5 +18,5 @@
  */
 Ext.define('Ssp.model.reference.EnrollmentStatus', {
 	extend: 'Ssp.model.reference.AbstractReference',
-    fields: []
+    fields: [{name: 'code', type: 'string'}]
 });

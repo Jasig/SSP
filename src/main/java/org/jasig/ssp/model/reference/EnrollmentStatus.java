@@ -20,11 +20,14 @@ package org.jasig.ssp.model.reference;
 
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.Auditable;
 
 /**
@@ -37,6 +40,12 @@ public class EnrollmentStatus
 		implements Auditable {
 
 	private static final long serialVersionUID = 20121004154040619L;
+	
+	@Column(nullable = false, length = 50)
+	@NotNull
+	@NotEmpty
+	@Size(max = 50)
+	private String code;
 
 	/**
 	 * Constructor
@@ -87,6 +96,14 @@ public class EnrollmentStatus
 	@Override
 	protected int hashPrime() {
 		return 353;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 }
