@@ -29,7 +29,9 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.jasig.ssp.model.reference.CourseworkHours;
 import org.jasig.ssp.model.reference.EducationGoal;
+import org.jasig.ssp.model.reference.RegistrationLoad;
 
 /**
  * Students may have an Education Goal stored for use in notifications to
@@ -84,14 +86,17 @@ public class PersonEducationGoal
 
 	@Column
 	private Boolean additionalAcademicProgramInformationNeeded;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinColumn(name = "coursework_hours_id", nullable = true)
+	private CourseworkHours courseworkHours;
 	
-	@Column(length = 50)
-	@Size(max = 50)
-	private String courseWorkWeeklyHoursName;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinColumn(name = "registration_load_id", nullable = true)
+	private RegistrationLoad registrationLoad;
 	
-	@Column(length = 50)
-	@Size(max = 50)
-	private String registrationLoadName;
 	
 	@Column(length = 50)
 	@Size(max = 50)
@@ -189,33 +194,6 @@ public class PersonEducationGoal
 		this.additionalAcademicProgramInformationNeeded = additionalAcademicProgramInformationNeeded;
 	}
 
-	/**
-	 * @return the courseWorkWeeklyHoursName
-	 */
-	public String getCourseWorkWeeklyHoursName() {
-		return courseWorkWeeklyHoursName;
-	}
-
-	/**
-	 * @param courseWorkWeeklyHoursName the courseWorkWeeklyHoursName to set
-	 */
-	public void setCourseWorkWeeklyHoursName(String courseWorkWeeklyHoursName) {
-		this.courseWorkWeeklyHoursName = courseWorkWeeklyHoursName;
-	}
-
-	/**
-	 * @return the registrationLoadName
-	 */
-	public String getRegistrationLoadName() {
-		return registrationLoadName;
-	}
-
-	/**
-	 * @param registrationLoadName the registrationLoadName to set
-	 */
-	public void setRegistrationLoadName(String registrationLoadName) {
-		this.registrationLoadName = registrationLoadName;
-	}
 
 	/**
 	 * @return the anticipatedGraduationDateTermCode
@@ -261,5 +239,21 @@ public class PersonEducationGoal
 				: 17;
 
 		return result;
+	}
+
+	public CourseworkHours getCourseworkHours() {
+		return courseworkHours;
+	}
+
+	public void setCourseworkHours(CourseworkHours courseworkHours) {
+		this.courseworkHours = courseworkHours;
+	}
+
+	public RegistrationLoad getRegistrationLoad() {
+		return registrationLoad;
+	}
+
+	public void setRegistrationLoad(RegistrationLoad registrationLoad) {
+		this.registrationLoad = registrationLoad;
 	}
 }

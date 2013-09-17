@@ -124,10 +124,40 @@
                     "path": "/app/model/reference/"
                 },
                 {
+                    "clsName": "Ssp.model.reference.CourseworkHours",
+                    "name": "CourseworkHours.js",
+                    "path": "/app/model/reference/"
+                },                
+                {
+                    "clsName": "Ssp.model.reference.RegistrationLoad",
+                    "name": "RegistrationLoad.js",
+                    "path": "/app/model/reference/"
+                },  
+                                              {
+                    "clsName": "Ssp.model.reference.EnrollmentStatus",
+                    "name": "EnrollmentStatus.js",
+                    "path": "/app/model/reference/"
+                }, 
+                {
                     "clsName": "Ssp.store.reference.MilitaryAffiliations",
                     "name": "MilitaryAffiliations.js",
                     "path": "/app/store/reference/"
                 },
+                {
+                    "clsName": "Ssp.store.reference.CourseworkHours",
+                    "name": "CourseworkHours.js",
+                    "path": "/app/store/reference/"
+                },                
+                {
+                    "clsName": "Ssp.store.reference.EnrollmentStatuses",
+                    "name": "EnrollmentStatuses.js",
+                    "path": "/app/store/reference/"
+                },                
+                {
+                    "clsName": "Ssp.store.reference.RegistrationLoads",
+                    "name": "RegistrationLoads.js",
+                    "path": "/app/store/reference/"
+                },                
  				{
                     "clsName": "Ssp.model.Placement",
                     "name": "Placement.js",
@@ -1019,21 +1049,6 @@
                     "clsName": "Ssp.controller.tool.actionplan.TaskTreeViewController",
                     "name": "TaskTreeViewController.js",
                     "path": "/app/controller/tool/actionplan/"
-                },
-                {
-                    "clsName": "Ssp.model.LoadRange",
-                    "name": "LoadRange.js",
-                    "path": "/app/model/"
-                },
-                {
-                    "clsName": "Ssp.store.reference.RegistrationLoadRanges",
-                    "name": "RegistrationLoadRanges.js",
-                    "path": "/app/store/reference/"
-                },
-                {
-                    "clsName": "Ssp.store.reference.WeeklyCourseWorkHourRanges",
-                    "name": "WeeklyCourseWorkHourRanges.js",
-                    "path": "/app/store/reference/"
                 },
                 {
                     "clsName": "Ssp.model.external.AbstractExternal",
@@ -2497,22 +2512,6 @@
                     "name": "MessageTemplatesDisplayAdminViewController.js",
                     "path": "/app/controller/admin/config/"
                 },
-		{
-                    "clsName": "Ssp.controller.admin.config.CourseWorkHoursAdminViewController",
-                    "name": "CourseWorkHoursAdminViewController.js",
-                    "path": "/app/controller/admin/config/"
-                },
-		{
-                    "clsName": "Ssp.controller.admin.config.EnrollmentStatusAdminViewController",
-                    "name": "EnrollmentStatusAdminViewController.js",
-                    "path": "/app/controller/admin/config/"
-                },
-		{
-                    "clsName": "Ssp.controller.admin.config.RegistrationLoadAdminViewController",
-                    "name": "RegistrationLoadAdminViewController.js",
-                    "path": "/app/controller/admin/config/"
-                },
-
                 {
                     "clsName": "Ssp.model.MessageTemplates",
                     "name": "MessageTemplates.js",
@@ -2566,51 +2565,6 @@
                 {
                     "clsName": "Ssp.view.admin.forms.config.MessageTemplatesDisplayAdmin",
                     "name": "MessageTemplatesDisplayAdmin.js",
-                    "path": "/app/view/admin/forms/config/"
-                },
-                {
-                    "clsName": "Ssp.view.admin.forms.config.CourseWorkHoursAddAdmin",
-                    "name": "CourseWorkHoursAddAdmin.js",
-                    "path": "/app/view/admin/forms/config/"
-                },
-                {
-                    "clsName": "Ssp.view.admin.forms.config.CourseWorkHoursAdmin",
-                    "name": "CourseWorkHoursAdmin.js",
-                    "path": "/app/view/admin/forms/config/"
-                },
-                {
-                    "clsName": "Ssp.view.admin.forms.config.CourseWorkHoursListAdmin",
-                    "name": "CourseWorkHoursListAdmin.js",
-                    "path": "/app/view/admin/forms/config/"
-                },
-                {
-                    "clsName": "Ssp.view.admin.forms.config.EnrollmentStatusAddAdmin",
-                    "name": "EnrollmentStatusAddAdmin.js",
-                    "path": "/app/view/admin/forms/config/"
-                },
-                {
-                    "clsName": "Ssp.view.admin.forms.config.EnrollmentStatusAdmin",
-                    "name": "EnrollmentStatusAdmin.js",
-                    "path": "/app/view/admin/forms/config/"
-                },
-                {
-                    "clsName": "Ssp.view.admin.forms.config.EnrollmentStatusListAdmin",
-                    "name": "EnrollmentStatusListAdmin.js",
-                    "path": "/app/view/admin/forms/config/"
-                },
-                {
-                    "clsName": "Ssp.view.admin.forms.config.RegistrationLoadAddAdmin",
-                    "name": "RegistrationLoadAddAdmin.js",
-                    "path": "/app/view/admin/forms/config/"
-                },
-                {
-                    "clsName": "Ssp.view.admin.forms.config.RegistrationLoadAdmin",
-                    "name": "RegistrationLoadAdmin.js",
-                    "path": "/app/view/admin/forms/config/"
-                },
-                {
-                    "clsName": "Ssp.view.admin.forms.config.RegistrationLoadListAdmin",
-                    "name": "RegistrationLoadListAdmin.js",
                     "path": "/app/view/admin/forms/config/"
                 },
                 {

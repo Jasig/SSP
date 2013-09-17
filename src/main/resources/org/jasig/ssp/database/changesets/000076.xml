@@ -1,0 +1,126 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<property name="schema" value="${database.schema}" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet author='tony.arland' id='Add coursework_hours table'>
+		<createTable tableName="coursework_hours">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="${nvarchar.type}(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="coursework_hours_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="coursework_hours_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<sql>grant all on coursework_hours to ${database.app.username}</sql>
+		<rollback>
+			<dropTable tableName="coursework_hours" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+
+	</changeSet>
+
+	<changeSet id="create reference data - coursework_hours" author="tony.arland">
+		<insert tableName="coursework_hours">
+			<column name="id" value="7c7df05a-92c2-4806-93c7-5b8d99d42657" />
+			<column name="name" value="0-5" />
+			<column name="description" value="Light Load" />
+			<column name="created_date" valueDate="2013-09-12T00:00:00" />
+			<column name="modified_date" valueDate="2013-09-12T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="coursework_hours">
+			<column name="id" value="FBD43E12-BD41-437E-85BA-A45BA0E12327" />
+			<column name="name" value="6-10" />
+			<column name="description" value="Moderate Load" />
+			<column name="created_date" valueDate="2013-09-12T00:00:00" />
+			<column name="modified_date" valueDate="2013-09-12T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="coursework_hours">
+			<column name="id" value="ac85ac8e-90e6-4425-b74e-7e8b0c7bee7a" />
+			<column name="name" value="11-15" />
+			<column name="description" value="Light Load Fulltime Student" />
+			<column name="created_date" valueDate="2013-09-12T00:00:00" />
+			<column name="modified_date" valueDate="2013-09-12T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="coursework_hours">
+			<column name="id" value="24efd91a-0a06-4f8c-a910-de2f4225e618" />
+			<column name="name" value="16-20" />
+			<column name="description" value="Standard Load Fulltime Student" />
+			<column name="created_date" valueDate="2013-09-12T00:00:00" />
+			<column name="modified_date" valueDate="2013-09-12T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>	
+		<insert tableName="coursework_hours">
+			<column name="id" value="c0a8018d-3d4a-11a2-813d-4af28ad9003b" />
+			<column name="name" value="More than 20" />
+			<column name="description" value="Heavy Load Fulltime Student" />
+			<column name="created_date" valueDate="2013-09-12T00:00:00" />
+			<column name="modified_date" valueDate="2013-09-12T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />	
+			<column name="object_status" value="1" />
+		</insert>
+</changeSet>		
+		
+</databaseChangeLog>

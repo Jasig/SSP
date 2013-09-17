@@ -43,8 +43,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
         studentStatusesStore: 'studentStatusesStore',
         studentIntake: 'currentStudentIntake',
     	veteranStatusesStore: 'veteranStatusesStore',
-    	registrationLoadRangesStore: 'registrationLoadRangesStore',
-    	weeklyCourseWorkHourRangesStore:'weeklyCourseWorkHourRangesStore'
+    	registrationLoadsStore: 'registrationLoadsStore',
+    	courseworkHoursStore:'courseworkHoursStore'
     }, 
     config: {
     	studentIntakeForm: null
@@ -220,10 +220,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var educationLevels = me.formUtils.alphaSortByField( formData.data.referenceData.educationLevels, 'name' );
 		var fundingSources = me.formUtils.alphaSortByField( formData.data.referenceData.fundingSources, 'name' );
 		var studentStatuses =  me.formUtils.alphaSortByField( formData.data.referenceData.studentStatuses, 'name' );
-		var weeklyCourseWorkHourRanges =  JSON.parse(formData.data.referenceData.weeklyCourseWorkHourRanges);
-		weeklyCourseWorkHourRanges = me.formUtils.valueSortByField( weeklyCourseWorkHourRanges, 'rangeStart' );
-		var registrationLoadRanges = JSON.parse(formData.data.referenceData.registrationLoadRanges);
-		registrationLoadRanges =  me.formUtils.valueSortByField(registrationLoadRanges , 'rangeStart' );
+		var courseworkHoursStore = me.formUtils.valueSortByField( formData.data.referenceData.courseworkHours, 'name' );
+		var registrationLoadsStore =  me.formUtils.valueSortByField(formData.data.referenceData.registrationLoads , 'rangeStart' );
 		var militaryAffiliations = me.formUtils.alphaSortByField( formData.data.referenceData.militaryAffiliations, 'name' );
 		
 		me.challengesStore.loadData( challenges );
@@ -243,8 +241,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		me.statesStore.loadData( formData.data.referenceData.states );
 		me.studentStatusesStore.loadData( studentStatuses );
 		me.veteranStatusesStore.loadData( formData.data.referenceData.veteranStatuses );
-		me.registrationLoadRangesStore.loadData(registrationLoadRanges);
-		me.weeklyCourseWorkHourRangesStore.loadData(weeklyCourseWorkHourRanges);
+		me.registrationLoadsStore.loadData(registrationLoadsStore);
+		me.courseworkHoursStore.loadData(courseworkHoursStore);
 		
 		// LOAD RECORDS FOR EACH OF THE FORMS
 		

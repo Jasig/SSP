@@ -1,0 +1,130 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<property name="schema" value="${database.schema}" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet author='tony.arland' id='add coursework_hours_id to person_education_goal'>
+		<addColumn tableName="person_education_goal" >
+			<column name="coursework_hours_id" type="uuid"></column>
+		</addColumn>
+		
+		<addForeignKeyConstraint constraintName="person_edu_goal_coursework_hours" referencedTableName="coursework_hours" baseColumnNames="coursework_hours_id" baseTableName="person_education_goal" referencedColumnNames="id"/>
+	</changeSet>
+
+	<changeSet author='tony.arland' id='add registration_load to person_education_goal'>
+		<addColumn tableName="person_education_goal" >
+			<column name="registration_load_id" type="uuid"></column>
+		</addColumn>
+		
+		<addForeignKeyConstraint constraintName="person_edu_goal_registration_load" referencedTableName="registration_load" baseColumnNames="registration_load_id" baseTableName="person_education_goal" referencedColumnNames="id"/>
+	</changeSet>
+
+	<changeSet author='tony.arland' id='add code to enrollment_status'>
+		<addColumn tableName="enrollment_status" >
+			<column name="code"  type="${nvarchar.type}(50)"  >
+			<constraints nullable="false"/>
+			</column>
+		</addColumn>
+		
+	</changeSet>
+	<changeSet id="create reference data - enrollment_status" author="tony.arland">
+		<insert tableName="enrollment_status">
+			<column name="id" value="3a6352c9-e7fe-e555-7f69-0124a5e5fe71" />
+			<column name="name" value="default" />
+			<column name="code" value="enrolled"/>
+			<column name="description" value="Enrolled" />
+			<column name="created_date" valueDate="2013-09-12T00:00:00" />
+			<column name="modified_date" valueDate="2013-09-12T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+
+		<rollback>
+			<delete tableName="enrollment_status">
+				<where>id='7c7df05a-92c2-4806-93c7-5b8d99d42657'</where>
+			</delete>
+		</rollback>
+	</changeSet>	
+	
+	<changeSet id="update registration_load_id_" author="tony.arland">
+		<update tableName="person_education_goal" >
+			<column name="registration_load_id" value="7c7df05a-92c2-4806-93c7-5b8d99d42657"/>
+			<where>
+				registration_load_name = 'LT'
+			</where>
+		</update>
+
+		<update tableName="person_education_goal" >
+			<column name="registration_load_id" value="FBD43E12-BD41-437E-85BA-A45BA0E12327"/>
+			<where>
+ 				 registration_load_name = 'PT'
+			</where>
+		</update>
+		<update tableName="person_education_goal" >
+			<column name="registration_load_id" value="ac85ac8e-90e6-4425-b74e-7e8b0c7bee7a"/>
+			<where>
+				 registration_load_name = 'FT'
+			</where>
+		</update>		
+	</changeSet>	
+	
+	<changeSet id="update coursework_hours_id" author="tony.arland">
+		<update tableName="person_education_goal" >
+			<column name="coursework_hours_id" value="7c7df05a-92c2-4806-93c7-5b8d99d42657"/>
+			<where>
+				course_work_weekly_hours_name = 'LTPT'
+			</where>
+		</update>
+
+		<update tableName="person_education_goal" >
+			<column name="coursework_hours_id" value="FBD43E12-BD41-437E-85BA-A45BA0E12327"/>
+			<where>
+				course_work_weekly_hours_name = 'Moderate'
+			</where>
+		</update>
+		<update tableName="person_education_goal" >
+			<column name="coursework_hours_id" value="ac85ac8e-90e6-4425-b74e-7e8b0c7bee7a"/>
+			<where>
+				course_work_weekly_hours_name = 'LTFT'
+			</where>
+		</update>	
+		<update tableName="person_education_goal" >
+			<column name="coursework_hours_id" value="24efd91a-0a06-4f8c-a910-de2f4225e618"/>
+			<where>
+				course_work_weekly_hours_name = 'STFT'
+			</where>
+		</update>		
+		<update tableName="person_education_goal" >
+			<column name="coursework_hours_id" value="c0a8018d-3d4a-11a2-813d-4af28ad9003b"/>
+			<where>
+				course_work_weekly_hours_name = 'HVFT'
+			</where>
+		</update>			
+	</changeSet>	
+</databaseChangeLog>

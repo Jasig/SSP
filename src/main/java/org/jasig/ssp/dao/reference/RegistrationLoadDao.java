@@ -16,25 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.portlet.ssp;
+package org.jasig.ssp.dao.reference;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.portlet.ModelAndView;
-import org.springframework.web.portlet.bind.annotation.RenderMapping;
+import org.springframework.stereotype.Repository;
+import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.reference.MilitaryAffiliation;
+import org.jasig.ssp.model.reference.RegistrationLoad;
 
-@Controller
-@RequestMapping("VIEW")
-public final class SspPortletController {
-	
-	@Value("#{configProperties.ssp_main_use_minifed_js}")
-	private boolean sspMainUseMinifiedJs = false;
-	
-	@RenderMapping
-	public ModelAndView show(){
-		return new ModelAndView("ssp-main", "useMinified", sspMainUseMinifiedJs);
+/**
+ * Data access class for the RegistrationLoad reference entity.
+ */
+@Repository
+public class RegistrationLoadDao extends AbstractReferenceAuditableCrudDao<RegistrationLoad>
+		implements AuditableCrudDao<RegistrationLoad> {
+
+	public RegistrationLoadDao() {
+		super(RegistrationLoad.class);
 	}
-
 }

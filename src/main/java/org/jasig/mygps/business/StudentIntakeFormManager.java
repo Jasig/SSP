@@ -54,6 +54,7 @@ import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChildCareArrangement;
 import org.jasig.ssp.model.reference.Citizenship;
+import org.jasig.ssp.model.reference.CourseworkHours;
 import org.jasig.ssp.model.reference.EducationGoal;
 import org.jasig.ssp.model.reference.EducationLevel;
 import org.jasig.ssp.model.reference.EmploymentShifts;
@@ -63,6 +64,7 @@ import org.jasig.ssp.model.reference.Genders;
 import org.jasig.ssp.model.reference.MaritalStatus;
 import org.jasig.ssp.model.reference.MilitaryAffiliation;
 import org.jasig.ssp.model.reference.Race;
+import org.jasig.ssp.model.reference.RegistrationLoad;
 import org.jasig.ssp.model.reference.StudentStatus;
 import org.jasig.ssp.model.reference.VeteranStatus;
 import org.jasig.ssp.model.tool.Tools;
@@ -73,10 +75,12 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ChildCareArrangementService;
 import org.jasig.ssp.service.reference.CitizenshipService;
+import org.jasig.ssp.service.reference.CourseworkHoursService;
 import org.jasig.ssp.service.reference.EducationGoalService;
 import org.jasig.ssp.service.reference.EthnicityService;
 import org.jasig.ssp.service.reference.MaritalStatusService;
 import org.jasig.ssp.service.reference.RaceService;
+import org.jasig.ssp.service.reference.RegistrationLoadService;
 import org.jasig.ssp.service.reference.StudentStatusService;
 import org.jasig.ssp.service.reference.VeteranStatusService;
 import org.jasig.ssp.service.tool.PersonToolService;
@@ -114,6 +118,12 @@ public class StudentIntakeFormManager { // NOPMD
 	
 	@Autowired
 	private transient EducationGoalService educationGoalService;
+	
+	@Autowired
+	private transient RegistrationLoadService registrationLoadService;
+	
+	@Autowired
+	private transient CourseworkHoursService courseworkHoursService;
 	
 	@Autowired
 	private transient EducationGoalDao educationGoalDao;
@@ -1554,24 +1564,45 @@ public class StudentIntakeFormManager { // NOPMD
 							.getFormQuestionById(
 									SECTION_EDUCATIONGOAL_QUESTION_MILITARYBRANCHDESCRIPTION_ID)
 							.getValue());
+
 			
-			studentEducationGoal
-			.setRegistrationLoadName(educationGoalSection
+			FormQuestionTO registrationLoadQuestion = educationGoalSection
 					.getFormQuestionById(
-							SECTION_EDUCATIONGOAL_QUESTION_REGISTRATION_LOAD_ID)
-					.getValue());
+							SECTION_EDUCATIONGOAL_QUESTION_REGISTRATION_LOAD_ID);
+			final Collection<RegistrationLoad> registrationLoads = registrationLoadService
+					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))
+					.getRows();
+			for (final RegistrationLoad rl : registrationLoads) {
+				if (registrationLoadQuestion.getValue() != null && rl.getName().equals(
+						registrationLoadQuestion.getFormOptionByValue(
+								registrationLoadQuestion.getValue()).getLabel())) {
+					studentEducationGoal.setRegistrationLoad(registrationLoadService
+							.get(rl.getId()));
+				}
+			}
 			
 			studentEducationGoal
 			.setAnticipatedGraduationDateTermCode(educationGoalSection
 					.getFormQuestionById(
 							SECTION_EDUCATIONGOAL_QUESTION_GRADUATION_DATE_ID)
 					.getValue());	
+
 			
-			studentEducationGoal
-			.setCourseWorkWeeklyHoursName(educationGoalSection
+			FormQuestionTO courseworkHoursQuestion = educationGoalSection
 					.getFormQuestionById(
-							SECTION_EDUCATIONGOAL_QUESTION_COURSEWORK_LOAD_ID)
-					.getValue());			
+							SECTION_EDUCATIONGOAL_QUESTION_COURSEWORK_LOAD_ID);
+			final Collection<CourseworkHours> courseworkHours = courseworkHoursService
+					.getAll(new SortingAndPaging(ObjectStatus.ACTIVE))
+					.getRows();
+			for (final CourseworkHours ch : courseworkHours) {
+				if (courseworkHoursQuestion.getValue() != null && ch.getName().equals(
+						courseworkHoursQuestion.getFormOptionByValue(
+								courseworkHoursQuestion.getValue()).getLabel())) {
+					studentEducationGoal.setCourseworkHours(courseworkHoursService
+							.get(ch.getId()));
+				}
+			}
+			
 
 
 			String majorSureOfValue = educationGoalSection.getFormQuestionById(
@@ -2846,14 +2877,15 @@ public class StudentIntakeFormManager { // NOPMD
 		eduGoalSectionQuestions.add(additionalInfoQuestion);	
 		
 
+		 
 		// Registration Load
 		final FormQuestionTO registrationLoadQuestion = new FormQuestionTO();
 		final List<FormOptionTO> registrationLoadQuestionOptions = new ArrayList<FormOptionTO>();
-
-		//Hard coded values, will eventually be replaced with a proper referenec type
-		registrationLoadQuestionOptions.add(new FormOptionTO(UUID.fromString("c0a8017b-3e18-1685-813e-18e698700024"),"1-6","LT"));
-		registrationLoadQuestionOptions.add(new FormOptionTO(UUID.fromString("c0a8017b-3e18-1685-813e-18e698700025"),"7-12","PT"));
-		registrationLoadQuestionOptions.add(new FormOptionTO(UUID.fromString("c0a8017b-3e18-1685-813e-18e698700026"),"13 or more","FT"));
+		PagingWrapper<RegistrationLoad> allRegistrationLoads = registrationLoadService.getAll(new SortingAndPaging(ObjectStatus.ACTIVE));
+		for (RegistrationLoad registrationLoad : allRegistrationLoads) 
+		{
+			registrationLoadQuestionOptions.add(new FormOptionTO(registrationLoad.getId(), registrationLoad.getName(), registrationLoad.getId().toString()));
+		}
 		
 		registrationLoadQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_REGISTRATION_LOAD_ID);
@@ -2867,12 +2899,12 @@ public class StudentIntakeFormManager { // NOPMD
 		// Coursework Load
 		final FormQuestionTO courseworkQuestion = new FormQuestionTO();
 		final List<FormOptionTO> courseworkQuestionOptions = new ArrayList<FormOptionTO>();
-		//Hard coded values, will eventually be replaced with a proper referenec type
-		courseworkQuestionOptions.add(new FormOptionTO(UUID.fromString("c0a8017b-3df4-113d-813d-f40156610004"),"0-5","LTPT"));
-		courseworkQuestionOptions.add(new FormOptionTO(UUID.fromString("c0a8017b-3e18-1685-813e-18e6986e0012"),"6-10","Moderate"));
-		courseworkQuestionOptions.add(new FormOptionTO(UUID.fromString("c0a8017b-3e18-1685-813e-18e6986e000b"),"11-15","LTFT"));
-		courseworkQuestionOptions.add(new FormOptionTO(UUID.fromString("c0a8017b-3e18-1685-813e-18e6986e000c"),"16-20","STFT"));
-		courseworkQuestionOptions.add(new FormOptionTO(UUID.fromString("c0a8017b-3e18-1685-813e-18e6986e000d"),"More Than 20","HVFT"));		
+		
+		PagingWrapper<CourseworkHours> allCourseworkHours = courseworkHoursService.getAll(new SortingAndPaging(ObjectStatus.ACTIVE));
+		for (CourseworkHours courseworkHours : allCourseworkHours) 
+		{
+			courseworkQuestionOptions.add(new FormOptionTO(courseworkHours.getId(), courseworkHours.getName(), courseworkHours.getId().toString()));
+		}
 
 		
 		courseworkQuestion

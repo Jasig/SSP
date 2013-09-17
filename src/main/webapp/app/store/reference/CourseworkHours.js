@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,25 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.portlet.ssp;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.portlet.ModelAndView;
-import org.springframework.web.portlet.bind.annotation.RenderMapping;
-
-@Controller
-@RequestMapping("VIEW")
-public final class SspPortletController {
-	
-	@Value("#{configProperties.ssp_main_use_minifed_js}")
-	private boolean sspMainUseMinifiedJs = false;
-	
-	@RenderMapping
-	public ModelAndView show(){
-		return new ModelAndView("ssp-main", "useMinified", sspMainUseMinifiedJs);
-	}
-
-}
+Ext.define('Ssp.store.reference.CourseworkHours', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.CourseworkHours',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('courseworkHours')});
+    }
+});

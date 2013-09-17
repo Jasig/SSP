@@ -16,25 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.portlet.ssp;
+package org.jasig.ssp.service.reference.impl;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.portlet.ModelAndView;
-import org.springframework.web.portlet.bind.annotation.RenderMapping;
+import org.jasig.ssp.dao.reference.EnrollmentStatusDao;
+import org.jasig.ssp.model.reference.EnrollmentStatus;
+import org.jasig.ssp.service.reference.EnrollmentStatusService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@Controller
-@RequestMapping("VIEW")
-public final class SspPortletController {
-	
-	@Value("#{configProperties.ssp_main_use_minifed_js}")
-	private boolean sspMainUseMinifiedJs = false;
-	
-	@RenderMapping
-	public ModelAndView show(){
-		return new ModelAndView("ssp-main", "useMinified", sspMainUseMinifiedJs);
+@Service 
+@Transactional
+public class EnrollmentStatusServiceImpl extends
+		AbstractReferenceService<EnrollmentStatus>
+		implements EnrollmentStatusService {
+
+	@Autowired
+	transient private EnrollmentStatusDao dao;
+
+	protected void setDao(final EnrollmentStatusDao dao) {
+		this.dao = dao;
 	}
 
+	@Override
+	protected EnrollmentStatusDao getDao() {
+		return dao;
+	}
 }

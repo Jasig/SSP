@@ -42,9 +42,9 @@ public class PersonEducationGoalTO
 	private Boolean additionalAcademicProgramInformationNeeded, careerDecided,
 			confidentInAbilities;
 	
-	private String courseWorkWeeklyHoursName;
+	private UUID courseworkHoursId;
 
-	private String registrationLoadName;
+	private UUID registrationLoadId;
 
 	private String anticipatedGraduationDateTermCode;
 
@@ -73,8 +73,8 @@ public class PersonEducationGoalTO
 		careerDecided = model.getCareerDecided();
 		howSureAboutOccupation = model.getHowSureAboutOccupation();
 		confidentInAbilities = model.getConfidentInAbilities();
-		courseWorkWeeklyHoursName = model.getCourseWorkWeeklyHoursName();
-		registrationLoadName = model.getRegistrationLoadName();
+		courseworkHoursId = model.getCourseworkHours() == null ? null : model.getCourseworkHours().getId();
+		registrationLoadId = model.getRegistrationLoad() == null ? null : model.getRegistrationLoad().getId();
 		anticipatedGraduationDateTermCode = model.getAnticipatedGraduationDateTermCode();
 		additionalAcademicProgramInformationNeeded = model
 				.getAdditionalAcademicProgramInformationNeeded();
@@ -172,34 +172,6 @@ public class PersonEducationGoalTO
 	}
 
 	/**
-	 * @return the courseWorkWeeklyHoursName
-	 */
-	public String getCourseWorkWeeklyHoursName() {
-		return courseWorkWeeklyHoursName;
-	}
-
-	/**
-	 * @param courseWorkWeeklyHoursName the courseWorkWeeklyHoursName to set
-	 */
-	public void setCourseWorkWeeklyHoursName(String courseWorkWeeklyHoursName) {
-		this.courseWorkWeeklyHoursName = courseWorkWeeklyHoursName;
-	}
-
-	/**
-	 * @return the registrationLoadName
-	 */
-	public String getRegistrationLoadName() {
-		return registrationLoadName;
-	}
-
-	/**
-	 * @param registrationLoadName the registrationLoadName to set
-	 */
-	public void setRegistrationLoadName(String registrationLoadName) {
-		this.registrationLoadName = registrationLoadName;
-	}
-
-	/**
 	 * @return the anticipatedGraduationDateTermCode
 	 */
 	public String getAnticipatedGraduationDateTermCode() {
@@ -212,5 +184,21 @@ public class PersonEducationGoalTO
 	public void setAnticipatedGraduationDateTermCode(
 			String anticipatedGraduationDateTermCode) {
 		this.anticipatedGraduationDateTermCode = anticipatedGraduationDateTermCode;
+	}
+
+	public UUID getCourseworkHoursId() {
+		return courseworkHoursId;
+	}
+
+	public void setCourseworkHoursId(UUID courseworkHoursId) {
+		this.courseworkHoursId = courseworkHoursId;
+	}
+
+	public UUID getRegistrationLoadId() {
+		return registrationLoadId;
+	}
+
+	public void setRegistrationLoadId(UUID registrationLoadId) {
+		this.registrationLoadId = registrationLoadId;
 	}
 }

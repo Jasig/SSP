@@ -23,9 +23,12 @@ import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.PersonEducationGoalTOFactory;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonEducationGoal;
+import org.jasig.ssp.model.reference.RegistrationLoad;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.reference.CourseworkHoursService;
 import org.jasig.ssp.service.reference.EducationGoalService;
+import org.jasig.ssp.service.reference.RegistrationLoadService;
 import org.jasig.ssp.transferobject.PersonEducationGoalTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +55,12 @@ public class PersonEducationGoalTOFactoryImpl extends
 
 	@Autowired
 	private transient PersonService personService;
+	
+	@Autowired
+	private transient RegistrationLoadService registrationLoadService; 
+	
+	@Autowired
+	private transient CourseworkHoursService courseworkHoursService;
 
 	@Override
 	protected PersonEducationGoalDao getDao() {
@@ -80,8 +89,9 @@ public class PersonEducationGoalTOFactoryImpl extends
 		model.setHowSureAboutOccupation(tObject.getHowSureAboutOccupation());
 		model.setConfidentInAbilities(tObject.getConfidentInAbilities());
 		model.setAdditionalAcademicProgramInformationNeeded(tObject.getAdditionalAcademicProgramInformationNeeded());
-		model.setCourseWorkWeeklyHoursName(tObject.getCourseWorkWeeklyHoursName());
-		model.setRegistrationLoadName(tObject.getRegistrationLoadName());
+		model.setCourseworkHours(tObject.getCourseworkHoursId() == null ? null : courseworkHoursService.get(tObject.getCourseworkHoursId()));
+		model.setRegistrationLoad(tObject.getRegistrationLoadId() == null ? null : registrationLoadService.get(tObject.getRegistrationLoadId()));
+		
 		model.setAnticipatedGraduationDateTermCode(tObject.getAnticipatedGraduationDateTermCode());
 		model.setEducationGoal(tObject.getEducationGoalId() == null ? null
 				: educationGoalService.get(tObject.getEducationGoalId()));

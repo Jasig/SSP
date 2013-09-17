@@ -31,12 +31,14 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.AbstractReference;
 import org.jasig.ssp.model.reference.EmploymentShifts;
 import org.jasig.ssp.model.reference.Genders;
+import org.jasig.ssp.model.reference.RegistrationLoad;
 import org.jasig.ssp.model.reference.States;
 import org.jasig.ssp.model.tool.IntakeForm;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.ChallengeService;
 import org.jasig.ssp.service.reference.ChildCareArrangementService;
 import org.jasig.ssp.service.reference.CitizenshipService;
+import org.jasig.ssp.service.reference.CourseworkHoursService;
 import org.jasig.ssp.service.reference.EducationGoalService;
 import org.jasig.ssp.service.reference.EducationLevelService;
 import org.jasig.ssp.service.reference.EthnicityService;
@@ -44,6 +46,7 @@ import org.jasig.ssp.service.reference.RaceService;
 import org.jasig.ssp.service.reference.FundingSourceService;
 import org.jasig.ssp.service.reference.MaritalStatusService;
 import org.jasig.ssp.service.reference.MilitaryAffiliationService;
+import org.jasig.ssp.service.reference.RegistrationLoadService;
 import org.jasig.ssp.service.reference.StudentStatusService;
 import org.jasig.ssp.service.reference.VeteranStatusService;
 import org.jasig.ssp.service.reference.ConfigService;
@@ -58,6 +61,7 @@ import org.jasig.ssp.transferobject.reference.AbstractReferenceTO;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.transferobject.reference.ChildCareArrangementTO;
 import org.jasig.ssp.transferobject.reference.CitizenshipTO;
+import org.jasig.ssp.transferobject.reference.CourseworkHoursTO;
 import org.jasig.ssp.transferobject.reference.EducationGoalTO;
 import org.jasig.ssp.transferobject.reference.EducationLevelTO;
 import org.jasig.ssp.transferobject.reference.EthnicityTO;
@@ -65,6 +69,7 @@ import org.jasig.ssp.transferobject.reference.RaceTO;
 import org.jasig.ssp.transferobject.reference.FundingSourceTO;
 import org.jasig.ssp.transferobject.reference.MaritalStatusTO;
 import org.jasig.ssp.transferobject.reference.MilitaryAffiliationTO;
+import org.jasig.ssp.transferobject.reference.RegistrationLoadTO;
 import org.jasig.ssp.transferobject.reference.StudentStatusTO;
 import org.jasig.ssp.transferobject.reference.VeteranStatusTO;
 import org.jasig.ssp.transferobject.tool.IntakeFormTO;
@@ -137,6 +142,12 @@ public class IntakeController extends AbstractBaseController {
 
 	@Autowired
 	private transient VeteranStatusService veteranStatusService;
+	
+	@Autowired
+	private transient RegistrationLoadService registrationLoadService;
+	
+	@Autowired
+	private transient CourseworkHoursService courseworkHoursService;
 	
 	@Autowired
 	private transient ConfigService configService;
@@ -219,8 +230,8 @@ public class IntakeController extends AbstractBaseController {
 		refData.put("genders", Genders.values());
 		refData.put("states", States.values());
 		refData.put("futureTerms",termService.getCurrentAndFutureTerms());
-		refData.put("registrationLoadRanges", configService.getByName("registration_load_ranges").getValue());
-		refData.put("weeklyCourseWorkHourRanges", configService.getByName("weekly_course_work_hour_ranges").getValue());
+		refData.put("registrationLoads", registrationLoadReferenceDataFor(formTO, sAndP));
+		refData.put("courseworkHours", courseworkHoursReferenceDataFor(formTO, sAndP));
 		return refData;
 	}
 
@@ -383,7 +394,38 @@ public class IntakeController extends AbstractBaseController {
 				allTOs);
 	}
 
+	private List<RegistrationLoadTO> registrationLoadReferenceDataFor(IntakeFormTO formTO, SortingAndPaging sAndP) {
+		final List<RegistrationLoadTO> allTOs =
+				RegistrationLoadTO.toTOList(registrationLoadService.getAll(sAndP).getRows());
 
+		if ( formTO.getPersonDemographics() == null ||
+				formTO.getPersonEducationGoal().getRegistrationLoadId() == null ) {
+
+			return filterInactiveExceptFor(Lists.<UUID>newArrayListWithCapacity(0), allTOs);
+
+		}
+
+		return filterInactiveExceptFor(
+				Lists.newArrayList(formTO.getPersonEducationGoal().getRegistrationLoadId()),
+				allTOs);
+	}
+
+	private List<CourseworkHoursTO> courseworkHoursReferenceDataFor(IntakeFormTO formTO, SortingAndPaging sAndP) {
+		final List<CourseworkHoursTO> allTOs =
+				CourseworkHoursTO.toTOList(courseworkHoursService.getAll(sAndP).getRows());
+
+		if ( formTO.getPersonDemographics() == null ||
+				formTO.getPersonEducationGoal().getCourseworkHoursId() == null ) {
+
+			return filterInactiveExceptFor(Lists.<UUID>newArrayListWithCapacity(0), allTOs);
+
+		}
+
+		return filterInactiveExceptFor(
+				Lists.newArrayList(formTO.getPersonEducationGoal().getCourseworkHoursId()),
+				allTOs);
+	}
+	
 	private <T extends AbstractReferenceTO> List<T>
 	filterInactiveExceptFor(Collection<UUID> ids, List<T> toFilter) {
 		List<T> filtered = Lists.newArrayListWithCapacity(toFilter.size());

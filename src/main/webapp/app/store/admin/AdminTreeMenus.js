@@ -310,6 +310,18 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 						flex: .25						
 					}]
                 }, {
+                    text: 'Coursework Hours',
+                    title: 'Coursework Hours',
+                    store: 'courseworkHours',
+                    form: 'AbstractReferenceAdmin',
+                    leaf: true
+                }, {
+                    text: 'Enrollment Statuses',
+                    title: 'Enrollment Statuses',
+                    store: 'enrollmentStatuses',
+                    form: 'AbstractReferenceAdmin',
+                    leaf: true
+                },{
                     text: 'Funding Sources',
                     title: 'Funding Sources',
                     store: 'fundingSources',
@@ -325,6 +337,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     text: 'Military Affiliations',
                     title: 'Military Affiliations',
                     store: 'militaryAffiliations',
+                    form: 'AbstractReferenceAdmin',
+                    leaf: true
+                },{
+                    text: 'Registration Loads',
+                    title: 'Registration Loads',
+                    store: 'registrationLoads',
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
@@ -534,28 +552,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'messageTemplates',
                     form: 'messagetemplatesadmin',
                     leaf: true
-                },
-				{
-					text: 'Enrollment Status Reference Items',
-                    title: 'Enrollment Status Reference Items',
-                    //store: 'messageTemplates',
-                    form: 'enrollmentstatusadmin',
-                    leaf: true
-				},
-				{
-					text: 'Registration Load Reference Items',
-                    title: 'Registration Load Reference Items',
-                    //store: 'messageTemplates',
-                    form: 'registrationloadadmin',
-                    leaf: true
-				},
-				{
-					text: 'CourseWork Hours Reference Items',
-                    title: 'CourseWork Hours Reference Items',
-                    //store: 'messageTemplates',
-                    form: 'courseworkhoursadmin',
-                    leaf: true
-				}
+                }
+
 				]
             }, {
                 text: 'MAP',
