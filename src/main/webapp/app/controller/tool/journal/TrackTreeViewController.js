@@ -33,11 +33,6 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
         journalStepUrl: '',
         journalStepDetailUrl: ''
     },
-    control: {
-        view: {
-            itemexpand: 'onItemExpand'
-        }
-    },
     
     init: function(){
         var rootNode = null;
@@ -62,13 +57,61 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
 	clearTrack: function() {
 		this.treeUtils.clearRootCategories();
 	},
-    
+
+    getTreeStore: function() {
+        var me = this;
+        return me.getView().getView().getTreeStore();
+    },
+
+    getLoadingRootNode: function() {
+        var me = this;
+        return me.loadingRootNode;
+    },
+
+    setLoadingRootNode: function(node) {
+        var me = this;
+        me.loadingRootNode = node;
+    },
+
+    getDisplayedRootNode: function() {
+        var me = this;
+        return me.getTreeStore().getRootNode();
+    },
+
+    setDisplayedRootNode: function(node) {
+        var me = this;
+        me.getTreeStore().setRootNode(node);
+    },
+
+    loading: function(yesNo) {
+        var me = this;
+        me.getView().getView().setLoading(yesNo);
+    },
+
+    loaded: function() {
+        var me = this;
+        me.setDisplayedRootNode(me.getLoadingRootNode());
+        me.setLoadingRootNode(null);
+        this.awaitingAfterJournalDetailsLoadedCallbacks = 0;
+        this.loading(false);
+    },
+
+    resetForLoad: function() {
+        var me = this;
+        me.loading(true);
+        me.treeUtils.clearRootCategories();
+        var origRootNode = this.getDisplayedRootNode();
+        me.setLoadingRootNode(origRootNode.copy(null, true));
+        origRootNode.remove();
+        this.awaitingAfterJournalDetailsLoadedCallbacks = 0;
+    },
+
     loadSteps: function( journalTrack ) {
-		var journalTrackId = "";
-		
-        // clear the categories
-        this.treeUtils.clearRootCategories();
-        
+
+        this.resetForLoad();
+
+        var journalTrackId = "";
+
         if ( journalTrack ) {
 			journalTrackId = journalTrack;
 		} else {
@@ -88,7 +131,10 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
             treeRequest.set('expanded', false);
             treeRequest.set('callbackFunc', this.afterJournalStepsLoaded);
             treeRequest.set('callbackScope', this);
+            treeRequest.set('nodeToAppendTo', this.getLoadingRootNode());
             this.treeUtils.getItems(treeRequest);
+        } else {
+            this.loaded();
         }
     },
 
@@ -180,13 +226,29 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
 
     afterJournalStepsLoaded: function(scope){
         // after the journal steps load expand them to
-        // display the details under each step
-        var me = this;
-        
-        scope.getView().getView().getTreeStore().getRootNode().expandChildren();
+        // display the details under each step.
+        //
+        // Don't try to do this using getLoadingRootNode().expandChildren().
+        // The children of LoadingRootNode aren't displayed yet (they're
+        // loading), so the corresponding view event won't fire and thus
+        // whatever function we want to use to actually deal with the expansion
+        // won't be called. Instead, we do that explicitly here.
+        var me = scope;
+        var rootNode = me.getLoadingRootNode();
+        var anyChildren = false;
+        rootNode.eachChild(function(node) {
+            anyChildren = true;
+            me.awaitingAfterJournalDetailsLoadedCallbacks++;
+            node.expand();
+            me.loadDetailsForStepNode(node);
+        });
+
+        if ( !(anyChildren) ) {
+            me.loaded();
+        }
     },
-    
-    onItemExpand: function(nodeInt, obj){
+
+    loadDetailsForStepNode: function(nodeInt, obj){
         var me = this;
         var node = nodeInt;
         var url = me.journalStepDetailUrl;
@@ -270,7 +332,8 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
 
     afterJournalDetailsLoaded: function(scope, node){
 
-        var me = this;
+        scope.awaitingAfterJournalDetailsLoadedCallbacks--;
+
         // after the journal details load select each detail
         // that is selected in the journal
         var journalEntryDetails = scope.journalEntry.get("journalEntryDetails");
@@ -289,7 +352,7 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
 
                         var id = innerItem.id;
 
-                        var detailNode = scope.getView().getView().getTreeStore().getNodeById(id + '_journalDetail');
+                        var detailNode = scope.getLoadingRootNode().findChild('id', (id + '_journalDetail'), true);
 
                         if (detailNode != null) {
 
@@ -300,7 +363,7 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
                             var parentId = journalStep.id;
 
 
-                            var parentNode = scope.getView().getView().getTreeStore().getNodeById(parentId + '_journalStep');
+                            var parentNode = scope.getLoadingRootNode().findChild('id', (parentId + '_journalStep'), true);
 
                             if ((stepNode && parentNode) && (stepNode.id == parentNode.id)) {
                                 detailNode.set('checked', true);
@@ -316,12 +379,15 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
         }
         
         var children = node.childNodes;
-        if (children) {
-            if (node.get('qtitle') == 'INACTIVE' && !children.length) {
-                node.remove();
-            }
+        if ( !(children) || !(children.length) ) {
+            node.remove();
+        }
+
+        if ( scope.awaitingAfterJournalDetailsLoadedCallbacks <= 0 ) {
+            scope.loaded();
         }
     },
+
     
     onSaveClick: function(button){
         var me = this;
