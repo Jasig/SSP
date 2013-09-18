@@ -89,16 +89,18 @@ public class ChallengeReferralDao extends
 	}
 
 	public long countByChallengeIdNotOnActiveTaskList(final UUID challengeId,
-			final Person student, final String sessionId) {
+			final Person student, final String sessionId, boolean selfHelpGuide) {
 
+		String selfHelpGuideString = selfHelpGuide ? "and cr.showInSelfHelpGuide = true " : "";
 		return (Long) sessionFactory
 				.getCurrentSession()
 				.createQuery(
 						"select count(cr) "
 								+ "from ChallengeReferral cr "
 								+ "inner join cr.challengeChallengeReferrals ccr "
-								+ "where cr.showInSelfHelpGuide = true "
-								+ "and ccr.challenge.id = :challengeId "
+								+ "where "
+								+ "ccr.challenge.id = :challengeId "
+								+ selfHelpGuideString
 								+ "and cr.objectStatus = :objectStatus "
 								+ "and not exists (from Task "
 								+ "where challengeReferral.id = cr.id "
@@ -118,16 +120,18 @@ public class ChallengeReferralDao extends
 	@SuppressWarnings(UNCHECKED)
 	// :TODO paging?
 	public List<ChallengeReferral> byChallengeIdNotOnActiveTaskList(
-			final UUID challengeId, final Person student, final String sessionId) {
+			final UUID challengeId, final Person student, final String sessionId, boolean selfHelpGuide) {
 
+		String selfHelpGuideString = selfHelpGuide ? "and cr.showInSelfHelpGuide = true " : "";
 		return sessionFactory
 				.getCurrentSession()
 				.createQuery(
 						"select cr "
 								+ "from ChallengeReferral cr "
 								+ "inner join cr.challengeChallengeReferrals ccr "
-								+ "where cr.showInSelfHelpGuide = true "
-								+ "and ccr.challenge.id = :challengeId "
+								+ "where "
+								+ "ccr.challenge.id = :challengeId "
+								+ selfHelpGuideString
 								+ "and cr.objectStatus = :objectStatus "
 								+ "and not exists " + "(from Task "
 								+ "where challengeReferral.id = cr.id "

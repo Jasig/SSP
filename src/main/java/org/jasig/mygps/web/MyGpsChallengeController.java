@@ -97,7 +97,7 @@ public class MyGpsChallengeController extends AbstractBaseController {
 	List<ChallengeTO> search(@RequestParam("query") final String query)
 			throws Exception {
 		try {
-			return challengeService.search(query);
+			return challengeService.search(query,securityService.currentUser().getPerson(),true);
 		} catch (Exception e) {
 			LOGGER.error("ERROR : search() : {}", e.getMessage(), e);
 			throw e;

@@ -39,14 +39,14 @@ public interface ChallengeReferralService extends
 	PagingWrapper<ChallengeReferral> getAllForChallenge(Challenge challenge,
 			SortingAndPaging sAndP);
 
-	List<ChallengeReferral> challengeReferralSearch(Challenge challenge);
+	List<ChallengeReferral> challengeReferralSearch(Challenge challenge,boolean selfHelpGuide);
 
 	List<ChallengeReferral> getChallengeReferralCountByChallengeAndQuery(Challenge challenge,
 			String query, SortingAndPaging sAndP);
 
 	long countByChallengeIdNotOnActiveTaskList(Challenge challenge,
-			Person student, String sessionId);
+			Person student, String sessionId, boolean selfHelpGuide);
 
 	List<ChallengeReferral> byChallengeIdNotOnActiveTaskList(
-			Challenge challenge, Person student, String sessionId);
+			Challenge challenge, Person student, String sessionId, boolean selfHelpGuide);
 }

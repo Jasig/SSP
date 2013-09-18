@@ -63,10 +63,10 @@ public class ChallengeReferralServiceImpl extends
 
 	@Override
 	public List<ChallengeReferral> challengeReferralSearch(
-			final Challenge challenge) {
+			final Challenge challenge,boolean selfHelpGuide) {
 		return dao.byChallengeIdNotOnActiveTaskList(challenge.getId(),
 				securityService.currentUser().getPerson(),
-				securityService.getSessionId());
+				securityService.getSessionId(),selfHelpGuide);
 	}
 
 	@Override
@@ -112,19 +112,19 @@ public class ChallengeReferralServiceImpl extends
 	@Override
 	public long countByChallengeIdNotOnActiveTaskList(
 			final Challenge challenge,
-			final Person student, final String sessionId) {
+			final Person student, final String sessionId, boolean selfHelpGuide) {
 		return dao.countByChallengeIdNotOnActiveTaskList(challenge.getId(),
-				student, sessionId);
-	}
+				student, sessionId,selfHelpGuide);
+	} 
 
 	@Override
 	public List<ChallengeReferral> byChallengeIdNotOnActiveTaskList(
 			final Challenge challenge, final Person student,
-			final String sessionId) {
+			final String sessionId,boolean selfHelpGuide) {
 		return dao.byChallengeIdNotOnActiveTaskList(challenge.getId(), student,
-				sessionId);
-	}
-
+				sessionId,selfHelpGuide);
+	} 
+	 
 	@Override
 	protected ChallengeReferralDao getDao() {
 		return dao;

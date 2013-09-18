@@ -89,12 +89,14 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 	 * @param query
 	 *            Text string to compare with a SQL LIKE clause on the
 	 *            SelfHelpGuide Question, Description, and Tags fields
+	 * @param selfHelpGuide 
 	 * @return All Challenges that match the specified criteria.
 	 */
 	@SuppressWarnings(UNCHECKED)
-	public List<Challenge> searchByQuery(final String query) {
+	public List<Challenge> searchByQuery(final String query, boolean selfHelpGuide) {
+		String selfHelpGuideString = selfHelpGuide ? "and showInSelfHelpGuide = true" : "";
 		final String beginningHql = "select distinct c from Challenge c inner join c.challengeChallengeReferrals ccr where c.objectStatus = :objectStatus and c.showInSelfHelpSearch = true "; // NOPMD
-		final String endHql = " and exists (from ChallengeReferral where id = ccr.challengeReferral.id and showInSelfHelpGuide = true and objectStatus = :objectStatus) order by c.name"; // NOPMD
+		final String endHql = " and exists (from ChallengeReferral where id = ccr.challengeReferral.id " + selfHelpGuideString + " and objectStatus = :objectStatus) order by c.name"; // NOPMD
 
 		if (!StringUtils.isNotBlank(query)) {
 			// no query specified so don't bother filtering by a wildcard string
@@ -117,6 +119,31 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 				.setParameter("objectStatus", ObjectStatus.ACTIVE).list();
 	}
 
+	@SuppressWarnings(UNCHECKED)
+	public List<Challenge> searchByQueryNoSelfHelpGuide(final String query) {
+		final String beginningHql = "select distinct c from Challenge c inner join c.challengeChallengeReferrals ccr where c.objectStatus = :objectStatus and c.showInSelfHelpSearch = true "; // NOPMD
+		final String endHql = " and exists (from ChallengeReferral where id = ccr.challengeReferral.id  and objectStatus = :objectStatus) order by c.name"; // NOPMD
+
+		if (!StringUtils.isNotBlank(query)) {
+			// no query specified so don't bother filtering by a wildcard string
+			return sessionFactory
+					.getCurrentSession()
+					.createQuery(beginningHql + endHql)
+					.setParameter("objectStatus", ObjectStatus.ACTIVE).list();
+		}
+
+		return sessionFactory
+				.getCurrentSession()
+				.createQuery(beginningHql
+						+ "and (upper(c.name) like :query "
+						+ "or upper(c.selfHelpGuideQuestion) like :query "
+						+ "or upper(c.selfHelpGuideDescription) like :query "
+						+ "or upper(c.tags) like :query) "
+						+ endHql)
+				.setParameter("query",
+						"%" + query.toUpperCase(Locale.getDefault()) + "%")
+				.setParameter("objectStatus", ObjectStatus.ACTIVE).list();
+	}
 	/**
 	 * Retrieves all Challenges that are marked to be able to be shown in the
 	 * StudentIntake interface.

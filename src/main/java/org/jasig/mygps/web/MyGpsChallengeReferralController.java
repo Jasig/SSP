@@ -105,7 +105,7 @@ public class MyGpsChallengeReferralController extends AbstractBaseController {
 
 			return challengeReferralTOFactory
 					.asTOList(challengeReferralService
-							.challengeReferralSearch(challenge));
+							.challengeReferralSearch(challenge,true));
 		} catch (Exception e) {
 			LOGGER.error("ERROR : search() : {}", e.getMessage(), e);
 			throw e;

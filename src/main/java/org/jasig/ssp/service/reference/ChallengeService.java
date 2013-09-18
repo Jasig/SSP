@@ -32,7 +32,7 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 
 public interface ChallengeService extends ReferenceService<Challenge> {
 
-	List<Challenge> challengeSearch(String query);
+	List<Challenge> challengeSearch(String query,boolean selfHelpGuide);
 
 	PagingWrapper<Challenge> getAllForCategory(Category category,
 			SortingAndPaging sAndP);
@@ -48,5 +48,8 @@ public interface ChallengeService extends ReferenceService<Challenge> {
 
 	PagingWrapper<Challenge> getAllForIntake(SortingAndPaging sAndP);
 
-	List<ChallengeTO> search(String query) throws Exception;
+
+	List<ChallengeTO> search(String query, Person student, boolean selfHelpGuide)
+			throws Exception;
+
 }

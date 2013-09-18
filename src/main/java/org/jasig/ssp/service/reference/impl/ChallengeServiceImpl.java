@@ -72,16 +72,16 @@ public class ChallengeServiceImpl extends AbstractReferenceService<Challenge>
 			.getLogger(ChallengeServiceImpl.class);
 	
 	@Override
-	public List<Challenge> challengeSearch(final String query) {
-		final List<Challenge> challenges = dao.searchByQuery(query);
+	public List<Challenge> challengeSearch(final String query, boolean selfHelpGuide) {
+		final List<Challenge> challenges = dao.searchByQuery(query,selfHelpGuide); 
 		final List<Challenge> results = Lists.newArrayList();
 
-		if (challenges != null) {
+		if (challenges != null) { 
 			for (final Challenge challenge : challenges) {
 				final long count = challengeReferralService
 						.countByChallengeIdNotOnActiveTaskList(challenge,
 								securityService.currentUser().getPerson(),
-								securityService.getSessionId());
+								securityService.getSessionId(),selfHelpGuide);
 				if (count > 0) {
 					results.add(challenge);
 				}
@@ -166,12 +166,13 @@ public class ChallengeServiceImpl extends AbstractReferenceService<Challenge>
 
 		return challengeReferral;
 	}
-	
-	@Override
-	public List<ChallengeTO> search(final String query)
+
+
+	@Override 
+	public List<ChallengeTO> search(final String query,Person student,boolean selfHelpGuide)
 			throws Exception {
-		try {
-			final List<Challenge> challenges = challengeSearch(query);
+		try { 
+			final List<Challenge> challenges = challengeSearch(query,selfHelpGuide);
 
 			final List<ChallengeTO> challengeTOs = Lists.newArrayList();
 
@@ -180,8 +181,8 @@ public class ChallengeServiceImpl extends AbstractReferenceService<Challenge>
 
 				List<ChallengeReferral> referrals = challengeReferralService
 						.byChallengeIdNotOnActiveTaskList(challenge,
-								securityService.currentUser().getPerson(),
-								securityService.getSessionId());
+								student,
+								securityService.getSessionId(),selfHelpGuide);
 				challengeTO
 						.setChallengeChallengeReferrals(challengeReferralTOFactory
 								.asTOList(referrals));

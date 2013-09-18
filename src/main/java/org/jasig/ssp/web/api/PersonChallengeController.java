@@ -165,12 +165,12 @@ public class PersonChallengeController extends
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	@DynamicPermissionChecking
 	public @ResponseBody
-	List<ChallengeTO> getChallengesForPerson(
+	List<ChallengeTO> getChallengesForPerson(@PathVariable final UUID personId,
 			@RequestParam("query") final String query)
 			throws Exception {
 
 		try {
-			return challengeService.search(query);
+			return challengeService.search(query,personService.get(personId),false);
 		} catch (Exception e) {
 			LOGGER.error("ERROR : search() : {}", e.getMessage(), e);
 			throw e;
