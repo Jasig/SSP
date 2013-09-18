@@ -26,6 +26,7 @@
 	http://www.liquibase.org/xml/ns/dbchangelog-ext
 	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+	<property name="schema" value="${database.schema}" />
 	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
 	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 	<property name="concat.type" value="||" dbms="postgresql"/>
@@ -34,7 +35,7 @@
 	<changeSet id="Provide code column in student_type table" author="paul.spaude">
 		<preConditions onFail="MARK_RAN" onFailMessage="Code column already exists in student_type table">
 			<not>
-				<columnExists columnName="code"  tableName="student_type"/>
+				<columnExists columnName="code"  tableName="student_type" schemaName="${schema}"/>
 			</not>
 		</preConditions>
 		<comment>Add code column to student_type table with temporary generated data. Please change to correct values after execution.</comment>
