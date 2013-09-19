@@ -24,7 +24,7 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewControll
     	caseloadService: 'caseloadService',
     	store: 'caseloadStore',
     	formUtils: 'formRendererUtils',
-        coachesStore: 'allCoachesStore',
+        coachesStore: 'allCoachesCurrentStore',
         reassignCaseloadStore: 'reassignCaseloadStore',
     	appEventsController: 'appEventsController'
         
@@ -46,6 +46,7 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewControll
     },       
 	init: function() {
 		var me=this;
+		me.coachesStore.load();
 		me.store.removeAll();
 	     me.formUtils.reconfigureGridPanel( me.getView(), me.store);
 		return me.callParent(arguments);

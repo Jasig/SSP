@@ -1912,11 +1912,16 @@
                     "name": "Coaches.js",
                     "path": "/app/store/"
                 },
- {
+ 				{
                     "clsName": "Ssp.store.CoachesAll",
                     "name": "CoachesAll.js",
                     "path": "/app/store/"
-                },                
+                },    
+ 				{
+                    "clsName": "Ssp.store.CoachesAllCurrent",
+                    "name": "CoachesAll.js",
+                    "path": "/app/store/"
+                },                             
                 {
                     "clsName": "Ssp.store.Goals",
                     "name": "Goals.js",

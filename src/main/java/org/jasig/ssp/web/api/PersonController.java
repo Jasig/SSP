@@ -55,6 +55,7 @@ import javax.validation.Valid;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.UUID;
 
 /**
@@ -151,7 +152,17 @@ public class PersonController extends AbstractBaseController {
 		return new PagedResponse<PersonLiteTO>(true, coaches.getResults(),
 				PersonLiteTO.toTOListFromCoachTOs(coaches.getRows()));
 	}
+	
+	@RequestMapping(value = "/currentCoachesLite", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	public @ResponseBody
+	PagedResponse<PersonLiteTO> getAllCurrentCoaches() {
+		final SortedSet<CoachPersonLiteTO> coaches = service
+				.getAllCurrentCoachesLite(CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_AND_ID_COMPARATOR);
 
+		return new PagedResponse<PersonLiteTO>(true, new Long(coaches.size()),
+				PersonLiteTO.toTOListFromCoachTOs(coaches));
+	}
 	/**
 	 * Retrieves the specified instance from persistent storage.
 	 * 
