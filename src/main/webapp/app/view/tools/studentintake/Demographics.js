@@ -80,7 +80,15 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
-				        allowBlank: true
+				        allowBlank: true,
+						forceSelection: true,
+						listeners:{
+							'change': function() {
+								if (this.getValue() === null) {
+    								this.reset();
+  								}
+							}
+						}
 					},{
 				        xtype: 'combobox',
 				        name: 'ethnicityId',
@@ -92,7 +100,15 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
-				        allowBlank: true
+				        allowBlank: true,
+						forceSelection: true,
+						listeners:{
+							'change': function() {
+								if (this.getValue() === null) {
+    								this.reset();
+  								}
+							}
+						}
 					},{
 						xtype: 'combobox',
 				        name: 'raceId',
@@ -104,7 +120,15 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
-				        allowBlank: true
+				        allowBlank: true,
+						forceSelection: true,
+						listeners:{
+							'change': function() {
+								if (this.getValue() === null) {
+    								this.reset();
+  								}
+							}
+						}
 					},{
 				        xtype: 'combobox',
 				        name: 'gender',
@@ -116,7 +140,14 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
-				        allowBlank: true
+				        forceSelection: true,
+						listeners:{
+							'change': function() {
+								if (this.getValue() === null) {
+    								this.reset();
+  								}
+							}
+						}
 					},{
 				        xtype: 'combobox',
 				        itemId: 'citizenship',
