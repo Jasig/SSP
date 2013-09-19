@@ -31,4 +31,7 @@
 		<modifyDataType tableName="challenge_referral" columnName="link" newDataType="${nvarchar.type}(256)" />		
 	</changeSet>
 
+	<changeSet author='tony.arland' id='change type of  task#link'>
+		<modifyDataType tableName="task" columnName="link" newDataType="${nvarchar.type}(256)" />		
+	</changeSet>
 </databaseChangeLog>
