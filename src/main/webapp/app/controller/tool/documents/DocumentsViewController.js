@@ -23,6 +23,7 @@ Ext.define('Ssp.controller.tool.documents.DocumentsViewController', {
     	apiProperties: 'apiProperties',
     	appEventsController: 'appEventsController',
     	authenticatedPerson: 'authenticatedPerson',
+    	personLite: 'personLite',
     	formUtils: 'formRendererUtils',
     	person: 'currentPerson',
     	store: 'studentDocumentsStore',
@@ -67,7 +68,7 @@ Ext.define('Ssp.controller.tool.documents.DocumentsViewController', {
 	init: function() {
 		var me = this;
 		me.formUtils.reconfigureGridPanel(me.getView(), me.store);
-		me.store.load(me.person.get('id'));
+		me.store.load(me.personLite.get('id'));
 		return me.callParent(arguments);
     },
     
