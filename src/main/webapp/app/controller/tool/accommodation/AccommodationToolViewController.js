@@ -49,8 +49,7 @@ Ext.define('Ssp.controller.tool.accommodation.AccommodationToolViewController', 
 	},
     
 	init: function() {
-		var me=this;	
-		
+		var me=this;
 		// Load the views dynamically
 		// otherwise duplicate id's will be registered
 		// on cancel
@@ -416,6 +415,14 @@ Ext.define('Ssp.controller.tool.accommodation.AccommodationToolViewController', 
 					}
 					accommodationData.personDisability.odsRegistrationDate = completedOdsRegistrationDateSave;
 					
+					
+					me.accommodation.set('personDisabilityAccommodations', accommodationData.personDisabilityAccommodations);
+					me.accommodation.set('personDisabilityAgencies', accommodationData.personDisabilityAgencies);
+					me.accommodation.set('personDisabilityTypes', accommodationData.personDisabilityTypes);
+					me.accommodation.set('personDisability', accommodationData.personDisability);
+				
+					
+					
 					scope.saveAccommodationSuccess(r,scope,newSaveFlag);
 				},
 				failure: function(r,scope){
@@ -440,7 +447,7 @@ Ext.define('Ssp.controller.tool.accommodation.AccommodationToolViewController', 
 			me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );
 			if ( newSaveFlag ) {
 				me.onCancelClick(); //rebuild view for new save to show date
-			}										
+			}				
 		}								
 	},
 	
@@ -454,5 +461,6 @@ Ext.define('Ssp.controller.tool.accommodation.AccommodationToolViewController', 
 		me.getView().removeAll();
 		me.initAccommodationViews();
 		me.buildAccommodation( me.accommodation );
+		
 	}
 });
