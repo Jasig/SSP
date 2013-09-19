@@ -62,7 +62,7 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				    	xtype: 'textarea',
 				        fieldLabel: 'Link (HTML Supported)',
 				        name: 'link',
-				        maxLength: 1000,
+				        maxLength: 256,
 				        allowBlank:true
 				    },{
 				        xtype: 'combobox',

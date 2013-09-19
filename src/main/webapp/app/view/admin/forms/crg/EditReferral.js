@@ -47,6 +47,7 @@ Ext.define('Ssp.view.admin.forms.crg.EditReferral',{
                     xtype: 'textareafield',
                     fieldLabel: 'Link (HTML supported) example &lt;a href="www.google.com"&gt;Google&lt;/a&gt;',
                     anchor: '100%',
+                    maxLength: 256,
                     name: 'link'
                 },                
                 {
