@@ -35,31 +35,6 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
             form: '',
             expanded: true,
             children: [
-//               {
-//                text: 'Student Success',
-//                title: 'Student Success',
-//                form: '',
-//                expanded: false,
-//                children: [{
-//                    text: 'Campus Services',
-//                    title: 'Campus Services',
-//                    store: 'campusServices',
-//                    form: 'AbstractReferenceAdmin',
-//                    leaf: true
-//                }, {
-//                    text: 'LASSI Skill Components',
-//                    title: 'LASSI Skill Components',
-//                    store: 'lassis',
-//                    form: 'AbstractReferenceAdmin',
-//                    leaf: true
-//                }, {
-//                    text: 'Personality Types',
-//                    title: 'Personality Types',
-//                    store: 'personalityTypes',
-//                    form: 'AbstractReferenceAdmin',
-//                    leaf: true
-//                }]
-//            },
             {
                 text: 'Accommodation',
                 title: 'Accommodation',
@@ -125,8 +100,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     leaf: true
                 }]
             }, {
-                text: 'Caseload',
-                title: 'Caseload',
+                text: 'Caseload Assignment',
+                title: 'Caseload Assignment',
                 form: '',
                 expanded: false,
                 children: [{
@@ -135,13 +110,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'programStatusChangeReasons',
                     form: 'AbstractReferenceAdmin',
                     leaf: true
-                }]
-            }, {
-                text: 'Caseload Assignment',
-                title: 'Caseload Assignment',
-                form: '',
-                expanded: false,
-                children: [{
+                },{
                     text: 'Referral Sources',
                     title: 'Referral Sources',
                     store: 'referralSources',
