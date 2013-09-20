@@ -48,11 +48,19 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
 	    								var columns = rowEditor.grid.columns;
 	    								var record = rowEditor.context.record;
 	    								
+										if(record.get('id') == '' || record.get('id') == null || record.get('id') == undefined){
+											me.store.load();
+										}
+										
 	    								Ext.each(rowEditor.editor.items.items, function(item) {
+											
 	    									if( item.store ) {
+											
 	    										item.store.clearFilter(true);
 	    									}			
 	    								});
+										
+										
 	    							}
     							}
     					});
