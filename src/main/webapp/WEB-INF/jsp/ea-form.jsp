@@ -280,7 +280,7 @@
                 suggestions:  '<c:url value="/api/1/reference/earlyAlertSuggestion?limit=-1" />',
                 submit:       '<c:url value="/api/1/person/STUDENTID/earlyAlert" />',
                 configByName: '<c:url value="/api/1/reference/config?name=CONFIGNAME" />',
-                enrollmentStatus: '<c:url value="/api/1/reference/enrollmentStatus?limit=-1"/>'
+                enrollmentStatus: '<c:url value="/api/1/reference/enrollmentStatus?limit=-1"/>',
                 done:         '${doneUrl}'
             },
             parameters: {
