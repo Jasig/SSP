@@ -38,6 +38,7 @@ Ext.define('Ssp.controller.SearchViewController', {
         searchCriteria: 'searchCriteria',
         searchService: 'searchService',
         searchStore: 'studentsSearchStore',
+		termsStore: 'termsStore',
         sspConfig: 'sspConfig'
     },
     
@@ -126,6 +127,11 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	// ensure the selected person is not loaded twice
 		// once on load and once on selection
 	   	me.personLite.set('id','');
+		
+		if(me.termsStore.getTotalCount() == 0){
+				me.termsStore.addListener("load", me.onTermsStoreLoad, me);
+				me.termsStore.load();
+		}
 
     	// set the search results to the stored
 	   	// search results
@@ -340,11 +346,18 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     onAddPersonClick: function( button ){
     	var me=this;
+		
         var skipCallBack = this.appEventsController.getApplication().fireEvent('personButtonAdd',me);  
         if(skipCallBack)
         {
         	me.onAddPerson();
         }
+	},
+	
+	onTermsStoreLoad:function(){
+		var me = this;
+		me.termsStore.removeListener( "onTermsStoreLoad", me.onTermsStoreLoad, me );
+		
 	},
 	
 	onEditPersonClick: function( button ){

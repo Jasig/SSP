@@ -17,109 +17,137 @@
  * under the License.
  */
 Ext.define('Ssp.store.external.Terms', {
-	extend: 'Ssp.store.reference.AbstractReferences',
-	model: 'Ssp.model.external.Term',
-    mixins: [ 'Deft.mixin.Injectable' ],
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.external.Term',
+    mixins: ['Deft.mixin.Injectable'],
     inject: {
-    	apiProperties: 'apiProperties'
+        apiProperties: 'apiProperties'
     },
-   
+    
     constructor: function(){
-		var me = this;
-		me.callParent(arguments);
-		me.addListener('load', me.sortAfterLoad, me, {single:true});
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('terms'),
-    		autoLoad: true});
-    	return; 
+        var me = this;
+        me.callParent(arguments);
+        me.addListener('load', me.sortAfterLoad, me, {
+            single: true
+        });
+        Ext.apply(this.getProxy(), {
+            url: this.getProxy().url + this.apiProperties.getItemUrl('terms'),
+            autoLoad: true
+        });
+        return;
     },
-
-	sortAfterLoad: function(){
-		var me = this;
-		me.sort('startDate', 'DESC');
-	},
+    
+    sortAfterLoad: function(){
+        var me = this;
+        me.sort('startDate', 'DESC');
+    },
     
     getCurrentAndFutureTermsStore: function(sortEarliestFirst){
-		var me = this;
-    	var store = Ext.create('Ext.data.Store', {
-		     	model: "Ssp.model.external.Term"
-		     });
-    	store.loadRecords(me.getCurrentAndFutureTerms());
-		me.sortStoreByDate(store, sortEarliestFirst);
-    	return store;
+        var me = this;
+        var store = Ext.create('Ext.data.Store', {
+            model: "Ssp.model.external.Term"
+        });
+        store.loadRecords(me.getCurrentAndFutureTerms());
+        me.sortStoreByDate(store, sortEarliestFirst);
+        return store;
     },
-
-	sortStoreByDate: function(store, sortEarliestFirst){
-		if(sortEarliestFirst)
-			store.sort('startDate','ASC');
-		else
-			store.sort('startDate','DESC');
-	},
-
+    
+    sortStoreByDate: function(store, sortEarliestFirst){
+        if (sortEarliestFirst) 
+            store.sort('startDate', 'ASC');
+        else 
+            store.sort('startDate', 'DESC');
+    },
+    
     getFutureTermsStore: function(sortEarliestFirst){
-		var me = this;
-    	var store = Ext.create('Ext.data.Store', {
-		     	model: "Ssp.model.external.Term"
-		     });
-    	store.loadData(me.getFutureTerms());
-		me.sortStoreByDate(store, sortEarliestFirst);
-    	return store;
+        var me = this;
+        var store = Ext.create('Ext.data.Store', {
+            model: "Ssp.model.external.Term"
+        });
+        store.loadData(me.getFutureTerms());
+        me.sortStoreByDate(store, sortEarliestFirst);
+        return store;
     },
-
-	getTermsFromTermCodesStore: function(termCodes){
-		var me = this;
-		var terms = [];
-		Ext.Array.forEach(termCodes, function(termCode){
-			var index = me.find( 'code', termCode);
-			terms.push(me.getAt(index));
-		});
-		var store = Ext.create('Ext.data.Store', {
-		     	model: "Ssp.model.external.Term"
-		     });
-    	store.loadData(terms);
-		store.sort('startDate', 'DESC');
-		return store;
-	},
-
-	getTermsFromTermCodes: function(termCodes){
-		var me = this;
-		return me.getTermsFromTermCodesStore(termCodes).getRange(0);
-	},
+    
+    getTermsFromTermCodesStore: function(termCodes){
+        var me = this;
+        var terms = [];
+        Ext.Array.forEach(termCodes, function(termCode){
+            var index = me.find('code', termCode);
+            terms.push(me.getAt(index));
+        });
+        var store = Ext.create('Ext.data.Store', {
+            model: "Ssp.model.external.Term"
+        });
+        store.loadData(terms);
+        store.sort('startDate', 'DESC');
+        return store;
+    },
+    
+    getTermsFromTermCodes: function(termCodes){
+        var me = this;
+        return me.getTermsFromTermCodesStore(termCodes).getRange(0);
+    },
     
     getCurrentAndFutureTerms: function(maximum){
-    	var me = this;
-		var startIndex = 0
-		var currentTermIndex = me.findBy(me.isCurrentTerm);
-		if(maximum){
-			var startReportYear = me.getAt(currentTermIndex).get("reportYear");
-			startIndex = me.find('reportYear', startReportYear + maximum);
-			if(startIndex == -1)
-				startIndex = 0;
-		}
-    	return me.getRange(startIndex, currentTermIndex);
+        var me = this;
+        var startIndex = 0
+        var currentTermIndex = me.findBy(me.isCurrentTerm);
+        if (maximum) {
+            var startReportYear = me.getAt(currentTermIndex).get("reportYear");
+            startIndex = me.find('reportYear', startReportYear + maximum);
+            if (startIndex == -1) 
+                startIndex = 0;
+        }
+        return me.getRange(startIndex, currentTermIndex);
     },
-
-	isPastTerm: function(termCode){
-    	var me = this;
-		var startIndex = 0
-		var currentTermIndex = me.findBy(me.isCurrentTerm);
-		var termIndex = me.find('code', termCode)
-		
-		if(me.getAt(termIndex).get('endDate').getTime() <= (new Date()).getTime())
-			return true;
-		else			
-			return termIndex <= currentTermIndex ? false : true;
+    
+    isPastTerm: function(termCode){
+        var me = this;
+        var startIndex = 0
+        var currentTermIndex = me.findBy(me.isCurrentTerm);
+        var termIndex = me.find('code', termCode)
+        
+        if (me.getAt(termIndex).get('endDate').getTime() <= (new Date()).getTime()) 
+            return true;
+        else 
+            return termIndex <= currentTermIndex ? false : true;
     },
     
     getFutureTerms: function(){
-    	var me = this;
-    	var currentTermIndex = me.findBy(me.isCurrentTerm) - 1;
-    	return me.getRange(0, currentTermIndex);
+        var me = this;
+        var currentTermIndex = me.findBy(me.isCurrentTerm) - 1;
+        return me.getRange(0, currentTermIndex);
     },
     
     isCurrentTerm: function(record, id){
-    	var me = this;
-    	if(record.get('startDate').getTime() >= (new Date()).getTime())
-    		return false;
-    	return true;
+        var me = this;
+        if (record.get('startDate').getTime() >= (new Date()).getTime()) 
+            return false;
+        return true;
+    },
+    
+    getCurrentAndFutureYearStore: function(sortEarliestFirst){
+        var me = this;
+        var store = Ext.create('Ext.data.Store', {
+            model: "Ssp.model.external.Term"
+        });
+        store.loadRecords(me.getCurrentAndFutureTerms());
+        me.sortStoreByDate(store, sortEarliestFirst);
+        
+        
+        var uniqueIds = store.collect("reportYear");
+        var items = [];
+        Ext.Array.each(uniqueIds, function(item){
+            var newModel = Ext.create("Ssp.model.external.Term");
+            newModel.set('reportYear', item);
+            items.push(newModel);
+        });
+        
+        store.loadData(items);
+        
+        return store;
     }
+    
+    
 });

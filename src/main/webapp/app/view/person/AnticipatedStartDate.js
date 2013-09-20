@@ -58,7 +58,7 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
 		        name: 'anticipatedStartYear',
 		        fieldLabel: 'Anticipated Start Year',
 		        emptyText: 'Select One',
-		        store: this.termsStore.getCurrentAndFutureTermsStore(true),
+		        store: this.termsStore.getCurrentAndFutureYearStore(true),
 		        valueField: 'reportYear',
 		        displayField: 'reportYear',
 		        mode: 'local',
