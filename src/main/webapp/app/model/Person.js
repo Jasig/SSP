@@ -103,12 +103,13 @@ Ext.define('Ssp.model.Person', {
     },
 
     setCoachId: function( value ){
-    	if (value != "")
+    	if (value)
     	{
-        	if ( this.get('coach') != null)
-        	{
-        		this.set('coach',{"id":value});
-        	}    		
+        	this.set('coach',{"id":value});
+    	}
+    	else
+    	{
+    		this.set('coach',null);
     	}
     },    
     
@@ -155,14 +156,16 @@ Ext.define('Ssp.model.Person', {
     	return ((studentType != null)? studentType.name : "");   	
     },    
     
-    setStudentTypeId: function( value ){
+    setStudentTypeId: function( value )
+    {
     	var me=this;
-    	if (value != "")
+    	if (value)
     	{
-        	if ( me.get('studentType') != null)
-        	{
-        		me.set('studentType',{"id":value});
-        	}    		
+    		me.set('studentType',{"id":value});
+    	}
+    	else
+    	{
+    		me.set('studentType',null);
     	}
     },
     

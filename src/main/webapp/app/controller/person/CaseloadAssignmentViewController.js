@@ -246,16 +246,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			model.setCoachId( coachID );
 			model.setStudentTypeId( studentTypeID );
 
-            //handles the case where the model doesn't allow it to be set when the original was null
-			if ( coachID && !model.getCoachId() ) {
-                model.set('coach',{"id":coachID});
-            }
-
-            //handles the case where the model doesn't allow it to be set when the original was null
-            if ( studentTypeID && !model.getStudentTypeId() ) {
-            	model.set('studentType',{"id":studentTypeID});
-            }
-			
 			// update the appointment
 			appointmentForm.updateRecord();
 						
