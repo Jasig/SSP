@@ -32,6 +32,7 @@ import javax.mail.internet.MimeMessage;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.collect.Lists;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
 import org.jasig.ssp.dao.MessageDao;
@@ -361,7 +362,12 @@ public class MessageServiceImpl implements MessageService {
 				mimeMessageHelper.setReplyTo(message.getSender()
 						.getEmailAddressWithName());
 			}
-			
+			//As per SSP-693 we set the configured BCC on all outbound messages
+			String configBCC = getBcc();
+			if(StringUtils.isNotBlank(configBCC))
+			{
+				mimeMessageHelper.addBcc(configBCC);
+			}
 			if ( message.getRecipient() != null && 
 					StringUtils.isNotBlank(message.getRecipient().getPrimaryEmailAddress() ) 
 					) { // NOPMD by jon.adams			{
@@ -395,14 +401,14 @@ public class MessageServiceImpl implements MessageService {
 				throw new SendFailedException("Recipient Email Address '"
 						+ message.getRecipientEmailAddress() + "' is invalid");
 			}
-
-			if (!StringUtils.isEmpty(message.getCarbonCopy())) { // NOPMD
+			String carbonCopy = message.getCarbonCopy();
+			if (!StringUtils.isEmpty(carbonCopy)) { // NOPMD
 				try {
 					
 					//check for multiple addresses seperated by a comma
-					if(message.getCarbonCopy().indexOf(",") != -1)
+					if(carbonCopy.indexOf(",") != -1)
 					{
-						StringTokenizer tokenizer = new StringTokenizer(message.getCarbonCopy(),",");
+						StringTokenizer tokenizer = new StringTokenizer(carbonCopy,",");
 						while(tokenizer.hasMoreTokens())
 						{
 							mimeMessageHelper.addCc(tokenizer.nextToken());
@@ -410,16 +416,16 @@ public class MessageServiceImpl implements MessageService {
 					}
 					else
 					{
-						mimeMessageHelper.setCc(message.getCarbonCopy());
+						mimeMessageHelper.setCc(carbonCopy);
 					}
 					
 				} catch ( MessagingException e ) {
 					LOGGER.warn("Invalid carbon copy address: '{}'. Will"
 							+ " attempt to send message anyway.",
-							message.getCarbonCopy(), e);
+							carbonCopy, e);
 				}
-			} else if (!StringUtils.isEmpty(getBcc())) {
-				final String bcc = getBcc();
+			} else if (!StringUtils.isEmpty(configBCC)) {
+				final String bcc = configBCC;
 				try {
 					mimeMessageHelper.setBcc(bcc);
 				} catch ( MessagingException e ) {
