@@ -21,6 +21,7 @@ package org.jasig.ssp.web.api.external;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,6 +53,7 @@ import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
 import org.jasig.ssp.model.external.ExternalStudentRecords;
 import org.jasig.ssp.model.external.ExternalStudentRecordsLite;
 import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.reference.EnrollmentStatus;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertService;
@@ -71,6 +73,7 @@ import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptTermService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.service.reference.EnrollmentStatusService;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.JournalEntryTO;
 import org.jasig.ssp.transferobject.PersonLiteTO;
@@ -178,6 +181,9 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	
 	@Autowired
 	private transient SecurityService securityService;
+	
+	@Autowired
+	private transient EnrollmentStatusService enrollmentStatusService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ExternalStudentRecordsController.class);
@@ -251,7 +257,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		}
 		List<ExternalStudentTranscriptCourseTO> courses = externalStudentTranscriptCourseFactory.asTOList(
 				externalStudentTranscriptCourseService.getTranscriptsBySchoolIdAndTermCode(schoolId, currentTerm.getCode()));
-		Map<String,String> mappings = statusCodeMappings();
+		Collection<EnrollmentStatus> mappings = statusCodeMappings();
 		
 		String defaultStatusCode = getDefaultStatusCode(mappings);
 		
@@ -263,14 +269,21 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 			{
 				LOGGER.debug("FACULTY SCHOOL ID WAS NOT RESOLVED WHILE LOADING TRANSCRIPT RECORD.  Factulty School_id: "+course.getFacultySchoolId()+" Student ID: "+course.getSchoolId()+" Course: "+course.getFormattedCourse());
 			}
-			if(person != null)
-				course.setFacultyName(person.getFullName());
 			
-			if(mappings != null){
-				if(mappings.containsKey(course.getStatusCode())){
-					course.setStatusCode(mappings.get(course.getStatusCode()));
-				}else if(defaultStatusCode != null)
-					course.setStatusCode(defaultStatusCode);
+			if(course.getStatusCode() == null)
+			{
+				course.setStatusCode(defaultStatusCode);
+			}
+			else
+			if(mappings != null && !mappings.isEmpty())
+			{
+				for (EnrollmentStatus enrollmentStatus : mappings) 
+				{
+					if(enrollmentStatus.getCode().equals(course.getStatusCode()))
+					{   
+						course.setStatusCode(enrollmentStatus.getName());
+					}
+				}
 			}
 		}
 		return courses;
@@ -298,27 +311,19 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		return balanceOwed;
 	}
 	
-	private String getDefaultStatusCode(Map<String,String> mappings){
-		String v = null;
-		if ( mappings != null ) {
-			if(mappings.containsKey("default")) {
-				v = mappings.get("default");
+	private String getDefaultStatusCode(Collection<EnrollmentStatus> mappings){
+		for (EnrollmentStatus enrollmentStatus : mappings) {
+			if("default".equals(enrollmentStatus.getCode()))
+			{
+				return enrollmentStatus.getName();
 			}
 		}
-		return v;
+		return null;
 	}
 	
-	private Map<String,String> statusCodeMappings() throws ObjectNotFoundException{
-		String codeMappings = configService.getByName("status_code_mappings").getValue();
-		ObjectMapper m = new ObjectMapper();
-		Map<String,String> statusCodeMap = null;
-	    try {	    	
-			statusCodeMap = m.readValue(codeMappings, new HashMap<String,String>().getClass());
-			//TODO Refactor messages?
-		} catch ( IOException e ) {
-			this.getLogger().error("Failed to deserialize status_code_mappings config", e);
-		}
-	    return statusCodeMap;
+	private Collection<EnrollmentStatus> statusCodeMappings() throws ObjectNotFoundException{
+		PagingWrapper<EnrollmentStatus> allStatuses = enrollmentStatusService.getAll(new SortingAndPaging(ObjectStatus.ALL));
+		return allStatuses.getRows();
 	}
 	
 	@RequestMapping(value = "/transcript/term", method = RequestMethod.GET)
