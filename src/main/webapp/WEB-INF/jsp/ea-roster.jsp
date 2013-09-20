@@ -179,7 +179,8 @@
         		courseList: '<c:url value="/api/1/person/${user.schoolId}/instruction/course"/>',
         		enterAlert: '${enterAlertUrl}',
         		roster: '<c:url value="/api/1/person/${user.schoolId}/instruction/course/FORMATTEDCOURSE/roster?termCode=TERMCODE"/>',
-                configByName: '<c:url value="/api/1/reference/config?name=CONFIGNAME" />'
+                configByName: '<c:url value="/api/1/reference/config?name=CONFIGNAME" />',
+                enrollmentStatus: '<c:url value="/api/1/reference/enrollmentStatus?limit=-1"/>'
         	},
             course_id_delim: ':',
             statusMappingConfigName: 'status_code_mappings'

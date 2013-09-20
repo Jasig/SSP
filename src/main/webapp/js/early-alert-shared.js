@@ -42,20 +42,46 @@ var ssp = ssp || {};
         if ( ssp.statusCodeMappings ) {
             return ssp.statusCodeMappings;
         }
-        var mappingsStr = ssp.getConfigValueByName(options.statusMappingConfigName, options);
-        ssp.statusCodeMappings = mappingsStr ? $.parseJSON(mappingsStr) : null;
+        var rslt;
+        $.ajax({
+            url: options.urls.enrollmentStatus,
+            async: false,
+            dataType: 'json',
+            error: function(jqXHR, textStatus, errorThrown) {
+                // nothing to do
+            },
+            success: function(data, textStatus, jqXHR) {
+            	rslt = data.rows;
+            },
+            type: 'GET'
+        });        
+        ssp.statusCodeMappings = rslt;
         return ssp.statusCodeMappings;
     };
 
     ssp.getStatusCodeName = function(code, options) {
         var mappings = ssp.getStatusCodeMappings(options);
+        var defaultMapping;
         if ( !(mappings) ) {
-            return code;
+        	return code;
         }
+        
+        for (var i = 0; i < mappings.length; i++)
+        {
+        	if(mappings[i].code === 'default')
+        	{
+        		defaultMapping = mappings[i];
+        	}
+        	if(mappings[i].code === code)
+        	{
+        		return mappings[i].name;
+        	}
+        }
+        
         if ( code === "" || code === null || code === undefined ) {
-            return ( 'default' in mappings ) ? mappings.default : code;
+            return ( defaultMapping ) ? defaultMapping.name : code;
         }
-        return ( code in mappings ) ? mappings[code] : code;
+        return code;
     };
 
 })(jQuery, fluid);
