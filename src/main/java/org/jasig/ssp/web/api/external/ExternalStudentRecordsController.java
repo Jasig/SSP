@@ -270,7 +270,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 				LOGGER.debug("FACULTY SCHOOL ID WAS NOT RESOLVED WHILE LOADING TRANSCRIPT RECORD.  Factulty School_id: "+course.getFacultySchoolId()+" Student ID: "+course.getSchoolId()+" Course: "+course.getFormattedCourse());
 			}
 			
-			if(course.getStatusCode() == null)
+			if(StringUtils.isBlank(course.getStatusCode()))
 			{
 				course.setStatusCode(defaultStatusCode);
 			}
