@@ -33,6 +33,29 @@ Ext.define('Ssp.service.PersonProgramStatusService', {
     	baseUrl = baseUrl.replace("{id}",personId);
 		return baseUrl;
     },
+	
+	getCurrentProgramStatus: function(personId, callbacks){
+		var me=this;
+		var url = me.getBaseUrl( personId );
+       
+		var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+    		callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+	    
+		me.apiProperties.makeRequest({
+			url: url + "/current",
+			method: 'GET',
+			successFunc: success,
+			failureFunc: failure,
+			scope: me
+		});  
+	},
 
     save: function( personId, jsonData, callbacks ){
 		var me=this;

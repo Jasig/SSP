@@ -85,7 +85,15 @@ Ext.define('Ssp.view.tools.profile.Person', {
                     fieldLabel: 'SSP Status',
                     name: 'programStatus',
                     itemId: 'programStatus'
-                }]
+                },
+				{
+					fieldLabel: 'Status Reason',
+                    name: 'programStatusReason',
+                    itemId: 'programStatusReason',
+					hidden: true
+					
+					
+				}]
             
             }]
         

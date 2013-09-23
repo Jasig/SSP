@@ -26,9 +26,11 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         personLite: 'personLite',
         personService: 'personService',
         transcriptService: 'transcriptService',
+		personProgramStatusService: 'personProgramStatusService',
         profileReferralSourcesStore: 'profileReferralSourcesStore',
         profileServiceReasonsStore: 'profileServiceReasonsStore',
 		profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
+		programStatusChangeReasonsStore: 'programStatusChangeReasonsStore',
         sspConfig: 'sspConfig',
 		formUtils: 'formRendererUtils'
     },
@@ -37,6 +39,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         nameField: '#studentName',
         photoUrlField: '#studentPhoto',
 		primaryEmailAddressField: '#primaryEmailAddress',
+		
         
         studentIdField: '#studentId',
         birthDateField: '#birthDate',
@@ -81,7 +84,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
                 failures: {},
                 successes: {},
                 responseCnt: 0,
-                expectedResponseCnt: 2
+                expectedResponseCnt: 3
             }
 
             me.personService.get(id, {
@@ -94,8 +97,24 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
                 failure: me.newServiceFailureHandler('transcript', me.getTranscriptFailure, serviceResponses),
                 scope: me
             });
+			me.personProgramStatusService.getCurrentProgramStatus(id, {
+                success: me.newServiceSuccessHandler('programstatus', me.getCurrentProgramStatusSuccess, serviceResponses),
+                failure: me.newServiceFailureHandler('programstatus', me.getCurrentProgramStatusFailure, serviceResponses),
+                scope: me
+            });
+			
+			
         }
-        
+		
+		if (!me.programStatusChangeReasonsStore.getTotalCount()) {
+			me.programStatusChangeReasonsStore.load({
+				params: {
+					start: 0,
+					limit: 50
+				}
+			});
+			
+		}
         return me.callParent(arguments);
     },
 
@@ -266,6 +285,37 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     },
 
     getTranscriptFailure: function() {
+        // nothing to do
+    },
+	
+	getCurrentProgramStatusSuccess: function(serviceResponses) {
+        var me = this;
+		var programStatusReason;
+		var studentStatus;
+		
+		var programStatusResponse = serviceResponses.successes.programstatus;
+		studentStatus = programStatusResponse['programStatusChangeReasonId'];
+		
+		
+		var programStatusReasonField = Ext.ComponentQuery.query('#programStatusReason')[0];
+		if (studentStatus) {
+                    programStatusReason = me.programStatusChangeReasonsStore.findRecord('id', studentStatus);
+					
+                    if (programStatusReason) {
+							programStatusReasonField.show();
+							programStatusReasonField.setFieldLabel('');
+							programStatusReasonField.setValue('<span style="color:#15428B">Reason:  </span>' + programStatusReason.get('name'));
+					}
+		}
+		else
+		{
+			programStatusReasonField.hide();
+		}
+		
+	},
+	
+	getCurrentProgramStatusFailure: function() {
+		
         // nothing to do
     },
 

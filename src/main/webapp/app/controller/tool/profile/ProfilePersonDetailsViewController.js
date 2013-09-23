@@ -26,6 +26,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         personLite: 'personLite',
         personService: 'personService',
         transcriptService: 'transcriptService',
+		personProgramStatusService: 'personProgramStatusService',
+		programStatusChangeReasonsStore: 'programStatusChangeReasonsStore',
         sspConfig: 'sspConfig',
         formUtils: 'formRendererUtils'
     },
@@ -39,6 +41,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         birthDateField: '#birthDate',
         studentTypeField: '#studentType',
         programStatusField: '#programStatus',
+		programStatusReasonField: '#programStatusReason',
         paymentStatusField: '#paymentStatus',
         f1StatusField: '#f1Status',
         residencyCountyField: '#residencyCounty',
@@ -81,7 +84,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
                 failures: {},
                 successes: {},
                 responseCnt: 0,
-                expectedResponseCnt: 3
+                expectedResponseCnt: 4
             }
             
             me.personService.get(id, {
@@ -99,8 +102,24 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
                 failure: me.newServiceFailureHandler('transcriptFull', me.getTranscriptFullFailure, serviceResponses),
                 scope: me
             });
+			me.personProgramStatusService.getCurrentProgramStatus(id, {
+                success: me.newServiceSuccessHandler('programstatus', me.getCurrentProgramStatusSuccess, serviceResponses),
+                failure: me.newServiceFailureHandler('programstatus', me.getCurrentProgramStatusFailure, serviceResponses),
+                scope: me
+            });
         }
+		
+		if (!me.programStatusChangeReasonsStore.getTotalCount()) {
+			me.programStatusChangeReasonsStore.load({
+				params: {
+					start: 0,
+					limit: 50
+				}
+			});
+			
+		}
         
+		
         return me.callParent(arguments);
     },
     
@@ -295,6 +314,38 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
     },
     
     getTranscriptFullFailure: function(){
+        // nothing to do
+    },
+	
+	getCurrentProgramStatusSuccess: function(serviceResponses) {
+        var me = this;
+		var programStatusReason;
+		var studentStatus;
+		
+		var programStatusResponse = serviceResponses.successes.programstatus;
+		studentStatus = programStatusResponse['programStatusChangeReasonId'];
+		
+		var programStatusReasonField = me.getProgramStatusReasonField();
+		
+		
+		if (studentStatus) {
+                    programStatusReason = me.programStatusChangeReasonsStore.findRecord('id', studentStatus);
+					
+                    if (programStatusReason) {
+							programStatusReasonField.show();
+							programStatusReasonField.setFieldLabel('');
+							programStatusReasonField.setValue('<span style="color:#15428B">Reason:  </span>' + programStatusReason.get('name'));
+					}
+		}
+		else
+		{
+			programStatusReasonField.hide();
+		}
+		
+	},
+	
+	getCurrentProgramStatusFailure: function() {
+		
         // nothing to do
     },
     
