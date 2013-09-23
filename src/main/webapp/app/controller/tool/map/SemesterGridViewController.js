@@ -31,13 +31,18 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 		mapPlanService:'mapPlanService',
 		person: 'currentPerson',
 		termsStore: 'termsStore',
-		formRendererUtils: 'formRendererUtils'
+		formRendererUtils: 'formRendererUtils',
+		coursesStore: 'coursesStore'
     },
     control:{
     	view:{
     		    itemdblclick: 'onItemDblClick'
     		}
     },	
+	config:{
+		minHrs : '0',
+		maxHrs: '0'
+	},
 	init: function() {
 		var me=this;
 		me.appEventsController.assignEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
@@ -45,15 +50,18 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 		return me.callParent(arguments);
     },
 	
+	
 
     onItemDblClick: function(grid, record, item, index, e, eOpts) {
 		var me = this;
 		var courseRecord = record;
+		
     		me.coursePlanDetails = Ext.create('Ssp.view.tools.map.CourseNotes',{enableFields : me.getView().enableDragAndDrop});
     		me.coursePlanDetails.parentGrid = me.getView();
     		
     		
 			var creditHours = me.coursePlanDetails.query('#creditHours')[0];
+			
 
 			if(courseRecord.modelName == 'Ssp.model.external.Course')
 			{
@@ -63,26 +71,50 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 				array[0] = planCourse;
 				grid.store.insert( indexOf != -1 ? indexOf : index ,array);
 				grid.store.remove(courseRecord);
+				
 			}
 			else
 			{
 				var planCourse = courseRecord;
+			
 			}
 	
+	
+		
 			me.electiveStore.clearFilter(true);
 			me.electiveStore.load();
 			me.formRendererUtils.applyAssociativeStoreFilter(me.electiveStore, record.get('electiveId'));	
 		
 			me.coursePlanDetails.query('form')[0].getForm().loadRecord(planCourse);
-    		creditHours.setValue(planCourse.get('creditHours'));
-		    creditHours.setMinValue(planCourse.get('minCreditHours'));
-		    creditHours.setMaxValue(planCourse.get('maxCreditHours'));
+			
+			creditHours.setValue(planCourse.get('creditHours'));
+			
+			var course = me.coursesStore.findRecord('code', planCourse.get('code'));
+		
+			if(me.getMinHrs() == 0){
+				if(course != null)
+					creditHours.setMinValue(course.get('minCreditHours'));
+			}
+			else
+			{
+				creditHours.setMinValue(me.getMinHrs());
+			}
+    		if(me.getMaxHrs() == 0){
+				if(course != null)
+					creditHours.setMaxValue(course.get('maxCreditHours'));
+			}
+			else
+			{
+				creditHours.setMaxValue(me.getMaxHrs());
+			}
+		    
 			me.coursePlanDetails.query('#electiveId')[0].select(me.coursePlanDetails.electiveStore.getById(planCourse.get('electiveId')));
     		me.coursePlanDetails.rowIndex = index;
     		me.coursePlanDetails.semesterStore = grid.store;
 			me.coursePlanDetails.setTitle(planCourse.get('formattedCourse') + ' - ' + planCourse.get('title'));
     		me.coursePlanDetails.center();
     		me.coursePlanDetails.show();
+			
     },
     
     onDrop: function(node, data, overModel, dropPosition, eOpts){
@@ -93,6 +125,11 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
     		me.droppedFromStore = data.view.getStore();
 		}
 		me.droppedRecord = data.records[0];
+		
+		me.setMinHrs(me.droppedRecord.data.minCreditHours);
+		me.setMaxHrs(me.droppedRecord.data.maxCreditHours);
+		
+		
 		me.validateCourses();
 		me.currentMapPlan.dirty = true;
 		return true;
@@ -128,6 +165,7 @@ Ext.define('Ssp.controller.tool.map.SemesterGridViewController', {
 
 		var panel = me.getView().findParentByType("semesterpanel");
 		var planCourse = me.currentMapPlan.getPlanCourseFromCourseCode(me.droppedRecord.get("code"), panel.getItemId());
+		
 		var invalidReasons = planCourse.invalidReasons;
     	if(!me.currentMapPlan.get("isValid") &&  invalidReasons != null && invalidReasons.length > 1){
     		var message = " \n Are you sure you want to add the course? " 
