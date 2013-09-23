@@ -18,8 +18,10 @@
  */
 package org.jasig.ssp.dao.external;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.ExternalCourseRequisite;
@@ -37,6 +39,10 @@ public class ExternalCourseRequisiteDao extends
 	@SuppressWarnings("unchecked")
 	public List<ExternalCourseRequisite> getRequisitesForCourse(
 			String requiringCourseCode) {
+		if(StringUtils.isBlank(requiringCourseCode))
+		{
+			return new ArrayList<ExternalCourseRequisite>();
+		}
 		Criteria criteria = this.createCriteria();
 		criteria.add(Restrictions.or(Restrictions.eq("requiringCourseCode", requiringCourseCode), Restrictions.and(Restrictions.eq("requiredCourseCode", requiringCourseCode),Restrictions.ne("requisiteCode", RequisiteCode.PRE))));
 		return (List<ExternalCourseRequisite>)criteria.list();
@@ -46,8 +52,11 @@ public class ExternalCourseRequisiteDao extends
 	@SuppressWarnings("unchecked")
 	public List<ExternalCourseRequisite> getRequisitesForCourses(
 			List<String> requiringCourseCode) {
+		if(requiringCourseCode == null || requiringCourseCode.isEmpty())
+		{
+			return new ArrayList<ExternalCourseRequisite>();
+		}
 		Criteria criteria = this.createCriteria();
-		
 		criteria.add(Restrictions.in("requiringCourseCode", requiringCourseCode));
 		return (List<ExternalCourseRequisite>)criteria.list();
 	}
