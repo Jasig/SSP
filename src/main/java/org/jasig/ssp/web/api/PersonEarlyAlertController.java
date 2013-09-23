@@ -23,8 +23,12 @@ import org.jasig.ssp.factory.EarlyAlertTOFactory;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonProgramStatus;
+import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonProgramStatusService;
+import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
@@ -47,6 +51,7 @@ import javax.mail.SendFailedException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -71,6 +76,12 @@ public class PersonEarlyAlertController extends
 
 	@Autowired
 	private transient EarlyAlertTOFactory factory;
+	
+	@Autowired
+	private transient ProgramStatusService programStatusService;
+	
+	@Autowired
+	private transient PersonProgramStatusService personProgramStatusService;
 
 	@Override
 	protected EarlyAlertTOFactory getFactory() {
@@ -145,6 +156,9 @@ public class PersonEarlyAlertController extends
 			obj.setClosedDate(new Date());
 		}
 		
+		// As per SSP-900, students will have their programStatus set to 'Active'  regardless of it's current state
+		setProgramStatusToActiveIfNotAlready(personId);
+		
 		// create
 		final EarlyAlertTO earlyAlertTO = super.create(personId, obj);
 
@@ -170,6 +184,21 @@ public class PersonEarlyAlertController extends
 
 		// return created EarlyAlert
 		return earlyAlertTO;
+	}
+
+	private void setProgramStatusToActiveIfNotAlready(final UUID personId)
+			throws ObjectNotFoundException, ValidationException {
+		Person student = personService.load(personId);
+		ProgramStatus activeStatus = programStatusService.getActiveStatus();
+		if(!activeStatus.getName().equals(student.getCurrentProgramStatusName()))
+		{
+			PersonProgramStatus personProgramStatus = new PersonProgramStatus();
+			personProgramStatus.setPerson(student);
+			personProgramStatus.setProgramStatus(activeStatus);
+			personProgramStatus.setEffectiveDate(Calendar.getInstance().getTime());
+			personProgramStatusService.expireActive(student,personProgramStatus); 
+			student.getProgramStatuses().add(personProgramStatus);
+		}
 	}
 
 	@Override
@@ -269,7 +298,10 @@ public class PersonEarlyAlertController extends
 
 			personId = person.getId();
 		}
-
+		
+		// As per SSP-900, students will have their programStatus set to 'Active'  regardless of it's current state
+		setProgramStatusToActiveIfNotAlready(personId);
+		
 		if (personId == null) {
 			throw new ObjectNotFoundException(
 					"Specified person or student identifier could not be found.",

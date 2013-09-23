@@ -61,4 +61,7 @@ public interface PersonProgramStatusService
 	 */
 	void setTransitionForStudent(@NotNull Person person)
 			throws ObjectNotFoundException, ValidationException;
+
+	void expireActive(Person person, PersonProgramStatus savingStatus)
+			throws ValidationException;
 }

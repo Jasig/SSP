@@ -131,7 +131,8 @@ public class PersonProgramStatusServiceImpl extends
 	 * @throws ValidationException if the current list of statuses is in an
 	 *   invalid state
 	 */
-	private void expireActive(final Person person, PersonProgramStatus savingStatus)
+	@Override
+	public void expireActive(final Person person, PersonProgramStatus savingStatus)
 	throws ValidationException {
 		PersonProgramStatus pps = getActiveExcluding(person, savingStatus);
 		if ( pps != null ) {
