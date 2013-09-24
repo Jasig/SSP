@@ -58,6 +58,9 @@ public class Permission { // NOPMD enum won't work for these values in
 	public static final String PERSON_PROGRAM_STATUS_WRITE = ROLE_PREFIX
 			+ "PERSON_PROGRAM_STATUS_WRITE";
 
+	//Caseload Bulk Reassign
+	public static final String PERSON_BULK_REASSIGN = ROLE_PREFIX + "PERSON_BULK_REASSIGN";
+
 	// Report Permissions/Roles
 	public static final String REPORT_READ = ROLE_PREFIX + "REPORT_READ";
 
@@ -80,7 +83,8 @@ public class Permission { // NOPMD enum won't work for these values in
 			+ PERSON_DELETE + END;
 	public static final String SECURITY_PERSON_INSTRUCTION_READ = HAS_ROLE
 			+ PERSON_INSTRUCTION_READ + END;
-
+	public static final String SECURITY_PERSON_BULK_REASSIGN = HAS_ROLE + PERSON_BULK_REASSIGN
+			+ END;
 	public static final String SECURITY_REPORT_READ = HAS_ROLE + REPORT_READ
 			+ END;
 
