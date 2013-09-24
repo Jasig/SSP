@@ -127,7 +127,7 @@ public class CaseloadController extends AbstractBaseController {
 	}
 	
 	@RequestMapping(value = "/caseload", method = RequestMethod.POST)
-	@PreAuthorize(Permission.SECURITY_PERSON_WRITE)
+	@PreAuthorize(Permission.SECURITY_PERSON_BULK_REASSIGN)
 	public @ResponseBody
 	CaseloadReassignmentRequestTO reassignStudents(
 			final @RequestBody CaseloadReassignmentRequestTO obj)
