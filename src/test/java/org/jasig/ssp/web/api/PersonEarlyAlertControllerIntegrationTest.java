@@ -198,7 +198,7 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 				.newHashSet();
 		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
 				EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME));
-		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+		obj.setEarlyAlertSuggestions(earlyAlertSuggestionIds);
 
 		final EarlyAlertTO saved = controller.create(PERSON_ID,
 				obj);
@@ -503,7 +503,7 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 				"Some EARLY_ALERT_SUGGESTION_INACTIVE_NAME");
 		inactiveSuggestion.setObjectStatus(ObjectStatus.INACTIVE);
 		earlyAlertSuggestionIds.add(inactiveSuggestion);
-		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+		obj.setEarlyAlertSuggestions(earlyAlertSuggestionIds);
 		return obj;
 	}
 
@@ -577,7 +577,7 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		final Set<EarlyAlertReasonTO> earlyAlertReasonIds = Sets.newHashSet();
 		earlyAlertReasonIds.add(new EarlyAlertReasonTO(EARLY_ALERT_REASON_ID,
 				""));
-		obj.setEarlyAlertReasonIds(earlyAlertReasonIds);
+		obj.setEarlyAlertReasons(earlyAlertReasonIds);
 
 		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
 				.newHashSet();
@@ -587,7 +587,7 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
 				EARLY_ALERT_SUGGESTION_ID2,
 				""));
-		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+		obj.setEarlyAlertSuggestions(earlyAlertSuggestionIds);
 
 		final EarlyAlertTO saved = controller.create(PERSON_STUDENTID,
 				obj);
@@ -637,7 +637,7 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		final Set<EarlyAlertReasonTO> earlyAlertReasonIds = Sets.newHashSet();
 		earlyAlertReasonIds.add(new EarlyAlertReasonTO(EARLY_ALERT_REASON_ID,
 				""));
-		obj.setEarlyAlertReasonIds(earlyAlertReasonIds);
+		obj.setEarlyAlertReasons(earlyAlertReasonIds);
 
 		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
 				.newHashSet();
@@ -645,7 +645,7 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 				EARLY_ALERT_SUGGESTION_ID1, ""));
 		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
 				EARLY_ALERT_SUGGESTION_ID2, ""));
-		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+		obj.setEarlyAlertSuggestions(earlyAlertSuggestionIds);
 
 		// act
 		final EarlyAlertTO saved = controller.create(EXTERNAL_STUDENT, obj);

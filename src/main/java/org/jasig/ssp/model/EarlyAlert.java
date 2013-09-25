@@ -120,7 +120,7 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	@JoinTable(name = "early_alert_early_alert_suggestion",
 			joinColumns = @JoinColumn(name = "early_alert_id"),
 			inverseJoinColumns = @JoinColumn(name = "early_alert_suggestion_id"))
-	private Set<EarlyAlertSuggestion> earlyAlertSuggestionIds = Sets
+	private Set<EarlyAlertSuggestion> earlyAlertSuggestions = Sets
 			.newHashSet();
 
 	/**
@@ -291,7 +291,7 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	/**
 	 * @return the earlyAlertReasonIds
 	 */
-	public Set<EarlyAlertReason> getEarlyAlertReasonIds() {
+	public Set<EarlyAlertReason> getEarlyAlertReasons() {
 		return earlyAlertReasonIds;
 	}
 
@@ -299,7 +299,7 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	 * @param earlyAlertReasonIds
 	 *            the earlyAlertReasonIds to set
 	 */
-	public void setEarlyAlertReasonIds(
+	public void setEarlyAlertReasons(
 			final Set<EarlyAlertReason> earlyAlertReasonIds) {
 		this.earlyAlertReasonIds = earlyAlertReasonIds;
 	}
@@ -307,17 +307,17 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	/**
 	 * @return the earlyAlertSuggestionIds
 	 */
-	public Set<EarlyAlertSuggestion> getEarlyAlertSuggestionIds() {
-		return earlyAlertSuggestionIds;
+	public Set<EarlyAlertSuggestion> getEarlyAlertSuggestions() {
+		return earlyAlertSuggestions;
 	}
 
 	/**
 	 * @param earlyAlertSuggestionIds
 	 *            the earlyAlertSuggestionIds to set
 	 */
-	public void setEarlyAlertSuggestionIds(
+	public void setEarlyAlertSuggestions(
 			final Set<EarlyAlertSuggestion> earlyAlertSuggestionIds) {
-		this.earlyAlertSuggestionIds = earlyAlertSuggestionIds;
+		this.earlyAlertSuggestions = earlyAlertSuggestionIds;
 	}
 
 	@Override

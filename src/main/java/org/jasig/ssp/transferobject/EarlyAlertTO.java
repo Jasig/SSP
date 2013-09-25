@@ -28,8 +28,12 @@ import java.util.UUID;
 
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.EarlyAlertReason;
+import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 import org.jasig.ssp.transferobject.reference.EarlyAlertReasonTO;
 import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
+
+import com.google.common.collect.Sets;
 
 /**
  * Early Alert transfer object
@@ -67,9 +71,9 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 	
 	private Integer noOfResponses;
 	
-	private Set<EarlyAlertReasonTO> earlyAlertReasonIds;
+	private Set<UUID> earlyAlertReasonIds;
 
-	private Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds;
+	private Set<UUID> earlyAlertSuggestionIds;
 
 	private Boolean sendEmailToStudent = Boolean.FALSE;
 
@@ -108,6 +112,8 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 		comment = earlyAlert.getComment();
 		closedDate = earlyAlert.getClosedDate();
 		closedById = earlyAlert.getClosedById();
+		earlyAlertReasonIds = Sets.newHashSet();
+		earlyAlertSuggestionIds = Sets.newHashSet();
 
 		if ( closedById != null ) {
 			Person closedBy = earlyAlert.getClosedBy();
@@ -121,10 +127,17 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 		personId = earlyAlert.getPerson() == null ? null : earlyAlert
 				.getPerson().getId();
 
-		earlyAlertReasonIds = EarlyAlertReasonTO.toTOSet(earlyAlert
-				.getEarlyAlertReasonIds());
-		earlyAlertSuggestionIds = EarlyAlertSuggestionTO.toTOSet(earlyAlert
-				.getEarlyAlertSuggestionIds());
+		Set<EarlyAlertReason> earlyAlertReasonModels = earlyAlert
+				.getEarlyAlertReasons();
+		for (EarlyAlertReason earlyAlertReason : earlyAlertReasonModels) {
+			earlyAlertReasonIds.add(earlyAlertReason.getId());
+		}
+		
+		Set<EarlyAlertSuggestion> earlyAlertSuggestionModels = earlyAlert
+				.getEarlyAlertSuggestions();
+		for (EarlyAlertSuggestion earlyAlertSuggestion : earlyAlertSuggestionModels) {
+			earlyAlertSuggestionIds.add(earlyAlertSuggestion.getId());
+		}
 		
 		setNoOfResponses(earlyAlert.getResponseCount());
 	}
@@ -329,38 +342,6 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 	}
 
 	/**
-	 * @return The list of EarlyAlertReasons
-	 */
-	public Set<EarlyAlertReasonTO> getEarlyAlertReasonIds() {
-		return earlyAlertReasonIds;
-	}
-
-	/**
-	 * @param earlyAlertReasonIds
-	 *            The list of EarlyAlertReasons to set
-	 */
-	public void setEarlyAlertReasonIds(
-			final Set<EarlyAlertReasonTO> earlyAlertReasonIds) {
-		this.earlyAlertReasonIds = earlyAlertReasonIds;
-	}
-
-	/**
-	 * @return The list of EarlyAlertSuggestions
-	 */
-	public Set<EarlyAlertSuggestionTO> getEarlyAlertSuggestionIds() {
-		return earlyAlertSuggestionIds;
-	}
-
-	/**
-	 * @param earlyAlertSuggestionIds
-	 *            The list of EarlyAlertSuggestions to set
-	 */
-	public void setEarlyAlertSuggestionIds(
-			final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds) {
-		this.earlyAlertSuggestionIds = earlyAlertSuggestionIds;
-	}
-
-	/**
 	 * For the create API method, if true, will send a message to the student.
 	 * 
 	 * @return If true, will send a message to student for the created Early
@@ -385,6 +366,22 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 
 	public void setNoOfResponses(Integer noOfResponses) {
 		this.noOfResponses = noOfResponses;
+	}
+
+	public Set<UUID> getEarlyAlertReasonIds() {
+		return earlyAlertReasonIds;
+	}
+
+	public void setEarlyAlertReasonIds(Set<UUID> earlyAlertReasonIds) {
+		this.earlyAlertReasonIds = earlyAlertReasonIds;
+	}
+
+	public Set<UUID> getEarlyAlertSuggestionIds() {
+		return earlyAlertSuggestionIds;
+	}
+
+	public void setEarlyAlertSuggestionIds(Set<UUID> earlyAlertSuggestionIds) {
+		this.earlyAlertSuggestionIds = earlyAlertSuggestionIds;
 	}
 
 }

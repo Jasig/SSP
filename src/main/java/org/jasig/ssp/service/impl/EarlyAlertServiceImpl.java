@@ -260,26 +260,26 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		}
 
 		final Set<EarlyAlertReason> earlyAlertReasons = new HashSet<EarlyAlertReason>();
-		if (obj.getEarlyAlertReasonIds() != null) {
-			for (final EarlyAlertReason reason : obj.getEarlyAlertReasonIds()) {
+		if (obj.getEarlyAlertReasons() != null) {
+			for (final EarlyAlertReason reason : obj.getEarlyAlertReasons()) {
 				earlyAlertReasons.add(earlyAlertReasonService.load(reason
 						.getId()));
 			}
 		}
 
-		current.setEarlyAlertReasonIds(earlyAlertReasons);
+		current.setEarlyAlertReasons(earlyAlertReasons);
 
 		final Set<EarlyAlertSuggestion> earlyAlertSuggestions = new HashSet<EarlyAlertSuggestion>();
-		if (obj.getEarlyAlertSuggestionIds() != null) {
+		if (obj.getEarlyAlertSuggestions() != null) {
 			for (final EarlyAlertSuggestion reason : obj
-					.getEarlyAlertSuggestionIds()) {
+					.getEarlyAlertSuggestions()) {
 				earlyAlertSuggestions.add(earlyAlertSuggestionService
 						.load(reason
 								.getId()));
 			}
 		}
 
-		current.setEarlyAlertSuggestionIds(earlyAlertSuggestions);
+		current.setEarlyAlertSuggestions(earlyAlertSuggestions);
 
 		return getDao().save(current);
 	}
@@ -429,8 +429,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 				// Only routes that are for any of the Reasons in this
 				// EarlyAlert should be applied.
-				if ((earlyAlert.getEarlyAlertReasonIds() == null)
-						|| !earlyAlert.getEarlyAlertReasonIds().contains(
+				if ((earlyAlert.getEarlyAlertReasons() == null)
+						|| !earlyAlert.getEarlyAlertReasons().contains(
 								route.getEarlyAlertReason())) {
 					continue;
 				}

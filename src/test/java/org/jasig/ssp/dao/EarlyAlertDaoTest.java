@@ -147,7 +147,7 @@ public class EarlyAlertDaoTest {
 				"EARLY_ALERT_SUGGESTION_DELETED_NAME", "description", (short) 0); // NOPMD
 		deletedSuggestion.setObjectStatus(ObjectStatus.INACTIVE);
 		earlyAlertSuggestionIds.add(deletedSuggestion);
-		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+		obj.setEarlyAlertSuggestions(earlyAlertSuggestionIds);
 
 		return obj;
 	}

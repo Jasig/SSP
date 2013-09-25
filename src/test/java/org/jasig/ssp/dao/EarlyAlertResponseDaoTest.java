@@ -228,7 +228,7 @@ public class EarlyAlertResponseDaoTest {
 				(short) 0); // NOPMD
 		deletedSuggestion.setObjectStatus(ObjectStatus.INACTIVE);
 		earlyAlertSuggestionIds.add(deletedSuggestion);
-		earlyAlert.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+		earlyAlert.setEarlyAlertSuggestions(earlyAlertSuggestionIds);
 
 		final EarlyAlertResponse obj = new EarlyAlertResponse();
 		obj.setEarlyAlert(earlyAlert);

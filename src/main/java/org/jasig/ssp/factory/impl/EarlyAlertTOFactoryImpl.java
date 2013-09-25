@@ -19,6 +19,7 @@
 package org.jasig.ssp.factory.impl;
 
 import java.util.HashSet;
+import java.util.UUID;
 
 import org.jasig.ssp.dao.EarlyAlertDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
@@ -105,21 +106,21 @@ public class EarlyAlertTOFactoryImpl extends
 			model.setPerson(personService.get(tObject.getPersonId()));
 		}
 
-		model.setEarlyAlertReasonIds(new HashSet<EarlyAlertReason>());
+		model.setEarlyAlertReasons(new HashSet<EarlyAlertReason>());
 		if (tObject.getEarlyAlertReasonIds() != null) {
-			for (final EarlyAlertReasonTO obj : tObject
+			for (final UUID id : tObject
 					.getEarlyAlertReasonIds()) {
-				model.getEarlyAlertReasonIds().add(
-						earlyAlertReasonService.load(obj.getId()));
+				model.getEarlyAlertReasons().add(
+						earlyAlertReasonService.load(id));
 			}
 		}
 
-		model.setEarlyAlertSuggestionIds(new HashSet<EarlyAlertSuggestion>());
+		model.setEarlyAlertSuggestions(new HashSet<EarlyAlertSuggestion>());
 		if (tObject.getEarlyAlertSuggestionIds() != null) {
-			for (final EarlyAlertSuggestionTO obj : tObject
+			for (final UUID id : tObject
 					.getEarlyAlertSuggestionIds()) {
-				model.getEarlyAlertSuggestionIds().add(
-						earlyAlertSuggestionService.load(obj.getId()));
+				model.getEarlyAlertSuggestions().add(
+						earlyAlertSuggestionService.load(id));
 			}
 		}
 

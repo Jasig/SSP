@@ -219,7 +219,7 @@ var ssp = ssp || {};
                 courseTermCode: options.parameters.term,
                 emailCC: $(selectors.emailCc).val(),
                 campusId: $(selectors.campus).val(),
-                earlyAlertReasonIds: [ { id: $(selectors.reason).val() } ],
+                earlyAlertReasonIds: [  $(selectors.reason).val()  ],
                 earlyAlertReasonOtherDescription: $(selectors.otherReasonText).val(),
                 earlyAlertSuggestionIds: [],  // Set below...
                 earlyAlertSuggestionOtherDescription: $(selectors.suggestionsOtherHidden).val(),
@@ -227,7 +227,7 @@ var ssp = ssp || {};
                 sendEmailToStudent: sendNotice
             };
             $(selectors.suggestionsId).each(function() {
-            	postData.earlyAlertSuggestionIds.push({ id: $(this).val() });
+            	postData.earlyAlertSuggestionIds.push( $(this).val() );
             });
             
             // Submit the alert

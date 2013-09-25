@@ -449,7 +449,7 @@ public class Stubs {
 				(short) 0); // NOPMD
 		deletedSuggestion.setObjectStatus(ObjectStatus.INACTIVE);
 		earlyAlertSuggestionIds.add(deletedSuggestion);
-		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+		obj.setEarlyAlertSuggestions(earlyAlertSuggestionIds);
 
 		final Set<EarlyAlertReason> earlyAlertReasonIds = Sets
 				.newHashSet();
@@ -457,7 +457,7 @@ public class Stubs {
 				EarlyAlertReasonFixture.OTHER.id(),
 				EarlyAlertReasonFixture.OTHER.title,
 				"description", (short) 0)); // NOPMD by jon.adams
-		obj.setEarlyAlertReasonIds(earlyAlertReasonIds);
+		obj.setEarlyAlertReasons(earlyAlertReasonIds);
 
 		return obj;
 	}

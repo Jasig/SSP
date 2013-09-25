@@ -306,7 +306,7 @@ public class EarlyAlertResponseServiceTest {
 				(short) 0); // NOPMD
 		deletedSuggestion.setObjectStatus(ObjectStatus.INACTIVE);
 		earlyAlertSuggestionIds.add(deletedSuggestion);
-		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
+		obj.setEarlyAlertSuggestions(earlyAlertSuggestionIds);
 
 		final EarlyAlertResponse response = new EarlyAlertResponse();
 		response.setEarlyAlert(obj);
