@@ -306,7 +306,11 @@ Ext.define('Ssp.controller.SearchViewController', {
     	              { sortable: sortableColumns, header: 'Status', dataIndex: 'currentProgramStatusName', flex: .15}
     	              ];		
 		}
-		me.getSearchGridPager().bindStore(store);
+		if(me.getSearchGridPager)
+		{
+			me.getSearchGridPager().bindStore(store);
+		}
+		
 		me.refreshPagingToolBar();
 		grid.getView().getRowClass = function(row, index)
 	    {
