@@ -1,0 +1,233 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<property name="schema" value="${database.schema}" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	<property name="externalUser" value="a new UUID" />
+	<property name="concat.operator" value="||"  dbms="postgresql"/>
+	<property name="concat.operator" value="+"  dbms="mssql"/>	
+	<property name="nullfunction" value="COALESCE"  dbms="postgresql"/>
+	<property name="nullfunction" value="ISNULL"  dbms="mssql"/>	
+	<property name="check_for_manage_integration_database_config_sql"
+			  value="select count(id) from config where name='manage_integration_database'" />
+	<property name="should_manage_integration_database_sql"
+			  value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
+
+	<changeSet id="add not-null constraint to external_student_test.discriminator" author="dan.mccallum">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip add not-null constraint to external_student_test.discriminator">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<columnExists tableName="external_student_test" columnName="discriminator" schemaName="${schema}"/>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>
+		<addNotNullConstraint tableName="external_student_test" columnName="discriminator" columnDataType="${nvarchar.type}(1)"/>
+	</changeSet>
+
+	<!-- Need to drop existing external_student_test keys and constraints before
+	recreating the key to include the discriminator column. Original
+	keys/constraints were not given explicit names, though. In SQLServer this
+	results in effectively random names; In PostgreSQL we get predictable names.
+	Hence the two sets of db-specific key/constraint dropping changeSets.
+
+	Went with inline recreate of the keys/constraints rather than a temp table
+	for a couple reasons:
+
+		- *Should* be a bit faster. Creating the key again can take some time,
+			but at least we don't need to copy the data.
+		- Less chance of exhausting db resources in the event this table
+			is very large.
+		- No chance of nuking local out of band customizations to the table.
+
+	Since we were able to do the inline recreate without iteration logic, it
+	seemed fine to just go ahead and inline the raw SQL here rather than code
+	up a custom 'generator' in Java.
+
+	Note that we do not recreate the original uniqueness constraint, just
+	the primary key. Those two constraints are redundant. -->
+
+	<changeSet id="drop primary key on external_student_test (mssql)" author="dan.mccallum" dbms="mssql">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip drop primary key on external_student_test (mssql)">
+			<sqlCheck  expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<columnExists tableName="external_student_test" columnName="discriminator" schemaName="${schema}"/>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>
+		<sql>
+			declare @name nvarchar(256)
+
+			select @name = constraints_view.constraint_name
+			from (select distinct o.constraint_name,
+					(select i.COLUMN_NAME + ',' as [text()] FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE i
+					 where o.CONSTRAINT_NAME = i.CONSTRAINT_NAME
+					 and i.table_name = 'external_student_test'
+					 and i.table_schema = '${schema}'
+					 order by i.ordinal_position for xml path ('') ) constraint_columns
+				  from INFORMATION_SCHEMA.KEY_COLUMN_USAGE o
+				  where o.table_name = 'external_student_test' ) constraints_view
+			where constraints_view.constraint_columns = 'school_id,test_code,sub_test_code,test_date,'
+			and OBJECTPROPERTY(OBJECT_ID(constraints_view.constraint_name),  'IsPrimaryKey') = 1
+
+			exec('alter table ${schema}.external_student_test drop constraint ' + @name);
+		</sql>
+	</changeSet>
+
+	<changeSet id="drop unique constraint on external_student_test (mssql)" author="dan.mccallum" dbms="mssql">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip drop unique constraint on external_student_test (mssql)">
+			<sqlCheck  expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<columnExists tableName="external_student_test" columnName="discriminator" schemaName="${schema}"/>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>
+		<sql>
+			declare @name nvarchar(256)
+
+			select @name = constraints_view.constraint_name
+			from (select distinct o.constraint_name,
+					(select i.COLUMN_NAME + ',' as [text()] FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE i
+					 where o.CONSTRAINT_NAME = i.CONSTRAINT_NAME
+					 and i.table_name = 'external_student_test'
+					 and i.table_schema = '${schema}'
+					 order by i.ordinal_position for xml path ('') ) constraint_columns
+				  from INFORMATION_SCHEMA.KEY_COLUMN_USAGE o
+				  where o.table_name = 'external_student_test' ) constraints_view
+			where constraints_view.constraint_columns = 'school_id,test_code,sub_test_code,test_date,'
+			and OBJECTPROPERTY(OBJECT_ID(constraints_view.constraint_name),  'IsPrimaryKey') = 0
+
+			exec('alter table ${schema}.external_student_test drop constraint ' + @name);
+		</sql>
+	</changeSet>
+
+	<changeSet id="drop primary key 1 on external_student_test (pg)" author="dan.mccallum" dbms="postgresql">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip drop primary key 1 on external_student_test (postgresql)">
+			<sqlCheck  expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<columnExists tableName="external_student_test" columnName="discriminator" schemaName="${schema}"/>
+			<!-- key existence check for pg but not sqlserver b/c now-non-existent changesets
+			 had already been run in CI that cleaned up the key on pg before we had working
+			 changsets for sqlserver. Note... don't list both a tableName and primaryKeyName here...
+			 Liquibase will only use one or the other and prefer tableName. -->
+			<primaryKeyExists schemaName="${schema}" primaryKeyName="external_student_test_pkey" />
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>
+
+		<dropPrimaryKey tableName="external_student_test" schemaName="${schema}" constraintName="external_student_test_pkey" />
+	</changeSet>
+
+	<changeSet id="drop primary key 2 on external_student_test (pg)" author="dan.mccallum" dbms="postgresql">
+		<!-- Needs to be MARK_RAN so you don't accidentally clobber this PK after the
+		changset at the bottom re/creates it and you restart the app. Note that this
+		changeset only exists to clean up after other changesets which no longer exist.
+		So it's safe to use MARK_RAN even if you've got
+		external.apply.natural.keys=false... you won't need it to run when you get around
+		to flipping that config to true
+		-->
+		<preConditions onFail="MARK_RAN"
+					   onFailMessage="Skip drop primary key 2 on external_student_test (postgresql)">
+			<sqlCheck  expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<columnExists tableName="external_student_test" columnName="discriminator" schemaName="${schema}"/>
+			<!-- key existence check for pg but not sqlserver b/c now-non-existent changesets
+			 had already been run in CI that cleaned up the key on pg before we had working
+			 changsets for sqlserver. Note... don't list both a tableName and primaryKeyName here...
+			 Liquibase will only use one or the other and prefer tableName. -->
+			<primaryKeyExists schemaName="${schema}" primaryKeyName="external_student_test_pk" />
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>
+
+		<dropPrimaryKey tableName="external_student_test" schemaName="${schema}" constraintName="external_student_test_pk" />
+	</changeSet>
+
+	<changeSet id="drop unique constraint 1 on external_student_test (pg)" author="dan.mccallum" dbms="postgresql">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip drop unique constraint 1 on external_student_test (postgresql)">
+			<sqlCheck  expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<columnExists tableName="external_student_test" columnName="discriminator" schemaName="${schema}"/>
+			<!-- constraint existence check for pg but not sqlserver b/c now-non-existent changesets
+			 had already been run in CI that cleaned up the constraint on pg before we had working
+			 changsets for sqlserver -->
+			<sqlCheck expectedResult="1">select count (*) from pg_constraint where conname='external_student_test_school_id_test_code_sub_test_code_tes_key'</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>
+
+		<dropUniqueConstraint tableName="external_student_test" schemaName="${schema}" constraintName="external_student_test_school_id_test_code_sub_test_code_tes_key" />
+	</changeSet>
+
+	<changeSet id="drop unique constraint 2 on external_student_test (pg)" author="dan.mccallum" dbms="postgresql">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip drop unique constraint 2 on external_student_test (postgresql)">
+			<sqlCheck  expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<columnExists tableName="external_student_test" columnName="discriminator" schemaName="${schema}"/>
+			<!-- 2 constraint existence checks again b/c now-non-existent changesets that had already
+			  run in CI created an explicitly named constraint that we don't need any more. -->
+			<sqlCheck expectedResult="1">select count (*) from pg_constraint where conname='external_student_test_unq'</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>
+
+		<dropUniqueConstraint tableName="external_student_test" schemaName="${schema}" constraintName="external_student_test_unq" />
+	</changeSet>
+
+	<changeSet id="re-add discriminator to external_student_test key" author="dan.mccallum">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip add discriminator to external_student_test key">
+			<sqlCheck  expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<columnExists tableName="external_student_test" columnName="discriminator" schemaName="${schema}"/>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>
+
+		<dropView viewName="v_external_student_test" schemaName="${schema}"/>
+		<addPrimaryKey tableName="external_student_test" schemaName="${schema}" columnNames="school_id,test_code,sub_test_code,test_date,discriminator" constraintName="external_student_test_pk"/>
+
+		<createView viewName="v_external_student_test">
+			select school_id${concat.operator}test_code${concat.operator}sub_test_code${concat.operator}cast(test_date as ${nvarchar.type}(120))${concat.operator}discriminator as id,* from external_student_test
+		</createView>
+		
+		<sql>grant all on v_external_student_test to ${database.app.username}</sql>
+	</changeSet>
+
+</databaseChangeLog>
