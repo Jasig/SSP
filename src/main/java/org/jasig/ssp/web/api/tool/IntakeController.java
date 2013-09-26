@@ -398,7 +398,7 @@ public class IntakeController extends AbstractBaseController {
 		final List<RegistrationLoadTO> allTOs =
 				RegistrationLoadTO.toTOList(registrationLoadService.getAll(sAndP).getRows());
 
-		if ( formTO.getPersonDemographics() == null ||
+		if ( formTO.getPersonEducationGoal() == null ||
 				formTO.getPersonEducationGoal().getRegistrationLoadId() == null ) {
 
 			return filterInactiveExceptFor(Lists.<UUID>newArrayListWithCapacity(0), allTOs);
@@ -414,9 +414,9 @@ public class IntakeController extends AbstractBaseController {
 		final List<CourseworkHoursTO> allTOs =
 				CourseworkHoursTO.toTOList(courseworkHoursService.getAll(sAndP).getRows());
 
-		if ( formTO.getPersonDemographics() == null ||
+		if ( formTO.getPersonEducationGoal() == null ||
 				formTO.getPersonEducationGoal().getCourseworkHoursId() == null ) {
-
+ 
 			return filterInactiveExceptFor(Lists.<UUID>newArrayListWithCapacity(0), allTOs);
 
 		}
