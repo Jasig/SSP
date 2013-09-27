@@ -86,12 +86,11 @@ public class PostgresPrimaryKeyDropperWithoutName implements CustomSqlChange {
 		JdbcConnection conn = (JdbcConnection)database.getConnection();
 		PreparedStatement prepareStatement;
 		
-		String dropConstraintSql;
 		RowMapper rowMapper = new RowMapper() {
 			
 			@Override
 			public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
-					String constraintName = (String) rs.getObject(1);
+					String constraintName = rs.getString(1);
 					String dropConstraintSql = "Alter table "+tableName+" drop constraint "+constraintName;
 					SqlStatement sqlStatement = new RawSqlStatement(dropConstraintSql);
 					statements.add(sqlStatement);
@@ -101,11 +100,11 @@ public class PostgresPrimaryKeyDropperWithoutName implements CustomSqlChange {
 		
 		try {
 			 prepareStatement = conn.prepareStatement(constraintNameSql);
-			 prepareStatement.executeQuery();
+			 prepareStatement.executeQuery(constraintNameSql);
 		} catch (DatabaseException e) {
-			throw new CustomChangeException(constraintNameSql);
+			throw new CustomChangeException(e);
 		} catch (SQLException e) {
-			throw new CustomChangeException(constraintNameSql);
+			throw new CustomChangeException(e);
 		}
 			int i=0;
 			try {
@@ -114,7 +113,7 @@ public class PostgresPrimaryKeyDropperWithoutName implements CustomSqlChange {
 					rowMapper.mapRow(prepareStatement.getResultSet(),i++);
 				}
 			} catch (SQLException e) {
-				throw new CustomChangeException(constraintNameSql);
+				throw new CustomChangeException(e);
 			}
 		return statements.toArray(new SqlStatement[statements.size()]);
 	}
