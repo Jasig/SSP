@@ -20,15 +20,26 @@ package org.jasig.ssp.web.api.reference;
 
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.factory.reference.EnrollmentStatusTOFactory;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.EnrollmentStatus;
+import org.jasig.ssp.model.reference.Tag;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.reference.EnrollmentStatusService;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.reference.EnrollmentStatusTO;
+import org.jasig.ssp.transferobject.reference.TagTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/1/reference/enrollmentStatus")
@@ -62,5 +73,24 @@ public class EnrollmentStatusController
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
+	}
+	@RequestMapping(method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
+	public @ResponseBody
+	PagedResponse<EnrollmentStatusTO> getAll(
+			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) Integer start,
+			final @RequestParam(required = false) Integer limit,
+			final @RequestParam(required = false) String sort,
+			final @RequestParam(required = false) String sortDirection) {
+
+		final PagingWrapper<EnrollmentStatus> data = getService().getAll(
+				SortingAndPaging.createForSingleSortWithPaging(
+						status == null ? ObjectStatus.ALL : status, start,
+						limit, sort, sortDirection, "name"));
+
+		return new PagedResponse<EnrollmentStatusTO>(true, data.getResults(), getFactory()
+				.asTOList(data.getRows()));
+
 	}
 }
