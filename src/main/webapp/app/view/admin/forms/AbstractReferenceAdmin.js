@@ -29,7 +29,8 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
         colorsStore: 'colorsStore',
         colorsUnpagedStore: 'colorsUnpagedStore',
         colorsAllStore: 'colorsAllStore',
-        colorsAllUnpagedStore: 'colorsAllUnpagedStore'
+        colorsAllUnpagedStore: 'colorsAllUnpagedStore',
+		columnRendererUtils: 'columnRendererUtils'
     },
 	height: '100%',
 	width: '100%',
@@ -149,6 +150,17 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                 selType: 'rowmodel',
 				cls: 'configgrid',
                 columns: [
+					{
+                        header: 'Active',
+                        required: true,
+                        dataIndex: 'active',
+						defaultValue: true,
+                        renderer: me.columnRendererUtils.renderActive,
+                        flex: .10,
+                        field: {
+                            xtype: 'checkbox'
+                        }
+                    },
                     { header: 'Name',
                         dataIndex: 'name',
                         field: {

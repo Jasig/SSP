@@ -21,6 +21,7 @@ Ext.define('Ssp.store.reference.Ethnicities', {
     model: 'Ssp.model.reference.Ethnicity',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('ethnicity')});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('ethnicity'),
+    		extraParams: this.extraParams});
     }
 });

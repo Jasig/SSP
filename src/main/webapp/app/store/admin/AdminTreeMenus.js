@@ -43,10 +43,25 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 children: [{
                     text: 'Disability Accommodations',
                     title: 'Disability Accommodations',
-                    store: 'disabilityAccommodations',
+                    store: 'disabilityAccommodationsAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true,
-                    columns: [{
+                    columns: [
+					{
+                        header: 'Active',
+                        required: true,
+                        dataIndex: 'active',
+						defaultValue: true,
+                        renderer: me.columnRendererUtils.renderActive,
+                        flex: .10,
+                        field: {
+                            xtype: 'checkbox'
+                        }
+                    },{
                         header: 'Name',
                         dataIndex: 'name',
                         required: true,
@@ -83,19 +98,31 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 }, {
                     text: 'Disability Agencies',
                     title: 'Disability Agencies',
-                    store: 'disabilityAgencies',
+                    store: 'disabilityAgenciesAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
                     text: 'Disability Statuses',
                     title: 'Disability Statuses',
-                    store: 'disabilityStatuses',
+                    store: 'disabilityStatusesAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
                     text: 'Disability Types',
                     title: 'Disability Types',
-                    store: 'disabilityTypes',
+                    store: 'disabilityTypesAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }]
@@ -107,25 +134,41 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 children: [{
                     text: 'Program Status Change Reasons',
                     title: 'Program Status Change Reasons',
-                    store: 'programStatusChangeReasons',
+                    store: 'programStatusChangeReasonsAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 },{
                     text: 'Referral Sources',
                     title: 'Referral Sources',
-                    store: 'referralSources',
+                    store: 'referralSourcesAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
                     text: 'Special Service Groups',
                     title: 'Special Service Groups',
-                    store: 'specialServiceGroups',
+                    store: 'specialServiceGroupsAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
                     text: 'Service Reasons',
                     title: 'Service Reasons',
-                    store: 'serviceReasons',
+                    store: 'serviceReasonsAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
@@ -198,14 +241,22 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 children: [{
                     text: 'Child Care Arrangements',
                     title: 'Child Care Arrangements',
-                    store: 'childCareArrangements',
+                    store: 'childCareArrangementsAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
                     text: 'Citizenships',
                     title: 'Citizenships',
-                    store: 'citizenships',
+                    store: 'citizenshipsAll',
                     form: 'AbstractReferenceAdmin',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     leaf: true
                 }, {
                     text: 'Confidentiality Disclosure Agreement',
@@ -216,19 +267,31 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 }, {
                     text: 'Education Goals',
                     title: 'Education Goals',
-                    store: 'educationGoals',
+                    store: 'educationGoalsAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
                     text: 'Education Levels',
                     title: 'Education Levels',
-                    store: 'educationLevels',
+                    store: 'educationLevelsAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
                     text: 'Ethnicities',
                     title: 'Ethnicities',
-                    store: 'ethnicities',
+                    store: 'ethnicitiesAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
@@ -281,43 +344,71 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 }, {
                     text: 'Coursework Hours',
                     title: 'Coursework Hours',
-                    store: 'courseworkHours',
+                    store: 'courseworkHoursAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
                     text: 'Funding Sources',
                     title: 'Funding Sources',
-                    store: 'fundingSources',
+                    store: 'fundingSourcesAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
                     text: 'Marital Statuses',
                     title: 'Marital Statuses',
-                    store: 'maritalStatuses',
+                    store: 'maritalStatusesAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
                     text: 'Military Affiliations',
                     title: 'Military Affiliations',
-                    store: 'militaryAffiliations',
+                    store: 'militaryAffiliationsAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 },{
                     text: 'Registration Loads',
                     title: 'Registration Loads',
-                    store: 'registrationLoads',
+                    store: 'registrationLoadsAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
                     text: 'Student Statuses',
                     title: 'Student Statuses',
-                    store: 'studentStatuses',
+                    store: 'studentStatusesAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
                     text: 'Veteran Statuses',
                     title: 'Veteran Statuses',
-                    store: 'veteranStatuses',
+                    store: 'veteranStatusesAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }]
@@ -368,7 +459,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'confidentialityLevels',
                     form: 'AbstractReferenceAdmin',
                     leaf: true,
-                    columns: [{
+                    columns: [
+					{
                         header: 'Name',
                         dataIndex: 'name',
                         required: true,
@@ -414,28 +506,55 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 }, {
                     text: 'Outcomes',
                     title: 'Outcomes',
-                    store: 'earlyAlertOutcomes',
+                    store: 'earlyAlertOutcomesAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
                     text: 'Outreaches',
                     title: 'Outreaches',
-                    store: 'earlyAlertOutreaches',
+                    store: 'earlyAlertOutreachesAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
                     text: 'Reasons',
                     title: 'Reasons',
-                    store: 'earlyAlertReasons',
+                    store: 'earlyAlertReasonsAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
                     text: 'Referrals',
                     title: 'Referrals',
-                    store: 'earlyAlertReferrals',
+                    store: 'earlyAlertReferralsAll',
                     form: 'AbstractReferenceAdmin',
                     leaf: true,
-                    columns: [{
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
+                    columns: [
+					{
+                        header: 'Active',
+                        required: true,
+                        dataIndex: 'active',
+						defaultValue: true,
+                        renderer: me.columnRendererUtils.renderActive,
+                        flex: .10,
+                        field: {
+                            xtype: 'checkbox'
+                        }
+                    },{
                         header: 'Name',
                         dataIndex: 'name',
                         required: true,
@@ -464,7 +583,11 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 }, {
                     text: 'Suggestions',
                     title: 'Suggestions',
-                    store: 'earlyAlertSuggestions',
+                    store: 'earlyAlertSuggestionsAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }]
@@ -476,7 +599,11 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 children: [{
                     text: 'Sources',
                     title: 'Sources',
-                    store: 'journalSources',
+                    store: 'journalSourcesAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
@@ -494,7 +621,11 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 }, {
                     text: 'Tracks',
                     title: 'Tracks',
-                    store: 'journalTracks',
+                    store: 'journalTracksAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }]
@@ -526,12 +657,10 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         header: 'Active',
                         required: true,
                         dataIndex: 'active',
-                        defaultValue: true,
                         renderer: me.columnRendererUtils.renderActive,
                         flex: .20,
                         field: {
-                            xtype: 'checkbox',
-                            checked: true
+                            xtype: 'checkbox'
                         }
                     }, {
                         header: 'Name',
@@ -727,7 +856,6 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         header: 'Active',
                         required: true,
                         dataIndex: 'active',
-                        defaultValue: true,
                         renderer: me.columnRendererUtils.renderActive,
                         flex: .20,
                         field: {

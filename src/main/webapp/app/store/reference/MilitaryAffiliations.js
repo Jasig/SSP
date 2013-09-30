@@ -21,6 +21,7 @@ Ext.define('Ssp.store.reference.MilitaryAffiliations', {
     model: 'Ssp.model.reference.MilitaryAffiliation',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('militaryAffiliation')});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('militaryAffiliation'),
+    		extraParams: this.extraParams});
     }
 });

@@ -21,6 +21,7 @@ Ext.define('Ssp.store.reference.CourseworkHours', {
     model: 'Ssp.model.reference.CourseworkHours',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('courseworkHours')});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('courseworkHours'),
+    		extraParams: this.extraParams});
     }
 });

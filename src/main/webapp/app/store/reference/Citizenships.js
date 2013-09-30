@@ -21,6 +21,7 @@ Ext.define('Ssp.store.reference.Citizenships', {
     model: 'Ssp.model.reference.Citizenship',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('citizenship')});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('citizenship'),
+    		extraParams: this.extraParams});
     }
 });

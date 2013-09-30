@@ -21,6 +21,7 @@ Ext.define('Ssp.store.reference.FundingSources', {
     model: 'Ssp.model.reference.FundingSource',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('fundingSource')});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('fundingSource'),
+    		extraParams: this.extraParams});
     }
 });

@@ -16,12 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.store.reference.EarlyAlertSuggestions', {
-    extend: 'Ssp.store.reference.AbstractReferences',
-    model: 'Ssp.model.reference.EarlyAlertSuggestion',
+Ext.define('Ssp.store.reference.JournalSourcesAll', {
+    extend: 'Ext.data.Store',
+    model: 'Ssp.model.reference.JournalSource',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties'
+    },
     constructor: function(){
-    	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('earlyAlertSuggestion'),
-    		extraParams: this.extraParams});
+        Ext.apply(this, {
+                proxy: this.apiProperties.getProxy(''),
+                autoLoad: false,
+                autoSync: false,
+				extraParams: {status: "ALL"}
+            }
+        );
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('journalSource'),extraParams: this.extraParams});
+        return this.callParent(arguments);
     }
 });

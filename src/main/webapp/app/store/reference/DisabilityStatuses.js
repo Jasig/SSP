@@ -21,6 +21,7 @@ Ext.define('Ssp.store.reference.DisabilityStatuses', {
     model: 'Ssp.model.reference.DisabilityStatus',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('disabilityStatus')});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('disabilityStatus'),
+    		extraParams: this.extraParams});
     }
 });

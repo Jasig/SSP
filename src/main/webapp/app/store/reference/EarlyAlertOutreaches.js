@@ -21,6 +21,7 @@ Ext.define('Ssp.store.reference.EarlyAlertOutreaches', {
     model: 'Ssp.model.reference.EarlyAlertOutreach',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('earlyAlertOutreach')});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('earlyAlertOutreach'),
+    		extraParams: this.extraParams});
     }
 });

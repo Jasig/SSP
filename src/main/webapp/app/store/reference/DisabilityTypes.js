@@ -21,6 +21,7 @@ Ext.define('Ssp.store.reference.DisabilityTypes', {
     model: 'Ssp.model.reference.DisabilityType',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('disabilityType')});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('disabilityType'),
+    		extraParams: this.extraParams});
     }
 });
