@@ -60,8 +60,8 @@
 			create table external_student_test as select * from external_student_test_temp
 		</sql>
 		<sql>grant all on external_student_test to ${database.app.username}</sql>
-		<addUniqueConstraint tableName="external_student_test" columnNames="school_id,test_code,sub_test_code,test_date,discriminator" />
-		<addPrimaryKey tableName="external_student_test" columnNames="school_id,test_code,sub_test_code,test_date,discriminator" />
+		<addUniqueConstraint tableName="external_student_test" columnNames="school_id,test_code,sub_test_code,test_date,discriminator" constraintName="external_student_test_unq"/>
+		<addPrimaryKey tableName="external_student_test" columnNames="school_id,test_code,sub_test_code,test_date,discriminator" constraintName="external_student_test_pk"/>
 		<createView viewName="v_external_student_test">
 			select school_id${concat.operator}test_code${concat.operator}sub_test_code${concat.operator}cast(test_date as ${nvarchar.type}(120))${concat.operator}discriminator as id,* from external_student_test
 		</createView>
