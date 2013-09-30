@@ -78,7 +78,8 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                                     	fieldLabel: 'To',
                                     	labelWidth: 30,
 										width:400,
-										allowBlank:false
+										allowBlank:false,
+										itemId: 'emailTo'
                                     	}]
                               },
                               {
@@ -94,7 +95,8 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                                            	fieldLabel: 'cc',
                                            	vtype: 'multiemail',
                                            	labelWidth: 30,
-											width:400
+											width:400,
+											itemId: 'emailCC'
                                            }]
                                },
                                {

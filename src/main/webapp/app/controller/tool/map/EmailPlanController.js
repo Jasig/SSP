@@ -21,11 +21,14 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	appEventsController: 'appEventsController'
+    	appEventsController: 'appEventsController',
+		person: 'currentPerson',
+		currentMapPlan: 'currentMapPlan'
        
     },
     control: {
     	optionsEmailView: '#optionsEmailView',
+		
     	
     	'fullFormat': {
     	   selector: '#fullFormat',
@@ -44,6 +47,8 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
     
 	init: function() {
 		var me=this;
+		
+		
 		Ext.apply(Ext.form.field.VTypes, {
 
 		    //  vtype validation function
@@ -63,6 +68,14 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
 		});
 		me.getOptionsEmailView().hide();
 		
+		var emailToField = Ext.ComponentQuery.query('#emailTo',me.getView())[0];
+		
+		var emailCCField = Ext.ComponentQuery.query('#emailCC',me.getView())[0];
+		
+		emailToField.setValue(me.handleNull(me.person.get('primaryEmailAddress')));
+		
+		emailCCField.setValue(me.handleNull(me.currentMapPlan.get('contactEmail')));
+		
 		return this.callParent(arguments);
     },
     
@@ -79,6 +92,14 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
         if (nv){
         me.getOptionsEmailView().hide();
         }
-    }
+    },
+	
+	handleNull: function(value, defaultValue){
+		if(defaultValue == null || defaultValue == undefined)
+			defaultValue = "";
+		if(value == null || value == undefined || value == 'null')
+			return defaultValue;
+		return value;
+	}
 	
 });
