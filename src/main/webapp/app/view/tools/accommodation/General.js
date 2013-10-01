@@ -69,7 +69,7 @@ Ext.define('Ssp.view.tools.accommodation.General', {
 				        valueField: 'id',
 				        displayField: 'name',
 				        mode: 'local',
-				        typeAhead: true,
+				        //typeAhead: true,
 				        queryMode: 'local',
 				        allowBlank: true,
 						editable: false
