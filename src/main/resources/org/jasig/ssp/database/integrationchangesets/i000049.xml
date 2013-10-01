@@ -52,7 +52,7 @@
 		<dropView viewName="v_external_student_test" />
 		
 		<addColumn tableName="external_student_test"  schemaName="${schema}">
-			<column name="discriminator" type="${nvarchar.type}(1)" defaultValue="1"></column>
+			<column name="discriminator" type="${nvarchar.type}(1)" value="1" defaultValue="1"></column>
 		</addColumn>
 		
 		<createView viewName="v_external_student_test">
@@ -61,6 +61,5 @@
 		
 		<sql>grant all on v_external_student_test to ${database.app.username}</sql>
 	</changeSet>
-
 
 </databaseChangeLog>
