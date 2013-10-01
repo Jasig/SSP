@@ -68,5 +68,12 @@
 		
 		<sql>grant all on v_external_student_test to ${database.app.username}</sql>
 	</changeSet>
-
+	
+	<changeSet id="drop external_student_test_temp"  author="tony.arland" >
+		<preConditions>
+			<tableExists tableName="external_student_test_temp"/>
+		</preConditions>
+		
+		<dropTable tableName="external_student_test_temp" schemaName="${schema}" />
+    </changeSet>
 </databaseChangeLog>
