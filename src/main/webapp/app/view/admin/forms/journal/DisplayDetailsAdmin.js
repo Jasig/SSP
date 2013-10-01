@@ -25,7 +25,8 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayDetailsAdmin', {
     controller: 'Ssp.controller.admin.journal.DisplayDetailsAdminViewController',
     inject: {
         apiProperties: 'apiProperties',
-        authenticatedPerson: 'authenticatedPerson'
+        authenticatedPerson: 'authenticatedPerson',
+		columnRendererUtils: 'columnRendererUtils'
     },
 	height: '100%',
 	width: '100%',
@@ -45,6 +46,16 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayDetailsAdmin', {
     		      selType: 'rowmodel',
 				  cls: 'configgrid',
     		      columns: [
+				  {
+                        header: 'Active',
+                        required: true,
+                        dataIndex: 'active',
+                        renderer: me.columnRendererUtils.renderActive,
+                        flex: .20,
+                        field: {
+                            xtype: 'checkbox'
+                        }
+                    }, 
     		                { header: 'Name',  
     		                  dataIndex: 'name',
     		                  field: {
@@ -77,13 +88,6 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayDetailsAdmin', {
      		                   hidden: !me.authenticatedPerson.hasAccess('JOURNAL_DETAIL_ADMIN_EDIT_BUTTON'),
      		                   action: 'edit',
      		                   itemId: 'editButton'
-     		               }, '-' ,{
-     		                   text: 'Delete',
-     		                   iconCls: 'icon-delete',
-     		                   xtype: 'button',
-     		                   hidden: !me.authenticatedPerson.hasAccess('JOURNAL_DETAIL_ADMIN_DELETE_BUTTON'),
-     		                   action: 'delete',
-     		                   itemId: 'deleteButton'
      		               }]
      		           },{
      		               xtype: 'toolbar',

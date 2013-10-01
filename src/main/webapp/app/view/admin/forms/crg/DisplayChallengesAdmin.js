@@ -47,6 +47,17 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
     		      enableDragDrop: false,
 				  cls: 'configgrid',
     		      columns: [
+				  		{
+	                        header: 'Active',
+	                        required: true,
+	                        dataIndex: 'active',
+							defaultValue: true,
+	                        renderer: me.columnRendererUtils.renderActive,
+	                        flex: .10,
+	                        field: {
+	                            xtype: 'checkbox'
+	                        }
+	                    },
     		                { header: 'Name',  
     		                  dataIndex: 'name',
     		                  flex: 1 
@@ -81,13 +92,6 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
      		                   hidden: !me.authenticatedPerson.hasAccess('CHALLENGES_ADMIN_EDIT_BUTTON'),
      		                   action: 'edit',
      		                   itemId: 'editButton'
-     		               }, '-' ,{
-     		                   text: 'Delete',
-     		                   iconCls: 'icon-delete',
-     		                   xtype: 'button',
-     		                   hidden: !me.authenticatedPerson.hasAccess('CHALLENGES_ADMIN_DELETE_BUTTON'),
-     		                   action: 'delete',
-     		                   itemId: 'deleteButton'
      		               }]
      		           },{
      		               xtype: 'toolbar',

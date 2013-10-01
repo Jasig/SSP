@@ -935,8 +935,24 @@ Ext.onReady(function(){
 					caseloadStore: 'Ssp.store.Caseload',
 					reassignCaseloadStore: 'Ssp.store.Caseload',
 					challengesStore: 'Ssp.store.reference.Challenges',
+					challengesAllStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.Challenges', {
+							     extraParams: {status: "ALL"}
+							 });
+				    	},
+				    	singleton: true
+				    },
 					challengeCategoriesStore: 'Ssp.store.reference.ChallengeCategories',
 					challengeReferralsStore: 'Ssp.store.reference.ChallengeReferrals',
+					challengeReferralsAllStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.ChallengeReferrals', {
+							     extraParams: {status: "ALL"}
+							 });
+				    	},
+				    	singleton: true
+				    },
 				    childCareArrangementsStore: 'Ssp.store.reference.ChildCareArrangements',
 					childCareArrangementsAllStore: {
 				    	fn: function(){
@@ -1261,7 +1277,23 @@ Ext.onReady(function(){
 					journalSourcesAllStore: 'Ssp.store.reference.JournalSourcesAll',
 					journalSourcesAllUnpagedStore: 'Ssp.store.reference.JournalSourcesAllUnpaged',
 			        journalStepsStore: 'Ssp.store.reference.JournalSteps',
+					journalStepsAllStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.JournalSteps', {
+							     extraParams: {status: "ALL"}
+							 });
+					    },
+					    singleton: true
+					},	
 			        journalDetailsStore: 'Ssp.store.reference.JournalStepDetails',
+					journalDetailsAllStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.JournalStepDetails', {
+							     extraParams: {status: "ALL"}
+							 });
+					    },
+					    singleton: true
+					},	
 			        journalTracksStore: 'Ssp.store.reference.JournalTracks',
 			        journalTracksUnpagedStore: 'Ssp.store.reference.JournalTracksUnpaged',
 					journalTracksAllStore: 'Ssp.store.reference.JournalTracksAll',

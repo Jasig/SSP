@@ -31,7 +31,7 @@ Ext.define('Ssp.controller.AdminViewController', {
         colorsUnpagedStore: 'colorsUnpagedStore',
         colorsAllStore: 'colorsAllStore',
         colorsAllUnpagedStore: 'colorsAllUnpagedStore',
-    	confidentialityLevelsStore: 'confidentialityLevelsStore',
+    	confidentialityLevelsAllStore: 'confidentialityLevelsAllStore',
     	disabilityAccommodationsAllStore: 'disabilityAccommodationsAllStore',
     	disabilityAgenciesAllStore: 'disabilityAgenciesAllStore',
     	disabilityStatusesAllStore: 'disabilityStatusesAllStore',

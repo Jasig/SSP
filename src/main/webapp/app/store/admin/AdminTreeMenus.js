@@ -421,6 +421,10 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     text: 'Categories',
                     title: 'Categories',
                     store: 'challengeCategories',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
@@ -456,10 +460,25 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 children: [{
                     text: 'Confidentiality Levels',
                     title: 'Confidentiality Levels',
-                    store: 'confidentialityLevels',
+                    store: 'confidentialityLevelsAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true,
                     columns: [
+					{
+                        header: 'Active',
+                        required: true,
+                        dataIndex: 'active',
+						defaultValue: true,
+                        renderer: me.columnRendererUtils.renderActive,
+                        flex: .10,
+                        field: {
+                            xtype: 'checkbox'
+                        }
+                    },
 					{
                         header: 'Name',
                         dataIndex: 'name',

@@ -47,6 +47,16 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayStepsAdmin', {
 				  cls: 'configgrid',
     		      enableDragDrop: false,
     		      columns: [
+						  {
+		                        header: 'Active',
+		                        required: true,
+		                        dataIndex: 'active',
+		                        renderer: me.columnRendererUtils.renderActive,
+		                        flex: .20,
+		                        field: {
+		                            xtype: 'checkbox'
+		                        }
+		                    }, 
     		                { header: 'Name',  
     		                  dataIndex: 'name',
     		                  field: {
@@ -86,13 +96,6 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayStepsAdmin', {
      		                   hidden: !me.authenticatedPerson.hasAccess('JOURNAL_STEP_ADMIN_EDIT_BUTTON'),
      		                   action: 'edit',
      		                   itemId: 'editButton'
-     		               }, '-' ,{
-     		                   text: 'Delete',
-     		                   iconCls: 'icon-delete',
-     		                   xtype: 'button',
-     		                   hidden: !me.authenticatedPerson.hasAccess('JOURNAL_STEP_ADMIN_DELETE_BUTTON'),
-     		                   action: 'delete',
-     		                   itemId: 'deleteButton'
      		               }]
      		           },{
     		               xtype: 'toolbar',

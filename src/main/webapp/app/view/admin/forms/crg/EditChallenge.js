@@ -82,6 +82,11 @@ Ext.define('Ssp.view.admin.forms.crg.EditChallenge',{
                     fieldLabel: 'Show in Self Help Search',
                     anchor: '100%',
                     name: 'showInSelfHelpSearch'
+                },
+				{
+                    xtype: 'checkbox',
+                    fieldLabel: 'Active',
+                    name: 'active'
                 }
             ],
             

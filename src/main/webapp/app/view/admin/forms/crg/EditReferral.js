@@ -55,6 +55,11 @@ Ext.define('Ssp.view.admin.forms.crg.EditReferral',{
                     fieldLabel: 'Show in Self Help Guide',
                     anchor: '100%',
                     name: 'showInSelfHelpGuide'
+                },
+				{
+                    xtype: 'checkbox',
+                    fieldLabel: 'Active',
+                    name: 'active'
                 }
             ],
             

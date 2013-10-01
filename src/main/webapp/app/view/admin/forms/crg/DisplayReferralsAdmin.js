@@ -25,7 +25,8 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayReferralsAdmin', {
     controller: 'Ssp.controller.admin.crg.DisplayReferralsAdminViewController',
     inject: {
         apiProperties: 'apiProperties',
-        authenticatedPerson: 'authenticatedPerson'
+        authenticatedPerson: 'authenticatedPerson',
+		columnRendererUtils: 'columnRendererUtils'
     },
 	height: '100%',
 	width: '100%',
@@ -44,7 +45,19 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayReferralsAdmin', {
     		      autoScroll: true,
     		      selType: 'rowmodel',
 				  cls: 'configgrid',
-    		      columns: [{ 
+    		      columns: [
+					  {
+	                        header: 'Active',
+	                        required: true,
+	                        dataIndex: 'active',
+							defaultValue: true,
+	                        renderer: me.columnRendererUtils.renderActive,
+	                        flex: .10,
+	                        field: {
+	                            xtype: 'checkbox'
+	                        }
+	                    },
+						{ 
     		                  header: 'Name',  
     		                  dataIndex: 'name',
     		                  field: {
@@ -80,13 +93,6 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayReferralsAdmin', {
      		                   hidden: !me.authenticatedPerson.hasAccess('CHALLENGE_REFERRALS_ADMIN_EDIT_BUTTON'),
      		                   action: 'edit',
      		                   itemId: 'editButton'
-     		               }, '-' ,{
-     		                   text: 'Delete',
-     		                   iconCls: 'icon-delete',
-     		                   hidden: !me.authenticatedPerson.hasAccess('CHALLENGE_REFERRALS_ADMIN_DELETE_BUTTON'),
-     		                   xtype: 'button',
-     		                   action: 'delete',
-     		                   itemId: 'deleteButton'
      		               }]
      		           },{
      		               xtype: 'toolbar',
