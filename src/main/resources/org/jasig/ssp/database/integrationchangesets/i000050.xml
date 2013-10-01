@@ -129,9 +129,9 @@
 		</sql>
 	</changeSet>
 
-	<changeSet id="drop primary key on external_student_test (pg)" author="dan.mccallum" dbms="postgresql">
+	<changeSet id="drop primary key 1 on external_student_test (pg)" author="dan.mccallum" dbms="postgresql">
 		<preConditions onFail="CONTINUE"
-					   onFailMessage="Skip drop primary key on external_student_test (postgresql)">
+					   onFailMessage="Skip drop primary key 1 on external_student_test (postgresql)">
 			<sqlCheck  expectedResult="1">${check_for_manage_integration_database_config_sql}
 			</sqlCheck>
 			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
@@ -139,17 +139,44 @@
 			<columnExists tableName="external_student_test" columnName="discriminator" schemaName="${schema}"/>
 			<!-- key existence check for pg but not sqlserver b/c now-non-existent changesets
 			 had already been run in CI that cleaned up the key on pg before we had working
-			 changsets for sqlserver -->
-			<primaryKeyExists schemaName="${schema}" primaryKeyName="external_student_test_pkey" tableName="external_student_test" />
+			 changsets for sqlserver. Note... don't list both a tableName and primaryKeyName here...
+			 Liquibase will only use one or the other and prefer tableName. -->
+			<primaryKeyExists schemaName="${schema}" primaryKeyName="external_student_test_pkey" />
 			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
 		</preConditions>
 
 		<dropPrimaryKey tableName="external_student_test" schemaName="${schema}" constraintName="external_student_test_pkey" />
 	</changeSet>
 
+	<changeSet id="drop primary key 2 on external_student_test (pg)" author="dan.mccallum" dbms="postgresql">
+		<!-- Needs to be MARK_RAN so you don't accidentally clobber this PK after the
+		changset at the bottom re/creates it and you restart the app. Note that this
+		changeset only exists to clean up after other changesets which no longer exist.
+		So it's safe to use MARK_RAN even if you've got
+		external.apply.natural.keys=false... you won't need it to run when you get around
+		to flipping that config to true
+		-->
+		<preConditions onFail="MARK_RAN"
+					   onFailMessage="Skip drop primary key 2 on external_student_test (postgresql)">
+			<sqlCheck  expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<columnExists tableName="external_student_test" columnName="discriminator" schemaName="${schema}"/>
+			<!-- key existence check for pg but not sqlserver b/c now-non-existent changesets
+			 had already been run in CI that cleaned up the key on pg before we had working
+			 changsets for sqlserver. Note... don't list both a tableName and primaryKeyName here...
+			 Liquibase will only use one or the other and prefer tableName. -->
+			<primaryKeyExists schemaName="${schema}" primaryKeyName="external_student_test_pk" />
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>
+
+		<dropPrimaryKey tableName="external_student_test" schemaName="${schema}" constraintName="external_student_test_pk" />
+	</changeSet>
+
 	<changeSet id="drop unique constraint 1 on external_student_test (pg)" author="dan.mccallum" dbms="postgresql">
 		<preConditions onFail="CONTINUE"
-					   onFailMessage="Skip drop unique constraint on external_student_test (postgresql)">
+					   onFailMessage="Skip drop unique constraint 1 on external_student_test (postgresql)">
 			<sqlCheck  expectedResult="1">${check_for_manage_integration_database_config_sql}
 			</sqlCheck>
 			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
@@ -167,7 +194,7 @@
 
 	<changeSet id="drop unique constraint 2 on external_student_test (pg)" author="dan.mccallum" dbms="postgresql">
 		<preConditions onFail="CONTINUE"
-					   onFailMessage="Skip drop unique constraint on external_student_test (postgresql)">
+					   onFailMessage="Skip drop unique constraint 2 on external_student_test (postgresql)">
 			<sqlCheck  expectedResult="1">${check_for_manage_integration_database_config_sql}
 			</sqlCheck>
 			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
