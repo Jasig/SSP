@@ -151,7 +151,13 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	
     	// ensure the drop handler waits for the drop
     	dropHandler.wait=true;
-
+    	
+    	if(data.records[0].get('objectStatus') ==='INACTIVE')
+    	{
+            Ext.Msg.alert('SSP Error','You cannot assign inactive reference items');
+            dropHandler.cancelDrop;
+            return 1;
+    	}
 		
     	// handle drop on a folder
         if (!overModel.isLeaf() && dropPosition == 'append')
