@@ -29,6 +29,9 @@ Ext.define('Ssp.store.external.Terms', {
 		me.callParent(arguments);
 		me.addListener('load', me.sortAfterLoad, me, {single:true});
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('terms'),
+    		extraParams: {
+    		    limit: '-1'
+    		},
     		autoLoad: true});
     	return; 
     },
