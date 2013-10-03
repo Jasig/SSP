@@ -74,7 +74,7 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
 		
 		emailToField.setValue(me.handleNull(me.person.get('primaryEmailAddress')));
 		
-		emailCCField.setValue(me.handleNull(me.currentMapPlan.get('contactEmail')));
+		emailCCField.setValue(me.handleNull(me.person.getCoachPrimaryEmailAddress()));
 		
 		return this.callParent(arguments);
     },
