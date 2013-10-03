@@ -23,6 +23,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.AbstractAuditable;
 import org.jasig.ssp.model.Auditable;
@@ -44,6 +45,9 @@ public class JournalStepJournalStepDetail extends AbstractAuditable implements
 	@ManyToOne
 	@JoinColumn(name = "journal_step_detail_id", nullable = false)
 	private JournalStepDetail journalStepDetail;
+	
+	@NotNull
+	private Integer sortOrder;
 
 	public JournalStep getJournalStep() {
 		return journalStep;
@@ -66,6 +70,14 @@ public class JournalStepJournalStepDetail extends AbstractAuditable implements
 		return 191;
 	}
 
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+	
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+	
 	@Override
 	public int hashCode() { // NOPMD by jon.adams on 5/9/12 7:29 PM
 		int result = hashPrime();
@@ -79,4 +91,5 @@ public class JournalStepJournalStepDetail extends AbstractAuditable implements
 
 		return result;
 	}
+
 }

@@ -24,6 +24,7 @@ Ext.define('Ssp.controller.tool.document.StudentDocumentToolViewController', {
     	appEventsController: 'appEventsController',
     	formUtils: 'formRendererUtils',
     	person: 'currentPerson',
+    	personLite: 'personLite',
     	model: 'currentDocument',
     	documentsStore: 'documentsStore',
         confidentialityLevelsStore: 'confidentialityLevelsStore'
@@ -44,7 +45,7 @@ Ext.define('Ssp.controller.tool.document.StudentDocumentToolViewController', {
 	},
     init: function() {
 		var me = this;
-		var personId = this.person.get('id');
+		var personId = me.personLite.get('id');
 		var successFunc = function(response,view){
 	    	var r = Ext.decode(response.responseText);
 	    	if (r.rows.length > 0)

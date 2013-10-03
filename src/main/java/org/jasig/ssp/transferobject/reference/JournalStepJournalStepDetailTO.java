@@ -37,6 +37,8 @@ public class JournalStepJournalStepDetailTO extends
 	private JournalStepTO journalStep;
 
 	private JournalStepDetailTO journalStepDetail;
+	
+	private Integer sortOrder;
 
 	public JournalStepJournalStepDetailTO() {
 		super();
@@ -56,6 +58,7 @@ public class JournalStepJournalStepDetailTO extends
 				: new JournalStepTO(model.getJournalStep());
 		journalStepDetail = model.getJournalStepDetail() == null ? null
 				: new JournalStepDetailTO(model.getJournalStepDetail());
+		sortOrder = model.getSortOrder();
 	}
 
 	public static List<JournalStepJournalStepDetailTO> toTOList(
@@ -84,5 +87,13 @@ public class JournalStepJournalStepDetailTO extends
 
 	public void setJournalStepDetail(final JournalStepDetailTO journalStepDetail) {
 		this.journalStepDetail = journalStepDetail;
+	}
+
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 }

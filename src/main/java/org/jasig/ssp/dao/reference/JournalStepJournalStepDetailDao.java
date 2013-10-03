@@ -21,10 +21,12 @@ package org.jasig.ssp.dao.reference;
 import java.util.UUID;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.reference.JournalStepJournalStepDetail;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
@@ -42,10 +44,7 @@ public class JournalStepJournalStepDetailDao extends
 			final SortingAndPaging sAndP) {
 		final Criteria query = createCriteria();
 		query.add(Restrictions.eq("journalStep.id", journalStepId));
-		if("sortOrder".equals(sAndP.getDefaultSortProperty()))
-		{
-			return processCriteriaWithStatusSortingAndPaging(query, new SortingAndPaging(sAndP.getStatus(),sAndP.getFirstResult(),sAndP.getMaxResults(),sAndP.getSortFields(),null,null));
-		}
+		sAndP.appendSortField("sortOrder", SortDirection.ASC);
 		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 
@@ -55,6 +54,7 @@ public class JournalStepJournalStepDetailDao extends
 		final Criteria query = createCriteria();
 		query.add(Restrictions.eq("journalStep.id", journalStepId));
 		query.add(Restrictions.eq("journalStepDetail.id", journalStepDetailId));
+		sAndP.appendSortField("sortOrder", SortDirection.ASC);
 		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 }

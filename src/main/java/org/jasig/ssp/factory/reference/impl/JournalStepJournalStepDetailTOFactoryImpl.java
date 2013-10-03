@@ -20,7 +20,6 @@ package org.jasig.ssp.factory.reference.impl;
 
 import org.jasig.ssp.dao.reference.JournalStepJournalStepDetailDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
-import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
 import org.jasig.ssp.factory.reference.JournalStepJournalStepDetailTOFactory;
 import org.jasig.ssp.model.reference.JournalStepJournalStepDetail;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -70,7 +69,7 @@ public class JournalStepJournalStepDetailTOFactoryImpl extends
 				null : journalStepService.get(tObject.getJournalStep().getId()));
 		model.setJournalStepDetail(tObject.getJournalStepDetail() == null ?
 				null : journalStepDetailService.get(tObject.getJournalStepDetail().getId()));
-
+		model.setSortOrder(tObject.getSortOrder());
 		return model;
 	}
 

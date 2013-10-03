@@ -35,7 +35,7 @@ public interface JournalTrackService extends
 
 	JournalTrackJournalStep addJournalStepToJournalTrack(
 			JournalStep journalStep,
-			JournalTrack journalTrack);
+			JournalTrack journalTrack, int sortOrder);
 
 	JournalTrackJournalStep removeJournalStepFromJournalTrack(
 			JournalStep journalStep,

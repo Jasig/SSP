@@ -18,7 +18,9 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -71,12 +73,12 @@ public class JournalStepServiceImpl extends
 	public PagingWrapper<JournalStep> getAllForJournalTrack(
 			final JournalTrack journalTrack,
 			final SortingAndPaging sAndP) {
-		Set<JournalStep> steps = new HashSet<JournalStep>();
+		List<JournalStep> steps = new ArrayList<JournalStep>();
 		PagingWrapper<JournalStep> allForJournalTrack = getDao().getAllForJournalTrack(journalTrack.getId(), new SortingAndPaging(ObjectStatus.ALL, sAndP.getFirstResult(), sAndP.getMaxResults(), sAndP.getSortFields(), sAndP.getDefaultSortProperty(), sAndP.getDefaultSortDirection()));
 		PagingWrapper<JournalTrackJournalStep> allForJournalTrackAssociations = journalTrackJournalStepDao.getAllForJournalTrack(journalTrack.getId(), new SortingAndPaging(sAndP.getStatus()));
-		for (JournalStep journalStep : allForJournalTrack) 
+		for (JournalTrackJournalStep journalTrackJournalStep : allForJournalTrackAssociations) {
 		{
-			for (JournalTrackJournalStep journalTrackJournalStep : allForJournalTrackAssociations) {
+			for (JournalStep journalStep : allForJournalTrack) 
 				if(journalStep.getId().equals(journalTrackJournalStep.getJournalStep().getId()))
 				{
 					steps.add(journalStep);
@@ -96,27 +98,43 @@ public class JournalStepServiceImpl extends
 	@Override
 	public JournalStepJournalStepDetail addJournalStepDetailToJournalStep(
 			final JournalStepDetail journalStepDetail,
-			final JournalStep journalStep) {
+			final JournalStep journalStep,final int sortOrder) {
+		
 		final PagingWrapper<JournalStepJournalStepDetail> journalStepDetailCategories = journalStepJournalStepDetailDao
 				.getAllForJournalStepDetailAndJournalStep(
 						journalStepDetail.getId(),
 						journalStep.getId(),
 						new SortingAndPaging(ObjectStatus.ACTIVE));
-
-		JournalStepJournalStepDetail journalStepJournalStepDetail = null;
-		// if this journalStepDetail is already there and ACTIVE, ignore
-		if (journalStepDetailCategories.getResults() < 1) {
-			journalStepJournalStepDetail = new JournalStepJournalStepDetail();
-			journalStepJournalStepDetail.setJournalStep(journalStep);
-			journalStepJournalStepDetail
-					.setJournalStepDetail(journalStepDetail);
-			journalStepJournalStepDetail.setObjectStatus(ObjectStatus.ACTIVE);
-
-			journalStepJournalStepDetail = journalStepJournalStepDetailDao
-					.save(journalStepJournalStepDetail);
+		
+		if(journalStepDetailCategories.getResults() > 0)
+		{
+			journalStepJournalStepDetailDao.delete(journalStepDetailCategories.getRows().iterator().next());
 		}
 
-		return journalStepJournalStepDetail;
+		PagingWrapper<JournalStepJournalStepDetail> allForJournalStep = journalStepJournalStepDetailDao.getAllForJournalStep(journalStep.getId(), new SortingAndPaging(ObjectStatus.ACTIVE));
+		int order = 0;
+		for (JournalStepJournalStepDetail journalStepJournalStepDetail : allForJournalStep) 
+		{
+			if(order >= sortOrder )
+			{
+				journalStepJournalStepDetail.setSortOrder(order + 1);
+				journalStepJournalStepDetailDao.save(journalStepJournalStepDetail);
+			}
+			order++;
+		}
+		
+		JournalStepJournalStepDetail newJournalStepJournalStepDetail = null;
+			newJournalStepJournalStepDetail = new JournalStepJournalStepDetail();
+			newJournalStepJournalStepDetail.setSortOrder(sortOrder);
+			newJournalStepJournalStepDetail.setJournalStep(journalStep);
+			newJournalStepJournalStepDetail
+			.setJournalStepDetail(journalStepDetail);
+			newJournalStepJournalStepDetail.setObjectStatus(ObjectStatus.ACTIVE);
+			
+			newJournalStepJournalStepDetail = journalStepJournalStepDetailDao
+					.save(newJournalStepJournalStepDetail);
+			return newJournalStepJournalStepDetail;
+
 	}
 
 	@Override
@@ -145,7 +163,7 @@ public class JournalStepServiceImpl extends
 
 		return journalStepJournalStepDetail;
 	}
-	
+	 
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException {
 		super.delete(id);

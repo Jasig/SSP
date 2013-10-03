@@ -149,7 +149,7 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
                 transformed.push(me.journalStepNodeItemFromTrackAssociation(assoc));
             }
         });
-        return me.sortBy(transformed, "name");
+        return transformed;
     },
 
     uniqueJournalTrackJournalStepAssociations: function (assocs) {
@@ -280,7 +280,7 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
                 transformed.push(me.journalDetailNodeItemFromStepAssociation(assoc));
             }
         });
-        return me.sortBy(transformed, "name");
+        return transformed;
     },
 
     uniqueJournalStepJournalDetailAssociations: function (assocs) {

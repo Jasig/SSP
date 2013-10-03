@@ -1216,6 +1216,11 @@
                     "clsName": "Ssp.controller.tool.document.StudentDocumentToolViewController",
                     "name": "StudentDocumentToolViewController.js",
                     "path": "/app/controller/tool/document/"
+                },                
+                {
+                    "clsName": "Ssp.controller.admin.journal.AssociateJournalAdminViewController",
+                    "name": "AssociateJournalAdminViewController.js",
+                    "path": "/app/controller/admin/journal/"
                 },
                 {
                     "clsName": "Ssp.controller.tool.document.EditDocumentViewController",

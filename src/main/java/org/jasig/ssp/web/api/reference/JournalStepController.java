@@ -37,6 +37,7 @@ import org.jasig.ssp.service.reference.JournalStepDetailService;
 import org.jasig.ssp.service.reference.JournalStepService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.reference.JournalAssociationTO;
 import org.jasig.ssp.transferobject.reference.JournalStepDetailTO;
 import org.jasig.ssp.transferobject.reference.JournalStepJournalStepDetailTO;
 import org.jasig.ssp.transferobject.reference.JournalStepTO;
@@ -140,7 +141,7 @@ public class JournalStepController
 		final PagingWrapper<JournalStepDetail> data = journalStepDetailService
 				.getAllForJournalStep(journalStep,
 						SortingAndPaging.createForSingleSortWithPaging(status, start,
-								limit, sort, sortDirection, "sortOrder"));
+								limit, sort, sortDirection, null));
 
 		return new PagedResponse<JournalStepDetailTO>(true,
 				data.getResults(), journalStepDetailTOFactory
@@ -151,15 +152,15 @@ public class JournalStepController
 	public @ResponseBody
 	ServiceResponse addJournalStepDetailToJournalStep(
 			@PathVariable final UUID id,
-			@RequestBody @NotNull final UUID journalStepDetailId)
+			@RequestBody @NotNull final JournalAssociationTO journalAssociation)
 			throws ObjectNotFoundException {
 
 		final JournalStepDetail journalStepDetail = journalStepDetailService
-				.get(journalStepDetailId);
+				.get(journalAssociation.getId());
 		final JournalStep journalStep = service.get(id);
-
+ 
 		service.addJournalStepDetailToJournalStep(journalStepDetail,
-				journalStep);
+				journalStep,journalAssociation.getSortOrder());
 
 		return new ServiceResponse(true);
 	}

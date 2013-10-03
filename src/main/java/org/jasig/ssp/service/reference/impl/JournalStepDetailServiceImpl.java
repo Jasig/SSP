@@ -18,7 +18,9 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -67,13 +69,13 @@ public class JournalStepDetailServiceImpl extends
 	public PagingWrapper<JournalStepDetail> getAllForJournalStep(
 			final JournalStep journalStep,
 			final SortingAndPaging sAndP) {
-		//using sets t
-		Set<JournalStepDetail> details = new HashSet<JournalStepDetail>();
+		List<JournalStepDetail> details = new ArrayList<JournalStepDetail>();
 		PagingWrapper<JournalStepDetail> allForJournalStep = dao.getAllForJournalStep(journalStep.getId(), new SortingAndPaging(ObjectStatus.ALL, sAndP.getFirstResult(), sAndP.getMaxResults(), sAndP.getSortFields(), sAndP.getDefaultSortProperty(), sAndP.getDefaultSortDirection()));
 		PagingWrapper<JournalStepJournalStepDetail> allAssociationsForJournalStep = journalStepJournalStepDetailDao.getAllForJournalStep(journalStep.getId(), new SortingAndPaging(sAndP.getStatus()));
-		for (JournalStepDetail journalStepDetail : allForJournalStep) 
-		{
+
 			for (JournalStepJournalStepDetail journalStepJournalStepDetail : allAssociationsForJournalStep) {
+			{
+			for (JournalStepDetail journalStepDetail : allForJournalStep) 
 				if(journalStepDetail.getId().equals(journalStepJournalStepDetail.getJournalStepDetail().getId()))
 				{
 					details.add(journalStepDetail);

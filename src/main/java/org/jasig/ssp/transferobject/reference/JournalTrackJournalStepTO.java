@@ -38,6 +38,9 @@ public class JournalTrackJournalStepTO extends
 	private JournalTrackTO journalTrack;
 
 	private JournalStepTO journalStep;
+	
+	private Integer sortOrder;
+
 
 	public JournalTrackJournalStepTO() {
 		super();
@@ -57,6 +60,8 @@ public class JournalTrackJournalStepTO extends
 				: new JournalTrackTO(model.getJournalTrack());
 		journalStep = model.getJournalStep() == null ? null
 				: new JournalStepTO(model.getJournalStep());
+		
+		sortOrder = model.getSortOrder();
 
 	}
 
@@ -86,5 +91,13 @@ public class JournalTrackJournalStepTO extends
 
 	public void setJournalTrack(JournalTrackTO journalTrack) {
 		this.journalTrack = journalTrack;
+	}
+
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 }

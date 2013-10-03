@@ -23,6 +23,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.AbstractAuditable;
 import org.jasig.ssp.model.Auditable;
@@ -43,6 +44,9 @@ public class JournalTrackJournalStep
 	@JoinColumn(name = "journal_step_id", nullable = false)
 	private JournalStep journalStep;
 
+	@NotNull
+	private Integer sortOrder;
+	
 	public JournalTrack getJournalTrack() {
 		return journalTrack;
 	}
@@ -59,6 +63,14 @@ public class JournalTrackJournalStep
 		this.journalStep = journalStep;
 	}
 
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+	
 	@Override
 	protected int hashPrime() {
 		return 251;
@@ -77,4 +89,6 @@ public class JournalTrackJournalStep
 
 		return result;
 	}
+
+
 }

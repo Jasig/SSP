@@ -1,4 +1,4 @@
-/*
+/**
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,23 +16,46 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.controller.admin.journal.AssociateTrackStepsAdminViewController', {
-	extend: 'Ssp.controller.admin.journal.AssociateJournalAdminViewController',
-    config: {
-        associatedItemType: 'journalStep',
-        parentItemType: 'journalTrack',
-        parentIdAttribute: 'journalTrackId',
-        associatedItemIdAttribute: 'journalStepId'
-    },
-	constructor: function(){
-		this.callParent(arguments);
-		
-		this.clear();
-		//this.getParentItems();
-		
-		var params = {status: "ACTIVE", limit: "-1"};
-		this.getParentItemsWithParams(params);
-		
-		return this;
-	}	
-});
+package org.jasig.ssp.transferobject.reference;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
+import org.jasig.ssp.model.reference.JournalStepDetail;
+import org.jasig.ssp.transferobject.TransferObject;
+
+import com.google.common.collect.Lists;
+
+public class JournalAssociationTO implements Serializable {
+
+	private static final long serialVersionUID = 7539604345170318617L;
+
+	private int sortOrder;
+	
+	private UUID id;
+
+	public JournalAssociationTO() {
+		super();
+	}
+
+
+	public int getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(final int sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+
+
+	public UUID getId() {
+		return id;
+	}
+
+
+	public void setId(UUID id) {
+		this.id = id;
+	}
+}

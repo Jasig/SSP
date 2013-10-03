@@ -41,6 +41,7 @@ Ext.define('Ssp.view.admin.forms.journal.AssociateTrackStepsAdmin', {
 			        plugins: {
 			            ptype: 'treeviewdragdrop',
 			            dropGroup: 'gridtotree',
+			            dragGroup: 'gridtotree',
 			            enableDrop: true
 			        }
 			     },

@@ -51,7 +51,7 @@ public interface JournalStepService extends
 			throws ObjectNotFoundException;
 
 	JournalStepJournalStepDetail addJournalStepDetailToJournalStep(
-			JournalStepDetail journalStepDetail, JournalStep journalStep);
+			JournalStepDetail journalStepDetail, JournalStep journalStep, int i);
 
 	JournalStepJournalStepDetail removeJournalStepDetailFromJournalStep(
 			JournalStepDetail journalStepDetail, JournalStep journalStep);

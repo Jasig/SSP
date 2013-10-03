@@ -37,6 +37,7 @@ import org.jasig.ssp.service.reference.JournalStepService;
 import org.jasig.ssp.service.reference.JournalTrackService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.reference.JournalAssociationTO;
 import org.jasig.ssp.transferobject.reference.JournalStepTO;
 import org.jasig.ssp.transferobject.reference.JournalTrackJournalStepTO;
 import org.jasig.ssp.transferobject.reference.JournalTrackTO;
@@ -156,13 +157,13 @@ public class JournalTrackController
 	@RequestMapping(value = "/{id}/journalStep", method = RequestMethod.POST)
 	public @ResponseBody
 	ServiceResponse addJournalStepToJournalTrack(@PathVariable final UUID id,
-			@RequestBody @NotNull final UUID journalStepId)
+			@RequestBody @NotNull final JournalAssociationTO journalAssociation)
 			throws ObjectNotFoundException {
 
-		final JournalStep journalStep = journalStepService.get(journalStepId);
+		final JournalStep journalStep = journalStepService.get(journalAssociation.getId());
 		final JournalTrack journalTrack = service.get(id);
 
-		service.addJournalStepToJournalTrack(journalStep, journalTrack);
+		service.addJournalStepToJournalTrack(journalStep, journalTrack,journalAssociation.getSortOrder());
 
 		return new ServiceResponse(true);
 	}

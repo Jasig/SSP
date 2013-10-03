@@ -17,7 +17,7 @@
  * under the License.
  */
 Ext.define('Ssp.controller.admin.journal.AssociateStepDetailsAdminViewController', {
-	extend: 'Ssp.controller.admin.AdminItemAssociationViewController',
+	extend: 'Ssp.controller.admin.journal.AssociateJournalAdminViewController',
     config: {
         associatedItemType: 'journalStepDetail',
         parentItemType: 'journalStep',

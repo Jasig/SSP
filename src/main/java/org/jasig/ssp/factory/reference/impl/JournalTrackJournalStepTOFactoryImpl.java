@@ -18,18 +18,13 @@
  */
 package org.jasig.ssp.factory.reference.impl;
 
-import org.jasig.ssp.dao.reference.JournalStepJournalStepDetailDao;
 import org.jasig.ssp.dao.reference.JournalTrackJournalStepDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
-import org.jasig.ssp.factory.reference.JournalStepJournalStepDetailTOFactory;
 import org.jasig.ssp.factory.reference.JournalTrackJournalStepTOFactory;
-import org.jasig.ssp.model.reference.JournalStepJournalStepDetail;
 import org.jasig.ssp.model.reference.JournalTrackJournalStep;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.reference.JournalStepDetailService;
 import org.jasig.ssp.service.reference.JournalStepService;
 import org.jasig.ssp.service.reference.JournalTrackService;
-import org.jasig.ssp.transferobject.reference.JournalStepJournalStepDetailTO;
 import org.jasig.ssp.transferobject.reference.JournalTrackJournalStepTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,7 +70,7 @@ public class JournalTrackJournalStepTOFactoryImpl extends
 				null : journalTrackService.get(tObject.getJournalTrack().getId()));
 		model.setJournalStep(tObject.getJournalStep() == null ?
 				null : journalStepService.get(tObject.getJournalStep().getId()));
-
+		model.setSortOrder(tObject.getSortOrder());
 		return model;
 	}
 

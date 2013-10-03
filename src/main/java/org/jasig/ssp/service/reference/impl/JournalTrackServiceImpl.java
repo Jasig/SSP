@@ -24,6 +24,8 @@ import org.jasig.ssp.dao.reference.JournalTrackDao;
 import org.jasig.ssp.dao.reference.JournalTrackJournalStepDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.JournalStep;
+import org.jasig.ssp.model.reference.JournalStepDetail;
+import org.jasig.ssp.model.reference.JournalStepJournalStepDetail;
 import org.jasig.ssp.model.reference.JournalTrack;
 import org.jasig.ssp.model.reference.JournalTrackJournalStep;
 import org.jasig.ssp.service.reference.JournalTrackService;
@@ -61,26 +63,40 @@ public class JournalTrackServiceImpl
 
 	@Override
 	public JournalTrackJournalStep addJournalStepToJournalTrack(
-			final JournalStep journalStep, final JournalTrack journalTrack) {
+			final JournalStep journalStep, final JournalTrack journalTrack, int sortOrder) {
 		// get current steps for track
 		final PagingWrapper<JournalTrackJournalStep> journalTrackJournalSteps = journalTrackJournalStepDao
 				.getAllForJournalTrackAndJournalStep(journalTrack.getId(),
 						journalStep.getId(),
 						new SortingAndPaging(ObjectStatus.ACTIVE));
+			
+			if(journalTrackJournalSteps.getResults() > 0)
+			{
+				journalTrackJournalStepDao.delete(journalTrackJournalSteps.getRows().iterator().next());
+			}
 
-		JournalTrackJournalStep journalTrackJournalStep = null;
-		// if this step is already there and Active, ignore
-		if (journalTrackJournalSteps.getResults() < 1) {
-			journalTrackJournalStep = new JournalTrackJournalStep();
-			journalTrackJournalStep.setJournalStep(journalStep);
-			journalTrackJournalStep.setJournalTrack(journalTrack);
-			journalTrackJournalStep.setObjectStatus(ObjectStatus.ACTIVE);
-
-			journalTrackJournalStep = journalTrackJournalStepDao
-					.save(journalTrackJournalStep);
-		}
-
-		return journalTrackJournalStep;
+			PagingWrapper<JournalTrackJournalStep> allForJournalTrack = journalTrackJournalStepDao.getAllForJournalTrack(journalTrack.getId(), new SortingAndPaging(ObjectStatus.ACTIVE));
+			int order = 0;
+			for (JournalTrackJournalStep journalTrackJournalStep : allForJournalTrack) 
+			{
+				if(order >= sortOrder )
+				{
+					journalTrackJournalStep.setSortOrder(order + 1);
+					journalTrackJournalStepDao.save(journalTrackJournalStep);
+				}
+				order++;
+			}
+			
+		
+		JournalTrackJournalStep newJournalTrackJournalStep = null;
+			newJournalTrackJournalStep = new JournalTrackJournalStep();
+			newJournalTrackJournalStep.setJournalStep(journalStep);
+			newJournalTrackJournalStep.setJournalTrack(journalTrack);
+			newJournalTrackJournalStep.setObjectStatus(ObjectStatus.ACTIVE);
+			newJournalTrackJournalStep.setSortOrder(sortOrder);
+			newJournalTrackJournalStep = journalTrackJournalStepDao
+					.save(newJournalTrackJournalStep);
+		return newJournalTrackJournalStep;
 	}
 
 	@Override
