@@ -20,8 +20,11 @@ package org.jasig.ssp.dao.reference;
 
 import org.springframework.stereotype.Repository;
 import org.jasig.ssp.dao.AuditableCrudDao;
-import org.jasig.ssp.model.reference.MilitaryAffiliation;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.RegistrationLoad;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 /**
  * Data access class for the RegistrationLoad reference entity.
@@ -32,5 +35,19 @@ public class RegistrationLoadDao extends AbstractReferenceAuditableCrudDao<Regis
 
 	public RegistrationLoadDao() {
 		super(RegistrationLoad.class);
+	}
+	
+	@Override
+	public PagingWrapper<RegistrationLoad> getAll(final SortingAndPaging sAndP) {
+		SortingAndPaging sp = sAndP;
+		if (sp == null) {
+			sp = new SortingAndPaging(ObjectStatus.ACTIVE);
+		}
+
+		if (!sp.isSorted()) {
+			sp.appendSortField("name", SortDirection.ASC);
+		}
+
+		return super.getAll(sp);
 	}
 }

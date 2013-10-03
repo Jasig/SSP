@@ -21,7 +21,11 @@ package org.jasig.ssp.dao.reference;
 import org.springframework.stereotype.Repository;
 
 import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.MessageTemplate;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 /**
  * Data access class for the MessageTemplate reference entity.
@@ -33,5 +37,20 @@ public class MessageTemplateDao extends
 
 	public MessageTemplateDao() {
 		super(MessageTemplate.class);
+	}
+	
+	@Override
+	public PagingWrapper<MessageTemplate> getAll(
+			final SortingAndPaging sAndP) {
+		SortingAndPaging sp = sAndP;
+		if (sp == null) {
+			sp = new SortingAndPaging(ObjectStatus.ACTIVE);
+		}
+
+		if (!sp.isSorted()) {
+			sp.appendSortField("name", SortDirection.ASC);
+		}
+
+		return super.getAll(sp);
 	}
 }

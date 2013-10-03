@@ -22,6 +22,10 @@ import org.springframework.stereotype.Repository;
 
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.reference.DisabilityAgency;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
+import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.model.ObjectStatus;
 
 /**
  * Data access class for the DisabilityAgency reference entity.
@@ -32,5 +36,19 @@ public class DisabilityAgencyDao extends AbstractReferenceAuditableCrudDao<Disab
 
 	public DisabilityAgencyDao() {
 		super(DisabilityAgency.class);
+	}
+	
+	@Override
+	public PagingWrapper<DisabilityAgency> getAll(final SortingAndPaging sAndP) {
+		SortingAndPaging sp = sAndP;
+		if (sp == null) {
+			sp = new SortingAndPaging(ObjectStatus.ACTIVE);
+		}
+
+		if (!sp.isSorted()) {
+			sp.appendSortField("name", SortDirection.ASC);
+		}
+
+		return super.getAll(sp);
 	}
 }

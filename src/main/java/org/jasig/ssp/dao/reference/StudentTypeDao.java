@@ -21,7 +21,11 @@ package org.jasig.ssp.dao.reference;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.StudentType;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -41,5 +45,20 @@ public class StudentTypeDao extends
 		final Criteria query = createCriteria();
 		query.add(Restrictions.eq("code", code));
 		return (StudentType) query.uniqueResult();
+	}
+	
+	@Override
+	public PagingWrapper<StudentType> getAll(
+			final SortingAndPaging sAndP) {
+		SortingAndPaging sp = sAndP;
+		if (sp == null) {
+			sp = new SortingAndPaging(ObjectStatus.ACTIVE);
+		}
+
+		if (!sp.isSorted()) {
+			sp.appendSortField("name", SortDirection.ASC);
+		}
+
+		return super.getAll(sp);
 	}
 }

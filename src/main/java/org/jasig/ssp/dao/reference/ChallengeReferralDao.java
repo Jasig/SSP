@@ -29,6 +29,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
@@ -157,5 +158,21 @@ public class ChallengeReferralDao extends
 		sAndP.addStatusFilterToCriteria(subQuery);
 
 		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
+	}
+	
+	@Override
+	public PagingWrapper<ChallengeReferral> getAll(
+			final SortingAndPaging sAndP) {
+		SortingAndPaging sp = sAndP;
+		if (sp == null) {
+			sp = new SortingAndPaging(ObjectStatus.ACTIVE);
+		}
+
+		if (!sp.isSorted()) {
+			sp.appendSortField("objectStatus", SortDirection.ASC);
+			sp.appendSortField("name", SortDirection.ASC);
+		}
+
+		return super.getAll(sp);
 	}
 }

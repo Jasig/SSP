@@ -27,6 +27,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.JournalStepDetail;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
@@ -74,5 +75,20 @@ public class JournalStepDetailDao extends
 		JournalStepDetail obj = get(id);
 		String softDeleteAssociations = "update JournalStepJournalStepDetail set objectStatus = :objectStatus where journalStepDetail = :journalStepDetail";
 		createHqlQuery(softDeleteAssociations).setInteger("objectStatus", ObjectStatus.INACTIVE.ordinal()).setEntity("journalStepDetail", obj).executeUpdate();		
+	}
+	
+	@Override
+	public PagingWrapper<JournalStepDetail> getAll(final SortingAndPaging sAndP) {
+		SortingAndPaging sp = sAndP;
+		if (sp == null) {
+			sp = new SortingAndPaging(ObjectStatus.ACTIVE);
+		}
+
+		if (!sp.isSorted()) {
+			sp.appendSortField("objectStatus", SortDirection.ASC);
+			sp.appendSortField("name", SortDirection.ASC);
+		}
+
+		return super.getAll(sp);
 	}
 }

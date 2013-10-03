@@ -25,9 +25,9 @@ import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.JournalStep;
-import org.jasig.ssp.model.reference.JournalStepDetail;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
@@ -59,5 +59,20 @@ public class JournalStepDao extends
 		JournalStep obj = get(id);
 		String softDeleteAssociations = "update JournalTrackJournalStep set objectStatus = :objectStatus where journalStep = :journalStep";
 		createHqlQuery(softDeleteAssociations).setInteger("objectStatus", ObjectStatus.INACTIVE.ordinal()).setEntity("journalStep", obj).executeUpdate();		
+	}
+	
+	@Override
+	public PagingWrapper<JournalStep> getAll(final SortingAndPaging sAndP) {
+		SortingAndPaging sp = sAndP;
+		if (sp == null) {
+			sp = new SortingAndPaging(ObjectStatus.ACTIVE);
+		}
+
+		if (!sp.isSorted()) {
+			sp.appendSortField("objectStatus", SortDirection.ASC);
+			sp.appendSortField("name", SortDirection.ASC);
+		}
+
+		return super.getAll(sp);
 	}
 }

@@ -207,4 +207,21 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 		sAndP.addStatusFilterToCriteria(subQuery);
 		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
+	
+	
+	@Override
+	public PagingWrapper<Challenge> getAll(
+			final SortingAndPaging sAndP) {
+		SortingAndPaging sp = sAndP;
+		if (sp == null) {
+			sp = new SortingAndPaging(ObjectStatus.ACTIVE);
+		}
+
+		if (!sp.isSorted()) {
+			sp.appendSortField("objectStatus", SortDirection.ASC);
+			sp.appendSortField("name", SortDirection.ASC);
+		}
+
+		return super.getAll(sp);
+	}
 }

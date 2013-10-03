@@ -19,7 +19,11 @@
 package org.jasig.ssp.dao.reference;
 
 import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.ProgramStatusChangeReason;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -32,5 +36,20 @@ public class ProgramStatusChangeReasonDao extends
 
 	public ProgramStatusChangeReasonDao() {
 		super(ProgramStatusChangeReason.class);
+	}
+	
+	@Override
+	public PagingWrapper<ProgramStatusChangeReason> getAll(
+			final SortingAndPaging sAndP) {
+		SortingAndPaging sp = sAndP;
+		if (sp == null) {
+			sp = new SortingAndPaging(ObjectStatus.ACTIVE);
+		}
+
+		if (!sp.isSorted()) {
+			sp.appendSortField("name", SortDirection.ASC);
+		}
+
+		return super.getAll(sp);
 	}
 }

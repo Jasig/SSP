@@ -51,7 +51,7 @@ public class ConfigDao extends AbstractReferenceAuditableCrudDao<Config>
 		}
 
 		if (!sp.isSorted()) {
-			sp.appendSortField("sortOrder", SortDirection.ASC);
+			
 			sp.appendSortField("name", SortDirection.ASC);
 		}
 

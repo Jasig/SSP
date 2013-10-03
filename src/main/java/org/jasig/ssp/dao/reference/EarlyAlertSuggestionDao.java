@@ -53,7 +53,6 @@ public class EarlyAlertSuggestionDao extends
 		}
 
 		if (!sp.isSorted()) {
-			sp.appendSortField("sortOrder", SortDirection.ASC);
 			sp.appendSortField("name", SortDirection.ASC);
 		}
 

@@ -21,7 +21,11 @@ package org.jasig.ssp.dao.reference;
 import org.springframework.stereotype.Repository;
 
 import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.JournalTrack;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 /**
  * Data access class for the JournalTrack reference entity.
@@ -34,4 +38,21 @@ public class JournalTrackDao extends
 	public JournalTrackDao() {
 		super(JournalTrack.class);
 	}
+	
+	
+	@Override
+	public PagingWrapper<JournalTrack> getAll(final SortingAndPaging sAndP) {
+		SortingAndPaging sp = sAndP;
+		if (sp == null) {
+			sp = new SortingAndPaging(ObjectStatus.ACTIVE);
+		}
+
+		if (!sp.isSorted()) {
+			sp.appendSortField("objectStatus", SortDirection.ASC);
+			sp.appendSortField("name", SortDirection.ASC);
+		}
+
+		return super.getAll(sp);
+	}
+	
 }

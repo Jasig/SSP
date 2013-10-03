@@ -21,7 +21,11 @@ package org.jasig.ssp.dao.reference;
 import org.springframework.stereotype.Repository;
 
 import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.MaritalStatus;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 /**
  * Data access class for the MaritalStatus reference entity.
@@ -32,5 +36,19 @@ public class MaritalStatusDao extends AbstractReferenceAuditableCrudDao<MaritalS
 
 	public MaritalStatusDao() {
 		super(MaritalStatus.class);
+	}
+	
+	@Override
+	public PagingWrapper<MaritalStatus> getAll(final SortingAndPaging sAndP) {
+		SortingAndPaging sp = sAndP;
+		if (sp == null) {
+			sp = new SortingAndPaging(ObjectStatus.ACTIVE);
+		}
+
+		if (!sp.isSorted()) {
+			sp.appendSortField("name", SortDirection.ASC);
+		}
+
+		return super.getAll(sp);
 	}
 }
