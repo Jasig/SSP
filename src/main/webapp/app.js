@@ -415,6 +415,7 @@ Ext.require([
 	'Ext.form.field.ComboBox',
 	'Ext.grid.column.Action',
 	'Ext.grid.feature.Grouping'
+
 ]);
 
 var apiUrls = [
