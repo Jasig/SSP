@@ -226,7 +226,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 		addBindParams(personSearchRequest,query,currentTerm);
 		query.setResultTransformer(new NamespacedAliasToBeanResultTransformer(
-				PersonSearchResult2.class, "person_")).list();
+				PersonSearchResult2.class, "person_"));
 		return query.list();
 	}
 
