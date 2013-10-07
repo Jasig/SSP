@@ -157,10 +157,15 @@ Ext.require([
     'Ssp.view.admin.forms.crg.EditReferral',
 
 	
-    //CASELOAD REASSIGNMENT TOOLS
+    //CASELOAD REASSIGNMENT ADMIN
     'Ssp.view.admin.forms.caseload.CaseloadReassignment',
     'Ssp.view.admin.forms.caseload.CaseloadReassignmentSource',
     'Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget',
+    
+    //CASELOAD REASSIGNMENT ADMIN
+    'Ssp.view.tools.caseload.CaseloadReassignment',
+    'Ssp.view.tools.caseload.CaseloadReassignmentSource',
+    'Ssp.view.tools.caseload.CaseloadReassignmentTarget',    
 
     //MyGPS ADMIN TOOLS
     'Ssp.view.admin.forms.shg.SelfHelpGuideAdmin',
