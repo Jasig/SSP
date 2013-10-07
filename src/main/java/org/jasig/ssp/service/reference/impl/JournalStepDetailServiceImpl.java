@@ -68,18 +68,13 @@ public class JournalStepDetailServiceImpl extends
 	@Override
 	public PagingWrapper<JournalStepDetail> getAllForJournalStep(
 			final JournalStep journalStep,
-			final SortingAndPaging sAndP) {
+			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 		List<JournalStepDetail> details = new ArrayList<JournalStepDetail>();
-		PagingWrapper<JournalStepDetail> allForJournalStep = dao.getAllForJournalStep(journalStep.getId(), new SortingAndPaging(ObjectStatus.ALL, sAndP.getFirstResult(), sAndP.getMaxResults(), sAndP.getSortFields(), sAndP.getDefaultSortProperty(), sAndP.getDefaultSortDirection()));
-		PagingWrapper<JournalStepJournalStepDetail> allAssociationsForJournalStep = journalStepJournalStepDetailDao.getAllForJournalStep(journalStep.getId(), new SortingAndPaging(sAndP.getStatus()));
-
-			for (JournalStepJournalStepDetail journalStepJournalStepDetail : allAssociationsForJournalStep) {
+		List<JournalStepJournalStepDetail> journalStepJournalStepDetails = journalStep.getJournalStepJournalStepDetails();
+		for (JournalStepJournalStepDetail journalStepJournalStepDetail : journalStepJournalStepDetails) {
+			if(sAndP.getStatus() == null || journalStepJournalStepDetail.getObjectStatus().equals(sAndP.getStatus()))
 			{
-			for (JournalStepDetail journalStepDetail : allForJournalStep) 
-				if(journalStepDetail.getId().equals(journalStepJournalStepDetail.getJournalStepDetail().getId()))
-				{
-					details.add(journalStepDetail);
-				}
+				details.add(journalStepJournalStepDetail.getJournalStepDetail());
 			}
 		}
 		return new PagingWrapper<JournalStepDetail>(details);

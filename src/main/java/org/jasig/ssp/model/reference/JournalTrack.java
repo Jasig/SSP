@@ -18,7 +18,9 @@
  */
 package org.jasig.ssp.model.reference;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,6 +28,7 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 import org.jasig.ssp.model.Auditable;
 
@@ -50,7 +53,8 @@ public class JournalTrack
 	 * persisted.
 	 */
 	@OneToMany(mappedBy = "journalTrack")
-	private Set<JournalTrackJournalStep> journalTrackJournalSteps = new HashSet<JournalTrackJournalStep>(
+	@OrderBy("sortOrder")
+	private List<JournalTrackJournalStep> journalTrackJournalSteps = new ArrayList<JournalTrackJournalStep>(
 			0);
 
 	/**
@@ -97,12 +101,12 @@ public class JournalTrack
 		this.sortOrder = sortOrder;
 	}
 
-	public Set<JournalTrackJournalStep> getJournalTrackJournalSteps() {
+	public List<JournalTrackJournalStep> getJournalTrackJournalSteps() {
 		return journalTrackJournalSteps;
 	}
 
 	public void setJournalTrackJournalSteps(
-			final Set<JournalTrackJournalStep> journalTrackJournalSteps) {
+			final List<JournalTrackJournalStep> journalTrackJournalSteps) {
 		this.journalTrackJournalSteps = journalTrackJournalSteps;
 	}
 

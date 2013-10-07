@@ -68,21 +68,17 @@ public class JournalStepServiceImpl extends
 	protected JournalStepDao getDao() {
 		return dao;
 	}
-
+ 
 	@Override
 	public PagingWrapper<JournalStep> getAllForJournalTrack(
 			final JournalTrack journalTrack,
 			final SortingAndPaging sAndP) {
 		List<JournalStep> steps = new ArrayList<JournalStep>();
-		PagingWrapper<JournalStep> allForJournalTrack = getDao().getAllForJournalTrack(journalTrack.getId(), new SortingAndPaging(ObjectStatus.ALL, sAndP.getFirstResult(), sAndP.getMaxResults(), sAndP.getSortFields(), sAndP.getDefaultSortProperty(), sAndP.getDefaultSortDirection()));
-		PagingWrapper<JournalTrackJournalStep> allForJournalTrackAssociations = journalTrackJournalStepDao.getAllForJournalTrack(journalTrack.getId(), new SortingAndPaging(sAndP.getStatus()));
-		for (JournalTrackJournalStep journalTrackJournalStep : allForJournalTrackAssociations) {
-		{
-			for (JournalStep journalStep : allForJournalTrack) 
-				if(journalStep.getId().equals(journalTrackJournalStep.getJournalStep().getId()))
-				{
-					steps.add(journalStep);
-				}
+		List<JournalTrackJournalStep> journalTrackJournalSteps = journalTrack.getJournalTrackJournalSteps();
+		for (JournalTrackJournalStep journalTrackJournalStep : journalTrackJournalSteps) {
+			if(sAndP.getStatus() == null || (sAndP.getStatus().equals(journalTrackJournalStep.getObjectStatus())))
+			{
+				steps.add(journalTrackJournalStep.getJournalStep());
 			}
 		}
 		return new PagingWrapper<JournalStep>(steps);

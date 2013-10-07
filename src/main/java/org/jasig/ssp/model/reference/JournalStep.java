@@ -18,7 +18,9 @@
  */
 package org.jasig.ssp.model.reference;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -27,6 +29,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.OrderBy;
 import org.jasig.ssp.model.Auditable;
 
 /**
@@ -47,11 +50,13 @@ public class JournalStep
 	private boolean usedForTransition = false;
 
 	@OneToMany(mappedBy = "journalStep")
-	private Set<JournalTrackJournalStep> journalTrackJournalSteps = new HashSet<JournalTrackJournalStep>(
+	@javax.persistence.OrderBy("sortOrder")
+	private List<JournalTrackJournalStep> journalTrackJournalSteps = new ArrayList<JournalTrackJournalStep>(
 			0);
 
 	@OneToMany(mappedBy = "journalStep")
-	private Set<JournalStepJournalStepDetail> journalStepJournalStepDetails = new HashSet<JournalStepJournalStepDetail>(
+	@javax.persistence.OrderBy("sortOrder")
+	private List<JournalStepJournalStepDetail> journalStepJournalStepDetails = new ArrayList<JournalStepJournalStepDetail>(
 			0);
 
 	/**
@@ -101,21 +106,21 @@ public class JournalStep
 		this.usedForTransition = usedForTransition;
 	}
 
-	public Set<JournalTrackJournalStep> getJournalTrackJournalSteps() {
+	public List<JournalTrackJournalStep> getJournalTrackJournalSteps() {
 		return journalTrackJournalSteps;
 	}
 
 	public void setJournalTrackJournalSteps(
-			final Set<JournalTrackJournalStep> journalTrackJournalSteps) {
+			final List<JournalTrackJournalStep> journalTrackJournalSteps) {
 		this.journalTrackJournalSteps = journalTrackJournalSteps;
 	}
 
-	public Set<JournalStepJournalStepDetail> getJournalStepJournalStepDetails() {
+	public List<JournalStepJournalStepDetail> getJournalStepJournalStepDetails() {
 		return journalStepJournalStepDetails;
 	}
 
 	public void setJournalStepJournalStepDetails(
-			final Set<JournalStepJournalStepDetail> journalStepJournalStepDetails) {
+			final List<JournalStepJournalStepDetail> journalStepJournalStepDetails) {
 		this.journalStepJournalStepDetails = journalStepJournalStepDetails;
 	}
 
