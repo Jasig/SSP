@@ -34,7 +34,7 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentTargetViewControll
     	formToDisplay: 'editreferral',
         coachStore: 'coachesStore',
         reassignCaseloadStore: 'reassignCaseloadStore',
-    	formToDisplay: 'caseloadreassignment',
+    	formToDisplay: 'caseloadreassignment'
     },
     control: {
 		'removeButton': {

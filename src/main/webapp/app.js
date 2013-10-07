@@ -162,7 +162,7 @@ Ext.require([
     'Ssp.view.admin.forms.caseload.CaseloadReassignmentSource',
     'Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget',
     
-    //CASELOAD REASSIGNMENT ADMIN
+    //CASELOAD REASSIGNMENT TOOL
     'Ssp.view.tools.caseload.CaseloadReassignment',
     'Ssp.view.tools.caseload.CaseloadReassignmentSource',
     'Ssp.view.tools.caseload.CaseloadReassignmentTarget',    
