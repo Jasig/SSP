@@ -2068,6 +2068,11 @@
                     "path": "/app/controller/admin/caseload/"
                 },
                 {
+                    "clsName": "Ssp.controller.tool.caseload.CaseloadReassignmentTargetViewController",
+                    "name": "CaseloadReassignmentTargetViewController.js",
+                    "path": "/app/controller/tool/caseload/"
+                },                
+                {
                     "clsName": "Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewController",
                     "name": "CaseloadReassignmentSourceViewController.js",
                     "path": "/app/controller/admin/caseload/"
@@ -2092,6 +2097,21 @@
                     "name": "CaseloadReassignment.js",
                     "path": "/app/view/admin/forms/caseload/"
                 },
+                {
+                    "clsName": "Ssp.view.tools.caseload.CaseloadReassignmentTarget",
+                    "name": "CaseloadReassignmentTarget.js",
+                    "path": "/app/view/tools/caseload/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.caseload.CaseloadReassignmentSource",
+                    "name": "CaseloadReassignmentSource.js",
+                    "path": "/app/view/tools/caseload/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.caseload.CaseloadReassignment",
+                    "name": "CaseloadReassignment.js",
+                    "path": "/app/view/tools/caseload/"
+                },                
                 {
                     "clsName": "Ssp.view.admin.forms.crg.AssociateChallengeReferralsAdmin",
                     "name": "AssociateChallengeReferralsAdmin.js",
