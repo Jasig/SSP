@@ -31,12 +31,18 @@
 		<addColumn tableName="journal_step_journal_step_detail" schemaName="${schema}">
 			<column name="sort_order" defaultValueNumeric="0" type="int" ></column>
 		</addColumn>
+		<update tableName="journal_step_journal_step_detail" schemaName="${schema}">
+			<column name="sort_order" value="0"></column>
+		</update>
 		<addNotNullConstraint tableName="journal_step_journal_step_detail" columnName="sort_order" columnDataType="int"/>
 	</changeSet>
 	<changeSet author='tony.arland' id='add sort_order to journal_track_journal_step'>
 		<addColumn tableName="journal_track_journal_step" schemaName="${schema}">
 			<column name="sort_order" defaultValueNumeric="0" type="int"></column>
 		</addColumn>
+		<update tableName="journal_track_journal_step" schemaName="${schema}">
+			<column name="sort_order" value="0"></column>
+		</update>		
 		<addNotNullConstraint tableName="journal_step_journal_step_detail" columnName="sort_order" columnDataType="int"/>
 	</changeSet>
 </databaseChangeLog>
