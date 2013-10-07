@@ -53,7 +53,12 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
 			        queryMode: 'local',
 			        allowBlank: false,
 			        width: 300
-				}],
+				},
+				{
+                    xtype: 'checkbox',
+                    fieldLabel: 'Active',
+                    name: 'active'
+                }],
 	            
 	            dockedItems: [{
 	       		               xtype: 'toolbar',

@@ -27,6 +27,7 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
         apiProperties: 'apiProperties',
         appEventsController: 'appEventsController',
         authenticatedPerson: 'authenticatedPerson',
+		columnRendererUtils: 'columnRendererUtils',
         model: 'currentCampus',
         store: 'campusesStore'
     },
@@ -55,7 +56,20 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
 			    	            },
 			    	            scope: me
 			    	        }]
-     		              },{ header: 'Name',  
+     		              },
+						  {
+	                        header: 'Active',
+	                        required: true,
+	                        dataIndex: 'active',
+							defaultValue: true,
+	                        renderer: me.columnRendererUtils.renderActive,
+	                        flex: .10,
+	                        field: {
+	                            xtype: 'checkbox'
+	                        }
+	                    },
+						  
+						  { header: 'Name',  
     		                  dataIndex: 'name',
     		                  flex: 50 },
     		                { header: 'Description',
