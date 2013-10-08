@@ -92,7 +92,7 @@ public class ElectiveController
 	}
 
 	@RequestMapping(method = RequestMethod.PUT)
-	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_WRITE)
 	public @ResponseBody
 	ElectiveTO save(@Valid @RequestBody final List<String> jsonList)
 			throws ValidationException, ObjectNotFoundException {
