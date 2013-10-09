@@ -271,6 +271,7 @@ Ext.require([
     'Ssp.model.reference.JournalStep',
     'Ssp.model.reference.JournalStepDetail',
 	'Ssp.model.reference.ConfidentialityLevel',
+	'Ssp.model.reference.ConfidentialityLevelOption',
 	'Ssp.model.reference.ConfidentialityDisclosureAgreement',
 	'Ssp.model.reference.EarlyAlertReferral',
 	'Ssp.model.external.Course',
@@ -310,6 +311,7 @@ Ext.require([
     'Ssp.store.reference.Citizenships',
     'Ssp.store.reference.Colors',
 	'Ssp.store.reference.ConfidentialityLevels',
+	'Ssp.store.reference.ConfidentialityLevelOptions',
 	'Ssp.store.reference.ConfigurationOptions',
 	'Ssp.store.reference.DisabilityAccommodations',
 	'Ssp.store.reference.DisabilityAgencies',
@@ -1020,6 +1022,14 @@ Ext.onReady(function(){
 				    	},
 				    	singleton: true
 				    },
+				    confidentialityLevelOptionsStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.ConfidentialityLevelOptions', {
+							     storeId: 'confidentialityLevelOptionsStore'		
+							 });
+				    	},
+				    	singleton: true
+				    },				    
 				    confidentialityLevelsStore: 'Ssp.store.reference.ConfidentialityLevels',
 					confidentialityLevelsAllStore: {
 						fn: function(){

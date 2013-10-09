@@ -24,7 +24,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
         colorsStore: 'colorsStore',
         colorsUnpagedStore: 'colorsUnpagedStore',
         colorsAllStore: 'colorsAllStore',
-        colorsAllUnpagedStore: 'colorsAllUnpagedStore'
+        colorsAllUnpagedStore: 'colorsAllUnpagedStore',
+        confidentialityLevelOptionsStore: 'confidentialityLevelOptionsStore'
     },
     autoLoad: false,
     constructor: function(){
@@ -483,27 +484,41 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         header: 'Name',
                         dataIndex: 'name',
                         required: true,
+                        flex: .20,
                         field: {
                             xtype: 'textfield'
                         },
-                        flex: 50
                     }, {
                         header: 'Description',
                         dataIndex: 'description',
-                        flex: 50,
+                        flex: .30,
                         field: {
                             xtype: 'textfield'
                         },
-                        flex: 50
                     }, {
                         header: 'Acronym',
                         dataIndex: 'acronym',
                         required: true,
-                        flex: 50,
+                        flex: .10,
                         field: {
                             xtype: 'textfield'
-                        }
-                    }]
+                        }},
+                        {
+                            header: 'Data Permission',
+                            dataIndex: 'dataPermission',
+                            required: true,                        
+                            field: {
+                                xtype: 'combo',
+                                store: me.confidentialityLevelOptionsStore,
+                                displayField: 'name',
+                                typeAhead: true,
+                                mode:'local',
+                                queryMode:'local',
+                                forceSelection: false,
+                                associativeField: 'dataPermission'
+                            },
+                            flex: .3
+                        }]
                 }, {
                     text: 'OAuth2 Clients',
                     title: 'OAuth2 Clients',

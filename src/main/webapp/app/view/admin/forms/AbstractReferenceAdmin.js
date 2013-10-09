@@ -30,6 +30,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
         colorsUnpagedStore: 'colorsUnpagedStore',
         colorsAllStore: 'colorsAllStore',
         colorsAllUnpagedStore: 'colorsAllUnpagedStore',
+        confidentialityLevelOptionsStore: 'confidentialityLevelOptionsStore',
 		columnRendererUtils: 'columnRendererUtils'
     },
 	height: '100%',

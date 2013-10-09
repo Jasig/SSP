@@ -16,38 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.reference.ConfidentialityLevel', {
-    extend: 'Ssp.model.reference.AbstractReference',
+Ext.define('Ssp.store.reference.ConfidentialityLevelOptions', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.ConfidentialityLevelOption',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-    	apiProperties: 'apiProperties'
+        apiProperties: 'apiProperties'
     },
-    
-    fields: [{name:'acronym',type:'string',defaultValue:'DEFAULT'},
-             {name:'dataPermission',type:'string'}
-             ] ,
-
-	constructor: function(){
-		return this.callParent(arguments);
-	},
-
-    proxy: {
-		type: 'rest',
-		url: '',
-		actionMethods: {
-			create: "POST", 
-			read: "GET", 
-			update: "PUT", 
-			destroy: "DELETE"
-		},
-		reader: {
-			type: 'json',
-			successProperty: 'success',
-			message: 'message'
-		},
-	    writer: {
-	        type: 'json',
-	        successProperty: 'success'
-	    }
-	}
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('confidentialityLevel')+'/options',
+    		extraParams: this.extraParams
+    	});
+    	this.load();
+    }
 });

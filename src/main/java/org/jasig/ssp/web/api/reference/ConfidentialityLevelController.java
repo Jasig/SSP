@@ -18,17 +18,31 @@
  */
 package org.jasig.ssp.web.api.reference;
 
+import java.util.List;
+
 import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.factory.reference.ConfidentialityLevelOptionTOFactory;
 import org.jasig.ssp.factory.reference.ConfidentialityLevelTOFactory;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
+import org.jasig.ssp.security.permissions.DataPermissions;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
+import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.reference.ConfidentialityLevelOptionTO;
 import org.jasig.ssp.transferobject.reference.ConfidentialityLevelTO;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/1/reference/confidentialityLevel")
@@ -44,6 +58,9 @@ public class ConfidentialityLevelController
 		return service;
 	}
 
+	@Autowired
+	protected transient ConfidentialityLevelOptionTOFactory optionFactory;
+	
 	@Autowired
 	protected transient ConfidentialityLevelTOFactory factory;
 
@@ -62,5 +79,13 @@ public class ConfidentialityLevelController
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
+	}
+	
+	@RequestMapping(value="/options", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
+	public @ResponseBody
+	PagedResponse<ConfidentialityLevelOptionTO> getAllOptions() {
+		List<DataPermissions> availableOptions = service.getAvailableConfidentialityLevelOptions();
+		return new PagedResponse<ConfidentialityLevelOptionTO>(true, new Long(availableOptions.size()), optionFactory.asTOList(availableOptions));
 	}
 }

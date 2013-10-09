@@ -59,6 +59,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 			me.authenticatedPerson.showUnauthorizedAccessAlert();
 		}
 
+
 		//Associative Object handling
 		var rowEditor = editor.editor;
 		var rowFields = rowEditor.items.items;			
@@ -72,7 +73,6 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 				me.formRendererUtils.applyAssociativeStoreFilter(item.store, e.record.get(item.associativeField));
 			}
 		});
-		
     	return access;
     },
     
@@ -86,7 +86,8 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		Ext.each(editor.editor.items.items, function(item) {
 			if(item.store != undefined && item.store != null) {
 				item.store.clearFilter(true);
-			}			
+			}	
+			
 		});
 
 		Ext.Ajax.request({
@@ -147,6 +148,10 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 			if(item.xtype == "combo") {
 				var valueField = (item.valueField == undefined? "id": item.valueField);
 				var store = item.store;
+				if(store.data.length == 0)
+				{
+					store.load();
+				}
 				var firstComboElement = store.data.items[0];
 				item.setValue(firstComboElement.data[valueField]);
 			}

@@ -32,6 +32,7 @@ Ext.define('Ssp.controller.AdminViewController', {
         colorsAllStore: 'colorsAllStore',
         colorsAllUnpagedStore: 'colorsAllUnpagedStore',
     	confidentialityLevelsAllStore: 'confidentialityLevelsAllStore',
+    	confidentialityLevelOptionsStore: 'confidentialityLevelOptionsStore',
     	disabilityAccommodationsAllStore: 'disabilityAccommodationsAllStore',
     	disabilityAgenciesAllStore: 'disabilityAgenciesAllStore',
     	disabilityStatusesAllStore: 'disabilityStatusesAllStore',
@@ -80,6 +81,8 @@ Ext.define('Ssp.controller.AdminViewController', {
 	},
 	
 	init: function() {
+		var me = this;
+		me.confidentialityLevelOptionsStore.load();
 		return this.callParent(arguments);
     }, 
     

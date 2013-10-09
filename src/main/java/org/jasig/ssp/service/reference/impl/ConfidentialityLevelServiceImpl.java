@@ -18,8 +18,12 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
+import org.apache.commons.collections.ListUtils;
 import org.jasig.ssp.dao.reference.ConfidentialityLevelDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
@@ -27,6 +31,7 @@ import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.DataPermissions;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,12 +59,7 @@ public class ConfidentialityLevelServiceImpl extends
 		return dao;
 	}
 
-	@Override
-	public ConfidentialityLevel create(final ConfidentialityLevel obj)
-			throws ObjectNotFoundException, ValidationException {
-		throw new UnsupportedOperationException(
-				"This can't work unless groups are assigned differently than through the portlet filter.");
-	}
+
 
 	@Override
 	public Collection<String> confidentialityLevelsAsPermissions() {
@@ -153,5 +153,27 @@ public class ConfidentialityLevelServiceImpl extends
 		}
 
 		return null;
+	}
+
+	@Override
+	public List<DataPermissions> getAvailableConfidentialityLevelOptions() {
+		List<DataPermissions> allPermissions = Arrays.asList(DataPermissions.values());
+		List<DataPermissions> allAvailableDataPermissions = new ArrayList<DataPermissions>();
+		Collection<ConfidentialityLevel> allConfidentialityLevels = dao.getAll(ObjectStatus.ALL).getRows();
+		
+		for (DataPermissions dataPermission : allPermissions) {
+			boolean found = false;
+			for (ConfidentialityLevel confidentialityLevel : allConfidentialityLevels) {
+				if(confidentialityLevel.getPermission().equals(dataPermission))
+				{
+					found = true;
+				}
+			}
+			if(!found)
+			{
+				allAvailableDataPermissions.add(dataPermission);
+			}
+		}
+		return allAvailableDataPermissions;
 	}
 }

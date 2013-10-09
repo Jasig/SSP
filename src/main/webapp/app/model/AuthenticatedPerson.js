@@ -351,12 +351,6 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
     },
     
     isDeveloperRestrictedContent: function( item ){
-		var restricted = false;
-		// Restricting Adding Confidentiality Levels in the system
-		if (item instanceof Ssp.model.reference.ConfidentialityLevel)
-		{
-			restricted = true;
-		}
-		return restricted;
+    	return false;
     }
 });

@@ -19,6 +19,7 @@
 package org.jasig.ssp.service.reference;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.security.SspUser;
@@ -51,4 +52,6 @@ public interface ConfidentialityLevelService extends
 
 	Collection<ConfidentialityLevel> confidentialityLevelsForSspUser(
 			SspUser user);
+
+	List<DataPermissions> getAvailableConfidentialityLevelOptions();
 }

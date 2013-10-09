@@ -25,6 +25,7 @@ import org.jasig.ssp.dao.reference.ConfidentialityLevelDao;
 import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
 import org.jasig.ssp.factory.reference.ConfidentialityLevelTOFactory;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
+import org.jasig.ssp.security.permissions.DataPermissions;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.reference.ConfidentialityLevelTO;
 
@@ -53,6 +54,7 @@ public class ConfidentialityLevelTOFactoryImpl
 		final ConfidentialityLevel model = super.from(tObject);
 
 		model.setAcronym(tObject.getAcronym());
+		model.setPermission(DataPermissions.valueOf(tObject.getDataPermission()));
 
 		return model;
 	}

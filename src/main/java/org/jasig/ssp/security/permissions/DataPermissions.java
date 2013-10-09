@@ -53,6 +53,46 @@ public enum DataPermissions {
 
 	DATA_INDIVIDUALIZED_LEARNING_PLAN,
 
+	DATA_CR_01,
+
+	DATA_CR_02,
+
+	DATA_CR_03,
+
+	DATA_CR_04,
+
+	DATA_CR_05,
+
+	DATA_CR_06,
+
+	DATA_CR_07,
+
+	DATA_CR_08,
+
+	DATA_CR_09,
+
+	DATA_CR_10,
+
+	DATA_CR_11,
+
+	DATA_CR_12,
+
+	DATA_CR_13,
+
+	DATA_CR_14,
+
+	DATA_CR_15,
+
+	DATA_CR_16,
+
+	DATA_CR_17,
+
+	DATA_CR_18,
+
+	DATA_CR_19,
+
+	DATA_CR_20,
+	
 	DATA_MANAGER,
 
 	DATA_STAFF,

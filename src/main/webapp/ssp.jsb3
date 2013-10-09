@@ -1908,6 +1908,16 @@
                     "path": "/app/model/reference/"
                 },
                 {
+                    "clsName": "Ssp.model.reference.ConfidentialityLevelOption",
+                    "name": "ConfidentialityLevelOption.js",
+                    "path": "/app/model/reference/"
+                },    
+                {
+                    "clsName": "Ssp.store.reference.ConfidentialityLevelOptions",
+                    "name": "ConfidentialityLevelOptions.js",
+                    "path": "/app/store/reference/"
+                }                            
+                {
                     "clsName": "Ssp.model.reference.ConfidentialityDisclosureAgreement",
                     "name": "ConfidentialityDisclosureAgreement.js",
                     "path": "/app/model/reference/"

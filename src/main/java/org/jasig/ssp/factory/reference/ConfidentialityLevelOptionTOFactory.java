@@ -1,4 +1,4 @@
-/*
+/**
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,38 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.reference.ConfidentialityLevel', {
-    extend: 'Ssp.model.reference.AbstractReference',
-    mixins: [ 'Deft.mixin.Injectable' ],
-    inject: {
-    	apiProperties: 'apiProperties'
-    },
-    
-    fields: [{name:'acronym',type:'string',defaultValue:'DEFAULT'},
-             {name:'dataPermission',type:'string'}
-             ] ,
+package org.jasig.ssp.factory.reference;
 
-	constructor: function(){
-		return this.callParent(arguments);
-	},
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.reference.ConfidentialityLevel;
+import org.jasig.ssp.security.permissions.DataPermissions;
+import org.jasig.ssp.transferobject.reference.ConfidentialityLevelOptionTO;
+import org.jasig.ssp.transferobject.reference.ConfidentialityLevelTO;
 
-    proxy: {
-		type: 'rest',
-		url: '',
-		actionMethods: {
-			create: "POST", 
-			read: "GET", 
-			update: "PUT", 
-			destroy: "DELETE"
-		},
-		reader: {
-			type: 'json',
-			successProperty: 'success',
-			message: 'message'
-		},
-	    writer: {
-	        type: 'json',
-	        successProperty: 'success'
-	    }
-	}
-});
+public interface ConfidentialityLevelOptionTOFactory extends
+		TOFactory<ConfidentialityLevelOptionTO, DataPermissions> {
+}
