@@ -141,7 +141,7 @@ public class StudentDocumentServiceImpl extends AbstractAuditableCrudService<Stu
 	@Override
 	public PagingWrapper<StudentDocument> getAllForPerson(Person person,
 			SortingAndPaging sAndP) {
-		return dao.getAllForPerson(person, sAndP);
+		return dao.getAllForPerson(person, sAndP,securityService.currentlyAuthenticatedUser());
 	}
 
 	@Override

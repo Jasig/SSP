@@ -30,7 +30,7 @@ import org.hibernate.annotations.CascadeType;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 
 @Entity
-public class StudentDocument extends AbstractAuditable  implements PersonAssocAuditable{
+public class StudentDocument extends AbstractAuditable  implements RestrictedPersonAssocAuditable{
 
 	/**
 	 * 
