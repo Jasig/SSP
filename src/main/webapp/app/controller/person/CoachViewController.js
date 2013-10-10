@@ -56,31 +56,27 @@ Ext.define('Ssp.controller.person.CoachViewController', {
     
 	init: function() {
 		var me=this;
-		var editFlag = me.person.get('id');
 		me.missingCoach = null;
 
 		me.coachesStore.load(function(records, operation, success) {
 	        if(!success) {
 				Ext.Msg.alert('Error','Unable to load Coaches. Please see your system administrator for assistance.');
 	        } else {
-				if ( editFlag ) {
-					// Must be edit mode. Make best effort at trying to find the
+					// Make best effort at trying to find the
 					// associated coach and inject it into the view. Currently
 					// associated coach might not be in the store already, e.g. if he/she
 					// were "demoted" in the directory system. So, we query to get all
 					// coaches.
-					var currentCoachId = me.person.getCoachId();				
+					var currentCoachId = me.person.getCoachId();
 
 					//Don't look up or put in combo if ID is not valid
                     if ( currentCoachId ) {
                         if ( !(me.coachesStore.getById(currentCoachId)) ) {
-                            console.log("here missing coach");
                             me.lookupMissingCoach(currentCoachId, me.afterMissingCoachLookup, me);
                         } else {
                             me.getCoachCombo().setValue( me.person.getCoachId() );
                         }
                     }
-				} 
 			}
 		 });
 		
