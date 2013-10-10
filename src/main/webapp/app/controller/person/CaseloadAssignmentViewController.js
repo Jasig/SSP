@@ -341,7 +341,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		
 		var parsedResponseText = Ext.decode(response.responseText);
 		var responseDetail = parsedResponseText.detail.details;
-		console.log(responseDetail);
 		var id = model.get('id');
 		if ( id ) {
 			dialogOpts.title = "Conflicting Student Record Updates";
@@ -425,7 +424,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		}
 		var parsedResponseText = Ext.decode(response.responseText);
 		var responseDetail = parsedResponseText.detail;
-		console.log(responseDetail);
 		if ( !(responseDetail) ) {
 			return null;
 		}

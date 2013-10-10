@@ -283,5 +283,7 @@ Ext.define('Ssp.model.Person', {
     	me.set('birthDate', jsonData.birthDate);
     	me.set('username', jsonData.username);
     	me.set('photoUrl', jsonData.photoUrl);
+        me.set('coach', jsonData.coach);
+        me.set('studentType', jsonData.studentType);
     }
 });

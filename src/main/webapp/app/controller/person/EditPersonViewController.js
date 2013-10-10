@@ -164,7 +164,8 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 				me.getView().getForm().reset();
 				model.populateFromExternalData( r );
 				me.person.data = model.data;
-				me.getView().loadRecord( me.person );				
+				me.getView().loadRecord( me.person );
+				me.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});
 			}
 			//If we find an internal record, reload the screen in 'Edit' mode.
 			else
