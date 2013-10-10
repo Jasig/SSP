@@ -22,19 +22,21 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.StudentDocument;
+import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class StudentDocumentDao
-		extends AbstractPersonAssocAuditableCrudDao<StudentDocument>
+		extends AbstractRestrictedPersonAssocAuditableCrudDao<StudentDocument>
 		implements PersonAssocAuditableCrudDao<StudentDocument> {
-
+ 
 	public StudentDocumentDao() {
 		super(StudentDocument.class);
 	}
@@ -45,9 +47,11 @@ public class StudentDocumentDao
 	
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<StudentDocument> getAllForPerson(Person person,
-			SortingAndPaging sAndP) {
-		Collection<StudentDocument> rows = createCriteria().add(Restrictions.eq("person", person))
-				.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE)).list();
+			SortingAndPaging sAndP,final SspUser requestor) {
+		Criteria criteria = createCriteria().add(Restrictions.eq("person", person))
+						.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
+		addConfidentialityLevelsRestriction(requestor, criteria);
+		Collection<StudentDocument> rows = criteria.list();
 		return new PagingWrapper<StudentDocument>(rows);
 	}
 
