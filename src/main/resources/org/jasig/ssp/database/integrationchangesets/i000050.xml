@@ -96,6 +96,7 @@
 			where constraints_view.constraint_columns = 'school_id,test_code,sub_test_code,test_date,'
 			and OBJECTPROPERTY(OBJECT_ID(constraints_view.constraint_name),  'IsPrimaryKey') = 1
 
+			if @name is not null
 			exec('alter table ${schema}.external_student_test drop constraint ' + @name);
 		</sql>
 	</changeSet>
@@ -125,6 +126,7 @@
 			where constraints_view.constraint_columns = 'school_id,test_code,sub_test_code,test_date,'
 			and OBJECTPROPERTY(OBJECT_ID(constraints_view.constraint_name),  'IsPrimaryKey') = 0
 
+			if @name is not null
 			exec('alter table ${schema}.external_student_test drop constraint ' + @name);
 		</sql>
 	</changeSet>
