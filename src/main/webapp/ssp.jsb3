@@ -1916,7 +1916,7 @@
                     "clsName": "Ssp.store.reference.ConfidentialityLevelOptions",
                     "name": "ConfidentialityLevelOptions.js",
                     "path": "/app/store/reference/"
-                }                            
+                },
                 {
                     "clsName": "Ssp.model.reference.ConfidentialityDisclosureAgreement",
                     "name": "ConfidentialityDisclosureAgreement.js",
