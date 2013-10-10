@@ -211,6 +211,21 @@
 		<dropUniqueConstraint tableName="external_student_test" schemaName="${schema}" constraintName="external_student_test_unq" />
 	</changeSet>
 
+	<!-- These constraints potentially skipped in some real-world deployments which already had data in the table and
+	could not create the pre-discriminator key -->
+	<changeSet id="ensure non-null external_student_test columns" author="dan.mccallum">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip drop unique constraint 2 on external_student_test (postgresql)">
+			<sqlCheck  expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>
+		<addNotNullConstraint tableName="external_student_test" columnName="sub_test_code" columnDataType="${nvarchar.type}(25)" />
+		<addNotNullConstraint tableName="external_student_test" columnName="test_date" columnDataType="date" />
+	</changeSet>
+
 	<changeSet id="re-add discriminator to external_student_test key" author="dan.mccallum">
 		<preConditions onFail="CONTINUE"
 					   onFailMessage="Skip add discriminator to external_student_test key">
