@@ -47,7 +47,7 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
 		var me=this;
 		me.confidentialityLevelsStore.clearFilter(true);
 		me.confidentialityLevelsStore.load();
-		me.formUtils.applyAssociativeStoreFilter(me.confidentialityLevelsStore, me.model.get('defaultConfidentialityLevelId'));
+		me.formUtils.applyAssociativeStoreFilter(me.confidentialityLevelsStore, me.model.get('confidentialityLevelId'));
 		me.getView().getForm().loadRecord(me.model);
 		return this.callParent(arguments);
     },
