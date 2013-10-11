@@ -70,10 +70,7 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
     
     onItemDblClick: function(grid, record, item, index, e, eOpts) {
 		var me = this;
-    	if(me.courseDetailsPopUp == null || me.courseDetailsPopUp.isDestroyed){
-    		me.courseDetailsPopUp = Ext.create('Ssp.view.tools.map.CourseDetails');
-    		me.courseDetailsPopUp.center();
-    	}
+   		me.courseDetailsPopUp = Ext.create('Ssp.view.tools.map.CourseDetails');
     	me.courseDetailsPopUp.record = record;
 		me.courseDetailsPopUp.query("#formatted_course_title")[0].setValue( record.get("formattedCourse") + " : " + record.get("title"));
 		me.courseDetailsPopUp.query("#description")[0].setValue(record.get("description"));
@@ -82,8 +79,6 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
 		me.courseDetailsPopUp.query("#departmentCode")[0].setValue(record.get("departmentCode"));
 		me.courseDetailsPopUp.query("#divisionCode")[0].setValue(record.get("divisionCode"));
 		me.courseDetailsPopUp.query("#tags")[0].setValue(record.get("tags"));
-		
-		
 		
 		
 		var masterSylComponent = me.courseDetailsPopUp.query("#mastersyllabus")[0];
@@ -104,7 +99,7 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
 	    
 		
     },
-    showCourseDetails:function(){
+    showCourseDetails:function(scope){
         var me=this;
         var reqs= '';
         me.courseRequisitesStore.each(function(req) {
@@ -120,6 +115,7 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
         },
     destroy:function(){
 	    var me=this;
+		me.appEventsController.getApplication().removeListener("onRequisiteLoad", me.showCourseDetails, me);
 		if(me.courseDetailsPopUp != null && !me.courseDetailsPopUp.isDestroyed)
 			me.courseDetailsPopUp.close();
     }
