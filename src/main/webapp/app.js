@@ -264,6 +264,7 @@ Ext.require([
 	'Ssp.model.tool.shg.SelfHelpGuideQuestions',
 	'Ssp.model.tool.caseload.CaseloadReassignmentRequest',
 	'Ssp.model.reference.AbstractReference',
+	'Ssp.model.reference.AdminSelectedIndex',
     'Ssp.model.reference.Challenge',
     'Ssp.model.reference.ChallengeCategory',
     'Ssp.model.reference.ChallengeReferral',
@@ -546,6 +547,12 @@ Ext.onReady(function(){
 
 				// configure the application
 				Deft.Injector.configure({
+					adminSelectedIndex: {
+						fn: function(){
+				            return new Ssp.model.reference.AdminSelectedIndex({});
+				        },
+				        singleton: true
+					},
 					sspParentDivId: {
 				        value: sspParentDivId
 				    },
@@ -929,6 +936,15 @@ Ext.onReady(function(){
 				    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
 				    anticipatedStartTermsStore: 'Ssp.store.reference.AnticipatedStartTerms',
 					campusesStore: 'Ssp.store.reference.Campuses',
+					campusesAllStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.Campuses', {
+							     storeId: 'campusesAllStore',		
+							     extraParams: {status: "ALL"}
+							 });
+				    	},
+				    	singleton: true
+				    },
 					campusesAllUnpagedStore: {
 				    	fn: function(){
 				    		return Ext.create('Ssp.store.reference.Campuses', {

@@ -21,6 +21,7 @@ Ext.define('Ssp.store.reference.Campuses', {
     model: 'Ssp.model.reference.Campus',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('campus')});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('campus'),
+		extraParams: this.extraParams});
     }
 });

@@ -29,7 +29,7 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
         authenticatedPerson: 'authenticatedPerson',
 		columnRendererUtils: 'columnRendererUtils',
         model: 'currentCampus',
-        store: 'campusesStore'
+        store: 'campusesAllStore'
     },
     height: '100%',
 	width: '100%',

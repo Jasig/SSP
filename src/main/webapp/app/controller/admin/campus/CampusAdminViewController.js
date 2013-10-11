@@ -23,11 +23,13 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
     	appEventsController: 'appEventsController',
     	campusService: 'campusService',
     	campusEarlyAlertRouting: 'currentCampusEarlyAlertRouting',
-    	campusesStore: 'campusesStore',
+    	campusesStore: 'campusesAllStore',
     	earlyAlertCoordinatorsStore: 'coachesStore',
     	earlyAlertReasonsStore: 'earlyAlertReasonsStore',
     	formUtils: 'formRendererUtils',
-    	model: 'currentCampus'
+    	model: 'currentCampus',
+		adminSelectedIndex: 'adminSelectedIndex',
+		apiProperties: 'apiProperties'
     },
     config: {
     	containerToLoadInto: 'adminforms',
@@ -53,7 +55,35 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
     },
 	init: function() {
 		var me=this;
-		me.campusesStore.load();
+		var ptb = me.getView().down('pagingtoolbar');
+        var asidx = me.adminSelectedIndex.get('value');
+        var pageidx = parseInt(asidx / me.apiProperties.getPagingSize());
+        var startidx = pageidx * me.apiProperties.getPagingSize();
+       
+        me.campusesStore.load({
+            params: {
+                start: startidx,
+                page: (pageidx + 1)
+            },
+            callback: function(){
+                if (asidx >= 0) {
+                    var rowidx = (asidx - startidx);
+                    
+                    me.getView().getSelectionModel().select(rowidx);
+                    var sn = me.getView().getView().getSelectedNodes()[0];
+                    Ext.get(sn).highlight("ff0000", {
+                        attr: 'color',
+                        duration: 60000
+                    });
+                    me.adminSelectedIndex.set('value', -1);
+                   
+                    if (ptb) {
+                        ptb.child('#inputItem').setValue((pageidx + 1));
+                    }
+					me.getView().getStore().currentPage = (pageidx + 1); 
+                }
+            }
+        });
 		me.earlyAlertCoordinatorsStore.load();
 		me.earlyAlertReasonsStore.load();
 		return this.callParent(arguments);
@@ -80,9 +110,10 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
     }, 
     
 	onEditClick: function(button) {
-		var grid, record;
+		var grid, record, idx;
 		grid = button.up('grid');
 		record = grid.getView().getSelectionModel().getSelection()[0];
+		this.adminSelectedIndex.set('value',-1);
         if (record) 
         {		
         	this.model.data=record.data;
@@ -95,6 +126,7 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
 	onAddClick: function(button){
 		var model = new Ssp.model.reference.Campus();
 		this.model.data = model.data;
+		this.adminSelectedIndex.set('value',-1);
 		this.displayCampusEditor();
 	},
 	
