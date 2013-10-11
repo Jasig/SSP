@@ -20,16 +20,9 @@ Ext.define('Ssp.controller.tool.actionplan.ActionPlanToolViewController', {
     extend: 'Deft.mvc.ViewController',	
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
-        store: 'confidentialityLevelsAllUnpagedStore'
     },
     constructor: function() {
     	var me=this;   	
-    	
-		me.store.clearFilter(true);
-		
-    	// ensure loading of all confidentiality levels in the database
-    	me.store.load();
-    	
 		return me.callParent(arguments);
     }  
 });
