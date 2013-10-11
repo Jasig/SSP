@@ -102,7 +102,6 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
       
 		me.journalTracksStore.clearFilter(true);
 		me.journalSourcesStore.clearFilter(true);
-		me.confidentialityLevelsStore.clearFilter(true);		
         
         if ( me.model.get('journalTrack') != null ) {
             journalTrackId = me.model.get('journalTrack').id;
@@ -114,9 +113,8 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
         me.getView().getForm().reset();
         me.getView().getForm().loadRecord(me.model);
 
+		me.confidentialityLevelsStore.load();
         var confLevelId = me.model.getConfidentialityLevelId();
-        me.formUtils.applyAssociativeStoreFilter(me.confidentialityLevelsStore, confLevelId);
-        me.authenticatedPerson.applyConfidentialityLevelsFilter(me.confidentialityLevelsStore);
         me.getConfidentialityLevelCombo().setValue(confLevelId);
 
         var journalSourceId = me.model.get('journalSource').id;

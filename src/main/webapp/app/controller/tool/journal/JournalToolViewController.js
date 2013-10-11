@@ -71,13 +71,12 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 			failure: me.getAllJournalEntriesFailure,
 			scope: me
 		});
-	
-		me.confidentialityLevelsStore.clearFilter(true);
 		
-		me.confidentialityLevelsStore.load();		
+		me.confidentialityLevelsStore.load();
+		me.formUtils.applyActiveOnlyFilter(me.confidentialityLevelsStore);
 		
 		me.journalSourcesStore.load();
-		
+
 		me.journalTracksStore.load();
 		
 		return me.callParent(arguments);
