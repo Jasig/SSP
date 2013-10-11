@@ -24,6 +24,11 @@
                     "path": "/app/store/reference/"
                 },
                 {
+                    "clsName": "Ssp.model.reference.AdminSelectedIndex",
+                    "name": "AdminSelectedIndex.js",
+                    "path": "/app/model/reference/"
+                },
+                {
                     "clsName": "Ssp.view.admin.AdminMain",
                     "name": "AdminMain.js",
                     "path": "/app/view/admin/"
