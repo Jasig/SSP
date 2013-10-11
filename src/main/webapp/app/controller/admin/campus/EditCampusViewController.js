@@ -25,7 +25,8 @@ Ext.define('Ssp.controller.admin.campus.EditCampusViewController', {
     	formUtils: 'formRendererUtils',
     	model: 'currentCampus',
     	store: 'campusesStore',
-		personService: 'personService'
+		personService: 'personService',
+		adminSelectedIndex: 'adminSelectedIndex'
     },
     config: {
     	containerToLoadInto: 'adminforms',
@@ -113,6 +114,7 @@ Ext.define('Ssp.controller.admin.campus.EditCampusViewController', {
 	onSaveClick: function(button) {
 		var me = this; 
 		me.getView().getForm().updateRecord();
+		
 		me.getView().setLoading( true );
 		me.campusService.saveCampus( me.model.data, {
 			success: me.saveSuccess,
@@ -130,8 +132,23 @@ Ext.define('Ssp.controller.admin.campus.EditCampusViewController', {
     saveSuccess: function( r, scope ){
 		var me=scope;
 		me.maybeClearMissingEaCoordinator();
+		
+				var rowid = r['id'];
+				me.store.load({
+					params: {
+						limit: 500
+					},
+					callback: function(records) {
+						
+						var rowidx = me.store.find('id',rowid);
+						
+						me.adminSelectedIndex.set('value',rowidx);
+						
+						me.displayMain();
+					}
+				});
 		me.getView().setLoading( false );
-		me.displayMain();
+		
     },
     
     saveFailure: function( response, scope ){

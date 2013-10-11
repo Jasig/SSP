@@ -23,7 +23,8 @@ Ext.define('Ssp.controller.admin.crg.EditReferralViewController', {
     	apiProperties: 'apiProperties',
     	formUtils: 'formRendererUtils',
     	model: 'currentChallengeReferral',
-    	store: 'challengeReferralsStore'
+    	store: 'challengeReferralsStore',
+		adminSelectedIndex: 'adminSelectedIndex'
     },
     config: {
     	containerToLoadInto: 'adminforms',
@@ -47,6 +48,7 @@ Ext.define('Ssp.controller.admin.crg.EditReferralViewController', {
 	onSaveClick: function(button) {
 		var me = this;
 		var record, id, jsonData, url;
+		me.getView().setLoading(true);
 		if(me.getView().getForm().isValid())
 		{
 			url = this.store.getProxy().url;
@@ -55,7 +57,25 @@ Ext.define('Ssp.controller.admin.crg.EditReferralViewController', {
 			id = record.get('id');
 			jsonData = record.data;
 			successFunc = function(response, view) {
-				me.displayMain();
+				var responseTextObject = response['responseText'];
+				var rto = Ext.JSON.decode(responseTextObject);
+				var rowid = rto['id'];
+				me.store.load({
+					params: {
+						limit: 500
+					},
+					callback: function(records) {
+						var rowidx = -1;
+						Ext.Array.each(records, function(item,index) {
+							if (item.get('id') === rowid) {
+								rowidx = index;
+								return false;
+							}
+						});
+						me.adminSelectedIndex.set('value',rowidx);
+						me.displayMain();
+					}
+				});
 			};
 			
 			if (id.length > 0)

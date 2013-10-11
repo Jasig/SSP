@@ -18,57 +18,91 @@
  */
 Ext.define('Ssp.controller.admin.crg.DisplayChallengesAdminViewController', {
     extend: 'Deft.mvc.ViewController',
-    mixins: [ 'Deft.mixin.Injectable' ],
+    mixins: ['Deft.mixin.Injectable'],
     inject: {
-    	apiProperties: 'apiProperties',
-    	store: 'challengesAllStore',
-    	formUtils: 'formRendererUtils',
-    	model: 'currentChallenge'
+        apiProperties: 'apiProperties',
+        store: 'challengesAllStore',
+        formUtils: 'formRendererUtils',
+        model: 'currentChallenge',
+        adminSelectedIndex: 'adminSelectedIndex'
     },
     config: {
-    	containerToLoadInto: 'adminforms',
-    	formToDisplay: 'editchallenge'
+        containerToLoadInto: 'adminforms',
+        formToDisplay: 'editchallenge'
     },
     control: {
-    	'editButton': {
-			click: 'onEditClick'
-		},
-		
-		'addButton': {
-			click: 'onAddClick'
-		}  	
-    },       
-	init: function() {
-		var me=this;
-		
-		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
-		me.store.load();
-		
-		return me.callParent(arguments);
-    }, 
-    
-	onEditClick: function(button) {
-		var grid, record;
-		grid = button.up('grid');
-		record = grid.getView().getSelectionModel().getSelection()[0];
-        if (record) 
-        {		
-        	this.model.data=record.data;
-        	this.displayEditor();
-        }else{
-     	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
+        'editButton': {
+            click: 'onEditClick'
+        },
+        
+        'addButton': {
+            click: 'onAddClick'
         }
-	},
-	
-	onAddClick: function(button){
-		var model = new Ssp.model.reference.Challenge();
-		this.model.data = model.data;
-		this.displayEditor();
-	},
-	
+    },
+    init: function(){
+        var me = this;
+        me.formUtils.reconfigureGridPanel(me.getView(), me.store);
+        var ptb = me.getView().down('pagingtoolbar');
+        var asidx = me.adminSelectedIndex.get('value');
+        var pageidx = parseInt(asidx / me.apiProperties.getPagingSize());
+        var startidx = pageidx * me.apiProperties.getPagingSize();
+        
+        me.store.load({
+            params: {
+                start: startidx,
+                page: (pageidx + 1)
+            },
+            callback: function(){
+                if (asidx >= 0) {
+                    var rowidx = (asidx - startidx);
+                   
+                    me.getView().getSelectionModel().select(rowidx);
+					
+                    var sn = me.getView().getView().getSelectedNodes()[0];
+                    
+                    Ext.get(sn).highlight("ff0000", {
+                        attr: 'color',
+                        duration: 60000
+                    });
+                    me.adminSelectedIndex.set('value', -1);
+                  
+                    if (ptb) {
+                        ptb.child('#inputItem').setValue((pageidx + 1));
+                    }
+					me.getView().getStore().currentPage = (pageidx + 1); 
+                }
+            }
+        });
+        
+        return me.callParent(arguments);
+    },
     
-	
-	displayEditor: function(){
-		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
-	}
+    onEditClick: function(button){
+        var grid, record, idx;
+        grid = button.up('grid');
+        record = grid.getView().getSelectionModel().getSelection()[0];
+		this.adminSelectedIndex.set('value', -1);
+        
+        if (record) {
+            this.model.data = record.data;
+            this.displayEditor();
+        }
+        else {
+            Ext.Msg.alert('SSP Error', 'Please select an item to edit.');
+        }
+    },
+    
+    onAddClick: function(button){
+        var model = new Ssp.model.reference.Challenge();
+        this.model.data = model.data;
+        this.adminSelectedIndex.set('value', -1);
+        this.displayEditor();
+    },
+    
+    
+    
+    displayEditor: function(idx){
+        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+        // comp.getController().setSelectedIndex(idx);
+    }
 });

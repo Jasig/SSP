@@ -24,7 +24,8 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
     	formUtils: 'formRendererUtils',
     	model: 'currentChallenge',
     	store: 'challengesStore',
-        confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
+        confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
+		adminSelectedIndex: 'adminSelectedIndex'
     },
     config: {
     	containerToLoadInto: 'adminforms',
@@ -51,13 +52,43 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
     
 	onSaveClick: function(button) {
 		var me = this;
-		var record, id, jsonData, url;
+		me.getView().setLoading(true);
+		var record, id, jsonData, url, selectedIndex;
 		url = this.store.getProxy().url;
 		this.getView().getForm().updateRecord();
 		record = this.model;
 		id = record.get('id');
+		
 		jsonData = record.data;
 		successFunc = function(response, view) {
+			
+			var responseTextObject = response['responseText'];
+			var rto = Ext.JSON.decode(responseTextObject);
+		
+			var rowid = rto['id'];
+			me.store.load({
+				params: {
+					limit: 500
+				},
+				callback: function(records) {
+					
+					var rowidx = -1;
+					
+					Ext.Array.each(records, function(item,index) {
+						if (item.get('id') === rowid) {
+							rowidx = index;
+							return false;
+						}
+					});
+					
+					me.adminSelectedIndex.set('value',rowidx);
+					me.displayMain();
+				}
+			});
+			
+			
+		};
+		successEditFunc = function(response, view) {
 			me.displayMain();
 		};
 		
@@ -87,6 +118,8 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
 	},
 	
 	displayMain: function(){
+		this.getView().setLoading(false);
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+		
 	}
 });

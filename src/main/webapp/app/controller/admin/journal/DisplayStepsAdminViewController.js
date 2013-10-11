@@ -23,7 +23,8 @@ Ext.define('Ssp.controller.admin.journal.DisplayStepsAdminViewController', {
     	apiProperties: 'apiProperties',
     	store: 'journalStepsAllStore',
     	formUtils: 'formRendererUtils',
-    	model: 'currentJournalStep'
+    	model: 'currentJournalStep',
+		adminSelectedIndex: 'adminSelectedIndex'
     },
     config: {
     	containerToLoadInto: 'adminforms',
@@ -43,15 +44,49 @@ Ext.define('Ssp.controller.admin.journal.DisplayStepsAdminViewController', {
 		var me=this;
 		
 		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
-		me.store.load();
+		var ptb = me.getView().down('pagingtoolbar');
+        var asidx = me.adminSelectedIndex.get('value');
+        var pageidx = parseInt(asidx / me.apiProperties.getPagingSize());
+        var startidx = pageidx * me.apiProperties.getPagingSize();
+        
+        me.store.load({
+            params: {
+                start: startidx,
+                page: (pageidx + 1)
+            },
+            callback: function(){
+                if (asidx >= 0) {
+                    var rowidx = (asidx - startidx);
+                    
+                    me.getView().getSelectionModel().select(rowidx);
+                    
+                    var sn = me.getView().getView().getSelectedNodes()[0];
+                    
+                    Ext.get(sn).highlight("ff0000", {
+                        attr: 'color',
+                        duration: 60000
+                    });
+                    me.adminSelectedIndex.set('value', -1);
+                   
+                    if (ptb) {
+                       
+                        ptb.child('#inputItem').setValue((pageidx + 1));
+                        
+                    }
+					me.getView().getStore().currentPage = (pageidx + 1); 
+					
+                }
+            }
+        });
 		
 		return me.callParent(arguments);
     },    
     
 	onEditClick: function(button) {
-		var grid, record;
+		var grid, record,idx;
 		grid = button.up('grid');
 		record = grid.getView().getSelectionModel().getSelection()[0];
+		this.adminSelectedIndex.set('value',-1);
         if (record) 
         {		
         	this.model.data=record.data;
@@ -64,6 +99,8 @@ Ext.define('Ssp.controller.admin.journal.DisplayStepsAdminViewController', {
 	onAddClick: function(button){
 		var model = new Ssp.model.reference.JournalStep();
 		this.model.data = model.data;
+		
+		this.adminSelectedIndex.set('value',-1);
 		this.displayEditor();
 	},
 	

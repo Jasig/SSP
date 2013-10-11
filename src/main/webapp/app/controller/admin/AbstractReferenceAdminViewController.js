@@ -37,6 +37,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		'deleteButton': {
 			click: 'deleteConfirmation'
 		}
+		
     },
     
 	init: function() {
@@ -99,10 +100,27 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 				if(persistMethod == "PUT") {
 					var r = Ext.decode(response.responseText);
 					record.persisted = true;
+					
+					if (record.dirty) {
+						record.commit();
+						editor.grid.getSelectionModel().select(record);
+						var h = editor.grid.getView().getSelectedNodes()[0];
+						Ext.get(h).highlight("ff0000", {attr:'color', duration: 60000});
+						
+					}
 				} else {
 					var r = Ext.decode(response.responseText);
 					record.populateFromGenericObject(r);
 					store.totalCount = store.totalCount+1;
+					
+					if (record.dirty) {
+						record.commit();
+						editor.grid.getSelectionModel().select(0);
+						
+						var h1 = editor.grid.getView().getSelectedNodes()[0];
+						Ext.get(h1).highlight("ff0000", {attr:'color', duration: 60000});
+						
+					}
 				}
 			},
 			failure: this.apiProperties.handleError

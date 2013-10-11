@@ -26,7 +26,8 @@ Ext.define('Ssp.controller.admin.config.MessageTemplateDetailsAdminViewControlle
         apiProperties: 'apiProperties',
         formUtils: 'formRendererUtils',
         model: 'currentMessageTemplate',
-        store: 'messageTemplatesStore'
+        store: 'messageTemplatesStore',
+		adminSelectedIndex: 'adminSelectedIndex'
     },
     config: {
         containerToLoadInto: 'adminforms',
@@ -58,6 +59,7 @@ Ext.define('Ssp.controller.admin.config.MessageTemplateDetailsAdminViewControlle
         var me = this;
         var record, id, jsonData, url, parentId;
         url = this.store.getProxy().url;
+		me.getView().setLoading(true);
         this.getView().getForm().updateRecord();
         record = this.model;
         id = record.get('id');
@@ -71,9 +73,25 @@ Ext.define('Ssp.controller.admin.config.MessageTemplateDetailsAdminViewControlle
                 },
                 jsonData: jsonData,
                 success: function(response, view){
-                    var r = Ext.decode(response.responseText);
-                    record.commit();
-                    me.displayMain();
+                    var responseTextObject = response['responseText'];
+					var rto = Ext.JSON.decode(responseTextObject);
+					var rowid = rto['id'];
+					me.store.load({
+						params: {
+							limit: 500
+						},
+						callback: function(records) {
+							var rowidx = -1;
+							Ext.Array.each(records, function(item,index) {
+								if (item.get('id') === rowid) {
+									rowidx = index;
+									return false;
+								}
+							});
+							me.adminSelectedIndex.set('value',rowidx);
+							me.displayMain();
+						}
+					});
                     
                 },
                 failure: this.apiProperties.handleError
