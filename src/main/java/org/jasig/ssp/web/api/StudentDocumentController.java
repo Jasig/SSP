@@ -32,6 +32,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.StudentDocumentService;
+import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
@@ -77,6 +78,9 @@ public class StudentDocumentController  extends AbstractBaseController {
 	
 	@Autowired
 	private transient StudentDocumentTOFactory factory;
+	
+	@Autowired
+	private transient ConfidentialityLevelService confidentialityLevelService;
 
  
 	/**
@@ -143,6 +147,7 @@ public class StudentDocumentController  extends AbstractBaseController {
 		oldDocument.setAuthor(securityService.currentlyAuthenticatedUser().getPerson());
 		oldDocument.setComments(obj.getComment());
 		oldDocument.setName(obj.getName());
+		oldDocument.setConfidentialityLevel(confidentialityLevelService.get(obj.getConfidentialityLevelId()));
 
 		StudentDocument newDocument = getStudentDocumentService().save(oldDocument);
 		return getFactory().from(newDocument);
