@@ -114,8 +114,7 @@ Ext.define('Ssp.model.AbstractBase', {
                  // the risk of accidentally soft-deleting persistent records
                  // when the client side model is written back to the server.
                  if ( value === undefined || value === null ) {
-                	 value = true;
-                     record.set('objectStatus', 'ACTIVE'); // the default
+                     value = 'ACTIVE' === record.get('objectStatus');
                  } else {
                      record.set('objectStatus', !(!value) ? 'ACTIVE' : 'INACTIVE');
                  }
