@@ -100,6 +100,10 @@ public class ExternalPerson extends AbstractExternalData implements
 	@Size(max = 50)
 	private String officeLocation, officeHours;
 
+    @Column(length = 250)
+    @Size(max = 250)
+    private String photoUrl;
+
 	@Column(length = 100)
 	@Size(max = 100)
 	private String departmentName;
@@ -413,4 +417,12 @@ public class ExternalPerson extends AbstractExternalData implements
 		}
 		this.nonLocalAddress = nonLocalAddress ? BOOLEAN_YES : BOOLEAN_NO;
 	}
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(final String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
 }

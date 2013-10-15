@@ -225,6 +225,11 @@ public class ExternalPersonServiceImpl
 			person.setCellPhone(externalPerson.getCellPhone());
 		}
 
+        if ((person.getPhotoUrl() == null) ||
+                (!person.getPhotoUrl().equals(externalPerson.getPhotoUrl()))) {
+            person.setPhotoUrl(externalPerson.getPhotoUrl());
+        }
+
 		if ((person.getActualStartTerm() == null) ||
 				(!person.getActualStartTerm().equals(
 						externalPerson.getActualStartTerm()))) {
