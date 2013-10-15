@@ -31,6 +31,7 @@ import org.jasig.ssp.model.Task;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
 import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
+import org.jasig.ssp.transferobject.reference.ConfidentialityLevelTO;
 
 /**
  * Task transfer object
@@ -60,8 +61,11 @@ public class TaskTO
 	private UUID challengeId;
 
 	private UUID challengeReferralId;
+	
+	private UUID confidentialityLevelId;
 
-	private ConfidentialityLevelLiteTO confidentialityLevel;
+
+	private ConfidentialityLevelTO confidentialityLevel;
 
 	public TaskTO() {
 		super();
@@ -92,9 +96,8 @@ public class TaskTO
 		if (task.getChallengeReferral() != null) {
 			challengeReferralId = task.getChallengeReferral().getId();
 		}
-
-		confidentialityLevel = ConfidentialityLevelLiteTO.fromModel(
-				task.getConfidentialityLevel());
+		
+		confidentialityLevel = new ConfidentialityLevelTO(task.getConfidentialityLevel());
 	}
 
 	/**
@@ -248,12 +251,12 @@ public class TaskTO
 		this.personId = personId;
 	}
 
-	public ConfidentialityLevelLiteTO getConfidentialityLevel() {
+	public ConfidentialityLevelTO getConfidentialityLevel() {
 		return confidentialityLevel;
 	}
 
 	public void setConfidentialityLevel(
-			final ConfidentialityLevelLiteTO confidentialityLevel) {
+			final ConfidentialityLevelTO confidentialityLevel) {
 		this.confidentialityLevel = confidentialityLevel;
 	}
 
@@ -263,5 +266,13 @@ public class TaskTO
 
 	public void setLink(String link) {
 		this.link = link;
+	}
+
+	public UUID getConfidentialityLevelId() {
+		return confidentialityLevelId;
+	}
+
+	public void setConfidentialityLevelId(UUID confidentialityLevelId) {
+		this.confidentialityLevelId = confidentialityLevelId;
 	}
 }

@@ -100,6 +100,8 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     	if ( form.isValid() )
     	{
     		form.updateRecord();
+    		
+    		model.data.confidentialityLevel = form
 
 			// Can't use model.set('dueDate') to set our date string here b/c
 			// the types don't match. Doing so will cause that field to become
@@ -116,6 +118,7 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 			var origDueDate = model.data.dueDate;
 			var todayDateJSON = me.formUtils.toJSONStringifiableDate( new Date() );
 			var origDueDateJSON = me.formUtils.toJSONStringifiableDate( model.data.dueDate );
+			model.data.confidentialityLevel = form.getFields().items[3].lastSelection[0].data;
 			
 			model.data.dueDate = me.formUtils.toJSONStringifiableDate( model.data.dueDate );
 			if (id == "") {
