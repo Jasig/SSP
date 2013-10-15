@@ -259,14 +259,14 @@ Ext.define('Ssp.view.tools.profile.Details', {
                     defaults: {
                         anchor: '100%'
                     },
-                    padding: 0,
+                    padding: 2,
                     margin: '0 0 0 5',
                     flex: .30,
                     items: [{
                         fieldLabel: 'Residency',
                         name: 'residencyCounty',
                         itemId: 'residencyCounty',
-                        labelWidth: 55
+                        labelWidth: 60
                     }, {
                         xtype: 'tbspacer',
                         height: '20'
