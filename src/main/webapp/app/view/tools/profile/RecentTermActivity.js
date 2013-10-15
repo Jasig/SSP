@@ -37,11 +37,12 @@ Ext.define('Ssp.view.tools.profile.RecentTermActivity', {
                 dataIndex: 'termCode',
                 text: 'Term',
                 flex: 1
-            }, {
-                dataIndex: 'onPlan',
-                text: 'MAP',
-                flex: 1
-            }, {
+            },// {
+            //    dataIndex: 'onPlan',
+            //    text: 'MAP',
+            //    flex: 1
+           // },
+           {
                 dataIndex: 'gradePointAverage',
                 text: 'GPA',
                 flex: 1
