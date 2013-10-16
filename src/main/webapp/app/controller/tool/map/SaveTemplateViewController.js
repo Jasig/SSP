@@ -50,9 +50,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		me.divisionsStore.load();
 		
 	    me.getView().query('checkbox[name=objectStatus]')[0].setValue(me.currentMapPlan.getAsBoolean('objectStatus',"ACTIVE"));
-		if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
-			me.getView().query('checkbox[name="isPrivate"]')[0].setValue(true);
-		}
+
 		return me.callParent(arguments);
     },
 
@@ -116,7 +114,12 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 	    	var form =  me.getView().query('form')[0].getForm();
 	    	
 			form.updateRecord(me.currentMapPlan);
-	    	me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox[name=objectStatus]')[0].getValue()) ? 'ACTIVE' : 'INACTIVE');		
+			// Checkbox is disabled in this case, so will be skipped on a Ext.form.Basic.updateRecord()
+			// http://stackoverflow.com/questions/13364510/update-form-record-for-disabled-fields#comment18246782_13365321
+			if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
+				me.currentMapPlan.set('isPrivate', true);
+			}
+			me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox[name=objectStatus]')[0].getValue()) ? 'ACTIVE' : 'INACTIVE');
 			if(!me.currentMapPlan.get('isTemplate')){
 				me.currentMapPlan.set('id', '');
 				me.currentMapPlan.setIsTemplate(true);
@@ -144,6 +147,9 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     	var me=this;
 		me.resetForm();
 	    me.getView().query('form')[0].loadRecord( me.currentMapPlan );
+	    if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
+	        me.getView().query('checkbox[name="isPrivate"]')[0].setValue(true);
+	    }
     },
 
 	setCheckBox: function(query, fieldName){
