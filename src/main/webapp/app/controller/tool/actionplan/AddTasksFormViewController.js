@@ -101,7 +101,6 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     	{
     		form.updateRecord();
     		
-    		model.data.confidentialityLevel = form
 
 			// Can't use model.set('dueDate') to set our date string here b/c
 			// the types don't match. Doing so will cause that field to become
