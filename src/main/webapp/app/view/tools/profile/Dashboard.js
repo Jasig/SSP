@@ -74,12 +74,22 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                     
                     }]
                 
-                }, {
+                },{
+                xtype: 'fieldset',
+                border: 0,
+                title: '',
+                defaultType: 'displayfield',
+                margin: '0 0 0 2',
+                flex: .25,
+                defaults: {
+                    anchor: '100%'
+                },items:[                
+                {
                     xtype: 'fieldset',
                     border: 1,
                     title: '',
                     defaultType: 'displayfield',
-                    margin: '0 0 0 2',
+                    margin: '0 0 33 2',
                     defaults: {
                         anchor: '100%'
                     },
@@ -141,9 +151,38 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         fieldLabel: 'Action Plan',
                         itemId: 'actionPlan',
                         name: 'actionPlan'
+                    }
+                    ]
+
+                },
+                
+                {
+                    xtype: 'fieldset',
+                    border: 1,
+                    title: 'Student Intake',
+                    defaultType: 'displayfield',
+                    margin: '0 0 0 2',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    flex: .25,
+                    height: '370',
+                    
+                    items: [{
+                        fieldLabel: 'Assigned',
+                        name: 'studentIntakeAssigned',
+                        itemId: 'studentIntakeAssigned',
+                        renderer: Ext.util.Format.dateRenderer('m/d/Y')
+                    }, {
+                        fieldLabel: 'Completed',
+                        name: 'studentIntakeCompleted',
+                        itemId: 'studentIntakeCompleted',
+                        renderer: Ext.util.Format.dateRenderer('m/d/Y')
                     }]
                 
-                }, {
+                }
+                ]
+                },{
                     xtype: 'fieldset',
                     border: 0,
                     title: '',

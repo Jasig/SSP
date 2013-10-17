@@ -413,7 +413,6 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 	private Integer actualStartYear;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false, updatable = false)
 	private Date studentIntakeRequestDate;
 	
 	@Column(length = 50)

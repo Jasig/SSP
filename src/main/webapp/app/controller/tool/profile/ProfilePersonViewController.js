@@ -61,7 +61,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
         earlyAlertField: '#earlyAlert',
         actionPlanField: '#actionPlan',
-		
+        
+        studentIntakeAssignedField: '#studentIntakeAssigned',
+        studentIntakeCompletedField: '#studentIntakeCompleted',
+        
 		'serviceReasonEdit': {
             click: 'onServiceReasonEditButtonClick'
         },
@@ -174,6 +177,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var earlyAlertField = me.getEarlyAlertField();
         var actionPlanField = me.getActionPlanField();
 		var studentIdField = me.getStudentIdField();
+		
+        var studentIntakeAssignedField = me.getStudentIntakeAssignedField();
+		var studentIntakeCompletedField = me.getStudentIntakeCompletedField();
 
         var fullName = me.person.getFullName();
 		var firstLastName = me.person.getFirstLastName();
@@ -219,6 +225,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         me.getRegisteredTermsField().setValue(me.handleNull(me.person.get('registeredTerms')));
         me.getPaymentStatusField().setValue(me.handleNull(me.person.get('paymentStatus')));
 		
+        studentIntakeAssignedField.setValue(me.handleNull(me.person.get('studentIntakeRequestDate')));
+        studentIntakeCompletedField.setValue(me.handleNull(me.person.get('studentIntakeCompleteDate')));
+
 
         var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
         var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
