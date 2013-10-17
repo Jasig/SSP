@@ -32,4 +32,12 @@ public class TemplateOutputTO extends AbstractPlanOutputTO<Template, TemplateTO>
     public TemplateOutputTO(){
     	super();
     }
+    
+    public void setPlan(TemplateTO plan){
+    	setNonOuputTO(plan);
+    }
+   
+    public TemplateTO getPlan() {
+    	return getNonOutputTO();
+    }
 }
