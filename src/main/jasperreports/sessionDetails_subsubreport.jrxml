@@ -30,7 +30,7 @@
 	<detail>
 		<band height="15" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="a2ab2788-bf8a-44b4-8086-e6bcfa018baf" stretchType="RelativeToBandHeight" x="0" y="0" width="555" height="13"/>
+				<reportElement uuid="a2ab2788-bf8a-44b4-8086-e6bcfa018baf" stretchType="RelativeToTallestObject" x="0" y="0" width="555" height="13" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>

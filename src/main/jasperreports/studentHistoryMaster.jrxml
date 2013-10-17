@@ -96,7 +96,7 @@
 		<band height="41">
 			<printWhenExpression><![CDATA[!$F{journalEntries}.isEmpty();]]></printWhenExpression>
 			<subreport>
-				<reportElement uuid="9e8c4f35-4564-41fb-9f57-97834d567f98" positionType="Float" stretchType="RelativeToTallestObject" x="14" y="17" width="558" height="22" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="9e8c4f35-4564-41fb-9f57-97834d567f98" positionType="Float" stretchType="RelativeToBandHeight" x="14" y="17" width="558" height="22" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
 				<subreportParameter name="SUBREPORT_DIR"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{journalEntries})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/journalEntries_subreport.jasper"]]></subreportExpression>
@@ -114,7 +114,7 @@
 		<band height="36">
 			<printWhenExpression><![CDATA[!$F{taskList}.isEmpty()]]></printWhenExpression>
 			<subreport>
-				<reportElement uuid="2f28ed7a-0c04-4584-bfc2-aee090764c3c" positionType="Float" x="14" y="16" width="558" height="20" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="2f28ed7a-0c04-4584-bfc2-aee090764c3c" positionType="Float" stretchType="RelativeToBandHeight" x="14" y="16" width="558" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{taskList})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/groupsHistory_subreport.jasper"]]></subreportExpression>
 			</subreport>
@@ -139,7 +139,7 @@
 				<text><![CDATA[EARLY ALERT]]></text>
 			</staticText>
 			<subreport>
-				<reportElement uuid="2f28ed7a-0c04-4584-bfc2-aee090764c3c" positionType="Float" x="13" y="17" width="558" height="20" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="2f28ed7a-0c04-4584-bfc2-aee090764c3c" positionType="Float" stretchType="RelativeToBandHeight" x="13" y="17" width="558" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{earlyAlerts})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/earlyAlertHistory_subreport.jasper"]]></subreportExpression>
 			</subreport>

@@ -33,7 +33,7 @@
 	<detail>
 		<band height="22" splitType="Stretch">
 			<subreport>
-				<reportElement uuid="07669e9d-86c1-4720-9964-faa28f09be28" stretchType="RelativeToTallestObject" x="0" y="0" width="555" height="22"/>
+				<reportElement uuid="07669e9d-86c1-4720-9964-faa28f09be28" stretchType="RelativeToTallestObject" x="0" y="0" width="555" height="22" isPrintWhenDetailOverflows="true"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{journalStepDetails})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/sessionDetails_subsubreport.jasper"]]></subreportExpression>
 			</subreport>

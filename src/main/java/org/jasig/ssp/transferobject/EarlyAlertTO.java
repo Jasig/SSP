@@ -75,6 +75,10 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 
 	private Set<UUID> earlyAlertSuggestionIds;
 
+    private Set<EarlyAlertReasonTO> earlyAlertReasonTOs;
+
+    private Set<EarlyAlertSuggestionTO> earlyAlertSuggestionTOs;
+
 	private Boolean sendEmailToStudent = Boolean.FALSE;
 
 	/**
@@ -114,6 +118,8 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 		closedById = earlyAlert.getClosedById();
 		earlyAlertReasonIds = Sets.newHashSet();
 		earlyAlertSuggestionIds = Sets.newHashSet();
+        earlyAlertReasonTOs = Sets.newHashSet();
+        earlyAlertSuggestionTOs = Sets.newHashSet();
 
 		if ( closedById != null ) {
 			Person closedBy = earlyAlert.getClosedBy();
@@ -131,12 +137,14 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 				.getEarlyAlertReasons();
 		for (EarlyAlertReason earlyAlertReason : earlyAlertReasonModels) {
 			earlyAlertReasonIds.add(earlyAlertReason.getId());
+            earlyAlertReasonTOs.add(new EarlyAlertReasonTO(earlyAlertReason));
 		}
 		
 		Set<EarlyAlertSuggestion> earlyAlertSuggestionModels = earlyAlert
 				.getEarlyAlertSuggestions();
 		for (EarlyAlertSuggestion earlyAlertSuggestion : earlyAlertSuggestionModels) {
 			earlyAlertSuggestionIds.add(earlyAlertSuggestion.getId());
+            earlyAlertSuggestionTOs.add(new EarlyAlertSuggestionTO(earlyAlertSuggestion));
 		}
 		
 		setNoOfResponses(earlyAlert.getResponseCount());
@@ -379,6 +387,22 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 	public Set<UUID> getEarlyAlertSuggestionIds() {
 		return earlyAlertSuggestionIds;
 	}
+
+    public Set<EarlyAlertReasonTO> getEarlyAlertReasonTOs() {
+        return this.earlyAlertReasonTOs;
+    }
+
+    public Set<EarlyAlertSuggestionTO> getEarlyAlertSuggestionTOs() {
+        return this.earlyAlertSuggestionTOs;
+    }
+
+    public void setEarlyAlertReasonTOs(Set<EarlyAlertReasonTO> earlyAlertReasonTOs) {
+        this.earlyAlertReasonTOs = earlyAlertReasonTOs;
+    }
+
+    public void setEarlyAlertSuggestionTOs(Set<EarlyAlertSuggestionTO> earlyAlertSuggestionTOs) {
+        this.earlyAlertSuggestionTOs = earlyAlertSuggestionTOs;
+    }
 
 	public void setEarlyAlertSuggestionIds(Set<UUID> earlyAlertSuggestionIds) {
 		this.earlyAlertSuggestionIds = earlyAlertSuggestionIds;

@@ -26,7 +26,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
-	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -36,11 +36,11 @@
 	<field name="createdBy.lastName" class="java.lang.String"/>
 	<field name="courseName" class="java.lang.String"/>
 	<field name="courseTitle" class="java.lang.String"/>
-	<field name="earlyAlertReasonIds" class="java.util.Set"/>
+	<field name="earlyAlertReasonTOs" class="java.util.Set"/>
 	<field name="comment" class="java.lang.String"/>
 	<field name="closedDate" class="java.util.Date"/>
 	<field name="createdDate" class="java.util.Date"/>
-	<field name="earlyAlertSuggestionIds" class="java.util.Set"/>
+	<field name="earlyAlertSuggestionTOs" class="java.util.Set"/>
 	<field name="earlyAlertSuggestionOtherDescription" class="java.lang.String"/>
 	<field name="earlyAlertReasonOtherDescription" class="java.lang.String"/>
 	<background>
@@ -103,8 +103,8 @@
 				<text><![CDATA[Reason:]]></text>
 			</staticText>
 			<subreport>
-				<reportElement uuid="f8a10acb-ebf6-47bf-ae69-2563d155e8a9" stretchType="RelativeToBandHeight" x="101" y="96" width="454" height="20"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{earlyAlertReasonIds})]]></dataSourceExpression>
+				<reportElement uuid="f8a10acb-ebf6-47bf-ae69-2563d155e8a9" stretchType="RelativeToBandHeight" x="101" y="96" width="454" height="20" isPrintWhenDetailOverflows="true"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{earlyAlertReasonTOs})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/sessionDetails_subsubreport.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
@@ -124,8 +124,8 @@
 				<text><![CDATA[Suggestion:]]></text>
 			</staticText>
 			<subreport>
-				<reportElement uuid="05823614-2838-44aa-ac47-12b8360f3341" x="101" y="0" width="454" height="20"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{earlyAlertSuggestionIds})]]></dataSourceExpression>
+				<reportElement uuid="05823614-2838-44aa-ac47-12b8360f3341" stretchType="RelativeToBandHeight" x="101" y="0" width="454" height="20"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{earlyAlertSuggestionTOs})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/sessionDetails_subsubreport.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
