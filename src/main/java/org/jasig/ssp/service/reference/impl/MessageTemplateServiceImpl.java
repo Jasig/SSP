@@ -313,9 +313,9 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("planContactNotes", plan.getContactNotes());
 		messageParams.put("planStudentNotes", plan.getStudentNotes());
 		messageParams.put("termCourses", termCourses);
-		messageParams.put("studentFullName", student.getFullName());
-		messageParams.put("studentEmail", student.getPrimaryEmailAddress());
-		messageParams.put("studentSchoolId", student.getSchoolId());
+		if(student != null)
+			addStudent(messageParams, student);
+		
 		messageParams.put("coachPhone1", owner.getCellPhone());
 		messageParams.put("coachPhone2", owner.getHomePhone());
 		messageParams.put("coachFullName", owner.getFullName());
@@ -326,5 +326,11 @@ public class MessageTemplateServiceImpl extends
 		
 		return messageParams;
 		
+	}
+	
+	private void addStudent(Map<String,Object> messageParams, Person student){
+			messageParams.put("studentFullName", student.getFullName());
+			messageParams.put("studentEmail", student.getPrimaryEmailAddress());
+			messageParams.put("studentSchoolId", student.getSchoolId());
 	}
 }
