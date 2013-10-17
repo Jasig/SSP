@@ -219,6 +219,7 @@ public class TaskServiceImpl
 		task.setSessionId(sessionId);
 		task.setDescription(challengeReferral.getPublicDescription());
 		task.setName(challengeReferral.getName());
+		task.setLink(challengeReferral.getLink());
 
 		setDefaultConfidentialityLevel(task, challenge);
 
