@@ -48,8 +48,6 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		me.programsStore.load();
 		me.departmentsStore.load();
 		me.divisionsStore.load();
-		
-	    me.getView().query('checkbox[name=objectStatus]')[0].setValue(me.currentMapPlan.getAsBoolean('objectStatus',"ACTIVE"));
 
 		return me.callParent(arguments);
     },
@@ -147,6 +145,14 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     	var me=this;
 		me.resetForm();
 	    me.getView().query('form')[0].loadRecord( me.currentMapPlan );
+	    var activenessCheckbox = me.getView().query('checkbox[name=objectStatus]')[0];
+	    if (!me.currentMapPlan.get('id')) {
+	        activenessCheckbox.setValue(false); // Create mode. New Templates intentionally
+	                                             // inactive by default (https://issues.jasig.org/browse/SSP-1828)
+	    } else {
+	        // Edit mode. Preserve current state as the default.
+	        activenessCheckbox.setValue(me.currentMapPlan.getAsBoolean('objectStatus',"ACTIVE"));
+	    }
 	    if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
 	        me.getView().query('checkbox[name="isPrivate"]')[0].setValue(true);
 	    }
