@@ -267,10 +267,29 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		//myPlans
 		buildMyPlans(personSearchRequest,filterTracker, stringBuilder);
 		
+		//birthDate
+		buildBirthDate(personSearchRequest,filterTracker, stringBuilder);
+		
 		appendAndOrWhere(stringBuilder, filterTracker);
 		stringBuilder.append(" p.studentType != null ");
 		stringBuilder.append(" and p.objectStatus = :activeObjectStatus ");
 		stringBuilder.append(" and programStatuses.expirationDate IS NULL");
+	}
+
+
+	private void buildBirthDate(PersonSearchRequest personSearchRequest,
+			FilterTracker filterTracker, StringBuilder stringBuilder) {
+		if(hasBirthDate(personSearchRequest))
+		{
+			appendAndOrWhere(stringBuilder,filterTracker);
+			stringBuilder.append(" p.birthDate = :birthDate ");
+		}
+		
+	}
+
+
+	private boolean hasBirthDate(PersonSearchRequest personSearchRequest) {
+		return personSearchRequest.getBirthDate() != null;
 	}
 
 
@@ -395,6 +414,11 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		{
 			query.setEntity("owner", securityService.currentlyAuthenticatedUser().getPerson());
 		}
+		
+		if(hasBirthDate(personSearchRequest))
+		{
+			query.setDate("birthDate", personSearchRequest.getBirthDate());
+		}		
 		
 		query.setInteger("activeObjectStatus", ObjectStatus.ACTIVE.ordinal());
 	}

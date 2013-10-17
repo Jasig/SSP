@@ -108,6 +108,7 @@ Ext.define('Ssp.service.SearchService', {
     		 planStatus,
     		 myCaseload,
     		 myPlans,
+    		 birthDate,
     		callbacks ){
     	var me = this;
 		me.searchWithParams({
@@ -124,7 +125,8 @@ Ext.define('Ssp.service.SearchService', {
 		 mapStatus: mapStatus,
 		 planStatus: planStatus,
 		 myCaseload: myCaseload,
-		 myPlans: myPlans
+		 myPlans: myPlans,
+		 birthDate: birthDate,
 		}, callbacks);
     }
 });

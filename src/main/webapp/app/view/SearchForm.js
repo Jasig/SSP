@@ -247,17 +247,34 @@ Ext.define('Ssp.view.SearchForm',{
    		   		    valueField: 'code',
 		   		    displayField: 'displayValue'               
                 },
-                {
-                    xtype: 'checkboxfield',
-                    fieldLabel: 'My Caseload',
-                    name: 'myCaseload',
-					enableKeyEvents:true,
-                    listeners: {
-                        change: function() {
-                        	Ext.ComponentQuery.query('[name=planStatus]')[0].focus();
-                        }
-                    }
-                },
+                {	layout: 'column',
+                    border: false,
+                    items: [
+                             {
+                                 xtype: 'checkboxfield',
+                                 fieldLabel: 'My Caseload',
+                                 name: 'myCaseload',
+                			     enableKeyEvents:true,
+                                 listeners: {
+                                     change: function() {
+                                      	Ext.ComponentQuery.query('[name=planStatus]')[0].focus();
+                                       }
+                                 },
+                         	   labelAlign: 'left',
+                         	   columnWidth: .45,
+                            },
+                            {
+        				       xtype: 'datefield',
+                         	   altFormats: 'm/d/Y|m-d-Y',
+                         	   allowBlank: true,
+                         	   labelAlign: 'left',
+                         	   columnWidth: .45,
+                         	   fieldLabel: 'Birth Date',
+                         	   name: 'birthDate',
+ 							   itemId: 'birthDate',
+                            }              
+                 ]},
+
                 {
                     xtype: 'checkboxfield',
                     fieldLabel: 'My Plans',

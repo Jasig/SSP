@@ -30,6 +30,7 @@ Ext.define('Ssp.model.FilterDiscreteValues', {
              {name:'financialAidStatus',type:'string'},
              {name:'mapStatus',type:'string'},
              {name:'planStatus',type:'string'},
-             {name:'myCaseload',type:'boolean'}
+             {name:'myCaseload',type:'boolean'},
+             {name:'birthDate',type:'date', dateFormat: 'c'}
              ]
 });

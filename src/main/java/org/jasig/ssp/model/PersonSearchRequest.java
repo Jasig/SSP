@@ -19,6 +19,7 @@
 package org.jasig.ssp.model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
@@ -76,6 +77,7 @@ public class PersonSearchRequest {
 	
 	private Boolean myPlans;
 
+	private Date birthDate;
 
 	public PersonSearchRequest() {
 		super();
@@ -219,6 +221,16 @@ public class PersonSearchRequest {
 
 	public void setMyPlans(Boolean myPlans) {
 		this.myPlans = myPlans;
+	}
+
+
+	public Date getBirthDate() {
+		return birthDate;
+	}
+
+
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
 	}
 
 
