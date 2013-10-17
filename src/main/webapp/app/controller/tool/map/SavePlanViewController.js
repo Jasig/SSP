@@ -40,7 +40,12 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 		var me=this;
 	    me.resetForm();
 	    me.getView().query('form')[0].loadRecord( me.currentMapPlan );
-		me.getView().query('checkbox[name=objectStatus]')[0].setValue(me.currentMapPlan.getAsBoolean('objectStatus',"ACTIVE"));
+	    var activenessCheckbox = me.getView().query('checkbox[name=objectStatus]')[0];
+	    if ( me.currentMapPlan.get('id') ) {
+	        activenessCheckbox.setValue(me.currentMapPlan.getAsBoolean('objectStatus',"ACTIVE"));
+	    } else {
+	        activenessCheckbox.setValue(true);
+	    }
 		me.setCheckBox('checkbox[name=isFinancialAid]', 'isFinancialAid');
 		me.setCheckBox('checkbox[name=isImportant]', 'isImportant');
 		me.setCheckBox('checkbox[name=isF1Visa]', 'isF1Visa');
