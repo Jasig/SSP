@@ -275,19 +275,19 @@ Ext.define('Ssp.service.MapPlanService', {
 		}	
     },
     
-    print: function(semesterStores, outputData, callbacks ){
+    print: function(semesterStores, outputData, callbacks, planType){
 		var me = this;
-    	me.outputMap(semesterStores, callbacks, outputData, 'print');
+    	me.outputMap(semesterStores, callbacks, outputData, 'print', planType);
     },
-    printCurrent: function(semesterStores, outputData, callbacks ){
+    printCurrent: function(semesterStores, outputData, callbacks, planType ){
 		var me = this;
     	me.outputCurrentMap(semesterStores, callbacks, outputData, 'printCurrent');
     },    
-    email: function(semesterStores, outputData, callbacks ){
+    email: function(semesterStores, outputData, callbacks, planType ){
 		var me = this;
     	me.outputMap(semesterStores, callbacks, outputData, 'email');
     },
-    emailCurrent: function(semesterStores, outputData, callbacks ){
+    emailCurrent: function(semesterStores, outputData, callbacks, planType ){
 		var me = this;
     	me.outputCurrentMap(semesterStores, callbacks, outputData, 'emailCurrent');
     },
@@ -310,10 +310,17 @@ Ext.define('Ssp.service.MapPlanService', {
    			failureFunc: failure,
    			scope: me
    		});
-    },        
-    outputMap: function(semesterStores, callbacks, outputData, outputType){
+    },
+    outputMap: function(semesterStores, callbacks, outputData, outputType, planType){
     	var me=this;
-		var url = me.getBaseUrl(me.personLite.get('id'));
+    	var url = null;
+    	if(planType == null)
+			planType = "plan"
+    	if(planType=="plan")
+		  url = me.getBaseUrl(me.personLite.get('id'));
+    	else
+    	  url = me.getTemplateBaseUrl();
+    	
 	    var success = function( response ){
 			callbacks.success( response, callbacks.scope );
 	    };

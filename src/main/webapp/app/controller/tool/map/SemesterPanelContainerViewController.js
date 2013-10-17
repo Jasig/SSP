@@ -566,12 +566,19 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		metaData.set('includeTotalTimeExpected', true);
 		metaData.set('includeFinancialAidInformation', true);
 		
-		me.mapPlanService.print(me.semesterStores, metaData, {
+		var planType = "plan";
+		if(me.currentMapPlan.get("isTemplate") == true)
+			planType = "template";
+			
+		me.mapPlanService.print(me.semesterStores, 
+			metaData,
+			{
             success: me.newServiceSuccessHandler('printMap', me.printMapPlanServiceSuccess, serviceResponses),
             failure: me.newServiceFailureHandler('printMap', me.printMapPlanServiceFailure, serviceResponses),
             scope: me,
             isPrivate: false
-        });
+        	},
+			planType);
 	},
 	
 	 printMapPlanServiceSuccess: function(serviceResponses) {
