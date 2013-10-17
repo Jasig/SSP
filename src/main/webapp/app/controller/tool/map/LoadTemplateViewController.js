@@ -96,24 +96,39 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
             listeners: {
              select: 'onTypeFilterSelect'
             }
+         },
+         view: {
+            show: 'onShow'
          }
-			
 	},
 
 	init: function() {
 		var me=this;
 	    me.resetForm();
 	    me.store.addListener("load", me.onStoreLoaded, me);
-	    me.getView().setLoading(true);
-	    me.store.load();
-		//TODO this should be automatic
-
+	    //wait for onShow() to actually load the store
 		return me.callParent(arguments);
+    },
+
+    loadTemplates: function() {
+        var me = this;
+        me.getView().setLoading(true);
+        me.store.load(); // callback registered in init()
     },
     
     onStoreLoaded: function(){
     	var me = this;
     	me.getView().setLoading(false);
+    },
+
+    onShow: function() {
+        // do this on show rather than init b/c this component isn't destroyed
+        // when dismissed, but we need to make sure you see all the latest
+        // Template changes whenever we do display this component. The easiest
+        // way to do that is to just hit the store/server again every time the
+        // view fires its show event
+        var me = this;
+        me.loadTemplates();
     },
 
     resetForm: function() {
