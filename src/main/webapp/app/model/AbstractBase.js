@@ -124,6 +124,8 @@ Ext.define('Ssp.model.AbstractBase', {
              ],
     
 	populateFromGenericObject: function( record ){
+			this.synchronizingStatusFields = false;
+			this.statusFieldsInitialized = false;
 			for (fieldName in this.data)
 	    	{
 	    		this.set( fieldName, record == null ? null : record[fieldName]);
