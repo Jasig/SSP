@@ -146,7 +146,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		me.resetForm();
 	    me.getView().query('form')[0].loadRecord( me.currentMapPlan );
 	    var activenessCheckbox = me.getView().query('checkbox[name=objectStatus]')[0];
-	    if (!me.currentMapPlan.get('id')) {
+	    if (!me.currentMapPlan.get('id') || !(me.currentMapPlan.get('isTemplate')) || me.getView().saveAs) {
 	        activenessCheckbox.setValue(false); // Create mode. New Templates intentionally
 	                                             // inactive by default (https://issues.jasig.org/browse/SSP-1828)
 	    } else {
