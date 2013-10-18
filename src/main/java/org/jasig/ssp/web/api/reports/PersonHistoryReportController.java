@@ -49,6 +49,8 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TaskService;
+import org.jasig.ssp.service.reference.EarlyAlertReasonService;
+import org.jasig.ssp.service.reference.EarlyAlertSuggestionService;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.JournalEntryTO;
 import org.jasig.ssp.transferobject.PersonTO;
@@ -96,6 +98,10 @@ public class PersonHistoryReportController extends ReportBaseController {
 	private transient EarlyAlertService earlyAlertService;
 	@Autowired
 	private transient EarlyAlertTOFactory earlyAlertTOFactory;
+    @Autowired
+    private transient EarlyAlertReasonService earlyAlertReasonService;
+    @Autowired
+    private transient EarlyAlertSuggestionService earlyAlertSuggestionService;
 	@Autowired
 	private transient TaskService taskService;
 	@Autowired
@@ -144,11 +150,29 @@ public class PersonHistoryReportController extends ReportBaseController {
 			taskTOMap.put(groupName, taskTOFactory.asTOList(tasks));
 		}
 
-		// separate the Students into bands by date
+        // separate the Students into bands by date
 		final List<StudentHistoryTO> studentHistoryTOs = sort(earlyAlertTOs,
 				taskTOMap, journalEntryTOs);
 
-		final Map<String, Object> parameters = Maps.newHashMap();
+        // add suggestion names and reason names to Student History TO's
+        for (StudentHistoryTO studentTOIndex : studentHistoryTOs) {
+            for (EarlyAlertTO eaTOIndex : studentTOIndex.getEarlyAlerts()) {
+                ArrayList<String> tempEaReasonNames = new ArrayList<String>();
+                ArrayList<String> tempEaSuggestionNames = new ArrayList<String>();
+
+                for ( UUID eaReasonId : eaTOIndex.getEarlyAlertReasonIds() ) {
+                    tempEaReasonNames.add(earlyAlertReasonService.load(eaReasonId).getName());
+                }
+
+                for ( UUID eaSuggestionId : eaTOIndex.getEarlyAlertSuggestionIds() ) {
+                    tempEaSuggestionNames.add(earlyAlertSuggestionService.load(eaSuggestionId).getName());
+                }
+                studentTOIndex.setEarlyAlertReasonNames(tempEaReasonNames);
+                studentTOIndex.setEarlyAlertSuggestionNames(tempEaSuggestionNames);
+            }
+        }
+
+        final Map<String, Object> parameters = Maps.newHashMap();
 		
 		SearchParameters.addReportDateToMap(parameters);
 		parameters.put(STUDENT_TO, personTO);
@@ -186,6 +210,7 @@ public class PersonHistoryReportController extends ReportBaseController {
 				final StudentHistoryTO studentHistoryTO = studentHistoryMap
 						.get(snewDate);
 				studentHistoryTO.addEarlyAlertTO(thisEarlyAlertTO);
+
 			} else {
 				final StudentHistoryTO thisStudentHistoryTO = new StudentHistoryTO(
 						snewDate);

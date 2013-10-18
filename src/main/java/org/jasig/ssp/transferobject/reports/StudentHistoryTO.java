@@ -18,24 +18,22 @@
  */
 package org.jasig.ssp.transferobject.reports;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.JournalEntryTO;
 import org.jasig.ssp.transferobject.TaskTO;
 
-public class StudentHistoryTO { 
-		
-	String dateDayOnly;
+public class StudentHistoryTO {
+
+    String dateDayOnly;
 	
 	List<EarlyAlertTO> earlyAlerts = new ArrayList<EarlyAlertTO>();
 	List<HashMap<String, Object>> taskList = new ArrayList<HashMap<String,Object>>();	
 	HashMap<String,ArrayList<TaskTO>> taskMap = new HashMap<String,ArrayList<TaskTO>>();
-
 	List<JournalEntryTO> journalEntries = new ArrayList<JournalEntryTO>();
+    List<String> earlyAlertReasonNames = new ArrayList<String>();
+    List<String> earlyAlertSuggestionNames = new ArrayList<String>();
 
 	public StudentHistoryTO(String dateDayOnly) {
 		this.dateDayOnly = dateDayOnly;
@@ -106,6 +104,22 @@ public class StudentHistoryTO {
 	public void setTaskMap(HashMap<String, ArrayList<TaskTO>> taskMap) {
 		this.taskMap = taskMap;
 	}
+
+    public List<String> getEarlyAlertReasonNames() {
+        return earlyAlertReasonNames;
+    }
+
+    public void setEarlyAlertReasonNames(List<String> earlyAlertReasonNames) {
+        this.earlyAlertReasonNames = earlyAlertReasonNames;
+    }
+
+    public List<String> getEarlyAlertSuggestionNames() {
+        return earlyAlertSuggestionNames;
+    }
+
+    public void setEarlyAlertSuggestionNames(List<String> earlyAlertSuggestionNames) {
+        this.earlyAlertSuggestionNames = earlyAlertSuggestionNames;
+    }
 }
 
 
