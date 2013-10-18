@@ -256,11 +256,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	onCreateMapPlan:function(){
 		var me = this;
-		var view  = me.getView().getComponent("semestersets");
-		if(view == null){
-			return;
-		}
-		view.removeAll(true);
+
 
 		var terms = me.getTerms(me.currentMapPlan);
 		
@@ -308,7 +304,12 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			yearViews.push(yearView);
 			}
 		});
-			
+		
+		var view  = me.getView().getComponent("semestersets");
+		if(view == null){
+			return;
+		}
+		view.removeAll(true);			
 		Ext.suspendLayouts();
 		view.add(yearViews);	
 		Ext.resumeLayouts(true);	
