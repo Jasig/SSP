@@ -159,9 +159,9 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 
        	} else {
        		me.scope.currentMapPlan.loadFromServer(Ext.decode(serviceResponses.responseText));
+       		me.scope.currentMapPlan.set('isTemplate',true);
 			me.scope.appEventsController.getApplication().fireEvent('onLoadTemplatePlan');
 			me.scope.appEventsController.getApplication().fireEvent("onCurrentMapPlanChangeUpdateMapView");
-			me.scope.currentMapPlan.set('isTemplate',true);
 			me.scope.getView().hide();
 		}
 	},
@@ -309,6 +309,7 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 	destroy:function(){
 	    var me=this;
 	    me.store.clearFilter(false);
+	    me.store.removeListener("load", me.onStoreLoaded, me);
 	    return me.callParent( arguments );
 	}
 		

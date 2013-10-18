@@ -136,6 +136,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	
 	destroy: function(){
 		var me=this;
+		me.appEventsController.getApplication().removeListener("onUpdateCurrentMapPlanPlanToolView", me.updatePastTermButton, me);
 		if(me.allTemplatesPopUp != null && !me.allTemplatesPopUp.isDestroyed)
 		    me.allTemplatesPopUp.close();
 		 return me.callParent( arguments );
