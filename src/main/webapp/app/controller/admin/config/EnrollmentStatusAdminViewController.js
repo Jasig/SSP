@@ -102,7 +102,7 @@ Ext.define('Ssp.controller.admin.config.EnrollmentStatusAdminViewController', {
             }
             
             else {
-                var addString = "[" + "{" + '"' + me.getEsCodeField().getValue() + '":' +
+                var addString = "{" + '"' + me.getEsCodeField().getValue() + '":' +
                 '"' +
                 me.getEsLabelField().getValue();
             }
@@ -114,8 +114,7 @@ Ext.define('Ssp.controller.admin.config.EnrollmentStatusAdminViewController', {
                 '"' +
                 me.getEsDefaultField().getValue() +
                 '"' +
-                "}" +
-                "]";
+                "}";
             }
             else {
                 var addDefaultString = addString + '"';
@@ -131,7 +130,7 @@ Ext.define('Ssp.controller.admin.config.EnrollmentStatusAdminViewController', {
 						var newValueString = subDefault  + addDefaultString + "," + rest;
 						}
 				else
-					var newValueString = subDefault + addDefaultString + '"' + "}" + "]";
+					var newValueString = subDefault + addDefaultString + '"' + "}";
 			}
 		
 			
