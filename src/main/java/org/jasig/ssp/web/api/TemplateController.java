@@ -20,40 +20,37 @@ package org.jasig.ssp.web.api;
 
 import java.util.UUID;
 
+import javax.mail.SendFailedException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.apache.commons.lang.StringUtils;
-import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.TemplateLiteTOFactory;
 import org.jasig.ssp.factory.reference.TemplateTOFactory;
-import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Template;
-import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.RequestTrustService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TemplateService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.PagedResponse;
-import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.TemplateLiteTO;
 import org.jasig.ssp.transferobject.TemplateOutputTO;
 import org.jasig.ssp.transferobject.TemplateTO;
-import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -80,6 +77,9 @@ public class TemplateController  extends AbstractBaseController {
 	
 	@Autowired
 	private PersonService personService;
+	
+	@Autowired
+	private transient RequestTrustService requestTrustService;
 	
 	@Autowired
 	private TermService termService;
@@ -201,12 +201,14 @@ public class TemplateController  extends AbstractBaseController {
 	public @ResponseBody
 	TemplateTO create(@Valid @RequestBody final TemplateTO obj) throws ObjectNotFoundException,
 			ValidationException, CloneNotSupportedException {
+		
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"It is invalid to send an entity with an ID to the create method. Did you mean to use the save method instead?");
 		}
-
 		Template model = getFactory().from(obj);
+		
+		assertTemplateWritePublicApiAuthorization(model);
 		
 		model = getService().save(model);
 
@@ -217,6 +219,16 @@ public class TemplateController  extends AbstractBaseController {
 			}
 		}
 		return null;
+	}
+	
+	private void assertTemplateWritePublicApiAuthorization(Template template)
+			throws AccessDeniedException {
+		if ( securityService.hasAuthority("ROLE_MAP_PUBLIC_TEMPLATE_WRITE") || template.getIsPrivate()){
+			return;
+		}
+
+		LOGGER.warn("Access is denied for Operation. Role required: ROLE_MAP_PUBLIC_TEMPLATE_WRITE");
+		throw new AccessDeniedException("Untrusted request with insufficient permissions.");
 	}
 	
 	/**
@@ -299,7 +311,11 @@ public class TemplateController  extends AbstractBaseController {
 		if (obj.getId() == null) {
 			obj.setId(id);
 		}
+		
 		final Template oldTemplate = getService().get(id);
+		
+		assertTemplateWritePublicApiAuthorization(oldTemplate);
+		
 		final Person oldOwner = oldTemplate.getOwner();
 		
 		SspUser currentUser = getSecurityService().currentlyAuthenticatedUser();
@@ -342,7 +358,11 @@ public class TemplateController  extends AbstractBaseController {
 	public @ResponseBody
 	ServiceResponse delete(@PathVariable final UUID id)
 			throws ObjectNotFoundException {
+		Template model = getService().get(id);
+		
+		assertTemplateWritePublicApiAuthorization(model);
 		getService().delete(id);
+		
 		return new ServiceResponse(true);
 	}
 	
