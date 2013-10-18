@@ -32,15 +32,15 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["/home/codynet/workspace/ssd/SSP-Open-Source-Project/src/main/resources/reports/"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="earlyAlertReasonNames" class="java.util.List"/>
+	<parameter name="earlyAlertSuggestionNames" class="java.util.List"/>
 	<field name="createdBy.firstName" class="java.lang.String"/>
 	<field name="createdBy.lastName" class="java.lang.String"/>
 	<field name="courseName" class="java.lang.String"/>
 	<field name="courseTitle" class="java.lang.String"/>
-	<field name="earlyAlertReasonTOs" class="java.util.Set"/>
 	<field name="comment" class="java.lang.String"/>
 	<field name="closedDate" class="java.util.Date"/>
 	<field name="createdDate" class="java.util.Date"/>
-	<field name="earlyAlertSuggestionTOs" class="java.util.Set"/>
 	<field name="earlyAlertSuggestionOtherDescription" class="java.lang.String"/>
 	<field name="earlyAlertReasonOtherDescription" class="java.lang.String"/>
 	<background>
@@ -104,8 +104,8 @@
 			</staticText>
 			<subreport>
 				<reportElement uuid="f8a10acb-ebf6-47bf-ae69-2563d155e8a9" stretchType="RelativeToBandHeight" x="101" y="96" width="454" height="20" isPrintWhenDetailOverflows="true"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{earlyAlertReasonTOs})]]></dataSourceExpression>
-				<subreportExpression><![CDATA["reports/sessionDetails_subsubreport.jasper"]]></subreportExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{earlyAlertReasonNames})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["reports/earlyAlertHistorySuggestionsReasons_subreport.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="17">
@@ -125,8 +125,8 @@
 			</staticText>
 			<subreport>
 				<reportElement uuid="05823614-2838-44aa-ac47-12b8360f3341" stretchType="RelativeToBandHeight" x="101" y="0" width="454" height="20"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{earlyAlertSuggestionTOs})]]></dataSourceExpression>
-				<subreportExpression><![CDATA["reports/sessionDetails_subsubreport.jasper"]]></subreportExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{earlyAlertSuggestionNames})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["reports/earlyAlertHistorySuggestionsReasons_subreport.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="17">
