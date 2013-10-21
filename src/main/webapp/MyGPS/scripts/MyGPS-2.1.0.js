@@ -1568,7 +1568,7 @@
           var values;
           values = ko.utils.unwrapObservable(valueAccessor());
           $(element).click(function() {
-            return window.open(ko.utils.unwrapObservable(values.url), "ChildWindow", "height=" + values.height + ",width=" + values.width, "resizable=1, scrollbars=1");
+            return window.open(ko.utils.unwrapObservable(values.url), "ChildWindow", " height=" + values.height + ", width=" + values.width + ", resizable=1, scrollbars=1");
           });
           return false;
         }
