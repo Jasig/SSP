@@ -691,6 +691,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         header: 'Active',
                         required: true,
                         dataIndex: 'active',
+                        defaultValue: true,
                         renderer: me.columnRendererUtils.renderActive,
                         flex: .20,
                         field: {
@@ -831,6 +832,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         header: 'Active',
                         required: true,
                         dataIndex: 'active',
+                        defaultValue: true,
                         renderer: me.columnRendererUtils.renderActive,
                         flex: .20,
                         field: {
@@ -890,6 +892,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         header: 'Active',
                         required: true,
                         dataIndex: 'active',
+                        defaultValue: true,
                         renderer: me.columnRendererUtils.renderActive,
                         flex: .20,
                         field: {
