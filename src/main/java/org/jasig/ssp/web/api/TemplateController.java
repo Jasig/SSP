@@ -19,7 +19,6 @@
 package org.jasig.ssp.web.api;
 
 import java.util.UUID;
-
 import javax.mail.SendFailedException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -34,7 +33,6 @@ import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.RequestTrustService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TemplateService;
 import org.jasig.ssp.service.external.TermService;
@@ -77,10 +75,7 @@ public class TemplateController  extends AbstractBaseController {
 	
 	@Autowired
 	private PersonService personService;
-	
-	@Autowired
-	private transient RequestTrustService requestTrustService;
-	
+
 	@Autowired
 	private TermService termService;
 	
@@ -206,10 +201,11 @@ public class TemplateController  extends AbstractBaseController {
 			throw new ValidationException(
 					"It is invalid to send an entity with an ID to the create method. Did you mean to use the save method instead?");
 		}
+
+		assertTemplateWritePublicApiAuthorization(obj);
+
 		Template model = getFactory().from(obj);
-		
-		assertTemplateWritePublicApiAuthorization(model);
-		
+
 		model = getService().save(model);
 
 		if (null != model) {
@@ -220,16 +216,51 @@ public class TemplateController  extends AbstractBaseController {
 		}
 		return null;
 	}
-	
-	private void assertTemplateWritePublicApiAuthorization(Template template)
+
+	/**
+	 * Rejects the change request if the user is proposing saving/creating a
+	 * public {@link Template} but lacks the necessary permissions. For most
+	 * operations we do this in terms of a {@link TemplateTO}, which represents
+	 * the proposed new state, instead of a {@link Template} because
+	 * it's not the existing state that matters, it's the end state. I.e.
+	 * a user should be allowed to make a public {@link Template} private but
+	 * not vice versa. Also, testing the TO in this was is slightly more
+	 * performant than testing the mapped {@link Template} or both since we
+	 * can skip the mapping if the test fails. There is at least one case,
+	 * though (deletion), where we need the actual model (see
+	 * {@link #assertTemplateWritePublicApiAuthorization(org.jasig.ssp.model.Template)}).
+	 *
+	 * <p>This also just <em>happens</em> to work because we require that
+	 * all API update operations pass the entire object to be updated, so
+	 * the client is essentially forced to specify the privateness mode that
+	 * they want in every inbound {@link TemplateTO}</p>
+	 *
+	 * @param template
+	 * @throws AccessDeniedException
+	 */
+	private void assertTemplateWritePublicApiAuthorization(TemplateTO template)
 			throws AccessDeniedException {
 		if ( securityService.hasAuthority("ROLE_MAP_PUBLIC_TEMPLATE_WRITE") || template.getIsPrivate()){
 			return;
 		}
 
-		LOGGER.warn("Access is denied for Operation. Role required: ROLE_MAP_PUBLIC_TEMPLATE_WRITE");
-		throw new AccessDeniedException("Untrusted request with insufficient permissions.");
+		throw new AccessDeniedException("Insufficient permissions to create, delete, or make changes to a public template.");
 	}
+
+	/**
+	 * This overload intended primarily to support the delete operation.
+	 *
+	 * @see #assertTemplateWritePublicApiAuthorization(org.jasig.ssp.transferobject.TemplateTO)
+	 * @param template
+	 */
+	private void assertTemplateWritePublicApiAuthorization(Template template) {
+		if ( securityService.hasAuthority("ROLE_MAP_PUBLIC_TEMPLATE_WRITE") || template.getIsPrivate()){
+			return;
+		}
+
+		throw new AccessDeniedException("Insufficient permissions to create, delete, or make changes to a public template.");
+	}
+
 	
 	/**
 	 * Returns an html page valid for printing
@@ -311,11 +342,11 @@ public class TemplateController  extends AbstractBaseController {
 		if (obj.getId() == null) {
 			obj.setId(id);
 		}
-		
+
+		assertTemplateWritePublicApiAuthorization(obj);
+
 		final Template oldTemplate = getService().get(id);
-		
-		assertTemplateWritePublicApiAuthorization(oldTemplate);
-		
+
 		final Person oldOwner = oldTemplate.getOwner();
 		
 		SspUser currentUser = getSecurityService().currentlyAuthenticatedUser();
