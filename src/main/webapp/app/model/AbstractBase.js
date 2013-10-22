@@ -90,7 +90,7 @@ Ext.define('Ssp.model.AbstractBase', {
              // a calculated field that exists just to make binding objectStatus
              // to a checkbox a little easier.
              {name: 'active', type: 'boolean', persist: false, convert: function(value, record){
-                 if ( !(record.statusFieldsInitialized) || record.synchronizingStatusFields ) {
+                 if ( !(record.statusFieldsInitialized) ) {
                      // must be during initialization so don't worry about
                      // updating objectStatus. 'active' is a calculated field
                      // when being read from the back end, so ignore 'value'
