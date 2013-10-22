@@ -28,7 +28,7 @@
 	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 
 	<changeSet author='tony.arland' id='fix typo in ESL data perm'>
-		<preConditions>
+		<preConditions onFail="CONTINUE">
 			<tableExists tableName="up_permission"/>
 			<tableExists tableName="up_permission_activity"/>
 		</preConditions>
