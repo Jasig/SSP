@@ -134,7 +134,7 @@ public class ChallengeServiceTest {
 	@Test
 	public void testSearch() {
 		// arrange, act
-		final List<Challenge> challenges = service.challengeSearch("bad query");
+		final List<Challenge> challenges = service.challengeSearch("bad query", true);
 
 		// assert
 		assertTrue("List with a bad query should have returned an empty list.",
