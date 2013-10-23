@@ -376,7 +376,7 @@ public class PersonServiceImpl implements PersonService {
 
 					@Override
 					public Person call() throws Exception {
-						return dao.getByUsername(obj.getUsername());
+						return dao.getBySchoolId(obj.getSchoolId());
 					}
 				});
 				throw new PersonExistsException(PersonExistsException.ERROR_CONSTRAINT_VIOLATION_USERNAME,person.getId(), person.getUsername(), person.getSchoolId(),  obj.getUsername(), obj.getSchoolId(), person.getFullName());
@@ -385,14 +385,12 @@ public class PersonServiceImpl implements PersonService {
 			
 			if ( "unique_person_username".equals(constraintName) ) {
 				person = withTransaction.withNewTransactionAndUncheckedExceptionsReadOnly(new Callable<Person>() {
-
 					@Override
 					public Person call() throws Exception {
-						dao.getBySchoolId(obj.getSchoolId());
-						return dao.getBySchoolId(obj.getSchoolId());
+						return dao.getByUsername(obj.getUsername());
 					}
 				});
-				throw new PersonExistsException(PersonExistsException.ERROR_CONSTRAINT_VIOLATION_USERNAME,person.getId(), person.getUsername(), person.getSchoolId(),  obj.getUsername(), obj.getSchoolId(), person.getFullName());
+				throw new PersonExistsException(PersonExistsException.ERROR_CONSTRAINT_VIOLATION_SCHOOL_ID,person.getId(), person.getUsername(), person.getSchoolId(),  obj.getUsername(), obj.getSchoolId(), person.getFullName());
 			}
 			throw e;
 		}
