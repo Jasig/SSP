@@ -19,8 +19,6 @@
 package org.jasig.ssp.service.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +54,6 @@ import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
 import org.jasig.ssp.transferobject.AbstractPlanTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.TermNoteTO;
-import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,10 +65,9 @@ import com.google.common.collect.Lists;
  */
 @Transactional
 public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
-		TO extends AbstractPlanTO<T>, TOO extends AbstractPlanOutputTO<T,TO>,
-		TOOMT extends AbstractMessageTemplateMapPrintParamsTO<TOO, T,TO>>
+		TO extends AbstractPlanTO<T>, TOO extends AbstractPlanOutputTO<T,TO>>
 	extends  AbstractAuditableCrudService<T>
-	implements AbstractPlanService<T,TO, TOO, TOOMT> {
+	implements AbstractPlanService<T,TO, TOO> {
 
 	@Autowired
 	private SecurityService securityService;
@@ -133,16 +129,19 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 	
 	@Override
 	@Transactional(readOnly=true)
-	public SubjectAndBody createMatrixOutput(final TOOMT outputPlan) throws ObjectNotFoundException {
-
-		List<TermCourses<T,TO>> courses = collectTermCourses(outputPlan.getOutputPlan().getNonOutputTO());
-		outputPlan.setTermCourses(courses);
-		outputPlan.setTotalPlanCreditHours(calculateTotalPlanHours(courses));
+	public SubjectAndBody createMatrixOutput(final TO outputPlan) throws ObjectNotFoundException {
+		
+		//TODO eventually find a better  way to set the student when in context
+		Person student = outputPlan instanceof PlanTO ?  personService.get(UUID.fromString(((PlanTO)outputPlan).getPersonId())) : null;
+		Person owner = getPersonService().get(UUID.fromString(outputPlan.getOwnerId()));
+		
+		
+		List<TermCourses<T,TO>> courses = collectTermCourses(outputPlan);
+		Float totalPlanCreditHours = calculateTotalPlanHours(courses);
 		 
-		SubjectAndBody subjectAndBody = getMessageTemplateService().createMapPlanMatrixOutput(outputPlan);
+		SubjectAndBody subjectAndBody = getMessageTemplateService().createMapPlanMatrixOutput(student, owner, outputPlan, totalPlanCreditHours, courses, getInstitutionName());
 		return subjectAndBody;
 	}
-	
 	@Override
 	@Transactional(readOnly=true)
 	public SubjectAndBody createFullOutput(TOO planOutput) throws ObjectNotFoundException
@@ -342,9 +341,8 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 				semesterCourses.get(course.getTermCode()).addCourse(course);
 			}
 		}
-				
 		List<TermCourses<T,TO>> courses =  Lists.newArrayList(semesterCourses.values());
-			
+	
 		return courses;
 	}
 	

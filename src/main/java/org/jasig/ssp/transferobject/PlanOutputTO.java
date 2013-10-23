@@ -18,10 +18,7 @@
  */
 package org.jasig.ssp.transferobject;
 
-import java.util.UUID;
-
 import org.jasig.ssp.model.Plan;
-import org.jasig.ssp.model.reference.MessageTemplate;
 
 /** PlanOutputTO is strictly for bringing back data from client
  * for printing and email purposes
@@ -30,10 +27,6 @@ import org.jasig.ssp.model.reference.MessageTemplate;
  *
  */
 public class PlanOutputTO extends AbstractPlanOutputTO<Plan,PlanTO>{
-	
-	private UUID messageTemplateMatrixId = MessageTemplate.OUTPUT_MAP_PLAN_MATRIX_ID;
-	
-	private UUID messageTemplateFullId = MessageTemplate.OUTPUT_MAP_PLAN_FULL_ID;
     
     public PlanOutputTO(){
     	super();
@@ -46,25 +39,5 @@ public class PlanOutputTO extends AbstractPlanOutputTO<Plan,PlanTO>{
     public PlanTO getPlan() {
     	return getNonOutputTO();
     }
-    
-    @Override
-	public UUID getMessageTemplateMatrixId() {
-		return messageTemplateMatrixId;
-	}
-
-    @Override
-	public void setMessageTemplateId(UUID messageTemplateMatrixId) {
-		this.messageTemplateMatrixId = messageTemplateMatrixId;
-	}
-	
-    @Override
-	public UUID getMessageTemplateFullId() {
-		return messageTemplateFullId;
-	}
-
-    @Override
-	public void setMessageTemplateFullId(UUID messageTemplateFullId) {
-		this.messageTemplateFullId = messageTemplateFullId;
-	}
     
 }

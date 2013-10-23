@@ -18,12 +18,14 @@
  */
 package org.jasig.ssp.service.reference;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.TermCourses;
@@ -32,8 +34,9 @@ import org.jasig.ssp.service.ReferenceService;
 import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
 import org.jasig.ssp.transferobject.AbstractPlanTO;
 import org.jasig.ssp.transferobject.GoalTO;
+import org.jasig.ssp.transferobject.PlanOutputTO;
+import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.TaskTO;
-import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
 
 /**
  * MessageTemplate service
@@ -71,8 +74,9 @@ public interface MessageTemplateService extends
 	SubjectAndBody createEarlyAlertResponseToFacultyMessage(
 			Map<String, Object> messageParams);
 	
-	public <TOO extends AbstractPlanOutputTO<T, TO>, T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanMatrixOutput(
-			AbstractMessageTemplateMapPrintParamsTO<TOO, T, TO> params);
+	public <T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanMatrixOutput(final Person student, final Person owner, final TO plan, final Float totalPlanCreditHours,
+			final List<TermCourses<T, TO>> courses,
+			String institutionName);
 	
 	public  <T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanFullOutput(final Person student, final Person owner, final AbstractPlanOutputTO<T,TO> plan, 
 			final Float totalPlanCreditHours,

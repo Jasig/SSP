@@ -18,16 +18,13 @@
  */
 package org.jasig.ssp.transferobject;
 
-import java.util.UUID;
-
 import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
 import org.jasig.ssp.model.external.ExternalStudentTranscript;
-import org.jasig.ssp.model.reference.MessageTemplate;
 
 public abstract class AbstractPlanOutputTO<P extends AbstractPlan,T extends AbstractPlanTO<P>> {
 
-	// This is a minimal template that will work for both plan and template. Not optimized.
+
 	private T plan;
 	private String outputFormat;
     private Boolean includeCourseDescription;
@@ -140,19 +137,5 @@ public abstract class AbstractPlanOutputTO<P extends AbstractPlan,T extends Abst
 	 */
 	public void setGpa(ExternalStudentTranscript gpa) {
 		this.gpa = gpa;
-	}
-	
-	public UUID getMessageTemplateMatrixId() {
-		return null;
-	}
-
-	public void setMessageTemplateId(UUID messageTemplateMatrixId) {
-	}
-	
-	public UUID getMessageTemplateFullId() {
-		return null;
-	}
-
-	public void setMessageTemplateFullId(UUID messageTemplateFullId) {
 	}
 }

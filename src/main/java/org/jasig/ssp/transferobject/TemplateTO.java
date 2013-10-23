@@ -125,4 +125,6 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 		return templateCourses;
 	}
 
+
+
 }

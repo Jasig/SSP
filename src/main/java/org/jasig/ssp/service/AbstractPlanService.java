@@ -27,11 +27,8 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
 import org.jasig.ssp.transferobject.AbstractPlanTO;
-import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
 
-public interface AbstractPlanService<T extends AbstractPlan,TO extends AbstractPlanTO<T>,
-TOO extends AbstractPlanOutputTO<T,TO>,
-TOOMT extends AbstractMessageTemplateMapPrintParamsTO<TOO, T,TO>> extends AuditableCrudService<T> {
+public interface AbstractPlanService<T extends AbstractPlan,TO extends AbstractPlanTO<T>,TOO extends AbstractPlanOutputTO<T,TO>> extends AuditableCrudService<T> {
 
 	static final public String OUTPUT_FORMAT_MATRIX = "matrixFormat";
 	
@@ -43,11 +40,10 @@ TOOMT extends AbstractMessageTemplateMapPrintParamsTO<TOO, T,TO>> extends Audita
 	public T copyAndSave(T model, Person newOwner) throws CloneNotSupportedException;
 
 	SubjectAndBody createOutput(TOO plan) throws ObjectNotFoundException;
+
+	SubjectAndBody createMatrixOutput(TO plan) throws ObjectNotFoundException;
 	
 	SubjectAndBody createFullOutput(TOO plan) throws ObjectNotFoundException;
 	
 	public TO validate(TO model) throws ObjectNotFoundException;
-
-	SubjectAndBody createMatrixOutput(TOOMT outputPlan)
-			throws ObjectNotFoundException;
 }
