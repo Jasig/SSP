@@ -24,12 +24,17 @@ import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.TemplateDao;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Template;
-import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.TemplateService;
-import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.service.external.ExternalDepartmentService;
+import org.jasig.ssp.service.external.ExternalDivisionService;
+import org.jasig.ssp.service.external.ExternalProgramService;
 import org.jasig.ssp.transferobject.TemplateOutputTO;
 import org.jasig.ssp.transferobject.TemplateTO;
+import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
+import org.jasig.ssp.transferobject.reference.MessageTemplatePlanPrintParams;
+import org.jasig.ssp.transferobject.reference.MessageTemplatePlanTemplatePrintParamsTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,10 +48,23 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public  class TemplateServiceImpl extends AbstractPlanServiceImpl<Template,TemplateTO,TemplateOutputTO> implements TemplateService {
+public  class TemplateServiceImpl extends AbstractPlanServiceImpl<Template,
+TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implements TemplateService {
 
 	@Autowired
 	private transient TemplateDao dao;
+	
+	@Autowired
+	private PersonService personService;
+	
+	@Autowired
+	private transient ExternalDepartmentService departmentService;
+	
+	@Autowired
+	private transient ExternalDivisionService divisionService;
+	
+	@Autowired
+	private transient ExternalProgramService programService;
 	
 	@Override
 	protected TemplateDao getDao() {
@@ -64,9 +82,28 @@ public  class TemplateServiceImpl extends AbstractPlanServiceImpl<Template,Templ
 	public SubjectAndBody createOutput(TemplateOutputTO templateOutputDataTO) throws ObjectNotFoundException {
 
 		SubjectAndBody output = null;
-
+		
+		MessageTemplatePlanTemplatePrintParamsTO params = new MessageTemplatePlanTemplatePrintParamsTO();
+		params.setMessageTemplateId(templateOutputDataTO.getMessageTemplateMatrixId());
+		params.setOutputPlan(templateOutputDataTO);
+		
+		TemplateTO to = templateOutputDataTO.getNonOutputTO();
+		if(StringUtils.isNotBlank(to.getDepartmentCode()))
+			params.setDepartmentName(departmentService.getByCode(to.getDepartmentCode()).getName());
+		if(StringUtils.isNotBlank(to.getDivisionCode()))
+			params.setDivisionName(divisionService.getByCode(to.getDivisionCode()).getName());
+		if(StringUtils.isNotBlank(to.getProgramCode()))
+			params.setProgramName(programService.getByCode(to.getProgramCode()).getName());
+		
+		params.setInstitutionName(getInstitutionName());
+		
+		if(StringUtils.isNotBlank(templateOutputDataTO.getPlan().getOwnerId())){
+			params.setOwner(personService.get(
+					UUID.fromString(templateOutputDataTO.getPlan().getOwnerId())));
+		}
+		
 		if(templateOutputDataTO.getOutputFormat().equals(TemplateService.OUTPUT_FORMAT_MATRIX)) {
-			output = createMatrixOutput(templateOutputDataTO.getNonOutputTO());
+			output = createMatrixOutput(params);
 		} else{
 			output = createFullOutput(templateOutputDataTO);
 		}
