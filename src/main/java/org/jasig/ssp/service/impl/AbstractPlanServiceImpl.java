@@ -345,21 +345,6 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 				
 		List<TermCourses<T,TO>> courses =  Lists.newArrayList(semesterCourses.values());
 			
-		// Order terms in map for printing
-		Collections.sort(courses, new Comparator<TermCourses<T,TO>>() {
-		    public int compare(TermCourses<T,TO> a, TermCourses<T,TO> b) {
-		       return a.getTerm().getStartDate().compareTo(b.getTerm().getStartDate());
-		    }
-		});
-				
-		// Order courses in terms for printing
-		for(TermCourses<T, TO> course: semesterCourses.values())
-			Collections.sort(course.getCourses(), new Comparator<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>() {
-			    public int compare(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> a, AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> b) {
-			       return a.getOrderInTerm().compareTo(b.getOrderInTerm());
-			    }
-		});
-		
 		return courses;
 	}
 	
