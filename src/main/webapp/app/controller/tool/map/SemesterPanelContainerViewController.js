@@ -791,9 +791,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				}
 			}
 			for(var i = 0; i < planCourses.length; i++){
-				var planCourse = planCourses[i];
-				if(planCourse.isTranscript)
-					continue;
+				var planCourse = planCourses[i];				
 				var currentCourseTerm = planCourse.termCode;
 				var termCourseCode = termMap[currentCourseTerm];
 				if(termCourseCode == false && !planCourse.duplicateOfTranscript){
