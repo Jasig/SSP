@@ -37,6 +37,8 @@ public class StudentDocumentTO extends AbstractAuditableTO<StudentDocument> impl
     
     private UUID confidentialityLevelId;
     
+    private String confidentialityLevelName;
+    
     private String fileName;
     
     private String author;
@@ -47,6 +49,7 @@ public class StudentDocumentTO extends AbstractAuditableTO<StudentDocument> impl
     public StudentDocumentTO(StudentDocument studentDocument) {
     	this.setComment(studentDocument.getComments());
     	this.setConfidentialityLevelId(studentDocument.getConfidentialityLevel().getId());
+    	this.setConfidentialityLevelName(studentDocument.getConfidentialityLevel().getName());
     	this.setFileName(studentDocument.getFileName());
     	this.setName(studentDocument.getName());
     	this.setAuthor(studentDocument.getAuthor().getFullName());
@@ -98,5 +101,11 @@ public class StudentDocumentTO extends AbstractAuditableTO<StudentDocument> impl
 
 	public void setAuthor(String author) {
 		this.author = author;
+	}
+	public String getConfidentialityLevelName() {
+		return confidentialityLevelName;
+	}
+	public void setConfidentialityLevelName(String confidentialityLevelName) {
+		this.confidentialityLevelName = confidentialityLevelName;
 	}
 }
