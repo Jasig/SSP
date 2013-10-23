@@ -23,7 +23,8 @@ Ext.define('Ssp.view.tools.map.StudentTranscriptViewer', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.map.MAPController',
     width: 440,
-    height: 300,   
+    height: 300,  
+    overflowY: 'auto', 
     layout: {
                 type: 'fit'
             },
@@ -31,6 +32,8 @@ Ext.define('Ssp.view.tools.map.StudentTranscriptViewer', {
         Ext.apply(this,
 		{
 			title: 'Student Transcript',
+			height:Ext.getBody().getViewSize().height*0.60,
+    			width:Ext.getBody().getViewSize().width*0.50,    
 			items: [
 		{
 		xtype: 'transcript'
