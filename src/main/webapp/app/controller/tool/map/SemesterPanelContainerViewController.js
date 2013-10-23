@@ -560,15 +560,19 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				show: true
             }
 		var metaData = new Ssp.model.tool.map.PlanOutputData();
-		metaData.set('outputFormat', 'fullFormat');
+		
 		metaData.set('includeCourseDescription', true);
 		metaData.set('includeHeaderFooter', true);
 		metaData.set('includeTotalTimeExpected', true);
 		metaData.set('includeFinancialAidInformation', true);
 		
 		var planType = "plan";
-		if(me.currentMapPlan.get("isTemplate") == true)
+		if(me.currentMapPlan.get("isTemplate") == true){
 			planType = "template";
+			metaData.set('outputFormat', 'matrixFormat');
+		}else{
+			metaData.set('outputFormat', 'fullFormat');
+		}
 			
 		me.mapPlanService.print(me.semesterStores, 
 			metaData,

@@ -42,6 +42,7 @@ import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
 import org.jasig.ssp.transferobject.AbstractPlanTO;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -238,21 +239,20 @@ public class MessageTemplateServiceImpl extends
 				messageParams);
 	}
 	
+	
 	@Override
-	public <T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanMatrixOutput(final Person student, final Person owner, TO plan, 
-			final Float totalPlanCreditHours,
-			final List<TermCourses<T, TO>> termCourses,
-			final String institutionName) {
+	public <TOO extends AbstractPlanOutputTO<T, TO>, T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanMatrixOutput(
+			AbstractMessageTemplateMapPrintParamsTO<TOO, T, TO> params) {
 		
 		final Map<String, Object> messageParams =  addParamsToMapPlan(
-				student,
-				owner, 
-				plan, 
-				totalPlanCreditHours,
-				termCourses,
-				institutionName);
-		 
-		return populateFromTemplate(MessageTemplate.OUTPUT_MAP_PLAN_MATRIX_ID, messageParams);
+				params.getStudent(), 
+				params.getOwner(), 
+				params.getOutputPlan().getNonOutputTO(),
+				params.getTotalPlanCreditHours(),
+				params.getTermCourses(),
+				params.getInstitutionName());
+		messageParams.put("printParams", params);
+		return populateFromTemplate(params.getMessageTemplateId(), messageParams);
 	}
 	
 	@Override
@@ -310,6 +310,9 @@ public class MessageTemplateServiceImpl extends
 		final Map<String, Object> messageParams = new HashMap<String, Object>(); 
 		
 		messageParams.put("title", plan.getName());
+		messageParams.put("plan", plan);
+		SimpleDateFormat formatter = new SimpleDateFormat("MMM-dd-yyyy");
+		messageParams.put("lastModified", formatter.format(plan.getModifiedDate()));
 		messageParams.put("planContactNotes", plan.getContactNotes());
 		messageParams.put("planStudentNotes", plan.getStudentNotes());
 		messageParams.put("termCourses", termCourses);

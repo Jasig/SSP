@@ -413,7 +413,7 @@ Ext.define('Ssp.service.MapPlanService', {
 			});
 		}
 	    me.updateCurrentMap(semesterStores);
-	    outputData.set("plan",me.currentMapPlan.getSimpleJsonData());
+	    outputData.set("plan", me.currentMapPlan.getSimpleJsonData());
 	    outputData.set("isPrivate",isPrivate);
     }
     	

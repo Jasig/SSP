@@ -37,6 +37,8 @@ import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
 import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
+import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
+import org.jasig.ssp.transferobject.reference.MessageTemplatePlanPrintParams;
 import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
 import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
 import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO;
@@ -54,7 +56,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOutputTO>
+public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOutputTO,MessageTemplatePlanPrintParams>
 		implements PlanService {
 
 	@Autowired
@@ -102,7 +104,20 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 		SubjectAndBody output = null;
 
 		if(planOutputDataTO.getOutputFormat().equals(PlanService.OUTPUT_FORMAT_MATRIX)) {
-			output = createMatrixOutput(planOutputDataTO.getNonOutputTO());
+			MessageTemplatePlanPrintParams params = new MessageTemplatePlanPrintParams();
+			params.setMessageTemplateId(planOutputDataTO.getMessageTemplateMatrixId());
+			params.setOutputPlan(planOutputDataTO);
+			params.setInstitutionName(getInstitutionName());
+			if(StringUtils.isNotBlank(planOutputDataTO.getPlan().getOwnerId())){
+				params.setOwner(personService.get(
+						UUID.fromString(planOutputDataTO.getPlan().getOwnerId())));
+			}
+			
+			if(StringUtils.isNotBlank(planOutputDataTO.getPlan().getPersonId())){
+				params.setStudent(personService.get(
+						UUID.fromString(planOutputDataTO.getPlan().getPersonId())));
+			}
+			output = createMatrixOutput(params);
 		} else{
 			UUID personID = UUID.fromString(planOutputDataTO.getPlan().getPersonId());
 			String schoolId = personService.get(personID).getSchoolId();
@@ -113,6 +128,7 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 
 		return output;
 	}
+	
 
 	@Override
 	public PagingWrapper<Plan> getAllForStudent(

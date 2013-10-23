@@ -23,8 +23,121 @@
 				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-	<!-- Intentionally empty. For now. Just reserving this changelog name b/c of
-	an ongoing fix in rel-2-0-patches that will need to be merged up into
-	master -->
+	<changeSet id="Add map print template" author="jim.stanley">
+		<insert tableName="message_template">
+			<column name="id" value="bcc180b0-3a8b-11e3-aa6e-0800200c9a66" />
+			<column name="name" value="Template Plan Printout" />
+			<column name="description" value="Template Plan Printout" />
+			<column name="subject" value="Template Plan" />
+			<column name="body" ><![CDATA[<div>
 
+<p text-align="center" style="padding-left:10%">
+<table style="width:80%" ><tbody>
+<tr>
+<td style="text-align:left;width:30%" ></td>
+<td style="text-align:center;width:30%;font-size:large" ><b>$!title</b></td>
+<td style="text-align:right;width:30%;font-size:small" >Last Modified: $!lastModified</td>
+</tr>
+<tr>
+<td style="text-align:left;font-size:small" >#if($!printParams.divisionName)Division: $!printParams.divisionName#end</td>
+<td style="text-align:center;font-size:small" >#if($!printParams.departmentName)Department: $!printParams.departmentName#end</td>
+<td style="text-align:right;font-size:small" >#if($!printParams.programName)Program: $!printParams.programName#end</td>
+</tr>
+</tbody></table>
+<b>
+</p>
+</div>
+<div style="position:relative;left:100px">
+	#foreach($termCourse in $termCourses) 
+		<table cellpadding="0" cellspacing="0" style="background-color:white;width:80%;border-collapse:collapse;">
+			<caption  style="font-size:small;text-align:left">$termCourse.term.name #if($!termCourse.studentNotes) - $!termCourse.studentNotes#end</caption>
+			<thead>
+				<tr >
+					<th style="text-align:center;border:1px solid black;width:15%">
+						Course<br/>Number
+					</th>
+					<th style="text-align:center;border:1px solid black;width:50%">
+						Course Title
+					</th>
+					<th style="text-align:center;border:1px solid black;width:15%">
+						Credit <br/> Hours
+					</th>
+					<th style="text-align:center;border:1px solid black;width:25%">
+						Notes <b>(Student)</b> <br/> 
+					</th>
+				</tr>
+			</thead>
+			#foreach($course in $!termCourse.courses)
+			<tr>
+				<td style="text-align:center;border:1px solid black;width:15%;padding-bottom:5px; padding-top:5px;padding-left:5px">
+					$!course.formattedCourse
+				</td>
+				<td style="text-align:left;border:1px solid black;width:50%;padding-bottom:5px; padding-top:5px;padding-left:5px">
+					$!course.courseTitle
+				</td>
+				<td style="text-align:center;border:1px solid black;width:15%;padding-bottom:5px; padding-top:5px;padding-left:5px">
+					$!course.creditHours
+				</td>
+				<td style="text-align:center;border:1px solid black;width:25%;padding-bottom:5px; padding-top:5px;padding-left:5px">
+					$!course.studentNotes
+				</td>
+			</tr>
+			<tr>
+			#end
+			<tr>
+			<td colspan="3" style="height:35px; padding-bottom:5px; padding-left:80px;vertical-align:bottom">
+			 	<b>Total Credit Hours:</b>  $!termCourse.totalCreditHours
+			</td>
+			</tr>
+			<tr>
+			<td colspan="3" style="height:15px">
+			<br/>
+			</td>
+			</tr>
+		</table>
+	#end
+	<table style="width:80%">
+		<tbody>
+		#if($!planStudentNotes)
+		<tr>
+		<td style="text-align:left">
+		   Notes:
+		</td>
+		</tr>
+		<tr>
+		<td style="text-align:left;padding-left10px;">
+		   $!planStudentNotes
+		</td>
+		</tr>
+		#end
+		<tr>
+		<td style="text-align:center">
+		<b>Total Template Hours: $!totalPlanHours</b>
+		</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+	<div>
+	<p style="padding-left:20px">
+	For questions, contact:</br>
+	<b>&#160;&#160;&#160;$!coachFullName</br>
+	&#160;&#160;&#160;$!coachPhone2</br>
+	&#160;&#160;&#160;$!coachEmail</br>
+	</p>
+	</div>
+	]]></column>
+			<column name="created_date" valueDate="2013-04-23T10:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="message_template">
+				<where>id = 'bcc180b0-3a8b-11e3-aa6e-0800200c9a66'</where>
+			</delete>
+		</rollback>
+	</changeSet>
 </databaseChangeLog>

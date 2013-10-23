@@ -39,6 +39,7 @@ import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.external.ExternalPersonPlanStatus;
 import org.jasig.ssp.model.reference.Config;
+import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.MessageService;
@@ -289,7 +290,7 @@ public class PlanController  extends AbstractBaseController {
 	public @ResponseBody
 	String print(final HttpServletResponse response,
 			 @RequestBody final PlanOutputTO planOutputDataTO) throws ObjectNotFoundException {
-
+		
 		SubjectAndBody message = service.createOutput(planOutputDataTO);
 		if(message != null)
 			return message.getBody();
@@ -307,6 +308,7 @@ public class PlanController  extends AbstractBaseController {
 		Plan currentPlan = service.getCurrentForStudent(personId);
 		PlanTO planTO = getFactory().from(currentPlan);
 		planOutputDataTO.setPlan(planTO);
+		
 		SubjectAndBody message = service.createOutput(planOutputDataTO);
 		if(message != null)
 			return message.getBody();
@@ -364,6 +366,8 @@ public class PlanController  extends AbstractBaseController {
 	public @ResponseBody
 	String email(final HttpServletResponse response,
 			 @RequestBody final PlanOutputTO planOutputDataTO) throws ObjectNotFoundException {
+		
+		
 		SubjectAndBody messageText = service.createOutput(planOutputDataTO);
 		if(messageText == null)
 			return null;
