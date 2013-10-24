@@ -196,8 +196,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             me.profileServiceReasonsStore.loadData(me.person.get('serviceReasons'));
         }
 
-		// load service reasonssd
-        if (personResponse.serviceReasons != null) {
+		// load special service groups
+        if (personResponse.specialServiceGroups != null) {
             me.profileSpecialServiceGroupsStore.loadData(me.person.get('specialServiceGroups'));
         }
 
