@@ -487,14 +487,14 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         flex: .20,
                         field: {
                             xtype: 'textfield'
-                        },
+                        }
                     }, {
                         header: 'Description',
                         dataIndex: 'description',
                         flex: .30,
                         field: {
                             xtype: 'textfield'
-                        },
+                        }
                     }, {
                         header: 'Acronym',
                         dataIndex: 'acronym',

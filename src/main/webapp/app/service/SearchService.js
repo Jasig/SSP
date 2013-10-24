@@ -126,7 +126,7 @@ Ext.define('Ssp.service.SearchService', {
 		 planStatus: planStatus,
 		 myCaseload: myCaseload,
 		 myPlans: myPlans,
-		 birthDate: birthDate,
+		 birthDate: birthDate
 		}, callbacks);
     }
 });

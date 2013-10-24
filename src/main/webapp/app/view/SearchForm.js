@@ -261,7 +261,7 @@ Ext.define('Ssp.view.SearchForm',{
                                        }
                                  },
                          	   labelAlign: 'left',
-                         	   columnWidth: .45,
+                         	   columnWidth: .45
                             },
                             {
         				       xtype: 'datefield',
@@ -271,7 +271,7 @@ Ext.define('Ssp.view.SearchForm',{
                          	   columnWidth: .45,
                          	   fieldLabel: 'Birth Date',
                          	   name: 'birthDate',
- 							   itemId: 'birthDate',
+ 							   itemId: 'birthDate'
                             }              
                  ]},
 
