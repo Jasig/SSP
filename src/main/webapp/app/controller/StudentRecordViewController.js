@@ -31,6 +31,9 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 			collapse: 'onCollapsed',
 			expand: 'onExpanded'
 		},
+		'emailStudentButton': {
+            click: 'onEmailStudentButtonClick'
+        },		
 		'studentRecordEditButton': {
             click: 'onStudentRecordEditButtonClick'
         },
@@ -47,13 +50,18 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     },
     
     onCollapsed: function(){
-    	this.appEventsController.getApplication().fireEvent('collapseStudentRecord');
+    	var me=this;
+    	me.appEventsController.getApplication().fireEvent('collapseStudentRecord');
     },
-    
     onExpanded: function(){
-    	this.appEventsController.getApplication().fireEvent('expandStudentRecord');
+    	var me=this;
+    	me.appEventsController.getApplication().fireEvent('expandStudentRecord');
     },
-	
+    onEmailStudentButtonClick: function(button){
+        var me = this;
+   		me.emailStudentPopup = Ext.create('Ssp.view.EmailStudentView');
+   		me.emailStudentPopup.show();
+    },	
 	onStudentRecordEditButtonClick: function(button){
         var me=this;
         var skipCallBack = this.appEventsController.getApplication().fireEvent('personToolbarEdit',me);  
@@ -63,16 +71,15 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
         }
     },
     studentRecordEdit: function(){
-    	var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
+    	var me=this;
+    	var comp = me.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
     },
 	onEmailCoachButtonClick: function(button){
         var me=this;
-        this.appEventsController.getApplication().fireEvent('emailCoach');
-        
+        me.appEventsController.getApplication().fireEvent('emailCoach');
     },
-	
 	onViewCoachingHistoryButtonClick: function(button){
         var me=this;
-       this.appEventsController.getApplication().fireEvent('viewCoachHistory');
+        me.appEventsController.getApplication().fireEvent('viewCoachHistory');
     }
 });

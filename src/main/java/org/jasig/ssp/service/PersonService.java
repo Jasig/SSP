@@ -32,11 +32,13 @@ import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PersonSearchRequestTO;
+import org.jasig.ssp.transferobject.EmailStudentRequestTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.portlet.PortletRequest;
@@ -285,5 +287,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	String getSchoolIdForPersonId(UUID personId) throws ObjectNotFoundException;
 
 	void evict(Person model);
+
+	boolean emailStudent(EmailStudentRequestTO emailRequest) throws ObjectNotFoundException, ValidationException;
 
 }

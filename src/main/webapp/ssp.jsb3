@@ -1071,6 +1071,11 @@
                     "path": "/app/model/external/"
                 },
                 {
+                    "clsName": "Ssp.model.EmailStudentRequest",
+                    "name": "EmailStudentRequest.js",
+                    "path": "/app/model/"
+                },                
+                {
                     "clsName": "Ssp.model.external.CourseRequisite",
                     "name": "CourseRequisite.js",
                     "path": "/app/model/external/"
@@ -1417,6 +1422,16 @@
                     "name": "StudentRecord.js",
                     "path": "/app/view/"
                 },
+                {
+                    "clsName": "Ssp.view.EmailStudentForm",
+                    "name": "EmailStudentForm.js",
+                    "path": "/app/view/"
+                },                 
+                {
+                    "clsName": "Ssp.view.EmailStudentView",
+                    "name": "EmailStudentView.js",
+                    "path": "/app/view/"
+                },                
                 {
                     "clsName": "Ssp.view.ProgramStatusChangeReasonWindow",
                     "name": "ProgramStatusChangeReasonWindow.js",

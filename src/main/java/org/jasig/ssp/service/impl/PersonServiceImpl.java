@@ -32,25 +32,34 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.portlet.PortletRequest;
 
 import org.hibernate.exception.ConstraintViolationException;
-import org.jasig.ssp.dao.PersonExistsException;
 import org.jasig.ssp.dao.PersonDao;
+import org.jasig.ssp.dao.PersonExistsException;
+import org.jasig.ssp.model.JournalEntry;
+import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.external.ExternalPerson;
+import org.jasig.ssp.model.reference.ConfidentialityLevel;
+import org.jasig.ssp.model.reference.JournalSource;
 import org.jasig.ssp.security.PersonAttributesResult;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.service.EarlyAlertService;
+import org.jasig.ssp.service.JournalEntryService;
+import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
+import org.jasig.ssp.service.reference.ConfidentialityLevelService;
+import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
+import org.jasig.ssp.transferobject.EmailStudentRequestTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
-import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.util.transaction.WithTransaction;
@@ -72,7 +81,7 @@ import com.google.common.collect.Sets;
  * Person service implementation
  * 
  * @author jon.adams
- */
+ */ 
 @Service
 @Transactional
 public class PersonServiceImpl implements PersonService {
@@ -104,6 +113,19 @@ public class PersonServiceImpl implements PersonService {
 
 	@Autowired
 	private transient EarlyAlertService earlyAlertService;
+	
+	@Autowired
+	private transient MessageService messageService;
+	
+	@Autowired
+	private transient JournalEntryService journalEntryService;
+	
+	
+	@Autowired
+	private transient JournalSourceService journalSourceService;
+	
+	@Autowired
+	private transient ConfidentialityLevelService confidentialityLevelService;
 
 	/**
 	 * If <code>true</code>, each individual coach synchronized by
@@ -775,5 +797,171 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public void evict(Person model) {
 		dao.removeFromSession(model);	
+	}
+
+	@Override
+	public boolean emailStudent(EmailStudentRequestTO emailRequest) throws ObjectNotFoundException, ValidationException {
+		
+		validateInput(emailRequest);		
+		
+		Message message = buildAndSendStudentEmail(emailRequest);
+		
+		buildJournalEntryIfNecessary(emailRequest, message);
+		
+		return true;
+		
+	}
+
+	private void buildJournalEntryIfNecessary(
+			EmailStudentRequestTO emailRequest, Message message)
+			throws ObjectNotFoundException, ValidationException {
+		if(emailRequest.getCreateJournalEntry())
+		{
+			Person student = get(emailRequest.getStudentId());
+			
+			JournalEntry journalEntry = new JournalEntry();
+			journalEntry.setPerson(student);
+			
+			String commentFromEmail = buildJournalEntryCommentFromEmail(emailRequest, message);
+			
+			ConfidentialityLevel confidentialityLevel;
+			if(emailRequest.getConfidentialityLevelId() == null)
+			{
+				confidentialityLevel = confidentialityLevelService.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE);
+			}
+			else
+			{
+				confidentialityLevel = confidentialityLevelService.get(emailRequest.getConfidentialityLevelId());
+			}
+			journalEntry.setConfidentialityLevel(confidentialityLevel);
+			journalEntry.setComment(commentFromEmail);
+			journalEntry.setEntryDate(new Date());
+			journalEntry.setJournalSource(journalSourceService.get(JournalSource.JOURNALSOURCE_EMAIL_ID));
+			journalEntryService.save(journalEntry);
+		}
+	}
+
+	private String buildJournalEntryCommentFromEmail(
+			EmailStudentRequestTO emailRequest, Message message) {
+		StringBuilder journalEntryCommentBuilder = new StringBuilder();
+		String EOL = System.getProperty("line.separator");
+		journalEntryCommentBuilder.append("FROM: " + message.getSender().getFullName() + EOL);
+		journalEntryCommentBuilder.append("TO: " + message.getRecipientEmailAddress() + EOL);
+		if(message.getCarbonCopy() != null)
+		{
+			journalEntryCommentBuilder.append("CC: " + message.getCarbonCopy() + EOL);
+		}
+		journalEntryCommentBuilder.append(EOL);
+		journalEntryCommentBuilder.append("Subject: "+emailRequest.getEmailSubject() + EOL);
+		journalEntryCommentBuilder.append(EOL);
+		journalEntryCommentBuilder.append("Email Message: "+emailRequest.getEmailBody() + EOL);
+		journalEntryCommentBuilder.append(EOL);
+		
+		return journalEntryCommentBuilder.toString();
+	}
+
+	private void validateInput(EmailStudentRequestTO emailRequest) {
+		if(emailRequest.getStudentId() == null)
+		{
+			throw new IllegalArgumentException("Must provide a student Id");
+		}
+		if(validateAddresses(emailRequest))
+		{
+			throw new IllegalArgumentException("Must enter at least one email address");
+		}
+		if(org.apache.commons.lang.StringUtils.isBlank(emailRequest.getEmailSubject()))
+		{
+			throw new IllegalArgumentException("Email subject must be provided");
+		}
+		if(org.apache.commons.lang.StringUtils.isBlank(emailRequest.getEmailBody()))
+		{
+			throw new IllegalArgumentException("Email body must be provided");
+		}
+	}
+
+	private Message buildAndSendStudentEmail(EmailStudentRequestTO emailRequest)
+			throws ObjectNotFoundException {
+		SubjectAndBody subjectAndBody = new SubjectAndBody(emailRequest.getEmailSubject(), emailRequest.getEmailBody());
+		
+		String toAddress = null;
+		
+		String ccString = null;
+		
+		//If the primary email is not provided then secondary email gets promoted to the 'to' address
+		//If primary and secondary email not provided then the first alternate email gets promoted
+		if(org.apache.commons.lang.StringUtils.isNotBlank(emailRequest.getPrimaryEmail()))
+		{
+			toAddress = emailRequest.getPrimaryEmail();
+			ccString = buildCCString(emailRequest.getSecondaryEmail(),emailRequest.getAdditionalEmail());
+		}
+		else
+		if(org.apache.commons.lang.StringUtils.isNotBlank(emailRequest.getSecondaryEmail()))
+		{
+			toAddress = emailRequest.getSecondaryEmail();
+			ccString = buildCCString(null,emailRequest.getAdditionalEmail());
+		}
+		else
+		{
+			String[] addresses = emailRequest.getAdditionalEmail().split(",");
+			int count =0;
+			StringBuilder builder = new StringBuilder();
+			for (String address : addresses) {
+				if(count == 0)
+				{
+					toAddress = address;
+				}
+				else
+				{
+					builder.append(address.trim());
+					builder.append(",");
+				}
+				count++;
+			}
+			if(count > 1)
+			{
+				builder.deleteCharAt(builder.lastIndexOf(","));
+			}
+			ccString = builder.toString().trim();
+		}
+		return messageService.createMessage(toAddress, ccString, subjectAndBody);
+	}
+
+	private boolean validateAddresses(EmailStudentRequestTO emailRequest) {
+		return org.apache.commons.lang.StringUtils.isBlank(emailRequest.getPrimaryEmail()) && 
+				org.apache.commons.lang.StringUtils.isBlank(emailRequest.getSecondaryEmail()) && 
+				org.apache.commons.lang.StringUtils.isBlank(emailRequest.getAdditionalEmail());
 	} 
+	
+	private String buildCCString(String secondaryEmailAddress,
+			String alternateEmailAddress) 
+	{
+		StringBuilder builder = new StringBuilder();
+		if(org.apache.commons.lang.StringUtils.isNotBlank(secondaryEmailAddress))
+		{
+			builder.append(secondaryEmailAddress);
+			
+			if(org.apache.commons.lang.StringUtils.isNotBlank(alternateEmailAddress))
+			{
+				String[] addresses = alternateEmailAddress.split(",");
+				for (String address : addresses) {
+					builder.append(",");
+					builder.append(address.trim());
+				}
+			}
+
+		}
+		else
+		{
+			if(org.apache.commons.lang.StringUtils.isNotBlank(alternateEmailAddress))
+			{
+				String[] addresses = alternateEmailAddress.split(alternateEmailAddress);
+				for (String address : addresses) {
+					builder.append(address);
+					builder.append(",");
+				}
+				builder.deleteCharAt(builder.lastIndexOf(","));
+			}
+		}
+		return builder.toString();
+	}
 }

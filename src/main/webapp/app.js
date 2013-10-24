@@ -33,6 +33,8 @@ Ext.require([
     'Ssp.view.Search',
     'Ssp.view.SearchForm',
     'Ssp.view.StudentRecord',
+    'Ssp.view.EmailStudentForm',
+    'Ssp.view.EmailStudentView',
     'Ssp.view.ProgramStatusChangeReasonWindow',
     'Ssp.view.person.CaseloadAssignment',
     'Ssp.view.person.EditPerson',
@@ -223,6 +225,7 @@ Ext.require([
 	'Ssp.model.PersonAppointment',
 	'Ssp.model.Appointment',
 	'Ssp.model.CaseloadPerson',
+	'Ssp.model.EmailStudentRequest',
 	'Ssp.model.SearchPerson',
 	'Ssp.model.SearchCriteria',
 	'Ssp.model.CaseloadFilterCriteria',
@@ -675,6 +678,12 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+			        currentCourse:{
+				        fn: function(){
+				            return new Ssp.model.external.Course({id:""});
+				    	},
+				        singleton: true
+			        },			        
 			        currentJournalStep:{
 				        fn: function(){
 				            return new Ssp.model.reference.JournalStep({id:""});
