@@ -55,7 +55,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
 				    },
 					{
 		                xtype: 'tbspacer',
-		                width: 25
+		                width: 85
 		            },
 		            {
 		                xtype: 'combobox',
@@ -94,7 +94,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
 				    },
 					{
 		                xtype: 'tbspacer',
-		                width: 118
+		                width: 178
 		            },				    
 				    {
 		            	xtype: 'displayfield',
@@ -125,7 +125,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
 				    },
 					{
 		                xtype: 'tbspacer',
-		                width: 102
+		                width: 162
 		            },				    
 				    {
 		            	xtype: 'displayfield',
@@ -153,7 +153,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
 					    },
 						{
 			                xtype: 'tbspacer',
-			                width: 100
+			                width: 50
 			            },						    
 					    {
 			            	xtype: 'textfield',
