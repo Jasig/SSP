@@ -27,6 +27,7 @@ Ext.define('Ssp.view.tools.map.FAView', {
     },
     height: 475,
     width: 380,
+    style : 'z-index: -1;',  
     resizable: true,
     initComponent: function(){
         var me = this;

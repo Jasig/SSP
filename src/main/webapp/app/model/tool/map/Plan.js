@@ -126,7 +126,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		}
     	
     	Ext.Array.forEach(planCourses, function(planCourse) {
-    	if(termCodes.indexOf(planCourse.termCode) < 0){
+    	if( Ext.Array.indexOf(termCodes, planCourse.termCode) < 0 ) {
     		termCodes[i++] = planCourse.termCode;
     	}});
     	return termCodes;
