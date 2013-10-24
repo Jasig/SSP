@@ -17,134 +17,108 @@
  * under the License.
  */
 .addPersonIcon {
-background-image: url('/ssp/images/add-person-icon.png') !important;
+background: url('/ssp/images/add-person-icon.png') !important;
 }
 
 .addToolIcon {
 height: 10px;
 width: 10px;
-background-image: url('/ssp/images/add-tool-icon.png') !important;
+background: url('/ssp/images/add-tool-icon.png') !important;
 }
 
 .confidentialityAgreementIcon{
-background-image: url('/ssp/images/confidentiality-agreement-icon.png') !important;
+background: url('/ssp/images/confidentiality-agreement-icon.png') !important;
 }
 
 .deletePersonIcon {
-background-image: url('/ssp/images/delete-person-icon.png') !important;
+background: url('/ssp/images/delete-person-icon.png') !important;
 }
 
 .displaySearchIcon {
-background-image: url('/ssp/images/display-search-icon.png') !important;
+background: url('/ssp/images/display-search-icon.png') !important;
 }
 
 .displayCaseloadIcon {
-background-image: url('/ssp/images/display-caseload-icon.png') !important;
+background: url('/ssp/images/display-caseload-icon.png') !important;
 }
 
 .earlyAlertResponseIcon {
-background-image: url('/ssp/images/mail-reply-icon.png') !important;
+background: url('/ssp/images/mail-reply-icon.png') !important;
 }
 
 .editPencilIcon {
-background-image: url('/ssp/images/pencil.png') !important;
-background: transparent;
+background: transparent url('/ssp/images/pencil.png') no-repeat !important;
  border-style:none;
- background-repeat: no-repeat;
 }
 
 .deleteIcon {
-background-image: url('/ssp/images/delete-icon.png') !important;
-background: transparent;
- border-style:none;
- background-repeat: no-repeat;
+background: transparent url('/ssp/images/delete-icon.png') no-repeat !important;
+ border-style:none; 
 }
 
 .mapPrintIcon {
-background-image: url('/ssp/images/print-icon.png') !important;
-background: transparent;
+background: transparent url('/ssp/images/print-icon.png') no-repeat !important;
  border-style:none;
- background-repeat: no-repeat;
 }
 
 .mapMovePlanIcon {
-background-image: url('/ssp/images/move-plan.png') !important;
-background: transparent;
- border-style:none;
- background-repeat: no-repeat;
+background: transparent url('/ssp/images/move-plan.png') no-repeat !important;
+ border-style:none; 
  width:48px;
 }
 
 .transcriptIcon {
-background-image: url('/ssp/images/icon-transcript.png') !important;
-background: transparent;
- border-style:none;
- background-repeat: no-repeat;
+background: transparent url('/ssp/images/icon-transcript.png') no-repeat !important;
+ border-style:none; 
  width:22px;
 }
 
 
 
 .mapEmailIcon {
-background-image: url('/ssp/images/email-icon.png') !important;
-background: transparent;
+background: transparent url('/ssp/images/email-icon.png') no-repeat !important;
  border-style:none;
- background-repeat: no-repeat;
 }
 
 .planMoveBackwardIcon {
-background-image: url('/ssp/images/backward.png') !important;
-background: transparent;
+background: transparent url('/ssp/images/backward.png') no-repeat !important;
  border-style:none;
- background-repeat: no-repeat;
 }
 
 .planMoveForwardIcon {
-background-image: url('/ssp/images/forward.png') !important;
-background: transparent;
+background: transparent url('/ssp/images/forward.png') no-repeat !important;
  border-style:none;
- background-repeat: no-repeat;
 }
 
 .mapNotesIcon {
-background-image: url('/ssp/images/plan-notes.png') !important;
-background: transparent;
+background: transparent url('/ssp/images/plan-notes.png') no-repeat !important;
  border-style:none;
- background-repeat: no-repeat;
 }
 
 .planEmailIcon {
-background-image: url('/ssp/images/email-icon.png') !important;
-background: transparent;
+background: transparent url('/ssp/images/email-icon.png') no-repeat !important;
  border-style:none;
- background-repeat: no-repeat;
 }
 
 .mapFAIcon {
-background-image: url('/ssp/images/dollar2.png') !important;
-background: transparent;
+background: transparent url('/ssp/images/dollar2.png') no-repeat !important;
  border-style:none;
- background-repeat: no-repeat;
 }
 
 .mapClearSearchIcon {
-background-image: url('/ssp/images/cancelsearchIcon.png') !important;
-background: transparent;
+background: transparent url('/ssp/images/cancelsearchIcon.png') no-repeat !important;
  border-style:none;
- background-repeat: no-repeat;
 }
 
 .overviewIcon {
-background-image: url('/ssp/images/document.png') !important;
-background: transparent;
+background: transparent url('/ssp/images/document.png') no-repeat !important;
  border-style:none;
- background-repeat: no-repeat;
 }
 
 /*
 .early-alert-tree-panel .x-tree-icon-parent
 {
-    background-image: url('/ssp/images/early-alert-folder-icon.png') !important;
+    background: url('/ssp/images/early-alert-folder-icon.png') !important;
     background-repeat: no-repeat;
     height: 16px;
     width: 16px;
@@ -152,7 +126,7 @@ background: transparent;
 
 .early-alert-tree-panel .x-grid-tree-node-expanded .x-tree-icon-parent
 {
-    background-image: url('/ssp/images/early-alert-folder-icon.png') !important;
+    background: url('/ssp/images/early-alert-folder-icon.png') !important;
     background-repeat: no-repeat;
     height: 16px;
     width: 16px;
@@ -160,78 +134,71 @@ background: transparent;
 
 
 .early-alert-tree-panel .x-tree-icon-leaf {    
-    background-image: url('/ssp/images/early-alert-folder-icon.png') !important;
+    background: url('/ssp/images/early-alert-folder-icon.png') !important;
     height: 16px;
     width: 16px;
 }
 */
 
 .editPersonIcon {
-background-image: url('/ssp/images/edit-person-icon.png') !important;
+background: url('/ssp/images/edit-person-icon.png') !important;
 }
 
 .editPerson20Icon {
-background-image: url('/ssp/images/edit-person-icon_20.png') !important;
-background: transparent;
+background: transparent url('/ssp/images/edit-person-icon_20.png') no-repeat !important;
 border-style:none;
-background-repeat: no-repeat;
-
 }
 
 .emailIcon {
-background-image: url('/ssp/images/email-icon.png') !important;
+background: url('/ssp/images/email-icon.png') !important;
 }
 
 .helpIcon {
-background-image: url('/ssp/images/help-icon.png') !important;
+background: url('/ssp/images/help-icon.png') !important;
 }
 .helpIconSmall {
-background-image: url('/ssp/images/help-icon-small.png') !important;
-	background: transparent;
- 	border-style:none;
- 	background-repeat: no-repeat;
+background: transparent url('/ssp/images/help-icon-small.png') no-repeat !important;	
+ 	border-style:none; 	
 }
 
 .importantIconSmall {
-background-image: url('/ssp/images/important-icon.png') !important;
-	background: transparent;
- 	border-style:none;
- 	background-repeat: no-repeat;
+background: transparent url('/ssp/images/important-icon.png') no-repeat !important;	
+ 	border-style:none; 	
 }
 .multiselect-invalid .x-boundlist {
     border-color: Red !important;
 }
 
 .printIcon {
-background-image: url('/ssp/images/print-icon.png') !important;
+background: url('/ssp/images/print-icon.png') !important;
 }
 
 .retrieveCaseloadIcon {
-background-image: url('/ssp/images/retrieve-caseload-icon.png') !important;
+background: url('/ssp/images/retrieve-caseload-icon.png') !important;
 }
 
 .searchIcon {
-background-image: url('/ssp/images/search-icon.png') !important;
+background: url('/ssp/images/search-icon.png') !important;
 }
 
 .studentHistoryIcon {
-background-image: url('/ssp/images/student-history-report-icon.png') !important;
+background: url('/ssp/images/student-history-report-icon.png') !important;
 }
 
 .setNonParticipatingStatusIcon {
-background-image: url('/ssp/images/set-non-participating-status-icon.png') !important;
+background: url('/ssp/images/set-non-participating-status-icon.png') !important;
 }
 
 .setNoShowStatusIcon {
-background-image: url('/ssp/images/set-no-show-status-icon.png') !important;
+background: url('/ssp/images/set-no-show-status-icon.png') !important;
 }
 
 .setActiveStatusIcon {
-background-image: url('/ssp/images/set-active-status-icon.png') !important;
+background: url('/ssp/images/set-active-status-icon.png') !important;
 }
 
 .setTransitionStatusIcon {
-background-image: url('/ssp/images/set-transition-status-icon.png') !important;
+background: url('/ssp/images/set-transition-status-icon.png') !important;
 }
 
 .caseload-early-alert-indicator > td { 
