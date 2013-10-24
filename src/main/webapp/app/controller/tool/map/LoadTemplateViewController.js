@@ -124,6 +124,7 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
     onOpenClick: function(button) {
     	var me = this;
 		var grid, record;
+    	me.getView().setLoading(true);
 		var callbacks = new Object();
 		callbacks.success = me.onLoadCompleteSuccess;
 		callbacks.failure = me.onLoadCompleteFailure;
@@ -147,6 +148,7 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
        		me.scope.currentMapPlan.set('isTemplate',true);
 			me.scope.appEventsController.getApplication().fireEvent('onLoadTemplatePlan');
 			me.scope.appEventsController.getApplication().fireEvent("onCurrentMapPlanChangeUpdateMapView");
+	    	me.scope.getView().setLoading(false);
 			me.scope.getView().hide();
 		}
 	},
