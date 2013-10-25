@@ -273,9 +273,15 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         	me.getBalanceOwedField().setFieldLabel('');
 			me.getBalanceOwedField().setValue('<span style="color:#15428B">Balance:  </span>' + Ext.util.Format.usMoney(financialAid.balanceOwed));
         	me.getFinancialAidRemainingField().setFieldLabel('');
-			me.getFinancialAidRemainingField().setValue('<span style="color:#15428B">FA Amount:  </span>' + Ext.util.Format.usMoney(financialAid.financialAidRemaining));
+			if(financialAid.financialAidRemaining != null)
+				me.getFinancialAidRemainingField().setValue('<span style="color:#15428B">FA Amount:  </span>' + Ext.util.Format.usMoney(financialAid.financialAidRemaining));
+			else
+				me.getFinancialAidRemainingField().setValue('<span style="color:#15428B">FA Amount:  </span>' );
         	me.getOriginalLoanAmountField().setFieldLabel('');
-			me.getOriginalLoanAmountField().setValue('<span style="color:#15428B">Loan Amount:  </span>' + Ext.util.Format.usMoney(financialAid.originalLoanAmount));
+			if(financialAid.originalLoanAmount != null)
+				me.getOriginalLoanAmountField().setValue('<span style="color:#15428B">Loan Amount:  </span>' + Ext.util.Format.usMoney(financialAid.originalLoanAmount));
+			else
+				me.getOriginalLoanAmountField().setValue('<span style="color:#15428B">Loan Amount:  </span>');
         	me.getFinancialAidGpaField().setFieldLabel('');
 			me.getFinancialAidGpaField().setValue('<span style="color:#15428B">FA GPA:  </span>' + me.handleNull(financialAid.financialAidGpa));
 

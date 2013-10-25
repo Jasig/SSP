@@ -150,8 +150,14 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
         	
         	me.getFafsaDateField().setValue(Ext.util.Format.date(Ext.Date.parse(financialAid.fafsaDate, 'c'),'m/d/Y'));
         	me.getBalanceOwedField().setValue(Ext.util.Format.usMoney(financialAid.balanceOwed));
-        	me.getFinancialAidRemainingField().setValue(Ext.util.Format.usMoney(financialAid.financialAidRemaining));
-        	me.getOriginalLoanAmountField().setValue(Ext.util.Format.usMoney(financialAid.originalLoanAmount));
+			if(financialAid.financialAidRemaining != null)
+				me.getFinancialAidRemainingField().setValue(Ext.util.Format.usMoney(financialAid.financialAidRemaining));
+			else
+				me.getFinancialAidRemainingField().setValue('' );
+			if(financialAid.originalLoanAmount != null )
+				me.getOriginalLoanAmountField().setValue(Ext.util.Format.usMoney(financialAid.originalLoanAmount));
+			else
+				me.getOriginalLoanAmountField().setValue('');
         	me.getFinancialAidGpaField().setValue(me.handleNull(financialAid.financialAidGpa));
 			me.getGpa20AHrsNeededField().setValue(me.handleNull(financialAid.gpa20AHrsNeeded));
 	        me.getGpa20BHrsNeededField().setValue(me.handleNull(financialAid.gpa20BHrsNeeded));

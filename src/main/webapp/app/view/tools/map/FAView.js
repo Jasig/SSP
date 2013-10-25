@@ -191,7 +191,7 @@ Ext.define('Ssp.view.tools.map.FAView', {
                         fieldLabel: 'FA Amount Remaining',
                         name: 'financialAidRemaining',
                         itemId: 'financialAidRemaining',
-						labelWidth: 80
+						labelWidth: 130
                     
                     },{
                         fieldLabel: 'Loan Amount',
