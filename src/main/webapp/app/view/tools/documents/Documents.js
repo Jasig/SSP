@@ -58,13 +58,20 @@ Ext.define('Ssp.view.tools.documents.Documents', {
                         xtype: 'gridcolumn',
                         dataIndex: 'author',
                         text: 'Author',
-                        flex: .20
-                    }, {
+                        flex: .10
+                    }, 
+					{
+						xtype: 'gridcolumn',
+						dataIndex: 'confidentialityLevelName',
+	                	flex: .15,
+						header: 'Confidentiality'
+                    },
+					{
                         xtype: 'gridcolumn',
                         dataIndex: 'comment',
                         text: 'Comments',
                         sortable: 'false',
-                        flex: .50
+                        flex: .25
                     }],
             dockedItems: [{
                 dock: 'top',
