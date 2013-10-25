@@ -848,7 +848,12 @@
                     "clsName": "Ssp.controller.SearchFormViewController",
                     "name": "SearchFormViewController.js",
                     "path": "/app/controller/"
-                },                
+                }, 
+                {
+                    "clsName": "Ssp.controller.EmailStudentViewController",
+                    "name": "EmailStudentViewController.js",
+                    "path": "/app/controller/"
+                },
                 {
                     "clsName": "Ssp.controller.StudentRecordViewController",
                     "name": "StudentRecordViewController.js",
