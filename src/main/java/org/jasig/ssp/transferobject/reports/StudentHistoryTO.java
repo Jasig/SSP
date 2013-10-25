@@ -32,8 +32,6 @@ public class StudentHistoryTO {
 	List<HashMap<String, Object>> taskList = new ArrayList<HashMap<String,Object>>();	
 	HashMap<String,ArrayList<TaskTO>> taskMap = new HashMap<String,ArrayList<TaskTO>>();
 	List<JournalEntryTO> journalEntries = new ArrayList<JournalEntryTO>();
-    List<String> earlyAlertReasonNames = new ArrayList<String>();
-    List<String> earlyAlertSuggestionNames = new ArrayList<String>();
 
 	public StudentHistoryTO(String dateDayOnly) {
 		this.dateDayOnly = dateDayOnly;
@@ -105,21 +103,6 @@ public class StudentHistoryTO {
 		this.taskMap = taskMap;
 	}
 
-    public List<String> getEarlyAlertReasonNames() {
-        return earlyAlertReasonNames;
-    }
-
-    public void setEarlyAlertReasonNames(List<String> earlyAlertReasonNames) {
-        this.earlyAlertReasonNames = earlyAlertReasonNames;
-    }
-
-    public List<String> getEarlyAlertSuggestionNames() {
-        return earlyAlertSuggestionNames;
-    }
-
-    public void setEarlyAlertSuggestionNames(List<String> earlyAlertSuggestionNames) {
-        this.earlyAlertSuggestionNames = earlyAlertSuggestionNames;
-    }
 }
 
 

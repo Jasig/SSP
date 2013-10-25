@@ -35,8 +35,6 @@
 	<field name="journalEntries" class="java.util.List"/>
 	<field name="taskList" class="java.util.List"/>
 	<field name="earlyAlerts" class="java.util.List"/>
-	<field name="earlyAlertReasonNames" class="java.util.List"/>
-	<field name="earlyAlertSuggestionNames" class="java.util.List"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -142,12 +140,6 @@
 			</staticText>
 			<subreport>
 				<reportElement uuid="2f28ed7a-0c04-4584-bfc2-aee090764c3c" positionType="Float" stretchType="RelativeToBandHeight" x="13" y="17" width="558" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
-				<subreportParameter name="earlyAlertReasonNames">
-					<subreportParameterExpression><![CDATA[$F{earlyAlertReasonNames}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="earlyAlertSuggestionNames">
-					<subreportParameterExpression><![CDATA[$F{earlyAlertSuggestionNames}]]></subreportParameterExpression>
-				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{earlyAlerts})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/earlyAlertHistory_subreport.jasper"]]></subreportExpression>
 			</subreport>

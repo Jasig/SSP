@@ -49,8 +49,6 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TaskService;
-import org.jasig.ssp.service.reference.EarlyAlertReasonService;
-import org.jasig.ssp.service.reference.EarlyAlertSuggestionService;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.JournalEntryTO;
 import org.jasig.ssp.transferobject.PersonTO;
@@ -82,6 +80,7 @@ public class PersonHistoryReportController extends ReportBaseController {
 	private static final String REPORT_URL = "/reports/studentHistoryMaster.jasper";
 	private static final String REPORT_FILE_TITLE = "StudentHistoryReprt-";
 	private static final String STUDENT_TO = "studentTO";
+    private static final String STUDENT_RECORD_TO = "studentRecordTO";
 	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PersonHistoryReportController.class);
@@ -98,10 +97,6 @@ public class PersonHistoryReportController extends ReportBaseController {
 	private transient EarlyAlertService earlyAlertService;
 	@Autowired
 	private transient EarlyAlertTOFactory earlyAlertTOFactory;
-    @Autowired
-    private transient EarlyAlertReasonService earlyAlertReasonService;
-    @Autowired
-    private transient EarlyAlertSuggestionService earlyAlertSuggestionService;
 	@Autowired
 	private transient TaskService taskService;
 	@Autowired
@@ -153,24 +148,6 @@ public class PersonHistoryReportController extends ReportBaseController {
         // separate the Students into bands by date
 		final List<StudentHistoryTO> studentHistoryTOs = sort(earlyAlertTOs,
 				taskTOMap, journalEntryTOs);
-
-        // add suggestion names and reason names to Student History TO's
-        for (StudentHistoryTO studentTOIndex : studentHistoryTOs) {
-            for (EarlyAlertTO eaTOIndex : studentTOIndex.getEarlyAlerts()) {
-                ArrayList<String> tempEaReasonNames = new ArrayList<String>();
-                ArrayList<String> tempEaSuggestionNames = new ArrayList<String>();
-
-                for ( UUID eaReasonId : eaTOIndex.getEarlyAlertReasonIds() ) {
-                    tempEaReasonNames.add(earlyAlertReasonService.load(eaReasonId).getName());
-                }
-
-                for ( UUID eaSuggestionId : eaTOIndex.getEarlyAlertSuggestionIds() ) {
-                    tempEaSuggestionNames.add(earlyAlertSuggestionService.load(eaSuggestionId).getName());
-                }
-                studentTOIndex.setEarlyAlertReasonNames(tempEaReasonNames);
-                studentTOIndex.setEarlyAlertSuggestionNames(tempEaSuggestionNames);
-            }
-        }
 
         final Map<String, Object> parameters = Maps.newHashMap();
 		

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
@@ -77,6 +78,12 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 
 	private Boolean sendEmailToStudent = Boolean.FALSE;
 
+
+    @JsonIgnore     //For Student History Report
+    private Set<EarlyAlertReasonTO> earlyAlertReasonTOs;
+    @JsonIgnore
+    private Set<EarlyAlertSuggestionTO> earlyAlertSuggestionTOs;
+
 	/**
 	 * Empty constructor
 	 */
@@ -114,8 +121,10 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 		closedById = earlyAlert.getClosedById();
 		earlyAlertReasonIds = Sets.newHashSet();
 		earlyAlertSuggestionIds = Sets.newHashSet();
+        earlyAlertReasonTOs = Sets.newHashSet();
+        earlyAlertSuggestionTOs = Sets.newHashSet();
 
-		if ( closedById != null ) {
+        if ( closedById != null ) {
 			Person closedBy = earlyAlert.getClosedBy();
 			closedByName = closedBy.getFirstName()
 					+ (closedBy.getMiddleName() == null || closedBy.getMiddleName().length() == 0 ? "" : " " + closedBy.getMiddleName())
@@ -131,12 +140,14 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 				.getEarlyAlertReasons();
 		for (EarlyAlertReason earlyAlertReason : earlyAlertReasonModels) {
 			earlyAlertReasonIds.add(earlyAlertReason.getId());
+            earlyAlertReasonTOs.add(new EarlyAlertReasonTO(earlyAlertReason));
 		}
 		
 		Set<EarlyAlertSuggestion> earlyAlertSuggestionModels = earlyAlert
 				.getEarlyAlertSuggestions();
 		for (EarlyAlertSuggestion earlyAlertSuggestion : earlyAlertSuggestionModels) {
 			earlyAlertSuggestionIds.add(earlyAlertSuggestion.getId());
+            earlyAlertSuggestionTOs.add(new EarlyAlertSuggestionTO(earlyAlertSuggestion));
 		}
 		
 		setNoOfResponses(earlyAlert.getResponseCount());
@@ -384,4 +395,23 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 		this.earlyAlertSuggestionIds = earlyAlertSuggestionIds;
 	}
 
+    @JsonIgnore
+    public Set<EarlyAlertReasonTO> getEarlyAlertReasonTOs() {
+        return earlyAlertReasonTOs;
+    }
+
+    @JsonIgnore
+    public void setEarlyAlertReasonTOs(Set<EarlyAlertReasonTO> earlyAlertReasonTOs) {
+        this.earlyAlertReasonTOs = earlyAlertReasonTOs;
+    }
+
+    @JsonIgnore
+    public Set<EarlyAlertSuggestionTO> getEarlyAlertSuggestionTOs() {
+        return earlyAlertSuggestionTOs;
+    }
+
+    @JsonIgnore
+    public void setEarlyAlertSuggestionTOs(Set<EarlyAlertSuggestionTO> earlyAlertSuggestionTOs) {
+        this.earlyAlertSuggestionTOs = earlyAlertSuggestionTOs;
+    }
 }
