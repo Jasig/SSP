@@ -155,7 +155,7 @@ public class PersonController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/email", method = RequestMethod.POST)
-	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	@PreAuthorize(Permission.SECURITY_PERSON_WRITE)
 	public @ResponseBody
 	boolean emailStudent(
 			final @RequestBody EmailStudentRequestTO emailRequest) throws ObjectNotFoundException, ValidationException {

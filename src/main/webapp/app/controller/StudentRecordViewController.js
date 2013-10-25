@@ -23,7 +23,9 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 		appEventsController: 'appEventsController',
 		formUtils: 'formRendererUtils',
 		apiProperties: 'apiProperties',
-        personLite: 'personLite'
+        personLite: 'personLite',
+    	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
+        
 	},
 	
     control: {
@@ -46,6 +48,9 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 	},
 	
     init: function() {
+    	var me=this;
+		me.confidentialityLevelsStore.load();
+    
  		return this.callParent(arguments);
     },
     
