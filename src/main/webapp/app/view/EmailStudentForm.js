@@ -102,7 +102,6 @@ Ext.define('Ssp.view.EmailStudentForm', {
                         name: 'primaryEmail',
                         itemId: 'primaryEmail',
                         labelSeparator : '',
-                        value: 'aarland@unicon.net',
                         fieldStyle: 'color:blue'
 				    }]
             },
@@ -133,7 +132,6 @@ Ext.define('Ssp.view.EmailStudentForm', {
                         name: 'secondaryEmail',
                         itemId: 'secondaryEmail',
                         labelSeparator : '',
-                        value: 'aarland@unicon.net',
                         fieldStyle: 'color:blue',
                         
 				    }]
@@ -148,7 +146,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
 				items: [
 					    {
 				            xtype: 'displayfield',
-		                    value: 'CC This email to additional recipients (comma seperated)',
+		                    value: 'CC This email to additional recipients (comma separated)',
 		                    fieldStyle: 'color:black'
 					    },
 						{
