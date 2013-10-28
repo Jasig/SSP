@@ -106,7 +106,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 		// Add Properties to return in the case load
 		//
 		// Set Columns to Return: id, firstName, middleName, lastName,
-		// schoolId
+		// schoolId, and birthDate
 		final ProjectionList projections = Projections.projectionList();
 		projections.add(Projections.property("id").as("clr_personId"));
 		projections.add(Projections.property("firstName").as("clr_firstName"));
@@ -115,6 +115,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 		projections.add(Projections.property("schoolId").as("clr_schoolId"));
 		projections.add(Projections.property("studentIntakeCompleteDate").as(
 				"clr_studentIntakeCompleteDate"));
+        projections.add(Projections.property("birthDate").as("clr_birthDate"));
 
 		// Join to Student Type
 		query.createAlias("studentType", "studentType",

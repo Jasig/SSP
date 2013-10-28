@@ -47,6 +47,8 @@ public class CaseloadRecord {
 	@NotNull
 	private String lastName;
 
+    private Date birthDate;
+
 	private String studentTypeName;
 
 	private Date currentAppointmentStartTime;
@@ -136,4 +138,13 @@ public class CaseloadRecord {
 	public void setStudentTypeName(final String studentTypeName) {
 		this.studentTypeName = studentTypeName;
 	}
+
+    public Date getBirthDate() {
+        return birthDate == null ? null : new Date(birthDate.getTime());
+    }
+
+    public final void setBirthDate(final Date birthDate) {
+        this.birthDate = birthDate == null ? null : new Date(
+                birthDate.getTime());
+    }
 }

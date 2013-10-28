@@ -23,7 +23,11 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.model.CaseloadRecord;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
 
 /**
  * Caseload record transfer object
@@ -43,6 +47,10 @@ public class CaseloadRecordTO implements TransferObject<CaseloadRecord> {
 
 	@NotNull
 	private String lastName;
+
+    @JsonSerialize(using = DateOnlySerializer.class)
+    @JsonDeserialize(using = DateOnlyDeserializer.class)
+    private Date birthDate;
 
 	private String studentTypeName;
 
@@ -65,7 +73,7 @@ public class CaseloadRecordTO implements TransferObject<CaseloadRecord> {
 		setPersonId(model.getPersonId());
 		setSchoolId(model.getSchoolId());
 		setStudentTypeName(model.getStudentTypeName());
-
+        setBirthDate(model.getBirthDate());
 		setNumberOfEarlyAlerts(model.getNumberOfEarlyAlerts());
 		setStudentIntakeComplete(model.isStudentIntakeComplete());
 		setCurrentAppointmentStartTime(model.getCurrentAppointmentStartTime());
@@ -118,6 +126,15 @@ public class CaseloadRecordTO implements TransferObject<CaseloadRecord> {
 	public final void setStudentTypeName(final String studentTypeName) {
 		this.studentTypeName = studentTypeName;
 	}
+
+    public Date getBirthDate() {
+        return birthDate == null ? null : new Date(birthDate.getTime());
+    }
+
+    public final void setBirthDate(final Date birthDate) {
+        this.birthDate = birthDate == null ? null : new Date(
+                birthDate.getTime());
+    }
 
 	public Date getCurrentAppointmentStartTime() {
 		return currentAppointmentStartTime == null ? null : new Date(
