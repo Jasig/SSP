@@ -17,7 +17,7 @@
  * under the License.
  */
 .addPersonIcon {
-background: url('/ssp/images/add-person-icon.png') !important;
+background: url('/ssp/images/add-person-icon.png') no-repeat !important;
 }
 
 .addToolIcon {
@@ -31,7 +31,7 @@ background: url('/ssp/images/confidentiality-agreement-icon.png') !important;
 }
 
 .deletePersonIcon {
-background: url('/ssp/images/delete-person-icon.png') !important;
+background: url('/ssp/images/delete-person-icon.png') no-repeat !important;
 }
 
 .displaySearchIcon {
@@ -141,7 +141,7 @@ background: transparent url('/ssp/images/document.png') no-repeat !important;
 */
 
 .editPersonIcon {
-background: url('/ssp/images/edit-person-icon.png') !important;
+background: url('/ssp/images/edit-person-icon.png') no-repeat !important;
 }
 
 .editPerson20Icon {
@@ -186,19 +186,19 @@ background: url('/ssp/images/student-history-report-icon.png') !important;
 }
 
 .setNonParticipatingStatusIcon {
-background: url('/ssp/images/set-non-participating-status-icon.png') !important;
+background: url('/ssp/images/set-non-participating-status-icon.png') no-repeat !important;
 }
 
 .setNoShowStatusIcon {
-background: url('/ssp/images/set-no-show-status-icon.png') !important;
+background: url('/ssp/images/set-no-show-status-icon.png') no-repeat !important;
 }
 
 .setActiveStatusIcon {
-background: url('/ssp/images/set-active-status-icon.png') !important;
+background: url('/ssp/images/set-active-status-icon.png') no-repeat !important;
 }
 
 .setTransitionStatusIcon {
-background: url('/ssp/images/set-transition-status-icon.png') !important;
+background: url('/ssp/images/set-transition-status-icon.png') no-repeat !important;
 }
 
 .caseload-early-alert-indicator > td { 
