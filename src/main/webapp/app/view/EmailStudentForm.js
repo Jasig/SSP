@@ -24,7 +24,8 @@ Ext.define('Ssp.view.EmailStudentForm', {
     	apiProperties: 'apiProperties',
     	appEventsController: 'appEventsController',
 		columnRendererUtils : 'columnRendererUtils',
-    	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
+    	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
+        person: 'currentPerson'
     },
     controller: 'Ssp.controller.EmailStudentViewController',
     initComponent: function(){
@@ -88,7 +89,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
 				        itemId: 'sendToPrimaryEmail',
 				        labelSeparator: '',
 				        hideLabel: true,
-				        checked:true,
+				        disabled: !me.person.get('primaryEmailAddress'),
 				        boxLabel: 'Send To Primary Email Address',
 				        fieldLabel: 'text'				        
 				    },
@@ -118,6 +119,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
 				        fieldLabel: '',
 				        itemId: 'sendToSecondaryEmail',
 				        labelSeparator: '',
+				        disabled: !me.person.get('secondaryEmailAddress'),
 				        hideLabel: true,
 				        boxLabel: 'Send To Secondary Email Address',
 				        fieldLabel: 'text'				        

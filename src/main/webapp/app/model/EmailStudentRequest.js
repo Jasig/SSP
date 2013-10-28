@@ -21,7 +21,7 @@ Ext.define('Ssp.model.EmailStudentRequest', {
     fields: [{name: 'studentId', type: 'string'},
         {name: 'confidentialityLevelId', type: 'string'},
         {name: 'createJournalEntry', type: 'boolean'},
-        {name: 'sendToPrimaryEmail', type: 'boolean', defaultValue: true},
+        {name: 'sendToPrimaryEmail', type: 'boolean'},
         {name: 'primaryEmail', type: 'string'},
         {name: 'sendToSecondaryEmail', type: 'boolean'},
         {name: 'secondaryEmail', type: 'string'},
