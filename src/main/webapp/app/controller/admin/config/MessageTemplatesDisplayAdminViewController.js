@@ -57,10 +57,8 @@ Ext.define('Ssp.controller.admin.config.MessageTemplatesDisplayAdminViewControll
                     
                     var sn = me.getView().getView().getSelectedNodes()[0];
                     
-                    Ext.get(sn).highlight("ff0000", {
-                        attr: 'color',
-                        duration: 60000
-                    });
+                    Ext.get(sn).highlight(Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_COLOR,
+                        Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_OPTIONS);
                     me.adminSelectedIndex.set('value', -1);
                    
                     if (ptb) {

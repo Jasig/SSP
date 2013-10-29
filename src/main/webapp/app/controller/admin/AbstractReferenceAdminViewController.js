@@ -105,7 +105,8 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 						record.commit();
 						editor.grid.getSelectionModel().select(record);
 						var h = editor.grid.getView().getSelectedNodes()[0];
-						Ext.get(h).highlight("ff0000", {attr:'color', duration: 60000});
+						Ext.get(h).highlight(Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_COLOR,
+							Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_OPTIONS);
 						
 					}
 				} else {
@@ -118,7 +119,8 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 						editor.grid.getSelectionModel().select(0);
 						
 						var h1 = editor.grid.getView().getSelectedNodes()[0];
-						Ext.get(h1).highlight("ff0000", {attr:'color', duration: 60000});
+						Ext.get(h1).highlight(Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_COLOR,
+							Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_OPTIONS);
 						
 					}
 				}
