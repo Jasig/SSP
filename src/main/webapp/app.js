@@ -471,7 +471,7 @@ var apiUrls = [
   {name: 'maritalStatus', url: 'reference/maritalStatus'},
   {name: 'militaryAffiliation', url: 'reference/militaryAffiliation'},
   {name: 'enrollmentStatus', url: 'reference/enrollmentStatus'},
-  {name: 'blurb', url: 'reference/blurb'},
+  {name: 'blurb', url: 'blurb'},
   {name: 'registrationLoad', url: 'reference/registrationLoad'},
   {name: 'courseworkHours', url: 'reference/courseworkHours'},
   {name: 'messageTemplate', url: 'reference/messageTemplate'},
