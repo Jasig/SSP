@@ -45,6 +45,7 @@ Ext.define('Ssp.controller.EmailStudentViewController', {
 		var model = new  Ext.create('Ssp.model.EmailStudentRequest');
 		model.set('studentId',me.person.get('id'));
 		model.set('primaryEmail',me.person.get('primaryEmailAddress'));
+		model.set('sendToPrimaryEmail',me.person.get('primaryEmailAddress') ? true : false);
 		model.set('secondaryEmail',me.person.get('secondaryEmailAddress'));
 		
 		me.getView().getForm().loadRecord(model);
