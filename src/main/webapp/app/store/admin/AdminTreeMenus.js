@@ -742,6 +742,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         header: 'Name',
                         dataIndex: 'name',
                         required: true,
+                        rowEditable: false,
                         flex: .10,
                         field: {
                             xtype: 'textfield'
@@ -755,6 +756,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         }
                     },  {
                         header: 'Code',
+                        rowEditable: false,
                         dataIndex: 'code',
                         filterable: true,
                         flex: .20,
@@ -770,6 +772,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         }
                     },{
                         header: 'Entity Type Code',
+                        rowEditable: false,
                         dataIndex: 'entityTypeCode',
                         flex: .20,
                         filterable: true,

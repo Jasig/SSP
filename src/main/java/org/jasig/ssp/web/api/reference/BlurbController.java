@@ -18,19 +18,29 @@
  */
 package org.jasig.ssp.web.api.reference;
 
+import java.util.UUID;
+
+import javax.validation.Valid;
+
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.factory.reference.BlurbTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.Blurb;
 import org.jasig.ssp.security.permissions.Permission;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.BlurbService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.reference.BlurbTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,7 +67,13 @@ public class BlurbController {
 	protected BlurbController() {
 	}
 	
+	/**
+	 * Logger
+	 */
+	protected static final Logger LOGGER = LoggerFactory
+			.getLogger(BlurbController.class);	
 	@RequestMapping(method = RequestMethod.GET)
+	
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	PagedResponse<BlurbTO> getAll(
@@ -77,6 +93,46 @@ public class BlurbController {
 				.asTOList(data.getRows()));
 
 	}
-	
-	
+	/**
+	 * Persist any changes to the specified instance.
+	 * 
+	 * @param id
+	 *            Explicit id to the instance to persist.
+	 * @param obj
+	 *            Full instance to persist.
+	 * @return The update data object instance.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If the specified id is null.
+	 */
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public @ResponseBody
+	BlurbTO save(@PathVariable final UUID id, @Valid @RequestBody final BlurbTO obj)
+			throws ValidationException, ObjectNotFoundException {
+		if (id == null) {
+			throw new ValidationException(
+					"You submitted without an id to the save method.  Did you mean to create?");
+		}
+
+		if (obj.getId() == null) {
+			obj.setId(id);
+		}
+
+		final Blurb model = getFactory().from(obj);
+
+		final Blurb savedT = getService().save(model);
+		if (null != savedT) {
+			return this.instantiateTO(model);
+		}
+
+		return null;
+	}	
+
+	private BlurbTO instantiateTO(final Blurb model) throws ValidationException {
+		BlurbTO out;
+		out =new BlurbTO();
+		out.from(model);
+		return out;
+	}
 }
