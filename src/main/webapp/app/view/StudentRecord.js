@@ -20,6 +20,9 @@ Ext.define('Ssp.view.StudentRecord', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.studentrecord',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    inject: {
+        authenticatedPerson: 'authenticatedPerson'
+    },    
     controller: 'Ssp.controller.StudentRecordViewController',
     width: '100%',
     height: '100%',
@@ -40,6 +43,7 @@ Ext.define('Ssp.view.StudentRecord', {
                 text: '<u>Email Student</u>',
                 width: 110,
                 height: 20,
+        		hidden: !me.authenticatedPerson.hasAccess('EMAIL_STUDENT_BUTTON'),
                 xtype: 'button',
                 cls: "makeTransparent",
                 itemId: 'emailStudentButton'
