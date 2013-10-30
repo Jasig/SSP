@@ -271,6 +271,8 @@ Ext.require([
     'Ssp.model.reference.Challenge',
     'Ssp.model.reference.ChallengeCategory',
     'Ssp.model.reference.ChallengeReferral',
+    'Ssp.model.reference.EnrollmentStatus',
+    'Ssp.model.reference.Text',
     'Ssp.model.reference.JournalTrack',
     'Ssp.model.reference.JournalStep',
     'Ssp.model.reference.JournalStepDetail',
@@ -345,6 +347,7 @@ Ext.require([
     'Ssp.store.reference.MilitaryAffiliations',
     'Ssp.store.reference.CourseworkHours',
     'Ssp.store.reference.EnrollmentStatuses',
+    'Ssp.store.reference.Texts',
     'Ssp.store.reference.RegistrationLoads',
     'Ssp.store.reference.CourseworkHours',
 	'Ssp.store.reference.MessageTemplates',
@@ -468,6 +471,7 @@ var apiUrls = [
   {name: 'maritalStatus', url: 'reference/maritalStatus'},
   {name: 'militaryAffiliation', url: 'reference/militaryAffiliation'},
   {name: 'enrollmentStatus', url: 'reference/enrollmentStatus'},
+  {name: 'blurb', url: 'reference/blurb'},
   {name: 'registrationLoad', url: 'reference/registrationLoad'},
   {name: 'courseworkHours', url: 'reference/courseworkHours'},
   {name: 'messageTemplate', url: 'reference/messageTemplate'},
@@ -1377,6 +1381,16 @@ Ext.onReady(function(){
 					    singleton: true
 					},	
 			    	enrollmentStatusesStore: 'Ssp.store.reference.EnrollmentStatuses',
+			    	textStore: 
+			    	{
+						fn: function(){
+							return Ext.create('Ssp.store.reference.Texts', {
+								storeId: 'textStore',
+								extraParams: {status: "ALL", limit: -1, start: null}
+							});
+						},
+						singleton: true
+					},
 					messageTemplatesStore: 'Ssp.store.reference.MessageTemplates',	
 			    	personalityTypesStore: 'Ssp.store.reference.PersonalityTypes',
 			    	placementStore: 'Ssp.store.Placement',
