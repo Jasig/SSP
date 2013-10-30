@@ -1939,7 +1939,7 @@
                 },    
  				{
                     "clsName": "Ssp.store.CoachesAllCurrent",
-                    "name": "CoachesAll.js",
+                    "name": "CoachesAllCurrent.js",
                     "path": "/app/store/"
                 },                             
                 {
@@ -2005,6 +2005,11 @@
                 {
                     "clsName": "Ssp.store.reference.JournalTracks",
                     "name": "JournalTracks.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.JournalTracksAll",
+                    "name": "JournalTracksAll.js",
                     "path": "/app/store/reference/"
                 },
                 {
@@ -2353,6 +2358,11 @@
                     "path": "/app/store/reference/"
                 },
                 {
+                    "clsName": "Ssp.store.reference.JournalSourcesAll",
+                    "name": "JournalSourcesAll.js",
+                    "path": "/app/store/reference/"
+                },
+                {
                     "clsName": "Ssp.store.reference.JournalSourcesUnpaged",
                     "name": "JournalSourcesUnpaged.js",
                     "path": "/app/store/reference/"
@@ -2571,6 +2581,21 @@
                     "clsName": "Ssp.model.reference.MessageTemplate",
                     "name": "MessageTemplate.js",
                     "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.LoadRange",
+                    "name": "LoadRange.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.RegistrationLoadRanges",
+                    "name": "RegistrationLoadRanges.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.WeeklyCourseWorkHourRanges",
+                    "name": "WeeklyCourseWorkHourRanges.js",
+                    "path": "/app/store/reference/"
                 },
                 {
                     "clsName": "Ssp.store.reference.ConfigurationOptions",
