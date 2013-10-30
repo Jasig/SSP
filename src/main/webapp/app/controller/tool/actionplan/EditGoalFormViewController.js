@@ -52,9 +52,11 @@ Ext.define('Ssp.controller.tool.actionplan.EditGoalFormViewController', {
 		//me.authenticatedPerson.applyConfidentialityLevelsFilter( me.confidentialityLevelsStore );
 		
 		me.getView().getForm().loadRecord( me.model );
-		me.getCombo().setValue( this.model.get('confidentialityLevel').id );
 		
 		me.formUtils.applyAssociativeStoreFilter(me.confidentialityLevelsStore,me.model.get('confidentialityLevel').id);
+		
+		me.getCombo().setValue( this.model.get('confidentialityLevel').id );
+		
 		
 		me.authenticatedPerson.applyConfidentialityLevelsFilter(me.confidentialityLevelsStore);
 		
