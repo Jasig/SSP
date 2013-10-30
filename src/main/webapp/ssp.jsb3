@@ -138,11 +138,16 @@
                     "name": "RegistrationLoad.js",
                     "path": "/app/model/reference/"
                 },  
-                                              {
+                {
                     "clsName": "Ssp.model.reference.EnrollmentStatus",
                     "name": "EnrollmentStatus.js",
                     "path": "/app/model/reference/"
                 }, 
+                {
+                    "clsName": "Ssp.model.reference.Text",
+                    "name": "Text.js",
+                    "path": "/app/model/reference/"
+                },                 
                 {
                     "clsName": "Ssp.store.reference.MilitaryAffiliations",
                     "name": "MilitaryAffiliations.js",
@@ -152,7 +157,12 @@
                     "clsName": "Ssp.store.reference.CourseworkHours",
                     "name": "CourseworkHours.js",
                     "path": "/app/store/reference/"
-                },                
+                },
+                {
+                    "clsName": "Ssp.store.reference.Texts",
+                    "name": "Texts.js",
+                    "path": "/app/store/reference/"
+                },
                 {
                     "clsName": "Ssp.store.reference.EnrollmentStatuses",
                     "name": "EnrollmentStatuses.js",

@@ -1,0 +1,928 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<property name="schema" value="${database.schema}" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet author='tony.arland' id='Add blurb table'>
+		<createTable tableName="blurb">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="${nvarchar.type}(80)">
+				<constraints nullable="false" />
+			</column>
+			<column name="value" type="${nvarchar.type}(256)">
+				<constraints nullable="false" />
+			</column>			
+			<column name="code" type="${nvarchar.type}(80)">
+				<constraints nullable="false" unique="true" uniqueConstraintName="blurb_code_unq" />
+			</column>		
+			<column name="entity_type_code" type="${nvarchar.type}(80)">
+				<constraints nullable="false" />
+			</column>				
+			<column name="description" type="text">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="blurb_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="blurb_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		
+		<sql>grant all on blurb to ${database.app.username}</sql>
+		<rollback>
+			<dropTable tableName="blurb" />
+		</rollback>
+		
+	</changeSet>	
+	
+<changeSet id="seed blurb table" author="tony.arland">
+
+		<!--INTAKE TAB 1 (Personal)  -->
+		
+		<insert tableName="blurb">
+			<column name="id" value="1a92f3e6-9364-4e6f-8388-aee95a3af55d" />
+			<column name="name" value="Intake Tab 1 Label" />
+			<column name="code" value="intake.tab1.label.tab1"/>
+			<column name="value" value="Person"/>
+			<column name="description" value="Person tab label" />
+			<column name="entity_type_code" value="reference.tab1" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="64ef22e1-0cf3-44df-9ccb-993ab7548baa" />
+			<column name="name" value="Intake First Name Label" />
+			<column name="code" value="intake.tab1.label.first-name"/>
+			<column name="value" value="First Name"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.first-name" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="247c1850-b368-4f29-8c8b-7b25efce8605" />
+			<column name="name" value="Intake Middle Name Label" />
+			<column name="code" value="intake.tab1.label.middle-name"/>
+			<column name="value" value="First Name"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.middle-name" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>		
+		<insert tableName="blurb">
+			<column name="id" value="9b1182c7-9783-4be0-bc09-a30bf0d45f47" />
+			<column name="name" value="Intake Last Name Label" />
+			<column name="code" value="intake.tab1.label.last-name"/>
+			<column name="value" value="Last Name"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.last-name" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="bc816c86-04c8-4d7b-87a5-0a74ad3ea23a" />
+			<column name="name" value="Intake Birth Date Label" />
+			<column name="code" value="intake.tab1.label.student-id"/>
+			<column name="value" value="Birth Date"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.birth-date" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="337d77c4-3689-4581-b924-6dc0dcdb1be1" />
+			<column name="name" value="Intake Home Phone Label" />
+			<column name="code" value="intake.tab1.label.home-phone"/>
+			<column name="value" value="Home Phone"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.home-phone" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>
+		
+		<insert tableName="blurb">
+			<column name="id" value="f079a6e4-8867-4c6a-b84a-b8fa07d8696c" />
+			<column name="name" value="Intake Work Phone Label" />
+			<column name="code" value="intake.tab1.label.work-phone"/>
+			<column name="value" value="Work Phone"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.work-phone" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>		
+		
+		<insert tableName="blurb">
+			<column name="id" value="f640d0f8-1763-4471-a2cb-71b062b6af78" />
+			<column name="name" value="Intake Cell Phone Label" />
+			<column name="code" value="intake.tab1.label.cell-phone"/>
+			<column name="value" value="Cell Phone"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.cell-phone" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>
+		
+		<insert tableName="blurb">
+			<column name="id" value="06b4151e-8857-4e65-870c-36da50268ee7" />
+			<column name="name" value="Intake School Email Label" />
+			<column name="code" value="intake.tab1.label.school-email"/>
+			<column name="value" value="School Email"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.school-email" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="347fb756-ae34-4b94-a6ed-4aafb0b985a2" />
+			<column name="name" value="Intake Alternate Email Label" />
+			<column name="code" value="intake.tab1.label.alternate-email"/>
+			<column name="value" value="School Email"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.alternate-email" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="7112e79a-0a61-413a-8948-8c4c19f2bb18" />
+			<column name="name" value="Intake Non Local Label" />
+			<column name="code" value="intake.tab1.label.non-local"/>
+			<column name="value" value="Non Local"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.non-local" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="0b08f251-4970-4415-a37a-f4bae0820f23" />
+			<column name="name" value="Intake Address 1 Label" />
+			<column name="code" value="intake.tab1.label.address-1"/>
+			<column name="value" value="Address Line 1"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.address-1" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="f0a1b90c-7424-42cb-9a5b-a56e5d381d72" />
+			<column name="name" value="Intake Address 2 Label" />
+			<column name="code" value="intake.tab1.label.address-2"/>
+			<column name="value" value="Address Line 2"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.address-2" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>		
+		<insert tableName="blurb">
+			<column name="id" value="a696238c-2c77-4d84-b4df-a8c832d1c91a" />
+			<column name="name" value="Intake City Label" />
+			<column name="code" value="intake.tab1.label.city"/>
+			<column name="value" value="City"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.city" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>
+		<insert tableName="blurb">
+			<column name="id" value="8ae3cabd-4401-4ecb-b0bb-f1096a21b48b" />
+			<column name="name" value="Intake State Label" />
+			<column name="code" value="intake.tab1.label.state"/>
+			<column name="value" value="State"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.state" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="08e22868-8f83-489b-865d-95000b7ec374" />
+			<column name="name" value="Intake Zip Code Label" />
+			<column name="code" value="intake.tab1.label.zip"/>
+			<column name="value" value="Zip Code"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.zip" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="1026cbd8-7a8a-499a-a404-7f3af488fa65" />
+			<column name="name" value="Intake Country Label" />
+			<column name="code" value="intake.tab1.label.country"/>
+			<column name="value" value="Country"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.country" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<!--INTAKE TAB 2 (Demographics)  -->
+		
+		<insert tableName="blurb">
+			<column name="id" value="343eede9-b777-4d63-84f7-c65c71eee052" />
+			<column name="name" value="Intake Tab 2 Label" />
+			<column name="code" value="intake.tab2.label"/>
+			<column name="value" value="Demographics"/>
+			<column name="description" value="Demographics tab label" />
+			<column name="entity_type_code" value="reference.tab2" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>
+		
+		<insert tableName="blurb">
+			<column name="id" value="2be74b03-8cf8-4410-a75b-20d8d4304cca" />
+			<column name="name" value="Intake Marital Status Label" />
+			<column name="code" value="intake.tab2.label.marital-status"/>
+			<column name="value" value="Marital Status"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.marital-status" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>		
+
+		<insert tableName="blurb">
+			<column name="id" value="dabfee4c-f975-4c89-a749-1ff467da9884" />
+			<column name="name" value="Intake Ethnicity Label" />
+			<column name="code" value="intake.tab2.label.ethnicity"/>
+			<column name="value" value="Ethnicity"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.ethnicity" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="cb3a7e29-4303-4a7a-87b5-fe9a10027e45" />
+			<column name="name" value="Intake Race Label" />
+			<column name="code" value="intake.tab2.label.race"/>
+			<column name="value" value="Race"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.race" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="fd6dc9c9-219a-4634-9ee7-c5fcbbef6b8e" />
+			<column name="name" value="Intake Gender Label" />
+			<column name="code" value="intake.tab2.label.gender"/>
+			<column name="value" value="Gender"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.gender" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="7b1d2b79-4f09-4338-944e-893f4f3cdeb7" />
+			<column name="name" value="Intake Citizenship Label" />
+			<column name="code" value="intake.tab2.label.citizenship"/>
+			<column name="value" value="Country Of Citizenship"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.citizenship" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="301ece83-ffe7-4d2e-aec1-5c07b806573a" />
+			<column name="name" value="Intake Military Affiliation Label" />
+			<column name="code" value="intake.tab2.label.military-affiliation"/>
+			<column name="value" value="Military Affiliation"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.military-affiliation" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<insert tableName="blurb">
+			<column name="id" value="703b31a6-2d23-49cd-bbbc-a867920c2635" />
+			<column name="name" value="Intake Veteran Status Label" />
+			<column name="code" value="intake.tab2.label.veteran-status"/>
+			<column name="value" value="Veteran Status"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.veteran-status" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>
+			
+						
+		<insert tableName="blurb">
+			<column name="id" value="06ad79bf-4e10-44f2-8c4f-16f2da8f7d2f" />
+			<column name="name" value="Intake Primary Caregiver Label" />
+			<column name="code" value="intake.tab2.label.primary-caregiver"/>
+			<column name="value" value="Are you a Primary Caregiver?"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.primary-caregiver" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>
+		
+		<insert tableName="blurb">
+			<column name="id" value="9a24e721-b59b-4d40-8edd-c522ac29f37a" />
+			<column name="name" value="Intake Children Ages Label" />
+			<column name="code" value="intake.tab2.label.children-ages"/>
+			<column name="value" value="Ages? Separate each age with a comma. (1,5,12)"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.children-ages" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>		
+		
+		<insert tableName="blurb">
+			<column name="id" value="3a389f67-0e46-454f-96e2-51fb9518f53a" />
+			<column name="name" value="Intake Number of Children Label" />
+			<column name="code" value="intake.tab2.label.number-children"/>
+			<column name="value" value="If You have Children, How Many?"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.number-children" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<insert tableName="blurb">
+			<column name="id" value="5187c5cd-5c20-44c1-920e-00dea367b3b6" />
+			<column name="name" value="Intake Childcare Needed Label" />
+			<column name="code" value="intake.tab2.label.childcare-needed"/>
+			<column name="value" value="Childcare Needed?"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.childcare-needed" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>
+		
+		<insert tableName="blurb">
+			<column name="id" value="eb189389-3112-4214-85c2-c406c773d245" />
+			<column name="name" value="Intake Childcare Arrangements Label" />
+			<column name="code" value="intake.tab2.label.childcare-arrangements"/>
+			<column name="value" value="If yes, what are your childcare arrangements?"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.childcare-arrangements" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="baf298c9-5ddb-4c67-8957-c7e7445d2f08" />
+			<column name="name" value="Intake Employed Label" />
+			<column name="code" value="intake.tab2.label.employed"/>
+			<column name="value" value="Are you Employed?"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.employed" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>
+		
+		<insert tableName="blurb">
+			<column name="id" value="2c921081-23b5-4bcb-b620-db191cedf09a" />
+			<column name="name" value="Intake Place of Employment Label" />
+			<column name="code" value="intake.tab2.label.place-of-employment"/>
+			<column name="value" value="Place of Employment"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.place-of-employment" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="ed71bc25-3190-4fd4-a68c-de14fcd264dc" />
+			<column name="name" value="Intake Shift Label" />
+			<column name="code" value="intake.tab2.label.shift"/>
+			<column name="value" value="Shift"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.shift" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		
+		<insert tableName="blurb">
+			<column name="id" value="ce66754b-869a-4a21-9e45-e414544cde0b" />
+			<column name="name" value="Intake Wage Label" />
+			<column name="code" value="intake.tab2.label.wage"/>
+			<column name="value" value="Wage"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.wage" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="7b300c10-f858-4271-bfdd-1d271da358dd" />
+			<column name="name" value="Intake Total Hours Worked Label" />
+			<column name="code" value="intake.tab2.label.total-hours-worked"/>
+			<column name="value" value="Total Hours worked weekly while attending school"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.total-hours-worked" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+
+		<!--INTAKE TAB 3 (EduPlan)  -->
+		
+		
+		<insert tableName="blurb">
+			<column name="id" value="e79a610e-6d61-4879-b3d3-b0a1d52495b5" />
+			<column name="name" value="Intake Tab 3 Label" />
+			<column name="code" value="intake.tab3.label"/>
+			<column name="value" value="EduPlan"/>
+			<column name="description" value="EduPlan tab label" />
+			<column name="entity_type_code" value="reference.tab3" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>		
+
+		<insert tableName="blurb">
+			<column name="id" value="13d9e636-6a50-4a43-9de0-e9f50307c693" />
+			<column name="name" value="Intake Student Status Label" />
+			<column name="code" value="intake.tab3.label.student-status"/>
+			<column name="value" value="Student Status"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.student-status" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<insert tableName="blurb">
+			<column name="id" value="e43ec7f7-1a8a-422d-beca-bb3aad14cb36" />
+			<column name="name" value="Intake Student Completed Label" />
+			<column name="code" value="intake.tab3.label.completed"/>
+			<column name="value" value="Check all that you have completed"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.completed" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="0893976d-f7bd-41ed-8ea1-0d1089ff0ed8" />
+			<column name="name" value="Intake Parents College Label" />
+			<column name="code" value="intake.tab3.label.parents-college"/>
+			<column name="value" value="Have your parents obtained a college degree?"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.parents-college" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>		
+		
+		<insert tableName="blurb">
+			<column name="id" value="002d9807-8986-4db7-bbfb-f547381a8ff0" />
+			<column name="name" value="Intake Special Needs Label" />
+			<column name="code" value="intake.tab3.label.special-needs"/>
+			<column name="value" value="Special needs or require special accomodation?"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.special-needs" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+																																			
+		<insert tableName="blurb">
+			<column name="id" value="4133e249-f43d-4cf2-ab3b-9855f0c04aa6" />
+			<column name="name" value="Intake Typical Grade Label" />
+			<column name="code" value="intake.tab3.label.typical-grade"/>
+			<column name="value" value="What grade did you typically earn at your highest level of education?"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.typical-grade" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>
+		
+		<!--INTAKE TAB 4 (EduLevel)  -->
+		
+		
+		<insert tableName="blurb">
+			<column name="id" value="ec3ce67d-b149-466f-a2fe-cc9b176fc321" />
+			<column name="name" value="Intake Tab 4 Label" />
+			<column name="code" value="intake.tab4.label"/>
+			<column name="value" value="EduLevel"/>
+			<column name="description" value="EduLevel tab label" />
+			<column name="entity_type_code" value="reference.tab4" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>
+		
+		<insert tableName="blurb">
+			<column name="id" value="e591579e-27cf-49fe-9294-00130fe0f16d" />
+			<column name="name" value="Intake EduLevel Question Label" />
+			<column name="code" value="intake.tab4.label.edu-level"/>
+			<column name="value" value="Education level completed: Select all that apply"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.edu-level" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<!--INTAKE TAB 5 (EduGoal)  -->
+		
+		<insert tableName="blurb">
+			<column name="id" value="3f1c5fb9-7577-429f-8e00-22c510c55866" />
+			<column name="name" value="Intake Tab 5 Label" />
+			<column name="code" value="intake.tab5.label"/>
+			<column name="value" value="EduGoal"/>
+			<column name="description" value="EduGoal tab label" />
+			<column name="entity_type_code" value="reference.tab5" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>		
+		
+		<insert tableName="blurb">
+			<column name="id" value="5e0e9f07-e654-425f-a787-270c674b1048" />
+			<column name="name" value="Intake Education/Career Goal Label" />
+			<column name="code" value="intake.tab5.label.goal"/>
+			<column name="value" value="Education/Career Goal"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.goal" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="7781ce38-5d18-4efa-8461-9e1f56aeb07f" />
+			<column name="name" value="Intake Planned Major Label" />
+			<column name="code" value="intake.tab5.label.planned-major"/>
+			<column name="value" value="What is your planned major?"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.planned-major" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		
+		<insert tableName="blurb">
+			<column name="id" value="b8658813-b7c9-4d38-b8f9-cb306b2142eb" />
+			<column name="name" value="Intake Sure About Major Label" />
+			<column name="code" value="intake.tab5.label.sure-major"/>
+			<column name="value" value="How sure are you about your major?"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.sure-major" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>				
+					
+		
+		<insert tableName="blurb">
+			<column name="id" value="8d8dbc91-f30f-4f87-b405-bb2993da04d8" />
+			<column name="name" value="Intake Decided Occupation Label" />
+			<column name="code" value="intake.tab5.label.decided-occupation"/>
+			<column name="value" value="Have you decided on a career/occupation?"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.decided-occupation" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>		
+		
+		
+		<insert tableName="blurb">
+			<column name="id" value="921133e9-8c3b-4783-9f13-08ef1b277120" />
+			<column name="name" value="Intake Planned Occupation Label" />
+			<column name="code" value="intake.tab5.label.planned-occupation"/>
+			<column name="value" value="What is your planned occupation?"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.planned-occupation" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		
+		<insert tableName="blurb">
+			<column name="id" value="9287622c-2a2a-4d50-b016-c7586fec1247" />
+			<column name="name" value="Intake Sure Occupation Label" />
+			<column name="code" value="intake.tab5.label.sure-occupation"/>
+			<column name="value" value="How sure are you about your occupation?"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.sure-occupation" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		
+		<insert tableName="blurb">
+			<column name="id" value="97cb9704-39be-4f08-ae89-64ddc236aa73" />
+			<column name="name" value="Intake Confident Ability Label" />
+			<column name="code" value="intake.tab5.label.confident-ability"/>
+			<column name="value" value="Are you confident your abilities are compatible with the career field?"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.confident-ability" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>		
+		
+		<insert tableName="blurb">
+			<column name="id" value="89ba37b3-4358-40d0-b61f-444a0712a03f" />
+			<column name="name" value="Intake Additional Info Label" />
+			<column name="code" value="intake.tab5.label.additional-info"/>
+			<column name="value" value="Do you need additional information about which academic programs may lead to a future career?"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.additional-info" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="37a01fd6-810c-48a5-a6e9-81d3ec8801c1" />
+			<column name="name" value="Intake Registration Load Label" />
+			<column name="code" value="intake.tab5.label.registration-load"/>
+			<column name="value" value="Registration Load"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.registration-load" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="87f0c97c-4853-4b73-86f2-3c141bec532a" />
+			<column name="name" value="Intake Hours Coursework Label" />
+			<column name="code" value="intake.tab5.label.hours-coursework"/>
+			<column name="value" value="Hours per Week for Coursework"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.hours-coursework" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="7333c451-41f9-4e15-bea6-cd5effb26d23" />
+			<column name="name" value="Intake Anticipated Graduation Date Label" />
+			<column name="code" value="intake.tab5.label.anticipated-graduation"/>
+			<column name="value" value="Anticipated Graduation Date?"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.anticipated-graduation" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		
+		<!--INTAKE TAB 6 (Funding)  -->
+
+		
+		<insert tableName="blurb">
+			<column name="id" value="3258a72a-9014-472f-93c6-179a99ff7c2e" />
+			<column name="name" value="Intake Funding Tab Label" />
+			<column name="code" value="intake.tab6.label"/>
+			<column name="value" value="How will you pay for college?"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.tab6" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="9cf8048b-63d1-46e4-ad8f-1e33d764df33" />
+			<column name="name" value="Intake Funding Question Label" />
+			<column name="code" value="intake.tab6.label.funding-question"/>
+			<column name="value" value="Funding"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.funding-question" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>		
+		
+		<!--INTAKE TAB 7 (Challenges)  -->
+
+		
+		<insert tableName="blurb">
+			<column name="id" value="1c0bf63a-eb36-4af1-911f-804e95efd75b" />
+			<column name="name" value="Intake Challenges Tab Label" />
+			<column name="code" value="intake.tab7.label"/>
+			<column name="value" value="Challenges"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.tab7" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="41c2488f-74b7-4100-9cc4-6dc188eb1fdf" />
+			<column name="name" value="Intake Challenges Question Label" />
+			<column name="code" value="intake.tab7.label.challenges-question"/>
+			<column name="value" value="Select all challenges that may be barriers to your academic success"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.challenges-question" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="modified_by" value="ac1043b5-3c4a-1ab6-813c-4a7b26ef0000" />
+			<column name="object_status" value="1" />
+		</insert>		
+															
+</changeSet>	
+</databaseChangeLog>
