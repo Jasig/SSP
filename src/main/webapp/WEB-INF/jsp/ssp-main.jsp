@@ -26,6 +26,8 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/resources/css/ext-all.css" />">
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/src/ux/css/CheckHeader.css" />">
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/src/ux/css/ItemSelector.css" />">
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/src/ux/css/GridFilters.css" />">
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/src/ux/css/RangeMenu.css" />">
 
 <!-- SSP Theme -->
 <link href="<c:url value="/resources/css/tabs.css" />" rel="stylesheet" type="text/css" />
@@ -44,6 +46,16 @@
 <script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/CheckColumn.js" />"></script>
 <script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/form/MultiSelect.js" />"></script>
 <script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/form/ItemSelector.js" />"></script>   
+<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/grid/FiltersFeature.js" />"></script>  
+<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/grid/TransformGrid.js" />"></script>   
+<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/grid/filter/Filter.js" />"></script>   
+<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/grid/filter/StringFilter.js" />"></script>   
+<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/grid/filter/DateFilter.js" />"></script>   
+<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/grid/filter/ListFilter.js" />"></script>   
+<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/grid/filter/NumericFilter.js" />"></script>   
+<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/grid/filter/BooleanFilter.js" />"></script>  
+<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/grid/menu/RangeMenu.js" />"></script>   
+<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/src/ux/grid/menu/ListMenu.js" />"></script>   
 
 <!-- DEFT Lib -->
 <script type="text/javascript" src="<c:url value="/js/libs/deft/deft-0.6.8pre.js" />"></script>
