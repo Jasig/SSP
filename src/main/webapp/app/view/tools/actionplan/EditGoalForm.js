@@ -55,7 +55,7 @@ Ext.define('Ssp.view.tools.actionplan.EditGoalForm', {
 			        emptyText: 'Select One',
 			        store: this.store,
 			        valueField: 'id',
-			        displayField: 'acronym',
+			        displayField: 'name',
 			        typeAhead: true,
 			        queryMode: 'local',
 			        allowBlank: false,
