@@ -48,17 +48,15 @@ Ext.define('Ssp.controller.tool.actionplan.EditGoalFormViewController', {
 	init: function() {
 		var me=this;
 		
-		// apply confidentiality level filter
-		//me.authenticatedPerson.applyConfidentialityLevelsFilter( me.confidentialityLevelsStore );
-		
 		me.getView().getForm().loadRecord( me.model );
 		
+        me.confidentialityLevelsStore.clearFilter(true);
+		
+		me.confidentialityLevelsStore.load();
 		me.formUtils.applyAssociativeStoreFilter(me.confidentialityLevelsStore,me.model.get('confidentialityLevel').id);
 		
 		me.getCombo().setValue( this.model.get('confidentialityLevel').id );
 		
-		
-		me.authenticatedPerson.applyConfidentialityLevelsFilter(me.confidentialityLevelsStore);
 		
 		return me.callParent(arguments);
     },	
