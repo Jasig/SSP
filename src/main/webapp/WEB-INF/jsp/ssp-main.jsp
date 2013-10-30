@@ -26,8 +26,8 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/resources/css/ext-all.css" />">
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/src/ux/css/CheckHeader.css" />">
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/src/ux/css/ItemSelector.css" />">
-<link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/src/ux/css/GridFilters.css" />">
-<link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/src/ux/css/RangeMenu.css" />">
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/src/ux/grid/css/GridFilters.css" />">
+<link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/src/ux/grid/css/RangeMenu.css" />">
 
 <!-- SSP Theme -->
 <link href="<c:url value="/resources/css/tabs.css" />" rel="stylesheet" type="text/css" />
