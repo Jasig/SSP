@@ -78,6 +78,30 @@ Ext.define('Ssp.controller.EmailStudentViewController', {
             return ;
         }
         
+        var ccAddresses = record.get("additionalEmail");
+        var valid = true
+	    if (ccAddresses != null)
+	    {
+	    	// validate email addresses
+		    if ( ccAddresses.indexOf(",") )
+		    {
+		    	emailTestArr = ccAddresses.split(',');
+		    	Ext.each(emailTestArr,function(emailAddress,index){
+		    		if (valid == true)
+		    			valid = this.validateEmailAddress( emailAddress );
+		    	}, this);
+		    }else{
+		    	valid = this.validateEmailAddress( ccAddresses );
+		    }
+
+		    if (valid==false)
+		    {
+		    	Ext.Msg.alert('Error','One or more of the addresses you entered are invalid. Please correct the form and try again.');
+		    	return;
+		    }
+	    }
+		    
+        
         //scrub emails from the json if the option has not been selected
         if(!record.get("sendToPrimaryEmail"))
         {
@@ -116,6 +140,10 @@ Ext.define('Ssp.controller.EmailStudentViewController', {
     onCancelClick: function(){
     	var me=this;
     	me.getView().up('.window').close();
+    },
+    validateEmailAddress: function( value ){
+    	var emailExpression = filter = new RegExp('^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$');
+    	return emailExpression.test( value );
     }
     
 });
