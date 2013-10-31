@@ -26,9 +26,9 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
-	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.zoom" value="5.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="933"/>
 	<parameter name="studentTO" class="org.jasig.ssp.transferobject.PersonTO"/>
 	<parameter name="reportDate" class="java.lang.String"/>
 	<parameter name="studentRecordTO" class="org.jasig.ssp.transferobject.external.ExternalStudentRecordsLiteTO"/>
@@ -67,7 +67,7 @@
 		</band>
 	</title>
 	<detail>
-		<band height="164" splitType="Stretch">
+		<band height="182" splitType="Stretch">
 			<printWhenExpression><![CDATA[$V{PAGE_NUMBER}==1]]></printWhenExpression>
 			<staticText>
 				<reportElement uuid="5699d48e-300c-4b6c-9177-20746b23d6d8" x="0" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
@@ -117,7 +117,7 @@
 			<staticText>
 				<reportElement uuid="20e4ea5f-68b6-4362-b7d7-cfb9f983566a" x="273" y="0" width="140" height="20" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
-				<text><![CDATA[Student Advisor: ]]></text>
+				<text><![CDATA[Student Coach: ]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="3df642a5-92ae-4643-b264-e210473c3cd3" x="100" y="0" width="160" height="20" isPrintWhenDetailOverflows="true">
@@ -241,7 +241,7 @@
 				<text><![CDATA[Current GPA: ]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="fb461df4-5090-482a-8460-b4102f519066" x="413" y="120" width="160" height="20" isPrintWhenDetailOverflows="true">
+				<reportElement uuid="fb461df4-5090-482a-8460-b4102f519066" x="413" y="120" width="64" height="20" isPrintWhenDetailOverflows="true">
 					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
 				</reportElement>
 				<textElement/>
@@ -252,15 +252,34 @@
 				<textElement/>
 				<text><![CDATA[Completion Rate: ]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
 				<reportElement uuid="f684f510-6141-4b4b-bdb5-790cfb68ab2a" x="413" y="140" width="160" height="20" isPrintWhenDetailOverflows="true">
 					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
 				</reportElement>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{studentRecordTO}.getGpa().getCreditCompletionRate()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new BigDecimal($P{studentRecordTO}.getGpa().getCreditCompletionRate().doubleValue()*0.01)]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="af98c4e0-4110-4fca-89a6-f0989e6530a6" x="477" y="120" width="96" height="20" isPrintWhenDetailOverflows="true">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{studentRecordTO}.getGpa().getGpaTrendIndicator()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="bc57fe43-f7e9-4f8b-ab4d-fb66d89e3854" x="273" y="162" width="140" height="20"/>
+				<textElement/>
+				<text><![CDATA[MAP Name: ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="f8900300-bda1-4ada-85ea-98d767e33c30" stretchType="RelativeToBandHeight" x="413" y="162" width="160" height="20" isPrintWhenDetailOverflows="true">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{studentPlanTO}.getName()]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="21" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<printWhenExpression><![CDATA[$V{PAGE_NUMBER}==1]]></printWhenExpression>
 			<staticText>
 				<reportElement uuid="263eab1e-2045-4a6b-a816-52756b26f34b" x="0" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
@@ -275,16 +294,16 @@
 				<textFieldExpression><![CDATA[$P{studentRecordTO}.getGpa().getCurrentRestrictions()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="bc57fe43-f7e9-4f8b-ab4d-fb66d89e3854" x="273" y="0" width="140" height="20"/>
+				<reportElement uuid="f93b9ddc-fc7f-490d-9dd8-412f85c44d41" x="273" y="0" width="140" height="20"/>
 				<textElement/>
-				<text><![CDATA[MAP Name: ]]></text>
+				<text><![CDATA[MAP Status: ]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="f8900300-bda1-4ada-85ea-98d767e33c30" stretchType="RelativeToBandHeight" x="412" y="0" width="160" height="20" isPrintWhenDetailOverflows="true">
+				<reportElement uuid="9f2a3adc-c1d3-425e-9635-c53c344b29bb" x="413" y="0" width="160" height="20" isPrintWhenDetailOverflows="true">
 					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
 				</reportElement>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{studentPlanTO}.getName()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{studentMapStatusTO}.getStatus()]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="83" splitType="Stretch">
@@ -315,12 +334,12 @@
 				<text><![CDATA[F1: ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="a74218b9-b41d-466a-8d76-54bde98c0bd2" x="273" y="20" width="140" height="20"/>
+				<reportElement uuid="a74218b9-b41d-466a-8d76-54bde98c0bd2" x="273" y="0" width="140" height="20"/>
 				<textElement/>
 				<text><![CDATA[MAP Last Updated: ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="456bc62d-fd32-4401-bbaa-1e0667aa8477" x="273" y="40" width="140" height="20"/>
+				<reportElement uuid="456bc62d-fd32-4401-bbaa-1e0667aa8477" x="273" y="20" width="140" height="20"/>
 				<textElement/>
 				<text><![CDATA[MAP Projected Graduation: ]]></text>
 			</staticText>
@@ -360,30 +379,30 @@
 				<textFieldExpression><![CDATA[$P{studentRecordTO}.getFinancialAid().getSapStatus()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="7ee98890-5500-4cfd-8887-9daef5de5090" x="413" y="20" width="160" height="20" isPrintWhenDetailOverflows="true">
+				<reportElement uuid="7ee98890-5500-4cfd-8887-9daef5de5090" x="413" y="0" width="160" height="20" isPrintWhenDetailOverflows="true">
 					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
 				</reportElement>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{studentPlanTO}.getModifiedDate() == null ? "" : new SimpleDateFormat("MM/dd/yyyy").format($P{studentPlanTO}.getModifiedDate())]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="37a3b0ea-4953-47a0-941a-36bdc595d8c5" x="413" y="40" width="160" height="20" isPrintWhenDetailOverflows="true">
+				<reportElement uuid="37a3b0ea-4953-47a0-941a-36bdc595d8c5" x="413" y="20" width="160" height="20" isPrintWhenDetailOverflows="true">
 					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
 				</reportElement>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{planProjectedGraduationTerm}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="f93b9ddc-fc7f-490d-9dd8-412f85c44d41" x="273" y="0" width="140" height="20"/>
+				<reportElement uuid="445126e6-b6e8-4225-a939-9dc5b21982ce" x="273" y="40" width="140" height="20" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
-				<text><![CDATA[MAP Status: ]]></text>
+				<text><![CDATA[Advisor: ]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="9f2a3adc-c1d3-425e-9635-c53c344b29bb" x="413" y="0" width="160" height="20" isPrintWhenDetailOverflows="true">
+				<reportElement uuid="a42ddf7f-1c33-4bec-97d2-144263a78cf3" x="413" y="40" width="160" height="20" isPrintWhenDetailOverflows="true">
 					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
 				</reportElement>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{studentMapStatusTO}.getStatus()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{studentPlanTO}.getOwnerName()]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="32" splitType="Stretch">

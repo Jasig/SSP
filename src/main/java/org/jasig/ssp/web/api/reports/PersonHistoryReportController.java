@@ -168,14 +168,14 @@ public class PersonHistoryReportController extends ReportBaseController {
         //get current plan for student summary add projected graduation date as an additional parameter
         Plan checkPlan = planService.getCurrentForStudent(personId);
         PlanTO plan = new PlanTO();
-        String  planGraduateTerm = null;
+        String  planGraduateTerm = "";
 
         if ( checkPlan != null ) {
             plan.from(checkPlan);
             if ( plan.getPersonId().equals(personId) ) {
                 plan = planService.validate(plan);
-                planGraduateTerm = plan.getPlanCourses().get(0).getTermCode();
             }
+            planGraduateTerm = plan.getPlanCourses().get(0).getTermCode();
         }
         final PlanTO planTO = plan;
         final String planProjectedGraduationTerm = planGraduateTerm;
