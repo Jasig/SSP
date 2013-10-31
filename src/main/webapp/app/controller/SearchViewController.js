@@ -222,7 +222,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 				me.search();
 				me.displaySearchBar();
 			}
-		}	
+			me.showHideDOBColumn(false);
+		}
     },
     
     selectFirstItem: function(){
@@ -277,10 +278,14 @@ Ext.define('Ssp.controller.SearchViewController', {
 
 	displayCaseloadBar: function(){
 		var me=this;
-		me.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
+	    me.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
 		me.getCaseloadBar().show();
 		me.getSearchBar().hide();
 		me.setGridView();
+
+		if ( this.getView().getWidth() < (0.45 * Ext.getBody().getViewSize().width) ) {
+            me.showHideDOBColumn(false);
+        }
 	},
 	
 	applyColumns: function(){
@@ -296,7 +301,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	              { sortable: sortableColumns, header: 'First', dataIndex: 'firstName', flex: 1 },		        
     	              { sortable: sortableColumns, header: 'MI', dataIndex: 'middleName', flex: .2},
     	              { sortable: sortableColumns, header: 'Last', dataIndex: 'lastName', flex: 1},
-    	              { sortable: sortableColumns, header: 'DOB', dataIndex: 'birthDate', renderer: Ext.util.Format.dateRenderer('m/d/Y'), hidden: true, flex: 1},
+    	              { sortable: sortableColumns, header: 'DOB', dataIndex: 'birthDate', renderer: Ext.util.Format.dateRenderer('m/d/Y'), hidden: false, flex: 1},
     	              { sortable: sortableColumns, header: 'Type', dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: .2},
     	              { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: 1},
     	              { sortable: sortableColumns, header: 'Alerts', dataIndex: 'numberOfEarlyAlerts', flex: .2}
@@ -660,10 +665,16 @@ Ext.define('Ssp.controller.SearchViewController', {
     
 	onRetrieveCaseloadClick: function( button ){
 		var me=this;
+		var dobDisplayCheck = Ext.ComponentQuery.query('.gridcolumn[text=DOB]')[0].hidden;
         var skipCallBack = this.appEventsController.getApplication().fireEvent('retrieveCaseload',me);  
+
         if(skipCallBack)
         {
         	me.getCaseload();
+        }
+
+        if ( dobDisplayCheck ) {
+            me.showHideDOBColumn(false);
         }
 	},
 	
