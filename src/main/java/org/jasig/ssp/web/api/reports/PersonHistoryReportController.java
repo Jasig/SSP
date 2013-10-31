@@ -166,16 +166,26 @@ public class PersonHistoryReportController extends ReportBaseController {
         final ExternalStudentRecordsLiteTO recordTO = new ExternalStudentRecordsLiteTO(record, null); //null because don't need balance owed
 
         //get current plan for student summary add projected graduation date as an additional parameter
-        PlanTO plan = new PlanTO(planService.getCurrentForStudent(personId));
-        if ( plan.getPersonId().equals(personId) ) {
-            plan = planService.validate(plan);
+        Plan checkPlan = planService.getCurrentForStudent(personId);
+        PlanTO plan = new PlanTO();
+        String  planGraduateTerm = null;
+
+        if ( checkPlan != null ) {
+            plan.from(checkPlan);
+            if ( plan.getPersonId().equals(personId) ) {
+                plan = planService.validate(plan);
+                planGraduateTerm = plan.getPlanCourses().get(0).getTermCode();
+            }
         }
         final PlanTO planTO = plan;
-        final String planProjectedGraduationTerm = planTO.getPlanCourses().get(0).getTermCode();
+        final String planProjectedGraduationTerm = planGraduateTerm;
 
         //get current plan status for student summary
         final ExternalPersonPlanStatusTO mapStatusTO = new ExternalPersonPlanStatusTO();
-        mapStatusTO.from(planStatusService.getBySchoolId(schoolId));
+        ExternalPersonPlanStatus planStatus = planStatusService.getBySchoolId(schoolId);
+        if ( planStatus != null ) {
+            mapStatusTO.from(planStatus);
+        }
 
         // separate the Students into bands by date
 		final List<StudentHistoryTO> studentHistoryTOs = sort(earlyAlertTOs,
