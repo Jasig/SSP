@@ -92,13 +92,6 @@ public class JournalStepDetailDaoTest {
 		dao.delete(obj);
 	}
 
-	@Test
-	public void testGetAllForJournalStep() {
-		final PagingWrapper<JournalStepDetail> all = dao.getAllForJournalStep(
-				UUID.randomUUID(), new SortingAndPaging(ObjectStatus.ACTIVE));
-		assertList(all.getRows());
-	}
-
 	@Test(expected = ObjectNotFoundException.class)
 	public void testNull() throws ObjectNotFoundException {
 		final UUID id = UUID.randomUUID();

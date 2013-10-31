@@ -165,7 +165,7 @@ public class ChallengeReferralDaoTest {
 	@Test
 	public void countByChallengeIdNotOnActiveTaskList() {
 		final long count = dao.countByChallengeIdNotOnActiveTaskList(
-				testChallenge.getId(), testStudent, "testSessionId");
+				testChallenge.getId(), testStudent, "testSessionId", false);
 		assertTrue("Ensure count result is non-negative.", count > -1);
 	}
 
@@ -173,7 +173,7 @@ public class ChallengeReferralDaoTest {
 	public void byChallengeIdNotOnActiveTaskList() {
 		final List<ChallengeReferral> crs = dao
 				.byChallengeIdNotOnActiveTaskList(
-						testChallenge.getId(), testStudent, "testSessionId");
+						testChallenge.getId(), testStudent, "testSessionId", false);
 		assertList(crs);
 	}
 
