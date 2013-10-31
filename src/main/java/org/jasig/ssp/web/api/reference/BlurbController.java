@@ -107,6 +107,7 @@ public class BlurbController {
 	 *             If the specified id is null.
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_WRITE)
 	public @ResponseBody
 	BlurbTO save(@PathVariable final UUID id, @Valid @RequestBody final BlurbTO obj)
 			throws ValidationException, ObjectNotFoundException {
