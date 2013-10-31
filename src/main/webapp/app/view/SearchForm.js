@@ -265,8 +265,11 @@ Ext.define('Ssp.view.SearchForm',{
                             },
                             {
         				       xtype: 'datefield',
-                         	   altFormats: 'm/d/Y|m-d-Y',
+        				       format: 'm/d/Y',
+       				    	   altFormats: 'm/d/Y|m-d-Y',
                          	   allowBlank: true,
+                         	   showToday:false, 
+                         	   validateOnChange: false,
                          	   labelAlign: 'left',
                          	   columnWidth: .45,
                          	   fieldLabel: 'Birth Date',
