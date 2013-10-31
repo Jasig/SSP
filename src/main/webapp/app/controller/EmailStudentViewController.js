@@ -93,7 +93,7 @@ Ext.define('Ssp.controller.EmailStudentViewController', {
 
         var success = function()
         {
-            Ext.Msg.alert('Email Sent','Your student email has been send successfully.');
+            Ext.Msg.alert('Email Sent','Your student email has been sent successfully.');
         	me.getView().up('.window').close();
         }
         
