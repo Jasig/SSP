@@ -271,15 +271,16 @@ Ext.define('Ssp.view.SearchForm',{
                          	   showToday:false, 
                          	   validateOnChange: false,
                          	   labelAlign: 'left',
-                         	   columnWidth: .45,
-                         	   fieldLabel: 'Birth Date',
+                         	   columnWidth: .55,
+                         	   labelSeparator: '',
+                         	   fieldLabel: 'Birth Date: (mm/dd/ccyy)',
                          	   name: 'birthDate',
  							   itemId: 'birthDate',
  							  onExpand: function() {
  								    var value = this.getValue();
  								    var today = new Date();
  								    this.picker.setValue(Ext.isDate(value) ? value : new Date(today.getYear()-20, today.getMonth(), today.getDate(), 0, 0, 0, 0));
- 								},
+ 								}
                             }              
                  ]},
 
