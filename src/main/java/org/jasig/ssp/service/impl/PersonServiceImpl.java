@@ -954,7 +954,7 @@ public class PersonServiceImpl implements PersonService {
 		{
 			if(org.apache.commons.lang.StringUtils.isNotBlank(alternateEmailAddress))
 			{
-				String[] addresses = alternateEmailAddress.split(alternateEmailAddress);
+				String[] addresses = alternateEmailAddress.split(",");;
 				for (String address : addresses) {
 					builder.append(address);
 					builder.append(",");
