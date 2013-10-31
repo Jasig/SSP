@@ -80,7 +80,7 @@ Ext.define('Ssp.controller.EmailStudentViewController', {
         
         var ccAddresses = record.get("additionalEmail");
         var valid = true
-	    if (ccAddresses != null)
+	    if (ccAddresses)
 	    {
 	    	// validate email addresses
 		    if ( ccAddresses.indexOf(",") )
@@ -93,7 +93,6 @@ Ext.define('Ssp.controller.EmailStudentViewController', {
 		    }else{
 		    	valid = this.validateEmailAddress( ccAddresses );
 		    }
-
 		    if (valid==false)
 		    {
 		    	Ext.Msg.alert('Error','One or more of the addresses you entered are invalid. Please correct the form and try again.');
