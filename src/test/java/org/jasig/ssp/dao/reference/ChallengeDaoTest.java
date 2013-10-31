@@ -143,7 +143,7 @@ public class ChallengeDaoTest {
 
 	@Test
 	public void searchByQuery() {
-		final List<Challenge> challenges = dao.searchByQuery("issue");
+		final List<Challenge> challenges = dao.searchByQuery("issue", false);
 		assertList(challenges);
 		assertFalse("Search list should have returned some items.",
 				challenges.isEmpty());

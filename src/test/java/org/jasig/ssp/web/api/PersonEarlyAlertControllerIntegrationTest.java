@@ -194,11 +194,10 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		obj.setPersonId(PERSON_ID);
 		obj.setEmailCC(testEmailCC);
 		obj.setCampusId(CAMPUS_ID);
-		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
+		final Set<UUID> earlyAlertSuggestionIds = Sets
 				.newHashSet();
-		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
-				EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME));
-		obj.setEarlyAlertSuggestions(earlyAlertSuggestionIds);
+		earlyAlertSuggestionIds.add(EARLY_ALERT_SUGGESTION_ID);
+		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
 
 		final EarlyAlertTO saved = controller.create(PERSON_ID,
 				obj);
@@ -212,9 +211,8 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		assertEquals("Saved instance values did not match.", testEmailCC,
 				saved.getEmailCC());
 		assertEquals("Saved instance sets did not match.",
-				EARLY_ALERT_SUGGESTION_NAME,
-				saved.getEarlyAlertSuggestionIds().iterator().next()
-						.getName());
+				EARLY_ALERT_SUGGESTION_ID,
+				saved.getEarlyAlertSuggestionIds().iterator().next());
 
 		final ServiceResponse response = controller.delete(savedId,
 				PERSON_ID);
@@ -294,7 +292,7 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		// Reload data to make sure it filters correctly
 		final EarlyAlertTO reloaded = controller.get(savedId, PERSON_ID);
 
-		final Set<EarlyAlertSuggestionTO> suggestions = reloaded
+		final Set<UUID> suggestions = reloaded
 				.getEarlyAlertSuggestionIds();
 
 		assertEquals("Set returned all objects instead of active only.", 2,
@@ -302,18 +300,11 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 
 		int count = 0;
 
-		for (final EarlyAlertSuggestionTO eas : suggestions) {
-			if (eas.getId().equals(EARLY_ALERT_SUGGESTION_ID)) {
+		for (final UUID easId : suggestions) {
+			if (easId.equals(EARLY_ALERT_SUGGESTION_ID)) {
 				count++;
-				assertEquals("Status should be active.", ObjectStatus.ACTIVE,
-						eas.getObjectStatus());
-				assertEquals("Saved instance sets did not match.",
-						EARLY_ALERT_SUGGESTION_NAME, eas.getName());
-			} else if (eas.getId().equals(EARLY_ALERT_SUGGESTION_INACTIVE_ID)) {
+			} else if (easId.equals(EARLY_ALERT_SUGGESTION_INACTIVE_ID)) {
 				count++;
-				assertEquals("Status should be inactive.",
-						ObjectStatus.INACTIVE,
-						eas.getObjectStatus());
 			} else {
 				fail("Unexpected Suggestion found.");
 			}
@@ -494,16 +485,11 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		obj.setEarlyAlertReasonOtherDescription("some string");
 		obj.setEarlyAlertSuggestionOtherDescription("some other description");
 
-		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
+		final Set<UUID> earlyAlertSuggestionIds = Sets
 				.newHashSet();
-		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
-				EARLY_ALERT_SUGGESTION_ID, EARLY_ALERT_SUGGESTION_NAME));
-		final EarlyAlertSuggestionTO inactiveSuggestion = new EarlyAlertSuggestionTO(
-				EARLY_ALERT_SUGGESTION_INACTIVE_ID,
-				"Some EARLY_ALERT_SUGGESTION_INACTIVE_NAME");
-		inactiveSuggestion.setObjectStatus(ObjectStatus.INACTIVE);
-		earlyAlertSuggestionIds.add(inactiveSuggestion);
-		obj.setEarlyAlertSuggestions(earlyAlertSuggestionIds);
+		earlyAlertSuggestionIds.add(EARLY_ALERT_SUGGESTION_ID);
+		earlyAlertSuggestionIds.add(EARLY_ALERT_SUGGESTION_INACTIVE_ID);
+		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
 		return obj;
 	}
 
@@ -574,20 +560,15 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		final EarlyAlertTO obj = new EarlyAlertTO();
 		obj.setCampusId(CAMPUS_ID);
 
-		final Set<EarlyAlertReasonTO> earlyAlertReasonIds = Sets.newHashSet();
-		earlyAlertReasonIds.add(new EarlyAlertReasonTO(EARLY_ALERT_REASON_ID,
-				""));
-		obj.setEarlyAlertReasons(earlyAlertReasonIds);
+		final Set<UUID> earlyAlertReasonIds = Sets.newHashSet();
+		earlyAlertReasonIds.add(EARLY_ALERT_REASON_ID);
+		obj.setEarlyAlertReasonIds(earlyAlertReasonIds);
 
-		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
+		final Set<UUID> earlyAlertSuggestionIds = Sets
 				.newHashSet();
-		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
-				EARLY_ALERT_SUGGESTION_ID1,
-				""));
-		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
-				EARLY_ALERT_SUGGESTION_ID2,
-				""));
-		obj.setEarlyAlertSuggestions(earlyAlertSuggestionIds);
+		earlyAlertSuggestionIds.add(EARLY_ALERT_SUGGESTION_ID1);
+		earlyAlertSuggestionIds.add(EARLY_ALERT_SUGGESTION_ID2);
+		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
 
 		final EarlyAlertTO saved = controller.create(PERSON_STUDENTID,
 				obj);
@@ -634,18 +615,15 @@ public class PersonEarlyAlertControllerIntegrationTest { // NOPMD by jon.adams
 		final EarlyAlertTO obj = new EarlyAlertTO();
 		obj.setCampusId(CAMPUS_ID);
 
-		final Set<EarlyAlertReasonTO> earlyAlertReasonIds = Sets.newHashSet();
-		earlyAlertReasonIds.add(new EarlyAlertReasonTO(EARLY_ALERT_REASON_ID,
-				""));
-		obj.setEarlyAlertReasons(earlyAlertReasonIds);
+		final Set<UUID> earlyAlertReasonIds = Sets.newHashSet();
+		earlyAlertReasonIds.add(EARLY_ALERT_REASON_ID);
+		obj.setEarlyAlertReasonIds(earlyAlertReasonIds);
 
-		final Set<EarlyAlertSuggestionTO> earlyAlertSuggestionIds = Sets
+		final Set<UUID> earlyAlertSuggestionIds = Sets
 				.newHashSet();
-		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
-				EARLY_ALERT_SUGGESTION_ID1, ""));
-		earlyAlertSuggestionIds.add(new EarlyAlertSuggestionTO(
-				EARLY_ALERT_SUGGESTION_ID2, ""));
-		obj.setEarlyAlertSuggestions(earlyAlertSuggestionIds);
+		earlyAlertSuggestionIds.add(EARLY_ALERT_SUGGESTION_ID1);
+		earlyAlertSuggestionIds.add(EARLY_ALERT_SUGGESTION_ID2);
+		obj.setEarlyAlertSuggestionIds(earlyAlertSuggestionIds);
 
 		// act
 		final EarlyAlertTO saved = controller.create(EXTERNAL_STUDENT, obj);

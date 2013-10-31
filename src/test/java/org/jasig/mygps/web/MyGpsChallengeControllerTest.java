@@ -54,7 +54,7 @@ public class MyGpsChallengeControllerTest {
 		String query = "ABCDEFG";
 		List<Challenge> searchResults = Lists.newArrayList();
 		List<ChallengeTO> searchResultsTO = Lists.newArrayList();
-		expect(manager.challengeSearch(query)).andReturn(searchResults);
+		expect(manager.challengeSearch(query, false)).andReturn(searchResults);
 
 		replay(manager);
 

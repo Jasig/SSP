@@ -40,6 +40,7 @@ import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
 import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
+import org.jasig.ssp.transferobject.reference.ConfidentialityLevelTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
@@ -251,8 +252,8 @@ public class PersonTaskControllerIntegrationTest {
 		obj.setPersonId(PERSON_ID);
 		obj.setObjectStatus(ObjectStatus.ACTIVE);
 		obj.setName("Some Name");
-		obj.setConfidentialityLevel(new ConfidentialityLevelLiteTO(
-				ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE, "EVERYONE"));
+		obj.setConfidentialityLevel(new ConfidentialityLevelTO(
+				ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE, "EVERYONE", "EVERYONE"));
 		return obj;
 	}
 

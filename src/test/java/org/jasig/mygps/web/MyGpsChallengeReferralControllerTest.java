@@ -98,7 +98,7 @@ public class MyGpsChallengeReferralControllerTest {
 		List<ChallengeReferral> searchResults = Lists.newArrayList();
 		List<ChallengeReferralTO> searchResultsTO = Lists.newArrayList();
 		expect(challengeService.get(challenge.getId())).andReturn(challenge);
-		expect(challengeReferralService.challengeReferralSearch(challenge))
+		expect(challengeReferralService.challengeReferralSearch(challenge, false))
 				.andReturn(searchResults);
 		expect(challengeReferralTOFactory.asTOList(searchResults)).andReturn(
 				searchResultsTO);
