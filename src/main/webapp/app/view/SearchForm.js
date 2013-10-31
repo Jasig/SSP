@@ -274,7 +274,12 @@ Ext.define('Ssp.view.SearchForm',{
                          	   columnWidth: .45,
                          	   fieldLabel: 'Birth Date',
                          	   name: 'birthDate',
- 							   itemId: 'birthDate'
+ 							   itemId: 'birthDate',
+ 							  onExpand: function() {
+ 								    var value = this.getValue();
+ 								    var today = new Date();
+ 								    this.picker.setValue(Ext.isDate(value) ? value : new Date(today.getYear()-20, today.getMonth(), today.getDate(), 0, 0, 0, 0));
+ 								},
                             }              
                  ]},
 
