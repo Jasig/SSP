@@ -194,7 +194,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                         dock: 'bottom',
                         displayInfo: true,
                         pageSize: me.apiProperties.getPagingSize(),
-                        hidden: !hasPagingToolbar
+                        hidden: !me.hasPagingToolbar
                     },
                     {
                         xtype: 'toolbar',
