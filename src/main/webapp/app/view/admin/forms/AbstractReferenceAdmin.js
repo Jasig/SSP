@@ -80,11 +80,15 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     	var deleteVisible = true;
     	var headerInstructions = null;
     	var hasPagingToolbar = true;
+
     	if( me.interfaceOptions ) {
     		addVisible = me.interfaceOptions.addButtonVisible;
     		deleteVisible = me.interfaceOptions.deleteButtonVisible;    
     		headerInstructions = me.interfaceOptions.headerInstructions;
-    		hasPagingToolbar = me.interfaceOptions.hasPagingToolbar;
+
+    		if ( typeof me.interfaceOptions.hasPagingToolbar != 'undefined' ) {
+    		    hasPagingToolbar = me.interfaceOptions.hasPagingToolbar;
+    		}
     	}
 
         // Special handling for view config so we don't accidentally clobber
@@ -194,7 +198,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                         dock: 'bottom',
                         displayInfo: true,
                         pageSize: me.apiProperties.getPagingSize(),
-                        hidden: !me.hasPagingToolbar
+                        hidden: !hasPagingToolbar
                     },
                     {
                         xtype: 'toolbar',
