@@ -155,28 +155,25 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                     ]
 
                 },
-                
                 {
                     xtype: 'fieldset',
                     border: 1,
                     title: 'Student Intake',
                     defaultType: 'displayfield',
                     margin: '0 0 0 2',
-                    defaults: {
-                        anchor: '100%'
-                    },
-                    flex: .25,
                     height: '370',
-                    
-                    items: [{
+                     items: [{
                         fieldLabel: 'Assigned',
                         name: 'studentIntakeAssigned',
                         itemId: 'studentIntakeAssigned',
+                        labelWidth: '50',
                         renderer: Ext.util.Format.dateRenderer('m/d/Y')
                     }, {
                         fieldLabel: 'Completed',
                         name: 'studentIntakeCompleted',
                         itemId: 'studentIntakeCompleted',
+                        cls: 'dashboardIntakeDates',
+                        labelWidth: '50',
                         renderer: Ext.util.Format.dateRenderer('m/d/Y')
                     }]
                 
