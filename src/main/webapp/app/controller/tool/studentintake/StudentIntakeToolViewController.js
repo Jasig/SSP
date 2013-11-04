@@ -44,7 +44,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
         studentIntake: 'currentStudentIntake',
     	veteranStatusesStore: 'veteranStatusesStore',
     	registrationLoadsStore: 'registrationLoadsStore',
-    	courseworkHoursStore:'courseworkHoursStore'
+    	courseworkHoursStore:'courseworkHoursStore',
+    	textStore:'textStore'
     }, 
     config: {
     	studentIntakeForm: null
@@ -64,6 +65,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	init: function() {
 		var me=this;	
 		
+		me.textStore.load();
 		// Load the views dynamically
 		// otherwise duplicate id's will be registered
 		// on cancel
@@ -129,31 +131,31 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	        height: '100%',
 	        activeTab: 0,
 			border: 0,
-	        items: [ { title: 'Personal'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
+	        items: [ { title: me.textStore.getValueByCode('intake.tab1.label')+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
 	        		   autoScroll: true,
 	        		   items: [{xtype: 'studentintakepersonal'}]
 	        		},{
-	            		title: 'Demographics',
+	            		title: me.textStore.getValueByCode('intake.tab2.label'),
 	            		autoScroll: true,
 	            		items: [{xtype: 'studentintakedemographics'}]
 	        		},{
-	            		title: 'EduPlan',
+	            		title: me.textStore.getValueByCode('intake.tab3.label'),
 	            		autoScroll: true,
 	            		items: [{xtype: 'studentintakeeducationplans'}]
 	        		},{
-	            		title: 'EduLevel',
+	            		title: me.textStore.getValueByCode('intake.tab4.label'),
 	            		autoScroll: true,
 	            		items: [{xtype: 'studentintakeeducationlevels'}]
 	        		},{
-	            		title: 'EduGoal',
+	            		title: me.textStore.getValueByCode('intake.tab5.label'),
 	            		autoScroll: true,
 	            		items: [{xtype: 'studentintakeeducationgoals'}]
 	        		},{
-	            		title: 'Funding',
+	            		title: me.textStore.getValueByCode('intake.tab6.label'),
 	            		autoScroll: true,
 	            		items: [{xtype: 'studentintakefunding'}]
 	        		},{
-	            		title: 'Challenges',
+	            		title: me.textStore.getValueByCode('intake.tab7.label'),
 	            		autoScroll: true,
 	            		hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_CHALLENGE_TAB'),
 	            		items: [{xtype: 'studentintakechallenges'}]
@@ -378,7 +380,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		educationLevelFormProps = {
 				mainComponentType: 'checkbox',
 			    formId: 'StudentIntakeEducationLevels', 
-                fieldSetTitle: 'Education level completed: Select all that apply',
+                fieldSetTitle: me.textStore.getValueByCode('intake.tab4.label.edu-level'),
                 itemsArr: educationLevels, 
                 selectedItemsArr: personEducationLevels, 
                 idFieldName: 'id', 
@@ -397,7 +399,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		fundingSourceFormProps = {
 				mainComponentType: 'checkbox',
 				formId: 'StudentIntakeFunding', 
-                fieldSetTitle: 'How will you pay for college?',
+                fieldSetTitle: me.textStore.getValueByCode('intake.tab6.label.funding-question'),
                 itemsArr: fundingSources, 
                 selectedItemsArr: personFundingSources, 
                 idFieldName: 'id', 
@@ -416,7 +418,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		challengeFormProps = {
 				mainComponentType: 'checkbox',
 				formId: 'StudentIntakeChallenges', 
-                fieldSetTitle: 'Select all challenges that may be barriers to your academic success:',
+                fieldSetTitle: me.textStore.getValueByCode('intake.tab7.label.challenges-question'),
                 itemsArr: challenges, 
                 selectedItemsArr: personChallenges, 
                 idFieldName: 'id', 

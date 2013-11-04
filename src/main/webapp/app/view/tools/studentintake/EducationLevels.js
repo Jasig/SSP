@@ -18,8 +18,13 @@
  */
 Ext.define('Ssp.view.tools.studentintake.EducationLevels', {
 	extend: 'Ext.form.Panel',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],	
 	alias: 'widget.studentintakeeducationlevels',
 	id : 'StudentIntakeEducationLevels',
+    inject: {
+        textStore:'textStore'
+    },	
     width: '100%',
     height: '100%',
 	minHeight: 1000,

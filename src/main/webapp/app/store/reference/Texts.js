@@ -23,4 +23,11 @@ Ext.define('Ssp.store.reference.Texts', {
     	this.callParent(arguments);
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('blurb'),
 		extraParams: this.extraParams});
-    }});
+    },
+    getValueByCode:function(code)
+    {
+    	var me=this;
+    	return me.getAt(me.find('code',code)).get('value');
+    }
+
+});

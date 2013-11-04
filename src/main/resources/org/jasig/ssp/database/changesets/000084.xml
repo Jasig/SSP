@@ -869,7 +869,7 @@
 			<column name="id" value="3258a72a-9014-472f-93c6-179a99ff7c2e" />
 			<column name="name" value="Intake Funding Tab Label" />
 			<column name="code" value="intake.tab6.label"/>
-			<column name="value" value="How will you pay for college?"/>
+			<column name="value" value="Funding"/>
 			<column name="description" value="" />
 			<column name="entity_type_code" value="reference.tab6" />
 			<column name="created_date" valueDate="2013-10-29T00:00:00" />
@@ -925,4 +925,87 @@
 		</insert>		
 															
 </changeSet>	
+
+<changeSet author='tony.arland' id='change blurb seedings'>
+	<update tableName="blurb">
+		<column name="code" value="intake.tab1.label" />
+		<column name="value" value="Personal" />
+		<where>id = '1a92f3e6-9364-4e6f-8388-aee95a3af55d'</where>
+	</update>
+	
+	<update tableName="blurb">
+		<column name="value" value="Funding" />
+		<where>id = '3258a72a-9014-472f-93c6-179a99ff7c2e'</where>
+	</update>	
+	
+	<update tableName="blurb">
+		<column name="value" value="Student Id" />
+		<column name="entity_type_code" value="reference.student-id"/>
+		<where>id = 'bc816c86-04c8-4d7b-87a5-0a74ad3ea23a'</where>
+	</update>	
+
+	<update tableName="blurb">
+		<column name="value" value="Student Id" />
+		<column name="entity_type_code" value="reference.student-id"/>
+		<where>id = 'bc816c86-04c8-4d7b-87a5-0a74ad3ea23a'</where>
+	</update>	
+	
+	<insert tableName="blurb">
+		<column name="id" value="94768043-cee4-40ab-8318-4008cf71009b" />
+		<column name="name" value="Intake Birthday Label" />
+		<column name="code" value="intake.tab1.label.birthday"/>
+		<column name="value" value="Birthday"/>
+		<column name="description" value="" />
+		<column name="entity_type_code" value="reference.birthday" />
+		<column name="created_date" valueDate="2013-10-29T00:00:00" />
+		<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+		<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+		<column name="object_status" value="1" />
+	</insert>
+
+</changeSet>
+	
+	<changeSet author='tony.arland' id='change blurb seedings 2'>
+		<insert tableName="blurb">
+			<column name="id" value="35c412fd-838f-47e2-897a-adbd88a629ad" />
+			<column name="name" value="Intake Alternate In Use Label" />
+			<column name="code" value="intake.tab1.label.alt-in-use"/>
+			<column name="value" value="In Use"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.alt-in-use" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		
+		<insert tableName="blurb">
+			<column name="id" value="e45e465e-efde-4193-93c6-59996818d360" />
+			<column name="name" value="Intake Country of Citizenship Label" />
+			<column name="code" value="intake.tab2.label.country-citizenship"/>
+			<column name="value" value="Country of Citizenship"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.country-citizenship" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>		
+		
+		<update tableName="blurb">
+			<column name="value" value="Citizenship" />
+			<where>id = '7b1d2b79-4f09-4338-944e-893f4f3cdeb7'</where>
+		</update>
+	</changeSet>	
+	
+	<changeSet author='tony.arland' id='change blurb seedings 3'>
+		<update tableName="blurb">
+			<column name="value" value="How will you pay for college?" />
+			<where>id = '9cf8048b-63d1-46e4-ad8f-1e33d764df33'</where>
+		</update>
+	</changeSet>	
+
 </databaseChangeLog>

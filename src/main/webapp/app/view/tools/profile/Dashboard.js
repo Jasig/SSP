@@ -23,7 +23,8 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
     controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
-        sspConfig: 'sspConfig'
+        sspConfig: 'sspConfig',
+        
     },
     width: '100%',
     height: '100%',

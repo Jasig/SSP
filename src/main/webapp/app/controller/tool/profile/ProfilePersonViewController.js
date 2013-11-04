@@ -32,7 +32,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
 		programStatusChangeReasonsStore: 'programStatusChangeReasonsStore',
         sspConfig: 'sspConfig',
-		formUtils: 'formRendererUtils'
+		formUtils: 'formRendererUtils',
+    	textStore:'textStore'
+		
     },
     
     control: {
@@ -78,7 +80,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var me = this;
         var id = me.personLite.get('id');
         me.resetForm();
-       
+       me.textStore.load();
         if (id != "") {
             // display loader
             me.getView().setLoading(true);
