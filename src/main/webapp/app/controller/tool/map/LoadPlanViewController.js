@@ -96,6 +96,7 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
     	var me = this;
 		var grid, record;
 		var callbacks = new Object();
+    	me.getView().setLoading(true);
 		callbacks.success = me.onLoadCompleteSuccess;
 		callbacks.failure = me.onLoadCompleteFailure;
 		callbacks.scope = me;
@@ -117,12 +118,13 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
        		me.scope.currentMapPlan.loadFromServer(Ext.decode(serviceResponses.responseText));
 			me.scope.appEventsController.getApplication().fireEvent('onLoadMapPlan');
 			me.scope.appEventsController.getApplication().fireEvent("onCurrentMapPlanChangeUpdateMapView");
+	    	me.scope.getView().setLoading(false);
 			me.scope.getView().hide();
 		}
 	},
 	onLoadCompleteFailure: function(serviceResponses){
 		var me = this;
-		view.setLoading(false);
+    	me.scope.getView().setLoading(false);
 	},	    
 	onCloseClick: function(){
 		var me = this;
