@@ -99,7 +99,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	search: function(){
 		var me=this;		
 		me.searchService.search2( 
-				me.getView().query('textfield[name=studentId]')[0].value,
+				Ext.String.trim(me.getView().query('textfield[name=studentId]')[0].value),
 				me.getView().query('combobox[name=programStatus]')[0].value,
 				me.getView().query('combobox[name=coachId]')[0].value,				
 				me.getView().query('combobox[name=declaredMajor]')[0].value,

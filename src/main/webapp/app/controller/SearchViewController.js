@@ -636,7 +636,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		{
 			me.getView().setLoading( true );
 			me.searchService.search( 
-					me.searchCriteria.get('searchTerm'), 
+					Ext.String.trim(me.searchCriteria.get('searchTerm')),
 					me.searchCriteria.get('outsideCaseload'),
 					{
 					success: me.searchSuccess,
