@@ -358,10 +358,12 @@ Ext.define('Ssp.controller.SearchViewController', {
 
 	showHideDOBColumn: function( value ) {
         var dobColumn = Ext.ComponentQuery.query('.gridcolumn[text=DOB]')[0];
-    	if ( value ) {
-           dobColumn.show();
-        } else {
-            dobColumn.hide();
+    	if ( dobColumn ) {
+    	    if ( value ) {
+                dobColumn.show();
+            } else {
+                dobColumn.hide();
+            }
         }
     },
 
