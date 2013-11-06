@@ -106,7 +106,8 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
         {	
         	 me.mapPlanService.getPlan(record.get('id'),record.get('personId'), callbacks);
         }else{
-     	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
+           Ext.Msg.alert('SSP Error', 'Please select an item to edit.');
+           me.getView().setLoading(false);
         }    	
     },
 	
