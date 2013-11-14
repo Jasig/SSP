@@ -46,8 +46,8 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
         var filters = {
                 ftype: 'filters',
                 encode: false, // json encode the filter query
-                local: true,   // defaults to false (remote filtering)
-            };   	
+                local: true   // defaults to false (remote filtering)
+        };
     	var sort = me.sort;
     	
     	var cellEditor = Ext.create('Ext.grid.plugin.RowEditing', { 

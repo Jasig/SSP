@@ -134,7 +134,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                         name: 'secondaryEmail',
                         itemId: 'secondaryEmail',
                         labelSeparator : '',
-                        fieldStyle: 'color:blue',
+                        fieldStyle: 'color:blue'
                         
 				    }]
             },
@@ -187,8 +187,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
 		                height: 200
 				    }]
             }
-            ]
-		    ,
+            ],
 		    dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'top',
