@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="Normalize Dates On Test Data Postgre" author="paul.spaude">
+        <preConditions onFail="MARK_RAN" onFailMessage="Skipping Postgres Normalize Dates on Test Data">
+            <dbms type="postgresql" />
+        </preConditions>
+        <sql splitStatements="false">
+            CREATE OR REPLACE FUNCTION normalizeAllDates() RETURNS void AS $$
+
+            DECLARE
+               tableName VARCHAR;
+               ifExists BOOLEAN;
+
+            BEGIN
+               FOR tableName IN (SELECT table_name FROM information_schema.tables WHERE table_schema='public') LOOP
+
+                  ifExists = (SELECT EXISTS (SELECT column_name FROM information_schema.columns WHERE table_name=tableName and column_name='created_date'));
+
+                  IF ifExists IS TRUE THEN
+                     EXECUTE 'UPDATE ' || tableName || ' SET created_date = ''2013-01-01 00:00:00'';';
+                  END IF;
+
+                  ifExists = (SELECT EXISTS (SELECT column_name FROM information_schema.columns WHERE table_name=tableName and column_name='modified_date'));
+
+                  IF ifExists IS TRUE THEN
+                     EXECUTE 'UPDATE ' || tableName || ' SET modified_date = ''2013-01-01 00:00:00'';';
+                  END IF;
+
+                END LOOP;
+            END;
+
+            $$ LANGUAGE plpgsql;
+
+            SELECT normalizeAllDates();
+        </sql>
+
+	</changeSet>
+
+    <changeSet id="Normalize Dates on Test Data MSSQL" author="paul.spaude">
+        <preConditions onFail="MARK_RAN" onFailMessage="Skipping MSSQL Normalize Dates On Test Data">
+            <dbms type="mssql" />
+        </preConditions>
+        <sql splitStatements="true"  endDelimiter="GO" stripComments="false">
+            EXEC sp_MSforeachtable '
+               DECLARE @updateStatement nvarchar(1000);
+               DECLARE @tableName varchar(255);
+               SET @tableName =  PARSENAME("?",1);
+
+               IF EXISTS (SELECT * FROM sys.columns WHERE object_id = object_id(''?'') AND name = ''created_date'')
+               BEGIN
+                    SET @updateStatement = N''UPDATE '' + @tableName + N'' SET created_date = ''''2013-01-01 00:00:00'''';''
+                    EXEC sp_executesql @updateStatement
+               END
+
+               IF EXISTS (SELECT * FROM sys.columns WHERE object_id = object_id(''?'') AND name = ''modified_date'')
+               BEGIN
+                    SET @updateStatement = N''UPDATE '' + @tableName + N'' SET modified_date = ''''2013-01-01 00:00:00'''';''
+                    EXEC sp_executesql @updateStatement
+               END
+            '
+        </sql>
+
+    </changeSet>
+
+</databaseChangeLog>
