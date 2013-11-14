@@ -30,6 +30,8 @@
 		<sencha.skip>false</sencha.skip>
 
 		<maven.build.timestamp.format>yyyyMMdd-HHmmZ</maven.build.timestamp.format>
+ 		<integrationTest.skip>true</integrationTest.skip>
+  		<unitTest.skip>false</unitTest.skip>
 	</properties>
 
 	<scm>
@@ -100,6 +102,15 @@
 				<sencha.skip>true</sencha.skip>
 			</properties>
 		</profile>
+
+        <profile>
+            <id>API_INTEGRATION_TEST</id>
+            <properties>
+                <integrationTest.skip>false</integrationTest.skip>
+                <unitTest.skip>true</unitTest.skip>
+            </properties>
+
+        </profile>
 
 	</profiles>
 
@@ -548,20 +559,32 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>${apache.httpcomponents.version}</version>
-			<scope>test</scope>
-		</dependency>
-
 		<!-- Allow use of properties files in maven script -->
 		<dependency>
 			<groupId>org.codehaus.mojo</groupId>
 			<artifactId>properties-maven-plugin</artifactId>
 			<version>1.0-alpha-2</version>
 		</dependency>
-		
+
+        <dependency>
+            <groupId>com.jayway.restassured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>1.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit-dep</artifactId>
+            <version>4.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.2.1</version>
+            <scope>test</scope>
+        </dependency>
+
 	</dependencies>
 
 
@@ -805,6 +828,7 @@
 				<version>2.12</version>
 				<inherited>true</inherited>
 				<configuration>
+                    <skip>${unitTest.skip}</skip>
 					<forkMode>once</forkMode>
 					<reportFormat>plain</reportFormat>
 				</configuration>
@@ -816,6 +840,51 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+            <!-- Add API Integration Test Source to Tests -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>add-test-source</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${basedir}/src/test/api</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Run API Integration Tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.16</version>
+                <configuration>
+                    <skip>${integrationTest.skip}</skip>
+                    <encoding>utf-8</encoding>
+                    <systemPropertyVariables>
+                        <apiURL>${apiURL}</apiURL>
+                        <apiPORT>${apiPORT}</apiPORT>
+                        <artifactVersion>${project.version}</artifactVersion>
+                        <buildDate>${timestamp}</buildDate>
+                        <scmRevision>${buildNumber}</scmRevision>
+                    </systemPropertyVariables>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 			<!-- Allow running liquibase from the command line through maven -->
 			<plugin>
 				<groupId>org.liquibase</groupId>

@@ -76,8 +76,7 @@ public class TagController
 		super(Tag.class, TagTO.class);
 	}
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(StudentTypeController.class);
+
 
 	@Override
 	protected Logger getLogger() {

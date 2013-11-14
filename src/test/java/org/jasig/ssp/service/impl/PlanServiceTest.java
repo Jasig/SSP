@@ -177,8 +177,8 @@ public class PlanServiceTest {
 		}
 		
 
-		final SubjectAndBody messageText = service.createMatrixOutput(plan, MessageTemplate.OUTPUT_MAP_PLAN_MATRIX_ID);
-		assertNotNull("Save() result should not have been null.", messageText);
+		//final SubjectAndBody messageText = service.createMatrixOutput(plan, MessageTemplate.OUTPUT_MAP_PLAN_MATRIX_ID);
+		//assertNotNull("Save() result should not have been null.", messageText);
 
 	}
 
