@@ -176,7 +176,7 @@ Ext.define('Ssp.view.tools.map.FAView', {
                         itemId: 'f1Status',
                         labelWidth: 30
 		             },{
-                        fieldLabel: 'FASFA',
+                        fieldLabel: 'FAFSA',
                         name: 'fafsaDate',
                         itemId: 'fafsaDate',
 						labelWidth: 60
