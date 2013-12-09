@@ -162,7 +162,7 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                     defaultType: 'displayfield',
                     margin: '0 0 0 2',
                     height: '370',
-                     items: [{
+                    items: [{
                         fieldLabel: 'Assigned',
                         name: 'studentIntakeAssigned',
                         itemId: 'studentIntakeAssigned',
