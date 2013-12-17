@@ -29,6 +29,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -40,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -89,6 +91,10 @@ public class ServerController extends AbstractBaseController {
 	private ServletContext servletContext;
 
 	private Map<String,Object> versionProfile;
+	
+	
+	@Value("#{configProperties.client_timeout}")
+	private  Long clientTimeout  = 0L;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ServerController.class);
@@ -112,6 +118,13 @@ public class ServerController extends AbstractBaseController {
 		return versionProfile;
 	}
 
+	@RequestMapping(value = "/clientTimeout", method = RequestMethod.GET)
+	@DynamicPermissionChecking
+	public @ResponseBody
+	Long getClientTimeout(HttpServletRequest  request) throws IOException {
+		return 	clientTimeout;
+	}
+	
     private synchronized void maybeCacheVersionProfile() throws IOException {
 		if ( versionProfile == null ) {
 			cacheVersionProfile();
@@ -229,5 +242,13 @@ public class ServerController extends AbstractBaseController {
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
+	}
+
+	public Long getStudentDocumentsFileTypes() {
+		return clientTimeout;
+	}
+
+	public void setStudentDocumentsFileTypes(Long clientTimeout) {
+		this.clientTimeout = clientTimeout;
 	}
 }
