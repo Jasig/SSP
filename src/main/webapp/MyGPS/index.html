@@ -79,6 +79,12 @@
 			    }
 			}
 			function stayLoggedIn() {
+                $.ajax({
+                    type: 'get',
+                    url: '/ssp/api/1/server/version',
+                    success: function (data) {
+                    }
+                });				
 	    	 	$("#timeout").dialog("close");
                 clearTimeout(logoutID);
 			}
