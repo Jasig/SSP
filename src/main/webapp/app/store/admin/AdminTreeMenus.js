@@ -727,61 +727,64 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'messageTemplates',
                     form: 'messagetemplatesadmin',
                     leaf: true
-                },{
-                    text: 'Text',
-                    title: 'Text',
-                    store: 'text',
-					interfaceOptions: {
-                        addButtonVisible: false,
-                        deleteButtonVisible: false,
-                        hasPagingToolbar: false
-                    }, 
-                    form: 'AbstractReferenceAdmin',
-                    leaf: true,
-                    columns: [
-					{
-                        header: 'Name',
-                        dataIndex: 'name',
-                        required: true,
-                        rowEditable: false,
-                        flex: .10,
-                        field: {
-                            xtype: 'textfield'
-                        }
-                    }, {
-                        header: 'Value',
-                        dataIndex: 'value',
-                        flex: .10,
-                        field: {
-                            xtype: 'textfield'
-                        }
-                    },  {
-                        header: 'Code',
-                        rowEditable: false,
-                        dataIndex: 'code',
-                        filterable: true,
-                        flex: .20,
-                        field: {
-                            xtype: 'textfield'
-                        }
-                    }, {
-                        header: 'Description',
-                        dataIndex: 'description',
-                        flex: .20,
-                        field: {
-                            xtype: 'textfield'
-                        }
-                    },{
-                        header: 'Entity Type Code',
-                        rowEditable: false,
-                        dataIndex: 'entityTypeCode',
-                        flex: .20,
-                        filterable: true,
-                        field: {
-                            xtype: 'textfield'
-                        }
-                    }]
                 }
+// Temporarily disabled feature
+//,
+//                    {
+//                    text: 'Text',
+//                    title: 'Text',
+//                    store: 'text',
+//					interfaceOptions: {
+//                        addButtonVisible: false,
+//                        deleteButtonVisible: false,
+//                        hasPagingToolbar: false
+//                    },
+//                    form: 'AbstractReferenceAdmin',
+//                    leaf: true,
+//                    columns: [
+//					{
+//                        header: 'Name',
+//                        dataIndex: 'name',
+//                        required: true,
+//                        rowEditable: false,
+//                        flex: .10,
+//                        field: {
+//                            xtype: 'textfield'
+//                        }
+//                    }, {
+//                        header: 'Value',
+//                        dataIndex: 'value',
+//                        flex: .10,
+//                        field: {
+//                            xtype: 'textfield'
+//                        }
+//                    },  {
+//                        header: 'Code',
+//                        rowEditable: false,
+//                        dataIndex: 'code',
+//                        filterable: true,
+//                        flex: .20,
+//                        field: {
+//                            xtype: 'textfield'
+//                        }
+//                    }, {
+//                        header: 'Description',
+//                        dataIndex: 'description',
+//                        flex: .20,
+//                        field: {
+//                            xtype: 'textfield'
+//                        }
+//                    },{
+//                        header: 'Entity Type Code',
+//                        rowEditable: false,
+//                        dataIndex: 'entityTypeCode',
+//                        flex: .20,
+//                        filterable: true,
+//                        field: {
+//                            xtype: 'textfield'
+//                        }
+//                    }]
+//                }
 
 				]
             }, {
