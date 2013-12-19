@@ -28,6 +28,8 @@
 
 		<gmaven.runtime>1.8</gmaven.runtime>
 		<sencha.skip>false</sencha.skip>
+
+		<maven.build.timestamp.format>yyyyMMdd-HHmmZ</maven.build.timestamp.format>
 	</properties>
 
 	<scm>
@@ -578,6 +580,9 @@
                        </goals>
                      </execution>
                 </executions>
+				<configuration>
+					<revisionOnScmFailure>${maven.build.timestamp}</revisionOnScmFailure>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
