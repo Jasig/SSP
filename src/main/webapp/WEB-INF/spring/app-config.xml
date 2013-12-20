@@ -95,6 +95,7 @@
 				<entry key="database.timezone.legacy" value="#{configProperties.db_time_zone_legacy}" />
 				<entry key="database.timezone" value="#{configProperties.db_time_zone}" />
 				<entry key="database.schema" value="#{configProperties['db_schema']?:(configProperties.db_dialect matches '^.*Postgre.*$' ? 'public' : 'dbo')}" />
+				<entry key="manage.external.database.by.default" value="#{configProperties.db_liquibase_manage_external_database_by_default}" />
 			</util:map>
 		</property>
 		<property name="defaultSchema" value="#{configProperties['db_schema']?:(configProperties.db_dialect matches '^.*Postgre.*$' ? 'public' : 'dbo')}" />
