@@ -323,6 +323,11 @@
 	
 	<changeSet author='jim.stanley'
 		id='Add Table External Student Transcript Term'>
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping Add Table External Student Transcript Term">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<createTable tableName="external_student_transcript_term">
 			<column name="school_id" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
