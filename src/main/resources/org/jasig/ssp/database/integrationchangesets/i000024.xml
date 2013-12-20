@@ -34,6 +34,11 @@
 
 
 	<changeSet id="Remove Not Null tuition paid ext_reg_stat_by_term" author="jim.stanley">
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping Remove Not Null tuition paid ext_reg_stat_by_term">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<dropNotNullConstraint tableName="external_registration_status_by_term"
 				columnName="tuition_paid" columnDataType="${nchar.type}(1)" />
 		<rollback>
@@ -45,6 +50,9 @@
 	<changeSet id="remove tuition paid default values ext_reg_stat_by_term" author="jim.stanley">
 				<preConditions onFail="CONTINUE"
 					   onFailMessage="Skip modifications to external_person fields widths in integration database">
+					<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+					</sqlCheck>
+					<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
 			 <changeLogPropertyDefined property="strip.tuition.paid.is.y" value="true"/>
 		</preConditions>
 		<update tableName="external_registration_status_by_term">

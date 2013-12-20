@@ -35,6 +35,11 @@
 
 	<changeSet author='jim.stanley'
 		id='Add tuition paid colum to External Registration Status By Term'>
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping add tuition paid colum">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<addColumn tableName="external_registration_status_by_term">
 			<column name="tuition_paid" type="${nchar.type}(1)">
 				<constraints nullable="true" />
@@ -70,6 +75,11 @@
 	
 	<changeSet author='jim.stanley'
 		id='Add Section Info for External Faculty Course Roster'>
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping add section info to rosters">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<addColumn tableName="external_faculty_course_roster">
 			<column name="section_code" type="${nvarchar.type}(128)">
 				<constraints nullable="true" />
@@ -109,6 +119,11 @@
 	
 	<changeSet author='jim.stanley'
 		id='Add Section Info for External Faculty Course'>
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping add section info for courses">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<addColumn tableName="external_faculty_course">
 			<column name="section_code" type="${nvarchar.type}(128)">
 				<constraints nullable="true" />
@@ -150,6 +165,11 @@
 	
 	<changeSet author='jim.stanley'
 		id='Add Table External Students By Course'>
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping add table external students by course">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<createTable tableName="external_students_by_course">
 			<column name="school_id" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
@@ -191,6 +211,11 @@
 	
 	<changeSet author='jim.stanley'
 		id='Add Table External Student Academic Program'>
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping add table external students academic program">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<createTable tableName="external_student_academic_program">
 			<column name="school_id" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
@@ -223,6 +248,11 @@
 	
 	<changeSet author='jim.stanley'
 		id='Add Table External Student Test'>
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping add table external student test">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<createTable tableName="external_student_test">
 			<column name="school_id" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
@@ -272,6 +302,11 @@
 	
 	<changeSet author='jim.stanley'
 		id='Add Table External Course Section'>
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping add table external course section">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<createTable tableName="external_course_section">
 			<column name="formatted_course" type="${nvarchar.type}(35)">
 				<constraints nullable="false" />
@@ -311,6 +346,11 @@
 	
 	<changeSet author='jim.stanley'
 		id='Add Table External Student Transcript.'>
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping add table external student transcript">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<createTable tableName="external_student_transcript">
 			<column name="school_id" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
@@ -347,6 +387,11 @@
 	
 	<changeSet author='jim.stanley'
 		id='Add Table External Student Transcript Course'>
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping add table external student transcript course">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<createTable tableName="external_student_transcript_course">
 			<column name="school_id" type="${nvarchar.type}(50)">
 				<constraints nullable="false" />
@@ -397,6 +442,11 @@
 	</changeSet>
 	
 	<changeSet id="Insert tuition paid default values ext_reg_stat_by_term" author="jim.stanley">
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping update ext_reg_stat_by_term defaults">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<update tableName="external_registration_status_by_term">
 			<column name="tuition_paid" value="Y"/>
 			<where >school_id IS NOT NULL</where>
@@ -410,6 +460,11 @@
 	</changeSet>
 	
 	<changeSet id="Set sec code numbers to default values ext_fac_cou_roster" author="jim.stanley">
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping update ext_fac_cou_roster defaults">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<update tableName="external_faculty_course_roster">
 			<column name="section_code" value="default" />
 			<column name="section_number" value="default" />
@@ -425,6 +480,11 @@
 	</changeSet>
 	
 	<changeSet id="Insert course code into external_faculty_course" author="jim.stanley">
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping insert course code into external_faculty_course">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<update tableName="external_faculty_course">
 			<column name="section_code" value="code" />
 			<column name="section_number" value="code" />
@@ -440,6 +500,11 @@
 	</changeSet>
 	
 	<changeSet id="Add not null constraing tuition paid external_reg_stat_by_term" author="jim.stanley">
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping add not null constraint tuition paid ">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<addNotNullConstraint tableName="external_registration_status_by_term"
 				columnName="tuition_paid" columnDataType="${nchar.type}(1)" />
 		<rollback>
@@ -449,6 +514,11 @@
 	</changeSet>
 	
 	<changeSet id="Add not null constraint to sec code,number of ext_fac_roster" author="jim.stanley">
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping add not null constraints to external_faculty_course_roster">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<addNotNullConstraint tableName="external_faculty_course_roster"
 				columnName="section_code" columnDataType="${nvarchar.type}(128)"  />
 		<rollback>
@@ -464,7 +534,12 @@
 		</rollback>
 	</changeSet>
 	
-	<changeSet id="Add not null constraint to number, code of ext_fac_course" author="jim.stanley">	
+	<changeSet id="Add not null constraint to number, code of ext_fac_course" author="jim.stanley">
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping add not null constraints to ext_fac_course">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<addNotNullConstraint tableName="external_faculty_course"
 				columnName="section_code" columnDataType="${nvarchar.type}(128)" />
 		<rollback>

@@ -38,6 +38,11 @@
 
 	<changeSet author='jim.stanley'
 		id='Remove null constraints for 1.2 fields'>
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping remove null constraints for 1.2 fields">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<dropNotNullConstraint tableName="external_faculty_course" columnName="section_number" columnDataType="${nvarchar.type}(10)" />
 		<dropNotNullConstraint tableName="external_faculty_course" columnName="section_code" columnDataType="${nvarchar.type}(128)"  />
 		<dropNotNullConstraint tableName="external_faculty_course_roster" columnName="section_number" columnDataType="${nvarchar.type}(10)" />
@@ -52,6 +57,11 @@
 	</changeSet>
 	
 	<changeSet id="Remove default values ext_fac_cou_roster" author="jim.stanley">
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping remove default values ext_fac_cou_roster">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<update tableName="external_faculty_course_roster">
 			<column name="section_code" value="NULL" />
 			<column name="section_number" value="NULL" />
@@ -62,6 +72,11 @@
 	</changeSet>
 	
 	<changeSet id="remove default code in external_faculty_course" author="jim.stanley">
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping remove default code in external_faculty_course">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<update tableName="external_faculty_course">
 			<column name="section_code" value="NULL" />
 			<column name="section_number" value="NULL" />
@@ -73,7 +88,10 @@
 
 	<changeSet author='jim.stanley'
 		id='Add first_name to external_student_transcript_course'>
-		<preConditions onFail="MARK_RAN">
+		<preConditions onFail="CONTINUE">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
             <not><columnExists tableName="external_student_transcript_course" columnName="first_name" schemaName="${schema}"/></not>
         </preConditions>
 		<addColumn tableName="external_student_transcript_course">
@@ -106,7 +124,10 @@
 	
 	<changeSet author='jim.stanley'
 		id='Add middle_name to external_student_transcript_course'>
-		<preConditions onFail="MARK_RAN">
+		<preConditions onFail="CONTINUE">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
             <not><columnExists tableName="external_student_transcript_course" columnName="middle_name" schemaName="${schema}"/></not>
         </preConditions>
 		<addColumn tableName="external_student_transcript_course">
@@ -140,7 +161,10 @@
 	
 		<changeSet author='jim.stanley'
 		id='Add last_name to external_student_transcript_course'>
-		<preConditions onFail="MARK_RAN">
+		<preConditions onFail="CONTINUE">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
             <not><columnExists tableName="external_student_transcript_course" columnName="last_name" schemaName="${schema}"/></not>
         </preConditions>
 		<addColumn tableName="external_student_transcript_course">
@@ -173,7 +197,10 @@
 	
 	<changeSet author='jim.stanley'
 		id='Add fields to external_student_transcript_course'>
-		<preConditions onFail="MARK_RAN">
+		<preConditions onFail="CONTINUE">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
             <not><columnExists tableName="external_student_transcript_course" columnName="audited" schemaName="${schema}"/></not>
         </preConditions>
 		<addColumn tableName="external_student_transcript_course">
@@ -221,6 +248,11 @@
 		
 		
  	<changeSet author='jim.stanley' id='Fill in required data to external_student_transcript_course'>
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping Fill in required data to external_student_transcript_course">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<sql>
 		<![CDATA[
 			UPDATE external_student_transcript_course
@@ -257,6 +289,11 @@
 	
 	<changeSet author='jim.stanley'
 		id='All nulls drop term_code in external_student_transcript'>
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping all nulls drop term_code in external_student_transcript">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<dropNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_for_gpa" columnDataType="decimal(9,2)"  />
 		<dropNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_earned" columnDataType="decimal(9,2)" />
 		<dropNotNullConstraint tableName="external_student_transcript" columnName="credit_hours_attempted" columnDataType="decimal(9,2)"  />

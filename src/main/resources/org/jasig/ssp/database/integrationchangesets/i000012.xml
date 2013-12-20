@@ -31,7 +31,10 @@
 
 	<changeSet author='jim.stanley'
 		id='Drop table and view external_course_section'>
-		<preConditions onFail="MARK_RAN">
+		<preConditions onFail="CONTINUE">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
            	<tableExists tableName="external_course_section" schemaName="${schema}" />
         </preConditions>
 		<dropView viewName="v_external_course_section"/>
