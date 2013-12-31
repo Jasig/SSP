@@ -32,7 +32,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		semesterStores : 'currentSemesterStores',
 		colorsStore: 'colorsStore'
     },
-    
+    semesterPanels : new Array(),
 	control: {
 	    	view: {
 				afterlayout: {
@@ -41,7 +41,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				}
 	    	}
 	},
-
+	config:{
+		minHrs : '0',
+		maxHrs: '0'
+	},
 	
 	init: function() {
 		var me=this;
@@ -265,7 +268,15 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		}
 		
 		me.fillSemesterStores(terms);
-
+		
+		var view  = me.getView().getComponent("semestersets");
+		if(view == null){
+			return;
+		}		
+		Ext.suspendLayouts();
+		view.removeAll(false);
+		
+		var i=0;
 		var termsets = [];
 		Ext.Array.forEach(terms, function(term) {
 			if(termsets.hasOwnProperty(term.get("reportYear"))){
@@ -278,6 +289,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var yearViews = new Array();
 		Ext.Array.forEach(termsets, function(termSet) {
 			if (termSet) {
+			var yearSemesterPanels = new Array();
 			var yearView = new Ext.form.FieldSet({
 				xtype : 'fieldset',
 				border: 0,
@@ -300,6 +312,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				var isPast = me.termsStore.isPastTerm(termCode);
 				semesterPanels.push(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode]));
 			});
+
+			
 			yearView.add(semesterPanels);		
 			yearViews.push(yearView);
 			}
@@ -309,8 +323,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		if(view == null){
 			return;
 		}
-		view.removeAll(true);			
-		Ext.suspendLayouts();
+			
 		view.add(yearViews);	
 		Ext.resumeLayouts(true);	
 		
@@ -326,21 +339,21 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			store:semesterStore
 		});
 		
-		if(!me.termsStore.isPastTerm(termCode)){
-		 	var semesterGrid = new Ssp.view.tools.map.SemesterGrid({
-				store:semesterStore,
-				scroll: true
-			});
-			semesterPanel.add(semesterGrid);
-		}else{
-		 	var semesterGrid = new Ssp.view.tools.map.SemesterGrid({
-				store:semesterStore,
-				scroll: true,
-				enableDragAndDrop: false
-			});
-		 	semesterPanel.tools[0].hidden = false;
-			semesterPanel.add(semesterGrid);
-		}
+//		if(!me.termsStore.isPastTerm(termCode)){
+//		 	var semesterGrid = new Ssp.view.tools.map.SemesterGrid({
+//				store:semesterStore,
+//				scroll: true
+//			});
+//			semesterPanel.add(semesterGrid);
+//		}else{
+//		 	var semesterGrid = new Ssp.view.tools.map.SemesterGrid({
+//				store:semesterStore,
+//				scroll: true,
+//				enableDragAndDrop: false
+//			});
+//		 	semesterPanel.tools[0].hidden = false;
+//			semesterPanel.add(semesterGrid);
+//		}
 
 		return semesterPanel;
 	},
@@ -456,8 +469,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var planHours = 0;
 		var devHours = 0;
 		Ext.Array.forEach(panels, function(panel) {
-			var storeGrid = panel.query("semestergrid")[0];
-			var store = storeGrid.getStore();
+			var store = panel.getStore();
 			var semesterBottomDock = panel.getDockedComponent("semesterBottomDock");
 			
 			var hours = me.updateTermHours(store, semesterBottomDock);
@@ -838,7 +850,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			}
 		}
 	},
-
 	destroy: function() {
         var me=this;
 		if(me.coursePlanDetails != null && !me.coursePlanDetails.isDestroyed){

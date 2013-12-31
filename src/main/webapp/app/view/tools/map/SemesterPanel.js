@@ -17,13 +17,21 @@
  * under the License.
  */
 Ext.define('Ssp.view.tools.map.SemesterPanel', {
-    extend: 'Ext.Panel',
+    extend: 'Ext.grid.Panel',
     alias: 'widget.semesterpanel',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
 	inject:{
 		appEventsController: 'appEventsController',
-    	currentMapPlan: 'currentMapPlan'
+    	currentMapPlan: 'currentMapPlan',
+		appEventsController: 'appEventsController',
+		electiveStore: 'electivesAllUnpagedStore',
+    	currentMapPlan: 'currentMapPlan',
+		colorsStore: 'colorsStore', 
+		colorsUnpagedStore: 'colorsUnpagedStore', 
+		colorsAllStore: 'colorsAllStore', 
+		colorsAllUnpagedStore: 'colorsAllUnpagedStore'    	
 	},
+	store: null,
     controller: 'Ssp.controller.tool.map.SemesterPanelViewController',
     columnLines: false,
     layout: {
@@ -32,9 +40,174 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 	height: 200,
 	width: 225,
 	pastTerm: false,
+ 	enableDragAndDrop: true,
+    columnLines: false,
+ 	hideHeaders: true, 	
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
+			viewConfig: {
+				copy: false,
+		        plugins: {
+		            ptype: 'gridviewdragdrop',
+					ddGroup: 'ddGroupForCourses',
+					dropGroup: 'coursesDDGroup',
+					dragGroup: 'coursesDDGroup',
+					pluginId: 'semesterviewdragdrop',
+					enableDrag: me.enableDragAndDrop || me.currentMapPlan.get('isTemplate'),
+					enableDrop: me.enableDragAndDrop || me.currentMapPlan.get('isTemplate')
+		    }
+		}, 
+		invalidRecord: function(record) { 
+            return record.get('isValidInTerm') === false || record.get('hasCorequisites')  === false || record.get('hasPrerequisites')  === false; 
+        },		
+		columns: [
+					{
+					    xtype: 'gridcolumn',
+					    width: 5,
+					    height: 5,
+					    flex:0,
+					    renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+					    	var isImportant = record.get('isImportant');
+					    	var color = isImportant ? '#ff9900' : 'rgba(0,0,0,0.0)';
+							metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;'
+							if ( isImportant ) {
+								metaData.tdAttr = 'data-qtip="Orange indicates Course is Important"';
+							}
+					     }		            
+					},
+					{
+					    xtype: 'gridcolumn',
+					    width: 5,
+					    height: 5,
+					    flex:0,
+					    renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+					    	var isTranscript = record.get('isTranscript');
+					    	var duplicateOfTranscript = record.get('duplicateOfTranscript');
+					    	var color = isTranscript ? '#ffff00' : 'rgba(0,0,0,0.0)';
+					    	color = duplicateOfTranscript ? '#0000FF' : color;
+							
+							if ( isTranscript ) {
+								if(!duplicateOfTranscript)
+									metaData.tdAttr = 'data-qtip="Yellow indicates course is already on students\' transcript"';
+								else{
+									metaData.tdAttr = 'data-qtip="Blue indicates course is a duplicate of one on students\' transcript but in a different term."';
+								}
+							}
+							metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
+					     }		            
+					},
+					{
+					    xtype: 'gridcolumn',
+					    width: 5,
+					    height: 5,
+					    flex:0,
+					    renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+					    	var me=this;
+					    	var elective = me.electiveStore.getById(record.get('electiveId'))
+					    	var colorId = elective ? elective.get('color') : null;
+					    	var color = colorId ? me.colorsAllUnpagedStore.getById(colorId) : null;
+					    	var colorCode = color ? '#'+color.get('hexCode') : 'rgba(0,0,0,0.0)';
+							metaData.style = 'background-color: '+colorCode+'; background-image: none; margin:2px 2px 2px 2px;'
+							if ( elective ) {
+								metaData.tdAttr = 'data-qtip="This is an elective. Elective code: ' + elective.get('code') + '"';
+							}
+							return elective;						
+					     }		            
+					},
+					{
+					    xtype: 'gridcolumn',
+					    width: 5,
+					    height: 5,
+					    flex:0,
+					    renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+					    		var isDev = record.isDev();
+					        	var color = isDev ? '#ff0000' : 'rgba(0,0,0,0.0)';
+								metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
+								if ( isDev ) {
+									metaData.tdAttr = 'data-qtip="Red indicates course is a dev course."';
+								}					
+					     }		            
+					}
+					,
+					{
+					dataIndex: 'title',
+					xtype: 'gridcolumn',
+					hidden: true,
+					hideable: false
+					
+					}, 
+					{
+					dataIndex: 'formattedCourse',
+					xtype: 'gridcolumn',
+					flex:1,
+					width:160,
+					renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+					    	var me=this;
+						    if(me.invalidRecord(record)){
+						    	metaData.style = 'font-style:italic;color:#FF0000';
+								metaData.tdAttr = 'data-qtip="Concerns:' + record.get("invalidReasons") + '"';
+							}
+							return value;
+					    }		
+					},            
+					{
+					dataIndex: 'creditHours',
+					xtype: 'gridcolumn',
+					flex:0.5,
+					width:25,
+					renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+					    	var me=this;
+							if(me.invalidRecord(record))
+						    	metaData.style = 'font-style:italic;color:#FF0000';
+							return value;
+					    }		
+					},{
+					dataIndex: 'maxCreditHours',
+					xtype: 'gridcolumn',
+					hidden: true,
+					hideable:false
+					}, 
+					{
+					dataIndex: 'minCreditHours',
+					xtype: 'gridcolumn',
+					hidden: true,
+					hideable:false
+					},{
+					dataIndex: 'code',
+					xtype: 'gridcolumn',
+					hidden: true,
+					hideable:false
+					},{
+					dataIndex: 'isDev',
+					xtype: 'gridcolumn',
+					hidden: true,
+					hideable:false
+					},{
+					xtype: 'gridcolumn',
+					flex:0.5,
+					renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+						var me=this;
+						var elective = me.electiveStore.getById(record.get('electiveId'))
+						if((record.data.contactNotes != undefined && record.data.contactNotes.length > 0) ||
+														(record.data.studentNotes != undefined && record.data.studentNotes.length > 0) ){
+							if(record.data.contactNotes && record.data.contactNotes.length > 0)
+								metaData.tdAttr = 'data-qtip="Contact Notes: ' + record.data.contactNotes;
+							if(record.data.contactNotes && record.data.contactNotes.length > 0)
+								metaData.tdAttr += ' Student Notes: ' + record.data.studentNotes 
+							if(elective)
+								metaData.tdAttr += ' Elective: ' + elective.get('name');
+							
+							metaData.tdAttr += '"';
+							return '<img src="/ssp/images/' + Ssp.util.Constants.EDIT_COURSE_NOTE_NAME + '" />'
+						}
+						if(me.invalidRecord(record))
+					    	metaData.style = 'font-style:italic;color:#FF0000';
+						return "";
+					 }		            
+					}
+					],
+		
             tools: [
 			{
                 xtype: 'button',
@@ -77,12 +250,6 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 cls: 'deleteIcon',
                 tooltip: 'Select a course and press this button to remove it from the term.'
             }],
-			items : [ /*{
-				store: me.store,
-				scroll: true,
-				xtype : 'semestergrid',
-			}*/],
-           
             dockedItems: [{
                 dock: 'bottom',
                 xtype: 'toolbar',
@@ -112,6 +279,11 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
         });
         
         return me.callParent(arguments);
-    }
+    },
+	getStore: function() {
+		var me=this;
+		return me.store;
+	},
+      
     
 });
