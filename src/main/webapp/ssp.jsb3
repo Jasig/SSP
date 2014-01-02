@@ -383,11 +383,6 @@
                     "name": "SemesterPanelViewController.js",
                     "path": "/app/controller/tool/map/"
                 },
-                 {
-                    "clsName": "Ssp.controller.tool.map.SemesterGridViewController",
-                    "name": "SemesterGridViewController.js",
-                    "path": "/app/controller/tool/map/"
-                },
 				{
                     "clsName": "Ssp.controller.tool.map.EmailPlanController",
                     "name": "EmailPlanController.js",
@@ -426,11 +421,6 @@
                 {
                     "clsName": "Ssp.view.tools.map.CoursesView",
                     "name": "CoursesView.js",
-                    "path": "/app/view/tools/map/"
-                },
-                {
-                    "clsName": "Ssp.view.tools.map.SemesterGrid",
-                    "name": "SemesterGrid.js",
                     "path": "/app/view/tools/map/"
                 },
                 {

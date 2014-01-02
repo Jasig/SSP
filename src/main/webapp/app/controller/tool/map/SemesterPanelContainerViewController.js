@@ -333,28 +333,24 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	createSemesterPanel: function(semesterName, termCode, semesterStore){
 		var me = this;
-		var semesterPanel = new Ssp.view.tools.map.SemesterPanel({
-			title:semesterName,
-			itemId:termCode,
-			store:semesterStore
-		});
 		
-//		if(!me.termsStore.isPastTerm(termCode)){
-//		 	var semesterGrid = new Ssp.view.tools.map.SemesterGrid({
-//				store:semesterStore,
-//				scroll: true
-//			});
-//			semesterPanel.add(semesterGrid);
-//		}else{
-//		 	var semesterGrid = new Ssp.view.tools.map.SemesterGrid({
-//				store:semesterStore,
-//				scroll: true,
-//				enableDragAndDrop: false
-//			});
-//		 	semesterPanel.tools[0].hidden = false;
-//			semesterPanel.add(semesterGrid);
-//		}
-
+		if(!me.termsStore.isPastTerm(termCode)){
+			var semesterPanel = new Ssp.view.tools.map.SemesterPanel({
+				title:semesterName,
+				itemId:termCode,
+				store:semesterStore,
+				scroll: true
+			});		 	
+		}else{
+			var semesterPanel = new Ssp.view.tools.map.SemesterPanel({
+				title:semesterName,
+				itemId:termCode,
+				store:semesterStore,
+				enableDragAndDrop: false,
+				scroll: true
+			});			 	
+		 	semesterPanel.tools[0].hidden = false;
+		}
 		return semesterPanel;
 	},
 	
