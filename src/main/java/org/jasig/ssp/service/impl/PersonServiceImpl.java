@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.portlet.PortletRequest;
 
 import org.hibernate.exception.ConstraintViolationException;
+import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.dao.PersonExistsException;
 import org.jasig.ssp.model.JournalEntry;
@@ -228,6 +229,14 @@ public class PersonServiceImpl implements PersonService {
 				// work if you're running with ExtendedSQLServer*Dialect. Else
 				// getConstraintName() will always be null.)
 				if (sqlException.getConstraintName().equalsIgnoreCase(
+
+                       "uq_person_school_id")) {
+                     LOGGER.info("Tried to add a user that was already present");
+ 
+                     throw new ObjectExistsException("Account with school_id "
+                             + person.getSchoolId() + " already exists.");
+                 }
+				if (sqlException.getConstraintName().equalsIgnoreCase(						
 						"unique_person_username")) {
 					LOGGER.info("Tried to add a user that was already present ({})",
 							username, sqlException);
@@ -242,7 +251,6 @@ public class PersonServiceImpl implements PersonService {
 					throw new PersonExistsException("Account with user name "
 							+ username + " already exists.");
 				}
-
 				// Also SSP-397
 				throw sqlException;
 

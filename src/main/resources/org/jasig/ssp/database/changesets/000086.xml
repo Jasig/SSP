@@ -1,0 +1,57 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<property name="schema" value="${database.schema}" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet author='tony.arland' id='harmonize up_person_dir.user_name size'>
+		<preConditions onFail="CONTINUE">
+			<tableExists tableName="up_person_dir"/>
+		</preConditions>
+		<modifyDataType tableName="up_person_dir" columnName="user_name" newDataType="${nvarchar.type}(50)"/>
+	</changeSet>
+	
+	<changeSet author='tony.arland' id='harmonize up_user.user_name size'>
+		<preConditions onFail="CONTINUE">
+			<tableExists tableName="up_user"/>
+		</preConditions>
+		<modifyDataType tableName="up_user" columnName="user_name" newDataType="${nvarchar.type}(50)"/>
+	</changeSet>	
+	
+	<changeSet author='tony.arland' id='harmonize up_sso_ticket.user_name size'>
+		<preConditions onFail="CONTINUE">
+			<tableExists tableName="up_sso_ticket"/>
+		</preConditions>
+		<modifyDataType tableName="up_sso_ticket" columnName="user_name" newDataType="${nvarchar.type}(50)"/>
+	</changeSet>
+	
+	<changeSet author='tony.arland' id='harmonize person.username size'>
+		<preConditions onFail="CONTINUE">
+			<tableExists tableName="person"/>
+		</preConditions>
+		<modifyDataType tableName="person" columnName="username" newDataType="${nvarchar.type}(50)"/>
+	</changeSet>		
+</databaseChangeLog>
