@@ -53,5 +53,12 @@
 			<tableExists tableName="person"/>
 		</preConditions>
 		<modifyDataType tableName="person" columnName="username" newDataType="${nvarchar.type}(50)"/>
-	</changeSet>		
+	</changeSet>	
+	
+	<changeSet author='tony.arland' id='harmonize up_raw_events.user_name size'>
+		<preConditions onFail="CONTINUE">
+			<tableExists tableName="up_raw_events"/>
+		</preConditions>
+		<modifyDataType tableName="up_raw_events" columnName="user_name" newDataType="${nvarchar.type}(50)"/>
+	</changeSet>
 </databaseChangeLog>
