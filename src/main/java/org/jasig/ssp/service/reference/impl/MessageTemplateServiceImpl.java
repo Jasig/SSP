@@ -319,10 +319,17 @@ public class MessageTemplateServiceImpl extends
 		if(student != null)
 			addStudent(messageParams, student);
 		
-		messageParams.put("coachPhone1", owner.getCellPhone());
-		messageParams.put("coachPhone2", owner.getHomePhone());
-		messageParams.put("coachFullName", owner.getFullName());
-		messageParams.put("coachEmail", owner.getPrimaryEmailAddress());
+		messageParams.put("contactPhone", plan.getContactPhone());
+		messageParams.put("contactName", plan.getContactName());
+		messageParams.put("contactEmail", plan.getContactEmail());
+		messageParams.put("contactTitle", plan.getContactTitle());
+		
+
+		
+		messageParams.put("ownerPhone", owner.getWorkPhone());
+		messageParams.put("ownerFullName", owner.getFullName());
+		messageParams.put("ownerEmail", owner.getPrimaryEmailAddress());
+		
 		messageParams.put("totalPlanHours", totalPlanCreditHours);
 		messageParams.put("institution", institutionName);
 		messageParams.put("createdDateFormatted", formatDate(new Date()));
@@ -332,6 +339,7 @@ public class MessageTemplateServiceImpl extends
 	}
 	
 	private void addStudent(Map<String,Object> messageParams, Person student){
+			messageParams.put("student", student);
 			messageParams.put("studentFullName", student.getFullName());
 			messageParams.put("studentEmail", student.getPrimaryEmailAddress());
 			messageParams.put("studentSchoolId", student.getSchoolId());
