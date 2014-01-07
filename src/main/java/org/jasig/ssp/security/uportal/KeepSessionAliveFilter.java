@@ -19,9 +19,11 @@
 
 package org.jasig.ssp.security.uportal;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.portlet.utils.rest.CrossContextRestApiInvoker;
 import org.jasig.portlet.utils.rest.RestResponse;
 import org.jasig.portlet.utils.rest.SimpleCrossContextRestApiInvoker;
+import org.jasig.ssp.util.SspStringUtils;
 import org.jasig.ssp.util.http.HttpServletGetRequestWrapper;
 
 import javax.servlet.Filter;
@@ -46,6 +48,7 @@ import java.util.Map;
 public class KeepSessionAliveFilter implements Filter {
     private final String SESSION_KEEP_ALIVE_ATTRIBUTE_KEY = KeepSessionAliveFilter.class.getName() +"_SESSION_KEEP_ALIVE";
     private int interval = 10 * 60 * 1000; // DEFAULT TO 10 minutes (in milliseconds)
+    public static final String OVERRIDE_INTERVAL_PARAM = "force_platform_session_keep_alive";
 
     /**
      * Set per-session interval in minutes after which the next request hitting
@@ -73,7 +76,8 @@ public class KeepSessionAliveFilter implements Filter {
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response,
                          final FilterChain chain) throws IOException, ServletException {
-        if ( interval < 0 ) {
+        boolean overrideInterval = isIntervalOverridden(request);
+        if ( !(overrideInterval) && interval < 0 ) {
             chain.doFilter(request, response);
             return;
         }
@@ -85,10 +89,9 @@ public class KeepSessionAliveFilter implements Filter {
             return;
         }
         Long lastUpdate = (Long)session.getAttribute(SESSION_KEEP_ALIVE_ATTRIBUTE_KEY);
-        if(lastUpdate != null)
+        if( overrideInterval || lastUpdate != null)
         {
-            long delta = System.currentTimeMillis() - lastUpdate.longValue();
-            if(delta >= interval) {
+            if(overrideInterval || ((System.currentTimeMillis() - lastUpdate.longValue()) >= interval)) {
                 final CrossContextRestApiInvoker rest = new SimpleCrossContextRestApiInvoker();
                 //ensures request is GET going into REST Invoker
                 HttpServletGetRequestWrapper wrap = new HttpServletGetRequestWrapper(httpServletRequest);
@@ -101,5 +104,10 @@ public class KeepSessionAliveFilter implements Filter {
         }
 
         chain.doFilter(request, response);
+    }
+
+    protected boolean isIntervalOverridden(ServletRequest request) {
+        final String paramVal = StringUtils.trimToNull(request.getParameter(OVERRIDE_INTERVAL_PARAM));
+        return paramVal != null && SspStringUtils.booleanFromString(paramVal);
     }
 }
