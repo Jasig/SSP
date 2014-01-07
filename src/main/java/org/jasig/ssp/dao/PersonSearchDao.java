@@ -348,6 +348,14 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	private void addBindParams(PersonSearchRequest personSearchRequest,
 			Query query, Term currentTerm) 
 	{
+		if(hasStudentId(personSearchRequest)) {
+			final String wildcardedStudentIdOrNameTerm = new StringBuilder("%")
+					.append(personSearchRequest.getStudentId().toUpperCase())
+					.append("%")
+					.toString();
+			query.setString("studentIdOrName", wildcardedStudentIdOrNameTerm);
+		}
+
 		if(hasPlanStatus(personSearchRequest))
 		{
 			query.setInteger("planObjectStatus", 
@@ -543,18 +551,15 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if(hasStudentId(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			StringBuilder idOrNameBuilder = new StringBuilder();
-			idOrNameBuilder.append(" ( ");
-			idOrNameBuilder.append(" upper(p.firstName) like '%:studentIdOrName%' ");
-			idOrNameBuilder.append(" or ");
-			idOrNameBuilder.append(" upper(p.lastName) like '%:studentIdOrName%' ");
-			idOrNameBuilder.append(" or ");
-			idOrNameBuilder.append(" upper(p.firstName ||' '|| p.lastName) like '%:studentIdOrName%' ");
-			idOrNameBuilder.append(" or ");
-			idOrNameBuilder.append(" upper(p.schoolId) like '%:studentIdOrName%' ");
-			idOrNameBuilder.append(" ) ");
-			//can't bind using 'like' so we find and replace instead
-			stringBuilder.append(idOrNameBuilder.toString().replace(":studentIdOrName", personSearchRequest.getStudentId().toUpperCase()));
+			stringBuilder.append(" ( ");
+			stringBuilder.append(" upper(p.firstName) like :studentIdOrName ");
+			stringBuilder.append(" or ");
+			stringBuilder.append(" upper(p.lastName) like :studentIdOrName ");
+			stringBuilder.append(" or ");
+			stringBuilder.append(" upper(p.firstName ||' '|| p.lastName) like :studentIdOrName ");
+			stringBuilder.append(" or ");
+			stringBuilder.append(" upper(p.schoolId) like :studentIdOrName ");
+			stringBuilder.append(" ) ");
 		}
 	}
 
