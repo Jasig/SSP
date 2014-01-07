@@ -34,6 +34,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlyFormatting;
 import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.security.DynamicPermissionChecking;
@@ -87,14 +88,15 @@ public class ServerController extends AbstractBaseController {
 		put(NOTE_ENTRY_NAME, NOTE_API_FIELD_NAME);
 	}});
 
+	private static final String CLIENT_TIMEOUT_CONFIG_NAME = "client_timeout";
+
 	@Autowired
 	private ServletContext servletContext;
 
+	@Autowired
+	private ConfigService configService;
+
 	private Map<String,Object> versionProfile;
-	
-	
-	@Value("#{configProperties.client_timeout}")
-	private  Long clientTimeout  = 0L;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ServerController.class);
@@ -118,11 +120,18 @@ public class ServerController extends AbstractBaseController {
 		return versionProfile;
 	}
 
+	// We want this particular config to be available anonymously, and the
+	// caller doesn't need all the extra junk that comes with a "normal"
+	// config API response, so we introduced this API as a way to bypass
+	// both the permisssions and the "junk" on the config API for this
+	// one entry in particular
 	@RequestMapping(value = "/clientTimeout", method = RequestMethod.GET)
 	@DynamicPermissionChecking
 	public @ResponseBody
-	Long getClientTimeout(HttpServletRequest  request) throws IOException {
-		return 	clientTimeout;
+	Map<String,Object> getClientTimeout(HttpServletRequest request) {
+		final Map<String,Object> timeout = new HashMap<String,Object>();
+		timeout.put("timeoutMins", configService.getByNameExceptionOrDefaultAsInt(CLIENT_TIMEOUT_CONFIG_NAME));
+		return timeout;
 	}
 	
     private synchronized void maybeCacheVersionProfile() throws IOException {
@@ -244,11 +253,4 @@ public class ServerController extends AbstractBaseController {
 		return LOGGER;
 	}
 
-	public Long getStudentDocumentsFileTypes() {
-		return clientTimeout;
-	}
-
-	public void setStudentDocumentsFileTypes(Long clientTimeout) {
-		this.clientTimeout = clientTimeout;
-	}
 }
