@@ -54,15 +54,14 @@
 					ic.column_id = c.column_id
 			where i.index_id > 0    
 			and i.type in (1, 2) 
-			and i.is_primary_key = 0 -- do not include PK indexes
-			and i.is_unique_constraint = 1 -- do not include UQ
+			and i.is_primary_key = 0
+			and i.is_unique_constraint = 1 
 			and i.is_disabled = 0
 			and i.is_hypothetical = 0
 			and ic.key_ordinal > 0
 			and c.name = 'USER_NAME'
 			and t.name = 'UP_PERSON_DIR'
 			order by ic.key_ordinal
-			-- create alter table command as string and run it
 			set @sql = N'drop index '+ @default +' on  UP_PERSON_DIR '
 			exec sp_executesql @sql
 		
@@ -106,7 +105,7 @@
 		
 		</sql>		
 		<modifyDataType tableName="up_user" columnName="user_name" newDataType="${nvarchar.type}(50)"/>
-		<createIndex tableName="up_user" indexName="uq_up_user_user_name" >
+		<createIndex tableName="up_user" indexName="uq_up_user_user_name" unique="true">
 			<column name="user_name"></column>
 		</createIndex>		
 	</changeSet>	
