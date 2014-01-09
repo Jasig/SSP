@@ -58,15 +58,15 @@ public class SapStatusTO
 	}
 	
 	/**
-	 * @return the race code
+	 * @return the sapstatus code
 	 */
 	public String getCode() {
 		return code;
 	}
 	
 	/**
-	 * @param race external ref code
-	 * 				the race code to set
+	 * @param sapstatus external ref code
+	 * 				the sapstatus code to set
 	 */
 	public void setCode(final String code) {
 		this.code = code;
@@ -76,7 +76,7 @@ public class SapStatusTO
 			final Collection<SapStatus> models) {
 		final List<SapStatusTO> tObjects = Lists.newArrayList();
 		for (final SapStatus model : models) {
-			tObjects.add(new SapStatusTO(model)); // NOPMD by jon.adams
+			tObjects.add(new SapStatusTO(model)); 
 		}
 
 		return tObjects;
