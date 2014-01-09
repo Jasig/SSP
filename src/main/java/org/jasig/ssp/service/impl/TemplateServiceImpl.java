@@ -37,6 +37,8 @@ import org.jasig.ssp.transferobject.reference.MessageTemplatePlanPrintParams;
 import org.jasig.ssp.transferobject.reference.MessageTemplatePlanTemplatePrintParamsTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +52,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public  class TemplateServiceImpl extends AbstractPlanServiceImpl<Template,
 TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implements TemplateService {
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(TemplateServiceImpl.class);
 
 	@Autowired
 	private transient TemplateDao dao;
@@ -88,12 +93,29 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 		params.setOutputPlan(templateOutputDataTO);
 		
 		TemplateTO to = templateOutputDataTO.getNonOutputTO();
-		if(StringUtils.isNotBlank(to.getDepartmentCode()))
-			params.setDepartmentName(departmentService.getByCode(to.getDepartmentCode()).getName());
-		if(StringUtils.isNotBlank(to.getDivisionCode()))
-			params.setDivisionName(divisionService.getByCode(to.getDivisionCode()).getName());
-		if(StringUtils.isNotBlank(to.getProgramCode()))
-			params.setProgramName(programService.getByCode(to.getProgramCode()).getName());
+		if(StringUtils.isNotBlank(to.getDepartmentCode())) {
+			try {
+				params.setDepartmentName(departmentService.getByCode(to.getDepartmentCode()).getName());
+			} catch ( ObjectNotFoundException e ) {
+				LOGGER.info("Template {} has invalid department code {}", to.getId(), to.getDepartmentCode());
+			}
+		}
+
+		if(StringUtils.isNotBlank(to.getDivisionCode())) {
+			try {
+				params.setDivisionName(divisionService.getByCode(to.getDivisionCode()).getName());
+			} catch ( ObjectNotFoundException e ) {
+				LOGGER.info("Template {} has invalid division code {}", to.getId(), to.getDivisionCode());
+			}
+		}
+
+		if(StringUtils.isNotBlank(to.getProgramCode())) {
+			try {
+				params.setProgramName(programService.getByCode(to.getProgramCode()).getName());
+			} catch ( ObjectNotFoundException e ) {
+				LOGGER.info("Template {} has invalid program code {}", to.getId(), to.getProgramCode());
+			}
+		}
 		
 		params.setInstitutionName(getInstitutionName());
 		
