@@ -52,7 +52,7 @@
 		<band height="33">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="808e5a0f-9d17-4450-b534-e79deefd4e16" stretchType="RelativeToBandHeight" x="104" y="0" width="321" height="22" isPrintWhenDetailOverflows="true"/>
-				<textElement/>
+				<textElement markup="html"/>
 				<textFieldExpression><![CDATA[($F{link}.trim().length() < 1 || $F{link} == null) ? null : "Link: " + $F{link} ]]></textFieldExpression>
 			</textField>
 			<line>
