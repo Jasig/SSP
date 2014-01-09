@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.require([
-    'Ext.ux.grid.FiltersFeature'
-]);
+//Ext.require([
+//    'Ext.ux.grid.FiltersFeature'
+//]);
 Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
 	extend: 'Ext.grid.Panel',
 	alias : 'widget.abstractreferenceadmin',
@@ -164,7 +164,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                 plugins: cellEditor,
                 selType: 'rowmodel',
 				cls: 'configgrid',
-				features: [filters],
+				//features: [filters],
                 columns: [
 					{
                         header: 'Active',
