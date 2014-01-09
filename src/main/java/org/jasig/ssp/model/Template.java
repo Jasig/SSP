@@ -120,7 +120,7 @@ public class Template extends AbstractPlan implements Cloneable{
 		clone.setIsImportant(this.getIsImportant());
 		clone.setIsF1Visa(this.getIsF1Visa());
 		clone.setDepartmentCode(this.getDepartmentCode());
-		clone.setDivisionCode(this.getDepartmentCode());
+		clone.setDivisionCode(this.getDivisionCode());
 		clone.setProgramCode(this.getProgramCode());
 		List<TemplateCourse> planCourses = this.getTemplateCourses();
 		for (TemplateCourse planCourse : planCourses) {
