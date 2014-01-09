@@ -20,33 +20,33 @@ package org.jasig.ssp.service.reference.impl;
 
 import javax.validation.constraints.NotNull;
 
-import org.jasig.ssp.dao.reference.RaceDao;
-import org.jasig.ssp.model.reference.Race;
-import org.jasig.ssp.service.reference.RaceService;
+import org.jasig.ssp.dao.reference.SapStatusDao;
+import org.jasig.ssp.model.reference.SapStatus;
+import org.jasig.ssp.service.reference.SapStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class RaceServiceImpl extends
-		AbstractReferenceService<Race>
-		implements RaceService {
+public class SapStatusServiceImpl extends
+		AbstractReferenceService<SapStatus>
+		implements SapStatusService {
 
 	@Autowired
-	transient private RaceDao dao;
+	transient private SapStatusDao dao;
 
-	protected void setDao(final RaceDao dao) {
+	protected void setDao(final SapStatusDao dao) {
 		this.dao = dao;
 	}
 
 	@Override
-	protected RaceDao getDao() {
+	protected SapStatusDao getDao() {
 		return dao;
 	}
 	
 	@Override
-	public Race getByCode(@NotNull final String code) {
+	public SapStatus getByCode(@NotNull final String code) {
 		return this.dao.getByCode(code);		
 	}
 	

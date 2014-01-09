@@ -16,38 +16,40 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.reference.impl;
+package org.jasig.ssp.factory.reference.impl;
 
-import javax.validation.constraints.NotNull;
-
-import org.jasig.ssp.dao.reference.RaceDao;
-import org.jasig.ssp.model.reference.Race;
-import org.jasig.ssp.service.reference.RaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.jasig.ssp.dao.reference.SapStatusDao;
+import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
+import org.jasig.ssp.factory.reference.SapStatusTOFactory;
+import org.jasig.ssp.model.reference.SapStatus;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.reference.SapStatusTO;
 
 @Service
-@Transactional
-public class RaceServiceImpl extends
-		AbstractReferenceService<Race>
-		implements RaceService {
+@Transactional(readOnly = true)
+public class SapStatusTOFactoryImpl extends
+		AbstractReferenceTOFactory<SapStatusTO, SapStatus>
+		implements SapStatusTOFactory {
+
+	public SapStatusTOFactoryImpl() {
+		super(SapStatusTO.class, SapStatus.class);
+	}
 
 	@Autowired
-	transient private RaceDao dao;
-
-	protected void setDao(final RaceDao dao) {
-		this.dao = dao;
-	}
+	private transient SapStatusDao dao;
 
 	@Override
-	protected RaceDao getDao() {
+	protected SapStatusDao getDao() {
 		return dao;
 	}
-	
+
 	@Override
-	public Race getByCode(@NotNull final String code) {
-		return this.dao.getByCode(code);		
+	public SapStatus from(final SapStatusTO tObject) throws ObjectNotFoundException {
+		SapStatus model = super.from(tObject);	
+		model.setCode(tObject.getCode());
+		return model;
 	}
-	
 }

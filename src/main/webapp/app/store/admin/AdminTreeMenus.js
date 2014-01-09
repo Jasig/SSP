@@ -342,7 +342,54 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 						},
 						flex: .25						
 					}]
-                }, {
+                },{
+					text: 'SAP Statuses',
+                    title: 'SAP Statuses',
+                    store: 'sapStatuses',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    },                    
+					form: 'AbstractReferenceAdmin',
+                    leaf: true,
+                    columns: [{
+					    header: 'Active',
+                        required: true,
+                        dataIndex: 'active',
+                        defaultValue: true,
+                        flex: .2,
+                        renderer: me.columnRendererUtils.renderActive,
+                        field: {
+                            xtype: 'checkbox',
+                            fieldStyle: "margin-bottom:12px;"
+                        }
+					},{					
+                        header: 'Name',
+                        dataIndex: 'name',
+                        required: true,
+                        field: {
+                            xtype: 'textfield'
+                        },
+                        flex: .25
+                    }, {
+                        header: 'Description',
+                        required: false,
+                        dataIndex: 'description',
+                        field: {
+                            xtype: 'textfield'
+                        },
+                        flex: 1                 
+                    }, {
+						header: 'SAP Code',
+						required: true,
+						dataIndex: 'code',
+						field: {
+							xtype: 'textfield'
+						},
+						flex: .25						
+					}]
+                }, 
+                {
                     text: 'Coursework Hours',
                     title: 'Coursework Hours',
                     store: 'courseworkHoursAll',

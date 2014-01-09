@@ -16,38 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.reference.impl;
+package org.jasig.ssp.service.reference;
 
 import javax.validation.constraints.NotNull;
 
-import org.jasig.ssp.dao.reference.RaceDao;
-import org.jasig.ssp.model.reference.Race;
-import org.jasig.ssp.service.reference.RaceService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.jasig.ssp.model.reference.SapStatus;
+import org.jasig.ssp.service.ReferenceService;
 
-@Service
-@Transactional
-public class RaceServiceImpl extends
-		AbstractReferenceService<Race>
-		implements RaceService {
-
-	@Autowired
-	transient private RaceDao dao;
-
-	protected void setDao(final RaceDao dao) {
-		this.dao = dao;
-	}
-
-	@Override
-	protected RaceDao getDao() {
-		return dao;
-	}
+public interface SapStatusService
+		extends ReferenceService<SapStatus> {
 	
-	@Override
-	public Race getByCode(@NotNull final String code) {
-		return this.dao.getByCode(code);		
-	}
-	
+	SapStatus getByCode(@NotNull final String code);
 }

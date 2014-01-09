@@ -331,6 +331,7 @@ Ext.require([
     'Ssp.store.reference.EmploymentShifts',
     'Ssp.store.reference.Ethnicities',
 	'Ssp.store.reference.Races',
+	'Ssp.store.reference.SapStatuses',
     'Ssp.store.reference.FundingSources',
     'Ssp.store.reference.Genders',
     'Ssp.store.reference.JournalSources',
@@ -461,6 +462,7 @@ var apiUrls = [
   {name: 'elective', url: 'reference/elective'},
   {name: 'ethnicity', url: 'reference/ethnicity'},
   {name: 'race', url: 'reference/race'},
+  {name: 'sapstatus', url: 'reference/sapstatus'},
   {name: 'fundingSource', url: 'reference/fundingSource'},
   {name: 'journalSource', url: 'reference/journalSource'},
   {name: 'journalStep', url: 'reference/journalStep'},
@@ -1301,7 +1303,15 @@ Ext.onReady(function(){
 							 });
 					    },
 					    singleton: true
-					},			
+					},	
+					sapStatusesStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.SapStatuses', {
+							     extraParams: {status: "ALL", limit: "-1"}
+							 });
+					    },
+					    singleton: true
+					},
 			    	fundingSourcesStore: 'Ssp.store.reference.FundingSources',
 					fundingSourcesAllStore: {
 			    		fn: function(){
