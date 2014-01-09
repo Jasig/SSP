@@ -333,6 +333,7 @@ Ext.require([
     'Ssp.store.reference.Ethnicities',
 	'Ssp.store.reference.Races',
 	'Ssp.store.reference.SapStatuses',
+	'Ssp.store.reference.FinancialAidFiles',
     'Ssp.store.reference.FundingSources',
     'Ssp.store.reference.Genders',
     'Ssp.store.reference.JournalSources',
@@ -465,6 +466,7 @@ var apiUrls = [
   {name: 'ethnicity', url: 'reference/ethnicity'},
   {name: 'race', url: 'reference/race'},
   {name: 'sapstatus', url: 'reference/sapstatus'},
+  {name: 'financialAidFile', url: 'reference/financialAidFile'},
   {name: 'fundingSource', url: 'reference/fundingSource'},
   {name: 'journalSource', url: 'reference/journalSource'},
   {name: 'journalStep', url: 'reference/journalStep'},
@@ -1310,6 +1312,14 @@ Ext.onReady(function(){
 					sapStatusesStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.SapStatuses', {
+							     extraParams: {status: "ALL", limit: "-1"}
+							 });
+					    },
+					    singleton: true
+					},
+					financialAidFilesStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.FinancialAidFiles', {
 							     extraParams: {status: "ALL", limit: "-1"}
 							 });
 					    },
