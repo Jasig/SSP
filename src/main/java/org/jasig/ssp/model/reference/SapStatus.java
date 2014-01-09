@@ -2,8 +2,14 @@ package org.jasig.ssp.model.reference;
 
 import java.util.UUID;
 
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+
 import org.jasig.ssp.model.Auditable;
 
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class SapStatus extends AbstractReference implements Auditable {
 
 	/**

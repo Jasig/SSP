@@ -57,7 +57,7 @@ public class SapStatusController
 	}
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(EthnicityController.class);
+			.getLogger(SapStatusController.class);
 
 	@Override
 	protected Logger getLogger() {
