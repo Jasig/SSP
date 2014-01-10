@@ -855,7 +855,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.appEventsController.removeEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
         
 		me.appEventsController.removeEvent({eventName: 'onPrintMapPlan', callBackFunc: me.onPrintMapPlan, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onShowMapPlanOverView', callBackFunc: me.onShowMapPlanOverView, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onShowMapPlanOverView', callBackFunc: me.onShowMapPlanOverView, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onEmailMapPlan', callBackFunc: me.onEmailMapPlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onShowMain', callBackFunc: me.onCreateNewMapPlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onSaveAsMapPlan', callBackFunc: me.onSaveAsMapPlan, scope: me});
