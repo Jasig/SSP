@@ -312,7 +312,7 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("title", plan.getName());
 		messageParams.put("plan", plan);
 		SimpleDateFormat formatter = new SimpleDateFormat("MMM-dd-yyyy");
-		messageParams.put("lastModified", formatter.format(plan.getModifiedDate()));
+		messageParams.put("lastModified", plan.getModifiedDate() == null ? null : formatter.format(plan.getModifiedDate()));
 		messageParams.put("planContactNotes", plan.getContactNotes());
 		messageParams.put("planStudentNotes", plan.getStudentNotes());
 		messageParams.put("termCourses", termCourses);
