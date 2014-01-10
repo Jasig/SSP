@@ -187,7 +187,15 @@ Ext.define('Ssp.service.MapPlanService', {
 		me.currentMapPlan.clearPlanCourses();
         me.currentMapPlan.updatePlanCourses(semesterStores);
     }, 
-
+    updatePrintableMap: function(semesterStores,printableMap){ 
+        var me = this;
+        printableMap.set('personId',  me.personLite.get('id'));
+        printableMap.set('ownerId',  me.authenticatedPerson.get('id'));
+        
+        var i = 0;
+        printableMap.clearPlanCourses();
+        printableMap.updatePlanCourses(semesterStores);
+    }, 
 	getBoolean: function(model, fieldName){
 		var me = model;
 		if(me.get(fieldName) == 'on' || me.get(fieldName) == true || me.get(fieldName) == 1 || me.get(fieldName) == 'true'){
@@ -396,24 +404,25 @@ Ext.define('Ssp.service.MapPlanService', {
 		  converted to semesterCourses because of some inconsistencies
 		   this needs to be corrected                                        *****/		
 		var me = this;	
-    	var objectStatus = me.currentMapPlan.get('objectStatus');
+		var printableMap = me.currentMapPlan.copy();
+    	var objectStatus = printableMap.get('objectStatus');
 		if(objectStatus != 'ACTIVE' || objectStatus != 'INACTIVE'){
-			me.currentMapPlan.set('objectStatus','ACTIVE');
+			printableMap.set('objectStatus','ACTIVE');
 		}
 	    var failure = function( response ){
 	    	me.apiProperties.handleError( response );
 		    callbacks.failure( response, callbacks.scope );
 	    };
     	if(semesterStores == null){
-			var planCourses = me.currentMapPlan.get('planCourses');
+			var planCourses = printableMap.get('planCourses');
 			var semsetersStore = new Ssp.store.SemesterCourses();
 			semesterStores = [semsetersStore];
 			Ext.Array.forEach(planCourses, function(planCourse){
 				semsetersStore.add(new Ssp.model.tool.map.SemesterCourse(planCourse));
 			});
 		}
-	    me.updateCurrentMap(semesterStores);
-	    outputData.set("plan", me.currentMapPlan.getSimpleJsonData());
+	    me.updatePrintableMap(semesterStores, printableMap);
+	    outputData.set("plan", printableMap.getSimpleJsonData());
 	    outputData.set("isPrivate",isPrivate);
     }
     	
