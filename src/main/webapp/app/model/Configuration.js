@@ -28,7 +28,7 @@ Ext.define('Ssp.model.Configuration', {
 		      */
              {name: 'syncStudentPersonalDataWithExternalData', 
     	      type: 'boolean', 
-    	      defaultValue: false
+    	      defaultValue: true
     	     },
     	     /*
     	      * Set this option to true to display the retrieveFromExternalDataButton on the Caseload
@@ -41,22 +41,20 @@ Ext.define('Ssp.model.Configuration', {
     	    	defaultValue: true
     	     },
     	     /*
- 
-    	     /*
     	      * Set this option to the label you would like to see for the studentId values in the system.
     	      * For instance: Use this to label your studentId for your institution's naming convention.
     	      */
              {
     	      name: 'studentIdAlias', 
     	      type: 'string', 
-    	      defaultValue: 'Student ID'
+    	      defaultValue: 'Tartan ID'
     	     },
     	     /*
     	      * Minimum data length for a studentId/schoolId in the application.
     	      */
     	     {name: 'studentIdMinValidationLength', 
     	      type: 'number', 
-    	      defaultValue: 3
+    	      defaultValue: 7
     	     },
     	     /*
     	      * Error message for a studentId/schoolId that exceeds the specified minimum validation length.
@@ -70,7 +68,7 @@ Ext.define('Ssp.model.Configuration', {
     	      */
     	     {name: 'studentIdMaxValidationLength', 
        	      type: 'number', 
-       	      defaultValue: 20
+       	      defaultValue: 9
        	     },
     	     /*
     	      * Error message for a studentId/schoolId that exceeds the specified maximum validation length.
@@ -92,7 +90,7 @@ Ext.define('Ssp.model.Configuration', {
     	      */
     	     {name: 'studentIdAllowableCharacters', 
           	  type: 'string', 
-          	  defaultValue: 'a-zA-Z0-9'
+          	  defaultValue: '0-9'
           	 },
     	     /*
     	      * Error message for a studentId/schoolId validation error.
