@@ -274,7 +274,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			return;
 		}		
 		Ext.suspendLayouts();
-		view.removeAll(false);
+		view.removeAll(true);
 		
 		var i=0;
 		var termsets = [];
@@ -321,6 +321,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		
 		var view  = me.getView().getComponent("semestersets");
 		if(view == null){
+			Ext.resumeLayouts(true);
 			return;
 		}
 			
