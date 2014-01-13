@@ -125,8 +125,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
     },
     onDeleteButtonClick: function() {
 		var me = this;
-		var grid = me.getView().query('grid')[0];
-		var record = grid.getView().getSelectionModel().getSelection()[0];
+		var grid = me.getView();
+		var record = grid.getSelectionModel().getSelection()[0];
 		if(!grid.enableDragAndDrop && !me.currentMapPlan.get('isTemplate'))
 		{
 		 	Ext.Msg.alert('SSP Error', 'You cannot modify old terms.'); 
@@ -138,7 +138,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	    }
 		else
 		{
-			me.getView().query('grid')[0].getView().store.remove(record);
+			grid.store.remove(record);
 		}
     },
 	onTermNotesSave: function(button){
