@@ -48,8 +48,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 			listeners: {
                 click: 'onDeleteButtonClick'
              }
-		},		
+		},
 		view: {
+			itemdblclick: 'onItemDblClick',
 			afterlayout: {
 				fn: 'onAfterLayout',
 				single: true
