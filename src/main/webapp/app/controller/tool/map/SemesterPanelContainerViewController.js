@@ -318,13 +318,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			yearViews.push(yearView);
 			}
 		});
-		
-		var view  = me.getView().getComponent("semestersets");
-		if(view == null){
-			Ext.resumeLayouts(true);
-			return;
-		}
-			
+
 		view.add(yearViews);	
 		Ext.resumeLayouts(true);	
 		
