@@ -24,8 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jasig.ssp.model.external.ExternalStudentAcademicProgram;
+import org.jasig.ssp.model.external.ExternalStudentFinancialAidAwardTerm;
+import org.jasig.ssp.model.external.ExternalStudentFinancialAidFile;
 import org.jasig.ssp.model.external.ExternalStudentRecords;
-import org.jasig.ssp.model.external.ExternalStudentTermCourses;
 import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
 
 
@@ -74,12 +75,27 @@ public class ExternalStudentRecordsTO implements ExternalDataTO<ExternalStudentR
 		}
 		if(model.getFinancialAid() != null)
 			financialAid = new ExternalStudentFinancialAidTO(model.getFinancialAid());
+		
+		if(model.getFinancialAidAcceptedTerms() != null  && !model.getFinancialAidAcceptedTerms().isEmpty()){
+			this.financialAidAcceptedTerms = new ArrayList<ExternalStudentFinancialAidAwardTermTO>();
+			for(ExternalStudentFinancialAidAwardTerm term:model.getFinancialAidAcceptedTerms())
+				this.financialAidAcceptedTerms.add(new ExternalStudentFinancialAidAwardTermTO(term));
+		}
+		
+		if(model.getFinancialAidFiles() != null  && !model.getFinancialAidFiles().isEmpty()){
+			this.financialAidFiles = new ArrayList<ExternalStudentFinancialAidFileTO>();
+			for(ExternalStudentFinancialAidFile term:model.getFinancialAidFiles())
+				this.financialAidFiles.add(new ExternalStudentFinancialAidFileTO(term));
+		}
 	}
 	
 	private ExternalStudentTranscriptTO gpa;
 	private List<ExternalStudentAcademicProgramTO> programs;
 	private List<ExternalStudentTranscriptCourseTO> terms;
 	private ExternalStudentFinancialAidTO financialAid;
+	private List<ExternalStudentFinancialAidAwardTermTO> financialAidAcceptedTerms;
+	private List<ExternalStudentFinancialAidFileTO> financialAidFiles;
+	
 	/**
 	 * @return the financial
 	 */
@@ -129,6 +145,30 @@ public class ExternalStudentRecordsTO implements ExternalDataTO<ExternalStudentR
 	 */
 	public void setTerms(List<ExternalStudentTranscriptCourseTO> terms) {
 		this.terms = terms;
+	}
+	
+	/**
+	 * @return the financialAidAcceptedTerms
+	 */
+	public List<ExternalStudentFinancialAidAwardTermTO> getFinancialAidAcceptedTerms() {
+		return financialAidAcceptedTerms;
+	}
+	/**
+	 * @param financialAidAcceptedTerms the financialAidAcceptedTerms to set
+	 */
+	public void setFinancialAidAcceptedTerms(
+			List<ExternalStudentFinancialAidAwardTermTO> financialAidAcceptedTerms) {
+		this.financialAidAcceptedTerms = financialAidAcceptedTerms;
+	}
+	
+	public List<ExternalStudentFinancialAidFileTO> getFinancialAidFiles() {
+		return financialAidFiles;
+	}
+	
+	
+	public void setFinancialAidFiles(
+			List<ExternalStudentFinancialAidFileTO> financialAidFiles) {
+		this.financialAidFiles = financialAidFiles;
 	}
 
 }

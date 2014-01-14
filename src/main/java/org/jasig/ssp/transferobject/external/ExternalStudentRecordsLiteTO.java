@@ -25,6 +25,8 @@ import java.util.List;
 
 import org.jasig.ssp.model.external.ExternalStudentAcademicProgram;
 import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
+import org.jasig.ssp.model.external.ExternalStudentFinancialAidAwardTerm;
+import org.jasig.ssp.model.external.ExternalStudentFinancialAidFile;
 import org.jasig.ssp.model.external.ExternalStudentRecordsLite;
 import org.jasig.ssp.model.external.ExternalStudentTermCourses;
 
@@ -48,6 +50,12 @@ public class ExternalStudentRecordsLiteTO implements ExternalDataTO<ExternalStud
 	private List<ExternalStudentAcademicProgramTO> programs;
 	
 	private ExternalStudentFinancialAidTO financialAid;
+	
+	private List<ExternalStudentFinancialAidAwardTermTO> financialAidAcceptedTerms;
+	
+	private List<ExternalStudentFinancialAidFileTO> financialAidFiles;
+	
+	
 
 	/**
 	 * @return the financialAid
@@ -76,6 +84,18 @@ public class ExternalStudentRecordsLiteTO implements ExternalDataTO<ExternalStud
 		
 		if( model.getFinancialAid() != null)
 			financialAid = new ExternalStudentFinancialAidTO(model.getFinancialAid(), null);
+		
+		if(model.getFinancialAidAcceptedTerms() != null  && !model.getFinancialAidAcceptedTerms().isEmpty()){
+			this.financialAidAcceptedTerms = new ArrayList<ExternalStudentFinancialAidAwardTermTO>();
+			for(ExternalStudentFinancialAidAwardTerm term:model.getFinancialAidAcceptedTerms())
+				this.financialAidAcceptedTerms.add(new ExternalStudentFinancialAidAwardTermTO(term));
+		}
+		
+		if(model.getFinancialAidFiles() != null  && !model.getFinancialAidFiles().isEmpty()){
+			this.financialAidFiles = new ArrayList<ExternalStudentFinancialAidFileTO>();
+			for(ExternalStudentFinancialAidFile term:model.getFinancialAidFiles())
+				this.financialAidFiles.add(new ExternalStudentFinancialAidFileTO(term));
+		}
 	}
 
 	/**
@@ -104,6 +124,24 @@ public class ExternalStudentRecordsLiteTO implements ExternalDataTO<ExternalStud
 	 */
 	public void setPrograms(List<ExternalStudentAcademicProgramTO> programs) {
 		this.programs = programs;
+	}
+
+	public List<ExternalStudentFinancialAidAwardTermTO> getFinancialAidAcceptedTerms() {
+		return financialAidAcceptedTerms;
+	}
+
+	public void setFinancialAidAcceptedTerms(
+			List<ExternalStudentFinancialAidAwardTermTO> financialAidAcceptedTerms) {
+		this.financialAidAcceptedTerms = financialAidAcceptedTerms;
+	}
+
+	public List<ExternalStudentFinancialAidFileTO> getFinancialAidFiles() {
+		return financialAidFiles;
+	}
+
+	public void setFinancialAidFiles(
+			List<ExternalStudentFinancialAidFileTO> financialAidFiles) {
+		this.financialAidFiles = financialAidFiles;
 	}
 
 }
