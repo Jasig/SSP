@@ -29,7 +29,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 		personProgramStatusService: 'personProgramStatusService',
 		programStatusChangeReasonsStore: 'programStatusChangeReasonsStore',
         sspConfig: 'sspConfig',
-        formUtils: 'formRendererUtils'
+        formUtils: 'formRendererUtils',
+        sapStatusesStore: 'sapStatusesStore',
+        financialAidFilesStore: 'financialAidFilesStore'
     },
     
     control: {
@@ -80,7 +82,12 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         eligibleFederalAidField: '#eligibleFederalAid',
         termsLeftField: '#termsLeft',
         institutionalLoanAmountField: '#institutionalLoanAmount',
-        financialAidFileStatusField: '#financialAidFileStatus',
+        financialAidFileStatusField: {
+	           selector: '#financialAidFileStatus',
+			   listeners: {
+		            click: 'onShowFinancialAidFileStatuses'
+		        }
+	    },
 		financialAidAcceptedTermsField: '#financialAidAcceptedTerms',
 
     },
@@ -89,6 +96,12 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         var id = me.personLite.get('id');
         me.resetForm();
         me.sapStatusCode = null;
+        if(me.sapStatusesStore.getTotalCount() <= 0){
+			me.sapStatusesStore.load();
+        }
+        if(me.financialAidFilesStore.getTotalCount() <= 0){
+			me.financialAidFilesStore.load();
+        }
         if (id != "") {
             // display loader
             me.getView().setLoading(true);
@@ -301,7 +314,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 			me.getEligibleFederalAidField().setValue(me.handleNull(financialAid.eligibleFederalAid));
 			me.getTermsLeftField().setValue(me.handleNull(financialAid.termsLeft));
 			me.getInstitutionalLoanAmountField().setValue(me.handleNull(financialAid.institutionalLoanAmount));
-			me.getFinancialAidFileStatusField().setValue(me.handleNull(financialAid.financialAidFileStatus));
+			me.getFinancialAidFileStatusField().setText('<u>' + me.handleNull(financialAid.financialAidFileStatus) + '</u>');
         }
         var financialAidAcceptedTerms = transcript.get('financialAidAcceptedTerms');
         if (financialAidAcceptedTerms) {
@@ -313,19 +326,11 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         	me.getFinancialAidAcceptedTermsField().setValue(financialAidAcceptedTermsString);
         }
 
-		var financialAidFilesStatus = transcript.get('financialAidFiles');
-		var financialAidFilesStatusString = "";
-        if (financialAidFilesStatus) {
-        	for(i = 0; i < financialAidFilesStatus.length ; i++){
-        		var financialAidFileStatus = financialAidFilesStatus[i];
-        		financialAidFilesStatusString += financialAidAcceptedTerm.fileCode + '=' + financialAidAcceptedTerm.fileStatus + "<br/>";
-        	}
-        	
-        }
+		me.financialAidFilesStatuses = transcript.get('financialAidFiles');
+		
     },
     
     getTranscriptFailure: function(){
-        // nothing to do
     },
     
     
@@ -411,6 +416,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         if(me.sapCodeInfoPopup != null && !me.sapCodeInfoPopup.isDestroyed)
 	    	me.sapCodeInfoPopup.close();
         
+        if(me.financialAidFilePopup != null && !me.financialAidFilePopup.isDestroyed)
+	    	me.financialAidFilePopup.close();
         return me.callParent(arguments);
     },
     
@@ -430,5 +437,12 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 		if(me.sapCodeInfoPopup == null || me.sapCodeInfoPopup.isDestroyed)
        		me.sapCodeInfoPopup = Ext.create('Ssp.view.tools.profile.SapStatus',{hidden:true,code:me.sapStatusCode});
 		me.sapCodeInfoPopup.show();
+    },
+    
+    onShowFinancialAidFileStatuses: function(){
+    	var me=this;
+		if(me.financialAidFilePopup == null || me.financialAidFilePopup.isDestroyed)
+       		me.financialAidFilePopup = Ext.create('Ssp.view.tools.profile.FinancialAidFileViewer',{hidden:true,financialAidFilesStatuses:me.financialAidFilesStatuses});
+		me.financialAidFilePopup.show();
     }
 });

@@ -76,12 +76,14 @@ Ext.define('Ssp.view.tools.profile.SapStatus', {
                         fieldLabel: 'Code',
                         name: 'code',
                         itemId: 'code',
-                        labelWidth: 60
+                        labelWidth: 80,
+                        value:'........'
                     }, {
                         fieldLabel: 'Name',
                         name: 'name',
                         itemId: 'name',
-                        labelWidth: 80
+                        labelWidth: 80,
+                        value:'........'
                     }, {
                         xtype: 'tbspacer',
                         height: '10'
@@ -90,7 +92,8 @@ Ext.define('Ssp.view.tools.profile.SapStatus', {
                         fieldLabel: 'Description',
                         name: 'description',
                         itemId: 'description',
-                        labelWidth: 50
+                        labelWidth: 80,
+                        value:'........'
                     }, 
                     {
                         xtype: 'tbspacer',

@@ -236,13 +236,28 @@ Ext.define('Ssp.view.tools.profile.Details', {
 	                        name: 'currentYearFinancialAidAward',
 	                        itemId: 'currentYearFinancialAidAward'
 
-	                    },
-                    {
-                        fieldLabel: 'FA File',
+	                    },{
+		                    xtype: 'fieldset',
+		                    border: 0,
+							layout:'hbox',
+		                    title: '',
+		                    defaultType: 'displayfield',
+		                    defaults: {
+		                        anchor: '100%'
+		                    },
+		                    flex: .25,
+		                    width: '200',
+		                    margin: '0 0 0 0',
+		                    items: [{
+                        xtype: 'label',
+						text:'FA File',
+						forId:'financialAidFileStatus'
+                    },{
                         name: 'financialAidFileStatus',
                         itemId: 'financialAidFileStatus',
-                        labelWidth: 60
-                    },
+                        xtype: 'button',
+                        cls: "makeTransparent",
+                    }]},
                     {
                         fieldLabel: 'FA Accepted',
                         name: 'financialAidAcceptedTerms',
