@@ -22,6 +22,7 @@ Ext.define('Ssp.store.reference.SapStatuses', {
     constructor: function(){
     	this.callParent(arguments);
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('sapstatus'), 
+    	autoLoad:true,
 		extraParams: this.extraParams
 		});
     }
