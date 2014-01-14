@@ -1,0 +1,76 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <property name="schema" value="${database.schema}" />
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+    <property name="concat.operator" value="||"  dbms="postgresql"/>
+    <property name="concat.operator" value="+"  dbms="mssql"/>
+    
+	<changeSet author='jim.stanley'
+        id='Add Table External Student Financial Aid File'>
+        <preConditions onFail="CONTINUE" onFailMessage="Skipping Add External Student Financial Aid Award Term">
+            <sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+            </sqlCheck>
+            <sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+            <changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+        </preConditions>
+        <createTable tableName="external_student_financial_aid_file">
+            <column name="school_id" type="${nvarchar.type}(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="file_status" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="financial_file_code" type="${nvarchar.type}(25)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+                
+        <addUniqueConstraint tableName="external_student_financial_aid_file" columnNames="school_id,financial_file_code"/>
+        
+        <addPrimaryKey tableName="external_student_financial_aid_file" columnNames="school_id,financial_file_code"/>
+        
+
+        <createView viewName="v_external_student_financial_aid_file">
+            select school_id${concat.operator}financial_file_code as id,* from external_student_financial_aid_file
+        </createView>
+
+        <sql>grant all on external_student_financial_aid_file to ${database.app.username}</sql>
+        <sql>grant all on v_external_student_financial_aid_file to ${database.app.username}</sql>
+        <rollback>
+            <dropView viewName="v_external_student_financial_aid_file" />
+            <dropTable tableName="external_student_financial_aid_file" />
+        </rollback>
+
+        <!-- Theres a different assumption in the liquibase handling of timezones 
+            on postgres. Specifying "Without" timezone -->
+        <modifySql dbms="postgresql">
+            <replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+        </modifySql>       
+    </changeSet>
+    
+
+</databaseChangeLog>
