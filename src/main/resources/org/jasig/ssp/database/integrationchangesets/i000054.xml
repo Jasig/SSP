@@ -1,0 +1,68 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<changeSet id="add columns external_student_financial_aid" author="jim.stanley">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip re-narrow external_student_financial_aid fafsa_date (pk)">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+		</preConditions>
+		<dropView viewName="v_external_student_financial_aid" />
+		<addColumn tableName="external_student_financial_aid">
+            <column name="sap_status_code" type="${nvarchar.type}(25)" >
+                <constraints nullable="true" />
+            </column>   
+        </addColumn>
+        <addColumn tableName="external_student_financial_aid">
+            <column name="institutional_loan_amount" type="decimal(9,2)" >
+                <constraints nullable="true" />
+            </column>   
+        </addColumn>
+        <addColumn tableName="external_student_financial_aid">
+            <column name="eligible_federal_aid" type="character(1)" >
+                <constraints nullable="true" />
+            </column>   
+        </addColumn>
+        <addColumn tableName="external_student_financial_aid">
+            <column name="financial_aid_file_status" type="${nvarchar.type}(25)" >
+                <constraints nullable="true" />
+            </column>   
+        </addColumn>
+        <addColumn tableName="external_student_financial_aid">
+            <column name="terms_left" type="int" >
+                <constraints nullable="true" />
+            </column>   
+        </addColumn>
+		<createView viewName="v_external_student_financial_aid">
+			select school_id as id,* from external_student_financial_aid
+		</createView>
+		<sql>grant all on v_external_student_financial_aid to ${database.app.username}</sql>
+	</changeSet>
+
+
+</databaseChangeLog>
