@@ -223,33 +223,80 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         name: 'fafsaDate',
                         itemId: 'fafsaDate'
                     }, {
-                        fieldLabel: 'FA Award',
-                        name: 'currentYearFinancialAidAward',
-                        itemId: 'currentYearFinancialAidAward'
-                    
-                    }, {
-                        fieldLabel: 'FA Amount',
-                        name: 'financialAidRemaining',
-                        itemId: 'financialAidRemaining'
-                    
-                    }, {
-                        fieldLabel: 'Loan Amount',
-                        name: 'originalLoanAmount',
-                        itemId: 'originalLoanAmount'
-                    
-                    }, {
                         xtype: 'tbspacer',
                         height: '10'
-                    }, {
-                        fieldLabel: 'SAP',
-                        name: 'sapStatus',
-                        itemId: 'sapStatus'
-                    }, {
-                        fieldLabel: 'F1',
-                        name: 'f1Status',
-                        itemId: 'f1Status',
-                        labelWidth: 15
-                    }]
+                    },{
+                        fieldLabel: 'Eligible Fed Aid',
+                        name: 'eligibleFederalAid',
+                        itemId: 'eligibleFederalAid',
+						hidden:true,
+                        labelWidth: 60
+                    },	{
+	                        fieldLabel: 'FA Award',
+	                        name: 'currentYearFinancialAidAward',
+	                        itemId: 'currentYearFinancialAidAward'
+
+	                    },
+                    {
+                        fieldLabel: 'FA File',
+                        name: 'financialAidFileStatus',
+                        itemId: 'financialAidFileStatus',
+                        labelWidth: 60
+                    },
+                    {
+                        fieldLabel: 'FA Accepted',
+                        name: 'financialAidAcceptedTerms',
+                        itemId: 'financialAidAcceptedTerms',
+                        labelWidth: 60
+                    },		{
+	                        fieldLabel: 'FA Amount',
+	                        name: 'financialAidRemaining',
+	                        itemId: 'financialAidRemaining'
+
+	                    },
+                    {
+                        fieldLabel: 'Institutional Loan Amount',
+                        name: 'institutionalLoanAmount',
+                        itemId: 'institutionalLoanAmount',
+                        labelWidth: 60
+                    },	{
+		                        fieldLabel: 'Loan Amount',
+		                        name: 'originalLoanAmount',
+		                        itemId: 'originalLoanAmount'
+
+		                    },
+                    {
+                        fieldLabel: 'Remaining FA Terms',
+                        name: 'termsLeft',
+                        itemId: 'termsLeft',
+                        labelWidth: 100
+                    }	, 	{
+			                    xtype: 'fieldset',
+			                    border: 0,
+								layout:'hbox',
+			                    title: '',
+			                    defaultType: 'displayfield',
+			                    defaults: {
+			                        anchor: '100%'
+			                    },
+			                    flex: .25,
+			                    width: '200',
+			                    margin: '0 0 0 0',
+			                    items: [{
+	                        xtype: 'label',
+							text:'Status Code',
+							forId:'sapStatusCode'
+	                    },{
+	                        name: 'sapStatusCode',
+	                        itemId: 'sapStatusCode',
+	                        xtype: 'button',
+	                        cls: "makeTransparent",
+	                    }]}, {
+	                        fieldLabel: 'F1',
+	                        name: 'f1Status',
+	                        itemId: 'f1Status',
+	                        labelWidth: 15
+	                    }]
                 
                 }, {
                     xtype: 'fieldset',

@@ -65,6 +65,7 @@ Ext.require([
     'Ssp.view.tools.profile.CurrentSchedule',
     'Ssp.view.tools.profile.DroppedCourses',
 	'Ssp.view.tools.profile.Details',
+	'Ssp.view.tools.profile.SapStatus',
 	'Ssp.view.tools.profile.Dashboard',
 	'Ssp.view.tools.profile.AcademicProgram',
 	'Ssp.view.tools.profile.RecentTermActivity',

@@ -61,7 +61,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         currentYearFinancialAidAwardField: '#currentYearFinancialAidAward',
         academicProgramsField: '#academicPrograms',
         intendedProgramAtAdmitField: '#intendedProgramAtAdmit',
-        sapStatusField: '#sapStatus',
+
         fafsaDateField: '#fafsaDate',
         
         financialAidGpaField: '#financialAidGpa',
@@ -70,12 +70,25 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         creditCompletionRateField: '#creditCompletionRate',
         balanceOwedField: '#balanceOwed',
         financialAidRemainingField: '#financialAidRemaining',
-        originalLoanAmountField: '#originalLoanAmount'
+        originalLoanAmountField: '#originalLoanAmount',
+        sapStatusCodeField: {
+	           selector: '#sapStatusCode',
+			   listeners: {
+		            click: 'onShowSAPCodeInfo'
+		        }
+	    },
+        eligibleFederalAidField: '#eligibleFederalAid',
+        termsLeftField: '#termsLeft',
+        institutionalLoanAmountField: '#institutionalLoanAmount',
+        financialAidFileStatusField: '#financialAidFileStatus',
+		financialAidAcceptedTermsField: '#financialAidAcceptedTerms',
+
     },
     init: function(){
         var me = this;
         var id = me.personLite.get('id');
         me.resetForm();
+        me.sapStatusCode = null;
         if (id != "") {
             // display loader
             me.getView().setLoading(true);
@@ -266,8 +279,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         if (financialAid) {
             me.getCurrentYearFinancialAidAwardField().setFieldLabel('');
         	me.getCurrentYearFinancialAidAwardField().setValue('<span style="color:#15428B">FA Award:  </span>' + me.handleNull(financialAid.currentYearFinancialAidAward));
-        	me.getSapStatusField().setFieldLabel('');
-			me.getSapStatusField().setValue('<span style="color:#15428B">SAP:  </span>' + me.handleNull(financialAid.sapStatus));
+        	//me.getSapStatusField().setFieldLabel('');
+		//	me.getSapStatusField().setValue('<span style="color:#15428B">SAP:  </span>' + me.handleNull(financialAid.sapStatus));
         	me.getFafsaDateField().setFieldLabel('');
 			me.getFafsaDateField().setValue('<span style="color:#15428B">FAFSA:  </span>' + Ext.util.Format.date(Ext.Date.parse(financialAid.fafsaDate, 'c'),'m/d/Y'));
         	me.getBalanceOwedField().setFieldLabel('');
@@ -283,8 +296,31 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 			else
 				me.getOriginalLoanAmountField().setValue('<span style="color:#15428B">Loan Amount:  </span>');
         	me.getFinancialAidGpaField().setFieldLabel('');
-			me.getFinancialAidGpaField().setValue('<span style="color:#15428B">FA GPA:  </span>' + me.handleNull(financialAid.financialAidGpa));
+			me.getSapStatusCodeField().setText('<u>' + me.handleNull(financialAid.sapStatusCode) + '</u>');
+			me.sapStatusCode = financialAid.sapStatusCode;
+			me.getEligibleFederalAidField().setValue(me.handleNull(financialAid.eligibleFederalAid));
+			me.getTermsLeftField().setValue(me.handleNull(financialAid.termsLeft));
+			me.getInstitutionalLoanAmountField().setValue(me.handleNull(financialAid.institutionalLoanAmount));
+			me.getFinancialAidFileStatusField().setValue(me.handleNull(financialAid.financialAidFileStatus));
+        }
+        var financialAidAcceptedTerms = transcript.get('financialAidAcceptedTerms');
+        if (financialAidAcceptedTerms) {
+        	var financialAidAcceptedTermsString = "";
+        	for(i = 0; i < financialAidAcceptedTerms.length ; i++){
+        		var financialAidAcceptedTerm = financialAidAcceptedTerms[i];
+        		financialAidAcceptedTermsString += financialAidAcceptedTerm.termCode + '=' + financialAidAcceptedTerm.accepted  + ',';
+        	}
+        	me.getFinancialAidAcceptedTermsField().setValue(financialAidAcceptedTermsString);
+        }
 
+		var financialAidFilesStatus = transcript.get('financialAidFiles');
+		var financialAidFilesStatusString = "";
+        if (financialAidFilesStatus) {
+        	for(i = 0; i < financialAidFilesStatus.length ; i++){
+        		var financialAidFileStatus = financialAidFilesStatus[i];
+        		financialAidFilesStatusString += financialAidAcceptedTerm.fileCode + '=' + financialAidAcceptedTerm.fileStatus + "<br/>";
+        	}
+        	
         }
     },
     
@@ -372,6 +408,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
     
     destroy: function(){
         var me = this;
+        if(me.sapCodeInfoPopup != null && !me.sapCodeInfoPopup.isDestroyed)
+	    	me.sapCodeInfoPopup.close();
+        
         return me.callParent(arguments);
     },
     
@@ -380,5 +419,16 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         if (me.person.getCoachPrimaryEmailAddress()) {
             window.location = 'mailto:' + me.person.getCoachPrimaryEmailAddress();
         }
+    },
+    
+    onShowFinancialFiles: function(){
+    	
+    },
+    
+    onShowSAPCodeInfo: function(){
+    	var me=this;
+		if(me.sapCodeInfoPopup == null || me.sapCodeInfoPopup.isDestroyed)
+       		me.sapCodeInfoPopup = Ext.create('Ssp.view.tools.profile.SapStatus',{hidden:true,code:me.sapStatusCode});
+		me.sapCodeInfoPopup.show();
     }
 });
