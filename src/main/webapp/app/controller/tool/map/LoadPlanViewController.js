@@ -116,6 +116,12 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 		if(!serviceResponses || !serviceResponses.responseText || serviceResponses.responseText.trim().length == 0) {
 
        	} else {
+			// Not completely sure why, why loadFromServer() doesn't clear out
+			// existing 'currentMapPlan' state first, e.g. it preserves template
+			// state. Might be other call sites that need that behavior. But
+			// we know here that we always want a complete refresh, so wipe out
+			// current state first.
+			me.scope.currentMapPlan.clearMapPlan();
        		me.scope.currentMapPlan.loadFromServer(Ext.decode(serviceResponses.responseText));
 			me.scope.appEventsController.getApplication().fireEvent('onLoadMapPlan');
 			me.scope.appEventsController.getApplication().fireEvent("onCurrentMapPlanChangeUpdateMapView");

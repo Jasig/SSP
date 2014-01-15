@@ -123,6 +123,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			me.allPlansPopUp = Ext.create('Ssp.view.tools.map.LoadPlans',{hidden:true,onInit:true,fromMapLoad:true});
 			me.allPlansPopUp.show();
        	} else {
+			me.currentMapPlan.clearMapPlan();
 			me.currentMapPlan.loadFromServer(Ext.decode(mapResponse.responseText));
 			if(isTemplate){
 				me.currentMapPlan.set("planCourses", me.currentMapPlan.get('templateCourses'));
@@ -130,13 +131,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			me.onCreateMapPlan();
 			me.populatePlanStores();
 			me.updateAllPlanHours();
-			if(isTemplate)
-				me.currentMapPlan.setIsTemplate(isTemplate);
-			else
-				me.currentMapPlan.setIsTemplate(false);
+			me.currentMapPlan.setIsTemplate(!!(isTemplate));
+			me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
 		}
-    	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
-
     },
 
     onLoadMapPlan: function () {
@@ -244,8 +241,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.currentMapPlan.set('personId',  me.personLite.get('id'));
 		me.currentMapPlan.set('ownerId',  me.authenticatedPerson.get('id'));
 		me.currentMapPlan.set('name','New Plan');
-		me.currentMapPlan.set('termNotes',[]);
-		me.currentMapPlan.setIsTemplate(false);
 		me.onCreateMapPlan();
 		me.populatePlanStores();
 		me.updateAllPlanHours();

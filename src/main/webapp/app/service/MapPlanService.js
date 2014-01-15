@@ -380,21 +380,34 @@ Ext.define('Ssp.service.MapPlanService', {
 	planStatus: function(plan, callbacks){
 		var me=this;
 		if(plan.get("isTemplate")){
-			return callbacks.faliure("Is template, no plan status.", callbacks.scope);
+			if ( callbacks.failure ) {
+				if ( callbacks.scope ) {
+					callbacks.failure.apply(callbacks.scope, ["Is template, no plan status."]);
+				} else {
+					callbacks.failure("Is template, no plan status.");
+				}
+			}
+			return;
 		}
+		// Little bit of weirdness here to support those clients that need an
+		// explicit invocation scope to be passed through to callbacks. This
+		// shouldn't be necessary b/c the makeRequest() will invoke the
+		// callback in the specified scope, so 'this' in the callback will refer
+		// to that same value (the same way it does here). But we need that
+		// explicit scope arg for backward compatibility.
+		var success = function( response ){
+			callbacks.success.apply(this, [response, this]);
+		};
+		var failure = function( response ){
+			callbacks.failure.apply(this, [response, this]);
+		};
 		var url = me.getBaseUrl(me.personLite.get('id'));
-	    var success = function( response ){
-			callbacks.success( response, callbacks.scope );
-	    };
-	    var failure = function( response ){
-	    	callbacks.failure(response, callbacks.scope);
-	    };
 		me.apiProperties.makeRequest({
    			url: url+'/planstatus',
    			method: 'GET',
    			successFunc: success,
    			failureFunc: failure,
-   			scope: me
+   			scope: callbacks.scope
    		});
 	},
     
