@@ -132,6 +132,7 @@ Ext.define('Ssp.controller.tool.map.MAPController', {
 	
 	destroy:function(){
 	    var me=this;
+	    me.currentMapPlan.clearMapPlan();
 	    return me.callParent( arguments );
 	}
 });

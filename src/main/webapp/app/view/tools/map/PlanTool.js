@@ -301,6 +301,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 		                defaults: {
 		                    anchor: '100%'
 		                },
+		                hidden: me.currentMapPlan.get("isTemplate"),
 		                items: [
 							{
 								 xtype: 'button',
@@ -316,7 +317,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 		                    labelWidth: 115,
 							width:200,
 							fieldStyle:"text-align:left",
-		                    hidden: me.currentMapPlan.get("isTemplate")
+
 
 		                }]
 				}]
