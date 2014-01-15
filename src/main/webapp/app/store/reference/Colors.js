@@ -25,7 +25,6 @@ Ext.define('Ssp.store.reference.Colors', {
     		url: this.getProxy().url + this.apiProperties.getItemUrl('color'), 
     		extraParams: this.extraParams
     	});
-    	this.load(); //load on instantiation for elective screen
     	return this;
     }
 });

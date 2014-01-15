@@ -24,7 +24,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		appEventsController: 'appEventsController',
     	courseService:'courseService',
 		electiveStore: 'electivesAllUnpagedStore',
-		colorsStore: 'colorsStore',
 		transcriptStore: 'courseTranscriptsStore',
     	formUtils: 'formRendererUtils',
 		semesterStores : 'currentSemesterStores',

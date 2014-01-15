@@ -25,6 +25,5 @@ Ext.define('Ssp.store.reference.Electives', {
     		url: this.getProxy().url + this.apiProperties.getItemUrl('elective'),
     		extraParams: this.extraParams
     	});
-    	this.load();    	
     }
 });
