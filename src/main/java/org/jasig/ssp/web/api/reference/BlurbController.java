@@ -112,25 +112,23 @@ public class BlurbController {
 	BlurbTO save(@PathVariable final UUID id, @Valid @RequestBody final BlurbTO obj)
 			throws ValidationException, ObjectNotFoundException {
 
-		throw new UnsupportedOperationException("Temporarily disabled feature");
+		if (id == null) {
+			throw new ValidationException(
+					"You submitted without an id to the save method.  Did you mean to create?");
+		}
 
-//		if (id == null) {
-//			throw new ValidationException(
-//					"You submitted without an id to the save method.  Did you mean to create?");
-//		}
-//
-//		if (obj.getId() == null) {
-//			obj.setId(id);
-//		}
-//
-//		final Blurb model = getFactory().from(obj);
-//
-//		final Blurb savedT = getService().save(model);
-//		if (null != savedT) {
-//			return this.instantiateTO(model);
-//		}
-//
-//		return null;
+		if (obj.getId() == null) {
+			obj.setId(id);
+		}
+
+		final Blurb model = getFactory().from(obj);
+
+		final Blurb savedT = getService().save(model);
+		if (null != savedT) {
+			return this.instantiateTO(model);
+		}
+
+		return null;
 	}	
 
 	private BlurbTO instantiateTO(final Blurb model) throws ValidationException {
