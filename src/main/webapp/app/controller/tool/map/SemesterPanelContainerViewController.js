@@ -28,9 +28,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		authenticatedPerson: 'authenticatedPerson',
         personLite: 'personLite',
     	currentMapPlan: 'currentMapPlan',
-		electiveStore : 'electivesStore',
 		semesterStores : 'currentSemesterStores',
-		colorsStore: 'colorsStore'
+        electiveStore: 'electivesAllUnpagedStore',
+        colorStore: 'colorsAllUnpagedStore',
     },
     semesterPanels : new Array(),
 	control: {
@@ -51,14 +51,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var id = me.personLite.get('id');
 		
 	    me.resetForm();
-        if(me.electiveStore.data.length == 0)
-        {
-        	me.electiveStore.load();
-        }
-        if(me.colorsStore.data.length == 0)
-        {
-        	me.colorsStore.load();
-        } 
 		me.appEventsController.assignEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onLoadTemplatePlan', callBackFunc: me.onLoadTemplatePlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
@@ -111,6 +103,32 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
         };
     },
 
+    // Just to avoid creating needless closures
+    noOp: function() {},
+
+    // Makes sure we have all the stuff the SemesterPanels will need before they
+    // render. This breaks encapsulation, but not sure of a better way...
+    // maybe a static method on SemesterPanel or SemesterPanelController?
+    // the latter breaks encapsulation too and its dependencies wouldn't have
+    // loaded when the static is invoked, I don't think. The former might not
+    // be so bad in terms of separation of concerns since we already have
+    // complex rendering functions there. But I think we still have the same
+    // DI timing issue. So we do the dirty deed here...
+    withMapPlanRenderingDependencies: function(work) {
+        var me = this;
+        var responseDispatcher = Ext.create('Ssp.util.ResponseDispatcher', {
+            remainingOpNames: ['electives','colors'],
+            afterLastOp: {
+                callback: work.fn,
+                callbackScope: work.scope,
+            },
+        });
+        me.electiveStore.clearFilter(true);
+        me.electiveStore.load(responseDispatcher.setSuccessCallback('electives', me.noOp, me));
+        me.colorStore.clearFilter(true);
+        me.colorStore.load(responseDispatcher.setSuccessCallback('colors', me.noOp, me));
+    },
+
     getMapPlanServiceSuccess: function(serviceResponses, isTemplate) {
         var me = this;
         var mapResponse = serviceResponses.successes.map;
@@ -128,41 +146,61 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			if(isTemplate){
 				me.currentMapPlan.set("planCourses", me.currentMapPlan.get('templateCourses'));
 			}
-			me.onCreateMapPlan();
-			me.populatePlanStores();
-			me.updateAllPlanHours();
-			me.currentMapPlan.setIsTemplate(!!(isTemplate));
-			me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+			me.withMapPlanRenderingDependencies({
+				fn: function() {
+					me.onCreateMapPlan();
+					me.populatePlanStores();
+					me.updateAllPlanHours();
+					me.currentMapPlan.setIsTemplate(!!(isTemplate));
+					me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+				},
+				scope: me // shouldnt be necessary in this particular case, but satisfies ResponseDispatcher expectations
+			});
 		}
     },
 
     onLoadMapPlan: function () {
     	var me = this;
-		me.onCreateMapPlan();
-		me.populatePlanStores();
-		me.updateAllPlanHours();  
-    	me.currentMapPlan.setIsTemplate(false);
-    	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
-		me.getView().setLoading(false);
+        me.withMapPlanRenderingDependencies({
+			fn: function() {
+				me.onCreateMapPlan();
+				me.populatePlanStores();
+				me.updateAllPlanHours();
+    			me.currentMapPlan.setIsTemplate(false);
+    			me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+				me.getView().setLoading(false);
+			},
+			scope: me // shouldnt be necessary in this particular case, but satisfies ResponseDispatcher expectations
+        });
     },
     
     onLoadTemplatePlan: function () {
-    	var me = this;
-    	me.currentMapPlan.set("planCourses", me.currentMapPlan.get('templateCourses'));
-    	me.currentMapPlan.setIsTemplate(true);
-		me.onCreateMapPlan();
-		me.populatePlanStores();
-		me.updateAllPlanHours();  
-    	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
-		me.getView().setLoading(false);
+		var me = this;
+		me.withMapPlanRenderingDependencies({
+			fn: function() {
+				me.currentMapPlan.set("planCourses", me.currentMapPlan.get('templateCourses'));
+				me.currentMapPlan.setIsTemplate(true);
+				me.onCreateMapPlan();
+				me.populatePlanStores();
+				me.updateAllPlanHours();
+				me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+				me.getView().setLoading(false);
+			},
+			scope: me
+		});
     },
     
     getMapPlanServiceFailure: function() {
 		var me = this;
-		me.onCreateNewMapPlan();
-		me.updateAllPlanHours();
-		me.currentMapPlan.set('personId',me.personLite.get('id'));
-		me.currentMapPlan.set('ownerId',me.personLite.get('id'));
+		me.withMapPlanRenderingDependencies({
+			fn: function() {
+				me.onCreateNewMapPlan();
+				me.updateAllPlanHours();
+				me.currentMapPlan.set('personId',me.personLite.get('id'));
+				me.currentMapPlan.set('ownerId',me.personLite.get('id'));
+			},
+			scope: me // shouldnt be necessary in this particular case, but satisfies ResponseDispatcher expectations
+		});
     },
  
 	onAfterLayout: function(){
@@ -709,12 +747,17 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	onValidateAccept: function(btnId){
 		var me = this;
 		if(btnId == 'ok'){
-			me.currentMapPlan.loadPlan(me.clonedMap, true);
-			me.onCreateMapPlan();
-			me.populatePlanStores();
-			me.updateAllPlanHours();
-			me.currentMapPlan.dirty = true;
-			me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+			me.withMapPlanRenderingDependencies({
+					fn: function() {
+						me.currentMapPlan.loadPlan(me.clonedMap, true);
+						me.onCreateMapPlan();
+						me.populatePlanStores();
+						me.updateAllPlanHours();
+						me.currentMapPlan.dirty = true;
+						me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+					},
+					scope: me
+			});
 		}
 	},
 	

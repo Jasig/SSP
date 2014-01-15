@@ -104,7 +104,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 					    flex:0,
 					    renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 					    	var me=this;
-					    	var elective = me.electiveStore.getById(record.get('electiveId'))
+					    	var elective = me.electiveStore.getById(record.get('electiveId'));
 					    	var colorId = elective ? elective.get('color') : null;
 					    	var color = colorId ? me.colorsAllUnpagedStore.getById(colorId) : null;
 					    	var colorCode = color ? '#'+color.get('hexCode') : 'rgba(0,0,0,0.0)';

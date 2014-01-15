@@ -116,10 +116,16 @@ Ext.define('Ssp.controller.AdminViewController', {
 		}
 	},
 
+	// Just to avoid creating needless closures
+	noOp: function() {},
+
 	loadAdmin: function( title ,form, storeName, columns, options ) {
 		var me=this;
 		var comp = this.formUtils.loadDisplay('adminforms',form, true, options);
 		var store = null;
+
+		if (Ext.isFunction(comp.setTitle))
+			comp.setTitle(title + ' Admin');
 		
 		// set a store if defined
 		if (storeName != "")
@@ -138,16 +144,50 @@ Ext.define('Ssp.controller.AdminViewController', {
 					// comp.reconfigure(store);
 					me.formUtils.reconfigureGridPanel(comp, store);
 				}
-				
-				comp.getStore().load();
-				if(options.sort != null && options.sort != undefined) {
-					var sort = options.sort					
-					comp.getStore().sort(sort.field, (sort.direction != null && sort.direction != undefined) ? sort.direction : "ASC");
+			}
+
+			if ( store || options.interfaceOptions.storeDependencies ) {
+
+				var mainStoreName = 'main';
+				var responseDispatcherConfig = {
+					remainingOpNames: (store ? [] : [mainStoreName]),
+					afterLastOp: {
+						callback: Ext.pass(me.afterAdminStoresLoaded, [title ,form, storeName, columns, options, comp, store], me),
+						callbackScope: me
+					}
 				}
+				if ( options.interfaceOptions.storeDependencies ) {
+					Ext.each(options.interfaceOptions.storeDependencies, function(storeDependency) {
+						responseDispatcherConfig.remainingOpNames.push(storeDependency.name);
+					});
+				}
+				var responseDispatcher = Ext.create('Ssp.util.ResponseDispatcher', responseDispatcherConfig);
+				if ( options.interfaceOptions.storeDependencies ) {
+					Ext.each(options.interfaceOptions.storeDependencies, function(storeDependency) {
+						if ( storeDependency.clearFilter ) {
+							storeDependency.store.clearFilter();
+						}
+						storeDependency.store.load(responseDispatcher.setSuccessCallback(storeDependency.name, me.noOp, me));
+					});
+				}
+				if ( store ) {
+					// no clearFilter() here to preserve legacy behavior
+					comp.getStore().load(responseDispatcher.setSuccessCallback(mainStoreName, me.noOp, me));
+				}
+
+			} else {
+				me.afterAdminStoresLoaded(title ,form, storeName, columns, options, comp);
 			}
 		}
-		
-		if (Ext.isFunction(comp.setTitle))
-			comp.setTitle(title + ' Admin');
+	},
+
+	afterAdminStoresLoaded: function(title ,form, storeName, columns, options, comp, store) {
+		var me = this;
+		if ( store ) {
+			if(options.sort != null && options.sort != undefined) {
+				var sort = options.sort
+				comp.getStore().sort(sort.field, (sort.direction != null && sort.direction != undefined) ? sort.direction : "ASC");
+			}
+		}
 	}
 });
