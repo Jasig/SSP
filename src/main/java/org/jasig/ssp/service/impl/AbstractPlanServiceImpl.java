@@ -39,7 +39,6 @@ import org.jasig.ssp.model.external.ExternalCourseRequisite;
 import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
 import org.jasig.ssp.model.external.RequisiteCode;
 import org.jasig.ssp.model.external.Term;
-import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
 import org.jasig.ssp.service.AbstractPlanService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -171,26 +170,30 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 	public TO validate(TO model) throws ObjectNotFoundException{
 
 		List<? extends AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courses = model.getCourses();
-		Map<String, List<String>> coursesByTerm = new HashMap<String, List<String>>();
-		Map<String, AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courseCodeCourse = new HashMap<String,AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>();
+		Map<String, List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>> coursesByTerm = new HashMap<String, List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>>();
 		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>  course: courses){
 			course.setIsValidInTerm(true);//Set all courses valid in term
-			courseCodeCourse.put(course.getCourseCode(), course);
 			if(coursesByTerm.containsKey(course.getTermCode())){
-				coursesByTerm.get(course.getTermCode()).add(course.getCourseCode());
+				coursesByTerm.get(course.getTermCode()).add(course);
 			}else {
-				List<String> termCourses = Lists.newArrayList(course.getCourseCode());
+				List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> termCourses =
+						new ArrayList<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>();
+				termCourses.add(course);
 				coursesByTerm.put(course.getTermCode(), termCourses);
 			}
 		}
-		for(String termCode: coursesByTerm.keySet()){
-			List<String> validCourseCodes = getCourseService().getValidCourseCodesForTerm(termCode, coursesByTerm.get(termCode));
-			List<String> courseCodesTerm = coursesByTerm.get(termCode);
-			for(String courseCode:courseCodesTerm){
-				if(validCourseCodes.contains(courseCode)){
+		for(Map.Entry<String, List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>> entry: coursesByTerm.entrySet()){
+			final String termCode = entry.getKey();
+			final List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> coursesInTerm = entry.getValue();
+			final List<String> courseCodesInTerm = Lists.newArrayListWithCapacity(coursesInTerm.size());
+			for ( AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : coursesInTerm ) {
+				courseCodesInTerm.add(course.getCourseCode());
+			}
+			final List<String> validCourseCodes = getCourseService().getValidCourseCodesForTerm(termCode, courseCodesInTerm);
+			for ( AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : coursesInTerm ) {
+				if(validCourseCodes.contains(course.getCourseCode())){
 					continue;
 				}else{
-					  AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course = courseCodeCourse.get(courseCode);
 					  course.setIsValidInTerm(false);
 					  model.setIsValid(false);
 					  course.setInvalidReasons("Course: " + course.getFormattedCourse() + " is not currently offered in the selected term.");
