@@ -189,6 +189,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		me.set('modifiedDate',null);
 		me.set('isValid',true);
 		me.set('isTemplate',false);
+		me.dirty = false;
 	},
 			
 	loadFromServer : function(objectData){
