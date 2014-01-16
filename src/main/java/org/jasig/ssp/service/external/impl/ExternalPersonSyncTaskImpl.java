@@ -230,6 +230,11 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 
 		final PagingWrapper<Person> people = personService.getAll(sAndP);
 
+		if ( people.getRows().isEmpty() ) {
+			LOGGER.info("External person sync found 0 records starting at [{}]", nextPersonIndex);
+			return new Pair(0L, people.getResults());
+		}
+
 		if ( Thread.currentThread().isInterrupted() ) {
 			LOGGER.info("Abandoning external person sync because of thread interruption");
 			throw new InterruptedException();
