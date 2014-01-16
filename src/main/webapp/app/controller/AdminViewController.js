@@ -61,6 +61,7 @@ Ext.define('Ssp.controller.AdminViewController', {
     	militaryAffiliationsAllStore: 'militaryAffiliationsAllStore',
     	courseworkHoursAllStore: 'courseworkHoursAllStore',
     	enrollmentStatusesStore: 'enrollmentStatusesStore',
+    	completedItemsStore: 'completedItemsStore',
     	registrationLoadsAllStore: 'registrationLoadsAllStore',
     	personalityTypesStore: 'personalityTypesStore',
     	programStatusChangeReasonsAllStore: 'programStatusChangeReasonsAllStore',

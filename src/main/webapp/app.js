@@ -271,6 +271,7 @@ Ext.require([
     'Ssp.model.reference.ChallengeCategory',
     'Ssp.model.reference.ChallengeReferral',
     'Ssp.model.reference.EnrollmentStatus',
+    'Ssp.model.reference.CompletedItem',
     'Ssp.model.reference.Text',
     'Ssp.model.reference.JournalTrack',
     'Ssp.model.reference.JournalStep',
@@ -347,6 +348,7 @@ Ext.require([
     'Ssp.store.reference.MilitaryAffiliations',
     'Ssp.store.reference.CourseworkHours',
     'Ssp.store.reference.EnrollmentStatuses',
+    'Ssp.store.reference.CompletedItems',
     'Ssp.store.reference.Texts',
     'Ssp.store.reference.RegistrationLoads',
     'Ssp.store.reference.CourseworkHours',
@@ -472,6 +474,7 @@ var apiUrls = [
   {name: 'maritalStatus', url: 'reference/maritalStatus'},
   {name: 'militaryAffiliation', url: 'reference/militaryAffiliation'},
   {name: 'enrollmentStatus', url: 'reference/enrollmentStatus'},
+  {name: 'completedItems', url: 'reference/completedItems'},
   {name: 'blurb', url: 'blurb'},
   {name: 'registrationLoad', url: 'reference/registrationLoad'},
   {name: 'courseworkHours', url: 'reference/courseworkHours'},
@@ -1390,6 +1393,16 @@ Ext.onReady(function(){
 					    singleton: true
 					},	
 			    	enrollmentStatusesStore: 'Ssp.store.reference.EnrollmentStatuses',
+			    	completedItemsStore: 
+			    	{
+						fn: function(){
+							return Ext.create('Ssp.store.reference.CompletedItems', {
+								storeId: 'completedItemsStore',
+								extraParams: {status: "ALL", limit: -1, start: null}
+							});
+						},
+						singleton: true
+					},
 			    	textStore: 
 			    	{
 						fn: function(){

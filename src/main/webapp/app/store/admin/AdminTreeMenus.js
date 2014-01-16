@@ -250,6 +250,16 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
+                    text: 'CompletedItems',
+                    title: 'CompletedItems',
+                    store: 'completedItems',
+                    form: 'AbstractReferenceAdmin',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
+                    leaf: true
+                },{
                     text: 'Citizenships',
                     title: 'Citizenships',
                     store: 'citizenshipsAll',
