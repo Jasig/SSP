@@ -23,32 +23,20 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-    <!-- The all-caps "EVERYONE" name causes problems for test portability
-    because, for example, OSX Postgres sorts capitals ahead of lower-case, but
-    Linux Postgres is the reverse -->
-    <changeSet id="Normalize EVERYONE conf level name" author="dan.mccallum">
-        <update tableName="confidentiality_level">
-            <column name="name" value="Everyone"/>
-            <where>id = 'b3d077a7-4055-0510-7967-4a09f93a0357'</where>
-        </update>
+    <changeSet id="Load API Integration Test Data ADDENDUM 1 Postgres" author="jim.stanley">
+        <preConditions onFail="MARK_RAN" onFailMessage="Skipping Postgres API Integration Data Load">
+            <dbms type="postgresql" />
+        </preConditions>
+        <sqlFile path="sspITAddendum1PSQL.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"></sqlFile>
     </changeSet>
 
-    <!-- Same problem here as above -->
-    <changeSet id="Normalize DOD Civilian military affilation name" author="dan.mccallum">
-        <update tableName="military_affiliation">
-            <column name="name" value="Dod Civilian"/>
-            <where>id = 'ac85ac8e-90e6-4425-b74e-7e8b0c7bee7a'</where>
-        </update>
-    </changeSet>
-
-    <!-- Same problem here as above -->
-    <changeSet id="Normalize Full Time registration load name" author="dan.mccallum">
-        <update tableName="registration_load">
-            <column name="name" value="0"/> <!-- hack to get consistent lexical ordering across platforms -->
-            <where>id = 'ac85ac8e-90e6-4425-b74e-7e8b0c7bee7a'</where>
-        </update>
+    <changeSet id="Load API Integration Test Data ADDENDUM 1 MSSQL" author="jim.stanley">
+        <preConditions onFail="MARK_RAN" onFailMessage="Skipping MSSQL API Integration Data Load">
+            <dbms type="mssql" />
+        </preConditions>
+        <sqlFile path="sspITAddendum1MSSQL.sql" relativeToChangelogFile="true" splitStatements="true"  endDelimiter="GO" stripComments="false"></sqlFile>
     </changeSet>
 
 </databaseChangeLog>

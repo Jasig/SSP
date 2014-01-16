@@ -25,66 +25,30 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-    <changeSet id="Normalize Dates On Test Data Postgre" author="paul.spaude">
-        <preConditions onFail="MARK_RAN" onFailMessage="Skipping Postgres Normalize Dates on Test Data">
-            <dbms type="postgresql" />
-        </preConditions>
-        <sql splitStatements="false">
-            CREATE OR REPLACE FUNCTION normalizeAllDates() RETURNS void AS $$
+    <!-- The all-caps "EVERYONE" name causes problems for test portability
+    because, for example, OSX Postgres sorts capitals ahead of lower-case, but
+    Linux Postgres is the reverse -->
+    <changeSet id="Normalize EVERYONE conf level name" author="dan.mccallum">
+        <update tableName="confidentiality_level">
+            <column name="name" value="Everyone"/>
+            <where>id = 'b3d077a7-4055-0510-7967-4a09f93a0357'</where>
+        </update>
+    </changeSet>
 
-            DECLARE
-               tableName VARCHAR;
-               ifExists BOOLEAN;
+    <!-- Same problem here as above -->
+    <changeSet id="Normalize DOD Civilian military affilation name" author="dan.mccallum">
+        <update tableName="military_affiliation">
+            <column name="name" value="Dod Civilian"/>
+            <where>id = 'ac85ac8e-90e6-4425-b74e-7e8b0c7bee7a'</where>
+        </update>
+    </changeSet>
 
-            BEGIN
-               FOR tableName IN (SELECT table_name FROM information_schema.tables WHERE table_schema='public') LOOP
-
-                  ifExists = (SELECT EXISTS (SELECT column_name FROM information_schema.columns WHERE table_name=tableName and column_name='created_date'));
-
-                  IF ifExists IS TRUE THEN
-                     EXECUTE 'UPDATE ' || tableName || ' SET created_date = ''2013-01-01 00:00:00'';';
-                  END IF;
-
-                  ifExists = (SELECT EXISTS (SELECT column_name FROM information_schema.columns WHERE table_name=tableName and column_name='modified_date'));
-
-                  IF ifExists IS TRUE THEN
-                     EXECUTE 'UPDATE ' || tableName || ' SET modified_date = ''2013-01-01 00:00:00'';';
-                  END IF;
-
-                END LOOP;
-            END;
-
-            $$ LANGUAGE plpgsql;
-
-            SELECT normalizeAllDates();
-        </sql>
-
-	</changeSet>
-
-    <changeSet id="Normalize Dates on Test Data MSSQL" author="paul.spaude">
-        <preConditions onFail="MARK_RAN" onFailMessage="Skipping MSSQL Normalize Dates On Test Data">
-            <dbms type="mssql" />
-        </preConditions>
-        <sql splitStatements="true"  endDelimiter="GO" stripComments="false">
-            EXEC sp_MSforeachtable '
-               DECLARE @updateStatement nvarchar(1000);
-               DECLARE @tableName varchar(255);
-               SET @tableName =  PARSENAME("?",1);
-
-               IF EXISTS (SELECT * FROM sys.columns WHERE object_id = object_id(''?'') AND name = ''created_date'')
-               BEGIN
-                    SET @updateStatement = N''UPDATE '' + @tableName + N'' SET created_date = ''''2013-01-01 00:00:00'''';''
-                    EXEC sp_executesql @updateStatement
-               END
-
-               IF EXISTS (SELECT * FROM sys.columns WHERE object_id = object_id(''?'') AND name = ''modified_date'')
-               BEGIN
-                    SET @updateStatement = N''UPDATE '' + @tableName + N'' SET modified_date = ''''2013-01-01 00:00:00'''';''
-                    EXEC sp_executesql @updateStatement
-               END
-            '
-        </sql>
-
+    <!-- Same problem here as above -->
+    <changeSet id="Normalize Full Time registration load name" author="dan.mccallum">
+        <update tableName="registration_load">
+            <column name="name" value="0"/> <!-- hack to get consistent lexical ordering across platforms -->
+            <where>id = 'ac85ac8e-90e6-4425-b74e-7e8b0c7bee7a'</where>
+        </update>
     </changeSet>
 
 </databaseChangeLog>

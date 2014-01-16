@@ -26,7 +26,10 @@
 
     <include file="org/jasig/ssp/database/masterChangeLog.xml"/>
 	<include file="org/jasig/ssp/database/apiTestChangesets/api_test_1.xml" />
+    
     <include file="org/jasig/ssp/database/apiTestChangesets/api_test_2.xml" />
     <include file="org/jasig/ssp/database/apiTestChangesets/api_test_3.xml" />
+    <include file="org/jasig/ssp/database/apiTestChangesets/api_test_normalize_dates_last.xml" />
+    
 
 </databaseChangeLog>
