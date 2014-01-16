@@ -146,48 +146,44 @@ Ext.define('Ssp.controller.AdminViewController', {
 				}
 			}
 
-			if ( store || options.interfaceOptions.storeDependencies ) {
+			if ( options.interfaceOptions.storeDependencies ) {
 
-				var mainStoreName = 'main';
 				var responseDispatcherConfig = {
-					remainingOpNames: (store ? [] : [mainStoreName]),
+					remainingOpNames: [],
 					afterLastOp: {
-						callback: Ext.pass(me.afterAdminStoresLoaded, [title ,form, storeName, columns, options, comp, store], me),
+						callback: Ext.pass(me.afterStoreDependenciesLoaded, [title ,form, storeName, columns, options, comp, store], me),
 						callbackScope: me
 					}
 				}
-				if ( options.interfaceOptions.storeDependencies ) {
-					Ext.each(options.interfaceOptions.storeDependencies, function(storeDependency) {
-						responseDispatcherConfig.remainingOpNames.push(storeDependency.name);
-					});
-				}
+				Ext.each(options.interfaceOptions.storeDependencies, function(storeDependency) {
+					responseDispatcherConfig.remainingOpNames.push(storeDependency.name);
+				});
 				var responseDispatcher = Ext.create('Ssp.util.ResponseDispatcher', responseDispatcherConfig);
-				if ( options.interfaceOptions.storeDependencies ) {
-					Ext.each(options.interfaceOptions.storeDependencies, function(storeDependency) {
-						if ( storeDependency.clearFilter ) {
-							storeDependency.store.clearFilter();
-						}
-						storeDependency.store.load(responseDispatcher.setSuccessCallback(storeDependency.name, me.noOp, me));
-					});
-				}
-				if ( store ) {
-					// no clearFilter() here to preserve legacy behavior
-					comp.getStore().load(responseDispatcher.setSuccessCallback(mainStoreName, me.noOp, me));
-				}
+
+				Ext.each(options.interfaceOptions.storeDependencies, function(storeDependency) {
+					if ( storeDependency.clearFilter ) {
+						storeDependency.store.clearFilter();
+					}
+					storeDependency.store.load(responseDispatcher.setSuccessCallback(storeDependency.name, me.noOp, me));
+				});
 
 			} else {
-				me.afterAdminStoresLoaded(title ,form, storeName, columns, options, comp);
+				me.afterStoreDependenciesLoaded(title ,form, storeName, columns, options, comp, store);
 			}
 		}
 	},
 
-	afterAdminStoresLoaded: function(title ,form, storeName, columns, options, comp, store) {
+	afterStoreDependenciesLoaded: function(title ,form, storeName, columns, options, comp, store) {
 		var me = this;
-		if ( store ) {
-			if(options.sort != null && options.sort != undefined) {
-				var sort = options.sort
-				comp.getStore().sort(sort.field, (sort.direction != null && sort.direction != undefined) ? sort.direction : "ASC");
-			}
+		if ( store ) { // store (not comp.getStore()) existence check to preserve legacy behavior, maybe to let reconfigureGridPanel() change the store?
+			// unlike with options.interfaceOptions.storeDependencies handling,
+			// no clearFilter() here to preserve legacy behavior
+			comp.getStore().load(function() { // load() is on comp.getStore() not store, again to preserve legacy
+				if(options.sort != null && options.sort != undefined) {
+					var sort = options.sort
+					comp.getStore().sort(sort.field, (sort.direction != null && sort.direction != undefined) ? sort.direction : "ASC");
+				}
+			});
 		}
 	}
 });
