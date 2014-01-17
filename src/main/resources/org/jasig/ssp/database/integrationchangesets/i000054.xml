@@ -49,7 +49,7 @@
             </column>   
         </addColumn>
         <addColumn tableName="external_student_financial_aid">
-            <column name="financial_aid_file_status" type="${nvarchar.type}(25)" >
+            <column name="financial_aid_file_status" type="int" >
                 <constraints nullable="true" />
             </column>   
         </addColumn>
@@ -63,6 +63,4 @@
 		</createView>
 		<sql>grant all on v_external_student_financial_aid to ${database.app.username}</sql>
 	</changeSet>
-
-
 </databaseChangeLog>
