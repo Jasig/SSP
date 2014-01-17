@@ -49,8 +49,6 @@ public class CompletedItemsTOFactoryImpl extends
 	@Override
 	public CompletedItems from(final CompletedItemsTO tObject) throws ObjectNotFoundException {
 		final CompletedItems model = super.from(tObject);
-
-		model.setCode(tObject.getCode());
 		return model;
 	}
 	
