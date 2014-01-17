@@ -150,7 +150,8 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
         {	
         	 me.mapPlanService.getTemplate(record.get('id'), callbacks);
         }else{
-     	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
+     	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.');
+     	   me.getView().setLoading(false);
         }    	
     },
 	
