@@ -227,7 +227,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		
 		
 		me.validateCourses();
-		me.currentMapPlan.dirty = true;
 		return true;
     },
 
@@ -255,10 +254,15 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		 me.getView().setLoading(false);
 		var mapResponse = serviceResponses.successes.validatedPlan;
 		var planAsJsonObject = Ext.decode(mapResponse.responseText);
-		me.currentMapPlan.loadFromServer(planAsJsonObject);
 		me.planWasDirty = me.currentMapPlan.dirty;
-		me.currentMapPlan.repopulatePlanStores(me.semesterStores, me.currentMapPlan.get("isValid"));
-
+		me.currentMapPlan.loadFromServer(planAsJsonObject);
+		// If the plan came back as valid, then we know a course was added and
+		// thus must be dirty, thus the 2nd arg. If not the user is given the
+		// option to undo the course add. Also, we need to be sure to update
+		// the dirty flag here rather than in onDrop() b/c this
+		// function may fire after onDrop() has already returned and
+		// Plan.loadFromServer() above lowers the dirty flag
+		me.currentMapPlan.repopulatePlanStores(me.semesterStores, me.currentMapPlan.get("isValid") ? true : me.planWasDirty);
 		var panel = me.getView();
 		var planCourse = me.currentMapPlan.getPlanCourseFromCourseCode(me.droppedRecord.get("code"), panel.getItemId());
 		
