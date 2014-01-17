@@ -37,9 +37,10 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
         // writing does) get initialized before the component that actually
         // loads the current plan (not to mention that that load is async). So
         // we just make sure to clear out any existing view state (paranoia?),
-        // set up listeners, fire up a loading spinner, then wait for a
-        // subsequent event to indicate the current plan is loaded.
-        me.getView().setLoading(true);
+        // set up listeners and wait for a subsequent event to indicate the
+        // current plan is loaded. We don't set a spinner here b/c we don't
+        // want to accidentally lock the panel forever should we never get
+        // the event we expect
         me.resetForm();
         me.appEventsController.getApplication().addListener("onUpdateCurrentMapPlanPlanToolView", me.onUpdateCurrentMapPlan, me);
         return me.callParent(arguments);
