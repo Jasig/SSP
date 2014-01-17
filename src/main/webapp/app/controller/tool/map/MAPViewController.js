@@ -162,31 +162,24 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		var view = me.getView();
 		
 		me.onUpdateSaveOption();
-		
-		//need to remove toolsNav before adding it, without this
-		//the first time you loaded the MAP page it would not catch this event
-		me.appEventsController.removeEvent({eventName: 'toolsNav', scope: me.application}); 
-		me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me.application});
-		
-		me.appEventsController.removeEvent({eventName: 'personNav', scope: me.application}); 
-		me.appEventsController.assignEvent({eventName: 'personNav', callBackFunc: me.onPersonNav, scope: me});	
-		
-		me.appEventsController.removeEvent({eventName: 'personButtonAdd', scope: me.application}); 
+
+		// Special handling for this one b/c ApplicationEventsController only
+		// allows one handler per event. We happen to know it's OK to have
+		// multiple handlers in this particular case.
+		me.appEventsController.getApplication().addListener('toolsNav', me.onToolsNav, me);
+
+		me.appEventsController.assignEvent({eventName: 'personNav', callBackFunc: me.onPersonNav, scope: me});
+
 		me.appEventsController.assignEvent({eventName: 'personButtonAdd', callBackFunc: me.onPersonButtonAdd, scope: me});	
-		
-		me.appEventsController.removeEvent({eventName: 'personToolbarEdit', scope: me.application}); 
+
 		me.appEventsController.assignEvent({eventName: 'personToolbarEdit', callBackFunc: me.onPersonToolbarEdit, scope: me});
-		
-		me.appEventsController.removeEvent({eventName: 'personButtonEdit', scope: me.application}); 
+
 		me.appEventsController.assignEvent({eventName: 'personButtonEdit', callBackFunc: me.onPersonButtonEdit, scope: me});	
-		
-		me.appEventsController.removeEvent({eventName: 'personButtonDeleted', scope: me.application}); 
+
 		me.appEventsController.assignEvent({eventName: 'personButtonDeleted', callBackFunc: me.onPersonButtonDelete, scope: me});
-		
-		me.appEventsController.removeEvent({eventName: 'retrieveCaseload', scope: me.application}); 
+
 		me.appEventsController.assignEvent({eventName: 'retrieveCaseload', callBackFunc: me.onRetrieveCaseload, scope: me});
-		
-		me.appEventsController.removeEvent({eventName: 'personStatusChange', scope: me.application}); 
+
 		me.appEventsController.assignEvent({eventName: 'personStatusChange', callBackFunc: me.onPersonStatusChange, scope: me});	
 		
 		me.appEventsController.assignEvent({eventName: 'onSavePlanRequest', callBackFunc: me.onSavePlanRequest, scope: me});
@@ -207,8 +200,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	},
 		
 	onToolsNav: function(toolsRecord, toolsViewController) {
-		var application = this; //scope is application, so 'this' is application
-		var me = application.getController("Ssp.controller.tool.map.MAPViewController");
+		var me = this;
 		
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
@@ -226,7 +218,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		return true;
 	},
 	onPersonNav: function(records, searchViewController) {
-		var application = this.application; 
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
@@ -247,7 +238,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		return true;
 	},
 	onPersonButtonAdd: function(searchViewController){
-		var application = this.application; 
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
@@ -266,7 +256,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		return true;
 	},
 	onPersonButtonEdit: function(searchViewController){
-		var application = this.application; 
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
@@ -302,7 +291,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		return true;
 	},	
 	onPersonButtonDelete: function(searchViewController){
-		var application = this.application; 
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
@@ -321,7 +309,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		return true;
 	},	
 	onRetrieveCaseload: function(searchViewController){
-		var application = this.application; 
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
@@ -340,7 +327,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		return true;
 	},	
 	onPersonStatusChange: function(searchViewController,button){
-		var application = this.application; 
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
@@ -662,9 +648,16 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	
 	destroy:function(){
 	    var me=this;
-	    
-	    me.appEventsController.removeEvent({eventName: 'toolsNav', scope: me.application});
-	    
+
+	    me.appEventsController.removeEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
+		me.appEventsController.removeEvent({eventName: 'personNav', callBackFunc: me.onPersonNav, scope: me});
+		me.appEventsController.removeEvent({eventName: 'personButtonAdd', callBackFunc: me.onPersonButtonAdd, scope: me});
+		me.appEventsController.removeEvent({eventName: 'personToolbarEdit', callBackFunc: me.onPersonToolbarEdit, scope: me});
+		me.appEventsController.removeEvent({eventName: 'personButtonEdit', callBackFunc: me.onPersonButtonEdit, scope: me});
+		me.appEventsController.removeEvent({eventName: 'personButtonDeleted', callBackFunc: me.onPersonButtonDelete, scope: me});
+		me.appEventsController.removeEvent({eventName: 'retrieveCaseload', callBackFunc: me.onRetrieveCaseload, scope: me});
+		me.appEventsController.removeEvent({eventName: 'personStatusChange', callBackFunc: me.onPersonStatusChange, scope: me});
+
 		me.appEventsController.removeEvent({eventName: 'onSavePlanRequest', callBackFunc: me.onSavePlanRequest, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onSaveTemplateRequest', callBackFunc: me.onSaveTemplateRequest, scope: me});
 		
