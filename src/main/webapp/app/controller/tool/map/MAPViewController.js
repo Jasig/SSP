@@ -205,8 +205,21 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
 				if(btn === 'yes'){
-					me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
-					me.savePlanPopUp.show();
+					if ( me.currentMapPlan.get('isTemplate') ) {
+						// Cleanup template popups b/c not sure if they can be reused and if
+						// we just replace it with a new instance, the old one might never
+						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+						// only b/c that code is much older (but still might turn out to need
+						// to be handled similarly)
+						if ( me.saveTemplatePopUp ) {
+							me.saveTemplatePopUp.destroy();
+						}
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+						me.saveTemplatePopUp.show();
+					} else {
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+						me.savePlanPopUp.show();
+					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};					
@@ -223,8 +236,21 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
 				if(btn === 'yes'){
-					me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
-					me.savePlanPopUp.show();
+					if ( me.currentMapPlan.get('isTemplate') ) {
+						// Cleanup template popups b/c not sure if they can be reused and if
+						// we just replace it with a new instance, the old one might never
+						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+						// only b/c that code is much older (but still might turn out to need
+						// to be handled similarly)
+						if ( me.saveTemplatePopUp ) {
+							me.saveTemplatePopUp.destroy();
+						}
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+						me.saveTemplatePopUp.show();
+					} else {
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+						me.savePlanPopUp.show();
+					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};
@@ -243,8 +269,21 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
 				if(btn === 'yes'){
-					me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
-					me.savePlanPopUp.show();
+					if ( me.currentMapPlan.get('isTemplate') ) {
+						// Cleanup template popups b/c not sure if they can be reused and if
+						// we just replace it with a new instance, the old one might never
+						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+						// only b/c that code is much older (but still might turn out to need
+						// to be handled similarly)
+						if ( me.saveTemplatePopUp ) {
+							me.saveTemplatePopUp.destroy();
+						}
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+						me.saveTemplatePopUp.show();
+					} else {
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+						me.savePlanPopUp.show();
+					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};
@@ -261,8 +300,21 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
 				if(btn === 'yes'){
-					me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
-					me.savePlanPopUp.show();
+					if ( me.currentMapPlan.get('isTemplate') ) {
+						// Cleanup template popups b/c not sure if they can be reused and if
+						// we just replace it with a new instance, the old one might never
+						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+						// only b/c that code is much older (but still might turn out to need
+						// to be handled similarly)
+						if ( me.saveTemplatePopUp ) {
+							me.saveTemplatePopUp.destroy();
+						}
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+						me.saveTemplatePopUp.show();
+					} else {
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+						me.savePlanPopUp.show();
+					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};
@@ -278,8 +330,21 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
 				if(btn === 'yes'){
-					me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
-					me.savePlanPopUp.show();
+					if ( me.currentMapPlan.get('isTemplate') ) {
+						// Cleanup template popups b/c not sure if they can be reused and if
+						// we just replace it with a new instance, the old one might never
+						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+						// only b/c that code is much older (but still might turn out to need
+						// to be handled similarly)
+						if ( me.saveTemplatePopUp ) {
+							me.saveTemplatePopUp.destroy();
+						}
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+						me.saveTemplatePopUp.show();
+					} else {
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+						me.savePlanPopUp.show();
+					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};
@@ -296,8 +361,21 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
 				if(btn === 'yes'){
-					me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
-					me.savePlanPopUp.show();
+					if ( me.currentMapPlan.get('isTemplate') ) {
+						// Cleanup template popups b/c not sure if they can be reused and if
+						// we just replace it with a new instance, the old one might never
+						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+						// only b/c that code is much older (but still might turn out to need
+						// to be handled similarly)
+						if ( me.saveTemplatePopUp ) {
+							me.saveTemplatePopUp.destroy();
+						}
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+						me.saveTemplatePopUp.show();
+					} else {
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+						me.savePlanPopUp.show();
+					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};
@@ -314,8 +392,21 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
 				if(btn === 'yes'){
-					me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
-					me.savePlanPopUp.show();
+					if ( me.currentMapPlan.get('isTemplate') ) {
+						// Cleanup template popups b/c not sure if they can be reused and if
+						// we just replace it with a new instance, the old one might never
+						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+						// only b/c that code is much older (but still might turn out to need
+						// to be handled similarly)
+						if ( me.saveTemplatePopUp ) {
+							me.saveTemplatePopUp.destroy();
+						}
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+						me.saveTemplatePopUp.show();
+					} else {
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+						me.savePlanPopUp.show();
+					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};
@@ -332,8 +423,21 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
 				if(btn === 'yes'){
-					me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
-					me.savePlanPopUp.show();
+					if ( me.currentMapPlan.get('isTemplate') ) {
+						// Cleanup template popups b/c not sure if they can be reused and if
+						// we just replace it with a new instance, the old one might never
+						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+						// only b/c that code is much older (but still might turn out to need
+						// to be handled similarly)
+						if ( me.saveTemplatePopUp ) {
+							me.saveTemplatePopUp.destroy();
+						}
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+						me.saveTemplatePopUp.show();
+					} else {
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+						me.savePlanPopUp.show();
+					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};
