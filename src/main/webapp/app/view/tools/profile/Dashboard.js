@@ -230,6 +230,11 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         height: '20'
                     }, {
                         xtype: 'profilespecialservicegroups'
+                    },{
+                        xtype: 'tbspacer',
+                        height: '20'
+                    },{
+                    	 xtype: 'profilereferralsources'
                     }]
                 }]
             }]

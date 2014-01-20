@@ -88,6 +88,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         
         'serviceGroupEdit': {
             click: 'onServiceGroupEditButtonClick'
+        },
+        
+        'referralSourceEdit': {
+            click: 'onReferralSourceEditButtonClick'
         }
     
     },
@@ -394,6 +398,13 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     },
     
     onServiceGroupEditButtonClick: function(button){
+        var me=this;
+        
+        var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
+        
+    },
+    
+    onReferralSourceEditButtonClick: function(button){
         var me=this;
         
         var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 

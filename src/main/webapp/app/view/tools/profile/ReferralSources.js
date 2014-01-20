@@ -32,7 +32,17 @@ Ext.define('Ssp.view.tools.profile.ReferralSources', {
 			        hideHeaders: true,
 			        autoScroll: true,
 			        queryMode: 'local',
+			        title: 'Referral Sources',
 		            store: me.store,
+		            tools: [{
+		                xtype: 'button',
+		                itemId: 'referralSourceEdit',
+		                width: 20,
+		                height: 20,
+		                cls: 'editPencilIcon',
+		                text:'',
+		                tooltip: 'Edit'
+		            }],
     		        columns: [
     		                { header: 'Source',  
     		                  dataIndex: 'name',
