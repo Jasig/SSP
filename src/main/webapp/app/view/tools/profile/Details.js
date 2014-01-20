@@ -249,10 +249,14 @@ Ext.define('Ssp.view.tools.profile.Details', {
 	                        } } 
 	                    },
                     {
-                        fieldLabel: 'FA Accepted',
-                        name: 'financialAidAcceptedTerms',
-                        itemId: 'financialAidAcceptedTerms',
-                        labelWidth: 60
+	                    	fieldLabel: 'FA Accepted',
+							xtype     : 'textareafield',
+							grow      : true,
+							width: 320,
+							style: 'border: none;',
+	                        name: 'financialAidAcceptedTerms',
+	                        itemId: 'financialAidAcceptedTerms',
+	                        labelWidth: 100
                     },		{
 	                        fieldLabel: 'FA Amount',
 	                        name: 'financialAidRemaining',
@@ -260,10 +264,10 @@ Ext.define('Ssp.view.tools.profile.Details', {
 
 	                    },
                     {
-                        fieldLabel: 'Institutional Loan Amount',
+                        fieldLabel: 'Instit. Loan Amount',
                         name: 'institutionalLoanAmount',
                         itemId: 'institutionalLoanAmount',
-                        labelWidth: 60
+                        labelWidth: 140
                     },	{
 		                        fieldLabel: 'Loan Amount',
 		                        name: 'originalLoanAmount',
@@ -274,10 +278,16 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         fieldLabel: 'Remaining FA Terms',
                         name: 'termsLeft',
                         itemId: 'termsLeft',
-                        labelWidth: 100
+                        labelWidth: 120
+                    },{
+                        fieldLabel: 'SAP',
+                        name: 'sapStatus',
+                        itemId: 'sapStatus',
+                        labelWidth: 15,
+                        hidden:true
                     }	, {
-                        name: 'sapStatusCodeDetails',
-                        itemId: 'sapStatusCodeDetails',
+                        name: 'sapStatusCode',
+                        itemId: 'sapStatusCode',
                         xtype: 'label',
                         listeners: { element: 'el', click: function (me) { 
                         	var view = Ext.ComponentQuery.query("#profileDetails");

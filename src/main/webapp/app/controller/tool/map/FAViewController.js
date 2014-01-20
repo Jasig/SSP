@@ -51,7 +51,24 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
         paymentStatusField: '#paymentStatus',
 		registeredTermsField: '#registeredTerms',
         financialAidRemainingField: '#financialAidRemaining',
-        originalLoanAmountField: '#originalLoanAmount'
+        originalLoanAmountField: '#originalLoanAmount',
+        
+        sapStatusCodeField: {
+	           selector: '#sapStatusCodeDetails',
+			   listeners: {
+		            click: 'onShowSAPCodeInfo'
+		        }
+	    },
+	    eligibleFederalAidField: '#eligibleFederalAid',
+	    termsLeftField: '#termsLeft',
+     	institutionalLoanAmountField: '#institutionalLoanAmount',
+     	financialAidFileStatusField: {
+	           selector: '#financialAidFileStatusDetails',
+			   listeners: {
+		            click: 'onShowFinancialAidFileStatuses'
+		        }
+     		},
+       financialAidAcceptedTermsField: '#financialAidAcceptedTerms',
     
     },
     init: function(){
@@ -162,7 +179,27 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
 			me.getGpa20AHrsNeededField().setValue(me.handleNull(financialAid.gpa20AHrsNeeded));
 	        me.getGpa20BHrsNeededField().setValue(me.handleNull(financialAid.gpa20BHrsNeeded));
 			me.getNeededFor67PtcCompletionField().setValue(me.handleNull(financialAid.neededFor67PtcCompletion));
+			
+			me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP Status:   </span><u>' + me.handleNull(financialAid.sapStatusCode) + '</u>', false);
+			me.sapStatusCode = financialAid.sapStatusCode;
+			me.getEligibleFederalAidField().setValue(me.handleNull(financialAid.eligibleFederalAid));
+			me.getTermsLeftField().setValue(me.handleNull(financialAid.termsLeft));
+			me.getInstitutionalLoanAmountField().setValue(me.handleNull(financialAid.institutionalLoanAmount));
+			me.getFinancialAidFileStatusField().setText('<span style="color:#15428B">FA File:   </span><u>' + me.handleNull(financialAid.financialAidFileStatus) + '</u>', false);
+
         }
+        
+        var financialAidAcceptedTerms = transcript.get('financialAidAcceptedTerms');
+        if (financialAidAcceptedTerms) {
+        	var financialAidAcceptedTermsString = "";
+        	for(i = 0; i < financialAidAcceptedTerms.length ; i++){
+        		var financialAidAcceptedTerm = financialAidAcceptedTerms[i];
+        		financialAidAcceptedTermsString += financialAidAcceptedTerm.termCode + '=' + financialAidAcceptedTerm.accepted  + ', ';
+        	}
+        	me.getFinancialAidAcceptedTermsField().setValue(financialAidAcceptedTermsString.slice(0,-2));
+        }
+
+		me.financialAidFilesStatuses = transcript.get('financialAidFiles');
     },
 
     getTranscriptFailure: function() {
@@ -175,9 +212,52 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
             me.getView().setLoading(false);
         }
     },
+    
+	closePopups:function(query){
+		var me=this;
+		var popups  = me.getPopup(query);
+		if(popups && popups.length > 0){
+			for(var i = 0; i < popups.length; i++){
+		   		popup = popups[i];
+		   		if(popup != null && !popup.isDestroyed){
+	    	  		popup.close();
+				}
+			}
+		}
+	},
+	
+	getPopup: function(query){
+		return Ext.ComponentQuery.query(query);
+	},
+
+    
+    onShowSAPCodeInfo: function(sapStatusCode){
+    	var me=this;
+		me.showPopup('sapstatusview', 'Ssp.view.tools.profile.SapStatus', {hidden:true,code:sapStatusCode})
+    },
+
+    
+    onShowFinancialAidFileStatuses: function(){
+    	var me=this;
+		me.showPopup('financialaidfileviewer', 'Ssp.view.tools.profile.FinancialAidFileViewer', {hidden:true,financialAidFilesStatuses:me.financialAidFilesStatuses})
+    },
+
+	showPopup: function(query, constructor, params){
+    	var me=this;
+		var popups = me.getPopup(query);
+		if(popups && popups.length > 0){
+			for(var i = 0; i < popups.length ; i++)
+			   popups[i].show();
+		} else{
+       		var popup = Ext.create(constructor,params);
+			popup.show();
+		}
+    },
 
 	destroy: function() {
-        var me=this;
+        var me = this;
+    	me.closePopups('financialaidfileviewer');
+	    me.closePopups('sapstatusview');
         return me.callParent( arguments );
     }
 

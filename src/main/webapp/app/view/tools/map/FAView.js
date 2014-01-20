@@ -25,7 +25,7 @@ Ext.define('Ssp.view.tools.map.FAView', {
         columnRendererUtils: 'columnRendererUtils'
         //sspConfig: 'sspConfig'
     },
-    height: 475,
+    height: 600,
     width: 380,
     style : 'z-index: -1;',  
     resizable: true,
@@ -37,6 +37,8 @@ Ext.define('Ssp.view.tools.map.FAView', {
                 type: 'vbox'
             },
             title: 'Financial Aid',
+            name:'financialAidMapPopup',
+            itemId: 'financialAidMapPopup',
             items: [{
                 xtype: 'form',
                 flex: 1,
@@ -193,12 +195,60 @@ Ext.define('Ssp.view.tools.map.FAView', {
                         itemId: 'financialAidRemaining',
 						labelWidth: 130
                     
+                    },	
+                    {
+                        fieldLabel: 'FA Accepted',
+						xtype     : 'textareafield',
+						grow      : true,
+						width: 320,
+						style: 'border: none;',
+                        name: 'financialAidAcceptedTerms',
+                        itemId: 'financialAidAcceptedTerms',
+                        labelWidth: 100
+                    },
+                    {
+                        fieldLabel: 'Instit. Loan Amount',
+                        name: 'institutionalLoanAmount',
+                        itemId: 'institutionalLoanAmount',
+                        labelWidth: 130
                     },{
                         fieldLabel: 'Loan Amount',
                         name: 'originalLoanAmount',
                         itemId: 'originalLoanAmount',
 						labelWidth: 80
-                	}]
+                	},
+                    {
+                        fieldLabel: 'Remaining FA Terms',
+                        name: 'termsLeft',
+                        itemId: 'termsLeft',
+                        labelWidth: 120
+                    }, {
+                        name: 'sapStatusCodeDetails',
+                        itemId: 'sapStatusCodeDetails',
+                        xtype: 'label',
+                        text:'N/A',
+                        listeners: { element: 'el', click: function (me) { 
+                        	var view = Ext.ComponentQuery.query("#financialAidMapPopup");
+                        	if(view && view.length > 0)
+		                		view[0].getController().onShowSAPCodeInfo(me.target.outerText);
+                        } } 
+                    },{
+                        name: 'financialAidFileStatusDetails',
+                        itemId: 'financialAidFileStatusDetails',
+                        xtype:'label',
+                        text:'N/A',
+                        listeners: { element: 'el', click: function () { 
+                        	var view = Ext.ComponentQuery.query("#financialAidMapPopup");
+                        	if(view && view.length > 0)
+		                		view[0].getController().onShowFinancialAidFileStatuses();
+                        } } 
+                    }	,{
+	                        fieldLabel: 'Eligible Fed Aid',
+	                        name: 'eligibleFederalAid',
+	                        itemId: 'eligibleFederalAid',
+							hidden:true,
+	                        labelWidth: 60
+	                    }]
 				}]
 			}]
             }]

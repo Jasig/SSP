@@ -188,10 +188,14 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                     } } 
                 },
                 {
-                    fieldLabel: 'FA Accepted',
+                	fieldLabel: 'FA Accepted',
+					xtype     : 'textareafield',
+					grow      : true,
+					width: 320,
+					style: 'border: none;',
                     name: 'financialAidAcceptedTerms',
                     itemId: 'financialAidAcceptedTerms',
-                    labelWidth: 80
+                    labelWidth: 100
                 }, {
                 name: 'sapStatusCode',
                 itemId: 'sapStatusCode',

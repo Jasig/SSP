@@ -313,7 +313,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 			me.sapStatusCode = financialAid.sapStatusCode;
 			me.getView().sapStatusCode = financialAid.sapStatusCode;
 			me.getBalanceOwedField().setValue(Ext.util.Format.usMoney(financialAid.balanceOwed));
-			me.getFinancialAidFileStatusField().setText( '<span style="color:#15428B">FA FIle:  </span><u>' + me.handleNull(financialAid.financialAidFileStatus) + '</u>', false);
+			me.getFinancialAidFileStatusField().setText( '<span style="color:#15428B">FA File:  </span><u>' + me.handleNull(financialAid.financialAidFileStatus) + '</u>', false);
 
         }
         var financialAidAcceptedTerms = transcript.get('financialAidAcceptedTerms');
@@ -321,9 +321,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         	var financialAidAcceptedTermsString = "";
         	for(i = 0; i < financialAidAcceptedTerms.length ; i++){
         		var financialAidAcceptedTerm = financialAidAcceptedTerms[i];
-        		financialAidAcceptedTermsString += financialAidAcceptedTerm.termCode + '=' + financialAidAcceptedTerm.accepted  + ',';
+        		financialAidAcceptedTermsString += financialAidAcceptedTerm.termCode + '=' + financialAidAcceptedTerm.accepted  + ', ';
         	}
-        	me.getFinancialAidAcceptedTermsField().setValue(financialAidAcceptedTermsString);
+        	me.getFinancialAidAcceptedTermsField().setValue(financialAidAcceptedTermsString.slice(0,-2));
         }
 
 		me.financialAidFilesStatuses = transcript.get('financialAidFiles');
