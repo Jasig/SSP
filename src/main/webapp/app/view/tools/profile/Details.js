@@ -33,6 +33,8 @@ Ext.define('Ssp.view.tools.profile.Details', {
             border: 0,
             bodyPadding: 0,
             layout: 'anchor',
+            name: 'profileDetails',
+            itemId: 'profileDetails',
             defaults: {
                 anchor: '100%'
             },
@@ -237,27 +239,15 @@ Ext.define('Ssp.view.tools.profile.Details', {
 	                        itemId: 'currentYearFinancialAidAward'
 
 	                    },{
-		                    xtype: 'fieldset',
-		                    border: 0,
-							layout:'hbox',
-		                    title: '',
-		                    defaultType: 'displayfield',
-		                    defaults: {
-		                        anchor: '100%'
-		                    },
-		                    flex: .25,
-		                    width: '200',
-		                    margin: '0 0 0 0',
-		                    items: [{
-                        xtype: 'label',
-						text:'FA File',
-						forId:'financialAidFileStatus'
-                    },{
-                        name: 'financialAidFileStatus',
-                        itemId: 'financialAidFileStatus',
-                        xtype: 'button',
-                        cls: "makeTransparent",
-                    }]},
+	                        name: 'financialAidFileStatusDetails',
+	                        itemId: 'financialAidFileStatusDetails',
+	                        xtype:'label',
+	                        listeners: { element: 'el', click: function () { 
+	                        	var view = Ext.ComponentQuery.query("#profileDetails");
+	                        	if(view && view.length > 0)
+			                		view[0].getController().onShowFinancialAidFileStatuses();
+	                        } } 
+	                    },
                     {
                         fieldLabel: 'FA Accepted',
                         name: 'financialAidAcceptedTerms',
@@ -285,28 +275,16 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         name: 'termsLeft',
                         itemId: 'termsLeft',
                         labelWidth: 100
-                    }	, 	{
-			                    xtype: 'fieldset',
-			                    border: 0,
-								layout:'hbox',
-			                    title: '',
-			                    defaultType: 'displayfield',
-			                    defaults: {
-			                        anchor: '100%'
-			                    },
-			                    flex: .25,
-			                    width: '200',
-			                    margin: '0 0 0 0',
-			                    items: [{
-	                        xtype: 'label',
-							text:'Status Code',
-							forId:'sapStatusCode'
-	                    },{
-	                        name: 'sapStatusCode',
-	                        itemId: 'sapStatusCode',
-	                        xtype: 'button',
-	                        cls: "makeTransparent",
-	                    }]}, {
+                    }	, {
+                        name: 'sapStatusCodeDetails',
+                        itemId: 'sapStatusCodeDetails',
+                        xtype: 'label',
+                        listeners: { element: 'el', click: function (me) { 
+                        	var view = Ext.ComponentQuery.query("#profileDetails");
+                        	if(view && view.length > 0)
+		                		view[0].getController().onShowSAPCodeInfo(me.target.outerText);
+                        } } 
+                    },{
 	                        fieldLabel: 'F1',
 	                        name: 'f1Status',
 	                        itemId: 'f1Status',

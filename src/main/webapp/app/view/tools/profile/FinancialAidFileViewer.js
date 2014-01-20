@@ -22,8 +22,8 @@ Ext.define('Ssp.view.tools.profile.FinancialAidFileViewer', {
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.profile.FinancialAidFileViewController',
-    width: 440,
-    height: 300, 
+    width: 400,
+    height: 200, 
     overflowY: 'auto',
     style : 'z-index: -1;',  
     layout: {
@@ -33,7 +33,7 @@ Ext.define('Ssp.view.tools.profile.FinancialAidFileViewer', {
         Ext.apply(this,
 		{
 			title: 'Financial Aid Files Status',
-			height:Ext.getBody().getViewSize().height*0.60,
+			height:Ext.getBody().getViewSize().height*0.30,
     			width:Ext.getBody().getViewSize().width*0.50,    
 			items: [{
 						xtype: 'financialAidFiles',

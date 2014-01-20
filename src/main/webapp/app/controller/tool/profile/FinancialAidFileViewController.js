@@ -21,20 +21,91 @@ Ext.define('Ssp.controller.tool.profile.FinancialAidFileViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-        financialAidFilesStore: 'financialAidFilesStore'
+        financialAidFilesStore: 'financialAidFilesStore',
+		transcriptService: 'transcriptService',
+        personLite: 'personLite'
     },
 
 	init: function() {
 		var me=this;
-		var args = arguments;
+		
+		var id = me.personLite.get('id');
+		 if (id != "") {
+	            // display loader
+	            me.getView().setLoading(true);
+	            var serviceResponses = {
+		                failures: {},
+		                successes: {},
+		                responseCnt: 0,
+		                expectedResponseCnt: 1
+		            }
+		            
+	            me.transcriptService.getSummary(id, {
+	                success: me.newServiceSuccessHandler('transcript', me.getTranscriptSuccess, serviceResponses),
+	                failure: me.newServiceFailureHandler('transcript', me.getTranscriptFailure, serviceResponses),
+	                scope: me
+	            });
+	          
+	    }
+		
+		return this.callParent(arguments);
+    },
+    newServiceSuccessHandler: function(name, callback, serviceResponses){
+        var me = this;
+        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response){
+            serviceResponses.successes[name] = response;
+        });
+    },
+    
+    newServiceFailureHandler: function(name, callback, serviceResponses){
+        var me = this;
+        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response){
+            serviceResponses.failures[name] = response;
+        });
+    },
+    
+    newServiceHandler: function(name, callback, serviceResponses, serviceResponsesCallback){
+        return function(r, scope){
+            var me = scope;
+            serviceResponses.responseCnt++;
+            if (serviceResponsesCallback) {
+                serviceResponsesCallback.apply(me, [name, serviceResponses, r]);
+            }
+            if (callback) {
+                callback.apply(me, [serviceResponses]);
+            }
+            me.afterServiceHandler(serviceResponses);
+        };
+    },
+
+	afterServiceHandler: function(serviceResponses){
+        var me = this;
+        if (serviceResponses.responseCnt >= serviceResponses.expectedResponseCnt) {
+            me.getView().setLoading(false);
+        }
+    },
+
+    getTranscriptSuccess: function(serviceResponses) {
+        var me = this;
+
 		var view = me.getView();
-		var grid = view.getComponent('financialAidFilesGrid');
+	    var grid =	Ext.ComponentQuery.query("financialAidFiles");
+	    if(grid && grid.length > 0)
+			grid = grid[0];
+			
+        view.setLoading(false);
+        var transcriptResponse = serviceResponses.successes.transcript;
+
+        var transcript = new Ssp.model.Transcript(transcriptResponse);
+
+		var financialAidFilesStatuses = transcript.get('financialAidFiles');
+		
 		var storeStatuses = grid.getStore();
 		storeStatuses.removeAll();
-		if(view.financialAidFilesStatuses){
-			for(i = 0; i < view.financialAidFilesStatuses.length; i++){
+		if(financialAidFilesStatuses){
+			for(i = 0; i < financialAidFilesStatuses.length; i++){
 				var fileStatus = Ext.create('Ssp.model.external.FinancialAidFileStatus');
-				var status = view.financialAidFilesStatuses[i];
+				var status = financialAidFilesStatuses[i];
 				var file = me.financialAidFilesStore.findRecord('code', status.financialFileCode);
 				fileStatus.set("code", status.financialFileCode);
 				fileStatus.set("status", status.fileStatus);
@@ -45,8 +116,13 @@ Ext.define('Ssp.controller.tool.profile.FinancialAidFileViewController', {
 				storeStatuses.add(fileStatus);
 			}
 		}	
-		return this.callParent(arguments);
     },
+
+    getTranscriptFailure: function() {
+    	 // display loader
+        me.getView().setLoading(false);
+    },
+    
 
 
 	destroy: function() {

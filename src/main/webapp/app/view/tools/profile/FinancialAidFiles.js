@@ -34,6 +34,8 @@ Ext.define('Ssp.view.tools.profile.FinancialAidFiles', {
             qqueryMode:'local',
             store: me.store,
             autoScroll: true,
+            name: 'financialAidFilePopup',
+            itemId: 'financialAidFilePopup',
             columns: [{
             	xtype: 'gridcolumn',
                 text: 'File Code',

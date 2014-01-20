@@ -24,10 +24,12 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
     inject: {
         columnRendererUtils: 'columnRendererUtils',
         sspConfig: 'sspConfig',
+        person: 'currentPerson',
         
     },
     width: '100%',
     height: '100%',
+    
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
@@ -58,19 +60,55 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         anchor: '100%'
                     },
                     flex: .45,
-                    items: [                    /*{
-                     fieldLabel: '<a href="">Watch</a>',
-                     name: 'watchStudent',
-                     itemId: 'watchStudent',
-                     padding: '0 0 0 0',
-                     labelWidth: 20,
-                     margin: '0 0 1 5'
-                     
-                     },*/
+                    items: [                  
                     {
                         xtype: 'profileperson'
                     
-                    }, {
+                    },
+                    {
+                        xtype: 'fieldset',
+                        border: 1,
+                        defaultType: 'displayfield',
+                        margin: '0 0 0 2',
+                        height: '370',
+                        items: [{
+                            fieldLabel: 'Early Alerts',
+                            itemId: 'earlyAlert',
+                            name: 'earlyAlert'
+                        
+                        }, {
+                            fieldLabel: 'Action Plan',
+                            itemId: 'actionPlan',
+                            name: 'actionPlan'
+                        },{
+                            xtype: 'fieldset',
+                            border: 0,
+                            title: 'Student Intake',
+                            defaultType: 'displayfield',
+                            margin: '0 0 0 2',
+                            height: '100',
+                            items: [{
+                                fieldLabel: 'Assigned',
+                                name: 'studentIntakeAssigned',
+                                itemId: 'studentIntakeAssigned',
+                                labelWidth: '50',
+                                renderer: Ext.util.Format.dateRenderer('m/d/Y')
+                            }, {
+                                fieldLabel: 'Completed',
+                                name: 'studentIntakeCompleted',
+                                itemId: 'studentIntakeCompleted',
+                                cls: 'dashboardIntakeDates',
+                                labelWidth: '50',
+                                renderer: Ext.util.Format.dateRenderer('m/d/Y')
+                            }]
+                        
+                        }]
+                    }
+					, {
+		                  xtype: 'tbspacer',
+		                   height: '10'
+		               },
+                    {
                         xtype: 'profileacademicprogram'
                     
                     }]
@@ -127,59 +165,49 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         itemId: 'paymentStatus',
                         labelWidth: 50
                     }, {
-                        fieldLabel: 'FA Award',
-                        name: 'currentYearFinancialAidAward',
-                        itemId: 'currentYearFinancialAidAward'
-                    
-                    }, {
-                        fieldLabel: 'SAP',
-                        name: 'sapStatus',
-                        itemId: 'sapStatus'
-                    }, {
-                        fieldLabel: 'F1',
-                        name: 'f1Status',
-                        itemId: 'f1Status',
-                        labelWidth: 15
-                    }, {
+                        fieldLabel: 'Balance',
+                        name: 'balanceOwed',
+                        itemId: 'balanceOwed',
+						labelWidth: 50
+                    },{
                         xtype: 'tbspacer',
                         height: '10'
-                    }, {
-                        fieldLabel: 'Early Alerts',
-                        itemId: 'earlyAlert',
-                        name: 'earlyAlert'
-                    
-                    }, {
-                        fieldLabel: 'Action Plan',
-                        itemId: 'actionPlan',
-                        name: 'actionPlan'
+                    },{
+                        fieldLabel: 'FA Award',
+                        name: 'f1Status',
+                        itemId: 'f1Status',
+                        labelWidth: 60
+                    },{
+                    name: 'financialAidFileStatus',
+                    itemId: 'financialAidFileStatus',
+                    xtype:'label',
+                    listeners: { element: 'el', click: function () { 
+                    	var view = Ext.ComponentQuery.query("#profileDetails");
+						if(view && view.length > 0)
+                    		view[0].getController().onShowFinancialAidFileStatuses();
+                    } } 
+                },
+                {
+                    fieldLabel: 'FA Accepted',
+                    name: 'financialAidAcceptedTerms',
+                    itemId: 'financialAidAcceptedTerms',
+                    labelWidth: 80
+                }, {
+                name: 'sapStatusCode',
+                itemId: 'sapStatusCode',
+                xtype: 'label',
+                listeners: { element: 'el', click: function (me) { 
+                	var view = Ext.ComponentQuery.query("#profileDetails");
+                	if(view && view.length > 0)
+                		view[0].getController().onShowSAPCodeInfo(me.target.outerText);
+                } } 
+            }, {
+                        xtype: 'tbspacer',
+                        height: '10'
                     }
                     ]
 
-                },
-                {
-                    xtype: 'fieldset',
-                    border: 1,
-                    title: 'Student Intake',
-                    defaultType: 'displayfield',
-                    margin: '0 0 0 2',
-                    height: '370',
-                    items: [{
-                        fieldLabel: 'Assigned',
-                        name: 'studentIntakeAssigned',
-                        itemId: 'studentIntakeAssigned',
-                        labelWidth: '50',
-                        renderer: Ext.util.Format.dateRenderer('m/d/Y')
-                    }, {
-                        fieldLabel: 'Completed',
-                        name: 'studentIntakeCompleted',
-                        itemId: 'studentIntakeCompleted',
-                        cls: 'dashboardIntakeDates',
-                        labelWidth: '50',
-                        renderer: Ext.util.Format.dateRenderer('m/d/Y')
-                    }]
-                
-                }
-                ]
+                }]
                 },{
                     xtype: 'fieldset',
                     border: 0,

@@ -24,7 +24,7 @@ Ext.define('Ssp.view.tools.profile.SapStatus', {
     inject: {
         columnRendererUtils: 'columnRendererUtils'
     },
-    height: 200,
+    height: 120,
     width: 300,
     style : 'z-index: -1;',  
     resizable: true,

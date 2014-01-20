@@ -33,7 +33,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		programStatusChangeReasonsStore: 'programStatusChangeReasonsStore',
         sspConfig: 'sspConfig',
 		formUtils: 'formRendererUtils',
-    	textStore:'textStore'
+    	textStore:'textStore',
+        sapStatusesStore: 'sapStatusesStore',
+        financialAidFilesStore: 'financialAidFilesStore'
 		
     },
     
@@ -54,9 +56,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         academicStandingField: '#academicStanding',
         currentRestrictionsField: '#currentRestrictions',
         creditCompletionRateField: '#creditCompletionRate',
-        currentYearFinancialAidAwardField: '#currentYearFinancialAidAward',
         academicProgramsField: '#academicPrograms',
-        sapStatusField: '#sapStatus',
         registeredTermsField: '#registeredTerms',
         paymentStatusField: '#paymentStatus',
      
@@ -66,6 +66,21 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         
         studentIntakeAssignedField: '#studentIntakeAssigned',
         studentIntakeCompletedField: '#studentIntakeCompleted',
+        
+        balanceOwedField: '#balanceOwed',
+        sapStatusCodeField: {
+	           selector: '#sapStatusCode',
+			   listeners: {
+		            click: 'onShowSAPCodeInfo'
+		        }
+	    },
+        financialAidFileStatusField: {
+	           selector: '#financialAidFileStatus',
+			   listeners: {
+		            click: 'onShowFinancialAidFileStatuses'
+		        }
+	    },
+		financialAidAcceptedTermsField: '#financialAidAcceptedTerms',
         
 		'serviceReasonEdit': {
             click: 'onServiceReasonEditButtonClick'
@@ -80,6 +95,12 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var me = this;
         var id = me.personLite.get('id');
         me.resetForm();
+        if(me.sapStatusesStore.getTotalCount() <= 0){
+			me.sapStatusesStore.load();
+        }
+        if(me.financialAidFilesStore.getTotalCount() <= 0){
+			me.financialAidFilesStore.load();
+        }
        me.textStore.load();
         if (id != "") {
             // display loader
@@ -288,11 +309,24 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
         var financialAid = transcript.get('financialAid');
         if ( financialAid ) {
-            me.getCurrentYearFinancialAidAwardField().setFieldLabel('');
-        	me.getCurrentYearFinancialAidAwardField().setValue('<span style="color:#15428B">FA Award:  </span>' + me.handleNull(financialAid.currentYearFinancialAidAward));
-        	me.getSapStatusField().setFieldLabel('');
-			me.getSapStatusField().setValue('<span style="color:#15428B">SAP:  </span>' + me.handleNull(financialAid.sapStatus));
+        	me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP:  </span><u>' + me.handleNull(financialAid.sapStatusCode) + '</u>', false);
+			me.sapStatusCode = financialAid.sapStatusCode;
+			me.getView().sapStatusCode = financialAid.sapStatusCode;
+			me.getBalanceOwedField().setValue(Ext.util.Format.usMoney(financialAid.balanceOwed));
+			me.getFinancialAidFileStatusField().setText( '<span style="color:#15428B">FA FIle:  </span><u>' + me.handleNull(financialAid.financialAidFileStatus) + '</u>', false);
+
         }
+        var financialAidAcceptedTerms = transcript.get('financialAidAcceptedTerms');
+        if (financialAidAcceptedTerms) {
+        	var financialAidAcceptedTermsString = "";
+        	for(i = 0; i < financialAidAcceptedTerms.length ; i++){
+        		var financialAidAcceptedTerm = financialAidAcceptedTerms[i];
+        		financialAidAcceptedTermsString += financialAidAcceptedTerm.termCode + '=' + financialAidAcceptedTerm.accepted  + ',';
+        	}
+        	me.getFinancialAidAcceptedTermsField().setValue(financialAidAcceptedTermsString);
+        }
+
+		me.financialAidFilesStatuses = transcript.get('financialAidFiles');
     },
 
     getTranscriptFailure: function() {
@@ -339,6 +373,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
 	destroy: function() {
         var me=this;
+		var view = Ext.ComponentQuery.query("#profileDetails");
+    	if(view && view.length > 0)
+    		view[0].getController().closePopups();
         return me.callParent( arguments );
     },
 
@@ -361,6 +398,20 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         
         var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
         
+    },
+    
+    onShowSAPCodeInfo: function(){
+    	var me=this;
+		if(me.sapCodeInfoPopup == null || me.sapCodeInfoPopup.isDestroyed)
+       		me.sapCodeInfoPopup = Ext.create('Ssp.view.tools.profile.SapStatus',{hidden:true,code:me.sapStatusCode});
+		me.sapCodeInfoPopup.show();
+    },
+    
+    onShowFinancialAidFileStatuses: function(){
+    	var me=this;
+		if(me.financialAidFilePopup == null || me.financialAidFilePopup.isDestroyed)
+       		me.financialAidFilePopup = Ext.create('Ssp.view.tools.profile.FinancialAidFileViewer',{hidden:true,financialAidFilesStatuses:me.financialAidFilesStatuses});
+		me.financialAidFilePopup.show();
     }
 	
 });
