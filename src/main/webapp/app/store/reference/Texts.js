@@ -27,7 +27,10 @@ Ext.define('Ssp.store.reference.Texts', {
     getValueByCode:function(code)
     {
     	var me=this;
-    	return me.getAt(me.find('code',code)).get('value');
+    	var index = me.find('code',code);
+    	if(index >= 0)
+    	 return me.getAt(index).get('value');
+    	return null;
     }
 
 });
