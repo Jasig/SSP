@@ -81,6 +81,7 @@ Ext.require([
     'Ssp.view.tools.actionplan.DisplayStrengths',
     'Ssp.view.tools.actionplan.TaskTree',
     'Ssp.view.tools.studentintake.StudentIntake',
+    'Ssp.view.tools.studentintake.Checklist',
     'Ssp.view.tools.studentintake.Challenges',
     'Ssp.view.tools.studentintake.Demographics',
     'Ssp.view.tools.studentintake.EducationGoals',
@@ -353,7 +354,7 @@ Ext.require([
     'Ssp.store.reference.MilitaryAffiliations',
     'Ssp.store.reference.CourseworkHours',
     'Ssp.store.reference.EnrollmentStatuses',
-    'Ssp.store.reference.CompletedItems',
+    'Ssp.store.reference.CompletedItem',
     'Ssp.store.reference.Texts',
     'Ssp.store.reference.RegistrationLoads',
     'Ssp.store.reference.CourseworkHours',
@@ -480,7 +481,7 @@ var apiUrls = [
   {name: 'maritalStatus', url: 'reference/maritalStatus'},
   {name: 'militaryAffiliation', url: 'reference/militaryAffiliation'},
   {name: 'enrollmentStatus', url: 'reference/enrollmentStatus'},
-  {name: 'completedItems', url: 'reference/completedItems'},
+  {name: 'completedItem', url: 'reference/completedItem'},
   {name: 'blurb', url: 'blurb'},
   {name: 'registrationLoad', url: 'reference/registrationLoad'},
   {name: 'courseworkHours', url: 'reference/courseworkHours'},
@@ -1407,11 +1408,11 @@ Ext.onReady(function(){
 					    singleton: true
 					},	
 			    	enrollmentStatusesStore: 'Ssp.store.reference.EnrollmentStatuses',
-			    	completedItemsStore: 
+			    	completedItemStore: 
 			    	{
 						fn: function(){
-							return Ext.create('Ssp.store.reference.CompletedItems', {
-								storeId: 'completedItemsStore',
+							return Ext.create('Ssp.store.reference.CompletedItem', {
+								storeId: 'completedItemStore',
 								extraParams: {status: "ALL", limit: -1, start: null}
 							});
 						},
@@ -1422,6 +1423,16 @@ Ext.onReady(function(){
 						fn: function(){
 							return Ext.create('Ssp.store.reference.Texts', {
 								storeId: 'textStore',
+								extraParams: {status: "ALL", limit: -1, start: null}
+							});
+						},
+						singleton: true
+					},
+			    	intakeTextStore: 
+			    	{
+						fn: function(){
+							return Ext.create('Ssp.store.reference.Texts', {
+								storeId: 'intakeTextStore',
 								extraParams: {status: "ALL", limit: -1, start: null}
 							});
 						},
