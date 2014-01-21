@@ -38,6 +38,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.ChallengeService;
 import org.jasig.ssp.service.reference.ChildCareArrangementService;
 import org.jasig.ssp.service.reference.CitizenshipService;
+import org.jasig.ssp.service.reference.CompletedItemService;
 import org.jasig.ssp.service.reference.CourseworkHoursService;
 import org.jasig.ssp.service.reference.EducationGoalService;
 import org.jasig.ssp.service.reference.EducationLevelService;
@@ -54,6 +55,7 @@ import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.AbstractAuditableTO;
 import org.jasig.ssp.transferobject.PersonChallengeTO;
+import org.jasig.ssp.transferobject.PersonCompletedItemTO;
 import org.jasig.ssp.transferobject.PersonEducationLevelTO;
 import org.jasig.ssp.transferobject.PersonFundingSourceTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
@@ -61,6 +63,7 @@ import org.jasig.ssp.transferobject.reference.AbstractReferenceTO;
 import org.jasig.ssp.transferobject.reference.ChallengeTO;
 import org.jasig.ssp.transferobject.reference.ChildCareArrangementTO;
 import org.jasig.ssp.transferobject.reference.CitizenshipTO;
+import org.jasig.ssp.transferobject.reference.CompletedItemTO;
 import org.jasig.ssp.transferobject.reference.CourseworkHoursTO;
 import org.jasig.ssp.transferobject.reference.EducationGoalTO;
 import org.jasig.ssp.transferobject.reference.EducationLevelTO;
@@ -109,6 +112,9 @@ public class IntakeController extends AbstractBaseController {
 
 	@Autowired
 	private transient ChallengeService challengeService;
+	
+	@Autowired
+	private transient CompletedItemService completedItemsService;
 
 	@Autowired
 	private transient ChildCareArrangementService childCareArrangementService;
@@ -214,6 +220,8 @@ public class IntakeController extends AbstractBaseController {
 				.createForSingleSortWithPaging(ObjectStatus.ALL, 0, -1, null, null, null);
 
 		refData.put("challenges", challengeReferenceDataFor(formTO, sAndP));
+		refData.put("checklist", checkListReferenceDataFor(formTO, sAndP));
+		
 		refData.put("childCareArrangements", childCareArrangementReferenceDataFor(formTO, sAndP));
 		refData.put("citizenships", citizenshipReferenceDataFor(formTO, sAndP));
 		refData.put("educationGoals", educationGoalReferenceDataFor(formTO, sAndP));
@@ -241,7 +249,13 @@ public class IntakeController extends AbstractBaseController {
 				associatedIds(formTO.getPersonChallenges(), PERSON_ASSOC_CHALLENGE_UUID_EXTRACTOR),
 				ChallengeTO.toTOList(challengeService.getAllForIntake(sAndP).getRows(), true));
 	}
-
+	private List<CompletedItemTO> checkListReferenceDataFor(IntakeFormTO formTO,
+			SortingAndPaging sAndP) {
+		return filterInactiveExceptFor(
+		associatedIds(formTO.getPersonChecklist(), PERSON_ASSOC_CHECKLIST_UUID_EXTRACTOR),
+		CompletedItemTO.toTOList(completedItemsService.getAll(sAndP).getRows()));
+	}
+	
 	private List<ChildCareArrangementTO> childCareArrangementReferenceDataFor(IntakeFormTO formTO, SortingAndPaging sAndP) {
 		final List<ChildCareArrangementTO> allTOs =
 				ChildCareArrangementTO.toTOList(childCareArrangementService.getAll(sAndP).getRows());
@@ -449,7 +463,13 @@ public class IntakeController extends AbstractBaseController {
 					return to.getChallengeId();
 				}
 			};
-
+	private static final UUIDExtractor<PersonCompletedItemTO> PERSON_ASSOC_CHECKLIST_UUID_EXTRACTOR =
+			new UUIDExtractor<PersonCompletedItemTO>() {
+				@Override
+				public UUID fromTO(PersonCompletedItemTO to) {
+					return to.getCompletedItemId();
+				}
+			};
 	private static final UUIDExtractor<PersonEducationLevelTO> PERSON_ASSOC_EDU_LEVEL_UUID_EXTRACTOR =
 			new UUIDExtractor<PersonEducationLevelTO>() {
 				@Override

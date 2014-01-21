@@ -22,39 +22,39 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.jasig.ssp.model.reference.CompletedItems;
+import org.jasig.ssp.model.reference.CompletedItem;
 import org.jasig.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;
 
-public class CompletedItemsTO extends AbstractReferenceTO<CompletedItems>
-		implements TransferObject<CompletedItems> {
+public class CompletedItemTO extends AbstractReferenceTO<CompletedItem>
+		implements TransferObject<CompletedItem> {
 
 	
-	public CompletedItemsTO() {
+	public CompletedItemTO() {
 		super();
 	}
 
-	public CompletedItemsTO(final UUID id, final String name,
+	public CompletedItemTO(final UUID id, final String name,
 			final String description) {
 		super(id, name, description);
 	}
 
-	public CompletedItemsTO(final CompletedItems model) {
+	public CompletedItemTO(final CompletedItem model) {
 		super();
 		from(model);
 	}
 
 	@Override
-	public void from(CompletedItems model) {
+	public void from(CompletedItem model) {
 		super.from(model);
 	};
 	
-	public static List<CompletedItemsTO> toTOList(
-			final Collection<CompletedItems> models) {
-		final List<CompletedItemsTO> tObjects = Lists.newArrayList();
-		for (CompletedItems model : models) {
-			tObjects.add(new CompletedItemsTO(model));
+	public static List<CompletedItemTO> toTOList(
+			final Collection<CompletedItem> models) {
+		final List<CompletedItemTO> tObjects = Lists.newArrayList();
+		for (CompletedItem model : models) {
+			tObjects.add(new CompletedItemTO(model));
 		}
 		return tObjects;
 	}

@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,30 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.reference.impl;
-
-import org.jasig.ssp.dao.reference.CompletedItemsDao;
-import org.jasig.ssp.model.reference.CompletedItems;
-import org.jasig.ssp.service.reference.CompletedItemsService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-@Service 
-@Transactional
-public class CompletedItemsServiceImpl extends
-		AbstractReferenceService<CompletedItems>
-		implements CompletedItemsService {
-
-	@Autowired
-	transient private CompletedItemsDao dao;
-
-	protected void setDao(final CompletedItemsDao dao) {
-		this.dao = dao;
-	}
-
-	@Override
-	protected CompletedItemsDao getDao() {
-		return dao;
-	}
-}
+Ext.define('Ssp.store.reference.CompletedItem', {
+    extend: 'Ssp.store.reference.AbstractReferences',
+    model: 'Ssp.model.reference.CompletedItem',
+    constructor: function(){
+    	this.callParent(arguments);
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('completedItem')});
+    }
+});

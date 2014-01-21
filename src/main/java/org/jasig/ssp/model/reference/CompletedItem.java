@@ -35,7 +35,7 @@ import org.jasig.ssp.model.Auditable;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class CompletedItems
+public class CompletedItem
 		extends AbstractReference
 		implements Auditable {
 
@@ -45,7 +45,7 @@ public class CompletedItems
 	/**
 	 * Constructor
 	 */
-	public CompletedItems() {
+	public CompletedItem() {
 		super();
 	}
 
@@ -56,7 +56,7 @@ public class CompletedItems
 	 *            Identifier; required
 	 */
 
-	public CompletedItems(@NotNull final UUID id) {
+	public CompletedItem(@NotNull final UUID id) {
 		super(id);
 	}
 
@@ -69,7 +69,7 @@ public class CompletedItems
 	 *            Name; required; max 80 characters
 	 */
 
-	public CompletedItems(@NotNull final UUID id, @NotNull final String name) {
+	public CompletedItem(@NotNull final UUID id, @NotNull final String name) {
 		super(id, name);
 	}
 
@@ -83,7 +83,7 @@ public class CompletedItems
 	 * @param description
 	 *            Description; max 64000 characters
 	 */
-	public CompletedItems(@NotNull final UUID id, @NotNull final String name,
+	public CompletedItem(@NotNull final UUID id, @NotNull final String name,
 			final String description) {
 		super(id, name, description);
 	}

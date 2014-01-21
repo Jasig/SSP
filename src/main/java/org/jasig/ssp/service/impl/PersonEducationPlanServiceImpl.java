@@ -77,8 +77,6 @@ public class PersonEducationPlanServiceImpl implements
 			current.setStudentStatus(studentStatusService.get(obj
 					.getStudentStatus().getId()));
 		}
-		current.setNewOrientationComplete(obj.isNewOrientationComplete());
-		current.setRegisteredForClasses(obj.isRegisteredForClasses());
 		current.setCollegeDegreeForParents(obj.isCollegeDegreeForParents());
 		current.setSpecialNeeds(obj.isSpecialNeeds());
 		current.setGradeTypicallyEarned(obj.getGradeTypicallyEarned());

@@ -34,8 +34,7 @@ public class PersonEducationPlanTO
 
 	private UUID personId;
 
-	private boolean newOrientationComplete, registeredForClasses,
-			collegeDegreeForParents, specialNeeds;
+	private boolean	collegeDegreeForParents, specialNeeds;
 	private String gradeTypicallyEarned;
 
 	public PersonEducationPlanTO() {
@@ -51,8 +50,6 @@ public class PersonEducationPlanTO
 	public final void from(final PersonEducationPlan model) {
 		super.from(model);
 
-		newOrientationComplete = model.isNewOrientationComplete();
-		registeredForClasses = model.isRegisteredForClasses();
 		collegeDegreeForParents = model.isCollegeDegreeForParents();
 		specialNeeds = model.isSpecialNeeds();
 
@@ -88,22 +85,6 @@ public class PersonEducationPlanTO
 
 	public void setStudentStatusId(final UUID studentStatusId) {
 		this.studentStatusId = studentStatusId;
-	}
-
-	public boolean isNewOrientationComplete() {
-		return newOrientationComplete;
-	}
-
-	public void setNewOrientationComplete(final boolean newOrientationComplete) {
-		this.newOrientationComplete = newOrientationComplete;
-	}
-
-	public boolean isRegisteredForClasses() {
-		return registeredForClasses;
-	}
-
-	public void setRegisteredForClasses(final boolean registeredForClasses) {
-		this.registeredForClasses = registeredForClasses;
 	}
 
 	public boolean isCollegeDegreeForParents() {

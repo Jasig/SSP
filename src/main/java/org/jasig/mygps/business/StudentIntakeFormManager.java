@@ -36,10 +36,12 @@ import org.jasig.mygps.model.transferobject.FormQuestionTO;
 import org.jasig.mygps.model.transferobject.FormSectionTO;
 import org.jasig.mygps.model.transferobject.FormTO;
 import org.jasig.ssp.dao.PersonChallengeDao;
+import org.jasig.ssp.dao.PersonCompletedItemDao;
 import org.jasig.ssp.dao.PersonEducationGoalDao;
 import org.jasig.ssp.dao.PersonEducationLevelDao;
 import org.jasig.ssp.dao.PersonFundingSourceDao;
 import org.jasig.ssp.dao.reference.ChallengeDao;
+import org.jasig.ssp.dao.reference.CompletedItemDao;
 import org.jasig.ssp.dao.reference.EducationGoalDao;
 import org.jasig.ssp.dao.reference.EducationLevelDao;
 import org.jasig.ssp.dao.reference.FundingSourceDao;
@@ -47,6 +49,7 @@ import org.jasig.ssp.dao.reference.MilitaryAffiliationDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonChallenge;
+import org.jasig.ssp.model.PersonCompletedItem;
 import org.jasig.ssp.model.PersonDemographics;
 import org.jasig.ssp.model.PersonEducationGoal;
 import org.jasig.ssp.model.PersonEducationLevel;
@@ -57,6 +60,7 @@ import org.jasig.ssp.model.reference.Blurb;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChildCareArrangement;
 import org.jasig.ssp.model.reference.Citizenship;
+import org.jasig.ssp.model.reference.CompletedItem;
 import org.jasig.ssp.model.reference.CourseworkHours;
 import org.jasig.ssp.model.reference.EducationGoal;
 import org.jasig.ssp.model.reference.EducationLevel;
@@ -150,6 +154,12 @@ public class StudentIntakeFormManager { // NOPMD
 
 	@Autowired
 	private transient PersonChallengeDao studentChallengeDao;
+	
+	@Autowired
+	private transient PersonCompletedItemDao personCompletedItemDao;
+	
+	@Autowired
+	private transient CompletedItemDao completedItemDao;
 
 	@Autowired
 	private transient PersonService personService;
@@ -360,6 +370,14 @@ public class StudentIntakeFormManager { // NOPMD
 			.fromString("839dc532-1aec-4580-8294-8c97bb72fa72");
 	
 
+	// Checklist
+	public static final UUID SECTION_CHECKLIST_ID = UUID
+			.fromString("e8e3da7f-812d-498f-90a3-4626ab544712");
+	public static final UUID SECTION_CHECKLIST_QUESTION_CHALLENGE_ID = UUID
+			.fromString("fd64c498-9d83-42a9-8e91-00aa0a65b0a3");
+	public static final UUID SECTION_CHECKLIST = UUID
+			.fromString("7ca8443d-ffc6-4545-90bb-bb4508999871");
+
 	public FormTO create() throws ObjectNotFoundException {
 
 		final FormTO formTO = new FormTO();
@@ -380,6 +398,8 @@ public class StudentIntakeFormManager { // NOPMD
 		formSections.add(buildEducationGoalSection(blurbStore));
 		formSections.add(buildFundingSection(blurbStore));
 		formSections.add(buildChallengesSection(blurbStore));
+		formSections.add(buildChecklistSection(blurbStore));
+		
 
 		// FormTO
 		formTO.setId(UUID.randomUUID());
@@ -388,6 +408,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		return formTO;
 	}
+
 
 	private Map<String, Blurb> populateBlurbStore() {
 		Map<String,Blurb> blurbStore = new HashMap<String, Blurb>();
@@ -754,18 +775,6 @@ public class StudentIntakeFormManager { // NOPMD
 					.setValueAbstractReference(
 							student.getEducationPlan().getStudentStatus());
 
-			// New Student Orientation
-			formSectionTO.getFormQuestionById(
-					SECTION_EDUCATIONPLAN_QUESTION_COMPLETEDORIENTATION_ID)
-					.setValueBoolean(
-							student.getEducationPlan().isNewOrientationComplete());
-
-			// Registered for Classes
-			formSectionTO
-					.getFormQuestionById(
-							SECTION_EDUCATIONPLAN_QUESTION_REGISTEREDFORCLASSES_ID)
-					.setValueBoolean(
-							student.getEducationPlan().isRegisteredForClasses());
 
 			// Have Parents Obtained a College Degree
 			formSectionTO.getFormQuestionById(
@@ -1327,14 +1336,6 @@ public class StudentIntakeFormManager { // NOPMD
 			student.setEducationPlan(educationPlan);
 		}
 
-		educationPlan.setNewOrientationComplete(educationPlanSection
-				.getFormQuestionById(
-						SECTION_EDUCATIONPLAN_QUESTION_COMPLETEDORIENTATION_ID)
-				.getValue() == null ? false : SspStringUtils
-				.booleanFromString(educationPlanSection.getFormQuestionById(
-						SECTION_EDUCATIONPLAN_QUESTION_COMPLETEDORIENTATION_ID)
-						.getValue()));
-
 		final FormQuestionTO gradeAtHighestEducationLevelQuestion = educationPlanSection
 				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_GRADEATHIGHESTEDUCATIONLEVEL_ID);
 		if (StringUtils
@@ -1365,13 +1366,6 @@ public class StudentIntakeFormManager { // NOPMD
 							.getValue()));
 		}
 
-		educationPlan.setRegisteredForClasses(educationPlanSection
-				.getFormQuestionById(
-						SECTION_EDUCATIONPLAN_QUESTION_REGISTEREDFORCLASSES_ID)
-				.getValue() == null ? false : SspStringUtils
-				.booleanFromString(educationPlanSection.getFormQuestionById(
-						SECTION_EDUCATIONPLAN_QUESTION_REGISTEREDFORCLASSES_ID)
-						.getValue()));
 
 		// Require Special Accommodation
 		final FormQuestionTO requireSpecialAccomodationQuestion = educationPlanSection
@@ -1734,6 +1728,42 @@ public class StudentIntakeFormManager { // NOPMD
 				}
 			}
 		}
+		
+		/* Checklist */
+		final FormSectionTO checklistSection = formTO
+				.getFormSectionById(SECTION_CHECKLIST_ID);
+		final FormQuestionTO checklistQuestion = checklistSection
+				.getFormQuestionById(SECTION_CHECKLIST_QUESTION_CHALLENGE_ID);
+
+		Set<PersonCompletedItem> studentchecklist = student.getCompletedItems();
+
+		if (studentchecklist == null) {
+			studentchecklist = Sets.newHashSet();
+			student.setCompletedItems(studentchecklist);
+		}
+ 
+		for (final PersonCompletedItem studentCompletedItem : studentchecklist) {
+			personCompletedItemDao.delete(studentCompletedItem);
+		}
+
+		studentchecklist.clear();
+
+		if (checklistQuestion.getValues() != null) {
+			for (final String value : checklistQuestion.getValues()) {
+				final FormOptionTO formOptionTO = checklistQuestion
+						.getFormOptionByValue(value);
+
+				if (formOptionTO != null) {
+					final PersonCompletedItem studentCompletedItem = new PersonCompletedItem(); // NOPMD
+					studentCompletedItem.setPerson(student);
+					studentCompletedItem.setCompletedItems(completedItemDao.get(formOptionTO
+							.getId()));
+					
+					personCompletedItemDao.save(studentCompletedItem);
+					studentchecklist.add(studentCompletedItem);
+				}
+			}
+		}		
 
 		student.setStudentIntakeCompleteDate(new Date());
 
@@ -2432,35 +2462,6 @@ public class StudentIntakeFormManager { // NOPMD
 		newStudentOrientationQuestionOptions.add(new FormOptionTO(UUID
 				.randomUUID(), "No", "N"));
 
-		newStudentOrientationQuestion
-				.setId(SECTION_EDUCATIONPLAN_QUESTION_COMPLETEDORIENTATION_ID);
-		newStudentOrientationQuestion
-				.setLabel("Have you completed new student orientation?");
-		newStudentOrientationQuestion
-				.setOptions(newStudentOrientationQuestionOptions);
-		newStudentOrientationQuestion.setType(FORM_TYPE_RADIOLIST);
-
-		eduPlanSectionQuestions.add(newStudentOrientationQuestion);
-
-		// Registered for Classes
-		final FormQuestionTO registeredForClassesQuestion = new FormQuestionTO();
-		final List<FormOptionTO> registeredForClassesQuestionOptions = new ArrayList<FormOptionTO>();
-
-		registeredForClassesQuestionOptions.add(new FormOptionTO(UUID
-				.randomUUID(), "Yes", "Y"));
-		registeredForClassesQuestionOptions.add(new FormOptionTO(UUID
-				.randomUUID(), "No", "N"));
-
-		registeredForClassesQuestion
-				.setId(SECTION_EDUCATIONPLAN_QUESTION_REGISTEREDFORCLASSES_ID);
-		registeredForClassesQuestion
-				.setLabel("Have you registered for classes?");
-		registeredForClassesQuestion
-				.setOptions(registeredForClassesQuestionOptions);
-		registeredForClassesQuestion.setType(FORM_TYPE_RADIOLIST);
-
-		eduPlanSectionQuestions.add(registeredForClassesQuestion);
-
 		// Parents Obtained College Degree
 		final FormQuestionTO parentsObtainedCollegeDegreeQuestion = new FormQuestionTO();
 		final List<FormOptionTO> parentsObtainedCollegeDegreeQuestionOptions = new ArrayList<FormOptionTO>();
@@ -3061,5 +3062,37 @@ public class StudentIntakeFormManager { // NOPMD
 		challengeSection.setQuestions(challengeSectionQuestions);
 
 		return challengeSection;
+	}
+	
+	private FormSectionTO buildChecklistSection(Map<String, Blurb> blurbStore) {
+		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
+
+		final FormSectionTO checklistSection = new FormSectionTO();
+		final List<FormQuestionTO> checklistSectionQuestions = new ArrayList<FormQuestionTO>();
+
+		checklistSection.setId(SECTION_CHECKLIST_ID);
+		checklistSection.setLabel(getLabelNullSafe(blurbStore,"intake.tab8.label"));
+
+		// Checklist
+		final FormQuestionTO checklistQuestionTO = new FormQuestionTO();
+		final List<FormOptionTO> checklistOptions = new ArrayList<FormOptionTO>();
+
+		for (final CompletedItem completedItem : completedItemDao.getAll(sAndP)) {
+			checklistOptions.add(new FormOptionTO(completedItem.getId(), completedItem
+					.getName(), completedItem.getId().toString()));
+		}
+
+		checklistQuestionTO.setId(SECTION_CHECKLIST_QUESTION_CHALLENGE_ID);
+		checklistQuestionTO
+				.setLabel(getLabelNullSafe(blurbStore,"intake.tab8.label.checklist-question"));
+		checklistQuestionTO.setOptions(checklistOptions);
+		checklistQuestionTO.setType(FORM_TYPE_CHECKLIST);
+
+		checklistSectionQuestions.add(checklistQuestionTO);
+
+		// Add questions to section
+		checklistSection.setQuestions(checklistSectionQuestions);
+
+		return checklistSection;
 	}
 }

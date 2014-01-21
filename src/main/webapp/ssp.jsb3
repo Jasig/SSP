@@ -84,6 +84,11 @@
                     "path": "/app/view/tools/actionplan/"
                 },
                 {
+                    "clsName": "Ssp.view.tools.studentintake.Checklist",
+                    "name": "Checklist.js",
+                    "path": "/app/view/tools/studentintake/"
+                },                
+                {
                     "clsName": "Ssp.view.tools.studentintake.Challenges",
                     "name": "Challenges.js",
                     "path": "/app/view/tools/studentintake/"
@@ -174,8 +179,8 @@
                     "path": "/app/store/reference/"
                 },    
                 {
-                    "clsName": "Ssp.store.reference.CompletedItems",
-                    "name": "CompletedItems.js",
+                    "clsName": "Ssp.store.reference.CompletedItem",
+                    "name": "CompletedItem.js",
                     "path": "/app/store/reference/"
                 },                             
                 {

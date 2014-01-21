@@ -514,6 +514,10 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	private Set<PersonChallenge> challenges;
 
+	@Nullable
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	private Set<PersonCompletedItem> completedItems;
 	/**
 	 * Disability record for a student.
 	 * 
@@ -1335,6 +1339,14 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 	 */
 	public void setF1Status(String f1Status) {
 		this.f1Status = f1Status;
+	}
+
+	public Set<PersonCompletedItem> getCompletedItems() {
+		return completedItems;
+	}
+
+	public void setCompletedItems(Set<PersonCompletedItem> completedItems) {
+		this.completedItems = completedItems;
 	}
 
 }

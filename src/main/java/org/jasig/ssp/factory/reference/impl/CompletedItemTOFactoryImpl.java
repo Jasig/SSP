@@ -18,37 +18,37 @@
  */
 package org.jasig.ssp.factory.reference.impl;
 
-import org.jasig.ssp.dao.reference.CompletedItemsDao;
+import org.jasig.ssp.dao.reference.CompletedItemDao;
 import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
-import org.jasig.ssp.factory.reference.CompletedItemsTOFactory;
-import org.jasig.ssp.model.reference.CompletedItems;
+import org.jasig.ssp.factory.reference.CompletedItemTOFactory;
+import org.jasig.ssp.model.reference.CompletedItem;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.reference.CompletedItemsTO;
+import org.jasig.ssp.transferobject.reference.CompletedItemTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-public class CompletedItemsTOFactoryImpl extends
-		AbstractReferenceTOFactory<CompletedItemsTO, CompletedItems>
-		implements CompletedItemsTOFactory {
+public class CompletedItemTOFactoryImpl extends
+		AbstractReferenceTOFactory<CompletedItemTO, CompletedItem>
+		implements CompletedItemTOFactory {
 
-	public CompletedItemsTOFactoryImpl() {
-		super(CompletedItemsTO.class, CompletedItems.class);
+	public CompletedItemTOFactoryImpl() {
+		super(CompletedItemTO.class, CompletedItem.class);
 	}
 
 	@Autowired
-	private transient CompletedItemsDao dao;
+	private transient CompletedItemDao dao;
 
 	@Override
-	protected CompletedItemsDao getDao() {
+	protected CompletedItemDao getDao() {
 		return dao;
 	}
 	
 	@Override
-	public CompletedItems from(final CompletedItemsTO tObject) throws ObjectNotFoundException {
-		final CompletedItems model = super.from(tObject);
+	public CompletedItem from(final CompletedItemTO tObject) throws ObjectNotFoundException {
+		final CompletedItem model = super.from(tObject);
 		return model;
 	}
 	

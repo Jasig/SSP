@@ -19,14 +19,14 @@
 package org.jasig.ssp.web.api.reference;
 
 import org.jasig.ssp.factory.TOFactory;
-import org.jasig.ssp.factory.reference.CompletedItemsTOFactory;
+import org.jasig.ssp.factory.reference.CompletedItemTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.reference.CompletedItems;
+import org.jasig.ssp.model.reference.CompletedItem;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.AuditableCrudService;
-import org.jasig.ssp.service.reference.CompletedItemsService;
+import org.jasig.ssp.service.reference.CompletedItemService;
 import org.jasig.ssp.transferobject.PagedResponse;
-import org.jasig.ssp.transferobject.reference.CompletedItemsTO;
+import org.jasig.ssp.transferobject.reference.CompletedItemTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -40,33 +40,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/1/reference/completedItems")
-public class CompletedItemsController
+@RequestMapping("/1/reference/completedItem")
+public class CompletedItemController
 		extends
-		AbstractAuditableReferenceController<CompletedItems, CompletedItemsTO> {
+		AbstractAuditableReferenceController<CompletedItem, CompletedItemTO> {
 
 	@Autowired
-	protected transient CompletedItemsService service;
+	protected transient CompletedItemService service;
 
 	@Override
-	protected AuditableCrudService<CompletedItems> getService() {
+	protected AuditableCrudService<CompletedItem> getService() {
 		return service;
 	}
 
 	@Autowired
-	protected transient CompletedItemsTOFactory factory;
+	protected transient CompletedItemTOFactory factory;
 
 	@Override
-	protected TOFactory<CompletedItemsTO, CompletedItems> getFactory() {
+	protected TOFactory<CompletedItemTO, CompletedItem> getFactory() {
 		return factory;
 	}
 
-	protected CompletedItemsController() {
-		super(CompletedItems.class, CompletedItemsTO.class);
+	protected CompletedItemController() {
+		super(CompletedItem.class, CompletedItemTO.class);
 	}
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(CompletedItemsController.class);
+			.getLogger(CompletedItemController.class);
 
 	@Override
 	protected Logger getLogger() {
@@ -75,19 +75,19 @@ public class CompletedItemsController
 	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
-	PagedResponse<CompletedItemsTO> getAll(
+	PagedResponse<CompletedItemTO> getAll(
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection) {
 
-		final PagingWrapper<CompletedItems> data = getService().getAll(
+		final PagingWrapper<CompletedItem> data = getService().getAll(
 				SortingAndPaging.createForSingleSortWithPaging(
 						status == null ? ObjectStatus.ALL : status, start,
 						limit, sort, sortDirection, "name"));
 
-		return new PagedResponse<CompletedItemsTO>(true, data.getResults(), getFactory()
+		return new PagedResponse<CompletedItemTO>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));
 
 	}

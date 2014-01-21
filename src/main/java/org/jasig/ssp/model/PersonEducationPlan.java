@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.model;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,6 +27,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
 import org.jasig.ssp.model.reference.StudentStatus;
@@ -51,12 +54,6 @@ public class PersonEducationPlan
 	private StudentStatus studentStatus;
 
 	@Column
-	private boolean newOrientationComplete;
-
-	@Column
-	private boolean registeredForClasses;
-
-	@Column
 	private boolean collegeDegreeForParents;
 
 	@Column
@@ -72,22 +69,6 @@ public class PersonEducationPlan
 
 	public void setStudentStatus(final StudentStatus studentStatus) {
 		this.studentStatus = studentStatus;
-	}
-
-	public boolean isNewOrientationComplete() {
-		return newOrientationComplete;
-	}
-
-	public void setNewOrientationComplete(final boolean newOrientationComplete) {
-		this.newOrientationComplete = newOrientationComplete;
-	}
-
-	public boolean isRegisteredForClasses() {
-		return registeredForClasses;
-	}
-
-	public void setRegisteredForClasses(final boolean registeredForClasses) {
-		this.registeredForClasses = registeredForClasses;
 	}
 
 	public boolean isCollegeDegreeForParents() {
@@ -122,8 +103,6 @@ public class PersonEducationPlan
 	 * @see #overwrite(PersonEducationPlan)
 	 */
 	public void overwrite(final PersonEducationPlan source) {
-		setNewOrientationComplete(source.isNewOrientationComplete());
-		setRegisteredForClasses(source.isRegisteredForClasses());
 		setCollegeDegreeForParents(source.isCollegeDegreeForParents());
 		setSpecialNeeds(source.isSpecialNeeds());
 		setGradeTypicallyEarned(source.getGradeTypicallyEarned());
@@ -145,8 +124,6 @@ public class PersonEducationPlan
 
 		// PersonEducationLevel
 		result *= hashField("studentStatus", studentStatus);
-		result *= newOrientationComplete ? 3 : 5;
-		result *= registeredForClasses ? 7 : 11;
 		result *= collegeDegreeForParents ? 13 : 17;
 		result *= specialNeeds ? 19 : 23;
 		result *= hashField("gradeTypicallyEarned", gradeTypicallyEarned);

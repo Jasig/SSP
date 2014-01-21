@@ -16,11 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.reference;
+package org.jasig.ssp.factory.reference;
 
-import org.jasig.ssp.model.reference.CompletedItems;
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.reference.CompletedItem;
 import org.jasig.ssp.model.reference.EnrollmentStatus;
-import org.jasig.ssp.service.ReferenceService;
- 
-public interface CompletedItemsService extends ReferenceService<CompletedItems> {
+import org.jasig.ssp.transferobject.reference.CompletedItemTO;
+import org.jasig.ssp.transferobject.reference.EnrollmentStatusTO;
+
+public interface CompletedItemTOFactory extends
+		TOFactory<CompletedItemTO, CompletedItem> {
 }
+ 

@@ -84,14 +84,6 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 							}
 						}
 					},{
-				        xtype: 'checkboxgroup',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab3.label.completed'),
-				        columns: 1,
-				        items: [
-				            {boxLabel: 'New Student Orientation', name: 'newOrientationComplete'},
-				            {boxLabel: 'Registered for Classes', name: 'registeredForClasses'}
-				        ]
-				    },{
 				        xtype: "radiogroup",
 				        fieldLabel: me.textStore.getValueByCode('intake.tab3.label.parents-college'),
 				        columns: 1,

@@ -27,8 +27,8 @@
 	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
 	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 
-	<changeSet author='tony.arland' id='Add completed_items table'>
-		<createTable tableName="completed_items">
+	<changeSet author='tony.arland' id='Add completed_item table'>
+		<createTable tableName="completed_item">
 			<column name="id" type="uuid">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
@@ -44,12 +44,12 @@
 			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="completed_items_created_by_person_id"
+					foreignKeyName="completed_item_created_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="completed_items_modified_by_person_id"
+					foreignKeyName="completed_item_modified_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
@@ -57,9 +57,9 @@
 			</column>
 		</createTable>
 
-		<sql>grant all on completed_items to ${database.app.username}</sql>
+		<sql>grant all on completed_item to ${database.app.username}</sql>
 		<rollback>
-			<dropTable tableName="completed_items" />
+			<dropTable tableName="completed_item" />
 		</rollback>
 
 		<!-- Theres a different assumption in the liquibase handling of timezones 
@@ -70,8 +70,8 @@
 
 	</changeSet>
 	
-	<changeSet id="create reference data - completedItems" author="tony.arland">
-		<insert tableName="completed_items">
+	<changeSet id="create reference data - completeditem" author="tony.arland">
+		<insert tableName="completed_item">
 			<column name="id" value="3c9702d5-986e-43c2-ab6a-25799fed7b92" />
 			<column name="name" value="New Student Orientation" />
 			<column name="description" value="New Student Orientation" />
@@ -81,7 +81,7 @@
 			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="object_status" value="1" />
 		</insert>
-		<insert tableName="completed_items">
+		<insert tableName="completed_item">
 			<column name="id" value="502e6ff4-0751-40d0-9f65-8ac115f73534" />
 			<column name="name" value="Registered for Classes" />
 			<column name="description" value="Registered for Classes" />
@@ -92,10 +92,10 @@
 			<column name="object_status" value="1" />
 		</insert>
 		<rollback>
-			<delete tableName="completed_items">
+			<delete tableName="completed_item">
 				<where>id='3c9702d5-986e-43c2-ab6a-25799fed7b92'</where>
 			</delete>
-			<delete tableName="completed_items">
+			<delete tableName="completed_item">
 				<where>id='502e6ff4-0751-40d0-9f65-8ac115f73534'</where>
 			</delete>
 		</rollback>

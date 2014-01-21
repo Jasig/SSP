@@ -1,4 +1,4 @@
-/*
+/**
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,11 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.store.reference.CompletedItems', {
-    extend: 'Ssp.store.reference.AbstractReferences',
-    model: 'Ssp.model.reference.CompletedItem',
-    constructor: function(){
-    	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('completedItems')});
-    }
-});
+package org.jasig.ssp.factory;
+
+import org.jasig.ssp.model.PersonCompletedItem;
+import org.jasig.ssp.transferobject.PersonCompletedItemTO;
+
+public interface PersonCompletedItemTOFactory extends
+		TOFactory<PersonCompletedItemTO, PersonCompletedItem> {
+}

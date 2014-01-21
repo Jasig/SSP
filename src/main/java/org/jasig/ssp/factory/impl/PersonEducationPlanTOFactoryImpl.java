@@ -72,8 +72,6 @@ public class PersonEducationPlanTOFactoryImpl extends
 
 		final PersonEducationPlan model = super.from(tObject);
 
-		model.setNewOrientationComplete(tObject.isNewOrientationComplete());
-		model.setRegisteredForClasses(tObject.isRegisteredForClasses());
 		model.setCollegeDegreeForParents(tObject.isCollegeDegreeForParents());
 		model.setSpecialNeeds(tObject.isSpecialNeeds());
 		model.setGradeTypicallyEarned(tObject.getGradeTypicallyEarned());

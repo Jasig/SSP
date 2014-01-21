@@ -24,6 +24,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
         authenticatedPerson: 'authenticatedPerson',
         appEventsController: 'appEventsController',
         challengesStore: 'challengesStore',
+        completedItemStore: 'completedItemStore',
     	childCareArrangementsStore: 'childCareArrangementsStore',
     	citizenshipsStore: 'citizenshipsStore',
     	educationGoalsStore: 'educationGoalsStore',
@@ -159,6 +160,10 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	            		autoScroll: true,
 	            		hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_CHALLENGE_TAB'),
 	            		items: [{xtype: 'studentintakechallenges'}]
+	        		},{
+	            		title: me.textStore.getValueByCode('intake.tab8.label'),
+	            		autoScroll: true,
+	            		items: [{xtype: 'studentintakechecklist'}]
 	        		}]
 		    })
 	    
@@ -200,6 +205,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var personEducationLevels = formData.data.personEducationLevels;
 		var personFundingSources = formData.data.personFundingSources;
 		var personChallenges = formData.data.personChallenges;
+		var personChecklist = formData.data.personChecklist;
 		var personEducationGoalId = "";
 		
 		var studentIntakeEducationPlansForm = Ext.getCmp('StudentIntakeEducationPlans');
@@ -214,9 +220,10 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var fundingSourcesAdditionalFieldsMap;
 		var challengeFormProps;
 		var challengesAdditionalFieldsMap;
+		var checklistFormProps;
 		var defaultLabelWidth;
-
 		// REFERENCE OBJECTS
+		var checklist = me.formUtils.alphaSortByField( formData.data.referenceData.checklist, 'name' );
 		var challenges = me.formUtils.alphaSortByField( formData.data.referenceData.challenges, 'name' );
 		var educationGoals = me.formUtils.alphaSortByField( formData.data.referenceData.educationGoals, 'name' );
 		var educationLevels = me.formUtils.alphaSortByField( formData.data.referenceData.educationLevels, 'name' );
@@ -227,6 +234,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var militaryAffiliations = me.formUtils.alphaSortByField( formData.data.referenceData.militaryAffiliations, 'name' );
 		
 		me.challengesStore.loadData( challenges );
+		me.completedItemStore.loadData( checklist );
 		me.childCareArrangementsStore.loadData( formData.data.referenceData.childCareArrangements );
 		me.citizenshipsStore.loadData( formData.data.referenceData.citizenships );
 		me.educationGoalsStore.loadData( educationGoals );
@@ -426,6 +434,17 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
                 additionalFieldsMap: challengesAdditionalFieldsMap };
 		
 		me.formUtils.createForm( challengeFormProps );
+		
+		checklistFormProps = {
+				mainComponentType: 'checkbox',
+				formId: 'StudentIntakeChecklist', 
+                fieldSetTitle: me.textStore.getValueByCode('intake.tab8.label.checklist-question'),
+                itemsArr: checklist, 
+                selectedItemsArr: personChecklist, 
+                idFieldName: 'id', 
+                selectedIdFieldName: 'completedItemId'};
+		
+		me.formUtils.createForm( checklistFormProps );
 	},
 	
 	onSaveClick: function( button ) {
@@ -438,13 +457,16 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var educationLevelsForm = Ext.getCmp('StudentIntakeEducationLevels').getForm();
 		var fundingForm = Ext.getCmp('StudentIntakeFunding').getForm();
 		var challengesForm = Ext.getCmp('StudentIntakeChallenges').getForm();
-		
+		var checklistForm = Ext.getCmp('StudentIntakeChecklist').getForm();
+
 		var educationGoalId = "";
 		var educationGoalDescription = "";
 		var educationGoalFormValues = null;
 		var educationLevelFormValues = null;
 		var fundingFormValues = null;
 		var challengesFormValues = null;
+		var checklistFormValues = null;
+
 		
 		var studentIntakeFormModel = null;
 		var personId = "";
@@ -456,7 +478,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		             educationLevelsForm,
 		             educationGoalForm,
 		             fundingForm,
-		             challengesForm];
+		             challengesForm,
+		             checklistForm];
 
 		// validate and save the model
 		var validateResult = me.formUtils.validateForms( formsToValidate );
@@ -479,7 +502,9 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 				personEducationPlan: me.studentIntake.get('personEducationPlan').data,
 				personEducationLevels: [],
 				personFundingSources: [],
-				personChallenges: []
+				personChallenges: [],
+				personChecklist: []
+				
 			};
 						
 			// date saved as null is ok if using External Data Sync Routine
@@ -514,7 +539,11 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			intakeData.personFundingSources = formUtils.createTransferObjectsFromSelectedValues('fundingSourceId', fundingFormValues, personId);	
 			
 			challengesFormValues = challengesForm.getValues();
-			intakeData.personChallenges = formUtils.createTransferObjectsFromSelectedValues('challengeId', challengesFormValues, personId);			
+			intakeData.personChallenges = formUtils.createTransferObjectsFromSelectedValues('challengeId', challengesFormValues, personId);	
+			
+			checklistFormValues = checklistForm.getValues();
+			intakeData.personChecklist = formUtils.createTransferObjectsFromSelectedValues('completedItemId', checklistFormValues, personId);			
+
 
 			// display loader
 			me.getView().setLoading( true );

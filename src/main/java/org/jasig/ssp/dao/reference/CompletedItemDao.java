@@ -21,7 +21,7 @@ package org.jasig.ssp.dao.reference;
 import org.springframework.stereotype.Repository;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.reference.CompletedItems;
+import org.jasig.ssp.model.reference.CompletedItem;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -30,15 +30,15 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
  * Data access class for the MilitaryAffiliation reference entity.
  */
 @Repository
-public class CompletedItemsDao extends AbstractReferenceAuditableCrudDao<CompletedItems>
-		implements AuditableCrudDao<CompletedItems> {
+public class CompletedItemDao extends AbstractReferenceAuditableCrudDao<CompletedItem>
+		implements AuditableCrudDao<CompletedItem> {
 
-	public CompletedItemsDao() {
-		super(CompletedItems.class);
+	public CompletedItemDao() {
+		super(CompletedItem.class);
 	}
 	
 	@Override
-	public PagingWrapper<CompletedItems> getAll(
+	public PagingWrapper<CompletedItem> getAll(
 			final SortingAndPaging sAndP) {
 		SortingAndPaging sp = sAndP;
 		if (sp == null) {

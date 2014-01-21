@@ -23,9 +23,11 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.jasig.ssp.model.PersonCompletedItem;
 import org.jasig.ssp.model.tool.IntakeForm;
 import org.jasig.ssp.transferobject.PersonChallengeTO;
 import org.jasig.ssp.transferobject.PersonDemographicsTO;
+import org.jasig.ssp.transferobject.PersonCompletedItemTO;
 import org.jasig.ssp.transferobject.PersonEducationGoalTO;
 import org.jasig.ssp.transferobject.PersonEducationLevelTO;
 import org.jasig.ssp.transferobject.PersonEducationPlanTO;
@@ -58,6 +60,9 @@ public class IntakeFormTO implements TransferObject<IntakeForm> { // NOPMD
 
 	@Valid
 	private List<PersonChallengeTO> personChallenges;
+	
+	@Valid
+	private List<PersonCompletedItemTO> personChecklist;
 
 	private Map<String, Object> referenceData;
 
@@ -99,7 +104,13 @@ public class IntakeFormTO implements TransferObject<IntakeForm> { // NOPMD
 				personEducationPlan.setPersonId(person.getId());
 			}
 		}
-
+		if (model.getPerson().getCompletedItems() != null 
+				&& !model.getPerson().getCompletedItems().isEmpty()) {
+			personChecklist = PersonCompletedItemTO.toTOList(model.getPerson().getCompletedItems());
+			for (PersonCompletedItemTO completedItem : getPersonChecklist()) {
+				completedItem.setPersonId(model.getPerson().getId());
+			}
+		}
 		if ((model.getPerson().getEducationLevels() != null)
 				&& !(model.getPerson().getEducationLevels().isEmpty())) {
 			personEducationLevels = PersonEducationLevelTO
@@ -188,4 +199,13 @@ public class IntakeFormTO implements TransferObject<IntakeForm> { // NOPMD
 	public void setReferenceData(final Map<String, Object> referenceData) {
 		this.referenceData = referenceData;
 	}
+
+	public List<PersonCompletedItemTO> getPersonChecklist() {
+		return personChecklist;
+	}
+
+	public void setPersonChecklist(List<PersonCompletedItemTO> personChecklist) {
+		this.personChecklist = personChecklist;
+	}
 }
+
