@@ -38,17 +38,27 @@ public class ExternalStudentFinancialAidAwardTermDao extends
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<ExternalStudentFinancialAidAwardTerm> getStudentFinancialAidAwardsBySchoolId(String schoolId){
-		Criteria criteria = createCriteria();
-		criteria.add(Restrictions.eq("schoolId", schoolId));
-		return (List<ExternalStudentFinancialAidAwardTerm>)criteria.list();
-	}
-	
 	public List<ExternalStudentFinancialAidAwardTerm> gettStudentFinancialAidAwardsBySchoolIdTermCode(String schoolId, String termCode){
 		Criteria criteria = createCriteria();
 		criteria.add(Restrictions.eq("schoolId", schoolId));
 		criteria.add(Restrictions.eq("termCode", termCode));
 		return (List<ExternalStudentFinancialAidAwardTerm>)criteria.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ExternalStudentFinancialAidAwardTerm> getStudentFinancialAidAwardsBySchoolId(String schoolId){
+		Query criteria = createHqlQuery("SELECT faAward.schoolId as faAward_schoolId, " +
+				"faAward.accepted as faAward_accepted, " +
+				"faAward.termCode as faAward_termCode " +
+				"FROM ExternalStudentFinancialAidAwardTerm as faAward, Term as faAwardTerm " +
+				"WHERE faAward.schoolId = :schoolId AND faAward.termCode = faAwardTerm.code " +
+				"ORDER BY faAwardTerm.startDate DESC");
+		criteria.setParameter("schoolId", schoolId);
+		criteria.setResultTransformer(
+				new NamespacedAliasToBeanResultTransformer(
+						ExternalStudentFinancialAidAwardTerm.class, "faAward_"));
+		return (List<ExternalStudentFinancialAidAwardTerm>)criteria.list();
+
 	}
 	
 }

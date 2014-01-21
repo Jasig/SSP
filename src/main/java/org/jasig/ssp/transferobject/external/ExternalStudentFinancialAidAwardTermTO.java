@@ -61,7 +61,7 @@ public class ExternalStudentFinancialAidAwardTermTO implements Serializable,
 	private String accepted;
 	
 	private String termCode;
-
+	
 	/**
 	 * @return the schoolId
 	 */

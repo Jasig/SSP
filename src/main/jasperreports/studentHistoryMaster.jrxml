@@ -1,24 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Licensed to Jasig under one or more contributor license
-    agreements. See the NOTICE file distributed with this work
-    for additional information regarding copyright ownership.
-    Jasig licenses this file to you under the Apache License,
-    Version 2.0 (the "License"); you may not use this file
-    except in compliance with the License. You may obtain a
-    copy of the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on
-    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations
-    under the License.
-
--->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="studentActionPlan" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aac79acd-053b-4b36-bb85-9b85200e4ec8">
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
@@ -26,9 +6,9 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
-	<property name="ireport.zoom" value="5.0"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="933"/>
+	<property name="ireport.y" value="608"/>
 	<parameter name="studentTO" class="org.jasig.ssp.transferobject.PersonTO"/>
 	<parameter name="reportDate" class="java.lang.String"/>
 	<parameter name="studentRecordTO" class="org.jasig.ssp.transferobject.external.ExternalStudentRecordsLiteTO"/>
@@ -405,7 +385,7 @@
 				<textFieldExpression><![CDATA[$P{studentPlanTO}.getOwnerName()]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="32" splitType="Stretch">
+		<band height="41" splitType="Stretch">
 			<printWhenExpression><![CDATA[$V{PAGE_NUMBER}==1]]></printWhenExpression>
 			<staticText>
 				<reportElement uuid="cb94434f-856a-41cf-ab68-07c348953f0b" x="1" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
@@ -427,6 +407,68 @@
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{studentTO}.getServiceReasons())]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/sessionDetails_subsubreport.jasper"]]></subreportExpression>
 			</subreport>
+		</band>
+		<band height="80">
+			<staticText>
+				<reportElement uuid="cb94434f-856a-41cf-ab68-07c348953f0b" x="1" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<text><![CDATA[FA File Status:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cb94434f-856a-41cf-ab68-07c348953f0b" x="273" y="20" width="138" height="20" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<text><![CDATA[FA Award (terms):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cb94434f-856a-41cf-ab68-07c348953f0b" x="1" y="20" width="100" height="20" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<text><![CDATA[FA Accepted:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cb94434f-856a-41cf-ab68-07c348953f0b" x="273" y="0" width="138" height="20" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<text><![CDATA[SAP Code:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cb94434f-856a-41cf-ab68-07c348953f0b" x="1" y="40" width="100" height="20" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<text><![CDATA[Remaining Terms:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a3c2a285-6332-46c4-8006-ba15ad8ec823" x="101" y="0" width="160" height="20" isPrintWhenDetailOverflows="true">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{studentRecordTO}.getFinancialAid().getFinancialAidFileStatus()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement uuid="a3c2a285-6332-46c4-8006-ba15ad8ec823" x="101" y="20" width="160" height="20" isPrintWhenDetailOverflows="true">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{studentRecordTO}.getFinancialAidAcceptedTermsOutput()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement uuid="a3c2a285-6332-46c4-8006-ba15ad8ec823" x="411" y="0" width="160" height="20" isPrintWhenDetailOverflows="true">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{studentRecordTO}.getFinancialAid().getSapStatusCode()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement uuid="a3c2a285-6332-46c4-8006-ba15ad8ec823" x="413" y="20" width="160" height="20" isPrintWhenDetailOverflows="true">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{studentRecordTO}.getAllFinancialAidTermsOutput()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a3c2a285-6332-46c4-8006-ba15ad8ec823" x="100" y="40" width="160" height="20" isPrintWhenDetailOverflows="true">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{studentRecordTO}.getFinancialAid().getTermsLeft()]]></textFieldExpression>
+			</textField>
 		</band>
 		<band height="33">
 			<printWhenExpression><![CDATA[$V{PAGE_NUMBER}==1]]></printWhenExpression>
@@ -496,7 +538,7 @@
 				<subreportExpression><![CDATA["reports/earlyAlertHistory_subreport.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
-		<band height="22">
+		<band height="16">
 			<rectangle>
 				<reportElement uuid="942aff52-9d2c-4551-8098-69343f0d5370" x="0" y="10" width="572" height="2" backcolor="#7E7979"/>
 			</rectangle>

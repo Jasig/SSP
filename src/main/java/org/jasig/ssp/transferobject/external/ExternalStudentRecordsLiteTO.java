@@ -143,5 +143,36 @@ public class ExternalStudentRecordsLiteTO implements ExternalDataTO<ExternalStud
 			List<ExternalStudentFinancialAidFileTO> financialAidFiles) {
 		this.financialAidFiles = financialAidFiles;
 	}
+	
+	public String getAllFinancialAidTermsOutput(){
+		StringBuilder output = new StringBuilder("");
+		for(ExternalStudentFinancialAidAwardTermTO to:getFinancialAidAcceptedTerms()){
+			output.append(to.getTermCode())
+			.append(":").
+			append(to.getAccepted()).
+			append(", ");
+		}
+		if(output.length() > 2){
+			return output.substring(0, output.length() - 2);
+		}
+		return "";
+	}
 
+	
+	public String getFinancialAidAcceptedTermsOutput(){
+		StringBuilder output = new StringBuilder("");
+		String accepted = "Y";
+		for(ExternalStudentFinancialAidAwardTermTO to:getFinancialAidAcceptedTerms()){
+			if(to.getAccepted().equalsIgnoreCase(accepted)){
+				output.append(to.getTermCode())
+						.append(":").
+						append(to.getAccepted()).
+						append(", ");
+			}
+		}
+		if(output.length() > 2){
+			return output.substring(0, output.length() - 2);
+		}
+		return "";
+	}
 }

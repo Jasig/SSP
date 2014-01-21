@@ -33,6 +33,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
+
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.EarlyAlertTOFactory;
 import org.jasig.ssp.factory.JournalEntryTOFactory;
@@ -46,6 +47,8 @@ import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.*;
 import org.jasig.ssp.service.external.ExternalPersonPlanStatusService;
 import org.jasig.ssp.service.external.ExternalStudentAcademicProgramService;
+import org.jasig.ssp.service.external.ExternalStudentFinancialAidAwardTermService;
+import org.jasig.ssp.service.external.ExternalStudentFinancialAidFileService;
 import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.transferobject.*;
@@ -109,6 +112,10 @@ public class PersonHistoryReportController extends ReportBaseController {
     private transient ExternalStudentAcademicProgramService externalStudentAcademicProgramService;
     @Autowired
     private transient ExternalStudentFinancialAidService externalStudentFinancialAidService;
+	@Autowired
+	private transient ExternalStudentFinancialAidAwardTermService externalStudentFinancialAidAwardTermService;
+	@Autowired
+	private transient ExternalStudentFinancialAidFileService externalStudentFinancialAidFileService;
     @Autowired
     private transient ExternalPersonPlanStatusService planStatusService;
     @Autowired
@@ -163,6 +170,9 @@ public class PersonHistoryReportController extends ReportBaseController {
         record.setPrograms(externalStudentAcademicProgramService.getAcademicProgramsBySchoolId(schoolId));
         record.setGPA(externalStudentTranscriptService.getRecordsBySchoolId(schoolId));
         record.setFinancialAid(externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId));
+		record.setFinancialAidAcceptedTerms(externalStudentFinancialAidAwardTermService.getStudentFinancialAidAwardsBySchoolId(schoolId));
+		record.setFinancialAidFiles(externalStudentFinancialAidFileService.getStudentFinancialAidFilesBySchoolId(schoolId));
+
         final ExternalStudentRecordsLiteTO recordTO = new ExternalStudentRecordsLiteTO(record, null); //null because don't need balance owed
 
         //get current plan for student summary add projected graduation date as an additional parameter
