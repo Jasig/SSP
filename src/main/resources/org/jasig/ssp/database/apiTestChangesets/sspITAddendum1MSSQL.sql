@@ -17,43 +17,8 @@
 -- under the License.
 --
 
-/**
- * Licensed to Jasig under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Jasig licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a
- * copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
-
-
-/* ***THIS IS A COMPILATION SCRIPT FILE of ALL SCRIPTS RAN TO SETUP SSP TRAINING*** 
- *  It will work with a blank ssp database setup after liquibase has run.
- *        Version is rel-2-0-patches on Oct. 10th 2013.
- */
-
-SET statement_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SET check_function_bodies = false;
-SET client_min_messages = warning;
-
-SET search_path = public, pg_catalog;
-
-
 --
--- Deletes For SSP Default Data
+-- Deletes For SSP Data
 --
 DELETE FROM sap_status;
 DELETE FROM financial_aid_file;

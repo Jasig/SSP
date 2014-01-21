@@ -209,8 +209,5 @@ public class TagIT extends AbstractReferenceTest {
 
         referenceNegativeSupportedMethodTest(TAG_PATH, testNegativePostObject, testNegativeValidateObject);
     }
-
-    //TODO
-    /* Future: add test to test permissions as lower user (ie coach) this would test only post, put, delete
-      and be called here but found in abstract reference test */
 }
+

@@ -136,14 +136,14 @@ public class JournalStepIT extends AbstractReferenceTest {
         JOURNAL_STEP_DETAIL_FOR_TRANS.put("modifiedDate", getDefaultCreatedModifiedByDate());
         JOURNAL_STEP_DETAIL_FOR_TRANS.put("modifiedBy", getDefaultCreatedModifiedBy());
         JOURNAL_STEP_DETAIL_FOR_TRANS.put("objectStatus", "ACTIVE");
-        JOURNAL_STEP_DETAIL_FOR_TRANS.put("name", "Graduation Check");
+        JOURNAL_STEP_DETAIL_FOR_TRANS.put("name", "Graduation check");
         JOURNAL_STEP_DETAIL_FOR_TRANS.put("description", "Discuss the graduation process and do a graduation check " +
                 "with the student");
         JOURNAL_STEP_DETAIL_FOR_TRANS.put("sortOrder", 0);
 
         JOURNAL_STEP_DETAIL_TESTPOST_FOR_TRANS = new JSONObject();
         JOURNAL_STEP_DETAIL_TESTPOST_FOR_TRANS.put("id", "0a640a2a-409d-1271-8140-e5a8293001e2"); //id of FIN AID JDetail
-        JOURNAL_STEP_DETAIL_TESTPOST_FOR_TRANS.put("sortOrder", "5");
+        JOURNAL_STEP_DETAIL_TESTPOST_FOR_TRANS.put("sortOrder", 5);
 
         JOURNAL_STEP_DETAIL_POST_FOR_TRANS = new JSONObject();
         JOURNAL_STEP_DETAIL_POST_FOR_TRANS.put("id", "0a640a2a-409d-1271-8140-e5a8293001e2");
@@ -152,7 +152,7 @@ public class JournalStepIT extends AbstractReferenceTest {
         JOURNAL_STEP_DETAIL_POST_FOR_TRANS.put("modifiedDate", getDefaultCreatedModifiedByDate());
         JOURNAL_STEP_DETAIL_POST_FOR_TRANS.put("modifiedBy", getDefaultCreatedModifiedBy());
         JOURNAL_STEP_DETAIL_POST_FOR_TRANS.put("objectStatus", "ACTIVE");
-        JOURNAL_STEP_DETAIL_POST_FOR_TRANS.put("name", "FIN AID - Applying for Appeal ");
+        JOURNAL_STEP_DETAIL_POST_FOR_TRANS.put("name", "Financial aid applying for appeal ");
         JOURNAL_STEP_DETAIL_POST_FOR_TRANS.put("description", "Worked with the student on the FIN AID appeal process " +
                 "and discussed the options they have");
         JOURNAL_STEP_DETAIL_POST_FOR_TRANS.put("sortOrder", 0);

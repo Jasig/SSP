@@ -51,4 +51,12 @@
         </update>
     </changeSet>
 
+    <!-- Same problem here as above -->
+    <changeSet id="Normalize Disability Accommodation name" author="paul.spaude">
+        <update tableName="disability_accommodation">
+            <column name="name" value="Tape of a recorded lecture"/>
+            <where>id = 'f0ff3e53-bf45-421e-8bbf-c0ef8a2049b4'</where>
+        </update>
+    </changeSet>
+
 </databaseChangeLog>
