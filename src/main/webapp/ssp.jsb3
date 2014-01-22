@@ -143,6 +143,11 @@
                     "name": "RegistrationLoad.js",
                     "path": "/app/model/reference/"
                 },  
+                 {
+                    "clsName": "Ssp.model.reference.SapStatus",
+                    "name": "SapStatus.js",
+                    "path": "/app/model/reference/"
+                },  
                 {
                     "clsName": "Ssp.model.reference.EnrollmentStatus",
                     "name": "EnrollmentStatus.js",
@@ -317,6 +322,16 @@
                     "clsName": "Ssp.controller.tool.accommodation.AccommodationToolViewController",
                     "name": "AccommodationToolViewController.js",
                     "path": "/app/controller/tool/accommodation/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.SapStatuses",
+                    "name": "SapStatuses.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.ConfidentialityDisclosureAgreements",
+                    "name": "ConfidentialityDisclosureAgreements.js",
+                    "path": "/app/store/reference/"
                 },
                 {
                     "clsName": "Ssp.view.tools.accommodation.General",
@@ -1088,6 +1103,11 @@
                 {
                     "clsName": "Ssp.model.external.FinancialAid",
                     "name": "FinancialAid.js",
+                    "path": "/app/model/external/"
+                },
+                {
+                    "clsName": "Ssp.model.external.FinancialAidFileStatus",
+                    "name": "FinancialAidFileStatus.js",
                     "path": "/app/model/external/"
                 },
                 {
@@ -2260,6 +2280,11 @@
                 {
                     "clsName": "Ssp.model.reference.Ethnicity",
                     "name": "Ethnicity.js",
+                    "path": "/app/model/reference/"
+                },
+                 {
+                    "clsName": "Ssp.model.reference.FinancialAidFile",
+                    "name": "FinancialAidFile.js",
                     "path": "/app/model/reference/"
                 },
                 {
