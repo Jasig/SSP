@@ -30,7 +30,6 @@
 			</sqlCheck>
 			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
 			</sqlCheck>
-			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
 		</preConditions>
 		<dropView viewName="v_external_student_financial_aid" />
 		<addColumn tableName="external_student_financial_aid">
@@ -58,6 +57,7 @@
                 <constraints nullable="true" />
             </column>   
         </addColumn>
+        
 		<createView viewName="v_external_student_financial_aid">
 			select school_id as id,* from external_student_financial_aid
 		</createView>
