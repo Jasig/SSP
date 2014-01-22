@@ -35,7 +35,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
     	maritalStatusesStore: 'maritalStatusesStore',
     	militaryAffiliationsStore: 'militaryAffiliationsStore',
     	veteranStatusesStore: 'veteranStatusesStore',
-        textStore:'textStore'
+        textStore:'intakeTextStore'
     	
     },    
 	width: '100%',

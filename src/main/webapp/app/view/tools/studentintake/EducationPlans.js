@@ -26,7 +26,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
     inject: {
     	formUtils: 'formRendererUtils',
         studentStatusesStore: 'studentStatusesStore',
-        textStore:'textStore'
+        textStore:'intakeTextStore'
     },
 	width: '100%',
     height: '100%',

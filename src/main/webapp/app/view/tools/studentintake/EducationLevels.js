@@ -40,7 +40,34 @@ Ext.define('Ssp.view.tools.studentintake.EducationLevels', {
 				    defaults: {
 				        anchor: '100%'
 				    },
-				    defaultType: 'checkbox'
+				    defaultType: 'checkbox',
+				    dockedItems: [{
+			       	    xtype: 'toolbar',
+					    items: [{
+	  		                   text: 'Check All',
+	  		                   xtype: 'button',
+	  		                   width: 75,
+	  		                   itemId: 'checkButton',
+	  		                   handler: function () {
+	  		                   var checkboxes = Ext.getCmp('StudentIntakeEducationLevels').query('[isCheckbox]');
+	  		                   Ext.Array.each(checkboxes, function (checkbox) {
+	  		                	   	  checkbox.setValue(1);
+	  		                   		})
+					    }}, 
+	 		            {
+	  	  		                   text: 'Clear All',
+	  	  		                   xtype: 'button',
+	  	  		                   width: 75,
+	  	  		                   itemId: 'clearButton',
+	  	  		                   handler: function () {
+	  	  		                   var checkboxes = Ext.getCmp('StudentIntakeEducationLevels').query('[isCheckbox]');
+	  	  		                   Ext.Array.each(checkboxes, function (checkbox) {
+	  	  		                       checkbox.setValue(0);
+	  	  		                   });
+	  		               }
+					    }]
+					    }
+					    ]				    
 				});
 		
 		return this.callParent(arguments);

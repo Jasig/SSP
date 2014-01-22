@@ -46,7 +46,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     	veteranStatusesStore: 'veteranStatusesStore',
     	registrationLoadsStore: 'registrationLoadsStore',
     	courseworkHoursStore:'courseworkHoursStore',
-    	textStore:'textStore'
+    	textStore:'intakeTextStore'
     }, 
     config: {
     	studentIntakeForm: null
@@ -411,6 +411,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
                 itemsArr: fundingSources, 
                 selectedItemsArr: personFundingSources, 
                 idFieldName: 'id', 
+                selectAllButton: true,
                 selectedIdFieldName: 'fundingSourceId',
                 additionalFieldsMap: fundingSourcesAdditionalFieldsMap };
 		
