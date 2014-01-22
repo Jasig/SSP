@@ -86,10 +86,30 @@ public class MessageTemplateServiceImpl extends
 		return configService.getByNameNull("serverExternalPath");
 	}
 
+	private String getInstitutionName() {
+		return configService.getByNameNull("inst_name");
+	}
+	
+	private String getInstitutionHomeUrl() {
+		return configService.getByNameNull("inst_home_url");
+	}
+	
+	private String getAppTitle() {
+		return configService.getByNameNull("app_title");
+	}
+	
+	private void setInstitutionValues(Map<String, Object> messageParams){
+		messageParams.put("institutionName", getInstitutionName());
+		messageParams.put("institutionHomeUrl", getInstitutionHomeUrl());
+		messageParams.put("applicationTitle", getAppTitle());
+		messageParams.put("linkToSSP", getServerExternalPath());
+	}
+	
 	private SubjectAndBody populateFromTemplate(
 			final UUID messageTemplateId,
 			final Map<String, Object> templateParameters) {
 		try {
+			setInstitutionValues(templateParameters);
 			final MessageTemplate messageTemplate = dao.get(messageTemplateId);
 
 			final String subject = velocityTemplateService
@@ -122,7 +142,6 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("message", body);
 		messageParams.put("student", student);
 		messageParams.put("fullName", student.getFullName());
-
 		return populateFromTemplate(MessageTemplate.CONTACT_COACH_ID,
 				messageParams);
 	}
@@ -132,7 +151,6 @@ public class MessageTemplateServiceImpl extends
 		final Map<String, Object> messageParams = new HashMap<String, Object>();
 		messageParams.put("task", task);
 		messageParams.put("dueDateFormatted", formatDate(task.getDueDate()));
-
 		return populateFromTemplate(MessageTemplate.ACTION_PLAN_STEP_ID,
 				messageParams);
 	}
@@ -142,7 +160,6 @@ public class MessageTemplateServiceImpl extends
 		final Map<String, Object> messageParams = new HashMap<String, Object>();
 		messageParams.put("task", task);
 		messageParams.put("dueDateFormatted", formatDate(task.getDueDate()));
-
 		return populateFromTemplate(MessageTemplate.CUSTOM_ACTION_PLAN_TASK_ID,
 				messageParams);
 	}
@@ -156,7 +173,6 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("goalTOs", goalTOs);
 		messageParams.put("student", student);
 		messageParams.put("fullName", student.getFullName());
-
 		return populateFromTemplate(MessageTemplate.ACTION_PLAN_EMAIL_ID,
 				messageParams);
 	}
@@ -168,7 +184,6 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("taskName", task.getName());
 		messageParams.put("student", task.getPerson());
 		messageParams.put("fullName", task.getPerson().getFullName());
-
 		// fix links in description
 		final String linkedDescription = task.getDescription()
 				.replaceAll(
@@ -193,7 +208,6 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("termToRepresentEarlyAlert",
 				termToRepresentEarlyAlert);
 		messageParams.put("earlyAlert", earlyAlert);
-
 		return populateFromTemplate(
 				MessageTemplate.JOURNAL_NOTE_FOR_EARLY_ALERT_RESPONSE_ID,
 				messageParams);
