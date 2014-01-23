@@ -1111,6 +1111,11 @@
                     "path": "/app/model/external/"
                 },
                 {
+                    "clsName": "Ssp.model.external.FinancialAidAward",
+                    "name": "FinancialAidAward.js",
+                    "path": "/app/model/external/"
+                },
+                {
                     "clsName": "Ssp.model.external.Course",
                     "name": "Course.js",
                     "path": "/app/model/external/"

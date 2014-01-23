@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.controller.tool.profile.FinancialAidFileViewController', {
+Ext.define('Ssp.controller.tool.profile.FinancialAidAwardViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
@@ -84,12 +84,12 @@ Ext.define('Ssp.controller.tool.profile.FinancialAidFileViewController', {
             me.getView().setLoading(false);
         }
     },
-
+    
     getTranscriptSuccess: function(serviceResponses) {
         var me = this;
 
 		var view = me.getView();
-	    var grid =	Ext.ComponentQuery.query("financialAidFiles");
+	    var grid =	Ext.ComponentQuery.query("financialaidawards");
 	    if(grid && grid.length > 0)
 			grid = grid[0];
 			
@@ -98,25 +98,15 @@ Ext.define('Ssp.controller.tool.profile.FinancialAidFileViewController', {
 
         var transcript = new Ssp.model.Transcript(transcriptResponse);
 
-		var financialAidFilesStatuses = transcript.get('financialAidFiles');
+		var financialAidAwards = transcript.get('financialAidAcceptedTerms');
 		
-		var storeStatuses = grid.getStore();
-		storeStatuses.removeAll();
-		if(financialAidFilesStatuses){
-			for(i = 0; i < financialAidFilesStatuses.length; i++){
-				var fileStatus = Ext.create('Ssp.model.external.FinancialAidFileStatus');
-				var status = financialAidFilesStatuses[i];
-				var file = me.financialAidFilesStore.findRecord('code', status.financialFileCode);
-				fileStatus.set("code", status.financialFileCode);
-				fileStatus.set("status", status.fileStatus);
-				if(file){
-					fileStatus.set("description", file.get('description'));
-					fileStatus.set("name", file.get('name'));
-				}
-				fileStatus.commit();
-				storeStatuses.add(fileStatus);
-			}
-		}	
+		var storeFAAwards = grid.getStore();
+		storeFAAwards.removeAll();
+		for(var i = 0; i < financialAidAwards.length; i++){
+			var faAward = Ext.create('Ssp.model.external.FinancialAidAward');
+			faAward.populateFromExternalData(financialAidAwards[i]);
+			storeFAAwards.add(faAward);
+		}
     },
 
     getTranscriptFailure: function() {

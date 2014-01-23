@@ -180,23 +180,20 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
 	        me.getGpa20BHrsNeededField().setValue(me.handleNull(financialAid.gpa20BHrsNeeded));
 			me.getNeededFor67PtcCompletionField().setValue(me.handleNull(financialAid.neededFor67PtcCompletion));
 			
-			me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP Status:   </span><u>' + me.handleNull(financialAid.sapStatusCode) + '</u>', false);
-			me.sapStatusCode = financialAid.sapStatusCode;
+						me.sapStatusCode = financialAid.sapStatusCode;
 			me.getEligibleFederalAidField().setValue(me.handleNull(financialAid.eligibleFederalAid));
 			me.getTermsLeftField().setValue(me.handleNull(financialAid.termsLeft));
 			me.getInstitutionalLoanAmountField().setValue(me.handleNull(financialAid.institutionalLoanAmount));
-			me.getFinancialAidFileStatusField().setText('<span style="color:#15428B">FA File:   </span><u>' + me.handleNull(financialAid.financialAidFileStatus) + '</u>', false);
+			me.getFinancialAidFileStatusField().setValue(me.handleNull(financialAid.financialAidFileStatus));
+			me.getSapStatusCodeField().setValue( me.handleNull(financialAid.sapStatusCode));
 
         }
-        
+       
         var financialAidAcceptedTerms = transcript.get('financialAidAcceptedTerms');
-        if (financialAidAcceptedTerms) {
-        	var financialAidAcceptedTermsString = "";
-        	for(i = 0; i < financialAidAcceptedTerms.length ; i++){
-        		var financialAidAcceptedTerm = financialAidAcceptedTerms[i];
-        		financialAidAcceptedTermsString += financialAidAcceptedTerm.termCode + '=' + financialAidAcceptedTerm.accepted  + ', ';
-        	}
-        	me.getFinancialAidAcceptedTermsField().setValue(financialAidAcceptedTermsString.slice(0,-2));
+        if (financialAidAcceptedTerms && financialAidAcceptedTerms.length > 0) {
+        	var model = Ext.create("Ssp.model.external.FinancialAidAward");
+            model.populateFromExternalData(financialAidAwards[0]);
+            me.getFinancialAidAcceptedTermsField().setValue(model.get("termCode") + " (" +  model.get("acceptedLong") + ")");
         }
 
 		me.financialAidFilesStatuses = transcript.get('financialAidFiles');

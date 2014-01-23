@@ -16,15 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.tools.profile.FinancialAidFiles', {
+Ext.define('Ssp.view.tools.profile.FinancialAidAwards', {
     extend: 'Ext.grid.Panel',
-    alias: 'widget.financialAidFiles',
+    alias: 'widget.financialaidawards',
     mixins: ['Deft.mixin.Injectable'],
     store:Ext.create('Ext.data.Store', {
-    	fields: [{name: 'code', type: 'string'},
-                 {name: 'description', type: 'string'},
-                 {name: 'status', type: 'string'},
-                 {name: 'name', type: 'string'}]
+    	fields: [{name: 'accepted', type: 'string'},
+                 {name: 'schoolId', type: 'string'},
+                 {name: 'termCode', type: 'string'}]
 	}),
     width: '100%',
     height: '100%',
@@ -34,26 +33,17 @@ Ext.define('Ssp.view.tools.profile.FinancialAidFiles', {
             queryMode:'local',
             store: me.store,
             autoScroll: true,
+ 			markDirty: false,
             columns: [{
             	xtype: 'gridcolumn',
-                text: 'File Code',
-                dataIndex: 'code',
+                text: 'Term',
+                dataIndex: 'termCode',
                 flex: .2
             },{
             	xtype: 'gridcolumn',
-            	text: 'File Name',
-                dataIndex: 'name',
+            	text: 'Accepted',
+                dataIndex: 'acceptedLong',
                 flex: .2
-            },{
-            	xtype: 'gridcolumn',
-            	text: 'File Description',
-                dataIndex: 'description',
-                flex: .5
-            },{
-            	xtype: 'gridcolumn',
-                text: 'File Status',
-                dataIndex: 'status',
-                flex: .1
             }]
         });
         

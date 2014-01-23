@@ -233,12 +233,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         itemId: 'eligibleFederalAid',
 						hidden:true,
                         labelWidth: 60
-                    },	{
-	                        fieldLabel: 'FA Award',
-	                        name: 'currentYearFinancialAidAward',
-	                        itemId: 'currentYearFinancialAidAward'
-
-	                    },{
+                    },{
 	                        name: 'financialAidFileStatusDetails',
 	                        itemId: 'financialAidFileStatusDetails',
 	                        xtype:'label',
@@ -247,17 +242,24 @@ Ext.define('Ssp.view.tools.profile.Details', {
 	                        	if(view && view.length > 0)
 			                		view[0].getController().onShowFinancialAidFileStatuses();
 	                        } } 
+	                    },{
+	                        xtype: 'tbspacer',
+	                        height: '10'
 	                    },
                     {
-	                    	fieldLabel: 'FA Accepted',
-							xtype     : 'textareafield',
-							grow      : true,
-							width: 320,
-							style: 'border: none;',
+	                    	xtype:'label',
 	                        name: 'financialAidAcceptedTerms',
 	                        itemId: 'financialAidAcceptedTerms',
-	                        labelWidth: 100
+	                        listeners: { element: 'el', click: function () { 
+	                        	var view = Ext.ComponentQuery.query("#profileDetails");
+	                        	if(view && view.length > 0)
+			                		view[0].getController().onShowFinancialAidAwards();
+	                        } }
+	                        
                     },		{
+                        xtype: 'tbspacer',
+                        height: '10'
+                    },{
 	                        fieldLabel: 'FA Amount',
 	                        name: 'financialAidRemaining',
 	                        itemId: 'financialAidRemaining'
@@ -280,12 +282,9 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         itemId: 'termsLeft',
                         labelWidth: 120
                     },{
-                        fieldLabel: 'SAP',
-                        name: 'sapStatus',
-                        itemId: 'sapStatus',
-                        labelWidth: 15,
-                        hidden:true
-                    }	, {
+                        xtype: 'tbspacer',
+                        height: '10'
+                    }, {
                         name: 'sapStatusCode',
                         itemId: 'sapStatusCode',
                         xtype: 'label',

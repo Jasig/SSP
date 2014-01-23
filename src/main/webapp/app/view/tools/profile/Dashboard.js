@@ -173,11 +173,14 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         xtype: 'tbspacer',
                         height: '10'
                     },{
-                        fieldLabel: 'FA Award',
+                        fieldLabel: 'F1',
                         name: 'f1Status',
                         itemId: 'f1Status',
                         labelWidth: 60
-                    },{
+                    }	,{
+	                        xtype: 'tbspacer',
+	                        height: '10'
+	                    },{
                     name: 'financialAidFileStatus',
                     itemId: 'financialAidFileStatus',
                     xtype:'label',
@@ -186,17 +189,11 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
 						if(view && view.length > 0)
                     		view[0].getController().onShowFinancialAidFileStatuses();
                     } } 
-                },
+                }	,{
+                        xtype: 'tbspacer',
+                        height: '10'
+                    },
                 {
-                	fieldLabel: 'FA Accepted',
-					xtype     : 'textareafield',
-					grow      : true,
-					width: 320,
-					style: 'border: none;',
-                    name: 'financialAidAcceptedTerms',
-                    itemId: 'financialAidAcceptedTerms',
-                    labelWidth: 100
-                }, {
                 name: 'sapStatusCode',
                 itemId: 'sapStatusCode',
                 xtype: 'label',
@@ -205,7 +202,20 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                 	if(view && view.length > 0)
                 		view[0].getController().onShowSAPCodeInfo(me.target.outerText);
                 } } 
-            }, {
+            }	,{
+                    xtype: 'tbspacer',
+                    height: '10'
+                }, 	{
+                	text: 'FA Awarded:',
+                    name: 'financialAidAcceptedTerms',
+                    itemId: 'financialAidAcceptedTerms',
+                    xtype:'label',
+                    listeners: { element: 'el', click: function () { 
+                    	var view = Ext.ComponentQuery.query("#profileDetails");
+						if(view && view.length > 0)
+                    		view[0].getController().onShowFinancialAidAwards();
+                    } } 
+                },{
                         xtype: 'tbspacer',
                         height: '10'
                     }

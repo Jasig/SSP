@@ -68,18 +68,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         studentIntakeCompletedField: '#studentIntakeCompleted',
         
         balanceOwedField: '#balanceOwed',
-        sapStatusCodeField: {
-	           selector: '#sapStatusCode',
-			   listeners: {
-		            click: 'onShowSAPCodeInfo'
-		        }
-	    },
-        financialAidFileStatusField: {
-	           selector: '#financialAidFileStatus',
-			   listeners: {
-		            click: 'onShowFinancialAidFileStatuses'
-		        }
-	    },
+        sapStatusCodeField: '#sapStatusCode',
+        financialAidFileStatusField: '#financialAidFileStatus',
 		financialAidAcceptedTermsField: '#financialAidAcceptedTerms',
         
 		'serviceReasonEdit': {
@@ -320,18 +310,18 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 			me.getFinancialAidFileStatusField().setText( '<span style="color:#15428B">FA File:  </span><u>' + me.handleNull(financialAid.financialAidFileStatus) + '</u>', false);
 
         }
-        var financialAidAcceptedTerms = transcript.get('financialAidAcceptedTerms');
-        if (financialAidAcceptedTerms) {
-        	var financialAidAcceptedTermsString = "";
-        	for(i = 0; i < financialAidAcceptedTerms.length ; i++){
-        		var financialAidAcceptedTerm = financialAidAcceptedTerms[i];
-        		financialAidAcceptedTermsString += financialAidAcceptedTerm.termCode + '=' + financialAidAcceptedTerm.accepted  + ', ';
-        	}
-        	me.getFinancialAidAcceptedTermsField().setValue(financialAidAcceptedTermsString.slice(0,-2));
+        me.financialAidAwards = transcript.get('financialAidAcceptedTerms');
+        if ( me.financialAidAwards  && me.financialAidAwards.length > 0) { 
+        	var model = Ext.create("Ssp.model.external.FinancialAidAward");
+        	model.populateFromExternalData(me.financialAidAwards[0]);
+        	me.getFinancialAidAcceptedTermsField().setText('<span style="color:#15428B">FA Awarded:   </span><u>' + model.get("termCode") + " (" +  model.get("acceptedLong") + ")</u>", false);
         }
+        
 
 		me.financialAidFilesStatuses = transcript.get('financialAidFiles');
     },
+    
+    
 
     getTranscriptFailure: function() {
         // nothing to do
@@ -409,20 +399,5 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         
         var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
         
-    },
-    
-    onShowSAPCodeInfo: function(){
-    	var me=this;
-		if(me.sapCodeInfoPopup == null || me.sapCodeInfoPopup.isDestroyed)
-       		me.sapCodeInfoPopup = Ext.create('Ssp.view.tools.profile.SapStatus',{hidden:true,code:me.sapStatusCode});
-		me.sapCodeInfoPopup.show();
-    },
-    
-    onShowFinancialAidFileStatuses: function(){
-    	var me=this;
-		if(me.financialAidFilePopup == null || me.financialAidFilePopup.isDestroyed)
-       		me.financialAidFilePopup = Ext.create('Ssp.view.tools.profile.FinancialAidFileViewer',{hidden:true,financialAidFilesStatuses:me.financialAidFilesStatuses});
-		me.financialAidFilePopup.show();
     }
-	
 });

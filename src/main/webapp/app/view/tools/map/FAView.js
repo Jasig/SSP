@@ -197,11 +197,7 @@ Ext.define('Ssp.view.tools.map.FAView', {
                     
                     },	
                     {
-                        fieldLabel: 'FA Accepted',
-						xtype     : 'textareafield',
-						grow      : true,
-						width: 320,
-						style: 'border: none;',
+                        fieldLabel: 'FA Awarded',
                         name: 'financialAidAcceptedTerms',
                         itemId: 'financialAidAcceptedTerms',
                         labelWidth: 100
@@ -225,23 +221,11 @@ Ext.define('Ssp.view.tools.map.FAView', {
                     }, {
                         name: 'sapStatusCodeDetails',
                         itemId: 'sapStatusCodeDetails',
-                        xtype: 'label',
-                        text:'N/A',
-                        listeners: { element: 'el', click: function (me) { 
-                        	var view = Ext.ComponentQuery.query("#financialAidMapPopup");
-                        	if(view && view.length > 0)
-		                		view[0].getController().onShowSAPCodeInfo(me.target.outerText);
-                        } } 
+                        fieldLabel:'SAP'
                     },{
                         name: 'financialAidFileStatusDetails',
                         itemId: 'financialAidFileStatusDetails',
-                        xtype:'label',
-                        text:'N/A',
-                        listeners: { element: 'el', click: function () { 
-                        	var view = Ext.ComponentQuery.query("#financialAidMapPopup");
-                        	if(view && view.length > 0)
-		                		view[0].getController().onShowFinancialAidFileStatuses();
-                        } } 
+                        fieldLabel:'FA File'
                     }	,{
 	                        fieldLabel: 'Eligible Fed Aid',
 	                        name: 'eligibleFederalAid',
