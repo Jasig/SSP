@@ -23,7 +23,8 @@ Ext.define('Ssp.view.tools.profile.Details', {
     controller: 'Ssp.controller.tool.profile.ProfilePersonDetailsViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
-        sspConfig: 'sspConfig'
+        sspConfig: 'sspConfig',
+        textStore:'sspTextStore'
     },
     width: '100%',
     height: '100%',
@@ -117,22 +118,22 @@ Ext.define('Ssp.view.tools.profile.Details', {
                             },
                             
                             items: [{
-                                fieldLabel: 'Gender',
+                                fieldLabel: me.textStore.getValueByCode('ssp.label.gender'),
                                 name: 'gender',
                                 itemId: 'gender',
                                 labelWidth: 50
                             }, {
-                                fieldLabel: 'Marital Status',
+                                fieldLabel: me.textStore.getValueByCode('ssp.label.marital-status'),
                                 name: 'maritalStatus',
                                 itemId: 'maritalStatus',
                                 labelWidth: 80
                             }, {
-                                fieldLabel: 'Ethnicity',
+                                fieldLabel: me.textStore.getValueByCode('ssp.label.ethnicity'),
                                 name: 'ethnicity',
                                 itemId: 'ethnicity',
                                 labelWidth: 55
                             }, {
-								fieldLabel: 'Race',
+								fieldLabel: me.textStore.getValueByCode('ssp.label.race'),
 								name: 'race',
 								itemId: 'race',
 								labelWidth: 55

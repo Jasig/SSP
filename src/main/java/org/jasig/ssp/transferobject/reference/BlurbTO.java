@@ -33,8 +33,6 @@ public class BlurbTO extends AbstractReferenceTO<Blurb>
 
 	private String code;
 	
-	private String entityTypeCode;
-	
 	private String value;
 	
 	public BlurbTO() {
@@ -50,7 +48,6 @@ public class BlurbTO extends AbstractReferenceTO<Blurb>
 	public void from(Blurb model) {
 		super.from(model);
 		setCode(model.getCode());
-		setEntityTypeCode(model.getEntityTypeCode());
 		setValue(model.getValue());
 	};
 	
@@ -69,14 +66,6 @@ public class BlurbTO extends AbstractReferenceTO<Blurb>
 
 	public void setCode(String code) {
 		this.code = code;
-	}
-
-	public String getEntityTypeCode() {
-		return entityTypeCode;
-	}
-
-	public void setEntityTypeCode(String entityTypeCode) {
-		this.entityTypeCode = entityTypeCode;
 	}
 
 	public String getValue() {

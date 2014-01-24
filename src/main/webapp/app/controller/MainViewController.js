@@ -21,7 +21,8 @@ Ext.define('Ssp.controller.MainViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	appEventsController: 'appEventsController',
-        formUtils: 'formRendererUtils'
+        formUtils: 'formRendererUtils',
+        textStore:'sspTextStore'
     },
     config: {
     	personButtonsVisible: true
@@ -37,8 +38,10 @@ Ext.define('Ssp.controller.MainViewController', {
 	},
 	
 	init: function() {
-		this.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
-		this.displayStudentRecordView();
+		var me=this;
+		me.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
+		me.displayStudentRecordView();
+		me.textStore.load();
 		return this.callParent(arguments);
     },
 

@@ -15,7 +15,7 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */
+ */ 
 Ext.define('Ssp.store.admin.AdminTreeMenus', {
     extend: 'Ext.data.TreeStore',
     mixins: ['Deft.mixin.Injectable'],
@@ -781,15 +781,6 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         header: 'Description',
                         dataIndex: 'description',
                         flex: .20,
-                        field: {
-                            xtype: 'textfield'
-                        }
-                    },{
-                        header: 'Entity Type Code',
-                        rowEditable: false,
-                        dataIndex: 'entityTypeCode',
-                        flex: .20,
-                        filterable: true,
                         field: {
                             xtype: 'textfield'
                         }

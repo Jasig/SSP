@@ -31,7 +31,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         sspConfig: 'sspConfig',
         formUtils: 'formRendererUtils',
         sapStatusesStore: 'sapStatusesStore',
-        financialAidFilesStore: 'financialAidFilesStore'
+        financialAidFilesStore: 'financialAidFilesStore',
+        textStore:'sspTextStore'
     },
     
     control: {
@@ -200,13 +201,13 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         
         // load additional values
         nameField.setFieldLabel('');
-        nameField.setValue('<span style="color:#15428B">Name:  </span>' + firstLastName);
+        nameField.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.first-name')+':  </span>' + firstLastName);
         studentIdField.setFieldLabel('');
         studentIdField.setValue('<span style="color:#15428B">' + me.sspConfig.get('studentIdAlias') + ':  </span>' + me.person.get('schoolId'));
         primaryEmailAddressField.setFieldLabel('');
-        primaryEmailAddressField.setValue('<span style="color:#15428B">Email:  </span>' + me.person.get('primaryEmailAddress'));
+        primaryEmailAddressField.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.school-email')+':  </span>' + me.person.get('primaryEmailAddress'));
         birthDateField.setFieldLabel('');
-        birthDateField.setValue('<span style="color:#15428B">DOB:  </span>' + me.person.getFormattedBirthDate());
+        birthDateField.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.birthday')+':  </span>' + me.person.getFormattedBirthDate());
         studentTypeField.setFieldLabel('');
         studentTypeField.setValue('<span style="color:#15428B">Student Type:  </span>' + me.handleNull(me.person.getStudentTypeName()));
         photoUrlField.setSrc(me.person.getPhotoUrl());

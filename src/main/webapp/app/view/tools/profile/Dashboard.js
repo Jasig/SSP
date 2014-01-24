@@ -25,7 +25,7 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
         columnRendererUtils: 'columnRendererUtils',
         sspConfig: 'sspConfig',
         person: 'currentPerson',
-        
+        textStore:'sspTextStore'
     },
     width: '100%',
     height: '100%',

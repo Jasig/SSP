@@ -22,8 +22,12 @@ Ext.define('Ssp.view.person.EditPerson', {
 	mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.person.EditPersonViewController',
-	initComponent: function() {	
-		Ext.apply(this, 
+    inject: {
+        textStore:'sspTextStore'
+    },    
+	initComponent: function() {
+		var me=this;
+		Ext.apply(me, 
 				{
 					border: 0,	    
 				    fieldDefaults: {
@@ -38,7 +42,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			            defaultType: 'textfield',
 
 			       items: [{
-			        fieldLabel: 'First Name',
+			        fieldLabel: me.textStore.getValueByCode('ssp.label.first-name'),
 			        name: 'firstName',
 			        itemId: 'firstName',
 			        id: 'editPersonFirstName',
@@ -46,7 +50,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        allowBlank:false,
 			        width: 350
 			    },{
-			        fieldLabel: 'Middle Name',
+			        fieldLabel: me.textStore.getValueByCode('ssp.label.middle-name'),
 			        name: 'middleName',
 			        itemId: 'middleName',
 			        id: 'editPersonMiddleName',
@@ -54,7 +58,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        allowBlank:true,
 			        width: 350
 			    },{
-			        fieldLabel: 'Last Name',
+			        fieldLabel: me.textStore.getValueByCode('ssp.label.last-name'),
 			        name: 'lastName',
 			        itemId: 'lastName',
 			        id: 'editPersonLastName',
@@ -83,7 +87,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        allowBlank:false,
 			        width: 350
 			    },{
-			        fieldLabel: 'Home Phone',
+			        fieldLabel: me.textStore.getValueByCode('ssp.label.home-phone'),
 			        name: 'homePhone',
 			        emptyText: 'xxx-xxx-xxxx',
 			        maxLength: 25,
@@ -91,7 +95,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        itemId: 'homePhone',
 			        width: 350
 			    },{
-			        fieldLabel: 'Work Phone',
+			        fieldLabel: me.textStore.getValueByCode('ssp.label.work-phone'),
 			        name: 'workPhone',
 			        emptyText: 'xxx-xxx-xxxx',
 			        maxLength: 25,
@@ -99,7 +103,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        itemId: 'workPhone',
 			        width: 350
 			    },{
-			        fieldLabel: 'School Email',
+			        fieldLabel:  me.textStore.getValueByCode('ssp.label.school-email'),
 			        name: 'primaryEmailAddress',
 			        vtype:'email',
 			        maxLength: 100,
@@ -107,7 +111,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        itemId: 'primaryEmailAddress',
 			        width: 350
 			    },{
-			        fieldLabel: 'Alternate Email',
+			        fieldLabel:  me.textStore.getValueByCode('ssp.label.alternate-email'),
 			        name: 'secondaryEmailAddress',
 			        vtype:'email',
 			        maxLength: 100,

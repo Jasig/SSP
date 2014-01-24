@@ -39,7 +39,9 @@ Ext.define('Ssp.controller.SearchViewController', {
         searchService: 'searchService',
         searchStore: 'studentsSearchStore',
 		termsStore: 'termsStore',
-        sspConfig: 'sspConfig'
+        sspConfig: 'sspConfig',
+        textStore:'sspTextStore'
+        
     },
     
     control: {
@@ -127,7 +129,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	// ensure the selected person is not loaded twice
 		// once on load and once on selection
 	   	me.personLite.set('id','');
-		
+
 		if(me.termsStore.getTotalCount() == 0){
 				me.termsStore.addListener("load", me.onTermsStoreLoad, me);
 				me.termsStore.load();
@@ -298,10 +300,10 @@ Ext.define('Ssp.controller.SearchViewController', {
 		{
 			store = me.caseloadStore;
 			columns = [
-    	              { sortable: sortableColumns, header: 'First', dataIndex: 'firstName', flex: 1 },		        
-    	              { sortable: sortableColumns, header: 'MI', dataIndex: 'middleName', flex: .2},
-    	              { sortable: sortableColumns, header: 'Last', dataIndex: 'lastName', flex: 1},
-    	              { sortable: sortableColumns, header: 'DOB', dataIndex: 'birthDate', renderer: Ext.util.Format.dateRenderer('m/d/Y'), hidden: false, flex: 1},
+    	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.first-name'), dataIndex: 'firstName', flex: 1 },		        
+    	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.middle-name'), dataIndex: 'middleName', flex: .2},
+    	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.last-name'), dataIndex: 'lastName', flex: 1},
+    	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.birthday'), dataIndex: 'birthDate', renderer: Ext.util.Format.dateRenderer('m/d/Y'), hidden: false, flex: 1},
     	              { sortable: sortableColumns, header: 'Type', dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: .2},
     	              { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: 1},
     	              { sortable: sortableColumns, header: 'Alerts', dataIndex: 'numberOfEarlyAlerts', flex: .2}
@@ -312,9 +314,9 @@ Ext.define('Ssp.controller.SearchViewController', {
 			columns = [
     	              /* { header: "Photo", dataIndex: 'photoUrl', renderer: this.columnRendererUtils.renderPhotoIcon, flex: 50 }, */		        
     	              /*{ sortable: sortableColumns, header: 'Student', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderSearchStudentName, flex: .25 },*/
-    	              { sortable: sortableColumns, header: 'First', dataIndex: 'firstName', flex: .2},		        
-    	              { sortable: sortableColumns, header: 'MI', dataIndex: 'middleName', flex: .05},
-    	              { sortable: sortableColumns, header: 'Last', dataIndex: 'lastName', flex: .2},
+    	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.first-name'), dataIndex: 'firstName', flex: .2},		        
+    	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.middle-name'), dataIndex: 'middleName', flex: .05},
+    	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.last-name'), dataIndex: 'lastName', flex: .2},
     	              { sortable: sortableColumns, header: 'Coach', dataIndex: 'coach', renderer: me.columnRendererUtils.renderCoachName, flex: .25 },
     	              { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: .15},
     	              { sortable: sortableColumns, header: 'Status', dataIndex: 'currentProgramStatusName', flex: .15}

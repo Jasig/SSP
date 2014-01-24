@@ -52,11 +52,6 @@ public class Blurb
 	@NotNull
 	@NotEmpty
 	private String value;
-	
-	@Column(nullable = false)
-	@NotNull
-	@NotEmpty
-	private String entityTypeCode;		
 
 	/**
 	 * Constructor
@@ -80,17 +75,6 @@ public class Blurb
 	public void setCode(String code) {
 		this.code = code;
 	}
-
-
-	public String getEntityTypeCode() {
-		return entityTypeCode;
-	}
-
-
-	public void setEntityTypeCode(String entityTypeCode) {
-		this.entityTypeCode = entityTypeCode;
-	}
-
 
 	public String getValue() {
 		return value;

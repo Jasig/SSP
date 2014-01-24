@@ -52,7 +52,6 @@ public class BlurbTOFactoryImpl extends
 
 		model.setCode(tObject.getCode());
 		model.setDescription(tObject.getDescription());
-		model.setEntityTypeCode(tObject.getEntityTypeCode());
 		model.setValue(tObject.getValue());
 		
 		return model;

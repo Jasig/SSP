@@ -26,7 +26,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
     inject: {
     	columnRendererUtils: 'columnRendererUtils',
         statesStore: 'statesStore',
-        textStore:'intakeTextStore'
+        textStore:'sspTextStore'
     },
 	width: '100%',
     height: '100%',
@@ -71,25 +71,25 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				            }
 				        }
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.first-name'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.first-name'),
 				        name: 'firstName',
 				        itemId: 'firstName',
 				        maxLength: 50,
 				        allowBlank:false
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.middle-name'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.middle-name'),
 				        name: 'middleName',
 				        itemId: 'middleName',
 				        maxLength: 50,
 				        allowBlank:true
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.last-name'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.last-name'),
 				        name: 'lastName',
 				        itemId: 'lastName',
 				        maxLength: 50,
 				        allowBlank:false
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.student-id'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.student-id'),
 				        name: 'schoolId',
 				        minLength: 0,
 				        maxLength: 7,
@@ -97,42 +97,42 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        allowBlank:false
 				    },{
 				    	xtype: 'datefield',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.birthday'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.birthday'),
 				    	itemId: 'birthDate',
 				    	altFormats: 'm/d/Y|m-d-Y',
 				    	invalidText: '{0} is not a valid date - it must be in the format: 06/02/2012 or 06-02-2012',
 				        name: 'birthDate',
 				        allowBlank:false
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.home-phone'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.home-phone'),
 				        name: 'homePhone',
 				        emptyText: 'xxx-xxx-xxxx',
 				        maxLength: 25,
 				        allowBlank:true,
 				        itemId: 'homePhone' 
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.work-phone'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.work-phone'),
 				        name: 'workPhone',
 				        emptyText: 'xxx-xxx-xxxx',
 				        maxLength: 25,
 				        allowBlank:true,
 				        itemId: 'workPhone'
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.cell-phone'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.cell-phone'),
 				        name: 'cellPhone',
 				        emptyText: 'xxx-xxx-xxxx',
 				        maxLength: 25,
 				        allowBlank:true,
 				        itemId: 'cellPhone'
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.school-email'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.school-email'),
 				        name: 'primaryEmailAddress',
 				        vtype:'email',
 				        maxLength: 100,
 				        allowBlank:true,
 				        itemId: 'primaryEmailAddress'
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.alternate-email'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-email'),
 				        name: 'secondaryEmailAddress',
 				        vtype:'email',
 				        maxLength: 100,
@@ -143,23 +143,23 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    	fieldLabel: 'CURRENT ADDRESS'
 				    },{
 				    	xtype: 'displayfield',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.non-local'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.non-local'),
 				    	name: 'nonLocalAddress',
 				    	renderer: me.columnRendererUtils.renderFriendlyBoolean
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.address-1'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.address-1'),
 				        name: 'addressLine1',
 				        maxLength: 50,
 				        allowBlank:true,
 				        itemId: 'addressLine1'
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.address-2'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.address-2'),
 				        name: 'addressLine2',
 				        maxLength: 50,
 				        allowBlank:true,
 				        itemId: 'addressLine2'
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.city'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.city'),
 				        name: 'city',
 				        maxLength: 50,
 				        allowBlank:true,
@@ -167,7 +167,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    },{
 				        xtype: 'combobox',
 				        name: 'state',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.state'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.state'),
 				        emptyText: 'Select a State',
 				        store: me.statesStore,
 				        valueField: 'code',
@@ -184,7 +184,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 							}
 						}
 					},{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.zip'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.zip'),
 				        name: 'zipCode',
 				        maxLength: 10,
 				        allowBlank:true,
@@ -194,22 +194,22 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    	fieldLabel: 'ALTERNATE ADDRESS'
 				    },{
 				    	xtype:'checkbox',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.alt-in-use'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.alt-in-use'),
 				    	name: 'alternateAddressInUse'
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.address-1'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.address-1'),
 				        name: 'alternateAddressLine1',
 				        maxLength: 50,
 				        allowBlank:true,
 				        itemId: 'alternateAddressLine1'
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.address-2'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.address-2'),
 						name: 'alternateAddressLine2',
 						maxLength: 50,
 						allowBlank: true,
 						itemId: 'alternateAddressLine2'
 					},{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.city'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.city'),
 				        name: 'alternateAddressCity',
 				        maxLength: 50,
 				        allowBlank:true,
@@ -217,7 +217,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				    },{
 				        xtype: 'combobox',
 				        name: 'alternateAddressState',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.state'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.state'),
 				        emptyText: 'Select a State',
 				        store: me.statesStore,
 				        valueField: 'code',
@@ -234,13 +234,13 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 							}
 						}
 					},{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.zip'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.zip'),
 				        name: 'alternateAddressZipCode',
 				        maxLength: 10,
 				        allowBlank:true,
 				        itemId: 'alternateAddressZipCode'
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab1.label.country'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.country'),
 				        name: 'alternateAddressCountry',
 				        allowBlank:true,
 				        itemId: 'alternateAddressCountry',

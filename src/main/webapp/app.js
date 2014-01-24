@@ -1431,11 +1431,11 @@ Ext.onReady(function(){
 						},
 						singleton: true
 					},
-			    	intakeTextStore: 
+			    	sspTextStore: 
 			    	{
 						fn: function(){
 							return Ext.create('Ssp.store.reference.Texts', {
-								storeId: 'intakeTextStore',
+								storeId: 'sspTextStore',
 								extraParams: {status: "ALL", limit: -1, start: null}
 							});
 						},

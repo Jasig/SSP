@@ -31,7 +31,8 @@ Ext.define('Ssp.view.SearchForm',{
         financialAidSAPStatus: 'financialAidSAPStatus',
         mapStatusStore: 'mapStatusStore',
         currentlyRegisteredStore: 'currentlyRegisteredStore',
-        programsStore: 'programsStore'
+        programsStore: 'programsStore',
+        textStore:'sspTextStore'
     },
     collapsible: true,
 	layout: {
@@ -273,7 +274,7 @@ Ext.define('Ssp.view.SearchForm',{
                          	   labelAlign: 'left',
                          	   columnWidth: .55,
                          	   labelSeparator: '',
-                         	   fieldLabel: 'Birth Date: (mm/dd/ccyy)',
+                         	   fieldLabel: me.textStore.getValueByCode('ssp.label.birthday')+': (mm/dd/ccyy)',
                          	   name: 'birthDate',
  							   itemId: 'birthDate',
  							  onExpand: function() {

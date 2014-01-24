@@ -23,7 +23,8 @@ Ext.define('Ssp.view.tools.profile.Contact', {
     controller: 'Ssp.controller.tool.profile.ProfileContactViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
-        sspConfig: 'sspConfig'
+        sspConfig: 'sspConfig',
+        textStore:'sspTextStore'
     },
     width: '100%',
     height: '100%',
@@ -69,7 +70,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         },
                         flex: .40,
                         items: [{
-                            fieldLabel: 'Non-local',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.non-local'),
                             name: 'nonLocalAddress',
                             labelWidth: 80,
                             renderer: me.columnRendererUtils.renderFriendlyBoolean
@@ -91,13 +92,13 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                             anchor: '100%'
                         },
                         items: [{
-                            fieldLabel: 'Home Phone',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.home-phone'),
                             name: 'homePhone'
                         }, {
-                            fieldLabel: 'Mobile Phone',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.cell-phone'),
                             name: 'cellPhone'
                         }, {
-                            fieldLabel: 'School Official',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.school-email'),
                             name: 'primaryEmailAddress',
                             itemId: 'primaryEmailAddress',
                             listeners: {
@@ -108,10 +109,10 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                                 }
                             }
                         }, {
-                            fieldLabel: 'Secondary',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-email'),
                             name: 'secondaryEmailAddress'
                         }, {
-                            fieldLabel: 'DOB',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.birthday'),
                             name: 'birthDate',
                             itemId: 'birthDate',
                             height: '60'
@@ -159,7 +160,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                             buttonAlign: 'right',
                             action: 'edit'
                         }, {
-                            fieldLabel: 'In Use',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.alt-in-use'),
                             name: 'alternateAddressInUse',
                             labelWidth: 80,
                             itemId: 'alternateAddressInUse'

@@ -29,7 +29,7 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
 /**
- * Data access class for the MilitaryAffiliation reference entity.
+ * Data access class for the Blurb reference entity.
  */
 @Repository
 public class BlurbDao extends AbstractReferenceAuditableCrudDao<Blurb>

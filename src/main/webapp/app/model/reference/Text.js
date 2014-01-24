@@ -19,8 +19,7 @@
 Ext.define('Ssp.model.reference.Text', {
 	extend: 'Ssp.model.reference.AbstractReference',
     fields: [{name: 'value', type: 'string'},
-             {name: 'code', type: 'string'},
-             {name: 'entityTypeCode', type: 'string'}],
+             {name: 'code', type: 'string'}],
              
          	constructor: function(){
         		return this.callParent(arguments);
