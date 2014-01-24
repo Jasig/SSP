@@ -69,7 +69,7 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         xtype: 'fieldset',
                         border: 1,
                         defaultType: 'displayfield',
-                        margin: '0 0 0 2',
+                        margin: '0 0 2 2',
                         height: '370',
                         items: [{
                             fieldLabel: 'Early Alerts',
@@ -81,32 +81,28 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                             itemId: 'actionPlan',
                             name: 'actionPlan'
                         },{
-                            xtype: 'fieldset',
-                            border: 0,
-                            title: 'Student Intake',
-                            defaultType: 'displayfield',
-                            margin: '0 0 0 2',
-                            height: '100',
-                            items: [{
+                            fieldLabel: 'Student Intake',
+                            name: 'studentintakeLabel',
+                            itemId: 'studentintakeLabel',
+                        },{
                                 fieldLabel: 'Assigned',
                                 name: 'studentIntakeAssigned',
                                 itemId: 'studentIntakeAssigned',
-                                labelWidth: '50',
+								margin:'0 0 0 10',
                                 renderer: Ext.util.Format.dateRenderer('m/d/Y')
                             }, {
                                 fieldLabel: 'Completed',
                                 name: 'studentIntakeCompleted',
                                 itemId: 'studentIntakeCompleted',
                                 cls: 'dashboardIntakeDates',
-                                labelWidth: '50',
+								margin:'0 0 0 10',
                                 renderer: Ext.util.Format.dateRenderer('m/d/Y')
-                            }]
                         
                         }]
                     }
 					, {
 		                  xtype: 'tbspacer',
-		                   height: '10'
+		                   height: 10
 		               },
                     {
                         xtype: 'profileacademicprogram'
@@ -151,10 +147,7 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         fieldLabel: 'Restrictions',
                         name: 'currentRestrictions',
                         itemId: 'currentRestrictions'
-                    }, {
-                        xtype: 'tbspacer',
-                        height: '10'
-                    }, {
+                    },{
                         fieldLabel: 'Reg',
                         name: 'registeredTerms',
                         itemId: 'registeredTerms',
@@ -170,16 +163,13 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         itemId: 'balanceOwed',
 						labelWidth: 50
                     },{
-                        xtype: 'tbspacer',
-                        height: '10'
-                    },{
                         fieldLabel: 'F1',
                         name: 'f1Status',
                         itemId: 'f1Status',
                         labelWidth: 60
                     }	,{
 	                        xtype: 'tbspacer',
-	                        height: '10'
+	                        height: 8
 	                    },{
                     name: 'financialAidFileStatus',
                     itemId: 'financialAidFileStatus',
@@ -191,7 +181,7 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                     } } 
                 }	,{
                         xtype: 'tbspacer',
-                        height: '10'
+                        height: 8
                     },
                 {
                 name: 'sapStatusCode',
@@ -204,7 +194,7 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                 } } 
             }	,{
                     xtype: 'tbspacer',
-                    height: '10'
+                    height: 8
                 }, 	{
                 	text: 'FA Awarded:',
                     name: 'financialAidAcceptedTerms',
@@ -217,7 +207,7 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                     } } 
                 },{
                         xtype: 'tbspacer',
-                        height: '10'
+                        height: 8
                     }
                     ]
 
@@ -237,12 +227,12 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         xtype: 'profileservicereasons'
                     }, {
                         xtype: 'tbspacer',
-                        height: '20'
+                        height: 10
                     }, {
                         xtype: 'profilespecialservicegroups'
                     },{
                         xtype: 'tbspacer',
-                        height: '20'
+                        height: 10
                     },{
                     	 xtype: 'profilereferralsources'
                     }]

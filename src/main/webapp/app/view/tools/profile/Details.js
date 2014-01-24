@@ -172,9 +172,6 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         name: 'cumGPA',
                         itemId: 'cumGPA'
                     }, {
-                        xtype: 'tbspacer',
-                        height: '10'
-                    }, {
                         fieldLabel: 'FA GPA',
                         name: 'financialAidGpa',
                         itemId: 'financialAidGpa'
@@ -226,7 +223,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         itemId: 'fafsaDate'
                     }, {
                         xtype: 'tbspacer',
-                        height: '10'
+                        height: 8
                     },{
                         fieldLabel: 'Eligible Fed Aid',
                         name: 'eligibleFederalAid',
@@ -244,7 +241,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
 	                        } } 
 	                    },{
 	                        xtype: 'tbspacer',
-	                        height: '10'
+	                        height: 8
 	                    },
                     {
 	                    	xtype:'label',
@@ -258,7 +255,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
 	                        
                     },		{
                         xtype: 'tbspacer',
-                        height: '10'
+                        height: 8
                     },{
 	                        fieldLabel: 'FA Amount',
 	                        name: 'financialAidRemaining',
@@ -283,7 +280,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         labelWidth: 120
                     },{
                         xtype: 'tbspacer',
-                        height: '10'
+                        height: 5
                     }, {
                         name: 'sapStatusCode',
                         itemId: 'sapStatusCode',
@@ -328,5 +325,4 @@ Ext.define('Ssp.view.tools.profile.Details', {
         
         return me.callParent(arguments);
     }
-    
 });
