@@ -177,7 +177,7 @@ public class ExternalStudentRecordsTO implements ExternalDataTO<ExternalStudentR
 			for(ExternalStudentFinancialAidAwardTermTO to:getFinancialAidAcceptedTerms()){
 				output.append(to.getTermCode())
 				.append(":").
-				append(to.getAccepted()).
+				append(to.getAcceptedLong()).
 				append(", ");
 			}
 		}
@@ -195,7 +195,7 @@ public class ExternalStudentRecordsTO implements ExternalDataTO<ExternalStudentR
 				if(to.getAccepted().equalsIgnoreCase(accepted)){
 					output.append(to.getTermCode())
 							.append(":").
-							append(to.getAccepted()).
+							append(to.getAcceptedLong()).
 							append(", ");
 				}
 			}

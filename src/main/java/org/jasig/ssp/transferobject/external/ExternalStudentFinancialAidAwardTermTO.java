@@ -96,6 +96,13 @@ public class ExternalStudentFinancialAidAwardTermTO implements Serializable,
 	public String getAccepted() {
 		return accepted;
 	}
+	
+	/**
+	 * @return the accepted
+	 */
+	public String getAcceptedLong() {
+		return accepted.toLowerCase().equals("y") ? "Accepted":"Not Accepted";
+	}
 
 	/**
 	 * @param accepted the accepted to set

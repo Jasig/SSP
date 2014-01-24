@@ -24,11 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jasig.ssp.model.external.ExternalStudentAcademicProgram;
-import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
 import org.jasig.ssp.model.external.ExternalStudentFinancialAidAwardTerm;
 import org.jasig.ssp.model.external.ExternalStudentFinancialAidFile;
 import org.jasig.ssp.model.external.ExternalStudentRecordsLite;
-import org.jasig.ssp.model.external.ExternalStudentTermCourses;
 
 public class ExternalStudentRecordsLiteTO implements ExternalDataTO<ExternalStudentRecordsLite>,
 		Serializable {
@@ -150,7 +148,7 @@ public class ExternalStudentRecordsLiteTO implements ExternalDataTO<ExternalStud
 			for(ExternalStudentFinancialAidAwardTermTO to:getFinancialAidAcceptedTerms()){
 				output.append(to.getTermCode())
 				.append(":").
-				append(to.getAccepted()).
+				append(to.getAcceptedLong()).
 				append(", ");
 			}
 		}
@@ -166,7 +164,7 @@ public class ExternalStudentRecordsLiteTO implements ExternalDataTO<ExternalStud
 		String accepted = "Y";
 		if(getFinancialAidAcceptedTerms() != null && getFinancialAidAcceptedTerms().size() > 0){
 			for(ExternalStudentFinancialAidAwardTermTO to:getFinancialAidAcceptedTerms()){
-				if(to.getAccepted().equalsIgnoreCase(accepted)){
+				if(to.getAcceptedLong().equalsIgnoreCase(accepted)){
 					output.append(to.getTermCode())
 							.append(":").
 							append(to.getAccepted()).

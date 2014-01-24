@@ -8,7 +8,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="608"/>
+	<property name="ireport.y" value="622"/>
 	<parameter name="studentTO" class="org.jasig.ssp.transferobject.PersonTO"/>
 	<parameter name="reportDate" class="java.lang.String"/>
 	<parameter name="studentRecordTO" class="org.jasig.ssp.transferobject.external.ExternalStudentRecordsLiteTO"/>
@@ -415,14 +415,9 @@
 				<text><![CDATA[FA File Status:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="cb94434f-856a-41cf-ab68-07c348953f0b" x="273" y="20" width="138" height="20" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="cb94434f-856a-41cf-ab68-07c348953f0b" x="1" y="40" width="100" height="20" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
-				<text><![CDATA[FA Award (terms):]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="cb94434f-856a-41cf-ab68-07c348953f0b" x="1" y="20" width="100" height="20" isPrintWhenDetailOverflows="true"/>
-				<textElement/>
-				<text><![CDATA[FA Accepted:]]></text>
+				<text><![CDATA[FA Award (By Term):]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="cb94434f-856a-41cf-ab68-07c348953f0b" x="273" y="0" width="138" height="20" isPrintWhenDetailOverflows="true"/>
@@ -430,9 +425,9 @@
 				<text><![CDATA[SAP Code:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="cb94434f-856a-41cf-ab68-07c348953f0b" x="1" y="40" width="100" height="20" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="cb94434f-856a-41cf-ab68-07c348953f0b" x="1" y="20" width="100" height="20" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
-				<text><![CDATA[Remaining Terms:]]></text>
+				<text><![CDATA[FA Terms Avail.:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="a3c2a285-6332-46c4-8006-ba15ad8ec823" x="101" y="0" width="160" height="20" isPrintWhenDetailOverflows="true">
@@ -442,13 +437,6 @@
 				<textFieldExpression><![CDATA[$P{studentRecordTO}.getFinancialAid().getFinancialAidFileStatus()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
-				<reportElement uuid="a3c2a285-6332-46c4-8006-ba15ad8ec823" x="101" y="20" width="160" height="20" isPrintWhenDetailOverflows="true">
-					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
-				</reportElement>
-				<textElement/>
-				<textFieldExpression><![CDATA[$P{studentRecordTO}.getFinancialAidAcceptedTermsOutput()]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
 				<reportElement uuid="a3c2a285-6332-46c4-8006-ba15ad8ec823" x="411" y="0" width="160" height="20" isPrintWhenDetailOverflows="true">
 					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
 				</reportElement>
@@ -456,14 +444,14 @@
 				<textFieldExpression><![CDATA[$P{studentRecordTO}.getFinancialAid().getSapStatusCode()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
-				<reportElement uuid="a3c2a285-6332-46c4-8006-ba15ad8ec823" x="413" y="20" width="160" height="20" isPrintWhenDetailOverflows="true">
+				<reportElement uuid="a3c2a285-6332-46c4-8006-ba15ad8ec823" x="101" y="40" width="470" height="40" isPrintWhenDetailOverflows="true">
 					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
 				</reportElement>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{studentRecordTO}.getAllFinancialAidTermsOutput()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="a3c2a285-6332-46c4-8006-ba15ad8ec823" x="100" y="40" width="160" height="20" isPrintWhenDetailOverflows="true">
+				<reportElement uuid="a3c2a285-6332-46c4-8006-ba15ad8ec823" x="101" y="20" width="159" height="20" isPrintWhenDetailOverflows="true">
 					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
 				</reportElement>
 				<textElement/>
