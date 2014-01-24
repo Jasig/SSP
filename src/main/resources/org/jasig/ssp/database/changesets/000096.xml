@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+    <changeSet id="update message templates to remove sinclair refs SSP-705" author="jim.stanley">
+        <sql>
+<![CDATA[
+update message_template
+set body = '${task.person.firstName},<br/>An Action Item identified through the ${institutionName} ${applicationTitle} application needs your attention.  Please login to your account at <a href="${linkToSSP}">${linkToSSP}</a> to review and complete the assigned item.<br/><br/>The following item is due for review:<br/>Description: ${task.description}<br/>Link: ${taskTO.link}<br/>Due Date: ${dueDateFormatted}'
+where id = '31CF8D8D-2BC9-44E0-AAD1-D8BA43530BB0' and body='${task.person.firstName},<br/>An Action Item identified through the Sinclair Community College Resources application needs your attention.  Please login to your account at https://resources.sinclair.edu to review and complete the assigned item.<br/><br/>The following item is due for review:<br/>Name: ${task.name}<br/>Description: ${task.description}<br/>Due Date: ${dueDateFormatted}';
+
+update message_template
+set body = '<html><body>Dear ${fullName},<br/><br/>The following resources and goals have been identified to assist with achieving your success.<br/><br/><br/>#foreach($taskTO in $taskTOs)<b>Resource:</b> ${taskTO.name}<br/><b>Description:</b> ${taskTO.description}<br/><b>Link:</b> ${taskTO.link}<br/><br/>#end <br/>#foreach($goalTO in $goalTOs)<b>Goal:</b> ${goalTO.name}<br/><b>Description:</b> ${goalTO.description}<br/><br/>#end <br/>If you have any questions concerning the resources or goals, please contact the resource in question or your coach/advisor.<br/><br/>Thank you.</body></html>'
+where id = '5D183F35-023D-40EA-B8D9-66FBE190FFFB' AND body='<html>
+<body>Dear ${fullName},<br/>
+<br/>
+As a result of completing the self help guide questionnaire(s) you have
+identified the following resource information as being imperative to your
+success.&nbsp;&nbsp;Below you will find the solutions you felt offered the best
+path to your success.<br/>
+<br/>
+<br/>
+#foreach($taskTO in $taskTOs)<b>Resource:</b>&nbsp;${taskTO.name}<br/><b>Description:</b>&nbsp;${taskTO.description}<br/><b>Link:</b>&nbsp;${taskTO.link}<br/><br/>#end <br/>
+#foreach($goalTO in $goalTOs)<b>Resource:</b>&nbsp;${goalTO.name}<br/><b>Description:</b>&nbsp;${goalTO.description}<br/><br/>#end <br/>
+Should you have any questions concerning the resource information listed please contact the resource in question or the counseling staff at your institution.<br/>
+<br/>
+Thank you.</body></html>';
+
+
+update message_template
+set body ='<html><body><p>Hello ${fullName}</p><p>Your Coach or Advisor has asked that you complete a ${applicationTitle} Task online.  ${description}.  The form is a series of questions that should only take a few minutes to complete.  The information collected will assist us in providing you with the best services and advice that we can.</p> <p>Please login with your college username and password at the following URL:  <a href="${linkToSSP}">${linkToSSP}</a>.  The Student Intake link will appear in the Task list on the right side of the screen.</p><p>Thank you for your time and cooperation.  We look forward to providing you great service!  If you have questions, please contact your Coach or Advisor directly. This is an automated message, please do not use the reply option.</p></body></html>'
+where id = '9D3CE5B1-E27D-40C8-8F45-ABCB1BCCF3B0' and body='<html><body><p>Hello ${fullName}!</p><p>Your Coach or Advisor has asked that you complete a Task online, the Student Intake form.  ${description}  The form is a series of questions that should only take a few minutes to complete.  The information collected will assist us in providing you with the best services and advice that we can.</p> <p>Please login with your college username and password at the following URL:  <a href="https://resources.sinclair.edu">https://resources.sinclair.edu</a></p><p>The Student Intake link will appear in the Task list on the right side of the screen.</p><p>Please complete this task by ${dueDateFormatted}</p><p>Thank you for your time and cooperation.  We look forward to providing you great service!</p><p>-Sinclair Team</p><p>If you have questions, please contact your Coach or Advisor directly. This is an automated message, please do not use the reply option.</p></body></html>';
+
+update message_template
+set body = '<html><body>
+<p><b>STUDENT $!termToRepresentEarlyAlert SYSTEM MESSAGE</b></p>
+<p>This email is in response to an early alert notice initiated on $earlyAlert.createdDate for the following student:</p>
+<table>
+<tr><th>Student Name</th><td>$earlyAlert.person.firstName $earlyAlert.person.lastName</td></tr>
+<tr><th>Student ID</th><td>$!earlyAlert.person.schoolId</td></tr>
+<tr><th>In the class</th><td>$!earlyAlert.courseName</td></tr>
+<tr><th>Instructor</th><td>$earlyAlert.createdBy.firstName $earlyAlert.createdBy.lastName</td></tr>
+#if( $earlyAlert.person.coach.lastName )
+<tr><th>Coach</th><td>$earlyAlert.person.coach.firstName $earlyAlert.person.coach.lastName</td></tr>
+#end
+<tr><th>Response by</th><td>$earlyAlertResponse.createdBy.firstName $earlyAlertResponse.createdBy.lastName</td></tr>
+
+</table>
+#if( $earlyAlert.closedDate )
+<p>This incident was addressed and CLOSED on $earlyAlert.closedDate. The final outcome for this incident was:</p>
+#else
+<p>This incident was addressed on $earlyAlertResponse.modifiedDate. The outcome was:</p>
+#end
+
+<p>$!earlyAlertResponse.earlyAlertOutcome.name</p>
+#if( $earlyAlertResponse.earlyAlertOutcomeOtherDescription )
+
+<p>$earlyAlertResponse.earlyAlertOutcomeOtherDescription</p>
+#end
+<p>The student has been referred by his/her counselor to the following departments or services based upon early alert status:</p>
+<ul>
+#foreach( $earlyAlertReferral in $earlyAlertResponse.earlyAlertReferralIds )
+<li>$earlyAlertReferral.name</li>
+#end
+</ul>
+#if( $earlyAlertResponse.comment )
+
+<p>******************* COMMENTS *******************
+
+<br />
+
+$earlyAlertResponse.comment
+<br />
+******************* COMMENTS *******************</p>
+#end
+<p>Email generated by $!institutionName $!applicationTitle $!termToRepresentEarlyAlert</p>
+</body></html>'
+where id = 'b528c1ac-6104-435b-ae62-09fb5f9ef680' and body='<html><body>
+<div>
+<p style="padding-left:20px">
+$studentFullName</br>
+$studentEmail</br>
+School Id: $studentSchoolId
+</p>
+</div>
+<div>
+<p style="text-align:center">
+$title
+</p>
+</div>
+<div style="position:relative;left:100px">
+    #foreach($termCourse in $termCourses) 
+        <table cellpadding="0" cellspacing="0" style="background-color:white;width:80%;border-collapse:collapse;">
+            <caption  style="font-size:small;text-align:left">$termCourse.term.name</caption>
+            <thead>
+                <tr >
+                    <th style="text-align:center;border:1px solid black;width:325">
+                        Course<br/>Number
+                    </th>
+                    <th style="text-align:center;border:1px solid black;width:60%">
+                        Course Title
+                    </th>
+                    <th style="text-align:center;border:1px solid black;width:15%">
+                        Credit <br/> Hours
+                    </th>
+                </tr>
+            </thead>
+            #foreach($course in $termCourse.courses)
+            <tr>
+                <td style="text-align:center;border:1px solid black;width:25%;padding-bottom:5px; padding-top:5px;padding-left:5px">
+                    $course.formattedCourse
+                </td>
+                <td style="text-align:left;border:1px solid black;width:60%;padding-bottom:5px; padding-top:5px;padding-left:5px">
+                    
+                    $course.courseTitle
+                </td>
+                <td style="text-align:center;border:1px solid black;width:15%;padding-bottom:5px; padding-top:5px;padding-left:5px">
+                    $course.creditHours
+                </td>
+            </tr>
+            <tr>
+            #end
+            <tr>
+            <td colspan="3" style="height:35px; padding-bottom:5px; padding-left:80px;vertical-align:bottom">
+                <b>Total Credit Hours:</b>  $termCourse.totalCreditHours
+            </td>
+            </tr>
+            <tr>
+            <td colspan="3" style="height:15px">
+            <br/>
+            </td>
+            </tr>
+        </table>
+    #end
+</div>
+    <div>
+    <p style="padding-left:20px">
+    <b>If I have questions or concerns about my plan I will contact:
+    </p>
+    <p style="padding-left:20px">
+    $coachFullName</br>
+    $coachPhone2</br>
+    $coachEmail
+    </p>
+    </div>
+</body></html>';
+
+
+update message_template
+set body ='<html><body>
+<p>Dear $earlyAlert.person.firstName $earlyAlert.person.lastName</p>
+<p>Your instructor for #if( $earlyAlert.courseName )$earlyAlert.courseName#else<COURSE NAME UNAVAILABLE>#end notified me that you are experiencing issues that might affect your success#if( $institutionName ) at $institutionName#end. An academic advisor, counselor or coach will contact you soon to discuss your situation.</p>
+<table><tr><th>Instructor</th><td>$earlyAlert.createdBy.firstName $earlyAlert.createdBy.lastName#if( $earlyAlert.createdBy.workPhone )</td><tr>
+<tr><th>Phone</th><td>$earlyAlert.createdBy.workPhone#end</td><tr>
+<tr><th>Email</th><td>$earlyAlert.createdBy.primaryEmailAddress</td><tr>
+</table>
+<p>We value you as a student #if( $institutionName ) at $institutionName#end and want to support your success. If you have not been contacted by someone within a week, please feel free to speak with me.</p>
+<p>Sincerely,</p>
+<p>$earlyAlert.person.coach.firstName $earlyAlert.person.coach.lastName
+<br />$earlyAlert.person.coach.title#if( $earlyAlert.person.coach.staffDetails.officeLocation )
+<br />$earlyAlert.person.coach.officeLocation#end#if( $earlyAlert.person.coach.workPhone )
+<br />$earlyAlert.person.coach.workPhone#end
+<br />$earlyAlert.person.coach.primaryEmailAddress</p>
+<p>Email generated by $!institutionName $!applicationTitle $!termToRepresentEarlyAlert</p>
+<p>This is a system generated email. Please do not reply to this confirmation.</p>
+</body></html>'
+
+where id = 'b528c1ac-6104-435b-ae62-08eb4f8ef40e' and body='<html><body>
+<p>Dear $earlyAlert.person.firstName $earlyAlert.person.lastName</p>
+
+<p>Your instructor for #if( $earlyAlert.courseName )$earlyAlert.courseName#else<COURSE NAME UNAVAILABLE>#end notified me that you are experiencing issues that might affect your success#if( $institutionName ) at $institutionName#end.  An academic advisor, counselor or coach will contact you soon to discuss your situation. In the meantime, here are a few resources which may help you find academic success.</p>
+
+<table><tr><th>Instructor</th><td>$earlyAlert.createdBy.firstName $earlyAlert.createdBy.lastName#if( $earlyAlert.createdBy.workPhone )</td><tr>
+<tr><th>Phone</th><td>$earlyAlert.createdBy.workPhone#end</td><tr>
+<tr><th>Email</th><td>$earlyAlert.createdBy.primaryEmailAddress</td><tr>
+</table>
+
+<p>The Tutoring and Learning Center (Library: 512-4506) provides professional tutoring in the subject areas of English grammar and writing, basic math and study skills. The Center also provides additional quiet computer areas for students, online resources, and supplemental learning materials. Walk-ins are available during open hours. Call for schedule.</p>
+
+<p>Tutorial Services (Library: 512-2792) provides free educational assistance for students who are enrolled in most 100 level courses (including DEV and some 200 level classes). Student tutors provide individual tutoring sessions by appointment.</p>
+
+<p>The Writing Center (Library: 512-5106) provides a comfortable learning environment for classroom instruction and tutorial assistance for writing.</p>
+
+<p>The Math Lab (Building 1, Room 315: 512-2286) provides tutoring and homework help for students in MAT classes. Walk-ins are available during open hours.</p>
+
+<p>COPE is a unique series of workshops designed to help students Conquer some of the Obstacles that can Prevent the achievement of their Educational goals. A schedule of topics is available in 10-424 or online at http://www.sinclair.edu/stservices/cnsl/Cope/ Contact Anthony Webb at 512-2752 for handouts of past or future workshops.</p>
+
+<p>Information on Dropping: Before withdrawing from any or all classes, consult an academic advisor. If you are using financial aid to pay for your tuition or books, contact the Financial Aid & Scholarships Office: Building 10, 3rd Floor, (937) 512-3000.</p>
+
+<p>We value you as a student #if( $institutionName ) at $institutionName#end and want to support your success. If you have not been contacted by someone within a week, please feel free to speak with me.</p>
+
+<p>Sincerely,</p>
+
+<p>$earlyAlert.person.coach.firstName $earlyAlert.person.coach.lastName
+<br />$earlyAlert.person.coach.title#if( $earlyAlert.person.coach.staffDetails.officeLocation )
+<br />$earlyAlert.person.coach.officeLocation#end#if( $earlyAlert.person.coach.workPhone )
+<br />$earlyAlert.person.coach.workPhone#end
+<br />$earlyAlert.person.coach.primaryEmailAddress</p>
+
+<p>Email generated by $!institutionName $!applicationTitle $!termToRepresentEarlyAlert</p>
+
+<p>This is a system generated email. Please do not reply to this confirmation.</p>
+</body></html>';
+
+
+update message_template
+set subject ='Student#if( $termToRepresentEarlyAlert ) $termToRepresentEarlyAlert#end Notice - $earlyAlert.person.firstName $earlyAlert.person.lastName#if( $earlyAlert.courseName) : $earlyAlert.courseName#end'
+where id = 'b528c1ac-6104-435b-ae62-08eb4f8ef40e' and subject='Student $TermToRepresentEarlyAlert Notice - $FirstName> $LastName : $CourseName';
+
+update message_template
+set subject='Student $!termToRepresentEarlyAlert Confirmation Notice - $earlyAlert.person.firstName $earlyAlert.person.lastName #if( $earlyAlert.courseName) : $earlyAlert.courseName#end'
+where id='b528c1ac-6104-435b-ae62-09eb5f8ef55f' and subject='Student$!termToRepresentEarlyAlert Advisor Reply - $earlyAlert.person.firstName $earlyAlert.person.lastName #if( $earlyAlert.courseName) : $earlyAlert.courseName#end';
+
+
+update message_template
+set body = '${task.person.firstName},<br/>An Action Item identified through the ${institutionName} ${applicationTitle} application needs your attention. Please login to your account at <a href="${linkToSSP}">${linkToSSP}</a> to review and complete the assigned item.<br/><br/>The following item is due for review:<br/>Challenge: ${task.challenge.name}<br/>Referral: ${task.challengeReferral.name}<br/>Link: ${taskTO.link}<br/>Due Date: ${dueDateFormatted}'
+where id = 'AEC07252-1FF0-479D-A2EF-C0E017E1C05D' AND body='${task.person.firstName},<br/>An Action Item identified through the ${applicationTitle} application needs your attention.  Please login to your account at ${linkToSSP} to review and complete the assigned item.<br/><br/>The following item is due for review:<br/>Challenge: ${task.challenge.name}<br/>Referral: ${task.challengeReferral.name}<br/>Due Date: ${dueDateFormatted}';
+
+]]>
+        </sql>
+
+        <rollback>
+            <comment>Ignore rollback - makes template generic</comment>
+        </rollback>
+    </changeSet>
+   </databaseChangeLog>
