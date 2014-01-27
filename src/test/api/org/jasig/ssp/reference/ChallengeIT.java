@@ -21,8 +21,10 @@ package org.jasig.ssp.reference;
 
 
 import static com.jayway.restassured.RestAssured.expect;
+import static com.jayway.restassured.RestAssured.post;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import com.jayway.restassured.response.Response;
 import com.sun.java_cup.internal.runtime.virtual_parse_stack;
@@ -34,19 +36,17 @@ import org.json.simple.JSONObject;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 
 public class ChallengeIT extends AbstractReferenceTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChallengeIT.class);
 
-    private static final String CHALLENGE_REFERRAL_ID = "de37299c-feac-4e71-9583-13a91c44370c";
     private static final String CHALLENGE_PATH = REFERENCE_PATH + "challenge";
-    private static final String CHALLENGE_REFERRAL_PATH = CHALLENGE_PATH + "/" + CHALLENGE_REFERRAL_ID + "/challengeReferral";
+    private static final String CHALLENGE_REFERRAL_BARE = "/challengeReferral";
+    private static final String CHALLENGE_REFERRAL_PATH = CHALLENGE_PATH +
+            "/07b5c3ac-3bdf-4d12-b65d-94cb55167998/challengeReferral";
 
     private static final String[] CHALLENGE_UUIDS;
     private static final String[] CHALLENGE_NAMES;
@@ -56,9 +56,11 @@ public class ChallengeIT extends AbstractReferenceTest {
     private static final String[] CHALLENGE_TAGS;
 
     private static final Map<String, String[]> CHALLENGE_REFERRAL_MAPPINGS;
+    private static final Map<String, String[]> SELF_HELP_GUIDE_QUESTION_MAPPINGS;
 
     private static final JSONArray CHALLENGE_ROWS;
     private static final JSONObject CHALLENGE_RESPONSE;
+
 
     private static final String[] CHALLENGE_REFERRAL_UUIDS;
     private static final String[] CHALLENGE_REFERRAL_NAMES;
@@ -66,6 +68,11 @@ public class ChallengeIT extends AbstractReferenceTest {
     private static final String[] CHALLENGE_REFERRAL_PUBLIC_DESCRIPTIONS;
     private static final boolean[] CHALLENGE_REFERRAL_SELF_HELP_GUIDE_VALUES;
     private static final String[] CHALLENGE_REFERRAL_LINKS;
+
+    private static final String[] SELF_HELP_GUIDE_QUESTION_UUIDS;
+    private static final int[] SELF_HELP_GUIDE_QUESTION_QUESTION_NUMBERS;
+    private static final String[] SELF_HELP_GUIDE_QUESTION_SELF_HELP_GUIDE_ID;
+
 
     static {
 
@@ -103,10 +110,10 @@ public class ChallengeIT extends AbstractReferenceTest {
         };
 
         CHALLENGE_REFERRAL_NAMES = new String[] {
-                "Academic Petition", "Admission - Application", "Alcoholics-anonymous", "Attendance Issues",
+                "Academic Petition", "Admission - Application", "Alcoholics Anonymous", "Attendance Issues",
                 "Campus Organization", "Career Coach", "Child Support Enforcement Agency", "Class - Grief & Loss",
                 "Computer Access", "COPE Workshop", "Counseling Services",
-                "Counseling - Weekend Intervention Program (WIP)", "Courses and Class Schedule", "CrisisCare",
+                "Counseling Weekend Intervention Program", "Courses and Class Schedule", "CrisisCare",
                 "Day-VEST", " Dialogue on Race Relations", "FAFSA & Student Guide - Spanish", "Family Services",
                 "Fee Bill", "Financial Aid Award", "Financial Aid Deadlines", "Financial Aid Office Application",
                 "Health and well being Handouts", "Holistic Counseling - Process", "Improve English Skills",
@@ -352,6 +359,47 @@ public class ChallengeIT extends AbstractReferenceTest {
                 "http://www.pinterest.com/all/food_drink/", "", null, "www.humanmetrics.com/cgi-win/Jtypes1.htm", ""
         };
 
+
+
+        //Self Help Guide Question Data
+        SELF_HELP_GUIDE_QUESTION_UUIDS = new String[] {
+                "3fb44068-df2b-49bf-b71d-035070435726", "81953c1b-4930-4d62-90da-1fb032be399a",
+                "ad78dc04-bb23-4e62-b135-3983cb208ba6", "3c6abe0b-69cc-4555-88c8-380ef129459a",
+                "7973e86d-f0a6-4653-8dd2-4365a3861861", "961c2085-e546-408d-8b5f-41911b053b40",
+                "ee618726-1bb1-40fc-a696-01ca1fb3d558", "14f7a05a-df89-45f4-a2b0-18c0fe9a53be",
+                "209d97cf-2f51-4261-80a5-21db7f0d7aa2", "ddcc44a1-9d1b-4bec-8aab-3ab800b31115",
+                "9c2e722e-2eac-4821-993b-3af6cd2d94af", "26523538-3d22-40de-a3a2-4cb7c8be2443",
+                "0e46733e-193d-4950-ba29-4cd0f9620561", "850942d7-86d4-470d-8a43-7a23b3be679a",
+                "7125d031-a0b9-4de2-9d81-a2663f032471", "7787fab3-d09c-4fcc-ae6a-a26898a23ee4",
+                "e5cf1d3f-f044-41db-8b65-c62be7d02f3b", "cf39078c-183e-4e31-a912-7d4ceb59e6ce",
+                "db8cdf11-9f1d-4b68-b39f-9d7ae7ce19a0", "9d3cbfec-97ca-492b-a9d0-f4020c84ed3a",
+                "f62330bd-0fc3-4ea3-8d77-b777dabe8484", "c5a508fa-bdbc-4286-8999-ac208804d547",
+                "bdb02005-ec5e-4957-b485-e988d139eeb3", "a4bf9024-3f11-4bdd-be01-60ec8154fd6e",
+                "d549486e-6355-443a-a27c-8e5859a6dd25", "1b417345-aa6a-4859-94ab-9f1913f81872"
+        };
+
+        SELF_HELP_GUIDE_QUESTION_QUESTION_NUMBERS = new int[] {
+                10, 6, 2, 3, 4, 6, 9, 7, 3, 11, 2, 1, 10, 4, 6, 8, 5, 5, 8, 5, 4, 7, 6, 1, 5, 1
+        };
+
+        SELF_HELP_GUIDE_QUESTION_SELF_HELP_GUIDE_ID = new String[] {
+                "5b7bdb2a-e7fe-e555-7599-02c9e3cacfa5", "5b7bdb2a-e7fe-e555-7599-02c9e3cacfa5",
+                "6dce9c28-e7fe-e555-762e-f82ea0c75580", "894073e7-e7fe-e555-7c05-ff79555478e7",
+                "894073e7-e7fe-e555-7c05-ff79555478e7", "894073e7-e7fe-e555-7c05-ff79555478e7",
+                "4fd534df-e7fe-e555-7c71-0042593b1990", "4fd534df-e7fe-e555-7c71-0042593b1990",
+                "4fd534df-e7fe-e555-7c71-0042593b1990", "4fd534df-e7fe-e555-7c71-0042593b1990",
+                "4fd534df-e7fe-e555-7c71-0042593b1990", "4fd534df-e7fe-e555-7c71-0042593b1990",
+                "4fd534df-e7fe-e555-7c71-0042593b1990", "4fd534df-e7fe-e555-7c71-0042593b1990",
+                "4fd534df-e7fe-e555-7c71-0042593b1990", "4fd534df-e7fe-e555-7c71-0042593b1990",
+                "4fd534df-e7fe-e555-7c71-0042593b1990", "5b7bdb2a-e7fe-e555-7599-02c9e3cacfa5",
+                "5b7bdb2a-e7fe-e555-7599-02c9e3cacfa5", "6dce9c28-e7fe-e555-762e-f82ea0c75580",
+                "6dce9c28-e7fe-e555-762e-f82ea0c75580", "6dce9c28-e7fe-e555-762e-f82ea0c75580",
+                "6dce9c28-e7fe-e555-762e-f82ea0c75580", "6dce9c28-e7fe-e555-762e-f82ea0c75580",
+                "894073e7-e7fe-e555-7c05-ff79555478e7", "3a6352c9-e7fe-e555-7f69-0124a5e5fe71"
+        };
+
+
+
         //Challenge Data
         CHALLENGE_UUIDS = new String[] {
                 "5d6dc03f-b000-42b1-a078-253c55867ff1", "0a640a2a-409d-1271-8140-d0cf543a0106",
@@ -433,7 +481,7 @@ public class ChallengeIT extends AbstractReferenceTest {
                 " and engaging in activities of importance and value in their life.", "Fatigue can reduce a students" +
                 " ability to focus on academic endeavors and keep you from performing at your best level. " +
                 "Many options are available to help address this challenge.", "Instructors expect students to be in" +
-                " class, on time, every time.  Being late or missing just one class forces you to play “catch-up” " +
+                " class, on time, every time.  Being late or missing just one class forces you to play catch-up " +
                 "and can negatively affect your grades.", "Selecting a major or career field is an important first " +
                 "step on the path to your future career.  Deciding on a major can provide a goal for you to work " +
                 "towards and the purpose behind future career activities and getting a degree.  "
@@ -502,7 +550,7 @@ public class ChallengeIT extends AbstractReferenceTest {
                 "Fatigue can reduce a students ability to focus on academic endeavors and keep you from performing " +
                         "at your best level. Many options are available to help address this challenge.",
                 "Instructors expect students to be in class, on time, every time.  " +
-                        "Being late or missing just one class forces you to play “catch-up” and can negatively " +
+                        "Being late or missing just one class forces you to play catch-up and can negatively " +
                         "affect your grades.", "Selecting a major or career field is an important first step on " +
                 "the path to your future career.  Deciding on a major can provide a goal for you to work towards " +
                 "and the purpose behind future career activities and getting a degree.  "
@@ -601,9 +649,9 @@ public class ChallengeIT extends AbstractReferenceTest {
                 "ea8396c8-5e13-4a62-ba62-17cade2c57a5", "e9e29c50-0e3e-4f3b-a0a8-1deb5ba7352f",
                 "bc7967cf-bf1a-4445-885c-19705a0e686b"
         });
-        CHALLENGE_REFERRAL_MAPPINGS.put(CHALLENGE_UUIDS[1], new String[] { "d1650a52-b6e0-415b-9781-38504be570ac",
-                "d9b99e47-1714-450a-8db1-2d3913ac90cb", "fd01167f-f99c-456b-80ad-0fc44a99ac24",
-                "751a3383-7398-469f-a35f-3a86a08d8fcd", "7fa465ae-c8cd-430c-a263-04c6a5046068"
+        CHALLENGE_REFERRAL_MAPPINGS.put(CHALLENGE_UUIDS[1], new String[] { "fd01167f-f99c-456b-80ad-0fc44a99ac24",
+                "751a3383-7398-469f-a35f-3a86a08d8fcd", "7fa465ae-c8cd-430c-a263-04c6a5046068",
+                "d1650a52-b6e0-415b-9781-38504be570ac", "d9b99e47-1714-450a-8db1-2d3913ac90cb"
         });
         CHALLENGE_REFERRAL_MAPPINGS.put(CHALLENGE_UUIDS[2], new String[] { "ea8396c8-5e13-4a62-ba62-17cade2c57a5",
                 "96cc3609-0ec2-42d6-8123-0b15492a9d2c", "6e68497f-d4af-4f51-a9f7-251f7e2f680c",
@@ -696,12 +744,69 @@ public class ChallengeIT extends AbstractReferenceTest {
                 "c8f59411-d74f-4e93-b70f-370c6b297e96", "db9229fe-2511-4939-8f9a-18d17e674e0c"
         });
         CHALLENGE_REFERRAL_MAPPINGS.put(CHALLENGE_UUIDS[28], new String[] { "a81a21b6-bfd7-4fd3-a07e-04025a078a7d",
-                "19fbec43-8c0b-478b-9d5f-00ec6ec57511", "a81a21b6-bfd7-4fd3-a07e-04025a078a7d",
                 "19fbec43-8c0b-478b-9d5f-00ec6ec57511", "b4c42bfd-7ad4-41ef-b650-31a135c660ce" });
 
-        CHALLENGE_ROWS = new JSONArray();
 
-        final JSONArray blankArrayForSelfHelpGuideQuestions = new JSONArray();
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS = new HashMap<String, String[]>();
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[0], null);
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[1], null);
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[2], new String[] { "26523538-3d22-40de-a3a2-4cb7c8be2443",
+                "db8cdf11-9f1d-4b68-b39f-9d7ae7ce19a0"
+        });
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[3], null);
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[4], new String[] { "961c2085-e546-408d-8b5f-41911b053b40",
+                "9c2e722e-2eac-4821-993b-3af6cd2d94af", "cf39078c-183e-4e31-a912-7d4ceb59e6ce",
+                "bdb02005-ec5e-4957-b485-e988d139eeb3"
+        });
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[5], new String[] { "ad78dc04-bb23-4e62-b135-3983cb208ba6",
+                "7973e86d-f0a6-4653-8dd2-4365a3861861", "209d97cf-2f51-4261-80a5-21db7f0d7aa2"
+        });
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[6], null);
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[7], new String[] {
+                "ddcc44a1-9d1b-4bec-8aab-3ab800b31115" });
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[8], new String[] {
+                "3fb44068-df2b-49bf-b71d-035070435726" });
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[9], new String[] {
+                "850942d7-86d4-470d-8a43-7a23b3be679a" });
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[10], null);
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[11], new String[] {
+                "e5cf1d3f-f044-41db-8b65-c62be7d02f3b" });
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[12], new String[] {
+                "9d3cbfec-97ca-492b-a9d0-f4020c84ed3a", "d549486e-6355-443a-a27c-8e5859a6dd25"
+        });
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[13], null);
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[14], null);
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[15], null);
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[16], null);
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[17], new String[] {
+                "7125d031-a0b9-4de2-9d81-a2663f032471" });
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[18], null);
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[19], null);
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[20], null);
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[21], null);
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[22], null);
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[23], new String[] {
+                "14f7a05a-df89-45f4-a2b0-18c0fe9a53be", "a4bf9024-3f11-4bdd-be01-60ec8154fd6e"
+        });
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[24], new String[] {
+                "3c6abe0b-69cc-4555-88c8-380ef129459a", "7787fab3-d09c-4fcc-ae6a-a26898a23ee4",
+                "f62330bd-0fc3-4ea3-8d77-b777dabe8484"
+        });
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[25], new String[] {
+                "ee618726-1bb1-40fc-a696-01ca1fb3d558","c5a508fa-bdbc-4286-8999-ac208804d547"
+        });
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[26], null);
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[27], new String[] {
+                "81953c1b-4930-4d62-90da-1fb032be399a", "0e46733e-193d-4950-ba29-4cd0f9620561"
+        });
+        SELF_HELP_GUIDE_QUESTION_MAPPINGS.put(CHALLENGE_UUIDS[28], new String[] {
+                "1b417345-aa6a-4859-94ab-9f1913f81872"
+        });
+
+
+
+        //Build the response
+        CHALLENGE_ROWS = new JSONArray();
 
         for ( int index = 0; index < CHALLENGE_UUIDS.length; index++ ) {
             JSONObject temp = new JSONObject();
@@ -715,7 +820,10 @@ public class ChallengeIT extends AbstractReferenceTest {
             temp.put("description", CHALLENGE_DESCRIPTIONS[index]);
             temp.put("selfHelpGuideDescription", CHALLENGE_SELF_HELP_GUIDE_DESCRIPTIONS[index]);
             temp.put("selfHelpGuideQuestion", CHALLENGE_SELF_HELP_GUIDE_QUESTIONS[index]);
-            temp.put("selfHelpGuideQuestions", blankArrayForSelfHelpGuideQuestions);
+
+            temp.put("selfHelpGuideQuestions", loadSelfHelpGuideQuestionsForChallenge(
+                    SELF_HELP_GUIDE_QUESTION_MAPPINGS.get(CHALLENGE_UUIDS[index]), CHALLENGE_UUIDS[index],
+                    CHALLENGE_NAMES[index]));
 
             if ( index != 1 ) {
                 temp.put("showInStudentIntake", true);
@@ -751,14 +859,14 @@ public class ChallengeIT extends AbstractReferenceTest {
         final JSONObject testPostPutNegative = (JSONObject) ((JSONObject)CHALLENGE_ROWS.get(0)).clone();
         testPostPutNegative.put("name", "testPostUnAuth");
 
-  //      referenceAuthenticationControlledMethodNegativeTest(CHALLENGE_PATH, testPostPutNegative);
+        referenceAuthenticationControlledMethodNegativeTest(CHALLENGE_PATH, testPostPutNegative);
     }
 
     @Test
     @ApiAuthentication(mode="unauth")
     public void testPermissionProtectedMethodsChallengeReferenceChallengeReferral() {
 
-   /*     //tests permission on get /{id}/challengeReferral method
+        //tests permission on get /{id}/challengeReferral method
         expect()
             .statusCode(403)
         .when()
@@ -769,7 +877,7 @@ public class ChallengeIT extends AbstractReferenceTest {
             .statusCode(403)
         .given()
             .contentType("application/json")
-            .body(UUID.fromString(CHALLENGE_REFERRAL_FULL_FOR_POST_RESPONSE.get("id").toString()))
+            .body( UUID.fromString(CHALLENGE_REFERRAL_UUIDS[1]) )
         .when()
             .post(CHALLENGE_REFERRAL_PATH);
 
@@ -778,74 +886,73 @@ public class ChallengeIT extends AbstractReferenceTest {
             .statusCode(403)
         .given()
             .contentType("application/json")
-            .body(UUID.fromString(CHALLENGE_REFERRAL.get("id").toString()))
+            .body(UUID.fromString(CHALLENGE_REFERRAL_UUIDS[ 1 ]))
         .when()
-            .delete(CHALLENGE_REFERRAL_PATH);   */
+            .delete(CHALLENGE_REFERRAL_PATH);
     }
 
     @Test
     @ApiAuthentication(mode="auth")
     public void testChallengeReferenceAllBody() {
 
- //       testResponseBody(CHALLENGE_PATH, CHALLENGE_RESPONSE);
+        Map allChallengeResponseExpected = expect()
+            .contentType("application/json")
+            .statusCode(200)
+            .log().ifError()
+        .when()
+            .get(CHALLENGE_PATH).getBody().jsonPath().getMap("");
+
+        if ( CHALLENGE_RESPONSE.get("success").equals(allChallengeResponseExpected.get("success")) &&
+                CHALLENGE_RESPONSE.get("message").equals(allChallengeResponseExpected.get("message")) &&
+                CHALLENGE_RESPONSE.get("results").equals(allChallengeResponseExpected.get("results")) ) {
+
+            ArrayList<Map> challengeListActual = (ArrayList) allChallengeResponseExpected.get("rows");
+            int rowExpectedIndex;
+
+            for ( Map actualRowIndex : challengeListActual ) {
+
+                for ( rowExpectedIndex = 0; rowExpectedIndex < CHALLENGE_ROWS.size(); rowExpectedIndex++ ) {
+                    if ( actualRowIndex.get("id").equals(CHALLENGE_UUIDS[rowExpectedIndex]) ) {
+                        break;
+                    }
+                }
+
+                if ( rowExpectedIndex < CHALLENGE_ROWS.size() ) {
+
+                    assertTrue(checkChallengeResponseEqualToExpected((JSONObject) CHALLENGE_ROWS.get(rowExpectedIndex),
+                            actualRowIndex));
+
+                } else {
+                    fail("ERROR: Actual challenge object not found in expected response body! ChallengeID in actual " +
+                            "response: " + actualRowIndex.get("id") + ". \n");
+                }
+            }
+
+        } else {
+            fail("Challenge Response for get all doesn't match in success, results, or message! " +
+            " Expected: success = " + CHALLENGE_RESPONSE.get("success") + " , message = " +
+                    CHALLENGE_RESPONSE.get("message") + ", and results = " + CHALLENGE_RESPONSE.get("results") +
+            ".  Actual: success = " + allChallengeResponseExpected.get("success") + ". message = " +
+            allChallengeResponseExpected.get("message") + ", and results = " +
+                    allChallengeResponseExpected.get("results") + ". \n");
+        }
     }
 
     @Test
     @ApiAuthentication(mode="auth")
     public void testChallengeReferenceSingleItemBody() {
 
-    /*      for ( Object a : CHALLENGE_ROWS ) {
+        JSONObject singleChallengeExpected = (JSONObject) CHALLENGE_ROWS.get(1);
 
-             Response test = expect()
-                  .contentType("application/json")
-              .when()
-                  .get(CHALLENGE_PATH + "/" +((JSONObject) a).get("id"));
-
-              Map test2 = test.getBody().jsonPath().getMap("");
-              Set keys = ((JSONObject) a).keySet();
-
-              System.out.println("\n\n********************************************************************\n\n");
-
-              for ( Object key : keys ) {
-                  Object temp239 = ((JSONObject)a).get(key);
-                  Object temp392 = test2.get(key);
-             //     System.out.println("[Key = " + key.toString() + " |\nAct= " + temp392 + " \n\nExp= " + temp239 +"\n\n");
-
-                  if ( temp239 != null && temp392 != null ) {
-                      if ( !temp392.equals(temp239) ) {
-
-             //           System.out.println("\n***NOT EQUALS : " + key.toString() + "\n\n");
-                      }
-
-                  }
-              }
-
-              System.out.println("\n\n********************************************************************\n\n");
-
-
-              testSingleItemResponseBody(CHALLENGE_PATH, (JSONObject) a);     */
-
-
-
-  /*        String toGet = "selfHelpGuideQuestions";
-              System.out.println("\nTESTING:"+ toGet +"\n\n");
-            Object temp23 = ((JSONObject)a).get(toGet);
-
-           String id =  ((JSONObject) a).get("id").toString();
-
-              System.out.println("\n Testing : " + id + "\n\n");
-
-
-          expect()
+        Map singleItemActual = expect()
             .contentType("application/json")
             .statusCode(200)
             .log().ifError()
-            .body(toGet, equalTo(temp23))
-         .when()
-            .get(CHALLENGE_PATH + "/" + id);
-          }                 */
+        .when()
+            .get(CHALLENGE_PATH + "/" + singleChallengeExpected.get("id"))
+            .getBody().jsonPath().getMap("");
 
- //       testSingleItemResponseBody(CHALLENGE_PATH, (JSONObject) CHALLENGE_ROWS.get(1));
+        assertTrue(checkChallengeResponseEqualToExpected(singleChallengeExpected, singleItemActual));
 
     }
 
@@ -853,47 +960,206 @@ public class ChallengeIT extends AbstractReferenceTest {
     @ApiAuthentication(mode="auth")
     public void testChallengeReferenceSingleItemBodyChallengeReferral() {
 
-   /*     //tests get /{id}/challengeReferral method
+        JSONObject challengeReferralExpected = new JSONObject();
+
+        challengeReferralExpected.put("success", "true");
+        challengeReferralExpected.put("message", "");
+        challengeReferralExpected.put("results", 4);
+        challengeReferralExpected.put("rows",
+                loadChallengeReferralsForChallenge(CHALLENGE_REFERRAL_MAPPINGS.get(CHALLENGE_UUIDS[2])));
+
+        //tests get /{id}/challengeReferral method
         expect()
             .contentType("application/json")
             .statusCode(200)
             .log().ifError()
-            .body("", equalTo(CHALLENGE_REFERRAL_RESPONSE))
         .when()
-            .get(CHALLENGE_REFERRAL_PATH);  */
+            .get(CHALLENGE_REFERRAL_PATH);
     }
 
     @Test
     @ApiAuthentication(mode="auth")
     public void testUnsupportedMethodsChallengeReference() {
 
-   //     testUnsupportedMethods(REFERENCE_SUPPORTED_METHODS, CHALLENGE_PATH);
+        testUnsupportedMethods(REFERENCE_SUPPORTED_METHODS, CHALLENGE_PATH);
     }
 
     @Test
     @ApiAuthentication(mode="auth")
     public void testUnsupportedMethodsChallengeReferenceChallengeReferral() {
 
-  //      testUnsupportedMethods(new String[]{"GET", "POST", "DELETE"}, CHALLENGE_REFERRAL_PATH);
+        testUnsupportedMethods(new String[]{"GET", "POST", "DELETE"}, CHALLENGE_REFERRAL_PATH);
     }
 
     @Test
     @ApiAuthentication(mode="auth")
     public void testChallengeReferenceSupportedMethodsPositive() {
+
         final JSONObject testPostPutPositive = (JSONObject) ((JSONObject)CHALLENGE_ROWS.get(3)).clone();
         testPostPutPositive.put("name", "testPostPositive");
 
- //       referencePositiveSupportedMethodTest(CHALLENGE_PATH, ((JSONObject) CHALLENGE_ROWS.get(4)).get("id").toString()
-  //              testPostPutPositive);
+        int checkResultCount = -2;
+
+        //get all (store results to check at the end)
+        Response checkItemCount = expect()
+            .statusCode(200)
+            .log().ifError()
+            .contentType("application/json")
+        .when()
+            .get(CHALLENGE_PATH);
+
+        String result = checkItemCount.getBody().jsonPath().getJsonObject("results").toString();
+
+        if ( StringUtils.isNotBlank(result) ) {
+            checkResultCount = Integer.parseInt(result);
+        } else {
+            LOGGER.error("Get all method failed at beginning of Positive Test! No results returned.");
+            fail("GET all failed.");
+        }
+
+        //get /id
+        expect()
+            .statusCode(200)
+            .log().ifError()
+            .contentType("application/json")
+        .when()
+            .get(CHALLENGE_PATH + "/" + CHALLENGE_UUIDS[7]);
+
+        testPostPutPositive.remove("id");
+
+        //post
+        Response postResponse = expect()
+            .statusCode(200)
+            .log().ifError()
+        .given()
+            .contentType("application/json")
+            .body(testPostPutPositive)
+        .when()
+            .post(CHALLENGE_PATH);
+
+        final String postContentUUID = postResponse.getBody().jsonPath().getJsonObject("id").toString();
+
+        //get more complete data from post using get (MSSQL version is not reliable without this extra get)
+        Map parsedPostResponse = expect()
+            .statusCode(200)
+            .log().ifError()
+            .contentType("application/json")
+        .when()
+            .get(CHALLENGE_PATH + "/" + postContentUUID).getBody().jsonPath().getMap("");
+
+        testPostPutPositive.put("id", postContentUUID);
+        testPostPutPositive.put("createdBy", getCurrentLoginCreatedModifiedBy());
+        testPostPutPositive.put("modifiedBy", getCurrentLoginCreatedModifiedBy());
+        testPostPutPositive.put("createdDate", parsedPostResponse.get("createdDate"));
+        testPostPutPositive.put("modifiedDate", parsedPostResponse.get("modifiedDate"));
+        testPostPutPositive.put("challengeChallengeReferrals", new JSONArray());
+        testPostPutPositive.put("selfHelpGuideQuestions", new JSONArray());
+        testPostPutPositive.put("referralCount", 0);
+
+        //verify post worked
+        Map postVerificationActual = expect()
+            .statusCode(200)
+            .log().ifError()
+            .contentType("application/json")
+        .when()
+            .get(CHALLENGE_PATH + "/" + postContentUUID).getBody().jsonPath().getMap("");
+
+        assertTrue(checkChallengeResponseEqualToExpected(testPostPutPositive, postVerificationActual));
+
+        testPostPutPositive.remove("id");
+        testPostPutPositive.put("name", ("testReferencePut" + testPassDeConflictNumber));
+
+        //put
+        expect()
+            .statusCode(200)
+            .log().ifError()
+        .given()
+            .contentType("application/json")
+            .body(testPostPutPositive)
+        .when()
+            .put(CHALLENGE_PATH + "/" + postContentUUID);
+
+        //get more complete data from put using get
+        final Response putResponse = expect()
+            .statusCode(200)
+            .log().ifError()
+            .contentType("application/json")
+        .when()
+            .get(CHALLENGE_PATH + "/" + postContentUUID);
+
+        testPostPutPositive.put("id", postContentUUID);
+        testPostPutPositive.put("modifiedDate", putResponse.getBody().jsonPath().getJsonObject("modifiedDate"));
+
+        //verify put worked
+        Map putVerificationActual = expect()
+            .statusCode(200)
+            .log().ifError()
+            .contentType("application/json")
+        .when()
+            .get(CHALLENGE_PATH + "/" + postContentUUID).getBody().jsonPath().getMap("");
+
+        assertTrue(checkChallengeResponseEqualToExpected(testPostPutPositive, putVerificationActual));
+
+        //delete
+        expect()
+            .statusCode(200)
+            .log().ifError()
+        .when()
+            .delete(CHALLENGE_PATH + "/" + postContentUUID);
+
+        testPostPutPositive.put("objectStatus", "INACTIVE");
+
+        //get verify delete worked
+        final Response deleteCheckResponse = expect()
+            .statusCode(200)
+            .log().ifError()
+            .contentType("application/json")
+        .when()
+            .get(CHALLENGE_PATH + "/" + postContentUUID);
+
+        testPostPutPositive.put("modifiedDate", deleteCheckResponse.getBody().jsonPath().getJsonObject("modifiedDate"));
+
+        //verify delete is still intact but inactive
+        Map deleteVerificationResponse = expect()
+            .statusCode(200)
+            .log().ifError()
+            .contentType("application/json")
+        .when()
+            .get(CHALLENGE_PATH + "/" + postContentUUID).getBody().jsonPath().getMap("");
+
+        assertTrue(checkChallengeResponseEqualToExpected(testPostPutPositive, deleteVerificationResponse));
+
+        //get (verify result # matches expected active)
+        expect()
+            .statusCode(200)
+            .log().ifError()
+            .contentType("application/json")
+            .body("results", equalTo( checkResultCount ))
+        .given()
+            .queryParam("status", "ACTIVE")
+        .when()
+            .get(CHALLENGE_PATH);
+
+        //get (verify result # matches expected inactive)
+        expect()
+            .statusCode(200)
+            .log().ifError()
+            .contentType("application/json")
+            .body("results", equalTo(1))
+        .given()
+            .queryParam("status", "INACTIVE")
+        .when()
+            .get(CHALLENGE_PATH);
     }
 
     @Test
     @ApiAuthentication(mode="auth")
     public void testChallengeReferenceSupportedMethodsPositiveChallengeReferral() {
 
-        int checkResultCount = 1;
+        int checkResultCount = loadChallengeReferralsForChallenge(
+                CHALLENGE_REFERRAL_MAPPINGS.get("07b5c3ac-3bdf-4d12-b65d-94cb55167998")).size();
 
-/*        //get /id/challenge
+       //get /id/challengeReferral
         expect()
             .statusCode(200)
             .log().ifError()
@@ -901,46 +1167,54 @@ public class ChallengeIT extends AbstractReferenceTest {
         .when()
             .get(CHALLENGE_REFERRAL_PATH);
 
-        //post /id/challenge
+        //post /id/challengeReferral
         expect()
             .statusCode(200)
             .log().ifError()
         .given()
             .contentType("application/json")
-            .body(UUID.fromString(CHALLENGE_REFERRAL_FULL_FOR_POST_RESPONSE.get("id").toString()))
+            .body(UUID.fromString(CHALLENGE_REFERRAL_UUIDS[12]))
         .when()
             .post(CHALLENGE_REFERRAL_PATH);
 
-        //verify post worked      /challenge
-        Response postResponse = expect()
+        //verify post worked      /challengeReferral
+        List postResponse = expect()
             .statusCode(200)
             .log().ifError()
             .contentType("application/json")
             .body("results", equalTo(checkResultCount + 1))
         .when()
-            .get(CHALLENGE_REFERRAL_PATH);
+            .get(CHALLENGE_REFERRAL_PATH).getBody().jsonPath().getList("rows");
 
-        assertEquals( CHALLENGE_REFERRAL_FULL_FOR_POST_RESPONSE.get("id").toString(),
-                postResponse.getBody().jsonPath().getJsonObject("rows[1].id").toString() );
+        ArrayList<String> returnedUUIDs = new ArrayList<String>();
 
-        //delete   /challenge
+        for ( Object actualRowIndex : postResponse ) {
+
+            returnedUUIDs.add( ((HashMap) actualRowIndex).get("id").toString() );
+        }
+
+        if ( !returnedUUIDs.contains(CHALLENGE_REFERRAL_UUIDS[12]) ) {
+            fail("Post failed for challengeReferral positive test method!");
+        }
+
+        //delete   /challengeReferral
         expect()
             .statusCode(200)
             .log().ifError()
         .given()
             .contentType("application/json")
-            .body(UUID.fromString(CHALLENGE_REFERRAL_FULL_FOR_POST_RESPONSE.get("id").toString()))
+            .body( UUID.fromString(CHALLENGE_REFERRAL_UUIDS[12]) )
         .when()
             .delete(CHALLENGE_REFERRAL_PATH);
 
-        //get (verify result # matches)  /challenge
+        //get (verify result # matches)  /challengeReferral
         expect()
             .statusCode(200)
             .log().ifError()
             .contentType("application/json")
             .body("results", equalTo(checkResultCount))
         .when()
-            .get(CHALLENGE_REFERRAL_PATH);      */
+            .get(CHALLENGE_REFERRAL_PATH);
     }
 
     @Test
@@ -950,25 +1224,15 @@ public class ChallengeIT extends AbstractReferenceTest {
         testNegativePostObject.put("name", ("testPostNegative" + testPassDeConflictNumber));
         final JSONObject testNegativeValidateObject = (JSONObject) CHALLENGE_ROWS.get(6);
 
-   //     referenceNegativeSupportedMethodTest(CHALLENGE_PATH, testNegativePostObject, testNegativeValidateObject);
-    }
-
-    @Test
-    @ApiAuthentication(mode="auth")
-    public void testChallengeReferenceSupportedMethodsNegativeChallengeReferral() {
-
-        final String nonExistentUUID = "70b982b0-68d7-11e3-949a-0800200c9a66";
-        final UUID testPostInvalid = UUID.fromString(nonExistentUUID);
-        final JSONObject testGetInvalid = new JSONObject();
         int checkResultCount = 0;
 
-        //get /challenge
- /*       Response checkItemCount = expect()
+        //get all (store results to check at the end)
+        Response checkItemCount = expect()
             .statusCode(200)
             .log().ifError()
             .contentType("application/json")
         .when()
-            .get(CHALLENGE_REFERRAL_PATH);
+            .get(CHALLENGE_PATH);
 
         String result = checkItemCount.getBody().jsonPath().getJsonObject("results").toString();
 
@@ -979,92 +1243,305 @@ public class ChallengeIT extends AbstractReferenceTest {
             fail("GET all failed Negative Tests.");
         }
 
-        testGetInvalid.put("success", "true");
-        testGetInvalid.put("message", "");
-        testGetInvalid.put("results", 0);
-        testGetInvalid.put("rows", new JSONArray());
-
-        //get invalid id   /challengeChallengeReferral
+        //get invalid id
         expect()
             .statusCode(404)
             .contentType("application/json")
         .when()
-            .get(CHALLENGE_PATH + "/" + nonExistentUUID);
+            .get(CHALLENGE_PATH + "/70b982b0-68d7-11e3-949a-0800200c9a66");
 
-        //post unassigned uuid name /challenge
+        testNegativePostObject.remove("id");
+        final String name = testNegativePostObject.get("name").toString();
+        testNegativePostObject.remove("name");
+
+        //post empty name
         expect()
-            .statusCode(404)
+            .statusCode(400)
         .given()
             .contentType("application/json")
-            .body(testPostInvalid)
+            .body(testNegativePostObject)
         .when()
-            .post(CHALLENGE_REFERRAL_PATH);
+            .post(CHALLENGE_PATH);
 
+        testNegativePostObject.put("name", name);
+        testNegativePostObject.put("objectStatus", "");
 
-        //delete  /challenge
+        //put
         expect()
-            .statusCode(404)
+            .statusCode(500)
         .given()
             .contentType("application/json")
-            .body(UUID.fromString(nonExistentUUID))
+            .body(testNegativePostObject)
         .when()
-            .delete(CHALLENGE_REFERRAL_PATH);
+            .put(CHALLENGE_PATH + "/" + testNegativeValidateObject.get("id"));
 
-        //get all (verify result # is unchanged)    /challenge
+        //verify put didn't work
+        Map testPutNegative = expect()
+            .statusCode(200)
+            .contentType("application/json")
+        .when()
+            .get(CHALLENGE_PATH + "/" + testNegativeValidateObject.get("id")).getBody().jsonPath().getMap("");
+
+        if ( checkChallengeResponseEqualToExpected( testNegativeValidateObject, testPutNegative ) == false ) {
+            fail("Negative test for challenge in put method. Put worked despite invalid put content!");
+        }
+
+        //delete
+        expect()
+            .statusCode(404)
+        .when()
+            .delete(CHALLENGE_PATH + "/70b982b0-68d7-11e3-949a-0800200c9a66");
+
+
+        //get all (verify result # is unchanged)
         expect()
             .statusCode(200)
             .log().ifError()
             .contentType("application/json")
             .body("results", equalTo(checkResultCount))
         .when()
-            .get(CHALLENGE_REFERRAL_PATH);   */
+            .get(CHALLENGE_PATH);
+    }
+
+    @Test
+    @ApiAuthentication(mode="auth")
+    public void testChallengeReferenceSupportedMethodsNegativeChallengeReferral() {
+
+        final String challengReferralPathForNegativeTest = CHALLENGE_PATH + "/" + CHALLENGE_UUIDS[5] +
+                CHALLENGE_REFERRAL_BARE;
+
+        JSONObject negativeReferallObject = (JSONObject) ((JSONObject) (loadChallengeReferralsForChallenge(
+                CHALLENGE_REFERRAL_MAPPINGS.get(CHALLENGE_UUIDS[3])).get(1))).clone();
+
+        JSONObject validateReferallObject = (JSONObject) ((JSONObject) (loadChallengeReferralsForChallenge(
+                CHALLENGE_REFERRAL_MAPPINGS.get(CHALLENGE_UUIDS[5])).get(1)));
+
+
+        int checkResultCount = 0;
+
+        //get all (store results to check at the end)
+        Response checkItemCount = expect()
+            .statusCode(200)
+            .log().ifError()
+            .contentType("application/json")
+        .when()
+            .get(challengReferralPathForNegativeTest);
+
+        String result = checkItemCount.getBody().jsonPath().getJsonObject("results").toString();
+
+        if ( StringUtils.isNotBlank(result) ) {
+            checkResultCount = Integer.parseInt(result);
+        } else {
+            LOGGER.error("Get all method failed in Negative Test! No results returned.");
+            fail("GET all failed Negative Tests.");
+        }
+
+        //get invalid id
+        expect()
+            .statusCode(404)
+            .contentType("application/json")
+        .when()
+            .get(CHALLENGE_PATH + "/70b982b0-68d7-11e3-949a-0800200c9a66" + CHALLENGE_REFERRAL_BARE);
+
+        //post empty name
+        expect()
+            .statusCode(404)
+        .given()
+            .contentType("application/json")
+            .body(UUID.fromString("70b982b0-68d7-11e3-949a-0800200c9a66"))
+        .when()
+            .post(challengReferralPathForNegativeTest);
+
+        //delete
+        expect()
+            .statusCode(404)
+        .when()
+            .delete(challengReferralPathForNegativeTest + "&id=" + UUID.fromString("70b982b0-68d7-11e3-949a-0800200c9a66"));
+
+
+        //get all (verify result # is unchanged)
+        expect()
+            .statusCode(200)
+            .log().ifError()
+            .contentType("application/json")
+            .body("results", equalTo(checkResultCount))
+        .when()
+            .get(challengReferralPathForNegativeTest);
     }
 
 
     private static final JSONArray loadChallengeReferralsForChallenge( final String[] challengeReferralIDs ) {
 
         final JSONArray jsonArrayOfReferralsToReturn = new JSONArray();
-        int referralUUIDIndex;
 
-        for ( String challengeReferralID : challengeReferralIDs ) {
+        if ( challengeReferralIDs != null ) {
 
-            JSONObject tempChallengeReferral = new JSONObject();
+            int referralUUIDIndex;
 
-           for (referralUUIDIndex = 0; referralUUIDIndex < CHALLENGE_REFERRAL_UUIDS.length; referralUUIDIndex++) {
-                if ( challengeReferralID.equals(CHALLENGE_REFERRAL_UUIDS[referralUUIDIndex]) ) {
-                    break;
+            for ( String challengeReferralID : challengeReferralIDs ) {
+
+                JSONObject tempChallengeReferral = new JSONObject();
+
+                for ( referralUUIDIndex = 0; referralUUIDIndex < CHALLENGE_REFERRAL_UUIDS.length; referralUUIDIndex++ ) {
+                    if ( challengeReferralID.equals(CHALLENGE_REFERRAL_UUIDS[referralUUIDIndex]) ) {
+                        break;
+                    }
                 }
-           }
 
-            if ( referralUUIDIndex < CHALLENGE_REFERRAL_UUIDS.length ) {
+                if ( referralUUIDIndex < CHALLENGE_REFERRAL_UUIDS.length ) {
 
-                tempChallengeReferral.put("id", CHALLENGE_REFERRAL_UUIDS[ referralUUIDIndex ]);
-                tempChallengeReferral.put("createdDate", getDefaultCreatedModifiedByDate());
-                tempChallengeReferral.put("createdBy", getDefaultCreatedModifiedBy());
-                tempChallengeReferral.put("modifiedDate", getDefaultCreatedModifiedByDate());
-                tempChallengeReferral.put("modifiedBy", getDefaultCreatedModifiedBy());
-                tempChallengeReferral.put("objectStatus", "ACTIVE");
-                tempChallengeReferral.put("name", CHALLENGE_REFERRAL_NAMES[referralUUIDIndex]);
-                tempChallengeReferral.put("description", CHALLENGE_REFERRAL_DESCRIPTIONS[referralUUIDIndex]);
-                tempChallengeReferral.put("publicDescription", CHALLENGE_REFERRAL_PUBLIC_DESCRIPTIONS[referralUUIDIndex]);
-                tempChallengeReferral.put("showInSelfHelpGuide", CHALLENGE_REFERRAL_SELF_HELP_GUIDE_VALUES[referralUUIDIndex]);
+                    tempChallengeReferral.put("id", CHALLENGE_REFERRAL_UUIDS[ referralUUIDIndex ]);
+                    tempChallengeReferral.put("createdDate", getDefaultCreatedModifiedByDate());
+                    tempChallengeReferral.put("createdBy", getDefaultCreatedModifiedBy());
+                    tempChallengeReferral.put("modifiedDate", getDefaultCreatedModifiedByDate());
+                    tempChallengeReferral.put("modifiedBy", getDefaultCreatedModifiedBy());
+                    tempChallengeReferral.put("objectStatus", "ACTIVE");
+                    tempChallengeReferral.put("name", CHALLENGE_REFERRAL_NAMES[referralUUIDIndex]);
+                    tempChallengeReferral.put("description", CHALLENGE_REFERRAL_DESCRIPTIONS[referralUUIDIndex]);
+                    tempChallengeReferral.put("publicDescription", CHALLENGE_REFERRAL_PUBLIC_DESCRIPTIONS[referralUUIDIndex]);
+                    tempChallengeReferral.put("showInSelfHelpGuide", CHALLENGE_REFERRAL_SELF_HELP_GUIDE_VALUES[referralUUIDIndex]);
 
-                if ( referralUUIDIndex != 24 && referralUUIDIndex != 25 && referralUUIDIndex != 54  ) {
-                    tempChallengeReferral.put("showInStudentIntake", null);
+                    if ( referralUUIDIndex != 24 && referralUUIDIndex != 25 && referralUUIDIndex != 54  ) {
+                        tempChallengeReferral.put("showInStudentIntake", null);
+                    } else {
+                        tempChallengeReferral.put("showInStudentIntake", true);
+                    }
+
+                    tempChallengeReferral.put("link", CHALLENGE_REFERRAL_LINKS[referralUUIDIndex]);
+
+                    jsonArrayOfReferralsToReturn.add(tempChallengeReferral);
+
                 } else {
-                    tempChallengeReferral.put("showInStudentIntake", true);
+                    fail("ERROR: ChallengeReferral not found! Index: " + referralUUIDIndex + " of " + challengeReferralIDs.length +
+                            " and ReferralIDs given: [" + challengeReferralIDs.toString() + "]. \n");
+                }
+            }
+        }
+        return jsonArrayOfReferralsToReturn;
+    }
+
+
+    private static final JSONArray loadSelfHelpGuideQuestionsForChallenge( final String[] selfHelpGuideQuestionIDs,
+                                                                           final String challengeID,
+                                                                           final String challengeName ) {
+        final JSONArray jsonArrayOfQuestionsToReturn = new JSONArray();
+
+        if ( selfHelpGuideQuestionIDs != null ) {
+
+            int questionIDIndex;
+
+            for ( String singleSelfHelpGuideQuestionID : selfHelpGuideQuestionIDs ) {
+
+                JSONObject tempSelfHelpGuideQuestion = new JSONObject();
+
+                for ( questionIDIndex = 0; questionIDIndex < SELF_HELP_GUIDE_QUESTION_UUIDS.length; questionIDIndex++ ) {
+                    if ( singleSelfHelpGuideQuestionID.equals(SELF_HELP_GUIDE_QUESTION_UUIDS[questionIDIndex]) ) {
+                        break;
+                    }
                 }
 
-                tempChallengeReferral.put("link", CHALLENGE_REFERRAL_LINKS[referralUUIDIndex]);
+                if ( questionIDIndex < CHALLENGE_REFERRAL_UUIDS.length ) {
 
-                jsonArrayOfReferralsToReturn.add(tempChallengeReferral);
+                    tempSelfHelpGuideQuestion.put("id", SELF_HELP_GUIDE_QUESTION_UUIDS[questionIDIndex]);
+                    tempSelfHelpGuideQuestion.put("name", challengeName);
 
-            } else {
-                fail("ERROR: ChallengeReferral not found! Index: " + referralUUIDIndex + " of " + challengeReferralIDs.length +
-                        " and ReferralIDs given: [" + challengeReferralIDs.toString() + "]. \n");
+                    if ( questionIDIndex > 5 && questionIDIndex < 17 ) {
+                        tempSelfHelpGuideQuestion.put("description", "");
+                    } else {
+                        tempSelfHelpGuideQuestion.put("description", null);
+                    }
+                    tempSelfHelpGuideQuestion.put("createdDate", getDefaultCreatedModifiedByDate());
+                    tempSelfHelpGuideQuestion.put("modifiedDate", getDefaultCreatedModifiedByDate());
+                    tempSelfHelpGuideQuestion.put("createdBy", getDefaultCreatedModifiedBy());
+                    tempSelfHelpGuideQuestion.put("modifiedBy", getDefaultCreatedModifiedBy());
+                    tempSelfHelpGuideQuestion.put("objectStatus", "ACTIVE");
+                    tempSelfHelpGuideQuestion.put("questionNumber", SELF_HELP_GUIDE_QUESTION_QUESTION_NUMBERS[questionIDIndex]);
+                    tempSelfHelpGuideQuestion.put("mandatory", false);
+                    tempSelfHelpGuideQuestion.put("critical", false);
+                    tempSelfHelpGuideQuestion.put("challengeId", challengeID);
+                    tempSelfHelpGuideQuestion.put("selfHelpGuideId", SELF_HELP_GUIDE_QUESTION_SELF_HELP_GUIDE_ID[questionIDIndex]);
+
+                    jsonArrayOfQuestionsToReturn.add(tempSelfHelpGuideQuestion);
+
+                } else {
+                    fail("ERROR: Self Help Guide Question not found! Index: " + questionIDIndex + " of " +
+                            selfHelpGuideQuestionIDs.length + " and ReferralIDs given: [" +
+                            singleSelfHelpGuideQuestionID.toString() + "]. \n");
+                }
             }
         }
 
-        return jsonArrayOfReferralsToReturn;
+        return jsonArrayOfQuestionsToReturn;
     }
+
+
+    private final boolean checkChallengeResponseEqualToExpected( final JSONObject expected, final Map actual ) {
+
+        boolean result = false;
+
+         if ( expected.keySet().size() != actual.keySet().size() ) {
+
+            if ( expected.keySet().size() > actual.keySet().size() ) {
+                fail("JSON Expected size is greater than actual! Check for missing values in returned JSON or " +
+                        "non-updated test data structure.");
+            } else {
+                fail("JSON Expected size is less than actual! Check for improper or non-updated test data JSON " +
+                        "structure.");
+            }
+
+        } else if ( !expected.keySet().containsAll(actual.keySet()) ) {
+
+            fail("JSON Names don't match! Check for improper or non-updated test data JSON structure");
+
+        } else {
+
+            for ( Object nameIndex : expected.keySet() ) {
+
+                if ( !nameIndex.toString().equals("challengeChallengeReferrals") &&
+                        !nameIndex.toString().equals("selfHelpGuideQuestions")) {
+
+                    try {
+                        if ( !expected.get(nameIndex).equals( actual.get(nameIndex) ) ) {
+                            fail("JSON Doesn't match for Challenge : " + expected.get("name") + "!  Name : " +
+                                nameIndex.toString() + " value does not match." );
+                        }
+                    } catch ( NullPointerException npe ) {
+                        if ( actual.get(nameIndex) != null ) {
+                            fail("JSON Doesn't match for Challenge: " + expected.get("name") + " in name " +
+                            nameIndex.toString() + " value is not null. Actual value is " + actual.get(nameIndex) +
+                                    ". ");
+                        }
+                    }
+
+                } else {
+
+                    ArrayList expectedList = (ArrayList) expected.get(nameIndex);
+                    ArrayList actualList = (ArrayList) actual.get(nameIndex);
+
+                    if ( expectedList.size() != actualList.size() ) {
+
+                        fail("Expected JSONArray length doesn't match for " + expected.get("name") +
+                                " in value " + nameIndex.toString() + ". Expected: " + expectedList.size() + "  and  " +
+                                "Actual: " + actualList.size()+". ");
+
+                    } else {
+
+                        for ( Object listIndex : expectedList ) {
+
+                            if ( !expectedList.contains(listIndex) ) {
+                                fail("Expected JSONArray value(s) don't match for " + expected.get("name") +
+                                        " in name " + nameIndex.toString() + ". The arraylist value of concern is: " +
+                                        ((JSONObject)listIndex).get("name") + ". ");
+                            }
+                        }
+                    }
+
+                    result = true;
+                }
+            }
+         }
+
+        return result;
+    }
+
 }
