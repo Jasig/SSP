@@ -134,15 +134,11 @@ public class Task // NOPMD by jon.adams
 			return null;
 		}
 
-		if (person.getId() == getCreatedBy().getId()) {
-			if (challengeReferral == null) {
-				return CUSTOM_ACTION_PLAN_TASK;
-			} else {
-				return ACTION_PLAN_TASK;
-			}
+		if (challengeReferral == null) {
+			return CUSTOM_ACTION_PLAN_TASK;
 		}
+		return ACTION_PLAN_TASK;
 
-		return SSP_ACTION_PLAN_TASK;
 	}
 
 	public String getGroup() {
