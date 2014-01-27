@@ -49,6 +49,19 @@ public class BlurbServiceImpl extends
 	}
 
 	@Override
+	public Blurb save(Blurb obj) throws org.jasig.ssp.service.ObjectNotFoundException ,org.jasig.ssp.web.api.validation.ValidationException {
+		Blurb blurb = dao.get(obj.getId());
+		if(blurb == null)
+		{
+			throw new org.jasig.ssp.web.api.validation.ValidationException("Blurb with PK "+obj.getId()+" does not exist.");
+		}
+		if(!blurb.getCode().equals(obj.getCode()) || !blurb.getName().equals(obj.getName()))
+		{
+			throw new org.jasig.ssp.web.api.validation.ValidationException("You can't edit a blurb's code or name.");
+		}
+		return super.save(obj);
+	};
+	@Override
 	public PagingWrapper<Blurb> getAll(
 			SortingAndPaging sAndP, String code) {
 		return dao.getAll(sAndP,code);
