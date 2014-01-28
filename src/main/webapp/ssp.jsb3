@@ -958,7 +958,21 @@
                     "clsName": "Ssp.controller.tool.profile.ProfileToolViewController",
                     "name": "ProfileToolViewController.js",
                     "path": "/app/controller/tool/profile/"
+                },{
+                    "clsName": "Ssp.controller.tool.profile.FinancialAidAwardViewController",
+                    "name": "FinancialAidAwardViewController.js",
+                    "path": "/app/controller/tool/profile/"
+                },{
+                    "clsName": "Ssp.controller.tool.profile.SapStatusController",
+                    "name": "SapStatusController.js",
+                    "path": "/app/controller/tool/profile/"
                 },
+                 {
+                    "clsName": "Ssp.controller.tool.profile.FinancialAidFileViewController",
+                    "name": "FinancialAidFileViewController.js",
+                    "path": "/app/controller/tool/profile/"
+                },
+                 
             	{
                     "clsName": "Ssp.model.StudentActivity",
                     "name": "StudentActivity.js",
@@ -1585,6 +1599,26 @@
                 {
                     "clsName": "Ssp.view.tools.profile.ServicesProvided",
                     "name": "ServicesProvided.js",
+                    "path": "/app/view/tools/profile/"
+                },{
+                    "clsName": "Ssp.view.tools.profile.FinancialAidFileViewer",
+                    "name": "FinancialAidFileViewer.js",
+                    "path": "/app/view/tools/profile/"
+                },{
+                    "clsName": "Ssp.view.tools.profile.FinancialAidAwardViewer",
+                    "name": "FinancialAidAwardViewer.js",
+                    "path": "/app/view/tools/profile/"
+                },{
+                    "clsName": "Ssp.view.tools.profile.FinancialAidAwards",
+                    "name": "FinancialAidAwards.js",
+                    "path": "/app/view/tools/profile/"
+                },{
+                    "clsName": "Ssp.view.tools.profile.FinancialAidFiles",
+                    "name": "FinancialAidFiles.js",
+                    "path": "/app/view/tools/profile/"
+                },{
+                    "clsName": "Ssp.view.tools.profile.SapStatus",
+                    "name": "SapStatus.js",
                     "path": "/app/view/tools/profile/"
                 },
                 {
@@ -2415,6 +2449,11 @@
                 {
                     "clsName": "Ssp.store.reference.Ethnicities",
                     "name": "Ethnicities.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.FinancialAidFiles",
+                    "name": "FinancialAidFiles.js",
                     "path": "/app/store/reference/"
                 },
                 {

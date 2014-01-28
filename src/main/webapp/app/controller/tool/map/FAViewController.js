@@ -192,7 +192,7 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
         var financialAidAcceptedTerms = transcript.get('financialAidAcceptedTerms');
         if (financialAidAcceptedTerms && financialAidAcceptedTerms.length > 0) {
         	var model = Ext.create("Ssp.model.external.FinancialAidAward");
-            model.populateFromExternalData(financialAidAwards[0]);
+            model.populateFromExternalData(financialAidAcceptedTerms[0]);
             me.getFinancialAidAcceptedTermsField().setValue(model.get("termCode") + " (" +  model.get("acceptedLong") + ")");
         }
 
