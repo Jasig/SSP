@@ -145,8 +145,16 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         // Set defined configured label for the studentId field
         var studentIdAlias = me.sspConfig.get('studentIdAlias');
         me.getStudentIdField().setFieldLabel(studentIdAlias);
+        me.setFinancialLabels();
 
     },
+    
+	setFinancialLabels: function(){
+		var me=this;
+		me.getFinancialAidFileStatusField().setText('<span style="color:#15428B">FA File:   </span>', false);
+        me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP Code:   </span>', false);
+        me.getFinancialAidAcceptedTermsField().setText('<span style="color:#15428B">FA Awarded:   </span>', false);
+	},
 
     newServiceSuccessHandler: function(name, callback, serviceResponses) {
         var me = this;

@@ -146,6 +146,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         // Set defined configured label for the studentId field
         var studentIdAlias = me.sspConfig.get('studentIdAlias');
         me.getStudentIdField().setFieldLabel(studentIdAlias);
+        me.setFinancialLabels();
     },
     
     newServiceSuccessHandler: function(name, callback, serviceResponses){
@@ -240,6 +241,13 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 			return "";
 		return value;
 	},
+	
+	setFinancialLabels: function(){
+		var me=this;
+		me.getFinancialAidFileStatusField().setText('<span style="color:#15428B">FA File:   </span>', false);
+        me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP Code:   </span>', false);
+        me.getFinancialAidAcceptedTermsField().setText('<span style="color:#15428B">FA Awarded:   </span>', false);
+	},
     
     getTranscriptSuccess: function(serviceResponses){
         var me = this;
@@ -277,12 +285,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
             me.getIntendedProgramAtAdmitField().setValue(intendedProgramsAtAdmit.join(', '));
         }
         
-        
         var financialAid = transcript.get('financialAid');
         
-        me.getFinancialAidFileStatusField().setText('<span style="color:#15428B">FA File:   </span>', false);
-        me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP Code:   </span>', false);
-        me.getFinancialAidAcceptedTermsField().setText('<span style="color:#15428B">FA Awarded:   </span>', false);
         if (financialAid) {
         	me.getFafsaDateField().setFieldLabel('');
 			me.getFafsaDateField().setValue('<span style="color:#15428B">FAFSA:  </span>' + Ext.util.Format.date(Ext.Date.parse(financialAid.fafsaDate, 'c'),'m/d/Y'));
