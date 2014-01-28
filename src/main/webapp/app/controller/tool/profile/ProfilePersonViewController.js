@@ -300,6 +300,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             me.getAcademicProgramsField().setValue('<span style="color:#15428B">Academic Program:  </span>' + programNames.join(', '));
         }
         
+        me.getFinancialAidFileStatusField().setText('<span style="color:#15428B">FA File:   </span>', false);
+        me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP Code:   </span>', false);
+        me.getFinancialAidAcceptedTermsField().setText('<span style="color:#15428B">FA Awarded:   </span>', false);
 
         var financialAid = transcript.get('financialAid');
         if ( financialAid ) {
