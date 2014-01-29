@@ -82,7 +82,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			        fieldLabel: 'Username',
 			        name: 'username',
 			        minLength: 4,
-			        maxLength: 100,
+			        maxLength: 25,
 			        itemId: 'username',
 			        allowBlank:false,
 			        width: 350
