@@ -501,6 +501,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		form.loadRecord(me.currentMapPlan);
 		me.notesPopUp.query('[name=saveButton]')[0].addListener('click', me.onPlanNotesSave, me, {single:true});
 	    me.notesPopUp.center();
+	    var title = me.currentMapPlan.get("isTemplate") == true? 'Template Notes':'Plan Notes';
+	    me.notesPopUp.setTitle(title);
 		me.notesPopUp.show();
     },
 
