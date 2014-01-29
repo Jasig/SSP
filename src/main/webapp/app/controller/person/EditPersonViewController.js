@@ -193,6 +193,21 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     },    
     getBySchoolIdFailure: function( response, scope ){
     	var me=scope;
+		var dialogOpts = {
+			buttons: Ext.Msg.OK,
+			icon: Ext.Msg.ERROR,
+			fn: Ext.emptyFn,
+			title: 'Student Not Found',
+			msg: 'No matching student found for the id provided',
+			scope: me
+		};
+		
+		if(response.status == 404 && response.statusText == 'Not Found')
+		{
+			
+			Ext.Msg.show(dialogOpts);
+		}
+		
     	me.getView().setLoading( false );
     }
 });
