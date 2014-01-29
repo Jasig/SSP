@@ -55,7 +55,33 @@ Ext.define('Ssp.view.person.Appointment', {
                     fieldLabel: 'Start Time',
                     increment: 30,
                     typeAhead: false,
-                    allowBlank: false
+                    allowBlank: false,
+                    listeners: {
+                        'select': function(){
+                            var currentDate = new Date();
+                            
+                            var dval = Ext.ComponentQuery.query('#appointmentDateField')[0].getValue();
+                            
+                            var sBeginTime = Ext.Date.add(dval, Ext.Date.HOUR, Ext.ComponentQuery.query('#startTimeField')[0].getValue().getHours());
+                            
+                            var stBeginTime = Ext.Date.add(sBeginTime, Ext.Date.MINUTE, Ext.ComponentQuery.query('#startTimeField')[0].getValue().getMinutes());
+                            
+                            
+                            if (currentDate > stBeginTime) {
+                            
+                                alert('Error! appointment start time must be in the future.');
+                            }
+                            
+                            
+                            if (Ext.ComponentQuery.query('#endTimeField')[0].getValue() !== null) {
+                                if (this.getValue() > Ext.ComponentQuery.query('#endTimeField')[0].getValue()) {
+                                    alert('Error! End Date Must Be Later Than The Start Date.')
+                                    this.setValue(Ext.ComponentQuery.query('#endTimeField')[0].getValue())
+                                };
+                               };
+                            Ext.ComponentQuery.query('#endTimeField')[0].setMinValue(this.getValue())
+                        }
+                    }
                 }, {
                     xtype: 'timefield',
                     name: 'endTime',
@@ -63,7 +89,32 @@ Ext.define('Ssp.view.person.Appointment', {
                     fieldLabel: 'End Time',
                     typeAhead: false,
                     allowBlank: false,
-                    increment: 30
+                    increment: 30,
+                    listeners: {
+                        'select': function(){
+                            var currentDate = new Date();
+                            
+                            var dval = Ext.ComponentQuery.query('#appointmentDateField')[0].getValue();
+                            
+                            var sEndTime = Ext.Date.add(dval, Ext.Date.HOUR, Ext.ComponentQuery.query('#endTimeField')[0].getValue().getHours());
+                            
+                            var stEndTime = Ext.Date.add(sEndTime, Ext.Date.MINUTE, Ext.ComponentQuery.query('#endTimeField')[0].getValue().getMinutes());
+                            
+                            
+                            if (currentDate > stEndTime) {
+                            
+                                alert('Error! appointment end time must be in the future.');
+                            }
+                            
+                            if (Ext.ComponentQuery.query('#startTimeField')[0].getValue() !== null) {
+                                if (this.getValue() < Ext.ComponentQuery.query('#startTimeField')[0].getValue()) {
+                                    alert('Error! End Date Must Be Later Than The Start Date.')
+                                    this.setValue(Ext.ComponentQuery.query('#startTimeField')[0].getValue())
+                                };
+                               };
+                            
+                         }
+                    }
                 }, {
                     xtype: 'checkboxfield',
                     fieldLabel: 'Send Student Intake Request',
