@@ -59,7 +59,15 @@ Ext.define('Ssp.view.person.Coach', {
 				        mode: 'local',
 				        typeAhead: true,
 				        queryMode: 'local',
-				        allowBlank: false
+				        allowBlank: false,
+						forceSelection: true,
+						listeners:{
+						'change': function() {
+							if (this.getValue() === null) {
+								this.reset();
+								}
+						}
+					}
 					},{
 				    	xtype: 'displayfield',
 				        fieldLabel: 'Office',
