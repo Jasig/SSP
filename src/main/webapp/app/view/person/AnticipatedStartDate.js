@@ -52,7 +52,15 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
 		        mode: 'local',
 		        typeAhead: true,
 		        queryMode: 'local',
-		        allowBlank: true
+		        allowBlank: true,
+				forceSelection: true,
+				listeners:{
+					'change': function() {
+						if (this.getValue() === null) {
+							this.reset();
+							}
+					}
+				}
 			},{
 		        xtype: 'combobox',
 		        name: 'anticipatedStartYear',
