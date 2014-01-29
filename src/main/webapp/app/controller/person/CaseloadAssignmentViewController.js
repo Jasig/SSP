@@ -218,6 +218,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		// service reasons view
 		var serviceReasonsView = Ext.ComponentQuery.query('.personservicereasons')[0];
 		var serviceReasonsForm = serviceReasonsView.getForm();
+		var selectedServiceReasonsItemSelector = Ext.ComponentQuery.query('#selectedServiceReasonsItemSelector')[0];
 		var selectedServiceReasons = [];
 
 		// anticipated start date view
@@ -260,8 +261,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			model.set('referralSources', selectedReferralSources);
 			
 			// set the service reasons
-			serviceReasonsFormValues = serviceReasonsForm.getValues();
-			selectedServiceReasons = me.formUtils.getSelectedIdsAsArray( serviceReasonsFormValues );
+			serviceReasonsFormValues = selectedServiceReasonsItemSelector.getValue();
+			selectedServiceReasons = me.getSelectedItemSelectorIdsForTransfer(serviceReasonsFormValues);
 			model.set('serviceReasons', selectedServiceReasons);
 						
 			me.getView().setLoading( true );
@@ -315,6 +316,27 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
     savePersonFailure: function( response, scope ){
     	var me=scope;
+		
+		var dialogOpts = {
+			buttons: Ext.Msg.OK,
+			icon: Ext.Msg.ERROR,
+			fn: Ext.emptyFn,
+			title: 'Duplicate Username',
+			msg: 'Username already exists.',
+			scope: me
+		};
+		
+		
+		var parsedResponseText = Ext.decode(response.responseText);
+		
+		var responseDetail = parsedResponseText.message;
+		
+		
+		
+		if(response.status == 500 && responseDetail.indexOf('ERROR: duplicate key value violates unique constraint "uq_person_school_id"') !== -1){
+			Ext.Msg.show(dialogOpts);
+		}
+		
     	me.getView().setLoading( false );
     },
 
@@ -538,6 +560,16 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		var me=scope; 
     	me.getView().setLoading( false );
 		me.loadStudentToolsView();  	
+		
+		var dialogOpts = {
+			buttons: Ext.Msg.OK,
+			icon: Ext.Msg.INFO,
+			fn: Ext.emptyFn,
+			title: '',
+			msg: 'Student Information updated successfully',
+			scope: me
+		};	
+		Ext.Msg.show(dialogOpts);
     },    
     
     saveAppointmentFailure: function( response, scope ){

@@ -470,6 +470,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		var id = me.personLite.get('id');
 		me.getView().setLoading( false );
 	    store.remove( store.getById( id ) );
+		me.loadStudentToolsView();
 	},
 	
 	deletePersonFailure: function( r, scope ){
@@ -483,6 +484,10 @@ Ext.define('Ssp.controller.SearchViewController', {
     
     loadCaseloadAssignment: function(){
     	var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});    	
+    },
+	
+	loadStudentToolsView: function(){
+    	this.appEventsController.getApplication().fireEvent('displayStudentRecordView');
     },
   
     onSetProgramStatusClick: function( button ){

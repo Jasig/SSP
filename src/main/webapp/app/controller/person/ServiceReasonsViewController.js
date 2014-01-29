@@ -23,11 +23,47 @@ Ext.define('Ssp.controller.person.ServiceReasonsViewController', {
     	formUtils: 'formRendererUtils',
     	columnRendererUtils: 'columnRendererUtils',
         person: 'currentPerson',
-        serviceReasonsStore: 'serviceReasonsAllUnpagedStore'
+        serviceReasonsStore: 'serviceReasonsAllUnpagedStore',
+		formRendererUtils: 'formRendererUtils',
+		itemSelectorInitializer: 'itemSelectorInitializer'    
     },
     
 	init: function() {
 		var me=this;
+    	var selectedServiceReasons =  me.columnRendererUtils.getSelectedIdsForMultiSelect( me.person.get('serviceReasons') );
+		
+		var serviceReasonsSuccessFunc = function(records,operation,success){
+			if (records.length > 0) {
+				var items = [];
+				Ext.Array.each(records, function(item, index){
+					if (me.formUtils.filterAssociativeItem(item.get('active'), item.get('id'), selectedServiceReasons)) {
+						items.push(item.raw);
+					}
+				});
+				
+				 me.formRendererUtils.applyAssociativeStoreFilter(me.serviceReasonsStore, selectedServiceReasons);
+
+		        me.itemSelectorInitializer.defineAndAddSelectorField(me.getView(), selectedServiceReasons, {
+		            itemId: 'selectedServiceReasonsItemSelector',
+		            name: 'selectedServiceReasons',
+					fieldLabel: '<div style="float:right; width: 48%; ">Assigned to the Student</div><div style="width: 50%;">Available Service Reasons</div>',
+					labelAlign: 'top',
+					labelSeparator: ' ',
+		            store: me.serviceReasonsStore
+		        });
+				
+			}
+		};
+		
+		me.serviceReasonsStore.load({scope: me, callback: serviceReasonsSuccessFunc});
+		
+
+        //me.serviceReasonsStore.load({scope: me, callback: serviceReasonsSuccessFunc});
+       // me.serviceReasonsStore.clearFilter(true);
+       
+		
+		
+		/*var me=this;
 		var selectedServiceReasons =  me.columnRendererUtils.getSelectedIdsForMultiSelect( me.person.get('serviceReasons') );
 
 		var serviceReasonsSuccessFunc = function(records,operation,success){
@@ -53,7 +89,7 @@ Ext.define('Ssp.controller.person.ServiceReasonsViewController', {
 	    	}
 		};
 		
-		me.serviceReasonsStore.load({scope: me, callback: serviceReasonsSuccessFunc});
+		me.serviceReasonsStore.load({scope: me, callback: serviceReasonsSuccessFunc});*/
 		
 		return this.callParent(arguments);
     }
