@@ -22,15 +22,19 @@ import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.TemplateDao;
+import org.jasig.ssp.model.MapTemplateVisibility;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TemplateService;
 import org.jasig.ssp.service.external.ExternalDepartmentService;
 import org.jasig.ssp.service.external.ExternalDivisionService;
 import org.jasig.ssp.service.external.ExternalProgramService;
+import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.TemplateOutputTO;
+import org.jasig.ssp.transferobject.TemplateSearchTO;
 import org.jasig.ssp.transferobject.TemplateTO;
 import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
 import org.jasig.ssp.transferobject.reference.MessageTemplatePlanPrintParams;
@@ -40,6 +44,7 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +60,8 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(TemplateServiceImpl.class);
+	
+	private static String ANONYMOUS_MAP_TEMPLATE_ACCESS="anonymous_map_template_access";
 
 	@Autowired
 	private transient TemplateDao dao;
@@ -70,6 +77,12 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 	
 	@Autowired
 	private transient ExternalProgramService programService;
+	
+	@Autowired
+	private transient SecurityService securityService;
+	
+	@Autowired
+	private transient ConfigService configService;
 	
 	@Override
 	protected TemplateDao getDao() {
@@ -135,12 +148,24 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 
 	@Override
 	public PagingWrapper<Template> getAll(
-			SortingAndPaging createForSingleSortWithPaging, Boolean isPrivate,
-			String divisionCode, String programCode, String departmentCode) {
-		return getDao().getAll(createForSingleSortWithPaging,  isPrivate,
-			 divisionCode,  programCode, departmentCode);
+			SortingAndPaging createForSingleSortWithPaging,TemplateSearchTO searchTO) {
+
+		if(!securityService.isAuthenticated() || !securityService.hasAuthority("ROLE_PERSON_MAP_READ")){
+			if(!anonymousUsersAllowed()){
+				LOGGER.info("Invalid request for templates, requested by anonymous user, anonymous access is not enabled");
+				throw new AccessDeniedException("Invalid request for templates, requested by anonymous user, anonymous access is not enabled");
+			}
+			if(searchTO.visibilityAll())
+				searchTO.setVisibility(MapTemplateVisibility.ANONYMOUS);
+			if(!searchTO.getVisibility().equals(MapTemplateVisibility.ANONYMOUS)){
+				LOGGER.info("Invalid request for templates, request by anonymous user request was for private/authenticated templates only.");
+				throw new AccessDeniedException("Invalid request for templates, request by anonymous user request was for private/authenticated templates only.");
+			}
+		}
+		return getDao().getAll(createForSingleSortWithPaging, searchTO);
 	}
-
-
-
+	
+	private Boolean anonymousUsersAllowed() {
+		return Boolean.parseBoolean(configService.getByName(ANONYMOUS_MAP_TEMPLATE_ACCESS).getValue().toLowerCase());
+	}
 }

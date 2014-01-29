@@ -268,13 +268,16 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 			if(record.get("objectStatus") != me.values.objectStatus)
 				return false;
 		}
-		if(me.values.typeValue != null && me.values.typeValue != undefined && me.values.typeValue != 'ALL')
-		{
-			if(record.get("isPrivate") == true && me.values.typeValue == "PUBLIC")
-				return false;
-			if(record.get("isPrivate") == false && me.values.typeValue == "PRIVATE")
-				return false;
-		}
+		var visibilityMatch = false;
+		var typeValue = me.getTypeFilter().getValue();
+		if( typeValue == 'ALL')
+			visibilityMatch = true;
+		else if(record.get("visibility") == typeValue)
+			visibilityMatch = true;
+				
+		if(visibilityMatch == false)
+			return visibilityMatch;
+		
 		return me.filterForPublicTemplates(record);
 	},
 	
@@ -282,13 +285,13 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 		var me = this;
 		var typeValue = me.getTypeFilter().getValue();
 		var filterValue = true;
-		if(typeValue == 'PUBLIC' && (me.getProgram().getValue() == null || me.getProgram().getValue() < 1))
+		if((typeValue == 'AUTHENTICATED' || typeValue == 'ANONYMOUS') && (me.getProgram().getValue() == null || me.getProgram().getValue() < 1))
 		{
 			filterValue = me.hasNoProgram(record);
 			if(filterValue == false)
 				return filterValue;
 		}
-		if(typeValue == 'PUBLIC' && (me.getDepartment().getValue() == null || me.getDepartment().getValue() < 1))
+		if((typeValue == 'AUTHENTICATED' || typeValue == 'ANONYMOUS') && (me.getDepartment().getValue() == null || me.getDepartment().getValue() < 1))
 		{
 			filterValue = me.hasNoDepartment(record);
 			if(filterValue == false)

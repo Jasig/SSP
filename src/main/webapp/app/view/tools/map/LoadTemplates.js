@@ -215,7 +215,8 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 									    fields: ['value', 'name'],
 									    	data : [
 										        	{"value":"ALL","name":"ALL"},
-										        	{"value":"PUBLIC","name":"PUBLIC"},
+										        	{"value":"ANONYMOUS","name":"ANONYMOUS"},
+										        	{"value":"AUTHENTICATED","name":"AUTHENTICATED"},
 										        	{"value":"PRIVATE","name":"PRIVATE"}
 										    	]
 									}),
@@ -313,9 +314,9 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
          {
              text: 'Type',
              width: 45,
-             dataIndex: 'isPrivate',
+             dataIndex: 'visibility',
              sortable: true,
-				renderer:me.columnRendererUtils.renderTemplatePrivate
+				renderer:me.columnRendererUtils.renderTemplateVisibility
          },	{
                  text: 'Status',
                  width: 55,
@@ -344,7 +345,5 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
         });
         
         return me.callParent(arguments);
-    }
-                            
-    
+    }   
 });

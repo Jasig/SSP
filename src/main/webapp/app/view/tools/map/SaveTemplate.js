@@ -74,16 +74,29 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                 			    {
                                     xtype: 'tbspacer',
                                     width: 20
-                                },
-                			    {
-                			    	xtype:'checkbox',
-                			    	fieldLabel: 'Private to Me ',
-                			    	name: 'isPrivate',
-									itemId: 'isPrivate',
-                			    	labelWidth: 85,
-                			    	value: true,
-                			    	disabled: !me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')
-                			    }
+                                },{
+						        	xtype: 'combobox',
+						        	name: 'visibility',
+						        	fieldLabel: 'Type',
+									labelWidth:80,
+									store: Ext.create('Ext.data.Store', {
+									    	fields: ['value', 'name'],
+									    		data : [
+										        	{"value":"ANONYMOUS","name":"ANONYMOUS"},
+										        	{"value":"AUTHENTICATED","name":"AUTHENTICATED"},
+										        	{"value":"PRIVATE","name":"PRIVATE"}
+										        	]
+											}),
+						        		valueField: 'value',
+						        		displayField: 'name',
+										value: "PRIVATE",
+						        		mode: 'local',
+						        		queryMode: 'local',
+						        		allowBlank: false,
+						        		itemId: 'visibility',
+						        		width: 290,
+						        		disabled: !me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')
+						    		}
                 			    ]},
                 			{
                                     xtype: 'fieldset',

@@ -286,5 +286,14 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	
 	renderTemplatePrivate: function(value, metadata, record) {
 		return record.get('isPrivate') == true ? "Private":"Public";
+	},
+	
+	renderTemplateVisibility: function(value, metadata, record) {
+		if(record.get('visibility') == 'PRIVATE')
+			return  "Private";
+		if(record.get('visibility') == 'AUTHENTICATED')
+			return  "Auth";
+		if(record.get('visibility') == 'ANONYMOUS')
+			return  "Anon";
 	}
 });

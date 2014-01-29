@@ -21,6 +21,7 @@ package org.jasig.ssp.transferobject;
 import java.util.List;
 
 import org.jasig.ssp.model.AbstractPlanCourse;
+import org.jasig.ssp.model.MapTemplateVisibility;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateCourse;
@@ -41,6 +42,8 @@ public class TemplateLiteTO extends AbstractPlanTO<Template> {
 	
 	private Boolean isPrivate;
 	
+	private MapTemplateVisibility visibility;
+	
 	/**
 	 * Empty constructor.
 	 */
@@ -59,6 +62,7 @@ public class TemplateLiteTO extends AbstractPlanTO<Template> {
 	public void from(Template model) {
 		super.from(model);
 		this.setIsPrivate(model.getIsPrivate());
+		this.setVisibility(model.getVisibility());
 		this.setDepartmentCode(model.getDepartmentCode());
 		this.setDivisionCode(model.getDivisionCode());
 		this.setProgramCode(model.getProgramCode());
@@ -91,6 +95,12 @@ public class TemplateLiteTO extends AbstractPlanTO<Template> {
 	}
 	public void setIsPrivate(Boolean isPrivate) {
 		this.isPrivate = isPrivate;
+	}
+	public MapTemplateVisibility getVisibility() {
+		return visibility;
+	}
+	public void setVisibility(MapTemplateVisibility visibility) {
+		this.visibility = visibility;
 	}
 
 }

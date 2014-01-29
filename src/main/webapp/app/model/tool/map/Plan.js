@@ -40,6 +40,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			{name:'programCode',type:'string'},
 			{name:'divisionCode',type:'string'},
 			{name:'isPrivate',type:'boolean'},
+			{name:'visibility',type:'string'},
 			{name:'isValid',type:'boolean'},
              
             {name:'planCourses',type:'auto',
@@ -184,6 +185,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		me.set('departmentCode','');
 		me.set('divisionCode','');
 		me.set('isPrivate',false);
+		me.set('visibility','AUTHENTICATED');
 		me.set('programCode','');
 		me.set('createdDate',null);
 		me.set('modifiedDate',null);
@@ -259,6 +261,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			simpleData.divisionCode = me.get('divisionCode');
 			simpleData.programCode = me.get('programCode');
 			simpleData.isPrivate = me.getBoolean('isPrivate');
+			simpleData.visibility = me.get('visibility');
 		}else{
 			simpleData.planCourses = me.get('planCourses');
 			simpleData.personId = me.get('personId');

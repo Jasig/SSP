@@ -38,7 +38,8 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		},
 		'cancelButton': {
 			click: 'onCancelClick'
-		}
+		},
+		visibilityField: '#visibility'
 	},
 	init: function() {
 		var me=this;
@@ -48,6 +49,10 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		me.programsStore.load();
 		me.departmentsStore.load();
 		me.divisionsStore.load();
+		
+		if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
+			me.getVisibilityField().setValue('PRIVATE');
+		}
 
 		return me.callParent(arguments);
     },
@@ -70,10 +75,10 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     		Ext.Msg.alert('Error','Please give the template a name.');
     		return;
     	}
-    	var isPrivate = me.getView().query('checkbox[name="isPrivate"]')[0].getValue();
-    	if(!isPrivate){
+    	var visibility = me.getVisibilityField().getValue();
+    	if(visibility != 'PRIVATE'){
     		if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
-    			me.getView().query('checkbox[name="isPrivate"]')[0].setValue(true);
+    			me.getVisibilityField().setValue('PRIVATE');
     			Ext.Msg.alert('Error','You do not have permission to save a public template.');
         		return;
     		}else{
@@ -116,6 +121,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 			// http://stackoverflow.com/questions/13364510/update-form-record-for-disabled-fields#comment18246782_13365321
 			if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
 				me.currentMapPlan.set('isPrivate', true);
+				me.currentMapPlan.set('visibility', 'PRIVATE');
 			}
 			me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox[name=objectStatus]')[0].getValue()) ? 'ACTIVE' : 'INACTIVE');
 			if(!me.currentMapPlan.get('isTemplate')){
@@ -154,7 +160,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 	        activenessCheckbox.setValue(me.currentMapPlan.getAsBoolean('objectStatus',"ACTIVE"));
 	    }
 	    if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
-	        me.getView().query('checkbox[name="isPrivate"]')[0].setValue(true);
+	    	me.getVisibilityField().setValue('PRIVATE');
 	    }
     },
 

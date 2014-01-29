@@ -18,18 +18,12 @@
  */
 package org.jasig.ssp.factory.reference.impl;
 
-import java.util.UUID;
-
-import org.jasig.ssp.dao.PlanDao;
 import org.jasig.ssp.dao.TemplateDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
-import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.TemplateLiteTOFactory;
-import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.transferobject.PlanLiteTO;
 import org.jasig.ssp.transferobject.TemplateLiteTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,6 +68,7 @@ public class TemplateLiteTOFactoryImpl extends AbstractAuditableTOFactory<Templa
 		model.setDepartmentCode(tObject.getDepartmentCode());
 		model.setDivisionCode(tObject.getDivisionCode());
 		model.setIsPrivate(tObject.getIsPrivate());
+		model.setVisibility(tObject.getVisibility());
 		model.setProgramCode(tObject.getProgramCode());		
 	return model;
 	}

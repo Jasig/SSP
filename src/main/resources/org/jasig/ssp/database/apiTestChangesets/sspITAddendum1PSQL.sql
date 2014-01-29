@@ -167,4 +167,8 @@ UPDATE external_student_financial_aid set sap_status_code='GOV_2', institutional
 
 UPDATE external_student_financial_aid set sap_status_code='GOV_1', institutional_loan_amount=10000.00, eligible_federal_aid='n', financial_aid_file_status=2, terms_left=4 WHERE school_id LIKE 'n%';
 
+
+UPDATE map_template set visibility=0 WHERE is_private=TRUE;
+UPDATE map_template set visibility=1 WHERE is_private=FALSE;
+
 --***END OF SQL SCRIPT***
