@@ -183,7 +183,7 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
 						me.sapStatusCode = financialAid.sapStatusCode;
 			me.getEligibleFederalAidField().setValue(me.handleNull(financialAid.eligibleFederalAid));
 			me.getTermsLeftField().setValue(me.handleNull(financialAid.termsLeft));
-			me.getInstitutionalLoanAmountField().setValue(me.handleNull(financialAid.institutionalLoanAmount));
+			me.getInstitutionalLoanAmountField().setValue(me.handleNull(Ext.util.Format.usMoney(financialAid.institutionalLoanAmount)));
 			me.getFinancialAidFileStatusField().setValue(me.handleNull(financialAid.financialAidFileStatus));
 			me.getSapStatusCodeField().setValue( me.handleNull(financialAid.sapStatusCode));
 

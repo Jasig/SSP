@@ -307,7 +307,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 			me.sapStatusCode = financialAid.sapStatusCode;
 			me.getEligibleFederalAidField().setValue(me.handleNull(financialAid.eligibleFederalAid));
 			me.getTermsLeftField().setValue(me.handleNull(financialAid.termsLeft));
-			me.getInstitutionalLoanAmountField().setValue(me.handleNull(financialAid.institutionalLoanAmount));
+			me.getInstitutionalLoanAmountField().setValue(me.handleNull(Ext.util.Format.usMoney(financialAid.institutionalLoanAmount)));
 			
 			me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP Code:   </span><u>' + me.handleNull(financialAid.sapStatusCode) + '</u>', false);
 			me.getFinancialAidFileStatusField().setText('<span style="color:#15428B">FA File:   </span><u>' + me.handleNull(financialAid.financialAidFileStatus) + '</u>', false);

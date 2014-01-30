@@ -264,10 +264,10 @@ Ext.define('Ssp.view.tools.profile.Details', {
 
 	                    },
                     {
-                        fieldLabel: 'Instit. Loan Amount',
+                        fieldLabel: 'Institutional Loan Amount',
                         name: 'institutionalLoanAmount',
                         itemId: 'institutionalLoanAmount',
-                        labelWidth: 140
+                        labelWidth: 150
                     },	{
 		                        fieldLabel: 'Loan Amount',
 		                        name: 'originalLoanAmount',

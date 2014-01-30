@@ -203,10 +203,10 @@ Ext.define('Ssp.view.tools.map.FAView', {
                         labelWidth: 100
                     },
                     {
-                        fieldLabel: 'Instit. Loan Amount',
+                        fieldLabel: 'Institutional Loan Amount',
                         name: 'institutionalLoanAmount',
                         itemId: 'institutionalLoanAmount',
-                        labelWidth: 130
+                        labelWidth: 150
                     },{
                         fieldLabel: 'Loan Amount',
                         name: 'originalLoanAmount',
