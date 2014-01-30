@@ -57,7 +57,7 @@
         </rollback>
     </changeSet>
     
-    <changeSet id="update current template visibility" author="jim.stanley">
+    <changeSet id="update current template visibility" author="jim.stanley" dbms="postgresql">
         <update tableName="map_template">
             <column name="visibility" valueNumeric="1"/>
             <where>is_private=TRUE</where>
@@ -65,6 +65,24 @@
         <update tableName="map_template">
             <column name="visibility" valueNumeric="0"/>
             <where>is_private=FALSE</where>
+        </update>
+        <update tableName="map_template">
+            <column name="visibility" valueNumeric="0"/>
+            <where>is_private=NULL</where>
+        </update>
+      <addNotNullConstraint columnDataType="int" columnName="visibility" tableName="map_template"/>
+      <rollback>
+          <comment>Ignore rollback - makes template generic</comment>
+       </rollback>
+    </changeSet>
+    <changeSet id="update current template visibility" author="jim.stanley" dbms="mssql">
+        <update tableName="map_template">
+            <column name="visibility" valueNumeric="1"/>
+            <where>is_private=1</where>
+        </update>
+        <update tableName="map_template">
+            <column name="visibility" valueNumeric="0"/>
+            <where>is_private=0</where>
         </update>
         <update tableName="map_template">
             <column name="visibility" valueNumeric="0"/>
