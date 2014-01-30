@@ -315,6 +315,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var financialAid = transcript.get('financialAid');
         if ( financialAid ) {
         	me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP:  </span><u>' + me.handleNull(financialAid.sapStatusCode) + '</u>', false);
+			var view = Ext.ComponentQuery.query("#profileDetails")[0];
+			view.getController().sapStatusCode = me.handleNull(financialAid.sapStatusCode);
 			me.sapStatusCode = financialAid.sapStatusCode;
 			me.getView().sapStatusCode = financialAid.sapStatusCode;
 			me.getBalanceOwedField().setValue(Ext.util.Format.usMoney(financialAid.balanceOwed));

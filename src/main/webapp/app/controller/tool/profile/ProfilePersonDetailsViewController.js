@@ -428,10 +428,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
     },
    
     
-    onShowSAPCodeInfo: function(sapStatusCode){
+    onShowSAPCodeInfo: function(){
     	var me=this;
 		if(me.sapCodeInfoPopup == null || me.sapCodeInfoPopup.isDestroyed)
-       		me.sapCodeInfoPopup = Ext.create('Ssp.view.tools.profile.SapStatus',{hidden:true,code:sapStatusCode});
+       		me.sapCodeInfoPopup = Ext.create('Ssp.view.tools.profile.SapStatus',{hidden:true,code:me.sapStatusCode});
 		me.sapCodeInfoPopup.show();
     },
     

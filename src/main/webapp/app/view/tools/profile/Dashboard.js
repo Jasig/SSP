@@ -190,7 +190,7 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                 listeners: { element: 'el', click: function (me) { 
                 	var view = Ext.ComponentQuery.query("#profileDetails");
                 	if(view && view.length > 0)
-                		view[0].getController().onShowSAPCodeInfo(me.target.outerText);
+                		view[0].getController().onShowSAPCodeInfo();
                 } } 
             }	,{
                     xtype: 'tbspacer',
