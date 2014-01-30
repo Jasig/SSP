@@ -172,7 +172,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 	@Autowired
 	private transient PersonFundingSourceDao studentFundingSourceDao;
-	
+	 
 	@Autowired
 	private transient MilitaryAffiliationDao militaryAffiliationDao;
 

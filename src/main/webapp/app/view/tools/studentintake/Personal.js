@@ -97,7 +97,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        allowBlank:false
 				    },{
 				    	xtype: 'datefield',
-				        fieldLabel: me.textStore.getValueByCode('ssp.label.birthday'),
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.dob'),
 				    	itemId: 'birthDate',
 				    	altFormats: 'm/d/Y|m-d-Y',
 				    	invalidText: '{0} is not a valid date - it must be in the format: 06/02/2012 or 06-02-2012',

@@ -237,7 +237,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		primaryEmailAddressField.setFieldLabel('');
         primaryEmailAddressField.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.school-email')+':  </span>' + me.handleNull(me.person.get('primaryEmailAddress')));
 		birthDateField.setFieldLabel('');
-        birthDateField.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.birthday')+':  </span>' + me.handleNull(me.person.getFormattedBirthDate()));
+        birthDateField.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.dob')+':  </span>' + me.handleNull(me.person.getFormattedBirthDate()));
 		studentTypeField.setFieldLabel('');
         studentTypeField.setValue('<span style="color:#15428B">Student Type:  </span>' + me.handleNull(me.person.getStudentTypeName()));
         photoUrlField.setSrc(me.person.getPhotoUrl());

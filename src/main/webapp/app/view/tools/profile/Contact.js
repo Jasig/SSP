@@ -112,7 +112,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                             fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-email'),
                             name: 'secondaryEmailAddress'
                         }, {
-                            fieldLabel: me.textStore.getValueByCode('ssp.label.birthday'),
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.dob'),
                             name: 'birthDate',
                             itemId: 'birthDate',
                             height: '60'

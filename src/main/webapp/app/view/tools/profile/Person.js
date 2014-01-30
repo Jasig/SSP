@@ -67,7 +67,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
                     itemId: 'studentId',
                     name: 'schoolId'
                 }, {
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.birthday'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.dob'),
                     name: 'birthDate',
                     itemId: 'birthDate'
                 }, {

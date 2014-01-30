@@ -303,7 +303,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.first-name'), dataIndex: 'firstName', flex: 1 },		        
     	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.middle-name'), dataIndex: 'middleName', flex: .2},
     	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.last-name'), dataIndex: 'lastName', flex: 1},
-    	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.birthday'), dataIndex: 'birthDate', renderer: Ext.util.Format.dateRenderer('m/d/Y'), hidden: false, flex: 1},
+    	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.dob'), dataIndex: 'birthDate', renderer: Ext.util.Format.dateRenderer('m/d/Y'), hidden: false, flex: 1},
     	              { sortable: sortableColumns, header: 'Type', dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: .2},
     	              { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: 1},
     	              { sortable: sortableColumns, header: 'Alerts', dataIndex: 'numberOfEarlyAlerts', flex: .2}
