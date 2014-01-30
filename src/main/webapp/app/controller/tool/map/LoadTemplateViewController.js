@@ -105,8 +105,13 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 	init: function() {
 		var me=this;
 	    me.resetForm();
+		if(me.programsStore.getTotalCount() < 1)
+	    	me.programsStore.load();
+		if(me.departmentsStore.getTotalCount() < 1)
+	    	me.departmentsStore.load();
+		if(me.divisionsStore.getTotalCount() < 1)
+	    	me.divisionsStore.load();
 	    me.store.addListener("load", me.onStoreLoaded, me);
-	    //wait for onShow() to actually load the store
 		return me.callParent(arguments);
     },
 
@@ -275,41 +280,7 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 		else if(record.get("visibility") == typeValue)
 			visibilityMatch = true;
 				
-		if(visibilityMatch == false)
-			return visibilityMatch;
-		
-		return me.filterForPublicTemplates(record);
-	},
-	
-	filterForPublicTemplates: function(record){
-		var me = this;
-		var typeValue = me.getTypeFilter().getValue();
-		var filterValue = true;
-		if((typeValue == 'AUTHENTICATED' || typeValue == 'ANONYMOUS') && (me.getProgram().getValue() == null || me.getProgram().getValue() < 1))
-		{
-			filterValue = me.hasNoProgram(record);
-			if(filterValue == false)
-				return filterValue;
-		}
-		if((typeValue == 'AUTHENTICATED' || typeValue == 'ANONYMOUS') && (me.getDepartment().getValue() == null || me.getDepartment().getValue() < 1))
-		{
-			filterValue = me.hasNoDepartment(record);
-			if(filterValue == false)
-				return filterValue;
-		}
-		return filterValue;
-	},
-    
-	hasNoProgram: function(record){
-		if(record.get("noProgramCode") == null || record.get("noProgramCode") < 1)
-			return true;
-		return false;
-	},
-	
-	hasNoDepartment: function(record){
-		if(record.get("departmentCode") == null || record.get("departmentCode") < 1)
-			return true;
-		return false;
+		return visibilityMatch;
 	},
 	
 	destroy:function(){
