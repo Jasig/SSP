@@ -50,17 +50,11 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
 		        valueField: 'name',
 		        displayField: 'name',
 		        mode: 'local',
-		        typeAhead: true,
 		        queryMode: 'local',
 		        allowBlank: true,
 				forceSelection: true,
-				listeners:{
-					'change': function() {
-						if (this.getValue() === null) {
-							this.reset();
-							}
-					}
-				}
+				typeAhead: false,
+				editable: false
 			},{
 		        xtype: 'combobox',
 		        name: 'anticipatedStartYear',
@@ -70,9 +64,10 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
 		        valueField: 'reportYear',
 		        displayField: 'reportYear',
 		        mode: 'local',
-		        typeAhead: true,
 		        queryMode: 'local',
-		        allowBlank: true
+		        allowBlank: true,
+				typeAhead: false,
+				editable: false
 			}]
 		});
 		
