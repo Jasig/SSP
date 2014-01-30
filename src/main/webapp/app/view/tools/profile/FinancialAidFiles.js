@@ -48,12 +48,12 @@ Ext.define('Ssp.view.tools.profile.FinancialAidFiles', {
             	xtype: 'gridcolumn',
             	text: 'File Description',
                 dataIndex: 'description',
-                flex: .5
+                flex: .4
             },{
             	xtype: 'gridcolumn',
                 text: 'File Status',
                 dataIndex: 'status',
-                flex: .1
+                flex: .2
             }]
         });
         
