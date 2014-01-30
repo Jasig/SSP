@@ -1819,7 +1819,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		firstNameQuestionTO.setReadOnly(true);
 		firstNameQuestionTO.setId(SECTION_PERSONAL_QUESTION_FIRSTNAME_ID);
-		firstNameQuestionTO.setLabel(getLabelNullSafe(blurbStore,"intake.tab1.label.first-name"));
+		firstNameQuestionTO.setLabel(getLabelNullSafe(blurbStore,"ssp.label.first-name"));
 		firstNameQuestionTO.setMaximumLength("50");
 		firstNameQuestionTO.setRequired(true);
 		firstNameQuestionTO.setType(FORM_TYPE_TEXTINPUT);
@@ -1832,7 +1832,7 @@ public class StudentIntakeFormManager { // NOPMD
 		middleNameQuestionTO.setReadOnly(true);
 		middleNameQuestionTO
 				.setId(SECTION_PERSONAL_QUESTION_MIDDLENAME_ID);
-		middleNameQuestionTO.setLabel(getLabelNullSafe(blurbStore,"intake.tab1.label.middle-name"));
+		middleNameQuestionTO.setLabel(getLabelNullSafe(blurbStore,"ssp.label.middle-name"));
 		middleNameQuestionTO.setMaximumLength("50");
 		middleNameQuestionTO.setType(FORM_TYPE_TEXTINPUT);
 
@@ -1843,7 +1843,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		lastNameQuestionTO.setReadOnly(true);
 		lastNameQuestionTO.setId(SECTION_PERSONAL_QUESTION_LASTNAME_ID);
-		lastNameQuestionTO.setLabel(getLabelNullSafe(blurbStore,"intake.tab1.label.last-name"));
+		lastNameQuestionTO.setLabel(getLabelNullSafe(blurbStore,"ssp.label.last-name"));
 		lastNameQuestionTO.setMaximumLength("50");
 		lastNameQuestionTO.setRequired(true);
 		lastNameQuestionTO.setType(FORM_TYPE_TEXTINPUT);
@@ -1855,7 +1855,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		birthDateQuestion.setReadOnly(true);
 		birthDateQuestion.setId(SECTION_PERSONAL_QUESTION_BIRTHDATE_ID);
-		birthDateQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab1.label.birthday"));
+		birthDateQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.dob"));
 		birthDateQuestion.setMaximumLength("10");
 		birthDateQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -1866,7 +1866,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		schoolEmailQuestion.setReadOnly(true);
 		schoolEmailQuestion.setId(SECTION_PERSONAL_QUESTION_SCHOOLEMAIL_ID);
-		schoolEmailQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab1.label.school-email"));
+		schoolEmailQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.school-email"));
 		schoolEmailQuestion.setMaximumLength("100");
 		schoolEmailQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -1875,7 +1875,7 @@ public class StudentIntakeFormManager { // NOPMD
 		// Home Email
 		final FormQuestionTO homeEmailQuestion = new FormQuestionTO();
 		homeEmailQuestion.setId(SECTION_PERSONAL_QUESTION_HOMEEMAIL_ID);
-		homeEmailQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab1.label.alternate-email"));
+		homeEmailQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.alternate-email"));
 		homeEmailQuestion.setMaximumLength("100");
 		homeEmailQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -1886,7 +1886,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		homePhoneQuestion.setReadOnly(true);
 		homePhoneQuestion.setId(SECTION_PERSONAL_QUESTION_HOMEPHONE_ID);
-		homePhoneQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab1.label.home-phone"));
+		homePhoneQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.home-phone"));
 		homePhoneQuestion.setMaximumLength("12");
 		homePhoneQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -1897,7 +1897,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		workPhoneQuestion.setReadOnly(true);
 		workPhoneQuestion.setId(SECTION_PERSONAL_QUESTION_WORKPHONE_ID);
-		workPhoneQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab1.label.work-phone"));
+		workPhoneQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.work-phone"));
 		workPhoneQuestion.setMaximumLength("12");
 		workPhoneQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -1907,7 +1907,7 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO cellPhoneQuestion = new FormQuestionTO();
 
 		cellPhoneQuestion.setId(SECTION_PERSONAL_QUESTION_CELLPHONE_ID);
-		cellPhoneQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab1.label.cell-phone"));
+		cellPhoneQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.cell-phone"));
 		cellPhoneQuestion.setMaximumLength("12");
 		cellPhoneQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -1918,7 +1918,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		addressQuestion.setReadOnly(true);
 		addressQuestion.setId(SECTION_PERSONAL_QUESTION_ADDRESS_ID);
-		addressQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab1.label.address-1"));
+		addressQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.address-1"));
 		addressQuestion.setMaximumLength("50");
 		addressQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -1929,7 +1929,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		cityQuestion.setReadOnly(true);
 		cityQuestion.setId(SECTION_PERSONAL_QUESTION_CITY_ID);
-		cityQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab1.label.city"));
+		cityQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.city"));
 		cityQuestion.setMaximumLength("50");
 		cityQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -2060,7 +2060,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		stateQuestion.setReadOnly(true);
 		stateQuestion.setId(SECTION_PERSONAL_QUESTION_STATE_ID);
-		stateQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab1.label.state"));
+		stateQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.state"));
 		stateQuestion.setMaximumLength("2");
 		stateQuestion.setOptions(stateQuestionOptions);
 		stateQuestion.setType(FORM_TYPE_SELECT);
@@ -2072,7 +2072,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		zipCodeQuestion.setReadOnly(true);
 		zipCodeQuestion.setId(SECTION_PERSONAL_QUESTION_ZIPCODE_ID);
-		zipCodeQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab1.label.zip"));
+		zipCodeQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.zip"));
 		zipCodeQuestion.setMaximumLength("10");
 		zipCodeQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -2120,7 +2120,7 @@ public class StudentIntakeFormManager { // NOPMD
 		final List<FormOptionTO> ethnicityQuestionOptions = new ArrayList<FormOptionTO>();
 
 		ethnicityQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_ETHNICITY_ID);
-		ethnicityQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.ethnicity"));
+		ethnicityQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.ethnicity"));
 
 		for (final Ethnicity ethnicity : ethnicityService.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()) {
@@ -2138,7 +2138,7 @@ public class StudentIntakeFormManager { // NOPMD
 		final List<FormOptionTO> raceQuestionOptions = new ArrayList<FormOptionTO>();
 
 		raceQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_RACE_ID);
-		raceQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.race"));
+		raceQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.race"));
 
 		for (final Race race : raceService.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()) {
@@ -2161,7 +2161,7 @@ public class StudentIntakeFormManager { // NOPMD
 				"F"));
 
 		genderQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_GENDER_ID);
-		genderQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.gender"));
+		genderQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.gender"));
 		genderQuestion.setOptions(genderQuestionOptions);
 		genderQuestion.setType(FORM_TYPE_RADIOLIST);
 
