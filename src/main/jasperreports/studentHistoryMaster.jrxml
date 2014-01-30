@@ -438,7 +438,7 @@
 			<staticText>
 				<reportElement uuid="cb94434f-856a-41cf-ab68-07c348953f0b" x="1" y="40" width="100" height="20" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
-				<text><![CDATA[FA Award (By Term):]]></text>
+				<text><![CDATA[FA Award (Term):]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="cb94434f-856a-41cf-ab68-07c348953f0b" x="273" y="0" width="138" height="20" isPrintWhenDetailOverflows="true"/>
