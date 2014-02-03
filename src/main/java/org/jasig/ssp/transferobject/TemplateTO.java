@@ -58,6 +58,10 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 	public void from(Template model) {
 		super.from(model);
 		this.setIsPrivate(model.getIsPrivate());
+		if(model.getVisibility().equals(MapTemplateVisibility.PRIVATE))
+			this.setIsPrivate(true);
+		else
+			this.setIsPrivate(false);
 		this.setVisibility(model.getVisibility());
 		this.setDepartmentCode(model.getDepartmentCode());
 		this.setDivisionCode(model.getDivisionCode());

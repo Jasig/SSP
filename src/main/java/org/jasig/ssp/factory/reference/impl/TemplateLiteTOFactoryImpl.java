@@ -21,6 +21,7 @@ package org.jasig.ssp.factory.reference.impl;
 import org.jasig.ssp.dao.TemplateDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.reference.TemplateLiteTOFactory;
+import org.jasig.ssp.model.MapTemplateVisibility;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
@@ -67,7 +68,10 @@ public class TemplateLiteTOFactoryImpl extends AbstractAuditableTOFactory<Templa
 		model.setStudentNotes(tObject.getStudentNotes());		
 		model.setDepartmentCode(tObject.getDepartmentCode());
 		model.setDivisionCode(tObject.getDivisionCode());
-		model.setIsPrivate(tObject.getIsPrivate());
+		if(tObject.getIsPrivate() && tObject.getVisibility().equals(MapTemplateVisibility.PRIVATE))
+			model.setIsPrivate(true);
+		else
+			model.setIsPrivate(false);
 		model.setVisibility(tObject.getVisibility());
 		model.setProgramCode(tObject.getProgramCode());		
 	return model;

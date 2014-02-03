@@ -59,11 +59,11 @@
     
     <changeSet id="update current template visibility" author="jim.stanley" dbms="postgresql">
         <update tableName="map_template">
-            <column name="visibility" valueNumeric="1"/>
+            <column name="visibility" valueNumeric="0"/>
             <where>is_private=TRUE</where>
         </update>
         <update tableName="map_template">
-            <column name="visibility" valueNumeric="0"/>
+            <column name="visibility" valueNumeric="1"/>
             <where>is_private=FALSE</where>
         </update>
         <update tableName="map_template">
@@ -77,11 +77,11 @@
     </changeSet>
     <changeSet id="update current template visibility" author="jim.stanley" dbms="mssql">
         <update tableName="map_template">
-            <column name="visibility" valueNumeric="1"/>
+            <column name="visibility" valueNumeric="0"/>
             <where>is_private=1</where>
         </update>
         <update tableName="map_template">
-            <column name="visibility" valueNumeric="0"/>
+            <column name="visibility" valueNumeric="1"/>
             <where>is_private=0</where>
         </update>
         <update tableName="map_template">

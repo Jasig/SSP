@@ -148,14 +148,15 @@ public class TemplateController  extends AbstractBaseController {
 			ValidationException {
 		Template model = getService().get(id);
 		SspUser currentUser = getSecurityService().currentlyAuthenticatedUser();
-		if(model != null ){
-			if(model.getIsPrivate() || model.getVisibility().equals(MapTemplateVisibility.PRIVATE) && currentUser != null){
-				if(!model.getCreatedBy().getId().equals(currentUser.getPerson().getId()))
-					throw new AccessDeniedException("Insufficient permissions view template.");
-			}else if ((currentUser == null || !getSecurityService().isAuthenticated())  && !model.getVisibility().equals(MapTemplateVisibility.ANONYMOUS)){
-				throw new AccessDeniedException("Insufficient permissions to view requested template.");
+		TemplateTO to = validatePlan(new TemplateTO(model));
+		if(to != null ){
+			if((to.getIsPrivate() || to.getVisibility().equals(MapTemplateVisibility.PRIVATE)) && currentUser != null){
+				if(!to.getCreatedBy().getId().equals(currentUser.getPerson().getId()))
+					throw new AccessDeniedException("Insufficient permissions to view private template.");
+			}else if ((currentUser == null || !getSecurityService().isAuthenticated())  && !to.getVisibility().equals(MapTemplateVisibility.ANONYMOUS)){
+				throw new AccessDeniedException("Insufficient permissions to view requested template. No authenticated person.");
 			}
-			 return validatePlan(new TemplateTO(model));
+			return to;
 		}
 	    return null;
 	}	

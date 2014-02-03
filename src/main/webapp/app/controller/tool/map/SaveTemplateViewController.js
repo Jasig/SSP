@@ -123,6 +123,11 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 				me.currentMapPlan.set('isPrivate', true);
 				me.currentMapPlan.set('visibility', 'PRIVATE');
 			}
+			
+			if(me.currentMapPlan.get('visibility') == 'PRIVATE'){
+				me.currentMapPlan.set('isPrivate', true);
+			}
+			
 			me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox[name=objectStatus]')[0].getValue()) ? 'ACTIVE' : 'INACTIVE');
 			if(!me.currentMapPlan.get('isTemplate')){
 				me.currentMapPlan.set('id', '');
@@ -161,6 +166,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 	    }
 	    if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
 	    	me.getVisibilityField().setValue('PRIVATE');
+	    	me.getVisibilityField().setDisabled(true);
 	    }
     },
 

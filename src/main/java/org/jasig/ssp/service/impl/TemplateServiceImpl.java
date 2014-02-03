@@ -36,8 +36,6 @@ import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.TemplateOutputTO;
 import org.jasig.ssp.transferobject.TemplateSearchTO;
 import org.jasig.ssp.transferobject.TemplateTO;
-import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
-import org.jasig.ssp.transferobject.reference.MessageTemplatePlanPrintParams;
 import org.jasig.ssp.transferobject.reference.MessageTemplatePlanTemplatePrintParamsTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -163,6 +161,17 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 			}
 		}
 		return getDao().getAll(createForSingleSortWithPaging, searchTO);
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public TemplateTO validate(TemplateTO model) throws ObjectNotFoundException{
+		model = super.validate(model);
+		if(model.getVisibility().equals(MapTemplateVisibility.PRIVATE))
+			model.setIsPrivate(true);
+		else
+			model.setIsPrivate(false);
+		return model;
 	}
 	
 	private Boolean anonymousUsersAllowed() {

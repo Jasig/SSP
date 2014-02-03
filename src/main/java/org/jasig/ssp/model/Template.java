@@ -130,7 +130,10 @@ public class Template extends AbstractPlan implements Cloneable{
 	public Template clone() throws CloneNotSupportedException {
 		Template clone = new Template();
 		cloneCommonFields(clone);
-		clone.setIsPrivate(this.getIsPrivate());
+		if(this.getVisibility().equals(MapTemplateVisibility.PRIVATE))
+			clone.setIsPrivate(true);
+		else
+			clone.setIsPrivate(false);
 		clone.setVisibility(this.getVisibility());
 		clone.setIsImportant(this.getIsImportant());
 		clone.setIsF1Visa(this.getIsF1Visa());
