@@ -24,7 +24,8 @@ Ext.define('Ssp.view.Viewport',{
     controller: 'Ssp.controller.ViewportViewController',
     inject: {
     	parentDivId: 'sspParentDivId',
-    	renderFullScreen: 'renderSSPFullScreen'
+    	renderFullScreen: 'renderSSPFullScreen',
+    	textStore:'sspTextStore'
     },
     layout: 'fit',
     id: 'sspView',
@@ -37,6 +38,7 @@ Ext.define('Ssp.view.Viewport',{
             html = document.body.parentNode,
             el;
 
+        me.textStore.load();
         // Init the Main Shell for the application
         Ext.apply(this, {items: [{xtype:'mainview'}]}); 
         

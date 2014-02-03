@@ -22,7 +22,7 @@ Ext.define('Ssp.store.reference.Texts', {
     constructor: function(){
     	this.callParent(arguments);
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('blurb'),
-		extraParams: this.extraParams});
+    		autoLoad: true,extraParams: this.extraParams});
     },
     getValueByCode:function(code)
     {
