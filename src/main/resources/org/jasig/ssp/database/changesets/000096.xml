@@ -236,7 +236,7 @@ where id = 'b528c1ac-6104-435b-ae62-08eb4f8ef40e' and subject='Student $TermToRe
 
 update message_template
 set subject='Student $!termToRepresentEarlyAlert Confirmation Notice - $earlyAlert.person.firstName $earlyAlert.person.lastName #if( $earlyAlert.courseName) : $earlyAlert.courseName#end'
-where id='b528c1ac-6104-435b-ae62-09eb5f8ef55f' and subject='Student$!termToRepresentEarlyAlert Advisor Reply - $earlyAlert.person.firstName $earlyAlert.person.lastName #if( $earlyAlert.courseName) : $earlyAlert.courseName#end';
+where id='b528c1ac-6104-435b-ae62-09eb5f8ef55f' and subject='Student$!termToRepresentEarlyAlert Confirmation Notice - $earlyAlert.person.firstName $earlyAlert.person.lastName #if( $earlyAlert.courseName) : $earlyAlert.courseName#end';
 
 
 update message_template
