@@ -150,7 +150,7 @@ public class TemplateController  extends AbstractBaseController {
 		SspUser currentUser = getSecurityService().currentlyAuthenticatedUser();
 		TemplateTO to = validatePlan(new TemplateTO(model));
 		if(to != null ){
-			if((to.getIsPrivate() || to.getVisibility().equals(MapTemplateVisibility.PRIVATE)) && currentUser != null){
+			if(to.getVisibility().equals(MapTemplateVisibility.PRIVATE) && currentUser != null){
 				if(!to.getCreatedBy().getId().equals(currentUser.getPerson().getId()))
 					throw new AccessDeniedException("Insufficient permissions to view private template.");
 			}else if ((currentUser == null || !getSecurityService().isAuthenticated())  && !to.getVisibility().equals(MapTemplateVisibility.ANONYMOUS)){
