@@ -134,7 +134,10 @@ Ext.define('Ssp.controller.SearchViewController', {
 				me.termsStore.addListener("load", me.onTermsStoreLoad, me);
 				me.termsStore.load();
 		}
-
+		if(me.textStore.getTotalCount() == 0){
+			me.textStore.addListener("load", me.applyColumns, me);
+			me.textStore.load();
+		}
     	// set the search results to the stored
 	   	// search results
 		//me.getSearchText().setValue( me.searchCriteria.get('searchTerm') );
@@ -253,7 +256,9 @@ Ext.define('Ssp.controller.SearchViewController', {
 
 	setGridView: function( view ){
 		var me=this;
-		me.applyColumns();
+		if(me.textStore.getTotalCount() > 0){
+			me.applyColumns();
+		}
 	},
 	
 	onToolsNav: function() {

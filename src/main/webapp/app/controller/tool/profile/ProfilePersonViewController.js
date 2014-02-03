@@ -95,7 +95,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         if(me.financialAidFilesStore.getTotalCount() <= 0){
 			me.financialAidFilesStore.load();
         }
-       me.textStore.load();
         if (id != "") {
             // display loader
             me.getView().setLoading(true);
