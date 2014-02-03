@@ -84,7 +84,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 							}
 						}
 					},{
-				        xtype: "radiogroup",
+				        xtype: 'radiogroup',
 				        fieldLabel: me.textStore.getValueByCode('intake.tab3.label.parents-college'),
 				        columns: 1,
 				        itemId: "collegeDegreeForParents",

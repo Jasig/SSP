@@ -225,12 +225,9 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				            {boxLabel: "Yes", itemId: 'primaryCaregiverCheckOn', name: "primaryCaregiver", inputValue:"true"},
 				            {boxLabel: "No",  itemId: 'primaryCaregiverCheckOff', name: "primaryCaregiver", inputValue:"false"}]
 				    },{
-				        xtype: 'displayfield',
-				        fieldLabel: 'If you have children, please indicate below'
-				    },{
 				        xtype: 'numberfield',
 				        name: 'numberOfChildren',
-				        fieldLabel: 'How many?',
+				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.number-children'),
 				        value: 0,
 				        minValue: 0,
 				        maxValue: 50
