@@ -2102,7 +2102,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		maritalStatusQuestion
 				.setId(SECTION_DEMOGRAPHICS_QUESTION_MARITALSTATUS_ID);
-		maritalStatusQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.marital-status"));
+		maritalStatusQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.marital-status"));
 
 		PagingWrapper<MaritalStatus> allMartialStatuses = maritalStatusService.getAll(new SortingAndPaging(ObjectStatus.ACTIVE));
 		for (MaritalStatus maritalStatus : allMartialStatuses) 
@@ -2279,7 +2279,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		howManyChildrenQuestion
 				.setId(SECTION_DEMOGRAPHICS_QUESTION_HOWMANYCHILDREN_ID);
-		howManyChildrenQuestion.setLabel("If you have children, how many?");
+		howManyChildrenQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.number-children"));
 		howManyChildrenQuestion.setOptions(howManyChildrenQuestionOptions);
 		howManyChildrenQuestion.setType(FORM_TYPE_SELECT);
 

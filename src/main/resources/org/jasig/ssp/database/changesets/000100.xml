@@ -51,5 +51,11 @@
 			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
 			<column name="object_status" value="1" />
 		</insert>
+	</changeSet>	
+	<changeSet author='tony.arland' id='changes for SSP-2067'>
+		<update tableName="blurb">
+			<column name="code" value="intake.tab1.label" />
+			<where>code = 'intake.tab1.label.tab1'</where>
+		</update>
 	</changeSet>																															
 </databaseChangeLog>

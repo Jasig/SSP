@@ -231,7 +231,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
         // load additional values
 		nameField.setFieldLabel('');
-        nameField.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.first-name')+':  </span>' + firstLastName);
+        nameField.setValue('<span style="color:#15428B">'+'Name'+':  </span>' + firstLastName);
 		studentIdField.setFieldLabel('');
         studentIdField.setValue('<span style="color:#15428B">' + me.sspConfig.get('studentIdAlias') + ':  </span>' + me.person.get('schoolId'));
 		primaryEmailAddressField.setFieldLabel('');
