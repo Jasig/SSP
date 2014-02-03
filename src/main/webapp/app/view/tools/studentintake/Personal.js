@@ -89,7 +89,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        maxLength: 50,
 				        allowBlank:false
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('ssp.label.student-id'),
+				        fieldLabel: 'Student ID',
 				        name: 'schoolId',
 				        minLength: 0,
 				        maxLength: 7,

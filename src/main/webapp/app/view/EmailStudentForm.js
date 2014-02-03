@@ -25,7 +25,8 @@ Ext.define('Ssp.view.EmailStudentForm', {
     	appEventsController: 'appEventsController',
 		columnRendererUtils : 'columnRendererUtils',
     	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
-        person: 'currentPerson'
+        person: 'currentPerson',
+        textStore: 'sspTextStore'
     },
     controller: 'Ssp.controller.EmailStudentViewController',
     initComponent: function(){
@@ -51,7 +52,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
 				        itemId: 'createJournalEntry',
 				        labelSeparator: '',
 				        hideLabel: true,
-				        boxLabel: 'Include this Email in the Students Journal Notes',
+				        boxLabel: 'Record this Email as a Journal Entry',
 				        fieldLabel: 'text'				        
 				    },
 					{
@@ -90,7 +91,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
 				        labelSeparator: '',
 				        hideLabel: true,
 				        disabled: !me.person.get('primaryEmailAddress'),
-				        boxLabel: 'Send To Primary Email Address',
+				        boxLabel: 'Send To '+me.textStore.getValueByCode('ssp.label.school-email')+' Address',
 				        fieldLabel: 'text'				        
 				    },
 					{
@@ -121,7 +122,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
 				        labelSeparator: '',
 				        disabled: !me.person.get('secondaryEmailAddress'),
 				        hideLabel: true,
-				        boxLabel: 'Send To Secondary Email Address',
+				        boxLabel: 'Send To '+me.textStore.getValueByCode('ssp.label.alternate-email')+' Address',
 				        fieldLabel: 'text'				        
 				    },
 					{
