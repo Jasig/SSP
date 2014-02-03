@@ -2755,7 +2755,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		militaryBranchQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_MILITARYBRANCHDESCRIPTION_ID);
-		militaryBranchQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab5.label.bachelor-major"));
+		militaryBranchQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab5.label.military-goal"));
 		militaryBranchQuestion.setMaximumLength(DEFAULT_MAXIMUM_STRING_LENGTH);
 		militaryBranchQuestion.setType(FORM_TYPE_TEXTINPUT);
 		militaryBranchQuestion.setRequired(true);

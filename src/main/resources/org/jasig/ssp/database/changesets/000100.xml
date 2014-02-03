@@ -38,5 +38,18 @@
 			<where>code = 'ssp.label.student-id'</where>
 		</delete>
 	</changeSet>
-																															
+	<changeSet author='tony.arland' id='changes for SSP-2066'>
+		<insert tableName="blurb">
+			<column name="id" value="b95d5e64-bd8f-46a5-bd82-f25ba29f6c2b" />
+			<column name="name" value="Military Goal Label" />
+			<column name="code" value="intake.tab5.label.military-goal"/>
+			<column name="value" value="Describe military goal"/>
+			<column name="description" value="Military Goal Label" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+	</changeSet>																															
 </databaseChangeLog>

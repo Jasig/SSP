@@ -304,7 +304,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			      parentId: Ssp.util.Constants.EDUCATION_GOAL_MILITARY_ID, 
 				  parentName: "military",
 				  name: "description", 
-				  label: "Describe military goal", 
+				  label: me.textStore.getValueByCode('intake.tab5.label.military-goal'),
 				  fieldType: "mappedtextfield",
 				  labelWidth: 200
 			 },
