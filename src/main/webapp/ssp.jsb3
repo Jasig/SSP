@@ -925,8 +925,8 @@
                     "path": "/app/controller/person/"
                 },
                 {
-                    "clsName": "Ssp.controller.person.StudentIntakeRequestController",
-                    "name": "StudentIntakeRequestController.js",
+                    "clsName": "Ssp.controller.person.StudentIntakeRequestViewController",
+                    "name": "StudentIntakeRequestViewController.js",
                     "path": "/app/controller/person/"
                 },
                 {
