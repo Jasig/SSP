@@ -235,6 +235,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		// Validate all of the forms
 		if ( validateResult.valid ) 
 		{
+			
 			personForm.updateRecord();	
 			anticipatedStartDateForm.updateRecord();
 
@@ -244,15 +245,37 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			//set coach and student type
 			model.setCoachId( coachID );
 			model.setStudentTypeId( studentTypeID );
-			
-			
-			
-
 			// update the appointment
 			appointmentForm.updateRecord();
 			
 			studentIntakeRequestForm.updateRecord();
 			
+			if (id == "") {
+				
+				var currentDate = new Date();
+				if (me.appointment.get('startTime') && me.appointment.get('appointmentDate') && me.appointment.get('endTime')) {
+					
+					var dval = me.appointment.get('appointmentDate');
+					
+					var sBeginTime = Ext.Date.add(dval, Ext.Date.HOUR, me.appointment.get('startTime').getHours());
+					var stBeginTime = Ext.Date.add(sBeginTime, Ext.Date.MINUTE, me.appointment.get('startTime').getMinutes());
+					
+					if (currentDate > stBeginTime) {
+						var dialogOpts = {
+						buttons: Ext.Msg.OK,
+						icon: Ext.Msg.ERROR,
+						fn: Ext.emptyFn,
+						title: 'Appointment Time',
+						msg: 'The appointment time must be in the future.',
+						scope: me
+						};
+						Ext.Msg.show(dialogOpts);
+						return;
+					}
+					
+				}
+				
+			}
 			
 						
 			// set special service groups

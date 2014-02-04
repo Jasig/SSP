@@ -90,13 +90,7 @@ Ext.define('Ssp.view.person.Appointment', {
                         padding: '0 0 0 0',
                         listeners: {
                             'select': function(){
-                                if (Ext.ComponentQuery.query('#endTimeField')[0].getValue() !== null) {
-                                    if (this.getValue() > Ext.ComponentQuery.query('#endTimeField')[0].getValue()) {
-                                        alert('Error! End Date Must Be Later Than The Start Date.')
-                                        this.setValue(Ext.ComponentQuery.query('#endTimeField')[0].getValue())
-                                    };
-                                                                    };
-                                Ext.ComponentQuery.query('#endTimeField')[0].setMinValue(this.getValue())
+                                Ext.ComponentQuery.query('#endTimeField')[0].setMinValue(this.getValue());
                             }
                         }
                     }, {
