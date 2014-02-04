@@ -59,7 +59,7 @@ Ext.define('Ssp.controller.tool.studentintake.PersonalViewController', {
 		studentIdField = me.getStudentIdField();
 		studentIdField.setDisabled(disabled);
 		// set the field label and supply an asterisk for required
-		studentIdField.setFieldLabel(me.sspConfig.get('studentIdAlias') + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
+		//studentIdField.setFieldLabel(studentIdField.getFieldLabel() + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
 		Ext.apply(studentIdField, {
             minLength: me.sspConfig.get('studentIdMinValidationLength'),
             minLengthText: '',
