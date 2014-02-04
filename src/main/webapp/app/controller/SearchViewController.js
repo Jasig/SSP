@@ -364,7 +364,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 
 	showHideDOBColumn: function( value ) {
-        var dobColumn = Ext.ComponentQuery.query('.gridcolumn[text=DOB]')[0];
+		var me=this;
+        var dobColumn = Ext.ComponentQuery.query('.gridcolumn[text='+me.textStore.getValueByCode('ssp.label.dob')+']')[0];
     	if ( dobColumn ) {
     	    if ( value ) {
                 dobColumn.show();
@@ -679,7 +680,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     
 	onRetrieveCaseloadClick: function( button ){
 		var me=this;
-		var dobDisplayCheck = Ext.ComponentQuery.query('.gridcolumn[text=DOB]')[0].hidden;
+		var dobDisplayCheck = Ext.ComponentQuery.query('.gridcolumn[text='+me.textStore.getValueByCode('ssp.label.dob')+']')[0].hidden;
         var skipCallBack = this.appEventsController.getApplication().fireEvent('retrieveCaseload',me);  
 
         if(skipCallBack)
