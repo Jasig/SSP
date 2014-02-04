@@ -27,6 +27,7 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
     },
     width: '100%',
     height: '100%',
+	
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
@@ -35,13 +36,15 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
             defaults: {
                 bodyStyle: 'padding:5px'
             },
-            layout: {
-                type: 'accordion',
-                align: 'stretch',
-                titleCollapse: true,
-                animate: true,
-                activeOnTop: true
-            },
+			layout:{
+				type: 'fit'
+			},
+			items:[{
+				xtype : 'tabpanel',
+				activeTab : 0,
+				itemId: 'caseloadPanel',
+				deferredRender: false
+			}],
             dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'top',
@@ -56,30 +59,10 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
                     text: 'Cancel'
                 }]
             
-            }, {
-                xtype: 'toolbar',
-                
-                items: [{
-                
-                    xtype: 'label',
-                    text: 'Fill out the following forms with assigned coach details and appointment information'
-                }]
-            }, {
+            },  {
                 dock: 'bottom',
                 xtype: 'toolbar',
-                items: [                /*,{
-                 xtype: 'checkbox',
-                 boxLabel: 'Send Student Intake Request',
-                 name: 'sendStudentIntakeRequest'
-                 },{
-                 xtype: 'tbspacer',
-                 width: 25
-                 },{
-                 xtype: 'displayfield',
-                 fieldLabel: 'Last Request Date',
-                 name: 'lastStudentIntakeRequestDate',
-                 value: ((me.model.getFormattedStudentIntakeRequestDate().length > 0) ? me.person.getFormattedStudentIntakeRequestDate() : 'No requests have been sent')
-                 }*/
+                items: [                
                  {
                     xtype: 'tbspacer',
                     flex: 1

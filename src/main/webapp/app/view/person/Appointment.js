@@ -21,12 +21,15 @@ Ext.define('Ssp.view.person.Appointment', {
     alias: 'widget.personappointment',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.person.AppointmentViewController',
+    inject: {
+        studentTypesStore: 'studentTypesAllUnpagedStore'
+    },
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
             fieldDefaults: {
                 msgTarget: 'side',
-                labelAlign: 'right',
+                labelAlign: 'top',
                 labelWidth: 200
             },
             border: 0,
@@ -41,94 +44,84 @@ Ext.define('Ssp.view.person.Appointment', {
                     anchor: '50%'
                 },
                 items: [{
+                    xtype: 'combobox',
+                    name: 'studentTypeId',
+                    itemId: 'studentTypeCombo',
+                    id: 'studentTypeCombo',
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>' + 'Student Type',
+                    emptyText: 'Select One',
+                    store: me.studentTypesStore,
+                    valueField: 'id',
+                    displayField: 'name',
+                    mode: 'local',
+                    typeAhead: false,
+                    editable: false,
+                    queryMode: 'local',
+                    allowBlank: false
+                }, {
                     xtype: 'datefield',
                     fieldLabel: 'Appointment Date',
                     itemId: 'appointmentDateField',
                     altFormats: 'm/d/Y|m-d-Y',
                     invalidText: '{0} is not a valid date - it must be in the format: 06/21/2012 or 06-21-2012',
                     name: 'appointmentDate',
-                    allowBlank: false
-                }, {
-                    xtype: 'timefield',
-                    name: 'startTime',
-                    itemId: 'startTimeField',
-                    fieldLabel: 'Start Time',
-                    increment: 30,
-                    typeAhead: false,
                     allowBlank: false,
-                    listeners: {
-                        'select': function(){
-                            var currentDate = new Date();
-                            
-                            var dval = Ext.ComponentQuery.query('#appointmentDateField')[0].getValue();
-                            
-                            var sBeginTime = Ext.Date.add(dval, Ext.Date.HOUR, Ext.ComponentQuery.query('#startTimeField')[0].getValue().getHours());
-                            
-                            var stBeginTime = Ext.Date.add(sBeginTime, Ext.Date.MINUTE, Ext.ComponentQuery.query('#startTimeField')[0].getValue().getMinutes());
-                            
-                            
-                            if (currentDate > stBeginTime) {
-                            
-                                alert('Error! appointment start time must be in the future.');
+                    showToday: false,
+                }, {
+                    xtype: 'fieldset',
+                    title: '',
+                    layout: {
+                        align: 'stretch',
+                        type: 'hbox'
+                    },
+                    border: 0,
+                    padding: '0 0 0 0',
+                    items: [{
+                        xtype: 'timefield',
+                        name: 'startTime',
+                        itemId: 'startTimeField',
+                        fieldLabel: 'Appointment Start',
+                        labelSeparator: "",
+                        increment: 30,
+                        typeAhead: false,
+                        allowBlank: false,
+                        width: 110,
+                        margin: '0 0 0 0',
+                        padding: '0 0 0 0',
+                        listeners: {
+                            'select': function(){
+                                if (Ext.ComponentQuery.query('#endTimeField')[0].getValue() !== null) {
+                                    if (this.getValue() > Ext.ComponentQuery.query('#endTimeField')[0].getValue()) {
+                                        alert('Error! End Date Must Be Later Than The Start Date.')
+                                        this.setValue(Ext.ComponentQuery.query('#endTimeField')[0].getValue())
+                                    };
+                                                                    };
+                                Ext.ComponentQuery.query('#endTimeField')[0].setMinValue(this.getValue())
                             }
-                            
-                            
-                            if (Ext.ComponentQuery.query('#endTimeField')[0].getValue() !== null) {
-                                if (this.getValue() > Ext.ComponentQuery.query('#endTimeField')[0].getValue()) {
-                                    alert('Error! End Date Must Be Later Than The Start Date.')
-                                    this.setValue(Ext.ComponentQuery.query('#endTimeField')[0].getValue())
-                                };
-                               };
-                            Ext.ComponentQuery.query('#endTimeField')[0].setMinValue(this.getValue())
                         }
-                    }
-                }, {
-                    xtype: 'timefield',
-                    name: 'endTime',
-                    itemId: 'endTimeField',
-                    fieldLabel: 'End Time',
-                    typeAhead: false,
-                    allowBlank: false,
-                    increment: 30,
-                    listeners: {
-                        'select': function(){
-                            var currentDate = new Date();
-                            
-                            var dval = Ext.ComponentQuery.query('#appointmentDateField')[0].getValue();
-                            
-                            var sEndTime = Ext.Date.add(dval, Ext.Date.HOUR, Ext.ComponentQuery.query('#endTimeField')[0].getValue().getHours());
-                            
-                            var stEndTime = Ext.Date.add(sEndTime, Ext.Date.MINUTE, Ext.ComponentQuery.query('#endTimeField')[0].getValue().getMinutes());
-                            
-                            
-                            if (currentDate > stEndTime) {
-                            
-                                alert('Error! appointment end time must be in the future.');
-                            }
-                            
-                            if (Ext.ComponentQuery.query('#startTimeField')[0].getValue() !== null) {
-                                if (this.getValue() < Ext.ComponentQuery.query('#startTimeField')[0].getValue()) {
-                                    alert('Error! End Date Must Be Later Than The Start Date.')
-                                    this.setValue(Ext.ComponentQuery.query('#startTimeField')[0].getValue())
-                                };
-                               };
-                            
-                         }
-                    }
-                }, {
-                    xtype: 'checkboxfield',
-                    fieldLabel: 'Send Student Intake Request',
-                    name: 'studentIntakeRequested',
-                    itemId: 'studentIntakeRequestedField',
-                    inputValue: true
-                }, {
-                    //xtype: 'textfield',
-                    fieldLabel: 'Also Send Student Intake Request To Email',
-                    name: 'intakeEmail',
-                    itemId: 'intakeEmailField',
-                    hidden: true,
-                    maxLength: 100,
-                    vtype: 'email'
+                    }, {
+                        xtype: 'timefield',
+                        name: 'endTime',
+                        itemId: 'endTimeField',
+                        fieldLabel: '- End Times',
+                        typeAhead: false,
+                        allowBlank: false,
+                        increment: 30,
+                        width: 110,
+                        margin: '0 0 0 0',
+                        padding: '0 0 0 5',
+                        listeners: {
+                            'select': function(){
+                                if (Ext.ComponentQuery.query('#startTimeField')[0].getValue() !== null) {
+                                    if (this.getValue() < Ext.ComponentQuery.query('#startTimeField')[0].getValue()) {
+                                        alert('Error! End Date Must Be Later Than The Start Date.')
+                                        this.setValue(Ext.ComponentQuery.query('#startTimeField')[0].getValue())
+                                    };
+                             };
+                                
+                          }
+                        }
+                    }]
                 }]
             }]
         });

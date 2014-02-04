@@ -261,3 +261,8 @@ background:#ffff00 !important;
    font-weight: bold;
    white-space: normal;
 }
+
+.syncedField{
+	font-size: x-small;
+	color: #308014;
+}

@@ -75,7 +75,6 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 		var displayRetrieveFromExternalButton = me.sspConfig.get('allowExternalRetrievalOfStudentDataFromCaseloadAssignment');
     	// alias the studentId field and provide validation
 		var studentIdField = me.getStudentIdField();
-		studentIdField.setFieldLabel(me.sspConfig.get('studentIdAlias') + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
 		Ext.apply(studentIdField, {
 	                  minLength: me.sspConfig.get('studentIdMinValidationLength'),
 	                  minLengthText: me.sspConfig.get('studentIdMinValidationErrorText'),
@@ -103,8 +102,7 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 		}
 		
 		me.getView().getForm().reset();
-		me.getView().loadRecord( me.person );	
-
+		me.getView().loadRecord( me.person );
 		// use config to determine if the retrieveFromExternalButton should be visible
 		if (me.person.get('id') == "")
 		{
@@ -117,6 +115,14 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 		
 		return me.callParent(arguments);
     },
+	
+	handleNull: function(value, defaultValue){
+		if(defaultValue == null || defaultValue == undefined)
+			defaultValue = "";
+		if(value == null || value == undefined || value == 'null')
+			return defaultValue;
+		return value;
+	},
     
     onStudentNameChange: function( comp, newValue, oldValue, eOpts){
     	var me=this;

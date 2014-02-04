@@ -95,18 +95,15 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     initForms: function(){
 		// retrieve the appointment screen and define items for the screen
     	var caseloadAssignmentView, items; 
-    	var caseloadAssignmentView = Ext.ComponentQuery.query('.caseloadassignment')[0];
+    	//var caseloadAssignmentView = Ext.ComponentQuery.query('.caseloadassignment')[0];
 		
-		items = [{ title: 'Personal'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
+		var caseloadAssignmentView = Ext.ComponentQuery.query('#caseloadPanel')[0];
+		
+		items = [{ title: 'Student'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
         	       autoScroll: true,
-        		   items: [{xtype: 'editperson'}]
+        		   items: [{xtype: 'student'}]
         		},{
-            		title: 'Appointment'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
-            		autoScroll: true,
-            		items: [{xtype: 'personcoach'},
-            		        {xtype:'personappointment'}]
-        		},{
-            		title: 'Special Service Groups',
+            		title: 'Service Groups',
             		autoScroll: true,
             		items: [{xtype: 'personspecialservicegroups'}]
         		},{
@@ -114,13 +111,9 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
             		autoScroll: true,
             		items: [{xtype: 'personreferralsources'}]
         		},{
-            		title: 'Reasons for Service',
+            		title: 'Service Reasons',
             		autoScroll: true,
             		items: [{xtype: 'personservicereasons'}]
-        		},{
-            		title: 'Ability to Benefit/Anticipated Start Date',
-            		autoScroll: true,
-            		items: [{xtype: 'personanticipatedstartdate'}]
         		}];
     	
     	// adding a record, so simply init the view
@@ -197,7 +190,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 
 		// coach view
 		var coachView = Ext.ComponentQuery.query('.personcoach')[0];
-		var coachForm = coachView.getForm();		
+		var coachForm = coachView.getForm();	
 		
 		// appointment view
 		var appointmentView = Ext.ComponentQuery.query('.personappointment')[0];
@@ -224,10 +217,15 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		// anticipated start date view
 		var anticipatedStartDateView = Ext.ComponentQuery.query('.personanticipatedstartdate')[0];
 		var anticipatedStartDateForm = anticipatedStartDateView.getForm();
+		
+		// anticipated start date view
+		var studentIntakeRequestView = Ext.ComponentQuery.query('.studentIntakeRequest')[0];
+		var studentIntakeRequestForm = studentIntakeRequestView.getForm();
 
 		var formsToValidate = [personForm,
 	                 coachForm,
 	                 appointmentForm,
+					 studentIntakeRequestForm,
 	                 anticipatedStartDateForm,
 	                 serviceReasonsForm,
 	                 specialServiceGroupsForm,
@@ -241,20 +239,27 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			anticipatedStartDateForm.updateRecord();
 
             var coachID = coachForm.findField('coachId').getValue();
-            var studentTypeID = coachForm.findField('studentTypeId').getValue();
+            var studentTypeID = appointmentForm.findField('studentTypeId').getValue();
 
 			//set coach and student type
 			model.setCoachId( coachID );
 			model.setStudentTypeId( studentTypeID );
+			
+			
+			
 
 			// update the appointment
 			appointmentForm.updateRecord();
+			
+			studentIntakeRequestForm.updateRecord();
+			
+			
 						
 			// set special service groups
 			specialServiceGroupsFormValues = specialServiceGroupsItemSelector.getValue();
 			selectedSpecialServiceGroups = me.getSelectedItemSelectorIdsForTransfer(specialServiceGroupsFormValues);
 			model.set('specialServiceGroups', selectedSpecialServiceGroups);
-
+		
 			// referral sources
 			referralSourcesFormValues = referralSourcesItemSelector.getValue();
 			selectedReferralSources = me.getSelectedItemSelectorIdsForTransfer(referralSourcesFormValues);
@@ -264,7 +269,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			serviceReasonsFormValues = selectedServiceReasonsItemSelector.getValue();
 			selectedServiceReasons = me.getSelectedItemSelectorIdsForTransfer(serviceReasonsFormValues);
 			model.set('serviceReasons', selectedServiceReasons);
-						
+				
 			me.getView().setLoading( true );
 			
 			// ensure props are null if necessary
@@ -333,7 +338,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		
 		
 		
-		if(response.status == 500 && responseDetail.indexOf('ERROR: duplicate key value violates unique constraint "uq_person_school_id"') !== -1){
+		if(response.status == 500 && responseDetail.indexOf('ERROR: duplicate key value violates unique constraint "unique_person_username"') !== -1){
 			Ext.Msg.show(dialogOpts);
 		}
 		
@@ -543,9 +548,17 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     		{
     			me.currentPersonAppointment.set( 'endTime', me.formUtils.fixDateOffsetWithTime( me.appointment.getEndDate() ) );
     		}
-    		me.currentPersonAppointment.set(  'studentIntakeRequested', me.appointment.get('studentIntakeRequested'));
-    		me.currentPersonAppointment.set(  'intakeEmail', me.appointment.get('intakeEmail'));
-    		
+			
+			var studentIntakeRequestView = Ext.ComponentQuery.query('.studentIntakeRequest')[0];
+			var studentIntakeRequestForm = studentIntakeRequestView.getForm();
+		
+			var studentIntakeRequested = studentIntakeRequestForm.findField('studentIntakeRequested').getValue();
+            var studentIntakeEmail = studentIntakeRequestForm.findField('intakeEmail').getValue();
+			
+    		me.currentPersonAppointment.set(  'studentIntakeRequested', studentIntakeRequested);
+    		me.currentPersonAppointment.set(  'intakeEmail', studentIntakeEmail);
+			
+			
     		jsonData = me.currentPersonAppointment.data;
     		personId = me.person.get('id');
 			

@@ -52,7 +52,9 @@ Ext.define('Ssp.controller.person.ReferralSourcesViewController', {
         me.itemSelectorInitializer.defineAndAddSelectorField(me.getView(), selectedReferralSources, {
             itemId: 'referralSourcesItemSelector',
             name: 'referralSources',
-            fieldLabel: 'Referral Sources',
+			fieldLabel: '<div style="float:right; width: 48%; ">Assigned to the Student</div><div style="width: 50%;">Available Referral Sources</div>',
+			labelAlign: 'top',
+			labelSeparator: ' ',
             store: me.store
         });
 

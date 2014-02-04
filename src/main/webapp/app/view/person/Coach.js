@@ -24,9 +24,9 @@ Ext.define('Ssp.view.person.Coach', {
     controller: 'Ssp.controller.person.CoachViewController',
     inject: {
     	coachesStore: 'coachesStore',
-    	sspConfig: 'sspConfig',
-    	studentTypesStore: 'studentTypesAllUnpagedStore'
+    	sspConfig: 'sspConfig'
     },
+	width: '100%',
 	initComponent: function() {	
 		var me=this;
 		Ext.apply(me, 
@@ -36,7 +36,7 @@ Ext.define('Ssp.view.person.Coach', {
 			    fieldDefaults: {
 			        msgTarget: 'side',
 			        labelAlign: 'right',
-			        labelWidth: 200
+			        labelWidth: 100
 			    },	
 				items: [{
 			            xtype: 'fieldset',
@@ -45,13 +45,13 @@ Ext.define('Ssp.view.person.Coach', {
 			            title: '',
 			            defaultType: 'textfield',
 			            defaults: {
-			                anchor: '50%'
+			                anchor: '100%'
 			            },
 			       items: [{
 				        xtype: 'combobox',
 				        name: 'coachId',
 				        itemId: 'coachCombo',
-				        fieldLabel: me.sspConfig.get('coachFieldLabel'),
+				        fieldLabel: '<span class="syncedField">(sync\'d)</span>' +  me.sspConfig.get('coachFieldLabel'),
 				        emptyText: 'Select One',
 				        store: me.coachesStore,
 				        valueField: 'id',
@@ -61,10 +61,12 @@ Ext.define('Ssp.view.person.Coach', {
 				        allowBlank: false,
 						forceSelection: true,
 						typeAhead: false,
-				        editable: false
+				        editable: false,
+						width: 200,
+						labelAlign: 'top'
 					},{
 				    	xtype: 'displayfield',
-				        fieldLabel: 'Office',
+				        fieldLabel: '<span class="syncedField">(sync\'d)</span>' +  'Office',
 				        itemId: 'officeField',
 				        name: 'coachOffice'
 				    },{
@@ -74,7 +76,7 @@ Ext.define('Ssp.view.person.Coach', {
 				        name: 'coachPhone'
 				    },{
 				    	xtype: 'displayfield',
-				        fieldLabel: 'Email',
+				        fieldLabel: '<span class="syncedField">(sync\'d)</span>' +  'Email',
 				        itemId: 'emailAddressField',
 				        name: 'coachEmailAddress'
 				    },{
@@ -82,22 +84,7 @@ Ext.define('Ssp.view.person.Coach', {
 				        fieldLabel: 'Department',
 				        itemId: 'departmentField',
 				        name: 'coachDepartment'
-				    },{
-				        xtype: 'combobox',
-				        name: 'studentTypeId',
-				        itemId: 'studentTypeCombo',
-				        id: 'studentTypeCombo',
-				        fieldLabel: 'Student Type',
-				        emptyText: 'Select One',
-				        store: me.studentTypesStore,
-				        valueField: 'id',
-				        displayField: 'name',
-				        mode: 'local',
-				        typeAhead: false,
-				        editable: false,
-				        queryMode: 'local',
-				        allowBlank: false
-					}]
+				    }]
 			    }]
 			});
 		

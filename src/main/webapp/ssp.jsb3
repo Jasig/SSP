@@ -905,6 +905,11 @@
                     "path": "/app/controller/person/"
                 },
                 {
+                    "clsName": "Ssp.controller.person.StudentViewController",
+                    "name": "StudentViewController.js",
+                    "path": "/app/controller/person/"
+                },
+                {
                     "clsName": "Ssp.controller.person.EditPersonViewController",
                     "name": "EditPersonViewController.js",
                     "path": "/app/controller/person/"
@@ -917,6 +922,11 @@
                 {
                     "clsName": "Ssp.controller.person.AppointmentViewController",
                     "name": "AppointmentViewController.js",
+                    "path": "/app/controller/person/"
+                },
+                {
+                    "clsName": "Ssp.controller.person.StudentIntakeRequestController",
+                    "name": "StudentIntakeRequestController.js",
                     "path": "/app/controller/person/"
                 },
                 {

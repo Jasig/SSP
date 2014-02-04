@@ -44,14 +44,8 @@ Ext.define('Ssp.controller.person.CoachViewController', {
         		change: 'onCoachComboChange',
         		select: 'onCoachComboSelect'
     		} 
-    	},
-    	
-    	studentTypeCombo: {
-    		selector: '#studentTypeCombo',
-    		listeners: {
-        		select: 'onStudentTypeComboSelect'
-    		}     		
     	}
+		
     },
     
 	init: function() {
@@ -80,11 +74,6 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 			}
 		 });
 		
-		me.studentTypesStore.clearFilter(true);	 
-		
-		if ( me.person.data.studentType ) {
-			me.formRendererUtils.applyAssociativeStoreFilter(me.studentTypesStore, me.person.data.studentType.id);	
-		}
 		
 		me.initForm();
 		
@@ -93,8 +82,7 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 
 	initForm: function(){
 		var me=this;
-		me.getView().getForm().reset();		
-		me.getStudentTypeCombo().setValue( me.person.getStudentTypeId() );
+		me.getView().getForm().reset();	
 		me.inited=true;
 	},    
     
@@ -123,24 +111,6 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 		me.getOfficeField().setValue( coach.get('officeLocation') );
 	},
 
-	onStudentTypeComboSelect: function(comp, records, eOpts){
-		var me=this;
-		var studentType, requireInitialAppointment;
-		if(records.length>0){
-			me.appEventsController.getApplication().fireEvent('studentTypeChange');
-		}
-	},
-	
-	onStudentTypeComboChange: function(comp, newValue, oldValue, eOpts){
-		var me=this;
-		var studentType, requireInitialAppointment;
-		//Assumes studentTypesStore is loaded in higher controller
-		studentType = me.studentTypesStore.getById(newValue); 
-		
-		if(studentType != null){
-			me.appEventsController.getApplication().fireEvent('studentTypeChange');
-		}
-	},
 		
 	lookupMissingCoach: function(coachId, after, afterScope) {
 		var me = this;

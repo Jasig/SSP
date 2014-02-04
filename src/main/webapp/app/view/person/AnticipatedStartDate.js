@@ -25,23 +25,27 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
     inject: {
 		termsStore: 'termsStore'
     },
+	
 	initComponent: function() {	
+		var abilityToBenefit = Ext.create('Ext.data.Store', {
+            fields: [{name: 'abilityToBenefit'},
+			{name: 'value'}],
+            data: [{
+                'abilityToBenefit': 'No', value: false
+            }, {
+                'abilityToBenefit': 'Yes', value: true
+            }]
+        });
 		Ext.apply(this, 
 				{
 		        fieldDefaults: {
 		        msgTarget: 'side',
-		        labelAlign: 'right',
+		        labelAlign: 'top',
 		        labelWidth: 125
 		    },
 			border: 0,
-			items: [{
-		        xtype: 'checkboxgroup',
-		        fieldLabel: 'Ability to Benefit',
-		        columns: 1,
-		        items: [
-		            {boxLabel: '', name: 'abilityToBenefit'}
-		        ]
-		    },{
+			items: [
+			{
 		        xtype: 'combobox',
 		        name: 'anticipatedStartTerm',
 		        fieldLabel: 'Anticipated Start Term',
@@ -68,7 +72,23 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
 		        allowBlank: true,
 				typeAhead: false,
 				editable: false
-			}]
+			},
+			{
+				xtype: 'combobox',
+		        name: 'abilityToBenefit',
+		        fieldLabel: 'Ability to Benefit',
+		        //emptyText: 'Select One',
+		        store: abilityToBenefit,
+		        valueField: 'value',
+		        displayField: 'abilityToBenefit',
+		        mode: 'local',
+		        queryMode: 'local',
+		        allowBlank: true,
+				forceSelection: true,
+				typeAhead: false,
+				editable: false
+			}
+			]
 		});
 		
 		return this.callParent(arguments);
