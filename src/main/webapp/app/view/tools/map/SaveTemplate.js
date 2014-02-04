@@ -95,7 +95,6 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
 						        		allowBlank: false,
 						        		itemId: 'visibility',
 						        		width: 290,
-						        		disabled: !me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')
 						    		}
                 			    ]},
                 			{

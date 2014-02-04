@@ -52,6 +52,9 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		
 		if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
 			me.getVisibilityField().setValue('PRIVATE');
+			me.getVisibilityField().setDisabled(true);
+		}else{
+			me.getVisibilityField().setDisabled(false);
 		}
 
 		return me.callParent(arguments);
@@ -167,6 +170,9 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 	    if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
 	    	me.getVisibilityField().setValue('PRIVATE');
 	    	me.getVisibilityField().setDisabled(true);
+	    }else{
+	    	if(me.getVisibilityField().getValue() == null || me.getVisibilityField().getValue() == '')
+	    		me.getVisibilityField().setValue('AUTHENTICATED');
 	    }
     },
 
