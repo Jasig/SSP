@@ -58,7 +58,7 @@
             </column>   
         </addColumn>
         <addColumn tableName="external_student_financial_aid">
-            <column name="financial_aid_file_status" type="int" >
+            <column name="financial_aid_file_status" type="${nvarchar.type}(10)" >
                 <constraints nullable="true" />
             </column>   
         </addColumn>

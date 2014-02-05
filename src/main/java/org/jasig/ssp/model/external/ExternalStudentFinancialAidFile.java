@@ -57,7 +57,7 @@ public class ExternalStudentFinancialAidFile extends AbstractExternalData
 	@Size(max = 25)
 	private String financialFileCode;
 	
-	@Enumerated(EnumType.ORDINAL)
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private FinancialFileStatus fileStatus;
 

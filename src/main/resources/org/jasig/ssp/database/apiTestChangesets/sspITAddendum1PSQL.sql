@@ -60,47 +60,47 @@ INSERT INTO financial_aid_file (id, code, description, created_date, modified_da
 -- Data for Name: external_student_financial_aid_file; Type: TABLE DATA; Schema: public; Owner: sspadmin
 --
 
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('bjones27','2','CITY_1');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('bjones27','1','STATE_2');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('bjones27','1','GOV_2');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('bjones27','2','GOV_1');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('bjones27','2','COUNTY_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('bjones27','COMPLETE','CITY_1');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('bjones27','PENDING','STATE_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('bjones27','PENDING','GOV_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('bjones27','COMPLETE','GOV_1');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('bjones27','COMPLETE','COUNTY_2');
 
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('btaylor30','2','CITY_1');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('btaylor30','1','STATE_2');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('btaylor30','1','GOV_2');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('btaylor30','2','GOV_1');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('btaylor30','2','COUNTY_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('btaylor30','COMPLETE','CITY_1');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('btaylor30','PENDING','STATE_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('btaylor30','PENDING','GOV_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('btaylor30','COMPLETE','GOV_1');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('btaylor30','COMPLETE','COUNTY_2');
 
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cgarcia1','2','CITY_1');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cgarcia1','1','STATE_2');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cgarcia1','1','GOV_2');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cgarcia1','0','GOV_1');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cgarcia1','2','COUNTY_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cgarcia1','COMPLETE','CITY_1');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cgarcia1','PENDING','STATE_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cgarcia1','PENDING','GOV_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cgarcia1','INCOMPLETE','GOV_1');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cgarcia1','COMPLETE','COUNTY_2');
 
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('charris223','2','CITY_1');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('charris223','1','STATE_2');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('charris223','1','GOV_2');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('charris223','0','GOV_1');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('charris223','2','COUNTY_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('charris223','COMPLETE','CITY_1');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('charris223','PENDING','STATE_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('charris223','PENDING','GOV_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('charris223','INCOMPLETE','GOV_1');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('charris223','COMPLETE','COUNTY_2');
 
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cjackson52','2','CITY_1');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cjackson52','1','STATE_2');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cjackson52','1','GOV_2');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cjackson52','0','GOV_1');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cjackson52','2','COUNTY_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cjackson52','COMPLETE','CITY_1');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cjackson52','PENDING','STATE_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cjackson52','PENDING','GOV_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cjackson52','INCOMPLETE','GOV_1');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cjackson52','COMPLETE','COUNTY_2');
 
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cmiller114','2','CITY_1');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cmiller114','1','STATE_2');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cmiller114','1','GOV_2');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cmiller114','0','GOV_1');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cmiller114','2','COUNTY_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cmiller114','COMPLETE','CITY_1');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cmiller114','PENDING','STATE_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cmiller114','PENDING','GOV_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cmiller114','INCOMPLETE','GOV_1');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('cmiller114','COMPLETE','COUNTY_2');
 
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('csimth29','2','CITY_1');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('csimth29','1','STATE_2');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('csimth29','1','GOV_2');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('csimth29','0','GOV_1');
-insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('csimth29','2','COUNTY_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('csimth29','COMPLETE','CITY_1');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('csimth29','PENDING','STATE_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('csimth29','PENDING','GOV_2');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('csimth29','INCOMPLETE','GOV_1');
+insert into external_student_financial_aid_file (school_id, file_status, financial_file_code) values ('csimth29','COMPLETE','COUNTY_2');
 
 --
 -- Data for Name: external_student_financial_aid_award_term; Type: TABLE DATA; Schema: public; Owner: sspadmin
@@ -153,19 +153,19 @@ insert into external_student_financial_aid_award_term (school_id, accepted, term
 -- Data for Name: external_student_financial_aid; Type: TABLE DATA; Schema: public; Owner: sspadmin
 --
 
-UPDATE external_student_financial_aid set sap_status_code='CITY_1', institutional_loan_amount=10000.00, eligible_federal_aid='Y', financial_aid_file_status=2, terms_left=4 WHERE school_id LIKE 'b%';
+UPDATE external_student_financial_aid set sap_status_code='CITY_1', institutional_loan_amount=10000.00, eligible_federal_aid='Y', financial_aid_file_status='COMPLETE', terms_left=4 WHERE school_id LIKE 'b%';
 
-UPDATE external_student_financial_aid set sap_status_code='COUNTY_1', institutional_loan_amount=15000.00, eligible_federal_aid='N', financial_aid_file_status=1, terms_left=48 WHERE school_id LIKE 'c%';
+UPDATE external_student_financial_aid set sap_status_code='COUNTY_1', institutional_loan_amount=15000.00, eligible_federal_aid='N', financial_aid_file_status='PENDING', terms_left=48 WHERE school_id LIKE 'c%';
 
-UPDATE external_student_financial_aid set sap_status_code='STATE_1', institutional_loan_amount=15000.00, eligible_federal_aid='N', financial_aid_file_status=1, terms_left=48 WHERE school_id LIKE 'c%';
+UPDATE external_student_financial_aid set sap_status_code='STATE_1', institutional_loan_amount=15000.00, eligible_federal_aid='N', financial_aid_file_status='PENDING', terms_left=48 WHERE school_id LIKE 'c%';
 
-UPDATE external_student_financial_aid set sap_status_code='COUNTY_2', institutional_loan_amount=15000.00, eligible_federal_aid='Y', financial_aid_file_status=0, terms_left=8 WHERE school_id LIKE 'j%';
+UPDATE external_student_financial_aid set sap_status_code='COUNTY_2', institutional_loan_amount=15000.00, eligible_federal_aid='Y', financial_aid_file_status='INCOMPLETE', terms_left=8 WHERE school_id LIKE 'j%';
 
-UPDATE external_student_financial_aid set sap_status_code='STATE_2', institutional_loan_amount=8000.00, eligible_federal_aid='Y', financial_aid_file_status=0, terms_left=8 WHERE school_id LIKE 'l%';
+UPDATE external_student_financial_aid set sap_status_code='STATE_2', institutional_loan_amount=8000.00, eligible_federal_aid='Y', financial_aid_file_status='INCOMPLETE', terms_left=8 WHERE school_id LIKE 'l%';
 
-UPDATE external_student_financial_aid set sap_status_code='GOV_2', institutional_loan_amount=17000.00, eligible_federal_aid='Y', financial_aid_file_status=2, terms_left=2 WHERE school_id LIKE 'm%';
+UPDATE external_student_financial_aid set sap_status_code='GOV_2', institutional_loan_amount=17000.00, eligible_federal_aid='Y', financial_aid_file_status='COMPLETE', terms_left=2 WHERE school_id LIKE 'm%';
 
-UPDATE external_student_financial_aid set sap_status_code='GOV_1', institutional_loan_amount=10000.00, eligible_federal_aid='n', financial_aid_file_status=2, terms_left=4 WHERE school_id LIKE 'n%';
+UPDATE external_student_financial_aid set sap_status_code='GOV_1', institutional_loan_amount=10000.00, eligible_federal_aid='n', financial_aid_file_status='COMPLETE', terms_left=4 WHERE school_id LIKE 'n%';
 
 
 UPDATE map_template set visibility=0 WHERE is_private=TRUE;

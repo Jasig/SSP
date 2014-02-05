@@ -39,7 +39,7 @@
             <column name="school_id" type="${nvarchar.type}(50)">
                 <constraints nullable="false" />
             </column>
-            <column name="file_status" type="int">
+            <column name="file_status" type="${nvarchar.type}(10)">
                 <constraints nullable="false" />
             </column>
             <column name="financial_file_code" type="${nvarchar.type}(25)">
