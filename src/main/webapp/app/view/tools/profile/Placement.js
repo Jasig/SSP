@@ -58,6 +58,11 @@ Ext.define('Ssp.view.tools.profile.Placement', {
                     text: 'Date',
 					renderer: Ext.util.Format.dateRenderer('m/d/Y'),
 					flex: 1
+                },{
+                    xtype: 'gridcolumn',
+                    dataIndex: 'outcome',
+                    text: 'Outcome',
+					flex: 1
                 }
             ],
             viewConfig: {

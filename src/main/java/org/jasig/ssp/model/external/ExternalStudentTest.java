@@ -86,6 +86,11 @@ public class ExternalStudentTest extends AbstractExternalData implements
 	@NotEmpty
 	@Size(max = 25)
 	private String status;
+	
+	@Column(nullable = true, length = 255)
+	@Size(max = 255)
+	private String outcome;
+
 
 	/**
 	 * @return the schoolId
@@ -212,6 +217,21 @@ public class ExternalStudentTest extends AbstractExternalData implements
 	 */
 	public void setStatus(final String status) {
 		this.status = status;
+	}
+	
+	/**
+	 * @return the outcome
+	 */
+	public String getOutcome() {
+		return outcome;
+	}
+
+
+	/**
+	 * @param status the outcome to set
+	 */
+	public void setOutcome(final String outcome) {
+		this.outcome = outcome;
 	}
 
 }

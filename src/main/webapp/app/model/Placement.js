@@ -21,6 +21,7 @@ Ext.define('Ssp.model.Placement', {
     fields: [{name:'score',type:'string'},
              {name:'status',type:'string'},
              {name:'name',type:'string'},
+             {name:'outcome',type:'string'},
              {name:'subTestName',type:'string'},
              {
             	 name: 'type',
