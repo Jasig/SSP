@@ -18,12 +18,23 @@
  */
 package org.jasig.ssp.dao;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.Appointment;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.external.ExternalStudentFinancialAidAwardTerm;
+import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -51,5 +62,79 @@ public class AppointmentDao
 		query.setMaxResults(1);
 
 		return (Appointment) query.uniqueResult();
+	}
+	
+	public Map<UUID,Date> getCurrentAppointmentDatesForPeopleIds(Collection<UUID> peopleIds){
+		List<List<UUID>> batches = prepareBatches(peopleIds);
+		String baseQuery = "select TOP personId as appt_personId, startTime as appt_startTime from appointment where personId in (%) and objectStatus = 1 sort by modfiedDate GROUP BY personId";
+		Map<UUID, Date> map = new HashMap<UUID, Date>();
+		for (List<UUID> batch : batches) 
+		{
+			StringBuilder inClause = new StringBuilder();
+			for (UUID studentId : batch) 
+			{
+				inClause.append("'");
+				inClause.append(studentId.toString());
+				inClause.append("'");
+				inClause.append(",");
+			}
+			inClause.deleteCharAt(inClause.lastIndexOf(","));
+			String query = StringUtils.replace(baseQuery, "%", inClause.toString());
+			List<AppointmentStartTime> list = createHqlQuery( query ).setResultTransformer(new NamespacedAliasToBeanResultTransformer(
+					AppointmentStartTime.class, "appt_")).list();
+			for(AppointmentStartTime st:list){
+				map.put(st.getPersonId(), st.startTime);
+			}
+		}
+		return map;
+	}
+	
+	private List<List<UUID>> prepareBatches(Collection<UUID> uuids){
+		List<UUID> currentBatch = new ArrayList<UUID>(); 
+		List<List<UUID>> batches = new ArrayList<List<UUID>>();
+		int batchCounter = 0;
+		for (UUID uuid : uuids) 
+		{
+			if(batchCounter == getBatchsize())
+			{
+				currentBatch.add(uuid);
+				batches.add(currentBatch);
+				currentBatch = new ArrayList<UUID>();
+				batchCounter = 0;
+			}
+			else
+			{
+				currentBatch.add(uuid);
+				batchCounter++;
+			}
+		}
+		batches.add(currentBatch);
+		return batches;
+	}
+	public class AppointmentStartTime {
+		
+	    public UUID personId;
+	    public Date startTime;
+
+	    public AppointmentStartTime(UUID personId, Date startTime) {
+	        this.personId = personId;
+	        this.startTime = startTime;
+	    }
+
+		public UUID getPersonId() {
+			return personId;
+		}
+
+		public void setPersonId(UUID personId) {
+			this.personId = personId;
+		}
+
+		public Date getStartTime() {
+			return startTime;
+		}
+
+		public void setStartTime(Date startTime) {
+			this.startTime = startTime;
+		}
 	}
 }

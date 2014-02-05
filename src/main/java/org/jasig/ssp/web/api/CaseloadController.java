@@ -20,21 +20,22 @@ package org.jasig.ssp.web.api;
 
 import java.util.UUID;
 
-import org.jasig.ssp.factory.CaseloadRecordTOFactory;
-import org.jasig.ssp.model.CaseloadRecord;
+import org.jasig.ssp.factory.PersonSearchResult2TOFactory;
+import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.security.permissions.Permission;
-import org.jasig.ssp.service.CaseloadService;
+import org.jasig.ssp.service.PersonSearchService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.CaseloadReassignmentRequestTO;
-import org.jasig.ssp.transferobject.CaseloadRecordTO;
+import org.jasig.ssp.transferobject.PersonSearchResult2TO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,13 +60,13 @@ public class CaseloadController extends AbstractBaseController {
 	private transient PersonService personService;
 
 	@Autowired
-	private transient CaseloadService service;
+	private transient PersonSearchService service;
 
 	@Autowired
 	private transient ProgramStatusService programStatusService;
 
 	@Autowired
-	private transient CaseloadRecordTOFactory factory;
+	private transient PersonSearchResult2TOFactory factory;
 
 	@Autowired
 	private transient SecurityService securityService;
@@ -77,32 +78,32 @@ public class CaseloadController extends AbstractBaseController {
  
 	@RequestMapping(value = "/caseload", method = RequestMethod.GET)
 	public @ResponseBody
-	PagedResponse<CaseloadRecordTO> myCaseload(
+	PagedResponse<PersonSearchResult2TO> myCaseload(
 			final @RequestParam(required = false) UUID programStatusId,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, ValidationException {
 
 		ProgramStatus programStatus = null;
 		if (null != programStatusId) {
 			programStatus = programStatusService.get(programStatusId);
 		}
 
-		final PagingWrapper<CaseloadRecord> caseload = service.caseLoadFor(
+		final PagingWrapper<PersonSearchResult2> caseload = service.caseLoadFor(
 				programStatus, securityService.currentUser().getPerson(),
 				SortingAndPaging.createForSingleSortWithPaging(status, start, limit,
 						sort, sortDirection, "lastName"));
 
-		return new PagedResponse<CaseloadRecordTO>(true, caseload.getResults(),
+		return new PagedResponse<PersonSearchResult2TO>(true, caseload.getResults(),
 				factory.asTOList(caseload.getRows()));
 	}
 
 	@RequestMapping(value = "/{personId}/caseload", method = RequestMethod.GET)
 	public @ResponseBody
-	PagedResponse<CaseloadRecordTO> caseloadFor(
+	PagedResponse<PersonSearchResult2TO> caseloadFor(
 			@PathVariable final UUID personId,
 			final @RequestParam(required = false) UUID programStatusId,
 			final @RequestParam(required = false) ObjectStatus status,
@@ -110,19 +111,19 @@ public class CaseloadController extends AbstractBaseController {
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
 			final @RequestParam(required = false) String sortDirection)
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, ValidationException {
 
 		ProgramStatus programStatus = null;
 		if (null != programStatusId) {
 			programStatus = programStatusService.get(programStatusId);
 		}
 
-		final PagingWrapper<CaseloadRecord> caseload = service.caseLoadFor(
+		final PagingWrapper<PersonSearchResult2> caseload = service.caseLoadFor(
 				programStatus, personService.get(personId),
 				SortingAndPaging.createForSingleSortWithPaging(status, start, limit,
 						sort, sortDirection, "lastName"));
 
-		return new PagedResponse<CaseloadRecordTO>(true, caseload.getResults(),
+		return new PagedResponse<PersonSearchResult2TO>(true, caseload.getResults(),
 				factory.asTOList(caseload.getRows()));
 	}
 	

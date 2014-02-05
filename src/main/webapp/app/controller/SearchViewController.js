@@ -129,6 +129,10 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	// ensure the selected person is not loaded twice
 		// once on load and once on selection
 	   	me.personLite.set('id','');
+	   	
+	   	
+	   	
+
 
 		if(me.termsStore.getTotalCount() == 0){
 				me.termsStore.addListener("load", me.onTermsStoreLoad, me);
@@ -197,6 +201,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	me.appEventsController.removeEvent({eventName: 'retrieveCaseload', callBackFunc: me.onRetrieveCaseload, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'onPersonSearchSuccess', callBackFunc: me.searchSuccess, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
+		me.appEventsController.removeEvent({eventName: 'hideShowPersonSearchColumns', callBackFunc: me.applyColumns, scope: me});
 		
 		return me.callParent( arguments );
     },
@@ -227,7 +233,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 				me.search();
 				me.displaySearchBar();
 			}
-			me.showHideDOBColumn(false);
+			me.onCollapseStudentRecord();
 		}
     },
     
@@ -247,11 +253,28 @@ Ext.define('Ssp.controller.SearchViewController', {
     },
     
     onCollapseStudentRecord: function() {
-        this.showHideDOBColumn(true);
+		var me = this;
+        me.showColumn(false,'birthDate');
+		if(me.preferences.get('SEARCH_GRID_VIEW_TYPE') == 1){
+			me.showColumn(false,'coach');
+			me.showColumn(false,'currentProgramStatusName');
+			me.showColumn(true,'studentType')
+		}else{
+			me.showColumn(true,'coach');
+			me.showColumn(false,'studentType')
+			me.showColumn(true,'currentProgramStatusName');
+		}
 	},
 	
 	onExpandStudentRecord: function() {
-	    this.showHideDOBColumn(false);
+		var me = this;
+	    me.showColumn(true,'birthDate');
+		me.showColumn(true,'coach');	
+		me.showColumn(true,'currentProgramStatusName');
+		me.showColumn(true,'studentType')
+		if(me.preferences.get('SEARCH_GRID_VIEW_TYPE') == 1){
+			me.showColumn(false,'coach');
+		}
 	},  
 
 	setGridView: function( view ){
@@ -279,8 +302,10 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.getCaseloadBar().hide();
 		me.getSearchBar().show();
 		Ext.ComponentQuery.query('searchForm')[0].show();
-
 		me.setGridView();
+		if ( this.getView().getWidth() < (0.45 * Ext.getBody().getViewSize().width) ) {
+            me.onCollapseStudentRecord();
+        }
 	},
 
 	displayCaseloadBar: function(){
@@ -291,7 +316,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.setGridView();
 
 		if ( this.getView().getWidth() < (0.45 * Ext.getBody().getViewSize().width) ) {
-            me.showHideDOBColumn(false);
+            me.onCollapseStudentRecord();
         }
 	},
 	
@@ -304,29 +329,24 @@ Ext.define('Ssp.controller.SearchViewController', {
 		if ( me.preferences.get('SEARCH_GRID_VIEW_TYPE')==1 )
 		{
 			store = me.caseloadStore;
-			columns = [
-    	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.first-name'), dataIndex: 'firstName', flex: 1 },		        
-    	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.middle-name'), dataIndex: 'middleName', flex: .2},
-    	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.last-name'), dataIndex: 'lastName', flex: 1},
-    	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.dob'), dataIndex: 'birthDate', renderer: Ext.util.Format.dateRenderer('m/d/Y'), hidden: false, flex: 1},
-    	              { sortable: sortableColumns, header: 'Type', dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: .2},
-    	              { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: 1},
-    	              { sortable: sortableColumns, header: 'Alerts', dataIndex: 'numberOfEarlyAlerts', flex: .2}
-    	              ];
+			
 		}else{
 			store = me.searchStore;
 			store.pageSize = store.data.length;
-			columns = [
-    	              /* { header: "Photo", dataIndex: 'photoUrl', renderer: this.columnRendererUtils.renderPhotoIcon, flex: 50 }, */		        
-    	              /*{ sortable: sortableColumns, header: 'Student', dataIndex: 'lastName', renderer: me.columnRendererUtils.renderSearchStudentName, flex: .25 },*/
-    	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.first-name'), dataIndex: 'firstName', flex: .2},		        
-    	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.middle-name'), dataIndex: 'middleName', flex: .05},
-    	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.last-name'), dataIndex: 'lastName', flex: .2},
-    	              { sortable: sortableColumns, header: 'Coach', dataIndex: 'coach', renderer: me.columnRendererUtils.renderCoachName, flex: .25 },
-    	              { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: .15},
-    	              { sortable: sortableColumns, header: 'Status', dataIndex: 'currentProgramStatusName', flex: .15}
-    	              ];		
 		}
+		
+		columns = [
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.first-name'), dataIndex: 'firstName', flex: 1 },		        
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.middle-name'), dataIndex: 'middleName', flex: .2},
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.last-name'), dataIndex: 'lastName', flex: 1},
+				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.dob'), dataIndex: 'birthDate', renderer: Ext.util.Format.dateRenderer('m/d/Y'), flex: 1},
+	              { sortable: sortableColumns, header: 'Coach', dataIndex: 'coach', renderer: me.columnRendererUtils.renderCoachName, flex: 1},
+	              { sortable: sortableColumns, header: 'Type', dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: .2},
+				  { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: 1},
+	              { sortable: sortableColumns, header: 'Status', dataIndex: 'currentProgramStatusName', flex: .2},   	              
+	              { sortable: sortableColumns, header: 'Alerts', dataIndex: 'numberOfEarlyAlerts', flex: .2}
+	              ];
+		
 		if(me.getSearchGridPager)
 		{
 			me.getSearchGridPager().bindStore(store);
@@ -361,16 +381,17 @@ Ext.define('Ssp.controller.SearchViewController', {
 	    };  		
 		
 		me.formUtils.reconfigureGridPanel(grid, store, columns);
+		me.onCollapseStudentRecord();
 	},
 
-	showHideDOBColumn: function( value ) {
+	 showColumn: function( show, dataIndex ) {
 		var me=this;
-        var dobColumn = Ext.ComponentQuery.query('.gridcolumn[text='+me.textStore.getValueByCode('ssp.label.dob')+']')[0];
-    	if ( dobColumn ) {
-    	    if ( value ) {
-                dobColumn.show();
+        var column = Ext.ComponentQuery.query('.gridcolumn[dataIndex='+dataIndex+']')[0];
+    	if ( column ) {
+    	    if ( show ) {
+                column.show();
             } else {
-                dobColumn.hide();
+                column.hide();
             }
         }
     },
@@ -689,7 +710,7 @@ Ext.define('Ssp.controller.SearchViewController', {
         }
 
         if ( dobDisplayCheck ) {
-            me.showHideDOBColumn(false);
+            me.onCollapseStudentRecord();
         }
 	},
 	

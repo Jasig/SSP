@@ -30,8 +30,8 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 	
     control: {
 		view: {
-			collapse: 'onCollapsed',
-			expand: 'onExpanded'
+			collapse: 'onExpanded',
+			expand: 'onCollapsed'
 		},
 		'emailStudentButton': {
             click: 'onEmailStudentButtonClick'

@@ -30,9 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.collect.Lists;
 
 @Service
-@Transactional(readOnly = true)
-public class PersonSearchResult2TOFactoryImpl implements
-		PersonSearchResult2TOFactory {
+@Transactional
+public class PersonSearchResult2TOFactoryImpl implements PersonSearchResult2TOFactory {
 
 	@Override
 	public PersonSearchResult2TO from(final PersonSearchResult2 model) {

@@ -83,6 +83,16 @@ public class AppointmentServiceImpl
 
 		return appts;
 	}
+	
+	@Override
+	public Map<UUID, Date> getCurrentAppointmenDateForPeopleIds(
+			final Collection<UUID> peopleIds) {
+		
+		
+		final Map<UUID, Date> appts = dao.getCurrentAppointmentDatesForPeopleIds(peopleIds);
+
+		return appts;
+	}
 
 	@Override
 	public Appointment create(final Appointment obj)

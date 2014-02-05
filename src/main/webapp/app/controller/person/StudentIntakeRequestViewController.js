@@ -27,7 +27,6 @@ Ext.define('Ssp.controller.person.StudentIntakeRequestViewController', {
 		person: 'currentPerson'
     },
     control: {
-    	
     	'studentIntakeRequestedField':{
     		change: 'onHideRequestEmail'
     	}
@@ -54,4 +53,4 @@ Ext.define('Ssp.controller.person.StudentIntakeRequestViewController', {
     		emailBox.hide();
     	}
     }
-	});
+});

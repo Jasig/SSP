@@ -128,6 +128,7 @@ public class PersonServiceImpl implements PersonService {
 	@Autowired
 	private transient ConfidentialityLevelService confidentialityLevelService;
 
+
 	/**
 	 * If <code>true</code>, each individual coach synchronized by
 	 * {@link #syncCoaches()} will be written in its own transaction. If false,

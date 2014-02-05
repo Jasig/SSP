@@ -37,7 +37,7 @@ import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.sql.JoinType;
 import org.hibernate.transform.AliasToBeanResultTransformer;
-import org.jasig.ssp.model.CaseloadRecord;
+import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ProgramStatus;
@@ -60,7 +60,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public PagingWrapper<CaseloadRecord> caseLoadFor(
+	public PagingWrapper<PersonSearchResult2> caseLoadFor(
 			final ProgramStatus programStatus, @NotNull final Person coach,
 			final SortingAndPaging sAndP) {
 
@@ -126,18 +126,16 @@ public class CaseloadDao extends AbstractDao<Person> {
 
 		query.setProjection(projections);
 
-//		query.setResultTransformer(new AliasToBeanResultTransformer(
-//				CaseloadRecord.class));
 		query.setResultTransformer(
 				new NamespacedAliasToBeanResultTransformer(
-						CaseloadRecord.class, "clr_"));
+						PersonSearchResult2.class, "clr_"));
 
 		// Add Paging
 		if (sAndP != null) {
 			sAndP.addAll(query);
 		}
 
-		return new PagingWrapper<CaseloadRecord>(totalRows, query.list());
+		return new PagingWrapper<PersonSearchResult2>(totalRows, query.list());
 	}
 
 	@SuppressWarnings("unchecked")

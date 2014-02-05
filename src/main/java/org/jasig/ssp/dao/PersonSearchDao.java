@@ -187,7 +187,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 	
 	@SuppressWarnings("unchecked")
-	public List<PersonSearchResult2> search(PersonSearchRequest personSearchRequest) throws ObjectNotFoundException 
+	public List<PersonSearchResult2> search(PersonSearchRequest personSearchRequest)
 	{
 		Term currentTerm;
 		FilterTracker filterTracker = new FilterTracker();
@@ -214,6 +214,9 @@ public class PersonSearchDao extends AbstractDao<Person> {
 				"p.coach.firstName as person_coachFirstName, " +
 				"p.coach.lastName as person_coachLastName, " +
 				"p.coach.id as person_coachId, " +
+				"p.studentIntakeCompleteDate as person_studentIntakeCompleteDate, " +
+				"p.birthDate as person_birthDate, " +
+				"p.studentType.name as person_studentTypeName, " +
 				"p.photoUrl as person_photoUrl");
 		
 		buildFrom(personSearchRequest,stringBuilder);
