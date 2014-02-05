@@ -28,14 +28,12 @@
     <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
     <property name="concat.operator" value="||"  dbms="postgresql"/>
     <property name="concat.operator" value="+"  dbms="mssql"/>
-    
-	<changeSet author='jim.stanley'
-        id='Add Table External Student Financial Aid File'>
-        <preConditions onFail="CONTINUE" onFailMessage="Skipping Add External Student Financial Aid File">
+
+    <changeSet id="Add external_student_financial_aid_file table" author="dan.mccallum">
+        <preConditions onFail="CONTINUE" onFailMessage="Skipping Add external_student_financial_aid_file table">
             <sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
             </sqlCheck>
             <sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
-            <changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
         </preConditions>
         <createTable tableName="external_student_financial_aid_file">
             <column name="school_id" type="${nvarchar.type}(50)">
@@ -48,56 +46,86 @@
                 <constraints nullable="false" />
             </column>
         </createTable>
-
-        <!-- Name tries to reflect what Postgres would generate naturally -->
-        <addPrimaryKey constraintName="external_student_financial_aid_file_pkey" tableName="external_student_financial_aid_file" columnNames="school_id,financial_file_code"/>
-        
-        <createView viewName="v_external_student_financial_aid_file">
-            select school_id${concat.operator}financial_file_code as id,* from external_student_financial_aid_file
-        </createView>
-
         <sql>grant all on external_student_financial_aid_file to ${database.app.username}</sql>
-        <sql>grant all on v_external_student_financial_aid_file to ${database.app.username}</sql>
-        <rollback>
-            <dropView viewName="v_external_student_financial_aid_file" />
-            <dropTable tableName="external_student_financial_aid_file" />
-        </rollback>
-
     </changeSet>
-    
-    <changeSet author='jim.stanley'
-        id='Add Table Ext Student Financial Aid File No Key'>
-        <preConditions onFail="CONTINUE" onFailMessage="Skipping Add External Student Financial Aid File">
+
+    <!-- Drop view if it was created in non-PK mode but now we're in PK mode. Historically we allow you
+     to change config in that direction but not back -->
+    <changeSet id="Drop v_external_student_financial_aid_file view (pk)" author="dan.mccallum">
+        <preConditions onFail="CONTINUE" onFailMessage="Skipping Drop v_external_student_financial_aid_file view (pk)">
+            <sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+            </sqlCheck>
+            <sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+            <changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+            <viewExists viewName="v_external_student_financial_aid_file" schemaName="${schema}" />
+            <changeSetExecuted id="Add v_external_student_financial_aid_file view (no-pk)"
+                               author="dan.mccallum" changeLogFile="org/jasig/ssp/database/integrationchangesets/i000053.xml" />
+
+            <not>
+                <!-- If you were in PK mode, then non-PK mode, then flip back to PK mode, the <changeSetExecuted> above would
+                be true, but if we delete the view again because of that, the view won't be recreated b/c both view creation
+                changesets would have already run.
+
+                B/c of the nature of Liquibase we just can't support this endless flipping back and forth.
+                The primary use case we want to support is starting in non-PK mode then flipping to PK mode. That said, we don't
+                want to completely cripple the application if you do flip back and forth. So for the PK to non-PK to PK use
+                case here you'll just end up with the external_student_financial_aid_file table/view stuck in non-PK mode and
+                you'll have to fix it manually if you really do want PK mode. -->
+                <changeSetExecuted id="Add v_external_student_financial_aid_file view (pk)"
+                                   author="dan.mccallum" changeLogFile="org/jasig/ssp/database/integrationchangesets/i000053.xml" />
+            </not>
+        </preConditions>
+        <dropView viewName="v_external_student_financial_aid_file" />
+    </changeSet>
+
+    <!-- Create the view in non-PK mode but only if it doesn't already exist. Historically we've allowed
+    you to switch from non-PK mode to PK mode, but not back. So no attempt here to change the view if
+    something else already created it -->
+    <changeSet id="Add v_external_student_financial_aid_file view (no-pk)" author="dan.mccallum">
+        <preConditions onFail="CONTINUE" onFailMessage="Skipping Add v_external_student_financial_aid_file view (no-pk)">
             <sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
             </sqlCheck>
             <sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
             <changeLogPropertyDefined property="external.apply.natural.keys" value="false"/>
+            <not>
+                <viewExists viewName="v_external_student_financial_aid_file" schemaName="${schema}" />
+            </not>
         </preConditions>
-        <createTable tableName="external_student_financial_aid_file">
-            <column name="school_id" type="${nvarchar.type}(50)">
-                <constraints nullable="false" />
-            </column>
-            <column name="file_status" type="int">
-                <constraints nullable="false" />
-            </column>
-            <column name="financial_file_code" type="${nvarchar.type}(25)">
-                <constraints nullable="false" />
-            </column>
-        </createTable>        
-
         <createView viewName="v_external_student_financial_aid_file">
             select ROW_NUMBER() OVER (ORDER BY school_id,financial_file_code) as id, * from external_student_financial_aid_file
         </createView>
 
-        <sql>grant all on external_student_financial_aid_file to ${database.app.username}</sql>
         <sql>grant all on v_external_student_financial_aid_file to ${database.app.username}</sql>
-        <rollback>
-            <dropView viewName="v_external_student_financial_aid_file" />
-            <dropTable tableName="external_student_financial_aid_file" />
-        </rollback>
-
     </changeSet>
-    
-    
+
+    <changeSet id="Add v_external_student_financial_aid_file view (pk)" author="dan.mccallum">
+        <preConditions onFail="CONTINUE" onFailMessage="Skipping Add v_external_student_financial_aid_file view (pk)">
+            <sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+            </sqlCheck>
+            <sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+            <changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+            <not>
+                <viewExists viewName="v_external_student_financial_aid_file" schemaName="${schema}" />
+            </not>
+        </preConditions>
+        <createView viewName="v_external_student_financial_aid_file">
+            select school_id${concat.operator}financial_file_code as id,* from external_student_financial_aid_file
+        </createView>
+
+        <sql>grant all on v_external_student_financial_aid_file to ${database.app.username}</sql>
+    </changeSet>
+
+    <changeSet author='dan.mccallum'
+               id='Add external_student_financial_aid_file constraints'>
+        <preConditions onFail="CONTINUE" onFailMessage="Skipping Add external_student_financial_aid_file constraints">
+            <sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+            </sqlCheck>
+            <sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+            <changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+        </preConditions>
+
+        <!-- Name tries to reflect what Postgres would generate naturally -->
+        <addPrimaryKey constraintName="external_student_financial_aid_file_pkey" tableName="external_student_financial_aid_file" columnNames="school_id,financial_file_code"/>
+    </changeSet>
 
 </databaseChangeLog>

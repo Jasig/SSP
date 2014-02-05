@@ -23,17 +23,26 @@
 				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-	<changeSet id="add columns external_student_financial_aid" author="jim.stanley">
-		<preConditions onFail="CONTINUE"
-					   onFailMessage="Skip add columns external_student_financial_aid">
-			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
-			</sqlCheck>
-			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
-			</sqlCheck>
-			<changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
-		</preConditions>
-		<dropView viewName="v_external_student_financial_aid" />
-		<addColumn tableName="external_student_financial_aid">
+    <changeSet id="Drop v_external_student_financial_aid" author="dan.mccallum">
+        <preConditions onFail="CONTINUE"
+                       onFailMessage="Skip Drop v_external_student_financial_aid">
+            <sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+            </sqlCheck>
+            <sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+            </sqlCheck>
+        </preConditions>
+        <dropView viewName="v_external_student_financial_aid" />
+    </changeSet>
+
+    <changeSet id="Add columns to external_student_financial_aid" author="dan.mccallum">
+        <preConditions onFail="CONTINUE"
+                       onFailMessage="Skip Add columns to external_student_financial_aid">
+            <sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+            </sqlCheck>
+            <sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+            </sqlCheck>
+        </preConditions>
+        <addColumn tableName="external_student_financial_aid">
             <column name="sap_status_code" type="${nvarchar.type}(25)" >
                 <constraints nullable="true" />
             </column>   
@@ -58,10 +67,67 @@
                 <constraints nullable="true" />
             </column>   
         </addColumn>
-        
-		<createView viewName="v_external_student_financial_aid">
-			select school_id as id,* from external_student_financial_aid
-		</createView>
-		<sql>grant all on v_external_student_financial_aid to ${database.app.username}</sql>
-	</changeSet>
+    </changeSet>
+
+    <!-- Drop view if it was created in non-PK mode but now we're in PK mode. Historically we allow you
+     to change config in that direction but not back -->
+    <changeSet id="Drop v_external_student_financial_aid view (pk)" author="dan.mccallum">
+        <preConditions onFail="CONTINUE" onFailMessage="Skip Drop v_external_student_financial_aid view (pk)">
+            <sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+            </sqlCheck>
+            <sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+            <changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+            <viewExists viewName="v_external_student_financial_aid" schemaName="${schema}" />
+            <changeSetExecuted id="add back v_external_student_financial_aid view (no-pk)"
+                               author="dan.mccallum" changeLogFile="org/jasig/ssp/database/integrationchangesets/i000054.xml" />
+            <not>
+                <!-- If you were in PK mode, then non-PK mode, then flip back to PK mode, the <changeSetExecuted> above would
+                be true, but if we delete the view again because of that, the view won't be recreated b/c view recreation
+                changesets would have already run.
+
+                B/c of the nature of Liquibase we just can't support this endless flipping back and forth.
+                The primary use case we want to support is starting in non-PK mode then flipping to PK mode. That said, we don't
+                want to completely cripple the application if you do flip back and forth. So for the PK to non-PK to PK use
+                case here you'll just end up with the external_student_financial_aid table/view stuck in non-PK mode and
+                you'll have to fix it manually if you really do want PK mode. -->
+                <changeSetExecuted id="Add back v_external_student_financial_aid view (pk)"
+                                   author="dan.mccallum" changeLogFile="org/jasig/ssp/database/integrationchangesets/i000054.xml" />
+            </not>
+        </preConditions>
+        <dropView viewName="v_external_student_financial_aid" />
+    </changeSet>
+
+    <changeSet id="Add back v_external_student_financial_aid view (pk)" author="dan.mccallum">
+        <preConditions onFail="CONTINUE" onFailMessage="Skipping Add back v_external_student_financial_aid view (pk)">
+            <sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+            </sqlCheck>
+            <sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+            <changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+        </preConditions>
+        <createView viewName="v_external_student_financial_aid">
+            select school_id as id,* from external_student_financial_aid
+        </createView>
+        <sql>grant all on v_external_student_financial_aid to ${database.app.username}</sql>
+    </changeSet>
+
+    <changeSet id="add back v_external_student_financial_aid view (no-pk)" author="dan.mccallum">
+        <preConditions onFail="CONTINUE" onFailMessage="Skipping Add back v_external_student_financial_aid view (no-pk)">
+            <sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+            </sqlCheck>
+            <sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+            <changeLogPropertyDefined property="external.apply.natural.keys" value="false"/>
+
+            <!-- Without this the app will error out if you begin with PKs enabled then turn them
+            off. We just really don't want/need to support that use case in our Liquibase, but still
+            don't want to error out.-->
+            <not>
+                <viewExists viewName="v_external_student_financial_aid" schemaName="${schema}" />
+            </not>
+        </preConditions>
+        <createView viewName="v_external_student_financial_aid">
+            select ROW_NUMBER() OVER (ORDER BY school_id) as id, * from external_student_financial_aid
+        </createView>
+        <sql>grant all on v_external_student_financial_aid to ${database.app.username}</sql>
+    </changeSet>
+
 </databaseChangeLog>
