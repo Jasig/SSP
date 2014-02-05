@@ -122,8 +122,8 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 			peopleIds.add(record.getId());
 		}
 
-		final Map<UUID, Appointment> appts = appointmentService
-				.getCurrentAppointmentForPeopleIds(peopleIds);
+		final Map<UUID, Date> appts = appointmentService
+				.getCurrentAppointmenDateForPeopleIds(peopleIds);
 
 		final Map<UUID, Number> earlyAlertCounts = earlyAlertService
 				.getCountOfActiveAlertsForPeopleIds(peopleIds);
@@ -131,7 +131,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 		for (final PersonSearchResult2 record : results) {
 			if (appts.containsKey(record.getId())) {
 				record.setCurrentAppointmentStartTime(appts.get(
-						record.getId()).getStartTime());
+						record.getId()));
 			}
 
 			if (earlyAlertCounts.containsKey(record.getId())) {
