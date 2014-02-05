@@ -33,6 +33,7 @@ public interface AppointmentService extends
 
 	Map<UUID, Appointment> getCurrentAppointmentForPeopleIds(
 			final Collection<UUID> peopleIds);
+
 	
 	public Map<UUID, Date> getCurrentAppointmenDateForPeopleIds(
 			final Collection<UUID> peopleIds);

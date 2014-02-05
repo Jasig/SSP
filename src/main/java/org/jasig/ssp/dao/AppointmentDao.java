@@ -31,6 +31,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.Appointment;
+import org.jasig.ssp.model.AppointmentStartTime;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.ExternalStudentFinancialAidAwardTerm;
@@ -66,7 +67,8 @@ public class AppointmentDao
 	
 	public Map<UUID,Date> getCurrentAppointmentDatesForPeopleIds(Collection<UUID> peopleIds){
 		List<List<UUID>> batches = prepareBatches(peopleIds);
-		String baseQuery = "select TOP personId as appt_personId, startTime as appt_startTime from appointment where personId in (%) and objectStatus = 1 sort by modfiedDate GROUP BY personId";
+		String baseQuery = "select appt.id from Appointment as appt "
+				+ "where appt.person.id in (%) and appt.objectStatus = 1 group by appt.person.id, appt.id order by appt.modifiedDate desc";
 		Map<UUID, Date> map = new HashMap<UUID, Date>();
 		for (List<UUID> batch : batches) 
 		{
@@ -78,13 +80,25 @@ public class AppointmentDao
 				inClause.append("'");
 				inClause.append(",");
 			}
+			if(inClause.lastIndexOf(",") < 0)
+				break;
 			inClause.deleteCharAt(inClause.lastIndexOf(","));
 			String query = StringUtils.replace(baseQuery, "%", inClause.toString());
-			List<AppointmentStartTime> list = createHqlQuery( query ).setResultTransformer(new NamespacedAliasToBeanResultTransformer(
-					AppointmentStartTime.class, "appt_")).list();
-			for(AppointmentStartTime st:list){
-				map.put(st.getPersonId(), st.startTime);
+			List<UUID> list = createHqlQuery( query ).setMaxResults(1).list();
+			List<AppointmentStartTime> appointmentDates = new ArrayList<AppointmentStartTime>();
+			/* because postgres does not support limit inside of select clauses **/
+			if(list.size()  > 0){
+				String secondQuery = "select appt.person.id as appt_personId, appt.startTime as appt_startTime from  Appointment as appt "
+				+ "where appt.id in :appointments";
+				appointmentDates = createHqlQuery( secondQuery ).setParameterList("appointments", list).
+						setResultTransformer(new NamespacedAliasToBeanResultTransformer(
+						AppointmentStartTime.class, "appt_")).list();
+				
+				for(AppointmentStartTime st:appointmentDates){
+					map.put(st.getPersonId(), st.getStartTime());
+				}
 			}
+			
 		}
 		return map;
 	}
@@ -110,31 +124,5 @@ public class AppointmentDao
 		}
 		batches.add(currentBatch);
 		return batches;
-	}
-	public class AppointmentStartTime {
-		
-	    public UUID personId;
-	    public Date startTime;
-
-	    public AppointmentStartTime(UUID personId, Date startTime) {
-	        this.personId = personId;
-	        this.startTime = startTime;
-	    }
-
-		public UUID getPersonId() {
-			return personId;
-		}
-
-		public void setPersonId(UUID personId) {
-			this.personId = personId;
-		}
-
-		public Date getStartTime() {
-			return startTime;
-		}
-
-		public void setStartTime(Date startTime) {
-			this.startTime = startTime;
-		}
 	}
 }
