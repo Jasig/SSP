@@ -80,7 +80,7 @@ import com.google.common.collect.Maps;
 public class PersonHistoryReportController extends ReportBaseController {
 
 	private static final String REPORT_URL = "/reports/studentHistoryMaster.jasper";
-	private static final String REPORT_FILE_TITLE = "StudentHistoryReprt-";
+	private static final String REPORT_FILE_TITLE = "StudentHistoryReport-";
 	private static final String STUDENT_TO = "studentTO";
     private static final String STUDENT_RECORD_TO = "studentRecordTO";
     private static final String STUDENT_PLAN_TO = "studentPlanTO";
