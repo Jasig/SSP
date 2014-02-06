@@ -68,7 +68,7 @@ public class AppointmentDao
 	public Map<UUID,Date> getCurrentAppointmentDatesForPeopleIds(Collection<UUID> peopleIds){
 		List<List<UUID>> batches = prepareBatches(peopleIds);
 		String baseQuery = "select appt.id from Appointment as appt "
-				+ "where appt.person.id in (%) and appt.objectStatus = 1 group by appt.person.id, appt.id order by appt.modifiedDate desc";
+				+ "where appt.person.id in (%) and appt.objectStatus = 1 group by appt.person.id, appt.id, appt.modifiedDate order by appt.modifiedDate desc";
 		Map<UUID, Date> map = new HashMap<UUID, Date>();
 		for (List<UUID> batch : batches) 
 		{
