@@ -146,7 +146,6 @@ Ext.define('Ssp.controller.SearchViewController', {
     
     onTextStoreLoad:function(){
     	var me = this;
-    	me.applyColumns();
     	me.onCollapseStudentRecord();
     },
     
@@ -249,6 +248,8 @@ Ext.define('Ssp.controller.SearchViewController', {
     
     onCollapseStudentRecord: function() {
 		var me = this;
+		me.preferences.set('SEARCH_VIEW_SIZE', "COLLAPSED");
+		me.applyColumns();
         me.showColumn(false,'birthDate');
 		if(me.getIsCaseload()){
 			me.showColumn(false,'coach');
@@ -259,11 +260,12 @@ Ext.define('Ssp.controller.SearchViewController', {
 			me.showColumn(true,'currentProgramStatusName');
 			me.showColumn(false,'studentType');
 		}
-		me.preferences.set('SEARCH_VIEW_SIZE', "COLLAPSED");
 	},
 	
 	onExpandStudentRecord: function() {
 		var me = this;
+		me.preferences.set('SEARCH_VIEW_SIZE', "EXPANDED");
+		me.applyColumns();
 	    me.showColumn(true,'birthDate');
 		me.showColumn(true,'studentType')
 		if(me.getIsCaseload()){
@@ -273,12 +275,10 @@ Ext.define('Ssp.controller.SearchViewController', {
 			me.showColumn(true,'coach');	
 			me.showColumn(true,'currentProgramStatusName');
 		}
-		me.preferences.set('SEARCH_VIEW_SIZE', "EXPANDED");
 	},  
 
 	setGridView: function( view ){
 		var me=this;
-		me.applyColumns();
 		if(me.getIsExpanded()){
 			me.onExpandStudentRecord();
 		}else{
@@ -346,7 +346,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		
 		columns = [
 	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.first-name'), dataIndex: 'firstName', flex: 1 },		        
-	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.middle-name'), dataIndex: 'middleName', flex: me.getIsExpanded() && me.getIsCaseload() ? .4:.2},
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.middle-name'), dataIndex: 'middleName', flex: me.getIsExpanded() ? .4:.2},
 	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.last-name'), dataIndex: 'lastName', flex: 1},
 				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.dob'), dataIndex: 'birthDate', renderer: Ext.util.Format.dateRenderer('m/d/Y'), flex: .5},
 	              { sortable: sortableColumns, header: 'Coach', dataIndex: 'coach', renderer: me.columnRendererUtils.renderCoachName, flex: 1},
