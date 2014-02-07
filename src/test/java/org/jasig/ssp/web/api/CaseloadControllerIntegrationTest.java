@@ -120,9 +120,10 @@ public class CaseloadControllerIntegrationTest {
 	 * 
 	 * @throws ObjectNotFoundException
 	 *             If object could not be found.
+	 * @throws ValidationException 
 	 */
 	@Test
-	public void testControllerCaseloadFor() throws ObjectNotFoundException {
+	public void testControllerCaseloadFor() throws ObjectNotFoundException, ValidationException {
 		final Collection<PersonSearchResult2TO> list = controller.caseloadFor(
 				ADVISOR_ID, null, ObjectStatus.ACTIVE, null, null, null, null)
 				.getRows();
@@ -137,10 +138,11 @@ public class CaseloadControllerIntegrationTest {
 	 * 
 	 * @throws ObjectNotFoundException
 	 *             If object could not be found.
+	 * @throws ValidationException 
 	 */
 	@Test
 	public void testControllerCaseloadForProgramStatusFilter()
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, ValidationException {
 		final PagedResponse<PersonSearchResult2TO> result = controller
 				.caseloadFor(ADVISOR_ID,
 						programStatusService.get(ProgramStatus.TRANSITIONED_ID)
