@@ -19,6 +19,8 @@
 package org.jasig.ssp.dao;
 
 import java.util.ArrayList;
+
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -34,7 +35,6 @@ import org.jasig.ssp.model.Appointment;
 import org.jasig.ssp.model.AppointmentStartTime;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.external.ExternalStudentFinancialAidAwardTerm;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.springframework.stereotype.Repository;
 
@@ -67,35 +67,27 @@ public class AppointmentDao
 	
 	public Map<UUID,Date> getCurrentAppointmentDatesForPeopleIds(Collection<UUID> peopleIds){
 		List<List<UUID>> batches = prepareBatches(peopleIds);
-		String baseQuery = "select appt.id from Appointment as appt "
-				+ "where appt.person.id in (%) and appt.objectStatus = 1 group by appt.person.id, appt.id, appt.modifiedDate order by appt.modifiedDate desc";
+		String query = "select appt.person.id as appt_personId, appt.startTime as appt_startTime from Appointment as appt "
+				+ "where appt.person.id in :peopleIds and appt.objectStatus = 1 order by appt.modifiedDate desc";
 		Map<UUID, Date> map = new HashMap<UUID, Date>();
+		
+
+		Date earliestAppt = getEarliestAppointmentDate();
 		for (List<UUID> batch : batches) 
 		{
-			StringBuilder inClause = new StringBuilder();
-			for (UUID studentId : batch) 
-			{
-				inClause.append("'");
-				inClause.append(studentId.toString());
-				inClause.append("'");
-				inClause.append(",");
-			}
-			if(inClause.lastIndexOf(",") < 0)
-				break;
-			inClause.deleteCharAt(inClause.lastIndexOf(","));
-			String query = StringUtils.replace(baseQuery, "%", inClause.toString());
-			List<UUID> list = createHqlQuery( query ).setMaxResults(1).list();
 			List<AppointmentStartTime> appointmentDates = new ArrayList<AppointmentStartTime>();
-			/* because postgres does not support limit inside of select clauses **/
-			if(list.size()  > 0){
-				String secondQuery = "select appt.person.id as appt_personId, appt.startTime as appt_startTime from  Appointment as appt "
-				+ "where appt.id in :appointments";
-				appointmentDates = createHqlQuery( secondQuery ).setParameterList("appointments", list).
-						setResultTransformer(new NamespacedAliasToBeanResultTransformer(
-						AppointmentStartTime.class, "appt_")).list();
-				
-				for(AppointmentStartTime st:appointmentDates){
-					map.put(st.getPersonId(), st.getStartTime());
+			appointmentDates = createHqlQuery( query ).setParameterList("peopleIds", batch).
+					setResultTransformer(new NamespacedAliasToBeanResultTransformer(
+					AppointmentStartTime.class, "appt_")).list();
+			
+			for(AppointmentStartTime st:appointmentDates){
+				if(map.containsKey(st.getPersonId())){
+					Date date = map.get(st.getPersonId());
+					if(st.getStartTime().after(earliestAppt) && st.getStartTime().before(date))
+						map.put(st.getPersonId(), st.getStartTime());
+				}else{
+					if(st.getStartTime().after(earliestAppt))
+						map.put(st.getPersonId(), st.getStartTime());
 				}
 			}
 			
@@ -103,6 +95,13 @@ public class AppointmentDao
 		return map;
 	}
 	
+	private Date getEarliestAppointmentDate(){
+		Date today = new Date();
+		Calendar c = Calendar.getInstance();
+		c.setTime(today);
+		c.add(Calendar.DATE, -1);
+		return c.getTime();
+	}
 	private List<List<UUID>> prepareBatches(Collection<UUID> uuids){
 		List<UUID> currentBatch = new ArrayList<UUID>(); 
 		List<List<UUID>> batches = new ArrayList<List<UUID>>();
