@@ -66,6 +66,9 @@ public class AppointmentDao
 	}
 	
 	public Map<UUID,Date> getCurrentAppointmentDatesForPeopleIds(Collection<UUID> peopleIds){
+		if(peopleIds == null || peopleIds.size() == 0)
+			return new HashMap<UUID,Date>();
+		
 		List<List<UUID>> batches = prepareBatches(peopleIds);
 		String query = "select appt.person.id as appt_personId, appt.startTime as appt_startTime from Appointment as appt "
 				+ "where appt.person.id in :peopleIds and appt.objectStatus = 1 order by appt.modifiedDate desc";
@@ -75,6 +78,9 @@ public class AppointmentDao
 		Date earliestAppt = getEarliestAppointmentDate();
 		for (List<UUID> batch : batches) 
 		{
+			if(batch == null || batch.size() <= 0 ){
+				continue;
+			}
 			List<AppointmentStartTime> appointmentDates = new ArrayList<AppointmentStartTime>();
 			appointmentDates = createHqlQuery( query ).setParameterList("peopleIds", batch).
 					setResultTransformer(new NamespacedAliasToBeanResultTransformer(
