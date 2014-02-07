@@ -22,7 +22,10 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewControll
     inject: {
     	apiProperties: 'apiProperties',
     	caseloadService: 'caseloadService',
-    	store: 'caseloadStore',
+        // Don't use caseloadStore b/c that's also used by the search UI. So
+        // all the reloading we do in this component breaks the search view if
+        // it's currently on-screen. See SSP-2003.
+    	store: 'reassignCaseloadStagingStore',
     	formUtils: 'formRendererUtils',
         coachesStore: 'allCoachesCurrentStore',
         reassignCaseloadStore: 'reassignCaseloadStore',
@@ -61,7 +64,7 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewControll
 	     	Ext.Msg.alert('SSP Error', 'There was an issue in loading assigned students for this coach.'); 
     	}
     	me.coachId = newValue;
-    	me.caseloadService.getCaseloadById(me.coachId, {success: success, failure: failure, scope: me});
+    	me.caseloadService.getCaseloadById(me.coachId, me.store, {success: success, failure: failure, scope: me});
 		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
 	},   
 	onAddAllButtonClick: function(button) {

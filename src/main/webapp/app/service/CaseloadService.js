@@ -20,8 +20,7 @@ Ext.define('Ssp.service.CaseloadService', {
     extend: 'Ssp.service.AbstractService',   		
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
-    	apiProperties: 'apiProperties',
-    	store: 'caseloadStore'
+    	apiProperties: 'apiProperties'
     },
     initComponent: function() {
 		return this.callParent( arguments );
@@ -40,11 +39,11 @@ Ext.define('Ssp.service.CaseloadService', {
     	return baseUrl;
     },    
 
-    getCaseload: function( programStatusId, callbacks ){
+    getCaseload: function( programStatusId, store, callbacks ){
     	var me=this;
 	    
 		// clear the store
-		me.store.removeAll();
+		store.removeAll();
 
 		// Set the Url for the Caseload Store
 		// including param definitions because the params need
@@ -53,9 +52,9 @@ Ext.define('Ssp.service.CaseloadService', {
 		// toolbar applied to the SearchView will not
 		// apply the params when using next or previous
 		// page
-		Ext.apply(me.store.getProxy(),{url: me.getBaseUrl()+'?programStatusId='+programStatusId+'&status=ACTIVE'});
+		Ext.apply(store.getProxy(),{url: me.getBaseUrl()+'?programStatusId='+programStatusId+'&status=ACTIVE'});
 
-	    me.store.load({
+	    store.load({
 		    callback: function(records, operation, success) {
 		        if (success)
 		        {
@@ -74,14 +73,14 @@ Ext.define('Ssp.service.CaseloadService', {
 		});
     },
     
-    getCaseloadById: function( personId, callbacks ){
+    getCaseloadById: function( personId, store, callbacks ){
     	var me=this;
     	var success = function( response, view ){
     		var r = Ext.decode(response.responseText);
-    		me.store.removeAll();
+    		store.removeAll();
 	    	if (r.rows.length > 0)
 	    	{
-	    		me.store.loadData(r.rows);
+	    		store.loadData(r.rows);
 	    	}
 	    	if (callbacks != null)
 	    	{

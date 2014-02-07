@@ -986,6 +986,7 @@ Ext.onReady(function(){
 					campusEarlyAlertRoutingsStore: 'Ssp.store.reference.CampusEarlyAlertRoutings',
 					campusServicesStore: 'Ssp.store.reference.CampusServices',
 					caseloadStore: 'Ssp.store.Caseload',
+					reassignCaseloadStagingStore: 'Ssp.store.Caseload',
 					reassignCaseloadStore: 'Ssp.store.Caseload',
 					challengesStore: 'Ssp.store.reference.Challenges',
 					challengesAllStore: {

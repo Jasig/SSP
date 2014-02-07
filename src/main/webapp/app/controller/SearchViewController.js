@@ -754,7 +754,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
 		me.setGridView();
 		me.getView().setLoading( true );
-		me.caseloadService.getCaseload( me.caseloadFilterCriteria.get( 'programStatusId' ), 
+		me.caseloadService.getCaseload( me.caseloadFilterCriteria.get( 'programStatusId' ),
+    		me.caseloadStore,
     		{success:me.getCaseloadSuccess, 
 			 failure:me.getCaseloadFailure, 
 			 scope: me});		
