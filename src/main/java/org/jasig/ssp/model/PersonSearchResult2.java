@@ -73,7 +73,7 @@ public class PersonSearchResult2 {
 	}
 
 	public void setPersonId(final UUID personId) {
-		this.personId = personId;
+		setIds(personId);
 	}
 
 	public Date getCurrentAppointmentStartTime() {
@@ -164,6 +164,11 @@ public class PersonSearchResult2 {
 	}
 
 	public void setId(UUID id) {
+		setIds(id);
+	}
+	
+	private void setIds(UUID id){
+		this.personId = id;
 		this.id = id;
 	}
 
