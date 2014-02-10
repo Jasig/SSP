@@ -101,6 +101,7 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 			me.getSecondaryEmailAddressField().setDisabled(disabled);
 		}
 		
+		
 		me.getView().getForm().reset();
 		me.getView().loadRecord( me.person );
 		// use config to determine if the retrieveFromExternalButton should be visible
@@ -113,6 +114,17 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 			me.getRetrieveFromExternalButton().setVisible(false);
 		}
 		
+		
+		
+		if (me.getRetrieveFromExternalButton().isVisible() == false) {
+			
+			me.getStudentIdField().getEl().replaceCls('editPersonWithButton','editPersonWithoutButton');
+			
+		}
+		else {
+			
+			me.getStudentIdField().getEl().replaceCls('editPersonWithoutButton','editPersonWithButton');
+		}
 		return me.callParent(arguments);
     },
 	

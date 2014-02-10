@@ -44,55 +44,43 @@ Ext.define('Ssp.view.person.Student', {
                 labelAlign: 'right',
                 labelWidth: 100
             },
-            items: [{
-                xtype: 'fieldcontainer',
-                padding: '0 0 0 0',
-                flex: '.65',
-                items: [{
+			items: [
+                {
                     xtype: 'fieldcontainer',
-                    padding: '0 0 0 0',
-                    width: '100%',
-                    layout: {
-                        type: 'hbox'
-                    },
+                    flex: 0.35,
+					padding: '0 0 0 0',
+					margin: '0 0 0 0',
                     fieldLabel: '',
-                    items: [{
-                        xtype: 'fieldset',
-                        border: 0,
-                        title: '',
-                        padding: '0 0 0 0',
-                        defaultType: 'textfield',
-                        defaults: {
-                            anchor: '100%'
-                        },
-                        flex: .50,
-                        
-                        items: [{
+					layout: {
+						type: 'vbox'
+					},
+					items: [
+                        {
                             xtype: 'editperson'
-                        }]
-                    }, {
-                        xtype: 'fieldset',
-                        border: 0,
-                        flex: .50,
-                        items: [{
+                        }
+                    ]
+                },
+                {
+                    xtype: 'fieldcontainer',
+                    flex: 0.35,
+                    fieldLabel: '',
+					padding: '0 10 0 0',
+					items: [
+                        {
                             xtype: 'personcoach'
-                        }]
-                    }]
-                }, {
+                        },
+						{
                     xtype: 'fieldset',
+					padding: '0 10 0 0',
                     title: 'Student Intake',
+					border: 0,
                     layout: {
-                        align: 'stretch',
-                        type: 'hbox'
+						flex: .90
                     },
                     items: [{
                         xtype: 'studentIntakeRequest',
                         flex: .50
-                    }, {
-                        xtype: 'fieldset',
-                        title: '',
-                        flex: .50,
-                        items: [{
+                    },{
                             fieldLabel: 'Student Intake Request Sent ',
                             name: 'studentIntakeRequestDateInCaseload',
                             itemId: 'studentIntakeRequestDateInCaseload',
@@ -109,17 +97,26 @@ Ext.define('Ssp.view.person.Student', {
                             renderer: Ext.util.Format.dateRenderer('m/d/Y')
                         
                         }]
-                    }]
-                }]
-            }, {
-                xtype: 'fieldset',
-				border: 0,
-                items: [{
+            }
+						
+                    ]
+                },
+                {
+                    xtype: 'fieldcontainer',
+                    fieldLabel: '',
+					padding: ' 0 0 0 0',
+					
+					items: [
+                        {
                     xtype: 'personappointment'
                 }, {
                     xtype: 'personanticipatedstartdate'
-                }]
-            }]
+                }
+                    ]
+                }
+            ]
+			
+            
         });
         
         me.callParent(arguments);

@@ -41,7 +41,7 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
 			},
 			items:[{
 				xtype : 'tabpanel',
-				activeTab : 0,
+				
 				itemId: 'caseloadPanel',
 				deferredRender: false
 			}],

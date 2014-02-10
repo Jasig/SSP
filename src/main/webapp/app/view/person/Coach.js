@@ -35,7 +35,7 @@ Ext.define('Ssp.view.person.Coach', {
 			    padding: 0,
 			    fieldDefaults: {
 			        msgTarget: 'side',
-			        labelAlign: 'right',
+			        labelAlign: 'top',
 			        labelWidth: 100
 			    },	
 				items: [{
@@ -45,13 +45,13 @@ Ext.define('Ssp.view.person.Coach', {
 			            title: '',
 			            defaultType: 'textfield',
 			            defaults: {
-			                anchor: '100%'
+			                //anchor: '100%'
 			            },
 			       items: [{
 				        xtype: 'combobox',
 				        name: 'coachId',
 				        itemId: 'coachCombo',
-				        fieldLabel: '<span class="syncedField">(sync\'d)</span>' +  me.sspConfig.get('coachFieldLabel'),
+				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' +  me.sspConfig.get('coachFieldLabel'),
 				        emptyText: 'Select One',
 				        store: me.coachesStore,
 				        valueField: 'id',
@@ -62,28 +62,27 @@ Ext.define('Ssp.view.person.Coach', {
 						forceSelection: true,
 						typeAhead: false,
 				        editable: false,
-						width: 200,
-						labelAlign: 'top'
+						width: 350
 					},{
-				    	xtype: 'displayfield',
-				        fieldLabel: '<span class="syncedField">(sync\'d)</span>' +  'Office',
+				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' +  'Office',
 				        itemId: 'officeField',
-				        name: 'coachOffice'
+				        name: 'coachOffice',
+						width: 350
 				    },{
-				    	xtype: 'displayfield',
 				        fieldLabel: 'Phone',
 				        itemId: 'phoneField',
-				        name: 'coachPhone'
+				        name: 'coachPhone',
+						width: 350
 				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: '<span class="syncedField">(sync\'d)</span>' +  'Email',
+				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' +  'Email',
 				        itemId: 'emailAddressField',
-				        name: 'coachEmailAddress'
+				        name: 'coachEmailAddress',
+						width: 350
 				    },{
-				    	xtype: 'displayfield',
 				        fieldLabel: 'Department',
 				        itemId: 'departmentField',
-				        name: 'coachDepartment'
+				        name: 'coachDepartment',
+						width: 350
 				    }]
 			    }]
 			});

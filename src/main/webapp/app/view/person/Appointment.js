@@ -48,7 +48,7 @@ Ext.define('Ssp.view.person.Appointment', {
                     name: 'studentTypeId',
                     itemId: 'studentTypeCombo',
                     id: 'studentTypeCombo',
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>' + 'Student Type',
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + 'Student Type',
                     emptyText: 'Select One',
                     store: me.studentTypesStore,
                     valueField: 'id',

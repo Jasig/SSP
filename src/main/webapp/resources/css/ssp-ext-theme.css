@@ -266,3 +266,17 @@ background:#ffff00 !important;
 	font-size: x-small;
 	color: #308014;
 }
+
+.editPersonWithoutButton{
+	margin-left: 155px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.editPersonWithButton{
+	margin-left: 15px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	
+}
+

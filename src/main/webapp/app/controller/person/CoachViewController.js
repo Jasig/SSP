@@ -51,7 +51,7 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 	init: function() {
 		var me=this;
 		me.missingCoach = null;
-
+	
 		me.coachesStore.load(function(records, operation, success) {
 	        if(!success) {
 				Ext.Msg.alert('Error','Unable to load Coaches. Please see your system administrator for assistance.');
@@ -83,6 +83,7 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 	initForm: function(){
 		var me=this;
 		me.getView().getForm().reset();	
+		
 		me.inited=true;
 	},    
     
