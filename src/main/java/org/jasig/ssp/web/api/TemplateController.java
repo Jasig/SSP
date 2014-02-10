@@ -65,6 +65,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/1/reference/map/template")
 public class TemplateController  extends AbstractBaseController {
 
+	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(TemplateController.class);
 
@@ -72,6 +73,8 @@ public class TemplateController  extends AbstractBaseController {
 	protected Logger getLogger() {
 		return LOGGER;
 	}
+	
+	private static String ANONYMOUS_MAP_TEMPLATE_ACCESS="anonymous_map_template_access";
 	 
 	@Autowired
 	private TemplateService service;
@@ -153,8 +156,10 @@ public class TemplateController  extends AbstractBaseController {
 			if(to.getVisibility().equals(MapTemplateVisibility.PRIVATE) && currentUser != null){
 				if(!to.getCreatedBy().getId().equals(currentUser.getPerson().getId()))
 					throw new AccessDeniedException("Insufficient permissions to view private template.");
-			}else if ((currentUser == null || !getSecurityService().isAuthenticated())  && !to.getVisibility().equals(MapTemplateVisibility.ANONYMOUS)){
-				throw new AccessDeniedException("Insufficient permissions to view requested template. No authenticated person.");
+			}else if ((currentUser == null || !getSecurityService().isAuthenticated()) && !to.getVisibility().equals(MapTemplateVisibility.ANONYMOUS))
+				throw new AccessDeniedException("Insufficient permissions to view requested template.");
+			else if((currentUser == null || !getSecurityService().isAuthenticated()) && !anonymousUsersAllowed()){
+				throw new AccessDeniedException("Insufficient permissions to view requested template. Unanimous access is not activated.");
 			}
 			return to;
 		}
@@ -475,6 +480,10 @@ public class TemplateController  extends AbstractBaseController {
 
 	public void setLiteFactory(TemplateLiteTOFactory liteFactory) {
 		this.liteFactory = liteFactory;
+	}
+	
+	private Boolean anonymousUsersAllowed() {
+		return Boolean.parseBoolean(configService.getByName(ANONYMOUS_MAP_TEMPLATE_ACCESS).getValue().toLowerCase());
 	}
 
 }

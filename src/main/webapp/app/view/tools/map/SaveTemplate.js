@@ -77,8 +77,8 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                                 },{
 						        	xtype: 'combobox',
 						        	name: 'visibility',
-						        	fieldLabel: 'Type',
-									labelWidth:80,
+						        	fieldLabel: 'Visibility',
+									labelWidth:60,
 									store: Ext.create('Ext.data.Store', {
 									    	fields: ['value', 'name'],
 									    		data : [

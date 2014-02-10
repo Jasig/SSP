@@ -209,7 +209,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 						    items: [{
 						        	xtype: 'combobox',
 						        	name: 'isPrivateFilter',
-						        	fieldLabel: 'Type',
+						        	fieldLabel: 'Visibility',
 									labelWidth:80,
 									store: Ext.create('Ext.data.Store', {
 									    fields: ['value', 'name'],
@@ -312,7 +312,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
          store: me.store,
          columns: [
          {
-             text: 'Type',
+             text: 'Vis',
              width: 45,
              dataIndex: 'visibility',
              sortable: true,
