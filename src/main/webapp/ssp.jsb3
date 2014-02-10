@@ -830,6 +830,11 @@
                     "path": "/app/service/"
                 },
                 {
+                    "clsName": "Ssp.service.ServiceReasonsService",
+                    "name": "ServiceReasonsService.js",
+                    "path": "/app/service/"
+                },
+                {
                     "clsName": "Ssp.service.StudentIntakeService",
                     "name": "StudentIntakeService.js",
                     "path": "/app/service/"
