@@ -32,6 +32,9 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
         currentPersonAppointment: 'currentPersonAppointment',
         studentTypesStore: 'studentTypesAllUnpagedStore'
     },
+	config: {
+		panelKids: null
+	},
     control: {
     	'saveButton':{
     		click: 'onSaveClick'
@@ -60,46 +63,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		//Loading store here for coach, student_type, and appointment combos due to timing issue between separate controllers
 		me.studentTypesStore.load(); 
 		
-		// load the person record and init the view
-		if (id.length > 0)
-		{
-			me.getView().setLoading( true );
-			
-	    	me.personService.get( id, {success:me.getPersonSuccess, 
-	    									  failure:me.getPersonFailure, 
-	    									  scope: me} );					
-		}else{
-			me.initForms();
-			me.updateTitle();
-		}
-		
-		me.appEventsController.assignEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
-		return this.callParent(arguments);
-    },
-
-	resetAppointmentModels: function() {
-		var me=this;
-		// initialize the appointment and personAppointment
-		var personAppointment = new Ssp.model.PersonAppointment();
-		var appointment = new Ssp.model.Appointment();
-		me.appointment.data = appointment.data;
-		me.currentPersonAppointment.data = personAppointment.data;
-	},
-    
-    destroy: function(){
-		this.appEventsController.removeEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
-    	
-    	return this.callParent( arguments );
-    },
-  
-    initForms: function(){
-		// retrieve the appointment screen and define items for the screen
-    	var caseloadAssignmentView, items; 
-    	//var caseloadAssignmentView = Ext.ComponentQuery.query('.caseloadassignment')[0];
-		
-		var caseloadAssignmentView = Ext.ComponentQuery.query('#caseloadPanel')[0];
-		
-		items = [{ title: 'Student'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
+		me.panelKids = [{ title: 'Student'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
         	       autoScroll: true,
         		   items: [{xtype: 'student'}]
         		},{
@@ -115,9 +79,51 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
             		autoScroll: true,
             		items: [{xtype: 'personservicereasons'}]
         		}];
+		
+		// load the person record and init the view
+		if (id.length > 0)
+		{
+			me.getView().setLoading( true );
+			
+	    	me.personService.get( id, {success:me.getPersonSuccess, 
+	    									  failure:me.getPersonFailure, 
+	    									  scope: me} );					
+		}else{
+			me.initForms();
+			me.updateTitle();
+		}
+		
+		me.appEventsController.assignEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this}); 
+		me.appEventsController.assignEvent({eventName: 'goToDifferentTabinCaseload', callBackFunc: this.onGoToDifferentTabinCaseload, scope: this});    
+		return this.callParent(arguments);
+    },
+
+	resetAppointmentModels: function() {
+		var me=this;
+		// initialize the appointment and personAppointment
+		var personAppointment = new Ssp.model.PersonAppointment();
+		var appointment = new Ssp.model.Appointment();
+		me.appointment.data = appointment.data;
+		me.currentPersonAppointment.data = personAppointment.data;
+	},
+    
+    destroy: function(){
+		this.appEventsController.removeEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
+    	this.appEventsController.removeEvent({eventName: 'goToDifferentTabinCaseload', callBackFunc: this.onGoToDifferentTabinCaseload, scope: this}); 
+    	return this.callParent( arguments );
+    },
+  
+    initForms: function(){
+		var me = this;
+		// retrieve the appointment screen and define items for the screen
+    	var caseloadAssignmentView, items; 
+    	//var caseloadAssignmentView = Ext.ComponentQuery.query('.caseloadassignment')[0];
+		
+		var caseloadAssignmentView = Ext.ComponentQuery.query('#caseloadPanel')[0];
+		caseloadAssignmentView.setActiveTab(0);
     	
     	// adding a record, so simply init the view
-		caseloadAssignmentView.add(items);
+		caseloadAssignmentView.add(me.panelKids);
     },
 
     getPersonSuccess: function( r, scope ){
@@ -129,10 +135,41 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		me.getCurrentAppointment();
 		me.updateTitle();
     },
+	
+	
     
     getPersonFailure: function( response, scope ){
     	var me=scope;  	
     	me.getView().setLoading( false );
+    },
+	
+	onGoToDifferentTabinCaseload: function(args){
+		var me=this;
+		
+		var counter = 0;
+		var caseloadAssignmentView = Ext.ComponentQuery.query('#caseloadPanel')[0];
+		
+		caseloadAssignmentView.on('add', function(){
+			var loadedPanels = Ext.ComponentQuery.query('#caseloadPanel > panel');
+			var totalPanels = me.panelKids;
+			
+			if (loadedPanels.length === totalPanels.length) {
+				var tabIdx = caseloadAssignmentView.items.findIndex('title', args.panelTitle);
+				
+				if (tabIdx === totalPanels.length - 1) {
+				
+					if (counter == 0) {
+						counter = counter + 1;
+					}
+					else {
+						caseloadAssignmentView.setActiveTab(tabIdx);
+					}
+				}
+				else{
+					caseloadAssignmentView.setActiveTab(tabIdx);
+				}
+			}
+		});
     },
 
     getCurrentAppointment: function(){
@@ -184,6 +221,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		var jsonData = new Object();
 		var currentPersonAppointment;
 		
+		me.getView().setLoading( true );
+		
 		// edit person view
 		var personView = Ext.ComponentQuery.query('.editperson')[0];
 		var personForm = personView.getForm();
@@ -211,7 +250,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		// service reasons view
 		var serviceReasonsView = Ext.ComponentQuery.query('.personservicereasons')[0];
 		var serviceReasonsForm = serviceReasonsView.getForm();
-		var selectedServiceReasonsItemSelector = Ext.ComponentQuery.query('#selectedServiceReasonsItemSelector')[0];
+		var serviceReasonsItemSelector = Ext.ComponentQuery.query('#serviceReasonsItemSelector')[0];
 		var selectedServiceReasons = [];
 
 		// anticipated start date view
@@ -289,11 +328,11 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			model.set('referralSources', selectedReferralSources);
 			
 			// set the service reasons
-			serviceReasonsFormValues = selectedServiceReasonsItemSelector.getValue();
+			serviceReasonsFormValues = serviceReasonsItemSelector.getValue();
 			selectedServiceReasons = me.getSelectedItemSelectorIdsForTransfer(serviceReasonsFormValues);
 			model.set('serviceReasons', selectedServiceReasons);
 				
-			me.getView().setLoading( true );
+			
 			
 			// ensure props are null if necessary
 			jsonData = model.setPropsNullForSave( model.data );
@@ -314,7 +353,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     savePersonSuccess: function( r, scope ){
 		var me=scope;
 		var personProgramStatus;
-		me.getView().setLoading( false );    	
+		//me.getView().setLoading( false );    	
     	if (r.id != "")
 		{
     		// new student save an Active program status
