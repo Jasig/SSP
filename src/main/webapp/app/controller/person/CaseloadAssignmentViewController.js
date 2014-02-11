@@ -346,6 +346,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 				                    scope: me} );
 
 		}else{
+			me.getView().setLoading( false );
 			me.formUtils.displayErrors( validateResult.fields );
 		}
     },
