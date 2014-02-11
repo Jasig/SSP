@@ -38,7 +38,15 @@ Ext.define('Ssp.view.tools.profile.Placement', {
                     xtype: 'gridcolumn',
                     dataIndex: 'type',
                     text: 'Type',
-					flex: 1
+					flex: 1,
+				    
+					renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+						var me = this;
+						if((record.data.hasDetails == true) ){
+							return '<a title="Click to get more detailed information about test results from Smarter Measure." target="_test_results" href="'+record.get("testProviderLink")+'">'+value+'</a>';
+						}
+			             return value;
+			         },
                 },
                 {
                     xtype: 'gridcolumn',

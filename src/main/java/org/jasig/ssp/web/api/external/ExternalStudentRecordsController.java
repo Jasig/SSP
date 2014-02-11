@@ -18,7 +18,6 @@
  */
 package org.jasig.ssp.web.api.external;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,9 +28,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.ssp.factory.EarlyAlertTOFactory;
 import org.jasig.ssp.factory.JournalEntryTOFactory;
 import org.jasig.ssp.factory.TaskTOFactory;
@@ -53,7 +53,9 @@ import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
 import org.jasig.ssp.model.external.ExternalStudentRecords;
 import org.jasig.ssp.model.external.ExternalStudentRecordsLite;
 import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.model.reference.EnrollmentStatus;
+import org.jasig.ssp.security.BasicAuthenticationRestTemplate;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertService;
@@ -99,6 +101,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -192,6 +195,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	
 	@Autowired
 	private transient EnrollmentStatusService enrollmentStatusService;
+
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ExternalStudentRecordsController.class);
@@ -444,10 +448,22 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		return recentActivities;
 	}
 	
-	private String getPersonLiteName(PersonLiteTO person){
-		return person.getFirstName() + " " + person.getLastName();
+
+	@RequestMapping(value = "/financialaid/summary", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	public @ResponseBody
+	ExternalStudentFinancialAidTO loadFinancialAidSummary(final @PathVariable UUID id)
+			throws ObjectNotFoundException {
+		String schoolId = getStudentId(id);
+		
+		ExternalStudentFinancialAid record = externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId);
+
+		final ExternalStudentFinancialAidTO recordTO = externalStudentFinancialAidTOFactory.from(record);
+		
+		return recordTO;
 	}
 	
+
 	/**
 	 * Using the Student UUID passed, return the ExternalStudentRecordsLiteTO in its current state,
 	 * creating it if necessary.
@@ -466,26 +482,42 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 			throws ObjectNotFoundException {
 		String schoolId = getStudentId(id);
 		
-		return externalStudentTestTOFactory.asTOList(externalStudentTestService.getStudentTestResults(schoolId));
+		List<ExternalStudentTestTO> studentTestTOs =  externalStudentTestTOFactory.asTOList(externalStudentTestService.getStudentTestResults(schoolId, id));
+		return studentTestTOs;
 	}
 	
-	@RequestMapping(value = "/financialaid/summary", method = RequestMethod.GET)
+	/**
+	 * Using the Student UUID passed, return the ExternalStudentRecordsLiteTO in its current state,
+	 * creating it if necessary.
+	 * 
+	 * @param id
+	 *            Student identifier Any errors will throw this generic
+	 *            exception.
+	 * @return Service response with success value, in the JSON format.
+	 * @throws ObjectNotFoundException
+	 *             If any reference data could not be loaded.
+	 */
+	@RequestMapping(value = "/test/details", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
-	public @ResponseBody
-	ExternalStudentFinancialAidTO loadFinancialAidSummary(final @PathVariable UUID id)
+	public String getTestProviderDetails(final @PathVariable UUID id,
+			final @RequestParam(required = true) String testCode,
+			final @RequestParam(required = false) String subTestCode,
+			HttpServletResponse httpServletResponse)
 			throws ObjectNotFoundException {
-		String schoolId = getStudentId(id);
-		
-		ExternalStudentFinancialAid record = externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId);
-		
-
-		final ExternalStudentFinancialAidTO recordTO = externalStudentFinancialAidTOFactory.from(record);
-		
-		return recordTO;
+		Person person = personService.get(id);
+		return "redirect:" + (String)externalStudentTestService.getTestDetails(testCode, subTestCode, person);
+	}
+	
+	private String getPersonLiteName(PersonLiteTO person){
+		return person.getFirstName() + " " + person.getLastName();
 	}
 	
 	String getStudentId(UUID personId) throws ObjectNotFoundException{
 		return personService.getSchoolIdForPersonId(personId);
 	}
+
+
 	
+
+
 }

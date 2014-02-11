@@ -25,4 +25,5 @@ public interface ExternalStudentTranscriptService extends
 	
 	ExternalStudentTranscript getRecordsBySchoolId(String schoolId);
 
+
 }

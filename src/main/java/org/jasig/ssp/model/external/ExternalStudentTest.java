@@ -90,6 +90,10 @@ public class ExternalStudentTest extends AbstractExternalData implements
 	@Column(nullable = true, length = 255)
 	@Size(max = 255)
 	private String outcome;
+	
+	private String testProviderLink;
+	
+	private Boolean hasDetails;
 
 
 	/**
@@ -232,6 +236,26 @@ public class ExternalStudentTest extends AbstractExternalData implements
 	 */
 	public void setOutcome(final String outcome) {
 		this.outcome = outcome;
+	}
+
+
+	public String getTestProviderLink() {
+		return testProviderLink;
+	}
+
+
+	public void setTestProviderLink(String testProviderLink) {
+		this.testProviderLink = testProviderLink;
+	}
+
+
+	public Boolean getHasDetails() {
+		return hasDetails;
+	}
+
+
+	public void setHasDetails(Boolean hasDetails) {
+		this.hasDetails = hasDetails;
 	}
 
 }

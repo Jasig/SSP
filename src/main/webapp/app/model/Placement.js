@@ -22,6 +22,8 @@ Ext.define('Ssp.model.Placement', {
              {name:'status',type:'string'},
              {name:'name',type:'string'},
              {name:'outcome',type:'string'},
+             {name:'testProviderLink',type:'string'},
+             {name:'hasDetails',type:'boolean'},
              {name:'subTestName',type:'string'},
              {
             	 name: 'type',

@@ -19,11 +19,17 @@
 package org.jasig.ssp.service.external;
 
 import java.util.List;
+import java.util.UUID;
 
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.ExternalStudentTest;
 
 public interface ExternalStudentTestService extends ExternalDataService<ExternalStudentTest> {
 	
 	List<ExternalStudentTest> getStudentTestResults(String schoolId);
+	
+	List<ExternalStudentTest> getStudentTestResults(String schoolId, UUID id);
+	
+	Object getTestDetails(String testCode, String subTestCode, Person person);
 
 }

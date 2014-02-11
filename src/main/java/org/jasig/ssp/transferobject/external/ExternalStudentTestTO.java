@@ -48,6 +48,10 @@ public class ExternalStudentTestTO implements Serializable, ExternalDataTO<Exter
 	private String status;
 	private String outcome;
 	
+	private String testProviderLink;
+	
+	private Boolean hasDetails = false;
+	
 	public ExternalStudentTestTO(){
 		super();
 	}
@@ -115,7 +119,8 @@ public class ExternalStudentTestTO implements Serializable, ExternalDataTO<Exter
 		score = model.getScore();
 		status = model.getStatus();
 		outcome = model.getOutcome();
-		
+		hasDetails = model.getHasDetails();
+		testProviderLink = model.getTestProviderLink();
 	}
 
 
@@ -246,14 +251,12 @@ public class ExternalStudentTestTO implements Serializable, ExternalDataTO<Exter
 		this.testCode = testCode;
 	}
 	
-	
 	/**
 	 * @return the outcome
 	 */
 	public String getOutcome() {
 		return outcome;
 	}
-
 
 	/**
 	 * @param status the outcome to set
@@ -262,6 +265,19 @@ public class ExternalStudentTestTO implements Serializable, ExternalDataTO<Exter
 		this.outcome = outcome;
 	}
 
-	
+	public String getTestProviderLink() {
+		return testProviderLink;
+	}
 
+	public void setTestProviderLink(String testProviderLink) {
+		this.testProviderLink = testProviderLink;
+	}
+
+	public Boolean getHasDetails() {
+		return hasDetails;
+	}
+
+	public void setHasDetails(Boolean hasDetails) {
+		this.hasDetails = hasDetails;
+	}
 }
