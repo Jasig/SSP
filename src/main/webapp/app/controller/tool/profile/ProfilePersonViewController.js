@@ -189,8 +189,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         me.person.populateFromGenericObject(personResponse);
 
         // load and render person data
-        me.profileReferralSourcesStore.removeAll();
-        me.profileServiceReasonsStore.removeAll();
+       	me.profileReferralSourcesStore.removeAll();
+       	me.profileServiceReasonsStore.removeAll();
+       	me.profileSpecialServiceGroupsStore.removeAll();
 		
         var nameField = me.getNameField();	
 		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
@@ -208,8 +209,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var fullName = me.person.getFullName();
 		var firstLastName = me.person.getFirstLastName();
         var coachName = me.person.getCoachFullName();
-		
-
+       	
         // load referral sources
         if (personResponse.referralSources != null) {
             me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
