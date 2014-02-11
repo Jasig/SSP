@@ -1552,6 +1552,16 @@
                     "path": "/app/view/person/"
                 },
                 {
+                    "clsName": "Ssp.view.person.Student",
+                    "name": "Student.js",
+                    "path": "/app/view/person/"
+                },
+                {
+                    "clsName": "Ssp.view.person.StudentIntakeRequest",
+                    "name": "StudentIntakeRequest.js",
+                    "path": "/app/view/person/"
+                },
+                {
                     "clsName": "Ssp.view.person.AnticipatedStartDate",
                     "name": "AnticipatedStartDate.js",
                     "path": "/app/view/person/"
