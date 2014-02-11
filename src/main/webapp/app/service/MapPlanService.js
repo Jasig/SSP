@@ -403,7 +403,7 @@ Ext.define('Ssp.service.MapPlanService', {
 		};
 		var url = me.getBaseUrl(me.personLite.get('id'));
 		me.apiProperties.makeRequest({
-   			url: url+'/planstatus',
+   			url: url+'/calculatedPlanstatus',
    			method: 'GET',
    			successFunc: success,
    			failureFunc: failure,

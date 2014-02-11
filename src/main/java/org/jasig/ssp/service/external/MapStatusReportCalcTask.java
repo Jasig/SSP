@@ -16,21 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service;
+package org.jasig.ssp.service.external;
 
-/**
- * Exists just to give us a non-transactional location in which to launch
- * a relatively static set of scheduled jobs and clean up after them
- */
-public interface ScheduledTaskWrapperService {
-
-	public void sendMessages();
-
-	public void syncCoaches();
-
-	public void syncExternalPersons();
-
-	public void sendTaskReminders();
-
-	public void calcMapStatusReports();
+public interface MapStatusReportCalcTask {
+	/**
+	 * Calculate Map Plan Status for all active plans
+	 */
+	void exec();
 }

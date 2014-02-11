@@ -18,19 +18,11 @@
  */
 package org.jasig.ssp.service;
 
-/**
- * Exists just to give us a non-transactional location in which to launch
- * a relatively static set of scheduled jobs and clean up after them
- */
-public interface ScheduledTaskWrapperService {
+import org.jasig.ssp.model.MapStatusReport;
 
-	public void sendMessages();
+public interface MapStatusReportService extends PersonAssocAuditableService<MapStatusReport>  {
 
-	public void syncCoaches();
+	void deleteAllOldReports();
 
-	public void syncExternalPersons();
 
-	public void sendTaskReminders();
-
-	public void calcMapStatusReports();
 }

@@ -30,8 +30,10 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.external.ExternalPersonPlanStatusTOFactory;
+import org.jasig.ssp.factory.external.PersonMapStatusReportTOFactory;
 import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
+import org.jasig.ssp.model.MapStatusReport;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -42,6 +44,7 @@ import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.Permission;
+import org.jasig.ssp.service.MapStatusReportService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
@@ -59,7 +62,9 @@ import org.jasig.ssp.transferobject.PlanLiteTO;
 import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.external.AbstractPlanStatusReportTO;
 import org.jasig.ssp.transferobject.external.ExternalPersonPlanStatusTO;
+import org.jasig.ssp.transferobject.external.PersonMapPlanStatusReportTO;
 import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -120,10 +125,16 @@ public class PlanController  extends AbstractBaseController {
 	private transient MessageService messageService;
 	
 	@Autowired
+	private transient MapStatusReportService mapStatusReportService;
+	
+	@Autowired
 	private transient ExternalPersonPlanStatusService planStatusService;
 	
 	@Autowired
 	private ExternalPersonPlanStatusTOFactory planStatusFactory;
+	
+	@Autowired
+	private PersonMapStatusReportTOFactory mapStatusReportTOFactory;
 
  
 	/**
@@ -504,6 +515,47 @@ public class PlanController  extends AbstractBaseController {
 		{
 			return null;
 		}
+	}
+
+	@DynamicPermissionChecking
+	@RequestMapping(value = "/calculatedPlanstatus", method = RequestMethod.GET)
+	public @ResponseBody
+	AbstractPlanStatusReportTO getCalculatedPlanStatus(
+			final HttpServletRequest request,
+			final HttpServletResponse response,
+			@PathVariable final UUID personId)
+			throws ObjectNotFoundException {
+		assertStandardMapReadApiAuthorization(request);
+		if(personId == null){
+			return null;
+		}
+		String schoolId = null;
+		Person student = personService.get(personId);
+		schoolId = student.getSchoolId();
+		
+		Boolean calcPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim().toLowerCase());
+		
+		if(calcPlanStatus)
+		{
+			PagingWrapper<MapStatusReport> allForPerson = mapStatusReportService.getAllForPerson(student, null);
+			if(allForPerson.getRows().size() > 0)
+			{
+				MapStatusReport report = allForPerson.getRows().iterator().next();
+				return mapStatusReportTOFactory.from(report);
+			}
+		}
+		else
+		{
+			//TODO not the cleanest way to handle but clientside generates 500 error in console
+			// Currently plan status is not required.
+			try{
+				return planStatusFactory.from(planStatusService.getBySchoolId(schoolId));
+			}catch(Exception exp)
+			{
+				return null;
+			}
+		}
+		throw new ObjectNotFoundException(personId,"MapStatusReport");
 	}
 	
 	private PlanTO validatePlan(PlanTO plan) throws ObjectNotFoundException{

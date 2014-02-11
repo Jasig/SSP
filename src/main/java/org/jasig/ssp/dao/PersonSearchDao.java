@@ -18,9 +18,7 @@
  */
 package org.jasig.ssp.dao;
 
-import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -40,18 +38,16 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.PersonSearchResult2;
+import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.TermService;
-import org.jasig.ssp.service.external.impl.TermServiceImpl;
 import org.jasig.ssp.service.reference.ConfigService;
-import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.external.ExternalStudentRecordsController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -368,7 +364,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 		if(hasMapStatus(personSearchRequest))
 		{ 
-			query.setString("mapStatus", PersonSearchRequest.MAP_STATUS_ON_PLAN.equals(personSearchRequest.getMapStatus()) ? PersonSearchRequest.MAP_STATUS_ON_PLAN : PersonSearchRequest.MAP_STATUS_OFF_PLAN);
+			query.setString("mapStatus", PersonSearchRequest.MAP_STATUS_ON_PLAN.equals(personSearchRequest.getMapStatus()) ? PlanStatus.ON.toString() : PlanStatus.OFF.toString());
 		}
 		
 		if(hasGpaCriteria(personSearchRequest))
@@ -453,11 +449,21 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 	private void buildMapStatus(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) 
 	{
-		if(hasMapStatus(personSearchRequest))
+		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
+
+		if(hasMapStatus(personSearchRequest) && !calculateMapPlanStatus)
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" esps.status = :mapStatus ");
 			stringBuilder.append(" and esps.schoolId = p.schoolId ");
+		}
+		
+		if(hasMapStatus(personSearchRequest) && calculateMapPlanStatus)
+		{
+			appendAndOrWhere(stringBuilder,filterTracker);
+			stringBuilder.append(" msr.plan in elements(p.plans) ");
+			stringBuilder.append(" and msr.planStatus = :mapStatus ");
+			
 		}
 	}
 
@@ -620,9 +626,15 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			stringBuilder.append(", ExternalStudentTranscript est ");
 		}
 		
-		if(hasMapStatus(personSearchRequest))
+		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
+
+		if(hasMapStatus(personSearchRequest) && !calculateMapPlanStatus)
 		{
 			stringBuilder.append(", ExternalPersonPlanStatus esps ");
+		}
+		if(hasMapStatus(personSearchRequest) && calculateMapPlanStatus)
+		{
+			stringBuilder.append(", org.jasig.ssp.model.MapStatusReport msr ");
 		}
 		
 		if(hasFinancialAidStatus(personSearchRequest))

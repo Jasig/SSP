@@ -16,21 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service;
+package org.jasig.ssp.factory.external;
 
-/**
- * Exists just to give us a non-transactional location in which to launch
- * a relatively static set of scheduled jobs and clean up after them
- */
-public interface ScheduledTaskWrapperService {
+import org.jasig.ssp.model.MapStatusReport;
+import org.jasig.ssp.transferobject.external.PersonMapPlanStatusReportTO;
 
-	public void sendMessages();
+public interface PersonMapStatusReportTOFactory extends
+		ExternalTOFactory<PersonMapPlanStatusReportTO, MapStatusReport> {
 
-	public void syncCoaches();
-
-	public void syncExternalPersons();
-
-	public void sendTaskReminders();
-
-	public void calcMapStatusReports();
 }

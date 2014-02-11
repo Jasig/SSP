@@ -36,6 +36,7 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.ExternalPersonSyncTask;
+import org.jasig.ssp.service.external.MapStatusReportCalcTask;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -61,6 +62,7 @@ public class ScheduledTaskWrapperServiceImpl
 			.getLogger(ScheduledTaskWrapperServiceImpl.class);
 
 	private static final String EVERY_DAY_1_AM = "0 0 1 * * *";
+	private static final String EVERY_DAY_3_AM = "0 0 3 * * *";
 	private static final String FIFTEEN_MINUTES_IN_MILLIS = 15 * 60 * 1000 + "";
 
 	// Not a fan of the underscores but matches convention for existing
@@ -73,12 +75,19 @@ public class ScheduledTaskWrapperServiceImpl
 	private static final String SCHEDULER_CONFIG_POLL_TASK_ID = "task_scheduler_config_poll";
 	private static final String SCHEDULER_CONFIG_POLL_TASK_TRIGGER_CONFIG_NAME = "task_scheduler_config_poll_trigger";
 	private static final String SCHEDULER_CONFIG_POLL_TASK_DEFAULT_TRIGGER = FIFTEEN_MINUTES_IN_MILLIS;
+	
+	private static final String MAP_STATUS_REPORT_CALC_TASK_ID = "task_map_plan_status_calc";
+	private static final String MAP_STATUS_REPORT_CALC_TASK_TRIGGER_CONFIG_NAME = "task_scheduler_map_plan_status_calculation_trigger";
+	private static final String MAP_STATUS_REPORT_CALC_TASK_DEFAULT_TRIGGER = EVERY_DAY_3_AM;
 
 	// see assumptions about grouping in tryExpressionAsPeriodicTrigger()
 	private static final Pattern PERIODIC_TRIGGER_WITH_INITIAL_DELAY_PATTERN = Pattern.compile("^(\\d+)/(\\d+)$");
 
 	@Autowired
 	private transient ExternalPersonSyncTask externalPersonSyncTask;
+	
+	@Autowired
+	private transient MapStatusReportCalcTask mapStatusReportCalcTask;
 
 	@Autowired
 	private transient MessageService messageService;
@@ -120,6 +129,16 @@ public class ScheduledTaskWrapperServiceImpl
 				},
 				EXTERNAL_PERSON_SYNC_TASK_DEFAULT_TRIGGER,
 				EXTERNAL_PERSON_SYNC_TASK_TRIGGER_CONFIG_NAME));
+		
+		this.tasks.put(MAP_STATUS_REPORT_CALC_TASK_ID, new Task(MAP_STATUS_REPORT_CALC_TASK_ID,
+				new Runnable() {
+					@Override
+					public void run() {
+						calcMapStatusReports();
+					}
+				},
+				MAP_STATUS_REPORT_CALC_TASK_DEFAULT_TRIGGER,
+				MAP_STATUS_REPORT_CALC_TASK_TRIGGER_CONFIG_NAME));		
 		this.tasks.put(SCHEDULER_CONFIG_POLL_TASK_ID, new Task(SCHEDULER_CONFIG_POLL_TASK_ID,
 				new Runnable() {
 					@Override
@@ -460,6 +479,15 @@ public class ScheduledTaskWrapperServiceImpl
 		}
 	}
 
+	@Override
+	public void calcMapStatusReports() {
+		try {
+			mapStatusReportCalcTask.exec();
+		} finally {
+			securityService.afterRequest();
+		}
+	}
+	
 	@Override
 	@Scheduled(cron = "0 0 1 * * *")
 	// run at 1 am every day

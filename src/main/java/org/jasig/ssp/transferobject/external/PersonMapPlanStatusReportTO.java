@@ -16,21 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service;
+package org.jasig.ssp.transferobject.external;
 
-/**
- * Exists just to give us a non-transactional location in which to launch
- * a relatively static set of scheduled jobs and clean up after them
- */
-public interface ScheduledTaskWrapperService {
+import org.jasig.ssp.model.MapStatusReport;
 
-	public void sendMessages();
+public class PersonMapPlanStatusReportTO extends AbstractPlanStatusReportTO implements
+		ExternalDataTO<MapStatusReport> {
+	
+	@Override
+	public void from(MapStatusReport model) {
+		this.setSchoolId(model.getPerson().getSchoolId());
+		this.setStatus(model.getPlanStatus());
+		this.setStatusReason(model.getPlanNote());		
+	}
 
-	public void syncCoaches();
-
-	public void syncExternalPersons();
-
-	public void sendTaskReminders();
-
-	public void calcMapStatusReports();
 }

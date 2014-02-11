@@ -16,21 +16,41 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service;
+package org.jasig.ssp.transferobject.reports;
 
-/**
- * Exists just to give us a non-transactional location in which to launch
- * a relatively static set of scheduled jobs and clean up after them
- */
-public interface ScheduledTaskWrapperService {
+import java.util.UUID;
 
-	public void sendMessages();
+public class PlanIdPersonIdPair {
 
-	public void syncCoaches();
+	public PlanIdPersonIdPair(UUID planId, UUID personId) {
+		super();
+		this.planId = planId;
+		this.personId = personId;
+	}
 
-	public void syncExternalPersons();
+	private UUID planId;
+	private UUID personId;
+	
+	/**
+	 * 
+	 */
+	public PlanIdPersonIdPair() {
+		super();
+	}
 
-	public void sendTaskReminders();
+	public UUID getPlanId() {
+		return planId;
+	}
 
-	public void calcMapStatusReports();
+	public void setPlanId(UUID planId) {
+		this.planId = planId;
+	}
+
+	public UUID getPersonId() {
+		return personId;
+	}
+
+	public void setPersonId(UUID personId) {
+		this.personId = personId;
+	}
 }

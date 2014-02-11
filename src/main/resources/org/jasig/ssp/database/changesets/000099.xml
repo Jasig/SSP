@@ -22,7 +22,6 @@
 				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
-<!-- 
 
 	<property name="schema" value="${database.schema}" />
 	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
@@ -168,5 +167,4 @@
 			<column name="plan_checmsum" type="${nvarchar.type}(500)"></column>
 		</addColumn>
 	</changeSet>
- -->	
 </databaseChangeLog>

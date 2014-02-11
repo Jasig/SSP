@@ -57,5 +57,99 @@
 			<column name="code" value="intake.tab1.label" />
 			<where>code = 'intake.tab1.label.tab1'</where>
 		</update>
+	</changeSet>	
+	<changeSet author='tony.arland' id='seeding map status report configs'>
+		<insert tableName="config">
+			<column name="id" value="96d5b6fe-d771-462c-945a-5353b298a0fe" />
+			<column name="name" value="calculate_map_plan_status" />
+			<column name="description" value="turns on/off cron job that will drive the calculation" />
+            <column name="value" value="false" /> 
+            <column name="default_value" value="false" /> 
+			<column name="created_date" valueDate="2014-03-04T12:00:00" />
+			<column name="modified_date" valueDate="2014-03-04T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>
+		<insert tableName="config">
+			<column name="id" value="3e53b6af-ccc3-4794-84fc-e4729c22f856" />
+			<column name="name" value="map_plan_status_passing_grades" />
+			<column name="description" value="Map Status Report Config: In cases where a plan course and taken course line up, the student must have passed the class in order to not cause a anomaly" />
+            <column name="value" value="A+, A. A-, B+, B, B-, C+, C, C-, D+, D, D-" /> 
+            <column name="default_value" value="A+, A. A-, B+, B, B-, C+, C, C-, D+, D, D-" /> 
+			<column name="created_date" valueDate="2014-03-04T12:00:00" />
+			<column name="modified_date" valueDate="2014-03-04T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>
+		<insert tableName="config">
+			<column name="id" value="cd0bee3c-3338-4d48-ba62-f71222c5e4d3" />
+			<column name="name" value="map_plan_status_cutoff_term_code" />
+			<column name="description"
+				value="Map Status Report Config: he calculation cutoff term is the latest future term to be included in the matching logic.  The term range for a given calculation will start with the oldest term for the student transcripted courses up to the cutoff term.  The term must be a valid term from external_term.  Black value defaults to current term " />
+            <column name="value" value=" " /> 
+            <column name="default_value" value=" " /> 			
+			<column name="created_date" valueDate="2014-03-04T12:00:00" />
+			<column name="modified_date" valueDate="2014-03-04T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>
+		<insert tableName="config">
+			<column name="id" value="8f72ab37-ac5a-4f21-bd05-510dac0466bb" />
+			<column name="name" value="task_scheduler_map_plan_status_calculation_trigger" />
+			<column name="description"
+				value="Map Status Report Config:  Drives the frequency of the cron job that will calculate status" />
+            <column name="value" value="0 0 3 * * *" /> 
+            <column name="default_value" value="0 0 3 * * *" /> 			
+			<column name="created_date" valueDate="2012-05-07T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='8f72ab37-ac5a-4f21-bd05-510dac0466bb'</where>
+            </delete>
+            <delete tableName="config">
+                <where>id='cd0bee3c-3338-4d48-ba62-f71222c5e4d3'</where>
+            </delete>
+            <delete tableName="config">
+                <where>id='3e53b6af-ccc3-4794-84fc-e4729c22f856'</where>
+            </delete>
+            <delete tableName="config">
+                <where>id='96d5b6fe-d771-462c-945a-5353b298a0fe'</where>
+            </delete>                                    
+        </rollback>		
+	</changeSet>	
+	<changeSet author='tony.arland' id='seeding map status report configs 2' >
+		<insert tableName="config">
+			<column name="id" value="5157bc00-edde-4b3d-9b5c-8fcd716eb413" />
+			<column name="name" value="map_plan_status_addition_course_matching_criteria" />
+			<column name="description"
+				value="Map Status Report Config: In addition to the static matching criteria (term_code, formatted_course, and course_code), implementors have the option to add additional criteria. COURSE_TITLE will match PLAN_COURSE.COURSE_TITLE to EXTERNAL_STUDENT_TRANSCRIPT_COURSE.TITLE and CREDIT_HOURS will match PLAN_COURSE.CREDIT_HOURS with EXTERNAL_STUDENT_TRANSCRIPT_COURSE.CREDIT_EARNED" />
+            <column name="value" value=" " /> 
+            <column name="default_value" value=" " /> 			
+			<column name="created_date" valueDate="2014-03-04T12:00:00" />
+			<column name="modified_date" valueDate="2014-03-04T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='5157bc00-edde-4b3d-9b5c-8fcd716eb413'</where>
+            </delete>
+            <delete tableName="config">
+                <where>id='987108ab-a0f5-4fc2-bb59-792652303b31'</where>
+            </delete>
+        </rollback>		
 	</changeSet>																															
 </databaseChangeLog>
