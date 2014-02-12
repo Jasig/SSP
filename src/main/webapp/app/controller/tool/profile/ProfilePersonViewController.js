@@ -145,6 +145,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var studentIdAlias = me.sspConfig.get('studentIdAlias');
         me.getStudentIdField().setFieldLabel(studentIdAlias);
         me.setFinancialLabels();
+        // load and render person data
+       	me.profileReferralSourcesStore.removeAll();
+       	me.profileServiceReasonsStore.removeAll();
+       	me.profileSpecialServiceGroupsStore.removeAll();
 
     },
     
@@ -187,11 +191,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var me = this;
         var personResponse = serviceResponses.successes.person;
         me.person.populateFromGenericObject(personResponse);
-
-        // load and render person data
-       	me.profileReferralSourcesStore.removeAll();
-       	me.profileServiceReasonsStore.removeAll();
-       	me.profileSpecialServiceGroupsStore.removeAll();
 		
         var nameField = me.getNameField();	
 		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
