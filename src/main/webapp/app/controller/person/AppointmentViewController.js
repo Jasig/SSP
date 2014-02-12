@@ -24,7 +24,8 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
     	appointment: 'currentAppointment',
     	formUtils: 'formRendererUtils',
     	studentTypesStore: 'studentTypesAllUnpagedStore',
-		person: 'currentPerson'
+		person: 'currentPerson',
+        configurationOptionsStore: 'configurationOptionsStore'
     },
     control: {
     	appointmentDateField: '#appointmentDateField',
@@ -50,6 +51,27 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 			today = new Date();
 			me.getAppointmentDateField().setMinValue( Ext.Date.clearTime( today ) );
 		}
+		
+		var getStudentTypeSetFromExternalDataValue = 'true';
+		 me.configurationOptionsStore.each(function(rec){
+        
+            var s = rec.get('value');
+            
+            if (rec.get('name') == 'studentTypeSetFromExternalData') {
+                if (s.indexOf("true") == -1) 
+                    getStudentTypeSetFromExternalDataValue = 'false'
+            }
+            if (rec.get('name') == 'studentTypeUnsetFromExternalData') {
+                if (s.indexOf("true") == -1) 
+                    getStudentTypeSetFromExternalDataValue = 'false'
+            }
+            
+        });
+		
+		
+			 if (getStudentTypeSetFromExternalDataValue == 'false') {
+			 	me.getStudentTypeCombo().setFieldLabel('Student Type' +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
+			 }
 		
 		me.studentTypesStore.clearFilter(true);	 
 		

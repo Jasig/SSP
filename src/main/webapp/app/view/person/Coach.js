@@ -27,12 +27,15 @@ Ext.define('Ssp.view.person.Coach', {
     	sspConfig: 'sspConfig'
     },
 	width: '100%',
+	padding: '0 0 0 0',
+	layout: {
+		type:'vbox'
+	},
 	initComponent: function() {	
 		var me=this;
 		Ext.apply(me, 
 				{
 			    border: 0,
-			    padding: 0,
 			    fieldDefaults: {
 			        msgTarget: 'side',
 			        labelAlign: 'top',
@@ -62,27 +65,27 @@ Ext.define('Ssp.view.person.Coach', {
 						forceSelection: true,
 						typeAhead: false,
 				        editable: false,
-						width: 350
+						width: 300
 					},{
 				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' +  'Office',
 				        itemId: 'officeField',
 				        name: 'coachOffice',
-						width: 350
+						width: 300
 				    },{
 				        fieldLabel: 'Phone',
 				        itemId: 'phoneField',
 				        name: 'coachPhone',
-						width: 350
+						width: 300
 				    },{
 				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' +  'Email',
 				        itemId: 'emailAddressField',
 				        name: 'coachEmailAddress',
-						width: 350
+						width: 300
 				    },{
 				        fieldLabel: 'Department',
 				        itemId: 'departmentField',
 				        name: 'coachDepartment',
-						width: 350
+						width: 300
 				    }]
 			    }]
 			});

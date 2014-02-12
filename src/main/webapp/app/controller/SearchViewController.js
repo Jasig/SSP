@@ -40,7 +40,8 @@ Ext.define('Ssp.controller.SearchViewController', {
         searchStore: 'studentsSearchStore',
 		termsStore: 'termsStore',
         sspConfig: 'sspConfig',
-        textStore:'sspTextStore'
+        textStore:'sspTextStore',
+		configurationOptionsStore: 'configurationOptionsStore'
         
     },
     
@@ -191,6 +192,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 
 	   	// load program statuses
 		me.getProgramStatuses();	
+		me.configurationOptionsStore.load();
 	},
 
     destroy: function() {

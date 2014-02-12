@@ -27,8 +27,9 @@ Ext.define('Ssp.view.person.EditPerson', {
     },
 	padding: '0 0 0 0',
 	margin: '0 0 0 0',
+	width: '100%',
 	layout: {
-		align:'stretch',
+		//align:'stretch',
 		type:'vbox'
 	},
     initComponent: function(){
@@ -38,7 +39,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 			padding: 0,
             fieldDefaults: {
                 msgTarget: 'side',
-                labelAlign: 'right',
+                labelAlign: 'top',
                 labelWidth: 150
             },
             items: [{
@@ -50,17 +51,11 @@ Ext.define('Ssp.view.person.EditPerson', {
                 items: [{
 					xtype: 'fieldcontainer',
 					border: 0,
+					padding: '0 0 0 0',
 					layout: {
 						type: 'hbox'
 					},
 					items: [{
-						xtype: 'button',
-						tooltip: 'Load record from external system (Possible loss of local changes if record is found)',
-						text: 'Find',
-						itemId: 'retrieveFromExternalButton',
-						margins: '22 0 0 10',
-						width: 130
-					},{
 						xtype: 'textfield',
 						name: 'schoolId',
 						fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.sspConfig.get('studentIdAlias'),
@@ -68,10 +63,17 @@ Ext.define('Ssp.view.person.EditPerson', {
 						maxLength: 7,
 						itemId: 'studentId',
 						allowBlank: false,
-						width: 195,
+						width: 250,
 						labelAlign: 'top',
-						cls: 'editPersonWithButton'
-						//padding: '0 0 0 15'
+						padding: '0 5 0 0'
+					},
+					{
+						xtype: 'button',
+						tooltip: 'Load record from external system (Possible loss of local changes if record is found)',
+						text: 'Find',
+						itemId: 'retrieveFromExternalButton',
+						margins: '22 0 0 10',
+						width: 50
 					}]
 				}, {
                     fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + 'Username',
@@ -80,7 +82,7 @@ Ext.define('Ssp.view.person.EditPerson', {
                     maxLength: 25,
                     itemId: 'username',
                     allowBlank: false,
-                    width: 350
+                    width: 250
                 }, {
                     fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.first-name'),
                     name: 'firstName',
@@ -88,7 +90,7 @@ Ext.define('Ssp.view.person.EditPerson', {
                     id: 'editPersonFirstName',
                     maxLength: 50,
                     allowBlank: false,
-                    width: 350
+                    width: 250
                 }, {
                     fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.middle-name'),
                     name: 'middleName',
@@ -96,7 +98,7 @@ Ext.define('Ssp.view.person.EditPerson', {
                     id: 'editPersonMiddleName',
                     maxLength: 50,
                     allowBlank: true,
-                    width: 350
+                    width: 250
                 }, {
                     fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.last-name'),
                     name: 'lastName',
@@ -104,7 +106,7 @@ Ext.define('Ssp.view.person.EditPerson', {
                     id: 'editPersonLastName',
                     maxLength: 50,
                     allowBlank: false,
-                    width: 350
+                    width: 250
                 }, {
                     fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.home-phone'),
                     name: 'homePhone',
@@ -112,7 +114,7 @@ Ext.define('Ssp.view.person.EditPerson', {
                     maxLength: 25,
                     allowBlank: true,
                     itemId: 'homePhone',
-                    width: 350
+                    width: 250
                 }, {
                     fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.work-phone'),
                     name: 'workPhone',
@@ -120,7 +122,7 @@ Ext.define('Ssp.view.person.EditPerson', {
                     maxLength: 25,
                     allowBlank: true,
                     itemId: 'workPhone',
-                    width: 350
+                    width: 250
                 }, {
                     fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.school-email'),
                     name: 'primaryEmailAddress',
@@ -128,7 +130,7 @@ Ext.define('Ssp.view.person.EditPerson', {
                     maxLength: 100,
                     allowBlank: true,
                     itemId: 'primaryEmailAddress',
-                    width: 350
+                    width: 250
                 }, {
                     fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-email'),
                     name: 'secondaryEmailAddress',
@@ -136,7 +138,7 @@ Ext.define('Ssp.view.person.EditPerson', {
                     maxLength: 100,
                     allowBlank: true,
                     itemId: 'secondaryEmailAddress',
-                    width: 350
+                    width: 250
                 }]
             }]
         });

@@ -24,6 +24,11 @@ Ext.define('Ssp.view.person.Appointment', {
     inject: {
         studentTypesStore: 'studentTypesAllUnpagedStore'
     },
+	width: '100%',
+	padding: '0 0 0 0',
+	layout: {
+		type:'vbox'
+	},
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
@@ -40,9 +45,9 @@ Ext.define('Ssp.view.person.Appointment', {
                 padding: 0,
                 title: '',
                 defaultType: 'textfield',
-                defaults: {
+                /*defaults: {
                     anchor: '50%'
-                },
+                },*/
                 items: [{
                     xtype: 'combobox',
                     name: 'studentTypeId',
@@ -57,7 +62,8 @@ Ext.define('Ssp.view.person.Appointment', {
                     typeAhead: false,
                     editable: false,
                     queryMode: 'local',
-                    allowBlank: false
+                    allowBlank: false,
+					width: 250
                 }, {
                     xtype: 'datefield',
                     fieldLabel: 'Appointment Date',

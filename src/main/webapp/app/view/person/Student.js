@@ -48,7 +48,7 @@ Ext.define('Ssp.view.person.Student', {
                 {
                     xtype: 'fieldcontainer',
                     flex: 0.35,
-					padding: '0 0 0 0',
+					padding: '0 10 0 0',
 					margin: '0 0 0 0',
                     fieldLabel: '',
 					layout: {
@@ -65,6 +65,10 @@ Ext.define('Ssp.view.person.Student', {
                     flex: 0.35,
                     fieldLabel: '',
 					padding: '0 10 0 0',
+					margin: '0 0 0 0',
+					layout: {
+						type: 'vbox'
+					},
 					items: [
                         {
                             xtype: 'personcoach'
@@ -79,20 +83,20 @@ Ext.define('Ssp.view.person.Student', {
                     },
                     items: [{
                         xtype: 'studentIntakeRequest',
-                        flex: .50
+                        //flex: .50
                     },{
-                            fieldLabel: 'Student Intake Request Sent ',
+                            fieldLabel: 'Student Intake Request Last Sent ',
                             name: 'studentIntakeRequestDateInCaseload',
                             itemId: 'studentIntakeRequestDateInCaseload',
                             xtype: 'displayfield',
-                            labelWidth: 200,
+                            labelWidth: 195,
                             renderer: Ext.util.Format.dateRenderer('m/d/Y')
                         }, {
                             fieldLabel: 'Student Intake Request Completed',
                             name: 'studentIntakeCompleteDateInCaseload',
                             itemId: 'studentIntakeCompleteDateInCaseload',
                             xtype: 'displayfield',
-                            labelWidth: 200,
+                            labelWidth: 195,
                             value: 'test',
                             renderer: Ext.util.Format.dateRenderer('m/d/Y')
                         
@@ -105,7 +109,11 @@ Ext.define('Ssp.view.person.Student', {
                     xtype: 'fieldcontainer',
                     fieldLabel: '',
 					padding: ' 0 0 0 0',
-					
+					margin: '0 0 0 0',
+					flex: 0.30,
+					layout: {
+						type: 'vbox'
+					},
 					items: [
                         {
                     xtype: 'personappointment'

@@ -30,12 +30,14 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
         personService: 'personService',
         personProgramStatusService: 'personProgramStatusService',
         currentPersonAppointment: 'currentPersonAppointment',
-        studentTypesStore: 'studentTypesAllUnpagedStore'
+        studentTypesStore: 'studentTypesAllUnpagedStore',
+		configurationOptionsStore: 'configurationOptionsStore'
     },
 	config: {
 		panelKids: null
 	},
     control: {
+		
     	'saveButton':{
     		click: 'onSaveClick'
     	},
@@ -56,12 +58,19 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
 	init: function() {
 		var me=this;
+		
+		
+		
 		me.resetAppointmentModels();
 
 		var id = me.personLite.get('id');
 		
 		//Loading store here for coach, student_type, and appointment combos due to timing issue between separate controllers
 		me.studentTypesStore.load(); 
+		
+		
+		
+		
 		
 		me.panelKids = [{ title: 'Student'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
         	       autoScroll: true,
@@ -85,12 +94,15 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		{
 			me.getView().setLoading( true );
 			
+			me.configurationOptionsStore.load();
+			
 	    	me.personService.get( id, {success:me.getPersonSuccess, 
 	    									  failure:me.getPersonFailure, 
 	    									  scope: me} );					
 		}else{
 			me.initForms();
 			me.updateTitle();
+			
 		}
 		
 		me.appEventsController.assignEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this}); 
@@ -115,6 +127,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
   
     initForms: function(){
 		var me = this;
+		
 		// retrieve the appointment screen and define items for the screen
     	var caseloadAssignmentView, items; 
     	//var caseloadAssignmentView = Ext.ComponentQuery.query('.caseloadassignment')[0];
@@ -124,6 +137,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	
     	// adding a record, so simply init the view
 		caseloadAssignmentView.add(me.panelKids);
+		
+		
     },
 
     getPersonSuccess: function( r, scope ){
@@ -221,7 +236,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		var jsonData = new Object();
 		var currentPersonAppointment;
 		
-		me.getView().setLoading( true );
+		
 		
 		// edit person view
 		var personView = Ext.ComponentQuery.query('.editperson')[0];
@@ -332,7 +347,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 			selectedServiceReasons = me.getSelectedItemSelectorIdsForTransfer(serviceReasonsFormValues);
 			model.set('serviceReasons', selectedServiceReasons);
 				
-			
+			me.getView().setLoading( true );
 			
 			// ensure props are null if necessary
 			jsonData = model.setPropsNullForSave( model.data );
@@ -354,7 +369,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     savePersonSuccess: function( r, scope ){
 		var me=scope;
 		var personProgramStatus;
-		//me.getView().setLoading( false );    	
+		me.getView().setLoading( false );    	
     	if (r.id != "")
 		{
     		// new student save an Active program status

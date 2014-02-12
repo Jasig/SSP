@@ -57,7 +57,8 @@ Ext.define('Ssp.view.person.StudentIntakeRequest', {
                     hidden: true,
                     maxLength: 100,
                     vtype: 'email',
-					labelAlign: 'top'
+					labelAlign: 'top',
+					width: 250
                 }]
             }]
         });
