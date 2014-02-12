@@ -97,12 +97,12 @@
 			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="map_status_report_created_by_person_id"
+					foreignKeyName="map_status_report_d_cr_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="map_status_report_modified_by_person_id"
+					foreignKeyName="map_status_report_d_modified_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
@@ -137,12 +137,12 @@
 			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="map_status_report_created_by_person_id"
+					foreignKeyName="map_status_report_t_cr_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="map_status_report_modified_by_person_id"
+					foreignKeyName="map_status_report_t_modified_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
