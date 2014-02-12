@@ -53,6 +53,9 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 		}
 		
 		var getStudentTypeSetFromExternalDataValue = 'true';
+		var getStudentTypeUnSetFromExternalDataValue = 'true';
+		
+		
 		 me.configurationOptionsStore.each(function(rec){
         
             var s = rec.get('value');
@@ -63,13 +66,14 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
             }
             if (rec.get('name') == 'studentTypeUnsetFromExternalData') {
                 if (s.indexOf("true") == -1) 
-                    getStudentTypeSetFromExternalDataValue = 'false'
+                    getStudentTypeUnSetFromExternalDataValue = 'false'
             }
             
         });
 		
 		
-			 if (getStudentTypeSetFromExternalDataValue == 'false') {
+		
+			 if (getStudentTypeSetFromExternalDataValue == 'false' && getStudentTypeUnSetFromExternalDataValue == 'false') {
 			 	me.getStudentTypeCombo().setFieldLabel('Student Type' +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
 			 }
 		

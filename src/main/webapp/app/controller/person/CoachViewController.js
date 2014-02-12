@@ -78,26 +78,28 @@ Ext.define('Ssp.controller.person.CoachViewController', {
         });
         
         var getExtDataCoachValue = 'true';
+		var getExtUnsetDataCoachValue = 'true';
         
         me.configurationOptionsStore.each(function(rec){
         
             var s = rec.get('value');
             if (rec.get('name') == 'coachSetFromExternalData') {
-            
+				
                 if (s.indexOf("true") == -1) 
                     getExtDataCoachValue = 'false'
                 
             }
             if (rec.get('name') == 'coachUnsetFromExternalData') {
+				
                 if (s.indexOf("true") == -1) 
-                    getExtDataCoachValue = 'false'
+                    getExtUnsetDataCoachValue = 'false'
             }
            
             
         });
-       
+      
 		
-        if (getExtDataCoachValue == 'false') {
+        if (getExtDataCoachValue == 'false' && getExtUnsetDataCoachValue == 'false') {
             me.getCoachCombo().setFieldLabel(me.sspConfig.get('coachFieldLabel') +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
         }
 		
