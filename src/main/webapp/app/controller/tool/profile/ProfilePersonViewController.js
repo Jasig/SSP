@@ -89,6 +89,11 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var me = this;
         var id = me.personLite.get('id');
         me.resetForm();
+        me.appEventsController.assignEvent({
+            eventName: 'emailCoach',
+            callBackFunc: me.onEmailCoach,
+            scope: me
+        });
         if(me.sapStatusesStore.getTotalCount() <= 0){
 			me.sapStatusesStore.load();
         }
@@ -149,6 +154,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
        	me.profileReferralSourcesStore.removeAll();
        	me.profileServiceReasonsStore.removeAll();
        	me.profileSpecialServiceGroupsStore.removeAll();
+		me.appEventsController.getApplication().fireEvent('updateStudentRecord',{person:null});
 
     },
     
@@ -179,7 +185,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             serviceResponses.responseCnt++;
             if ( serviceResponsesCallback ) {
                 serviceResponsesCallback.apply(me, [name, serviceResponses, r]);
-            }
+			}
             if ( callback ) {
                 callback.apply(me, [ serviceResponses ]);
             }
@@ -250,18 +256,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		
         studentIntakeAssignedField.setValue(me.handleNull(me.person.get('studentIntakeRequestDate')));
         studentIntakeCompletedField.setValue(me.handleNull(me.person.get('studentIntakeCompleteDate')));
-
-
-        var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
-        var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
-        studentRecordComp.setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + me.person.get('schoolId'));
-        studentCoachButton.setText('<u>Coach: ' + coachName + '</u>');
-		
-        me.appEventsController.assignEvent({
-            eventName: 'emailCoach',
-            callBackFunc: me.onEmailCoach,
-            scope: me
-        });
+        me.appEventsController.getApplication().fireEvent('updateStudentRecord',{'person':me.person});
     },
 
     getPersonFailure: function() {
@@ -378,6 +373,11 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
 	destroy: function() {
         var me=this;
+        me.appEventsController.removeEvent({
+            eventName: 'emailCoach',
+            callBackFunc: me.onEmailCoach,
+            scope: me
+        });
 		var view = Ext.ComponentQuery.query("#profileDetails");
     	if(view && view.length > 0)
     		view[0].getController().closePopups();

@@ -148,6 +148,9 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     onResetClick: function(button){
 		var me=this;
 		me.clear();	
+		me.searchStore.removeAll();
+		me.appEventsController.getApplication().fireEvent("onPersonSearchSuccess");
+		
 	},  
 	onSearchClick: function(button){
 		var me=this;

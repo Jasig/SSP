@@ -23,7 +23,6 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 		appEventsController: 'appEventsController',
 		formUtils: 'formRendererUtils',
 		apiProperties: 'apiProperties',
-        personLite: 'personLite',
     	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
         
 	},
@@ -50,9 +49,15 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     init: function() {
     	var me=this;
 		me.confidentialityLevelsStore.load();
-    
+        me.appEventsController.assignEvent({
+            eventName: 'updateStudentRecord',
+            callBackFunc: me.updateStudentRecord,
+            scope: me
+        });
+        me.updateStudentRecord();
  		return this.callParent(arguments);
     },
+    
     
     onCollapsed: function(){
     	var me=this;
@@ -86,5 +91,34 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 	onViewCoachingHistoryButtonClick: function(button){
         var me=this;
         me.appEventsController.getApplication().fireEvent('viewCoachHistory');
+    },
+    
+    updateStudentRecord: function(args){
+		var me = this;
+    	if(args && args.person){
+			me.getEmailStudentButton().show();
+			me.getViewCoachingHistoryButton().show();
+			me.getStudentRecordEditButton().show();
+			me.getEmailCoachButton().show();
+			var fullName = args.person.getFullName();
+			var coachName = args.person.getCoachFullName();
+	        me.getView().setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + args.person.get('schoolId'));
+	        me.getEmailCoachButton().setText('<u>Coach: ' + coachName + '</u>');
+			
+		}else{
+			me.getViewCoachingHistoryButton().hide();
+			me.getStudentRecordEditButton().hide();
+			me.getView().setTitle('');
+			me.getEmailStudentButton().hide();
+			me.getEmailCoachButton().hide();
+		}
+    },
+    
+    destroy: function(){
+    	 me.appEventsController.removeEvent({
+             eventName: 'updateStudentRecord',
+             callBackFunc: me.updateStudentRecord,
+             scope: me
+         });
     }
 });

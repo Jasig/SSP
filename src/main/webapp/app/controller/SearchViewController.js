@@ -321,6 +321,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.getSearchBar().show();
 		Ext.ComponentQuery.query('searchForm')[0].show();
 		me.setGridView();
+		me.selectFirstItem();
 	},
 
 	displayCaseloadBar: function(){
@@ -329,6 +330,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.getCaseloadBar().show();
 		me.getSearchBar().hide();
 		me.setGridView();
+		me.selectFirstItem();
 	},
 	
 	applyColumns: function(){
