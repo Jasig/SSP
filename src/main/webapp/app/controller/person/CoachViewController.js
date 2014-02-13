@@ -85,13 +85,13 @@ Ext.define('Ssp.controller.person.CoachViewController', {
             var s = rec.get('value');
             if (rec.get('name') == 'coachSetFromExternalData') {
 				
-                if (s.indexOf("true") == -1) 
+                if (s.toUpperCase().indexOf("TRUE") == -1) 
                     getExtDataCoachValue = 'false'
                 
             }
             if (rec.get('name') == 'coachUnsetFromExternalData') {
 				
-                if (s.indexOf("true") == -1) 
+                if (s.toUpperCase().indexOf("TRUE") == -1) 
                     getExtUnsetDataCoachValue = 'false'
             }
            

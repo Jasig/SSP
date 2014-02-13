@@ -61,11 +61,12 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
             var s = rec.get('value');
             
             if (rec.get('name') == 'studentTypeSetFromExternalData') {
-                if (s.indexOf("true") == -1) 
+                if (s.toUpperCase().indexOf("TRUE") == -1) 
                     getStudentTypeSetFromExternalDataValue = 'false'
             }
+			
             if (rec.get('name') == 'studentTypeUnsetFromExternalData') {
-                if (s.indexOf("true") == -1) 
+                if (s.toUpperCase().indexOf("TRUE") == -1) 
                     getStudentTypeUnSetFromExternalDataValue = 'false'
             }
             
