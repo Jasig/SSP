@@ -30,7 +30,11 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     control: {
 		view: {
 			collapse: 'onExpanded',
-			expand: 'onCollapsed'
+			expand: 'onCollapsed',
+			afterlayout: {
+				fn: 'onAfterLayout',
+				single: true
+			}
 		},
 		'emailStudentButton': {
             click: 'onEmailStudentButtonClick'
@@ -57,6 +61,11 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
         me.updateStudentRecord();
  		return this.callParent(arguments);
     },
+    
+	onAfterLayout: function(){
+		var me = this;
+		me.updateStudentRecord();
+	},
     
     
     onCollapsed: function(){
@@ -115,10 +124,12 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     },
     
     destroy: function(){
+		var me = this;
     	 me.appEventsController.removeEvent({
              eventName: 'updateStudentRecord',
              callBackFunc: me.updateStudentRecord,
              scope: me
          });
+    	 return me.callParent(arguments);
     }
 });

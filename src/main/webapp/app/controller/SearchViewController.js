@@ -518,7 +518,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 
     refreshPagingToolBar: function(){
-    	this.getSearchGridPager().onLoad();
+		if(this.getSearchGridPager() != null)
+    		this.getSearchGridPager().onLoad();
     },
     
     loadCaseloadAssignment: function(){
@@ -743,7 +744,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	var me=scope;
     	var activeProgramStatusId = "";
     	var programStatus;
-    	if ( me.programStatusesStore.getCount() > 0)
+    	if ( me.programStatusesStore.getCount() > 0 && me.getCaseloadStatusCombo() != null)
     	{
     		me.getCaseloadStatusCombo().setValue( me.caseloadFilterCriteria.get('programStatusId') );
     	}

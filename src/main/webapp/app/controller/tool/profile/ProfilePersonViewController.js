@@ -154,8 +154,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
        	me.profileReferralSourcesStore.removeAll();
        	me.profileServiceReasonsStore.removeAll();
        	me.profileSpecialServiceGroupsStore.removeAll();
-		me.appEventsController.getApplication().fireEvent('updateStudentRecord',{person:null});
-
     },
     
 	setFinancialLabels: function(){
