@@ -144,7 +144,7 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 
 	private void initAdditionalCriteria(Set<String> additionalCriteriaSet) {
 		String additionalMatchingCriteriaString = configService.getByNameEmpty("map_plan_status_addition_course_matching_criteria");
-		if(StringUtils.isEmpty(additionalMatchingCriteriaString.trim()))
+		if(!StringUtils.isEmpty(additionalMatchingCriteriaString.trim()))
 		{
 			String[] criteria = additionalMatchingCriteriaString.split(",");
 			for (String string : criteria) {
