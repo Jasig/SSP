@@ -151,5 +151,12 @@
                 <where>id='987108ab-a0f5-4fc2-bb59-792652303b31'</where>
             </delete>
         </rollback>		
-	</changeSet>																															
+	</changeSet>	
+	<changeSet author='tony.arland' id='fix grade config typo' >
+		<update tableName="config">
+			<column name="value" value="A+, A, A-, B+, B, B-, C+, C, C-, D+, D, D-" />
+			<column name="default_value" value="A+, A, A-, B+, B, B-, C+, C, C-, D+, D, D-" />
+			<where>id = '3e53b6af-ccc3-4794-84fc-e4729c22f856'</where>
+		</update>	
+	</changeSet>																														
 </databaseChangeLog>
