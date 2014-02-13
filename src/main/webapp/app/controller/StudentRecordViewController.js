@@ -105,23 +105,36 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     updateStudentRecord: function(args){
 		var me = this;
     	if(args && args.person){
-			me.getEmailStudentButton().show();
-			me.getViewCoachingHistoryButton().show();
-			me.getStudentRecordEditButton().show();
-			me.getEmailCoachButton().show();
+			me.showElement(me.getEmailStudentButton());
+			me.showElement(me.getViewCoachingHistoryButton());
+			me.showElement(me.getStudentRecordEditButton());
+			me.showElement(me.getEmailCoachButton());
 			var fullName = args.person.getFullName();
 			var coachName = args.person.getCoachFullName();
-	        me.getView().setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + args.person.get('schoolId'));
-	        me.getEmailCoachButton().setText('<u>Coach: ' + coachName + '</u>');
+			if(me.getView())
+	        	me.getView().setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + args.person.get('schoolId'));
+			if(me.getEmailCoachButton())
+	        	me.getEmailCoachButton().setText('<u>Coach: ' + coachName + '</u>');
 			
 		}else{
-			me.getViewCoachingHistoryButton().hide();
-			me.getStudentRecordEditButton().hide();
-			me.getView().setTitle('');
-			me.getEmailStudentButton().hide();
-			me.getEmailCoachButton().hide();
+			me.hideElement(me.getViewCoachingHistoryButton());
+			me.hideElement(me.getStudentRecordEditButton());
+			if(me.getView())
+				me.getView().setTitle('');
+			me.hideElement(me.getEmailStudentButton());
+			me.hideElement(me.getEmailCoachButton());
 		}
     },
+
+	hideElement: function(element){
+		if(element)
+			element.hide();
+	},
+	
+	showElement: function(element){
+		if(element)
+			element.show();
+	},
     
     destroy: function(){
 		var me = this;

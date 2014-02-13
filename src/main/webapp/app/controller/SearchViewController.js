@@ -244,7 +244,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     		me.personLite.set('id', "");
     		me.appEventsController.getApplication().fireEvent('loadPerson');
     	}
-    	
+    	me.appEventsController.getApplication().fireEvent('updateStudentRecord');
     	me.refreshPagingToolBar();    	
     },
     
