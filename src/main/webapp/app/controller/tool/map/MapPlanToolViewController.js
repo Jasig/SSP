@@ -121,14 +121,14 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
 			me.getOnPlanStatusDetails().setTooltip(planStatus.statusReason);
 		}
 		else{
-			me.getOnPlanField().setValue("No Status");
+			me.getOnPlanField().setValue("No Plan");
 			me.getOnPlanStatusDetails().setTooltip("Currently, there is no status given for this student.");
 		}
 	},
 	
 	onPlanStatusFailure:function(){
 		var me = this;
-		me.getOnPlanField().setValue("[Status Load Failed]");
+		me.getOnPlanField().setValue("No Plan");
 	},
 	
 	onCurrentMapPlanChange: function(){

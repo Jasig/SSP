@@ -543,11 +543,11 @@ public class PlanController  extends AbstractBaseController {
 				MapStatusReport report = allForPerson.getRows().iterator().next();
 				return mapStatusReportTOFactory.from(report);
 			}
+			else 
+			return new PersonMapPlanStatusReportTO();
 		}
 		else
 		{
-			//TODO not the cleanest way to handle but clientside generates 500 error in console
-			// Currently plan status is not required.
 			try{
 				return planStatusFactory.from(planStatusService.getBySchoolId(schoolId));
 			}catch(Exception exp)
@@ -555,7 +555,6 @@ public class PlanController  extends AbstractBaseController {
 				return null;
 			}
 		}
-		throw new ObjectNotFoundException(personId,"MapStatusReport");
 	}
 	
 	private PlanTO validatePlan(PlanTO plan) throws ObjectNotFoundException{
