@@ -246,7 +246,7 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 	private String generatePlanNote(
 			MapStatusReport report) 
 	{
-		return report.getCourseDetails().size() > 0 ? report.getCourseDetails().size()+" plan cours(es) have issues" : " ";
+		return report.getCourseDetails().size() > 0 ? report.getCourseDetails().size()+" plan course(s) have issues" : " ";
 	}
 
 	private void buildTermDetails(final MapStatusReport report,

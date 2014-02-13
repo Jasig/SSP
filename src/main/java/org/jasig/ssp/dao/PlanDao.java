@@ -257,18 +257,21 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 	public List<PlanStudentStatusTO> getPlanStudentStatusByCourse(SearchPlanTO form){
 		
 		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
-		String planStatusSelect = calculateMapPlanStatus ? " MapStatusReport msr " : " ExternalPersonPlanStatus ps ";
+		String planStatusFrom = calculateMapPlanStatus ? " MapStatusReport msr " : " ExternalPersonPlanStatus ps ";
+		String planStatusSelectReason = calculateMapPlanStatus ? " msr.planNote as plan_statusDetails,   " : " ps.statusReason as plan_statusDetails,   ";
+		String planStatusSelectStatus = calculateMapPlanStatus ? " msr.planStatus as plan_planStatus  " : " ps.status as plan_planStatus  ";
+		
 		StringBuilder selectPlanCourses = new  StringBuilder("select " +
 				"distinct person.schoolId as plan_studentId, " +
 				"pc.formattedCourse as plan_formattedCourse, " +
 				"pc.courseTitle as plan_courseTitle, " +
 				"p.objectStatus as plan_planObjectStatus, " +
-				"ps.statusReason as plan_statusDetails, " +
-				"ps.status as plan_planStatus " +
-				"from Plan p, Person person, PlanCourse pc, ExternalCourse ec, "+planStatusSelect);
+				 planStatusSelectReason +
+				 planStatusSelectStatus +
+				"from Plan p, Person person, PlanCourse pc, ExternalCourse ec, "+planStatusFrom);
 		
 		buildQueryWhereClause(selectPlanCourses, form,calculateMapPlanStatus);
-		selectPlanCourses.append(" and ps.schoolId = person.schoolId");
+		selectPlanCourses.append(calculateMapPlanStatus ? "and msr.person = person " : " and ps.schoolId = person.schoolId ");
 		
 		
 		Query query = createHqlQuery(selectPlanCourses.toString()).setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal() );
