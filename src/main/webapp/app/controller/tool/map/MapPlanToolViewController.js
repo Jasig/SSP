@@ -121,7 +121,7 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
 			me.getOnPlanStatusDetails().setTooltip(planStatus.statusReason);
 		}
 		else{
-			me.getOnPlanField().setValue("No Plan");
+			me.getOnPlanField().setValue("No Status");
 			me.getOnPlanStatusDetails().setTooltip("Currently, there is no status given for this student.");
 		}
 	},
