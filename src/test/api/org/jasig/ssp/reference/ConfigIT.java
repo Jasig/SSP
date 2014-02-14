@@ -124,7 +124,7 @@ public class ConfigIT extends AbstractReferenceTest {
         };
 
         CONFIG_VALUES = new String[] {
-                "SSP", "noone@test.com", "20", null, "false", "false", "http://test.edu", "My Edu", "true", "3",
+                "SSP", "noone@test.com", "20", "true", "false", "false", "http://test.edu", "My Edu", "true", "3",
                 "[{\"name\":\"LT\",\"description\":\"Light part time schedule.\",\"rangeStart\":1," +
                         "\"rangeEnd\":6,\"rangeLabel\":\"1-6\"},\n\t\t\t\t\t\t\t\t\t\t\t{\"name\":\"PT\",\"description" +
                         "\":\"Part time student\",\"rangeStart\":7,\"rangeEnd\":12,\"rangeLabel\":\"7-12\"}, " +
