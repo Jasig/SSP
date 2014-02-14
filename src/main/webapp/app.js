@@ -1033,7 +1033,16 @@ Ext.onReady(function(){
 			    	allCoachesCurrentStore: 'Ssp.store.CoachesAllCurrent',
 				    confidentialityDisclosureAgreementsStore: 'Ssp.store.reference.ConfidentialityDisclosureAgreements',
 					configurationOptionsStore: 'Ssp.store.reference.ConfigurationOptions',
-					configurationOptionsUnpagedStore: 'Ssp.store.reference.ConfigurationOptionsUnpaged',
+					configurationOptionsUnpagedStore: 
+					{
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.ConfigurationOptionsUnpaged', {
+							     storeId: 'configurationOptionsUnpagedStore',		
+							     extraParams: {limit: "-1"}
+							 });
+				    	},
+				    	singleton: true
+				    },
 				    colorsStore: {
 				    	fn: function(){
 				    		return Ext.create('Ssp.store.reference.Colors', {

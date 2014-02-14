@@ -31,7 +31,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
         personProgramStatusService: 'personProgramStatusService',
         currentPersonAppointment: 'currentPersonAppointment',
         studentTypesStore: 'studentTypesAllUnpagedStore',
-		configurationOptionsStore: 'configurationOptionsStore'
+		configurationOptionsUnpagedStore: 'configurationOptionsUnpagedStore'
     },
 	config: {
 		panelKids: null
@@ -93,8 +93,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		if (id.length > 0)
 		{
 			me.getView().setLoading( true );
-			
-			me.configurationOptionsStore.load();
 			
 	    	me.personService.get( id, {success:me.getPersonSuccess, 
 	    									  failure:me.getPersonFailure, 

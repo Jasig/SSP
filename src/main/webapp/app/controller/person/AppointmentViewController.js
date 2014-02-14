@@ -25,7 +25,7 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
     	formUtils: 'formRendererUtils',
     	studentTypesStore: 'studentTypesAllUnpagedStore',
 		person: 'currentPerson',
-        configurationOptionsStore: 'configurationOptionsStore'
+        configurationOptionsUnpagedStore: 'configurationOptionsUnpagedStore'
     },
     control: {
     	appointmentDateField: '#appointmentDateField',
@@ -56,7 +56,8 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 		var getStudentTypeUnSetFromExternalDataValue = 'true';
 		
 		
-		 me.configurationOptionsStore.each(function(rec){
+		
+		 me.configurationOptionsUnpagedStore.each(function(rec){
         
             var s = rec.get('value');
             
