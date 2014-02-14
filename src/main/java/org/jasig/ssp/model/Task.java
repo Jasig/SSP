@@ -19,6 +19,7 @@
 package org.jasig.ssp.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.persistence.Column;
@@ -27,6 +28,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -55,6 +57,8 @@ public class Task // NOPMD by jon.adams
 	public static final String CUSTOM_ACTION_PLAN_TASK = "CUS";
 
 	public static final String SSP_ACTION_PLAN_TASK = "SSP";
+	
+	private static final String DATABASE_TABLE_NAME = "task";
 
 	@NotNull
 	@Column(nullable = false, length = 100)
@@ -106,6 +110,11 @@ public class Task // NOPMD by jon.adams
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "confidentiality_level_id", nullable = false)
 	private ConfidentialityLevel confidentialityLevel;
+	
+	@Nullable
+	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	private List<TaskMessageEnqueue> messagesSent;
 
 	/**
 	 * Constructor that only calls the
@@ -287,5 +296,13 @@ public class Task // NOPMD by jon.adams
 
 	public void setLink(String link) {
 		this.link = link;
+	}
+
+	public List<TaskMessageEnqueue> getMessagesSent() {
+		return messagesSent;
+	}
+
+	public void setMessagesSent(List<TaskMessageEnqueue> messagesSent) {
+		this.messagesSent = messagesSent;
 	}
 }

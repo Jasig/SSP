@@ -24,6 +24,7 @@ import org.jasig.ssp.factory.TaskTOFactory;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.TaskMessageEnqueueService;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
 import org.jasig.ssp.service.reference.ChallengeService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
@@ -59,6 +60,9 @@ public class TaskTOFactoryImpl extends
 
 	@Autowired
 	private transient ConfidentialityLevelService confidentialityLevelService;
+	
+	@Autowired
+	private transient TaskMessageEnqueueService taskMessageSentService;
 
 	@Override
 	protected TaskDao getDao() {
@@ -97,6 +101,10 @@ public class TaskTOFactoryImpl extends
 		} else {
 			model.setConfidentialityLevel(confidentialityLevelService
 					.get(tObject.getConfidentialityLevel().getId()));
+		}
+		
+		if(tObject.getMessageSentIds() != null && !tObject.getMessageSentIds().isEmpty()){
+			model.setMessagesSent(taskMessageSentService.getAllFromIds(tObject.getMessageSentIds()));
 		}
 
 		return model;

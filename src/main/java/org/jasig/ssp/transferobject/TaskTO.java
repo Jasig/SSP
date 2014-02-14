@@ -28,6 +28,7 @@ import java.util.UUID;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.model.Task;
+import org.jasig.ssp.model.TaskMessageEnqueue;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
 import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
@@ -64,8 +65,9 @@ public class TaskTO
 	
 	private UUID confidentialityLevelId;
 
-
 	private ConfidentialityLevelTO confidentialityLevel;
+	
+	private List<UUID> messageSentIds;
 
 	public TaskTO() {
 		super();
@@ -98,6 +100,12 @@ public class TaskTO
 		}
 		
 		confidentialityLevel = new ConfidentialityLevelTO(task.getConfidentialityLevel());
+		if(task.getMessagesSent() != null && !task.getMessagesSent().isEmpty()){
+			messageSentIds = new ArrayList<UUID>();
+			for(TaskMessageEnqueue messageSentId:task.getMessagesSent()){
+				messageSentIds.add(messageSentId.getId());
+			}
+		}
 	}
 
 	/**
@@ -274,5 +282,13 @@ public class TaskTO
 
 	public void setConfidentialityLevelId(UUID confidentialityLevelId) {
 		this.confidentialityLevelId = confidentialityLevelId;
+	}
+
+	public List<UUID> getMessageSentIds() {
+		return messageSentIds;
+	}
+
+	public void setMessageSentIds(List<UUID> messageSentIds) {
+		this.messageSentIds = messageSentIds;
 	}
 }

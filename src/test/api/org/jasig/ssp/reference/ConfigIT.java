@@ -70,7 +70,7 @@ public class ConfigIT extends AbstractReferenceTest {
         CONFIG_NAMES = new String[] {
                 "app_title", "bcc_email_address", "client_timeout", "coachSetFromExternalData",
                 "coachUnsetFromExternalData", "highly_trusted_ips_enabled", "inst_home_url", "inst_name",
-                "manage_integration_database", "numberOfDaysPriorForTaskReminder", "registration_load_ranges",
+                "manage_integration_database", "numberOfDaysPriorForTaskReminders", "registration_load_ranges",
                 "send_mail", "serverExternalPath", "status_code_mappings", "studentTypeSetFromExternalData",
                 "studentTypeUnsetFromExternalData", "task_external_person_sync_batch_size",
                 "task_external_person_sync_max_batches_per_exec", "task_external_person_sync_trigger",
@@ -92,7 +92,8 @@ public class ConfigIT extends AbstractReferenceTest {
                         "If true the tables and views will be manipulated automatically as the application evolves " +
                         "(tables added/modified/dropped, views added/modified/dropped).  " +
                         "If false, the administrator must follow and apply the changes.",
-                "The Number of days prior to expiration to send out a Task Reminder",
+                "Set of days prior to expiration to send out Task Reminders. Comma delimited list. example:3,4,5. "
+                + "Would send out reminders 3 days before, 4 days before and 5 days before expiration date.",
                 "To properly indicate the term load activity ranges need to be sepcified, is proper json with " +
                         "range name and [start,end] range.", "Whether the system should send out mails, or just " +
                 "log their generation", "The externally visible url of the application",

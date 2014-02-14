@@ -20,7 +20,9 @@ package org.jasig.ssp.service.impl; // NOPMD
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -31,16 +33,19 @@ import javax.validation.constraints.NotNull;
 import org.codehaus.plexus.util.StringUtils;
 import org.jasig.ssp.dao.TaskDao;
 import org.jasig.ssp.model.Goal;
+import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Task;
+import org.jasig.ssp.model.TaskMessageEnqueue;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.AbstractRestrictedPersonAssocAuditableService;
 import org.jasig.ssp.service.MessageService;
+import org.jasig.ssp.service.TaskMessageEnqueueService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
@@ -59,6 +64,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 @Service
@@ -75,6 +81,9 @@ public class TaskServiceImpl
 
 	@Autowired
 	private transient MessageTemplateService messageTemplateService;
+	
+	@Autowired
+	private transient TaskMessageEnqueueService taskMessageSentService;
 
 	@Autowired
 	private transient ConfidentialityLevelService confidentialityLevelService;
@@ -90,13 +99,24 @@ public class TaskServiceImpl
 		return dao;
 	}
 
-	private int getNumberOfDaysPriorForTaskReminder() {
+	private List<Integer> getNumberOfDaysPriorForTaskReminder() {
 		final String numVal = configService
-				.getByNameNull("numberOfDaysPriorForTaskReminder");
-		if (!StringUtils.isEmpty(numVal) && StringUtils.isNumeric(numVal)) {
-			return Integer.valueOf(numVal);
+				.getByNameNull("numberOfDaysPriorForTaskReminders");
+		if(StringUtils.isBlank(numVal))
+			return Lists.newArrayList(new Integer(14));
+		String[] numVals = numVal.split(",");
+		List<Integer>daysPrior = new ArrayList<Integer>();
+		
+		for(String str:numVals){
+			if (!StringUtils.isBlank(str) && StringUtils.isNumeric(str)) {
+				daysPrior.add(Integer.parseInt(str));
+			}
 		}
-		return 14;
+		if(daysPrior.size() == 0){
+			daysPrior.add(14);
+		}
+		Collections.sort(daysPrior);
+		return daysPrior;
 	}
 
 	@Override
@@ -339,13 +359,8 @@ public class TaskServiceImpl
 		try {
 
 			// Calculate reminder window start date
-			final Calendar now = Calendar.getInstance();
-			now.setTime(new Date());
+			final Integer now = daysSince1900(new Date());
 
-			final Calendar startDateCalendar = Calendar.getInstance();
-			final Calendar dueDateCalendar = Calendar.getInstance();
-
-			// Send reminders for custom action plan tasks
 			final List<Task> tasks = getAllWhichNeedRemindersSent(sAndP);
 
 			for (final Task task : tasks) {
@@ -354,32 +369,14 @@ public class TaskServiceImpl
 					LOGGER.info("Abandoning sendAllTaskReminderNotifications because of thread interruption");
 					break;
 				}
-
-				// Calculate reminder window start date
-				startDateCalendar.setTime(task.getDueDate());
-				startDateCalendar.add(Calendar.HOUR,
-						getNumberOfDaysPriorForTaskReminder() * 24 * -1);
-
-				// Due date
-				dueDateCalendar.setTime(task.getDueDate());
-
-				if (now.after(startDateCalendar)
-						&& (now.before(dueDateCalendar))) {
-
-					SubjectAndBody subjAndBody;
-					if (task.getType().equals(Task.CUSTOM_ACTION_PLAN_TASK)) {
-						subjAndBody = messageTemplateService
-								.createCustomActionPlanTaskMessage(task);
-					} else {
-						subjAndBody = messageTemplateService
-								.createActionPlanStepMessage(task);
+				Integer dueDate = daysSince1900(task.getDueDate());
+				
+				for(Integer daysBefore:getNumberOfDaysPriorForTaskReminder()){
+					if(daysBefore.equals(dueDate - now) && !messageSent(task, daysBefore)) {
+						sendReminderMessage(task, daysBefore);
+						break;
 					}
-
-					messageService.createMessage(task.getPerson(), null,
-							subjAndBody);
-
-					setReminderSentDateToToday(task);
-				}
+				}				
 			}
 
 		} catch (final Exception e) {
@@ -389,6 +386,61 @@ public class TaskServiceImpl
 
 		LOGGER.info("END : sendTaskReminderNotifications()");
 	}
+	
+	private Boolean messageSent(Task task, Integer daysBefore){
+		if(task.getMessagesSent() != null && !task.getMessagesSent().isEmpty()){
+			for(TaskMessageEnqueue messageSent:task.getMessagesSent()){
+				if(task.getDueDate().equals(messageSent.getTaskDueDate()) 
+						&& messageSent.getMessageEnqueueDate() != null 
+						&& messageSent.getDaysBefore().equals(daysBefore))
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	private void sendReminderMessage(final Task task, final Integer daysBefore) throws SendFailedException, 
+		ObjectNotFoundException, ValidationException{
+
+
+		SubjectAndBody subjAndBody;
+		if (task.getType().equals(Task.CUSTOM_ACTION_PLAN_TASK)) {
+			subjAndBody = messageTemplateService
+					.createCustomActionPlanTaskMessage(task);
+		} else {
+			subjAndBody = messageTemplateService
+					.createActionPlanStepMessage(task);
+		}
+
+		Message message = messageService.createMessage(task.getPerson(), null,
+				subjAndBody);
+		
+		taskMessageSentService.save(new TaskMessageEnqueue(task, message, daysBefore));
+
+	}
+	
+	private  int daysSince1900(Date date) {
+	    Calendar c = new GregorianCalendar();
+	    c.setTime(date);
+
+	    int year = c.get(Calendar.YEAR);
+	    if (year < 1900 || year > 2099) {
+	        throw new IllegalArgumentException("daysSince1900 - Date must be between 1900 and 2099");
+	    }
+	    year -= 1900;
+	    int month = c.get(Calendar.MONTH) + 1;
+	    int days = c.get(Calendar.DAY_OF_MONTH);
+
+	    if (month < 3) {
+	        month += 12;
+	        year--;
+	    }
+	    int yearDays = (int) (year * 365.25);
+	    int monthDays = (int) ((month + 1) * 30.61);
+
+	    return (yearDays + monthDays + days - 63);
+	}
+	
 
 	@Override
 	public Long getTaskCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
