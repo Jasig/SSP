@@ -30,7 +30,6 @@
             </sqlCheck>
             <sqlCheck expectedResult="true">${should_manage_integration_database_sql}
             </sqlCheck>
-            <changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
             <not><columnExists tableName="external_student_test" columnName="outcome" schemaName="${schema}"/></not>
         </preConditions>
         <dropView viewName="v_external_student_test" />
@@ -46,28 +45,5 @@
         
         <sql>grant all on v_external_student_test to ${database.app.username}</sql>
     </changeSet>
-    
-    <changeSet id="add outcome col external_student_test no key" author="jim.stanley">
-        <preConditions onFail="CONTINUE"
-                       onFailMessage="Skip re-narrow external_student_financial_aid fafsa_date (pk)">
-            <sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
-            </sqlCheck>
-            <sqlCheck expectedResult="true">${should_manage_integration_database_sql}
-            </sqlCheck>
-            <changeLogPropertyDefined property="external.apply.natural.keys" value="false"/>
-            <not><columnExists tableName="external_student_test" columnName="outcome" schemaName="${schema}"/></not>
-        </preConditions>
-        <dropView viewName="v_external_student_test" />
-        <addColumn tableName="external_student_test">
-            <column name="outcome" type="${nvarchar.type}(255)" >
-                <constraints nullable="true" />
-            </column>   
-        </addColumn>
-        
-        <createView viewName="v_external_student_test">
-            select ROW_NUMBER() OVER (ORDER BY school_id) as id,* from external_student_test
-        </createView>
-        
-        <sql>grant all on v_external_student_test to ${database.app.username}</sql>
-    </changeSet>
+
 </databaseChangeLog>
