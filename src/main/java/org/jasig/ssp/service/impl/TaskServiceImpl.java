@@ -36,6 +36,7 @@ import org.jasig.ssp.model.Goal;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Strength;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.TaskMessageEnqueue;
@@ -52,6 +53,7 @@ import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.GoalTO;
+import org.jasig.ssp.transferobject.StrengthTO;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
@@ -298,15 +300,16 @@ public class TaskServiceImpl
 
 	@Override
 	public void sendTasksForPersonToEmail(@NotNull final List<Task> tasks,
-			final List<Goal> goals, final Person student,
+			final List<Goal> goals, final List<Strength> strengths, final Person student,
 			final List<String> emailAddresses, final List<Person> recipients)
 			throws ObjectNotFoundException {
 
 		final List<TaskTO> taskTOs = TaskTO.toTOList(tasks);
 		final List<GoalTO> goalTOs = GoalTO.toTOList(goals);
+		final List<StrengthTO> strengthTOs = StrengthTO.toTOList(strengths);
 
 		final SubjectAndBody subjAndBody = messageTemplateService
-				.createActionPlanMessage(student, taskTOs, goalTOs);
+				.createActionPlanMessage(student, taskTOs, goalTOs, strengthTOs);
 
 		if (emailAddresses != null) {
 			for (final String address : emailAddresses) {

@@ -45,12 +45,14 @@ import org.jasig.ssp.factory.TaskTOFactory;
 import org.jasig.ssp.model.Goal;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Strength;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.GoalService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.StrengthService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
@@ -96,6 +98,10 @@ public class PersonTaskController extends
 
 	@Autowired
 	private transient GoalService goalService;
+	
+
+	@Autowired
+	private transient StrengthService strengthService;
 
 	@Override
 	protected TaskTOFactory getFactory() {
@@ -194,7 +200,8 @@ public class PersonTaskController extends
 	void print(final HttpServletResponse response,
 			final @PathVariable UUID personId,
 			final @RequestParam(required = false) List<UUID> taskIds,
-			final @RequestParam(required = false) List<UUID> goalIds
+			final @RequestParam(required = false) List<UUID> goalIds,
+			final @RequestParam(required = false) List<UUID> strengthIds
 			) throws ObjectNotFoundException, JRException, IOException {
 
 		checkPermissionForOp("READ");
@@ -211,6 +218,9 @@ public class PersonTaskController extends
 				goalIds, person, requestor, securityService.getSessionId(),
 				sAndP);
 
+		final List<Strength> strengths = strengthService.getStrengthsForPersonIfNoneSelected(
+				strengthIds, person, requestor, securityService.getSessionId(),
+				sAndP);
 		final Iterator<Task> taskIter = tasks.iterator();
 		while (taskIter.hasNext()) {
 			final Task task = taskIter.next();
@@ -254,12 +264,15 @@ public class PersonTaskController extends
 
 		final JRBeanCollectionDataSource goalsDS = new JRBeanCollectionDataSource(
 				goals);
+		
+		final JRBeanCollectionDataSource strengthsDS = new JRBeanCollectionDataSource(
+				strengths);
 		final Map<String, Object> parameters = Maps.newHashMap();
 		parameters.put("studentName",
 				person.getFirstName() + " " + person.getLastName());
 		parameters.put("studentId", person.getSchoolId());
 		parameters.put("initialDate", person.getCreatedDate());
-		parameters.put("studentStrengths", person.getStrengths());
+		parameters.put("strengths", strengthsDS);
 		parameters.put("reviewDate", new Date());
 		parameters.put("goals", goalsDS);
 
@@ -337,6 +350,12 @@ public class PersonTaskController extends
 				emailForm.getGoalIds(), student, securityService.currentUser(),
 				securityService.getSessionId(), new SortingAndPaging(
 						ObjectStatus.ACTIVE));
+		
+		// strengths
+		final List<Strength> strenghts = strengthService.getStrengthsForPersonIfNoneSelected(
+				emailForm.getStrengthIds(), student, securityService.currentUser(),
+				securityService.getSessionId(), new SortingAndPaging(
+						ObjectStatus.ACTIVE));
 
 		// tasks
 		final List<Task> tasks = service.getTasksForPersonIfNoneSelected(
@@ -344,7 +363,7 @@ public class PersonTaskController extends
 				securityService.getSessionId(), new SortingAndPaging(
 						ObjectStatus.ACTIVE));
 
-		service.sendTasksForPersonToEmail(tasks, goals, student,
+		service.sendTasksForPersonToEmail(tasks, goals, strenghts, student,
 				emailForm.getRecipientEmailAddresses(), recipients);
 
 		return true;

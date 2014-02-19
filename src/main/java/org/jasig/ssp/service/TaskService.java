@@ -27,6 +27,7 @@ import javax.mail.SendFailedException;
 
 import org.jasig.ssp.model.Goal;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Strength;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
@@ -206,6 +207,8 @@ public interface TaskService
 	 *            the tasks
 	 * @param goals
 	 *            the goals
+	  * @param strengths
+	 *            the strengths
 	 * @param student
 	 *            the student
 	 * @param emailAddresses
@@ -220,6 +223,7 @@ public interface TaskService
 	 */
 	void sendTasksForPersonToEmail(final List<Task> tasks,
 			final List<Goal> goals,
+			final  List<Strength> strengths,
 			final Person student, final List<String> emailAddresses, 
 			final List<Person> recipients) throws ObjectNotFoundException,
 			ValidationException;

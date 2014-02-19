@@ -28,10 +28,10 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="244"/>
+	<property name="ireport.y" value="64"/>
 	<parameter name="studentName" class="java.lang.String"/>
 	<parameter name="studentId" class="java.lang.String"/>
-	<parameter name="studentStrengths" class="java.lang.String"/>
+	<parameter name="strengths" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<parameter name="initialDate" class="java.util.Date"/>
 	<parameter name="reviewDate" class="java.util.Date"/>
 	<parameter name="followupDate" class="java.util.Date"/>
@@ -49,7 +49,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="152" splitType="Stretch">
+		<band height="211" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="10" y="30" width="100" height="13"/>
 				<textElement/>
@@ -111,31 +111,21 @@
 				<dataSourceExpression><![CDATA[$P{goals}]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/goals_subreport.jasper"]]></subreportExpression>
 			</subreport>
-		</band>
-	</title>
-	<pageHeader>
-		<band height="48" splitType="Stretch">
-			<printWhenExpression><![CDATA[$V{PAGE_NUMBER}.intValue() == 1 ? new Boolean(true) : new Boolean(false)]]></printWhenExpression>
 			<rectangle>
-				<reportElement uuid="19f089d6-00fb-46ae-bc54-ef0012f8f77f" positionType="Float" x="0" y="0" width="572" height="20" backcolor="#AFAAAA"/>
+				<reportElement uuid="19f089d6-00fb-46ae-bc54-ef0012f8f77f" x="0" y="148" width="572" height="20" backcolor="#AFAAAA"/>
 			</rectangle>
 			<staticText>
-				<reportElement uuid="93bf8f38-92a2-4aa4-afa6-03f692c1da5c" x="9" y="3" width="100" height="17"/>
+				<reportElement uuid="93bf8f38-92a2-4aa4-afa6-03f692c1da5c" x="10" y="151" width="100" height="17"/>
 				<textElement/>
-				<text><![CDATA[Strengths]]></text>
+				<text><![CDATA[Strength(s)]]></text>
 			</staticText>
-			<staticText>
-				<reportElement uuid="89854de8-f1c7-4c8f-b2b5-691a837b4f01" positionType="Float" x="9" y="27" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[My strengths are:]]></text>
-			</staticText>
-			<textField isStretchWithOverflow="true">
-				<reportElement uuid="b75271d7-7da8-4c46-82b1-bc586091568f" positionType="Float" stretchType="RelativeToBandHeight" x="109" y="27" width="463" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$P{studentStrengths}]]></textFieldExpression>
-			</textField>
+			<subreport>
+				<reportElement uuid="a03fafd2-be35-4d86-a0c9-034f81295b02" x="0" y="167" width="572" height="41"/>
+				<dataSourceExpression><![CDATA[$P{strengths}]]></dataSourceExpression>
+				<subreportExpression><![CDATA["reports/strengths_subreport.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
-	</pageHeader>
+	</title>
 	<columnHeader>
 		<band/>
 	</columnHeader>

@@ -30,6 +30,8 @@ public class EmailPersonTasksForm {
 	private List<UUID> taskIds;
 
 	private List<UUID> goalIds;
+	
+	private List<UUID> strengthIds;
 
 	private List<String> recipientEmailAddresses;
 
@@ -49,6 +51,14 @@ public class EmailPersonTasksForm {
 
 	public void setGoalIds(final List<UUID> goalIds) {
 		this.goalIds = goalIds;
+	}
+
+	public List<UUID> getStrengthIds() {
+		return strengthIds;
+	}
+
+	public void setStrengthIds(List<UUID> strengthIds) {
+		this.strengthIds = strengthIds;
 	}
 
 	public List<String> getRecipientEmailAddresses() {

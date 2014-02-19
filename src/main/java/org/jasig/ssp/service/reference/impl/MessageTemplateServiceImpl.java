@@ -41,6 +41,7 @@ import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
 import org.jasig.ssp.transferobject.AbstractPlanTO;
 import org.jasig.ssp.transferobject.GoalTO;
+import org.jasig.ssp.transferobject.StrengthTO;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,11 +167,12 @@ public class MessageTemplateServiceImpl extends
 
 	@Override
 	public SubjectAndBody createActionPlanMessage(final Person student,
-			final List<TaskTO> taskTOs, final List<GoalTO> goalTOs) {
+			final List<TaskTO> taskTOs, final List<GoalTO> goalTOs,  List<StrengthTO> strengthTOs) {
 
 		final Map<String, Object> messageParams = new HashMap<String, Object>();
 		messageParams.put("taskTOs", taskTOs);
 		messageParams.put("goalTOs", goalTOs);
+		messageParams.put("strengthTOs", strengthTOs);
 		messageParams.put("student", student);
 		messageParams.put("fullName", student.getFullName());
 		return populateFromTemplate(MessageTemplate.ACTION_PLAN_EMAIL_ID,

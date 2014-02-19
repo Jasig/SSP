@@ -32,6 +32,7 @@ import org.jasig.ssp.service.ReferenceService;
 import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
 import org.jasig.ssp.transferobject.AbstractPlanTO;
 import org.jasig.ssp.transferobject.GoalTO;
+import org.jasig.ssp.transferobject.StrengthTO;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
 
@@ -49,7 +50,7 @@ public interface MessageTemplateService extends
 	SubjectAndBody createCustomActionPlanTaskMessage(final Task task);
 
 	SubjectAndBody createActionPlanMessage(Person student,
-			List<TaskTO> taskTOs, List<GoalTO> goalTOs);
+			List<TaskTO> taskTOs, List<GoalTO> goalTOs,  List<StrengthTO> strengthTOs);
 
 	SubjectAndBody createJournalNoteForEarlyAlertResponseMessage(
 			String termToRepresentEarlyAlert, EarlyAlert earlyAlert);

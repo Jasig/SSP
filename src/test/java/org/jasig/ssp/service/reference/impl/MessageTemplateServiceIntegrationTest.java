@@ -181,7 +181,7 @@ public class MessageTemplateServiceIntegrationTest {
 		final SubjectAndBody subjAndBody = service.createActionPlanMessage(
 				personService.get(UUID
 						.fromString("f549ecab-5110-4cc1-b2bb-369cac854dea")),
-				taskTOs, goalTOs);
+				taskTOs, goalTOs, null);
 		assertSubjectAndBody(subjAndBody, "Action plan for Kenneth Thompson",
 				"<html>\n<body>Dear Kenneth Thompson,<br/>");
 		assertTrue("Body should contain the name of a task", subjAndBody

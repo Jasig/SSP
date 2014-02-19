@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+    <changeSet id="update message templates to remove sinclair refs SSP-705" author="jim.stanley">
+        <sql>
+<![CDATA[
+update message_template
+set body = '<html><body>Dear ${fullName},<br/><br/>The following resources and goals have been identified to assist with achieving your success.<br/><br/><br/>#foreach($taskTO in $taskTOs)<b>Resource:</b> ${taskTO.name}<br/><b>Description:</b> ${taskTO.description}<br/><b>Link:</b> ${taskTO.link}<br/><br/>#end <br/>#foreach($goalTO in $goalTOs)<b>Goal:</b> ${goalTO.name}<br/><b>Description:</b> ${goalTO.description}<br/><br/>#end <br/>#foreach($strengthTO in $strengthTOs)<b>Goal:</b> ${strengthTO.name}<br/><b>Description:</b> ${strengthTO.description}<br/><br/>#end<br/>If you have any questions concerning the resources or goals, please contact the resource in question or your coach/advisor.<br/><br/>Thank you.</body></html>'
+where id = '5D183F35-023D-40EA-B8D9-66FBE190FFFB' AND body like '%<html><body>Dear ${fullName},<br/><br/>The following resources and goals have been identified to assist with achieving your success.<br/><br/><br/>#foreach($taskTO in $taskTOs)<b>Resource:</b> ${taskTO.name}<br/><b>Description:</b> ${taskTO.description}<br/><b>Link:</b> ${taskTO.link}<br/><br/>#end <br/>#foreach($goalTO in $goalTOs)<b>Goal:</b> ${goalTO.name}<br/><b>Description:</b> ${goalTO.description}<br/><br/>#end <br/>If you have any questions concerning the resources or goals, please contact the resource in question or your coach/advisor.<br/><br/>Thank you.</body></html>%';
+]]>
+        </sql>
+
+        <rollback>
+            <comment>Ignore rollback - makes template generic</comment>
+        </rollback>
+    </changeSet>
+   </databaseChangeLog>

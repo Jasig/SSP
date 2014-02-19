@@ -180,7 +180,7 @@ public class MyGpsTaskController extends AbstractBaseController {
 		final List<String> emailAddresses = Lists.newArrayList();
 		emailAddresses.add(emailAddress);
 
-		taskService.sendTasksForPersonToEmail(tasks, null, student,
+		taskService.sendTasksForPersonToEmail(tasks, null, null, student,
 				emailAddresses,
 				null);
 
