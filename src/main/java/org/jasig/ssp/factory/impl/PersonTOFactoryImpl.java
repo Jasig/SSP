@@ -103,7 +103,6 @@ public class PersonTOFactoryImpl extends
 		model.setPhotoUrl(tObject.getPhotoUrl());
 		model.setSchoolId(tObject.getSchoolId());
 		model.setEnabled(tObject.getEnabled());
-		model.setStrengths(tObject.getStrengths());
 		model.setAbilityToBenefit(tObject.getAbilityToBenefit());
 		model.setAnticipatedStartTerm(tObject.getAnticipatedStartTerm());
 		model.setAnticipatedStartYear(tObject.getAnticipatedStartYear());

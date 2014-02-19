@@ -129,8 +129,6 @@ public class PersonTO // NOPMD
 
 	private CoachPersonLiteTO coach;
 
-	private String strengths;
-
 	private Boolean abilityToBenefit;
 
 	private String anticipatedStartTerm;
@@ -259,7 +257,6 @@ public class PersonTO // NOPMD
 					);
 		}
 
-		strengths = model.getStrengths();
 		abilityToBenefit = model.getAbilityToBenefit();
 		anticipatedStartTerm = model.getAnticipatedStartTerm();
 		anticipatedStartYear = model.getAnticipatedStartYear();
@@ -669,14 +666,6 @@ public class PersonTO // NOPMD
 	public Date getFormattedStudentIntakeCompleteDate() {
 		Date timestamp = getStudentIntakeCompleteDate();
 		return timestamp == null ? null : DateTimeUtils.midnightOn(timestamp);
-	}
-
-	public String getStrengths() {
-		return strengths;
-	}
-
-	public void setStrengths(final String strengths) {
-		this.strengths = strengths;
 	}
 
 	public Boolean getAbilityToBenefit() {
