@@ -45,6 +45,7 @@ import org.jasig.ssp.transferobject.TemplateLiteTO;
 import org.jasig.ssp.transferobject.TemplateOutputTO;
 import org.jasig.ssp.transferobject.TemplateSearchTO;
 import org.jasig.ssp.transferobject.TemplateTO;
+import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -112,6 +113,7 @@ public class TemplateController  extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */ 
+	@DynamicPermissionChecking
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<TemplateTO> get(
@@ -121,8 +123,10 @@ public class TemplateController  extends AbstractBaseController {
 			final @RequestParam(required = false) String programCode,
 			final @RequestParam(required = false) String departmentCode) throws ObjectNotFoundException,
 			ValidationException {
+		
 		TemplateSearchTO searchTO = new TemplateSearchTO(visibility,  objectStatus,
 															divisionCode,  programCode,  departmentCode);
+		validateAccessForGet(searchTO);
 		final PagingWrapper<Template> data = getService().getAll(
 				SortingAndPaging.createForSingleSortWithPaging(
 						objectStatus == null ? ObjectStatus.ALL : objectStatus, null,
@@ -145,6 +149,7 @@ public class TemplateController  extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */
+	@DynamicPermissionChecking
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
 	public @ResponseBody
 	TemplateTO getTemplate(final @PathVariable UUID id) throws ObjectNotFoundException,
@@ -177,6 +182,7 @@ public class TemplateController  extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */
+	@DynamicPermissionChecking
 	@RequestMapping(value="/summary", method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<TemplateLiteTO> getSummary(
@@ -190,6 +196,7 @@ public class TemplateController  extends AbstractBaseController {
 		TemplateSearchTO searchTO = new TemplateSearchTO(visibility, objectStatus,
 				divisionCode,  programCode,  departmentCode);
 		
+		validateAccessForGet(searchTO);
 		final PagingWrapper<Template> data = getService().getAll(
 				SortingAndPaging.createForSingleSortWithPaging(
 						objectStatus == null ? ObjectStatus.ALL : objectStatus, null,
@@ -484,6 +491,21 @@ public class TemplateController  extends AbstractBaseController {
 	
 	private Boolean anonymousUsersAllowed() {
 		return Boolean.parseBoolean(configService.getByName(ANONYMOUS_MAP_TEMPLATE_ACCESS).getValue().toLowerCase());
+	}
+	
+	private void validateAccessForGet(TemplateSearchTO searchTO){
+		if(!securityService.isAuthenticated() || !securityService.hasAuthority("ROLE_PERSON_MAP_READ")){
+			if(!anonymousUsersAllowed()){
+				LOGGER.info("Invalid request for templates, requested by anonymous user, anonymous access is not enabled");
+				throw new AccessDeniedException("Invalid request for templates, requested by anonymous user, anonymous access is not enabled");
+			}
+			if(searchTO.visibilityAll())
+				searchTO.setVisibility(MapTemplateVisibility.ANONYMOUS);
+			if(!searchTO.getVisibility().equals(MapTemplateVisibility.ANONYMOUS)){
+				LOGGER.info("Invalid request for templates, request by anonymous user request was for private/authenticated templates only.");
+				throw new AccessDeniedException("Invalid request for templates, request by anonymous user request was for private/authenticated templates only.");
+			}
+		}
 	}
 
 }
