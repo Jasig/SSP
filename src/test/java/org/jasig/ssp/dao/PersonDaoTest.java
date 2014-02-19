@@ -136,7 +136,6 @@ public class PersonDaoTest { // NOPMD Test suites love lots of methods!
 		obj.setUsername("username");
 		obj.setSchoolId("school id");
 		obj.setPrimaryEmailAddress("user@sinclair.edu");
-		obj.setStrengths("strengths");
 
 		// act
 		final Person saved = dao.save(obj);
@@ -148,8 +147,7 @@ public class PersonDaoTest { // NOPMD Test suites love lots of methods!
 
 		final Person loaded = dao.get(saved.getId());
 		assertNotNull("Loaded ID should not have been null.", loaded.getId());
-		assertEquals("Strengths property did not match.", "strengths",
-				loaded.getStrengths());
+
 
 		final Collection<Person> all = dao.getAll(ObjectStatus.ACTIVE)
 				.getRows();
