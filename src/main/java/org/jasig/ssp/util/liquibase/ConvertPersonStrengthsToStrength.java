@@ -20,7 +20,9 @@ import liquibase.resource.ResourceAccessor;
 import liquibase.statement.SqlStatement;
 import liquibase.statement.core.RawSqlStatement;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.model.Person;
 
 public class ConvertPersonStrengthsToStrength implements CustomSqlChange {
 
@@ -65,7 +67,8 @@ public class ConvertPersonStrengthsToStrength implements CustomSqlChange {
 				if(StringUtils.isNotBlank(rs.getString(3)))
 				{
 					String personId = rs.getString(1);
-					String coachId = rs.getString(2);
+					String coachId = StringUtils.isNotBlank(rs.getString(2)) ? rs.getString(2) : 
+							Person.SYSTEM_ADMINISTRATOR_ID.toString();
 					String strength = rs.getString(3);
 					Date now = new Date();
 						SqlStatement statement =
@@ -81,7 +84,7 @@ public class ConvertPersonStrengthsToStrength implements CustomSqlChange {
 										+ " modified_date ) values('"
 										+ UUID.randomUUID().toString() 
 										+ "', '" + "Migrated"
-										+ "', '" + strength
+										+ "', '" + StringEscapeUtils.escapeSql(strength)
 										+ "', '" + personId
 										+ "', '" + CONFIDENTIALITY_LEVEL_EVERYONE_ID
 										+ "',1"
