@@ -26,7 +26,7 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentTargetViewControll
     	formUtils: 'formRendererUtils',
     	model: 'currentChallengeReferral',
     	reassignCaseloadStore: 'reassignCaseloadStore',
-        caseloadStore: 'caseloadStore',
+        caseloadStore: 'reassignCaseloadStagingStore',
     	appEventsController: 'appEventsController'
     },
     config: {

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+    <changeSet id="update message templates to remove sinclair ref" author="jim.stanley">
+        <sql>
+<![CDATA[
+update message_template
+set body = '${task.person.firstName},<br/>An Action Item identified through the ${applicationTitle} application needs your attention.  Please login to your account at ${linkToSSP} to review and complete the assigned item.<br/><br/>The following item is due for review:<br/>Challenge: ${task.challenge.name}<br/>Referral: ${task.challengeReferral.name}<br/>Due Date: ${dueDateFormatted}'
+where id = 'AEC07252-1FF0-479D-A2EF-C0E017E1C05D' AND body='${task.person.firstName},<br/>An Action Item identified through the Sinclair Community College Resources application needs your attention.  Please login to your account at https://resources.sinclair.edu to review and complete the assigned item.<br/><br/>The following item is due for review:<br/>Challenge: ${task.challenge.name}<br/>Referral: ${task.challengeReferral.name}<br/>Due Date: ${dueDateFormatted}';
+
+]]>
+        </sql>
+
+        <rollback>
+            <comment>Ignore rollback - fixes typos</comment>
+        </rollback>
+    </changeSet>
+   </databaseChangeLog>

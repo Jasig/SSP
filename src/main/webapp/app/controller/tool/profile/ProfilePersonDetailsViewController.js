@@ -29,7 +29,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 		personProgramStatusService: 'personProgramStatusService',
 		programStatusChangeReasonsStore: 'programStatusChangeReasonsStore',
         sspConfig: 'sspConfig',
-        formUtils: 'formRendererUtils'
+        formUtils: 'formRendererUtils',
+        sapStatusesStore: 'sapStatusesStore',
+        financialAidFilesStore: 'financialAidFilesStore',
+        textStore:'sspTextStore'
     },
     
     control: {
@@ -58,10 +61,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         academicStandingField: '#academicStanding',
         currentRestrictionsField: '#currentRestrictions',
         creditCompletionRateField: '#creditCompletionRate',
-        currentYearFinancialAidAwardField: '#currentYearFinancialAidAward',
         academicProgramsField: '#academicPrograms',
         intendedProgramAtAdmitField: '#intendedProgramAtAdmit',
-        sapStatusField: '#sapStatus',
+
         fafsaDateField: '#fafsaDate',
         
         financialAidGpaField: '#financialAidGpa',
@@ -70,12 +72,26 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         creditCompletionRateField: '#creditCompletionRate',
         balanceOwedField: '#balanceOwed',
         financialAidRemainingField: '#financialAidRemaining',
-        originalLoanAmountField: '#originalLoanAmount'
+        originalLoanAmountField: '#originalLoanAmount',
+        sapStatusCodeField: '#sapStatusCode',
+        eligibleFederalAidField: '#eligibleFederalAid',
+        termsLeftField: '#termsLeft',
+        institutionalLoanAmountField: '#institutionalLoanAmount',
+        financialAidFileStatusField: '#financialAidFileStatusDetails',
+		financialAidAcceptedTermsField: '#financialAidAcceptedTerms',
+
     },
     init: function(){
         var me = this;
         var id = me.personLite.get('id');
         me.resetForm();
+        me.sapStatusCode = null;
+        if(me.sapStatusesStore.getTotalCount() <= 0){
+			me.sapStatusesStore.load();
+        }
+        if(me.financialAidFilesStore.getTotalCount() <= 0){
+			me.financialAidFilesStore.load();
+        }
         if (id != "") {
             // display loader
             me.getView().setLoading(true);
@@ -130,6 +146,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         // Set defined configured label for the studentId field
         var studentIdAlias = me.sspConfig.get('studentIdAlias');
         me.getStudentIdField().setFieldLabel(studentIdAlias);
+        me.setFinancialLabels();
     },
     
     newServiceSuccessHandler: function(name, callback, serviceResponses){
@@ -185,13 +202,13 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         
         // load additional values
         nameField.setFieldLabel('');
-        nameField.setValue('<span style="color:#15428B">Name:  </span>' + firstLastName);
+        nameField.setValue('<span style="color:#15428B">'+'Name'+':  </span>' + firstLastName);
         studentIdField.setFieldLabel('');
         studentIdField.setValue('<span style="color:#15428B">' + me.sspConfig.get('studentIdAlias') + ':  </span>' + me.person.get('schoolId'));
         primaryEmailAddressField.setFieldLabel('');
-        primaryEmailAddressField.setValue('<span style="color:#15428B">Email:  </span>' + me.person.get('primaryEmailAddress'));
+        primaryEmailAddressField.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.school-email')+':  </span>' + me.person.get('primaryEmailAddress'));
         birthDateField.setFieldLabel('');
-        birthDateField.setValue('<span style="color:#15428B">DOB:  </span>' + me.person.getFormattedBirthDate());
+        birthDateField.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.dob')+':  </span>' + me.person.getFormattedBirthDate());
         studentTypeField.setFieldLabel('');
         studentTypeField.setValue('<span style="color:#15428B">Student Type:  </span>' + me.handleNull(me.person.getStudentTypeName()));
         photoUrlField.setSrc(me.person.getPhotoUrl());
@@ -223,6 +240,13 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 		if(value == null || value == undefined || value == 'null')
 			return "";
 		return value;
+	},
+	
+	setFinancialLabels: function(){
+		var me=this;
+		me.getFinancialAidFileStatusField().setText('<span style="color:#15428B">FA File:   </span>', false);
+        me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP Code:   </span>', false);
+        me.getFinancialAidAcceptedTermsField().setText('<span style="color:#15428B">FA Awarded:   </span>', false);
 	},
     
     getTranscriptSuccess: function(serviceResponses){
@@ -261,29 +285,42 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
             me.getIntendedProgramAtAdmitField().setValue(intendedProgramsAtAdmit.join(', '));
         }
         
-        
         var financialAid = transcript.get('financialAid');
+        
         if (financialAid) {
-            me.getCurrentYearFinancialAidAwardField().setFieldLabel('');
-        	me.getCurrentYearFinancialAidAwardField().setValue('<span style="color:#15428B">FA Award:  </span>' + me.handleNull(financialAid.currentYearFinancialAidAward));
-        	me.getSapStatusField().setFieldLabel('');
-			me.getSapStatusField().setValue('<span style="color:#15428B">SAP:  </span>' + me.handleNull(financialAid.sapStatus));
         	me.getFafsaDateField().setFieldLabel('');
 			me.getFafsaDateField().setValue('<span style="color:#15428B">FAFSA:  </span>' + Ext.util.Format.date(Ext.Date.parse(financialAid.fafsaDate, 'c'),'m/d/Y'));
         	me.getBalanceOwedField().setFieldLabel('');
 			me.getBalanceOwedField().setValue('<span style="color:#15428B">Balance:  </span>' + Ext.util.Format.usMoney(financialAid.balanceOwed));
         	me.getFinancialAidRemainingField().setFieldLabel('');
-			me.getFinancialAidRemainingField().setValue('<span style="color:#15428B">FA Amount:  </span>' + Ext.util.Format.usMoney(financialAid.financialAidRemaining));
+			if(financialAid.financialAidRemaining != null)
+				me.getFinancialAidRemainingField().setValue('<span style="color:#15428B">FA Amount:  </span>' + Ext.util.Format.usMoney(financialAid.financialAidRemaining));
+			else
+				me.getFinancialAidRemainingField().setValue('<span style="color:#15428B">FA Amount:  </span>' );
         	me.getOriginalLoanAmountField().setFieldLabel('');
-			me.getOriginalLoanAmountField().setValue('<span style="color:#15428B">Loan Amount:  </span>' + Ext.util.Format.usMoney(financialAid.originalLoanAmount));
+			if(financialAid.originalLoanAmount != null)
+				me.getOriginalLoanAmountField().setValue('<span style="color:#15428B">Loan Amount:  </span>' + Ext.util.Format.usMoney(financialAid.originalLoanAmount));
+			else
+				me.getOriginalLoanAmountField().setValue('<span style="color:#15428B">Loan Amount:  </span>');
         	me.getFinancialAidGpaField().setFieldLabel('');
-			me.getFinancialAidGpaField().setValue('<span style="color:#15428B">FA GPA:  </span>' + me.handleNull(financialAid.financialAidGpa));
-
+			
+			me.sapStatusCode = financialAid.sapStatusCode;
+			me.getEligibleFederalAidField().setValue(me.handleNull(financialAid.eligibleFederalAid));
+			me.getTermsLeftField().setValue(me.handleNull(financialAid.termsLeft));
+			me.getInstitutionalLoanAmountField().setValue(me.handleNull(Ext.util.Format.usMoney(financialAid.institutionalLoanAmount)));
+			
+			me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP Code:   </span><u>' + me.handleNull(financialAid.sapStatusCode) + '</u>', false);
+			me.getFinancialAidFileStatusField().setText('<span style="color:#15428B">FA File:   </span><u>' + me.handleNull(financialAid.financialAidFileStatus) + '</u>', false);
         }
+        financialAidAwards = transcript.get('financialAidAcceptedTerms');
+        if ( financialAidAwards  && financialAidAwards.length > 0) {
+        	var model = Ext.create("Ssp.model.external.FinancialAidAward");
+           	model.populateFromExternalData(financialAidAwards[0]);
+        	me.getFinancialAidAcceptedTermsField().setText('<span style="color:#15428B">FA Awarded:   </span><u>' + model.get("termCode") + " (" +  model.get("acceptedLong") + ")</u>", false);
+        }		
     },
     
     getTranscriptFailure: function(){
-        // nothing to do
     },
     
     
@@ -364,15 +401,51 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         }
     },
     
+	closePopups:function(){
+		var me=this;
+		if(me.sapCodeInfoPopup != null && !me.sapCodeInfoPopup.isDestroyed)
+	    	me.sapCodeInfoPopup.close();
+        
+        if(me.financialAidFilePopup != null && !me.financialAidFilePopup.isDestroyed)
+	    	me.financialAidFilePopup.close();
+        
+        if(me.financialAidAwardPopup != null && !me.financialAidAwardPopup.isDestroyed)
+	    	me.financialAidAwardPopup.close();
+	},
+	
     destroy: function(){
         var me = this;
+    	me.closePopups();
         return me.callParent(arguments);
     },
+    
     
     onEmailCoach: function(){
         var me = this;
         if (me.person.getCoachPrimaryEmailAddress()) {
             window.location = 'mailto:' + me.person.getCoachPrimaryEmailAddress();
         }
+    },
+   
+    
+    onShowSAPCodeInfo: function(){
+    	var me=this;
+		if(me.sapCodeInfoPopup == null || me.sapCodeInfoPopup.isDestroyed)
+       		me.sapCodeInfoPopup = Ext.create('Ssp.view.tools.profile.SapStatus',{hidden:true,code:me.sapStatusCode});
+		me.sapCodeInfoPopup.show();
+    },
+    
+    onShowFinancialAidFileStatuses: function(){
+    	var me=this;
+		if(me.financialAidFilePopup == null || me.financialAidFilePopup.isDestroyed)
+       		me.financialAidFilePopup = Ext.create('Ssp.view.tools.profile.FinancialAidFileViewer',{hidden:true});
+		me.financialAidFilePopup.show();
+    },
+    
+    onShowFinancialAidAwards: function(){
+    	var me=this;
+		if(me.financialAidFilePopup == null || me.financialAidFilePopup.isDestroyed)
+       		me.financialAidFilePopup = Ext.create('Ssp.view.tools.profile.FinancialAidAwardViewer',{hidden:true});
+		me.financialAidFilePopup.show();
     }
 });

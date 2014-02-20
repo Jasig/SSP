@@ -31,4 +31,6 @@ public interface ScheduledTaskWrapperService {
 	public void syncExternalPersons();
 
 	public void sendTaskReminders();
+
+	public void calcMapStatusReports();
 }

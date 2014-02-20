@@ -23,8 +23,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -34,10 +36,12 @@ import org.jasig.mygps.model.transferobject.FormQuestionTO;
 import org.jasig.mygps.model.transferobject.FormSectionTO;
 import org.jasig.mygps.model.transferobject.FormTO;
 import org.jasig.ssp.dao.PersonChallengeDao;
+import org.jasig.ssp.dao.PersonCompletedItemDao;
 import org.jasig.ssp.dao.PersonEducationGoalDao;
 import org.jasig.ssp.dao.PersonEducationLevelDao;
 import org.jasig.ssp.dao.PersonFundingSourceDao;
 import org.jasig.ssp.dao.reference.ChallengeDao;
+import org.jasig.ssp.dao.reference.CompletedItemDao;
 import org.jasig.ssp.dao.reference.EducationGoalDao;
 import org.jasig.ssp.dao.reference.EducationLevelDao;
 import org.jasig.ssp.dao.reference.FundingSourceDao;
@@ -45,15 +49,18 @@ import org.jasig.ssp.dao.reference.MilitaryAffiliationDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonChallenge;
+import org.jasig.ssp.model.PersonCompletedItem;
 import org.jasig.ssp.model.PersonDemographics;
 import org.jasig.ssp.model.PersonEducationGoal;
 import org.jasig.ssp.model.PersonEducationLevel;
 import org.jasig.ssp.model.PersonEducationPlan;
 import org.jasig.ssp.model.PersonFundingSource;
 import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.reference.Blurb;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChildCareArrangement;
 import org.jasig.ssp.model.reference.Citizenship;
+import org.jasig.ssp.model.reference.CompletedItem;
 import org.jasig.ssp.model.reference.CourseworkHours;
 import org.jasig.ssp.model.reference.EducationGoal;
 import org.jasig.ssp.model.reference.EducationLevel;
@@ -73,6 +80,7 @@ import org.jasig.ssp.service.PersonConfidentialityDisclosureAgreementService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.BlurbService;
 import org.jasig.ssp.service.reference.ChildCareArrangementService;
 import org.jasig.ssp.service.reference.CitizenshipService;
 import org.jasig.ssp.service.reference.CourseworkHoursService;
@@ -87,6 +95,7 @@ import org.jasig.ssp.service.tool.PersonToolService;
 import org.jasig.ssp.util.SspStringUtils;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.reference.BlurbController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,6 +132,9 @@ public class StudentIntakeFormManager { // NOPMD
 	private transient RegistrationLoadService registrationLoadService;
 	
 	@Autowired
+	private transient BlurbService blurbService;
+	
+	@Autowired
 	private transient CourseworkHoursService courseworkHoursService;
 	
 	@Autowired
@@ -142,6 +154,12 @@ public class StudentIntakeFormManager { // NOPMD
 
 	@Autowired
 	private transient PersonChallengeDao studentChallengeDao;
+	
+	@Autowired
+	private transient PersonCompletedItemDao personCompletedItemDao;
+	
+	@Autowired
+	private transient CompletedItemDao completedItemDao;
 
 	@Autowired
 	private transient PersonService personService;
@@ -154,7 +172,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 	@Autowired
 	private transient PersonFundingSourceDao studentFundingSourceDao;
-	
+	 
 	@Autowired
 	private transient MilitaryAffiliationDao militaryAffiliationDao;
 
@@ -350,6 +368,15 @@ public class StudentIntakeFormManager { // NOPMD
 			.fromString("3f8d0dc4-4506-4cd6-95e6-3d74c0a07f80");
 	public static final UUID SECTION_CHALLENGE_QUESTION_OTHER_ID = UUID
 			.fromString("839dc532-1aec-4580-8294-8c97bb72fa72");
+	
+
+	// Checklist
+	public static final UUID SECTION_CHECKLIST_ID = UUID
+			.fromString("e8e3da7f-812d-498f-90a3-4626ab544712");
+	public static final UUID SECTION_CHECKLIST_QUESTION_CHALLENGE_ID = UUID
+			.fromString("fd64c498-9d83-42a9-8e91-00aa0a65b0a3");
+	public static final UUID SECTION_CHECKLIST = UUID
+			.fromString("7ca8443d-ffc6-4545-90bb-bb4508999871");
 
 	public FormTO create() throws ObjectNotFoundException {
 
@@ -360,14 +387,19 @@ public class StudentIntakeFormManager { // NOPMD
 		if (null != confidentialitySection) {
 			formSections.add(confidentialitySection);
 		}
-
-		formSections.add(buildPersonalSection());
-		formSections.add(buildDemographicsSection());
-		formSections.add(buildEducationPlanSection());
-		formSections.add(buildEducationLevelsSection());
-		formSections.add(buildEducationGoalSection());
-		formSections.add(buildFundingSection());
-		formSections.add(buildChallengesSection());
+		//Rather than thrash the database for the many labels we'll need 
+		//for this call.  Lets load them all into memory for the life of the call
+		Map<String,Blurb> blurbStore = populateBlurbStore();
+		
+		formSections.add(buildPersonalSection(blurbStore));
+		formSections.add(buildDemographicsSection(blurbStore));
+		formSections.add(buildEducationPlanSection(blurbStore));
+		formSections.add(buildEducationLevelsSection(blurbStore));
+		formSections.add(buildEducationGoalSection(blurbStore));
+		formSections.add(buildFundingSection(blurbStore));
+		formSections.add(buildChallengesSection(blurbStore));
+		formSections.add(buildChecklistSection(blurbStore));
+		
 
 		// FormTO
 		formTO.setId(UUID.randomUUID());
@@ -375,6 +407,16 @@ public class StudentIntakeFormManager { // NOPMD
 		formTO.setSections(formSections);
 
 		return formTO;
+	}
+
+
+	private Map<String, Blurb> populateBlurbStore() {
+		Map<String,Blurb> blurbStore = new HashMap<String, Blurb>();
+		PagingWrapper<Blurb> allLabels = blurbService.getAll(new SortingAndPaging(ObjectStatus.ALL));
+		for (Blurb blurb : allLabels) {
+			blurbStore.put(blurb.getCode(), blurb);
+		}
+		return blurbStore;
 	}
 
 	/**
@@ -733,18 +775,6 @@ public class StudentIntakeFormManager { // NOPMD
 					.setValueAbstractReference(
 							student.getEducationPlan().getStudentStatus());
 
-			// New Student Orientation
-			formSectionTO.getFormQuestionById(
-					SECTION_EDUCATIONPLAN_QUESTION_COMPLETEDORIENTATION_ID)
-					.setValueBoolean(
-							student.getEducationPlan().isNewOrientationComplete());
-
-			// Registered for Classes
-			formSectionTO
-					.getFormQuestionById(
-							SECTION_EDUCATIONPLAN_QUESTION_REGISTEREDFORCLASSES_ID)
-					.setValueBoolean(
-							student.getEducationPlan().isRegisteredForClasses());
 
 			// Have Parents Obtained a College Degree
 			formSectionTO.getFormQuestionById(
@@ -1306,14 +1336,6 @@ public class StudentIntakeFormManager { // NOPMD
 			student.setEducationPlan(educationPlan);
 		}
 
-		educationPlan.setNewOrientationComplete(educationPlanSection
-				.getFormQuestionById(
-						SECTION_EDUCATIONPLAN_QUESTION_COMPLETEDORIENTATION_ID)
-				.getValue() == null ? false : SspStringUtils
-				.booleanFromString(educationPlanSection.getFormQuestionById(
-						SECTION_EDUCATIONPLAN_QUESTION_COMPLETEDORIENTATION_ID)
-						.getValue()));
-
 		final FormQuestionTO gradeAtHighestEducationLevelQuestion = educationPlanSection
 				.getFormQuestionById(SECTION_EDUCATIONPLAN_QUESTION_GRADEATHIGHESTEDUCATIONLEVEL_ID);
 		if (StringUtils
@@ -1344,13 +1366,6 @@ public class StudentIntakeFormManager { // NOPMD
 							.getValue()));
 		}
 
-		educationPlan.setRegisteredForClasses(educationPlanSection
-				.getFormQuestionById(
-						SECTION_EDUCATIONPLAN_QUESTION_REGISTEREDFORCLASSES_ID)
-				.getValue() == null ? false : SspStringUtils
-				.booleanFromString(educationPlanSection.getFormQuestionById(
-						SECTION_EDUCATIONPLAN_QUESTION_REGISTEREDFORCLASSES_ID)
-						.getValue()));
 
 		// Require Special Accommodation
 		final FormQuestionTO requireSpecialAccomodationQuestion = educationPlanSection
@@ -1713,6 +1728,42 @@ public class StudentIntakeFormManager { // NOPMD
 				}
 			}
 		}
+		
+		/* Checklist */
+		final FormSectionTO checklistSection = formTO
+				.getFormSectionById(SECTION_CHECKLIST_ID);
+		final FormQuestionTO checklistQuestion = checklistSection
+				.getFormQuestionById(SECTION_CHECKLIST_QUESTION_CHALLENGE_ID);
+
+		Set<PersonCompletedItem> studentchecklist = student.getCompletedItems();
+
+		if (studentchecklist == null) {
+			studentchecklist = Sets.newHashSet();
+			student.setCompletedItems(studentchecklist);
+		}
+ 
+		for (final PersonCompletedItem studentCompletedItem : studentchecklist) {
+			personCompletedItemDao.delete(studentCompletedItem);
+		}
+
+		studentchecklist.clear();
+
+		if (checklistQuestion.getValues() != null) {
+			for (final String value : checklistQuestion.getValues()) {
+				final FormOptionTO formOptionTO = checklistQuestion
+						.getFormOptionByValue(value);
+
+				if (formOptionTO != null) {
+					final PersonCompletedItem studentCompletedItem = new PersonCompletedItem(); // NOPMD
+					studentCompletedItem.setPerson(student);
+					studentCompletedItem.setCompletedItems(completedItemDao.get(formOptionTO
+							.getId()));
+					
+					personCompletedItemDao.save(studentCompletedItem);
+					studentchecklist.add(studentCompletedItem);
+				}
+			}
+		}		
 
 		student.setStudentIntakeCompleteDate(new Date());
 
@@ -1755,20 +1806,20 @@ public class StudentIntakeFormManager { // NOPMD
 		return confidentialitySection;
 	}
 
-	private FormSectionTO buildPersonalSection() {
+	private FormSectionTO buildPersonalSection(Map<String, Blurb> blurbStore) {
 
 		final FormSectionTO personalSection = new FormSectionTO();
 		final List<FormQuestionTO> personalSectionQuestions = new ArrayList<FormQuestionTO>();
 
 		personalSection.setId(SECTION_PERSONAL_ID);
-		personalSection.setLabel("Personal");
+		personalSection.setLabel(getLabelNullSafe(blurbStore,"intake.tab1.label"));
 
 		// First Name
 		final FormQuestionTO firstNameQuestionTO = new FormQuestionTO();
 
 		firstNameQuestionTO.setReadOnly(true);
 		firstNameQuestionTO.setId(SECTION_PERSONAL_QUESTION_FIRSTNAME_ID);
-		firstNameQuestionTO.setLabel("First");
+		firstNameQuestionTO.setLabel(getLabelNullSafe(blurbStore,"ssp.label.first-name"));
 		firstNameQuestionTO.setMaximumLength("50");
 		firstNameQuestionTO.setRequired(true);
 		firstNameQuestionTO.setType(FORM_TYPE_TEXTINPUT);
@@ -1781,7 +1832,7 @@ public class StudentIntakeFormManager { // NOPMD
 		middleNameQuestionTO.setReadOnly(true);
 		middleNameQuestionTO
 				.setId(SECTION_PERSONAL_QUESTION_MIDDLENAME_ID);
-		middleNameQuestionTO.setLabel("Middle Name");
+		middleNameQuestionTO.setLabel(getLabelNullSafe(blurbStore,"ssp.label.middle-name"));
 		middleNameQuestionTO.setMaximumLength("50");
 		middleNameQuestionTO.setType(FORM_TYPE_TEXTINPUT);
 
@@ -1792,7 +1843,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		lastNameQuestionTO.setReadOnly(true);
 		lastNameQuestionTO.setId(SECTION_PERSONAL_QUESTION_LASTNAME_ID);
-		lastNameQuestionTO.setLabel("Last");
+		lastNameQuestionTO.setLabel(getLabelNullSafe(blurbStore,"ssp.label.last-name"));
 		lastNameQuestionTO.setMaximumLength("50");
 		lastNameQuestionTO.setRequired(true);
 		lastNameQuestionTO.setType(FORM_TYPE_TEXTINPUT);
@@ -1804,7 +1855,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		birthDateQuestion.setReadOnly(true);
 		birthDateQuestion.setId(SECTION_PERSONAL_QUESTION_BIRTHDATE_ID);
-		birthDateQuestion.setLabel("Birthdate");
+		birthDateQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.dob"));
 		birthDateQuestion.setMaximumLength("10");
 		birthDateQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -1815,7 +1866,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		schoolEmailQuestion.setReadOnly(true);
 		schoolEmailQuestion.setId(SECTION_PERSONAL_QUESTION_SCHOOLEMAIL_ID);
-		schoolEmailQuestion.setLabel("Email (School)");
+		schoolEmailQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.school-email"));
 		schoolEmailQuestion.setMaximumLength("100");
 		schoolEmailQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -1823,9 +1874,8 @@ public class StudentIntakeFormManager { // NOPMD
 
 		// Home Email
 		final FormQuestionTO homeEmailQuestion = new FormQuestionTO();
-
 		homeEmailQuestion.setId(SECTION_PERSONAL_QUESTION_HOMEEMAIL_ID);
-		homeEmailQuestion.setLabel("Email (Home)");
+		homeEmailQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.alternate-email"));
 		homeEmailQuestion.setMaximumLength("100");
 		homeEmailQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -1836,7 +1886,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		homePhoneQuestion.setReadOnly(true);
 		homePhoneQuestion.setId(SECTION_PERSONAL_QUESTION_HOMEPHONE_ID);
-		homePhoneQuestion.setLabel("Home Phone");
+		homePhoneQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.home-phone"));
 		homePhoneQuestion.setMaximumLength("12");
 		homePhoneQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -1847,7 +1897,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		workPhoneQuestion.setReadOnly(true);
 		workPhoneQuestion.setId(SECTION_PERSONAL_QUESTION_WORKPHONE_ID);
-		workPhoneQuestion.setLabel("Work Phone");
+		workPhoneQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.work-phone"));
 		workPhoneQuestion.setMaximumLength("12");
 		workPhoneQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -1857,7 +1907,7 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO cellPhoneQuestion = new FormQuestionTO();
 
 		cellPhoneQuestion.setId(SECTION_PERSONAL_QUESTION_CELLPHONE_ID);
-		cellPhoneQuestion.setLabel("Cell Phone");
+		cellPhoneQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.cell-phone"));
 		cellPhoneQuestion.setMaximumLength("12");
 		cellPhoneQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -1868,7 +1918,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		addressQuestion.setReadOnly(true);
 		addressQuestion.setId(SECTION_PERSONAL_QUESTION_ADDRESS_ID);
-		addressQuestion.setLabel("Address");
+		addressQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.address-1"));
 		addressQuestion.setMaximumLength("50");
 		addressQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -1879,7 +1929,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		cityQuestion.setReadOnly(true);
 		cityQuestion.setId(SECTION_PERSONAL_QUESTION_CITY_ID);
-		cityQuestion.setLabel("City");
+		cityQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.city"));
 		cityQuestion.setMaximumLength("50");
 		cityQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -2010,7 +2060,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		stateQuestion.setReadOnly(true);
 		stateQuestion.setId(SECTION_PERSONAL_QUESTION_STATE_ID);
-		stateQuestion.setLabel("State");
+		stateQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.state"));
 		stateQuestion.setMaximumLength("2");
 		stateQuestion.setOptions(stateQuestionOptions);
 		stateQuestion.setType(FORM_TYPE_SELECT);
@@ -2022,7 +2072,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		zipCodeQuestion.setReadOnly(true);
 		zipCodeQuestion.setId(SECTION_PERSONAL_QUESTION_ZIPCODE_ID);
-		zipCodeQuestion.setLabel("Zip Code");
+		zipCodeQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.zip"));
 		zipCodeQuestion.setMaximumLength("10");
 		zipCodeQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -2032,14 +2082,19 @@ public class StudentIntakeFormManager { // NOPMD
 
 		return personalSection;
 	}
+ 
+	private String getLabelNullSafe(Map<String, Blurb> blurbStore, String key) {
+		Blurb label = blurbStore.get(key);
+		return label == null ? key : label.getValue();
+	}
 
-	private FormSectionTO buildDemographicsSection() { // NOPMD
+	private FormSectionTO buildDemographicsSection(Map<String, Blurb> blurbStore) { // NOPMD
 
 		final FormSectionTO demographicSection = new FormSectionTO();
 		final List<FormQuestionTO> demographicSectionQuestions = new ArrayList<FormQuestionTO>();
 
 		demographicSection.setId(SECTION_DEMOGRAPHICS_ID);
-		demographicSection.setLabel("Demographics");
+		demographicSection.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label"));
 
 		// Marital Status
 		final FormQuestionTO maritalStatusQuestion = new FormQuestionTO();
@@ -2047,7 +2102,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		maritalStatusQuestion
 				.setId(SECTION_DEMOGRAPHICS_QUESTION_MARITALSTATUS_ID);
-		maritalStatusQuestion.setLabel("Marital Status");
+		maritalStatusQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.marital-status"));
 
 		PagingWrapper<MaritalStatus> allMartialStatuses = maritalStatusService.getAll(new SortingAndPaging(ObjectStatus.ACTIVE));
 		for (MaritalStatus maritalStatus : allMartialStatuses) 
@@ -2065,7 +2120,7 @@ public class StudentIntakeFormManager { // NOPMD
 		final List<FormOptionTO> ethnicityQuestionOptions = new ArrayList<FormOptionTO>();
 
 		ethnicityQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_ETHNICITY_ID);
-		ethnicityQuestion.setLabel("Ethnicity");
+		ethnicityQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.ethnicity"));
 
 		for (final Ethnicity ethnicity : ethnicityService.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()) {
@@ -2083,7 +2138,7 @@ public class StudentIntakeFormManager { // NOPMD
 		final List<FormOptionTO> raceQuestionOptions = new ArrayList<FormOptionTO>();
 
 		raceQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_RACE_ID);
-		raceQuestion.setLabel("Race");
+		raceQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.race"));
 
 		for (final Race race : raceService.getAll(
 				new SortingAndPaging(ObjectStatus.ACTIVE)).getRows()) {
@@ -2106,7 +2161,7 @@ public class StudentIntakeFormManager { // NOPMD
 				"F"));
 
 		genderQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_GENDER_ID);
-		genderQuestion.setLabel("Gender");
+		genderQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.gender"));
 		genderQuestion.setOptions(genderQuestionOptions);
 		genderQuestion.setType(FORM_TYPE_RADIOLIST);
 
@@ -2123,7 +2178,7 @@ public class StudentIntakeFormManager { // NOPMD
 		}
 
 		citizenshipQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID);
-		citizenshipQuestion.setLabel("Citizenship");
+		citizenshipQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.citizenship"));
 		citizenshipQuestion.setOptions(citizenshipQuestionOptions);
 		citizenshipQuestion.setType(FORM_TYPE_SELECT);
 
@@ -2133,7 +2188,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		countryOfCitizenshipQuestion
 				.setId(SECTION_DEMOGRAPHICS_QUESTION_COUNTRYOFCITIZENSHIP_ID);
-		countryOfCitizenshipQuestion.setLabel("Country of Citizenship");
+		countryOfCitizenshipQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.country-citizenship"));
 		countryOfCitizenshipQuestion.setMaximumLength("50");
 		countryOfCitizenshipQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -2153,7 +2208,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		veteranStatusQuestion
 				.setId(SECTION_DEMOGRAPHICS_QUESTION_VETERANSTATUS_ID);
-		veteranStatusQuestion.setLabel("Veteran Status");
+		veteranStatusQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.veteran-status"));
 		veteranStatusQuestion.setOptions(veteranStatusQuestionOptions);
 		veteranStatusQuestion.setType(FORM_TYPE_SELECT);
 
@@ -2171,7 +2226,7 @@ public class StudentIntakeFormManager { // NOPMD
 		}
 
 		militaryAffiliationQuestion.setId(SECTION_DEMOGRAPHICS_MILITARY_AFFILIATION_ID);
-		militaryAffiliationQuestion.setLabel("Military Affiliation");
+		militaryAffiliationQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.military-affiliation"));
 		militaryAffiliationQuestion.setOptions(militaryAffiliationOptions);
 		militaryAffiliationQuestion.setType(FORM_TYPE_SELECT);
 
@@ -2189,7 +2244,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		primaryCaregiverQuestion
 				.setId(SECTION_DEMOGRAPHICS_QUESTION_PRIMARYCAREGIVER_ID);
-		primaryCaregiverQuestion.setLabel("Are you a primary Caregiver?");
+		primaryCaregiverQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.primary-caregiver"));
 		primaryCaregiverQuestion.setOptions(primaryCaregiverQuestionOptions);
 		primaryCaregiverQuestion.setType(FORM_TYPE_RADIOLIST);
 
@@ -2224,7 +2279,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		howManyChildrenQuestion
 				.setId(SECTION_DEMOGRAPHICS_QUESTION_HOWMANYCHILDREN_ID);
-		howManyChildrenQuestion.setLabel("If you have children, how many?");
+		howManyChildrenQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.number-children"));
 		howManyChildrenQuestion.setOptions(howManyChildrenQuestionOptions);
 		howManyChildrenQuestion.setType(FORM_TYPE_SELECT);
 
@@ -2235,7 +2290,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		childrenAgesQuestion
 				.setId(SECTION_DEMOGRAPHICS_QUESTION_CHILDRENAGES_ID);
-		childrenAgesQuestion.setLabel("Ages? (Separated by commas)");
+		childrenAgesQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.children-ages"));
 		childrenAgesQuestion.setMaximumLength("50");
 		childrenAgesQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -2252,7 +2307,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		childCareNeededQuestion
 				.setId(SECTION_DEMOGRAPHICS_QUESTION_CHILDCARENEEDED_ID);
-		childCareNeededQuestion.setLabel("Childcare needed?");
+		childCareNeededQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.childcare-needed"));
 		childCareNeededQuestion.setOptions(childCareNeededQuestionOptions);
 		childCareNeededQuestion.setType(FORM_TYPE_RADIOLIST);
 
@@ -2271,7 +2326,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		childCareArrangementQuestion
 				.setId(SECTION_DEMOGRAPHICS_QUESTION_CHILDCAREARRANGEMENT_ID);
-		childCareArrangementQuestion.setLabel("Childcare arrangement");
+		childCareArrangementQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.childcare-arrangements"));
 		childCareArrangementQuestion
 				.setOptions(childCareArrangementQuestionOptions);
 		childCareArrangementQuestion.setType(FORM_TYPE_SELECT);
@@ -2294,7 +2349,7 @@ public class StudentIntakeFormManager { // NOPMD
 				"N"));
 
 		employedQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_EMPLOYED_ID);
-		employedQuestion.setLabel("Are you employed");
+		employedQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.employed"));
 		employedQuestion.setOptions(employedQuestionOptions);
 		employedQuestion.setType(FORM_TYPE_RADIOLIST);
 
@@ -2304,7 +2359,7 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO employerQuestion = new FormQuestionTO();
 
 		employerQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_EMPLOYER_ID);
-		employerQuestion.setLabel("Place of employment");
+		employerQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.place-of-employment"));
 		employerQuestion.setType(FORM_TYPE_TEXTINPUT);
 		// DEPENDENCY -> employerQuestion shown when employedQuestion selection
 		// matches "Yes"
@@ -2327,7 +2382,7 @@ public class StudentIntakeFormManager { // NOPMD
 				"Not Applicable", "4"));
 
 		shiftQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_SHIFT_ID);
-		shiftQuestion.setLabel("Shift");
+		shiftQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.shift"));
 		shiftQuestion.setOptions(shiftQuestionOptions);
 		shiftQuestion.setType(FORM_TYPE_SELECT);
 		// DEPENDENCY -> shiftQuestion shown when employedQuestion selection
@@ -2341,7 +2396,7 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO wageQuestion = new FormQuestionTO();
 
 		wageQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_WAGE_ID);
-		wageQuestion.setLabel("Wages");
+		wageQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.wage"));
 		wageQuestion.setType(FORM_TYPE_TEXTINPUT);
 		// DEPENDENCY -> wageQuestion shown when employedQuestion selection
 		// matches "Yes"
@@ -2355,7 +2410,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		hoursWorkedPerWeekQuestion
 				.setId(SECTION_DEMOGRAPHICS_QUESTION_HOURSWORKEDPERWEEK_ID);
-		hoursWorkedPerWeekQuestion.setLabel("Hours Worked per Week");
+		hoursWorkedPerWeekQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.total-hours-worked"));
 		hoursWorkedPerWeekQuestion.setType(FORM_TYPE_TEXTINPUT);
 		// DEPENDENCY -> hoursWorkedPerWeekQuestion shown when employedQuestion
 		// selection matches "Yes"
@@ -2371,13 +2426,13 @@ public class StudentIntakeFormManager { // NOPMD
 		return demographicSection;
 	}
 
-	private FormSectionTO buildEducationPlanSection() {
+	private FormSectionTO buildEducationPlanSection(Map<String, Blurb> blurbStore) {
 
 		final FormSectionTO eduPlanSection = new FormSectionTO();
 		final List<FormQuestionTO> eduPlanSectionQuestions = new ArrayList<FormQuestionTO>();
 
 		eduPlanSection.setId(SECTION_EDUCATIONPLAN_ID);
-		eduPlanSection.setLabel("EduPlan");
+		eduPlanSection.setLabel(getLabelNullSafe(blurbStore,"intake.tab3.label"));
 
 		// Student Status
 		final FormQuestionTO studentStatusQuestion = new FormQuestionTO();
@@ -2392,7 +2447,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		studentStatusQuestion
 				.setId(SECTION_EDUCATIONPLAN_QUESTION_STUDENTSTATUS_ID);
-		studentStatusQuestion.setLabel("Student Status");
+		studentStatusQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab3.label.student-status"));
 		studentStatusQuestion.setOptions(studentStatusQuestionOptions);
 		studentStatusQuestion.setType(FORM_TYPE_RADIOLIST);
 
@@ -2407,35 +2462,6 @@ public class StudentIntakeFormManager { // NOPMD
 		newStudentOrientationQuestionOptions.add(new FormOptionTO(UUID
 				.randomUUID(), "No", "N"));
 
-		newStudentOrientationQuestion
-				.setId(SECTION_EDUCATIONPLAN_QUESTION_COMPLETEDORIENTATION_ID);
-		newStudentOrientationQuestion
-				.setLabel("Have you completed new student orientation?");
-		newStudentOrientationQuestion
-				.setOptions(newStudentOrientationQuestionOptions);
-		newStudentOrientationQuestion.setType(FORM_TYPE_RADIOLIST);
-
-		eduPlanSectionQuestions.add(newStudentOrientationQuestion);
-
-		// Registered for Classes
-		final FormQuestionTO registeredForClassesQuestion = new FormQuestionTO();
-		final List<FormOptionTO> registeredForClassesQuestionOptions = new ArrayList<FormOptionTO>();
-
-		registeredForClassesQuestionOptions.add(new FormOptionTO(UUID
-				.randomUUID(), "Yes", "Y"));
-		registeredForClassesQuestionOptions.add(new FormOptionTO(UUID
-				.randomUUID(), "No", "N"));
-
-		registeredForClassesQuestion
-				.setId(SECTION_EDUCATIONPLAN_QUESTION_REGISTEREDFORCLASSES_ID);
-		registeredForClassesQuestion
-				.setLabel("Have you registered for classes?");
-		registeredForClassesQuestion
-				.setOptions(registeredForClassesQuestionOptions);
-		registeredForClassesQuestion.setType(FORM_TYPE_RADIOLIST);
-
-		eduPlanSectionQuestions.add(registeredForClassesQuestion);
-
 		// Parents Obtained College Degree
 		final FormQuestionTO parentsObtainedCollegeDegreeQuestion = new FormQuestionTO();
 		final List<FormOptionTO> parentsObtainedCollegeDegreeQuestionOptions = new ArrayList<FormOptionTO>();
@@ -2448,7 +2474,7 @@ public class StudentIntakeFormManager { // NOPMD
 		parentsObtainedCollegeDegreeQuestion
 				.setId(SECTION_EDUCATIONPLAN_QUESTION_PARENTSHAVECOLLEGEDEGREE_ID);
 		parentsObtainedCollegeDegreeQuestion
-				.setLabel("Have your parents obtained a college degree?");
+				.setLabel(getLabelNullSafe(blurbStore,"intake.tab3.label.parents-college"));
 		parentsObtainedCollegeDegreeQuestion
 				.setOptions(newStudentOrientationQuestionOptions);
 		parentsObtainedCollegeDegreeQuestion.setType(FORM_TYPE_RADIOLIST);
@@ -2467,7 +2493,7 @@ public class StudentIntakeFormManager { // NOPMD
 		specialAccomodationQuestion
 				.setId(SECTION_EDUCATIONPLAN_QUESTION_REQUIRESPECIALACCOMMODATIONS_ID);
 		specialAccomodationQuestion
-				.setLabel("Special needs or require special accomodation?");
+				.setLabel(getLabelNullSafe(blurbStore,"intake.tab3.label.special-needs"));
 		specialAccomodationQuestion
 				.setOptions(specialAccomodationQuestionOptions);
 		specialAccomodationQuestion.setType(FORM_TYPE_RADIOLIST);
@@ -2500,7 +2526,7 @@ public class StudentIntakeFormManager { // NOPMD
 		gradeEarnedHighestLevelEducationQuestion
 				.setId(SECTION_EDUCATIONPLAN_QUESTION_GRADEATHIGHESTEDUCATIONLEVEL_ID);
 		gradeEarnedHighestLevelEducationQuestion
-				.setLabel("What grade did you typically earn at your highest level of education?");
+				.setLabel(getLabelNullSafe(blurbStore,"intake.tab3.label.typical-grade"));
 		gradeEarnedHighestLevelEducationQuestion
 				.setOptions(gradeEarnedHighestLevelEducationQuestionOptions);
 		gradeEarnedHighestLevelEducationQuestion.setType(FORM_TYPE_RADIOLIST);
@@ -2513,13 +2539,13 @@ public class StudentIntakeFormManager { // NOPMD
 		return eduPlanSection;
 	}
 
-	private FormSectionTO buildEducationLevelsSection() {
+	private FormSectionTO buildEducationLevelsSection(Map<String, Blurb> blurbStore) {
 
 		final FormSectionTO eduLevelSection = new FormSectionTO();
 		final List<FormQuestionTO> eduLevelSectionQuestions = new ArrayList<FormQuestionTO>();
 
 		eduLevelSection.setId(SECTION_EDUCATIONLEVEL_ID);
-		eduLevelSection.setLabel("EduLevels");
+		eduLevelSection.setLabel(getLabelNullSafe(blurbStore,"intake.tab4.label"));
 
 		// Education Level Completed
 		final FormQuestionTO educationLevelCompletedQuestion = new FormQuestionTO();
@@ -2534,7 +2560,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		educationLevelCompletedQuestion
 				.setId(SECTION_EDUCATIONLEVEL_QUESTION_EDUCATIONLEVELCOMPLETED_ID);
-		educationLevelCompletedQuestion.setLabel("Education Level Completed");
+		educationLevelCompletedQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab4.label.edu-level"));
 		educationLevelCompletedQuestion
 				.setOptions(educationLevelCompletedQuestionOptions);
 		educationLevelCompletedQuestion.setType(FORM_TYPE_CHECKLIST);
@@ -2543,10 +2569,10 @@ public class StudentIntakeFormManager { // NOPMD
 
 		// No Diploma/No GED - Last Year Attended
 		final FormQuestionTO noDiplomaLastYearAttendedQuestion = new FormQuestionTO();
-
+		
 		noDiplomaLastYearAttendedQuestion
 				.setId(SECTION_EDUCATIONLEVEL_QUESTION_NODIPLOMALASTYEARATTENDED_ID);
-		noDiplomaLastYearAttendedQuestion.setLabel("Last Year Attended");
+		noDiplomaLastYearAttendedQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab4.label.last-year-attended"));
 		noDiplomaLastYearAttendedQuestion.setMaximumLength("4");
 		noDiplomaLastYearAttendedQuestion.setType(FORM_TYPE_TEXTINPUT);
 		noDiplomaLastYearAttendedQuestion.setRequired(true);
@@ -2566,7 +2592,7 @@ public class StudentIntakeFormManager { // NOPMD
 		noDiplomaHighestGradeCompletedQuestion
 				.setId(SECTION_EDUCATIONLEVEL_QUESTION_NODIPLOMAHIGHESTGRADECOMPLETED_ID);
 		noDiplomaHighestGradeCompletedQuestion
-				.setLabel("Highest Grade Completed");
+				.setLabel(getLabelNullSafe(blurbStore,"intake.tab4.label.highest-grade"));
 		noDiplomaHighestGradeCompletedQuestion.setType(FORM_TYPE_TEXTINPUT);
 		noDiplomaHighestGradeCompletedQuestion.setRequired(true);
 		// DEPENDENCY -> noDiplomaHighestGradeCompletedQuestion shown when
@@ -2581,10 +2607,10 @@ public class StudentIntakeFormManager { // NOPMD
 
 		// GED - Year of GED
 		final FormQuestionTO gedYearOfGedQuestion = new FormQuestionTO();
-
+		
 		gedYearOfGedQuestion
 				.setId(SECTION_EDUCATIONLEVEL_QUESTION_GEDYEAROFGED_ID);
-		gedYearOfGedQuestion.setLabel("Year of GED");
+		gedYearOfGedQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab4.label.year-of-ged"));
 		gedYearOfGedQuestion.setMaximumLength("4");
 		gedYearOfGedQuestion.setType(FORM_TYPE_TEXTINPUT);
 		gedYearOfGedQuestion.setRequired(true);
@@ -2600,10 +2626,10 @@ public class StudentIntakeFormManager { // NOPMD
 
 		// High School Graduation - Year Graduated
 		final FormQuestionTO highSchoolYearGraduatedQuestion = new FormQuestionTO();
-
+		
 		highSchoolYearGraduatedQuestion
 				.setId(SECTION_EDUCATIONLEVEL_QUESTION_HIGHSCHOOLYEARGRADUATED_ID);
-		highSchoolYearGraduatedQuestion.setLabel("Year Graduated");
+		highSchoolYearGraduatedQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab4.label.year-graduated"));
 		highSchoolYearGraduatedQuestion.setMaximumLength("4");
 		highSchoolYearGraduatedQuestion.setType(FORM_TYPE_TEXTINPUT);
 		highSchoolYearGraduatedQuestion.setRequired(true);
@@ -2619,10 +2645,9 @@ public class StudentIntakeFormManager { // NOPMD
 
 		// High School Graduation - High School Attended
 		final FormQuestionTO highSchoolAttendedQuestion = new FormQuestionTO();
-
 		highSchoolAttendedQuestion
 				.setId(SECTION_EDUCATIONLEVEL_QUESTION_HIGHSCHOOLATTENDED_ID);
-		highSchoolAttendedQuestion.setLabel("High School Attended");
+		highSchoolAttendedQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab4.label.highschool-attended"));
 		highSchoolAttendedQuestion.setMaximumLength("250");
 		highSchoolAttendedQuestion.setType(FORM_TYPE_TEXTINPUT);
 		highSchoolAttendedQuestion.setRequired(true);
@@ -2638,11 +2663,10 @@ public class StudentIntakeFormManager { // NOPMD
 
 		// Some College Credits - Last Year Attended
 		final FormQuestionTO someCollegeCreditsLastYearAttendedQuestion = new FormQuestionTO();
-
 		someCollegeCreditsLastYearAttendedQuestion
 				.setId(SECTION_EDUCATIONLEVEL_QUESTION_SOMECOLLEGECREDITSLASTYEARATTENDED_ID);
 		someCollegeCreditsLastYearAttendedQuestion
-				.setLabel("Last Year Attended");
+				.setLabel(getLabelNullSafe(blurbStore,"intake.tab4.label.last-year-attended"));
 		someCollegeCreditsLastYearAttendedQuestion.setMaximumLength("4");
 		someCollegeCreditsLastYearAttendedQuestion.setType(FORM_TYPE_TEXTINPUT);
 		someCollegeCreditsLastYearAttendedQuestion.setRequired(true);
@@ -2662,7 +2686,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		otherPleaseExplainQuestion
 				.setId(SECTION_EDUCATIONLEVEL_QUESTION_OTHERPLEASEEXPLAIN_ID);
-		otherPleaseExplainQuestion.setLabel("Please Explain");
+		otherPleaseExplainQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab4.label.explain-credits"));
 		otherPleaseExplainQuestion.setMaximumLength("250");
 		otherPleaseExplainQuestion.setType(FORM_TYPE_TEXTAREA);
 		otherPleaseExplainQuestion.setRequired(true);
@@ -2682,13 +2706,13 @@ public class StudentIntakeFormManager { // NOPMD
 		return eduLevelSection;
 	}
 
-	private FormSectionTO buildEducationGoalSection() throws ObjectNotFoundException {
+	private FormSectionTO buildEducationGoalSection(Map<String, Blurb> blurbStore) throws ObjectNotFoundException {
 
 		final FormSectionTO eduGoalSection = new FormSectionTO();
 		final List<FormQuestionTO> eduGoalSectionQuestions = new ArrayList<FormQuestionTO>();
 
 		eduGoalSection.setId(SECTION_EDUCATIONGOAL_ID);
-		eduGoalSection.setLabel("EduGoal");
+		eduGoalSection.setLabel(getLabelNullSafe(blurbStore,"intake.tab5.label"));
 
 		// Education/Career Goal
 		final FormQuestionTO educationCareerGoalQuestion = new FormQuestionTO();
@@ -2702,7 +2726,7 @@ public class StudentIntakeFormManager { // NOPMD
 		
 		educationCareerGoalQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_GOAL_ID);
-		educationCareerGoalQuestion.setLabel("Education/Career Goal");
+		educationCareerGoalQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab5.label.goal"));
 		educationCareerGoalQuestion
 				.setOptions(educationCareerGoalQuestionOptions);
 		educationCareerGoalQuestion.setType(FORM_TYPE_RADIOLIST);
@@ -2714,7 +2738,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		bachelorsDegreeQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_GOALDESCRIPTION_ID);
-		bachelorsDegreeQuestion.setLabel("Bachelor's Degree Major");
+		bachelorsDegreeQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab5.label.bachelor-major"));
 		bachelorsDegreeQuestion.setMaximumLength(DEFAULT_MAXIMUM_STRING_LENGTH);
 		bachelorsDegreeQuestion.setType(FORM_TYPE_TEXTINPUT);
 		bachelorsDegreeQuestion.setRequired(true);
@@ -2731,7 +2755,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		militaryBranchQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_MILITARYBRANCHDESCRIPTION_ID);
-		militaryBranchQuestion.setLabel("Military Branch");
+		militaryBranchQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab5.label.military-goal"));
 		militaryBranchQuestion.setMaximumLength(DEFAULT_MAXIMUM_STRING_LENGTH);
 		militaryBranchQuestion.setType(FORM_TYPE_TEXTINPUT);
 		militaryBranchQuestion.setRequired(true);
@@ -2747,7 +2771,7 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO otherQuestion = new FormQuestionTO();
 
 		otherQuestion.setId(SECTION_EDUCATIONGOAL_QUESTION_OTHERDESCRIPTION_ID);
-		otherQuestion.setLabel("Other Goal");
+		otherQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab5.label.other-goal"));
 		otherQuestion.setMaximumLength(DEFAULT_MAXIMUM_STRING_LENGTH);
 		otherQuestion.setType(FORM_TYPE_TEXTINPUT);
 		otherQuestion.setRequired(true);
@@ -2765,7 +2789,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		plannedMajorQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_MAJOR_ID);
-		plannedMajorQuestion.setLabel("What is your planned major?");
+		plannedMajorQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab5.label.planned-major"));
 		plannedMajorQuestion.setMaximumLength("50");
 		plannedMajorQuestion.setType(FORM_TYPE_TEXTINPUT);
 		eduGoalSectionQuestions.add(plannedMajorQuestion);
@@ -2787,7 +2811,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		majorCertaintyQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID);
-		majorCertaintyQuestion.setLabel("How sure are you about your major?");
+		majorCertaintyQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab5.label.sure-major"));
 		majorCertaintyQuestion.setOptions(majorCertaintyQuestionOptions);
 		majorCertaintyQuestion.setType(FORM_TYPE_RADIOLIST);
 
@@ -2804,7 +2828,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		occupationDecidedQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_DECIDED_ID);
-		occupationDecidedQuestion.setLabel("Have you decided on a career / occupation?");
+		occupationDecidedQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab5.label.decided-occupation"));
 		occupationDecidedQuestion.setOptions(occupationDecidedQuestionOptions);
 		occupationDecidedQuestion.setType(FORM_TYPE_RADIOLIST);
 
@@ -2815,7 +2839,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		plannedOccupationQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_ID);
-		plannedOccupationQuestion.setLabel("What is your planned occupation?");
+		plannedOccupationQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab5.label.planned-occupation"));
 		plannedOccupationQuestion.setMaximumLength("50");
 		plannedOccupationQuestion.setType(FORM_TYPE_TEXTINPUT);
 
@@ -2838,7 +2862,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		occupationCertaintyQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_SUREOF_ID);
-		occupationCertaintyQuestion.setLabel("How sure are you about your occupation?");
+		occupationCertaintyQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab5.label.sure-occupation"));
 		occupationCertaintyQuestion.setOptions(occupationCertaintyQuestionOptions);
 		occupationCertaintyQuestion.setType(FORM_TYPE_RADIOLIST);
 
@@ -2854,7 +2878,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		occupationCompatibleQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_COMPATIBLE_ID);
-		occupationCompatibleQuestion.setLabel("Are you confident your abilities are compatible with the career field?");
+		occupationCompatibleQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab5.label.confident-ability"));
 		occupationCompatibleQuestion.setOptions(occupationCompatibleQuestionOptions);
 		occupationCompatibleQuestion.setType(FORM_TYPE_RADIOLIST);
 
@@ -2870,7 +2894,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		additionalInfoQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_ADDITIONAL_INFO_ID);
-		additionalInfoQuestion.setLabel("Do you need additional information about which academic programs may lead to a future career?");
+		additionalInfoQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab5.label.additional-info"));
 		additionalInfoQuestion.setOptions(additionalInfoQuestionOptions);
 		additionalInfoQuestion.setType(FORM_TYPE_RADIOLIST);
 
@@ -2889,7 +2913,7 @@ public class StudentIntakeFormManager { // NOPMD
 		
 		registrationLoadQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_REGISTRATION_LOAD_ID);
-		registrationLoadQuestion.setLabel("Registration Load");
+		registrationLoadQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab5.label.registration-load"));
 		registrationLoadQuestion
 				.setOptions(registrationLoadQuestionOptions);
 		registrationLoadQuestion.setType(FORM_TYPE_RADIOLIST);
@@ -2909,7 +2933,7 @@ public class StudentIntakeFormManager { // NOPMD
 		
 		courseworkQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_COURSEWORK_LOAD_ID);
-		courseworkQuestion.setLabel("Hours per Week for Coursework");
+		courseworkQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab5.label.hours-coursework"));
 		courseworkQuestion
 				.setOptions(courseworkQuestionOptions);
 		courseworkQuestion.setType(FORM_TYPE_RADIOLIST);
@@ -2929,7 +2953,7 @@ public class StudentIntakeFormManager { // NOPMD
 		
 		graduationDateQuestion
 				.setId(SECTION_EDUCATIONGOAL_QUESTION_GRADUATION_DATE_ID);
-		graduationDateQuestion.setLabel("Anticipated Graduation Date");
+		graduationDateQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab5.label.anticipated-graduation"));
 		graduationDateQuestion
 				.setOptions(graduationDateQuestionOptions);
 		graduationDateQuestion.setType(FORM_TYPE_SELECT);
@@ -2943,13 +2967,13 @@ public class StudentIntakeFormManager { // NOPMD
 		return eduGoalSection;
 	}
 
-	private FormSectionTO buildFundingSection() {
+	private FormSectionTO buildFundingSection(Map<String, Blurb> blurbStore) {
 
 		final FormSectionTO fundingSection = new FormSectionTO();
 		final List<FormQuestionTO> fundingSectionQuestions = new ArrayList<FormQuestionTO>();
 
 		fundingSection.setId(SECTION_FUNDING_ID);
-		fundingSection.setLabel("Funding");
+		fundingSection.setLabel(getLabelNullSafe(blurbStore,"intake.tab6.label"));
 
 		// Funding
 		final FormQuestionTO fundingQuestionTO = new FormQuestionTO();
@@ -2962,7 +2986,7 @@ public class StudentIntakeFormManager { // NOPMD
 		}
 
 		fundingQuestionTO.setId(SECTION_FUNDING_QUESTION_FUNDING_ID);
-		fundingQuestionTO.setLabel("How will you pay for college");
+		fundingQuestionTO.setLabel(getLabelNullSafe(blurbStore,"intake.tab6.label.funding-question"));
 		fundingQuestionTO.setOptions(fundingSourceOptions);
 		fundingQuestionTO.setType(FORM_TYPE_CHECKLIST);
 
@@ -2970,9 +2994,9 @@ public class StudentIntakeFormManager { // NOPMD
 
 		// Other Description
 		final FormQuestionTO otherQuestion = new FormQuestionTO();
-
+		
 		otherQuestion.setId(SECTION_FUNDING_QUESTION_OTHER_ID);
-		otherQuestion.setLabel("Other");
+		otherQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab6.label.other-funding"));
 		otherQuestion.setMaximumLength(DEFAULT_MAXIMUM_STRING_LENGTH);
 		otherQuestion.setType(FORM_TYPE_TEXTINPUT);
 		otherQuestion.setRequired(true);
@@ -2990,7 +3014,7 @@ public class StudentIntakeFormManager { // NOPMD
 		return fundingSection;
 	}
 
-	private FormSectionTO buildChallengesSection() {
+	private FormSectionTO buildChallengesSection(Map<String, Blurb> blurbStore) {
 
 		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
 
@@ -2998,7 +3022,7 @@ public class StudentIntakeFormManager { // NOPMD
 		final List<FormQuestionTO> challengeSectionQuestions = new ArrayList<FormQuestionTO>();
 
 		challengeSection.setId(SECTION_CHALLENGE_ID);
-		challengeSection.setLabel("Challenges");
+		challengeSection.setLabel(getLabelNullSafe(blurbStore,"intake.tab7.label"));
 
 		// Challenges
 		final FormQuestionTO challengeQuestionTO = new FormQuestionTO();
@@ -3012,7 +3036,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 		challengeQuestionTO.setId(SECTION_CHALLENGE_QUESTION_CHALLENGE_ID);
 		challengeQuestionTO
-				.setLabel("Select all challenges that may be barriers to your academic success");
+				.setLabel(getLabelNullSafe(blurbStore,"intake.tab7.label.challenges-question"));
 		challengeQuestionTO.setOptions(challengeOptions);
 		challengeQuestionTO.setType(FORM_TYPE_CHECKLIST);
 
@@ -3038,5 +3062,37 @@ public class StudentIntakeFormManager { // NOPMD
 		challengeSection.setQuestions(challengeSectionQuestions);
 
 		return challengeSection;
+	}
+	
+	private FormSectionTO buildChecklistSection(Map<String, Blurb> blurbStore) {
+		final SortingAndPaging sAndP = new SortingAndPaging(ObjectStatus.ACTIVE);
+
+		final FormSectionTO checklistSection = new FormSectionTO();
+		final List<FormQuestionTO> checklistSectionQuestions = new ArrayList<FormQuestionTO>();
+
+		checklistSection.setId(SECTION_CHECKLIST_ID);
+		checklistSection.setLabel(getLabelNullSafe(blurbStore,"intake.tab8.label"));
+
+		// Checklist
+		final FormQuestionTO checklistQuestionTO = new FormQuestionTO();
+		final List<FormOptionTO> checklistOptions = new ArrayList<FormOptionTO>();
+
+		for (final CompletedItem completedItem : completedItemDao.getAll(sAndP)) {
+			checklistOptions.add(new FormOptionTO(completedItem.getId(), completedItem
+					.getName(), completedItem.getId().toString()));
+		}
+
+		checklistQuestionTO.setId(SECTION_CHECKLIST_QUESTION_CHALLENGE_ID);
+		checklistQuestionTO
+				.setLabel(getLabelNullSafe(blurbStore,"intake.tab8.label.checklist-question"));
+		checklistQuestionTO.setOptions(checklistOptions);
+		checklistQuestionTO.setType(FORM_TYPE_CHECKLIST);
+
+		checklistSectionQuestions.add(checklistQuestionTO);
+
+		// Add questions to section
+		checklistSection.setQuestions(checklistSectionQuestions);
+
+		return checklistSection;
 	}
 }

@@ -354,12 +354,6 @@ public class StudentIntakeFormManagerTest {
 		assertEquals("Student Status option does not match.", "Former",
 				educationPlan.getStudentStatus().getName());
 
-		assertTrue("New Orientation option does not match.",
-				educationPlan.isNewOrientationComplete());
-
-		assertTrue("Registered for Classes option does not match.",
-				educationPlan.isRegisteredForClasses());
-
 		assertTrue("Parents' Degree option does not match.",
 				educationPlan.isCollegeDegreeForParents());
 

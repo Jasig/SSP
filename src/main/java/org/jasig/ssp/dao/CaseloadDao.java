@@ -37,7 +37,7 @@ import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.sql.JoinType;
 import org.hibernate.transform.AliasToBeanResultTransformer;
-import org.jasig.ssp.model.CaseloadRecord;
+import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ProgramStatus;
@@ -60,7 +60,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public PagingWrapper<CaseloadRecord> caseLoadFor(
+	public PagingWrapper<PersonSearchResult2> caseLoadFor(
 			final ProgramStatus programStatus, @NotNull final Person coach,
 			final SortingAndPaging sAndP) {
 
@@ -106,7 +106,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 		// Add Properties to return in the case load
 		//
 		// Set Columns to Return: id, firstName, middleName, lastName,
-		// schoolId
+		// schoolId, and birthDate
 		final ProjectionList projections = Projections.projectionList();
 		projections.add(Projections.property("id").as("clr_personId"));
 		projections.add(Projections.property("firstName").as("clr_firstName"));
@@ -115,6 +115,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 		projections.add(Projections.property("schoolId").as("clr_schoolId"));
 		projections.add(Projections.property("studentIntakeCompleteDate").as(
 				"clr_studentIntakeCompleteDate"));
+        projections.add(Projections.property("birthDate").as("clr_birthDate"));
 
 		// Join to Student Type
 		query.createAlias("studentType", "studentType",
@@ -125,18 +126,16 @@ public class CaseloadDao extends AbstractDao<Person> {
 
 		query.setProjection(projections);
 
-//		query.setResultTransformer(new AliasToBeanResultTransformer(
-//				CaseloadRecord.class));
 		query.setResultTransformer(
 				new NamespacedAliasToBeanResultTransformer(
-						CaseloadRecord.class, "clr_"));
+						PersonSearchResult2.class, "clr_"));
 
 		// Add Paging
 		if (sAndP != null) {
 			sAndP.addAll(query);
 		}
 
-		return new PagingWrapper<CaseloadRecord>(totalRows, query.list());
+		return new PagingWrapper<PersonSearchResult2>(totalRows, query.list());
 	}
 
 	@SuppressWarnings("unchecked")

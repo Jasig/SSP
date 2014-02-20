@@ -54,6 +54,7 @@ Ext.define('Ssp.model.tool.studentintake.StudentIntakeForm', {
              'personEducationLevels',
              'personFundingSources',
              'personChallenges',
+             'personChecklist',
              'referenceData'],
 
 	autoLoad: false,

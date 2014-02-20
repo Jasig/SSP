@@ -227,6 +227,7 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 				record.set('journalTrack', {id:trackValue});
 							
                 // fix date from GMT to UTC
+                record.set('entryDate', me.getEntryDateField().getValue());
                 var origEntryDate = record.data.entryDate;
                 record.data.entryDate = me.formUtils.toJSONStringifiableDate(record.data.entryDate);                
                              

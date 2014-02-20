@@ -23,7 +23,8 @@ Ext.define('Ssp.view.tools.profile.Person', {
     //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
-        sspConfig: 'sspConfig'
+        sspConfig: 'sspConfig',
+        textStore:'sspTextStore'
     },
     width: '100%',
     height: '100%',
@@ -66,15 +67,15 @@ Ext.define('Ssp.view.tools.profile.Person', {
                     itemId: 'studentId',
                     name: 'schoolId'
                 }, {
-                    fieldLabel: 'DOB',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.dob'),
                     name: 'birthDate',
                     itemId: 'birthDate'
                 }, {
-                    fieldLabel: 'Phone',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.home-phone'),
                     name: 'homePhone',
                     labelWidth: 38
                 }, {
-                    fieldLabel: 'Email',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.school-email'),
                     name: 'primaryEmailAddress',
 					itemId: 'primaryEmailAddress'
                 }, {

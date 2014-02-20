@@ -47,11 +47,15 @@ Ext.define('Ssp.controller.person.SpecialServiceGroupsViewController', {
         me.store.loadData(r.rows);
         me.store.clearFilter(true);
         me.formRendererUtils.applyAssociativeStoreFilter(me.store, selectedSpecialServiceGroups);
+		
+		
 
         me.itemSelectorInitializer.defineAndAddSelectorField(me.getView(), selectedSpecialServiceGroups, {
             itemId: 'specialServiceGroupsItemSelector',
             name: 'specialServiceGroups',
-            fieldLabel: 'Service Groups',
+            fieldLabel: '<div style="float:right; width: 48%; ">Assigned to the Student</div><div style="width: 50%;">Available Service Groups</div>',
+			labelAlign: 'top',
+			labelSeparator: ' ',
             store: me.store
         });
 

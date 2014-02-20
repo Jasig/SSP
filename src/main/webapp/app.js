@@ -33,11 +33,15 @@ Ext.require([
     'Ssp.view.Search',
     'Ssp.view.SearchForm',
     'Ssp.view.StudentRecord',
+    'Ssp.view.EmailStudentForm',
+    'Ssp.view.EmailStudentView',
     'Ssp.view.ProgramStatusChangeReasonWindow',
+	'Ssp.view.person.Student',
     'Ssp.view.person.CaseloadAssignment',
     'Ssp.view.person.EditPerson',
     'Ssp.view.person.Coach',
     'Ssp.view.person.Appointment',
+	'Ssp.view.person.StudentIntakeRequest',
     'Ssp.view.person.SpecialServiceGroups',
     'Ssp.view.person.ReferralSources',
     'Ssp.view.person.ServiceReasons',
@@ -63,9 +67,14 @@ Ext.require([
     'Ssp.view.tools.profile.CurrentSchedule',
     'Ssp.view.tools.profile.DroppedCourses',
 	'Ssp.view.tools.profile.Details',
+	'Ssp.view.tools.profile.SapStatus',
 	'Ssp.view.tools.profile.Dashboard',
 	'Ssp.view.tools.profile.AcademicProgram',
 	'Ssp.view.tools.profile.RecentTermActivity',
+	'Ssp.view.tools.profile.FinancialAidFiles',
+	'Ssp.view.tools.profile.FinancialAidFileViewer',
+	'Ssp.view.tools.profile.FinancialAidAwards',
+	'Ssp.view.tools.profile.FinancialAidAwardViewer',
     'Ssp.view.tools.actionplan.ActionPlan',
     'Ssp.view.tools.actionplan.Tasks',
     'Ssp.view.tools.actionplan.AddTask',
@@ -76,6 +85,7 @@ Ext.require([
     'Ssp.view.tools.actionplan.DisplayStrengths',
     'Ssp.view.tools.actionplan.TaskTree',
     'Ssp.view.tools.studentintake.StudentIntake',
+    'Ssp.view.tools.studentintake.Checklist',
     'Ssp.view.tools.studentintake.Challenges',
     'Ssp.view.tools.studentintake.Demographics',
     'Ssp.view.tools.studentintake.EducationGoals',
@@ -117,7 +127,6 @@ Ext.require([
     'Ssp.view.tools.map.MAP',
 	'Ssp.view.tools.map.MAPTool',
 	'Ssp.view.tools.map.CoursesView',
-	'Ssp.view.tools.map.SemesterGrid',
 	'Ssp.view.tools.map.SemesterGridTranscript',
     'Ssp.view.tools.map.SemesterPanel',
     'Ssp.view.tools.map.SemesterPanelContainer',
@@ -223,6 +232,7 @@ Ext.require([
 	'Ssp.model.PersonAppointment',
 	'Ssp.model.Appointment',
 	'Ssp.model.CaseloadPerson',
+	'Ssp.model.EmailStudentRequest',
 	'Ssp.model.SearchPerson',
 	'Ssp.model.SearchCriteria',
 	'Ssp.model.CaseloadFilterCriteria',
@@ -268,6 +278,9 @@ Ext.require([
     'Ssp.model.reference.Challenge',
     'Ssp.model.reference.ChallengeCategory',
     'Ssp.model.reference.ChallengeReferral',
+    'Ssp.model.reference.EnrollmentStatus',
+    'Ssp.model.reference.CompletedItem',
+    'Ssp.model.reference.Text',
     'Ssp.model.reference.JournalTrack',
     'Ssp.model.reference.JournalStep',
     'Ssp.model.reference.JournalStepDetail',
@@ -278,6 +291,8 @@ Ext.require([
 	'Ssp.model.external.Course',
 	'Ssp.model.external.CourseRequisite',
 	'Ssp.model.external.PersonNote',
+	'Ssp.model.external.FinancialAidFileStatus',
+	'Ssp.model.external.FinancialAidAward',
 	'Ssp.model.ApiUrl',
 	'Ssp.mixin.ApiProperties',
 	'Ssp.mixin.controller.ItemSelectorInitializer',
@@ -327,6 +342,8 @@ Ext.require([
     'Ssp.store.reference.EmploymentShifts',
     'Ssp.store.reference.Ethnicities',
 	'Ssp.store.reference.Races',
+	'Ssp.store.reference.SapStatuses',
+	'Ssp.store.reference.FinancialAidFiles',
     'Ssp.store.reference.FundingSources',
     'Ssp.store.reference.Genders',
     'Ssp.store.reference.JournalSources',
@@ -342,6 +359,8 @@ Ext.require([
     'Ssp.store.reference.MilitaryAffiliations',
     'Ssp.store.reference.CourseworkHours',
     'Ssp.store.reference.EnrollmentStatuses',
+    'Ssp.store.reference.CompletedItem',
+    'Ssp.store.reference.Texts',
     'Ssp.store.reference.RegistrationLoads',
     'Ssp.store.reference.CourseworkHours',
 	'Ssp.store.reference.MessageTemplates',
@@ -399,6 +418,7 @@ Ext.require([
     'Ssp.service.ReferralSourceService',
     'Ssp.service.SearchService',
     'Ssp.service.SpecialServiceGroupService',
+	'Ssp.service.ServiceReasonsService',
     'Ssp.service.StudentIntakeService',
     'Ssp.service.TranscriptService',
 	'Ssp.service.MapPlanService',
@@ -456,6 +476,8 @@ var apiUrls = [
   {name: 'elective', url: 'reference/elective'},
   {name: 'ethnicity', url: 'reference/ethnicity'},
   {name: 'race', url: 'reference/race'},
+  {name: 'sapstatus', url: 'reference/sapstatus'},
+  {name: 'financialAidFile', url: 'reference/financialAidFile'},
   {name: 'fundingSource', url: 'reference/fundingSource'},
   {name: 'journalSource', url: 'reference/journalSource'},
   {name: 'journalStep', url: 'reference/journalStep'},
@@ -465,6 +487,8 @@ var apiUrls = [
   {name: 'maritalStatus', url: 'reference/maritalStatus'},
   {name: 'militaryAffiliation', url: 'reference/militaryAffiliation'},
   {name: 'enrollmentStatus', url: 'reference/enrollmentStatus'},
+  {name: 'completedItem', url: 'reference/completedItem'},
+  {name: 'blurb', url: 'blurb'},
   {name: 'registrationLoad', url: 'reference/registrationLoad'},
   {name: 'courseworkHours', url: 'reference/courseworkHours'},
   {name: 'messageTemplate', url: 'reference/messageTemplate'},
@@ -675,6 +699,12 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+			        currentCourse:{
+				        fn: function(){
+				            return new Ssp.model.external.Course({id:""});
+				    	},
+				        singleton: true
+			        },			        
 			        currentJournalStep:{
 				        fn: function(){
 				            return new Ssp.model.reference.JournalStep({id:""});
@@ -957,6 +987,7 @@ Ext.onReady(function(){
 					campusEarlyAlertRoutingsStore: 'Ssp.store.reference.CampusEarlyAlertRoutings',
 					campusServicesStore: 'Ssp.store.reference.CampusServices',
 					caseloadStore: 'Ssp.store.Caseload',
+					reassignCaseloadStagingStore: 'Ssp.store.Caseload',
 					reassignCaseloadStore: 'Ssp.store.Caseload',
 					challengesStore: 'Ssp.store.reference.Challenges',
 					challengesAllStore: {
@@ -1002,7 +1033,16 @@ Ext.onReady(function(){
 			    	allCoachesCurrentStore: 'Ssp.store.CoachesAllCurrent',
 				    confidentialityDisclosureAgreementsStore: 'Ssp.store.reference.ConfidentialityDisclosureAgreements',
 					configurationOptionsStore: 'Ssp.store.reference.ConfigurationOptions',
-					configurationOptionsUnpagedStore: 'Ssp.store.reference.ConfigurationOptionsUnpaged',
+					configurationOptionsUnpagedStore: 
+					{
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.ConfigurationOptionsUnpaged', {
+							     storeId: 'configurationOptionsUnpagedStore',		
+							     extraParams: {limit: "-1"}
+							 });
+				    	},
+				    	singleton: true
+				    },
 				    colorsStore: {
 				    	fn: function(){
 				    		return Ext.create('Ssp.store.reference.Colors', {
@@ -1289,7 +1329,23 @@ Ext.onReady(function(){
 							 });
 					    },
 					    singleton: true
-					},			
+					},	
+					sapStatusesStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.SapStatuses', {
+							     extraParams: {status: "ALL", limit: "-1"}
+							 });
+					    },
+					    singleton: true
+					},
+					financialAidFilesStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.FinancialAidFiles', {
+							     extraParams: {status: "ALL", limit: "-1"}
+							 });
+					    },
+					    singleton: true
+					},
 			    	fundingSourcesStore: 'Ssp.store.reference.FundingSources',
 					fundingSourcesAllStore: {
 			    		fn: function(){
@@ -1368,6 +1424,36 @@ Ext.onReady(function(){
 					    singleton: true
 					},	
 			    	enrollmentStatusesStore: 'Ssp.store.reference.EnrollmentStatuses',
+			    	completedItemStore: 
+			    	{
+						fn: function(){
+							return Ext.create('Ssp.store.reference.CompletedItem', {
+								storeId: 'completedItemStore',
+								extraParams: {status: "ALL", limit: -1, start: null}
+							});
+						},
+						singleton: true
+					},
+			    	textStore: 
+			    	{
+						fn: function(){
+							return Ext.create('Ssp.store.reference.Texts', {
+								storeId: 'textStore',
+								extraParams: {status: "ALL", limit: -1, start: null}
+							});
+						},
+						singleton: true
+					},
+			    	sspTextStore: 
+			    	{
+						fn: function(){
+							return Ext.create('Ssp.store.reference.Texts', {
+								storeId: 'sspTextStore',
+								extraParams: {status: "ALL", limit: -1, start: null}
+							});
+						},
+						singleton: true
+					},
 					messageTemplatesStore: 'Ssp.store.reference.MessageTemplates',	
 			    	personalityTypesStore: 'Ssp.store.reference.PersonalityTypes',
 			    	placementStore: 'Ssp.store.Placement',
@@ -1533,6 +1619,7 @@ Ext.onReady(function(){
 			        referralSourceService: 'Ssp.service.ReferralSourceService',
 			        searchService: 'Ssp.service.SearchService',
 			        specialServiceGroupService: 'Ssp.service.SpecialServiceGroupService',
+					serviceReasonsService: 'Ssp.service.ServiceReasonsService',
 			        studentIntakeService: 'Ssp.service.StudentIntakeService',
 			        transcriptService: 'Ssp.service.TranscriptService',
 			        mapPlanService: 'Ssp.service.MapPlanService',

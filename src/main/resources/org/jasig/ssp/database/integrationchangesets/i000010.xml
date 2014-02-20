@@ -37,6 +37,11 @@
 
 	<changeSet author='jim.stanley'
 		id='Make adjustments for External Tables 1.2 fields'>
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping Make adjustments for External Tables 1.2 field">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<dropView viewName="v_external_student_transcript_course" />
 		<dropNotNullConstraint tableName="external_student_transcript_course" columnName="credit_type" columnDataType="${nvarchar.type}(25)" />
 		<modifyDataType tableName="external_student_transcript_course" columnName="status_code"  newDataType="${nvarchar.type}(2)"/>

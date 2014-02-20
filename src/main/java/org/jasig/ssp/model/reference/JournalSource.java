@@ -42,6 +42,12 @@ public class JournalSource
 	 */
 	public static final UUID JOURNALSOURCE_EARLYALERT_ID = UUID
 			.fromString("b2d07a00-5056-a51a-80b5-f725f1c5c3e2");
+	
+	/**
+	 * JournalSource Email identifier
+	 */
+	public static final UUID JOURNALSOURCE_EMAIL_ID = UUID
+			.fromString("b2d079a2-5056-a51a-8075-328971518ff0");
 
 	/**
 	 * Empty constructor

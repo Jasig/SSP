@@ -62,6 +62,7 @@ public class StudentDocumentTOFactoryImpl extends AbstractAuditableTOFactory<Stu
 		StudentDocumentTO to = super.from(model);
 		to.setComment(model.getComments());
 		to.setConfidentialityLevelId(model.getConfidentialityLevel().getId());
+		to.setConfidentialityLevelName(model.getConfidentialityLevel().getName());
 		to.setName(model.getName());
 		to.setFileName(model.getFileName());
 		to.setAuthor(model.getAuthor().getFullName());

@@ -20,41 +20,54 @@ Ext.define('Ssp.controller.person.ServiceReasonsViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-    	formUtils: 'formRendererUtils',
+		apiProperties: 'apiProperties',
+    	formRendererUtils: 'formRendererUtils',
     	columnRendererUtils: 'columnRendererUtils',
         person: 'currentPerson',
-        serviceReasonsStore: 'serviceReasonsAllUnpagedStore'
+        store: 'serviceReasonsAllUnpagedStore',
+		itemSelectorInitializer: 'itemSelectorInitializer',
+		service: 'serviceReasonsService'
     },
-    
+	
 	init: function() {
 		var me=this;
-		var selectedServiceReasons =  me.columnRendererUtils.getSelectedIdsForMultiSelect( me.person.get('serviceReasons') );
+				
+		me.service.getAll({
+			success: me.getAllSuccess,
+			failure: me.getAllFailure,
+			scope: me
+		});
+		
+		return me.callParent(arguments);
+    },
+    
+	getAllSuccess: function( r, scope ){
+		var me=scope;
+    	var selectedServiceReasons = me.columnRendererUtils.getSelectedIdsForMultiSelect( me.person.get('serviceReasons') );
 
-		var serviceReasonsSuccessFunc = function(records,operation,success){
-			if (records.length > 0)
-	    	{
-	    		var items = [];
-				Ext.Array.each(records,function(item,index){
-					if(me.formUtils.filterAssociativeItem(item.get('active'), item.get('id'), selectedServiceReasons)) {
-						items.push(item.raw);
-					}
-	    		});
-				var serviceReasonsFormProps = {
-	    				mainComponentType: 'checkbox',
-	    				formId: 'personservicereasons', 
-	                    fieldSetTitle: 'Select all that apply:',
-	                    itemsArr: items, 
-	                    selectedItemsArr: me.person.get('serviceReasons'), 
-	                    idFieldName: 'id', 
-	                    selectedIdFieldName: 'id',
-	                    additionalFieldsMap: [] };
-	    		
-	    		me.formUtils.createForm( serviceReasonsFormProps );	    		
-	    	}
-		};
+        me.store.loadData(r.rows);
+        me.store.clearFilter(true);
+        me.formRendererUtils.applyAssociativeStoreFilter(me.store, selectedServiceReasons);
 		
-		me.serviceReasonsStore.load({scope: me, callback: serviceReasonsSuccessFunc});
 		
-		return this.callParent(arguments);
+
+        me.itemSelectorInitializer.defineAndAddSelectorField(me.getView(), selectedServiceReasons, {
+            itemId: 'serviceReasonsItemSelector',
+            name: 'serviceReasons',
+            fieldLabel: '<div style="float:right; width: 48%; ">Assigned to the Student</div><div style="width: 50%;">Available Service Reasons</div>',
+			labelAlign: 'top',
+			labelSeparator: ' ',
+            store: me.store
+        });
+		
+		
+
+	},
+	
+    getAllFailure: function( response, scope ){
+    	var me=scope;  	
     }
+	
+    
+	
 });

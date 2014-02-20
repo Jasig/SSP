@@ -21,5 +21,7 @@ Ext.define('Ssp.model.Transcript', {
     fields: [{name: 'gpa', type: 'auto'},
              {name: 'programs', type: 'auto'},
              {name: 'financialAid', type: 'auto'},
+             {name: 'financialAidAcceptedTerms', type: 'auto'},
+             {name: 'financialAidFiles', type: 'auto'},
              {name: 'terms', type: 'auto'}]
 });

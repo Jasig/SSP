@@ -26,18 +26,15 @@ Ext.define('Ssp.view.person.ServiceReasons', {
     width: '100%',
     height: '100%',
     autoScroll: true,
+	
 	initComponent: function() {	
-		Ext.apply(this, 
+		var me=this;
+		Ext.apply(me, 
 				{
-				    bodyPadding: 0,
-				    border: 0,
-				    layout: 'anchor',
-				    defaults: {
-				        anchor: '100%'
-				    },
-				    defaultType: 'checkbox'
+				    bodyPadding: 5,
+				    layout: 'anchor'
 				});
 		
-		return this.callParent(arguments);
+		return me.callParent(arguments);
 	}
 });

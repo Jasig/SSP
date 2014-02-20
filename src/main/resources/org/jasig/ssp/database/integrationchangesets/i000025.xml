@@ -25,6 +25,11 @@
 
 	<!-- See 000031.xml for an explanation of why this works. -->
 	<changeSet id="narrow external_student_test test_date" author="dan.mccallum">
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping narrow external_student_test test_date">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<dropView viewName="v_external_student_test" />
 		<modifyDataType tableName="external_student_test" columnName="test_date" newDataType="date" />
 		<createView viewName="v_external_student_test">

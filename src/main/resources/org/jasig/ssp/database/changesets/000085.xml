@@ -1,0 +1,52 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <property name="schema" value="${database.schema}" />
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+<changeSet id="Add task link to action plan MessageTemplate" author="paul.spaude">
+    <update tableName="message_template">
+        <column name="body"><![CDATA[<html>
+<body>Dear ${fullName},<br/>
+<br/>
+As a result of completing the self help guide questionnaire(s) you have
+identified the following resource information as being imperative to your
+success.&nbsp;&nbsp;Below you will find the solutions you felt offered the best
+path to your success.<br/>
+<br/>
+<br/>
+#foreach($taskTO in $taskTOs)<b>Resource:</b>&nbsp;${taskTO.name}<br/><b>Description:</b>&nbsp;${taskTO.description}<br/><b>Link:</b>&nbsp;${taskTO.link}<br/><br/>#end <br/>
+#foreach($goalTO in $goalTOs)<b>Resource:</b>&nbsp;${goalTO.name}<br/><b>Description:</b>&nbsp;${goalTO.description}<br/><br/>#end <br/>
+Should you have any questions concerning the resource information listed please contact the resource in question or the counseling staff at your institution.<br/>
+<br/>
+Thank you.</body></html>]]>
+        </column>
+        <where>
+            id = '5D183F35-023D-40EA-B8D9-66FBE190FFFB'
+        </where>
+    </update>
+</changeSet>
+</databaseChangeLog>

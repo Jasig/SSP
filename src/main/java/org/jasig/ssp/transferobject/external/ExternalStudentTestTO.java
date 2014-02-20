@@ -46,6 +46,7 @@ public class ExternalStudentTestTO implements Serializable, ExternalDataTO<Exter
 
 	private BigDecimal score;
 	private String status;
+	private String outcome;
 	
 	public ExternalStudentTestTO(){
 		super();
@@ -75,6 +76,32 @@ public class ExternalStudentTestTO implements Serializable, ExternalDataTO<Exter
 		this.status = status;
 	}
 	
+	/**
+	 * @param schoolId
+	 * @param testName
+	 * @param subTestCode
+	 * @param subTestName
+	 * @param testDate
+	 * @param score
+	 * @param status
+	 * @param outcome
+	 */
+	public ExternalStudentTestTO(final String schoolId,  final String testCode, 
+			final String testName,
+			final String subTestCode, final String subTestName, final Date testDate,
+			final BigDecimal score, final String status, final String outcome) {
+		super();
+		this.schoolId = schoolId;
+		this.testCode = testCode;
+		this.name = testName;
+		this.subTestCode = subTestCode;
+		this.subTestName = subTestName;
+		this.takenDate = testDate;
+		this.score = score;
+		this.status = status;
+		this.outcome = outcome;
+	}
+	
 	
 	@Override
 	public void from(ExternalStudentTest model) {
@@ -87,6 +114,7 @@ public class ExternalStudentTestTO implements Serializable, ExternalDataTO<Exter
 		takenDate = model.getTestDate();
 		score = model.getScore();
 		status = model.getStatus();
+		outcome = model.getOutcome();
 		
 	}
 
@@ -217,6 +245,23 @@ public class ExternalStudentTestTO implements Serializable, ExternalDataTO<Exter
 	public void setTestCode(String testCode) {
 		this.testCode = testCode;
 	}
+	
+	
+	/**
+	 * @return the outcome
+	 */
+	public String getOutcome() {
+		return outcome;
+	}
+
+
+	/**
+	 * @param status the outcome to set
+	 */
+	public void setOutcome(final String outcome) {
+		this.outcome = outcome;
+	}
+
 	
 
 }

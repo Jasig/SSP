@@ -84,6 +84,11 @@
                     "path": "/app/view/tools/actionplan/"
                 },
                 {
+                    "clsName": "Ssp.view.tools.studentintake.Checklist",
+                    "name": "Checklist.js",
+                    "path": "/app/view/tools/studentintake/"
+                },                
+                {
                     "clsName": "Ssp.view.tools.studentintake.Challenges",
                     "name": "Challenges.js",
                     "path": "/app/view/tools/studentintake/"
@@ -138,11 +143,26 @@
                     "name": "RegistrationLoad.js",
                     "path": "/app/model/reference/"
                 },  
-                                              {
+                 {
+                    "clsName": "Ssp.model.reference.SapStatus",
+                    "name": "SapStatus.js",
+                    "path": "/app/model/reference/"
+                },  
+                {
                     "clsName": "Ssp.model.reference.EnrollmentStatus",
                     "name": "EnrollmentStatus.js",
                     "path": "/app/model/reference/"
                 }, 
+                {
+                    "clsName": "Ssp.model.reference.CompletedItem",
+                    "name": "CompletedItem.js",
+                    "path": "/app/model/reference/"
+                },                
+                {
+                    "clsName": "Ssp.model.reference.Text",
+                    "name": "Text.js",
+                    "path": "/app/model/reference/"
+                },                 
                 {
                     "clsName": "Ssp.store.reference.MilitaryAffiliations",
                     "name": "MilitaryAffiliations.js",
@@ -152,12 +172,22 @@
                     "clsName": "Ssp.store.reference.CourseworkHours",
                     "name": "CourseworkHours.js",
                     "path": "/app/store/reference/"
-                },                
+                },
+                {
+                    "clsName": "Ssp.store.reference.Texts",
+                    "name": "Texts.js",
+                    "path": "/app/store/reference/"
+                },
                 {
                     "clsName": "Ssp.store.reference.EnrollmentStatuses",
                     "name": "EnrollmentStatuses.js",
                     "path": "/app/store/reference/"
-                },                
+                },    
+                {
+                    "clsName": "Ssp.store.reference.CompletedItem",
+                    "name": "CompletedItem.js",
+                    "path": "/app/store/reference/"
+                },                             
                 {
                     "clsName": "Ssp.store.reference.RegistrationLoads",
                     "name": "RegistrationLoads.js",
@@ -294,6 +324,16 @@
                     "path": "/app/controller/tool/accommodation/"
                 },
                 {
+                    "clsName": "Ssp.store.reference.SapStatuses",
+                    "name": "SapStatuses.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.ConfidentialityDisclosureAgreements",
+                    "name": "ConfidentialityDisclosureAgreements.js",
+                    "path": "/app/store/reference/"
+                },
+                {
                     "clsName": "Ssp.view.tools.accommodation.General",
                     "name": "General.js",
                     "path": "/app/view/tools/accommodation/"
@@ -373,7 +413,7 @@
                     "name": "SemesterPanelViewController.js",
                     "path": "/app/controller/tool/map/"
                 },
-                 {
+                {
                     "clsName": "Ssp.controller.tool.map.SemesterGridViewController",
                     "name": "SemesterGridViewController.js",
                     "path": "/app/controller/tool/map/"
@@ -416,11 +456,6 @@
                 {
                     "clsName": "Ssp.view.tools.map.CoursesView",
                     "name": "CoursesView.js",
-                    "path": "/app/view/tools/map/"
-                },
-                {
-                    "clsName": "Ssp.view.tools.map.SemesterGrid",
-                    "name": "SemesterGrid.js",
                     "path": "/app/view/tools/map/"
                 },
                 {
@@ -795,6 +830,11 @@
                     "path": "/app/service/"
                 },
                 {
+                    "clsName": "Ssp.service.ServiceReasonsService",
+                    "name": "ServiceReasonsService.js",
+                    "path": "/app/service/"
+                },
+                {
                     "clsName": "Ssp.service.StudentIntakeService",
                     "name": "StudentIntakeService.js",
                     "path": "/app/service/"
@@ -848,7 +888,12 @@
                     "clsName": "Ssp.controller.SearchFormViewController",
                     "name": "SearchFormViewController.js",
                     "path": "/app/controller/"
-                },                
+                }, 
+                {
+                    "clsName": "Ssp.controller.EmailStudentViewController",
+                    "name": "EmailStudentViewController.js",
+                    "path": "/app/controller/"
+                },
                 {
                     "clsName": "Ssp.controller.StudentRecordViewController",
                     "name": "StudentRecordViewController.js",
@@ -865,6 +910,11 @@
                     "path": "/app/controller/person/"
                 },
                 {
+                    "clsName": "Ssp.controller.person.StudentViewController",
+                    "name": "StudentViewController.js",
+                    "path": "/app/controller/person/"
+                },
+                {
                     "clsName": "Ssp.controller.person.EditPersonViewController",
                     "name": "EditPersonViewController.js",
                     "path": "/app/controller/person/"
@@ -877,6 +927,11 @@
                 {
                     "clsName": "Ssp.controller.person.AppointmentViewController",
                     "name": "AppointmentViewController.js",
+                    "path": "/app/controller/person/"
+                },
+                {
+                    "clsName": "Ssp.controller.person.StudentIntakeRequestViewController",
+                    "name": "StudentIntakeRequestViewController.js",
                     "path": "/app/controller/person/"
                 },
                 {
@@ -918,7 +973,21 @@
                     "clsName": "Ssp.controller.tool.profile.ProfileToolViewController",
                     "name": "ProfileToolViewController.js",
                     "path": "/app/controller/tool/profile/"
+                },{
+                    "clsName": "Ssp.controller.tool.profile.FinancialAidAwardViewController",
+                    "name": "FinancialAidAwardViewController.js",
+                    "path": "/app/controller/tool/profile/"
+                },{
+                    "clsName": "Ssp.controller.tool.profile.SapStatusController",
+                    "name": "SapStatusController.js",
+                    "path": "/app/controller/tool/profile/"
                 },
+                 {
+                    "clsName": "Ssp.controller.tool.profile.FinancialAidFileViewController",
+                    "name": "FinancialAidFileViewController.js",
+                    "path": "/app/controller/tool/profile/"
+                },
+                 
             	{
                     "clsName": "Ssp.model.StudentActivity",
                     "name": "StudentActivity.js",
@@ -1066,10 +1135,25 @@
                     "path": "/app/model/external/"
                 },
                 {
+                    "clsName": "Ssp.model.external.FinancialAidFileStatus",
+                    "name": "FinancialAidFileStatus.js",
+                    "path": "/app/model/external/"
+                },
+                {
+                    "clsName": "Ssp.model.external.FinancialAidAward",
+                    "name": "FinancialAidAward.js",
+                    "path": "/app/model/external/"
+                },
+                {
                     "clsName": "Ssp.model.external.Course",
                     "name": "Course.js",
                     "path": "/app/model/external/"
                 },
+                {
+                    "clsName": "Ssp.model.EmailStudentRequest",
+                    "name": "EmailStudentRequest.js",
+                    "path": "/app/model/"
+                },                
                 {
                     "clsName": "Ssp.model.external.CourseRequisite",
                     "name": "CourseRequisite.js",
@@ -1418,6 +1502,16 @@
                     "path": "/app/view/"
                 },
                 {
+                    "clsName": "Ssp.view.EmailStudentForm",
+                    "name": "EmailStudentForm.js",
+                    "path": "/app/view/"
+                },                 
+                {
+                    "clsName": "Ssp.view.EmailStudentView",
+                    "name": "EmailStudentView.js",
+                    "path": "/app/view/"
+                },                
+                {
                     "clsName": "Ssp.view.ProgramStatusChangeReasonWindow",
                     "name": "ProgramStatusChangeReasonWindow.js",
                     "path": "/app/view/"
@@ -1455,6 +1549,16 @@
                 {
                     "clsName": "Ssp.view.person.ServiceReasons",
                     "name": "ServiceReasons.js",
+                    "path": "/app/view/person/"
+                },
+                {
+                    "clsName": "Ssp.view.person.Student",
+                    "name": "Student.js",
+                    "path": "/app/view/person/"
+                },
+                {
+                    "clsName": "Ssp.view.person.StudentIntakeRequest",
+                    "name": "StudentIntakeRequest.js",
                     "path": "/app/view/person/"
                 },
                 {
@@ -1520,6 +1624,26 @@
                 {
                     "clsName": "Ssp.view.tools.profile.ServicesProvided",
                     "name": "ServicesProvided.js",
+                    "path": "/app/view/tools/profile/"
+                },{
+                    "clsName": "Ssp.view.tools.profile.FinancialAidFileViewer",
+                    "name": "FinancialAidFileViewer.js",
+                    "path": "/app/view/tools/profile/"
+                },{
+                    "clsName": "Ssp.view.tools.profile.FinancialAidAwardViewer",
+                    "name": "FinancialAidAwardViewer.js",
+                    "path": "/app/view/tools/profile/"
+                },{
+                    "clsName": "Ssp.view.tools.profile.FinancialAidAwards",
+                    "name": "FinancialAidAwards.js",
+                    "path": "/app/view/tools/profile/"
+                },{
+                    "clsName": "Ssp.view.tools.profile.FinancialAidFiles",
+                    "name": "FinancialAidFiles.js",
+                    "path": "/app/view/tools/profile/"
+                },{
+                    "clsName": "Ssp.view.tools.profile.SapStatus",
+                    "name": "SapStatus.js",
                     "path": "/app/view/tools/profile/"
                 },
                 {
@@ -2222,6 +2346,11 @@
                     "name": "Ethnicity.js",
                     "path": "/app/model/reference/"
                 },
+                 {
+                    "clsName": "Ssp.model.reference.FinancialAidFile",
+                    "name": "FinancialAidFile.js",
+                    "path": "/app/model/reference/"
+                },
                 {
                     "clsName": "Ssp.model.reference.FundingSource",
                     "name": "FundingSource.js",
@@ -2345,6 +2474,11 @@
                 {
                     "clsName": "Ssp.store.reference.Ethnicities",
                     "name": "Ethnicities.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.FinancialAidFiles",
+                    "name": "FinancialAidFiles.js",
                     "path": "/app/store/reference/"
                 },
                 {

@@ -30,9 +30,14 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
         personService: 'personService',
         personProgramStatusService: 'personProgramStatusService',
         currentPersonAppointment: 'currentPersonAppointment',
-        studentTypesStore: 'studentTypesAllUnpagedStore'
+        studentTypesStore: 'studentTypesAllUnpagedStore',
+		configurationOptionsUnpagedStore: 'configurationOptionsUnpagedStore'
     },
+	config: {
+		panelKids: null
+	},
     control: {
+		
     	'saveButton':{
     		click: 'onSaveClick'
     	},
@@ -53,12 +58,36 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
 	init: function() {
 		var me=this;
+		
+		
+		
 		me.resetAppointmentModels();
 
 		var id = me.personLite.get('id');
 		
 		//Loading store here for coach, student_type, and appointment combos due to timing issue between separate controllers
 		me.studentTypesStore.load(); 
+		
+		
+		
+		
+		
+		me.panelKids = [{ title: 'Student'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
+        	       autoScroll: true,
+        		   items: [{xtype: 'student'}]
+        		},{
+            		title: 'Service Groups',
+            		autoScroll: true,
+            		items: [{xtype: 'personspecialservicegroups'}]
+        		},{
+            		title: 'Referral Sources',
+            		autoScroll: true,
+            		items: [{xtype: 'personreferralsources'}]
+        		},{
+            		title: 'Service Reasons',
+            		autoScroll: true,
+            		items: [{xtype: 'personservicereasons'}]
+        		}];
 		
 		// load the person record and init the view
 		if (id.length > 0)
@@ -71,9 +100,11 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		}else{
 			me.initForms();
 			me.updateTitle();
+			
 		}
 		
-		me.appEventsController.assignEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
+		me.appEventsController.assignEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this}); 
+		me.appEventsController.assignEvent({eventName: 'goToDifferentTabinCaseload', callBackFunc: this.onGoToDifferentTabinCaseload, scope: this});    
 		return this.callParent(arguments);
     },
 
@@ -88,43 +119,24 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
     destroy: function(){
 		this.appEventsController.removeEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
-    	
+    	this.appEventsController.removeEvent({eventName: 'goToDifferentTabinCaseload', callBackFunc: this.onGoToDifferentTabinCaseload, scope: this}); 
     	return this.callParent( arguments );
     },
   
     initForms: function(){
+		var me = this;
+		
 		// retrieve the appointment screen and define items for the screen
     	var caseloadAssignmentView, items; 
-    	var caseloadAssignmentView = Ext.ComponentQuery.query('.caseloadassignment')[0];
+    	//var caseloadAssignmentView = Ext.ComponentQuery.query('.caseloadassignment')[0];
 		
-		items = [{ title: 'Personal'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
-        	       autoScroll: true,
-        		   items: [{xtype: 'editperson'}]
-        		},{
-            		title: 'Appointment'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
-            		autoScroll: true,
-            		items: [{xtype: 'personcoach'},
-            		        {xtype:'personappointment'}]
-        		},{
-            		title: 'Special Service Groups',
-            		autoScroll: true,
-            		items: [{xtype: 'personspecialservicegroups'}]
-        		},{
-            		title: 'Referral Sources',
-            		autoScroll: true,
-            		items: [{xtype: 'personreferralsources'}]
-        		},{
-            		title: 'Reasons for Service',
-            		autoScroll: true,
-            		items: [{xtype: 'personservicereasons'}]
-        		},{
-            		title: 'Ability to Benefit/Anticipated Start Date',
-            		autoScroll: true,
-            		items: [{xtype: 'personanticipatedstartdate'}]
-        		}];
+		var caseloadAssignmentView = Ext.ComponentQuery.query('#caseloadPanel')[0];
+		caseloadAssignmentView.setActiveTab(0);
     	
     	// adding a record, so simply init the view
-		caseloadAssignmentView.add(items);
+		caseloadAssignmentView.add(me.panelKids);
+		
+		
     },
 
     getPersonSuccess: function( r, scope ){
@@ -136,10 +148,41 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		me.getCurrentAppointment();
 		me.updateTitle();
     },
+	
+	
     
     getPersonFailure: function( response, scope ){
     	var me=scope;  	
     	me.getView().setLoading( false );
+    },
+	
+	onGoToDifferentTabinCaseload: function(args){
+		var me=this;
+		
+		var counter = 0;
+		var caseloadAssignmentView = Ext.ComponentQuery.query('#caseloadPanel')[0];
+		
+		caseloadAssignmentView.on('add', function(){
+			var loadedPanels = Ext.ComponentQuery.query('#caseloadPanel > panel');
+			var totalPanels = me.panelKids;
+			
+			if (loadedPanels.length === totalPanels.length) {
+				var tabIdx = caseloadAssignmentView.items.findIndex('title', args.panelTitle);
+				
+				if (tabIdx === totalPanels.length - 1) {
+				
+					if (counter == 0) {
+						counter = counter + 1;
+					}
+					else {
+						caseloadAssignmentView.setActiveTab(tabIdx);
+					}
+				}
+				else{
+					caseloadAssignmentView.setActiveTab(tabIdx);
+				}
+			}
+		});
     },
 
     getCurrentAppointment: function(){
@@ -191,13 +234,15 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		var jsonData = new Object();
 		var currentPersonAppointment;
 		
+		
+		
 		// edit person view
 		var personView = Ext.ComponentQuery.query('.editperson')[0];
 		var personForm = personView.getForm();
 
 		// coach view
 		var coachView = Ext.ComponentQuery.query('.personcoach')[0];
-		var coachForm = coachView.getForm();		
+		var coachForm = coachView.getForm();	
 		
 		// appointment view
 		var appointmentView = Ext.ComponentQuery.query('.personappointment')[0];
@@ -218,15 +263,21 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		// service reasons view
 		var serviceReasonsView = Ext.ComponentQuery.query('.personservicereasons')[0];
 		var serviceReasonsForm = serviceReasonsView.getForm();
+		var serviceReasonsItemSelector = Ext.ComponentQuery.query('#serviceReasonsItemSelector')[0];
 		var selectedServiceReasons = [];
 
 		// anticipated start date view
 		var anticipatedStartDateView = Ext.ComponentQuery.query('.personanticipatedstartdate')[0];
 		var anticipatedStartDateForm = anticipatedStartDateView.getForm();
+		
+		// anticipated start date view
+		var studentIntakeRequestView = Ext.ComponentQuery.query('.studentIntakeRequest')[0];
+		var studentIntakeRequestForm = studentIntakeRequestView.getForm();
 
 		var formsToValidate = [personForm,
 	                 coachForm,
 	                 appointmentForm,
+					 studentIntakeRequestForm,
 	                 anticipatedStartDateForm,
 	                 serviceReasonsForm,
 	                 specialServiceGroupsForm,
@@ -236,34 +287,64 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		// Validate all of the forms
 		if ( validateResult.valid ) 
 		{
+			
 			personForm.updateRecord();	
 			anticipatedStartDateForm.updateRecord();
 
             var coachID = coachForm.findField('coachId').getValue();
-            var studentTypeID = coachForm.findField('studentTypeId').getValue();
+            var studentTypeID = appointmentForm.findField('studentTypeId').getValue();
 
 			//set coach and student type
 			model.setCoachId( coachID );
 			model.setStudentTypeId( studentTypeID );
-
 			// update the appointment
 			appointmentForm.updateRecord();
+			
+			studentIntakeRequestForm.updateRecord();
+			
+			if (id == "") {
+				
+				var currentDate = new Date();
+				if (me.appointment.get('startTime') && me.appointment.get('appointmentDate') && me.appointment.get('endTime')) {
+					
+					var dval = me.appointment.get('appointmentDate');
+					
+					var sBeginTime = Ext.Date.add(dval, Ext.Date.HOUR, me.appointment.get('startTime').getHours());
+					var stBeginTime = Ext.Date.add(sBeginTime, Ext.Date.MINUTE, me.appointment.get('startTime').getMinutes());
+					
+					if (currentDate > stBeginTime) {
+						var dialogOpts = {
+						buttons: Ext.Msg.OK,
+						icon: Ext.Msg.ERROR,
+						fn: Ext.emptyFn,
+						title: 'Appointment Time',
+						msg: 'The appointment time must be in the future.',
+						scope: me
+						};
+						Ext.Msg.show(dialogOpts);
+						return;
+					}
+					
+				}
+				
+			}
+			
 						
 			// set special service groups
 			specialServiceGroupsFormValues = specialServiceGroupsItemSelector.getValue();
 			selectedSpecialServiceGroups = me.getSelectedItemSelectorIdsForTransfer(specialServiceGroupsFormValues);
 			model.set('specialServiceGroups', selectedSpecialServiceGroups);
-
+		
 			// referral sources
 			referralSourcesFormValues = referralSourcesItemSelector.getValue();
 			selectedReferralSources = me.getSelectedItemSelectorIdsForTransfer(referralSourcesFormValues);
 			model.set('referralSources', selectedReferralSources);
 			
 			// set the service reasons
-			serviceReasonsFormValues = serviceReasonsForm.getValues();
-			selectedServiceReasons = me.formUtils.getSelectedIdsAsArray( serviceReasonsFormValues );
+			serviceReasonsFormValues = serviceReasonsItemSelector.getValue();
+			selectedServiceReasons = me.getSelectedItemSelectorIdsForTransfer(serviceReasonsFormValues);
 			model.set('serviceReasons', selectedServiceReasons);
-						
+				
 			me.getView().setLoading( true );
 			
 			// ensure props are null if necessary
@@ -278,6 +359,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 				                    scope: me} );
 
 		}else{
+			me.getView().setLoading( false );
 			me.formUtils.displayErrors( validateResult.fields );
 		}
     },
@@ -315,6 +397,27 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
     savePersonFailure: function( response, scope ){
     	var me=scope;
+		
+		var dialogOpts = {
+			buttons: Ext.Msg.OK,
+			icon: Ext.Msg.ERROR,
+			fn: Ext.emptyFn,
+			title: 'Duplicate Username',
+			msg: 'Username already exists.',
+			scope: me
+		};
+		
+		
+		var parsedResponseText = Ext.decode(response.responseText);
+		
+		var responseDetail = parsedResponseText.message;
+		
+		
+		
+		if(response.status == 500 && responseDetail.indexOf('ERROR: duplicate key value violates unique constraint "unique_person_username"') !== -1){
+			Ext.Msg.show(dialogOpts);
+		}
+		
     	me.getView().setLoading( false );
     },
 
@@ -521,9 +624,17 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     		{
     			me.currentPersonAppointment.set( 'endTime', me.formUtils.fixDateOffsetWithTime( me.appointment.getEndDate() ) );
     		}
-    		me.currentPersonAppointment.set(  'studentIntakeRequested', me.appointment.get('studentIntakeRequested'));
-    		me.currentPersonAppointment.set(  'intakeEmail', me.appointment.get('intakeEmail'));
-    		
+			
+			var studentIntakeRequestView = Ext.ComponentQuery.query('.studentIntakeRequest')[0];
+			var studentIntakeRequestForm = studentIntakeRequestView.getForm();
+		
+			var studentIntakeRequested = studentIntakeRequestForm.findField('studentIntakeRequested').getValue();
+            var studentIntakeEmail = studentIntakeRequestForm.findField('intakeEmail').getValue();
+			
+    		me.currentPersonAppointment.set(  'studentIntakeRequested', studentIntakeRequested);
+    		me.currentPersonAppointment.set(  'intakeEmail', studentIntakeEmail);
+			
+			
     		jsonData = me.currentPersonAppointment.data;
     		personId = me.person.get('id');
 			
@@ -538,6 +649,16 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		var me=scope; 
     	me.getView().setLoading( false );
 		me.loadStudentToolsView();  	
+		
+		var dialogOpts = {
+			buttons: Ext.Msg.OK,
+			icon: Ext.Msg.INFO,
+			fn: Ext.emptyFn,
+			title: '',
+			msg: 'Student Information updated successfully',
+			scope: me
+		};	
+		Ext.Msg.show(dialogOpts);
     },    
     
     saveAppointmentFailure: function( response, scope ){

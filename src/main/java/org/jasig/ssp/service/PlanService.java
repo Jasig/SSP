@@ -18,17 +18,17 @@
  */
 package org.jasig.ssp.service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
-import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
+import org.jasig.ssp.transferobject.reference.MessageTemplatePlanPrintParams;
+import org.jasig.ssp.transferobject.reports.MapPlanStatusReportCourse;
 import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
 import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
+import org.jasig.ssp.transferobject.reports.PlanIdPersonIdPair;
 import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO;
 import org.jasig.ssp.transferobject.reports.SearchPlanTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -37,7 +37,8 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 /**
  * Person service
  */
-public interface PlanService extends AbstractPlanService<Plan,PlanTO,PlanOutputTO> {
+public interface PlanService extends AbstractPlanService<Plan,PlanTO,
+PlanOutputTO, MessageTemplatePlanPrintParams> {
 
 	Plan copyAndSave(Plan plan) throws CloneNotSupportedException;
 
@@ -52,5 +53,9 @@ public interface PlanService extends AbstractPlanService<Plan,PlanTO,PlanOutputT
 	List<PlanCourseCountTO> getPlanCourseCount(SearchPlanTO form);
 	
 	List<PlanStudentStatusTO> getPlanStudentStatusByCourse(SearchPlanTO form);
+
+	List<PlanIdPersonIdPair> getAllActivePlanIds();
+
+	List<MapPlanStatusReportCourse> getAllPlanCoursesForStatusReport(UUID planId);
 		
 }

@@ -25,8 +25,9 @@ Ext.define('Ssp.view.tools.map.FAView', {
         columnRendererUtils: 'columnRendererUtils'
         //sspConfig: 'sspConfig'
     },
-    height: 475,
+    height: 600,
     width: 380,
+    style : 'z-index: -1;',  
     resizable: true,
     initComponent: function(){
         var me = this;
@@ -36,6 +37,8 @@ Ext.define('Ssp.view.tools.map.FAView', {
                 type: 'vbox'
             },
             title: 'Financial Aid',
+            name:'financialAidMapPopup',
+            itemId: 'financialAidMapPopup',
             items: [{
                 xtype: 'form',
                 flex: 1,
@@ -175,7 +178,7 @@ Ext.define('Ssp.view.tools.map.FAView', {
                         itemId: 'f1Status',
                         labelWidth: 30
 		             },{
-                        fieldLabel: 'FASFA',
+                        fieldLabel: 'FAFSA',
                         name: 'fafsaDate',
                         itemId: 'fafsaDate',
 						labelWidth: 60
@@ -190,14 +193,46 @@ Ext.define('Ssp.view.tools.map.FAView', {
                         fieldLabel: 'FA Amount Remaining',
                         name: 'financialAidRemaining',
                         itemId: 'financialAidRemaining',
-						labelWidth: 80
+						labelWidth: 130
                     
+                    },	
+                    {
+                        fieldLabel: 'FA Awarded',
+                        name: 'financialAidAcceptedTerms',
+                        itemId: 'financialAidAcceptedTerms',
+                        labelWidth: 100
+                    },
+                    {
+                        fieldLabel: 'Institutional Loan Amount',
+                        name: 'institutionalLoanAmount',
+                        itemId: 'institutionalLoanAmount',
+                        labelWidth: 150
                     },{
                         fieldLabel: 'Loan Amount',
                         name: 'originalLoanAmount',
                         itemId: 'originalLoanAmount',
 						labelWidth: 80
-                	}]
+                	},
+                    {
+                        fieldLabel: 'Remaining FA Terms',
+                        name: 'termsLeft',
+                        itemId: 'termsLeft',
+                        labelWidth: 120
+                    }, {
+                        name: 'sapStatusCodeDetails',
+                        itemId: 'sapStatusCodeDetails',
+                        fieldLabel:'SAP'
+                    },{
+                        name: 'financialAidFileStatusDetails',
+                        itemId: 'financialAidFileStatusDetails',
+                        fieldLabel:'FA File'
+                    }	,{
+	                        fieldLabel: 'Eligible Fed Aid',
+	                        name: 'eligibleFederalAid',
+	                        itemId: 'eligibleFederalAid',
+							hidden:true,
+	                        labelWidth: 60
+	                    }]
 				}]
 			}]
             }]

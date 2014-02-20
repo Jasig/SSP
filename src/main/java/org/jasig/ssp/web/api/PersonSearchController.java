@@ -19,18 +19,15 @@
 package org.jasig.ssp.web.api;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
 import org.jasig.ssp.factory.PersonSearchResult2TOFactory;
 import org.jasig.ssp.factory.PersonSearchResultTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchResult;
 import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.reference.ProgramStatus;
@@ -41,7 +38,6 @@ import org.jasig.ssp.service.RequestTrustService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.PagedResponse;
-import org.jasig.ssp.transferobject.PersonSearchRequestTO;
 import org.jasig.ssp.transferobject.PersonSearchResult2TO;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
 import org.jasig.ssp.util.security.DynamicPermissionChecking;
@@ -52,9 +48,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -145,12 +139,13 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false)String planStatus,
 	 final @RequestParam(required = false) Boolean myCaseload,
 	 final @RequestParam(required = false) Boolean myPlans,
-	 final HttpServletRequest request) throws ObjectNotFoundException, ValidationException
+	 final @RequestParam(required = false) Date birthDate,
+	 final HttpServletRequest request) throws ObjectNotFoundException
 	 {
 		assertSearchApiAuthorization(request);
 
 		final PagingWrapper<PersonSearchResult2> models = service.search2(personSearchRequestFactory.from(studentId,programStatus,coachId,declaredMajor,
-				hoursEarnedMin,hoursEarnedMax,gpaEarnedMin,gpaEarnedMax,currentlyRegistered,sapStatus,mapStatus,planStatus,myCaseload,myPlans));
+				hoursEarnedMin,hoursEarnedMax,gpaEarnedMin,gpaEarnedMax,currentlyRegistered,sapStatus,mapStatus,planStatus,myCaseload,myPlans,birthDate));
 		return new PagedResponse<PersonSearchResult2TO>(true,
 				models.getResults(), factory2.asTOList(models.getRows()));	
 	}

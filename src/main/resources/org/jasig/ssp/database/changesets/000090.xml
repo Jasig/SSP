@@ -1,0 +1,238 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<property name="schema" value="${database.schema}" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet author='tony.arland' id='change blurb seedings 2.1'>
+		<preConditions onFail="MARK_RAN">
+		<not>
+			<changeSetExecuted changeLogFile="org/jasig/ssp/database/changesets/000084.xml" author="tony.arland" id="change blurb seedings 2"/>
+		</not>
+		</preConditions>
+		<insert tableName="blurb">
+			<column name="id" value="35c412fd-838f-47e2-897a-adbd88a629ad" />
+			<column name="name" value="Intake Alternate In Use Label" />
+			<column name="code" value="intake.tab1.label.alt-in-use"/>
+			<column name="value" value="In Use"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.alt-in-use" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		
+		<insert tableName="blurb">
+			<column name="id" value="e45e465e-efde-4193-93c6-59996818d360" />
+			<column name="name" value="Intake Country of Citizenship Label" />
+			<column name="code" value="intake.tab2.label.country-citizenship"/>
+			<column name="value" value="Country of Citizenship"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.country-citizenship" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>		
+		
+		<update tableName="blurb">
+			<column name="value" value="Citizenship" />
+			<where>id = '7b1d2b79-4f09-4338-944e-893f4f3cdeb7'</where>
+		</update>
+	</changeSet>	
+	
+	<changeSet author='tony.arland' id='change blurb seedings 3.1'>
+		<update tableName="blurb">
+			<column name="value" value="How will you pay for college?" />
+			<where>id = '9cf8048b-63d1-46e4-ad8f-1e33d764df33'</where>
+		</update>
+	</changeSet>	
+	<changeSet author='tony.arland' id='change funding tab name'>
+		<update tableName="blurb">
+			<column name="value" value="Funding" />
+			<where>id = '3258a72a-9014-472f-93c6-179a99ff7c2e'</where>
+		</update>
+	</changeSet>	
+	<changeSet author='tony.arland' id='change blurb seedings 4'>
+		
+		<insert tableName="blurb">
+			<column name="id" value="27f41528-2093-418a-871d-dbbd9434c79c" />
+			<column name="name" value="Year of GED Label" />
+			<column name="code" value="intake.tab4.label.year-of-ged"/>
+			<column name="value" value="Year of GED"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.year-of-ged" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+		
+		<insert tableName="blurb">
+			<column name="id" value="6e1641cb-845b-4022-aa93-5a5f3de513fc" />
+			<column name="name" value="Year Graduated Label" />
+			<column name="code" value="intake.tab4.label.year-graduated"/>
+			<column name="value" value="Year Graduated"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.year-graduated" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="0f12811c-e5fb-4d32-b488-98f776e31f4f" />
+			<column name="name" value="High School Attended Label" />
+			<column name="code" value="intake.tab4.label.highschool-attended"/>
+			<column name="value" value="High School Attended"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.highschool-attended" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="7ae1a511-566f-4b95-bc7a-30e1434fc4a2" />
+			<column name="name" value="Last Year Attended Label" />
+			<column name="code" value="intake.tab4.label.last-year-attended"/>
+			<column name="value" value="Last Year Attended"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.last-year-attended" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>	
+
+		<insert tableName="blurb">
+			<column name="id" value="5c611b41-64bf-4c81-ae51-0687ddf0fcb0" />
+			<column name="name" value="Please Explain Label" />
+			<column name="code" value="intake.tab4.label.explain-credits"/>
+			<column name="value" value="Please Explain"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.explain-credits" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="5c0edf26-f8ba-4242-b8ba-bfecee59d376" />
+			<column name="name" value="Bachelor's Degree Major Label" />
+			<column name="code" value="intake.tab5.label.bachelor-major"/>
+			<column name="value" value="Bachelor's Degree Major"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.bachelor-major" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>	
+
+		<insert tableName="blurb">
+			<column name="id" value="b3c450ad-96c1-4fcb-a6a0-2561a2142e59" />
+			<column name="name" value="Military Branch Label" />
+			<column name="code" value="intake.tab5.label.military-branch"/>
+			<column name="value" value="Military Branch"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.military-branch" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>	
+
+		<insert tableName="blurb">
+			<column name="id" value="ebeb62d7-8d1a-4268-9839-ba3aafa690be" />
+			<column name="name" value="Other Goal Label" />
+			<column name="code" value="intake.tab5.label.other-goal"/>
+			<column name="value" value="Other Goal"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.other-goal" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="b40f82d2-6d8c-4c75-be27-294ce73a70ea" />
+			<column name="name" value="Other Funding Label" />
+			<column name="code" value="intake.tab5.label.other-funding"/>
+			<column name="value" value="Other"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.other-funding" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="663e877a-2ca9-493b-a181-f529d00358a2" />
+			<column name="name" value="Other Funding Label" />
+			<column name="code" value="intake.tab6.label.other-funding"/>
+			<column name="value" value="Other"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.other-funding" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>	
+		
+		<insert tableName="blurb">
+			<column name="id" value="946b05aa-2d3d-403f-854c-4a2071e51a5e" />
+			<column name="name" value="Other Challeneges Label" />
+			<column name="code" value="intake.tab6.label.other-challenges"/>
+			<column name="value" value="Other"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.other-challenges" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>												
+	</changeSet>		
+</databaseChangeLog>

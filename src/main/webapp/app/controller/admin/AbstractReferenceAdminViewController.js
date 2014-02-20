@@ -59,8 +59,14 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		{
 			me.authenticatedPerson.showUnauthorizedAccessAlert();
 		}
-
-
+		me.editor = editor;
+		var columns = e.grid.columns;
+		Ext.each(columns, function(column,editor) {
+		if(column.rowEditable === false)
+		{
+				me.editor.editor.form.findField(column.dataIndex).disable();
+		}
+		});		
 		//Associative Object handling
 		var rowEditor = editor.editor;
 		var rowFields = rowEditor.items.items;			

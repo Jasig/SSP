@@ -19,6 +19,7 @@
 package org.jasig.ssp.factory;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.UUID;
 
 import org.jasig.ssp.model.PersonSearchRequest;
@@ -32,6 +33,6 @@ public interface PersonSearchRequestTOFactory extends
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,
-			String sapStatus, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans) throws ObjectNotFoundException;
+			String sapStatus, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans, Date birthDate) throws ObjectNotFoundException;
 
 }

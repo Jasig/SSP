@@ -26,9 +26,9 @@ import org.jasig.ssp.model.reference.ProgramStatus;
  * Denormalized and calculated view onto a coach's caseload for a particular
  * {@link ProgramStatus}.
  *
- * <p>Serves a simlar function to {@link CaseloadRecord}. Sort of a summative
+ * <p>Serves a simlar function to {@link PersonSearchResult2}. Sort of a summative
  * view of those records on a per-coach, per-status basis. Also, like
- * {@link CaseloadRecord}, this is intentionally not a proper-JPA entity, but a
+ * {@link PersonSearchResult2}, this is intentionally not a proper-JPA entity, but a
  * projection-derived pseudo-entity that exists primarily in support of
  * reporting requirements.</p>
  *

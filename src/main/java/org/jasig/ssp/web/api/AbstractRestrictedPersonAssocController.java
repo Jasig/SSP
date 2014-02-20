@@ -163,9 +163,6 @@ public abstract class AbstractRestrictedPersonAssocController<T extends Restrict
 			model.setPerson(personService.get(personId));
 		}
 
-//		restrictedPersonAssocPermissionService.checkPermissionForModel(model,
-//				securityService.currentUser());
-
 		final T savedT = getService().save(model);
 		if (null != savedT) {
 			return instantiateTO(savedT);

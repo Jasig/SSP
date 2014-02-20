@@ -52,7 +52,7 @@
 			<column name="name" value="manage_integration_database" />
 			<column name="description"
 				value="Whether the system should manage the integration database.  If true the tables and views will be manipulated automatically as the application evolves (tables added/modified/dropped, views added/modified/dropped).  If false, the administrator must follow and apply the changes." />
-			<column name="value">true</column>
+			<column name="value">${manage.external.database.by.default}</column>
 			<column name="created_date" valueDate="2012-05-07T12:00:00" />
 			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
 			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />

@@ -165,9 +165,11 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
        	} else {
 			me.currentMapPlan.loadFromServer(Ext.decode(mapResponse.responseText));
 			var lastTerm = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(me.currentMapPlan))[0];
-	        me.getOnPlanField().setValue("Plan Exists.")
-	        me.getMapNameField().setValue(me.currentMapPlan.get("name"));
-	        me.getMapLastUpdatedField().setValue(me.currentMapPlan.getFormattedModifiedDate());
+	        if ( me.getOnPlanField() ) {
+	            me.getOnPlanField().setValue("Plan Exists.")
+	            me.getMapNameField().setValue(me.currentMapPlan.get("name"));
+	            me.getMapLastUpdatedField().setValue(me.currentMapPlan.getFormattedModifiedDate());
+	        }
 			if(lastTerm)
 	        	me.getMapProjectedField().setValue(lastTerm.get("code"));
 	        me.getPrintPlanButton().show();

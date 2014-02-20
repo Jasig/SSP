@@ -25,7 +25,8 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
     controller: 'Ssp.controller.tool.studentintake.EducationPlansViewController',
     inject: {
     	formUtils: 'formRendererUtils',
-        studentStatusesStore: 'studentStatusesStore'
+        studentStatusesStore: 'studentStatusesStore',
+        textStore:'sspTextStore'
     },
 	width: '100%',
     height: '100%',
@@ -65,7 +66,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				        xtype: 'combobox',
 				        name: 'studentStatusId',
 				        itemId: 'studentStatusCombo',
-				        fieldLabel: 'Student Status',
+				        fieldLabel: me.textStore.getValueByCode('intake.tab3.label.student-status'),
 				        emptyText: 'Select One',
 				        store: me.studentStatusesStore,
 				        valueField: 'id',
@@ -83,16 +84,8 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 							}
 						}
 					},{
-				        xtype: 'checkboxgroup',
-				        fieldLabel: 'Check all that you have completed',
-				        columns: 1,
-				        items: [
-				            {boxLabel: 'New Student Orientation', name: 'newOrientationComplete'},
-				            {boxLabel: 'Registered for Classes', name: 'registeredForClasses'}
-				        ]
-				    },{
-				        xtype: "radiogroup",
-				        fieldLabel: "Have your parents obtained a college degree?",
+				        xtype: 'radiogroup',
+				        fieldLabel: me.textStore.getValueByCode('intake.tab3.label.parents-college'),
 				        columns: 1,
 				        itemId: "collegeDegreeForParents",
 				        items: [
@@ -100,7 +93,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				            {boxLabel: "No", itemId: "collegeDegreeForParentsCheckOff", name: "collegeDegreeForParents", inputValue:false}]
 				    },{
 				        xtype: "radiogroup",
-				        fieldLabel: "Require special accommodations?",
+				        fieldLabel: me.textStore.getValueByCode('intake.tab3.label.special-needs'),
 				        columns: 1,
 				        itemId: "specialNeeds",
 				        items: [
@@ -108,7 +101,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				            {boxLabel: "No", itemId: "specialNeedsCheckOff", name: "specialNeeds", inputValue:"n"}]
 				    },{
 				        xtype: 'radiogroup',
-				        fieldLabel: 'What grade did you typically earn at your highest level of education?',
+				        fieldLabel: me.textStore.getValueByCode('intake.tab3.label.typical-grade'),
 				        columns: 1,
 				        items: [
 				            {boxLabel: 'A', name: 'gradeTypicallyEarned', inputValue: "1"},

@@ -21,6 +21,7 @@ Ext.define('Ssp.model.tool.documents.StudentDocument', {
     fields: [{name:'name',type:'string'},
              {name:'comment',type:'string'},
              {name:'confidentialityLevelId',type:'string'},
+			 {name:'confidentialityLevelName',type:'string'},
              {name:'fileName',type:'string'},
              {name:'author', type:'string'}]
 });

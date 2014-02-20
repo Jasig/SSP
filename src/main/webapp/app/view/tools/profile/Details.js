@@ -23,7 +23,8 @@ Ext.define('Ssp.view.tools.profile.Details', {
     controller: 'Ssp.controller.tool.profile.ProfilePersonDetailsViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
-        sspConfig: 'sspConfig'
+        sspConfig: 'sspConfig',
+        textStore:'sspTextStore'
     },
     width: '100%',
     height: '100%',
@@ -33,6 +34,8 @@ Ext.define('Ssp.view.tools.profile.Details', {
             border: 0,
             bodyPadding: 0,
             layout: 'anchor',
+            name: 'profileDetails',
+            itemId: 'profileDetails',
             defaults: {
                 anchor: '100%'
             },
@@ -115,22 +118,22 @@ Ext.define('Ssp.view.tools.profile.Details', {
                             },
                             
                             items: [{
-                                fieldLabel: 'Gender',
+                                fieldLabel: me.textStore.getValueByCode('ssp.label.gender'),
                                 name: 'gender',
                                 itemId: 'gender',
                                 labelWidth: 50
                             }, {
-                                fieldLabel: 'Marital Status',
+                                fieldLabel: me.textStore.getValueByCode('ssp.label.marital-status'),
                                 name: 'maritalStatus',
                                 itemId: 'maritalStatus',
                                 labelWidth: 80
                             }, {
-                                fieldLabel: 'Ethnicity',
+                                fieldLabel: me.textStore.getValueByCode('ssp.label.ethnicity'),
                                 name: 'ethnicity',
                                 itemId: 'ethnicity',
                                 labelWidth: 55
                             }, {
-								fieldLabel: 'Race',
+								fieldLabel: me.textStore.getValueByCode('ssp.label.race'),
 								name: 'race',
 								itemId: 'race',
 								labelWidth: 55
@@ -169,9 +172,6 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         fieldLabel: 'GPA',
                         name: 'cumGPA',
                         itemId: 'cumGPA'
-                    }, {
-                        xtype: 'tbspacer',
-                        height: '10'
                     }, {
                         fieldLabel: 'FA GPA',
                         name: 'financialAidGpa',
@@ -223,33 +223,80 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         name: 'fafsaDate',
                         itemId: 'fafsaDate'
                     }, {
-                        fieldLabel: 'FA Award',
-                        name: 'currentYearFinancialAidAward',
-                        itemId: 'currentYearFinancialAidAward'
-                    
-                    }, {
-                        fieldLabel: 'FA Amount',
-                        name: 'financialAidRemaining',
-                        itemId: 'financialAidRemaining'
-                    
-                    }, {
-                        fieldLabel: 'Loan Amount',
-                        name: 'originalLoanAmount',
-                        itemId: 'originalLoanAmount'
-                    
-                    }, {
                         xtype: 'tbspacer',
-                        height: '10'
+                        height: 8
+                    },{
+                        fieldLabel: 'Eligible Fed Aid',
+                        name: 'eligibleFederalAid',
+                        itemId: 'eligibleFederalAid',
+						hidden:true,
+                        labelWidth: 60
+                    },{
+	                        name: 'financialAidFileStatusDetails',
+	                        itemId: 'financialAidFileStatusDetails',
+	                        xtype:'label',
+	                        listeners: { element: 'el', click: function () { 
+	                        	var view = Ext.ComponentQuery.query("#profileDetails");
+	                        	if(view && view.length > 0)
+			                		view[0].getController().onShowFinancialAidFileStatuses();
+	                        } } 
+	                    },{
+	                        xtype: 'tbspacer',
+	                        height: 8
+	                    },
+                    {
+	                    	xtype:'label',
+	                        name: 'financialAidAcceptedTerms',
+	                        itemId: 'financialAidAcceptedTerms',
+	                        listeners: { element: 'el', click: function () { 
+	                        	var view = Ext.ComponentQuery.query("#profileDetails");
+	                        	if(view && view.length > 0)
+			                		view[0].getController().onShowFinancialAidAwards();
+	                        } }
+	                        
+                    },		{
+                        xtype: 'tbspacer',
+                        height: 8
+                    },{
+	                        fieldLabel: 'FA Amount',
+	                        name: 'financialAidRemaining',
+	                        itemId: 'financialAidRemaining'
+
+	                    },
+                    {
+                        fieldLabel: 'Institutional Loan Amount',
+                        name: 'institutionalLoanAmount',
+                        itemId: 'institutionalLoanAmount',
+                        labelWidth: 150
+                    },	{
+		                        fieldLabel: 'Loan Amount',
+		                        name: 'originalLoanAmount',
+		                        itemId: 'originalLoanAmount'
+
+		                    },
+                    {
+                        fieldLabel: 'Remaining FA Terms',
+                        name: 'termsLeft',
+                        itemId: 'termsLeft',
+                        labelWidth: 120
+                    },{
+                        xtype: 'tbspacer',
+                        height: 5
                     }, {
-                        fieldLabel: 'SAP',
-                        name: 'sapStatus',
-                        itemId: 'sapStatus'
-                    }, {
-                        fieldLabel: 'F1',
-                        name: 'f1Status',
-                        itemId: 'f1Status',
-                        labelWidth: 15
-                    }]
+                        name: 'sapStatusCode',
+                        itemId: 'sapStatusCode',
+                        xtype: 'label',
+                        listeners: { element: 'el', click: function (me) { 
+                        	var view = Ext.ComponentQuery.query("#profileDetails");
+                        	if(view && view.length > 0)
+		                		view[0].getController().onShowSAPCodeInfo();
+                        } } 
+                    },{
+	                        fieldLabel: 'F1',
+	                        name: 'f1Status',
+	                        itemId: 'f1Status',
+	                        labelWidth: 15
+	                    }]
                 
                 }, {
                     xtype: 'fieldset',
@@ -279,5 +326,4 @@ Ext.define('Ssp.view.tools.profile.Details', {
         
         return me.callParent(arguments);
     }
-    
 });

@@ -42,6 +42,7 @@ import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
 import org.jasig.ssp.transferobject.AbstractPlanTO;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,10 +86,30 @@ public class MessageTemplateServiceImpl extends
 		return configService.getByNameNull("serverExternalPath");
 	}
 
+	private String getInstitutionName() {
+		return configService.getByNameNull("inst_name");
+	}
+	
+	private String getInstitutionHomeUrl() {
+		return configService.getByNameNull("inst_home_url");
+	}
+	
+	private String getAppTitle() {
+		return configService.getByNameNull("app_title");
+	}
+	
+	private void setInstitutionValues(Map<String, Object> messageParams){
+		messageParams.put("institutionName", getInstitutionName());
+		messageParams.put("institutionHomeUrl", getInstitutionHomeUrl());
+		messageParams.put("applicationTitle", getAppTitle());
+		messageParams.put("linkToSSP", getServerExternalPath());
+	}
+	
 	private SubjectAndBody populateFromTemplate(
 			final UUID messageTemplateId,
 			final Map<String, Object> templateParameters) {
 		try {
+			setInstitutionValues(templateParameters);
 			final MessageTemplate messageTemplate = dao.get(messageTemplateId);
 
 			final String subject = velocityTemplateService
@@ -121,7 +142,6 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("message", body);
 		messageParams.put("student", student);
 		messageParams.put("fullName", student.getFullName());
-
 		return populateFromTemplate(MessageTemplate.CONTACT_COACH_ID,
 				messageParams);
 	}
@@ -131,7 +151,6 @@ public class MessageTemplateServiceImpl extends
 		final Map<String, Object> messageParams = new HashMap<String, Object>();
 		messageParams.put("task", task);
 		messageParams.put("dueDateFormatted", formatDate(task.getDueDate()));
-
 		return populateFromTemplate(MessageTemplate.ACTION_PLAN_STEP_ID,
 				messageParams);
 	}
@@ -141,7 +160,6 @@ public class MessageTemplateServiceImpl extends
 		final Map<String, Object> messageParams = new HashMap<String, Object>();
 		messageParams.put("task", task);
 		messageParams.put("dueDateFormatted", formatDate(task.getDueDate()));
-
 		return populateFromTemplate(MessageTemplate.CUSTOM_ACTION_PLAN_TASK_ID,
 				messageParams);
 	}
@@ -155,7 +173,6 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("goalTOs", goalTOs);
 		messageParams.put("student", student);
 		messageParams.put("fullName", student.getFullName());
-
 		return populateFromTemplate(MessageTemplate.ACTION_PLAN_EMAIL_ID,
 				messageParams);
 	}
@@ -167,7 +184,6 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("taskName", task.getName());
 		messageParams.put("student", task.getPerson());
 		messageParams.put("fullName", task.getPerson().getFullName());
-
 		// fix links in description
 		final String linkedDescription = task.getDescription()
 				.replaceAll(
@@ -192,7 +208,6 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("termToRepresentEarlyAlert",
 				termToRepresentEarlyAlert);
 		messageParams.put("earlyAlert", earlyAlert);
-
 		return populateFromTemplate(
 				MessageTemplate.JOURNAL_NOTE_FOR_EARLY_ALERT_RESPONSE_ID,
 				messageParams);
@@ -238,21 +253,20 @@ public class MessageTemplateServiceImpl extends
 				messageParams);
 	}
 	
+	
 	@Override
-	public <T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanMatrixOutput(final Person student, final Person owner, TO plan, 
-			final Float totalPlanCreditHours,
-			final List<TermCourses<T, TO>> termCourses,
-			final String institutionName) {
+	public <TOO extends AbstractPlanOutputTO<T, TO>, T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanMatrixOutput(
+			AbstractMessageTemplateMapPrintParamsTO<TOO, T, TO> params) {
 		
 		final Map<String, Object> messageParams =  addParamsToMapPlan(
-				student,
-				owner, 
-				plan, 
-				totalPlanCreditHours,
-				termCourses,
-				institutionName);
-		 
-		return populateFromTemplate(MessageTemplate.OUTPUT_MAP_PLAN_MATRIX_ID, messageParams);
+				params.getStudent(), 
+				params.getOwner(), 
+				params.getOutputPlan().getNonOutputTO(),
+				params.getTotalPlanCreditHours(),
+				params.getTermCourses(),
+				params.getInstitutionName());
+		messageParams.put("printParams", params);
+		return populateFromTemplate(params.getMessageTemplateId(), messageParams);
 	}
 	
 	@Override
@@ -310,16 +324,26 @@ public class MessageTemplateServiceImpl extends
 		final Map<String, Object> messageParams = new HashMap<String, Object>(); 
 		
 		messageParams.put("title", plan.getName());
+		messageParams.put("plan", plan);
+		SimpleDateFormat formatter = new SimpleDateFormat("MMM-dd-yyyy");
+		messageParams.put("lastModified", plan.getModifiedDate() == null ? null : formatter.format(plan.getModifiedDate()));
 		messageParams.put("planContactNotes", plan.getContactNotes());
 		messageParams.put("planStudentNotes", plan.getStudentNotes());
 		messageParams.put("termCourses", termCourses);
 		if(student != null)
 			addStudent(messageParams, student);
 		
-		messageParams.put("coachPhone1", owner.getCellPhone());
-		messageParams.put("coachPhone2", owner.getHomePhone());
-		messageParams.put("coachFullName", owner.getFullName());
-		messageParams.put("coachEmail", owner.getPrimaryEmailAddress());
+		messageParams.put("contactPhone", plan.getContactPhone());
+		messageParams.put("contactName", plan.getContactName());
+		messageParams.put("contactEmail", plan.getContactEmail());
+		messageParams.put("contactTitle", plan.getContactTitle());
+		
+
+		
+		messageParams.put("ownerPhone", owner.getWorkPhone());
+		messageParams.put("ownerFullName", owner.getFullName());
+		messageParams.put("ownerEmail", owner.getPrimaryEmailAddress());
+		
 		messageParams.put("totalPlanHours", totalPlanCreditHours);
 		messageParams.put("institution", institutionName);
 		messageParams.put("createdDateFormatted", formatDate(new Date()));
@@ -329,6 +353,7 @@ public class MessageTemplateServiceImpl extends
 	}
 	
 	private void addStudent(Map<String,Object> messageParams, Person student){
+			messageParams.put("student", student);
 			messageParams.put("studentFullName", student.getFullName());
 			messageParams.put("studentEmail", student.getPrimaryEmailAddress());
 			messageParams.put("studentSchoolId", student.getSchoolId());

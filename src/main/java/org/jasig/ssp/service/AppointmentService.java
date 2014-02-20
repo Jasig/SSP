@@ -19,6 +19,7 @@
 package org.jasig.ssp.service;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -31,5 +32,9 @@ public interface AppointmentService extends
 	Appointment getCurrentAppointmentForPerson(final Person person);
 
 	Map<UUID, Appointment> getCurrentAppointmentForPeopleIds(
+			final Collection<UUID> peopleIds);
+
+	
+	public Map<UUID, Date> getCurrentAppointmenDateForPeopleIds(
 			final Collection<UUID> peopleIds);
 }

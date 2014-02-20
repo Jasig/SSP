@@ -1,0 +1,176 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<property name="schema" value="${database.schema}" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	
+
+	<changeSet author='tony.arland' id='change blurb seedings 7'>
+		<insert tableName="blurb">
+			<column name="id" value="6b7ebbf3-2466-4189-9cb4-2f925dc8c4e2" />
+			<column name="name" value="Highest Grade Completed Label" />
+			<column name="code" value="intake.tab4.label.highest-grade"/>
+			<column name="value" value="Highest Grade Completed"/>
+			<column name="description" value="Highest Grade Completed" />
+			<column name="entity_type_code" value="reference.highest-grade" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+	</changeSet>
+
+	<changeSet author='tony.arland' id='update checklist tab default name'>
+		<update tableName="blurb">
+			<column name="value" value="Completed Items" />
+			<where>id = 'fdbe6203-a828-4fe8-8924-2463223646cb'</where>
+		</update>
+	</changeSet>	
+	
+	<changeSet author='tony.arland' id='change blurbs to be global'>
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.address-1" />
+			<where>id = '0b08f251-4970-4415-a37a-f4bae0820f23'</where>
+		</update>
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.address-2" />
+			<where>id = 'f0a1b90c-7424-42cb-9a5b-a56e5d381d72'</where>
+		</update>
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.city" />
+			<where>id = 'a696238c-2c77-4d84-b4df-a8c832d1c91a'</where>
+		</update>	
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.state" />
+			<where>id = '8ae3cabd-4401-4ecb-b0bb-f1096a21b48b'</where>
+		</update>	
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.zip" />
+			<where>id = '08e22868-8f83-489b-865d-95000b7ec374'</where>
+		</update>
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.country" />
+			<where>id = '1026cbd8-7a8a-499a-a404-7f3af488fa65'</where>
+		</update>
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.first-name" />
+			<where>id = '64ef22e1-0cf3-44df-9ccb-993ab7548baa'</where>
+		</update>		
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.middle-name" />
+			<column name="value" value="Middle Name"></column>
+			<where>id = '247c1850-b368-4f29-8c8b-7b25efce8605'</where>
+		</update>		
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.last-name" />
+			<where>id = '9b1182c7-9783-4be0-bc09-a30bf0d45f47'</where>
+		</update>	
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.home-phone" />
+			<where>id = '337d77c4-3689-4581-b924-6dc0dcdb1be1'</where>
+		</update>	
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.work-phone" />
+			<where>id = 'f079a6e4-8867-4c6a-b84a-b8fa07d8696c'</where>
+		</update>	
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.cell-phone" />
+			<where>id = 'f640d0f8-1763-4471-a2cb-71b062b6af78'</where>
+		</update>	
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.school-email" />
+			<where>id = '06b4151e-8857-4e65-870c-36da50268ee7'</where>
+		</update>		
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.alternate-email" />
+			<column name="value" value="Alternate Email" />
+			<where>id = '347fb756-ae34-4b94-a6ed-4aafb0b985a2'</where>
+		</update>	
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.non-local" />
+			<where>id = '7112e79a-0a61-413a-8948-8c4c19f2bb18'</where>
+		</update>
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.marital-status" />
+			<where>id = '2be74b03-8cf8-4410-a75b-20d8d4304cca'</where>
+		</update>		
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.ethnicity" />
+			<where>id = 'dabfee4c-f975-4c89-a749-1ff467da9884'</where>
+		</update>	
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.race" />
+			<where>id = 'cb3a7e29-4303-4a7a-87b5-fe9a10027e45'</where>
+		</update>	
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.gender" />
+			<where>id = 'fd6dc9c9-219a-4634-9ee7-c5fcbbef6b8e'</where>
+		</update>
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.alt-in-use" />
+			<where>id = '35c412fd-838f-47e2-897a-adbd88a629ad'</where>
+		</update>	
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.student-id" />
+			<where>id = 'bc816c86-04c8-4d7b-87a5-0a74ad3ea23a'</where>
+		</update>	
+		
+		<update tableName="blurb">
+			<column name="code" value="ssp.label.birthday" />
+			<where>id = '94768043-cee4-40ab-8318-4008cf71009b'</where>
+		</update>
+																															
+	</changeSet>
+			
+	<changeSet id="drop entity type code from blurb table" author="tony.arland">
+	<preConditions>
+		<columnExists tableName="blurb" columnName="entity_type_code" schemaName="${database.schema}"/>
+	</preConditions>
+	<dropColumn tableName="blurb" columnName="entity_type_code" schemaName="${database.schema}"/>
+	</changeSet>
+</databaseChangeLog>

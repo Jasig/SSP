@@ -187,7 +187,15 @@ Ext.define('Ssp.service.MapPlanService', {
 		me.currentMapPlan.clearPlanCourses();
         me.currentMapPlan.updatePlanCourses(semesterStores);
     }, 
-
+    updatePrintableMap: function(semesterStores,printableMap){ 
+        var me = this;
+        printableMap.set('personId',  me.personLite.get('id'));
+        printableMap.set('ownerId',  me.authenticatedPerson.get('id'));
+        
+        var i = 0;
+        printableMap.clearPlanCourses();
+        printableMap.updatePlanCourses(semesterStores);
+    }, 
 	getBoolean: function(model, fieldName){
 		var me = model;
 		if(me.get(fieldName) == 'on' || me.get(fieldName) == true || me.get(fieldName) == 1 || me.get(fieldName) == 'true'){
@@ -372,21 +380,34 @@ Ext.define('Ssp.service.MapPlanService', {
 	planStatus: function(plan, callbacks){
 		var me=this;
 		if(plan.get("isTemplate")){
-			return callbacks.faliure("Is template, no plan status.", callbacks.scope);
+			if ( callbacks.failure ) {
+				if ( callbacks.scope ) {
+					callbacks.failure.apply(callbacks.scope, ["Is template, no plan status."]);
+				} else {
+					callbacks.failure("Is template, no plan status.");
+				}
+			}
+			return;
 		}
+		// Little bit of weirdness here to support those clients that need an
+		// explicit invocation scope to be passed through to callbacks. This
+		// shouldn't be necessary b/c the makeRequest() will invoke the
+		// callback in the specified scope, so 'this' in the callback will refer
+		// to that same value (the same way it does here). But we need that
+		// explicit scope arg for backward compatibility.
+		var success = function( response ){
+			callbacks.success.apply(this, [response, this]);
+		};
+		var failure = function( response ){
+			callbacks.failure.apply(this, [response, this]);
+		};
 		var url = me.getBaseUrl(me.personLite.get('id'));
-	    var success = function( response ){
-			callbacks.success( response, callbacks.scope );
-	    };
-	    var failure = function( response ){
-	    	callbacks.failure(response, callbacks.scope);
-	    };
 		me.apiProperties.makeRequest({
-   			url: url+'/planstatus',
+   			url: url+'/calculatedPlanstatus',
    			method: 'GET',
    			successFunc: success,
    			failureFunc: failure,
-   			scope: me
+   			scope: callbacks.scope
    		});
 	},
     
@@ -396,24 +417,25 @@ Ext.define('Ssp.service.MapPlanService', {
 		  converted to semesterCourses because of some inconsistencies
 		   this needs to be corrected                                        *****/		
 		var me = this;	
-    	var objectStatus = me.currentMapPlan.get('objectStatus');
+		var printableMap = me.currentMapPlan.copy();
+    	var objectStatus = printableMap.get('objectStatus');
 		if(objectStatus != 'ACTIVE' || objectStatus != 'INACTIVE'){
-			me.currentMapPlan.set('objectStatus','ACTIVE');
+			printableMap.set('objectStatus','ACTIVE');
 		}
 	    var failure = function( response ){
 	    	me.apiProperties.handleError( response );
 		    callbacks.failure( response, callbacks.scope );
 	    };
     	if(semesterStores == null){
-			var planCourses = me.currentMapPlan.get('planCourses');
+			var planCourses = printableMap.get('planCourses');
 			var semsetersStore = new Ssp.store.SemesterCourses();
 			semesterStores = [semsetersStore];
 			Ext.Array.forEach(planCourses, function(planCourse){
 				semsetersStore.add(new Ssp.model.tool.map.SemesterCourse(planCourse));
 			});
 		}
-	    me.updateCurrentMap(semesterStores);
-	    outputData.set("plan",me.currentMapPlan.getSimpleJsonData());
+	    me.updatePrintableMap(semesterStores, printableMap);
+	    outputData.set("plan", printableMap.getSimpleJsonData());
 	    outputData.set("isPrivate",isPrivate);
     }
     	

@@ -32,7 +32,11 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
 		programStatusChangeReasonsStore: 'programStatusChangeReasonsStore',
         sspConfig: 'sspConfig',
-		formUtils: 'formRendererUtils'
+		formUtils: 'formRendererUtils',
+    	textStore:'sspTextStore',
+        sapStatusesStore: 'sapStatusesStore',
+        financialAidFilesStore: 'financialAidFilesStore'
+		
     },
     
     control: {
@@ -52,22 +56,32 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         academicStandingField: '#academicStanding',
         currentRestrictionsField: '#currentRestrictions',
         creditCompletionRateField: '#creditCompletionRate',
-        currentYearFinancialAidAwardField: '#currentYearFinancialAidAward',
         academicProgramsField: '#academicPrograms',
-        sapStatusField: '#sapStatus',
         registeredTermsField: '#registeredTerms',
         paymentStatusField: '#paymentStatus',
      
 
         earlyAlertField: '#earlyAlert',
         actionPlanField: '#actionPlan',
-		
+        
+        studentIntakeAssignedField: '#studentIntakeAssigned',
+        studentIntakeCompletedField: '#studentIntakeCompleted',
+        
+        balanceOwedField: '#balanceOwed',
+        sapStatusCodeField: '#sapStatusCode',
+        financialAidFileStatusField: '#financialAidFileStatus',
+		financialAidAcceptedTermsField: '#financialAidAcceptedTerms',
+        
 		'serviceReasonEdit': {
             click: 'onServiceReasonEditButtonClick'
         },
         
         'serviceGroupEdit': {
             click: 'onServiceGroupEditButtonClick'
+        },
+        
+        'referralSourceEdit': {
+            click: 'onReferralSourceEditButtonClick'
         }
     
     },
@@ -75,7 +89,17 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var me = this;
         var id = me.personLite.get('id');
         me.resetForm();
-       
+        me.appEventsController.assignEvent({
+            eventName: 'emailCoach',
+            callBackFunc: me.onEmailCoach,
+            scope: me
+        });
+        if(me.sapStatusesStore.getTotalCount() <= 0){
+			me.sapStatusesStore.load();
+        }
+        if(me.financialAidFilesStore.getTotalCount() <= 0){
+			me.financialAidFilesStore.load();
+        }
         if (id != "") {
             // display loader
             me.getView().setLoading(true);
@@ -125,8 +149,19 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         // Set defined configured label for the studentId field
         var studentIdAlias = me.sspConfig.get('studentIdAlias');
         me.getStudentIdField().setFieldLabel(studentIdAlias);
-
+        me.setFinancialLabels();
+        // load and render person data
+       	me.profileReferralSourcesStore.removeAll();
+       	me.profileServiceReasonsStore.removeAll();
+       	me.profileSpecialServiceGroupsStore.removeAll();
     },
+    
+	setFinancialLabels: function(){
+		var me=this;
+		me.getFinancialAidFileStatusField().setText('<span style="color:#15428B">FA File:   </span>', false);
+        me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP Code:   </span>', false);
+        me.getFinancialAidAcceptedTermsField().setText('<span style="color:#15428B">FA Awarded:   </span>', false);
+	},
 
     newServiceSuccessHandler: function(name, callback, serviceResponses) {
         var me = this;
@@ -148,7 +183,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             serviceResponses.responseCnt++;
             if ( serviceResponsesCallback ) {
                 serviceResponsesCallback.apply(me, [name, serviceResponses, r]);
-            }
+			}
             if ( callback ) {
                 callback.apply(me, [ serviceResponses ]);
             }
@@ -160,10 +195,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var me = this;
         var personResponse = serviceResponses.successes.person;
         me.person.populateFromGenericObject(personResponse);
-
-        // load and render person data
-        me.profileReferralSourcesStore.removeAll();
-        me.profileServiceReasonsStore.removeAll();
 		
         var nameField = me.getNameField();	
 		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
@@ -174,12 +205,14 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var earlyAlertField = me.getEarlyAlertField();
         var actionPlanField = me.getActionPlanField();
 		var studentIdField = me.getStudentIdField();
+		
+        var studentIntakeAssignedField = me.getStudentIntakeAssignedField();
+		var studentIntakeCompletedField = me.getStudentIntakeCompletedField();
 
         var fullName = me.person.getFullName();
 		var firstLastName = me.person.getFirstLastName();
         var coachName = me.person.getCoachFullName();
-		
-
+       	
         // load referral sources
         if (personResponse.referralSources != null) {
             me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
@@ -200,13 +233,13 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
         // load additional values
 		nameField.setFieldLabel('');
-        nameField.setValue('<span style="color:#15428B">Name:  </span>' + firstLastName);
+        nameField.setValue('<span style="color:#15428B">'+'Name'+':  </span>' + firstLastName);
 		studentIdField.setFieldLabel('');
         studentIdField.setValue('<span style="color:#15428B">' + me.sspConfig.get('studentIdAlias') + ':  </span>' + me.person.get('schoolId'));
 		primaryEmailAddressField.setFieldLabel('');
-        primaryEmailAddressField.setValue('<span style="color:#15428B">Email:  </span>' + me.handleNull(me.person.get('primaryEmailAddress')));
+        primaryEmailAddressField.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.school-email')+':  </span>' + me.handleNull(me.person.get('primaryEmailAddress')));
 		birthDateField.setFieldLabel('');
-        birthDateField.setValue('<span style="color:#15428B">DOB:  </span>' + me.handleNull(me.person.getFormattedBirthDate()));
+        birthDateField.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.dob')+':  </span>' + me.handleNull(me.person.getFormattedBirthDate()));
 		studentTypeField.setFieldLabel('');
         studentTypeField.setValue('<span style="color:#15428B">Student Type:  </span>' + me.handleNull(me.person.getStudentTypeName()));
         photoUrlField.setSrc(me.person.getPhotoUrl());
@@ -219,17 +252,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         me.getRegisteredTermsField().setValue(me.handleNull(me.person.get('registeredTerms')));
         me.getPaymentStatusField().setValue(me.handleNull(me.person.get('paymentStatus')));
 		
-
-        var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
-        var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
-        studentRecordComp.setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + me.person.get('schoolId'));
-        studentCoachButton.setText('<u>Coach: ' + coachName + '</u>');
-		
-        me.appEventsController.assignEvent({
-            eventName: 'emailCoach',
-            callBackFunc: me.onEmailCoach,
-            scope: me
-        });
+        studentIntakeAssignedField.setValue(me.handleNull(me.person.get('studentIntakeRequestDate')));
+        studentIntakeCompletedField.setValue(me.handleNull(me.person.get('studentIntakeCompleteDate')));
+        me.appEventsController.getApplication().fireEvent('updateStudentRecord',{'person':me.person});
     },
 
     getPersonFailure: function() {
@@ -274,15 +299,33 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             me.getAcademicProgramsField().setValue('<span style="color:#15428B">Academic Program:  </span>' + programNames.join(', '));
         }
         
+        me.getFinancialAidFileStatusField().setText('<span style="color:#15428B">FA File:   </span>', false);
+        me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP Code:   </span>', false);
+        me.getFinancialAidAcceptedTermsField().setText('<span style="color:#15428B">FA Awarded:   </span>', false);
 
         var financialAid = transcript.get('financialAid');
         if ( financialAid ) {
-            me.getCurrentYearFinancialAidAwardField().setFieldLabel('');
-        	me.getCurrentYearFinancialAidAwardField().setValue('<span style="color:#15428B">FA Award:  </span>' + me.handleNull(financialAid.currentYearFinancialAidAward));
-        	me.getSapStatusField().setFieldLabel('');
-			me.getSapStatusField().setValue('<span style="color:#15428B">SAP:  </span>' + me.handleNull(financialAid.sapStatus));
+        	me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP:  </span><u>' + me.handleNull(financialAid.sapStatusCode) + '</u>', false);
+			var view = Ext.ComponentQuery.query("#profileDetails")[0];
+			view.getController().sapStatusCode = me.handleNull(financialAid.sapStatusCode);
+			me.sapStatusCode = financialAid.sapStatusCode;
+			me.getView().sapStatusCode = financialAid.sapStatusCode;
+			me.getBalanceOwedField().setValue(Ext.util.Format.usMoney(financialAid.balanceOwed));
+			me.getFinancialAidFileStatusField().setText( '<span style="color:#15428B">FA File:  </span><u>' + me.handleNull(financialAid.financialAidFileStatus) + '</u>', false);
+
         }
+        me.financialAidAwards = transcript.get('financialAidAcceptedTerms');
+        if ( me.financialAidAwards  && me.financialAidAwards.length > 0) { 
+        	var model = Ext.create("Ssp.model.external.FinancialAidAward");
+        	model.populateFromExternalData(me.financialAidAwards[0]);
+        	me.getFinancialAidAcceptedTermsField().setText('<span style="color:#15428B">FA Awarded:   </span><u>' + model.get("termCode") + " (" +  model.get("acceptedLong") + ")</u>", false);
+        }
+        
+
+		me.financialAidFilesStatuses = transcript.get('financialAidFiles');
     },
+    
+    
 
     getTranscriptFailure: function() {
         // nothing to do
@@ -328,6 +371,14 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
 	destroy: function() {
         var me=this;
+        me.appEventsController.removeEvent({
+            eventName: 'emailCoach',
+            callBackFunc: me.onEmailCoach,
+            scope: me
+        });
+		var view = Ext.ComponentQuery.query("#profileDetails");
+    	if(view && view.length > 0)
+    		view[0].getController().closePopups();
         return me.callParent( arguments );
     },
 
@@ -342,6 +393,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var me=this;
         
         var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
+		me.appEventsController.getApplication().fireEvent('goToDifferentTabinCaseload',{panelTitle:'Service Reasons'});
         
     },
     
@@ -349,7 +401,15 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var me=this;
         
         var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
+		me.appEventsController.getApplication().fireEvent('goToDifferentTabinCaseload',{panelTitle:'Service Groups'});
+        
+    },
+    
+    onReferralSourceEditButtonClick: function(button){
+        var me=this;
+        
+        var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
+		me.appEventsController.getApplication().fireEvent('goToDifferentTabinCaseload',{panelTitle:'Referral Sources'});
         
     }
-	
 });

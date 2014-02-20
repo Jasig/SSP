@@ -52,6 +52,14 @@
 		member. -->
 	<changeSet id="Backfill early alert term codes (mssql)" author="dan.mccallum"
 			dbms="mssql">
+		<!-- MARK_RAN b/c if the external view doesn't exist when this runs,
+		there's no point in backfilling early_alert... there's almost certainly
+		nothing in that table... and we avoid suprises later by just skipping
+		the changeset, which was originally intended for upgrades, not
+		new installs. -->
+		<preConditions onFail="MARK_RAN">
+			<viewExists viewName="v_external_faculty_course" schemaName="${schema}" />
+		</preConditions>
 		<sql>
 			update early_alert set course_term_code =
 			(select top 1 c.term_code
@@ -71,6 +79,14 @@
 	<!-- Postgres has different result set limiting syntax than SqlServer -->
 	<changeSet id="Backfill early alert term codes (pg)" author="dan.mccallum"
 			   dbms="postgresql">
+		<!-- MARK_RAN b/c if the external view doesn't exist when this runs,
+		there's no point in backfilling early_alert... there's almost certainly
+		nothing in that table... and we avoid suprises later by just skipping
+		the changeset, which was originally intended for upgrades, not
+		new installs. -->
+		<preConditions onFail="MARK_RAN">
+			<viewExists viewName="v_external_faculty_course" schemaName="${schema}" />
+		</preConditions>
 		<sql>
 			update early_alert set course_term_code =
 			(select c.term_code

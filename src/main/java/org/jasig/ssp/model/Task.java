@@ -29,7 +29,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -134,15 +133,11 @@ public class Task // NOPMD by jon.adams
 			return null;
 		}
 
-		if (person.getId() == getCreatedBy().getId()) {
-			if (challengeReferral == null) {
-				return CUSTOM_ACTION_PLAN_TASK;
-			} else {
-				return ACTION_PLAN_TASK;
-			}
+		if (challengeReferral == null) {
+			return CUSTOM_ACTION_PLAN_TASK;
 		}
+		return ACTION_PLAN_TASK;
 
-		return SSP_ACTION_PLAN_TASK;
 	}
 
 	public String getGroup() {

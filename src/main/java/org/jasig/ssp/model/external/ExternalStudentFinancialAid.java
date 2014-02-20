@@ -24,6 +24,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -65,6 +67,8 @@ public class ExternalStudentFinancialAid extends AbstractExternalData implements
 	@Column(nullable = true)
 	String currentYearFinancialAidAward;
 	
+	
+	/* retained for legacy reasons */
 	@Column(nullable = true)
 	String sapStatus;
 
@@ -81,6 +85,33 @@ public class ExternalStudentFinancialAid extends AbstractExternalData implements
 	@Column(nullable = true)
 	BigDecimal remainingLoanAmount;
 	
+	
+	@Enumerated(EnumType.ORDINAL)
+	@Column(nullable = true)
+	FinancialFileStatus financialAidFileStatus;
+	
+	@Column(nullable = true)
+	Integer termsLeft;
+	
+	@Column(nullable = true)
+	BigDecimal institutionalLoanAmount;
+	
+	@Column(nullable = true, length = 10)
+	@Size(max = 10)
+	String sapStatusCode;
+	
+	@Column(nullable = true, length = 1)
+	@Size(max = 1)
+	String eligibleFederalAid;
+	
+	public String getSapStatusCode() {
+		return sapStatusCode;
+	}
+
+	public void setSapStatusCode(String sapStatusCode) {
+		this.sapStatusCode = sapStatusCode;
+	}
+
 	/**
 	 * @return the schoolId
 	 */
@@ -233,6 +264,38 @@ public class ExternalStudentFinancialAid extends AbstractExternalData implements
 	 */
 	public void setRemainingLoanAmount(BigDecimal remainingLoanAmount) {
 		this.remainingLoanAmount = remainingLoanAmount;
+	}
+
+	public FinancialFileStatus getFinancialAidFileStatus() {
+		return financialAidFileStatus;
+	}
+
+	public void setFinancialAidFileStatus(FinancialFileStatus financialAidFileStatus) {
+		this.financialAidFileStatus = financialAidFileStatus;
+	}
+
+	public Integer getTermsLeft() {
+		return termsLeft;
+	}
+
+	public void setTermsLeft(Integer termsLeft) {
+		this.termsLeft = termsLeft;
+	}
+
+	public BigDecimal getInstitutionalLoanAmount() {
+		return institutionalLoanAmount;
+	}
+
+	public void setInstitutionalLoanAmount(BigDecimal institutionalLoanAmount) {
+		this.institutionalLoanAmount = institutionalLoanAmount;
+	}
+
+	public String getEligibleFederalAid() {
+		return eligibleFederalAid;
+	}
+
+	public void setEligibleFederalAid(String eligibleFederalAid) {
+		this.eligibleFederalAid = eligibleFederalAid;
 	}
 
 }

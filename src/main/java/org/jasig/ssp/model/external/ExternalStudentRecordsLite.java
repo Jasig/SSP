@@ -28,7 +28,8 @@ public class ExternalStudentRecordsLite extends AbstractExternalData implements
 	 * 
 	 */
 	private static final long serialVersionUID = -5994592133348666761L;
-	
+	private List<ExternalStudentFinancialAidAwardTerm> financialAidAcceptedTerms;
+	private List<ExternalStudentFinancialAidFile> financialAidFiles;
 
 	private ExternalStudentTranscript gpa;
 	private List<ExternalStudentAcademicProgram> programs;
@@ -68,6 +69,27 @@ public class ExternalStudentRecordsLite extends AbstractExternalData implements
 	 */
 	public void setFinancialAid(ExternalStudentFinancialAid financialAid) {
 		this.financialAid = financialAid;
+	}
+	
+	/**
+	 * @return the financialAidAcceptedTerms
+	 */
+	public List<ExternalStudentFinancialAidAwardTerm> getFinancialAidAcceptedTerms() {
+		return financialAidAcceptedTerms;
+	}
+	/**
+	 * @param financialAidAcceptedTerms the financialAidAcceptedTerms to set
+	 */
+	public void setFinancialAidAcceptedTerms(
+			List<ExternalStudentFinancialAidAwardTerm> financialAidAcceptedTerms) {
+		this.financialAidAcceptedTerms = financialAidAcceptedTerms;
+	}
+	public List<ExternalStudentFinancialAidFile> getFinancialAidFiles() {
+		return financialAidFiles;
+	}
+	public void setFinancialAidFiles(
+			List<ExternalStudentFinancialAidFile> financialAidFiles) {
+		this.financialAidFiles = financialAidFiles;
 	}
 
 }

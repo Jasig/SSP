@@ -23,10 +23,13 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
     controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
-        sspConfig: 'sspConfig'
+        sspConfig: 'sspConfig',
+        person: 'currentPerson',
+        textStore:'sspTextStore'
     },
     width: '100%',
     height: '100%',
+    
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
@@ -57,29 +60,71 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         anchor: '100%'
                     },
                     flex: .45,
-                    items: [                    /*{
-                     fieldLabel: '<a href="">Watch</a>',
-                     name: 'watchStudent',
-                     itemId: 'watchStudent',
-                     padding: '0 0 0 0',
-                     labelWidth: 20,
-                     margin: '0 0 1 5'
-                     
-                     },*/
+                    items: [                  
                     {
                         xtype: 'profileperson'
                     
-                    }, {
+                    },
+                    {
+                        xtype: 'fieldset',
+                        border: 1,
+                        defaultType: 'displayfield',
+                        margin: '0 0 2 2',
+                        height: '370',
+                        items: [{
+                            fieldLabel: 'Early Alerts',
+                            itemId: 'earlyAlert',
+                            name: 'earlyAlert'
+                        
+                        }, {
+                            fieldLabel: 'Action Plan',
+                            itemId: 'actionPlan',
+                            name: 'actionPlan'
+                        },{
+                            fieldLabel: 'Student Intake',
+                            name: 'studentintakeLabel',
+                            itemId: 'studentintakeLabel',
+                        },{
+                                fieldLabel: 'Assigned',
+                                name: 'studentIntakeAssigned',
+                                itemId: 'studentIntakeAssigned',
+								margin:'0 0 0 10',
+                                renderer: Ext.util.Format.dateRenderer('m/d/Y')
+                            }, {
+                                fieldLabel: 'Completed',
+                                name: 'studentIntakeCompleted',
+                                itemId: 'studentIntakeCompleted',
+                                cls: 'dashboardIntakeDates',
+								margin:'0 0 0 10',
+                                renderer: Ext.util.Format.dateRenderer('m/d/Y')
+                        
+                        }]
+                    }
+					, {
+		                  xtype: 'tbspacer',
+		                   height: 10
+		               },
+                    {
                         xtype: 'profileacademicprogram'
                     
                     }]
                 
-                }, {
+                },{
+                xtype: 'fieldset',
+                border: 0,
+                title: '',
+                defaultType: 'displayfield',
+                margin: '0 0 0 2',
+                flex: .25,
+                defaults: {
+                    anchor: '100%'
+                },items:[                
+                {
                     xtype: 'fieldset',
                     border: 1,
                     title: '',
                     defaultType: 'displayfield',
-                    margin: '0 0 0 2',
+                    margin: '0 0 33 2',
                     defaults: {
                         anchor: '100%'
                     },
@@ -102,10 +147,7 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         fieldLabel: 'Restrictions',
                         name: 'currentRestrictions',
                         itemId: 'currentRestrictions'
-                    }, {
-                        xtype: 'tbspacer',
-                        height: '10'
-                    }, {
+                    },{
                         fieldLabel: 'Reg',
                         name: 'registeredTerms',
                         itemId: 'registeredTerms',
@@ -116,34 +158,61 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         itemId: 'paymentStatus',
                         labelWidth: 50
                     }, {
-                        fieldLabel: 'FA Award',
-                        name: 'currentYearFinancialAidAward',
-                        itemId: 'currentYearFinancialAidAward'
-                    
-                    }, {
-                        fieldLabel: 'SAP',
-                        name: 'sapStatus',
-                        itemId: 'sapStatus'
-                    }, {
+                        fieldLabel: 'Balance',
+                        name: 'balanceOwed',
+                        itemId: 'balanceOwed',
+						labelWidth: 50
+                    },{
                         fieldLabel: 'F1',
                         name: 'f1Status',
                         itemId: 'f1Status',
-                        labelWidth: 15
-                    }, {
+                        labelWidth: 60
+                    }	,{
+	                        xtype: 'tbspacer',
+	                        height: 8
+	                    },{
+                    name: 'financialAidFileStatus',
+                    itemId: 'financialAidFileStatus',
+                    xtype:'label',
+                    listeners: { element: 'el', click: function () { 
+                    	var view = Ext.ComponentQuery.query("#profileDetails");
+						if(view && view.length > 0)
+                    		view[0].getController().onShowFinancialAidFileStatuses();
+                    } } 
+                }	,{
                         xtype: 'tbspacer',
-                        height: '10'
-                    }, {
-                        fieldLabel: 'Early Alerts',
-                        itemId: 'earlyAlert',
-                        name: 'earlyAlert'
-                    
-                    }, {
-                        fieldLabel: 'Action Plan',
-                        itemId: 'actionPlan',
-                        name: 'actionPlan'
-                    }]
-                
-                }, {
+                        height: 8
+                    },
+                {
+                name: 'sapStatusCode',
+                itemId: 'sapStatusCode',
+                xtype: 'label',
+                listeners: { element: 'el', click: function (me) { 
+                	var view = Ext.ComponentQuery.query("#profileDetails");
+                	if(view && view.length > 0)
+                		view[0].getController().onShowSAPCodeInfo();
+                } } 
+            }	,{
+                    xtype: 'tbspacer',
+                    height: 8
+                }, 	{
+                	text: 'FA Awarded:',
+                    name: 'financialAidAcceptedTerms',
+                    itemId: 'financialAidAcceptedTerms',
+                    xtype:'label',
+                    listeners: { element: 'el', click: function () { 
+                    	var view = Ext.ComponentQuery.query("#profileDetails");
+						if(view && view.length > 0)
+                    		view[0].getController().onShowFinancialAidAwards();
+                    } } 
+                },{
+                        xtype: 'tbspacer',
+                        height: 8
+                    }
+                    ]
+
+                }]
+                },{
                     xtype: 'fieldset',
                     border: 0,
                     title: '',
@@ -158,9 +227,14 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         xtype: 'profileservicereasons'
                     }, {
                         xtype: 'tbspacer',
-                        height: '20'
+                        height: 10
                     }, {
                         xtype: 'profilespecialservicegroups'
+                    },{
+                        xtype: 'tbspacer',
+                        height: 10
+                    },{
+                    	 xtype: 'profilereferralsources'
                     }]
                 }]
             }]

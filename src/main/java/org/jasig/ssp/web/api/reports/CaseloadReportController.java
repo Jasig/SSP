@@ -35,8 +35,8 @@ import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.security.permissions.Permission;
-import org.jasig.ssp.service.CaseloadService;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonSearchService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
@@ -153,7 +153,7 @@ public class CaseloadReportController extends ReportBaseController {
 	@Autowired
 	protected transient ProgramStatusService programStatusService;
 	@Autowired
-	protected transient CaseloadService caseLoadService;
+	protected transient PersonSearchService caseLoadService;
 	@Autowired
 	protected transient StudentTypeService studentTypeService;
 	

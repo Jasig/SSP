@@ -1,0 +1,143 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<property name="schema" value="${database.schema}" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<changeSet author='tony.arland' id='create person_completed_item table'>
+		<createTable tableName="person_completed_item">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="person_id" type="uuid" >
+				<constraints nullable="false"
+					foreignKeyName="person_comp_item_person_id"
+					references="person(id)" />
+			</column>
+			<column name="completed_item_id" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_comp_item_comp_item_id"
+					references="completed_item(id)" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="person_comp_item_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="person_comp_item_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<createIndex tableName="person_completed_item" indexName="person_completed_item_idx">
+			<column name="person_id"></column>
+		</createIndex>
+		<sql>grant all on person_completed_item to ${database.app.username}</sql>
+		<rollback>
+			<dropTable tableName="completed_item" />
+		</rollback>
+
+		<!-- Theres a different assumption in the liquibase handling of timezones 
+			on postgres. Specifying "Without" timezone -->
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+	</changeSet>
+	<changeSet id="seed person_completed_item postgres" author="tony.arland" dbms="postgresql">
+		<sql>
+			insert into person_completed_item (id,person_id,completed_item_id,created_date,modified_date,created_by,modified_by,object_status) 
+			 (select pep.id,p.id,'3c9702d5-986e-43c2-ab6a-25799fed7b92',current_timestamp,current_timestamp,'58ba5ee3-734e-4ae9-b9c5-943774b4de41','58ba5ee3-734e-4ae9-b9c5-943774b4de41',1 
+			 from person_education_plan pep
+			 join person p on pep.id = p.person_education_plan_id
+			 where new_orientation_complete  = true)
+		</sql>
+		<sql>
+			insert into person_completed_item (id,person_id,completed_item_id,created_date,modified_date,created_by,modified_by,object_status) 
+			(select p.id,p.id,'502e6ff4-0751-40d0-9f65-8ac115f73534',current_timestamp,current_timestamp,'58ba5ee3-734e-4ae9-b9c5-943774b4de41','58ba5ee3-734e-4ae9-b9c5-943774b4de41',1 
+			from person_education_plan pep 
+			join person p on pep.id = p.person_education_plan_id
+			where pep.registered_for_classes = true)
+		</sql>		
+	</changeSet>
+	
+	<changeSet id="seed person_completed_item mssql" author="tony.arland" dbms="mssql">
+		<sql>
+			insert into person_completed_item (id,person_id,completed_item_id,created_date,modified_date,created_by,modified_by,object_status) 
+			 (select pep.id,p.id,'3c9702d5-986e-43c2-ab6a-25799fed7b92',current_timestamp,current_timestamp,'58ba5ee3-734e-4ae9-b9c5-943774b4de41','58ba5ee3-734e-4ae9-b9c5-943774b4de41',1 
+			 from person_education_plan pep
+			 join person p on pep.id = p.person_education_plan_id
+			 where new_orientation_complete  = 1)
+		</sql>
+		<sql>
+			insert into person_completed_item (id,person_id,completed_item_id,created_date,modified_date,created_by,modified_by,object_status) 
+			(select p.id,p.id,'502e6ff4-0751-40d0-9f65-8ac115f73534',current_timestamp,current_timestamp,'58ba5ee3-734e-4ae9-b9c5-943774b4de41','58ba5ee3-734e-4ae9-b9c5-943774b4de41',1 
+			from person_education_plan pep 
+			join person p on pep.id = p.person_education_plan_id
+			where pep.registered_for_classes = 1)
+		</sql>		
+	</changeSet>	
+	
+	<changeSet author='tony.arland' id='change blurb seedings 5'>
+		<insert tableName="blurb">
+			<column name="id" value="fdbe6203-a828-4fe8-8924-2463223646cb" />
+			<column name="name" value="Checklist tab label" />
+			<column name="code" value="intake.tab8.label"/>
+			<column name="value" value="Checklist"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.checklist" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+	</changeSet>
+	
+		<changeSet author='tony.arland' id='change blurb seedings 6'>
+		<insert tableName="blurb">
+			<column name="id" value="14aa910d-6061-4194-83e5-0cb97323b49a" />
+			<column name="name" value="intake checklist label" />
+			<column name="code" value="intake.tab8.label.checklist-question"/>
+			<column name="value" value="Check all that apply"/>
+			<column name="description" value="" />
+			<column name="entity_type_code" value="reference.checklist-question" />
+			<column name="created_date" valueDate="2013-10-29T00:00:00" />
+			<column name="modified_date" valueDate="2013-10-29T00:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+	</changeSet>
+		
+</databaseChangeLog>

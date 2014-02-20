@@ -209,13 +209,14 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 						    items: [{
 						        	xtype: 'combobox',
 						        	name: 'isPrivateFilter',
-						        	fieldLabel: 'Type',
+						        	fieldLabel: 'Visibility',
 									labelWidth:80,
 									store: Ext.create('Ext.data.Store', {
 									    fields: ['value', 'name'],
 									    	data : [
 										        	{"value":"ALL","name":"ALL"},
-										        	{"value":"PUBLIC","name":"PUBLIC"},
+										        	{"value":"ANONYMOUS","name":"ANONYMOUS"},
+										        	{"value":"AUTHENTICATED","name":"AUTHENTICATED"},
 										        	{"value":"PRIVATE","name":"PRIVATE"}
 										    	]
 									}),
@@ -311,11 +312,11 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
          store: me.store,
          columns: [
          {
-             text: 'Type',
+             text: 'Vis',
              width: 45,
-             dataIndex: 'isPrivate',
+             dataIndex: 'visibility',
              sortable: true,
-				renderer:me.columnRendererUtils.renderTemplatePrivate
+				renderer:me.columnRendererUtils.renderTemplateVisibility
          },	{
                  text: 'Status',
                  width: 55,
@@ -344,7 +345,5 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
         });
         
         return me.callParent(arguments);
-    }
-                            
-    
+    }   
 });

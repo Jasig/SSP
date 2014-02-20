@@ -21,6 +21,7 @@ package org.jasig.ssp.factory.tool.impl;
 import java.util.Set;
 
 import org.jasig.ssp.factory.PersonChallengeTOFactory;
+import org.jasig.ssp.factory.PersonCompletedItemTOFactory;
 import org.jasig.ssp.factory.PersonDemographicsTOFactory;
 import org.jasig.ssp.factory.PersonEducationGoalTOFactory;
 import org.jasig.ssp.factory.PersonEducationLevelTOFactory;
@@ -64,6 +65,9 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 
 	@Autowired
 	private transient PersonChallengeTOFactory personChallengeTOFactory;
+	
+	@Autowired
+	private transient PersonCompletedItemTOFactory completedItemsTOFactory;
 
 	@Override
 	public IntakeFormTO from(final IntakeForm model) {
@@ -180,6 +184,19 @@ public class IntakeFormTOFactoryImpl implements IntakeFormTOFactory {
 		}
 
 		associateWithPerson(model.getPerson().getChallenges(),
+				model.getPerson());
+		
+		if ((tObject.getPersonChecklist() != null)
+				&& !tObject.getPersonChecklist().isEmpty()) {
+			SetOps.updateSet(
+					model.getPerson().getCompletedItems(),
+					completedItemsTOFactory.asSet(
+							tObject.getPersonChecklist()));
+		} else {
+			SetOps.softDeleteSetItems(model.getPerson().getCompletedItems());
+		}
+
+		associateWithPerson(model.getPerson().getCompletedItems(),
 				model.getPerson());
 
 		return model;

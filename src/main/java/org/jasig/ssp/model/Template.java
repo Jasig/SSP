@@ -24,6 +24,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -56,6 +58,10 @@ public class Template extends AbstractPlan implements Cloneable{
 	
 	@Column(nullable = false)
 	private Boolean isPrivate = false;
+	
+	@Enumerated(EnumType.ORDINAL)
+	@Column(nullable = false)
+	private MapTemplateVisibility visibility = MapTemplateVisibility.AUTHENTICATED;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "template", orphanRemoval=true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
@@ -97,6 +103,14 @@ public class Template extends AbstractPlan implements Cloneable{
 	public void setIsPrivate(Boolean isPrivate) {
 		this.isPrivate = isPrivate;
 	}
+	
+	public MapTemplateVisibility getVisibility() {
+		return visibility;
+	}
+
+	public void setVisibility(MapTemplateVisibility visibility) {
+		this.visibility = visibility;
+	}
 
 	public List<TemplateCourse> getTemplateCourses() {
 		return templateCourses;
@@ -116,11 +130,15 @@ public class Template extends AbstractPlan implements Cloneable{
 	public Template clone() throws CloneNotSupportedException {
 		Template clone = new Template();
 		cloneCommonFields(clone);
-		clone.setIsPrivate(this.getIsPrivate());
+		if(this.getVisibility().equals(MapTemplateVisibility.PRIVATE))
+			clone.setIsPrivate(true);
+		else
+			clone.setIsPrivate(false);
+		clone.setVisibility(this.getVisibility());
 		clone.setIsImportant(this.getIsImportant());
 		clone.setIsF1Visa(this.getIsF1Visa());
 		clone.setDepartmentCode(this.getDepartmentCode());
-		clone.setDivisionCode(this.getDepartmentCode());
+		clone.setDivisionCode(this.getDivisionCode());
 		clone.setProgramCode(this.getProgramCode());
 		List<TemplateCourse> planCourses = this.getTemplateCourses();
 		for (TemplateCourse planCourse : planCourses) {

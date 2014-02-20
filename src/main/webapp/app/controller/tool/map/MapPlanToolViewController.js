@@ -32,12 +32,18 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
     
 	init: function() {
 		var me=this;
-	    me.resetForm();
-		me.currentMapPlan.addListener();
-		me.updatePlanStatus();
-	    me.getView().loadRecord(me.currentMapPlan);
-	   	me.appEventsController.getApplication().addListener("onUpdateCurrentMapPlanPlanToolView", me.onUpdateCurrentMapPlan, me);
-		return me.callParent(arguments);
+        // Cannot do anything in init that depends on the current plan
+        // having been loaded because this component potentially (and at this
+        // writing does) get initialized before the component that actually
+        // loads the current plan (not to mention that that load is async). So
+        // we just make sure to clear out any existing view state (paranoia?),
+        // set up listeners and wait for a subsequent event to indicate the
+        // current plan is loaded. We don't set a spinner here b/c we don't
+        // want to accidentally lock the panel forever should we never get
+        // the event we expect
+        me.resetForm();
+        me.appEventsController.getApplication().addListener("onUpdateCurrentMapPlanPlanToolView", me.onUpdateCurrentMapPlan, me);
+        return me.callParent(arguments);
     },
     resetForm: function() {
         var me = this;
@@ -46,39 +52,66 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
 
     updatePlanStatus: function(){
 		var me=this;
+        // Important to cache this before the async plan status lookup rather
+        // than in a success or failure handler because we know the event
+        // that triggers this function execution can be fired multiple times
+        // before those async calls return.
+        me.currentMapPlanId = me.currentMapPlan.getId();
+
     	if(me.currentMapPlan.get('isTemplate') == true || me.currentMapPlan.get('personId') == ""){
-    		me.getOnPlanField().setValue("");
+    		me.afterUpdatePlanStatus();
     		return;
     	}
-    	me.getView().setLoading(true);
- 		var callbacks = new Object();
- 		var serviceResponses = {
-             failures: {},
-             successes: {},
-             responseCnt: 0,
-             expectedResponseCnt: 1
-         }
- 		callbacks.success = me.newServiceSuccessHandler('planStatus', me.onPlanStatusSuccess, serviceResponses);
- 		callbacks.failure = me.newServiceFailureHandler('planStatus', me.onPlanStatusFailure, serviceResponses);
- 		callbacks.scope = me;
- 		me.mapPlanService.planStatus(me.currentMapPlan, callbacks);
+        me.mapPlanService.planStatus(me.currentMapPlan, {
+            success: function(response) {
+                me.onPlanStatusSuccess(response);
+                me.afterUpdatePlanStatus();
+            },
+            failure: function(response) {
+                me.onPlanStatusFailure(response);
+                me.afterUpdatePlanStatus();
+            },
+            scope: me
+        });
+    },
+
+    afterUpdatePlanStatus: function() {
+        var me = this;
+        me.onCurrentMapPlanChange();
+        me.getView().setLoading(false);
     },
     
 	onUpdateCurrentMapPlan: function(){
 		var me = this;
-		me.getView().loadRecord(me.currentMapPlan);
-		//me.updatePlanStatus();
-		me.onCurrentMapPlanChange();
+        if ( me.guardPlanStatusLookup() ) {
+            me.getView().setLoading(true);
+            me.getView().loadRecord(me.currentMapPlan);
+            me.updatePlanStatus();
+        }
 	},
+
+    guardPlanStatusLookup: function() {
+        var me = this;
+        // Can't tell the difference between two different "new" plans without
+        // listening for "onCreateNewMapPlan". But can't hook into that b/c
+        // SemesterPanelContainerViewController translates that event into
+        // "onUpdateCurrentMapPlanPlanToolView", which this component listens
+        // for. So we might not receive "onCreateNewMapPlan" until after
+        // "onUpdateCurrentMapPlanPlanToolView". So this guard ends up being
+        // a bit imprecise. But we assume it's probably not necessary to reload
+        // the plan status if all you're doing is replacing an unsaved plan with
+        // another unsaved plan.
+        return me.currentMapPlanId === undefined || // first time load
+            me.currentMapPlanId !== me.currentMapPlan.getId(); // obviously changing plans
+    },
+
 	
-	onPlanStatusSuccess:function(serviceResponses){
+	onPlanStatusSuccess:function(response){
 		var me = this;
-		me.getView().setLoading(false);
-		var planStatus = serviceResponses.successes.planStatus;
-		if(planStatus.responseText && planStatus.responseText.length > 1)
-		   planStatus = Ext.decode(planStatus.responseText);
+		if(response.responseText && response.responseText.length > 1)
+		    var planStatus = Ext.decode(response.responseText);
 		else
-			planStatus = null;
+		    var planStatus = null;
 			
 		if(planStatus && planStatus.status == "ON"){
 			me.getOnPlanField().setValue("On Plan");
@@ -95,49 +128,14 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
 	
 	onPlanStatusFailure:function(){
 		var me = this;
-		me.getView().setLoading(false);
-		me.getOnPlanField().setValue("No Status");
+		me.getOnPlanField().setValue("No Plan");
 	},
 	
 	onCurrentMapPlanChange: function(){
 		var me = this;
 		me.appEventsController.getApplication().fireEvent("onCurrentMapPlanChangeUpdateMapView");
 	},
-	
-	newServiceSuccessHandler: function(name, callback, serviceResponses) {
-        var me = this;
-        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response) {
-            serviceResponses.successes[name] = response;
-        });
-    },
 
-    newServiceFailureHandler: function(name, callback, serviceResponses) {
-        var me = this;
-        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response) {
-            serviceResponses.failures[name] = response;
-        });
-    },
-
-    newServiceHandler: function(name, callback, serviceResponses, serviceResponsesCallback) {
-        return function(r, scope) {
-            var me = scope;
-            serviceResponses.responseCnt++;
-            if ( serviceResponsesCallback ) {
-                serviceResponsesCallback.apply(me, [name, serviceResponses, r]);
-            }
-            if ( callback ) {
-                callback.apply(me, [ serviceResponses ]);
-            }
-            me.afterServiceHandler(serviceResponses);
-        };
-    },
-
-	afterServiceHandler: function(serviceResponses) {
-        var me = this;
-        if ( serviceResponses.responseCnt >= serviceResponses.expectedResponseCnt ) {
-            //me.getView().setLoading(false);
-        }
-    },
 	
 	destroy: function(){
 		var me = this;

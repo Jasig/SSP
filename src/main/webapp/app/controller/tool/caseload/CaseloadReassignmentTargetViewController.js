@@ -21,6 +21,6 @@ Ext.define('Ssp.controller.tool.caseload.CaseloadReassignmentTargetViewControlle
     mixins: [ 'Deft.mixin.Injectable' ],
     config: {
     	containerToLoadInto: 'tools',
-    	formToDisplay: 'toolcaseloadreassignment',
+    	formToDisplay: 'toolcaseloadreassignment'
     }
 });

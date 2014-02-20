@@ -265,7 +265,7 @@ public class TemplateDaoTest {
 	{
 		PagingWrapper<Template> all = dao.getAll(SortingAndPaging.createForSingleSortWithPaging(
 						ObjectStatus.ALL , null,
-						null, null, null, null), null, null, null, null);
+						null, null, null, null), null);
 		assertTrue(all.getRows().size() > 0);
 	}
 	public void testTemplateDaoSaveWithChildren2() throws ObjectNotFoundException, CloneNotSupportedException {

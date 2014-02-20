@@ -22,6 +22,6 @@ Ext.define('Ssp.view.tools.caseload.CaseloadReassignmentSource', {
 	title: 'Assigned Students',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewController',
+    controller: 'Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewController'
 
 });

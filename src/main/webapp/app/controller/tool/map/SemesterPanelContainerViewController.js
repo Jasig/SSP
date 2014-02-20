@@ -28,11 +28,11 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		authenticatedPerson: 'authenticatedPerson',
         personLite: 'personLite',
     	currentMapPlan: 'currentMapPlan',
-		electiveStore : 'electivesStore',
 		semesterStores : 'currentSemesterStores',
-		colorsStore: 'colorsStore'
+        electiveStore: 'electivesAllUnpagedStore',
+        colorStore: 'colorsAllUnpagedStore',
     },
-    
+    semesterPanels : new Array(),
 	control: {
 	    	view: {
 				afterlayout: {
@@ -41,21 +41,16 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				}
 	    	}
 	},
-
+	config:{
+		minHrs : '0',
+		maxHrs: '0'
+	},
 	
 	init: function() {
 		var me=this;
 		var id = me.personLite.get('id');
 		
 	    me.resetForm();
-        if(me.electiveStore.data.length == 0)
-        {
-        	me.electiveStore.load();
-        }
-        if(me.colorsStore.data.length == 0)
-        {
-        	me.colorsStore.load();
-        } 
 		me.appEventsController.assignEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onLoadTemplatePlan', callBackFunc: me.onLoadTemplatePlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
@@ -108,6 +103,32 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
         };
     },
 
+    // Just to avoid creating needless closures
+    noOp: function() {},
+
+    // Makes sure we have all the stuff the SemesterPanels will need before they
+    // render. This breaks encapsulation, but not sure of a better way...
+    // maybe a static method on SemesterPanel or SemesterPanelController?
+    // the latter breaks encapsulation too and its dependencies wouldn't have
+    // loaded when the static is invoked, I don't think. The former might not
+    // be so bad in terms of separation of concerns since we already have
+    // complex rendering functions there. But I think we still have the same
+    // DI timing issue. So we do the dirty deed here...
+    withMapPlanRenderingDependencies: function(work) {
+        var me = this;
+        var responseDispatcher = Ext.create('Ssp.util.ResponseDispatcher', {
+            remainingOpNames: ['electives','colors'],
+            afterLastOp: {
+                callback: work.fn,
+                callbackScope: work.scope,
+            },
+        });
+        me.electiveStore.clearFilter(true);
+        me.electiveStore.load(responseDispatcher.setSuccessCallback('electives', me.noOp, me));
+        me.colorStore.clearFilter(true);
+        me.colorStore.load(responseDispatcher.setSuccessCallback('colors', me.noOp, me));
+    },
+
     getMapPlanServiceSuccess: function(serviceResponses, isTemplate) {
         var me = this;
         var mapResponse = serviceResponses.successes.map;
@@ -120,49 +141,66 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			me.allPlansPopUp = Ext.create('Ssp.view.tools.map.LoadPlans',{hidden:true,onInit:true,fromMapLoad:true});
 			me.allPlansPopUp.show();
        	} else {
+			me.currentMapPlan.clearMapPlan();
 			me.currentMapPlan.loadFromServer(Ext.decode(mapResponse.responseText));
 			if(isTemplate){
 				me.currentMapPlan.set("planCourses", me.currentMapPlan.get('templateCourses'));
 			}
-			me.onCreateMapPlan();
-			me.populatePlanStores();
-			me.updateAllPlanHours();
-			if(isTemplate)
-				me.currentMapPlan.setIsTemplate(isTemplate);
-			else
-				me.currentMapPlan.setIsTemplate(false);
+			me.withMapPlanRenderingDependencies({
+				fn: function() {
+					me.onCreateMapPlan();
+					me.populatePlanStores();
+					me.updateAllPlanHours();
+					me.currentMapPlan.setIsTemplate(!!(isTemplate));
+					me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+				},
+				scope: me // shouldnt be necessary in this particular case, but satisfies ResponseDispatcher expectations
+			});
 		}
-    	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
-
     },
 
     onLoadMapPlan: function () {
     	var me = this;
-		me.onCreateMapPlan();
-		me.populatePlanStores();
-		me.updateAllPlanHours();  
-    	me.currentMapPlan.setIsTemplate(false);
-    	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
-		me.getView().setLoading(false);
+        me.withMapPlanRenderingDependencies({
+			fn: function() {
+				me.onCreateMapPlan();
+				me.populatePlanStores();
+				me.updateAllPlanHours();
+    			me.currentMapPlan.setIsTemplate(false);
+    			me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+				me.getView().setLoading(false);
+			},
+			scope: me // shouldnt be necessary in this particular case, but satisfies ResponseDispatcher expectations
+        });
     },
     
     onLoadTemplatePlan: function () {
-    	var me = this;
-    	me.currentMapPlan.set("planCourses", me.currentMapPlan.get('templateCourses'));
-    	me.currentMapPlan.setIsTemplate(true);
-		me.onCreateMapPlan();
-		me.populatePlanStores();
-		me.updateAllPlanHours();  
-    	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
-		me.getView().setLoading(false);
+		var me = this;
+		me.withMapPlanRenderingDependencies({
+			fn: function() {
+				me.currentMapPlan.set("planCourses", me.currentMapPlan.get('templateCourses'));
+				me.currentMapPlan.setIsTemplate(true);
+				me.onCreateMapPlan();
+				me.populatePlanStores();
+				me.updateAllPlanHours();
+				me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+				me.getView().setLoading(false);
+			},
+			scope: me
+		});
     },
     
     getMapPlanServiceFailure: function() {
 		var me = this;
-		me.onCreateNewMapPlan();
-		me.updateAllPlanHours();
-		me.currentMapPlan.set('personId',me.personLite.get('id'));
-		me.currentMapPlan.set('ownerId',me.personLite.get('id'));
+		me.withMapPlanRenderingDependencies({
+			fn: function() {
+				me.onCreateNewMapPlan();
+				me.updateAllPlanHours();
+				me.currentMapPlan.set('personId',me.personLite.get('id'));
+				me.currentMapPlan.set('ownerId',me.personLite.get('id'));
+			},
+			scope: me // shouldnt be necessary in this particular case, but satisfies ResponseDispatcher expectations
+		});
     },
  
 	onAfterLayout: function(){
@@ -241,8 +279,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.currentMapPlan.set('personId',  me.personLite.get('id'));
 		me.currentMapPlan.set('ownerId',  me.authenticatedPerson.get('id'));
 		me.currentMapPlan.set('name','New Plan');
-		me.currentMapPlan.set('termNotes',[]);
-		me.currentMapPlan.setIsTemplate(false);
 		me.onCreateMapPlan();
 		me.populatePlanStores();
 		me.updateAllPlanHours();
@@ -265,7 +301,15 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		}
 		
 		me.fillSemesterStores(terms);
-
+		
+		var view  = me.getView().getComponent("semestersets");
+		if(view == null){
+			return;
+		}		
+		Ext.suspendLayouts();
+		view.removeAll(true);
+		
+		var i=0;
 		var termsets = [];
 		Ext.Array.forEach(terms, function(term) {
 			if(termsets.hasOwnProperty(term.get("reportYear"))){
@@ -278,6 +322,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var yearViews = new Array();
 		Ext.Array.forEach(termsets, function(termSet) {
 			if (termSet) {
+			var yearSemesterPanels = new Array();
 			var yearView = new Ext.form.FieldSet({
 				xtype : 'fieldset',
 				border: 0,
@@ -300,17 +345,13 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				var isPast = me.termsStore.isPastTerm(termCode);
 				semesterPanels.push(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode]));
 			});
+
+			
 			yearView.add(semesterPanels);		
 			yearViews.push(yearView);
 			}
 		});
-		
-		var view  = me.getView().getComponent("semestersets");
-		if(view == null){
-			return;
-		}
-		view.removeAll(true);			
-		Ext.suspendLayouts();
+
 		view.add(yearViews);	
 		Ext.resumeLayouts(true);	
 		
@@ -320,28 +361,24 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	createSemesterPanel: function(semesterName, termCode, semesterStore){
 		var me = this;
-		var semesterPanel = new Ssp.view.tools.map.SemesterPanel({
-			title:semesterName,
-			itemId:termCode,
-			store:semesterStore
-		});
 		
 		if(!me.termsStore.isPastTerm(termCode)){
-		 	var semesterGrid = new Ssp.view.tools.map.SemesterGrid({
+			var semesterPanel = new Ssp.view.tools.map.SemesterPanel({
+				title:semesterName,
+				itemId:termCode,
 				store:semesterStore,
 				scroll: true
-			});
-			semesterPanel.add(semesterGrid);
+			});		 	
 		}else{
-		 	var semesterGrid = new Ssp.view.tools.map.SemesterGrid({
+			var semesterPanel = new Ssp.view.tools.map.SemesterPanel({
+				title:semesterName,
+				itemId:termCode,
 				store:semesterStore,
-				scroll: true,
-				enableDragAndDrop: false
-			});
+				enableDragAndDrop: false,
+				scroll: true
+			});			 	
 		 	semesterPanel.tools[0].hidden = false;
-			semesterPanel.add(semesterGrid);
 		}
-
 		return semesterPanel;
 	},
 	
@@ -456,8 +493,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var planHours = 0;
 		var devHours = 0;
 		Ext.Array.forEach(panels, function(panel) {
-			var storeGrid = panel.query("semestergrid")[0];
-			var store = storeGrid.getStore();
+			var store = panel.getStore();
 			var semesterBottomDock = panel.getDockedComponent("semesterBottomDock");
 			
 			var hours = me.updateTermHours(store, semesterBottomDock);
@@ -560,15 +596,19 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				show: true
             }
 		var metaData = new Ssp.model.tool.map.PlanOutputData();
-		metaData.set('outputFormat', 'fullFormat');
+		
 		metaData.set('includeCourseDescription', true);
 		metaData.set('includeHeaderFooter', true);
 		metaData.set('includeTotalTimeExpected', true);
 		metaData.set('includeFinancialAidInformation', true);
 		
 		var planType = "plan";
-		if(me.currentMapPlan.get("isTemplate") == true)
+		if(me.currentMapPlan.get("isTemplate") == true){
 			planType = "template";
+			metaData.set('outputFormat', 'matrixFormat');
+		}else{
+			metaData.set('outputFormat', 'fullFormat');
+		}
 			
 		me.mapPlanService.print(me.semesterStores, 
 			metaData,
@@ -707,12 +747,17 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	onValidateAccept: function(btnId){
 		var me = this;
 		if(btnId == 'ok'){
-			me.currentMapPlan.loadPlan(me.clonedMap, true);
-			me.onCreateMapPlan();
-			me.populatePlanStores();
-			me.updateAllPlanHours();
-			me.currentMapPlan.dirty = true;
-			me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+			me.withMapPlanRenderingDependencies({
+					fn: function() {
+						me.currentMapPlan.loadPlan(me.clonedMap, true);
+						me.onCreateMapPlan();
+						me.populatePlanStores();
+						me.updateAllPlanHours();
+						me.currentMapPlan.dirty = true;
+						me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+					},
+					scope: me
+			});
 		}
 	},
 	
@@ -834,7 +879,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			}
 		}
 	},
-
 	destroy: function() {
         var me=this;
 		if(me.coursePlanDetails != null && !me.coursePlanDetails.isDestroyed){
@@ -844,7 +888,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.appEventsController.removeEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
         
 		me.appEventsController.removeEvent({eventName: 'onPrintMapPlan', callBackFunc: me.onPrintMapPlan, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onShowMapPlanOverView', callBackFunc: me.onShowMapPlanOverView, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onShowMapPlanOverView', callBackFunc: me.onShowMapPlanOverView, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onEmailMapPlan', callBackFunc: me.onEmailMapPlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onShowMain', callBackFunc: me.onCreateNewMapPlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onSaveAsMapPlan', callBackFunc: me.onSaveAsMapPlan, scope: me});

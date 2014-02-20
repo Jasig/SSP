@@ -19,7 +19,6 @@
 package org.jasig.ssp.dao;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,21 +26,23 @@ import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.Query;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Plan;
-import org.jasig.ssp.transferobject.external.SearchExternalCourseTO;
+import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
+import org.jasig.ssp.transferobject.reports.MapPlanStatusReportCourse;
 import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
 import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
+import org.jasig.ssp.transferobject.reports.PlanIdPersonIdPair;
 import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO;
 import org.jasig.ssp.transferobject.reports.SearchPlanTO;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.google.common.collect.Lists;
@@ -50,17 +51,13 @@ import com.google.common.collect.Lists;
 public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<Plan> {
 
 
+	@Autowired
+	private transient ConfigService configService;
+	
 	public PlanDao() {
 		super(Plan.class);
 	}
 
-//	@Override
-//	protected Criteria createCriteria() {
-//		Criteria c = super.createCriteria();
-//		c.setFetchMode("planCourses.elective.color", FetchMode.SELECT);
-//		return c;
-//	}
-	
 	@SuppressWarnings("unchecked")
 	public List<Plan> getAllForStudent(UUID id)
 	{
@@ -166,17 +163,25 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 	@SuppressWarnings("unchecked")
 	public List<PlanCourseCountTO> getPlanCourseCount(SearchPlanTO form){
 		
+		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
+		String planStatusSelect = calculateMapPlanStatus ? " MapStatusReport msr " : " ExternalPersonPlanStatus ps ";
 		StringBuilder selectPlanCourses = new  StringBuilder("select count(distinct pc.id) as plan_studentCount, " +
 				"pc.courseCode as plan_courseCode, " +
 				"pc.formattedCourse as plan_formattedCourse, " +
 				"pc.courseTitle as plan_courseTitle, " +
 				"pc.termCode as plan_termCode " +
-				"from Plan p, PlanCourse pc, Person person, ExternalCourse ec, ExternalPersonPlanStatus ps ");
+				"from Plan p, PlanCourse pc, Person person, ExternalCourse ec,"+ planStatusSelect);
 		
-		buildQueryWhereClause(selectPlanCourses, form);
-		if(form.getPlanStatus() != null)
+		buildQueryWhereClause(selectPlanCourses, form,calculateMapPlanStatus);
+		if(form.getPlanStatus() != null && !calculateMapPlanStatus)
+		{
 			selectPlanCourses.append(" and ps.schoolId = person.schoolId");
-		
+		}
+		if(form.getPlanStatus() != null && calculateMapPlanStatus)
+		{
+			selectPlanCourses.append(" and msr.plan in elements(person.plans) ");
+			
+		}
 		selectPlanCourses.append(" group by pc.courseCode, pc.formattedCourse, pc.courseTitle, pc.termCode");
 		
 		Query query = createHqlQuery(selectPlanCourses.toString()).setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal() );
@@ -187,7 +192,7 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 		return planCoursesCount;
 	}
 	
-	private void buildQueryWhereClause(StringBuilder query, SearchPlanTO form){
+	private void buildQueryWhereClause(StringBuilder query, SearchPlanTO form, boolean calculateMapPlanStatus){
 		query.append(" where p.objectStatus = :objectStatus and pc.plan.id = p.id and p.person.id = person.id  and ec.code = pc.courseCode ");
 		if(!StringUtils.isEmpty(form.getSubjectAbbreviation()))
 		{			
@@ -210,11 +215,15 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 			query.append(" and ec.formattedCourse = :formattedCourse ");
 		}
 		
-		if(form.getPlanStatus() != null)
+		if(form.getPlanStatus() != null && !calculateMapPlanStatus)
 		{
 			query.append(" and ps.status = :planStatus ");
 		}
 		
+		if(form.getPlanStatus() != null && calculateMapPlanStatus)
+		{
+			query.append(" and msr.planStatus = :planStatus ");
+		}
 		
 	}
 	
@@ -247,17 +256,22 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 	@SuppressWarnings("unchecked")
 	public List<PlanStudentStatusTO> getPlanStudentStatusByCourse(SearchPlanTO form){
 		
+		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
+		String planStatusFrom = calculateMapPlanStatus ? " MapStatusReport msr " : " ExternalPersonPlanStatus ps ";
+		String planStatusSelectReason = calculateMapPlanStatus ? " msr.planNote as plan_statusDetails,   " : " ps.statusReason as plan_statusDetails,   ";
+		String planStatusSelectStatus = calculateMapPlanStatus ? " msr.planStatus as plan_planStatus  " : " ps.status as plan_planStatus  ";
+		
 		StringBuilder selectPlanCourses = new  StringBuilder("select " +
 				"distinct person.schoolId as plan_studentId, " +
 				"pc.formattedCourse as plan_formattedCourse, " +
 				"pc.courseTitle as plan_courseTitle, " +
 				"p.objectStatus as plan_planObjectStatus, " +
-				"ps.statusReason as plan_statusDetails, " +
-				"ps.status as plan_planStatus " +
-				"from Plan p, Person person, PlanCourse pc, ExternalCourse ec, ExternalPersonPlanStatus ps");
+				 planStatusSelectReason +
+				 planStatusSelectStatus +
+				"from Plan p, Person person, PlanCourse pc, ExternalCourse ec, "+planStatusFrom);
 		
-		buildQueryWhereClause(selectPlanCourses, form);
-		selectPlanCourses.append(" and ps.schoolId = person.schoolId");
+		buildQueryWhereClause(selectPlanCourses, form,calculateMapPlanStatus);
+		selectPlanCourses.append(calculateMapPlanStatus ? "and msr.person = person " : " and ps.schoolId = person.schoolId ");
 		
 		
 		Query query = createHqlQuery(selectPlanCourses.toString()).setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal() );
@@ -266,5 +280,25 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 				PlanStudentStatusTO.class, "plan_")).list();
 		
 		return planStudentStatus;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<PlanIdPersonIdPair> getAllActivePlanIds() {
+		String getAllActivePlanIdQuery = "select new org.jasig.ssp.transferobject.reports.PlanIdPersonIdPair(plan.id, plan.person.id) "
+									   + "from org.jasig.ssp.model.Plan plan "
+									   + "where plan.objectStatus = :objectStatus and plan.person.objectStatus = :objectStatus";
+		Query query = createHqlQuery(getAllActivePlanIdQuery);
+		List<PlanIdPersonIdPair> result  = query.setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal()).list();
+									   
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<MapPlanStatusReportCourse> getAllPlanCoursesForStatusReport(
+			UUID planId) {
+		String getAllPlanCoursesForStatusReportTO = "select new org.jasig.ssp.transferobject.reports.MapPlanStatusReportCourse(pc.termCode, pc.formattedCourse, pc.courseCode, pc.courseTitle, pc.creditHours) "
+												  + " from PlanCourse pc where pc.plan.id = :planId and objectStatus = :objectStatus";
+		Query query = createHqlQuery(getAllPlanCoursesForStatusReportTO).setParameter("planId", planId).setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal());
+		return query.list();
 	}
 }

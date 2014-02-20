@@ -19,6 +19,8 @@
 package org.jasig.ssp.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +39,6 @@ import org.jasig.ssp.model.external.ExternalCourseRequisite;
 import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
 import org.jasig.ssp.model.external.RequisiteCode;
 import org.jasig.ssp.model.external.Term;
-import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
 import org.jasig.ssp.service.AbstractPlanService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -54,6 +55,7 @@ import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
 import org.jasig.ssp.transferobject.AbstractPlanTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.TermNoteTO;
+import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,9 +67,10 @@ import com.google.common.collect.Lists;
  */
 @Transactional
 public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
-		TO extends AbstractPlanTO<T>, TOO extends AbstractPlanOutputTO<T,TO>>
+		TO extends AbstractPlanTO<T>, TOO extends AbstractPlanOutputTO<T,TO>,
+		TOOMT extends AbstractMessageTemplateMapPrintParamsTO<TOO, T,TO>>
 	extends  AbstractAuditableCrudService<T>
-	implements AbstractPlanService<T,TO, TOO> {
+	implements AbstractPlanService<T,TO, TOO, TOOMT> {
 
 	@Autowired
 	private SecurityService securityService;
@@ -129,19 +132,16 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 	
 	@Override
 	@Transactional(readOnly=true)
-	public SubjectAndBody createMatrixOutput(final TO outputPlan) throws ObjectNotFoundException {
-		
-		//TODO eventually find a better  way to set the student when in context
-		Person student = outputPlan instanceof PlanTO ?  personService.get(UUID.fromString(((PlanTO)outputPlan).getPersonId())) : null;
-		Person owner = getPersonService().get(UUID.fromString(outputPlan.getOwnerId()));
-		
-		
-		List<TermCourses<T,TO>> courses = collectTermCourses(outputPlan);
-		Float totalPlanCreditHours = calculateTotalPlanHours(courses);
+	public SubjectAndBody createMatrixOutput(final TOOMT outputPlan) throws ObjectNotFoundException {
+
+		List<TermCourses<T,TO>> courses = collectTermCourses(outputPlan.getOutputPlan().getNonOutputTO());
+		outputPlan.setTermCourses(courses);
+		outputPlan.setTotalPlanCreditHours(calculateTotalPlanHours(courses));
 		 
-		SubjectAndBody subjectAndBody = getMessageTemplateService().createMapPlanMatrixOutput(student, owner, outputPlan, totalPlanCreditHours, courses, getInstitutionName());
+		SubjectAndBody subjectAndBody = getMessageTemplateService().createMapPlanMatrixOutput(outputPlan);
 		return subjectAndBody;
 	}
+	
 	@Override
 	@Transactional(readOnly=true)
 	public SubjectAndBody createFullOutput(TOO planOutput) throws ObjectNotFoundException
@@ -170,26 +170,30 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 	public TO validate(TO model) throws ObjectNotFoundException{
 
 		List<? extends AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courses = model.getCourses();
-		Map<String, List<String>> coursesByTerm = new HashMap<String, List<String>>();
-		Map<String, AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courseCodeCourse = new HashMap<String,AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>();
+		Map<String, List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>> coursesByTerm = new HashMap<String, List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>>();
 		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>  course: courses){
 			course.setIsValidInTerm(true);//Set all courses valid in term
-			courseCodeCourse.put(course.getCourseCode(), course);
 			if(coursesByTerm.containsKey(course.getTermCode())){
-				coursesByTerm.get(course.getTermCode()).add(course.getCourseCode());
+				coursesByTerm.get(course.getTermCode()).add(course);
 			}else {
-				List<String> termCourses = Lists.newArrayList(course.getCourseCode());
+				List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> termCourses =
+						new ArrayList<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>();
+				termCourses.add(course);
 				coursesByTerm.put(course.getTermCode(), termCourses);
 			}
 		}
-		for(String termCode: coursesByTerm.keySet()){
-			List<String> validCourseCodes = getCourseService().getValidCourseCodesForTerm(termCode, coursesByTerm.get(termCode));
-			List<String> courseCodesTerm = coursesByTerm.get(termCode);
-			for(String courseCode:courseCodesTerm){
-				if(validCourseCodes.contains(courseCode)){
+		for(Map.Entry<String, List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>> entry: coursesByTerm.entrySet()){
+			final String termCode = entry.getKey();
+			final List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> coursesInTerm = entry.getValue();
+			final List<String> courseCodesInTerm = Lists.newArrayListWithCapacity(coursesInTerm.size());
+			for ( AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : coursesInTerm ) {
+				courseCodesInTerm.add(course.getCourseCode());
+			}
+			final List<String> validCourseCodes = getCourseService().getValidCourseCodesForTerm(termCode, courseCodesInTerm);
+			for ( AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : coursesInTerm ) {
+				if(validCourseCodes.contains(course.getCourseCode())){
 					continue;
 				}else{
-					  AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course = courseCodeCourse.get(courseCode);
 					  course.setIsValidInTerm(false);
 					  model.setIsValid(false);
 					  course.setInvalidReasons("Course: " + course.getFormattedCourse() + " is not currently offered in the selected term.");
@@ -341,8 +345,24 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 				semesterCourses.get(course.getTermCode()).addCourse(course);
 			}
 		}
+				
 		List<TermCourses<T,TO>> courses =  Lists.newArrayList(semesterCourses.values());
-	
+			
+		// Order terms in map for printing
+		Collections.sort(courses, new Comparator<TermCourses<T,TO>>() {
+		    public int compare(TermCourses<T,TO> a, TermCourses<T,TO> b) {
+		       return a.getTerm().getStartDate().compareTo(b.getTerm().getStartDate());
+		    }
+		});
+				
+		// Order courses in terms for printing
+		for(TermCourses<T, TO> course: semesterCourses.values())
+			Collections.sort(course.getCourses(), new Comparator<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>() {
+			    public int compare(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> a, AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> b) {
+			       return a.getOrderInTerm().compareTo(b.getOrderInTerm());
+			    }
+		});
+		
 		return courses;
 	}
 	

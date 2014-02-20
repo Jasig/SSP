@@ -33,7 +33,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
-import org.jasig.ssp.transferobject.CaseloadRecordTO;
+import org.jasig.ssp.transferobject.PersonSearchResult2TO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
@@ -120,10 +120,11 @@ public class CaseloadControllerIntegrationTest {
 	 * 
 	 * @throws ObjectNotFoundException
 	 *             If object could not be found.
+	 * @throws ValidationException 
 	 */
 	@Test
-	public void testControllerCaseloadFor() throws ObjectNotFoundException {
-		final Collection<CaseloadRecordTO> list = controller.caseloadFor(
+	public void testControllerCaseloadFor() throws ObjectNotFoundException, ValidationException {
+		final Collection<PersonSearchResult2TO> list = controller.caseloadFor(
 				ADVISOR_ID, null, ObjectStatus.ACTIVE, null, null, null, null)
 				.getRows();
 
@@ -137,16 +138,17 @@ public class CaseloadControllerIntegrationTest {
 	 * 
 	 * @throws ObjectNotFoundException
 	 *             If object could not be found.
+	 * @throws ValidationException 
 	 */
 	@Test
 	public void testControllerCaseloadForProgramStatusFilter()
-			throws ObjectNotFoundException {
-		final PagedResponse<CaseloadRecordTO> result = controller
+			throws ObjectNotFoundException, ValidationException {
+		final PagedResponse<PersonSearchResult2TO> result = controller
 				.caseloadFor(ADVISOR_ID,
 						programStatusService.get(ProgramStatus.TRANSITIONED_ID)
 								.getId(), ObjectStatus.ACTIVE, null, null,
 						null, null);
-		final Collection<CaseloadRecordTO> list = result.getRows();
+		final Collection<PersonSearchResult2TO> list = result.getRows();
 
 		assertEquals("Filtered list should have 2 results.", 0,
 				result.getResults());

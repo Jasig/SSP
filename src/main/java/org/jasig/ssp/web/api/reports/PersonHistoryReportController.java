@@ -33,28 +33,30 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
+
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.EarlyAlertTOFactory;
 import org.jasig.ssp.factory.JournalEntryTOFactory;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.factory.TaskTOFactory;
-import org.jasig.ssp.model.EarlyAlert;
-import org.jasig.ssp.model.JournalEntry;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.Task;
+import org.jasig.ssp.model.*;
+import org.jasig.ssp.model.external.ExternalPersonPlanStatus;
+import org.jasig.ssp.model.external.ExternalStudentRecordsLite;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.Permission;
-import org.jasig.ssp.service.EarlyAlertService;
-import org.jasig.ssp.service.JournalEntryService;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.SecurityService;
-import org.jasig.ssp.service.TaskService;
-import org.jasig.ssp.transferobject.EarlyAlertTO;
-import org.jasig.ssp.transferobject.JournalEntryTO;
-import org.jasig.ssp.transferobject.PersonTO;
-import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.service.*;
+import org.jasig.ssp.service.external.ExternalPersonPlanStatusService;
+import org.jasig.ssp.service.external.ExternalStudentAcademicProgramService;
+import org.jasig.ssp.service.external.ExternalStudentFinancialAidAwardTermService;
+import org.jasig.ssp.service.external.ExternalStudentFinancialAidFileService;
+import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
+import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
+import org.jasig.ssp.transferobject.*;
+import org.jasig.ssp.transferobject.external.ExternalPersonPlanStatusTO;
+import org.jasig.ssp.transferobject.external.ExternalStudentRecordsLiteTO;
 import org.jasig.ssp.transferobject.reports.StudentHistoryTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,10 +80,13 @@ import com.google.common.collect.Maps;
 public class PersonHistoryReportController extends ReportBaseController {
 
 	private static final String REPORT_URL = "/reports/studentHistoryMaster.jasper";
-	private static final String REPORT_FILE_TITLE = "StudentHistoryReprt-";
+	private static final String REPORT_FILE_TITLE = "StudentHistoryReport-";
 	private static final String STUDENT_TO = "studentTO";
     private static final String STUDENT_RECORD_TO = "studentRecordTO";
-	
+    private static final String STUDENT_PLAN_TO = "studentPlanTO";
+    private static final String STUDENT_MAP_STATUS_TO = "studentMapStatusTO";
+    private static final String STUDENT_MAP_PROJECTED_GRADUATION_TERM = "planProjectedGraduationTerm";
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PersonHistoryReportController.class);
 
@@ -101,6 +106,20 @@ public class PersonHistoryReportController extends ReportBaseController {
 	private transient TaskService taskService;
 	@Autowired
 	private transient TaskTOFactory taskTOFactory;
+    @Autowired
+    private transient ExternalStudentTranscriptService externalStudentTranscriptService;
+    @Autowired
+    private transient ExternalStudentAcademicProgramService externalStudentAcademicProgramService;
+    @Autowired
+    private transient ExternalStudentFinancialAidService externalStudentFinancialAidService;
+	@Autowired
+	private transient ExternalStudentFinancialAidAwardTermService externalStudentFinancialAidAwardTermService;
+	@Autowired
+	private transient ExternalStudentFinancialAidFileService externalStudentFinancialAidFileService;
+    @Autowired
+    private transient ExternalPersonPlanStatusService planStatusService;
+    @Autowired
+    private transient PlanService planService;
 	@Autowired
 	protected transient SecurityService securityService;
 
@@ -116,6 +135,7 @@ public class PersonHistoryReportController extends ReportBaseController {
 		final Person person = personService.get(personId);
 		final PersonTO personTO = personTOFactory.from(person);
 		final SspUser requestor = securityService.currentUser();
+        final String schoolId = person.getSchoolId();
 
 		LOGGER.debug("Requester id: " + requestor.getPerson().getId());
 		// get all the journal entries for this person
@@ -145,6 +165,38 @@ public class PersonHistoryReportController extends ReportBaseController {
 			taskTOMap.put(groupName, taskTOFactory.asTOList(tasks));
 		}
 
+        // get financial aid, academic, and transcript info for student summary
+        final ExternalStudentRecordsLite record = new ExternalStudentRecordsLite();
+        record.setPrograms(externalStudentAcademicProgramService.getAcademicProgramsBySchoolId(schoolId));
+        record.setGPA(externalStudentTranscriptService.getRecordsBySchoolId(schoolId));
+        record.setFinancialAid(externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId));
+		record.setFinancialAidAcceptedTerms(externalStudentFinancialAidAwardTermService.getStudentFinancialAidAwardsBySchoolId(schoolId));
+		record.setFinancialAidFiles(externalStudentFinancialAidFileService.getStudentFinancialAidFilesBySchoolId(schoolId));
+
+        final ExternalStudentRecordsLiteTO recordTO = new ExternalStudentRecordsLiteTO(record, null); //null because don't need balance owed
+
+        //get current plan for student summary add projected graduation date as an additional parameter
+        Plan checkPlan = planService.getCurrentForStudent(personId);
+        PlanTO plan = new PlanTO();
+        String  planGraduateTerm = "";
+
+        if ( checkPlan != null ) {
+            plan.from(checkPlan);
+            if ( plan.getPersonId().equals(personId) ) {
+                plan = planService.validate(plan);
+            }
+            planGraduateTerm = plan.getPlanCourses().get(0).getTermCode();
+        }
+        final PlanTO planTO = plan;
+        final String planProjectedGraduationTerm = planGraduateTerm;
+
+        //get current plan status for student summary
+        final ExternalPersonPlanStatusTO mapStatusTO = new ExternalPersonPlanStatusTO();
+        ExternalPersonPlanStatus planStatus = planStatusService.getBySchoolId(schoolId);
+        if ( planStatus != null ) {
+            mapStatusTO.from(planStatus);
+        }
+
         // separate the Students into bands by date
 		final List<StudentHistoryTO> studentHistoryTOs = sort(earlyAlertTOs,
 				taskTOMap, journalEntryTOs);
@@ -153,6 +205,10 @@ public class PersonHistoryReportController extends ReportBaseController {
 		
 		SearchParameters.addReportDateToMap(parameters);
 		parameters.put(STUDENT_TO, personTO);
+        parameters.put(STUDENT_RECORD_TO, recordTO);
+        parameters.put(STUDENT_PLAN_TO, planTO);
+        parameters.put(STUDENT_MAP_STATUS_TO, mapStatusTO);
+        parameters.put(STUDENT_MAP_PROJECTED_GRADUATION_TERM, planProjectedGraduationTerm);
 		
 		this.generateReport(response, parameters, studentHistoryTOs, REPORT_URL, reportType, 
 				REPORT_FILE_TITLE + personTO.getLastName());

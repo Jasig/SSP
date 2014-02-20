@@ -23,8 +23,9 @@ Ext.define('Ssp.view.tools.map.StudentTranscriptViewer', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.map.MAPController',
     width: 440,
-    height: 300,  
-    overflowY: 'auto', 
+    height: 300, 
+    overflowY: 'auto',
+    style : 'z-index: -1;',  
     layout: {
                 type: 'fit'
             },

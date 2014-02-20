@@ -20,9 +20,13 @@ package org.jasig.ssp.dao;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.SimpleExpression;
+import org.jasig.ssp.model.MapTemplateVisibility;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.transferobject.TemplateSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,34 +43,41 @@ public class TemplateDao extends AbstractPlanDao<Template> implements
 	private transient SecurityService securityService;
 	
 	public PagingWrapper<Template> getAll(
-			SortingAndPaging sNp, Boolean isPrivate,
-			String divisionCode, String programCode, String departmentCode) {
+			SortingAndPaging sNp,
+			TemplateSearchTO searchTO) {
 		
 				Criteria criteria = createCriteria(sNp);
-				if(isPrivate != null)
-				{
-					criteria.add(Restrictions.eq("isPrivate", isPrivate));
-					if(isPrivate)
-					{
-						criteria.add(Restrictions.eq("owner", getSecurityService().currentlyAuthenticatedUser().getPerson()));
-					}
+				LogicalExpression isPrivate =null;
+				SimpleExpression anonymous =  Restrictions.eq("visibility", MapTemplateVisibility.ANONYMOUS);
+				SimpleExpression authenticated =Restrictions.eq("visibility", MapTemplateVisibility.AUTHENTICATED);
+				
+				if(searchTO.visibilityAll() || searchTO.getVisibility().equals( MapTemplateVisibility.PRIVATE)){
+					 isPrivate =  Restrictions.and(Restrictions.eq("visibility", MapTemplateVisibility.PRIVATE), 
+						Restrictions.eq("owner", getSecurityService().currentlyAuthenticatedUser().getPerson()));
 				}
-				else
-				{
-					//the line below can be written as (isPrivate == false || (isPrivate == true && owner = currentUser)
-					criteria.add(Restrictions.or(Restrictions.eq("isPrivate", false), Restrictions.and(Restrictions.eq("isPrivate", true), Restrictions.eq("owner", getSecurityService().currentlyAuthenticatedUser().getPerson()))));
+				
+				if(searchTO.visibilityAll()){
+					criteria.add(Restrictions.or(Restrictions.or(authenticated, anonymous), isPrivate));
+				} else if(searchTO.getVisibility().equals( MapTemplateVisibility.PRIVATE)){
+					criteria.add(isPrivate);
+				}else if(searchTO.getVisibility().equals( MapTemplateVisibility.AUTHENTICATED)){
+					criteria.add(authenticated);
+				}else if(searchTO.getVisibility().equals( MapTemplateVisibility.ANONYMOUS)){
+					criteria.add(anonymous);
 				}
-				if(!StringUtils.isEmpty(programCode))
+				
+				
+				if(!StringUtils.isEmpty(searchTO.getProgramCode()))
 				{
-					criteria.add(Restrictions.eq("programCode", programCode));
+					criteria.add(Restrictions.eq("programCode", searchTO.getProgramCode()));
 				}
-				if(!StringUtils.isEmpty(divisionCode))
+				if(!StringUtils.isEmpty(searchTO.getDivisionCode()))
 				{
-					criteria.add(Restrictions.eq("divisionCode", divisionCode));
+					criteria.add(Restrictions.eq("divisionCode", searchTO.getDivisionCode()));
 				}					
-				if(!StringUtils.isEmpty(departmentCode))
+				if(!StringUtils.isEmpty(searchTO.getDepartmentCode()))
 				{
-					criteria.add(Restrictions.eq("departmentCode", departmentCode));
+					criteria.add(Restrictions.eq("departmentCode", searchTO.getDepartmentCode()));
 				}
 				return processCriteriaWithStatusSortingAndPaging(criteria,
 				 				sNp);

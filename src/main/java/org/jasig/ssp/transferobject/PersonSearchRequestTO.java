@@ -19,6 +19,7 @@
 package org.jasig.ssp.transferobject;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.UUID;
 
 import org.jasig.ssp.model.PersonSearchRequest;
@@ -56,7 +57,7 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	
 	private Boolean myPlans;
 	
-
+	private Date birthDate;
 	
 	
 	public String getStudentId() {
@@ -174,6 +175,14 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 
 	public void setMyPlans(Boolean myPlans) {
 		this.myPlans = myPlans;
+	}
+
+	public Date getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
 	}
 
 }

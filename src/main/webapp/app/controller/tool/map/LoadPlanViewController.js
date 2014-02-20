@@ -96,6 +96,7 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
     	var me = this;
 		var grid, record;
 		var callbacks = new Object();
+    	me.getView().setLoading(true);
 		callbacks.success = me.onLoadCompleteSuccess;
 		callbacks.failure = me.onLoadCompleteFailure;
 		callbacks.scope = me;
@@ -105,7 +106,8 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
         {	
         	 me.mapPlanService.getPlan(record.get('id'),record.get('personId'), callbacks);
         }else{
-     	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
+           Ext.Msg.alert('SSP Error', 'Please select an item to edit.');
+           me.getView().setLoading(false);
         }    	
     },
 	
@@ -114,15 +116,22 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 		if(!serviceResponses || !serviceResponses.responseText || serviceResponses.responseText.trim().length == 0) {
 
        	} else {
+			// Not completely sure why, why loadFromServer() doesn't clear out
+			// existing 'currentMapPlan' state first, e.g. it preserves template
+			// state. Might be other call sites that need that behavior. But
+			// we know here that we always want a complete refresh, so wipe out
+			// current state first.
+			me.scope.currentMapPlan.clearMapPlan();
        		me.scope.currentMapPlan.loadFromServer(Ext.decode(serviceResponses.responseText));
 			me.scope.appEventsController.getApplication().fireEvent('onLoadMapPlan');
 			me.scope.appEventsController.getApplication().fireEvent("onCurrentMapPlanChangeUpdateMapView");
+	    	me.scope.getView().setLoading(false);
 			me.scope.getView().hide();
 		}
 	},
 	onLoadCompleteFailure: function(serviceResponses){
 		var me = this;
-		view.setLoading(false);
+    	me.scope.getView().setLoading(false);
 	},	    
 	onCloseClick: function(){
 		var me = this;

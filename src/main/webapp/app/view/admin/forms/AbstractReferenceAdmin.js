@@ -16,6 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+Ext.require([
+    'Ext.ux.grid.FiltersFeature'
+]);
 Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
 	extend: 'Ext.grid.Panel',
 	alias : 'widget.abstractreferenceadmin',
@@ -40,6 +43,11 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     initComponent: function(){
     	var me=this;
 
+        var filters = {
+                ftype: 'filters',
+                encode: false, // json encode the filter query
+                local: true   // defaults to false (remote filtering)
+        };
     	var sort = me.sort;
     	
     	var cellEditor = Ext.create('Ext.grid.plugin.RowEditing', { 
@@ -71,10 +79,16 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
     	var addVisible = true;
     	var deleteVisible = true;
     	var headerInstructions = null;
+    	var hasPagingToolbar = true;
+
     	if( me.interfaceOptions ) {
     		addVisible = me.interfaceOptions.addButtonVisible;
     		deleteVisible = me.interfaceOptions.deleteButtonVisible;    
     		headerInstructions = me.interfaceOptions.headerInstructions;
+
+    		if ( typeof me.interfaceOptions.hasPagingToolbar != 'undefined' ) {
+    		    hasPagingToolbar = me.interfaceOptions.hasPagingToolbar;
+    		}
     	}
 
         // Special handling for view config so we don't accidentally clobber
@@ -150,6 +164,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                 plugins: cellEditor,
                 selType: 'rowmodel',
 				cls: 'configgrid',
+				features: [filters],
                 columns: [
 					{
                         header: 'Active',
@@ -182,7 +197,8 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                         xtype: 'pagingtoolbar',
                         dock: 'bottom',
                         displayInfo: true,
-                        pageSize: me.apiProperties.getPagingSize()
+                        pageSize: me.apiProperties.getPagingSize(),
+                        hidden: !hasPagingToolbar
                     },
                     {
                         xtype: 'toolbar',

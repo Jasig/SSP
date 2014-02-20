@@ -27,6 +27,15 @@ Ext.define('Ssp.model.SearchPerson', {
 			 {name: 'coachFirstName', type: 'string'},
 			 {name: 'coachLastName', type: 'string'},
              {name: 'currentProgramStatusName', type: 'string'},
+             {name:'personId', type: 'string'},
+             {name: 'birthDate', type: 'date', dateFormat: 'Y-m-d'},
+             {name: 'studentTypeName', type: 'string'},
+             {name: 'currentAppointmentStartDate', type: 'date', dateFormat: 'time'},
+             {name: 'numberOfEarlyAlerts', type: 'string'},
+             {name: 'studentIntakeComplete', type: 'boolean'},
+             {name: 'currentAppointmentStartTime', type: 'date', dateFormat: 'time'},
+             {name: 'currentProgramStatusName', type: 'string'},
+
 			 {name:'coachId', type: 'string'},
              {name: 'coach', type: 'auto'},
              {
@@ -53,5 +62,9 @@ Ext.define('Ssp.model.SearchPerson', {
       		astName = me.get('coach')? me.get('coach').lastName : "";
 		}
       	return firstName + " " + lastName;
-     }
+     },
+     
+     getStudentTypeName: function(){
+      	return ((this.get('studentTypeName') != null)? this.get('studentTypeName') : "");   	
+      }
 });

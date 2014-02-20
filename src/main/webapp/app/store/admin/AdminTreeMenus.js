@@ -15,7 +15,7 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */
+ */ 
 Ext.define('Ssp.store.admin.AdminTreeMenus', {
     extend: 'Ext.data.TreeStore',
     mixins: ['Deft.mixin.Injectable'],
@@ -250,6 +250,16 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
+                    text: 'CompletedItem',
+                    title: 'CompletedItem',
+                    store: 'completedItem',
+                    form: 'AbstractReferenceAdmin',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
+                    leaf: true
+                },{
                     text: 'Citizenships',
                     title: 'Citizenships',
                     store: 'citizenshipsAll',
@@ -342,7 +352,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 						},
 						flex: .25						
 					}]
-                }, {
+                },
+                {
                     text: 'Coursework Hours',
                     title: 'Coursework Hours',
                     store: 'courseworkHoursAll',
@@ -487,14 +498,14 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         flex: .20,
                         field: {
                             xtype: 'textfield'
-                        },
+                        }
                     }, {
                         header: 'Description',
                         dataIndex: 'description',
                         flex: .30,
                         field: {
                             xtype: 'textfield'
-                        },
+                        }
                     }, {
                         header: 'Acronym',
                         dataIndex: 'acronym',
@@ -728,9 +739,151 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     form: 'messagetemplatesadmin',
                     leaf: true
                 }
-
-				]
-            }, {
+                	,
+                    {
+                    text: 'Text',
+                    title: 'Text',
+                    store: 'text',
+					interfaceOptions: {
+                        addButtonVisible: false,
+                        deleteButtonVisible: false,
+                        hasPagingToolbar: false
+                    },
+                    form: 'AbstractReferenceAdmin',
+                    leaf: true,
+                    columns: [
+					{
+                        header: 'Name',
+                        dataIndex: 'name',
+                        required: true,
+                        rowEditable: false,
+                        flex: .10,
+                        field: {
+                            xtype: 'textfield'
+                        }
+                    }, {
+                        header: 'Value',
+                        dataIndex: 'value',
+                        flex: .10,
+                        field: {
+                            xtype: 'textfield'
+                        }
+                    },  {
+                        header: 'Code',
+                        rowEditable: false,
+                        dataIndex: 'code',
+                        filterable: true,
+                        flex: .20,
+                        field: {
+                            xtype: 'textfield'
+                        }
+                    }, {
+                        header: 'Description',
+                        dataIndex: 'description',
+                        flex: .20,
+                        field: {
+                            xtype: 'textfield'
+                        }
+                    }]
+                }	]
+            }	, {text: 'Main Tool',
+	            title: 'Main Tool',
+	            form: '',
+	            expanded: false,
+	            children: [{
+					text: 'SAP Statuses',
+	                title: 'SAP Statuses',
+	                store: 'sapStatuses',
+					interfaceOptions: {
+	                    addButtonVisible: true,
+	                    deleteButtonVisible: false                  
+	                },                    
+					form: 'AbstractReferenceAdmin',
+	                leaf: true,
+	                columns: [{
+					    header: 'Active',
+	                    required: true,
+	                    dataIndex: 'active',
+	                    defaultValue: true,
+	                    flex: .2,
+	                    renderer: me.columnRendererUtils.renderActive,
+	                    field: {
+	                        xtype: 'checkbox',
+	                        fieldStyle: "margin-bottom:12px;"
+	                    }
+					},{					
+	                    header: 'Name',
+	                    dataIndex: 'name',
+	                    required: true,
+	                    field: {
+	                        xtype: 'textfield'
+	                    },
+	                    flex: .25
+	                }, {
+	                    header: 'Description',
+	                    required: false,
+	                    dataIndex: 'description',
+	                    field: {
+	                        xtype: 'textfield'
+	                    },
+	                    flex: 1                 
+	                }, {
+						header: 'SAP Code',
+						required: true,
+						dataIndex: 'code',
+						field: {
+							xtype: 'textfield'
+						},
+						flex: .25						
+					}]
+	            }, {
+					text: 'Financial Aid Files',
+	                title: 'Financial Aid Files',
+	                store: 'financialAidFiles',
+					interfaceOptions: {
+	                    addButtonVisible: true,
+	                    deleteButtonVisible: false                  
+	                },                    
+					form: 'AbstractReferenceAdmin',
+	                leaf: true,
+	                columns: [{
+					    header: 'Active',
+	                    required: true,
+	                    dataIndex: 'active',
+	                    defaultValue: true,
+	                    flex: .2,
+	                    renderer: me.columnRendererUtils.renderActive,
+	                    field: {
+	                        xtype: 'checkbox',
+	                        fieldStyle: "margin-bottom:12px;"
+	                    }
+					},{					
+	                    header: 'Name',
+	                    dataIndex: 'name',
+	                    required: true,
+	                    field: {
+	                        xtype: 'textfield'
+	                    },
+	                    flex: .25
+	                }, {
+	                    header: 'Description',
+	                    required: false,
+	                    dataIndex: 'description',
+	                    field: {
+	                        xtype: 'textfield'
+	                    },
+	                    flex: 1                 
+	                }, {
+						header: 'File Code',
+						required: true,
+						dataIndex: 'code',
+						field: {
+							xtype: 'textfield'
+						},
+						flex: .25						
+					}]
+	            }]
+	        },{
                 text: 'MAP',
                 title: 'MAP',
                 form: '',
@@ -750,7 +903,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         addButtonVisible: true,
                         deleteButtonVisible: false,
                         dragAndDropReorder: true,
-                        headerInstructions: "Double-click to edit and drag to re-order items."
+                        headerInstructions: "Double-click to edit and drag to re-order items.",
+                        storeDependencies: [{
+                            name: "colors",
+                            store: me.colorsAllUnpagedStore,
+                            clearFilter: true
+                        }]
                     },                    
                     form: 'AbstractReferenceAdmin',
                     leaf: true,

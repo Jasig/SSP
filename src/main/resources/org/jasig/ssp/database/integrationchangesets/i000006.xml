@@ -33,6 +33,11 @@
 
 	<changeSet author='jim.stanley'
 		id='Fix Table External Student Test'>
+		<preConditions onFail="CONTINUE" onFailMessage="Skipping fix external student test">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+		</preConditions>
 		<dropView viewName="v_external_student_test" />
 		<dropTable tableName="external_student_test" />
 		<createTable tableName="external_student_test">

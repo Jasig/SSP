@@ -22,9 +22,15 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.Size;
+
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
+import org.jasig.ssp.model.external.FinancialFileStatus;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
 
@@ -61,6 +67,16 @@ public class ExternalStudentFinancialAidTO implements Serializable,
 	BigDecimal remainingLoanAmount;
 	
 	BigDecimal balanceOwed;
+	
+	FinancialFileStatus financialAidFileStatus;
+	
+	Integer termsLeft;
+	
+	BigDecimal institutionalLoanAmount;
+	
+	String sapStatusCode;
+	
+	String eligibleFederalAid;
 	
 	public ExternalStudentFinancialAidTO(){
 		super();
@@ -279,6 +295,46 @@ public class ExternalStudentFinancialAidTO implements Serializable,
 		this.balanceOwed = balanceOwed;
 	}
 
+	public FinancialFileStatus getFinancialAidFileStatus() {
+		return financialAidFileStatus;
+	}
+
+	public void setFinancialAidFileStatus(FinancialFileStatus financialAidFileStatus) {
+		this.financialAidFileStatus = financialAidFileStatus;
+	}
+
+	public Integer getTermsLeft() {
+		return termsLeft;
+	}
+
+	public void setTermsLeft(Integer termsLeft) {
+		this.termsLeft = termsLeft;
+	}
+
+	public BigDecimal getInstitutionalLoanAmount() {
+		return institutionalLoanAmount;
+	}
+
+	public void setInstitutionalLoanAmount(BigDecimal institutionalLoanAmount) {
+		this.institutionalLoanAmount = institutionalLoanAmount;
+	}
+	
+	public String getSapStatusCode() {
+		return sapStatusCode;
+	}
+
+	public void setSapStatusCode(String sapStatusCode) {
+		this.sapStatusCode = sapStatusCode;
+	}
+
+	public String getEligibleFederalAid() {
+		return eligibleFederalAid;
+	}
+
+	public void setEligibleFederalAid(String eligibleFederalAid) {
+		this.eligibleFederalAid = eligibleFederalAid;
+	}
+
 	@Override
 	public void from(ExternalStudentFinancialAid model) {
 		schoolId = model.getSchoolId();
@@ -288,10 +344,15 @@ public class ExternalStudentFinancialAidTO implements Serializable,
 		neededFor67PtcCompletion = model.getNeededFor67PtcCompletion();
 		currentYearFinancialAidAward = model.getCurrentYearFinancialAidAward();
 		sapStatus = model.getSapStatus();
+		sapStatusCode = model.getSapStatusCode();
 		fafsaDate = model.getFafsaDate();
 		financialAidRemaining = model.getFinancialAidRemaining();
 		originalLoanAmount = model.getOriginalLoanAmount();
-		remainingLoanAmount = model.getRemainingLoanAmount();		
+		remainingLoanAmount = model.getRemainingLoanAmount();	
+		financialAidFileStatus = model.getFinancialAidFileStatus();
+		termsLeft = model.getTermsLeft();
+		institutionalLoanAmount = model.getInstitutionalLoanAmount();
+		eligibleFederalAid = model.getEligibleFederalAid();
 	}
 
 	

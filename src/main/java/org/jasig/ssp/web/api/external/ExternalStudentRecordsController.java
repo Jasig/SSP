@@ -66,6 +66,8 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.ExternalStudentAcademicProgramService;
+import org.jasig.ssp.service.external.ExternalStudentFinancialAidAwardTermService;
+import org.jasig.ssp.service.external.ExternalStudentFinancialAidFileService;
 import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
 import org.jasig.ssp.service.external.ExternalStudentTestService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptCourseService;
@@ -174,6 +176,12 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	private transient ExternalStudentFinancialAidService externalStudentFinancialAidService;
 	
 	@Autowired
+	private transient ExternalStudentFinancialAidAwardTermService externalStudentFinancialAidAwardTermService;
+	
+	@Autowired
+	private transient ExternalStudentFinancialAidFileService externalStudentFinancialAidFileService;
+	
+	@Autowired
 	private transient ExternalStudentFinancialAidTOFactory externalStudentFinancialAidTOFactory;
 	
 	@Autowired
@@ -214,7 +222,8 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		record.setPrograms(externalStudentAcademicProgramService.getAcademicProgramsBySchoolId(schoolId));
 		record.setGPA(externalStudentTranscriptService.getRecordsBySchoolId(schoolId));
 		record.setFinancialAid(externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId));		
-
+		record.setFinancialAidAcceptedTerms(externalStudentFinancialAidAwardTermService.getStudentFinancialAidAwardsBySchoolId(schoolId));
+		record.setFinancialAidFiles(externalStudentFinancialAidFileService.getStudentFinancialAidFilesBySchoolId(schoolId));
 		ExternalStudentRecordsLiteTO recordTO = new ExternalStudentRecordsLiteTO(record, getBalancedOwed(id, schoolId));
 
 		return recordTO;
@@ -233,7 +242,8 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		record.setGPA(externalStudentTranscriptService.getRecordsBySchoolId(schoolId));
 		record.setFinancialAid(externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId));
 		record.setTerms(externalStudentTranscriptCourseService.getTranscriptsBySchoolId(schoolId));		
-		
+		record.setFinancialAidAcceptedTerms(externalStudentFinancialAidAwardTermService.getStudentFinancialAidAwardsBySchoolId(schoolId));
+		record.setFinancialAidFiles(externalStudentFinancialAidFileService.getStudentFinancialAidFilesBySchoolId(schoolId));
 		ExternalStudentRecordsTO recordTO = new ExternalStudentRecordsTO(record, getBalancedOwed(id, schoolId));
 		return recordTO;
 	}

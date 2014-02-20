@@ -37,8 +37,9 @@ Ext.define('Ssp.controller.MainViewController', {
 	},
 	
 	init: function() {
-		this.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
-		this.displayStudentRecordView();
+		var me=this;
+		me.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
+		me.displayStudentRecordView();
 		return this.callParent(arguments);
     },
 

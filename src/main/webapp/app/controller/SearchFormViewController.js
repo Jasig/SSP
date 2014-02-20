@@ -99,7 +99,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	search: function(){
 		var me=this;		
 		me.searchService.search2( 
-				me.getView().query('textfield[name=studentId]')[0].value,
+				Ext.String.trim(me.getView().query('textfield[name=studentId]')[0].value),
 				me.getView().query('combobox[name=programStatus]')[0].value,
 				me.getView().query('combobox[name=coachId]')[0].value,				
 				me.getView().query('combobox[name=declaredMajor]')[0].value,
@@ -113,6 +113,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				me.getView().query('combobox[name=planStatus]')[0].value,
 				me.getView().query('checkbox[name=myCaseload]')[0].value,
 				me.getView().query('checkbox[name=myPlans]')[0].value,
+				me.getView().query('datefield[name=birthDate]')[0].value,
 				{
 				success: me.searchSuccess,
 				failure: me.searchFailure,
@@ -147,6 +148,9 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     onResetClick: function(button){
 		var me=this;
 		me.clear();	
+		me.searchStore.removeAll();
+		me.appEventsController.getApplication().fireEvent("onPersonSearchSuccess");
+		
 	},  
 	onSearchClick: function(button){
 		var me=this;

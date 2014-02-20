@@ -19,7 +19,7 @@
 Ext.define('Ssp.store.Caseload', {
     // extend: 'Ext.data.Store',
     extend: 'Ssp.store.reference.AbstractReferences',
-    model: 'Ssp.model.CaseloadPerson',
+    model: 'Ssp.model.SearchPerson',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         apiProperties: 'apiProperties'

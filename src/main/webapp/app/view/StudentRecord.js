@@ -20,6 +20,9 @@ Ext.define('Ssp.view.StudentRecord', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.studentrecord',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    inject: {
+        authenticatedPerson: 'authenticatedPerson'
+    },    
     controller: 'Ssp.controller.StudentRecordViewController',
     width: '100%',
     height: '100%',
@@ -35,6 +38,16 @@ Ext.define('Ssp.view.StudentRecord', {
                 align: 'stretch'
             },
             tools: [
+        	{
+                tooltip: 'Email Student',
+                text: '<u>Email Student</u>',
+                width: 110,
+                height: 20,
+        		hidden: !me.authenticatedPerson.hasAccess('EMAIL_STUDENT_BUTTON'),
+                xtype: 'button',
+                cls: "makeTransparent",
+                itemId: 'emailStudentButton'
+            },                    
 			{
                 xtype: 'tbspacer',
                 flex: .05
@@ -57,8 +70,6 @@ Ext.define('Ssp.view.StudentRecord', {
                 text: '<u>Coaching History</u>',
                 width: 110,
                 height: 20,
-                //hidden: !me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'),
-                //cls: 'studentHistoryIcon',
                 xtype: 'button',
 				cls: "makeTransparent",
                 itemId: 'viewCoachingHistoryButton'
@@ -73,7 +84,6 @@ Ext.define('Ssp.view.StudentRecord', {
                 tooltip: 'Edit Student',
 				cls: "editPerson20Icon",
 				width: 23
-                //hidden: !me.authenticatedPerson.hasAccess('EDIT_STUDENT_BUTTON')
             },
 			{
                 xtype: 'tbspacer',

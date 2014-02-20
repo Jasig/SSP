@@ -24,19 +24,22 @@ Ext.define('Ssp.view.person.Coach', {
     controller: 'Ssp.controller.person.CoachViewController',
     inject: {
     	coachesStore: 'coachesStore',
-    	sspConfig: 'sspConfig',
-    	studentTypesStore: 'studentTypesAllUnpagedStore'
+    	sspConfig: 'sspConfig'
     },
+	width: '100%',
+	padding: '0 0 0 0',
+	layout: {
+		type:'vbox'
+	},
 	initComponent: function() {	
 		var me=this;
 		Ext.apply(me, 
 				{
 			    border: 0,
-			    padding: 0,
 			    fieldDefaults: {
 			        msgTarget: 'side',
-			        labelAlign: 'right',
-			        labelWidth: 200
+			        labelAlign: 'top',
+			        labelWidth: 100
 			    },	
 				items: [{
 			            xtype: 'fieldset',
@@ -45,57 +48,45 @@ Ext.define('Ssp.view.person.Coach', {
 			            title: '',
 			            defaultType: 'textfield',
 			            defaults: {
-			                anchor: '50%'
+			                //anchor: '100%'
 			            },
 			       items: [{
 				        xtype: 'combobox',
 				        name: 'coachId',
 				        itemId: 'coachCombo',
-				        fieldLabel: me.sspConfig.get('coachFieldLabel'),
+				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' +  me.sspConfig.get('coachFieldLabel'),
 				        emptyText: 'Select One',
 				        store: me.coachesStore,
 				        valueField: 'id',
 				        displayField: 'fullName',
 				        mode: 'local',
-				        typeAhead: true,
 				        queryMode: 'local',
-				        allowBlank: false
+				        allowBlank: false,
+						forceSelection: true,
+						typeAhead: false,
+				        editable: false,
+						width: 300
 					},{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Office',
+				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' +  'Office',
 				        itemId: 'officeField',
-				        name: 'coachOffice'
+				        name: 'coachOffice',
+						width: 300
 				    },{
-				    	xtype: 'displayfield',
 				        fieldLabel: 'Phone',
 				        itemId: 'phoneField',
-				        name: 'coachPhone'
+				        name: 'coachPhone',
+						width: 300
 				    },{
-				    	xtype: 'displayfield',
-				        fieldLabel: 'Email',
+				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' +  'Email',
 				        itemId: 'emailAddressField',
-				        name: 'coachEmailAddress'
+				        name: 'coachEmailAddress',
+						width: 300
 				    },{
-				    	xtype: 'displayfield',
 				        fieldLabel: 'Department',
 				        itemId: 'departmentField',
-				        name: 'coachDepartment'
-				    },{
-				        xtype: 'combobox',
-				        name: 'studentTypeId',
-				        itemId: 'studentTypeCombo',
-				        id: 'studentTypeCombo',
-				        fieldLabel: 'Student Type',
-				        emptyText: 'Select One',
-				        store: me.studentTypesStore,
-				        valueField: 'id',
-				        displayField: 'name',
-				        mode: 'local',
-				        typeAhead: false,
-				        editable: false,
-				        queryMode: 'local',
-				        allowBlank: false
-					}]
+				        name: 'coachDepartment',
+						width: 300
+				    }]
 			    }]
 			});
 		

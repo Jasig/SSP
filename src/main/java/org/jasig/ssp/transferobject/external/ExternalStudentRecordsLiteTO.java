@@ -24,9 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jasig.ssp.model.external.ExternalStudentAcademicProgram;
-import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
+import org.jasig.ssp.model.external.ExternalStudentFinancialAidAwardTerm;
+import org.jasig.ssp.model.external.ExternalStudentFinancialAidFile;
 import org.jasig.ssp.model.external.ExternalStudentRecordsLite;
-import org.jasig.ssp.model.external.ExternalStudentTermCourses;
 
 public class ExternalStudentRecordsLiteTO implements ExternalDataTO<ExternalStudentRecordsLite>,
 		Serializable {
@@ -48,6 +48,12 @@ public class ExternalStudentRecordsLiteTO implements ExternalDataTO<ExternalStud
 	private List<ExternalStudentAcademicProgramTO> programs;
 	
 	private ExternalStudentFinancialAidTO financialAid;
+	
+	private List<ExternalStudentFinancialAidAwardTermTO> financialAidAcceptedTerms;
+	
+	private List<ExternalStudentFinancialAidFileTO> financialAidFiles;
+	
+	
 
 	/**
 	 * @return the financialAid
@@ -76,6 +82,18 @@ public class ExternalStudentRecordsLiteTO implements ExternalDataTO<ExternalStud
 		
 		if( model.getFinancialAid() != null)
 			financialAid = new ExternalStudentFinancialAidTO(model.getFinancialAid(), null);
+		
+		if(model.getFinancialAidAcceptedTerms() != null  && !model.getFinancialAidAcceptedTerms().isEmpty()){
+			this.financialAidAcceptedTerms = new ArrayList<ExternalStudentFinancialAidAwardTermTO>();
+			for(ExternalStudentFinancialAidAwardTerm term:model.getFinancialAidAcceptedTerms())
+				this.financialAidAcceptedTerms.add(new ExternalStudentFinancialAidAwardTermTO(term));
+		}
+		
+		if(model.getFinancialAidFiles() != null  && !model.getFinancialAidFiles().isEmpty()){
+			this.financialAidFiles = new ArrayList<ExternalStudentFinancialAidFileTO>();
+			for(ExternalStudentFinancialAidFile term:model.getFinancialAidFiles())
+				this.financialAidFiles.add(new ExternalStudentFinancialAidFileTO(term));
+		}
 	}
 
 	/**
@@ -106,4 +124,57 @@ public class ExternalStudentRecordsLiteTO implements ExternalDataTO<ExternalStud
 		this.programs = programs;
 	}
 
+	public List<ExternalStudentFinancialAidAwardTermTO> getFinancialAidAcceptedTerms() {
+		return financialAidAcceptedTerms;
+	}
+
+	public void setFinancialAidAcceptedTerms(
+			List<ExternalStudentFinancialAidAwardTermTO> financialAidAcceptedTerms) {
+		this.financialAidAcceptedTerms = financialAidAcceptedTerms;
+	}
+
+	public List<ExternalStudentFinancialAidFileTO> getFinancialAidFiles() {
+		return financialAidFiles;
+	}
+
+	public void setFinancialAidFiles(
+			List<ExternalStudentFinancialAidFileTO> financialAidFiles) {
+		this.financialAidFiles = financialAidFiles;
+	}
+	
+	public String getAllFinancialAidTermsOutput(){
+		StringBuilder output = new StringBuilder("");
+		if(getFinancialAidAcceptedTerms() != null && getFinancialAidAcceptedTerms().size() > 0){
+			for(ExternalStudentFinancialAidAwardTermTO to:getFinancialAidAcceptedTerms()){
+				output.append(to.getTermCode())
+				.append(":").
+				append(to.getAcceptedLong()).
+				append(", ");
+			}
+		}
+		if(output.length() > 2){
+			return output.substring(0, output.length() - 2);
+		}
+		return "";
+	}
+
+	
+	public String getFinancialAidAcceptedTermsOutput(){
+		StringBuilder output = new StringBuilder("");
+		String accepted = "Y";
+		if(getFinancialAidAcceptedTerms() != null && getFinancialAidAcceptedTerms().size() > 0){
+			for(ExternalStudentFinancialAidAwardTermTO to:getFinancialAidAcceptedTerms()){
+				if(to.getAcceptedLong().equalsIgnoreCase(accepted)){
+					output.append(to.getTermCode())
+							.append(":").
+							append(to.getAccepted()).
+							append(", ");
+				}
+			}
+		}
+		if(output.length() > 2){
+			return output.substring(0, output.length() - 2);
+		}
+		return "";
+	}
 }

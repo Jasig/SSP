@@ -24,6 +24,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
         authenticatedPerson: 'authenticatedPerson',
         appEventsController: 'appEventsController',
         challengesStore: 'challengesStore',
+        completedItemStore: 'completedItemStore',
     	childCareArrangementsStore: 'childCareArrangementsStore',
     	citizenshipsStore: 'citizenshipsStore',
     	educationGoalsStore: 'educationGoalsStore',
@@ -44,7 +45,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
         studentIntake: 'currentStudentIntake',
     	veteranStatusesStore: 'veteranStatusesStore',
     	registrationLoadsStore: 'registrationLoadsStore',
-    	courseworkHoursStore:'courseworkHoursStore'
+    	courseworkHoursStore:'courseworkHoursStore',
+    	textStore:'sspTextStore'
     }, 
     config: {
     	studentIntakeForm: null
@@ -64,6 +66,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	init: function() {
 		var me=this;	
 		
+		me.textStore.load();
 		// Load the views dynamically
 		// otherwise duplicate id's will be registered
 		// on cancel
@@ -129,34 +132,38 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	        height: '100%',
 	        activeTab: 0,
 			border: 0,
-	        items: [ { title: 'Personal'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
+	        items: [ { title: me.textStore.getValueByCode('intake.tab1.label')+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
 	        		   autoScroll: true,
 	        		   items: [{xtype: 'studentintakepersonal'}]
 	        		},{
-	            		title: 'Demographics',
+	            		title: me.textStore.getValueByCode('intake.tab2.label'),
 	            		autoScroll: true,
 	            		items: [{xtype: 'studentintakedemographics'}]
 	        		},{
-	            		title: 'EduPlan',
+	            		title: me.textStore.getValueByCode('intake.tab3.label'),
 	            		autoScroll: true,
 	            		items: [{xtype: 'studentintakeeducationplans'}]
 	        		},{
-	            		title: 'EduLevel',
+	            		title: me.textStore.getValueByCode('intake.tab4.label'),
 	            		autoScroll: true,
 	            		items: [{xtype: 'studentintakeeducationlevels'}]
 	        		},{
-	            		title: 'EduGoal',
+	            		title: me.textStore.getValueByCode('intake.tab5.label'),
 	            		autoScroll: true,
 	            		items: [{xtype: 'studentintakeeducationgoals'}]
 	        		},{
-	            		title: 'Funding',
+	            		title: me.textStore.getValueByCode('intake.tab6.label'),
 	            		autoScroll: true,
 	            		items: [{xtype: 'studentintakefunding'}]
 	        		},{
-	            		title: 'Challenges',
+	            		title: me.textStore.getValueByCode('intake.tab7.label'),
 	            		autoScroll: true,
 	            		hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_CHALLENGE_TAB'),
 	            		items: [{xtype: 'studentintakechallenges'}]
+	        		},{
+	            		title: me.textStore.getValueByCode('intake.tab8.label'),
+	            		autoScroll: true,
+	            		items: [{xtype: 'studentintakechecklist'}]
 	        		}]
 		    })
 	    
@@ -198,6 +205,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var personEducationLevels = formData.data.personEducationLevels;
 		var personFundingSources = formData.data.personFundingSources;
 		var personChallenges = formData.data.personChallenges;
+		var personChecklist = formData.data.personChecklist;
 		var personEducationGoalId = "";
 		
 		var studentIntakeEducationPlansForm = Ext.getCmp('StudentIntakeEducationPlans');
@@ -212,9 +220,10 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var fundingSourcesAdditionalFieldsMap;
 		var challengeFormProps;
 		var challengesAdditionalFieldsMap;
+		var checklistFormProps;
 		var defaultLabelWidth;
-
 		// REFERENCE OBJECTS
+		var checklist = me.formUtils.alphaSortByField( formData.data.referenceData.checklist, 'name' );
 		var challenges = me.formUtils.alphaSortByField( formData.data.referenceData.challenges, 'name' );
 		var educationGoals = me.formUtils.alphaSortByField( formData.data.referenceData.educationGoals, 'name' );
 		var educationLevels = me.formUtils.alphaSortByField( formData.data.referenceData.educationLevels, 'name' );
@@ -225,6 +234,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var militaryAffiliations = me.formUtils.alphaSortByField( formData.data.referenceData.militaryAffiliations, 'name' );
 		
 		me.challengesStore.loadData( challenges );
+		me.completedItemStore.loadData( checklist );
 		me.childCareArrangementsStore.loadData( formData.data.referenceData.childCareArrangements );
 		me.citizenshipsStore.loadData( formData.data.referenceData.citizenships );
 		me.educationGoalsStore.loadData( educationGoals );
@@ -286,7 +296,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		      parentId: Ssp.util.Constants.EDUCATION_GOAL_BACHELORS_DEGREE_ID, 
 			  parentName: "bachelor",
 			  name: "description", 
-			  label: "Describe bachelor's goal", 
+			  label:  me.textStore.getValueByCode('intake.tab5.label.bachelor-major'),
 			  fieldType: "mappedtextfield",
 			  labelWidth: 200
 			 },
@@ -294,7 +304,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			      parentId: Ssp.util.Constants.EDUCATION_GOAL_MILITARY_ID, 
 				  parentName: "military",
 				  name: "description", 
-				  label: "Describe military goal", 
+				  label: me.textStore.getValueByCode('intake.tab5.label.military-goal'),
 				  fieldType: "mappedtextfield",
 				  labelWidth: 200
 			 },
@@ -302,7 +312,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		      parentId: Ssp.util.Constants.EDUCATION_GOAL_OTHER_ID, 
 			  parentName: "other",
 			  name: "description", 
-			  label: "Decribe your other goal", 
+			  label: me.textStore.getValueByCode('intake.tab5.label.other-goal'),
 			  fieldType: "mappedtextfield",
 			  labelWidth: 200
 			 }
@@ -325,7 +335,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		educationLevelsAdditionalFieldsMap = [{parentId: Ssp.util.Constants.EDUCATION_LEVEL_NO_DIPLOMA_GED_ID, 
 			                                   parentName: "no diploma/no ged", 
 			                                   name: "lastYearAttended", 
-			                                   label: "Last Year Attended",
+			                                   label: me.textStore.getValueByCode('intake.tab4.label.last-year-attended'),
 			                                   fieldType: "mappedtextfield", 
 			                                   labelWidth: defaultLabelWidth,
 			                                   validationExpression: '^(19|20)\\d{2}$',
@@ -333,7 +343,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		                                      {parentId: Ssp.util.Constants.EDUCATION_LEVEL_NO_DIPLOMA_GED_ID, 
 			                                   parentName: "no diploma/no ged", 
 			                                   name: "highestGradeCompleted", 
-			                                   label: "Highest Grade Completed", 
+			                                   label: me.textStore.getValueByCode('intake.tab4.label.highest-grade'), 
 			                                   fieldType: "mappedtextfield", 
 			                                   labelWidth: defaultLabelWidth,
                                                validationExpression: '^([0-9]|1[0-6])$',
@@ -341,7 +351,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		                                      {parentId: Ssp.util.Constants.EDUCATION_LEVEL_GED_ID, 
 			                                   parentName: "ged", 
 			                                   name: "graduatedYear", 
-			                                   label: "Year of GED", 
+			                                   label: me.textStore.getValueByCode('intake.tab4.label.year-of-ged'), 
 			                                   fieldType: "mappedtextfield",
 			                                   labelWidth: defaultLabelWidth,
 			                                   validationExpression: '^(19|20)\\d{2}$',
@@ -349,7 +359,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		                                      {parentId: Ssp.util.Constants.EDUCATION_LEVEL_HIGH_SCHOOL_GRADUATION_ID, 
 			                                   parentName: "high school graduation", 
 			                                   name: "graduatedYear", 
-			                                   label: "Year Graduated", 
+			                                   label: me.textStore.getValueByCode('intake.tab4.label.year-graduated'), 
 			                                   fieldType: "mappedtextfield",
 			                                   labelWidth: defaultLabelWidth,
 			                                   validationExpression: '^(19|20)\\d{2}$',
@@ -357,13 +367,13 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		     		                        {parentId: Ssp.util.Constants.EDUCATION_LEVEL_HIGH_SCHOOL_GRADUATION_ID, 
 			                                 parentName: "high school graduation", 
 			                                 name: "schoolName", 
-			                                 label: "High School Attended", 
+			                                 label: me.textStore.getValueByCode('intake.tab4.label.highschool-attended'), 
 			                                 fieldType: "mappedtextfield",
 			                                 labelWidth: defaultLabelWidth},
 		     		                        {parentId: Ssp.util.Constants.EDUCATION_LEVEL_SOME_COLLEGE_CREDITS_ID, 
 			                                 parentName: "some college credits", 
 			                                 name: "lastYearAttended", 
-			                                 label: "Last Year Attended", 
+			                                 label: me.textStore.getValueByCode('intake.tab4.label.last-year-attended'), 
 			                                 fieldType: "mappedtextfield",
 			                                 labelWidth: defaultLabelWidth,
 			                                 validationExpression: '^(19|20)\\d{2}$',
@@ -371,14 +381,14 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		     		                        {parentId: Ssp.util.Constants.EDUCATION_LEVEL_OTHER_ID, 
 			                                 parentName: "other", 
 			                                 name: "description", 
-			                                 label: "Please Explain", 
+			                                 label: me.textStore.getValueByCode('intake.tab4.label.explain-credits'), 
 			                                 fieldType: "mappedtextarea",
 			                                 labelWidth: defaultLabelWidth}];		
 		
 		educationLevelFormProps = {
 				mainComponentType: 'checkbox',
 			    formId: 'StudentIntakeEducationLevels', 
-                fieldSetTitle: 'Education level completed: Select all that apply',
+                fieldSetTitle: me.textStore.getValueByCode('intake.tab4.label.edu-level'),
                 itemsArr: educationLevels, 
                 selectedItemsArr: personEducationLevels, 
                 idFieldName: 'id', 
@@ -386,21 +396,22 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
                 additionalFieldsMap: educationLevelsAdditionalFieldsMap };
 		
 		me.formUtils.createForm( educationLevelFormProps );
-
+		
 		fundingSourcesAdditionalFieldsMap = [{parentId: Ssp.util.Constants.FUNDING_SOURCE_OTHER_ID, 
 											  parentName: "other",
 											  name: "description", 
-											  label: "Please Explain", 
+											  label: me.textStore.getValueByCode('intake.tab6.label.other-funding'), 
 											  fieldType: "mappedtextarea",
 											  labelWidth: defaultLabelWidth}];
 		
 		fundingSourceFormProps = {
 				mainComponentType: 'checkbox',
 				formId: 'StudentIntakeFunding', 
-                fieldSetTitle: 'How will you pay for college?',
+                fieldSetTitle: me.textStore.getValueByCode('intake.tab6.label.funding-question'),
                 itemsArr: fundingSources, 
                 selectedItemsArr: personFundingSources, 
                 idFieldName: 'id', 
+                selectAllButton: true,
                 selectedIdFieldName: 'fundingSourceId',
                 additionalFieldsMap: fundingSourcesAdditionalFieldsMap };
 		
@@ -409,14 +420,14 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		challengesAdditionalFieldsMap = [{parentId: Ssp.util.Constants.CHALLENGE_OTHER_ID,
 			                              parentName: "other",
 			                              name: "description", 
-			                              label: "Please Explain", 
+			                              label: me.textStore.getValueByCode('intake.tab6.label.other-challenges'), 
 			                              fieldType: "mappedtextarea",
 			                              labelWidth: defaultLabelWidth}];
 		
 		challengeFormProps = {
 				mainComponentType: 'checkbox',
 				formId: 'StudentIntakeChallenges', 
-                fieldSetTitle: 'Select all challenges that may be barriers to your academic success:',
+                fieldSetTitle: me.textStore.getValueByCode('intake.tab7.label.challenges-question'),
                 itemsArr: challenges, 
                 selectedItemsArr: personChallenges, 
                 idFieldName: 'id', 
@@ -424,6 +435,17 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
                 additionalFieldsMap: challengesAdditionalFieldsMap };
 		
 		me.formUtils.createForm( challengeFormProps );
+		
+		checklistFormProps = {
+				mainComponentType: 'checkbox',
+				formId: 'StudentIntakeChecklist', 
+                fieldSetTitle: me.textStore.getValueByCode('intake.tab8.label.checklist-question'),
+                itemsArr: checklist, 
+                selectedItemsArr: personChecklist, 
+                idFieldName: 'id', 
+                selectedIdFieldName: 'completedItemId'};
+		
+		me.formUtils.createForm( checklistFormProps );
 	},
 	
 	onSaveClick: function( button ) {
@@ -436,13 +458,16 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		var educationLevelsForm = Ext.getCmp('StudentIntakeEducationLevels').getForm();
 		var fundingForm = Ext.getCmp('StudentIntakeFunding').getForm();
 		var challengesForm = Ext.getCmp('StudentIntakeChallenges').getForm();
-		
+		var checklistForm = Ext.getCmp('StudentIntakeChecklist').getForm();
+
 		var educationGoalId = "";
 		var educationGoalDescription = "";
 		var educationGoalFormValues = null;
 		var educationLevelFormValues = null;
 		var fundingFormValues = null;
 		var challengesFormValues = null;
+		var checklistFormValues = null;
+
 		
 		var studentIntakeFormModel = null;
 		var personId = "";
@@ -454,7 +479,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		             educationLevelsForm,
 		             educationGoalForm,
 		             fundingForm,
-		             challengesForm];
+		             challengesForm,
+		             checklistForm];
 
 		// validate and save the model
 		var validateResult = me.formUtils.validateForms( formsToValidate );
@@ -477,7 +503,9 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 				personEducationPlan: me.studentIntake.get('personEducationPlan').data,
 				personEducationLevels: [],
 				personFundingSources: [],
-				personChallenges: []
+				personChallenges: [],
+				personChecklist: []
+				
 			};
 						
 			// date saved as null is ok if using External Data Sync Routine
@@ -512,7 +540,11 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 			intakeData.personFundingSources = formUtils.createTransferObjectsFromSelectedValues('fundingSourceId', fundingFormValues, personId);	
 			
 			challengesFormValues = challengesForm.getValues();
-			intakeData.personChallenges = formUtils.createTransferObjectsFromSelectedValues('challengeId', challengesFormValues, personId);			
+			intakeData.personChallenges = formUtils.createTransferObjectsFromSelectedValues('challengeId', challengesFormValues, personId);	
+			
+			checklistFormValues = checklistForm.getValues();
+			intakeData.personChecklist = formUtils.createTransferObjectsFromSelectedValues('completedItemId', checklistFormValues, personId);			
+
 
 			// display loader
 			me.getView().setLoading( true );

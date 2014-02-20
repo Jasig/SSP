@@ -35,12 +35,8 @@ Ext.define('Ssp.controller.tool.studentintake.EducationPlansViewController', {
 	init: function() {
 		var me=this;
 		var personEducationPlan = me.model.get('personEducationPlan');
-		var parentsDegreeLabel = me.sspConfig.get('educationPlanParentsDegreeLabel');
-		var specialNeedsLabel = me.sspConfig.get('educationPlanSpecialNeedsLabel');
 		var collegeDegreeForParents = me.model.get('personEducationPlan').get('collegeDegreeForParents')
 		var specialNeeds = me.model.get('personEducationPlan').get('specialNeeds');
-		me.getParentsDegreeField().setFieldLabel(parentsDegreeLabel);
-		me.getSpecialNeedsField().setFieldLabel(specialNeedsLabel);
 		
 		if ( personEducationPlan != null && personEducationPlan != undefined )
 		{

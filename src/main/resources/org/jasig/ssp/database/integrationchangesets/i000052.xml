@@ -1,0 +1,129 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    <property name="schema" value="${database.schema}" />
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+    <property name="concat.operator" value="||"  dbms="postgresql"/>
+    <property name="concat.operator" value="+"  dbms="mssql"/>
+
+    <changeSet id="Add external_student_financial_aid_award_term table" author="dan.mccallum">
+        <preConditions onFail="CONTINUE" onFailMessage="Skipping Add external_student_financial_aid_award_term table">
+            <sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+            </sqlCheck>
+            <sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+        </preConditions>
+        <createTable tableName="external_student_financial_aid_award_term">
+            <column name="school_id" type="${nvarchar.type}(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="accepted" type="char(1)">
+                <constraints nullable="false" />
+            </column>
+            <column name="term_code" type="${nvarchar.type}(25)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <sql>grant all on external_student_financial_aid_award_term to ${database.app.username}</sql>
+    </changeSet>
+
+    <!-- Drop view if it was created in non-PK mode but now we're in PK mode. Historically we allow you
+     to change config in that direction but not back -->
+    <changeSet id="Drop v_external_student_financial_aid_award_term view (pk)" author="dan.mccallum">
+        <preConditions onFail="CONTINUE" onFailMessage="Skipping Drop v_external_student_financial_aid_award_term view (pk)">
+            <sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+            </sqlCheck>
+            <sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+            <changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+            <viewExists viewName="v_external_student_financial_aid_award_term" schemaName="${schema}" />
+            <changeSetExecuted id="Add v_external_student_financial_aid_award_term view (no-pk)"
+                               author="dan.mccallum" changeLogFile="org/jasig/ssp/database/integrationchangesets/i000052.xml" />
+            <not>
+                <!-- If you were in PK mode, then non-PK mode, then flip back to PK mode, the <changeSetExecuted> above would
+                be true, but if we delete the view again because of that, the view won't be recreated b/c both view creation
+                changesets would have already run.
+
+                B/c of the nature of Liquibase we just can't support this endless flipping back and forth.
+                The primary use case we want to support is starting in non-PK mode then flipping to PK mode. That said, we don't
+                want to completely cripple the application if you do flip back and forth. So for the PK to non-PK to PK use
+                case here you'll just end up with the external_student_financial_aid_award_term table/view stuck in non-PK mode and
+                you'll have to fix it manually if you really do want PK mode. -->
+                <changeSetExecuted id="Add v_external_student_financial_aid_award_term view (pk)"
+                                   author="dan.mccallum" changeLogFile="org/jasig/ssp/database/integrationchangesets/i000052.xml" />
+            </not>
+        </preConditions>
+        <dropView viewName="v_external_student_financial_aid_award_term" />
+    </changeSet>
+
+    <!-- Create the view in non-PK mode but only if it doesn't already exist. Historically we've allowed
+    you to switch from non-PK mode to PK mode, but not back. So no attempt here to change the view if
+    something else already created it -->
+    <changeSet id="Add v_external_student_financial_aid_award_term view (no-pk)" author="dan.mccallum">
+        <preConditions onFail="CONTINUE" onFailMessage="Skipping Add v_external_student_financial_aid_award_term view (no-pk)">
+            <sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+            </sqlCheck>
+            <sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+            <changeLogPropertyDefined property="external.apply.natural.keys" value="false"/>
+            <not>
+                <viewExists viewName="v_external_student_financial_aid_award_term" schemaName="${schema}" />
+            </not>
+        </preConditions>
+        <createView viewName="v_external_student_financial_aid_award_term">
+            select ROW_NUMBER() OVER (ORDER BY school_id, term_code) as id, * from external_student_financial_aid_award_term
+        </createView>
+
+        <sql>grant all on v_external_student_financial_aid_award_term to ${database.app.username}</sql>
+    </changeSet>
+
+    <changeSet id="Add v_external_student_financial_aid_award_term view (pk)" author="dan.mccallum">
+        <preConditions onFail="CONTINUE" onFailMessage="Skipping Add v_external_student_financial_aid_award_term view (pk)">
+            <sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+            </sqlCheck>
+            <sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+            <changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+            <not>
+                <viewExists viewName="v_external_student_financial_aid_award_term" schemaName="${schema}" />
+            </not>
+        </preConditions>
+        <createView viewName="v_external_student_financial_aid_award_term">
+            select school_id${concat.operator}term_code as id,* from external_student_financial_aid_award_term
+        </createView>
+
+        <sql>grant all on v_external_student_financial_aid_award_term to ${database.app.username}</sql>
+    </changeSet>
+
+    <changeSet author='dan.mccallum'
+        id='Add external_student_financial_aid_award_term constraints'>
+        <preConditions onFail="CONTINUE" onFailMessage="Skipping Add external_student_financial_aid_award_term constraints">
+            <sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+            </sqlCheck>
+            <sqlCheck expectedResult="true">${should_manage_integration_database_sql}</sqlCheck>
+            <changeLogPropertyDefined property="external.apply.natural.keys" value="true"/>
+        </preConditions>
+
+        <!-- Name tries to reflect what Postgres would generate naturally -->
+        <addPrimaryKey constraintName="external_student_financial_aid_award_term_pkey" tableName="external_student_financial_aid_award_term" columnNames="school_id,term_code"/>
+    </changeSet>
+
+</databaseChangeLog>

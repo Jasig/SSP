@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.jasig.ssp.model.AbstractPlanCourse;
+import org.jasig.ssp.model.MapTemplateVisibility;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateCourse;
 import org.jasig.ssp.model.TermNote;
@@ -39,6 +39,8 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 	private String departmentCode;
 	
 	private Boolean isPrivate;
+	
+	private MapTemplateVisibility visibility;
 	
 	private List<TemplateCourseTO> templateCourses = new ArrayList<TemplateCourseTO>(); 
 	
@@ -56,6 +58,11 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 	public void from(Template model) {
 		super.from(model);
 		this.setIsPrivate(model.getIsPrivate());
+		if(model.getVisibility().equals(MapTemplateVisibility.PRIVATE))
+			this.setIsPrivate(true);
+		else
+			this.setIsPrivate(false);
+		this.setVisibility(model.getVisibility());
 		this.setDepartmentCode(model.getDepartmentCode());
 		this.setDivisionCode(model.getDivisionCode());
 		this.setProgramCode(model.getProgramCode());
@@ -125,6 +132,12 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 		return templateCourses;
 	}
 
+	public MapTemplateVisibility getVisibility() {
+		return visibility;
+	}
 
+	public void setVisibility(MapTemplateVisibility visibility) {
+		this.visibility = visibility;
+	}
 
 }

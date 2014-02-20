@@ -55,7 +55,13 @@
 	</changeSet> 
 
     <changeSet id="drop and re-add external_course_v" author="tony.arland">
-        
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip drop and re-add external_course_v">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
         <dropView viewName="v_external_course" />
 		<createView viewName="v_external_course">
 			select ROW_NUMBER() OVER (ORDER BY code) as id,* from external_course

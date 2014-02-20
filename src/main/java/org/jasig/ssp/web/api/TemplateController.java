@@ -19,12 +19,14 @@
 package org.jasig.ssp.web.api;
 
 import java.util.UUID;
+
 import javax.mail.SendFailedException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.jasig.ssp.factory.reference.TemplateLiteTOFactory;
 import org.jasig.ssp.factory.reference.TemplateTOFactory;
+import org.jasig.ssp.model.MapTemplateVisibility;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
@@ -41,6 +43,7 @@ import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.TemplateLiteTO;
 import org.jasig.ssp.transferobject.TemplateOutputTO;
+import org.jasig.ssp.transferobject.TemplateSearchTO;
 import org.jasig.ssp.transferobject.TemplateTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -62,6 +65,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/1/reference/map/template")
 public class TemplateController  extends AbstractBaseController {
 
+	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(TemplateController.class);
 
@@ -69,6 +73,8 @@ public class TemplateController  extends AbstractBaseController {
 	protected Logger getLogger() {
 		return LOGGER;
 	}
+	
+	private static String ANONYMOUS_MAP_TEMPLATE_ACCESS="anonymous_map_template_access";
 	 
 	@Autowired
 	private TemplateService service;
@@ -106,21 +112,24 @@ public class TemplateController  extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */ 
-	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	PagedResponse<TemplateTO> get(
-			final @RequestParam(required = false) Boolean isPrivate,
+			final @RequestParam(required = false) MapTemplateVisibility visibility,
 			final @RequestParam(required = false) ObjectStatus objectStatus,
 			final @RequestParam(required = false) String divisionCode,
 			final @RequestParam(required = false) String programCode,
 			final @RequestParam(required = false) String departmentCode) throws ObjectNotFoundException,
 			ValidationException {
+		TemplateSearchTO searchTO = new TemplateSearchTO(visibility,  objectStatus,
+															divisionCode,  programCode,  departmentCode);
 		final PagingWrapper<Template> data = getService().getAll(
 				SortingAndPaging.createForSingleSortWithPaging(
 						objectStatus == null ? ObjectStatus.ALL : objectStatus, null,
-						null, null, null, null),isPrivate,divisionCode,programCode,departmentCode);
-
+						null, null, null, null), searchTO);
+		if(data == null)
+			return null;
+		
 		return new PagedResponse<TemplateTO>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));		
 	}
@@ -136,13 +145,25 @@ public class TemplateController  extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */
-	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
 	public @ResponseBody
 	TemplateTO getTemplate(final @PathVariable UUID id) throws ObjectNotFoundException,
 			ValidationException {
 		Template model = getService().get(id);
-		return validatePlan(new TemplateTO(model));
+		SspUser currentUser = getSecurityService().currentlyAuthenticatedUser();
+		TemplateTO to = validatePlan(new TemplateTO(model));
+		if(to != null ){
+			if(to.getVisibility().equals(MapTemplateVisibility.PRIVATE) && currentUser != null){
+				if(!to.getCreatedBy().getId().equals(currentUser.getPerson().getId()))
+					throw new AccessDeniedException("Insufficient permissions to view private template.");
+			}else if ((currentUser == null || !getSecurityService().isAuthenticated()) && !to.getVisibility().equals(MapTemplateVisibility.ANONYMOUS))
+				throw new AccessDeniedException("Insufficient permissions to view requested template.");
+			else if((currentUser == null || !getSecurityService().isAuthenticated()) && !anonymousUsersAllowed()){
+				throw new AccessDeniedException("Insufficient permissions to view requested template. Unanimous access is not activated.");
+			}
+			return to;
+		}
+	    return null;
 	}	
  
 	/**
@@ -157,21 +178,24 @@ public class TemplateController  extends AbstractBaseController {
 	 *             If that specified data is not invalid.
 	 */
 	@RequestMapping(value="/summary", method = RequestMethod.GET)
-	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
 	public @ResponseBody
 	PagedResponse<TemplateLiteTO> getSummary(
-			final @RequestParam(required = false) Boolean isPrivate,
+			final @RequestParam(required = false) MapTemplateVisibility visibility,
 			final @RequestParam(required = false) ObjectStatus objectStatus,
 			final @RequestParam(required = false) String divisionCode,
 			final @RequestParam(required = false) String programCode,
 			final @RequestParam(required = false) String departmentCode) throws ObjectNotFoundException,
 			ValidationException {
-		// Run getAll
+		
+		TemplateSearchTO searchTO = new TemplateSearchTO(visibility, objectStatus,
+				divisionCode,  programCode,  departmentCode);
+		
 		final PagingWrapper<Template> data = getService().getAll(
 				SortingAndPaging.createForSingleSortWithPaging(
 						objectStatus == null ? ObjectStatus.ALL : objectStatus, null,
-						null, null, null, null),isPrivate,divisionCode,programCode,departmentCode);
-
+						null, null, null, null), searchTO);
+		if(data == null)
+			return null;
 		return new PagedResponse<TemplateLiteTO>(true, data.getResults(), getLiteFactory()
 				.asTOList(data.getRows()));		
 	}
@@ -247,6 +271,8 @@ public class TemplateController  extends AbstractBaseController {
 		throw new AccessDeniedException("Insufficient permissions to create, delete, or make changes to a public template.");
 	}
 
+	
+	
 	/**
 	 * This overload intended primarily to support the delete operation.
 	 *
@@ -304,6 +330,7 @@ public class TemplateController  extends AbstractBaseController {
 	public @ResponseBody
 	String email(final HttpServletResponse response,
 			 @RequestBody final TemplateOutputTO planOutputDataTO) throws ObjectNotFoundException {
+		
 		SubjectAndBody messageText = getService().createOutput(planOutputDataTO);
 		if(messageText == null)
 			return null;
@@ -453,6 +480,10 @@ public class TemplateController  extends AbstractBaseController {
 
 	public void setLiteFactory(TemplateLiteTOFactory liteFactory) {
 		this.liteFactory = liteFactory;
+	}
+	
+	private Boolean anonymousUsersAllowed() {
+		return Boolean.parseBoolean(configService.getByName(ANONYMOUS_MAP_TEMPLATE_ACCESS).getValue().toLowerCase());
 	}
 
 }

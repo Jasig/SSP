@@ -29,10 +29,12 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlyFormatting;
 import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.security.DynamicPermissionChecking;
@@ -40,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -85,8 +88,13 @@ public class ServerController extends AbstractBaseController {
 		put(NOTE_ENTRY_NAME, NOTE_API_FIELD_NAME);
 	}});
 
+	private static final String CLIENT_TIMEOUT_CONFIG_NAME = "client_timeout";
+
 	@Autowired
 	private ServletContext servletContext;
+
+	@Autowired
+	private ConfigService configService;
 
 	private Map<String,Object> versionProfile;
 
@@ -112,6 +120,20 @@ public class ServerController extends AbstractBaseController {
 		return versionProfile;
 	}
 
+	// We want this particular config to be available anonymously, and the
+	// caller doesn't need all the extra junk that comes with a "normal"
+	// config API response, so we introduced this API as a way to bypass
+	// both the permisssions and the "junk" on the config API for this
+	// one entry in particular
+	@RequestMapping(value = "/clientTimeout", method = RequestMethod.GET)
+	@DynamicPermissionChecking
+	public @ResponseBody
+	Map<String,Object> getClientTimeout(HttpServletRequest request) {
+		final Map<String,Object> timeout = new HashMap<String,Object>();
+		timeout.put("timeoutMins", configService.getByNameExceptionOrDefaultAsInt(CLIENT_TIMEOUT_CONFIG_NAME));
+		return timeout;
+	}
+	
     private synchronized void maybeCacheVersionProfile() throws IOException {
 		if ( versionProfile == null ) {
 			cacheVersionProfile();
@@ -230,4 +252,5 @@ public class ServerController extends AbstractBaseController {
 	protected Logger getLogger() {
 		return LOGGER;
 	}
+
 }

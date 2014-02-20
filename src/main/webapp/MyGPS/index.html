@@ -45,6 +45,58 @@
 			});
 						
 		</script>	
+
+ <script type="text/javascript">
+			idleTime = 0;
+			var timeoutInMinutes;
+
+			$(document).ready(function () {
+				    $.ajax({
+				        type: 'get',
+				        url: '/ssp/api/1/server/clientTimeout',
+				        success: function (data) {
+				            timeoutInMinutes = data;
+				        }
+				    });
+			    //Increment the idle time counter every minute.
+			    var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
+			    var logoutID = null;
+			    //Zero the idle timer on mouse movement.
+			    $(document).mousemove(function (e) {
+			        idleTime = 0;
+			    });
+			    $(document).keypress(function (e) {
+			        idleTime = 0;
+			    });
+			});
+
+			function timerIncrement() {
+			    idleTime = idleTime + 1;
+			    if (idleTime >= timeoutInMinutes && viewModel.authenticated()) {
+			        $.mobile.changePage('templates/timeout-dialog.html',{transition:'slide', role:'dialog'});
+ 			        startLogout();
+
+			    }
+			}
+			function stayLoggedIn() {
+                $.ajax({
+                    type: 'get',
+                    url: '/ssp/api/1/server/version',
+                    success: function (data) {
+                    }
+                });				
+	    	 	$("#timeout").dialog("close");
+                clearTimeout(logoutID);
+			}
+			function startLogout() {
+			    logoutID = window.setTimeout(doLogout, 60000);
+			}
+
+			function doLogout() {
+                clearTimeout(logoutID);			
+			    window.location = '/ssp-platform/Logout';
+			}
+</script>  		
 		<script type="text/javascript" src="scripts/lib/jquery.mobile-1.0rc1.min.js"></script>
 		<script type="text/javascript" src="scripts/lib/jquery.tmpl.min.js"></script>
 		<script type="text/javascript" src="scripts/lib/jquery.tmpl.loadTemplates.min.js"></script>
@@ -60,11 +112,8 @@
 	<body>
 		
 		<!-- Home Page -->
-		
 		<div id="home-page" class="page" data-role="page" data-ajax="false" data-dom-cache="true">
-			
 			<script type="text/javascript" src="scripts/home.js"></script>
-			
 			<div class="header">
 				<div class="banner" data-bind="template: { name: 'bannerTemplate' }"></div>
 				<div data-role="header" data-theme="b"  data-ajax="false">
@@ -87,11 +136,8 @@
 					<h2>Welcome</h2>
 					<p>This self help tool will assist you in identifying and overcoming challenges or barriers to your success at this college. Please use the Self Help Guides to begin the process of identifying the challenges you might face, and discovering the solutions available to meet those challenges. The tool will assist you in building a Personal Road Map that will guide you on your journey to success. Good luck on that journey!</p>		
 				</div>
-				
 				<div class="task-list" data-bind="template: { name: 'tasksTemplate' }"></div>
-				
 			</div>
-			
 			<div class="footer" data-bind="template: { name: 'footerTemplate' }"></div>
 						
 		</div>

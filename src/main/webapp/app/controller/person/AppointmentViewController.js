@@ -23,15 +23,21 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
     	appEventsController: 'appEventsController',
     	appointment: 'currentAppointment',
     	formUtils: 'formRendererUtils',
-    	studentTypesStore: 'studentTypesAllUnpagedStore'
+    	studentTypesStore: 'studentTypesAllUnpagedStore',
+		person: 'currentPerson',
+        configurationOptionsUnpagedStore: 'configurationOptionsUnpagedStore'
     },
     control: {
     	appointmentDateField: '#appointmentDateField',
     	startTimeField: '#startTimeField',
     	endTimeField: '#endTimeField',
-    	'studentIntakeRequestedField':{
-    		change: 'onHideRequestEmail'
-    	} 
+    	
+    	studentTypeCombo: {
+    		selector: '#studentTypeCombo',
+    		listeners: {
+        		select: 'onStudentTypeComboSelect'
+    		}     		
+    	}
     },
     
 	init: function() {
@@ -45,26 +51,49 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 			today = new Date();
 			me.getAppointmentDateField().setMinValue( Ext.Date.clearTime( today ) );
 		}
+		
+		var getStudentTypeSetFromExternalDataValue = 'true';
+		var getStudentTypeUnSetFromExternalDataValue = 'true';
+		
+		
+		
+		 me.configurationOptionsUnpagedStore.each(function(rec){
+        
+            var s = rec.get('value');
+            
+            if (rec.get('name') == 'studentTypeSetFromExternalData') {
+                if (s.toUpperCase().indexOf("TRUE") == -1) 
+                    getStudentTypeSetFromExternalDataValue = 'false'
+            }
+			
+            if (rec.get('name') == 'studentTypeUnsetFromExternalData') {
+                if (s.toUpperCase().indexOf("TRUE") == -1) 
+                    getStudentTypeUnSetFromExternalDataValue = 'false'
+            }
+            
+        });
+		
+		
+		
+			 if (getStudentTypeSetFromExternalDataValue == 'false' && getStudentTypeUnSetFromExternalDataValue == 'false') {
+			 	me.getStudentTypeCombo().setFieldLabel('Student Type' +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
+			 }
+		
+		me.studentTypesStore.clearFilter(true);	 
+		
+		if ( me.person.data.studentType ) {
+			me.formUtils.applyAssociativeStoreFilter(me.studentTypesStore, me.person.data.studentType.id);	
+		}
 				
 		me.getView().getForm().reset();
+		me.getStudentTypeCombo().setValue( me.person.getStudentTypeId() );
 		me.getView().loadRecord( me.appointment );
 
 		me.assignAppointmentRequiredFields();
 		
 		return me.callParent(arguments);
     },
-    onHideRequestEmail: function(field, newValue,oldValue, eOpts)
-    {
-    	var emailBox = Ext.ComponentQuery.query('#intakeEmailField')[0];
-    	if(newValue)
-    	{
-    		emailBox.show();
-    	}
-    	else
-    	{
-    		emailBox.hide();
-    	}
-    },
+    
     destroy: function(){
     	this.appEventsController.removeEvent({eventName: 'studentTypeChange', callBackFunc: this.onStudentTypeChange, scope: this});    	
     	
@@ -74,6 +103,25 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
     onStudentTypeChange: function(){
     	this.assignAppointmentRequiredFields();
     },
+	
+	onStudentTypeComboSelect: function(comp, records, eOpts){
+		var me=this;
+		var studentType, requireInitialAppointment;
+		if(records.length>0){
+			me.appEventsController.getApplication().fireEvent('studentTypeChange');
+		}
+	},
+	
+	onStudentTypeComboChange: function(comp, newValue, oldValue, eOpts){
+		var me=this;
+		var studentType, requireInitialAppointment;
+		//Assumes studentTypesStore is loaded in higher controller
+		studentType = me.studentTypesStore.getById(newValue); 
+		
+		if(studentType != null){
+			me.appEventsController.getApplication().fireEvent('studentTypeChange');
+		}
+	},
     
     assignAppointmentRequiredFields: function(){
     	// TODO: Decouple this interaction from

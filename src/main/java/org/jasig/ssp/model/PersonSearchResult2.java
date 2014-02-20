@@ -18,22 +18,47 @@
  */
 package org.jasig.ssp.model;
 
+import java.util.Date;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
+/**
+ * Caseload record
+ * 
+ * <p>
+ * There isn't a 'Caseload' table/model, but this psuedo-model is used by the
+ * DAO layer to store aggregate data for use by the Caseload controller and
+ * service layers.
+ */
 public class PersonSearchResult2 {
 
-	private UUID id;
-	
-	private UUID coachId;
+	private UUID personId;
 
-
+	@NotNull
 	private String schoolId;
 
+	@NotNull
 	private String firstName;
 
 	private String middleName;
 
+	@NotNull
 	private String lastName;
+
+    private Date birthDate;
+
+	private String studentTypeName;
+
+	private Date currentAppointmentStartTime;
+
+	private Date studentIntakeCompleteDate;
+
+	private int numberOfEarlyAlerts;
+	
+	private UUID id;
+	
+	private UUID coachId;
 
 	private String coachFirstName;
 	
@@ -43,144 +68,151 @@ public class PersonSearchResult2 {
 
 	private String currentProgramStatusName;
 
-	/**
-	 * @return the id
-	 */
-	public UUID getId() {
-		return id;
+	public UUID getPersonId() {
+		return personId;
 	}
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	
-
-	/**
-	 * @return the coachId
-	 */
-	public UUID getCoachId() {
-		return coachId;
+	public void setPersonId(final UUID personId) {
+		setIds(personId);
 	}
 
-	/**
-	 * @param coachId the coachId to set
-	 */
-	public void setCoachId(UUID coachId) {
-		this.coachId = coachId;
+	public Date getCurrentAppointmentStartTime() {
+		return currentAppointmentStartTime == null ? null : new Date(
+				currentAppointmentStartTime.getTime());
 	}
 
-	/**
-	 * @return the schoolId
-	 */
+	public final void setCurrentAppointmentStartTime(
+			final Date currentAppointmentStartTime) {
+		this.currentAppointmentStartTime = currentAppointmentStartTime == null ? null
+				: new Date(currentAppointmentStartTime.getTime());
+	}
+
+	public int getNumberOfEarlyAlerts() {
+		return numberOfEarlyAlerts;
+	}
+
+	public void setNumberOfEarlyAlerts(final Number numberOfEarlyAlerts) {
+		this.numberOfEarlyAlerts = numberOfEarlyAlerts.intValue();
+	}
+
+	public boolean isStudentIntakeComplete() {
+		return (studentIntakeCompleteDate != null);
+	}
+
+	public Date getStudentIntakeCompleteDate() {
+		return studentIntakeCompleteDate == null ? null : new Date(
+				studentIntakeCompleteDate.getTime());
+	}
+
+	public void setStudentIntakeCompleteDate(
+			final Date studentIntakeCompleteDate) {
+		this.studentIntakeCompleteDate = (studentIntakeCompleteDate == null ? null
+				: new Date(studentIntakeCompleteDate.getTime()));
+	}
+
 	public String getSchoolId() {
 		return schoolId;
 	}
 
-	/**
-	 * @param schoolId the schoolId to set
-	 */
-	public void setSchoolId(String schoolId) {
+	public void setSchoolId(final String schoolId) {
 		this.schoolId = schoolId;
 	}
 
-	/**
-	 * @return the firstName
-	 */
 	public String getFirstName() {
 		return firstName;
 	}
 
-	/**
-	 * @param firstName the firstName to set
-	 */
-	public void setFirstName(String firstName) {
+	public void setFirstName(final String firstName) {
 		this.firstName = firstName;
 	}
 
-	/**
-	 * @return the middleName
-	 */
 	public String getMiddleName() {
 		return middleName;
 	}
 
-	/**
-	 * @param middleName the middleName to set
-	 */
-	public void setMiddleName(String middleName) {
+	public void setMiddleName(final String middleName) {
 		this.middleName = middleName;
 	}
 
-	/**
-	 * @return the lastName
-	 */
 	public String getLastName() {
 		return lastName;
 	}
 
-	/**
-	 * @param lastName the lastName to set
-	 */
-	public void setLastName(String lastName) {
+	public void setLastName(final String lastName) {
 		this.lastName = lastName;
 	}
 
-	/**
-	 * @return the coachFirstName
-	 */
+	public String getStudentTypeName() {
+		return studentTypeName;
+	}
+
+	public void setStudentTypeName(final String studentTypeName) {
+		this.studentTypeName = studentTypeName;
+	}
+
+    public Date getBirthDate() {
+        return birthDate == null ? null : new Date(birthDate.getTime());
+    }
+
+    public final void setBirthDate(final Date birthDate) {
+        this.birthDate = birthDate == null ? null : new Date(
+                birthDate.getTime());
+    }
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		setIds(id);
+	}
+	
+	private void setIds(UUID id){
+		this.personId = id;
+		this.id = id;
+	}
+
+	public UUID getCoachId() {
+		return coachId;
+	}
+
+	public void setCoachId(UUID coachId) {
+		this.coachId = coachId;
+	}
+
 	public String getCoachFirstName() {
 		return coachFirstName;
 	}
 
-	/**
-	 * @param coachFirstName the coachFirstName to set
-	 */
 	public void setCoachFirstName(String coachFirstName) {
 		this.coachFirstName = coachFirstName;
 	}
 
-	/**
-	 * @return the coachLastName
-	 */
 	public String getCoachLastName() {
 		return coachLastName;
 	}
 
-	/**
-	 * @param coachLastName the coachLastName to set
-	 */
 	public void setCoachLastName(String coachLastName) {
 		this.coachLastName = coachLastName;
 	}
 
-	/**
-	 * @return the programStatusName
-	 */
-	public String getCurrentProgramStatusName() {
-		return currentProgramStatusName;
-	}
-
-	/**
-	 * @param programStatusName the programStatusName to set
-	 */
-	public void setCurrentProgramStatusName(String programStatusName) {
-		this.currentProgramStatusName = programStatusName;
-	}
-
-	/**
-	 * @return the photoUrl
-	 */
 	public String getPhotoUrl() {
 		return photoUrl;
 	}
 
-	/**
-	 * @param photoUrl the photoUrl to set
-	 */
 	public void setPhotoUrl(String photoUrl) {
 		this.photoUrl = photoUrl;
+	}
+
+	public String getCurrentProgramStatusName() {
+		return currentProgramStatusName;
+	}
+
+	public void setCurrentProgramStatusName(String currentProgramStatusName) {
+		this.currentProgramStatusName = currentProgramStatusName;
+	}
+
+	public void setNumberOfEarlyAlerts(int numberOfEarlyAlerts) {
+		this.numberOfEarlyAlerts = numberOfEarlyAlerts;
 	}
 }

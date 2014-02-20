@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -90,6 +91,16 @@ public class EarlyAlertDao extends
 	 *         for each.
 	 */
 	public Map<UUID, Number> getCountOfActiveAlertsForPeopleIds(
+			@NotNull final Collection<UUID> personIds) {
+		List<List<UUID>> batches = prepareBatches(personIds);
+		Map<UUID, Number> set = new HashMap<UUID,Number>();
+		for(List<UUID> batch:batches){
+			set.putAll(getCountOfActiveAlertsForPeopleIdsBatch(batch));
+		}
+		return set;
+	}
+	
+	private Map<UUID, Number> getCountOfActiveAlertsForPeopleIdsBatch(
 			@NotNull final Collection<UUID> personIds) {
 		return getCountOfAlertsForPeopleId(personIds, new CriteriaCallback() {
 			@Override
@@ -604,5 +615,28 @@ public class EarlyAlertDao extends
 		criteria.add(Restrictions.isNotNull("person.studentType"));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		return criteria;
+	}
+	
+	private List<List<UUID>> prepareBatches(Collection<UUID> uuids){
+		List<UUID> currentBatch = new ArrayList<UUID>(); 
+		List<List<UUID>> batches = new ArrayList<List<UUID>>();
+		int batchCounter = 0;
+		for (UUID uuid : uuids) 
+		{
+			if(batchCounter == getBatchsize())
+			{
+				currentBatch.add(uuid);
+				batches.add(currentBatch);
+				currentBatch = new ArrayList<UUID>();
+				batchCounter = 0;
+			}
+			else
+			{
+				currentBatch.add(uuid);
+				batchCounter++;
+			}
+		}
+		batches.add(currentBatch);
+		return batches;
 	}
 }

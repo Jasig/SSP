@@ -31,7 +31,8 @@ Ext.define('Ssp.view.SearchForm',{
         financialAidSAPStatus: 'financialAidSAPStatus',
         mapStatusStore: 'mapStatusStore',
         currentlyRegisteredStore: 'currentlyRegisteredStore',
-        programsStore: 'programsStore'
+        programsStore: 'programsStore',
+        textStore:'sspTextStore'
     },
     collapsible: true,
 	layout: {
@@ -247,17 +248,43 @@ Ext.define('Ssp.view.SearchForm',{
    		   		    valueField: 'code',
 		   		    displayField: 'displayValue'               
                 },
-                {
-                    xtype: 'checkboxfield',
-                    fieldLabel: 'My Caseload',
-                    name: 'myCaseload',
-					enableKeyEvents:true,
-                    listeners: {
-                        change: function() {
-                        	Ext.ComponentQuery.query('[name=planStatus]')[0].focus();
-                        }
-                    }
-                },
+                {	layout: 'column',
+                    border: false,
+                    items: [
+                             {
+                                 xtype: 'checkboxfield',
+                                 fieldLabel: 'My Caseload',
+                                 name: 'myCaseload',
+                			     enableKeyEvents:true,
+                                 listeners: {
+                                     change: function() {
+                                      	Ext.ComponentQuery.query('[name=planStatus]')[0].focus();
+                                       }
+                                 },
+                         	   labelAlign: 'left',
+                         	   columnWidth: .45
+                            },
+                            {
+        				       xtype: 'datefield',
+        				       format: 'm/d/Y',
+       				    	   altFormats: 'm/d/Y|m-d-Y',
+                         	   allowBlank: true,
+                         	   showToday:false, 
+                         	   validateOnChange: false,
+                         	   labelAlign: 'left',
+                         	   columnWidth: .55,
+                         	   labelSeparator: '',
+                         	   fieldLabel: me.textStore.getValueByCode('ssp.label.dob')+': (mm/dd/ccyy)',
+                         	   name: 'birthDate',
+ 							   itemId: 'birthDate',
+ 							  onExpand: function() {
+ 								    var value = this.getValue();
+ 								    var today = new Date();
+ 								    this.picker.setValue(Ext.isDate(value) ? value : new Date(today.getYear()-20, today.getMonth(), today.getDate(), 0, 0, 0, 0));
+ 								}
+                            }              
+                 ]},
+
                 {
                     xtype: 'checkboxfield',
                     fieldLabel: 'My Plans',

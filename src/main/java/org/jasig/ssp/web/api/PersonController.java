@@ -34,6 +34,7 @@ import org.jasig.ssp.transferobject.PersonLiteTO;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.EmailStudentRequestTO;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -151,6 +152,15 @@ public class PersonController extends AbstractBaseController {
 
 		return new PagedResponse<PersonLiteTO>(true, coaches.getResults(),
 				PersonLiteTO.toTOListFromCoachTOs(coaches.getRows()));
+	}
+
+	@RequestMapping(value = "/email", method = RequestMethod.POST)
+	@PreAuthorize(Permission.SECURITY_PERSON_WRITE)
+	public @ResponseBody
+	boolean emailStudent(
+			final @RequestBody EmailStudentRequestTO emailRequest) throws ObjectNotFoundException, ValidationException {
+		service.emailStudent(emailRequest);
+		return true;
 	}
 	
 	@RequestMapping(value = "/currentCoachesLite", method = RequestMethod.GET)
@@ -279,40 +289,6 @@ public class PersonController extends AbstractBaseController {
 		return null;
 	}
   
-//	private PersonExistsException objectExistsExceptionWithId(final PersonExistsException orig,PersonTO origPerson) {
-//		Person bySchoolIdOrUsername = null;
-//		try {
-//			if ( PersonExistsException.ERROR_SCHOOL_ID_EXISTING.equals(orig.getError()) ) {
-//				bySchoolIdOrUsername =
-//						service.getBySchoolId(orig.getOriginalSchoolId());
-//			} else if ( PersonExistsException.ERROR_USERNAME_EXISTING.equals(orig.getError()) ) {
-//				bySchoolIdOrUsername =
-//						service.personFromUsername(orig.getOriginalUsername());
-//				if(!origPerson.getSchoolId().equals(bySchoolIdOrUsername.getSchoolId()))
-//				{
-//					LOGGER.info("Username and schoolid don't match up."
-//							+ " Original conflict message: {}", orig.getMessage());
-//					throw new PersonExistsException(PersonExistsException.ERROR_CONSTRAINT_VIOLATION_SCHOOL_ID,bySchoolIdOrUsername.getId(), bySchoolIdOrUsername.getUsername(), bySchoolIdOrUsername.getSchoolId(),  origPerson.getUsername(), origPerson.getSchoolId(), origPerson.getFirstName()+""+origPerson.getLastName());
-//				}
-//				
-//			}
-//		} catch ( ObjectNotFoundException ee ) {
-//			LOGGER.info("Failed to look up conflicting Person record."
-//					+ " Original conflict message: {}", orig.getMessage(), ee);
-//			return null;
-//		} catch ( RuntimeException ee ) {
-//			LOGGER.info("Failed to look up conflicting Person record."
-//					+ " Original conflict message: {}", orig.getMessage(), ee);
-//			return null;
-//		}
-//		if ( bySchoolIdOrUsername == null ) {
-//			LOGGER.info("Failed to look up conflicting Person record."
-//					+ " Original conflict message: {}", orig.getMessage());
-//			return null;
-//		}
-// 
-//		return new PersonExistsException(orig);
-//	}
 
 	/**
 	 * Persist any changes to the specified instance.
