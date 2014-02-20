@@ -305,7 +305,7 @@ public class TemplateController  extends AbstractBaseController {
 	String print(final HttpServletResponse response,
 			 @RequestBody final TemplateOutputTO planOutputDataTO) throws ObjectNotFoundException {
 
-		SubjectAndBody message = getService().createMatrixOutput(planOutputDataTO.getPlan());
+		SubjectAndBody message = getService().createOutput(planOutputDataTO);
 		if(message != null)
 			return message.getBody();
 		
