@@ -20,10 +20,17 @@
 package org.jasig.ssp.reference;
 
 
+import com.jayway.restassured.specification.ResponseSpecification;
 import org.jasig.ssp.security.ApiAuthentication;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.Test;
+
+import static com.jayway.restassured.RestAssured.expect;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.jasig.ssp.ExpectationUtils.expectListResponseObjectAtIndex;
 
 
 public class EnrollmentStatusIT extends AbstractReferenceTest {
@@ -102,7 +109,27 @@ public class EnrollmentStatusIT extends AbstractReferenceTest {
     @ApiAuthentication(mode="auth")
     public void testEnrollmentStatusReferenceAllBody() {
 
-        testResponseBody(ENROLLMENT_STATUS_PATH, ENROLLMENT_STATUS_RESPONSE);
+        // At least one of the other tests POSTs an ACTIVE record. So we use GTE
+        // assertion on the spec below, else unpredictable test execution
+        // ordering will make this test unstable. Was just simpler at the time
+        // than figuring out either how to make that POST test follow-up with
+        // a DELETE or maintaining a class-scoped context for adjusting
+        // test expectations based on accumulated changes to persistent data.
+
+        ResponseSpecification spec =
+                expect()
+                        .contentType("application/json")
+                        .statusCode(200)
+                        .log().ifError()
+                        .body("results", greaterThanOrEqualTo(3))
+                        .and()
+                        .body("success", equalTo("true"))
+                        .and()
+                        .body("rows", hasSize(greaterThanOrEqualTo(3)))
+                        .and();
+
+        spec = expectListResponseObjectAtIndex(spec, 0, ENROLLMENT_STATUS_ROWS);
+        spec.when().get(ENROLLMENT_STATUS_PATH);
     }
 
     @Test

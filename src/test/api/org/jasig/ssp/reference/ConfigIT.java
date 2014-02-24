@@ -20,10 +20,8 @@
 package org.jasig.ssp.reference;
 
 
-import static com.jayway.restassured.RestAssured.expect;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.fail;
 import com.jayway.restassured.response.Response;
+import com.jayway.restassured.specification.ResponseSpecification;
 import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Matchers;
 import org.jasig.ssp.security.ApiAuthentication;
@@ -32,172 +30,123 @@ import org.json.simple.JSONObject;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.Map;
+
+import static com.jayway.restassured.RestAssured.expect;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.jasig.ssp.ExpectationUtils.*;
+import static org.junit.Assert.fail;
 
 
 public class ConfigIT extends AbstractReferenceTest {
 
     private static final String CONFIG_PATH = REFERENCE_PATH + "config";
-
-    private static final String[] CONFIG_UUIDS;
-    private static final String[] CONFIG_NAMES;
-    private static final String[] CONFIG_DESCRIPTIONS;
-    private static final String[] CONFIG_VALUES;
-    private static final String[] CONFIG_DEFAULT_VALUES;
-    private static final int[] CONFIG_SORT_ORDERS;
     private static final JSONArray CONFIG_ROWS;
-    private static final JSONObject CONFIG_RESPONSE;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigIT.class);
 
+
+    // Slightly different approach here than what you see in other tests since
+    // as of late-2.3.0 development we're not going to be concerned with
+    // complete validation of list response bodies. It's just too painful
+    // to maintain the list/s of all possible values. Still need to have
+    // a few expectations set up here, though. But since there are so few
+    // relative to what we've maintained in the past, I switched to more
+    // explicit object construction and away from the more abstract
+    // array-based construction that you'll find in many other tests.
     static {
-
-        CONFIG_UUIDS = new String[] {
-                "67bd120e-9be1-11e1-ad1f-0026b9e7ff4c", "59dbcf48-9be3-11e1-bded-0026b9e7ff4c",
-                "0ed5d4e3-77cb-11e3-a151-406c8f22c3ce", "1b5528d2-d789-11e1-9d78-0026b9e7ff4c",
-                "d1442778-f3a0-11e1-a285-406c8f22c3ce", "312c069e-ee71-11e2-80f4-406c8f22c3ce",
-                "8298fc28-9be1-11e1-933d-0026b9e7ff4c", "e99ff3c7-6a59-4812-b3b1-285fa8764d3a",
-                "333c4e98-ccef-11e1-8ff5-0026b9e7ff4c", "645d19ea-9be3-11e1-8ffe-0026b9e7ff4c",
-                "5e42ccb0-876c-11e2-9e96-0800200c9a66", "3eb8d2ee-9baa-11e1-844c-0026b9e7ff4c",
-                "e6c63bb0-9be2-11e1-a6cb-0026b9e7ff4c", "cdfafe17-5aa5-11e2-82f7-406c8f22c3ce",
-                "33f3c840-d903-11e2-a28f-0800200c9a66", "5d62d170-d904-11e2-a28f-0800200c9a66",
-                "65f23fe8-e829-11e2-b231-406c8f22c3ce", "d22f5bf3-e829-11e2-97e9-406c8f22c3ce",
-                "21a321e8-e03a-11e2-bb74-406c8f22c3ce", "161b5557-e03b-11e2-b770-406c8f22c3ce",
-                "80e51b59-3936-436a-93e2-9a116c1fd03c", "43bd3066-a5a8-11e1-8e16-0026b9e7ff4c",
-                "9e454391-666c-11e2-84d4-406c8f22c3ce", "bc5f37e0-880f-11e2-9e96-0800200c9a66"
-        };
-
-        CONFIG_NAMES = new String[] {
-                "app_title", "bcc_email_address", "client_timeout", "coachSetFromExternalData",
-                "coachUnsetFromExternalData", "highly_trusted_ips_enabled", "inst_home_url", "inst_name",
-                "manage_integration_database", "numberOfDaysPriorForTaskReminders", "registration_load_ranges",
-                "send_mail", "serverExternalPath", "status_code_mappings", "studentTypeSetFromExternalData",
-                "studentTypeUnsetFromExternalData", "task_external_person_sync_batch_size",
-                "task_external_person_sync_max_batches_per_exec", "task_external_person_sync_trigger",
-                "task_scheduler_config_poll_trigger", "term_to_represent_early_alert", "test_env_mock_mail_server_port",
-                "up_coach_query", "weekly_course_work_hour_ranges"
-        };
-
-        CONFIG_DESCRIPTIONS = new String[] {
-                "The Title of the application", "The email address to blind carbon copy on every message",
-                "Minutes of browser inactivity after which the user will be prompted to extend her session. " +
-                        "Else the session will automatically end. This is distinct from the server-side session timeout" +
-                        " and should generally be some fraction of the latter (1/3 by default).",
-                "Coach is always set from external data if this is set to true.  It will overwrite any local " +
-                        "changes for coach.", "All coach assignments to be deleted based on external data, " +
-                "overwriting any local changes or externally assigned coach.",
-                "Boolean value indicating whether or not to consider highly_trusted_ips",
-                "The homepage of the Organization", "Institution name",
-                "Whether the system should manage the integration database.  " +
-                        "If true the tables and views will be manipulated automatically as the application evolves " +
-                        "(tables added/modified/dropped, views added/modified/dropped).  " +
-                        "If false, the administrator must follow and apply the changes.",
-                "Set of days prior to expiration to send out Task Reminders. Comma delimited list. example:3,4,5. "
-                + "Would send out reminders 3 days before, 4 days before and 5 days before expiration date.",
-                "To properly indicate the term load activity ranges need to be sepcified, is proper json with " +
-                        "range name and [start,end] range.", "Whether the system should send out mails, or just " +
-                "log their generation", "The externally visible url of the application",
-                "Map status codes to more human-friendly names. Should be well-formed JSON with keys being code " +
-                        "and values being names. Use special key 'default' for naming missing statuses.",
-                "Student type is always set from external data if this is set to true.  It will overwrite any " +
-                        "local changes for student type.", "All student type assignments to be deleted based on " +
-                "external data, overwriting any local changes or externally assigned student type.",
-                "Maximum number of person records to sync from the external person table in a single transaction. " +
-                        "Negative values treated as unlimited. A zero (0) will be treated the same way as the web " +
-                        "APIs (100 at this writing).", "Maximum number of transactions per execution of the " +
-                "external person sync task. Negative values treated as unlimited. A zero (0) will disable the task.",
-                "Frequency with which the person and external person tables will be synchronized. This is resource " +
-                        "intensive, so should be run during off hours. Specify a number to run the sync every x-many " +
-                        "milliseconds. Or specify two numbers separated by a slash (60000/1000) to represent both a " +
-                        "period and an initial offset. Or specify a cron expression. " +
-                        "See http://www.manpagez.com/man/5/crontab/ for cron expression syntax. Default value means " +
-                        "'daily at 1AM, server-local time.'", "Frequency with which execution schedules for " +
-                "background tasks will be checked for new configuration. Specify a number to run the sync every " +
-                "x-many milliseconds.  Or specify two numbers separated by a slash (60000/1000) to represent " +
-                "both a period and an initial offset. Or specify a cron expression. " +
-                "See http://www.manpagez.com/man/5/crontab/ for cron expression syntax. Default value means " +
-                "'every 15 minutes after an initial offset of 5 minutes.'", "Term to refer to early alerts," +
-                " early intervention, or whatever you want to call them.", "The port to start the mock mail server " +
-                "on in the test environment", "uPortal user lookup criteria by attribute name/value pairs. " +
-                "(Currently these are anded.) Should be well-formed JSON that will parse to a Java Map<String,String>." +
-                "", "To properly indate the weekly course work hour ranges need to be sepcified, is proper json with" +
-                " range name and [start,end] range."
-        };
-
-        CONFIG_VALUES = new String[] {
-                "SSP", "noone@test.com", "20", "true", "false", "false", "http://test.edu", "My Edu", "true", "3",
-                "[{\"name\":\"LT\",\"description\":\"Light part time schedule.\",\"rangeStart\":1," +
-                        "\"rangeEnd\":6,\"rangeLabel\":\"1-6\"},\n\t\t\t\t\t\t\t\t\t\t\t{\"name\":\"PT\",\"description" +
-                        "\":\"Part time student\",\"rangeStart\":7,\"rangeEnd\":12,\"rangeLabel\":\"7-12\"}, " +
-                        "\n\t\t\t\t\t\t\t\t\t\t\t{\"name\":\"FT\",\"description\":\"Full time student\",\"rangeStart" +
-                        "\":13,\"rangeEnd\":1000,\"rangeLabel\":\"13 or more\"}]",
-                "false", "http://ssp.test.edu",
-                "{\"default\": \"Enrolled\"}",
-                "false", "false", "100",
-                "-1", "0 0 1 * * *", "900000/300000", "Early Alert", "40025",
-                "{\"SSP_ROLES\": \"SSP_COACH\"}",
-                "[{\"name\":\"LTPT\",\"description\":\"Light Load\",\"rangeStart\":0,\"rangeEnd\":5,\"rangeLabel\":\"0-5\"},\n" +
-                        "\t\t\t{\"name\":\"Moderate\",\"description\":\"Moderate Load\",\"rangeStart\":6,\"rangeEnd\":10,\"rangeLabel\":\"6-10\"}, \n" +
-                        "\t\t\t{\"name\":\"LTFT\",\"description\":\"Light load Full Time Student\",\"rangeStart\":11,\"rangeEnd\":15,\"rangeLabel\":\"11-15\"},\n" +
-                        "\t\t\t{\"name\":\"STFT\",\"description\":\"Standard load Full Time Student\",\"rangeStart\":16,\"rangeEnd\":20,\"rangeLabel\":\"16-20\"},\n" +
-                        "\t\t\t{\"name\":\"HVFT\",\"description\":\"Heavy load Full Time Student\",\"rangeStart\":21,\"rangeEnd\":1000,\"rangeLabel\":\"More Than 20\"}]"
-        };
-
-        CONFIG_DEFAULT_VALUES = new String[] {
-                "SSP", "noone@test.com", "20", "true", "false", "false", "http://test.edu", "My Edu", "true", "3",
-                "[{\"name\":\"LT\",\"description\":\"Light part time schedule\",\"rangeStart\":1,\"rangeEnd\":6,\"" +
-                        "rangeLabel\":\"1-6\"},\n\t\t\t\t\t\t\t\t\t\t\t{\"name\":\"PT\",\"description\":\"" +
-                        "Part time student\",\"rangeStart\":7,\"rangeEnd\":12,\"rangeLabel\":\"7-12\"}, " +
-                        "\n\t\t\t\t\t\t\t\t\t\t\t{\"name\":\"FT\",\"description\":\"Full time student\"," +
-                        "\"rangeStart\":13,\"rangeEnd\":1000,\"rangeLabel\":\"13 or more\"}]",
-                "false", "http://ssp.test.edu",
-                "{\"default\": \"Enrolled\"}",
-                "false", "false", "100", "-1", "0 0 1 * * *", "900000/300000", "Early Alert", "40025",
-                "{\"SSP_ROLES\": \"SSP_COACH\"}",
-                "[{\"name\":\"LTPT\",\"description\":\"Light Load\",\"rangeStart\":0,\"rangeEnd\":5,\"rangeLabel\":\"0-5\"},\n" +
-                        "\t\t\t{\"name\":\"Moderate\",\"description\":\"Moderate Load\",\"rangeStart\":6,\"rangeEnd\":10,\"rangeLabel\":\"6-10\"}, \n" +
-                        "\t\t\t{\"name\":\"LTFT\",\"description\":\"Light load Full Time Student\",\"rangeStart\":11,\"rangeEnd\":15,\"rangeLabel\":\"11-15\"},\n" +
-                        "\t\t\t{\"name\":\"STFT\",\"description\":\"Standard load Full Time Student\",\"rangeStart\":16,\"rangeEnd\":20,\"rangeLabel\":\"16-20\"},\n" +
-                        "\t\t\t{\"name\":\"HVFT\",\"description\":\"Heavy load Full Time Student\",\"rangeStart\":21,\"rangeEnd\":1000,\"rangeLabel\":\"More Than 20\"}]"
-        };
-
-        CONFIG_SORT_ORDERS = new int[] {
-                100, 100, 501, 100, 102, 406, 100, 99, 100, 100, 105, 100, 100, 103, 102, 102, 306, 306, 206, 216, 101,
-                100, 104, 106
-        };
 
         CONFIG_ROWS = new JSONArray();
 
-        for ( int index = 0; index < CONFIG_UUIDS.length; index++ ) {
+        final JSONObject expectedResult1 = new JSONObject();
+        expectedResult1.put("id", "065e9d10-853d-11e3-baa7-0800200c9a66");
+        expectedResult1.put("createdBy", getDefaultCreatedModifiedBy());
+        expectedResult1.put("description", "Setting this value to true allows map template designers to allow access to map template without authentication.");
+        expectedResult1.put("modifiedBy", getDefaultCreatedModifiedBy());
+        expectedResult1.put("name", "anonymous_map_template_access");
+        expectedResult1.put("objectStatus", "ACTIVE");
+        expectedResult1.put("createdDate", getDefaultCreatedModifiedByDate());
+        expectedResult1.put("modifiedDate", getDefaultCreatedModifiedByDate());
+        expectedResult1.put("value", "false");
+        expectedResult1.put("valueValidation", null);
+        expectedResult1.put("sortOrder", 502);
+        expectedResult1.put("defaultValue", "false");
 
-            JSONObject temp = new JSONObject();
-            temp.put("id", CONFIG_UUIDS[index]);
-            temp.put("createdBy", getDefaultCreatedModifiedBy());
-            temp.put("description", CONFIG_DESCRIPTIONS[index]);
-            temp.put("modifiedBy", getDefaultCreatedModifiedBy());
-            temp.put("name", CONFIG_NAMES[index]);
-            temp.put("objectStatus", "ACTIVE");
-            temp.put("createdDate", getDefaultCreatedModifiedByDate());
-            temp.put("modifiedDate", getDefaultCreatedModifiedByDate());
-            temp.put("value", CONFIG_VALUES[index]);
-            temp.put("valueValidation", null);
-            temp.put("sortOrder", CONFIG_SORT_ORDERS[index]);
-            temp.put("defaultValue", CONFIG_DEFAULT_VALUES[index]);
+        CONFIG_ROWS.add(expectedResult1);
 
-            CONFIG_ROWS.add(temp);
-        }
+        final JSONObject expectedResult2 = new JSONObject();
+        expectedResult2.put("id", "67bd120e-9be1-11e1-ad1f-0026b9e7ff4c");
+        expectedResult2.put("createdBy", getDefaultCreatedModifiedBy());
+        expectedResult2.put("description", "The Title of the application");
+        expectedResult2.put("modifiedBy", getDefaultCreatedModifiedBy());
+        expectedResult2.put("name", "app_title");
+        expectedResult2.put("objectStatus", "ACTIVE");
+        expectedResult2.put("createdDate", getDefaultCreatedModifiedByDate());
+        expectedResult2.put("modifiedDate", getDefaultCreatedModifiedByDate());
+        expectedResult2.put("value", "SSP");
+        expectedResult2.put("valueValidation", null);
+        expectedResult2.put("sortOrder", 100);
+        expectedResult2.put("defaultValue", "SSP");
 
-        CONFIG_RESPONSE = new JSONObject();
-        CONFIG_RESPONSE.put("success", "true");
-        CONFIG_RESPONSE.put("message", "");
-        CONFIG_RESPONSE.put("results", CONFIG_ROWS.size());
-        CONFIG_RESPONSE.put("rows", CONFIG_ROWS);
+        CONFIG_ROWS.add(expectedResult2);
+
+        final JSONObject expectedResult3 = new JSONObject();
+        expectedResult3.put("id", "59dbcf48-9be3-11e1-bded-0026b9e7ff4c");
+        expectedResult3.put("createdBy", getDefaultCreatedModifiedBy());
+        expectedResult3.put("description", "The email address to blind carbon copy on every message");
+        expectedResult3.put("modifiedBy", getDefaultCreatedModifiedBy());
+        expectedResult3.put("name", "bcc_email_address");
+        expectedResult3.put("objectStatus", "ACTIVE");
+        expectedResult3.put("createdDate", getDefaultCreatedModifiedByDate());
+        expectedResult3.put("modifiedDate", getDefaultCreatedModifiedByDate());
+        expectedResult3.put("value", "noone@test.com");
+        expectedResult3.put("valueValidation", null);
+        expectedResult3.put("sortOrder", 100);
+        expectedResult3.put("defaultValue", "noone@test.com");
+
+        CONFIG_ROWS.add(expectedResult3);
+
+        final JSONObject expectedResult4 = new JSONObject();
+        expectedResult4.put("id", "96d5b6fe-d771-462c-945a-5353b298a0fe");
+        expectedResult4.put("createdBy", getDefaultCreatedModifiedBy());
+        expectedResult4.put("description", "turns on/off cron job that will drive the calculation");
+        expectedResult4.put("modifiedBy", getDefaultCreatedModifiedBy());
+        expectedResult4.put("name", "calculate_map_plan_status");
+        expectedResult4.put("objectStatus", "ACTIVE");
+        expectedResult4.put("createdDate", getDefaultCreatedModifiedByDate());
+        expectedResult4.put("modifiedDate", getDefaultCreatedModifiedByDate());
+        expectedResult4.put("value", "false");
+        expectedResult4.put("valueValidation", null);
+        expectedResult4.put("sortOrder", 600);
+        expectedResult4.put("defaultValue", "false");
+
+        CONFIG_ROWS.add(expectedResult4);
+
+        final JSONObject expectedResult5 = new JSONObject();
+        expectedResult5.put("id", "0ed5d4e3-77cb-11e3-a151-406c8f22c3ce");
+        expectedResult5.put("createdBy", getDefaultCreatedModifiedBy());
+        expectedResult5.put("description", "Minutes of browser inactivity after which the user will be prompted to extend her session. Else the session will automatically end. This is distinct from the server-side session timeout and should generally be some fraction of the latter (1/3 by default).");
+        expectedResult5.put("modifiedBy", getDefaultCreatedModifiedBy());
+        expectedResult5.put("name", "client_timeout");
+        expectedResult5.put("objectStatus", "ACTIVE");
+        expectedResult5.put("createdDate", getDefaultCreatedModifiedByDate());
+        expectedResult5.put("modifiedDate", getDefaultCreatedModifiedByDate());
+        expectedResult5.put("value", "20");
+        expectedResult5.put("valueValidation", null);
+        expectedResult5.put("sortOrder", 501);
+        expectedResult5.put("defaultValue", "20");
+
+        CONFIG_ROWS.add(expectedResult5);
+
     }
 
     @Test
     @ApiAuthentication(mode="unauth")
     public void testPermissionProtectedMethodsConfigReference() {
-        final JSONObject testPostPutNegative = (JSONObject) ((JSONObject) CONFIG_ROWS.get(0)).clone();
+        final JSONObject testPostPutNegative = copyOfExpectedObjectAtIndex(0, CONFIG_ROWS);
         testPostPutNegative.put("name", "testPostUnAuth");
 
         referenceAuthenticationControlledMethodNegativeTest(CONFIG_PATH, testPostPutNegative);
@@ -206,7 +155,7 @@ public class ConfigIT extends AbstractReferenceTest {
         expect()
             .statusCode(403)
         .given()
-            .queryParam("name", CONFIG_NAMES[0])
+            .queryParam("name", expectedStringFieldValueAtIndex("name", 0, CONFIG_ROWS))
         .when()
             .get(CONFIG_PATH);
     }
@@ -215,23 +164,44 @@ public class ConfigIT extends AbstractReferenceTest {
     @ApiAuthentication(mode="auth")
     public void testConfigReferenceAllBody() {
 
-        testResponseBody(CONFIG_PATH, CONFIG_RESPONSE);
+        ResponseSpecification spec =
+                expect()
+                    .contentType("application/json")
+                    .statusCode(200)
+                    .log().ifError()
+                    .body("results", equalTo(30))
+                    .and()
+                    .body("success", equalTo("true"))
+                    .and()
+                    .body("rows", hasSize(30))
+                    .and();
+
+        spec = expectListResponseObjectAtIndex(spec, 0, CONFIG_ROWS);
+
+        // One of the other tests soft-deletes a config record. So we either
+        // need a status=ALL or GTE assertion on the spec above, else
+        // unpredictable test execution ordering will make this test unstable.
+        // Since this particular API doesn't support POST, we know the total
+        // record count will never grow, so we go with an exact match on
+        // record counts in the assertions, which then requires the status=ALL
+        spec.when().get(CONFIG_PATH + "?status=ALL");
+
     }
 
     @Test
     @ApiAuthentication(mode="auth")
     public void testConfigReferenceSingleItemBody() {
 
-        testSingleItemResponseBody(CONFIG_PATH, (JSONObject) CONFIG_ROWS.get(1));
+        testSingleItemResponseBody(CONFIG_PATH, expectedObjectAtIndex(1, CONFIG_ROWS));
 
         //get /name
         expect()
             .statusCode(200)
             .log().ifError()
             .contentType("application/json")
-            .body("", Matchers.equalTo(CONFIG_ROWS.get(1)))
+            .body("", Matchers.equalTo(expectedObjectAtIndex(1, CONFIG_ROWS)))
         .given()
-            .queryParam("name", CONFIG_NAMES[1])
+            .queryParam("name", expectedStringFieldValueAtIndex("name", 1, CONFIG_ROWS))
         .when()
             .get(CONFIG_PATH);
 
@@ -248,7 +218,7 @@ public class ConfigIT extends AbstractReferenceTest {
     @Test
     @ApiAuthentication(mode="auth")
     public void testConfigReferenceSupportedMethodsPositive() {
-        final JSONObject testPutPositive = (JSONObject) ((JSONObject) CONFIG_ROWS.get(2)).clone();
+        final JSONObject testPutPositive = copyOfExpectedObjectAtIndex(2, CONFIG_ROWS);
         testPutPositive.put("name", "testPutPositive");
 
         int checkResultCount = -2;
@@ -276,7 +246,7 @@ public class ConfigIT extends AbstractReferenceTest {
             .log().ifError()
             .contentType("application/json")
         .when()
-            .get(CONFIG_PATH + "/" + CONFIG_UUIDS[1]);
+            .get(CONFIG_PATH + "/" + expectedStringFieldValueAtIndex("id", 1, CONFIG_ROWS));
 
         //get /name
         expect()
@@ -284,7 +254,7 @@ public class ConfigIT extends AbstractReferenceTest {
             .log().ifError()
             .contentType("application/json")
       .given()
-            .queryParam("name", CONFIG_NAMES[1])
+            .queryParam("name", expectedStringFieldValueAtIndex("name", 1, CONFIG_ROWS))
         .when()
             .get(CONFIG_PATH);
 
@@ -396,9 +366,9 @@ public class ConfigIT extends AbstractReferenceTest {
     @Test
     @ApiAuthentication(mode="auth")
     public void testConfigReferenceSupportedMethodsNegative() {
-        final JSONObject testNegativePostObject = (JSONObject) ((JSONObject) CONFIG_ROWS.get(4)).clone();
+        final JSONObject testNegativePostObject = copyOfExpectedObjectAtIndex(3, CONFIG_ROWS);
         testNegativePostObject.put("name", ("testPostNegative" + testPassDeConflictNumber));
-        final JSONObject testNegativeValidateObject = (JSONObject) CONFIG_ROWS.get(5);
+        final JSONObject testNegativeValidateObject = expectedObjectAtIndex(4, CONFIG_ROWS);
 
         referenceNegativeSupportedMethodTest(CONFIG_PATH, testNegativePostObject,
                 testNegativeValidateObject);
