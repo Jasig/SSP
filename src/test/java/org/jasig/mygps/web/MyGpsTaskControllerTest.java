@@ -183,7 +183,7 @@ public class MyGpsTaskControllerTest {
 				service.getAllForPerson(eq(student), eq(false),
 						eq(securityService.currentUser()),
 						isA(SortingAndPaging.class))).andReturn(tasks);
-		service.sendTasksForPersonToEmail(tasks, null, student, emailAddresses,
+		service.sendTasksForPersonToEmail(tasks, null, null, student, emailAddresses,
 				null);
 
 		replay(service);
