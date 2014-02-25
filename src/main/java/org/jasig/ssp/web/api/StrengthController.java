@@ -71,6 +71,6 @@ public class StrengthController
 
 	@Override
 	public String permissionBaseName() {
-		return "Strength";
+		return "STRENGTH";
 	}
 }
