@@ -25,9 +25,11 @@ import org.jasig.ssp.dao.reference.ChallengeReferralDao;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.model.reference.ChallengeReferralSearchResult;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
+import org.jasig.ssp.transferobject.reference.ChallengeReferralSearchFormTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,5 +134,9 @@ public class ChallengeReferralServiceImpl extends
 
 	protected void setDao(final ChallengeReferralDao dao) {
 		this.dao = dao;
+	}
+	
+	public PagingWrapper<ChallengeReferralSearchResult>  summarySearch(ChallengeReferralSearchFormTO searchForm){
+	    return getDao().summarySearch(searchForm);
 	}
 }

@@ -23,7 +23,9 @@ import java.util.List;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
+import org.jasig.ssp.model.reference.ChallengeReferralSearchResult;
 import org.jasig.ssp.service.ReferenceService;
+import org.jasig.ssp.transferobject.reference.ChallengeReferralSearchFormTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
@@ -49,4 +51,6 @@ public interface ChallengeReferralService extends
 
 	List<ChallengeReferral> byChallengeIdNotOnActiveTaskList(
 			Challenge challenge, Person student, String sessionId, boolean selfHelpGuide);
+	
+	PagingWrapper<ChallengeReferralSearchResult> summarySearch(ChallengeReferralSearchFormTO searchForm);
 }
