@@ -31,7 +31,7 @@ public class ChallengeReferralSearchResultTOFactoryImpl
 		model.setChallengeName(tObject.getChallengeName());
 		model.setChallengeReferralId(tObject.getChallengeReferralId());
 		model.setChallengeReferralName(tObject.getChallengeReferralName());
-		model.setChallengeReferralDescription(tObject.getChallengReferralDescription());
+		model.setChallengeReferralDescription(tObject.getChallengeReferralDescription());
 		return model;
 	}
 
