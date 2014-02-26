@@ -33,6 +33,7 @@ import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -225,9 +226,15 @@ public interface TaskService
 	void sendTasksForPersonToEmail(final List<Task> tasks,
 			final List<Goal> goals,
 			final  List<Strength> strengths,
-			final Person student, final List<String> emailAddresses, 
-			final List<Person> recipients) throws ObjectNotFoundException,
+			final Person student, 
+			final EmailPersonTasksForm form) throws ObjectNotFoundException,
 			ValidationException;
+	
+	void sendTasksForPersonToEmail(final List<Task> tasks,
+			final Person student, 
+			final String emailAddress) throws ObjectNotFoundException,
+			ValidationException;
+
 
 	/**
 	 * Sends taskReminders for all tasks in the task reminder window

@@ -33,9 +33,17 @@ public class EmailPersonTasksForm {
 	
 	private List<UUID> strengthIds;
 
-	private List<String> recipientEmailAddresses;
-
-	private List<UUID> recipientIds;
+	private Boolean sendToPrimaryEmail;
+	
+	private String primaryEmail;
+	
+	private Boolean sendToSecondaryEmail;
+	
+	private String secondaryEmail;
+	
+	private Boolean sendToAdditionalEmail;
+	
+	private String additionalEmail;
 
 	public List<UUID> getTaskIds() {
 		return taskIds;
@@ -43,6 +51,54 @@ public class EmailPersonTasksForm {
 
 	public void setTaskIds(final List<UUID> taskIds) {
 		this.taskIds = taskIds;
+	}
+
+	public Boolean getSendToPrimaryEmail() {
+		return sendToPrimaryEmail;
+	}
+
+	public void setSendToPrimaryEmail(Boolean sendToPrimaryEmail) {
+		this.sendToPrimaryEmail = sendToPrimaryEmail;
+	}
+
+	public String getPrimaryEmail() {
+		return primaryEmail;
+	}
+
+	public void setPrimaryEmail(String primaryEmail) {
+		this.primaryEmail = primaryEmail;
+	}
+
+	public Boolean getSendToSecondaryEmail() {
+		return sendToSecondaryEmail;
+	}
+
+	public void setSendToSecondaryEmail(Boolean sendToSecondaryEmail) {
+		this.sendToSecondaryEmail = sendToSecondaryEmail;
+	}
+
+	public String getSecondaryEmail() {
+		return secondaryEmail;
+	}
+
+	public void setSecondaryEmail(String secondaryEmail) {
+		this.secondaryEmail = secondaryEmail;
+	}
+
+	public Boolean getSendToAdditionalEmail() {
+		return sendToAdditionalEmail;
+	}
+
+	public void setSendToAdditionalEmail(Boolean sendToAdditionalEmail) {
+		this.sendToAdditionalEmail = sendToAdditionalEmail;
+	}
+
+	public String getAdditionalEmail() {
+		return additionalEmail;
+	}
+
+	public void setAdditionalEmail(String additionalEmail) {
+		this.additionalEmail = additionalEmail;
 	}
 
 	public List<UUID> getGoalIds() {
@@ -59,22 +115,5 @@ public class EmailPersonTasksForm {
 
 	public void setStrengthIds(List<UUID> strengthIds) {
 		this.strengthIds = strengthIds;
-	}
-
-	public List<String> getRecipientEmailAddresses() {
-		return recipientEmailAddresses;
-	}
-
-	public void setRecipientEmailAddresses(
-			final List<String> recipientEmailAddresses) {
-		this.recipientEmailAddresses = recipientEmailAddresses;
-	}
-
-	public List<UUID> getRecipientIds() {
-		return recipientIds;
-	}
-
-	public void setRecipientIds(final List<UUID> recipientIds) {
-		this.recipientIds = recipientIds;
 	}
 }

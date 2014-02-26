@@ -339,13 +339,6 @@ public class PersonTaskController extends
 
 		List<Person> recipients = null; // NOPMD because passing null as allowed
 
-		if (emailForm.getRecipientIds() != null) {
-			// get a list of recipients from a list of recipientIds
-			recipients = personService.peopleFromListOfIds(emailForm
-					.getRecipientIds(), new SortingAndPaging(
-					ObjectStatus.ACTIVE));
-		}
-
 		final Person student = personService.get(personId);
 
 		// goals
@@ -367,7 +360,7 @@ public class PersonTaskController extends
 						ObjectStatus.ACTIVE));
 
 		service.sendTasksForPersonToEmail(tasks, goals, strenghts, student,
-				emailForm.getRecipientEmailAddresses(), recipients);
+				emailForm);
 
 		return true;
 	}

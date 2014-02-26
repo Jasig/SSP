@@ -176,13 +176,9 @@ public class MyGpsTaskController extends AbstractBaseController {
 			tasks = taskService.getAllForSessionId(
 					securityService.getSessionId(), true, sAndP);
 		}
-
-		final List<String> emailAddresses = Lists.newArrayList();
-		emailAddresses.add(emailAddress);
-
-		taskService.sendTasksForPersonToEmail(tasks, null, null, student,
-				emailAddresses,
-				null);
+		
+		taskService.sendTasksForPersonToEmail(tasks,student,
+				emailAddress);
 
 		return true;
 	}

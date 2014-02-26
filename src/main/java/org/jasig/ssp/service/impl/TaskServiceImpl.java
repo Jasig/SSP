@@ -53,9 +53,11 @@ import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
+import org.jasig.ssp.transferobject.EmailStudentRequestTO;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.StrengthTO;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -305,9 +307,10 @@ public class TaskServiceImpl
 	@Override
 	public void sendTasksForPersonToEmail(@NotNull final List<Task> tasks,
 			final List<Goal> goals, final List<Strength> strengths, final Person student,
-			final List<String> emailAddresses, final List<Person> recipients)
+			final EmailPersonTasksForm form)
 			throws ObjectNotFoundException {
-
+		validateInput(form);
+		String[] addresses = getEmailAddresses(form);
 		final List<TaskTO> taskTOs = TaskTO.toTOList(tasks);
 		final List<GoalTO> goalTOs = GoalTO.toTOList(goals);
 		final List<StrengthTO> strengthTOs = StrengthTO.toTOList(strengths);
@@ -315,20 +318,28 @@ public class TaskServiceImpl
 		final SubjectAndBody subjAndBody = messageTemplateService
 				.createActionPlanMessage(student, taskTOs, goalTOs, strengthTOs);
 
-		if (emailAddresses != null) {
-			for (final String address : emailAddresses) {
-				messageService.createMessage(address, null, subjAndBody);
-			}
-		}
 
-		if (recipients != null) {
-			for (final Person recipient : recipients) {
-				messageService.createMessage(
-						recipient.getPrimaryEmailAddress(),
-						null, subjAndBody);
-			}
-		}
+		messageService.createMessage(addresses[0], addresses[1], subjAndBody);
 	}
+	
+	@Override
+	public void sendTasksForPersonToEmail(@NotNull final List<Task> tasks,
+			final Person student,
+			final String emailAdresses)
+			throws ObjectNotFoundException {
+		if(StringUtils.isBlank(emailAdresses)){
+			throw new IllegalArgumentException("Must enter at least one email address");
+		}
+		final List<TaskTO> taskTOs = TaskTO.toTOList(tasks);
+
+		final SubjectAndBody subjAndBody = messageTemplateService
+				.createActionPlanMessage(student, taskTOs, null, null);
+
+
+		messageService.createMessage(emailAdresses, null, subjAndBody);
+	}
+	
+	
 
 	@Override
 	public List<Task> getTasksForPersonIfNoneSelected(
@@ -487,5 +498,99 @@ public class TaskServiceImpl
 			}
 		}
 		return tasks;
+	}
+	
+	private void validateInput(EmailPersonTasksForm emailRequest) {
+
+		if(validateAddresses(emailRequest))
+		{
+			throw new IllegalArgumentException("Must enter at least one email address");
+		}
+	}
+
+	private String[] getEmailAddresses(EmailPersonTasksForm emailRequest)
+			throws ObjectNotFoundException {
+		
+		String toAddress = null;
+		
+		String ccString = null;
+		
+		//If the primary email is not provided then secondary email gets promoted to the 'to' address
+		//If primary and secondary email not provided then the first alternate email gets promoted
+		if(org.apache.commons.lang.StringUtils.isNotBlank(emailRequest.getPrimaryEmail()))
+		{
+			toAddress = emailRequest.getPrimaryEmail();
+			ccString = buildCCString(emailRequest.getSecondaryEmail(),emailRequest.getAdditionalEmail());
+		}
+		else
+		if(org.apache.commons.lang.StringUtils.isNotBlank(emailRequest.getSecondaryEmail()))
+		{
+			toAddress = emailRequest.getSecondaryEmail();
+			ccString = buildCCString(null,emailRequest.getAdditionalEmail());
+		}
+		else if(StringUtils.isNotBlank(emailRequest.getAdditionalEmail()))
+		{
+			
+			String[] addresses = emailRequest.getAdditionalEmail().split(",");
+			int count =0;
+			StringBuilder builder = new StringBuilder();
+			for (String address : addresses) {
+				if(count == 0)
+				{
+					toAddress = address;
+				}
+				else
+				{
+					builder.append(address.trim());
+					builder.append(",");
+				}
+				count++;
+			}
+			if(count > 1)
+			{
+				builder.deleteCharAt(builder.lastIndexOf(","));
+			}
+			ccString = builder.toString().trim();
+		}
+		return new String[]{toAddress, ccString};
+	}
+
+	private boolean validateAddresses(EmailPersonTasksForm emailRequest) {
+		return org.apache.commons.lang.StringUtils.isBlank(emailRequest.getPrimaryEmail()) && 
+				org.apache.commons.lang.StringUtils.isBlank(emailRequest.getSecondaryEmail()) && 
+				org.apache.commons.lang.StringUtils.isBlank(emailRequest.getAdditionalEmail());
+	} 
+	
+	private String buildCCString(String secondaryEmailAddress,
+			String alternateEmailAddress) 
+	{
+		StringBuilder builder = new StringBuilder();
+		if(org.apache.commons.lang.StringUtils.isNotBlank(secondaryEmailAddress))
+		{
+			builder.append(secondaryEmailAddress);
+			
+			if(org.apache.commons.lang.StringUtils.isNotBlank(alternateEmailAddress))
+			{
+				String[] addresses = alternateEmailAddress.split(",");
+				for (String address : addresses) {
+					builder.append(",");
+					builder.append(address.trim());
+				}
+			}
+
+		}
+		else
+		{
+			if(org.apache.commons.lang.StringUtils.isNotBlank(alternateEmailAddress))
+			{
+				String[] addresses = alternateEmailAddress.split(",");
+				for (String address : addresses) {
+					builder.append(address);
+					builder.append(",");
+				}
+				builder.deleteCharAt(builder.lastIndexOf(","));
+			}
+		}
+		return builder.toString();
 	}
 }
