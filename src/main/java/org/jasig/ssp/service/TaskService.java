@@ -32,6 +32,7 @@ import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -261,6 +262,8 @@ public interface TaskService
 	Long getStudentTaskCountForCoach(Person coach, Date createDateFrom,
 			Date createDateTo, List<UUID> studentTypeIds);
 	
-	PagingWrapper<EntityStudentCountByCoachTO> getStudentTaskCountForCoaches(EntityCountByCoachSearchForm form); 
+	PagingWrapper<EntityStudentCountByCoachTO> getStudentTaskCountForCoaches(EntityCountByCoachSearchForm form);
+	
+	List<Task> create(List<TaskTO> tasks, Person student) throws ValidationException, ObjectNotFoundException;
 
 }

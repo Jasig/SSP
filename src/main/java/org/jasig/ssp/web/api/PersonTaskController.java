@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -41,6 +42,8 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.jasig.ssp.factory.TaskTOFactory;
 import org.jasig.ssp.model.Goal;
 import org.jasig.ssp.model.ObjectStatus;
@@ -368,6 +371,49 @@ public class PersonTaskController extends
 
 		return true;
 	}
+	
+	/**
+	 * bulk save changes to the specified IDs and objects, for the specified person.
+	 * 
+	 * @param id
+	 *            the instance to update
+	 * @param personId
+	 *            the person
+	 * @param obj
+	 *            the full instance data to update
+	 * @return the updated instance
+	 * @throws ObjectNotFoundException
+	 *             If the specified ID could not be found.
+	 * @throws ValidationException
+	 *             If the updated data was not valid.
+	 */
+	@RequestMapping(value = "/bulk", method = RequestMethod.POST)
+	@DynamicPermissionChecking
+	public @ResponseBody
+	List<TaskTO> bulk(
+			@PathVariable final UUID personId,
+			@Valid @RequestBody final List<LinkedHashMap> maps)
+			throws ObjectNotFoundException, ValidationException {
+
+		checkPermissionForOp("WRITE");
+		if (maps == null || maps.size() == 0) {
+			throw new ValidationException("Missing data.");
+		}
+		if (personId == null) {
+			throw new IllegalArgumentException("Student identifier is required.");
+		}
+		Person student = personService.get(personId);
+		List<TaskTO> taskTOs = null;
+		try{
+			ObjectMapper mapper = new ObjectMapper();
+			taskTOs = mapper.convertValue(maps, new TypeReference<List<TaskTO>>() { });
+		}catch(IllegalArgumentException exp){
+			throw new IllegalArgumentException("Converting objects to Tasks resulted in illegal argument exception.");
+		}
+		List<Task> createdTasks = service.create(taskTOs, student);
+		return factory.asTOList(createdTasks);
+	}
+
 
 	@Override
 	protected Logger getLogger() {

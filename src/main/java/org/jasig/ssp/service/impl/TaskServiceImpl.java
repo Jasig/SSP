@@ -32,6 +32,7 @@ import javax.validation.constraints.NotNull;
 
 import org.codehaus.plexus.util.StringUtils;
 import org.jasig.ssp.dao.TaskDao;
+import org.jasig.ssp.factory.TaskTOFactory;
 import org.jasig.ssp.model.Goal;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
@@ -77,6 +78,9 @@ public class TaskServiceImpl
 
 	@Autowired
 	private transient TaskDao dao;
+	
+	@Autowired
+	private transient TaskTOFactory factory;
 
 	@Autowired
 	private transient MessageService messageService;
@@ -459,5 +463,29 @@ public class TaskServiceImpl
 	@Override
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentTaskCountForCoaches(EntityCountByCoachSearchForm form) {
 		return dao.getStudentTaskCountForCoaches(form);
+	}
+	
+	public List<Task> create(List<TaskTO> taskTOs, Person student) throws ValidationException, 
+	ObjectNotFoundException{
+		List<Task> tasks = new ArrayList<Task>();
+		
+		for(TaskTO taskTO:taskTOs){
+			if (taskTO.getId() != null) {
+				throw new ValidationException(
+						"It is invalid to send with an ID to the create method. Did you mean to use the save method instead?");
+			}
+			final Task model = factory.from(taskTO);
+			if (null != model) {
+				if (model.getPerson() == null) {
+					model.setPerson(student);
+				}
+
+				final Task createdModel = dao.save(model);
+				if (null != createdModel) {
+					tasks.add(createdModel);
+				}
+			}
+		}
+		return tasks;
 	}
 }
