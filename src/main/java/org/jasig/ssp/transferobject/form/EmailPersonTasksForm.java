@@ -44,6 +44,10 @@ public class EmailPersonTasksForm {
 	private Boolean sendToAdditionalEmail;
 	
 	private String additionalEmail;
+	
+	private Boolean sendToCoachEmail;
+	
+	private String coachEmail;
 
 	public List<UUID> getTaskIds() {
 		return taskIds;
@@ -99,6 +103,22 @@ public class EmailPersonTasksForm {
 
 	public void setAdditionalEmail(String additionalEmail) {
 		this.additionalEmail = additionalEmail;
+	}
+
+	public Boolean getSendToCoachEmail() {
+		return sendToCoachEmail;
+	}
+
+	public void setSendToCoachEmail(Boolean sendToCoachEmail) {
+		this.sendToCoachEmail = sendToCoachEmail;
+	}
+
+	public String getCoachEmail() {
+		return coachEmail;
+	}
+
+	public void setCoachEmail(String coachEmail) {
+		this.coachEmail = coachEmail;
 	}
 
 	public List<UUID> getGoalIds() {

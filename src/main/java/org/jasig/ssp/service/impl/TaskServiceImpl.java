@@ -309,7 +309,7 @@ public class TaskServiceImpl
 			final List<Goal> goals, final List<Strength> strengths, final Person student,
 			final EmailPersonTasksForm form)
 			throws ObjectNotFoundException {
-		validateInput(form);
+		
 		String[] addresses = getEmailAddresses(form);
 		final List<TaskTO> taskTOs = TaskTO.toTOList(tasks);
 		final List<GoalTO> goalTOs = GoalTO.toTOList(goals);
@@ -499,98 +499,62 @@ public class TaskServiceImpl
 		}
 		return tasks;
 	}
-	
-	private void validateInput(EmailPersonTasksForm emailRequest) {
-
-		if(validateAddresses(emailRequest))
-		{
-			throw new IllegalArgumentException("Must enter at least one email address");
-		}
-	}
-
 	private String[] getEmailAddresses(EmailPersonTasksForm emailRequest)
-			throws ObjectNotFoundException {
+			throws IllegalArgumentException {
 		
 		String toAddress = null;
 		
-		String ccString = null;
+		StringBuilder ccBuilder = new StringBuilder("");
 		
-		//If the primary email is not provided then secondary email gets promoted to the 'to' address
-		//If primary and secondary email not provided then the first alternate email gets promoted
-		if(org.apache.commons.lang.StringUtils.isNotBlank(emailRequest.getPrimaryEmail()))
-		{
-			toAddress = emailRequest.getPrimaryEmail();
-			ccString = buildCCString(emailRequest.getSecondaryEmail(),emailRequest.getAdditionalEmail());
+		List<String> addressSet = new ArrayList<String>();
+		if(org.apache.commons.lang.StringUtils.isNotBlank(emailRequest.getPrimaryEmail()) && emailRequest.getSendToPrimaryEmail())
+			addressSet.add(emailRequest.getPrimaryEmail());
+		if(org.apache.commons.lang.StringUtils.isNotBlank(emailRequest.getSecondaryEmail()) && emailRequest.getSendToSecondaryEmail())
+			addressSet.add(emailRequest.getSecondaryEmail());
+		if(org.apache.commons.lang.StringUtils.isNotBlank(emailRequest.getCoachEmail()) && emailRequest.getSendToCoachEmail())
+			addressSet.add(emailRequest.getCoachEmail());
+		if(org.apache.commons.lang.StringUtils.isNotBlank(emailRequest.getAdditionalEmail()) && emailRequest.getSendToAdditionalEmail())
+			addressSet.add(emailRequest.getAdditionalEmail());
+		
+		if(addressSet.size() == 0){
+			throw new IllegalArgumentException("Must enter at least one email address");
 		}
-		else
-		if(org.apache.commons.lang.StringUtils.isNotBlank(emailRequest.getSecondaryEmail()))
-		{
-			toAddress = emailRequest.getSecondaryEmail();
-			ccString = buildCCString(null,emailRequest.getAdditionalEmail());
-		}
-		else if(StringUtils.isNotBlank(emailRequest.getAdditionalEmail()))
-		{
-			
-			String[] addresses = emailRequest.getAdditionalEmail().split(",");
-			int count =0;
-			StringBuilder builder = new StringBuilder();
+		String prefix = "";
+		for(String addressCommaDelimited: addressSet){
+			String[] addresses = addressCommaDelimited.split(",");
 			for (String address : addresses) {
-				if(count == 0)
-				{
-					toAddress = address;
+				if(!isValidEmailAddress(address, true)){
+					//TODO potentially at this point an IllegalArgument Exception should be thrown.
+					LOGGER.error("Sending task email, address not valid: " + address);
+					continue;
 				}
-				else
-				{
-					builder.append(address.trim());
-					builder.append(",");
+				if(org.apache.commons.lang.StringUtils.isBlank(toAddress)){
+					toAddress = address.trim();
+					continue;
 				}
-				count++;
+				ccBuilder.append(prefix);
+				ccBuilder.append(address.trim());
+				prefix = ", ";
 			}
-			if(count > 1)
-			{
-				builder.deleteCharAt(builder.lastIndexOf(","));
-			}
-			ccString = builder.toString().trim();
-		}
-		return new String[]{toAddress, ccString};
-	}
-
-	private boolean validateAddresses(EmailPersonTasksForm emailRequest) {
-		return org.apache.commons.lang.StringUtils.isBlank(emailRequest.getPrimaryEmail()) && 
-				org.apache.commons.lang.StringUtils.isBlank(emailRequest.getSecondaryEmail()) && 
-				org.apache.commons.lang.StringUtils.isBlank(emailRequest.getAdditionalEmail());
-	} 
-	
-	private String buildCCString(String secondaryEmailAddress,
-			String alternateEmailAddress) 
-	{
-		StringBuilder builder = new StringBuilder();
-		if(org.apache.commons.lang.StringUtils.isNotBlank(secondaryEmailAddress))
-		{
-			builder.append(secondaryEmailAddress);
 			
-			if(org.apache.commons.lang.StringUtils.isNotBlank(alternateEmailAddress))
-			{
-				String[] addresses = alternateEmailAddress.split(",");
-				for (String address : addresses) {
-					builder.append(",");
-					builder.append(address.trim());
-				}
-			}
-
 		}
-		else
-		{
-			if(org.apache.commons.lang.StringUtils.isNotBlank(alternateEmailAddress))
-			{
-				String[] addresses = alternateEmailAddress.split(",");
-				for (String address : addresses) {
-					builder.append(address);
-					builder.append(",");
-				}
-				builder.deleteCharAt(builder.lastIndexOf(","));
-			}
+		if(org.apache.commons.lang.StringUtils.isBlank(toAddress)){
+			throw new IllegalArgumentException("No valid email address found please enter at least one valid email address");
 		}
-		return builder.toString();
+		return new String[]{toAddress, ccBuilder.toString().trim()};
 	}
+	
+	private Boolean isValidEmailAddress(String address, Boolean strict){
+		if(org.apache.commons.lang.StringUtils.isBlank(address))
+			return false;
+		if(address.length() > 254)
+			return false;
+	    String stricterFilterString = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+	    String laxString = ".+@.+\\.[A-Za-z]{2}[A-Za-z]*";
+	    String emailRegex = strict ? stricterFilterString : laxString;
+	    java.util.regex.Pattern p = java.util.regex.Pattern.compile(emailRegex);
+	    java.util.regex.Matcher m = p.matcher(address);
+	    return m.matches();
+	}
+
 }
