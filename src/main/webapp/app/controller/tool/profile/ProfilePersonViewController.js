@@ -34,7 +34,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         sspConfig: 'sspConfig',
 		formUtils: 'formRendererUtils',
     	textStore:'sspTextStore',
-        sapStatusesStore: 'sapStatusesStore',
+        sapStatusesStore: 'sapStatusesAllUnpagedStore',
         financialAidFilesStore: 'financialAidFilesStore'
 		
     },
