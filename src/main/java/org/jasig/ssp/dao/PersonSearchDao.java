@@ -314,7 +314,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if(hasFinancialAidStatus(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" esfa.sapStatus = :sapStatus ");
+			stringBuilder.append(" esfa.sapStatusCode = :sapStatusCode ");
 			stringBuilder.append(" and esfa.schoolId = p.schoolId ");
 		}
 		
@@ -323,7 +323,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 	private boolean hasFinancialAidStatus(
 			PersonSearchRequest personSearchRequest) {
-		return personSearchRequest.getSapStatus() != null;
+		return personSearchRequest.getSapStatusCode() != null;
 	}
 
 
@@ -425,7 +425,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 		if(hasFinancialAidStatus(personSearchRequest))
 		{
-			query.setString("sapStatus", personSearchRequest.getSapStatus());
+			query.setString("sapStatusCode", personSearchRequest.getSapStatusCode());
 		}
 		
 		if(hasCurrentlyRegistered(personSearchRequest))
