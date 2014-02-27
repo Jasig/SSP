@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.dao.reference;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -26,11 +27,15 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
+import org.hibernate.Hibernate;
+import org.hibernate.Query;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -209,6 +214,7 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public PagingWrapper<Challenge> getAll(
 			final SortingAndPaging sAndP) {
@@ -221,7 +227,37 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 			sp.appendSortField("objectStatus", SortDirection.ASC);
 			sp.appendSortField("name", SortDirection.ASC);
 		}
-
-		return super.getAll(sp);
+		
+		StringBuilder statement = new StringBuilder("select id from Challenge");
+		if(!sp.getStatus().equals(ObjectStatus.ALL)){
+			statement.append(" where objectStatus=:objectStatus");
+		}
+		statement.append(" order by ");
+		String suffix = "";
+		for(Pair<String,SortDirection> sf:sp.getSortFields()){
+			statement.append(suffix);
+			statement.append(sf.getFirst().toString() + " " + sf.getSecond().toString());
+			suffix = ", ";
+		}
+		
+		Query query = createHqlQuery(statement.toString());
+		if(!sp.getStatus().equals(ObjectStatus.ALL)){
+			query.setParameter("objectStatus", sp.getStatus());
+		}
+		List<UUID> uuids = query.list();
+		int size = uuids.size();
+		if(size > 0){
+			if(sp.getMaxResults() != null && sp.getMaxResults()  > 0)
+				uuids = uuids.subList(sp.getFirstResult(), 
+						sp.getFirstResult() + sp.getMaxResults() > size ? size : sp.getFirstResult() + (sp.getMaxResults() == null ? size:sp.getMaxResults()));
+			
+			Criteria criteria = createCriteria();
+			criteria.setFetchMode( "challengeChallengeReferrals", FetchMode.JOIN );
+			criteria.setFetchMode( "selfHelpGuideQuestions", FetchMode.JOIN );
+			
+			criteria.add(Restrictions.in("id", uuids));
+			return new PagingWrapper<Challenge>(size,  criteria.list());
+		}
+		return new PagingWrapper(0,new ArrayList<UUID>());
 	}
 }

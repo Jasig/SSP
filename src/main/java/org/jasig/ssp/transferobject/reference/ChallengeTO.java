@@ -114,7 +114,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 
 	@Override
 	public final void from(@NotNull final Challenge model) {
-		from(model, false);
+		from(model, true);
 	}
 
 	private final void from(@NotNull final Challenge model,
@@ -124,7 +124,13 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 		selfHelpGuideQuestion = model.getSelfHelpGuideQuestion();
 
 		selfHelpGuideQuestions = Lists.newArrayList();
-		if (model.getSelfHelpGuideQuestions() != null) {
+		
+		if (skipReferrals
+				|| (model.getSelfHelpGuideQuestions() == null)
+				|| model.getSelfHelpGuideQuestions().isEmpty()) {
+			selfHelpGuideQuestions = new ArrayList<SelfHelpGuideQuestionTO>();
+		} else {
+			selfHelpGuideQuestions = new ArrayList<SelfHelpGuideQuestionTO>();
 			for (final SelfHelpGuideQuestion question : model
 					.getSelfHelpGuideQuestions()) {
 				selfHelpGuideQuestions
