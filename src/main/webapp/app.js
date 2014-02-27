@@ -1338,6 +1338,14 @@ Ext.onReady(function(){
 					    },
 					    singleton: true
 					},
+					sapStatusesActiveUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.SapStatuses', {
+								extraParams: {status: "ACTIVE", limit: "-1"}
+							});
+						},
+						singleton: true
+					},
 					financialAidFilesStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.FinancialAidFiles', {

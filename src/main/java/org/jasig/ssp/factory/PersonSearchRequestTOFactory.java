@@ -33,6 +33,6 @@ public interface PersonSearchRequestTOFactory extends
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,
-			String sapStatus, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans, Date birthDate) throws ObjectNotFoundException;
+			String sapStatusCode, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans, Date birthDate) throws ObjectNotFoundException;
 
 }

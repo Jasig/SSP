@@ -69,7 +69,7 @@ public class PersonSearchRequest {
 	
 	private String planStatus;
 	
-	private String sapStatus;
+	private String sapStatusCode;
 	
 	private String mapStatus;
 	
@@ -174,13 +174,13 @@ public class PersonSearchRequest {
 	}
 
 
-	public String getSapStatus() {
-		return sapStatus;
+	public String getSapStatusCode() {
+		return sapStatusCode;
 	}
 
 
-	public void setSapStatus(String sapStatus) {
-		this.sapStatus = sapStatus;
+	public void setSapStatusCode(String sapStatusCode) {
+		this.sapStatusCode = sapStatusCode;
 	}
 
 
