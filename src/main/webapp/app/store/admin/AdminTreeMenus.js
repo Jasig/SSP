@@ -793,7 +793,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 	            children: [{
 					text: 'SAP Statuses',
 	                title: 'SAP Statuses',
-	                store: 'sapStatuses',
+	                store: 'sapStatusesAll',
 					interfaceOptions: {
 	                    addButtonVisible: true,
 	                    deleteButtonVisible: false                  

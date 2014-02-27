@@ -1330,13 +1330,21 @@ Ext.onReady(function(){
 					    },
 					    singleton: true
 					},	
-					sapStatusesStore: {
+					sapStatusesAllStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.SapStatuses', {
-							     extraParams: {status: "ALL", limit: "-1"}
+							     extraParams: {status: "ALL"}
 							 });
 					    },
 					    singleton: true
+					},
+					sapStatusesAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.SapStatuses', {
+								extraParams: {status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
 					},
 					sapStatusesActiveUnpagedStore: {
 						fn: function(){
