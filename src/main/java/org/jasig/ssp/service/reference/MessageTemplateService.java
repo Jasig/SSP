@@ -35,6 +35,7 @@ import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.StrengthTO;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
+import org.jasig.ssp.transferobject.reports.MapStatusReportSummary;
 
 /**
  * MessageTemplate service
@@ -80,4 +81,6 @@ public interface MessageTemplateService extends
 			final Float totalPlanDevHours,
 			final List<TermCourses<T, TO>> termCourses,
 			final String institutionName);
+
+	SubjectAndBody createMapStatusReportEmail(MapStatusReportSummary summary);
 }

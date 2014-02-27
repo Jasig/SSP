@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -58,6 +59,11 @@ public class MapStatusReport extends AbstractAuditable implements PersonAssocAud
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	private List<MapStatusReportTermDetails> termDetails = new ArrayList<MapStatusReportTermDetails>(0);
 	
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "report", orphanRemoval=true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	private List<MapStatusReportSubstitutionDetails> substitutionDetails = new ArrayList<MapStatusReportSubstitutionDetails>(0);
+	
 	@NotNull
 	@ManyToOne()
 	@JoinColumn(name = "person_id", updatable = false, nullable = false)
@@ -76,6 +82,9 @@ public class MapStatusReport extends AbstractAuditable implements PersonAssocAud
 	@Column(length = 500)
 	@Size(max = 500)
 	private String planNote;
+	
+	@Column(precision = 2, scale = 2, nullable = false)
+	private BigDecimal planRatio;
 	
 	public MapStatusReport(UUID id) {
 		super();
@@ -142,6 +151,22 @@ public class MapStatusReport extends AbstractAuditable implements PersonAssocAud
 
 	public void setPlanStatus(PlanStatus planStatus) {
 		this.planStatus = planStatus;
+	}
+
+	public List<MapStatusReportSubstitutionDetails> getSubstitutionDetails() {
+		return substitutionDetails;
+	}
+
+	public void setSubstitutionDetails(List<MapStatusReportSubstitutionDetails> substitutionDetails) {
+		this.substitutionDetails = substitutionDetails;
+	}
+
+	public BigDecimal getPlanRatio() {
+		return planRatio;
+	}
+
+	public void setPlanRatio(BigDecimal planRatio) {
+		this.planRatio = planRatio;
 	}
 
 

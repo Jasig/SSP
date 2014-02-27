@@ -24,6 +24,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
     inject: {
         columnRendererUtils: 'columnRendererUtils',
 		appEventsController: 'appEventsController',
+        programsStore: 'programsFacetedStore',
 		currentMapPlan: 'currentMapPlan'
     },
     height: 554,
@@ -137,6 +138,19 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
 									width: '80%',
             				        allowBlank:false
             				    },{
+        		                    xtype: 'combobox',
+        	                        name: 'programCode',
+            				        itemId: 'programCode',
+									store: me.programsStore,
+        	                        fieldLabel: 'Program',
+        	                        emptyText: 'Specific Program',
+        	                        valueField: 'code',
+        	                        displayField: 'name',
+        	                        mode: 'local',
+        	                        typeAhead: true,
+        	                        queryMode: 'local',
+        	                        allowBlank: true,
+        	                    },{
             				        fieldLabel: 'Contact Name',
             				        name: 'contactName',
             				        itemId: 'contactName',

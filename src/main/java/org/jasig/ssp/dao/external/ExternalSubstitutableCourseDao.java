@@ -16,18 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-/**
- * 
- */
-package org.jasig.ssp.model.external;
+package org.jasig.ssp.dao.external;
 
-/**
- * @author jamesstanley
- *
- */
-public enum PlanStatus {
-	ON,
-	OFF,
-	ON_TRACK,
-	ON_PLAN_SEQUENCE
+import java.util.List;
+
+import org.jasig.ssp.dao.AbstractDao;
+import org.jasig.ssp.model.external.ExternalSubstitutableCourse;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class ExternalSubstitutableCourseDao extends AbstractDao<ExternalSubstitutableCourse> {
+
+	public ExternalSubstitutableCourseDao() {
+		super(ExternalSubstitutableCourse.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<ExternalSubstitutableCourse> getAllSubstitutableCourses()
+	{
+		String getAllSql = " from org.jasig.ssp.model.external.ExternalSubstitutableCourse ";
+		return createHqlQuery(getAllSql).list();
+		
+	}
 }

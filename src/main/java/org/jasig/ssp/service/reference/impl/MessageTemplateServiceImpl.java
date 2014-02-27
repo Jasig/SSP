@@ -44,6 +44,7 @@ import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.StrengthTO;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
+import org.jasig.ssp.transferobject.reports.MapStatusReportSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -359,5 +360,22 @@ public class MessageTemplateServiceImpl extends
 			messageParams.put("studentFullName", student.getFullName());
 			messageParams.put("studentEmail", student.getPrimaryEmailAddress());
 			messageParams.put("studentSchoolId", student.getSchoolId());
+	}
+
+	@Override
+	public SubjectAndBody createMapStatusReportEmail(
+			MapStatusReportSummary summary) {
+		final Map<String, Object> messageParams = new HashMap<String, Object>(); 
+		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, ''yy HH:mm:ss z");
+		messageParams.put("startTime", sdf.format(summary.getStartTime().getTime()));
+		messageParams.put("endTime", sdf.format(summary.getEndTime().getTime()));
+		messageParams.put("totalPlans", summary.getStudentsInScope());
+		messageParams.put("title", "Map Status Report");
+		messageParams.put("reportSummaryDetails", summary.getSummaryDetails());
+		messageParams.put("termConfigReminder", false);
+		messageParams.put("error", false);
+		
+		return populateFromTemplate(MessageTemplate.MAP_STATUS_REPORT_ID,
+				messageParams);
 	}
 }

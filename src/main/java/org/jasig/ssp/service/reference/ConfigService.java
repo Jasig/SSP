@@ -18,8 +18,6 @@
  */
 package org.jasig.ssp.service.reference;
 
-import java.util.Map;
-
 import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.ReferenceService;

@@ -18,39 +18,41 @@
  */
 package org.jasig.ssp.transferobject.reports;
 
-import java.util.UUID;
+import org.jasig.ssp.model.external.PlanStatus;
 
-public class PlanIdPersonIdPair {
 
-	public PlanIdPersonIdPair(UUID planId, UUID personId) {
+
+public class MapStatusReportSummaryDetail {
+
+	public MapStatusReportSummaryDetail(String planStatus, Long count) {
 		super();
-		this.planId = planId;
-		this.personId = personId;
+		this.planStatus = planStatus;
+		this.count = count;
 	}
-
-	private UUID planId;
-	private UUID personId;
+	 
+	public MapStatusReportSummaryDetail(PlanStatus planStatus, Long count) {
+		super();
+		this.planStatus = planStatus.name();
+		this.count = count;
+	}
 	
-	/**
-	 * 
-	 */
-	public PlanIdPersonIdPair() {
-		super();
+	private String planStatus;
+	
+	private Long count;
+
+	public String getPlanStatus() {
+		return planStatus;
 	}
 
-	public UUID getPlanId() {
-		return planId;
+	public void setPlanStatus(String planStatus) {
+		this.planStatus = planStatus;
 	}
 
-	public void setPlanId(UUID planId) {
-		this.planId = planId;
+	public Long getCount() {
+		return count;
 	}
 
-	public UUID getPersonId() {
-		return personId;
-	}
-
-	public void setPersonId(UUID personId) {
-		this.personId = personId;
-	}
+	public void setCount(Long count) {
+		this.count = count;
+	} 
 }

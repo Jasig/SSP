@@ -28,7 +28,7 @@ import org.jasig.ssp.transferobject.reference.MessageTemplatePlanPrintParams;
 import org.jasig.ssp.transferobject.reports.MapPlanStatusReportCourse;
 import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
 import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
-import org.jasig.ssp.transferobject.reports.PlanIdPersonIdPair;
+import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
 import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO;
 import org.jasig.ssp.transferobject.reports.SearchPlanTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -54,7 +54,7 @@ PlanOutputTO, MessageTemplatePlanPrintParams> {
 	
 	List<PlanStudentStatusTO> getPlanStudentStatusByCourse(SearchPlanTO form);
 
-	List<PlanIdPersonIdPair> getAllActivePlanIds();
+	List<MapStatusReportPerson> getAllActivePlanIds();
 
 	List<MapPlanStatusReportCourse> getAllPlanCoursesForStatusReport(UUID planId);
 		

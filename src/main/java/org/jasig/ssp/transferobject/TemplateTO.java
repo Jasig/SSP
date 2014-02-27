@@ -31,8 +31,6 @@ import org.jasig.ssp.model.TermNote;
 /**
  */
 public class TemplateTO extends AbstractPlanTO<Template> {
-
-	private String programCode;
 	
 	private String divisionCode;
 	
@@ -65,7 +63,6 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 		this.setVisibility(model.getVisibility());
 		this.setDepartmentCode(model.getDepartmentCode());
 		this.setDivisionCode(model.getDivisionCode());
-		this.setProgramCode(model.getProgramCode());
 		List<TemplateCourse> templateCourses = model.getTemplateCourses();
 		for (TemplateCourse templateCourse : templateCourses) {
 			this.getTemplateCourses().add(new TemplateCourseTO(templateCourse));
@@ -75,13 +72,6 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 			TermNoteTO termNoteTO = new TermNoteTO(termNote);
 			this.getTermNotes().add(termNoteTO);
 		}
-	}
-	public String getProgramCode() {
-		return programCode;
-	}
-
-	public void setProgramCode(String programCode) {
-		this.programCode = programCode;
 	}
 
 	public String getDivisionCode() {

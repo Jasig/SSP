@@ -22,7 +22,8 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
     inject:{
 		appEventsController: 'appEventsController',
 		formUtils: 'formRendererUtils',
-    	currentMapPlan: 'currentMapPlan'
+    	currentMapPlan: 'currentMapPlan',
+        programsStore: 'programsFacetedStore'
     },
     
 	control: {
@@ -49,6 +50,8 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 		me.setCheckBox('checkbox[name=isFinancialAid]', 'isFinancialAid');
 		me.setCheckBox('checkbox[name=isImportant]', 'isImportant');
 		me.setCheckBox('checkbox[name=isF1Visa]', 'isF1Visa');
+		me.programsStore.load();
+
 		return me.callParent(arguments);
     },
    
@@ -102,7 +105,6 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
     onShow: function(){
     	var me=this;
     },
-	
 	
 	setCheckBox: function(query, fieldName){
 		var me=this;

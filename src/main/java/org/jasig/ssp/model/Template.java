@@ -43,10 +43,7 @@ import org.hibernate.annotations.CascadeType;
 public class Template extends AbstractPlan implements Cloneable{
 
 	private static final long serialVersionUID = 1308748010487627451L;
-	
-	@Column(length = 50)
-	@Size(max = 50)
-	private String programCode;
+
 	
 	@Column(length = 50)
 	@Size(max = 50)
@@ -71,14 +68,6 @@ public class Template extends AbstractPlan implements Cloneable{
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "template", orphanRemoval=true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	private List<TermNote> termNotes = new ArrayList<TermNote>(0);
-	
-	public String getProgramCode() {
-		return programCode;
-	}
-
-	public void setProgramCode(String programCode) {
-		this.programCode = programCode;
-	}
 
 	public String getDivisionCode() {
 		return divisionCode;

@@ -36,7 +36,7 @@ import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.transferobject.reports.MapPlanStatusReportCourse;
 import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
 import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
-import org.jasig.ssp.transferobject.reports.PlanIdPersonIdPair;
+import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
 import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO;
 import org.jasig.ssp.transferobject.reports.SearchPlanTO;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
@@ -175,7 +175,7 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 		buildQueryWhereClause(selectPlanCourses, form,calculateMapPlanStatus);
 		if(form.getPlanStatus() != null && !calculateMapPlanStatus)
 		{
-			selectPlanCourses.append(" and ps.schoolId = person.schoolId");
+			selectPlanCourses.append(" and ps.schoolId = person.schoolId ");
 		}
 		if(form.getPlanStatus() != null && calculateMapPlanStatus)
 		{
@@ -283,12 +283,12 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<PlanIdPersonIdPair> getAllActivePlanIds() {
-		String getAllActivePlanIdQuery = "select new org.jasig.ssp.transferobject.reports.PlanIdPersonIdPair(plan.id, plan.person.id) "
+	public List<MapStatusReportPerson> getAllActivePlanIds() {
+		String getAllActivePlanIdQuery = "select new org.jasig.ssp.transferobject.reports.MapStatusReportPerson(plan.id, plan.person.id, plan.person.schoolId, plan.programCode,plan.person.firstName,plan.person.lastName) "
 									   + "from org.jasig.ssp.model.Plan plan "
 									   + "where plan.objectStatus = :objectStatus and plan.person.objectStatus = :objectStatus";
 		Query query = createHqlQuery(getAllActivePlanIdQuery);
-		List<PlanIdPersonIdPair> result  = query.setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal()).list();
+		List<MapStatusReportPerson> result  = query.setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal()).list();
 									   
 		return result;
 	}

@@ -63,6 +63,8 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 	private Boolean isValid = true;	
 	
 	private List<TermNoteTO> termNotes = new ArrayList<TermNoteTO>();
+
+	private String programCode;
 	/**
 	 * Empty constructor.
 	 */
@@ -90,6 +92,7 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 		this.setIsImportant(model.getIsImportant());
 		this.setStudentNotes(model.getStudentNotes());
 		this.setIsValid(model.getIsValid());
+		this.setProgramCode(model.getProgramCode());
 	}
 	
 	public abstract List<? extends AbstractPlanCourseTO<T,? extends AbstractPlanCourse<T>>> getCourses();
@@ -234,6 +237,16 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 	 */
 	public void setIsValid(Boolean isValid) {
 		this.isValid = isValid;
+	}
+
+
+	public String getProgramCode() {
+		return programCode;
+	}
+
+
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
 	}
 
 }

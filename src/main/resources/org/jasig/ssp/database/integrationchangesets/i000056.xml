@@ -1,0 +1,135 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="schema" value="${database.schema}" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	<property name="check_for_manage_integration_database_config_sql"
+			  value="select count(id) from config where name='manage_integration_database'" />
+	<property name="should_manage_integration_database_sql"
+			  value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
+	<property name="concat.operator" value="||"  dbms="postgresql"/>
+	<property name="concat.operator" value="+"  dbms="mssql"/>	
+	<property name="nullfunction" value="COALESCE"  dbms="postgresql"/>
+	<property name="nullfunction" value="ISNULL"  dbms="mssql"/>
+	
+	<changeSet id="Add the external_substitutable_course table  ." author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_course_term and external_course table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+		
+		<createTable tableName="external_substitutable_course">
+			<column name="term_code" type="${nvarchar.type}(25)" >
+				<constraints nullable="false" />
+			</column>
+			<column name="program_code" type="${nvarchar.type}(50)" >
+				<constraints nullable="false" />
+			</column>			
+			<column name="source_formatted_course" type="${nvarchar.type}(35)" >
+				<constraints nullable="false" />
+			</column>
+			<column name="source_course_code" type="${nvarchar.type}(50)" >
+				<constraints nullable="false" />
+			</column>
+			<column name="source_course_title" type="${nvarchar.type}(50)" >
+				<constraints nullable="false" />
+			</column>	
+			<column name="target_formatted_course" type="${nvarchar.type}(35)" >
+				<constraints nullable="false" />
+			</column>
+			<column name="target_course_code" type="${nvarchar.type}(50)" >
+				<constraints nullable="false" />
+			</column>				
+			<column name="target_course_title" type="${nvarchar.type}(500)" >
+				<constraints nullable="false" />
+			</column>	
+		</createTable>
+				
+		<createView viewName="v_external_substitutable_course">
+			select ROW_NUMBER() OVER (ORDER BY source_formatted_course ${concat.operator} term_code ${concat.operator} target_formatted_course ) as id,* from external_substitutable_course
+		</createView>
+
+		<sql>grant all on external_substitutable_course to ${database.app.username}</sql>
+		<sql>grant all on v_external_substitutable_course to ${database.app.username}</sql>	
+				
+		<rollback>
+			<dropView viewName="v_external_substitutable_course" />
+			<dropTable tableName="external_substitutable_course" />
+		</rollback>			
+	</changeSet>
+	<changeSet id="add registration dates to external_term" author="">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_term table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+		<dropView viewName="v_external_term" />
+		<addColumn tableName="external_term">
+			<column name="registration_start_date" type="date"></column>
+		</addColumn>
+				<addColumn tableName="external_term">
+			<column name="registration_end_date" type="date"></column>
+		</addColumn>
+		<createView viewName="v_external_term">
+			select ROW_NUMBER() OVER (ORDER BY code) as id, * from external_term
+		</createView>
+
+		<sql>grant all on v_external_term to ${database.app.username}</sql>
+		<rollback>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="add course_code to external_student_transcript_course" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+					   onFailMessage="Skip v_external_student_transcript_course correction">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<dropView viewName="v_external_student_transcript_course" />
+		<addColumn tableName="external_student_transcript_course">
+			<column name="course_code" type="${nvarchar.type}(50)"></column>
+		</addColumn>
+		<createView viewName="v_external_student_transcript_course">
+			select school_id${concat.operator}term_code${concat.operator}formatted_course${concat.operator}${nullfunction}(section_code,'null') as id,*
+			from external_student_transcript_course
+		</createView>
+		
+		<sql>grant all on v_external_student_transcript_course to ${database.app.username}</sql>
+		
+	</changeSet>	
+
+</databaseChangeLog>

@@ -76,6 +76,9 @@ public class MessageTemplate
 	
 	public static final UUID OUTPUT_MAP_PLAN_FULL_ID = UUID
 			.fromString("df47a4b0-b666-11e2-9e96-0800200c9a66");
+	
+	public static final UUID MAP_STATUS_REPORT_ID = UUID
+			.fromString("3da780e7-b7df-43b2-8988-fc51ef03f7c0");
 
 	@NotNull
 	@Column(name = "subject", nullable = false, length = 250)

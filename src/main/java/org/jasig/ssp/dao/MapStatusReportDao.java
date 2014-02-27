@@ -18,15 +18,23 @@
  */
 package org.jasig.ssp.dao;
 
+import java.util.List;
+
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jasig.ssp.model.MapStatusReport;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.external.PlanStatus;
+import org.jasig.ssp.transferobject.reports.MapStatusReportCoachEmailInfo;
+import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
+import org.jasig.ssp.transferobject.reports.MapStatusReportSummaryDetail;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class MapStatusReportDao  extends AbstractPersonAssocAuditableCrudDao<MapStatusReport> implements PersonAssocAuditableCrudDao<MapStatusReport> { 
 
-
+ 
 
 	public MapStatusReportDao() {
 		super(MapStatusReport.class);
@@ -38,17 +46,45 @@ public class MapStatusReportDao  extends AbstractPersonAssocAuditableCrudDao<Map
 	public void deleteAllOldReports() {
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
+		
+		String deleteSubstitutionDetailsHql = "delete org.jasig.ssp.model.MapStatusReportSubstitutionDetails msrsd";
+		session.createQuery(deleteSubstitutionDetailsHql).executeUpdate();
 		String deleteCourseDetailsHql = "delete org.jasig.ssp.model.MapStatusReportCourseDetails msrcd";
 		session.createQuery(deleteCourseDetailsHql).executeUpdate();
 		String deleteTermDetailsHql = "delete org.jasig.ssp.model.MapStatusReportTermDetails msrtd";
 		session.createQuery(deleteTermDetailsHql).executeUpdate();
 		String deleteMapStatusReportHql = "delete org.jasig.ssp.model.MapStatusReport msrtd";
 		session.createQuery(deleteMapStatusReportHql).executeUpdate();
-
 		
 		tx.commit();
 		session.close();
 
+	} 
+	@SuppressWarnings("unchecked")
+	public List<MapStatusReportSummaryDetail> getSummaryDetails() {
+		String detailsQuery = " select new org.jasig.ssp.transferobject.reports.MapStatusReportSummaryDetail(msr.planStatus,count(*)) from MapStatusReport msr group by msr.planStatus order by count(*) desc";
+		return createHqlQuery(detailsQuery).list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<MapStatusReportCoachEmailInfo> getCoachesWithOffPlanStudent() {
+		String detailsQuery = " select distinct new org.jasig.ssp.transferobject.reports.MapStatusReportCoachEmailInfo(plan.owner.id, plan.owner.primaryEmailAddress,plan.person.coach.primaryEmailAddress) "
+				+ "from Plan plan, MapStatusReport msr "
+				+ " where msr.plan = plan and msr.planStatus = :planStatus ";
+
+		return createHqlQuery(detailsQuery).setString("planStatus", PlanStatus.OFF.name()).list();
+	}
+	
+
+	@SuppressWarnings("unchecked")
+	public List<MapStatusReportPerson> getOffPlanPlansForOwner(Person owner) {
+		String getAllActivePlanIdQuery = "select new org.jasig.ssp.transferobject.reports.MapStatusReportPerson(plan.id, plan.person.id, plan.person.schoolId, plan.programCode,plan.person.firstName,plan.person.lastName) "
+									   + "from org.jasig.ssp.model.Plan plan , MapStatusReport msr "
+									   + "where  msr.plan = plan and msr.planStatus = :planStatus and plan.owner = :owner";
+		Query query = createHqlQuery(getAllActivePlanIdQuery);
+		List<MapStatusReportPerson> result  = query.setEntity("owner", owner).setString("planStatus", PlanStatus.OFF.name()).list();
+									   
+		return result;
 	}
 
 

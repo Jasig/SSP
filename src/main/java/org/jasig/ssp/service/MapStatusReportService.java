@@ -18,11 +18,39 @@
  */
 package org.jasig.ssp.service;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import org.jasig.ssp.dao.external.ExternalSubstitutableCourseDao;
 import org.jasig.ssp.model.MapStatusReport;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.external.ExternalSubstitutableCourse;
+import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.transferobject.reports.MapStatusReportCoachEmailInfo;
+import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
+import org.jasig.ssp.transferobject.reports.MapStatusReportSummaryDetail;
 
 public interface MapStatusReportService extends PersonAssocAuditableService<MapStatusReport>  {
 
 	void deleteAllOldReports();
 
+	MapStatusReport evaluatePlan(Set<String> gradesSet, Set<String> criteriaSet,
+			Term cutoffTerm, List<Term> allTerms,
+			MapStatusReportPerson planIdPersonIdPair, Collection<ExternalSubstitutableCourse> allSubstitutableCourses, boolean termBound, boolean useSubstitutableCourses);
+
+	Set<String> getAdditionalCriteria();
+
+	Set<String> getPassingGrades();
+
+	Term deriveCuttoffTerm();
+
+	Collection<ExternalSubstitutableCourse> getAllSubstitutableCourses();
+
+	List<MapStatusReportSummaryDetail> getSummaryDetails();
+
+	List<MapStatusReportCoachEmailInfo> getCoachesWithOffPlanStudent();
+	
+	List<MapStatusReportPerson> getOffPlanPlansForOwner(Person coach);
 
 }

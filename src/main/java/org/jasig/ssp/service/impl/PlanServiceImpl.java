@@ -42,7 +42,7 @@ import org.jasig.ssp.transferobject.reference.MessageTemplatePlanPrintParams;
 import org.jasig.ssp.transferobject.reports.MapPlanStatusReportCourse;
 import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
 import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
-import org.jasig.ssp.transferobject.reports.PlanIdPersonIdPair;
+import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
 import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO;
 import org.jasig.ssp.transferobject.reports.SearchPlanTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -176,7 +176,7 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 	}
 
 	@Override
-	public List<PlanIdPersonIdPair> getAllActivePlanIds() {
+	public List<MapStatusReportPerson> getAllActivePlanIds() {
 		return dao.getAllActivePlanIds();
 	}
 

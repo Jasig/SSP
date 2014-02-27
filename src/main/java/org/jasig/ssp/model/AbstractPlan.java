@@ -34,6 +34,11 @@ import org.hibernate.annotations.Immutable;
 @MappedSuperclass
 public abstract class AbstractPlan extends AbstractAuditable implements Cloneable {
 
+	
+	@Column(length = 50)
+	@Size(max = 50)
+	private String programCode;
+	
 	@Column(length = 200)
 	@Size(max = 200)
 	private String name;
@@ -267,6 +272,14 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 
 	public void setIsDirty(Boolean isDirty) {
 		this.isDirty = isDirty;
+	}
+
+	public String getProgramCode() {
+		return programCode;
+	}
+
+	public void setProgramCode(String programCode) {
+		this.programCode = programCode;
 	}
 
 }

@@ -254,12 +254,12 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		simpleData.createdDate = me.get('createdDate');
 		simpleData.modifiedDate = me.get('modifiedDate');
 		simpleData.isValid = me.get('isValid');
+		simpleData.programCode = me.get('programCode');
 		
 		if(me.get('isTemplate')){
 			simpleData.templateCourses = me.get('planCourses');
 			simpleData.departmentCode = me.get('departmentCode');
 			simpleData.divisionCode = me.get('divisionCode');
-			simpleData.programCode = me.get('programCode');
 			simpleData.isPrivate = me.getBoolean('isPrivate');
 			simpleData.visibility = me.get('visibility');
 		}else{

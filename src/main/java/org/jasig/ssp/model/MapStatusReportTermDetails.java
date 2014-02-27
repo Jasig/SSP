@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.model;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -58,6 +59,9 @@ public class MapStatusReportTermDetails extends AbstractAuditable implements Aud
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private AnomalyCode anomalyCode;
+	
+	@Column(precision = 2, scale = 2, nullable = false)
+	private BigDecimal termRatio;
 
 	public MapStatusReportTermDetails(UUID id) {
 		super();
@@ -118,6 +122,14 @@ public class MapStatusReportTermDetails extends AbstractAuditable implements Aud
 
 	public void setTermStatus(TermStatus termStatus) {
 		this.termStatus = termStatus;
+	}
+
+	public BigDecimal getTermRatio() {
+		return termRatio;
+	}
+
+	public void setTermRatio(BigDecimal termRatio) {
+		this.termRatio = termRatio;
 	}
 
 

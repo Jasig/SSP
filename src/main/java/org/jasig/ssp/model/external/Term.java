@@ -58,6 +58,14 @@ public class Term extends AbstractExternalReferenceData implements Serializable,
 	@Column(nullable = false)
 	private Date endDate;
 
+	@Temporal(TemporalType.DATE)
+	@Column(nullable = false)
+	private Date registrationStartDate;
+
+	@Temporal(TemporalType.DATE)
+	@Column(nullable = false)
+	private Date registrationEndDate;
+	
 	@NotNull
 	@Column(nullable = false, length = 25)
 	private int reportYear;
@@ -118,5 +126,21 @@ public class Term extends AbstractExternalReferenceData implements Serializable,
 	 */
 	public void setReportYear(final int reportYear) {
 		this.reportYear = reportYear;
+	}
+
+	public Date getRegistrationEndDate() {
+		return registrationEndDate;
+	}
+
+	public void setRegistrationEndDate(Date registrationEndDate) {
+		this.registrationEndDate = registrationEndDate;
+	}
+
+	public Date getRegistrationStartDate() {
+		return registrationStartDate;
+	}
+
+	public void setRegistrationStartDate(Date registrationStartDate) {
+		this.registrationStartDate = registrationStartDate;
 	}
 }

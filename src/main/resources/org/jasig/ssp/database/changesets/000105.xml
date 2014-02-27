@@ -1,0 +1,262 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    <property name="schema" value="${database.schema}" />
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+
+    <changeSet id="create table map_status_report_substitution_details. " author="tony.arland">
+		<createTable tableName="map_status_report_substitution_details">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="report_id" type="uuid" >
+				<constraints nullable="false"
+					foreignKeyName="msrca_report_id"
+					references="map_status_report(id)" />
+			</column>			
+			<column name="term_code" type="${nvarchar.type}(25)" >
+				<constraints nullable="false" />
+			</column>
+			<column name="formatted_course" type="${nvarchar.type}(35)" >
+				<constraints nullable="false" />
+			</column>
+			<column name="course_code" type="${nvarchar.type}(50)" >
+				<constraints nullable="false" />
+			</column>
+			<column name="substituted_term_code" type="${nvarchar.type}(25)" >
+				<constraints nullable="false" />
+			</column>
+			<column name="substituted_formatted_course" type="${nvarchar.type}(35)" >
+				<constraints nullable="false" />
+			</column>
+			<column name="substituted_course_code" type="${nvarchar.type}(50)" >
+				<constraints nullable="false" />
+			</column>				
+			<column name="substitution_note" type="${nvarchar.type}(500)" >
+				<constraints nullable="false" />
+			</column>	
+			<column name="substitution_code" type="${nvarchar.type}(30)" >
+				<constraints nullable="false" />
+			</column>							
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="map_status_report_a_cr_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="map_status_report_a_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>	
+		
+		<addColumn tableName="map_status_report">
+			<column name="plan_ratio" type="decimal(3,2)" defaultValueNumeric="0.0">
+				<constraints nullable="false" />
+			</column>
+		</addColumn>
+		
+		<addColumn tableName="map_status_report_term_details">
+			<column name="term_ratio" type="decimal(3,2)" defaultValueNumeric="0.0" >
+				<constraints nullable="false" />
+			</column>
+		</addColumn>
+</changeSet>
+
+<changeSet id="add program code to plan" author="tony.arland">
+	<addColumn tableName="map_plan">
+		<column name="program_code" type="${nvarchar.type}(30)"></column>
+	</addColumn>
+</changeSet>
+
+<changeSet id="new configs for map report status calculation phase 2" author="tony.arland">
+		<insert tableName="config">
+			<column name="id" value="e20be2e7-8bc3-4e2b-8ca8-0b5f62040fd3" />
+			<column name="name" value="map_plan_status_term_bound_strict" />
+			<column name="description"
+				value="Map Status Report Config: Drives final plan status calc.  If set to true, plan status calc will strictly enforce term bound rules when calculating status" />
+            <column name="value" value="false" /> 
+            <column name="default_value" value="false" /> 			
+			<column name="created_date" valueDate="2014-03-04T12:00:00" />
+			<column name="modified_date" valueDate="2014-03-04T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>
+		<insert tableName="config">
+			<column name="id" value="baf550f4-0262-474d-9de5-6da3443e1b06" />
+			<column name="name" value="map_plan_status_use_substitutable_courses" />
+			<column name="description"
+				value="Map Status Report Config:  Drives the use of substitutable courses when calculating plan status" />
+            <column name="value" value="true" /> 
+            <column name="default_value" value="true" /> 			
+			<column name="created_date" valueDate="2012-05-07T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>
+</changeSet>
+
+<changeSet id="new configs for map report status calculation phase 3" author="tony.arland">
+		<insert tableName="config">
+			<column name="id" value="accba9c0-cf22-41ce-ba05-d357d6e2d3a5" />
+			<column name="name" value="map_plan_status_send_report_email" />
+			<column name="description"
+				value="Map Status Report Config: If set the true, an email will be sent to the address listed in config map_plan_status_email" />
+            <column name="value" value="false" /> 
+            <column name="default_value" value="false" /> 			
+			<column name="created_date" valueDate="2014-03-04T12:00:00" />
+			<column name="modified_date" valueDate="2014-03-04T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>
+		<insert tableName="config">
+			<column name="id" value="11cfe1f1-1400-42d4-8b92-af37da9f2af1" />
+			<column name="name" value="map_plan_status_email" />
+			<column name="description"
+				value="Map Status Report Config:  Email address that status email should be sent to.  map_plan_status_send_report_email should be set to true for email to be sent" />
+            <column name="value" value="foo@bar.com" /> 
+            <column name="default_value" value="foo@bar.com" /> 			
+			<column name="created_date" valueDate="2012-05-07T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>
+</changeSet>
+<changeSet id="seed message template for map status report email.." author="tony.arland">
+		<insert tableName="message_template">
+			<column name="id" value="3da780e7-b7df-43b2-8988-fc51ef03f7c0" />
+			<column name="name" value="Map Status Calculation Run Report" />
+			<column name="description" value="Map Status Calculation Run Report" />
+			<column name="subject" value="Map Status Calculation Run Report" />
+			<column name="body" ><![CDATA[<div>
+<p style="padding-left:20px">
+Map Status Report Calculation Information.</br>
+Start Time: $startTime</br>
+End Time: $endTime</br>
+Total Plans Calculated: $totalPlans
+</p>
+</div>
+<div>
+<p style="text-align:center">
+$title
+</p>
+</div>
+<div style="position:relative;left:100px">
+		<table cellpadding="0" cellspacing="0" style="background-color:white;width:80%;border-collapse:collapse;">
+			<caption  style="font-size:small;text-align:left">$termCourse.term.name</caption>
+			<thead>
+				<tr >
+					<th style="text-align:center;border:1px solid black;width:325">
+						Plan Status
+					</th>
+					<th style="text-align:center;border:1px solid black;width:60%">
+						Count
+					</th>
+				</tr>
+			</thead>
+			#foreach($reportSummaryDetail in $reportSummaryDetails)
+			<tr>
+				<td style="text-align:center;border:1px solid black;width:25%;padding-bottom:5px; padding-top:5px;padding-left:5px">
+					$reportSummaryDetail.planStatus
+				</td>
+				<td style="text-align:left;border:1px solid black;width:60%;padding-bottom:5px; padding-top:5px;padding-left:5px">
+					
+					$reportSummaryDetail.count
+				</td>
+			</tr>
+			#end
+		</table>
+</div>
+#if($termConfigReminder)
+	<div>
+	<p style="padding-left:20px">
+	<b>The configured current term is out of date.  The configuration 'map_plan_status_cutoff_term' is either incorrect or outdated.  The 
+	calculation will use the current term as the cutoff term until this configuration is updated.
+	</p>
+	</div>
+#end
+#if($error)
+	<div>
+	<p style="padding-left:20px">
+	<b>There has been an error during the calculation run.  Below is the error message:
+	</p>
+	<div style="position:relative;left:100px">
+		$errorMessage
+	</div>	
+	</div>
+#end
+	]]></column>
+			<column name="created_date" valueDate="2013-04-23T10:00:00" />
+			<column name="modified_date" valueDate="2012-04-23T10:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+		</insert>
+
+		<rollback>
+			<delete tableName="message_template">
+				<where>id = '3da780e7-b7df-43b2-8988-fc51ef03f7c0'</where>
+			</delete>
+		</rollback>
+</changeSet>
+<changeSet id="grant for new map report details table" author="tony.arland">
+        <sql>grant all on map_status_report_substitution_details to ${database.app.username}</sql>
+</changeSet>
+
+<changeSet id="seed coach off plan email config" author="tony.arland">
+		<insert tableName="config">
+			<column name="id" value="ae5311a3-b7aa-4613-b54b-bf93a116640f" />
+			<column name="name" value="map_plan_status_send_off_plan_coach_email" />
+			<column name="description"
+				value="Map Status Report Config:  Send off plan emails to coaches after status calc run" />
+            <column name="value" value="false" /> 
+            <column name="default_value" value="false" /> 			
+			<column name="created_date" valueDate="2012-05-07T12:00:00" />
+			<column name="modified_date" valueDate="2012-05-07T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>
+</changeSet>
+
+
+</databaseChangeLog>
