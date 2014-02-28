@@ -308,8 +308,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 }, {
 					text: 'Races',
                     title: 'Races',
-                    store: 'races',
-                    store: 'races',                    
+                    store: 'racesAll',
 					interfaceOptions: {
                         addButtonVisible: true,
                         deleteButtonVisible: false                  

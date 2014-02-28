@@ -1366,7 +1366,15 @@ Ext.onReady(function(){
 						},
 						singleton: true
 					},
-					racesStore: {
+					racesAllStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.Races', {
+								extraParams: {status: "ALL"}
+							});
+						},
+						singleton: true
+					},
+					racesAllUnpagedStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Races', {
 							     extraParams: {status: "ALL", limit: "-1"}
