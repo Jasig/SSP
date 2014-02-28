@@ -1398,7 +1398,15 @@ Ext.onReady(function(){
 						},
 						singleton: true
 					},
-					financialAidFilesStore: {
+					financialAidFilesAllStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.FinancialAidFiles', {
+								extraParams: {status: "ALL"}
+							});
+						},
+						singleton: true
+					},
+					financialAidFilesAllUnpagedStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.FinancialAidFiles', {
 							     extraParams: {status: "ALL", limit: "-1"}

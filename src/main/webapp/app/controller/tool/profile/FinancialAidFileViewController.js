@@ -21,7 +21,7 @@ Ext.define('Ssp.controller.tool.profile.FinancialAidFileViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-        financialAidFilesStore: 'financialAidFilesStore',
+        financialAidFilesStore: 'financialAidFilesAllUnpagedStore',
 		transcriptService: 'transcriptService',
         personLite: 'personLite'
     },
