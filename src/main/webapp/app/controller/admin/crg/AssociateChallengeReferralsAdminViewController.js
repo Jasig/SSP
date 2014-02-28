@@ -22,7 +22,8 @@ Ext.define('Ssp.controller.admin.crg.AssociateChallengeReferralsAdminViewControl
         associatedItemType: 'challengeReferral',
         parentItemType: 'challenge',
         parentIdAttribute: 'challengeId',
-        associatedItemIdAttribute: 'challengeReferralId'
+        associatedItemIdAttribute: 'challengeReferralId',
+        nodeSortFunction: this.nodeSortFunction
     },
 	constructor: function(){
 		var me=this;
@@ -30,5 +31,13 @@ Ext.define('Ssp.controller.admin.crg.AssociateChallengeReferralsAdminViewControl
 		me.clear();
 		me.getParentItems();		
 		return me;
-	}	
+	},
+	
+    nodeSortFunction: function(a,b){
+    	if(a.name.toUpperCase() > b.name.toUpperCase())
+    		return 1;
+    	if(a.name.toUpperCase() < b.name.toUpperCase())
+    		return -1;
+    	return 0;
+    }
 });

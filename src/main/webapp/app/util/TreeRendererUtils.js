@@ -113,7 +113,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
      *             be created with an id such as 12345_challenge.
      * @expanded - whether or not a branch should load expanded   
      */
-    createNodesFromJson: function(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable, includeToolTip, toolTipFieldName){
+    createNodesFromJson: function(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable, includeToolTip, toolTipFieldName, sortFunction){
     	var nodeIdentifier = "";
     	var enableCheckSelection = enableCheckSelection;
     	var nodes = [];
@@ -123,6 +123,9 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     		nodeIdentifier = '_' + nodeName;
     	}
 		
+		if(sortFunction && sortFunction != null)
+    		records.sort(sortFunction);
+
     	Ext.each(records, function(name, index) {
     		var nodeData = {
         	        text: records[index].name,
@@ -139,7 +142,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
         	
     		nodes.push( nodeData );
     	});
-    	
+		
     	return nodes;
     },   
  
@@ -170,6 +173,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     	var removeParentWhenNoChildrenExist = treeRequest.get('removeParentWhenNoChildrenExist');
     	var includeToolTip = treeRequest.get('includeToolTip');
     	var toolTipFieldName = treeRequest.get('toolTipFieldName');
+		var sortFunction = treeRequest.get('sortFunction');
     	var node = treeRequest.get('node');
 		
     	// retrieve items
@@ -186,7 +190,15 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 					if ( responseFilter ) {
 						records = responseFilter.apply(callbackScope, [records]);
 					};
-		    		nodes = me.createNodesFromJson(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable, includeToolTip, toolTipFieldName);
+		    		nodes = me.createNodesFromJson(records, 
+							isLeaf, 
+							nodeType, 
+							enableCheckSelection, 
+							expanded, 
+							expandable, 
+							includeToolTip, 
+							toolTipFieldName,
+							sortFunction);
 		    		me.appendChildren( nodeToAppendTo, nodes);
 		    	}else{
 		    		me.appendChildren( nodeToAppendTo, []);
@@ -229,6 +241,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     	var removeParentWhenNoChildrenExist = treeRequest.get('removeParentWhenNoChildrenExist');
     	var includeToolTip = treeRequest.get('includeToolTip');
     	var toolTipFieldName = treeRequest.get('toolTipFieldName');
+		var sortFunction = treeRequest.get('sortFunction');
 		var node = treeRequest.get('node');
     	// retrieve items
 		me.apiProperties.makeRequest({
@@ -243,7 +256,15 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 		    	var nodes = [];
 		    	if (records.length > 0)
 		    	{
-		    		nodes = me.createNodesFromJson(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable, includeToolTip, toolTipFieldName);
+		    		nodes = me.createNodesFromJson(records, 
+								isLeaf, 
+								nodeType, 
+								enableCheckSelection, 
+								expanded, 
+								expandable, 
+								includeToolTip, 
+								toolTipFieldName,
+								sortFunction);
 		    		
 					me.appendChildren( nodeToAppendTo, nodes);
 					

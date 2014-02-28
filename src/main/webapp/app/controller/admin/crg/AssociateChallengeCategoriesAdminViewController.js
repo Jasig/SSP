@@ -22,7 +22,8 @@ Ext.define('Ssp.controller.admin.crg.AssociateChallengeCategoriesAdminViewContro
         associatedItemType: 'challenge',
         parentItemType: 'category',
         parentIdAttribute: 'categoryId',
-        associatedItemIdAttribute: 'challengeId'
+        associatedItemIdAttribute: 'challengeId',
+        nodeSortFunction: this.nodeSortFunction
     },
 	constructor: function(){
 		this.callParent(arguments);
@@ -31,5 +32,13 @@ Ext.define('Ssp.controller.admin.crg.AssociateChallengeCategoriesAdminViewContro
 		this.getParentItems();
 		
 		return this;
-	}
+	},
+    
+    nodeSortFunction: function(a,b){
+    	if(a.name.toUpperCase() > b.name.toUpperCase())
+    		return 1;
+    	if(a.name.toUpperCase() < b.name.toUpperCase())
+    		return -1;
+    	return 0;
+    }
 });

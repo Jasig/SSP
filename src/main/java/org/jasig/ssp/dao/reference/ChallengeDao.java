@@ -184,6 +184,11 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 			@NotNull final UUID categoryId,
 			@NotNull final SortingAndPaging sAndP) {
 		final Criteria query = createCriteria();
+		if (!sAndP.isSorted()) {
+			sAndP.appendSortField("objectStatus", SortDirection.ASC);
+			sAndP.appendSortField("name", SortDirection.ASC);
+		}
+		
 		final Criteria subQuery = query.createCriteria("challengeCategories");
 		subQuery.add(Restrictions.eq("category.id", categoryId));
 		sAndP.addStatusFilterToCriteria(subQuery);
@@ -254,9 +259,17 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 			Criteria criteria = createCriteria();
 			criteria.setFetchMode( "challengeChallengeReferrals", FetchMode.JOIN );
 			criteria.setFetchMode( "selfHelpGuideQuestions", FetchMode.JOIN );
+			for(Pair<String,SortDirection> sf:sp.getSortFields()){
+				if(sf.getSecond().equals(SortDirection.ASC))
+					criteria.addOrder(Order.asc(sf.getFirst().toString()));
+				else
+					criteria.addOrder(Order.desc(sf.getFirst().toString()));
+			}
 			
 			criteria.add(Restrictions.in("id", uuids));
-			return new PagingWrapper<Challenge>(size,  criteria.list());
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			List<Challenge> challenges = criteria.list();
+			return new PagingWrapper<Challenge>(size, challenges);
 		}
 		return new PagingWrapper(0,new ArrayList<UUID>());
 	}

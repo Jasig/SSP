@@ -29,7 +29,8 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
         associatedItemType: "",
         parentItemType: "",
         parentIdAttribute: "",
-        associatedItemIdAttribute: ""
+        associatedItemIdAttribute: "",
+		nodeSortFunction: "",
     },
     
     control: {
@@ -119,16 +120,17 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	treeRequest.set('callbackFunc', me.onLoadComplete);
     	treeRequest.set('callbackScope', me);
 		treeRequest.set('node', node);
+		treeRequest.set('sortFunction', me.nodeSortFunction);
     	me.treeUtils.getItemsWithParams( treeRequest , {limit: '-1', status: 'ACTIVE'});
 		
     },
 
 	onLoadComplete: function( scope, node ){
 		var me=scope;
-		
-		if (node && node != "" && node.get('qtitle') == 'INACTIVE' && !node.hasChildNodes()) {
-			// remove the node
-			node.remove(true);
+		if (node && node != ""){
+			if(node.get('qtitle') == 'INACTIVE' && !node.hasChildNodes()) {
+				node.remove(true);
+			}
 		}
 	},
 	

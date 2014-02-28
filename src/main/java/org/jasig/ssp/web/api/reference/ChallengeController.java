@@ -125,10 +125,11 @@ public class ChallengeController
 			throws ObjectNotFoundException {
 
 		final Challenge challenge = service.get(id);
+		
 
 		final PagingWrapper<ChallengeReferral> data = challengeReferralService
 				.getAllForChallenge(challenge, SortingAndPaging
-						.createForSingleSortWithPaging(status, start, limit, sort,
+						.createForSingleSortWithPaging(status, start, limit, sort == null ? "name":sort,
 								sortDirection, null));
 
 		return new PagedResponse<ChallengeReferralTO>(true,
