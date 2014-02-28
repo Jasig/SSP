@@ -839,7 +839,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 	            }, {
 					text: 'Financial Aid Files',
 	                title: 'Financial Aid Files',
-	                store: 'financialAidFiles',
+	                store: 'financialAidFilesAll',
 					interfaceOptions: {
 	                    addButtonVisible: true,
 	                    deleteButtonVisible: false                  
