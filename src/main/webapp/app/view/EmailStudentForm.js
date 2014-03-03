@@ -147,14 +147,6 @@ Ext.define('Ssp.view.EmailStudentForm', {
                     type: 'hbox'
                 },                
 				items: [
-						{
-						    xtype: 'checkbox',
-						    name: 'sendToAdditionalEmail',
-						    fieldLabel: '',
-						    itemId: 'sendToAdditionalEmail',
-						    labelSeparator: '',
-						    hideLabel: true,
-						},
 					    {
 				            xtype: 'displayfield',
 		                    value: 'CC This email to additional recipients (comma separated)',

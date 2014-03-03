@@ -34,7 +34,7 @@ import org.jasig.ssp.transferobject.PersonLiteTO;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
-import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
+import org.jasig.ssp.transferobject.EmailStudentRequestTO;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -158,7 +158,7 @@ public class PersonController extends AbstractBaseController {
 	@PreAuthorize(Permission.SECURITY_PERSON_WRITE)
 	public @ResponseBody
 	boolean emailStudent(
-			final @RequestBody EmailStudentRequestForm emailRequest) throws ObjectNotFoundException, ValidationException {
+			final @RequestBody EmailStudentRequestTO emailRequest) throws ObjectNotFoundException, ValidationException {
 		service.emailStudent(emailRequest);
 		return true;
 	}

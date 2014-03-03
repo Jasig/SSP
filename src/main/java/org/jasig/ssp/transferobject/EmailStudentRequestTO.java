@@ -16,23 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.transferobject.form;
+package org.jasig.ssp.transferobject;
 
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Command Object for the email method of the PersonTaskController.
- * 
- * Only one of either recipientEmailAddresses or recipientIds is required.
- */
-public class EmailPersonTasksForm {
-	private List<UUID> taskIds;
+import javax.validation.constraints.NotNull;
 
-	private List<UUID> goalIds;
+import org.jasig.ssp.model.Person;
+
+import com.google.common.collect.Lists;
+
+public class EmailStudentRequestTO implements Serializable {
+
+
+
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private UUID studentId;
 	
-	private List<UUID> strengthIds;
-
+	private UUID confidentialityLevelId;
+	
+	private Boolean createJournalEntry;
+	
 	private Boolean sendToPrimaryEmail;
 	
 	private String primaryEmail;
@@ -45,16 +57,32 @@ public class EmailPersonTasksForm {
 	
 	private String additionalEmail;
 	
-	private Boolean sendToCoachEmail;
+	private String emailSubject;
 	
-	private String coachEmail;
+	private String emailBody;
 
-	public List<UUID> getTaskIds() {
-		return taskIds;
+	public UUID getStudentId() {
+		return studentId;
 	}
 
-	public void setTaskIds(final List<UUID> taskIds) {
-		this.taskIds = taskIds;
+	public void setStudentId(UUID studentId) {
+		this.studentId = studentId;
+	}
+
+	public UUID getConfidentialityLevelId() {
+		return confidentialityLevelId;
+	}
+
+	public void setConfidentialityLevelId(UUID confidentialityLevelId) {
+		this.confidentialityLevelId = confidentialityLevelId;
+	}
+
+	public Boolean getCreateJournalEntry() {
+		return createJournalEntry;
+	}
+
+	public void setCreateJournalEntry(Boolean createJournalEntry) {
+		this.createJournalEntry = createJournalEntry;
 	}
 
 	public Boolean getSendToPrimaryEmail() {
@@ -105,35 +133,19 @@ public class EmailPersonTasksForm {
 		this.additionalEmail = additionalEmail;
 	}
 
-	public Boolean getSendToCoachEmail() {
-		return sendToCoachEmail;
+	public String getEmailSubject() {
+		return emailSubject;
 	}
 
-	public void setSendToCoachEmail(Boolean sendToCoachEmail) {
-		this.sendToCoachEmail = sendToCoachEmail;
+	public void setEmailSubject(String emailSubject) {
+		this.emailSubject = emailSubject;
 	}
 
-	public String getCoachEmail() {
-		return coachEmail;
+	public String getEmailBody() {
+		return emailBody;
 	}
 
-	public void setCoachEmail(String coachEmail) {
-		this.coachEmail = coachEmail;
-	}
-
-	public List<UUID> getGoalIds() {
-		return goalIds;
-	}
-
-	public void setGoalIds(final List<UUID> goalIds) {
-		this.goalIds = goalIds;
-	}
-
-	public List<UUID> getStrengthIds() {
-		return strengthIds;
-	}
-
-	public void setStrengthIds(List<UUID> strengthIds) {
-		this.strengthIds = strengthIds;
+	public void setEmailBody(String emailBody) {
+		this.emailBody = emailBody;
 	}
 }
