@@ -32,7 +32,7 @@ import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PersonSearchRequestTO;
-import org.jasig.ssp.transferobject.EmailStudentRequestTO;
+import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
@@ -288,6 +288,6 @@ public interface PersonService extends AuditableCrudService<Person> {
 
 	void evict(Person model);
 
-	boolean emailStudent(EmailStudentRequestTO emailRequest) throws ObjectNotFoundException, ValidationException;
+	boolean emailStudent(EmailStudentRequestForm emailRequest) throws ObjectNotFoundException, ValidationException;
 
 }

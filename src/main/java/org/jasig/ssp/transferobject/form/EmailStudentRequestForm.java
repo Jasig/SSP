@@ -18,60 +18,62 @@
  */
 package org.jasig.ssp.transferobject.form;
 
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
+import org.jasig.ssp.model.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Command Object for the email method of the PersonTaskController.
- * 
- * Only one of either recipientEmailAddresses or recipientIds is required.
- */
-public class EmailPersonTasksForm extends AbstractEmailForm {
-	
-	private List<UUID> taskIds;
+import com.google.common.collect.Lists;
 
-	private List<UUID> goalIds;
+public class EmailStudentRequestForm extends AbstractEmailForm implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	private UUID studentId;
 	
-	private List<UUID> strengthIds;
+	private UUID confidentialityLevelId;
 	
+	private Boolean createJournalEntry;
+
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(EmailPersonTasksForm.class);
+			.getLogger(EmailStudentRequestForm.class);
 	
 	@Override
 	protected Logger getLogger(){
 		return LOGGER;
 	}
 	
-	
-	public EmailPersonTasksForm(){
-		
+	public UUID getStudentId() {
+		return studentId;
+	}
+
+	public void setStudentId(UUID studentId) {
+		this.studentId = studentId;
 	}
 	
-	public List<UUID> getTaskIds() {
-		return taskIds;
+	public Boolean hasStudentId(){
+		return this.studentId == null ? false:true;
 	}
 
-	public void setTaskIds(final List<UUID> taskIds) {
-		this.taskIds = taskIds;
+	public UUID getConfidentialityLevelId() {
+		return confidentialityLevelId;
 	}
 
-
-	public List<UUID> getGoalIds() {
-		return goalIds;
+	public void setConfidentialityLevelId(UUID confidentialityLevelId) {
+		this.confidentialityLevelId = confidentialityLevelId;
 	}
 
-	public void setGoalIds(final List<UUID> goalIds) {
-		this.goalIds = goalIds;
+	public Boolean getCreateJournalEntry() {
+		return createJournalEntry;
 	}
 
-	public List<UUID> getStrengthIds() {
-		return strengthIds;
-	}
-
-	public void setStrengthIds(List<UUID> strengthIds) {
-		this.strengthIds = strengthIds;
+	public void setCreateJournalEntry(Boolean createJournalEntry) {
+		this.createJournalEntry = createJournalEntry;
 	}
 }
