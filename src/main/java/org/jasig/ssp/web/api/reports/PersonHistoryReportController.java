@@ -185,7 +185,8 @@ public class PersonHistoryReportController extends ReportBaseController {
             if ( plan.getPersonId().equals(personId) ) {
                 plan = planService.validate(plan);
             }
-            planGraduateTerm = plan.getPlanCourses().get(0).getTermCode();
+            if(plan.getPlanCourses() != null && !plan.getPlanCourses().isEmpty())
+            	planGraduateTerm = plan.getPlanCourses().get(0).getTermCode();
         }
         final PlanTO planTO = plan;
         final String planProjectedGraduationTerm = planGraduateTerm;
