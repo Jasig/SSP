@@ -53,25 +53,6 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
     initComponent: function(){
     	var me=this;
     	var sm = Ext.create('Ext.selection.CheckboxModel'
-		
-		/*,{
-			getHeaderConfig : function() {
-                var me = this;
-                return {
-                    isCheckerHd : true,
-                    text        : 'Select ',
-                    width       : '40',
-                    sortable    : false,
-                    draggable   : false,
-                    resizable   : false,
-                    hideable    : false,
-                    menuDisabled: true,
-                    dataIndex   : '',
-                    locked      : false
-                };
-            }
-		}*/
-		
 		);
     	Ext.apply(me,
     			{
@@ -80,16 +61,6 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
     	    		selModel: sm,
 					title: 'Tasks',
 					cls: 'tasksgrid',
-					/*
-    	    		features: [{
-		    	        id: 'group',
-		    	        ftype: 'grouping',
-		    	        groupHeaderTpl: '{name}',
-		    	        depthToIndent: 0,
-		    	        hideGroupedHeader: true,
-		    	        enableGroupingMenu: false
-		    	    }],*/
-		
 		    	    columns: [{
 		    	        xtype:'actioncolumn',
 		    	        width:68,
@@ -98,7 +69,6 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	        items: [{
 		    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
 		    	            tooltip: 'Edit Task',
-							//padding: '2 2 2 2',
 		    	            handler: function(grid, rowIndex, colIndex) {
 		    	            	var rec = grid.getStore().getAt(rowIndex);
 		    	            	var panel = grid.up('panel');
@@ -256,7 +226,6 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 							{
                                 xtype: 'checkbox',
                                 boxLabel: 'Incomplete Tasks',
-                                //hidden: !me.authenticatedPerson.hasAccess('FILTER_TASKS_BY_AUTHENTICATED_USER_CHECKBOX'),
                                 itemId: 'filterTasksByInCompleteCheck'
                             },
 							{
