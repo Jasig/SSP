@@ -91,8 +91,8 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
 		{
 			academicLinkComponent.hidden = true;
 		}
-		masterSylComponent.setFieldLabel("<a href=\""+record.get("masterSyllabusLink")+"\">Master Syllabus</a>");
-		academicLinkComponent.setFieldLabel("<a href=\""+record.get("academicLink")+"\">Academic Link</a>");
+		masterSylComponent.setFieldLabel("<a href=\""+record.get("masterSyllabusLink")+"\" target=\"_blank\">Master Syllabus</a>");
+		academicLinkComponent.setFieldLabel("<a href=\""+record.get("academicLink")+"\" target=\"_blank\">Academic Link</a>");
 		
 		me.courseRequisitesStore = Ext.create('Ssp.store.external.CourseRequisites');
 		me.courseRequisitesStore.load(record.get('code'));
