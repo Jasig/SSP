@@ -290,7 +290,7 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 				requiringCourse.setHasCorequisites(false);
 				requiringCourse.setHasPrerequisites(false);
 				model.setIsValid(false);
-				requiringCourse.setInvalidReasons(" Pre/co requisite + " + requisiteCourse.getRequiredCourseCode() + " is missing.");
+				requiringCourse.setInvalidReasons(" Pre/co requisite + " + requisiteCourse.getRequiredFormattedCourse() + " is missing.");
 			}
 		}
 		
