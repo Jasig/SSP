@@ -17,105 +17,117 @@
  * under the License.
  */
 Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
-	extend: 'Ext.grid.Panel',
-	alias : 'widget.displayactionplangoals',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.displayactionplangoals',
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController',
     inject: {
-    	appEventsController: 'appEventsController',
-    	authenticatedPerson: 'authenticatedPerson',
-    	columnRendererUtils: 'columnRendererUtils',
-    	model: 'currentGoal',
-        store: 'goalsStore'
+        appEventsController: 'appEventsController',
+        authenticatedPerson: 'authenticatedPerson',
+        columnRendererUtils: 'columnRendererUtils',
+        model: 'currentGoal',
+        store: 'goalsStore',
+        confidentialityLevelsAllUnpagedStore: 'confidentialityLevelsAllUnpagedStore'
     },
     width: '100%',
-	height: '100%',   
-    layout: 'anchor',
+    height: '100%',
+    autoScroll: true,
+    layout: 'fit',
     itemId: 'goalsPanel',
-    defaults: {
-        anchor: '100%'
-    },	
-	initComponent: function() {	
-		var me=this;
-    	var sm = Ext.create('Ext.selection.CheckboxModel');
-		
-		Ext.apply(me, {
-
-				title: 'Goals',
-				store: me.store,
-				selModel: sm,
-			    columns: [{
-	    	        xtype:'actioncolumn',
-	    	        width:65,
-	    	        header: 'Action',
-	    	        items: [{
-	    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
-	    	            tooltip: 'Edit Goal',
-	    	            handler: function(grid, rowIndex, colIndex) {
-	    	            	var rec = grid.getStore().getAt(rowIndex);
-	    	                var panel = grid.up('panel');
-	    	                panel.model.data=rec.data;
-	    	            	panel.appEventsController.getApplication().fireEvent('editGoal');
-	    	            },
-	    	            getClass: function(value, metadata, record)
-                        {
-	    	            	// hide if user does not have permission to edit
-	    	            	var cls = 'x-hide-display';
-	    	            	if ( me.authenticatedPerson.hasAccess('EDIT_GOAL_BUTTON') )
-	    	            	{
-	    	            		cls = Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH;
-	    	            	}
-	    	            	
-	    	            	return cls;                            
-	    	            },
-	    	            scope: me
-	    	        },{
-	    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
-	    	            tooltip: 'Delete Goal',
-	    	            handler: function(grid, rowIndex, colIndex) {
-	    	            	var rec = grid.getStore().getAt(rowIndex);
-	    	            	var panel = grid.up('panel');
-	    	                panel.model.data=rec.data;
-	    	            	panel.appEventsController.getApplication().fireEvent('deleteGoal');
-	    	            },
-	    	            getClass: function(value, metadata, record)
-                        {
-	    	            	// hide if user does not have permission to delete
-	    	            	var cls = 'x-hide-display';
-	    	            	if ( me.authenticatedPerson.hasAccess('DELETE_GOAL_BUTTON') )
-	    	            	{
-	    	            		cls = Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH;
-	    	            	}
-	    	            	
-	    	            	return cls;                            
-	    	            },
-	    	            scope: me
-	    	        }]
-	    	    },{
-	    	        header: 'Name',
-	    	        flex: 1,
-	    	        dataIndex: 'name',
-	    	        renderer: me.columnRendererUtils.renderGoalName
-	    	    },{
-	    	        header: 'Confidentiality',
-	    	        dataIndex: 'confidentialityLevel',
-	    	        renderer: me.columnRendererUtils.renderConfidentialityLevelName
-	    	    }],
-	    	    
-	    	    dockedItems: [{
-			        dock: 'top',
-			        xtype: 'toolbar',
-			        items: [{
-			            tooltip: 'Add a Goal',
-			            text: 'Add',
-			            hidden: !me.authenticatedPerson.hasAccess('ADD_GOAL_BUTTON'),
-			            xtype: 'button',
-			            itemId: 'addGoalButton'
-			        }]
-	    	    }]
-		});
-		
-		return me.callParent(arguments);
-	}
+    
+    initComponent: function(){
+        var me = this;
+        
+        var cellEditor = Ext.create('Ext.grid.plugin.RowEditing', {
+            clicksToEdit: 2,
+            listeners: {
+                cancelEdit: function(rowEditor, item){
+                    var columns = rowEditor.grid.columns;
+                    var record = rowEditor.context.record;
+                    if (record.get('id') == '' || record.get('id') == null || record.get('id') == undefined) {
+                        me.store.load();
+                    }
+                }
+            }
+        });
+        
+        Ext.apply(me, {
+            plugins: cellEditor,
+            selType: 'rowmodel',
+            cls: 'configgrid',
+            title: 'Goals',
+            store: me.store,
+            viewConfig: {
+                markDirty: false
+            },
+            columns: [{
+                header: 'Name',
+                flex: .25,
+                dataIndex: 'name',
+                rowEditable: true,
+                field: {
+                    xtype: 'textfield',
+                    fieldStyle: "margin-bottom:12px;"
+                }
+            }, {
+                header: 'Description',
+                flex: .50,
+                dataIndex: 'description',
+                rowEditable: true,
+                field: {
+                    xtype: 'textfield',
+                    fieldStyle: "margin-bottom:12px;"
+                }
+            }, {
+                header: 'Confidentiality',
+                dataIndex: 'confidentialityLevel',
+                itemId: 'goalsCFCombo',
+                renderer: me.columnRendererUtils.renderConfidentialityLevel,
+                required: true,
+                flex: .25,
+                field: {
+                    xtype: 'combo',
+                    store: me.confidentialityLevelsAllUnpagedStore,
+                    displayField: 'name',
+                    valueField: 'id',
+                    forceSelection: true
+                }
+            
+            
+            
+            }],
+            
+            dockedItems: [{
+                dock: 'top',
+                xtype: 'toolbar',
+                items: [{
+                    tooltip: 'Add a Goal',
+                    text: 'Add Goal',
+                    hidden: !me.authenticatedPerson.hasAccess('ADD_GOAL_BUTTON'),
+                    xtype: 'button',
+                    itemId: 'addGoalButton'
+                }, {
+                    tooltip: 'Delete a Goal',
+                    text: 'Delete Goal',
+                    hidden: !me.authenticatedPerson.hasAccess('DELETE_GOAL_BUTTON'),
+                    xtype: 'button',
+                    itemId: 'deleteGoalButton'
+                }, {
+                    xtype: 'tbspacer',
+                    width: '200'
+                }, {
+                    xtype: 'emailandprintactionplan'
+                }]
+            }, {
+                xtype: 'toolbar',
+                dock: 'top',
+                items: [{
+                    xtype: 'label',
+                    text: 'Double-click to edit a goal'
+                }]
+            }]
+        });
+        
+        return me.callParent(arguments);
+    }
 });

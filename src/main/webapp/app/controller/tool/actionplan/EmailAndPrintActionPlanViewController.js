@@ -16,23 +16,38 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.store.Tasks', {
-    extend: 'Ext.data.Store',
-    model: 'Ssp.model.tool.actionplan.TaskGroup',
-    mixins: [ 'Deft.mixin.Injectable' ],
+Ext.define('Ssp.controller.tool.actionplan.EmailAndPrintActionPlanViewController', {
+    extend: 'Deft.mvc.ViewController',	
+    mixins: [ 'Deft.mixin.Injectable'],
     inject: {
-    	apiProperties: 'apiProperties'
-    },   
-	constructor: function(){
-        Ext.apply(this, {
-                proxy: this.apiProperties.getProxy(''),
-                pageSize: this.apiProperties.getInfinitePagingSize(),
-                autoLoad: false,
-                autoSync: false
-            }
-        );
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('personTaskGroup')
-		});
-        return this.callParent(arguments);
+    	apiProperties: 'apiProperties',
+    	appEventsController: 'appEventsController'
+    },
+    control: {  
+    	'emailTasksButton': {
+			click: 'onEmailTasksClick'
+		},
+
+		'printTasksButton': {
+			click: 'onPrintTasksClick'
+		}
+	},
+ 
+	init: function(){
+		var me=this;
+    	
+		return me.callParent(arguments);
+	},
+	
+	onEmailTasksClick: function(button) {
+    	var me=this;
+		me.appEventsController.getApplication().fireEvent('emailActionPlan');
+    	
+    },
+	
+	onPrintTasksClick: function(button) {
+    	var me=this;
+		me.appEventsController.getApplication().fireEvent('printActionPlan');
+    	
     }
 });

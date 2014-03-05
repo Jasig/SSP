@@ -80,6 +80,8 @@ Ext.require([
     'Ssp.view.tools.actionplan.AddTask',
     'Ssp.view.tools.actionplan.AddTaskForm',
     'Ssp.view.tools.actionplan.EditGoalForm',
+	'Ssp.view.tools.actionplan.EmailActionPlan',
+	'Ssp.view.tools.actionplan.EmailAndPrintActionPlan',
     'Ssp.view.tools.actionplan.DisplayActionPlan',
     'Ssp.view.tools.actionplan.DisplayActionPlanGoals',
     'Ssp.view.tools.actionplan.DisplayStrengths',
@@ -237,6 +239,7 @@ Ext.require([
 	'Ssp.model.SearchCriteria',
 	'Ssp.model.CaseloadFilterCriteria',
 	'Ssp.model.PersonGoal',
+	'Ssp.model.PersonStrength',
 	'Ssp.model.PersonLite',	
 	'Ssp.model.Placement',
 	'Ssp.model.PersonProgramStatus',
@@ -307,6 +310,7 @@ Ext.require([
     'Ssp.store.Tasks',
     'Ssp.store.StudentActivities',
     'Ssp.store.Goals',
+	'Ssp.store.Strengths',
     'Ssp.store.SelfHelpGuides',
     'Ssp.store.SelfHelpGuideQuestions',
     'Ssp.store.JournalEntries',
@@ -509,6 +513,7 @@ var apiUrls = [
   {name: 'personEarlyAlert', url: 'person/{personId}/earlyAlert'},
   {name: 'personEarlyAlertResponse', url: 'person/{personId}/earlyAlert/{earlyAlertId}/response'},
   {name: 'personGoal', url: 'person/{id}/goal'},
+  {name: 'personStrength', url: 'person/{id}/strength'},
   {name: 'personJournalEntry', url: 'person/{id}/journalEntry'},
   {name: 'personTask', url: 'person/{id}/task'},
   {name: 'personTaskGroup', url: 'person/{id}/task/group'},
@@ -743,6 +748,12 @@ Ext.onReady(function(){
 			        currentGoal:{
 				        fn: function(){
 				            return new Ssp.model.PersonGoal({id:""});
+				    	},
+				        singleton: true
+			        },
+					currentStrength:{
+				        fn: function(){
+				            return new Ssp.model.PersonStrength({id:""});
 				    	},
 				        singleton: true
 			        },
@@ -1357,6 +1368,7 @@ Ext.onReady(function(){
 					},	
 			    	gendersStore: 'Ssp.store.reference.Genders',
 				    goalsStore: 'Ssp.store.Goals',
+					strengthsStore: 'Ssp.store.Strengths',
 			    	journalEntriesStore: 'Ssp.store.JournalEntries',
 			    	journalEntriesUnpagedStore: 'Ssp.store.JournalEntriesUnpaged',
 			    	journalEntryDetailsStore: 'Ssp.store.JournalEntryDetails',

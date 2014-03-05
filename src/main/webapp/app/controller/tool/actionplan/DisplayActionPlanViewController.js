@@ -18,380 +18,259 @@
  */
 Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
     extend: 'Deft.mvc.ViewController',
-    mixins: [ 'Deft.mixin.Injectable' ],
+    mixins: ['Deft.mixin.Injectable'],
     inject: {
-    	apiProperties: 'apiProperties',
-    	appEventsController: 'appEventsController',
-    	authenticatedPerson: 'authenticatedPerson',
-    	formUtils: 'formRendererUtils',
-    	goalsStore: 'goalsStore',
+        apiProperties: 'apiProperties',
+        appEventsController: 'appEventsController',
+        authenticatedPerson: 'authenticatedPerson',
+        formUtils: 'formRendererUtils',
+        goalsStore: 'goalsStore',
+        strengthsStore: 'strengthsStore',
         personLite: 'personLite',
-    	store: 'tasksStore'
+        store: 'tasksStore'
     },
     
     config: {
-    	filteredTaskStatus: null,
-    	filterAuthenticated: false,
-    	personTaskUrl: '',
-    	personTaskGroupUrl: '',
-    	personEmailTaskUrl: '',
-    	personPrintTaskUrl: ''
+        personTaskUrl: '',
+        personTaskGroupUrl: '',
+        personPrintTaskUrl: ''
     },
     
     control: {
-    	'taskStatusTabs': {
-    		tabchange: 'onTaskStatusTabChange'
-    	},
-		
-		'emailTasksButton': {
-			click: 'onEmailTasksClick'
-		},
-
-		'printTasksButton': {
-			click: 'onPrintTasksClick'
-		},
-		
-		'filterTasksBySelfCheck': {
-			change: 'onFilterTasksBySelfChange'
-		},
-    	
-		addTaskButton: {
-			selector: '#addTaskButton',
-			listeners: {
-				click: 'onAddTaskClick'
-			}
-		},
-		
-		goalsPanel: '#goalsPanel',
-		activeTasksGrid: '#activeTasksGrid',
-		completeTasksGrid: '#completeTasksGrid',
-		allTasksGrid: '#allTasksGrid'
-	},
-	
-	init: function() {
-		var me = this;
-		var personId;
-		var child;
-		var successFunc = function(response,view){
-	    	var r, records;
-	    	var groupedTasks=[];
-	    	r = Ext.decode(response.responseText);
-	    	
-	    	// hide the loader
-	    	me.getView().setLoading( false );
-	    	
-	    	if (r != null)
-	    	{
-	    		Ext.Object.each(r,function(key,value){
-		    		var taskGroup = key;
-		    		var tasks = value;
-		    		Ext.Array.each(tasks,function(task,index){
-		    			task.group=taskGroup;
-		    			groupedTasks.push(task);
-		    		},this);
-		    	},this);		    		
-
-	    		me.store.loadData(groupedTasks);
-	    		me.filteredTaskStatus="ACTIVE";
-	    		me.filterTasks();
-	    	}
-		};
-	
-    	me.getAddTaskButton().setDisabled( !me.authenticatedPerson.hasPermission('ROLE_PERSON_TASK_WRITE') );
-    	
-		// clear any existing tasks
-		me.store.removeAll();
-
-		// display loader
-		me.getView().setLoading( true );
-		
-		personId = me.personLite.get('id');
-		me.personTaskUrl = me.apiProperties.getItemUrl('personTask');
-		me.personTaskUrl = me.personTaskUrl.replace('{id}',personId);
-		me.personTaskGroupUrl = me.apiProperties.getItemUrl('personTaskGroup');
-		me.personTaskGroupUrl = me.personTaskGroupUrl.replace('{id}',personId);
-		me.personEmailTaskUrl = me.apiProperties.getItemUrl('personEmailTask');
-		me.personEmailTaskUrl = me.personEmailTaskUrl.replace('{id}',personId);	
-		me.personPrintTaskUrl = me.apiProperties.getItemUrl('personPrintTask');
-		me.personPrintTaskUrl = me.personPrintTaskUrl.replace('{id}',personId);
-		
-		me.apiProperties.makeRequest({
-			url: me.apiProperties.createUrl(me.personTaskGroupUrl),
-			method: 'GET',
-			successFunc: successFunc 
-		});
-			
-    	me.appEventsController.assignEvent({eventName: 'filterTasks', callBackFunc: this.onFilterTasks, scope: this});		
-		
-		return me.callParent(arguments);
+        goalsPanel: '#goalsPanel',
+        tasksPanel: '#tasksPanel'
+    },
+    
+    init: function(){
+        var me = this;
+        var personId;
+        var child;
+        var successFunc = function(response, view){
+            var r, records;
+            var groupedTasks = [];
+            r = Ext.decode(response.responseText);
+            
+            // hide the loader
+            me.getView().setLoading(false);
+            
+            if (r != null) {
+                Ext.Object.each(r, function(key, value){
+                    var taskGroup = key;
+                    var tasks = value;
+                    Ext.Array.each(tasks, function(task, index){
+                        task.group = taskGroup;
+                        groupedTasks.push(task);
+                    }, this);
+                }, this);
+                
+                me.store.sort([{
+                    property: 'completedDate',
+                    direction: 'ASC'
+                }, {
+                    property: 'dueDate',
+                    direction: 'DESC'
+                }]);
+                
+            }
+            me.store.loadData(groupedTasks);
+            
+        };
+        
+        
+        
+        // clear any existing tasks
+        me.store.removeAll();
+        
+        
+        // display loader
+        me.getView().setLoading(true);
+        
+        personId = me.personLite.get('id');
+        me.personTaskUrl = me.apiProperties.getItemUrl('personTask');
+        me.personTaskUrl = me.personTaskUrl.replace('{id}', personId);
+        me.personTaskGroupUrl = me.apiProperties.getItemUrl('personTaskGroup');
+        me.personTaskGroupUrl = me.personTaskGroupUrl.replace('{id}', personId);
+        me.personPrintTaskUrl = me.apiProperties.getItemUrl('personPrintTask');
+        me.personPrintTaskUrl = me.personPrintTaskUrl.replace('{id}', personId);
+        
+        me.apiProperties.makeRequest({
+            url: me.apiProperties.createUrl(me.personTaskGroupUrl),
+            method: 'GET',
+            successFunc: successFunc
+        });
+        
+        
+        me.appEventsController.assignEvent({
+            eventName: 'emailActionPlan',
+            callBackFunc: this.onEmailActionPlan,
+            scope: this
+        });
+        me.appEventsController.assignEvent({
+            eventName: 'printActionPlan',
+            callBackFunc: this.onPrintActionPlan,
+            scope: this
+        });
+        me.appEventsController.assignEvent({
+            eventName: 'emailAPToUsers',
+            callBackFunc: this.onEmailAPToUsers,
+            scope: this
+        });
+        return me.callParent(arguments);
     },
     
     destroy: function(){
-    	this.appEventsController.removeEvent({eventName: 'filterTasks', callBackFunc: this.onFilterTasks, scope: this});    	
+    
+        this.appEventsController.assignEvent({
+            eventName: 'emailActionPlan',
+            callBackFunc: this.onEmailActionPlan,
+            scope: this
+        });
+        this.appEventsController.assignEvent({
+            eventName: 'printActionPlan',
+            callBackFunc: this.onPrintActionPlan,
+            scope: this
+        });
+        this.appEventsController.assignEvent({
+            eventName: 'emailAPToUsers',
+            callBackFunc: this.onEmailAPToUsers,
+            scope: this
+        });
     },
     
-    onFilterTasks: function(){
-    	this.filterTasks();
+    onEmailActionPlan: function(button){
+        var me = this;
+        var msg = me.getTaskGoalCountNotificationMessage();
+        if (msg.length > 0) {
+            Ext.Msg.confirm({
+                title: ' Would you like to continue emailing?',
+                msg: msg,
+                buttons: Ext.Msg.YESNO,
+                fn: me.emailTasksConfirm,
+                scope: me
+            });
+        }
+        else {
+            me.goToEmailActionPlan();
+        }
     },
     
-    onFilterTasksBySelfChange: function(comp, newComp, oldComp, eOpts){
-		this.filterAuthenticated=!this.filterAuthenticated;
-		this.filterTasks();
-	},
-    
-    onTaskStatusTabChange: function(panel, newComp, oldComp, eOpts) {
-		this.filteredTaskStatus = newComp.action.toUpperCase();
-		this.filterTasks();
+    emailTasksConfirm: function(btnId){
+        var me = this;
+        if (btnId == "yes") {
+            me.goToEmailActionPlan();
+        }
     },
     
-    filterTasks: function(){
-    	var me=this;
-    	var filtersArr = [];
-		var filterStatusFunc = null;
-		var authenticatedId = me.authenticatedPerson.get('id');
-		var filterAuthenticatedFunc = new Ext.util.Filter({
-		    filterFn: function(item) {
-				return (item.get('createdBy').id == authenticatedId); 
-			},
-			scope: me
-		});
-
-		switch (me.filteredTaskStatus)
-		{
-			case 'ACTIVE':
-				filterStatusFunc = function(item) { return (item.get('completed') == false); };
-				break;
-			
-			case 'COMPLETE':
-				filterStatusFunc = function(item) { return (item.get('completed') == true); };
-				break;
-		}
-		
-		if (filterStatusFunc != null)
-			filtersArr.push(filterStatusFunc);
-		
-		if (me.filterAuthenticated == true)
-			filtersArr.push(filterAuthenticatedFunc);
-		
-		// reset filter
-		me.store.clearFilter();
-		
-		// apply new filters
-		me.store.filter(filtersArr);
-    },
-
-    onEmailTasksClick: function(button) {
-    	var me=this;
-    	var msg = me.getTaskGoalCountNotificationMessage();
-		if (msg.length > 0)
-		{
-	           Ext.Msg.confirm({
-	     		     title:' Would you like to continue emailing?',
-	     		     msg: msg,
-	     		     buttons: Ext.Msg.YESNO,
-	     		     fn: me.emailTasksConfirm,
-	     		     scope: me
-	     		   });
-		}else{
-			me.displayEmailAddressWindow();
-		}
+    goToEmailActionPlan: function(){
+        var me = this;
+        if (me.emailActionPlanPopUp == null || me.emailActionPlanPopUp.isDestroyed) 
+            me.emailActionPlanPopUp = Ext.create('Ssp.view.tools.actionplan.EmailActionPlan', {
+                hidden: true
+            });
+        me.emailActionPlanPopUp.show();
+        
     },
     
-    emailTasksConfirm: function( btnId ){
-     	var me=this;
-     	if (btnId=="yes")
-     	{
-         	me.displayEmailAddressWindow();    		
-     	}
-     }, 
     
-    displayEmailAddressWindow: function(){
-    	var me=this;
-    	Ext.create('Ext.window.Window', {
-		    title: 'To whom would you like to send this Action Plan',
-		    height: 200,
-		    width: 400,
-		    layout: 'fit',
-		    modal: true,
-		    items:[{
-		        xtype:'form',
-		        layout:'anchor',
-		        items :[{
-		            xtype: 'label',
-		            text: 'Enter recipient email addresses separated by a comma'
-		            
-		        },{
-		            xtype: 'textarea',
-		            anchor: '100%',
-		            name: 'recipientEmailAddresses'
-		        }]
-			}],
-			dockedItems: [{
-		        dock: 'bottom',
-		        xtype: 'toolbar',
-		        items: [{
-		            text: 'Send',
-		            xtype: 'button',
-		            handler: me.emailTaskList,
-		            scope: me
-		        },{
-		            text: 'Cancel',
-		            xtype: 'button',
-		            handler: function(button){
-		            	button.up('window').close();
-		            }
-		        }]
-    	    }]
-		}).show();
+    
+    onPrintActionPlan: function(button){
+        var me = this;
+        var msg = me.getTaskGoalCountNotificationMessage();
+        if (msg.length > 0) {
+            Ext.Msg.confirm({
+                title: ' Would you like to continue printing??',
+                msg: msg,
+                buttons: Ext.Msg.YESNO,
+                fn: me.printTasksConfirm,
+                scope: me
+            });
+        }
+        else {
+            me.printTasks();
+        }
     },
     
-    emailTaskList: function( button ){
-	    var me=this;
-    	var valid = false;
-	    var jsonData;
-	    var emailTestArr;
-	    var arrRecipientEmailAddresses = [];
-	    var recipientEmailAddresses = button.up('panel').down('form').getValues().recipientEmailAddresses;
-	    if (recipientEmailAddresses != null)
-	    {
-	    	// validate email addresses
-		    if ( recipientEmailAddresses.indexOf(",") )
-		    {
-		    	emailTestArr = recipientEmailAddresses.split(',');
-		    	// handle a list of email addresses
-		    	Ext.each(emailTestArr,function(emailAddress,index){
-		    		valid = this.validateEmailAddress( emailAddress );
-		    		arrRecipientEmailAddresses.push( Ext.String.trim(emailAddress) );
-		    		if (valid != true)
-		    			return;
-		    	}, this);
-		    }else{
-		    	valid = this.validateEmailAddress( recipientEmailAddresses );
-		    	arrRecipientEmailAddresses.push( Ext.String.trim( recipientEmailAddresses ) );
-		    }
-		    
-		    // define data to email
-			jsonData = {
-	    			"taskIds": me.getSelectedTasks(),
-	    		    "goalIds": me.getSelectedGoals(),
-	    		    "recipientIds": [],
-					"recipientEmailAddresses": arrRecipientEmailAddresses
-			};
-
-		    if (valid==true)
-		    {
-		    	// email the task list
-	    		url = this.apiProperties.createUrl( this.personEmailTaskUrl );
-		    	this.apiProperties.makeRequest({
-					url: url,
-					method: 'POST',
-					jsonData: jsonData,
-					successFunc: function(){
-						button.up('window').close();
-						Ext.Msg.alert('Success','The task list has been sent to the listed recipient(s).');
-					}
-				});
-		    }else{
-		    	Ext.Msg.alert('Error','1 or more of the addresses you entered are invalid. Please correct the form and try again.');		    	
-		    }	
-	    }else{
-	    	Ext.Msg.alert('Error','Unable to determine an email address please enter a valid email address.');
-	    }
+    printTasksConfirm: function(btnId){
+        var me = this;
+        if (btnId == "yes") {
+            me.printTasks();
+        }
     },
     
-    validateEmailAddress: function( value ){
-    	var emailExpression = filter = new RegExp('^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$');
-    	return emailExpression.test( value );
-    },
-    
-    onPrintTasksClick: function(button) {
-    	var me=this;
-    	var msg = me.getTaskGoalCountNotificationMessage();
-		if (msg.length > 0)
-		{
-           Ext.Msg.confirm({
-     		     title:' Would you like to continue printing??',
-     		     msg: msg,
-     		     buttons: Ext.Msg.YESNO,
-     		     fn: me.printTasksConfirm,
-     		     scope: me
-     		   });
-		}else{
-			me.printTasks();
-		}
-    },
- 
-    printTasksConfirm: function( btnId ){
-     	var me=this;
-     	if (btnId=="yes")
-     	{
-         	me.printTasks();    		
-     	}
-     },    
-    
-    printTasks: function() {
-    	var me=this;
-    	var url, jsonData;	
-		var jsonData = {
-				"taskIds": me.getSelectedTasks(),
-		        "goalIds": me.getSelectedGoals()
-		        };
- 
-    	url = me.apiProperties.createUrl( me.personPrintTaskUrl );
-
-		me.apiProperties.getReporter().postReport({
-			url: url,
-			params: jsonData
-		});
+    printTasks: function(){
+        var me = this;
+        var url, jsonData;
+        var allGoals = [];
+        me.goalsStore.each(function(rec){
+        
+            allGoals.push(rec.get('id'));
+        });
+        
+        
+        var allStrenghts = [];
+        me.strengthsStore.each(function(rec){
+        
+            allStrenghts.push(rec.get('id'));
+        });
+        
+        var allTasks = [];
+        
+        if (me.getSelectedTasks().length == 0) {
+            me.store.each(function(rec){
+                allTasks.push(rec.get('id'));
+            });
+        }
+        else {
+            var allTasks = me.getSelectedTasks();
+        }
+        var jsonData = {
+            "taskIds": allTasks,
+            "goalIds": allGoals,
+            "strengthIds": allStrenghts
+        };
+        
+        url = me.apiProperties.createUrl(me.personPrintTaskUrl);
+        
+        me.apiProperties.getReporter().postReport({
+            url: url,
+            params: jsonData
+        });
     },
     
     getTaskGoalCountNotificationMessage: function(){
-		var me=this;
-    	// if no tasks or goals have been added to the student's record
-		// then display a notification to first add tasks and goals before
-		// printing
-		var notificationMsg = "";
-		if ( me.store.getCount() < 1 )
-		{
-			notificationMsg += "This student has " + me.store.getCount() + " assigned tasks.";
-		}
-		
-		if ( me.goalsStore.getCount() < 1 )
-		{
-			notificationMsg += "This student has " + me.goalsStore.getCount() + " assigned goals.";
-		}
-		
-		return notificationMsg;
-    },
-		
-    getSelectedTasks: function(){
-    	var me=this;
-    	var activeTasksGrid = me.getActiveTasksGrid();
-		var completeTasksGrid = me.getCompleteTasksGrid();
-		var allTasksGrid = me.getAllTasksGrid();
-		var activeTaskIds = me.getSelectedIdsArray( activeTasksGrid.getView().getSelectionModel().getSelection() );
-		var completeTaskIds = me.getSelectedIdsArray( completeTasksGrid.getView().getSelectionModel().getSelection() );
-		var allTaskIds = me.getSelectedIdsArray( allTasksGrid.getView().getSelectionModel().getSelection() );
-		var taskIds = Ext.Array.merge( activeTaskIds, completeTaskIds, allTaskIds);
-		return taskIds;    	
+        var me = this;
+        // if no tasks or goals have been added to the student's record
+        // then display a notification to first add tasks and goals before
+        // printing
+        var notificationMsg = "";
+        if (me.store.getCount() < 1) {
+            notificationMsg += "This student has " + me.store.getCount() + " assigned tasks.";
+        }
+        
+        if (me.goalsStore.getCount() < 1) {
+            notificationMsg += "This student has " + me.goalsStore.getCount() + " assigned goals.";
+        }
+        
+        return notificationMsg;
     },
     
-    getSelectedGoals: function(){
-		var me=this;
-    	var goalsPanel = me.getGoalsPanel();
-		return me.getSelectedIdsArray( goalsPanel.getView().getSelectionModel().getSelection() );
+    getSelectedTasks: function(){
+        var me = this;
+        var allTasksGrid = me.getTasksPanel();
+        var taskIds = [];
+        var allTaskIds = me.getSelectedIdsArray(allTasksGrid.getView().getSelectionModel().getSelection());
+        var taskIds = Ext.Array.merge(allTaskIds);
+        return taskIds;
     },
+    
+    
     
     getSelectedIdsArray: function(arr){
-		var selectedIds = [];
-		Ext.each(arr, function(item, index) {
-			selectedIds.push( item.get('id') );
-		});
-		
-		return selectedIds;
-    },
-    
-    onAddTaskClick: function(button) {
-    	this.appEventsController.getApplication().fireEvent('addTask');
+        var selectedIds = [];
+        Ext.each(arr, function(item, index){
+            selectedIds.push(item.get('id'));
+        });
+        
+        return selectedIds;
     }
 });

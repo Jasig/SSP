@@ -20,7 +20,9 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	extend: 'Ext.Component',
 	mixins: ['Deft.mixin.Injectable'],
     inject: {
-    	colorsAllUnpagedStore: 'colorsAllUnpagedStore'
+    	colorsAllUnpagedStore: 'colorsAllUnpagedStore',
+		confidentialityLevelsAllUnpagedStore: 'confidentialityLevelsAllUnpagedStore',
+		formUtils: 'formRendererUtils'
     },
     
 	initComponent: function() {
@@ -42,8 +44,8 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
     
 	renderTaskName: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
-        strHtml += '<p>' + record.get('name').toUpperCase() + '</p>';
-		strHtml += '<p>' + record.get('description') + '</p>';
+        strHtml += '<p>' + record.get('name').toUpperCase() + ': ';
+		strHtml += record.get('description') + '</p>';
 		strHtml += '</div>';
 	    return strHtml;
 	},
@@ -51,11 +53,30 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	renderTaskDueDate: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
         strHtml += '<p>' + Ext.util.Format.date( record.get('dueDate') ,'m/d/Y') + '</p>';
-        strHtml += '<p>' + ((record.get('completedDate') != null) ? 'COMPLETE' : 'ACTIVE' ) + '</p>';
-		strHtml += '<p>' + record.get('confidentialityLevel').name.toUpperCase() + '<br/>' + record.getCreatedByPersonName().toUpperCase() + '</p>';
 		strHtml += '</div>';
 	    return strHtml;
 	},	
+	
+	renderTaskStatus: function(val, metaData, record) {
+		var strHtml = '<div style="white-space:normal !important;">';
+        strHtml += '<p>' + ((record.get('completedDate') != null) ? 'Complete' : 'InComplete' ) + '</p>';
+		strHtml += '</div>';
+	    return strHtml;
+	},
+	
+	renderTaskAuthor: function(val, metaData, record) {
+		var strHtml = '<div style="white-space:normal !important;">';
+        strHtml += '<p>' + record.getCreatedByPersonName() + '</p>';
+		strHtml += '</div>';
+	    return strHtml;
+	},
+	
+	renderTaskCFLevel: function(val, metaData, record) {
+		var strHtml = '<div style="white-space:normal !important;">';
+        strHtml += '<p>' + record.get('confidentialityLevel').name + '</p>';
+		strHtml += '</div>';
+	    return strHtml;
+	},
 	
 	renderGoalName: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
@@ -79,6 +100,8 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 		strHtml += '</div>';
 	    return strHtml;		
 	},
+	
+	
 
 	renderCreatedByDate: function(val, metaData, record) {
 	    return Ext.util.Format.date( record.get('createdDate'),'m/d/Y');		
@@ -221,6 +244,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 		var me = this; 
 		var colorsStore = me.colorsAllUnpagedStore;
 		colorsStore.clearFilter(true);
+		
 		var color = colorsStore.findRecord('id', val);
 		
 		if(color == null || color.data == null) {
@@ -236,6 +260,28 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 		strHtml += '</div>';
 		strHtml += '<div style="background-color:#' + hexCode + ';width:49%;float:right;">';
 		strHtml += '<p>&nbsp;</p>';
+		strHtml += '</div>';
+		strHtml += '</div>';
+		return strHtml;		
+	},
+	
+	renderConfidentialityLevel: function(val, metadata, record) {
+		var me = this; 
+		var confidentialityLevelsStore = me.confidentialityLevelsAllUnpagedStore;
+		confidentialityLevelsStore.clearFilter(true);
+		
+		var confidentialityLevel = confidentialityLevelsStore.findRecord('id', val.id);
+		
+		
+		if(confidentialityLevel == null) {
+			return '';
+		}
+		
+		
+		var confidentialityLevelName = confidentialityLevel.data.name;
+		var strHtml = '<div>';
+		strHtml += '<div style="float:left;width:90%">';
+		strHtml += confidentialityLevelName;
 		strHtml += '</div>';
 		strHtml += '</div>';
 		return strHtml;		

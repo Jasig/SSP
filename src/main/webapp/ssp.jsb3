@@ -1125,6 +1125,16 @@
                     "path": "/app/controller/tool/actionplan/"
                 },
                 {
+                    "clsName": "Ssp.controller.tool.actionplan.EmailActionPlanController",
+                    "name": "EmailActionPlanController.js",
+                    "path": "/app/controller/tool/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.actionplan.EmailAndPrintActionPlanViewController",
+                    "name": "EmailAndPrintActionPlanViewController.js",
+                    "path": "/app/controller/tool/actionplan/"
+                },
+                {
                     "clsName": "Ssp.model.external.AbstractExternal",
                     "name": "AbstractExternal.js",
                     "path": "/app/model/external/"
@@ -1687,6 +1697,16 @@
                     "path": "/app/view/tools/actionplan/"
                 },
                 {
+                    "clsName": "Ssp.view.tools.actionplan.EmailActionPlan",
+                    "name": "EmailActionPlan.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.actionplan.EmailAndPrintActionPlan",
+                    "name": "EmailAndPrintActionPlan.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
                     "clsName": "Ssp.view.tools.studentintake.StudentIntake",
                     "name": "StudentIntake.js",
                     "path": "/app/view/tools/studentintake/"
@@ -1902,6 +1922,11 @@
                     "path": "/app/model/"
                 },
                 {
+                    "clsName": "Ssp.model.PersonStrength",
+                    "name": "PersonStrength.js",
+                    "path": "/app/model/"
+                },
+                {
                     "clsName": "Ssp.model.tool.documents.StudentDocument",
                     "name": "StudentDocument.js",
                     "path": "/app/model/tool/documents/"
@@ -2069,6 +2094,11 @@
                 {
                     "clsName": "Ssp.store.Goals",
                     "name": "Goals.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.Strengths",
+                    "name": "Strengths.js",
                     "path": "/app/store/"
                 },
                 {

@@ -17,53 +17,122 @@
  * under the License.
  */
 Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
-	extend: 'Ext.form.Panel',
+	extend: 'Ext.grid.Panel',
 	alias : 'widget.displaystrengths',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.actionplan.DisplayStrengthsViewController',
     inject: {
-    	authenticatedPerson: 'authenticatedPerson'
+        appEventsController: 'appEventsController',
+        authenticatedPerson: 'authenticatedPerson',
+        columnRendererUtils: 'columnRendererUtils',
+        model: 'currentStrength',
+        store: 'strengthsStore',
+		confidentialityLevelsAllUnpagedStore: 'confidentialityLevelsAllUnpagedStore'
     },
     width: '100%',
-	height: '100%',
-	initComponent: function() {	
-		var me=this;
-		Ext.applyIf(me,{
-	        title: 'Strengths',
-			items:[{
-		        xtype:'form',
-		        layout:'anchor',
-		        items :[{
-		            xtype: 'textarea',
-		            anchor: '100%',
-		            height: 50,
-		            fieldLabel: 'Strengths',
-		            itemId: 'strengths',
-		            name: 'strengths'
-		        }]
-			}],
-			
-    	    dockedItems: [{
-		        dock: 'top',
-		        xtype: 'toolbar',
-		        items: [{
-		            tooltip: 'Save Strengths',
-		            text: 'Save',
-		            hidden: !me.authenticatedPerson.hasAccess('SAVE_STRENGTHS_BUTTON'),
-		            xtype: 'button',
-		            itemId: 'saveButton'
-		        },{
-        	    	xtype: 'label',
-        	    	html: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE,
-        	    	itemId: 'saveSuccessMessage',
-        	    	style: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE_STYLE,
-        	    	hidden: true
-        	    }]
-    	    }]
+    height: '100%',
+	autoScroll: true,
+    layout: 'fit',
+    itemId: 'strengthsPanel',
+    
+    initComponent: function(){
+        var me = this;
 		
-		});
-		
-		return me.callParent(arguments);
-	}
+		var cellEditor = Ext.create('Ext.grid.plugin.RowEditing', { 
+    							clicksToEdit: 2,
+    							listeners: {
+	    							cancelEdit: function(rowEditor, item){
+	    								var columns = rowEditor.grid.columns;
+	    								var record = rowEditor.context.record;
+	    								
+										if(record.get('id') == '' || record.get('id') == null || record.get('id') == undefined){
+											me.store.load();
+										}
+										
+	    								
+										
+										
+	    							}
+    							}
+    					});
+        
+        Ext.apply(me, {
+            plugins: cellEditor,
+			selType: 'rowmodel',
+            title: 'Strengths',
+            store: me.store,
+			viewConfig: {
+                markDirty: false
+            },
+            columns: [
+			{
+                header: 'Name',
+                flex: .25,
+                dataIndex: 'name',
+				field: {
+                    xtype: 'textfield',
+					fieldStyle: "margin-bottom:12px;"
+                }
+            }, {
+                header: 'Description',
+                flex: .50,
+                dataIndex: 'description',
+				field: {
+                    xtype: 'textfield',
+					fieldStyle: "margin-bottom:12px;"
+                }
+            }, {
+                header: 'Confidentiality',
+                dataIndex: 'confidentialityLevel',
+                renderer: me.columnRendererUtils.renderConfidentialityLevel,
+                required: true,
+                flex: .25,
+                field: {
+                    xtype: 'combo',
+                    store: me.confidentialityLevelsAllUnpagedStore,
+                    displayField: 'name',
+                    valueField: 'id',
+                    forceSelection: true
+                }
+            
+            }],
+            
+            dockedItems: [{
+                dock: 'top',
+                xtype: 'toolbar',
+				width: '100%',
+                items: [{
+                    tooltip: 'Add a Strength',
+                    text: 'Add Strength',
+                    hidden: !me.authenticatedPerson.hasAccess('ADD_STRENGTH_BUTTON'),
+                    xtype: 'button',
+                    itemId: 'addStrengthButton'
+                },
+				{
+					tooltip: 'Delete a Strength',
+                    text: 'Delete Strength',
+                    hidden: !me.authenticatedPerson.hasAccess('DELETE_STRENGTH_BUTTON'),
+                    xtype: 'button',
+                    itemId: 'deleteStrengthButton'
+				},
+				{
+                    xtype: 'tbspacer',
+                    width: '200'
+                },
+				 {
+                    xtype: 'emailandprintactionplan'
+                }]
+            }, {
+                xtype: 'toolbar',
+                dock: 'top',
+                items: [{
+                    xtype: 'label',
+                    text: 'Double-click to edit a strength'
+                }]
+            }]
+        });
+        
+        return me.callParent(arguments);
+    }
 });

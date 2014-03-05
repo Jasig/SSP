@@ -29,44 +29,76 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
     	model: 'currentTask',
         store: 'tasksStore'
     },
-    layout: 'auto',
+    layout: 'fit',
 	width: '100%',
     height: '100%',
-	minHeight: 200,
+	itemId: 'tasksPanel',
 	dueDateMsg: 'Task due dates are always interpreted in the institution\'s time zone.',
 	dueDateRenderer: function() {
 		var me = this;
 		return function(value,metaData,record) {
-			// http://www.sencha.com/forum/showthread.php?179016
 			metaData.tdAttr = 'data-qtip="' + me.dueDateMsg + '"';
 			return me.columnRendererUtils.renderTaskDueDate(value,metaData,record);
 		}
 	},
+	fullDescription: function() {
+		var me = this;
+		
+		return function(value,metaData,record) {
+			var fullDesc = record.get('description');
+			metaData.tdAttr = 'data-qtip="' + fullDesc + '"';
+			return me.columnRendererUtils.renderTaskName(value,metaData,record);
+		}
+	},
     initComponent: function(){
     	var me=this;
-    	var sm = Ext.create('Ext.selection.CheckboxModel');
-    	
+    	var sm = Ext.create('Ext.selection.CheckboxModel'
+		
+		/*,{
+			getHeaderConfig : function() {
+                var me = this;
+                return {
+                    isCheckerHd : true,
+                    text        : 'Select ',
+                    width       : '40',
+                    sortable    : false,
+                    draggable   : false,
+                    resizable   : false,
+                    hideable    : false,
+                    menuDisabled: true,
+                    dataIndex   : '',
+                    locked      : false
+                };
+            }
+		}*/
+		
+		);
     	Ext.apply(me,
     			{
     		        scroll: 'vertical',
     	    		store: me.store,    		
     	    		selModel: sm,
+					title: 'Tasks',
+					cls: 'tasksgrid',
+					/*
     	    		features: [{
 		    	        id: 'group',
 		    	        ftype: 'grouping',
 		    	        groupHeaderTpl: '{name}',
 		    	        depthToIndent: 0,
-		    	        hideGroupedHeader: false,
+		    	        hideGroupedHeader: true,
 		    	        enableGroupingMenu: false
-		    	    }],
+		    	    }],*/
 		
 		    	    columns: [{
 		    	        xtype:'actioncolumn',
-		    	        width:65,
+		    	        width:68,
 		    	        header: 'Action',
+						
 		    	        items: [{
 		    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
 		    	            tooltip: 'Edit Task',
+							//padding: '2 2 2 2',
 		    	            handler: function(grid, rowIndex, colIndex) {
 		    	            	var rec = grid.getStore().getAt(rowIndex);
 		    	            	var panel = grid.up('panel');
@@ -132,15 +164,28 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	            scope: me
 		    	        }]
 		    	    },{
+		    	        text: 'Challenge',
+		    	        flex: .20,
+		    	        sortable: true,
+		    	        dataIndex: 'group',
+						renderer: function(value, metaData, record, rowIndex, colIndex, store, view){
+	                        var tpl = new Ext.Template('<div class="wrappable-cell">{NAME}</div>');
+	                        
+	                        return tpl.apply({
+	                            NAME: record.get('group')
+	                        });
+	                    }
+		    	    },
+					{
 		    	        text: 'Description',
 		    	        flex: 1,
-		    	        tdCls: 'task',
 		    	        sortable: true,
 		    	        dataIndex: 'name',
-		    	        renderer: me.columnRendererUtils.renderTaskName
+		    	        renderer: me.fullDescription(),
+						
 		    	    },{
 		    	        header: 'Due Date',
-		    	        width: 150,
+		    	        width: 80,
 		    	        dataIndex: 'dueDate',
 		    	        renderer: me.dueDateRenderer(),
 						listeners: {
@@ -151,7 +196,82 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 								});
 							}
 						}
-		    	    }]
+		    	    },
+					{
+		    	        text: 'Status',
+		    	        width: 80,
+		    	        sortable: true,
+		    	        dataIndex: 'completedDate',
+		    	        renderer: me.columnRendererUtils.renderTaskStatus
+		    	    },
+					{
+		    	        text: 'Author',
+		    	        flex: .20,
+		    	        sortable: true,
+		    	        dataIndex: 'name',
+		    	        renderer: me.columnRendererUtils.renderTaskAuthor
+		    	    },
+					{
+		    	        text: 'Confidentiality',
+		    	        flex: .20,
+		    	        sortable: true,
+		    	        dataIndex: 'name',
+		    	        renderer: me.columnRendererUtils.renderTaskCFLevel
+		    	    },
+					
+					],
+					dockedItems: [{
+                            dock: 'top',
+                            xtype: 'toolbar',
+                            items: [{
+                                text: 'Select All',
+                                xtype: 'button',
+                                itemId: 'selectAllTaskButton'
+                            }, {
+                                tooltip: 'Add a Task',
+                                text: 'Add Task',
+                                hidden: !me.authenticatedPerson.hasAccess('ADD_TASK_BUTTON'),
+                                xtype: 'button',
+                                itemId: 'addTaskButton'
+                            }, {
+                                xtype: 'emailandprintactionplan'
+                            }, {
+                                xtype: 'tbspacer',
+                                flex: .50
+                            }, 
+							{
+								xtype: 'label',
+								text: 'Show Only:',
+								padding: '5 10 5 5'
+							},{
+                                xtype: 'checkbox',
+                                boxLabel: 'Tasks I created',
+                                hidden: !me.authenticatedPerson.hasAccess('FILTER_TASKS_BY_AUTHENTICATED_USER_CHECKBOX'),
+                                itemId: 'filterTasksBySelfCheck'
+                            },
+							{
+                                xtype: 'tbspacer',
+                                width: 10
+                            }, 
+							{
+                                xtype: 'checkbox',
+                                boxLabel: 'Incomplete Tasks',
+                                //hidden: !me.authenticatedPerson.hasAccess('FILTER_TASKS_BY_AUTHENTICATED_USER_CHECKBOX'),
+                                itemId: 'filterTasksByInCompleteCheck'
+                            },
+							{
+                                xtype: 'tbspacer',
+                                flex: .05
+                            }
+							]
+                        }, {
+                            xtype: 'toolbar',
+                            dock: 'top',
+                            items: [{
+                                xtype: 'label',
+                                text: 'By default, all items are included in the Print and Email functions. Select items to Print or Email individual items'
+                            }]
+                        }]
     	
 
     			});

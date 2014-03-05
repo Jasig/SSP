@@ -280,3 +280,27 @@ background:#ffff00 !important;
 	
 }
 
+.tasksgrid .x-column-header-checkbox .x-column-header-text {
+display: none;
+}
+
+.tasksgrid .x-grid-cell-inner {
+    overflow: hidden;
+    padding: 3px 2px 5px;
+    white-space: nowrap;
+	height: 42px;
+	
+ }
+ .tasksgrid .x-grid-row .x-grid-cell-special {
+ 	background-color: transparent;
+	background-image: none;
+ }
+ 
+ .tasksgrid .wrappable-cell {
+    white-space: normal;
+    word-wrap: break-word !important;
+}
+ 
+ 
+
+

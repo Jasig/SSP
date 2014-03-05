@@ -16,13 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.store.Tasks', {
+Ext.define('Ssp.store.Strengths', {
     extend: 'Ext.data.Store',
-    model: 'Ssp.model.tool.actionplan.TaskGroup',
+    model: 'Ssp.model.PersonStrength',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties'
-    },   
+    }, 
 	constructor: function(){
         Ext.apply(this, {
                 proxy: this.apiProperties.getProxy(''),
@@ -31,8 +31,8 @@ Ext.define('Ssp.store.Tasks', {
                 autoSync: false
             }
         );
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('personTaskGroup')
-		});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('personStrength')});
         return this.callParent(arguments);
-    }
+    }   
+	
 });
