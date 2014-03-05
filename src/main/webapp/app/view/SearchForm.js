@@ -27,8 +27,8 @@ Ext.define('Ssp.view.SearchForm',{
      	appEventsController: 'appEventsController',
     	programStatusesStore: 'programStatusesStore',
         coachesStore: 'coachesStore',
-        planStatusStore: 'planStatusStore',  
-        financialAidSAPStatus: 'financialAidSAPStatus',
+        planStatusStore: 'planStatusStore',
+        sapStatusesStore: 'sapStatusesActiveUnpagedStore',
         mapStatusStore: 'mapStatusStore',
         currentlyRegisteredStore: 'currentlyRegisteredStore',
         programsStore: 'programsStore',
@@ -223,10 +223,10 @@ Ext.define('Ssp.view.SearchForm',{
                     fieldLabel: 'Fin Aid SAP Status',
                     width: 100,
                     emptyText: 'Any',
-                    name: 'financialAidStatus',
-                    store: me.financialAidSAPStatus,
+                    name: 'financialAidSapStatusCode',
+                    store: me.sapStatusesStore,
    		   		    valueField: 'code',
-		   		    displayField: 'displayValue'                      
+		   		    displayField: 'name'
                 },     
                 {
 		   		    xtype: 'combobox',

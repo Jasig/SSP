@@ -1322,7 +1322,15 @@ Ext.onReady(function(){
 						},
 						singleton: true
 					},
-					racesStore: {
+					racesAllStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.Races', {
+								extraParams: {status: "ALL"}
+							});
+						},
+						singleton: true
+					},
+					racesAllUnpagedStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Races', {
 							     extraParams: {status: "ALL", limit: "-1"}
@@ -1330,15 +1338,39 @@ Ext.onReady(function(){
 					    },
 					    singleton: true
 					},	
-					sapStatusesStore: {
+					sapStatusesAllStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.SapStatuses', {
-							     extraParams: {status: "ALL", limit: "-1"}
+							     extraParams: {status: "ALL"}
 							 });
 					    },
 					    singleton: true
 					},
-					financialAidFilesStore: {
+					sapStatusesAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.SapStatuses', {
+								extraParams: {status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					},
+					sapStatusesActiveUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.SapStatuses', {
+								extraParams: {status: "ACTIVE", limit: "-1"}
+							});
+						},
+						singleton: true
+					},
+					financialAidFilesAllStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.FinancialAidFiles', {
+								extraParams: {status: "ALL"}
+							});
+						},
+						singleton: true
+					},
+					financialAidFilesAllUnpagedStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.FinancialAidFiles', {
 							     extraParams: {status: "ALL", limit: "-1"}

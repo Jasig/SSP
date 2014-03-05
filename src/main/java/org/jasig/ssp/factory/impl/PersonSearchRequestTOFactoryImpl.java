@@ -79,7 +79,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			ProgramStatus programStatus = getProgramStatusDao().get(to.getProgramStatus());
 			model.setProgramStatus(programStatus);
 		}
-		model.setSapStatus(to.getSapStatus());
+		model.setSapStatusCode(to.getSapStatusCode());
 		model.setStudentId(to.getStudentId());
 		model.setPlanStatus(to.getPlanStatus());
 		model.setMyCaseload(to.getMyCaseload());
@@ -110,7 +110,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,
-			String sapStatus, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans,Date birthDate) throws ObjectNotFoundException {
+			String sapStatusCode, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans,Date birthDate) throws ObjectNotFoundException {
 		PersonSearchRequestTO to = new PersonSearchRequestTO();
 		to.setStudentId(studentId);
 		to.setProgramStatus(programStatus == null ? null : UUID.fromString(programStatus));
@@ -121,7 +121,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		to.setGpaEarnedMin(gpaEarnedMin);
 		to.setGpaEarnedMax(gpaEarnedMax);
 		to.setCurrentlyRegistered(currentlyRegistered);
-		to.setSapStatus(sapStatus);
+		to.setSapStatusCode(sapStatusCode);
 		to.setMapStatus(mapStatus);
 		to.setPlanStatus(planStatus);
 		to.setMyCaseload(myCaseload);
