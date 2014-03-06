@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.impl; // NOPMD
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
@@ -30,8 +31,6 @@ import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
 import javax.mail.internet.MimeMessage;
 import javax.validation.constraints.NotNull;
-
-import com.google.common.collect.Lists;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
@@ -47,7 +46,6 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.util.transaction.WithTransaction;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -58,9 +56,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
 
 /**
  * Message service implementation for sending e-mails (messages) to various
@@ -337,6 +336,20 @@ public class MessageServiceImpl implements MessageService {
 		final EmailValidator emailValidator = EmailValidator.getInstance();
 		return emailValidator.isValid(email);
 	}
+	
+	/**
+	 * Validate e-mail address via {@link EmailValidator}.
+	 * 
+	 * @param email
+	 *            E-mail address to validate
+	 * @return True if the e-mail is valid
+	 */
+	protected boolean validateEmails(final List<String> emails) {
+		final EmailValidator emailValidator = EmailValidator.getInstance();
+		for(String email:emails)
+			if( !emailValidator.isValid(email)) return false;
+		return true;
+	}
 
 	@Override
 	@Transactional(readOnly = false)
@@ -362,16 +375,26 @@ public class MessageServiceImpl implements MessageService {
 				mimeMessageHelper.setReplyTo(message.getSender()
 						.getEmailAddressWithName());
 			}
+			
+			if (message.getRecipient() != null && 
+					!validateEmails(message.getRecipient().getEmailAddresses())) {
+				throw new SendFailedException("A Recipient Email Address '"
+						+ StringUtils.join(message.getRecipient().getEmailAddresses(),", ") + "' is invalid");
+			}
+			else if (!validateEmail(message.getRecipientEmailAddress())) {
+				throw new SendFailedException("Recipient Email Address '"
+						+ message.getRecipientEmailAddress() + "' is invalid");
+			}
+			
 			//As per SSP-693 we set the configured BCC on all outbound messages
-			String configBCC = getBcc();
+			String configBCC = getBcc(); 
 			if(StringUtils.isNotBlank(configBCC))
 			{
 				mimeMessageHelper.addBcc(configBCC);
 			}
-			if ( message.getRecipient() != null && 
-					StringUtils.isNotBlank(message.getRecipient().getPrimaryEmailAddress() ) 
-					) { // NOPMD by jon.adams			{
-					mimeMessageHelper.setTo(message.getRecipient().getEmailAddressWithName());
+			if ( message.getRecipient() != null && message.getRecipient().hasEmailAddresses()) { // NOPMD by jon.adams			{
+				    List<String> addresseses = message.getRecipient().getEmailAddressesWithName();
+					mimeMessageHelper.setTo(addresseses.toArray(new String[addresseses.size()]));
 			} else if ( StringUtils.isNotBlank(message.getRecipientEmailAddress()) ) { // NOPMD
 				mimeMessageHelper.setTo(message.getRecipientEmailAddress());
 			} else {
@@ -391,16 +414,6 @@ public class MessageServiceImpl implements MessageService {
 				return false;
 			}
 
-			
-			if (message.getRecipient() != null && 
-					!validateEmail(message.getRecipient().getPrimaryEmailAddress())) {
-				throw new SendFailedException("Recipient Email Address '"
-						+ message.getRecipient().getPrimaryEmailAddress() + "' is invalid");
-			}
-			else if (!validateEmail(message.getRecipientEmailAddress())) {
-				throw new SendFailedException("Recipient Email Address '"
-						+ message.getRecipientEmailAddress() + "' is invalid");
-			}
 			String carbonCopy = message.getCarbonCopy();
 			if (!StringUtils.isEmpty(carbonCopy)) { // NOPMD
 				try {

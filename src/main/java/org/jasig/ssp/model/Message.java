@@ -138,8 +138,8 @@ final public class Message
 
 	public void setRecipient(final Person recipient) {
 		this.recipient = recipient;
-		if (recipient != null) {
-			recipientEmailAddress = recipient.getPrimaryEmailAddress();
+		if (recipient != null && recipient.hasEmailAddresses() && recipient.getEmailAddresses().size() > 0) {
+			recipientEmailAddress = recipient.getEmailAddresses().get(0);
 		}
 	}
 
