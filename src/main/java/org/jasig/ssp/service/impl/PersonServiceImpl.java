@@ -57,7 +57,8 @@ import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
-import org.jasig.ssp.transferobject.EmailStudentRequestTO;
+import org.jasig.ssp.transferobject.form.EmailAddress;
+import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
@@ -807,9 +808,9 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public boolean emailStudent(EmailStudentRequestTO emailRequest) throws ObjectNotFoundException, ValidationException {
+	public boolean emailStudent(EmailStudentRequestForm emailRequest) throws ObjectNotFoundException, ValidationException {
 		
-		validateInput(emailRequest);		
+		validateInput(emailRequest);
 		
 		Message message = buildAndSendStudentEmail(emailRequest);
 		
@@ -820,7 +821,7 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	private void buildJournalEntryIfNecessary(
-			EmailStudentRequestTO emailRequest, Message message)
+			EmailStudentRequestForm emailRequest, Message message)
 			throws ObjectNotFoundException, ValidationException {
 		if(emailRequest.getCreateJournalEntry())
 		{
@@ -849,7 +850,7 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	private String buildJournalEntryCommentFromEmail(
-			EmailStudentRequestTO emailRequest, Message message) {
+			EmailStudentRequestForm emailRequest, Message message) {
 		StringBuilder journalEntryCommentBuilder = new StringBuilder();
 		String EOL = System.getProperty("line.separator");
 		journalEntryCommentBuilder.append("FROM: " + message.getSender().getFullName() + EOL);
@@ -867,108 +868,40 @@ public class PersonServiceImpl implements PersonService {
 		return journalEntryCommentBuilder.toString();
 	}
 
-	private void validateInput(EmailStudentRequestTO emailRequest) {
-		if(emailRequest.getStudentId() == null)
-		{
-			throw new IllegalArgumentException("Must provide a student Id");
-		}
-		if(validateAddresses(emailRequest))
-		{
-			throw new IllegalArgumentException("Must enter at least one email address");
-		}
-		if(org.apache.commons.lang.StringUtils.isBlank(emailRequest.getEmailSubject()))
-		{
-			throw new IllegalArgumentException("Email subject must be provided");
-		}
-		if(org.apache.commons.lang.StringUtils.isBlank(emailRequest.getEmailBody()))
-		{
-			throw new IllegalArgumentException("Email body must be provided");
-		}
-	}
+	
 
-	private Message buildAndSendStudentEmail(EmailStudentRequestTO emailRequest)
+	private Message buildAndSendStudentEmail(EmailStudentRequestForm emailRequest)
 			throws ObjectNotFoundException {
 		SubjectAndBody subjectAndBody = new SubjectAndBody(emailRequest.getEmailSubject(), emailRequest.getEmailBody());
-		
-		String toAddress = null;
-		
-		String ccString = null;
-		
-		//If the primary email is not provided then secondary email gets promoted to the 'to' address
-		//If primary and secondary email not provided then the first alternate email gets promoted
-		if(org.apache.commons.lang.StringUtils.isNotBlank(emailRequest.getPrimaryEmail()))
-		{
-			toAddress = emailRequest.getPrimaryEmail();
-			ccString = buildCCString(emailRequest.getSecondaryEmail(),emailRequest.getAdditionalEmail());
-		}
-		else
-		if(org.apache.commons.lang.StringUtils.isNotBlank(emailRequest.getSecondaryEmail()))
-		{
-			toAddress = emailRequest.getSecondaryEmail();
-			ccString = buildCCString(null,emailRequest.getAdditionalEmail());
-		}
-		else
-		{
-			String[] addresses = emailRequest.getAdditionalEmail().split(",");
-			int count =0;
-			StringBuilder builder = new StringBuilder();
-			for (String address : addresses) {
-				if(count == 0)
-				{
-					toAddress = address;
-				}
-				else
-				{
-					builder.append(address.trim());
-					builder.append(",");
-				}
-				count++;
-			}
-			if(count > 1)
-			{
-				builder.deleteCharAt(builder.lastIndexOf(","));
-			}
-			ccString = builder.toString().trim();
-		}
-		return messageService.createMessage(toAddress, ccString, subjectAndBody);
+		EmailAddress addresses = emailRequest.getValidEmailAddresses();
+		return messageService.createMessage(addresses.getTo(), addresses.getCc(), subjectAndBody);
 	}
-
-	private boolean validateAddresses(EmailStudentRequestTO emailRequest) {
-		return org.apache.commons.lang.StringUtils.isBlank(emailRequest.getPrimaryEmail()) && 
-				org.apache.commons.lang.StringUtils.isBlank(emailRequest.getSecondaryEmail()) && 
-				org.apache.commons.lang.StringUtils.isBlank(emailRequest.getAdditionalEmail());
-	} 
 	
-	private String buildCCString(String secondaryEmailAddress,
-			String alternateEmailAddress) 
-	{
-		StringBuilder builder = new StringBuilder();
-		if(org.apache.commons.lang.StringUtils.isNotBlank(secondaryEmailAddress))
+	private void validateInput(EmailStudentRequestForm emailRequest) {
+		StringBuilder validationMsg = new StringBuilder();
+		String EOL = System.getProperty("line.separator");
+		if(!emailRequest.hasStudentId())
 		{
-			builder.append(secondaryEmailAddress);
-			
-			if(org.apache.commons.lang.StringUtils.isNotBlank(alternateEmailAddress))
-			{
-				String[] addresses = alternateEmailAddress.split(",");
-				for (String address : addresses) {
-					builder.append(",");
-					builder.append(address.trim());
-				}
-			}
-
+			validationMsg.append("Must provide a student Id"+EOL);
 		}
-		else
+		if(!emailRequest.hasEmailSubject())
 		{
-			if(org.apache.commons.lang.StringUtils.isNotBlank(alternateEmailAddress))
-			{
-				String[] addresses = alternateEmailAddress.split(",");
-				for (String address : addresses) {
-					builder.append(address);
-					builder.append(",");
-				}
-				builder.deleteCharAt(builder.lastIndexOf(","));
-			}
+			validationMsg.append("Email subject must be provided"+EOL);
 		}
-		return builder.toString();
+		if(!emailRequest.hasEmailBody())
+		{
+			validationMsg.append("Email body must be provided"+EOL);
+		}
+		
+		if(!emailRequest.hasValidPrimaryAddress()){
+			validationMsg.append("At least one valid email address must be included."+EOL);
+		}
+		
+		String validation = validationMsg.toString();
+		if(org.apache.commons.lang.StringUtils.isNotBlank(validation)){
+			throw new IllegalArgumentException(validation);
+		}
 	}
+
+
 }

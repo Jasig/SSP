@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.SessionFactory;
 import org.jasig.ssp.dao.MessageDao;
 import org.jasig.ssp.model.ObjectStatus;
@@ -112,9 +113,6 @@ public class PersonTaskControllerIntegrationTest {
 	public void testControllerEmail() throws ObjectNotFoundException,
 			ValidationException {
 		// arrange
-		final List<UUID> recipientIds = Lists.newArrayList();
-		recipientIds.add(PERSON_ID);
-
 		final List<String> recipientEmailAddresses = Lists.newArrayList();
 		recipientEmailAddresses.add(TEST_EMAIL);
 
@@ -124,8 +122,7 @@ public class PersonTaskControllerIntegrationTest {
 		goalIds.add(GOAL_ID);
 
 		final EmailPersonTasksForm emailForm = new EmailPersonTasksForm();
-		emailForm.setRecipientIds(recipientIds);
-		emailForm.setRecipientEmailAddresses(recipientEmailAddresses);
+		emailForm.setPrimaryEmail(StringUtils.join(recipientEmailAddresses, ","));
 		emailForm.setTaskIds(taskIds);
 		emailForm.setGoalIds(goalIds);
 
@@ -157,7 +154,7 @@ public class PersonTaskControllerIntegrationTest {
 		goalIds.add(GOAL_ID);
 
 		final EmailPersonTasksForm emailForm = new EmailPersonTasksForm();
-		emailForm.setRecipientEmailAddresses(recipientEmailAddresses);
+		emailForm.setPrimaryEmail(StringUtils.join(recipientEmailAddresses, ","));
 		emailForm.setTaskIds(taskIds);
 		emailForm.setGoalIds(goalIds);
 
@@ -169,7 +166,7 @@ public class PersonTaskControllerIntegrationTest {
 
 		// try with empty list
 		final List<UUID> recipientIds = Lists.newArrayList();
-		emailForm.setRecipientIds(recipientIds);
+		emailForm.setPrimaryEmail(StringUtils.join(recipientEmailAddresses, ","));
 		final boolean result2 = controller.email(PERSON_ID, emailForm);
 		assertTrue("Send e-mail should have returned success.", result2);
 	}
