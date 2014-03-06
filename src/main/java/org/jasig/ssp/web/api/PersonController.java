@@ -18,8 +18,12 @@
  */
 package org.jasig.ssp.web.api;
 
+import java.util.SortedSet;
+import java.util.UUID;
+
+import javax.validation.Valid;
+
 import org.apache.commons.lang.NotImplementedException;
-import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonExistsException;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
@@ -34,8 +38,7 @@ import org.jasig.ssp.transferobject.PersonLiteTO;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
-import org.jasig.ssp.transferobject.EmailStudentRequestTO;
-import org.jasig.ssp.util.collections.Pair;
+import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.util.transaction.WithTransaction;
@@ -51,13 +54,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.validation.Valid;
-
-import java.io.Serializable;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.UUID;
 
 /**
  * Service methods for manipulating data about people in the system.
@@ -158,7 +154,7 @@ public class PersonController extends AbstractBaseController {
 	@PreAuthorize(Permission.SECURITY_PERSON_WRITE)
 	public @ResponseBody
 	boolean emailStudent(
-			final @RequestBody EmailStudentRequestTO emailRequest) throws ObjectNotFoundException, ValidationException {
+			final @RequestBody EmailStudentRequestForm emailRequest) throws ObjectNotFoundException, ValidationException {
 		service.emailStudent(emailRequest);
 		return true;
 	}

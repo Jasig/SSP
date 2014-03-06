@@ -47,17 +47,18 @@ import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.AbstractRestrictedPersonAssocAuditableService;
 import org.jasig.ssp.service.MessageService;
-import org.jasig.ssp.service.TaskMessageEnqueueService;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.TaskMessageEnqueueService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
-import org.jasig.ssp.transferobject.EmailStudentRequestTO;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.StrengthTO;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.form.EmailAddress;
 import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
+import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -309,8 +310,11 @@ public class TaskServiceImpl
 			final List<Goal> goals, final List<Strength> strengths, final Person student,
 			final EmailPersonTasksForm form)
 			throws ObjectNotFoundException {
-		
-		String[] addresses = getEmailAddresses(form);
+		if(!form.hasValidPrimaryAddress()){
+			throw new IllegalArgumentException("Must enter at least one email address");
+		}
+
+		EmailAddress addresses = form.getValidEmailAddresses();
 		final List<TaskTO> taskTOs = TaskTO.toTOList(tasks);
 		final List<GoalTO> goalTOs = GoalTO.toTOList(goals);
 		final List<StrengthTO> strengthTOs = StrengthTO.toTOList(strengths);
@@ -319,7 +323,7 @@ public class TaskServiceImpl
 				.createActionPlanMessage(student, taskTOs, goalTOs, strengthTOs);
 
 
-		messageService.createMessage(addresses[0], addresses[1], subjAndBody);
+		messageService.createMessage(addresses.getTo(), addresses.getCc(), subjAndBody);
 	}
 	
 	@Override
@@ -327,7 +331,7 @@ public class TaskServiceImpl
 			final Person student,
 			final String emailAdresses)
 			throws ObjectNotFoundException {
-		if(StringUtils.isBlank(emailAdresses)){
+		if(!EmailStudentRequestForm.hasValidEmailAddress(emailAdresses, true)){
 			throw new IllegalArgumentException("Must enter at least one email address");
 		}
 		final List<TaskTO> taskTOs = TaskTO.toTOList(tasks);
@@ -499,62 +503,6 @@ public class TaskServiceImpl
 		}
 		return tasks;
 	}
-	private String[] getEmailAddresses(EmailPersonTasksForm emailRequest)
-			throws IllegalArgumentException {
-		
-		String toAddress = null;
-		
-		StringBuilder ccBuilder = new StringBuilder("");
-		
-		List<String> addressSet = new ArrayList<String>();
-		if(org.apache.commons.lang.StringUtils.isNotBlank(emailRequest.getPrimaryEmail()) && emailRequest.getSendToPrimaryEmail())
-			addressSet.add(emailRequest.getPrimaryEmail());
-		if(org.apache.commons.lang.StringUtils.isNotBlank(emailRequest.getSecondaryEmail()) && emailRequest.getSendToSecondaryEmail())
-			addressSet.add(emailRequest.getSecondaryEmail());
-		if(org.apache.commons.lang.StringUtils.isNotBlank(emailRequest.getCoachEmail()) && emailRequest.getSendToCoachEmail())
-			addressSet.add(emailRequest.getCoachEmail());
-		if(org.apache.commons.lang.StringUtils.isNotBlank(emailRequest.getAdditionalEmail()) && emailRequest.getSendToAdditionalEmail())
-			addressSet.add(emailRequest.getAdditionalEmail());
-		
-		if(addressSet.size() == 0){
-			throw new IllegalArgumentException("Must enter at least one email address");
-		}
-		String prefix = "";
-		for(String addressCommaDelimited: addressSet){
-			String[] addresses = addressCommaDelimited.split(",");
-			for (String address : addresses) {
-				if(!isValidEmailAddress(address, true)){
-					//TODO potentially at this point an IllegalArgument Exception should be thrown.
-					LOGGER.error("Sending task email, address not valid: " + address);
-					continue;
-				}
-				if(org.apache.commons.lang.StringUtils.isBlank(toAddress)){
-					toAddress = address.trim();
-					continue;
-				}
-				ccBuilder.append(prefix);
-				ccBuilder.append(address.trim());
-				prefix = ", ";
-			}
-			
-		}
-		if(org.apache.commons.lang.StringUtils.isBlank(toAddress)){
-			throw new IllegalArgumentException("No valid email address found please enter at least one valid email address");
-		}
-		return new String[]{toAddress, ccBuilder.toString().trim()};
-	}
 	
-	private Boolean isValidEmailAddress(String address, Boolean strict){
-		if(org.apache.commons.lang.StringUtils.isBlank(address))
-			return false;
-		if(address.length() > 254)
-			return false;
-	    String stricterFilterString = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-	    String laxString = ".+@.+\\.[A-Za-z]{2}[A-Za-z]*";
-	    String emailRegex = strict ? stricterFilterString : laxString;
-	    java.util.regex.Pattern p = java.util.regex.Pattern.compile(emailRegex);
-	    java.util.regex.Matcher m = p.matcher(address);
-	    return m.matches();
-	}
 
 }
