@@ -265,6 +265,40 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 			                }]
 
 			            },{
+			                xtype: 'fieldset',
+			                border: 0,
+			                padding: '0 0 0 0',
+			                title: '',
+			                defaultType: 'displayfield',
+			                layout: 'vbox',
+			                width: 80,
+							itemId: 'mapStatusFieldSet',
+			                cls: 'center-align',
+							hidden:  me.currentMapPlan.get("isTemplate") == true,
+			                defaults: {
+			                    anchor: '100%'
+			                },
+			                items: [{
+			                    tooltip:  'View of Student\'s Map Status Detail',
+			                    width: 30,
+			                    height: 30,
+			                    cls: 'studentHistoryIcon',
+			                    xtype: 'button',
+			                    itemId: 'showMapStatus',
+			                    align: 'center',
+			                    hidden:  me.currentMapPlan.get("isTemplate") == true,
+			                    padding: '0 0 0 0'
+			                    
+			                }, {
+			                    xtype: 'label',
+								itemId: 'showMapStatusLabel',
+								width: 125,
+								hidden:  me.currentMapPlan.get("isTemplate") == true,
+			                    text: 'Map Report'
+
+			                }]
+
+			            },{
                 xtype: 'tbspacer',
                 flex: 1
             }, {

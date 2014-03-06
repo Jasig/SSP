@@ -2293,6 +2293,8 @@
 				<option value="">${not_applicable}</option>
 				<option value="ON">On Plan</option>
 				<option value="OFF">Off Plan</option>
+				<option value="ON_TRACK_SUBSTITUTIO">On Track Substitution</option>
+				<option value="ON_TRACK_SEQUENCE">On Track Sequence</option>				
 				</select>
 		</div>
 		<div class="ea-label">

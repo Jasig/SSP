@@ -21,15 +21,21 @@ package org.jasig.ssp.service;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jasig.ssp.dao.external.ExternalSubstitutableCourseDao;
 import org.jasig.ssp.model.MapStatusReport;
+import org.jasig.ssp.model.MapStatusReportCourseDetails;
+import org.jasig.ssp.model.MapStatusReportSubstitutionDetails;
+import org.jasig.ssp.model.MapStatusReportTermDetails;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.ExternalSubstitutableCourse;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.transferobject.reports.MapStatusReportCoachEmailInfo;
 import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummaryDetail;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 public interface MapStatusReportService extends PersonAssocAuditableService<MapStatusReport>  {
 
@@ -52,5 +58,15 @@ public interface MapStatusReportService extends PersonAssocAuditableService<MapS
 	List<MapStatusReportCoachEmailInfo> getCoachesWithOffPlanStudent();
 	
 	List<MapStatusReportPerson> getOffPlanPlansForOwner(Person coach);
+
+	List<MapStatusReportCourseDetails> getAllCourseDetailsForPerson(
+			Person person);
+
+	List<MapStatusReportTermDetails> getAllTermDetailsForPerson(Person person);
+
+	List<MapStatusReportSubstitutionDetails> getAllSubstitutionDetailsForPerson(
+			Person person);
+
+	void oldReportForStudent(UUID personId);
 
 }

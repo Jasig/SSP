@@ -16,18 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.transferobject.external;
+package org.jasig.ssp.factory.external;
 
 import org.jasig.ssp.model.MapStatusReport;
+import org.jasig.ssp.transferobject.external.MapStatusReportLiteTO;
 
-public class PersonMapPlanStatusReportTO extends AbstractPlanStatusReportTO implements
-		ExternalDataTO<MapStatusReport> {
-	
-	@Override
-	public void from(MapStatusReport model) {
-		this.setSchoolId(model.getPerson().getSchoolId());
-		this.setStatus(model.getPlanStatus());
-		this.setStatusReason(model.getPlanNote());		
-	}
+public interface MapStatusReportLiteTOFactory extends
+		ExternalTOFactory<MapStatusReportLiteTO, MapStatusReport> {
 
 }

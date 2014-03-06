@@ -16,12 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.factory.external;
+package org.jasig.ssp.factory.reference;
 
+import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.model.MapStatusReport;
-import org.jasig.ssp.transferobject.external.PersonMapPlanStatusReportTO;
+import org.jasig.ssp.transferobject.MapStatusReportTO;
 
-public interface PersonMapStatusReportTOFactory extends
-		ExternalTOFactory<PersonMapPlanStatusReportTO, MapStatusReport> {
-
+public interface MapStatusReportTOFactory extends
+		TOFactory<MapStatusReportTO, MapStatusReport> {
 }

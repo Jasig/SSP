@@ -25,6 +25,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -39,7 +40,7 @@ public class MapStatusReportTermDetails extends AbstractAuditable implements Aud
 	private static final long serialVersionUID = -8908014739182627558L;
 
 	@NotNull
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "report_id", updatable = false, nullable = false)
 	private MapStatusReport report;
 	

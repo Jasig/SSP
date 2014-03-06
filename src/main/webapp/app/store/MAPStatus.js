@@ -32,7 +32,9 @@ Ext.define('Ssp.store.MAPStatus', {
     load: function() {
         var me=this;
         var values = [{ displayValue:'On Plan', code: 'ON_PLAN', booleanValue: true },
-                      { displayValue:'Off Plan', code: 'OFF_PLAN', booleanValue: false }
+                      { displayValue:'Off Plan', code: 'OFF_PLAN', booleanValue: false },
+                      { displayValue:'On Track Sequence', code: 'ON_TRACK_SEQUENCE', booleanValue: true },
+                      { displayValue:'On Track Substitution', code: 'ON_TRACK_SUBSTITUTIO', booleanValue: false }                      
         ];
         // set the model
         me.loadData( values );

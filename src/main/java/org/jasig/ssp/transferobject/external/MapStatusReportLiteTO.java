@@ -16,33 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-/**
- * 
- */
-package org.jasig.ssp.model.external;
+package org.jasig.ssp.transferobject.external;
 
-/**
- * @author jamesstanley
- *
- */
-public enum PlanStatus {
-	ON("On Plan"),
-	OFF("Off Plan"),
-	ON_TRACK_SUBSTITUTIO("On Track Substitution"),
-	ON_TRACK_SEQUENCE("On Track Sequence");
+import org.jasig.ssp.model.MapStatusReport;
+
+public class MapStatusReportLiteTO extends AbstractPlanStatusReportTO implements
+		ExternalDataTO<MapStatusReport> {
 	
-	private String displayName;
-
-	private PlanStatus(String displayName)
-	{
-		this.setDisplayName(displayName);
+	@Override
+	public void from(MapStatusReport model) {
+		this.setSchoolId(model.getPerson().getSchoolId());
+		this.setStatus(model.getPlanStatus());
+		this.setStatusReason(model.getPlanNote());		
 	}
 
-	public String getDisplayName() {
-		return displayName;
-	}
-
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
-	}
 }

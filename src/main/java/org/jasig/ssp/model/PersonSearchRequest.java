@@ -20,24 +20,17 @@ package org.jasig.ssp.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.reference.ProgramStatus;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonProgramStatusService;
-import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
 import org.jasig.ssp.web.api.PersonSearchController;
-import org.jasig.ssp.web.api.validation.ValidationException;
 
 /**
  * PersonSearchResult model for use by {@link PersonSearchResultTO} and then
  * {@link PersonSearchController}.
  */
 public class PersonSearchRequest {
-
+	
 	
 	public static final String PLAN_STATUS_ACTIVE = "ACTIVE";
 	
@@ -47,6 +40,9 @@ public class PersonSearchRequest {
 	
 	public static final String MAP_STATUS_OFF_PLAN = "OFF_PLAN";
 
+	public static final String MAP_STATUS_ON_TRACK_SUBSTITUTIO = "ON_TRACK_SUBSTITUTIO";
+	
+	public static final String MAP_STATUS_ON_TRACK_SEQUENCE = "ON_TRACK_SEQUENCE";
 	
 	// id of the student
 	private String studentId;

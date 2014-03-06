@@ -64,4 +64,9 @@ public class TermServiceImpl extends AbstractExternalReferenceDataService<Term>
 	public List<Term> facetSearch(String tag, String programCode) {
 		return dao.facetSearch(tag,programCode);
 	}
+	
+	@Override
+	public Term getTermWithRegistrationWindowOpenIfAny() {
+		return dao.getTermWithRegistrationWindowOpenIfAny();
+	}
 }

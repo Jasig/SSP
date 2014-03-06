@@ -99,9 +99,8 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 			return;			
 		}
 		MapStatusReportSummary summary = new MapStatusReportSummary();
-		Calendar startTime = Calendar.getInstance();
+		summary.setStartTime(Calendar.getInstance());
 		
-		summary.setStartTime(startTime);
 		//Hard delete all previous reports
 		mapStatusReportService.deleteAllOldReports();
 		
@@ -131,14 +130,12 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 			evaluatePlan(gradesSet, additionalCriteriaSet, cutoffTerm, 
 					allTerms, planIdPersonIdPair, allSubstitutableCourses,termBound,useSubstitutableCourses);
 		}
-		Calendar endTime = Calendar.getInstance();
-		summary.setEndTime(endTime);
+		summary.setEndTime(Calendar.getInstance());
 		summary.setStudentsInScope(allActivePlans.size());
 		
-		LOGGER.error("MAPSTATUS REPORT RUNTIME: "+(endTime.getTimeInMillis() - startTime.getTimeInMillis())+" ms.");
+		LOGGER.info("MAPSTATUS REPORT RUNTIME: "+(summary.getEndTime().getTimeInMillis() - summary.getStartTime().getTimeInMillis())+" ms.");
 		
 		sendReportEmail(summary);
-		
 		sendOffPlanEmailsToCoaches();
 		
 	}
@@ -151,7 +148,6 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 				
 				StringBuilder sb = new StringBuilder();
 				sb.append("The following students have been determined to be Off Plan after comparing their transcript to their MAP</br>");
-				LOGGER.error("COACH: "+mapStatusReportCoachEmailInfo.getPersonId()+" email:"+mapStatusReportCoachEmailInfo.getPrimaryEmail());
 				int linebreak = 0;
 				List<MapStatusReportPerson> offPlanPlansForCoach = mapStatusReportService.getOffPlanPlansForOwner(new Person(mapStatusReportCoachEmailInfo.getPersonId()));
 				for (MapStatusReportPerson mapStatusReportPerson : offPlanPlansForCoach) 
@@ -159,7 +155,7 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 					sb.append(mapStatusReportPerson.getFirstName()+" "+mapStatusReportPerson.getLastName());
 					if((linebreak % 3) == 2)
 					{
-						sb.append("</br>");
+						sb.append(",</br>");
 					}else
 					{
 						sb.append(", ");
@@ -197,7 +193,7 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 		{
 			List<MapStatusReportSummaryDetail> details = mapStatusReportService.getSummaryDetails();
 			for (MapStatusReportSummaryDetail mapStatusReportSummaryDetail : details) {
-				LOGGER.error("MAPSTATUSREPORT SUMMARY: "+ mapStatusReportSummaryDetail.getPlanStatus()+" COUNT: "+mapStatusReportSummaryDetail.getCount());
+				LOGGER.info("MAPSTATUSREPORT SUMMARY: "+ mapStatusReportSummaryDetail.getPlanStatus()+" COUNT: "+mapStatusReportSummaryDetail.getCount());
 			}
 			summary.setSummaryDetails(details);
 			SubjectAndBody mapStatusEmail = messageTemplateService.createMapStatusReportEmail(summary);

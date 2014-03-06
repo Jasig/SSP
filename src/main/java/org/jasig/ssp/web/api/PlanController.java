@@ -27,7 +27,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.external.ExternalPersonPlanStatusTOFactory;
-import org.jasig.ssp.factory.external.PersonMapStatusReportTOFactory;
+import org.jasig.ssp.factory.external.MapStatusReportLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
 import org.jasig.ssp.model.MapStatusReport;
@@ -53,7 +53,7 @@ import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.external.AbstractPlanStatusReportTO;
 import org.jasig.ssp.transferobject.external.ExternalPersonPlanStatusTO;
-import org.jasig.ssp.transferobject.external.PersonMapPlanStatusReportTO;
+import org.jasig.ssp.transferobject.external.MapStatusReportLiteTO;
 import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -120,7 +120,7 @@ public class PlanController  extends AbstractBaseController {
 	private ExternalPersonPlanStatusTOFactory planStatusFactory;
 	
 	@Autowired
-	private PersonMapStatusReportTOFactory mapStatusReportTOFactory;
+	private MapStatusReportLiteTOFactory mapStatusReportTOFactory;
 
  
 	/**
@@ -530,7 +530,7 @@ public class PlanController  extends AbstractBaseController {
 				return mapStatusReportTOFactory.from(report);
 			}
 			else 
-			return new PersonMapPlanStatusReportTO();
+			return new MapStatusReportLiteTO();
 		}
 		else
 		{

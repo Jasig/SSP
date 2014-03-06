@@ -86,6 +86,12 @@ public class MapStatusReport extends AbstractAuditable implements PersonAssocAud
 	@Column(precision = 2, scale = 2, nullable = false)
 	private BigDecimal planRatio;
 	
+	@Column
+	private int totalPlanCourses;
+	
+	@Column
+	private int planRatioDemerits;
+	
 	public MapStatusReport(UUID id) {
 		super();
 		setId(id);
@@ -167,6 +173,22 @@ public class MapStatusReport extends AbstractAuditable implements PersonAssocAud
 
 	public void setPlanRatio(BigDecimal planRatio) {
 		this.planRatio = planRatio;
+	}
+
+	public int getTotalPlanCourses() {
+		return totalPlanCourses;
+	}
+
+	public void setTotalPlanCourses(int totalPlanCourses) {
+		this.totalPlanCourses = totalPlanCourses;
+	}
+
+	public int getPlanRatioDemerits() {
+		return planRatioDemerits;
+	}
+
+	public void setPlanRatioDemerits(int planRatioDemerits) {
+		this.planRatioDemerits = planRatioDemerits;
 	}
 
 

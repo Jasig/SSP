@@ -297,7 +297,6 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
  		me.mapPlanService.planStatus(me.currentMapPlan, callbacks);
     },
     
-
 	onPlanStatusSuccess:function(serviceResponses){
 		var me = this;
 		me.getView().setLoading(false);
@@ -310,6 +309,10 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 			me.getOnPlanField().setValue("On Plan");
 		else if(planStatus && planStatus.status == "OFF")
 			me.getOnPlanField().setValue("Off Plan");
+		else if(planStatus && planStatus.status == "ON_TRACK_SUBSTITUTIO")
+			me.getOnPlanField().setValue("On Track Substitution");		
+		else if(planStatus && planStatus.status == "ON_TRACK_SEQUENCE")
+			me.getOnPlanField().setValue("On Track Sequence");			
 		else
 			me.getOnPlanField().setValue("No Status");
 		var serviceResponses = {

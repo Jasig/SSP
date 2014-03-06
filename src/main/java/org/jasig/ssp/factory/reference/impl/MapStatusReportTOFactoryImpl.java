@@ -16,50 +16,39 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.factory.external.impl;
+package org.jasig.ssp.factory.reference.impl;
 
 import org.jasig.ssp.dao.MapStatusReportDao;
-import org.jasig.ssp.dao.external.ExternalDataDao;
-import org.jasig.ssp.dao.external.ExternalPersonPlanStatusDao;
-import org.jasig.ssp.factory.external.ExternalPersonPlanStatusTOFactory;
-import org.jasig.ssp.factory.external.PersonMapStatusReportTOFactory;
+import org.jasig.ssp.factory.AbstractAuditableTOFactory;
+import org.jasig.ssp.factory.reference.MapStatusReportTOFactory;
 import org.jasig.ssp.model.MapStatusReport;
-import org.jasig.ssp.model.external.ExternalCourseRequisite;
-import org.jasig.ssp.model.external.ExternalPersonPlanStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.external.ExternalPersonPlanStatusTO;
-import org.jasig.ssp.transferobject.external.PersonMapPlanStatusReportTO;
+import org.jasig.ssp.transferobject.MapStatusReportTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-public class PersonMapStatusReportTOFactoryImpl
-		extends
-		AbstractExternalDataTOFactory<PersonMapPlanStatusReportTO, MapStatusReport>
-		implements PersonMapStatusReportTOFactory {
+public class MapStatusReportTOFactoryImpl extends AbstractAuditableTOFactory<MapStatusReportTO, MapStatusReport>
+		implements MapStatusReportTOFactory {
 
-
-
-	public PersonMapStatusReportTOFactoryImpl() {
-		super(PersonMapPlanStatusReportTO.class, MapStatusReport.class);
+	public MapStatusReportTOFactoryImpl() {
+		super(MapStatusReportTO.class, MapStatusReport.class);
 	}
- 
+
 	@Autowired
 	private transient MapStatusReportDao dao;
 
+	@Override
+	protected MapStatusReportDao getDao() {
+		return dao;
+	}
 	
 	@Override
-	public MapStatusReport from(PersonMapPlanStatusReportTO tObject)
-			throws ObjectNotFoundException {
-		final MapStatusReport model = super.from(tObject);
+	public MapStatusReport from(MapStatusReportTO tObject) throws ObjectNotFoundException {
+		MapStatusReport model = new MapStatusReport();
 		return model;
 	}
 
-
-	@Override
-	protected ExternalDataDao<MapStatusReport> getDao() {
-		return null;
-	}
 }

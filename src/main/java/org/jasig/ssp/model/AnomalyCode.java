@@ -19,5 +19,17 @@
 package org.jasig.ssp.model;
 
 public enum AnomalyCode {
-COURSE_NOT_TAKEN, COURSE_NOT_PASSED, COURSE_NOT_REGISTERED, CURR_OR_FUT_COURSE_NO_GRADE, NO_ANOMALY, MULTIPLE_ANOMALIES_IN_TERM
+COURSE_NOT_TAKEN("Course Not Taken"), COURSE_NOT_PASSED("Course Not Passed"), COURSE_NOT_REGISTERED("Course Not Registered"), CURR_OR_FUT_COURSE_NO_GRADE("Current or Future Course Has No Grade"), NO_ANOMALY("No Anomaly"), 
+MULTIPLE_ANOMALIES_IN_TERM("Multiple Anomalies In Term");
+
+private String displayText;
+private AnomalyCode(String displayText) {
+	this.setDisplayText(displayText);
+}
+public String getDisplayText() {
+	return displayText;
+}
+public void setDisplayText(String displayText) {
+	this.displayText = displayText;
+}
 }

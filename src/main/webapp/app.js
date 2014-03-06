@@ -132,7 +132,7 @@ Ext.require([
 	'Ssp.view.tools.map.SemesterGridTranscript',
     'Ssp.view.tools.map.SemesterPanel',
     'Ssp.view.tools.map.SemesterPanelContainer',
-    'Ssp.view.tools.map.MAPTool',
+    'Ssp.view.tools.map.MapStatusReport',
     'Ssp.view.tools.map.FAView',
 	'Ssp.view.tools.map.MAPView',
     'Ssp.view.tools.map.MovePlan',
@@ -270,6 +270,10 @@ Ext.require([
 	'Ssp.model.tool.documents.StudentDocument',
 	'Ssp.model.tool.map.SemesterCourse',
 	'Ssp.model.tool.map.Plan',
+	'Ssp.model.tool.map.MapStatus',
+	'Ssp.model.tool.map.MapStatusCourseDetail',
+	'Ssp.model.tool.map.MapStatusSubstitutionDetail',
+	'Ssp.model.tool.map.MapStatusTermDetail',
 	'Ssp.model.tool.map.TermNote',
 	'Ssp.model.tool.map.PlanCourse',
 	'Ssp.model.tool.map.PlanOutputData',
@@ -401,6 +405,10 @@ Ext.require([
     'Ssp.store.reference.VeteranStatuses',
     'Ssp.store.PlanStatus',
     'Ssp.store.MAPStatus',
+    'Ssp.store.MapStatusReports',
+    'Ssp.store.MapStatusReportCourseDetails',
+    'Ssp.store.MapStatusReportSubstitutionDetails',
+    'Ssp.store.MapStatusReportTermDetails',
     'Ssp.store.CurrentlyRegistered',
     'Ssp.store.FinancialAidSAPStatus',
     'Ssp.service.AbstractService',
@@ -530,6 +538,7 @@ var apiUrls = [
   {name: 'templatePlan', url: 'reference/map/template'},
   {name: 'placement', url: 'person/{id}/test'},
   {name: 'studentDocument', url: 'person/{id}/studentdocument'},
+  {name: 'mapStatusReport', url: 'person/{id}/map/statusReport'},
   {name: 'registrationLoadRanges', url: 'reference/config/?name=registration_load_ranges'},
   {name: 'selfHelpGuides', url: 'selfHelpGuides/search'},
   {name: 'selfHelpGuideQuestions', url: 'selfHelpGuides/selfHelpGuideQuestions'},
@@ -834,6 +843,30 @@ Ext.onReady(function(){
 						},
 						singleton: true
 					},
+					mapStatusReportStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.MapStatusReports');
+						},
+						singleton: true
+					},	
+					mapStatusReportCourseDetailsStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.MapStatusReportCourseDetails');
+						},
+						singleton: true
+					},	
+					mapStatusReportTermDetailsStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.MapStatusReportTermDetails');
+						},
+						singleton: true
+					},	
+					mapStatusReportSubstitutionDetailsStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.MapStatusReportSubstitutionDetails');
+						},
+						singleton: true
+					},					
 					currentScheduleStore: {
 						fn: function(){
 							return Ext.create('Ext.data.Store',{

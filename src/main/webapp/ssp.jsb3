@@ -1382,6 +1382,11 @@
                     "path": "/app/controller/admin/crg/"
                 },
                 {
+                    "clsName": "Ssp.view.tools.map.MapStatusReport",
+                    "name": "MapStatusReport.js",
+                    "path": "/app/view/tools/map/"
+                },                
+                {
                     "clsName": "Ssp.controller.admin.journal.JournalStepAdminViewController",
                     "name": "JournalStepAdminViewController.js",
                     "path": "/app/controller/admin/journal/"
@@ -1991,6 +1996,26 @@
                     "name": "Plan.js",
                     "path": "/app/model/tool/map/"
                 },
+                {
+                    "clsName": "Ssp.model.tool.map.MapStatus",
+                    "name": "MapStatus.js",
+                    "path": "/app/model/tool/map/"
+                },      
+                {
+                    "clsName": "Ssp.model.tool.map.MapStatusCourseDetail",
+                    "name": "MapStatusCourseDetail.js",
+                    "path": "/app/model/tool/map/"
+                },   
+                {
+                    "clsName": "Ssp.model.tool.map.MapStatusSubstitutionDetail",
+                    "name": "MapStatusSubstitutionDetail.js",
+                    "path": "/app/model/tool/map/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.map.MapStatusTermDetail",
+                    "name": "MapStatusTermDetail.js",
+                    "path": "/app/model/tool/map/"
+                },                                                         
                  {
                     "clsName": "Ssp.store.SemesterCourses",
                     "name": "SemesterCourses.js",
@@ -2211,7 +2236,27 @@
                     "name": "MAPStatus.js",
                     "path": "/app/store/"
                 },   
-                                                                         {
+                {
+                    "clsName": "Ssp.store.MapStatusReportCourseDetails",
+                    "name": "MapStatusReportCourseDetails.js",
+                    "path": "/app/store/"
+                }, 
+                {
+                    "clsName": "Ssp.store.MapStatusReports",
+                    "name": "MapStatusReports.js",
+                    "path": "/app/store/"
+                }, 
+                {
+                    "clsName": "Ssp.store.MAPStatus",
+                    "name": "MAPStatus.js",
+                    "path": "/app/store/"
+                },     
+                {
+                    "clsName": "Ssp.store.MapStatusReportSubstitutionDetails",
+                    "name": "MapStatusReportSubstitutionDetails.js",
+                    "path": "/app/store/"
+                },                                                             
+                {                                                         {
                     "clsName": "Ssp.store.CurrentlyRegistered",
                     "name": "CurrentlyRegistered.js",
                     "path": "/app/store/"

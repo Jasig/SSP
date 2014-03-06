@@ -18,17 +18,23 @@
  */
 package org.jasig.ssp.dao;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jasig.ssp.model.MapStatusReport;
+import org.jasig.ssp.model.MapStatusReportCourseDetails;
+import org.jasig.ssp.model.MapStatusReportSubstitutionDetails;
+import org.jasig.ssp.model.MapStatusReportTermDetails;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.transferobject.reports.MapStatusReportCoachEmailInfo;
 import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummaryDetail;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -85,6 +91,34 @@ public class MapStatusReportDao  extends AbstractPersonAssocAuditableCrudDao<Map
 		List<MapStatusReportPerson> result  = query.setEntity("owner", owner).setString("planStatus", PlanStatus.OFF.name()).list();
 									   
 		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<MapStatusReportCourseDetails> getAllCourseDetailsForPerson(
+			Person person) {
+		String query = "select msrcd from MapStatusReportCourseDetails msrcd, MapStatusReport msr where msrcd.report = msr and msr.person = :person";
+		return createHqlQuery(query).setEntity("person", person).list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<MapStatusReportTermDetails> getAllTermDetailsForPerson(
+			Person person) {
+		String query = "select msrtd from MapStatusReportTermDetails msrtd, MapStatusReport msr where msrtd.report = msr and msr.person = :person";
+		return createHqlQuery(query).setEntity("person", person).list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<MapStatusReportSubstitutionDetails> getAllSubstitutionDetailsForPerson(
+			Person person) {
+		String query = "select msrsd from MapStatusReportSubstitutionDetails msrsd, MapStatusReport msr where msrsd.report = msr and msr.person = :person";
+		return createHqlQuery(query).setEntity("person", person).list();
+	}
+	
+	public void oldReportForStudent(UUID personId) {
+		Collection<MapStatusReport> allForPersonId = getAllForPersonId(personId, null).getRows();
+		for (MapStatusReport mapStatusReport : allForPersonId) {
+			delete(mapStatusReport);
+		}
 	}
 
 

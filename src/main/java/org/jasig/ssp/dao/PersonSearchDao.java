@@ -361,10 +361,26 @@ public class PersonSearchDao extends AbstractDao<Person> {
 					PersonSearchRequest.PLAN_STATUS_ACTIVE.equals(personSearchRequest.getPlanStatus()) 
 					? ObjectStatus.ACTIVE.ordinal() : ObjectStatus.INACTIVE.ordinal());
 		}
-		
 		if(hasMapStatus(personSearchRequest))
 		{ 
-			query.setString("mapStatus", PersonSearchRequest.MAP_STATUS_ON_PLAN.equals(personSearchRequest.getMapStatus()) ? PlanStatus.ON.toString() : PlanStatus.OFF.toString());
+			PlanStatus param = null;
+			if(PersonSearchRequest.MAP_STATUS_ON_PLAN.equals(personSearchRequest.getMapStatus()))
+			{
+				param = PlanStatus.ON;
+			}
+			if(PersonSearchRequest.MAP_STATUS_OFF_PLAN.equals(personSearchRequest.getMapStatus()))
+			{
+				param = PlanStatus.OFF;
+			}
+			if(PersonSearchRequest.MAP_STATUS_ON_TRACK_SEQUENCE.equals(personSearchRequest.getMapStatus()))
+			{
+				param = PlanStatus.ON_TRACK_SEQUENCE;
+			}
+			if(PersonSearchRequest.MAP_STATUS_ON_TRACK_SUBSTITUTIO.equals(personSearchRequest.getMapStatus()))
+			{
+				param = PlanStatus.ON_TRACK_SUBSTITUTIO;
+			}			
+			query.setString("mapStatus",param.name());
 		}
 		
 		if(hasGpaCriteria(personSearchRequest))

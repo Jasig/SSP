@@ -256,6 +256,12 @@ $title
 			<column name="sort_order" value="600" />
 		</insert>
 </changeSet>
-
-
+<changeSet id="add total plan courses and plan non-matches" author="tony.arland">
+	<addColumn tableName="map_status_report">
+		<column name="total_plan_courses" type="integer"></column>
+	</addColumn>
+	<addColumn tableName="map_status_report">
+		<column name="plan_ratio_demerits" type="integer"></column>
+	</addColumn>	
+</changeSet>
 </databaseChangeLog>

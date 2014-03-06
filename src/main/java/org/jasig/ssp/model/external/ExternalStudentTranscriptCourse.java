@@ -129,6 +129,10 @@ public class ExternalStudentTranscriptCourse extends AbstractExternalData
 	@Column(nullable = true, length = 50)
 	@Size(max = 50)
 	private String facultySchoolId;
+	
+	@Column(nullable = true, length = 50)
+	@Size(max = 50)
+	private String courseCode;
 
 	/**
 	 * @return the schoolId
@@ -392,5 +396,13 @@ public class ExternalStudentTranscriptCourse extends AbstractExternalData
 	 */
 	public void setFacultySchoolId(String facultySchoolId) {
 		this.facultySchoolId = facultySchoolId;
+	}
+
+	public String getCourseCode() {
+		return courseCode;
+	}
+
+	public void setCourseCode(String courseCode) {
+		this.courseCode = courseCode;
 	}
 }

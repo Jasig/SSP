@@ -116,6 +116,12 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
 		if(planStatus && planStatus.status == "ON"){
 			me.getOnPlanField().setValue("On Plan");
 			me.getOnPlanStatusDetails().setTooltip("Student is currently on plan.");
+		}else if(planStatus && planStatus.status == "ON_TRACK_SUBSTITUTIO"){
+			me.getOnPlanField().setValue("On Track Substitution");
+			me.getOnPlanStatusDetails().setTooltip(planStatus.statusReason);
+		}else if(planStatus && planStatus.status == "ON_TRACK_SEQUENCE"){
+			me.getOnPlanField().setValue("On Track Sequence");
+			me.getOnPlanStatusDetails().setTooltip(planStatus.statusReason);			
 		}else if(planStatus && planStatus.status == "OFF"){
 			me.getOnPlanField().setValue("Off Plan");
 			me.getOnPlanStatusDetails().setTooltip(planStatus.statusReason);

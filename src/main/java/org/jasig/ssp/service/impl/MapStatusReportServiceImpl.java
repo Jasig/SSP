@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.MapStatusReportDao;
@@ -58,6 +59,8 @@ import org.jasig.ssp.transferobject.reports.MapPlanStatusReportCourse;
 import org.jasig.ssp.transferobject.reports.MapStatusReportCoachEmailInfo;
 import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummaryDetail;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,6 +106,9 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	
 	private static String CONFIGURABLE_MATCH_CRITERIA_CREDIT_HOURS = "CREDIT_HOURS";
 	
+	private static String CONFIGURABLE_MATCH_CRITERIA_COURSE_CODE = "COURSE_CODE";
+
+	
 	@Override
 	public MapStatusReport save(MapStatusReport obj)
 			throws ObjectNotFoundException, ValidationException {
@@ -129,12 +135,12 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 			boolean termBound, 
 			boolean useSubstitutableCourses) 
 	{
-		LOGGER.error("Loading plan with id {}",planAndPersonInfo.getPlanId());
+		LOGGER.info("Loading plan with id {}",planAndPersonInfo.getPlanId());
 		String schoolId = planAndPersonInfo.getSchoolId();
 		
 		
 		List<MapPlanStatusReportCourse> planCourses = planService.getAllPlanCoursesForStatusReport(planAndPersonInfo.getPlanId()); 
-		LOGGER.error("Loading plan "+planAndPersonInfo.getPlanId()+" courses with with count {}",planCourses.size());
+		LOGGER.info("Loading plan "+planAndPersonInfo.getPlanId()+" courses with with count {}",planCourses.size());
 		final MapStatusReport report = initReport(planAndPersonInfo);
 		
 		//We only add something to course details in the case where there is an anomaly 
@@ -181,7 +187,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		buildTermDetails(report, reportTermDetails, courseReportsByTerm,planCoursesByTerm);
 		
 		report.setPlanStatus(calculatePlanStatus(reportCourseDetails,reportSubstitutionDetails,termBound,useSubstitutableCourses));
-		report.setPlanRatio(calculatePlanRatio(planCourses,reportCourseDetails,reportSubstitutionDetails,termBound,useSubstitutableCourses));
+		report.setPlanRatio(calculatePlanRatio(report,planCourses,reportCourseDetails,reportSubstitutionDetails,termBound,useSubstitutableCourses));
 		report.setCourseDetails(reportCourseDetails);
 		report.setTermDetails(reportTermDetails);
 		report.setSubstitutionDetails(reportSubstitutionDetails);
@@ -201,12 +207,12 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 			if(containsTermSubstitution(reportSubstitutionDetails))
 				return PlanStatus.OFF;
 			if(containsCourseSubstitution(reportSubstitutionDetails))
-				return PlanStatus.ON_PLAN_SEQUENCE;
+				return PlanStatus.ON_TRACK_SEQUENCE;
 		}
 		if(termBound == false && useSubstitutableCourses == false)
 		{
 			if(containsTermSubstitution(reportSubstitutionDetails))
-				return PlanStatus.ON_TRACK ;
+				return PlanStatus.ON_TRACK_SUBSTITUTIO  ;
 			if(containsCourseSubstitution(reportSubstitutionDetails))
 				return PlanStatus.OFF;
 		}
@@ -220,9 +226,9 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		if(termBound == false && useSubstitutableCourses == true)
 		{
 			if(containsTermSubstitution(reportSubstitutionDetails))
-				return PlanStatus.ON_TRACK;
+				return PlanStatus.ON_TRACK_SUBSTITUTIO;
 			if(containsCourseSubstitution(reportSubstitutionDetails))
-				return PlanStatus.ON_PLAN_SEQUENCE;
+				return PlanStatus.ON_TRACK_SEQUENCE;
 		}	
 		return PlanStatus.ON;
 	}	
@@ -263,8 +269,11 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		return false;
 	}
 	private BigDecimal calculatePlanRatio(
-			List<MapPlanStatusReportCourse> planCourses,
-			List<MapStatusReportCourseDetails> reportCourseDetails, List<MapStatusReportSubstitutionDetails> reportSubstitutionDetails, boolean termBound, boolean useSubstitutableCourses) 
+			MapStatusReport report, List<MapPlanStatusReportCourse> planCourses,
+			List<MapStatusReportCourseDetails> reportCourseDetails, 
+			List<MapStatusReportSubstitutionDetails> reportSubstitutionDetails, 
+			boolean termBound, 
+			boolean useSubstitutableCourses) 
 	{
 		if(planCourses.isEmpty())
 			return new BigDecimal(1);
@@ -286,7 +295,8 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 			if(containsCourseSubstitution(reportSubstitutionDetails))
 				anomalies =anomalies + numCourseSubstitution(reportSubstitutionDetails);
 		}
-		
+		report.setPlanRatioDemerits(anomalies);
+		report.setTotalPlanCourses(planCourses.size());
 		return new BigDecimal(new Float(planCourses.size() - anomalies) / new Float(planCourses.size()));
 	}
 
@@ -307,7 +317,8 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 
 	private void buildTermDetails(final MapStatusReport report,
 			List<MapStatusReportTermDetails> reportTermDetails,
-			Map<String, List<MapStatusReportCourseDetails>> courseReportsByTerm, Map<String, List<MapPlanStatusReportCourse>> planCoursesByTerm) 
+			Map<String, List<MapStatusReportCourseDetails>> courseReportsByTerm, 
+			Map<String, List<MapPlanStatusReportCourse>> planCoursesByTerm) 
 	{
 		Set<String> evaluatedTerms = courseReportsByTerm.keySet();
 		for (String termCode : evaluatedTerms) {
@@ -381,7 +392,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 				matchedTranscriptCourse = findTranscriptCourseMatch(mapPlanStatusReportCourse,transcript,criteriaSet);
 				if(matchedTranscriptCourse != null)
 				{
-					//If we find a term unbounded match, create an audit entry
+					//If we find a term unbounded match, create an substitution entry
 					reportSubstitutionDetails.add(createSubstitutionEntry(matchedTranscriptCourse,mapPlanStatusReportCourse,SubstitutionCode.TERM,report));
 				}
 				
@@ -392,6 +403,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 				matchedTranscriptCourse = findTranscriptCourseMatchSubstitutableCourse(mapPlanStatusReportCourse,transcript,criteriaSet,allSubstitutableCourses);
 				if(matchedTranscriptCourse != null)
 				{
+					//If we find a substitution match, create an substitution entry
 					reportSubstitutionDetails.add(createSubstitutionEntry(matchedTranscriptCourse,mapPlanStatusReportCourse,SubstitutionCode.SUBSTITUTABLE_COURSE,report));
 				}
 
@@ -438,7 +450,6 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 					&& (substitutableCourse.getTermCode() == null || mapPlanStatusReportCourse.getTermCode().trim().equalsIgnoreCase(substitutableCourse.getTermCode().trim()))
 					&& (substitutableCourse.getProgramCode() == null || mapPlanStatusReportCourse.getTermCode().trim().equalsIgnoreCase(substitutableCourse.getProgramCode().trim()))					)
 			{
-				LOGGER.error("FOUND MATCH%%");
 				//if a substitution is found, check to see if the student has taken the target course
 				for(ExternalStudentTranscriptCourse transcriptCourse : transcript)
 				{
@@ -529,6 +540,17 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 					match = false;
 				}			
 			}
+			if(criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_COURSE_CODE))
+			{
+				//its quite possible that course code may not be on the transcript.  If this is true, we shouldn't consider course_code at all
+				if(mapPlanStatusReportCourse.getCourseCode() != null && externalStudentTranscriptCourse.getCourseCode() != null)
+				{
+					if(!mapPlanStatusReportCourse.getCourseCode().trim().equalsIgnoreCase(externalStudentTranscriptCourse.getCourseCode().trim()))
+					{
+						match = false;
+					}			
+				}
+			}			
 			if(match)
 			{
 				return externalStudentTranscriptCourse;
@@ -611,11 +633,18 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		String cutoffTermCode = configService.getByNameEmpty("map_plan_status_cutoff_term_code");
 		if(cutoffTermCode.trim().isEmpty() )
 		{
+			//If a registration window is open for a defined term.  Use that
+			Term termWithRegistrationWindowOpenIfAny = termService.getTermWithRegistrationWindowOpenIfAny();
+			if(termWithRegistrationWindowOpenIfAny != null)
+			{
+				return termWithRegistrationWindowOpenIfAny;
+			}
 			try {
+				//If there is no registration window open, go with the current term.
 				return termService.getCurrentTerm();
 			} catch (ObjectNotFoundException e) {
 				//if we can't resolve the current term, we have bigger problems
-				LOGGER.error("Map Status Calculation will stop because the current term cannot be resolved.  This is likely an data issue in the EXTERNAL_TERM table");
+				LOGGER.error("Map Status Calculation will stop because the current term cannot be resolved.  This is likely a data issue in the EXTERNAL_TERM table");
 				throw new IllegalArgumentException("Current term could not be resolved.  Map Report Calcuation aborted.");
 			}
 		}
@@ -628,7 +657,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 					return termService.getCurrentTerm();
 				} catch (ObjectNotFoundException e1) {
 					//if we can't resolve the current term, we have bigger problems
-					LOGGER.error("Map Status Calculation will stop because the current term cannot be resolved.  This is likely an data issue in the EXTERNAL_TERM table");
+					LOGGER.error("Map Status Calculation will stop because the current term cannot be resolved.  This is likely a data issue in the EXTERNAL_TERM table");
 					throw new IllegalArgumentException("Current term could not be resolved.  Map Report Calcuation aborted.");
 				}
 			}
@@ -649,4 +678,30 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	public List<MapStatusReportPerson> getOffPlanPlansForOwner(Person owner) {
 		return dao.getOffPlanPlansForOwner(owner);
 	}
+
+	@Override
+	public List<MapStatusReportCourseDetails> getAllCourseDetailsForPerson(
+			Person person) {
+		return dao.getAllCourseDetailsForPerson(person);
+	}
+
+	@Override
+	public List<MapStatusReportTermDetails> getAllTermDetailsForPerson(
+			Person person) {
+		return dao.getAllTermDetailsForPerson(person);
+
+	}
+
+	@Override
+	public List<MapStatusReportSubstitutionDetails> getAllSubstitutionDetailsForPerson(
+			Person person) {
+		return dao.getAllSubstitutionDetailsForPerson(person);
+
+	}
+
+	@Override
+	public void oldReportForStudent(UUID personId) {
+		 dao.oldReportForStudent(personId);
+	}
+
 }
