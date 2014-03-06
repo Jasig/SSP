@@ -18,12 +18,15 @@
  */
 package org.jasig.ssp.service.external.impl;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.ssp.dao.external.ExternalDataDao;
 import org.jasig.ssp.dao.external.ExternalStudentTestDao;
 import org.jasig.ssp.model.Person;
@@ -34,8 +37,10 @@ import org.jasig.ssp.service.external.ExternalStudentTestService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.external.ExternalStudentTestTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 @Transactional
@@ -89,7 +94,7 @@ public class ExternalStudentTestServiceImpl extends
 	}
 	
 	@Override
-	public Object getTestDetails(String testCode, String subTestcode, Person person){
+	public Object getTestDetails(String testCode, String subTestcode, Person person) throws IOException{
 		String username = null;
 		String password = null;
 		String baseUrl = null;
@@ -120,21 +125,46 @@ public class ExternalStudentTestServiceImpl extends
 			groupKey = gkConfig.getValue();
 		}
 		
-		String userNameUrl = baseUrl+ "/users";
-		Map<String,String> params = new HashMap<String,String>();
-		params.put("FirstName", person.getFirstName());
-		params.put("LastName", person.getLastName());
-		params.put("Email", person.getPrimaryEmailAddress());
-		params.put("InternalID", person.getSchoolId());
-		if(StringUtils.isNotBlank(groupKey))
-			params.put("GroupKey", groupKey);
-		
-		BasicAuthenticationRestTemplate client = new BasicAuthenticationRestTemplate(username, password);
-		String smUserId = (String)client.get(userNameUrl, params, String.class);
-		
-		String urlRedirect = baseUrl+ "/users/" + smUserId + "/reportlink";
-
-		return  (String)client.get(urlRedirect, null, String.class);
+	
+		if(StringUtils.isNotBlank(groupKey)){
+			URI targetUrl = UriComponentsBuilder.fromUriString(baseUrl)
+				.port(443)
+			    .path("/users")
+			    .queryParam("AdministrativeGroupKey", groupKey)
+			    .queryParam("FirstName", person.getFirstName())
+			    .queryParam("LastName",  person.getLastName())
+			    .queryParam("Email", person.getPrimaryEmailAddress())
+			    .queryParam("UserId", person.getSchoolId())
+			    .build()
+			    .toUri();
+			BasicAuthenticationRestTemplate client = new BasicAuthenticationRestTemplate(username, password, true);
+			ResponseEntity<String> smUserJason = client.getForEntity(targetUrl, String.class);
+			if(StringUtils.isNotBlank(smUserJason.getBody())){
+				ObjectMapper mapper = new ObjectMapper();
+				Map<String, Object> value = null;
+				try {
+					value = mapper.readValue(smUserJason.getBody(), Map.class);
+				} catch (final Exception e) {
+					final String msg = "Failed to access attributes for the specified person:  "
+							 + person.getSchoolId();
+					throw new IOException(msg, e);
+				}
+				value = (Map<String,Object>)value.get("User");
+				String urlRedirect = baseUrl+ "/users/" + value.get("UserId") + "/reportlink";
+				ResponseEntity<String> reportLink = client.getForEntity(urlRedirect, String.class);
+				try {
+					value = mapper.readValue(reportLink.getBody(), Map.class);
+				} catch (final Exception e) {
+					final String msg = "Failed to access attributes for the specified person:  "
+							 + person.getSchoolId();
+					throw new IOException(msg, e);
+				}
+				if(value != null){
+					return value.get("EntryLink");
+				}
+			}
+		}
+		throw new IOException("Failed to access attributes for the specified person with school id:  " + person.getSchoolId());
 	}
 
 

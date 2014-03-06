@@ -27,6 +27,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -91,8 +92,10 @@ public class ExternalStudentTest extends AbstractExternalData implements
 	@Size(max = 255)
 	private String outcome;
 	
+	@Transient
 	private String testProviderLink;
 	
+	@Transient
 	private Boolean hasDetails;
 
 

@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.external;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +31,6 @@ public interface ExternalStudentTestService extends ExternalDataService<External
 	
 	List<ExternalStudentTest> getStudentTestResults(String schoolId, UUID id);
 	
-	Object getTestDetails(String testCode, String subTestCode, Person person);
+	Object getTestDetails(String testCode, String subTestCode, Person person) throws IOException;
 
 }
