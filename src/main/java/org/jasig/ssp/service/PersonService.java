@@ -24,15 +24,15 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.UUID;
 
-import javax.portlet.PortletRequest;
-
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
-import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
+import org.jasig.ssp.transferobject.PersonSearchRequestTO;
+import org.jasig.ssp.transferobject.EmailStudentRequestTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
@@ -40,6 +40,8 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.security.core.GrantedAuthority;
+
+import javax.portlet.PortletRequest;
 
 /**
  * Person service
@@ -286,6 +288,6 @@ public interface PersonService extends AuditableCrudService<Person> {
 
 	void evict(Person model);
 
-	boolean emailStudent(EmailStudentRequestForm emailRequest) throws ObjectNotFoundException, ValidationException;
+	boolean emailStudent(EmailStudentRequestTO emailRequest) throws ObjectNotFoundException, ValidationException;
 
 }

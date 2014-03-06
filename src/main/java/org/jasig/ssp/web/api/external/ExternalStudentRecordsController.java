@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.web.api.external;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -494,7 +495,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	 *            Student identifier Any errors will throw this generic
 	 *            exception.
 	 * @return Service response with success value, in the JSON format.
-	 * @throws ObjectNotFoundException
+	 * @throws ObjectNotFoundException, IOException
 	 *             If any reference data could not be loaded.
 	 */
 	@RequestMapping(value = "/test/details", method = RequestMethod.GET)
@@ -503,9 +504,10 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 			final @RequestParam(required = true) String testCode,
 			final @RequestParam(required = false) String subTestCode,
 			HttpServletResponse httpServletResponse)
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, IOException {
 		Person person = personService.get(id);
-		return "redirect:" + (String)externalStudentTestService.getTestDetails(testCode, subTestCode, person);
+		String url = (String)externalStudentTestService.getTestDetails(testCode, subTestCode, person);
+		return "redirect:" +  url;
 	}
 	
 	private String getPersonLiteName(PersonLiteTO person){
