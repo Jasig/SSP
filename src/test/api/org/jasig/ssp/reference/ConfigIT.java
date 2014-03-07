@@ -169,11 +169,11 @@ public class ConfigIT extends AbstractReferenceTest {
                     .contentType("application/json")
                     .statusCode(200)
                     .log().ifError()
-                    .body("results", equalTo(30))
+                    .body("results", equalTo(40))
                     .and()
                     .body("success", equalTo("true"))
                     .and()
-                    .body("rows", hasSize(30))
+                    .body("rows", hasSize(40))
                     .and();
 
         spec = expectListResponseObjectAtIndex(spec, 0, CONFIG_ROWS);
