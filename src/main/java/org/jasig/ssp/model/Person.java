@@ -48,6 +48,8 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.OrderBy;
+import org.hibernate.annotations.Sort;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.model.reference.StudentType;
@@ -589,22 +591,50 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 	private List<Plan> plans;
 
 	@Nullable
+	@Sort(comparator = PersonServiceReasonComparator.class)
 	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
 	private Set<PersonServiceReason> serviceReasons;
+	
+	private class PersonServiceReasonComparator implements Comparator<PersonServiceReason> {
 
+		@Override
+		public int compare(PersonServiceReason o1, PersonServiceReason o2) {
+			return o1.getServiceReason().getName().compareTo(o1.getServiceReason().getName());
+		}
+		
+	}
 	@Nullable
+	@Sort(comparator = PersonSpecialServiceGroupComparator.class)
 	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
 	private Set<PersonSpecialServiceGroup> specialServiceGroups;
+	
+	private class PersonSpecialServiceGroupComparator implements Comparator<PersonSpecialServiceGroup> {
 
+		@Override
+		public int compare(PersonSpecialServiceGroup o1, PersonSpecialServiceGroup o2) {
+			return o1.getSpecialServiceGroup().getName().compareTo(o2.getSpecialServiceGroup().getName());
+		}
+		
+	}
 	@Nullable
+	@Sort(comparator = ReferralSourceComparator.class)
 	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
 	private Set<PersonReferralSource> referralSources;
+	
+	private class ReferralSourceComparator implements Comparator<PersonReferralSource> {
+
+		@Override
+		public int compare(PersonReferralSource o1, PersonReferralSource o2) {
+			return o1.getReferralSource().getName().compareTo(o2.getReferralSource().getName());
+		}
+		
+	}
 
 	@Nullable
 	@OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval = true)
