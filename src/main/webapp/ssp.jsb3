@@ -2255,8 +2255,8 @@
                     "clsName": "Ssp.store.MapStatusReportSubstitutionDetails",
                     "name": "MapStatusReportSubstitutionDetails.js",
                     "path": "/app/store/"
-                },                                                             
-                {                                                         {
+                },
+                {
                     "clsName": "Ssp.store.CurrentlyRegistered",
                     "name": "CurrentlyRegistered.js",
                     "path": "/app/store/"
