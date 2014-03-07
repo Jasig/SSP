@@ -45,6 +45,7 @@ import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.service.reference.ChallengeReferralService;
 import org.jasig.ssp.service.reference.ChallengeService;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -183,8 +184,9 @@ public class MyGpsTaskControllerTest {
 				service.getAllForPerson(eq(student), eq(false),
 						eq(securityService.currentUser()),
 						isA(SortingAndPaging.class))).andReturn(tasks);
-		service.sendTasksForPersonToEmail(tasks, null, null, student, emailAddresses,
-				null);
+		EmailPersonTasksForm form = new EmailPersonTasksForm();
+		form.setRecipientEmailAddresses(emailAddresses);
+		service.sendTasksForPersonToEmail(tasks, null, null, student, form);
 
 		replay(service);
 
