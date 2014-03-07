@@ -131,7 +131,7 @@ Ext.define('Ssp.view.tools.profile.AcademicProgram', {
                         itemId: 'mapLastUpdated',
 						labelWidth: 75
                     }, {
-                        fieldLabel: 'MAP Projected Grad',
+                        fieldLabel: 'MAP Ends',
                         name: 'mapProjected',
                         itemId: 'mapProjected',
                         labelWidth: 110
