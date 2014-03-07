@@ -16,6 +16,7 @@ public class ChallengeReferralSearchResultTO implements TransferObject<Challenge
 	private String challengeReferralName;
 	private UUID challengeReferralId;
 	private String challengeReferralDescription;
+	private String challengeReferralLink;
 
 	public ChallengeReferralSearchResultTO() {
 	}
@@ -76,6 +77,14 @@ public class ChallengeReferralSearchResultTO implements TransferObject<Challenge
 		this.challengeReferralDescription = challengeReferralDescription;
 	}
 
+	public String getChallengeReferralLink() {
+		return challengeReferralLink;
+	}
+
+	public void setChallengeReferralLink(String challengeReferralLink) {
+		this.challengeReferralLink = challengeReferralLink;
+	}
+
 	@Override
 	public void from(ChallengeReferralSearchResult model) {
 		this.challengeReferralId = model.getChallengeReferralId();
@@ -86,6 +95,7 @@ public class ChallengeReferralSearchResultTO implements TransferObject<Challenge
 		this.categoryName = model.getCategoryName();
 		this.challengeName = model.getChallengeName();
 		this.challengeReferralDescription = model.getChallengeReferralDescription();
+		this.challengeReferralLink = model.getChallengeReferralLink();
 		
 	}
 

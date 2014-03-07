@@ -13,6 +13,7 @@ public class ChallengeReferralSearchResult {
 	private String challengeReferralName;
 	private UUID challengeReferralId;
 	private String challengeReferralDescription;
+	private String challengeReferralLink;
 	
 	public ChallengeReferralSearchResult() {
 	}
@@ -71,6 +72,14 @@ public class ChallengeReferralSearchResult {
 
 	public void setChallengeReferralDescription(String challengeReferralDescription) {
 		this.challengeReferralDescription = challengeReferralDescription;
+	}
+
+	public String getChallengeReferralLink() {
+		return challengeReferralLink;
+	}
+
+	public void setChallengeReferralLink(String challengeReferralLink) {
+		this.challengeReferralLink = challengeReferralLink;
 	}
 
 }

@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
@@ -36,10 +35,8 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ChallengeReferral;
 import org.jasig.ssp.model.reference.ChallengeReferralSearchResult;
-import org.jasig.ssp.transferobject.reference.ChallengeReferralSearchFormTO;
-import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.security.SspUser;
-import org.jasig.ssp.util.collections.Pair;
+import org.jasig.ssp.transferobject.reference.ChallengeReferralSearchFormTO;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
@@ -283,9 +280,20 @@ public class ChallengeReferralDao extends
 	        }
 	    });
 
-	    
-		return new PagingWrapper<ChallengeReferralSearchResult>(uniques.size(), uniques);
-		
+	    Integer resultSize = uniques.size();
+	    if(searchForm.getSortAndPage().isPaged() && resultSize > 0){
+	    	Integer start = searchForm.getSortAndPage().getFirstResult();
+	    	
+	    	Integer max = searchForm.getSortAndPage().getMaxResults();
+	    	if(start >= uniques.size())
+	    	{
+	    		uniques = new ArrayList<ChallengeReferralSearchResult>();
+	    	}else{
+	    		max = start + max > uniques.size() || max < 0 ? uniques.size():start + max;
+	    		uniques = uniques.subList(start, max);
+	    	}
+	    }
+	    return new PagingWrapper<ChallengeReferralSearchResult>(resultSize, uniques);		
 	}
 	
 
@@ -296,7 +304,8 @@ public class ChallengeReferralDao extends
 		statement.append("c.id as cr_sel_challengeId, ");
 		statement.append("cr.name as cr_sel_challengeReferralName, ");
 		statement.append("cr.id as cr_sel_challengeReferralId, ");
-		statement.append("cr.description as cr_sel_challengeReferralDescription ");
+		statement.append("cr.description as cr_sel_challengeReferralDescription, ");
+		statement.append("cr.link as cr_sel_challengeReferralLink ");
 		statement.append("from ChallengeCategory as cc, ");
 		statement.append("ChallengeChallengeReferral as ccr, ");
 		statement.append("ChallengeReferral as cr, ");
@@ -334,7 +343,8 @@ public class ChallengeReferralDao extends
 		statement.append("c.id as cr_sel_challengeId, ");
 		statement.append("cr.name as cr_sel_challengeReferralName, ");
 		statement.append("cr.id as cr_sel_challengeReferralId, ");
-		statement.append("cr.description as cr_sel_challengeReferralDescription ");
+		statement.append("cr.description as cr_sel_challengeReferralDescription, ");
+		statement.append("cr.link as cr_sel_challengeReferralLink ");
 		statement.append("from ChallengeChallengeReferral as ccr, ");
 		statement.append("ChallengeReferral as cr, ");
 		statement.append("Challenge as c ");
@@ -357,7 +367,8 @@ public class ChallengeReferralDao extends
 		StringBuilder statement = new StringBuilder();
 		statement.append("select distinct cr.name as cr_sel_challengeReferralName, ");
 		statement.append("cr.id as cr_sel_challengeReferralId, ");
-		statement.append("cr.description as cr_sel_challengeReferralDescription ");
+		statement.append("cr.description as cr_sel_challengeReferralDescription, ");
+		statement.append("cr.link as cr_sel_challengeReferralLink ");
 		statement.append("from ChallengeReferral as cr ");
 		statement.append("where cr.objectStatus = :objectStatus ");
 		if(hasSearchPhrase){
@@ -366,7 +377,4 @@ public class ChallengeReferralDao extends
 		}
 		return statement;
 	}
-	
-
-
 }
