@@ -181,7 +181,6 @@ Ext.define('Ssp.service.MapPlanService', {
     updateCurrentMap: function(semesterStores){ 
         var me = this;
         me.currentMapPlan.set('personId',  me.personLite.get('id'));
-		me.currentMapPlan.set('ownerId',  me.authenticatedPerson.get('id'));
         
         var i = 0;
 		me.currentMapPlan.clearPlanCourses();
@@ -190,7 +189,6 @@ Ext.define('Ssp.service.MapPlanService', {
     updatePrintableMap: function(semesterStores,printableMap){ 
         var me = this;
         printableMap.set('personId',  me.personLite.get('id'));
-        printableMap.set('ownerId',  me.authenticatedPerson.get('id'));
         
         var i = 0;
         printableMap.clearPlanCourses();
