@@ -1,0 +1,119 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    <property name="schema" value="${database.schema}" />
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet id="Add configs to support smarter measure" author="jim.stanley">
+        <insert tableName="config">
+            <column name="id" value="c0619e59-4dfa-4419-8180-49c405164aba" />
+            <column name="name" value="smarter_measure_base_url" />
+            <column name="description"
+                    value="Base url for REST intractionw with smarter measure" />
+            <column name="value" value="https://api.smartermeasure.com/v3" />
+            <column name="default_value" value="https://api.smartermeasure.com/v3" /> <!-- nulls not allowed -->
+            <column name="created_date" valueDate="2014-02-05T12:00:00" />
+            <column name="modified_date" valueDate="2014-02-05T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="503" />
+        </insert>
+        <insert tableName="config">
+            <column name="id" value="ac9f0417-38cc-4270-b04a-a2206a130054" />
+            <column name="name" value="smarter_measure_username" />
+            <column name="description"
+                    value="Username to for basic authentication smarter measure" />
+            <column name="value" value="ssp" />
+            <column name="default_value" value="ssp" /> <!-- nulls not allowed -->
+            <column name="created_date" valueDate="2014-02-05T12:00:00" />
+            <column name="modified_date" valueDate="2014-02-05T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="504" />
+        </insert>
+        <insert tableName="config">
+            <column name="id" value="5871587f-47de-45f0-9e5f-6cd61756cbe7" />
+            <column name="name" value="smarter_measure_password" />
+            <column name="description"
+                    value="password to for basic authentication smarter measure" />
+            <column name="value" value="smartermeasurepassword" />
+            <column name="default_value" value="smartermeasurepassword" /> <!-- nulls not allowed -->
+            <column name="created_date" valueDate="2014-02-05T12:00:00" />
+            <column name="modified_date" valueDate="2014-02-05T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="504" />
+        </insert>
+        <insert tableName="config">
+            <column name="id" value="8b4d72fa-c175-441d-9394-b4e4cfe30012" />
+            <column name="name" value="smarter_measure_reserved_test_code_pairs" />
+            <column name="description"
+                    value="list of testcode,subtestcode pairs that come from smarter measure" />
+            <column name="value" value="ACT:COMP" />
+            <column name="default_value" value="testcode:subtestcode" /> <!-- nulls not allowed -->
+            <column name="created_date" valueDate="2014-02-05T12:00:00" />
+            <column name="modified_date" valueDate="2014-02-05T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="505" />
+        </insert>
+        <insert tableName="config">
+            <column name="id" value="81229c60-901c-11e3-baa8-0800200c9a66" />
+            <column name="name" value="smarter_measure_group_key" />
+            <column name="description"
+                    value="list of smarter measures group key designation for school." />
+            <column name="value" value="smartermeasuregroupkey" />
+            <column name="default_value" value="smartermeasuregroupkey" /> <!-- nulls not allowed -->
+            <column name="created_date" valueDate="2014-02-05T12:00:00" />
+            <column name="modified_date" valueDate="2014-02-05T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="506" />
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='c0619e59-4dfa-4419-8180-49c405164aba'</where>
+            </delete>
+            <delete tableName="config">
+                <where>id='ac9f0417-38cc-4270-b04a-a2206a130054'</where>
+            </delete>
+            <delete tableName="config">
+                <where>id='5871587f-47de-45f0-9e5f-6cd61756cbe7'</where>
+            </delete>
+            <delete tableName="config">
+                <where>id='8b4d72fa-c175-441d-9394-b4e4cfe30012'</where>
+            </delete>
+            <delete tableName="config">
+                <where>id='81229c60-901c-11e3-baa8-0800200c9a66'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+    
+</databaseChangeLog>
