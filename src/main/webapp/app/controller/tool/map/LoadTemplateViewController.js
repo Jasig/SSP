@@ -123,6 +123,7 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
     
     onStoreLoaded: function(){
     	var me = this;
+    	me.store.sort();
     	me.getView().setLoading(false);
     },
 

@@ -70,6 +70,7 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 		    	},this);		    		
 
 	    		me.store.loadData(data);
+	    		me.store.sort();
 	    	}
 		};
 		
