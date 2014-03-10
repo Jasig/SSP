@@ -1306,7 +1306,7 @@ Ext.onReady(function(){
 						fn: function(){
 							return Ext.create('Ssp.store.PlanTemplatesSummary', {
 							     storeId: 'planTemplatesSummaryStore',		
-							     extraParams: {sort: "name", sortDirection: "DESC", status: "ALL", limit: "-1"}
+							     extraParams: {sort: "name", sortDirection: "ASC", status: "ALL", limit: "-1"}
 							});
 						},
 						singleton: true
