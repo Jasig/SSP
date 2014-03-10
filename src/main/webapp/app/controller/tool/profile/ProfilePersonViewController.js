@@ -42,7 +42,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     control: {
         nameField: '#studentName',
         photoUrlField: '#studentPhoto',
-		primaryEmailAddressField: '#primaryEmailAddress',
+		primaryEmailAddressLabel: '#primaryEmailAddressLabel',
+		primaryEmailAddressField: '#primaryEmailAddressField',
+
 		
         
         studentIdField: '#studentId',
@@ -198,6 +200,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		
         var nameField = me.getNameField();	
 		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
+		var primaryEmailAddressLabel = me.getPrimaryEmailAddressLabel();
+		
         var photoUrlField = me.getPhotoUrlField();
         var birthDateField = me.getBirthDateField();
         var studentTypeField = me.getStudentTypeField();
@@ -236,8 +240,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         nameField.setValue('<span style="color:#15428B">'+'Name'+':  </span>' + firstLastName);
 		studentIdField.setFieldLabel('');
         studentIdField.setValue('<span style="color:#15428B">' + me.sspConfig.get('studentIdAlias') + ':  </span>' + me.person.get('schoolId'));
+        primaryEmailAddressLabel.setFieldLabel('');
+		primaryEmailAddressLabel.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.school-email')+':  </span>' );
 		primaryEmailAddressField.setFieldLabel('');
-        primaryEmailAddressField.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.school-email')+':  </span>' + me.handleNull(me.person.get('primaryEmailAddress')));
+        primaryEmailAddressField.setValue('<a href="mailto:'+me.handleNull(me.person.get('primaryEmailAddress'))+'" target="_top">'+me.handleNull(me.person.get('primaryEmailAddress'))+'</a>');        
 		birthDateField.setFieldLabel('');
         birthDateField.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.dob')+':  </span>' + me.handleNull(me.person.getFormattedBirthDate()));
 		studentTypeField.setFieldLabel('');
