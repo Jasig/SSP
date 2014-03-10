@@ -191,7 +191,7 @@ var ssp = ssp || {};
             that.pager = fluid.pager(container, pagerOptions);
 
             // Click event for selecting a student
-            $(container + ' ' + that.options.selectors.rosterTable + ' tr').live('click', function() {
+            $(container + ' ' + that.options.selectors.rosterTable + ' tbody tr').live('click', function() {
                 var schoolId = $(this).find('.schoolId').text();
                 var selectedRosterIds = getSelectedRosterIds();
                 var alertFormUrl = options.urls.enterAlert.replace('SCHOOLID', schoolId).replace('FORMATTEDCOURSE', selectedRosterIds.formattedCourse).replace('TERMCODE', selectedRosterIds.termCode);
