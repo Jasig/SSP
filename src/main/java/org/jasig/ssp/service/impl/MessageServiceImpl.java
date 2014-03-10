@@ -19,6 +19,7 @@
 package org.jasig.ssp.service.impl; // NOPMD
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
@@ -364,16 +365,19 @@ public class MessageServiceImpl implements MessageService {
 			final MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(
 					mimeMessage);
 
-			mimeMessageHelper.setFrom(personService.get(
-					Person.SYSTEM_ADMINISTRATOR_ID).getEmailAddressWithName());
+			String adminAddress = personService.get(
+					Person.SYSTEM_ADMINISTRATOR_ID).getEmailAddressWithName();
+			mimeMessageHelper.setFrom(adminAddress);
+			message.setSentFromAddress(adminAddress);
 			// We just happen to know that getEmailAddressWithName() uses the
 			// primary address. This could probably be handled better. W/o
 			// the blank string check, though, javax.mail will blow up
 			// w/ a AddressException
-			String replyTo = message.getSender().getPrimaryEmailAddress();
-			if ( StringUtils.isNotBlank(replyTo) ) {
-				mimeMessageHelper.setReplyTo(message.getSender()
-						.getEmailAddressWithName());
+			if(message.getSender().hasEmailAddresses()){
+				String replyTo = message.getSender()
+						.getEmailAddressesWithName().get(0);
+				mimeMessageHelper.setReplyTo(replyTo);
+				message.setSentReplyToAddress(replyTo);
 			}
 			
 			if (message.getRecipient() != null && 
@@ -391,12 +395,15 @@ public class MessageServiceImpl implements MessageService {
 			if(StringUtils.isNotBlank(configBCC))
 			{
 				mimeMessageHelper.addBcc(configBCC);
+				message.setSentBccAddresses(configBCC);
 			}
 			if ( message.getRecipient() != null && message.getRecipient().hasEmailAddresses()) { // NOPMD by jon.adams			{
 				    List<String> addresseses = message.getRecipient().getEmailAddressesWithName();
 					mimeMessageHelper.setTo(addresseses.toArray(new String[addresseses.size()]));
+					message.setSentToAddresses(StringUtils.join(message.getRecipient().getEmailAddresses(), ","));
 			} else if ( StringUtils.isNotBlank(message.getRecipientEmailAddress()) ) { // NOPMD
 				mimeMessageHelper.setTo(message.getRecipientEmailAddress());
+				message.setSentToAddresses(message.getRecipientEmailAddress());
 			} else {
 				StringBuilder errorMsg = new StringBuilder();
 				
@@ -422,14 +429,19 @@ public class MessageServiceImpl implements MessageService {
 					if(carbonCopy.indexOf(",") != -1)
 					{
 						StringTokenizer tokenizer = new StringTokenizer(carbonCopy,",");
+						List<String> carbonCopies = new ArrayList<String>();
 						while(tokenizer.hasMoreTokens())
 						{
-							mimeMessageHelper.addCc(tokenizer.nextToken());
+							String token = tokenizer.nextToken();
+							mimeMessageHelper.addCc(token);
+							carbonCopies.add(token);
 						}
+						message.setSentCcAddresses(StringUtils.join(carbonCopies,","));
 					}
 					else
 					{
 						mimeMessageHelper.setCc(carbonCopy);
+						message.setSentCcAddresses(carbonCopy);
 					}
 					
 				} catch ( MessagingException e ) {
@@ -441,6 +453,7 @@ public class MessageServiceImpl implements MessageService {
 				final String bcc = configBCC;
 				try {
 					mimeMessageHelper.setBcc(bcc);
+					message.setSentBccAddresses(bcc);
 				} catch ( MessagingException e ) {
 					LOGGER.warn("Invalid BCC address: '{}'. Will"
 							+ " attempt to send message anyway.", bcc, e);

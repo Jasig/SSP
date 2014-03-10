@@ -60,6 +60,21 @@ final public class Message
 
 	@Column(length = 512, nullable = true)
 	private String carbonCopy;
+	
+	@Column(length = 512, nullable = true)
+	private String sentToAddresses;
+	
+	@Column(length = 512, nullable = true)
+	private String sentCcAddresses;
+	
+	@Column(length = 512, nullable = true)
+	private String sentBccAddresses;
+	
+	@Column(length = 100, nullable = true)
+	private String sentFromAddress;
+	
+	@Column(length = 100, nullable = true)
+	private String sentReplyToAddress;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = true)
@@ -181,6 +196,46 @@ final public class Message
 
 	public void setCarbonCopy(final String carbonCopy) {
 		this.carbonCopy = carbonCopy;
+	}
+
+	public String getSentToAddresses() {
+		return sentToAddresses;
+	}
+
+	public void setSentToAddresses(String sentToAddresses) {
+		this.sentToAddresses = sentToAddresses;
+	}
+
+	public String getSentCcAddresses() {
+		return sentCcAddresses;
+	}
+
+	public void setSentCcAddresses(String sentCcAddresses) {
+		this.sentCcAddresses = sentCcAddresses;
+	}
+
+	public String getSentBccAddresses() {
+		return sentBccAddresses;
+	}
+
+	public void setSentBccAddresses(String sentBccAddresses) {
+		this.sentBccAddresses = sentBccAddresses;
+	}
+
+	public String getSentFromAddress() {
+		return sentFromAddress;
+	}
+
+	public void setSentFromAddress(String sentFromAddress) {
+		this.sentFromAddress = sentFromAddress;
+	}
+
+	public String getSentReplyToAddress() {
+		return sentReplyToAddress;
+	}
+
+	public void setSentReplyToAddress(String sentReplyToAddress) {
+		this.sentReplyToAddress = sentReplyToAddress;
 	}
 
 	@Override
