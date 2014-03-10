@@ -75,9 +75,13 @@ Ext.define('Ssp.view.tools.profile.Person', {
                     name: 'homePhone',
                     labelWidth: 38
                 }, {
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.school-email'),
-                    name: 'primaryEmailAddress',
-					itemId: 'primaryEmailAddress'
+                    name: 'primaryEmailAddressLabel',
+					itemId: 'primaryEmailAddressLabel'
+                }, {
+                    fieldLabel: '',
+                    hideLabel: true,
+                    name: 'primaryEmailAddressField',
+					itemId: 'primaryEmailAddressField'
                 }, {
                     fieldLabel: 'Student Type',
                     name: 'studentType',
