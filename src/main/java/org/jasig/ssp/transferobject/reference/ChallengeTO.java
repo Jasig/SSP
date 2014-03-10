@@ -114,7 +114,7 @@ public class ChallengeTO extends AbstractReferenceTO<Challenge> implements
 
 	@Override
 	public final void from(@NotNull final Challenge model) {
-		from(model, true);
+		from(model, false);
 	}
 
 	private final void from(@NotNull final Challenge model,
