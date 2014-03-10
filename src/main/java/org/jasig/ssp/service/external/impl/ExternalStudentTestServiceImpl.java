@@ -134,7 +134,7 @@ public class ExternalStudentTestServiceImpl extends
 			    .queryParam("FirstName", person.getFirstName())
 			    .queryParam("LastName",  person.getLastName())
 			    .queryParam("Email", person.getPrimaryEmailAddress())
-			    .queryParam("UserId", person.getSchoolId())
+			    .queryParam("InternalId", person.getSchoolId())
 			    .build()
 			    .toUri();
 			BasicAuthenticationRestTemplate client = new BasicAuthenticationRestTemplate(username, password, true);
