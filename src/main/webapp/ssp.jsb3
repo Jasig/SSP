@@ -1382,6 +1382,11 @@
                     "path": "/app/controller/admin/crg/"
                 },
                 {
+                    "clsName": "Ssp.controller.tool.map.MapStatusReportController",
+                    "name": "MapStatusReportController.js",
+                    "path": "/app/controller/tool/map/"
+                },
+                {
                     "clsName": "Ssp.view.tools.map.MapStatusReport",
                     "name": "MapStatusReport.js",
                     "path": "/app/view/tools/map/"
