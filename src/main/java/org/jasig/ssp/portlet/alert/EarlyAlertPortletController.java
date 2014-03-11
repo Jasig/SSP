@@ -18,7 +18,9 @@
  */
 package org.jasig.ssp.portlet.alert;
 
+import java.util.HashMap;
 import java.util.Map;
+
 import javax.portlet.PortletRequest;
 
 import org.jasig.ssp.dao.ObjectExistsException;
@@ -59,8 +61,15 @@ public final class EarlyAlertPortletController {
 	private FacultyCourseService facultyCourseService;
 
 	@RenderMapping
-	public String showRoster(final PortletRequest req) {
-		return "ea-roster";
+	public ModelAndView showRoster(final PortletRequest req) {
+		String formattedCourse = req.getParameter("formattedCourse");
+		String key = "";
+		String termCode = req.getParameter("termCode");
+		if(org.apache.commons.lang.StringUtils.isNotBlank(formattedCourse))
+			key = formattedCourse;
+		if(org.apache.commons.lang.StringUtils.isNotBlank(termCode))
+			key += ":" + termCode;
+		return new ModelAndView("ea-roster", "initialSelectedCourse", key);
 	}
 
 	@RenderMapping(params = "action=enterAlert")
@@ -139,8 +148,18 @@ public final class EarlyAlertPortletController {
 	}
 
 	@RenderMapping(params = "confirm=true")
-	public ModelAndView confirm(@RequestParam final String studentName) {
-		return new ModelAndView("ea-roster", "studentName", studentName);
+	public ModelAndView confirm(final PortletRequest req, @RequestParam final String studentName) {
+		String formattedCourse = req.getParameter("formattedCourse");
+		String initialSelectedCourse = "";
+		String termCode = req.getParameter("termCode");
+		if(org.apache.commons.lang.StringUtils.isNotBlank(formattedCourse))
+			initialSelectedCourse = formattedCourse;
+		if(org.apache.commons.lang.StringUtils.isNotBlank(termCode))
+			initialSelectedCourse += ":" + termCode;
+		Map<String,String> model = new HashMap<String,String>();
+		model.put("studentName", studentName);
+		model.put("initialSelectedCourse", initialSelectedCourse);
+		return new ModelAndView("ea-roster", model);
 	}
 	
 	@ModelAttribute("user")

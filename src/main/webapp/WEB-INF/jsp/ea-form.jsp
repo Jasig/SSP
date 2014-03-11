@@ -20,10 +20,15 @@
 --%>
 <jsp:directive.include file="/WEB-INF/jsp/include.jsp"/>
 
-<portlet:renderURL var="cancelUrl" />
+<portlet:renderURL var="cancelUrl" >
+    <portlet:param name="formattedCourse" value="${course.formattedCourse}"/>
+    <portlet:param name="termCode" value="${course.termCode}"/>
+</portlet:renderURL>
 <portlet:renderURL var="doneUrl" escapeXml="false">
     <portlet:param name="confirm" value="true"/>
     <portlet:param name="studentName" value="STUDENTNAME"/>
+    <portlet:param name="formattedCourse" value="${course.formattedCourse}"/>
+    <portlet:param name="termCode" value="${course.termCode}"/>
 </portlet:renderURL>
 
 <c:set var="n"><portlet:namespace/></c:set>

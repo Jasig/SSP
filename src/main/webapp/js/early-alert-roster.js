@@ -48,8 +48,13 @@ var ssp = ssp || {};
             return rslt;
         };
 
-        var getSelectedRosterIds = function() {
-            var selectedCourse = that.locate('courseSelect').val();
+        var getSelectedRosterIds = function(initialSelectedCourse) {
+        	 var selectedCourse = "";
+        	if(initialSelectedCourse){
+        		selectedCourse = initialSelectedCourse;
+        		that.locate('courseSelect').val(initialSelectedCourse);
+        	}else
+              selectedCourse = that.locate('courseSelect').val();
             var selectedRosterIds = {
                 formattedCourse: '',
                 termCode: ''
@@ -83,9 +88,9 @@ var ssp = ssp || {};
         /*
          * Roster Data Function
          */
-        var getRosterData = function() {
+        var getRosterData = function(initialSelectedCourse) {
         	var rslt = [];
-            var selectedRosterIds = getSelectedRosterIds();
+            var selectedRosterIds = getSelectedRosterIds(initialSelectedCourse);
             if ( selectedRosterIds && selectedRosterIds.formattedCourse ) {
                 $.ajax({
                     url: options.urls.roster.replace('FORMATTEDCOURSE', selectedRosterIds.formattedCourse).replace('TERMCODE', selectedRosterIds.termCode),
@@ -163,7 +168,7 @@ var ssp = ssp || {};
 
             // Initialize the courseSelect
             var pagerOptions = {
-                dataModel: getRosterData(),
+                dataModel: getRosterData( that.options.initialSelectedCourse),
                 columnDefs: [
                     { key: 'firstName', valuebinding: '*.firstName', sortable: true },
                     { key: 'middleName', valuebinding: '*.middleName', sortable: true },

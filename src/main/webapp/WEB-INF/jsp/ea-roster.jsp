@@ -183,7 +183,8 @@
                 enrollmentStatus: '<c:url value="/api/1/reference/enrollmentStatus?limit=-1"/>'
         	},
             course_id_delim: ':',
-            statusMappingConfigName: 'status_code_mappings'
+            statusMappingConfigName: 'status_code_mappings',
+            initialSelectedCourse: '${initialSelectedCourse}'
         };
         ssp.EarlyAlertRoster('#${n}earlyAlert', options);
     </c:when>
