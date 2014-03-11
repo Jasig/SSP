@@ -910,7 +910,11 @@ Ext.onReady(function(){
 				            return Ext.create('Ext.data.Store',{
 				            	model: 'Ssp.model.reference.SpecialServiceGroup',
 								filterOnLoad: true,
-								filters: [{property:"objectStatus", value:'ACTIVE'}]
+								filters: [{property:"objectStatus", value:'ACTIVE'}],
+								sorters:  [{
+							         property: 'name',
+							         direction: 'ASC'
+							     }]
 				            });
 				    	},
 				        singleton: true
@@ -920,7 +924,11 @@ Ext.onReady(function(){
 				            return Ext.create('Ext.data.Store',{
 				            	model: 'Ssp.model.reference.ReferralSource',
 								filterOnLoad: true,
-								filters: [{property:"objectStatus", value:'ACTIVE'}]
+								filters: [{property:"objectStatus", value:'ACTIVE'}],
+								sorters:  [{
+							         property: 'name',
+							         direction: 'ASC'
+							     }]
 				            });
 				    	},
 				        singleton: true
@@ -930,7 +938,11 @@ Ext.onReady(function(){
 				            return Ext.create('Ext.data.Store',{
 				            	model: 'Ssp.model.reference.ServiceReason',
 								filterOnLoad: true,
-								filters: [{property:"objectStatus", value:'ACTIVE'}]
+								filters: [{property:"objectStatus", value:'ACTIVE'}],
+								sorters:  [{
+							         property: 'name',
+							         direction: 'ASC'
+							     }]
 				            });
 				    	},
 				        singleton: true
