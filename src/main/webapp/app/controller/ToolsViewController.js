@@ -103,7 +103,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
             this.loadTool(record.get('toolType'));
         }
         else
-        if(record.get('toolType') === 'caseloadreassignment' && skipCallBack) {
+        if(record.get('toolType') === 'toolcaseloadreassignment' && skipCallBack) {
             this.loadTool(record.get('toolType'));
         }
     },
