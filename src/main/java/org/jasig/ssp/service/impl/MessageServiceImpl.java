@@ -358,7 +358,7 @@ public class MessageServiceImpl implements MessageService {
 			throws ObjectNotFoundException, SendFailedException {
 
 		LOGGER.info("BEGIN : sendMessage()");
-		LOGGER.info("Sending message: {}", message.toString());
+		LOGGER.info(addMessageIdToError(message) + "Sending message: {}" , message.toString());
 
 		try {
 			final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -382,11 +382,11 @@ public class MessageServiceImpl implements MessageService {
 			
 			if (message.getRecipient() != null && 
 					!validateEmails(message.getRecipient().getEmailAddresses())) {
-				throw new SendFailedException("A Recipient Email Address '"
+				throw new SendFailedException(addMessageIdToError(message) + "A Recipient Email Address '"
 						+ StringUtils.join(message.getRecipient().getEmailAddresses(),", ") + "' is invalid");
 			}
 			else if (!validateEmail(message.getRecipientEmailAddress())) {
-				throw new SendFailedException("Recipient Email Address '"
+				throw new SendFailedException(addMessageIdToError(message) + "Recipient Email Address '"
 						+ message.getRecipientEmailAddress() + "' is invalid");
 			}
 			
@@ -407,7 +407,7 @@ public class MessageServiceImpl implements MessageService {
 			} else {
 				StringBuilder errorMsg = new StringBuilder();
 				
-				errorMsg.append("Message " +message.toString() 
+				errorMsg.append(addMessageIdToError(message) + " Message " +message.toString() 
 						+" could not be sent. Invalid recipient email address of '");				
 				
 				if (message.getRecipient() != null) {
@@ -445,7 +445,7 @@ public class MessageServiceImpl implements MessageService {
 					}
 					
 				} catch ( MessagingException e ) {
-					LOGGER.warn("Invalid carbon copy address: '{}'. Will"
+					LOGGER.warn(addMessageIdToError(message) + "Invalid carbon copy address: '{}'. Will"
 							+ " attempt to send message anyway.",
 							carbonCopy, e);
 				}
@@ -455,7 +455,7 @@ public class MessageServiceImpl implements MessageService {
 					mimeMessageHelper.setBcc(bcc);
 					message.setSentBccAddresses(bcc);
 				} catch ( MessagingException e ) {
-					LOGGER.warn("Invalid BCC address: '{}'. Will"
+					LOGGER.warn(addMessageIdToError(message) + "Invalid BCC address: '{}'. Will"
 							+ " attempt to send message anyway.", bcc, e);
 				}
 			}
@@ -471,11 +471,15 @@ public class MessageServiceImpl implements MessageService {
 		} catch (final MessagingException e) {
 			LOGGER.error("ERROR : sendMessage() : {}", e);
 			throw new SendFailedException(
-					"The message parameters were invalid.", e);
+					addMessageIdToError(message) + "The message parameters were invalid.", e);
 		}
 
 		LOGGER.info("END : sendMessage()");
 		return true;
+	}
+	
+	private String addMessageIdToError(Message message){
+		return "Message Id: " + message.getId().toString() + ": ";
 	}
 
 	private void send(final MimeMessage mimeMessage) throws SendFailedException {
