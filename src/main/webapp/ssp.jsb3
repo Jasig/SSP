@@ -864,6 +864,11 @@
                     "name": "MapPlanService.js",
                     "path": "/app/service/"
                 },
+                 {
+                    "clsName": "Ssp.service.SearchChallengeReferralService",
+                    "name": "SearchChallengeReferralService.js",
+                    "path": "/app/service/"
+                },
                 {
                     "clsName": "Ssp.controller.ApplicationEventsController",
                     "name": "ApplicationEventsController.js",
@@ -1132,6 +1137,31 @@
                 {
                     "clsName": "Ssp.controller.tool.actionplan.EmailAndPrintActionPlanViewController",
                     "name": "EmailAndPrintActionPlanViewController.js",
+                    "path": "/app/controller/tool/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.actionplan.ChallengesGridViewController",
+                    "name": "ChallengesGridViewController.js",
+                    "path": "/app/controller/tool/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.actionplan.CustomActionPlanViewController",
+                    "name": "CustomActionPlanViewController.js",
+                    "path": "/app/controller/tool/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.actionplan.EditTasksFormViewController",
+                    "name": "EditTasksFormViewController.js",
+                    "path": "/app/controller/tool/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.actionplan.SearchChallengeViewController",
+                    "name": "SearchChallengeViewController.js",
+                    "path": "/app/controller/tool/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.controller.tool.actionplan.TasksGridViewController",
+                    "name": "TasksGridViewController.js",
                     "path": "/app/controller/tool/actionplan/"
                 },
                 {
@@ -1717,6 +1747,41 @@
                     "path": "/app/view/tools/actionplan/"
                 },
                 {
+                    "clsName": "Ssp.view.tools.actionplan.AddAPTask",
+                    "name": "AddAPTask.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.actionplan.AddTaskView",
+                    "name": "AddTaskView.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.actionplan.ChallengesGrid",
+                    "name": "ChallengesGrid.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.actionplan.CustomActionPlan",
+                    "name": "CustomActionPlan.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.actionplan.EditTaskForm",
+                    "name": "EditTaskForm.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.actionplan.SearchChallengeView",
+                    "name": "SearchChallengeView.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.actionplan.TasksGrid",
+                    "name": "TasksGrid.js",
+                    "path": "/app/view/tools/actionplan/"
+                },
+                {
                     "clsName": "Ssp.view.tools.studentintake.StudentIntake",
                     "name": "StudentIntake.js",
                     "path": "/app/view/tools/studentintake/"
@@ -1937,6 +2002,11 @@
                     "path": "/app/model/"
                 },
                 {
+                    "clsName": "Ssp.model.SearchChallengeReferral",
+                    "name": "SearchChallengeReferral.js",
+                    "path": "/app/model/"
+                },
+                {
                     "clsName": "Ssp.model.tool.documents.StudentDocument",
                     "name": "StudentDocument.js",
                     "path": "/app/model/tool/documents/"
@@ -2129,6 +2199,11 @@
                 {
                     "clsName": "Ssp.store.Strengths",
                     "name": "Strengths.js",
+                    "path": "/app/store/"
+                },
+                 {
+                    "clsName": "Ssp.store.AddTasks",
+                    "name": "AddTasks.js",
                     "path": "/app/store/"
                 },
                 {

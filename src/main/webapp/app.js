@@ -86,6 +86,13 @@ Ext.require([
     'Ssp.view.tools.actionplan.DisplayActionPlanGoals',
     'Ssp.view.tools.actionplan.DisplayStrengths',
     'Ssp.view.tools.actionplan.TaskTree',
+	'Ssp.view.tools.actionplan.AddAPTask',
+	'Ssp.view.tools.actionplan.ChallengesGrid',
+    'Ssp.view.tools.actionplan.CustomActionPlan',
+    'Ssp.view.tools.actionplan.EditTaskForm',
+    'Ssp.view.tools.actionplan.SearchChallengeView',
+	'Ssp.view.tools.actionplan.TasksGrid',
+	'Ssp.view.tools.actionplan.AddTaskView',
     'Ssp.view.tools.studentintake.StudentIntake',
     'Ssp.view.tools.studentintake.Checklist',
     'Ssp.view.tools.studentintake.Challenges',
@@ -240,6 +247,7 @@ Ext.require([
 	'Ssp.model.CaseloadFilterCriteria',
 	'Ssp.model.PersonGoal',
 	'Ssp.model.PersonStrength',
+	'Ssp.model.SearchChallengeReferral',
 	'Ssp.model.PersonLite',	
 	'Ssp.model.Placement',
 	'Ssp.model.PersonProgramStatus',
@@ -315,6 +323,7 @@ Ext.require([
     'Ssp.store.StudentActivities',
     'Ssp.store.Goals',
 	'Ssp.store.Strengths',
+	'Ssp.store.AddTasks',
     'Ssp.store.SelfHelpGuides',
     'Ssp.store.SelfHelpGuideQuestions',
     'Ssp.store.JournalEntries',
@@ -429,6 +438,7 @@ Ext.require([
     'Ssp.service.ProgramStatusService',
     'Ssp.service.ReferralSourceService',
     'Ssp.service.SearchService',
+	'Ssp.service.SearchChallengeReferralService',
     'Ssp.service.SpecialServiceGroupService',
 	'Ssp.service.ServiceReasonsService',
     'Ssp.service.StudentIntakeService',
@@ -465,6 +475,7 @@ var apiUrls = [
   {name: 'category', url: 'reference/category'},
   {name: 'challenge', url: 'reference/challenge'},
   {name: 'challengeReferral', url: 'reference/challengeReferral'},
+  {name: 'challengeReferralSearch', url: 'reference/challengeReferral/search'},
   {name: 'childCareArrangement', url: 'reference/childCareArrangement'},
   {name: 'citizenship', url: 'reference/citizenship'},
   {name: 'color', url: 'reference/color'},
@@ -754,6 +765,7 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+					 
 			        currentGoal:{
 				        fn: function(){
 				            return new Ssp.model.PersonGoal({id:""});
@@ -1017,6 +1029,12 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+					addTasksStore:{
+				        fn: function(){
+				            return new Ssp.store.AddTasks();
+				    	},
+				        singleton: true
+			        },
 			        // STORES
 					abstractReferencesStore: 'Ssp.store.reference.AbstractReferences',
 				    adminTreeMenusStore: 'Ssp.store.admin.AdminTreeMenus',
@@ -1050,6 +1068,14 @@ Ext.onReady(function(){
 				    	fn: function(){
 				    		return Ext.create('Ssp.store.reference.Challenges', {
 							     extraParams: {status: "ALL"}
+							 });
+				    	},
+				    	singleton: true
+				    },
+					challengesAllUnpagedStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.Challenges', {
+							     extraParams: {limit: "-1"}
 							 });
 				    	},
 				    	singleton: true
@@ -1446,6 +1472,7 @@ Ext.onReady(function(){
 			    	gendersStore: 'Ssp.store.reference.Genders',
 				    goalsStore: 'Ssp.store.Goals',
 					strengthsStore: 'Ssp.store.Strengths',
+					// addTasksStore: 'Ssp.store.AddTasks',
 			    	journalEntriesStore: 'Ssp.store.JournalEntries',
 			    	journalEntriesUnpagedStore: 'Ssp.store.JournalEntriesUnpaged',
 			    	journalEntryDetailsStore: 'Ssp.store.JournalEntryDetails',
@@ -1582,6 +1609,7 @@ Ext.onReady(function(){
 					},
 				    searchStore: 'Ssp.store.Search',
 				    studentsSearchStore: 'Ssp.store.StudentsSearch',
+					searchChallengeReferralStore: 'Ssp.store.SearchChallengeReferral',
 				    selfHelpGuidesStore: 'Ssp.store.SelfHelpGuides',
 				    selfHelpGuideQuestionsStore: 'Ssp.store.SelfHelpGuideQuestions',
 				    serviceReasonsStore: {
@@ -1707,6 +1735,7 @@ Ext.onReady(function(){
 			        programStatusService: 'Ssp.service.ProgramStatusService',
 			        referralSourceService: 'Ssp.service.ReferralSourceService',
 			        searchService: 'Ssp.service.SearchService',
+					searchChallengeReferralService: 'Ssp.service.SearchChallengeReferralService',
 			        specialServiceGroupService: 'Ssp.service.SpecialServiceGroupService',
 					serviceReasonsService: 'Ssp.service.ServiceReasonsService',
 			        studentIntakeService: 'Ssp.service.StudentIntakeService',
