@@ -63,13 +63,13 @@ public final class EarlyAlertPortletController {
 	@RenderMapping
 	public ModelAndView showRoster(final PortletRequest req) {
 		String formattedCourse = req.getParameter("formattedCourse");
-		String key = "";
+		String initialSelectedCourse = "";
 		String termCode = req.getParameter("termCode");
 		if(org.apache.commons.lang.StringUtils.isNotBlank(formattedCourse))
-			key = formattedCourse;
+			initialSelectedCourse = formattedCourse;
 		if(org.apache.commons.lang.StringUtils.isNotBlank(termCode))
-			key += ":" + termCode;
-		return new ModelAndView("ea-roster", "initialSelectedCourse", key);
+			initialSelectedCourse += ":" + termCode;
+		return new ModelAndView("ea-roster", "initialSelectedCourse", initialSelectedCourse);
 	}
 
 	@RenderMapping(params = "action=enterAlert")
@@ -107,7 +107,7 @@ public final class EarlyAlertPortletController {
 			}
 
 			if ( course == null ) {
-				throw new IllegalStateException("Course not found for current instructor");
+				throw new IllegalStateException(buildErrorMesssage("Course not found for current instructor:", user.getSchoolId(), null, formattedCourse, termCode));
 			}
 
 			/*
@@ -118,18 +118,26 @@ public final class EarlyAlertPortletController {
 			student = personService.getBySchoolId(schoolId,true);  // TODO:  Handle error better??
 
 			if ( student == null ) {
-				throw new IllegalStateException("Student not found");
+				throw new IllegalStateException("Student not found: " + schoolId);
 			}
 			
 			enrollment = facultyCourseService.getEnrollment(user.getSchoolId(),
-					formattedCourse, course.getTermCode(), student.getSchoolId());
+					formattedCourse, course.getTermCode(), schoolId);
 
 			if ( enrollment == null ) {
-				throw new IllegalStateException("Enrollment not found.");
+				throw new IllegalStateException(buildErrorMesssage("Enrollment not found for: ", 
+						user.getSchoolId(), 
+						schoolId, 
+						formattedCourse, 
+						termCode));
 			}
 
 		} catch (ObjectNotFoundException e) {
-			throw new RuntimeException("Unrecognized entity", e);
+			throw new RuntimeException(buildErrorMesssage("Unrecognized Entity: ", 
+					user.getSchoolId(), 
+					schoolId, 
+					formattedCourse, 
+					termCode), e);
 		}
 		/*
 		 *  SANITY CHECK (is this even necessary?  wanted?)
@@ -137,9 +145,11 @@ public final class EarlyAlertPortletController {
 		 *      course
 		 */
 		if (!course.getFacultySchoolId().equals(user.getSchoolId())) {
-			final String msg = "Logged in user must be faculty of record on " +
-													"the specified course.";
-			throw new IllegalStateException(msg);
+			throw new IllegalStateException(buildErrorMesssage("Logged in user must be faculty of record on the specified course: ", 
+					user.getSchoolId(), 
+					null, 
+					formattedCourse, 
+					termCode));
 		}
 		model.put(KEY_STUDENT_ID, student.getId());  // Student UUID
 		model.put(KEY_COURSE, course);
@@ -157,7 +167,7 @@ public final class EarlyAlertPortletController {
 		if(org.apache.commons.lang.StringUtils.isNotBlank(termCode))
 			initialSelectedCourse += ":" + termCode;
 		Map<String,String> model = new HashMap<String,String>();
-		model.put("studentName", studentName);
+		model.put("studentName", org.apache.commons.lang.StringEscapeUtils.unescapeJavaScript(studentName));
 		model.put("initialSelectedCourse", initialSelectedCourse);
 		return new ModelAndView("ea-roster", model);
 	}
@@ -221,5 +231,19 @@ public final class EarlyAlertPortletController {
 			throw new UserNotEnabledException("User '" + username + "' is disabled.");
 		}
 		return person;
+	}
+	
+	private String buildErrorMesssage(String prefix, String facultySchoolId, String studentSchoolId, String formattedCourse, String termCode){
+		StringBuilder errorMsg = new StringBuilder(prefix);
+		if(org.apache.commons.lang.StringUtils.isNotBlank(facultySchoolId))
+			errorMsg.append(" Faculty School ID:").append(facultySchoolId);
+		if(org.apache.commons.lang.StringUtils.isNotBlank(studentSchoolId))
+			errorMsg.append(" Student School ID:").append(studentSchoolId);
+		if(org.apache.commons.lang.StringUtils.isNotBlank(formattedCourse))
+			errorMsg.append(" Formatted Course:").append(formattedCourse);
+		if(org.apache.commons.lang.StringUtils.isNotBlank(termCode))
+			errorMsg.append(" TermCode:").append(termCode);
+		errorMsg.append("\n\n");
+		return errorMsg.toString();
 	}
 }
