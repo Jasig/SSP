@@ -67,7 +67,8 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
                 rowEditable: true,
                 field: {
                     xtype: 'textfield',
-                    fieldStyle: "margin-bottom:12px;"
+                    fieldStyle: "margin-bottom:12px;",
+					maxLength: 80
                 }
             }, {
                 header: 'Description',
@@ -76,7 +77,8 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
                 rowEditable: true,
                 field: {
                     xtype: 'textfield',
-                    fieldStyle: "margin-bottom:12px;"
+                    fieldStyle: "margin-bottom:12px;",
+					maxLength: 1000
                 }
             }, {
                 header: 'Confidentiality',
