@@ -264,7 +264,7 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 	@Override
     public void afterPropertiesSet() throws Exception {
         try {
-            Session session = SessionFactoryUtils.openSession(sessionFactory);
+        	Session session = sessionFactory.openSession();
             TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
     		flushAndLoadCache();
     		lastCacheFlush = Calendar.getInstance();            

@@ -364,7 +364,7 @@ public class MessageServiceImpl implements MessageService {
 			final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 			final MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(
 					mimeMessage);
-
+ 
 			String adminAddress = personService.get(
 					Person.SYSTEM_ADMINISTRATOR_ID).getEmailAddressWithName();
 			mimeMessageHelper.setFrom(adminAddress);
