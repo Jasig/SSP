@@ -26,13 +26,14 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
         model: 'currentTask',
         personLite: 'personLite',
         store: 'tasksStore',
-        authenticatedPerson: 'authenticatedPerson'
+        authenticatedPerson: 'authenticatedPerson',
+		confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
     },
     
     config: {
         appEventsController: 'appEventsController',
         containerToLoadInto: 'tools',
-        formToDisplay: 'addtask',
+        formToDisplay: 'addtaskview',
         url: '',
         filterAuthenticated: false,
         filteredTaskStatus: null
@@ -74,6 +75,8 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
         
         this.filteredTaskStatus = null;
         this.filterTasks();
+		
+		this.confidentialityLevelsStore.load();
         
         return this.callParent(arguments);
     },
@@ -133,12 +136,17 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
     },
     
     onEditTask: function(){
-        this.loadEditor();
+        
+		 this.editTaskFormPopUp = Ext.create('Ssp.view.tools.actionplan.EditTaskForm', {
+               
+            });
+        this.editTaskFormPopUp.show();
     },
     
     onCloseTask: function(){
         var me = this;
         var store, id, model, groupName;
+		me.getView().setLoading(true);
         model = me.model;
         id = model.get('id');
         store = me.store;
@@ -167,6 +175,14 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
                         
                         store.sync();
                         Ext.ComponentQuery.query('#tasksPanel')[0].getView().refresh();
+						 store.sort([{
+                    property: 'completedDate',
+                    direction: 'ASC'
+                }, {
+                    property: 'dueDate',
+                    direction: 'DESC'
+                }]);
+				me.getView().setLoading(false);
                         
                         me.filterTasks();
                     }
@@ -176,6 +192,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
         }
         else {
             Ext.Msg.alert('SSP Error', 'Unable to delete. No id was specified to delete.');
+			me.getView().setLoading(false);
         }
     },
     
