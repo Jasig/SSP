@@ -21,6 +21,8 @@ package org.jasig.ssp.web.api;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -114,6 +116,7 @@ public class MapStatusReportController  extends AbstractBaseController {
 	@Autowired
 	private transient PlanService planService;
 	
+	
 
  
 	/**
@@ -148,10 +151,24 @@ public class MapStatusReportController  extends AbstractBaseController {
 	List<MapStatusReportCourseDetailTO> getCourseDetails(final @PathVariable UUID personId,
 			final HttpServletRequest request)  {
 
-		List<MapStatusReportCourseDetailTO> resultTO = new ArrayList<MapStatusReportCourseDetailTO>();
 		assertStandardMapReadApiAuthorization(request);
+		List<MapStatusReportCourseDetailTO> resultTO = new ArrayList<MapStatusReportCourseDetailTO>();
 		
 		List<MapStatusReportCourseDetails> result = mapStatusReportService.getAllCourseDetailsForPerson(new Person(personId));
+		Collections.sort(result, new Comparator<MapStatusReportCourseDetails>() {
+			@Override
+			public int compare(MapStatusReportCourseDetails o1, MapStatusReportCourseDetails o2) {
+				Term o1Term, o2Term;
+				try {
+					 o1Term = termService.getByCode(o1.getTermCode());
+					 o2Term = termService.getByCode(o2.getTermCode());
+				} catch (Exception e)
+				{
+					return 0;
+				}
+				return o1Term.getStartDate().compareTo(o2Term.getStartDate());
+			}
+		});		
 		for (MapStatusReportCourseDetails mapStatusReportCourseDetails : result) {
 			resultTO.add(new MapStatusReportCourseDetailTO(mapStatusReportCourseDetails));
 		}
@@ -168,6 +185,20 @@ public class MapStatusReportController  extends AbstractBaseController {
 		assertStandardMapReadApiAuthorization(request);
 		
 		List<MapStatusReportTermDetails> result = mapStatusReportService.getAllTermDetailsForPerson(new Person(personId));
+		Collections.sort(result, new Comparator<MapStatusReportTermDetails>() {
+			@Override
+			public int compare(MapStatusReportTermDetails o1, MapStatusReportTermDetails o2) {
+				Term o1Term, o2Term;
+				try {
+					 o1Term = termService.getByCode(o1.getTermCode());
+					 o2Term = termService.getByCode(o2.getTermCode());
+				} catch (Exception e)
+				{
+					return 0;
+				}
+				return o1Term.getStartDate().compareTo(o2Term.getStartDate());
+			}
+		});			
 		for (MapStatusReportTermDetails mapStatusReportCourseDetails : result) {
 			resultTO.add(new MapStatusReportTermDetailTO(mapStatusReportCourseDetails));
 		}
@@ -184,6 +215,20 @@ public class MapStatusReportController  extends AbstractBaseController {
 		assertStandardMapReadApiAuthorization(request);
 		
 		List<MapStatusReportSubstitutionDetails> result = mapStatusReportService.getAllSubstitutionDetailsForPerson(new Person(personId));
+		Collections.sort(result, new Comparator<MapStatusReportSubstitutionDetails>() {
+			@Override
+			public int compare(MapStatusReportSubstitutionDetails o1, MapStatusReportSubstitutionDetails o2) {
+				Term o1Term, o2Term;
+				try {
+					 o1Term = termService.getByCode(o1.getTermCode());
+					 o2Term = termService.getByCode(o2.getTermCode());
+				} catch (Exception e)
+				{
+					return 0;
+				}
+				return o1Term.getStartDate().compareTo(o2Term.getStartDate());
+			}
+		});	
 		for (MapStatusReportSubstitutionDetails mapStatusReportCourseDetails : result) {
 			resultTO.add(new MapStatusReportSubstitutionDetailTO(mapStatusReportCourseDetails));
 		}

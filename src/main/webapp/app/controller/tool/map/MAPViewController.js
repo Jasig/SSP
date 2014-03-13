@@ -43,6 +43,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
         },
 		'planFAFieldSet': '#planFAFieldSet',
 		'planTranscriptFieldSet': '#planTranscriptFieldSet',
+		'mapStatusFieldSet': '#mapStatusFieldSet',
 		'onPlan':'#onPlan',
         'onPlanStatusDetails':'#onPlanStatusDetails',
 		'onPlanFieldSet':'#onPlanFieldSet',
@@ -740,6 +741,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.getPlanNotesButton().setTooltip("Template Notes");
 			me.getPlanFAFieldSet().hide();
 			me.getPlanTranscriptFieldSet().hide();
+			me.getMapStatusFieldSet().hide();
 			me.getMovePlanLabel().setText("Move Template");
 			me.getMovePlanButton().setTooltip("Move Template");
 			me.getOnPlanFieldSet().hide();
@@ -751,6 +753,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.getPlanFAFieldSet().show();
 			me.getPlanFAButton().show();
 			me.getPlanTranscriptFieldSet().show();
+			me.getMapStatusFieldSet().show();
 			me.getPrintLabel().show();
 			me.getEmailPlanButton().show();
 			me.getEmailLabel().show();

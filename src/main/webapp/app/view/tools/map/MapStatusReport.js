@@ -79,7 +79,7 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 				        itemId: 'totalPlanCourses',
 				        name: 'totalPlanCourses'
 				    }, {
-				        fieldLabel: 'Plan Demerits',
+				        fieldLabel: 'Plan Anomalies',
 				        itemId: 'planRatioDemerits',
 				        name: 'planRatioDemerits'
 				    }, {
