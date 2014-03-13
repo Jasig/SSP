@@ -26,5 +26,13 @@ Ext.define('Ssp.store.reference.ConfigurationOptionsUnpaged', {
 			
             extraParams: this.extraParams
         });
+    },
+    getConfigByName:function(name)
+    {
+    	var me=this;
+    	var index = me.find('name',name);
+    	if(index >= 0)
+    	 return me.getAt(index).get('value');
+    	return null;
     }
 });
