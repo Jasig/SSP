@@ -24,6 +24,7 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
     	appEventsController: 'appEventsController',
 		termsStore:'termsStore',
 		currentMapPlan: 'currentMapPlan',
+        configStore: 'configurationOptionsUnpagedStore',
 		semesterStores : 'currentSemesterStores'
     },
     control: {
@@ -47,7 +48,21 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 	init: function() {
 		var me=this;
 		var view = me.getView();
-		me.currentAndFutureTermsStore = me.termsStore.getCurrentAndFutureTermsStore(true);
+		
+		me.configStore.clearFilter();
+		me.configStore.load({
+            extraParams: {
+                limit: "-1"
+            } 
+        });
+		me.editPastTerms = me.configStore.getConfigByName('map_edit_past_terms');
+		if(me.editPastTerms === 'true')
+		{
+			me.currentAndFutureTermsStore = me.termsStore.getClonedStoreSortedByDate(true);
+		}
+		else
+			me.currentAndFutureTermsStore = me.termsStore.getCurrentAndFutureTermsStore(true);
+		
 		var availableTerms = me.getAvailableTerms();
 		
 		var allowedTerms = me.getAllowedTerms(availableTerms);
