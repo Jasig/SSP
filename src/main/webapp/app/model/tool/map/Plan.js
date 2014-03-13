@@ -80,12 +80,20 @@ Ext.define('Ssp.model.tool.map.Plan', {
 	clearPlanCourses:function(){
 		var me = this;
 		var currentCourses =  me.get('planCourses');
-		while(currentCourses && currentCourses.length > 0){
-			currentCourses.pop(); 
+		if(Array.isArray(currentCourses)){
+			while(	currentCourses.length > 0){
+				currentCourses.pop(); 
+			}
+		}else{
+			me.set('planCourses',[]);
 		}
 		var currentTemplateCourses =  me.get('templateCourses');
-		while(currentTemplateCourses && currentTemplateCourses.length > 0){
-			currentTemplateCourses.pop();
+		if(Array.isArray(currentTemplateCourses)){
+			while(	currentTemplateCourses.length > 0){
+				currentTemplateCourses.pop(); 
+			}
+		}else{
+			me.set('templateCourses',[]);
 		}
 	},	
 	
@@ -151,7 +159,8 @@ Ext.define('Ssp.model.tool.map.Plan', {
 	clearTermNotes:function(){
 		var me = this;
 		var termNotes =  me.get('termNotes');
-		if(!termNotes){
+		if(!Array.isArray(termNotes)){
+			me.set('termNotes',[]);
 			return;
 		}
 		while(termNotes.length > 0) {

@@ -281,7 +281,14 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	onTermsStoreLoad:function(){
 		var me = this;
 		me.termsStore.removeListener( "onTermsStoreLoad", me.onTermsStoreLoad, me );
-		me.fireInitialiseMap();
+		if(me.termsStore.getTotalCount() == 0){
+			me.getView().setLoading(false);
+			me.currentMapPlan.clearMapPlan();
+			me.currentMapPlan.set('personId',  me.personLite.get('id'));
+			me.currentMapPlan.set('ownerId',  me.authenticatedPerson.get('id'));
+			me.currentMapPlan.set('name','No Terms Found.');
+		}else
+			me.fireInitialiseMap();
 	},
 	
 	onCreateNewMapPlan:function(){
@@ -303,8 +310,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	onCreateMapPlan:function(){
 		var me = this;
-
-
 		var terms = me.getTerms(me.currentMapPlan);
 		
 		if(terms.length == 0){
