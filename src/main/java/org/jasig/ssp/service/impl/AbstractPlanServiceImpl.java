@@ -191,6 +191,7 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 			}
 			final List<String> validCourseCodes = getCourseService().getValidCourseCodesForTerm(termCode, courseCodesInTerm);
 			for ( AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : coursesInTerm ) {
+				//validCourseCodes.isEmpty() is short circuiting logic as per SSP-1923
 				if(validCourseCodes.isEmpty() || validCourseCodes.contains(course.getCourseCode())){
 					continue;
 				}else{
