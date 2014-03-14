@@ -53,6 +53,13 @@ public class ExternalCourseServiceImpl extends AbstractExternalReferenceDataServ
 
 	@Override
 	public Boolean validateCourseForTerm(String courseCode, String termCode) {
+		//Shirt Circut:  As per SSP-1923.  If the is table is empty
+		//we assume the implementor does not want this validation and there for we will
+		//not spam the UI with validation errors in this case
+		if(!dao.hasCourseTerms())
+		{
+			 return true;
+		}
 		return dao.validateCourseForTerm( courseCode,  termCode);
 	}
 
