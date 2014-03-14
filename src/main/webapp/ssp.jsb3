@@ -424,7 +424,7 @@
                     "path": "/app/view/tools/map/"
                 },
                 {
-                    "clsName": "Ssp.view.tools.StudentTranscriptViewer",
+                    "clsName": "Ssp.view.tools.map.StudentTranscriptViewer",
                     "name": "StudentTranscriptViewer.js",
                     "path": "/app/view/tools/map/"
                 },
