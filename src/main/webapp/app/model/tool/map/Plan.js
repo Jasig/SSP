@@ -209,7 +209,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		me.populateFromGenericObject( objectData );
 		var termNotes = me.get('termNotes');
 		var recordTermNotes = [];
-		if(termNotes && termNotes.length > 0){
+		if(Array.isArray(termNotes) && termNotes.length > 0){
 			Ext.Array.forEach(termNotes, function(termNote) {
 				var recordTermNote = new Ssp.model.tool.map.TermNote();
 				recordTermNote.populateFromGenericObject(termNote);
@@ -231,15 +231,17 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		var simpleData = {};
 		var termNotes = me.get('termNotes')
 		simpleData.termNotes = [];
-		Ext.Array.forEach(termNotes, function(termNote) {
-			var studentNoteHasValue = !me.isEmpty(termNote.get("studentNotes"));
-			var contactNoteHasValue = !me.isEmpty(termNote.get("contactNotes"));
-			if(termNote != null && (studentNoteHasValue || contactNoteHasValue || termNote.get("isImportant"))){
-				termNote.set("id","");
-				termNote.set("objectStatus","ACTIVE");
-				simpleData.termNotes.push(termNote.getData());
-			}
-		});
+		if(Array.isArray(termNotes)){
+			Ext.Array.forEach(termNotes, function(termNote) {
+				var studentNoteHasValue = !me.isEmpty(termNote.get("studentNotes"));
+				var contactNoteHasValue = !me.isEmpty(termNote.get("contactNotes"));
+				if(termNote != null && (studentNoteHasValue || contactNoteHasValue || termNote.get("isImportant"))){
+					termNote.set("id","");
+					termNote.set("objectStatus","ACTIVE");
+					simpleData.termNotes.push(termNote.getData());
+				}
+			});
+		}
 		
 		simpleData.ownerId = me.get('ownerId');
 		simpleData.objectStatus = me.getObjectStatus();

@@ -139,6 +139,7 @@ Ext.require([
 	'Ssp.view.tools.map.SemesterGridTranscript',
     'Ssp.view.tools.map.SemesterPanel',
     'Ssp.view.tools.map.SemesterPanelContainer',
+    'Ssp.view.tools.map.StudentTranscriptViewer',
     'Ssp.view.tools.map.MapStatusReport',
     'Ssp.view.tools.map.FAView',
 	'Ssp.view.tools.map.MAPView',
