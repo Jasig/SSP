@@ -31,5 +31,5 @@ public interface TermService extends ExternalReferenceDataService<Term> {
 
 	List<Term> facetSearch(String tag, String programCode);
 
-	Term getTermWithRegistrationWindowOpenIfAny();
+	List<Term> getTermsWithRegistrationWindowOpenIfAny();
 }

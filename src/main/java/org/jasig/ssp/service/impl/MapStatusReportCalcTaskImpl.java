@@ -90,7 +90,7 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 	public void exec() {
 
 		if ( Thread.currentThread().isInterrupted() ) {
-			LOGGER.info("Abandoning external person sync because of thread interruption");
+			LOGGER.info("Abandoning map status report calculation because of thread interruption");
 			return;
 		}
 		if(!Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim()))
@@ -98,6 +98,8 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 			LOGGER.info("Map Plan Status Report calculation will not execute because the property calculate_map_plan_status is set to false");
 			return;			
 		}
+		LOGGER.info("BEGIN : MAPSTATUS REPORT ");
+		
 		MapStatusReportSummary summary = new MapStatusReportSummary();
 		summary.setStartTime(Calendar.getInstance());
 		
@@ -115,7 +117,6 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 		
 		//Lets figure out our cutoff term
 		Term cutoffTerm = mapStatusReportService.deriveCuttoffTerm();
-		LOGGER.info("BEGIN : MAPSTATUS REPORT ");
 		
 		//Lightweight query to avoid the potential 'kitchen sink' we would pull out if we fetched the Plan object
 		List<MapStatusReportPerson> allActivePlans = planService.getAllActivePlanIds();
@@ -127,17 +128,30 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 		
 		//Iterate through the active plans.  A transaction is committed after each plan
 		for (MapStatusReportPerson planIdPersonIdPair : allActivePlans) {
+			
+			if ( Thread.currentThread().isInterrupted() ) {
+				LOGGER.info("Abandoning map status report calculation because of thread interruption");
+				return;
+			}
+			
+			LOGGER.info("MAP STATUS REPORT CALCULATION STARTING FOR: "+planIdPersonIdPair.getSchoolId());
+			
 			evaluatePlan(gradesSet, additionalCriteriaSet, cutoffTerm, 
 					allTerms, planIdPersonIdPair, allSubstitutableCourses,termBound,useSubstitutableCourses);
+			
+			LOGGER.info("FINISHED MAP STATUS REPORT CALCULATION FOR: "+planIdPersonIdPair.getSchoolId());
 		}
 		summary.setEndTime(Calendar.getInstance());
 		summary.setStudentsInScope(allActivePlans.size());
 		
-		LOGGER.info("MAPSTATUS REPORT RUNTIME: "+(summary.getEndTime().getTimeInMillis() - summary.getStartTime().getTimeInMillis())+" ms.");
 		
 		sendReportEmail(summary);
 		sendOffPlanEmailsToCoaches();
 		
+		
+		LOGGER.info("MAPSTATUS REPORT RUNTIME: "+(summary.getEndTime().getTimeInMillis() - summary.getStartTime().getTimeInMillis())+" ms.");
+		LOGGER.info("END : MAPSTATUS REPORT ");
+
 	}
 
 	private void sendOffPlanEmailsToCoaches() {

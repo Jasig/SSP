@@ -135,10 +135,10 @@ public class TermDao extends AbstractExternalReferenceDataDao<Term> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Term getTermWithRegistrationWindowOpenIfAny() {
+	public List<Term> getTermsWithRegistrationWindowOpenIfAny() {
 		String query = "from Term term where term.registrationStartDate <= current_date() and current_date() <= term.registrationEndDate";
 		List<Term> result = createHqlQuery(query).list();
-		return result.isEmpty() ? null : result.get(0);
+		return result;
 	}
 	
 }

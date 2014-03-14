@@ -633,15 +633,28 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		String cutoffTermCode = configService.getByNameEmpty("map_plan_status_cutoff_term_code");
 		if(cutoffTermCode.trim().isEmpty() )
 		{
-			//If a registration window is open for a defined term.  Use that
-			Term termWithRegistrationWindowOpenIfAny = termService.getTermWithRegistrationWindowOpenIfAny();
-			if(termWithRegistrationWindowOpenIfAny != null)
+			//If a registration window is open for a defined term.  Use that 
+			List<Term> termsWithRegistrationWindowOpen = termService.getTermsWithRegistrationWindowOpenIfAny();
+			Term latestTerm = null;
+			if(!termsWithRegistrationWindowOpen.isEmpty())
 			{
-				return termWithRegistrationWindowOpenIfAny;
+				for (Term term : termsWithRegistrationWindowOpen) {
+					if(latestTerm == null)
+					{
+						latestTerm = term;
+					}
+					else
+					{
+						if(term.getStartDate().after(latestTerm.getStartDate()))
+						{
+							latestTerm = term;
+						}
+					}
+				}
 			}
 			try {
 				//If there is no registration window open, go with the current term.
-				return termService.getCurrentTerm();
+				return latestTerm == null ? termService.getCurrentTerm() : latestTerm;
 			} catch (ObjectNotFoundException e) {
 				//if we can't resolve the current term, we have bigger problems
 				LOGGER.error("Map Status Calculation will stop because the current term cannot be resolved.  This is likely a data issue in the EXTERNAL_TERM table");
