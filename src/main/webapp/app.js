@@ -150,6 +150,7 @@ Ext.require([
 	'Ssp.view.tools.map.PlanNotes',
 	'Ssp.view.tools.map.LoadTemplates',
 	'Ssp.view.tools.map.SaveTemplate',
+	'Ssp.view.tools.map.StudentTranscriptViewer',
 	'Ssp.view.tools.map.SavePlan',
     'Ssp.view.tools.map.CourseNotes',
     'Ssp.view.tools.map.TermNotes',
