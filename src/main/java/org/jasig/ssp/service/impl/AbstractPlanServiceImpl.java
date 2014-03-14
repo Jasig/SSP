@@ -191,7 +191,7 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 			}
 			final List<String> validCourseCodes = getCourseService().getValidCourseCodesForTerm(termCode, courseCodesInTerm);
 			for ( AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : coursesInTerm ) {
-				if(validCourseCodes.contains(course.getCourseCode())){
+				if(validCourseCodes.isEmpty() || validCourseCodes.contains(course.getCourseCode())){
 					continue;
 				}else{
 					  course.setIsValidInTerm(false);
