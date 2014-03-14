@@ -769,7 +769,6 @@ Ext.define('Ssp.controller.SearchViewController', {
     getCaseloadSuccess: function( r, scope){
     	var me=scope;
     	me.getView().setLoading( false );
-		me.selectFirstItem();
 		me.getSearchGridPager().onLoad();
     },
 
