@@ -278,7 +278,7 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 
 	public boolean hasCourseTerms() {
 		String query = " select count(*) from ExternalCourseTerm ";
-		Integer count = (Integer) createHqlQuery(query).uniqueResult();
+		Long count = (Long) createHqlQuery(query).uniqueResult();
 		return count == null ? false : count > 0;
 	}
 }
