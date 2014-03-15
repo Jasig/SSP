@@ -45,12 +45,12 @@ Ext.define('Ssp.store.external.Terms', {
         me.sort('startDate', 'DESC');
     },
     
-    getCurrentAndFutureTermsStore: function(sortEarliestFirst){
+    getCurrentAndFutureTermsStore: function(sortEarliestFirst, maximum){
         var me = this;
         var store = Ext.create('Ext.data.Store', {
             model: "Ssp.model.external.Term"
         });
-        store.loadRecords(me.getCurrentAndFutureTerms());
+        store.loadRecords(me.getCurrentAndFutureTerms(maximum));
         me.sortStoreByDate(store, sortEarliestFirst);
         return store;
     },
