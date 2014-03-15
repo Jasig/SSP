@@ -258,7 +258,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var me = this;
 		var terms;
 		
-		var termsStore = me.termsStore.getCurrentAndFutureTermsStore(5);			
+		var termsStore = me.termsStore.getCurrentAndFutureTermsStore(true, 5);			
 		if(mapPlan){
 			var mapTerms = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(mapPlan));
 			Ext.Array.forEach(mapTerms, function(mapTerm) {
