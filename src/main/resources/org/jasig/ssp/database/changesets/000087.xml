@@ -789,7 +789,7 @@ set body = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http
 		<strong>Total MAP Credit HRS: TERM:</strong> $totalPlanHours <strong>DEV:</strong> $totalPlanDevHours
 		</p>
 		</div>
-	#if($includeHeaderFooter)
+	#if($includeFinancialAidInformation)
 	<div style="width: 980px">
 		<div style="left:10px;margin-top:30px">
 		<p style="text-align:left; color:#000000;">
