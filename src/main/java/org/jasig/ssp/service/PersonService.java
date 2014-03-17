@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.UUID;
 
+import javax.mail.SendFailedException;
 import javax.portlet.PortletRequest;
 
 import org.jasig.ssp.model.ObjectStatus;
@@ -32,6 +33,7 @@ import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
+import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
@@ -287,5 +289,11 @@ public interface PersonService extends AuditableCrudService<Person> {
 	void evict(Person model);
 
 	boolean emailStudent(EmailStudentRequestForm emailRequest) throws ObjectNotFoundException, ValidationException;
+
+	void sendCoachingAssignmentChangeEmail(Person model, UUID oldCoachId)
+			throws ObjectNotFoundException, SendFailedException,
+			ValidationException;
+
+	UUID getCoachIdForStudent(PersonTO obj);
 
 }
