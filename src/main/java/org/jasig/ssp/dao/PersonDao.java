@@ -44,6 +44,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
+import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
@@ -692,5 +693,17 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 					.add(Projections.groupProperty("c.username").as("coachUsername"));
 		}
 		return projections;
+	}
+
+	public UUID getCoachIdForStudent(PersonTO obj) {
+		String query = "select p.coach.id from Person p where p = :person";
+		Object coachId =  createHqlQuery(query).setEntity("person", new Person(obj.getId())).uniqueResult();
+		UUID coachIdUUID = null;
+		if(coachId != null)
+		{
+			coachIdUUID = (UUID) coachId;
+		}
+			
+		return coachIdUUID;
 	}
 }

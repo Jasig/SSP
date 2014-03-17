@@ -437,9 +437,9 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 	 * 
 	 * Maximum length of 4000.
 	 */
-	@Column(length = 4000)
-	@Size(max = 4000)
-	private String strengths;
+//	@Column(length = 4000)
+//	@Size(max = 4000)
+//	private String strengths;
 
 	/**
 	 * Information/details about a staff member.
@@ -1082,7 +1082,7 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 	 * @return the strengths
 	 */
 	public String getStrengths() {
-		return strengths;
+		return "";
 	}
 
 	/**
@@ -1090,7 +1090,7 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 	 *            the strengths to set
 	 */
 	public void setStrengths(final String strengths) {
-		this.strengths = strengths;
+		//this.strengths = strengths;
 	}
 
 	public Person getCoach() {
@@ -1303,7 +1303,7 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 		result *= hashField("photoUrl", photoUrl);
 		result *= hashField("schoolId", schoolId);
 		result *= hashField("username", username);
-		result *= hashField("strengths", strengths);
+		result *= hashField("strengths", "");
 		result *= hashField("coach", coach);
 		// result *= hashField("studentType", studentType);
 		result *= hashField("anticipatedStartTerm", anticipatedStartTerm);
