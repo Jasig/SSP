@@ -56,6 +56,20 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
                     fieldLabel: 'Early Alert Course',
                     value: me.earlyAlert.get('courseName') +  ' ' + me.earlyAlert.get('courseTitle')
                  },{
+                     xtype: 'multiselect',
+                     name: 'earlyAlertOutreachIds',
+                     itemId: 'outreachList',
+                     fieldLabel: 'Outreach'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
+                     store: me.outreachesStore,
+                     displayField: 'name',
+ 					queryMode: 'local',
+                     msgTarget: 'side',
+                     valueField: 'id',
+                     invalidCls: 'multiselect-invalid',
+                     minSelections: 1,
+                     allowBlank: false,
+                     anchor: '95%'
+                 },{
                     xtype: 'combobox',
                     itemId: 'outcomeCombo',
                     name: 'earlyAlertOutcomeId',
@@ -75,20 +89,6 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
                     itemId: 'otherOutcomeDescriptionText',
                     name: 'earlyAlertOutcomeOtherDescription',
                     fieldLabel: 'Other Outcome Description',
-                    anchor: '95%'
-                },{
-                    xtype: 'multiselect',
-                    name: 'earlyAlertOutreachIds',
-                    itemId: 'outreachList',
-                    fieldLabel: 'Outreach'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
-                    store: me.outreachesStore,
-                    displayField: 'name',
-					queryMode: 'local',
-                    msgTarget: 'side',
-                    valueField: 'id',
-                    invalidCls: 'multiselect-invalid',
-                    minSelections: 1,
-                    allowBlank: false,
                     anchor: '95%'
                 },{
                     xtype: 'textareafield',
