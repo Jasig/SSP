@@ -213,7 +213,7 @@
 
       <!-- Referral Reason -->
       <div class="ea-input">
-        <select class="field-reason">
+        <select class="field-reason" multiple="multiple">
           <option class="prompt" value=""><spring:message code="select.a.reason"/></option>
         </select><br/>
         <input type="text" class="field-other-reason-text" name="earlyAlertReasonOtherDescription" value="" placeholder="<spring:message code="type.a.reason"/>" style="display: none; margin-top: 8px;" />

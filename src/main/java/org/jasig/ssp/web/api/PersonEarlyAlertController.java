@@ -140,13 +140,6 @@ public class PersonEarlyAlertController extends
 							+ " match if a person identifier is set in the data.");
 		}
 
-		// TEMPORARY check until the issue in SSP-338 is fixed
-		if (obj.getEarlyAlertReasonIds() != null
-				&& obj.getEarlyAlertReasonIds().size() > 1) {
-			throw new ValidationException(
-					"Early alerts may not have more than one reason.");
-		}
-
 		if (obj.getPersonId() == null) {
 			obj.setPersonId(personId);
 		}

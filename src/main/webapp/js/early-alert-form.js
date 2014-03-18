@@ -220,7 +220,7 @@ var ssp = ssp || {};
                 courseTermCode: options.parameters.term,
                 emailCC: $(selectors.emailCc).val(),
                 campusId: $(selectors.campus).val(),
-                earlyAlertReasonIds: [  $(selectors.reason).val()  ],
+                earlyAlertReasonIds: $(selectors.reason).val(),
                 earlyAlertReasonOtherDescription: $(selectors.otherReasonText).val(),
                 earlyAlertSuggestionIds: [],  // Set below...
                 earlyAlertSuggestionOtherDescription: $(selectors.suggestionsOtherHidden).val(),
