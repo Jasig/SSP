@@ -44,6 +44,7 @@ var ssp = ssp || {};
             student:                 '.field-student',
             enrollmentStatus:        '.field-enrollment-status',
             netId:                   '.field-net-id',
+            studentSchoolId:               '.field-student-school-id',
             studentEmail:            '.field-student-email',
             studentType:             '.field-student-type',
             assignedCounselor:       '.field-assigned-counselor',
@@ -284,7 +285,10 @@ var ssp = ssp || {};
         $(selectors.enrollmentStatus).text(ssp.getStatusCodeName(options.parameters.enrollmentStatusCode, options));
 
         // netId
-        $(selectors.netId).text(student.schoolId);
+        $(selectors.netId).text(student.username);
+        
+        // schoolId
+        $(selectors.studentSchoolId).text(student.schoolId);
 
         // studentEmail
         $(selectors.studentEmail).text(student.primaryEmailAddress);

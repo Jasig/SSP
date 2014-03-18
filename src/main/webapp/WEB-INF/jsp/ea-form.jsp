@@ -117,6 +117,17 @@
         <span><spring:message code="net.id"/>:</span>
       </div>
       <div class="ea-clear"></div>
+      
+            <!-- Student ID -->
+      <div class="ea-input">
+        <span class="field-student-school-id"></span>
+      </div>
+      <div class="ea-required">&nbsp;</div>
+      <div class="ea-label">
+        <span><spring:message code="student.school.id"/>:</span>
+      </div>
+      <div class="ea-clear"></div>
+      
 
       <!-- Student Email -->
       <div class="ea-input">
