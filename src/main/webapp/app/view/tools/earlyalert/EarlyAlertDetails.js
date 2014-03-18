@@ -120,12 +120,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
                     }, {
                         xtype: 'toolbar',
                         dock: 'top',
-                        items: [{
-                            text: 'Respond  to selected Early Alert',
-                            xtype: 'button',
-                            itemId: 'detailRespondButton',
-                            hidden: !me.authenticatedPerson.hasAccess('RESPOND_EARLY_ALERT_BUTTON')
-                        }]
+                        items: []
                     }, {
                         xtype: 'gridpanel',
                         title: 'Responses',
@@ -194,6 +189,13 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
                     text: 'Return to Early Alert List',
                     xtype: 'button',
                     itemId: 'finishButton'
+                },{
+                    xtype: 'tbspacer'
+                },{
+                    text: 'Respond  to selected Early Alert',
+                    xtype: 'button',
+                    itemId: 'detailRespondButton',
+                    hidden: !me.authenticatedPerson.hasAccess('RESPOND_EARLY_ALERT_BUTTON')
                 }]
             }]
         });
