@@ -161,13 +161,11 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                                     boxLabel: 'Total Time Expected Outside Class'
                                  },
                                  {
-                                	hidden:true,
-                                    hideable:false,
-									checked: true,
-                                    name: 'includeFinancialAidInformation',
-                                    labelSeparator: '',
-                                    boxLabel: 'Display Financial Aid Information'
-                                 }]
+         							checked: true,
+                                     name: 'includeFinancialAidInformation',
+                                     labelSeparator: '',
+                                     boxLabel: 'Display FinAid Information'
+                                  }]
                                 }],
                                     dockedItems: [{
                                     xtype: 'toolbar',

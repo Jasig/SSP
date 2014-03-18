@@ -191,7 +191,7 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 			}
 			final List<String> validCourseCodes = getCourseService().getValidCourseCodesForTerm(termCode, courseCodesInTerm);
 			for ( AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : coursesInTerm ) {
-				if(validCourseCodes.contains(course.getCourseCode())){
+				if(validCourseCodes.isEmpty() || validCourseCodes.contains(course.getCourseCode())){
 					continue;
 				}else{
 					  course.setIsValidInTerm(false);
@@ -290,7 +290,7 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 				requiringCourse.setHasCorequisites(false);
 				requiringCourse.setHasPrerequisites(false);
 				model.setIsValid(false);
-				requiringCourse.setInvalidReasons(" Pre/co requisite + " + requisiteCourse.getRequiredCourseCode() + " is missing.");
+				requiringCourse.setInvalidReasons(" Pre/co requisite + " + requisiteCourse.getRequiredFormattedCourse() + " is missing.");
 			}
 		}
 		

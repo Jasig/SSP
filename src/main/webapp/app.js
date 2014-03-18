@@ -140,6 +140,7 @@ Ext.require([
 	'Ssp.view.tools.map.PlanNotes',
 	'Ssp.view.tools.map.LoadTemplates',
 	'Ssp.view.tools.map.SaveTemplate',
+	'Ssp.view.tools.map.StudentTranscriptViewer',
 	'Ssp.view.tools.map.SavePlan',
     'Ssp.view.tools.map.CourseNotes',
     'Ssp.view.tools.map.TermNotes',
@@ -910,7 +911,11 @@ Ext.onReady(function(){
 				            return Ext.create('Ext.data.Store',{
 				            	model: 'Ssp.model.reference.SpecialServiceGroup',
 								filterOnLoad: true,
-								filters: [{property:"objectStatus", value:'ACTIVE'}]
+								filters: [{property:"objectStatus", value:'ACTIVE'}],
+								sorters:  [{
+							         property: 'name',
+							         direction: 'ASC'
+							     }]
 				            });
 				    	},
 				        singleton: true
@@ -920,7 +925,11 @@ Ext.onReady(function(){
 				            return Ext.create('Ext.data.Store',{
 				            	model: 'Ssp.model.reference.ReferralSource',
 								filterOnLoad: true,
-								filters: [{property:"objectStatus", value:'ACTIVE'}]
+								filters: [{property:"objectStatus", value:'ACTIVE'}],
+								sorters:  [{
+							         property: 'name',
+							         direction: 'ASC'
+							     }]
 				            });
 				    	},
 				        singleton: true
@@ -930,7 +939,11 @@ Ext.onReady(function(){
 				            return Ext.create('Ext.data.Store',{
 				            	model: 'Ssp.model.reference.ServiceReason',
 								filterOnLoad: true,
-								filters: [{property:"objectStatus", value:'ACTIVE'}]
+								filters: [{property:"objectStatus", value:'ACTIVE'}],
+								sorters:  [{
+							         property: 'name',
+							         direction: 'ASC'
+							     }]
 				            });
 				    	},
 				        singleton: true
@@ -1306,7 +1319,7 @@ Ext.onReady(function(){
 						fn: function(){
 							return Ext.create('Ssp.store.PlanTemplatesSummary', {
 							     storeId: 'planTemplatesSummaryStore',		
-							     extraParams: {sort: "name", sortDirection: "DESC", status: "ALL", limit: "-1"}
+							     extraParams: {sort: "name", sortDirection: "ASC", status: "ALL", limit: "-1"}
 							});
 						},
 						singleton: true
@@ -1322,7 +1335,15 @@ Ext.onReady(function(){
 						},
 						singleton: true
 					},
-					racesStore: {
+					racesAllStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.Races', {
+								extraParams: {status: "ALL"}
+							});
+						},
+						singleton: true
+					},
+					racesAllUnpagedStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Races', {
 							     extraParams: {status: "ALL", limit: "-1"}
@@ -1330,15 +1351,39 @@ Ext.onReady(function(){
 					    },
 					    singleton: true
 					},	
-					sapStatusesStore: {
+					sapStatusesAllStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.SapStatuses', {
-							     extraParams: {status: "ALL", limit: "-1"}
+							     extraParams: {status: "ALL"}
 							 });
 					    },
 					    singleton: true
 					},
-					financialAidFilesStore: {
+					sapStatusesAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.SapStatuses', {
+								extraParams: {status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					},
+					sapStatusesActiveUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.SapStatuses', {
+								extraParams: {status: "ACTIVE", limit: "-1"}
+							});
+						},
+						singleton: true
+					},
+					financialAidFilesAllStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.FinancialAidFiles', {
+								extraParams: {status: "ALL"}
+							});
+						},
+						singleton: true
+					},
+					financialAidFilesAllUnpagedStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.FinancialAidFiles', {
 							     extraParams: {status: "ALL", limit: "-1"}

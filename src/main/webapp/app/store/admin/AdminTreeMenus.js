@@ -308,8 +308,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 }, {
 					text: 'Races',
                     title: 'Races',
-                    store: 'races',
-                    store: 'races',                    
+                    store: 'racesAll',
 					interfaceOptions: {
                         addButtonVisible: true,
                         deleteButtonVisible: false                  
@@ -793,7 +792,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 	            children: [{
 					text: 'SAP Statuses',
 	                title: 'SAP Statuses',
-	                store: 'sapStatuses',
+	                store: 'sapStatusesAll',
 					interfaceOptions: {
 	                    addButtonVisible: true,
 	                    deleteButtonVisible: false                  
@@ -839,7 +838,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 	            }, {
 					text: 'Financial Aid Files',
 	                title: 'Financial Aid Files',
-	                store: 'financialAidFiles',
+	                store: 'financialAidFilesAll',
 					interfaceOptions: {
 	                    addButtonVisible: true,
 	                    deleteButtonVisible: false                  

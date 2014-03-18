@@ -147,19 +147,6 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 	@Override
 	public PagingWrapper<Template> getAll(
 			SortingAndPaging createForSingleSortWithPaging,TemplateSearchTO searchTO) {
-
-		if(!securityService.isAuthenticated() || !securityService.hasAuthority("ROLE_PERSON_MAP_READ")){
-			if(!anonymousUsersAllowed()){
-				LOGGER.info("Invalid request for templates, requested by anonymous user, anonymous access is not enabled");
-				throw new AccessDeniedException("Invalid request for templates, requested by anonymous user, anonymous access is not enabled");
-			}
-			if(searchTO.visibilityAll())
-				searchTO.setVisibility(MapTemplateVisibility.ANONYMOUS);
-			if(!searchTO.getVisibility().equals(MapTemplateVisibility.ANONYMOUS)){
-				LOGGER.info("Invalid request for templates, request by anonymous user request was for private/authenticated templates only.");
-				throw new AccessDeniedException("Invalid request for templates, request by anonymous user request was for private/authenticated templates only.");
-			}
-		}
 		return getDao().getAll(createForSingleSortWithPaging, searchTO);
 	}
 	

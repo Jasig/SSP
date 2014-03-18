@@ -76,16 +76,18 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
             });
         }
 
-        me.store.loadData(courseTranscripts);
-		me.store.sort([
-		    {
-		        property : 'termStartDate',
-		        direction: 'DESC'
-		    },
-		    {
-		        property : 'formattedCourse',
-		        direction: 'ASC'
-		    }]);
+        if(courseTranscripts.length > 0){
+        	me.store.loadData(courseTranscripts);
+        	me.store.sort([
+        	               {
+        	            	   property : 'termStartDate',
+        	            	   direction: 'DESC'
+        	               },
+        	               {
+        	            	   property : 'formattedCourse',
+        	            	   direction: 'ASC'
+        	               }]);
+    	}
         me.getView().setLoading( false );
     },
     

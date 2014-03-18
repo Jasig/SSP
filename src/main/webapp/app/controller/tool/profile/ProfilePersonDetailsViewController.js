@@ -30,8 +30,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 		programStatusChangeReasonsStore: 'programStatusChangeReasonsStore',
         sspConfig: 'sspConfig',
         formUtils: 'formRendererUtils',
-        sapStatusesStore: 'sapStatusesStore',
-        financialAidFilesStore: 'financialAidFilesStore',
+        sapStatusesStore: 'sapStatusesAllUnpagedStore',
+        financialAidFilesStore: 'financialAidFilesAllUnpagedStore',
         textStore:'sspTextStore'
     },
     
@@ -52,8 +52,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         genderField: '#gender',
         ethnicityField: '#ethnicity',
 		raceField: '#race',
-        primaryEmailAddressField: '#primaryEmailAddress',
-        registeredTermsField: '#registeredTerms',
+		primaryEmailAddressLabel: '#primaryEmailAddressLabel',
+		primaryEmailAddressField: '#primaryEmailAddressField',
+		registeredTermsField: '#registeredTerms',
         
         gpaField: '#cumGPA',
         transferHrsField: '#transferHrs',
@@ -183,8 +184,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         me.person.populateFromGenericObject(personResponse);
                
         var nameField = me.getNameField();
-        var primaryEmailAddressField = me.getPrimaryEmailAddressField();
-        var photoUrlField = me.getPhotoUrlField();
+		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
+		var primaryEmailAddressLabel = me.getPrimaryEmailAddressLabel();
+		var photoUrlField = me.getPhotoUrlField();
         var birthDateField = me.getBirthDateField();
         var studentTypeField = me.getStudentTypeField();
         var programStatusField = me.getProgramStatusField();
@@ -205,8 +207,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         nameField.setValue('<span style="color:#15428B">'+'Name'+':  </span>' + firstLastName);
         studentIdField.setFieldLabel('');
         studentIdField.setValue('<span style="color:#15428B">' + me.sspConfig.get('studentIdAlias') + ':  </span>' + me.person.get('schoolId'));
-        primaryEmailAddressField.setFieldLabel('');
-        primaryEmailAddressField.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.school-email')+':  </span>' + me.person.get('primaryEmailAddress'));
+        primaryEmailAddressLabel.setFieldLabel('');
+		primaryEmailAddressLabel.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.school-email')+':  </span>' );
+		primaryEmailAddressField.setFieldLabel('');
+        primaryEmailAddressField.setValue('<a href="mailto:'+me.handleNull(me.person.get('primaryEmailAddress'))+'" target="_top">'+me.handleNull(me.person.get('primaryEmailAddress'))+'</a>');        
         birthDateField.setFieldLabel('');
         birthDateField.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.dob')+':  </span>' + me.person.getFormattedBirthDate());
         studentTypeField.setFieldLabel('');

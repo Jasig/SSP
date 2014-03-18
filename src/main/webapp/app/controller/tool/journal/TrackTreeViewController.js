@@ -350,25 +350,13 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
 
                     Ext.Array.each(journalStepDetails, function(innerItem, innerIndex){
 
-                        var id = innerItem.id;
+                        var parentNode = scope.getLoadingRootNode().findChild('id', (journalStep.id + '_journalStep'), true);
+                        if(parentNode != null){
+                        	var detailNode = parentNode.findChild('id', (innerItem.id + '_journalDetail'), true);
 
-                        var detailNode = scope.getLoadingRootNode().findChild('id', (id + '_journalDetail'), true);
-
-                        if (detailNode != null) {
-
-                            stepNode = detailNode.parentNode;
-
-
-
-                            var parentId = journalStep.id;
-
-
-                            var parentNode = scope.getLoadingRootNode().findChild('id', (parentId + '_journalStep'), true);
-
-                            if ((stepNode && parentNode) && (stepNode.id == parentNode.id)) {
-                                detailNode.set('checked', true);
-
-                            }
+                        	if (detailNode != null) {
+                        		detailNode.set('checked', true);
+                        	}
                         }
 
                     });

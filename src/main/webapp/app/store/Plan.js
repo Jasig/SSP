@@ -26,7 +26,14 @@ Ext.define('Ssp.store.Plan', {
 	constructor: function(){
 		Ext.apply(this, {
 							proxy: this.apiProperties.getProxy(this.apiProperties.getItemUrl('personMapPlan')),
-							autoLoad: false
+							autoLoad: false,
+						     sorters: [{
+						         property: 'name',
+						         direction: 'ASC'
+						     }, {
+						         property: 'modifiedDate',
+						         direction: 'DESC'
+						     }]							
 						});
 		return this.callParent(arguments);
 	}

@@ -21,7 +21,7 @@ Ext.define('Ssp.controller.tool.profile.SapStatusController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-        sapStatusesStore: 'sapStatusesStore'
+        sapStatusesStore: 'sapStatusesAllUnpagedStore'
     },
 	control: {
         codeField: '#code',

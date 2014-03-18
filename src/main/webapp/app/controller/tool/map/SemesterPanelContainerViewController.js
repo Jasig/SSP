@@ -30,6 +30,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     	currentMapPlan: 'currentMapPlan',
 		semesterStores : 'currentSemesterStores',
         electiveStore: 'electivesAllUnpagedStore',
+        configStore: 'configurationOptionsUnpagedStore',
         colorStore: 'colorsAllUnpagedStore',
     },
     semesterPanels : new Array(),
@@ -49,6 +50,16 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	init: function() {
 		var me=this;
 		var id = me.personLite.get('id');
+		
+		
+		me.configStore.clearFilter();
+		me.configStore.load({
+            extraParams: {
+                limit: "-1"
+            } 
+        });
+		
+		me.editPastTerms = me.configStore.getConfigByName('map_edit_past_terms');
 		
 	    me.resetForm();
 		me.appEventsController.assignEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadMapPlan, scope: me});
@@ -247,7 +258,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var me = this;
 		var terms;
 		
-		var termsStore = me.termsStore.getCurrentAndFutureTermsStore(5);			
+		var termsStore = me.termsStore.getCurrentAndFutureTermsStore(true, 5);			
 		if(mapPlan){
 			var mapTerms = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(mapPlan));
 			Ext.Array.forEach(mapTerms, function(mapTerm) {
@@ -339,11 +350,12 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				yearView.minHeight = 214;
 			}
 			var semesterPanels = new Array();
+			
 			Ext.Array.forEach(termSet, function(term) {
 				var termCode = term.get('code');
 				var panelName = term.get("name");
 				var isPast = me.termsStore.isPastTerm(termCode);
-				semesterPanels.push(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode]));
+				semesterPanels.push(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode],me.editPastTerms));
 			});
 
 			
@@ -359,10 +371,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.getView().setLoading(false);
     },
 	
-	createSemesterPanel: function(semesterName, termCode, semesterStore){
+	createSemesterPanel: function(semesterName, termCode, semesterStore,editPastTerms){
 		var me = this;
 		
-		if(!me.termsStore.isPastTerm(termCode)){
+		if(me.editPastTerms === 'true' || !me.termsStore.isPastTerm(termCode)){
 			var semesterPanel = new Ssp.view.tools.map.SemesterPanel({
 				title:semesterName,
 				itemId:termCode,
@@ -378,6 +390,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				scroll: true
 			});			 	
 		 	semesterPanel.tools[0].hidden = false;
+		 	semesterPanel.editPastTerms = editPastTerms;
 		}
 		return semesterPanel;
 	},

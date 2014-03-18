@@ -52,6 +52,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.mail.SendFailedException;
 import javax.validation.Valid;
 
 import java.io.Serializable;
@@ -302,21 +303,29 @@ public class PersonController extends AbstractBaseController {
 	 *             If specified object could not be found.
 	 * @throws ValidationException
 	 *             If the specified id is null.
+	 * @throws SendFailedException 
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	@PreAuthorize(Permission.SECURITY_PERSON_WRITE)
 	public @ResponseBody
 	PersonTO save(final @PathVariable UUID id,
 			final @Valid @RequestBody PersonTO obj)
-			throws ObjectNotFoundException, ValidationException {
+			throws ObjectNotFoundException, ValidationException, SendFailedException {
 		if (id == null) {
 			throw new ValidationException(
 					"You submitted a person without an id to the save method.  Did you mean to create?");
 		}
+		//This call has to always be before 
+		//final Person model = factory.from(obj);
+		UUID oldCoachId = service.getCoachIdForStudent(obj);
 
 		final Person model = factory.from(obj);
 		model.setId(id);
-
+		
+		if(!model.getCoach().getId().equals(oldCoachId))
+		{
+			service.sendCoachingAssignmentChangeEmail(model,oldCoachId);
+		}
 		final Person savedPerson = service.save(model);
 		if (null != savedPerson) {
 			return new PersonTO(savedPerson);

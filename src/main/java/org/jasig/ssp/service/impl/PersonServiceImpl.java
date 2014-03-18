@@ -29,6 +29,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.mail.SendFailedException;
 import javax.portlet.PortletRequest;
 
 import org.hibernate.exception.ConstraintViolationException;
@@ -54,10 +55,12 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
+import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.EmailStudentRequestTO;
+import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
@@ -127,6 +130,9 @@ public class PersonServiceImpl implements PersonService {
 	
 	@Autowired
 	private transient ConfidentialityLevelService confidentialityLevelService;
+	
+	@Autowired
+	private transient ConfigService configService;
 
 
 	/**
@@ -444,8 +450,14 @@ public class PersonServiceImpl implements PersonService {
 	 */
 	@Override
 	public Person save(final Person obj) throws ObjectNotFoundException {
+
 		final Person person = dao.save(obj);
 		return additionalAttribsForStudent(person);
+	}
+
+	@Override
+	public UUID getCoachIdForStudent(PersonTO obj) {
+		return dao.getCoachIdForStudent(obj);
 	}
 
 	/**
@@ -970,5 +982,19 @@ public class PersonServiceImpl implements PersonService {
 			}
 		}
 		return builder.toString();
+	}
+
+	@Override
+	public void sendCoachingAssignmentChangeEmail(Person model, UUID oldCoachId) throws ObjectNotFoundException, SendFailedException, ValidationException {
+		
+		Person oldCoach = get(oldCoachId);
+		String appTitle = configService.getByNameEmpty("app_title");
+		String serverExternalPath = configService.getByNameEmpty("serverExternalPath");
+
+		String message = oldCoach.getFullName()+" has assigned "+model.getFullName()+" to your caseload in "+appTitle+". Please visit "+serverExternalPath+" to view the student's information in "+appTitle+".";
+		String subject = "A coaching assignment has changed in "+appTitle;
+
+		SubjectAndBody subjectAndBody = new SubjectAndBody(subject, message);
+		messageService.createMessage(model.getCoach().getPrimaryEmailAddress(), oldCoach.getPrimaryEmailAddress(), subjectAndBody);
 	}
 }

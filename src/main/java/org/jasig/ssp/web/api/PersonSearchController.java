@@ -134,7 +134,7 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) BigDecimal gpaEarnedMin,
 	 final @RequestParam(required = false) BigDecimal gpaEarnedMax,
 	 final @RequestParam(required = false) Boolean currentlyRegistered,
-	 final @RequestParam(required = false) String sapStatus,
+	 final @RequestParam(required = false) String sapStatusCode,
 	 final @RequestParam(required = false)String mapStatus,
 	 final @RequestParam(required = false)String planStatus,
 	 final @RequestParam(required = false) Boolean myCaseload,
@@ -145,7 +145,7 @@ public class PersonSearchController extends AbstractBaseController {
 		assertSearchApiAuthorization(request);
 
 		final PagingWrapper<PersonSearchResult2> models = service.search2(personSearchRequestFactory.from(studentId,programStatus,coachId,declaredMajor,
-				hoursEarnedMin,hoursEarnedMax,gpaEarnedMin,gpaEarnedMax,currentlyRegistered,sapStatus,mapStatus,planStatus,myCaseload,myPlans,birthDate));
+				hoursEarnedMin,hoursEarnedMax,gpaEarnedMin,gpaEarnedMax,currentlyRegistered,sapStatusCode,mapStatus,planStatus,myCaseload,myPlans,birthDate));
 		return new PagedResponse<PersonSearchResult2TO>(true,
 				models.getResults(), factory2.asTOList(models.getRows()));	
 	}

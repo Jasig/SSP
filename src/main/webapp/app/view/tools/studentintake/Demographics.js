@@ -30,7 +30,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
     	educationLevelsStore: 'educationLevelsStore',
     	employmentShiftsStore: 'employmentShiftsStore',
     	ethnicitiesStore: 'ethnicitiesStore',
-		racesStore: 'racesStore',
+		racesStore: 'racesAllUnpagedStore',
     	gendersStore: 'gendersStore',
     	maritalStatusesStore: 'maritalStatusesStore',
     	militaryAffiliationsStore: 'militaryAffiliationsStore',

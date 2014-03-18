@@ -91,7 +91,8 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
 		Query query = createHqlQuery(baseValidateCourseHqlQuery)
 		.setParameterList("courseCodes", codes)
 		.setString("termCode", termCode);
-		return (List<String>)query.list();
+		List<String> result = (List<String>)query.list();
+		return result;
 	}
 
 
@@ -274,4 +275,10 @@ public class ExternalCourseDao extends AbstractExternalReferenceDataDao<External
             SessionFactoryUtils.closeSession(sessionHolder.getSession());
         }
     }
+
+	public boolean hasCourseTerms() {
+		String query = " select count(*) from ExternalCourseTerm ";
+		Long count = (Long) createHqlQuery(query).uniqueResult();
+		return count == null ? false : count > 0;
+	}
 }

@@ -45,16 +45,24 @@ Ext.define('Ssp.store.external.Terms', {
         me.sort('startDate', 'DESC');
     },
     
-    getCurrentAndFutureTermsStore: function(sortEarliestFirst){
+    getCurrentAndFutureTermsStore: function(sortEarliestFirst, maximum){
         var me = this;
         var store = Ext.create('Ext.data.Store', {
             model: "Ssp.model.external.Term"
         });
-        store.loadRecords(me.getCurrentAndFutureTerms());
+        store.loadRecords(me.getCurrentAndFutureTerms(maximum));
         me.sortStoreByDate(store, sortEarliestFirst);
         return store;
     },
-    
+    getClonedStoreSortedByDate: function(sortEarliestFirst){
+        var me = this;
+        var store = Ext.create('Ext.data.Store', {
+            model: "Ssp.model.external.Term"
+        });
+        store.loadData(me.getRange(0, me.getCount() - 1));
+        me.sortStoreByDate(store, sortEarliestFirst);
+        return store;
+    },
     sortStoreByDate: function(store, sortEarliestFirst){
         if (sortEarliestFirst) 
             store.sort('startDate', 'ASC');
