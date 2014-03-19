@@ -42,26 +42,27 @@ Ext.define('Ssp.service.SearchService', {
 		// definition from the load method or the paging
 		// toolbar applied to the SearchView will not
 		// apply the params when using next or previous page
-
-		queryStr = "";
-		for (var paramName in params) {
-			// TODO url encoding?
-			if ( queryStr && (params[paramName] || !params[paramName] == '')) {
-				queryStr += "&";
-			}
-			if(params[paramName] || !params[paramName] == '')
-			{
-				queryStr += paramName + "=" + params[paramName];
+		var activeParams = {};
+	    var birthDate = "";
+		for (key in params) {
+			if(key != "birthDate" ){
+		    	if(params[key] && params[key] != null){
+					activeParams[key] = params[key] 
+				}
+			}else{
+				if(params[key] && params[key] != null){
+					birthDate = "birthDate=" + params[key] + "&";
+				}
 			}
 		}
-		if ( !("sort" in params) ) {
-			if ( queryStr ) {
-				queryStr += "&";
-			}
-			queryStr += "sort=lastName";
+		
+		if ( !("sort" in activeParams) ) {
+			activeParams["sort"] = "lastName";
 		}
+		
+		var encodedUrl = Ext.urlEncode(activeParams);
 
-		Ext.apply(me.store.getProxy(),{url: me.getBaseUrl()+'?'+queryStr});
+		Ext.apply(me.store.getProxy(),{url: me.getBaseUrl()+'?'+ birthDate +encodedUrl});
 
 		me.store.load({
 			params: {
