@@ -25,6 +25,7 @@ import org.jasig.portlet.utils.rest.RestResponse;
 import org.jasig.portlet.utils.rest.SimpleCrossContextRestApiInvoker;
 import org.jasig.ssp.util.SspStringUtils;
 import org.jasig.ssp.util.http.HttpServletGetRequestWrapper;
+import org.springframework.web.context.request.async.WebAsyncUtils;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -35,6 +36,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,7 +84,9 @@ public class KeepSessionAliveFilter implements Filter {
             return;
         }
         
-        request.removeAttribute("org.springframework.web.context.request.async.WebAsyncManager.WEB_ASYNC_MANAGER");
+		Object webAsyncManager = request.getAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
+		request.removeAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
+		
         final HttpServletRequest httpServletRequest = (HttpServletRequest)request;
         final HttpServletResponse httpServletResponse = (HttpServletResponse)response;
         final HttpSession session = httpServletRequest.getSession(false);
@@ -99,10 +103,13 @@ public class KeepSessionAliveFilter implements Filter {
                 HttpServletGetRequestWrapper wrap = new HttpServletGetRequestWrapper(httpServletRequest);
                 final Map<String, String[]> params = new HashMap<String, String[]>();
                 final RestResponse rr = rest.invoke(wrap, httpServletResponse, "/ssp-platform/api/session.json", params);
+                request.setAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE, webAsyncManager);
                 session.setAttribute(SESSION_KEEP_ALIVE_ATTRIBUTE_KEY,System.currentTimeMillis());
             }
         } else {
             session.setAttribute(SESSION_KEEP_ALIVE_ATTRIBUTE_KEY,System.currentTimeMillis());
+            request.setAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE, webAsyncManager);
+
         }
 
         chain.doFilter(request, response);
