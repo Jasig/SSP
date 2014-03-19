@@ -57,9 +57,7 @@ public class RequestAndResponseAccessFilter implements Filter {
 
 		requests.set((HttpServletRequest) req);
 		responses.set((HttpServletResponse) res);
-		Object asyncManager = req.getAttribute("org.springframework.web.context.request.async.WebAsyncManager.WEB_ASYNC_MANAGER");
-		req.removeAttribute("org.springframework.web.context.request.async.WebAsyncManager.WEB_ASYNC_MANAGER");
-		
+
 		chain.doFilter(req, res);
 
 		requests.remove();

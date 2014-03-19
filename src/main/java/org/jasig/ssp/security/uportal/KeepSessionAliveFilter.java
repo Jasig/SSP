@@ -83,10 +83,7 @@ public class KeepSessionAliveFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        
-		Object webAsyncManager = request.getAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
-		request.removeAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
-		
+
         final HttpServletRequest httpServletRequest = (HttpServletRequest)request;
         final HttpServletResponse httpServletResponse = (HttpServletResponse)response;
         final HttpSession session = httpServletRequest.getSession(false);
@@ -94,6 +91,7 @@ public class KeepSessionAliveFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+
         Long lastUpdate = (Long)session.getAttribute(SESSION_KEEP_ALIVE_ATTRIBUTE_KEY);
         if( overrideInterval || lastUpdate != null)
         {
@@ -101,14 +99,18 @@ public class KeepSessionAliveFilter implements Filter {
                 final CrossContextRestApiInvoker rest = new SimpleCrossContextRestApiInvoker();
                 //ensures request is GET going into REST Invoker
                 HttpServletGetRequestWrapper wrap = new HttpServletGetRequestWrapper(httpServletRequest);
-                final Map<String, String[]> params = new HashMap<String, String[]>();
-                final RestResponse rr = rest.invoke(wrap, httpServletResponse, "/ssp-platform/api/session.json", params);
-                request.setAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE, webAsyncManager);
-                session.setAttribute(SESSION_KEEP_ALIVE_ATTRIBUTE_KEY,System.currentTimeMillis());
+                final Object origWebAsyncManager = wrap.getAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
+                request.removeAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
+                try {
+                    final Map<String, String[]> params = new HashMap<String, String[]>();
+                    final RestResponse rr = rest.invoke(wrap, httpServletResponse, "/ssp-platform/api/session.json", params);
+                    session.setAttribute(SESSION_KEEP_ALIVE_ATTRIBUTE_KEY,System.currentTimeMillis());
+                } finally {
+                    request.setAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE, origWebAsyncManager);
+                }
             }
         } else {
             session.setAttribute(SESSION_KEEP_ALIVE_ATTRIBUTE_KEY,System.currentTimeMillis());
-            request.setAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE, webAsyncManager);
 
         }
 

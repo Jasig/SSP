@@ -48,6 +48,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.context.ServletContextAware;
 
 import com.google.common.collect.Maps;
+import org.springframework.web.context.request.async.WebAsyncUtils;
 
 public class UPortalPersonAttributesService
 		implements PersonAttributesService, ServletContextAware {
@@ -116,9 +117,16 @@ public class UPortalPersonAttributesService
 		params.put(PARAM_USERNAME, new String[] { username });
 
 		final CrossContextRestApiInvoker rest = new SimpleCrossContextRestApiInvoker();
-		req.removeAttribute("org.springframework.web.context.request.async.WebAsyncManager.WEB_ASYNC_MANAGER");
-		
-		final RestResponse rr = rest.invoke(req, res, REST_URI_PERSON, params);
+
+		final Object origWebAsyncManager = req.getAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
+		req.removeAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
+
+		RestResponse rr;
+		try {
+			rr = rest.invoke(req, res, REST_URI_PERSON, params);
+		} finally {
+			req.setAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE, origWebAsyncManager);
+		}
 
 		final ObjectMapper mapper = new ObjectMapper();
 		Map<String, Map<String, Map<String, List<String>>>> value = null;
@@ -194,8 +202,7 @@ public class UPortalPersonAttributesService
 			searchTerms.add(y.getKey());
 			params.put(y.getKey(), new String[] { y.getValue() });
 		}
-		
-		req.removeAttribute("org.springframework.web.context.request.async.WebAsyncManager.WEB_ASYNC_MANAGER");
+
 		// Build the URL
 		final StringBuilder bld = new StringBuilder(REST_URI_SEARCH_PREFIX);
 		for (final String key : params.keySet()) {
@@ -209,7 +216,16 @@ public class UPortalPersonAttributesService
 		params.put(PARAM_SEARCH_TERMS, searchTerms.toArray(new String[0]));
 
 		final CrossContextRestApiInvoker rest = new SimpleCrossContextRestApiInvoker();
-		final RestResponse rr = rest.invoke(req, res, url, params);
+
+		final Object origWebAsyncManager = req.getAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
+		req.removeAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
+
+		RestResponse rr;
+		try {
+			rr = rest.invoke(req, res, url, params);
+		} finally {
+			req.setAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE, origWebAsyncManager);
+		}
 
 		final ObjectMapper mapper = new ObjectMapper();
 		Map<String, List<Map<String, Object>>> value = null;
