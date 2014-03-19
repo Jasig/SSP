@@ -116,6 +116,8 @@ public class UPortalPersonAttributesService
 		params.put(PARAM_USERNAME, new String[] { username });
 
 		final CrossContextRestApiInvoker rest = new SimpleCrossContextRestApiInvoker();
+		req.removeAttribute("org.springframework.web.context.request.async.WebAsyncManager.WEB_ASYNC_MANAGER");
+		
 		final RestResponse rr = rest.invoke(req, res, REST_URI_PERSON, params);
 
 		final ObjectMapper mapper = new ObjectMapper();
@@ -192,7 +194,8 @@ public class UPortalPersonAttributesService
 			searchTerms.add(y.getKey());
 			params.put(y.getKey(), new String[] { y.getValue() });
 		}
-
+		
+		req.removeAttribute("org.springframework.web.context.request.async.WebAsyncManager.WEB_ASYNC_MANAGER");
 		// Build the URL
 		final StringBuilder bld = new StringBuilder(REST_URI_SEARCH_PREFIX);
 		for (final String key : params.keySet()) {

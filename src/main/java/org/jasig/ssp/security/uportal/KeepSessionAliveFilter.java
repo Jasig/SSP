@@ -81,6 +81,8 @@ public class KeepSessionAliveFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+        
+        request.removeAttribute("org.springframework.web.context.request.async.WebAsyncManager.WEB_ASYNC_MANAGER");
         final HttpServletRequest httpServletRequest = (HttpServletRequest)request;
         final HttpServletResponse httpServletResponse = (HttpServletResponse)response;
         final HttpSession session = httpServletRequest.getSession(false);
