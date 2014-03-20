@@ -43,6 +43,8 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
         // the event we expect
         me.resetForm();
         me.appEventsController.getApplication().addListener("onUpdateCurrentMapPlanPlanToolView", me.onUpdateCurrentMapPlan, me);
+        me.appEventsController.getApplication().addListener("onUpdatePlanStatus", me.updatePlanStatus, me);
+
         return me.callParent(arguments);
     },
     resetForm: function() {
@@ -146,5 +148,7 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
 	destroy: function(){
 		var me = this;
 		me.appEventsController.getApplication().removeListener("onUpdateCurrentMapPlanPlanToolView", me.onUpdateCurrentMapPlan, me);
+        me.appEventsController.getApplication().removeListener("onUpdatePlanStatus", me.updatePlanStatus, me);
+
 	}
 });

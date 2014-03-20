@@ -72,12 +72,11 @@ Ext.define('Ssp.controller.tool.map.MapStatusReportController', {
 				me.mapStatusReportTermDetailsStore.load(personId);
 				me.mapStatusReportCourseDetailsStore.load(personId);
 				me.mapStatusReportSubstitutionDetailsStore.load(personId);
-	    	view.scope.getView().setLoading(false);
-			callbacks.success( response, callbacks.scope );
+				view.scope.appEventsController.getApplication().fireEvent("onUpdatePlanStatus");
+				view.scope.getView().setLoading(false);
 	    };
 	    var failure = function( response ){
 	    	me.apiProperties.handleError( response );	    	
-	    	callbacks.failure( response, callbacks.scope );
 	    };
 	    
 		me.apiProperties.makeRequest({
