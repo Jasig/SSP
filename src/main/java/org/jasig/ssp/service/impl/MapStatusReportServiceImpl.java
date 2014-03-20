@@ -149,7 +149,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		//We will create an entry for all plan terms prior to the cutoff term, regardless if anomaly is present
 		List<MapStatusReportTermDetails> reportTermDetails = new ArrayList<MapStatusReportTermDetails>();
 		
-		//We will create an entry for all plan terms prior to the cutoff term, regardless if anomaly is present
+		//Create an entry whenever there is a term or course substitution
 		List<MapStatusReportSubstitutionDetails> reportSubstitutionDetails = new ArrayList<MapStatusReportSubstitutionDetails>();
 		
 		
@@ -210,12 +210,12 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 			if(containsTermSubstitution(reportSubstitutionDetails))
 				return PlanStatus.OFF;
 			if(containsCourseSubstitution(reportSubstitutionDetails))
-				return PlanStatus.ON_TRACK_SEQUENCE;
+				return PlanStatus.ON_TRACK_SUBSTITUTIO;
 		}
 		if(termBound == false && useSubstitutableCourses == false)
 		{
 			if(containsTermSubstitution(reportSubstitutionDetails))
-				return PlanStatus.ON_TRACK_SUBSTITUTIO  ;
+				return PlanStatus.ON_TRACK_SEQUENCE;
 			if(containsCourseSubstitution(reportSubstitutionDetails))
 				return PlanStatus.OFF;
 		}
@@ -229,9 +229,9 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		if(termBound == false && useSubstitutableCourses == true)
 		{
 			if(containsTermSubstitution(reportSubstitutionDetails))
-				return PlanStatus.ON_TRACK_SUBSTITUTIO;
-			if(containsCourseSubstitution(reportSubstitutionDetails))
 				return PlanStatus.ON_TRACK_SEQUENCE;
+			if(containsCourseSubstitution(reportSubstitutionDetails))
+				return PlanStatus.ON_TRACK_SUBSTITUTIO;
 		}	
 		return PlanStatus.ON;
 	}	
