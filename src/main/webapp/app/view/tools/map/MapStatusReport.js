@@ -75,7 +75,7 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 					    align: 'left'
 				    
 				    }, {
-				        fieldLabel: 'Total Plan Courses',
+				        fieldLabel: 'Total Plan Courses In Scope',
 				        itemId: 'totalPlanCourses',
 				        name: 'totalPlanCourses'
 				    }, {

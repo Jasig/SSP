@@ -187,7 +187,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		buildTermDetails(report, reportTermDetails, courseReportsByTerm,planCoursesByTerm);
 		
 		report.setPlanStatus(calculatePlanStatus(reportCourseDetails,reportSubstitutionDetails,termBound,useSubstitutableCourses));
-		report.setPlanRatio(calculatePlanRatio(report,planCourses,reportCourseDetails,reportSubstitutionDetails,termBound,useSubstitutableCourses));
+		report.setPlanRatio(calculatePlanRatio(report,planCourses,reportCourseDetails,reportSubstitutionDetails,termBound,useSubstitutableCourses,planCoursesByTerm,reportTermDetails));
 		report.setCourseDetails(reportCourseDetails);
 		report.setTermDetails(reportTermDetails);
 		report.setSubstitutionDetails(reportSubstitutionDetails);
@@ -196,7 +196,10 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	}
 
 	private PlanStatus calculatePlanStatus(
-			List<MapStatusReportCourseDetails> reportCourseDetails, List<MapStatusReportSubstitutionDetails> reportSubstitutionDetails, boolean termBound, boolean useSubstitutableCourses) {
+			List<MapStatusReportCourseDetails> reportCourseDetails, 
+			List<MapStatusReportSubstitutionDetails> reportSubstitutionDetails, 
+			boolean termBound, 
+			boolean useSubstitutableCourses) {
 
 		
 		if(reportCourseDetails.size() > 0 )
@@ -273,8 +276,22 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 			List<MapStatusReportCourseDetails> reportCourseDetails, 
 			List<MapStatusReportSubstitutionDetails> reportSubstitutionDetails, 
 			boolean termBound, 
-			boolean useSubstitutableCourses) 
+			boolean useSubstitutableCourses, 
+			Map<String, List<MapPlanStatusReportCourse>> planCoursesByTerm, 
+			List<MapStatusReportTermDetails> reportTermDetails) 
 	{
+		int totalPlanCoursesInScope = 0;
+		//Calculate total number of plans in scope
+		for(MapStatusReportTermDetails reportTermDetail : reportTermDetails)
+		{
+			List<MapPlanStatusReportCourse> planCoursesForTerm = planCoursesByTerm.get(reportTermDetail.getTermCode());
+			if(planCoursesForTerm != null && !planCoursesForTerm.isEmpty())
+			{
+				totalPlanCoursesInScope = totalPlanCoursesInScope + planCoursesForTerm.size();
+			}
+			
+		}
+		
 		if(planCourses.isEmpty())
 			return new BigDecimal(1);
 		int anomalies = reportCourseDetails.size();
@@ -296,8 +313,8 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 				anomalies =anomalies + numCourseSubstitution(reportSubstitutionDetails);
 		}
 		report.setPlanRatioDemerits(anomalies);
-		report.setTotalPlanCourses(planCourses.size());
-		return new BigDecimal(new Float(planCourses.size() - anomalies) / new Float(planCourses.size()));
+		report.setTotalPlanCourses(totalPlanCoursesInScope);
+		return new BigDecimal(new Float(totalPlanCoursesInScope - anomalies) / new Float(totalPlanCoursesInScope));
 	}
 
 	private MapStatusReport initReport(MapStatusReportPerson planIdPersonIdPair) 
