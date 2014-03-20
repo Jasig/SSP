@@ -210,17 +210,15 @@
         <span><spring:message code="campus"/>:</span>
       </div>
       <div class="ea-clear"></div>
-
-      <!-- Referral Reason -->
+      
+       <!-- Referral Reasons -->
       <div class="ea-input">
-        <select class="field-reason" multiple="multiple">
-          <option class="prompt" value=""><spring:message code="select.a.reason"/></option>
-        </select><br/>
-        <input type="text" class="field-other-reason-text" name="earlyAlertReasonOtherDescription" value="" placeholder="<spring:message code="type.a.reason"/>" style="display: none; margin-top: 8px;" />
+        <ul class="field-reasons"></ul>
+        <p><a href="javascript:void(0);" class="reasons-add-edit"><img src="<c:url value="/rs/famfamfam/silk/1.3/add.png" />" alt="<spring:message code="add.edit"/>" /> <spring:message code="add.edit"/></a></p>
       </div>
-      <div class="ea-required">*</div>
+      <div class="ea-required">&nbsp;</div>
       <div class="ea-label">
-        <span><spring:message code="referral.reason"/>:</span>
+        <span><spring:message code="referral.reasons"/>:</span>
       </div>
       <div class="ea-clear"></div>
 
@@ -256,10 +254,17 @@
       <div class="ea-label">&nbsp;</div>
       <div class="ea-clear"></div>
       
+      <div class="reasons-dialog" style="display: none;">
+        <ul>
+        </ul>
+      </div>
+            
       <div class="suggestions-dialog" style="display: none;">
         <ul>
         </ul>
       </div>
+      
+
     
       <div class="notice-dialog" style="display: none;">
         <p><spring:message code="send.email.notice.to.student"/></p>
@@ -292,7 +297,7 @@
             urls: {
                 person:       '<c:url value="/api/1/person/STUDENTID" />',
                 campus:       '<c:url value="/api/1/reference/campus?limit=-1" />',
-                reason:       '<c:url value="/api/1/reference/earlyAlertReason?limit=-1" />',
+                reasons:       '<c:url value="/api/1/reference/earlyAlertReason?limit=-1" />',
                 suggestions:  '<c:url value="/api/1/reference/earlyAlertSuggestion?limit=-1" />',
                 submit:       '<c:url value="/api/1/person/STUDENTID/earlyAlert" />',
                 configByName: '<c:url value="/api/1/reference/config?name=CONFIGNAME" />',

@@ -53,8 +53,11 @@ var ssp = ssp || {};
             department:              '.field-department',
             emailCc:                 '.field-email-cc',
             campus:                  '.field-campus',
-            reason:                  '.field-reason',
-            otherReasonText:         '.field-other-reason-text',
+            reasons:                 '.field-reasons',
+            reasonsId:               '.field-reasons-id',
+            reasonsOtherHidden:      '.field-reasons-other-hidden',
+            reasonsAddEdit:          '.reasons-add-edit',
+            reasonsDialog:           '.reasons-dialog',
             suggestions:             '.field-suggestions',
             suggestionsId:           '.field-suggestions-id',
             suggestionsOtherHidden:  '.field-suggestions-other-hidden',
@@ -123,7 +126,7 @@ var ssp = ssp || {};
         var getReasonsData = function() {
             var rslt = [];
             $.ajax({
-                url: options.urls.reason,
+                url: options.urls.reasons,
                 async: false,
                 dataType: 'json',
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -187,11 +190,11 @@ var ssp = ssp || {};
             } else {
                 $(selectors.campus).removeClass('invalid');
             }
-            if (!$(selectors.reason).val()) {
+            if(!$(selectors.reasonsId) || $(selectors.reasonsId).length <= 0) {
                 rslt = false;
-            	$(selectors.reason).addClass('invalid');
+            	$(selectors.reasonsAddEdit).addClass('invalid');
             } else {
-                $(selectors.reason).removeClass('invalid');
+                $(selectors.reasonsAddEdit).removeClass('invalid');
             }
             var emailCc = $(selectors.emailCc).val().trim();
             // True regex email validation is a pipe-dream. Just a sanity
@@ -220,16 +223,21 @@ var ssp = ssp || {};
                 courseTermCode: options.parameters.term,
                 emailCC: $(selectors.emailCc).val(),
                 campusId: $(selectors.campus).val(),
-                earlyAlertReasonIds: $(selectors.reason).val(),
-                earlyAlertReasonOtherDescription: $(selectors.otherReasonText).val(),
+                earlyAlertReasonIds: [], // Set below...
+                earlyAlertReasonOtherDescription: $(selectors.reasonsOtherHidden).val(),
                 earlyAlertSuggestionIds: [],  // Set below...
                 earlyAlertSuggestionOtherDescription: $(selectors.suggestionsOtherHidden).val(),
                 comment: $(selectors.comments).val(),
                 sendEmailToStudent: sendNotice
             };
+            $(selectors.reasonsId).each(function() {
+            	postData.earlyAlertReasonIds.push( $(this).val() );
+            });
             $(selectors.suggestionsId).each(function() {
             	postData.earlyAlertSuggestionIds.push( $(this).val() );
             });
+            
+            
             
             // Submit the alert
             $.ajax({
@@ -308,20 +316,43 @@ var ssp = ssp || {};
         	var html = '<option value="' + value.id + '">' + value.name + '</option>';
             $(selectors.campus).append(html);
         });
-        
+
         // reason
         $.each(reasons, function(index, value) {
-        	var html = '<option value="' + value.id + '">' + value.name + '</option>';
-            $(selectors.reason).append(html);
-        });
-        $(selectors.reason).change(function() {
-            if ($(this).val() === CONSTANT_IDS.OTHER_EARLY_ALERT_REASON_ID) {
-                $(selectors.otherReasonText).slideDown(500);
-            } else {
-            	$(selectors.otherReasonText).val('');
-                $(selectors.otherReasonText).slideUp(500);
+        	var html = '<li><input type="checkbox" value="' + value.id + '">' + value.name;
+        	if (value.id === CONSTANT_IDS.OTHER_EARLY_ALERT_REASON_ID) {
+                html += '<br/><input type="text" name="earlyAlertReasonOtherDescription" value="" style="width:15.5em" placeholder="Type a reason for the referral..." />';
             }
-        })
+        	html += '</li>';
+            $(selectors.reasonsDialog).find('ul').append(html);
+        });
+        var reasonsDlgOptions = {
+            autoOpen: false,
+            buttons: {
+                'OK': function() {
+                    $(selectors.reasons).html('');  // Clear
+                    $(this).find('li').each(function() {
+                        var chk = $(this).find('input');
+                        if (chk.attr('checked')) {
+                        	var html = '<input type="hidden" class="field-reasons-id" value="' + chk.val() + '" />';
+                            html += (chk.val() === CONSTANT_IDS.OTHER_EARLY_ALERT_REASON_ID) 
+                                ? $(this).find(':text').val() + '<input type="hidden" class="field-reasons-other-hidden" value="' + $(this).find(':text').val() + '" />'
+                                : $(this).text();
+                            $(selectors.reasons).append('<li>' + html + '</li>');
+                        }
+                    });
+                    $(this).dialog('close');
+                },
+                'Cancel': function() { $(this).dialog('close'); },
+            },
+            modal: true,
+            title: 'Edit Faculty Reasons'
+        };
+        var reasonsDlg = $(selectors.reasonsDialog).dialog(reasonsDlgOptions);
+        $(selectors.reasonsAddEdit).click(function() {
+            reasonsDlg.dialog('open');
+        });
+        
 
         // suggestions
         $.each(suggestions, function(index, value) {
