@@ -255,6 +255,7 @@ var ssp = ssp || {};
                 success: function(data, textStatus, jqXHR) {
                 	// Return to the roster screen, with a message
                     var url = options.urls.done.replace('STUDENTNAME', escape(studentName));
+                    url = url.replace('CONFIRMED_ID', escape(data.id));
                     window.location = url;
                 },
                 type: 'POST'

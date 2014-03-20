@@ -62,6 +62,17 @@ public final class EarlyAlertPortletController {
 
 	@RenderMapping
 	public ModelAndView showRoster(final PortletRequest req) {
+		
+		Map<String,String> model = new HashMap<String,String>();
+		
+		model.put("initialSelectedCourse", getInitialSelectedCourse(req));
+		if(isConfirmed(req))
+			model.put("studentName", org.apache.commons.lang.StringEscapeUtils.unescapeJavaScript(req.getParameter("studentName")));
+			
+		return new ModelAndView("ea-roster", model);
+	}
+	
+	private String getInitialSelectedCourse(final PortletRequest req){
 		String formattedCourse = req.getParameter("formattedCourse");
 		String initialSelectedCourse = "";
 		String termCode = req.getParameter("termCode");
@@ -69,8 +80,45 @@ public final class EarlyAlertPortletController {
 			initialSelectedCourse = formattedCourse;
 		if(org.apache.commons.lang.StringUtils.isNotBlank(termCode))
 			initialSelectedCourse += ":" + termCode;
-		return new ModelAndView("ea-roster", "initialSelectedCourse", initialSelectedCourse);
+		return initialSelectedCourse;
 	}
+	
+	
+	//TODO this is a total hack added to "clear" confirm. portlet does not have access to render parameters so no way to clear
+	private Boolean isConfirmed(PortletRequest req){
+		
+		String confirm = req.getParameter("confirm");
+		if(org.apache.commons.lang.StringUtils.isBlank(confirm))
+			return false;
+		
+		String pastConfirm = (String)req.getPortletSession().getAttribute("confirm");
+		pastConfirm = org.apache.commons.lang.StringEscapeUtils.unescapeJavaScript(pastConfirm);
+		if(org.apache.commons.lang.StringUtils.isBlank(pastConfirm)){
+			req.getPortletSession().setAttribute("confirm", confirm);
+			return true;
+		}
+		if(confirm.equals(pastConfirm))
+			return false;
+
+		req.getPortletSession().setAttribute("confirm", confirm);
+		return true;
+	}
+/*
+	@RenderMapping(params = "confirm=true")
+	public ModelAndView confirm(final PortletRequest req, @RequestParam final String studentName) {
+		String formattedCourse = req.getParameter("formattedCourse");
+		String initialSelectedCourse = "";
+		String termCode = req.getParameter("termCode");
+		if(org.apache.commons.lang.StringUtils.isNotBlank(formattedCourse))
+			initialSelectedCourse = formattedCourse;
+		if(org.apache.commons.lang.StringUtils.isNotBlank(termCode))
+			initialSelectedCourse += ":" + termCode;
+		
+		
+		return new ModelAndView("ea-roster", model);
+	}
+	
+*/
 
 	@RenderMapping(params = "action=enterAlert")
 	public ModelAndView showForm(final PortletRequest req, 
@@ -155,21 +203,6 @@ public final class EarlyAlertPortletController {
 		model.put(KEY_COURSE, course);
 		model.put(KEY_ENROLLMENT, enrollment);
 		return new ModelAndView("ea-form", model);
-	}
-
-	@RenderMapping(params = "confirm=true")
-	public ModelAndView confirm(final PortletRequest req, @RequestParam final String studentName) {
-		String formattedCourse = req.getParameter("formattedCourse");
-		String initialSelectedCourse = "";
-		String termCode = req.getParameter("termCode");
-		if(org.apache.commons.lang.StringUtils.isNotBlank(formattedCourse))
-			initialSelectedCourse = formattedCourse;
-		if(org.apache.commons.lang.StringUtils.isNotBlank(termCode))
-			initialSelectedCourse += ":" + termCode;
-		Map<String,String> model = new HashMap<String,String>();
-		model.put("studentName", org.apache.commons.lang.StringEscapeUtils.unescapeJavaScript(studentName));
-		model.put("initialSelectedCourse", initialSelectedCourse);
-		return new ModelAndView("ea-roster", model);
 	}
 	
 	@ModelAttribute("user")

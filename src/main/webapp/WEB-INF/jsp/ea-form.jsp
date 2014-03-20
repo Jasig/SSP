@@ -25,7 +25,7 @@
     <portlet:param name="termCode" value="${course.termCode}"/>
 </portlet:renderURL>
 <portlet:renderURL var="doneUrl" escapeXml="false">
-    <portlet:param name="confirm" value="true"/>
+    <portlet:param name="confirm" value="CONFIRMED_ID"/>
     <portlet:param name="studentName" value="STUDENTNAME"/>
     <portlet:param name="formattedCourse" value="${course.formattedCourse}"/>
     <portlet:param name="termCode" value="${course.termCode}"/>
