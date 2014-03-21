@@ -34,7 +34,7 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
     	mapStatusReportSubstitutionDetailsStore: 'mapStatusReportSubstitutionDetailsStore',
 		person: 'currentPerson'
     },
-	height:800,
+	height:900,
 	width:900,   
     overflowY: 'auto',
     style : 'z-index: -1;',  
@@ -108,7 +108,7 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 			            columns: [{
 			                xtype: 'gridcolumn',
 			                dataIndex: 'termCode',
-			                text: 'Term',
+			                text: 'Plan Term',
 			                flex: .10
 			            }, {
 			                xtype: 'gridcolumn',
@@ -142,17 +142,17 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 				            columns: [{
 				                xtype: 'gridcolumn',
 				                dataIndex: 'termCode',
-				                text: 'Term',
+				                text: 'Plan Term',
 				                flex: .10
 				            }, {
 				                xtype: 'gridcolumn',
 				                dataIndex: 'formattedCourse',
-				                text: 'Formatted Course',
+				                text: 'Plan Formatted Course',
 				                flex: .15
 				            }, {
 				                xtype: 'gridcolumn',
 				                dataIndex: 'courseCode',
-				                text: 'Course Code',
+				                text: 'Plan Course Code',
 				                flex: .20
 				            }, {
 				                xtype: 'gridcolumn',
@@ -174,39 +174,39 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 				         {
 					        	xtype: 'gridpanel',
 					        	queryMode:'local',
-					        	title: 'Substitution Details',
+					        	title: 'On Track Details',
 					        	width:800,
 					        	height:200,
 					            store: me.mapStatusReportSubstitutionDetailsStore,
 					            columns: [{
 					                xtype: 'gridcolumn',
 					                dataIndex: 'termCode',
-					                text: 'Term',
-					                flex: .17
+					                text: 'Plan Term',
+					                flex: .12
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'formattedCourse',
-					                text: 'Formatted Course',
-					                flex: .17
+					                text: 'Plan Formatted Course',
+					                flex: .22
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'courseCode',
-					                text: 'Course Code',
-					                flex: .15
+					                text: 'Plan Course Code',
+					                flex: .20
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'substitutedTermCode',
-					                text: 'Substituted Term Code',
-					                flex: .27
+					                text: 'Transcript Term Code',
+					                flex: .23
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'substitutedFormattedCourse',
-					                text: 'Substituted Formatted Course',
+					                text: 'Transcript Formatted Course',
 					                flex: .27
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'substitutedCourseCode',
-					                text: 'Substituted Course Course',
+					                text: 'Transcript Course Course',
 					                flex: .27
 					            }, {
 					                xtype: 'gridcolumn',
