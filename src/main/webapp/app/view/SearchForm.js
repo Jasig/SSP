@@ -32,6 +32,7 @@ Ext.define('Ssp.view.SearchForm',{
         mapStatusStore: 'mapStatusStore',
         currentlyRegisteredStore: 'currentlyRegisteredStore',
         programsStore: 'programsStore',
+        configStore: 'configurationOptionsUnpagedStore',
         textStore:'sspTextStore'
     },
     collapsible: true,
@@ -47,6 +48,8 @@ Ext.define('Ssp.view.SearchForm',{
 	},
 	initComponent: function() {
     	var me=this;
+    	me.configStore.load();
+    	me.mapStatusStore.configStore = me.configStore;
         Ext.applyIf(me, {
             width: '50%',
             header: {
