@@ -102,7 +102,7 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                         },
                         {
                         	xtype: 'button',
-                        	text: 'Save as Plan',
+                        	text: 'Save as New Plan',
                         	itemId: 'savePlanAsButton'
                         },
                         {
