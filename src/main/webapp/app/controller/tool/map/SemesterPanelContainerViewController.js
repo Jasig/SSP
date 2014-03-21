@@ -514,10 +514,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			devHours += hours.devHours;
 		});
 		if(Ext.getCmp('currentTotalPlanCrHrs')) {
-			Ext.getCmp('currentTotalPlanCrHrs').setValue(planHours);
+			Ext.getCmp('currentTotalPlanCrHrs').setValue((planHours/100).toFixed(2));
 		}
 		if(Ext.getCmp('currentPlanTotalDevCrHrs')) {
-			Ext.getCmp('currentPlanTotalDevCrHrs').setValue(devHours);
+			Ext.getCmp('currentPlanTotalDevCrHrs').setValue((devHours/100).toFixed(2));
 		}		
 	},
 	
@@ -532,13 +532,14 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				value = model.get('minCreditHours');
 				model.set('creditHours', value);
 			}
-			totalHours += value;
+			value = parseInt((value * 100).toFixed(0));
+			totalHours += value
 			if(model.get('isDev')){
 				totalDevHours += value;
 			}
 		});
 		var termCreditHours = semesterBottomDock.getComponent('termCrHrs');
-		termCreditHours.setText("" + totalHours + "");
+		termCreditHours.setText("" +  (totalHours / 100).toFixed(2) + "");
 		var hours = new Object();
 		hours.planHours = totalHours;
 		hours.devHours = totalDevHours;

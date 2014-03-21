@@ -334,6 +334,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         var transferHours = 0;
         var transcript = new Ssp.model.Transcript(transcriptFullResponse);
         var terms = transcript.get('terms');
+
+        	
         if (terms) {
             Ext.Array.each(terms, function(term){
                 var courseTranscript = Ext.create('Ssp.model.CourseTranscript', term);
@@ -342,14 +344,13 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
                 if (creditTypeUpper == 'TRANSFER') {
                     var credit = courseTranscript.get('creditEarned');
 					if (!isNaN(credit)) 
-                    	transferHours += credit;
+                    	transferHours += parseInt((credit * 100).toFixed(0));
                 }
             });
         }
-        
         if (transferHours > 0) {
             me.getTransferHrsField().setFieldLabel('');
-            me.getTransferHrsField().setValue('<span style="color:#15428B">Transfer Hrs:  </span>' + transferHours);
+            me.getTransferHrsField().setValue('<span style="color:#15428B">Transfer Hrs:  </span>' + (transferHours / 100).toFixed(2));
         }
         
     },
