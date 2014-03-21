@@ -77,7 +77,8 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 	private Set<UUID> earlyAlertSuggestionIds;
 
 	private Boolean sendEmailToStudent = Boolean.FALSE;
-
+	
+	private Date lastResponseDate;
 
     @JsonIgnore     //For Student History Report
     private Set<EarlyAlertReasonTO> earlyAlertReasonTOs;
@@ -151,6 +152,8 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 		}
 		
 		setNoOfResponses(earlyAlert.getResponseCount());
+		
+		lastResponseDate = earlyAlert.getLastResponseDate();
 	}
 
 	/**
@@ -414,4 +417,12 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
     public void setEarlyAlertSuggestionTOs(Set<EarlyAlertSuggestionTO> earlyAlertSuggestionTOs) {
         this.earlyAlertSuggestionTOs = earlyAlertSuggestionTOs;
     }
+
+	public Date getLastResponseDate() {
+		return lastResponseDate;
+	}
+
+	public void setLastResponseDate(Date lastResponseDate) {
+		this.lastResponseDate = lastResponseDate;
+	}
 }

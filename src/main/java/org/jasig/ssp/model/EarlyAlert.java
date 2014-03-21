@@ -19,6 +19,7 @@
 package org.jasig.ssp.model;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -97,8 +98,15 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	
 	private static final String RESPONSE_COUNT_FORMULA = "(select count(*) from early_alert_response ear where ear.early_alert_id = ID)";
 
+	private static final String RESPONSE_DATES_FORMULA = "(select max(ear.modified_date) from early_alert_response ear "
+			+ "where ear.early_alert_id = id)";
+
+	
 	@Formula(RESPONSE_COUNT_FORMULA)
 	private int responseCount;
+	
+	@Formula(RESPONSE_DATES_FORMULA)
+	private Date lastResponseDate;
 	/**
 	 * Associated person. Changes to this Person <i>are</i> persisted.
 	 */
@@ -357,4 +365,13 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	public void setResponseCount(int responseCount) {
 		this.responseCount = responseCount;
 	}
+
+	public Date getLastResponseDate() {
+		return lastResponseDate;
+	}
+
+	public void setResponseDates(Date lastResponseDate) {
+		this.lastResponseDate = lastResponseDate;
+	}
+	
 }

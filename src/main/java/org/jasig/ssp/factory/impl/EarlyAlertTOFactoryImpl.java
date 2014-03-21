@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.factory.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -38,6 +40,8 @@ import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
 
 /**
  * EarlyAlert transfer object factory
@@ -123,6 +127,8 @@ public class EarlyAlertTOFactoryImpl extends
 						earlyAlertSuggestionService.load(id));
 			}
 		}
+
+		model.setResponseDates(tObject.getLastResponseDate());
 
 		return model;
 	}

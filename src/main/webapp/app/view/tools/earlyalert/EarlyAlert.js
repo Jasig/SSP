@@ -66,7 +66,13 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
                 sortable: true,
                 dataIndex: 'closedDate',
                 renderer: me.columnRendererUtils.renderEarlyAlertStatus
-            }, {
+            },{
+                text: 'Last Response Date',
+                flex: 1,
+                dataIndex: 'lastResponseDate',
+                renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A'),
+                sortable: true
+            } , {
                 text: 'Details',
                 flex: 2,
                 sortable: true,

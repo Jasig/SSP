@@ -183,17 +183,53 @@ Ext.define('Ssp.service.EarlyAlertService', {
     
     populateEarlyAlerts: function( records, personId ){
         var me=this;
-        Ext.Array.each( records, function(record, index){
-             // count = me.getAllEarlyAlertCount(personId, record.id);
-            //record.iconCls='earlyAlertTreeIcon';
-            record.leaf=false;
-            record.nodeType='early alert';
-            record.gridDisplayDetails=record.courseName + " - " + record.courseTitle ; 
-            record.expanded=false;
+        var sortingStore = Ext.create('Ext.data.Store', {
+        	model: 'Ssp.model.tool.earlyalert.PersonEarlyAlertTree',
+        	storeId: 'earlyAlertSortingStore',
+        	sorters: [{
+        		sorterFn: function(o1, o2) {
+        			var getClosedDate = function(o) {
+        					var closedDate = o.get('closedDate');
+        					if (closedDate) {
+        						return 2;
+        					} else {
+        						return 1;
+        					}
+        				},
+        				rank1 = getClosedDate(o1),
+        				rank2 = getClosedDate(o2);
+
+        			if (rank1 === rank2) {
+        				return 0;
+        			}
+
+        			return rank1 < rank2 ? -1 : 1;
+        		}
+        	}, {
+        		property: "lastResponseDate",
+        		direction: "DESC"
+        	}, {
+        		property: "createdDate",
+        		direction: "DESC"
+        	}]
+        });
+
+    	
+    	sortingStore.loadData(records);
+    	
+    	sortingStore.sort();
+    	var models = sortingStore.getRange();
+    	var sortedRecords = []
+        Ext.Array.each( models, function(record, index){
+        	sortedRecords[index]=record.data
+        	sortedRecords[index].leaf=false;
+        	sortedRecords[index].nodeType='early alert';
+        	sortedRecords[index].gridDisplayDetails=sortedRecords[index].courseName + " - " + sortedRecords[index].courseTitle ; 
+        	sortedRecords[index].expanded=false;
         });
 
 		me.treeStore.getRootNode().removeAll();
-        me.treeStore.getRootNode().appendChild(records);
+        me.treeStore.getRootNode().appendChild(sortedRecords);
     },
 
     resetEarlyAlertResponsesStore: function() {

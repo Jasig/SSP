@@ -924,6 +924,7 @@ Ext.onReady(function(){
 				            	model: 'Ssp.model.tool.earlyalert.PersonEarlyAlertTree'				                
 				            });
 				    	},
+				    	
 				        singleton: true
 			        },
 				    earlyAlertDetailsSuggestionsStore: {

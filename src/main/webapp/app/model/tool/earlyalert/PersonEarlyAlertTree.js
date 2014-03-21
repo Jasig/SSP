@@ -42,6 +42,7 @@ Ext.define('Ssp.model.tool.earlyalert.PersonEarlyAlertTree', {
              {name:'nodeType',type:'string',defaultValue:'early alert'},
              {name:'gridDisplayDetails', type:'string'},
              {name: 'noOfResponses', type:'string'},
+             {name:'lastResponseDate', type: 'date', dateFormat: 'time'},
              /* end props for tree manipulation */
              
              {name:'earlyAlertId',type:'string'},
