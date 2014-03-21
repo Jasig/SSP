@@ -233,6 +233,38 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		// *depends* on the flush.
 		getDao().save(earlyAlert);
 	}
+	
+	@Override
+	public void openEarlyAlert(UUID earlyAlertId)
+			throws ObjectNotFoundException, ValidationException {
+		final EarlyAlert earlyAlert = getDao().get(earlyAlertId);
+
+		// DAOs don't implement ObjectNotFoundException consistently and we'd
+		// rather they not implement it at all, so a small attempt at 'future
+		// proofing' here
+		if ( earlyAlert == null ) {
+			throw new ObjectNotFoundException(earlyAlertId, EarlyAlert.class.getName());
+		}
+
+		if ( earlyAlert.getClosedDate() == null ) {
+			return;
+		}
+
+		final SspUser sspUser = securityService.currentUser();
+		if ( sspUser == null ) {
+			throw new ValidationException("Early Alert cannot be closed by a null User.");
+		}
+
+		earlyAlert.setClosedDate(null);
+		earlyAlert.setClosedBy(null);
+
+		// This save will result in a Hib session flush, which works fine with
+		// our current usage. Future use cases might prefer to delay the
+		// flush and we can address that when the time comes. Might not even
+		// need to change anything here if it turns out nothing actually
+		// *depends* on the flush.
+		getDao().save(earlyAlert);
+	}
 
 	@Override
 	public EarlyAlert save(@NotNull final EarlyAlert obj)

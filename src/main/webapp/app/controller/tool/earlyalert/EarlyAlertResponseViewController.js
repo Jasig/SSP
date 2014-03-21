@@ -78,7 +78,10 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 			me.model = new Ssp.model.tool.earlyalert.EarlyAlertResponse();
 		}
 		me.filterEarlyAlertOutcomesAndOutreaches();		
+		var closed = (me.earlyAlert.get('closedById') == "" || me.earlyAlert.get('closedById') == null) ? false:true;
+		me.model.set("closed",closed);
 		me.getView().getForm().loadRecord(me.model);
+		
 		me.showHideOtherOutcomeDescription();
 		return me.callParent(arguments);
     },
@@ -192,6 +195,8 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 				{
 					me.earlyAlert.set( 'closedById', me.authenticatedPerson.getId() );
 				}
+			}else{
+				me.earlyAlert.set( 'closedById', null);
 			}
 			
 			// jsonData for the response

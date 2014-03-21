@@ -70,6 +70,17 @@ public interface EarlyAlertService
 	 * @throws ValidationException if a business rule is violated
 	 */
 	void closeEarlyAlert(UUID earlyAlertId) throws ObjectNotFoundException, ValidationException;
+	
+	/**
+	 * Mark an EarlyAlert open by the current user. No-op if the alert
+	 * is already open.
+	 *
+	 * @param earlyAlertId
+	 * @throws ObjectNotFoundException if the referenced EarlyAlert does
+	 *   not exist
+	 * @throws ValidationException if a business rule is violated
+	 */
+	void openEarlyAlert(UUID earlyAlertId) throws ObjectNotFoundException, ValidationException;
 
 	/**
 	 * Count how many open early alerts exist for the specified people
