@@ -357,7 +357,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 					MapStatusReportCourseDetails mapStatusReportCourseDetails = coursesDetailsForTerm.get(0);
 					termDetail.setReport(report);
 					termDetail.setTermCode(termCode);
-					termDetail.setAnomalyNote("Term has one anomaly: "+mapStatusReportCourseDetails.getAnomalyCode());
+					termDetail.setAnomalyNote("Term has one anomaly: "+mapStatusReportCourseDetails.getAnomalyCode().getDisplayText());
 					termDetail.setAnomalyCode(mapStatusReportCourseDetails.getAnomalyCode());
 					termDetail.setTermRatio(calculateTermRatio(termCode,planCoursesByTerm,coursesDetailsForTerm));
 				}
