@@ -34,7 +34,7 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
     	mapStatusReportSubstitutionDetailsStore: 'mapStatusReportSubstitutionDetailsStore',
 		person: 'currentPerson'
     },
-	height:900,
+	height:780,
 	width:900,   
     overflowY: 'auto',
     style : 'z-index: -1;',  
