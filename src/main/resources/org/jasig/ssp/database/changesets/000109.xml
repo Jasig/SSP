@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />   
+     
+    <changeSet id="Add CC to Message and recipient to EA referral" author="jim.stanley">
+        <addColumn tableName="early_alert_referral">
+            <column name="carbon_copy" type="${nvarchar.type}(512)">
+                <constraints nullable="true" />
+            </column>
+            <column name="recipient_email_address" type="${nvarchar.type}(100)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="early_alert_referral" columnName="carbon_copy" />
+            <dropColumn tableName="early_alert_referral" columnName="recipient_email_address" />
+        </rollback>
+    </changeSet>
+    <changeSet id="Template Message for EA to referral source" author="jim.stanley">
+        <insert tableName="message_template">
+            <column name="id" value="d6d1f68a-0533-426f-bd0b-d129a92edf81" />
+            <column name="name" value="Early Alert Response to Referral Source from Coach" />
+            <column name="description"
+                value="Message sent to referral source when the Advisor responds via SSP." />
+            <column name="subject" value="New Referral from $!applicationTitle for $earlyAlert.person.firstName $earlyAlert.person.lastName" />
+            <column name="body"><![CDATA[<html><body>
+			<p><b>STUDENT $!termToRepresentEarlyAlert SYSTEM MESSAGE</b></p>
+			<p>This email is based on a referral for an $!termToRepresentEarlyAlert created on $earlyAlert.createdDate for the following student:</p>
+			<table>
+			<tr><th>Student Name</th><td>$earlyAlert.person.firstName $earlyAlert.person.lastName</td></tr>
+			<tr><th>Student ID</th><td>$!earlyAlert.person.schoolId</td></tr>
+			<tr><th>In the class</th><td>$!earlyAlert.courseName</td></tr>
+			<tr><th>Instructor</th><td>$earlyAlert.createdBy.firstName $earlyAlert.createdBy.lastName</td></tr>
+			#if( $earlyAlert.person.coach.lastName )
+			<tr><th>Coach</th><td>$earlyAlert.person.coach.firstName $earlyAlert.person.coach.lastName</td></tr>
+			#end
+			<tr><th>Response by</th><td>$earlyAlertResponse.createdBy.firstName $earlyAlertResponse.createdBy.lastName</td></tr>
+			<tr><th>Status</th><td>#if( $earlyAlert.closedDate )
+			This incident was addressed and CLOSED on $earlyAlert.closedDate. The final outcome for this incident was:
+			#else
+			This incident was addressed on $earlyAlertResponse.modifiedDate. The outcome was:
+			#end
+			</td></tr>
+			<tr><th>Outcome:</th><td>$!earlyAlertResponse.earlyAlertOutcome.name</td></tr>
+			#if( $earlyAlertResponse.comment )
+			<tr><th>Comments:</th><td>$earlyAlertResponse.comment</td></tr>
+			#end
+			</table>
+			<p>The student has been referred by $earlyAlertResponse.createdBy.firstName $earlyAlertResponse.createdBy.lastName to $earlyAlertReferral.name based upon the $!termToRepresentEarlyAlert status.  
+			<p>If you have access to $!applicationTitle, please enter an $!termToRepresentEarlyAlert response or Journal Entry.  If you do not have access, please send an email to $earlyAlertResponse.createdBy.firstName $earlyAlertResponse.createdBy.lastName 	#if($earlyAlertResponse.createdBy.primaryEmailAddress)
+				<a href="mailto:$earlyAlertResponse.createdBy.primaryEmailAddress?#if($earlyAlertResponse.createdBy.secondaryEmailAddress)cc=$earlyAlertResponse.createdBy.secondaryEmailAddress&#end subject=Student%20Referral:%20$earlyAlert.person.firstName%20 $earlyAlert.person.lastName"> $earlyAlertResponse.createdBy.primaryEmailAddress </a>#end with the details of your interaction with $earlyAlert.person.firstName $earlyAlert.person.lastName</p>
+			<p>Email generated by $!applicationTitle</p>
+			</body></html>]]></column>
+            <column name="created_date" valueDate="2014-03-21T16:00:00" />
+            <column name="modified_date" valueDate="2014-03-21T16:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <rollback>
+            <delete tableName="message_template">
+                <where>id = 'd6d1f68a-0533-426f-bd0b-d129a92edf81'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

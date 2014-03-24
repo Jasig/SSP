@@ -623,6 +623,26 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         field: {
                             xtype: 'textfield'
                         }
+                     }, {
+                         header: 'Referral Primary Email',
+                         required: true,
+                         dataIndex: 'recipientEmailAddress',
+                         renderer: me.columnRendererUtils.renderValidEmail,
+                         flex: 25,
+                         field: {
+                             xtype: 'textfield',
+                             vtype: 'email'
+                         }
+                      }, {
+                          header: 'Referral Secondary Emails',
+                          required: true,
+                          dataIndex: 'carbonCopy',
+                          renderer: me.columnRendererUtils.renderValidEmail,
+                          flex: 25,
+                          field: {
+                              xtype: 'textfield',
+                              vtype: 'email'
+                          }
                     }]
                 }, {
                     text: 'Suggestions',

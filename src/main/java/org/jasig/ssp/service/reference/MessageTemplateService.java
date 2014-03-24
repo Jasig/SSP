@@ -73,6 +73,9 @@ public interface MessageTemplateService extends
 	SubjectAndBody createEarlyAlertResponseToFacultyMessage(
 			Map<String, Object> messageParams);
 	
+	SubjectAndBody createEarlyAlertResponseToReferralSourceMessage(
+			Map<String, Object> messageParams);
+	
 	public <TOO extends AbstractPlanOutputTO<T, TO>, T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanMatrixOutput(
 			AbstractMessageTemplateMapPrintParamsTO<TOO, T, TO> params);
 	

@@ -378,4 +378,13 @@ public class MessageTemplateServiceImpl extends
 		return populateFromTemplate(MessageTemplate.MAP_STATUS_REPORT_ID,
 				messageParams);
 	}
+
+	//TODO GENERATE EARLYALERT_RESPONSE_TO_REFERRAL
+	@Override
+	public SubjectAndBody createEarlyAlertResponseToReferralSourceMessage(
+			Map<String, Object> messageParams) {
+			return populateFromTemplate(
+					MessageTemplate.EARLYALERT_RESPONSE_TO_REFERRAL_SOURCE,
+					messageParams);
+	}
 }

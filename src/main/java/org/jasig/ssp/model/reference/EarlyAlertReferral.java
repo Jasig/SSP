@@ -20,6 +20,7 @@ package org.jasig.ssp.model.reference;
 
 import java.util.UUID;
 
+import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
@@ -48,6 +49,14 @@ public class EarlyAlertReferral
 	@Column(nullable = false)
 	@NotNull
 	private String acronym;
+	
+	@Column(nullable = true,  length = 100)
+	@Nullable
+	private String recipientEmailAddress;
+	
+	@Column(nullable = true,  length = 512)
+	@Nullable
+	private String carbonCopy;
 
 	/**
 	 * Constructor
@@ -125,6 +134,22 @@ public class EarlyAlertReferral
 		this.acronym = acronym;
 	}
 
+	public String getRecipientEmailAddress() {
+		return recipientEmailAddress;
+	}
+
+	public void setRecipientEmailAddress(String recipientEmailAddress) {
+		this.recipientEmailAddress = recipientEmailAddress;
+	}
+
+	public String getCarbonCopy() {
+		return carbonCopy;
+	}
+
+	public void setCarbonCopy(String carbonCopy) {
+		this.carbonCopy = carbonCopy;
+	}
+
 	/**
 	 * Unique (amongst all Models in the system) prime for use by
 	 * {@link #hashCode()}
@@ -143,6 +168,8 @@ public class EarlyAlertReferral
 
 		result *= hashField("sortOrder", sortOrder);
 		result *= hashField("acronym", acronym);
+		result *= hashField("recipientEmailAddress", recipientEmailAddress);
+		result *= hashField("carbonCopy", carbonCopy);
 
 		return result;
 	}

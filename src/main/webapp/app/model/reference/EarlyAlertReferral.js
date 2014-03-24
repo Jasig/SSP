@@ -18,5 +18,7 @@
  */
 Ext.define('Ssp.model.reference.EarlyAlertReferral', {
 	extend: 'Ssp.model.reference.AbstractReference',
-    fields: [{name:'acronym',type:'string'}]
+    fields: [{name:'acronym',type:'string'},
+             {name:'recipientEmailAddress',type:'string'},
+             {name:'carbonCopy',type:'string'}]
 });

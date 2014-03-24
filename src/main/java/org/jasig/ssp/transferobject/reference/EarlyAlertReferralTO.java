@@ -41,6 +41,12 @@ public class EarlyAlertReferralTO extends
 	private short sortOrder; // NOPMD by jon on 5/4/12 11:16
 
 	private String acronym;
+	
+
+	private String recipientEmailAddress;
+	
+
+	private String carbonCopy;
 
 	/**
 	 * Empty constructor
@@ -65,7 +71,7 @@ public class EarlyAlertReferralTO extends
 	}
 
 	/**
-	 * Constructor to initialize all properties of the class.
+	 * Constructor to initialize core properties of the class.
 	 * 
 	 * @param id
 	 *            identifier
@@ -86,6 +92,35 @@ public class EarlyAlertReferralTO extends
 		super(id, name, description);
 		this.sortOrder = sortOrder;
 		this.acronym = acronym;
+	}
+	
+	
+	/**
+	 * Constructor to initialize all properties of the class.
+	 * 
+	 * @param id
+	 *            identifier
+	 * @param name
+	 *            name shown to the user
+	 * @param description
+	 *            description shown to the user in detail views
+	 * @param sortOrder
+	 *            default sort order for use when displaying a list of these
+	 *            reference objects to the user
+	 * @param acronym
+	 *            acronym (a.k.a. code)
+	 */
+	public EarlyAlertReferralTO(@NotNull final UUID id,
+			@NotNull final String name,
+			final String description, final short sortOrder, // NOPMD by jon
+			@NotNull final String acronym,
+			 final String recipientEmailAddress,
+			 final String carbonCopy) {
+		super(id, name, description);
+		this.sortOrder = sortOrder;
+		this.acronym = acronym;
+		this.recipientEmailAddress = recipientEmailAddress;
+		this.carbonCopy = carbonCopy;
 	}
 
 	/**
@@ -113,6 +148,9 @@ public class EarlyAlertReferralTO extends
 		super.from(model);
 		sortOrder = model.getSortOrder();
 		acronym = model.getAcronym();
+		
+		recipientEmailAddress = model.getRecipientEmailAddress();
+		carbonCopy = model.getCarbonCopy();
 	}
 
 	/**
@@ -149,6 +187,22 @@ public class EarlyAlertReferralTO extends
 	 */
 	public void setAcronym(@NotNull final String acronym) {
 		this.acronym = acronym;
+	}
+
+	public String getRecipientEmailAddress() {
+		return recipientEmailAddress;
+	}
+
+	public void setRecipientEmailAddress(String recipientEmailAddress) {
+		this.recipientEmailAddress = recipientEmailAddress;
+	}
+
+	public String getCarbonCopy() {
+		return carbonCopy;
+	}
+
+	public void setCarbonCopy(String carbonCopy) {
+		this.carbonCopy = carbonCopy;
 	}
 
 	/**

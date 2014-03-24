@@ -67,6 +67,9 @@ public class EarlyAlertReferralTOFactoryImpl
 
 		model.setSortOrder(tObject.getSortOrder());
 		model.setAcronym(tObject.getAcronym());
+		
+		model.setRecipientEmailAddress(tObject.getRecipientEmailAddress());
+		model.setCarbonCopy(tObject.getCarbonCopy());
 
 		return model;
 	}
