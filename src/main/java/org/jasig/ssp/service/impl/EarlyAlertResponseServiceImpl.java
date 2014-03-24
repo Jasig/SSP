@@ -25,9 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
 import javax.mail.SendFailedException;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.EarlyAlertResponseDao;
 import org.jasig.ssp.factory.EarlyAlertResponseTOFactory;
 import org.jasig.ssp.model.EarlyAlert;
@@ -202,6 +204,16 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 						"have gone missing. Probably deleted by another user.",
 						e);
 			}
+		}else{
+			try {
+				earlyAlertService.openEarlyAlert(saved.getEarlyAlert().getId());
+			} catch ( ObjectNotFoundException e ) {
+				throw new ValidationException(
+						"Records related to the proposed EarlyAlertResponse " +
+						"have gone missing. Probably deleted by another user.",
+						e);
+			}
+			
 		}
 
 		afterEarlyAlertResponseCreate(saved);
@@ -340,6 +352,22 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 			LOGGER.info("Message {} created for EarlyAlertResponse {}", message,
 					earlyAlertResponse);
 		}
+		
+		Set<EarlyAlertReferral> referrals = earlyAlertResponse.getEarlyAlertReferralIds();
+		
+		for(EarlyAlertReferral referral:referrals){
+			if(StringUtils.isNotBlank(referral.getRecipientEmailAddress()) || 
+					StringUtils.isNotBlank(referral.getCarbonCopy())){
+				final SubjectAndBody subjAndBody = messageTemplateService.createEarlyAlertResponseToReferralSourceMessage(fillReferralTemplateParameters(earlyAlertResponse, referral));
+				
+				final Message message = messageService.createMessage(referral.getRecipientEmailAddress(), referral.getCarbonCopy(),
+						subjAndBody);
+
+				LOGGER.info("Referral Message {} created for EarlyAlertResponse {} and Referral " + referral.getName(), message,
+						earlyAlertResponse);
+			}
+		}
+		
 	}
 
 	/**
@@ -407,6 +435,34 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
  
 		return templateParameters;
 	}
+	
+	private Map<String, Object> fillReferralTemplateParameters( // NOPMD by jon.adams
+			@NotNull final EarlyAlertResponse earlyAlertResponse, @NotNull final EarlyAlertReferral earlyAlertReferral) {
+		if (earlyAlertResponse == null) {
+			throw new IllegalArgumentException(
+					"EarlyAlertResponse was missing.");
+		}
+
+		final EarlyAlert earlyAlert = earlyAlertResponse.getEarlyAlert();
+
+		// get basic template parameters from the early alert
+		final Map<String, Object> templateParameters = earlyAlertService
+				.fillTemplateParameters(earlyAlert);
+
+		// add early alert response to the parameter list
+		templateParameters.put("earlyAlertResponse", earlyAlertResponse);
+		templateParameters.put("earlyAlertReferral", earlyAlertReferral);
+		templateParameters.put("workPhone", earlyAlert.getPerson()
+				.getWorkPhone());
+		if ( earlyAlert.getPerson().getCoach() != null &&
+				earlyAlert.getPerson().getCoach().getStaffDetails() != null ) {
+			templateParameters.put("officeLocation", earlyAlert.getPerson()
+					.getCoach().getStaffDetails().getOfficeLocation());
+		}
+ 
+		return templateParameters;
+	}
+
 
 	@Override
 	public Long getEarlyAlertResponseCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {		
