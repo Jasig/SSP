@@ -83,6 +83,8 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 		
 		if ( me.person.data.studentType ) {
 			me.formUtils.applyAssociativeStoreFilter(me.studentTypesStore, me.person.data.studentType.id);	
+		} else {
+			me.formUtils.applyActiveOnlyFilter(me.studentTypesStore);
 		}
 				
 		me.getView().getForm().reset();
