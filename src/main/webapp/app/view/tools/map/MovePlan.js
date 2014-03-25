@@ -17,35 +17,63 @@
  * under the License.
  */
 Ext.define('Ssp.view.tools.map.MovePlan', {
-    extend: 'Ext.form.FieldContainer',
+    extend: 'Ext.form.Panel',
     alias: 'widget.moveplan',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.tool.map.MapPlanToolViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
-        termsStore: 'termsStore'
+        termsStore: 'termsStore',
+        authenticatedPerson: 'authenticatedPerson',
+    	currentMapPlan: 'currentMapPlan'        	
     },
     width: '100%',
-    height: '100%',
+    height: '38',
+	style: 'background-color: lightgrey;',
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
             fieldLabel: '',
             layout: 'hbox',
             margin: '0 0 0 0',
-			padding: ' 2 0 0 0',
-            height: '38',
+			padding: '0 0 0 0',
             defaultType: 'displayfield',
-			style: 'background-color: lightgrey;',
+            bodyStyle: {"background-color":"lightgrey"},  
             fieldDefaults: {
                 msgTarget: 'side'
             },
-            
             items: [
+
+                 {
+                            fieldLabel: me.currentMapPlan.get("isTemplate") == true ? 'Template Title':'Plan Title',
+        					xtype:'displayfield',
+                            itemId: 'name',
+                            name: 'name',
+        					frame: false,
+        					readOnly: true,
+        					editable:false
+                        }, 	
+                        {
+                            xtype: 'tbspacer',
+                            flex: 1
+                        },                        
+        				{
+        								 xtype: 'button',
+        								 width: 20,
+        								itemId:'onPlanStatusDetails',
+        				    	         cls: 'helpIconSmall',
+        				    	         tooltip: 'Student is currently on plan.'
+        				    	     },{
+                            		fieldLabel: 'Student is Currently',
+        		                    itemId: 'onPlan',
+        		                    name: 'onPlan',
+        							fieldStyle:"text-align:left",
+        				   },                 
                {
                     xtype: 'tbspacer',
                     flex: 1
                 }, {
-                    fieldLabel: 'Current Total Plan Cr Hrs',
+                    fieldLabel: 'Plan Hrs',
                     itemId: 'currentTotalPlanCrHrs',
                     name: 'currentTotalPlanCrHrs',
                     id: 'currentTotalPlanCrHrs',
@@ -53,7 +81,7 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
                     width: 190
                 
                 }, {
-                    fieldLabel: 'Dev Cr Hrs',
+                    fieldLabel: 'Dev Hrs',
                     itemId: 'currentPlanTotalDevCrHrs',
                     name: 'currentPlanTotalDevCrHrs',
 					id:'currentPlanTotalDevCrHrs',
@@ -63,7 +91,7 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
                 },	{
 		                    xtype: 'tbspacer',
 		                    flex: .05
-		                },]
+		                }]
         
         });
         

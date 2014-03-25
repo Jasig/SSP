@@ -20,7 +20,6 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
     extend: 'Ext.form.Panel',
     alias: 'widget.plantool',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.map.MapPlanToolViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
         authenticatedPerson: 'authenticatedPerson',
@@ -301,61 +300,6 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 			            },{
                 xtype: 'tbspacer',
                 flex: 1
-            }, {
-                xtype: 'fieldset',
-                border: 0,
-                padding: '0 0 0 0',
-                title: '',
-                defaultType: 'displayfield',
-                layout: 'vbox',
-                defaults: {
-                    anchor: '100%'
-                },
-                items: [{
-                    fieldLabel: me.currentMapPlan.get("isTemplate") == true ? 'Template Title':'Plan Title',
-					xtype:'textareafield',
-                    itemId: 'name',
-                    name: 'name',
-                    labelWidth: 65,
-					width:200,
-					height:40,
-					style: 'border: none;',
-					frame: false,
-					readOnly: true,
-					fieldStyle:"border:none 0px black; margin-top:2px; background-image:none",
-					editable:false
-                }, 	{
-		                xtype: 'fieldset',
-		                border: 0,
-		                padding: '0 0 0 0',
-		                title: '',
-						itemId:'onPlanFieldSet',
-		                defaultType: 'displayfield',
-		                layout: 'hbox',
-		                defaults: {
-		                    anchor: '100%'
-		                },
-		                hidden: me.currentMapPlan.get("isTemplate"),
-		                items: [
-							{
-								 xtype: 'button',
-								 width: 20,
-				                 height: 20,
-								itemId:'onPlanStatusDetails',
-				    	         cls: 'helpIconSmall',
-				    	         tooltip: 'Student is currently on plan.'
-				    	     },{
-                    		fieldLabel: 'Student is Currently',
-		                    itemId: 'onPlan',
-		                    name: 'onPlan',
-		                    labelWidth: 115,
-							width:200,
-							fieldStyle:"text-align:left",
-
-
-		                }]
-				}]
-            
             }]
         });
         

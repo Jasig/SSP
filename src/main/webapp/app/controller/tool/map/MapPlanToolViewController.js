@@ -29,7 +29,6 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
     	currentMapPlan: 'currentMapPlan',
     	mapPlanService:'mapPlanService'
     },
-    
 	init: function() {
 		var me=this;
         // Cannot do anything in init that depends on the current plan
@@ -142,6 +141,14 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
 	onCurrentMapPlanChange: function(){
 		var me = this;
 		me.appEventsController.getApplication().fireEvent("onCurrentMapPlanChangeUpdateMapView");
+		 if(me.currentMapPlan.get('isTemplate') == true)
+		{
+			me.getOnPlanField().hide();
+			me.getOnPlanStatusDetails().hide();
+		}else{
+			me.getOnPlanField().show();
+			me.getOnPlanStatusDetails().show();
+		}
 	},
 
 	
