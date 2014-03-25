@@ -19,6 +19,7 @@
 package org.jasig.ssp.model.external;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,6 +53,12 @@ public class ExternalSubstitutableCourse  implements ExternalData, Serializable 
 
 	@Column(nullable = false, length = 50)
 	private String sourceCourseTitle;	
+	
+	@Column
+	private BigDecimal sourceCreditHours;
+	
+	@Column
+	private BigDecimal targetCreditHours;
 	
 	@Column(nullable = false, length = 35)
 	private String targetFormattedCourse;	
@@ -139,5 +146,21 @@ public class ExternalSubstitutableCourse  implements ExternalData, Serializable 
 
 	public void setProgramCode(String programCode) {
 		this.programCode = programCode;
+	}
+
+	public BigDecimal getSourceCreditHours() {
+		return sourceCreditHours;
+	}
+
+	public void setSourceCreditHours(BigDecimal sourceCreditHours) {
+		this.sourceCreditHours = sourceCreditHours;
+	}
+
+	public BigDecimal getTargetCreditHours() {
+		return targetCreditHours;
+	}
+
+	public void setTargetCreditHours(BigDecimal targetCreditHours) {
+		this.targetCreditHours = targetCreditHours;
 	}	
 }

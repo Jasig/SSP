@@ -81,4 +81,31 @@
 				
 	</changeSet>
 
+	<changeSet id="add columns to substitutable courses" author="tony.arland">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip creating the external_course_term and external_course table for integration database">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+		
+		<dropView viewName="v_external_substitutable_course"/>
+		
+		<addColumn tableName="external_substitutable_course">
+			<column name="source_credit_hours" type="numeric(9,2)"></column>
+		</addColumn>
+		
+		<addColumn tableName="external_substitutable_course">
+			<column name="target_credit_hours" type="numeric(9,2)"></column>
+		</addColumn>
+				
+		<createView viewName="v_external_substitutable_course">
+			select ROW_NUMBER() OVER (ORDER BY source_formatted_course ${concat.operator} term_code ${concat.operator} target_formatted_course ) as id,* from external_substitutable_course
+		</createView>
+
+		<sql>grant all on external_substitutable_course to ${database.app.username}</sql>
+		<sql>grant all on v_external_substitutable_course to ${database.app.username}</sql>	
+				
+	</changeSet>
 </databaseChangeLog>

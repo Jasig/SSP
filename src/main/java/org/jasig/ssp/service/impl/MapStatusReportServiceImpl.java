@@ -445,7 +445,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		detail.setTermCode(mapPlanStatusReportCourse.getTermCode());
 		detail.setSubstitutedFormattedCourse(matchedTranscriptCourse.getFormattedCourse());
 		detail.setSubstitutedTermCode(matchedTranscriptCourse.getTermCode());
-		detail.setSubstitutedCourseCode(" ");
+		detail.setSubstitutedCourseCode(matchedTranscriptCourse.getCourseCode());
 		detail.setSubstitutionNote(" ");
 		detail.setSubstitutionCode(substitutionCode);
 		detail.setReport(report);
@@ -463,14 +463,20 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		{
 			//If term or program code are defined as null as part of the substitution then it's considered term or program unbounded
 			//In otherwords, if term is null it applies to all terms, if program is null is applies to all programs
-			if(mapPlanStatusReportCourse.getFormattedCourse().trim().equalsIgnoreCase(substitutableCourse.getSourceFormattedCourse().trim())
-					&& (substitutableCourse.getTermCode() == null || mapPlanStatusReportCourse.getTermCode().trim().equalsIgnoreCase(substitutableCourse.getTermCode().trim()))
-					&& (substitutableCourse.getProgramCode() == null || mapPlanStatusReportCourse.getTermCode().trim().equalsIgnoreCase(substitutableCourse.getProgramCode().trim()))					)
+			if((mapPlanStatusReportCourse.getFormattedCourse().trim().equalsIgnoreCase(substitutableCourse.getSourceFormattedCourse().trim()) &&
+				(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_COURSE_TITLE) || mapPlanStatusReportCourse.getCourseTitle().trim().equalsIgnoreCase(substitutableCourse.getSourceCourseCode())) &&
+				(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_CREDIT_HOURS) || mapPlanStatusReportCourse.getCreditHours().equals(substitutableCourse.getSourceCreditHours())) &&
+				(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_COURSE_CODE) || mapPlanStatusReportCourse.getCourseCode().trim().equals(substitutableCourse.getSourceCourseCode()))) 
+			   && (substitutableCourse.getTermCode() == null || mapPlanStatusReportCourse.getTermCode().trim().equalsIgnoreCase(substitutableCourse.getTermCode().trim()))
+		       && (substitutableCourse.getProgramCode() == null || mapPlanStatusReportCourse.getTermCode().trim().equalsIgnoreCase(substitutableCourse.getProgramCode().trim()))					)
 			{
 				//if a substitution is found, check to see if the student has taken the target course
 				for(ExternalStudentTranscriptCourse transcriptCourse : transcript)
 				{
-					if(transcriptCourse.getFormattedCourse().trim().equalsIgnoreCase(substitutableCourse.getTargetFormattedCourse().trim())
+					if( (transcriptCourse.getFormattedCourse().trim().equalsIgnoreCase(substitutableCourse.getTargetFormattedCourse().trim()) &&
+							(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_COURSE_TITLE) || transcriptCourse.getTitle().trim().equalsIgnoreCase(substitutableCourse.getTargetCourseTitle())) &&
+							(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_CREDIT_HOURS) || transcriptCourse.getCreditEarned().equals(substitutableCourse.getTargetCreditHours())) &&
+							(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_COURSE_CODE) || transcriptCourse.getCourseCode().trim().equals(substitutableCourse.getTargetCourseCode()))) 
 							&& (substitutableCourse.getTermCode() == null || transcriptCourse.getTermCode().trim().equalsIgnoreCase(substitutableCourse.getTermCode().trim()))
 							&& (substitutableCourse.getProgramCode() == null || transcriptCourse.getTermCode().trim().equalsIgnoreCase(substitutableCourse.getProgramCode().trim()))							)
 					return transcriptCourse;
