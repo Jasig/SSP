@@ -292,7 +292,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 			
 		}
 		
-		if(planCourses.isEmpty())
+		if(planCourses.isEmpty() || totalPlanCoursesInScope == 0)
 			return new BigDecimal(1);
 		int anomalies = reportCourseDetails.size();
 		if(termBound == true && useSubstitutableCourses == true)
