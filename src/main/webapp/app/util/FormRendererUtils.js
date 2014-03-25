@@ -890,7 +890,8 @@ Ext.define('Ssp.util.FormRendererUtils',{
 			filterFn: function(storeItem) {
 				return storeItem.data.active;
 			}
-		})
+		});
+		return store.filter(activeOnlyFilter);
 	}
 });
 
