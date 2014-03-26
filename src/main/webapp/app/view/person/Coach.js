@@ -67,25 +67,29 @@ Ext.define('Ssp.view.person.Coach', {
 				        editable: false,
 						width: 300
 					},{
-				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' +  'Office',
+				        fieldLabel: 'Office',
 				        itemId: 'officeField',
 				        name: 'coachOffice',
-						width: 300
+						width: 300,
+						disabled: true
 				    },{
 				        fieldLabel: 'Phone',
 				        itemId: 'phoneField',
 				        name: 'coachPhone',
-						width: 300
+						width: 300,
+						disabled: true
 				    },{
-				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' +  'Email',
+				        fieldLabel: 'Email',
 				        itemId: 'emailAddressField',
 				        name: 'coachEmailAddress',
-						width: 300
+						width: 300,
+						disabled: true
 				    },{
 				        fieldLabel: 'Department',
 				        itemId: 'departmentField',
 				        name: 'coachDepartment',
-						width: 300
+						width: 300,
+						disabled: true
 				    }]
 			    }]
 			});

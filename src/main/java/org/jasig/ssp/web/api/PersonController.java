@@ -137,7 +137,7 @@ public class PersonController extends AbstractBaseController {
 	@RequestMapping(value = "/coach", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
-	PagedResponse<PersonLiteTO> getAllCoaches(
+	PagedResponse<CoachPersonLiteTO> getAllCoaches(
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
@@ -147,8 +147,9 @@ public class PersonController extends AbstractBaseController {
 				.getAllCoachesLite(SortingAndPaging.createForSingleSortWithPaging(status,
 						start, limit, sort, sortDirection, null));
 
-		return new PagedResponse<PersonLiteTO>(true, coaches.getResults(),
-				PersonLiteTO.toTOListFromCoachTOs(coaches.getRows()));
+		return new PagedResponse<CoachPersonLiteTO>(true, coaches.getResults(),
+				coaches.getRows());
+
 	}
 
 	@RequestMapping(value = "/email", method = RequestMethod.POST)
