@@ -80,8 +80,11 @@ public class MessageTemplate
 	public static final UUID MAP_STATUS_REPORT_ID = UUID
 			.fromString("3da780e7-b7df-43b2-8988-fc51ef03f7c0");
 	
-	public static final UUID EARLYALERT_RESPONSE_TO_REFERRAL_SOURCE = UUID.
+	public static final UUID EARLYALERT_RESPONSE_TO_REFERRAL_SOURCE_ID = UUID.
 			fromString("d6d1f68a-0533-426f-bd0b-d129a92edf81");
+	
+	public static final UUID EARLYALERT_RESPONSE_REQUIRED_ID = UUID.
+			fromString("bfae36f8-53d0-486f-8bc5-a9d98beb544e");
 
 	@NotNull
 	@Column(name = "subject", nullable = false, length = 250)

@@ -56,6 +56,8 @@ public class PersonSearchResult2 {
 
 	private int numberOfEarlyAlerts;
 	
+	private int numberEarlyAlertResponsesRequired;
+	
 	private UUID id;
 	
 	private UUID coachId;
@@ -214,5 +216,18 @@ public class PersonSearchResult2 {
 
 	public void setNumberOfEarlyAlerts(int numberOfEarlyAlerts) {
 		this.numberOfEarlyAlerts = numberOfEarlyAlerts;
+	}
+	
+	public void setNumberEarlyAlertResponsesRequired(final Number numberEarlyAlertResponsesRequired) {
+		this.numberEarlyAlertResponsesRequired = numberEarlyAlertResponsesRequired.intValue();
+	}
+
+
+	public int getNumberEarlyAlertResponsesRequired() {
+		return numberEarlyAlertResponsesRequired;
+	}
+
+	public void setNumberEarlyAlertResponsesRequired(int numberEarlyAlertResponsesRequired) {
+		this.numberEarlyAlertResponsesRequired = numberEarlyAlertResponsesRequired;
 	}
 }

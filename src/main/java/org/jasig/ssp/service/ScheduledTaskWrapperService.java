@@ -33,4 +33,6 @@ public interface ScheduledTaskWrapperService {
 	public void sendTaskReminders();
 
 	public void calcMapStatusReports();
+	
+	public void sendEarlyAlertReminders();
 }

@@ -30,6 +30,7 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -533,6 +534,58 @@ public class EarlyAlertDao extends
 		
 		return total;
 
+	}
+	
+	public List<EarlyAlert> getResponseDueEarlyAlerts(Date lastResponseDate){
+		String sql = "select distinct ea " + responseQuery();
+		final Query query = createHqlQuery(sql);
+		query.setParameter("lastResponseDate", lastResponseDate);
+		query.setParameter("objectStatus", ObjectStatus.ACTIVE);
+		return (List<EarlyAlert>)query.list();
+	}
+	
+	public Map<UUID, Number> getResponsesDueCountEarlyAlerts(
+			@NotNull final Collection<UUID> personIds, Date lastResponseDate) {
+		List<List<UUID>> batches = prepareBatches(personIds);
+		List<Object[]> results = new ArrayList<Object[]>();
+		Map<UUID,Number> responsesDuePerPerson = new HashMap<UUID,Number>();
+		for(List<UUID> batch:batches){
+			results.addAll(getResponsesBatchDueCountEarlyAlerts(batch, lastResponseDate));
+		}
+		
+
+		// put query results into return value
+		for (final Object[] result : results) {
+			responsesDuePerPerson.put((UUID) result[0], (Number) result[1]);
+		}
+
+		// ensure all people IDs that were request exist in return Map
+		for (final UUID id : personIds) {
+			if (!responsesDuePerPerson.containsKey(id)) {
+				responsesDuePerPerson.put(id, 0);
+			}
+		}
+		return responsesDuePerPerson;
+	}
+	
+	public List<Object[]> getResponsesBatchDueCountEarlyAlerts(List<UUID> students, Date lastResponseDate){
+		String sql = "select distinct ea.person.id, count(ea) " +  responseQuery() 
+				+ " and ea.person.id in :personIds group by ea.person.id";
+		final Query query = createHqlQuery(sql);
+		query.setParameter("objectStatus", ObjectStatus.ACTIVE);
+		query.setParameter("lastResponseDate", lastResponseDate);
+		query.setParameterList("personIds", students);
+		return (List<Object[]>)query.list();
+	}
+	
+	private  String  responseQuery(){
+		return "from EarlyAlert as ea where ((ea.closedDate is null and ea.objectStatus = :objectStatus "
+				+ "and ea.lastResponseDate is null and ea.createdDate < :lastResponseDate) or "
+				+ "(ea.closedDate is null and ea.objectStatus = :objectStatus and ea.lastResponseDate < :lastResponseDate)) ";
+				/*+ "and  (((select max(ear.modifiedDate) from EarlyAlertResponse as ear "
+			+ "where ear.earlyAlertId = ea.id) is empty)"
+				+ "or (select max(ear.modifiedDate) from EarlyAlertResponse as ear2 "
+			+ "where ear2.earlyAlertId = ea.id) <= :lastResponseDate)";*/
 	}
 	
 	private Criteria setPersonCriteria(Criteria criteria, PersonSearchFormTO personSearchForm){

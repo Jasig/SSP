@@ -141,7 +141,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}else{
 			me.onTextStoreLoad();
 		}
-
+		
 		return me.callParent(arguments);
     },
     
@@ -188,11 +188,27 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	me.appEventsController.assignEvent({eventName: 'setNonParticipatingProgramStatusComplete', callBackFunc: me.onSetNonParticipatingProgramStatusComplete, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onPersonSearchSuccess', callBackFunc: me.searchSuccess, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
+		me.appEventsController.assignEvent({eventName: 'updateEarlyAlertCounts', callBackFunc: me.onUpdateEarlyAlertCounts, scope: me});
 	   	me.initSearchGrid();
 
 	   	// load program statuses
 		me.getProgramStatuses();	
 		me.configurationOptionsUnpagedStore.load();
+	},
+	
+	onUpdateEarlyAlertCounts: function(params){
+		var me = this;
+		var person = me.caseloadStore.findRecord("id",params.personId);
+		if(person != null){
+			person.set('numberOfEarlyAlerts', params.openEarlyAlerts);
+			person.set('numberEarlyAlertResponsesRequired', params.lateEarlyAlertResponses);
+		}
+		
+		person = me.searchStore.findRecord("id",params.personId);
+		if(person != null){
+			person.set('numberOfEarlyAlerts', params.openEarlyAlerts);
+			person.set('numberEarlyAlertResponsesRequired', params.lateEarlyAlertResponses);
+		}
 	},
 
     destroy: function() {
@@ -204,7 +220,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	me.appEventsController.removeEvent({eventName: 'onPersonSearchSuccess', callBackFunc: me.searchSuccess, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
-		
+		me.appEventsController.removeEvent({eventName: 'updateEarlyAlertCounts', callBackFunc: me.onUpdateEarlyAlertCounts, scope: me});
 		return me.callParent( arguments );
     },
     
@@ -385,6 +401,15 @@ Ext.define('Ssp.controller.SearchViewController', {
 				if (row.get('numberOfEarlyAlerts') > 0)
 				{
 					cls = 'caseload-early-alert-indicator'
+				}				
+			}
+			
+			// early alert color will over-ride the alert
+			if ( row.get('numberEarlyAlertResponsesRequired') != null)
+			{
+				if (row.get('numberEarlyAlertResponsesRequired') > 0)
+				{
+					cls = 'caseload-early-alert-response-required-indicator'
 				}				
 			}
 

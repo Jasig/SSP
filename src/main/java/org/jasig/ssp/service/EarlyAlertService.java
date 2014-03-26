@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
 import javax.mail.SendFailedException;
 import javax.validation.constraints.NotNull;
 
@@ -165,6 +166,8 @@ public interface EarlyAlertService
 
 	PagingWrapper<EarlyAlertStudentReportTO> getStudentsEarlyAlertCountSetForCritera(EarlyAlertStudentSearchTO searchForm, SortingAndPaging createForSingleSort);
 	
-	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(EntityCountByCoachSearchForm form);
+	PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(EntityCountByCoachSearchForm form);
 
+	Map<UUID,Number> getResponsesDueCountEarlyAlerts(List<UUID> personIds);
+	void sendAllEarlyAlertReminderNotifications();
 }

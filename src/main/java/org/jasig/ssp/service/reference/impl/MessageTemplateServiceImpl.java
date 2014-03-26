@@ -256,6 +256,13 @@ public class MessageTemplateServiceImpl extends
 				messageParams);
 	}
 	
+	@Override
+	public SubjectAndBody createEarlyAlertResponseRequiredToCoachMessage(
+			final Map<String, Object> messageParams) {
+		return populateFromTemplate(
+				MessageTemplate.EARLYALERT_RESPONSE_REQUIRED_ID,
+				messageParams);
+	}
 	
 	@Override
 	public <TOO extends AbstractPlanOutputTO<T, TO>, T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanMatrixOutput(
@@ -384,7 +391,7 @@ public class MessageTemplateServiceImpl extends
 	public SubjectAndBody createEarlyAlertResponseToReferralSourceMessage(
 			Map<String, Object> messageParams) {
 			return populateFromTemplate(
-					MessageTemplate.EARLYALERT_RESPONSE_TO_REFERRAL_SOURCE,
+					MessageTemplate.EARLYALERT_RESPONSE_TO_REFERRAL_SOURCE_ID,
 					messageParams);
 	}
 }

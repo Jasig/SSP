@@ -60,6 +60,8 @@ public class PersonSearchResult2TO implements TransferObject<PersonSearchResult2
 
 	private int numberOfEarlyAlerts;
 	
+	private int numberEarlyAlertResponsesRequired;
+	
 	private UUID id;
 	
 	private UUID coachId;
@@ -100,6 +102,7 @@ public class PersonSearchResult2TO implements TransferObject<PersonSearchResult2
 		setCoachLastName(model.getCoachLastName());
 		setPhotoUrl(model.getPhotoUrl());
 		setCurrentProgramStatusName(model.getCurrentProgramStatusName());
+		setNumberEarlyAlertResponsesRequired(model.getNumberEarlyAlertResponsesRequired());
 	}
 
 	public UUID getPersonId() {
@@ -233,5 +236,14 @@ public class PersonSearchResult2TO implements TransferObject<PersonSearchResult2
 
 	public void setCurrentProgramStatusName(String currentProgramStatusName) {
 		this.currentProgramStatusName = currentProgramStatusName;
+	}
+
+	public int getNumberEarlyAlertResponsesRequired() {
+		return numberEarlyAlertResponsesRequired;
+	}
+
+	public void setNumberEarlyAlertResponsesRequired(
+			int numberEarlyAlertResponsesRequired) {
+		this.numberEarlyAlertResponsesRequired = numberEarlyAlertResponsesRequired;
 	}
 }

@@ -32,6 +32,7 @@ Ext.define('Ssp.model.SearchPerson', {
              {name: 'studentTypeName', type: 'string'},
              {name: 'currentAppointmentStartDate', type: 'date', dateFormat: 'time'},
              {name: 'numberOfEarlyAlerts', type: 'string'},
+             {name: 'numberEarlyAlertResponsesRequired', type: 'int'},
              {name: 'studentIntakeComplete', type: 'boolean'},
              {name: 'currentAppointmentStartTime', type: 'date', dateFormat: 'time'},
              {name: 'currentProgramStatusName', type: 'string'},

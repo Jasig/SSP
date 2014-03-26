@@ -27,7 +27,9 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     	formUtils: 'formRendererUtils',
     	model: 'currentEarlyAlertResponse',
     	personLite: 'personLite',
-		authenticatedPerson: 'authenticatedPerson'
+		authenticatedPerson: 'authenticatedPerson',
+		treeStore: 'earlyAlertsTreeStore',
+		util: 'util'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -217,6 +219,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		var me=scope;
 		me.getView().setLoading(false);
 		me.displayMain();
+		me.util.onUpdateEarlyAlertsResponseStatus(me.treeStore.getRootNode().childNodes, r);
 	},
 
 	closeEarlyAlertFailure: function( response, scope ) {
@@ -255,6 +258,4 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 	onResponseGotoEAListClick: function(button){
         var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertList(), true, {});
     }
-	
-	
 });

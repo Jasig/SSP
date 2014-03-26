@@ -202,9 +202,12 @@ background: url('/ssp/images/set-transition-status-icon.png') no-repeat !importa
 }
 
 .caseload-early-alert-indicator > td { 
-background:#f6c8ba !important; 
+background:#FEBB40 !important; 
 }
 
+.caseload-early-alert-response-required-indicator > td {
+	background:#f6c8ba !important; 
+}
 .caseload-appointment-indicator > td { 
 background:#ffff00 !important; 
 }

@@ -73,6 +73,9 @@ public interface MessageTemplateService extends
 	SubjectAndBody createEarlyAlertResponseToFacultyMessage(
 			Map<String, Object> messageParams);
 	
+	 SubjectAndBody createEarlyAlertResponseRequiredToCoachMessage(
+				final Map<String, Object> messageParams);
+	
 	SubjectAndBody createEarlyAlertResponseToReferralSourceMessage(
 			Map<String, Object> messageParams);
 	

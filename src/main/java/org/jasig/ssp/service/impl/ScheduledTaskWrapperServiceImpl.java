@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.ScheduledTaskWrapperService;
@@ -100,6 +101,9 @@ public class ScheduledTaskWrapperServiceImpl
 
 	@Autowired
 	private transient TaskService taskService;
+	
+	@Autowired
+	private transient EarlyAlertService earlyAlertService;
 
 	@Autowired
 	private transient TaskScheduler taskScheduler;
@@ -494,6 +498,17 @@ public class ScheduledTaskWrapperServiceImpl
 	public void sendTaskReminders() {
 		try {
 			taskService.sendAllTaskReminderNotifications();
+		} finally {
+			securityService.afterRequest();
+		}
+	}
+	
+	@Override
+	@Scheduled(cron = "0 0 2 * * *")
+	// run at 2 am every day
+	public void sendEarlyAlertReminders() {
+		try {
+			earlyAlertService.sendAllEarlyAlertReminderNotifications();
 		} finally {
 			securityService.afterRequest();
 		}

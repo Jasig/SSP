@@ -111,6 +111,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 		return new PagingWrapper<PersonSearchResult>(people.getResults(),
 				personSearchResults);
 	}
+	
 
 	@Override
 	public PagingWrapper<PersonSearchResult2> search2(PersonSearchRequest from) {
@@ -127,6 +128,9 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 
 		final Map<UUID, Number> earlyAlertCounts = earlyAlertService
 				.getCountOfActiveAlertsForPeopleIds(peopleIds);
+		
+		final Map<UUID, Number> numberEarlyAlertResponsesRequired = earlyAlertService.
+				getResponsesDueCountEarlyAlerts(peopleIds);
 
 		for (final PersonSearchResult2 record : results) {
 			if (appts.containsKey(record.getId())) {
@@ -136,6 +140,11 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 
 			if (earlyAlertCounts.containsKey(record.getId())) {
 				record.setNumberOfEarlyAlerts(earlyAlertCounts.get(record
+						.getId()));
+			}
+			
+			if (numberEarlyAlertResponsesRequired.containsKey(record.getId())) {
+				record.setNumberEarlyAlertResponsesRequired(numberEarlyAlertResponsesRequired.get(record
 						.getId()));
 			}
 		}

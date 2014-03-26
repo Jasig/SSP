@@ -35,8 +35,9 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
         personLite: 'personLite',
         referralsStore: 'earlyAlertReferralsAllUnpagedStore',
         suggestionsStore: 'earlyAlertSuggestionsAllUnpagedStore',
-        treeStore: 'earlyAlertsTreeStore'
-    },
+        treeStore: 'earlyAlertsTreeStore',
+        util: 'util'
+        },
     config: {
         containerToLoadInto: 'tools',
         earlyAlertDetailsDisplay: 'earlyalertdetails',
@@ -91,12 +92,35 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
                   }
              }
         });
-
+        me.appEventsController.assignEvent({eventName: 'updateEarlyAlertsResponseStatus', callBackFunc: me.onUpdateEarlyAlertsResponseStatus, scope: me});
+        me.setGridRowClass(me.getView());
     },
 
     destroy: function() {
         return this.callParent( arguments );
-    },    
+    },  
+    
+    setGridRowClass: function(grid){
+    	grid.getView().getRowClass = function(row, index)
+	    {
+		    var cls = "";
+		    
+			// early alert color will over-ride the appointment date
+			if ( row.get('closedDate') == null)
+			{
+				cls = 'caseload-early-alert-indicator'			
+			}
+			if ( row.get('responseRequired') != null)
+			{
+				if (row.get('responseRequired') == true)
+				{
+					cls = 'caseload-early-alert-response-required-indicator'
+				}				
+			}
+
+			return cls;
+	    };  		
+    },
     
     getEarlyAlerts: function(){
         var me=this;
@@ -120,7 +144,13 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
             personEarlyAlert = new Ssp.model.tool.earlyalert.PersonEarlyAlert();
             me.earlyAlert.data = personEarlyAlert.data;
         }
-		
+        
+        me.onUpdateEarlyAlertsResponseStatus();
+    },
+    
+    onUpdateEarlyAlertsResponseStatus: function(earlyAlertResponse){
+    	var me = this;
+    	me.util.onUpdateEarlyAlertsResponseStatus(me.treeStore.getRootNode().childNodes);
     },
 
     getEarlyAlertsFailure: function( r, scope){
@@ -209,5 +239,11 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     
     displayEarlyAlertResponseDetails: function(button){
         var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getEarlyAlertResponseDetailsDisplay(), true, {});
+    },
+    
+    destroy:function(){
+    	var me = this;
+        me.appEventsController.removeEvent({eventName: 'updateEarlyAlertsResponseStatus', callBackFunc: me.onUpdateEarlyAlertsResponseStatus, scope: me});
+        return me.callParent( arguments );
     }
 });

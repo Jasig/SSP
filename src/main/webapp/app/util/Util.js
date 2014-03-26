@@ -20,7 +20,9 @@ Ext.define('Ssp.util.Util', {
     extend: 'Ext.Component',
 	mixins: [ 'Deft.mixin.Injectable' ],
 	inject: {
-		apiProperties: 'apiProperties'
+		apiProperties: 'apiProperties',
+		appEventsController: 'appEventsController',
+		configurationOptionsUnpagedStore: 'configurationOptionsUnpagedStore'
 	},
 
 	initComponent: function() {
@@ -66,5 +68,39 @@ Ext.define('Ssp.util.Util', {
 		});
 
 
-	}
+	},
+	
+	// in the utils because needed by two different controllers each destroyed by the other
+	onUpdateEarlyAlertsResponseStatus: function(models, earlyAlertResponse){
+		if(!models || models.length == 0)
+			return;
+	    var me = this;
+    	var params = {"openEarlyAlerts":0, "lateEarlyAlertResponses":0,"personId":models[0].get("personId")};
+		me.configurationOptionsUnpagedStore.clearFilter();
+    	var maxResponse = me.configurationOptionsUnpagedStore.getConfigByName("maximum_days_before_early_alert_response");
+    	var miniumResponseDate = null;
+    	if(maxResponse && maxResponse > 0){
+    		miniumResponseDate = new Date();
+    		miniumResponseDate.setDate(miniumResponseDate.getDate() - maxResponse);
+    	}
+		
+        Ext.Array.each( models, function(model, index){
+        	model.set("responseRequired", false);
+        	if(earlyAlertResponse != null && earlyAlertResponse.earlyAlertId == model.get("id")){
+    			if(earlyAlertResponse.closed == true)
+    				model.set("closedDate", new Date());
+    			model.set("lastResponseDate", new Date())
+    		}
+        	if(!model.get("closedDate")){
+        		params.openEarlyAlerts++;
+        			var lastResponseDate = model.get("lastResponseDate") != null ? model.get("lastResponseDate") : model.get("createdDate");
+        			if(miniumResponseDate && (lastResponseDate - miniumResponseDate) < 0){
+        				params.lateEarlyAlertResponses++;
+        				model.set("responseRequired", true);
+        			}
+			}
+        });
+        me.appEventsController.getApplication().fireEvent('updateEarlyAlertCounts', params);
+    },
+
 });

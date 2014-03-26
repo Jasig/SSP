@@ -26,7 +26,7 @@ Ext.define('Ssp.service.EarlyAlertService', {
         earlyAlertOutcomesStore: 'earlyAlertOutcomesStore',
         treeStore: 'earlyAlertsTreeStore',
         treeUtils: 'treeRendererUtils',
-		currentEarlyAlertResponsesGridStore: 'currentEarlyAlertResponsesGridStore'
+		currentEarlyAlertResponsesGridStore: 'currentEarlyAlertResponsesGridStore'	
     },
     initComponent: function() {
         return this.callParent( arguments );
@@ -77,9 +77,7 @@ Ext.define('Ssp.service.EarlyAlertService', {
             var r = Ext.decode(response.responseText);
             if (r.rows.length > 0)
             {
-                
-                me.populateEarlyAlerts( r.rows,personId );
-                
+                me.populateEarlyAlerts( r.rows,personId);
             }
             if (callbacks != null)
             {
@@ -181,7 +179,7 @@ Ext.define('Ssp.service.EarlyAlertService', {
         }
     },    
     
-    populateEarlyAlerts: function( records, personId ){
+    populateEarlyAlerts: function( records, personId){
         var me=this;
         var sortingStore = Ext.create('Ext.data.Store', {
         	model: 'Ssp.model.tool.earlyalert.PersonEarlyAlertTree',
@@ -206,10 +204,10 @@ Ext.define('Ssp.service.EarlyAlertService', {
         			return rank1 < rank2 ? -1 : 1;
         		}
         	}, {
-        		property: "lastResponseDate",
-        		direction: "DESC"
-        	}, {
         		property: "createdDate",
+        		direction: "DESC"
+        	},{
+        		property: "lastResponseDate",
         		direction: "DESC"
         	}]
         });
@@ -219,7 +217,7 @@ Ext.define('Ssp.service.EarlyAlertService', {
     	
     	sortingStore.sort();
     	var models = sortingStore.getRange();
-    	var sortedRecords = []
+    	var sortedRecords = [];
         Ext.Array.each( models, function(record, index){
         	sortedRecords[index]=record.data
         	sortedRecords[index].leaf=false;
@@ -227,7 +225,7 @@ Ext.define('Ssp.service.EarlyAlertService', {
         	sortedRecords[index].gridDisplayDetails=sortedRecords[index].courseName + " - " + sortedRecords[index].courseTitle ; 
         	sortedRecords[index].expanded=false;
         });
-
+       
 		me.treeStore.getRootNode().removeAll();
         me.treeStore.getRootNode().appendChild(sortedRecords);
     },

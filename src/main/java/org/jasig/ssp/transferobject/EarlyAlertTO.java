@@ -104,7 +104,7 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 	}
 
 	@Override
-	public final void from(final EarlyAlert earlyAlert) {
+	public void from(final EarlyAlert earlyAlert) {
 		super.from(earlyAlert);
 
 		courseName = earlyAlert.getCourseName();

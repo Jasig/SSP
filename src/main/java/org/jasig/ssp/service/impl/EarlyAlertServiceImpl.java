@@ -19,8 +19,13 @@
 package org.jasig.ssp.service.impl; // NOPMD by jon.adams
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -63,10 +68,13 @@ import org.jasig.ssp.service.reference.EarlyAlertSuggestionService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.StudentTypeService;
+import org.jasig.ssp.transferobject.EarlyAlertTO;
+import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertMessageTemplateTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
+import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -76,6 +84,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -739,6 +748,112 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	@Override
 	public Long getEarlyAlertCountSetForCritera(EarlyAlertStudentSearchTO searchForm){
 		return dao.getEarlyAlertCountSetForCritera(searchForm);
+	}
+	
+	@Override
+	public void sendAllEarlyAlertReminderNotifications() {
+		Date lastResponseDate = getMinimumResponseComplianceDate();
+		// if no responseDate is given no emails are sent
+		if(lastResponseDate == null)
+			return;
+		List<EarlyAlert> eaOutOfCompliance = dao.getResponseDueEarlyAlerts(lastResponseDate);
+		Map<Person, List<EarlyAlertMessageTemplateTO>> easByCoach = new HashMap<Person, List<EarlyAlertMessageTemplateTO>>();
+		for(EarlyAlert earlyAlert: eaOutOfCompliance){
+			Person coach = earlyAlert.getPerson().getCoach();
+			if(easByCoach.containsKey(coach)){
+				List<EarlyAlertMessageTemplateTO> coachEarlyAlerts = easByCoach.get(coach);
+				coachEarlyAlerts.add(new EarlyAlertMessageTemplateTO(earlyAlert));
+			}else{
+				easByCoach.put(coach, Lists.newArrayList(new EarlyAlertMessageTemplateTO(earlyAlert)));
+			}
+		}
+		for(Person coach: easByCoach.keySet()){
+			Map<String,Object> messageParams = new HashMap<String,Object>();
+			
+			Collections.sort(easByCoach.get(coach), new Comparator<EarlyAlertTO>() {
+		        @Override public int compare(EarlyAlertTO p1, EarlyAlertTO p2) {
+		        	Date p1Date = p1.getLastResponseDate();
+		        	if(p1Date == null)
+		        		p1Date = p1.getCreatedDate();
+		        	Date p2Date = p2.getLastResponseDate();
+		        	if(p2Date == null)
+		        		p2Date = p2.getCreatedDate();
+		            return p1Date.compareTo(p2Date);
+		        }
+
+		    });
+			
+			Integer daysSince1900ResponseExpected =  daysSince1900(lastResponseDate);
+			List<Pair<EarlyAlertMessageTemplateTO,Integer>> earlyAlertTOPairs = new ArrayList<Pair<EarlyAlertMessageTemplateTO,Integer>>();
+			for(EarlyAlertMessageTemplateTO ea:easByCoach.get(coach)){
+				Integer daysOutOfCompliance;
+				if(ea.getLastResponseDate() != null){
+					daysOutOfCompliance = daysSince1900ResponseExpected - daysSince1900(ea.getLastResponseDate());
+				}else{
+				    daysOutOfCompliance = daysSince1900ResponseExpected - daysSince1900(ea.getCreatedDate());
+				}
+				
+				// Just in case attempt to only send emails for EA full day out of compliance
+				if(daysOutOfCompliance >= 0)
+					earlyAlertTOPairs.add(new Pair<EarlyAlertMessageTemplateTO,Integer>(ea, daysOutOfCompliance));
+			}
+			messageParams.put("earlyAlertTOPairs", earlyAlertTOPairs);
+			messageParams.put("coach", coach);
+			messageParams.put("termToRepresentEarlyAlert",
+					configService.getByNameEmpty("term_to_represent_early_alert"));
+			SubjectAndBody subjAndBody = messageTemplateService.createEarlyAlertResponseRequiredToCoachMessage(messageParams);
+			try{
+				messageService.createMessage(coach, null, subjAndBody);
+			}catch(Exception exp){
+				LOGGER.error("Unable to send reminder emails to coach: " + coach.getFullName() + "\n", exp);
+			}
+		}
+		
+	}
+	
+	public Map<UUID,Number> getResponsesDueCountEarlyAlerts(List<UUID> personIds){
+		Date lastResponseDate = getMinimumResponseComplianceDate();
+		if(lastResponseDate == null)
+			return new HashMap<UUID,Number>();
+		return dao.getResponsesDueCountEarlyAlerts(personIds, lastResponseDate);
+	}
+	
+	private Date getMinimumResponseComplianceDate(){
+		final String numVal = configService
+				.getByNameNull("maximum_days_before_early_alert_response");
+		if(StringUtils.isBlank(numVal))
+			return null;
+		Integer allowedDaysPastResponse = Integer.parseInt(numVal);
+		
+		Date lastResponseDate = new Date();
+		
+		Calendar cal = Calendar.getInstance();
+	    cal.setTime(lastResponseDate);
+	    cal.add(Calendar.DAY_OF_MONTH, -allowedDaysPastResponse);
+	    return cal.getTime();
+				
+	}
+	
+	private  int daysSince1900(Date date) {
+	    Calendar c = new GregorianCalendar();
+	    c.setTime(date);
+
+	    int year = c.get(Calendar.YEAR);
+	    if (year < 1900 || year > 2099) {
+	        throw new IllegalArgumentException("daysSince1900 - Date must be between 1900 and 2099");
+	    }
+	    year -= 1900;
+	    int month = c.get(Calendar.MONTH) + 1;
+	    int days = c.get(Calendar.DAY_OF_MONTH);
+
+	    if (month < 3) {
+	        month += 12;
+	        year--;
+	    }
+	    int yearDays = (int) (year * 365.25);
+	    int monthDays = (int) ((month + 1) * 30.61);
+
+	    return (yearDays + monthDays + days - 63);
 	}
 	
 }

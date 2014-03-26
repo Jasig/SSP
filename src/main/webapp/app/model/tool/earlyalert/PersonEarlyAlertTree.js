@@ -26,6 +26,7 @@ Ext.define('Ssp.model.tool.earlyalert.PersonEarlyAlertTree', {
              {name:'earlyAlertReasonId',type:'string'},
              {name:'earlyAlertReasonIds',type:'auto'},
              {name:'earlyAlertReasonOtherDescription',type:'string'},
+             {name:'responseRequired',type:'boolean'},
              {name:'earlyAlertSuggestionIds',type:'auto'},
              {name:'earlyAlertSuggestionOtherDescription',type:'string'},
              {name:'comment',type:'string'},
