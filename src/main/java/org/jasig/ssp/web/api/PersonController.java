@@ -270,7 +270,6 @@ public class PersonController extends AbstractBaseController {
 					conflict = null;
 					createdModel = service.create(model);
 					if (null != createdModel) {
-						externalPersonService.updatePersonFromExternalPerson(createdModel);
 						return new PersonTO(createdModel);
 					}
 				} catch ( PersonExistsException e ) {
