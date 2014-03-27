@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -114,9 +115,9 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	
 
 	@Override
-	public PagingWrapper<PersonSearchResult2> search2(PersonSearchRequest from) {
+	public PagingWrapper<PersonSearchResult2> search2(PersonSearchRequest form) {
 		
-		List<PersonSearchResult2> results = dao.search(from);
+		List<PersonSearchResult2> results = dao.search(form);
 		
 		final List<UUID> peopleIds = Lists.newArrayList();
 		for (final PersonSearchResult2 record : results) {
@@ -131,8 +132,29 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 		
 		final Map<UUID, Number> numberEarlyAlertResponsesRequired = earlyAlertService.
 				getResponsesDueCountEarlyAlerts(peopleIds);
+		
+		List<PersonSearchResult2> filteredResults = null;
+		if(form.getEarlyAlertResponseLate() != null){
+			filteredResults = new ArrayList<PersonSearchResult2>();
+			if(form.getEarlyAlertResponseLate()){
+				for(PersonSearchResult2 result:results){
+					if(numberEarlyAlertResponsesRequired.containsKey(result.getPersonId()) 
+							&& numberEarlyAlertResponsesRequired.get(result.getPersonId()).intValue() > 0){
+						filteredResults.add(result);
+					}
+				}
+			}else{
+				for(PersonSearchResult2 result:results){
+					if(!numberEarlyAlertResponsesRequired.containsKey(result.getPersonId()) 
+							|| numberEarlyAlertResponsesRequired.get(result.getPersonId()).intValue() <= 0){
+						filteredResults.add(result);
+					}
+				}
+			}
+		}else
+			filteredResults = results;
 
-		for (final PersonSearchResult2 record : results) {
+		for (final PersonSearchResult2 record : filteredResults) {
 			if (appts.containsKey(record.getId())) {
 				record.setCurrentAppointmentStartTime(appts.get(
 						record.getId()));
@@ -149,7 +171,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 			}
 		}
 
-		return new PagingWrapper<PersonSearchResult2>(results.size(), results);
+		return new PagingWrapper<PersonSearchResult2>(filteredResults.size(), filteredResults);
 	}
 	
 

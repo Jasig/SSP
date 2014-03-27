@@ -47,6 +47,8 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	
 	private Boolean currentlyRegistered;
 	
+	private Boolean earlyAlertResponseLate;
+	
 	private String sapStatusCode;
 	
 	private String mapStatus;
@@ -130,6 +132,14 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 
 	public void setCurrentlyRegistered(Boolean currentlyRegistered) {
 		this.currentlyRegistered = currentlyRegistered;
+	}
+
+	public Boolean getEarlyAlertResponseLate() {
+		return earlyAlertResponseLate;
+	}
+
+	public void setEarlyAlertResponseLate(Boolean earlyAlertResponseLate) {
+		this.earlyAlertResponseLate = earlyAlertResponseLate;
 	}
 
 	public String getSapStatusCode() {

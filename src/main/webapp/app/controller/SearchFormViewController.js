@@ -108,6 +108,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				me.getView().query('numberfield[name=gpaMin]')[0].value,
 				me.getView().query('numberfield[name=gpaMax]')[0].value,				
 				me.getView().query('combobox[name=currentlyRegistered]')[0].value,
+				me.getView().query('combobox[name=earlyAlertResponseLate]')[0].value,
 				me.getView().query('combobox[name=financialAidSapStatusCode]')[0].value,
 				me.getView().query('combobox[name=mapStatus]')[0].value,
 				me.getView().query('combobox[name=planStatus]')[0].value,

@@ -32,7 +32,7 @@ public interface PersonSearchRequestTOFactory extends
 	PersonSearchRequest from(String studentId, String programStatus,
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
-			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,
+			BigDecimal gpaEarnedMax, Boolean currentlyRegistered, Boolean earlyAlertResponseLate,
 			String sapStatusCode, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans, Date birthDate) throws ObjectNotFoundException;
 
 }

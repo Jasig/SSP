@@ -2347,6 +2347,11 @@
                     "path": "/app/store/"
                 },
                 {
+                    "clsName": "Ssp.store.EarlyAlertResponseLate",
+                    "name": "EarlyAlertResponseLate.js",
+                    "path": "/app/store/"
+                },
+                {
                     "clsName": "Ssp.controller.admin.crg.AssociateChallengeCategoriesAdminViewController",
                     "name": "AssociateChallengeCategoriesAdminViewController.js",
                     "path": "/app/controller/admin/crg/"

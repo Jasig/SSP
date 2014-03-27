@@ -1713,6 +1713,7 @@ Ext.onReady(function(){
 			        planStatusStore: 'Ssp.store.PlanStatus',
 			        financialAidSAPStatus: 'Ssp.store.FinancialAidSAPStatus',
 			        mapStatusStore: 'Ssp.store.MAPStatus',
+			        earlyAlertResponseLateStore: 'Ssp.store.EarlyAlertResponseLate',
 			        currentlyRegisteredStore: 'Ssp.store.CurrentlyRegistered',
 			        oauth2ClientsStore: 'Ssp.store.OAuth2Clients',
 			        permissionsStore: 'Ssp.store.Permissions',

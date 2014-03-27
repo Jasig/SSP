@@ -63,6 +63,8 @@ public class PersonSearchRequest {
 	
 	private Boolean currentlyRegistered;
 	
+	private Boolean earlyAlertResponseLate;
+	
 	private String planStatus;
 	
 	private String sapStatusCode;
@@ -167,6 +169,16 @@ public class PersonSearchRequest {
 
 	public void setCurrentlyRegistered(Boolean currentlyRegistered) {
 		this.currentlyRegistered = currentlyRegistered;
+	}
+
+
+	public Boolean getEarlyAlertResponseLate() {
+		return earlyAlertResponseLate;
+	}
+
+
+	public void setEarlyAlertResponseLate(Boolean earlyAlertResponseLate) {
+		this.earlyAlertResponseLate = earlyAlertResponseLate;
 	}
 
 

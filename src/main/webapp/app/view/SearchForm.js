@@ -31,6 +31,7 @@ Ext.define('Ssp.view.SearchForm',{
         sapStatusesStore: 'sapStatusesActiveUnpagedStore',
         mapStatusStore: 'mapStatusStore',
         currentlyRegisteredStore: 'currentlyRegisteredStore',
+        earlyAlertResponseLateStore: 'earlyAlertResponseLateStore',
         programsStore: 'programsStore',
         configStore: 'configurationOptionsUnpagedStore',
         textStore:'sspTextStore'
@@ -220,6 +221,15 @@ Ext.define('Ssp.view.SearchForm',{
                     store: me.currentlyRegisteredStore,
    		   		    valueField: 'booleanValue',
 		   		    displayField: 'displayValue'                 
+                }, 
+                {
+		   		    xtype: 'combobox',
+                    fieldLabel: 'Early Alert Response Status',
+		   		    emptyText: 'Any',
+                    name: 'earlyAlertResponseLate',
+                    store: me.earlyAlertResponseLateStore,
+   		   		    valueField: 'booleanValue',
+		   		    displayField: 'displayValue' 
                 }, 
                 {
 		   		    xtype: 'combobox',

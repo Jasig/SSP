@@ -569,6 +569,8 @@ public class EarlyAlertDao extends
 	}
 	
 	public List<Object[]> getResponsesBatchDueCountEarlyAlerts(List<UUID> students, Date lastResponseDate){
+		if(students.size() == 0)
+			return new ArrayList<Object[]>();
 		String sql = "select distinct ea.person.id, count(ea) " +  responseQuery() 
 				+ " and ea.person.id in :personIds group by ea.person.id";
 		final Query query = createHqlQuery(sql);
