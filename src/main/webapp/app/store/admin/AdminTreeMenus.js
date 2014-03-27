@@ -25,7 +25,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
         colorsUnpagedStore: 'colorsUnpagedStore',
         colorsAllStore: 'colorsAllStore',
         colorsAllUnpagedStore: 'colorsAllUnpagedStore',
-        confidentialityLevelOptionsStore: 'confidentialityLevelOptionsStore'
+        confidentialityLevelOptionsStore: 'confidentialityLevelOptionsStore',
     },
     autoLoad: false,
     constructor: function(){
@@ -610,22 +610,21 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         header: 'Description',
                         required: false,
                         dataIndex: 'description',
-                        flex: 50,
+                        flex: 80,
                         field: {
                             xtype: 'textfield'
                         },
-                        flex: 50
                     }, {
                         header: 'Acronym',
                         required: true,
                         dataIndex: 'acronym',
-                        flex: 50,
+                        flex: 10,
                         field: {
                             xtype: 'textfield'
                         }
                      }, {
-                         header: 'Referral Primary Email',
-                         required: true,
+                         header: 'Referral Email',
+                         required: false,
                          dataIndex: 'recipientEmailAddress',
                          renderer: me.columnRendererUtils.renderValidEmail,
                          flex: 25,
@@ -634,14 +633,14 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                              vtype: 'email'
                          }
                       }, {
-                          header: 'Referral Secondary Emails',
-                          required: true,
+                          header: 'Carbon Copy(s)',
+                          required: false,
                           dataIndex: 'carbonCopy',
                           renderer: me.columnRendererUtils.renderValidEmail,
-                          flex: 25,
+                          flex: 50,
                           field: {
                               xtype: 'textfield',
-                              vtype: 'email'
+                              vtype: 'multiemail'
                           }
                     }]
                 }, {

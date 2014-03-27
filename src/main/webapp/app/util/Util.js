@@ -101,6 +101,5 @@ Ext.define('Ssp.util.Util', {
 			}
         });
         me.appEventsController.getApplication().fireEvent('updateEarlyAlertCounts', params);
-    },
-
+    }
 });

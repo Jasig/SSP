@@ -1897,6 +1897,33 @@ Ext.onReady(function(){
 				    	    },
 				    	    passwordConfirmText : 'Passwords/secrets do not match'
 				    	});
+				
+						Ext.apply(Ext.form.field.VTypes,{
+				    	    multiemail: function(val, field) {
+								Ext.form.field.VTypes.multiemailInvalidPositions = [];
+								if(val && val.length > 0){
+									var emailAddresses = val.split(',');
+									var valid = true;
+									var i = 0;
+									Ext.Array.each( emailAddresses, function(emailAddress, index){
+										// if it is a string and it contains something other than whitespace
+										if(emailAddress && !(/^\s*$/).test(emailAddress)){
+											if(!Ext.form.field.VTypes.email(emailAddress.trim())){
+												valid = false;
+												Ext.form.field.VTypes.multiemailInvalidPositions[i] = index;
+											}
+										}
+										i++;
+									});
+									return valid;
+								}
+								return true;
+							},
+							multiemailInvalidPositions: [],
+							multiemailText: function(){return 'Email(s) at position(s) ' + Ext.form.field.VTypes.multiemailInvalidPositions.join(",") + "are invalid"},
+							multiemailMask: /[a-z0-9_.-@,\s]/i
+						
+				    	});
 
 				    	/*
 				    	 * Per Animal, http://www.extjs.com/forum/showthread.php?p=450116#post450116
