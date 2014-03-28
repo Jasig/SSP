@@ -918,6 +918,8 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public void sendCoachingAssignmentChangeEmail(Person model, UUID oldCoachId) throws ObjectNotFoundException, SendFailedException, ValidationException {
 		
+		if(oldCoachId == null || model.getCoach() == null || StringUtils.isEmpty(model.getCoach().getPrimaryEmailAddress()))
+			return;
 		Person oldCoach = get(oldCoachId);
 		String appTitle = configService.getByNameEmpty("app_title");
 		String serverExternalPath = configService.getByNameEmpty("serverExternalPath");
