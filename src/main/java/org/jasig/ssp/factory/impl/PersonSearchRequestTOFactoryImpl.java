@@ -24,11 +24,13 @@ import java.util.UUID;
 
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.dao.reference.ProgramStatusDao;
+import org.jasig.ssp.dao.reference.SpecialServiceGroupDao;
 import org.jasig.ssp.factory.AbstractTOFactory;
 import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.reference.ProgramStatus;
+import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.PersonSearchRequestTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,9 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 	
 	@Autowired
 	private ProgramStatusDao programStatusDao;
+	
+	@Autowired
+	private SpecialServiceGroupDao specialServiceGroupDao;
 	
 	public PersonSearchRequestTOFactoryImpl() {
 		super(PersonSearchRequestTO.class, PersonSearchRequest.class);
@@ -79,6 +84,12 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			ProgramStatus programStatus = getProgramStatusDao().get(to.getProgramStatus());
 			model.setProgramStatus(programStatus);
 		}
+		
+		if(to.getSpecialServiceGroup() != null)
+		{
+			SpecialServiceGroup specialServiceGroup = getSpecialServiceGroupDao().get(to.getSpecialServiceGroup());
+			model.setSpecialServiceGroup(specialServiceGroup);
+		}
 		model.setSapStatusCode(to.getSapStatusCode());
 		model.setStudentId(to.getStudentId());
 		model.setPlanStatus(to.getPlanStatus());
@@ -99,6 +110,11 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 	public ProgramStatusDao getProgramStatusDao() {
 		return programStatusDao;
 	}
+	
+	public SpecialServiceGroupDao getSpecialServiceGroupDao() {
+		return specialServiceGroupDao;
+	}
+
 
 
 	public void setProgramStatusDao(ProgramStatusDao programStatusDao) {
@@ -107,7 +123,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 
 
 	@Override
-	public PersonSearchRequest from(String studentId, String programStatus,
+	public PersonSearchRequest from(String studentId, String programStatus, String specialServiceGroup,
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,Boolean earlyAlertResponseLate,
@@ -115,6 +131,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		PersonSearchRequestTO to = new PersonSearchRequestTO();
 		to.setStudentId(studentId);
 		to.setProgramStatus(programStatus == null ? null : UUID.fromString(programStatus));
+		to.setSpecialServiceGroup(specialServiceGroup == null ? null : UUID.fromString(specialServiceGroup));
 		to.setCoachId(coachId == null ? null : UUID.fromString(coachId));
 		to.setDeclaredMajor(declaredMajor);
 		to.setHoursEarnedMin(hoursEarnedMin);

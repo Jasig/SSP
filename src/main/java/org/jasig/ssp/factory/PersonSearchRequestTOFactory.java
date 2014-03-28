@@ -29,7 +29,7 @@ import org.jasig.ssp.transferobject.PersonSearchRequestTO;
 public interface PersonSearchRequestTOFactory extends
 		TOFactory<PersonSearchRequestTO, PersonSearchRequest> {
 
-	PersonSearchRequest from(String studentId, String programStatus,
+	PersonSearchRequest from(String studentId, String programStatus,String specialServiceGroup,
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered, Boolean earlyAlertResponseLate,

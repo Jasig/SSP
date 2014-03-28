@@ -101,6 +101,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		me.searchService.search2( 
 				Ext.String.trim(me.getView().query('textfield[name=studentId]')[0].value),
 				me.getView().query('combobox[name=programStatus]')[0].value,
+				me.getView().query('combobox[name=specialServiceGroup]')[0].value,
 				me.getView().query('combobox[name=coachId]')[0].value,				
 				me.getView().query('combobox[name=declaredMajor]')[0].value,
 				me.getView().query('numberfield[name=hoursEarnedMin]')[0].value,

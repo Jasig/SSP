@@ -245,6 +245,9 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		// programStatus
 		buildProgramStatus(personSearchRequest, filterTracker, stringBuilder);	
 		
+		// specialServiceGroup
+		buildSpecialServiceGroup( personSearchRequest, filterTracker, stringBuilder);
+		
 		//declaredMajor
 		buildDeclaredMajor(personSearchRequest, filterTracker, stringBuilder);
 		
@@ -342,6 +345,22 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	private boolean hasProgramStatus(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getProgramStatus() != null;
 	}
+	
+	private void buildSpecialServiceGroup(PersonSearchRequest personSearchRequest,
+			FilterTracker filterTracker, StringBuilder stringBuilder) {
+		if(hasSpecialServiceGroup(personSearchRequest))
+		{
+			appendAndOrWhere(stringBuilder,filterTracker);
+			stringBuilder.append(" specialServiceGroup = :specialServiceGroup ");
+		}
+		
+		
+	}
+
+
+	private boolean hasSpecialServiceGroup(PersonSearchRequest personSearchRequest) {
+		return personSearchRequest.getSpecialServiceGroup() != null;
+	}
 
 
 	private void addBindParams(PersonSearchRequest personSearchRequest,
@@ -421,6 +440,11 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if(hasProgramStatus(personSearchRequest))
 		{
 			query.setEntity("programStatus", personSearchRequest.getProgramStatus());
+		}
+		
+		if(hasSpecialServiceGroup(personSearchRequest))
+		{
+			query.setEntity("specialServiceGroup", personSearchRequest.getSpecialServiceGroup());
 		}
 		
 		if(hasFinancialAidStatus(personSearchRequest))
@@ -609,7 +633,12 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if(hasMyPlans(personSearchRequest) || hasPlanStatus(personSearchRequest))
 		{
 			stringBuilder.append(" join p.plans as plan ");
-		}		
+		}	
+		
+		if(this.hasSpecialServiceGroup(personSearchRequest)){
+			stringBuilder.append(" left join p.specialServiceGroups as specialServiceGroups ");
+			stringBuilder.append(" left join specialServiceGroups.specialServiceGroup as specialServiceGroup ");
+		}
 	}
 
 	private boolean hasPlanStatus(PersonSearchRequest personSearchRequest) 

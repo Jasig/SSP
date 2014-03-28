@@ -34,6 +34,7 @@ Ext.define('Ssp.view.SearchForm',{
         earlyAlertResponseLateStore: 'earlyAlertResponseLateStore',
         programsStore: 'programsStore',
         configStore: 'configurationOptionsUnpagedStore',
+        specialServiceGroupsAllUnpagedStore: 'specialServiceGroupsAllUnpagedStore',
         textStore:'sspTextStore'
     },
     collapsible: true,
@@ -119,7 +120,17 @@ Ext.define('Ssp.view.SearchForm',{
 		   		    displayField: 'name',
                     width: 100,
                     name: 'programStatus'
-                },               
+                },    
+                {
+		   		    xtype: 'combobox',
+                    fieldLabel: 'Special Service Group',
+                    emptyText: 'Select Special Service Group',
+		   		    store: me.specialServiceGroupsAllUnpagedStore,
+   		   		    valueField: 'id',
+		   		    displayField: 'name',
+                    width: 100,
+                    name: 'specialServiceGroup'
+                },  
                 {
 		   		    xtype: 'combobox',
                     fieldLabel: 'Assigned Coach',

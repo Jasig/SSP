@@ -32,6 +32,8 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	private String studentId;
 
 	private UUID programStatus;
+	
+	private UUID specialServiceGroup;
 
 	private UUID coachId;
 
@@ -76,6 +78,14 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 
 	public void setProgramStatus(UUID programStatus) {
 		this.programStatus = programStatus;
+	}
+
+	public UUID getSpecialServiceGroup() {
+		return specialServiceGroup;
+	}
+
+	public void setSpecialServiceGroup(UUID specialServiceGroup) {
+		this.specialServiceGroup = specialServiceGroup;
 	}
 
 	public UUID getCoachId() {

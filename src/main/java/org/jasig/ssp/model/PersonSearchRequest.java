@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import org.jasig.ssp.model.reference.ProgramStatus;
+import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
 import org.jasig.ssp.web.api.PersonSearchController;
 
@@ -48,6 +49,8 @@ public class PersonSearchRequest {
 	private String studentId;
 
 	private ProgramStatus programStatus;
+	
+	private SpecialServiceGroup specialServiceGroup;
 
 	private Person coach;
 
@@ -99,6 +102,16 @@ public class PersonSearchRequest {
 
 	public void setProgramStatus(ProgramStatus programStatus) {
 		this.programStatus = programStatus;
+	}
+
+
+	public SpecialServiceGroup getSpecialServiceGroup() {
+		return specialServiceGroup;
+	}
+
+
+	public void setSpecialServiceGroup(SpecialServiceGroup specialServiceGroup) {
+		this.specialServiceGroup = specialServiceGroup;
 	}
 
 

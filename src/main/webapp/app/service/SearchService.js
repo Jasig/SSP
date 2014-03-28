@@ -97,6 +97,7 @@ Ext.define('Ssp.service.SearchService', {
     search2: function( 
     		 studentId,
     		 programStatus,
+    		 specialServiceGroup,
     		 coachId,
     		 declaredMajor,
     		 hoursEarnedMin,
@@ -116,6 +117,7 @@ Ext.define('Ssp.service.SearchService', {
 		me.searchWithParams({
    		 studentId: studentId,
 		 programStatus: programStatus,
+		 specialServiceGroup: specialServiceGroup,
 		 coachId: coachId,
 		 declaredMajor: declaredMajor,
 		 hoursEarnedMin: hoursEarnedMin,
