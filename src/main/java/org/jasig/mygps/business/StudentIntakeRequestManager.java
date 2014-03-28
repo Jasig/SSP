@@ -18,14 +18,13 @@
  */
 package org.jasig.mygps.business;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
 import javax.mail.SendFailedException;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.PersonDao;
-import org.jasig.ssp.dao.TaskDao;
 import org.jasig.ssp.dao.reference.MessageTemplateDao;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
@@ -36,9 +35,10 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
+import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
-import org.jasig.ssp.service.reference.impl.ConfidentialityLevelServiceImpl;
 import org.jasig.ssp.transferobject.AppointmentTO;
+import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,6 +75,9 @@ public class StudentIntakeRequestManager {
 	
 	@Autowired
 	protected transient ConfidentialityLevelService confidentialityLevelService;
+	
+	@Autowired
+	protected transient ConfigService configService;
 	
 
 	
@@ -145,6 +148,12 @@ public class StudentIntakeRequestManager {
 		studentIntakeTask.setLink("<a href='intake.html'>Click Here To Fill Out Student Intake</a>");
 		studentIntakeTask.setSessionId(securityService.getSessionId());
 		studentIntakeTask.setConfidentialityLevel(confidentialityLevelService.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE));
+		String offset = configService.getByNameEmpty("student_intake_default_due_date_offset");
+		Integer offsetValue = 7;
+		if(StringUtils.isNotBlank(offset)){
+			offsetValue = Integer.parseInt(offset);
+		}
+		studentIntakeTask.setDueDate(DateTimeUtils.getDateOffsetInDays(new Date(), offsetValue));
 		return studentIntakeTask;
 	}
 

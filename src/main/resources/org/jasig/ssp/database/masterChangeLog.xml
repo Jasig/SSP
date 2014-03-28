@@ -224,4 +224,5 @@
 	<include file="org/jasig/ssp/database/changesets/000109.xml" />
 	<include file="org/jasig/ssp/database/integrationchangesets/i000058.xml" />
 	<include file="org/jasig/ssp/database/changesets/000110.xml" />
+	<include file="org/jasig/ssp/database/changesets/000111.xml" />
 </databaseChangeLog>
