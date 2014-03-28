@@ -34,6 +34,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
@@ -64,6 +65,19 @@ import org.jasig.ssp.util.uuid.UUIDCustomType;
 @MappedSuperclass
 @TypeDef(name = "uuid-custom", typeClass = UUIDCustomType.class)
 public abstract class AbstractAuditable implements Auditable { // NOPMD
+	
+	private static final String CREATED_BY_FIRST_NAME_FORMULA = " ( select p.first_name from person p" +
+			" where p.id = CREATED_BY) ";
+
+	private static final String CREATED_BY_LAST_NAME_FORMULA = " ( select p.last_name from person p" +
+			" where p.id = CREATED_BY) ";
+	
+	private static final String MODIFIED_BY_FIRST_NAME_FORMULA = " ( select p.first_name from person p" +
+			" where p.id = MODIFIED_BY ) ";
+
+	private static final String MODIFIED_BY_LAST_NAME_FORMULA = " ( select p.last_name from person p" +
+			" where p.id = MODIFIED_BY) ";
+	
 	@Id
 	@Type(type = "uuid-custom")
 	@GeneratedValue(generator = "uuid")
@@ -86,9 +100,20 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 	 * lookup for every entity sent through the Controllers (or anything that
 	 * uses {@link AbstractAuditable} transfer objects).
 	 */
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(nullable = false, updatable = false)
-	private Person createdBy;
+	@Type(type = "uuid-custom")
+	private UUID createdBy;
+	
+	@Formula(CREATED_BY_FIRST_NAME_FORMULA)
+	private String createdByFirstName;
+	
+	@Formula(CREATED_BY_LAST_NAME_FORMULA)
+	private String createdByLastName;
+	
+	@Formula(MODIFIED_BY_FIRST_NAME_FORMULA)
+	private String modifiedByFirstName;
+	
+	@Formula(MODIFIED_BY_LAST_NAME_FORMULA)
+	private String modifiedByLastName;
 
 	/**
 	 * Most recent modification time stamp.
@@ -106,9 +131,8 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 	 * lookup for every entity sent through the Controllers (or anything that
 	 * uses AbstractAuditable transfer objects).
 	 */
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(nullable = false)
-	private Person modifiedBy;
+	@Type(type = "uuid-custom")
+	private UUID modifiedBy;
 
 	/**
 	 * Entity status.
@@ -243,12 +267,12 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 	}
 
 	@Override
-	public Person getCreatedBy() {
+	public UUID getCreatedBy() {
 		return createdBy;
 	}
 
 	@Override
-	public void setCreatedBy(final Person createdBy) {
+	public void setCreatedBy(final UUID createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -264,12 +288,12 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 	}
 
 	@Override
-	public Person getModifiedBy() {
+	public UUID getModifiedBy() {
 		return modifiedBy;
 	}
 
 	@Override
-	public void setModifiedBy(final Person modifiedBy) {
+	public void setModifiedBy(final UUID modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 
@@ -327,4 +351,37 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 		}
 		return true;
 	}
+	@Override
+	public String getCreatedByFirstName() {
+		return createdByFirstName;
+	}
+	@Override
+	public void setCreatedByFirstName(String createdByFirstName) {
+		this.createdByFirstName = createdByFirstName;
+	}
+	@Override
+	public String getCreatedByLastName() {
+		return createdByLastName;
+	}
+	@Override
+	public void setCreatedByLastName(String createdByLastName) {
+		this.createdByLastName = createdByLastName;
+	}
+	@Override
+	public String getModifiedByFirstName() {
+		return modifiedByFirstName;
+	}
+	@Override
+	public void setModifiedByFirstName(String modifiedByFirstName) {
+		this.modifiedByFirstName = modifiedByFirstName;
+	}
+	@Override
+	public String getModifiedByLastName() {
+		return modifiedByLastName;
+	}
+	@Override
+	public void setModifiedByLastName(String modifiedByLastName) {
+		this.modifiedByLastName = modifiedByLastName;
+	}
+
 }

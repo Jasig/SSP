@@ -157,7 +157,7 @@ public class MessageServiceImpl implements MessageService {
 		}
 
 		message.setSender(person);
-		message.setCreatedBy(person);
+		message.setCreatedBy(person.getId());
 		return message;
 	}
 

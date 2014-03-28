@@ -69,7 +69,8 @@ public abstract class AbstractAuditableTOFactory<TObject extends AbstractAuditab
 		}
 
 		model.setObjectStatus(tObject.getObjectStatus());
-
+		model.setCreatedBy(tObject.getCreatedBy().getId());
+		model.setModifiedBy(tObject.getModifiedBy().getId());
 		return model;
 	}
 

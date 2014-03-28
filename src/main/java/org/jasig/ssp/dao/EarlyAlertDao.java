@@ -191,7 +191,7 @@ public class EarlyAlertDao extends
 		}		
 		
 		// restrict to coach
-		query.add(Restrictions.eq("createdBy", coach));
+		query.add(Restrictions.eq("createdBy", coach.getId()));
 
 		if (createDateFrom != null) {
 			query.add(Restrictions.ge("createdDate",
@@ -234,7 +234,7 @@ public class EarlyAlertDao extends
 					createDateTo));
 		}
 		
-		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", coach))
+		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", coach.getId()))
 		        .setProjection(Projections.countDistinct("person")).list().get(0);
 
 		return totalRows;
@@ -451,9 +451,15 @@ public class EarlyAlertDao extends
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(EntityCountByCoachSearchForm form) {
 
 		final Criteria query = createCriteria();
+		List<Person> coaches = form.getCoaches();
+		List<UUID> coachIds = new ArrayList<UUID>();
+		for (Person person : coaches) {
+			coachIds.add(person.getId());
+		}
+		
  
 		setBasicCriteria( query,  form);
-		query.add(Restrictions.in("createdBy", form.getCoaches()));
+		query.add(Restrictions.in("createdBy", coachIds));
 		// item count
 		Long totalRows = 0L;
 		if ((form.getSAndP() != null) && form.getSAndP().isPaged()) {

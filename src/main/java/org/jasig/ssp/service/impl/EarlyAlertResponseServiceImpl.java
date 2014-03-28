@@ -51,6 +51,7 @@ import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.VelocityTemplateService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
@@ -132,6 +133,9 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	@Autowired
 	private transient EarlyAlertResponseTOFactory earlyAlertResponseTOFactory;
 
+	@Autowired
+	private transient PersonService personService;
+	
 	@Override
 	protected EarlyAlertResponseDao getDao() {
 		return dao;
@@ -335,8 +339,7 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		if (earlyAlertResponse.getEarlyAlert().getPerson() == null) {
 			throw new IllegalArgumentException("EarlyAlert Person is missing.");
 		}
-
-		final Person person = earlyAlertResponse.getEarlyAlert().getCreatedBy();
+		final Person person = personService.get(earlyAlertResponse.getEarlyAlert().getCreatedBy());
 		if ( person == null ) {
 			LOGGER.warn("EarlyAlert {} has no creator. Unable to send"
 					+ " response email to faculty.",

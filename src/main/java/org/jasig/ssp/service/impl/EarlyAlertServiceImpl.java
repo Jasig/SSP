@@ -546,7 +546,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			throw new IllegalArgumentException("EarlyAlert.Person is missing.");
 		}
 
-		final Person person = earlyAlert.getCreatedBy();
+		final UUID personId = earlyAlert.getCreatedBy();
+		Person person = personService.get(personId);
 		if ( person == null ) {
 			LOGGER.warn("EarlyAlert {} has no creator. Unable to send"
 					+ " confirmation message to faculty.", earlyAlert);
@@ -583,16 +584,16 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		}
 
 		// ensure earlyAlert.createdBy is populated
-		if ((earlyAlert.getCreatedBy().getFirstName() == null)
-				|| (earlyAlert.getCreatedBy().getLastName() == null)) {
-			if (earlyAlert.getCreatedBy().getId() == null) {
+		if ((earlyAlert.getCreatedByFirstName() == null)
+				|| (earlyAlert.getCreatedByFirstName() == null)) {
+			if (earlyAlert.getCreatedBy() == null) {
 				throw new IllegalArgumentException(
-						"EarlyAlert.CreatedBy.Id is missing.");
+						"EarlyAlert.CreatedBy is missing.");
 			}
 
 			try {
 				earlyAlert.setCreatedBy(personService.get(earlyAlert
-						.getCreatedBy().getId()));
+						.getCreatedBy()).getId());
 			} catch (final ObjectNotFoundException e) {
 				throw new IllegalArgumentException(
 						"EarlyAlert.CreatedBy.Id could not be loaded.", e);
@@ -603,7 +604,14 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 		final String courseName = earlyAlert.getCourseName();
 		if ( StringUtils.isNotBlank(courseName) ) {
-			final String facultySchoolId = earlyAlert.getCreatedBy().getSchoolId();
+			Person creator;
+			try {
+				creator = personService.get(earlyAlert.getCreatedBy());
+			} catch (ObjectNotFoundException e1) {
+				throw new IllegalArgumentException(
+						"EarlyAlert.CreatedBy.Id could not be loaded.", e1);
+			}
+			final String facultySchoolId = creator.getSchoolId();
 			if ( (StringUtils.isNotBlank(facultySchoolId)) ) {
 				String termCode = earlyAlert.getCourseTermCode();
 				FacultyCourse course = null;
