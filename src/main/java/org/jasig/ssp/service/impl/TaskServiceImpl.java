@@ -19,10 +19,8 @@
 package org.jasig.ssp.service.impl; // NOPMD
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -61,6 +59,7 @@ import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
 import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
+import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -381,7 +380,7 @@ public class TaskServiceImpl
 		try {
 
 			// Calculate reminder window start date
-			final Integer now = daysSince1900(new Date());
+			final Integer now = DateTimeUtils.daysSince1900(new Date());
 
 			final List<Task> tasks = getAllWhichNeedRemindersSent(sAndP);
 
@@ -391,7 +390,7 @@ public class TaskServiceImpl
 					LOGGER.info("Abandoning sendAllTaskReminderNotifications because of thread interruption");
 					break;
 				}
-				Integer dueDate = daysSince1900(task.getDueDate());
+				Integer dueDate = DateTimeUtils.daysSince1900(task.getDueDate());
 				
 				for(Integer daysBefore:getNumberOfDaysPriorForTaskReminder()){
 					if(daysBefore.equals(dueDate - now) && !messageSent(task, daysBefore)) {
@@ -441,27 +440,6 @@ public class TaskServiceImpl
 
 	}
 	
-	private  int daysSince1900(Date date) {
-	    Calendar c = new GregorianCalendar();
-	    c.setTime(date);
-
-	    int year = c.get(Calendar.YEAR);
-	    if (year < 1900 || year > 2099) {
-	        throw new IllegalArgumentException("daysSince1900 - Date must be between 1900 and 2099");
-	    }
-	    year -= 1900;
-	    int month = c.get(Calendar.MONTH) + 1;
-	    int days = c.get(Calendar.DAY_OF_MONTH);
-
-	    if (month < 3) {
-	        month += 12;
-	        year--;
-	    }
-	    int yearDays = (int) (year * 365.25);
-	    int monthDays = (int) ((month + 1) * 30.61);
-
-	    return (yearDays + monthDays + days - 63);
-	}
 	
 
 	@Override

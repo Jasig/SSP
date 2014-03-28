@@ -74,6 +74,7 @@ import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
+import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -791,14 +792,14 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 		    });
 			
-			Integer daysSince1900ResponseExpected =  daysSince1900(lastResponseDate);
+			Integer daysSince1900ResponseExpected =  DateTimeUtils.daysSince1900(lastResponseDate);
 			List<Pair<EarlyAlertMessageTemplateTO,Integer>> earlyAlertTOPairs = new ArrayList<Pair<EarlyAlertMessageTemplateTO,Integer>>();
 			for(EarlyAlertMessageTemplateTO ea:easByCoach.get(coach)){
 				Integer daysOutOfCompliance;
 				if(ea.getLastResponseDate() != null){
-					daysOutOfCompliance = daysSince1900ResponseExpected - daysSince1900(ea.getLastResponseDate());
+					daysOutOfCompliance = daysSince1900ResponseExpected - DateTimeUtils.daysSince1900(ea.getLastResponseDate());
 				}else{
-				    daysOutOfCompliance = daysSince1900ResponseExpected - daysSince1900(ea.getCreatedDate());
+				    daysOutOfCompliance = daysSince1900ResponseExpected - DateTimeUtils.daysSince1900(ea.getCreatedDate());
 				}
 				
 				// Just in case attempt to only send emails for EA full day out of compliance
@@ -833,35 +834,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			return null;
 		Integer allowedDaysPastResponse = Integer.parseInt(numVal);
 		
-		Date lastResponseDate = new Date();
-		
-		Calendar cal = Calendar.getInstance();
-	    cal.setTime(lastResponseDate);
-	    cal.add(Calendar.DAY_OF_MONTH, -allowedDaysPastResponse);
-	    return cal.getTime();
+	    return DateTimeUtils.getDateOffsetInDays(new Date(), -allowedDaysPastResponse);
 				
 	}
-	
-	private  int daysSince1900(Date date) {
-	    Calendar c = new GregorianCalendar();
-	    c.setTime(date);
-
-	    int year = c.get(Calendar.YEAR);
-	    if (year < 1900 || year > 2099) {
-	        throw new IllegalArgumentException("daysSince1900 - Date must be between 1900 and 2099");
-	    }
-	    year -= 1900;
-	    int month = c.get(Calendar.MONTH) + 1;
-	    int days = c.get(Calendar.DAY_OF_MONTH);
-
-	    if (month < 3) {
-	        month += 12;
-	        year--;
-	    }
-	    int yearDays = (int) (year * 365.25);
-	    int monthDays = (int) ((month + 1) * 30.61);
-
-	    return (yearDays + monthDays + days - 63);
-	}
-	
 }
