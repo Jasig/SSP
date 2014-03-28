@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -90,7 +91,7 @@ public class JournalEntryDao
 		
 		setCriteria( query,  form);
 		
-		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", coach))
+		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", coach.getId()))
         .setProjection(Projections.countDistinct("person")).list().get(0);
 
 		return totalRows;
@@ -101,9 +102,13 @@ public class JournalEntryDao
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentJournalCountForCoaches(EntityCountByCoachSearchForm form) {
 
 		final Criteria query = createCriteria();
- 
+		List<Person> coaches = form.getCoaches();
+		List<UUID> coachIds = new ArrayList<UUID>();
+		for (Person person : coaches) {
+			coachIds.add(person.getId());
+		} 
 		setCriteria(query, form);
-		query.add(Restrictions.in("createdBy", form.getCoaches()));
+		query.add(Restrictions.in("createdBy", coachIds));
 		// item count
 		Long totalRows = 0L;
 		if ((form.getSAndP() != null) && form.getSAndP().isPaged()) {

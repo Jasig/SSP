@@ -56,7 +56,7 @@ public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
 		description = StringUtils.isBlank(description) ? task.getDescription() : description;
 		
 		dueDate = task.getDueDate();
-		createdBy = task.getCreatedBy().getId();
+		createdBy = task.getCreatedBy();
 		type = task.getType();
 	}
 

@@ -69,7 +69,7 @@ public abstract class AbstractRestrictedPersonAssocAuditableCrudDao<T extends Re
 		}
 		criteria.add(Restrictions.or(
 				Restrictions.in("confidentialityLevel", levels),
-				Restrictions.eq("createdBy.id", requestor.getPerson()
+				Restrictions.eq("createdBy", requestor.getPerson()
 						.getId())));
 		LOGGER.debug("Number of Confidentiality Levels for user {}",
 				levels.size());
