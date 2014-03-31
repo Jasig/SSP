@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />   
+     
+    <changeSet id="add body_checksum,subject_checksum for message_template" author="jim.stanley">
+        <addColumn tableName="message_template">
+            <column name="body_checksum" type="${nvarchar.type}(40)">
+                <constraints nullable="true" />
+            </column>
+            <column name="subject_checksum" type="${nvarchar.type}(40)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="message_template" columnName="body_checksum" />
+            <dropColumn tableName="message_template" columnName="subject_checksum" />
+        </rollback>
+    </changeSet>
+    <changeSet  id="set initial checksums for message templates" author="jim.stanley">
+        <sql>
+<![CDATA[
+    update message_template set body_checksum = 'bfc5bd83651b2a5c789c1ab85172559083bd51ca' where id = '0b7e484d-44e4-4f0d-8db5-3518d015b495';
+    update message_template set subject_checksum = 'c3382b888816e20388767d553dab06408b574318' where id = '0b7e484d-44e4-4f0d-8db5-3518d015b495';
+    
+    update message_template set body_checksum = '3817b7bc24e3577687f43787950343311c077002' where id = '31cf8d8d-2bc9-44e0-aad1-d8ba43530bb0';
+    update message_template set subject_checksum = '1ee5873328af774f5a7e260a9147ebe7feab88aa' where id = '31cf8d8d-2bc9-44e0-aad1-d8ba43530bb0';
+    
+    update message_template set body_checksum = '5b2636dfac449b13a4bbd3f0af018a529af514f3' where id = '3da780e7-b7df-43b2-8988-fc51ef03f7c0';
+    update message_template set subject_checksum = 'f75af3bad0a9fe24883e4bf07b3a8860d1372144' where id = '3da780e7-b7df-43b2-8988-fc51ef03f7c0';
+    
+    update message_template set body_checksum = '8da86c3cb4298fd7be792941e5001269292cca5c' where id = '5d183f35-023d-40ea-b8d9-66fbe190fffb';
+    update message_template set subject_checksum = 'fd10555e3c52f0644bf172a964d91169c14ca6a0' where id = '5d183f35-023d-40ea-b8d9-66fbe190fffb';
+    
+    update message_template set body_checksum = '47bdf41b11ff36d0475fc52cedebd9448d307611' where id = '9d3ce5b1-e27d-40c8-8f45-abcb1bccf3b0';
+    update message_template set subject_checksum = '367b9fc7a78416eb95d3f1aa0770b60b8906b51e' where id = '9d3ce5b1-e27d-40c8-8f45-abcb1bccf3b0';
+    
+    update message_template set body_checksum = '9acd635085bfdf8d4a631c0aaad269a047d9aca8' where id = 'aa2e0356-46df-4acd-ab3e-b96a6aa943d3';
+    update message_template set subject_checksum = '8989988b7ea013aaa58876f6114816022458468e' where id = 'aa2e0356-46df-4acd-ab3e-b96a6aa943d3';
+    
+    update message_template set body_checksum = '6f4cb97ed16457c706291df876892dff22d893c5' where id = 'aec07252-1ff0-479d-a2ef-c0e017e1c05d';
+    update message_template set subject_checksum = '1ee5873328af774f5a7e260a9147ebe7feab88aa' where id = 'aec07252-1ff0-479d-a2ef-c0e017e1c05d';
+    
+    update message_template set body_checksum = '1b2545ada6b26a4eff412f396f25fc16f388a1b0' where id = 'b528c1ac-6104-435b-ae62-08eb4f7ee2f9';
+    update message_template set subject_checksum = 'bf01b27ddd8ca60e3e8e09e4ca8523713b9805d8' where id = 'b528c1ac-6104-435b-ae62-08eb4f7ee2f9';
+    
+    update message_template set body_checksum = '218598edb4b6841326c3fb60d3dfc06de7c1446c' where id = 'b528c1ac-6104-435b-ae62-08eb4f7ee3fc';
+    update message_template set subject_checksum = 'e4923bdba7faf24a4834d6f895a023ed016e63ae' where id = 'b528c1ac-6104-435b-ae62-08eb4f7ee3fc';
+    
+    update message_template set body_checksum = '488a19dbc5b3d612dbe3a503f70ab27e671ad822' where id = 'b528c1ac-6104-435b-ae62-08eb4f8ef40e';
+    update message_template set subject_checksum = 'e4923bdba7faf24a4834d6f895a023ed016e63ae' where id = 'b528c1ac-6104-435b-ae62-08eb4f8ef40e';
+    
+    update message_template set body_checksum = 'fcb527f89ae63c921531aca00dcde3f504b4a71c' where id = 'b528c1ac-6104-435b-ae62-09eb5f8ef55f';
+    update message_template set subject_checksum = '18ba07dfccac8c607e3e726b14b2bbf8bca94782' where id = 'b528c1ac-6104-435b-ae62-09eb5f8ef55f';
+    
+    update message_template set body_checksum = '49b9bea7353073dd988b4cbebfc200e67949b453' where id = 'b528c1ac-6104-435b-ae62-09fb5f9ef680';
+    update message_template set subject_checksum = '9c9ebb235b88a61fc6f1fbc7c7ae6d11539550fb' where id = 'b528c1ac-6104-435b-ae62-09fb5f9ef680';
+    
+    update message_template set body_checksum = '9c425e313d3263d81f04f94a3c22cf1cbe9e4507' where id = 'bcc180b0-3a8b-11e3-aa6e-0800200c9a66';
+    update message_template set subject_checksum = '487cfe413d13ae326e7fe40f0114bfa75cf448fa' where id = 'bcc180b0-3a8b-11e3-aa6e-0800200c9a66';
+    
+    update message_template set body_checksum = '00bd8007463caf4a39f89d441d28e75935df1be9' where id = 'bfae36f8-53d0-486f-8bc5-a9d98beb544e';
+    update message_template set subject_checksum = '781509a1eed598ad06c1634a8a5988c0c6e3d795' where id = 'bfae36f8-53d0-486f-8bc5-a9d98beb544e';
+    
+    update message_template set body_checksum = 'a6a70acf204a8f3a7653a4e071146dbc6f1dda97' where id = 'd6d1f68a-0533-426f-bd0b-d129a92edf81';
+    update message_template set subject_checksum = 'eb26edde75fd20c72e3409e8650c4845d3135d8f' where id = 'd6d1f68a-0533-426f-bd0b-d129a92edf81';
+    
+    update message_template set body_checksum = 'af7211025101c0c96f20fe1f4aea8080a98a5eea' where id = 'df47a4b0-b666-11e2-9e96-0800200c9a66';
+    update message_template set subject_checksum = '8989988b7ea013aaa58876f6114816022458468e' where id = 'df47a4b0-b666-11e2-9e96-0800200c9a66';
+
+]]>
+        </sql>
+      </changeSet>
+</databaseChangeLog>
