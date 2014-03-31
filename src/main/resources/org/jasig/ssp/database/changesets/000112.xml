@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet id="re-create table map_status_report_sub_details w/o consts." author="tony.arland">
+    	<dropTable tableName="map_status_report_substitution_details"/>
+    	
+		<createTable tableName="map_status_report_substitution_details">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="report_id" type="uuid" >
+				<constraints nullable="false"
+					foreignKeyName="msrca_report_id"
+					references="map_status_report(id)" />
+			</column>			
+			<column name="term_code" type="${nvarchar.type}(25)" >
+				<constraints nullable="false" />
+			</column>
+			<column name="formatted_course" type="${nvarchar.type}(35)" >
+				<constraints nullable="false" />
+			</column>
+			<column name="course_code" type="${nvarchar.type}(50)" >
+			</column>
+			<column name="substituted_term_code" type="${nvarchar.type}(25)" >
+				<constraints nullable="false" />
+			</column>
+			<column name="substituted_formatted_course" type="${nvarchar.type}(35)" >
+				<constraints nullable="false" />
+			</column>
+			<column name="substituted_course_code" type="${nvarchar.type}(50)" >
+			</column>				
+			<column name="substitution_note" type="${nvarchar.type}(500)" >
+			</column>	
+			<column name="substitution_code" type="${nvarchar.type}(30)" >
+				<constraints nullable="false" />
+			</column>							
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false"
+					foreignKeyName="map_status_report_a_cr_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true"
+					foreignKeyName="map_status_report_a_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>	
+        <sql>grant all on map_status_report_substitution_details to ${database.app.username}</sql>
+   </changeSet>
+
+</databaseChangeLog>
