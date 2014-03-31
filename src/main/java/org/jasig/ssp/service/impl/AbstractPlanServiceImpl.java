@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -153,8 +154,8 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 		
 		
 		List<TermCourses<T,TO>> courses = collectTermCourses(plan);
-		Float totalPlanCreditHours = calculateTotalPlanHours(courses);
-		Float totalPlanDevHours = calculateTotalPlanDevHours(courses);
+		BigDecimal totalPlanCreditHours = calculateTotalPlanHours(courses);
+		BigDecimal totalPlanDevHours = calculateTotalPlanDevHours(courses);
 		
 		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanFullOutput(student, owner, 
 				planOutput, 
@@ -304,18 +305,18 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 
 	protected abstract UUID getPersonIdPlannedFor(TO model);
 
-	private Float calculateTotalPlanDevHours(List<TermCourses<T, TO>> courses) {
-		Float totalDevCreditHours = new Float(0);
+	private BigDecimal calculateTotalPlanDevHours(List<TermCourses<T, TO>> courses) {
+		BigDecimal totalDevCreditHours = new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP);
 		for(TermCourses<T,TO> termCourses : courses){
-			totalDevCreditHours = totalDevCreditHours + termCourses.getTotalDevCreditHours();
+			totalDevCreditHours = totalDevCreditHours.add(termCourses.getTotalDevCreditHours());
 		}
 		return totalDevCreditHours;
 	}
 
-	private Float calculateTotalPlanHours(List<TermCourses<T,TO>> courses) {
-		Float totalPlanCreditHours = new Float(0);
+	private BigDecimal calculateTotalPlanHours(List<TermCourses<T,TO>> courses) {
+		BigDecimal totalPlanCreditHours = new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP);
 		for(TermCourses<T,TO> termCourses : courses){
-			totalPlanCreditHours = totalPlanCreditHours + termCourses.getTotalCreditHours();
+			totalPlanCreditHours = totalPlanCreditHours.add(termCourses.getTotalCreditHours());
 		}
 		return totalPlanCreditHours;
 	}

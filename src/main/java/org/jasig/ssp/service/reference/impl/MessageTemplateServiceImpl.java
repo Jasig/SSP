@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -272,8 +273,8 @@ public class MessageTemplateServiceImpl extends
 	@Override
 	public <T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanFullOutput(final Person student,final Person owner, 
 			final AbstractPlanOutputTO<T, TO> planOutput, 
-			final Float totalPlanCreditHours,
-			final Float totalPlanDevHours,
+			final BigDecimal totalPlanCreditHours,
+			final BigDecimal totalPlanDevHours,
 			final List<TermCourses<T, TO>> termCourses,
 			final String institutionName) {
  
@@ -317,7 +318,7 @@ public class MessageTemplateServiceImpl extends
 			final Person student,
 			final Person owner, 
 			final TO plan, 
-			final Float totalPlanCreditHours,
+			final BigDecimal totalPlanCreditHours,
 			final List<TermCourses<T,TO>> termCourses,
 			final String institutionName){
 		
