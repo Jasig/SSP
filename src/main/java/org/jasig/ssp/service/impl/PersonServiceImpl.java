@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.mail.SendFailedException;
 import javax.portlet.PortletRequest;
 
+import org.apache.poi.util.StringUtil;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonDao;
@@ -987,7 +988,7 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public void sendCoachingAssignmentChangeEmail(Person model, UUID oldCoachId) throws ObjectNotFoundException, SendFailedException, ValidationException {
 		
-		if(oldCoachId == null || model.getCoach() == null || StringUtils.isEmpty(model.getCoach().getPrimaryEmailAddress()))
+		if(oldCoachId == null || model.getCoach() == null || org.apache.commons.lang.StringUtils.isBlank(model.getCoach().getPrimaryEmailAddress()))
 			return;
 		Person oldCoach = get(oldCoachId);
 		String appTitle = configService.getByNameEmpty("app_title");
