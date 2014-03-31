@@ -27,7 +27,7 @@ import liquibase.statement.core.RawSqlStatement;
  * @author jamesstanley
  *
  * Example:
- * <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateChecksums">
+ * <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
  *   <param name="messageTemplateId" value="0b7e484d-44e4-4f0d-8db5-3518d015b495"/>
  *   <param name="columnName" value="body"/>
  *   <param name="columnValue"><![CDATA[ <p>Templte Update<p>
