@@ -50,12 +50,13 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
                             itemId: 'name',
                             name: 'name',
         					frame: false,
+        				    fieldStyle: 'text-align: left',
         					readOnly: true,
         					editable:false
                         }, 	
                         {
                             xtype: 'tbspacer',
-                            flex: 1
+                            flex: .5
                         },                        
         				{
         								 xtype: 'button',
@@ -67,26 +68,28 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
                             		fieldLabel: 'Student is Currently',
         		                    itemId: 'onPlan',
         		                    name: 'onPlan',
-        							fieldStyle:"text-align:left",
-        				   },                 
-               {
-                    xtype: 'tbspacer',
-                    flex: 1
-                }, {
+        							fieldStyle:"text-align:left"
+        				   },
+                           {
+                               xtype: 'tbspacer',
+                               flex: .5
+                           },         				   
+        		{
                     fieldLabel: 'Plan Hrs',
                     itemId: 'currentTotalPlanCrHrs',
                     name: 'currentTotalPlanCrHrs',
                     id: 'currentTotalPlanCrHrs',
-                    labelWidth: 150,
-                    width: 190
+				    fieldStyle: 'text-align: left'
                 
-                }, {
+                },                        {
+                    xtype: 'tbspacer',
+                    flex: .5
+                },  {
                     fieldLabel: 'Dev Hrs',
                     itemId: 'currentPlanTotalDevCrHrs',
                     name: 'currentPlanTotalDevCrHrs',
 					id:'currentPlanTotalDevCrHrs',
-                    labelWidth: 70,
-                    width: 130
+				    fieldStyle: 'text-align: left'
                 
                 },	{
 		                    xtype: 'tbspacer',
