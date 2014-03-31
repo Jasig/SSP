@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.reference;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -83,8 +84,8 @@ public interface MessageTemplateService extends
 			AbstractMessageTemplateMapPrintParamsTO<TOO, T, TO> params);
 	
 	public  <T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanFullOutput(final Person student, final Person owner, final AbstractPlanOutputTO<T,TO> plan, 
-			final Float totalPlanCreditHours,
-			final Float totalPlanDevHours,
+			final BigDecimal totalPlanCreditHours,
+			final BigDecimal totalPlanDevHours,
 			final List<TermCourses<T, TO>> termCourses,
 			final String institutionName);
 

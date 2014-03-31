@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.transferobject.reference;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,7 +30,7 @@ import org.jasig.ssp.transferobject.AbstractPlanTO;
 
 public class AbstractMessageTemplateMapPrintParamsTO<TOO extends AbstractPlanOutputTO<T,TO>, T extends AbstractPlan,TO extends AbstractPlanTO<T>> {
 
-	Float totalPlanCreditHours;
+	BigDecimal totalPlanCreditHours;
 	List<TermCourses<T, TO>> termCourses;
 	String institutionName;
 	UUID messageTemplateId;
@@ -45,10 +46,10 @@ public class AbstractMessageTemplateMapPrintParamsTO<TOO extends AbstractPlanOut
 		this.outputPlan = outputPlan;
 	}
 	
-	public Float getTotalPlanCreditHours() {
+	public BigDecimal getTotalPlanCreditHours() {
 		return totalPlanCreditHours;
 	}
-	public void setTotalPlanCreditHours(Float totalPlanCreditHours) {
+	public void setTotalPlanCreditHours(BigDecimal totalPlanCreditHours) {
 		this.totalPlanCreditHours = totalPlanCreditHours;
 	}
 	public List<TermCourses<T, TO>> getTermCourses() {
