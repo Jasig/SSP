@@ -144,19 +144,23 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
             var cmb = Ext.ComponentQuery.query('#goalsCFCombo')[0];
             Ext.Array.each(items, function(item, index, count){
                 if (item.xtype == 'combo') {
-                
+                	me.confidentialityLevelsStore.on({
+						load: {
+							fn: function(store, records, state, operation, opts){
+								if (e.record.get('confidentialityLevel').id == null || e.record.get('confidentialityLevel').id == '') {
+									var confidentialityLevelId = me.confidentialityLevelsStore.findRecord('name', 'EVERYONE').get('id');
+									item.setValue(confidentialityLevelId);
+								}
+								else {
+									item.setValue(e.record.get('confidentialityLevel').id);
+								}
+							},
+							scope: this,
+							single: true
+						}
+					});
                     me.confidentialityLevelsStore.load();
-                    me.confidentialityLevelsStore.on("load", function(store, records, state, operation, opts){
-                        if (e.record.get('confidentialityLevel').id == null) {
-                            var confidentialityLevelId = me.confidentialityLevelsStore.findRecord('name', 'EVERYONE').get('id');
-                            item.setValue(confidentialityLevelId);
-                        }
-                        else {
-                            item.setValue(e.record.get('confidentialityLevel').id);
-                        }
-                        store.removeListener('load');
-                    });
-                    
+                  
                 }
             });
         }
