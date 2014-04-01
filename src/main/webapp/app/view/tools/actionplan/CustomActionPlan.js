@@ -68,12 +68,14 @@ Ext.define('Ssp.view.tools.actionplan.CustomActionPlan', {
                     xtype: 'textfield',
                     width: '99%',
                     fieldLabel: 'Name',
-                    name: 'name'
+                    name: 'name',
+					maxLength: 100,
+					allowBlank: false
                 }, {
                     xtype: 'textareafield',
                     width: '95%',
                     fieldLabel: 'Description',
-                    maxLength: 1000,
+                    maxLength: 2000,
                     allowBlank: false,
                     name: 'description'
                 }, {

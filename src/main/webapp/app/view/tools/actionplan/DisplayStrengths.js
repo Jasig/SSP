@@ -70,9 +70,12 @@ Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
                 header: 'Name',
                 flex: .25,
                 dataIndex: 'name',
+				
 				field: {
                     xtype: 'textfield',
-					fieldStyle: "margin-bottom:12px;"
+					fieldStyle: "margin-bottom:12px;",
+					maxLength: 80,
+					allowBlank: false
                 }
             }, {
                 header: 'Description',
@@ -80,7 +83,8 @@ Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
                 dataIndex: 'description',
 				field: {
                     xtype: 'textfield',
-					fieldStyle: "margin-bottom:12px;"
+					fieldStyle: "margin-bottom:12px;",
+					maxLength: 2000
                 }
             }, {
                 header: 'Confidentiality',
