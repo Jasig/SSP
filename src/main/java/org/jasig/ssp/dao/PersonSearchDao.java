@@ -587,15 +587,9 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if(hasCurrentlyRegistered(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append("( rbt.termCode = :currentTerm");
+			stringBuilder.append(" rbt.termCode = :currentTerm");
 			stringBuilder.append(" and rbt.schoolId = p.schoolId ");
 			stringBuilder.append(" and "+ (personSearchRequest.getCurrentlyRegistered() ? " rbt.registeredCourseCount > 0 " : " rbt.registeredCourseCount < 1 "));
-			stringBuilder.append(" )");
-			// added because above returns not true if the do not have an rbt for the current Term
-			if(!personSearchRequest.getCurrentlyRegistered()){
-				stringBuilder.append(" or ( rbt.termCode != :currentTerm");
-				stringBuilder.append(" )");
-			}
 		}
 	}
 
