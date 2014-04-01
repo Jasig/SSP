@@ -77,7 +77,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 /**
  * EarlyAlert service implementation
@@ -640,20 +639,20 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		if ( person == null ) {
 			return; // can occur in some legit person lookup call paths
 		}
-		Map<UUID,Number> activeCnts =
-				getCountOfActiveAlertsForPeopleIds(Sets.newHashSet(person.getId()));
-		if ( activeCnts == null || !(activeCnts.containsKey(person.getId())) ) {
-			person.setActiveAlertsCount(0);
-		} else {
-			person.setActiveAlertsCount(activeCnts.get(person.getId()));
-		}
-		Map<UUID,Number> closedCnts =
-				getCountOfClosedAlertsForPeopleIds(Sets.newHashSet(person.getId()));
-		if ( closedCnts == null || !(closedCnts.containsKey(person.getId())) ) {
-			person.setClosedAlertsCount(0);
-		} else {
-			person.setClosedAlertsCount(closedCnts.get(person.getId()));
-		}
+//		Map<UUID,Number> activeCnts =
+//				getCountOfActiveAlertsForPeopleIds(Sets.newHashSet(person.getId()));
+//		if ( activeCnts == null || !(activeCnts.containsKey(person.getId())) ) {
+//			person.setActiveAlertsCount(0);
+//		} else {
+//			person.setActiveAlertsCount(activeCnts.get(person.getId()));
+//		}
+//		Map<UUID,Number> closedCnts =
+//				getCountOfClosedAlertsForPeopleIds(Sets.newHashSet(person.getId()));
+//		if ( closedCnts == null || !(closedCnts.containsKey(person.getId())) ) {
+//			person.setClosedAlertsCount(0);
+//		} else {
+//			person.setClosedAlertsCount(closedCnts.get(person.getId()));
+//		}
 	}
 
 	@Override

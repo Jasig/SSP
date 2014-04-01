@@ -35,7 +35,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		formUtils: 'formRendererUtils',
     	textStore:'sspTextStore',
         sapStatusesStore: 'sapStatusesAllUnpagedStore',
-        financialAidFilesStore: 'financialAidFilesAllUnpagedStore'
+        financialAidFilesStore: 'financialAidFilesAllUnpagedStore',
+        personRegistrationStatusByTermStore: 'personRegistrationStatusByTermStore'
 		
     },
     
@@ -105,7 +106,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         if (id != "") {
             // display loader
             me.getView().setLoading(true);
-
+            me.personRegistrationStatusByTermStore.load(id);
             var serviceResponses = {
                 failures: {},
                 successes: {},
@@ -255,9 +256,20 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         earlyAlertField.setValue('<span style="color:#15428B">Early Alerts:  </span>' + me.handleNull(me.person.getEarlyAlertRatio()));
 		actionPlanField.setFieldLabel('');
         actionPlanField.setValue('<span style="color:#15428B">Action Plan:  </span>' + me.handleNull(me.person.getActionPlanSummary()));
-        me.getRegisteredTermsField().setValue(me.handleNull(me.person.get('registeredTerms')));
-        me.getPaymentStatusField().setValue(me.handleNull(me.person.get('paymentStatus')));
-		
+        var redTerms = '';
+        for (var i = 0; i < me.personRegistrationStatusByTermStore.getCount(); i++)
+        {
+        	redTerms = redTerms + ' ' + me.personRegistrationStatusByTermStore.getAt(i).get('termCode');
+        }
+        
+        me.getRegisteredTermsField().setValue(redTerms);
+        var regStatus = '';
+        console.log(me.personRegistrationStatusByTermStore);
+        for (var i = 0; i < me.personRegistrationStatusByTermStore.getCount(); i++)
+        {
+          regStatus = regStatus + ' ' + me.personRegistrationStatusByTermStore.getAt(i).get('termCode') + '=' + me.personRegistrationStatusByTermStore.getAt(i).get('tuitionPaid');
+        }
+        me.getPaymentStatusField().setValue(regStatus);		
         studentIntakeAssignedField.setValue(me.handleNull(me.person.get('studentIntakeRequestDate')));
         studentIntakeCompletedField.setValue(me.handleNull(me.person.get('studentIntakeCompleteDate')));
         me.appEventsController.getApplication().fireEvent('updateStudentRecord',{'person':me.person});

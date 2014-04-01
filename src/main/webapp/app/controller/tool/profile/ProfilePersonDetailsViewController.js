@@ -32,6 +32,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         formUtils: 'formRendererUtils',
         sapStatusesStore: 'sapStatusesAllUnpagedStore',
         financialAidFilesStore: 'financialAidFilesAllUnpagedStore',
+        personRegistrationStatusByTermStore: 'personRegistrationStatusByTermStore',
         textStore:'sspTextStore'
     },
     
@@ -96,7 +97,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         if (id != "") {
             // display loader
             me.getView().setLoading(true);
-            
+            me.personRegistrationStatusByTermStore.load(id);
+
             var serviceResponses = {
                 failures: {},
                 successes: {},
@@ -218,8 +220,20 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         photoUrlField.setSrc(me.person.getPhotoUrl());
         programStatusField.setFieldLabel('');
         programStatusField.setValue('<span style="color:#15428B">SSP Status:  </span>' + me.handleNull(me.person.getProgramStatusName()));
-        me.getRegisteredTermsField().setValue(me.person.get('registeredTerms'));
-        me.getPaymentStatusField().setValue(me.handleNull(me.person.get('paymentStatus')));
+        var redTerms = '';
+        for (var i = 0; i < me.personRegistrationStatusByTermStore.getCount(); i++)
+        {
+        	redTerms = redTerms + ' ' + me.personRegistrationStatusByTermStore.getAt(i).get('termCode');
+        }
+        
+        me.getRegisteredTermsField().setValue(redTerms);
+        var regStatus = '';
+        console.log(me.personRegistrationStatusByTermStore);
+        for (var i = 0; i < me.personRegistrationStatusByTermStore.getCount(); i++)
+        {
+          regStatus = regStatus + ' ' + me.personRegistrationStatusByTermStore.getAt(i).get('termCode') + '=' + me.personRegistrationStatusByTermStore.getAt(i).get('tuitionPaid');
+        }
+        me.getPaymentStatusField().setValue(regStatus);
 		
 		anticipatedStartYearTermField.setFieldLabel('');
 		anticipatedStartYearTermField.setValue('<span style="color:#15428B">Anticipated Start Year/Term:  </span>' + me.person.get('anticipatedStartYear') + '/' + me.person.get('anticipatedStartTerm'));
