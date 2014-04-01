@@ -101,7 +101,9 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	    return strHtml;		
 	},
 	
-	
+	renderCompletedDate: function(val, metaData, record) {
+	    return Ext.util.Format.date( record.get('completedDate'),'m/d/Y');		
+	},
 
 	renderCreatedByDate: function(val, metaData, record) {
 	    return Ext.util.Format.date( record.get('createdDate'),'m/d/Y');		
@@ -270,8 +272,10 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 		var confidentialityLevelsStore = me.confidentialityLevelsAllUnpagedStore;
 		confidentialityLevelsStore.clearFilter(true);
 		
-		var confidentialityLevel = confidentialityLevelsStore.findRecord('id', val.id);
-		
+		if(val)
+			var confidentialityLevel = confidentialityLevelsStore.findRecord('id', val.id);
+		else
+			var confidentialityLevel = null;
 		
 		if(confidentialityLevel == null) {
 			return '';

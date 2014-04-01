@@ -175,6 +175,13 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	        renderer: me.columnRendererUtils.renderTaskStatus
 		    	    },
 					{
+		    	        text: 'Completed Date',
+		    	        width: 90,
+		    	        sortable: true,
+		    	        dataIndex: 'completedDate',
+		    	        renderer: me.columnRendererUtils.renderCompletedDate
+		    	    },
+					{
 		    	        text: 'Author',
 		    	        flex: .20,
 		    	        sortable: true,
