@@ -101,7 +101,7 @@ Ext.define('Ssp.controller.tool.actionplan.EmailActionPlanController', {
                 emailTestArr = ccAddresses.split(',');
                 Ext.each(emailTestArr, function(emailAddress, index){
                     if (valid == true) 
-                        valid = this.validateEmailAddress(emailAddress);
+                        valid = this.validateEmailAddress(emailAddress.trim());
                     
                 }, this);
             }
