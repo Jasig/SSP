@@ -76,9 +76,9 @@ Ext.define('Ssp.view.tools.actionplan.ChallengesGrid', {
 				store: this.searchChallengeReferralStore,
                 pageSize: me.apiProperties.getPagingSize()
             }],
-            multiSelect: true,
+           
             viewConfig: {
-                //copy: true,
+                copy: true,
                 plugins: {
                     ptype: 'gridviewdragdrop',
 		                  dragGroup: 'gridtogrid',

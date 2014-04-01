@@ -294,12 +294,12 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
 		 var me = this;
 		if (button.up('panel').getSelectionModel().getSelection().length > 0) {
 			button.up('panel').getSelectionModel().deselectAll();
-			button.setText('Select All');
+			button.setText('Check All');
 		}
 		else {
 		
 		button.up('panel').getSelectionModel().selectAll();
-		button.setText('DeSelect All');
+		button.setText('Clear All');
 		}
     }
     

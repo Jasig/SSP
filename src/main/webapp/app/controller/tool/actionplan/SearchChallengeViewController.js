@@ -93,7 +93,17 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
             listeners: {
                 click: 'onChallengeCancelClick'
             }
-        }
+        },
+        
+        'searchCancel': {
+            selector: '#searchCancel',
+            hidden: true,
+            listeners: {
+                click: 'onSearchCancelClick'
+            }
+        },
+		
+		searchKeyword: '#searchKeyword'
     
     
     
@@ -109,37 +119,74 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
         me.url = me.apiProperties.createUrl(me.apiProperties.getItemUrl('personTask'));
         me.url = me.url.replace('{id}', me.personLite.get('id'));
         
+		me.appEventsController.assignEvent({eventName: 'onSearchKeyword', callBackFunc: me.onSearchKeywordClick, scope: me});
         
         return me.callParent(arguments);
+    },
+	
+	destroy: function() {
+    	var me=this;  	
+
+		me.appEventsController.removeEvent({eventName: 'onSearchKeyword', callBackFunc: me.onSearchKeywordClick, scope: me});
+    	
+        return me.callParent( arguments );
     },
     
     onSearchKeywordClick: function(button){
         var me = this;
+		me.searchChallenege();
+    },
+	
+	searchChallenege: function(){
+		var me = this;
         var selectedCategoryId = '';
         var selectedChallengeId = '';
+		var searchText = '';
         if (me.getCategoryNameCombo().getValue() !== null) {
             selectedCategoryId = me.getCategoryNameCombo().getValue();
         }
         if (me.getCategoryChallengeNameCombo().getValue() !== null) {
             selectedChallengeId = me.getCategoryChallengeNameCombo().getValue();
         }
-        me.searchChallengeReferralService.search(selectedCategoryId, selectedChallengeId, me.getView().query('textfield[name=searchKeyword]')[0].value, {
-            success: me.searchSuccess,
-            failure: me.searchFailure,
-            scope: me
-        });
-    },
+		if(me.getView().query('textfield[name=searchKeyword]')[0].value != '')
+		{
+			searchText = me.getView().query('textfield[name=searchKeyword]')[0].value;
+		}
+		if (selectedCategoryId != '' || selectedChallengeId != '' || searchText != '') {
+			me.searchChallengeReferralService.search(selectedCategoryId, selectedChallengeId, searchText, {
+				success: me.searchSuccess,
+				failure: me.searchFailure,
+				scope: me
+			});
+		}
+		else
+			me.searchChallengeReferralStore.removeAll();
+	},
     
     onCategoryCancelClick: function(button){
         var me = this;
         me.getCategoryNameCombo().setValue("");
         me.handleSelect(me);
+		
     },
     
     onChallengeCancelClick: function(button){
         var me = this;
         me.getCategoryChallengeNameCombo().setValue("");
         me.handleSelect(me);
+		me.searchChallengeReferralStore.removeAll();
+    },
+	
+	onSearchCancelClick: function(button){
+        var me = this;
+        me.getSearchKeyword().setValue("");
+		 if (me.getCategoryChallengeNameCombo().getValue() !== null) {
+		 	me.searchChallenege();
+		 }
+		 else
+		 {
+		 	me.searchChallengeReferralStore.removeAll();
+		 }
     },
     
     handleSelect: function(me){
@@ -149,6 +196,7 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
         });
         var params = me.getAllParams();
         me.doFaceting(params);
+		
     },
     
     getAllParams: function(){
@@ -247,7 +295,6 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
             
         });
         
-        
     },
     
     onAddAllChallengeReferralButtonClick: function(button){
@@ -293,10 +340,11 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
            
             item.set('type', 'SSP');
             item.set('personId', me.personLite.get('id'));
-           
+			item.set('confidentialityLevel',{id: item.data.confidentialityLevel.id});
+         
             data.push(item.getData());
         });
-        
+		
         successFunc = function(response, view){
         
             me.getView().setLoading(false);
@@ -317,7 +365,6 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
             successFunc: successFunc,
             failureFunc: failureFunc
         });
-        
         
     },
     

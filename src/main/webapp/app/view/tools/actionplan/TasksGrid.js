@@ -33,7 +33,6 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
     height: '100%',
     autoScroll: true,
     layout: 'fit',
-    itemId: 'tasksGrid',
     margin: '110 0 0 0',
     fullReferralDescription: function(){
         var me = this;
@@ -69,9 +68,11 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
         Ext.apply(me, {
             plugins: cellEditor,
             selType: 'rowmodel',
-            cls: 'tasksgrid',
+            cls: 'challengesgrid',
+			rowLines: true,
 			enableDragDrop: true,
             viewConfig: {
+				itemId: 'gridView',
                 markDirty: false,
                 plugins: {
                     ptype: 'gridviewdragdrop',
@@ -80,7 +81,6 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
 			          enableDrop: true,
 			          enableDrag: true
                 }
-            
             },
             columns: [{
                 header: 'Task',
@@ -104,7 +104,20 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 width: 85,
                 name: 'dueDate',
                 itemId: 'actionPlanDueDate',
-                
+                renderer: function(value, metaData, record, rowIndex, colIndex, store, view){
+                	var dt = record.get('dueDate');
+					
+					if (Ext.isObject(dt) && dt.apStr) {
+						return dt.apStr;
+					} else {
+						if (Ext.isDate(dt)) {
+							return Ext.Date.format(dt,'m/d/y');
+						}
+						else {
+							return dt;
+						}
+					}
+                },
                 
                 editor: {
                     xtype: 'datefield',

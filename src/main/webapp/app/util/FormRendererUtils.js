@@ -790,6 +790,15 @@ Ext.define('Ssp.util.FormRendererUtils',{
             }
         }
     },
+    toJSONStringifiableAPDate: function ( origDate ) {
+        return {
+            formattedStr: Ext.Date.format(origDate, 'Y-m-d'),
+            apStr: Ext.Date.format(origDate, 'm/d/y'),
+            toJSON: function() {
+                return '"' + this.formattedStr + '"';
+            }
+        }
+    },
 	
 	/**
 	 * Fix a date to correct for the GMT Offset in ExtJS.

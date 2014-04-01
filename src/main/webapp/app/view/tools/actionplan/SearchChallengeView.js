@@ -147,8 +147,31 @@ Ext.define('Ssp.view.tools.actionplan.SearchChallengeView', {
                         itemId: 'searchKeyword',
                         name: 'searchKeyword',
                         margin: ' 0 0 0 20',
-                        width: 405
-                    }]
+                        width: 405,
+                    enableKeyEvents: true,
+                    listeners: {
+                        afterrender: function(field){
+                            field.focus(false, 0);
+                        },
+                        specialkey: {
+                            scope: me,
+                            fn: function(field, el){
+                                if (el.getKey() == Ext.EventObject.ENTER) {
+                                    this.appEventsController.getApplication().fireEvent("onSearchKeyword");
+                                }
+                            }
+                        }
+                    }
+                    }, {
+				 		tooltip: 'Reset',
+				 		text: '',
+				 		width: 23,
+				 		height: 25,
+				 		name: 'searchCancel',
+				 		cls: 'mapClearSearchIcon',
+				 		xtype: 'button',
+				 		itemId: 'searchCancel'
+				 	}]
                 }, {
                     xtype: 'fieldset',
                     width: '100%',

@@ -201,7 +201,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
                             dock: 'top',
                             xtype: 'toolbar',
                             items: [{
-                                text: 'Select All',
+                                text: 'Check All',
                                 xtype: 'button',
                                 itemId: 'selectAllTaskButton'
                             }, {

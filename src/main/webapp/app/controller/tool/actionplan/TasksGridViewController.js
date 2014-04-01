@@ -36,6 +36,10 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
             beforeedit: 'onBeforeEdit',
             edit: 'editRecord'
         },
+		
+		'gridView': {
+    	   drop: 'onDrop'
+        },
         
         addCustomButton: {
             selector: '#addCustomButton',
@@ -57,7 +61,6 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
                 click: 'onRemoveAllTaskButtonClick'
             }
         }
-    
     },
     
     init: function(){
@@ -92,7 +95,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
     deleteAllConfirmation: function(){
         Ext.Msg.confirm({
             title: 'Delete Tasks?',
-            msg: 'You are about to delete all tasks in the task list: "' + '". Would you like to continue?',
+            msg: 'You are about to delete all tasks in the task list. Would you like to continue?',
             buttons: Ext.Msg.YESNO,
             fn: this.deleteAllTasks,
             scope: this
@@ -140,24 +143,27 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
     
     onBeforeEdit: function(editor, e, eOpts){
         var me = this;
-        
+      
         var items = editor.editor.items.items;
         me.formUtils.applyAssociativeStoreFilter(me.confidentialityLevelsStore, me.model.get('confidentialityLevel').id);
         Ext.Array.each(items, function(item, index, count){
             if (item.xtype == 'combo') {
-            
+            	me.confidentialityLevelsStore.on({
+						load: {
+							fn: function(store, records, state, operation, opts){
+								if (e.record.get('confidentialityLevel').id == null || e.record.get('confidentialityLevel').id == '') {
+									var confidentialityLevelId = me.confidentialityLevelsStore.findRecord('name', 'EVERYONE').get('id');
+									item.setValue(confidentialityLevelId);
+								}
+								else {
+									item.setValue(e.record.get('confidentialityLevel').id);
+								}
+							},
+							scope: this,
+							single: true
+						}
+					});
                 me.confidentialityLevelsStore.load();
-                me.confidentialityLevelsStore.on("load", function(store, records, state, operation, opts){
-                
-                    if (e.record.get('confidentialityLevel').id == null || e.record.get('confidentialityLevel').id == '') {
-                        var confidentialityLevelId = me.confidentialityLevelsStore.findRecord('name', 'EVERYONE').get('id');
-                        item.setValue(confidentialityLevelId);
-                    }
-                    else {
-                        item.setValue(e.record.get('confidentialityLevel').id);
-                    }
-                    store.removeListener('load');
-                });
                 
             }
         });
@@ -181,7 +187,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
             id: confLevelId,
             name: confLevelName
         };
-        record.set('confidentialityLevel', confLevel);
+        record.data.confidentialityLevel = confLevel;
         
         var store = editor.grid.getStore();
         
@@ -201,16 +207,38 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
             Ext.get(h).highlight(Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_COLOR, Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_OPTIONS);
             
         }
-        record.data.dueDate = me.formUtils.toJSONStringifiableDate(record.data.dueDate);
-        
+		
+        record.data.dueDate = me.formUtils.toJSONStringifiableAPDate(record.data.dueDate);
+		
+		
     },
     
-    onDrop: function(node, data, overModel, dropPosition, eOpts){
-        var me = this;
-        me.getView().setLoading(true);
-        
-        return true;
-    },
+   onDrop:function(node, data, overModel, dropPosition, options)
+	{   
+    	var me=this;
+		
+		var posId = me.getView().getView().indexOf(data.records[0]);
+		var badRecord = me.store.getAt(posId);
+		var task = new Ssp.model.tool.actionplan.Task();
+            task.set('name', badRecord.data.challengeReferralName);
+            task.set('description', badRecord.data.challengeReferralDescription);
+            task.set('link',badRecord.data.challengeReferralLink);
+            task.set('challengeReferralId', badRecord.data.challengeReferralId);
+            task.set('challengeId', badRecord.data.challengeId);
+			
+		if(badRecord)
+        {
+        	me.store.data.replace(this.store.data.getKey(badRecord),task);
+			me.getView().getStore().loadRecords(me.store.getRange());
+        }
+        else
+        {
+        	me.store.add(task);
+			
+        }
+		
+	},
+	
     
     getTStore: function(){
         var me = this;

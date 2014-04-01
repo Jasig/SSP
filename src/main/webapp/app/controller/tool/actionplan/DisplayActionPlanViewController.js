@@ -73,7 +73,6 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
                 
             }
             me.store.loadData(groupedTasks);
-            
         };
         
         
