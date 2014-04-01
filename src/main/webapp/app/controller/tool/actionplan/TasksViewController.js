@@ -76,7 +76,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
         this.filteredTaskStatus = null;
         this.filterTasks();
 		
-		this.confidentialityLevelsStore.load();
+		
         
         return this.callParent(arguments);
     },
@@ -174,7 +174,6 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
                         model.commit();
                         
                         store.sync();
-                        Ext.ComponentQuery.query('#tasksPanel')[0].getView().refresh();
 						 store.sort([{
                     property: 'completedDate',
                     direction: 'ASC'
@@ -290,9 +289,18 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
         // apply new filters
         me.store.filter(filtersArr);
     },
-    
+  
     onSelectAllTaskButtonClick: function(button){
-        Ext.ComponentQuery.query('#tasksPanel')[0].getSelectionModel().selectAll();
+		 var me = this;
+		if (button.up('panel').getSelectionModel().getSelection().length > 0) {
+			button.up('panel').getSelectionModel().deselectAll();
+			button.setText('Select All');
+		}
+		else {
+		
+		button.up('panel').getSelectionModel().selectAll();
+		button.setText('DeSelect All');
+		}
     }
     
     
