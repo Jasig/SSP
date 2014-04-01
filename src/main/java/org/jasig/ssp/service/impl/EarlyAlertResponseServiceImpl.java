@@ -40,6 +40,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
+import org.jasig.ssp.model.reference.EarlyAlertOutcome;
 import org.jasig.ssp.model.reference.EarlyAlertOutreach;
 import org.jasig.ssp.model.reference.EarlyAlertReferral;
 import org.jasig.ssp.model.reference.JournalSource;
@@ -61,6 +62,10 @@ import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.reference.JournalTrackService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.EarlyAlertResponseTO;
+import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertMessageTemplateTO;
+import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertOutcomeMessageTemplateTO;
+import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertResponseMessageTemplateTO;
+import org.jasig.ssp.transferobject.reference.EarlyAlertReferralTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
@@ -439,8 +444,8 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		return templateParameters;
 	}
 	
-	private Map<String, Object> fillReferralTemplateParameters( // NOPMD by jon.adams
-			@NotNull final EarlyAlertResponse earlyAlertResponse, @NotNull final EarlyAlertReferral earlyAlertReferral) {
+	private Map<String, Object> fillReferralTemplateParameters(
+			@NotNull final EarlyAlertResponse earlyAlertResponse, @NotNull final EarlyAlertReferral earlyAlertReferral) throws ObjectNotFoundException {
 		if (earlyAlertResponse == null) {
 			throw new IllegalArgumentException(
 					"EarlyAlertResponse was missing.");
@@ -451,17 +456,22 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		// get basic template parameters from the early alert
 		final Map<String, Object> templateParameters = earlyAlertService
 				.fillTemplateParameters(earlyAlert);
-
+		
+		Person creator = null;
+		if(earlyAlert.getPerson().getCreatedBy() != null)
+			creator = personService.get(earlyAlert.getCreatedBy());
+		
+		templateParameters.put("earlyAlert", 
+				new EarlyAlertMessageTemplateTO(earlyAlert, creator));
 		// add early alert response to the parameter list
-		templateParameters.put("earlyAlertResponse", earlyAlertResponse);
-		templateParameters.put("earlyAlertReferral", earlyAlertReferral);
-		templateParameters.put("workPhone", earlyAlert.getPerson()
-				.getWorkPhone());
-		if ( earlyAlert.getPerson().getCoach() != null &&
-				earlyAlert.getPerson().getCoach().getStaffDetails() != null ) {
-			templateParameters.put("officeLocation", earlyAlert.getPerson()
-					.getCoach().getStaffDetails().getOfficeLocation());
-		}
+		templateParameters.put("earlyAlertResponse", new EarlyAlertResponseMessageTemplateTO(earlyAlertResponse, 
+				personService.get(earlyAlertResponse.getCreatedBy())));
+		templateParameters.put("earlyAlertReferral", 
+				new EarlyAlertReferralTO(earlyAlertReferral));
+		
+		EarlyAlertOutcome earlyAlertOutcome = earlyAlertResponse.getEarlyAlertOutcome();
+		templateParameters.put("earlyAlertOutcome",  new EarlyAlertOutcomeMessageTemplateTO(earlyAlertOutcome, 
+				personService.get(earlyAlertOutcome.getCreatedBy())));
  
 		return templateParameters;
 	}

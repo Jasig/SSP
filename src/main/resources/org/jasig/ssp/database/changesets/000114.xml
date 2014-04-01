@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+    <changeSet id="Update Template Message body for EA to referral source" author="jim.stanley">
+        <preConditions onFail="MARK_RAN" onFailMessage="Skipping update to message template ">
+             <customPrecondition className="org.jasig.ssp.util.liquibase.MessageTemplateCheckSumPrecondition">
+                   <param name="messageTemplateId" value="d6d1f68a-0533-426f-bd0b-d129a92edf81"/>
+                  <param name="columnName" value="body"/>
+            </customPrecondition>
+        </preConditions>
+            <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+                 <param name="messageTemplateId" value="d6d1f68a-0533-426f-bd0b-d129a92edf81"/>
+                <param name="columnName" value="body"/>
+                <param name="columnValue"><![CDATA[<html><body>
+                            <p><b>STUDENT $!termToRepresentEarlyAlert SYSTEM MESSAGE</b></p>
+                            <p>This email is based on a referral for an $!termToRepresentEarlyAlert created on $!earlyAlert.createdDate for the following student:</p>
+                            <table>
+                            <tr><th>Student Name</th><td>$!earlyAlert.person.firstName $!earlyAlert.person.lastName</td></tr>
+                            #if($earlyAlert.person.schoolId)<tr><th>Student ID</th><td>$earlyAlert.person.schoolId</td></tr>#end
+                            #if($earlyAlert.courseName)<tr><th>In the class</th><td>$earlyAlert.courseName</td></tr>#end
+                            #if($earlyAlert.creator)<tr><th>Instructor</th><td>$!earlyAlert.creator.firstName $!earlyAlert.creator.lastName</td></tr>#end
+                            #if( $earlyAlert.coach.lastName )
+                                <tr><th>Coach</th><td>$!earlyAlert.person.coach.firstName $!earlyAlert.coach.lastName</td></tr>
+                            #end
+                            <tr><th>Response by</th><td>$earlyAlertResponse.creator.firstName $earlyAlertResponse.creator.lastName</td></tr>
+                            <tr><th>Status</th><td>#if( $!earlyAlert.closedDate )
+                            This incident was addressed and CLOSED on $!earlyAlert.closedDate. The final outcome for this incident was:
+                            #else
+                            This incident was addressed on $earlyAlertResponse.modifiedDate. The outcome was:
+                            #end
+                            </td></tr>
+                             #if( $earlyAlertOutcome.name )<tr><th>Outcome:</th><td>$!earlyAlertOutcome.name</td></tr>#end
+                            #if( $earlyAlertResponse.comment )<tr><th>Comments:</th><td>$earlyAlertResponse.comment</td></tr>#end
+
+                            </table>
+                            <p>The student has been referred by $!earlyAlertResponse.creator.firstName $!earlyAlertResponse.creator.lastName to $earlyAlertReferral.name based upon the $!termToRepresentEarlyAlert status.  
+                            <p>If you have access to $!applicationTitle, please enter an $!termToRepresentEarlyAlert response or Journal Entry.  If you do not have access, please send an email to $!earlyAlertResponse.creator.firstName $!earlyAlertResponse.creator.lastName  #if($earlyAlertResponse.creator.primaryEmailAddress)
+                                <a href="mailto:$earlyAlertResponse.creator.primaryEmailAddress?#if($earlyAlertResponse.creator.secondaryEmailAddress)cc=$earlyAlertResponse.creator.secondaryEmailAddress&#end subject=Student%20Referral:%20$!earlyAlert.person.firstName%20 $!earlyAlert.person.lastName"> $earlyAlertResponse.creator.primaryEmailAddress </a>#elseif($earlyAlertResponse.creator.secondaryEmailAddress)
+                                    <a href="mailto:$earlyAlertResponse.creator.secondaryEmailAddress?subject=Student%20Referral:%20$!earlyAlert.person.firstName%20 $!earlyAlert.person.lastName"> $earlyAlertResponse.creator.secondaryEmailAddress </a>
+                                      #end with the details of your interaction with $!earlyAlert.person.firstName $!earlyAlert.person.lastName</p>
+                            <p>Email generated by $!applicationTitle</p>
+                            </body></html>]]></param>
+            </customChange>
+    </changeSet>
+</databaseChangeLog>
