@@ -40,16 +40,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.OrderBy;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Sort;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
@@ -78,6 +75,12 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 	private static final long serialVersionUID = 4159658337332259029L;
 
 	private static final String DATABASE_TABLE_NAME = "person";
+	
+	private static final String ACTIVE_EARLY_ALERT_FORMULA = " ( select count(*) from early_alert ea " +
+			" where ea.person_id = ID and ea.closed_date is null ) ";
+
+	private static final String INACTIVE_EARLY_ALERT_FORMULA = " ( select count(*) from early_alert ea " +
+			" where ea.person_id = ID and ea.closed_date is not null ) ";
 
 	/**
 	 * Compares names only. I.e. two {@link Person}s with the same first, last,
@@ -651,11 +654,11 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 	@Transient
 	private List<RegistrationStatusByTerm> currentAndFutureRegistrationStatuses;	
 
-	@Transient
-	private Number activeAlertsCount;
+	@Formula(ACTIVE_EARLY_ALERT_FORMULA)
+	private Integer activeAlertsCount;
 
-	@Transient
-	private Number closedAlertsCount;
+	@Formula(INACTIVE_EARLY_ALERT_FORMULA)
+	private Integer closedAlertsCount;
 
 
 	/**
@@ -1243,7 +1246,7 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 		return activeAlertsCount;
 	}
 
-	public void setActiveAlertsCount(Number activeAlertsCount) {
+	public void setActiveAlertsCount(Integer activeAlertsCount) {
 		this.activeAlertsCount = activeAlertsCount;
 	}
 
@@ -1251,7 +1254,7 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 		return closedAlertsCount;
 	}
 
-	public void setClosedAlertsCount(Number closedAlertsCount) {
+	public void setClosedAlertsCount(Integer closedAlertsCount) {
 		this.closedAlertsCount = closedAlertsCount;
 	}
 

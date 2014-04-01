@@ -261,6 +261,7 @@ Ext.require([
 	'Ssp.model.MessageTemplates',
 	'Ssp.model.OAuth2Client',
 	'Ssp.model.Permission',
+	'Ssp.model.PersonRegistrationStatusByTerm',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
 	'Ssp.model.tool.studentintake.PersonDemographics',
 	'Ssp.model.tool.studentintake.PersonEducationGoal',
@@ -404,6 +405,7 @@ Ext.require([
 	'Ssp.store.external.Divisions',
     'Ssp.store.external.Courses',
     'Ssp.store.external.CourseRequisites',
+    'Ssp.store.RegistrationStatusByTerm',    
     'Ssp.store.external.PersonNotes',
     'Ssp.store.Students',
 	'Ssp.store.SemesterCourses',
@@ -531,6 +533,7 @@ var apiUrls = [
   {name: 'personCoach', url: 'person/coach'},
   {name: 'personCoachCurrent', url: 'person/currentCoachesLite'},
   {name: 'personDocument', url: 'person/{id}/document'},
+  {name: 'personRegistrationStatusByTerm', url: 'person/{personId}/registrationStatusByTerm'},
   {name: 'personEarlyAlert', url: 'person/{personId}/earlyAlert'},
   {name: 'personEarlyAlertResponse', url: 'person/{personId}/earlyAlert/{earlyAlertId}/response'},
   {name: 'personGoal', url: 'person/{id}/goal'},
@@ -875,6 +878,12 @@ Ext.onReady(function(){
 						},
 						singleton: true
 					},	
+					personRegistrationStatusByTermStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.RegistrationStatusByTerm');
+						},
+						singleton: true
+					},
 					mapStatusReportSubstitutionDetailsStore: {
 						fn: function(){
 							return Ext.create('Ssp.store.MapStatusReportSubstitutionDetails');

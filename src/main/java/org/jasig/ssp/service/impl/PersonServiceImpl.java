@@ -300,7 +300,6 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public PagingWrapper<Person> getAll(final SortingAndPaging sAndP) {
 		final PagingWrapper<Person> people = dao.getAll(sAndP);
-		additionalAttribsForStudents(people);
 		return people;
 	}
 
@@ -318,7 +317,7 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public Person get(final UUID id) throws ObjectNotFoundException {
 		final Person person = dao.get(id);
-		return additionalAttribsForStudent(person);
+		return person;
 	}
 
 	@Override
@@ -330,7 +329,7 @@ public class PersonServiceImpl implements PersonService {
 	public Person getBySchoolId(final String schoolId,boolean commitPerson)
 			throws ObjectNotFoundException {
 		try { 
-			return additionalAttribsForStudent(dao.getBySchoolId(schoolId));
+			return dao.getBySchoolId(schoolId);
 		} catch (final ObjectNotFoundException e) {
 			final ExternalPerson externalPerson = externalPersonService
 					.getBySchoolId(schoolId);
@@ -344,7 +343,7 @@ public class PersonServiceImpl implements PersonService {
 			evict(person);
 			externalPersonService.updatePersonFromExternalPerson(person,
 					externalPerson,commitPerson);
-			return additionalAttribsForStudent(person);
+			return person;
 		}
 	}
 
@@ -353,7 +352,6 @@ public class PersonServiceImpl implements PersonService {
 			throws ObjectNotFoundException {
 
 		final Person obj = dao.fromUsername(username);
-		additionalAttribsForStudent(obj);
 
 		if (null == obj) {
 			throw new ObjectNotFoundException(
@@ -441,7 +439,7 @@ public class PersonServiceImpl implements PersonService {
 			}
 		}
 
-		return additionalAttribsForStudent(person);
+		return person;
 	}
 
 	/**
@@ -451,9 +449,7 @@ public class PersonServiceImpl implements PersonService {
 	 */
 	@Override
 	public Person save(final Person obj) throws ObjectNotFoundException {
-
-		final Person person = dao.save(obj);
-		return additionalAttribsForStudent(person);
+		return dao.save(obj);
 	}
 
 	@Override
@@ -496,7 +492,6 @@ public class PersonServiceImpl implements PersonService {
 			final SortingAndPaging sAndP) {
 		try {
 			final List<Person> people = dao.getPeopleInList(personIds, sAndP);
-			additionalAttribsForStudents(people);
 			return people;
 		} catch (final ValidationException exc) {
 			return Lists.newArrayList();
@@ -514,7 +509,6 @@ public class PersonServiceImpl implements PersonService {
 		final List<Person> people = dao.getPeopleByCriteria(
 				personSearchFormTO,
 				sAndP);
-		additionalAttribsForStudents(people);
 		return people;
 	}
 
@@ -527,7 +521,6 @@ public class PersonServiceImpl implements PersonService {
 				specialServiceGroupIDs,
 				sAndP);
 
-		additionalAttribsForStudents(people);
 		return people;
 	}
 	
@@ -766,26 +759,6 @@ public class PersonServiceImpl implements PersonService {
 		return withTransaction.withTransactionAndUncheckedExceptions(callable);
 	}
 
-	private Iterable<Person> additionalAttribsForStudents(
-			final Iterable<Person> people) {
-		if (people == null) {
-			return null;
-		}
-
-		for (final Person person : people) {
-			additionalAttribsForStudent(person);
-		}
-
-		return people;
-	}
-
-	private Person additionalAttribsForStudent(final Person person) {
-		registrationStatusByTermService
-				.applyRegistrationStatusForCurrentTerm(person);
-		registrationStatusByTermService.applyCurrentAndFutureRegistrationStatuses(person);
-		earlyAlertService.applyEarlyAlertCounts(person);
-		return person;
-	}
 	
 
 	@Override

@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.service.external;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.Person;
@@ -64,4 +66,7 @@ public interface RegistrationStatusByTermService extends
 	Person applyRegistrationStatusForCurrentTerm(@NotNull Person person);
 
 	Person applyCurrentAndFutureRegistrationStatuses(Person person);
+
+	List<RegistrationStatusByTerm> getCurrentAndFutureTerms(Person person)
+			throws ObjectNotFoundException;
 }
