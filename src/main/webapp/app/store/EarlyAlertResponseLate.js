@@ -31,8 +31,9 @@ Ext.define('Ssp.store.EarlyAlertResponseLate', {
     },
     load: function() {
         var me=this;
-        var values = [{ displayValue:'Current Response', code: 'CURRENT', booleanValue: false },
-                      { displayValue:'Overdue Response', code: 'OVERDUE', booleanValue: true }
+        var values = [{ displayValue:'Alerts With Current Response', code: 'RESPONSE_CURRENT'},
+                      { displayValue:'Alerts With Overdue Response', code: 'RESPONSE_OVERDUE'},
+                      { displayValue:'All Open Alerts', code: 'ALL_OPEN_ALERTS' }
         ];
         // set the model
         me.loadData( values );

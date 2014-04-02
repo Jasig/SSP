@@ -49,7 +49,7 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	
 	private Boolean currentlyRegistered;
 	
-	private Boolean earlyAlertResponseLate;
+	private String earlyAlertResponseLate;
 	
 	private String sapStatusCode;
 	
@@ -144,11 +144,11 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 		this.currentlyRegistered = currentlyRegistered;
 	}
 
-	public Boolean getEarlyAlertResponseLate() {
+	public String getEarlyAlertResponseLate() {
 		return earlyAlertResponseLate;
 	}
 
-	public void setEarlyAlertResponseLate(Boolean earlyAlertResponseLate) {
+	public void setEarlyAlertResponseLate(String earlyAlertResponseLate) {
 		this.earlyAlertResponseLate = earlyAlertResponseLate;
 	}
 

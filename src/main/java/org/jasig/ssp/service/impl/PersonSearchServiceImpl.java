@@ -133,28 +133,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 		final Map<UUID, Number> numberEarlyAlertResponsesRequired = earlyAlertService.
 				getResponsesDueCountEarlyAlerts(peopleIds);
 		
-		List<PersonSearchResult2> filteredResults = null;
-		if(form.getEarlyAlertResponseLate() != null){
-			filteredResults = new ArrayList<PersonSearchResult2>();
-			if(form.getEarlyAlertResponseLate()){
-				for(PersonSearchResult2 result:results){
-					if(numberEarlyAlertResponsesRequired.containsKey(result.getPersonId()) 
-							&& numberEarlyAlertResponsesRequired.get(result.getPersonId()).intValue() > 0){
-						filteredResults.add(result);
-					}
-				}
-			}else{
-				for(PersonSearchResult2 result:results){
-					if(!numberEarlyAlertResponsesRequired.containsKey(result.getPersonId()) 
-							|| numberEarlyAlertResponsesRequired.get(result.getPersonId()).intValue() <= 0){
-						filteredResults.add(result);
-					}
-				}
-			}
-		}else
-			filteredResults = results;
-
-		for (final PersonSearchResult2 record : filteredResults) {
+		for (final PersonSearchResult2 record : results) {
 			if (appts.containsKey(record.getId())) {
 				record.setCurrentAppointmentStartTime(appts.get(
 						record.getId()));
@@ -170,6 +149,33 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 						.getId()));
 			}
 		}
+		
+		List<PersonSearchResult2> filteredResults = null;
+		if(form.getEarlyAlertResponseLate() != null){
+			filteredResults = new ArrayList<PersonSearchResult2>();
+			if(form.getEarlyAlertResponseLate().equals(PersonSearchRequest.EARLY_ALERT_RESPONSE_RESPONSE_OVERDUE)){
+				for(PersonSearchResult2 result:results){
+					if(numberEarlyAlertResponsesRequired.containsKey(result.getPersonId()) 
+							&& numberEarlyAlertResponsesRequired.get(result.getPersonId()).intValue() > 0){
+						filteredResults.add(result);
+					}
+				}
+			}else if(form.getEarlyAlertResponseLate().equals(PersonSearchRequest.EARLY_ALERT_RESPONSE_RESPONSE_CURRENT)){
+				for(PersonSearchResult2 result:results){
+					if((!numberEarlyAlertResponsesRequired.containsKey(result.getPersonId()) 
+							|| numberEarlyAlertResponsesRequired.get(result.getPersonId()).intValue() <= 0) && result.getNumberOfEarlyAlerts() > 0){
+						filteredResults.add(result);
+					}
+				}
+			}else {
+				for(PersonSearchResult2 result:results){
+					if(result.getNumberOfEarlyAlerts() > 0){
+						filteredResults.add(result);
+					}
+				}
+			}
+		}else
+			filteredResults = results;
 
 		return new PagingWrapper<PersonSearchResult2>(filteredResults.size(), filteredResults);
 	}

@@ -45,6 +45,12 @@ public class PersonSearchRequest {
 	
 	public static final String MAP_STATUS_ON_TRACK_SEQUENCE = "ON_TRACK_SEQUENCE";
 	
+	public static final String EARLY_ALERT_RESPONSE_RESPONSE_CURRENT = "RESPONSE_CURRENT";
+	
+	public static final String EARLY_ALERT_RESPONSE_RESPONSE_OVERDUE = "RESPONSE_OVERDUE";
+	
+	public static final String EARLY_ALERT_RESPONSE_ALL_OPEN_ALERTS = "ALL_OPEN_ALERTS";
+	
 	// id of the student
 	private String studentId;
 
@@ -66,7 +72,7 @@ public class PersonSearchRequest {
 	
 	private Boolean currentlyRegistered;
 	
-	private Boolean earlyAlertResponseLate;
+	private String earlyAlertResponseLate;
 	
 	private String planStatus;
 	
@@ -185,12 +191,12 @@ public class PersonSearchRequest {
 	}
 
 
-	public Boolean getEarlyAlertResponseLate() {
+	public String getEarlyAlertResponseLate() {
 		return earlyAlertResponseLate;
 	}
 
 
-	public void setEarlyAlertResponseLate(Boolean earlyAlertResponseLate) {
+	public void setEarlyAlertResponseLate(String earlyAlertResponseLate) {
 		this.earlyAlertResponseLate = earlyAlertResponseLate;
 	}
 

@@ -239,7 +239,7 @@ Ext.define('Ssp.view.SearchForm',{
 		   		    emptyText: 'Any',
                     name: 'earlyAlertResponseLate',
                     store: me.earlyAlertResponseLateStore,
-   		   		    valueField: 'booleanValue',
+   		   		    valueField: 'code',
 		   		    displayField: 'displayValue' 
                 }, 
                 {

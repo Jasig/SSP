@@ -565,12 +565,6 @@ public class EarlyAlertDao extends
 			responsesDuePerPerson.put((UUID) result[0], (Number) result[1]);
 		}
 
-		// ensure all people IDs that were request exist in return Map
-		for (final UUID id : personIds) {
-			if (!responsesDuePerPerson.containsKey(id)) {
-				responsesDuePerPerson.put(id, 0);
-			}
-		}
 		return responsesDuePerPerson;
 	}
 	

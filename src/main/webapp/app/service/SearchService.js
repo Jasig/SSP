@@ -126,7 +126,7 @@ Ext.define('Ssp.service.SearchService', {
 		 gpaEarnedMax: gpaEarnedMax,
 		 // required because false is not sent as a parameter we are depending on null to indicate no search
 		 currentlyRegistered: currentlyRegistered == null ? null : new Boolean(currentlyRegistered).toString(),
-		 earlyAlertResponseLate: earlyAlertResponseLate  == null ? null : new Boolean(earlyAlertResponseLate).toString(),
+		 earlyAlertResponseLate: earlyAlertResponseLate,
 		 sapStatusCode: sapStatusCode,
 		 mapStatus: mapStatus,
 		 planStatus: planStatus,

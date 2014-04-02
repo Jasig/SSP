@@ -134,7 +134,7 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) BigDecimal gpaEarnedMin,
 	 final @RequestParam(required = false) BigDecimal gpaEarnedMax,
 	 final @RequestParam(required = false) Boolean currentlyRegistered,
-	 final @RequestParam(required = false) Boolean earlyAlertResponseLate,
+	 final @RequestParam(required = false) String earlyAlertResponseLate,
 	 final @RequestParam(required = false) String sapStatusCode,
 	 final @RequestParam(required = false) String specialServiceGroup,
 	 final @RequestParam(required = false)String mapStatus,
