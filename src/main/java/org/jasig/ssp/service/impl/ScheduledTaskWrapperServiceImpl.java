@@ -18,23 +18,10 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.service.MessageService;
-import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.ScheduledTaskWrapperService;
-import org.jasig.ssp.service.SecurityService;
-import org.jasig.ssp.service.TaskService;
-import org.jasig.ssp.service.external.ExternalPersonService;
+import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.service.*;
 import org.jasig.ssp.service.external.ExternalPersonSyncTask;
 import org.jasig.ssp.service.external.MapStatusReportCalcTask;
 import org.jasig.ssp.service.reference.ConfigService;
@@ -45,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.Trigger;
@@ -52,7 +40,22 @@ import org.springframework.scheduling.TriggerContext;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.scheduling.support.PeriodicTrigger;
+import org.springframework.security.access.intercept.RunAsUserToken;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class ScheduledTaskWrapperServiceImpl
@@ -107,8 +110,17 @@ public class ScheduledTaskWrapperServiceImpl
 	@Autowired
 	private transient ConfigService configService;
 
+	@Autowired
+	private transient AuthenticationManager authenticationManager;
+
+	@Autowired
+	private ApplicationEventPublisher eventPublisher;
+
 	@Value("#{configProperties.scheduled_coach_sync_enabled}")
 	private boolean scheduledCoachSyncEnabled;
+
+	@Value("#{configProperties.ssp_trusted_code_run_as_key}")
+	private String runAsKey;
 
 	private HashMap<String, Task> tasks;
 
@@ -129,7 +141,7 @@ public class ScheduledTaskWrapperServiceImpl
 				},
 				EXTERNAL_PERSON_SYNC_TASK_DEFAULT_TRIGGER,
 				EXTERNAL_PERSON_SYNC_TASK_TRIGGER_CONFIG_NAME));
-		
+
 		this.tasks.put(MAP_STATUS_REPORT_CALC_TASK_ID, new Task(MAP_STATUS_REPORT_CALC_TASK_ID,
 				new Runnable() {
 					@Override
@@ -138,7 +150,7 @@ public class ScheduledTaskWrapperServiceImpl
 					}
 				},
 				MAP_STATUS_REPORT_CALC_TASK_DEFAULT_TRIGGER,
-				MAP_STATUS_REPORT_CALC_TASK_TRIGGER_CONFIG_NAME));		
+				MAP_STATUS_REPORT_CALC_TASK_TRIGGER_CONFIG_NAME));
 		this.tasks.put(SCHEDULER_CONFIG_POLL_TASK_ID, new Task(SCHEDULER_CONFIG_POLL_TASK_ID,
 				new Runnable() {
 					@Override
@@ -431,39 +443,191 @@ public class ScheduledTaskWrapperServiceImpl
 		}
 	}
 
-	// For all of the scheduled methods below... don't need to call
-	// securityService.currentFallingBackToAdmin()... it doesn't actually do any
-	// good... it won't be cached as the "current" user. Do need to clean up
-	// tho, b/c when securityService.currentFallingBackToAdmin() *is* called in
-	// the depths of syncCoaches(), threadlocals will be set
+	/**
+	 * Decorates the given {@link Runnable} with {@link #withSudo(Runnable)}
+	 * if the current {@link SecurityContext} is not considered "auditable",
+	 * otherwise the returned {@code Runnable} has no added behavior.
+	 *
+	 * <p>Design note: currently there is only this and the "raw"
+	 * {@link #withSudo(Runnable)}... nothing that restores the previous
+	 * {@link Authentication}, if any. Only reason is that we don't currently
+	 * need such a thing, so there's no point in spending time making sure
+	 * the replace/restore actually works.</p>
+	 *
+	 * @see #isCurrentAuthenticationAuditable()
+	 * @param work
+	 * @throws AuthenticationException
+	 */
+	protected Runnable withMaybeSudo(final Runnable work) throws AuthenticationException {
+		return new Runnable() {
+			@Override
+			public void run() {
+				if ( !(isCurrentAuthenticationAuditable()) ) {
+					LOGGER.debug("Insufficient Authentication in SecurityContext. Executing task via sudo.");
+					withSudo(work).run();
+				} else {
+					LOGGER.debug("Sufficient Authentication already present in SecurityContext. Skipping sudo and executing task in that context.");
+					work.run();
+				}
+			}
+		};
+	}
+
+	/**
+	 * Checks to see if our Hibernate flush interceptor will consider the
+	 * current {@link Authentication} sufficient for assigning to persistent
+	 * entities as either a "creator" or "modifier", <em>and is not the anonymous
+	 * user.</em>
+	 *
+	 * <p>Note that this implementation depends heavily on some quirky
+	 * behavior in {@link org.jasig.ssp.service.SecurityService#currentlyAuthenticatedUser()}.
+	 * Specifically, that method is assumed to return null if any of the following
+	 * are true:</p>
+	 *
+	 * <ol>
+	 *     <li>The current {@link SecurityContext} {@link Authentication}
+	 *     is null, or</li>
+	 *     <li>The current {@link SecurityContext} {@link Authentication} is
+	 *     unauthenticated, or</li>
+	 *     <li>The current {@link SecurityContext} {@link Authentication} is
+	 *     the anonymous user, or</li>
+	 *     <li>The current {@link SecurityContext} {@link Authentication} does
+	 *     not resolve to a known {@link Person}.</li>
+	 * </ol>
+	 *
+	 * @see #withSudo(Runnable)
+	 * @return
+	 */
+	protected boolean isCurrentAuthenticationAuditable() {
+		return securityService.currentlyAuthenticatedUser() != null;
+	}
+
+	/**
+	 * Decorates the given {@code Runnable} with a login and logout of
+	 * {@link org.jasig.ssp.service.SecurityService#noAuthAdminUser()}.
+	 *
+	 * <p>Prior to <a href="https://issues.jasig.org/browse/SSP-2241">SSP-2241</a>
+	 * we didn't attempt to ensure any particular {@link SecurityContext} state
+	 * prior to running jobs. This ended up causing a memory leak because our
+	 * Hibernate flush interceptor would generate a new {@link SspUser} for
+	 * every flushed "auditer" field, and every time that happened, that
+	 * {@link SspUser} was added to a {@code ThreadLocal} list. For a large
+	 * job like {@link #syncExternalPersons()}, the growth of that list was
+	 * particularly explosive. {@link SspUser} is definitely due for a refactor
+	 * to eliminate it's {@code ThreadLocal} dependencies, but for the time
+	 * being we're able to short-circuit the leak by ensuring that there is
+	 * a current {@link Authentication} that the Hibernate flush interceptor
+	 * will honor. (It will not honor the anonymous user.) And this is good
+	 * practice anyway - to always explicitly set up a security context rather
+	 * than let obscure Hibernate extension internals make up the rules as we
+	 * go.</p>
+	 *
+	 * @see #withMaybeSudo(Runnable)
+	 * @param work
+	 * @return
+	 * @throws AuthenticationException
+	 */
+	protected Runnable withSudo(final Runnable work) throws AuthenticationException {
+		return new Runnable() {
+			@Override
+			public void run() {
+				final SspUser runAs = securityService.noAuthAdminUser();
+				Authentication auth = new RunAsUserToken(runAsKey, runAs, null, runAs.getAuthorities(), null);
+				auth = authenticationManager.authenticate(auth);
+
+				// Not sure why/if we need this. Just trying to mimic long-time
+				// legacy behavior in UPortalPreAuthenticatedProcessingFilter
+				if (eventPublisher != null) {
+					eventPublisher.publishEvent(new AuthenticationSuccessEvent(auth));
+				}
+
+				// AuthenticationManager doesn't do this for you
+				SecurityContextHolder.getContext().setAuthentication(auth);
+
+				try {
+					work.run();
+				} finally {
+					SecurityContextHolder.getContext().setAuthentication(null);
+				}
+			}
+		};
+	}
+
+	/**
+	 * Wraps the given {@code Runnable} with the  sort of cleanup you'd normally
+	 * depend on after a HTTP request. In particular, this is necessary to
+	 * ensure release of {@code ThreadLocals} set by virtue of {@link SspUser}
+	 * interactions.
+	 */
+	protected Runnable withTaskCleanup(final Runnable work) {
+		return new Runnable() {
+			@Override
+			public void run() {
+				try {
+					LOGGER.debug("SspUser cleanup queue size (pre-task): {}", SspUser.cleanupQueueSize());
+					work.run();
+				} finally {
+					LOGGER.debug("SspUser cleanup queue size (post-task): {}", SspUser.cleanupQueueSize());
+					securityService.afterRequest();
+					LOGGER.debug("SspUser cleanup queue size (post-task-cleanup): " + SspUser.cleanupQueueSize());
+				}
+			}
+		};
+	}
+
+	/**
+	 * Wraps the given {@code Runnable} in the "standard" decorators you'd
+	 * typically need for execution of a background task and returns the
+	 * resulting {@code Runnable} for subsequent execution.
+	 *
+	 * @param work
+	 */
+	protected Runnable withTaskContext(Runnable work) {
+		return withTaskCleanup(withMaybeSudo(work));
+	}
+
+	/**
+	 * Wraps the given {@code Runnable} in the "standard" decorators you'd
+	 * typically need for execution of a background task, and then
+	 * executed the result. Please see {@link #withSudo(Runnable)} in particular
+	 * for why it's important to have a non-anonymous current
+	 * {@link Authentication} before actually executing a background task.
+	 *
+	 * @param work
+	 */
+	protected void execWithTaskContext(Runnable work) {
+		withTaskContext(work).run();
+	}
 
 	@Override
 	@Scheduled(fixedDelay = 150000)
 	// run 2.5 minutes after the end of the last invocation
 	public void sendMessages() {
-		try {
-			messageService.sendQueuedMessages();
-		} finally {
-			securityService.afterRequest();
-		}
+		execWithTaskContext(new Runnable() {
+			@Override
+			public void run() {
+				messageService.sendQueuedMessages();
+			}
+		});
 	}
 
 	@Override
 	@Scheduled(fixedDelay = 300000)
 	// run every 5 minutes
 	public void syncCoaches() {
-		if ( !(scheduledCoachSyncEnabled) ) {
-			LOGGER.debug("Scheduled coach sync disabled. Abandoning sync job");
-			return;
-		}
-		try {
-			LOGGER.info("Scheduled coach sync starting.");
-			PagingWrapper<Person> localCoaches = personService.syncCoaches();
-			LOGGER.info("Scheduled coach sync complete. Local coach count [{}]",
-					localCoaches.getResults());
-		} finally {
-			securityService.afterRequest();
-		}
+		execWithTaskContext(new Runnable() {
+			@Override
+			public void run() {
+				if (!(scheduledCoachSyncEnabled)) {
+					LOGGER.debug("Scheduled coach sync disabled. Abandoning sync job");
+					return;
+				}
+				LOGGER.info("Scheduled coach sync starting.");
+				PagingWrapper<Person> localCoaches = personService.syncCoaches();
+				LOGGER.info("Scheduled coach sync complete. Local coach count [{}]",
+						localCoaches.getResults());
+			}
+		});
 	}
 
 	/**
@@ -472,31 +636,34 @@ public class ScheduledTaskWrapperServiceImpl
 	 */
 	@Override
 	public void syncExternalPersons() {
-		try {
-			externalPersonSyncTask.exec();
-		} finally {
-			securityService.afterRequest();
-		}
+		execWithTaskContext(new Runnable() {
+			@Override
+			public void run() {
+				externalPersonSyncTask.exec();
+			}
+		});
 	}
 
 	@Override
 	public void calcMapStatusReports() {
-		try {
-			mapStatusReportCalcTask.exec();
-		} finally {
-			securityService.afterRequest();
-		}
+		execWithTaskContext(new Runnable() {
+			@Override
+			public void run() {
+				mapStatusReportCalcTask.exec();
+			}
+		});
 	}
 	
 	@Override
 	@Scheduled(cron = "0 0 1 * * *")
 	// run at 1 am every day
 	public void sendTaskReminders() {
-		try {
-			taskService.sendAllTaskReminderNotifications();
-		} finally {
-			securityService.afterRequest();
-		}
+		execWithTaskContext(new Runnable() {
+			@Override
+			public void run() {
+				taskService.sendAllTaskReminderNotifications();
+			}
+		});
 	}
 
 	protected static class Task {
