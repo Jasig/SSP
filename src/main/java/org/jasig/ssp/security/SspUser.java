@@ -35,13 +35,18 @@ import com.google.common.collect.Lists;
 /**
  * Design note on the <code>ThreadLocal</code> internal fields (SSP-854).
  * These are a hacks to deal with the fact that <code>SspUser</code> is used
- * both as a session-scoped object representing the session owner and as a
+ * both as a HTTP session-scoped object representing the session owner and as a
  * transient object acting as a wrapper around arbitrary <code>Person</code>
  * objects. When used in the latter mode, there might be several
  * <code>SspUser</code> instances created per request, each representing a
  * different user identity. The session-scoped mode necessitates thread-local
  * storage of the associated <code>Person</code> to avoid Hibernate lazy-load
- * issues. But it is hard for us to implement uniform filter-based or
+ * issues. Specifically, while the authenticated {@code SspUser} is a singleton
+ * scoped to the HTTP session, the {@link Person} to which that {@link SspUser}
+ * refers needs to be scoped to each <em>Hibernate</em> session that accesses
+ * that HTTP session, i.e. each {@code Thread} that accesses the latter.
+ *
+ * <p>But it is hard for us to implement uniform filter-based or
  * Spring <code>RequestAttributes</code>-based cleanup b/c the
  * transient mode means we can't have a static ThreadLocal for storing the
  * current <code>Person</code> - we don't know when a given SspUser represents
@@ -170,4 +175,8 @@ public class SspUser extends User implements Serializable {
 				.appendSuper(super.hashCode()).append(emailAddress)
 				.append(person).toHashCode();
 	}
+
+    public static int cleanupQueueSize() {
+        return cleanupQueue.get() == null ? 0 : cleanupQueue.get().size();
+    }
 }

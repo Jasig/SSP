@@ -44,6 +44,7 @@ It allows ssp to be run outside in absence of uportal.
 			port="33389"/>
 
 	<authentication-manager alias="authenticationManager">
+		<authentication-provider ref="runAsAuthenticationProvider" />
 		<ldap-authentication-provider
 			user-search-filter="(uid={0})" 
 			user-search-base="ou=users"

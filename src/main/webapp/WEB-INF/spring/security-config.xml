@@ -33,6 +33,14 @@
 	<beans:import resource="local/ssp-sec-local.xml"/>
 	<beans:import resource="config-props.xml" />
 
+	<!-- Little weird. Beans above depend on this thing, but no other good
+	location for common security-related beans and deepening the inlines import
+	hierarchy even further seems like a bad idea. -->
+	<beans:bean id="runAsAuthenticationProvider"
+				class="org.springframework.security.access.intercept.RunAsImplAuthenticationProvider">
+		<beans:property name="key" value="#{configProperties.ssp_trusted_code_run_as_key}" />
+	</beans:bean>
+
 	<global-method-security pre-post-annotations="enabled" />
 
 	<http pattern="/api/*/oauth2/token" create-session="stateless" authentication-manager-ref="oauth2ClientAuthenticationManager">
