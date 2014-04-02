@@ -90,6 +90,13 @@ public class SecurityServiceImpl implements SecurityService {
 		return user;
 	}
 
+	/**
+	 * Please see (at least) {@link #currentlyAuthenticatedUser()} and other
+	 * call sites before changing behaviors here. This is an idiosyncratic
+	 * function, but some of those idiosyncracies are depended on.
+	 *
+	 * @return
+	 */
 	@Override
 	public SspUser currentUser() {
 		SspUser sspUser = null;
@@ -186,6 +193,15 @@ public class SecurityServiceImpl implements SecurityService {
 		}
 	}
 
+	/**
+	 * Please be sure to check dependencies, esp
+	 * {@code ScheduledTaskWrapperServiceImpl} before changing any of the
+	 * behavior here. E.g. you may think it's odd that the anonymous user
+	 * is not considered authenticated (b/c that's not how SpringSecurity thinks
+	 * about it), but we do have code that depends on that fact.
+	 *
+	 * @return
+	 */
 	@Override
 	public SspUser currentlyAuthenticatedUser() {
 		final SspUser sspUser = currentUser();

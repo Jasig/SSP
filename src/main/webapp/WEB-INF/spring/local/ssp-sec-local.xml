@@ -42,6 +42,7 @@
 	<beans:beans profile="uportal">
 
 		<authentication-manager alias="authenticationManager">
+			<authentication-provider ref="runAsAuthenticationProvider" />
 			<authentication-provider ref="sspPreAuthenticatedAuthenticationProvider" />
 		</authentication-manager>
 
