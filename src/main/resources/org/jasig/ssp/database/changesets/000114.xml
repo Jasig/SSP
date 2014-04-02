@@ -70,4 +70,44 @@
                             </body></html>]]></param>
             </customChange>
     </changeSet>
+    
+    <changeSet id="Update template message for EA requiring response" author="jim.stanley">
+        <preConditions onFail="MARK_RAN" onFailMessage="Skipping update to message template ">
+             <customPrecondition className="org.jasig.ssp.util.liquibase.MessageTemplateCheckSumPrecondition">
+                   <param name="messageTemplateId" value="bfae36f8-53d0-486f-8bc5-a9d98beb544e"/>
+                  <param name="columnName" value="body"/>
+            </customPrecondition>
+        </preConditions>
+            <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+                 <param name="messageTemplateId" value="bfae36f8-53d0-486f-8bc5-a9d98beb544e"/>
+                <param name="columnName" value="body"/>
+                <param name="columnValue"><![CDATA[<html><body>
+           <p><b>STUDENT $!termToRepresentEarlyAlert SYSTEM MESSAGE</b></p>
+           <p> The following students have an $!termToRepresentEarlyAlert awaiting a response:
+           <table>
+           <tr>
+               <th> Student Name </th>
+               <th> Early Alert Created </th>
+               <th> Last Response </th>
+               <th> Created By </th>
+               <th> Course </th>
+               <th> Term Code </th>
+               <th> Days Out Of Compliance </th>
+           <tr>
+           #foreach($earlyAlertTOPair in $earlyAlertTOPairs)
+           <tr>
+              <td>$earlyAlertTOPair.first.person.firstName  $earlyAlertTOPair.first.person.lastName</td>
+              <td>#if($!earlyAlertTOPair.first.createdDate)$DateTimeUtils.formatDate(''MM/dd/yyyy'', $!earlyAlertTOPair.first.createdDate)#end</td>
+               <td>#if($!earlyAlertTOPair.first.lastResponseDate)$DateTimeUtils.formatDate(''MM/dd/yyyy'', $!earlyAlertTOPair.first.lastResponseDate)#else No response found #end</td>
+              <td>$!earlyAlertTOPair.first.creator.firstName $!earlyAlertTOPair.first.creator.lastName</td>
+              <td>$!earlyAlertTOPair.first.courseTitle</td>
+              <td>$!earlyAlertTOPair.first.courseTermCode</td>
+              <td>$!earlyAlertTOPair.second</td>
+           <tr>
+           #end
+           </table>
+
+           </body></html>]]></param>
+            </customChange>
+    </changeSet>
 </databaseChangeLog>

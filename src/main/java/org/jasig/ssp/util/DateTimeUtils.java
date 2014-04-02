@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -65,5 +66,10 @@ public class DateTimeUtils {
 	    cal.setTime(date);
 	    cal.add(Calendar.DAY_OF_MONTH, offset);
 	    return cal.getTime();
+	} 
+	
+	public static String formatDate(String format, Date date){
+		SimpleDateFormat formatter = new SimpleDateFormat(format);
+		return formatter.format(date);
 	}
 }
