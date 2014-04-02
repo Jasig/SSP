@@ -587,9 +587,15 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if(hasCurrentlyRegistered(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" rbt.termCode = :currentTerm");
-			stringBuilder.append(" and rbt.schoolId = p.schoolId ");
-			stringBuilder.append(" and "+ (personSearchRequest.getCurrentlyRegistered() ? " rbt.registeredCourseCount > 0 " : " rbt.registeredCourseCount < 1 "));
+			if(personSearchRequest.getCurrentlyRegistered())
+			{
+				stringBuilder.append(" exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :currentTerm and rbt.schoolId = p.schoolId and rbt.registeredCourseCount > 0 ) ");
+			}
+			else
+			{
+				stringBuilder.append(" not exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :currentTerm and rbt.schoolId = p.schoolId )  or ");
+				stringBuilder.append(" exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :currentTerm and rbt.schoolId = p.schoolId and rbt.registeredCourseCount = 0)  ");
+			}
 		}
 	}
 
@@ -655,11 +661,6 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	private void buildFrom(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) 
 	{
 		stringBuilder.append(" from Person p ");
-		
-		if(hasCurrentlyRegistered(personSearchRequest))
-		{
-			stringBuilder.append(", RegistrationStatusByTerm rbt ");
-		}
 		
 		if(hasDeclaredMajor(personSearchRequest))
 		{
