@@ -45,12 +45,12 @@ Ext.define('Ssp.store.external.Terms', {
         me.sort('startDate', 'DESC');
     },
     
-    getCurrentAndFutureTermsStore: function(sortEarliestFirst, maximum){
+    getCurrentAndFutureTermsStore: function(sortEarliestFirst, maximum, minimum){
         var me = this;
         var store = Ext.create('Ext.data.Store', {
             model: "Ssp.model.external.Term"
         });
-        store.loadRecords(me.getCurrentAndFutureTerms(maximum));
+        store.loadRecords(me.getCurrentAndFutureTerms(maximum, minimum));
         me.sortStoreByDate(store, sortEarliestFirst);
         return store;
     },
@@ -100,17 +100,46 @@ Ext.define('Ssp.store.external.Terms', {
         return me.getTermsFromTermCodesStore(termCodes).getRange(0);
     },
     
-    getCurrentAndFutureTerms: function(maximum){
+    // maximum is the maximum number of school years from current date to return terms for
+    // set to null to get all terms
+    // minimum is the number of school years from current term to start collecting terms
+    // negative values pull previous years, positive goes into the future, 0 pulls current year
+    // null start at current term
+    getCurrentAndFutureTerms: function(maximum, minimum){
         var me = this;
         var startIndex = 0
-        var currentTermIndex = me.findBy(me.isCurrentTerm);
-        if (maximum) {
-            var startReportYear = me.getAt(currentTermIndex).get("reportYear");
+        var endIndex = me.findBy(me.isCurrentTerm);
+        if(endIndex == -1)
+        	endIndex = me.getCount();
+        
+        var startReportYear = me.getAt(endIndex).get("reportYear");
+        if (maximum !== null && maximum !== undefined) {
             startIndex = me.find('reportYear', startReportYear + maximum);
             if (startIndex == -1) 
                 startIndex = 0;
         }
-        return me.getRange(startIndex, currentTermIndex);
+        
+        // No specific call to find the last that meets criteria or to pull indexes
+        // This will find the first term (chronologically in the same school year as the currentTerm
+        if (minimum !== null && minimum !== undefined ) {
+        	var index = me.find('reportYear', startReportYear + minimum);
+        	var gindex = index;
+        	var count = 0;
+        	while(index != -1){
+        		index = me.find('reportYear', startReportYear + minimum, ++index);
+        		if(index != -1){
+        			gindex = index;
+        		}
+        		if(++count >= 10)
+        			break;
+        	}
+            if (gindex == -1)
+            	endIndex = me.getCount();
+            else
+            	endIndex = gindex;
+        }
+        
+        return me.getRange(startIndex, endIndex);
     },
     
     isPastTerm: function(termCode){

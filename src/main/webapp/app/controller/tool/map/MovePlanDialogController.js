@@ -58,23 +58,21 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 		me.editPastTerms = me.configStore.getConfigByName('map_edit_past_terms');
 		if(me.editPastTerms === 'true')
 		{
-			me.currentAndFutureTermsStore = me.termsStore.getClonedStoreSortedByDate(true);
+			me.currentAndFutureTermsStore = me.termsStore.getCurrentAndFutureTermsStore(true, 8, -1);
 		}
 		else
-			me.currentAndFutureTermsStore = me.termsStore.getCurrentAndFutureTermsStore(true);
+			me.currentAndFutureTermsStore = me.termsStore.getCurrentAndFutureTermsStore(true, 8, null);
 		
 		var availableTerms = me.getAvailableTerms();
-		
-		var allowedTerms = me.getAllowedTerms(availableTerms);
-		
+				
 		me.getTermCodeToBumpField().bindStore(availableTerms);
-		me.getTermCodeEndField().bindStore(allowedTerms);
+		me.getTermCodeEndField().bindStore(me.currentAndFutureTermsStore);
 		
 		var startTerm = availableTerms.getAt(0);
 		me.getTermCodeToBumpField().setValue(startTerm.get('code'));
 		
-		var indexStartTerm = allowedTerms.find('code', startTerm.get('code'));
-		me.getTermCodeEndField().setValue(allowedTerms.getAt(indexStartTerm + 1).get('code'));
+		var indexStartTerm = me.currentAndFutureTermsStore.find('code', startTerm.get('code'));
+		me.getTermCodeEndField().setValue(me.currentAndFutureTermsStore.getAt(indexStartTerm + 1).get('code'));
 		
 		var actions = Ext.create('Ext.data.Store', {
 		    fields: ['action', 'name'],
@@ -114,23 +112,6 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 		}
     
 		return availableTerms;
-	},
-	
-	getAllowedTerms: function(availableTerms){
-		var me = this;
-		if(!me.currentMapPlan.get("isTemplate"))
-			return me.currentAndFutureTermsStore;
-		var sIndex = me.termsStore.find('code', availableTerms.getAt(0).get('code'));
-		var eIndex = me.termsStore.find('code', availableTerms.getAt(availableTerms.getCount() - 1).get('code'));
-		var allowedTerms = Ext.create('Ext.data.Store', {
-	     	model: "Ssp.model.external.Term"
-	     });
-		if(sIndex < eIndex){
-			allowedTerms.loadRecords(me.termsStore.getRange(sIndex));
-		}else
-			allowedTerms.loadRecords(me.termsStore.getRange(0, sIndex));
-		allowedTerms.sort('startDate', 'ASC');	
-		return allowedTerms;
 	},
 
     onMovePlan: function(){

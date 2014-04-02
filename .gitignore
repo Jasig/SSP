@@ -6,3 +6,12 @@ overlays
 /src/main/webapp/app-all.js
 /src/main/webapp/all-classes.js
 FooController.java
+src/main/resources/org/jasig/ssp/database/basicChangesets/api_test_normalize_dates_last.xml
+src/main/resources/org/jasig/ssp/database/basicChangesets/basic_dataset_1.xml
+src/main/resources/org/jasig/ssp/database/basicChangesets/basic_dataset_2.xml
+src/main/resources/org/jasig/ssp/database/basicChangesets/basic_dataset_3.xml
+src/main/resources/org/jasig/ssp/database/basicChangesets/datasetAddendum1PSQL.sql
+src/main/resources/org/jasig/ssp/database/basicChangesets/datasetAddendum2PSQL.sql
+src/main/resources/org/jasig/ssp/database/basicChangesets/datasetPSQL.sql
+src/main/resources/org/jasig/ssp/database/demoDataChangeset/large_course_set_demo_data.xml
+src/main/resources/org/jasig/ssp/database/masterChangeLog-basic-data.xml
