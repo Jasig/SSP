@@ -28,6 +28,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.SubjectAndBody;
+import org.jasig.ssp.model.TermCourses;
 import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
@@ -38,6 +39,8 @@ import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
 import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
+import org.jasig.ssp.transferobject.external.ExternalStudentFinancialAidTO;
+import org.jasig.ssp.transferobject.external.ExternalStudentTranscriptTO;
 import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
 import org.jasig.ssp.transferobject.reference.MessageTemplatePlanPrintParams;
 import org.jasig.ssp.transferobject.reports.MapPlanStatusReportCourse;
@@ -100,6 +103,11 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 	public Plan getCurrentForStudent(UUID personId) {
 		return dao.getActivePlanForStudent(personId);
 	}
+	
+	@Override
+	public Person getOwnerForPlan(UUID id) {
+		return dao.getOwnerForPlan(id);
+	}
 
 	@Override
 	@Transactional(readOnly=true)
@@ -124,14 +132,15 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 		} else{
 			UUID personID = UUID.fromString(planOutputDataTO.getPlan().getPersonId());
 			String schoolId = personService.get(personID).getSchoolId();
-			planOutputDataTO.setFinancialAid(externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId));
-			planOutputDataTO.setGpa(externalStudentTranscriptService.getRecordsBySchoolId(schoolId));
+			planOutputDataTO.setFinancialAid(new ExternalStudentFinancialAidTO(externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId)));
+			planOutputDataTO.setGpa(new ExternalStudentTranscriptTO(externalStudentTranscriptService.getRecordsBySchoolId(schoolId)));
 			output = createFullOutput(planOutputDataTO);
 		}
 
 		return output;
 	}
 	
+
 
 	@Override
 	public PagingWrapper<Plan> getAllForStudent(
@@ -188,9 +197,16 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 	}
 
 	@Override
-	public Person getOwnerForPlan(UUID id) {
-		return dao.getOwnerForPlan(id);
-	}
+	public SubjectAndBody createMatrixOutput(
+			MessageTemplatePlanPrintParams outputPlan)
+			throws ObjectNotFoundException {
 
+			List<TermCourses<Plan,PlanTO>> courses = collectTermCourses(outputPlan.getOutputPlan().getNonOutputTO());
+			outputPlan.setTermCourses(courses);
+			outputPlan.setTotalPlanCreditHours(calculateTotalPlanHours(courses));
+			 
+			SubjectAndBody subjectAndBody = getMessageTemplateService().createMapPlanMatrixOutput(outputPlan, null);
+			return subjectAndBody;
+	}
 
 }

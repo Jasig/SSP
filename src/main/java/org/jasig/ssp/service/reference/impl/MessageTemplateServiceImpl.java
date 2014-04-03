@@ -267,7 +267,7 @@ public class MessageTemplateServiceImpl extends
 	
 	@Override
 	public <TOO extends AbstractPlanOutputTO<T, TO>, T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanMatrixOutput(
-			AbstractMessageTemplateMapPrintParamsTO<TOO, T, TO> params) {
+			AbstractMessageTemplateMapPrintParamsTO<TOO, T, TO> params, Map<String,Object> additionalParams) {
 		
 		final Map<String, Object> messageParams =  addParamsToMapPlan(
 				params.getStudent(), 
@@ -275,8 +275,10 @@ public class MessageTemplateServiceImpl extends
 				params.getOutputPlan().getNonOutputTO(),
 				params.getTotalPlanCreditHours(),
 				params.getTermCourses(),
-				params.getInstitutionName());
-		messageParams.put("printParams", params);
+				params.getInstitutionName(),
+				params.getOutputPlan().getNotes());
+		if(additionalParams != null)
+			messageParams.put("printParams", additionalParams);
 		return populateFromTemplate(params.getMessageTemplateId(), messageParams);
 	}
 	
@@ -294,7 +296,8 @@ public class MessageTemplateServiceImpl extends
 				planOutput.getNonOutputTO(), 
 				totalPlanCreditHours,
 				termCourses,
-				institutionName);
+				institutionName,
+				planOutput.getNotes());
  
 		messageParams.put("isPrivate", planOutput.getIsPrivate());
 		messageParams.put("includeCourseDescription", planOutput.getIncludeCourseDescription());
@@ -330,7 +333,8 @@ public class MessageTemplateServiceImpl extends
 			final TO plan, 
 			final BigDecimal totalPlanCreditHours,
 			final List<TermCourses<T,TO>> termCourses,
-			final String institutionName){
+			final String institutionName,
+			final String emailNotes){
 		
 		final Map<String, Object> messageParams = new HashMap<String, Object>(); 
 		
@@ -341,6 +345,7 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("planContactNotes", plan.getContactNotes());
 		messageParams.put("planStudentNotes", plan.getStudentNotes());
 		messageParams.put("termCourses", termCourses);
+
 		if(student != null)
 			addStudent(messageParams, student);
 		
@@ -354,6 +359,7 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("ownerPhone", owner.getWorkPhone());
 		messageParams.put("ownerFullName", owner.getFullName());
 		messageParams.put("ownerEmail", owner.getPrimaryEmailAddress());
+		messageParams.put("emailNotes", emailNotes);
 		
 		messageParams.put("totalPlanHours", totalPlanCreditHours);
 		messageParams.put("institution", institutionName);

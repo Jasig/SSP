@@ -18,14 +18,19 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.TemplateDao;
 import org.jasig.ssp.model.MapTemplateVisibility;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Template;
+import org.jasig.ssp.model.TermCourses;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
@@ -34,9 +39,11 @@ import org.jasig.ssp.service.external.ExternalDepartmentService;
 import org.jasig.ssp.service.external.ExternalDivisionService;
 import org.jasig.ssp.service.external.ExternalProgramService;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.TemplateOutputTO;
 import org.jasig.ssp.transferobject.TemplateSearchTO;
 import org.jasig.ssp.transferobject.TemplateTO;
+import org.jasig.ssp.transferobject.reference.MessageTemplatePlanPrintParams;
 import org.jasig.ssp.transferobject.reference.MessageTemplatePlanTemplatePrintParamsTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -92,6 +99,11 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 	protected UUID getPersonIdPlannedFor(TemplateTO model) {
 		// templates are not "planned for" anybody in particular
 		return null;
+	}
+	
+	@Override
+	public Person getOwnerForPlan(UUID id) {
+		return dao.getOwnerForPlan(id);
 	}
 
 	@Override
@@ -167,7 +179,20 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 	}
 
 	@Override
-	public Person getOwnerForPlan(UUID id) {
-		return dao.getOwnerForPlan(id);
+	public SubjectAndBody createMatrixOutput(
+			MessageTemplatePlanTemplatePrintParamsTO outputPlan)
+			throws ObjectNotFoundException {
+		List<TermCourses<Template,TemplateTO>> courses = collectTermCourses(outputPlan.getOutputPlan().getNonOutputTO());
+		outputPlan.setTermCourses(courses);
+		outputPlan.setTotalPlanCreditHours(calculateTotalPlanHours(courses));
+		
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("departmentName", outputPlan.getDepartmentName());
+		params.put("divisionName", outputPlan.getDivisionName());
+		params.put("programName", outputPlan.getProgramName());
+		
+		SubjectAndBody subjectAndBody = getMessageTemplateService().createMapPlanMatrixOutput(outputPlan, params);
+		return subjectAndBody;
 	}
+	
 }

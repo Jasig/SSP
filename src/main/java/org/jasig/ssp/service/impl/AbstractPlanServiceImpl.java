@@ -131,17 +131,6 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 		return configService.getByNameNullOrDefaultValue("inst_name");
 	}
 	
-	@Override
-	@Transactional(readOnly=true)
-	public SubjectAndBody createMatrixOutput(final TOOMT outputPlan) throws ObjectNotFoundException {
-
-		List<TermCourses<T,TO>> courses = collectTermCourses(outputPlan.getOutputPlan().getNonOutputTO());
-		outputPlan.setTermCourses(courses);
-		outputPlan.setTotalPlanCreditHours(calculateTotalPlanHours(courses));
-		 
-		SubjectAndBody subjectAndBody = getMessageTemplateService().createMapPlanMatrixOutput(outputPlan);
-		return subjectAndBody;
-	}
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -314,7 +303,7 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 		return totalDevCreditHours;
 	}
 
-	private BigDecimal calculateTotalPlanHours(List<TermCourses<T,TO>> courses) {
+	protected BigDecimal calculateTotalPlanHours(List<TermCourses<T,TO>> courses) {
 		BigDecimal totalPlanCreditHours = new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP);
 		for(TermCourses<T,TO> termCourses : courses){
 			totalPlanCreditHours = totalPlanCreditHours.add(termCourses.getTotalCreditHours());
@@ -322,7 +311,7 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 		return totalPlanCreditHours;
 	}
 
-	private List<TermCourses<T,TO>> collectTermCourses(TO plan) throws ObjectNotFoundException {
+	protected List<TermCourses<T,TO>> collectTermCourses(TO plan) throws ObjectNotFoundException {
 		Map<String,TermCourses<T,TO>> semesterCourses = new HashMap<String, TermCourses<T,TO>>();
 		List<TermNoteTO> termNotes = plan.getTermNotes();
 		List<Term> currentAndFutureTerms = getTermService().getCurrentAndFutureTerms();
