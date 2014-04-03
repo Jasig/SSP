@@ -83,7 +83,7 @@ public class MapReportsController extends ReportBaseController {
 	private static String REPORT_FILE_TITLE_NUMBER_STUDENTS_BY_STATUS = "Number_Of_Students_By_Status";
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(CaseloadActivityReportController.class);
+			.getLogger(MapReportsController.class);
 	
 	@Autowired
 	protected transient TermService termService;
