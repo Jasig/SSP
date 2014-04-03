@@ -4,7 +4,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -54,6 +56,8 @@ import liquibase.statement.core.RawSqlStatement;
  ***/
 
 public class UpdateMessageTemplateAndChecksum implements CustomSqlChange {
+	
+	public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
 
 	String messageTemplateId;
 	
@@ -137,6 +141,10 @@ public class UpdateMessageTemplateAndChecksum implements CustomSqlChange {
 			String newColumnCheckSum = getCheckSum(StringUtils.deleteWhitespace(columnValue));
 			statements.add(new RawSqlStatement("update message_template set " 
 					+ columnName + "_checksum = '" + newColumnCheckSum 
+					+ "' where id = '" + messageTemplateId + "'"));
+			final SimpleDateFormat df = new SimpleDateFormat(DATE_TIME_FORMAT);
+			String newFormattedDate = df.format(new Date());
+			statements.add(new RawSqlStatement("update message_template set modified_date = '" +  newFormattedDate
 					+ "' where id = '" + messageTemplateId + "'"));
 
 		}catch(NoSuchAlgorithmException exp){
