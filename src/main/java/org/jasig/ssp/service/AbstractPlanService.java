@@ -50,4 +50,6 @@ TOOMT extends AbstractMessageTemplateMapPrintParamsTO<TOO, T,TO>> extends Audita
 
 	SubjectAndBody createMatrixOutput(TOOMT outputPlan)
 			throws ObjectNotFoundException;
+	
+	Person getOwnerForPlan(UUID id);
 }

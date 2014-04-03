@@ -18,6 +18,9 @@
  */
 package org.jasig.ssp.service;
 
+import java.util.UUID;
+
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.transferobject.TemplateOutputTO;
 import org.jasig.ssp.transferobject.TemplateSearchTO;
@@ -31,5 +34,7 @@ TemplateOutputTO , MessageTemplatePlanTemplatePrintParamsTO> {
 
 	PagingWrapper<Template> getAll(SortingAndPaging createForSingleSortWithPaging,
 			TemplateSearchTO searchTO);
+
+
 	
 }

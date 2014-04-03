@@ -378,10 +378,7 @@ public class TemplateController  extends AbstractBaseController {
 		}
 
 		assertTemplateWritePublicApiAuthorization(obj);
-
-		final Template oldTemplate = getService().get(id);
-
-		final Person oldOwner = oldTemplate.getOwner();
+		Person oldOwner = getService().getOwnerForPlan(id);
 		
 		SspUser currentUser = getSecurityService().currentlyAuthenticatedUser();
 		
