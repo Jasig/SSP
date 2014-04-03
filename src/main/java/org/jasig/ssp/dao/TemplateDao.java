@@ -18,12 +18,15 @@
  */
 package org.jasig.ssp.dao;
 
+import java.util.UUID;
+
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.SimpleExpression;
 import org.jasig.ssp.model.MapTemplateVisibility;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.transferobject.TemplateSearchTO;
@@ -89,5 +92,10 @@ public class TemplateDao extends AbstractPlanDao<Template> implements
 
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
+	}
+
+	public Person getOwnerForPlan(UUID id) {
+		String query = "Select t.owner from org.jasig.ssp.model.Template t where t.id = :id";
+		return (Person) createHqlQuery(query).setParameter("id", id).uniqueResult();
 	}
 }

@@ -30,6 +30,7 @@ import org.hibernate.Query;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
@@ -300,5 +301,10 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 												  + " from PlanCourse pc where pc.plan.id = :planId and objectStatus = :objectStatus";
 		Query query = createHqlQuery(getAllPlanCoursesForStatusReportTO).setParameter("planId", planId).setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal());
 		return query.list();
+	}
+
+	public Person getOwnerForPlan(UUID id) {
+		String query = "Select p.owner from org.jasig.ssp.model.Plan p where p.id = :id";
+		return (Person) createHqlQuery(query).setParameter("id", id).uniqueResult();
 	}
 }
