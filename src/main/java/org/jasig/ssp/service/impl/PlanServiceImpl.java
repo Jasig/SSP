@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.PlanDao;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.reference.Config;
@@ -185,5 +186,11 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 			UUID planId) {
 		return dao.getAllPlanCoursesForStatusReport(planId);
 	}
+
+	@Override
+	public Person getOwnerForPlan(UUID id) {
+		return dao.getOwnerForPlan(id);
+	}
+
 
 }

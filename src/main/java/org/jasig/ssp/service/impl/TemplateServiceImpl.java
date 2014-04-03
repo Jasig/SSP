@@ -23,6 +23,7 @@ import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.TemplateDao;
 import org.jasig.ssp.model.MapTemplateVisibility;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -163,5 +164,10 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 	
 	private Boolean anonymousUsersAllowed() {
 		return Boolean.parseBoolean(configService.getByName(ANONYMOUS_MAP_TEMPLATE_ACCESS).getValue().toLowerCase());
+	}
+
+	@Override
+	public Person getOwnerForPlan(UUID id) {
+		return dao.getOwnerForPlan(id);
 	}
 }
