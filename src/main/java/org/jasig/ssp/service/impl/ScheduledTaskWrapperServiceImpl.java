@@ -19,6 +19,9 @@
 package org.jasig.ssp.service.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.FlushMode;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.*;
@@ -34,6 +37,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.NestedRuntimeException;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
+import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.TriggerContext;
@@ -47,6 +52,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -109,6 +115,9 @@ public class ScheduledTaskWrapperServiceImpl
 
 	@Autowired
 	private transient ConfigService configService;
+
+	@Autowired
+	private transient SessionFactory sessionFactory;
 
 	@Autowired
 	private transient AuthenticationManager authenticationManager;
@@ -575,6 +584,43 @@ public class ScheduledTaskWrapperServiceImpl
 		};
 	}
 
+	protected Runnable withHibernateSession(final Runnable work) {
+		return new Runnable() {
+			@Override
+			public void run() {
+				// Basically a copy/paste of Spring's
+				// OpenSessionInViewFilter#doFilterInternal, with the
+				// web-specific stuff removed
+				boolean participate = false;
+				try {
+					if (TransactionSynchronizationManager.hasResource(sessionFactory)) {
+						// Do not modify the Session: just set the participate flag.
+						LOGGER.debug("Scheduled task joining existing Hibernate session/transaction");
+						participate = true;
+					} else {
+						LOGGER.debug("Scheduled task creating new Hibernate session");
+						Session session = SessionFactoryUtils.openSession(sessionFactory);
+						session.setFlushMode(FlushMode.MANUAL);
+						SessionHolder sessionHolder = new SessionHolder(session);
+						TransactionSynchronizationManager.bindResource(sessionFactory, sessionHolder);
+					}
+
+					work.run();
+
+				} finally {
+					if (!participate) {
+						SessionHolder sessionHolder =
+								(SessionHolder) TransactionSynchronizationManager.unbindResource(sessionFactory);
+						LOGGER.debug("Scheduled task closing Hibernate session");
+						SessionFactoryUtils.closeSession(sessionHolder.getSession());
+					} else {
+						LOGGER.debug("Scheduled task joined existing Hibernate session/transaction so skipping that cleanup step");
+					}
+				}
+			}
+		};
+	}
+
 	/**
 	 * Wraps the given {@code Runnable} in the "standard" decorators you'd
 	 * typically need for execution of a background task and returns the
@@ -583,7 +629,7 @@ public class ScheduledTaskWrapperServiceImpl
 	 * @param work
 	 */
 	protected Runnable withTaskContext(Runnable work) {
-		return withTaskCleanup(withMaybeSudo(work));
+		return withHibernateSession(withTaskCleanup(withMaybeSudo(work)));
 	}
 
 	/**
