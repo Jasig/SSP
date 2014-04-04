@@ -92,7 +92,7 @@
     update message_template set body_checksum = 'a6a70acf204a8f3a7653a4e071146dbc6f1dda97' where id = 'd6d1f68a-0533-426f-bd0b-d129a92edf81';
     update message_template set subject_checksum = 'eb26edde75fd20c72e3409e8650c4845d3135d8f' where id = 'd6d1f68a-0533-426f-bd0b-d129a92edf81';
     
-    update message_template set body_checksum = 'af7211025101c0c96f20fe1f4aea8080a98a5eea' where id = 'df47a4b0-b666-11e2-9e96-0800200c9a66';
+    update message_template set body_checksum = '3c72d1066d97debab53d1751324e0147e8bd1cc0' where id = 'df47a4b0-b666-11e2-9e96-0800200c9a66';
     update message_template set subject_checksum = '8989988b7ea013aaa58876f6114816022458468e' where id = 'df47a4b0-b666-11e2-9e96-0800200c9a66';
 
 ]]>

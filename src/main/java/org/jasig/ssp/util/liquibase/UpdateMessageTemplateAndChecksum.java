@@ -65,6 +65,8 @@ public class UpdateMessageTemplateAndChecksum implements CustomSqlChange {
 	
 	String columnValue;
 	
+	Boolean resetChecksum = false;
+	
 	private ResourceAccessor resourceAccessor;
 	
 	public UpdateMessageTemplateAndChecksum() {
@@ -107,7 +109,7 @@ public class UpdateMessageTemplateAndChecksum implements CustomSqlChange {
 		
 		if(StringUtils.isBlank(messageTemplateId))
 			errors.addError("MessageTemplateId can not be blank.");
-		if(StringUtils.isBlank(columnName))
+		if(resetChecksum == false && StringUtils.isBlank(columnName))
 			errors.addError("columnName can not be blank.");
 		
 		if ( errors.hasErrors() ) {
@@ -129,18 +131,20 @@ public class UpdateMessageTemplateAndChecksum implements CustomSqlChange {
 	public SqlStatement[] generateStatements(Database database)
 			throws CustomChangeException {
 		List<SqlStatement> statements = new ArrayList<SqlStatement>();
-		if(StringUtils.isBlank(columnValue)){
+		if(resetChecksum){
 			final String query = "select " + columnName + " from message_template where id = '" + messageTemplateId + "'";
 			columnValue = processQuery(database, query);
 		}else{
+			//UPDATE COLUMN
 			statements.add(new RawSqlStatement("update message_template set " 
 					+ columnName + " = '" + columnValue 
 					+ "' where id = '" + messageTemplateId + "'"));
 		}
 		try{
 			String newColumnCheckSum = getCheckSum(StringUtils.deleteWhitespace(columnValue));
-			statements.add(new RawSqlStatement("update message_template set " 
-					+ columnName + "_checksum = '" + newColumnCheckSum 
+			
+			//UPDATE CHECKSUM
+			statements.add(new RawSqlStatement("update message_template set " + columnName + "_checksum = '" + newColumnCheckSum 
 					+ "' where id = '" + messageTemplateId + "'"));
 			final SimpleDateFormat df = new SimpleDateFormat(DATE_TIME_FORMAT);
 			String newFormattedDate = df.format(new Date());
@@ -199,6 +203,14 @@ public class UpdateMessageTemplateAndChecksum implements CustomSqlChange {
 			sb.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).substring(1));
 		}
 		return sb.toString();
+	}
+
+	public Boolean getResetChecksum() {
+		return resetChecksum;
+	}
+
+	public void setResetChecksum(Boolean resetChecksum) {
+		this.resetChecksum = resetChecksum;
 	}
 
 }
