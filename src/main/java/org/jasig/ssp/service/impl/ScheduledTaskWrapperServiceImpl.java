@@ -27,6 +27,7 @@ import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.*;
 import org.jasig.ssp.service.external.ExternalPersonSyncTask;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.util.CallableExecutor;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.slf4j.Logger;
@@ -57,8 +58,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -663,10 +666,25 @@ public class ScheduledTaskWrapperServiceImpl
 	 */
 	@Override
 	public void syncExternalPersons() {
-		execWithTaskContext(new Runnable() {
+		externalPersonSyncTask.exec(new CallableExecutor<Pair<Long, Long>>() {
 			@Override
-			public void run() {
-				externalPersonSyncTask.exec();
+			public Pair<Long, Long> exec(final Callable<Pair<Long, Long>> work) throws Exception {
+				final AtomicReference<Pair<Long, Long>> resultHolder = new AtomicReference<Pair<Long, Long>>();
+				final AtomicReference<Exception> exceptionHolder = new AtomicReference<Exception>();
+				execWithTaskContext(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							resultHolder.set(work.call());
+						} catch (Exception e) {
+							exceptionHolder.set(e);
+						}
+					}
+				});
+				if ( exceptionHolder.get() != null ) {
+					throw exceptionHolder.get();
+				}
+				return resultHolder.get();
 			}
 		});
 	}
