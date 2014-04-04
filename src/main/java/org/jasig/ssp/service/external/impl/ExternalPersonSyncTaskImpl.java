@@ -31,6 +31,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.ExternalPersonSyncTask;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.util.CallableExecutor;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
@@ -76,7 +77,7 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 	// intentionally not transactional... this is the main loop, each iteration
 	// of which should be its own transaction.
 	@Override
-	public void exec() {
+	public void exec(CallableExecutor<Pair<Long,Long>> batchExec) {
 
 		if ( Thread.currentThread().isInterrupted() ) {
 			LOGGER.info("Abandoning external person sync because of thread interruption");
@@ -116,7 +117,16 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 
 			Pair<Long,Long> processedOfTotal = null;
 			try {
-				processedOfTotal = syncWithPersonInTransaction(sAndP);
+				if ( batchExec == null ) {
+					processedOfTotal = syncWithPersonInTransaction(sAndP);
+				} else {
+					processedOfTotal = batchExec.exec(new Callable<Pair<Long, Long>>() {
+						@Override
+						public Pair<Long, Long> call() throws Exception {
+							return syncWithPersonInTransaction(sAndP);
+						}
+					});
+				}
 			} catch ( InterruptedException e ) {
 				Thread.currentThread().interrupt(); // reassert
 			} catch (final Exception e) {
@@ -204,7 +214,7 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 	}
 
 	protected Pair<Long, Long> syncWithPersonInTransaction(final SortingAndPaging sAndP) throws Exception {
-		return withTransaction.withTransaction(new Callable<Pair<Long, Long>>() {
+		return withTransaction.withNewTransaction(new Callable<Pair<Long, Long>>() {
 			@Override
 			public Pair<Long, Long> call() throws Exception {
 				return syncWithPerson(sAndP);
