@@ -16,14 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.external;
+package org.jasig.ssp.util;
 
-import org.jasig.ssp.util.CallableExecutor;
-import org.jasig.ssp.util.collections.Pair;
+import java.util.concurrent.Callable;
 
-public interface ExternalPersonSyncTask {
-	/**
-	 * Synchronize Person and ExternalPerson tables
-	 */
-	void exec(CallableExecutor<Pair<Long,Long>> batchExecutor);
+public interface CallableExecutor<T> {
+
+	public T exec(Callable<T> work) throws Exception;
+
 }
