@@ -19,21 +19,28 @@
 package org.jasig.ssp.service.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.FlushMode;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.*;
 import org.jasig.ssp.service.external.ExternalPersonSyncTask;
 import org.jasig.ssp.service.external.MapStatusReportCalcTask;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.util.CallableExecutor;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.NestedRuntimeException;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
+import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.TriggerContext;
@@ -47,13 +54,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -63,6 +73,13 @@ public class ScheduledTaskWrapperServiceImpl
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ScheduledTaskWrapperServiceImpl.class);
+
+	public static final String TASK_NAME_MDC_KEY = "ssp.taskName";
+	public static final String SEND_MESSAGES_TASK_NAME = "send-messages";
+	public static final String SYNC_COACHES_TASK_NAME = "sync-coaches";
+	public static final String SYNC_EXTERNAL_PERSONS_TASK_NAME = "sync-external-persons";
+	public static final String CALC_MAP_STATUS_REPORTS_TASK_NAME = "calc-map-status-reports";
+	public static final String SEND_TASK_REMINDERS_TASK_NAME = "send-task-reminders";
 
 	private static final String EVERY_DAY_1_AM = "0 0 1 * * *";
 	private static final String EVERY_DAY_3_AM = "0 0 3 * * *";
@@ -109,6 +126,9 @@ public class ScheduledTaskWrapperServiceImpl
 
 	@Autowired
 	private transient ConfigService configService;
+
+	@Autowired
+	private transient SessionFactory sessionFactory;
 
 	@Autowired
 	private transient AuthenticationManager authenticationManager;
@@ -575,6 +595,67 @@ public class ScheduledTaskWrapperServiceImpl
 		};
 	}
 
+	protected Runnable withHibernateSession(final Runnable work) {
+		return new Runnable() {
+			@Override
+			public void run() {
+				// Basically a copy/paste of Spring's
+				// OpenSessionInViewFilter#doFilterInternal, with the
+				// web-specific stuff removed
+				boolean participate = false;
+				try {
+					if (TransactionSynchronizationManager.hasResource(sessionFactory)) {
+						// Do not modify the Session: just set the participate flag.
+						LOGGER.debug("Scheduled task joining existing Hibernate session/transaction");
+						participate = true;
+					} else {
+						LOGGER.debug("Scheduled task creating new Hibernate session");
+						Session session = SessionFactoryUtils.openSession(sessionFactory);
+						session.setFlushMode(FlushMode.MANUAL);
+						SessionHolder sessionHolder = new SessionHolder(session);
+						TransactionSynchronizationManager.bindResource(sessionFactory, sessionHolder);
+					}
+
+					work.run();
+
+				} finally {
+					if (!participate) {
+						SessionHolder sessionHolder =
+								(SessionHolder) TransactionSynchronizationManager.unbindResource(sessionFactory);
+						LOGGER.debug("Scheduled task closing Hibernate session");
+						SessionFactoryUtils.closeSession(sessionHolder.getSession());
+					} else {
+						LOGGER.debug("Scheduled task joined existing Hibernate session/transaction so skipping that cleanup step");
+					}
+				}
+			}
+		};
+	}
+
+	protected Runnable withTaskName(final String taskName, final Runnable work) {
+		return new Runnable() {
+			@Override
+			public void run() {
+				final String currentThreadName = Thread.currentThread().getName();
+				final String currentMdcEntry = MDC.get(TASK_NAME_MDC_KEY);
+				try {
+					final String newThreadName = currentThreadName == null ? taskName : currentThreadName + ":" + taskName;
+					Thread.currentThread().setName(newThreadName);
+					final String newMdcEntry = currentMdcEntry == null ? taskName : currentMdcEntry + ":" + taskName;
+					MDC.put(TASK_NAME_MDC_KEY, newMdcEntry);
+					work.run();
+				} finally {
+					if ( currentMdcEntry == null ) {
+						MDC.remove(TASK_NAME_MDC_KEY);
+					} else {
+						MDC.put(TASK_NAME_MDC_KEY, currentMdcEntry);
+					}
+					Thread.currentThread().setName(currentThreadName);
+				}
+			}
+		};
+	}
+
 	/**
 	 * Wraps the given {@code Runnable} in the "standard" decorators you'd
 	 * typically need for execution of a background task and returns the
@@ -582,8 +663,8 @@ public class ScheduledTaskWrapperServiceImpl
 	 *
 	 * @param work
 	 */
-	protected Runnable withTaskContext(Runnable work) {
-		return withTaskCleanup(withMaybeSudo(work));
+	protected Runnable withTaskContext(String taskName, Runnable work) {
+		return withTaskName(taskName, withHibernateSession(withTaskCleanup(withMaybeSudo(work))));
 	}
 
 	/**
@@ -595,15 +676,15 @@ public class ScheduledTaskWrapperServiceImpl
 	 *
 	 * @param work
 	 */
-	protected void execWithTaskContext(Runnable work) {
-		withTaskContext(work).run();
+	protected void execWithTaskContext(String taskName, Runnable work) {
+		withTaskContext(taskName, work).run();
 	}
 
 	@Override
 	@Scheduled(fixedDelay = 150000)
 	// run 2.5 minutes after the end of the last invocation
 	public void sendMessages() {
-		execWithTaskContext(new Runnable() {
+		execWithTaskContext(SEND_MESSAGES_TASK_NAME, new Runnable() {
 			@Override
 			public void run() {
 				messageService.sendQueuedMessages();
@@ -615,7 +696,7 @@ public class ScheduledTaskWrapperServiceImpl
 	@Scheduled(fixedDelay = 300000)
 	// run every 5 minutes
 	public void syncCoaches() {
-		execWithTaskContext(new Runnable() {
+		execWithTaskContext(SYNC_COACHES_TASK_NAME, new Runnable() {
 			@Override
 			public void run() {
 				if (!(scheduledCoachSyncEnabled)) {
@@ -636,17 +717,33 @@ public class ScheduledTaskWrapperServiceImpl
 	 */
 	@Override
 	public void syncExternalPersons() {
-		execWithTaskContext(new Runnable() {
+		externalPersonSyncTask.exec(new CallableExecutor<Pair<Long, Long>>() {
 			@Override
-			public void run() {
-				externalPersonSyncTask.exec();
+			public Pair<Long, Long> exec(final Callable<Pair<Long, Long>> work) throws Exception {
+				final AtomicReference<Pair<Long, Long>> resultHolder = new AtomicReference<Pair<Long, Long>>();
+				final AtomicReference<Exception> exceptionHolder = new AtomicReference<Exception>();
+				execWithTaskContext(SYNC_EXTERNAL_PERSONS_TASK_NAME, new Runnable() {
+					@Override
+					public void run() {
+						try {
+							resultHolder.set(work.call());
+						} catch (Exception e) {
+							exceptionHolder.set(e);
+						}
+					}
+				});
+				if ( exceptionHolder.get() != null ) {
+					throw exceptionHolder.get();
+				}
+				return resultHolder.get();
 			}
 		});
+
 	}
 
 	@Override
 	public void calcMapStatusReports() {
-		execWithTaskContext(new Runnable() {
+		execWithTaskContext(CALC_MAP_STATUS_REPORTS_TASK_NAME,new Runnable() {
 			@Override
 			public void run() {
 				mapStatusReportCalcTask.exec();
@@ -658,7 +755,7 @@ public class ScheduledTaskWrapperServiceImpl
 	@Scheduled(cron = "0 0 1 * * *")
 	// run at 1 am every day
 	public void sendTaskReminders() {
-		execWithTaskContext(new Runnable() {
+		execWithTaskContext(SEND_TASK_REMINDERS_TASK_NAME, new Runnable() {
 			@Override
 			public void run() {
 				taskService.sendAllTaskReminderNotifications();
