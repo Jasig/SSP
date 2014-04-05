@@ -152,7 +152,7 @@ public class TaskDao
 		setCriteria(query, form);
 		
 		// restrict to coach
-		query.add(Restrictions.eq("createdBy", coach));
+		query.add(Restrictions.eq("createdBy", coach.getId()));
 
 		// item count
 		Long totalRows = (Long) query.setProjection(Projections.rowCount())
@@ -174,7 +174,7 @@ public class TaskDao
 				null);
 		setCriteria(query, form);
 		
-		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", coach))
+		Long totalRows = (Long)query.add(Restrictions.eq("createdBy", coach.getId()))
 		        .setProjection(Projections.countDistinct("person")).list().get(0);
 
 		return totalRows;

@@ -49,9 +49,9 @@ public interface Auditable extends Serializable {
 
 	void setCreatedDate(@NotNull final Date createdDate);
 
-	Person getCreatedBy();
+	UUID getCreatedBy();
 
-	void setCreatedBy(@NotNull final Person createdBy);
+	void setCreatedBy(@NotNull final UUID createdBy);
 
 	/**
 	 * Gets the modified date
@@ -62,9 +62,9 @@ public interface Auditable extends Serializable {
 
 	void setModifiedDate(final Date modifiedDate);
 
-	Person getModifiedBy();
+	UUID getModifiedBy();
 
-	void setModifiedBy(final Person modifiedBy);
+	void setModifiedBy(final UUID modifiedBy);
 
 	/**
 	 * Gets the {@link ObjectStatus}
@@ -83,4 +83,20 @@ public interface Auditable extends Serializable {
 	 *         storage.
 	 */
 	boolean isTransient();
+
+	String getCreatedByFirstName();
+
+	void setCreatedByFirstName(String createdByFirstName);
+
+	String getCreatedByLastName();
+
+	String getModifiedByFirstName();
+
+	void setCreatedByLastName(String createdByLastName);
+
+	void setModifiedByFirstName(String modifiedByFirstName);
+
+	String getModifiedByLastName();
+
+	void setModifiedByLastName(String modifiedByLastName);
 }

@@ -104,7 +104,7 @@ public class EarlyAlertResponseDao extends
 		}		
 
 		// restrict to coach
-		query.add(Restrictions.eq("createdBy", coach));
+		query.add(Restrictions.eq("createdBy", coach.getId()));
 
 		if (createDateFrom != null) {
 			query.add(Restrictions.ge("createdDate",
@@ -477,7 +477,12 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertResponseCountByCoaches(EntityCountByCoachSearchForm form) {
 
 		final Criteria query = createCriteria();
- 
+		List<Person> coaches = form.getCoaches();
+		List<UUID> coachIds = new ArrayList<UUID>();
+		for (Person person : coaches) {
+			coachIds.add(person.getId());
+		}
+		
 		if (form.getCreateDateFrom() != null) {
 			query.add(Restrictions.ge("createdDate",
 					form.getCreateDateFrom()));
@@ -490,7 +495,7 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		
 		query.createAlias("earlyAlert", "earlyAlert");
 		Criteria personCriteria = query.createAlias("earlyAlert.person", "person");
-		personCriteria.add(Restrictions.in("earlyAlert.createdBy", form.getCoaches()));
+		personCriteria.add(Restrictions.in("earlyAlert.createdBy", coachIds));
 		
 		if (form.getStudentTypeIds() != null && !form.getStudentTypeIds().isEmpty()) {
 			personCriteria.add(Restrictions
