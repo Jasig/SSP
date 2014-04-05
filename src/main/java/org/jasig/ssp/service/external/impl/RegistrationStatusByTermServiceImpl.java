@@ -115,7 +115,8 @@ public class RegistrationStatusByTermServiceImpl extends
 		return person;
 	}	
 
-	private List<RegistrationStatusByTerm> getCurrentAndFutureTerms(
+	@Override
+	public List<RegistrationStatusByTerm> getCurrentAndFutureTerms(
 			Person person) throws ObjectNotFoundException {
 		List<Term> currentAndFutureTerms = termService.getCurrentAndFutureTerms();
 		List<RegistrationStatusByTerm> registrationStatuses = new ArrayList<RegistrationStatusByTerm>();

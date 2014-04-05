@@ -136,7 +136,7 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements // N
 			}
 
 			if ("createdBy".equals(property) && (state[i] == null)) {
-				state[i] = current;
+				state[i] = current.getId();
 				continue;
 			}
 
@@ -151,7 +151,7 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements // N
 			}
 
 			if ("modifiedBy".equals(property)) {
-				state[i] = current;
+				state[i] = current.getId();
 				continue;
 			}
 		}

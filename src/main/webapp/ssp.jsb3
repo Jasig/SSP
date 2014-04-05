@@ -1937,10 +1937,15 @@
                     "path": "/app/model/tool/actionplan/"
                 },
                 {
+                    "clsName": "Ssp.model.PersonRegistrationStatusByTerm",
+                    "name": "PersonRegistrationStatusByTerm.js",
+                    "path": "/app/model/"
+                },
+                {
                     "clsName": "Ssp.model.tool.earlyalert.PersonEarlyAlert",
                     "name": "PersonEarlyAlert.js",
                     "path": "/app/model/tool/earlyalert/"
-                },
+                },                
                 {
                     "clsName": "Ssp.model.tool.earlyalert.PersonEarlyAlertTree",
                     "name": "PersonEarlyAlertTree.js",
