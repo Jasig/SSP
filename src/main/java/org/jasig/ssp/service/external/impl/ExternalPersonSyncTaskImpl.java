@@ -74,6 +74,11 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 
 	private transient long nextPersonIndex = 0;
 
+	@Override
+	public Pair<Long,Long> getBatchExecReturnType() {
+		return new Pair<Long,Long>(null,null);
+	}
+
 	// intentionally not transactional... this is the main loop, each iteration
 	// of which should be its own transaction.
 	@Override
