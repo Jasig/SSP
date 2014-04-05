@@ -298,9 +298,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 			me.getBalanceOwedField().setValue('<span style="color:#15428B">Balance:  </span>' + Ext.util.Format.usMoney(financialAid.balanceOwed));
         	me.getFinancialAidRemainingField().setFieldLabel('');
 			if(financialAid.financialAidRemaining != null)
-				me.getFinancialAidRemainingField().setValue('<span style="color:#15428B">FA Amount:  </span>' + Ext.util.Format.usMoney(financialAid.financialAidRemaining));
+				me.getFinancialAidRemainingField().setValue('<span style="color:#15428B">FA Award:  </span>' + Ext.util.Format.usMoney(financialAid.financialAidRemaining));
 			else
-				me.getFinancialAidRemainingField().setValue('<span style="color:#15428B">FA Amount:  </span>' );
+				me.getFinancialAidRemainingField().setValue('<span style="color:#15428B">FA Award:  </span>' );
         	me.getOriginalLoanAmountField().setFieldLabel('');
 			if(financialAid.originalLoanAmount != null)
 				me.getOriginalLoanAmountField().setValue('<span style="color:#15428B">Loan Amount:  </span>' + Ext.util.Format.usMoney(financialAid.originalLoanAmount));

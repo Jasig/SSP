@@ -222,15 +222,14 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         fieldLabel: 'FAFSA',
                         name: 'fafsaDate',
                         itemId: 'fafsaDate'
+                    },{
+                        fieldLabel: 'Dep Status',
+                        name: 'termsLeft',
+                        itemId: 'termsLeft',
+                        labelWidth: 80
                     }, {
                         xtype: 'tbspacer',
                         height: 8
-                    },{
-                        fieldLabel: 'Eligible Fed Aid',
-                        name: 'eligibleFederalAid',
-                        itemId: 'eligibleFederalAid',
-						hidden:true,
-                        labelWidth: 60
                     },{
 	                        name: 'financialAidFileStatusDetails',
 	                        itemId: 'financialAidFileStatusDetails',
@@ -243,8 +242,12 @@ Ext.define('Ssp.view.tools.profile.Details', {
 	                    },{
 	                        xtype: 'tbspacer',
 	                        height: 8
-	                    },
-                    {
+	                    },{
+                        fieldLabel: 'Eligible FA',
+                        name: 'eligibleFederalAid',
+                        itemId: 'eligibleFederalAid',
+                        labelWidth: 60
+                    },{
 	                    	xtype:'label',
 	                        name: 'financialAidAcceptedTerms',
 	                        itemId: 'financialAidAcceptedTerms',
@@ -258,28 +261,19 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         xtype: 'tbspacer',
                         height: 8
                     },{
-	                        fieldLabel: 'FA Amount',
-	                        name: 'financialAidRemaining',
-	                        itemId: 'financialAidRemaining'
-
-	                    },
-                    {
-                        fieldLabel: 'Institutional Loan Amount',
+	                    fieldLabel: 'FA Award',
+	                    name: 'financialAidRemaining',
+	                    itemId: 'financialAidRemaining'
+	                    },{
+                        fieldLabel: 'FA Accepted',
                         name: 'institutionalLoanAmount',
                         itemId: 'institutionalLoanAmount',
-                        labelWidth: 150
+                        labelWidth: 80
                     },	{
-		                        fieldLabel: 'Loan Amount',
-		                        name: 'originalLoanAmount',
-		                        itemId: 'originalLoanAmount'
-
-		                    },
-                    {
-                        fieldLabel: 'Remaining FA Terms',
-                        name: 'termsLeft',
-                        itemId: 'termsLeft',
-                        labelWidth: 120
-                    },{
+		                fieldLabel: 'Loan Amount',
+		                name: 'originalLoanAmount',
+		                itemId: 'originalLoanAmount'
+					},{
                         xtype: 'tbspacer',
                         height: 5
                     }, {
