@@ -63,6 +63,7 @@ import org.jasig.ssp.service.reference.EarlyAlertSuggestionService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.StudentTypeService;
+import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
@@ -622,6 +623,14 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		}
 
 		templateParameters.put("earlyAlert", earlyAlert);
+		try {
+			Person creator = personService.get(earlyAlert.getCreatedBy());
+			if ( creator != null ) {
+				templateParameters.put("creator", new CoachPersonLiteTO(creator));
+			}
+		} catch ( ObjectNotFoundException e ) {
+			// nothing to be done
+		}
 		templateParameters.put("termToRepresentEarlyAlert",
 				configService.getByNameEmpty("term_to_represent_early_alert"));
 		templateParameters.put("linkToSSP",

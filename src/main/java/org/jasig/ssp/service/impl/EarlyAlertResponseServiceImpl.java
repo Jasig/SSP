@@ -58,6 +58,7 @@ import org.jasig.ssp.service.reference.EarlyAlertReferralService;
 import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.reference.JournalTrackService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
+import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.EarlyAlertResponseTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
@@ -400,6 +401,14 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 
 		// add early alert response to the parameter list
 		templateParameters.put("earlyAlertResponse", earlyAlertResponse);
+		try {
+			Person responseCreator = personService.get(earlyAlertResponse.getCreatedBy());
+			if ( responseCreator != null ) {
+				templateParameters.put("responseCreator", new CoachPersonLiteTO(responseCreator));
+			}
+		} catch ( ObjectNotFoundException e ) {
+			// nothing to be done
+		}
 		templateParameters.put("workPhone", earlyAlert.getPerson()
 				.getWorkPhone());
 		if ( earlyAlert.getPerson().getCoach() != null &&
