@@ -24,8 +24,13 @@ import javax.validation.constraints.NotNull;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
+import org.jasig.ssp.util.CallableExecutor;
+import org.jasig.ssp.util.collections.Pair;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
 
 /**
  * Message service
@@ -88,7 +93,9 @@ public interface MessageService {
 	 * Send any queued messages. Should be set to run regularly via some kind of
 	 * scheduling system.
 	 */
-	void sendQueuedMessages();
+	void sendQueuedMessages(CallableExecutor<Pair<PagingWrapper<Message>, Collection<Throwable>>> batchExec);
+
+	Pair<PagingWrapper<Message>, Collection<Throwable>> getSendQueuedMessagesBatchExecReturnType();
 
 	/**
 	 * Send a specific e-mail message immediately instead of relying on a
