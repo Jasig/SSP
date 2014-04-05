@@ -182,43 +182,39 @@ Ext.define('Ssp.view.tools.map.FAView', {
                         name: 'fafsaDate',
                         itemId: 'fafsaDate',
 						labelWidth: 60
-                    
+                     },{
+                        fieldLabel: 'Dep Status',
+                        name: 'termsLeft',
+                        itemId: 'termsLeft',
+                        labelWidth: 80
+
                     },{
                         fieldLabel: 'FA Award',
                         name: 'currentYearFinancialAidAward',
                         itemId: 'currentYearFinancialAidAward',
 						labelWidth: 80
-                    
                     },{
-                        fieldLabel: 'FA Amount Remaining',
-                        name: 'financialAidRemaining',
-                        itemId: 'financialAidRemaining',
-						labelWidth: 130
-                    
-                    },	
-                    {
                         fieldLabel: 'FA Awarded',
                         name: 'financialAidAcceptedTerms',
                         itemId: 'financialAidAcceptedTerms',
                         labelWidth: 100
-                    },
-                    {
-                        fieldLabel: 'Institutional Loan Amount',
+           
+                    },{
+                        fieldLabel: 'FA Remaining',
+                        name: 'financialAidRemaining',
+                        itemId: 'financialAidRemaining',
+						labelWidth: 100
+                    },{
+                        fieldLabel: 'FA Accepted',
                         name: 'institutionalLoanAmount',
                         itemId: 'institutionalLoanAmount',
-                        labelWidth: 150
+                        labelWidth: 80
                     },{
                         fieldLabel: 'Loan Amount',
                         name: 'originalLoanAmount',
                         itemId: 'originalLoanAmount',
 						labelWidth: 80
-                	},
-                    {
-                        fieldLabel: 'Remaining FA Terms',
-                        name: 'termsLeft',
-                        itemId: 'termsLeft',
-                        labelWidth: 120
-                    }, {
+                	}, {
                         name: 'sapStatusCodeDetails',
                         itemId: 'sapStatusCodeDetails',
                         fieldLabel:'SAP'
