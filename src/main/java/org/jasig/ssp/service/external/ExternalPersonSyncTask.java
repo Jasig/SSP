@@ -26,4 +26,6 @@ public interface ExternalPersonSyncTask {
 	 * Synchronize Person and ExternalPerson tables
 	 */
 	void exec(CallableExecutor<Pair<Long,Long>> batchExecutor);
+
+	Pair<Long,Long> getBatchExecReturnType();
 }

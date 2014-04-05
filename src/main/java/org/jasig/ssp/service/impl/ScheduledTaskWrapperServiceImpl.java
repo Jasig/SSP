@@ -619,7 +619,7 @@ public class ScheduledTaskWrapperServiceImpl
 						participate = true;
 					} else {
 						LOGGER.debug("Scheduled task creating new Hibernate session");
-						Session session = SessionFactoryUtils.openSession(sessionFactory);
+						Session session = sessionFactory.openSession();
 						session.setFlushMode(FlushMode.MANUAL);
 						SessionHolder sessionHolder = new SessionHolder(session);
 						TransactionSynchronizationManager.bindResource(sessionFactory, sessionHolder);
@@ -689,16 +689,53 @@ public class ScheduledTaskWrapperServiceImpl
 		withTaskContext(taskName, work).run();
 	}
 
+
+	/**
+	 * Basically a deferred form of {@link #execWithTaskContext(Runnable)}.
+	 * Useful when you have a scheduled job that does its work in batches and
+	 * you'd like the effect of {@link #execWithTaskContext(Runnable)} applied
+	 * independently for each batch. This is advisable for any long-running
+	 * job (which is probably why it was batched in the first place) b/c
+	 * otherwise you can end up with a system doing a great impression of
+	 * a memory leak as the Hib session grows indefinitely.
+	 *
+	 * <p>Batched jobs often need results from each batch to know what to
+	 * do next, hence the use of {@code Callable} rather than
+	 * {@link Runnable} here.</p>
+	 *
+	 * @param returnType
+	 * @param <T>
+	 * @return
+	 */
+	protected <T> CallableExecutor<T> newTaskWithContextExecutor(final String taskName, final T returnType) {
+		return new CallableExecutor<T>() {
+			@Override
+			public T exec(final Callable<T> work) throws Exception {
+				final AtomicReference<T> resultHolder = new AtomicReference<T>();
+				final AtomicReference<Exception> exceptionHolder = new AtomicReference<Exception>();
+				execWithTaskContext(taskName, new Runnable() {
+					@Override
+					public void run() {
+						try {
+							resultHolder.set(work.call());
+						} catch (Exception e) {
+							exceptionHolder.set(e);
+						}
+					}
+				});
+				if ( exceptionHolder.get() != null ) {
+					throw exceptionHolder.get();
+				}
+				return resultHolder.get();
+			}
+		};
+	}
+
 	@Override
 	@Scheduled(fixedDelay = 150000)
 	// run 2.5 minutes after the end of the last invocation
 	public void sendMessages() {
-		execWithTaskContext(SEND_MESSAGES_TASK_NAME, new Runnable() {
-			@Override
-			public void run() {
-				messageService.sendQueuedMessages();
-			}
-		});
+		messageService.sendQueuedMessages(newTaskWithContextExecutor(SEND_MESSAGES_TASK_NAME, messageService.getSendQueuedMessagesBatchExecReturnType()));
 	}
 
 	@Override
@@ -726,29 +763,10 @@ public class ScheduledTaskWrapperServiceImpl
 	 */
 	@Override
 	public void syncExternalPersons() {
-		externalPersonSyncTask.exec(new CallableExecutor<Pair<Long, Long>>() {
-			@Override
-			public Pair<Long, Long> exec(final Callable<Pair<Long, Long>> work) throws Exception {
-				final AtomicReference<Pair<Long, Long>> resultHolder = new AtomicReference<Pair<Long, Long>>();
-				final AtomicReference<Exception> exceptionHolder = new AtomicReference<Exception>();
-				execWithTaskContext(SYNC_EXTERNAL_PERSONS_TASK_NAME, new Runnable() {
-					@Override
-					public void run() {
-						try {
-							resultHolder.set(work.call());
-						} catch (Exception e) {
-							exceptionHolder.set(e);
-						}
-					}
-				});
-				if ( exceptionHolder.get() != null ) {
-					throw exceptionHolder.get();
-				}
-				return resultHolder.get();
-			}
-		});
-
+		externalPersonSyncTask.exec(newTaskWithContextExecutor(SYNC_EXTERNAL_PERSONS_TASK_NAME, externalPersonSyncTask.getBatchExecReturnType()));
 	}
+
+
 
 	@Override
 	public void calcMapStatusReports() {
