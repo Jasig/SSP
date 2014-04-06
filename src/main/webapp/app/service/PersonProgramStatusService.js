@@ -39,8 +39,12 @@ Ext.define('Ssp.service.PersonProgramStatusService', {
 		var url = me.getBaseUrl( personId );
        
 		var success = function( response, view ){
-	    	var r = Ext.decode(response.responseText);
-    		callbacks.success( r, callbacks.scope );
+            if ( response && response.responseText ) {
+	    	    var r = Ext.decode(response.responseText);
+    		    callbacks.success( r, callbacks.scope );
+            } else {
+                callbacks.success(null, callbacks.scope)
+            }
 	    };
 
 	    var failure = function( response ){

@@ -228,7 +228,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         
         me.getRegisteredTermsField().setValue(redTerms);
         var regStatus = '';
-        console.log(me.personRegistrationStatusByTermStore);
         for (var i = 0; i < me.personRegistrationStatusByTermStore.getCount(); i++)
         {
           regStatus = regStatus + ' ' + me.personRegistrationStatusByTermStore.getAt(i).get('termCode') + '=' + me.personRegistrationStatusByTermStore.getAt(i).get('tuitionPaid');
@@ -382,12 +381,15 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         var me = this;
 		var programStatusReason;
 		var studentStatus;
-		
+
+		var programStatusReasonField = me.getProgramStatusReasonField();
+
+		if ( !(serviceResponses.successes) || !(serviceResponses.successes.programstatus) ) {
+			programStatusReasonField.hide();
+			return;
+		}
 		var programStatusResponse = serviceResponses.successes.programstatus;
 		studentStatus = programStatusResponse['programStatusChangeReasonId'];
-		
-		var programStatusReasonField = me.getProgramStatusReasonField();
-		
 		
 		if (studentStatus) {
                     programStatusReason = me.programStatusChangeReasonsStore.findRecord('id', studentStatus);
