@@ -352,12 +352,16 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var me = this;
 		var programStatusReason;
 		var studentStatus;
-		
+
+		var programStatusReasonField = Ext.ComponentQuery.query('#programStatusReason')[0];
+
+		if ( !(serviceResponses.successes) || !(serviceResponses.successes.programstatus) ) {
+			programStatusReasonField.hide();
+			return;
+		}
 		var programStatusResponse = serviceResponses.successes.programstatus;
 		studentStatus = programStatusResponse['programStatusChangeReasonId'];
-		
-		
-		var programStatusReasonField = Ext.ComponentQuery.query('#programStatusReason')[0];
+
 		if (studentStatus) {
                     programStatusReason = me.programStatusChangeReasonsStore.findRecord('id', studentStatus);
 					
