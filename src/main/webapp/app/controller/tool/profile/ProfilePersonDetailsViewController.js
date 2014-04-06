@@ -228,7 +228,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         
         me.getRegisteredTermsField().setValue(redTerms);
         var regStatus = '';
-        console.log(me.personRegistrationStatusByTermStore);
         for (var i = 0; i < me.personRegistrationStatusByTermStore.getCount(); i++)
         {
           regStatus = regStatus + ' ' + me.personRegistrationStatusByTermStore.getAt(i).get('termCode') + '=' + me.personRegistrationStatusByTermStore.getAt(i).get('tuitionPaid');
