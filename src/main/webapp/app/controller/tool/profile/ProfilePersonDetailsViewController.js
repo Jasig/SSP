@@ -381,12 +381,15 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         var me = this;
 		var programStatusReason;
 		var studentStatus;
-		
+
+		var programStatusReasonField = me.getProgramStatusReasonField();
+
+		if ( !(serviceResponses.successes) || !(serviceResponses.successes.programstatus) ) {
+			programStatusReasonField.hide();
+			return;
+		}
 		var programStatusResponse = serviceResponses.successes.programstatus;
 		studentStatus = programStatusResponse['programStatusChangeReasonId'];
-		
-		var programStatusReasonField = me.getProgramStatusReasonField();
-		
 		
 		if (studentStatus) {
                     programStatusReason = me.programStatusChangeReasonsStore.findRecord('id', studentStatus);
