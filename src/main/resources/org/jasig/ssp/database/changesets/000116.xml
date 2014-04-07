@@ -52,7 +52,7 @@ WITH counts_temp
                    contact_notes, 
                    student_notes) 
 ---- 
-delete from map_term_note where template_id is not null and id in (
+delete from map_term_note where template_id is not null and id not in (
 SELECT id 
 FROM   map_term_note note2 
        JOIN (SELECT Min(temp1.combo_count) AS min_count, 
@@ -127,7 +127,7 @@ WITH counts_temp
                    contact_notes, 
                    student_notes) 
 ---- 
-delete from map_term_note where plan_id is not null and id in (
+delete from map_term_note where plan_id is not null and id not  in (
 SELECT id 
 FROM   map_term_note note2 
        JOIN (SELECT Min(temp1.combo_count) AS min_count, 
